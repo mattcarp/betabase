@@ -7,4 +7,4 @@ add section on adding fields and api points:
 * express
 * anything else?
 
-TODO (matt) figure out deployment of back end.
+TODO (matt) figure out deployment of back dev/stage (will probably just use heroku).
