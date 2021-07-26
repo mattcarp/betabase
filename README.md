@@ -8,5 +8,7 @@ add section on adding fields and api points:
 * anything else?
 
 TODO (matt) figure out deployment of back dev/stage (will probably just use heroku).
+
 TODO (matt) write a few cypress tests
+
 TODO integrated gihtub actions for stage deployment, run cypress on MR/deploy etc
