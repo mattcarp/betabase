@@ -1,0 +1,120 @@
+<div class="container">
+
+  <div id="gantt-container"></div>
+
+  <div class="hero-unit hero-unit-compact" id="dashboard">
+    <h1>choose an app</h1>
+    <div class="appchoice row">
+      <div class="span2 well">
+        <a routerLink="/AOMA/dashboard/show" routerLinkActive="active">AOMA <i class="icon-arrow-right icon-white"></i></a>
+
+        <h2><small>Current Round</small></h2>
+        <h4 class="chooser-text">
+          <ng-container *ngIf="!data?.aomaRound?.releaseNum">
+            No Current Round
+          </ng-container>
+          <ng-container *ngIf="data?.aomaRound?.releaseNum">
+            {{data?.aomaRound?.releaseNum}} <br>
+            {{data?.aomaRound?.name}}
+          </ng-container>
+        </h4>
+        <h2><small>Testing Period</small></h2>
+        <h4 class="chooser-text">
+          <ng-container *ngIf="!data?.aomaRound?.releaseNum">
+            None scheduled
+          </ng-container>
+          <ng-container *ngIf="data?.aomaRound?.releaseNum">
+            {{data?.aomaRound?.startsAt | date}}&nbsp;to <br>
+            {{data?.aomaRound?.endsAt | date}}
+          </ng-container>
+        </h4>
+
+        <h2><small>Tests This Round</small></h2>
+        <h4>{{data?.aomaTestCount}}&nbsp;total</h4>
+        <h4>{{data?.aomaFails}}&nbsp;fails</h4>
+
+        <h2><small>Cases Available</small></h2>
+        <h4>  {{data?.aomaScenarios?.scenarioCount}} </h4>
+      </div>
+
+      <div class="span2 well">
+        <a routerLink="/Promo/dashboard/show" routerLinkActive="active">Promo <i class="icon-arrow-right icon-white"></i></a>
+
+        <h2 class="chooser-header"><small>Current Round</small></h2>
+        <h4 class="chooser-text">
+          <ng-container *ngIf="!data?.promoRound?.releaseNum">
+            No Current Round
+          </ng-container>
+          <ng-container *ngIf="data?.promoRound?.releaseNum">
+            {{data?.promoRound?.releaseNum}} <br>
+            {{data?.promoRound?.name}}
+          </ng-container>
+        </h4>
+        <h2 class="chooser-header"><small>Testing Period</small></h2>
+        <h4 class="chooser-text">
+          <ng-container *ngIf="!data?.promoRound">
+            None scheduled
+          </ng-container>
+          <ng-container *ngIf="data?.promoRound">
+            {{data?.promoRound?.startsAt | date}}&nbsp;to <br>
+            {{data?.promoRound?.endsAt | date}}
+          </ng-container>
+        </h4>
+        <h2 class="chooser-header"><small>Tests This Round</small></h2>
+        <h4>{{data?.promoTestCount}}&nbsp;total</h4>
+        <h4>{{data?.promoFails}}&nbsp;fails</h4>
+        <h2><small>Cases Available</small></h2>
+        <h4>  {{data?.promoScenarios?.scenarioCount}}</h4>
+      </div>
+
+      <div class="span2 well">
+        <a routerLink="/DX/dashboard/show" routerLinkActive="active">DX <i class="icon-arrow-right icon-white"></i></a>
+
+        <h2 class="chooser-header"><small>Current Round</small></h2>
+        <h4 class="chooser-text">
+          <ng-container *ngIf="!data?.dxRound?.releaseNum">
+            No Current Round
+          </ng-container>
+          <ng-container *ngIf="data?.dxRound?.releaseNum">
+            {{data?.dxRound?.releaseNum}} <br>
+            {{data?.dxRound?.name}}
+          </ng-container>
+        </h4>
+        <h2 class="chooser-header"><small>Testing Period</small></h2>
+        <h4 class="chooser-text">
+          <ng-container *ngIf="!data?.dxRound?.releaseNum">
+            None scheduled
+          </ng-container>
+          <ng-container *ngIf="data?.dxRound?.releaseNum">
+            {{data?.dxRound?.startsAt | date}}&nbsp;to <br>
+            {{data?.dxRound?.endsAt | date}}
+          </ng-container>
+        </h4>
+      </div>
+      <div class="span2 well">
+        <a routerLink="/GRAS Lite/dashboard/show" routerLinkActive="active">GRAS Lite <i class="icon-arrow-right icon-white"></i></a>
+
+        <h2 class="chooser-header"><small>Current Round</small></h2>
+        <h4 class="chooser-text">
+          <ng-container *ngIf="!data?.grasLiteRound?.releaseNum">
+            No Current Round
+          </ng-container>
+          <ng-container *ngIf="data?.grasLiteRound?.releaseNum">
+            {{data?.grasLiteRound?.releaseNum}} <br>
+            {{data?.grasLiteRound?.name}}
+          </ng-container>
+        </h4>
+        <h2 class="chooser-header"><small>Testing Period</small></h2>
+        <h4 class="chooser-text">
+          <ng-container *ngIf="!data?.grasLiteRound?.releaseNum">
+            None scheduled
+          </ng-container>
+          <ng-container *ngIf="data?.grasLiteRound?.releaseNum">
+            {{data?.grasLiteRound?.startsAt | date}}&nbsp;to <br>
+            {{data?.grasLiteRound?.endsAt | date}}
+          </ng-container>
+        </h4>
+      </div>
+    </div>
+  </div>
+</div>
