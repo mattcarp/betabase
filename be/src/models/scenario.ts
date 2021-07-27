@@ -8,9 +8,6 @@ export const Scenario = db.sequelize.define('Scenario', {
     autoIncrement: true,
     primaryKey: true,
   },
-  // tests: {
-  //   type: DataTypes.STRING,
-  // },
   name: {
     type: DataTypes.STRING,
     length: 255,
@@ -120,4 +117,3 @@ export const getScenarioCount = async (app: string) => {
 }
 
 db.Scenario = Scenario;
-db.getScenarioCount = getScenarioCount;
