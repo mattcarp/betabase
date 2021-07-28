@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
+import { AppListData } from './models';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +14,8 @@ export class DashboardService {
     this.apiUrl = environment.apiUrl;
   }
 
-  getAppListData(): Observable<any> {
+  getAppListData(): Promise<AppListData> {
     const url = `${this.apiUrl}/app-list-data`;
-    return this.http.get(url);
+    return this.http.get<AppListData>(url).toPromise();
   }
 }
