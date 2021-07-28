@@ -2,8 +2,9 @@ import express from 'express';
 import cors from 'cors';
 
 import db from './models';
-import { getScenarioCount } from './models/scenario';
+import { getEnhancementScenarios, getPriorities, getRegressionScenarios, getScenarioCount } from './models/scenario';
 import { getFailCount, getRoundNotes, getTestCount } from './models/round';
+import { getDeployment } from './models/deployment';
 
 const app = express();
 app.use(express.json());
@@ -50,5 +51,21 @@ app.get('/api/app-list-data', async (request, response) => {
     promoTestCount,
     aomaFails,
     promoFails,
+  });
+});
+
+app.get('/api/:app/report-data', async (request, response) => {
+  const app = request.params.app;
+  const roundNotes = await getRoundNotes(app);
+  const deployment = await getDeployment(app);
+  const enhancementScenarios = await getEnhancementScenarios(app);
+  const regressionScenarios = await getRegressionScenarios(app);
+  const priorities = await getPriorities(app);
+  response.json({
+    roundNotes,
+    deployment,
+    enhancementScenarios,
+    regressionScenarios,
+    priorities,
   });
 });

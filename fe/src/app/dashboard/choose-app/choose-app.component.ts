@@ -19,6 +19,5 @@ export class ChooseAppComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.data = await this.dashboardService.getAppListData();
-    console.log(this.data);
   }
 }

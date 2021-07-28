@@ -1,1 +1,269 @@
-<p>app-details works!</p>
+<div *ngIf="isLoading">
+  Loading...
+</div>
+
+<div class="well" *ngIf="!isLoading">
+  <h3 class="row" style="padding-left: 12px;">Release {{reportData?.roundNotes?.releaseNum}} - {{reportData?.roundNotes?.name}}</h3>
+
+  <div class="ng-cloak">
+
+    <table>
+      <tr><th></th></tr>
+
+      <tr>
+        <td class="span3"><h3><small>Testing Period</small></h3></td>
+        <td class="span3"><h3><small>Days Remaining</small></h3></td>
+        <td class="span3"><h3><small>Release Date</small></h3></td>
+        <td class="span4"><h3><small>Latest Test Deployment</small></h3></td>
+      </tr>
+
+      <tr *ngIf="roundStart && percentRemain">
+        <td>
+          <h4>{{roundStart}}&nbsp;-&nbsp;{{roundEnd}}</h4>
+        </td>
+        <td><h4>{{daysLeft}} <small>&nbsp;({{percentRemain}})</small></h4></td>
+        <td><h4>{{releaseDate}}</h4></td>
+        <td><h4>{{deployDiff}} <small> {{deployDate}}</small></h4></td>
+      </tr>
+    </table>
+
+
+    <table class="coverage-pies">
+      <tr>
+        <td><h3><small>Browsers Tested</small></h3></td>
+        <td><h3><small>Completion Projection</small></h3></td>
+      </tr>
+      <tr class="chart-row">
+        <td><div id="browser-pie"></div></td>
+        <td><div id="completion-gauge"></div></td>
+      </tr>
+    </table>
+
+
+    <h2 class="statsHeader"><small class="tight">Progress</small></h2>
+
+    <table class="table table-condensed" ng-controller="progressController">
+      <thead></thead>
+      <tr>
+
+        <td class="span3">
+          <h4><span class="priorityRatio">{{getRatio('priorities')}}</span><small><a href="#priorities"> priorities</a></small></h4>
+        </td>
+        <td class="span3">
+          <h4><span class="enhancementRatio">{{getRatio('enhancementScenarios')}}</span><small><a href="#new_features"> new features</a></small></h4>
+        </td>
+        <td class="span3">
+          <h4><span class="regressionRatio">{{getRatio('regressionScenarios')}}</span><small><a href="#regressions"> regressions</a></small></h4>
+        </td>
+        <td class="span3">
+          <h4><span class="overallRatio">{{overallRatio}}</span><small> overall</small></h4>
+        </td>
+
+      </tr>
+    </table>
+<!--  -->
+<!--  -->
+<!--    <h2 class="statsHeader"><small class="tight">Tests on this Round</small></h2>-->
+<!--    <table class="table table-condensed">-->
+<!--      <thead></thead>-->
+<!--      <tbody>-->
+<!--      <tr>-->
+<!--        <td class="span2">-->
+<!--          <h4>-->
+<!--            {{ test_count }} <small>total</small>-->
+<!--          </h4>-->
+<!--        </td>-->
+<!--  -->
+<!--        <td class="span2">-->
+<!--          <h4>-->
+<!--            {{ test_count_today }}-->
+<!--            <small>today</small>-->
+<!--          </h4>-->
+<!--        </td>-->
+<!--        <td class="span2">-->
+<!--          <h4>-->
+<!--            {{ test_count_yesterday }}-->
+<!--            <small>yesterday</small>-->
+<!--          </h4>-->
+<!--        </td>-->
+<!--        <td class="span2">-->
+<!--          <h4>-->
+<!--            {{ test_count_week }} <small>past 7 days</small>-->
+<!--          </h4>-->
+<!--        </td>-->
+<!--        <td class="span2">-->
+<!--          <h4>{{ jira_count }} <small><a href="#jiras">-->
+<!--            <ng-pluralize count="jira_count"-->
+<!--                          when="{'0': 'JIRA tickets',-->
+<!--                       'one': 'JIRA ticket',-->
+<!--                       'other': 'JIRA tickets'}">-->
+<!--            </ng-pluralize>-->
+<!--          </a></small></h4>-->
+<!--        </td>-->
+<!--  -->
+<!--      </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
+<!--  -->
+<!--  -->
+<!--    <h2 class="statsHeader"><small>Cases for this Round</small></h2>-->
+<!--    <table class="table table-condensed">-->
+<!--      <thead></thead>-->
+<!--      <tr>-->
+<!--        <td class="span2">-->
+<!--          <h4>-->
+<!--            {{ enhancement_count + regression_count }}-->
+<!--            <small> for testing</small>-->
+<!--          </h4>-->
+<!--        </td>-->
+<!--  -->
+<!--        <td class="span2">-->
+<!--          <h4>-->
+<!--            {{ priority_count }}<small><a href="#priorities"> prioritized</a></small>-->
+<!--          </h4>-->
+<!--        </td>-->
+<!--        <td class="span2">-->
+<!--          <h4>-->
+<!--            {{ enhancement_count }}<small><a href="#new_features"> for new features</a></small>-->
+<!--          </h4>-->
+<!--        </td>-->
+<!--        <td class="span2">-->
+<!--          <h4>-->
+<!--            {{ regression_count }}<small><a href="#regressions"> for regression</a></small>-->
+<!--          </h4>-->
+<!--        </td>-->
+<!--        <td class="span2">-->
+<!--          <h4>-->
+<!--            {{ flagged_count }}<small><a href="#flagged"> flagged for review</a></small>-->
+<!--          </h4>-->
+<!--        </td>-->
+<!--      </tr>-->
+<!--    </table>-->
+  </div> <!-- cases for this round -->
+<!--  {% endverbatim %}-->
+<!--  -->
+<!--  <div><a id="exp_collapse" href="#" ><i id="chevron" class="icon-chevron-up" title="expand or collapse the tester notes"></i>expand/collapse</a></div>-->
+<!--  <div id="roundNotes" class="well">-->
+<!--    &lt;!&ndash; assigned JIRAs reminder &ndash;&gt;-->
+<!--    &lt;!&ndash; <div class="assigned_jiras alert alert-info">-->
+<!--        <strong>Friendly Reminder:</strong> For the current round, there <span class="number_assigned"></span> assigned to you: <br>-->
+<!--        <span class="assigned_tickets"></span>-->
+<!--    </div> &ndash;&gt;-->
+<!--  -->
+<!--    {% for item in roundNotes %}-->
+<!--    <p>{{ item.notes | raw }}</p>-->
+<!--    {% endfor %}-->
+<!--  </div>-->
+<!--  -->
+<!--  {% if not jiras %}-->
+<!--  <h4><small>No JIRA Tickets Yet</small></h4>-->
+<!--  {% else %}-->
+<!--  <a name="jiras"></a>-->
+<!--  -->
+<!--  -->
+<!--  <div class="row">-->
+<!--    <h2 class="pull-left bb-indent"><small>&nbsp;&nbsp;&nbsp;&nbsp;Current JIRA Tickets ({{jiras | length}}<span class="totalJiras">)</span></small>-->
+<!--      <button class="btn btn-mini btn-default hideClosed">hide closed tickets</button>-->
+<!--    </h2>-->
+<!--    <div class="updated pull-right"><h3><small class="moment"></small></h3></div>-->
+<!--  -->
+<!--  </div>-->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  &lt;!&ndash; container to which unique modals are appended &ndash;&gt;-->
+<!--  <div class="comments-modal-container"></div>-->
+<!--  -->
+<!--  <table class="table-bordered table-striped table-jira">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--      &lt;!&ndash; <th style="width:10px; text-align: center;"></th> &ndash;&gt;-->
+<!--      <th style="width:7%">Ticket</th>-->
+<!--      <th style="width:7%">Fix</th>-->
+<!--      <th style="width:7%">In Prod</th>-->
+<!--      <th style="width:7%">Case</th>-->
+<!--      <th style="width:21.5%">JIRA Title</th>-->
+<!--      <th style="width:21.5%">Test Result</th>-->
+<!--      <th style="width:21.5%">Last Comment</th>-->
+<!--      <th style="width:11.3%">Status</th>-->
+<!--      <th style="width:11.3%">Assignee</th>-->
+<!--      <th style="width:7.9%">Actions</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    {% for test in jiras %}-->
+<!--    <tr class="jira-row">-->
+<!--      <td class="jira-ticket" style="text-align: center;">-->
+<!--        <a href="https://jira.smedigitalapps.com/jira/browse/{{ test.ticket }}" target="window" title="View ticket in JIRA">{{ test.ticket }}</a>-->
+<!--      </td>-->
+<!--      <td class="center-in-column"><span class="fixVersionClass" style="font-style: italic;"></span></td>-->
+<!--      <td class="center-in-column">-->
+<!--        {% if test.in_prod == 'Yes' %}<span class="label label-default" title="Exists in Production Environment">{{test.in_prod}}</span>{% endif %}-->
+<!--        {% if test.in_prod == 'No' %}<span class="label label-warning" title="Does Not Occur in Production">{{test.in_prod}}</span>{% endif %}-->
+<!--        {% if test.in_prod == 'Unsure' %}<span class="label label-info" title="Not Tested in Production">{{test.in_prod}}</span>{% endif %}-->
+<!--      </td>-->
+<!--      <td style="text-align: center;"><a href="{{ path('scenario_show', { 'app': app.request.get('app'), 'id': test.scenario_id }) }}"> {{ test.scenario_id }}-->
+<!--      </a>{% if test.is_security %}<i class="icon-lock" title="security case">{% endif %}</i>-->
+<!--      </td>-->
+<!--      <td style="height: 45px; font-style: italic; text-align:left;" class="titleClas"></td>-->
+<!--      <td> {{ test.result | striptags | truncate(90)}} </td>-->
+<!--      <td style="height: 45px; font-style: italic;" class="commentClass"></td>-->
+<!--      <td style="height: 45px; font-style: italic;" class="statusClass"></td>-->
+<!--  -->
+<!--      <td style="height: 45px; font-style: italic; text-align: center;" class="assigneeClass"></td>-->
+<!--  -->
+<!--      <td style="text-align: center;">-->
+<!--        <a href="{{ path('test_show', { 'app': app.request.get('app'), 'id': test.id }) }}"><i class="icon-zoom-in" title="show test detail"></i></a>-->
+<!--        <a href="{{ path('test_edit', { 'app': app.request.get('app'), 'id': test.id }) }}"><i class="icon-pencil" title="edit or delete this test"></i></a>-->
+<!--      </td>-->
+<!--    </tr>-->
+<!--  -->
+<!--    {% endfor %}-->
+<!--    </tbody>-->
+<!--  </table>-->
+<!--  {% endif %}-->
+<!--  -->
+<!--  {% include '@front_end/enhancements-list.html' %}-->
+<!--  -->
+<!--  {% include '@front_end/priorities-list.html' %}-->
+<!--  -->
+<!--  {% include '@front_end/current-regressions-list.html' %}-->
+<!--  -->
+<!--  <a name="flagged"></a>-->
+<!--  {% if not flaggedScenarios %}-->
+<!--  <h2><small>No Cases Are Currently Flagged for Review</small></h2>-->
+<!--  {% else %}-->
+<!--  <h2><small>Flagged Cases ({{flaggedScenarios | length}})</small></h2>-->
+<!--  <table class="table-bordered table-striped" style="width: 100%; font-size: 12px;">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--      <th>ID</th>-->
+<!--      <th>Name</th>-->
+<!--      <th style="width: 15%;">Updated</th>-->
+<!--      <th>Flag Reason</th>-->
+<!--      <th>Actions</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--  -->
+<!--    {% for scenario in flaggedScenarios %}-->
+<!--    <tr>-->
+<!--      <td style="text-align: center;"> {{ scenario.id }} </td>-->
+<!--      <td> {{ scenario.name }} </td>-->
+<!--  -->
+<!--      <td style="text-align: center;"> {{ scenario.updatedat|date('M d g:i A') }}</td>-->
+<!--      <td> {{ scenario.flagreason | truncate(50)}} </td>-->
+<!--  -->
+<!--      <td style="text-align: center;">-->
+<!--        <a href="{{ path('scenario_show', { 'app': app.request.get('app'), 'id': scenario.id }) }}"><i class="icon-zoom-in" title="show scenario detail"></i></a>-->
+<!--        <a href="{{ path('scenario_edit', { 'app': app.request.get('app'), 'id': scenario.id }) }}"><i class="icon-pencil" title="edit this scenario"></i></a>-->
+<!--  -->
+<!--      </td>-->
+<!--    </tr>-->
+<!--    {% endfor %}-->
+<!--    </tbody>-->
+<!--  </table>-->
+<!--{% endif %}-->
+
+</div>
