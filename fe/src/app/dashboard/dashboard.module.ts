@@ -7,14 +7,7 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { AppDetailsComponent } from './app-details/app-details.component';
 
 @NgModule({
-  declarations: [
-    ChooseAppComponent,
-    AppDetailsComponent,
-  ],
-  imports: [
-    CommonModule,
-    HttpClientModule,
-    DashboardRoutingModule,
-  ],
+  declarations: [ChooseAppComponent, AppDetailsComponent],
+  imports: [CommonModule, HttpClientModule, DashboardRoutingModule],
 })
 export class DashboardModule {}
