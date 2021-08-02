@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-
-declare let require: any;
-const fs = require('../../package.json');
+import data from 'package.json';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +23,7 @@ export class AppComponent {
     ].join('');
 
     console.log(
-      `%c ${this.appTitle} %c ${this.isBuildDev ? '❗localhost' : ''} %c ${this.build} UI v.${fs.version}`,
+      `%c ${this.appTitle} %c ${this.isBuildDev ? '❗localhost' : ''} %c ${this.build} UI v.${data.version}`,
       style,
       '',
       '',
