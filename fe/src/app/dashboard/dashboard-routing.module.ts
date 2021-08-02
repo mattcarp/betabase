@@ -14,6 +14,22 @@ const routes: Routes = [
     component: AppDetailsComponent,
   },
   {
+    path: ':app/scenario/:id/show',
+    component: AppDetailsComponent,
+  },
+  {
+    path: ':app/scenario/:id/edit',
+    component: AppDetailsComponent,
+  },
+  {
+    path: ':app/test/:id/show',
+    component: AppDetailsComponent,
+  },
+  {
+    path: ':app/test/:id/edit',
+    component: AppDetailsComponent,
+  },
+  {
     path: '**',
     component: ChooseAppComponent,
   },

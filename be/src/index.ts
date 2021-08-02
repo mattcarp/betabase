@@ -2,9 +2,21 @@ import express from 'express';
 import cors from 'cors';
 
 import db from './models';
-import { getEnhancementScenarios, getPriorities, getRegressionScenarios, getScenarioCount } from './models/scenario';
-import { getFailCount, getRoundNotes, getTestCount } from './models/round';
+import {
+  getEnhancementCount,
+  getEnhancementScenarios,
+  getFlaggedCount,
+  getFlaggedScenarios,
+  getPriorities,
+  getPriorityCount,
+  getPriorityScenarios,
+  getRegressionCount,
+  getRegressionScenarios,
+  getScenarioCount,
+} from './models/scenario';
+import { getFailCount, getJiras, getRoundNotes, getTestCount } from './models/round';
 import { getDeployment } from './models/deployment';
+import { getTestCountRange } from './models/test';
 
 const app = express();
 app.use(express.json());
@@ -61,11 +73,33 @@ app.get('/api/:app/report-data', async (request, response) => {
   const enhancementScenarios = await getEnhancementScenarios(app);
   const regressionScenarios = await getRegressionScenarios(app);
   const priorities = await getPriorities(app);
+  const testsToday = await getTestCountRange(app, 'today');
+  const testsYesterday = await getTestCountRange(app, 'yesterday');
+  const testsThisWeek = await getTestCountRange(app, 'last7days');
+  const jiras = await getJiras(app);
+  const testCount = await getTestCount(app);
+  const enhancementCount = await getEnhancementCount(app);
+  const regressionCount = await getRegressionCount(app);
+  const flaggedCount = await getFlaggedCount(app);
+  const priorityCount = await getPriorityCount(app);
+  const flaggedScenarios = await getFlaggedScenarios(app);
+  const priorityScenarios = await getPriorityScenarios(app);
   response.json({
     roundNotes,
     deployment,
     enhancementScenarios,
     regressionScenarios,
     priorities,
+    testsToday,
+    testsYesterday,
+    testsThisWeek,
+    jiras,
+    testCount,
+    enhancementCount,
+    regressionCount,
+    flaggedCount,
+    priorityCount,
+    flaggedScenarios,
+    priorityScenarios,
   });
 });

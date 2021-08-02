@@ -1,6 +1,7 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, QueryTypes } from 'sequelize';
 
 import db from './index';
+import moment from 'moment';
 
 export const Test = db.sequelize.define('Test', {
   id: {
@@ -122,6 +123,44 @@ export const getAllTests = async () => {
   return await Test.findAll({
     include: db.Scenario,
   });
+}
+
+export const getTestCountRange = async (app: string, period: string) => {
+  let start;
+  let end;
+  switch (period) {
+    case 'today':
+      start = moment().startOf('day').format('Y-M-D');
+      end = moment().endOf('day').format('Y-M-D');
+      break;
+    case 'yesterday':
+      start = moment().startOf('day').subtract(1, 'days').format('Y-M-D');
+      end = moment().endOf('day').subtract(1, 'days').format('Y-M-D');
+      break;
+    case 'last7days':
+      start = moment().startOf('day').subtract(7, 'days').format('Y-M-D');
+      end = moment().endOf('day').format('Y-M-D');
+      break;
+  }
+  const query = "SELECT COUNT(t.id) AS testCount\n" +
+    "FROM `test` t, `scenario` s\n" +
+    "WHERE t.created_at BETWEEN '" + start + "' AND '" + end + "'\n" +
+    "AND s.id = t.scenario_id\n" +
+    "AND s.app_under_test = '" + app + "'";
+  const [{ testCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return testCount;
+}
+
+export const getTestCount = async (app: string) => {
+  const query = "SELECT COUNT(t.id) AS testCount\n" +
+    "FROM `round` r, `test` t, `scenario` s\n" +
+    "WHERE r.current_flag = TRUE\n" +
+    "AND t.updated_at BETWEEN r.starts_at AND r.ends_at\n" +
+    "AND s.id = t.scenario_id\n" +
+    "AND s.app_under_test = '" + app + "'\n" +
+    "AND r.app  = '" + app + "'";
+  const [{ testCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return testCount;
 }
 
 db.Test = Test;
