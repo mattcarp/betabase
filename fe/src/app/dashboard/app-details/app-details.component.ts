@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import * as moment from 'moment';
-import { filter, pluck } from 'rxjs/operators';
+import { filter, pluck, tap } from 'rxjs/operators';
 
 import { ReportData, ScenarioItem } from '../models';
 import { DashboardService } from '../dashboard.service';
@@ -13,6 +13,7 @@ import { DashboardService } from '../dashboard.service';
 })
 export class AppDetailsComponent {
   reportData: ReportData | null = null;
+  app: string | null = null;
 
   constructor(
     private dashboardService: DashboardService,
@@ -22,6 +23,7 @@ export class AppDetailsComponent {
       .pipe(
         filter((params: Params) => 'app' in params),
         pluck('app'),
+        tap((app: string) => this.app = app),
       )
       .subscribe((app: string) => this.fetchData(app));
   }
@@ -78,7 +80,7 @@ export class AppDetailsComponent {
       .format('MMM Do, h:mm a');
   }
 
-  get overallRatio(): number {
+  get overallRatio(): string {
     let regressionRatio = 0;
     let enhancementRatio = 0;
     let regressionCount = 0;
@@ -100,7 +102,12 @@ export class AppDetailsComponent {
     const regressionWeight = regressionCount / totalCount;
     const enhancementWeight = enhancementCount / totalCount;
     const weightedAvg = (enhancementWeight * enhancementRatio) + (regressionWeight * regressionRatio);
-    return weightedAvg;
+    return (Math.round(weightedAvg * 100)) + '%';
+  }
+
+  get roundStartMilliseconds(): number {
+    if (!this.reportData?.roundNotes?.startsAt) { return 0; }
+    return moment(this.reportData?.roundNotes?.startsAt).add(-5, 'h').valueOf();
   }
 
   getRatio(key: string): string {
@@ -110,6 +117,14 @@ export class AppDetailsComponent {
       ratio = testedCount / totalCount;
     }
     return (Math.round(ratio * 100)) + '%';
+  }
+
+  isMostRecentVisible(mostRecent: Date | undefined): boolean {
+    return !mostRecent || moment(mostRecent).isBefore(moment(this.roundStart));
+  }
+
+  getMilliseconds(date: Date | string | undefined): number {
+    return !date ? 0 : moment(date).valueOf();
   }
 
   private getCounts(key: string): { testedCount: number, totalCount: number } {

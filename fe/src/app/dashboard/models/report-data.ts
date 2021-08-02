@@ -1,4 +1,5 @@
 import { ScenarioItem } from './scenario-item';
+import { JiraItem } from './jira-item';
 
 export interface ReportData {
   roundNotes: {
@@ -19,4 +20,15 @@ export interface ReportData {
   enhancementScenarios: ScenarioItem[];
   regressionScenarios: ScenarioItem[];
   priorities: ScenarioItem[];
+  testsToday: number;
+  testsYesterday: number;
+  testsThisWeek: number;
+  jiras: JiraItem[];
+  testCount: number;
+  enhancementCount: number;
+  regressionCount: number;
+  flaggedCount: number;
+  priorityCount: number;
+  flaggedScenarios: ScenarioItem[];
+  priorityScenarios: ScenarioItem[];
 }

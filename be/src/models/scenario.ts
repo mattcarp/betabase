@@ -150,19 +150,6 @@ export const getRegressionScenarios = async (app: string) => {
   return result;
 }
 
-//getPriorities
-// SELECT s.id, s.name, s.coverage,
-//   s.app_under_test,
-//   t.created_at as most_recent,
-//   t.pass_fail AS last_test
-// FROM Scenario s LEFT JOIN Test t on s.id = t.scenario_id
-// AND t.created_at = (SELECT max(created_at) FROM Test
-// WHERE scenario_id = s.id)
-// WHERE s.app_under_test = :app
-// AND s.client_priority = TRUE
-// GROUP BY s.id
-// ORDER BY t.created_at ASC
-
 export const getPriorities = async (app: string) => {
   const query = "SELECT s.id, s.name, s.coverage,\n" +
     "s.app_under_test AS appUnderTest,\n" +
@@ -177,6 +164,86 @@ export const getPriorities = async (app: string) => {
     "ORDER BY t.created_at ASC";
   const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
   return result;
+}
+
+export const getEnhancementCount = async (app: string) => {
+  const query = "SELECT COUNT(s.id) as enhancementCount\n" +
+    "FROM `scenario` s\n" +
+    "LEFT JOIN `test` t ON s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "WHERE scenario_id = s.id)\n" +
+    "WHERE s.app_under_test = '" + app + "'\n" +
+    "AND s.coverage = 'New Enhancements'\n" +
+    "AND s.client_priority != TRUE\n" +
+    "OR s.client_priority = NULL";
+  const [{ enhancementCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return enhancementCount;
+}
+
+export const getRegressionCount = async (app: string) => {
+  const query = "SELECT COUNT(s.id) as regressionCount\n" +
+    "FROM `scenario` s\n" +
+    "LEFT JOIN `test` t ON s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "WHERE scenario_id = s.id)\n" +
+    "WHERE s.app_under_test = '" + app + "'\n" +
+    "AND s.coverage = 'Regression - Current Round'\n" +
+    "AND s.client_priority != TRUE\n" +
+    "OR s.client_priority = NULL";
+  const [{ regressionCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return regressionCount;
+}
+
+export const getPriorityCount = async (app: string) => {
+  const query = "SELECT COUNT(s.id) as priorityCount\n" +
+    "FROM `scenario` s\n" +
+    "LEFT JOIN `test` t ON s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "WHERE scenario_id = s.id)\n" +
+    "WHERE s.app_under_test = '" + app + "'\n" +
+    "AND s.client_priority = TRUE";
+  const [{ priorityCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return priorityCount;
+}
+
+export const getFlaggedCount = async (app: string) => {
+  const query = "SELECT COUNT(s.id) as flaggedCount\n" +
+    "FROM `scenario` s\n" +
+    "LEFT JOIN `test` t ON s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "WHERE scenario_id = s.id)\n" +
+    "WHERE s.app_under_test = '" + app + "'\n" +
+    "AND s.review_flag = '1'";
+  const [{ flaggedCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return flaggedCount;
+}
+
+export const getFlaggedScenarios = async (app: string) => {
+  const query = "SELECT s.*\n" +
+    "FROM `scenario` s\n" +
+    "LEFT JOIN `test` t ON s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "WHERE scenario_id = s.id)\n" +
+    "WHERE s.app_under_test = '" + app + "'\n" +
+    "AND s.review_flag = '1'";
+  const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return db.snakeCaseToCamelCase(result);
+}
+
+export const getPriorityScenarios = async (app: string) => {
+  const query = "SELECT s.id, s.name, s.coverage,\n" +
+    "s.app_under_test,\n" +
+    "t.created_at as mostRecent,\n" +
+    "t.pass_fail AS lastTest\n" +
+    "FROM `scenario` s LEFT JOIN `test` t on s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "WHERE scenario_id = s.id)\n" +
+    "WHERE s.app_under_test = '" + app + "'\n" +
+    "AND s.client_priority = TRUE\n" +
+    "GROUP BY s.id\n" +
+    "ORDER BY t.created_at ASC";
+  const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return db.snakeCaseToCamelCase(result);
 }
 
 db.Scenario = Scenario;
