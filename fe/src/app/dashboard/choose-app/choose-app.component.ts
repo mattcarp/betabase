@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DashboardService } from '../dashboard.service';
-import { AppListData } from '../models';
+import { AppService } from '../../shared/app.service';
+import { AppListData } from '../../shared/models';
 
 @Component({
   selector: 'app-choose-app',
@@ -11,13 +11,13 @@ import { AppListData } from '../models';
 export class ChooseAppComponent implements OnInit {
   data: AppListData | null = null;
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private appService: AppService) {}
 
   get isLoading(): boolean {
     return this.data === null;
   }
 
   async ngOnInit(): Promise<void> {
-    this.data = await this.dashboardService.getAppListData();
+    this.data = await this.appService.getAppListData();
   }
 }

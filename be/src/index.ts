@@ -12,11 +12,12 @@ import {
   getPriorityScenarios,
   getRegressionCount,
   getRegressionScenarios,
+  getScenario,
   getScenarioCount,
 } from './models/scenario';
 import { getFailCount, getJiras, getRoundNotes, getTestCount } from './models/round';
 import { getDeployment } from './models/deployment';
-import { getTestCountRange } from './models/test';
+import { getScenarioTests, getTestCountRange } from './models/test';
 
 const app = express();
 app.use(express.json());
@@ -102,4 +103,11 @@ app.get('/api/:app/report-data', async (request, response) => {
     flaggedScenarios,
     priorityScenarios,
   });
+});
+
+app.get('/api/scenario/:id', async (request, response) => {
+  const id = request.params.id;
+  const scenario = await getScenario(id);
+  const tests = await getScenarioTests(id);
+  response.json({ scenario, tests });
 });

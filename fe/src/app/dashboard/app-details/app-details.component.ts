@@ -3,8 +3,8 @@ import { ActivatedRoute, Params } from '@angular/router';
 import * as moment from 'moment';
 import { filter, pluck, tap } from 'rxjs/operators';
 
-import { ReportData, ScenarioItem } from '../models';
-import { DashboardService } from '../dashboard.service';
+import { ReportData, ScenarioItem } from '../../shared/models';
+import { AppService } from '../../shared/app.service';
 
 @Component({
   selector: 'app-app-details',
@@ -16,7 +16,7 @@ export class AppDetailsComponent {
   app: string | null = null;
 
   constructor(
-    private dashboardService: DashboardService,
+    private appService: AppService,
     private activatedRoute: ActivatedRoute,
   ) {
     activatedRoute.params
@@ -136,9 +136,7 @@ export class AppDetailsComponent {
   }
 
   private async fetchData(app: string): Promise<void> {
-    const a = moment().valueOf();
-    console.log(a);
-    this.reportData = await this.dashboardService.getAppReportData(app);
+    this.reportData = await this.appService.getAppReportData(app);
     console.log(this.reportData);
   }
 }

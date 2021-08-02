@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
-import { AppListData, ReportData } from './models';
+import { AppListData, ReportData, ScenarioItem, TestItem } from './models';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DashboardService {
+export class AppService {
   private readonly apiUrl: string;
 
   constructor(private http: HttpClient) {
@@ -22,5 +22,10 @@ export class DashboardService {
   getAppReportData(app: string): Promise<ReportData> {
     const url = `${this.apiUrl}/${app}/report-data`;
     return this.http.get<ReportData>(url).toPromise();
+  }
+
+  getScenario(id: string): Promise<{ scenario: ScenarioItem, tests: TestItem[] }> {
+    const url = `${this.apiUrl}/scenario/${id}`;
+    return this.http.get<{ scenario: ScenarioItem, tests: TestItem[] }>(url).toPromise();
   }
 }

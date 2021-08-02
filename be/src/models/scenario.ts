@@ -246,4 +246,9 @@ export const getPriorityScenarios = async (app: string) => {
   return db.snakeCaseToCamelCase(result);
 }
 
+export const getScenario = async (id: string) => {
+  const { dataValues } = await Scenario.findByPk(id);
+  return dataValues;
+}
+
 db.Scenario = Scenario;
