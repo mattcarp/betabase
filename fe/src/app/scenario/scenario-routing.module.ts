@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ScenarioDetailsComponent } from './scenario-details/scenario-details.component';
 import { ScenarioFormComponent } from './scenario-form/scenario-form.component';
+import { ScenarioListComponent } from './scenario-list/scenario-list.component';
 
 
 const routes: Routes = [
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: ':app/:id/new',
     component: ScenarioFormComponent,
+  },
+  {
+    path: ':app',
+    component: ScenarioListComponent,
   },
 ];
 

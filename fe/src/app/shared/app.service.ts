@@ -28,4 +28,9 @@ export class AppService {
     const url = `${this.apiUrl}/scenario/${id}`;
     return this.http.get<{ scenario: ScenarioItem, tests: TestItem[] }>(url).toPromise();
   }
+
+  getAllScenarios(app: string): Promise<ScenarioItem[]> {
+    const url = `${this.apiUrl}/scenario-list/${app}`;
+    return this.http.get<ScenarioItem[]>(url).toPromise();
+  }
 }

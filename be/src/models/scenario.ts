@@ -251,4 +251,14 @@ export const getScenario = async (id: string) => {
   return dataValues;
 }
 
+export const getScenarioList = async (appUnderTest: string) => {
+  const result = await Scenario.findAll({
+    where: { appUnderTest },
+    order: [
+      ['updatedAt', 'DESC'],
+    ],
+  });
+  return result;
+}
+
 db.Scenario = Scenario;

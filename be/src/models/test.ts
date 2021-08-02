@@ -165,7 +165,6 @@ export const getTestCount = async (app: string) => {
 
 export const getScenarioTests = async (scenario_id: string) => {
   const result = await Test.findAll({
-    include: db.Scenario,
     where: { scenario_id },
     order: [
       ['createdAt', 'DESC'],

@@ -14,6 +14,7 @@ import {
   getRegressionScenarios,
   getScenario,
   getScenarioCount,
+  getScenarioList,
 } from './models/scenario';
 import { getFailCount, getJiras, getRoundNotes, getTestCount } from './models/round';
 import { getDeployment } from './models/deployment';
@@ -110,4 +111,8 @@ app.get('/api/scenario/:id', async (request, response) => {
   const scenario = await getScenario(id);
   const tests = await getScenarioTests(id);
   response.json({ scenario, tests });
+});
+app.get('/api/scenario-list/:app', async (request, response) => {
+  const scenarios = await getScenarioList(request.params.app);
+  response.json(scenarios);
 });
