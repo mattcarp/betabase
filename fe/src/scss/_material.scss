@@ -1,0 +1,526 @@
+@import 'variables';
+
+// Material Form Field
+.mat-form-field {
+  &.full-width {
+    width: 100%;
+  }
+
+  &.mat-form-field-appearance-outline {
+    outline: none;
+
+    .mat-form-field-wrapper {
+      padding-bottom: 1em;
+      outline: none;
+
+      .mat-form-field-flex {
+        height: 2.25em;
+
+        .mat-form-field-outline {
+          transition: background-color 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+          border-radius: 5px;
+          background-color: white;
+
+          &.mat-form-field-outline-thick {
+            opacity: 1;
+            color: $color-grey;
+
+            .mat-form-field-outline-start,
+            .mat-form-field-outline-gap,
+            .mat-form-field-outline-end {
+              border-width: 1px;
+            }
+          }
+        }
+
+        .mat-form-field-infix {
+          padding: 0.25em 0;
+          border-top-width: 0.54em;
+
+          .mat-form-field-label-wrapper {
+            .mat-form-field-label {
+              top: 1.35em;
+            }
+          }
+        }
+      }
+    }
+
+    &.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+    &.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
+      transform: translateY(-1.19375em) scale(0.75);
+    }
+
+    .mat-form-field-prefix,
+    .mat-form-field-suffix {
+      top: 0.1em;
+
+      .mat-icon-button {
+        margin: 0 -0.75em 0 0;
+      }
+    }
+
+    .mat-form-field-prefix {
+      margin-right: 8px;
+    }
+
+    &.ng-invalid {
+      .mat-form-field-wrapper {
+        .mat-form-field-flex {
+          .mat-form-field-outline {
+            &.mat-form-field-outline-thick {
+              color: $color-red;
+            }
+          }
+        }
+      }
+    }
+
+    &:hover:not(.mat-focused):not(.ng-invalid) {
+      .mat-form-field-wrapper {
+        .mat-form-field-flex {
+          .mat-form-field-outline {
+            &.mat-form-field-outline-thick {
+              color: #a8a8a8;
+            }
+          }
+        }
+      }
+    }
+
+    .mat-select-arrow-wrapper {
+      transform: none;
+    }
+
+    // Button Select
+    &.button-select {
+      .mat-form-field-wrapper {
+        .mat-form-field-flex {
+          .mat-form-field-prefix,
+          .mat-form-field-suffix,
+          .mat-select-value,
+          .mat-select-arrow {
+            color: $color-light;
+          }
+        }
+      }
+    }
+
+    // Input Component
+    &.input {
+      .mat-form-field-wrapper {
+        margin: 0;
+        padding: 0 0 5px;
+      }
+    }
+  }
+
+  &.mat-form-field-can-float {
+    &.mat-form-field-should-float {
+      .mat-form-field-label {
+        transform: translateY(-0.76em) scale(0.75);
+      }
+    }
+  }
+
+  &.mat-paginator-page-size-select {
+    .mat-form-field-wrapper {
+      padding: 0;
+    }
+  }
+
+  // Button Select
+  &.button-select {
+    .mat-form-field-wrapper {
+      .mat-form-field-flex {
+        .mat-form-field-outline {
+          background-color: $color-medium;
+        }
+
+        .mat-form-field-prefix,
+        .mat-form-field-suffix,
+        .mat-select-value,
+        .mat-select-arrow,
+        .mat-form-field-label {
+          color: $color-white;
+        }
+      }
+    }
+  }
+
+  // Material Chip List
+  &.chip-list {
+    .mat-form-field-wrapper {
+      margin: 0 0 10px;
+      padding: 0;
+
+      .mat-form-field-flex {
+        height: unset;
+
+        .mat-form-field-infix {
+          padding: 0.25em 0 0.4em;
+
+          .mat-chip-list {
+            .mat-chip-list-wrapper {
+              .mat-chip {
+                &.mat-standard-chip {
+                  display: flex;
+                  align-items: center;
+                  min-width: 0;
+                  max-width: 280px;
+                  min-height: 28px;
+                  padding: 6px 8px;
+                  background-color: #d7ecf4;
+
+                  span {
+                    @include ellipsis;
+                    font-weight: 400;
+                    line-height: 1.2;
+                  }
+
+                  .fas {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    opacity: 1;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .fa-times {
+          color: $color-red;
+        }
+      }
+    }
+  }
+
+  // Material Textarea + see below
+  &.textarea {
+    .mat-form-field-wrapper {
+      .mat-form-field-flex {
+        height: unset;
+      }
+    }
+
+    &.height-200 {
+      .mat-form-field-wrapper {
+        .mat-form-field-flex {
+          height: 200px;
+
+          textarea {
+            &.mat-input-element {
+              height: 178px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.datepicker {
+    .mat-form-field-wrapper {
+      .mat-form-field-flex {
+        .mat-form-field-infix {
+          .mat-form-field-label-wrapper {
+            top: -0.95em;
+          }
+        }
+
+        .mat-form-field-suffix {
+          top: 0.25em;
+        }
+      }
+    }
+  }
+}
+
+// Material Textarea
+textarea {
+  &.mat-input-element {
+    min-height: 80px;
+    margin: -2px 0 4px !important;
+  }
+}
+
+// Material Buttons
+.mat-icon-button,
+.mat-flat-button,
+.mat-button {
+  &.mat-flat-button,
+  &.mat-button {
+    overflow: hidden;
+    min-width: 36px;
+    height: 24px;
+    padding: 0 10px;
+    transition: background-color 0.4s ease-out;
+    line-height: 24px;
+
+    &.mat-primary:not(.mat-button-disabled) {
+      &:hover {
+        background-color: $color-grey !important;
+      }
+    }
+
+    &.mat-accent:not(.mat-button-disabled) {
+      &:hover {
+        background-color: $color-green !important;
+      }
+    }
+
+    &.mat-warn:not(.mat-button-disabled) {
+      &:hover {
+        background-color: $color-red !important;
+      }
+    }
+
+    .mat-button-wrapper {
+      display: flex;
+      align-items: center;
+
+      span {
+        @include ellipsis;
+
+        & + .fas {
+          margin: 0 0 0 8px;
+        }
+      }
+    }
+  }
+
+  &.mat-button-disabled {
+    color: $color-grey !important;
+    background-color: $color-medium !important;
+
+    &.scroll-button-next,
+    &.scroll-button-prev {
+      opacity: 1 !important;
+      background-color: $color-grey !important;
+    }
+  }
+}
+
+.mat-icon-button {
+  transition: color 0.4s ease-out;
+
+  &.mat-primary:not(.mat-button-disabled) {
+    &:hover {
+      color: $color-grey !important;
+    }
+  }
+
+  &.mat-accent:not(.mat-button-disabled) {
+    &:hover {
+      color: $color-green !important;
+    }
+  }
+
+  .mat-warn:not(.mat-button-disabled) {
+    &:hover {
+      color: $color-red !important;
+    }
+  }
+
+  .mat-button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    .fas {
+      line-height: initial;
+    }
+  }
+
+  &.mat-button-disabled {
+    background-color: transparent !important;
+  }
+}
+
+// Material Radio
+.mat-radio-button {
+  margin-right: 10px;
+
+  &.radio-eye {
+    .mat-radio-label {
+      .mat-radio-container {
+        display: none;
+      }
+    }
+
+    .fas {
+      color: $color-darkgreen;
+    }
+
+    &.off {
+      .fas,
+      span {
+        color: $color-lightgrey;
+      }
+    }
+  }
+}
+
+// Material Select
+.mat-select-panel {
+  div {
+    display: flex;
+    align-items: center;
+    height: 2em;
+    padding: 0 16px;
+    font-weight: bold;
+  }
+
+  .mat-optgroup {
+    &-label {
+      height: 2em !important;
+      line-height: 2em !important;
+      color: $color-black;
+    }
+  }
+
+  .mat-option {
+    height: 2em !important;
+    line-height: 2em !important;
+  }
+}
+
+// Material Checkbox
+.mat-checkbox {
+  .mat-checkbox-layout {
+    .mat-checkbox-label {
+      @include ellipsis;
+    }
+  }
+}
+
+// Material Datepicker
+.mat-calendar {
+  .mat-calendar-content {
+    .mat-calendar-table {
+      .mat-calendar-body {
+        .mat-calendar-body-cell {
+          &:not(.mat-calendar-body-disabled) {
+            background-color: #effde9;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Material Dialogs
+.cdk-overlay-container {
+  .cdk-global-overlay-wrapper {
+    .mat-dialog-container {
+      overflow: hidden;
+      padding: 0;
+
+      .dialog {
+        &-title {
+          display: flex;
+          align-items: center;
+          margin: 0;
+          padding: 0 16px 0 4px;
+          color: $color-white;
+          border-radius: 4px 0 0 0;
+          background-color: $color-medium;
+
+          h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: normal;
+            color: $color-white;
+          }
+        }
+
+        &-actions {
+          display: flex;
+          align-items: center;
+          height: 40px;
+          min-height: 40px;
+          margin: 0;
+          padding: 0 16px;
+          background-color: $color-light;
+        }
+
+        &-content {
+          overflow-y: auto;
+          background-color: $color-white;
+
+          & > section {
+            height: 100%;
+            padding: 10px 16px 40px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.cdk-global-scrollblock {
+  overflow-y: hidden;
+}
+
+.cdk-overlay-light-backdrop,
+.cdk-overlay-dark-backdrop {
+  background-color: rgba($color-black, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+// Material Cards
+.mat-card {
+  margin: 0 0 10px;
+  padding: 5px 8px !important;
+}
+
+// Material Menu
+.mat-menu-panel {
+  .mat-menu-content {
+    padding: 0 !important;
+  }
+
+  &.hamburger-menu {
+    min-width: 200px;
+
+    .mat-menu-content {
+      background-color: rgba(var(--color-rgb-header), 1);
+
+      .mat-menu-item {
+        color: $color-white;
+
+        &[disabled] {
+          color: $color-grey;
+        }
+
+        &:hover {
+          background-color: rgba(var(--color-rgb-nav), 1);
+        }
+      }
+    }
+  }
+}
+
+// Material Chip List
+.mat-chip-list {
+  .mat-chip-list-wrapper {
+    .mat-chip {
+      min-height: 26px;
+      margin: 0 6px 6px 0;
+      padding: 0 10px 0 4px;
+
+      .fas {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        font-size: 14px;
+        border-radius: 50%;
+      }
+    }
+  }
+}

@@ -26,12 +26,22 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "/assets"
+              }
             ],
             "styles": [
-              "src/styles.scss"
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/assets/fonts/fontawesome-5.15.3/css/all.css",
+              "src/scss/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/scss/"
+              ]
+            },
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -96,11 +106,11 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [
-              "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/scss/styles.scss"
             ],
             "scripts": []
           }
