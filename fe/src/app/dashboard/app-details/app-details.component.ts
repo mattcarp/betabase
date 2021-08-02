@@ -105,11 +105,6 @@ export class AppDetailsComponent {
     return (Math.round(weightedAvg * 100)) + '%';
   }
 
-  get roundStartMilliseconds(): number {
-    if (!this.reportData?.roundNotes?.startsAt) { return 0; }
-    return moment(this.reportData?.roundNotes?.startsAt).add(-5, 'h').valueOf();
-  }
-
   getRatio(key: string): string {
     const { testedCount, totalCount } = this.getCounts(key);
     let ratio = 0;
@@ -119,12 +114,16 @@ export class AppDetailsComponent {
     return (Math.round(ratio * 100)) + '%';
   }
 
-  isMostRecentVisible(mostRecent: Date | undefined): boolean {
-    return !mostRecent || moment(mostRecent).isBefore(moment(this.roundStart));
-  }
-
-  getMilliseconds(date: Date | string | undefined): number {
-    return !date ? 0 : moment(date).valueOf();
+  getMostRecentText(mostRecent: string | Date | undefined): string {
+    let result = '';
+    const mostRecentMoment = mostRecent === null ? moment(mostRecent) : moment();
+    const roundStartMoment = moment(this.reportData?.roundNotes?.startsAt).add(-5, 'h');
+    if (mostRecent === null || (mostRecentMoment.utc().valueOf() < roundStartMoment.utc().valueOf())) {
+      result = 'none this round';
+    } else if (mostRecentMoment.utc().valueOf() > roundStartMoment.utc().valueOf()) {
+      result = mostRecentMoment.utc().format('Y-M-D');
+    }
+    return result;
   }
 
   private getCounts(key: string): { testedCount: number, totalCount: number } {
@@ -137,6 +136,8 @@ export class AppDetailsComponent {
   }
 
   private async fetchData(app: string): Promise<void> {
+    const a = moment().valueOf();
+    console.log(a);
     this.reportData = await this.dashboardService.getAppReportData(app);
     console.log(this.reportData);
   }

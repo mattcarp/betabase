@@ -1,7 +1,7 @@
 import { DataTypes, QueryTypes } from 'sequelize';
+import moment from 'moment';
 
 import db from './index';
-import moment from 'moment';
 
 export const Test = db.sequelize.define('Test', {
   id: {
