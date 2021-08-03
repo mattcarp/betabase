@@ -187,7 +187,7 @@
           <span *ngIf="test?.inProd === 'Unsure'" class="label label-info" title="Not Tested in Production">{{test?.inProd}}</span>
         </td>
         <td style="text-align: center;">
-          <a routerLink="{{[app, 'scenario', test?.scenarioId, 'show']}}">
+          <a routerLink="/scenario/{{app}}/{{test?.scenarioId}}/show">
             {{test?.scenarioId}}
             <i *ngIf="test?.isSecurity" class="icon-lock" title="security case"></i>
           </a>
@@ -249,8 +249,7 @@
             <span class="never" *ngIf="!item?.lastTest">never tested</span>
           </td>
           <td style="text-align: center;" class="recent-date">
-            <span *ngIf="!item?.mostRecent || (getMilliseconds(item?.mostRecent) < roundStartMilliseconds)" class="never">none this round</span>
-            <span *ngIf="getMilliseconds(item?.mostRecent) > roundStartMilliseconds"  am-time-ago="item.most_recent"> {{item?.mostRecent}}</span>
+            <span>{{getMostRecentText(item?.mostRecent)}}</span>
           </td>
           <td style="text-align: center;">
             <a routerLink="{{[app, 'scenario', item?.id, 'show']}}">
@@ -300,12 +299,11 @@
           <td class="bb-center-cell">{{item?.id}}</td>
           <td>{{item?.name}}</td>
           <td style="text-align: center;" class="last-result">
-            <span ng-if="item.last_test">{{item?.lastTest}}</span>
-            <span class="never" ng-if="!item.last_test">never tested</span>
+            <span *ngIf="item?.lastTest">{{item?.lastTest}}</span>
+            <span class="never" *ngIf="!item.lastTest">never tested</span>
           </td>
           <td style="text-align: center;" class="recent-date">
-            <span ng-if="!item.most_recent || item.most_recent < roundStart" class="never">none this round</span>
-            <span ng-if="item.most_recent > roundStart" am-time-ago="item.most_recent"></span>
+            <span>{{getMostRecentText(item?.mostRecent)}}</span>
           </td>
           <td style="text-align: center;">
             <a routerLink="{{[app, 'scenario', item?.id, 'show']}}">
@@ -354,11 +352,12 @@
           <td class="bb-center-cell">{{item?.id}}</td>
           <td>{{item?.name}}</td>
           <td style="text-align: center;" class="last-result">
-            <span ng-if="item.last_test">{{item?.lastTest}}</span>
-            <span class="never" ng-if="!item.last_test">never tested</span>
+            <span *ngIf="item?.lastTest">{{item?.lastTest}}</span>
+            <span class="never" *ngIf="!item?.lastTest">never tested</span>
           </td>
-          <td style="text-align: center;" ng-if="item.most_recent && item.most_recent > roundStart" class="recent-date" am-time-ago="item.most_recent"></td>
-          <td style="text-align: center;" class="recent-date" ng-if="!item.most_recent || item.most_recent < roundStart">none this round</td>
+          <td style="text-align: center;">
+            <span>{{getMostRecentText(item?.mostRecent)}}</span>
+          </td>
           <td style="text-align: center;">
             <a routerLink="{{[app, 'scenario', item?.id, 'show']}}">
               <i class="icon-zoom-in" title="show scenario detail"></i>
