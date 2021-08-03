@@ -1,0 +1,151 @@
+@use '~@angular/material' as mat;
+@include mat.core();
+
+// Section Colors
+:root {
+  --color-rgb-header: 34, 34, 34;
+  --color-rgb-nav: 147, 10, 8;
+  --color-rgb-main: 255, 255, 255;
+  --color-rgb-menu: 246, 247, 249;
+  --color-rgb-footer: 239, 239, 239;
+}
+
+$color-white: rgb(255, 255, 255);
+$color-black: rgb(38, 38, 38);
+$color-orange: #ef9537;
+$color-light: #e6e7e8;
+$color-lightgrey: #bababa;
+$color-grey: #919191;
+$color-medium: #4b4b4b;
+$color-lightblue: #00b1ff;
+$color-blue: #3488d4;
+$color-darkblue: #223670;
+$color-green: #28b419;
+$color-darkgreen: #418135;
+$color-red: #de0a0a;
+$color-darkred: #860202;
+// Light Colors
+$color-table-head: #dedede;
+$color-alt-row: #ecf3f8;
+$color-row: #fffed8;
+$color-active: #b2e797;
+$color-selection: #f7fff2;
+$color-read-only: #fafafa;
+
+/* Mat Theme Palette Generator -- http://mcg.mbitson.com/#!?mcgpalette0=%233f51b5 */
+$mat-primary: (
+  50 : #e9e9e9,
+  100 : #c9c9c9,
+  200 : #a5a5a5,
+  300 : #818181,
+  400 : #666666,
+  500 : #4b4b4b,
+  600 : #444444,
+  700 : #3b3b3b,
+  800 : #333333,
+  900 : #232323,
+  A100 : #f18080,
+  A200 : #ec5252,
+  A400 : #ff0c0c,
+  A700 : #f10000,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$mat-accent: (
+  50 : #e8f0e7,
+  100 : #c6d9c2,
+  200 : #a0c09a,
+  300 : #7aa772,
+  400 : #5e9453,
+  500 : #418135,
+  600 : #3b7930,
+  700 : #326e28,
+  800 : #2a6422,
+  900 : #1c5116,
+  A100 : #98ff8d,
+  A200 : #69ff5a,
+  A400 : #3bff27,
+  A700 : #24ff0e,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$mat-warn: (
+  50 : #f0e1e1,
+  100 : #dbb3b3,
+  200 : #c38181,
+  300 : #aa4e4e,
+  400 : #982828,
+  500 : #860202,
+  600 : #7e0202,
+  700 : #730101,
+  800 : #690101,
+  900 : #560101,
+  A100 : #ff8888,
+  A200 : #ff5555,
+  A400 : #ff2222,
+  A700 : #ff0808,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$light-primary: mat.define-palette($mat-primary);
+$light-accent: mat.define-palette($mat-accent);
+$light-warn: mat.define-palette($mat-warn);
+
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $light-primary,
+    accent: $light-accent,
+    warn: $light-warn,
+  )
+));
+
+@include mat.core-color($light-theme);
+@include mat.button-color($light-theme);
+@include mat.checkbox-color($light-theme);
+@include mat.radio-color($light-theme);
+@include mat.slide-toggle-color($light-theme);
