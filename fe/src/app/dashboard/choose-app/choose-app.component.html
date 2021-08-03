@@ -1,4 +1,8 @@
-<div class="container">
+<div *ngIf="isLoading">
+  Loading...
+</div>
+
+<div class="container" *ngIf="!isLoading">
 
   <div id="gantt-container"></div>
 

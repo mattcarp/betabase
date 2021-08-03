@@ -110,4 +110,19 @@ export const getFailCount = async (app: string) => {
   return failCount;
 }
 
+export const getJiras = async (app: string) => {
+  const query = "SELECT t.*, s.is_security\n" +
+    "FROM `round` r, `test` t, `scenario` s\n" +
+    "WHERE t.created_at BETWEEN r.starts_at AND DATE_ADD(r.release_date, INTERVAL 10 DAY)\n" +
+    "AND r.current_flag = TRUE\n" +
+    "AND s.id = t.scenario_id\n" +
+    "AND s.app_under_test = '" + app + "'\n" +
+    "AND r.app  = '" + app + "'\n" +
+    "AND t.ticket != ''\n" +
+    "GROUP BY t.ticket\n" +
+    "ORDER BY t.ticket DESC";
+  const result = await db.sequelize.query(query, { type: QueryTypes.SELECT, camelCase: true });
+  return db.snakeCaseToCamelCase(result);
+}
+
 db.Round = Round;

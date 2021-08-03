@@ -1,0 +1,152 @@
+<h1>Case <span id="current-case">{{scenario?.id}}</span>
+  <a routerLink="/scenario/{{scenario?.appUnderTest}}/{{scenario?.id}}/edit" class="btn btn-default btn-small">
+    edit master case</a></h1>
+
+<div class="alert alert-error" *ngIf="scenario?.coverage === 'Archived'">
+  <em>Note: </em> This case has been archived because it is no longer relevant.  Please refrain from testing it!
+</div>
+<div class="alert alert-error" *ngIf="scenario?.coverage === 'In Development'">
+  <em>Note: </em> This case is currently under development, and probably not ready to test!
+</div>
+
+<table id="detailTable" class="table-bordered table-striped">
+  <tbody>
+  <tr>
+    <th class="span3">Case ID</th>
+    <td>{{scenario?.id}}</td>
+  </tr>
+  <tr>
+    <th>Name</th>
+    <td class="span9">{{scenario?.name}}</td>
+  </tr>
+  <tr>
+    <th>Preconditions</th>
+    <td>{{scenario?.preconditions}}</td>
+  </tr>
+
+  <tr class="code" *ngIf="scenario?.mode === 'Automated'">
+    <th>Automation Code</th>
+    <td><pre><code>{{scenario?.script}}</code></pre></td>
+  <tr *ngIf="scenario?.mode !== 'Automated'">
+    <th>Script</th>
+    <td>{{scenario?.script}}</td>
+  </tr>
+  <tr>
+    <th>Expected Result</th>
+    <td>{{scenario?.expectedResult}}</td>
+  </tr>
+
+  <tr>
+    <th>Created</th>
+    <td>{{scenario?.createdAt | date }}</td>
+  </tr>
+  <tr>
+    <th>Updated</th>
+    <td>{{scenario?.updatedAt | date }}</td>
+  </tr>
+  <tr>
+    <th>Coverage</th>
+    <td>{{scenario?.coverage}}</td>
+  </tr>
+  <tr>
+    <th>Flagged for Review</th>
+    <td>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</td>
+  </tr>
+  <tr>
+    <th>Covers Security</th>
+    <td>{{scenario?.isSecurity ? 'Yes' : 'No'}}</td>
+  </tr>
+  <tr *ngIf="scenario?.flagReason">
+    <th>Reason for Review</th>
+    <td>{{scenario?.flagReason}}</td>
+  </tr>
+  <tr>
+    <th>Priority</th>
+    <td>{{scenario?.clientPriority ? 'Yes' : 'No'}}</td>
+  </tr>
+  </tbody>
+</table>
+
+<div ng-controller="variationsCtrl">
+
+<!--  <variations></variations>-->
+
+  <form novalidate ng-show="showInput" name="variationsForm" ng-submit="processForm()">
+    <input type="text" name="body" class="span10" ng-model="formData.body" placeholder="please enter a variation on ths script" required/>
+    <button class="btn btn-small" ng-click="cancel()">cancel</button>
+    <button class="btn btn-small" ng-disabled="variationsForm.body.$pristine" type="submit">save</button>
+  </form>
+
+  <div class="row well">
+
+
+    <a ng-click = "addVariation()" id="bb-add-variation" class="btn btn-default btn-small span2">
+      add a variation</a>
+
+<!--    {% if is_granted("ROLE_ADMIN") %}-->
+<!--    <form id="delete_scenario" name="deleteform" action="{{ path('scenario_delete', { 'app': app.request.get('app'), 'id': entity.id }) }}" method="post">-->
+<!--      {{ form_widget(delete_form) }}-->
+<!--      <input type="submit" class="offset2 btn btn-small btn-danger btn-delete" value="admin - delete this scenario">-->
+<!--    </form>-->
+<!--    {% endif %}-->
+
+  </div>
+
+</div><!-- variationsCtrl -->
+
+<section class="tests" id="tests">
+
+
+
+
+
+
+  <h2 class="pull-left">Tests For Case {{scenario?.id}} &nbsp;<a routerLink="/" class="btn btn-default btn-small">
+    create a new test</a></h2>
+
+
+  <table *ngIf="tests?.length" id="embedded_tests" class="table-bordered" style="width: 100%; margin-top:15px;">
+    <thead>
+    <tr>
+      <th>Creator</th>
+      <th>JIRA</th>
+      <th>Input</th>
+      <th>Result</th>
+      <th>Created</th>
+      <th>Deployment Timestamp</th>
+      <th>Browser</th>
+      <th>OS</th>
+      <th>Pass/Fail</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr  *ngFor="let test of tests">
+      <td>{{test?.createdAt}}</td>
+      <td>{{test?.ticket}}</td>
+      <td>{{test?.input | slice:0:50}}</td>
+      <td>{{test?.result | slice:0:50}}</td>
+      <td>{{test?.createdAt | date}}</td>
+      <td>{{(test?.deploymentStamp | date) || 'None'}}</td>
+      <td>{{test?.browserName}} {{test?.browserMajor}}{{test?.browserMinor}}</td>
+      <td>{{test?.osName}} {{test?.osMajor}} {{test?.osMinor}}</td>
+      <td>{{test?.passFail}}</td>
+      <td>
+        <a routerLink="/test/{{scenario?.appUnderTest}}/{{test?.id}}/show"><i class="icon-zoom-in" title="show test detail"></i></a>
+        <a routerLink="/test/{{scenario?.appUnderTest}}/{{test?.id}}/edit" [queryParams]="{ scenarioId: scenario?.id }"><i class="icon-pencil" title="edit or delete this test"></i></a>
+      </td>
+    </tr>
+
+
+    </tbody>
+  </table>
+
+  <br><br><br>
+  <h2 *ngIf="!tests?.length"><small>There are no tests for this Case. Go on, be a hero: be the first to test it.</small></h2>
+</section>
+
+<!--<div id="dialog" title="Confirmation Required">-->
+<!--  Are you really sure that you want to delete this case?  You will delete ALL related tests!  Bunny rabbits might be harmed!-->
+<!--</div>-->
+
