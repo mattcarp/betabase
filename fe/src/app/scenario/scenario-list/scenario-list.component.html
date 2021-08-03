@@ -1,1 +1,41 @@
-<p>scenario-list works!</p>
+<button class="btn btn-small pull-right bb-show-doc-form">Create PDF Documentation</button>
+
+<!--<form style="display:none;" class="form-inline bb-create-doc pull-right" action="{{ path('custom_document', { 'app': app.request.get('app') }) }}" method="post">-->
+<!--  <input class="bb-doc-subtitle span6" type="text" class="form-control" name="subtitle" placeholder="Enter report subtitle (optional)">-->
+<!--  <input type="hidden" name="app" value={{ app.request.get('app') }} />-->
+<!--  <input type="hidden" name="pdf" value='true' />-->
+<!--  <input class="btn btn-small bb-doc-btn" type="submit" value="Generate PDF File"/>-->
+<!--  <hr>-->
+<!--</form>-->
+
+<table id="mc_datatable" class="table table-bordered table-condensed">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Creator</th>
+      <th>Created</th>
+      <th>Updater</th>
+      <th>Updated&nbsp;&nbsp;</th>
+      <th>Flag?</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let scenario of scenarios">
+    <td class="bb-case-id">
+      <a routerLink="/scenario/{{app}}/{{scenario?.id}}/show">{{scenario?.id}}</a>
+    </td>
+    <td>{{scenario?.name}}</td>
+    <td>{{scenario?.createdBy}}</td>
+    <td>{{scenario?.createdAt | date}}</td>
+    <td>{{scenario?.updatedBy}}</td>
+    <td>{{scenario?.updatedAt | date}}</td>
+    <td>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</td>
+    <td>
+      <a routerLink="/scenario/{{app}}/{{scenario?.id}}/show"><i class="icon-zoom-in" title="show scenario detail"></i></a>
+      <a routerLink="/scenario/{{app}}/{{scenario?.id}}/edit"><i class="icon-pencil" title="edit this scenario"></i></a>
+    </td>
+  </tr>
+  </tbody>
+</table>
