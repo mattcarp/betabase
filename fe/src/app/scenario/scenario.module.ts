@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 import { ScenarioListComponent } from './scenario-list/scenario-list.component';
 import { ScenarioDetailsComponent } from './scenario-details/scenario-details.component';
@@ -15,6 +17,8 @@ import { ScenarioFormComponent } from './scenario-form/scenario-form.component';
   imports: [
     CommonModule,
     ScenarioRoutingModule,
+    FormsModule,
+    AngularEditorModule,
   ],
 })
 export class ScenarioModule {}

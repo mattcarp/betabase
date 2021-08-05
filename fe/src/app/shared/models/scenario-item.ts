@@ -1,8 +1,8 @@
 export interface ScenarioItem {
-  id: number;
+  id?: number;
   name?: string;
   coverage?: string;
-  appUnderTest?: string;
+  appUnderTest: string;
   mostRecent?: Date;
   lastTest?: string;
   enhancementSortOrder?: number;

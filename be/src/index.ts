@@ -3,6 +3,7 @@ import cors from 'cors';
 
 import db from './models';
 import {
+  createScenario,
   getEnhancementCount,
   getEnhancementScenarios,
   getFlaggedCount,
@@ -15,6 +16,7 @@ import {
   getScenario,
   getScenarioCount,
   getScenarioList,
+  updateScenario,
 } from './models/scenario';
 import { getFailCount, getJiras, getRoundNotes, getTestCount } from './models/round';
 import { getDeployment } from './models/deployment';
@@ -112,7 +114,21 @@ app.get('/api/scenario/:id', async (request, response) => {
   const tests = await getScenarioTests(id);
   response.json({ scenario, tests });
 });
+
 app.get('/api/scenario-list/:app', async (request, response) => {
   const scenarios = await getScenarioList(request.params.app);
   response.json(scenarios);
+});
+
+app.post('/api/scenario', async (request, response) => {
+  const params = request.body;
+  const model = await createScenario(params);
+  response.json(model);
+});
+
+app.put('/api/scenario/:id', async (request, response) => {
+  const id = request.params.id;
+  const params = request.body;
+  const result = await updateScenario(id, params);
+  response.send(result);
 });

@@ -33,4 +33,14 @@ export class AppService {
     const url = `${this.apiUrl}/scenario-list/${app}`;
     return this.http.get<ScenarioItem[]>(url).toPromise();
   }
+
+  addScenario(params: ScenarioItem): Promise<ScenarioItem> {
+    const url = `${this.apiUrl}/scenario`;
+    return this.http.post<ScenarioItem>(url, params).toPromise();
+  }
+
+  updateScenario(params: ScenarioItem): Promise<ScenarioItem> {
+    const url = `${this.apiUrl}/scenario/${params.id}`;
+    return this.http.put<ScenarioItem>(url, params).toPromise();
+  }
 }
