@@ -9,16 +9,7 @@ import { ScenarioRoutingModule } from './scenario-routing.module';
 import { ScenarioFormComponent } from './scenario-form/scenario-form.component';
 
 @NgModule({
-  declarations: [
-    ScenarioListComponent,
-    ScenarioDetailsComponent,
-    ScenarioFormComponent,
-  ],
-  imports: [
-    CommonModule,
-    ScenarioRoutingModule,
-    FormsModule,
-    AngularEditorModule,
-  ],
+  declarations: [ScenarioListComponent, ScenarioDetailsComponent, ScenarioFormComponent],
+  imports: [CommonModule, FormsModule, AngularEditorModule, ScenarioRoutingModule],
 })
 export class ScenarioModule {}

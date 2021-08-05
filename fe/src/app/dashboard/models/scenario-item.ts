@@ -6,7 +6,7 @@ export interface ScenarioItem {
   mostRecent?: Date;
   lastTest?: string;
   enhancementSortOrder?: number;
-  clientPriority?: number;
+  clientPriority?: number
   createdAt?: Date;
   createdBy?: string;
   currentRegressionSortOrder?: number;

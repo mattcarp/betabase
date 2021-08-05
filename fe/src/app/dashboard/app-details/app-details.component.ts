@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import * as moment from 'moment';
 import { filter, pluck, tap } from 'rxjs/operators';
 
@@ -10,17 +11,27 @@ import { AppService } from '../../shared/app.service';
   selector: 'app-app-details',
   templateUrl: './app-details.component.html',
   styleUrls: ['./app-details.component.scss'],
+  host: { '[class.page]': 'true' },
 })
 export class AppDetailsComponent {
   reportData: ReportData | null = null;
   app: string | null = null;
+  selectedApp = this.router.url.split('/')[2];
+  isNewFeaturesChecked = false;
+  numNewFeaturesChecked = 0;
+  isPrioritiesChecked = false;
+  numPrioritiesChecked = 0;
+  isRegressionsChecked = false;
+  numRegressionsChecked = 0;
 
-  constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
+  constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) {
     activatedRoute.params
       .pipe(
         filter((params: Params) => 'app' in params),
         pluck('app'),
-        tap((app: string) => this.app = app),
+        tap((app: string) => {
+          this.app = app;
+        }),
       )
       .subscribe((app: string) => this.fetchData(app));
   }
@@ -111,6 +122,18 @@ export class AppDetailsComponent {
     return `${Math.round(weightedAvg * 100)}%`;
   }
 
+  get imageUrl(): string {
+    if (this.selectedApp) {
+      switch (this.selectedApp) {
+        case 'AOMA':
+          return 'https://aoma-dev.smcdp-de.net/teams/web/images/aoma/login/aoma-login-logo.gif';
+        default:
+          break;
+      }
+    }
+    return '';
+  }
+
   getRatio(key: string): string {
     const { testedCount, totalCount } = this.getCounts(key);
     let ratio = 0;
@@ -120,16 +143,73 @@ export class AppDetailsComponent {
     return `${Math.round(ratio * 100)}%`;
   }
 
-  getMostRecentText(mostRecent: string | Date | undefined): string {
-    let result = '';
+  getMostRecentText(mostRecent: string | Date | undefined): string[] {
+    let result = ['', ''];
     const mostRecentMoment = mostRecent === null ? moment(mostRecent) : moment();
     const roundStartMoment = moment(this.reportData?.roundNotes?.startsAt).add(-5, 'h');
     if (mostRecent === null || mostRecentMoment.utc().valueOf() < roundStartMoment.utc().valueOf()) {
-      result = 'none this round';
+      result = ['none this round', 'red'];
     } else if (mostRecentMoment.utc().valueOf() > roundStartMoment.utc().valueOf()) {
-      result = mostRecentMoment.utc().format('Y-M-D');
+      result = [mostRecentMoment.utc().format('Y-M-D'), ''];
     }
     return result;
+  }
+
+  onClickScrollToElement(elementId: string): void {
+    document.getElementById(elementId)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest',
+    });
+  }
+
+  onNewFeaturesPassClick(): void {
+    document.querySelectorAll('.new-features-pass').forEach((el: Element, index: number) => {
+      if (!this.isNewFeaturesChecked) {
+        this.numNewFeaturesChecked = index + 1;
+        el.classList.add('hidden');
+      } else {
+        el.classList.remove('hidden');
+      }
+    });
+  }
+
+  onPrioritiesPassClick(): void {
+    document.querySelectorAll('.priorities-pass').forEach((el: Element, index: number) => {
+      if (!this.isPrioritiesChecked) {
+        this.numPrioritiesChecked = index + 1;
+        el.classList.add('hidden');
+      } else {
+        el.classList.remove('hidden');
+      }
+    });
+  }
+
+  onRegressionsPassClick(): void {
+    document.querySelectorAll('.regressions-pass').forEach((el: Element, index: number) => {
+      if (!this.isRegressionsChecked) {
+        this.numRegressionsChecked = index + 1;
+        el.classList.add('hidden');
+      } else {
+        el.classList.remove('hidden');
+      }
+    });
+  }
+
+  onDropEnhancementScenarios(event: CdkDragDrop<ScenarioItem[]>) {
+    // moveItemInArray(this.reportData?.enhancementScenarios, event.previousIndex, event.currentIndex);
+    //
+    // this.reportData.enhancementScenarios.forEach((item: ScenarioItem, index: number) => {
+    //   this.reportData.enhancementScenarios[index].numOrder = index + 1;
+    // });
+  }
+
+  onDropPrioritiesScenarios(event: CdkDragDrop<ScenarioItem[]>) {}
+
+  onDropRegressionsScenarios(event: CdkDragDrop<ScenarioItem[]>) {}
+
+  onActionClick(type: string, app: string | null, id: number | undefined, action: string): void {
+    this.router.navigate([`/${type}/${app}/${id}/${action}`]);
   }
 
   private getCounts(key: string): { testedCount: number; totalCount: number } {

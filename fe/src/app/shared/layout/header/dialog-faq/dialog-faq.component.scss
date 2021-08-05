@@ -1,0 +1,10 @@
+@import 'variables';
+
+.dialog {
+  &-content {
+    & > section {
+      height: 100%;
+      padding: 10px 16px;
+    }
+  }
+}

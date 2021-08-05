@@ -1,0 +1,21 @@
+<mat-form-field class="button-select">
+  <mat-label>Utilities</mat-label>
+
+  <mat-select [(ngModel)]="selectedItem" (selectionChange)="onSelectionChange($event.value)">
+    <ng-container *ngFor="let item of utilityItems">
+      <mat-option [value]="item?.url">
+        <span class="{{item?.class}}">{{item?.title}}</span>
+      </mat-option>
+    </ng-container>
+
+    <div>Documentation:</div>
+
+    <ng-container *ngFor="let item of docItems">
+      <mat-option [value]="item?.url" [disabled]="!selectedApp">
+        <span class="{{item?.class}}">{{item?.title}}</span>
+      </mat-option>
+    </ng-container>
+  </mat-select>
+
+  <i matPrefix class="fas fa-wrench"></i>
+</mat-form-field>

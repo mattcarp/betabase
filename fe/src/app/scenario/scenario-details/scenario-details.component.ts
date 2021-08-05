@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { filter, pluck } from 'rxjs/operators';
 
@@ -14,10 +14,7 @@ export class ScenarioDetailsComponent {
   scenario: ScenarioItem | null = null;
   tests: TestItem[] = [];
 
-  constructor(
-    private appService: AppService,
-    private activatedRoute: ActivatedRoute,
-  ) {
+  constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
     activatedRoute.params
       .pipe(
         filter((params: Params) => 'id' in params),
