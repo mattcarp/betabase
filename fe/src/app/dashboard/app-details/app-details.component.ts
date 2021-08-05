@@ -20,7 +20,7 @@ export class AppDetailsComponent {
       .pipe(
         filter((params: Params) => 'app' in params),
         pluck('app'),
-        tap((app: string) => this.app === app),
+        tap((app: string) => this.app = app),
       )
       .subscribe((app: string) => this.fetchData(app));
   }

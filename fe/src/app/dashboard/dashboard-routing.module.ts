@@ -10,15 +10,7 @@ const routes: Routes = [
     component: ChooseAppComponent,
   },
   {
-    path: ':app/dashboard/show',
-    component: AppDetailsComponent,
-  },
-  {
-    path: ':app/test/:id/show',
-    component: AppDetailsComponent,
-  },
-  {
-    path: ':app/test/:id/edit',
+    path: ':app/show',
     component: AppDetailsComponent,
   },
 ];
