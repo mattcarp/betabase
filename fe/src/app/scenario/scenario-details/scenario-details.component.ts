@@ -10,7 +10,7 @@ import { ScenarioItem, TestItem } from '../../shared/models';
   templateUrl: './scenario-details.component.html',
   styleUrls: ['./scenario-details.component.scss'],
 })
-export class ScenarioDetailsComponent implements OnInit {
+export class ScenarioDetailsComponent {
   scenario: ScenarioItem | null = null;
   tests: TestItem[] = [];
 
@@ -24,9 +24,6 @@ export class ScenarioDetailsComponent implements OnInit {
         pluck('id'),
       )
       .subscribe((id: string) => this.fetchData(id));
-  }
-
-  ngOnInit(): void {
   }
 
   private async fetchData(id: string): Promise<void> {

@@ -261,4 +261,19 @@ export const getScenarioList = async (appUnderTest: string) => {
   return result;
 }
 
+export const createScenario = async (params) => {
+  const model = await Scenario.create(params);
+  await model.save();
+  return model;
+}
+
+export const updateScenario = async (id, params) => {
+  try {
+    await Scenario.update({ ...params }, { where: { id }});
+    return id;
+  } catch (e) {
+    return e;
+  }
+}
+
 db.Scenario = Scenario;

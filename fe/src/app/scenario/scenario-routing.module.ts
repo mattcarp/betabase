@@ -8,15 +8,15 @@ import { ScenarioListComponent } from './scenario-list/scenario-list.component';
 
 const routes: Routes = [
   {
+    path: ':app/new',
+    component: ScenarioFormComponent,
+  },
+  {
     path: ':app/:id/show',
     component: ScenarioDetailsComponent,
   },
   {
     path: ':app/:id/edit',
-    component: ScenarioFormComponent,
-  },
-  {
-    path: ':app/:id/new',
     component: ScenarioFormComponent,
   },
   {
