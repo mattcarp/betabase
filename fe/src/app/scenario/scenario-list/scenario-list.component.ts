@@ -14,15 +14,14 @@ export class ScenarioListComponent {
   scenarios: ScenarioItem[] = [];
   app: string | null = null;
 
-  constructor(
-    private appService: AppService,
-    private activatedRoute: ActivatedRoute,
-  ) {
+  constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
     activatedRoute.params
       .pipe(
         filter((params: Params) => 'app' in params),
         pluck('app'),
-        tap((app: string) => this.app = app),
+        tap((app: string) => {
+          this.app = app;
+        }),
       )
       .subscribe((app: string) => this.fetchData(app));
   }

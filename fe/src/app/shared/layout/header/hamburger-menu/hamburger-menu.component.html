@@ -1,0 +1,24 @@
+<button
+  mat-icon-button
+  [matMenuTriggerFor]="menu"
+  (menuOpened)="menuOpened()"
+  (menuClosed)="menuClosed()"
+  class="hamburger"
+  [ngClass]="{'is-active': isMenuOpen}">
+  <span>Toggle Menu</span>
+</button>
+
+<mat-menu #menu="matMenu" class="hamburger-menu">
+  <button (click)="openDialogFaq()" mat-menu-item>
+    <i class="fas fa-question-circle"></i>
+    <span>FAQ</span>
+  </button>
+  <button (click)="openDialogContactUs()" mat-menu-item>
+    <i class="fas fa-envelope-open-text"></i>
+    <span>Contact Us</span>
+  </button>
+  <button mat-menu-item disabled>
+    <i class="fas fa-tools"></i>
+    <span>Artist Tools</span>
+  </button>
+</mat-menu>

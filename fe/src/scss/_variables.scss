@@ -5,6 +5,7 @@
   font-weight: 200;
   font-style: normal;
   src: local('Helvetica Light'), url('../assets/fonts/helvetica/Helvetica-Light.ttf') format('truetype');
+
   font-display: swap;
 }
 
@@ -13,6 +14,7 @@
   font-weight: 400;
   font-style: normal;
   src: local('Helvetica Regular'), url('../assets/fonts/helvetica/Helvetica.ttf') format('truetype');
+
   font-display: swap;
 }
 
@@ -21,6 +23,7 @@
   font-weight: 600;
   font-style: normal;
   src: local('Helvetica Bold'), url('../assets/fonts/helvetica/Helvetica-Bold.ttf') format('truetype');
+
   font-display: swap;
 }
 
@@ -41,10 +44,10 @@ $size-inputHeight: 36px;
 
 @mixin flex-grow {
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   flex-grow: 1;
   height: 100%;
-  overflow: hidden;
 }
 
 @mixin container-width {
@@ -61,63 +64,6 @@ $size-inputHeight: 36px;
   text-overflow: ellipsis;
 }
 
-@mixin header-button {
-  position: relative;
-  width: 46px;
-  height: 46px;
-  margin: 0 10px;
-  cursor: pointer;
-  transition: color 0.3s, background-color 0.2s;
-  color: rgba($color-white, 0.7);
-  border: none;
-  border-radius: 50%;
-  outline: none;
-  background-color: transparent;
-
-  span {
-    display: none;
-  }
-
-  &.active {
-    &:after {
-      position: absolute;
-      top: 0;
-      left: 0;
-      display: inline-block;
-      width: 46px;
-      height: 46px;
-      content: '';
-      border-width: 1px;
-      border-style: solid;
-      border-color: rgba($color-white, 0.4);
-      border-radius: 100%;
-    }
-  }
-
-  &:hover:not([disabled]) {
-    color: $color-white;
-    background-color: rgba($color-white, 0.1);
-  }
-
-  &[disabled] {
-    cursor: unset;
-    opacity: 0.5;
-
-    .fas {
-      opacity: 0.5;
-    }
-  }
-}
-
-@keyframes spinner {
-  0% {
-    transform: rotateZ(0deg);
-  }
-  100% {
-    transform: rotateZ(360deg);
-  }
-}
-
 @keyframes pulse {
   0% {
     box-shadow: 0 0 0 0 rgba($color-black, 0.4);
@@ -130,53 +76,60 @@ $size-inputHeight: 36px;
   }
 }
 
-@keyframes shake {
-  10%,
-  90% {
-    transform: translate3d(-1px, 0, 0);
-  }
-
-  20%,
-  80% {
-    transform: translate3d(2px, 0, 0);
-  }
-
-  30%,
-  50%,
-  70% {
-    transform: translate3d(-4px, 0, 0);
-  }
-
-  40%,
-  60% {
-    transform: translate3d(4px, 0, 0);
-  }
-}
-
-@keyframes movedown {
+// Spinner -- Material design loader
+@keyframes rotate {
   0% {
-    transform: translateY(-10px);
-    opacity: 0;
+    transform: rotate(0deg);
+  }
+  12.5% {
+    transform: rotate(180deg);
+    animation-timing-function: linear;
+  }
+  25% {
+    transform: rotate(630deg);
+  }
+  37.5% {
+    transform: rotate(810deg);
+    animation-timing-function: linear;
   }
   50% {
-    transform: translateY(0);
-    opacity: 1;
+    transform: rotate(1260deg);
+  }
+  62.5% {
+    transform: rotate(1440deg);
+    animation-timing-function: linear;
+  }
+  75% {
+    transform: rotate(1890deg);
+  }
+  87.5% {
+    transform: rotate(2070deg);
+    animation-timing-function: linear;
   }
   100% {
-    transform: translateY(10px);
-    opacity: 0;
+    transform: rotate(2520deg);
   }
 }
 
-@keyframes flashBackground {
-  from,
-  50%,
-  to {
-    background-color: $color-light;
+@keyframes rotate-shrink {
+  0% {
+    transform: rotate(-30deg);
   }
-
-  25%,
-  75% {
-    background-color: $color-orange;
+  29.4% {
+    border-left-color: transparent;
+  }
+  29.41% {
+    border-left-color: currentColor;
+  }
+  64.7% {
+    border-bottom-color: transparent;
+  }
+  64.71% {
+    border-bottom-color: currentColor;
+  }
+  100% {
+    transform: rotate(225deg);
+    border-bottom-color: currentColor;
+    border-left-color: currentColor;
   }
 }

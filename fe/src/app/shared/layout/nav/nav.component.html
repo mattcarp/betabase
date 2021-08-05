@@ -1,0 +1,31 @@
+<nav>
+  <button mat-flat-button
+          [disabled]="!isBackActive"
+          (click)="onBackClick()"
+          color="primary"
+          class="nav-button">
+    <i class="fas fa-arrow-left"></i>
+    <span>Back</span>
+  </button>
+
+  <ng-container *ngFor="let button of buttons">
+    <button mat-flat-button
+            (click)="onButtonClick(button.url)"
+            color="primary"
+            class="nav-button">
+      <i class="fas" [ngClass]="button.icon"></i>
+      <span *ngIf="button?.title">{{button?.title}}</span>
+    </button>
+  </ng-container>
+
+  <app-select-utility></app-select-utility>
+
+  <div class="spacer"></div>
+
+  <button mat-flat-button
+          (click)="onButtonClick('/dashboard')"
+          color="primary">
+    <i class="fas fa-random"></i>
+    <span>Switch App</span>
+  </button>
+</nav>

@@ -1,0 +1,17 @@
+<div class="auth auth-logout">
+  <div class="logo-app"></div>
+  <h3>Thanks for using {{appTitle}}!</h3>
+  <p>Would you like to log out of the system?</p>
+
+  <div class="links">
+    <button (click)="goToPage('main')" class="link">
+      <i class="fas fa-undo"></i>
+      <span>Back</span>
+    </button>
+
+    <button (click)="goToPage('auth/sign-in')" class="link">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Log Out</span>
+    </button>
+  </div>
+</div>
