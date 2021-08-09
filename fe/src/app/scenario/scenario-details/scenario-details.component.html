@@ -1,152 +1,271 @@
-<h1>Case <span id="current-case">{{scenario?.id}}</span>
-  <a routerLink="/scenario/{{scenario?.appUnderTest}}/{{scenario?.id}}/edit" class="btn btn-default btn-small">
-    edit master case</a></h1>
+<app-nav [isBackActive]="true" [app]="app"></app-nav>
 
-<div class="alert alert-error" *ngIf="scenario?.coverage === 'Archived'">
-  <em>Note: </em> This case has been archived because it is no longer relevant.  Please refrain from testing it!
-</div>
-<div class="alert alert-error" *ngIf="scenario?.coverage === 'In Development'">
-  <em>Note: </em> This case is currently under development, and probably not ready to test!
-</div>
+<section>
+  <ng-container *ngIf="!scenario; else template">
+    <div class="spinner">
+      <div class="spinner-progress"></div>
+      <div class="spinner-info">Loading...</div>
+    </div>
+  </ng-container>
 
-<table id="detailTable" class="table-bordered table-striped">
-  <tbody>
-  <tr>
-    <th class="span3">Case ID</th>
-    <td>{{scenario?.id}}</td>
-  </tr>
-  <tr>
-    <th>Name</th>
-    <td class="span9">{{scenario?.name}}</td>
-  </tr>
-  <tr>
-    <th>Preconditions</th>
-    <td>{{scenario?.preconditions}}</td>
-  </tr>
+  <ng-template #template>
+    <div class="header-flex">
+      <h2>Case {{scenario?.id}}</h2>
+      <div class="spacer"></div>
+      <button mat-flat-button (click)="onEditMaserCaseClick(scenario?.appUnderTest, scenario?.id)" color="primary">
+        <i class="fas fa-edit"></i>
+        <span>Edit maser case</span>
+      </button>
+    </div>
 
-  <tr class="code" *ngIf="scenario?.mode === 'Automated'">
-    <th>Automation Code</th>
-    <td><pre><code>{{scenario?.script}}</code></pre></td>
-  <tr *ngIf="scenario?.mode !== 'Automated'">
-    <th>Script</th>
-    <td>{{scenario?.script}}</td>
-  </tr>
-  <tr>
-    <th>Expected Result</th>
-    <td>{{scenario?.expectedResult}}</td>
-  </tr>
+    <div *ngIf="scenario?.coverage === 'Archived'" class="alert-error">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span>This case has been archived because it is no longer relevant. Please refrain from testing it!</span>
+    </div>
+    <div *ngIf="scenario?.coverage === 'In Development'" class="alert-error">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span>This case is currently under development, and probably not ready to test!</span>
+    </div>
 
-  <tr>
-    <th>Created</th>
-    <td>{{scenario?.createdAt | date }}</td>
-  </tr>
-  <tr>
-    <th>Updated</th>
-    <td>{{scenario?.updatedAt | date }}</td>
-  </tr>
-  <tr>
-    <th>Coverage</th>
-    <td>{{scenario?.coverage}}</td>
-  </tr>
-  <tr>
-    <th>Flagged for Review</th>
-    <td>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</td>
-  </tr>
-  <tr>
-    <th>Covers Security</th>
-    <td>{{scenario?.isSecurity ? 'Yes' : 'No'}}</td>
-  </tr>
-  <tr *ngIf="scenario?.flagReason">
-    <th>Reason for Review</th>
-    <td>{{scenario?.flagReason}}</td>
-  </tr>
-  <tr>
-    <th>Priority</th>
-    <td>{{scenario?.clientPriority ? 'Yes' : 'No'}}</td>
-  </tr>
-  </tbody>
-</table>
+    <div class="grid-container">
+      <div class="grid scenario">
+        <div>Case ID</div>
+        <div>{{scenario?.id}}</div>
+      </div>
+      <div class="grid scenario">
+        <div>Name</div>
+        <div>{{scenario?.name}}</div>
+      </div>
+      <div class="grid scenario">
+        <div>Preconditions</div>
+        <div [innerHTML]="scenario?.preconditions" class="inner-html"></div>
+      </div>
+      <ng-container *ngIf="scenario?.mode === 'Automated'; else script">
+        <div class="grid scenario">
+          <div>Automation Code</div>
+          <div>
+            <pre><code>{{scenario?.script}}</code></pre>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #script>
+        <div class="grid scenario">
+          <div>Script</div>
+          <div [innerHTML]="scenario?.script" class="inner-html"></div>
+        </div>
+      </ng-template>
+      <div class="grid scenario">
+        <div>Expected Result</div>
+        <div [innerHTML]="scenario?.expectedResult" class="inner-html"></div>
+      </div>
+      <div class="grid scenario">
+        <div>Created</div>
+        <div>{{scenario?.createdAt | date }}</div>
+      </div>
+      <div class="grid scenario">
+        <div>Updated</div>
+        <div>{{scenario?.updatedAt | date }}</div>
+      </div>
+      <div class="grid scenario">
+        <div>Coverage</div>
+        <div>{{scenario?.coverage}}</div>
+      </div>
+      <div class="grid scenario">
+        <div>Flagged for Review</div>
+        <div>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</div>
+      </div>
+      <div class="grid scenario">
+        <div>Covers Security</div>
+        <div>{{scenario?.isSecurity ? 'Yes' : 'No'}}</div>
+      </div>
+      <div class="grid scenario">
+        <ng-container *ngIf="scenario?.flagReason">
+          <div>Reason for Review</div>
+          <div>{{scenario?.flagReason}}</div>
+        </ng-container>
+      </div>
+      <div class="grid scenario">
+        <div>Priority</div>
+        <div>{{scenario?.clientPriority ? 'Yes' : 'No'}}</div>
+      </div>
+    </div>
 
-<div ng-controller="variationsCtrl">
+    <div class="header-flex">
+      <h2>There are no variations on this case</h2>
+      <div class="spacer"></div>
+      <button mat-flat-button (click)="onAddVariationClick()" [disabled]="isShowInput" color="primary">
+        <i class="fas fa-plus-circle"></i>
+        <span>Add variation</span>
+      </button>
+    </div>
 
-<!--  <variations></variations>-->
+    <form *ngIf="isShowInput" novalidate class="variations-form">
+      <div>
+        <mat-form-field class="full-width">
+          <mat-label>Variation script</mat-label>
+          <input matInput
+                 type="text"
+                 [(ngModel)]="variationsFormData"
+                 [ngModelOptions]="{ standalone: true }"
+                 placeholder="Please enter a variation on this script">
+          <button
+            *ngIf="variationsFormData"
+            (click)="variationsFormData = ''"
+            matSuffix mat-icon-button color="warn">
+            <i class="fas fa-times"></i>
+          </button>
+        </mat-form-field>
+      </div>
 
-  <form novalidate ng-show="showInput" name="variationsForm" ng-submit="processForm()">
-    <input type="text" name="body" class="span10" ng-model="formData.body" placeholder="please enter a variation on ths script" required/>
-    <button class="btn btn-small" ng-click="cancel()">cancel</button>
-    <button class="btn btn-small" ng-disabled="variationsForm.body.$pristine" type="submit">save</button>
-  </form>
+      <div class="actions">
+        <button mat-flat-button (click)="onCancelVariationClick()" color="warn">
+          <i class="fas fa-ban"></i>
+          <span>Cancel</span>
+        </button>
 
-  <div class="row well">
+        <button mat-flat-button (click)="onSaveVariationClick()" [disabled]="!variationsFormData" color="accent">
+          <i class="fas fa-save"></i>
+          <span>Save</span>
+        </button>
+      </div>
+    </form>
+    <!--
+    {% if is_granted("ROLE_ADMIN") %}
+    <form id="delete_scenario" name="deleteform" action="{{ path('scenario_delete', { 'app': app.request.get('app'), 'id': entity.id }) }}" method="post">
+      {{ form_widget(delete_form) }}
+      <input type="submit" class="offset2 btn btn-small btn-danger btn-delete" value="admin - delete this scenario">
+    </form>
+    {% endif %}
+    -->
 
+    <div class="header-flex">
+      <h2>Tests for case {{scenario?.id}}</h2>
+      <div class="spacer"></div>
+      <button mat-flat-button (click)="onNewTestClick(scenario?.appUnderTest, scenario?.id)" color="primary">
+        <i class="fas fa-edit"></i>
+        <span>Create new test</span>
+      </button>
+    </div>
 
-    <a ng-click = "addVariation()" id="bb-add-variation" class="btn btn-default btn-small span2">
-      add a variation</a>
+    <ng-container *ngIf="!tests?.length; else testTemplate">
+      <h2 class="red">There are no tests for this Case</h2>
+    </ng-container>
 
-<!--    {% if is_granted("ROLE_ADMIN") %}-->
-<!--    <form id="delete_scenario" name="deleteform" action="{{ path('scenario_delete', { 'app': app.request.get('app'), 'id': entity.id }) }}" method="post">-->
-<!--      {{ form_widget(delete_form) }}-->
-<!--      <input type="submit" class="offset2 btn btn-small btn-danger btn-delete" value="admin - delete this scenario">-->
-<!--    </form>-->
-<!--    {% endif %}-->
+    <ng-template #testTemplate>
+      <div class="header-flex">
+        <mat-form-field class="form-search">
+          <input
+            matInput
+            #searchTerm
+            [type]="'text'"
+            [attr.id]="'search'"
+            [placeholder]="'Search'"
+            (keyup.enter)="onSearchStart(searchTerm?.value)"
+            (keyup.esc)="searchTerm.value = ''; onSearchStart('')"
+            (input)="onSearchStart(searchTerm?.value)"
+            autocomplete="off">
+          <button
+            (click)="searchTerm.value = ''; onSearchStart('')"
+            *ngIf="searchTerm?.value"
+            matSuffix mat-icon-button color="warn">
+            <i class="fas fa-times-circle"></i>
+          </button>
+          <button
+            [disabled]="!searchTerm?.value?.length"
+            (click)="onSearchStart(searchTerm?.value)"
+            matSuffix mat-icon-button>
+            <i class="fas fa-search"></i>
+          </button>
+        </mat-form-field>
 
-  </div>
+        <div class="spacer"></div>
 
-</div><!-- variationsCtrl -->
+        <div>
+          <label>
+            Show Entries:
+            <mat-form-field class="pagination-select">
+              <mat-select [(ngModel)]="pageSize">
+                <mat-option *ngFor="let option of listOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </label>
 
-<section class="tests" id="tests">
+          <pagination-controls (pageChange)="paginationParams.page = $event"></pagination-controls>
+        </div>
+      </div>
 
+      <div class="grid-container">
+        <header class="grid tests">
+          <div #1>Creator</div>
+          <div #2>JIRA</div>
+          <div #3
+               (click)="onToggleSort('input')"
+               class="clickable"
+               [ngClass]="getClassSortField('input')">
+            Input <span [ngClass]="getClassDirection()"></span>
+          </div>
+          <div #4
+               (click)="onToggleSort('result')"
+               class="clickable"
+               [ngClass]="getClassSortField('result')">
+            Result <span [ngClass]="getClassDirection()"></span>
+          </div>
+          <div #5
+               (click)="onToggleSort('createdAt')"
+               class="clickable"
+               [ngClass]="getClassSortField('createdAt')">
+            Created <span [ngClass]="getClassDirection()"></span>
+          </div>
+          <div #6
+               (click)="onToggleSort('deploymentStamp')"
+               class="clickable"
+               [ngClass]="getClassSortField('deploymentStamp')">
+            Deployment Timestamp <span [ngClass]="getClassDirection()"></span>
+          </div>
+          <div #7
+               (click)="onToggleSort('browserName')"
+               class="clickable"
+               [ngClass]="getClassSortField('browserName')">
+            Browser <span [ngClass]="getClassDirection()"></span>
+          </div>
+          <div #8
+               (click)="onToggleSort('osMajor')"
+               class="clickable"
+               [ngClass]="getClassSortField('osMajor')">
+            OS <span [ngClass]="getClassDirection()"></span>
+          </div>
+          <div #9>Pass/Fail</div>
+          <div #10>Actions</div>
+        </header>
 
+        <div *ngFor="let test of tests | paginate: { itemsPerPage: pageSize, currentPage: paginationParams.page };
+              let i = index"
+             class="grid tests">
+          <div #1>{{test?.createdBy}}</div>
+          <div #2>{{test?.ticket}}</div>
+          <div #3 [innerHTML]="test.input | slice:0:300 | highlightSearch: search" class="inner-html"></div>
+          <div #4 [innerHTML]="test.result | slice:0:200 | highlightSearch: search" class="inner-html"></div>
+          <div #5 [innerHTML]="test?.createdAt | date: 'medium' | highlightSearch: search"></div>
+          <div #6 [innerHTML]="(test?.deploymentStamp | date: 'medium') | highlightSearch: search || 'None'"></div>
+          <div #7>{{test?.browserName}} {{test?.browserMajor}}{{test?.browserMinor}}</div>
+          <div #8>{{test?.osName}} {{test?.osMajor}} {{test?.osMinor}}</div>
+          <div #9 class="center">
+            <label *ngIf="test?.passFail === 'Fail'" class="label-warning">{{test?.passFail}}</label>
+            <label *ngIf="test?.passFail === 'Pass'" class="label-success">{{test?.passFail}}</label>
+          </div>
+          <div #10 class="center actions">
+            <button (click)="onActionClick('test', scenario?.appUnderTest, test?.id, 'show')" mat-icon-button>
+              <i class="fas fa-eye"></i>
+            </button>
+            <button (click)="onActionClick('test', scenario?.appUnderTest, test?.id, 'edit')" mat-icon-button>
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
 
-
-
-
-  <h2 class="pull-left">Tests For Case {{scenario?.id}} &nbsp;<a routerLink="/test/{{scenario?.appUnderTest}}/{{scenario?.id}}/new" class="btn btn-default btn-small">
-    create a new test</a></h2>
-
-
-  <table *ngIf="tests?.length" id="embedded_tests" class="table-bordered" style="width: 100%; margin-top:15px;">
-    <thead>
-    <tr>
-      <th>Creator</th>
-      <th>JIRA</th>
-      <th>Input</th>
-      <th>Result</th>
-      <th>Created</th>
-      <th>Deployment Timestamp</th>
-      <th>Browser</th>
-      <th>OS</th>
-      <th>Pass/Fail</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-
-    <tr  *ngFor="let test of tests">
-      <td>{{test?.createdAt}}</td>
-      <td>{{test?.ticket}}</td>
-      <td>{{test?.input | slice:0:50}}</td>
-      <td>{{test?.result | slice:0:50}}</td>
-      <td>{{test?.createdAt | date}}</td>
-      <td>{{(test?.deploymentStamp | date) || 'None'}}</td>
-      <td>{{test?.browserName}} {{test?.browserMajor}}{{test?.browserMinor}}</td>
-      <td>{{test?.osName}} {{test?.osMajor}} {{test?.osMinor}}</td>
-      <td>{{test?.passFail}}</td>
-      <td>
-        <a routerLink="/test/{{scenario?.appUnderTest}}/{{test?.id}}/show"><i class="icon-zoom-in" title="show test detail"></i></a>
-        <a routerLink="/test/{{scenario?.appUnderTest}}/{{test?.id}}/edit" [queryParams]="{ scenarioId: scenario?.id }"><i class="icon-pencil" title="edit or delete this test"></i></a>
-      </td>
-    </tr>
-
-
-    </tbody>
-  </table>
-
-  <br><br><br>
-  <h2 *ngIf="!tests?.length"><small>There are no tests for this Case. Go on, be a hero: be the first to test it.</small></h2>
+  </ng-template>
 </section>
-
-<!--<div id="dialog" title="Confirmation Required">-->
-<!--  Are you really sure that you want to delete this case?  You will delete ALL related tests!  Bunny rabbits might be harmed!-->
-<!--</div>-->
-

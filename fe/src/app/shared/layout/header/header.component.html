@@ -1,11 +1,17 @@
 <header>
-  <app-hamburger-menu (emitPagePath)="handleUrl($event)"></app-hamburger-menu>
+  <app-hamburger-menu></app-hamburger-menu>
 
   <figure (click)="goToHome()" class="app-logo dark">
     <img src="/assets/logos/app-logo-dark.svg" alt="logo">
     <figcaption class="app-logo-console">Console</figcaption>
     <img src="/assets/logos/app-logo-separator.svg" alt="separator">
-    <figcaption class="app-logo-name">{{appTitle}}</figcaption>
-    <small>v.{{verUI}}</small>
+    <figcaption class="app-logo-name">
+      {{appTitle}}
+      <small>v.{{verUI}}</small>
+    </figcaption>
+    <ng-container *ngIf="app">
+      <img src="/assets/logos/app-logo-separator-animate.svg" alt="separator">
+      <figcaption class="app-logo-app">{{app}} Testing</figcaption>
+    </ng-container>
   </figure>
 </header>

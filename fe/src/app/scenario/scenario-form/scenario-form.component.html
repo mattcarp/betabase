@@ -1,60 +1,97 @@
-<div *ngIf="isLoading">Loading...</div>
+<app-nav [isBackActive]="true" [app]="app"></app-nav>
 
-<div class="well" *ngIf="!isLoading && scenario">
-  <h1>Edit Case {{scenario?.id}}</h1>
+<section>
+  <div *ngIf="isLoading" class="spinner">
+    <div class="spinner-progress"></div>
+    <div class="spinner-info">Loading...</div>
+  </div>
 
-  <label for="">Name</label>
-  <input type="text" [(ngModel)]="scenario.name">
+  <div *ngIf="!isLoading && scenario">
+    <h2>Edit Case {{scenario?.id}}</h2>
 
-  <label for="">Preconditions</label>
-  <angular-editor [(ngModel)]="scenario.preconditions" [config]="config"></angular-editor>
+    <div>Name</div>
+    <mat-form-field class="full-width">
+      <input matInput [(ngModel)]="scenario.name" type="text">
+    </mat-form-field>
 
-  <label for="">Script</label>
-  <angular-editor [(ngModel)]="scenario.script" [config]="config"></angular-editor>
-
-  <label for="">Expected Result</label>
-  <angular-editor [(ngModel)]="scenario.expectedResult" [config]="config"></angular-editor>
-
-  <label for="">Coverage</label>
-  <select [(ngModel)]="scenario.coverage">
-    <option *ngFor="let option of coverageOptions" value="{{option}}">{{option}}</option>
-  </select>
-
-  <label class='checkbox'>
-    <input type="checkbox" [ngModel]="scenario.isSecurity" (ngModelChange)="onCheckboxChange($event, 'isSecurity')">Security Case?
-    <span class="wtf"><a href="#" class="label ttip"
-                         data-original-title="Does this case cover application security?">Wah?</a>
-    </span>
-  </label>
-
-  <div id="review">
-    <label class='checkbox'>
-      <input type="checkbox" [ngModel]="scenario.reviewFlag" (ngModelChange)="onCheckboxChange($event, 'reviewFlag')">
-      Flag for Review
-      <span class="wtf">
-        <a href="#" class="label ttip" data-original-title="Is the script incomplete?  See a problem with this case?  Flag it for review.">Wah?</a>
-      </span>
-    </label>
-
-    <div id="review_reason" *ngIf="scenario?.reviewFlag">
-      <label for="">Reason for Review</label>
-      <input type="text" [(ngModel)]="scenario.flagReason">
+    <div class="row">
+      <label>Preconditions</label>
+      <angular-editor [(ngModel)]="scenario.preconditions" [config]="config"></angular-editor>
     </div>
+
+    <div class="row">
+      <label>Script</label>
+      <angular-editor [(ngModel)]="scenario.script" [config]="config"></angular-editor>
+    </div>
+
+    <div class="row">
+      <label>Expected Result</label>
+      <angular-editor [(ngModel)]="scenario.expectedResult" [config]="config"></angular-editor>
+    </div>
+
+    <div class="grid">
+      <div>
+        <mat-form-field>
+          <mat-label>Coverage</mat-label>
+          <mat-select [(ngModel)]="scenario.coverage">
+            <mat-option *ngFor="let option of coverageOptions" [value]="option">{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="row">
+          <mat-form-field>
+            <mat-label>Mode</mat-label>
+            <mat-select [(ngModel)]="scenario.mode">
+              <mat-option *ngFor="let option of modeOptions" [value]="option">{{option}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="row">
+          <mat-slide-toggle
+            [ngModel]="scenario.isSecurity"
+            (ngModelChange)="onCheckboxChange($event, 'isSecurity')">
+            <span>Security</span>
+            <i matTooltip="Does this case cover application security?" class="fas fa-question-circle"></i>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="row">
+          <mat-slide-toggle
+            [ngModel]="scenario.reviewFlag"
+            (ngModelChange)="onCheckboxChange($event, 'reviewFlag')">
+            <span>Flag for Review</span>
+            <i matTooltip="Is the script incomplete?  See a problem with this case? Flag it for review."
+               class="fas fa-question-circle">
+            </i>
+          </mat-slide-toggle>
+        </div>
+
+        <ng-container *ngIf="scenario?.reviewFlag">
+          <div class="row">
+            <mat-form-field class="full-width textarea">
+              <mat-label>Reason for Review</mat-label>
+              <textarea matInput [(ngModel)]="scenario.flagReason"></textarea>
+            </mat-form-field>
+          </div>
+        </ng-container>
+
+        <div class="row">
+          <mat-slide-toggle
+            [ngModel]="scenario.clientPriority"
+            (ngModelChange)="onCheckboxChange($event, 'clientPriority')">
+            <span>Priority</span>
+            <i matTooltip="Has this case been deemed a priority?" class="fas fa-question-circle"></i>
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+
+    <button mat-flat-button (click)="onSaveClick()" color="accent">
+      <i class="fas fa-save"></i>
+      <span>{{saveBtnLabel}}</span>
+    </button>
   </div>
-
-  <label class='checkbox'>
-    <input type="checkbox" [ngModel]="scenario.clientPriority" (ngModelChange)="onCheckboxChange($event, 'clientPriority')">Priority
-    <span class="wtf"><a href="#" class="label ttip"
-                         data-original-title="Has this case been deemed a priority?">Wah?</a>
-      </span>
-  </label>
-
-  <label for="">Mode</label>
-  <select [(ngModel)]="scenario.mode">
-    <option *ngFor="let option of modeOptions" value="{{option}}">{{option}}</option>
-  </select>
-
-  <div class="well">
-    <button class="btn btn-small btn-primary save" (click)="onSaveClick()">{{saveBtnLabel}}</button>
-  </div>
-</div>
+</section>

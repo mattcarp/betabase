@@ -8,6 +8,5 @@ import { ResourceComponent } from './resource.component';
 @NgModule({
   declarations: [ResourceComponent],
   imports: [CommonModule, NavModule, ResourceRoutingModule],
-  exports: [ResourceComponent],
 })
 export class ResourceModule {}

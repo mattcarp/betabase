@@ -16,7 +16,6 @@ import { AppService } from '../../shared/app.service';
 export class AppDetailsComponent {
   reportData: ReportData | null = null;
   app: string | null = null;
-  selectedApp = this.router.url.split('/')[2];
   isNewFeaturesChecked = false;
   numNewFeaturesChecked = 0;
   isPrioritiesChecked = false;
@@ -123,8 +122,8 @@ export class AppDetailsComponent {
   }
 
   get imageUrl(): string {
-    if (this.selectedApp) {
-      switch (this.selectedApp) {
+    if (this.app) {
+      switch (this.app) {
         case 'AOMA':
           return 'https://aoma-dev.smcdp-de.net/teams/web/images/aoma/login/aoma-login-logo.gif';
         default:
@@ -197,6 +196,7 @@ export class AppDetailsComponent {
   }
 
   onDropEnhancementScenarios(event: CdkDragDrop<ScenarioItem[]>) {
+    // TODO: DragDrop
     // moveItemInArray(this.reportData?.enhancementScenarios, event.previousIndex, event.currentIndex);
     //
     // this.reportData.enhancementScenarios.forEach((item: ScenarioItem, index: number) => {

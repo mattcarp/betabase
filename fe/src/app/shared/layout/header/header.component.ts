@@ -1,5 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+
 import data from '../../../../../package.json';
 
 @Component({
@@ -7,20 +9,16 @@ import data from '../../../../../package.json';
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
-  @Output() emitPagePath: EventEmitter<string> = new EventEmitter<string>();
+  app: string | null = null;
   verUI: string;
   appTitle: string;
 
-  constructor(private titleService: Title) {
+  constructor(private titleService: Title, private router: Router) {
     this.appTitle = this.titleService.getTitle();
     this.verUI = data.version;
   }
 
-  handleUrl(page: string): void {
-    this.emitPagePath.emit(page);
-  }
-
   goToHome(): void {
-    this.handleUrl('main');
+    this.router.navigate(['/dashboard']);
   }
 }

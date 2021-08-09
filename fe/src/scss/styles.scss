@@ -114,16 +114,11 @@ app-main {
           background-color: rgba(var(--color-rgb-header), 0.1);
         }
 
-        .header-container {
+        .header-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-          align-items: end;
           width: 100%;
-          padding: 10px 0;
-
-          h2 {
-            margin: 0;
-          }
+          margin: 10px 0 0;
 
           button {
             margin: -10px -11px;
@@ -132,6 +127,11 @@ app-main {
           div {
             color: $color-grey;
           }
+        }
+
+        .header-flex {
+          display: flex;
+          align-items: center;
         }
       }
     }
@@ -201,6 +201,20 @@ a {
   color: $color-green;
 }
 
+.highlight {
+  color: black;
+  background-color: #ffbc77;
+}
+
+.row {
+  margin: 0 0 10px;
+
+  label:not(.mat-slide-toggle-label) {
+    margin: 0 0 5px;
+    display: block;
+  }
+}
+
 // Icons
 .far,
 .fas,
@@ -228,37 +242,39 @@ a {
     text-transform: uppercase;
   }
 
-  &-name {
-    overflow: hidden;
+  &-name, &-app {
     font: 200 21px/1 'Helvetica-Light', Helvetica, Roboto, Arial, sans-serif;
     white-space: nowrap;
     text-transform: uppercase;
     text-overflow: ellipsis;
-    direction: rtl;
-  }
+    position: relative;
 
-  small {
-    align-self: baseline;
-    margin: 4px 0 0 -34px;
+    small {
+      position: absolute;
+      top: -16px;
+      right: 0;
+      font-size: 12px;
+      text-transform: unset;
+    }
   }
 
   &.light {
     .app-logo-name {
       color: #414042;
-    }
 
-    small {
-      color: rgba($color-black, 0.4);
+      small {
+        color: rgba($color-black, 0.4);
+      }
     }
   }
 
   &.dark {
     .app-logo-name {
       color: #afafaf;
-    }
 
-    small {
-      color: rgba($color-white, 0.4);
+      small {
+        color: rgba($color-white, 0.4);
+      }
     }
   }
 }
@@ -312,8 +328,6 @@ a {
   transition: background-color 0.3s ease-in;
 
   & > div {
-    display: flex;
-    align-items: center;
     height: 100%;
     padding: 4px;
     border-right: 1px solid $color-table-head;
@@ -353,6 +367,34 @@ a {
       text-align: center;
     }
 
+    &.actions {
+      padding: 0;
+    }
+
+    &.inner-html {
+      flex-direction: column;
+      align-items: flex-start;
+
+      ul, ol {
+        margin: 0;
+
+        li {
+          margin: 0;
+          line-height: 1.2;
+        }
+      }
+
+      ol {
+        padding: 0 0 0 20px;
+      }
+
+      img {
+        box-shadow: 0 2px 6px 0 rgba($color-black, 0.2);
+        min-width: 400px;
+        max-width: 100%;
+      }
+    }
+
     .label-default,
     .label-warning,
     .label-info,
@@ -370,6 +412,7 @@ a {
       color: $color-white;
       border-radius: 3px;
       background-color: $color-grey;
+      margin: 0 auto;
     }
 
     .label-warning {
@@ -397,12 +440,12 @@ a {
     display: none;
   }
 
-  &-container {
-    border: 1px solid $color-table-head;
+  &:hover {
+    background-color: $color-active;
   }
 
-  &:hover {
-    background-color: #fefbeb;
+  &-container {
+    border: 1px solid $color-table-head;
   }
 }
 
@@ -414,6 +457,29 @@ header {
     height: 28px;
     min-height: 28px;
 
+    .ASC,
+    .DESC {
+      position: absolute;
+      top: 50%;
+      left: 4px;
+      width: 0;
+      height: 0;
+      transform: translateY(-50%);
+      opacity: 0;
+      border-right: 4px solid transparent;
+      border-left: 4px solid transparent;
+    }
+
+    .ASC {
+      border-top-width: 8px;
+      border-top-style: solid;
+    }
+
+    .DESC {
+      border-bottom-width: 8px;
+      border-bottom-style: solid;
+    }
+
     & > div {
       position: relative;
       display: flex;
@@ -424,6 +490,30 @@ header {
       font-weight: bold;
       color: $color-medium;
       background-color: $color-table-head;
+
+      &.clickable {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        padding: 0 20px;
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.4s;
+
+        &:hover {
+          .ASC,
+          .DESC {
+            opacity: 0.3;
+          }
+        }
+
+        &.active {
+          .ASC,
+          .DESC {
+            opacity: 1;
+          }
+        }
+      }
     }
   }
 }
@@ -462,4 +552,50 @@ header {
 
 .cdk-drag-placeholder {
   opacity: 0;
+}
+
+// Information
+.alert-error {
+  margin: 0 0 10px;
+  padding: 10px;
+  border: 1px solid $color-red;
+  border-radius: 6px;
+  background-color: $color-row;
+
+  .fa-exclamation-triangle {
+    color: $color-red;
+  }
+}
+
+// Pagination
+pagination-controls {
+  height: $size-navHeight;
+  display: inline-block;
+
+  .ngx-pagination {
+    margin: 0;
+    padding: 6px 0 7px;
+
+    li {
+      margin: 0;
+
+      &.pagination-previous {
+        padding-left: 0;
+      }
+
+      &.pagination-next {
+        padding-right: 0;
+      }
+
+      a {
+        transition: background-color 0.4s;
+        border: none;
+        outline: none;
+      }
+    }
+
+    .current {
+      background-color: $color-medium;
+    }
+  }
 }

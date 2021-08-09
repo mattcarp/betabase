@@ -10,6 +10,7 @@ import { ScenarioItem, TestItem } from '../../shared/models';
   selector: 'app-test-form',
   templateUrl: './test-form.component.html',
   styleUrls: ['./test-form.component.scss'],
+  host: { '[class.page]': 'true' },
 })
 export class TestFormComponent {
   scenario: ScenarioItem | null = null;

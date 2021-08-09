@@ -5,7 +5,6 @@ import { ScenarioDetailsComponent } from './scenario-details/scenario-details.co
 import { ScenarioFormComponent } from './scenario-form/scenario-form.component';
 import { ScenarioListComponent } from './scenario-list/scenario-list.component';
 
-
 const routes: Routes = [
   {
     path: ':app/new',

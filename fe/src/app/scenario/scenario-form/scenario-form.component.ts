@@ -10,8 +10,10 @@ import { AppService } from '../../shared/app.service';
   selector: 'app-scenario-form',
   templateUrl: './scenario-form.component.html',
   styleUrls: ['./scenario-form.component.scss'],
+  host: { '[class.page]': 'true' },
 })
 export class ScenarioFormComponent {
+  app: string | null = null;
   id: string | null = null;
   scenario: ScenarioItem | null = null;
   isLoading = false;
@@ -33,9 +35,7 @@ export class ScenarioFormComponent {
     translate: 'no',
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
-    toolbarHiddenButtons: [
-      ['bold'],
-    ],
+    toolbarHiddenButtons: [['bold']],
     customClasses: [
       {
         name: 'quote',
@@ -48,17 +48,12 @@ export class ScenarioFormComponent {
       {
         name: 'titleText',
         class: 'titleText',
-        tag: 'h1',
+        tag: 'h2',
       },
     ],
   };
 
-  private app: string | null = null;
-
-  constructor(
-    private appService: AppService,
-    private activatedRoute: ActivatedRoute,
-  ) {
+  constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
     activatedRoute.params
       .pipe(
         tap(({ app }) => {

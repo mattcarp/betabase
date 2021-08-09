@@ -8,7 +8,7 @@ export const NavConstants = {
     {
       icon: 'fa-list-alt',
       title: 'All Cases',
-      url: '',
+      url: 'scenario',
     },
     {
       icon: 'fa-plus-circle',
