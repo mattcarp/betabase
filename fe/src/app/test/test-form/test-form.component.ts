@@ -13,6 +13,7 @@ import { ScenarioItem, TestItem } from '../../shared/models';
   host: { '[class.page]': 'true' },
 })
 export class TestFormComponent {
+  app: string | null = null;
   scenario: ScenarioItem | null = null;
   test: TestItem | null = null;
   isLoading = false;
