@@ -43,4 +43,9 @@ export class AppService {
     const url = `${this.apiUrl}/scenario/${params.id}`;
     return this.http.put<ScenarioItem>(url, params).toPromise();
   }
+
+  addTest(params: TestItem): Promise<TestItem> {
+    const url = `${this.apiUrl}/test`;
+    return this.http.post<TestItem>(url, params).toPromise();
+  }
 }

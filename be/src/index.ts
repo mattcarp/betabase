@@ -3,7 +3,7 @@ import cors from 'cors';
 
 import db from './models';
 import {
-  createScenario,
+  addScenario,
   getEnhancementCount,
   getEnhancementScenarios,
   getFlaggedCount,
@@ -20,7 +20,7 @@ import {
 } from './models/scenario';
 import { getFailCount, getJiras, getRoundNotes, getTestCount } from './models/round';
 import { getDeployment } from './models/deployment';
-import { getScenarioTests, getTestCountRange } from './models/test';
+import { addTest, getScenarioTests, getTestCountRange } from './models/test';
 
 const app = express();
 app.use(express.json());
@@ -122,7 +122,7 @@ app.get('/api/scenario-list/:app', async (request, response) => {
 
 app.post('/api/scenario', async (request, response) => {
   const params = request.body;
-  const model = await createScenario(params);
+  const model = await addScenario(params);
   response.json(model);
 });
 
@@ -131,4 +131,10 @@ app.put('/api/scenario/:id', async (request, response) => {
   const params = request.body;
   const result = await updateScenario(id, params);
   response.send(result);
+});
+
+app.post('/api/test', async (request, response) => {
+  const params = request.body;
+  const model = await addTest(params);
+  response.json(model);
 });

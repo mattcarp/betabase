@@ -35,7 +35,7 @@ export const Deployment = db.sequelize.define('Deployment', {
 });
 
 export const getDeployment = async (app: string) => {
-  const [{ dataValues }] = await Deployment.findAll({
+  const result = await Deployment.findAll({
     attributes: [
       'build',
       'branch',
@@ -49,7 +49,7 @@ export const getDeployment = async (app: string) => {
     ],
     limit: 1,
   });
-  return dataValues;
+  return result?.[0]?.dataValues || null;
 }
 
 db.Deployment = Deployment;

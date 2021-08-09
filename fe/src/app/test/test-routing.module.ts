@@ -19,6 +19,10 @@ const routes: Routes = [
     component: TestFormComponent,
   },
   {
+    path: ':app/:scenarioId/new',
+    component: TestFormComponent,
+  },
+  {
     path: ':app',
     component: TestListComponent,
   },
