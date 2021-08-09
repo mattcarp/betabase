@@ -1,3 +1,7 @@
+<app-nav [isBackActive]="true"></app-nav>
+
+<section>
+
 <div *ngIf="isLoading">Loading...</div>
 <div class="well" *ngIf="!isLoading && (scenario && test)">
   <h3>Viewing a Single Test for Case {{scenario?.id}}</h3><br>
@@ -110,3 +114,5 @@
     <button class="btn btn-small span2 btn-danger" type="submit">Delete this Test</button>
   </div>
 </div>
+
+</section>
