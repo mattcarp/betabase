@@ -261,7 +261,7 @@ export const getScenarioList = async (appUnderTest: string) => {
   return result;
 }
 
-export const createScenario = async (params) => {
+export const addScenario = async (params) => {
   const model = await Scenario.create(params);
   await model.save();
   return model;

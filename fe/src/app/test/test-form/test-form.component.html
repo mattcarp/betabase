@@ -1,1 +1,126 @@
-<p>test-form works!</p>
+<div class="well" *ngIf="test && scenario">
+  <section>
+    <h2>Case {{scenario?.id}}</h2>
+    <table id="detailTable" class="table-bordered table-striped">
+      <tbody>
+        <tr>
+          <th>Name</th>
+          <td class="span9">{{scenario?.name}}</td>
+        </tr>
+        <tr>
+          <th>Created By</th>
+          <td>{{scenario?.createdBy}}</td>
+        </tr>
+        <tr>
+          <th>Updated By</th>
+          <td>{{scenario?.updatedBy}}</td>
+        </tr>
+        <tr>
+          <th>Created</th>
+          <td>{{scenario?.createdAt}}</td>
+        </tr>
+        <tr>
+          <th>Updated</th>
+          <td>{{scenario?.updatedAt}}</td>
+        </tr>
+        <tr>
+          <th>Coverage</th>
+          <td>{{scenario?.coverage}}</td>
+        </tr>
+        <tr>
+          <th>Flagged for Review?</th>
+          <td>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</td>
+        </tr>
+        <tr *ngIf="scenario?.reviewFlag">
+          <th>Reason for Review</th>
+          <td>{{scenario?.flagReason}}</td>
+        </tr>
+        <tr>
+          <th>Preconditions</th>
+          <td>{{scenario?.preconditions}}</td>
+        </tr>
+        <tr>
+          <th>Expected Result</th>
+          <td>{{scenario?.expectedResult}}</td>
+        </tr>
+        <tr>
+          <th>Script</th>
+          <td>{{scenario?.script}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <h2>Create a New Test for Case {{scenario?.id}}</h2>
+
+  <label for="">Name</label>
+  <input type="text" [(ngModel)]="test.build">
+
+  <label for="">Input</label>
+  <angular-editor [(ngModel)]="test.input" [config]="config"></angular-editor>
+
+  <label for="">Result</label>
+  <angular-editor [(ngModel)]="test.result" [config]="config"></angular-editor>
+
+  <div class='form-inline well'>
+    <label for="">Browser Name</label>
+    <select [(ngModel)]="test.browserName">
+      <option *ngFor="let option of browserNameOptions" value="{{option}}">{{option}}</option>
+    </select>
+
+    <label for="">Browser Major Version</label>
+    <select [(ngModel)]="test.browserMajor">
+      <option *ngFor="let option of browserVersionOptions" value="{{option}}">{{option}}</option>
+    </select>
+
+    <label for="">Browser Minor Version</label>
+    <select [(ngModel)]="test.browserMinor" placeholder="Minor Version - e.g. 0.20.384">
+      <option *ngFor="let option of browserVersionOptions" value="{{option}}">{{option}}</option>
+    </select>
+
+    <label for="">Operating System</label>
+    <select [(ngModel)]="test.osName">
+      <option *ngFor="let option of osNameOptions" value="{{option}}">{{option}}</option>
+    </select>
+
+    <label for="">OS Major Version</label>
+    <select [(ngModel)]="test.osMajor">
+      <option *ngFor="let option of browserVersionOptions" value="{{option}}">{{option}}</option>
+    </select>
+
+    <label for="">OS Minor Version</label>
+    <select [(ngModel)]="test.osMinor" placeholder="Minor Version - e.g. 1.90.89">
+      <option *ngFor="let option of browserVersionOptions" value="{{option}}">{{option}}</option>
+    </select>
+  </div>
+
+  <label for="">Pass/Fail</label>
+  <select [(ngModel)]="test.passFail">
+    <option *ngFor="let option of passFailOptions" value="{{option}}">{{option}}</option>
+  </select>
+
+  <div class="alert alert-block alert-success fade in hidden" id="jira-notes">
+    <h4 class="alert-heading">Contratulations!  You failed!</h4><br>
+    Here are some guidelines in case you feel that a JIRA is in order:
+    <ul>
+      <li>Please be sure the JIRA doesn't already exist.</li>
+      <li>Try additional browser and OS combinations.</li>
+      <li>Be sure to enter the ticket number (not the URL) in the JIRA Ticket field below.</li>
+    </ul>
+  </div>
+
+  <label for="">Comments</label>
+  <angular-editor [(ngModel)]="test.comments" [config]="config"></angular-editor>
+
+  <label for="">JIRA Ticket (can be added later) - use the form ABCD-1234</label>
+  <input type="text" [(ngModel)]="test.ticket">
+
+  <label for="">In Production?</label>
+  <select [(ngModel)]="test.inProd">
+    <option *ngFor="let option of inProdOptions" value="{{option}}">{{option}}</option>
+  </select>
+
+  <div class="form-actions well">
+    <button class="btn btn-small btn-primary" [disabled]="isCreateTestBtnDisabled" (click)="onCreateTestClick()">Create this Test</button>
+  </div>
+</div>

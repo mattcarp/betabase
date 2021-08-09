@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 import { TestRoutingModule } from './test-routing.module';
 import { TestFormComponent } from './test-form/test-form.component';
@@ -8,6 +10,6 @@ import { TestDetailsComponent } from './test-details/test-details.component';
 
 @NgModule({
   declarations: [TestFormComponent, TestListComponent, TestDetailsComponent],
-  imports: [CommonModule, TestRoutingModule],
+  imports: [CommonModule, TestRoutingModule, FormsModule, AngularEditorModule],
 })
 export class TestModule {}

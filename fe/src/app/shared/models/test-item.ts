@@ -7,7 +7,7 @@ export interface TestItem {
   createdAt?: Date;
   createdBy?: string;
   deploymentStamp?: Date;
-  id: number;
+  id?: number;
   inProd?: string;
   input?: string;
   osMajor?: string;
@@ -19,4 +19,5 @@ export interface TestItem {
   ticket?: string;
   updatedAt?: Date;
   updatedBy?: string;
+  scenarioId?: number;
 }

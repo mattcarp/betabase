@@ -34,21 +34,21 @@ export class ScenarioFormComponent {
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
     toolbarHiddenButtons: [
-      ['bold']
+      ['bold'],
     ],
     customClasses: [
       {
-        name: "quote",
-        class: "quote",
+        name: 'quote',
+        class: 'quote',
       },
       {
         name: 'redText',
-        class: 'redText'
+        class: 'redText',
       },
       {
-        name: "titleText",
-        class: "titleText",
-        tag: "h1",
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
       },
     ],
   };

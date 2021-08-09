@@ -107,6 +107,10 @@ export const Test = db.sequelize.define('Test', {
     nullable: true,
     field: 'os_minor',
   },
+  scenarioId: {
+    type: DataTypes.NUMBER,
+    field: 'scenario_id',
+  },
 }, {
   freezeTableName: true,
   tableName: 'test',
@@ -171,6 +175,12 @@ export const getScenarioTests = async (scenario_id: string) => {
     ],
   });
   return result;
+}
+
+export const addTest = async (params) => {
+  const model = await Test.create(params);
+  await model.save();
+  return model;
 }
 
 db.Test = Test;
