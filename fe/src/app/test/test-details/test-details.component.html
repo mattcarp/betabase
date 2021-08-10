@@ -1,12 +1,9 @@
-<app-nav [isBackActive]="true"></app-nav>
-
-<section>
-  <div *ngIf="isLoading">Loading...</div>
-  <div class="well" *ngIf="!isLoading && (scenario && test)">
-    <h3>Viewing a Single Test for Case {{scenario?.id}}</h3><br>
-    <h4>The Case</h4>
-    <table id="detailTable" class="record_properties condensed-table table-striped table-bordered">
-      <tbody>
+<div *ngIf="isLoading">Loading...</div>
+<div class="well" *ngIf="!isLoading && (scenario && test)">
+  <h3>Viewing a Single Test for Case {{scenario?.id}}</h3><br>
+  <h4>The Case</h4>
+  <table id="detailTable" class="record_properties condensed-table table-striped table-bordered">
+    <tbody>
       <tr>
         <th class="span3">Scenario ID</th>
         <td class="span9">{{scenario?.id}}</td>
@@ -51,66 +48,65 @@
         <th>Reason for Review</th>
         <td>{{scenario?.flagReason}}</td>
       </tr>
-      </tbody>
-    </table>
+    </tbody>
+  </table>
 
-    <br>
-    <h4>The Test</h4>
-    <table class="record_properties condensed-table table-striped table-bordered mcDetailTable">
-      <tbody>
+  <br>
+  <h4>The Test</h4>
+  <table class="record_properties condensed-table table-striped table-bordered mcDetailTable">
+    <tbody>
 
-      <tr>
-        <th class="span3">Created</th>
-        <td class="span9">{{test?.createdAt | date}} <b>by</b> {{test?.createdBy}}</td>
-      </tr>
-      <tr>
-        <th>Updated</th>
-        <td>{{test.updatedAt | date}} <b>by</b> {{test?.updatedBy}}</td>
-      </tr>
-      <tr>
-        <th>Date of Deployment Tested</th>
-        <td>{{(test?.deploymentStamp | date) || 'None'}}</td>
-      </tr>
-      <tr>
-        <th>Comments</th>
-        <td>{{test?.comments}}</td>
-      </tr>
-      <tr>
-        <th>JIRA</th>
-        <td>
-          <a href="https://jira.smedigitalapps.com/jira/browse/{{test?.ticket}}" target="window" title="view ticket in JIRA">{{test?.ticket}}</a>
-        </td>
-      </tr>
-      <tr>
-        <th>Status</th>
-        <td>{{test?.passFail}}</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td>{{test?.input}}</td>
-      </tr>
-      <tr>
-        <th>Result</th>
-        <td>{{test?.result}}</td>
-      </tr>
-      <tr>
-        <th>Browser</th>
-        <td>{{test?.browserName}} {{test?.browserMajor}} {{test?.browserMinor}}</td>
-      </tr>
-      <tr>
-        <th>Operating System</th>
-        <td>{{test?.osName}} {{test?.osMajor}} {{test?.osMinor}}</td>
-      </tr>
-      <tr>
-        <th>Pass/Fail</th>
-        <td>{{test?.passFail}}</td>
-      </tr>
-      </tbody>
-    </table>
-    <img *ngIf="test?.path?.length" src="{{'https://s3.amazonaws.com/betabase-user-uploads/' + test?.path}}" alt="Thumbnail" />
-    <div class="record_actions row well">
-      <a routerLink="/test/{{scenario?.appUnderTest}}/{{test?.id}}/edit">Edit this Test</a>
-      <button class="btn btn-small span2 btn-danger" type="submit">Delete this Test</button>
-    </div>
+    <tr>
+      <th class="span3">Created</th>
+      <td class="span9">{{test?.createdAt | date}} <b>by</b> {{test?.createdBy}}</td>
+    </tr>
+    <tr>
+      <th>Updated</th>
+      <td>{{test.updatedAt | date}} <b>by</b> {{test?.updatedBy}}</td>
+    </tr>
+    <tr>
+      <th>Date of Deployment Tested</th>
+      <td>{{(test?.deploymentStamp | date) || 'None'}}</td>
+    </tr>
+    <tr>
+      <th>Comments</th>
+      <td>{{test?.comments}}</td>
+    </tr>
+    <tr>
+      <th>JIRA</th>
+      <td>
+        <a href="https://jira.smedigitalapps.com/jira/browse/{{test?.ticket}}" target="window" title="view ticket in JIRA">{{test?.ticket}}</a>
+      </td>
+    </tr>
+    <tr>
+      <th>Status</th>
+      <td>{{test?.passFail}}</td>
+    </tr>
+    <tr>
+      <th>Input</th>
+      <td>{{test?.input}}</td>
+    </tr>
+    <tr>
+      <th>Result</th>
+      <td>{{test?.result}}</td>
+    </tr>
+    <tr>
+      <th>Browser</th>
+      <td>{{test?.browserName}} {{test?.browserMajor}} {{test?.browserMinor}}</td>
+    </tr>
+    <tr>
+      <th>Operating System</th>
+      <td>{{test?.osName}} {{test?.osMajor}} {{test?.osMinor}}</td>
+    </tr>
+    <tr>
+      <th>Pass/Fail</th>
+      <td>{{test?.passFail}}</td>
+    </tr>
+    </tbody>
+  </table>
+  <img *ngIf="test?.path?.length" src="{{'https://s3.amazonaws.com/betabase-user-uploads/' + test?.path}}" alt="Thumbnail" />
+  <div class="record_actions row well">
+    <a routerLink="/test/{{scenario?.appUnderTest}}/{{test?.id}}/edit">Edit this Test</a>
+    <button class="btn btn-small span2 btn-danger" type="submit">Delete this Test</button>
   </div>
-</section>
+</div>

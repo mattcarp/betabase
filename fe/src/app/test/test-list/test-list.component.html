@@ -1,8 +1,5 @@
-<app-nav [isBackActive]="true"></app-nav>
-
-<section>
-  <table id="tests_table" class="table table-bordered table-condensed">
-    <thead>
+<table id="tests_table" class="table table-bordered table-condensed">
+  <thead>
     <tr>
       <th>Case</th>
       <th>Updated</th>
@@ -15,8 +12,8 @@
       <th>JIRA</th>
       <th>Actions</th>
     </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
     <tr *ngFor="let entity of tests">
       <td><a routerLink="/scenario/{{app}}/{{entity?.scenarioId}}/show">{{entity?.scenarioId}}</a></td>
       <td style="width: 155px;">{{entity?.updatedAt | date}}</td>
@@ -32,6 +29,5 @@
         <a routerLink="/test/{{app}}/{{entity?.id}}/edit"><i class="icon-pencil" title="edit or delete this test"></i>edit</a>
       </td>
     </tr>
-    </tbody>
-  </table>
-</section>
+  </tbody>
+</table>
