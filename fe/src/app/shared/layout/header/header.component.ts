@@ -8,7 +8,6 @@ import data from '../../../../../package.json';
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
-  app: string | null = null;
   verUI: string;
   appTitle: string;
 
