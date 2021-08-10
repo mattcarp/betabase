@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 import data from '../../../../../package.json';
@@ -13,12 +12,8 @@ export class HeaderComponent {
   verUI: string;
   appTitle: string;
 
-  constructor(private titleService: Title, private router: Router) {
+  constructor(private titleService: Title) {
     this.appTitle = this.titleService.getTitle();
     this.verUI = data.version;
-  }
-
-  goToHome(): void {
-    this.router.navigate(['/dashboard']);
   }
 }

@@ -4,6 +4,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { RouterModule } from '@angular/router';
 
 import { NavModule } from '../nav/nav.module';
 import { HeaderComponent } from './header.component';
@@ -13,7 +14,7 @@ import { DialogContactUsComponent } from './dialog-contact-us/dialog-contact-us.
 
 @NgModule({
   declarations: [HeaderComponent, HamburgerMenuComponent, DialogFaqComponent, DialogContactUsComponent],
-  imports: [CommonModule, MatDialogModule, MatButtonModule, NavModule, MatMenuModule, MatExpansionModule],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, NavModule, MatMenuModule, MatExpansionModule, RouterModule],
   exports: [HeaderComponent, HamburgerMenuComponent],
   entryComponents: [DialogFaqComponent, DialogContactUsComponent],
 })

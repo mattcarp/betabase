@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
+import { filter, pluck } from 'rxjs/operators';
 
 import { NavConstants } from './nav.constant';
 
@@ -12,10 +13,22 @@ import { NavConstants } from './nav.constant';
 })
 export class NavComponent {
   @Input() isBackActive?: boolean = false;
-  @Input() app?: string | null = null;
   buttons = NavConstants.navButtons;
 
-  constructor(private router: Router, private location: Location) {}
+  private app: string | null = null;
+
+  constructor(private location: Location, private activatedRoute: ActivatedRoute) {
+    activatedRoute.params
+      .pipe(
+        filter((params: Params) => 'app' in params),
+        pluck('app'),
+      )
+      .subscribe((app: string) => this.app = app);
+  }
+
+  getLinkUrl(url: string): string {
+    return url.replace('_APP_', `${this.app}`);
+  }
 
   isDisabled(url: string): boolean {
     return url === 'scenario' && !this.app;
@@ -23,13 +36,5 @@ export class NavComponent {
 
   onBackClick(): void {
     this.location.back();
-  }
-
-  onButtonClick(url: string, app: string | null = null): void {
-    if (app?.length) {
-      this.router.navigate([`/${url}/${app}`]);
-    } else {
-      this.router.navigate([`/${url}`]);
-    }
   }
 }
