@@ -125,7 +125,9 @@ export class AppDetailsComponent {
     if (this.app) {
       switch (this.app) {
         case 'AOMA':
-          return 'https://aoma-dev.smcdp-de.net/teams/web/images/aoma/login/aoma-login-logo.gif';
+          return '/assets/logos/aoma-loading.gif';
+        case 'Promo':
+          return '/assets/logos/promo.jpeg';
         default:
           break;
       }
