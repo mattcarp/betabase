@@ -20,7 +20,7 @@ import {
 } from './models/scenario';
 import { getFailCount, getJiras, getRoundNotes, getTestCount } from './models/round';
 import { getDeployment } from './models/deployment';
-import { addTest, getScenarioTests, getTestCountRange } from './models/test';
+import { addTest, getScenarioTests, getTest, getTestCountRange, getTestList } from './models/test';
 
 const app = express();
 app.use(express.json());
@@ -115,7 +115,7 @@ app.get('/api/scenario/:id', async (request, response) => {
   response.json({ scenario, tests });
 });
 
-app.get('/api/scenario-list/:app', async (request, response) => {
+app.get('/api/scenarios/:app', async (request, response) => {
   const scenarios = await getScenarioList(request.params.app);
   response.json(scenarios);
 });
@@ -136,5 +136,15 @@ app.put('/api/scenario/:id', async (request, response) => {
 app.post('/api/test', async (request, response) => {
   const params = request.body;
   const model = await addTest(params);
+  response.json(model);
+});
+
+app.get('/api/tests/:app', async (request, response) => {
+  const model = await getTestList(request.params.app);
+  response.json(model);
+});
+
+app.get('/api/test/:id', async (request, response) => {
+  const model = await getTest(request.params.id);
   response.json(model);
 });

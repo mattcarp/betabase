@@ -30,7 +30,7 @@ export class AppService {
   }
 
   getAllScenarios(app: string): Promise<ScenarioItem[]> {
-    const url = `${this.apiUrl}/scenario-list/${app}`;
+    const url = `${this.apiUrl}/scenarios/${app}`;
     return this.http.get<ScenarioItem[]>(url).toPromise();
   }
 
@@ -47,5 +47,15 @@ export class AppService {
   addTest(params: TestItem): Promise<TestItem> {
     const url = `${this.apiUrl}/test`;
     return this.http.post<TestItem>(url, params).toPromise();
+  }
+
+  getAllTests(app: string): Promise<TestItem[]> {
+    const url = `${this.apiUrl}/tests/${app}`;
+    return this.http.get<TestItem[]>(url).toPromise();
+  }
+
+  getTest(id: string): Promise<TestItem> {
+    const url = `${this.apiUrl}/test/${id}`;
+    return this.http.get<TestItem>(url).toPromise();
   }
 }
