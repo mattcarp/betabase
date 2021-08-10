@@ -125,9 +125,9 @@ export class AppDetailsComponent {
     if (this.app) {
       switch (this.app) {
         case 'AOMA':
-          return '/assets/logos/aoma-loading.gif';
+          return '/assets/logos/aoma-logo.gif';
         case 'Promo':
-          return '/assets/logos/promo.jpeg';
+          return '/assets/logos/promo-logo.png';
         default:
           break;
       }
