@@ -9,24 +9,24 @@
   </button>
 
   <ng-container *ngFor="let button of buttons">
-    <button mat-flat-button
-            (click)="onButtonClick(button.url, app)"
-            [disabled]="isDisabled(button.url)"
-            color="primary"
-            class="nav-button">
+    <a mat-flat-button
+       routerLink="{{getLinkUrl(button.url)}}"
+       color="primary"
+       [disabled]="isDisabled(button.url)"
+       class="nav-button">
       <i class="fas" [ngClass]="button.icon"></i>
       <span *ngIf="button?.title">{{button?.title}}</span>
-    </button>
+    </a>
   </ng-container>
 
   <app-select-utility></app-select-utility>
 
   <div class="spacer"></div>
 
-  <button mat-flat-button
-          (click)="onButtonClick('dashboard')"
-          color="primary">
+  <a mat-flat-button
+     routerLink="/dashboard"
+     color="primary">
     <i class="fas fa-random"></i>
     <span>Switch App</span>
-  </button>
+  </a>
 </nav>

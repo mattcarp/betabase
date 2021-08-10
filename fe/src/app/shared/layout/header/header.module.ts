@@ -10,10 +10,11 @@ import { HeaderComponent } from './header.component';
 import { HamburgerMenuComponent } from './hamburger-menu/hamburger-menu.component';
 import { DialogFaqComponent } from './dialog-faq/dialog-faq.component';
 import { DialogContactUsComponent } from './dialog-contact-us/dialog-contact-us.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [HeaderComponent, HamburgerMenuComponent, DialogFaqComponent, DialogContactUsComponent],
-  imports: [CommonModule, MatDialogModule, MatButtonModule, NavModule, MatMenuModule, MatExpansionModule],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, NavModule, MatMenuModule, MatExpansionModule, RouterModule],
   exports: [HeaderComponent, HamburgerMenuComponent],
   entryComponents: [DialogFaqComponent, DialogContactUsComponent],
 })

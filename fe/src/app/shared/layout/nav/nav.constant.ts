@@ -3,22 +3,22 @@ export const NavConstants = {
     {
       icon: 'fa-user-headset',
       title: 'Support',
-      url: 'support',
+      url: '/support',
     },
     {
       icon: 'fa-list-alt',
       title: 'All Cases',
-      url: 'scenario',
+      url: '/scenario/_APP_',
     },
     {
       icon: 'fa-plus-circle',
       title: 'New Case',
-      url: '',
+      url: '/scenario/_APP_/new',
     },
     {
       icon: 'fa-code',
       title: 'All Tests',
-      url: '',
+      url: '/test/_APP_',
     },
   ],
 };
