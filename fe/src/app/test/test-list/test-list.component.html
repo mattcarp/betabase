@@ -1,5 +1,37 @@
 <app-nav [isBackActive]="true"></app-nav>
 
 <section>
-  <h2>test-list works!</h2>
+  <table id="tests_table" class="table table-bordered table-condensed">
+    <thead>
+    <tr>
+      <th>Case</th>
+      <th>Updated</th>
+      <th>Deployment</th>
+      <th>Tester</th>
+      <th>P/F</th>
+      <th>Result</th>
+      <th>Browser</th>
+      <th>OS</th>
+      <th>JIRA</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let entity of tests">
+      <td><a routerLink="/scenario/{{app}}/{{entity?.scenarioId}}/show">{{entity?.scenarioId}}</a></td>
+      <td style="width: 155px;">{{entity?.updatedAt | date}}</td>
+      <td style="width: 155px;">{{entity?.deploymentStamp | date}}</td>
+      <td>{{entity?.createdBy}}</td>
+      <td>{{entity?.passFail}}</td>
+      <td style="width: 160px;">{{entity?.result | slice:0:70}}</td>
+      <td>{{entity?.browserName}} {{entity?.browserMajor}}{{entity?.browserMinor}}</td>
+      <td>{{entity?.osName}} {{entity?.osMajor}}{{entity?.osMinor}}</td>
+      <td>{{entity?.ticket | slice:0:10}}</td>
+      <td>
+        <a routerLink="/test/{{app}}/{{entity?.id}}/show"><i class="icon-zoom-in" title="show test detail"></i>view</a>
+        <a routerLink="/test/{{app}}/{{entity?.id}}/edit"><i class="icon-pencil" title="edit or delete this test"></i>edit</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 </section>

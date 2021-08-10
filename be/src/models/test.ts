@@ -123,10 +123,18 @@ Test.hasOne(db.Scenario, {
   name: 'scenario_id',
 });
 
-export const getAllTests = async () => {
-  return await Test.findAll({
-    include: db.Scenario,
-  });
+export const getTestList = async (app: string) => {
+  const query = "SELECT t.created_at, t.updated_at,\n" +
+    "t.updated_by, t.pass_fail, t.input, t.created_by,\n" +
+    "t.browser_minor, t.os_name, t.os_major,\n" +
+    "t.os_minor, t.ticket, t.scenario_id, t.id, t.deployment_stamp\n" +
+    "FROM Test t, Scenario s\n" +
+    "WHERE t.scenario_id = s.id\n" +
+    "AND s.app_under_test = '" + app + "'\n" +
+    "ORDER BY t.updated_at DESC\n" +
+    "LIMIT 0, 2000";
+  const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return db.snakeCaseToCamelCase(result);
 }
 
 export const getTestCountRange = async (app: string, period: string) => {
@@ -181,6 +189,11 @@ export const addTest = async (params) => {
   const model = await Test.create(params);
   await model.save();
   return model;
+}
+
+export const getTest = async (id: string) => {
+  const { dataValues } = await Test.findByPk(id);
+  return dataValues;
 }
 
 db.Test = Test;

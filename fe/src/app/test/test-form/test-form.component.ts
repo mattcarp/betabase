@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { filter, pluck, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 import { AppService } from '../../shared/app.service';
 import { ScenarioItem, TestItem } from '../../shared/models';
@@ -56,12 +56,8 @@ export class TestFormComponent {
     private activatedRoute: ActivatedRoute,
   ) {
     activatedRoute.params
-      .pipe(
-        tap(() => this.test = {}),
-        filter((params: Params) => 'scenarioId' in params),
-        pluck('scenarioId'),
-      )
-      .subscribe((scenarioId: string) => this.fetchData(scenarioId));
+      .pipe(tap(() => this.test = {}))
+      .subscribe(({ scenarioId, id }) => this.fetchData(scenarioId, id));
   }
 
   get isCreateTestBtnDisabled(): boolean {
@@ -75,10 +71,17 @@ export class TestFormComponent {
     await this.appService.addTest(params);
   }
 
-  private async fetchData(id: string): Promise<void> {
+  private async fetchData(scenarioId: string, testId: string): Promise<void> {
     this.isLoading = true;
-    const { scenario } = await this.appService.getScenario(id);
-    this.scenario = scenario;
+    if (testId) {
+      this.test = await this.appService.getTest(testId);
+      const { scenario } = await this.appService.getScenario(`${this.test.scenarioId}`);
+      this.scenario = scenario;
+    }
+    if (scenarioId) {
+      const { scenario } = await this.appService.getScenario(scenarioId);
+      this.scenario = scenario;
+    }
     this.isLoading = false;
   }
 }
