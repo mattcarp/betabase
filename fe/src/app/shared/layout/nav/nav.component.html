@@ -10,7 +10,8 @@
 
   <ng-container *ngFor="let button of buttons">
     <button mat-flat-button
-            (click)="onButtonClick(button.url)"
+            (click)="onButtonClick(button.url, app)"
+            [disabled]="isDisabled(button.url)"
             color="primary"
             class="nav-button">
       <i class="fas" [ngClass]="button.icon"></i>
@@ -23,7 +24,7 @@
   <div class="spacer"></div>
 
   <button mat-flat-button
-          (click)="onButtonClick('/dashboard')"
+          (click)="onButtonClick('dashboard')"
           color="primary">
     <i class="fas fa-random"></i>
     <span>Switch App</span>

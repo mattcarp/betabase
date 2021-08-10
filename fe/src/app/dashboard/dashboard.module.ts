@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { NavModule } from '../shared/layout/nav/nav.module';
@@ -28,6 +29,7 @@ import { AppDetailsComponent } from './app-details/app-details.component';
     MatButtonModule,
     DashboardRoutingModule,
     NavModule,
+    MatBadgeModule,
   ],
 })
 export class DashboardModule {}

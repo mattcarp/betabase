@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { DialogFaqComponent } from '../dialog-faq/dialog-faq.component';
@@ -11,7 +11,6 @@ import { DialogContactUsComponent } from '../dialog-contact-us/dialog-contact-us
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HamburgerMenuComponent {
-  @Output() emitPagePath: EventEmitter<string> = new EventEmitter<string>();
   activePage = '';
   isMenuOpen = false;
 

@@ -1,41 +1,150 @@
-<button class="btn btn-small pull-right bb-show-doc-form">Create PDF Documentation</button>
+<app-nav [isBackActive]="true" [app]="app"></app-nav>
 
-<!--<form style="display:none;" class="form-inline bb-create-doc pull-right" action="{{ path('custom_document', { 'app': app.request.get('app') }) }}" method="post">-->
-<!--  <input class="bb-doc-subtitle span6" type="text" class="form-control" name="subtitle" placeholder="Enter report subtitle (optional)">-->
-<!--  <input type="hidden" name="app" value={{ app.request.get('app') }} />-->
-<!--  <input type="hidden" name="pdf" value='true' />-->
-<!--  <input class="btn btn-small bb-doc-btn" type="submit" value="Generate PDF File"/>-->
-<!--  <hr>-->
-<!--</form>-->
+<section>
+  <ng-container *ngIf="isLoading; else template">
+    <div class="spinner">
+      <div class="spinner-progress"></div>
+      <div class="spinner-info">Loading...</div>
+    </div>
+  </ng-container>
 
-<table id="mc_datatable" class="table table-bordered table-condensed">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Creator</th>
-      <th>Created</th>
-      <th>Updater</th>
-      <th>Updated&nbsp;&nbsp;</th>
-      <th>Flag?</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let scenario of scenarios">
-    <td class="bb-case-id">
-      <a routerLink="/scenario/{{app}}/{{scenario?.id}}/show">{{scenario?.id}}</a>
-    </td>
-    <td>{{scenario?.name}}</td>
-    <td>{{scenario?.createdBy}}</td>
-    <td>{{scenario?.createdAt | date}}</td>
-    <td>{{scenario?.updatedBy}}</td>
-    <td>{{scenario?.updatedAt | date}}</td>
-    <td>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</td>
-    <td>
-      <a routerLink="/scenario/{{app}}/{{scenario?.id}}/show"><i class="icon-zoom-in" title="show scenario detail"></i></a>
-      <a routerLink="/scenario/{{app}}/{{scenario?.id}}/edit"><i class="icon-pencil" title="edit this scenario"></i></a>
-    </td>
-  </tr>
-  </tbody>
-</table>
+  <ng-template #template>
+    <div class="header-flex">
+      <h2>
+        All Cases
+        <span matBadge="{{scenarios?.length}}" matBadgeOverlap="false" matBadgeColor="accent"></span>
+      </h2>
+      <div class="spacer"></div>
+      <button mat-flat-button color="warn">
+        <i class="fas fa-file-pdf"></i>
+        <span>Create PDF Documentation</span>
+      </button>
+      <!--
+        <form style="display:none;" class="form-inline bb-create-doc pull-right" action="{{ path('custom_document', { 'app': app.request.get('app') }) }}" method="post">
+          <input class="bb-doc-subtitle span6" type="text" class="form-control" name="subtitle" placeholder="Enter report subtitle (optional)">
+          <input type="hidden" name="app" value={{ app.request.get('app') }} />
+          <input type="hidden" name="pdf" value='true' />
+          <input class="btn btn-small bb-doc-btn" type="submit" value="Generate PDF File"/>
+          <hr>
+        </form>
+      -->
+    </div>
+
+    <div class="header-flex">
+      <mat-form-field class="form-search">
+        <input
+          matInput
+          #searchTerm
+          [type]="'text'"
+          [attr.id]="'search'"
+          [placeholder]="'Search'"
+          (keyup.enter)="onSearchStart(searchTerm?.value)"
+          (keyup.esc)="searchTerm.value = ''; onSearchStart('')"
+          (input)="onSearchStart(searchTerm?.value)"
+          autocomplete="off">
+        <button
+          (click)="searchTerm.value = ''; onSearchStart('')"
+          *ngIf="searchTerm?.value"
+          matSuffix mat-icon-button color="warn">
+          <i class="fas fa-times-circle"></i>
+        </button>
+        <button
+          [disabled]="!searchTerm?.value?.length"
+          (click)="onSearchStart(searchTerm?.value)"
+          matSuffix mat-icon-button>
+          <i class="fas fa-search"></i>
+        </button>
+      </mat-form-field>
+
+      <div class="spacer"></div>
+
+      <div>
+        <label>
+          Show Entries:
+          <mat-form-field class="pagination-select">
+            <mat-select [(ngModel)]="pageSize">
+              <mat-option *ngFor="let option of listOptions" [value]="option">
+                {{option}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </label>
+
+        <pagination-controls (pageChange)="paginationParams.page = $event"></pagination-controls>
+      </div>
+    </div>
+
+    <div class="grid-container">
+      <header class="grid">
+        <div #1
+             (click)="onToggleSort('id')"
+             class="clickable"
+             [ngClass]="getClassSortField('id')">
+          ID <span [ngClass]="getClassDirection()"></span>
+        </div>
+        <div #2
+             (click)="onToggleSort('name')"
+             class="clickable"
+             [ngClass]="getClassSortField('name')">
+          Name <span [ngClass]="getClassDirection()"></span>
+        </div>
+        <div #3
+             (click)="onToggleSort('creator')"
+             class="clickable"
+             [ngClass]="getClassSortField('creator')">
+          Creator <span [ngClass]="getClassDirection()"></span>
+        </div>
+        <div #4
+             (click)="onToggleSort('created')"
+             class="clickable"
+             [ngClass]="getClassSortField('created')">
+          Created <span [ngClass]="getClassDirection()"></span>
+        </div>
+        <div #5
+             (click)="onToggleSort('updater')"
+             class="clickable"
+             [ngClass]="getClassSortField('updater')">
+          Updater <span [ngClass]="getClassDirection()"></span>
+        </div>
+        <div #6
+             (click)="onToggleSort('updated')"
+             class="clickable"
+             [ngClass]="getClassSortField('updated')">
+          Updated <span [ngClass]="getClassDirection()"></span>
+        </div>
+        <div #7
+             (click)="onToggleSort('flag')"
+             class="clickable"
+             [ngClass]="getClassSortField('flag')">
+          Flag <span [ngClass]="getClassDirection()"></span>
+        </div>
+        <div #8>Actions</div>
+      </header>
+
+      <div *ngFor="let scenario of scenarios | paginate: { itemsPerPage: pageSize, currentPage: paginationParams.page };
+              let i = index"
+           class="grid">
+        <div #1 class="center">
+          <div>
+            <a routerLink="/scenario/{{app}}/{{scenario?.id}}/show">{{scenario?.id}}</a>
+          </div>
+        </div>
+        <div #2>{{scenario?.name}}</div>
+        <div #3>{{scenario?.createdBy}}</div>
+        <div #4>{{scenario?.createdAt | date}}</div>
+        <div #5>{{scenario?.updatedBy}}</div>
+        <div #6>{{scenario?.updatedAt | date}}</div>
+        <div #7 class="center">{{scenario?.reviewFlag ? 'Yes' : 'No'}}</div>
+        <div #8 class="center actions">
+          <button (click)="onActionClick('scenario', app, scenario?.id, 'show')" mat-icon-button>
+            <i class="fas fa-eye"></i>
+          </button>
+          <button (click)="onActionClick('scenario', app, scenario?.id, 'edit')" mat-icon-button>
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </ng-template>
+</section>

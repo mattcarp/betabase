@@ -24,9 +24,9 @@ export class AppService {
     return this.http.get<ReportData>(url).toPromise();
   }
 
-  getScenario(id: string): Promise<{ scenario: ScenarioItem, tests: TestItem[] }> {
+  getScenario(id: string): Promise<{ scenario: ScenarioItem; tests: TestItem[] }> {
     const url = `${this.apiUrl}/scenario/${id}`;
-    return this.http.get<{ scenario: ScenarioItem, tests: TestItem[] }>(url).toPromise();
+    return this.http.get<{ scenario: ScenarioItem; tests: TestItem[] }>(url).toPromise();
   }
 
   getAllScenarios(app: string): Promise<ScenarioItem[]> {

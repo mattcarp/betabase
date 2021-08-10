@@ -10,8 +10,10 @@ import { ScenarioItem, TestItem } from '../../shared/models';
   selector: 'app-test-form',
   templateUrl: './test-form.component.html',
   styleUrls: ['./test-form.component.scss'],
+  host: { '[class.page]': 'true' },
 })
 export class TestFormComponent {
+  app: string | null = null;
   scenario: ScenarioItem | null = null;
   test: TestItem | null = null;
   isLoading = false;

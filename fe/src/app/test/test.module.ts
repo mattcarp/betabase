@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
+import { NavModule } from '../shared/layout/nav/nav.module';
 import { TestRoutingModule } from './test-routing.module';
 import { TestFormComponent } from './test-form/test-form.component';
 import { TestListComponent } from './test-list/test-list.component';
@@ -10,6 +11,6 @@ import { TestDetailsComponent } from './test-details/test-details.component';
 
 @NgModule({
   declarations: [TestFormComponent, TestListComponent, TestDetailsComponent],
-  imports: [CommonModule, TestRoutingModule, FormsModule, AngularEditorModule],
+  imports: [CommonModule, FormsModule, AngularEditorModule, TestRoutingModule, NavModule],
 })
 export class TestModule {}

@@ -39,6 +39,7 @@ module.exports = {
         'no-process-exit': 'off',
         'no-unused-vars': 'warn',
         'no-useless-constructor': 'off',
+        '@typescript-eslint/no-unused-expressions': ['error', { 'allowTernary': true }],
         '@typescript-eslint/no-useless-constructor': 'off',
         '@typescript-eslint/no-empty-function': 'off',
         'object-curly-newline': 'off',

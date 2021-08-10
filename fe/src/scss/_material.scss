@@ -561,3 +561,31 @@ textarea {
     }
   }
 }
+
+// Material Tooltip
+.cdk-overlay-pane {
+  &.mat-tooltip-panel {
+    .mat-tooltip {
+      padding: 6px 10px;
+      font-size: 14px;
+      white-space: pre-line;
+      color: $color-black;
+      border: 1px solid $color-grey;
+      border-radius: 3px;
+      background-color: $color-light;
+    }
+  }
+}
+
+// Material Badge
+.mat-badge-medium {
+  &.mat-badge-after {
+    .mat-badge-content {
+      width: auto;
+      border-radius: 11px;
+      padding: 0 4px;
+      right: unset;
+      min-width: 22px;
+    }
+  }
+}
