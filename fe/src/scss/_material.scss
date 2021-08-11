@@ -94,7 +94,7 @@
 
     // Button Select
     &.button-select {
-      margin: 14px 0 0 10px;
+      margin: 14px 0 0 0;
 
       .mat-form-field-wrapper {
         .mat-form-field-flex {
@@ -428,6 +428,7 @@ textarea {
   .mat-checkbox-layout {
     .mat-checkbox-label {
       @include ellipsis;
+      align-self: center;
     }
   }
 }

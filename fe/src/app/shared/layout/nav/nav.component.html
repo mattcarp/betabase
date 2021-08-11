@@ -1,12 +1,12 @@
 <nav>
-  <button mat-flat-button
-          [disabled]="!isBackActive"
-          (click)="onBackClick()"
-          color="primary"
-          class="nav-button">
+  <a mat-flat-button
+     [disabled]="!isBackActive"
+     (click)="onBackClick()"
+     color="primary"
+     class="nav-button">
     <i class="fas fa-arrow-left"></i>
     <span>Back</span>
-  </button>
+  </a>
 
   <ng-container *ngFor="let button of buttons">
     <a mat-flat-button
@@ -25,7 +25,8 @@
 
   <a mat-flat-button
      routerLink="/dashboard"
-     color="primary">
+     color="primary"
+     class="nav-button">
     <i class="fas fa-random"></i>
     <span>Switch App</span>
   </a>

@@ -133,3 +133,12 @@ $size-inputHeight: 36px;
     border-left-color: currentColor;
   }
 }
+
+@keyframes marching-ants {
+  0% {
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+  }
+  100% {
+    background-position: 40px 0, -40px 100%, 0 -40px, 100% 40px;
+  }
+}

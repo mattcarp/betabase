@@ -1,118 +1,150 @@
 <app-nav [isBackActive]="true"></app-nav>
 
 <section>
+  <ng-container *ngIf="isLoading; else template">
+    <div class="spinner">
+      <div class="spinner-progress"></div>
+      <div class="spinner-info">Loading...</div>
+    </div>
+  </ng-container>
 
-<div *ngIf="isLoading">Loading...</div>
-<div class="well" *ngIf="!isLoading && (scenario && test)">
-  <h3>Viewing a Single Test for Case {{scenario?.id}}</h3><br>
-  <h4>The Case</h4>
-  <table id="detailTable" class="record_properties condensed-table table-striped table-bordered">
-    <tbody>
-      <tr>
-        <th class="span3">Scenario ID</th>
-        <td class="span9">{{scenario?.id}}</td>
-      </tr>
-      <tr>
-        <th>Name</th>
-        <td>{{scenario?.name}}</td>
-      </tr>
-      <tr>
-        <th>Preconditions</th>
-        <td>{{scenario?.preconditions}}</td>
-      </tr>
-      <tr>
-        <th>Script</th>
-        <td>{{scenario?.script}}</td>
-      </tr>
-      <tr>
-        <th>Expected Result</th>
-        <td>{{scenario?.expectedResult}}</td>
-      </tr>
-      <tr>
-        <th>Created By</th>
-        <td>{{scenario?.createdBy}}</td>
-      </tr>
-      <tr>
-        <th>Updated By</th>
-        <td>{{scenario?.updatedBy}}</td>
-      </tr>
-      <tr>
-        <th>Created</th>
-        <td>{{scenario?.createdAt | date}}</td>
-      </tr>
-      <tr>
-        <th>Updated</th>
-        <td>{{scenario?.updatedAt | date}}</td>
-      </tr>
-      <tr>
-        <th>Flagged for Review</th>
-        <td>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</td>
-      </tr>
-      <tr *ngIf="scenario?.reviewFlag">
-        <th>Reason for Review</th>
-        <td>{{scenario?.flagReason}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <ng-template #template>
+    <ng-container *ngIf="scenario && test">
+      <h2>Viewing a Single Test for Case {{scenario?.id}}</h2>
 
-  <br>
-  <h4>The Test</h4>
-  <table class="record_properties condensed-table table-striped table-bordered mcDetailTable">
-    <tbody>
+      <h3>The Case</h3>
 
-    <tr>
-      <th class="span3">Created</th>
-      <td class="span9">{{test?.createdAt | date}} <b>by</b> {{test?.createdBy}}</td>
-    </tr>
-    <tr>
-      <th>Updated</th>
-      <td>{{test.updatedAt | date}} <b>by</b> {{test?.updatedBy}}</td>
-    </tr>
-    <tr>
-      <th>Date of Deployment Tested</th>
-      <td>{{(test?.deploymentStamp | date) || 'None'}}</td>
-    </tr>
-    <tr>
-      <th>Comments</th>
-      <td>{{test?.comments}}</td>
-    </tr>
-    <tr>
-      <th>JIRA</th>
-      <td>
-        <a href="https://jira.smedigitalapps.com/jira/browse/{{test?.ticket}}" target="window" title="view ticket in JIRA">{{test?.ticket}}</a>
-      </td>
-    </tr>
-    <tr>
-      <th>Status</th>
-      <td>{{test?.passFail}}</td>
-    </tr>
-    <tr>
-      <th>Input</th>
-      <td>{{test?.input}}</td>
-    </tr>
-    <tr>
-      <th>Result</th>
-      <td>{{test?.result}}</td>
-    </tr>
-    <tr>
-      <th>Browser</th>
-      <td>{{test?.browserName}} {{test?.browserMajor}} {{test?.browserMinor}}</td>
-    </tr>
-    <tr>
-      <th>Operating System</th>
-      <td>{{test?.osName}} {{test?.osMajor}} {{test?.osMinor}}</td>
-    </tr>
-    <tr>
-      <th>Pass/Fail</th>
-      <td>{{test?.passFail}}</td>
-    </tr>
-    </tbody>
-  </table>
-  <img *ngIf="test?.path?.length" src="{{'https://s3.amazonaws.com/betabase-user-uploads/' + test?.path}}" alt="Thumbnail" />
-  <div class="record_actions row well">
-    <a routerLink="/test/{{scenario?.appUnderTest}}/{{test?.id}}/edit">Edit this Test</a>
-    <button class="btn btn-small span2 btn-danger" type="submit">Delete this Test</button>
-  </div>
-</div>
+      <div class="grid-container">
+        <div class="grid two-columns">
+          <div>Case ID</div>
+          <div>{{scenario?.id}}</div>
+        </div>
+        <div class="grid two-columns">
+          <div>Name</div>
+          <div>{{scenario?.name}}</div>
+        </div>
+        <div class="grid two-columns">
+          <div>Preconditions</div>
+          <div [innerHTML]="scenario?.preconditions" class="inner-html"></div>
+        </div>
+        <ng-container *ngIf="scenario?.mode === 'Automated'; else script">
+          <div class="grid two-columns">
+            <div>Automation Code</div>
+            <div>
+              <pre><code>{{scenario?.script}}</code></pre>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #script>
+          <div class="grid two-columns">
+            <div>Script</div>
+            <div [innerHTML]="scenario?.script" class="inner-html"></div>
+          </div>
+        </ng-template>
+        <div class="grid two-columns">
+          <div>Expected Result</div>
+          <div [innerHTML]="scenario?.expectedResult" class="inner-html"></div>
+        </div>
+        <div class="grid two-columns">
+          <div>Created By</div>
+          <div>{{scenario?.createdBy}}</div>
+        </div>
+        <div class="grid two-columns">
+          <div>Created</div>
+          <div>{{scenario?.createdAt | date }}</div>
+        </div>
+        <div class="grid two-columns">
+          <div>Updated By</div>
+          <div>{{scenario?.updatedBy}}</div>
+        </div>
+        <div class="grid two-columns">
+          <div>Updated</div>
+          <div>{{scenario?.updatedAt | date }}</div>
+        </div>
+        <div class="grid two-columns">
+          <div>Flagged for Review</div>
+          <div>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</div>
+        </div>
+        <div class="grid two-columns">
+          <ng-container *ngIf="scenario?.flagReason">
+            <div>Reason for Review</div>
+            <div>{{scenario?.flagReason}}</div>
+          </ng-container>
+        </div>
+      </div>
+
+      <h3>The Test</h3>
+
+      <div class="grid-container">
+        <div class="grid two-columns test">
+          <div>Created</div>
+          <div>{{test?.createdAt | date}} by {{test?.createdBy}}</div>
+        </div>
+        <div class="grid two-columns test">
+          <div>Updated</div>
+          <div>{{test.updatedAt | date}} by {{test?.updatedBy}}</div>
+        </div>
+        <div class="grid two-columns test">
+          <div>Date of Deployment Tested</div>
+          <div>{{(test?.deploymentStamp | date) || 'None'}}</div>
+        </div>
+        <div class="grid two-columns test">
+          <div>Comments</div>
+          <div>{{test?.comments}}</div>
+        </div>
+        <div class="grid two-columns test">
+          <div>JIRA</div>
+          <div>
+            <div>
+              <a href="https://jira.smedigitalapps.com/jira/browse/{{test?.ticket}}" target="_blank" class="ext">
+                {{test?.ticket}}
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="grid two-columns test">
+          <div>Input</div>
+          <div [innerHTML]="test?.input" class="inner-html"></div>
+        </div>
+        <div class="grid two-columns test">
+          <div>Result</div>
+          <div [innerHTML]="test?.result" class="inner-html"></div>
+        </div>
+        <div class="grid two-columns test">
+          <div>Browser</div>
+          <div>{{test?.browserName}} {{test?.browserMajor}} {{test?.browserMinor}}</div>
+        </div>
+        <div class="grid two-columns test">
+          <div>Operating System</div>
+          <div>{{test?.osName}} {{test?.osMajor}} {{test?.osMinor}}</div>
+        </div>
+        <div class="grid two-columns test">
+          <div>Pass/Fail</div>
+          <div>
+            <label *ngIf="test?.passFail === 'Fail'" class="label-warning">{{test?.passFail}}</label>
+            <label *ngIf="test?.passFail === 'Pass'" class="label-success">{{test?.passFail}}</label>
+          </div>
+        </div>
+      </div>
+
+      <img *ngIf="test?.path?.length" src="{{'https://s3.amazonaws.com/betabase-user-uploads/' + test?.path}}"
+           alt="Thumbnail"/>
+
+      <div class="actions-container">
+        <a mat-flat-button routerLink="/test/{{scenario?.appUnderTest}}/{{test?.id}}/edit"
+           color="primary"
+           class="actions-button">
+          <i class="fas fa-edit"></i>
+          <span>Edit this Test</span>
+        </a>
+
+        <button mat-flat-button type="submit" color="accent" class="actions-button">
+          <i class="fas fa-ban"></i>
+          <span>Delete this Test</span>
+        </button>
+      </div>
+
+    </ng-container>
+  </ng-template>
 
 </section>

@@ -25,7 +25,6 @@ export class ScenarioDetailsComponent {
     sortField: 'date',
     sortDirection: 'DESC',
   };
-  search = '';
 
   constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) {
     activatedRoute.params
@@ -66,7 +65,6 @@ export class ScenarioDetailsComponent {
 
   onSearchStart(searchTerm: string = ''): void {
     this.paginationParams.searchTerm = searchTerm;
-    this.search = searchTerm;
   }
 
   async onToggleSort(controlName: string): Promise<void> {
@@ -79,10 +77,6 @@ export class ScenarioDetailsComponent {
     }
     // TODO: Sort
     // this.loadTests(this.paginationParams.searchTerm);
-  }
-
-  onActionClick(type: string, test: string | undefined, id: number | undefined, action: string): void {
-    this.router.navigate([`/${type}/${test}/${id}/${action}`]);
   }
 
   private async fetchData(id: string): Promise<void> {

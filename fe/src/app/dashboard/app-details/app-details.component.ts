@@ -17,10 +17,13 @@ export class AppDetailsComponent {
   reportData: ReportData | null = null;
   app: string | null = null;
   isNewFeaturesChecked = false;
+  isNewFeaturesDragged = false;
   numNewFeaturesChecked = 0;
   isPrioritiesChecked = false;
+  isPrioritiesDragged = false;
   numPrioritiesChecked = 0;
   isRegressionsChecked = false;
+  isRegressionsDragged = false;
   numRegressionsChecked = 0;
 
   constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) {
@@ -197,7 +200,8 @@ export class AppDetailsComponent {
     });
   }
 
-  onDropEnhancementScenarios(event: CdkDragDrop<ScenarioItem[]>) {
+  onDropNewFeaturesScenarios(event: CdkDragDrop<ScenarioItem[]>) {
+    this.isNewFeaturesDragged = true;
     // TODO: DragDrop
     // moveItemInArray(this.reportData?.enhancementScenarios, event.previousIndex, event.currentIndex);
     //
@@ -206,12 +210,24 @@ export class AppDetailsComponent {
     // });
   }
 
-  onDropPrioritiesScenarios(event: CdkDragDrop<ScenarioItem[]>) {}
+  onDropPrioritiesScenarios(event: CdkDragDrop<ScenarioItem[]>) {
+    this.isPrioritiesDragged = true;
+  }
 
-  onDropRegressionsScenarios(event: CdkDragDrop<ScenarioItem[]>) {}
+  onDropRegressionsScenarios(event: CdkDragDrop<ScenarioItem[]>) {
+    this.isRegressionsDragged = true;
+  }
 
-  onActionClick(type: string, app: string | null, id: number | undefined, action: string): void {
-    this.router.navigate([`/${type}/${app}/${id}/${action}`]);
+  onNewFeaturesSaveClick(): void {
+    this.isNewFeaturesDragged = false;
+  }
+
+  onPrioritiesSaveClick(): void {
+    this.isPrioritiesDragged = false;
+  }
+
+  onRegressionsSaveClick(): void {
+    this.isRegressionsDragged = false;
   }
 
   private getCounts(key: string): { testedCount: number; totalCount: number } {

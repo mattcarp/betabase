@@ -1,17 +1,6 @@
 @import 'variables';
 
 .grid {
-  &.scenario {
-    grid-template-columns: minmax(80px, 160px) minmax(240px, 1fr);
-
-    & > div {
-      &:first-child {
-        justify-content: flex-end;
-        font-weight: bold;
-      }
-    }
-  }
-
   &.tests {
     grid-template-columns: minmax(60px, 80px)
     minmax(60px, 80px)
@@ -39,17 +28,5 @@
         margin: 0 0 0 10px;
       }
     }
-  }
-}
-
-label {
-  display: inline-flex;
-  align-items: center;
-  height: $size-navHeight;
-  margin: 0 10px;
-
-  .pagination-select {
-    width: 68px;
-    margin: 0 0 -12px 10px;
   }
 }

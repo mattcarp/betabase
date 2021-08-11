@@ -1,0 +1,11 @@
+.grid {
+  &.option {
+    &:hover {
+      background-color: transparent;
+    }
+
+    & > div {
+      border: none;
+    }
+  }
+}

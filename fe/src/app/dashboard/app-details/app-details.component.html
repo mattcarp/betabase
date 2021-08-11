@@ -1,4 +1,4 @@
-<app-nav [app]="app"></app-nav>
+<app-nav></app-nav>
 
 <section>
   <ng-container *ngIf="isLoading; else template">
@@ -204,12 +204,12 @@
           <div #8></div>
           <div #9></div>
           <div #10 class="center actions">
-            <button (click)="onActionClick('test', app, test?.id, 'show')" mat-icon-button>
+            <a routerLink="/test/{{app}}/{{test?.id}}/show" mat-icon-button>
               <i class="fas fa-eye"></i>
-            </button>
-            <button (click)="onActionClick('test', app, test?.id, 'edit')" mat-icon-button>
+            </a>
+            <a routerLink="/test/{{app}}/{{test?.id}}/edit" mat-icon-button>
               <i class="fas fa-edit"></i>
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -236,7 +236,10 @@
             </span>
           </mat-checkbox>
           <div>
-            <button mat-icon-button color="accent" disabled>
+            <button [disabled]="!isNewFeaturesDragged"
+                    (click)="onNewFeaturesSaveClick()"
+                    mat-icon-button
+                    color="accent">
               <i class="fas fa-save"></i>
             </button>
             You can reorder this list and save to preserve the new order
@@ -244,7 +247,9 @@
         </div>
       </div>
 
-      <div cdkDropList (cdkDropListDropped)="onDropEnhancementScenarios($event)" class="grid-container">
+      <div cdkDropList (cdkDropListDropped)="onDropNewFeaturesScenarios($event)"
+           class="grid-container"
+           [class.dragged]="isNewFeaturesDragged">
         <header class="grid new-features">
           <div #1>ID</div>
           <div #2>Name</div>
@@ -273,12 +278,12 @@
             <div class="{{getMostRecentText(item?.mostRecent)[1]}}">{{getMostRecentText(item?.mostRecent)[0]}}</div>
           </div>
           <div #5 class="center actions">
-            <button (click)="onActionClick('scenario', app, item?.id, 'show')" mat-icon-button>
+            <a routerLink="/scenario/{{app}}/{{item?.id}}/show" mat-icon-button>
               <i class="fas fa-eye"></i>
-            </button>
-            <button (click)="onActionClick('scenario', app, item?.id, 'edit')" mat-icon-button>
+            </a>
+            <a routerLink="/scenario/{{app}}/{{item?.id}}/edit" mat-icon-button>
               <i class="fas fa-edit"></i>
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -305,7 +310,10 @@
             </span>
           </mat-checkbox>
           <div>
-            <button mat-icon-button color="accent" disabled>
+            <button [disabled]="!isPrioritiesDragged"
+                    (click)="onPrioritiesSaveClick()"
+                    mat-icon-button
+                    color="accent">
               <i class="fas fa-save"></i>
             </button>
             You can reorder this list and save to preserve the new order
@@ -313,7 +321,9 @@
         </div>
       </div>
 
-      <div cdkDropList (cdkDropListDropped)="onDropPrioritiesScenarios($event)" class="grid-container">
+      <div cdkDropList (cdkDropListDropped)="onDropPrioritiesScenarios($event)"
+           class="grid-container"
+           [class.dragged]="isPrioritiesDragged">
         <header class="grid priorities">
           <div #1>ID</div>
           <div #2>Name</div>
@@ -342,12 +352,12 @@
             <div class="{{getMostRecentText(item?.mostRecent)[1]}}">{{getMostRecentText(item?.mostRecent)[0]}}</div>
           </div>
           <div #5 class="center actions">
-            <button (click)="onActionClick('scenario', app, item?.id, 'show')" mat-icon-button>
+            <a routerLink="/scenario/{{app}}/{{item?.id}}/show" mat-icon-button>
               <i class="fas fa-eye"></i>
-            </button>
-            <button (click)="onActionClick('scenario', app, item?.id, 'edit')" mat-icon-button>
+            </a>
+            <a routerLink="/scenario/{{app}}/{{item?.id}}/edit" mat-icon-button>
               <i class="fas fa-edit"></i>
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -374,7 +384,10 @@
             </span>
           </mat-checkbox>
           <div>
-            <button mat-icon-button color="accent" disabled>
+            <button [disabled]="!isRegressionsDragged"
+                    (click)="onRegressionsSaveClick()"
+                    mat-icon-button
+                    color="accent">
               <i class="fas fa-save"></i>
             </button>
             You can reorder this list and save to preserve the new order
@@ -382,7 +395,9 @@
         </div>
       </div>
 
-      <div cdkDropList (cdkDropListDropped)="onDropRegressionsScenarios($event)" class="grid-container">
+      <div cdkDropList (cdkDropListDropped)="onDropRegressionsScenarios($event)"
+           class="grid-container"
+           [class.dragged]="isRegressionsDragged">
         <header class="grid regressions">
           <div #1>ID</div>
           <div #2>Name</div>
@@ -411,12 +426,12 @@
             <div class="{{getMostRecentText(item?.mostRecent)[1]}}">{{getMostRecentText(item?.mostRecent)[0]}}</div>
           </div>
           <div #5 class="center actions">
-            <button (click)="onActionClick('scenario', app, item?.id, 'show')" mat-icon-button>
+            <a routerLink="/scenario/{{app}}/{{item?.id}}/show" mat-icon-button>
               <i class="fas fa-eye"></i>
-            </button>
-            <button (click)="onActionClick('scenario', app, item?.id, 'edit')" mat-icon-button>
+            </a>
+            <a routerLink="/scenario/{{app}}/{{item?.id}}/edit" mat-icon-button>
               <i class="fas fa-edit"></i>
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -450,12 +465,12 @@
           <div #3>{{item?.updatedAt | date}}</div>
           <div #4>{{item?.flagReason | slice:0:80}}</div>
           <div #5 class="center actions">
-            <button (click)="onActionClick('scenario', app, item?.id, 'show')" mat-icon-button>
+            <a routerLink="/scenario/{{app}}/{{item?.id}}/show" mat-icon-button>
               <i class="fas fa-eye"></i>
-            </button>
-            <button (click)="onActionClick('scenario', app, item?.id, 'edit')" mat-icon-button>
+            </a>
+            <a routerLink="/scenario/{{app}}/{{item?.id}}/edit" mat-icon-button>
               <i class="fas fa-edit"></i>
-            </button>
+            </a>
           </div>
         </div>
       </div>

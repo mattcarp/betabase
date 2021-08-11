@@ -121,7 +121,9 @@ app-main {
           margin: 10px 0 0;
 
           button {
-            margin: -10px -11px;
+            width: 16px;
+            height: 16px;
+            margin: 0 4px 10px 10px;
           }
 
           div {
@@ -144,10 +146,11 @@ h2 {
   font-size: 26px;
   line-height: 1.2;
   color: $color-grey;
+}
 
-  @media only screen and (max-width: 830px) {
-    font-size: 20px;
-  }
+h3 {
+  margin: 10px 0;
+  color: $color-medium;
 }
 
 h4 {
@@ -210,8 +213,23 @@ a {
   margin: 0 0 10px;
 
   label:not(.mat-slide-toggle-label) {
-    margin: 0 0 5px;
     display: block;
+    height: unset;
+    margin: 0 0 5px;
+  }
+}
+
+.actions-container {
+  display: flex;
+  margin: 20px 0 0 0;
+  padding: 20px;
+  border-radius: 6px;
+  background-color: $color-light;
+
+  .actions-button {
+    display: flex !important;
+    align-items: center;
+    margin: 0 10px 0 0 !important;
   }
 }
 
@@ -242,12 +260,13 @@ a {
     text-transform: uppercase;
   }
 
-  &-name, &-app {
+  &-name,
+  &-app {
+    position: relative;
     font: 200 21px/1 'Helvetica-Light', Helvetica, Roboto, Arial, sans-serif;
     white-space: nowrap;
     text-transform: uppercase;
     text-overflow: ellipsis;
-    position: relative;
 
     small {
       position: absolute;
@@ -340,28 +359,6 @@ a {
       @include ellipsis;
     }
 
-    button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      transition: color 0.3s ease-in;
-      color: $color-grey;
-
-      &.mat-icon-button {
-        color: $color-grey;
-      }
-
-      .mat-button-wrapper {
-        line-height: 1;
-      }
-
-      &:hover {
-        color: $color-medium;
-      }
-    }
-
     &.center {
       justify-content: center;
       text-align: center;
@@ -369,29 +366,54 @@ a {
 
     &.actions {
       padding: 0;
+
+      a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        transition: color 0.3s ease-in;
+        color: $color-grey;
+
+        &.mat-icon-button {
+          color: $color-grey;
+        }
+
+        .mat-button-wrapper {
+          line-height: 1;
+        }
+
+        &:hover {
+          color: $color-medium;
+        }
+      }
     }
 
     &.inner-html {
-      flex-direction: column;
       align-items: flex-start;
+      flex-direction: column;
 
-      ul, ol {
-        margin: 0;
+      ul,
+      ol {
+        margin: 6px 0;
+        padding: 0 0 0 20px;
 
         li {
           margin: 0;
-          line-height: 1.2;
+          line-height: 1;
         }
       }
 
-      ol {
-        padding: 0 0 0 20px;
+      p {
+        margin: 0 10px;
       }
 
       img {
-        box-shadow: 0 2px 6px 0 rgba($color-black, 0.2);
         min-width: 400px;
         max-width: 100%;
+        margin: 10px 0;
+        box-shadow: 0 2px 6px 0 rgba($color-black, 0.2);
       }
     }
 
@@ -404,6 +426,7 @@ a {
       justify-content: center;
       width: 60px;
       height: 20px;
+      margin: 0 auto;
       padding: 2px 4px;
       font-size: 11px;
       font-weight: bold;
@@ -412,7 +435,6 @@ a {
       color: $color-white;
       border-radius: 3px;
       background-color: $color-grey;
-      margin: 0 auto;
     }
 
     .label-warning {
@@ -445,7 +467,59 @@ a {
   }
 
   &-container {
+    position: relative;
     border: 1px solid $color-table-head;
+
+    &.dragged {
+      &:after {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        content: '';
+        animation: marching-ants 1s linear;
+        animation-play-state: running;
+        animation-iteration-count: infinite;
+        background-image: linear-gradient(to right, $color-white 50%, $color-red 50%),
+        linear-gradient(to right, $color-white 50%, $color-red 50%),
+        linear-gradient(to bottom, $color-white 50%, $color-red 50%),
+        linear-gradient(to bottom, $color-white 50%, $color-red 50%);
+        background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+        background-position: 0 0, 0 100%, 0 0, 100% 0;
+        background-size: 20px 1px, 20px 1px, 1px 20px, 1px 20px;
+      }
+    }
+  }
+
+  &.two-columns {
+    grid-template-columns: minmax(80px, 160px) minmax(240px, 1fr);
+
+    & > div {
+      &:first-child {
+        display: flex;
+        justify-content: flex-end;
+        font-weight: bold;
+      }
+
+      .label-default,
+      .label-warning,
+      .label-info,
+      .label-success {
+        margin: 0;
+      }
+    }
+
+    &:hover {
+      &:nth-child(even) {
+        background-color: rgba($color-black, 0.04);
+      }
+
+      &:nth-child(odd) {
+        background-color: $color-white;
+      }
+    }
   }
 }
 
@@ -569,8 +643,8 @@ header {
 
 // Pagination
 pagination-controls {
-  height: $size-navHeight;
   display: inline-block;
+  height: $size-navHeight;
 
   .ngx-pagination {
     margin: 0;
@@ -596,6 +670,33 @@ pagination-controls {
 
     .current {
       background-color: $color-medium;
+    }
+  }
+}
+
+label {
+  display: inline-flex;
+  align-items: center;
+  height: $size-navHeight;
+  margin: 0 10px;
+
+  .pagination-select {
+    width: 68px;
+    margin: 0 0 -12px 10px;
+  }
+}
+
+// Editor
+.angular-editor {
+  .angular-editor-wrapper {
+    .angular-editor-textarea {
+      background-color: $color-alt-row !important;
+
+      img {
+        min-width: 400px;
+        max-width: 100%;
+        box-shadow: 0 2px 6px 0 rgba($color-black, 0.2);
+      }
     }
   }
 }

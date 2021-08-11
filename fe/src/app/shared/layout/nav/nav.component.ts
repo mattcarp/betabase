@@ -23,7 +23,9 @@ export class NavComponent {
         filter((params: Params) => 'app' in params),
         pluck('app'),
       )
-      .subscribe((app: string) => this.app = app);
+      .subscribe((app: string) => {
+        this.app = app;
+      });
   }
 
   getLinkUrl(url: string): string {

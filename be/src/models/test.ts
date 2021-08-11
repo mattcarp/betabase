@@ -54,6 +54,7 @@ export const Test = db.sequelize.define('Test', {
   result: {
     type: DataTypes.TEXT,
     nullable: true,
+    field: 'result',
   },
   passFail: {
     type: DataTypes.STRING,
@@ -125,9 +126,10 @@ Test.hasOne(db.Scenario, {
 
 export const getTestList = async (app: string) => {
   const query = "SELECT t.created_at, t.updated_at,\n" +
-    "t.updated_by, t.pass_fail, t.input, t.created_by,\n" +
-    "t.browser_minor, t.os_name, t.os_major,\n" +
-    "t.os_minor, t.ticket, t.scenario_id, t.id, t.deployment_stamp\n" +
+    "t.updated_by, t.pass_fail, t.input, t.result, t.created_by,\n" +
+    "t.browser_name, t.browser_major, t.browser_minor,\n" +
+    "t.os_name, t.os_major, t.os_minor,\n" +
+    "t.ticket, t.scenario_id, t.id, t.deployment_stamp\n" +
     "FROM Test t, Scenario s\n" +
     "WHERE t.scenario_id = s.id\n" +
     "AND s.app_under_test = '" + app + "'\n" +
