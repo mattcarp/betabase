@@ -148,3 +148,29 @@ app.get('/api/test/:id', async (request, response) => {
   const model = await getTest(request.params.id);
   response.json(model);
 });
+
+app.post('/api/scenario/order', async (request, response) => {
+  const { items, type } = request.body;
+  let prop;
+  switch (type) {
+    case 'enhancementScenarios':
+      prop = 'enhancementSortOrder';
+      break;
+    case 'priorityScenarios':
+      prop = 'prioritySortOrder';
+      break;
+    case 'regressionScenarios':
+      prop = 'currentRegressionSortOrder';
+      break;
+    default:
+      break;
+  }
+  items.forEach((item, index) => {
+    const params = {
+      ...item,
+      [prop]: index,
+    };
+    updateScenario(params.id, params);
+  });
+  response.send(items);
+});

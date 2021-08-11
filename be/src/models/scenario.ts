@@ -274,6 +274,7 @@ export const updateScenario = async (id, params) => {
   } catch (e) {
     return e;
   }
+  return id;
 }
 
 db.Scenario = Scenario;

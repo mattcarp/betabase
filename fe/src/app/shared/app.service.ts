@@ -58,4 +58,9 @@ export class AppService {
     const url = `${this.apiUrl}/test/${id}`;
     return this.http.get<TestItem>(url).toPromise();
   }
+
+  updateScenarioOrder(items: ScenarioItem[], type: string): Promise<ScenarioItem[]> {
+    const url = `${this.apiUrl}/scenario/order`;
+    return this.http.post<ScenarioItem[]>(url, { items, type }).toPromise();
+  }
 }

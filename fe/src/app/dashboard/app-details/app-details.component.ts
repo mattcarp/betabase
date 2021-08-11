@@ -17,14 +17,16 @@ export class AppDetailsComponent {
   reportData: ReportData | null = null;
   app: string | null = null;
   isNewFeaturesChecked = false;
-  isNewFeaturesDragged = false;
   numNewFeaturesChecked = 0;
   isPrioritiesChecked = false;
-  isPrioritiesDragged = false;
   numPrioritiesChecked = 0;
   isRegressionsChecked = false;
-  isRegressionsDragged = false;
   numRegressionsChecked = 0;
+  draggedItems = {
+    enhancementScenarios: false,
+    priorityScenarios: false,
+    regressionScenarios: false,
+  };
 
   constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) {
     activatedRoute.params
@@ -132,7 +134,7 @@ export class AppDetailsComponent {
         case 'Promo':
           return '/assets/logos/promo-logo.png';
         default:
-          break;
+          return '';
       }
     }
     return '';
@@ -147,7 +149,7 @@ export class AppDetailsComponent {
     return `${Math.round(ratio * 100)}%`;
   }
 
-  getMostRecentText(mostRecent: string | Date | undefined): string[] {
+  getMostRecentText(mostRecent: string | Date = ''): string[] {
     let result = ['', ''];
     const mostRecentMoment = mostRecent === null ? moment(mostRecent) : moment();
     const roundStartMoment = moment(this.reportData?.roundNotes?.startsAt).add(-5, 'h');
@@ -200,34 +202,28 @@ export class AppDetailsComponent {
     });
   }
 
-  onDropNewFeaturesScenarios(event: CdkDragDrop<ScenarioItem[]>) {
-    this.isNewFeaturesDragged = true;
-    // TODO: DragDrop
-    // moveItemInArray(this.reportData?.enhancementScenarios, event.previousIndex, event.currentIndex);
-    //
-    // this.reportData.enhancementScenarios.forEach((item: ScenarioItem, index: number) => {
-    //   this.reportData.enhancementScenarios[index].numOrder = index + 1;
-    // });
+  async onChangeItemOrder(event: CdkDragDrop<ScenarioItem[]>, type: string): Promise<void> {
+    const reportData = this.reportData as any;
+    const items = reportData[type].slice();
+    const selectedItem = items[event.previousIndex];
+    const restItems = items.slice().filter((item: ScenarioItem) => item.id !== selectedItem.id);
+    const prevItems = restItems.slice(0, event.currentIndex);
+    const nextItems = restItems.slice(event.currentIndex, items.length);
+    const updatedItems = [...prevItems, selectedItem, ...nextItems];
+    reportData[type] = updatedItems;
+    this.draggedItems = {
+      ...this.draggedItems,
+      [type]: true,
+    };
   }
 
-  onDropPrioritiesScenarios(event: CdkDragDrop<ScenarioItem[]>) {
-    this.isPrioritiesDragged = true;
-  }
-
-  onDropRegressionsScenarios(event: CdkDragDrop<ScenarioItem[]>) {
-    this.isRegressionsDragged = true;
-  }
-
-  onNewFeaturesSaveClick(): void {
-    this.isNewFeaturesDragged = false;
-  }
-
-  onPrioritiesSaveClick(): void {
-    this.isPrioritiesDragged = false;
-  }
-
-  onRegressionsSaveClick(): void {
-    this.isRegressionsDragged = false;
+  async onSaveItemOrder(type: string): Promise<void> {
+    const reportData = this.reportData as any;
+    await this.appService.updateScenarioOrder(reportData[type], type);
+    this.draggedItems = {
+      ...this.draggedItems,
+      [type]: false,
+    };
   }
 
   private getCounts(key: string): { testedCount: number; totalCount: number } {
