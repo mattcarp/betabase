@@ -5,12 +5,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { NavModule } from '../shared/layout/nav/nav.module';
 import { SupportRoutingModule } from './support-routing.module';
 import { SupportComponent } from './support.component';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [SupportComponent],
@@ -21,10 +21,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatFormFieldModule,
     MatInputModule,
     MatSlideToggleModule,
-    NavModule,
-    SupportRoutingModule,
     MatChipsModule,
     MatCheckboxModule,
+    NavModule,
+    SupportRoutingModule,
   ],
   exports: [SupportComponent],
 })

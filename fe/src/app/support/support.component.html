@@ -49,7 +49,7 @@
         <div>Message</div>
         <mat-form-field class="full-width">
           <input matInput #message maxlength="140" placeholder="Ex. I need help with...">
-          <mat-hint align="end">{{message.value.length}} / 140</mat-hint>
+          <mat-hint align="end">{{message?.value?.length}} / 140</mat-hint>
         </mat-form-field>
 
         <div class="row">
@@ -92,9 +92,9 @@
             (change)="onChangeContact($event.checked, id)"
             class="contact-checkbox">
             <div class="header-flex">
-              {{item.name}}
+              {{item?.name}}
               <div class="spacer"></div>
-              {{item.phone}}
+              {{item?.phone}}
             </div>
           </mat-checkbox>
         </div>
