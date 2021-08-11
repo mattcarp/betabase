@@ -236,8 +236,8 @@
             </span>
           </mat-checkbox>
           <div>
-            <button [disabled]="!isNewFeaturesDragged"
-                    (click)="onNewFeaturesSaveClick()"
+            <button [disabled]="!draggedItems?.enhancementScenarios"
+                    (click)="onSaveItemOrder('enhancementScenarios')"
                     mat-icon-button
                     color="warn">
               <i class="fas fa-save"></i>
@@ -247,9 +247,9 @@
         </div>
       </div>
 
-      <div cdkDropList (cdkDropListDropped)="onDropNewFeaturesScenarios($event)"
+      <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'enhancementScenarios')"
            class="grid-container"
-           [class.dragged]="isNewFeaturesDragged">
+           [class.dragged]="draggedItems?.enhancementScenarios">
         <header class="grid new-features">
           <div #1>ID</div>
           <div #2>Name</div>
@@ -310,8 +310,8 @@
             </span>
           </mat-checkbox>
           <div>
-            <button [disabled]="!isPrioritiesDragged"
-                    (click)="onPrioritiesSaveClick()"
+            <button [disabled]="!draggedItems?.priorityScenarios"
+                    (click)="onSaveItemOrder('priorityScenarios')"
                     mat-icon-button
                     color="warn">
               <i class="fas fa-save"></i>
@@ -321,9 +321,9 @@
         </div>
       </div>
 
-      <div cdkDropList (cdkDropListDropped)="onDropPrioritiesScenarios($event)"
+      <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'priorityScenarios')"
            class="grid-container"
-           [class.dragged]="isPrioritiesDragged">
+           [class.dragged]="draggedItems?.priorityScenarios">
         <header class="grid priorities">
           <div #1>ID</div>
           <div #2>Name</div>
@@ -384,8 +384,8 @@
             </span>
           </mat-checkbox>
           <div>
-            <button [disabled]="!isRegressionsDragged"
-                    (click)="onRegressionsSaveClick()"
+            <button [disabled]="!draggedItems?.regressionScenarios"
+                    (click)="onSaveItemOrder('regressionScenarios')"
                     mat-icon-button
                     color="warn">
               <i class="fas fa-save"></i>
@@ -395,9 +395,9 @@
         </div>
       </div>
 
-      <div cdkDropList (cdkDropListDropped)="onDropRegressionsScenarios($event)"
+      <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'regressionScenarios')"
            class="grid-container"
-           [class.dragged]="isRegressionsDragged">
+           [class.dragged]="draggedItems?.regressionScenarios">
         <header class="grid regressions">
           <div #1>ID</div>
           <div #2>Name</div>
