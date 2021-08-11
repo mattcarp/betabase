@@ -3,176 +3,103 @@
 <section>
   <h2>SMS and Flash Conference Calls</h2>
 
-  <div class="well row">
-    <h3>Setup Flash Bridge</h3>
-    <button class="btn btn-default pull-right" id="setup-conf">Setup Conference</button>
-    <div id="setup-panel" class="hidden">
-      <form class="form-inline ng-pristine ng-valid">
-        <fieldset>
-          <legend>Conference number: +1 646 663 5100</legend>
-          <label>Conference Call Name</label>
-          <input id="conf-name" type="text" placeholder="Enter a short conference name…">
-          <span class="help-block">The call name will be read by a synthesized voice (you may want to write it phonetically)</span>
-          <label class="checkbox">
-
-            <input id="join-me" type="checkbox"> Dial me on + and connect me to the conference
-          </label>
-          <button type="submit" id="create-conf" class="btn btn-primary pull-right">Initiate Call</button>
-        </fieldset>
-      </form>
+  <article>
+    <div class="header-flex">
+      <h3>Setup Flash Bridge</h3>
+      <div class="spacer"></div>
+      <button mat-flat-button (click)="onSetupConferenceClick()" color="primary">
+        <i class="fas fa-user-cog"></i>
+        <span>Setup Conference</span>
+      </button>
     </div>
 
-  </div>
-
-  <div class="flash-notice alert-message alert alert-success" id="sms-notice"></div>
-
-  <div class="well row">
-    <div class="span5 well">
-
-      <h3>Compose SMS</h3>
-
-      <form class="form-inline ng-pristine ng-valid">
-        <div class="control-group">
-          <label class="control-label">Select contacts on the right hand panel</label>
-          <div class="well well-small span4" id="smsTo"></div>
+    <ng-container *ngIf="isSetupConference">
+      <fieldset>
+        <h4>Conference number: +1 646 663 5100</h4>
+        <mat-form-field class="full-width">
+          <mat-label>Conference Call Name</mat-label>
+          <input matInput type="text" placeholder="Enter a short conference name…">
+        </mat-form-field>
+        <div class="row">The call name will be read by a synthesized voice (you may want to write it phonetically)</div>
+        <div class="header-flex">
+          <mat-slide-toggle>
+            <span>Dial me on + and connect me to the conference</span>
+          </mat-slide-toggle>
+          <div class="spacer"></div>
+          <button mat-flat-button color="accent">
+            <i class="fas fa-phone-square-alt"></i>
+            <span>Initiate Call</span>
+          </button>
         </div>
-        <div class="control-group">
-          <label class="control-label" for="inputMessage">Message</label>
-          <div class="controls">
-            <textarea class="span4" rows="4" id="inputMessage" placeholder="Message"></textarea>
-            <span class="help-block"><span id="counter" class="safe">140</span> characters remaining</span>
-          </div>
+      </fieldset>
+    </ng-container>
+  </article>
+
+  <article>
+    <div class="contact">
+      <div>
+        <h3>Compose SMS</h3>
+        <div>Select contacts on the right hand panel</div>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-chip-list>
+            <mat-chip *ngFor="let contact of selectedContacts">{{contact?.phone}}</mat-chip>
+          </mat-chip-list>
+        </mat-form-field>
+
+        <div>Message</div>
+        <mat-form-field class="full-width">
+          <input matInput #message maxlength="140" placeholder="Ex. I need help with...">
+          <mat-hint align="end">{{message?.value?.length}} / 140</mat-hint>
+        </mat-form-field>
+
+        <div class="row">
+          <mat-slide-toggle (change)="onChangeSendEmail($event.checked)">
+            <span>Also send email</span>
+          </mat-slide-toggle>
         </div>
-        <div class="control-group">
-          <div class="controls">
-            <label class="checkbox">
-              <input type="checkbox" class="sendEmail" id="emailAlso"> Also send email
-            </label>
+
+
+        <ng-container *ngIf="isSendEmail">
+          <div class="row">From: user@gmail.com</div>
+          <div class="row">
+            <div>To:</div>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-chip-list>
+                <mat-chip *ngFor="let contact of selectedContacts">{{contact?.email}}</mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
           </div>
-        </div>
-        <div class="control-group emailControl" style="display: block;">
-          <span class="help-block">From sergei.nikonov@yahoo.com</span>
-          <div class="control-group">
-            <label class="control-label">To <br>
-              <div class="well well-small span4" id="emailRecipients"></div>
-            </label>
+          <div class="row">
+            <div>Subject:</div>
+            <mat-form-field class="full-width">
+              <input matInput>
+            </mat-form-field>
           </div>
-          <label class="control-label" for="emailSubject">Subject</label>
-          <div class="controls">
-            <input class="span4" id="emailSubject" placeholder="Subject">
-          </div>
-        </div>
-        <button type="submit" class="btn btn-default pull-right" id="send-messages">Send SMS
-          <span class="andSendEmail" style="display: inline;">&amp; Email</span>
+        </ng-container>
+
+        <button [disabled]="!selectedContacts.length" mat-flat-button color="accent">
+          <i class="fas fa-user-cog"></i>
+          <span>Send SMS<ng-container *ngIf="isSendEmail"> & Email</ng-container></span>
         </button>
-      </form>
+      </div>
 
+      <div>
+        <h3>Selected Contacts</h3>
+        <div *ngFor="let item of contacts; let id = index">
+          <mat-checkbox
+            [attr.id]="'checkbox-' + id"
+            [(ngModel)]="item.isChecked"
+            (change)="onChangeContact($event.checked, id)"
+            class="contact-checkbox">
+            <div class="header-flex">
+              {{item?.name}}
+              <div class="spacer"></div>
+              {{item?.phone}}
+            </div>
+          </mat-checkbox>
+        </div>
+      </div>
     </div>
-    <div class="span5 well">
-      <h3>Selected Contacts</h3><br>
-
-      <span class="hiddenEmail">rick.barry@asburymedia.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Rick Barry (Asbury Media) <span class="pull-right phone">+1 732 948 1413</span>
-      </label>
-      <span class="hiddenEmail">colie.brice@asburymedia.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Colie Brice (Asbury Media) <span class="pull-right phone">+1 732 321 2751</span>
-      </label>
-      <span class="hiddenEmail">manuela.brice@asburymedia.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Manuela Brice (Asbury Media) <span class="pull-right phone">+1 732 321 2751</span>
-      </label>
-      <span class="hiddenEmail">apptester03@asburymedia.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Fiona Burgess (Asbury Media) <span class="pull-right phone">+353 87 395 9392</span>
-      </label>
-      <span class="hiddenEmail">ralph.capasso@sonymusic.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Ralph Capasso (Sony Music) <span class="pull-right phone">+1 917 885 2714</span>
-      </label>
-      <span class="hiddenEmail">matt@mattcarpenter.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Matt Carpenter (Asbury Media) <span class="pull-right phone">+353 87 982 7211</span>
-      </label>
-      <span class="hiddenEmail">arnab.ghosh.wipro@sonymusic.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Arnab Ghosh (Sony Music) <span class="pull-right phone">+1 917 822 7217</span>
-      </label>
-      <span class="hiddenEmail">vamsikrishna.Gollapudi.infotech@sonymusic.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Vamsi Gollapudi (Infotech) <span class="pull-right phone">+1 917 972 5747</span>
-      </label>
-      <span class="hiddenEmail">garima.gupta.infotechlimited@sonymusic.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Garima Gupta (Infotech) <span class="pull-right phone">+1 973 767 6977</span>
-      </label>
-      <span class="hiddenEmail">prasad.inamdar.infotechlimited@sonymusic.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Prasad Inamdar (Infotech) <span class="pull-right phone">+1 302 740 7475</span>
-      </label>
-      <span class="hiddenEmail">Nathaniel.Lovett@sonymusic.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Nat Lovett (Sony Music) <span class="pull-right phone">+1 646 491 1590</span>
-      </label>
-      <span class="hiddenEmail">keith.mccarthy@asburymedia.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Keith McCarthy (Asbury Media) <span class="pull-right phone">+1 609 290 2372</span>
-      </label>
-      <span class="hiddenEmail">jack.pitzer@asburymedia.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Jack Pitzer (Asbury Media) <span class="pull-right phone">+1 201 218 4064</span>
-      </label>
-      <span class="hiddenEmail">Rohit.Raj.AsburyMedia@sonymusic.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Rohit Raj (Asbury Media) <span class="pull-right phone">+1 201 925 1748</span>
-      </label>
-      <span class="hiddenEmail">abhishek.ray.infotechlimited@sonymusic.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Abhishek Ray (Wipro) <span
-        class="pull-right phone">+1 651 675 9610</span>
-      </label>
-      <span class="hiddenEmail">tom.ruff@asburymedia.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Tom Ruff (Asbury Media) <span class="pull-right phone">+1 732 403 7251</span>
-      </label>
-      <span class="hiddenEmail">Christian.Seitz@sonymusic.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Christian Seitz (Sony Music) <span class="pull-right phone">+1 646 932 2732</span>
-      </label>
-      <span class="hiddenEmail">shahenaaz.syed.imcassociates@sonymusic.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Shahenaaz Syed (IMC Associates) <span class="pull-right phone">+1 732 986 6466</span>
-      </label>
-      <span class="hiddenEmail">David.Wenger@sonymusic.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Dave Wenger (Sony Music) <span class="pull-right phone">+1 718 208 9290</span>
-      </label>
-      <span class="hiddenEmail">erik.wood@asburymedia.com</span>
-      <label class="checkbox">
-        <input type="checkbox" class="contactSelect">
-        Erik Wood (Asbury Media) <span class="pull-right phone">+1 718 314 7113</span>
-      </label>
-    </div>
-  </div>
+  </article>
 
 </section>
