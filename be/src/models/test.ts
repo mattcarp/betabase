@@ -54,7 +54,6 @@ export const Test = db.sequelize.define('Test', {
   result: {
     type: DataTypes.TEXT,
     nullable: true,
-    field: 'result',
   },
   passFail: {
     type: DataTypes.STRING,
