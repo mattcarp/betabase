@@ -28,20 +28,20 @@
     </div>
 
     <div class="grid-container">
-      <div class="grid scenario">
+      <div class="grid two-columns">
         <div>Case ID</div>
         <div>{{scenario?.id}}</div>
       </div>
-      <div class="grid scenario">
+      <div class="grid two-columns">
         <div>Name</div>
         <div>{{scenario?.name}}</div>
       </div>
-      <div class="grid scenario">
+      <div class="grid two-columns">
         <div>Preconditions</div>
         <div [innerHTML]="scenario?.preconditions" class="inner-html"></div>
       </div>
       <ng-container *ngIf="scenario?.mode === 'Automated'; else script">
-        <div class="grid scenario">
+        <div class="grid two-columns">
           <div>Automation Code</div>
           <div>
             <pre><code>{{scenario?.script}}</code></pre>
@@ -49,42 +49,42 @@
         </div>
       </ng-container>
       <ng-template #script>
-        <div class="grid scenario">
+        <div class="grid two-columns">
           <div>Script</div>
           <div [innerHTML]="scenario?.script" class="inner-html"></div>
         </div>
       </ng-template>
-      <div class="grid scenario">
+      <div class="grid two-columns">
         <div>Expected Result</div>
         <div [innerHTML]="scenario?.expectedResult" class="inner-html"></div>
       </div>
-      <div class="grid scenario">
+      <div class="grid two-columns">
         <div>Created</div>
         <div>{{scenario?.createdAt | date }}</div>
       </div>
-      <div class="grid scenario">
+      <div class="grid two-columns">
         <div>Updated</div>
         <div>{{scenario?.updatedAt | date }}</div>
       </div>
-      <div class="grid scenario">
+      <div class="grid two-columns">
         <div>Coverage</div>
         <div>{{scenario?.coverage}}</div>
       </div>
-      <div class="grid scenario">
+      <div class="grid two-columns">
         <div>Flagged for Review</div>
         <div>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</div>
       </div>
-      <div class="grid scenario">
+      <div class="grid two-columns">
         <div>Covers Security</div>
         <div>{{scenario?.isSecurity ? 'Yes' : 'No'}}</div>
       </div>
-      <div class="grid scenario">
+      <div class="grid two-columns">
         <ng-container *ngIf="scenario?.flagReason">
           <div>Reason for Review</div>
           <div>{{scenario?.flagReason}}</div>
         </ng-container>
       </div>
-      <div class="grid scenario">
+      <div class="grid two-columns">
         <div>Priority</div>
         <div>{{scenario?.clientPriority ? 'Yes' : 'No'}}</div>
       </div>
@@ -245,10 +245,14 @@
              class="grid tests">
           <div #1>{{test?.createdBy}}</div>
           <div #2>{{test?.ticket}}</div>
-          <div #3 [innerHTML]="test.input | slice:0:300 | highlightSearch: search" class="inner-html"></div>
-          <div #4 [innerHTML]="test.result | slice:0:200 | highlightSearch: search" class="inner-html"></div>
-          <div #5 [innerHTML]="test?.createdAt | date: 'medium' | highlightSearch: search"></div>
-          <div #6 [innerHTML]="(test?.deploymentStamp | date: 'medium') | highlightSearch: search || 'None'"></div>
+          <div #3 [innerHTML]="test.input | slice:0:300 | highlightSearch: paginationParams.searchTerm"
+               class="inner-html">
+          </div>
+          <div #4 [innerHTML]="test.result | slice:0:200 | highlightSearch: paginationParams.searchTerm"
+               class="inner-html">
+          </div>
+          <div #5 [innerHTML]="test?.createdAt | date: 'medium' | highlightSearch: paginationParams.searchTerm"></div>
+          <div #6 [innerHTML]="(test?.deploymentStamp | date: 'medium') | highlightSearch: paginationParams.searchTerm || 'None'"></div>
           <div #7>{{test?.browserName}} {{test?.browserMajor}}{{test?.browserMinor}}</div>
           <div #8>{{test?.osName}} {{test?.osMajor}} {{test?.osMinor}}</div>
           <div #9 class="center">
@@ -256,12 +260,12 @@
             <label *ngIf="test?.passFail === 'Pass'" class="label-success">{{test?.passFail}}</label>
           </div>
           <div #10 class="center actions">
-            <button (click)="onActionClick('test', scenario?.appUnderTest, test?.id, 'show')" mat-icon-button>
+            <a routerLink="/test/{{scenario?.appUnderTest}}/{{test?.id}}/show" mat-icon-button>
               <i class="fas fa-eye"></i>
-            </button>
-            <button (click)="onActionClick('test', scenario?.appUnderTest, test?.id, 'edit')" mat-icon-button>
+            </a>
+            <a routerLink="/test/{{scenario?.appUnderTest}}/{{test?.id}}/edit" mat-icon-button>
               <i class="fas fa-edit"></i>
-            </button>
+            </a>
           </div>
         </div>
       </div>

@@ -136,12 +136,12 @@
         <div #6>{{scenario?.updatedAt | date}}</div>
         <div #7 class="center">{{scenario?.reviewFlag ? 'Yes' : 'No'}}</div>
         <div #8 class="center actions">
-          <button (click)="onActionClick('scenario', app, scenario?.id, 'show')" mat-icon-button>
+          <a routerLink="/scenario/{{app}}/{{scenario?.id}}/show" mat-icon-button>
             <i class="fas fa-eye"></i>
-          </button>
-          <button (click)="onActionClick('scenario', app, scenario?.id, 'edit')" mat-icon-button>
+          </a>
+          <a routerLink="/scenario/{{app}}/{{scenario?.id}}/edit" mat-icon-button>
             <i class="fas fa-edit"></i>
-          </button>
+          </a>
         </div>
       </div>
     </div>

@@ -89,9 +89,11 @@
       </div>
     </div>
 
-    <button mat-flat-button (click)="onSaveClick()" color="accent">
-      <i class="fas fa-save"></i>
-      <span>{{saveBtnLabel}}</span>
-    </button>
+    <div class="actions-container">
+      <button mat-flat-button (click)="onSaveClick()" color="accent" class="actions-button">
+        <i class="fas fa-save"></i>
+        <span>{{saveBtnLabel}}</span>
+      </button>
+    </div>
   </div>
 </section>

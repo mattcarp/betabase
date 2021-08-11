@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { filter, pluck, tap } from 'rxjs/operators';
+import { filter, pluck } from 'rxjs/operators';
 
 import { ScenarioItem, TestItem } from '../../shared/models';
 import { AppService } from '../../shared/app.service';
@@ -16,10 +16,7 @@ export class TestDetailsComponent {
   test: TestItem | null = null;
   isLoading = false;
 
-  constructor(
-    private appService: AppService,
-    private activatedRoute: ActivatedRoute,
-  ) {
+  constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
     activatedRoute.params
       .pipe(
         filter((params: Params) => 'id' in params),

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { tap } from 'rxjs/operators';
 
 import { AppService } from '../../shared/app.service';
 import { ScenarioItem, TestItem } from '../../shared/models';
@@ -26,9 +25,7 @@ export class TestFormComponent {
     translate: 'no',
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
-    toolbarHiddenButtons: [
-      ['bold'],
-    ],
+    toolbarHiddenButtons: [['bold']],
     customClasses: [
       {
         name: 'quote',
@@ -41,33 +38,35 @@ export class TestFormComponent {
       {
         name: 'titleText',
         class: 'titleText',
-        tag: 'h1',
+        tag: 'h2',
       },
     ],
   };
   browserNameOptions = ['Internet Explorer', 'Firefox', 'Chrome', 'Safari', 'Android Browser'];
-  browserVersionOptions = [...Array(81).keys()].slice(3);
+  browserVersionOptions = [...Array(81).keys()].slice(3).map(String);
   osNameOptions = ['Windows', 'Mac OS', 'iOS', 'Android', 'Linux (Ubuntu)'];
+  osVersionOptions = ['Vista', 'XP', ...Array(21).keys()].map(String);
   passFailOptions = ['Pending', 'Pass', 'Fail'];
   inProdOptions = ['Yes', 'No', 'Unsure'];
 
-  constructor(
-    private appService: AppService,
-    private activatedRoute: ActivatedRoute,
-  ) {
-    activatedRoute.params
-      .pipe(tap(() => this.test = {}))
-      .subscribe(({ scenarioId, id }) => this.fetchData(scenarioId, id));
+  constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
+    activatedRoute.params.subscribe(({ scenarioId, id }) => this.fetchData(scenarioId, id));
   }
 
   get isCreateTestBtnDisabled(): boolean {
-    return !this.test?.browserName?.length || !this.test.browserMinor?.length
-      || !this.test.browserMajor?.length || !this.test.osName?.length
-      || !this.test.osMinor?.length || !this.test.osMajor?.length || !this.test.passFail?.length
+    return (
+      !this.test?.browserName?.length ||
+      !this.test.browserMinor?.length ||
+      !this.test.browserMajor?.length ||
+      !this.test.osName?.length ||
+      !this.test.osMinor?.length ||
+      !this.test.osMajor?.length ||
+      !this.test.passFail?.length
+    );
   }
 
   async onCreateTestClick(): Promise<void> {
-    const params = { ...this.test, scenarioId: this.scenario?.id }
+    const params = { ...this.test, scenarioId: this.scenario?.id };
     await this.appService.addTest(params);
   }
 

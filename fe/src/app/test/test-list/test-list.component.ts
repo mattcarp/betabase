@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { filter, pluck, tap } from 'rxjs/operators';
 
-import { TestItem } from '../../shared/models';
+import { PaginationParams, TestItem } from '../../shared/models';
 import { AppService } from '../../shared/app.service';
 
 @Component({
@@ -14,6 +14,15 @@ import { AppService } from '../../shared/app.service';
 export class TestListComponent {
   tests: TestItem[] = [];
   app: string | null = null;
+  isLoading = false;
+  pageSize = 50;
+  listOptions = [50, 100, 250];
+  paginationParams: PaginationParams = {
+    searchTerm: '',
+    page: 1,
+    sortField: 'date',
+    sortDirection: 'DESC',
+  };
 
   constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
     activatedRoute.params
@@ -27,8 +36,33 @@ export class TestListComponent {
       .subscribe((app: string) => this.fetchData(app));
   }
 
+  getClassSortField(controlName: string): string {
+    return controlName === this.paginationParams.sortField ? 'active' : '';
+  }
+
+  getClassDirection(): string {
+    return this.paginationParams.sortDirection || '';
+  }
+
+  onSearchStart(searchTerm: string = ''): void {
+    this.paginationParams.searchTerm = searchTerm;
+  }
+
+  async onToggleSort(controlName: string): Promise<void> {
+    this.paginationParams.page = 1;
+    this.paginationParams.sortField = controlName;
+    if (this.paginationParams.sortDirection === 'ASC') {
+      this.paginationParams.sortDirection = 'DESC';
+    } else {
+      this.paginationParams.sortDirection = 'ASC';
+    }
+    // TODO: Sort
+    // this.loadTests(this.paginationParams.searchTerm);
+  }
+
   private async fetchData(app: string): Promise<void> {
+    this.isLoading = true;
     this.tests = await this.appService.getAllTests(app);
-    console.log(this.tests);
+    this.isLoading = false;
   }
 }

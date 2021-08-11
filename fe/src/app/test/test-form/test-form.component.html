@@ -7,129 +7,170 @@
   </div>
 
   <div *ngIf="!isLoading && test && scenario">
-    <h2>Edit Case {{scenario?.id}}</h2>
+    <h2>Edit Test for Case {{scenario?.id}}</h2>
 
-    <table id="detailTable" class="table-bordered table-striped">
-      <tbody>
-      <tr>
-        <th>Name</th>
-        <td class="span9">{{scenario?.name}}</td>
-      </tr>
-      <tr>
-        <th>Created By</th>
-        <td>{{scenario?.createdBy}}</td>
-      </tr>
-      <tr>
-        <th>Updated By</th>
-        <td>{{scenario?.updatedBy}}</td>
-      </tr>
-      <tr>
-        <th>Created</th>
-        <td>{{scenario?.createdAt}}</td>
-      </tr>
-      <tr>
-        <th>Updated</th>
-        <td>{{scenario?.updatedAt}}</td>
-      </tr>
-      <tr>
-        <th>Coverage</th>
-        <td>{{scenario?.coverage}}</td>
-      </tr>
-      <tr>
-        <th>Flagged for Review?</th>
-        <td>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</td>
-      </tr>
-      <tr *ngIf="scenario?.reviewFlag">
-        <th>Reason for Review</th>
-        <td>{{scenario?.flagReason}}</td>
-      </tr>
-      <tr>
-        <th>Preconditions</th>
-        <td>{{scenario?.preconditions}}</td>
-      </tr>
-      <tr>
-        <th>Expected Result</th>
-        <td>{{scenario?.expectedResult}}</td>
-      </tr>
-      <tr>
-        <th>Script</th>
-        <td>{{scenario?.script}}</td>
-      </tr>
-      </tbody>
-    </table>
+    <h3>The Case</h3>
 
-    <h2>Create a New Test for Case {{scenario?.id}}</h2>
-
-    <label for="">Name</label>
-    <input type="text" [(ngModel)]="test.build">
-
-    <label for="">Input</label>
-    <angular-editor [(ngModel)]="test.input" [config]="config"></angular-editor>
-
-    <label for="">Result</label>
-    <angular-editor [(ngModel)]="test.result" [config]="config"></angular-editor>
-
-    <div class='form-inline well'>
-      <label for="">Browser Name</label>
-      <select [(ngModel)]="test.browserName">
-        <option *ngFor="let option of browserNameOptions" value="{{option}}">{{option}}</option>
-      </select>
-
-      <label for="">Browser Major Version</label>
-      <select [(ngModel)]="test.browserMajor">
-        <option *ngFor="let option of browserVersionOptions" value="{{option}}">{{option}}</option>
-      </select>
-
-      <label for="">Browser Minor Version</label>
-      <select [(ngModel)]="test.browserMinor" placeholder="Minor Version - e.g. 0.20.384">
-        <option *ngFor="let option of browserVersionOptions" value="{{option}}">{{option}}</option>
-      </select>
-
-      <label for="">Operating System</label>
-      <select [(ngModel)]="test.osName">
-        <option *ngFor="let option of osNameOptions" value="{{option}}">{{option}}</option>
-      </select>
-
-      <label for="">OS Major Version</label>
-      <select [(ngModel)]="test.osMajor">
-        <option *ngFor="let option of browserVersionOptions" value="{{option}}">{{option}}</option>
-      </select>
-
-      <label for="">OS Minor Version</label>
-      <select [(ngModel)]="test.osMinor" placeholder="Minor Version - e.g. 1.90.89">
-        <option *ngFor="let option of browserVersionOptions" value="{{option}}">{{option}}</option>
-      </select>
+    <div class="grid-container">
+      <div class="grid two-columns">
+        <div>Name</div>
+        <div>{{scenario?.name}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Preconditions</div>
+        <div [innerHTML]="scenario?.preconditions" class="inner-html"></div>
+      </div>
+      <ng-container *ngIf="scenario?.mode === 'Automated'; else script">
+        <div class="grid two-columns">
+          <div>Automation Code</div>
+          <div>
+            <pre><code>{{scenario?.script}}</code></pre>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #script>
+        <div class="grid two-columns">
+          <div>Script</div>
+          <div [innerHTML]="scenario?.script" class="inner-html"></div>
+        </div>
+      </ng-template>
+      <div class="grid two-columns">
+        <div>Expected Result</div>
+        <div [innerHTML]="scenario?.expectedResult" class="inner-html"></div>
+      </div>
+      <div class="grid two-columns">
+        <div>Created By</div>
+        <div>{{scenario?.createdBy}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Created</div>
+        <div>{{scenario?.createdAt | date}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Updated By</div>
+        <div>{{scenario?.updatedBy}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Updated</div>
+        <div>{{scenario?.updatedAt | date}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Coverage</div>
+        <div>{{scenario?.coverage}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Flagged for Review</div>
+        <div>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</div>
+      </div>
+      <ng-container *ngIf="scenario?.flagReason">
+        <div class="grid two-columns">
+          <div>Reason for Review</div>
+          <div>{{scenario?.flagReason}}</div>
+        </div>
+      </ng-container>
     </div>
 
-    <label for="">Pass/Fail</label>
-    <select [(ngModel)]="test.passFail">
-      <option *ngFor="let option of passFailOptions" value="{{option}}">{{option}}</option>
-    </select>
+    <h2>The Test to be Edited</h2>
 
-    <div class="alert alert-block alert-success fade in hidden" id="jira-notes">
-      <h4 class="alert-heading">Contratulations! You failed!</h4><br>
-      Here are some guidelines in case you feel that a JIRA is in order:
-      <ul>
-        <li>Please be sure the JIRA doesn't already exist.</li>
-        <li>Try additional browser and OS combinations.</li>
-        <li>Be sure to enter the ticket number (not the URL) in the JIRA Ticket field below.</li>
-      </ul>
+    <div>Name</div>
+    <mat-form-field class="full-width">
+      <input matInput [(ngModel)]="test.build" type="text">
+    </mat-form-field>
+
+    <div class="row">
+      <label>Input</label>
+      <angular-editor [(ngModel)]="test.input" [config]="config"></angular-editor>
     </div>
 
-    <label for="">Comments</label>
-    <angular-editor [(ngModel)]="test.comments" [config]="config"></angular-editor>
+    <div class="row">
+      <label>Result</label>
+      <angular-editor [(ngModel)]="test.result" [config]="config"></angular-editor>
+    </div>
 
-    <label for="">JIRA Ticket (can be added later) - use the form ABCD-1234</label>
-    <input type="text" [(ngModel)]="test.ticket">
+    <div class="grid option">
+      <div class="row">
+        <label>Browser</label>
 
-    <label for="">In Production?</label>
-    <select [(ngModel)]="test.inProd">
-      <option *ngFor="let option of inProdOptions" value="{{option}}">{{option}}</option>
-    </select>
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <mat-select [(ngModel)]="test.browserName">
+            <mat-option *ngFor="let option of browserNameOptions" [value]="option">{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-    <div class="form-actions well">
-      <button class="btn btn-small btn-primary" [disabled]="isCreateTestBtnDisabled" (click)="onCreateTestClick()">
-        Create this Test
+        <mat-form-field>
+          <mat-label>Major Version</mat-label>
+          <mat-select [(ngModel)]="test.browserMajor">
+            <mat-option *ngFor="let option of browserVersionOptions" [value]="option">{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Minor Version</mat-label>
+          <input matInput [(ngModel)]="test.browserMinor" type="text">
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <label>Operating System</label>
+
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <mat-select [(ngModel)]="test.osName">
+            <mat-option *ngFor="let option of osNameOptions" [value]="option">{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Major Version</mat-label>
+          <mat-select [(ngModel)]="test.osMajor">
+            <mat-option *ngFor="let option of osVersionOptions" [value]="option">{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Minor Version</mat-label>
+          <input matInput [(ngModel)]="test.osMinor" type="text">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <label>Pass/Fail</label>
+      <mat-form-field>
+        <mat-select [(ngModel)]="test.passFail">
+          <mat-option *ngFor="let option of passFailOptions" [value]="option">{{option}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <label>Comments</label>
+      <angular-editor [(ngModel)]="test.comments" [config]="config"></angular-editor>
+    </div>
+
+    <div>JIRA Ticket (can be added later) - use the form ABCD-1234</div>
+    <mat-form-field class="full-width">
+      <input matInput [(ngModel)]="test.ticket" type="text">
+    </mat-form-field>
+
+    <div class="row">
+      <label>In Production?</label>
+      <mat-form-field>
+        <mat-select [(ngModel)]="test.inProd">
+          <mat-option *ngFor="let option of inProdOptions" [value]="option">{{option}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="actions-container">
+      <button mat-flat-button
+              [disabled]="isCreateTestBtnDisabled"
+              (click)="onCreateTestClick()"
+              color="accent"
+              class="actions-button">
+        <i class="fas fa-plus-circle"></i>
+        <span>Create this Test</span>
       </button>
     </div>
   </div>
