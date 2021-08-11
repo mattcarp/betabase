@@ -27,14 +27,12 @@ html {
 body {
   position: relative;
   box-sizing: border-box;
-  margin: 0;
   user-select: none;
   font: 400 14px/1 Helvetica, Roboto, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $color-medium;
   background-color: $color-white;
-  will-change: transform;
 }
 
 // Main Layout

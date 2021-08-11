@@ -1,1 +1,26 @@
 @import 'variables';
+
+article {
+  margin: 0 0 10px;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: $color-light;
+
+  .contact {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    grid-column-gap: 20px;
+    width: 100%;
+
+    &-checkbox {
+      width: 100%;
+      max-width: 400px;
+
+      ::ng-deep {
+        .mat-checkbox-layout {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

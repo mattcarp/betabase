@@ -590,3 +590,12 @@ textarea {
     }
   }
 }
+
+// Material Chip List
+.mat-chip-list {
+  .mat-chip-list-wrapper {
+    .mat-chip {
+      background-color: $color-white;
+    }
+  }
+}
