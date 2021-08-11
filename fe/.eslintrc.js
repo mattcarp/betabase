@@ -15,7 +15,7 @@ module.exports = {
       },
       rules: {
         '@typescript-eslint/lines-between-class-members': 'off',
-        'arrow-body-style': 'off',
+        'arrow-parens': ["error", "as-needed"],
         'class-methods-use-this': 'off',
         'func-names': 'off',
         'import/extensions': 'off',
@@ -37,6 +37,7 @@ module.exports = {
         'no-console': 'off',
         'no-empty-function': ['warn', { allow: ['constructors'] }],
         'no-process-exit': 'off',
+        'no-return-assign': 'off',
         'no-unused-vars': 'warn',
         'no-useless-constructor': 'off',
         '@typescript-eslint/no-unused-expressions': ['error', { 'allowTernary': true }],
