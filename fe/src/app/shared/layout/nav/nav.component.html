@@ -12,9 +12,9 @@
     <a mat-flat-button
        routerLink="{{getLinkUrl(button.url)}}"
        [disabled]="isDisabled(button.url)"
+       [routerLinkActive]="['active']"
        color="primary"
-       class="nav-button"
-       [ngClass]="{'active': isActiveLink(button.url)}">
+       class="nav-button">
       <i class="fas" [ngClass]="button.icon"></i>
       <span *ngIf="button?.title">{{button?.title}}</span>
     </a>

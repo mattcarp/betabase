@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { filter, pluck } from 'rxjs/operators';
 
@@ -18,20 +18,18 @@ export class NavComponent {
 
   private app: string | null = null;
 
-  constructor(private location: Location, private activatedRoute: ActivatedRoute, private router: Router) {
+  constructor(private location: Location, private activatedRoute: ActivatedRoute) {
     activatedRoute.params
       .pipe(
         filter((params: Params) => 'app' in params),
         pluck('app'),
       )
-      .subscribe((app: string) => this.app = app);
+      .subscribe((app: string) => {
+        this.app = app;
+      });
   }
 
   getLinkUrl(url: string): string {
-    const link = url.replace('_APP_', `${this.app}`);
-    if (this.router.url === link) {
-      this.activeLink = url;
-    }
     return url.replace('_APP_', `${this.app}`);
   }
 
@@ -43,10 +41,6 @@ export class NavComponent {
         url === '/test/_APP_') &&
       !this.app
     );
-  }
-
-  isActiveLink(url: string): boolean {
-    return this.activeLink === url;
   }
 
   onBackClick(): void {
