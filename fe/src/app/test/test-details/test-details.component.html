@@ -78,11 +78,11 @@
       <div class="grid-container">
         <div class="grid two-columns test">
           <div>Created</div>
-          <div>{{test?.createdAt | date}} by {{test?.createdBy}}</div>
+          <div>{{test?.createdAt | date}} <span class="grey">by {{test?.createdBy}}</span></div>
         </div>
         <div class="grid two-columns test">
           <div>Updated</div>
-          <div>{{test.updatedAt | date}} by {{test?.updatedBy}}</div>
+          <div>{{test.updatedAt | date}} <span class="grey">by {{test?.updatedBy}}</span></div>
         </div>
         <div class="grid two-columns test">
           <div>Date of Deployment Tested</div>
@@ -95,7 +95,7 @@
         <div class="grid two-columns test">
           <div>JIRA</div>
           <div>
-            <div>
+            <div *ngIf="test?.ticket?.length">
               <a href="https://jira.smedigitalapps.com/jira/browse/{{test?.ticket}}" target="_blank" class="ext">
                 {{test?.ticket}}
               </a>

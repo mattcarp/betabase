@@ -1,9 +1,9 @@
 export const NavConstants = {
   navButtons: [
     {
-      icon: 'fa-user-headset',
-      title: 'Support',
-      url: '/support',
+      icon: 'fa-home',
+      title: 'Dashboard',
+      url: '/dashboard/_APP_/show',
     },
     {
       icon: 'fa-list-alt',
@@ -19,6 +19,11 @@ export const NavConstants = {
       icon: 'fa-code',
       title: 'All Tests',
       url: '/test/_APP_',
+    },
+    {
+      icon: 'fa-user-headset',
+      title: 'Support',
+      url: '/support',
     },
   ],
 };

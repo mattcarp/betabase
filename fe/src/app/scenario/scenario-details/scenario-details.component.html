@@ -244,7 +244,13 @@
               let i = index"
              class="grid tests">
           <div #1>{{test?.createdBy}}</div>
-          <div #2>{{test?.ticket}}</div>
+          <div #2 class="center">
+            <div *ngIf="test?.ticket?.length">
+              <a href="https://jira.smedigitalapps.com/jira/browse/{{test?.ticket}}" target="_blank" class="ext">
+                {{test?.ticket}}
+              </a>
+            </div>
+          </div>
           <div #3 [innerHTML]="test.input | slice:0:300 | highlightSearch: paginationParams.searchTerm"
                class="inner-html">
           </div>

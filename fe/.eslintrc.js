@@ -10,12 +10,11 @@ module.exports = {
       extends: ['airbnb-typescript/base', 'prettier'],
       plugins: ['prettier'],
       parserOptions: {
-        project: ['tsconfig.*?.json', 'e2e/tsconfig.json'],
-        createDefaultProgram: true,
+        project: './tsconfig.json',
       },
       rules: {
         '@typescript-eslint/lines-between-class-members': 'off',
-        'arrow-parens': ["error", "as-needed"],
+        'arrow-parens': ['error', 'as-needed'],
         'class-methods-use-this': 'off',
         'func-names': 'off',
         'import/extensions': 'off',
@@ -45,8 +44,8 @@ module.exports = {
         '@typescript-eslint/no-empty-function': 'off',
         'object-curly-newline': 'off',
         'object-shorthand': 'off',
-        'operator-linebreak': 'off',
-        'prettier/prettier': 'error',
+        'operator-linebreak': ['error', 'after'],
+        'prettier/prettier': ['error', { 'endOfLine': 'auto' }],
       },
     },
     {

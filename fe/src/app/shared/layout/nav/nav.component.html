@@ -11,9 +11,10 @@
   <ng-container *ngFor="let button of buttons">
     <a mat-flat-button
        routerLink="{{getLinkUrl(button.url)}}"
-       color="primary"
        [disabled]="isDisabled(button.url)"
-       class="nav-button">
+       color="primary"
+       class="nav-button"
+       [ngClass]="{'active': isActiveLink(button.url)}">
       <i class="fas" [ngClass]="button.icon"></i>
       <span *ngIf="button?.title">{{button?.title}}</span>
     </a>

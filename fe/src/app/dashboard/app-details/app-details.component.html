@@ -199,7 +199,7 @@
             </div>
           </div>
           <div #5></div>
-          <div #6 [innerHTML]="test.result | slice:0:200"  class="inner-html"></div>
+          <div #6 [innerHTML]="test.result | slice:0:200" class="inner-html"></div>
           <div #7></div>
           <div #8></div>
           <div #9></div>
@@ -239,10 +239,10 @@
             <button [disabled]="!draggedItems?.enhancementScenarios"
                     (click)="onSaveItemOrder('enhancementScenarios')"
                     mat-icon-button
-                    color="warn">
+                    color="accent">
               <i class="fas fa-save"></i>
             </button>
-            You can reorder this list and save to preserve the new order
+            You can reorder this list and save to preserve the new order or cancel reorder
           </div>
         </div>
       </div>
@@ -250,6 +250,13 @@
       <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'enhancementScenarios')"
            class="grid-container"
            [class.dragged]="draggedItems?.enhancementScenarios">
+        <button *ngIf="draggedItems?.enhancementScenarios"
+                (click)="onCancelItemOrder('enhancementScenarios')"
+                mat-icon-button
+                color="warn"
+                class="cancel-button">
+          <i class="fas fa-times-circle"></i>
+        </button>
         <header class="grid new-features">
           <div #1>ID</div>
           <div #2>Name</div>
@@ -313,10 +320,10 @@
             <button [disabled]="!draggedItems?.priorityScenarios"
                     (click)="onSaveItemOrder('priorityScenarios')"
                     mat-icon-button
-                    color="warn">
+                    color="accent">
               <i class="fas fa-save"></i>
             </button>
-            You can reorder this list and save to preserve the new order
+            You can reorder this list and save to preserve the new order or cancel reorder
           </div>
         </div>
       </div>
@@ -324,6 +331,13 @@
       <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'priorityScenarios')"
            class="grid-container"
            [class.dragged]="draggedItems?.priorityScenarios">
+        <button *ngIf="draggedItems?.priorityScenarios"
+                (click)="onCancelItemOrder('priorityScenarios')"
+                mat-icon-button
+                color="warn"
+                class="cancel-button">
+          <i class="fas fa-times-circle"></i>
+        </button>
         <header class="grid priorities">
           <div #1>ID</div>
           <div #2>Name</div>
@@ -387,10 +401,10 @@
             <button [disabled]="!draggedItems?.regressionScenarios"
                     (click)="onSaveItemOrder('regressionScenarios')"
                     mat-icon-button
-                    color="warn">
+                    color="accent">
               <i class="fas fa-save"></i>
             </button>
-            You can reorder this list and save to preserve the new order
+            You can reorder this list and save to preserve the new order or cancel reorder
           </div>
         </div>
       </div>
@@ -398,6 +412,13 @@
       <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'regressionScenarios')"
            class="grid-container"
            [class.dragged]="draggedItems?.regressionScenarios">
+        <button *ngIf="draggedItems?.regressionScenarios"
+                (click)="onCancelItemOrder('regressionScenarios')"
+                mat-icon-button
+                color="warn"
+                class="cancel-button">
+          <i class="fas fa-times-circle"></i>
+        </button>
         <header class="grid regressions">
           <div #1>ID</div>
           <div #2>Name</div>

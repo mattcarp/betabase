@@ -19,6 +19,9 @@ export class HeaderComponent {
   }
 
   get app(): string {
+    if (this.router.url.includes('auth')) {
+      return '';
+    }
     return this.router.url.split('/')?.[2] || '';
   }
 }
