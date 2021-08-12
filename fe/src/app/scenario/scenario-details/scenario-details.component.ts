@@ -3,7 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { filter, pluck } from 'rxjs/operators';
 
 import { AppService } from '../../shared/app.service';
-import { PaginationParams, ScenarioItem, TestItem } from '../../shared/models';
+import { PaginationParams, ScenarioItem, TestItem, VariationItem } from '../../shared/models';
 
 @Component({
   selector: 'app-scenario-details',
@@ -15,8 +15,9 @@ export class ScenarioDetailsComponent {
   app: string | null = null;
   scenario: ScenarioItem | null = null;
   tests: TestItem[] = [];
+  variations: VariationItem[] = [];
   isShowInput = false;
-  variationsFormData = '';
+  variationText = '';
   pageSize = 10;
   listOptions = [10, 25, 50];
   paginationParams: PaginationParams = {
@@ -47,7 +48,8 @@ export class ScenarioDetailsComponent {
     this.isShowInput = !this.isShowInput;
   }
 
-  onSaveVariationClick(): void {
+  async onSaveVariationClick(): Promise<void> {
+    await this.appService.addVariation(Number(this.scenario?.id), this.variationText);
     this.isShowInput = !this.isShowInput;
   }
 
@@ -79,9 +81,15 @@ export class ScenarioDetailsComponent {
     // this.loadTests(this.paginationParams.searchTerm);
   }
 
+  async onUpdateVariationClick(variation: VariationItem): Promise<void> {
+    await this.appService.updateVariation(variation);
+    this.isShowInput = !this.isShowInput;
+  }
+
   private async fetchData(id: string): Promise<void> {
-    const { scenario, tests } = await this.appService.getScenario(id);
+    const { scenario, tests, variations } = await this.appService.getScenario(id);
     this.scenario = scenario;
     this.tests = tests;
+    this.variations = variations;
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
-import { AppListData, ReportData, ScenarioItem, TestItem } from './models';
+import { AppListData, ReportData, ScenarioItem, TestItem, VariationItem } from './models';
 
 @Injectable({
   providedIn: 'root',
@@ -24,9 +24,9 @@ export class AppService {
     return this.http.get<ReportData>(url).toPromise();
   }
 
-  getScenario(id: string): Promise<{ scenario: ScenarioItem; tests: TestItem[] }> {
+  getScenario(id: string): Promise<{ scenario: ScenarioItem; tests: TestItem[], variations: VariationItem[] }> {
     const url = `${this.apiUrl}/scenario/${id}`;
-    return this.http.get<{ scenario: ScenarioItem; tests: TestItem[] }>(url).toPromise();
+    return this.http.get<{ scenario: ScenarioItem; tests: TestItem[], variations: VariationItem[] }>(url).toPromise();
   }
 
   getAllScenarios(app: string): Promise<ScenarioItem[]> {
@@ -62,5 +62,15 @@ export class AppService {
   updateScenarioOrder(items: ScenarioItem[], type: string): Promise<ScenarioItem[]> {
     const url = `${this.apiUrl}/scenario/order`;
     return this.http.post<ScenarioItem[]>(url, { items, type }).toPromise();
+  }
+
+  addVariation(scenarioId: number, variationText: string): Promise<TestItem> {
+    const url = `${this.apiUrl}/variation`;
+    return this.http.post<TestItem>(url, { scenarioId, variationText }).toPromise();
+  }
+
+  updateVariation(variation: VariationItem): Promise<VariationItem> {
+    const url = `${this.apiUrl}/variation/${variation.id}`;
+    return this.http.put<VariationItem>(url, variation).toPromise();
   }
 }

@@ -91,7 +91,36 @@
     </div>
 
     <div class="header-flex">
-      <h2>There are no variations on this case</h2>
+      <h2 *ngIf="!variations?.length">There are no variations on this case</h2>
+
+      <ng-container *ngIf="variations?.length">
+        <h2>
+          <small>{{variations?.length}} variations</small>
+        </h2>
+        <div class="card span12" *ngFor="let variation of variations">
+          <div class="content">
+            <p class="bb-card-notes">created by {{variation?.createdBy}} <span>{{variation?.createdAt | date}}</span>
+              <span *ngIf="variation?.updatedBy"> and updated by {{variation?.updatedBy}} <span>{{variation?.updatedAt | date}}</span></span>
+            </p>
+            <mat-form-field class="full-width">
+              <mat-label>Variation script</mat-label>
+              <input matInput
+                     type="text"
+                     (keyup.enter)="onUpdateVariationClick(variation)"
+                     [(ngModel)]="variation.variationText"
+                     [ngModelOptions]="{ standalone: true }"
+                     placeholder="Please enter a variation on this script">
+              <button
+                *ngIf="variation.variationText"
+                (click)="variation.variationText = ''"
+                matSuffix mat-icon-button color="warn">
+                <i class="fas fa-times"></i>
+              </button>
+            </mat-form-field>
+          </div>
+        </div>
+      </ng-container>
+
       <div class="spacer"></div>
       <button mat-flat-button (click)="onAddVariationClick()" [disabled]="isShowInput" color="primary">
         <i class="fas fa-plus-circle"></i>
@@ -105,12 +134,12 @@
           <mat-label>Variation script</mat-label>
           <input matInput
                  type="text"
-                 [(ngModel)]="variationsFormData"
+                 [(ngModel)]="variationText"
                  [ngModelOptions]="{ standalone: true }"
                  placeholder="Please enter a variation on this script">
           <button
-            *ngIf="variationsFormData"
-            (click)="variationsFormData = ''"
+            *ngIf="variationText"
+            (click)="variationText = ''"
             matSuffix mat-icon-button color="warn">
             <i class="fas fa-times"></i>
           </button>
@@ -123,7 +152,7 @@
           <span>Cancel</span>
         </button>
 
-        <button mat-flat-button (click)="onSaveVariationClick()" [disabled]="!variationsFormData" color="accent">
+        <button mat-flat-button (click)="onSaveVariationClick()" [disabled]="!variationText" color="accent">
           <i class="fas fa-save"></i>
           <span>Save</span>
         </button>
