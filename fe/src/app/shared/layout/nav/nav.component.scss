@@ -2,5 +2,25 @@ nav {
   .nav-button {
     display: flex;
     margin: 0 10px 0 0;
+    position: relative;
+    overflow: visible;
+
+    &.active {
+      &:after {
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        width: 0;
+        height: 0;
+        margin-left: -4px;
+        content: '▲';
+        transform: translate(0, -50%);
+        font-size: 13px;
+      }
+
+      & + .active:after {
+        content: '';
+      }
+    }
   }
 }

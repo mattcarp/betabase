@@ -14,6 +14,7 @@ import { NavConstants } from './nav.constant';
 export class NavComponent {
   @Input() isBackActive?: boolean = false;
   buttons = NavConstants.navButtons;
+  activeLink = '';
 
   private app: string | null = null;
 
@@ -23,7 +24,9 @@ export class NavComponent {
         filter((params: Params) => 'app' in params),
         pluck('app'),
       )
-      .subscribe((app: string) => this.app = app);
+      .subscribe((app: string) => {
+        this.app = app;
+      });
   }
 
   getLinkUrl(url: string): string {
@@ -31,7 +34,13 @@ export class NavComponent {
   }
 
   isDisabled(url: string): boolean {
-    return url === 'scenario' && !this.app;
+    return (
+      (url === '/dashboard/_APP_/show' ||
+        url === '/scenario/_APP_' ||
+        url === '/scenario/_APP_/new' ||
+        url === '/test/_APP_') &&
+      !this.app
+    );
   }
 
   onBackClick(): void {

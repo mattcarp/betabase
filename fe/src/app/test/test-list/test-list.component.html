@@ -127,7 +127,7 @@
         </div>
         <div #2>{{entity?.updatedAt | date}}</div>
         <div #3>{{entity?.deploymentStamp | date}}</div>
-        <div #4>{{entity?.createdBy}}</div>
+        <div #4 [innerHTML]="entity?.createdBy | highlightSearch: paginationParams.searchTerm"></div>
         <div #5 class="center">
           <label *ngIf="entity?.passFail === 'Fail'" class="label-warning">{{entity?.passFail}}</label>
           <label *ngIf="entity?.passFail === 'Pass'" class="label-success">{{entity?.passFail}}</label>

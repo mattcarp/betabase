@@ -15,6 +15,7 @@ import { AppService } from '../../shared/app.service';
 })
 export class AppDetailsComponent {
   reportData: ReportData | null = null;
+  reportDataInitial: ReportData | null = null;
   app: string | null = null;
   isNewFeaturesChecked = false;
   numNewFeaturesChecked = 0;
@@ -209,8 +210,7 @@ export class AppDetailsComponent {
     const restItems = items.slice().filter((item: ScenarioItem) => item.id !== selectedItem.id);
     const prevItems = restItems.slice(0, event.currentIndex);
     const nextItems = restItems.slice(event.currentIndex, items.length);
-    const updatedItems = [...prevItems, selectedItem, ...nextItems];
-    reportData[type] = updatedItems;
+    reportData[type] = [...prevItems, selectedItem, ...nextItems];
     this.draggedItems = {
       ...this.draggedItems,
       [type]: true,
@@ -220,6 +220,16 @@ export class AppDetailsComponent {
   async onSaveItemOrder(type: string): Promise<void> {
     const reportData = this.reportData as any;
     await this.appService.updateScenarioOrder(reportData[type], type);
+    this.draggedItems = {
+      ...this.draggedItems,
+      [type]: false,
+    };
+  }
+
+  async onCancelItemOrder(type: string): Promise<void> {
+    const reportData = this.reportData as any;
+    const reportDataInitial = this.reportDataInitial as any;
+    reportData[type] = reportDataInitial[type];
     this.draggedItems = {
       ...this.draggedItems,
       [type]: false,
@@ -237,6 +247,6 @@ export class AppDetailsComponent {
 
   private async fetchData(app: string): Promise<void> {
     this.reportData = await this.appService.getAppReportData(app);
-    console.log(this.reportData);
+    this.reportDataInitial = JSON.parse(JSON.stringify(this.reportData));
   }
 }

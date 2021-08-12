@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 
 import { SupportConstants } from './support.constant';
 
@@ -8,11 +8,16 @@ import { SupportConstants } from './support.constant';
   styleUrls: ['./support.component.scss'],
   host: { '[class.page]': 'true' },
 })
-export class SupportComponent {
+export class SupportComponent implements OnDestroy {
   isSetupConference = false;
   isSendEmail = false;
   selectedContacts: { email: string; name: string; phone: string; isChecked: boolean }[] = [];
   contacts = SupportConstants.contacts;
+
+  ngOnDestroy(): void {
+    this.selectedContacts = [];
+    this.contacts.forEach((item: any) => item.isChecked = false);
+  }
 
   onSetupConferenceClick(): void {
     this.isSetupConference = !this.isSetupConference;
