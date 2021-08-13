@@ -1,9 +1,14 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { filter, pluck, tap } from 'rxjs/operators';
+import moment from 'moment';
 
 import { AppService } from '../../shared/app.service';
 import { PaginationParams, ScenarioItem } from '../../shared/models';
+
+interface SortItem {
+  [key: string]: any;
+}
 
 @Component({
   selector: 'app-scenario-list',
@@ -24,16 +29,36 @@ export class ScenarioListComponent {
     sortDirection: 'DESC',
   };
 
-  constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) {
+  constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
     activatedRoute.params
       .pipe(
         filter((params: Params) => 'app' in params),
         pluck('app'),
-        tap((app: string) => {
-          this.app = app;
-        }),
+        tap((app: string) => this.app = app),
       )
       .subscribe((app: string) => this.fetchData(app));
+  }
+
+  get sortedScenarios(): ScenarioItem[] {
+    return this.scenarios
+      .filter((item: ScenarioItem) => {
+        return this.paginationParams.searchTerm?.length
+          ? item.name?.includes(this.paginationParams.searchTerm)
+          : true;
+      })
+      .sort((a: SortItem, b: SortItem) => {
+        const sortField = this.paginationParams.sortField as string;
+        const ascOrder = this.paginationParams.sortDirection === 'ASC';
+        let aValue = a[sortField];
+        let bValue = b[sortField];
+        if (['createdAt', 'updatedAt'].includes(sortField)) {
+          aValue = moment(aValue).valueOf();
+          bValue = moment(bValue).valueOf();
+        }
+        return typeof aValue === 'string'
+          ? ascOrder ? bValue.localeCompare(aValue) : aValue.localeCompare(bValue)
+          : ascOrder ? bValue - aValue : aValue - bValue;
+      });
   }
 
   getClassSortField(controlName: string): string {
@@ -48,16 +73,14 @@ export class ScenarioListComponent {
     this.paginationParams.searchTerm = searchTerm;
   }
 
-  async onToggleSort(controlName: string): Promise<void> {
+  async onToggleSort(sortField: string): Promise<void> {
     this.paginationParams.page = 1;
-    this.paginationParams.sortField = controlName;
+    this.paginationParams.sortField = sortField;
     if (this.paginationParams.sortDirection === 'ASC') {
       this.paginationParams.sortDirection = 'DESC';
     } else {
       this.paginationParams.sortDirection = 'ASC';
     }
-    // TODO: Sort
-    // this.loadTests(this.paginationParams.searchTerm);
   }
 
   private async fetchData(app: string): Promise<void> {
