@@ -89,39 +89,39 @@
           Name <span [ngClass]="getClassDirection()"></span>
         </div>
         <div #3
-             (click)="onToggleSort('creator')"
+             (click)="onToggleSort('createdBy')"
              class="clickable"
-             [ngClass]="getClassSortField('creator')">
+             [ngClass]="getClassSortField('createdBy')">
           Creator <span [ngClass]="getClassDirection()"></span>
         </div>
         <div #4
-             (click)="onToggleSort('created')"
+             (click)="onToggleSort('createdAt')"
              class="clickable"
-             [ngClass]="getClassSortField('created')">
+             [ngClass]="getClassSortField('createdAt')">
           Created <span [ngClass]="getClassDirection()"></span>
         </div>
         <div #5
-             (click)="onToggleSort('updater')"
+             (click)="onToggleSort('updatedBy')"
              class="clickable"
-             [ngClass]="getClassSortField('updater')">
+             [ngClass]="getClassSortField('updatedBy')">
           Updater <span [ngClass]="getClassDirection()"></span>
         </div>
         <div #6
-             (click)="onToggleSort('updated')"
+             (click)="onToggleSort('updatedAt')"
              class="clickable"
-             [ngClass]="getClassSortField('updated')">
+             [ngClass]="getClassSortField('updatedAt')">
           Updated <span [ngClass]="getClassDirection()"></span>
         </div>
         <div #7
-             (click)="onToggleSort('flag')"
+             (click)="onToggleSort('reviewFlag')"
              class="clickable"
-             [ngClass]="getClassSortField('flag')">
+             [ngClass]="getClassSortField('reviewFlag')">
           Flag <span [ngClass]="getClassDirection()"></span>
         </div>
         <div #8>Actions</div>
       </header>
 
-      <div *ngFor="let scenario of scenarios | paginate: { itemsPerPage: pageSize, currentPage: paginationParams.page };
+      <div *ngFor="let scenario of sortedScenarios | paginate: { itemsPerPage: pageSize, currentPage: paginationParams.page };
               let i = index"
            class="grid">
         <div #1 class="center">
