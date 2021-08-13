@@ -1,18 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-message-alarm',
   templateUrl: './message-alarm.component.html',
   styleUrls: ['./message-alarm.component.scss'],
 })
-export class MessageAlarmComponent {
+export class MessageAlarmComponent implements OnInit {
   currentWidth = 0;
 
-  constructor() {
-    this.onResize();
+  ngOnInit() {
+    window.addEventListener('resize', this.resize, true);
+    setTimeout(() => this.resize());
   }
 
-  onResize() {
+  resize = (): void => {
     this.currentWidth = window.innerWidth;
-  }
+  };
 }

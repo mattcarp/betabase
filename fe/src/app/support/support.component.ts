@@ -16,7 +16,7 @@ export class SupportComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.selectedContacts = [];
-    this.contacts.forEach((item: any) => item.isChecked = false);
+    this.contacts.forEach(({ isChecked }) => isChecked = false);
   }
 
   onSetupConferenceClick(): void {

@@ -226,7 +226,7 @@ export class AppDetailsComponent {
     };
   }
 
-  async onCancelItemOrder(type: string): Promise<void> {
+  onCancelItemOrder(type: string): void {
     const reportData = this.reportData as any;
     const reportDataInitial = this.reportDataInitial as any;
     reportData[type] = reportDataInitial[type];
