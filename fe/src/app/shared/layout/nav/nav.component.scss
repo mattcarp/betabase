@@ -1,9 +1,10 @@
+@import 'variables';
+
 nav {
   .nav-button {
+    position: relative;
     display: flex;
     margin: 0 10px 0 0;
-    position: relative;
-    overflow: visible;
 
     &.active {
       &:after {

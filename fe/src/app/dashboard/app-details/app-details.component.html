@@ -235,14 +235,16 @@
               ─ hiding {{numNewFeaturesChecked}} cases that have passed during this round
             </span>
           </mat-checkbox>
-          <div>
+          <div class="flex">
             <button [disabled]="!draggedItems?.enhancementScenarios"
                     (click)="onSaveItemOrder('enhancementScenarios')"
                     mat-icon-button
                     color="accent">
               <i class="fas fa-save"></i>
             </button>
-            You can reorder this list and save to preserve the new order or cancel reorder
+            <div class="ellipsis">
+              <span>You can reorder this list and save to preserve the new order or cancel reorder</span>
+            </div>
           </div>
         </div>
       </div>
@@ -316,14 +318,16 @@
               ─ hiding {{numPrioritiesChecked}} cases that have passed during this round
             </span>
           </mat-checkbox>
-          <div>
+          <div class="flex">
             <button [disabled]="!draggedItems?.priorityScenarios"
                     (click)="onSaveItemOrder('priorityScenarios')"
                     mat-icon-button
                     color="accent">
               <i class="fas fa-save"></i>
             </button>
-            You can reorder this list and save to preserve the new order or cancel reorder
+            <div class="ellipsis">
+              <span>You can reorder this list and save to preserve the new order or cancel reorder</span>
+            </div>
           </div>
         </div>
       </div>
@@ -397,14 +401,16 @@
               ─ hiding {{numRegressionsChecked}} cases that have passed during this round
             </span>
           </mat-checkbox>
-          <div>
+          <div class="flex">
             <button [disabled]="!draggedItems?.regressionScenarios"
                     (click)="onSaveItemOrder('regressionScenarios')"
                     mat-icon-button
                     color="accent">
               <i class="fas fa-save"></i>
             </button>
-            You can reorder this list and save to preserve the new order or cancel reorder
+            <div class="ellipsis">
+              <span>You can reorder this list and save to preserve the new order or cancel reorder</span>
+            </div>
           </div>
         </div>
       </div>

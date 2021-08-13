@@ -80,18 +80,6 @@ main {
   user-select: none;
   transform: translate(-50%, -50%);
 
-  .logo-sme {
-    display: block;
-    width: 200px;
-    height: 200px;
-    margin: 0 auto;
-    background-image: url('/assets/logos/sme_200-black.png');
-    background-repeat: no-repeat;
-    background-position-x: center;
-    background-position-y: center;
-    background-size: contain;
-  }
-
   &-actions {
     position: relative;
     width: 300px;
@@ -255,5 +243,33 @@ main {
     p {
       font-size: 18px;
     }
+  }
+}
+
+.fun {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 100px;
+  width: 766px;
+
+  &-typing {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    color: black;
+    font-family: 'Dancing Script', cursive;
+    font-size: 60px;
+    animation: type 4s steps(50, end);
+
+    span {
+      color: $color-violet;
+    }
+  }
+}
+
+@keyframes type {
+  from {
+    width: 0;
   }
 }

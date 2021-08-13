@@ -4,9 +4,10 @@ import { RouterModule } from '@angular/router';
 
 import { HeaderModule } from '../header/header.module';
 import { MainComponent } from './main.component';
+import { MessageAlarmComponent } from '../message-alarm/message-alarm.component';
 
 @NgModule({
-  declarations: [MainComponent],
+  declarations: [MainComponent, MessageAlarmComponent],
   imports: [CommonModule, RouterModule, HeaderModule],
   exports: [MainComponent],
 })

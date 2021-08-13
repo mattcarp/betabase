@@ -92,60 +92,69 @@
       transform: none;
     }
 
-    // Button Select
-    &.button-select {
-      margin: 14px 0 0 0;
-
-      .mat-form-field-wrapper {
-        .mat-form-field-flex {
-          padding: 0 10px;
-
-          .mat-form-field-prefix,
-          .mat-form-field-suffix,
-          .mat-select-value,
-          .mat-select-arrow {
-            color: $color-light;
-          }
-
-          .mat-form-field-outline {
-            .mat-form-field-outline-start,
-            .mat-form-field-outline-gap,
-            .mat-form-field-outline-end {
-              border: none;
-            }
-          }
-
-          .mat-form-field-outline-thick {
-            transition: background-color 0.4s ease-out;
-          }
-
-          .mat-form-field-infix {
-            width: 80px;
-          }
-        }
-      }
-
-      &.mat-form-field-should-float .mat-form-field-label,
-      & .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
-        display: none;
-      }
-
-      &.mat-primary:not(.mat-button-disabled) {
-        &:hover {
-          .mat-form-field-wrapper {
-            .mat-form-field-outline-thick {
-              background-color: $color-grey;
-            }
-          }
-        }
-      }
-    }
-
     // Input Component
     &.input {
       .mat-form-field-wrapper {
         margin: 0;
         padding: 0 0 5px;
+      }
+    }
+  }
+
+  // Button Select
+  &.button-select {
+    margin: 14px 10px 0 0;
+
+    .mat-form-field-wrapper {
+      .mat-form-field-flex {
+        padding: 0 10px;
+
+        .mat-form-field-prefix,
+        .mat-form-field-suffix,
+        .mat-select-value,
+        .mat-select-arrow {
+          color: $color-light;
+        }
+
+        .mat-form-field-outline {
+          .mat-form-field-outline-start,
+          .mat-form-field-outline-gap,
+          .mat-form-field-outline-end {
+            border: none;
+          }
+        }
+
+        .mat-form-field-outline-thick {
+          transition: background-color 0.4s ease-out;
+        }
+
+        .mat-form-field-infix {
+          width: 70px;
+        }
+      }
+
+      .mat-form-field-label {
+        @include ellipsis;
+        margin-left: 0;
+
+        mat-label {
+
+        }
+      }
+    }
+
+    &.mat-form-field-should-float .mat-form-field-label,
+    & .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
+      display: none;
+    }
+
+    &.mat-primary:not(.mat-button-disabled) {
+      &:hover {
+        .mat-form-field-wrapper {
+          .mat-form-field-outline-thick {
+            background-color: $color-grey;
+          }
+        }
       }
     }
   }
@@ -284,6 +293,8 @@ textarea {
 .mat-icon-button,
 .mat-flat-button,
 .mat-button {
+  line-height: 28px !important;
+
   &.mat-flat-button,
   &.mat-button {
     overflow: hidden;
@@ -312,12 +323,11 @@ textarea {
     }
 
     .mat-button-wrapper {
+      @include ellipsis;
       display: flex;
       align-items: center;
 
       span {
-        @include ellipsis;
-
         & + .fas {
           margin: 0 0 0 8px;
         }

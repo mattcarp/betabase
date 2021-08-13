@@ -137,7 +137,13 @@
         </div>
         <div #7>{{entity?.browserName}} {{entity?.browserMajor}}{{entity?.browserMinor}}</div>
         <div #8>{{entity?.osName}} {{entity?.osMajor}} {{entity?.osMinor}}</div>
-        <div #9 class="center">{{entity?.ticket | slice:0:10}}</div>
+        <div #9 class="center">
+          <div *ngIf="entity?.ticket?.length">
+            <a href="https://jira.smedigitalapps.com/jira/browse/{{entity?.ticket}}" target="_blank" class="ext">
+              {{entity?.ticket}}
+            </a>
+          </div>
+        </div>
         <div #10 class="center actions">
           <a routerLink="/test/{{app}}/{{entity?.id}}/show" mat-icon-button>
             <i class="fas fa-eye"></i>

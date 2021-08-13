@@ -8,7 +8,7 @@ import data from 'package.json';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  private appTitle = 'Beta Base';
+  private appTitle = 'βetabase';
   private build = '';
 
   constructor(private titleService: Title) {

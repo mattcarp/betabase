@@ -1,6 +1,6 @@
 <div class="auth">
   <div>
-    <div class="logo-sme"></div>
+    <div class="logo-app"></div>
 
     <div class="auth-actions">
       <input #username
@@ -8,17 +8,17 @@
              placeholder="Username"
              value=""
              (focus)="handle2()"
-             class="text inc2" />
+             class="text inc2"/>
 
       <input #password
              type="password"
              placeholder="Password"
              value=""
              (focus)="handle1()"
-             class="pass inc1" />
+             class="pass inc1"/>
 
       <svg xmlns="http://www.w3.org/2000/svg" width="390" height="100">
-        <rect #rect x="0" y="45px" rx="27" ry="27" width="300px" height="50px" class="rect1" />
+        <rect #rect x="0" y="45px" rx="27" ry="27" width="300px" height="50px" class="rect1"/>
       </svg>
     </div>
 
@@ -26,11 +26,10 @@
       <span>Sign In</span>
     </button>
   </div>
-
-  <button (click)="onHelpClick()" class="link help">
-    <i class="fas fa-question-circle pulse"></i>
-    <span>Help</span>
-  </button>
 </div>
 
-<!-- https://freefrontend.com/css-login-forms/ -->
+<div class="fun">
+  <div class="fun-typing">
+    Now with less <span><i>β</i>eta</span> and more <span>base</span>!
+  </div>
+</div>

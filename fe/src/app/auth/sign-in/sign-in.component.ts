@@ -27,6 +27,4 @@ export class SignInComponent {
   onSignInClick(): void {
     this.router.navigate(['/dashboard']);
   }
-
-  onHelpClick(): void {}
 }
