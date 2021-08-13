@@ -1,17 +1,19 @@
+@import 'variables';
+
 nav {
   .nav-button {
-    display: flex;
-    margin: 0 10px 0 0;
     position: relative;
+    display: flex;
     overflow: visible;
+    margin: 0 10px 0 0;
 
     &.active {
       &:after {
         position: absolute;
-        bottom: 8px;
+        bottom: -4px;
         left: 50%;
-        width: 0;
-        height: 0;
+        width: 10px;
+        height: 10px;
         margin-left: -4px;
         content: '▲';
         transform: translate(0, -50%);

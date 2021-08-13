@@ -217,6 +217,10 @@ a {
   }
 }
 
+.flex {
+  display: flex;
+}
+
 .actions-container {
   display: flex;
   margin: 20px 0 0 0;
@@ -253,26 +257,35 @@ a {
   align-items: center;
   width: 100%;
 
-  &-console {
-    font: 600 21px/1 'Helvetica-Bold', Helvetica, Roboto, Arial, sans-serif;
-    text-transform: uppercase;
-  }
-
-  &-name,
-  &-app {
+  .app-logo-name {
+    font: 400 38px/1 'Dancing Script', cursive;
     position: relative;
-    font: 200 21px/1 'Helvetica-Light', Helvetica, Roboto, Arial, sans-serif;
-    white-space: nowrap;
-    text-transform: uppercase;
-    text-overflow: ellipsis;
+    padding-bottom: 14px;
+
+    div {
+      display: inline-block;
+
+      &::first-letter {
+        color: $color-violet;
+        font-size: 42px;
+        font-style: italic;
+      }
+    }
 
     small {
       position: absolute;
-      top: -16px;
+      top: 0;
       right: 0;
-      font-size: 12px;
+      font: 200 12px/1 'Helvetica-Light', Helvetica, Roboto, Arial, sans-serif;
       text-transform: unset;
     }
+  }
+
+  .app-logo-app {
+    font: 200 22px/1 'Helvetica-Light', Helvetica, Roboto, Arial, sans-serif;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
   }
 
   &.light {
@@ -296,6 +309,18 @@ a {
   }
 }
 
+.logo-app {
+  display: block;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  background-image: url('/assets/logos/app-logo.png');
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+  background-size: contain;
+}
+
 // Spinner -- Material design loader
 .spinner {
   position: absolute;
@@ -313,7 +338,7 @@ a {
     height: 60px;
     margin: 0 0 20px;
     animation: rotate 6s infinite;
-    color: $color-darkred;
+    color: $color-violet;
     background-color: transparent;
     mask-image: linear-gradient(transparent 50%, white 50%), linear-gradient(to right, transparent 50%, white 50%);
 

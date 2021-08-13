@@ -21,6 +21,7 @@ import {
 import { getFailCount, getJiras, getRoundNotes, getTestCount } from './models/round';
 import { getDeployment } from './models/deployment';
 import { addTest, getScenarioTests, getTest, getTestCountRange, getTestList } from './models/test';
+import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
 
 const app = express();
 app.use(express.json());
@@ -112,7 +113,8 @@ app.get('/api/scenario/:id', async (request, response) => {
   const id = request.params.id;
   const scenario = await getScenario(id);
   const tests = await getScenarioTests(id);
-  response.json({ scenario, tests });
+  const variations = await getScenarioVariations(request.params.id);
+  response.json({ scenario, tests, variations });
 });
 
 app.get('/api/scenarios/:app', async (request, response) => {
@@ -173,4 +175,17 @@ app.post('/api/scenario/order', async (request, response) => {
     updateScenario(params.id, params);
   });
   response.send(items);
+});
+
+app.post('/api/variation', async (request, response) => {
+  const params = request.body;
+  const model = await addVariation(params);
+  response.json(model);
+});
+
+app.put('/api/variation/:id', async (request, response) => {
+  const id = request.params.id;
+  const params = request.body;
+  const model = await updateVariation(id, params);
+  response.json(model);
 });

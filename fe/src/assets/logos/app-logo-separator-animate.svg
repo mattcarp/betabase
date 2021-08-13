@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="60" viewBox="0 0 71.56 214.69">
-    <path fill="#ed1c24" d="M10.07,95.36V78.65h17V95.36Zm17,21.7v16.71h-17V117.06Z"/>
-    <path fill="#ed1c24" d="M40.23,95.36V78.65h17V95.36Zm17,21.7v16.71h-17V117.06Z"/>
+    <path fill="#a400a4" d="M10.07,95.36V78.65h17V95.36Zm17,21.7v16.71h-17V117.06Z"/>
+    <path fill="#a400a4" d="M40.23,95.36V78.65h17V95.36Zm17,21.7v16.71h-17V117.06Z"/>
     <animate attributeName="visibility" from="visible" to="hidden" dur="1s" repeatCount="indefinite"/>
 </svg>

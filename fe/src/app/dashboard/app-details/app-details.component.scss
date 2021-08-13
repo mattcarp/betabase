@@ -127,3 +127,7 @@
     }
   }
 }
+
+.ellipsis {
+  @include ellipsis;
+}
