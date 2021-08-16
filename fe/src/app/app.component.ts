@@ -16,7 +16,7 @@ export class AppComponent {
 
     const style = [
       'padding: 4px 10px;',
-      'background: linear-gradient(#587887, #57a0bf);',
+      'background: linear-gradient(#a400a5, #611c61);',
       'font: normal 12px/1 Roboto, Helvetica, Arial;',
       'color: #fff;',
       'border-radius: 3px;',
