@@ -19,10 +19,6 @@ nav {
         transform: translate(0, -50%);
         font-size: 13px;
       }
-
-      & + .active:after {
-        content: '';
-      }
     }
   }
 }

@@ -13,6 +13,7 @@
        routerLink="{{getLinkUrl(button.url)}}"
        [disabled]="isDisabled(button.url)"
        [routerLinkActive]="['active']"
+       [routerLinkActiveOptions]="{exact:true}"
        color="primary"
        class="nav-button">
       <i class="fas" [ngClass]="button.icon"></i>
