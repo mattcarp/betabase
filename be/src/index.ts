@@ -1,7 +1,11 @@
 import express from 'express';
 import cors from 'cors';
+import * as bodyParser from 'body-parser';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 import db from './models';
+import config from './config';
 import {
   addScenario,
   getEnhancementCount,
@@ -21,11 +25,15 @@ import {
 import { getFailCount, getJiras, getRoundNotes, getTestCount } from './models/round';
 import { getDeployment } from './models/deployment';
 import { addTest, getScenarioTests, getTest, getTestCountRange, getTestList } from './models/test';
+import { addUser, getUserByUsername, updateUser } from './models/user';
 import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const port = process.env.PORT || 3000;
 
 const establishDbConnection = async () => {
@@ -42,11 +50,29 @@ app.listen(port, async () => {
   await establishDbConnection();
 });
 
+const isTokenValid = (req, res, next) => {
+  const token = req.headers['x-access-token'];
+  if (!token) {
+    return res.status(401).send({ message: 'No token provided!' });
+  }
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: 'Unauthorized!' });
+    }
+    req.userId = decoded.id;
+    next();
+  });
+};
+
+const isAdmin = (req, res, next) => {
+  return res.status(403).send({ message: 'Not enough rights' });
+};
+
 app.get('/', (request, response) => {
   response.send('Hello world!');
 });
 
-app.get('/api/app-list-data', async (request, response) => {
+app.get('/api/app-list-data', [isTokenValid], async (request, response) => {
   const aomaScenarios = await getScenarioCount('AOMA');
   const promoScenarios = await getScenarioCount('Promo');
   const aomaRound = await getRoundNotes('AOMA');
@@ -71,7 +97,7 @@ app.get('/api/app-list-data', async (request, response) => {
   });
 });
 
-app.get('/api/:app/report-data', async (request, response) => {
+app.get('/api/:app/report-data', [isTokenValid], async (request, response) => {
   const app = request.params.app;
   const roundNotes = await getRoundNotes(app);
   const deployment = await getDeployment(app);
@@ -109,7 +135,44 @@ app.get('/api/:app/report-data', async (request, response) => {
   });
 });
 
-app.get('/api/scenario/:id', async (request, response) => {
+app.post('/api/user', [isTokenValid, isAdmin], async (request: any, response, next) => {
+  const params = { ...request.body, password: bcrypt.hashSync(request.body.password, 8) };
+  const model = await addUser(params);
+  response.json(model);
+});
+
+app.put('/api/user/:id', [isTokenValid, isAdmin], async (request: any, response, next) => {
+  const params = request.body;
+  if ('password' in params) {
+    delete params.password;
+  }
+  const model = await updateUser(request.params.id, params);
+  response.json(model);
+});
+
+app.post('/api/auth/signin', async (request: any, response, next) => {
+  const user = await getUserByUsername(request.body.username);
+  if (!user) {
+    return response.status(404).send({ message: 'User Not found.' });
+  }
+  const passwordIsValid = bcrypt.compareSync(request.body.password, user.password);
+  if (!passwordIsValid) {
+    return response.status(401).send({
+      accessToken: null,
+      message: 'Invalid Password!',
+    });
+  }
+  const accessToken = jwt.sign({ id: user.id }, config.secret, { expiresIn: 86400 });
+  response.status(200).send({
+    accessToken,
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    roles: user.roles,
+  });
+});
+
+app.get('/api/scenario/:id', [isTokenValid], async (request, response) => {
   const id = request.params.id;
   const scenario = await getScenario(id);
   const tests = await getScenarioTests(id);
@@ -117,41 +180,41 @@ app.get('/api/scenario/:id', async (request, response) => {
   response.json({ scenario, tests, variations });
 });
 
-app.get('/api/scenarios/:app', async (request, response) => {
+app.get('/api/scenarios/:app', [isTokenValid], async (request, response) => {
   const scenarios = await getScenarioList(request.params.app);
   response.json(scenarios);
 });
 
-app.post('/api/scenario', async (request, response) => {
+app.post('/api/scenario', [isTokenValid], async (request, response) => {
   const params = request.body;
   const model = await addScenario(params);
   response.json(model);
 });
 
-app.put('/api/scenario/:id', async (request, response) => {
+app.put('/api/scenario/:id', [isTokenValid], async (request, response) => {
   const id = request.params.id;
   const params = request.body;
   const result = await updateScenario(id, params);
   response.send(result);
 });
 
-app.post('/api/test', async (request, response) => {
+app.post('/api/test', [isTokenValid], async (request, response) => {
   const params = request.body;
   const model = await addTest(params);
   response.json(model);
 });
 
-app.get('/api/tests/:app', async (request, response) => {
+app.get('/api/tests/:app', [isTokenValid], async (request, response) => {
   const model = await getTestList(request.params.app);
   response.json(model);
 });
 
-app.get('/api/test/:id', async (request, response) => {
+app.get('/api/test/:id', [isTokenValid], async (request, response) => {
   const model = await getTest(request.params.id);
   response.json(model);
 });
 
-app.post('/api/scenario/order', async (request, response) => {
+app.post('/api/scenario/order', [isTokenValid], async (request, response) => {
   const { items, type } = request.body;
   let prop;
   switch (type) {
@@ -177,13 +240,13 @@ app.post('/api/scenario/order', async (request, response) => {
   response.send(items);
 });
 
-app.post('/api/variation', async (request, response) => {
+app.post('/api/variation', [isTokenValid], async (request, response) => {
   const params = request.body;
   const model = await addVariation(params);
   response.json(model);
 });
 
-app.put('/api/variation/:id', async (request, response) => {
+app.put('/api/variation/:id', [isTokenValid], async (request, response) => {
   const id = request.params.id;
   const params = request.body;
   const model = await updateVariation(id, params);

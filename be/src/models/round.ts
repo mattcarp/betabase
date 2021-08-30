@@ -2,7 +2,6 @@ import { DataTypes, QueryTypes } from 'sequelize';
 import moment from 'moment';
 
 import db from './index';
-import * as stream from 'stream';
 
 export const Round = db.sequelize.define('Round', {
   id: {
