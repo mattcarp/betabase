@@ -7,22 +7,24 @@
              type="text"
              placeholder="Username"
              value=""
-             (focus)="handle2()"
-             class="text inc2"/>
+             (focus)="setFocus('rect1')"
+             class="text inc2" />
 
       <input #password
              type="password"
              placeholder="Password"
              value=""
-             (focus)="handle1()"
-             class="pass inc1"/>
+             (focus)="setFocus('rect2')"
+             class="pass inc1" />
 
       <svg xmlns="http://www.w3.org/2000/svg" width="390" height="100">
         <rect #rect x="0" y="45px" rx="27" ry="27" width="300px" height="50px" class="rect1"/>
       </svg>
     </div>
 
-    <button (click)="onSignInClick()" class="submit">
+    <button
+      [disabled]="!username?.value?.length || !password?.value?.length"
+      (click)="onSignInClick(username?.value, password?.value)" class="submit">
       <span>Sign In</span>
     </button>
   </div>
