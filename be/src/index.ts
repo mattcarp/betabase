@@ -169,6 +169,7 @@ app.post('/api/auth/signin', async (request: any, response, next) => {
     username: user.username,
     email: user.email,
     roles: user.roles,
+    jiraUsername: user.jiraUsername,
   });
 });
 
