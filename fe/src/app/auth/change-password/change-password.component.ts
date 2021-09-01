@@ -4,7 +4,6 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { Location } from '@angular/common';
 
 import { AuthService } from '../auth.service';
-import { ConfirmedValidator } from './confirmed.validator';
 
 @Component({
   selector: 'app-change-password',
@@ -49,12 +48,12 @@ export class ChangePasswordComponent {
         rePassword: new FormControl('', Validators.required),
       },
       {
-        validator: ConfirmedValidator('password', 'rePassword'),
+        validator: this.confirmedValidator('password', 'rePassword'),
       },
     );
   }
 
-  get f(): { [key: string]: AbstractControl } {
+  get formControls(): { [key: string]: AbstractControl } {
     return this.form.controls;
   }
 
@@ -84,5 +83,20 @@ export class ChangePasswordComponent {
   onShowRePasswordClick(): void {
     this.showRePass = !this.showRePass;
     this.typeRePass = this.showRePass ? 'text' : 'password';
+  }
+
+  private confirmedValidator(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+      if (matchingControl.errors && !matchingControl.errors.confirmedValidator) {
+        return;
+      }
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({ confirmedValidator: true });
+      } else {
+        matchingControl.setErrors(null);
+      }
+    };
   }
 }

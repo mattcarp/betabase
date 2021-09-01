@@ -71,7 +71,7 @@ export class AuthService {
     if (params?.accessToken?.length) {
       sessionStorage.setItem(this.localStorageKeys.token, params.accessToken);
     }
-    if (params?.id) {
+    if (!!params?.id) {
       const { id, username, email, roles, jiraUsername } = params;
       const userParams = JSON.stringify({ id, username, email, roles, jiraUsername });
       sessionStorage.setItem(this.localStorageKeys.user, userParams);
