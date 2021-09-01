@@ -258,17 +258,17 @@ a {
   width: 100%;
 
   .app-logo-name {
-    font: 400 38px/1 'Dancing Script', cursive;
     position: relative;
     padding-bottom: 14px;
+    font: 400 38px/1 'Dancing Script', cursive;
 
     div {
       display: inline-block;
 
       &::first-letter {
-        color: $color-violet;
         font-size: 42px;
         font-style: italic;
+        color: $color-violet;
       }
     }
 
@@ -284,8 +284,8 @@ a {
   .app-logo-app {
     font: 200 22px/1 'Helvetica-Light', Helvetica, Roboto, Arial, sans-serif;
     white-space: nowrap;
-    text-overflow: ellipsis;
     text-transform: uppercase;
+    text-overflow: ellipsis;
   }
 
   &.light {
@@ -309,10 +309,11 @@ a {
   }
 }
 
-.logo-app {
+.logo {
   display: block;
   width: 200px;
   height: 200px;
+  min-height: 200px;
   margin: 0 auto;
   background-image: url('/assets/logos/app-logo.png');
   background-repeat: no-repeat;
@@ -698,6 +699,45 @@ label {
         max-width: 100%;
         box-shadow: 0 2px 6px 0 rgba($color-black, 0.2);
       }
+    }
+  }
+}
+
+.auth-form {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 400px;
+  height: 440px;
+  min-height: 440px;
+  margin: -100px auto 0;
+  padding: 100px 50px 20px;
+  transition: transform 0.4s;
+  transform: translateY(0px);
+  border-radius: 6px;
+  box-shadow: 1px 2px 4px hsl(0deg 0% 0% / 0.2);
+
+  &:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 2px 4px 16px hsl(0deg 0% 0% / 0.2);
+  }
+
+  & > div {
+    text-align: center;
+
+    h3 {
+      margin: 10px 0 4vh;
+    }
+
+    button {
+      margin-top: 2vh;
+    }
+
+    .mat-form-field:not(:last-of-type) {
+      margin-bottom: 6px;
     }
   }
 }
