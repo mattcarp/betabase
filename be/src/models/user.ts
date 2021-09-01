@@ -1,5 +1,6 @@
-import { DataTypes, QueryTypes } from 'sequelize';
-import moment from 'moment';
+import { DataTypes } from 'sequelize';
+import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer';
 
 import db from './index';
 
@@ -137,9 +138,35 @@ export const User = db.sequelize.define('User', {
   tableName: 'user',
 });
 
+export const sendEmail = async (to: string, text: string) => {
+  const testAccount = await nodemailer.createTestAccount();
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.ethereal.email',
+    port: 587,
+    secure: false,
+    auth: {
+      user: testAccount.user,
+      pass: testAccount.pass,
+    },
+  });
+  const message = await transporter.sendMail({
+    to,
+    text,
+    from: '"The Betabase" <noreply@thebetabase.com>',
+    subject: 'Reset Password',
+    // html: "<b>Hello world?</b>", // html body
+  });
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(message));
+}
+
 export const getUserByUsername = async (emailCanonical: string) => {
-  const model = await User.findOne({ where: { emailCanonical } });
-  return model;
+  const { dataValues } = await User.findOne({ where: { emailCanonical } });
+  return dataValues;
+}
+
+export const getUser = async (id: string | number) => {
+  const { dataValues } = await User.findByPk(id);
+  return dataValues;
 }
 
 export const addUser = async (params) => {
@@ -151,6 +178,20 @@ export const addUser = async (params) => {
 export const updateUser = async (id, params) => {
   const model = await User.update({ ...params }, { where: { id }});
   return model;
+}
+
+export const sendResetPasswordToken = async (id: number, username: string, email: string) => {
+  const params = {
+    passwordRequestedAt: new Date(),
+    confirmationToken: bcrypt.hashSync(`${(new Date()).getMilliseconds()}`, 8),
+  };
+  await updateUser(id, params);
+  const text = 'Hello ' + username + '!\n' +
+    'To reset your password - please visit http://localhost:4200/reset-password?token=' +
+    params.confirmationToken + '\n' +
+    'Regards,\n' +
+    'The Betabase';
+  await sendEmail(email, text);
 }
 
 db.User = User;

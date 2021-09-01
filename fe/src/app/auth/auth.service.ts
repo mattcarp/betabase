@@ -4,31 +4,40 @@ import jwt_decode from 'jwt-decode';
 import { tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
+import { User } from '../shared/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly apiUrl: string;
-  private readonly localStorageKey = 'TOKEN';
+  private readonly localStorageKeys = {
+    token: 'TOKEN',
+    user: 'USER',
+  };
 
   constructor(private http: HttpClient) {
     this.apiUrl = environment.apiUrl;
   }
 
   get token(): string | null {
-    return localStorage.getItem(this.localStorageKey);
+    return sessionStorage.getItem(this.localStorageKeys.token);
   }
 
-  login(username: string, password: string): Promise<any> {
+  get user(): User | null {
+    const userParams = sessionStorage.getItem(this.localStorageKeys.user);
+    return userParams ? JSON.parse(userParams) : null;
+  }
+
+  login(username: string, password: string): Promise<User> {
     const url = `${this.apiUrl}/auth/signin`;
-    return this.http.post<any>(url, { username, password })
-      .pipe(tap(({ accessToken }) => this.setToken(accessToken)))
+    return this.http.post<User>(url, { username, password })
+      .pipe(tap((params: User) => this.setParams(params)))
       .toPromise();
   }
 
   logout(): void {
-    localStorage.setItem(this.localStorageKey, '');
+    sessionStorage.setItem(this.localStorageKeys.token, '');
   }
 
   getTokenExpirationDate(token: string): Date | null {
@@ -47,9 +56,14 @@ export class AuthService {
     return !(date.valueOf() > new Date().valueOf());
   }
 
-  private setToken(token?: string): void {
-    if (token) {
-      localStorage.setItem(this.localStorageKey, token);
+  private setParams(params: User): void {
+    if (params?.accessToken?.length) {
+      sessionStorage.setItem(this.localStorageKeys.token, params.accessToken);
+    }
+    if (!!params?.id) {
+      const { id, username, email, roles, jiraUsername } = params;
+      const userParams = JSON.stringify({ id, username, email, roles, jiraUsername });
+      sessionStorage.setItem(this.localStorageKeys.user, userParams);
     }
   }
 }
