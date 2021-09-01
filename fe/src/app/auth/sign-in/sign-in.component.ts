@@ -1,5 +1,6 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormControl, Validators } from '@angular/forms';
 
 import { AuthService } from '../auth.service';
 
@@ -7,23 +8,23 @@ import { AuthService } from '../auth.service';
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
   styleUrls: ['../auth.component.scss'],
+  host: { '[class.auth-form]': 'true' },
 })
 export class SignInComponent {
-  @ViewChild('username') username: ElementRef<HTMLInputElement> | undefined;
-  @ViewChild('password') password: ElementRef<HTMLInputElement> | undefined;
-  @ViewChild('rect') rect: ElementRef | undefined;
+  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  passwordFormControl = new FormControl('', [Validators.required]);
+  typePass = 'password';
+  showPass = false;
 
-  constructor(private router: Router, private authService: AuthService) {
-    setTimeout(() => this.password?.nativeElement.focus(), 500);
-    setTimeout(() => this.username?.nativeElement.focus(), 1500);
-  }
+  constructor(private router: Router, private authService: AuthService) {}
 
-  setFocus(className: string): void {
-    this.rect?.nativeElement.setAttribute('class', className);
-  }
-
-  async onSignInClick(username: string = '', password: string = ''): Promise<void> {
-    await this.authService.login(username, password);
+  async onSignInClick(email: string = '', password: string = ''): Promise<void> {
+    await this.authService.login(email, password);
     await this.router.navigate(['/dashboard']);
+  }
+
+  showPassword() {
+    this.showPass = !this.showPass;
+    this.typePass = this.showPass ? 'text' : 'password';
   }
 }

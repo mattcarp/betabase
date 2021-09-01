@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthComponent } from './auth/auth.component';
 import { MainComponent } from './shared/layout/main/main.component';
 import { AuthGuard } from './auth/guards/auth.guard';
 
@@ -13,7 +12,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: AuthComponent,
+    component: MainComponent,
     children: [
       {
         path: 'auth',

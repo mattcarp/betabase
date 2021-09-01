@@ -150,7 +150,7 @@ app.put('/api/user/:id', [isTokenValid, isAdmin], async (request: any, response,
   response.json(model);
 });
 
-app.post('/api/auth/signin', async (request: any, response, next) => {
+app.post('/api/auth/sign-in', async (request: any, response, next) => {
   const user = await getUserByUsername(request.body.username);
   if (!user) {
     return response.status(404).send({ message: 'User Not found.' });
