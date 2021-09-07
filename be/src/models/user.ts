@@ -164,6 +164,16 @@ export const getUserByUsername = async (emailCanonical: string) => {
   return dataValues;
 }
 
+export const getUserByToken = async (token: string) => {
+  const confirmationToken = decodeURIComponent(token);
+  try {
+    const { dataValues } = await User.findOne({ where: {confirmationToken }});
+    return dataValues;
+  } catch (e) {
+    return null;
+  }
+}
+
 export const getUser = async (id: string | number) => {
   const { dataValues } = await User.findByPk(id);
   return dataValues;
@@ -181,13 +191,15 @@ export const updateUser = async (id, params) => {
 }
 
 export const sendResetPasswordToken = async (id: number, username: string, email: string) => {
+  const hash = bcrypt.hashSync(`${(new Date()).getMilliseconds()}`, 8);
+  const confirmationToken = hash.substring(8, hash.length);
   const params = {
+    confirmationToken,
     passwordRequestedAt: new Date(),
-    confirmationToken: bcrypt.hashSync(`${(new Date()).getMilliseconds()}`, 8),
   };
   await updateUser(id, params);
   const text = 'Hello ' + username + '!\n' +
-    'To reset your password - please visit http://localhost:4200/reset-password?token=' +
+    'To reset your password - please visit:\nhttp://localhost:4200/auth/reset-password?token=' +
     params.confirmationToken + '\n' +
     'Regards,\n' +
     'The Betabase';

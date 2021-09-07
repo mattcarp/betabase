@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
+import { filter } from 'rxjs/operators';
 
 import { AuthService } from '../auth.service';
 
@@ -12,10 +13,24 @@ import { AuthService } from '../auth.service';
 })
 export class ResetPasswordComponent {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  message = '';
+  token = '';
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private activatedRoute: ActivatedRoute,
+  ) {
+    activatedRoute.queryParams
+      .pipe(filter((params: Params) => 'token' in params))
+      .subscribe(({ token }) => this.token = token);
+  }
 
   async onResetPasswordClick(email: string = ''): Promise<void> {
-    await this.authService.resetPassword(email);
+    this.message = await this.authService.resetPassword(email);
+  }
+
+  async onSetPasswordClick(password: string = ''): Promise<void> {
+    this.message = await this.authService.setPasswordWithToken(password, this.token);
   }
 }

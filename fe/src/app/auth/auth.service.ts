@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   logout(): void {
-    sessionStorage.setItem(this.localStorageKeys.token, '');
+    sessionStorage.removeItem(this.localStorageKeys.token);
   }
 
   getTokenExpirationDate(token: string): Date | null {
@@ -62,9 +62,14 @@ export class AuthService {
     return { currentPassword, newPassword, rePassword };
   }
 
-  resetPassword(email: string): any {
-    // TODO: need to do it
-    return email;
+  resetPassword(email: string): Promise<string> {
+    const url = `${this.apiUrl}/auth/reset-password`;
+    return this.http.post<string>(url, { email }).toPromise();
+  }
+
+  setPasswordWithToken(password: string, token: string): Promise<string> {
+    const url = `${this.apiUrl}/auth/set-password-with-token`;
+    return this.http.post<string>(url, { password, token }).toPromise();
   }
 
   private setParams(params: User): void {
