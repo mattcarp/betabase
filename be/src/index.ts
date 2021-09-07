@@ -25,7 +25,7 @@ import {
 import { getFailCount, getJiras, getRoundNotes, getTestCount } from './models/round';
 import { getDeployment } from './models/deployment';
 import { addTest, getScenarioTests, getTest, getTestCountRange, getTestList } from './models/test';
-import { addUser, sendResetPasswordToken, getUserByUsername, updateUser } from './models/user';
+import { addUser, sendResetPasswordToken, getUserByUsername, updateUser, getUserByToken } from './models/user';
 import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
 
 const app = express();
@@ -175,19 +175,19 @@ app.post('/api/auth/sign-in', async (request: any, response, next) => {
 });
 
 app.post('/api/auth/reset-password', async (request: any, response, next) => {
-  const user = await getUserByUsername(request.body.username);
+  const user = await getUserByUsername(request.body.email);
   if (!user) {
-    return response.status(404).send({ message: 'User Not found.' });
+    return response.status(404).json('User Not found.');
   }
   await sendResetPasswordToken(user.id, user.username, user.emailCanonical);
-  response.json({ message: 'Email has been sent.' });
+  response.status(200).json('Email has been sent.');
 });
 
 app.post('/api/auth/check-token', async (request: any, response, next) => {
   const token = request.body.token;
   const user = await getUserByUsername(request.body.email);
   if (!user) {
-    return response.status(404).send({ message: 'User Not found.' });
+    return response.status(404).json('User Not found.');
   }
   const valid = token === user.confirmationToken;
   response.json({
@@ -196,26 +196,17 @@ app.post('/api/auth/check-token', async (request: any, response, next) => {
   });
 });
 
-app.post('/api/auth/set-password', async (request: any, response, next) => {
+app.post('/api/auth/set-password-with-token', async (request: any, response, next) => {
   const token = request.body.token;
-  const user = await getUserByUsername(request.body.email);
+  const user = await getUserByToken(token);
   if (!user) {
-    return response.status(404).send({ message: 'User Not found.' });
+    return response.status(404).json('Token not found.');
   }
-  const valid = token === user.confirmationToken;
-  if (!valid) {
-    return response.status(401).send({
-      message: 'Token doesn\'t match.',
-    });
-  } else {
-    await updateUser(user.id, {
-      password: bcrypt.hashSync(request.body.password, 8),
-      confirmationToken: '',
-    });
-    return response.status(200).send({
-      message: 'Password has been set.',
-    });
-  }
+  await updateUser(user.id, {
+    password: bcrypt.hashSync(request.body.password, 8),
+    confirmationToken: '',
+  });
+  return response.status(200).json('Password has been set.');
 });
 
 app.get('/api/scenario/:id', [isTokenValid], async (request, response) => {
