@@ -1,0 +1,52 @@
+<section>
+  <ng-container *ngIf="isLoading; else template">
+    <div class="spinner">
+      <div class="spinner-progress"></div>
+      <div class="spinner-info">Loading...</div>
+    </div>
+  </ng-container>
+
+  <ng-template #template>
+    <div class="admin_area"> - Admin Area - </div>
+    <a routerLink="/round/{{app}}/new" class='btn btn-primary pull-right'>Create a New Round</a>
+    <h2>Round List</h2>
+
+    <table class="table-bordered table-striped span12">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Starts</th>
+          <th>Ends</th>
+          <th>Updated</th>
+          <th>Release</th>
+          <th>Current?</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let round of rounds">
+          <td>{{round?.name}}</td>
+          <td>{{(round?.startsAt | date:'Y-m-d') || ''}}</td>
+          <td>{{(round?.endsAt | date : 'Y-m-d') || ''}}</td>
+          <td>{{(round?.updatedAt | date : 'Y-m-d') || ''}}</td>
+          <td>{{round?.releaseNum}}</td>
+          <td><span *ngIf="round?.currentFlag" class="label label-success">Yes</span></td>
+          <td>
+            <ul>
+              <li>
+                <a routerLink="/round/{{app}}/{{round?.id}}/show" mat-icon-button>
+                  <i class="fas fa-eye"></i>
+                </a>
+              </li>
+              <li>
+                <a routerLink="/round/{{app}}/{{round?.id}}/edit" mat-icon-button>
+                  <i class="fas fa-edit"></i>
+                </a>
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-template>
+</section>

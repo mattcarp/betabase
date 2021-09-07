@@ -23,6 +23,17 @@
 
   <app-select-utility></app-select-utility>
 
+  <a mat-flat-button
+     *ngIf="isAdmin"
+     routerLink="{{getLinkUrl('/round/_APP_')}}"
+     [routerLinkActive]="['active']"
+     [routerLinkActiveOptions]="{exact:true}"
+     color="primary"
+     class="nav-button">
+    <i class="fas fa-list-alt"></i>
+    <span>Administer Rounds</span>
+  </a>
+
   <div class="spacer"></div>
 
   <a mat-flat-button

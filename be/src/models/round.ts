@@ -125,4 +125,32 @@ export const getJiras = async (app: string) => {
   return db.snakeCaseToCamelCase(result);
 }
 
+export const getRoundList = async (app: string) => {
+  const rounds = await Round.findAll({
+    attributes: [
+      'id',
+      'name',
+      'startsAt',
+      'endsAt',
+      'updatedAt',
+      'releaseNum',
+      'currentFlag',
+    ],
+    where: { app },
+    order: [
+      ['updatedAt', 'DESC'],
+    ],
+  });
+  return rounds;
+}
+
+export const getRoundById = async (id: string) => {
+  try {
+    const { dataValues } = await Round.findByPk(id);
+    return dataValues;
+  } catch (e) {
+    return null;
+  }
+}
+
 db.Round = Round;

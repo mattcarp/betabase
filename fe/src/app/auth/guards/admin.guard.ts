@@ -13,7 +13,7 @@ export class AdminGuard implements CanActivate {
   ) {}
 
   canActivate(): Observable<boolean> {
-    const isAdmin = false;
+    const isAdmin = this.authService.isAdmin;
     if (!isAdmin) this.location.back();
     return of(isAdmin);
   }

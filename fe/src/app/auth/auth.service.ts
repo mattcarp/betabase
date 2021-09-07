@@ -29,6 +29,10 @@ export class AuthService {
     return userParams ? JSON.parse(userParams) : null;
   }
 
+  get isAdmin(): boolean {
+    return true;
+  }
+
   login(username: string, password: string): Promise<User> {
     const url = `${this.apiUrl}/auth/sign-in`;
     return this.http

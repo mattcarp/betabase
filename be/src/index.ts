@@ -22,7 +22,7 @@ import {
   getScenarioList,
   updateScenario,
 } from './models/scenario';
-import { getFailCount, getJiras, getRoundNotes, getTestCount } from './models/round';
+import { getFailCount, getJiras, getRoundById, getRoundList, getRoundNotes, getTestCount } from './models/round';
 import { getDeployment } from './models/deployment';
 import { addTest, getScenarioTests, getTest, getTestCountRange, getTestList } from './models/test';
 import { addUser, sendResetPasswordToken, getUserByUsername, updateUser, getUserByToken } from './models/user';
@@ -288,4 +288,19 @@ app.put('/api/variation/:id', [isTokenValid], async (request, response) => {
   const params = request.body;
   const model = await updateVariation(id, params);
   response.json(model);
+});
+
+app.get('/api/rounds/:app', [isTokenValid], async (request, response) => {
+  const rounds = await getRoundList(request.params.app);
+  response.json(rounds);
+});
+
+app.get('/api/round/:id', [isTokenValid], async (request, response) => {
+  const round = await getRoundById(request.params.id);
+  response.json(round);
+});
+
+app.delete('/api/round/:id', [isTokenValid], async (request, response) => {
+  // todo
+  response.json('round');
 });
