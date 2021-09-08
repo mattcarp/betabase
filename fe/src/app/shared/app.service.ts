@@ -88,4 +88,19 @@ export class AppService {
     const url = `${this.apiUrl}/round/${id}`;
     return this.http.delete<string>(url).toPromise();
   }
+
+  addRound(round: RoundItem): Promise<RoundItem> {
+    const url = `${this.apiUrl}/round`;
+    return this.http.post<RoundItem>(url, round).toPromise();
+  }
+
+  updateRound(round: RoundItem): Promise<RoundItem> {
+    const url = `${this.apiUrl}/round/${round.id}`;
+    return this.http.put<RoundItem>(url, round).toPromise();
+  }
+
+  deleteScenario(id: number | null = null): Promise<string> {
+    const url = `${this.apiUrl}/scenario/${id}`;
+    return this.http.delete<string>(url).toPromise();
+  }
 }

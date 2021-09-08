@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   get isAdmin(): boolean {
-    return true;
+    return !!(this.user?.roles || '').split(',').find((role: string) => role === 'ROLE_ADMIN');
   }
 
   login(username: string, password: string): Promise<User> {

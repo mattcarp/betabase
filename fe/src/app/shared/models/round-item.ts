@@ -1,6 +1,6 @@
 export interface RoundItem {
   id?: number;
-  currentFlag?: boolean;
+  currentFlag?: number;
   app?: string;
   notes?: string;
   clientNotes?: string;

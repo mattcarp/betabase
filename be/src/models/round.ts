@@ -153,4 +153,28 @@ export const getRoundById = async (id: string) => {
   }
 }
 
+export const addRound = async (params) => {
+  const model = await Round.create(params);
+  await model.save();
+  return model;
+}
+
+export const updateRound = async (id, params) => {
+  try {
+    await Round.update({ ...params }, { where: { id }});
+    return id;
+  } catch (e) {
+    return e;
+  }
+}
+
+export const deleteRound = async (id: string) => {
+  try {
+    await Round.destroy({ where: { id }});
+    return `Round ${id} has been successfully deleted`;
+  } catch (e) {
+    return e;
+  }
+}
+
 db.Round = Round;

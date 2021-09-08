@@ -16,6 +16,10 @@
         <i class="fas fa-edit"></i>
         <span>Edit maser case</span>
       </button>
+      <button *ngIf="isAdmin" mat-flat-button (click)="onDeleteClick()" color="primary">
+        <i class="fas fa-trash"></i>
+        <span>Delete maser case</span>
+      </button>
     </div>
 
     <div *ngIf="scenario?.coverage === 'Archived'" class="alert-error">

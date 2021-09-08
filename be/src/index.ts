@@ -8,6 +8,7 @@ import db from './models';
 import config from './config';
 import {
   addScenario,
+  deleteScenario,
   getEnhancementCount,
   getEnhancementScenarios,
   getFlaggedCount,
@@ -22,10 +23,20 @@ import {
   getScenarioList,
   updateScenario,
 } from './models/scenario';
-import { getFailCount, getJiras, getRoundById, getRoundList, getRoundNotes, getTestCount } from './models/round';
+import {
+  addRound,
+  deleteRound,
+  getFailCount,
+  getJiras,
+  getRoundById,
+  getRoundList,
+  getRoundNotes,
+  getTestCount,
+  updateRound,
+} from './models/round';
 import { getDeployment } from './models/deployment';
 import { addTest, getScenarioTests, getTest, getTestCountRange, getTestList } from './models/test';
-import { addUser, sendResetPasswordToken, getUserByUsername, updateUser, getUserByToken } from './models/user';
+import { addUser, sendResetPasswordToken, getUserByUsername, updateUser, getUserByToken, getUser } from './models/user';
 import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
 
 const app = express();
@@ -64,8 +75,13 @@ const isTokenValid = (req, res, next) => {
   });
 };
 
-const isAdmin = (req, res, next) => {
-  return res.status(403).send({ message: 'Not enough rights' });
+const isAdmin = async (req, res, next) => {
+  const user = await getUser(req.userId);
+  const isAdmin = !!(user?.roles || '').split(',').find((role: string) => role === 'ROLE_ADMIN');
+  if (!user || !isAdmin) {
+    return res.status(403).send({ message: 'Not enough rights' });
+  }
+  next();
 };
 
 app.get('/', (request, response) => {
@@ -235,6 +251,12 @@ app.put('/api/scenario/:id', [isTokenValid], async (request, response) => {
   response.send(result);
 });
 
+app.delete('/api/scenario/:id', [isTokenValid, isAdmin], async (request, response) => {
+  const id = request.params.id;
+  const result = await deleteScenario(id);
+  response.json(result);
+});
+
 app.post('/api/test', [isTokenValid], async (request, response) => {
   const params = request.body;
   const model = await addTest(params);
@@ -290,17 +312,29 @@ app.put('/api/variation/:id', [isTokenValid], async (request, response) => {
   response.json(model);
 });
 
-app.get('/api/rounds/:app', [isTokenValid], async (request, response) => {
+app.get('/api/rounds/:app', [isTokenValid, isAdmin], async (request, response) => {
   const rounds = await getRoundList(request.params.app);
   response.json(rounds);
 });
 
-app.get('/api/round/:id', [isTokenValid], async (request, response) => {
+app.get('/api/round/:id', [isTokenValid, isAdmin], async (request, response) => {
   const round = await getRoundById(request.params.id);
   response.json(round);
 });
 
-app.delete('/api/round/:id', [isTokenValid], async (request, response) => {
-  // todo
-  response.json('round');
+app.delete('/api/round/:id', [isTokenValid, isAdmin], async (request, response) => {
+  const status = await deleteRound(request.params.id);
+  response.json(status);
+});
+
+app.post('/api/round', [isTokenValid, isAdmin], async (request, response) => {
+  const model = await addRound(request.body);
+  response.json(model);
+});
+
+app.put('/api/round/:id', [isTokenValid, isAdmin], async (request, response) => {
+  const id = request.params.id;
+  const params = request.body;
+  const model = await updateRound(id, params);
+  response.json(model);
 });
