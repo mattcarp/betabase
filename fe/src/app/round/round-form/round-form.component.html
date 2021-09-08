@@ -1,0 +1,68 @@
+<div>
+  <div class="admin_area"> - Admin Area - </div>
+  <ng-container *ngIf="!round?.id; else existingRound">
+    <h1>Round creation <small>(to use the fancy editor on the round notes, save this and then edit it)</small></h1>
+  </ng-container>
+  <ng-template #existingRound>
+    <h1>Edit Testing Round</h1>
+    <h3>Note that the 'Release num' field must match the JIRA 'Fix Version' exactly!</h3>
+  </ng-template>
+
+  <div *ngIf="round">
+    <div class="row">
+      <label>Tester Notes</label>
+      <angular-editor [(ngModel)]="round.notes" [config]="config"></angular-editor>
+    </div>
+
+    <div>App</div>
+    <mat-form-field class="full-width">
+      <input matInput [(ngModel)]="round.app" type="text">
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field class="full-width textarea">
+        <mat-label>Client notes</mat-label>
+        <textarea matInput [(ngModel)]="round.clientNotes"></textarea>
+      </mat-form-field>
+    </div>
+
+    <div>Name</div>
+    <mat-form-field class="full-width">
+      <input matInput [(ngModel)]="round.name" type="text">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput  [value]="round?.startsAt" [ngxMatDatetimePicker]="startsAt" placeholder="startsAt" (dateChange)="onDateChange('startsAt', $event)">
+      <mat-datepicker-toggle matSuffix [for]="$any(startsAt)"></mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #startsAt [showSpinners]="true" [showSeconds]="false" [enableMeridian]="true" [stepHour]="1" [stepMinute]="1" [stepSecond]="1"></ngx-mat-datetime-picker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput  [value]="round?.endsAt" [ngxMatDatetimePicker]="endsAt" placeholder="endsAt" (dateChange)="onDateChange('endsAt', $event)">
+      <mat-datepicker-toggle matSuffix [for]="$any(endsAt)"></mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #endsAt [showSpinners]="true" [showSeconds]="false" [enableMeridian]="true" [stepHour]="1" [stepMinute]="1" [stepSecond]="1"></ngx-mat-datetime-picker>
+    </mat-form-field>
+
+    <div>Release num</div>
+    <mat-form-field class="full-width">
+      <input matInput [(ngModel)]="round.releaseNum" type="text">
+    </mat-form-field>
+
+    <div class="row">
+      <mat-slide-toggle
+        [ngModel]="round.currentFlag"
+        (ngModelChange)="onCheckboxChange($event)">
+        <span>Security</span>
+      </mat-slide-toggle>
+    </div>
+  </div>
+  <div class="well">
+    <button (click)="onSaveClick()">
+      <ng-container *ngIf="!round?.id">Create</ng-container>
+      <ng-container *ngIf="round?.id">Save Edits</ng-container>
+    </button>
+
+    <button *ngIf="round?.id" (click)="onDeleteClick()">Delete</button>
+  </div>
+</div>
+

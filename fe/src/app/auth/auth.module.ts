@@ -12,6 +12,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { AdminGuard } from './guards/admin.guard';
 
 @NgModule({
   declarations: [AuthComponent, SignInComponent, ResetPasswordComponent, ChangePasswordComponent],
@@ -25,6 +26,6 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     AuthRoutingModule,
     HeaderModule,
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, AdminGuard],
 })
 export class AuthModule {}

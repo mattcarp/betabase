@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { MainComponent } from './shared/layout/main/main.component';
 import { AuthGuard } from './auth/guards/auth.guard';
+import { AdminGuard } from './auth/guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -37,6 +38,12 @@ const routes: Routes = [
     component: MainComponent,
     canActivate: [AuthGuard],
     loadChildren: () => import('./test/test.module').then((m) => m.TestModule),
+  },
+  {
+    path: 'round',
+    component: MainComponent,
+    canActivate: [AuthGuard, AdminGuard],
+    loadChildren: () => import('./round/round.module').then((m) => m.RoundModule),
   },
   // From Nav navigation:
   {

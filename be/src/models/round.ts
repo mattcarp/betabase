@@ -125,4 +125,56 @@ export const getJiras = async (app: string) => {
   return db.snakeCaseToCamelCase(result);
 }
 
+export const getRoundList = async (app: string) => {
+  const rounds = await Round.findAll({
+    attributes: [
+      'id',
+      'name',
+      'startsAt',
+      'endsAt',
+      'updatedAt',
+      'releaseNum',
+      'currentFlag',
+    ],
+    where: { app },
+    order: [
+      ['updatedAt', 'DESC'],
+    ],
+  });
+  return rounds;
+}
+
+export const getRoundById = async (id: string) => {
+  try {
+    const { dataValues } = await Round.findByPk(id);
+    return dataValues;
+  } catch (e) {
+    return null;
+  }
+}
+
+export const addRound = async (params) => {
+  const model = await Round.create(params);
+  await model.save();
+  return model;
+}
+
+export const updateRound = async (id, params) => {
+  try {
+    await Round.update({ ...params }, { where: { id }});
+    return id;
+  } catch (e) {
+    return e;
+  }
+}
+
+export const deleteRound = async (id: string) => {
+  try {
+    await Round.destroy({ where: { id }});
+    return `Round ${id} has been successfully deleted`;
+  } catch (e) {
+    return e;
+  }
+}
+
 db.Round = Round;

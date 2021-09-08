@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { filter, pluck } from 'rxjs/operators';
 
 import { NavConstants } from './nav.constant';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-nav',
@@ -18,7 +19,11 @@ export class NavComponent {
 
   private app: string | null = null;
 
-  constructor(private location: Location, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private location: Location,
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService,
+  ) {
     activatedRoute.params
       .pipe(
         filter((params: Params) => 'app' in params),
@@ -29,18 +34,21 @@ export class NavComponent {
       });
   }
 
+  get isAdmin(): boolean {
+    return this.authService.isAdmin;
+  }
+
   getLinkUrl(url: string): string {
     return url.replace('_APP_', `${this.app}`);
   }
 
   isDisabled(url: string): boolean {
     return (
-      (url === '/dashboard/_APP_/show' ||
-        url === '/scenario/_APP_' ||
-        url === '/scenario/_APP_/new' ||
-        url === '/test/_APP_') &&
-      !this.app
-    );
+      (url === '/dashboard/_APP_/show'
+        || url === '/scenario/_APP_'
+        || url === '/scenario/_APP_/new'
+        || url === '/test/_APP_')
+      && !this.app);
   }
 
   onBackClick(): void {

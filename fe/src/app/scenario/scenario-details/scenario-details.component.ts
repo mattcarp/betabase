@@ -4,6 +4,7 @@ import { filter, pluck } from 'rxjs/operators';
 
 import { AppService } from '../../shared/app.service';
 import { PaginationParams, ScenarioItem, TestItem, VariationItem } from '../../shared/models';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-scenario-details',
@@ -27,13 +28,22 @@ export class ScenarioDetailsComponent {
     sortDirection: 'DESC',
   };
 
-  constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) {
+  constructor(
+    private appService: AppService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService,
+  ) {
     activatedRoute.params
       .pipe(
         filter((params: Params) => 'id' in params),
         pluck('id'),
       )
       .subscribe((id: string) => this.fetchData(id));
+  }
+
+  get isAdmin(): boolean {
+    return this.authService.isAdmin;
   }
 
   onEditMaserCaseClick(appTest: string | undefined, scenarioId: number | undefined): void {
@@ -84,6 +94,11 @@ export class ScenarioDetailsComponent {
   async onUpdateVariationClick(variation: VariationItem): Promise<void> {
     await this.appService.updateVariation(variation);
     this.isShowInput = !this.isShowInput;
+  }
+
+  async onDeleteClick(): Promise<void> {
+    await this.appService.deleteScenario(this.scenario?.id);
+    await this.router.navigate([`/scenario/${this.scenario?.appUnderTest}`]);
   }
 
   private async fetchData(id: string): Promise<void> {

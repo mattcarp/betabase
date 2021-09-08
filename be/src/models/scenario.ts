@@ -277,4 +277,13 @@ export const updateScenario = async (id, params) => {
   return id;
 }
 
+export const deleteScenario = async (id: string) => {
+  try {
+    await Scenario.destroy({ where: { id }});
+    return `Scenario ${id} has been successfully deleted`;
+  } catch (e) {
+    return e;
+  }
+}
+
 db.Scenario = Scenario;

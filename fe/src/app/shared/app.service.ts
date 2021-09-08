@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
-import { AppListData, ReportData, ScenarioItem, TestItem, VariationItem } from './models';
+import { AppListData, ReportData, RoundItem, ScenarioItem, TestItem, VariationItem } from './models';
 
 @Injectable({
   providedIn: 'root',
@@ -72,5 +72,35 @@ export class AppService {
   updateVariation(variation: VariationItem): Promise<VariationItem> {
     const url = `${this.apiUrl}/variation/${variation.id}`;
     return this.http.put<VariationItem>(url, variation).toPromise();
+  }
+
+  getAllRounds(app: string): Promise<RoundItem[]> {
+    const url = `${this.apiUrl}/rounds/${app}`;
+    return this.http.get<RoundItem[]>(url).toPromise();
+  }
+
+  getRound(id: string): Promise<RoundItem> {
+    const url = `${this.apiUrl}/round/${id}`;
+    return this.http.get<RoundItem>(url).toPromise();
+  }
+
+  deleteRound(id: number | null = null): Promise<string> {
+    const url = `${this.apiUrl}/round/${id}`;
+    return this.http.delete<string>(url).toPromise();
+  }
+
+  addRound(round: RoundItem): Promise<RoundItem> {
+    const url = `${this.apiUrl}/round`;
+    return this.http.post<RoundItem>(url, round).toPromise();
+  }
+
+  updateRound(round: RoundItem): Promise<RoundItem> {
+    const url = `${this.apiUrl}/round/${round.id}`;
+    return this.http.put<RoundItem>(url, round).toPromise();
+  }
+
+  deleteScenario(id: number | null = null): Promise<string> {
+    const url = `${this.apiUrl}/scenario/${id}`;
+    return this.http.delete<string>(url).toPromise();
   }
 }
