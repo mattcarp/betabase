@@ -12,3 +12,17 @@ TODO (matt) figure out deployment of back dev/stage (will probably just use hero
 TODO (matt) write a few cypress tests
 
 TODO integrated gihtub actions for stage deployment, run cypress on MR/deploy etc
+
+## Running in the Docker
+
+Build docker container run:
+
+`./docker/build.sh`
+
+Run docker container:
+
+`./docker/run.sh`
+
+Remove docker container:
+
+`./docker/remove.sh`

@@ -3,6 +3,7 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import path from 'path';
 
 import db from './models';
 import config from './config';
@@ -83,10 +84,6 @@ const isAdmin = async (req, res, next) => {
   }
   next();
 };
-
-app.get('/', (request, response) => {
-  response.send('Hello world!');
-});
 
 app.get('/api/app-list-data', [isTokenValid], async (request, response) => {
   const aomaScenarios = await getScenarioCount('AOMA');
@@ -337,4 +334,15 @@ app.put('/api/round/:id', [isTokenValid, isAdmin], async (request, response) => 
   const params = request.body;
   const model = await updateRound(id, params);
   response.json(model);
+});
+
+// static files
+app.get('*.*', express.static(path.join(__dirname, './thebetabase3/')));
+// main route (angular app)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, './thebetabase3/index.html'));
+});
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, './thebetabase3/index.html'));
 });
