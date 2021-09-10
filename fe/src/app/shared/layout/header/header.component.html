@@ -7,7 +7,10 @@
       </figcaption>
       <ng-container *ngIf="app">
         <img src="/assets/logos/app-logo-separator-animate.svg" alt="separator">
-        <figcaption class="app-logo-app">{{app}} Testing</figcaption>
+        <figcaption class="app-logo-app">{{app}}
+          <span *ngIf="!isAdmin">Testing</span>
+          <span *ngIf="isAdmin" class="red">Admin</span>
+        </figcaption>
       </ng-container>
     </figure>
   </a>

@@ -1,4 +1,7 @@
+<app-nav [isBackActive]="true"></app-nav>
+
 <section>
+
   <ng-container *ngIf="isLoading; else template">
     <div class="spinner">
       <div class="spinner-progress"></div>
@@ -7,46 +10,47 @@
   </ng-container>
 
   <ng-template #template>
-    <div class="admin_area"> - Admin Area - </div>
-    <a routerLink="/round/{{app}}/new" class='btn btn-primary pull-right'>Create a New Round</a>
-    <h2>Round List</h2>
+    <div class="header-flex">
+      <h2>
+        Round List
+        <span matBadge="{{rounds?.length}}" matBadgeOverlap="false" matBadgeColor="accent"></span>
+      </h2>
+      <div class="spacer"></div>
+      <button routerLink="/round/{{app}}/new" mat-flat-button color="warn">
+        <i class="fas fa-plus-circle"></i>
+        <span>Create a New Round</span>
+      </button>
+    </div>
 
-    <table class="table-bordered table-striped span12">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Starts</th>
-          <th>Ends</th>
-          <th>Updated</th>
-          <th>Release</th>
-          <th>Current?</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let round of rounds">
-          <td>{{round?.name}}</td>
-          <td>{{(round?.startsAt | date:'Y-m-d') || ''}}</td>
-          <td>{{(round?.endsAt | date : 'Y-m-d') || ''}}</td>
-          <td>{{(round?.updatedAt | date : 'Y-m-d') || ''}}</td>
-          <td>{{round?.releaseNum}}</td>
-          <td><span *ngIf="round?.currentFlag" class="label label-success">Yes</span></td>
-          <td>
-            <ul>
-              <li>
-                <a routerLink="/round/{{app}}/{{round?.id}}/show" mat-icon-button>
-                  <i class="fas fa-eye"></i>
-                </a>
-              </li>
-              <li>
-                <a routerLink="/round/{{app}}/{{round?.id}}/edit" mat-icon-button>
-                  <i class="fas fa-edit"></i>
-                </a>
-              </li>
-            </ul>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="grid-container">
+      <header class="grid">
+        <div>Name</div>
+        <div>Starts</div>
+        <div>Ends</div>
+        <div>Updated</div>
+        <div>Release</div>
+        <div>Current?</div>
+        <div>Actions</div>
+      </header>
+
+      <div *ngFor="let round of rounds" class="grid">
+        <div>{{round?.name}}</div>
+        <div>{{(round?.startsAt | date: 'Y-m-d H:m:s') || ''}}</div>
+        <div>{{(round?.endsAt | date: 'Y-m-d H:m:s') || ''}}</div>
+        <div>{{(round?.updatedAt | date: 'Y-m-d H:m:s') || ''}}</div>
+        <div>{{round?.releaseNum}}</div>
+        <div class="center">
+          <label *ngIf="round?.currentFlag" class="label-info">Yes</label>
+        </div>
+        <div class="center actions">
+          <a routerLink="/round/{{app}}/{{round?.id}}/show" mat-icon-button>
+            <i class="fas fa-eye"></i>
+          </a>
+          <a routerLink="/round/{{app}}/{{round?.id}}/edit" mat-icon-button>
+            <i class="fas fa-edit"></i>
+          </a>
+        </div>
+      </div>
+    </div>
   </ng-template>
 </section>

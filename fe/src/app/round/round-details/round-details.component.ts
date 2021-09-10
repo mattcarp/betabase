@@ -9,6 +9,7 @@ import { RoundItem } from '../../shared/models';
   selector: 'app-round-details',
   templateUrl: './round-details.component.html',
   styleUrls: ['./round-details.component.scss'],
+  host: { '[class.page]': 'true' },
 })
 export class RoundDetailsComponent {
   round: RoundItem | null = null;
