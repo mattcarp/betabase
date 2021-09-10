@@ -1,54 +1,72 @@
-<div class="admin_area"> - Admin Area - </div>
+<app-nav [isBackActive]="true"></app-nav>
 
-<table class="table table-striped">
-  <tbody>
-    <tr>
-      <th>Round ID</th>
-      <td>{{round?.id}}</td>
-    </tr>
-    <tr>
-      <th>App</th>
-      <td>{{round?.app}}</td>
-    </tr>
-    <tr>
-      <th>Notes</th>
-      <td>{{round?.notes}}</td>
-    </tr>
-    <tr>
-      <th>Client Notes</th>
-      <td>{{round?.clientNotes}}</td>
-    </tr>
-    <tr>
-      <th>Name</th>
-      <td>{{round?.name}}</td>
-    </tr>
-    <tr>
-      <th>Starts_at</th>
-      <td>{{round?.startsAt | date : 'Y-m-d H:i:s'}}</td>
-    </tr>
-    <tr>
-      <th>Ends_at</th>
-      <td>{{round?.endsAt | date : 'Y-m-d H:i:s'}}</td>
-    </tr>
-    <tr>
-      <th>Created</th>
-      <td>{{round?.createdAt | date : 'Y-m-d H:i:s'}}</td>
-    </tr>
-    <tr>
-      <th>Updated</th>
-      <td>{{round?.updatedAt | date : 'Y-m-d H:i:s'}}</td>
-    </tr>
-    <tr>
-      <th>Release Number</th>
-      <td>{{round?.releaseNum}}</td>
-    </tr>
-  </tbody>
-</table>
+<section>
+  <ng-container *ngIf="!round; else template">
+    <div class="spinner">
+      <div class="spinner-progress"></div>
+      <div class="spinner-info">Loading...</div>
+    </div>
+  </ng-container>
 
-<div class="well">
-  <a routerLink="/round/{{round?.app}}">Back to the list</a>
+  <ng-template #template>
+    <h2>Round</h2>
 
-  <a routerLink="/round/{{round?.app}}/{{round?.id}}/edit">Edit</a>
+    <div class="grid-container">
+      <div class="grid two-columns">
+        <div>Round ID</div>
+        <div>{{round?.id}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>App</div>
+        <div>{{round?.app}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Notes</div>
+        <div>{{round?.notes}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Client Notes</div>
+        <div>{{round?.clientNotes}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Name</div>
+        <div>{{round?.name}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Starts_at</div>
+        <div>{{round?.startsAt | date: 'Y-m-d H:m:s'}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Ends_at</div>
+        <div>{{round?.endsAt | date: 'Y-m-d H:m:s'}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Created</div>
+        <div>{{round?.createdAt | date: 'Y-m-d H:m:s'}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Updated</div>
+        <div>{{round?.updatedAt | date: 'Y-m-d H:m:s'}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Release Number</div>
+        <div>{{round?.releaseNum}}</div>
+      </div>
+    </div>
 
-  <button (click)="onDeleteClick()" class="btn btn-danger">Delete</button>
-</div>
+    <div class="actions-container">
+      <a mat-flat-button routerLink="/round/{{round?.app}}/{{round?.id}}/edit"
+         color="primary"
+         class="actions-button">
+        <i class="fas fa-edit"></i>
+        <span>Edit</span>
+      </a>
+
+      <button (click)="onDeleteClick()" mat-flat-button color="warn" class="actions-button">
+        <i class="fas fa-ban"></i>
+        <span>Delete</span>
+      </button>
+    </div>
+
+  </ng-template>
+</section>

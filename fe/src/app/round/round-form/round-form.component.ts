@@ -10,6 +10,7 @@ import { AppService } from '../../shared/app.service';
   selector: 'app-round-form',
   templateUrl: './round-form.component.html',
   styleUrls: ['./round-form.component.scss'],
+  host: { '[class.page]': 'true' },
 })
 export class RoundFormComponent {
   round: RoundItem | null = null;
@@ -43,7 +44,8 @@ export class RoundFormComponent {
 
   constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) {
     activatedRoute.params
-      .pipe(tap(() => this.round = {}),
+      .pipe(
+        tap(() => (this.round = {})),
         filter((params: Params) => 'id' in params),
         pluck('id'),
       )

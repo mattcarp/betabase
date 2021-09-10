@@ -44,9 +44,9 @@
           }
 
           .mat-input-element {
+            -webkit-text-fill-color: $color-black;
             // Hack -- input:-webkit-autofill
             -webkit-box-shadow: inset 0 0 0 50px $color-white;
-            -webkit-text-fill-color: $color-black;
           }
         }
       }
@@ -62,9 +62,9 @@
       top: 0.1em;
 
       .mat-icon-button {
-        margin: 0 -0.75em 0 0;
         width: 2.2em !important;
         height: 1.8em !important;
+        margin: 0 -0.75em 0 0;
       }
     }
 
@@ -144,10 +144,6 @@
       .mat-form-field-label {
         @include ellipsis;
         margin-left: 0;
-
-        mat-label {
-
-        }
       }
     }
 
@@ -282,7 +278,7 @@
         }
 
         .mat-form-field-suffix {
-          top: 0.25em;
+          top: 0.4em;
         }
       }
     }
@@ -331,11 +327,13 @@ textarea {
     }
 
     .mat-button-wrapper {
-      @include ellipsis;
       display: flex;
+      overflow: hidden;
       align-items: center;
 
       span {
+        @include ellipsis;
+
         & + .fas {
           margin: 0 0 0 8px;
         }
@@ -600,11 +598,11 @@ textarea {
 .mat-badge-medium {
   &.mat-badge-after {
     .mat-badge-content {
-      width: auto;
-      border-radius: 11px;
-      padding: 0 4px;
       right: unset;
+      width: auto;
       min-width: 22px;
+      padding: 0 4px;
+      border-radius: 11px;
     }
   }
 }
@@ -620,4 +618,11 @@ textarea {
 
 .mat-error {
   color: $color-darkred;
+}
+
+// NGX Material Timepicker
+.ngx-mat-timepicker form .ngx-mat-timepicker-table .ngx-mat-timepicker-tbody tr td.ngx-mat-timepicker-meridian .mat-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

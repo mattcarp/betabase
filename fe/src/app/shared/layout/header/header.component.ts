@@ -26,6 +26,10 @@ export class HeaderComponent {
     return this.router.url.split('/')?.[2] || '';
   }
 
+  get isAdmin(): boolean {
+    return this.router.url.includes('round');
+  }
+
   get isLoggedIn(): boolean {
     return !!this.authService.token?.length;
   }
