@@ -8,7 +8,8 @@ import { RoundItem } from '../../shared/models';
 @Component({
   selector: 'app-round-list',
   templateUrl: './round-list.component.html',
-  styleUrls: ['./round-list.component.scss']
+  styleUrls: ['./round-list.component.scss'],
+  host: { '[class.page]': 'true' },
 })
 export class RoundListComponent {
   app: string | null = null;

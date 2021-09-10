@@ -51,7 +51,7 @@
         </div>
         <div class="grid two-columns">
           <div>Created</div>
-          <div>{{scenario?.createdAt | date }}</div>
+          <div>{{scenario?.createdAt | date: 'Y-m-d H:m:s' }}</div>
         </div>
         <div class="grid two-columns">
           <div>Updated By</div>
@@ -59,7 +59,7 @@
         </div>
         <div class="grid two-columns">
           <div>Updated</div>
-          <div>{{scenario?.updatedAt | date }}</div>
+          <div>{{scenario?.updatedAt | date: 'Y-m-d H:m:s' }}</div>
         </div>
         <div class="grid two-columns">
           <div>Flagged for Review</div>
@@ -78,15 +78,15 @@
       <div class="grid-container">
         <div class="grid two-columns test">
           <div>Created</div>
-          <div>{{test?.createdAt | date}} <span class="grey">by {{test?.createdBy}}</span></div>
+          <div>{{test?.createdAt | date: 'Y-m-d H:m:s'}} <span class="grey">by {{test?.createdBy}}</span></div>
         </div>
         <div class="grid two-columns test">
           <div>Updated</div>
-          <div>{{test.updatedAt | date}} <span class="grey">by {{test?.updatedBy}}</span></div>
+          <div>{{test.updatedAt | date: 'Y-m-d H:m:s'}} <span class="grey">by {{test?.updatedBy}}</span></div>
         </div>
         <div class="grid two-columns test">
           <div>Date of Deployment Tested</div>
-          <div>{{(test?.deploymentStamp | date) || 'None'}}</div>
+          <div>{{(test?.deploymentStamp | date: 'Y-m-d H:m:s') || 'None'}}</div>
         </div>
         <div class="grid two-columns test">
           <div>Comments</div>

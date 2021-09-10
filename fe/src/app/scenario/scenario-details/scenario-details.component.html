@@ -14,11 +14,11 @@
       <div class="spacer"></div>
       <button mat-flat-button (click)="onEditMaserCaseClick(scenario?.appUnderTest, scenario?.id)" color="primary">
         <i class="fas fa-edit"></i>
-        <span>Edit maser case</span>
+        <span>Edit Maser Case</span>
       </button>
-      <button *ngIf="isAdmin" mat-flat-button (click)="onDeleteClick()" color="primary">
+      <button *ngIf="isAdmin" mat-flat-button (click)="onDeleteClick()" color="warn">
         <i class="fas fa-trash"></i>
-        <span>Delete maser case</span>
+        <span>Delete Maser Case</span>
       </button>
     </div>
 
@@ -64,11 +64,11 @@
       </div>
       <div class="grid two-columns">
         <div>Created</div>
-        <div>{{scenario?.createdAt | date }}</div>
+        <div>{{scenario?.createdAt | date: 'Y-m-d H:m:s' }}</div>
       </div>
       <div class="grid two-columns">
         <div>Updated</div>
-        <div>{{scenario?.updatedAt | date }}</div>
+        <div>{{scenario?.updatedAt | date: 'Y-m-d H:m:s' }}</div>
       </div>
       <div class="grid two-columns">
         <div>Coverage</div>
@@ -103,8 +103,8 @@
         </h2>
         <div class="card span12" *ngFor="let variation of variations">
           <div class="content">
-            <p class="bb-card-notes">created by {{variation?.createdBy}} <span>{{variation?.createdAt | date}}</span>
-              <span *ngIf="variation?.updatedBy"> and updated by {{variation?.updatedBy}} <span>{{variation?.updatedAt | date}}</span></span>
+            <p class="bb-card-notes">created by {{variation?.createdBy}} <span>{{variation?.createdAt | date: 'Y-m-d H:m:s'}}</span>
+              <span *ngIf="variation?.updatedBy"> and updated by {{variation?.updatedBy}} <span>{{variation?.updatedAt | date: 'Y-m-d H:m:s'}}</span></span>
             </p>
             <mat-form-field class="full-width">
               <mat-label>Variation script</mat-label>
@@ -290,8 +290,8 @@
           <div #4 [innerHTML]="test.result | slice:0:200 | highlightSearch: paginationParams.searchTerm"
                class="inner-html">
           </div>
-          <div #5 [innerHTML]="test?.createdAt | date: 'medium' | highlightSearch: paginationParams.searchTerm"></div>
-          <div #6 [innerHTML]="(test?.deploymentStamp | date: 'medium') | highlightSearch: paginationParams.searchTerm || 'None'"></div>
+          <div #5 [innerHTML]="test?.createdAt | date: 'Y-m-d H:m:s' | highlightSearch: paginationParams.searchTerm"></div>
+          <div #6 [innerHTML]="(test?.deploymentStamp | date: 'Y-m-d H:m:s') | highlightSearch: paginationParams.searchTerm || 'None'"></div>
           <div #7>{{test?.browserName}} {{test?.browserMajor}}{{test?.browserMinor}}</div>
           <div #8>{{test?.osName}} {{test?.osMajor}} {{test?.osMinor}}</div>
           <div #9 class="center">

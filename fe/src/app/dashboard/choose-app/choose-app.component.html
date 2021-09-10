@@ -37,7 +37,9 @@
             <div>
               <ng-container *ngIf="!data?.aomaRound?.releaseNum">None Scheduled</ng-container>
               <ng-container *ngIf="data?.aomaRound?.releaseNum">
-                {{data?.aomaRound?.startsAt | date}} to {{data?.aomaRound?.endsAt | date}}
+                {{data?.aomaRound?.startsAt | date: 'Y-m-d H:m:s'}}
+                to
+                {{data?.aomaRound?.endsAt | date: 'Y-m-d H:m:s'}}
               </ng-container>
             </div>
           </div>
@@ -80,7 +82,9 @@
             <div>
               <ng-container *ngIf="!data?.promoRound?.releaseNum">None Scheduled</ng-container>
               <ng-container *ngIf="data?.promoRound?.releaseNum">
-                {{data?.promoRound?.startsAt | date}} to {{data?.promoRound?.endsAt | date}}
+                {{data?.promoRound?.startsAt | date: 'Y-m-d H:m:s'}}
+                to
+                {{data?.promoRound?.endsAt | date: 'Y-m-d H:m:s'}}
               </ng-container>
             </div>
           </div>
@@ -125,7 +129,9 @@
             <div>
               <ng-container *ngIf="!data?.dxRound?.releaseNum">None Scheduled</ng-container>
               <ng-container *ngIf="data?.dxRound?.releaseNum">
-                {{data?.dxRound?.startsAt | date}} to {{data?.dxRound?.endsAt | date}}
+                {{data?.dxRound?.startsAt | date: 'Y-m-d H:m:s'}}
+                to
+                {{data?.dxRound?.endsAt | date: 'Y-m-d H:m:s'}}
               </ng-container>
             </div>
           </div>
@@ -159,7 +165,9 @@
             <div>
               <ng-container *ngIf="!data?.grasLiteRound?.releaseNum">None Scheduled</ng-container>
               <ng-container *ngIf="data?.grasLiteRound?.releaseNum">
-                {{data?.grasLiteRound?.startsAt | date}} to {{data?.grasLiteRound?.endsAt | date}}
+                {{data?.grasLiteRound?.startsAt | date: 'Y-m-d H:m:s'}}
+                to
+                {{data?.grasLiteRound?.endsAt | date: 'Y-m-d H:m:s'}}
               </ng-container>
             </div>
           </div>
