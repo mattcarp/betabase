@@ -4,7 +4,16 @@
     "module": "CommonJS",
     "esModuleInterop": true,
     "outDir": "dist",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "experimentalDecorators": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "typings/browser",
+    "typings/browser.d.ts"
+  ],
+  "include": [
+    "./**/*"
+  ]
 }
