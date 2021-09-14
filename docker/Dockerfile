@@ -1,4 +1,4 @@
-FROM node:latest as be-builder
+FROM node:16.3-alpine3.12 as be-builder
 
 WORKDIR /be
 
@@ -10,7 +10,7 @@ RUN npm install -g tsc && npm install -g concurrently
 
 RUN npm run build
 
-FROM node:latest as fe-builder
+FROM node:16.3-alpine3.12 as fe-builder
 
 WORKDIR /fe
 
@@ -20,7 +20,7 @@ RUN npm --verbose install
 
 RUN npm run build
 
-FROM node:latest
+FROM node:16.3-alpine3.12
 
 WORKDIR /app
 
