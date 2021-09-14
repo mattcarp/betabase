@@ -26,3 +26,14 @@ Run docker container:
 Remove docker container:
 
 `./docker/remove.sh`
+
+
+## Deploying to Heroku
+
+https://devcenter.heroku.com/articles/container-registry-and-runtime#pushing-an-existing-image
+
+`docker tag <IMAGE> registry.heroku.com/<APP>/web`
+
+`docker push registry.heroku.com/<APP>/web`
+
+`heroku container:release web`
