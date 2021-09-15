@@ -64,11 +64,11 @@
       </div>
       <div class="grid two-columns">
         <div>Created</div>
-        <div>{{scenario?.createdAt | date: 'Y-m-d H:m:s' }}</div>
+        <div>{{scenario?.createdAt | date: 'yyyy-MM-dd'}}</div>
       </div>
       <div class="grid two-columns">
         <div>Updated</div>
-        <div>{{scenario?.updatedAt | date: 'Y-m-d H:m:s' }}</div>
+        <div>{{scenario?.updatedAt | date: 'yyyy-MM-dd'}}</div>
       </div>
       <div class="grid two-columns">
         <div>Coverage</div>
@@ -103,8 +103,8 @@
         </h2>
         <div class="card span12" *ngFor="let variation of variations">
           <div class="content">
-            <p class="bb-card-notes">created by {{variation?.createdBy}} <span>{{variation?.createdAt | date: 'Y-m-d H:m:s'}}</span>
-              <span *ngIf="variation?.updatedBy"> and updated by {{variation?.updatedBy}} <span>{{variation?.updatedAt | date: 'Y-m-d H:m:s'}}</span></span>
+            <p class="bb-card-notes">created by {{variation?.createdBy}} <span>{{variation?.createdAt | date: 'yyyy-MM-dd'}}</span>
+              <span *ngIf="variation?.updatedBy"> and updated by {{variation?.updatedBy}} <span>{{variation?.updatedAt | date: 'yyyy-MM-dd'}}</span></span>
             </p>
             <mat-form-field class="full-width">
               <mat-label>Variation script</mat-label>
@@ -162,14 +162,6 @@
         </button>
       </div>
     </form>
-    <!--
-    {% if is_granted("ROLE_ADMIN") %}
-    <form id="delete_scenario" name="deleteform" action="{{ path('scenario_delete', { 'app': app.request.get('app'), 'id': entity.id }) }}" method="post">
-      {{ form_widget(delete_form) }}
-      <input type="submit" class="offset2 btn btn-small btn-danger btn-delete" value="admin - delete this scenario">
-    </form>
-    {% endif %}
-    -->
 
     <div class="header-flex">
       <h2>Tests for case {{scenario?.id}}</h2>
@@ -290,8 +282,8 @@
           <div #4 [innerHTML]="test.result | slice:0:200 | highlightSearch: paginationParams.searchTerm"
                class="inner-html">
           </div>
-          <div #5 [innerHTML]="test?.createdAt | date: 'Y-m-d H:m:s' | highlightSearch: paginationParams.searchTerm"></div>
-          <div #6 [innerHTML]="(test?.deploymentStamp | date: 'Y-m-d H:m:s') | highlightSearch: paginationParams.searchTerm || 'None'"></div>
+          <div #5 [innerHTML]="test?.createdAt | date: 'yyyy-MM-dd' | highlightSearch: paginationParams.searchTerm"></div>
+          <div #6 [innerHTML]="(test?.deploymentStamp | date: 'yyyy-MM-dd') | highlightSearch: paginationParams.searchTerm || 'None'"></div>
           <div #7>{{test?.browserName}} {{test?.browserMajor}}{{test?.browserMinor}}</div>
           <div #8>{{test?.osName}} {{test?.osMajor}} {{test?.osMinor}}</div>
           <div #9 class="center">

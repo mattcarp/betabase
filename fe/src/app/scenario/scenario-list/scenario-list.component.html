@@ -131,9 +131,9 @@
         </div>
         <div #2 [innerHTML]="scenario?.name | highlightSearch: paginationParams.searchTerm"></div>
         <div #3 [innerHTML]="scenario?.createdBy | highlightSearch: paginationParams.searchTerm"></div>
-        <div #4>{{scenario?.createdAt | date: 'Y-m-d H:m:s'}}</div>
+        <div #4>{{scenario?.createdAt | date: 'yyyy-MM-dd'}}</div>
         <div #5 [innerHTML]="scenario?.updatedBy | highlightSearch: paginationParams.searchTerm"></div>
-        <div #6>{{scenario?.updatedAt | date: 'Y-m-d H:m:s'}}</div>
+        <div #6>{{scenario?.updatedAt | date: 'yyyy-MM-dd'}}</div>
         <div #7 class="center">{{scenario?.reviewFlag ? 'Yes' : 'No'}}</div>
         <div #8 class="center actions">
           <a routerLink="/scenario/{{app}}/{{scenario?.id}}/show" mat-icon-button>

@@ -35,9 +35,9 @@
 
       <div *ngFor="let round of rounds" class="grid">
         <div>{{round?.name}}</div>
-        <div>{{(round?.startsAt | date: 'Y-m-d H:m:s') || ''}}</div>
-        <div>{{(round?.endsAt | date: 'Y-m-d H:m:s') || ''}}</div>
-        <div>{{(round?.updatedAt | date: 'Y-m-d H:m:s') || ''}}</div>
+        <div>{{(round?.startsAt | date: 'yyyy-MM-dd') || ''}}</div>
+        <div>{{(round?.endsAt | date: 'yyyy-MM-dd') || ''}}</div>
+        <div>{{(round?.updatedAt | date: 'yyyy-MM-dd') || ''}}</div>
         <div>{{round?.releaseNum}}</div>
         <div class="center">
           <label *ngIf="round?.currentFlag" class="label-info">Yes</label>
