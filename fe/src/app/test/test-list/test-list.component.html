@@ -125,8 +125,8 @@
             <a routerLink="/scenario/{{app}}/{{entity?.scenarioId}}/show">{{entity?.scenarioId}}</a>
           </div>
         </div>
-        <div #2>{{entity?.updatedAt | date: 'Y-m-d H:m:s'}}</div>
-        <div #3>{{entity?.deploymentStamp | date: 'Y-m-d H:m:s'}}</div>
+        <div #2>{{entity?.updatedAt | date: 'yyyy-MM-dd'}}</div>
+        <div #3>{{entity?.deploymentStamp | date: 'yyyy-MM-dd'}}</div>
         <div #4 [innerHTML]="entity?.createdBy | highlightSearch: paginationParams.searchTerm"></div>
         <div #5 class="center">
           <label *ngIf="entity?.passFail === 'Fail'" class="label-warning">{{entity?.passFail}}</label>
