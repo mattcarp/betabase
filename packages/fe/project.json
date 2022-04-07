@@ -14,8 +14,8 @@
         "polyfills": "packages/fe/src/polyfills.ts",
         "tsConfig": "packages/fe/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["packages/fe/src/favicon.ico", "packages/fe/src/assets"],
-        "styles": ["packages/fe/src/styles.scss"],
+        "assets": ["packages/fe/src/assets"],
+        "styles": ["packages/fe/src/scss/styles.scss"],
         "scripts": []
       },
       "configurations": {

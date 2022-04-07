@@ -10,6 +10,7 @@ import { Title } from '@angular/platform-browser';
 export class AppComponent {
   private appTitle = 'βetabase';
   private build = '';
+  private version = '3.0.0'; // data.version;
 
   constructor(private titleService: Title) {
     this.titleService.setTitle(this.appTitle);
@@ -23,7 +24,7 @@ export class AppComponent {
     ].join('');
 
     console.log(
-      `%c ${this.appTitle} %c ${this.isBuildDev ? '❗localhost' : ''} %c ${this.build} UI v.${'data.version'}`,
+      `%c ${this.appTitle} %c ${this.isBuildDev ? '❗localhost' : ''} %c ${this.build} UI v.${this.version}`,
       style,
       '',
       '',
