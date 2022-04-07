@@ -1,0 +1,54 @@
+<header>
+  <a routerLink="/dashboard">
+    <figure class="app-logo dark">
+      <figcaption class="app-logo-name">
+        The <div>{{appTitle}}</div>
+        <small>v.{{verUI}}</small>
+      </figcaption>
+      <ng-container *ngIf="app">
+        <img src="/assets/logos/app-logo-separator-animate.svg" alt="separator">
+        <figcaption class="app-logo-app">{{app}}
+          <span *ngIf="!isAdmin">Testing</span>
+          <span *ngIf="isAdmin" class="red">Admin</span>
+        </figcaption>
+      </ng-container>
+    </figure>
+  </a>
+
+  <div class="spacer"></div>
+
+<!--  <button mat-button [matMenuTriggerFor]="menu">-->
+  <button mat-button>
+    <ng-container *ngIf="!isLoggedIn; else logOut">
+      <i class="far fa-user"></i>
+      <span>My profile</span>
+    </ng-container>
+    <ng-template #logOut>
+      <i class="fas fa-user"></i>
+      <span>{{userInfo}}</span>
+    </ng-template>
+  </button>
+
+  <mat-menu #menu class="header-menu-panel">
+    <ng-container *ngIf="!isLoggedIn; else logOutMenu">
+      <button (click)="onGotoClick('auth/sign-in')" mat-menu-item>
+        <i class="fas fa-sign-in-alt"></i>
+        <span>Sign In</span>
+      </button>
+    </ng-container>
+    <ng-template #logOutMenu>
+      <button (click)="onSignOutClick()" mat-menu-item>
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Sign Out</span>
+      </button>
+    </ng-template>
+
+    <button
+      [disabled]="!isLoggedIn"
+      (click)="onGotoClick('auth/change-password')"
+      mat-menu-item>
+      <i class="fas fa-user-cog"></i>
+      <span>Change Password</span>
+    </button>
+  </mat-menu>
+</header>
