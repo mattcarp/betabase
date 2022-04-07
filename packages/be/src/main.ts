@@ -337,12 +337,12 @@ app.put('/api/round/:id', [isTokenValid, isAdmin], async (request, response) => 
 });
 
 // static files
-app.get('*.*', express.static(path.join(__dirname, './thebetabase3/')));
+app.get('*.*', express.static(path.join(__dirname, '../fe/')));
 // main route (angular app)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, './thebetabase3/index.html'));
+  res.sendFile(path.join(__dirname, '../fe/index.html'));
 });
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  res.sendFile(path.join(__dirname, './thebetabase3/index.html'));
+  res.sendFile(path.join(__dirname, '../fe/index.html'));
 });
