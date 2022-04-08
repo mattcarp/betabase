@@ -607,6 +607,12 @@ textarea {
   }
 }
 
+h2 {
+  .mat-badge {
+    vertical-align: super;
+  }
+}
+
 // Material Chip List
 .mat-chip-list {
   .mat-chip-list-wrapper {
