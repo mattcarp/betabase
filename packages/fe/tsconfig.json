@@ -20,7 +20,6 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "exactOptionalPropertyTypes": true
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

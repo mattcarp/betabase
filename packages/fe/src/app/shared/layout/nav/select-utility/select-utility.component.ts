@@ -5,7 +5,8 @@ import { SelectUtilityConstants } from './select-utility.constants';
 
 @Component({
   selector: 'app-select-utility',
-  templateUrl: 'select-utility.component.html',
+  templateUrl: './select-utility.component.html',
+  styleUrls: ['./select-utility.component.scss'],
 })
 export class SelectUtilityComponent {
   selectedItem: string;
@@ -25,7 +26,7 @@ export class SelectUtilityComponent {
     return this.buttonsConstants.docs;
   }
 
-  onSelectionChange(value: string): void {
+  onMenuItemClick(value: string): void {
     switch (value) {
       case 'media':
         window.open('https://aomad2-webapp01-int.smcdp-aws.net/media-analysis/files-upload', '_blank');

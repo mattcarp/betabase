@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
-// import data from '../../../../../package.json';
 import { AuthService } from '../../../auth/auth.service';
 
 @Component({
@@ -16,7 +15,7 @@ export class HeaderComponent {
 
   constructor(private titleService: Title, private router: Router, private authService: AuthService) {
     this.appTitle = this.titleService.getTitle();
-    // this.verUI = data.version;
+    this.verUI = require('../../../../../../../package.json').version;
   }
 
   get app(): string {

@@ -15,7 +15,10 @@
         "tsConfig": "packages/fe/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": ["packages/fe/src/assets"],
-        "styles": ["packages/fe/src/scss/styles.scss"],
+        "styles": [
+          "packages/fe/src/assets/fonts/fontawesome-5.15.3/css/all.css",
+          "packages/fe/src/scss/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {

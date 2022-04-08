@@ -8,10 +8,11 @@ import { RouterModule } from '@angular/router';
 
 import { NavComponent } from './nav.component';
 import { SelectUtilityComponent } from './select-utility/select-utility.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [NavComponent, SelectUtilityComponent],
-  imports: [CommonModule, FormsModule, MatButtonModule, MatFormFieldModule, MatSelectModule, RouterModule],
+  imports: [CommonModule, FormsModule, MatButtonModule, MatFormFieldModule, MatSelectModule, RouterModule, MatMenuModule],
   exports: [NavComponent],
 })
 export class NavModule {}

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-// import data from 'package.json';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +8,12 @@ import { Title } from '@angular/platform-browser';
 })
 export class AppComponent {
   private appTitle = 'βetabase';
+  private readonly verUI: string;
   private build = '';
-  private version = '3.0.0'; // data.version;
 
   constructor(private titleService: Title) {
     this.titleService.setTitle(this.appTitle);
+    this.verUI = require('../../../../package.json').version;
 
     const style = [
       'padding: 4px 10px;',
@@ -24,7 +24,7 @@ export class AppComponent {
     ].join('');
 
     console.log(
-      `%c ${this.appTitle} %c ${this.isBuildDev ? '❗localhost' : ''} %c ${this.build} UI v.${this.version}`,
+      `%c ${this.appTitle} %c ${this.isBuildDev ? '❗localhost' : ''} %c ${this.build} UI v.${this.verUI}`,
       style,
       '',
       '',

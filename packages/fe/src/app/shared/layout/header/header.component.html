@@ -17,8 +17,7 @@
 
   <div class="spacer"></div>
 
-<!--  <button mat-button [matMenuTriggerFor]="menu">-->
-  <button mat-button>
+  <button mat-button [matMenuTriggerFor]="menu">
     <ng-container *ngIf="!isLoggedIn; else logOut">
       <i class="far fa-user"></i>
       <span>My profile</span>
