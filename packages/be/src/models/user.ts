@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
-import bcrypt from 'bcryptjs';
-import nodemailer from 'nodemailer';
+import * as bcrypt from 'bcryptjs';
+import * as nodemailer from 'nodemailer';
 
 import db from './index';
 
@@ -167,7 +167,7 @@ export const getUserByUsername = async (emailCanonical: string) => {
 export const getUserByToken = async (token: string) => {
   const confirmationToken = decodeURIComponent(token);
   try {
-    const { dataValues } = await User.findOne({ where: {confirmationToken }});
+    const { dataValues } = await User.findOne({ where: { confirmationToken }});
     return dataValues;
   } catch (e) {
     return null;
