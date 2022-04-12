@@ -160,8 +160,8 @@ export const sendEmail = async (to: string, text: string) => {
 }
 
 export const getUserByUsername = async (emailCanonical: string) => {
-  const { dataValues } = await User.findOne({ where: { emailCanonical } });
-  return dataValues;
+  const response = await User.findOne({ where: { emailCanonical } });
+  return response?.dataValues;
 }
 
 export const getUserByToken = async (token: string) => {
