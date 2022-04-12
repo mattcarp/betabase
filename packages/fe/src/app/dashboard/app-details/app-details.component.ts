@@ -73,7 +73,7 @@ export class AppDetailsComponent {
       msRemaining = 0;
     }
     const durationMs = moment(this.reportData?.roundNotes?.endsAt).diff(moment(this.reportData?.roundNotes?.startsAt));
-    let percentRemain = msRemaining / durationMs;
+    let percentRemain = msRemaining / durationMs || 0;
     percentRemain = Math.round(percentRemain * 100);
     if (percentRemain > 100) {
       percentRemain = 100;
@@ -123,7 +123,7 @@ export class AppDetailsComponent {
     const totalCount = regressionCount + enhancementCount;
     const regressionWeight = regressionCount / totalCount;
     const enhancementWeight = enhancementCount / totalCount;
-    const weightedAvg = enhancementWeight * enhancementRatio + regressionWeight * regressionRatio;
+    const weightedAvg = enhancementWeight * enhancementRatio + regressionWeight * regressionRatio || 0;
     return `${Math.round(weightedAvg * 100)}%`;
   }
 

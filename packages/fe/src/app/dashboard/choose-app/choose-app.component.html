@@ -12,6 +12,51 @@
 
   <ng-template #template>
     <div class="choose">
+      <mat-card (click)="onButtonClick('/dashboard/Partner Previewer/show')" class="choose-card">
+        <mat-card-header>
+          <div mat-card-avatar class="choose-card-avatar">
+            <img src="/assets/logos/partner-logo.png" alt="logo">
+          </div>
+          <mat-card-title>Partner Previewer</mat-card-title>
+          <mat-card-subtitle *ngIf="data?.partnerPreviewerRound?.releaseNum">
+            release: {{data?.partnerPreviewerRound?.releaseNum}}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="choose-card-section">
+            <div>Current Round:</div>
+            <div>
+              <ng-container *ngIf="!data?.partnerPreviewerRound?.releaseNum">No Current Round</ng-container>
+              <ng-container *ngIf="data?.partnerPreviewerRound?.releaseNum">{{data?.partnerPreviewerRound?.name}}</ng-container>
+            </div>
+          </div>
+
+          <div class="choose-card-section">
+            <div>Testing Period:</div>
+            <div>
+              <ng-container *ngIf="!data?.partnerPreviewerRound?.releaseNum">None Scheduled</ng-container>
+              <ng-container *ngIf="data?.partnerPreviewerRound?.releaseNum">
+                {{data?.partnerPreviewerRound?.startsAt | date}}
+                to
+                {{data?.partnerPreviewerRound?.endsAt | date}}
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="choose-card-section">
+            <div>Tests This Round:</div>
+            <div>{{data?.partnerPreviewerTestCount}} total, {{data?.partnerPreviewerFails}} fails</div>
+
+          </div>
+
+          <div class="choose-card-section">
+            <div>Cases Available:</div>
+            <div>{{data?.partnerPreviewerScenarios?.scenarioCount}}</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
       <mat-card (click)="onButtonClick('/dashboard/AOMA/show')" class="choose-card">
         <mat-card-header>
           <div mat-card-avatar class="choose-card-avatar">

@@ -88,25 +88,33 @@ const isAdmin = async (req, res, next) => {
 app.get('/api/app-list-data', [isTokenValid], async (request, response) => {
   const aomaScenarios = await getScenarioCount('AOMA');
   const promoScenarios = await getScenarioCount('Promo');
+  const partnerPreviewerScenarios = await getScenarioCount('Partner Previewer');
   const aomaRound = await getRoundNotes('AOMA');
   const promoRound = await getRoundNotes('Promo');
   const dxRound = await getRoundNotes('DX');
   const grasLiteRound = await getRoundNotes('GRAS Lite');
+  const partnerPreviewerRound = await getRoundNotes('Partner Previewer');
   const aomaTestCount = await getTestCount('AOMA');
   const promoTestCount = await getTestCount('Promo');
+  const partnerPreviewerTestCount = await getTestCount('Partner Previewer');
   const aomaFails = await getFailCount('AOMA');
   const promoFails = await getFailCount('Promo');
+  const partnerPreviewerFails = await getFailCount('Partner Previewer');
   response.json({
     aomaScenarios,
     promoScenarios,
+    partnerPreviewerScenarios,
     aomaRound,
     promoRound,
     dxRound,
     grasLiteRound,
+    partnerPreviewerRound,
     aomaTestCount,
     promoTestCount,
+    partnerPreviewerTestCount,
     aomaFails,
     promoFails,
+    partnerPreviewerFails,
   });
 });
 

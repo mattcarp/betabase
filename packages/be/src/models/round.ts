@@ -63,7 +63,7 @@ export const Round = db.sequelize.define('Round', {
 });
 
 export const getRoundNotes = async (app: string) => {
-  const [{ dataValues }] = await Round.findAll({
+  const response = await Round.findAll({
     attributes: [
       'notes',
       'clientNotes',
@@ -79,7 +79,7 @@ export const getRoundNotes = async (app: string) => {
       app: app,
     },
   });
-  return dataValues;
+  return response?.[0]?.dataValues;
 }
 
 export const getTestCount = async (app: string) => {
