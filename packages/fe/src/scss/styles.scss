@@ -314,15 +314,17 @@ a {
 
 .logo {
   display: block;
-  width: 200px;
-  height: 200px;
-  min-height: 200px;
+  width: 152px;
+  height: 152px;
+  min-height: 152px;
   margin: 0 auto;
+  border-radius: 50%;
   background-image: url('/assets/logos/app-logo.png');
   background-repeat: no-repeat;
   background-position-x: center;
   background-position-y: center;
   background-size: contain;
+  box-shadow: rgba(0,0,0,0.36) 0 10px 30px 0;
 }
 
 // Spinner -- Material design loader

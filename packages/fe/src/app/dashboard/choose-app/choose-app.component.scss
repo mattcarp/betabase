@@ -3,14 +3,13 @@
 section {
   align-items: center;
   justify-content: center;
-  padding: 0 !important;
 
   .choose {
     display: grid;
     grid-template-columns: repeat(2, 400px);
     grid-gap: 20px;
     height: 100%;
-    max-height: 384px;
+    max-height: 586px;
 
     button {
       flex-direction: column;
