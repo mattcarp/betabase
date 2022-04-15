@@ -87,6 +87,11 @@ export class ScenarioListComponent {
     }
   }
 
+  async onDeleteClick(scenarioItem: ScenarioItem): Promise<void> {
+    await this.appService.deleteScenario(scenarioItem?.id);
+    await this.fetchData(scenarioItem?.appUnderTest);
+  }
+
   private async fetchData(app: string): Promise<void> {
     this.isLoading = true;
     this.scenarios = await this.appService.getAllScenarios(app);
