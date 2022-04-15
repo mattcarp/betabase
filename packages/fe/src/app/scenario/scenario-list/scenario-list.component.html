@@ -142,6 +142,9 @@
           <a routerLink="/scenario/{{app}}/{{scenario?.id}}/edit" mat-icon-button>
             <i class="fas fa-edit"></i>
           </a>
+          <a mat-icon-button (click)="onDeleteClick(scenario)">
+            <i class="fas fa-trash"></i>
+          </a>
         </div>
       </div>
     </div>
