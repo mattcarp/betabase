@@ -12,13 +12,16 @@ import { MainModule } from './shared/layout/main/main.module';
 import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
 import { ErrorHandlerInterceptor } from './auth/interceptors/error-handler.interceptor';
 
+import { NgChartsModule } from 'ng2-charts';
+
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline',
 };
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, AuthModule, MainModule, MatSnackBarModule],
+  imports: [BrowserModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, AuthModule, MainModule, 
+    MatSnackBarModule, NgChartsModule],
   providers: [
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
