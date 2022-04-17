@@ -139,14 +139,11 @@ export const User = db.sequelize.define('User', {
 });
 
 export const sendEmail = async (to: string, text: string) => {
-  const testAccount = await nodemailer.createTestAccount();
   const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    secure: false,
+    service: 'gmail',
     auth: {
-      user: testAccount.user,
-      pass: testAccount.pass,
+      user: 'thebetabase3@gmail.com',
+      pass: 'thebetabase3thebetabase3',
     },
   });
   const message = await transporter.sendMail({
@@ -199,7 +196,7 @@ export const sendResetPasswordToken = async (id: number, username: string, email
   };
   await updateUser(id, params);
   const text = 'Hello ' + username + '!\n' +
-    'To reset your password - please visit:\nhttp://localhost:4200/auth/reset-password?token=' +
+    'To reset your password - please visit:\nhttps://thebetabase.herokuapp.com/auth/reset-password?token=' +
     params.confirmationToken + '\n' +
     'Regards,\n' +
     'The Betabase';
