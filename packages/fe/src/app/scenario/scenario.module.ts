@@ -35,6 +35,6 @@ import { ScenarioFormComponent } from './scenario-form/scenario-form.component';
     PipesModule,
     ScenarioRoutingModule,
     NavModule,
-  ]
+  ],
 })
 export class ScenarioModule {}
