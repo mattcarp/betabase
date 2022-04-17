@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
 import { AuthService } from '../auth.service';
+import { NotificationDialogComponent } from '../../shared/layout/notification-dialog/notification-dialog.component';
 
 @Component({
   selector: 'app-sign-in',
@@ -15,12 +17,25 @@ export class SignInComponent {
   passwordFormControl = new FormControl('', [Validators.required]);
   typePass = 'password';
   showPass = false;
+  isLoading = false;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private dialog: MatDialog,
+  ) {}
 
   async onSignInClick(email: string = '', password: string = ''): Promise<void> {
-    await this.authService.login(email, password);
-    await this.router.navigate(['/dashboard']);
+    this.isLoading = true;
+    try {
+      await this.authService.login(email, password);
+      await this.router.navigate(['/dashboard']);
+    } catch (e) {
+      this.dialog.open(NotificationDialogComponent, {
+        data: 'User not found',
+      });
+    }
+    this.isLoading = false;
   }
 
   showPassword() {

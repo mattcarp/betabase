@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { HeaderModule } from '../shared/layout/header/header.module';
 import { AuthRoutingModule } from './auth-routing.module';
@@ -13,6 +14,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { AdminGuard } from './guards/admin.guard';
+import { NotificationDialogModule } from '../shared/layout/notification-dialog/notification-dialog.module';
 
 @NgModule({
   declarations: [AuthComponent, SignInComponent, ResetPasswordComponent, ChangePasswordComponent],
@@ -25,6 +27,8 @@ import { AdminGuard } from './guards/admin.guard';
     MatButtonModule,
     AuthRoutingModule,
     HeaderModule,
+    MatProgressSpinnerModule,
+    NotificationDialogModule,
   ],
   providers: [AuthGuard, AdminGuard],
 })

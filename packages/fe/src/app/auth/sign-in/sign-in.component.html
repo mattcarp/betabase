@@ -1,48 +1,55 @@
 <div>
   <h3>Sign In</h3>
 
-  <mat-form-field class="full-width">
-    <mat-label>Email Address:</mat-label>
-    <input #userEmail
-           [formControl]="emailFormControl"
-           autocomplete="off"
-           matInput
-           type="email"
-           required>
-    <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-      Please enter a valid email address
-    </mat-error>
-    <mat-error *ngIf="emailFormControl.hasError('required')">
-      Email is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
+  <div class="spinner" *ngIf="isLoading; else template">
+    <div class="spinner-progress"></div>
+    <div class="spinner-info">Loading...</div>
+  </div>
 
-  <mat-form-field class="full-width">
-    <mat-label>Password:</mat-label>
-    <input #userPassword
-           [formControl]="passwordFormControl"
-           autocomplete="off"
-           matInput
-           [type]="typePass"
-           required>
-    <mat-error *ngIf="passwordFormControl.hasError('required')">
-      Password is <strong>required</strong>
-    </mat-error>
-    <button (click)="showPassword()" matSuffix mat-icon-button>
-      <i *ngIf="!showPass" class="fas fa-eye-slash"></i>
-      <i *ngIf="showPass" class="fas fa-eye"></i>
+  <ng-template #template>
+    <mat-form-field class="full-width">
+      <mat-label>Email Address:</mat-label>
+      <input #userEmail
+             [formControl]="emailFormControl"
+             autocomplete="off"
+             matInput
+             type="email"
+             required>
+      <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+        Please enter a valid email address
+      </mat-error>
+      <mat-error *ngIf="emailFormControl.hasError('required')">
+        Email is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Password:</mat-label>
+      <input #userPassword
+             [formControl]="passwordFormControl"
+             autocomplete="off"
+             matInput
+             [type]="typePass"
+             required>
+      <mat-error *ngIf="passwordFormControl.hasError('required')">
+        Password is <strong>required</strong>
+      </mat-error>
+      <button (click)="showPassword()" matSuffix mat-icon-button>
+        <i *ngIf="!showPass" class="fas fa-eye-slash"></i>
+        <i *ngIf="showPass" class="fas fa-eye"></i>
+      </button>
+    </mat-form-field>
+
+    <button
+      [disabled]="!userEmail?.value || !userPassword?.value"
+      (click)="onSignInClick(userEmail.value, userPassword.value)"
+      type="submit"
+      mat-raised-button
+      color="accent">
+      <i class="fas fa-sign-in-alt"></i>
+      <span>Sign In</span>
     </button>
-  </mat-form-field>
-
-  <button
-    [disabled]="!userEmail?.value || !userPassword?.value"
-    (click)="onSignInClick(userEmail.value, userPassword.value)"
-    type="submit"
-    mat-raised-button
-    color="accent">
-    <i class="fas fa-sign-in-alt"></i>
-    <span>Sign In</span>
-  </button>
+  </ng-template>
 </div>
 
 
