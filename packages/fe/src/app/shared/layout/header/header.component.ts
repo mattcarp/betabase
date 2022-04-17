@@ -22,7 +22,7 @@ export class HeaderComponent {
     if (this.router.url.includes('auth')) {
       return '';
     }
-    return this.router.url.split('/')?.[2] || '';
+    return this.router.url.split('/')?.[2]?.replace('-', ' ') || '';
   }
 
   get isAdmin(): boolean {

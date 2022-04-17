@@ -16,7 +16,7 @@ import { AppService } from '../../shared/app.service';
 export class AppDetailsComponent {
   reportData: ReportData | null = null;
   reportDataInitial: ReportData | null = null;
-  app: string | null = null;
+  app = '';
   isNewFeaturesChecked = false;
   numNewFeaturesChecked = 0;
   isPrioritiesChecked = false;
@@ -29,7 +29,7 @@ export class AppDetailsComponent {
     regressionScenarios: false,
   };
 
-  constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) {
+  constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
     activatedRoute.params
       .pipe(
         filter((params: Params) => 'app' in params),
@@ -130,15 +130,25 @@ export class AppDetailsComponent {
   get imageUrl(): string {
     if (this.app) {
       switch (this.app) {
-        case 'AOMA':
+        case 'aoma':
           return '/assets/logos/aoma-logo.gif';
-        case 'Promo':
+        case 'promo':
           return '/assets/logos/promo-logo.png';
+        case 'promo-admin':
+          return '/assets/logos/promo-admin-logo.png';
+        case 'partner-previewer':
+          return '/assets/logos/partner-logo.png';
+       case 'dx':
+          return '/assets/logos/dx-logo.png';
         default:
           return '';
       }
     }
     return '';
+  }
+
+  get appTitle(): string {
+    return this.app.replace('-', ' ').toUpperCase();
   }
 
   getRatio(key: string): string {

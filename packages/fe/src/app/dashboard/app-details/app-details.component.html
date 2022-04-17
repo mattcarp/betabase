@@ -22,7 +22,7 @@
             </div>
           </ng-template>
         </div>
-        <mat-card-title>{{app}}</mat-card-title>
+        <mat-card-title>{{appTitle}}</mat-card-title>
         <mat-card-subtitle *ngIf="reportData?.roundNotes?.releaseNum">
           release: {{reportData?.roundNotes?.releaseNum}} | <strong>{{reportData?.roundNotes?.name}}</strong>
         </mat-card-subtitle>
@@ -148,7 +148,7 @@
     </mat-card>
 
     <ng-container *ngIf="!reportData?.jiras?.length; else jiras">
-      <h2 class="red">No JIRA Tickets Yet</h2>
+      <div class="warning">No JIRA Tickets Yet</div>
     </ng-container>
 
     <ng-template #jiras>
@@ -216,7 +216,7 @@
     </ng-template>
 
     <ng-container *ngIf="!reportData?.enhancementScenarios?.length; else newFeatures">
-      <h2 class="red">No Cases For New Features Yet</h2>
+      <div class="warning">No Cases For New Features Yet</div>
     </ng-container>
 
     <ng-template #newFeatures>
@@ -299,7 +299,7 @@
     </ng-template>
 
     <ng-container *ngIf="!reportData?.priorityScenarios?.length; else prioritiesTemplate">
-      <h2 class="red">No Prioritized Cases Yet</h2>
+      <div class="warning">No Prioritized Cases Yet</div>
     </ng-container>
 
     <ng-template #prioritiesTemplate>
@@ -382,7 +382,7 @@
     </ng-template>
 
     <ng-container *ngIf="!reportData?.regressionScenarios?.length; else regressionsTemplate">
-      <h2 class="red">No Regressions Cases Yet</h2>
+      <div class="warning">No Regressions Cases Yet</div>
     </ng-container>
 
     <ng-template #regressionsTemplate>
@@ -465,7 +465,7 @@
     </ng-template>
 
     <ng-container *ngIf="!reportData?.flaggedScenarios?.length; else flaggedTemplate">
-      <h2 class="red">No Cases Are Currently Flagged for Review</h2>
+      <div class="warning">No Cases Are Currently Flagged for Review</div>
     </ng-container>
 
     <ng-template #flaggedTemplate>

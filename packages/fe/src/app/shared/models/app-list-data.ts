@@ -5,6 +5,12 @@ export interface AppListData {
   promoScenarios: {
     scenarioCount: number;
   };
+  promoAdminScenarios: {
+    scenarioCount: number;
+  };
+  dxScenarios: {
+    scenarioCount: number;
+  };
   partnerPreviewerScenarios: {
     scenarioCount: number;
   };
@@ -28,7 +34,7 @@ export interface AppListData {
     releaseNum: string;
     releaseDate: string;
   };
-  dxRound: {
+  promoAdminRound: {
     notes: string;
     clientNotes: string;
     app: string;
@@ -38,7 +44,7 @@ export interface AppListData {
     releaseNum: string;
     releaseDate: Date;
   };
-  grasLiteRound: {
+  dxRound: {
     notes: string;
     clientNotes: string;
     app: string;
@@ -59,9 +65,13 @@ export interface AppListData {
     releaseDate: Date;
   };
   aomaTestCount: number;
-  promoTestCount: number;
-  partnerPreviewerTestCount: number;
   aomaFails: number;
+  promoTestCount: number;
   promoFails: number;
+  promoAdminTestCount: number;
+  promoAdminFails: number;
+  dxTestCount: number;
+  dxFails: number;
+  partnerPreviewerTestCount: number;
   partnerPreviewerFails: number;
 }

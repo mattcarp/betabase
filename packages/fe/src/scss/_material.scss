@@ -1,5 +1,70 @@
 @import '../scss/variables';
 
+// Material Card
+.mat-card {
+  .mat-card-header {
+    .mat-card-avatar {
+      transition: transform 1.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+      img {
+        width: 100%;
+      }
+
+      .null-cover {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: $color-light;
+
+        .fas {
+          font-size: 26px;
+          color: $color-lightgrey;
+        }
+      }
+    }
+
+    .mat-card-header-text {
+      .mat-card-title {
+        margin: 0 0 6px;
+      }
+
+      .mat-card-subtitle {
+        height: 14px;
+        margin: 0 0 12px;
+      }
+    }
+  }
+
+  .mat-card-content {
+    padding: 6px 0;
+
+    section {
+      display: grid;
+      grid-template-columns: 114px 1fr;
+      grid-template-rows: auto;
+      grid-gap: 10px;
+      width: 100%;
+      padding: 0;
+
+      & > div {
+        margin: 0 0 10px;
+        line-height: 1.2;
+
+        &:first-child {
+          justify-self: flex-end;
+          color: $color-medium;
+        }
+
+        &:last-child {
+          @include ellipsis;
+        }
+      }
+    }
+  }
+}
+
 // Material Form Field
 .mat-form-field {
   &.full-width {
@@ -109,60 +174,6 @@
     }
   }
 
-  // Button Select
-  &.button-select {
-    margin: 14px 10px 0 0;
-
-    .mat-form-field-wrapper {
-      .mat-form-field-flex {
-        padding: 0 10px;
-
-        .mat-form-field-prefix,
-        .mat-form-field-suffix,
-        .mat-select-value,
-        .mat-select-arrow {
-          color: $color-light;
-        }
-
-        .mat-form-field-outline {
-          .mat-form-field-outline-start,
-          .mat-form-field-outline-gap,
-          .mat-form-field-outline-end {
-            border: none;
-          }
-        }
-
-        .mat-form-field-outline-thick {
-          transition: background-color 0.4s ease-out;
-        }
-
-        .mat-form-field-infix {
-          width: 70px;
-        }
-      }
-
-      .mat-form-field-label {
-        @include ellipsis;
-        margin-left: 0;
-      }
-    }
-
-    &.mat-form-field-should-float .mat-form-field-label,
-    & .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
-      display: none;
-    }
-
-    &.mat-primary:not(.mat-button-disabled) {
-      &:hover {
-        .mat-form-field-wrapper {
-          .mat-form-field-outline-thick {
-            background-color: $color-grey;
-          }
-        }
-      }
-    }
-  }
-
   &.mat-form-field-can-float {
     &.mat-form-field-should-float {
       .mat-form-field-label {
@@ -174,25 +185,6 @@
   &.mat-paginator-page-size-select {
     .mat-form-field-wrapper {
       padding: 0;
-    }
-  }
-
-  // Button Select
-  &.button-select {
-    .mat-form-field-wrapper {
-      .mat-form-field-flex {
-        .mat-form-field-outline {
-          background-color: $color-medium;
-        }
-
-        .mat-form-field-prefix,
-        .mat-form-field-suffix,
-        .mat-select-value,
-        .mat-select-arrow,
-        .mat-form-field-label {
-          color: $color-white;
-        }
-      }
     }
   }
 
@@ -262,6 +254,19 @@
             &.mat-input-element {
               height: 178px;
             }
+          }
+        }
+      }
+    }
+  }
+
+  &.notes {
+    .mat-form-field-wrapper {
+      .mat-form-field-flex {
+        textarea {
+          &.mat-input-element {
+            padding: 4px;
+            border: 1px solid $color-lightgrey;
           }
         }
       }
@@ -412,30 +417,6 @@ textarea {
         color: $color-lightgrey;
       }
     }
-  }
-}
-
-// Material Select
-.mat-select-panel {
-  div {
-    display: flex;
-    align-items: center;
-    height: 2em;
-    padding: 0 16px;
-    font-weight: bold;
-  }
-
-  .mat-optgroup {
-    &-label {
-      height: 2em !important;
-      line-height: 2em !important;
-      color: $color-black;
-    }
-  }
-
-  .mat-option {
-    height: 2em !important;
-    line-height: 2em !important;
   }
 }
 
@@ -624,6 +605,28 @@ h2 {
 
 .mat-error {
   color: $color-darkred;
+}
+
+// Material Select
+.mat-select-panel {
+  overflow: auto;
+  min-width: 100%;
+  max-width: 280px;
+  max-height: 256px;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 4px;
+  outline: 0;
+  background: white;
+  -webkit-overflow-scrolling: touch;
+
+  &:not([class*=mat-elevation-z]) {
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px rgba(0, 0, 0, 0.14), 0 1px 10px rgba(0, 0, 0, 0.12);
+  }
+
+  .mat-option.mat-selected:not(.mat-option-multiple) {
+    background: rgba(0,0,0,0.12);
+  }
 }
 
 // NGX Material Timepicker
