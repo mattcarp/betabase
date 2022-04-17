@@ -162,7 +162,8 @@ p {
   margin: 10px;
 }
 
-ul {
+ul,
+ol {
   margin: 10px;
   padding: 0 0 0 20px;
 
@@ -208,6 +209,12 @@ a {
 .highlight {
   color: black;
   background-color: #ffbc77;
+}
+
+.warning {
+  margin: 20px 0 0;
+  font: 200 24px/1 'Helvetica-Light', Helvetica, Roboto, Arial, sans-serif;
+  color: $color-red;
 }
 
 .row {

@@ -1,110 +1,86 @@
 @import '../../../scss/variables';
 
-section {
-  align-items: center;
-  justify-content: center;
+.container {
+  margin: 2vw auto;
 
-  .choose {
+  h2 {
+    text-align: center;
+  }
+
+  .cards {
     display: grid;
-    grid-template-columns: repeat(2, 400px);
-    grid-gap: 20px;
-    height: 100%;
-    max-height: 586px;
+    grid-template-columns: repeat(2, minmax(320px, 1fr));
+    grid-template-rows: repeat(3, 200px);
+    grid-auto-flow: dense;
+    background-color: $color-read-only;
+  }
 
-    button {
-      flex-direction: column;
-      height: 100%;
-      margin: 0;
-      padding: 16px;
-      transition: background-color 0.9s cubic-bezier(0.075, 0.82, 0.165, 1);
-      color: $color-medium;
-      border-radius: 8px;
-      background-color: $color-light;
+  .card {
+    overflow: hidden;
+    cursor: pointer;
+    transition: background-color 0.9s cubic-bezier(0.075, 0.82, 0.165, 1),
+    transform 0.9s cubic-bezier(0.075, 0.82, 0.165, 1);
+    border-bottom: 14px solid white;
+    background-color: $color-read-only;
 
-      &:hover {
-        color: $color-white;
-        background-color: $color-orange;
+    &:last-child,
+    &:nth-last-child(2):nth-child(odd) {
+      border-bottom: none;
+    }
 
-        .fas {
-          transform: scale(1.2);
-        }
-      }
+    &:nth-child(odd) {
+      border-right: 14px solid white;
+    }
 
-      .fas {
-        display: flex;
-        align-items: flex-end;
-        height: 60px;
-        transition: transform 9000ms cubic-bezier(0.075, 0.82, 0.165, 1);
-        font-size: 50px;
-      }
+    &:before {
+      position: absolute;
+      right: -174px;
+      bottom: -104px;
+      display: block;
+      width: 300px;
+      height: 300px;
+      content: '';
+      transform: rotate(-30deg);
+      opacity: 0.08;
+    }
 
-      span {
-        margin: 16px 0 0;
-        transition: margin 0.3s ease-in-out;
-        font-size: 16px;
-        text-align: center;
-        hyphens: auto;
+    section {
+      &:before {
+        content: unset;
       }
     }
 
-    &-card {
-      height: 182px;
-      cursor: pointer;
-      transition: background-color 0.9s cubic-bezier(0.075, 0.82, 0.165, 1),
-      transform 0.9s cubic-bezier(0.075, 0.82, 0.165, 1);
-      background-color: $color-read-only;
+    &:hover {
+      background-color: $color-active;
 
-      &:hover {
-        transform: scale(1.02);
-        background-color: $color-active;
-
-        .choose-card-avatar {
-          transform: scale(1.3);
-        }
+      &:before {
+        filter: grayscale(100%);
       }
+    }
 
-      &-avatar {
-        transition: transform 1.2s cubic-bezier(0.075, 0.82, 0.165, 1);
-
-        img {
-          width: 100%;
-        }
-
-        .null-cover {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 100%;
-          height: 100%;
-          background-color: $color-light;
-
-          .fas {
-            font-size: 26px;
-            color: $color-lightgrey;
-          }
-        }
+    &.partner {
+      &:before {
+        background: url(/assets/logos/partner-logo.png) no-repeat;
       }
-
-      &-section {
-        display: grid;
-        grid-template-columns: 114px 1fr;
-        grid-template-rows: auto;
-        grid-gap: 10px;
-        width: 100%;
-
-        & > div {
-          margin: 0 0 10px;
-          line-height: 1.2;
-
-          &:first-child {
-            justify-self: flex-end;
-            color: $color-medium;
-          }
-
-          &:last-child {
-            @include ellipsis;
-          }
-        }
+    }
+    &.aoma {
+      &:before {
+        background: url(/assets/logos/aoma-logo.gif) no-repeat;
+      }
+    }
+    &.promo-admin {
+      &:before {
+        background: url(/assets/logos/promo-admin-logo.png) no-repeat;
+      }
+    }
+    &.promo {
+      &:before {
+        background: url(/assets/logos/promo-logo.png) no-repeat;
+      }
+    }
+    &.dx {
+      &:before {
+        background: url(/assets/logos/dx-logo.png) no-repeat;
       }
     }
   }
