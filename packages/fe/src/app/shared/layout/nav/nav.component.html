@@ -26,6 +26,7 @@
   <a mat-flat-button
      *ngIf="isAdmin"
      routerLink="{{getLinkUrl('/round/_APP_')}}"
+     [disabled]="isSupport"
      [routerLinkActive]="['active']"
      [routerLinkActiveOptions]="{exact:true}"
      color="primary"
