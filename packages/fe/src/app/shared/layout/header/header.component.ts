@@ -19,10 +19,9 @@ export class HeaderComponent {
   }
 
   get app(): string {
-    if (this.router.url.includes('auth')) {
-      return '';
-    }
-    return this.router.url.split('/')?.[2]?.replace('-', ' ') || '';
+    return this.router.url.includes('auth')
+      ? ''
+      : this.router.url.split('/')?.[2]?.replace('-', ' ');
   }
 
   get isAdmin(): boolean {

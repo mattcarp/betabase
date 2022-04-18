@@ -13,7 +13,11 @@
   <div class="label">Documentation:</div>
 
   <ng-container *ngFor="let item of docItems">
-    <button (click)="onMenuItemClick(item.url)" [disabled]="!selectedApp" mat-menu-item>
+    <button
+      (click)="onMenuItemClick(item.url)"
+      [disabled]="!selectedApp"
+      mat-menu-item
+      class="utility-button">
       <span class="{{item?.class}}">{{item?.title}}</span>
     </button>
   </ng-container>

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { filter, pluck } from 'rxjs/operators';
 
@@ -22,6 +22,7 @@ export class NavComponent {
   constructor(
     private location: Location,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private authService: AuthService,
   ) {
     activatedRoute.params
@@ -36,6 +37,10 @@ export class NavComponent {
 
   get isAdmin(): boolean {
     return this.authService.isAdmin;
+  }
+
+  get isSupport(): boolean {
+    return this.router.url.includes('support');
   }
 
   getLinkUrl(url: string): string {
