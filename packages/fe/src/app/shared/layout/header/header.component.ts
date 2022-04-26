@@ -21,7 +21,7 @@ export class HeaderComponent {
   get app(): string {
     return this.router.url.includes('auth')
       ? ''
-      : this.router.url.split('/')?.[2]?.replace('-', ' ');
+      : this.router.url.split('/')?.[2]?.replace('-', ' ').replace('%20', ' ');
   }
 
   get isAdmin(): boolean {
