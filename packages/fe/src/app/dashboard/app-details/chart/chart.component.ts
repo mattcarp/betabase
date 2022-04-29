@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChartData, ChartOptions, ChartType } from 'chart.js';
 
 import { ChartOption } from './chart.model';
-import { ChartData, ChartOptions, ChartType } from 'chart.js';
 
 @Component({
   selector: 'app-chart',

@@ -279,7 +279,7 @@ export class AppDetailsComponent {
     const tests = await this.appService.getAllTests(this.app);
 
     // - Browser
-    const browsers = tests.map((test: TestItem) => test.browserName).sort();
+    const browsers = tests.map(({ browserName }) => browserName).sort();
     const browserName = [...new Set(browsers)];
     const browser = this.chartDisplayOptions.browser;
     browser.datasets[0].data = [];

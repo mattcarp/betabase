@@ -1,6 +1,6 @@
 <label>{{title}}</label>
 
-<ng-container *ngIf="chartData.datasets[0].data.length; else noData">
+<ng-container *ngIf="chartData?.datasets?.[0]?.data?.length; else noData">
   <canvas
     baseChart
     [data]="chartData"
