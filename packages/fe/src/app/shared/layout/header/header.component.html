@@ -24,7 +24,7 @@
     </ng-container>
     <ng-template #logOut>
       <i class="fas fa-user"></i>
-      <span>{{userInfo}}</span>
+      <span>{{userName}}</span>
     </ng-template>
   </button>
 
@@ -42,12 +42,12 @@
       </button>
     </ng-template>
 
-    <button
-      [disabled]="!isLoggedIn"
-      (click)="onGotoClick('auth/change-password')"
-      mat-menu-item>
-      <i class="fas fa-user-cog"></i>
-      <span>Change Password</span>
-    </button>
+<!--    <button-->
+<!--      [disabled]="!isLoggedIn"-->
+<!--      (click)="onGotoClick('auth/change-password')"-->
+<!--      mat-menu-item>-->
+<!--      <i class="fas fa-user-cog"></i>-->
+<!--      <span>Change Password</span>-->
+<!--    </button>-->
   </mat-menu>
 </header>
