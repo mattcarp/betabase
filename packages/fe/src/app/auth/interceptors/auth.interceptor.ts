@@ -35,7 +35,7 @@ export class AuthInterceptor implements HttpInterceptor {
         loggedIn
           ? this.handleRequestWithTokenHeader(req, next)
           : next.handle(req)
-      )
+      ),
     );
   }
 

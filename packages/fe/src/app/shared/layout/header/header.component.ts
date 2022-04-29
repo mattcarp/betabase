@@ -26,12 +26,6 @@ export class HeaderComponent implements OnInit {
     this.verUI = require('../../../../../../../package.json').version;
   }
 
-  async ngOnInit(): Promise<void> {
-    this.isLoggedIn = await this.keycloakService.isLoggedIn();
-    await this.keycloakService.loadUserProfile();
-    this.userName = this.keycloakService.getUsername();
-  }
-
   get app(): string {
     return this.router.url.includes('auth')
       ? ''
@@ -48,5 +42,11 @@ export class HeaderComponent implements OnInit {
 
   async onSignOutClick(): Promise<void> {
     await this.keycloakService.logout();
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.isLoggedIn = await this.keycloakService.isLoggedIn();
+    await this.keycloakService.loadUserProfile();
+    this.userName = this.keycloakService.getUsername();
   }
 }
