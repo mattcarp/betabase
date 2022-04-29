@@ -9,14 +9,20 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatBadgeModule } from '@angular/material/badge';
+import { NgChartsModule } from 'ng2-charts';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { NavModule } from '../shared/layout/nav/nav.module';
 import { ChooseAppComponent } from './choose-app/choose-app.component';
 import { AppDetailsComponent } from './app-details/app-details.component';
+import { ChartComponent } from './app-details/chart/chart.component';
 
 @NgModule({
-  declarations: [ChooseAppComponent, AppDetailsComponent],
+  declarations: [
+    ChooseAppComponent,
+    AppDetailsComponent,
+    ChartComponent,
+  ],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -27,9 +33,10 @@ import { AppDetailsComponent } from './app-details/app-details.component';
     MatCheckboxModule,
     MatCardModule,
     MatButtonModule,
+    MatBadgeModule,
+    NgChartsModule,
     DashboardRoutingModule,
     NavModule,
-    MatBadgeModule,
   ],
 })
 export class DashboardModule {}

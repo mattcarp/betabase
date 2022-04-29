@@ -1,0 +1,18 @@
+<label>{{title}}</label>
+
+<ng-container *ngIf="chartData?.datasets?.[0]?.data?.length; else noData">
+  <canvas
+    baseChart
+    [data]="chartData"
+    [labels]="chartData?.labels"
+    [options]="chartOptions"
+    [legend]="chartLegend"
+    [type]="chartType">
+  </canvas>
+
+  <h2 *ngIf="result">{{result}}</h2>
+</ng-container>
+
+<ng-template #noData>
+  <h4>No Data</h4>
+</ng-template>

@@ -2,14 +2,11 @@
 
 <section>
   <ng-container *ngIf="isLoading; else template">
-    <div class="spinner">
-      <div class="spinner-progress"></div>
-      <div class="spinner-info">Loading...</div>
-    </div>
+    <ng-template [ngTemplateOutlet]="spinner"></ng-template>
   </ng-container>
 
   <ng-template #template>
-    <mat-card class="card">
+    <mat-card *ngIf="reportData?.enhancementCount" class="card">
       <mat-card-header class="card-header">
         <div mat-card-avatar class="card-header-avatar">
           <ng-container *ngIf="imageUrl.length; else nullCover">
@@ -31,7 +28,6 @@
       <mat-card-content class="card-content">
         <div class="card-content-grid">
           <div>
-            <h1>hi!</h1>
             <div class="row">
               <div>Testing Period:</div>
               <div>{{roundStart}} - {{roundEnd}}</div>
@@ -138,6 +134,33 @@
                 <a (click)="onClickScrollToElement('flagged')">flagged for review</a>
               </ng-template>
             </div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart">
+            <ng-container *ngIf="chartDisplayOptions?.completion?.isLoading; else completionChart">
+              <ng-template [ngTemplateOutlet]="spinner"></ng-template>
+            </ng-container>
+            <ng-template #completionChart>
+              <app-chart [inputOptions]="chartDisplayOptions.completion"></app-chart>
+            </ng-template>
+          </div>
+          <div class="chart">
+            <ng-container *ngIf="chartDisplayOptions?.browser?.isLoading; else browserChart">
+              <ng-template [ngTemplateOutlet]="spinner"></ng-template>
+            </ng-container>
+            <ng-template #browserChart>
+              <app-chart [inputOptions]="chartDisplayOptions.browser"></app-chart>
+            </ng-template>
+          </div>
+          <div class="chart">
+            <ng-container *ngIf="chartDisplayOptions?.total?.isLoading; else totalChart">
+              <ng-template [ngTemplateOutlet]="spinner"></ng-template>
+            </ng-container>
+            <ng-template #totalChart>
+              <app-chart [inputOptions]="chartDisplayOptions.total"></app-chart>
+            </ng-template>
           </div>
         </div>
 
@@ -506,3 +529,10 @@
 
   </ng-template>
 </section>
+
+<ng-template #spinner>
+  <div class="spinner">
+    <div class="spinner-progress"></div>
+    <div class="spinner-info">Loading...</div>
+  </div>
+</ng-template>

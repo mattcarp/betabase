@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AppService } from '../../shared/app.service';
 import { AppListData } from '../../shared/models';
+import { detailsChartOptions } from '../app-details/app-details.constants';
 
 @Component({
   selector: 'app-choose-app',
@@ -20,6 +21,11 @@ export class ChooseAppComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    const chartDisplayOptions = detailsChartOptions;
+    chartDisplayOptions.completion.isLoading = true;
+    chartDisplayOptions.browser.isLoading = true;
+    chartDisplayOptions.total.isLoading = true;
+
     this.data = await this.appService.getAppListData();
   }
 
