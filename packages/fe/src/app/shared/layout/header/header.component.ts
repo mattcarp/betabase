@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { KeycloakService } from 'keycloak-angular';
 
 import { AuthService } from '../../../auth/auth.service';
 
@@ -9,11 +10,18 @@ import { AuthService } from '../../../auth/auth.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   verUI: string = '';
   appTitle: string;
+  userName: string = '';
+  isLoggedIn: boolean = false;
 
-  constructor(private titleService: Title, private router: Router, private authService: AuthService) {
+  constructor(
+    private titleService: Title,
+    private router: Router,
+    private authService: AuthService,
+    private keycloakService: KeycloakService,
+  ) {
     this.appTitle = this.titleService.getTitle();
     this.verUI = require('../../../../../../../package.json').version;
   }
@@ -28,24 +36,17 @@ export class HeaderComponent {
     return this.router.url.includes('round');
   }
 
-  get isLoggedIn(): boolean {
-    return !!this.authService.token?.length;
-  }
-
-  get userInfo(): string {
-    const username = this.authService.user?.username;
-    if (username?.length) {
-      return username;
-    }
-    return '';
-  }
-
   onGotoClick(link: string): void {
     this.router.navigate([`/${link}`]);
   }
 
   async onSignOutClick(): Promise<void> {
-    this.authService.logout();
-    await this.router.navigate(['/']);
+    await this.keycloakService.logout();
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.isLoggedIn = await this.keycloakService.isLoggedIn();
+    await this.keycloakService.loadUserProfile();
+    this.userName = this.keycloakService.getUsername();
   }
 }

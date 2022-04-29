@@ -13,7 +13,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
-import { AdminGuard } from './guards/admin.guard';
 import { NotificationDialogModule } from '../shared/layout/notification-dialog/notification-dialog.module';
 
 @NgModule({
@@ -30,6 +29,6 @@ import { NotificationDialogModule } from '../shared/layout/notification-dialog/n
     MatProgressSpinnerModule,
     NotificationDialogModule,
   ],
-  providers: [AuthGuard, AdminGuard],
+  providers: [AuthGuard],
 })
 export class AuthModule {}
