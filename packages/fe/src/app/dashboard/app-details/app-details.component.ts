@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params} from '@angular/router';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import * as moment from 'moment';
 import { filter, pluck, tap } from 'rxjs/operators';
 
-import { ReportData, ScenarioItem } from '../../shared/models';
+import { ReportData, ScenarioItem, TestItem } from '../../shared/models';
 import { AppService } from '../../shared/app.service';
+import { detailsChartOptions } from './app-details.constants';
 
 @Component({
   selector: 'app-app-details',
@@ -28,6 +29,7 @@ export class AppDetailsComponent {
     priorityScenarios: false,
     regressionScenarios: false,
   };
+  chartDisplayOptions = detailsChartOptions;
 
   constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
     activatedRoute.params
@@ -136,7 +138,7 @@ export class AppDetailsComponent {
           return '/assets/logos/promo-logo.png';
         case 'promo-admin':
           return '/assets/logos/promo-admin-logo.png';
-        case 'partner-previewer':
+        case 'Partner Previewer':
           return '/assets/logos/partner-logo.png';
        case 'dx':
           return '/assets/logos/dx-logo.png';
@@ -258,5 +260,67 @@ export class AppDetailsComponent {
   private async fetchData(app: string): Promise<void> {
     this.reportData = await this.appService.getAppReportData(app);
     this.reportDataInitial = JSON.parse(JSON.stringify(this.reportData));
+
+    // Data for Charts
+    // - Completion
+    const overall = parseInt(this.overallRatio.replace('%', ''));
+    const completion = this.chartDisplayOptions.completion;
+    completion.datasets[0].data = [];
+    completion.labels = [];
+    if (overall) {
+      completion.datasets[0].data.push(overall);
+      completion.labels.push('Finished');
+      completion.datasets[0].data.push(100 - overall);
+      completion.labels.push('In Progress');
+      completion.result = overall;
+    }
+    completion.isLoading = false;
+
+    const tests = await this.appService.getAllTests(this.app);
+
+    // - Browser
+    const browsers = tests.map((test: TestItem) => test.browserName).sort();
+    const browserName = [...new Set(browsers)];
+    const browser = this.chartDisplayOptions.browser;
+    browser.datasets[0].data = [];
+    browser.labels = [];
+    browserName.forEach((item: string | undefined) => {
+      const number = browsers.filter(browser => browser === item).length;
+      browser.datasets[0].data.push(number);
+      browser.labels.push(item || '');
+    });
+    browser.isLoading = false;
+
+    // - Total Tests by Date
+    const years = tests.map((test: TestItem) => moment(test.createdAt).format('YYYY')).sort();
+    const yearName = [...new Set(years)];
+    // -- For new features
+    const yearsFeatures = this.reportData.enhancementScenarios
+      .map((item: ScenarioItem) => moment(item.mostRecent).format('YYYY')).sort();
+    const yearFeaturesName = [...new Set(yearsFeatures)];
+    const lastYearFeatures = yearFeaturesName[yearFeaturesName.length - 1];
+    const lastNumFeatures = yearsFeatures.filter(item => item === lastYearFeatures).length;
+    const total = this.chartDisplayOptions.total;
+    total.datasets[0].data = [];
+    total.datasets[0].label = [];
+    total.datasets[1].data = [];
+    total.datasets[1].label = [];
+    total.labels = [];
+    const lastYear = parseInt(yearName[yearName.length - 1]);
+    const now = new Date().getFullYear();
+    for (let i = 0; i < now - lastYear; i += 1) {
+      yearName.push((now - i).toString());
+    }
+    yearName.sort().forEach((yearValue: string) => {
+      total.datasets[0].data.push(years.filter(item => item === yearValue).length);
+      const numFeatures = parseInt(yearValue) >= parseInt(lastYearFeatures)
+        ? lastNumFeatures
+        : yearsFeatures.filter(item => item === yearValue).length;
+      total.datasets[1].data.push(numFeatures);
+      total.labels.push(yearValue || '');
+    });
+    total.datasets[0].label.push('Total Tests');
+    total.datasets[1].label.push('For New Features');
+    total.isLoading = false;
   }
 }

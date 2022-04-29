@@ -131,3 +131,16 @@
 .ellipsis {
   @include ellipsis;
 }
+
+.chart-container {
+  display: flex;
+  min-height: 300px;
+  margin: 10px 0 0;
+  padding: 10px;
+  background-color: white;
+
+  .chart {
+    position: relative;
+    width: 33.33%;
+  }
+}

@@ -27,7 +27,6 @@ html {
 body {
   position: relative;
   box-sizing: border-box;
-  user-select: none;
   font: 400 14px/1 Helvetica, Roboto, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -253,7 +252,6 @@ a {
 
   & + span {
     margin-left: 8px;
-    user-select: none;
     line-height: 1;
     text-align: left;
     white-space: nowrap;
