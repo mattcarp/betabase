@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthModule } from './auth/auth.module';
 import { MainModule } from './shared/layout/main/main.module';
 import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
+import { environment } from '../environments/environment';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline',
@@ -22,7 +23,7 @@ const initializeKeycloak = (keycloak: KeycloakService) => {
       config: {
         url: 'https://betabase-keycloack.herokuapp.com/auth',
         realm: 'thebetabase',
-        clientId: 'thebetabase-client',
+        clientId: environment?.production ? 'thebetabase-client-prod' : 'thebetabase-client-local',
       },
       initOptions: {
         checkLoginIframe: true,
