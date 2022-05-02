@@ -24,6 +24,7 @@ const config = {
   dbUser: process.env.DB_USER,
   dbPassword: process.env.DB_PASSWORD,
   secret: 'the-betabase-3-secret-key',
+  resource: process.env.PRODUCTION ? 'thebetabase-client-prod' : 'thebetabase-client-local',
 };
 
 export default config;
