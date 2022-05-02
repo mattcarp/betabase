@@ -8,6 +8,7 @@
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "allowedCommonJsDependencies": ["keycloak-js"],
         "outputPath": "dist/packages/fe",
         "index": "packages/fe/src/index.html",
         "main": "packages/fe/src/main.ts",

@@ -79,10 +79,11 @@
       outline: none;
 
       .mat-form-field-flex {
-        height: 2.25em;
+        height: 2.4em;
 
         .mat-form-field-outline {
           transition: background-color 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+          color: $color-lightgrey !important;
           border-radius: 5px;
           background-color: white;
 
@@ -103,12 +104,17 @@
           border-top-width: 0.54em;
 
           .mat-form-field-label-wrapper {
+            top: -0.8em;
+            padding-top: 0.8em;
+
             .mat-form-field-label {
               top: 1.35em;
+              margin: -0.25em 0 0;
             }
           }
 
           .mat-input-element {
+            margin-bottom: 0.21em;
             -webkit-text-fill-color: $color-black;
             // Hack -- input:-webkit-autofill
             -webkit-box-shadow: inset 0 0 0 50px $color-white;
@@ -165,6 +171,20 @@
       transform: none;
     }
 
+    // Button Select
+    &.button-select {
+      .mat-form-field-wrapper {
+        .mat-form-field-flex {
+          .mat-form-field-prefix,
+          .mat-form-field-suffix,
+          .mat-select-value,
+          .mat-select-arrow {
+            color: $color-light;
+          }
+        }
+      }
+    }
+
     // Input Component
     &.input {
       .mat-form-field-wrapper {
@@ -185,6 +205,25 @@
   &.mat-paginator-page-size-select {
     .mat-form-field-wrapper {
       padding: 0;
+    }
+  }
+
+  // Button Select
+  &.button-select {
+    .mat-form-field-wrapper {
+      .mat-form-field-flex {
+        .mat-form-field-outline {
+          background-color: $color-medium;
+        }
+
+        .mat-form-field-prefix,
+        .mat-form-field-suffix,
+        .mat-select-value,
+        .mat-select-arrow,
+        .mat-form-field-label {
+          color: $color-white;
+        }
+      }
     }
   }
 
@@ -263,11 +302,17 @@
   &.notes {
     .mat-form-field-wrapper {
       .mat-form-field-flex {
+        padding: 0.75em 0.75em 0 0;
+
         textarea {
           &.mat-input-element {
             padding: 4px;
-            border: 1px solid $color-lightgrey;
+            background-color: rgba($color-white, 0.3);
           }
+        }
+
+        .mat-form-field-label {
+          margin-top: 0;
         }
       }
     }
@@ -278,12 +323,17 @@
       .mat-form-field-flex {
         .mat-form-field-infix {
           .mat-form-field-label-wrapper {
-            top: -0.95em;
+            top: -0.86em;
+            padding-top: 0.76em;
+          }
+
+          .mat-input-element {
+            margin-bottom: 0.38em;
           }
         }
 
         .mat-form-field-suffix {
-          top: 0.4em;
+          top: 0.05em;
         }
       }
     }
@@ -434,14 +484,20 @@ textarea {
 .mat-calendar {
   .mat-calendar-content {
     .mat-calendar-table {
-      .mat-calendar-body {
+      .ngx-mat-calendar-body {
         .mat-calendar-body-cell {
-          &:not(.mat-calendar-body-disabled) {
-            background-color: #effde9;
+          &-content {
+            border-color: transparent;
           }
         }
       }
     }
+  }
+}
+
+.cdk-overlay-container {
+  .mat-datepicker-content {
+    background-color: $color-white;
   }
 }
 
