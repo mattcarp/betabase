@@ -156,13 +156,13 @@ app.get('/api/:app/report-data', [keycloak.protect()], async (request, response)
   });
 });
 
-app.post('/api/user', [keycloak.protect(), keycloak.protect('admin')], async (request: any, response, next) => {
+app.post('/api/user', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request: any, response, next) => {
   const params = { ...request.body, password: bcrypt.hashSync(request.body.password, 8) };
   const model = await addUser(params);
   response.json(model);
 });
 
-app.put('/api/user/:id', [keycloak.protect(), keycloak.protect('admin')], async (request: any, response, next) => {
+app.put('/api/user/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request: any, response, next) => {
   const params = request.body;
   if ('password' in params) {
     delete params.password;
@@ -256,7 +256,7 @@ app.put('/api/scenario/:id', [keycloak.protect()], async (request, response) => 
   response.send(result);
 });
 
-app.delete('/api/scenario/:id', [keycloak.protect(), keycloak.protect('admin')], async (request, response) => {
+app.delete('/api/scenario/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
   const id = request.params.id;
   const result = await deleteScenario(id);
   response.json(result);
@@ -317,27 +317,27 @@ app.put('/api/variation/:id', [keycloak.protect()], async (request, response) =>
   response.json(model);
 });
 
-app.get('/api/rounds/:app', [keycloak.protect(), keycloak.protect('admin')], async (request, response) => {
+app.get('/api/rounds/:app', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
   const rounds = await getRoundList(request.params.app);
   response.json(rounds);
 });
 
-app.get('/api/round/:id', [keycloak.protect(), keycloak.protect('admin')], async (request, response) => {
+app.get('/api/round/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
   const round = await getRoundById(request.params.id);
   response.json(round);
 });
 
-app.delete('/api/round/:id', [keycloak.protect(), keycloak.protect('admin')], async (request, response) => {
+app.delete('/api/round/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
   const status = await deleteRound(request.params.id);
   response.json(status);
 });
 
-app.post('/api/round', [keycloak.protect(), keycloak.protect('admin')], async (request, response) => {
+app.post('/api/round', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
   const model = await addRound(request.body);
   response.json(model);
 });
 
-app.put('/api/round/:id', [keycloak.protect(), keycloak.protect('admin')], async (request, response) => {
+app.put('/api/round/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
   const id = request.params.id;
   const params = request.body;
   const model = await updateRound(id, params);
