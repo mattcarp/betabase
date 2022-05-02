@@ -48,7 +48,8 @@
         <div>
           <mat-form-field class="full-width">
             <mat-label>Name</mat-label>
-            <input matInput [(ngModel)]="round.name" type="text">
+            <input matInput [(ngModel)]="round.name" type="text" required>
+            <mat-error *ngIf="!round.name">Name is required</mat-error>
           </mat-form-field>
 
           <div>
