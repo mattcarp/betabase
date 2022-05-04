@@ -13,6 +13,7 @@ import { NgChartsModule } from 'ng2-charts';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { NavModule } from '../shared/layout/nav/nav.module';
+import { SpinnerModule } from '../shared/layout/spinner/spinner.module';
 import { ChooseAppComponent } from './choose-app/choose-app.component';
 import { AppDetailsComponent } from './app-details/app-details.component';
 import { ChartComponent } from './app-details/chart/chart.component';
@@ -37,6 +38,7 @@ import { ChartComponent } from './app-details/chart/chart.component';
     NgChartsModule,
     DashboardRoutingModule,
     NavModule,
+    SpinnerModule,
   ],
 })
 export class DashboardModule {}

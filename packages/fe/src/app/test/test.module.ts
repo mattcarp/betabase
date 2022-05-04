@@ -11,6 +11,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 
 import { NavModule } from '../shared/layout/nav/nav.module';
 import { TestRoutingModule } from './test-routing.module';
+import { SpinnerModule } from '../shared/layout/spinner/spinner.module';
 import { TestFormComponent } from './test-form/test-form.component';
 import { TestListComponent } from './test-list/test-list.component';
 import { TestDetailsComponent } from './test-details/test-details.component';
@@ -31,6 +32,7 @@ import { PipesModule } from '../shared/pipes/pipes.module';
     TestRoutingModule,
     NavModule,
     PipesModule,
+    SpinnerModule,
   ],
 })
 export class TestModule {}

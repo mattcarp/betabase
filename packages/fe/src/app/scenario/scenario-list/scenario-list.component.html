@@ -2,10 +2,7 @@
 
 <section>
   <ng-container *ngIf="isLoading; else template">
-    <div class="spinner">
-      <div class="spinner-progress"></div>
-      <div class="spinner-info">Loading...</div>
-    </div>
+    <app-spinner></app-spinner>
   </ng-container>
 
   <ng-template #template>

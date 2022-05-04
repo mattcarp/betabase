@@ -14,11 +14,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
 
+import { RoundRoutingModule } from './round-routing.module';
+import { NavModule } from '../shared/layout/nav/nav.module';
+import { SpinnerModule } from '../shared/layout/spinner/spinner.module';
 import { RoundListComponent } from './round-list/round-list.component';
 import { RoundFormComponent } from './round-form/round-form.component';
 import { RoundDetailsComponent } from './round-details/round-details.component';
-import { RoundRoutingModule } from './round-routing.module';
-import { NavModule } from '../shared/layout/nav/nav.module';
 
 @NgModule({
   declarations: [RoundListComponent, RoundFormComponent, RoundDetailsComponent],
@@ -38,6 +39,7 @@ import { NavModule } from '../shared/layout/nav/nav.module';
     MatButtonModule,
     MatBadgeModule,
     NavModule,
+    SpinnerModule,
   ],
 })
 export class RoundModule {}
