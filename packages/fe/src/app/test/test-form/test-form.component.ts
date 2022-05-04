@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { tap } from 'rxjs/operators';
 
 import { AppService } from '../../shared/app.service';
 import { ScenarioItem, TestItem } from '../../shared/models';
@@ -50,7 +51,12 @@ export class TestFormComponent {
   inProdOptions = ['Yes', 'No', 'Unsure'];
 
   constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
-    activatedRoute.params.subscribe(({ scenarioId, id }) => this.fetchData(scenarioId, id));
+    activatedRoute.params
+      .pipe(tap(({ app }) => {
+        this.test = {};
+        this.scenario = { appUnderTest: app };
+      }))
+      .subscribe(({ scenarioId, id }) => this.fetchData(scenarioId, id));
   }
 
   get isCreateTestBtnDisabled(): boolean {
