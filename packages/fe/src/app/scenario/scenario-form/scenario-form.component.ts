@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { filter, pluck, tap } from 'rxjs/operators';
 
@@ -53,7 +53,11 @@ export class ScenarioFormComponent {
     ],
   };
 
-  constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private appService: AppService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+  ) {
     activatedRoute.params
       .pipe(
         tap(({ app }) => {
@@ -74,6 +78,7 @@ export class ScenarioFormComponent {
     this.id
       ? await this.appService.updateScenario(<ScenarioItem>this.scenario)
       : await this.appService.addScenario(<ScenarioItem>this.scenario);
+    await this.router.navigate([`/dashboard/${this.app}/show`]);
   }
 
   onCheckboxChange(value: boolean, key: 'reviewFlag' | 'clientPriority' | 'isSecurity'): void {
