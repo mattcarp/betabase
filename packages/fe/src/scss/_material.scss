@@ -570,6 +570,8 @@ textarea {
 
 // Material Menu
 .mat-menu-panel {
+  min-height: unset !important;
+
   .mat-menu-content {
     padding: 0 !important;
   }

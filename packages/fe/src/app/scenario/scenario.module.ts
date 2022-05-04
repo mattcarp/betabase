@@ -13,6 +13,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 
 import { PipesModule } from '../shared/pipes/pipes.module';
 import { NavModule } from '../shared/layout/nav/nav.module';
+import { SpinnerModule } from '../shared/layout/spinner/spinner.module';
 import { ScenarioListComponent } from './scenario-list/scenario-list.component';
 import { ScenarioDetailsComponent } from './scenario-details/scenario-details.component';
 import { ScenarioRoutingModule } from './scenario-routing.module';
@@ -35,6 +36,7 @@ import { ScenarioFormComponent } from './scenario-form/scenario-form.component';
     PipesModule,
     ScenarioRoutingModule,
     NavModule,
+    SpinnerModule,
   ],
 })
 export class ScenarioModule {}
