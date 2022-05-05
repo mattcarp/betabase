@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { KeycloakService } from 'keycloak-angular';
 import { filter, pluck, tap } from 'rxjs/operators';
 
 import { ScenarioItem } from '../../shared/models';
@@ -57,6 +58,7 @@ export class ScenarioFormComponent {
     private appService: AppService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private keycloakService: KeycloakService,
   ) {
     activatedRoute.params
       .pipe(
@@ -74,6 +76,10 @@ export class ScenarioFormComponent {
     return this.id ? 'Save Edits' : 'Save this Case';
   }
 
+  get isAdmin(): boolean {
+    return this.keycloakService.isUserInRole('admin');
+  }
+
   async onSaveClick(): Promise<void> {
     this.id
       ? await this.appService.updateScenario(<ScenarioItem>this.scenario)
@@ -85,6 +91,11 @@ export class ScenarioFormComponent {
     if (this.scenario) {
       this.scenario[key] = value ? 1 : 0;
     }
+  }
+
+  async onDeleteClick(): Promise<void> {
+    await this.appService.deleteScenario(this.scenario?.id);
+    await this.router.navigate([`/dashboard/${this.app}/show`]);
   }
 
   private async fetchData(id: string): Promise<void> {

@@ -94,6 +94,16 @@
         <i class="fas fa-save"></i>
         <span>{{saveBtnLabel}}</span>
       </button>
+
+      <button
+        *ngIf="isAdmin && scenario?.id"
+        (click)="onDeleteClick()"
+        mat-flat-button
+        color="warn"
+        class="actions-button">
+        <i class="fas fa-trash-alt"></i>
+        <span>Delete</span>
+      </button>
     </div>
   </div>
 </section>
