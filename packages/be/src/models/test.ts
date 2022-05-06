@@ -2,6 +2,7 @@ import { DataTypes, QueryTypes } from 'sequelize';
 import * as moment from 'moment';
 
 import db from './index';
+import { Scenario } from './scenario';
 
 export const Test = db.sequelize.define('Test', {
   id: {
@@ -195,6 +196,15 @@ export const addTest = async (params) => {
 export const getTest = async (id: string) => {
   const { dataValues } = await Test.findByPk(id);
   return dataValues;
+}
+
+export const deleteTest = async (id: string) => {
+  try {
+    await Test.destroy({ where: { id }});
+    return `Test ${id} has been successfully deleted`;
+  } catch (e) {
+    return e;
+  }
 }
 
 db.Test = Test;

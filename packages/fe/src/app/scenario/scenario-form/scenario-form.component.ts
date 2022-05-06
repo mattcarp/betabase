@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { KeycloakService } from 'keycloak-angular';
 import { filter, pluck, tap } from 'rxjs/operators';
 
 import { ScenarioItem } from '../../shared/models';
 import { AppService } from '../../shared/app.service';
+import { DialogWarningComponent } from '../../shared/layout/dialog-warning/dialog-warning.component';
 
 @Component({
   selector: 'app-scenario-form',
@@ -59,6 +61,7 @@ export class ScenarioFormComponent {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private keycloakService: KeycloakService,
+    private dialog: MatDialog,
   ) {
     activatedRoute.params
       .pipe(
@@ -94,8 +97,16 @@ export class ScenarioFormComponent {
   }
 
   async onDeleteClick(): Promise<void> {
-    await this.appService.deleteScenario(this.scenario?.id);
-    await this.router.navigate([`/dashboard/${this.app}/show`]);
+    this.dialog.open(DialogWarningComponent, {
+      data: 'delete',
+      width: '500px',
+      autoFocus: false,
+    }).afterClosed()
+      .pipe(filter((remove: boolean) => remove))
+      .subscribe(async () => {
+        await this.appService.deleteScenario(this.scenario?.id);
+        await this.router.navigate([`/dashboard/${this.app}/show`]);
+      });
   }
 
   private async fetchData(id: string): Promise<void> {

@@ -135,8 +135,8 @@
           <span>Edit this Test</span>
         </a>
 
-        <button mat-flat-button type="submit" color="warn" class="actions-button">
-          <i class="fas fa-ban"></i>
+        <button (click)="onDeleteClick()" mat-flat-button color="warn" class="actions-button">
+          <i class="fas fa-trash"></i>
           <span>Delete this Test</span>
         </button>
       </div>

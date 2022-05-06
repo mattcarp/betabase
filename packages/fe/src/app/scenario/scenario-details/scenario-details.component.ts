@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { filter, pluck } from 'rxjs/operators';
 
 import { AppService } from '../../shared/app.service';
 import { PaginationParams, ScenarioItem, TestItem, VariationItem } from '../../shared/models';
 import { AuthService } from '../../auth/auth.service';
+import { DialogWarningComponent } from '../../shared/layout/dialog-warning/dialog-warning.component';
 
 @Component({
   selector: 'app-scenario-details',
@@ -33,6 +35,7 @@ export class ScenarioDetailsComponent {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
+    private dialog: MatDialog,
   ) {
     activatedRoute.params
       .pipe(
@@ -97,8 +100,16 @@ export class ScenarioDetailsComponent {
   }
 
   async onDeleteClick(): Promise<void> {
-    await this.appService.deleteScenario(this.scenario?.id);
-    await this.router.navigate([`/scenario/${this.scenario?.appUnderTest}`]);
+    this.dialog.open(DialogWarningComponent, {
+      data: 'delete',
+      width: '500px',
+      autoFocus: false,
+    }).afterClosed()
+      .pipe(filter((remove: boolean) => remove))
+      .subscribe(async () => {
+        await this.appService.deleteScenario(this.scenario?.id);
+        await this.router.navigate([`/scenario/${this.scenario?.appUnderTest}`]);
+      });
   }
 
   private async fetchData(id: string): Promise<void> {

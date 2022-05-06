@@ -6,19 +6,26 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
 import { NavModule } from '../shared/layout/nav/nav.module';
 import { TestRoutingModule } from './test-routing.module';
 import { SpinnerModule } from '../shared/layout/spinner/spinner.module';
+import { PipesModule } from '../shared/pipes/pipes.module';
 import { TestFormComponent } from './test-form/test-form.component';
 import { TestListComponent } from './test-list/test-list.component';
 import { TestDetailsComponent } from './test-details/test-details.component';
-import { PipesModule } from '../shared/pipes/pipes.module';
+import { DialogWarningComponent } from '../shared/layout/dialog-warning/dialog-warning.component';
 
 @NgModule({
-  declarations: [TestFormComponent, TestListComponent, TestDetailsComponent],
+  declarations: [
+    TestFormComponent,
+    TestListComponent,
+    TestDetailsComponent,
+    DialogWarningComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -27,6 +34,7 @@ import { PipesModule } from '../shared/pipes/pipes.module';
     MatInputModule,
     MatSelectModule,
     MatBadgeModule,
+    MatDialogModule,
     NgxPaginationModule,
     AngularEditorModule,
     TestRoutingModule,

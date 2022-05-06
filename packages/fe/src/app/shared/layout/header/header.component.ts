@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit {
   }
 
   get isAdmin(): boolean {
-    return this.router.url.includes('round');
+    return this.keycloakService.isUserInRole('admin');
   }
 
   onGotoClick(link: string): void {

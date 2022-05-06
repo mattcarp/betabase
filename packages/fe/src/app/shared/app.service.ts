@@ -60,6 +60,11 @@ export class AppService {
     return firstValueFrom(this.http.get<TestItem>(url));
   }
 
+  deleteTest(id: number | null = null): Promise<string> {
+    const url = `${this.apiUrl}/test/${id}`;
+    return firstValueFrom(this.http.delete<string>(url));
+  }
+
   updateScenarioOrder(items: ScenarioItem[], type: string): Promise<ScenarioItem[]> {
     const url = `${this.apiUrl}/scenario/order`;
     return firstValueFrom(this.http.post<ScenarioItem[]>(url, { items, type }));

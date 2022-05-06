@@ -38,7 +38,7 @@ import {
   updateRound,
 } from './models/round';
 import { getDeployment } from './models/deployment';
-import { addTest, getScenarioTests, getTest, getTestCountRange, getTestList } from './models/test';
+import { addTest, deleteTest, getScenarioTests, getTest, getTestCountRange, getTestList } from './models/test';
 import { addUser, sendResetPasswordToken, getUserByUsername, updateUser, getUserByToken } from './models/user';
 import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
 
@@ -344,6 +344,11 @@ app.put('/api/round/:id', [keycloak.protect(), keycloak.protect(`${config.resour
   response.json(model);
 });
 
+app.delete('/api/test/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
+  const id = request.params.id;
+  const result = await deleteTest(id);
+  response.json(result);
+});
 // static files
 app.get('*.*', express.static(path.join(__dirname, '../fe/')));
 // main route (angular app)

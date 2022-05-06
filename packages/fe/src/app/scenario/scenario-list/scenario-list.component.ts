@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { filter, pluck, tap } from 'rxjs/operators';
 import * as moment from 'moment';
 
 import { AppService } from '../../shared/app.service';
 import { PaginationParams, ScenarioItem } from '../../shared/models';
+import { DialogWarningComponent } from '../../shared/layout/dialog-warning/dialog-warning.component';
 
 interface SortItem {
   [key: string]: any;
@@ -29,7 +31,11 @@ export class ScenarioListComponent {
     sortDirection: 'DESC',
   };
 
-  constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private appService: AppService,
+    private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog,
+  ) {
     activatedRoute.params
       .pipe(
         filter((params: Params) => 'app' in params),
@@ -88,8 +94,16 @@ export class ScenarioListComponent {
   }
 
   async onDeleteClick(scenarioItem: ScenarioItem): Promise<void> {
-    await this.appService.deleteScenario(scenarioItem?.id);
-    await this.fetchData(scenarioItem?.appUnderTest);
+    this.dialog.open(DialogWarningComponent, {
+      data: 'delete',
+      width: '500px',
+      autoFocus: false,
+    }).afterClosed()
+      .pipe(filter((remove: boolean) => remove))
+      .subscribe(async () => {
+        await this.appService.deleteScenario(scenarioItem?.id);
+        await this.fetchData(scenarioItem?.appUnderTest);
+      });
   }
 
   private async fetchData(app: string): Promise<void> {
