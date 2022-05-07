@@ -72,8 +72,12 @@ export class TestFormComponent {
   }
 
   async onCreateTestClick(): Promise<void> {
+    this.isLoading = true;
     const params = { ...this.test, scenarioId: this.scenario?.id! };
-    await this.appService.addTest(params);
+    this.test?.id
+      ? await this.appService.updateTest(params)
+      : await this.appService.addTest(params);
+    this.isLoading = false;
   }
 
   private async fetchData(scenarioId: string, testId: string): Promise<void> {

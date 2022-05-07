@@ -38,7 +38,15 @@ import {
   updateRound,
 } from './models/round';
 import { getDeployment } from './models/deployment';
-import { addTest, deleteTest, getScenarioTests, getTest, getTestCountRange, getTestList } from './models/test';
+import {
+  addTest,
+  deleteTest,
+  getScenarioTests,
+  getTest,
+  getTestCountRange,
+  getTestList,
+  updateTest,
+} from './models/test';
 import { addUser, sendResetPasswordToken, getUserByUsername, updateUser, getUserByToken } from './models/user';
 import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
 
@@ -275,6 +283,13 @@ app.get('/api/tests/:app', [keycloak.protect()], async (request, response) => {
 
 app.get('/api/test/:id', [keycloak.protect()], async (request, response) => {
   const model = await getTest(request.params.id);
+  response.json(model);
+});
+
+app.put('/api/test/:id', [keycloak.protect()], async (request, response) => {
+  const id = request.params.id;
+  const params = request.body;
+  const model = await updateTest(id, params);
   response.json(model);
 });
 
