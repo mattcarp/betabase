@@ -293,32 +293,52 @@ export class AppDetailsComponent {
 
     // - Total Tests by Date
     const years = tests.map((test: TestItem) => moment(test.createdAt).format('YYYY')).sort();
-    const yearName = [...new Set(years)];
-    // -- For new features
-    const yearsFeatures = this.reportData.enhancementScenarios
-      .map((item: ScenarioItem) => moment(item.mostRecent).format('YYYY')).sort();
-    const yearFeaturesName = [...new Set(yearsFeatures)];
-    const lastYearFeatures = yearFeaturesName[yearFeaturesName.length - 1];
-    const lastNumFeatures = yearsFeatures.filter(item => item === lastYearFeatures).length;
+    const yearsUnique = [...new Set(years)];
+    let xAxisName = yearsUnique;
     const total = this.chartDisplayOptions.total;
     total.datasets[0].data = [];
     total.datasets[0].label = [];
     total.datasets[1].data = [];
     total.datasets[1].label = [];
     total.labels = [];
-    const lastYear = parseInt(yearName[yearName.length - 1]);
-    const now = new Date().getFullYear();
-    for (let i = 0; i < now - lastYear; i += 1) {
-      yearName.push((now - i).toString());
+    if (yearsUnique.length > 1) {
+      // -- For new features
+      const yearsFeatures = this.reportData.enhancementScenarios
+        .map((item: ScenarioItem) => moment(item.mostRecent).format('YYYY')).sort();
+      const yearFeaturesName = [...new Set(yearsFeatures)];
+      const lastYearFeatures = yearFeaturesName[yearFeaturesName.length - 1];
+      const lastNumFeatures = yearsFeatures.filter(item => item === lastYearFeatures).length;
+      const lastYear = parseInt(xAxisName[xAxisName.length - 1]);
+      const now = new Date().getFullYear();
+      for (let i = 0; i < now - lastYear; i += 1) {
+        xAxisName.push((now - i).toString());
+      }
+      xAxisName.sort().forEach((value: string) => {
+        total.datasets[0].data.push(years.filter(item => item === value).length);
+        const numFeatures = parseInt(value) >= parseInt(lastYearFeatures)
+          ? lastNumFeatures
+          : yearsFeatures.filter(item => item === value).length;
+        total.datasets[1].data.push(numFeatures);
+        total.labels.push(value || '');
+      });
+    } else {
+      // -- For new features
+      const monthsFeatures = this.reportData.enhancementScenarios
+        .map((item: ScenarioItem) => moment(item.mostRecent).format('MM')).sort();
+      const monthFeaturesName = [...new Set(monthsFeatures)];
+      const lastMonthFeatures = monthFeaturesName[monthFeaturesName.length - 1];
+      const lastNumFeatures = monthsFeatures.filter(item => item === lastMonthFeatures).length;
+      const months = tests.map((test: TestItem) => parseInt(moment(test.createdAt).format('MM'))).sort();
+      xAxisName = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+      xAxisName.forEach((value: string, index: number) => {
+        total.datasets[0].data.push(months.filter(item => item === index + 1).length);
+        const numFeatures = parseInt(value) >= parseInt(lastMonthFeatures)
+          ? lastNumFeatures
+          : monthsFeatures.filter(item => item === value).length;
+        total.datasets[1].data.push(numFeatures);
+        total.labels.push(value || '');
+      });
     }
-    yearName.sort().forEach((yearValue: string) => {
-      total.datasets[0].data.push(years.filter(item => item === yearValue).length);
-      const numFeatures = parseInt(yearValue) >= parseInt(lastYearFeatures)
-        ? lastNumFeatures
-        : yearsFeatures.filter(item => item === yearValue).length;
-      total.datasets[1].data.push(numFeatures);
-      total.labels.push(yearValue || '');
-    });
     total.datasets[0].label.push('Total Tests');
     total.datasets[1].label.push('For New Features');
     total.isLoading = false;
