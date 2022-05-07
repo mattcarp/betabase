@@ -166,11 +166,11 @@
     <div class="actions-container">
       <button mat-flat-button
               [disabled]="isCreateTestBtnDisabled"
-              (click)="onCreateTestClick()"
+              (click)="onSaveClick()"
               color="accent"
               class="actions-button">
         <i class="fas fa-save"></i>
-        <span>Save this Test</span>
+        <span>{{saveBtnLabel}}</span>
       </button>
     </div>
   </div>

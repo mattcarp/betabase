@@ -71,7 +71,11 @@ export class TestFormComponent {
     );
   }
 
-  async onCreateTestClick(): Promise<void> {
+  get saveBtnLabel(): string {
+    return this.test?.id ? 'Save Edits' : 'Save this Test';
+  }
+
+  async onSaveClick(): Promise<void> {
     this.isLoading = true;
     const params = { ...this.test, scenarioId: this.scenario?.id! };
     this.test?.id

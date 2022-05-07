@@ -4,7 +4,8 @@
   minmax(80px, 100px)
   minmax(70px, 90px)
   minmax(200px, 1fr)
-  repeat(2, minmax(64px, 100px))
+  minmax(64px, 105px)
+  minmax(64px, 120px)
   minmax(64px, 80px)
   minmax(64px, 90px);
 }
