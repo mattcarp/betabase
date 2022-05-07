@@ -293,6 +293,12 @@ app.put('/api/test/:id', [keycloak.protect()], async (request, response) => {
   response.json(model);
 });
 
+app.delete('/api/test/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
+  const id = request.params.id;
+  const result = await deleteTest(id);
+  response.json(result);
+});
+
 app.post('/api/scenario/order', [keycloak.protect()], async (request, response) => {
   const { items, type } = request.body;
   let prop;
@@ -359,11 +365,6 @@ app.put('/api/round/:id', [keycloak.protect(), keycloak.protect(`${config.resour
   response.json(model);
 });
 
-app.delete('/api/test/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
-  const id = request.params.id;
-  const result = await deleteTest(id);
-  response.json(result);
-});
 // static files
 app.get('*.*', express.static(path.join(__dirname, '../fe/')));
 // main route (angular app)

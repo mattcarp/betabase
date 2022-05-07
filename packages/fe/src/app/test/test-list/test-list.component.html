@@ -132,7 +132,7 @@
         <div #6 [innerHTML]="entity?.result | slice:0:200 | highlightSearch: paginationParams.searchTerm"
              class="inner-html">
         </div>
-        <div #7>{{entity?.browserName}} {{entity?.browserMajor}}{{entity?.browserMinor}}</div>
+        <div #7>{{entity?.browserName}} {{entity?.browserMajor}}.{{entity?.browserMinor}}</div>
         <div #8>{{entity?.osName}} {{entity?.osMajor}} {{entity?.osMinor}}</div>
         <div #9 class="center">
           <div *ngIf="entity?.ticket?.length">
