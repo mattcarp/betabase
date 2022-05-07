@@ -308,8 +308,10 @@ export class AppDetailsComponent {
       const yearFeaturesName = [...new Set(yearsFeatures)];
       const lastYearFeatures = yearFeaturesName[yearFeaturesName.length - 1];
       const lastNumFeatures = yearsFeatures.filter(item => item === lastYearFeatures).length;
-      const lastYear = parseInt(xAxisName[xAxisName.length - 1]);
       const now = new Date().getFullYear();
+      const lastList = parseInt(xAxisName[xAxisName.length - 1]);
+      lastList === now ? xAxisName.splice(-1) : null;
+      const lastYear = parseInt(xAxisName[xAxisName.length - 1]);
       for (let i = 0; i < now - lastYear; i += 1) {
         xAxisName.push((now - i).toString());
       }
