@@ -50,6 +50,11 @@ export class AppService {
     return firstValueFrom(this.http.post<TestItem>(url, params));
   }
 
+  updateTest(params: TestItem): Promise<TestItem> {
+    const url = `${this.apiUrl}/test/${params.id}`;
+    return firstValueFrom(this.http.put<TestItem>(url, params));
+  }
+
   getAllTests(app: string): Promise<TestItem[]> {
     const url = `${this.apiUrl}/tests/${app}`;
     return firstValueFrom(this.http.get<TestItem[]>(url));

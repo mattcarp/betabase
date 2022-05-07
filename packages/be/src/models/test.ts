@@ -198,6 +198,11 @@ export const getTest = async (id: string) => {
   return dataValues;
 }
 
+export const updateTest = async (id, params) => {
+  await Test.update({ ...params }, { where: { id }});
+  return id;
+}
+
 export const deleteTest = async (id: string) => {
   try {
     await Test.destroy({ where: { id }});
