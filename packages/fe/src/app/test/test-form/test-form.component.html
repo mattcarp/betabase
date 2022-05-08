@@ -7,7 +7,7 @@
   </div>
 
   <div *ngIf="!isLoading && test && scenario">
-    <h2>Edit Test for Case {{scenario?.id}}</h2>
+    <h2>{{test?.id ? 'Edit' : 'New'}} Test for Case {{scenario?.id}}</h2>
 
     <h3>The Case</h3>
 
@@ -70,12 +70,7 @@
       </ng-container>
     </div>
 
-    <h2>The Test to be Edited</h2>
-
-    <div>Name</div>
-    <mat-form-field class="full-width">
-      <input matInput [(ngModel)]="test.build" type="text">
-    </mat-form-field>
+    <br>
 
     <div class="row">
       <label>Input</label>
