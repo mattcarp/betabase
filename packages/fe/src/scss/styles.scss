@@ -727,6 +727,10 @@ label {
 // Editor
 .angular-editor {
   .angular-editor-wrapper {
+    p {
+      margin: 10px 0 0;
+    }
+
     .angular-editor-textarea {
       background-color: $color-alt-row !important;
 
