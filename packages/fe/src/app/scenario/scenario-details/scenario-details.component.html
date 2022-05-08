@@ -92,7 +92,7 @@
     </div>
 
     <div class="header-flex">
-      <h2 *ngIf="!variations?.length">There are no variations on this case</h2>
+      <div *ngIf="!variations?.length" class="warning">There are no variations on this case</div>
 
       <ng-container *ngIf="variations?.length">
         <h2>
@@ -170,7 +170,7 @@
     </div>
 
     <ng-container *ngIf="!tests?.length; else testTemplate">
-      <h2 class="red">There are no tests for this Case</h2>
+      <div class="warning">There are no tests for this Case</div>
     </ng-container>
 
     <ng-template #testTemplate>
