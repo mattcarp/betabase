@@ -95,7 +95,6 @@ export class TestFormComponent {
       const { scenario } = await this.appService.getScenario(scenarioId);
       this.scenario = scenario;
     }
-    console.log('❌', this.test?.id);
     this.isLoading = false;
   }
 }
