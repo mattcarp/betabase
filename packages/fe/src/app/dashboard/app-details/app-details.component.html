@@ -52,7 +52,7 @@
               <ng-template [ngTemplateOutlet]="spinner"></ng-template>
             </ng-container>
             <ng-template #completionChart>
-              <app-chart [inputOptions]="chartDisplayOptions.completion"></app-chart>
+              <app-chart [inputOptions]="chartDisplayOptions?.completion"></app-chart>
             </ng-template>
           </div>
           <div class="chart">
@@ -60,7 +60,7 @@
               <ng-template [ngTemplateOutlet]="spinner"></ng-template>
             </ng-container>
             <ng-template #browserChart>
-              <app-chart [inputOptions]="chartDisplayOptions.browser"></app-chart>
+              <app-chart [inputOptions]="chartDisplayOptions?.browser"></app-chart>
             </ng-template>
           </div>
           <div class="chart">
@@ -68,7 +68,7 @@
               <ng-template [ngTemplateOutlet]="spinner"></ng-template>
             </ng-container>
             <ng-template #totalChart>
-              <app-chart [inputOptions]="chartDisplayOptions.total"></app-chart>
+              <app-chart [inputOptions]="chartDisplayOptions?.total"></app-chart>
             </ng-template>
           </div>
         </div>
