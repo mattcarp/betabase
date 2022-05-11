@@ -143,8 +143,7 @@
               <ng-container *ngIf="!reportData?.jiras?.length; else jirasLink">JIRA ticket</ng-container>
               <ng-template #jirasLink>
                 <a (click)="onClickScrollToElement('jiras')">
-                  JIRA ticket
-                  <ng-container *ngIf="reportData?.jiras?.length !== 1">s</ng-container>
+                  JIRA ticket<ng-container *ngIf="reportData?.jiras?.length !== 1">s</ng-container>
                 </a>
               </ng-template>
             </span>
