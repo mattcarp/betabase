@@ -9,6 +9,18 @@
   outline: none;
 }
 
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+  background-color: #eaeaea;
+  -webkit-appearance: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $color-violet;
+  box-shadow: 0 0 1px rgba($color-black, 0.5);
+}
+
 html,
 body,
 app-root,
@@ -162,6 +174,7 @@ ol {
 }
 
 a {
+  cursor: pointer;
   text-decoration: none;
   word-break: break-word;
   color: $color-blue;
@@ -430,7 +443,7 @@ a {
       }
 
       p {
-        margin: 0 10px;
+        margin: 0;
       }
 
       img {
@@ -482,7 +495,7 @@ a {
   }
 
   &:nth-child(even):not(header.grid) {
-    background-color: rgba($color-black, 0.04);
+    background-color: rgba(226, 228, 255, 0.8);
   }
 
   &:nth-child(odd):not(header.grid) {
@@ -539,6 +552,7 @@ header {
     overflow: hidden;
     height: 28px;
     min-height: 28px;
+    padding: 0 7px 0 0;
     border: 0;
     background-color: $color-table-head;
 
@@ -588,6 +602,12 @@ header {
         height: 100%;
         content: '';
         background-color: $color-white;
+      }
+
+      &:last-child {
+        &:after {
+          content: unset;
+        }
       }
 
       &.clickable {
