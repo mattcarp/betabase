@@ -30,40 +30,67 @@
 
   &-content {
     padding: 8px 16px 16px;
-    background-color: rgba(255,255,255,0.3);
+    background-color: rgba($color-white, 0.3);
 
-    &-grid {
-      display: grid;
-      grid-template-columns: minmax(100px, 1.5fr) repeat(auto-fit, minmax(80px, 1fr));
-      grid-template-rows: auto;
-      grid-gap: 10px;
+    .flex,
+    .grid-row {
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
       width: 100%;
-      line-height: 1.2;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 152px 1fr;
-      grid-template-rows: auto;
-      grid-gap: 10px;
-      width: 100%;
+      margin: 8px 0 16px;
 
       & > div {
-        line-height: 1.2;
+        display: flex;
+        align-items: center;
+        font-size: calc(14px + 1vw - 0.6vmin);
+        font-weight: bold;
+        gap: 8px;
 
-        &:first-child {
-          justify-self: flex-end;
-          color: $color-medium;
-        }
-
-        &:last-child {
-          @include ellipsis;
+        span {
+          font-size: 14px;
+          font-weight: normal;
         }
       }
     }
 
-    .notes {
-      width: 100%;
+    .flex {
+      & > div {
+        span:not(.grey) {
+          text-align: right;
+        }
+      }
+    }
+
+    .grid-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      grid-template-rows: auto;
+      margin: 16px 0 0;
+    }
+  }
+
+  details {
+    margin: 20px 0 0;
+
+    summary {
+      color: #3488d4;
+
+      ::marker {
+        color: $color-medium;
+      }
+    }
+
+    div {
+      margin: 5px 0 0;
+      padding: 10px;
+      background-color: $color-white;
+
+      ::ng-deep {
+        img {
+          max-width: 100%;
+        }
+      }
     }
   }
 }
@@ -107,6 +134,12 @@
       }
     }
 
+    .scrolling {
+      overflow-x: hidden;
+      overflow-y: scroll;
+      max-height: 50vh;
+    }
+
     .cancel-button {
       position: absolute;
       z-index: 2;
@@ -126,6 +159,13 @@
       }
     }
   }
+
+  &:nth-child(even),
+  &:nth-child(odd) {
+    &.fail {
+      background-color: #f9d0d1;
+    }
+  }
 }
 
 .ellipsis {
@@ -134,14 +174,15 @@
 
 .chart-container {
   display: flex;
-  min-height: 300px;
+  overflow-x: auto;
+  justify-content: center;
   margin: 10px 0 0;
   padding: 10px;
   background-color: white;
 
   .chart {
     position: relative;
-    width: 33.33%;
+    width: 300px;
   }
 }
 
