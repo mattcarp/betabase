@@ -157,7 +157,7 @@ export const getRoundById = async (id: string) => {
 export const addRound = async (params) => {
   const model = await Round.create(params);
   await model.save();
-  return model;
+  return model?.id;
 }
 
 export const updateRound = async (id, params) => {
