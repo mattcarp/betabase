@@ -74,12 +74,14 @@
 
     <div class="row">
       <label>Input</label>
-      <angular-editor [(ngModel)]="test.input" [config]="config"></angular-editor>
+      <ngx-editor-menu [editor]="inputEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
+      <ngx-editor [editor]="inputEditor" [(ngModel)]="test.input"></ngx-editor>
     </div>
 
     <div class="row">
       <label>Result</label>
-      <angular-editor [(ngModel)]="test.result" [config]="config"></angular-editor>
+      <ngx-editor-menu [editor]="resultEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
+      <ngx-editor [editor]="resultEditor" [(ngModel)]="test.result"></ngx-editor>
     </div>
 
     <div class="grid option">
@@ -141,7 +143,8 @@
 
     <div class="row">
       <label>Comments</label>
-      <angular-editor [(ngModel)]="test.comments" [config]="config"></angular-editor>
+      <ngx-editor-menu [editor]="commentsEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
+      <ngx-editor [editor]="commentsEditor" [(ngModel)]="test.comments"></ngx-editor>
     </div>
 
     <div>JIRA Ticket (can be added later) - use the form ABCD-1234</div>

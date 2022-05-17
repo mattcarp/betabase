@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { KeycloakService } from 'keycloak-angular';
 import { filter, pluck, tap } from 'rxjs/operators';
+import { Editor, Toolbar } from 'ngx-editor';
 
 import { ScenarioItem } from '../../shared/models';
 import { AppService } from '../../shared/app.service';
@@ -15,8 +15,8 @@ import { DialogWarningComponent } from '../../shared/layout/dialog-warning/dialo
   styleUrls: ['./scenario-form.component.scss'],
   host: { '[class.page]': 'true' },
 })
-export class ScenarioFormComponent {
-  app: string | null = null;
+export class ScenarioFormComponent implements OnDestroy {
+  app: string | undefined;
   id: string | null = null;
   scenario: ScenarioItem | null = null;
   isLoading = false;
@@ -29,32 +29,19 @@ export class ScenarioFormComponent {
     'Bug Fixes',
   ];
   modeOptions = ['Manual', 'Automated'];
-  config: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: '15rem',
-    minHeight: '5rem',
-    placeholder: 'Enter text here...',
-    translate: 'no',
-    defaultParagraphSeparator: 'p',
-    defaultFontName: 'Arial',
-    toolbarHiddenButtons: [['bold']],
-    customClasses: [
-      {
-        name: 'quote',
-        class: 'quote',
-      },
-      {
-        name: 'redText',
-        class: 'redText',
-      },
-      {
-        name: 'titleText',
-        class: 'titleText',
-        tag: 'h2',
-      },
-    ],
-  };
+  preconditionsEditor: Editor;
+  scriptEditor: Editor;
+  expectedResultEditor: Editor;
+  toolbarEditor: Toolbar = [
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['code', 'blockquote'],
+    ['ordered_list', 'bullet_list'],
+    [{ heading: ['h1', 'h2', 'h3', 'h4'] }],
+    ['link', 'image'],
+    ['text_color', 'background_color'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+  ];
 
   constructor(
     private appService: AppService,
@@ -73,6 +60,10 @@ export class ScenarioFormComponent {
         pluck('id'),
       )
       .subscribe((id: string) => this.fetchData(id));
+
+    this.preconditionsEditor = new Editor();
+    this.scriptEditor = new Editor();
+    this.expectedResultEditor = new Editor();
   }
 
   get saveBtnLabel(): string {
@@ -81,6 +72,12 @@ export class ScenarioFormComponent {
 
   get isAdmin(): boolean {
     return this.keycloakService.isUserInRole('admin');
+  }
+
+  ngOnDestroy(): void {
+    this.preconditionsEditor?.destroy();
+    this.scriptEditor?.destroy();
+    this.expectedResultEditor?.destroy();
   }
 
   async onSaveClick(): Promise<void> {

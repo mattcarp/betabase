@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { AngularEditorModule } from '@kolkov/angular-editor';
 import {
   NgxMatDatetimePickerModule,
   NgxMatTimepickerModule,
@@ -13,6 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
+import { NgxEditorModule } from 'ngx-editor';
 
 import { RoundRoutingModule } from './round-routing.module';
 import { NavModule } from '../shared/layout/nav/nav.module';
@@ -26,7 +26,7 @@ import { RoundDetailsComponent } from './round-details/round-details.component';
   imports: [
     CommonModule,
     RoundRoutingModule,
-    AngularEditorModule,
+    NgxEditorModule,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
