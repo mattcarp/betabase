@@ -31,7 +31,7 @@ export class TestFormComponent implements OnDestroy {
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
   browserNameOptions = ['Microsoft Edge', 'Firefox', 'Chrome', 'Safari', 'Android Browser'];
-  browserVersionOptions = [...Array(111).keys()].slice(15).map(String);
+  browserVersionOptions = [...Array(111).keys()].slice(14).map(String);
   osNameOptions = ['Windows', 'Mac OS', 'iOS', 'Android', 'Linux (Ubuntu)'];
   osVersionOptions = ['Vista', 'XP', ...Array(21).keys()].map(String);
   passFailOptions = ['Pending', 'Pass', 'Fail'];
