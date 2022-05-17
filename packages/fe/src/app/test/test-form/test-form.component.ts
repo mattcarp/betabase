@@ -44,7 +44,7 @@ export class TestFormComponent {
     ],
   };
   browserNameOptions = ['Microsoft Edge', 'Firefox', 'Chrome', 'Safari', 'Android Browser'];
-  browserVersionOptions = [...Array(111).keys()].slice(15).map(String);
+  browserVersionOptions = [...Array(111).keys()].slice(14).map(String);
   osNameOptions = ['Windows', 'Mac OS', 'iOS', 'Android', 'Linux (Ubuntu)'];
   osVersionOptions = ['Vista', 'XP', ...Array(21).keys()].map(String);
   passFailOptions = ['Pending', 'Pass', 'Fail'];
