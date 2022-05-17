@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { tap } from 'rxjs/operators';
 
@@ -50,7 +50,11 @@ export class TestFormComponent {
   passFailOptions = ['Pending', 'Pass', 'Fail'];
   inProdOptions = ['Yes', 'No', 'Unsure'];
 
-  constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private appService: AppService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+  ) {
     activatedRoute.params
       .pipe(tap(({ app }) => {
         this.test = {};
@@ -82,6 +86,7 @@ export class TestFormComponent {
       ? await this.appService.updateTest(params)
       : await this.appService.addTest(params);
     this.isLoading = false;
+    await this.router.navigate(['/scenario', this.app, this.test?.id, 'show']);
   }
 
   private async fetchData(scenarioId: string, testId: string): Promise<void> {
