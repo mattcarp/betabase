@@ -84,10 +84,10 @@ export class ScenarioFormComponent {
   }
 
   async onSaveClick(): Promise<void> {
-    this.id
+    const id = this.id
       ? await this.appService.updateScenario(<ScenarioItem>this.scenario)
       : await this.appService.addScenario(<ScenarioItem>this.scenario);
-    await this.router.navigate([`/dashboard/${this.app}/show`]);
+    await this.router.navigate(['/scenario', this.app, id, 'show']);
   }
 
   onCheckboxChange(value: boolean, key: 'reviewFlag' | 'clientPriority' | 'isSecurity'): void {
