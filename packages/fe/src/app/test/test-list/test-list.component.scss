@@ -9,3 +9,9 @@
   minmax(64px, 80px)
   minmax(64px, 90px);
 }
+
+header {
+  &.grid {
+    padding: 0;
+  }
+}

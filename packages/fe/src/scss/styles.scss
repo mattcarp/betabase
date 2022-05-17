@@ -391,7 +391,7 @@ a {
       border-right: none;
     }
 
-    & > span {
+    &:not(.inner-html) > span {
       @include ellipsis;
     }
 
