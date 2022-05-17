@@ -86,7 +86,7 @@ export class TestFormComponent {
       ? await this.appService.updateTest(params)
       : await this.appService.addTest(params);
     this.isLoading = false;
-    await this.router.navigate(['/scenario', this.app, this.test?.id, 'show']);
+    await this.router.navigate(['/test', this.scenario?.appUnderTest, this.test?.id, 'show']);
   }
 
   private async fetchData(scenarioId: string, testId: string): Promise<void> {
