@@ -7,7 +7,11 @@
   </div>
 
   <div *ngIf="!isLoading && scenario">
-    <h2>Edit Case {{scenario?.id}}</h2>
+    <h2>
+      <ng-container *ngIf="id?.length; else newItem">Edit</ng-container>
+      <ng-template #newItem>New</ng-template>
+      <ng-container> Case {{scenario?.id}}</ng-container>
+      </h2>
 
     <div>Name</div>
     <mat-form-field class="full-width">
