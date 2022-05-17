@@ -293,12 +293,10 @@
                 matBadgeOverlap="false" matBadgeColor="accent"></span>
         </h2>
         <div>
-          <mat-checkbox
-            [(ngModel)]="isNewFeaturesChecked"
-            (click)="onNewFeaturesPassClick()">
+          <mat-checkbox [(ngModel)]="isNewFeaturesChecked">
             Hide passing cases
             <span *ngIf="isNewFeaturesChecked" class="green">
-              ─ hiding {{numNewFeaturesChecked}} cases that have passed during this round
+              ─ hiding {{getPassedItemsQuantity(reportData?.enhancementScenarios)}} case<ng-container *ngIf="getPassedItemsQuantity(reportData?.enhancementScenarios) > 1">s</ng-container> that have passed during this round
             </span>
           </mat-checkbox>
           <div class="flex">
@@ -334,7 +332,7 @@
         </header>
 
         <div class="scrolling">
-          <div *ngFor="let item of reportData?.enhancementScenarios"
+          <div *ngFor="let item of getItemsByStatus(reportData?.enhancementScenarios, isNewFeaturesChecked)"
                cdkDrag cdkDragLockAxis="y"
                class="grid new-features"
                [ngClass]="{'pass': item?.lastTest === 'Pass', 'fail': item?.lastTest === 'Fail'}">
@@ -379,11 +377,10 @@
         </h2>
         <div>
           <mat-checkbox
-            [(ngModel)]="isPrioritiesChecked"
-            (click)="onPrioritiesPassClick()">
+            [(ngModel)]="isPrioritiesChecked">
             Hide passing cases
             <span *ngIf="isPrioritiesChecked" class="green">
-              ─ hiding {{numPrioritiesChecked}} cases that have passed during this round
+              ─ hiding {{getPassedItemsQuantity(reportData?.priorityScenarios)}} case<ng-container *ngIf="getPassedItemsQuantity(reportData?.priorityScenarios) > 1">s</ng-container> that have passed during this round
             </span>
           </mat-checkbox>
           <div class="flex">
@@ -419,7 +416,7 @@
         </header>
 
         <div class="scrolling">
-          <div *ngFor="let item of reportData?.priorityScenarios"
+          <div *ngFor="let item of getItemsByStatus(reportData?.priorityScenarios, isPrioritiesChecked)"
                cdkDrag cdkDragLockAxis="y"
                class="grid priorities"
                [ngClass]="{'pass': item?.lastTest === 'Pass', 'fail': item?.lastTest === 'Fail'}">
@@ -464,11 +461,10 @@
         </h2>
         <div>
           <mat-checkbox
-            [(ngModel)]="isRegressionsChecked"
-            (click)="onRegressionsPassClick()">
+            [(ngModel)]="isRegressionsChecked">
             Hide passing cases
             <span *ngIf="isRegressionsChecked" class="green">
-              ─ hiding {{numRegressionsChecked}} cases that have passed during this round
+              ─ hiding {{getPassedItemsQuantity(reportData?.regressionScenarios)}} case<ng-container *ngIf="getPassedItemsQuantity(reportData?.regressionScenarios) > 1">s</ng-container> that have passed during this round
             </span>
           </mat-checkbox>
           <div class="flex">
@@ -504,7 +500,7 @@
         </header>
 
         <div class="scrolling">
-          <div *ngFor="let item of reportData?.regressionScenarios"
+          <div *ngFor="let item of getItemsByStatus(reportData?.regressionScenarios, isRegressionsChecked)"
                cdkDrag cdkDragLockAxis="y"
                class="grid priorities"
                [ngClass]="{'pass': item?.lastTest === 'Pass', 'fail': item?.lastTest === 'Fail'}">

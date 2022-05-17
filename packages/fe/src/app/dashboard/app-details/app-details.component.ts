@@ -19,11 +19,8 @@ export class AppDetailsComponent {
   reportDataInitial: ReportData | null = null;
   app = '';
   isNewFeaturesChecked = false;
-  numNewFeaturesChecked = 0;
   isPrioritiesChecked = false;
-  numPrioritiesChecked = 0;
   isRegressionsChecked = false;
-  numRegressionsChecked = 0;
   draggedItems = {
     enhancementScenarios: false,
     priorityScenarios: false,
@@ -153,6 +150,17 @@ export class AppDetailsComponent {
     return this.app.replace('-', ' ').toUpperCase();
   }
 
+  getPassedItemsQuantity(scenarioItems: ScenarioItem[] = []): number {
+    const items = scenarioItems.filter(({ lastTest }) => lastTest === 'Pass') || [];
+    return items?.length;
+  }
+
+  getItemsByStatus(items: ScenarioItem[] = [], showFailed: boolean): ScenarioItem[] {
+    return showFailed
+      ? items.filter(({ lastTest }) => lastTest === 'Fail')
+      : items;
+  }
+
   getRatio(key: string): string {
     const { testedCount, totalCount } = this.getCounts(key);
     let ratio = 0;
@@ -179,39 +187,6 @@ export class AppDetailsComponent {
       behavior: 'smooth',
       block: 'start',
       inline: 'nearest',
-    });
-  }
-
-  onNewFeaturesPassClick(): void {
-    document.querySelectorAll('.new-features-pass').forEach((el: Element, index: number) => {
-      if (!this.isNewFeaturesChecked) {
-        this.numNewFeaturesChecked = index + 1;
-        el.classList.add('hidden');
-      } else {
-        el.classList.remove('hidden');
-      }
-    });
-  }
-
-  onPrioritiesPassClick(): void {
-    document.querySelectorAll('.priorities-pass').forEach((el: Element, index: number) => {
-      if (!this.isPrioritiesChecked) {
-        this.numPrioritiesChecked = index + 1;
-        el.classList.add('hidden');
-      } else {
-        el.classList.remove('hidden');
-      }
-    });
-  }
-
-  onRegressionsPassClick(): void {
-    document.querySelectorAll('.regressions-pass').forEach((el: Element, index: number) => {
-      if (!this.isRegressionsChecked) {
-        this.numRegressionsChecked = index + 1;
-        el.classList.add('hidden');
-      } else {
-        el.classList.remove('hidden');
-      }
     });
   }
 
