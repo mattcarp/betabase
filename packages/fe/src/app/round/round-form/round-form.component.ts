@@ -52,7 +52,7 @@ export class RoundFormComponent {
   ) {
     activatedRoute.params
       .pipe(
-        tap(() => this.round = {}),
+        tap((params: Params) => this.round = { app: params['app'] }),
         filter((params: Params) => 'id' in params),
         pluck('id'),
       )
@@ -73,7 +73,7 @@ export class RoundFormComponent {
 
   async onSaveClick(): Promise<void> {
     if (!this.round) { return; }
-    const { id } = this.round?.id
+    const id = this.round?.id
       ? await this.appService.updateRound(this.round)
       : await this.appService.addRound(this.round);
     await this.router.navigate(['/round', this.round?.app, id, 'show']);
