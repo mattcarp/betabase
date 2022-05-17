@@ -8,7 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { AngularEditorModule } from '@kolkov/angular-editor';
+import { NgxEditorModule } from 'ngx-editor';
 
 import { NavModule } from '../shared/layout/nav/nav.module';
 import { TestRoutingModule } from './test-routing.module';
@@ -36,7 +36,7 @@ import { DialogWarningComponent } from '../shared/layout/dialog-warning/dialog-w
     MatBadgeModule,
     MatDialogModule,
     NgxPaginationModule,
-    AngularEditorModule,
+    NgxEditorModule,
     TestRoutingModule,
     NavModule,
     PipesModule,

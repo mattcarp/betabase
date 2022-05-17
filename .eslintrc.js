@@ -1,0 +1,75 @@
+module.exports = {
+  root: true,
+  overrides: [
+    {
+      files: ['*.ts'],
+      parserOptions: {
+        project: ['tsconfig.*?.json', 'e2e/tsconfig.json'],
+        createDefaultProgram: true,
+      },
+      extends: [
+        'plugin:@angular-eslint/recommended',
+        'airbnb-typescript/base',
+        'prettier'
+      ],
+      plugins: ['import'],
+      rules: {
+        '@angular-eslint/no-output-native': 'off',
+        '@typescript-eslint/camelcase': 'off',
+        '@typescript-eslint/dot-notation': 'off',
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/lines-between-class-members': 'off',
+        '@typescript-eslint/naming-convention': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off',
+        '@typescript-eslint/no-object-literal-type-assertion': 'off',
+        '@typescript-eslint/no-parameter-properties': 'off',
+        '@typescript-eslint/no-underscore-dangle': 'off',
+        '@typescript-eslint/no-unused-expressions': 'off',
+        '@typescript-eslint/no-use-before-define': 'off',
+        'arrow-body-style': ['warn'],
+        'class-methods-use-this': 'off',
+        'dot-notation': 'off',
+        'function-paren-newline': 'off',
+        'global-require': 'off',
+        'implicit-arrow-linebreak': 'off',
+        'import/no-cycle': 'off',
+        'import/no-extraneous-dependencies': 'off',
+        'import/no-unresolved': 'off',
+        'import/prefer-default-export': 'off',
+        'max-len': [
+          'error',
+          { code: 120, ignoreComments: true, ignoreUrls: true, ignoreStrings: true },
+        ],
+        'no-console': 'off',
+        'no-empty-pattern': 'off',
+        'no-param-reassign': 'off',
+        'no-restricted-globals': 'off',
+        'no-return-await': 'off',
+        'no-underscore-dangle': 'off',
+        'no-unused-expressions': 'off',
+        'object-curly-newline': 'off',
+        'operator-linebreak': 'off',
+        'prefer-spread': 'off',
+        'radix': 'off',
+      },
+    },
+    {
+      files: ['index.html', '*.component.html'],
+      extends: ['plugin:@angular-eslint/template/recommended'],
+      rules: {
+        'max-len': ['warn', { code: 120, ignoreComments: true, ignoreUrls: true }],
+      },
+    },
+    {
+      files: ['*.component.ts'],
+      extends: ['plugin:@angular-eslint/template/process-inline-templates'],
+    },
+    {
+      files: ['src/**/*.spec.js'], // Or *.test.js
+      rules: {
+        'require-jsdoc': 'off',
+      },
+    },
+  ],
+};

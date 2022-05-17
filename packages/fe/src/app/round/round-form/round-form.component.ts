@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { Editor, Toolbar } from 'ngx-editor';
 import { filter, pluck, tap } from 'rxjs/operators';
 
 import { RoundItem } from '../../shared/models';
@@ -14,35 +14,20 @@ import { DialogWarningComponent } from '../../shared/layout/dialog-warning/dialo
   styleUrls: ['./round-form.component.scss'],
   host: { '[class.page]': 'true' },
 })
-export class RoundFormComponent {
+export class RoundFormComponent implements OnDestroy {
   round: RoundItem | null = null;
   isLoading = false;
-  config: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: '15rem',
-    minHeight: '5rem',
-    placeholder: 'Enter text here...',
-    translate: 'no',
-    defaultParagraphSeparator: 'p',
-    defaultFontName: 'Arial',
-    toolbarHiddenButtons: [['bold']],
-    customClasses: [
-      {
-        name: 'quote',
-        class: 'quote',
-      },
-      {
-        name: 'redText',
-        class: 'redText',
-      },
-      {
-        name: 'titleText',
-        class: 'titleText',
-        tag: 'h2',
-      },
-    ],
-  };
+  notesEditor: Editor;
+  toolbarEditor: Toolbar = [
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['code', 'blockquote'],
+    ['ordered_list', 'bullet_list'],
+    [{ heading: ['h1', 'h2', 'h3', 'h4'] }],
+    ['link', 'image'],
+    ['text_color', 'background_color'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+  ];
 
   constructor(
     private appService: AppService,
@@ -57,6 +42,12 @@ export class RoundFormComponent {
         pluck('id'),
       )
       .subscribe((id: string) => this.fetchData(id));
+
+    this.notesEditor = new Editor();
+  }
+
+  ngOnDestroy(): void {
+    this.notesEditor?.destroy();
   }
 
   onCheckboxChange(value: boolean): void {

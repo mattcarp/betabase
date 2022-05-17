@@ -447,17 +447,8 @@ a {
       }
 
       img {
-        min-width: 400px;
-        max-width: 100%;
         margin: 10px 0;
-        cursor: pointer;
-        transition: transform 0.4s ease-out, box-shadow 0.6s ease-out;
         box-shadow: 0 2px 6px 0 rgba($color-black, 0.2);
-
-        &:hover {
-          transform: scale(1.5);
-          box-shadow: 0 0 100px 0 rgba($color-black, 0.6);
-        }
       }
     }
 
@@ -744,25 +735,6 @@ label {
   }
 }
 
-// Editor
-.angular-editor {
-  .angular-editor-wrapper {
-    p {
-      margin: 10px 0 0;
-    }
-
-    .angular-editor-textarea {
-      background-color: $color-alt-row !important;
-
-      img {
-        min-width: 400px;
-        max-width: 100%;
-        box-shadow: 0 2px 6px 0 rgba($color-black, 0.2);
-      }
-    }
-  }
-}
-
 .auth-form {
   position: relative;
   display: flex;
@@ -800,4 +772,9 @@ label {
       margin-bottom: 6px;
     }
   }
+}
+
+// Editor
+.NgxEditor {
+  min-height: 8rem;
 }

@@ -9,7 +9,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { AngularEditorModule } from '@kolkov/angular-editor';
+import { NgxEditorModule } from 'ngx-editor';
 
 import { PipesModule } from '../shared/pipes/pipes.module';
 import { NavModule } from '../shared/layout/nav/nav.module';
@@ -32,7 +32,7 @@ import { ScenarioFormComponent } from './scenario-form/scenario-form.component';
     MatTooltipModule,
     MatBadgeModule,
     NgxPaginationModule,
-    AngularEditorModule,
+    NgxEditorModule,
     PipesModule,
     ScenarioRoutingModule,
     NavModule,

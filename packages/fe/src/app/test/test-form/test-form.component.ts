@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { Editor, Toolbar } from 'ngx-editor';
 import { tap } from 'rxjs/operators';
 
 import { AppService } from '../../shared/app.service';
@@ -12,37 +12,24 @@ import { ScenarioItem, TestItem } from '../../shared/models';
   styleUrls: ['./test-form.component.scss'],
   host: { '[class.page]': 'true' },
 })
-export class TestFormComponent {
+export class TestFormComponent implements OnDestroy {
   app: string | null = null;
   scenario: ScenarioItem | null = null;
   test: TestItem | null = null;
   isLoading = false;
-  config: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: '15rem',
-    minHeight: '5rem',
-    placeholder: 'Enter text here...',
-    translate: 'no',
-    defaultParagraphSeparator: 'p',
-    defaultFontName: 'Arial',
-    toolbarHiddenButtons: [['bold']],
-    customClasses: [
-      {
-        name: 'quote',
-        class: 'quote',
-      },
-      {
-        name: 'redText',
-        class: 'redText',
-      },
-      {
-        name: 'titleText',
-        class: 'titleText',
-        tag: 'h2',
-      },
-    ],
-  };
+  inputEditor: Editor;
+  resultEditor: Editor;
+  commentsEditor: Editor;
+  toolbarEditor: Toolbar = [
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['code', 'blockquote'],
+    ['ordered_list', 'bullet_list'],
+    [{ heading: ['h1', 'h2', 'h3', 'h4'] }],
+    ['link', 'image'],
+    ['text_color', 'background_color'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+  ];
   browserNameOptions = ['Microsoft Edge', 'Firefox', 'Chrome', 'Safari', 'Android Browser'];
   browserVersionOptions = [...Array(111).keys()].slice(15).map(String);
   osNameOptions = ['Windows', 'Mac OS', 'iOS', 'Android', 'Linux (Ubuntu)'];
@@ -61,6 +48,10 @@ export class TestFormComponent {
         this.scenario = { appUnderTest: app };
       }))
       .subscribe(({ scenarioId, id }) => this.fetchData(scenarioId, id));
+
+    this.inputEditor = new Editor();
+    this.resultEditor = new Editor();
+    this.commentsEditor = new Editor();
   }
 
   get isCreateTestBtnDisabled(): boolean {
@@ -77,6 +68,12 @@ export class TestFormComponent {
 
   get saveBtnLabel(): string {
     return this.test?.id ? 'Save Edits' : 'Save this Test';
+  }
+
+  ngOnDestroy(): void {
+    this.inputEditor?.destroy();
+    this.resultEditor?.destroy();
+    this.commentsEditor?.destroy();
   }
 
   async onSaveClick(): Promise<void> {

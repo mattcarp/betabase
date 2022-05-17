@@ -16,17 +16,20 @@
 
     <div class="row">
       <label>Preconditions</label>
-      <angular-editor [(ngModel)]="scenario.preconditions" [config]="config"></angular-editor>
+      <ngx-editor-menu [editor]="preconditionsEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
+      <ngx-editor [editor]="preconditionsEditor" [(ngModel)]="scenario.preconditions"></ngx-editor>
     </div>
 
     <div class="row">
       <label>Script</label>
-      <angular-editor [(ngModel)]="scenario.script" [config]="config"></angular-editor>
+      <ngx-editor-menu [editor]="scriptEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
+      <ngx-editor [editor]="scriptEditor" [(ngModel)]="scenario.script"></ngx-editor>
     </div>
 
     <div class="row">
       <label>Expected Result</label>
-      <angular-editor [(ngModel)]="scenario.expectedResult" [config]="config"></angular-editor>
+      <ngx-editor-menu [editor]="expectedResultEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
+      <ngx-editor [editor]="expectedResultEditor" [(ngModel)]="scenario.expectedResult"></ngx-editor>
     </div>
 
     <div class="grid">
