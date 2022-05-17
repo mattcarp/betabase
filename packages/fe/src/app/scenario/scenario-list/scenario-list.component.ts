@@ -49,7 +49,7 @@ export class ScenarioListComponent {
     return this.scenarios
       .filter((item: ScenarioItem) => {
         return this.paginationParams.searchTerm?.length
-          ? item.name?.includes(this.paginationParams.searchTerm)
+          ? item.name?.toLowerCase().includes(this.paginationParams.searchTerm)
           : true;
       })
       .sort((a: SortItem, b: SortItem) => {
