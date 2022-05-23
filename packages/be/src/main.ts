@@ -271,6 +271,7 @@ app.delete('/api/scenario/:id', [keycloak.protect(), keycloak.protect(`${config.
 });
 
 app.post('/api/test', [keycloak.protect()], async (request, response) => {
+  request.setTimeout(60 * 1000 * 10);
   const params = request.body;
   const model = await addTest(params);
   response.json(model);
@@ -287,6 +288,7 @@ app.get('/api/test/:id', [keycloak.protect()], async (request, response) => {
 });
 
 app.put('/api/test/:id', [keycloak.protect()], async (request, response) => {
+  request.setTimeout(60 * 1000 * 10);
   const id = request.params.id;
   const params = request.body;
   const model = await updateTest(id, params);
