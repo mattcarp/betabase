@@ -158,7 +158,7 @@ export const getTestCountRange = async (app: string, period: string) => {
   }
   const query = "SELECT COUNT(t.id) AS testCount\n" +
     "FROM `test` t, `scenario` s\n" +
-    "WHERE t.created_at BETWEEN '" + start + "' AND '" + end + "'\n" +
+    "WHERE t.created_at BETWEEN '" + start + " 0:00' AND '" + end + " 23:59'\n" +
     "AND s.id = t.scenario_id\n" +
     "AND s.app_under_test = '" + app + "'";
   const [{ testCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
