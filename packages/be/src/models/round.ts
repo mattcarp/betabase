@@ -74,10 +74,10 @@ export const getRoundNotes = async (app: string) => {
       'releaseNum',
       'releaseDate',
     ],
-    where: {
-      currentFlag: true,
-      app: app,
-    },
+    where: { app },
+    order: [
+      ['id', 'DESC'],
+    ],
   });
   return response?.[0]?.dataValues;
 }
