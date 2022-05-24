@@ -79,11 +79,16 @@ export class TestFormComponent implements OnDestroy {
   async onSaveClick(): Promise<void> {
     this.isLoading = true;
     const params = { ...this.test, scenarioId: this.scenario?.id! };
-    this.test?.id
-      ? await this.appService.updateTest(params)
-      : await this.appService.addTest(params);
-    this.isLoading = false;
-    await this.router.navigate(['/test', this.scenario?.appUnderTest, this.test?.id, 'show']);
+    try {
+      this.test?.id
+        ? await this.appService.updateTest(params)
+        : await this.appService.addTest(params);
+      this.isLoading = false;
+      await this.router.navigate(['/test', this.scenario?.appUnderTest, this.test?.id, 'show']);
+    } catch (e) {
+      console.log(e);
+      this.isLoading = false;
+    }
   }
 
   private async fetchData(scenarioId: string, testId: string): Promise<void> {

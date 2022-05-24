@@ -85,8 +85,7 @@ export const getRoundNotes = async (app: string) => {
 export const getTestCount = async (app: string) => {
   const query = "SELECT COUNT(t.id) AS testCount\n" +
     "FROM `round` r, `test` t, `scenario` s\n" +
-    "WHERE r.current_flag = TRUE\n" +
-    "AND t.updated_at BETWEEN r.starts_at AND r.ends_at\n" +
+    "WHERE t.updated_at BETWEEN r.starts_at AND r.ends_at\n" +
     "AND s.id = t.scenario_id\n" +
     "AND s.app_under_test = '" + app + "'\n" +
     "AND r.app  = '" + app + "'";
