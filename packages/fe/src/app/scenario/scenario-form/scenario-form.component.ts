@@ -1,13 +1,13 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { KeycloakService } from 'keycloak-angular';
 import { filter, pluck, tap } from 'rxjs/operators';
 import { Editor, Toolbar } from 'ngx-editor';
 
 import { ScenarioItem } from '../../shared/models';
 import { AppService } from '../../shared/app.service';
 import { DialogWarningComponent } from '../../shared/layout/dialog-warning/dialog-warning.component';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-scenario-form',
@@ -47,8 +47,8 @@ export class ScenarioFormComponent implements OnDestroy {
     private appService: AppService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private keycloakService: KeycloakService,
     private dialog: MatDialog,
+    private authService: AuthService,
   ) {
     activatedRoute.params
       .pipe(
@@ -71,7 +71,7 @@ export class ScenarioFormComponent implements OnDestroy {
   }
 
   get isAdmin(): boolean {
-    return this.keycloakService.isUserInRole('admin');
+    return this.authService.isAdmin;
   }
 
   ngOnDestroy(): void {
