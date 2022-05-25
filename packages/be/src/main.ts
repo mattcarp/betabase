@@ -4,8 +4,6 @@ import * as bodyParser from 'body-parser';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
 import * as path from 'path';
-import * as session from 'express-session';
-import * as Keycloak from 'keycloak-connect';
 
 import db from './models';
 import config from './config';
@@ -47,7 +45,7 @@ import {
   getTestList,
   updateTest,
 } from './models/test';
-import { addUser, sendResetPasswordToken, getUserByUsername, updateUser, getUserByToken } from './models/user';
+import { addUser, sendResetPasswordToken, getUserByUsername, updateUser, getUserByToken, getUser } from './models/user';
 import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
 
 const app = express();
@@ -56,26 +54,6 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.raw({ limit: '50mb' }));
 app.use(express.json());
-
-const memoryStore = new session.MemoryStore();
-app.use(session({
-  secret: config.secret,
-  resave: false,
-  saveUninitialized: true,
-  store: memoryStore,
-}));
-
-const keycloak = new Keycloak({
-  store: memoryStore,
-}, {
-  'realm': 'thebetabase',
-  'auth-server-url': 'https://betabase-keycloack.herokuapp.com/auth/',
-  'ssl-required': 'external',
-  'resource': 'thebetabase-client',
-  'confidential-port': 0
-});
-
-app.use(keycloak.middleware());
 
 const port = process.env.PORT || 3000;
 
@@ -93,7 +71,31 @@ app.listen(port, async () => {
   await establishDbConnection();
 });
 
-app.get('/api/app-list-data', keycloak.protect(), async (request, response) => {
+const isTokenValid = (req, res, next) => {
+  const token = req.headers['x-access-token'];
+  if (!token) {
+    return res.status(401).send({ message: 'No token provided!' });
+  }
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: 'Unauthorized!' });
+    }
+    req.userId = decoded.id;
+    next();
+  });
+};
+
+const isAdmin = async (req, res, next) => {
+  const user = await getUser(req.userId);
+  const isAdmin = !!(user?.roles || '').split(',').find((role: string) => role === 'ROLE_ADMIN');
+  if (!user || !isAdmin) {
+    return res.status(403).send({ message: 'Not enough rights' });
+  }
+  next();
+};
+
+app.get('/api/app-list-data', [isTokenValid], async (request, response) => {
+  request.setTimeout(60 * 1000 * 10);
   const aomaScenarios = await getScenarioCount('AOMA');
   const promoScenarios = await getScenarioCount('Promo');
   const partnerPreviewerScenarios = await getScenarioCount('Partner Previewer');
@@ -126,7 +128,8 @@ app.get('/api/app-list-data', keycloak.protect(), async (request, response) => {
   });
 });
 
-app.get('/api/:app/report-data', [keycloak.protect()], async (request, response) => {
+app.get('/api/:app/report-data', [isTokenValid], async (request, response) => {
+  request.setTimeout(60 * 1000 * 10);
   const app = request.params.app;
   const roundNotes = await getRoundNotes(app);
   const deployment = await getDeployment(app);
@@ -164,13 +167,13 @@ app.get('/api/:app/report-data', [keycloak.protect()], async (request, response)
   });
 });
 
-app.post('/api/user', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request: any, response, next) => {
+app.post('/api/user', [isTokenValid, isAdmin], async (request: any, response, next) => {
   const params = { ...request.body, password: bcrypt.hashSync(request.body.password, 8) };
   const model = await addUser(params);
   response.json(model);
 });
 
-app.put('/api/user/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request: any, response, next) => {
+app.put('/api/user/:id', [isTokenValid, isAdmin], async (request: any, response, next) => {
   const params = request.body;
   if ('password' in params) {
     delete params.password;
@@ -238,7 +241,7 @@ app.post('/api/auth/set-password-with-token', async (request: any, response, nex
   return response.status(200).json('Password has been set.');
 });
 
-app.get('/api/scenario/:id', [keycloak.protect()], async (request, response) => {
+app.get('/api/scenario/:id', [isTokenValid], async (request, response) => {
   const id = request.params.id;
   const scenario = await getScenario(id);
   const tests = await getScenarioTests(id);
@@ -246,48 +249,48 @@ app.get('/api/scenario/:id', [keycloak.protect()], async (request, response) => 
   response.json({ scenario, tests, variations });
 });
 
-app.get('/api/scenarios/:app', [keycloak.protect()], async (request, response) => {
+app.get('/api/scenarios/:app', [isTokenValid], async (request, response) => {
   const scenarios = await getScenarioList(request.params.app);
   response.json(scenarios);
 });
 
-app.post('/api/scenario', [keycloak.protect()], async (request, response) => {
+app.post('/api/scenario', [isTokenValid], async (request, response) => {
   const params = request.body;
   const model = await addScenario(params);
   response.json(model);
 });
 
-app.put('/api/scenario/:id', [keycloak.protect()], async (request, response) => {
+app.put('/api/scenario/:id', [isTokenValid], async (request, response) => {
   const id = request.params.id;
   const params = request.body;
   const result = await updateScenario(id, params);
   response.send(result);
 });
 
-app.delete('/api/scenario/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
+app.delete('/api/scenario/:id', [isTokenValid, isAdmin], async (request, response) => {
   const id = request.params.id;
   const result = await deleteScenario(id);
   response.json(result);
 });
 
-app.post('/api/test', [keycloak.protect()], async (request, response) => {
+app.post('/api/test', [isTokenValid], async (request, response) => {
   request.setTimeout(60 * 1000 * 10);
   const params = request.body;
   const model = await addTest(params);
   response.json(model);
 });
 
-app.get('/api/tests/:app', [keycloak.protect()], async (request, response) => {
+app.get('/api/tests/:app', [isTokenValid], async (request, response) => {
   const model = await getTestList(request.params.app);
   response.json(model);
 });
 
-app.get('/api/test/:id', [keycloak.protect()], async (request, response) => {
+app.get('/api/test/:id', [isTokenValid], async (request, response) => {
   const model = await getTest(request.params.id);
   response.json(model);
 });
 
-app.put('/api/test/:id', [keycloak.protect()], async (request, response) => {
+app.put('/api/test/:id', [isTokenValid], async (request, response) => {
   request.setTimeout(60 * 1000 * 10);
   const id = request.params.id;
   const params = request.body;
@@ -295,13 +298,13 @@ app.put('/api/test/:id', [keycloak.protect()], async (request, response) => {
   response.json(model);
 });
 
-app.delete('/api/test/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
+app.delete('/api/test/:id', [isTokenValid, isAdmin], async (request, response) => {
   const id = request.params.id;
   const result = await deleteTest(id);
   response.json(result);
 });
 
-app.post('/api/scenario/order', [keycloak.protect()], async (request, response) => {
+app.post('/api/scenario/order', [isTokenValid], async (request, response) => {
   const { items, type } = request.body;
   let prop;
   switch (type) {
@@ -327,40 +330,40 @@ app.post('/api/scenario/order', [keycloak.protect()], async (request, response) 
   response.send(items);
 });
 
-app.post('/api/variation', [keycloak.protect()], async (request, response) => {
+app.post('/api/variation', [isTokenValid], async (request, response) => {
   const params = request.body;
   const model = await addVariation(params);
   response.json(model);
 });
 
-app.put('/api/variation/:id', [keycloak.protect()], async (request, response) => {
+app.put('/api/variation/:id', [isTokenValid], async (request, response) => {
   const id = request.params.id;
   const params = request.body;
   const model = await updateVariation(id, params);
   response.json(model);
 });
 
-app.get('/api/rounds/:app', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
+app.get('/api/rounds/:app', [isTokenValid, isAdmin], async (request, response) => {
   const rounds = await getRoundList(request.params.app);
   response.json(rounds);
 });
 
-app.get('/api/round/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
+app.get('/api/round/:id', [isTokenValid, isAdmin], async (request, response) => {
   const round = await getRoundById(request.params.id);
   response.json(round);
 });
 
-app.delete('/api/round/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
+app.delete('/api/round/:id', [isTokenValid, isAdmin], async (request, response) => {
   const status = await deleteRound(request.params.id);
   response.json(status);
 });
 
-app.post('/api/round', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
+app.post('/api/round', [isTokenValid, isAdmin], async (request, response) => {
   const model = await addRound(request.body);
   response.json(model);
 });
 
-app.put('/api/round/:id', [keycloak.protect(), keycloak.protect(`${config.resource}:admin`)], async (request, response) => {
+app.put('/api/round/:id', [isTokenValid, isAdmin], async (request, response) => {
   const id = request.params.id;
   const params = request.body;
   const model = await updateRound(id, params);

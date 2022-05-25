@@ -1,8 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { KeycloakService } from 'keycloak-angular';
 
 import { AuthService } from '../auth.service';
 import { NotificationDialogComponent } from '../../shared/layout/notification-dialog/notification-dialog.component';
@@ -13,7 +12,7 @@ import { NotificationDialogComponent } from '../../shared/layout/notification-di
   styleUrls: ['../auth.component.scss'],
   // host: { '[class.auth-form]': 'true' },
 })
-export class SignInComponent implements OnInit {
+export class SignInComponent {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   passwordFormControl = new FormControl('', [Validators.required]);
   typePass = 'password';
@@ -24,17 +23,7 @@ export class SignInComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private dialog: MatDialog,
-    private keycloakService: KeycloakService,
   ) {}
-
-  async ngOnInit(): Promise<void> {
-    const isLoggedIn = await this.keycloakService.isLoggedIn();
-    if (isLoggedIn) {
-      await this.router.navigate(['/dashboard']);
-    } else {
-      await this.keycloakService.login();
-    }
-  }
 
   async onSignInClick(email: string = '', password: string = ''): Promise<void> {
     this.isLoading = true;

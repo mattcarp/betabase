@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { KeycloakService } from 'keycloak-angular';
 import { filter, pluck } from 'rxjs/operators';
 
 import { NavConstants } from './nav.constant';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-nav',
@@ -23,7 +23,7 @@ export class NavComponent {
     private location: Location,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private keycloakService: KeycloakService,
+    private authService: AuthService,
   ) {
     activatedRoute.params
       .pipe(
@@ -36,7 +36,7 @@ export class NavComponent {
   }
 
   get isAdmin(): boolean {
-    return this.keycloakService.isUserInRole('admin');
+    return this.authService.isAdmin;
   }
 
   get isSupport(): boolean {
