@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Params} from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { LabelType } from '@angular-slider/ngx-slider';
 import * as moment from 'moment';
 import { filter, pluck, tap } from 'rxjs/operators';
 
@@ -27,6 +28,12 @@ export class AppDetailsComponent {
     regressionScenarios: false,
   };
   chartDisplayOptions = detailsChartOptions;
+  isMonthsMode = false;
+  yearsUnique: string[] = [];
+
+  private allTests: TestItem[] = [];
+  private yearsAllTests: string[] = [];
+  private isDaysMode = false;
 
   constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
     activatedRoute.params
@@ -137,7 +144,7 @@ export class AppDetailsComponent {
           return '/assets/logos/promo-admin-logo.png';
         case 'Partner Previewer':
           return '/assets/logos/partner-logo.png';
-       case 'dx':
+        case 'dx':
           return '/assets/logos/dx-logo.png';
         default:
           return '';
@@ -223,6 +230,31 @@ export class AppDetailsComponent {
     };
   }
 
+  async yearSliderEvent(): Promise<void> {
+    const start = this.yearsUnique.indexOf(String(this.chartDisplayOptions.yearSlider.value));
+    const end = this.yearsUnique.indexOf(String(this.chartDisplayOptions.yearSlider.highValue));
+    this.isMonthsMode = end - start === 0;
+    if (this.isMonthsMode) {
+      await this.fetchDataTotalCharts(this.getValuesMonth(), this.getKeysMonth());
+    } else {
+      await this.fetchDataTotalCharts(this.yearsUnique.slice(start, end + 1));
+      this.chartDisplayOptions.monthSlider.value = 0;
+      this.chartDisplayOptions.monthSlider.highValue = 11;
+    }
+  }
+
+  async monthSliderEvent(): Promise<void> {
+    const start = this.chartDisplayOptions.monthSlider.value;
+    const end = this.chartDisplayOptions.monthSlider.highValue;
+    this.isDaysMode = end - start === 0;
+    if (this.isDaysMode) {
+      const days = [...Array(31).keys()].slice(1).map(String);
+      await this.fetchDataTotalCharts(days);
+    } else {
+      await this.fetchDataTotalCharts(this.getValuesMonth().slice(start, end + 1), this.getKeysMonth().slice(start, end + 1));
+    }
+  }
+
   private getCounts(key: string): { testedCount: number; totalCount: number } {
     let testedCount = 0;
     const reportData = this.reportData as any;
@@ -237,6 +269,7 @@ export class AppDetailsComponent {
     this.reportDataInitial = JSON.parse(JSON.stringify(this.reportData));
 
     // Data for Charts
+    this.allTests = await this.appService.getAllTests(this.app);
     // - Completion
     const overall = parseInt(this.overallRatio.replace('%', ''));
     const completion = this.chartDisplayOptions.completion;
@@ -250,74 +283,225 @@ export class AppDetailsComponent {
       completion.result = overall;
     }
     completion.isLoading = false;
-
-    const tests = await this.appService.getAllTests(this.app);
-
     // - Browser
-    const browsers = tests.map(({ browserName }) => browserName).sort();
+    const browsers = this.allTests.map(({ browserName }) => browserName).sort();
     const browserName = [...new Set(browsers)];
     const browser = this.chartDisplayOptions.browser;
     browser.datasets[0].data = [];
     browser.labels = [];
-    browserName.forEach((item: string | undefined) => {
-      const number = browsers.filter(browser => browser === item).length;
-      browser.datasets[0].data.push(number);
+    const backgroundColor: string[] = [];
+    const hoverBackgroundColor: string[] = [];
+    browserName.forEach((item: string | undefined, index: number) => {
+      browser.datasets[0].data.push(browsers.filter(browser => browser === item).length);
       browser.labels.push(item || '');
+      switch (item) {
+        case 'Chrome':
+          backgroundColor.push('#9ada9d');
+          hoverBackgroundColor.push('#57c04b');
+          break;
+        case 'Firefox':
+          backgroundColor.push('#ffa4b6');
+          hoverBackgroundColor.push('#ff6384');
+          break;
+        case 'Safari':
+          backgroundColor.push('#ffe29f');
+          hoverBackgroundColor.push('#ffcd56');
+          break;
+        case 'Android Browser':
+          backgroundColor.push('#86c7f3');
+          hoverBackgroundColor.push('#36a1eb');
+          break;
+        case 'Internet Explorer':
+          backgroundColor.push('#eeeff1');
+          hoverBackgroundColor.push('#d7dae0');
+          break;
+        case 'Microsoft Edge':
+          backgroundColor.push('#cda4ff');
+          hoverBackgroundColor.push('#a163ff');
+          break;
+        default:
+          backgroundColor.push('#ffeaa4');
+          hoverBackgroundColor.push('#ffe063');
+          break;
+      }
     });
+    browser.datasets[0].backgroundColor = backgroundColor;
+    browser.datasets[0].hoverBackgroundColor = hoverBackgroundColor;
+    browser.datasets[0].hoverBorderColor = 'rgba(0, 0, 0, 0.1)';
+    browser.datasets[0].label = 'value';
     browser.isLoading = false;
 
-    // - Total Tests by Date
-    const years = tests.map((test: TestItem) => moment(test.createdAt).format('YYYY')).sort();
-    const yearsUnique = [...new Set(years)];
-    let xAxisName = yearsUnique;
-    const total = this.chartDisplayOptions.total;
-    total.datasets[0].data = [];
-    total.datasets[0].label = [];
-    total.datasets[1].data = [];
-    total.datasets[1].label = [];
-    total.labels = [];
-    if (yearsUnique.length > 1) {
+    // ngx-slider
+    this.yearsAllTests = this.allTests.map((test: TestItem) => moment(test.createdAt).format('YYYY')).sort();
+    this.yearsUnique = [...new Set(this.yearsAllTests)];
+    if (this.yearsUnique.length > 1) {
+      const now = new Date().getFullYear();
+      now ? this.yearsUnique.splice(-1) : null;
+      const lastYear = parseInt(this.yearsUnique[this.yearsUnique.length - 1]);
+      for (let i = 0; i < now - lastYear; i += 1) {
+        this.yearsUnique.push((now - i).toString());
+      }
+      this.yearsUnique.sort();
+      await this.fetchDataTotalCharts(this.yearsUnique);
+    } else {
+      this.isMonthsMode = true;
+      await this.fetchDataTotalCharts(this.getValuesMonth(), this.getKeysMonth());
+    }
+    this.setYearSlider({
+      years: this.yearsUnique,
+      value: this.yearsUnique[0],
+      highValue: this.yearsUnique[this.yearsUnique.length - 1],
+    });
+    this.setMonthSlider({
+      value: 0,
+      highValue: 11,
+    });
+  }
+
+  private async fetchDataTotalCharts(xAxisName: string[], keyMonths: string[] = []): Promise<void> {
+    let data0: string[] = [];
+    let data1: string[] = [];
+    let labels: string[] = [];
+
+    if (this.isMonthsMode) {
+      const year = String(this.chartDisplayOptions.yearSlider.highValue || new Date().getFullYear());
+      const result = this.allTests
+        .map((test: TestItem) => moment(test.createdAt).format('YYYY-MM'))
+        .sort()
+        .filter((item: string) => item.includes(year))
+        .map((item: string) => item.replace(`${year}-`, ''));
+      const diff: string[] = [];
+      result.forEach((item: string) => {
+        if (keyMonths.includes(item)) {
+          diff.push(item);
+        }
+      });
+      xAxisName.forEach((name: string) => {
+        const month: { key: string; value: string }[] = this.chartDisplayOptions.months.filter(({ value }) => value === name);
+        data0.push(String(diff.filter((key: string) => key === month[0].key).length));
+        labels.push(name);
+      });
+
+      if (this.isDaysMode) {
+        data0 = [];
+        labels = [];
+        const year = String(this.chartDisplayOptions.yearSlider.highValue);
+        let month = String(this.chartDisplayOptions.monthSlider.highValue + 1);
+        month = Number(month) < 10 ? `0${month}` : month;
+        const result = this.allTests
+          .map((test: TestItem) => moment(test.createdAt).format('YYYY-MM-DD'))
+          .sort()
+          .filter((item: string) => item.includes(year))
+          .filter((item: string) => item.includes(`-${month}-`))
+          .map((item: string) => item.replace(`${year}-${month}-`, ''));
+        xAxisName.forEach((day: string) => {
+          data0.push(String(result.filter(item => item === day).length));
+          labels.push(day);
+        });
+      }
+
+      this.chartDisplayOptions.total = {
+        isLoading: false,
+        type: 'line',
+        title: 'Total Tests',
+        datasets: [
+          {
+            data: data0,
+            label: ['Total Tests'],
+            tension: 0.5,
+            fill: 'start',
+          },
+        ],
+        labels: labels,
+      };
+    } else {
       // -- For new features
-      const yearsFeatures = this.reportData.enhancementScenarios
+      const yearsFeatures = this.reportData?.enhancementScenarios
         .map((item: ScenarioItem) => moment(item.mostRecent).format('YYYY')).sort();
       const yearFeaturesName = [...new Set(yearsFeatures)];
       const lastYearFeatures = yearFeaturesName[yearFeaturesName.length - 1];
-      const lastNumFeatures = yearsFeatures.filter(item => item === lastYearFeatures).length;
-      const now = new Date().getFullYear();
-      const lastList = parseInt(xAxisName[xAxisName.length - 1]);
-      lastList === now ? xAxisName.splice(-1) : null;
-      const lastYear = parseInt(xAxisName[xAxisName.length - 1]);
-      for (let i = 0; i < now - lastYear; i += 1) {
-        xAxisName.push((now - i).toString());
-      }
-      xAxisName.sort().forEach((value: string) => {
-        total.datasets[0].data.push(years.filter(item => item === value).length);
+      const lastNumFeatures = yearsFeatures?.filter(item => item === lastYearFeatures).length;
+
+      xAxisName.forEach((value: string) => {
+        data0.push(String(this.yearsAllTests.filter(item => item === value).length));
         const numFeatures = parseInt(value) >= parseInt(lastYearFeatures)
           ? lastNumFeatures
-          : yearsFeatures.filter(item => item === value).length;
-        total.datasets[1].data.push(numFeatures);
-        total.labels.push(value || '');
+          : yearsFeatures?.filter(item => item === value).length;
+        data1.push(String(numFeatures));
+        labels.push(value);
       });
-    } else {
-      // -- For new features
-      const monthsFeatures = this.reportData.enhancementScenarios
-        .map((item: ScenarioItem) => moment(item.mostRecent).format('MM')).sort();
-      const monthFeaturesName = [...new Set(monthsFeatures)];
-      const lastMonthFeatures = monthFeaturesName[monthFeaturesName.length - 1];
-      const lastNumFeatures = monthsFeatures.filter(item => item === lastMonthFeatures).length;
-      const months = tests.map((test: TestItem) => parseInt(moment(test.createdAt).format('MM'))).sort();
-      xAxisName = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
-      xAxisName.forEach((value: string, index: number) => {
-        total.datasets[0].data.push(months.filter(item => item === index + 1).length);
-        const numFeatures = parseInt(value) >= parseInt(lastMonthFeatures)
-          ? lastNumFeatures
-          : monthsFeatures.filter(item => item === value).length;
-        total.datasets[1].data.push(numFeatures);
-        total.labels.push(value || '');
-      });
+
+      this.chartDisplayOptions.total = {
+        isLoading: false,
+        type: 'line',
+        title: 'Total Tests',
+        datasets: [
+          {
+            data: data0,
+            label: ['Total Tests'],
+            tension: 0.5,
+            fill: 'start',
+          },
+          {
+            data: data1,
+            label: ['For New Features'],
+            tension: 0.5,
+          },
+        ],
+        labels: labels,
+      };
     }
-    total.datasets[0].label.push('Total Tests');
-    total.datasets[1].label.push('For New Features');
-    total.isLoading = false;
+  }
+
+  private setYearSlider(yearData: any): void {
+    // Example -- https://www.npmjs.com/package/@angular-slider/ngx-slider
+    const yearSlider = this.chartDisplayOptions.yearSlider;
+    const years = yearData.years;
+    yearSlider.options = {
+      floor: Number(years[0]),
+      ceil: Number(years[years.length - 1]),
+      step: 1,
+      showTicks: true,
+    };
+    yearSlider.value = yearData.value;
+    yearSlider.highValue = yearData.highValue;
+  }
+
+  private setMonthSlider(monthData: { value: number, highValue: number }): void {
+    const monthSlider = this.chartDisplayOptions.monthSlider;
+    monthSlider.options = {
+      floor: 0,
+      ceil: 11,
+      step: 1,
+      showTicks: true,
+      translate: (value: number, label: LabelType): string => {
+        switch (label) {
+          case LabelType.Low:
+            return this.getValuesMonth()[value];
+          case LabelType.High:
+            return this.getValuesMonth()[value];
+          default:
+            return this.getValuesMonth()[value];
+        }
+      }
+    };
+    monthSlider.value = monthData.value;
+    monthSlider.highValue = monthData.highValue;
+  }
+
+  private getKeysMonth(): string[] {
+    const months: string[] = [];
+    this.chartDisplayOptions.months.forEach(({ key }) => {
+      months.push(key);
+    });
+    return months;
+  }
+
+  private getValuesMonth(): string[] {
+    const months: string[] = [];
+    this.chartDisplayOptions.months.forEach(({ value }) => {
+      months.push(value);
+    });
+    return months;
   }
 }

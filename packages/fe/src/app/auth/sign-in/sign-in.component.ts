@@ -10,7 +10,7 @@ import { NotificationDialogComponent } from '../../shared/layout/notification-di
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
   styleUrls: ['../auth.component.scss'],
-  // host: { '[class.auth-form]': 'true' },
+  host: { '[class.auth-form]': 'true' },
 })
 export class SignInComponent {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);

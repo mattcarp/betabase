@@ -43,9 +43,9 @@
       & > div {
         display: flex;
         align-items: center;
+        gap: 8px;
         font-size: calc(14px + 1vw - 0.6vmin);
         font-weight: bold;
-        gap: 8px;
 
         span {
           font-size: 14px;
@@ -175,14 +175,117 @@
 .chart-container {
   display: flex;
   overflow-x: auto;
-  justify-content: center;
+  min-height: 244px;
   margin: 10px 0 0;
   padding: 10px;
   background-color: white;
 
+  @media only screen and (min-width: 1250px) {
+    justify-content: center;
+  }
+
   .chart {
     position: relative;
     width: 300px;
+
+    &.total {
+      display: grid;
+      grid-template-columns: 300px 250px;
+      column-gap: 10px;
+      width: 550px;
+
+      .period {
+        display: grid;
+        grid-template-rows: 20px 1fr;
+        margin: 0 16px 0 0;
+
+        b,
+        span {
+          display: block;
+          text-align: center;
+        }
+
+        span {
+          font-size: 12px;
+          color: #717171;
+        }
+
+        & > div {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        ::ng-deep {
+          .ngx-slider {
+            margin: 28px 0 12px;
+
+            .ngx-slider-bar {
+              height: 2px;
+              background-color: #e5e5e5;
+            }
+
+            .ngx-slider-selection {
+              background-color: $color-blue;
+            }
+
+            .ngx-slider-pointer {
+              top: auto;
+              bottom: 0;
+              width: 8px;
+              height: 16px;
+              border-top-left-radius: 3px;
+              border-top-right-radius: 3px;
+              background-color: $color-medium;
+
+              &:after {
+                display: none;
+              }
+            }
+
+            .ngx-slider-bubble {
+              bottom: 18px;
+              font-size: 12px;
+            }
+
+            .ngx-slider-limit {
+              font-weight: bold;
+              color: $color-blue;
+            }
+
+            .ngx-slider-tick {
+              top: -1px;
+              width: 1px;
+              height: 10px;
+              margin-left: 4px;
+              border-radius: 0;
+              background: $color-lightgrey;
+
+              &ngx-slider-selected {
+                background-color: $color-blue;
+              }
+            }
+          }
+        }
+
+        .slider {
+          position: relative;
+
+          &.disabled {
+            &:after {
+              position: absolute;
+              z-index: 10;
+              top: 0;
+              display: block;
+              width: 100%;
+              height: 100%;
+              content: '';
+              background-color: rgba($color-white, 0.5);
+            }
+          }
+        }
+      }
+    }
   }
 }
 

@@ -63,12 +63,35 @@
               <app-chart [inputOptions]="chartDisplayOptions?.browser"></app-chart>
             </ng-template>
           </div>
-          <div class="chart">
+          <div class="chart total">
             <ng-container *ngIf="chartDisplayOptions?.total?.isLoading; else totalChart">
               <ng-template [ngTemplateOutlet]="spinner"></ng-template>
             </ng-container>
             <ng-template #totalChart>
               <app-chart [inputOptions]="chartDisplayOptions?.total"></app-chart>
+              <div class="period">
+                <b>Period selection</b>
+                <div>
+                  <span>Year(s)</span>
+                  <div class="slider" [class.disabled]="yearsUnique?.length === 1">
+                    <ngx-slider
+                      (mouseup)="yearSliderEvent()"
+                      [(value)]="chartDisplayOptions.yearSlider.value"
+                      [(highValue)]="chartDisplayOptions.yearSlider.highValue"
+                      [options]="chartDisplayOptions.yearSlider.options">
+                    </ngx-slider>
+                  </div>
+                  <span>Month(s)</span>
+                  <div class="slider" [class.disabled]="!isMonthsMode">
+                    <ngx-slider
+                      (mouseup)="monthSliderEvent()"
+                      [(value)]="chartDisplayOptions.monthSlider.value"
+                      [(highValue)]="chartDisplayOptions.monthSlider.highValue"
+                      [options]="chartDisplayOptions.monthSlider.options">
+                    </ngx-slider>
+                  </div>
+                </div>
+              </div>
             </ng-template>
           </div>
         </div>
