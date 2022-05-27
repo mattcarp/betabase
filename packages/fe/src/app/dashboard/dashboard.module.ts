@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatBadgeModule } from '@angular/material/badge';
 import { NgChartsModule } from 'ng2-charts';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { NavModule } from '../shared/layout/nav/nav.module';
@@ -36,6 +37,7 @@ import { ChartComponent } from './app-details/chart/chart.component';
     MatButtonModule,
     MatBadgeModule,
     NgChartsModule,
+    NgxSliderModule,
     DashboardRoutingModule,
     NavModule,
     SpinnerModule,

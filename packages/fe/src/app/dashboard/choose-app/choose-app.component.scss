@@ -40,6 +40,7 @@
       width: 300px;
       height: 300px;
       content: '';
+      transition: transform 0.4s ease-out, bottom 0.4s ease-out;
       transform: rotate(-30deg);
       opacity: 0.08;
     }
@@ -54,6 +55,8 @@
       background-color: $color-active;
 
       &:before {
+        bottom: -90px;
+        transform: rotate(-25deg) scale(1.2);
         filter: grayscale(100%);
       }
     }
