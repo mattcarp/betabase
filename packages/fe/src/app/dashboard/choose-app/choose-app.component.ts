@@ -25,11 +25,45 @@ export class ChooseAppComponent implements OnInit {
     chartDisplayOptions.completion.isLoading = true;
     chartDisplayOptions.browser.isLoading = true;
     chartDisplayOptions.total.isLoading = true;
-
-    this.data = await this.appService.getAppListData();
+    this.data = {};
+    ['Partner Previewer', 'AOMA', 'Promo', 'Promo Admin', 'DX'].forEach((appName: string) => {
+      ['getScenarioCount', 'getAppRoundNotes', 'getTestCount', 'getFailCount'].forEach((methodName: string) => {
+        this.setPropValue(appName, methodName);
+      });
+    });
   }
 
-  onButtonClick(page: string): void {
-    this.router.navigate([`${page}`]);
+  private async setPropValue(appName: string, methodName: string): Promise<void> {
+    let propName = '';
+    let propValue;
+    let prefix = appName
+      .split(' ')
+      .map((word: string, index: number) => {
+        return index === 0 ? word.toLowerCase() : word[0].toUpperCase() + word.substring(1);
+      })
+      .join('');
+    switch (methodName) {
+      case 'getScenarioCount':
+        propName = `${prefix}Scenarios`;
+        propValue = await this.appService.getScenarioCount(appName);
+        break;
+      case 'getAppRoundNotes':
+        propName = `${prefix}Round`;
+        propValue = await this.appService.getRoundNotes(appName);
+        break;
+      case 'getTestCount':
+        propName = `${prefix}TestCount`;
+        propValue = await this.appService.getTestCount(appName);
+        break;
+      case 'getFailCount':
+        propName = `${prefix}Fails`;
+        propValue = await this.appService.getFailCount(appName);
+        break;
+    }
+    this.data = { ...this.data, [propName]: propValue };
+  }
+
+  async onButtonClick(page: string): Promise<void> {
+    await this.router.navigate([`${page}`]);
   }
 }
