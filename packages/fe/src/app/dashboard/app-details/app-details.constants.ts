@@ -10,13 +10,13 @@ export const detailsChartOptions: {
     value: number;
     highValue: number;
     options: Options;
-  }
+  };
   monthSlider: {
     value: number;
     highValue: number;
     options: Options;
-  }
-  months: { key: string, value: string }[]
+  };
+  months: { key: string, value: string }[];
 } = {
   completion: {
     isLoading: true,

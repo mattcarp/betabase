@@ -490,18 +490,10 @@ export class AppDetailsComponent {
   }
 
   private getKeysMonth(): string[] {
-    const months: string[] = [];
-    this.chartDisplayOptions.months.forEach(({ key }) => {
-      months.push(key);
-    });
-    return months;
+    return this.chartDisplayOptions.months.map(({ key }) => key);
   }
 
   private getValuesMonth(): string[] {
-    const months: string[] = [];
-    this.chartDisplayOptions.months.forEach(({ value }) => {
-      months.push(value);
-    });
-    return months;
+    return this.chartDisplayOptions.months.map(({ value }) => value);
   }
 }
