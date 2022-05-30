@@ -41,12 +41,12 @@
 
           <section>
             <div>Tests This Round:</div>
-            <div>{{data?.partnerPreviewerTestCount}} total, {{data?.partnerPreviewerFails}} fails</div>
+            <div>{{data?.partnerPreviewerTestCount || 0}} total, {{data?.partnerPreviewerFails || 0}} fails</div>
           </section>
 
           <section>
             <div>Cases Available:</div>
-            <div>{{data?.partnerPreviewerScenarios?.scenarioCount}}</div>
+            <div>{{data?.partnerPreviewerScenarios?.scenarioCount || 0}}</div>
           </section>
         </mat-card-content>
       </mat-card>
@@ -85,12 +85,12 @@
 
           <section>
             <div>Tests This Round:</div>
-            <div>{{data?.aomaTestCount}} total, {{data?.aomaFails}} fails</div>
+            <div>{{data?.aomaTestCount || 0}} total, {{data?.aomaFails || 0}} fails</div>
           </section>
 
           <section>
             <div>Cases Available:</div>
-            <div>{{data?.aomaScenarios?.scenarioCount}}</div>
+            <div>{{data?.aomaScenarios?.scenarioCount || 0}}</div>
           </section>
         </mat-card-content>
       </mat-card>
@@ -129,12 +129,12 @@
 
           <section>
             <div>Tests This Round:</div>
-            <div>{{data?.promoAdminTestCount}} total, {{data?.promoAdminFails}} fails</div>
+            <div>{{data?.promoAdminTestCount || 0}} total, {{data?.promoAdminFails || 0}} fails</div>
           </section>
 
           <section>
             <div>Cases Available:</div>
-            <div>{{data?.promoAdminScenarios?.scenarioCount}}</div>
+            <div>{{data?.promoAdminScenarios?.scenarioCount || 0}}</div>
           </section>
         </mat-card-content>
       </mat-card>
@@ -173,12 +173,12 @@
 
           <section>
             <div>Tests This Round:</div>
-            <div>{{data?.promoTestCount}} total, {{data?.promoFails}} fails</div>
+            <div>{{data?.promoTestCount || 0}} total, {{data?.promoFails || 0}} fails</div>
           </section>
 
           <section>
             <div>Cases Available:</div>
-            <div>{{data?.promoScenarios?.scenarioCount}}</div>
+            <div>{{data?.promoScenarios?.scenarioCount || 0}}</div>
           </section>
         </mat-card-content>
       </mat-card>
@@ -217,12 +217,12 @@
 
           <section>
             <div>Tests This Round:</div>
-            <div>{{data?.dxTestCount}} total, {{data?.dxFails}} fails</div>
+            <div>{{data?.dxTestCount || 0}} total, {{data?.dxFails || 0}} fails</div>
           </section>
 
           <section>
             <div>Cases Available:</div>
-            <div>{{data?.dxScenarios?.scenarioCount}}</div>
+            <div>{{data?.dxScenarios?.scenarioCount || 0}}</div>
           </section>
         </mat-card-content>
       </mat-card>

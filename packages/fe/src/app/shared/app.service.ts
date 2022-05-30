@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { AppListData, ReportData, RoundItem, ScenarioItem, TestItem, VariationItem } from './models';
+import { ReportData, RoundItem, ScenarioItem, TestItem, VariationItem } from './models';
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +13,6 @@ export class AppService {
 
   constructor(private http: HttpClient) {
     this.apiUrl = environment.apiUrl;
-  }
-
-  getAppListData(): Promise<AppListData> {
-    const url = `${this.apiUrl}/app-list-data`;
-    return firstValueFrom(this.http.get<AppListData>(url));
   }
 
   getAppReportData(app: string): Promise<ReportData> {
@@ -113,5 +108,25 @@ export class AppService {
   deleteScenario(id: number | null = null): Promise<string> {
     const url = `${this.apiUrl}/scenario/${id}`;
     return firstValueFrom(this.http.delete<string>(url));
+  }
+
+  getScenarioCount(app: string): Promise<{ scenarioCount: number }> {
+    const url = `${this.apiUrl}/get-scenario-count/${app}`;
+    return firstValueFrom(this.http.get<{ scenarioCount: number }>(url));
+  }
+
+  getRoundNotes(app: string): Promise<RoundItem> {
+    const url = `${this.apiUrl}/get-round-notes/${app}`;
+    return firstValueFrom(this.http.get<RoundItem>(url));
+  }
+
+  getTestCount(app: string): Promise<number> {
+    const url = `${this.apiUrl}/get-test-count/${app}`;
+    return firstValueFrom(this.http.get<number>(url));
+  }
+
+  getFailCount(app: string): Promise<number> {
+    const url = `${this.apiUrl}/get-fail-count/${app}`;
+    return firstValueFrom(this.http.get<number>(url));
   }
 }
