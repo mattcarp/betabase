@@ -45,7 +45,15 @@ import {
   getTestList,
   updateTest,
 } from './models/test';
-import { addUser, sendResetPasswordToken, getUserByUsername, updateUser, getUserByToken, getUser } from './models/user';
+import {
+  addUser,
+  sendResetPasswordToken,
+  getUserByUsername,
+  updateUser,
+  getUserByToken,
+  getUser,
+  getUsers
+} from './models/user';
 import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
 
 const app = express();
@@ -153,18 +161,28 @@ app.get('/api/:app/report-data', [isTokenValid], async (request, response) => {
   });
 });
 
-app.post('/api/user', [isTokenValid, isAdmin], async (request: any, response, next) => {
+app.post('/api/users', [isTokenValid, isAdmin], async (request: any, response, next) => {
   const params = { ...request.body, password: bcrypt.hashSync(request.body.password, 8) };
   const model = await addUser(params);
   response.json(model);
 });
 
-app.put('/api/user/:id', [isTokenValid, isAdmin], async (request: any, response, next) => {
+app.put('/api/users/:id', [isTokenValid, isAdmin], async (request: any, response, next) => {
   const params = request.body;
   if ('password' in params) {
     delete params.password;
   }
-  const model = await updateUser(request.params.id, params);
+  await updateUser(request.params.id, params);
+  response.json(params);
+});
+
+app.get('/api/users', [isTokenValid, isAdmin], async (request: any, response, next) => {
+  const userItems = await getUsers();
+  const model = userItems?.map(({ dataValues }) => ({
+    ...dataValues,
+    password: null,
+    salt: null,
+  }));
   response.json(model);
 });
 
