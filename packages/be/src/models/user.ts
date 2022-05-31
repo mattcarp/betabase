@@ -203,4 +203,8 @@ export const sendResetPasswordToken = async (id: number, username: string, email
   await sendEmail(email, text);
 }
 
+export const getUsers = async () => {
+  return User.findAll();
+}
+
 db.User = User;

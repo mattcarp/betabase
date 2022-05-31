@@ -1,0 +1,55 @@
+<header>
+  <div class="grid">
+    <ng-container *ngFor="let header of tableHeaders">
+      <div>
+        <b>{{header}}</b>
+      </div>
+    </ng-container>
+  </div>
+</header>
+
+<div class="scrolling">
+  <ng-container *ngIf="isLoading; else tableVisible">
+    <div class="spinner">
+      <div class="spinner-progress"></div>
+      <div class="spinner-info">Loading...</div>
+    </div>
+  </ng-container>
+
+  <ng-template #tableVisible>
+    <div *ngFor="let user of users; let i = index" class="grid">
+      <div class="center">{{i + 1}}</div>
+      <div>{{user?.username}}</div>
+      <div>{{user?.email}}</div>
+      <div class="center">
+        <span>{{user?.enabled ? 'Yes' : 'No'}}</span>
+      </div>
+      <div class="actions">
+        <div>
+          <button
+            *ngIf="user?.enabled"
+            (click)="onDisableUserClick(user)"
+            class="grey"
+            mat-icon-button>
+            <i class="fas fa-user-slash"></i>
+          </button>
+
+          <button
+            *ngIf="!user?.enabled"
+            (click)="onEnableUserClick(user)"
+            class="grey"
+            mat-icon-button>
+            <i class="fas fa-user"></i>
+          </button>
+
+          <button
+            (click)="onDeleteUserClick(user)"
+            class="red"
+            mat-icon-button>
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
