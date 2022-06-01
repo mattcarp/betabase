@@ -59,9 +59,9 @@ const routes: Routes = [
     loadChildren: () => import('./resource/resource.module').then((m) => m.ResourceModule),
   },
   {
-    path: 'admin',
+    path: 'user',
     canActivate: [AuthGuard, AdminGuard],
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule),
   },
   {
     path: '**',

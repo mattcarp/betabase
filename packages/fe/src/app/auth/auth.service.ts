@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
-import { tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { firstValueFrom } from 'rxjs';
 
 import { environment } from '../../environments/environment';
@@ -38,7 +38,13 @@ export class AuthService {
     const url = `${this.apiUrl}/auth/sign-in`;
     return firstValueFrom(this.http
       .post<User>(url, { username, password })
-      .pipe(tap((params: User) => this.setParams(params))));
+      .pipe(
+        filter((user: User) => {
+          // todo show modal for disabled users
+          return !!user.enabled;
+        }),
+        tap((user: User) => this.setParams(user)),
+      ));
   }
 
   logout(): void {

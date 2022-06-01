@@ -9,19 +9,19 @@
 </header>
 
 <div class="scrolling">
-  <ng-container *ngIf="isLoading; else tableVisible">
+  <ng-container *ngIf="isLoading; else table">
     <div class="spinner">
       <div class="spinner-progress"></div>
       <div class="spinner-info">Loading...</div>
     </div>
   </ng-container>
 
-  <ng-template #tableVisible>
+  <ng-template #table>
     <div *ngFor="let user of users; let i = index" class="grid">
-      <div class="center">{{i + 1}}</div>
-      <div>{{user?.username}}</div>
-      <div>{{user?.email}}</div>
-      <div class="center">
+      <div class="center" (click)="onUserClick(user)">{{i + 1}}</div>
+      <div (click)="onUserClick(user)">{{user?.username}}</div>
+      <div (click)="onUserClick(user)">{{user?.email}}</div>
+      <div class="center" (click)="onUserClick(user)">
         <span>{{user?.enabled ? 'Yes' : 'No'}}</span>
       </div>
       <div class="actions">

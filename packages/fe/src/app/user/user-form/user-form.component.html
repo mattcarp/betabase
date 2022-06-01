@@ -1,0 +1,76 @@
+<ng-container *ngIf="isLoading; else formBlock">
+  <div class="spinner">
+    <div class="spinner-progress"></div>
+    <div class="spinner-info">Loading...</div>
+  </div>
+</ng-container>
+
+<ng-template #formBlock>
+
+  <div class="user">
+    <div class="user-container">
+      <h2>
+        <ng-container *ngIf="!user?.id">Create New</ng-container>
+        <ng-container *ngIf="user?.id">Edit</ng-container>
+        <ng-container> User</ng-container>
+      </h2>
+
+      <mat-form-field class="full-width">
+        <mat-label>Email:</mat-label>
+        <input type="email" matInput required [(ngModel)]="user.email">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Username:</mat-label>
+        <input matInput [(ngModel)]="user.username">
+      </mat-form-field>
+
+      <div class="row">
+        <mat-checkbox [(ngModel)]="user.enabled">
+          <span>Enabled</span>
+        </mat-checkbox>
+      </div>
+
+      <div class="row">
+        <mat-checkbox [checked]="isAdmin" (change)="onAdminRoleChange($event)">
+          <span>Is Admin</span>
+        </mat-checkbox>
+      </div>
+
+      <mat-form-field class="full-width" *ngIf="!user?.id">
+        <mat-label>Password:</mat-label>
+        <input matInput required [(ngModel)]="user.password">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>First Name:</mat-label>
+        <input matInput [(ngModel)]="user.fName">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Last Name:</mat-label>
+        <input matInput [(ngModel)]="user.lName">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Jira Username:</mat-label>
+        <input matInput [(ngModel)]="user.jiraUsername">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Mobile Phone:</mat-label>
+        <input matInput [(ngModel)]="user.mobilePhone">
+      </mat-form-field>
+
+      <button
+        (click)="onSaveClick()"
+        mat-raised-button
+        color="accent"
+        [disabled]="!user?.email?.length">
+        <ng-container *ngIf="!user?.id">Create</ng-container>
+        <ng-container *ngIf="user?.id">Update</ng-container>
+      </button>
+
+    </div>
+  </div>
+</ng-template>

@@ -52,7 +52,8 @@ import {
   updateUser,
   getUserByToken,
   getUser,
-  getUsers
+  getUsers,
+  deleteUser,
 } from './models/user';
 import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
 
@@ -182,7 +183,21 @@ app.get('/api/users', [isTokenValid, isAdmin], async (request: any, response, ne
     ...dataValues,
     password: null,
     salt: null,
+    confirmationToken: null,
   }));
+  response.json(model);
+});
+
+app.get('/api/users/:id', [isTokenValid, isAdmin], async (request: any, response, next) => {
+  const model = await getUser(request.params.id);
+  delete model.password;
+  delete model.salt;
+  delete model.confirmationToken;
+  response.json(model);
+});
+
+app.delete('/api/users/:id', [isTokenValid, isAdmin], async (request: any, response, next) => {
+  const model = await deleteUser(request.params.id);
   response.json(model);
 });
 
@@ -207,6 +222,7 @@ app.post('/api/auth/sign-in', async (request: any, response, next) => {
     email: user.email,
     roles: user.roles,
     jiraUsername: user.jiraUsername,
+    enabled: user.enabled,
   });
 });
 

@@ -8,14 +8,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgxPaginationModule } from 'ngx-pagination';
 
-import { AdminRoutingModule } from './admin-routing.module';
-import { AdminComponent } from './admin.component';
+import { UserRoutingModule } from './user-routing.module';
+import { UserComponent } from './user.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { UserListComponent } from './user-list/user-list.component';
 
 @NgModule({
   declarations: [
-    AdminComponent,
+    UserComponent,
     UserFormComponent,
     UserListComponent,
   ],
@@ -28,7 +28,7 @@ import { UserListComponent } from './user-list/user-list.component';
     MatSelectModule,
     MatCheckboxModule,
     NgxPaginationModule,
-    AdminRoutingModule,
+    UserRoutingModule,
   ],
 })
-export class AdminModule {}
+export class UserModule {}
