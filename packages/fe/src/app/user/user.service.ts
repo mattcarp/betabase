@@ -22,12 +22,16 @@ export class UserService {
 
   async updateUser(user: UserItem): Promise<UserItem> {
     const url = `${this.apiUrl}/users/${user.id}`;
+    user.emailCanonical = user.email;
+    user.usernameCanonical = user.username;
     return firstValueFrom(this.http.put<UserItem>(url, user));
   }
 
   async createUser(user: UserItem): Promise<UserItem> {
     const url = `${this.apiUrl}/users`;
     user.salt = String(Date.now().valueOf());
+    user.emailCanonical = user.email;
+    user.usernameCanonical = user.username;
     return firstValueFrom(this.http.post<UserItem>(url, user));
   }
 

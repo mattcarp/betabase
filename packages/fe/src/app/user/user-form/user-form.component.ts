@@ -52,10 +52,9 @@ export class UserFormComponent {
     if (this.user.id) {
       await this.userService.updateUser(this.user);
     } else {
-      const user = await this.userService.createUser(this.user);
-      await this.getUserData(String(user.id));
+      const { id } = await this.userService.createUser(this.user);
+      this.user.id = id;
     }
-
     this.isLoading = false;
     await this.router.navigate(['/user', this.user.id]);
   }

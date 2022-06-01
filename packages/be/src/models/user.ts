@@ -208,7 +208,7 @@ export const getUsers = async () => {
 }
 
 export const deleteUser = async (id) => {
-  const model = await User.delete(id);
+  const model = await User.destroy({ where: { id } });
   return model;
 }
 
