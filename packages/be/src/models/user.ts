@@ -143,7 +143,7 @@ export const sendEmail = async (to: string, text: string) => {
     service: 'gmail',
     auth: {
       user: 'thebetabase3@gmail.com',
-      pass: 'thebetabase3thebetabase3',
+      pass: 'ygruysrafvqotmep',
     },
   });
   const message = await transporter.sendMail({
@@ -196,7 +196,7 @@ export const sendResetPasswordToken = async (id: number, username: string, email
   };
   await updateUser(id, params);
   const text = 'Hello ' + username + '!\n' +
-    'To reset your password - please visit:\nhttps://thebetabase.herokuapp.com/auth/reset-password?token=' +
+    'To reset your password - please visit:\nhttps://betabase.herokuapp.com/auth/reset-password?token=' +
     params.confirmationToken + '\n' +
     'Regards,\n' +
     'The Betabase';
