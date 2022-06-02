@@ -24,7 +24,7 @@
 
       <mat-form-field class="full-width">
         <mat-label>Username:</mat-label>
-        <input matInput [(ngModel)]="user.username">
+        <input matInput required [(ngModel)]="user.username">
       </mat-form-field>
 
       <div class="row">
@@ -68,7 +68,7 @@
         [disabled]="!user?.email?.length">
         <ng-container *ngIf="!user?.id">
           <i class="fas fa-plus"></i>
-          Create
+          <span>Create</span>
         </ng-container>
         <ng-container *ngIf="user?.id">
           <i class="fas fa-edit"></i>

@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { filter } from 'rxjs/operators';
 
 import { UserItem } from '../user-item';
 import { UserService } from '../user.service';
+import { DialogWarningComponent } from '../../shared/layout/dialog-warning/dialog-warning.component';
 
 @Component({
   selector: 'app-user-list',
@@ -19,6 +22,7 @@ export class UserListComponent implements OnInit {
   constructor(
     private router: Router,
     private location: Location,
+    private dialog: MatDialog,
     private userService: UserService,
   ) {}
 
@@ -41,9 +45,17 @@ export class UserListComponent implements OnInit {
   }
 
   async onDeleteClick(user: UserItem): Promise<void> {
-    this.isLoading = true;
-    await this.userService.deleteUser(user);
-    await this.loadUsers();
+    this.dialog.open(DialogWarningComponent, {
+      data: 'delete',
+      width: '500px',
+      autoFocus: false,
+    }).afterClosed()
+      .pipe(filter((remove: boolean) => remove))
+      .subscribe(async () => {
+        this.isLoading = true;
+        await this.userService.deleteUser(user);
+        await this.loadUsers();
+      });
   }
 
   async onEditClick(user: UserItem): Promise<void> {
@@ -75,10 +87,6 @@ export class UserListComponent implements OnInit {
 
   onBackClick(): void {
     this.location.back();
-  }
-
-  onNewClick(): void {
-
   }
 
   private async loadUsers(): Promise<void> {

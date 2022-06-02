@@ -49,5 +49,15 @@
         }
       }
     }
+
+    &:hover {
+      &:nth-child(even) {
+        background-color: rgba(0, 255, 0, 0.1);
+      }
+
+      &:nth-child(odd) {
+        background-color: rgba(0, 255, 0, 0.07);
+      }
+    }
   }
 }
