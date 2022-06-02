@@ -5,4 +5,5 @@ export interface User {
   email?: string;
   roles?: string;
   jiraUsername?: string;
+  enabled?: boolean;
 }

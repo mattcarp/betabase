@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatDialog } from '@angular/material/dialog';
 import jwt_decode from 'jwt-decode';
-import { tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { firstValueFrom } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { User } from '../shared/models';
+import { DialogWarningComponent } from '../shared/layout/dialog-warning/dialog-warning.component';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +19,7 @@ export class AuthService {
     user: 'USER',
   };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private dialog: MatDialog) {
     this.apiUrl = environment.apiUrl;
   }
 
@@ -38,7 +40,19 @@ export class AuthService {
     const url = `${this.apiUrl}/auth/sign-in`;
     return firstValueFrom(this.http
       .post<User>(url, { username, password })
-      .pipe(tap((params: User) => this.setParams(params))));
+      .pipe(
+        filter((user: User) => {
+          if (!user.enabled) {
+            this.dialog.open(DialogWarningComponent, {
+              data: 'userDisabled',
+              width: '400px',
+              autoFocus: false,
+            });
+          }
+          return !!user.enabled;
+        }),
+        tap((user: User) => this.setParams(user)),
+      ));
   }
 
   logout(): void {

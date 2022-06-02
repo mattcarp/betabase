@@ -9,13 +9,11 @@ import { AuthService } from '../../../auth/auth.service';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavComponent {
   @Input() isBackActive?: boolean = false;
   buttons = NavConstants.navButtons;
-  activeLink = '';
 
   private app: string | null = null;
 

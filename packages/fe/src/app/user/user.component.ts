@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-admin',
+  selector: 'app-user',
   template: '<router-outlet></router-outlet>',
+  host: { '[class.page]': 'true' },
 })
-export class AdminComponent {}
+export class UserComponent {}

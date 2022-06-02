@@ -21,11 +21,13 @@ export class HeaderComponent {
   get app(): string {
     return this.router.url.includes('auth')
       ? ''
-      : this.router.url.split('/')?.[2]?.replace('-', ' ').replace('%20', ' ');
+      : this.router.url.split('/')?.[2]
+      ?.replace('-', ' ')
+      ?.replace('%20', ' ') || '';
   }
 
   get isAdmin(): boolean {
-    return this.router.url.includes('round');
+    return this.authService.isAdmin;
   }
 
   get isLoggedIn(): boolean {

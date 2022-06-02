@@ -1,0 +1,77 @@
+<nav>
+  <a mat-flat-button
+     (click)="onBackClick()"
+     color="primary"
+     class="nav-button">
+    <i class="fas fa-arrow-left"></i>
+    <span>Back</span>
+  </a>
+  <a mat-flat-button
+     routerLink="/user/create"
+     color="primary"
+     class="nav-button">
+    <i class="fas fa-plus-circle"></i>
+    <span>New user</span>
+  </a>
+</nav>
+
+<ng-container *ngIf="isLoading; else template">
+  <app-spinner></app-spinner>
+</ng-container>
+
+<ng-template #template>
+  <div class="grid-container">
+    <header class="grid">
+      <ng-container *ngFor="let header of tableHeaders">
+        <div>{{header}}</div>
+      </ng-container>
+    </header>
+
+    <div class="scrolling">
+      <div *ngFor="let user of users; let i = index" class="grid">
+        <div class="center">{{i + 1}}</div>
+        <div>{{user?.username}}</div>
+        <div>{{user?.email}}</div>
+        <div [innerHTML]="getRoles(user?.roles)" class="inner-html roles"></div>
+        <div>
+          <span>{{user?.lastLogin | date: 'YYYY-MM-dd H:m'}}</span>
+        </div>
+        <div class="center">
+          <span>{{user?.enabled ? 'Yes' : 'No'}}</span>
+        </div>
+        <div class="actions">
+          <div>
+            <button
+              *ngIf="user?.enabled"
+              (click)="onDisableClick(user)"
+              class="grey"
+              mat-icon-button>
+              <i class="fas fa-user-slash"></i>
+            </button>
+
+            <button
+              *ngIf="!user?.enabled"
+              (click)="onEnableClick(user)"
+              class="red"
+              mat-icon-button>
+              <i class="fas fa-user"></i>
+            </button>
+
+            <button
+              (click)="onEditClick(user)"
+              mat-icon-button>
+              <i class="fas fa-edit"></i>
+            </button>
+
+            <button
+              (click)="onDeleteClick(user)"
+              class="red"
+              mat-icon-button>
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

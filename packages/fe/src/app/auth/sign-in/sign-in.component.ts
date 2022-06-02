@@ -4,7 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { AuthService } from '../auth.service';
-import { NotificationDialogComponent } from '../../shared/layout/notification-dialog/notification-dialog.component';
+import { DialogWarningComponent } from '../../shared/layout/dialog-warning/dialog-warning.component';
 
 @Component({
   selector: 'app-sign-in',
@@ -31,8 +31,10 @@ export class SignInComponent {
       await this.authService.login(email, password);
       await this.router.navigate(['/dashboard']);
     } catch (e) {
-      this.dialog.open(NotificationDialogComponent, {
-        data: 'User not found',
+      this.dialog.open(DialogWarningComponent, {
+        data: 'auth',
+        width: '250px',
+        autoFocus: false,
       });
     }
     this.isLoading = false;

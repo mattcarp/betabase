@@ -207,4 +207,9 @@ export const getUsers = async () => {
   return User.findAll();
 }
 
+export const deleteUser = async (id) => {
+  const model = await User.destroy({ where: { id } });
+  return model;
+}
+
 db.User = User;
