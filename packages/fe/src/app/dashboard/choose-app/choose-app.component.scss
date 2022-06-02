@@ -9,7 +9,7 @@
 
   .cards {
     display: grid;
-    grid-template-columns: repeat(2, minmax(320px, 1fr));
+    grid-template-columns: repeat(2, 402px);
     grid-template-rows: repeat(3, 200px);
     grid-auto-flow: dense;
     background-color: $color-read-only;
@@ -18,8 +18,7 @@
   .card {
     overflow: hidden;
     cursor: pointer;
-    transition: background-color 0.9s cubic-bezier(0.075, 0.82, 0.165, 1),
-    transform 0.9s cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition: background-color 0.9s cubic-bezier(0.075, 0.82, 0.165, 1);
     border-bottom: 14px solid white;
     background-color: $color-read-only;
 

@@ -14,7 +14,7 @@
 
   &-container {
     width: 440px;
-    height: 410px;
+    height: 472px;
     margin: 20px;
     padding: 10px 20px 20px;
     border: 1px solid $color-lightgrey;
@@ -22,13 +22,9 @@
 
     .row {
       margin: 0 0 16px;
-    }
 
-    .tab {
-      margin: 0 0 0 24px;
-
-      & > mat-checkbox {
-        margin: 0 20px 0 0;
+      mat-checkbox {
+        margin-right: 16px;
       }
     }
   }

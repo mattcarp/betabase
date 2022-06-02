@@ -60,6 +60,7 @@ const routes: Routes = [
   },
   {
     path: 'user',
+    component: MainComponent,
     canActivate: [AuthGuard, AdminGuard],
     loadChildren: () => import('./user/user.module').then(m => m.UserModule),
   },

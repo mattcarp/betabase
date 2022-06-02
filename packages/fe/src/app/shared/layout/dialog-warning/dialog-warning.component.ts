@@ -9,10 +9,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class DialogWarningComponent {
   private warning = {
     delete: 'Are you sure you want to delete the current item?',
+    auth: 'User not found',
   };
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: 'delete',
+    @Inject(MAT_DIALOG_DATA) public data: 'delete' | 'auth',
     private dialogRef: MatDialogRef<DialogWarningComponent>,
   ) {}
 

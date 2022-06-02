@@ -6,11 +6,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Router } from '@angular/router';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -18,9 +14,6 @@ import { AuthService } from '../auth.service';
 
 @Injectable()
 export class ErrorHandlerInterceptor implements HttpInterceptor {
-  private horizontalPosition: MatSnackBarHorizontalPosition = 'end';
-  private verticalPosition: MatSnackBarVerticalPosition = 'top';
-
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -41,10 +34,11 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
   }
 
   private showErrorNotification(message: string): void {
-    this.snackBar.open(message, '', {
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-      duration: 5000,
-    });
+    const config = new MatSnackBarConfig();
+    config.verticalPosition = 'bottom';
+    config.horizontalPosition = 'center';
+    config.duration = 5000;
+    config.panelClass = 'panel-grey';
+    this.snackBar.open(message, '✕', config);
   }
 }

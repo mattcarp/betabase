@@ -141,6 +141,35 @@ app-main {
   }
 }
 
+nav {
+  .nav-button {
+    position: relative;
+    display: flex;
+    overflow: visible;
+    margin: 0 10px 0 0;
+
+    span {
+      @media only screen and (max-width: 1050px) {
+        display: none;
+      }
+    }
+
+    &.active {
+      &:after {
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        width: 10px;
+        height: 10px;
+        margin-left: -4px;
+        content: '▲';
+        transform: translate(0, -50%);
+        font-size: 13px;
+      }
+    }
+  }
+}
+
 // Elements
 h2 {
   margin: 10px 0;

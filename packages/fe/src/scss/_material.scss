@@ -356,7 +356,6 @@ textarea {
 
   &.mat-flat-button,
   &.mat-button {
-    overflow: hidden;
     min-width: 36px;
     height: 28px;
     padding: 0 10px;
@@ -683,8 +682,35 @@ h2 {
   }
 
   .mat-option.mat-selected:not(.mat-option-multiple) {
-    background: rgba(0,0,0,0.12);
+    background: rgba(0, 0, 0, 0.12);
   }
+}
+
+// Material Snack Bar
+.cdk-global-overlay-wrapper {
+  z-index: 1001;
+}
+
+.panel-grey,
+.panel-green,
+.panel-red {
+  color: $color-white;
+
+  .mat-button-wrapper {
+    color: $color-white;
+  }
+}
+
+.panel-grey {
+  background-color: $color-grey;
+}
+
+.panel-green {
+  background-color: $color-green;
+}
+
+.panel-red {
+  background-color: $color-red;
 }
 
 // NGX Material Timepicker

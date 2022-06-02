@@ -4,18 +4,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
 import { HeaderModule } from '../shared/layout/header/header.module';
 import { AuthRoutingModule } from './auth-routing.module';
+import { SpinnerModule } from '../shared/layout/spinner/spinner.module';
 import { AuthComponent } from './auth.component';
-import { AuthGuard } from './guards/auth.guard';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
-import { AdminGuard } from './guards/admin.guard';
-import { NotificationDialogModule } from '../shared/layout/notification-dialog/notification-dialog.module';
-import {SpinnerModule} from "../shared/layout/spinner/spinner.module";
 
 @NgModule({
   declarations: [AuthComponent, SignInComponent, ResetPasswordComponent, ChangePasswordComponent],
@@ -28,8 +26,6 @@ import {SpinnerModule} from "../shared/layout/spinner/spinner.module";
     MatButtonModule,
     AuthRoutingModule,
     HeaderModule,
-    MatProgressSpinnerModule,
-    NotificationDialogModule,
     SpinnerModule,
   ],
   providers: [AuthGuard, AdminGuard],

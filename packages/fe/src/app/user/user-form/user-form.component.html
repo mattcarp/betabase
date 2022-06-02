@@ -1,19 +1,21 @@
-<ng-container *ngIf="isLoading; else formBlock">
-  <div class="spinner">
-    <div class="spinner-progress"></div>
-    <div class="spinner-info">Loading...</div>
-  </div>
+<nav>
+  <a mat-flat-button
+     (click)="onBackClick()"
+     color="primary"
+     class="nav-button">
+    <i class="fas fa-arrow-left"></i>
+    <span>Back</span>
+  </a>
+</nav>
+
+<ng-container *ngIf="isLoading; else template">
+  <app-spinner></app-spinner>
 </ng-container>
 
-<ng-template #formBlock>
-
+<ng-template #template>
   <div class="user">
     <div class="user-container">
-      <h2>
-        <ng-container *ngIf="!user?.id">Create New</ng-container>
-        <ng-container *ngIf="user?.id">Edit</ng-container>
-        <ng-container> User</ng-container>
-      </h2>
+      <h2>{{user?.id ? 'Edit' : 'Create New'}} User</h2>
 
       <mat-form-field class="full-width">
         <mat-label>Email:</mat-label>
@@ -26,13 +28,10 @@
       </mat-form-field>
 
       <div class="row">
-        <mat-checkbox [(ngModel)]="user.enabled">
+        <mat-checkbox [(ngModel)]="user.enabled" color="primary">
           <span>Enabled</span>
         </mat-checkbox>
-      </div>
-
-      <div class="row">
-        <mat-checkbox [checked]="isAdmin" (change)="onAdminRoleChange($event)">
+        <mat-checkbox [checked]="isAdmin" (change)="onAdminRoleChange($event)" color="warn">
           <span>Is Admin</span>
         </mat-checkbox>
       </div>
@@ -67,8 +66,14 @@
         mat-raised-button
         color="accent"
         [disabled]="!user?.email?.length">
-        <ng-container *ngIf="!user?.id">Create</ng-container>
-        <ng-container *ngIf="user?.id">Update</ng-container>
+        <ng-container *ngIf="!user?.id">
+          <i class="fas fa-plus"></i>
+          Create
+        </ng-container>
+        <ng-container *ngIf="user?.id">
+          <i class="fas fa-edit"></i>
+          <span>Update</span>
+        </ng-container>
       </button>
 
     </div>

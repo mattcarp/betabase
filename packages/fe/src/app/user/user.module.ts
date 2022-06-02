@@ -9,6 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 import { UserRoutingModule } from './user-routing.module';
+import { SpinnerModule } from '../shared/layout/spinner/spinner.module';
 import { UserComponent } from './user.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { UserListComponent } from './user-list/user-list.component';
@@ -29,6 +30,7 @@ import { UserListComponent } from './user-list/user-list.component';
     MatCheckboxModule,
     NgxPaginationModule,
     UserRoutingModule,
+    SpinnerModule,
   ],
 })
 export class UserModule {}

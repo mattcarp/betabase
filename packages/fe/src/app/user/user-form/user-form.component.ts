@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { filter } from 'rxjs/operators';
 
@@ -10,6 +11,7 @@ import { UserItem } from '../user-item';
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss'],
+  host: { '[class.page]': 'true' },
 })
 export class UserFormComponent {
   isLoading = false;
@@ -18,9 +20,10 @@ export class UserFormComponent {
   private readonly adminRole = 'ROLE_ADMIN';
 
   constructor(
-    private userService: UserService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private location: Location,
+    private userService: UserService,
   ) {
     this.activatedRoute.params
       .pipe(filter((params: Params) => 'id' in params))
@@ -57,6 +60,10 @@ export class UserFormComponent {
     }
     this.isLoading = false;
     await this.router.navigate(['/user', this.user.id]);
+  }
+
+  onBackClick(): void {
+    this.location.back();
   }
 
   private async getUserData(id: string): Promise<void> {
