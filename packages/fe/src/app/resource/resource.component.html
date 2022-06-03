@@ -2,4 +2,58 @@
 
 <section>
   <h2>Testing Resources</h2>
+
+  <div class="well">
+    <h3>JavaScript Fragments (for pasting into form fields)</h3>
+    <pre>
+      <code class="xml">
+        // alert showing cookie
+        <span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">alert(document.cookie);</span><span
+        class="tag">&lt;/<span class="title">script</span>&gt;</span>
+
+        // generic alert
+        <span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">
+            alert(<span
+        class="string">'Your form allowed JavaScript alerts when it was rendered back to the user.'</span>);
+        </span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+
+        // an alert within a text fragment
+        I like this site because it<span class="tag">&lt;<span class="title">script</span>&gt;</span><span
+        class="javascript">alert(<span class="string">'JS Injected! - Test Failed!'</span>);</span><span class="tag">&lt;/<span
+        class="title">script</span>&gt;</span>teaches me a lot.
+
+        // test the snippet below using the Firebug console
+        <span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">
+        console.log(<span class="string">'This cookie should have no human-readable content: '</span> . document.cookie);
+        </span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+      </code>
+    </pre>
+  </div>
+
+  <div class="well">
+    <h3>HTML Fragments (for pasting into form fields)</h3>
+    <pre>
+      <code class="xml">
+        // form with redirect
+        <span class="tag">&lt;<span class="title">form</span> <span class="attribute">action</span>=<span class="value">"http://www.google.com"</span> <span
+          class="attribute">method</span>=<span class="value">"post"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"hidden"</span> <span
+          class="attribute">name</span>=<span class="value">"q"</span> <span class="attribute">value</span>=<span
+          class="value">"you just got redirected to google via embedded html in your form"</span>&gt;</span>
+
+        // common insertion attacks
+        <span class="tag">&lt;<span class="title">h1</span>&gt;</span> Vulnerability test <span class="tag">&lt;/<span
+        class="title">h1</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">META</span> <span class="attribute">HTTP-EQUIV</span>=<span
+          class="value">"refresh"</span> <span class="attribute">CONTENT</span>=<span class="value">"1;url=http://www.test.com"</span>&gt;</span>
+
+        // same as above with an random tag
+        <span class="tag">&lt;<span class="title">fk</span> <span class="attribute">STYLE</span>=<span class="value">"behavior: url(http://test.com/fail)"</span>&gt;</span>
+
+        // br and div attacks (who knew?)
+        <span class="tag">&lt;<span class="title">br</span> <span class="attribute">SIZE</span>=<span class="value">"&amp;｛alert('Injected')｝"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span> <span class="attribute">STYLE</span>=<span class="value">"background-image: url(javascript:alert('Injected'))"</span>&gt;</span>
+    </code>
+    </pre>
+  </div>
 </section>
