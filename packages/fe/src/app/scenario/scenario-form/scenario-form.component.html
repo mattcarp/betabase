@@ -21,19 +21,19 @@
     <div class="row">
       <label>Preconditions</label>
       <ngx-editor-menu [editor]="preconditionsEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
-      <ngx-editor [editor]="preconditionsEditor" [(ngModel)]="scenario.preconditions"></ngx-editor>
+      <ngx-editor [outputFormat]="'html'" [editor]="preconditionsEditor" [(ngModel)]="scenario.preconditions"></ngx-editor>
     </div>
 
     <div class="row">
       <label>Script</label>
       <ngx-editor-menu [editor]="scriptEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
-      <ngx-editor [editor]="scriptEditor" [(ngModel)]="scenario.script"></ngx-editor>
+      <ngx-editor [outputFormat]="'html'" [editor]="scriptEditor" [(ngModel)]="scenario.script"></ngx-editor>
     </div>
 
     <div class="row">
       <label>Expected Result</label>
       <ngx-editor-menu [editor]="expectedResultEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
-      <ngx-editor [editor]="expectedResultEditor" [(ngModel)]="scenario.expectedResult"></ngx-editor>
+      <ngx-editor [outputFormat]="'html'" [editor]="expectedResultEditor" [(ngModel)]="scenario.expectedResult"></ngx-editor>
     </div>
 
     <div class="grid">
