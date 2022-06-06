@@ -20,7 +20,7 @@
       <div class="row">
         <label>Tester Notes</label>
         <ngx-editor-menu [editor]="notesEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
-        <ngx-editor [editor]="notesEditor" [(ngModel)]="round.notes"></ngx-editor>
+        <ngx-editor [outputFormat]="'html'" [editor]="notesEditor" [(ngModel)]="round.notes"></ngx-editor>
       </div>
 
       <div class="columns">
