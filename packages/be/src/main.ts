@@ -114,6 +114,7 @@ app.get('/api/get-round-notes/:app', [isTokenValid], async (request, response) =
 });
 
 app.get('/api/get-test-count/:app', [isTokenValid], async (request, response) => {
+  request.setTimeout(60 * 1000 * 100);
   const testCount = await getTestCount(request.params.app);
   response.json(testCount);
 });
