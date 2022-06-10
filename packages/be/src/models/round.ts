@@ -94,10 +94,10 @@ export const getTestCount = async (app: string) => {
 }
 
 export const getFailCount = async (app: string) => {
-  const today = moment().format('Y-m-d h:m:s');
+  const today = moment().format('Y-M-D');
   const query = "SELECT COUNT( t.id ) AS failCount\n" +
   "FROM `round` r, `test` t, `scenario` s\n" +
-  "WHERE '" + today + "'\n" +
+  "WHERE '" + today + " 0:0:0'\n" +
   "BETWEEN r.starts_at AND r.ends_at\n" +
   "AND t.updated_at\n" +
   "BETWEEN r.starts_at AND r.ends_at\n" +
