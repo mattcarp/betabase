@@ -130,7 +130,7 @@ export const getTestList = async (app: string) => {
     "t.browser_name, t.browser_major, t.browser_minor,\n" +
     "t.os_name, t.os_major, t.os_minor,\n" +
     "t.ticket, t.scenario_id, t.id, t.deployment_stamp\n" +
-    "FROM Test t, Scenario s\n" +
+    "FROM test t, scenario s\n" +
     "WHERE t.scenario_id = s.id\n" +
     "AND s.app_under_test = '" + app + "'\n" +
     "ORDER BY t.updated_at DESC\n" +
