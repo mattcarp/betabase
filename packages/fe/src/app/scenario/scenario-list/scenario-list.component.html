@@ -12,7 +12,7 @@
         <span matBadge="{{scenarios?.length}}" matBadgeOverlap="false" matBadgeColor="accent"></span>
       </h2>
       <div class="spacer"></div>
-      <button mat-flat-button color="warn">
+      <button mat-flat-button color="warn" (click)="onGeneratePdfClick()">
         <i class="fas fa-file-pdf"></i>
         <span>Create PDF Documentation</span>
       </button>

@@ -286,4 +286,15 @@ export const deleteScenario = async (id: string) => {
   }
 }
 
+export const gepPdfData = async (app: string, scenarioIds: number[]) => {
+  const query = "SELECT s.id, s.name, s.created_by, s.created_at,\n" +
+    "s.updated_at, s.updated_by, s.coverage, s.review_flag,\n" +
+    "s.script, s.preconditions, s.expected_result\n" +
+    "FROM `scenario` s\n" +
+    "WHERE s.app_under_test = '" + app + "'\n" +
+    "AND s.id in (" + scenarioIds.join(', ') + ")";
+  const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return db.snakeCaseToCamelCase(result);
+}
+
 db.Scenario = Scenario;

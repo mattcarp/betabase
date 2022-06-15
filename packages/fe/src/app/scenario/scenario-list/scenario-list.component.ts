@@ -106,6 +106,14 @@ export class ScenarioListComponent {
       });
   }
 
+  async onGeneratePdfClick(): Promise<void> {
+    const pdfData = await this.appService.getPdfData({
+      app: this.app!,
+      scenarioIds: this.scenarios.map(({ id }) => id!),
+    });
+    console.log(pdfData);
+  }
+
   private async fetchData(app: string): Promise<void> {
     this.isLoading = true;
     this.scenarios = await this.appService.getAllScenarios(app);
