@@ -108,8 +108,8 @@ export class ScenarioListComponent {
 
   async onGeneratePdfClick(): Promise<void> {
     const pdfData = await this.appService.getPdfData({
-      app: this.app || '',
-      scenarioIds: this.scenarios.map(({ id }) => id || 0),
+      app: this.app!,
+      scenarioIds: this.scenarios.map(({ id }) => id!),
     });
     console.log(pdfData);
   }
