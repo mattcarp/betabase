@@ -129,4 +129,9 @@ export class AppService {
     const url = `${this.apiUrl}/get-fail-count/${app}`;
     return firstValueFrom(this.http.get<number>(url));
   }
+
+  getPdfData(params: { app: string, scenarioIds: number[] }): Promise<any> {
+    const url = `${this.apiUrl}/pdf-data`;
+    return firstValueFrom(this.http.post<any>(url, params));
+  }
 }

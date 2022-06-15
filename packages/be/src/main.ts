@@ -10,6 +10,7 @@ import config from './config';
 import {
   addScenario,
   deleteScenario,
+  gepPdfData,
   getEnhancementCount,
   getEnhancementScenarios,
   getFlaggedCount,
@@ -389,6 +390,11 @@ app.put('/api/round/:id', [isTokenValid, isAdmin], async (request, response) => 
   const params = request.body;
   const model = await updateRound(id, params);
   response.json(model);
+});
+
+app.post('/api/pdf-data', [isTokenValid], async (request, response) => {
+  const pdfData = await gepPdfData(request.body.app, request.body.scenarioIds);
+  response.json(pdfData);
 });
 
 // static files
