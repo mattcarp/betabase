@@ -1,4 +1,5 @@
 import { DataTypes, QueryTypes } from 'sequelize';
+import * as htmlToPdf from 'html-pdf-node';
 
 import db from './index';
 
@@ -286,7 +287,7 @@ export const deleteScenario = async (id: string) => {
   }
 }
 
-export const gepPdfData = async (app: string, scenarioIds: number[]) => {
+export const getPdfBlob = async (app: string, scenarioIds: number[]) => {
   const query = "SELECT s.id, s.name, s.created_by, s.created_at,\n" +
     "s.updated_at, s.updated_by, s.coverage, s.review_flag,\n" +
     "s.script, s.preconditions, s.expected_result\n" +
@@ -294,7 +295,12 @@ export const gepPdfData = async (app: string, scenarioIds: number[]) => {
     "WHERE s.app_under_test = '" + app + "'\n" +
     "AND s.id in (" + scenarioIds.join(', ') + ")";
   const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
-  return db.snakeCaseToCamelCase(result);
+  const scenarios =  db.snakeCaseToCamelCase(result);
+  const options = { format: 'A4' };
+  // todo add pdf contents here
+  const file = { content: '<h1>Welcome to html-pdf-node</h1>' };
+  const blob = await htmlToPdf.generatePdf(file, options);
+  return (new Buffer(blob)).toString('base64');
 }
 
 db.Scenario = Scenario;

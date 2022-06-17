@@ -30,6 +30,7 @@ export class ScenarioListComponent {
     sortField: 'date',
     sortDirection: 'DESC',
   };
+  isGeneratePdfBtnDisabled = false;
 
   constructor(
     private appService: AppService,
@@ -107,11 +108,12 @@ export class ScenarioListComponent {
   }
 
   async onGeneratePdfClick(): Promise<void> {
-    const pdfData = await this.appService.getPdfData({
+    this.isGeneratePdfBtnDisabled = true;
+    await this.appService.downloadPdf({
       app: this.app!,
       scenarioIds: this.scenarios.map(({ id }) => id!),
     });
-    console.log(pdfData);
+    this.isGeneratePdfBtnDisabled = false;
   }
 
   private async fetchData(app: string): Promise<void> {

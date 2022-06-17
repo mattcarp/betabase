@@ -12,19 +12,10 @@
         <span matBadge="{{scenarios?.length}}" matBadgeOverlap="false" matBadgeColor="accent"></span>
       </h2>
       <div class="spacer"></div>
-      <button mat-flat-button color="warn" (click)="onGeneratePdfClick()">
+      <button mat-flat-button color="warn" [disabled]="isGeneratePdfBtnDisabled" (click)="onGeneratePdfClick()">
         <i class="fas fa-file-pdf"></i>
         <span>Create PDF Documentation</span>
       </button>
-      <!--
-        <form style="display:none;" class="form-inline bb-create-doc pull-right" action="{{ path('custom_document', { 'app': app.request.get('app') }) }}" method="post">
-          <input class="bb-doc-subtitle span6" type="text" class="form-control" name="subtitle" placeholder="Enter report subtitle (optional)">
-          <input type="hidden" name="app" value={{ app.request.get('app') }} />
-          <input type="hidden" name="pdf" value='true' />
-          <input class="btn btn-small bb-doc-btn" type="submit" value="Generate PDF File"/>
-          <hr>
-        </form>
-      -->
     </div>
 
     <div class="header-flex">
