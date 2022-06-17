@@ -10,11 +10,11 @@ import config from './config';
 import {
   addScenario,
   deleteScenario,
-  gepPdfData,
   getEnhancementCount,
   getEnhancementScenarios,
   getFlaggedCount,
   getFlaggedScenarios,
+  getPdfBlob,
   getPriorities,
   getPriorityCount,
   getPriorityScenarios,
@@ -392,8 +392,9 @@ app.put('/api/round/:id', [isTokenValid, isAdmin], async (request, response) => 
   response.json(model);
 });
 
-app.post('/api/pdf-data', [isTokenValid], async (request, response) => {
-  const pdfData = await gepPdfData(request.body.app, request.body.scenarioIds);
+app.post('/api/pdf', [isTokenValid], async (request, response) => {
+  request.setTimeout(60 * 1000 * 10);
+  const pdfData = await getPdfBlob(request.body.app, request.body.scenarioIds);
   response.json(pdfData);
 });
 

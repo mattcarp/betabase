@@ -130,8 +130,14 @@ export class AppService {
     return firstValueFrom(this.http.get<number>(url));
   }
 
-  getPdfData(params: { app: string, scenarioIds: number[] }): Promise<any> {
-    const url = `${this.apiUrl}/pdf-data`;
-    return firstValueFrom(this.http.post<any>(url, params));
+  async downloadPdf(params: { app: string, scenarioIds: number[] }): Promise<void> {
+    const url = `${this.apiUrl}/pdf`;
+    const pdfAsBase64String = await firstValueFrom(this.http.post<string>(url, params));
+    const downloadLink = document.createElement('a');
+    downloadLink.href = `data:application/pdf;base64,${pdfAsBase64String}`;
+    // todo set correct file name
+    downloadLink.download = 'test.pdf';
+    downloadLink.click();
+    downloadLink.remove();
   }
 }
