@@ -6,13 +6,22 @@ import { environment } from '../../environments/environment';
 import { ReportData, RoundItem, ScenarioItem, TestItem, VariationItem } from './models';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AppService {
   private readonly apiUrl: string;
 
   constructor(private http: HttpClient) {
     this.apiUrl = environment.apiUrl;
+  }
+
+  get today(): string {
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+
+    return `${yyyy}-${mm}-${dd}`;
   }
 
   getAppReportData(app: string): Promise<ReportData> {
@@ -135,8 +144,7 @@ export class AppService {
     const pdfAsBase64String = await firstValueFrom(this.http.post<string>(url, params));
     const downloadLink = document.createElement('a');
     downloadLink.href = `data:application/pdf;base64,${pdfAsBase64String}`;
-    // todo set correct file name
-    downloadLink.download = 'test.pdf';
+    downloadLink.download = `All Cases ${this.today} ${params.app}.pdf`;
     downloadLink.click();
     downloadLink.remove();
   }

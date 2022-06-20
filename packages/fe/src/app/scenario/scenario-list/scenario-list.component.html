@@ -12,10 +12,15 @@
         <span matBadge="{{scenarios?.length}}" matBadgeOverlap="false" matBadgeColor="accent"></span>
       </h2>
       <div class="spacer"></div>
-      <button mat-flat-button color="warn" [disabled]="isGeneratePdfBtnDisabled" (click)="onGeneratePdfClick()">
-        <i class="fas fa-file-pdf"></i>
-        <span>Create PDF Documentation</span>
-      </button>
+      <div class="flex">
+        <div *ngIf="isGeneratePdfBtnDisabled" class="spinner generating">
+          <div class="spinner-progress"></div>
+        </div>
+        <button mat-flat-button color="warn" [disabled]="isGeneratePdfBtnDisabled" (click)="onGeneratePdfClick()">
+          <i class="fas fa-file-pdf"></i>
+          <span>Create PDF Documentation</span>
+        </button>
+      </div>
     </div>
 
     <div class="header-flex">
