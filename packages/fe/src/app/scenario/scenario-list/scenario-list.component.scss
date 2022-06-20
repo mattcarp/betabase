@@ -8,3 +8,25 @@
   60px
   minmax(64px, 120px);
 }
+
+.flex {
+  display: flex;
+  align-items: center;
+
+  .spinner {
+    &.generating {
+      position: relative;
+      display: inline-flex;
+      transform: unset;
+      height: 30px;
+      left: unset;
+    }
+
+    &-progress {
+      width: 30px;
+      height: 30px;
+      margin: 0;
+    }
+  }
+}
+
