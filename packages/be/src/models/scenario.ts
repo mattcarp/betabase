@@ -1,5 +1,5 @@
 import { DataTypes, QueryTypes } from 'sequelize';
-import * as htmlToPdf from 'html-pdf-node';
+import * as htmlToPdf from 'html-pdf';
 
 import db from './index';
 import { ScenarioItem } from '../../../fe/src/app/shared/models';
@@ -416,12 +416,20 @@ export const getPdfBlob = async (app: string, scenarioIds: number[]) => {
 </html>`;
 
   try {
-    const file = { content: htmlOutput };
-    const blob = await htmlToPdf.generatePdf(file, options);
-    return (new Buffer(blob)).toString('base64');
+    const blob = await generatePdf(htmlOutput);
+    return (new Buffer(<Buffer>blob)).toString('base64');
   } catch (error) {
     return error;
   }
+}
+
+const generatePdf = (html: string) => {
+  return new Promise((resolve, reject) => {
+    htmlToPdf.create(html).toBuffer((error, buffer) => {
+      if (error) { reject(error); }
+      resolve(buffer);
+    });
+  });
 }
 
 db.Scenario = Scenario;
