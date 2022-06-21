@@ -276,7 +276,6 @@ export const updateScenario = async (id, params) => {
   } catch (e) {
     return e;
   }
-  return id;
 }
 
 export const deleteScenario = async (id: string) => {
@@ -416,9 +415,13 @@ export const getPdfBlob = async (app: string, scenarioIds: number[]) => {
   </body>
 </html>`;
 
-  const file = { content: htmlOutput };
-  const blob = await htmlToPdf.generatePdf(file, options);
-  return (new Buffer(blob)).toString('base64');
+  try {
+    const file = { content: htmlOutput };
+    const blob = await htmlToPdf.generatePdf(file, options);
+    return (new Buffer(blob)).toString('base64');
+  } catch (error) {
+    return error;
+  }
 }
 
 db.Scenario = Scenario;
