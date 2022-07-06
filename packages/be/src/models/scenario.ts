@@ -122,13 +122,13 @@ export const getEnhancementScenarios = async (app: string) => {
   const query = "SELECT s.id, s.name, s.coverage, s.app_under_test AS appUnderTest,\n" +
     "t.created_at AS mostRecent, t.pass_fail AS lastTest,\n" +
     "s.enhancement_sort_order AS enhancementSortOrder\n" +
-    "FROM `scenario` s\n" +
-    "LEFT JOIN `test` t ON s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "FROM scenario s\n" +
+    "LEFT JOIN test t ON s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
     "WHERE scenario_id = s.id)\n" +
     "WHERE s.app_under_test = '" + app + "'\n" +
     "AND s.coverage = 'New Enhancements'\n" +
-    "AND s.client_priority != TRUE\n" +
+    "AND s.client_priority = 0\n" +
     "OR s.client_priority = NULL\n" +
     "ORDER BY s.enhancement_sort_order ASC";
   const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
@@ -140,13 +140,13 @@ export const getRegressionScenarios = async (app: string) => {
     "s.app_under_test AS appUnderTest,\n" +
     "t.created_at as mostRecent,\n" +
     "t.pass_fail AS lastTest\n" +
-    "FROM `scenario` s LEFT JOIN `test` t on s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "FROM scenario s LEFT JOIN test t on s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
     "WHERE scenario_id = s.id)\n" +
     "WHERE s.app_under_test = '" + app + "'\n" +
-    "AND s.client_priority != TRUE\n" +
+    "AND s.client_priority = 0\n" +
     "AND s.coverage = 'Regression - Current Round'\n" +
-    "GROUP BY s.id\n" +
+    "GROUP BY s.id, s.name, s.coverage, appUnderTest, mostRecent, lastTest\n" +
     "ORDER BY t.created_at ASC";
   const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
   return result;
@@ -157,12 +157,12 @@ export const getPriorities = async (app: string) => {
     "s.app_under_test AS appUnderTest,\n" +
     "t.created_at as mostRecent,\n" +
     "t.pass_fail AS lastTest\n" +
-    "FROM `scenario` s LEFT JOIN `test` t on s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "FROM scenario s LEFT JOIN test t on s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
     "WHERE scenario_id = s.id)\n" +
     "WHERE s.app_under_test = '" + app + "'\n" +
-    "AND s.client_priority = TRUE\n" +
-    "GROUP BY s.id\n" +
+    "AND s.client_priority = 1\n" +
+    "GROUP BY s.id, s.name, s.coverage, appUnderTest, mostRecent, lastTest\n" +
     "ORDER BY t.created_at ASC";
   const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
   return result;
@@ -170,13 +170,13 @@ export const getPriorities = async (app: string) => {
 
 export const getEnhancementCount = async (app: string) => {
   const query = "SELECT COUNT(s.id) as enhancementCount\n" +
-    "FROM `scenario` s\n" +
-    "LEFT JOIN `test` t ON s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "FROM scenario s\n" +
+    "LEFT JOIN test t ON s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
     "WHERE scenario_id = s.id)\n" +
     "WHERE s.app_under_test = '" + app + "'\n" +
     "AND s.coverage = 'New Enhancements'\n" +
-    "AND s.client_priority != TRUE\n" +
+    "AND s.client_priority = 0\n" +
     "OR s.client_priority = NULL";
   const [{ enhancementCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
   return enhancementCount;
@@ -184,13 +184,13 @@ export const getEnhancementCount = async (app: string) => {
 
 export const getRegressionCount = async (app: string) => {
   const query = "SELECT COUNT(s.id) as regressionCount\n" +
-    "FROM `scenario` s\n" +
-    "LEFT JOIN `test` t ON s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "FROM scenario s\n" +
+    "LEFT JOIN test t ON s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
     "WHERE scenario_id = s.id)\n" +
     "WHERE s.app_under_test = '" + app + "'\n" +
     "AND s.coverage = 'Regression - Current Round'\n" +
-    "AND s.client_priority != TRUE\n" +
+    "AND s.client_priority = 0\n" +
     "OR s.client_priority = NULL";
   const [{ regressionCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
   return regressionCount;
@@ -198,21 +198,21 @@ export const getRegressionCount = async (app: string) => {
 
 export const getPriorityCount = async (app: string) => {
   const query = "SELECT COUNT(s.id) as priorityCount\n" +
-    "FROM `scenario` s\n" +
-    "LEFT JOIN `test` t ON s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "FROM scenario s\n" +
+    "LEFT JOIN test t ON s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
     "WHERE scenario_id = s.id)\n" +
     "WHERE s.app_under_test = '" + app + "'\n" +
-    "AND s.client_priority = TRUE";
+    "AND s.client_priority = 1";
   const [{ priorityCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
   return priorityCount;
 }
 
 export const getFlaggedCount = async (app: string) => {
   const query = "SELECT COUNT(s.id) as flaggedCount\n" +
-    "FROM `scenario` s\n" +
-    "LEFT JOIN `test` t ON s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "FROM scenario s\n" +
+    "LEFT JOIN test t ON s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
     "WHERE scenario_id = s.id)\n" +
     "WHERE s.app_under_test = '" + app + "'\n" +
     "AND s.review_flag = '1'";
@@ -222,9 +222,9 @@ export const getFlaggedCount = async (app: string) => {
 
 export const getFlaggedScenarios = async (app: string) => {
   const query = "SELECT s.*\n" +
-    "FROM `scenario` s\n" +
-    "LEFT JOIN `test` t ON s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "FROM scenario s\n" +
+    "LEFT JOIN test t ON s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
     "WHERE scenario_id = s.id)\n" +
     "WHERE s.app_under_test = '" + app + "'\n" +
     "AND s.review_flag = '1'";
@@ -237,12 +237,12 @@ export const getPriorityScenarios = async (app: string) => {
     "s.app_under_test,\n" +
     "t.created_at as mostRecent,\n" +
     "t.pass_fail AS lastTest\n" +
-    "FROM `scenario` s LEFT JOIN `test` t on s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM `test`\n" +
+    "FROM scenario s LEFT JOIN test t on s.id = t.scenario_id\n" +
+    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
     "WHERE scenario_id = s.id)\n" +
     "WHERE s.app_under_test = '" + app + "'\n" +
-    "AND s.client_priority = TRUE\n" +
-    "GROUP BY s.id\n" +
+    "AND s.client_priority = 1\n" +
+    "GROUP BY s.id, s.name, s.coverage, s.app_under_test, mostRecent, lastTest\n" +
     "ORDER BY t.created_at ASC";
   const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
   return db.snakeCaseToCamelCase(result);
@@ -291,7 +291,7 @@ export const getPdfBlob = async (app: string, scenarioIds: number[]) => {
   const query = 'SELECT s.id, s.name, s.created_by, s.created_at,\n' +
     's.updated_at, s.updated_by, s.coverage, s.review_flag,\n' +
     's.script, s.preconditions, s.expected_result\n' +
-    'FROM `scenario` s\n' +
+    'FROM scenario s\n' +
     'WHERE s.app_under_test = \'' + app + '\'\n' +
     'AND s.id in (' + scenarioIds.join(', ') + ')';
   const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
