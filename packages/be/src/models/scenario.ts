@@ -178,8 +178,8 @@ export const getEnhancementCount = async (app: string) => {
     "AND s.coverage = 'New Enhancements'\n" +
     "AND s.client_priority = 0\n" +
     "OR s.client_priority = NULL";
-  const [{ enhancementCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
-  return enhancementCount;
+  const [{ enhancementcount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return enhancementcount;
 }
 
 export const getRegressionCount = async (app: string) => {
@@ -192,8 +192,8 @@ export const getRegressionCount = async (app: string) => {
     "AND s.coverage = 'Regression - Current Round'\n" +
     "AND s.client_priority = 0\n" +
     "OR s.client_priority = NULL";
-  const [{ regressionCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
-  return regressionCount;
+  const [{ regressioncount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return regressioncount;
 }
 
 export const getPriorityCount = async (app: string) => {
@@ -204,8 +204,8 @@ export const getPriorityCount = async (app: string) => {
     "WHERE scenario_id = s.id)\n" +
     "WHERE s.app_under_test = '" + app + "'\n" +
     "AND s.client_priority = 1";
-  const [{ priorityCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
-  return priorityCount;
+  const [{ prioritycount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return prioritycount;
 }
 
 export const getFlaggedCount = async (app: string) => {
@@ -216,8 +216,8 @@ export const getFlaggedCount = async (app: string) => {
     "WHERE scenario_id = s.id)\n" +
     "WHERE s.app_under_test = '" + app + "'\n" +
     "AND s.review_flag = '1'";
-  const [{ flaggedCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
-  return flaggedCount;
+  const [{ flaggedcount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return flaggedcount;
 }
 
 export const getFlaggedScenarios = async (app: string) => {
