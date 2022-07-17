@@ -10,7 +10,7 @@ export const Round = db.sequelize.define('Round', {
     primaryKey: true,
   },
   currentFlag: {
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.SMALLINT,
     field: 'current_flag',
     nullable: true,
   },

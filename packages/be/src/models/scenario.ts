@@ -47,17 +47,17 @@ export const Scenario = db.sequelize.define('Scenario', {
     field: 'updated_at',
   },
   reviewFlag: {
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.SMALLINT,
     field: 'review_flag',
     nullable: true,
   },
   isSecurity: {
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.SMALLINT,
     field: 'is_security',
     nullable: true,
   },
   clientPriority: {
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.SMALLINT,
     field: 'client_priority',
     nullable: true,
   },
