@@ -35,7 +35,7 @@ export const User = db.sequelize.define('User', {
     field: 'email_canonical',
   },
   enabled: {
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.SMALLINT,
     nullable: false,
   },
   salt: {
@@ -54,11 +54,11 @@ export const User = db.sequelize.define('User', {
     field: 'last_login',
   },
   locked: {
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.SMALLINT,
     nullable: false,
   },
   expired: {
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.SMALLINT,
     nullable: false,
   },
   expiresAt: {
@@ -82,7 +82,7 @@ export const User = db.sequelize.define('User', {
     nullable: false,
   },
   credentialsExpired: {
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.SMALLINT,
     nullable: false,
     field: 'credentials_expired',
   },
@@ -92,7 +92,7 @@ export const User = db.sequelize.define('User', {
     field: 'credentials_expire_at',
   },
   isNotified: {
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.SMALLINT,
     nullable: true,
     field: 'is_notified',
   },
