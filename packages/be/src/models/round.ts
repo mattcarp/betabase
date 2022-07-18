@@ -154,9 +154,31 @@ export const getRoundById = async (id: string) => {
 }
 
 export const addRound = async (params) => {
-  const model = await Round.create(params);
-  await model.save();
-  return model?.id;
+  const timestamp = moment().format('Y-MM-DD HH:mm:ss');
+  const query = `
+    insert into "round"
+      ("id","app","notes","client_notes","name","starts_at","ends_at","created_at","updated_at","release_num","current_flag")
+    values
+      (
+        (SELECT MAX("id") + 1 FROM "round"),
+        '${params.app}',
+        '${params.notes}',
+        '${params.clientNotes}',
+        '${params.name}',
+        '${params.startsAt}',
+        '${params.endsAt}',
+        '${params.createdAt || timestamp}',
+        '${params.updatedAt || timestamp}',
+        '${params.releaseNum}',
+        '${params.currentFlag}'
+      )
+    returning "id";`;
+  try {
+    const [[{ id }]] = await db.sequelize.query(query, { type: QueryTypes.INSERT, camelCase: true });
+    return id;
+  } catch (e) {
+    return e;
+  }
 }
 
 export const updateRound = async (id, params) => {
