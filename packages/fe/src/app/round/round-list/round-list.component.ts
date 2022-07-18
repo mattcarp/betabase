@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { filter, pluck, tap } from 'rxjs/operators';
+import * as moment from 'moment';
 
 import { AppService } from '../../shared/app.service';
 import { RoundItem } from '../../shared/models';
@@ -28,7 +29,13 @@ export class RoundListComponent {
 
   private async fetchData(app: string): Promise<void> {
     this.isLoading = true;
-    this.rounds = await this.appService.getAllRounds(app);
+    const rounds = await this.appService.getAllRounds(app);
+    this.rounds = rounds.map((item: RoundItem) => ({
+      ...item,
+      startsAt: moment(item.startsAt).isValid() ? item.startsAt : null,
+      endsAt: moment(item.endsAt).isValid() ? item.endsAt : null,
+      updatedAt: moment(item.updatedAt).isValid() ? item.updatedAt : null,
+    }));
     this.isLoading = false;
   }
 }
