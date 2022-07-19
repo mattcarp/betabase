@@ -123,13 +123,13 @@ export class AppDetailsComponent {
     if (this.reportData?.enhancementScenarios?.length !== 0) {
       const { testedCount, totalCount } = this.getCounts('enhancementScenarios');
       enhancementCount = totalCount;
-      enhancementRatio = testedCount / totalCount;
+      enhancementRatio = testedCount ? testedCount / totalCount : 1;
     }
 
     const totalCount = regressionCount + enhancementCount;
     const regressionWeight = regressionCount / totalCount;
     const enhancementWeight = enhancementCount / totalCount;
-    const weightedAvg = enhancementWeight * enhancementRatio + regressionWeight * regressionRatio || 0;
+    const weightedAvg = enhancementWeight * enhancementRatio + regressionWeight * regressionRatio;
     return `${Math.round(weightedAvg * 100)}%`;
   }
 
