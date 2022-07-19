@@ -65,6 +65,10 @@ export class AppDetailsComponent {
     return moment(this.reportData?.roundNotes?.endsAt).add(-5, 'h').format('MMM Do');
   }
 
+  get forTesting(): number {
+    return Number(this.reportData?.enhancementCount) + Number(this.reportData?.regressionCount);
+  }
+
   get daysLeft(): number {
     if (!this.reportData?.roundNotes?.endsAt) {
       return 0;
@@ -129,7 +133,7 @@ export class AppDetailsComponent {
     const totalCount = regressionCount + enhancementCount;
     const regressionWeight = regressionCount / totalCount;
     const enhancementWeight = enhancementCount / totalCount;
-    const weightedAvg = enhancementWeight * enhancementRatio + regressionWeight * regressionRatio;
+    const weightedAvg = enhancementWeight * enhancementRatio + regressionWeight * regressionRatio || 0;
     return `${Math.round(weightedAvg * 100)}%`;
   }
 
@@ -363,7 +367,7 @@ export class AppDetailsComponent {
     let data1: string[] = [];
     let labels: string[] = [];
 
-    if (this.isMonthsMode) {
+    if (this.isMonthsMode && this.yearsUnique.length) {
       const year = String(this.chartDisplayOptions.yearSlider.highValue || new Date().getFullYear());
       const result = this.allTests
         .map((test: TestItem) => moment(test.createdAt).format('YYYY-MM'))
@@ -414,7 +418,7 @@ export class AppDetailsComponent {
         ],
         labels: labels,
       };
-    } else {
+    } else if (this.yearsUnique.length) {
       // -- For new features
       const yearsFeatures = this.reportData?.enhancementScenarios
         .map((item: ScenarioItem) => moment(item.mostRecent).format('YYYY')).sort();
@@ -444,6 +448,26 @@ export class AppDetailsComponent {
           },
           {
             data: data1,
+            label: ['For New Features'],
+            tension: 0.5,
+          },
+        ],
+        labels: labels,
+      };
+    } else {
+      this.chartDisplayOptions.total = {
+        isLoading: false,
+        type: 'line',
+        title: 'Total Tests',
+        datasets: [
+          {
+            data: [],
+            label: ['Total Tests'],
+            tension: 0.5,
+            fill: 'start',
+          },
+          {
+            data: [],
             label: ['For New Features'],
             tension: 0.5,
           },
