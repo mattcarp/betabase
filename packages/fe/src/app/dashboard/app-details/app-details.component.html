@@ -34,7 +34,7 @@
           </div>
           <div>
             <span class="right">Days Remaining:</span>
-            {{daysLeft || '─'}} <span class="grey">({{percentRemain}})</span>
+            {{daysLeft || '─'}} <span *ngIf="daysLeft" class="grey">({{percentRemain}})</span>
           </div>
           <div>
             <span>Release Date:</span>
