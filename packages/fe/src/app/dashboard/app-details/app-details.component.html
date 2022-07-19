@@ -72,24 +72,29 @@
               <div class="period">
                 <b>Period selection</b>
                 <div>
-                  <span>Year(s)</span>
-                  <div class="slider" [class.disabled]="yearsUnique?.length === 1">
-                    <ngx-slider
-                      (mouseup)="yearSliderEvent()"
-                      [(value)]="chartDisplayOptions.yearSlider.value"
-                      [(highValue)]="chartDisplayOptions.yearSlider.highValue"
-                      [options]="chartDisplayOptions.yearSlider.options">
-                    </ngx-slider>
-                  </div>
-                  <span>Month(s)</span>
-                  <div class="slider" [class.disabled]="!isMonthsMode">
-                    <ngx-slider
-                      (mouseup)="monthSliderEvent()"
-                      [(value)]="chartDisplayOptions.monthSlider.value"
-                      [(highValue)]="chartDisplayOptions.monthSlider.highValue"
-                      [options]="chartDisplayOptions.monthSlider.options">
-                    </ngx-slider>
-                  </div>
+                  <ng-container *ngIf="chartDisplayOptions.yearSlider.value; else totalChartNoData">
+                    <span>Year(s)</span>
+                    <div class="slider" [class.disabled]="yearsUnique?.length === 1">
+                      <ngx-slider
+                        (mouseup)="yearSliderEvent()"
+                        [(value)]="chartDisplayOptions.yearSlider.value"
+                        [(highValue)]="chartDisplayOptions.yearSlider.highValue"
+                        [options]="chartDisplayOptions.yearSlider.options">
+                      </ngx-slider>
+                    </div>
+                    <span>Month(s)</span>
+                    <div class="slider" [class.disabled]="!isMonthsMode">
+                      <ngx-slider
+                        (mouseup)="monthSliderEvent()"
+                        [(value)]="chartDisplayOptions.monthSlider.value"
+                        [(highValue)]="chartDisplayOptions.monthSlider.highValue"
+                        [options]="chartDisplayOptions.monthSlider.options">
+                      </ngx-slider>
+                    </div>
+                  </ng-container>
+                  <ng-template #totalChartNoData>
+                    <h4>No Data</h4>
+                  </ng-template>
                 </div>
               </div>
             </ng-template>
@@ -178,7 +183,13 @@
             <span>Cases for this Round:</span>
           </div>
           <div>
-            {{(reportData?.enhancementCount || 0) + (reportData?.regressionCount || 0)}}
+            <!--            {{(reportData?.enhancementCount || 0) + (reportData?.regressionCount || 0)}}-->
+            <!--            {{reportData?.regressionCount}}-->
+            <!--            <ng-container *ngIf="reportData?.enhancementCount !== 0; else nullForTesting">-->
+            <!--              {{(reportData?.enhancementCount || 0) + (reportData?.regressionCount || 0)}}-->
+            <!--            </ng-container>-->
+            <!--            <ng-template #nullForTesting>0</ng-template>-->
+            {{forTesting}}
             <span class="grey">for testing</span>
           </div>
           <div>

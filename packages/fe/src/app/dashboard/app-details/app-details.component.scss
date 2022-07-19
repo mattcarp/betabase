@@ -195,9 +195,19 @@
       width: 550px;
 
       .period {
+        position: relative;
         display: grid;
         grid-template-rows: 20px 1fr;
         margin: 0 16px 0 0;
+
+        h4 {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin: 12px 0 0;
+          transform: translate(-50%, -50%);
+          color: #919191;
+        }
 
         b,
         span {

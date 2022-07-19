@@ -296,17 +296,6 @@ export const getPdfBlob = async (app: string, scenarioIds: number[]) => {
     'AND s.id in (' + scenarioIds.join(', ') + ')';
   const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
   const scenarios = db.snakeCaseToCamelCase(result);
-  const options = {
-    format: 'A4',
-    orientation: 'portrait',
-    margin: {
-      top: 20,
-      left: 20,
-      right: 20,
-      bottom: 40
-    },
-    paginationOffset: 1
-  };
   const date = new Date();
   const dd = String(date.getDate()).padStart(2, '0');
   const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -322,7 +311,7 @@ export const getPdfBlob = async (app: string, scenarioIds: number[]) => {
         <td>${index + 1}</td>
         <td>
           <a href="${scenarioPath}${app.replace(' ', '%20')}/${scenario.id}/show" target="_blank">${scenario.id}</a>
-          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAACXBIWXMAAAsTAAALEwEAmpwYAAAGuWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNi4wLWMwMDMgNzkuMTY0NTI3LCAyMDIwLzEwLzE1LTE3OjQ4OjMyICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMS0wNi0xN1QxMjozOToxMiswMzowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjEtMDctMDVUMjI6NTQ6NTcrMDM6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjEtMDctMDVUMjI6NTQ6NTcrMDM6MDAiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6YjFkYjYzMzgtMjI3Ny00ZjczLTlmMTctZWQyYmJjZjNlNzE5IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjQ4RUJDOTcwRTBDOTExRTc5MERBQTJCNDQxQTQzODExIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6NDhFQkM5NzBFMEM5MTFFNzkwREFBMkI0NDFBNDM4MTEiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiBwaG90b3Nob3A6SUNDUHJvZmlsZT0ic1JHQiBJRUM2MTk2Ni0yLjEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0Y5QjdDMEUwQzgxMUU3OTBEQUEyQjQ0MUE0MzgxMSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0OEVCQzk2RUUwQzkxMUU3OTBEQUEyQjQ0MUE0MzgxMSIvPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJzYXZlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDo1OWIwNmVmOS0xYjJjLTRiM2UtOGI4MC0xZjU4ODA2OGU1ZTkiIHN0RXZ0OndoZW49IjIwMjEtMDYtMTdUMTI6NDE6MTYrMDM6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMi4xIChNYWNpbnRvc2gpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJzYXZlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDpiMWRiNjMzOC0yMjc3LTRmNzMtOWYxNy1lZDJiYmNmM2U3MTkiIHN0RXZ0OndoZW49IjIwMjEtMDctMDVUMjI6NTQ6NTcrMDM6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMi4xIChNYWNpbnRvc2gpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PkTiYVcAAABVSURBVBiVY/z//z8DOjDtvIoiyIShAgIYoZiBgYGBgQVdFxbF/1mQOMiAoHX/0TQxwhWdLtfGpgCrSRgKTpdrY/cd1FQ4gDn8v2nnVbggMpuBgYEBAEsfFKnlZiKrAAAAAElFTkSuQmCC" alt="img">
+          <img width="6" height="6" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAACXBIWXMAAAsTAAALEwEAmpwYAAAGuWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNi4wLWMwMDMgNzkuMTY0NTI3LCAyMDIwLzEwLzE1LTE3OjQ4OjMyICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMS0wNi0xN1QxMjozOToxMiswMzowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjEtMDctMDVUMjI6NTQ6NTcrMDM6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjEtMDctMDVUMjI6NTQ6NTcrMDM6MDAiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6YjFkYjYzMzgtMjI3Ny00ZjczLTlmMTctZWQyYmJjZjNlNzE5IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjQ4RUJDOTcwRTBDOTExRTc5MERBQTJCNDQxQTQzODExIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6NDhFQkM5NzBFMEM5MTFFNzkwREFBMkI0NDFBNDM4MTEiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiBwaG90b3Nob3A6SUNDUHJvZmlsZT0ic1JHQiBJRUM2MTk2Ni0yLjEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0Y5QjdDMEUwQzgxMUU3OTBEQUEyQjQ0MUE0MzgxMSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0OEVCQzk2RUUwQzkxMUU3OTBEQUEyQjQ0MUE0MzgxMSIvPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJzYXZlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDo1OWIwNmVmOS0xYjJjLTRiM2UtOGI4MC0xZjU4ODA2OGU1ZTkiIHN0RXZ0OndoZW49IjIwMjEtMDYtMTdUMTI6NDE6MTYrMDM6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMi4xIChNYWNpbnRvc2gpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJzYXZlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDpiMWRiNjMzOC0yMjc3LTRmNzMtOWYxNy1lZDJiYmNmM2U3MTkiIHN0RXZ0OndoZW49IjIwMjEtMDctMDVUMjI6NTQ6NTcrMDM6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMi4xIChNYWNpbnRvc2gpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PkTiYVcAAABVSURBVBiVY/z//z8DOjDtvIoiyIShAgIYoZiBgYGBgQVdFxbF/1mQOMiAoHX/0TQxwhWdLtfGpgCrSRgKTpdrY/cd1FQ4gDn8v2nnVbggMpuBgYEBAEsfFKnlZiKrAAAAAElFTkSuQmCC" alt="img">
         </td>
         <td>
           <a href="#${scenario.id}">${scenario.name}</a>
@@ -330,7 +319,7 @@ export const getPdfBlob = async (app: string, scenarioIds: number[]) => {
       </tr>
     `);
     cases = cases.concat(`
-      <h3 id="${scenario.id}">⚓ Case ${scenario.id}</h3>
+      <h3 id="${scenario.id}"><small>⚓</small> Case ${scenario.id}</h3>
       <table>
         <tbody>
           <tr>
@@ -361,6 +350,10 @@ export const getPdfBlob = async (app: string, scenarioIds: number[]) => {
     <style>
       h3, p {
         font-family: Helvetica, Roboto, Arial, sans-serif;
+      }
+
+      h3 small {
+        color: grey;
       }
 
       body > p {
@@ -424,9 +417,22 @@ export const getPdfBlob = async (app: string, scenarioIds: number[]) => {
 }
 
 const generatePdf = (html: string) => {
+  const options = {
+    format: 'A4',
+    orientation: 'portrait',
+    margin: {
+      top: 20,
+      left: 20,
+      right: 20,
+      bottom: 40
+    },
+    paginationOffset: 1
+  };
   return new Promise((resolve, reject) => {
-    htmlToPdf.create(html).toBuffer((error, buffer) => {
-      if (error) { reject(error); }
+    htmlToPdf.create(html, options).toBuffer((error, buffer) => {
+      if (error) {
+        reject(error);
+      }
       resolve(buffer);
     });
   });

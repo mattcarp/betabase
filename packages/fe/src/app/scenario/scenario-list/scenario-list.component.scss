@@ -5,8 +5,14 @@
   120px
   minmax(64px, 120px)
   120px
-  60px
+  68px
   minmax(64px, 120px);
+}
+
+header {
+  &.grid {
+    padding: 0;
+  }
 }
 
 .flex {
