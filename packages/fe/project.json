@@ -8,14 +8,19 @@
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "allowedCommonJsDependencies": ["keycloak-js"],
+        "allowedCommonJsDependencies": [
+          "keycloak-js",
+          "moment"
+        ],
         "outputPath": "dist/packages/fe",
         "index": "packages/fe/src/index.html",
         "main": "packages/fe/src/main.ts",
         "polyfills": "packages/fe/src/polyfills.ts",
         "tsConfig": "packages/fe/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["packages/fe/src/assets"],
+        "assets": [
+          "packages/fe/src/assets"
+        ],
         "styles": [
           "packages/fe/src/assets/fonts/fontawesome-5.15.3/css/all.css",
           "packages/fe/src/scss/styles.scss"
