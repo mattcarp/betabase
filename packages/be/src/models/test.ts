@@ -132,7 +132,7 @@ export const getTestList = async (app: string) => {
     "t.ticket, t.scenario_id, t.id, t.deployment_stamp\n" +
     "FROM test t, scenario s\n" +
     "WHERE t.scenario_id = s.id\n" +
-    "AND s.app_under_test = '" + app + "'\n" +
+    "AND LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
     "ORDER BY t.updated_at DESC";
     // "LIMIT 0, 2000";
   const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
@@ -160,7 +160,7 @@ export const getTestCountRange = async (app: string, period: string) => {
     "FROM test t, scenario s\n" +
     "WHERE t.created_at BETWEEN '" + start + " 0:00' AND '" + end + " 23:59'\n" +
     "AND s.id = t.scenario_id\n" +
-    "AND s.app_under_test = '" + app + "'";
+    "AND LOWER(s.app_under_test) = LOWER('" + app + "')";
   const [{ testCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
   return testCount;
 }
@@ -171,7 +171,7 @@ export const getTestCount = async (app: string) => {
     "WHERE r.current_flag = TRUE\n" +
     "AND t.updated_at BETWEEN r.starts_at AND r.ends_at\n" +
     "AND s.id = t.scenario_id\n" +
-    "AND s.app_under_test = '" + app + "'\n" +
+    "AND LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
     "AND r.app  = '" + app + "'";
   const [{ testCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
   return testCount;
