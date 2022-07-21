@@ -83,30 +83,30 @@ export const getRoundNotes = async (app: string) => {
 }
 
 export const getTestCount = async (app: string) => {
-  const query = "SELECT COUNT(t.id) AS testCount\n" +
+  const query = "SELECT COUNT(t.id) AS count\n" +
     "FROM round r, test t, scenario s\n" +
     "WHERE t.updated_at BETWEEN r.starts_at AND r.ends_at\n" +
     "AND s.id = t.scenario_id\n" +
-    "AND s.app_under_test = '" + app + "'\n" +
-    "AND r.app  = '" + app + "'";
-  const [{ testCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
-  return testCount;
+    "AND LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
+    "AND LOWER(r.app)  = LOWER('" + app + "')";
+  const [{ count }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return count;
 }
 
 export const getFailCount = async (app: string) => {
   const today = moment().format('Y-M-D');
-  const query = "SELECT COUNT( t.id ) AS failCount\n" +
+  const query = "SELECT COUNT( t.id ) AS count\n" +
   "FROM round r, test t, scenario s\n" +
   "WHERE '" + today + " 0:0:0'\n" +
   "BETWEEN r.starts_at AND r.ends_at\n" +
   "AND t.updated_at\n" +
   "BETWEEN r.starts_at AND r.ends_at\n" +
   "AND s.id = t.scenario_id\n" +
-  "AND s.app_under_test = '" + app + "'\n" +
-  "AND r.app = '" + app + "'\n" +
+  "AND LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
+  "AND LOWER(r.app) = LOWER('" + app + "')\n" +
   "AND t.pass_fail = 'Fail'";
-  const [{ failCount }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
-  return failCount;
+  const [{ count }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return count;
 }
 
 export const getJiras = async (app: string) => {
@@ -116,7 +116,7 @@ export const getJiras = async (app: string) => {
     // "AND r.current_flag = TRUE\n" +
     "WHERE r.current_flag = 1\n" +
     "AND s.id = t.scenario_id\n" +
-    "AND s.app_under_test = '" + app + "'\n" +
+    "AND LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
     // "AND r.app  = '" + app + "'\n" +
     "AND t.ticket != ''\n" +
     "GROUP BY t.ticket, t.scenario_id, t.created_at, t.comments, t.created_by, t.input, t.result, t.pass_fail, t.build, t.id, s.is_security\n" +
