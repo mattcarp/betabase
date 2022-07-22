@@ -592,7 +592,7 @@
           <div *ngFor="let item of reportData?.flaggedScenarios" class="grid flagged">
             <div #1 class="center">{{item?.id}}</div>
             <div #2>{{item?.name}}</div>
-            <div #3>{{item?.updatedAt | date: 'Y-m-d H:m:s'}}</div>
+            <div #3>{{item?.updatedAt | date}}</div>
             <div #4>{{item?.flagReason | slice:0:80}}</div>
             <div #5 class="center actions">
               <a routerLink="/scenario/{{app}}/{{item?.id}}/show" mat-icon-button>
