@@ -80,11 +80,11 @@ export class TestFormComponent implements OnDestroy {
     this.isLoading = true;
     const params = { ...this.test, scenarioId: this.scenario?.id! };
     try {
-      this.test?.id
+      const { id } = this.test?.id
         ? await this.appService.updateTest(params)
         : await this.appService.addTest(params);
       this.isLoading = false;
-      await this.router.navigate(['/test', this.scenario?.appUnderTest, this.test?.id, 'show']);
+      await this.router.navigate(['/test', this.scenario?.appUnderTest, id, 'show']);
     } catch (e) {
       console.log(e);
       this.isLoading = false;

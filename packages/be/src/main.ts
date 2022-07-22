@@ -298,7 +298,8 @@ app.delete('/api/scenario/:id', [isTokenValid, isAdmin], async (request, respons
 app.post('/api/test', [isTokenValid], async (request, response) => {
   request.setTimeout(60 * 1000 * 10);
   const params = request.body;
-  const model = await addTest(params);
+  const { username } = await getUser(request.userId);
+  const model = await addTest(params, username);
   response.json(model);
 });
 
@@ -316,7 +317,8 @@ app.put('/api/test/:id', [isTokenValid], async (request, response) => {
   request.setTimeout(60 * 1000 * 10);
   const id = request.params.id;
   const params = request.body;
-  const model = await updateTest(id, params);
+  const { username } = await getUser(request.userId);
+  const model = await updateTest(id, params, username);
   response.json(model);
 });
 

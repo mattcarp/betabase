@@ -187,8 +187,8 @@ export const getScenarioTests = async (scenario_id: string) => {
   return result;
 }
 
-export const addTest = async (params) => {
-  const model = await Test.create(params);
+export const addTest = async (params, createdBy: string) => {
+  const model = await Test.create({ ...params, createdBy });
   await model.save();
   return model;
 }
@@ -198,8 +198,8 @@ export const getTest = async (id: string) => {
   return dataValues;
 }
 
-export const updateTest = async (id, params) => {
-  await Test.update({ ...params }, { where: { id }});
+export const updateTest = async (id, params, updatedBy: string) => {
+  await Test.update({ ...params, updatedBy }, { where: { id }});
   return id;
 }
 
