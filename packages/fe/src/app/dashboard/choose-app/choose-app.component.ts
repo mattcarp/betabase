@@ -70,6 +70,6 @@ export class ChooseAppComponent implements OnInit {
 
   getFormattedDate(dateString: Date | string | undefined): string {
     if (!dateString) { return ''; }
-    return moment(String(dateString), 'YYYY-MM-DD').format('LL');
+    return moment(String(dateString), 'YYYY-MM-DD').format('L');
   }
 }
