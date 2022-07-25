@@ -32,9 +32,9 @@
             <div>
               <ng-container *ngIf="!data?.partnerPreviewerRound?.releaseNum">None Scheduled</ng-container>
               <ng-container *ngIf="data?.partnerPreviewerRound?.releaseNum">
-                {{data?.partnerPreviewerRound?.startsAt | date}}
+                {{getFormattedDate(data?.partnerPreviewerRound?.startsAt)}}
                 to
-                {{data?.partnerPreviewerRound?.endsAt | date}}
+                {{getFormattedDate(data?.partnerPreviewerRound?.endsAt)}}
               </ng-container>
             </div>
           </section>
@@ -76,9 +76,9 @@
             <div>
               <ng-container *ngIf="!data?.aomaRound?.releaseNum">None Scheduled</ng-container>
               <ng-container *ngIf="data?.aomaRound?.releaseNum">
-                {{data?.aomaRound?.startsAt | date}}
+                {{getFormattedDate(data?.aomaRound?.startsAt)}}
                 to
-                {{data?.aomaRound?.endsAt | date}}
+                {{getFormattedDate(data?.aomaRound?.endsAt)}}
               </ng-container>
             </div>
           </section>
@@ -120,9 +120,9 @@
             <div>
               <ng-container *ngIf="!data?.promoAdminRound?.releaseNum">None Scheduled</ng-container>
               <ng-container *ngIf="data?.promoAdminRound?.releaseNum">
-                {{data?.promoAdminRound?.startsAt | date}}
+                {{getFormattedDate(data?.promoAdminRound?.startsAt)}}
                 to
-                {{data?.promoAdminRound?.endsAt | date}}
+                {{getFormattedDate(data?.promoAdminRound?.endsAt)}}
               </ng-container>
             </div>
           </section>
@@ -164,9 +164,9 @@
             <div>
               <ng-container *ngIf="!data?.promoRound?.releaseNum">None Scheduled</ng-container>
               <ng-container *ngIf="data?.promoRound?.releaseNum">
-                {{data?.promoRound?.startsAt | date}}
+                {{getFormattedDate(data?.promoRound?.startsAt)}}
                 to
-                {{data?.promoRound?.endsAt | date}}
+                {{getFormattedDate(data?.promoRound?.endsAt)}}
               </ng-container>
             </div>
           </section>
@@ -208,9 +208,9 @@
             <div>
               <ng-container *ngIf="!data?.dxRound?.releaseNum">None Scheduled</ng-container>
               <ng-container *ngIf="data?.dxRound?.releaseNum">
-                {{data?.dxRound?.startsAt | date}}
+                {{getFormattedDate(data?.dxRound?.startsAt)}}
                 to
-                {{data?.dxRound?.endsAt | date}}
+                {{getFormattedDate(data?.dxRound?.endsAt)}}
               </ng-container>
             </div>
           </section>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 
 import { AppService } from '../../shared/app.service';
 import { AppListData } from '../../shared/models';
@@ -65,5 +66,10 @@ export class ChooseAppComponent implements OnInit {
 
   async onButtonClick(page: string): Promise<void> {
     await this.router.navigate([`${page}`]);
+  }
+
+  getFormattedDate(dateString: Date | string | undefined): string {
+    if (!dateString) { return ''; }
+    return moment(String(dateString), 'YYYY-MM-DD').format('LL');
   }
 }
