@@ -10,15 +10,11 @@ import config from './config';
 import {
   addScenario,
   deleteScenario,
-  getEnhancementCount,
   getEnhancementScenarios,
-  getFlaggedCount,
   getFlaggedScenarios,
   getPdfBlob,
   getPriorities,
-  getPriorityCount,
   getPriorityScenarios,
-  getRegressionCount,
   getRegressionScenarios,
   getScenario,
   getScenarioCount,
@@ -116,7 +112,9 @@ app.get('/api/get-round-notes/:app', [isTokenValid], async (request, response) =
 
 app.get('/api/get-test-count/:app', [isTokenValid], async (request, response) => {
   request.setTimeout(60 * 1000 * 100);
-  const testCount = await getTestCount(request.params.app);
+  const app = request.params.app;
+  const { startsAt, endsAt } = await getRoundNotes(app);
+  const testCount = await getTestCount(app, startsAt, endsAt);
   response.json(testCount);
 });
 
@@ -129,21 +127,22 @@ app.get('/api/:app/report-data', [isTokenValid], async (request, response) => {
   request.setTimeout(60 * 1000 * 10);
   const app = request.params.app;
   const roundNotes = await getRoundNotes(app);
+  const { startsAt, endsAt } = roundNotes;
   const deployment = await getDeployment(app);
-  const enhancementScenarios = await getEnhancementScenarios(app);
-  const regressionScenarios = await getRegressionScenarios(app);
-  const priorities = await getPriorities(app);
+  const enhancementScenarios = await getEnhancementScenarios(app, startsAt, endsAt);
+  const regressionScenarios = await getRegressionScenarios(app, startsAt, endsAt);
+  const priorities = await getPriorities(app, startsAt, endsAt);
   const testsToday = await getTestCountRange(app, 'today');
   const testsYesterday = await getTestCountRange(app, 'yesterday');
   const testsThisWeek = await getTestCountRange(app, 'last7days');
-  const jiras = await getJiras(app);
-  const testCount = await getTestCount(app);
-  const enhancementCount = await getEnhancementCount(app);
-  const regressionCount = await getRegressionCount(app);
-  const flaggedCount = await getFlaggedCount(app);
-  const priorityCount = await getPriorityCount(app);
-  const flaggedScenarios = await getFlaggedScenarios(app);
-  const priorityScenarios = await getPriorityScenarios(app);
+  const jiras = await getJiras(app, startsAt);
+  const testCount = await getTestCount(app, startsAt, endsAt);
+  const enhancementCount = enhancementScenarios?.length;
+  const regressionCount = regressionScenarios?.length;
+  const priorityCount = priorities?.length;
+  const flaggedScenarios = await getFlaggedScenarios(app, startsAt, endsAt);
+  const priorityScenarios = await getPriorityScenarios(app, startsAt, endsAt);
+  const flaggedCount = flaggedScenarios?.length;
   response.json({
     roundNotes,
     deployment,

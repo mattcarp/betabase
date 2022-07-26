@@ -82,10 +82,10 @@ export const getRoundNotes = async (app: string) => {
   return response?.[0]?.dataValues;
 }
 
-export const getTestCount = async (app: string) => {
+export const getTestCount = async (app: string, startsAt: string, endsAt: string) => {
   const query = "SELECT COUNT(t.id) AS count\n" +
     "FROM round r, test t, scenario s\n" +
-    "WHERE t.updated_at BETWEEN r.starts_at AND r.ends_at\n" +
+    "WHERE DATE(t.updated_at) BETWEEN DATE('" + startsAt + "') AND DATE('" + endsAt + "')\n" +
     "AND s.id = t.scenario_id\n" +
     "AND LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
     "AND LOWER(r.app)  = LOWER('" + app + "')";
@@ -109,15 +109,14 @@ export const getFailCount = async (app: string) => {
   return count;
 }
 
-export const getJiras = async (app: string) => {
+export const getJiras = async (app: string, startsAt: string) => {
   const query = "SELECT t.*, s.is_security\n" +
     "FROM round r, test t, scenario s\n" +
-    // "WHERE t.created_at BETWEEN r.starts_at AND DATE_ADD(r.release_date, INTERVAL 10 DAY)\n" +
-    // "AND r.current_flag = TRUE\n" +
-    "WHERE r.current_flag = 1\n" +
+    "WHERE t.created_at != '0000-00-00 00:00:00' AND r.release_date != '0000-00-00 00:00:00' \n" +
+    "AND DATE(t.created_at) BETWEEN DATE('" + startsAt + "') AND DATE(r.release_date) + INTERVAL '10 day'\n" +
+    "AND r.current_flag = 1\n" +
     "AND s.id = t.scenario_id\n" +
     "AND LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
-    // "AND r.app  = '" + app + "'\n" +
     "AND t.ticket != ''\n" +
     "GROUP BY t.ticket, t.scenario_id, t.created_at, t.comments, t.created_by, t.input, t.result, t.pass_fail, t.build, t.id, s.is_security\n" +
     "ORDER BY t.ticket DESC";
@@ -197,6 +196,14 @@ export const deleteRound = async (id: string) => {
   } catch (e) {
     return e;
   }
+}
+
+export const getCurrentRoundDates = async (app: string) => {
+  const { startsAt, endsAt } = await getRoundNotes(app);
+  return {
+    startsAt: moment(new Date(startsAt)).format('Y-M-D'),
+    endsAt: moment(new Date(endsAt)).format('Y-M-D'),
+  };
 }
 
 db.Round = Round;

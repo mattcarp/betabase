@@ -118,16 +118,16 @@ export const getScenarioCount = async (app: string) => {
   return dataValues;
 }
 
-export const getEnhancementScenarios = async (app: string) => {
+export const getEnhancementScenarios = async (app: string, startsAt: string, endsAt: string) => {
   const query = "SELECT s.id, s.name, s.coverage, s.app_under_test,\n" +
     "t.created_at AS most_recent, t.pass_fail AS last_test,\n" +
     "s.enhancement_sort_order\n" +
     "FROM scenario s\n" +
     "LEFT JOIN test t ON s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
-    "WHERE scenario_id = s.id)\n" +
+    "AND DATE(t.created_at) BETWEEN DATE('" + startsAt + "') AND DATE('" + endsAt + "')\n" +
     "WHERE LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
     "AND s.coverage = 'New Enhancements'\n" +
+    "AND t.created_at IS NOT NULL\n" +
     "AND s.client_priority = 0\n" +
     "OR s.client_priority = NULL\n" +
     "ORDER BY s.enhancement_sort_order ASC";
@@ -135,14 +135,13 @@ export const getEnhancementScenarios = async (app: string) => {
   return db.snakeCaseToCamelCase(result);
 }
 
-export const getRegressionScenarios = async (app: string) => {
+export const getRegressionScenarios = async (app: string, startsAt: string, endsAt: string) => {
   const query = "SELECT s.id, s.name, s.coverage,\n" +
     "s.app_under_test,\n" +
     "t.created_at as most_recent,\n" +
     "t.pass_fail AS last_test\n" +
     "FROM scenario s LEFT JOIN test t on s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
-    "WHERE scenario_id = s.id)\n" +
+    "AND DATE(t.created_at) BETWEEN DATE('" + startsAt + "') AND DATE('" + endsAt + "')\n" +
     "WHERE LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
     "AND s.client_priority = 0\n" +
     "AND s.coverage = 'Regression - Current Round'\n" +
@@ -152,14 +151,13 @@ export const getRegressionScenarios = async (app: string) => {
   return db.snakeCaseToCamelCase(result);
 }
 
-export const getPriorities = async (app: string) => {
+export const getPriorities = async (app: string, startsAt: string, endsAt: string) => {
   const query = "SELECT s.id, s.name, s.coverage,\n" +
     "s.app_under_test,\n" +
     "t.created_at as most_recent,\n" +
     "t.pass_fail AS last_test\n" +
     "FROM scenario s LEFT JOIN test t on s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
-    "WHERE scenario_id = s.id)\n" +
+    "AND DATE(t.created_at) BETWEEN DATE('" + startsAt + "') AND DATE('" + endsAt + "')\n" +
     "WHERE LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
     "AND s.client_priority = 1\n" +
     "GROUP BY s.id, s.name, s.coverage, app_under_test, most_recent, last_test\n" +
@@ -220,26 +218,24 @@ export const getFlaggedCount = async (app: string) => {
   return count;
 }
 
-export const getFlaggedScenarios = async (app: string) => {
+export const getFlaggedScenarios = async (app: string, startsAt: string, endsAt: string) => {
   const query = "SELECT s.*\n" +
     "FROM scenario s\n" +
     "LEFT JOIN test t ON s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
-    "WHERE scenario_id = s.id)\n" +
-    "WHERE LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
+    "AND DATE(t.created_at) BETWEEN DATE('" + startsAt + "') AND DATE('" + endsAt + "')\n" +
+    "WHERE t.created_at IS NOT NULL AND LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
     "AND s.review_flag = '1'";
   const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
   return db.snakeCaseToCamelCase(result);
 }
 
-export const getPriorityScenarios = async (app: string) => {
+export const getPriorityScenarios = async (app: string, startsAt: string, endsAt: string) => {
   const query = "SELECT s.id, s.name, s.coverage,\n" +
     "s.app_under_test,\n" +
     "t.created_at as most_recent,\n" +
     "t.pass_fail AS last_test\n" +
     "FROM scenario s LEFT JOIN test t on s.id = t.scenario_id\n" +
-    "AND t.created_at = (SELECT max(created_at) FROM test\n" +
-    "WHERE scenario_id = s.id)\n" +
+    "AND DATE(t.created_at) BETWEEN DATE('" + startsAt + "') AND DATE('" + endsAt + "')\n" +
     "WHERE LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
     "AND s.client_priority = 1\n" +
     "GROUP BY s.id, s.name, s.coverage, s.app_under_test, most_recent, last_test\n" +
