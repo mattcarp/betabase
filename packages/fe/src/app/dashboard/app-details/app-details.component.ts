@@ -93,7 +93,7 @@ export class AppDetailsComponent {
 
   get releaseDate(): string {
     if (!this.reportData?.roundNotes?.releaseDate || String(this.reportData?.roundNotes?.releaseDate) === '0000-00-00 00:00:00') {
-      return '';
+      return moment(this.reportData?.roundNotes?.endsAt).add(-5, 'h').format('ddd, MMM Do');
     }
     return moment(this.reportData?.roundNotes?.releaseDate).add(-5, 'h').format('ddd, MMM Do');
   }
