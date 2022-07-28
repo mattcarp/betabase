@@ -48,21 +48,21 @@ export class AppDetailsComponent {
   }
 
   get isLoading(): boolean {
-    return this.reportData === null;
+    return !!!Object.keys(this.reportData || {})?.length;
   }
 
   get roundStart(): string {
     if (!this.reportData?.roundNotes?.startsAt) {
       return '';
     }
-    return moment(this.reportData?.roundNotes?.startsAt).add(-5, 'h').format('MMM Do');
+    return this.getDateAsMoment(this.reportData?.roundNotes?.startsAt).add(-5, 'h').format('MMM Do');
   }
 
   get roundEnd(): string {
     if (!this.reportData?.roundNotes?.endsAt) {
       return '';
     }
-    return moment(this.reportData?.roundNotes?.endsAt).add(-5, 'h').format('MMM Do');
+    return this.getDateAsMoment(this.reportData?.roundNotes?.endsAt).add(-5, 'h').format('MMM Do');
   }
 
   get forTesting(): number {
@@ -73,16 +73,16 @@ export class AppDetailsComponent {
     if (!this.reportData?.roundNotes?.endsAt) {
       return 0;
     }
-    const daysLeft = moment(this.reportData?.roundNotes?.endsAt).diff(moment(), 'days');
+    const daysLeft = this.getDateAsMoment(this.reportData?.roundNotes?.endsAt).diff(moment(), 'days');
     return daysLeft < 0 ? 0 : daysLeft;
   }
 
   get percentRemain(): string {
-    let msRemaining = moment(this.reportData?.roundNotes?.endsAt).diff(moment());
+    let msRemaining = this.getDateAsMoment(this.reportData?.roundNotes?.endsAt).diff(moment());
     if (msRemaining < 0) {
       msRemaining = 0;
     }
-    const durationMs = moment(this.reportData?.roundNotes?.endsAt).diff(moment(this.reportData?.roundNotes?.startsAt));
+    const durationMs = this.getDateAsMoment(this.reportData?.roundNotes?.endsAt).diff(this.getDateAsMoment(this.reportData?.roundNotes?.startsAt));
     let percentRemain = msRemaining / durationMs || 0;
     percentRemain = Math.round(percentRemain * 100);
     if (percentRemain > 100) {
@@ -93,9 +93,9 @@ export class AppDetailsComponent {
 
   get releaseDate(): string {
     if (!this.reportData?.roundNotes?.releaseDate || String(this.reportData?.roundNotes?.releaseDate) === '0000-00-00 00:00:00') {
-      return moment(this.reportData?.roundNotes?.endsAt).add(-5, 'h').format('ddd, MMM Do');
+      return this.getDateAsMoment(this.reportData?.roundNotes?.endsAt).add(-5, 'h').format('ddd, MMM Do');
     }
-    return moment(this.reportData?.roundNotes?.releaseDate).add(-5, 'h').format('ddd, MMM Do');
+    return this.getDateAsMoment(this.reportData?.roundNotes?.releaseDate).add(-5, 'h').format('ddd, MMM Do');
   }
 
   get deployDiff(): string {
@@ -336,7 +336,7 @@ export class AppDetailsComponent {
     browser.isLoading = false;
 
     // ngx-slider
-    this.yearsAllTests = this.allTests.map((test: TestItem) => moment(test.createdAt).format('YYYY')).sort();
+    this.yearsAllTests = this.allTests.map((test: TestItem) => this.getDateAsMoment(test.createdAt).format('YYYY')).sort();
     this.yearsUnique = [...new Set(this.yearsAllTests)];
     if (this.yearsUnique.length > 1) {
       const now = new Date().getFullYear();
@@ -370,7 +370,7 @@ export class AppDetailsComponent {
     if (this.isMonthsMode && this.yearsUnique.length) {
       const year = String(this.chartDisplayOptions.yearSlider.highValue || new Date().getFullYear());
       const result = this.allTests
-        .map((test: TestItem) => moment(test.createdAt).format('YYYY-MM'))
+        .map((test: TestItem) => this.getDateAsMoment(test.createdAt).format('YYYY-MM'))
         .sort()
         .filter((item: string) => item.includes(year))
         .map((item: string) => item.replace(`${year}-`, ''));
@@ -393,7 +393,7 @@ export class AppDetailsComponent {
         let month = String(this.chartDisplayOptions.monthSlider.highValue + 1);
         month = Number(month) < 10 ? `0${month}` : month;
         const result = this.allTests
-          .map((test: TestItem) => moment(test.createdAt).format('YYYY-MM-DD'))
+          .map((test: TestItem) => this.getDateAsMoment(test.createdAt).format('YYYY-MM-DD'))
           .sort()
           .filter((item: string) => item.includes(year))
           .filter((item: string) => item.includes(`-${month}-`))
@@ -421,7 +421,7 @@ export class AppDetailsComponent {
     } else if (this.yearsUnique.length) {
       // -- For new features
       const yearsFeatures = this.reportData?.enhancementScenarios
-        .map((item: ScenarioItem) => moment(item.mostRecent).format('YYYY')).sort();
+        .map((item: ScenarioItem) => this.getDateAsMoment(item.mostRecent).format('YYYY')).sort();
       const yearFeaturesName = [...new Set(yearsFeatures)];
       const lastYearFeatures = yearFeaturesName[yearFeaturesName.length - 1];
       const lastNumFeatures = yearsFeatures?.filter(item => item === lastYearFeatures).length;
@@ -519,5 +519,9 @@ export class AppDetailsComponent {
 
   private getValuesMonth(): string[] {
     return this.chartDisplayOptions.months.map(({ value }) => value);
+  }
+
+  private getDateAsMoment(dateString: Date | string | undefined): moment.Moment {
+    return moment(String(dateString), 'YYYY-MM-DD');
   }
 }
