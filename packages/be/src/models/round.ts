@@ -83,12 +83,16 @@ export const getRoundNotes = async (app: string) => {
 }
 
 export const getTestCount = async (app: string, startsAt: string, endsAt: string) => {
+  const emptyDateValue = '0000-00-00 00:00:00';
   const query = "SELECT COUNT(t.id) AS count\n" +
     "FROM round r, test t, scenario s\n" +
-    "WHERE DATE(t.updated_at) BETWEEN DATE('" + startsAt + "') AND DATE('" + endsAt + "')\n" +
+    "WHERE r.starts_at != '" + emptyDateValue + "'\n" +
+    "AND r.ends_at != '" + emptyDateValue + "'\n" +
+    "AND t.updated_at != '" + emptyDateValue + "'\n" +
+    "AND DATE(t.updated_at) BETWEEN DATE('" + startsAt + "') AND DATE('" + endsAt + "')\n" +
     "AND s.id = t.scenario_id\n" +
     "AND LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
-    "AND LOWER(r.app)  = LOWER('" + app + "')";
+    "AND LOWER(r.app) = LOWER('" + app + "')";
   const [{ count }] = await db.sequelize.query(query, { type: QueryTypes.SELECT });
   return count;
 }
