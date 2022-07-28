@@ -113,8 +113,12 @@ app.get('/api/get-round-notes/:app', [isTokenValid], async (request, response) =
 app.get('/api/get-test-count/:app', [isTokenValid], async (request, response) => {
   request.setTimeout(60 * 1000 * 100);
   const app = request.params.app;
-  const { startsAt, endsAt } = await getRoundNotes(app);
-  const testCount = await getTestCount(app, startsAt, endsAt);
+  let testCount = 0;
+  const round = await getRoundNotes(app);
+  if (round?.hasOwnProperty('startsAt') && round?.hasOwnProperty('endsAt')) {
+    const { startsAt, endsAt } = round;
+    testCount = await getTestCount(app, startsAt, endsAt);
+  }
   response.json(testCount);
 });
 
