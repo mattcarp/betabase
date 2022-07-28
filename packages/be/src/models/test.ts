@@ -134,13 +134,14 @@ export const getTestList = async (app: string) => {
       where: {
         appUnderTest: app,
         createdAt: {
-          [Op.between]: [moment(startsAt).format('YYYY-MM-DD'), moment(endsAt).format('YYYY-MM-DD')],
+          [Op.between]: [
+            moment(String(startsAt), 'YYYY-MM-DD').format('YYYY-MM-DD'),
+            moment(String(endsAt), 'YYYY-MM-DD').format('YYYY-MM-DD'),
+          ],
         },
       },
     });
-    const scenarioIds = scenarioItems
-      ?.map(({ dataValues }) => dataValues)
-      ?.map(({ id }) => id);
+    const scenarioIds = scenarioItems?.map(({ dataValues }) => dataValues)?.map(({ id }) => id);
     if (scenarioIds?.length) {
       result = await Test.findAll({
         where: {

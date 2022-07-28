@@ -29,7 +29,7 @@
         <div class="flex">
           <div>
             <span class="right">Testing Period:</span>
-            <ng-container *ngIf="roundStart.length; else nullRound">{{roundStart}} ─ {{roundEnd}}</ng-container>
+            <ng-container *ngIf="roundStart?.length; else nullRound">{{roundStart}} ─ {{roundEnd}}</ng-container>
             <ng-template #nullRound>─</ng-template>
           </div>
           <div>
