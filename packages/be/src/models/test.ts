@@ -1,8 +1,8 @@
-import { DataTypes, QueryTypes } from 'sequelize';
+import { DataTypes, Op, QueryTypes } from 'sequelize';
 import * as moment from 'moment';
 
 import db from './index';
-import { getCurrentRoundDates } from './round';
+import { getCurrentRoundDates, getRoundNotes } from './round';
 
 export const Test = db.sequelize.define('Test', {
   id: {
@@ -125,18 +125,33 @@ Test.hasOne(db.Scenario, {
 });
 
 export const getTestList = async (app: string) => {
-  const query = "SELECT t.created_at, t.updated_at,\n" +
-    "t.updated_by, t.pass_fail, t.input, t.result, t.created_by,\n" +
-    "t.browser_name, t.browser_major, t.browser_minor,\n" +
-    "t.os_name, t.os_major, t.os_minor,\n" +
-    "t.ticket, t.scenario_id, t.id, t.deployment_stamp\n" +
-    "FROM test t, scenario s\n" +
-    "WHERE t.scenario_id = s.id\n" +
-    "AND LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
-    "ORDER BY t.updated_at DESC";
-    // "LIMIT 0, 2000";
-  const result = await db.sequelize.query(query, { type: QueryTypes.SELECT });
-  return db.snakeCaseToCamelCase(result);
+  let result = [];
+  const round = await getRoundNotes(app);
+  if (round?.hasOwnProperty('startsAt') && round?.hasOwnProperty('endsAt')) {
+    const { startsAt, endsAt } = round;
+    const scenarioItems = await db.Scenario.findAll({
+      attributes: ['id'],
+      where: {
+        appUnderTest: app,
+        createdAt: {
+          [Op.between]: [moment(startsAt).format('YYYY-MM-DD'), moment(endsAt).format('YYYY-MM-DD')],
+        },
+      },
+    });
+    const scenarioIds = scenarioItems
+      ?.map(({ dataValues }) => dataValues)
+      ?.map(({ id }) => id);
+    if (scenarioIds?.length) {
+      result = await Test.findAll({
+        where: {
+          scenarioId: {
+            [Op.in]: scenarioIds,
+          },
+        },
+      });
+    }
+  }
+  return result?.map(({ dataValues }) => dataValues);
 }
 
 export const getTestCountRange = async (app: string, period: string) => {
