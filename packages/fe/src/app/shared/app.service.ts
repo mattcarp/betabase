@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { ReportData, RoundItem, ScenarioItem, TestItem, VariationItem } from './models';
+import { JiraItem, ReportData, RoundItem, ScenarioItem, TestItem, VariationItem } from './models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AppService {
   private readonly apiUrl: string;
@@ -129,8 +129,11 @@ export class AppService {
     return firstValueFrom(this.http.get<RoundItem>(url));
   }
 
-  getTestCount(app: string): Promise<number> {
-    const url = `${this.apiUrl}/get-test-count/${app}`;
+  getTestCount(app: string, startsAt?: string, endsAt?: string): Promise<number> {
+    let url = `${this.apiUrl}/get-test-count/${app}`;
+    if (!!startsAt?.length && !!endsAt?.length) {
+      url += `?startsAt=${startsAt}&endsAt=${endsAt}`;
+    }
     return firstValueFrom(this.http.get<number>(url));
   }
 
@@ -147,5 +150,45 @@ export class AppService {
     downloadLink.download = `All Cases ${this.today} ${params.app}.pdf`;
     downloadLink.click();
     downloadLink.remove();
+  }
+
+  getDeployment(app: string): Promise<ReportData> {
+    const url = `${this.apiUrl}/get-deployment/${app}`;
+    return firstValueFrom(this.http.get<ReportData>(url));
+  }
+
+  getEnhancementScenarios(app: string, startsAt: string, endsAt: string): Promise<ScenarioItem[]> {
+    const url = `${this.apiUrl}/enhancement-scenarios/${app}?startsAt=${startsAt}&endsAt=${endsAt}`;
+    return firstValueFrom(this.http.get<ScenarioItem[]>(url));
+  }
+
+  getRegressionScenarios(app: string, startsAt: string, endsAt: string): Promise<ScenarioItem[]> {
+    const url = `${this.apiUrl}/regression-scenarios/${app}?startsAt=${startsAt}&endsAt=${endsAt}`;
+    return firstValueFrom(this.http.get<ScenarioItem[]>(url));
+  }
+
+  getPriorities(app: string, startsAt: string, endsAt: string): Promise<ScenarioItem[]> {
+    const url = `${this.apiUrl}/priorities/${app}?startsAt=${startsAt}&endsAt=${endsAt}`;
+    return firstValueFrom(this.http.get<ScenarioItem[]>(url));
+  }
+
+  getTestCountRange(app: string, period: string): Promise<number> {
+    const url = `${this.apiUrl}/test-count-range/${app}?period=${period}`;
+    return firstValueFrom(this.http.get<number>(url));
+  }
+
+  getJiras(app: string, startsAt: string): Promise<JiraItem[]> {
+    const url = `${this.apiUrl}/jiras/${app}?startsAt=${startsAt}`;
+    return firstValueFrom(this.http.get<JiraItem[]>(url));
+  }
+
+  getFlaggedScenarios(app: string, startsAt: string, endsAt: string): Promise<ScenarioItem[]> {
+    const url = `${this.apiUrl}/flagged-scenarios/${app}?startsAt=${startsAt}&endsAt=${endsAt}`;
+    return firstValueFrom(this.http.get<ScenarioItem[]>(url));
+  }
+
+  sendSms(params: { telNumbers: string[]; message: string; }): Promise<boolean> {
+    const url = `${this.apiUrl}/sms`;
+    return firstValueFrom(this.http.post<boolean>(url, params));
   }
 }

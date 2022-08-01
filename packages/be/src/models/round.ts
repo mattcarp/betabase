@@ -63,23 +63,12 @@ export const Round = db.sequelize.define('Round', {
 });
 
 export const getRoundNotes = async (app: string) => {
-  const response = await Round.findAll({
-    attributes: [
-      'notes',
-      'clientNotes',
-      'app',
-      'startsAt',
-      'endsAt',
-      'name',
-      'releaseNum',
-      'releaseDate',
-    ],
-    where: { app },
-    order: [
-      ['createdAt', 'DESC'],
-    ],
-  });
-  return response?.[0]?.dataValues;
+  const query = `SELECT "notes", "client_notes" AS "clientNotes", "app", "starts_at" AS "startsAt",` +
+    `"ends_at" AS "endsAt", "name", "release_num" AS "releaseNum", "release_date" AS "releaseDate"` +
+    `FROM "round" AS "Round"` +
+    `WHERE lower("Round"."app") = lower('${app}') ORDER BY "Round"."created_at" DESC;`;
+  const response = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+  return response?.[0];
 }
 
 export const getTestCount = async (app: string, startsAt: string, endsAt: string) => {

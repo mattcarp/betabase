@@ -6,3 +6,5 @@ export * from './test-item';
 export * from './variation-item';
 export * from './user';
 export * from './round-item';
+export * from './deployment';
+export * from './jira-item';
