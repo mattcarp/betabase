@@ -191,4 +191,9 @@ export class AppService {
     const url = `${this.apiUrl}/sms`;
     return firstValueFrom(this.http.post<string>(url, params));
   }
+
+  sendEmail(params: { emails: string[]; message: string; subject: string; }): Promise<string> {
+    const url = `${this.apiUrl}/email`;
+    return firstValueFrom(this.http.post<string>(url, params));
+  }
 }
