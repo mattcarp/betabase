@@ -187,8 +187,8 @@ export class AppService {
     return firstValueFrom(this.http.get<ScenarioItem[]>(url));
   }
 
-  sendSms(params: { telNumbers: string[]; message: string; }): Promise<boolean> {
+  sendSms(params: { telNumbers: string[]; message: string; }): Promise<string> {
     const url = `${this.apiUrl}/sms`;
-    return firstValueFrom(this.http.post<boolean>(url, params));
+    return firstValueFrom(this.http.post<string>(url, params));
   }
 }
