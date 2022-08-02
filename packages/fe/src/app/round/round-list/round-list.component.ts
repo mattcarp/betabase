@@ -32,9 +32,9 @@ export class RoundListComponent {
     const rounds = await this.appService.getAllRounds(app);
     this.rounds = rounds.map((item: RoundItem) => ({
       ...item,
-      startsAt: moment(item.startsAt).isValid() ? item.startsAt : null,
-      endsAt: moment(item.endsAt).isValid() ? item.endsAt : null,
-      updatedAt: moment(item.updatedAt).isValid() ? item.updatedAt : null,
+      startsAt: moment(item.startsAt).isValid() ? item.startsAt : '',
+      endsAt: moment(item.endsAt).isValid() ? item.endsAt : '',
+      updatedAt: moment(item.updatedAt).isValid() ? item.updatedAt : '',
     }));
     this.isLoading = false;
   }

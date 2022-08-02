@@ -1,8 +1,10 @@
 import { DataTypes } from 'sequelize';
 import * as bcrypt from 'bcryptjs';
 import * as nodemailer from 'nodemailer';
+import * as twilio from 'twilio';
 
 import db from './index';
+import config from '../config';
 
 export const User = db.sequelize.define('User', {
   id: {
@@ -210,6 +212,21 @@ export const getUsers = async () => {
 export const deleteUser = async (id) => {
   const model = await User.destroy({ where: { id } });
   return model;
+}
+
+export const sendSms = async ({ telNumbers, message }) => {
+  const messages = [];
+  const client = twilio(config.twilioAccountSid, config.twilioAuthToken);
+  for (const telNumber of telNumbers) {
+    const msg = await client.messages.create({
+      // todo set actual number
+      from: telNumber,
+      to: telNumber,
+      body: message,
+    });
+    messages.push(msg);
+  }
+  return messages;
 }
 
 db.User = User;

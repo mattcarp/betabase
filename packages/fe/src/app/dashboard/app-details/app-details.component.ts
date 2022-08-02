@@ -269,9 +269,7 @@ export class AppDetailsComponent {
   }
 
   private async fetchData(app: string): Promise<void> {
-    this.reportData = await this.appService.getAppReportData(app);
-    this.reportDataInitial = JSON.parse(JSON.stringify(this.reportData));
-
+    await this.setReportData(app);
     // Data for Charts
     this.allTests = await this.appService.getAllTests(this.app);
     // - Completion
@@ -421,7 +419,7 @@ export class AppDetailsComponent {
     } else if (this.yearsUnique.length) {
       // -- For new features
       const yearsFeatures = this.reportData?.enhancementScenarios
-        .map((item: ScenarioItem) => this.getDateAsMoment(item.mostRecent).format('YYYY')).sort();
+        ?.map((item: ScenarioItem) => this.getDateAsMoment(item.mostRecent).format('YYYY')).sort();
       const yearFeaturesName = [...new Set(yearsFeatures)];
       const lastYearFeatures = yearFeaturesName[yearFeaturesName.length - 1];
       const lastNumFeatures = yearsFeatures?.filter(item => item === lastYearFeatures).length;
@@ -523,5 +521,45 @@ export class AppDetailsComponent {
 
   private getDateAsMoment(dateString: Date | string | undefined): moment.Moment {
     return moment(String(dateString), 'YYYY-MM-DD');
+  }
+
+  private async setReportData(app: string): Promise<void> {
+    this.reportData = {};
+    const roundNotes = await this.appService.getRoundNotes(app);
+    this.reportData.roundNotes = roundNotes;
+    const { startsAt, endsAt } = roundNotes;
+    const startDate = moment(startsAt).format('YYYY-MM-DD');
+    const endDate = moment(endsAt).format('YYYY-MM-DD');
+    const reportData = this.reportData as any;
+    const appService = this.appService as any;
+    const setPropValue = async (propName: string, methodName: string, params: string[]) => {
+      reportData[propName] = await appService[methodName](...params);
+      if (propName === 'enhancementScenarios') {
+        reportData.enhancementCount = reportData.enhancementScenarios?.length;
+      }
+      if (propName === 'regressionScenarios') {
+        reportData.regressionCount = reportData.regressionScenarios?.length;
+      }
+      if (propName === 'priorities') {
+        reportData.priorityCount = reportData.priorities?.length;
+      }
+      if (propName === 'flaggedScenarios') {
+        reportData.flaggedCount = reportData.flaggedScenarios?.length;
+      }
+    };
+    [
+      { propName: 'deployment', methodName: 'getDeployment', requestParams: [app] },
+      { propName: 'enhancementScenarios', methodName: 'getEnhancementScenarios', requestParams: [app, startDate, endDate] },
+      { propName: 'regressionScenarios', methodName: 'getRegressionScenarios', requestParams: [app, startDate, endDate] },
+      { propName: 'priorities', methodName: 'getPriorities', requestParams: [app, startDate, endDate] },
+      { propName: 'testsToday', methodName: 'getTestCountRange', requestParams: [app, 'today'] },
+      { propName: 'testsYesterday', methodName: 'getTestCountRange', requestParams: [app, 'yesterday'] },
+      { propName: 'testsThisWeek', methodName: 'getTestCountRange', requestParams: [app, 'last7days'] },
+      { propName: 'jiras', methodName: 'getJiras', requestParams: [app, startDate] },
+      { propName: 'testCount', methodName: 'getTestCount', requestParams: [app, startDate, endDate] },
+      { propName: 'flaggedScenarios', methodName: 'getFlaggedScenarios', requestParams: [app, startDate, endDate] },
+    ].forEach(({ propName, methodName, requestParams }) => {
+      setPropValue(propName, methodName, requestParams);
+    });
   }
 }

@@ -51,6 +51,7 @@ import {
   getUser,
   getUsers,
   deleteUser,
+  sendSms,
 } from './models/user';
 import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
 
@@ -114,10 +115,14 @@ app.get('/api/get-test-count/:app', [isTokenValid], async (request, response) =>
   request.setTimeout(60 * 1000 * 100);
   const app = request.params.app;
   let testCount = 0;
-  const round = await getRoundNotes(app);
-  if (round?.hasOwnProperty('startsAt') && round?.hasOwnProperty('endsAt')) {
-    const { startsAt, endsAt } = round;
-    testCount = await getTestCount(app, startsAt, endsAt);
+  if (request.params?.hasOwnProperty('startsAt') && request.params?.hasOwnProperty('endsAt')) {
+    testCount = await getTestCount(app, request.params.startsAt, request.params.endsAt);
+  } else {
+    const round = await getRoundNotes(app);
+    if (round?.hasOwnProperty('startsAt') && round?.hasOwnProperty('endsAt')) {
+      const { startsAt, endsAt } = round;
+      testCount = await getTestCount(app, startsAt, endsAt);
+    }
   }
   response.json(testCount);
 });
@@ -125,46 +130,6 @@ app.get('/api/get-test-count/:app', [isTokenValid], async (request, response) =>
 app.get('/api/get-fail-count/:app', [isTokenValid], async (request, response) => {
   const failCount = await getFailCount(request.params.app);
   response.json(failCount);
-});
-
-app.get('/api/:app/report-data', [isTokenValid], async (request, response) => {
-  request.setTimeout(60 * 1000 * 10);
-  const app = request.params.app;
-  const roundNotes = await getRoundNotes(app);
-  const { startsAt, endsAt } = roundNotes;
-  const deployment = await getDeployment(app);
-  const enhancementScenarios = await getEnhancementScenarios(app, startsAt, endsAt);
-  const regressionScenarios = await getRegressionScenarios(app, startsAt, endsAt);
-  const priorities = await getPriorities(app, startsAt, endsAt);
-  const testsToday = await getTestCountRange(app, 'today');
-  const testsYesterday = await getTestCountRange(app, 'yesterday');
-  const testsThisWeek = await getTestCountRange(app, 'last7days');
-  const jiras = await getJiras(app, startsAt);
-  const testCount = await getTestCount(app, startsAt, endsAt);
-  const enhancementCount = enhancementScenarios?.length;
-  const regressionCount = regressionScenarios?.length;
-  const priorityCount = priorities?.length;
-  const flaggedScenarios = await getFlaggedScenarios(app, startsAt, endsAt);
-  const priorityScenarios = await getPriorityScenarios(app, startsAt, endsAt);
-  const flaggedCount = flaggedScenarios?.length;
-  response.json({
-    roundNotes,
-    deployment,
-    enhancementScenarios,
-    regressionScenarios,
-    priorities,
-    testsToday,
-    testsYesterday,
-    testsThisWeek,
-    jiras,
-    testCount,
-    enhancementCount,
-    regressionCount,
-    flaggedCount,
-    priorityCount,
-    flaggedScenarios,
-    priorityScenarios,
-  });
 });
 
 app.post('/api/users', [isTokenValid, isAdmin], async (request: any, response, next) => {
@@ -401,6 +366,46 @@ app.post('/api/pdf', [isTokenValid], async (request, response) => {
   request.setTimeout(60 * 1000 * 10);
   const pdfData = await getPdfBlob(request.body.app, request.body.scenarioIds);
   response.json(pdfData);
+});
+
+app.get('/api/get-deployment/:app', [isTokenValid], async (request, response) => {
+  const deployment = await getDeployment(request.params.app);
+  response.json(deployment);
+});
+
+app.get('/api/enhancement-scenarios/:app', [isTokenValid], async (request, response) => {
+  const enhancementScenarios = await getEnhancementScenarios(request.params.app, request.query.startsAt, request.query.endsAt);
+  response.json(enhancementScenarios);
+});
+
+app.get('/api/regression-scenarios/:app', [isTokenValid], async (request, response) => {
+  const regressionScenarios = await getRegressionScenarios(request.params.app, request.query.startsAt, request.query.endsAt);
+  response.json(regressionScenarios);
+});
+
+app.get('/api/flagged-scenarios/:app', [isTokenValid], async (request, response) => {
+  const flaggedScenarios = await getFlaggedScenarios(request.params.app, request.query.startsAt, request.query.endsAt);
+  response.json(flaggedScenarios);
+});
+
+app.get('/api/priorities/:app', [isTokenValid], async (request, response) => {
+  const priorities = await getPriorities(request.params.app, request.query.startsAt, request.query.endsAt);
+  response.json(priorities);
+});
+
+app.get('/api/test-count-range/:app', [isTokenValid], async (request, response) => {
+  const count = await getTestCountRange(request.params.app, request.query.period);
+  response.json(count);
+});
+
+app.get('/api/jiras/:app', [isTokenValid], async (request, response) => {
+  const count = await getJiras(request.params.app, request.query.startsAt);
+  response.json(count);
+});
+
+app.post('/api/sms', [isTokenValid], async (request, response) => {
+  const msg = await sendSms(request.body);
+  response.json(msg);
 });
 
 // static files

@@ -18,12 +18,22 @@ if (!process.env.DB_PASSWORD) {
   throw Error('DB_PASSWORD is not defined');
 }
 
+if (!process.env.TWILIO_ACCOUNT_SID) {
+  throw Error('TWILIO_ACCOUNT_SID is not defined');
+}
+
+if (!process.env.TWILIO_AUTH_TOKEN) {
+  throw Error('TWILIO_AUTH_TOKEN is not defined');
+}
+
 const config = {
   dbHost: process.env.DB_HOST,
   dbName: process.env.DB_NAME,
   dbUser: process.env.DB_USER,
   dbPassword: process.env.DB_PASSWORD,
   secret: 'the-betabase-3-secret-key',
+  twilioAccountSid: process.env.TWILIO_ACCOUNT_SID,
+  twilioAuthToken: process.env.TWILIO_AUTH_TOKEN,
 };
 
 export default config;

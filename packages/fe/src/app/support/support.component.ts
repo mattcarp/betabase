@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 
 import { SupportConstants } from './support.constant';
+import { AppService } from '../shared/app.service';
 
 @Component({
   selector: 'app-support',
@@ -13,6 +14,8 @@ export class SupportComponent implements OnDestroy {
   isSendEmail = false;
   selectedContacts: { email: string; name: string; phone: string; isChecked: boolean }[] = [];
   contacts = SupportConstants.contacts;
+
+  constructor(private appService: AppService) {}
 
   ngOnDestroy(): void {
     this.selectedContacts = [];
@@ -30,5 +33,14 @@ export class SupportComponent implements OnDestroy {
 
   onChangeSendEmail(isChecked: boolean): void {
     this.isSendEmail = isChecked;
+  }
+
+  async onSendSmsClick(message: string): Promise<void> {
+    console.log('this.selectedContacts', this.selectedContacts);
+    console.log('this.message', message);
+    const telNumbers = this.selectedContacts
+      .filter((item) => !!item?.phone?.length)
+      .map(({ phone }) => phone);
+    await this.appService.sendSms({ telNumbers, message });
   }
 }

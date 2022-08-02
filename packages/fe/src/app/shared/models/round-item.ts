@@ -5,10 +5,10 @@ export interface RoundItem {
   notes?: string;
   clientNotes?: string;
   name?: string;
-  startsAt?: Date | null;
-  endsAt?: Date | null;
+  startsAt?: string | Date;
+  endsAt?: string | Date;
   releaseDate?: Date;
   createdAt?: Date;
-  updatedAt?: Date | null;
+  updatedAt?: string | Date;
   releaseNum?: string;
 }

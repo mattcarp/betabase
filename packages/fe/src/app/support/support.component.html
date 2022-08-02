@@ -77,7 +77,11 @@
           </div>
         </ng-container>
 
-        <button [disabled]="!selectedContacts.length" mat-flat-button color="accent">
+        <button
+          mat-flat-button
+          color="accent"
+          [disabled]="!selectedContacts?.length"
+          (click)="onSendSmsClick(message?.value!)">
           <i class="fas fa-user-cog"></i>
           <span>Send SMS<ng-container *ngIf="isSendEmail"> & Email</ng-container></span>
         </button>
