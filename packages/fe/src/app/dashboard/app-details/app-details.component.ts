@@ -546,6 +546,7 @@ export class AppDetailsComponent {
       if (propName === 'flaggedScenarios') {
         reportData.flaggedCount = reportData.flaggedScenarios?.length;
       }
+      this.reportDataInitial = JSON.parse(JSON.stringify(reportData));
     };
     [
       { propName: 'deployment', methodName: 'getDeployment', requestParams: [app] },
