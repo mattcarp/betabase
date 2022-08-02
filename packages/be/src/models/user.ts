@@ -140,7 +140,7 @@ export const User = db.sequelize.define('User', {
   tableName: 'user',
 });
 
-export const sendEmail = async (to: string, text: string) => {
+export const sendEmail = async (to: string, text: string, subject?: string) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -152,8 +152,7 @@ export const sendEmail = async (to: string, text: string) => {
     to,
     text,
     from: '"The Betabase" <noreply@thebetabase.com>',
-    subject: 'Reset Password',
-    // html: "<b>Hello world?</b>", // html body
+    subject: subject || 'Reset Password',
   });
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(message));
 }
@@ -226,9 +225,7 @@ export const sendSms = async ({ telNumbers, message }) => {
       });
       messages.push(msg);
     }
-    return !!messages?.length
-      ? messages.map(({ errorMessage }) => errorMessage).join(', ')
-      : `Message${messages?.length > 1 ? 's have' : ' has'} been sent`;
+    return messages.map(({ errorMessage }) => errorMessage).join(', ');
   } catch (e) {
     return e;
   }

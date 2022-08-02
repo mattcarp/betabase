@@ -52,6 +52,7 @@ import {
   getUsers,
   deleteUser,
   sendSms,
+  sendEmail,
 } from './models/user';
 import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
 
@@ -406,6 +407,17 @@ app.get('/api/jiras/:app', [isTokenValid], async (request, response) => {
 app.post('/api/sms', [isTokenValid], async (request, response) => {
   const msg = await sendSms(request.body);
   response.json(msg);
+});
+
+app.post('/api/email', [isTokenValid], async (request, response) => {
+  try {
+    for (const email of request.body.emails) {
+      await sendEmail(email, request.body.message, request.body.subject || '');
+    }
+    response.status(200).send();
+  } catch (e) {
+    response.json(e);
+  }
 });
 
 // static files

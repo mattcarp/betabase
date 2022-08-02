@@ -16,6 +16,7 @@ export class SupportComponent implements OnDestroy {
   isSendEmail = false;
   selectedContacts: { email: string; name: string; phone: string; isChecked: boolean }[] = [];
   contacts = SupportConstants.contacts;
+  emailSubject = '';
 
   constructor(private appService: AppService, private dialog: MatDialog) {}
 
@@ -38,16 +39,30 @@ export class SupportComponent implements OnDestroy {
   }
 
   async onSendSmsClick(message: string): Promise<void> {
+    let data = '';
     const telNumbers = this.selectedContacts
       .filter((item) => !!item?.phone?.length)
       .map(({ phone }) => phone);
-    const result = await this.appService.sendSms({ telNumbers, message });
-    if (result?.length) {
-      this.dialog.open(DialogWarningComponent, {
-        data: result,
-        width: '250px',
-        autoFocus: false,
-      });
+    const resultSms = await this.appService.sendSms({ telNumbers, message });
+    if (resultSms?.length) {
+      data = resultSms;
     }
+    if (this.isSendEmail) {
+      const emails = this.selectedContacts
+        .filter((item) => !!item?.email?.length)
+        .map(({ email }) => email);
+      const resultEmail = await this.appService.sendEmail({ emails, message, subject: this.emailSubject });
+      if (resultEmail?.length) {
+        data += '/n' + resultEmail;
+      }
+    }
+    if (!data?.length) {
+      data = `Message${telNumbers?.length > 1 || this.isSendEmail ? 's have' : ' has'} been sent`;
+    }
+    this.dialog.open(DialogWarningComponent, {
+      data,
+      width: '250px',
+      autoFocus: false,
+    });
   }
 }
