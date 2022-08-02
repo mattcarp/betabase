@@ -215,18 +215,23 @@ export const deleteUser = async (id) => {
 }
 
 export const sendSms = async ({ telNumbers, message }) => {
-  const messages = [];
-  const client = twilio(config.twilioAccountSid, config.twilioAuthToken);
-  for (const telNumber of telNumbers) {
-    const msg = await client.messages.create({
-      // todo set actual number
-      from: telNumber,
-      to: telNumber,
-      body: message,
-    });
-    messages.push(msg);
+  try {
+    const messages = [];
+    const client = twilio(config.twilioAccountSid, config.twilioAuthToken);
+    for (const telNumber of telNumbers) {
+      const msg = await client.messages.create({
+        from: '+16466635100',
+        to: telNumbers,
+        body: message,
+      });
+      messages.push(msg);
+    }
+    return !!messages?.length
+      ? messages.map(({ errorMessage }) => errorMessage).join(', ')
+      : `Message${messages?.length > 1 ? 's have' : ' has'} been sent`;
+  } catch (e) {
+    return e;
   }
-  return messages;
 }
 
 db.User = User;

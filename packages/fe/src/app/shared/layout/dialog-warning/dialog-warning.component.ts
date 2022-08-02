@@ -19,7 +19,9 @@ export class DialogWarningComponent {
   ) {}
 
   get message(): string {
-    return this.warning[this.data];
+    return Object.keys(this.warning).includes(this.data)
+      ? this.warning[this.data]
+      : this.data;
   }
 
   onDeleteClick(): void {

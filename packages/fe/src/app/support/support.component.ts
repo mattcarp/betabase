@@ -1,7 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import { SupportConstants } from './support.constant';
 import { AppService } from '../shared/app.service';
+import { DialogWarningComponent } from '../shared/layout/dialog-warning/dialog-warning.component';
 
 @Component({
   selector: 'app-support',
@@ -15,7 +17,7 @@ export class SupportComponent implements OnDestroy {
   selectedContacts: { email: string; name: string; phone: string; isChecked: boolean }[] = [];
   contacts = SupportConstants.contacts;
 
-  constructor(private appService: AppService) {}
+  constructor(private appService: AppService, private dialog: MatDialog) {}
 
   ngOnDestroy(): void {
     this.selectedContacts = [];
@@ -36,11 +38,16 @@ export class SupportComponent implements OnDestroy {
   }
 
   async onSendSmsClick(message: string): Promise<void> {
-    console.log('this.selectedContacts', this.selectedContacts);
-    console.log('this.message', message);
     const telNumbers = this.selectedContacts
       .filter((item) => !!item?.phone?.length)
       .map(({ phone }) => phone);
-    await this.appService.sendSms({ telNumbers, message });
+    const result = await this.appService.sendSms({ telNumbers, message });
+    if (result?.length) {
+      this.dialog.open(DialogWarningComponent, {
+        data: result,
+        width: '250px',
+        autoFocus: false,
+      });
+    }
   }
 }
