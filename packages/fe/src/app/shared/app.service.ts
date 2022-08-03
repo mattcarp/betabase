@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { JiraItem, ReportData, RoundItem, ScenarioItem, TestItem, VariationItem } from './models';
+import { UserItem } from '../user/user-item';
 
 @Injectable({
   providedIn: 'root',
@@ -187,13 +188,18 @@ export class AppService {
     return firstValueFrom(this.http.get<ScenarioItem[]>(url));
   }
 
-  sendSms(params: { telNumbers: string[]; message: string; }): Promise<string> {
+  sendSms(params: { telNumbers: string[]; message: string; }): Promise<any> {
     const url = `${this.apiUrl}/sms`;
-    return firstValueFrom(this.http.post<string>(url, params));
+    return firstValueFrom(this.http.post<any>(url, params));
   }
 
   sendEmail(params: { emails: string[]; message: string; subject: string; }): Promise<string> {
     const url = `${this.apiUrl}/email`;
     return firstValueFrom(this.http.post<string>(url, params));
+  }
+
+  async getUsers(): Promise<UserItem[]> {
+    const url = `${this.apiUrl}/users`;
+    return firstValueFrom(this.http.get<UserItem[]>(url));
   }
 }

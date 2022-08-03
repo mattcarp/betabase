@@ -1,9 +1,9 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { SupportConstants } from './support.constant';
 import { AppService } from '../shared/app.service';
 import { DialogWarningComponent } from '../shared/layout/dialog-warning/dialog-warning.component';
+import { UserItem } from '../user/user-item';
 
 @Component({
   selector: 'app-support',
@@ -11,27 +11,53 @@ import { DialogWarningComponent } from '../shared/layout/dialog-warning/dialog-w
   styleUrls: ['./support.component.scss'],
   host: { '[class.page]': 'true' },
 })
-export class SupportComponent implements OnDestroy {
+export class SupportComponent implements OnDestroy, OnInit {
   isSetupConference = false;
   isSendEmail = false;
-  selectedContacts: { email: string; name: string; phone: string; isChecked: boolean }[] = [];
-  contacts = SupportConstants.contacts;
+  selectedContacts: UserItem[] = [];
+  contacts: UserItem[] = [];
   emailSubject = '';
 
   constructor(private appService: AppService, private dialog: MatDialog) {}
 
+  getContactName(contact: UserItem): string {
+    let name = '';
+    if (contact?.fName?.length) {
+      name += contact?.fName;
+    }
+    if (contact?.lName?.length) {
+      name += ` ${contact?.lName}`;
+    }
+    if (!name?.length) {
+      name += contact?.username || contact?.usernameCanonical;
+    }
+    if (contact?.org?.length) {
+      name += ` (${contact?.org})`;
+    }
+    return name;
+  }
+
+  async ngOnInit(): Promise<void> {
+   // this.isLoading = true;
+  const contacts = await this.appService.getUsers();
+  this.contacts = contacts.filter(({ mobilePhone }) => !!mobilePhone?.length);
+        // this.isLoading = false;
+  }
+
   ngOnDestroy(): void {
     this.selectedContacts = [];
-    this.contacts.forEach(({ isChecked }) => isChecked = false);
   }
 
   onSetupConferenceClick(): void {
     this.isSetupConference = !this.isSetupConference;
   }
 
-  onChangeContact(isChecked: boolean, id: number): void {
-    this.contacts[id].isChecked = isChecked;
-    this.selectedContacts = this.contacts.filter((item: any) => item.isChecked);
+  onChangeContact(isChecked: boolean, contact: UserItem): void {
+    if (isChecked) {
+      this.selectedContacts.push(contact);
+    } else {
+      this.selectedContacts = this.selectedContacts.filter(({ id }) => id !== contact?.id);
+    }
   }
 
   onChangeSendEmail(isChecked: boolean): void {
@@ -41,16 +67,22 @@ export class SupportComponent implements OnDestroy {
   async onSendSmsClick(message: string): Promise<void> {
     let data = '';
     const telNumbers = this.selectedContacts
-      .filter((item) => !!item?.phone?.length)
-      .map(({ phone }) => phone);
+      .filter((item) => !!item?.mobilePhone?.length)
+      .map(({ mobilePhone }) => String(mobilePhone));
     const resultSms = await this.appService.sendSms({ telNumbers, message });
+    if (resultSms?.hasOwnProperty('moreInfo')) {
+      data = `Error while sending sms:\n`
+        + `status: ${resultSms?.status}\n`
+        + `code: ${resultSms?.code}\n`
+        + `more info: ${resultSms?.moreInfo}`;
+    }
     if (resultSms?.length) {
       data = resultSms;
     }
     if (this.isSendEmail) {
       const emails = this.selectedContacts
         .filter((item) => !!item?.email?.length)
-        .map(({ email }) => email);
+        .map(({ email }) => String(email));
       const resultEmail = await this.appService.sendEmail({ emails, message, subject: this.emailSubject });
       if (resultEmail?.length) {
         data += '/n' + resultEmail;
@@ -61,7 +93,7 @@ export class SupportComponent implements OnDestroy {
     }
     this.dialog.open(DialogWarningComponent, {
       data,
-      width: '250px',
+      width: '500px',
       autoFocus: false,
     });
   }
