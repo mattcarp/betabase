@@ -220,7 +220,7 @@ export const sendSms = async ({ telNumbers, message }) => {
     for (const telNumber of telNumbers) {
       const msg = await client.messages.create({
         from: '+16466635100',
-        to: telNumbers,
+        to: `+${telNumber.replace(/\s/g, '')}`,
         body: message,
       });
       messages.push(msg);

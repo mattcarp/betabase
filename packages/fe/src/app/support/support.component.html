@@ -42,7 +42,7 @@
         <div>Select contacts on the right hand panel</div>
         <mat-form-field appearance="fill" class="full-width">
           <mat-chip-list>
-            <mat-chip *ngFor="let contact of selectedContacts">{{contact?.phone}}</mat-chip>
+            <mat-chip *ngFor="let contact of selectedContacts">{{contact?.mobilePhone}}</mat-chip>
           </mat-chip-list>
         </mat-form-field>
 
@@ -92,13 +92,12 @@
         <div *ngFor="let item of contacts; let id = index">
           <mat-checkbox
             [attr.id]="'checkbox-' + id"
-            [(ngModel)]="item.isChecked"
-            (change)="onChangeContact($event.checked, id)"
+            (change)="onChangeContact($event.checked, item)"
             class="contact-checkbox">
             <div class="header-flex">
-              {{item?.name}}
+              {{getContactName(item)}}
               <div class="spacer"></div>
-              {{item?.phone}}
+              {{item?.mobilePhone}}
             </div>
           </mat-checkbox>
         </div>
