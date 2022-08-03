@@ -38,8 +38,8 @@ export class SupportComponent implements OnDestroy, OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-  const contacts = await this.appService.getUsers();
-  this.contacts = contacts.filter(({ mobilePhone }) => !!mobilePhone?.length);
+    const contacts = await this.appService.getUsers();
+    this.contacts = contacts.filter(({ mobilePhone }) => !!mobilePhone?.length);
   }
 
   ngOnDestroy(): void {

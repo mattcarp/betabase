@@ -7,7 +7,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { HttpClientModule } from '@angular/common/http';
 
 import { NavModule } from '../shared/layout/nav/nav.module';
 import { SupportRoutingModule } from './support-routing.module';
@@ -26,7 +25,6 @@ import { SupportComponent } from './support.component';
     MatCheckboxModule,
     NavModule,
     SupportRoutingModule,
-    HttpClientModule,
   ],
   exports: [SupportComponent],
 })
