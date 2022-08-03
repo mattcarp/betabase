@@ -15,7 +15,7 @@ import { DialogWarningComponent } from '../../shared/layout/dialog-warning/dialo
   host: { '[class.page]': 'true' },
 })
 export class UserListComponent implements OnInit {
-  tableHeaders = ['#', 'User Name', 'Email', 'Role', 'Last Login', 'Enabled', 'Actions'];
+  tableHeaders = ['#', 'User Name', 'Email', 'Mobile Phone', 'Role', 'Last Login', 'Enabled', 'Actions'];
   isLoading = false;
   users: UserItem[] = [];
 

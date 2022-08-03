@@ -32,6 +32,7 @@
         <div class="center">{{i + 1}}</div>
         <div>{{user?.username}}</div>
         <div>{{user?.email}}</div>
+        <div>{{user?.mobilePhone}}</div>
         <div [innerHTML]="getRoles(user?.roles)" class="inner-html roles"></div>
         <div>
           <span>{{user?.lastLogin | date: 'YYYY-MM-dd H:m'}}</span>

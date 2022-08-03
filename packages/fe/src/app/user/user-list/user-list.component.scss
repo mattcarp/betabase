@@ -10,7 +10,7 @@
   }
 
   .grid {
-    grid-template-columns: 50px 130px minmax(120px, 1fr) minmax(100px, 200px) minmax(64px, 140px) 64px minmax(64px, 120px);
+    grid-template-columns: 50px 130px minmax(120px, 1fr) minmax(120px, 200px) minmax(100px, 200px) minmax(64px, 140px) 64px minmax(64px, 120px);
 
     & > div {
       display: flex;
