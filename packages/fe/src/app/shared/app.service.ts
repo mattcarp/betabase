@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { JiraItem, ReportData, RoundItem, ScenarioItem, TestItem, VariationItem } from './models';
+import { JiraItem, ReportData, RoundItem, ScenarioItem, TestItem, TicketItem, VariationItem } from './models';
 import { UserItem } from '../user/user-item';
 
 @Injectable({
@@ -201,5 +201,10 @@ export class AppService {
   async getUsers(): Promise<UserItem[]> {
     const url = `${this.apiUrl}/users`;
     return firstValueFrom(this.http.get<UserItem[]>(url));
+  }
+
+  getZendeskTickets(): Promise<TicketItem[]> {
+    const url = `${this.apiUrl}/zend/tickets`;
+    return firstValueFrom(this.http.get<TicketItem[]>(url));
   }
 }
