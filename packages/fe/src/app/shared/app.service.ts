@@ -3,7 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { JiraItem, ReportData, RoundItem, ScenarioItem, TestItem, TicketItem, VariationItem } from './models';
+import {
+  CommentItem,
+  JiraItem,
+  ReportData,
+  RoundItem,
+  ScenarioItem,
+  TestItem,
+  TicketItem,
+  VariationItem,
+} from './models';
 import { UserItem } from '../user/user-item';
 
 @Injectable({
@@ -203,8 +212,31 @@ export class AppService {
     return firstValueFrom(this.http.get<UserItem[]>(url));
   }
 
-  getZendeskTickets(): Promise<TicketItem[]> {
-    const url = `${this.apiUrl}/zend/tickets`;
-    return firstValueFrom(this.http.get<TicketItem[]>(url));
+  async getZendeskTickets(): Promise<TicketItem[]> {
+    const url = `${this.apiUrl}/zendesk/tickets`;
+    const response = await firstValueFrom(this.http.get<{ ticket: TicketItem; error: string }>(url));
+    return <TicketItem[]>this.checkForZendeskError(response, 'tickets');
+  }
+
+  async getZendeskTicket(id: string): Promise<TicketItem | null> {
+    const url = `${this.apiUrl}/zendesk/tickets/${id}`;
+    const response = await firstValueFrom(this.http.get<{ ticket: TicketItem; error: string }>(url));
+    return <TicketItem>this.checkForZendeskError(response, 'ticket');
+  }
+
+  async getZendeskTicketComments(id: string): Promise<CommentItem[]> {
+    const url = `${this.apiUrl}/zendesk/tickets/${id}/comments`;
+    const response = await firstValueFrom(this.http.get<{ comments: CommentItem[]; error: string }>(url))
+    return <CommentItem[]>this.checkForZendeskError(response, 'comments');
+  }
+
+  private checkForZendeskError(params: any, propName: string): null | TicketItem | TicketItem[] | CommentItem[] {
+    if (params?.error?.length) {
+      // todo show error here
+      console.log('show error here ', params?.error);
+      return propName?.slice(-1) === 's' ? [] : null;
+    } else {
+      return params?.[propName];
+    }
   }
 }

@@ -6,9 +6,10 @@ import { MatTableModule } from '@angular/material/table';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
 import { TicketsRoutingModule } from './tickets-routing.module';
 import { NavModule } from '../shared/layout/nav/nav.module';
+import { TicketFormComponent } from './ticket-form/ticket-form.component';
 
 @NgModule({
-  declarations: [TicketListComponent],
+  declarations: [TicketListComponent, TicketFormComponent],
   imports: [CommonModule, HttpClientModule, TicketsRoutingModule, MatTableModule, NavModule],
 })
 export class TicketsModule {}
