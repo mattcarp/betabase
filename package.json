@@ -1,6 +1,6 @@
 {
   "name": "thebetabase",
-  "version": "3.0.55",
+  "version": "3.0.56",
   "license": "MIT",
   "scripts": {
     "postinstall": "ngcc --properties es2018 browser module main",
