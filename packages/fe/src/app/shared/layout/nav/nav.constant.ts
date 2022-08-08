@@ -25,5 +25,10 @@ export const NavConstants = {
       title: 'Support',
       url: '/support',
     },
+    {
+      icon: 'fa-books',
+      title: 'Tickets',
+      url: '/tickets',
+    },
   ],
 };

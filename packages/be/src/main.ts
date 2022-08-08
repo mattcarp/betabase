@@ -55,6 +55,7 @@ import {
   sendEmail,
 } from './models/user';
 import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
+import { getZendTickets } from './models/zend';
 
 const app = express();
 app.use(cors());
@@ -418,6 +419,11 @@ app.post('/api/email', [isTokenValid], async (request, response) => {
   } catch (e) {
     response.json(e);
   }
+});
+
+app.get('/api/zend/tickets', [isTokenValid], async (request, response) => {
+  const tickets = await getZendTickets();
+  response.json(tickets);
 });
 
 // static files

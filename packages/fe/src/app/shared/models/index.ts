@@ -8,3 +8,4 @@ export * from './user';
 export * from './round-item';
 export * from './deployment';
 export * from './jira-item';
+export * from './ticket-item';

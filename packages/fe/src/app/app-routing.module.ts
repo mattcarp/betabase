@@ -65,6 +65,12 @@ const routes: Routes = [
     loadChildren: () => import('./user/user.module').then(m => m.UserModule),
   },
   {
+    path: 'tickets',
+    component: MainComponent,
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./tickets/tickets.module').then(m => m.TicketsModule),
+  },
+  {
     path: '**',
     redirectTo: '/auth/sign-in',
   },
