@@ -9,3 +9,4 @@ export * from './round-item';
 export * from './deployment';
 export * from './jira-item';
 export * from './ticket-item';
+export * from './comment-item';
