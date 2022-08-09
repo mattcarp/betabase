@@ -12,6 +12,7 @@ import {
   TestItem,
   TicketItem,
   VariationItem,
+  ZendeskUser,
 } from './models';
 import { UserItem } from '../user/user-item';
 
@@ -230,7 +231,16 @@ export class AppService {
     return <CommentItem[]>this.checkForZendeskError(response, 'comments');
   }
 
-  private checkForZendeskError(params: any, propName: string): null | TicketItem | TicketItem[] | CommentItem[] {
+  async getZendeskUsers(ids: number[]): Promise<ZendeskUser[]> {
+    const url = `${this.apiUrl}/zendesk/users?ids=${ids.join(',')}`;
+    const response = await firstValueFrom(this.http.get<ZendeskUser[]>(url))
+    return <ZendeskUser[]>this.checkForZendeskError(response, 'users');
+  }
+
+  private checkForZendeskError(
+    params: any,
+    propName: string,
+  ): null | TicketItem | TicketItem[] | CommentItem[] | ZendeskUser[] {
     if (params?.error?.length) {
       // todo show error here
       console.log('show error here ', params?.error);

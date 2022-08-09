@@ -10,3 +10,4 @@ export * from './deployment';
 export * from './jira-item';
 export * from './ticket-item';
 export * from './comment-item';
+export * from './zendesk-user';
