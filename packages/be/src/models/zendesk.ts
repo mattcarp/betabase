@@ -15,6 +15,20 @@ const headers = {
   },
 };
 
+const fetchZendeskData = async (url: string, propName: string, singleItem: boolean) => {
+  try {
+    const response = await axios.get(url, headers);
+    const data = singleItem
+      ? [response?.data?.[propName] || {}]
+      : response?.data?.[propName] || [];
+    const items = db.snakeCaseToCamelCase(data);
+    const result = singleItem ? items?.[0] : items;
+    return { [propName]: result, error: null };
+  } catch (e) {
+    return { error: e.response.data.error, [propName]: null };
+  }
+}
+
 export const getZendeskTickets = async () => {
   const url = apiUrl + '/api/v2/tickets';
   const response = await fetchZendeskData(url, 'tickets', false);
@@ -33,16 +47,8 @@ export const getZendeskTicketComments = async (id: string) => {
   return response;
 }
 
-const fetchZendeskData = async (url: string, propName: string, singleItem: boolean) => {
-  try {
-    const response = await axios.get(url, headers);
-    const data = singleItem
-      ? [response?.data?.[propName] || {}]
-      : response?.data?.[propName] || [];
-    const items = db.snakeCaseToCamelCase(data);
-    const result = singleItem ? items?.[0] : items;
-    return { [propName]: result, error: null };
-  } catch (e) {
-    return { error: e.response.data.error, [propName]: null };
-  }
+export const getZendeskUsers = async (ids: string) => {
+  const url = apiUrl + '/api/v2/users/show_many' + '?ids=' + ids;
+  const response = await fetchZendeskData(url, 'users', false);
+  return response;
 }

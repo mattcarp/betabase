@@ -14,7 +14,6 @@ import {
   getFlaggedScenarios,
   getPdfBlob,
   getPriorities,
-  getPriorityScenarios,
   getRegressionScenarios,
   getScenario,
   getScenarioCount,
@@ -55,7 +54,7 @@ import {
   sendEmail,
 } from './models/user';
 import { addVariation, getScenarioVariations, updateVariation } from './models/variation';
-import { getZendeskTicket, getZendeskTicketComments, getZendeskTickets } from './models/zendesk';
+import { getZendeskTicket, getZendeskTicketComments, getZendeskTickets, getZendeskUsers } from './models/zendesk';
 
 const app = express();
 app.use(cors());
@@ -433,6 +432,11 @@ app.get('/api/zendesk/tickets/:id', [isTokenValid], async (request, response) =>
 
 app.get('/api/zendesk/tickets/:id/comments', [isTokenValid], async (request, response) => {
   const result = await getZendeskTicketComments(request.params.id);
+  response.json(result);
+});
+
+app.get('/api/zendesk/users', [isTokenValid], async (request, response) => {
+  const result = await getZendeskUsers(request.query.ids);
   response.json(result);
 });
 

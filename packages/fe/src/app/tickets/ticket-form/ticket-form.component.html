@@ -10,7 +10,7 @@
   <div *ngIf="comments?.length">
     <div *ngFor="let comment of comments">
       <div>{{comment?.createdAt | date}}</div>
-      <div>{{comment?.authorId}}</div>
+      <div>{{getUserNameById(comment?.authorId!)}}</div>
       <div>{{comment?.plainBody}}</div>
     </div>
   </div>
