@@ -65,10 +65,10 @@ const routes: Routes = [
     loadChildren: () => import('./user/user.module').then(m => m.UserModule),
   },
   {
-    path: 'tickets',
+    path: 'ticket',
     component: MainComponent,
     canActivate: [AuthGuard],
-    loadChildren: () => import('./tickets/tickets.module').then(m => m.TicketsModule),
+    loadChildren: () => import('./ticket/ticket.module').then(m => m.TicketModule),
   },
   {
     path: '**',

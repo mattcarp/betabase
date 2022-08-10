@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { firstValueFrom } from 'rxjs';
 
 import { environment } from '../../environments/environment';
@@ -22,7 +23,7 @@ import { UserItem } from '../user/user-item';
 export class AppService {
   private readonly apiUrl: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {
     this.apiUrl = environment.apiUrl;
   }
 
@@ -242,8 +243,12 @@ export class AppService {
     propName: string,
   ): null | TicketItem | TicketItem[] | CommentItem[] | ZendeskUser[] {
     if (params?.error?.length) {
-      // todo show error here
-      console.log('show error here ', params?.error);
+      const config = new MatSnackBarConfig();
+      config.verticalPosition = 'bottom';
+      config.horizontalPosition = 'center';
+      config.duration = 5000;
+      config.panelClass = 'panel-grey';
+      this.snackBar.open(params?.error, '✕', config);
       return propName?.slice(-1) === 's' ? [] : null;
     } else {
       return params?.[propName];

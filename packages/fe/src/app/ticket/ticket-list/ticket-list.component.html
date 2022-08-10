@@ -1,0 +1,118 @@
+<app-nav [isBackActive]="true"></app-nav>
+
+<section>
+  <ng-container *ngIf="isLoading; else template">
+    <app-spinner></app-spinner>
+  </ng-container>
+
+  <ng-template #template>
+    <div class="header-flex">
+      <h2>
+        Tickets
+        <span matBadge="{{tickets?.length}}" matBadgeOverlap="false" matBadgeColor="accent"></span>
+      </h2>
+    </div>
+
+    <div class="header-flex">
+      <mat-form-field class="form-search">
+        <input
+          matInput
+          #searchTerm
+          [type]="'text'"
+          [attr.id]="'search'"
+          [placeholder]="'Search'"
+          (keyup.enter)="onSearchStart(searchTerm?.value)"
+          (keyup.esc)="searchTerm.value = ''; onSearchStart('')"
+          (input)="onSearchStart(searchTerm?.value)"
+          autocomplete="off">
+        <button
+          (click)="searchTerm.value = ''; onSearchStart('')"
+          *ngIf="searchTerm?.value"
+          matSuffix mat-icon-button color="warn">
+          <i class="fas fa-times-circle"></i>
+        </button>
+        <button
+          [disabled]="!searchTerm?.value?.length"
+          (click)="onSearchStart(searchTerm?.value)"
+          matSuffix mat-icon-button>
+          <i class="fas fa-search"></i>
+        </button>
+      </mat-form-field>
+
+      <div class="spacer"></div>
+
+      <div class="flex">
+        <label>
+          Show Entries:
+          <mat-form-field class="pagination-select">
+            <mat-select [(ngModel)]="pageSize">
+              <mat-option *ngFor="let option of listOptions" [value]="option">
+                {{option}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </label>
+
+        <pagination-controls (pageChange)="paginationParams.page = $event"></pagination-controls>
+      </div>
+    </div>
+
+    <div class="grid-container">
+      <header class="grid">
+        <div #1
+             (click)="onToggleSort('id')"
+             class="clickable"
+             [ngClass]="getClassSortField('id')">
+          ID <span [ngClass]="getClassDirection()"></span>
+        </div>
+        <div #2
+             (click)="onToggleSort('name')"
+             class="clickable"
+             [ngClass]="getClassSortField('name')">
+          Status <span [ngClass]="getClassDirection()"></span>
+        </div>
+        <div #3
+             (click)="onToggleSort('createdBy')"
+             class="clickable"
+             [ngClass]="getClassSortField('createdBy')">
+          Subject <span [ngClass]="getClassDirection()"></span>
+        </div>
+        <div #4
+             (click)="onToggleSort('createdAt')"
+             class="clickable"
+             [ngClass]="getClassSortField('createdAt')">
+          Created <span [ngClass]="getClassDirection()"></span>
+        </div>
+        <div #5
+             (click)="onToggleSort('updatedAt')"
+             class="clickable"
+             [ngClass]="getClassSortField('updatedAt')">
+          Updated <span [ngClass]="getClassDirection()"></span>
+        </div>
+        <div #6>Actions</div>
+      </header>
+
+      <div *ngFor="let ticket of sortedTickets | paginate: { currentPage, itemsPerPage: pageSize }; let i = index"
+           class="grid">
+        <div #1 class="center">{{ticket?.id}}</div>
+        <div #2 class="center">
+          <label *ngIf="ticket?.status === 'open'" class="label-warning">{{ticket?.status}}</label>
+          <label *ngIf="ticket?.status === 'close'" class="label-success">{{ticket?.status}}</label>
+        </div>
+        <div #3 [innerHTML]="ticket?.subject | highlightSearch: paginationParams.searchTerm"></div>
+        <div #4>{{ticket?.createdAt | date: 'yyyy-MM-dd HH:mm'}}</div>
+        <div #5>{{ticket?.updatedAt | date: 'yyyy-MM-dd HH:mm'}}</div>
+        <div #6 class="center actions">
+          <a mat-icon-button (click)="onDetailsClick(ticket.id)">
+            <i class="fas fa-eye"></i>
+          </a>
+          <a mat-icon-button href="https://miosofthelp.zendesk.com/agent/tickets/{{ticket.id}}" target="_blank">
+            <i class="fas fa-external-link"></i>
+          </a>
+        </div>
+
+        <app-ticket-form [ticketId]="ticket.id"></app-ticket-form>
+      </div>
+    </div>
+  </ng-template>
+</section>

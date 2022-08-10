@@ -28,7 +28,7 @@ export const NavConstants = {
     {
       icon: 'fa-books',
       title: 'Tickets',
-      url: '/tickets',
+      url: '/ticket',
     },
   ],
 };

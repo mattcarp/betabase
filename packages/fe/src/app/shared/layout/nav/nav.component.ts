@@ -46,12 +46,17 @@ export class NavComponent {
   }
 
   isDisabled(url: string): boolean {
+    if (url === '/ticket') {
+      return false;
+    }
     return (
       (url === '/dashboard/_APP_/show'
         || url === '/scenario/_APP_'
         || url === '/scenario/_APP_/new'
-        || url === '/test/_APP_')
-      && !this.app);
+        || url === '/test/_APP_'
+      )
+      && !this.app
+    );
   }
 
   onBackClick(): void {

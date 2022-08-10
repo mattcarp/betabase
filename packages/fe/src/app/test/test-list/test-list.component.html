@@ -130,7 +130,7 @@
           <label *ngIf="entity?.passFail === 'Pass'" class="label-success">{{entity?.passFail}}</label>
         </div>
         <div #6 [innerHTML]="entity?.result | slice:0:200 | highlightSearch: paginationParams.searchTerm"
-             class="inner-html">
+             class="inner-html code">
         </div>
         <div #7>{{entity?.browserName}} {{entity?.browserMajor}}.{{entity?.browserMinor}}</div>
         <div #8>{{entity?.osName}} {{entity?.osMajor}}.{{entity?.osMinor}}</div>
