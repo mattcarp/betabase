@@ -11,7 +11,7 @@
         <div class="flex">
           <label *ngIf="ticket?.status === 'open'" class="label-warning">{{ticket?.status}}</label>
           <label *ngIf="ticket?.status === 'close'" class="label-success">{{ticket?.status}}</label>
-          <label>Incident #{{ticket?.id}} ({{ticket?.priority}})</label>
+          <label>Incident #{{ticket?.id}} <span *ngIf="ticket?.priority">({{ticket?.priority}})</span></label>
         </div>
         <div>
           <h3>{{ticket?.subject}}</h3>
