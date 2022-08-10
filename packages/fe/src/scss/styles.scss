@@ -489,6 +489,22 @@ a {
       }
     }
 
+    &.code {
+      position: relative;
+      padding: 8px;
+
+      &:before {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        bottom: 4px;
+        left: 4px;
+        content: '';
+        border-radius: 4px;
+        background-color: rgba(100, 100, 100, 0.1);
+      }
+    }
+
     .label-default,
     .label-warning,
     .label-info,

@@ -19,7 +19,7 @@ export class HeaderComponent {
   }
 
   get app(): string {
-    return this.router.url.includes('auth')
+    return ['auth', 'ticket'].includes(this.router.url.split('/')?.[1])
       ? ''
       : this.router.url.split('/')?.[2]
       ?.replace('-', ' ')
