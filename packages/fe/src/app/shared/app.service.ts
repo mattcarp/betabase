@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { firstValueFrom } from 'rxjs';
 
@@ -8,6 +8,7 @@ import {
   CommentItem,
   JiraItem,
   ReportData,
+  PaginationParams,
   RoundItem,
   ScenarioItem,
   TestItem,
@@ -214,10 +215,16 @@ export class AppService {
     return firstValueFrom(this.http.get<UserItem[]>(url));
   }
 
-  async getZendeskTickets(): Promise<TicketItem[]> {
+  async getZendeskTickets(requestParams: PaginationParams): Promise<{ tickets: TicketItem[]; count: number }> {
+    let params: HttpParams = new HttpParams();
+    for (const [key, value] of Object.entries(requestParams)) {
+      if (String(value)?.length) {
+        params = params.set(key, value);
+      }
+    }
     const url = `${this.apiUrl}/zendesk/tickets`;
-    const response = await firstValueFrom(this.http.get<{ ticket: TicketItem; error: string }>(url));
-    return <TicketItem[]>this.checkForZendeskError(response, 'tickets');
+    const response = await firstValueFrom(this.http.get<{ ticket: TicketItem; error: string }>(url, { params }));
+    return <{ tickets: TicketItem[]; count: number }>this.checkForZendeskError(response);
   }
 
   async getZendeskTicket(id: string): Promise<TicketItem | null> {
@@ -238,10 +245,7 @@ export class AppService {
     return <ZendeskUser[]>this.checkForZendeskError(response, 'users');
   }
 
-  private checkForZendeskError(
-    params: any,
-    propName: string,
-  ): null | TicketItem | TicketItem[] | CommentItem[] | ZendeskUser[] {
+  private checkForZendeskError(params: any, propName?: string): any {
     if (params?.error?.length) {
       const config = new MatSnackBarConfig();
       config.verticalPosition = 'bottom';
@@ -251,7 +255,7 @@ export class AppService {
       this.snackBar.open(params?.error, '✕', config);
       return propName?.slice(-1) === 's' ? [] : null;
     } else {
-      return params?.[propName];
+      return propName?.length ? params?.[propName] : params;
     }
   }
 }

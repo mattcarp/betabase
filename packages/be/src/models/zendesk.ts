@@ -22,15 +22,41 @@ const fetchZendeskData = async (url: string, propName: string, singleItem: boole
       ? [response?.data?.[propName] || {}]
       : response?.data?.[propName] || [];
     const items = db.snakeCaseToCamelCase(data);
-    const result = singleItem ? items?.[0] : items;
-    return { [propName]: result, error: null };
+    const result = { [propName]: singleItem ? items?.[0] : items, error: null };
+    if (response?.data?.hasOwnProperty('count')) {
+      result.count = response?.data?.count;
+    }
+    return result;
   } catch (e) {
     return { error: e.response.data.error, [propName]: null };
   }
 }
 
-export const getZendeskTickets = async () => {
-  const url = apiUrl + '/api/v2/tickets';
+const getZendeskQueryParams = (params: { [key: string]: string }) => {
+  const queryParams = [];
+  for (const [key, value] of Object.entries(params)) {
+    if (String(value)?.length) {
+      switch (key) {
+        case 'page':
+          queryParams.push(`page=${value}`);
+          break;
+        case 'limit':
+          queryParams.push(`per_page=${value}`);
+          break;
+        case 'sortField':
+          queryParams.push(`sort_by=${value}`);
+          break;
+        case 'sortDirection':
+          queryParams.push(`sort_order=${value.toLowerCase()}`);
+          break;
+      }
+    }
+  }
+  return `?${queryParams.join('&')}`;
+}
+
+export const getZendeskTickets = async (queryParams: { [key: string]: string }) => {
+  const url = apiUrl + '/api/v2/tickets' + getZendeskQueryParams(queryParams);
   const response = await fetchZendeskData(url, 'tickets', false);
   return response;
 }
