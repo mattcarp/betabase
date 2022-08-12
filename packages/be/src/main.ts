@@ -421,7 +421,7 @@ app.post('/api/email', [isTokenValid], async (request, response) => {
 });
 
 app.get('/api/zendesk/tickets', [isTokenValid], async (request, response) => {
-  const result = await getZendeskTickets();
+  const result = await getZendeskTickets(request.query);
   response.json(result);
 });
 

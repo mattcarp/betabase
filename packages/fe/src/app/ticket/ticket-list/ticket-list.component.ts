@@ -1,13 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import * as moment from 'moment';
 
 import { AppService } from '../../shared/app.service';
 import { PaginationParams, TicketItem } from '../../shared/models';
-
-interface SortItem {
-  [key: string]: any;
-}
 
 @Component({
   selector: 'app-ticket-list',
@@ -18,73 +13,73 @@ interface SortItem {
 export class TicketListComponent implements OnInit {
   isLoading = false;
   tickets: TicketItem[] = [];
-  pageSize = 50;
   listOptions = [50, 100, 250];
-  paginationParams: PaginationParams = {
+  requestParams: PaginationParams = {
     searchTerm: '',
     page: 1,
-    sortField: 'date',
+    limit: this.listOptions?.[0],
+    total: 0,
+    sortField: 'createdAt',
     sortDirection: 'DESC',
   };
 
-  constructor(private appService: AppService, private router: Router) {
-  }
+  constructor(private appService: AppService, private router: Router) {}
 
-  get sortedTickets(): TicketItem[] {
-    return this.tickets
-      .filter((item: TicketItem) => {
-        return this.paginationParams.searchTerm?.length
-          ? item.description?.toLowerCase().includes(this.paginationParams.searchTerm)
-          : true;
-      })
-      .sort((a: SortItem, b: SortItem) => {
-        const sortField = this.paginationParams.sortField as string;
-        const ascOrder = this.paginationParams.sortDirection === 'ASC';
-        let aValue = a[sortField];
-        let bValue = b[sortField];
-        if (['createdAt', 'updatedAt'].includes(sortField)) {
-          aValue = moment(aValue).valueOf();
-          bValue = moment(bValue).valueOf();
-        }
-        return typeof aValue === 'string'
-          ? ascOrder ? bValue.localeCompare(aValue) : aValue.localeCompare(bValue)
-          : ascOrder ? bValue - aValue : aValue - bValue;
-      });
-  }
-
-  get currentPage(): number {
-    return Number(this.paginationParams.page || 0);
+  get paginationParams(): { currentPage: number; itemsPerPage: number; totalItems: number; } {
+    return {
+      currentPage: this.requestParams.page!,
+      itemsPerPage: this.requestParams.limit!,
+      totalItems: this.requestParams.total!,
+    };
   }
 
   getClassSortField(controlName: string): string {
-    return controlName === this.paginationParams.sortField ? 'active' : '';
+    return controlName === this.requestParams.sortField ? 'active' : '';
   }
 
   getClassDirection(): string {
-    return this.paginationParams.sortDirection || '';
+    return this.requestParams.sortDirection || '';
   }
 
-  onSearchStart(searchTerm: string = ''): void {
-    this.paginationParams.searchTerm = searchTerm;
+  async onSearchStart(searchTerm: string = ''): Promise<void> {
+    this.requestParams.searchTerm = searchTerm;
+    await this.fetchData();
   }
 
   async onToggleSort(sortField: string): Promise<void> {
-    this.paginationParams.page = 1;
-    this.paginationParams.sortField = sortField;
-    if (this.paginationParams.sortDirection === 'ASC') {
-      this.paginationParams.sortDirection = 'DESC';
+    this.requestParams.page = 1;
+    this.requestParams.sortField = sortField;
+    if (this.requestParams.sortDirection === 'ASC') {
+      this.requestParams.sortDirection = 'DESC';
     } else {
-      this.paginationParams.sortDirection = 'ASC';
+      this.requestParams.sortDirection = 'ASC';
     }
+    await this.fetchData();
   }
 
   async ngOnInit(): Promise<void> {
-    this.isLoading = true;
-    this.tickets = await this.appService.getZendeskTickets();
-    this.isLoading = false;
+    await this.fetchData();
   }
 
   async onDetailsClick(id: number): Promise<void> {
     await this.router.navigate(['/ticket', id]);
+  }
+
+  async onPageChange(page: number): Promise<void> {
+    this.requestParams.page = page;
+    await this.fetchData();
+  }
+
+  async onShowQuantityChange(quantity: number): Promise<void> {
+    this.requestParams.limit = quantity;
+    await this.fetchData();
+  }
+
+  private async fetchData(): Promise<void> {
+    this.isLoading = true;
+    const { tickets, count } = await this.appService.getZendeskTickets(this.requestParams);
+    this.tickets = tickets;
+    this.requestParams.total = count;
+    this.isLoading = false;
   }
 }

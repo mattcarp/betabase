@@ -34,5 +34,4 @@ import { TicketFormComponent } from './ticket-form/ticket-form.component';
     PipesModule,
   ],
 })
-export class TicketModule {
-}
+export class TicketModule {}
