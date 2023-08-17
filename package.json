@@ -5,7 +5,8 @@
   "scripts": {
     "postinstall": "ngcc --properties es2018 browser module main",
     "start": "node dist/packages/be/main.js",
-    "build": "npx nx run-many --target=build --projects=be,fe --parallel=true"
+    "build": "npx nx run-many --target=build --projects=be,fe --parallel=true",
+    "docker": "docker build -t bb . && docker run -p 3000:3000 bb"
   },
   "private": true,
   "dependencies": {
