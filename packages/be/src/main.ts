@@ -102,6 +102,15 @@ const isAdmin = async (req, res, next) => {
   next();
 };
 
+app.get('/api/health', [], async (request, response) => {
+  try {
+    await db.sequelize.authenticate();
+    response.json({ status: 'OK', message: 'Application is healthy' });
+  } catch (error) {
+    response.status(500).json({ status: 'Error', message: error });
+  }
+});
+
 app.get('/api/get-scenario-count/:app', [isTokenValid], async (request, response) => {
   const quantity = await getScenarioCount(request.params.app);
   response.json(quantity);
