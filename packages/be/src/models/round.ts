@@ -111,7 +111,7 @@ export const getJiras = async (app: string, startsAt: string) => {
     "AND s.id = t.scenario_id\n" +
     "AND LOWER(s.app_under_test) = LOWER('" + app + "')\n" +
     "AND t.ticket != ''\n" +
-    "GROUP BY t.ticket, t.scenario_id, t.created_at, t.comments, t.created_by, t.input, t.result, t.pass_fail, t.build, t.id, s.is_security\n" +
+    "GROUP BY t.in_prod, t.deployment_stamp, t.os_minor, t.os_major, t.os_name, t.browser_minor, t.browser_major, t.browser_name, t.path, t.updated_by, t.updated_at, t.ticket, t.scenario_id, t.created_at, t.comments, t.created_by, t.input, t.result, t.pass_fail, t.build, t.id, s.is_security\n" +
     "ORDER BY t.ticket DESC";
   const result = await db.sequelize.query(query, { type: QueryTypes.SELECT, camelCase: true });
   return db.snakeCaseToCamelCase(result);
