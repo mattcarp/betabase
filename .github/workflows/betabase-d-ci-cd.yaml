@@ -2,14 +2,7 @@
 
 name: Betabase Dev App Deploy workflow
 
-# Branch rules to trigger the workflow
-on:
-  push:
-    branches:
-      - CLOUDOPS-14775
-
-  # This is used to trigger the workflow manually from Github UI.  
-  workflow_dispatch: {}
+on: [workflow_dispatch]
 
 jobs:
   deployment:
@@ -18,23 +11,23 @@ jobs:
     permissions:
       id-token: write # required to use OIDC authentication
       contents: read # required to checkout the code from the repo
-    
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-    
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
         role-to-assume: ${{ vars.AWS_DEV_IAM_ROLE }}
         role-duration-seconds: 900
         aws-region: ${{ vars.AWS_REGION }}
-        
+
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    
+
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
@@ -49,16 +42,16 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-        echo $image 
-        
+        echo $image
+
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: ${{ vars.ECS_TASK_DEFINITION }}
         container-name: ${{ vars.CONTAINER_NAME }}
-        image: ${{ steps.build-image.outputs.image }}    
-        
+        image: ${{ steps.build-image.outputs.image }}
+
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
@@ -66,7 +59,3 @@ jobs:
         service: ${{ vars.ECS_SERVICE }}
         cluster: ${{ vars.ECS_CLUSTER }}
         wait-for-service-stability: true
-        
-
-        
-    
