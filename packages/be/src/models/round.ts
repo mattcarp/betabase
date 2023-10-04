@@ -162,7 +162,7 @@ export const addRound = async (params) => {
         '${params.createdAt || timestamp}',
         '${params.updatedAt || timestamp}',
         '${params.releaseNum}',
-        '${params.currentFlag}'
+        '${params.currentFlag || 0}'
       )
     returning "id";`;
   try {
