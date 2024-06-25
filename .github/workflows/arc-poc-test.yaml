@@ -1,0 +1,26 @@
+### Testing betabase ci-cd workflow using Actions-Runner-Controller runners ###
+
+name: Actions-Runner-Controller CI-CD Build
+
+on: [workflow_dispatch]
+
+jobs:
+  deployment:
+    runs-on: betabase-dind-test-rss
+    environment: BETABASE-DEV
+    permissions:
+      id-token: write # required to use OIDC authentication
+      contents: read # required to checkout the code from the repo
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ vars.AWS_DEV_IAM_ROLE }}
+        role-duration-seconds: 900
+        aws-region: ${{ vars.AWS_REGION }}
+    
