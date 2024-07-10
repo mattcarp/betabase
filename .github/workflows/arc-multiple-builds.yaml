@@ -1,0 +1,32 @@
+### Testing multiple simultaneous build jobs using Actions-Runner-Controller runners ###
+
+name: ARC Multiple Builds
+
+on: [workflow_dispatch]
+
+jobs:
+  build_image:
+    strategy:
+      matrix:
+        job_number: [1, 2, 3, 4, 5]
+
+    runs-on: betabase-dind-rss
+    environment: BETABASE-DEV
+    permissions:
+      id-token: write # required to use OIDC authentication
+      contents: read # required to checkout the code from the repo
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+      
+    - name: Build image
+      id: build-image
+      run: |
+        # Build a docker container but don't push it
+        docker build -t betabase-arc-poc-test-image .
+
+    - name: Verify image has been built
+      run: docker images
+    
