@@ -6,7 +6,7 @@ on: [workflow_dispatch]
 
 jobs:
   deployment:
-    runs-on: betabase-dind-rss
+    runs-on: sme-aoma-runners
     environment: BETABASE-DEV
     permissions:
       id-token: write # required to use OIDC authentication
