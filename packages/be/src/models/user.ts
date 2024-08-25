@@ -209,12 +209,14 @@ export const sendResetPasswordToken = async (id: number, username: string, email
     passwordRequestedAt: new Date(),
   };
   await updateUser(id, params);
+  console.log(`Reset token generated for user ${username}: ${confirmationToken}`);
   const text = 'Hello ' + username + '!\n' +
-    'To reset your password - please visit:\nhttps://betabase.herokuapp.com/auth/reset-password?token=' +
+    'To reset your password - please visit:\nhttp://localhost:4200/auth/reset-password?token=' +
     params.confirmationToken + '\n' +
     'Regards,\n' +
     'The Betabase';
   await sendEmail(email, text);
+  console.log(`Reset email sent to ${email}`);
 }
 
 export const getUsers = async () => {

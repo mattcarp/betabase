@@ -245,12 +245,14 @@ app.post('/api/auth/set-password-with-token', async (request: any, response, nex
   const token = request.body.token;
   const user = await getUserByToken(token);
   if (!user) {
+    console.log('Token not found:', token);
     return response.status(404).json('Token not found.');
   }
   await updateUser(user.id, {
     password: bcrypt.hashSync(request.body.password, 8),
     confirmationToken: '',
   });
+  console.log(`Password updated for user ${user.username}`);
   return response.status(200).json('Password has been set.');
 });
 
