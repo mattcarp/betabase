@@ -182,12 +182,24 @@ app.delete('/api/users/:id', [isTokenValid, isAdmin], async (request: any, respo
 });
 
 app.post('/api/auth/sign-in', async (request: any, response, next) => {
-  const user = await getUserByUsername(request.body.username);
+  console.log('Received sign-in request:', request.body);
+  const { username, password } = request.body;
+
+  if (!username || !password) {
+    console.log('Missing username or password');
+    return response.status(400).send({ message: 'Username and password are required.' });
+  }
+
+  const user = await getUserByUsername(username);
+  console.log('User found:', user ? 'Yes' : 'No');
   if (!user) {
+    console.log('User not found, returning 404');
     return response.status(404).send({ message: 'User Not found.' });
   }
-  const passwordIsValid = bcrypt.compareSync(request.body.password, user.password);
+  const passwordIsValid = bcrypt.compareSync(password, user.password);
+  console.log('Password is valid:', passwordIsValid);
   if (!passwordIsValid) {
+    console.log('Invalid password, returning 401');
     return response.status(401).send({
       accessToken: null,
       message: 'Invalid Password!',
@@ -195,6 +207,7 @@ app.post('/api/auth/sign-in', async (request: any, response, next) => {
   }
   const accessToken = jwt.sign({ id: user.id }, config.secret, { expiresIn: 86400 });
   await updateUser(user.id, { lastLogin: new Date() });
+  console.log('Login successful, returning 200');
   response.status(200).send({
     accessToken,
     id: user.id,

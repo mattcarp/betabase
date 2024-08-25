@@ -157,8 +157,21 @@ export const sendEmail = async (to: string, text: string, subject?: string) => {
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(message));
 }
 
-export const getUserByUsername = async (emailCanonical: string) => {
-  const response = await User.findOne({ where: { emailCanonical } });
+export const getUserByUsername = async (usernameOrEmail: string) => {
+  console.log('Searching for user with username or email:', usernameOrEmail);
+  const response = await User.findOne({
+    where: db.sequelize.or(
+      { username: usernameOrEmail },
+      { email: usernameOrEmail },
+      { emailCanonical: usernameOrEmail.toLowerCase() }
+    )
+  });
+  console.log('User found:', response ? 'Yes' : 'No');
+  if (response) {
+    console.log('User details:', JSON.stringify(response.dataValues, null, 2));
+  } else {
+    console.log('No user found with the provided username or email');
+  }
   return response?.dataValues;
 }
 

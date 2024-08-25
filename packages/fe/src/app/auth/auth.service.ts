@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import jwt_decode from 'jwt-decode';
-import { filter, tap } from 'rxjs/operators';
-import { firstValueFrom } from 'rxjs';
+import { filter, tap, catchError } from 'rxjs/operators';
+import { firstValueFrom, throwError } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { User } from '../shared/models';
@@ -21,6 +21,7 @@ export class AuthService {
 
   constructor(private http: HttpClient, private dialog: MatDialog) {
     this.apiUrl = environment.apiUrl;
+    console.log('API URL:', this.apiUrl); // Log the API URL
   }
 
   get token(): string | null {
@@ -38,11 +39,14 @@ export class AuthService {
 
   login(username: string, password: string): Promise<User> {
     const url = `${this.apiUrl}/auth/sign-in`;
+    console.log('Login attempt:', { username, url }); // Log login attempt
     return firstValueFrom(this.http
       .post<User>(url, { username, password })
       .pipe(
+        tap((user: User) => console.log('Login response:', user)), // Log the response
         filter((user: User) => {
           if (!user.enabled) {
+            console.log('User is disabled'); // Log if user is disabled
             this.dialog.open(DialogWarningComponent, {
               data: 'userDisabled',
               width: '400px',
@@ -52,6 +56,10 @@ export class AuthService {
           return !!user.enabled;
         }),
         tap((user: User) => this.setParams(user)),
+        catchError((error) => {
+          console.error('Login error:', error); // Log any errors
+          return throwError(() => error);
+        })
       ));
   }
 
