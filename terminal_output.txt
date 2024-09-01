@@ -1,0 +1,33 @@
+
+> nx run fe:serve:development
+
+? Port 4200 is already in use.
+Would you like to use a different port? (Y/n) [46D[46C[2K[1A[2K[G? Port 4200 is already in use.
+Would you like to use a different port? (Y/n) y[47D[47C[2K[1A[2K[G? Port 4200 is already in use.
+Would you like to use a different port? Yes[43D[43C
+
+Initial Chunk Files                                                                                     | Names                              |  Raw Size
+vendor.js                                                                                               | vendor                             |   3.25 MB |
+main.js                                                                                                 | main                               | 662.61 kB |
+styles.css, styles.js                                                                                   | styles                             | 521.27 kB |
+polyfills.js                                                                                            | polyfills                          | 317.65 kB |
+runtime.js                                                                                              | runtime                            |  12.93 kB |
+
+| Initial Total                      |   4.73 MB
+
+Lazy Chunk Files                                                                                        | Names                              |  Raw Size
+packages_fe_src_app_dashboard_dashboard-routing_module_ts.js                                            | dashboard-dashboard-routing-module |   1.05 MB |
+packages_fe_src_app_auth_auth_routes_ts.js                                                              | auth-auth-routes                   | 968.45 kB |
+default-packages_fe_src_app_test_test_service_ts-node_modules_ngx-editor_fesm2015_ngx-editor_mjs.js     | scenario-scenario-routing-module   | 860.68 kB |
+default-node_modules_moment_moment_js.js                                                                | dashboard-dashboard-routing-module | 588.81 kB |
+packages_fe_src_app_scenario_scenario-routing_module_ts.js                                              | scenario-scenario-routing-module   | 450.10 kB |
+default-node_modules_angular_forms_fesm2015_forms_mjs.js                                                | auth-auth-routes                   | 294.94 kB |
+packages_fe_src_app_test_test-routing_module_ts.js                                                      | test-test-routing-module           | 126.29 kB |
+default-packages_fe_src_app_shared_app_service_ts-node_modules_rxjs_dist_esm_internal_operato-77340a.js | dashboard-dashboard-routing-module |  62.74 kB |
+
+Build at: 2024-09-01T12:38:37.462Z - Hash: 97e677682983d96f - Time: 6664ms
+
+** Angular Live Development Server is listening on localhost:59010, open your browser on http://localhost:59010/ **
+
+
+✖ Failed to compile.

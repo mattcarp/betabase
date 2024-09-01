@@ -10,7 +10,7 @@
       <mat-card-header class="card-header">
         <div mat-card-avatar class="card-header-avatar">
           <ng-container *ngIf="imageUrl.length; else nullCover">
-            <img src="{{imageUrl}}" alt="logo">
+            <img src="{{ imageUrl }}" alt="logo" />
           </ng-container>
 
           <ng-template #nullCover>
@@ -19,30 +19,34 @@
             </div>
           </ng-template>
         </div>
-        <mat-card-title>{{appTitle}}</mat-card-title>
+        <mat-card-title>{{ appTitle }}</mat-card-title>
         <mat-card-subtitle *ngIf="reportData?.roundNotes?.releaseNum">
-          release: {{reportData?.roundNotes?.releaseNum}} | <strong>{{reportData?.roundNotes?.name}}</strong>
+          release: {{ reportData?.roundNotes?.releaseNum }} | <strong>{{ reportData?.roundNotes?.name }}</strong>
         </mat-card-subtitle>
+        <!-- Add the text input here -->
+        <mat-form-field class="full-width">
+          <input matInput placeholder="ask anything about AOMA..." />
+        </mat-form-field>
       </mat-card-header>
 
       <mat-card-content class="card-content">
         <div class="flex">
           <div>
             <span class="right">Testing Period:</span>
-            <ng-container *ngIf="roundStart?.length; else nullRound">{{roundStart}} ─ {{roundEnd}}</ng-container>
+            <ng-container *ngIf="roundStart?.length; else nullRound">{{ roundStart }} ─ {{ roundEnd }}</ng-container>
             <ng-template #nullRound>─</ng-template>
           </div>
           <div>
             <span class="right">Days Remaining:</span>
-            {{daysLeft || '─'}} <span *ngIf="daysLeft" class="grey">({{percentRemain}})</span>
+            {{ daysLeft || '─' }} <span *ngIf="daysLeft" class="grey">({{ percentRemain }})</span>
           </div>
           <div>
             <span>Release Date:</span>
-            {{releaseDate || '─'}}
+            {{ releaseDate || '─' }}
           </div>
           <div>
             <span class="right">Latest Test Deployment:</span>
-            {{deployDiff || '─'}} <span class="grey">{{deployDate}}</span>
+            {{ deployDiff || '─' }} <span class="grey">{{ deployDate }}</span>
           </div>
         </div>
 
@@ -75,18 +79,14 @@
                   <ng-container *ngIf="chartDisplayOptions.yearSlider.value; else totalChartNoData">
                     <span>Year(s)</span>
                     <div class="slider" [class.disabled]="yearsUnique?.length === 1">
-                      <ngx-slider
-                        (mouseup)="yearSliderEvent()"
-                        [(value)]="chartDisplayOptions.yearSlider.value"
+                      <ngx-slider (mouseup)="yearSliderEvent()" [(value)]="chartDisplayOptions.yearSlider.value"
                         [(highValue)]="chartDisplayOptions.yearSlider.highValue"
                         [options]="chartDisplayOptions.yearSlider.options">
                       </ngx-slider>
                     </div>
                     <span>Month(s)</span>
                     <div class="slider" [class.disabled]="!isMonthsMode">
-                      <ngx-slider
-                        (mouseup)="monthSliderEvent()"
-                        [(value)]="chartDisplayOptions.monthSlider.value"
+                      <ngx-slider (mouseup)="monthSliderEvent()" [(value)]="chartDisplayOptions.monthSlider.value"
                         [(highValue)]="chartDisplayOptions.monthSlider.highValue"
                         [options]="chartDisplayOptions.monthSlider.options">
                       </ngx-slider>
@@ -106,7 +106,7 @@
             <span>Progress:</span>
           </div>
           <div>
-            {{getRatio('priorities')}}
+            {{ getRatio('priorities') }}
             <span class="grey">
               <ng-container *ngIf="!reportData?.priorityScenarios?.length; else prioritiesLink">
                 priorities
@@ -117,7 +117,7 @@
             </span>
           </div>
           <div>
-            {{getRatio('enhancementScenarios')}}
+            {{ getRatio('enhancementScenarios') }}
             <span class="grey">
               <ng-container *ngIf="!reportData?.enhancementScenarios?.length; else newFeaturesLink">
                 new features
@@ -128,7 +128,7 @@
             </span>
           </div>
           <div>
-            {{getRatio('regressionScenarios')}}
+            {{ getRatio('regressionScenarios') }}
             <span class="grey">
               <ng-container *ngIf="!reportData?.regressionScenarios?.length; else regressionsLink">
                 regressions
@@ -139,7 +139,7 @@
             </span>
           </div>
           <div>
-            {{overallRatio}}
+            {{ overallRatio }}
             <span class="grey">overall</span>
           </div>
           <div></div>
@@ -150,23 +150,23 @@
             <span>Tests on this Round:</span>
           </div>
           <div>
-            {{reportData?.testCount}}
+            {{ reportData?.testCount }}
             <span class="grey">total</span>
           </div>
           <div>
-            {{reportData?.testsToday}}
+            {{ reportData?.testsToday }}
             <span class="grey">today</span>
           </div>
           <div>
-            {{reportData?.testsYesterday}}
+            {{ reportData?.testsYesterday }}
             <span class="grey">yesterday</span>
           </div>
           <div>
-            {{reportData?.testsThisWeek}}
+            {{ reportData?.testsThisWeek }}
             <span class="grey">past 7 days</span>
           </div>
           <div>
-            {{reportData?.jiras?.length}}
+            {{ reportData?.jiras?.length }}
             <span class="grey">
               <ng-container *ngIf="!reportData?.jiras?.length; else jirasLink">JIRA ticket</ng-container>
               <ng-template #jirasLink>
@@ -189,11 +189,11 @@
             <!--              {{(reportData?.enhancementCount || 0) + (reportData?.regressionCount || 0)}}-->
             <!--            </ng-container>-->
             <!--            <ng-template #nullForTesting>0</ng-template>-->
-            {{forTesting}}
+            {{ forTesting }}
             <span class="grey">for testing</span>
           </div>
           <div>
-            {{reportData?.priorityCount}}
+            {{ reportData?.priorityCount }}
             <span class="grey">
               <ng-container *ngIf="!reportData?.priorityScenarios?.length; else prioritiesCase">
                 priorities
@@ -204,10 +204,9 @@
             </span>
           </div>
           <div>
-            {{reportData?.enhancementCount}}
+            {{ reportData?.enhancementCount }}
             <span class="grey">
-              <ng-container *ngIf="!reportData?.enhancementScenarios?.length; else forNewFeaturesCase">for new
-                features
+              <ng-container *ngIf="!reportData?.enhancementScenarios?.length; else forNewFeaturesCase">for new features
               </ng-container>
               <ng-template #forNewFeaturesCase>
                 <a (click)="onClickScrollToElement('new-features')">for new features</a>
@@ -215,7 +214,7 @@
             </span>
           </div>
           <div>
-            {{reportData?.regressionCount}}
+            {{ reportData?.regressionCount }}
             <span class="grey">
               <ng-container *ngIf="!reportData?.regressionScenarios?.length; else regressionsCase">
                 regressions
@@ -226,7 +225,7 @@
             </span>
           </div>
           <div>
-            {{reportData?.flaggedCount}}
+            {{ reportData?.flaggedCount }}
             <span class="grey">
               <ng-container *ngIf="!reportData?.flaggedScenarios?.length; else flaggedCase">
                 flagged for review
@@ -253,7 +252,7 @@
       <div [attr.id]="'jiras'" class="header-grid">
         <h2>
           Current JIRA Tickets
-          <span matBadge="{{reportData?.jiras?.length}}" matBadgeOverlap="false" matBadgeColor="accent"></span>
+          <span matBadge="{{ reportData?.jiras?.length }}" matBadgeOverlap="false" matBadgeColor="accent"></span>
         </h2>
       </div>
 
@@ -275,38 +274,41 @@
           <div *ngFor="let test of reportData?.jiras" class="grid jiras">
             <div #1 class="center">
               <div>
-                <a href="https://jira.smedigitalapps.com/jira/browse/{{test?.ticket}}" target="_blank" class="ext">
-                  {{test?.ticket}}
+                <a href="https://jira.smedigitalapps.com/jira/browse/{{ test?.ticket }}" target="_blank" class="ext">
+                  {{ test?.ticket }}
                 </a>
               </div>
             </div>
             <div #2></div>
             <div #3 class="center">
-              <label *ngIf="test?.inProd === 'Yes'" class="label-default"
-                     title="Exists in Production Environment">{{test?.inProd}}</label>
-              <label *ngIf="test?.inProd === 'No'" class="label-warning"
-                     title="Does Not Occur in Production">{{test?.inProd}}</label>
-              <label *ngIf="test?.inProd === 'Unsure'" class="label-info"
-                     title="Not Tested in Production">{{test?.inProd}}</label>
+              <label *ngIf="test?.inProd === 'Yes'" class="label-default" title="Exists in Production Environment">{{
+                test?.inProd
+                }}</label>
+              <label *ngIf="test?.inProd === 'No'" class="label-warning" title="Does Not Occur in Production">{{
+                test?.inProd
+                }}</label>
+              <label *ngIf="test?.inProd === 'Unsure'" class="label-info" title="Not Tested in Production">{{
+                test?.inProd
+                }}</label>
             </div>
             <div #4 class="center">
               <div>
-                <a routerLink="/scenario/{{app}}/{{test?.scenarioId}}/show">
+                <a routerLink="/scenario/{{ app }}/{{ test?.scenarioId }}/show">
                   <i *ngIf="test?.isSecurity" class="fas fa-shield-check"></i>
-                  <span>{{test?.scenarioId}}</span>
+                  <span>{{ test?.scenarioId }}</span>
                 </a>
               </div>
             </div>
             <div #5></div>
-            <div #6 [innerHTML]="test.result | slice:0:200" class="inner-html"></div>
+            <div #6 [innerHTML]="test.result | slice : 0 : 200" class="inner-html"></div>
             <div #7></div>
             <div #8></div>
             <div #9></div>
             <div #10 class="center actions">
-              <a routerLink="/test/{{app}}/{{test?.id}}/show" mat-icon-button>
+              <a routerLink="/test/{{ app }}/{{ test?.id }}/show" mat-icon-button>
                 <i class="fas fa-eye"></i>
               </a>
-              <a routerLink="/test/{{app}}/{{test?.id}}/edit" mat-icon-button>
+              <a routerLink="/test/{{ app }}/{{ test?.id }}/edit" mat-icon-button>
                 <i class="fas fa-edit"></i>
               </a>
             </div>
@@ -323,21 +325,21 @@
       <div [attr.id]="'new-features'" class="header-grid">
         <h2>
           Cases for New Enhancements
-          <span matBadge="{{reportData?.enhancementScenarios?.length}}"
-                matBadgeOverlap="false" matBadgeColor="accent"></span>
+          <span matBadge="{{ reportData?.enhancementScenarios?.length }}" matBadgeOverlap="false"
+            matBadgeColor="accent"></span>
         </h2>
         <div>
           <mat-checkbox [(ngModel)]="isNewFeaturesChecked">
             Hide passing cases
             <span *ngIf="isNewFeaturesChecked" class="green">
-              ─ hiding {{getPassedItemsQuantity(reportData?.enhancementScenarios)}} case<ng-container *ngIf="getPassedItemsQuantity(reportData?.enhancementScenarios) > 1">s</ng-container> that have passed during this round
+              ─ hiding {{ getPassedItemsQuantity(reportData?.enhancementScenarios) }} case<ng-container
+                *ngIf="getPassedItemsQuantity(reportData?.enhancementScenarios) > 1">s</ng-container>
+              that have passed during this round
             </span>
           </mat-checkbox>
           <div class="flex">
-            <button [disabled]="!draggedItems?.enhancementScenarios"
-                    (click)="onSaveItemOrder('enhancementScenarios')"
-                    mat-icon-button
-                    color="accent">
+            <button [disabled]="!draggedItems?.enhancementScenarios" (click)="onSaveItemOrder('enhancementScenarios')"
+              mat-icon-button color="accent">
               <i class="fas fa-save"></i>
             </button>
             <div class="ellipsis">
@@ -347,14 +349,10 @@
         </div>
       </div>
 
-      <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'enhancementScenarios')"
-           class="grid-container"
-           [class.dragged]="draggedItems?.enhancementScenarios">
-        <button *ngIf="draggedItems?.enhancementScenarios"
-                (click)="onCancelItemOrder('enhancementScenarios')"
-                mat-icon-button
-                color="warn"
-                class="cancel-button">
+      <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'enhancementScenarios')" class="grid-container"
+        [class.dragged]="draggedItems?.enhancementScenarios">
+        <button *ngIf="draggedItems?.enhancementScenarios" (click)="onCancelItemOrder('enhancementScenarios')"
+          mat-icon-button color="warn" class="cancel-button">
           <i class="fas fa-times-circle"></i>
         </button>
         <header class="grid new-features">
@@ -366,30 +364,31 @@
         </header>
 
         <div class="scrolling">
-          <div *ngFor="let item of getItemsByStatus(reportData?.enhancementScenarios, isNewFeaturesChecked)"
-               cdkDrag cdkDragLockAxis="y"
-               class="grid new-features"
-               [ngClass]="{'pass': item?.lastTest === 'Pass', 'fail': item?.lastTest === 'Fail'}">
-            <div #1 class="center">{{item?.id}}</div>
-            <div #2>{{item?.name}}</div>
+          <div *ngFor="let item of getItemsByStatus(reportData?.enhancementScenarios, isNewFeaturesChecked)" cdkDrag
+            cdkDragLockAxis="y" class="grid new-features"
+            [ngClass]="{ pass: item?.lastTest === 'Pass', fail: item?.lastTest === 'Fail' }">
+            <div #1 class="center">{{ item?.id }}</div>
+            <div #2>{{ item?.name }}</div>
             <div #3 class="center">
               <ng-container *ngIf="item?.lastTest; else neverTested">
-                <label *ngIf="item?.lastTest === 'Fail'" class="label-warning">{{item?.lastTest}}</label>
-                <label *ngIf="item?.lastTest === 'Pass'" class="label-success">{{item?.lastTest}}</label>
-                <label *ngIf="item?.lastTest === 'Pending'" class="label-default">{{item?.lastTest}}</label>
+                <label *ngIf="item?.lastTest === 'Fail'" class="label-warning">{{ item?.lastTest }}</label>
+                <label *ngIf="item?.lastTest === 'Pass'" class="label-success">{{ item?.lastTest }}</label>
+                <label *ngIf="item?.lastTest === 'Pending'" class="label-default">{{ item?.lastTest }}</label>
               </ng-container>
               <ng-template #neverTested>
                 <div class="red">never tested</div>
               </ng-template>
             </div>
             <div #4 class="center">
-              <div class="{{getMostRecentText(item?.mostRecent)[1]}}">{{getMostRecentText(item?.mostRecent)[0]}}</div>
+              <div class="{{ getMostRecentText(item?.mostRecent)[1] }}">
+                {{ getMostRecentText(item?.mostRecent)[0] }}
+              </div>
             </div>
             <div #5 class="center actions">
-              <a routerLink="/scenario/{{app}}/{{item?.id}}/show" mat-icon-button>
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/show" mat-icon-button>
                 <i class="fas fa-eye"></i>
               </a>
-              <a routerLink="/scenario/{{app}}/{{item?.id}}/edit" mat-icon-button>
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/edit" mat-icon-button>
                 <i class="fas fa-edit"></i>
               </a>
             </div>
@@ -406,22 +405,21 @@
       <div [attr.id]="'priorities'" class="header-grid">
         <h2>
           Prioritized Cases
-          <span matBadge="{{reportData?.priorityScenarios?.length}}"
-                matBadgeOverlap="false" matBadgeColor="accent"></span>
+          <span matBadge="{{ reportData?.priorityScenarios?.length }}" matBadgeOverlap="false"
+            matBadgeColor="accent"></span>
         </h2>
         <div>
-          <mat-checkbox
-            [(ngModel)]="isPrioritiesChecked">
+          <mat-checkbox [(ngModel)]="isPrioritiesChecked">
             Hide passing cases
             <span *ngIf="isPrioritiesChecked" class="green">
-              ─ hiding {{getPassedItemsQuantity(reportData?.priorityScenarios)}} case<ng-container *ngIf="getPassedItemsQuantity(reportData?.priorityScenarios) > 1">s</ng-container> that have passed during this round
+              ─ hiding {{ getPassedItemsQuantity(reportData?.priorityScenarios) }} case<ng-container
+                *ngIf="getPassedItemsQuantity(reportData?.priorityScenarios) > 1">s</ng-container>
+              that have passed during this round
             </span>
           </mat-checkbox>
           <div class="flex">
-            <button [disabled]="!draggedItems?.priorityScenarios"
-                    (click)="onSaveItemOrder('priorityScenarios')"
-                    mat-icon-button
-                    color="accent">
+            <button [disabled]="!draggedItems?.priorityScenarios" (click)="onSaveItemOrder('priorityScenarios')"
+              mat-icon-button color="accent">
               <i class="fas fa-save"></i>
             </button>
             <div class="ellipsis">
@@ -431,14 +429,10 @@
         </div>
       </div>
 
-      <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'priorityScenarios')"
-           class="grid-container"
-           [class.dragged]="draggedItems?.priorityScenarios">
-        <button *ngIf="draggedItems?.priorityScenarios"
-                (click)="onCancelItemOrder('priorityScenarios')"
-                mat-icon-button
-                color="warn"
-                class="cancel-button">
+      <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'priorityScenarios')" class="grid-container"
+        [class.dragged]="draggedItems?.priorityScenarios">
+        <button *ngIf="draggedItems?.priorityScenarios" (click)="onCancelItemOrder('priorityScenarios')" mat-icon-button
+          color="warn" class="cancel-button">
           <i class="fas fa-times-circle"></i>
         </button>
         <header class="grid priorities">
@@ -450,30 +444,31 @@
         </header>
 
         <div class="scrolling">
-          <div *ngFor="let item of getItemsByStatus(reportData?.priorityScenarios, isPrioritiesChecked)"
-               cdkDrag cdkDragLockAxis="y"
-               class="grid priorities"
-               [ngClass]="{'pass': item?.lastTest === 'Pass', 'fail': item?.lastTest === 'Fail'}">
-            <div #1 class="center">{{item?.id}}</div>
-            <div #2>{{item?.name}}</div>
+          <div *ngFor="let item of getItemsByStatus(reportData?.priorityScenarios, isPrioritiesChecked)" cdkDrag
+            cdkDragLockAxis="y" class="grid priorities"
+            [ngClass]="{ pass: item?.lastTest === 'Pass', fail: item?.lastTest === 'Fail' }">
+            <div #1 class="center">{{ item?.id }}</div>
+            <div #2>{{ item?.name }}</div>
             <div #3 class="center">
               <ng-container *ngIf="item?.lastTest; else neverTested">
-                <label *ngIf="item?.lastTest === 'Fail'" class="label-warning">{{item?.lastTest}}</label>
-                <label *ngIf="item?.lastTest === 'Pass'" class="label-success">{{item?.lastTest}}</label>
-                <label *ngIf="item?.lastTest === 'Pending'" class="label-default">{{item?.lastTest}}</label>
+                <label *ngIf="item?.lastTest === 'Fail'" class="label-warning">{{ item?.lastTest }}</label>
+                <label *ngIf="item?.lastTest === 'Pass'" class="label-success">{{ item?.lastTest }}</label>
+                <label *ngIf="item?.lastTest === 'Pending'" class="label-default">{{ item?.lastTest }}</label>
               </ng-container>
               <ng-template #neverTested>
                 <div class="red">never tested</div>
               </ng-template>
             </div>
             <div #4 class="center">
-              <div class="{{getMostRecentText(item?.mostRecent)[1]}}">{{getMostRecentText(item?.mostRecent)[0]}}</div>
+              <div class="{{ getMostRecentText(item?.mostRecent)[1] }}">
+                {{ getMostRecentText(item?.mostRecent)[0] }}
+              </div>
             </div>
             <div #5 class="center actions">
-              <a routerLink="/scenario/{{app}}/{{item?.id}}/show" mat-icon-button>
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/show" mat-icon-button>
                 <i class="fas fa-eye"></i>
               </a>
-              <a routerLink="/scenario/{{app}}/{{item?.id}}/edit" mat-icon-button>
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/edit" mat-icon-button>
                 <i class="fas fa-edit"></i>
               </a>
             </div>
@@ -490,22 +485,21 @@
       <div [attr.id]="'regressions'" class="header-grid">
         <h2>
           Cases for Regression
-          <span matBadge="{{reportData?.regressionScenarios?.length}}"
-                matBadgeOverlap="false" matBadgeColor="accent"></span>
+          <span matBadge="{{ reportData?.regressionScenarios?.length }}" matBadgeOverlap="false"
+            matBadgeColor="accent"></span>
         </h2>
         <div>
-          <mat-checkbox
-            [(ngModel)]="isRegressionsChecked">
+          <mat-checkbox [(ngModel)]="isRegressionsChecked">
             Hide passing cases
             <span *ngIf="isRegressionsChecked" class="green">
-              ─ hiding {{getPassedItemsQuantity(reportData?.regressionScenarios)}} case<ng-container *ngIf="getPassedItemsQuantity(reportData?.regressionScenarios) > 1">s</ng-container> that have passed during this round
+              ─ hiding {{ getPassedItemsQuantity(reportData?.regressionScenarios) }} case<ng-container
+                *ngIf="getPassedItemsQuantity(reportData?.regressionScenarios) > 1">s</ng-container>
+              that have passed during this round
             </span>
           </mat-checkbox>
           <div class="flex">
-            <button [disabled]="!draggedItems?.regressionScenarios"
-                    (click)="onSaveItemOrder('regressionScenarios')"
-                    mat-icon-button
-                    color="accent">
+            <button [disabled]="!draggedItems?.regressionScenarios" (click)="onSaveItemOrder('regressionScenarios')"
+              mat-icon-button color="accent">
               <i class="fas fa-save"></i>
             </button>
             <div class="ellipsis">
@@ -515,14 +509,10 @@
         </div>
       </div>
 
-      <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'regressionScenarios')"
-           class="grid-container"
-           [class.dragged]="draggedItems?.regressionScenarios">
-        <button *ngIf="draggedItems?.regressionScenarios"
-                (click)="onCancelItemOrder('regressionScenarios')"
-                mat-icon-button
-                color="warn"
-                class="cancel-button">
+      <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'regressionScenarios')" class="grid-container"
+        [class.dragged]="draggedItems?.regressionScenarios">
+        <button *ngIf="draggedItems?.regressionScenarios" (click)="onCancelItemOrder('regressionScenarios')"
+          mat-icon-button color="warn" class="cancel-button">
           <i class="fas fa-times-circle"></i>
         </button>
         <header class="grid regressions">
@@ -534,30 +524,31 @@
         </header>
 
         <div class="scrolling">
-          <div *ngFor="let item of getItemsByStatus(reportData?.regressionScenarios, isRegressionsChecked)"
-               cdkDrag cdkDragLockAxis="y"
-               class="grid priorities"
-               [ngClass]="{'pass': item?.lastTest === 'Pass', 'fail': item?.lastTest === 'Fail'}">
-            <div #1 class="center">{{item?.id}}</div>
-            <div #2>{{item?.name}}</div>
+          <div *ngFor="let item of getItemsByStatus(reportData?.regressionScenarios, isRegressionsChecked)" cdkDrag
+            cdkDragLockAxis="y" class="grid priorities"
+            [ngClass]="{ pass: item?.lastTest === 'Pass', fail: item?.lastTest === 'Fail' }">
+            <div #1 class="center">{{ item?.id }}</div>
+            <div #2>{{ item?.name }}</div>
             <div #3 class="center">
               <ng-container *ngIf="item?.lastTest; else neverTested">
-                <label *ngIf="item?.lastTest === 'Fail'" class="label-warning">{{item?.lastTest}}</label>
-                <label *ngIf="item?.lastTest === 'Pass'" class="label-success">{{item?.lastTest}}</label>
-                <label *ngIf="item?.lastTest === 'Pending'" class="label-default">{{item?.lastTest}}</label>
+                <label *ngIf="item?.lastTest === 'Fail'" class="label-warning">{{ item?.lastTest }}</label>
+                <label *ngIf="item?.lastTest === 'Pass'" class="label-success">{{ item?.lastTest }}</label>
+                <label *ngIf="item?.lastTest === 'Pending'" class="label-default">{{ item?.lastTest }}</label>
               </ng-container>
               <ng-template #neverTested>
                 <div class="red">never tested</div>
               </ng-template>
             </div>
             <div #4 class="center">
-              <div class="{{getMostRecentText(item?.mostRecent)[1]}}">{{getMostRecentText(item?.mostRecent)[0]}}</div>
+              <div class="{{ getMostRecentText(item?.mostRecent)[1] }}">
+                {{ getMostRecentText(item?.mostRecent)[0] }}
+              </div>
             </div>
             <div #5 class="center actions">
-              <a routerLink="/scenario/{{app}}/{{item?.id}}/show" mat-icon-button>
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/show" mat-icon-button>
                 <i class="fas fa-eye"></i>
               </a>
-              <a routerLink="/scenario/{{app}}/{{item?.id}}/edit" mat-icon-button>
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/edit" mat-icon-button>
                 <i class="fas fa-edit"></i>
               </a>
             </div>
@@ -574,8 +565,8 @@
       <div [attr.id]="'flagged'" class="header-grid">
         <h2>
           Flagged Cases
-          <span matBadge="{{reportData?.flaggedScenarios?.length}}"
-                matBadgeOverlap="false" matBadgeColor="accent"></span>
+          <span matBadge="{{ reportData?.flaggedScenarios?.length }}" matBadgeOverlap="false"
+            matBadgeColor="accent"></span>
         </h2>
       </div>
 
@@ -590,15 +581,15 @@
 
         <div class="scrolling">
           <div *ngFor="let item of reportData?.flaggedScenarios" class="grid flagged">
-            <div #1 class="center">{{item?.id}}</div>
-            <div #2>{{item?.name}}</div>
-            <div #3>{{item?.updatedAt | date}}</div>
-            <div #4>{{item?.flagReason | slice:0:80}}</div>
+            <div #1 class="center">{{ item?.id }}</div>
+            <div #2>{{ item?.name }}</div>
+            <div #3>{{ item?.updatedAt | date }}</div>
+            <div #4>{{ item?.flagReason | slice : 0 : 80 }}</div>
             <div #5 class="center actions">
-              <a routerLink="/scenario/{{app}}/{{item?.id}}/show" mat-icon-button>
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/show" mat-icon-button>
                 <i class="fas fa-eye"></i>
               </a>
-              <a routerLink="/scenario/{{app}}/{{item?.id}}/edit" mat-icon-button>
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/edit" mat-icon-button>
                 <i class="fas fa-edit"></i>
               </a>
             </div>
@@ -606,7 +597,6 @@
         </div>
       </div>
     </ng-template>
-
   </ng-template>
 </section>
 
