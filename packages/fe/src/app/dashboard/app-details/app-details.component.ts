@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { LabelType } from '@angular-slider/ngx-slider';
 import * as moment from 'moment';
 import { filter, pluck, tap } from 'rxjs/operators';
+import { OpenAIService } from '../../shared/services/openai.service';
 
 import { ReportData, ScenarioItem, TestItem } from '../../shared/models';
 import { AppService } from '../../shared/app.service';
@@ -15,7 +16,7 @@ import { detailsChartOptions } from './app-details.constants';
   styleUrls: ['./app-details.component.scss'],
   host: { '[class.page]': 'true' },
 })
-export class AppDetailsComponent {
+export class AppDetailsComponent implements OnInit {
   reportData: ReportData | null = null;
   reportDataInitial: ReportData | null = null;
   app = '';
@@ -35,7 +36,10 @@ export class AppDetailsComponent {
   private yearsAllTests: string[] = [];
   private isDaysMode = false;
 
-  constructor(private appService: AppService, private activatedRoute: ActivatedRoute) {
+  userQuestion: string = '';
+  messages: { sender: string; text: string }[] = [];
+
+  constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private openAIService: OpenAIService) {
     activatedRoute.params
       .pipe(
         filter((params: Params) => 'app' in params),
@@ -46,6 +50,8 @@ export class AppDetailsComponent {
       )
       .subscribe((app: string) => this.fetchData(app));
   }
+
+  ngOnInit(): void {}
 
   get isLoading(): boolean {
     return !!!Object.keys(this.reportData || {})?.length;
@@ -562,5 +568,14 @@ export class AppDetailsComponent {
     ].forEach(({ propName, methodName, requestParams }) => {
       setPropValue(propName, methodName, requestParams);
     });
+  }
+
+  async sendMessage(): Promise<void> {
+    if (!this.userQuestion.trim()) return;
+
+    this.messages.push({ sender: 'user', text: this.userQuestion });
+    const response = await this.openAIService.generateResponse(this.userQuestion);
+    this.messages.push({ sender: 'bot', text: response });
+    this.userQuestion = '';
   }
 }
