@@ -574,8 +574,14 @@ export class AppDetailsComponent implements OnInit {
     if (!this.userQuestion.trim()) return;
 
     this.messages.push({ sender: 'user', text: this.userQuestion });
-    const response = await this.openAIService.generateResponse(this.userQuestion);
-    this.messages.push({ sender: 'bot', text: response });
+    this.openAIService.generateResponse(this.userQuestion).subscribe({
+      next: (response: string) => {
+        this.messages.push({ sender: 'bot', text: response });
+      },
+      error: (error: any) => {
+        console.error('Error generating response:', error);
+      }
+    });
     this.userQuestion = '';
   }
 }

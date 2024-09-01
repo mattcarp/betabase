@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api', // Update this to match your backend server URL and port
+  apiUrl: 'http://localhost:3000/api',
+  openAIApiKey: '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'
 };
 
 /*
