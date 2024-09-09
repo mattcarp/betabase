@@ -71,3 +71,6 @@ amplifytools.xcconfig
 **.sample
 #amplify-do-not-edit-end
 /.angular
+
+# Nx temp files
+/.nx/cache
