@@ -13,7 +13,8 @@
         "tsConfig": "packages/be/tsconfig.app.json",
         "assets": ["packages/be/src/assets"],
         "compiler": "tsc",
-        "target": "node"
+        "target": "node",
+        "webpackConfig": "packages/be/webpack.config.js"
       },
       "configurations": {
         "production": {
@@ -36,18 +37,14 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["packages/be/**/*.ts"]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["coverage/packages/be"],
       "options": {
-        "jestConfig": "packages/be/jest.config.js",
-        "passWithNoTests": true
+        "jestConfig": "packages/be/jest.config.js"
       }
     }
   },
