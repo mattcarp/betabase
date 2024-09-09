@@ -4,8 +4,7 @@
     "outDir": "../../dist/out-tsc",
     "types": [ "node" ],
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES2017"
+    "allowSyntheticDefaultImports": true
   },
   "files": ["src/main.ts", "src/polyfills.ts"],
   "include": ["src/**/*.d.ts"],

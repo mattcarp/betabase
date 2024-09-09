@@ -74,3 +74,4 @@ amplifytools.xcconfig
 
 # Nx temp files
 /.nx/cache
+/.nx/workspace-data

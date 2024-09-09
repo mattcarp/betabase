@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import jwt_decode from 'jwt-decode';
 import { filter, tap, catchError } from 'rxjs/operators';
 import { firstValueFrom, throwError } from 'rxjs';
