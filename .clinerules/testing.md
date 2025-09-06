@@ -1,83 +1,214 @@
-# SIAM Testing Architecture Rules for Claude Code
+# Claude Code (Cline) Testing Rules for SIAM
 
-## Testing Framework
-- We use Playwright for all E2E testing
-- Tests are written in TypeScript
-- Follow Page Object Model pattern for complex pages
+## 🎯 Testing Architecture Overview
 
-## 🚨 CRITICAL PRODUCTION TEST RULE 🚨
-**ALL PRODUCTION TESTS MUST USE MAILINATOR FOR AUTHENTICATION**
-- Production URL: https://siam.onrender.com
-- Auth method: Magic link via Mailinator ONLY
-- Email format: siam-test-{timestamp}@mailinator.com
-- See tests/production/mailinator-auth-template.spec.ts for the pattern
-- NEVER mock auth or use direct login in production tests
-
-## Test Structure
-Tests are organized in /tests/ with this hierarchy:
-- api/ - API endpoint tests
-- auth/ - Authentication flows
-- e2e/ - End-to-end journeys
-- visual/ - Visual regression
-- helpers/ - Shared utilities
-- local/ - Local dev only
-- production/ - Prod only
-
-## When Creating New Tests
-1. Place in appropriate directory based on test type
-2. Name files as: [feature].spec.ts
-3. Tag with @smoke for critical tests
-4. Use data-testid attributes for selectors
-5. Import helpers from tests/helpers/
-
-## CRITICAL: Production vs Local Testing
-**PRODUCTION TESTS:**
-- ALWAYS use Mailinator for magic link authentication
-- Use test email like: siam-test-{timestamp}@mailinator.com
-- Magic link flow: Request link → Check Mailinator → Click link
-- NEVER use direct login or mock auth in production
-- Tag with @production
-
-**LOCAL TESTS:**
-- Can use direct auth or mock credentials
-- Can bypass magic link flow for speed
-- Use localhost:3000 as base URL
-
-## Git Commands for Tests
-To commit only production tests:
-```bash
-git add tests/production/
-git add tests/auth/*mailinator*.spec.ts
-git commit -m "feat: production tests with Mailinator flow"
+### Directory Structure (MEMORIZE THIS)
+```
+tests/
+├── __TESTING_RULES__.md      ← START HERE ALWAYS
+├── __CLAUDE_CODE__.md        ← Claude Code specific
+├── 01-unit/                  ← Fast tests (5s)
+├── 02-integration/           ← API tests (15s)
+├── 03-e2e/                   ← Browser tests (30s)
+├── __pages__/                ← Page Objects (REQUIRED)
+└── __fixtures__/             ← Test Factories
 ```
 
-To exclude local-only tests from commits:
+## 🚀 Quick Commands for Claude Code
+
+When user says → You execute:
 ```bash
-git add tests/ --ignore tests/local/
+"test this"        → npm run test:smoke
+"test chat"        → npm run test:feature -- chat
+"quick test"       → npm run test:smoke
+"test everything"  → npm run test:regression
+"fix test"         → npm run test:debug -- [failing-test]
+"make a test"      → Create using template below
 ```
 
-## Running Tests
-- Local: npm run test:e2e:local
-- Render: npm run test:e2e
-- Debug: npx playwright test --ui
+## 📝 Test Creation Template (USE EXACTLY)
 
-## Test Template
 ```typescript
-import { test, expect } from "@playwright/test";
+/**
+ * @feature [FeatureName]
+ * @priority p0
+ * @tags smoke, regression
+ */
+import { test, expect } from '@playwright/test';
+import { [Feature]Page } from '../../__pages__';
+import { TestFactory } from '../../__fixtures__';
 
-test.describe("Feature", () => {
-  test("action @smoke", async ({ page }) => {
-    await page.goto("/");
-    // test logic
-    await expect(page.locator("[data-testid='']")).toBeVisible();
+test.describe('[FEATURE] [FeatureName]', () => {
+  let page: [Feature]Page;
+  
+  test.beforeEach(async ({ page: pwPage }) => {
+    page = new [Feature]Page(pwPage);
+    await page.navigate();
+  });
+
+  test('[MUST] do critical action @smoke', async () => {
+    // Arrange
+    const data = TestFactory.createData();
+    
+    // Act
+    await page.performAction(data);
+    
+    // Assert
+    await expect(page.getResult()).toBe(expected);
   });
 });
 ```
 
-## Key Configs
-- playwright.config.ts - Main/Render config
-- playwright.config.local.ts - Local dev
-- Tests use baseURL from config
+## 🏭 Page Object Model (MANDATORY)
 
-## Documentation
-See /tests/README.md for comprehensive guide
+### NEVER write selectors in tests:
+```typescript
+// ❌ WRONG - Never do this
+await page.click('.submit-btn');
+
+// ✅ CORRECT - Always use page objects
+await chatPage.sendMessage('Hello');
+```
+
+### Page Object Template:
+```typescript
+export class [Feature]Page extends BasePage {
+  private selectors = {
+    input: '[data-testid="input"]',
+    button: '[data-testid="button"]'
+  };
+
+  async performAction(data: any): Promise<void> {
+    await this.page.fill(this.selectors.input, data);
+    await this.page.click(this.selectors.button);
+  }
+}
+```
+
+## 🎯 Selector Strategy (IN ORDER)
+
+1. `[data-testid="..."]` - BEST
+2. `[role="..."]` - GOOD  
+3. `[aria-label="..."]` - OK
+4. `text=...` - FALLBACK
+5. `.class`, `#id` - AVOID
+
+## 🏷️ Test Tagging Rules
+
+### Priority (REQUIRED):
+- `@p0` - Blocks deployment
+- `@p1` - Fix in 24 hours
+- `@p2` - Fix this sprint
+- `@p3` - Nice to have
+
+### Execution:
+- `@smoke` - Every commit (2 min)
+- `@regression` - Before deploy (30 min)
+- `@nightly` - Overnight runs
+
+## 🔧 Test Execution Commands
+
+```bash
+# By layer
+npm run test:unit          # Fast components
+npm run test:integration   # API tests
+npm run test:e2e          # Browser tests
+
+# By tag
+npm run test:smoke        # Critical only
+npm run test:regression   # Full suite
+
+# Smart execution
+npm run test:changed      # Only changed
+npm run test:failed       # Re-run failures
+
+# Debug
+npm run test:debug        # Debug mode
+npm run test:ui           # Playwright UI
+```
+
+## 📊 Test Data Factory
+
+### NEVER hardcode data:
+```typescript
+// ❌ WRONG
+const email = 'test@example.com';
+
+// ✅ CORRECT
+const user = TestFactory.createUser();
+const file = TestFactory.createFile();
+```
+
+## 🐛 Debugging Failed Tests
+
+1. Check page object selectors
+2. Verify test data validity
+3. Check timing/timeout issues
+4. Review console errors
+5. Screenshot at failure point
+
+## 📁 File Naming Convention
+
+ALWAYS: `[feature].[layer].test.ts`
+- `chat.unit.test.ts`
+- `chat.integration.test.ts`
+- `chat.e2e.test.ts`
+
+## ⚡ Performance Rules
+
+- Unit tests: < 5 seconds
+- Integration: < 15 seconds
+- E2E tests: < 30 seconds
+- Smoke suite: < 2 minutes
+- Full regression: < 30 minutes
+
+## 🚫 NEVER DO THIS
+
+1. ❌ Tests outside organized structure
+2. ❌ Raw selectors in test files
+3. ❌ Mixed test types (unit + e2e)
+4. ❌ Hardcoded test data
+5. ❌ Arbitrary timeouts
+6. ❌ Tests without tags
+
+## ✅ ALWAYS DO THIS
+
+1. ✅ Use Page Object Model
+2. ✅ Use Test Factories
+3. ✅ Follow naming convention
+4. ✅ Tag with priority
+5. ✅ Use config timeouts
+6. ✅ Group by feature
+
+## 📈 Test Results Location
+
+```
+test-results/
+├── playwright-report/    # HTML reports
+├── coverage/            # Coverage data
+├── screenshots/         # Failures
+└── metrics.json        # Performance
+```
+
+## 🎯 Claude Code Intelligence
+
+When working on:
+- Component → Create unit test in `01-unit/`
+- API endpoint → Create integration test in `02-integration/`
+- User flow → Create E2E test in `03-e2e/`
+- UI changes → Add visual test in `04-visual/`
+
+## 🔄 Test Workflow
+
+1. Write/modify code
+2. Claude Code suggests test
+3. Generate test with template
+4. Run `npm run test:changed`
+5. Fix any failures
+6. Run `npm run test:smoke`
+7. Commit when green
+
+---
+Priority: CRITICAL for Claude Code
+Source: tests/__TESTING_RULES__.md
+Last Updated: 2024
