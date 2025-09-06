@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Buttons Fix Demonstration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1200px;
+            width: 100%;
+            padding: 40px;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: #1a202c;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #718096;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .panel {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            background: #f7fafc;
+        }
+        
+        .panel h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .before h2 {
+            color: #e53e3e;
+        }
+        
+        .after h2 {
+            color: #38a169;
+        }
+        
+        .chat-input-demo {
+            background: #18181b;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .textarea-demo {
+            flex: 1;
+            background: #27272a;
+            border: 1px solid #3f3f46;
+            border-radius: 8px;
+            padding: 10px;
+            color: #f4f4f5;
+            font-family: inherit;
+            resize: none;
+            height: 40px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .voice-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid;
+        }
+        
+        /* Before styles - nearly invisible */
+        .before .voice-button {
+            color: #a1a1aa;
+            background: rgba(0, 0, 0, 0);
+            border-color: #3f3f46;
+        }
+        
+        .before .voice-button:hover {
+            background: rgba(39, 39, 42, 0.5);
+        }
+        
+        /* After styles - clearly visible */
+        .after .voice-button {
+            color: white;
+            background: rgb(39, 39, 42);
+            border-color: rgb(113, 113, 122);
+        }
+        
+        .after .voice-button:hover {
+            background: rgb(63, 63, 70);
+            border-color: rgb(161, 161, 170);
+        }
+        
+        .after .voice-button.recording {
+            background: rgb(220, 38, 38);
+            border-color: rgb(220, 38, 38);
+            animation: pulse 1.5s infinite;
+        }
+        
+        .after .voice-button.playing {
+            background: rgb(37, 99, 235);
+            border-color: rgb(59, 130, 246);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+        }
+        
+        .specs {
+            background: #1a202c;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .specs strong {
+            color: #fbbf24;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .status-broken {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .status-fixed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .demo-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e2e8f0;
+        }
+        
+        .demo-section h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .interactive-demo {
+            background: #18181b;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .demo-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .demo-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            background: rgb(39, 39, 42);
+            border: 2px solid rgb(113, 113, 122);
+            font-size: 24px;
+        }
+        
+        .demo-button:hover {
+            transform: scale(1.1);
+            background: rgb(63, 63, 70);
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+        
+        .demo-button:active {
+            transform: scale(0.95);
+        }
+        
+        #micButton:active {
+            background: rgb(220, 38, 38);
+            border-color: rgb(220, 38, 38);
+        }
+        
+        #speakerButton:active {
+            background: rgb(37, 99, 235);
+            border-color: rgb(59, 130, 246);
+        }
+        
+        .demo-text {
+            color: #a1a1aa;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .icon {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Voice Button Visibility Fix</h1>
+        <p class="subtitle">Regression fixed: Voice buttons are now clearly visible in the chat interface</p>
+        
+        <div class="comparison">
+            <div class="panel before">
+                <h2>
+                    <span class="icon">❌</span>
+                    Before Fix
+                    <span class="status-badge status-broken">BROKEN</span>
+                </h2>
+                
+                <div class="chat-input-demo">
+                    <textarea class="textarea-demo" placeholder="Ask me anything..."></textarea>
+                    <div class="button-group">
+                        <button class="voice-button" title="Hold to record">🎤</button>
+                        <button class="voice-button" title="Read last response">🔊</button>
+                    </div>
+                </div>
+                
+                <div class="specs">
+                    <strong>Color:</strong> rgb(161, 161, 170) - Light Gray<br>
+                    <strong>Background:</strong> rgba(0, 0, 0, 0) - Transparent<br>
+                    <strong>Border:</strong> #3f3f46 - Barely visible<br>
+                    <strong>Problem:</strong> Icons nearly invisible against dark background
+                </div>
+            </div>
+            
+            <div class="panel after">
+                <h2>
+                    <span class="icon">✅</span>
+                    After Fix
+                    <span class="status-badge status-fixed">FIXED</span>
+                </h2>
+                
+                <div class="chat-input-demo">
+                    <textarea class="textarea-demo" placeholder="Ask me anything..."></textarea>
+                    <div class="button-group">
+                        <button class="voice-button" title="Hold to record">🎤</button>
+                        <button class="voice-button" title="Read last response">🔊</button>
+                    </div>
+                </div>
+                
+                <div class="specs">
+                    <strong>Color:</strong> rgb(255, 255, 255) - Pure White<br>
+                    <strong>Background:</strong> rgb(39, 39, 42) - Dark Gray<br>
+                    <strong>Border:</strong> rgb(113, 113, 122) - Visible Gray<br>
+                    <strong>Solution:</strong> High contrast design for clear visibility
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🎮 Interactive Demo - Try It!</h2>
+            <div class="interactive-demo">
+                <div class="demo-buttons">
+                    <button class="demo-button" id="micButton" onclick="animateMic()">
+                        🎤
+                    </button>
+                    <button class="demo-button" id="speakerButton" onclick="animateSpeaker()">
+                        🔊
+                    </button>
+                </div>
+                <p class="demo-text">Click and hold the buttons to see the active states</p>
+            </div>
+        </div>
+        
+        <div class="success-message">
+            ✨ <strong>Success!</strong> Both voice buttons are now clearly visible and fully functional.<br>
+            Users can easily find and interact with push-to-talk and text-to-speech features.
+        </div>
+    </div>
+    
+    <script>
+        function animateMic() {
+            const btn = document.getElementById('micButton');
+            btn.style.background = 'rgb(220, 38, 38)';
+            btn.style.borderColor = 'rgb(220, 38, 38)';
+            btn.style.animation = 'pulse 1.5s infinite';
+            
+            setTimeout(() => {
+                btn.style.background = 'rgb(39, 39, 42)';
+                btn.style.borderColor = 'rgb(113, 113, 122)';
+                btn.style.animation = 'none';
+            }, 2000);
+        }
+        
+        function animateSpeaker() {
+            const btn = document.getElementById('speakerButton');
+            btn.style.background = 'rgb(37, 99, 235)';
+            btn.style.borderColor = 'rgb(59, 130, 246)';
+            btn.style.animation = 'pulse 1.5s infinite';
+            
+            setTimeout(() => {
+                btn.style.background = 'rgb(39, 39, 42)';
+                btn.style.borderColor = 'rgb(113, 113, 122)';
+                btn.style.animation = 'none';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

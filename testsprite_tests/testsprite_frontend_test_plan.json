@@ -1,0 +1,353 @@
+[
+  {
+    "id": "TC001",
+    "title": "Magic Link Authentication Success",
+    "description": "Verify that a user with a valid @sonymusic.com email address or whitelisted email can successfully log in using the magic link authentication.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the login page."
+      },
+      {
+        "type": "action",
+        "description": "Enter a valid @sonymusic.com or whitelisted email address."
+      },
+      {
+        "type": "action",
+        "description": "Request magic link and open the received link."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is authenticated and redirected to the HUD interface."
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Magic Link Authentication Domain Restriction Enforcement",
+    "description": "Verify that login is rejected for emails outside the @sonymusic.com domain and not in the whitelist.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the login page."
+      },
+      {
+        "type": "action",
+        "description": "Enter an email address not ending with @sonymusic.com and not whitelisted."
+      },
+      {
+        "type": "action",
+        "description": "Request magic link."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an error message indicating invalid domain restriction is displayed and no magic link is sent."
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Login Form Password Option and Validation",
+    "description": "Verify the login form allows password entry, correctly validates credentials, and handles errors.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the login page."
+      },
+      {
+        "type": "action",
+        "description": "Select password login option."
+      },
+      {
+        "type": "action",
+        "description": "Enter valid email and correct password."
+      },
+      {
+        "type": "action",
+        "description": "Submit login form."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify successful login and HUD interface is shown."
+      },
+      {
+        "type": "action",
+        "description": "Repeat login with correct email and incorrect password."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify appropriate error message for invalid credentials is displayed."
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Real-time Transcription Latency and Accuracy",
+    "description": "Verify that real-time transcription updates have latency under 2 seconds with accuracy above 85% for key classification.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Join a live meeting session and start speaking."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify transcribed text displays within 2 seconds after speech."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify transcription accuracy is above 85% compared to reference transcript."
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "AI Generated Meeting Summaries Quality",
+    "description": "Verify AI generated summaries and insights meet user satisfaction rating above 4 out of 5 in usability testing.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Conduct multiple sample meetings with AI-generated summaries."
+      },
+      {
+        "type": "assertion",
+        "description": "Collect user feedback and verify average satisfaction rating is over 4 out of 5."
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Speaker Identification and Sentiment Analysis Accuracy",
+    "description": "Verify speaker diarization correctly identifies different speakers and sentiment/emotion detection reflects correct contextual cues.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Simulate a meeting with multiple distinct speakers."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm speaker labels in transcription correspond to actual speakers."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify sentiment and emotion analysis matches expected tone and mood from speech samples."
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Audio Waveform and Digital Rain Visualization",
+    "description": "Verify that audio waveform and digital rain visualization reflect live audio SPL levels accurately from microphone and meeting input.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Provide varying audio input levels from microphone and meeting streams."
+      },
+      {
+        "type": "assertion",
+        "description": "Visually verify waveform and digital rain effects respond dynamically to audio SPL changes."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm logged data corresponds to visualized audio intensity."
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "HUD Layout Responsiveness and Accessibility",
+    "description": "Verify HUD interface layout with circular navigation and glassmorphism effects adapts well across different screen sizes and supports accessibility features.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Access the HUD on multiple devices and screen resolutions."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify layout elements adjust appropriately without overlaps or truncations."
+      },
+      {
+        "type": "action",
+        "description": "Test color contrast and reduced motion settings."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm UI meets WCAG guidelines including keyboard navigation support."
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "System Health Monitor Accuracy and Error Reporting",
+    "description": "Verify system health monitor reports accurate status and keeps error rates below 5%.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Simulate normal and error system states."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify system health monitor displays correct status messages."
+      },
+      {
+        "type": "assertion",
+        "description": "Check error reporting accuracy and that error rate remains below 5% over extended runtime."
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "User Settings Panel Functionality",
+    "description": "Verify that users can access, modify, and save settings in the Settings Panel with reflection in system behavior.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the settings panel."
+      },
+      {
+        "type": "action",
+        "description": "Change configurable settings such as audio input source and privacy preferences."
+      },
+      {
+        "type": "action",
+        "description": "Save changes and close panel."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify changes take effect immediately or after restart as specified."
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Privacy and Data Retention Compliance",
+    "description": "Verify privacy policies are enforced by data minimization, encryption, anonymization, and configurable retention periods.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Configure data retention period to shortest option."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify export and storage comply with configured retention and anonymization policies."
+      },
+      {
+        "type": "action",
+        "description": "Inspect stored data to confirm encryption and data minimization."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no unauthorized sensitive user data is retained beyond retention period."
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "AI/ML Backend Performance Under Load",
+    "description": "Verify AI/ML backend modules perform efficiently during peak load with memory usage under 2GB and without UI blocking.",
+    "category": "performance",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Simulate multiple concurrent live meeting sessions with audio streams."
+      },
+      {
+        "type": "assertion",
+        "description": "Monitor memory usage and confirm it remains under 2GB."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify UI remains responsive with no blocking or freezes."
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Content Aggregator and External Service Integration",
+    "description": "Verify AOMA Content Aggregator and MCP Client Wrapper correctly fetch and integrate external content and service data.",
+    "category": "integration",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Initiate content fetch from AOMA Mesh MCP server."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify fetched content is correctly displayed and integrated in AI insights dashboard."
+      },
+      {
+        "type": "action",
+        "description": "Trigger MCP Client API calls."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm correct processing and display of external data from MCP services."
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Lambda Health Verifier Service Validation",
+    "description": "Verify the Lambda Health Verifier service accurately reports AWS Lambda function health and error states.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Run health checks on all AWS Lambda functions used in the system."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the health verifier reports correct healthy or error states for each Lambda function."
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Meeting Data Export and Vector Storage",
+    "description": "Verify meeting data including transcription, insights, and vector embeddings are exported and stored correctly for retrieval.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Conduct a full meeting session."
+      },
+      {
+        "type": "action",
+        "description": "Trigger meeting data export at meeting end."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify data is saved with correct vector representations and metadata."
+      },
+      {
+        "type": "action",
+        "description": "Retrieve stored data and verify integrity and completeness."
+      }
+    ]
+  }
+]

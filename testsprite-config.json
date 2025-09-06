@@ -1,0 +1,72 @@
+{
+  "project": {
+    "name": "SIAM - Smart In A Meeting",
+    "type": "web",
+    "framework": "nextjs",
+    "language": "typescript",
+    "version": "1.0.0"
+  },
+  "testEnvironment": {
+    "baseUrl": "http://localhost:3000",
+    "headless": false,
+    "browser": "chromium",
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    }
+  },
+  "authentication": {
+    "type": "magic-link",
+    "testCredentials": {
+      "primaryEmail": "test@example.com",
+      "secondaryEmail": "test2@example.com"
+    },
+    "devMode": {
+      "bypass": true,
+      "autoLogin": true
+    }
+  },
+  "testCoverage": {
+    "targetPercentage": 90,
+    "criticalPaths": [
+      "authentication",
+      "chat-interface",
+      "aoma-integration",
+      "document-upload",
+      "knowledge-curation",
+      "voice-interface"
+    ]
+  },
+  "features": {
+    "chat": {
+      "priority": "P0",
+      "endpoints": ["/api/aoma-mcp"],
+      "validation": ["message-send", "response-receive", "history-display"]
+    },
+    "upload": {
+      "priority": "P0",
+      "endpoints": ["/api/upload"],
+      "validation": ["file-select", "upload-progress", "success-confirmation"]
+    },
+    "voice": {
+      "priority": "P0",
+      "endpoints": ["/api/elevenlabs"],
+      "validation": ["recording", "transcription", "tts-playback"]
+    },
+    "navigation": {
+      "priority": "P0",
+      "tabs": ["Chat", "HUD", "Test", "Fix", "Curate"],
+      "validation": ["tab-switching", "state-persistence"]
+    }
+  },
+  "apiEndpoints": {
+    "health": "/api/health",
+    "rpc": "/api/rpc",
+    "aomaMcp": "/api/aoma-mcp"
+  },
+  "errorHandling": {
+    "captureScreenshots": true,
+    "logLevel": "debug",
+    "retryFailedTests": 2
+  }
+}

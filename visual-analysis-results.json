@@ -1,0 +1,278 @@
+{
+  "login": {
+    "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"networkidle\"\u001b[22m\n",
+    "timestamp": "2025-08-25T15:01:20.727Z"
+  },
+  "dashboard": {
+    "title": "SIAM - Smart In a Meeting",
+    "url": "http://localhost:3000/dashboard",
+    "screenshotPath": "/Users/matt/Documents/projects/siam/screenshots/dashboard.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "accessibilityIssues": [],
+    "contrastIssues": [],
+    "macStylesUsage": {
+      "macClasses": [],
+      "macVariables": [
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected"
+      ],
+      "customStyles": []
+    },
+    "timestamp": "2025-08-25T15:01:25.172Z"
+  },
+  "chat": {
+    "title": "SIAM - Smart In a Meeting",
+    "url": "http://localhost:3000/chat",
+    "screenshotPath": "/Users/matt/Documents/projects/siam/screenshots/chat.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "accessibilityIssues": [],
+    "contrastIssues": [],
+    "macStylesUsage": {
+      "macClasses": [],
+      "macVariables": [
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected"
+      ],
+      "customStyles": []
+    },
+    "timestamp": "2025-08-25T15:01:28.145Z"
+  },
+  "hud": {
+    "title": "SIAM - Smart In a Meeting",
+    "url": "http://localhost:3000/hud",
+    "screenshotPath": "/Users/matt/Documents/projects/siam/screenshots/hud.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "accessibilityIssues": [],
+    "contrastIssues": [],
+    "macStylesUsage": {
+      "macClasses": [],
+      "macVariables": [
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected"
+      ],
+      "customStyles": []
+    },
+    "timestamp": "2025-08-25T15:01:31.321Z"
+  },
+  "test": {
+    "title": "SIAM - Smart In a Meeting",
+    "url": "http://localhost:3000/test",
+    "screenshotPath": "/Users/matt/Documents/projects/siam/screenshots/test.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "accessibilityIssues": [],
+    "contrastIssues": [],
+    "macStylesUsage": {
+      "macClasses": [],
+      "macVariables": [
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected"
+      ],
+      "customStyles": []
+    },
+    "timestamp": "2025-08-25T15:01:34.696Z"
+  },
+  "fix": {
+    "title": "SIAM - Smart In a Meeting",
+    "url": "http://localhost:3000/fix",
+    "screenshotPath": "/Users/matt/Documents/projects/siam/screenshots/fix.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "accessibilityIssues": [],
+    "contrastIssues": [],
+    "macStylesUsage": {
+      "macClasses": [],
+      "macVariables": [
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected"
+      ],
+      "customStyles": []
+    },
+    "timestamp": "2025-08-25T15:01:37.908Z"
+  },
+  "curate": {
+    "title": "SIAM - Smart In a Meeting",
+    "url": "http://localhost:3000/curate",
+    "screenshotPath": "/Users/matt/Documents/projects/siam/screenshots/curate.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "accessibilityIssues": [],
+    "contrastIssues": [],
+    "macStylesUsage": {
+      "macClasses": [],
+      "macVariables": [
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected"
+      ],
+      "customStyles": []
+    },
+    "timestamp": "2025-08-25T15:01:40.860Z"
+  },
+  "settings": {
+    "title": "SIAM - Smart In a Meeting",
+    "url": "http://localhost:3000/settings",
+    "screenshotPath": "/Users/matt/Documents/projects/siam/screenshots/settings.png",
+    "consoleErrors": [],
+    "accessibilityIssues": [],
+    "contrastIssues": [],
+    "macStylesUsage": {
+      "macClasses": [],
+      "macVariables": [
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected",
+        "MAC variables detected"
+      ],
+      "customStyles": []
+    },
+    "timestamp": "2025-08-25T15:01:43.809Z"
+  }
+}

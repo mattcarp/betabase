@@ -1,0 +1,79 @@
+# Task ID: 52
+# Title: Implement Dual Email Magic Link Authentication System
+# Status: done
+# Dependencies: 46, 43
+# Priority: high
+# Description: CRITICAL P0 BLOCKER: Replace the current Cognito password authentication with a dual email magic link system for Fiona's accounts (fiona.burgess.ext@sonymusic.com and fiona@fionaburgess.com). This is a high-priority blocker that must be completed TODAY as it blocks all P0 functionality. The system must provide passwordless authentication with seamless account switching and session persistence.
+# Details:
+URGENT IMPLEMENTATION REQUIRED - This is a P0 blocker that must be completed TODAY. The current Cognito system is incorrect and must be replaced immediately.
+
+**CRITICAL REQUIREMENTS:**
+- NO PASSWORDS - Magic links only for authentication
+- Dual email support: fiona.burgess.ext@sonymusic.com and fiona@fionaburgess.com
+- Must unblock all P0 functionality immediately
+
+**Implementation Steps:**
+1. **Magic Link Generation**: Develop a backend service to generate secure, time-limited magic links. Use JWTs (JSON Web Tokens) for encoding user information and expiration times. Ensure the links are cryptographically secure and expire after a short period (e.g., 15 minutes).
+2. **Email Sending**: Integrate with an email service provider (e.g., AWS SES, SendGrid) to send magic links to the specified email addresses: fiona.burgess.ext@sonymusic.com and fiona@fionaburgess.com. Ensure emails are sent promptly and include clear instructions for users.
+3. **Link Handling**: On the frontend, handle magic link clicks by verifying the JWT, extracting user information, and initiating a session. Implement robust error handling for expired or invalid links.
+4. **Session Management**: Use secure, HttpOnly cookies to manage user sessions. Implement session persistence across browser restarts by storing session tokens securely and refreshing them as needed.
+5. **Account Switching**: Allow users to switch between accounts seamlessly by managing multiple session tokens and providing a user-friendly interface for switching.
+6. **Cognito Removal**: Completely remove all Cognito password authentication components and replace with magic link system.
+7. **Security Considerations**: Implement rate limiting on magic link requests to prevent abuse. Use HTTPS for all communications and ensure all tokens are securely stored and transmitted.
+8. **Testing and Monitoring**: Set up logging and monitoring to track authentication attempts and identify potential issues.
+
+# Test Strategy:
+**PRIORITY TESTING - Must be completed TODAY:**
+1. **Magic Link Functionality**: Test the generation and expiration of magic links, ensuring they are valid for the specified duration and correctly encode user information.
+2. **Email Delivery**: Verify that emails are sent promptly to both specified addresses (fiona.burgess.ext@sonymusic.com and fiona@fionaburgess.com) and contain valid magic links.
+3. **Link Verification**: Test the frontend handling of magic links, ensuring correct session initiation and error handling for invalid or expired links.
+4. **Session Persistence**: Restart the browser and verify that sessions persist correctly without requiring re-authentication.
+5. **Account Switching**: Test switching between Fiona's two accounts to ensure seamless transitions and correct session management.
+6. **Cognito Removal Verification**: Confirm that all password-based authentication has been completely removed and replaced.
+7. **P0 Functionality Unblocking**: Verify that all previously blocked P0 functionality now works correctly with the new authentication system.
+8. **Security Testing**: Conduct penetration testing to ensure the system is secure against common vulnerabilities such as token replay attacks and CSRF.
+9. **Load Testing**: Simulate high volumes of authentication requests to ensure the system can handle peak loads without degradation.
+
+# Subtasks:
+## 1. Remove Cognito Password Authentication Components [done]
+### Dependencies: None
+### Description: Completely remove all existing Cognito password authentication code, components, and dependencies from the codebase
+### Details:
+
+
+## 2. Implement Magic Link JWT Generation Service [done]
+### Dependencies: None
+### Description: Create backend service to generate secure, time-limited JWTs for magic links with 15-minute expiration
+### Details:
+
+
+## 3. Set up Email Service Integration [done]
+### Dependencies: None
+### Description: Configure AWS SES or SendGrid to send magic links to fiona.burgess.ext@sonymusic.com and fiona@fionaburgess.com
+### Details:
+
+
+## 4. Implement Frontend Magic Link Handler [done]
+### Dependencies: None
+### Description: Create frontend components to handle magic link clicks, JWT verification, and session initiation
+### Details:
+
+
+## 5. Implement Dual Account Session Management [done]
+### Dependencies: None
+### Description: Create secure session management system supporting both Fiona email accounts with seamless switching
+### Details:
+
+
+## 6. Implement Rate Limiting and Security Measures [done]
+### Dependencies: None
+### Description: Add rate limiting for magic link requests and implement security measures against abuse
+### Details:
+
+
+## 7. Verify P0 Functionality Unblocking [done]
+### Dependencies: None
+### Description: Test and confirm that all previously blocked P0 functionality now works with the new authentication system
+### Details:
+
+

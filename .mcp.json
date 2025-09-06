@@ -1,0 +1,84 @@
+{
+  "mcpServers": {
+    "browserbase": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@browserbasehq/mcp"],
+      "env": {
+        "BROWSERBASE_API_KEY": "***REMOVED***",
+        "BROWSERBASE_PROJECT_ID": "zygotic-lynx-9x1Bh9",
+        "NODE_ENV": "development"
+      }
+    },
+    "playwright-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@executeautomation/playwright-mcp-server"],
+      "env": {
+        "NODE_ENV": "development",
+        "PLAYWRIGHT_OUTPUT_DIR": "./screenshots"
+      }
+    },
+    "testsprite": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@testsprite/testsprite-mcp@latest"],
+      "env": {
+        "NODE_ENV": "development",
+        "TESTSPRITE_API_KEY": "sk-user-ftTKeY8Vh_yLFLRhB7Rvvk7YCvLjW268LcOSpbhd4yb1ZYqEpUpUh3UfYpEvfGWv4kZ37poEtsLYcFz3BN3FCCiwGkiCJyz_F9n_L8efplsbzIvpU_CpEOV5YIiT51yT9aE"
+      }
+    },
+    "aoma-mesh": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/Users/matt/Documents/projects/siam/aoma-mcp-proxy.js"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "ref-tools": {
+      "type": "http",
+      "url": "https://api.ref.tools/mcp?apiKey=ref-851444f482b0cdffec41"
+    },
+    "task-master-ai": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "--package=task-master-ai", "task-master-ai"],
+      "env": {
+        "ANTHROPIC_API_KEY": "YOUR_ANTHROPIC_API_KEY_HERE",
+        "PERPLEXITY_API_KEY": "YOUR_PERPLEXITY_API_KEY_HERE",
+        "OPENAI_API_KEY": "YOUR_OPENAI_KEY_HERE",
+        "GOOGLE_API_KEY": "YOUR_GOOGLE_KEY_HERE",
+        "XAI_API_KEY": "YOUR_XAI_KEY_HERE",
+        "OPENROUTER_API_KEY": "YOUR_OPENROUTER_KEY_HERE",
+        "MISTRAL_API_KEY": "YOUR_MISTRAL_KEY_HERE",
+        "AZURE_OPENAI_API_KEY": "YOUR_AZURE_KEY_HERE",
+        "OLLAMA_API_KEY": "YOUR_OLLAMA_API_KEY_HERE"
+      }
+    },
+    "semgrep": {
+      "type": "stdio",
+      "command": "semgrep-mcp",
+      "args": ["-t", "stdio"],
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "supabase": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-supabase"],
+      "env": {
+        "SUPABASE_URL": "${NEXT_PUBLIC_SUPABASE_URL}",
+        "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_ROLE_KEY}"
+      }
+    },
+    "render": {
+      "type": "http",
+      "url": "https://mcp.render.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${RENDER_API_KEY}"
+      }
+    }
+  }
+}

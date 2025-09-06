@@ -1,0 +1,52 @@
+{
+  "version": "1.0",
+  "agent": "fiona",
+  "project": "siam",
+  "priority_filter": "FIONA_FIRST",
+  "tasks": {
+    "immediate": [
+      {
+        "id": "AUTH-001",
+        "priority": "CRITICAL",
+        "title": "Fix dual email magic link authentication",
+        "acceptance": "Fiona can log in with both emails without friction",
+        "blocked_by": [],
+        "blocks_everything": true
+      },
+      {
+        "id": "CHAT-001",
+        "priority": "CRITICAL",
+        "title": "Fix chat landing page as default",
+        "acceptance": "Lands on chat, not dashboard",
+        "blocked_by": ["AUTH-001"]
+      },
+      {
+        "id": "UPLOAD-001",
+        "priority": "CRITICAL",
+        "title": "Fix document upload to vector storage",
+        "acceptance": "Documents upload and are immediately queryable",
+        "blocked_by": ["AUTH-001"]
+      }
+    ],
+    "this_week": [
+      {
+        "id": "CURATE-001",
+        "priority": "HIGH",
+        "title": "Implement curation interface",
+        "acceptance": "Can view, add, delete, and correct knowledge",
+        "blocked_by": ["CHAT-001", "UPLOAD-001"]
+      }
+    ]
+  },
+  "validation_rules": {
+    "before_commit": "Would Fiona accept this?",
+    "before_pr": "Does this solve Fiona's actual problem?",
+    "before_deploy": "Can Fiona use this tomorrow for real work?"
+  },
+  "ai_instructions": {
+    "cursor": "Always filter decisions through Fiona agent requirements",
+    "windsurf": "Reference FIONA_PRIORITIES.md before any task",
+    "cline": "Use @fiona agent for all SIAM work",
+    "roo": "Prioritize Fiona's acceptance criteria above technical interest"
+  }
+}

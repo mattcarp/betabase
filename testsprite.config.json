@@ -1,0 +1,86 @@
+{
+  "projectName": "SIAM - Smart Interaction Agent Manager",
+  "testDirectory": "./testsprite_tests",
+  "outputDirectory": "./testsprite_results",
+  "baseUrl": "https://siam-app-production.up.railway.app",
+  "browser": "chromium",
+  "headless": false,
+  "timeout": 30000,
+  "retries": 2,
+  "parallel": false,
+  "reporters": ["console", "json", "html"],
+  "testPatterns": {
+    "unit": "**/*.unit.test.js",
+    "integration": "**/*.integration.test.js",
+    "e2e": "**/*.e2e.test.js"
+  },
+  "environments": {
+    "local": {
+      "baseUrl": "http://localhost:3000",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "staging": {
+      "baseUrl": "https://siam-staging.vercel.app",
+      "env": {
+        "NODE_ENV": "staging"
+      }
+    },
+    "production": {
+      "baseUrl": "https://siam-app-production.up.railway.app",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  },
+  "testSuites": {
+    "auth": {
+      "name": "Authentication Tests",
+      "tests": ["./testsprite_tests/auth/*.test.js"]
+    },
+    "voice": {
+      "name": "Voice Interface Tests",
+      "tests": ["./testsprite_tests/voice/*.test.js"]
+    },
+    "mcp": {
+      "name": "MCP Integration Tests",
+      "tests": ["./testsprite_tests/mcp/*.test.js"]
+    },
+    "ui": {
+      "name": "UI Component Tests",
+      "tests": ["./testsprite_tests/ui/*.test.js"]
+    }
+  },
+  "customCommands": {
+    "login": {
+      "description": "Login with test credentials",
+      "steps": [
+        "navigate to /login",
+        "fill email field",
+        "fill password field",
+        "click submit button",
+        "wait for dashboard"
+      ]
+    },
+    "checkVoiceInterface": {
+      "description": "Verify voice interface is functional",
+      "steps": [
+        "check microphone button exists",
+        "verify voice status indicator",
+        "check audio playback capability"
+      ]
+    }
+  },
+  "integrations": {
+    "slack": {
+      "enabled": false,
+      "webhookUrl": ""
+    },
+    "jira": {
+      "enabled": false,
+      "projectKey": "SIAM",
+      "url": ""
+    }
+  }
+}

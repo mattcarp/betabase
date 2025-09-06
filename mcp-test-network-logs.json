@@ -1,0 +1,122 @@
+[
+  {
+    "type": "request",
+    "method": "GET",
+    "url": "https://iamsiam.ai/",
+    "timestamp": "2025-08-06T15:24:05.821Z"
+  },
+  {
+    "type": "response",
+    "status": 200,
+    "url": "https://iamsiam.ai/",
+    "timestamp": "2025-08-06T15:24:07.074Z"
+  },
+  {
+    "type": "request",
+    "method": "GET",
+    "url": "https://iamsiam.ai/_next/static/css/e7fff1b5faebe85a.css",
+    "timestamp": "2025-08-06T15:24:07.082Z"
+  },
+  {
+    "type": "request",
+    "method": "GET",
+    "url": "https://iamsiam.ai/_next/static/css/d0180307dd2afd3d.css",
+    "timestamp": "2025-08-06T15:24:07.082Z"
+  },
+  {
+    "type": "request",
+    "method": "GET",
+    "url": "https://iamsiam.ai/_next/static/chunks/webpack-e07241449480e9b7.js",
+    "timestamp": "2025-08-06T15:24:07.082Z"
+  },
+  {
+    "type": "request",
+    "method": "GET",
+    "url": "https://iamsiam.ai/_next/static/chunks/4bd1b696-cf72ae8a39fa05aa.js",
+    "timestamp": "2025-08-06T15:24:07.082Z"
+  },
+  {
+    "type": "request",
+    "method": "GET",
+    "url": "https://iamsiam.ai/_next/static/chunks/964-babcf934fb90fad7.js",
+    "timestamp": "2025-08-06T15:24:07.082Z"
+  },
+  {
+    "type": "request",
+    "method": "GET",
+    "url": "https://iamsiam.ai/_next/static/chunks/main-app-69496ec153f69d22.js",
+    "timestamp": "2025-08-06T15:24:07.082Z"
+  },
+  {
+    "type": "request",
+    "method": "GET",
+    "url": "https://iamsiam.ai/_next/static/chunks/app/error-74c6f8d1036c943f.js",
+    "timestamp": "2025-08-06T15:24:07.082Z"
+  },
+  {
+    "type": "request",
+    "method": "GET",
+    "url": "https://iamsiam.ai/_next/static/chunks/549-5823080fb293c170.js",
+    "timestamp": "2025-08-06T15:24:07.082Z"
+  },
+  {
+    "type": "request",
+    "method": "GET",
+    "url": "https://iamsiam.ai/_next/static/chunks/app/page-9e0744fe950a49c1.js",
+    "timestamp": "2025-08-06T15:24:07.082Z"
+  },
+  {
+    "type": "response",
+    "status": 200,
+    "url": "https://iamsiam.ai/_next/static/css/d0180307dd2afd3d.css",
+    "timestamp": "2025-08-06T15:24:07.239Z"
+  },
+  {
+    "type": "response",
+    "status": 200,
+    "url": "https://iamsiam.ai/_next/static/css/e7fff1b5faebe85a.css",
+    "timestamp": "2025-08-06T15:24:07.244Z"
+  },
+  {
+    "type": "response",
+    "status": 200,
+    "url": "https://iamsiam.ai/_next/static/chunks/main-app-69496ec153f69d22.js",
+    "timestamp": "2025-08-06T15:24:07.303Z"
+  },
+  {
+    "type": "response",
+    "status": 200,
+    "url": "https://iamsiam.ai/_next/static/chunks/webpack-e07241449480e9b7.js",
+    "timestamp": "2025-08-06T15:24:07.303Z"
+  },
+  {
+    "type": "response",
+    "status": 200,
+    "url": "https://iamsiam.ai/_next/static/chunks/app/error-74c6f8d1036c943f.js",
+    "timestamp": "2025-08-06T15:24:07.511Z"
+  },
+  {
+    "type": "response",
+    "status": 200,
+    "url": "https://iamsiam.ai/_next/static/chunks/964-babcf934fb90fad7.js",
+    "timestamp": "2025-08-06T15:24:07.578Z"
+  },
+  {
+    "type": "response",
+    "status": 200,
+    "url": "https://iamsiam.ai/_next/static/chunks/4bd1b696-cf72ae8a39fa05aa.js",
+    "timestamp": "2025-08-06T15:24:07.691Z"
+  },
+  {
+    "type": "response",
+    "status": 200,
+    "url": "https://iamsiam.ai/_next/static/chunks/app/page-9e0744fe950a49c1.js",
+    "timestamp": "2025-08-06T15:24:07.729Z"
+  },
+  {
+    "type": "response",
+    "status": 200,
+    "url": "https://iamsiam.ai/_next/static/chunks/549-5823080fb293c170.js",
+    "timestamp": "2025-08-06T15:24:07.736Z"
+  }
+]

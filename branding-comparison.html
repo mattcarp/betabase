@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branding Comparison: SIAM → The Betabase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            color: #ffffff;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #3385ff, #8533ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 50px;
+            font-size: 1.1rem;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        @media (max-width: 900px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .version {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .version-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.3rem;
+            font-weight: 400;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .before .version-title {
+            border-left: 4px solid #ff5555;
+        }
+        
+        .after .version-title {
+            border-left: 4px solid #55ff55;
+        }
+        
+        .login-card {
+            background: rgba(30, 30, 30, 0.7);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 400px;
+            margin: 0 auto;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.6),
+                0 0 80px rgba(74, 158, 255, 0.1);
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+        }
+        
+        .brand-name {
+            font-size: 2rem;
+            font-weight: 200;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .brand-tagline {
+            color: #999;
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+        
+        .welcome-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .welcome-title {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 8px;
+        }
+        
+        .welcome-subtitle {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .form-section {
+            margin-top: 30px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.875rem;
+            color: #ccc;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3385ff;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(74, 158, 255, 0.2);
+        }
+        
+        .submit-button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px;
+            background: linear-gradient(90deg, #3385ff, #8533ff);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(51, 133, 255, 0.3);
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(51, 133, 255, 0.4);
+        }
+        
+        .footer-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            font-size: 0.75rem;
+            color: #666;
+            font-family: monospace;
+        }
+        
+        .changes-list {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        
+        .changes-list h3 {
+            margin-bottom: 15px;
+            color: #3385ff;
+            font-weight: 400;
+        }
+        
+        .changes-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .changes-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #bbb;
+        }
+        
+        .changes-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #55ff55;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Branding Comparison</h1>
+        <p class="subtitle">From SIAM to The Betabase - Visual Transformation</p>
+        
+        <div class="comparison">
+            <!-- BEFORE -->
+            <div class="version before">
+                <div class="version-title">🔴 BEFORE: SIAM</div>
+                <div class="login-card">
+                    <div class="logo-container">
+                        <!-- SIAM Logo -->
+                        <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                            <defs>
+                                <linearGradient id="siam-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3385ff;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#8533ff;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M20,20 h80 a20,20 0 0 1 20,20 v30 a20,20 0 0 1 -20,20 h-40 l-20,20 v-20 h-20 a20,20 0 0 1 -20,-20 v-30 a20,20 0 0 1 20,-20z" fill="url(#siam-grad)"/>
+                            <circle cx="45" cy="45" r="7" fill="white"/>
+                            <circle cx="75" cy="45" r="7" fill="white"/>
+                            <circle cx="60" cy="70" r="7" fill="white"/>
+                            <line x1="45" y1="45" x2="75" y2="45" stroke="white" stroke-width="4"/>
+                            <line x1="45" y1="45" x2="60" y2="70" stroke="white" stroke-width="4"/>
+                            <line x1="75" y1="45" x2="60" y2="70" stroke="white" stroke-width="4"/>
+                        </svg>
+                        <h2 class="brand-name">SIAM</h2>
+                        <p class="brand-tagline">Secure Intelligence Authentication Manager</p>
+                    </div>
+                    
+                    <div class="welcome-section">
+                        <h3 class="welcome-title">Welcome Back</h3>
+                        <p class="welcome-subtitle">Sign in to continue to your dashboard</p>
+                    </div>
+                    
+                    <div class="form-section">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" placeholder="Enter your email address" value="matt@example.com">
+                        <button class="submit-button">📧 Send Magic Link</button>
+                    </div>
+                    
+                    <div class="footer-info">
+                        v1.0.0 • Built Dec 2024<br>
+                        Eat • Me
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AFTER -->
+            <div class="version after">
+                <div class="version-title">🟢 AFTER: The Betabase</div>
+                <div class="login-card">
+                    <div class="logo-container">
+                        <!-- The Betabase Logo (same icon, new text) -->
+                        <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                            <defs>
+                                <linearGradient id="betabase-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3385ff;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#8533ff;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M20,20 h80 a20,20 0 0 1 20,20 v30 a20,20 0 0 1 -20,20 h-40 l-20,20 v-20 h-20 a20,20 0 0 1 -20,-20 v-30 a20,20 0 0 1 20,-20z" fill="url(#betabase-grad)"/>
+                            <circle cx="45" cy="45" r="7" fill="white"/>
+                            <circle cx="75" cy="45" r="7" fill="white"/>
+                            <circle cx="60" cy="70" r="7" fill="white"/>
+                            <line x1="45" y1="45" x2="75" y2="45" stroke="white" stroke-width="4"/>
+                            <line x1="45" y1="45" x2="60" y2="70" stroke="white" stroke-width="4"/>
+                            <line x1="75" y1="45" x2="60" y2="70" stroke="white" stroke-width="4"/>
+                        </svg>
+                        <h2 class="brand-name">The Betabase</h2>
+                        <p class="brand-tagline">yup. it's back.</p>
+                    </div>
+                    
+                    <div class="welcome-section">
+                        <h3 class="welcome-title">Welcome Back</h3>
+                        <p class="welcome-subtitle">Sign in to continue to your dashboard</p>
+                    </div>
+                    
+                    <div class="form-section">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" placeholder="Enter your email address" value="matt@example.com">
+                        <button class="submit-button">📧 Send Magic Link</button>
+                    </div>
+                    
+                    <div class="footer-info">
+                        v1.0.0 • Built Dec 2024<br>
+                        Eat • Me
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="changes-list">
+            <h3>🎨 Key Branding Changes</h3>
+            <ul>
+                <li>Brand name: "SIAM" → "The Betabase"</li>
+                <li>Tagline: "Secure Intelligence Authentication Manager" → "yup. it's back."</li>
+                <li>Chat placeholder: "Message SIAM..." → "Message The Betabase..."</li>
+                <li>System prompt: "You are SIAM" → "You are The Betabase"</li>
+                <li>Processing message: "SIAM is processing" → "The Betabase is processing"</li>
+                <li>Logo: Same visual identity (speech bubble with network nodes), new name</li>
+                <li>Color scheme: Maintained gradient (#3385ff → #8533ff)</li>
+                <li>Overall tone: Professional → Casual & playful</li>
+            </ul>
+        </div>
+        
+        <div class="changes-list" style="margin-top: 20px;">
+            <h3>📁 Files Modified</h3>
+            <ul>
+                <li>src/components/auth/MagicLinkLoginForm.tsx</li>
+                <li>src/components/ui/pages/ChatPage.tsx</li>
+                <li>src/components/ai/ai-sdk-chat-panel.tsx</li>
+                <li>src/components/ui/BetabaseLogo.tsx (new)</li>
+                <li>tests/helpers/auth.ts</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

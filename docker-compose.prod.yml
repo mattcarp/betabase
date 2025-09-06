@@ -1,0 +1,24 @@
+# 🏭 PRODUCTION OVERRIDE - Render-ready!
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+      cache_from:
+        - node:22-alpine
+    environment:
+      - NODE_ENV=production
+      - PORT=10000
+    volumes: [] # No volumes in production!
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2G
+        reservations:
+          cpus: "1"
+          memory: 1G

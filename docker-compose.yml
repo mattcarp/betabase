@@ -1,0 +1,95 @@
+version: "3.9"
+
+services:
+  # 🚀 Main application service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder # Use builder stage for dev (includes source)
+      args:
+        - NODE_ENV=development
+    container_name: siam-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - NEXT_PUBLIC_BYPASS_AUTH=true
+      # Copy these from your .env file
+      - NEXT_PUBLIC_COGNITO_USER_POOL_ID=${NEXT_PUBLIC_COGNITO_USER_POOL_ID}
+      - NEXT_PUBLIC_COGNITO_CLIENT_ID=${NEXT_PUBLIC_COGNITO_CLIENT_ID}
+      - NEXT_PUBLIC_COGNITO_REGION=${NEXT_PUBLIC_COGNITO_REGION}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - AWS_LAMBDA_FUNCTION_URL=${AWS_LAMBDA_FUNCTION_URL}
+      - MAILGUN_API_KEY=${MAILGUN_API_KEY}
+      - MAILGUN_DOMAIN=${MAILGUN_DOMAIN}
+      - MAILGUN_FROM_EMAIL=${MAILGUN_FROM_EMAIL}
+    volumes:
+      # Mount source code for hot reload in development
+      - ./src:/app/src:delegated
+      - ./app:/app/app:delegated
+      - ./public:/app/public:delegated
+      - ./styles:/app/styles:delegated
+      # Prevent node_modules from being overwritten
+      - /app/node_modules
+      - /app/.next
+    command: pnpm dev
+    networks:
+      - siam-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # 🏭 Production build service (for testing prod builds locally)
+  app-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner # Use full production build
+    container_name: siam-app-prod
+    ports:
+      - "10000:10000"
+    environment:
+      - NODE_ENV=production
+      - PORT=10000
+      - HOSTNAME=0.0.0.0
+      # Production environment variables
+      - NEXT_PUBLIC_COGNITO_USER_POOL_ID=${NEXT_PUBLIC_COGNITO_USER_POOL_ID}
+      - NEXT_PUBLIC_COGNITO_CLIENT_ID=${NEXT_PUBLIC_COGNITO_CLIENT_ID}
+      - NEXT_PUBLIC_COGNITO_REGION=${NEXT_PUBLIC_COGNITO_REGION}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - AWS_LAMBDA_FUNCTION_URL=${AWS_LAMBDA_FUNCTION_URL}
+      - MAILGUN_API_KEY=${MAILGUN_API_KEY}
+      - MAILGUN_DOMAIN=${MAILGUN_DOMAIN}
+      - MAILGUN_FROM_EMAIL=${MAILGUN_FROM_EMAIL}
+    networks:
+      - siam-network
+    profiles:
+      - production
+    restart: unless-stopped
+
+networks:
+  siam-network:
+    driver: bridge
+    name: siam-network
+
+# Volume definitions for persistent data
+volumes:
+  node_modules:
+  next_cache:

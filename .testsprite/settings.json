@@ -1,0 +1,43 @@
+{
+  "optimization": {
+    "parallelExecution": true,
+    "maxWorkers": 4,
+    "retryFailedTests": true,
+    "retryCount": 2,
+    "timeout": 30000,
+    "headless": true,
+    "slowMo": 0,
+    "video": "on-first-retry",
+    "trace": "on-first-retry",
+    "screenshot": "only-on-failure"
+  },
+  "security": {
+    "localAnalysis": true,
+    "encryptTransmission": true,
+    "sandboxExecution": true
+  },
+  "reporting": {
+    "format": ["json", "html", "console"],
+    "outputPath": "./testsprite_results",
+    "includeScreenshots": true,
+    "includeVideos": false,
+    "includeLogs": true
+  },
+  "caching": {
+    "enabled": true,
+    "maxAge": 3600000,
+    "clearOnStart": false
+  },
+  "ai": {
+    "autoGenerateTests": true,
+    "intelligentSelectors": true,
+    "selfHealing": true,
+    "smartWaitStrategies": true
+  },
+  "integration": {
+    "ide": "claude-code",
+    "apiVersion": "v1",
+    "serverType": "mcp",
+    "protocol": "stdio"
+  }
+}

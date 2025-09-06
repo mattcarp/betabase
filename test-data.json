@@ -1,0 +1,9 @@
+{
+  "test": "SIAM File Upload Test",
+  "aoma_features": ["Automated QC", "Linking workflows", "AMEBA integration"],
+  "usm_framework": {
+    "version": "3.0",
+    "components": ["Service Model", "Universal Standards", "Management Layer"]
+  },
+  "timestamp": "2025-08-20T11:23:00Z"
+}

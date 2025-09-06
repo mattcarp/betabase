@@ -1,0 +1,11 @@
+# Task ID: 36
+# Title: Setup Project Repository
+# Status: done
+# Dependencies: None
+# Priority: medium
+# Description: Initialize the project repository with version control and basic structure.
+# Details:
+Create a new Git repository for the SIAM project. Set up the initial directory structure to include folders for audio processing, transcription, topic analysis, UI, and tests. Add a README file with an overview of the project and initial setup instructions.
+
+# Test Strategy:
+Verify that the repository is accessible and the initial structure is correctly set up.

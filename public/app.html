@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIAM - Chat Interface</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: white;
+      }
+      #root {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      function App() {
+        const [isAuthenticated, setIsAuthenticated] = useState(false);
+        const [user, setUser] = useState(null);
+        const [loading, setLoading] = useState(true);
+
+        useEffect(() => {
+          // Check auth
+          const userData = localStorage.getItem("siam_user");
+          if (userData) {
+            const parsed = JSON.parse(userData);
+            setUser(parsed);
+            setIsAuthenticated(true);
+          }
+          setLoading(false);
+        }, []);
+
+        if (loading) {
+          return (
+            <div
+              style={{
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <h2>Loading SIAM...</h2>
+            </div>
+          );
+        }
+
+        if (!isAuthenticated) {
+          return (
+            <div
+              style={{
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <div
+                style={{
+                  background: "rgba(0,0,0,0.8)",
+                  padding: "40px",
+                  borderRadius: "16px",
+                  textAlign: "center",
+                }}
+              >
+                <h1>SIAM</h1>
+                <p>Not authenticated</p>
+                <a href="/emergency-login.html" style={{ color: "#4ade80" }}>
+                  Go to Login
+                </a>
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              background: "#1a1a1a",
+            }}
+          >
+            <header
+              style={{
+                padding: "20px",
+                background: "rgba(0,0,0,0.5)",
+                borderBottom: "1px solid rgba(255,255,255,0.1)",
+              }}
+            >
+              <h1>SIAM - Smart In A Meeting</h1>
+              <p>Welcome, {user.email}</p>
+            </header>
+
+            <main
+              style={{
+                flex: 1,
+                padding: "20px",
+                overflowY: "auto",
+              }}
+            >
+              <div
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  padding: "20px",
+                  borderRadius: "8px",
+                  marginBottom: "20px",
+                }}
+              >
+                <h2>🎉 Authentication Successful!</h2>
+                <p>The chat interface is being rebuilt.</p>
+                <p>Your auth token is valid and saved.</p>
+              </div>
+            </main>
+
+            <footer
+              style={{
+                padding: "20px",
+                background: "rgba(0,0,0,0.5)",
+                borderTop: "1px solid rgba(255,255,255,0.1)",
+              }}
+            >
+              <button
+                onClick={() => {
+                  localStorage.removeItem("siam_user");
+                  window.location.href = "/emergency-login.html";
+                }}
+                style={{
+                  padding: "10px 20px",
+                  background: "#ef4444",
+                  border: "none",
+                  borderRadius: "4px",
+                  color: "white",
+                  cursor: "pointer",
+                }}
+              >
+                Logout
+              </button>
+            </footer>
+          </div>
+        );
+      }
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>

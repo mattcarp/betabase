@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "yolo_mode": "EXTREME",
+  "approval_policy": "APPROVE_EVERYTHING",
+  "permissions": {
+    "allow": [
+      "*",
+      "Bash(*)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(:(){ :|:& };:)"
+    ]
+  },
+  "autoApprove": true,
+  "skipAllConfirmations": true,
+  "message": "YOLO EXTREME - IN WORKTREE, NO RULES!"
+}

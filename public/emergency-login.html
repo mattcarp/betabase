@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIAM - Login</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+      .login-box {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        width: 400px;
+        text-align: center;
+      }
+      h1 {
+        color: white;
+        margin: 0 0 10px 0;
+        font-size: 48px;
+        font-weight: 300;
+      }
+      p {
+        color: #aaa;
+        margin: 0 0 30px 0;
+      }
+      input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: white;
+        font-size: 16px;
+        box-sizing: border-box;
+      }
+      input::placeholder {
+        color: #888;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        margin: 20px 0;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      button:hover {
+        opacity: 0.9;
+      }
+      .version {
+        color: #666;
+        font-size: 12px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-box">
+      <h1>SIAM</h1>
+      <p>Welcome Back</p>
+      <p style="font-size: 14px">Sign in with your authorized email</p>
+      <form id="loginForm">
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="your.name@company.com"
+          required
+        />
+        <button type="submit">Send Magic Link</button>
+      </form>
+      <div
+        id="message"
+        style="color: #4ade80; margin: 10px 0; display: none"
+      ></div>
+      <div class="version">v0.1.0-dev | Emergency Static Login</div>
+    </div>
+
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = document.getElementById("email").value;
+          const messageDiv = document.getElementById("message");
+
+          try {
+            const response = await fetch("/api/auth/magic-link", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ action: "send", email: email }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+              messageDiv.style.color = "#4ade80";
+              messageDiv.textContent =
+                data.message || "Magic link sent! Check your email.";
+              messageDiv.style.display = "block";
+
+              // If dev code is provided, show it
+              if (data.devCode) {
+                messageDiv.innerHTML += "<br>Dev Code: " + data.devCode;
+              }
+
+              // Show verification form
+              if (data.success) {
+                messageDiv.innerHTML +=
+                  "<br><br>Enter verification code:<br>" +
+                  '<input type="text" id="verifyCode" maxlength="6" style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white;">' +
+                  '<button onclick="verifyCode()" style="margin-left: 10px; padding: 10px 20px; background: #4ade80; border: none; border-radius: 8px; color: black; cursor: pointer;">Verify</button>';
+              }
+            } else {
+              messageDiv.style.color = "#ef4444";
+              messageDiv.textContent =
+                data.error || "Failed to send magic link";
+              messageDiv.style.display = "block";
+            }
+          } catch (err) {
+            messageDiv.style.color = "#ef4444";
+            messageDiv.textContent = "Network error. Please try again.";
+            messageDiv.style.display = "block";
+          }
+        });
+
+      // Add verification function
+      window.verifyCode = async function () {
+        const code = document.getElementById("verifyCode").value;
+        const email = document.getElementById("email").value;
+        const messageDiv = document.getElementById("message");
+
+        try {
+          const response = await fetch("/api/auth/magic-link", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "verify",
+              email: email,
+              code: code,
+            }),
+          });
+
+          const data = await response.json();
+          if (data.success) {
+            // Save auth
+            localStorage.setItem(
+              "siam_user",
+              JSON.stringify({
+                email: email,
+                authToken: data.authToken || "verified-" + Date.now(),
+                verifiedAt: new Date().toISOString(),
+              }),
+            );
+
+            messageDiv.style.color = "#4ade80";
+            messageDiv.innerHTML =
+              "✅ Authentication successful! Redirecting...";
+
+            // Redirect to app
+            setTimeout(() => {
+              window.location.href = "/app.html";
+            }, 1500);
+          } else {
+            messageDiv.style.color = "#ef4444";
+            messageDiv.textContent = "Invalid code. Please try again.";
+          }
+        } catch (err) {
+          messageDiv.style.color = "#ef4444";
+          messageDiv.textContent = "Verification failed. Please try again.";
+        }
+      };
+    </script>
+  </body>
+</html>

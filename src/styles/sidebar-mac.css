@@ -1,0 +1,215 @@
+/* MAC Design System - Sidebar Specific Styles */
+
+/* Glassmorphism for sidebar */
+.mac-sidebar {
+  background: rgba(20, 20, 20, 0.7) !important;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced dropdown with MAC glassmorphism */
+.mac-dropdown {
+  background: rgba(30, 30, 30, 0.95) !important;
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(74, 158, 255, 0.1),
+    inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.mac-dropdown-item {
+  position: relative;
+  transition: all 150ms ease-out;
+}
+
+.mac-dropdown-item:hover {
+  background: rgba(74, 158, 255, 0.1);
+  color: var(--mac-text-primary);
+  padding-left: 12px;
+}
+
+.mac-dropdown-item:hover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--mac-primary-blue-400),
+    var(--mac-accent-purple-400)
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+/* Conversation item hover effects */
+.mac-conversation-item {
+  position: relative;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mac-conversation-item:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(74, 158, 255, 0.08),
+    transparent
+  );
+  transform: translateX(2px);
+}
+
+.mac-conversation-item.active {
+  background: linear-gradient(
+    90deg,
+    rgba(74, 158, 255, 0.15),
+    rgba(74, 158, 255, 0.05)
+  );
+  border-left: 2px solid var(--mac-primary-blue-400);
+  box-shadow: 
+    inset 0 0 20px rgba(74, 158, 255, 0.1),
+    0 0 40px rgba(74, 158, 255, 0.05);
+}
+
+/* Pinned indicator with glow */
+.mac-pin-indicator {
+  filter: drop-shadow(0 0 4px rgba(147, 51, 234, 0.5));
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(147, 51, 234, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(147, 51, 234, 0.8));
+  }
+}
+
+/* Search input with glow on focus */
+.mac-sidebar-search:focus {
+  box-shadow: 
+    0 0 0 1px rgba(74, 158, 255, 0.5),
+    0 0 20px rgba(74, 158, 255, 0.2),
+    inset 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+/* Scrollbar styling */
+.mac-sidebar-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mac-sidebar-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.mac-sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--mac-primary-blue-400),
+    var(--mac-accent-purple-400)
+  );
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(74, 158, 255, 0.3);
+}
+
+.mac-sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    var(--mac-primary-blue-500),
+    var(--mac-accent-purple-500)
+  );
+  box-shadow: 0 0 15px rgba(74, 158, 255, 0.5);
+}
+
+/* Storage indicator animation */
+.mac-storage-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.mac-storage-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: storage-shine 3s infinite;
+}
+
+@keyframes storage-shine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Action buttons with MAC hover effects */
+.mac-action-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 200ms ease-out;
+}
+
+.mac-action-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(74, 158, 255, 0.1);
+}
+
+.mac-action-button:hover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(74, 158, 255, 0.1),
+    transparent
+  );
+  animation: ripple 600ms ease-out;
+}
+
+@keyframes ripple {
+  from {
+    transform: scale(0);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Sidebar rail with gradient */
+.mac-sidebar-rail {
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(74, 158, 255, 0.1),
+    transparent
+  );
+  transition: all 150ms ease-out;
+}
+
+.mac-sidebar-rail:hover {
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(74, 158, 255, 0.2),
+    transparent
+  );
+  box-shadow: 0 0 10px rgba(74, 158, 255, 0.3);
+}

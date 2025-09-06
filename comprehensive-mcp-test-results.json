@@ -1,0 +1,55 @@
+{
+  "summary": {
+    "timestamp": "2025-08-06T15:50:15.505Z",
+    "totalTests": 6,
+    "screenshots": 3,
+    "errors": 0
+  },
+  "details": {
+    "timestamp": "2025-08-06T15:50:15.505Z",
+    "testSprite": {
+      "API Key Config": {
+        "status": "passed",
+        "details": "API key configured",
+        "timestamp": "2025-08-06T15:50:15.506Z"
+      },
+      "Test Generation": {
+        "status": "failed",
+        "details": "Exit code: 1",
+        "timestamp": "2025-08-06T15:50:17.530Z"
+      },
+      "Test Errors": {
+        "status": "failed",
+        "details": "error: unknown option '--url'\n...",
+        "timestamp": "2025-08-06T15:50:17.530Z"
+      }
+    },
+    "browserTools": {
+      "Server Start": {
+        "status": "failed",
+        "details": "HTTP 404",
+        "timestamp": "2025-08-06T15:50:20.573Z"
+      }
+    },
+    "playwright": {
+      "Page Load": {
+        "status": "passed",
+        "details": "SIAM application loaded",
+        "timestamp": "2025-08-06T15:50:25.320Z"
+      }
+    },
+    "authentication": {
+      "Deployment Status": {
+        "status": "pending",
+        "details": "Test user not in allowed list yet",
+        "timestamp": "2025-08-06T15:50:25.624Z"
+      }
+    },
+    "screenshots": [
+      "siam-initial-load.png",
+      "siam-deployment-pending.png",
+      "siam-final-state.png"
+    ],
+    "errors": []
+  }
+}

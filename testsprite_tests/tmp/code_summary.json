@@ -1,0 +1,166 @@
+{
+  "tech_stack": [
+    "TypeScript",
+    "React",
+    "Next.js 15",
+    "Tailwind CSS",
+    "shadcn/ui",
+    "Vercel AI SDK",
+    "OpenAI API",
+    "AWS Cognito",
+    "Supabase",
+    "Playwright",
+    "Framer Motion",
+    "React Hook Form",
+    "Zustand",
+    "TanStack Query"
+  ],
+  "features": [
+    {
+      "name": "Authentication System",
+      "description": "Magic link authentication using AWS Cognito with email-based verification codes",
+      "files": [
+        "src/components/auth/MagicLinkLoginForm.tsx",
+        "src/components/auth/LoginForm.tsx",
+        "src/services/cognitoAuth.ts",
+        "app/api/auth/magic-link/route.ts",
+        "app/api/auth/status/route.ts",
+        "app/api/auth/refresh/route.ts"
+      ]
+    },
+    {
+      "name": "AI Chat Interface",
+      "description": "Main chat interface with AI assistant using OpenAI and Vercel AI SDK",
+      "files": [
+        "src/components/ui/pages/ChatPage.tsx",
+        "src/components/ui/chat/ChatInterface.tsx",
+        "app/api/chat/route.ts",
+        "app/api/assistant/route.ts",
+        "app/api/assistant-v5/route.ts"
+      ]
+    },
+    {
+      "name": "GPT-5 Integration",
+      "description": "Experimental GPT-5 integration with custom responses API",
+      "files": [
+        "app/gpt5-chat/page.tsx",
+        "app/api/gpt5-responses/route.ts",
+        "app/api/gpt5-responses-proper/route.ts",
+        "src/hooks/useGPT5Responses.ts"
+      ]
+    },
+    {
+      "name": "AOMA Integration",
+      "description": "Sony Music AOMA system integration with MCP server communication",
+      "files": [
+        "app/api/aoma/route.ts",
+        "app/api/aoma-mcp/route.ts",
+        "app/api/aoma-stream/route.ts",
+        "app/api/aoma/health/route.ts",
+        "app/api/aoma/suggestions/route.ts"
+      ]
+    },
+    {
+      "name": "Document Upload",
+      "description": "File upload and processing with vector store integration",
+      "files": [
+        "src/components/DocumentUpload.tsx",
+        "app/api/upload/route.ts",
+        "app/api/vector-store/files/route.ts",
+        "app/api/vector-store/analyze/route.ts"
+      ]
+    },
+    {
+      "name": "Test Dashboard",
+      "description": "Comprehensive testing dashboard with Firecrawl integration for AUT analysis",
+      "files": [
+        "app/api/test/generate/route.ts",
+        "app/api/test/execute/route.ts",
+        "app/api/test/results/route.ts",
+        "app/api/test/analyze-aut/route.ts",
+        "app/api/test/firecrawl/route.ts",
+        "app/api/test/coverage/route.ts"
+      ]
+    },
+    {
+      "name": "UI Components Library",
+      "description": "Extensive UI component library using shadcn/ui and custom AI elements",
+      "files": [
+        "src/components/ui/*.tsx",
+        "src/components/ai-elements/*.tsx",
+        "src/components/ui/layout/EnhancedProfessionalLayout.tsx",
+        "src/components/ui/layout/SiamLayout.tsx"
+      ]
+    },
+    {
+      "name": "Settings Management",
+      "description": "User settings panel with theme, model selection, and preferences",
+      "files": [
+        "src/components/SettingsPanel.tsx",
+        "src/hooks/useSettings.ts",
+        "src/stores/settingsStore.ts"
+      ]
+    },
+    {
+      "name": "Real-time Features",
+      "description": "WebSocket-based real-time updates and live transcription",
+      "files": [
+        "src/components/LiveTranscription.tsx",
+        "src/components/ui/LiveInsights.tsx",
+        "src/components/AudioWaveform.tsx"
+      ]
+    },
+    {
+      "name": "System Monitoring",
+      "description": "Health monitoring and introspection system",
+      "files": [
+        "src/components/SystemHealthMonitor.tsx",
+        "app/api/health/route.ts",
+        "app/api/introspection/route.ts",
+        "app/api/deploy-check/route.ts"
+      ]
+    },
+    {
+      "name": "Data Visualization",
+      "description": "Charts, graphs, and visual data representations",
+      "files": [
+        "src/components/ui/DataVisualization.tsx",
+        "src/components/ui/HUDInterface.tsx",
+        "src/components/ui/CircularHUD.tsx",
+        "src/components/ui/RadialProgress.tsx"
+      ]
+    },
+    {
+      "name": "Error Handling",
+      "description": "Global error boundary and error tracking",
+      "files": [
+        "src/components/ErrorBoundary.tsx",
+        "src/utils/logger.ts"
+      ]
+    },
+    {
+      "name": "Search Features",
+      "description": "Search functionality with results display",
+      "files": [
+        "src/components/ui/SearchResultsResponse.tsx",
+        "src/components/ui/WisdomLibrary.tsx"
+      ]
+    },
+    {
+      "name": "Notification System",
+      "description": "Toast notifications and alerts using Sonner",
+      "files": [
+        "src/components/ui/sonner.tsx",
+        "src/components/ui/toast.tsx",
+        "src/hooks/useNotifications.tsx"
+      ]
+    },
+    {
+      "name": "Shortcuts System",
+      "description": "Global keyboard shortcuts management",
+      "files": [
+        "src/hooks/useGlobalShortcuts.ts"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+# 🔥 OPTIMIZED DOCKERIGNORE FOR FAST BUILDS
+
+# Dependencies (will be installed fresh in container)
+node_modules
+.pnpm-store
+
+# Build outputs (will be generated in container)
+.next
+.turbo
+dist
+build
+out
+
+# Symlinks that won't work in Docker (absolute paths break in container)
+mc-design-system*
+machine*
+.cursorrules*
+.windsurfrules*
+# Removed broken pattern with spaces
+.claude/agents
+.claude/commands
+.vscode/design-system.md
+
+# Development files
+.env.local
+.env.*.local
+.env.development
+
+# Version control
+.git
+.gitignore
+.github
+
+# IDE and editor files
+.vscode
+.idea
+.cursorrules
+.windsurfrules
+.claude
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage
+.nyc_output
+playwright-report
+test-results
+e2e
+cypress
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+__tests__
+__mocks__
+
+# Documentation
+*.md
+!README.md
+docs
+CHANGELOG
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Misc
+.dockerignore
+Dockerfile*
+docker-compose*
+.docker
+*.pem
+.vercel
+.netlify
+.railway
+
+# Temporary files
+*.tmp
+*.temp
+.cache
+tmp
+temp
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Package manager locks (we use pnpm)
+package-lock.json
+yarn.lock
+
+# Backup files
+*.backup
+*.bak
+*.old
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# Symlinks that break in Docker
+mc-design-system
+machine
+.claude/agents
+.claude/commands
+.vscode/design-system.md

@@ -1,0 +1,12 @@
+Test File for Curate Tab Upload
+================================
+
+This is a test document to verify the file upload functionality in the SIAM Curate tab.
+
+Content includes:
+- Knowledge base testing
+- Vector store integration validation
+- Upload/download workflow verification
+
+Timestamp: 2025-08-25T17:57:00Z
+Purpose: End-to-end testing of file upload system

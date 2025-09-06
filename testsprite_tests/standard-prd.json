@@ -1,0 +1,156 @@
+{
+  "product": {
+    "name": "SIAM - Smart In A Meeting",
+    "version": "1.0.0",
+    "description": "AI-powered meeting intelligence platform for real-time insights and actionable next steps"
+  },
+  "objectives": [
+    "Provide real-time meeting transcription and insights",
+    "Integrate AOMA knowledge base for contextual responses",
+    "Enable voice and text interaction modes",
+    "Support document upload and knowledge curation",
+    "Deliver actionable meeting summaries and next steps"
+  ],
+  "users": {
+    "primary": "Business professionals in meetings",
+    "secondary": "Team leaders and project managers",
+    "personas": [
+      {
+        "name": "Meeting Participant",
+        "needs": ["Real-time insights", "Meeting summaries", "Action items"],
+        "goals": [
+          "Stay focused in meetings",
+          "Capture important information",
+          "Follow up effectively"
+        ]
+      }
+    ]
+  },
+  "features": {
+    "authentication": {
+      "priority": "P0",
+      "description": "Dual email magic link authentication system",
+      "acceptance_criteria": [
+        "User can authenticate with primary email",
+        "User can authenticate with secondary email",
+        "Development mode bypasses authentication",
+        "Session persists across page refreshes"
+      ]
+    },
+    "chat_interface": {
+      "priority": "P0",
+      "description": "Main conversational interface with AOMA integration",
+      "acceptance_criteria": [
+        "User can send text messages",
+        "System provides contextual responses from AOMA",
+        "Chat history is displayed and scrollable",
+        "Response time is under 3 seconds",
+        "Error states are handled gracefully"
+      ]
+    },
+    "voice_interaction": {
+      "priority": "P0",
+      "description": "Voice recording and text-to-speech capabilities",
+      "acceptance_criteria": [
+        "User can record voice input",
+        "Voice is transcribed to text",
+        "Responses can be played as audio",
+        "ElevenLabs integration works correctly"
+      ]
+    },
+    "document_upload": {
+      "priority": "P0",
+      "description": "Upload and process documents for knowledge base",
+      "acceptance_criteria": [
+        "Upload button is visible and functional",
+        "Multiple file formats supported",
+        "Upload progress is displayed",
+        "Documents are processed into knowledge base"
+      ]
+    },
+    "knowledge_curation": {
+      "priority": "P0",
+      "description": "Curate and manage knowledge base content",
+      "acceptance_criteria": [
+        "Curate tab is accessible",
+        "User can view knowledge items",
+        "User can edit knowledge entries",
+        "Changes persist to database"
+      ]
+    },
+    "navigation": {
+      "priority": "P0",
+      "description": "Tab-based navigation system",
+      "acceptance_criteria": [
+        "All navigation tabs are visible",
+        "Tab switching works correctly",
+        "Active tab is highlighted",
+        "Navigation state persists"
+      ]
+    },
+    "live_insights": {
+      "priority": "P1",
+      "description": "Real-time meeting insights panel",
+      "acceptance_criteria": [
+        "Insights panel displays current context",
+        "Updates in real-time during conversations",
+        "Shows relevant AOMA knowledge"
+      ]
+    }
+  },
+  "technical_requirements": {
+    "frontend": {
+      "framework": "Next.js 15.4.2",
+      "language": "TypeScript",
+      "styling": "TailwindCSS",
+      "state": "React Hooks"
+    },
+    "backend": {
+      "api": "Next.js API Routes",
+      "mcp_servers": ["aoma-mesh", "elevenlabs", "testsprite"],
+      "external_services": ["Railway hosted AOMA", "ElevenLabs TTS"]
+    },
+    "performance": {
+      "page_load": "< 2 seconds",
+      "api_response": "< 3 seconds",
+      "uptime": "99.9%"
+    }
+  },
+  "test_scenarios": {
+    "critical_path": [
+      "User opens application",
+      "Application loads without errors",
+      "User sends a chat message",
+      "System responds with AOMA context",
+      "User switches between tabs",
+      "User uploads a document",
+      "User uses voice input",
+      "User receives audio response"
+    ],
+    "edge_cases": [
+      "Network disconnection during chat",
+      "Large file upload",
+      "Simultaneous voice and text input",
+      "Rapid tab switching",
+      "Session timeout handling"
+    ]
+  },
+  "success_metrics": {
+    "functional": [
+      "All P0 features operational",
+      "No critical errors in console",
+      "All API endpoints responding",
+      "MCP integrations connected"
+    ],
+    "performance": [
+      "Page loads in < 2 seconds",
+      "Chat responses in < 3 seconds",
+      "Voice transcription in < 2 seconds"
+    ],
+    "reliability": [
+      "No crashes during normal use",
+      "Graceful error handling",
+      "Data persistence across sessions"
+    ]
+  }
+}

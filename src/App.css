@@ -1,0 +1,364 @@
+/* Additional app-specific styles */
+.font-futuristic {
+  font-family: "Orbitron", monospace;
+}
+
+/* Custom neon color utilities */
+.text-neon-blue {
+  color: #3B82F6;
+}
+
+.text-neon-green {
+  color: #10B981;
+}
+
+.text-neon-purple {
+  color: #8b5cf6;
+}
+
+.text-neon-pink {
+  color: #ff006e;
+}
+
+.text-neon-cyan {
+  color: #06ffa5;
+}
+
+.bg-neon-blue {
+  background-color: #3B82F6;
+}
+
+.bg-neon-green {
+  background-color: #10B981;
+}
+
+.bg-neon-purple {
+  background-color: #8b5cf6;
+}
+
+.bg-neon-pink {
+  background-color: #ff006e;
+}
+
+.bg-neon-cyan {
+  background-color: #06ffa5;
+}
+
+.border-neon-blue {
+  border-color: #3B82F6;
+}
+
+.border-neon-green {
+  border-color: #10B981;
+}
+
+.border-neon-purple {
+  border-color: #8b5cf6;
+}
+
+.border-neon-pink {
+  border-color: #ff006e;
+}
+
+.border-neon-cyan {
+  border-color: #06ffa5;
+}
+
+/* Custom animations */
+
+.animate-pulse-neon {
+}
+
+/* Line clamp utility */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Scanning line animation */
+@keyframes scan {
+  0% {
+    transform: translateY(-100vh);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* Matrix-style digital rain effect */
+@keyframes matrix-rain {
+  0% {
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* Enhanced glow effects */
+.glow-emerald {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+.glow-violet {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+/* Futuristic button hover effects */
+.btn-futuristic {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-futuristic::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.btn-futuristic:hover::before {
+  left: 100%;
+}
+
+/* Global Recording Indicator Animations */
+
+@keyframes recording-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100vw);
+  }
+}
+
+@keyframes recording-glow {
+  0%,
+  100% {
+    filter: brightness(1) saturate(1);
+  }
+  50% {
+    filter: brightness(1.2) saturate(1.3);
+  }
+}
+
+.recording-indicator {
+  animation:
+    recording-pulse 2s ease-in-out infinite,
+    recording-glow 3s ease-in-out infinite;
+}
+
+.recording-sweep {
+  animation: recording-sweep 4s linear infinite;
+}
+
+/* Enhanced recording bar with multiple layers */
+.recording-bar-base {
+  background: linear-gradient(
+    90deg,
+    rgba(239, 68, 68, 0.9) 0%,
+    rgba(248, 113, 113, 1) 25%,
+    rgba(239, 68, 68, 1) 50%,
+    rgba(248, 113, 113, 1) 75%,
+    rgba(239, 68, 68, 0.9) 100%
+  );
+}
+
+.recording-bar-overlay {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 20%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.3) 80%,
+    transparent 100%
+  );
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .recording-indicator,
+  .recording-sweep,
+  .animate-pulse {
+    animation: none;
+  }
+
+  .recording-indicator {
+    background: #ef4444;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .recording-indicator {
+    background: #ff0000;
+    border: 1px solid #ffffff;
+  }
+}
+
+/* Jarvis/HUD Style Animations and Effects */
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-medium {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-fast {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* Jarvis Panel Styles */
+.jarvis-panel {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0)
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  transition: all 0.3s ease;
+}
+
+.jarvis-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+}
+
+.jarvis-glow {
+  border: 1px solid rgba(0, 255, 255, 0.6);
+  box-shadow:
+    0 0 20px rgba(0, 255, 255, 0.3),
+    inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.jarvis-glow-active {
+  border: 1px solid rgba(0, 255, 255, 0.8);
+  box-shadow:
+    0 0 30px rgba(0, 255, 255, 0.5),
+    0 0 60px rgba(0, 255, 255, 0.2),
+    inset 0 0 30px rgba(0, 255, 255, 0.2);
+}
+
+/* Circular Navigation */
+.circular-nav-item {
+  position: absolute;
+  transform-origin: center center;
+  transition: transform 0.5s cubic-bezier(0.5, 0, 0.35, 1);
+}
+
+/* HUD Grid Patterns */
+.hud-grid {
+  background-image:
+    linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Scan Line Effects */
+.scan-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-line::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 255, 0.8),
+    transparent
+  );
+  animation: scan-line 3s ease-in-out infinite;
+}
+
+/* Holographic Text Effects */
+.holographic-text {
+  color: #3B82F6;
+  text-shadow:
+    0 0 5px #3B82F6,
+    0 0 10px #3B82F6,
+    0 0 15px #3B82F6;
+}
+
+/* Custom Tailwind Extensions */
+.animate-rotate-slow {
+  animation: rotate-slow 20s linear infinite;
+}
+.animate-rotate-medium {
+  animation: rotate-medium 15s linear infinite;
+}
+.animate-rotate-fast {
+  animation: rotate-fast 8s linear infinite;
+}
+
+/* Audio Visualizer Enhancements */
+.audio-bar {
+  background: linear-gradient(to top, #3B82F6, #0080ff);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  transition: height 0.1s ease;
+}
+
+.audio-bar.active {
+  box-shadow:
+    0 0 20px rgba(0, 255, 255, 0.8),
+    0 0 40px rgba(0, 255, 255, 0.4);
+}

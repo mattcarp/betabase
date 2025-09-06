@@ -1,0 +1,22 @@
+# 🔥 DEVELOPMENT OVERRIDE - Maximum speed!
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: ""  # Explicitly remove the target
+      cache_from:
+        - node:22-alpine
+    environment:
+      - NEXT_PUBLIC_BYPASS_AUTH=true
+      - NEXT_PUBLIC_DEBUG_MODE=true
+      - NODE_OPTIONS=--max-old-space-size=4096
+    volumes:
+      # Mount EVERYTHING for hot reload
+      - .:/app:delegated
+      - /app/node_modules
+      - /app/.next
+    stdin_open: true
+    tty: true

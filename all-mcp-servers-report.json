@@ -1,0 +1,133 @@
+{
+  "summary": {
+    "timestamp": "2025-08-06T15:36:18.719Z",
+    "totalTests": 23
+  },
+  "details": {
+    "timestamp": "2025-08-06T15:36:18.719Z",
+    "mcpServers": {
+      "AOMA-Mesh Health": {
+        "status": "passed",
+        "details": "Status: healthy, Version: 2.0.0-railway_20250804-222415",
+        "timestamp": "2025-08-06T15:36:23.195Z"
+      },
+      "AOMA-openai": {
+        "status": "passed",
+        "details": "Latency: 3079ms",
+        "timestamp": "2025-08-06T15:36:23.195Z"
+      },
+      "AOMA-supabase": {
+        "status": "passed",
+        "details": "Latency: 124ms",
+        "timestamp": "2025-08-06T15:36:23.195Z"
+      },
+      "AOMA-vectorStore": {
+        "status": "passed",
+        "details": "Latency: N/Ams",
+        "timestamp": "2025-08-06T15:36:23.195Z"
+      },
+      "BrowserTools Health": {
+        "status": "failed",
+        "details": "HTTP 404",
+        "timestamp": "2025-08-06T15:36:23.199Z"
+      },
+      "TestSprite Config": {
+        "status": "passed",
+        "details": "API key configured",
+        "timestamp": "2025-08-06T15:36:23.199Z"
+      },
+      "TaskMaster Config": {
+        "status": "passed",
+        "details": "Environment configured",
+        "timestamp": "2025-08-06T15:36:23.199Z"
+      },
+      "Playwright MCP": {
+        "status": "passed",
+        "details": "Active and functional",
+        "timestamp": "2025-08-06T15:36:23.199Z"
+      },
+      "Direct AOMA Health": {
+        "status": "passed",
+        "details": "Status: 200, Data: healthy",
+        "timestamp": "2025-08-06T15:36:30.385Z"
+      },
+      "SIAM->AOMA Proxy": {
+        "status": "passed",
+        "details": "Status: 200, Data: healthy",
+        "timestamp": "2025-08-06T15:36:30.385Z"
+      },
+      "BrowserTools Connection": {
+        "status": "failed",
+        "details": "Status: 404",
+        "timestamp": "2025-08-06T15:36:30.385Z"
+      }
+    },
+    "authTests": {
+      "SIAM App Load": {
+        "status": "passed",
+        "details": "Application loaded successfully",
+        "timestamp": "2025-08-06T15:36:27.956Z"
+      },
+      "Email Input": {
+        "status": "passed",
+        "details": "Test email entered",
+        "timestamp": "2025-08-06T15:36:28.065Z"
+      },
+      "Password Field Detection": {
+        "status": "pending",
+        "details": "Field not shown (deployment updating)",
+        "timestamp": "2025-08-06T15:36:29.569Z"
+      },
+      "Magic Link Flow": {
+        "status": "passed",
+        "details": "Fallback working",
+        "timestamp": "2025-08-06T15:36:29.572Z"
+      }
+    },
+    "performanceTests": {
+      "Load Performance": {
+        "status": "passed",
+        "details": "DOM: 0ms, Load: 0ms, Response: 1ms",
+        "timestamp": "2025-08-06T15:36:30.387Z"
+      },
+      "Accessibility": {
+        "status": "passed",
+        "details": "No basic issues found",
+        "timestamp": "2025-08-06T15:36:30.389Z"
+      }
+    },
+    "networkAnalysis": {
+      "totalRequests": 26,
+      "mcpRequests": 2,
+      "mcpRequestDetails": [
+        {
+          "method": "POST",
+          "url": "https://iamsiam.ai/api/aoma-mcp",
+          "timestamp": "2025-08-06T15:36:30.213Z"
+        },
+        {
+          "status": 200,
+          "url": "https://iamsiam.ai/api/aoma-mcp",
+          "timestamp": "2025-08-06T15:36:30.378Z"
+        }
+      ],
+      "Network Monitoring": {
+        "status": "passed",
+        "details": "26 total, 2 MCP-related",
+        "timestamp": "2025-08-06T15:36:30.719Z"
+      }
+    },
+    "deploymentStatus": {
+      "Updated Deployment": {
+        "status": "failed",
+        "details": "Unexpected deployment state",
+        "timestamp": "2025-08-06T15:36:24.544Z"
+      },
+      "Runtime Check": {
+        "status": "pending",
+        "details": "Still updating",
+        "timestamp": "2025-08-06T15:36:27.990Z"
+      }
+    }
+  }
+}

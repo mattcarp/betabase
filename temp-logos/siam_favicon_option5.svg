@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3385ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8533ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Speech bubble -->
+  <path d="M20,20 h80 a20,20 0 0 1 20,20 v30 a20,20 0 0 1 -20,20 h-40 l-20,20 v-20 h-20 a20,20 0 0 1 -20,-20 v-30 a20,20 0 0 1 20,-20z"
+        fill="url(#grad2)" />
+  <!-- Network nodes -->
+  <circle cx="45" cy="45" r="7" fill="white"/>
+  <circle cx="75" cy="45" r="7" fill="white"/>
+  <circle cx="60" cy="70" r="7" fill="white"/>
+  <line x1="45" y1="45" x2="75" y2="45" stroke="white" stroke-width="4"/>
+  <line x1="45" y1="45" x2="60" y2="70" stroke="white" stroke-width="4"/>
+  <line x1="75" y1="45" x2="60" y2="70" stroke="white" stroke-width="4"/>
+</svg>

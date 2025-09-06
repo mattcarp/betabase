@@ -1,0 +1,70 @@
+# Render.com Deployment Configuration
+services:
+  - type: web
+    name: siam-app
+    runtime: docker
+    plan: starter # or standard for production
+
+    # Docker configuration
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+
+    # Health check
+    healthCheckPath: /api/health
+
+    # Environment
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: HOSTNAME
+        value: 0.0.0.0
+      - key: NEXT_TELEMETRY_DISABLED
+        value: 1
+
+      # Cognito (from dashboard)
+      - key: NEXT_PUBLIC_COGNITO_USER_POOL_ID
+        sync: false
+      - key: NEXT_PUBLIC_COGNITO_CLIENT_ID
+        sync: false
+      - key: NEXT_PUBLIC_COGNITO_REGION
+        value: us-east-2
+
+      # API Keys (from dashboard)
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PERPLEXITY_API_KEY
+        sync: false
+
+      # Supabase (from dashboard)
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+
+      # AWS Lambda (from dashboard)
+      - key: AWS_LAMBDA_FUNCTION_URL
+        sync: false
+
+      # Mailgun (from dashboard)
+      - key: MAILGUN_API_KEY
+        sync: false
+      - key: MAILGUN_DOMAIN
+        sync: false
+      - key: MAILGUN_FROM_EMAIL
+        sync: false
+
+    # Auto-deploy from main branch
+    autoDeploy: true
+    branch: main
+    
+    # Force redeploy - YOLO MODE ACTIVATED
+    # Last forced: 2025-08-23T07:09:00Z
+
+    # Build and start commands handled by Dockerfile
+    # No need to specify them here

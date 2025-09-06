@@ -1,0 +1,2 @@
+# Cursor IDE Rules
+# This file is required for deployment

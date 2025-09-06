@@ -1,0 +1,126 @@
+{
+  "summary": {
+    "total": 19,
+    "passed": 15,
+    "failed": 2,
+    "skipped": 2,
+    "passRate": 88.23529411764706
+  },
+  "timestamp": "2025-08-06T15:29:05.246Z",
+  "details": [
+    {
+      "name": "AOMA-Mesh MCP Server Health",
+      "status": "passed",
+      "details": "Status: healthy, Version: 2.0.0-railway_20250804-222415",
+      "timestamp": "2025-08-06T15:29:07.441Z"
+    },
+    {
+      "name": "Browser Tools Server Health",
+      "status": "failed",
+      "details": "HTTP 404",
+      "timestamp": "2025-08-06T15:29:07.449Z"
+    },
+    {
+      "name": "SIAM Application Load",
+      "status": "passed",
+      "details": "Page loaded successfully",
+      "timestamp": "2025-08-06T15:29:11.097Z"
+    },
+    {
+      "name": "Page Title Check",
+      "status": "passed",
+      "details": "Title: SIAM - Smart In a Meeting",
+      "timestamp": "2025-08-06T15:29:11.101Z"
+    },
+    {
+      "name": "Email Input Field",
+      "status": "passed",
+      "details": "1 elements found",
+      "timestamp": "2025-08-06T15:29:11.116Z"
+    },
+    {
+      "name": "Action Button",
+      "status": "passed",
+      "details": "2 elements found",
+      "timestamp": "2025-08-06T15:29:11.117Z"
+    },
+    {
+      "name": "Styled Text Elements",
+      "status": "passed",
+      "details": "1 elements found",
+      "timestamp": "2025-08-06T15:29:11.118Z"
+    },
+    {
+      "name": "Deployment Status",
+      "status": "skipped",
+      "details": "Still showing old allowed emails",
+      "timestamp": "2025-08-06T15:29:11.121Z"
+    },
+    {
+      "name": "Email Input",
+      "status": "passed",
+      "details": "Test email entered successfully",
+      "timestamp": "2025-08-06T15:29:11.135Z"
+    },
+    {
+      "name": "Password Field Detection",
+      "status": "skipped",
+      "details": "Password field not shown (deployment not updated)",
+      "timestamp": "2025-08-06T15:29:12.641Z"
+    },
+    {
+      "name": "Magic Link Flow",
+      "status": "passed",
+      "details": "Magic link button available",
+      "timestamp": "2025-08-06T15:29:12.644Z"
+    },
+    {
+      "name": "MCP API Proxy",
+      "status": "passed",
+      "details": "Status: 200",
+      "timestamp": "2025-08-06T15:29:12.845Z"
+    },
+    {
+      "name": "MCP API Data",
+      "status": "passed",
+      "details": "Received: {\"status\":\"healthy\",\"services\":{\"aomaProxy\":{\"status\":true},\"claudeMcp\":{\"status\":true}},\"metrics\":{\"uptime\":223739.589123637,\"timestamp\":\"2025-08-06T15:29:13.188Z\"}}",
+      "timestamp": "2025-08-06T15:29:12.845Z"
+    },
+    {
+      "name": "General API Health",
+      "status": "failed",
+      "details": "HTTP 404",
+      "timestamp": "2025-08-06T15:29:13.034Z"
+    },
+    {
+      "name": "Page Load Performance",
+      "status": "passed",
+      "details": "DOM: 0ms, Load: 0ms, Response: 1ms",
+      "timestamp": "2025-08-06T15:29:13.036Z"
+    },
+    {
+      "name": "Basic Accessibility",
+      "status": "passed",
+      "details": "No basic issues found",
+      "timestamp": "2025-08-06T15:29:13.039Z"
+    },
+    {
+      "name": "JavaScript Execution",
+      "status": "passed",
+      "details": "User Agent detected, LocalStorage: true, Fetch: true",
+      "timestamp": "2025-08-06T15:29:13.044Z"
+    },
+    {
+      "name": "Screenshot Capability",
+      "status": "passed",
+      "details": "Full page screenshot captured",
+      "timestamp": "2025-08-06T15:29:13.352Z"
+    },
+    {
+      "name": "Network Interception",
+      "status": "passed",
+      "details": "10 requests captured",
+      "timestamp": "2025-08-06T15:29:14.063Z"
+    }
+  ]
+}

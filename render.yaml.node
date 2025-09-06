@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: siam
+    env: node
+    plan: free
+    region: ohio
+    buildCommand: pnpm install --frozen-lockfile && pnpm run build
+    startCommand: pnpm run start:prod
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_ENABLE_MCP_INTEGRATION
+        value: true
+      - key: NEXT_PUBLIC_COGNITO_USER_POOL_ID
+        value: us-east-2_A0veaJRLo
+      - key: NEXT_PUBLIC_COGNITO_CLIENT_ID
+        value: 5c6ll37299p351to549lkg3o0d
+      - key: NEXT_PUBLIC_AWS_REGION
+        value: us-east-2
+      - key: MCP_LAMBDA_URL
+        value: https://luminous-dedication-production.up.railway.app
+      - key: NEXT_PUBLIC_AOMA_MESH_SERVER_URL
+        value: https://luminous-dedication-production.up.railway.app
+      - key: NEXT_PUBLIC_AOMA_MESH_RPC_URL
+        value: https://luminous-dedication-production.up.railway.app/rpc
+      - key: NEXT_PUBLIC_AOMA_MESH_HEALTH_URL
+        value: https://luminous-dedication-production.up.railway.app/health

@@ -1,0 +1,14 @@
+{
+  "name": "SIAM",
+  "short_name": "SIAM",
+  "icons": [
+    {
+      "src": "siam_favicon_option5.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#0a0a0a",
+  "background_color": "#0a0a0a",
+  "display": "standalone"
+}

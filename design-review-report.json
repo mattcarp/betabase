@@ -1,0 +1,283 @@
+{
+  "timestamp": "2025-08-27T10:16:58.952Z",
+  "url": "http://localhost:3000/",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "screenshots": [
+    "01-login-page-desktop.png",
+    "02-login-mobile.png",
+    "03-login-tablet.png",
+    "04-dashboard-page.png",
+    "04-chat-page.png",
+    "04-settings-page.png",
+    "04-test-page.png",
+    "04-hud-page.png",
+    "04-fix-page.png",
+    "04-curate-page.png"
+  ],
+  "gamingElements": {
+    "loginPage": [
+      "Potential neon color detected on BODY",
+      "Potential neon color detected on DIV",
+      "Potential neon color detected on DIV",
+      "Potential neon color detected on MAIN",
+      "Potential neon color detected on H1",
+      "Potential neon color detected on BUTTON",
+      "Potential neon color detected on svg",
+      "Potential neon color detected on path",
+      "Potential neon color detected on SPAN",
+      "Potential neon color detected on DIV",
+      "Potential neon color detected on SPAN",
+      "Potential neon color detected on SPAN",
+      "Potential neon color detected on BUTTON",
+      "Potential neon color detected on svg",
+      "Potential neon color detected on path",
+      "Potential neon color detected on path",
+      "Potential neon color detected on SPAN",
+      "Potential neon color detected on INPUT",
+      "Potential neon color detected on H4",
+      "Potential neon color detected on H4",
+      "Potential neon color detected on H4",
+      "Potential neon color detected on H2",
+      "Potential neon color detected on SELECT",
+      "Potential neon color detected on BUTTON",
+      "Potential neon color detected on svg",
+      "Potential neon color detected on path",
+      "Potential neon color detected on path",
+      "Potential neon color detected on SECTION",
+      "Potential neon color detected on SCRIPT",
+      "Potential neon color detected on SCRIPT",
+      "Potential neon color detected on SCRIPT",
+      "Potential neon color detected on SCRIPT",
+      "Potential neon color detected on SCRIPT",
+      "Potential neon color detected on SCRIPT",
+      "Potential neon color detected on SCRIPT",
+      "Potential neon color detected on SCRIPT",
+      "Potential neon color detected on SCRIPT",
+      "Potential neon color detected on SCRIPT",
+      "Potential neon color detected on SCRIPT",
+      "Potential neon color detected on NEXT-ROUTE-ANNOUNCER"
+    ],
+    "summary": "Gaming elements detected - review required"
+  },
+  "designSystemCompliance": {
+    "macClassesFound": 0,
+    "macClasses": [],
+    "colorTokens": [],
+    "nonCompliantElements": []
+  },
+  "performance": {
+    "firstContentfulPaint": 0,
+    "domContentLoaded": 0.09999999403953552,
+    "loadComplete": 0
+  },
+  "console": {
+    "messages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "log",
+        "text": "[COGNITO DEBUG] Configuration: {USER_POOL_ID: us-east-2_A0veaJRLo, CLIENT_ID: 5c6ll37299p351to549lkg3o0d, processEnvClientId: undefined, processEnvPoolId: undefined, usingFallback: true}"
+      },
+      {
+        "type": "log",
+        "text": "🚀 SIAM version v0.1.0-dev - Built 08/04/2025, 04:45:00 AM GMT+2\nBut seriously, "
+      },
+      {
+        "type": "log",
+        "text": "[SECURE AUTH] Starting secure authentication check..."
+      },
+      {
+        "type": "log",
+        "text": "[ENV DEBUG] NEXT_PUBLIC_BYPASS_AUTH: true bypassAuth: true"
+      },
+      {
+        "type": "log",
+        "text": "[BYPASS AUTH] Authentication bypassed via environment variable"
+      },
+      {
+        "type": "log",
+        "text": "🔧 MCP Client: Using http://localhost:3333"
+      },
+      {
+        "type": "warning",
+        "text": "Supabase credentials not found. Test dashboard will use mock data."
+      },
+      {
+        "type": "log",
+        "text": "🎯 Using AOMA-MESH-MCP orchestrated endpoint for model: gpt-5"
+      },
+      {
+        "type": "log",
+        "text": "🎯 Chat configuration: {selectedModel: gpt-5, currentApiEndpoint: /api/chat, shouldUseGPT5: true, apiProp: }"
+      },
+      {
+        "type": "log",
+        "text": "🎯 Using AOMA-MESH-MCP orchestrated endpoint for model: gpt-5"
+      },
+      {
+        "type": "log",
+        "text": "🎯 Chat configuration: {selectedModel: gpt-5, currentApiEndpoint: /api/chat, shouldUseGPT5: true, apiProp: }"
+      },
+      {
+        "type": "log",
+        "text": "🎯 Ensuring AOMA orchestration for endpoint: /api/chat"
+      },
+      {
+        "type": "log",
+        "text": "🎯 Ensuring AOMA orchestration for endpoint: /api/chat"
+      },
+      {
+        "type": "log",
+        "text": "🚫 Intercepting endpoint that bypasses AOMA: /api/chat-vercel"
+      },
+      {
+        "type": "log",
+        "text": "✅ Redirecting to AOMA-orchestrated endpoint: /api/chat"
+      },
+      {
+        "type": "log",
+        "text": "🎯 Using AOMA-MESH-MCP orchestrated endpoint for model: gpt-5"
+      },
+      {
+        "type": "log",
+        "text": "🎯 Chat configuration: {selectedModel: gpt-5, currentApiEndpoint: /api/chat, shouldUseGPT5: true, apiProp: }"
+      },
+      {
+        "type": "log",
+        "text": "🎯 Using AOMA-MESH-MCP orchestrated endpoint for model: gpt-5"
+      },
+      {
+        "type": "log",
+        "text": "🎯 Chat configuration: {selectedModel: gpt-5, currentApiEndpoint: /api/chat, shouldUseGPT5: true, apiProp: }"
+      },
+      {
+        "type": "log",
+        "text": "🚫 Intercepting endpoint that bypasses AOMA: /api/chat-vercel"
+      },
+      {
+        "type": "log",
+        "text": "✅ Redirecting to AOMA-orchestrated endpoint: /api/chat"
+      },
+      {
+        "type": "log",
+        "text": "🚫 Intercepting endpoint that bypasses AOMA: /api/chat-vercel"
+      },
+      {
+        "type": "log",
+        "text": "✅ Redirecting to AOMA-orchestrated endpoint: /api/chat"
+      },
+      {
+        "type": "log",
+        "text": "🚫 Intercepting endpoint that bypasses AOMA: /api/chat-vercel"
+      },
+      {
+        "type": "log",
+        "text": "✅ Redirecting to AOMA-orchestrated endpoint: /api/chat"
+      },
+      {
+        "type": "log",
+        "text": "[Fast Refresh] rebuilding"
+      },
+      {
+        "type": "log",
+        "text": "[Fast Refresh] done in 731ms"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      },
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      },
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      },
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      },
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      },
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      },
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      },
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      }
+    ],
+    "errors": [],
+    "errorCount": 0
+  },
+  "network": {
+    "requestCount": 62,
+    "responses": [
+      {
+        "url": "http://localhost:3000/dashboard",
+        "status": 404
+      },
+      {
+        "url": "http://localhost:3000/chat",
+        "status": 404
+      },
+      {
+        "url": "http://localhost:3000/settings",
+        "status": 404
+      },
+      {
+        "url": "http://localhost:3000/test",
+        "status": 404
+      },
+      {
+        "url": "http://localhost:3000/hud",
+        "status": 404
+      },
+      {
+        "url": "http://localhost:3000/fix",
+        "status": 404
+      },
+      {
+        "url": "http://localhost:3000/curate",
+        "status": 404
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+# Test dockerignore with proper space handling
+mc-design-system*
+.cursorrules*
+.windsurfrules*
+machine
+*.md
+!README.md
