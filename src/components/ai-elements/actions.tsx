@@ -2,14 +2,14 @@
 
 import React from "react";
 import type { ComponentProps, ReactNode } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+} from "../ui/tooltip";
+import { cn } from "../../lib/utils";
 
 export interface ActionItem {
   label: string;

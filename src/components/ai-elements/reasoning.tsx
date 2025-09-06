@@ -5,11 +5,11 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from "../ui/collapsible";
 import { Sparkles, ChevronDownIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 import { createContext, memo, useContext, useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import { Response } from "./response";
 
 type ReasoningContextValue = {

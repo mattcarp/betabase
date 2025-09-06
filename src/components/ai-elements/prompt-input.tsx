@@ -7,16 +7,16 @@ import type {
   KeyboardEventHandler,
 } from "react";
 import { Children } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+} from "../ui/select";
+import { Textarea } from "../ui/textarea";
+import { cn } from "../../lib/utils";
 import type { ChatStatus } from "ai";
 
 export type PromptInputProps = HTMLAttributes<HTMLFormElement>;

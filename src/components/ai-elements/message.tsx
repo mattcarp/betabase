@@ -1,6 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import type { ComponentProps, HTMLAttributes } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import type { UIMessage } from "ai";
 
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {

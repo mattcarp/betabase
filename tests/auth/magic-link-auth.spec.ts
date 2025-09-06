@@ -2,7 +2,8 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Magic Link Authentication", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    // Use baseURL from config or environment variable
+    await page.goto("/");
   });
 
   test("should display login form with magic link as default", async ({
@@ -231,7 +232,8 @@ test.describe("Magic Link Authentication", () => {
 
 test.describe("Authentication Error Handling", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    // Use baseURL from config or environment variable
+    await page.goto("/");
   });
 
   test("should handle AWS Cognito errors gracefully", async ({ page }) => {

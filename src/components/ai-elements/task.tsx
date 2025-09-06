@@ -1,12 +1,12 @@
 "use client";
 
 import type { ComponentProps } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
-} from "@/components/ui/collapsible";
+} from "../ui/collapsible";
 import {
   ChevronDownIcon,
   CheckIcon,
