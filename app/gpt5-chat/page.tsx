@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useGPT5Responses } from '@/hooks/useGPT5Responses';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
+import { useGPT5Responses } from '../../src/hooks/useGPT5Responses';
+import { Button } from '../../src/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../../src/components/ui/card';
+import { Textarea } from '../../src/components/ui/textarea';
+import { ScrollArea } from '../../src/components/ui/scroll-area';
+import { Badge } from '../../src/components/ui/badge';
 import { Loader2, Send, Trash2, Settings } from 'lucide-react';
 
 export default function GPT5Chat() {
