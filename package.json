@@ -19,7 +19,12 @@
     "test:e2e:debug": "playwright test --debug",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "deploy": "./scripts/deploy-bulletproof.sh",
+    "deploy:quick": "./scripts/deploy-bulletproof.sh --skip-tests",
+    "deploy:local-first": "npm run test:e2e:local && npm run deploy",
+    "deploy:status": "./scripts/deployment-status.sh",
+    "deploy:monitor": "./scripts/deploy-with-monitoring.sh"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.8",
