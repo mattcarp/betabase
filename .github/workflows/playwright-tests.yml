@@ -1,0 +1,240 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run regression tests every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Test suite to run'
+        required: true
+        default: 'critical'
+        type: choice
+        options:
+          - smoke
+          - critical
+          - regression
+          - all
+
+jobs:
+  test-matrix:
+    name: Test - ${{ matrix.suite }} on ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [smoke, critical]
+        browser: [chromium, firefox]
+        include:
+          # Add webkit only for smoke tests
+          - suite: smoke
+            browser: webkit
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      
+      - name: Run ${{ matrix.suite }} tests on ${{ matrix.browser }}
+        run: |
+          npx playwright test \
+            --config=tests/config/production.config.ts \
+            --project=${{ matrix.browser }} \
+            --grep @${{ matrix.suite }}
+        env:
+          PROD_URL: https://siam.onrender.com
+          CI: true
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.suite }}-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 7
+      
+      - name: Upload test videos
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-videos-${{ matrix.suite }}-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 3
+
+  full-suite-on-main:
+    name: Full Test Suite - Main Branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    # ALWAYS run full suite on push to main
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install ALL Playwright browsers
+        run: npx playwright install --with-deps
+      
+      - name: Run COMPLETE test suite
+        run: |
+          echo "🧪 Running FULL test suite on main branch push"
+          npm run test -- --reporter=json,html
+        env:
+          PROD_URL: https://siam.onrender.com
+          CI: true
+      
+      - name: Upload full test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-suite-report-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+            test-results.json
+          retention-days: 30
+      
+      - name: Comment deployment readiness
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('test-results.json', 'utf8'));
+            const passed = results.failed === 0;
+            
+            const status = passed 
+              ? '✅ **DEPLOYMENT READY** - All tests passed!'
+              : '🚫 **DEPLOYMENT BLOCKED** - Tests failed!';
+            
+            const body = `## Main Branch Test Results
+            ${status}
+            
+            📊 **Test Statistics:**
+            - Total Tests: ${results.total || 0}
+            - Passed: ${results.passed || 0}
+            - Failed: ${results.failed || 0}
+            - Skipped: ${results.skipped || 0}
+            - Duration: ${results.duration || 'N/A'}ms
+            
+            🔗 [View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            ${!passed ? '⚠️ **Action Required:** Fix failing tests before deployment!' : '🚀 Safe to deploy!'}`;
+            
+            // Create issue if tests fail on main
+            if (!passed) {
+              github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `🚨 Main branch tests failing - ${new Date().toISOString().split('T')[0]}`,
+                body: body,
+                labels: ['bug', 'critical', 'testing']
+              });
+            }
+  
+  regression-tests:
+    name: Scheduled Regression Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    # Run on schedule or manual trigger
+    if: github.event_name == 'schedule' || github.event.inputs.test_suite == 'regression' || github.event.inputs.test_suite == 'all'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: Run full regression suite
+        run: npm run test:prod:regression
+        env:
+          PROD_URL: https://siam.onrender.com
+          CI: true
+      
+      - name: Generate HTML report
+        if: always()
+        run: npx playwright show-report --port 9323 &
+      
+      - name: Upload regression report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-report
+          path: playwright-report/
+          retention-days: 14
+      
+      - name: Comment on PR with results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const testResults = fs.existsSync('test-results.json') 
+              ? JSON.parse(fs.readFileSync('test-results.json', 'utf8'))
+              : { passed: 0, failed: 0, skipped: 0 };
+            
+            const status = testResults.failed > 0 ? '❌ Failed' : '✅ Passed';
+            const comment = `## Playwright Test Results ${status}
+            
+            - **Passed:** ${testResults.passed}
+            - **Failed:** ${testResults.failed}
+            - **Skipped:** ${testResults.skipped}
+            
+            [View full report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  notify-failure:
+    name: Notify on Failure
+    runs-on: ubuntu-latest
+    needs: [test-matrix, regression-tests]
+    if: failure() && (github.ref == 'refs/heads/main' || github.event_name == 'schedule')
+    
+    steps:
+      - name: Send notification
+        run: |
+          echo "Tests failed! Sending notification..."
+          # Add your notification logic here (Slack, email, etc.)
+          # Example: curl -X POST $SLACK_WEBHOOK -d '{"text":"Playwright tests failed on main branch!"}'

@@ -1,0 +1,37 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Pre-push hook - Run tests before pushing to remote
+# This prevents broken code from reaching the remote repository
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+echo "🔍 Pre-push checks for branch: $BRANCH"
+
+# Only run full checks on main/develop branches
+if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "develop" ]; then
+    echo "📋 Running critical tests before push to $BRANCH..."
+    
+    # Run critical tests (5 minutes)
+    npm run test:local:critical
+    
+    if [ $? -ne 0 ]; then
+        echo "❌ Critical tests failed! Push aborted."
+        echo "Fix the failing tests or use --no-verify to bypass (not recommended)"
+        exit 1
+    fi
+    
+    echo "✅ All critical tests passed!"
+else
+    # For feature branches, just run smoke tests (2 minutes)
+    echo "🚀 Running smoke tests for feature branch..."
+    npm run test:local:smoke
+    
+    if [ $? -ne 0 ]; then
+        echo "⚠️  Smoke tests failed!"
+        echo "Consider fixing before pushing, or use --no-verify to bypass"
+        exit 1
+    fi
+fi
+
+echo "✅ Pre-push checks completed successfully!"
