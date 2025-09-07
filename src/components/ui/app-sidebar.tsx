@@ -40,10 +40,10 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Actions } from "@/components/ai-elements/actions";
-import { InlineCitation } from "@/components/ai-elements/inline-citation";
-import { Source } from "@/components/ai-elements/source";
-import { Suggestion } from "@/components/ai-elements/suggestion";
+import { Actions } from "../ai-elements/actions";
+import { InlineCitation } from "../ai-elements/inline-citation";
+import { Source } from "../ai-elements/source";
+import { Suggestion } from "../ai-elements/suggestion";
 import {
   DropdownMenu,
   DropdownMenuContent,

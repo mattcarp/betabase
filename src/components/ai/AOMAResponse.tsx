@@ -16,14 +16,14 @@ import {
   InlineCitationSource,
   InlineCitationText,
   InlineCitationQuote,
-} from "@/components/ai-elements/inline-citation";
-import { Response } from "@/components/ai-elements/response";
+} from "../ai-elements/inline-citation";
+import { Response } from "../ai-elements/response";
 import { 
   Sources, 
   SourcesTrigger, 
   SourcesContent, 
   Source 
-} from "@/components/ai-elements/source";
+} from "../ai-elements/source";
 
 interface AOMASource {
   title?: string;
