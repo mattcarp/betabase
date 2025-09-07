@@ -793,9 +793,9 @@ Last updated: August 26, 2025
 
 ## 🚀 Render MCP Server Integration
 
-**HIGHLY RECOMMENDED**: We've integrated the Render MCP server for seamless deployment management directly from Claude Code.
+**CONFIGURED**: The Render MCP server is integrated for seamless deployment management directly from Claude Code.
 
-### Quick Setup:
+### Quick Setup
 
 ```bash
 # Run the automated setup script

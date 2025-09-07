@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "../src/components/ui/button";
-import { Input } from "../src/components/ui/input";
+import { Button } from "../../src/components/ui/button";
+import { Input } from "../../src/components/ui/input";
 import {
   Form,
   FormControl,
@@ -10,7 +10,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../src/components/ui/form";
+} from "../../src/components/ui/form";
 import { useForm } from "react-hook-form";
 
 export default function MACComponentsTestPage() {

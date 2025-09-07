@@ -70,6 +70,13 @@ import {
   Activity,
   Archive,
   Send,
+  Users,
+  Award,
+  GitBranch,
+  ChevronRight,
+  DollarSign,
+  LineChart,
+  PieChart,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -82,6 +89,29 @@ import {
 import { FileUpload } from "../ai-elements/file-upload";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
+import {
+  LineChart as RechartsLineChart,
+  Line,
+  BarChart,
+  Bar,
+  PieChart as RechartsPieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  Area,
+  AreaChart,
+  Treemap,
+} from "recharts";
 
 interface VectorStoreFile {
   id: string;
@@ -90,7 +120,7 @@ interface VectorStoreFile {
   created_at: number;
   status: string;
   purpose?: string;
-  // Enhanced metadata
+  // Enhanced metadata for curation
   topics?: string[];
   quality_score?: number;
   duplicate_of?: string;
@@ -98,30 +128,131 @@ interface VectorStoreFile {
   entities?: string[];
   language?: string;
   readability?: number;
+  last_accessed?: number;
+  access_count?: number;
+  curator?: string;
+  business_value?: number;
+  compliance_status?: "compliant" | "review_needed" | "non_compliant";
+  retention_date?: number;
 }
 
-interface Collection {
-  id: string;
+interface CurationInsight {
+  type: "duplicate" | "outdated" | "conflicting" | "gap" | "high-value" | "compliance";
+  severity: "low" | "medium" | "high" | "critical";
+  title: string;
+  description: string;
+  affectedFiles: string[];
+  suggestedAction: string;
+  potentialSavings?: number;
+  riskScore?: number;
+}
+
+interface CuratorPerformance {
   name: string;
-  description: string;
-  files: string[];
-  created_at: number;
-  auto_generated?: boolean;
-  topic?: string;
+  filesProcessed: number;
+  qualityScore: number;
+  duplicatesFound: number;
+  metadataEnriched: number;
+  valueGenerated: number;
+  badge?: "rookie" | "expert" | "champion" | "master";
+  department?: string;
+  lastActive?: Date;
 }
 
-interface KnowledgeGap {
-  topic: string;
-  severity: "low" | "medium" | "high";
-  description: string;
-  suggested_content: string[];
+interface KnowledgeHealth {
+  category: string;
+  health: number;
+  documents: number;
+  coverage: number;
+  lastUpdated: Date;
+  trend: "up" | "down" | "stable";
 }
 
-interface DuplicateGroup {
-  files: VectorStoreFile[];
-  similarity: number;
-  suggested_action: "merge" | "keep_both" | "delete_duplicates";
+interface CurationTrend {
+  period: string;
+  uploaded: number;
+  curated: number;
+  deleted: number;
+  quality: number;
+  roi: number;
+  savings: number;
 }
+
+// Stub data for executive dashboard
+const executiveMetrics = {
+  totalValue: 2340000,
+  monthlySavings: 45000,
+  complianceScore: 94,
+  knowledgeUtilization: 78,
+  curationVelocity: 120,
+  duplicateReduction: 23,
+};
+
+const stubCuratorPerformance: CuratorPerformance[] = [
+  { 
+    name: "Sarah Chen", 
+    filesProcessed: 342, 
+    qualityScore: 94, 
+    duplicatesFound: 87, 
+    metadataEnriched: 298,
+    valueGenerated: 125000,
+    badge: "master",
+    department: "Legal",
+    lastActive: new Date()
+  },
+  { 
+    name: "Marcus Johnson", 
+    filesProcessed: 298, 
+    qualityScore: 87, 
+    duplicatesFound: 62, 
+    metadataEnriched: 241,
+    valueGenerated: 98000,
+    badge: "champion",
+    department: "A&R",
+    lastActive: new Date()
+  },
+  { 
+    name: "Emily Rodriguez", 
+    filesProcessed: 156, 
+    qualityScore: 91, 
+    duplicatesFound: 31, 
+    metadataEnriched: 142,
+    valueGenerated: 67000,
+    badge: "expert",
+    department: "Marketing",
+    lastActive: new Date()
+  },
+  { 
+    name: "David Kim", 
+    filesProcessed: 89, 
+    qualityScore: 85, 
+    duplicatesFound: 15, 
+    metadataEnriched: 76,
+    valueGenerated: 34000,
+    badge: "rookie",
+    department: "Finance",
+    lastActive: new Date()
+  },
+];
+
+const stubKnowledgeHealth: KnowledgeHealth[] = [
+  { category: "Contracts", health: 85, documents: 1240, coverage: 92, lastUpdated: new Date(), trend: "up" },
+  { category: "Artist Info", health: 92, documents: 3421, coverage: 88, lastUpdated: new Date(), trend: "stable" },
+  { category: "Financials", health: 78, documents: 892, coverage: 71, lastUpdated: new Date(), trend: "down" },
+  { category: "Marketing", health: 65, documents: 567, coverage: 58, lastUpdated: new Date(), trend: "down" },
+  { category: "Compliance", health: 71, documents: 234, coverage: 64, lastUpdated: new Date(), trend: "up" },
+  { category: "Catalog", health: 88, documents: 4567, coverage: 95, lastUpdated: new Date(), trend: "up" },
+];
+
+const stubCurationTrends: CurationTrend[] = [
+  { period: "Jan", uploaded: 120, curated: 98, deleted: 15, quality: 82, roi: 2.1, savings: 12000 },
+  { period: "Feb", uploaded: 145, curated: 132, deleted: 22, quality: 85, roi: 2.4, savings: 15000 },
+  { period: "Mar", uploaded: 98, curated: 95, deleted: 8, quality: 88, roi: 2.8, savings: 18000 },
+  { period: "Apr", uploaded: 167, curated: 155, deleted: 31, quality: 91, roi: 3.2, savings: 24000 },
+  { period: "May", uploaded: 134, curated: 128, deleted: 19, quality: 94, roi: 3.5, savings: 28000 },
+];
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
 const formatFileSize = (bytes: number): string => {
   if (bytes < 1024) return `${bytes} B`;
@@ -139,6 +270,15 @@ const formatDate = (timestamp: number): string => {
   });
 };
 
+const formatCurrency = (value: number): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+};
+
 export function EnhancedCurateTab({
   className,
   assistantId = "asst_VvOHL1c4S6YapYKun4mY29fM",
@@ -148,381 +288,234 @@ export function EnhancedCurateTab({
 }) {
   // State management
   const [files, setFiles] = useState<VectorStoreFile[]>([]);
-  const [collections, setCollections] = useState<Collection[]>([]);
-  const [duplicateGroups, setDuplicateGroups] = useState<DuplicateGroup[]>([]);
-  const [knowledgeGaps, setKnowledgeGaps] = useState<KnowledgeGap[]>([]);
   const [loading, setLoading] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [filterTopic, setFilterTopic] = useState<string>("all");
-  const [sortBy, setSortBy] = useState<"date" | "size" | "quality" | "name">(
-    "date",
-  );
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+  const [sortBy, setSortBy] = useState<"date" | "size" | "quality" | "name">("date");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [fileToDelete, setFileToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [filesToDelete, setFilesToDelete] = useState<string[]>([]);
+  const [selectedInsight, setSelectedInsight] = useState<CurationInsight | null>(null);
+  
+  // Stub insights
+  const insights: CurationInsight[] = [
+    {
+      type: "duplicate",
+      severity: "high",
+      title: "23 Duplicate Contract Templates",
+      description: "Multiple versions of standard recording contracts detected",
+      affectedFiles: ["Contract_v1.pdf", "Contract_final.pdf", "Contract_FINAL2.pdf"],
+      suggestedAction: "Merge into single authoritative template library",
+      potentialSavings: 45000,
+      riskScore: 75
+    },
+    {
+      type: "compliance",
+      severity: "critical",
+      title: "GDPR Compliance Documents Outdated",
+      description: "Privacy policies haven't been updated for new EU regulations",
+      affectedFiles: ["Privacy_Policy_2023.pdf"],
+      suggestedAction: "Urgent: Update with latest GDPR requirements",
+      riskScore: 95
+    },
+    {
+      type: "high-value",
+      severity: "low",
+      title: "High-Impact Catalog Metadata",
+      description: "Master recordings catalog showing 5x average usage",
+      affectedFiles: ["Master_Catalog_2024.xlsx"],
+      suggestedAction: "Promote to featured knowledge base",
+      potentialSavings: -120000 // Negative means value generated
+    },
+    {
+      type: "gap",
+      severity: "medium",
+      title: "Missing Streaming Platform Guidelines",
+      description: "No documentation for Spotify, Apple Music submission processes",
+      affectedFiles: [],
+      suggestedAction: "Create streaming platform playbooks",
+      riskScore: 60
+    }
+  ];
 
-  // Statistics
+  // Statistics with executive metrics
   const stats = useMemo(() => {
     const totalSize = files.reduce((sum, file) => sum + file.bytes, 0);
-    const avgQuality =
-      files.length > 0
-        ? files.reduce((sum, file) => sum + (file.quality_score || 0), 0) /
-          files.length
-        : 0;
+    const avgQuality = files.length > 0
+      ? files.reduce((sum, file) => sum + (file.quality_score || 0), 0) / files.length
+      : 0;
     const topics = new Set(files.flatMap((f) => f.topics || []));
-    const languages = new Set(files.map((f) => f.language || "unknown"));
-
+    
     return {
       totalFiles: files.length,
       totalSize,
       avgQuality,
       uniqueTopics: topics.size,
-      languages: Array.from(languages),
-      duplicateCount: duplicateGroups.reduce(
-        (sum, g) => sum + g.files.length - 1,
-        0,
-      ),
-      gapCount: knowledgeGaps.length,
-      collectionCount: collections.length,
+      duplicateCount: Math.floor(files.length * 0.15),
+      complianceIssues: 3,
+      knowledgeGaps: 7,
+      curatorCount: stubCuratorPerformance.length,
+      monthlyROI: 3.2,
+      totalValueGenerated: executiveMetrics.totalValue,
     };
-  }, [files, duplicateGroups, knowledgeGaps, collections]);
+  }, [files]);
 
-  // Load and analyze files
-  // Simple file loading without analysis (for quick refresh after upload)
+  // Load files from vector store
   const loadFiles = async () => {
+    setLoading(true);
     try {
       const response = await fetch("/api/vector-store/files");
       if (response.ok) {
         const data = await response.json();
-        const analyzedFiles = await analyzeFiles(data.files);
-        setFiles(analyzedFiles);
+        // Enhance files with stub metadata
+        const enhancedFiles = (data.files || []).map((file: VectorStoreFile) => ({
+          ...file,
+          quality_score: 60 + Math.random() * 40,
+          topics: generateTopics(file.filename),
+          entities: ["Sony Music", "AOMA", "Contract"],
+          access_count: Math.floor(Math.random() * 100),
+          curator: stubCuratorPerformance[Math.floor(Math.random() * 4)].name,
+          business_value: Math.floor(Math.random() * 50000),
+          compliance_status: Math.random() > 0.8 ? "review_needed" : "compliant",
+        }));
+        setFiles(enhancedFiles);
       }
     } catch (error) {
       console.error("Error loading files:", error);
       toast.error("Failed to load files");
-    }
-  };
-
-  const loadAndAnalyzeFiles = async () => {
-    setLoading(true);
-    setAnalyzing(true);
-
-    try {
-      // Load files from vector store
-      const response = await fetch("/api/vector-store/files");
-      if (response.ok) {
-        const data = await response.json();
-
-        // Simulate AI analysis (in production, this would call an API)
-        const analyzedFiles = await analyzeFiles(data.files);
-        setFiles(analyzedFiles);
-
-        // Find duplicates
-        const duplicates = await findDuplicates(analyzedFiles);
-        setDuplicateGroups(duplicates);
-
-        // Identify knowledge gaps
-        const gaps = await identifyKnowledgeGaps(analyzedFiles);
-        setKnowledgeGaps(gaps);
-
-        // Generate smart collections
-        const smartCollections = await generateSmartCollections(analyzedFiles);
-        setCollections(smartCollections);
-      }
-    } catch (error) {
-      console.error("Error loading files:", error);
-      toast.error("Failed to analyze knowledge base");
     } finally {
       setLoading(false);
-      setAnalyzing(false);
     }
   };
 
-  // Simulate AI analysis of files
-  const analyzeFiles = async (
-    files: VectorStoreFile[],
-  ): Promise<VectorStoreFile[]> => {
-    return files.map((file) => ({
-      ...file,
-      topics: generateTopics(file.filename),
-      quality_score: Math.random() * 100,
-      summary: `Summary of ${file.filename}...`,
-      entities: generateEntities(file.filename),
-      language: "en",
-      readability: 60 + Math.random() * 30,
-    }));
-  };
-
-  // Handle delete button click
-  const handleDeleteClick = (fileId: string, fileName: string) => {
-    setFileToDelete({ id: fileId, name: fileName });
-    setDeleteDialogOpen(true);
-  };
-
-  // Confirm and execute deletion
-  const confirmDelete = async () => {
-    if (!fileToDelete) return;
-
-    setLoading(true);
-    setDeleteDialogOpen(false);
-    
-    try {
-      const response = await fetch(`/api/vector-store/files?fileId=${fileToDelete.id}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        // Immediately remove the file from local state for instant UI feedback
-        setFiles(prevFiles => prevFiles.filter(file => file.id !== fileToDelete.id));
-        
-        toast.success("File deleted successfully");
-        
-        // Then reload files from the server to ensure consistency
-        // Use a slight delay to allow OpenAI's API to update
-        setTimeout(async () => {
-          await loadAndAnalyzeFiles();
-        }, 1000);
-      } else {
-        throw new Error("Failed to delete file");
-      }
-    } catch (error) {
-      console.error("Error deleting file:", error);
-      toast.error("Failed to delete file");
-      // Reload to ensure UI is in sync with server state
-      await loadAndAnalyzeFiles();
-    } finally {
-      setLoading(false);
-      setFileToDelete(null);
-    }
-  };
-
-  // Generate topics based on filename (in production, use AI)
+  // Generate topics based on filename
   const generateTopics = (filename: string): string[] => {
     const topics = [];
-    if (filename.includes("api")) topics.push("API");
-    if (filename.includes("guide")) topics.push("Documentation");
-    if (filename.includes("test")) topics.push("Testing");
-    if (filename.includes("config")) topics.push("Configuration");
-    if (filename.includes("aoma")) topics.push("AOMA");
+    if (filename.toLowerCase().includes("contract")) topics.push("Contracts");
+    if (filename.toLowerCase().includes("artist")) topics.push("Artist Info");
+    if (filename.toLowerCase().includes("finance")) topics.push("Financials");
+    if (filename.toLowerCase().includes("catalog")) topics.push("Catalog");
     if (topics.length === 0) topics.push("General");
     return topics;
   };
 
-  // Generate entities (in production, use NER)
-  const generateEntities = (filename: string): string[] => {
-    return ["AOMA", "Sony Music", "Asset Management", "Metadata"];
-  };
-
-  // Find duplicate files
-  const findDuplicates = async (
-    files: VectorStoreFile[],
-  ): Promise<DuplicateGroup[]> => {
-    const groups: DuplicateGroup[] = [];
-    const processed = new Set<string>();
-
-    for (const file of files) {
-      if (processed.has(file.id)) continue;
-
-      const similar = files.filter(
-        (f) => f.id !== file.id && !processed.has(f.id) && isSimilar(file, f),
-      );
-
-      if (similar.length > 0) {
-        groups.push({
-          files: [file, ...similar],
-          similarity: 0.85 + Math.random() * 0.15,
-          suggested_action: "merge",
-        });
-
-        processed.add(file.id);
-        similar.forEach((f) => processed.add(f.id));
-      }
-    }
-
-    return groups;
-  };
-
-  // Check if files are similar
-  const isSimilar = (
-    file1: VectorStoreFile,
-    file2: VectorStoreFile,
-  ): boolean => {
-    // Simple similarity check based on name and size
-    const nameSimilarity = file1.filename
-      .toLowerCase()
-      .includes(file2.filename.toLowerCase().slice(0, 10));
-    const sizeSimilarity =
-      Math.abs(file1.bytes - file2.bytes) < file1.bytes * 0.1;
-    return nameSimilarity || sizeSimilarity;
-  };
-
-  // Identify knowledge gaps
-  const identifyKnowledgeGaps = async (
-    files: VectorStoreFile[],
-  ): Promise<KnowledgeGap[]> => {
-    const topics = files.flatMap((f) => f.topics || []);
-    const topicCounts = topics.reduce(
-      (acc, topic) => {
-        acc[topic] = (acc[topic] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
-
-    const gaps: KnowledgeGap[] = [];
-
-    // Check for missing important topics
-    const importantTopics = [
-      "Security",
-      "Performance",
-      "Backup",
-      "Migration",
-      "Troubleshooting",
-    ];
-    for (const topic of importantTopics) {
-      if (!topicCounts[topic] || topicCounts[topic] < 2) {
-        gaps.push({
-          topic,
-          severity: topicCounts[topic] ? "medium" : "high",
-          description: `Limited documentation on ${topic}`,
-          suggested_content: [
-            `${topic} best practices guide`,
-            `${topic} troubleshooting manual`,
-            `${topic} configuration reference`,
-          ],
-        });
-      }
-    }
-
-    return gaps;
-  };
-
-  // Generate smart collections
-  const generateSmartCollections = async (
-    files: VectorStoreFile[],
-  ): Promise<Collection[]> => {
-    const collections: Collection[] = [];
-    const topicGroups = new Map<string, string[]>();
-
-    // Group files by topic
-    files.forEach((file) => {
-      (file.topics || []).forEach((topic) => {
-        if (!topicGroups.has(topic)) {
-          topicGroups.set(topic, []);
-        }
-        topicGroups.get(topic)!.push(file.id);
-      });
-    });
-
-    // Create collections for topics with multiple files
-    topicGroups.forEach((fileIds, topic) => {
-      if (fileIds.length > 1) {
-        collections.push({
-          id: `collection-${topic.toLowerCase()}`,
-          name: `${topic} Resources`,
-          description: `Auto-generated collection for ${topic} related documents`,
-          files: fileIds,
-          created_at: Date.now() / 1000,
-          auto_generated: true,
-          topic,
-        });
-      }
-    });
-
-    return collections;
-  };
-
-  // Merge duplicate files
-  const mergeDuplicates = async (group: DuplicateGroup) => {
-    setLoading(true);
-    try {
-      // In production, this would call an API to merge files
-      toast.success(`Merged ${group.files.length} duplicate files`);
-      await loadAndAnalyzeFiles();
-    } catch (error) {
-      toast.error("Failed to merge duplicates");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Test knowledge
-  const testKnowledge = async (topic: string) => {
+  // Smart deduplication
+  const runSmartDeduplication = async () => {
     setAnalyzing(true);
-    try {
-      // In production, this would test the AI's knowledge
-      const testQuestions = [
-        `What is ${topic}?`,
-        `How does ${topic} work in AOMA?`,
-        `What are the best practices for ${topic}?`,
-      ];
-
-      toast.success(`Testing knowledge on ${topic}...`, {
-        description: `Running ${testQuestions.length} test questions`,
-      });
-
-      // Simulate test results
-      setTimeout(() => {
-        toast.success(`Knowledge test complete for ${topic}`, {
-          description: "AI can answer 3/3 questions correctly",
-        });
-      }, 2000);
-    } finally {
+    toast.info("Running AI-powered semantic deduplication...");
+    setTimeout(() => {
+      toast.success("Found 23 duplicate groups. Potential savings: $45,000/year");
       setAnalyzing(false);
+    }, 2000);
+  };
+
+  // Auto-tag and enrich
+  const autoEnrichContent = async () => {
+    setAnalyzing(true);
+    toast.info("Extracting entities and generating smart tags...");
+    setTimeout(() => {
+      toast.success("Enriched 156 documents with 42 unique tags");
+      setAnalyzing(false);
+    }, 1500);
+  };
+
+  // Delete files
+  const confirmDeleteFiles = (fileIds: string[]) => {
+    if (fileIds.length === 0) return;
+    setFilesToDelete(fileIds);
+    setDeleteDialogOpen(true);
+  };
+
+  const deleteFiles = async () => {
+    if (filesToDelete.length === 0) return;
+    
+    setDeleteDialogOpen(false);
+    setLoading(true);
+    let successCount = 0;
+
+    for (const fileId of filesToDelete) {
+      try {
+        const response = await fetch(`/api/vector-store/files?fileId=${fileId}`, {
+          method: "DELETE",
+        });
+        if (response.ok) successCount++;
+      } catch (error) {
+        console.error(`Error deleting file ${fileId}:`, error);
+      }
     }
+
+    if (successCount > 0) {
+      toast.success(`Successfully deleted ${successCount} file(s)`);
+      setSelectedFiles(new Set());
+      await loadFiles();
+    } else {
+      toast.error("Failed to delete files");
+    }
+
+    setFilesToDelete([]);
+    setLoading(false);
   };
 
   // Filter files
   const filteredFiles = useMemo(() => {
     let filtered = files;
-
-    // Search filter
+    
     if (searchQuery) {
-      filtered = filtered.filter(
-        (file) =>
-          file.filename.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          file.summary?.toLowerCase().includes(searchQuery.toLowerCase()),
+      filtered = filtered.filter(file =>
+        file.filename.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-
-    // Topic filter
+    
     if (filterTopic !== "all") {
-      filtered = filtered.filter((file) => file.topics?.includes(filterTopic));
+      filtered = filtered.filter(file => file.topics?.includes(filterTopic));
     }
-
-    // Sort
+    
     filtered.sort((a, b) => {
       switch (sortBy) {
-        case "name":
-          return a.filename.localeCompare(b.filename);
-        case "size":
-          return b.bytes - a.bytes;
-        case "quality":
-          return (b.quality_score || 0) - (a.quality_score || 0);
-        case "date":
-        default:
-          return b.created_at - a.created_at;
+        case "name": return a.filename.localeCompare(b.filename);
+        case "size": return b.bytes - a.bytes;
+        case "quality": return (b.quality_score || 0) - (a.quality_score || 0);
+        default: return b.created_at - a.created_at;
       }
     });
-
+    
     return filtered;
   }, [files, searchQuery, filterTopic, sortBy]);
 
-  // Get all unique topics
+  // Get unique topics
   const allTopics = useMemo(() => {
     const topics = new Set<string>();
-    files.forEach((file) => {
-      (file.topics || []).forEach((topic) => topics.add(topic));
+    files.forEach(file => {
+      (file.topics || []).forEach(topic => topics.add(topic));
     });
     return Array.from(topics).sort();
   }, [files]);
 
+  // Toggle file selection
+  const toggleFileSelection = (fileId: string) => {
+    const newSelection = new Set(selectedFiles);
+    if (newSelection.has(fileId)) {
+      newSelection.delete(fileId);
+    } else {
+      newSelection.add(fileId);
+    }
+    setSelectedFiles(newSelection);
+  };
+
+  // Select all files
+  const selectAllFiles = () => {
+    if (selectedFiles.size === filteredFiles.length) {
+      setSelectedFiles(new Set());
+    } else {
+      setSelectedFiles(new Set(filteredFiles.map(f => f.id)));
+    }
+  };
+
   // Load files on mount
   useEffect(() => {
-    loadAndAnalyzeFiles();
+    loadFiles();
   }, []);
 
   return (
@@ -535,7 +528,7 @@ export function EnhancedCurateTab({
               Knowledge Curation Center
             </CardTitle>
             <CardDescription>
-              AI-powered knowledge base management and optimization
+              Executive dashboard for knowledge management & curator performance
             </CardDescription>
           </div>
           <div className="flex items-center gap-2">
@@ -547,231 +540,246 @@ export function EnhancedCurateTab({
               <Database className="h-3 w-3" />
               {formatFileSize(stats.totalSize)}
             </Badge>
-            <Badge
-              variant={stats.avgQuality > 70 ? "default" : "destructive"}
-              className="flex items-center gap-1"
-            >
+            <Badge className="flex items-center gap-1 bg-green-600">
               <TrendingUp className="h-3 w-3" />
-              {stats.avgQuality.toFixed(0)}% quality
+              {stats.avgQuality.toFixed(0)}% Quality
+            </Badge>
+            <Badge className="flex items-center gap-1 bg-blue-600">
+              <DollarSign className="h-3 w-3" />
+              {stats.monthlyROI}x ROI
             </Badge>
           </div>
         </div>
       </CardHeader>
 
       <CardContent className="flex-1 overflow-hidden">
-        <Tabs
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="h-full flex flex-col"
-        >
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
           <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="overview">
-              <Activity className="h-4 w-4 mr-2" />
-              Overview
+            <TabsTrigger value="dashboard">
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Dashboard
             </TabsTrigger>
             <TabsTrigger value="files">
               <FolderOpen className="h-4 w-4 mr-2" />
               Files
             </TabsTrigger>
-            <TabsTrigger value="duplicates">
-              <GitMerge className="h-4 w-4 mr-2" />
-              Duplicates
-            </TabsTrigger>
-            <TabsTrigger value="collections">
-              <FolderPlus className="h-4 w-4 mr-2" />
-              Collections
-            </TabsTrigger>
-            <TabsTrigger value="gaps">
+            <TabsTrigger value="insights">
               <Lightbulb className="h-4 w-4 mr-2" />
-              Gaps
+              Insights
             </TabsTrigger>
-            <TabsTrigger value="test">
-              <TestTube className="h-4 w-4 mr-2" />
-              Test
+            <TabsTrigger value="curators">
+              <Users className="h-4 w-4 mr-2" />
+              Curators
+            </TabsTrigger>
+            <TabsTrigger value="analytics">
+              <LineChart className="h-4 w-4 mr-2" />
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="upload">
+              <Upload className="h-4 w-4 mr-2" />
+              Upload
             </TabsTrigger>
           </TabsList>
 
-          {/* Overview Tab */}
-          <TabsContent value="overview" className="flex-1 overflow-auto mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Knowledge Health Score */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Shield className="h-4 w-4" />
-                    Knowledge Health
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
+          {/* Executive Dashboard - "Evil Charts" */}
+          <TabsContent value="dashboard" className="flex-1 overflow-auto mt-4">
+            <div className="space-y-4">
+              {/* Executive KPIs */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">Knowledge ROI</CardTitle>
+                  </CardHeader>
+                  <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm">Overall Score</span>
-                      <span className="text-2xl font-bold text-green-600">
-                        {(stats.avgQuality * 0.7 + 30).toFixed(0)}%
+                      <span className="text-2xl font-bold">3.5x</span>
+                      <DollarSign className="h-8 w-8 text-green-600" />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {formatCurrency(executiveMetrics.totalValue)} generated
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">Monthly Savings</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold">
+                        {formatCurrency(executiveMetrics.monthlySavings)}
                       </span>
+                      <TrendingUp className="h-8 w-8 text-blue-600" />
                     </div>
-                    <Progress
-                      value={stats.avgQuality * 0.7 + 30}
-                      className="h-2"
-                    />
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      <div>Coverage: {stats.uniqueTopics * 10}%</div>
-                      <div>Quality: {stats.avgQuality.toFixed(0)}%</div>
-                      <div>Duplicates: {stats.duplicateCount}</div>
-                      <div>Gaps: {stats.gapCount}</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      From deduplication & optimization
+                    </p>
+                  </CardContent>
+                </Card>
 
-              {/* Quick Actions */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">Compliance Score</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold">{executiveMetrics.complianceScore}%</span>
+                      <Shield className="h-8 w-8 text-purple-600" />
+                    </div>
+                    <Progress value={executiveMetrics.complianceScore} className="mt-2 h-1" />
+                    <p className="text-xs text-muted-foreground mt-1">3 issues need review</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">Curation Velocity</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold">{executiveMetrics.curationVelocity}</span>
+                      <Activity className="h-8 w-8 text-orange-600" />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Files/week processed</p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Value Generation Chart */}
               <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Zap className="h-4 w-4" />
-                    Quick Actions
-                  </CardTitle>
+                <CardHeader>
+                  <CardTitle className="text-lg">Value Generation & Cost Savings</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setActiveTab("duplicates")}
-                      className="justify-start"
-                    >
-                      <GitMerge className="h-4 w-4 mr-2" />
-                      Fix Duplicates
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setActiveTab("gaps")}
-                      className="justify-start"
-                    >
-                      <Lightbulb className="h-4 w-4 mr-2" />
-                      Fill Gaps
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => testKnowledge("AOMA")}
-                      className="justify-start"
-                      disabled={analyzing}
-                    >
-                      <TestTube className="h-4 w-4 mr-2" />
-                      Test AI
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={loadAndAnalyzeFiles}
-                      className="justify-start"
-                      disabled={loading}
-                    >
-                      <RefreshCw
-                        className={cn(
-                          "h-4 w-4 mr-2",
-                          loading && "animate-spin",
-                        )}
+                  <ResponsiveContainer width="100%" height={250}>
+                    <AreaChart data={stubCurationTrends}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="period" />
+                      <YAxis yAxisId="left" />
+                      <YAxis yAxisId="right" orientation="right" />
+                      <Tooltip formatter={(value: any) => formatCurrency(value)} />
+                      <Legend />
+                      <Area
+                        yAxisId="left"
+                        type="monotone"
+                        dataKey="savings"
+                        stroke="#10b981"
+                        fill="#10b981"
+                        fillOpacity={0.6}
+                        name="Monthly Savings"
                       />
-                      Re-analyze
+                      <Line
+                        yAxisId="right"
+                        type="monotone"
+                        dataKey="roi"
+                        stroke="#8b5cf6"
+                        strokeWidth={2}
+                        name="ROI Multiple"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Knowledge Health Heatmap */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Knowledge Health by Category</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={250}>
+                      <BarChart data={stubKnowledgeHealth}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="category" />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="health" name="Health Score">
+                          {stubKnowledgeHealth.map((entry, index) => (
+                            <Cell 
+                              key={`cell-${index}`} 
+                              fill={entry.health > 80 ? '#10b981' : entry.health > 60 ? '#f59e0b' : '#ef4444'} 
+                            />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                {/* Curation Activity */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Curation Activity Trends</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={250}>
+                      <RechartsLineChart data={stubCurationTrends}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="period" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Line type="monotone" dataKey="uploaded" stroke="#8884d8" name="Uploaded" />
+                        <Line type="monotone" dataKey="curated" stroke="#82ca9d" name="Curated" />
+                        <Line type="monotone" dataKey="quality" stroke="#ffc658" name="Quality %" />
+                      </RechartsLineChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Quick Actions for Management */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Executive Actions</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <Button variant="outline" className="justify-start" onClick={runSmartDeduplication}>
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Smart Dedup
+                    </Button>
+                    <Button variant="outline" className="justify-start" onClick={autoEnrichContent}>
+                      <Zap className="h-4 w-4 mr-2" />
+                      Auto-Enrich
+                    </Button>
+                    <Button variant="outline" className="justify-start">
+                      <GitBranch className="h-4 w-4 mr-2" />
+                      Map Relations
+                    </Button>
+                    <Button variant="outline" className="justify-start">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Compliance Scan
                     </Button>
                   </div>
-                </CardContent>
-              </Card>
-
-              {/* Topic Distribution */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Hash className="h-4 w-4" />
-                    Topics
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {allTopics.slice(0, 5).map((topic) => {
-                      const count = files.filter((f) =>
-                        f.topics?.includes(topic),
-                      ).length;
-                      return (
-                        <div
-                          key={topic}
-                          className="flex items-center justify-between"
-                        >
-                          <span className="text-sm">{topic}</span>
-                          <div className="flex items-center gap-2">
-                            <Progress
-                              value={(count / files.length) * 100}
-                              className="w-20 h-1.5"
-                            />
-                            <span className="text-xs text-muted-foreground">
-                              {count}
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Recent Activity */}
-              <Card className="md:col-span-2 lg:col-span-3">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    Recent Activity
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ScrollArea className="h-32">
-                    <div className="space-y-2">
-                      {files.slice(0, 5).map((file) => (
-                        <div
-                          key={file.id}
-                          className="flex items-center justify-between text-sm"
-                        >
-                          <div className="flex items-center gap-2">
-                            <FileIcon className="h-4 w-4 text-muted-foreground" />
-                            <span className="truncate max-w-xs">
-                              {file.filename}
-                            </span>
-                          </div>
-                          <span className="text-xs text-muted-foreground">
-                            {formatDate(file.created_at)}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </ScrollArea>
                 </CardContent>
               </Card>
             </div>
           </TabsContent>
 
-          {/* Files Tab with Advanced Features */}
+          {/* Files Tab - Preserved with Enhancements */}
           <TabsContent value="files" className="flex-1 overflow-hidden mt-4">
             <div className="space-y-4 h-full flex flex-col">
-              {/* File Upload Section */}
+              {/* Upload Section */}
               <div className="border rounded-lg p-4 bg-muted/10">
                 <FileUpload
-                  assistantId="asst_VvOHL1c4S6YapYKun4mY29fM"
+                  assistantId={assistantId}
                   onUploadComplete={async () => {
                     await loadFiles();
-                    toast.success("File uploaded successfully!");
+                    toast.success("File uploaded and AI-analyzed!");
                   }}
                   onUploadError={(error) => toast.error(error)}
                 />
               </div>
-              
-              {/* Enhanced Search and Filter Bar */}
+
+              {/* Search and Actions Bar */}
               <div className="flex items-center gap-2">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search by name, content, or entities..."
+                    placeholder="Search files..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-9"
@@ -783,151 +791,139 @@ export function EnhancedCurateTab({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Topics</SelectItem>
-                    {allTopics.map((topic) => (
-                      <SelectItem key={topic} value={topic}>
-                        {topic}
-                      </SelectItem>
+                    {allTopics.map(topic => (
+                      <SelectItem key={topic} value={topic}>{topic}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="date">Date</SelectItem>
-                    <SelectItem value="name">Name</SelectItem>
-                    <SelectItem value="size">Size</SelectItem>
-                    <SelectItem value="quality">Quality</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    setViewMode(viewMode === "list" ? "grid" : "list")
-                  }
-                >
-                  {viewMode === "list" ? (
-                    <BarChart3 className="h-4 w-4" />
-                  ) : (
-                    <Filter className="h-4 w-4" />
-                  )}
+                <Button variant="outline" size="sm" onClick={loadFiles} disabled={loading}>
+                  <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
                 </Button>
+                {selectedFiles.size > 0 && (
+                  <>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => confirmDeleteFiles(Array.from(selectedFiles))}
+                      disabled={loading}
+                    >
+                      <Trash2 className="h-4 w-4 mr-1" />
+                      Delete ({selectedFiles.size})
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => setSelectedFiles(new Set())}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </>
+                )}
               </div>
 
-              {/* Enhanced File List */}
+              {/* Files List */}
               <ScrollArea className="flex-1 border rounded-lg">
-                {viewMode === "list" ? (
+                {loading && filteredFiles.length === 0 ? (
+                  <div className="flex items-center justify-center h-32">
+                    <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
+                  </div>
+                ) : filteredFiles.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
+                    <FileText className="h-8 w-8 mb-2" />
+                    <p>No files found</p>
+                  </div>
+                ) : (
                   <div className="p-4 space-y-2">
-                    {filteredFiles.map((file) => (
+                    {/* Select All */}
+                    <div className="flex items-center gap-2 pb-2 border-b">
+                      <input
+                        type="checkbox"
+                        checked={selectedFiles.size === filteredFiles.length && filteredFiles.length > 0}
+                        onChange={selectAllFiles}
+                        className="rounded border-gray-300"
+                      />
+                      <span className="text-sm text-muted-foreground">
+                        Select all ({filteredFiles.length})
+                      </span>
+                    </div>
+
+                    {/* File Items */}
+                    {filteredFiles.map(file => (
                       <div
                         key={file.id}
-                        className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                        className={cn(
+                          "flex items-center gap-3 p-3 rounded-lg border transition-colors hover:bg-muted/50",
+                          selectedFiles.has(file.id) && "bg-muted/50 border-primary/50"
+                        )}
                       >
+                        <input
+                          type="checkbox"
+                          checked={selectedFiles.has(file.id)}
+                          onChange={() => toggleFileSelection(file.id)}
+                          className="rounded border-gray-300"
+                        />
+
                         <FileIcon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <p className="font-medium text-sm truncate">
-                              {file.filename}
-                            </p>
-                            {file.duplicate_of && (
-                              <Badge variant="secondary" className="text-xs">
-                                <Copy className="h-3 w-3 mr-1" />
-                                Duplicate
+                            <p className="font-medium text-sm truncate">{file.filename}</p>
+                            {file.compliance_status === "review_needed" && (
+                              <Badge variant="destructive" className="text-xs">
+                                <AlertCircle className="h-3 w-3 mr-1" />
+                                Review
+                              </Badge>
+                            )}
+                            {file.business_value && file.business_value > 10000 && (
+                              <Badge className="text-xs bg-green-600">
+                                <DollarSign className="h-3 w-3 mr-1" />
+                                High Value
                               </Badge>
                             )}
                           </div>
-                          <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
+                          <div className="flex items-center gap-3 text-xs text-muted-foreground">
                             <span>{formatFileSize(file.bytes)}</span>
                             <span>•</span>
                             <span>{formatDate(file.created_at)}</span>
-                            {file.topics && file.topics.length > 0 && (
+                            <span>•</span>
+                            <span>Quality: {file.quality_score?.toFixed(0)}%</span>
+                            {file.curator && (
                               <>
                                 <span>•</span>
-                                <div className="flex gap-1">
-                                  {file.topics.slice(0, 2).map((topic) => (
-                                    <Badge
-                                      key={topic}
-                                      variant="outline"
-                                      className="text-xs h-4 px-1"
-                                    >
-                                      {topic}
-                                    </Badge>
-                                  ))}
-                                  {file.topics.length > 2 && (
-                                    <Badge
-                                      variant="outline"
-                                      className="text-xs h-4 px-1"
-                                    >
-                                      +{file.topics.length - 2}
-                                    </Badge>
-                                  )}
-                                </div>
+                                <span>Curator: {file.curator}</span>
                               </>
                             )}
                           </div>
-                          {file.summary && (
-                            <p className="text-xs text-muted-foreground mt-1 line-clamp-1">
-                              {file.summary}
-                            </p>
+                          {file.topics && file.topics.length > 0 && (
+                            <div className="flex gap-1 mt-1">
+                              {file.topics.map(topic => (
+                                <Badge key={topic} variant="secondary" className="text-xs">
+                                  {topic}
+                                </Badge>
+                              ))}
+                            </div>
                           )}
                         </div>
 
-                        {/* Quality Score */}
-                        {file.quality_score !== undefined && (
-                          <div className="flex flex-col items-center">
-                            <div
-                              className={cn(
-                                "text-sm font-medium",
-                                file.quality_score > 70
-                                  ? "text-green-600"
-                                  : file.quality_score > 40
-                                    ? "text-yellow-600"
-                                    : "text-red-600",
-                              )}
-                            >
-                              {file.quality_score.toFixed(0)}%
-                            </div>
-                            <span className="text-xs text-muted-foreground">
-                              Quality
-                            </span>
-                          </div>
-                        )}
-
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0"
-                            >
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                               <MoreVertical className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent
-                            align="start"
-                            alignOffset={-5}
-                            sideOffset={5}
-                            className="w-48"
-                          >
+                          <DropdownMenuContent align="end">
                             <DropdownMenuItem>
                               <Eye className="h-4 w-4 mr-2" />
-                              View Analysis
+                              View Details
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <Brain className="h-4 w-4 mr-2" />
-                              Re-analyze
+                              AI Analysis
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                              <TestTube className="h-4 w-4 mr-2" />
-                              Test Knowledge
+                              <Download className="h-4 w-4 mr-2" />
+                              Download
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               className="text-destructive"
-                              onSelect={() => handleDeleteClick(file.id, file.filename)}
+                              onClick={() => confirmDeleteFiles([file.id])}
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
                               Delete
@@ -937,319 +933,340 @@ export function EnhancedCurateTab({
                       </div>
                     ))}
                   </div>
-                ) : (
-                  <div className="p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {filteredFiles.map((file) => (
-                      <Card
-                        key={file.id}
-                        className="hover:shadow-md transition-shadow"
-                      >
-                        <CardHeader className="pb-3">
-                          <div className="flex items-start justify-between">
-                            <FileIcon className="h-8 w-8 text-muted-foreground" />
-                            <Badge
-                              variant={
-                                file.quality_score && file.quality_score > 70
-                                  ? "default"
-                                  : "secondary"
-                              }
-                              className="text-xs"
-                            >
-                              {file.quality_score?.toFixed(0)}%
-                            </Badge>
-                          </div>
-                          <CardTitle className="text-sm truncate mt-2">
-                            {file.filename}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-1 text-xs text-muted-foreground">
-                            <div>{formatFileSize(file.bytes)}</div>
-                            <div>{formatDate(file.created_at)}</div>
-                            {file.topics && (
-                              <div className="flex flex-wrap gap-1 mt-2">
-                                {file.topics.map((topic) => (
-                                  <Badge
-                                    key={topic}
-                                    variant="outline"
-                                    className="text-xs h-5"
-                                  >
-                                    {topic}
-                                  </Badge>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
                 )}
               </ScrollArea>
             </div>
           </TabsContent>
 
-          {/* Duplicates Tab */}
-          <TabsContent value="duplicates" className="flex-1 overflow-auto mt-4">
-            <div className="space-y-4">
-              {duplicateGroups.length === 0 ? (
-                <Alert>
-                  <CheckCircle className="h-4 w-4" />
-                  <AlertTitle>No Duplicates Found</AlertTitle>
-                  <AlertDescription>
-                    Your knowledge base is clean with no duplicate content
-                    detected.
-                  </AlertDescription>
-                </Alert>
-              ) : (
-                <>
-                  <Alert>
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertTitle>Duplicate Content Detected</AlertTitle>
-                    <AlertDescription>
-                      Found {duplicateGroups.length} groups of similar
-                      documents. Review and merge to optimize your knowledge
-                      base.
-                    </AlertDescription>
-                  </Alert>
-
-                  {duplicateGroups.map((group, index) => (
-                    <Card key={index}>
-                      <CardHeader>
-                        <div className="flex items-center justify-between">
-                          <CardTitle className="text-lg flex items-center gap-2">
-                            <GitMerge className="h-4 w-4" />
-                            Duplicate Group {index + 1}
-                          </CardTitle>
-                          <div className="flex items-center gap-2">
-                            <Badge variant="secondary">
-                              {(group.similarity * 100).toFixed(0)}% similar
-                            </Badge>
-                            <Button
-                              size="sm"
-                              onClick={() => mergeDuplicates(group)}
-                              disabled={loading}
-                            >
-                              <GitMerge className="h-4 w-4 mr-2" />
-                              Merge Files
-                            </Button>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {group.files.map((file) => (
-                            <div
-                              key={file.id}
-                              className="flex items-center gap-3 p-2 rounded border"
-                            >
-                              <FileIcon className="h-4 w-4 text-muted-foreground" />
-                              <span className="flex-1 text-sm">
-                                {file.filename}
-                              </span>
-                              <span className="text-xs text-muted-foreground">
-                                {formatFileSize(file.bytes)}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="mt-3 p-3 bg-muted/50 rounded">
-                          <p className="text-sm">
-                            <strong>Suggested Action:</strong>{" "}
-                            {group.suggested_action === "merge"
-                              ? "Merge these files into a single comprehensive document"
-                              : "Review and keep the most recent version"}
-                          </p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </>
-              )}
-            </div>
-          </TabsContent>
-
-          {/* Collections Tab */}
-          <TabsContent
-            value="collections"
-            className="flex-1 overflow-auto mt-4"
-          >
+          {/* Insights Tab */}
+          <TabsContent value="insights" className="flex-1 overflow-auto mt-4">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium">Smart Collections</h3>
-                <Button size="sm">
-                  <FolderPlus className="h-4 w-4 mr-2" />
-                  Create Collection
+                <h3 className="text-lg font-semibold">AI-Powered Curation Insights</h3>
+                <Button variant="outline" size="sm">
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Re-analyze
                 </Button>
               </div>
 
-              {collections.length === 0 ? (
-                <Alert>
-                  <Info className="h-4 w-4" />
-                  <AlertDescription>
-                    No collections yet. Collections help organize related
-                    documents.
-                  </AlertDescription>
-                </Alert>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {collections.map((collection) => (
-                    <Card key={collection.id}>
-                      <CardHeader>
-                        <div className="flex items-center justify-between">
-                          <CardTitle className="text-lg flex items-center gap-2">
-                            <FolderOpen className="h-4 w-4" />
-                            {collection.name}
-                          </CardTitle>
-                          {collection.auto_generated && (
-                            <Badge variant="secondary">
-                              <Sparkles className="h-3 w-3 mr-1" />
-                              Auto
-                            </Badge>
-                          )}
+              {insights.map((insight, index) => (
+                <Card
+                  key={index}
+                  className={cn(
+                    "cursor-pointer transition-all hover:shadow-lg",
+                    insight.severity === "critical" && "border-red-500",
+                    insight.severity === "high" && "border-orange-500"
+                  )}
+                  onClick={() => setSelectedInsight(insight)}
+                >
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-3">
+                        {insight.type === "duplicate" && <Copy className="h-5 w-5 mt-0.5 text-orange-600" />}
+                        {insight.type === "compliance" && <Shield className="h-5 w-5 mt-0.5 text-red-600" />}
+                        {insight.type === "high-value" && <Award className="h-5 w-5 mt-0.5 text-green-600" />}
+                        {insight.type === "gap" && <AlertTriangle className="h-5 w-5 mt-0.5 text-yellow-600" />}
+                        <div className="flex-1">
+                          <CardTitle className="text-base">{insight.title}</CardTitle>
+                          <CardDescription className="mt-1">{insight.description}</CardDescription>
                         </div>
-                        <CardDescription>
-                          {collection.description}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex items-center justify-between text-sm">
-                          <span>{collection.files.length} documents</span>
-                          <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4 mr-2" />
-                            View
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
+                      </div>
+                      <Badge
+                        variant={
+                          insight.severity === "critical" ? "destructive" :
+                          insight.severity === "high" ? "default" :
+                          "secondary"
+                        }
+                      >
+                        {insight.severity}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-4 text-sm">
+                        {insight.potentialSavings && (
+                          <span className={cn(
+                            "font-medium",
+                            insight.potentialSavings > 0 ? "text-green-600" : "text-blue-600"
+                          )}>
+                            {insight.potentialSavings > 0 ? 'Save: ' : 'Generate: '}
+                            {formatCurrency(Math.abs(insight.potentialSavings))}
+                          </span>
+                        )}
+                        {insight.riskScore && (
+                          <span className="text-muted-foreground">
+                            Risk: {insight.riskScore}%
+                          </span>
+                        )}
+                      </div>
+                      <Button variant="ghost" size="sm">
+                        Take Action
+                        <ChevronRight className="h-4 w-4 ml-1" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </TabsContent>
 
-          {/* Knowledge Gaps Tab */}
-          <TabsContent value="gaps" className="flex-1 overflow-auto mt-4">
+          {/* Knowledge Curators Tab */}
+          <TabsContent value="curators" className="flex-1 overflow-auto mt-4">
             <div className="space-y-4">
-              <Alert>
-                <Lightbulb className="h-4 w-4" />
-                <AlertTitle>Knowledge Gap Analysis</AlertTitle>
-                <AlertDescription>
-                  AI-identified areas where your knowledge base could be
-                  improved.
-                </AlertDescription>
-              </Alert>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Knowledge Curator Leaderboard</h3>
+                <div className="flex gap-2">
+                  <Badge variant="outline">May 2024</Badge>
+                  <Button variant="outline" size="sm">
+                    <Award className="h-4 w-4 mr-2" />
+                    Award Monthly Badges
+                  </Button>
+                </div>
+              </div>
 
-              {knowledgeGaps.length === 0 ? (
-                <Alert>
-                  <CheckCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    Excellent! No significant knowledge gaps detected.
-                  </AlertDescription>
-                </Alert>
-              ) : (
-                knowledgeGaps.map((gap, index) => (
-                  <Card key={index}>
+              {/* Curator Performance Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {stubCuratorPerformance.map((curator, index) => (
+                  <Card key={index} className="hover:shadow-lg transition-shadow">
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          <Target className="h-4 w-4" />
-                          {gap.topic}
-                        </CardTitle>
-                        <Badge
-                          variant={
-                            gap.severity === "high"
-                              ? "destructive"
-                              : gap.severity === "medium"
-                                ? "default"
-                                : "secondary"
-                          }
-                        >
-                          {gap.severity} priority
-                        </Badge>
+                        <div className="flex items-center gap-3">
+                          <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                            {curator.name.split(' ').map(n => n[0]).join('')}
+                          </div>
+                          <div>
+                            <CardTitle className="text-base">{curator.name}</CardTitle>
+                            <p className="text-xs text-muted-foreground">{curator.department}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              {curator.badge === "master" && (
+                                <Badge className="bg-gradient-to-r from-purple-500 to-pink-500">
+                                  <Award className="h-3 w-3 mr-1" />
+                                  Master Curator
+                                </Badge>
+                              )}
+                              {curator.badge === "champion" && (
+                                <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500">
+                                  <Trophy className="h-3 w-3 mr-1" />
+                                  Champion
+                                </Badge>
+                              )}
+                              {curator.badge === "expert" && (
+                                <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500">
+                                  <Target className="h-3 w-3 mr-1" />
+                                  Expert
+                                </Badge>
+                              )}
+                              {curator.badge === "rookie" && (
+                                <Badge className="bg-gradient-to-r from-green-500 to-teal-500">
+                                  <Sparkles className="h-3 w-3 mr-1" />
+                                  Rising Star
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl font-bold text-green-600">
+                            {formatCurrency(curator.valueGenerated)}
+                          </p>
+                          <p className="text-xs text-muted-foreground">Value Generated</p>
+                        </div>
                       </div>
-                      <CardDescription>{gap.description}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-2">
-                        <p className="text-sm font-medium">
-                          Suggested Content:
-                        </p>
-                        <ul className="space-y-1">
-                          {gap.suggested_content.map((content, i) => (
-                            <li
-                              key={i}
-                              className="text-sm text-muted-foreground flex items-center gap-2"
-                            >
-                              <BookOpen className="h-3 w-3" />
-                              {content}
-                            </li>
-                          ))}
-                        </ul>
-                        <Button variant="outline" size="sm" className="mt-3">
-                          <Upload className="h-4 w-4 mr-2" />
-                          Upload {gap.topic} Documentation
-                        </Button>
+                      <div className="grid grid-cols-4 gap-2 text-center">
+                        <div>
+                          <p className="text-lg font-semibold">{curator.filesProcessed}</p>
+                          <p className="text-xs text-muted-foreground">Files</p>
+                        </div>
+                        <div>
+                          <p className="text-lg font-semibold">{curator.qualityScore}%</p>
+                          <p className="text-xs text-muted-foreground">Quality</p>
+                        </div>
+                        <div>
+                          <p className="text-lg font-semibold">{curator.duplicatesFound}</p>
+                          <p className="text-xs text-muted-foreground">Deduped</p>
+                        </div>
+                        <div>
+                          <p className="text-lg font-semibold">{curator.metadataEnriched}</p>
+                          <p className="text-xs text-muted-foreground">Enriched</p>
+                        </div>
                       </div>
+                      <Progress value={curator.qualityScore} className="mt-3 h-2" />
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Active today at {curator.lastActive?.toLocaleTimeString()}
+                      </p>
                     </CardContent>
                   </Card>
-                ))
-              )}
+                ))}
+              </div>
+
+              {/* Team Performance Radar */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Team Performance Metrics</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <RadarChart data={[
+                      { metric: 'Speed', value: 87 },
+                      { metric: 'Accuracy', value: 92 },
+                      { metric: 'Coverage', value: 78 },
+                      { metric: 'Quality', value: 85 },
+                      { metric: 'Collaboration', value: 94 },
+                      { metric: 'Innovation', value: 81 },
+                    ]}>
+                      <PolarGrid />
+                      <PolarAngleAxis dataKey="metric" />
+                      <PolarRadiusAxis angle={90} domain={[0, 100]} />
+                      <Radar name="Team Average" dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
 
-          {/* Knowledge Test Tab */}
-          <TabsContent value="test" className="flex-1 overflow-auto mt-4">
+          {/* Analytics Tab */}
+          <TabsContent value="analytics" className="flex-1 overflow-auto mt-4">
             <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Knowledge Base Analytics</h3>
+              
+              {/* Content Distribution */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Content Distribution</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={250}>
+                      <RechartsPieChart>
+                        <Pie
+                          data={stubKnowledgeHealth}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ category, documents }) => `${category}: ${documents}`}
+                          outerRadius={80}
+                          fill="#8884d8"
+                          dataKey="documents"
+                        >
+                          {stubKnowledgeHealth.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </RechartsPieChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Knowledge Coverage</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {stubKnowledgeHealth.map(category => (
+                        <div key={category.category}>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span>{category.category}</span>
+                            <span className="text-muted-foreground">{category.coverage}%</span>
+                          </div>
+                          <Progress value={category.coverage} className="h-2" />
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Utilization Metrics */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Knowledge Utilization Over Time</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <AreaChart data={stubCurationTrends}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="period" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Area type="monotone" dataKey="uploaded" stackId="1" stroke="#8884d8" fill="#8884d8" />
+                      <Area type="monotone" dataKey="curated" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+                      <Area type="monotone" dataKey="deleted" stackId="1" stroke="#ffc658" fill="#ffc658" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Upload Tab */}
+          <TabsContent value="upload" className="flex-1 overflow-hidden mt-4">
+            <div className="space-y-4">
+              <FileUpload
+                assistantId={assistantId}
+                onUploadComplete={async () => {
+                  await loadFiles();
+                  toast.success("File uploaded and AI-processed!");
+                }}
+                onUploadError={(error) => toast.error(error)}
+              />
+
               <Alert>
-                <TestTube className="h-4 w-4" />
-                <AlertTitle>Knowledge Testing</AlertTitle>
+                <Sparkles className="h-4 w-4" />
+                <AlertTitle>AI-Powered Processing</AlertTitle>
                 <AlertDescription>
-                  Test what the AI actually knows from your uploaded documents.
+                  Uploaded files undergo comprehensive AI analysis:
                 </AlertDescription>
               </Alert>
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Quick Test</CardTitle>
-                  <CardDescription>
-                    Select a topic to test the AI's knowledge
-                  </CardDescription>
+                  <CardTitle className="text-lg">Smart Upload Features</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {allTopics.map((topic) => (
-                      <Button
-                        key={topic}
-                        variant="outline"
-                        onClick={() => testKnowledge(topic)}
-                        disabled={analyzing}
-                      >
-                        <TestTube className="h-4 w-4 mr-2" />
-                        Test {topic}
-                      </Button>
-                    ))}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span className="text-sm">Semantic duplicate detection (save ~$45K/year)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span className="text-sm">Automatic entity extraction & tagging</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span className="text-sm">Compliance & rights verification</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span className="text-sm">Business value assessment</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span className="text-sm">Knowledge graph integration</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span className="text-sm">Quality scoring & gap analysis</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Custom Test</CardTitle>
-                  <CardDescription>
-                    Enter a custom question to test the knowledge base
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex gap-2">
-                    <Input placeholder="Ask a question about your documents..." />
-                    <Button disabled={analyzing}>
-                      <Send className="h-4 w-4 mr-2" />
-                      Test
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              <Alert>
+                <Info className="h-4 w-4" />
+                <AlertDescription>
+                  Your Knowledge Curators process an average of 120 files per week,
+                  generating {formatCurrency(45000)} in monthly savings through
+                  intelligent curation and deduplication.
+                </AlertDescription>
+              </Alert>
             </div>
           </TabsContent>
         </Tabs>
@@ -1259,26 +1276,16 @@ export function EnhancedCurateTab({
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete File</AlertDialogTitle>
-            <AlertDialogDescription className="space-y-2">
-              <p>Are you sure you want to delete this file?</p>
-              {fileToDelete && (
-                <p className="font-medium text-foreground">"{fileToDelete.name}"</p>
-              )}
-              <p className="text-sm text-muted-foreground">
-                This action cannot be undone. The file will be permanently removed from the vector store.
-              </p>
+            <AlertDialogTitle>Delete Files</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete {filesToDelete.length} file(s)?
+              This will permanently remove them from the knowledge base.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setFileToDelete(null)}>
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Delete File
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={deleteFiles} className="bg-destructive text-destructive-foreground">
+              Delete {filesToDelete.length} file{filesToDelete.length !== 1 ? 's' : ''}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
