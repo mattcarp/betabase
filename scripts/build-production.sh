@@ -23,9 +23,9 @@ for link in .cursorrules .windsurfrules machine mc-design-system; do
     fi
 done
 
-# Run the actual build (use build:next to avoid recursion)
+# Run the actual build
 echo "🚀 Running Next.js build..."
-npm run build:next
+next build
 BUILD_EXIT_CODE=$?
 
 # Restore symlinks (only in development, not in production)
