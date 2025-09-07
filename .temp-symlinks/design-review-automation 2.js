@@ -1,1 +1,0 @@
-/Users/matt/Documents/projects/mc-design-system/tools/design-review-automation.js
