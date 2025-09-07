@@ -20,7 +20,7 @@ import {
 import { AlertCircle, CheckCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
+import { Label } from "./label";
 
 /**
  * Form Provider - wraps react-hook-form's FormProvider

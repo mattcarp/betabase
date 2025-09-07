@@ -8,10 +8,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from "./dropdown-menu";
+import { Button } from "./button";
+import { Badge } from "./badge";
+import { ScrollArea } from "./scroll-area";
 import {
   Brain,
   Activity,

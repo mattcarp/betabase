@@ -9,7 +9,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { HUDMeter } from "./ui/HUDMeter";
-import { CircularProfessionalProgress as RadialProgress } from "@/components/ui/ProfessionalProgress"
+import { CircularProfessionalProgress as RadialProgress } from "./ui/ProfessionalProgress"
 import { DataStream } from "./ui/DataStream";
 
 interface SystemHealth {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CircularProfessionalProgress as RadialProgress } from "@/components/ui/ProfessionalProgress"
+import { CircularProfessionalProgress as RadialProgress } from "./components/ui/ProfessionalProgress"
 
 const ComponentPlayground = () => {
   const [progressValue, setProgressValue] = useState(75);

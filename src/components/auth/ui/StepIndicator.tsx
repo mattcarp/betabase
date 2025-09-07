@@ -1,6 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { Progress } from "@/components/ui/progress";
+import { Progress } from "../../ui/progress";
 
 interface StepIndicatorProps {
   currentStep: number;

@@ -21,7 +21,7 @@ import {
   SidebarMenuSkeleton,
   SidebarRail,
   SidebarSeparator,
-} from "@/components/ui/sidebar";
+} from "./sidebar";
 import {
   MessageCircle,
   Plus,
@@ -38,8 +38,8 @@ import {
   Settings,
   ChevronDown,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "./badge";
+import { Button } from "./button";
 import { Actions } from "../ai-elements/actions";
 import { InlineCitation } from "../ai-elements/inline-citation";
 import { Source } from "../ai-elements/source";
@@ -51,7 +51,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "./dropdown-menu";
 
 interface AppSidebarProps {
   className?: string;

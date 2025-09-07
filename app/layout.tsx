@@ -1,7 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import "../src/index.css";
-import { CustomElementGuard } from "@/components/CustomElementGuard";
+import { CustomElementGuard } from "../src/components/CustomElementGuard";
 
 export const metadata: Metadata = {
   title: "The Betabase",

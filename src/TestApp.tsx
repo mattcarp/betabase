@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CircularProfessionalProgress as RadialProgress } from "@/components/ui/ProfessionalProgress"
+import { CircularProfessionalProgress as RadialProgress } from "./components/ui/ProfessionalProgress"
 import { HUDMeter } from "./components/ui/HUDMeter";
 import { DataStream } from "./components/ui/DataStream";
 import { CircularHUD } from "./components/ui/CircularHUD";

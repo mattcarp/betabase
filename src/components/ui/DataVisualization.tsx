@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { cn } from "../../lib/utils";
-import { CircularProfessionalProgress as RadialProgress } from "@/components/ui/ProfessionalProgress"
+import { CircularProfessionalProgress as RadialProgress } from "./ProfessionalProgress"
 
 export interface DataPoint {
   timestamp: number;
