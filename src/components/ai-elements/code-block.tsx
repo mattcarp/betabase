@@ -3,11 +3,6 @@
 import { CheckIcon, CopyIcon } from "lucide-react";
 import type { ComponentProps, HTMLAttributes, ReactNode } from "react";
 import { createContext, useContext, useState } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import {
-  oneDark,
-  oneLight,
-} from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Button } from "../ui/button";
 import { cn } from "../../lib/utils";
 
@@ -43,52 +38,21 @@ export const CodeBlock = ({
       {...props}
     >
       <div className="relative">
-        <SyntaxHighlighter
-          language={language}
-          style={oneLight}
-          customStyle={{
-            margin: 0,
-            padding: "1rem",
-            fontSize: "0.875rem",
-            background: "hsl(var(--background))",
-            color: "hsl(var(--foreground))",
-          }}
-          showLineNumbers={showLineNumbers}
-          lineNumberStyle={{
-            color: "hsl(var(--muted-foreground))",
-            paddingRight: "1rem",
-            minWidth: "2.5rem",
-          }}
-          codeTagProps={{
-            className: "font-mono text-sm",
-          }}
-          className="dark:hidden overflow-hidden"
-        >
-          {code}
-        </SyntaxHighlighter>
-        <SyntaxHighlighter
-          language={language}
-          style={oneDark}
-          customStyle={{
-            margin: 0,
-            padding: "1rem",
-            fontSize: "0.875rem",
-            background: "hsl(var(--background))",
-            color: "hsl(var(--foreground))",
-          }}
-          showLineNumbers={showLineNumbers}
-          lineNumberStyle={{
-            color: "hsl(var(--muted-foreground))",
-            paddingRight: "1rem",
-            minWidth: "2.5rem",
-          }}
-          codeTagProps={{
-            className: "font-mono text-sm",
-          }}
-          className="hidden dark:block overflow-hidden"
-        >
-          {code}
-        </SyntaxHighlighter>
+        {/* Simple code display without syntax highlighting */}
+        <pre className="overflow-x-auto p-4 text-sm">
+          <code className="font-mono" data-language={language}>
+            {showLineNumbers
+              ? code.split('\n').map((line, i) => (
+                  <div key={i} className="table-row">
+                    <span className="table-cell pr-4 text-muted-foreground select-none">
+                      {i + 1}
+                    </span>
+                    <span className="table-cell">{line}</span>
+                  </div>
+                ))
+              : code}
+          </code>
+        </pre>
         {children && (
           <div className="absolute right-2 top-2 flex items-center gap-2">
             {children}
