@@ -151,7 +151,7 @@ export const mockSettings = {
 
 // Test utilities
 export const createMockComponent = (name: string) => {
-  return ({
+  const Component = ({
     children,
     ...props
   }: {
@@ -167,6 +167,8 @@ export const createMockComponent = (name: string) => {
       children,
     );
   };
+  Component.displayName = name;
+  return Component;
 };
 
 export const waitFor = (condition: () => boolean, timeout = 5000) => {
