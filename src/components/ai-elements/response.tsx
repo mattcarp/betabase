@@ -4,12 +4,12 @@ import { CodeBlock, CodeBlockCopyButton } from "./code-block";
 import type { ComponentProps, HTMLAttributes } from "react";
 import { memo, isValidElement } from "react";
 import ReactMarkdown, { type Options } from "react-markdown";
-import rehypeKatex from "rehype-katex";
+// import rehypeKatex from "rehype-katex"; // TEMPORARILY DISABLED - MISSING DEPENDENCY
 import remarkGfm from "remark-gfm";
 // import remarkMath from "remark-math"; // TEMPORARILY DISABLED - MISSING DEPENDENCY
 import { cn } from "../../lib/utils";
-import "katex/dist/katex.min.css";
-import hardenReactMarkdown from "harden-react-markdown";
+// import "katex/dist/katex.min.css"; // TEMPORARILY DISABLED - MISSING DEPENDENCY
+// import hardenReactMarkdown from "harden-react-markdown"; // TEMPORARILY DISABLED - MISSING DEPENDENCY
 
 /**
  * Parses markdown text and removes incomplete tokens to prevent partial rendering
@@ -156,7 +156,8 @@ function parseIncompleteMarkdown(text: string): string {
 }
 
 // Create a hardened version of ReactMarkdown
-const HardenedMarkdown = hardenReactMarkdown(ReactMarkdown);
+// const HardenedMarkdown = hardenReactMarkdown(ReactMarkdown); // TEMPORARILY DISABLED
+const HardenedMarkdown = ReactMarkdown; // Using regular ReactMarkdown for now
 
 export type ResponseProps = HTMLAttributes<HTMLDivElement> & {
   options?: Options;
@@ -371,11 +372,11 @@ export const Response = memo(
       >
         <HardenedMarkdown
           components={components}
-          rehypePlugins={[rehypeKatex]}
+          // rehypePlugins={[rehypeKatex]} // TEMPORARILY DISABLED - MISSING DEPENDENCY
           remarkPlugins={[remarkGfm]} // remarkMath temporarily disabled
-          allowedImagePrefixes={allowedImagePrefixes ?? ["*"]}
-          allowedLinkPrefixes={allowedLinkPrefixes ?? ["*"]}
-          defaultOrigin={defaultOrigin}
+          // allowedImagePrefixes={allowedImagePrefixes ?? ["*"]} // Hardened props disabled
+          // allowedLinkPrefixes={allowedLinkPrefixes ?? ["*"]} // Hardened props disabled
+          // defaultOrigin={defaultOrigin} // Hardened props disabled
           {...options}
         >
           {parsedChildren}
