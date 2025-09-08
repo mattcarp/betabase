@@ -1,7 +1,7 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+// import { DefaultChatTransport } from "ai"; // Removed - not available in current ai version
 import { useState, useRef, useEffect } from "react";
 import { cn } from "../../lib/utils";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
