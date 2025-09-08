@@ -4,18 +4,18 @@ const nextConfig = {
     // Temporarily ignore ESLint errors during builds to get deployment working
     ignoreDuringBuilds: true,
   },
-  outputFileTracingRoot: '/Users/matt/Documents/projects/siam',
+  // outputFileTracingRoot: '/Users/matt/Documents/projects/siam', // Removed - causes issues on Render
   reactStrictMode: false,
   images: {
     domains: ['localhost', 'siam.onrender.com'],
   },
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': '/Users/matt/Documents/projects/siam/src',
-    };
-    return config;
-  },
+  // webpack: (config) => {
+  //   config.resolve.alias = {
+  //     ...config.resolve.alias,
+  //     '@': '/Users/matt/Documents/projects/siam/src',
+  //   };
+  //   return config;
+  // },
   async headers() {
     return [
       {
