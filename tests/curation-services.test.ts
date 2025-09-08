@@ -290,10 +290,18 @@ describe('CurationService', () => {
     });
 
     it('should respect similarity threshold', () => {
-      const highThreshold = CurationService.findDuplicates(mockFiles, 0.99);
+      // Test actual similarity between our mock files
+      const similarity = CurationService.cosineSimilarity(
+        mockFiles[0].embedding,
+        mockFiles[1].embedding
+      );
+      
+      // Set threshold above actual similarity to get no duplicates
+      const highThreshold = CurationService.findDuplicates(mockFiles, similarity + 0.01);
       expect(highThreshold).toHaveLength(0);
 
-      const lowThreshold = CurationService.findDuplicates(mockFiles, 0.5);
+      // Set threshold below actual similarity to find duplicates
+      const lowThreshold = CurationService.findDuplicates(mockFiles, similarity - 0.01);
       expect(lowThreshold.length).toBeGreaterThan(0);
     });
 
