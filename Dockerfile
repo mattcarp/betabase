@@ -10,9 +10,6 @@ FROM node:22-alpine AS base
 # Install essential system dependencies (including bash for build scripts)
 RUN apk add --no-cache libc6-compat tini curl bash git
 
-# Enable corepack for pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
 # Set working directory
 WORKDIR /app
 
@@ -22,13 +19,12 @@ WORKDIR /app
 FROM base AS deps
 
 # Copy package files first (layer caching optimization)
-COPY package.json pnpm-lock.yaml* ./
+COPY package.json package-lock.json* ./
 
 # Install dependencies with better error handling
-RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
-    pnpm install --frozen-lockfile --prefer-offline || \
+RUN npm ci --legacy-peer-deps || \
     (echo "❌ Dependency installation failed! Retrying..." && \
-     pnpm install --no-frozen-lockfile)
+     npm install --legacy-peer-deps)
 
 # ============================================
 # BUILDER STAGE - Build the application
@@ -62,7 +58,7 @@ ENV NEXT_SHARP_PATH=/app/node_modules/sharp
 RUN test -f .env.production.local && echo "✅ Build info file exists" || echo "❌ Build info file missing"
 
 # Build the application with standalone output
-RUN pnpm run build || \
+RUN npm run build || \
     (echo "❌ Build failed! Check your code!" && exit 1)
 
 # ============================================
