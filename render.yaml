@@ -5,8 +5,8 @@ services:
     runtime: node
     plan: starter # or standard for production
     
-    # Build command - include dev dependencies for TypeScript
-    buildCommand: npm install --legacy-peer-deps --include=dev && npm run build
+    # Build command - manually install TypeScript then build
+    buildCommand: npm install --legacy-peer-deps && npm install --save-dev typescript @types/react && npm run build
     
     # Start command  
     startCommand: npm start
