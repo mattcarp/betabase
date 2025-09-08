@@ -20,7 +20,7 @@ import {
   Heart,
   Zap
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import type { AOMAProgressUpdate } from "@/services/aomaProgressStream";
 
 interface AOMAProgressProps {

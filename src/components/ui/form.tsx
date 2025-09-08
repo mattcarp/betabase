@@ -19,7 +19,7 @@ import {
 } from "react-hook-form";
 import { AlertCircle, CheckCircle } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import { Label } from "./label";
 
 /**
