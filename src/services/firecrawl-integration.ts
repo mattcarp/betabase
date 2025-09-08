@@ -6,7 +6,7 @@
  * - Customer support knowledge base
  */
 
-import { FirecrawlApp } from "@mendable/firecrawl-js";
+import FirecrawlApp from "@mendable/firecrawl-js";
 
 interface TestableFeature {
   name: string;

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { FirecrawlApp } from '@mendable/firecrawl-js';
+import FirecrawlApp from '@mendable/firecrawl-js';
 import { storeFirecrawlData, getFirecrawlAnalysis } from '../../../lib/supabase';
 import OpenAI from 'openai';
 
