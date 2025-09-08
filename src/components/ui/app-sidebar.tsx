@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import "@/styles/sidebar-mac.css";
-import { cn } from "@/lib/utils";
-import { useConversationStore } from "@/lib/conversation-store";
+import "../../styles/sidebar-mac.css";
+import { cn } from "../../lib/utils";
+import { useConversationStore } from "../../lib/conversation-store";
 import {
   Sidebar,
   SidebarContent,
