@@ -1,0 +1,209 @@
+/**
+ * Professional SIAM Interface
+ * Powered by MAC Design System - Matthew Adam Carpenter
+ * Clean, elegant, timeless design for sophisticated meeting AI
+ */
+
+@import "../src/styles/mac-design-system.css";
+@import "../src/styles/sidebar-mac.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    @apply h-full;
+  }
+
+  :root {
+    /* MAC Design System Variables */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 0 0% 8%; /* MAC Surface Elevated #141414 */
+    --card-foreground: 210 40% 98%;
+    --popover: 0 0% 8%; /* MAC Surface Elevated */
+    --popover-foreground: 210 40% 98%;
+    --primary: 214 100% 59%; /* MAC Primary Blue #3385ff */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 0 0% 8%; /* MAC Surface Elevated */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 0 0% 40%; /* MAC Text Muted #666666 */
+    --muted-foreground: 0 0% 70%; /* MAC Text Secondary #b3b3b3 */
+    --accent: 267 100% 59%; /* MAC Accent Purple #8533ff */
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 0 0% 20%; /* MAC Border elevated */
+    --input: 0 0% 8%; /* MAC Surface Elevated */
+    --ring: 214 100% 59%; /* MAC Primary Blue for focus */
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply text-white;
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
+    font-weight: 300;
+    line-height: 1.5;
+
+    /* MAC Professional Background */
+    background:
+      radial-gradient(
+        circle at 25% 25%,
+        rgba(51, 133, 255, 0.03) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 75% 75%,
+        rgba(133, 51, 255, 0.03) 0%,
+        transparent 50%
+      ),
+      #0a0a0a;
+    background-attachment: fixed;
+    overflow-x: hidden;
+  }
+
+  /* Professional MAC Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(133, 51, 255, 0.4);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(133, 51, 255, 0.6);
+  }
+}
+
+@layer components {
+  /* MAC Professional Glass Effect */
+  .mac-glass {
+    background: rgba(20, 20, 20, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .mac-glass::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+  }
+
+  /* MAC Card Components */
+  .mac-card {
+    @apply bg-mac-surface-elevated border-mac-border rounded-xl p-6;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mac-card:hover {
+    @apply border-primary/50 shadow-mac-purple-glow transform -translate-y-1;
+  }
+
+  .mac-card-elevated {
+    @apply mac-card shadow-mac-elevated;
+  }
+
+  /* MAC Professional Buttons */
+  .mac-button {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg;
+    @apply font-light text-sm transition-all duration-200;
+    @apply border border-transparent;
+  }
+
+  .mac-button-primary {
+    @apply bg-accent text-accent-foreground;
+  }
+
+  .mac-button-primary:hover {
+    @apply shadow-mac-purple-glow transform -translate-y-0.5;
+  }
+
+  .mac-button-secondary {
+    @apply bg-mac-surface-elevated text-mac-text-primary border-mac-border-elevated;
+  }
+
+  .mac-button-secondary:hover {
+    @apply bg-mac-state-hover border-primary/50;
+  }
+
+  .mac-button-outline {
+    @apply bg-transparent text-mac-text-primary border-mac-border-elevated;
+  }
+
+  .mac-button-outline:hover {
+    @apply bg-mac-state-hover border-primary/50;
+  }
+
+  /* MAC Professional Forms */
+  .mac-input {
+    @apply w-full px-4 py-3 bg-mac-surface-elevated border-mac-border rounded-lg;
+    @apply text-mac-text-primary placeholder-mac-text-muted font-light;
+    @apply transition-all duration-200;
+  }
+
+  .mac-input:focus {
+    @apply outline-none border-primary/50;
+    box-shadow: 0 0 0 3px rgba(51, 133, 255, 0.1);
+  }
+
+  /* MAC Professional Typography */
+  .mac-display {
+    @apply text-display font-thin text-mac-text-primary;
+  }
+
+  .mac-heading {
+    @apply text-heading-xl font-extralight text-mac-text-primary;
+  }
+
+  .mac-title {
+    @apply text-title font-light text-mac-text-primary;
+  }
+
+  .mac-body {
+    @apply text-body font-light text-mac-text-secondary;
+  }
+
+  /* MAC Floating Orbs Background */
+  .mac-floating-background {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: -1;
+  }
+
+
+/* Remove all cyberpunk/matrix styling - keep only professional elegance */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
