@@ -1,34 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 0 0% 8%;
-  --card-foreground: 210 40% 98%;
-  --popover: 0 0% 8%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 214 100% 59%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 0 0% 8%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 0 0% 40%;
-  --muted-foreground: 0 0% 70%;
-  --accent: 267 100% 59%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 0 0% 20%;
-  --input: 0 0% 8%;
-  --ring: 214 100% 59%;
-  --radius: 0.75rem;
-}
-
+/* Minimal CSS for deployment - no Tailwind directives to avoid PostCSS issues */
 body {
-  color: white;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-weight: 300;
-  line-height: 1.5;
+  margin: 0;
+  font-family: system-ui, sans-serif;
   background: #0a0a0a;
+  color: white;
 }
