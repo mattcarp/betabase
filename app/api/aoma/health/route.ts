@@ -6,7 +6,7 @@ export async function GET() {
     // Just check if the MCP client can be instantiated without running orchestration
     
     // Simple check - try to import MCPClient without triggering orchestration
-    const { MCPClient } = await import("@/services/MCPClient");
+    const { MCPClient } = await import("../../../../src/services/MCPClient");
     
     // Basic connection check without heavy orchestration
     // This is much faster and still validates MCP availability

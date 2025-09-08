@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { firecrawlService } from "@/services/firecrawl-integration";
+import { firecrawlService } from "../../../../src/services/firecrawl-integration";
 
 export async function POST(request: NextRequest) {
   try {

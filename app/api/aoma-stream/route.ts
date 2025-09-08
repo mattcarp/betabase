@@ -4,8 +4,8 @@
  */
 
 import { NextRequest } from "next/server";
-import { aomaOrchestrator } from "@/services/aomaOrchestrator";
-import { AOMAProgressUpdate } from "@/services/aomaProgressStream";
+import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
+import { AOMAProgressUpdate } from "../../../src/services/aomaProgressStream";
 
 export async function POST(request: NextRequest) {
   const { query } = await request.json();

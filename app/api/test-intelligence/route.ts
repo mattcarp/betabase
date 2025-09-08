@@ -4,8 +4,8 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { unifiedTestIntelligence } from "@/services/unified-test-intelligence";
-import { supportChatIntelligence } from "@/services/support-chat-intelligence";
+import { unifiedTestIntelligence } from "../../../src/services/unified-test-intelligence";
+import { supportChatIntelligence } from "../../../src/services/support-chat-intelligence";
 
 export async function POST(request: NextRequest) {
   try {

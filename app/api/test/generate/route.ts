@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
-import { modelConfig } from "@/services/modelConfig";
+import { modelConfig } from "../../../../src/services/modelConfig";
 
 export async function POST(request: NextRequest) {
   try {

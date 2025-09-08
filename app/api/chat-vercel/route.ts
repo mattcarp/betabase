@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai";
 import { streamText, convertToCoreMessages } from "ai";
-import { aomaOrchestrator } from "@/services/aomaOrchestrator";
+import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
 
 // Allow streaming responses up to 60 seconds
 export const maxDuration = 60;

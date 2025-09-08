@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cognitoAuth } from "@/services/cognitoAuth";
+import { cognitoAuth } from "../../../../src/services/cognitoAuth";
 
 // Helper function to get test emails from environment
 function getTestEmailPatterns(): string[] {
