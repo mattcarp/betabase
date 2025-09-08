@@ -99,13 +99,15 @@
     "vaul": "^0.9.1",
     "victory-vendor": "^37.3.6",
     "zod": "^3.23.8",
-    "zustand": "^5.0.5"
+    "zustand": "^5.0.5",
+    "typescript": "^5.5.3",
+    "@types/react": "^19.1.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.1",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.14",
-    "@types/react": "^19.1.1",
+    "@types/react": "^19.1.12",
     "@types/react-dom": "^19.0.2",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
@@ -118,7 +120,7 @@
     "prettier": "^3.3.2",
     "tailwindcss": "^3.4.4",
     "ts-jest": "^29.1.5",
-    "typescript": "^5.5.3"
+    "typescript": "^5.9.2"
   },
   "engines": {
     "node": ">=18.0.0",
