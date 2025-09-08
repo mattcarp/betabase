@@ -1,5 +1,5 @@
 import { openai } from "@ai-sdk/openai";
-import { streamText, convertToModelMessages } from "ai";
+import { streamText, convertToCoreMessages } from "ai";
 import { aomaOrchestrator } from "@/services/aomaOrchestrator";
 
 // Allow streaming responses up to 60 seconds
@@ -88,7 +88,7 @@ export async function POST(req: Request) {
     // Convert messages to model format with proper error handling
     let modelMessages;
     try {
-      modelMessages = convertToModelMessages(messages);
+      modelMessages = convertToCoreMessages(messages);
     } catch (conversionError) {
       console.error("Failed to convert messages:", conversionError);
       // Fallback: create a simple message array

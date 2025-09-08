@@ -312,9 +312,10 @@ export function AiSdkChatPanel({
   }, [currentApiEndpoint, selectedModel]);
   
   const chatResult = useChat({
-    transport: new DefaultChatTransport({
-      api: currentApiEndpoint, // Use the calculated endpoint directly
-    }),
+    api: currentApiEndpoint, // Use the calculated endpoint directly
+    // transport: new DefaultChatTransport({
+    //   api: currentApiEndpoint, // Use the calculated endpoint directly
+    // }),
     id: chatId,
     messages: initialMessages || [],
     // Note: body is not valid in v5 - system prompt and model should be handled differently
