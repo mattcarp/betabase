@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* MAC Design System imported in layout.tsx to avoid conflicts */
+/* Import custom styles */
+@import '../src/styles/motiff-glassmorphism.css';
+@import '../src/styles/mac-design-system.css';
 
 /* Base styles */
 @layer base {
