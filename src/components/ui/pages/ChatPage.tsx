@@ -29,7 +29,7 @@ import { Badge } from "../badge";
 import { Button } from "../button";
 import { Card, CardContent, CardHeader, CardTitle } from "../card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../tabs";
-import { cn } from "../../../lib/utils";
+import { cn } from "../../../../../../lib/utils";
 import { ConnectionStatusIndicator } from "../ConnectionStatusIndicator";
 import { SiamLogo } from "../SiamLogo";
 import { AOMAKnowledgePanel } from "../AOMAKnowledgePanel";

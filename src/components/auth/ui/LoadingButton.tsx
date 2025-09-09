@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, ButtonProps } from "../../ui/button";
-import { cn } from "../../lib/utils";
+import { cn } from "../../../../../lib/utils";
 
 interface LoadingButtonProps extends ButtonProps {
   loading?: boolean;

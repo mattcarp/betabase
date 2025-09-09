@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
 import { Input } from "../../ui/input";
-import { cn } from "../../lib/utils";
+import { cn } from "../../../../../lib/utils";
 
 interface VerificationCodeInputProps extends React.ComponentProps<"input"> {
   onAutoSubmit?: () => void;

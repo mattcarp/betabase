@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, Suspense } from "react";
-import { cn } from "../../lib/utils";
+import { cn } from "../lib/utils";
 import { LoadingSpinner } from "./LoadingStates";
 
 interface LiveTranscriptionProps {
