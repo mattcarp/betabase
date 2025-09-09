@@ -7,8 +7,6 @@ import { useSettings } from "../src/hooks/useSettings";
 // Use MagicLinkLoginForm for authentication (MAGIC LINKS ONLY - NO PASSWORDS)
 import { MagicLinkLoginForm as LoginForm } from "../src/components/auth/MagicLinkLoginForm";
 import { getBuildInfo, getFormattedBuildTime } from "../src/utils/buildInfo";
-import "../src/styles/motiff-glassmorphism.css";
-import "../src/styles/mac-design-system.css";
 import { debugLog, debugError } from "../src/utils/logger";
 import { cognitoAuth } from "../src/services/cognitoAuth";
 // import { Toaster } from "../src/components/ui/sonner";
