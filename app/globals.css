@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import custom styles */
-@import '../src/styles/motiff-glassmorphism.css';
-@import '../src/styles/mac-design-system.css';
+/* Custom styles loaded via link tags in layout.tsx to avoid PostCSS conflicts */
 
 /* Base styles */
 @layer base {
