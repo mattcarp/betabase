@@ -1,6 +1,8 @@
 import React from "react";
 import type { Metadata } from "next";
 import "./globals.css";
+import "../src/styles/motiff-glassmorphism.css";
+import "../src/styles/mac-design-system.css";
 import { CustomElementGuard } from "../src/components/CustomElementGuard";
 
 export const metadata: Metadata = {
