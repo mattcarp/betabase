@@ -2,8 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import MAC Design System */
-@import '../src/styles/mac-design-system.css';
+/* MAC Design System imported in layout.tsx to avoid conflicts */
 
 /* Base styles */
 @layer base {
