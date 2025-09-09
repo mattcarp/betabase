@@ -35,12 +35,13 @@ interface AUTAnalysis {
 }
 
 export class FirecrawlIntegrationService {
-  private firecrawl: FirecrawlApp;
+  private firecrawl: FirecrawlApp | null;
   private apiKey: string;
 
   constructor(apiKey?: string) {
     this.apiKey = apiKey || process.env.FIRECRAWL_API_KEY || "";
-    this.firecrawl = new FirecrawlApp({ apiKey: this.apiKey });
+    // Only create FirecrawlApp if API key is provided
+    this.firecrawl = this.apiKey ? new FirecrawlApp({ apiKey: this.apiKey }) : null;
   }
 
   /**
@@ -49,6 +50,10 @@ export class FirecrawlIntegrationService {
    */
   async analyzeAUT(baseUrl: string): Promise<AUTAnalysis> {
     console.log(`🔍 Analyzing AUT at ${baseUrl}...`);
+
+    if (!this.firecrawl) {
+      throw new Error("Firecrawl API key not configured. Set FIRECRAWL_API_KEY environment variable.");
+    }
 
     try {
       // Map the application to discover all URLs
@@ -103,6 +108,9 @@ export class FirecrawlIntegrationService {
    * Scrape and analyze a single page
    */
   private async scrapeAndAnalyze(url: string) {
+    if (!this.firecrawl) {
+      throw new Error("Firecrawl API key not configured");
+    }
     const scrapeResult = await this.firecrawl.scrapeUrl(url, {
       formats: ["markdown", "extract"],
       onlyMainContent: true,
@@ -150,6 +158,9 @@ export class FirecrawlIntegrationService {
    * Extract documentation for knowledge base
    */
   private async extractDocumentation(url: string) {
+    if (!this.firecrawl) {
+      throw new Error("Firecrawl API key not configured");
+    }
     const scrapeResult = await this.firecrawl.scrapeUrl(url, {
       formats: ["markdown"],
       onlyMainContent: true,
@@ -171,6 +182,9 @@ export class FirecrawlIntegrationService {
    * Generate test patterns from crawled documentation
    */
   async generateTestPatterns(documentationUrls: string[]): Promise<any[]> {
+    if (!this.firecrawl) {
+      throw new Error("Firecrawl API key not configured");
+    }
     const patterns = [];
 
     for (const url of documentationUrls) {
@@ -212,6 +226,10 @@ export class FirecrawlIntegrationService {
    */
   async conductTestingResearch(query: string) {
     console.log(`🔬 Conducting deep research on: ${query}`);
+
+    if (!this.firecrawl) {
+      throw new Error("Firecrawl API key not configured");
+    }
 
     const research = await this.firecrawl.search(query, {
       limit: 10,
