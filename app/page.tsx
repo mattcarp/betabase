@@ -15,7 +15,26 @@ import { cognitoAuth } from "../src/services/cognitoAuth";
 
 // YOLO ARCHITECTURE FIX: Migrated from src/App.tsx to proper App Router!
 const ChatPage = React.lazy(
-  () => import("../src/components/ui/pages/ChatPage"),
+  () => import("../src/components/ui/pages/ChatPage").catch((error) => {
+    console.error("Failed to load ChatPage:", error);
+    // Return a fallback component
+    return {
+      default: () => (
+        <div className="h-full w-screen flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-red-500 mb-4">Failed to load chat interface</p>
+            <p className="text-white mb-4">Error: {error.message}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              Reload Page
+            </button>
+          </div>
+        </div>
+      ),
+    };
+  }),
 );
 
 export default function Home() {
@@ -24,6 +43,7 @@ export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const { settings, isLoading: settingsLoading } = useSettings();
 
   // Build-time version info
@@ -147,11 +167,26 @@ export default function Home() {
         <React.Suspense
           fallback={
             <div className="h-full w-screen flex items-center justify-center">
-              <div className="text-white">Loading...</div>
+              <div className="text-white">Loading SIAM Interface...</div>
             </div>
           }
         >
-          <ChatPage onLogout={handleLogout} />
+          {loadError ? (
+            <div className="h-full w-screen flex items-center justify-center">
+              <div className="text-center">
+                <p className="text-red-500 mb-4">Failed to load application</p>
+                <p className="text-white mb-4">{loadError}</p>
+                <button 
+                  onClick={() => window.location.reload()} 
+                  className="px-4 py-2 bg-blue-500 text-white rounded"
+                >
+                  Reload
+                </button>
+              </div>
+            </div>
+          ) : (
+            <ChatPage onLogout={handleLogout} />
+          )}
         </React.Suspense>
       </main>
 
