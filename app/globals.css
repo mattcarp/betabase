@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import MAC Design System */
+@import '../src/styles/mac-design-system.css';
+
 /* Base styles */
 @layer base {
   :root {
