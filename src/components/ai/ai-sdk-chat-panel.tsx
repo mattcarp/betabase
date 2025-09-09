@@ -185,6 +185,10 @@ export function AiSdkChatPanel({
   const [isProcessing, setIsProcessing] = useState(false); // Simpler loading state
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
   
+  // Voice feature states - define before using in hooks
+  const [isTTSEnabled, setIsTTSEnabled] = useState(false);
+  const [selectedVoiceId, setSelectedVoiceId] = useState("21m00Tcm4TlvDq8ikWAM"); // Rachel as default
+  
   // Voice integration hooks
   const {
     speak,
@@ -508,10 +512,6 @@ export function AiSdkChatPanel({
   
   // State for storing and displaying the last prompt
   const [lastPrompt, setLastPrompt] = useState<string>("");
-  
-  // Voice feature states  
-  const [isTTSEnabled, setIsTTSEnabled] = useState(false);
-  const [selectedVoiceId, setSelectedVoiceId] = useState("21m00Tcm4TlvDq8ikWAM"); // Rachel as default
 
   // Sync messages with conversation manager
   useEffect(() => {
