@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Brain, TrendingUp, Clock, Target, Lightbulb } from "lucide-react";
-import { cn } from "../lib/utils";
+import { cn } from "../../lib/utils";
 
 interface Insight {
   id: string;
