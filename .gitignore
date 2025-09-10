@@ -34,10 +34,6 @@ storybook-static/
 .next/
 out/
 
-# Vercel (we use Railway)
-.vercel/
-.vercel.old/
-
 # Environment variables
 .env
 .env.local
@@ -66,7 +62,7 @@ ehthumbs.db
 Thumbs.db
 
 # Testing
-coverage/
+# coverage/
 .nyc_output/
 test-results/
 playwright-report/
@@ -79,12 +75,12 @@ verify-*.js
 *check*.js
 
 # Storybook
-*storybook.log
+# *storybook.log
 
 # Application specific
 audio/
 processed/
-config.json
+# config.json
 
 # Task files (commented out to keep tasks)
 
@@ -97,9 +93,8 @@ config.json
 .netlify
 
 # Claude Code local settings
-.claude/settings.local.json
-CLAUDE.local.md
-.vercel
+# .claude/settings.local.json
+# CLAUDE.local.md
 
 # Dependency directories
 .idea
@@ -108,28 +103,28 @@ CLAUDE.local.md
 .env.production.local
 
 # Windsurf rules
-.windsurfrules*
+# .windsurfrules*
 
 # AI Assistant local overrides and symlinks
-.cursorrules
-.cursorrules.local
-.windsurfrules
-.windsurfrules.local
-.claude/agents
-.claude/commands
-.vscode/design-system.md
+# .cursorrules
+# .cursorrules.local
+# .windsurfrules
+# .windsurfrules.local
+# .claude/agents
+# .claude/commands
+# .vscode/design-system.md
 
 # Local symlinks (needed locally but not in deployment)
-machine
-mc-design-system
-.cursorrules
-.windsurfrules
-.claude/agents
-.claude/commands
-.vscode/design-system.md
-.cursorrules
-test-uploads/
-.next.backup*
+# machine
+# mc-design-system
+# .cursorrules
+# .windsurfrules
+# .claude/agents
+# .claude/commands
+# .vscode/design-system.md
+# .cursorrules
+# test-uploads/
+# .next.backup*
 
 # Task files
 # tasks.json
