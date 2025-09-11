@@ -5,6 +5,25 @@ import OpenAI from 'openai';
 
 // Force dynamic mode to prevent build-time evaluation
 export const dynamic = 'force-dynamic';
+// Only allow crawling against the AOMA staging host (from env or default)
+const STAGE_URL = process.env.AOMA_STAGE_URL || 'https://aoma-stage.smcdp-de.net';
+let ALLOWED_STAGE_HOST = 'aoma-stage.smcdp-de.net';
+try {
+  ALLOWED_STAGE_HOST = new URL(STAGE_URL).host;
+} catch (_) {
+  // Fallback to default host
+}
+
+function assertStageUrl(targetUrl: string) {
+  try {
+    const { host } = new URL(targetUrl);
+    if (host !== ALLOWED_STAGE_HOST) {
+      throw new Error(`Only staging host is allowed: ${ALLOWED_STAGE_HOST}`);
+    }
+  } catch (e) {
+    throw new Error('Invalid or disallowed URL for staging crawl');
+  }
+}
 
 /**
  * Firecrawl → Supabase Integration for AOMA UI Analysis
@@ -38,13 +57,17 @@ export async function POST(req: NextRequest) {
   try {
     const { firecrawl: firecrawlClient, openai: openaiClient } = getClients();
     
-    if (!firecrawlClient || !openaiClient) {
+    // Require Firecrawl only; OpenAI is optional (embeddings skipped if absent)
+    if (!firecrawlClient) {
       return NextResponse.json(
-        { error: 'API keys not configured' },
+        { error: 'Firecrawl API key not configured' },
         { status: 500 }
       );
     }
     const { url, options = {} } = await req.json();
+
+    // Enforce staging-only crawls
+    assertStageUrl(url);
 
     if (!url) {
       return NextResponse.json(
@@ -206,6 +229,16 @@ export async function GET(req: NextRequest) {
   if (!url) {
     return NextResponse.json(
       { error: 'URL parameter is required' },
+      { status: 400 }
+    );
+  }
+
+  // Enforce staging-only reads by URL
+  try {
+    assertStageUrl(url);
+  } catch (e: any) {
+    return NextResponse.json(
+      { error: e?.message || 'Disallowed URL' },
       { status: 400 }
     );
   }
