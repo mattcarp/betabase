@@ -4,17 +4,16 @@
  * By Matthew Adam Carpenter - Enhanced with AI Agent System
  */
 
+import {
+    Activity,
+    Brain,
+    FileText,
+    MessageCircle,
+    Mic,
+    Settings
+} from "lucide-react";
 import React, { useState } from "react";
 import { cn } from "../../../lib/utils";
-import {
-  Mic,
-  FileText,
-  Brain,
-  Activity,
-  Settings,
-  MessageCircle,
-  MoreHorizontal,
-} from "lucide-react";
 
 interface ProfessionalLayoutProps {
   children?: React.ReactNode;

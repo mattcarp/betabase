@@ -1,0 +1,8 @@
+# Local overrides for this project
+# This file is gitignored - add your personal preferences here
+
+# Example: Developer name
+# DEVELOPER_NAME=YourName
+
+# Example: Preferred package manager
+# Use pnpm instead of npm
