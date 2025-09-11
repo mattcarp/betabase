@@ -115,16 +115,8 @@ processed/
 # .vscode/design-system.md
 
 # Local symlinks (needed locally but not in deployment)
-# machine
-# mc-design-system
-# .cursorrules
-# .windsurfrules
-# .claude/agents
-# .claude/commands
-# .vscode/design-system.md
-# .cursorrules
-# test-uploads/
-# .next.backup*
+# 
+
 
 # Task files
 # tasks.json

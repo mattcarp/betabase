@@ -1,0 +1,33 @@
+SIAM Test Document - AOMA Knowledge Base Upload Test
+=====================================================
+
+Date: August 16, 2025
+Purpose: Testing file upload to OpenAI Assistant vector store
+
+Key Information:
+----------------
+1. This is a test document for the SIAM system
+2. It contains information about AOMA (Augmented Organizational Memory Architecture)
+3. The document should be uploaded to assistant ID: asst_VvOHL1c4S6YapYKun4mY29fM
+
+Test Content:
+-------------
+AOMA is Sony Music's intelligent knowledge management system that:
+- Stores organizational knowledge and documents
+- Provides AI-powered search and retrieval
+- Integrates with multiple data sources
+- Enables intelligent meeting assistance
+
+Technical Details:
+------------------
+- Vector Store: OpenAI Assistant API
+- File Types Supported: PDF, TXT, MD, DOC, DOCX, CSV, JSON
+- Maximum File Size: 20MB
+- Processing: Automatic chunking and embedding
+
+Verification Keywords:
+----------------------
+UNIQUE_TEST_MARKER_2025: This unique string can be used to verify the file was uploaded correctly.
+AOMA_TEST_VERIFICATION: Another unique marker for search testing.
+
+End of Test Document

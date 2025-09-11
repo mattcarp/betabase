@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
+const isProd = process.env.NODE_ENV === 'production';
 const nextConfig = {
   // output: 'standalone', // Only needed for Docker deployments
   eslint: {
@@ -9,7 +11,8 @@ const nextConfig = {
     // Skip TypeScript checks during builds to avoid dependency issues on Render
     ignoreBuildErrors: true,
   },
-  // outputFileTracingRoot: '/Users/matt/Documents/projects/siam', // Removed - causes issues on Render
+  // In local/dev, explicitly set the tracing root to avoid monorepo lockfile confusion
+  ...(isProd ? {} : { outputFileTracingRoot: __dirname }),
   reactStrictMode: false,
   images: {
     domains: ['localhost', 'siam.onrender.com'],

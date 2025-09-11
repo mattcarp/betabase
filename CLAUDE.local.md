@@ -1,0 +1,2 @@
+- we are not using vercel. also, the progress indicator appeared twice and then hung around for a while BELOW the chat response. it should always be above the response.
+- you currently cannot navigate via explicit deep links, as its a SPA. you need to remember this for testing. we hope to change this in the future, but it's a reality at the moment.
