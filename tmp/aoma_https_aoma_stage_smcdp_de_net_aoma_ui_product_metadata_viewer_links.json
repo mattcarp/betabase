@@ -1,0 +1,18 @@
+{
+  "url": "https://aoma-stage.smcdp-de.net/aoma-ui/product-metadata-viewer",
+  "count": 3,
+  "links": [
+    {
+      "href": "javascript:submitChain('LoginResetPasswordDisplayChain')",
+      "text": "Forget password?"
+    },
+    {
+      "href": "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=Login#",
+      "text": "New Account"
+    },
+    {
+      "href": "https://login.microsoftonline.com/f0aff3b7-91a5-4aae-af71-c63e1dda2049/oauth2/authorize?response_type=code&response_mode=form_post&redirect_uri=https%3A%2F%2Faoma-stage.smcdp-de.net%2Fservlet%2Fcom.sonymusic.aoma.AOMADispatcherServlet&client_id=72e97d60-6868-4706-9caa-6781093d61ca&scope=openid%20user.read&state=8d9b563c-beb9-4d54-8ed8-119f57a09e68&nonce=54cddbf9-799d-4fe2-b990-2a1c7023a7ff&resource=https://graph.microsoft.com",
+      "text": "Employee Login"
+    }
+  ]
+}

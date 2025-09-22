@@ -33,6 +33,8 @@ import { cn } from "../../../lib/utils";
 import { ConnectionStatusIndicator } from "../ConnectionStatusIndicator";
 import { SiamLogo } from "../SiamLogo";
 import { AOMAKnowledgePanel } from "../AOMAKnowledgePanel";
+import EnhancedKnowledgePanel from "../EnhancedKnowledgePanel";
+import { getKnowledgeSourceCounts } from "../../../services/knowledgeSearchService";
 import { EnhancedCurateTab } from "../EnhancedCurateTab";
 import { TestDashboard } from "../../test-dashboard/TestDashboard";
 import { IntrospectionDropdown } from "../IntrospectionDropdown";
@@ -85,6 +87,9 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
   const [activeMode, setActiveMode] = useState<ComponentMode["mode"]>("chat");
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
+  const [knowledgeCounts, setKnowledgeCounts] = useState<Record<string, number>>({});
+  const [knowledgeStatus, setKnowledgeStatus] = useState<'ok'|'degraded'|'unknown'>("unknown");
+  const [lastKnowledgeRefresh, setLastKnowledgeRefresh] = useState<string>("");
   
   const { 
     activeConversationId, 
@@ -101,6 +106,25 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
       setActiveConversation(newConvo.id);
     }
   }, [conversations.length, createConversation, setActiveConversation]);
+
+  // Load quick knowledge indicators for header badges
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const counts = await getKnowledgeSourceCounts();
+        if (!mounted) return;
+        setKnowledgeCounts(counts);
+        const total = Object.values(counts).reduce((a, b) => a + (b || 0), 0);
+        setKnowledgeStatus(total > 0 ? "ok" : "degraded");
+        setLastKnowledgeRefresh(new Date().toLocaleTimeString());
+      } catch {
+        if (!mounted) return;
+        setKnowledgeStatus("degraded");
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
   
   const activeConversation = activeConversationId ? getConversation(activeConversationId) : null;
 
@@ -176,6 +200,22 @@ Be helpful, concise, and professional in your responses.`;
             <div className="flex items-center space-x-2">
               <ConnectionStatusIndicator />
               <IntrospectionDropdown />
+              {/* Knowledge status badges */}
+              <div className="hidden md:flex items-center gap-1">
+                <Badge variant="outline" title="Knowledge status">
+                  {knowledgeStatus === 'ok' ? 'Knowledge: OK' : knowledgeStatus === 'degraded' ? 'Knowledge: Degraded' : 'Knowledge: Unknown'}
+                </Badge>
+                {Object.entries(knowledgeCounts).map(([k,v]) => (
+                  <Badge key={k} variant="outline" className="text-xs" title={`Indexed ${k}`}>
+                    {k}:{v}
+                  </Badge>
+                ))}
+                {lastKnowledgeRefresh && (
+                  <Badge variant="outline" className="text-xs" title="Last refresh">
+                    updated {lastKnowledgeRefresh}
+                  </Badge>
+                )}
+              </div>
               
               {/* Sidebar trigger with MAC styling */}
               <SidebarTrigger className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 rounded-md transition-colors" />
@@ -291,9 +331,9 @@ Be helpful, concise, and professional in your responses.`;
 
         {/* Right Sidebar */}
         {isRightSidebarOpen && (
-          <aside className="w-64 border-l border-zinc-800/50 bg-zinc-950/50 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/30">
+          <aside className="w-96 border-l border-zinc-800/50 bg-zinc-950/50 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/30">
             <RightSidebar onToggle={() => setIsRightSidebarOpen(false)}>
-              <WisdomLibrary />
+              <EnhancedKnowledgePanel className="h-full" />
             </RightSidebar>
           </aside>
         )}

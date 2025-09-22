@@ -1,5 +1,6 @@
 import { openai } from "@ai-sdk/openai";
 import { streamText, convertToCoreMessages } from "ai";
+import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
 
 // Allow streaming responses up to 60 seconds
@@ -41,6 +42,7 @@ export async function POST(req: Request) {
       : null;
 
     let aomaContext = "";
+    let ragMeta: any = null;
 
     // Query AOMA knowledge if we have a user message
     let aomaError = null;
@@ -51,6 +53,12 @@ export async function POST(req: Request) {
       );
 
       try {
+        // Run knowledge search in parallel with orchestration prep
+        const ragPromise = searchKnowledge(latestUserMessage.content, {
+          matchThreshold: 0.78,
+          matchCount: 6,
+        });
+
         const aomaResult = await aomaOrchestrator.executeOrchestration(
           latestUserMessage.content,
         );
@@ -75,6 +83,24 @@ export async function POST(req: Request) {
           }
           
           console.log("✅ AOMA orchestration completed successfully");
+        }
+
+        // Await RAG and incorporate top snippets
+        try {
+          const rag = await ragPromise;
+          ragMeta = rag;
+          if (rag.results?.length) {
+            const snippets = rag.results
+              .slice(0, 4)
+              .map((r, i) => `(${i + 1}) [${r.source_type}] ${r.content?.slice(0, 400)}`)
+              .join("\n---\n");
+            aomaContext += `\n\n[KNOWLEDGE CONTEXT]\n${snippets}`;
+            aomaContext += `\n[CONTEXT_META]{\"count\":${rag.stats.count},\"ms\":${rag.durationMs},\"sources\":${JSON.stringify(
+              rag.stats.sourcesCovered,
+            )}}`;
+          }
+        } catch (e) {
+          console.warn("RAG search failed:", e);
         }
       } catch (error) {
         // CRITICAL: BE HONEST ABOUT AOMA FAILURES
@@ -148,6 +174,13 @@ ${
       onFinish: ({ usage, finishReason }) => {
         console.log("📊 Token usage:", usage);
         console.log("✅ Finish reason:", finishReason);
+        if (ragMeta) {
+          console.log("📚 Knowledge stats:", {
+            count: ragMeta.stats?.count,
+            ms: ragMeta.durationMs,
+            sources: ragMeta.stats?.sourcesCovered,
+          });
+        }
       },
     });
 

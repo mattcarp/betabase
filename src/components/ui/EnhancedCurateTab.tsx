@@ -72,6 +72,7 @@ import {
   Send,
   Users,
   Award,
+  Trophy,
   GitBranch,
   ChevronRight,
   DollarSign,

@@ -500,7 +500,7 @@ export class AOMAOrchestrator {
           // Call Railway AOMA server directly in production to avoid circular references
           // In development, use the local API endpoint for easier testing
           const aomaEndpoint = process.env.NODE_ENV === 'production' 
-            ? 'https://luminous-dedication-production.up.railway.app/rpc' 
+            ? 'https://aoma-mesh-mcp.onrender.com/rpc' 
             : 'http://localhost:3000/api/aoma';
           
           // For production Railway calls, we need to use JSON-RPC format
@@ -602,8 +602,8 @@ export class AOMAOrchestrator {
         case "search_outlook_emails":
         case "analyze_development_context":
           // Call the aoma-mesh-mcp server for these tools
-          // Always use Railway endpoint since local aoma-mesh-mcp isn't running
-          const mcpEndpoint = 'https://luminous-dedication-production.up.railway.app/rpc';
+          // Use Render endpoint for aoma-mesh-mcp
+          const mcpEndpoint = 'https://aoma-mesh-mcp.onrender.com/rpc';
           
           const mcpRequest = {
             jsonrpc: "2.0",

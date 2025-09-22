@@ -1,13 +1,13 @@
 /**
  * AOMA Parallel Router - A/B Testing & Performance Monitoring
- * Routes traffic between Railway and Render deployments for performance comparison
+ * Routes traffic to Render deployment (Railway removed)
  */
 
 import { aomaMeshMcp } from './aomaMeshMcp';
 
 export interface PerformanceMetrics {
   requestId: string;
-  provider: 'railway' | 'render';
+  provider: 'render';
   endpoint: string;
   startTime: number;
   endTime: number;
@@ -22,15 +22,15 @@ export interface PerformanceMetrics {
 
 export interface ABTestConfig {
   enabled: boolean;
-  renderPercentage: number; // 0-100
-  stickySession: boolean; // Keep same user on same provider
+  renderPercentage: number; // retained for compatibility
+  stickySession: boolean;
   performanceLogging: boolean;
-  comparisonMode: boolean; // Run both in parallel for comparison
+  comparisonMode: boolean; // no-op
 }
 
 class AOMAParallelRouter {
-  // Railway removed - using Render only
-    "https://luminous-dedication-production.up.railway.app";
+  // Railway removed; only Render is used
+  private railwayUrl = '';
   
   private renderUrl = process.env.NEXT_PUBLIC_RENDER_AOMA_URL || 
     "https://aoma-mesh-mcp.onrender.com";
@@ -46,31 +46,13 @@ class AOMAParallelRouter {
     comparisonMode: process.env.NEXT_PUBLIC_COMPARISON_MODE === 'true'
   };
 
-  private sessionRouting = new Map<string, 'railway' | 'render'>();
+  private sessionRouting = new Map<string, 'render'>();
 
   /**
    * Determines which provider to use based on A/B configuration
    */
-  private selectProvider(sessionId?: string): 'railway' | 'render' {
-    if (!this.config.enabled) {
-      return 'railway'; // Default to existing Railway deployment
-    }
-
-    // Sticky sessions - keep user on same provider
-    if (this.config.stickySession && sessionId) {
-      const existing = this.sessionRouting.get(sessionId);
-      if (existing) return existing;
-    }
-
-    // Random selection based on percentage
-    const useRender = Math.random() * 100 < this.config.renderPercentage;
-    const provider = useRender ? 'render' : 'railway';
-
-    if (this.config.stickySession && sessionId) {
-      this.sessionRouting.set(sessionId, provider);
-    }
-
-    return provider;
+  private selectProvider(): 'render' {
+    return 'render';
   }
 
   /**
@@ -81,8 +63,8 @@ class AOMAParallelRouter {
     options: RequestInit,
     sessionId?: string
   ): Promise<{ data: any; metrics: PerformanceMetrics }> {
-    const provider = this.selectProvider(sessionId);
-    const baseUrl = provider === 'render' ? this.renderUrl : this.railwayUrl;
+    const provider = this.selectProvider();
+    const baseUrl = this.renderUrl;
     const url = `${baseUrl}${endpoint}`;
 
     // Check for cold start (no request in last 5 minutes)
@@ -155,32 +137,15 @@ class AOMAParallelRouter {
     endpoint: string,
     options: RequestInit
   ): Promise<{
-    railway: { data?: any; metrics: PerformanceMetrics };
     render: { data?: any; metrics: PerformanceMetrics };
-    winner: 'railway' | 'render';
-    improvement: number; // Percentage improvement
+    winner: 'render';
+    improvement: number;
   }> {
-    const [railwayResult, renderResult] = await Promise.allSettled([
-      this.makeRequestDirect('railway', endpoint, options),
-      this.makeRequestDirect('render', endpoint, options)
-    ]);
-
-    const railwayMetrics = railwayResult.status === 'fulfilled' 
-      ? railwayResult.value.metrics 
-      : this.createErrorMetrics('railway', endpoint, railwayResult.reason);
-    
-    const renderMetrics = renderResult.status === 'fulfilled'
-      ? renderResult.value.metrics
-      : this.createErrorMetrics('render', endpoint, renderResult.reason);
-
-    const winner = renderMetrics.latency < railwayMetrics.latency ? 'render' : 'railway';
-    const improvement = ((railwayMetrics.latency - renderMetrics.latency) / railwayMetrics.latency) * 100;
-
+    const renderResult = await this.makeRequestDirect('render', endpoint, options);
     return {
-      railway: railwayResult.status === 'fulfilled' ? railwayResult.value : { metrics: railwayMetrics },
-      render: renderResult.status === 'fulfilled' ? renderResult.value : { metrics: renderMetrics },
-      winner,
-      improvement
+      render: renderResult,
+      winner: 'render',
+      improvement: 0
     };
   }
 
@@ -188,11 +153,11 @@ class AOMAParallelRouter {
    * Make a direct request to a specific provider
    */
   private async makeRequestDirect(
-    provider: 'railway' | 'render',
+    provider: 'render',
     endpoint: string,
     options: RequestInit
   ): Promise<{ data: any; metrics: PerformanceMetrics }> {
-    const baseUrl = provider === 'render' ? this.renderUrl : this.railwayUrl;
+    const baseUrl = this.renderUrl;
     const url = `${baseUrl}${endpoint}`;
     
     const requestId = `${provider}-direct-${Date.now()}`;
@@ -230,7 +195,7 @@ class AOMAParallelRouter {
    * Create error metrics for failed requests
    */
   private createErrorMetrics(
-    provider: 'railway' | 'render',
+    provider: 'render',
     endpoint: string,
     error: any
   ): PerformanceMetrics {
@@ -281,7 +246,7 @@ class AOMAParallelRouter {
   /**
    * Get performance statistics
    */
-  getStatistics(provider?: 'railway' | 'render'): {
+  getStatistics(provider?: 'render'): {
     totalRequests: number;
     avgLatency: number;
     p50Latency: number;

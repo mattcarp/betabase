@@ -122,15 +122,15 @@ export class AomaContentAggregator {
     this.config = {
       serverUrl: getEnvVar(
         "NEXT_PUBLIC_AOMA_MESH_SERVER_URL",
-        "https://luminous-dedication-production.up.railway.app",
+        "https://aoma-mesh-mcp.onrender.com",
       ) as string,
       rpcUrl: getEnvVar(
         "NEXT_PUBLIC_AOMA_MESH_RPC_URL",
-        "https://luminous-dedication-production.up.railway.app/rpc",
+        "https://aoma-mesh-mcp.onrender.com/rpc",
       ) as string,
       healthUrl: getEnvVar(
         "NEXT_PUBLIC_AOMA_MESH_HEALTH_URL",
-        "https://luminous-dedication-production.up.railway.app/health",
+        "https://aoma-mesh-mcp.onrender.com/health",
       ) as string,
       enableAutoQuery:
         getEnvVar("NEXT_PUBLIC_ENABLE_MCP_INTEGRATION", true) !== "false",
@@ -143,6 +143,8 @@ export class AomaContentAggregator {
         "workflow",
         "metadata",
         "sony music",
+        "universal service management",
+        "usm",
         "content delivery",
         "api",
         "integration",
@@ -227,12 +229,14 @@ export class AomaContentAggregator {
     const [jiraResult, confluenceResult] = await Promise.all([
       this.queryMcp("get_jira_tech_updates", {
         sinceHours: 24,
-        projects: ["AOMA", "TECH", "API"],
+        projects: ["AOMA", "USM", "TECH", "API"],
+        baseUrl: "https://jira.smedigitalapps.com/jira",
         maxResults: this.config.maxItems,
       }),
       this.queryMcp("get_confluence_tech_updates", {
         sinceHours: 24,
-        spaces: ["TECH", "API", "AOMA"],
+        spaces: ["AOMA", "USM", "TECH", "API", "RELEASE"],
+        baseUrl: "https://wiki.smedigitalapps.com",
         maxResults: this.config.maxItems,
       }),
     ]);

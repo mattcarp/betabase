@@ -6,7 +6,7 @@
  * - Customer support knowledge base
  */
 
-import FirecrawlApp from "@mendable/firecrawl-js";
+import Firecrawl from "@mendable/firecrawl-js";
 
 interface TestableFeature {
   name: string;
@@ -35,13 +35,13 @@ interface AUTAnalysis {
 }
 
 export class FirecrawlIntegrationService {
-  private firecrawl: FirecrawlApp | null;
+  private firecrawl: Firecrawl | null;
   private apiKey: string;
 
   constructor(apiKey?: string) {
     this.apiKey = apiKey || process.env.FIRECRAWL_API_KEY || "";
-    // Only create FirecrawlApp if API key is provided
-    this.firecrawl = this.apiKey ? new FirecrawlApp({ apiKey: this.apiKey }) : null;
+    // Only create Firecrawl if API key is provided
+    this.firecrawl = this.apiKey ? new Firecrawl({ apiKey: this.apiKey }) : null;
   }
 
   /**
@@ -56,15 +56,14 @@ export class FirecrawlIntegrationService {
     }
 
     try {
-      // Map the application to discover all URLs
-      const mapResult = await this.firecrawl.mapUrl(baseUrl, {
+      // Map the application to discover all URLs (Firecrawl v2)
+      const mapResult = await this.firecrawl.map(baseUrl, {
         search: "",
-        ignoreSitemap: false,
-        includeSubdomains: false,
         limit: 100,
+        sitemap: "include",
       });
 
-      const urls = mapResult.links || [];
+      const urls = mapResult.links ?? [];
       console.log(`📍 Discovered ${urls.length} URLs`);
 
       // Scrape key pages for feature extraction
@@ -111,47 +110,51 @@ export class FirecrawlIntegrationService {
     if (!this.firecrawl) {
       throw new Error("Firecrawl API key not configured");
     }
-    const scrapeResult = await this.firecrawl.scrapeUrl(url, {
-      formats: ["markdown", "extract"],
-      onlyMainContent: true,
-      extract: {
-        prompt: `Extract testable features and user flows from this page. Focus on:
+    const res = await this.firecrawl.scrape(url, {
+      formats: [
+        "markdown",
+        {
+          type: "json",
+          prompt: `Extract testable features and user flows from this page. Focus on:
           1. Interactive elements (buttons, forms, inputs)
           2. Navigation paths
           3. Key functionality
           4. User workflows`,
-        schema: {
-          type: "object",
-          properties: {
-            features: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  name: { type: "string" },
-                  description: { type: "string" },
-                  testPriority: { type: "string" },
-                  testTypes: { type: "array", items: { type: "string" } },
+          schema: {
+            type: "object",
+            properties: {
+              features: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    name: { type: "string" },
+                    description: { type: "string" },
+                    testPriority: { type: "string" },
+                    testTypes: { type: "array", items: { type: "string" } },
+                  },
                 },
               },
-            },
-            flows: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  name: { type: "string" },
-                  steps: { type: "array", items: { type: "string" } },
-                  criticalPath: { type: "boolean" },
+              flows: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    name: { type: "string" },
+                    steps: { type: "array", items: { type: "string" } },
+                    criticalPath: { type: "boolean" },
+                  },
                 },
               },
             },
           },
         },
-      },
+      ],
+      onlyMainContent: true,
     });
 
-    return scrapeResult.extract || { features: [], flows: [] };
+    const extract = (res as any).json;
+    return extract || { features: [], flows: [] };
   }
 
   /**
@@ -161,12 +164,12 @@ export class FirecrawlIntegrationService {
     if (!this.firecrawl) {
       throw new Error("Firecrawl API key not configured");
     }
-    const scrapeResult = await this.firecrawl.scrapeUrl(url, {
+    const scrapeResult = await this.firecrawl.scrape(url, {
       formats: ["markdown"],
       onlyMainContent: true,
     });
 
-    const content = scrapeResult.markdown || "";
+    const content = (scrapeResult as any).markdown || "";
 
     // Process content for knowledge base
     return [
@@ -188,33 +191,36 @@ export class FirecrawlIntegrationService {
     const patterns = [];
 
     for (const url of documentationUrls) {
-      const scrapeResult = await this.firecrawl.scrapeUrl(url, {
-        formats: ["markdown", "extract"],
-        extract: {
-          prompt:
-            "Extract test patterns, best practices, and testing guidelines",
-          schema: {
-            type: "object",
-            properties: {
-              testPatterns: {
-                type: "array",
-                items: {
-                  type: "object",
-                  properties: {
-                    pattern: { type: "string" },
-                    description: { type: "string" },
-                    example: { type: "string" },
-                    useCase: { type: "string" },
+      const scrapeResult = await this.firecrawl.scrape(url, {
+        formats: [
+          "markdown",
+          {
+            type: "json",
+            prompt: "Extract test patterns, best practices, and testing guidelines",
+            schema: {
+              type: "object",
+              properties: {
+                testPatterns: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      pattern: { type: "string" },
+                      description: { type: "string" },
+                      example: { type: "string" },
+                      useCase: { type: "string" },
+                    },
                   },
                 },
               },
             },
           },
-        },
+        ],
       });
 
-      if (scrapeResult.extract?.testPatterns) {
-        patterns.push(...scrapeResult.extract.testPatterns);
+      const extracted = (scrapeResult as any).json;
+      if (extracted?.testPatterns) {
+        patterns.push(...extracted.testPatterns);
       }
     }
 

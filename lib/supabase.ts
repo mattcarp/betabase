@@ -33,7 +33,7 @@ export interface AomaUnifiedVector {
   id: string;
   content: string;
   embedding?: number[];
-  source_type: 'knowledge' | 'jira' | 'git' | 'email' | 'metrics' | 'openai_import' | 'cache' | 'firecrawl';
+  source_type: 'knowledge' | 'jira' | 'git' | 'email' | 'metrics' | 'openai_import' | 'cache' | 'firecrawl' | 'confluence';
   source_id: string;
   metadata: Record<string, any>;
   created_at: string;
@@ -62,7 +62,9 @@ export async function searchVectors(
   matchCount = 10,
   sourceTypes?: string[]
 ) {
-  const { data, error } = await supabase.rpc('match_aoma_vectors', {
+  const client = supabase ?? supabaseAdmin;
+  if (!client) throw new Error('Supabase client not initialized');
+  const { data, error } = await client.rpc('match_aoma_vectors', {
     query_embedding: queryEmbedding,
     match_threshold: matchThreshold,
     match_count: matchCount,
@@ -79,7 +81,9 @@ export async function upsertVector(
   sourceId: string,
   metadata: Record<string, any> = {}
 ) {
-  const { data, error } = await supabase.rpc('upsert_aoma_vector', {
+  const client = supabase ?? supabaseAdmin;
+  if (!client) throw new Error('Supabase client not initialized');
+  const { data, error } = await client.rpc('upsert_aoma_vector', {
     p_content: content,
     p_embedding: embedding,
     p_source_type: sourceType,
@@ -89,6 +93,54 @@ export async function upsertVector(
 
   if (error) throw error;
   return data;
+}
+
+// Sony Music specific helpers
+export async function upsertSonyMusicJiraVector(
+  content: string,
+  embedding: number[],
+  sourceId: string,
+  metadata: Record<string, any> = {}
+) {
+  const enriched = { sony_music: true, ...metadata };
+  return upsertVector(content, embedding, 'jira', sourceId, enriched);
+}
+
+export async function searchSonyMusicKnowledge(
+  queryEmbedding: number[],
+  matchThreshold = 0.78,
+  matchCount = 20
+) {
+  // Restrict to Sony-relevant sources
+  return searchVectors(queryEmbedding, matchThreshold, matchCount, ['jira', 'confluence', 'firecrawl']);
+}
+
+export async function getSonyMusicProjectContent(projectKey: string, limit = 50) {
+  const client = supabase ?? supabaseAdmin;
+  if (!client) throw new Error('Supabase client not initialized');
+  const { data, error } = await client
+    .from('aoma_unified_vectors')
+    .select('*')
+    .in('source_type', ['jira', 'confluence', 'firecrawl'])
+    .contains('metadata', { project: projectKey })
+    .limit(limit);
+  if (error) throw error;
+  return data as AomaUnifiedVector[];
+}
+
+export async function validateSonyMusicContent() {
+  const client = supabase ?? supabaseAdmin;
+  if (!client) throw new Error('Supabase client not initialized');
+  const counts: Record<string, number> = {};
+  for (const type of ['jira', 'confluence', 'firecrawl']) {
+    const { count, error } = await client
+      .from('aoma_unified_vectors')
+      .select('*', { count: 'exact', head: true })
+      .eq('source_type', type);
+    if (error) throw error;
+    counts[type] = count ?? 0;
+  }
+  return counts;
 }
 
 // Firecrawl-specific operations

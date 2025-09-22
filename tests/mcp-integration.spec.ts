@@ -87,7 +87,7 @@ test.describe("MCP Server Integration (Task 40)", () => {
     expect(data).toHaveProperty("error");
   });
 
-  test("MCP Railway server connectivity check", async ({ request }) => {
+  test("MCP Render server connectivity check", async ({ request }) => {
     // Test that the Railway server URL is correctly configured
     const response = await request.post("http://localhost:3000/api/aoma-mcp", {
       data: {
