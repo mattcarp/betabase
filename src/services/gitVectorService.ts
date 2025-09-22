@@ -5,6 +5,7 @@
  */
 
 import { execSync } from 'child_process';
+import path from 'path';
 import { getSupabaseVectorService } from './supabaseVectorService';
 
 export interface GitCommit {
@@ -35,6 +36,15 @@ export class GitVectorService {
   }
 
   /**
+   * Delegate multi-repo indexing to MultiRepoIndexer while keeping backward compatibility.
+   */
+  async vectorizeReposFromEnv(options: { includeCommits?: boolean; includeFiles?: boolean } = {}) {
+    const { getMultiRepoIndexer } = await import('./multiRepoIndexer');
+    const indexer = getMultiRepoIndexer();
+    return indexer.indexAll(options);
+  }
+
+  /**
    * Extract git commits from repository
    */
   async extractGitCommits(
@@ -49,7 +59,8 @@ export class GitVectorService {
 
     try {
       // Build git log command
-      let gitCommand = `git -C "${repositoryPath}" log ${branch} --pretty=format:"%H|%an|%ae|%aI|%s" --numstat`;
+      // Use %x1f (unit separator) to avoid delimiter collisions in commit messages
+      let gitCommand = `git -C "${repositoryPath}" log ${branch} --pretty=format:%x1f%H%x1f%an%x1f%ae%x1f%aI%x1f%s --numstat`;
       
       if (maxCommits > 0) {
         gitCommand += ` -n ${maxCommits}`;
@@ -78,13 +89,14 @@ export class GitVectorService {
     let currentCommit: Partial<GitCommit> | null = null;
     
     for (const line of lines) {
-      if (line.includes('|') && line.split('|').length === 5) {
+      if (line.includes('\u001F')) {
         // This is a commit header line
         if (currentCommit) {
           commits.push(currentCommit as GitCommit);
         }
-        
-        const [hash, author, authorEmail, date, message] = line.split('|');
+        const parts = line.split('\u001F').filter(Boolean);
+        if (parts.length < 6) continue;
+        const [, hash, author, authorEmail, date, message] = parts;
         currentCommit = {
           hash,
           author,
@@ -144,7 +156,7 @@ Commit: ${commit.hash}`;
   /**
    * Create metadata object for git commit
    */
-  private createCommitMetadata(commit: GitCommit): Record<string, any> {
+  private createCommitMetadata(commit: GitCommit, repositoryPath: string, repositoryTag: string): Record<string, any> {
     return {
       hash: commit.hash,
       author: commit.author,
@@ -157,21 +169,23 @@ Commit: ${commit.hash}`;
       deletions: commit.deletions,
       files: commit.files.slice(0, 20), // Limit files in metadata to prevent size issues
       vectorizedAt: new Date().toISOString(),
-      sourceRepo: process.cwd() // Add repository context
+      repo_path: repositoryPath,
+      repository: repositoryTag
     };
   }
 
   /**
    * Vectorize a single git commit
    */
-  async vectorizeCommit(commit: GitCommit): Promise<string> {
+  async vectorizeCommit(commit: GitCommit, repositoryPath: string, repositoryTag: string): Promise<string> {
     const content = this.createCommitContent(commit);
-    const metadata = this.createCommitMetadata(commit);
+    const metadata = this.createCommitMetadata(commit, repositoryPath, repositoryTag);
+    const sourceId = `${repositoryTag}:${commit.hash}`;
 
     return await this.vectorService.upsertVector(
       content,
       'git',
-      commit.hash,
+      sourceId,
       metadata
     );
   }
@@ -179,14 +193,14 @@ Commit: ${commit.hash}`;
   /**
    * Vectorize multiple commits in batches
    */
-  async vectorizeCommits(commits: GitCommit[]): Promise<GitVectorizationResult> {
+  async vectorizeCommits(commits: GitCommit[], repositoryPath: string, repositoryTag: string): Promise<GitVectorizationResult> {
     const startTime = Date.now();
     const errors: Array<{ commitHash: string; error: string }> = [];
 
     console.log(`🚀 Starting vectorization of ${commits.length} git commits...`);
 
     // Update migration status
-    await this.vectorService.updateMigrationStatus('git', 'in_progress', {
+    await this.vectorService.updateMigrationStatus(`git:${repositoryTag}`, 'in_progress', {
       totalCount: commits.length,
       migratedCount: 0
     });
@@ -195,8 +209,8 @@ Commit: ${commit.hash}`;
     const vectors = commits.map(commit => ({
       content: this.createCommitContent(commit),
       sourceType: 'git' as const,
-      sourceId: commit.hash,
-      metadata: this.createCommitMetadata(commit)
+      sourceId: `${repositoryTag}:${commit.hash}`,
+      metadata: this.createCommitMetadata(commit, repositoryPath, repositoryTag)
     }));
 
     // Use the existing batch upsert functionality
@@ -206,7 +220,7 @@ Commit: ${commit.hash}`;
 
     // Update final migration status
     const status = result.failed === 0 ? 'completed' : 'failed';
-    await this.vectorService.updateMigrationStatus('git', status, {
+    await this.vectorService.updateMigrationStatus(`git:${repositoryTag}`, status, {
       totalCount: commits.length,
       migratedCount: result.success
     });
@@ -232,9 +246,11 @@ Commit: ${commit.hash}`;
       since?: string;
       branch?: string;
       skipExisting?: boolean;
+      repositoryTag?: string;
     } = {}
   ): Promise<GitVectorizationResult> {
     console.log(`📂 Processing git repository: ${repositoryPath}`);
+    const repositoryTag = options.repositoryTag || path.basename(repositoryPath);
     
     // Extract commits
     const commits = await this.extractGitCommits(repositoryPath, options);
@@ -259,7 +275,7 @@ Commit: ${commit.hash}`;
     }
 
     // Vectorize the commits
-    return await this.vectorizeCommits(commitsToProcess);
+    return await this.vectorizeCommits(commitsToProcess, repositoryPath, repositoryTag);
   }
 
   /**

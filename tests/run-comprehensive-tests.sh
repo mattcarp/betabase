@@ -21,7 +21,7 @@ if [ -z "$CI" ]; then
 else
     echo "🚀 Running tests in CI..."
     CONFIG="playwright.config.ts"
-    BASE_URL="https://siam-app-production.up.railway.app"
+    BASE_URL="https://siam.onrender.com"
 fi
 
 # Function to run a test suite

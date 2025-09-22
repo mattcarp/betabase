@@ -13,7 +13,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
-    "test:e2e:local": "playwright test --config=playwright.config.local.ts",
+    "test:e2e:local": "npx playwright test --project=e2e-local",
     "test:e2e:render": "playwright test --config=playwright.config.render.ts",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
@@ -21,6 +21,23 @@
     "test:regression": "playwright test --grep @regression",
     "test:changed": "jest -o",
     "test:feature": "playwright test --grep",
+    
+    "test:analyze": "./scripts/analyze-test-suite.sh",
+    "test:cleanup": "./scripts/cleanup-test-suite.sh",
+    "test:preserve": "./scripts/preserve-passing-tests.sh",
+
+    "test:unit": "npx playwright test --project=unit",
+    "test:integration": "npx playwright test --project=integration",
+    "test:e2e:production": "npx playwright test --project=e2e-production",
+    "test:critical": "npx playwright test tests/e2e/critical-paths/",
+
+    "test:clean": "npx playwright test --config=playwright.config.clean.ts",
+    "test:foundation": "npx playwright test tests/foundation/",
+    "test:health": "npx playwright test --grep='health|smoke'",
+
+    "test:report": "npx playwright show-report",
+    "test:debug": "npx playwright test --debug",
+    "test:ui": "npx playwright test --ui",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -40,7 +57,7 @@
     "@hookform/resolvers": "^3.10.0",
     "@icons-pack/react-simple-icons": "^13.7.0",
     "@magnusrodseth/shadcn-mcp-server": "^1.1.2",
-    "@mendable/firecrawl-js": "^4.3.4",
+    "@mendable/firecrawl-js": "^5.0.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-collapsible": "^1.1.11",
@@ -103,6 +120,7 @@
     "typescript": "^5.9.2",
     "@types/react": "^19.1.12",
     "postcss": "^8.4.39",
+    "p-limit": "^6.1.0",
     "tailwindcss": "^3.4.4"
   },
   "devDependencies": {

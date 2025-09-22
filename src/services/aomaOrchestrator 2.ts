@@ -326,7 +326,7 @@ export class AOMAOrchestrator {
   private async callAOMATool(toolName: string, args: any): Promise<any> {
     const railwayUrl =
       process.env.NEXT_PUBLIC_AOMA_MESH_SERVER_URL ||
-      "https://luminous-dedication-production.up.railway.app";
+      "https://aoma-mesh-mcp.onrender.com";
 
     const rpcPayload = {
       jsonrpc: "2.0",

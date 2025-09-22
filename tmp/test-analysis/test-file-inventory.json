@@ -1,0 +1,413 @@
+{
+  "totalFiles": 68,
+  "files": [
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/03-e2e/smoke/chat.e2e.test.ts",
+      "name": "chat.e2e.test.ts",
+      "purpose": "chat",
+      "hash": "ff6be72f3e662c3d981ba9152d69f14263494aac"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/ai-chat.spec.ts",
+      "name": "ai-chat.spec.ts",
+      "purpose": "chat",
+      "hash": "3d6f6a2e84772e1bc43032985a4b0bdb963ebaf9"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/api/test-openai-responses-api.spec.ts",
+      "name": "test-openai-responses-api.spec.ts",
+      "purpose": "api",
+      "hash": "2214584b08a5fe75f28d0139ec56338f45c21083"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth-flow.spec.js",
+      "name": "auth-flow.spec.js",
+      "purpose": "auth",
+      "hash": "bbe5c29c50ae1fca1f69ac328cc5a4e4060e8130"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth-flow.spec.ts",
+      "name": "auth-flow.spec.ts",
+      "purpose": "auth",
+      "hash": "df9adc3ebc7780ee2bed383ebbb4a034a97c25fe"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/custom-domain-test.spec.ts",
+      "name": "custom-domain-test.spec.ts",
+      "purpose": "auth",
+      "hash": "50c58c6a03be81f345f6be1847f1d5a875d291bf"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/fuck-it-ship-it.spec.ts",
+      "name": "fuck-it-ship-it.spec.ts",
+      "purpose": "auth",
+      "hash": "c0124c08614d5dc3d093af33a464899b9e8610a7"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/magic-link-auth.spec.ts",
+      "name": "magic-link-auth.spec.ts",
+      "purpose": "auth",
+      "hash": "bb3a80f24c9de26d9cc4db9823cffd62e533e63c"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/magic-link-mailgun.spec.ts",
+      "name": "magic-link-mailgun.spec.ts",
+      "purpose": "auth",
+      "hash": "515a1118f31d8bb9a7ed04b905d5292592c861f8"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/magic-link-sandbox.spec.ts",
+      "name": "magic-link-sandbox.spec.ts",
+      "purpose": "auth",
+      "hash": "6a03d662e97e5829e19a3a1d0e375921a6d1e4bc"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/mailgun-cognito-test.spec.ts",
+      "name": "mailgun-cognito-test.spec.ts",
+      "purpose": "auth",
+      "hash": "b3653fc4c5abd03a1a4bf42f6292ff3b395cd397"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/mailgun-with-fallback.spec.ts",
+      "name": "mailgun-with-fallback.spec.ts",
+      "purpose": "auth",
+      "hash": "538363b91d13fd9d7fe6196f7db7e924dd6af3e2"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/mailinator-browser-test.spec.ts",
+      "name": "mailinator-browser-test.spec.ts",
+      "purpose": "auth",
+      "hash": "3e34268ac63b6a8ba05aba5943c21ae24ca9ebc8"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/production-mailgun-test.spec.ts",
+      "name": "production-mailgun-test.spec.ts",
+      "purpose": "auth",
+      "hash": "2d9a8d1a21befc35ba84a03240580ef99fcd53b6"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/simple-mailgun-test.spec.ts",
+      "name": "simple-mailgun-test.spec.ts",
+      "purpose": "auth",
+      "hash": "79306960049f8f8364a834546dadf9fe9e154e1d"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/simple-mailinator-test.spec.ts",
+      "name": "simple-mailinator-test.spec.ts",
+      "purpose": "auth",
+      "hash": "f694162dacacfcea497f6939af87ab9d8bf531ff"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/test-user-auth.spec.ts",
+      "name": "test-user-auth.spec.ts",
+      "purpose": "auth",
+      "hash": "48f74c3c59f62c77b43ca6ddbb13f9d315920852"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/ultra-simple-test.spec.ts",
+      "name": "ultra-simple-test.spec.ts",
+      "purpose": "auth",
+      "hash": "8acf25a2f8df69cbe76e7409b00a784ef3011313"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/auth/webhook-test.spec.ts",
+      "name": "webhook-test.spec.ts",
+      "purpose": "auth",
+      "hash": "379de0713247fcb823b20ccb7241250080b551c0"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/comprehensive/assistant-functionality.spec.ts",
+      "name": "assistant-functionality.spec.ts",
+      "purpose": "other",
+      "hash": "1291e1273b8a54977502167849fac025ca04328d"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/comprehensive/auth-flow.spec.ts",
+      "name": "auth-flow.spec.ts",
+      "purpose": "auth",
+      "hash": "f2126c845083eaae0814a6705c48fd36d0f8d953"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/comprehensive/chat-functionality.spec.ts",
+      "name": "chat-functionality.spec.ts",
+      "purpose": "chat",
+      "hash": "47f6419ab9dc124acca0707ade8db5308d2f97c3"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/comprehensive/file-management-complete.spec.ts",
+      "name": "file-management-complete.spec.ts",
+      "purpose": "upload",
+      "hash": "ea31159be7e2c3351be2b58f0f24e5be7f98dfb5"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/comprehensive/file-upload-curate.spec.ts",
+      "name": "file-upload-curate.spec.ts",
+      "purpose": "upload",
+      "hash": "4775f988f2ea2a85e0bc0dec527fb8277cd0e64e"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-test.spec.ts",
+      "name": "curate-tab-test.spec.ts",
+      "purpose": "other",
+      "hash": "72718cd7824f738e79e884afba68edab53b77848"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/curation-services.test.ts",
+      "name": "curation-services.test.ts",
+      "purpose": "other",
+      "hash": "5cbfe9c0b4323637d697e864a21364d602c9393b"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/dashboard-integration-test.spec.ts",
+      "name": "dashboard-integration-test.spec.ts",
+      "purpose": "other",
+      "hash": "1d9df53b17b92f16351f6922e11573625d2e9b96"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/detailed-upload-test.spec.ts",
+      "name": "detailed-upload-test.spec.ts",
+      "purpose": "upload",
+      "hash": "3ff6cdf28ddbf15a2a90ef75a816de88613e7b54"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/e2e/chat-feature.example.spec.ts",
+      "name": "chat-feature.example.spec.ts",
+      "purpose": "chat",
+      "hash": "b06db5c5e12f91139f719fc5da7f0286c28ea98c"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/e2e/critical-paths/auth.spec.ts",
+      "name": "auth.spec.ts",
+      "purpose": "auth",
+      "hash": "3a40cfe36be2c5097a4496df764e4841b7fc039d"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/e2e/critical-paths/chat.spec.ts",
+      "name": "chat.spec.ts",
+      "purpose": "chat",
+      "hash": "6127029112399b6cacd879cc0533034b37ae4b8e"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/e2e/critical-paths/core-user-flows.spec.ts",
+      "name": "core-user-flows.spec.ts",
+      "purpose": "other",
+      "hash": "af419677e4930ca0a9e9065605fc0ba4ba8fc8c9"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/e2e/critical-paths/file-upload.spec.ts",
+      "name": "file-upload.spec.ts",
+      "purpose": "upload",
+      "hash": "1506fe273ffc54c84c73c76e1034b17e83da677a"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/e2e/css-loading.spec.ts",
+      "name": "css-loading.spec.ts",
+      "purpose": "performance",
+      "hash": "693ccad12b57577603fc26ae4743fb1dbded18f2"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/e2e/smoke/smoke.spec.ts",
+      "name": "smoke.spec.ts",
+      "purpose": "other",
+      "hash": "07a1e05c63cfe4317ccf93aee9945fe5fbc2a713"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/e2e/test-dashboard-complete.spec.ts",
+      "name": "test-dashboard-complete.spec.ts",
+      "purpose": "other",
+      "hash": "ece8b7050eeeebd0a39304e3002c0f36ac3bfbe0"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/enhanced-curate-tab.spec.ts",
+      "name": "enhanced-curate-tab.spec.ts",
+      "purpose": "other",
+      "hash": "dc968bd3d820a462e00554a3ea0a1017f3ad3188"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/file-upload-investigation.spec.ts",
+      "name": "file-upload-investigation.spec.ts",
+      "purpose": "upload",
+      "hash": "9bd8dc2e82939c431e014e923f2384fe05ff484e"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/fiona-unified-testing-example.spec.ts",
+      "name": "fiona-unified-testing-example.spec.ts",
+      "purpose": "other",
+      "hash": "42f09235ddc848fab7e6c20a968cd1d9479a8202"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/integration/knowledge-integration.test.ts",
+      "name": "knowledge-integration.test.ts",
+      "purpose": "other",
+      "hash": "25cd72bb200aa876b3005a689703874f8442d6eb"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/local-dev.spec.ts",
+      "name": "local-dev.spec.ts",
+      "purpose": "other",
+      "hash": "0f6a2120b4d9631f7a0bc6ff28149b1d0c81f08e"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/local/file-upload-test.spec.ts",
+      "name": "file-upload-test.spec.ts",
+      "purpose": "upload",
+      "hash": "c15020592c011932649c60e5c8313c3ffb0e63e0"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/localhost-test.spec.ts",
+      "name": "localhost-test.spec.ts",
+      "purpose": "other",
+      "hash": "db7146832779bfc31b212bbfa820e52dee0dca53"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/login-and-validate.spec.ts",
+      "name": "login-and-validate.spec.ts",
+      "purpose": "auth",
+      "hash": "eb355b87d8a2fefc11a8edf9706efbd3babbc930"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/mcp-integration.spec.ts",
+      "name": "mcp-integration.spec.ts",
+      "purpose": "other",
+      "hash": "64748d059e8aee35584004748bff94120afa6597"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/production/aoma-chat-test.spec.ts",
+      "name": "aoma-chat-test.spec.ts",
+      "purpose": "chat",
+      "hash": "c8c1f866c300eef99de44f646b88a7f660e668a9"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/production/custom-element-guard.spec.ts",
+      "name": "custom-element-guard.spec.ts",
+      "purpose": "other",
+      "hash": "998a3ebab9ae15628d52ceb5bd6df8e734089f19"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/production/full-production-test.spec.ts",
+      "name": "full-production-test.spec.ts",
+      "purpose": "other",
+      "hash": "242ac005a4f72f593dad3be1e8d269048763f290"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/production/mailinator-auth-template.spec.ts",
+      "name": "mailinator-auth-template.spec.ts",
+      "purpose": "auth",
+      "hash": "390f5aded7d243330ceb900b7dc160c7229eefa7"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/production/mailinator-timestamp-test.spec.ts",
+      "name": "mailinator-timestamp-test.spec.ts",
+      "purpose": "other",
+      "hash": "b1e12aa0179f0297a80b499e6e93678f91594f71"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/production/quick-verification.spec.ts",
+      "name": "quick-verification.spec.ts",
+      "purpose": "other",
+      "hash": "c0f7b69b19d4e7c9a3952302faf1311af98bd7c2"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/progress-indicator.spec.ts",
+      "name": "progress-indicator.spec.ts",
+      "purpose": "other",
+      "hash": "9e2099e51752164dea770608f58b0950f1f8597d"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/quick-test.spec.ts",
+      "name": "quick-test.spec.ts",
+      "purpose": "other",
+      "hash": "31b61c959123bbf80c78b323fd576a369b3348b7"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/render-deployment.spec.ts",
+      "name": "render-deployment.spec.ts",
+      "purpose": "other",
+      "hash": "b1326dd81357168df6d74023f9b97e0a6621889e"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/task-1-actual-siam-interface.spec.ts",
+      "name": "task-1-actual-siam-interface.spec.ts",
+      "purpose": "other",
+      "hash": "6679ad36adf854e7dae7ba5510ed6e2aa0526345"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/task-1-chat-interface.spec.ts",
+      "name": "task-1-chat-interface.spec.ts",
+      "purpose": "chat",
+      "hash": "fdf52d53bd2cfeaad0acb0602bc7db8bfebe25d8"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/task-61-playwright-integration.spec.ts",
+      "name": "task-61-playwright-integration.spec.ts",
+      "purpose": "other",
+      "hash": "bd75a4af9f9bb782dc6cc9f51f63a1fd6c4f2f8c"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/test-dashboard-quick.spec.ts",
+      "name": "test-dashboard-quick.spec.ts",
+      "purpose": "other",
+      "hash": "285857c5694b2f300587ed9bc970ac1f53b84df5"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/test-dashboard.spec.ts",
+      "name": "test-dashboard.spec.ts",
+      "purpose": "other",
+      "hash": "c7a1cbf15a9ba6b88fdfaa47f39c136ffc0e6ffe"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/upload-ui-direct.spec.ts",
+      "name": "upload-ui-direct.spec.ts",
+      "purpose": "upload",
+      "hash": "c6d65e6631e26f723080d808851614ca41735e2a"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/vercel-ai-sdk-comprehensive.spec.ts",
+      "name": "vercel-ai-sdk-comprehensive.spec.ts",
+      "purpose": "other",
+      "hash": "703e021337f6da744ce7460948924cef77a32667"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/visual/chat-landing.spec.ts",
+      "name": "chat-landing.spec.ts",
+      "purpose": "chat",
+      "hash": "4640ba7ab6f57f0cad5a060bcccc17382aaa6d41"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/visual/login-screenshot.spec.ts",
+      "name": "login-screenshot.spec.ts",
+      "purpose": "auth",
+      "hash": "3a4cc46a4c274f9b5eb71849fc6d943ef87ed9db"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/visual/siam-desktop.spec.ts",
+      "name": "siam-desktop.spec.ts",
+      "purpose": "visual",
+      "hash": "1ec1be4fcc89c95535175f842ce7e9151b6b9373"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/visual/siam-electron.spec.ts",
+      "name": "siam-electron.spec.ts",
+      "purpose": "visual",
+      "hash": "aa4ee9493d76b552b33c9b7147b44ee63c93bd6e"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/visual/storybook-audio-waveform.spec.ts",
+      "name": "storybook-audio-waveform.spec.ts",
+      "purpose": "visual",
+      "hash": "4c692a2850eeb9c89e6e3f21d92a890123eb0ecb"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/voice-features.spec.ts",
+      "name": "voice-features.spec.ts",
+      "purpose": "other",
+      "hash": "f1f7a72a8b7573957463fd1801f4948b342903bc"
+    },
+    {
+      "path": "/Users/mcarpent/Documents/projects/siam/tests/welcome-message.spec.ts",
+      "name": "welcome-message.spec.ts",
+      "purpose": "chat",
+      "hash": "caca294cc081f34bc93bfd6596fc780acb5038ad"
+    }
+  ]
+}

@@ -5,11 +5,13 @@
  */
 
 import {
-  supabase,
+  supabase as publicSupabase,
   AOMAVector,
   VectorSearchResult,
   handleSupabaseError,
 } from "@/lib/supabase";
+// Prefer server-only admin client for RPC/writes; fallback to public for safe reads
+import { supabaseAdmin } from "../../lib/supabase";
 import OpenAI from "openai";
 
 export class SupabaseVectorService {
@@ -60,8 +62,13 @@ export class SupabaseVectorService {
       // Generate embedding for the query
       const queryEmbedding = await this.generateEmbedding(query);
 
-      // Call our RPC function for similarity search
-      const { data, error } = await supabase.rpc("match_aoma_vectors", {
+      // Use admin client for RPC (grants require authenticated/service role)
+      const rpcClient = supabaseAdmin ?? publicSupabase;
+      if (!rpcClient) {
+        throw new Error("Supabase client is not initialized");
+      }
+
+      const { data, error } = await rpcClient.rpc("match_aoma_vectors", {
         query_embedding: queryEmbedding,
         match_threshold: matchThreshold,
         match_count: matchCount,
@@ -92,8 +99,14 @@ export class SupabaseVectorService {
       // Generate embedding
       const embedding = await this.generateEmbedding(content);
 
-      // Call our upsert function
-      const { data, error } = await supabase.rpc("upsert_aoma_vector", {
+      // Writes/RPC must use admin client
+      if (!supabaseAdmin) {
+        throw new Error(
+          "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server.",
+        );
+      }
+
+      const { data, error } = await supabaseAdmin.rpc("upsert_aoma_vector", {
         p_content: content,
         p_embedding: embedding,
         p_source_type: sourceType,
@@ -127,7 +140,7 @@ export class SupabaseVectorService {
     let failed = 0;
 
     // Process in batches to avoid overwhelming the API
-    const batchSize = 5;
+    const batchSize = Math.max(1, parseInt(process.env.VECTOR_BATCH_SIZE || '5', 10));
     for (let i = 0; i < vectors.length; i += batchSize) {
       const batch = vectors.slice(i, i + batchSize);
 
@@ -162,7 +175,13 @@ export class SupabaseVectorService {
    */
   async getVectorStats(): Promise<any> {
     try {
-      const { data, error } = await supabase
+      // Safe read: prefer public client, fallback to admin
+      const readClient = publicSupabase ?? supabaseAdmin;
+      if (!readClient) {
+        throw new Error("Supabase client is not initialized");
+      }
+
+      const { data, error } = await readClient
         .from("aoma_vector_stats")
         .select("*");
 
@@ -185,7 +204,14 @@ export class SupabaseVectorService {
     sourceId?: string,
   ): Promise<number> {
     try {
-      let query = supabase
+      // Deletions must use admin client
+      if (!supabaseAdmin) {
+        throw new Error(
+          "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server.",
+        );
+      }
+
+      let query = supabaseAdmin
         .from("aoma_unified_vectors")
         .delete()
         .eq("source_type", sourceType);
@@ -212,7 +238,13 @@ export class SupabaseVectorService {
    */
   async getMigrationStatus(): Promise<any> {
     try {
-      const { data, error } = await supabase
+      // Safe read: prefer public client, fallback to admin
+      const readClient = publicSupabase ?? supabaseAdmin;
+      if (!readClient) {
+        throw new Error("Supabase client is not initialized");
+      }
+
+      const { data, error } = await readClient
         .from("aoma_migration_status")
         .select("*")
         .order("created_at", { ascending: false });
@@ -253,7 +285,13 @@ export class SupabaseVectorService {
         updateData.completed_at = new Date().toISOString();
       }
 
-      const { error } = await supabase
+      if (!supabaseAdmin) {
+        throw new Error(
+          "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server.",
+        );
+      }
+
+      const { error } = await supabaseAdmin
         .from("aoma_migration_status")
         .upsert(updateData, {
           onConflict: "source_type",

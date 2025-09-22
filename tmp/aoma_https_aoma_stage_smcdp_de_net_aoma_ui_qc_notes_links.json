@@ -1,0 +1,18 @@
+{
+  "url": "https://aoma-stage.smcdp-de.net/aoma-ui/qc-notes",
+  "count": 3,
+  "links": [
+    {
+      "href": "javascript:submitChain('LoginResetPasswordDisplayChain')",
+      "text": "Forget password?"
+    },
+    {
+      "href": "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=Login#",
+      "text": "New Account"
+    },
+    {
+      "href": "https://login.microsoftonline.com/f0aff3b7-91a5-4aae-af71-c63e1dda2049/oauth2/authorize?response_type=code&response_mode=form_post&redirect_uri=https%3A%2F%2Faoma-stage.smcdp-de.net%2Fservlet%2Fcom.sonymusic.aoma.AOMADispatcherServlet&client_id=72e97d60-6868-4706-9caa-6781093d61ca&scope=openid%20user.read&state=ec0a228d-f97d-4d2b-b9a5-315a97ba1364&nonce=55232285-8de6-49e3-9db8-e89cfa1cd4d0&resource=https://graph.microsoft.com",
+      "text": "Employee Login"
+    }
+  ]
+}

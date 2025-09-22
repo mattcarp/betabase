@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import FirecrawlApp from '@mendable/firecrawl-js';
+import Firecrawl from '@mendable/firecrawl-js';
 import { storeFirecrawlData, getFirecrawlAnalysis } from '../../../lib/supabase';
 import OpenAI from 'openai';
+import { aomaStageAuthenticator } from '../../../src/services/aomaStageAuthenticator';
+import { aomaUIAnalyzer } from '../../../src/services/aomaUIAnalyzer';
 
 // Force dynamic mode to prevent build-time evaluation
 export const dynamic = 'force-dynamic';
@@ -35,12 +37,12 @@ function assertStageUrl(targetUrl: string) {
  */
 
 // Initialize clients lazily to avoid build-time errors
-let firecrawl: FirecrawlApp | null = null;
+let firecrawl: Firecrawl | null = null;
 let openai: OpenAI | null = null;
 
 const getClients = () => {
   if (!firecrawl && process.env.FIRECRAWL_API_KEY) {
-    firecrawl = new FirecrawlApp({
+    firecrawl = new Firecrawl({
       apiKey: process.env.FIRECRAWL_API_KEY
     });
   }
@@ -88,33 +90,63 @@ export async function POST(req: NextRequest) {
         });
       }
     }
-    // Crawl the page with Firecrawl
+    // Build Cookie header from forwarded header or authenticator
+    const forwardedCookie = req.headers.get('x-forward-cookie') || undefined;
+    let cookieHeader = forwardedCookie || undefined;
+    if (!cookieHeader) {
+      try {
+        cookieHeader = await aomaStageAuthenticator.getCookieHeader();
+      } catch (e) {
+        // No cookie available; proceed and let Firecrawl fail with 401/403
+      }
+    }
+
+    // Crawl the page with Firecrawl (pass auth cookies)
     console.log(`Crawling ${url} with Firecrawl...`);
-    const crawlData = await firecrawlClient.scrapeUrl(url, {
-      formats: ['markdown', 'html'],
+    let crawlData: any = await firecrawlClient.scrape(url, {
+      formats: ['markdown', 'html', 'summary'],
+      headers: cookieHeader ? { Cookie: cookieHeader } : undefined,
       ...options
     });
+
+    // If unauthorized, attempt one re-auth + retry
+    const unauthorized = (d: any) => {
+      const code = (d?.status || d?.statusCode || d?.status_code) as number | undefined;
+      const msg = (d?.error || d?.message || '') as string;
+      return code === 401 || code === 403 || /401|403|unauthor/i.test(msg || '');
+    };
+    if (!crawlData?.success && unauthorized(crawlData)) {
+      try {
+        const refreshedCookie = await aomaStageAuthenticator.ensureAuthenticated();
+        crawlData = await firecrawlClient.scrape(url, {
+          formats: ['markdown', 'html', 'summary'],
+          headers: { Cookie: refreshedCookie },
+          ...options
+        });
+      } catch (_) {}
+    }
 
     if (!crawlData.success) {
       throw new Error('Failed to crawl URL');
     }
 
-    // Analyze the crawled data for UI elements
-    const analysis = await analyzeUIStructure(crawlData);
+    // Analyze via aomaUIAnalyzer
+    const htmlForAnalysis = crawlData.html || '';
+    const analysis = aomaUIAnalyzer.analyze(url, htmlForAnalysis || crawlData);
 
     // Generate embeddings for semantic search
     const embedding = await generateEmbedding(analysis.summary);
 
     // Store in Supabase
     const storedData = await storeFirecrawlData(url, {
-      title: crawlData.metadata?.title || 'Untitled',
+      title: analysis.title || crawlData.metadata?.title || 'Untitled',
       elements: analysis.elements,
       selectors: analysis.selectors,
       navigationPaths: analysis.navigationPaths,
       testableFeatures: analysis.testableFeatures,
       userFlows: analysis.userFlows,
       metadata: {
-        ...crawlData.metadata,
+        ...(crawlData.metadata || {}),
         markdown: crawlData.markdown,
         analysisVersion: '1.0',
         crawledAt: new Date().toISOString()
@@ -136,72 +168,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Helper function to analyze UI structure
-async function analyzeUIStructure(crawlData: any) {
-  const markdown = crawlData.markdown || '';
-  const html = crawlData.html || '';
-  
-  // Parse UI elements from the crawled data
-  const elements: Record<string, any> = {};
-  const selectors: Record<string, any> = {};
-  const navigationPaths: string[] = [];
-  const testableFeatures: string[] = [];
-  const userFlows: Record<string, any> = {};
-
-  // Extract buttons
-  const buttonMatches = html.match(/<button[^>]*>.*?<\/button>/gi) || [];
-  elements.buttons = buttonMatches.map((btn: string) => {
-    const text = btn.replace(/<[^>]*>/g, '').trim();
-    const id = btn.match(/id="([^"]+)"/)?.[1];
-    const className = btn.match(/class="([^"]+)"/)?.[1];
-    return { text, id, className };
-  });
-
-  // Extract links
-  const linkMatches = html.match(/<a[^>]*href="([^"]+)"[^>]*>.*?<\/a>/gi) || [];
-  navigationPaths.push(...linkMatches.map((link: string) => {
-    const href = link.match(/href="([^"]+)"/)?.[1] || '';
-    return href;
-  }).filter(Boolean));
-
-  // Extract forms
-  const formMatches = html.match(/<form[^>]*>.*?<\/form>/gsi) || [];
-  elements.forms = formMatches.length;
-
-  // Extract input fields
-  const inputMatches = html.match(/<input[^>]*>/gi) || [];
-  elements.inputs = inputMatches.map((input: string) => {
-    const type = input.match(/type="([^"]+)"/)?.[1] || 'text';
-    const name = input.match(/name="([^"]+)"/)?.[1];
-    const id = input.match(/id="([^"]+)"/)?.[1];
-    return { type, name, id };
-  });
-
-  // Identify testable features based on elements
-  if (elements.buttons?.length > 0) testableFeatures.push('button_clicks');
-  if (elements.forms > 0) testableFeatures.push('form_submission');
-  if (elements.inputs?.length > 0) testableFeatures.push('text_input');
-  if (navigationPaths.length > 0) testableFeatures.push('navigation');
-
-  // Create a summary for embedding
-  const summary = `
-    Page with ${elements.buttons?.length || 0} buttons,
-    ${elements.forms || 0} forms,
-    ${elements.inputs?.length || 0} input fields,
-    ${navigationPaths.length} navigation links.
-    Testable features: ${testableFeatures.join(', ')}.
-    ${markdown.substring(0, 500)}
-  `.trim();
-
-  return {
-    elements,
-    selectors,
-    navigationPaths: [...new Set(navigationPaths)], // Remove duplicates
-    testableFeatures,
-    userFlows,
-    summary
-  };
-}
+// Inline analyzer removed in favor of aomaUIAnalyzer
 
 // Generate embeddings using OpenAI
 async function generateEmbedding(text: string): Promise<number[]> {

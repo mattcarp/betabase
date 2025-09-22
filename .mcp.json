@@ -29,11 +29,11 @@
       }
     },
     "aoma-mesh": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["/Users/matt/Documents/projects/siam/aoma-mcp-proxy.js"],
-      "env": {
-        "NODE_ENV": "production"
+      "type": "http",
+      "url": "https://luminous-dedication-production.up.railway.app/mcp",
+      "headers": {
+        "Authorization": "Bearer ${AOMA_MCP_API_KEY}",
+        "Origin": "${AOMA_MCP_ORIGIN}"
       }
     },
     "ref-tools": {
@@ -78,6 +78,15 @@
       "url": "https://mcp.render.com/mcp",
       "headers": {
         "Authorization": "Bearer ${RENDER_API_KEY}"
+      }
+    },
+    "firecrawl-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}",
+        "NODE_ENV": "development"
       }
     }
   }

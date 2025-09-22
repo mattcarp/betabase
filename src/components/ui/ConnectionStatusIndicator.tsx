@@ -27,7 +27,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
     const checkConnections = async () => {
       const newStatuses: ConnectionStatus[] = [];
 
-      // Check AOMA-MESH MCP Server (Railway deployment)
+      // Check AOMA-MESH MCP Server (Render deployment)
       try {
         // Check if we can reach the AOMA knowledge API
         const aomaHealthy = await fetch("/api/aoma/health", {
