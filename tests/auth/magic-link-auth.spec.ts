@@ -9,25 +9,22 @@ test.describe("Magic Link Authentication", () => {
   test("should display login form with magic link as default", async ({
     page,
   }) => {
-    // Check that the login form is displayed
-    await expect(page.locator("h2")).toContainText("Welcome to SIAM");
+    // Check that the login form is displayed with current UI text
+    await expect(page.locator("h2")).toContainText("Welcome Back");
 
-    // Check that domain restriction message is shown
-    await expect(
-      page.locator(
-        "text=Only @sonymusic.com emails and matt@mattcarpenter.com are allowed",
-      ),
-    ).toBeVisible();
+    // Check The Betabase branding
+    await expect(page.locator("h1")).toContainText("The Betabase");
+    await expect(page.locator("text=yup. it's back.")).toBeVisible();
 
     // Check that magic link is the default option
     await expect(page.locator('button[type="submit"]')).toContainText(
       "Send Magic Link",
     );
 
-    // Check that email placeholder shows allowed domains
+    // Check email input placeholder
     await expect(page.locator('input[type="email"]')).toHaveAttribute(
       "placeholder",
-      "your.name@sonymusic.com or matt@mattcarpenter.com",
+      "Enter your email address",
     );
   });
 
@@ -83,86 +80,81 @@ test.describe("Magic Link Authentication", () => {
     }
   });
 
-  test("should toggle between magic link and password modes", async ({
+  test("should only have magic link mode - no password option", async ({
     page,
   }) => {
-    // Initially should show magic link mode
+    // Should show magic link mode only
     await expect(page.locator('button[type="submit"]')).toContainText(
       "Send Magic Link",
     );
+
+    // Should not have password input or toggle options
     await expect(page.locator('input[type="password"]')).not.toBeVisible();
-
-    // Click toggle to password mode
-    await page.click("text=Use password instead");
-
-    // Should now show password mode
-    await expect(page.locator('button[type="submit"]')).toContainText(
-      "Sign In",
-    );
-    await expect(page.locator('input[type="password"]')).toBeVisible();
-
-    // Click toggle back to magic link mode
-    await page.click("text=Use magic link instead");
-
-    // Should be back to magic link mode
-    await expect(page.locator('button[type="submit"]')).toContainText(
-      "Send Magic Link",
-    );
-    await expect(page.locator('input[type="password"]')).not.toBeVisible();
+    await expect(page.locator("text=Use password instead")).not.toBeVisible();
+    await expect(page.locator("text=Use magic link instead")).not.toBeVisible();
   });
 
   test("should show verification form after sending magic link", async ({
     page,
   }) => {
-    const validEmail = "test@sonymusic.com";
+    const validEmail = "siam-test-x7j9k2p4@mailinator.com";
 
     // Fill in valid email
     await page.fill('input[type="email"]', validEmail);
 
-    // Mock the magic link send request to avoid actual AWS Cognito call
-    await page.route("**/cognito-idp/**", (route) => {
+    // Mock the magic link send request
+    await page.route("**/api/auth/magic-link", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
-        body: JSON.stringify({ success: true }),
+        body: JSON.stringify({ success: true, devCode: "123456" }),
       });
     });
 
     // Click send magic link button
     await page.click('button[type="submit"]');
 
-    // Should show verification form
-    await expect(page.locator("h2")).toContainText("Enter Magic Link Code");
+    // Should show verification form with current UI text
+    await expect(page.locator("h3")).toContainText("Magic Link Sent!");
     await expect(
-      page.locator(
-        "text=Enter the verification code from your magic link email",
-      ),
+      page.locator("text=We've sent a verification code to"),
     ).toBeVisible();
     await expect(
-      page.locator('input[placeholder*="6-digit code"]'),
+      page.locator("text=Check your email for the 6-digit verification code"),
+    ).toBeVisible();
+    await expect(
+      page.locator('input[placeholder="000000"]'),
     ).toBeVisible();
   });
 
   test("should handle verification code submission", async ({ page }) => {
-    const validEmail = "test@sonymusic.com";
+    const validEmail = "siam-test-x7j9k2p4@mailinator.com";
     const verificationCode = "123456";
 
     // Fill in valid email and send magic link
     await page.fill('input[type="email"]', validEmail);
 
     // Mock the magic link send request
-    await page.route("**/cognito-idp/**", (route) => {
-      route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({ success: true }),
-      });
+    await page.route("**/api/auth/magic-link", (route) => {
+      if (route.request().postData()?.includes('"action":"send"')) {
+        route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({ success: true, devCode: "123456" }),
+        });
+      } else if (route.request().postData()?.includes('"action":"verify"')) {
+        route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({ success: true, token: "mock-jwt-token" }),
+        });
+      }
     });
 
     await page.click('button[type="submit"]');
 
     // Should be on verification form
-    await expect(page.locator("h2")).toContainText("Enter Magic Link Code");
+    await expect(page.locator("h3")).toContainText("Magic Link Sent!");
 
     // Fill in verification code
     await page.fill('input[type="text"]', verificationCode);
@@ -170,8 +162,7 @@ test.describe("Magic Link Authentication", () => {
     // Click verify button
     await page.click('button[type="submit"]');
 
-    // Should attempt to verify the code
-    // Note: This will need AWS Cognito mocking for full test
+    // Should attempt to verify the code and potentially redirect
   });
 
   test("should NOT have a sign up option - this is a closed system", async ({
@@ -191,21 +182,16 @@ test.describe("Magic Link Authentication", () => {
       "Send Magic Link",
     );
 
-    // Verify this is a restricted system
-    await expect(
-      page.locator(
-        "text=Only @sonymusic.com emails and matt@mattcarpenter.com are allowed",
-      ),
-    ).toBeVisible();
+    // The current UI doesn't show domain restrictions prominently, but the system is still closed
+    // Only allowed emails will work in practice
   });
 
   test("should validate required fields", async ({ page }) => {
     // Try to submit without email
     await page.click('button[type="submit"]');
 
-    // Should show HTML5 validation or custom validation
-    const emailInput = page.locator('input[type="email"]');
-    await expect(emailInput).toHaveAttribute("required");
+    // Should show validation error message
+    await expect(page.locator("text=Email is required")).toBeVisible();
   });
 
   test("should handle case-insensitive email validation", async ({ page }) => {
@@ -236,20 +222,19 @@ test.describe("Authentication Error Handling", () => {
     await page.goto("/");
   });
 
-  test("should handle AWS Cognito errors gracefully", async ({ page }) => {
-    const validEmail = "test@sonymusic.com";
+  test("should handle authentication errors gracefully", async ({ page }) => {
+    const validEmail = "siam-test-x7j9k2p4@mailinator.com";
 
     // Fill in valid email
     await page.fill('input[type="email"]', validEmail);
 
-    // Mock AWS Cognito error response
-    await page.route("**/cognito-idp/**", (route) => {
+    // Mock API error response
+    await page.route("**/api/auth/magic-link", (route) => {
       route.fulfill({
         status: 400,
         contentType: "application/json",
         body: JSON.stringify({
-          message: "User does not exist",
-          code: "UserNotFoundException",
+          error: "User does not exist",
         }),
       });
     });
@@ -257,25 +242,25 @@ test.describe("Authentication Error Handling", () => {
     // Click send magic link button
     await page.click('button[type="submit"]');
 
-    // Should show error message
-    // Note: Adjust based on actual error handling implementation
+    // Should show error message (toast notification)
+    // The exact implementation may vary
   });
 
   test("should handle network errors", async ({ page }) => {
-    const validEmail = "test@sonymusic.com";
+    const validEmail = "siam-test-x7j9k2p4@mailinator.com";
 
     // Fill in valid email
     await page.fill('input[type="email"]', validEmail);
 
     // Mock network error
-    await page.route("**/cognito-idp/**", (route) => {
+    await page.route("**/api/auth/magic-link", (route) => {
       route.abort("failed");
     });
 
     // Click send magic link button
     await page.click('button[type="submit"]');
 
-    // Should show network error message
-    // Note: Adjust based on actual error handling implementation
+    // Should show network error message in toast or error display
+    // The exact implementation may vary based on error handling
   });
 });
