@@ -1,0 +1,290 @@
+[
+  {
+    "url": "https://aoma-stage.smcdp-de.net/aoma-ui/my-aoma-files",
+    "title": "AOMA Login",
+    "path": "/aoma-ui/my-aoma-files",
+    "contentLength": 3512,
+    "headings": [],
+    "forms": [
+      {
+        "id": "",
+        "action": "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet",
+        "fields": [
+          {
+            "type": "hidden",
+            "name": "chain",
+            "id": "",
+            "placeholder": ""
+          },
+          {
+            "type": "text",
+            "name": "user",
+            "id": "embedUserNameInputText",
+            "placeholder": ""
+          },
+          {
+            "type": "password",
+            "name": "pass",
+            "id": "pass",
+            "placeholder": ""
+          },
+          {
+            "type": "text",
+            "name": "passcode",
+            "id": "passcode",
+            "placeholder": ""
+          },
+          {
+            "type": "submit",
+            "name": "Login",
+            "id": "loginBtn",
+            "placeholder": ""
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      "Login"
+    ]
+  },
+  {
+    "url": "https://aoma-stage.smcdp-de.net/aoma-ui/simple-upload",
+    "title": "AOMA Login",
+    "path": "/aoma-ui/simple-upload",
+    "contentLength": 3512,
+    "headings": [],
+    "forms": [
+      {
+        "id": "",
+        "action": "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet",
+        "fields": [
+          {
+            "type": "hidden",
+            "name": "chain",
+            "id": "",
+            "placeholder": ""
+          },
+          {
+            "type": "text",
+            "name": "user",
+            "id": "embedUserNameInputText",
+            "placeholder": ""
+          },
+          {
+            "type": "password",
+            "name": "pass",
+            "id": "pass",
+            "placeholder": ""
+          },
+          {
+            "type": "text",
+            "name": "passcode",
+            "id": "passcode",
+            "placeholder": ""
+          },
+          {
+            "type": "submit",
+            "name": "Login",
+            "id": "loginBtn",
+            "placeholder": ""
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      "Login"
+    ]
+  },
+  {
+    "url": "https://aoma-stage.smcdp-de.net/aoma-ui/direct-upload",
+    "title": "AOMA Login",
+    "path": "/aoma-ui/direct-upload",
+    "contentLength": 3512,
+    "headings": [],
+    "forms": [
+      {
+        "id": "",
+        "action": "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet",
+        "fields": [
+          {
+            "type": "hidden",
+            "name": "chain",
+            "id": "",
+            "placeholder": ""
+          },
+          {
+            "type": "text",
+            "name": "user",
+            "id": "embedUserNameInputText",
+            "placeholder": ""
+          },
+          {
+            "type": "password",
+            "name": "pass",
+            "id": "pass",
+            "placeholder": ""
+          },
+          {
+            "type": "text",
+            "name": "passcode",
+            "id": "passcode",
+            "placeholder": ""
+          },
+          {
+            "type": "submit",
+            "name": "Login",
+            "id": "loginBtn",
+            "placeholder": ""
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      "Login"
+    ]
+  },
+  {
+    "url": "https://aoma-stage.smcdp-de.net/aoma-ui/product-metadata-viewer",
+    "title": "AOMA Login",
+    "path": "/aoma-ui/product-metadata-viewer",
+    "contentLength": 3512,
+    "headings": [],
+    "forms": [
+      {
+        "id": "",
+        "action": "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet",
+        "fields": [
+          {
+            "type": "hidden",
+            "name": "chain",
+            "id": "",
+            "placeholder": ""
+          },
+          {
+            "type": "text",
+            "name": "user",
+            "id": "embedUserNameInputText",
+            "placeholder": ""
+          },
+          {
+            "type": "password",
+            "name": "pass",
+            "id": "pass",
+            "placeholder": ""
+          },
+          {
+            "type": "text",
+            "name": "passcode",
+            "id": "passcode",
+            "placeholder": ""
+          },
+          {
+            "type": "submit",
+            "name": "Login",
+            "id": "loginBtn",
+            "placeholder": ""
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      "Login"
+    ]
+  },
+  {
+    "url": "https://aoma-stage.smcdp-de.net/aoma-ui/unified-submission-tool",
+    "title": "AOMA Login",
+    "path": "/aoma-ui/unified-submission-tool",
+    "contentLength": 3512,
+    "headings": [],
+    "forms": [
+      {
+        "id": "",
+        "action": "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet",
+        "fields": [
+          {
+            "type": "hidden",
+            "name": "chain",
+            "id": "",
+            "placeholder": ""
+          },
+          {
+            "type": "text",
+            "name": "user",
+            "id": "embedUserNameInputText",
+            "placeholder": ""
+          },
+          {
+            "type": "password",
+            "name": "pass",
+            "id": "pass",
+            "placeholder": ""
+          },
+          {
+            "type": "text",
+            "name": "passcode",
+            "id": "passcode",
+            "placeholder": ""
+          },
+          {
+            "type": "submit",
+            "name": "Login",
+            "id": "loginBtn",
+            "placeholder": ""
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      "Login"
+    ]
+  },
+  {
+    "url": "https://aoma-stage.smcdp-de.net/aoma-ui/video-metadata",
+    "title": "AOMA Login",
+    "path": "/aoma-ui/video-metadata",
+    "contentLength": 3512,
+    "headings": [],
+    "forms": [
+      {
+        "id": "",
+        "action": "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet",
+        "fields": [
+          {
+            "type": "hidden",
+            "name": "chain",
+            "id": "",
+            "placeholder": ""
+          },
+          {
+            "type": "text",
+            "name": "user",
+            "id": "embedUserNameInputText",
+            "placeholder": ""
+          },
+          {
+            "type": "password",
+            "name": "pass",
+            "id": "pass",
+            "placeholder": ""
+          },
+          {
+            "type": "text",
+            "name": "passcode",
+            "id": "passcode",
+            "placeholder": ""
+          },
+          {
+            "type": "submit",
+            "name": "Login",
+            "id": "loginBtn",
+            "placeholder": ""
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      "Login"
+    ]
+  }
+]

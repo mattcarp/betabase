@@ -1,0 +1,237 @@
+{
+  "url": "https://aoma-stage.smcdp-de.net/legacy-embed/4beb3bd2ba344f37b8c695bf04eb4623/servlet%7Ccom%5Esonymusic%5Eaoma%5EAOMADispatcherServlet~chain*CustomHomePageViewAction",
+  "title": "AOMA",
+  "crawled_at": "2025-09-23T00:44:59.501Z",
+  "text_length": 1450,
+  "links_count": 52,
+  "forms_count": 1,
+  "links": [
+    {
+      "text": "AOMA",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/homeLink"
+    },
+    {
+      "text": "Archive Submission Tool",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/submit-assets"
+    },
+    {
+      "text": "Asset Naming Utility",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/FQG6BJNOES/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*AssetNamingUtilEntryAction"
+    },
+    {
+      "text": "Asset Submission Tool (LFV)",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/asset-submission-tool"
+    },
+    {
+      "text": "CD Text",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/JO9QBXQ7DN/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*CDTextEntryDisplayChain"
+    },
+    {
+      "text": "Delete / Reset Master ID",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/E4YLA1JAUJ/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*DeleteMasterId"
+    },
+    {
+      "text": "Direct Upload",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/ILI4PM9XR/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*DirectUploadFormAction"
+    },
+    {
+      "text": "Manage Master Security Groups",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/K09DPMEVMM/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*ManageSecurityGroupViewAction"
+    },
+    {
+      "text": "Master - Create",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/K45JFPBDJ7/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*CreateMasterViewAction"
+    },
+    {
+      "text": "Master - Modify",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/9VX6T7IPGA/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*ModifyMasterViewAction"
+    },
+    {
+      "text": "Migrate Assets",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/CYAH79VXJ5/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*AssetMigrationStartupDisplayChain"
+    },
+    {
+      "text": "Mobile Audio Editor",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/AU57SRQNF/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*MobileAudioFormAction"
+    },
+    {
+      "text": "Package Printing Specs",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/902Q88T7GC/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*PackagePrintingSpecificationSelectProductAction"
+    },
+    {
+      "text": "Product Metadata Viewer",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/GTK3EYWM8/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*ProductMetadataViewerSelectProductAction"
+    },
+    {
+      "text": "QC Metadata",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/P1GK2UB6V/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*QCMetadataSelectAssetTypeDisplayAction"
+    },
+    {
+      "text": "QC Notes",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/Z6QEHHANTN/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*QCNotesViewNew"
+    },
+    {
+      "text": "Register Assets",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/W1H7F6EZQO/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*AssetRegistrationFormDisplayAction"
+    },
+    {
+      "text": "Simple Upload",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/BURIDGXTF/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*SimpleUploadFormAction"
+    },
+    {
+      "text": "Unified Submission Tool (UST)",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/unified-submission-tool"
+    },
+    {
+      "text": "Un-Register Assets",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/8ET47YAMIA/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*AssetSummaryRetrievalChain"
+    },
+    {
+      "text": "3rd Party Integration Manager",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/integration-manager"
+    },
+    {
+      "text": "Archive Export Status",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/user-export"
+    },
+    {
+      "text": "Asset Upload Job Status",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/asset-upload-job-status"
+    },
+    {
+      "text": "EOM Message Sender",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/eom-message-sender"
+    },
+    {
+      "text": "Export Destination Manager",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/7NOYBB85S/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*ExportDestinationDisplayAction%2526pageSelected*0"
+    },
+    {
+      "text": "Export Status",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/5Y6084YC6/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*ExportDeliveryStatsDisplayDefaultChain"
+    },
+    {
+      "text": "Export Status A3",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/export-status"
+    },
+    {
+      "text": "GRAS Message Sender",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/AQU32N8CJC/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*GRASMessagingSendingAction"
+    },
+    {
+      "text": "Link Attempt Status",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/link-attempts"
+    },
+    {
+      "text": "Manage QC Provider Teams",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/qc-providers"
+    },
+    {
+      "text": "Manage Supply Chain Order",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/KVRWC7AODR/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*SupplyChainOrderSelectAction"
+    },
+    {
+      "text": "Master Event History",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/master-event-history"
+    },
+    {
+      "text": "Master Status",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/A6CXAA1WWL/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*QCMasterStatusViewAction"
+    },
+    {
+      "text": "Metadata Import (GRAS)",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/NB870P8HJJ/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*ListLabelCopyImportAttempts%2526"
+    },
+    {
+      "text": "Mobile Audio Manager",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/XK30PUL1G/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*MobileAudioManagerAction"
+    },
+    {
+      "text": "Product Event History",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/product-event-history"
+    },
+    {
+      "text": "Product Linking",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/IZRHGILJ83/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*ViewProductLinkSummaryAction"
+    },
+    {
+      "text": "Product Linking A3",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/product-linking"
+    },
+    {
+      "text": "Product Status",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/1FI4DTCEJD/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*QCViewProductApproval"
+    },
+    {
+      "text": "Pseudo Video",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/pseudo-video"
+    },
+    {
+      "text": "Registration Job Status",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/registration-job-status"
+    },
+    {
+      "text": "Supply Chain Order Management (AOMA 3)",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/supply-chain-order-management"
+    },
+    {
+      "text": "Artist Search",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/summary/artist"
+    },
+    {
+      "text": "Digital Archive Batch Export",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/digital-archive-batch-export"
+    },
+    {
+      "text": "Media Batch Convertor (MBC)",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/media-batch-converter"
+    },
+    {
+      "text": "My AOMA Files",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/OLXN78C1F/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*MyAomaFilesAction"
+    },
+    {
+      "text": "My AOMA Files A3",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/my-aoma-files"
+    },
+    {
+      "text": "AMP User Management",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/user-management/search"
+    },
+    {
+      "text": "Change Password",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/legacy-embed/UFIFSNYMVA/servlet%257Ccom%255Esonymusic%255Eaoma%255EAOMADispatcherServlet~chain*SetPasswordAction"
+    },
+    {
+      "text": "Role Management",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/role-management"
+    },
+    {
+      "text": "User Event History",
+      "href": "https://aoma-stage.smcdp-de.net/aoma-ui/user-event-history"
+    },
+    {
+      "text": "TEST BANNER",
+      "href": "https://jira.smedigitalapps.com/jira/browse/DPSA-2BLABLA"
+    }
+  ],
+  "forms": [
+    {
+      "action": "https://aoma-stage.smcdp-de.net/legacy-embed/4beb3bd2ba344f37b8c695bf04eb4623/servlet%7Ccom%5Esonymusic%5Eaoma%5EAOMADispatcherServlet~chain*CustomHomePageViewAction",
+      "inputs": [
+        {
+          "name": "",
+          "type": "text"
+        },
+        {
+          "name": "",
+          "type": "select-one"
+        },
+        {
+          "name": "",
+          "type": "select-one"
+        }
+      ]
+    }
+  ]
+}
