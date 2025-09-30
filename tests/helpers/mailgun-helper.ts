@@ -259,5 +259,19 @@ export class MailgunTestHelper {
   }
 }
 
-// Export singleton instance for convenience
-export const mailgunHelper = new MailgunTestHelper();
+// Export singleton instance for convenience (lazy-loaded to avoid import-time errors)
+let _mailgunHelper: MailgunTestHelper | null = null;
+
+export function getMailgunHelper(): MailgunTestHelper {
+  if (!_mailgunHelper) {
+    _mailgunHelper = new MailgunTestHelper();
+  }
+  return _mailgunHelper;
+}
+
+// Backwards compatibility - will throw only when accessed
+export const mailgunHelper = new Proxy({} as MailgunTestHelper, {
+  get(_target, prop) {
+    return getMailgunHelper()[prop as keyof MailgunTestHelper];
+  }
+});
