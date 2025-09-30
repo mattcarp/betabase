@@ -1,5 +1,5 @@
-import { test, expect } from "../../../fixtures/auth.fixture";
-import { TEST_USERS } from "../../../fixtures/auth.fixture";
+import { test, expect } from "../../fixtures/auth.fixture";
+import { TEST_USERS } from "../../fixtures/auth.fixture";
 
 /**
  * Critical authentication flows that must never break
