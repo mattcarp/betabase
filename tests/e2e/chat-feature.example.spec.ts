@@ -59,7 +59,7 @@ test.describe("SIAM Chat Feature", () => {
   });
   
   test.describe("Basic Functionality", () => {
-    test("should load chat interface @smoke", async ({ page }) => {
+    test("should load chat interface @e2e", async ({ page }) => {
       await chatPage.navigateToChat();
       
       // Verify chat elements are present
