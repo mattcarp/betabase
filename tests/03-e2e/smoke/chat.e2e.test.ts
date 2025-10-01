@@ -1,7 +1,8 @@
 /**
  * @feature Chat
  * @priority p0
- * @tags smoke, regression, chat
+ * @tags regression, chat, e2e
+ * NOTE: These require authentication - not true smoke tests
  */
 import { test, expect } from '@playwright/test';
 import { ChatPage } from '../../__pages__/ChatPage';
@@ -21,7 +22,7 @@ test.describe('[FEATURE] Chat - Core Functionality', () => {
     await chatPage.waitForLoad();
   });
 
-  test('[MUST] send and receive messages @smoke @p0', async () => {
+  test('[MUST] send and receive messages @e2e @p0', async () => {
     // Arrange
     const message = TestFactory.createChatMessage({
       text: 'Hello, what is 2 + 2?',
@@ -35,7 +36,7 @@ test.describe('[FEATURE] Chat - Core Functionality', () => {
     const response = await chatPage.getLastAIMessage();
     expect(response).toContain(message.expectResponse);
   });
-  test('[MUST] clear chat history @smoke @p0', async () => {
+  test('[MUST] clear chat history @e2e @p0', async () => {
     // Arrange - Send a message first
     await chatPage.sendMessage('Test message');
     await chatPage.waitForResponse();
@@ -48,7 +49,7 @@ test.describe('[FEATURE] Chat - Core Functionality', () => {
     expect(messages).toHaveLength(0);
   });
 
-  test('[MUST] maintain conversation context @smoke @p0', async () => {
+  test('[MUST] maintain conversation context @e2e @p0', async () => {
     // Arrange - Create a conversation
     const conversation = TestFactory.createConversation();
     
