@@ -20,14 +20,15 @@ interface AOMAQueryResult {
 }
 
 class AOMAParallelQueryService {
-  private readonly RAILWAY_URL = '';
+  // AOMA Mesh MCP is deployed to Railway, NOT Render
+  private readonly RAILWAY_URL = process.env.NEXT_PUBLIC_AOMA_MESH_SERVER_URL ||
+    "https://luminous-dedication-production.up.railway.app";
   
-  private readonly RENDER_URL = process.env.NEXT_PUBLIC_RENDER_AOMA_URL || 
-    "https://aoma-mesh-mcp.onrender.com";
+  // No Render deployment - Railway only
+  private readonly RENDER_URL = '';
     
-  // Removed Lambda - we don't use it anymore
-  private readonly FALLBACK_URL = process.env.NEXT_PUBLIC_AOMA_MESH_SERVER_URL ||
-    "https://aoma-mesh-mcp.onrender.com";
+  // Primary URL is Railway
+  private readonly FALLBACK_URL = this.RAILWAY_URL;
 
   /**
    * Execute parallel queries to multiple AOMA endpoints
@@ -59,10 +60,9 @@ class AOMAParallelQueryService {
     // Enhance query for better context
     const enhancedQuery = this.enhanceQueryForContext(query);
 
-    // Create parallel queries to different endpoints
+    // Query Railway endpoint (primary deployment)
     const queries = [
-      this.queryEndpoint(enhancedQuery, strategy, this.FALLBACK_URL, 'lambda', 15000),
-      this.queryEndpoint(enhancedQuery, strategy, this.RENDER_URL, 'render', 25000)
+      this.queryEndpoint(enhancedQuery, strategy, this.RAILWAY_URL, 'railway', 10000)
     ];
 
     try {
@@ -85,10 +85,9 @@ class AOMAParallelQueryService {
       console.error('All AOMA queries failed:', error);
     }
 
-    // If all fail, try them sequentially with longer timeouts as fallback
+    // If first attempt fails, retry Railway with longer timeout
     for (const endpoint of [
-      { url: this.FALLBACK_URL, name: 'lambda', timeout: 25000 },
-      { url: this.RENDER_URL, name: 'render', timeout: 35000 }
+      { url: this.RAILWAY_URL, name: 'railway-retry', timeout: 15000 }
     ]) {
       const result = await this.queryEndpoint(
         enhancedQuery, 
