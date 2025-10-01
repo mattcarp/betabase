@@ -32,28 +32,28 @@ class ModelConfigService {
     chat: {
       model:
         (process.env.NEXT_PUBLIC_DEFAULT_CHAT_MODEL as OpenAIModel) || "gpt-5",
-      temperature: 0.7,
+      temperature: 1, // GPT-5 only supports default temperature (1)
       maxTokens: 8000,
       description: "Standard chat conversations with GPT-5",
       costTier: "standard",
     },
     "premium-chat": {
       model: "gpt-5",
-      temperature: 0.7,
+      temperature: 1, // GPT-5 only supports default temperature (1)
       maxTokens: 12000,
       description: "Premium chat with GPT-5 for complex tasks",
       costTier: "standard",
     },
     reasoning: {
       model: "gpt-5",
-      temperature: 0.3,
+      temperature: 1, // GPT-5 only supports default temperature (1)
       maxTokens: 10000,
       description: "Deep reasoning with GPT-5",
       costTier: "standard",
     },
     "code-generation": {
       model: "gpt-5",
-      temperature: 0.2,
+      temperature: 1, // GPT-5 only supports default temperature (1)
       maxTokens: 8000,
       description: "GPT-5 optimized for coding tasks",
       costTier: "standard",
@@ -81,7 +81,7 @@ class ModelConfigService {
     },
     "aoma-query": {
       model: "gpt-5",
-      temperature: 0.3,
+      temperature: 1, // GPT-5 only supports default temperature (1)
       maxTokens: 6000,
       description: "AOMA knowledge queries with GPT-5",
       costTier: "standard",

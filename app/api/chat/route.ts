@@ -10,7 +10,7 @@ export const maxDuration = 60;
 
 // Initialize OpenAI client
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY,
 });
 
 // Enhanced query for context
@@ -47,6 +47,20 @@ export async function POST(req: Request) {
   const chatStartTime = Date.now();
   
   try {
+    // Check for API key first
+    if (!process.env.OPENAI_API_KEY && !process.env.NEXT_PUBLIC_OPENAI_API_KEY) {
+      console.error("[API] OPENAI_API_KEY is not set in environment variables");
+      return new Response(
+        JSON.stringify({ 
+          error: "OpenAI API key is not configured. Please set OPENAI_API_KEY in your environment." 
+        }),
+        {
+          status: 503,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
+
     const body = await req.json();
     const { messages = [], model, temperature = 0.7, systemPrompt } = body;
 
@@ -77,12 +91,16 @@ export async function POST(req: Request) {
     let aomaConnectionStatus = "not-queried";
     const knowledgeElements: KnowledgeElement[] = [];
 
+    // PERFORMANCE FIX: Add bypass flag to skip slow AOMA orchestration
+    const bypassAOMA = process.env.NEXT_PUBLIC_BYPASS_AOMA === 'true';
+    console.log(`🔧 AOMA bypass flag: ${bypassAOMA} (env: ${process.env.NEXT_PUBLIC_BYPASS_AOMA})`);
+    
     // Check if we need AOMA context
     const latestUserMessage = messages
       .filter((m: any) => m.role === "user")
       .pop();
 
-    if (latestUserMessage && latestUserMessage.content) {
+    if (!bypassAOMA && latestUserMessage && latestUserMessage.content) {
       const queryString = typeof latestUserMessage.content === "string"
         ? latestUserMessage.content
         : JSON.stringify(latestUserMessage.content);
@@ -187,7 +205,7 @@ When responding, structure your knowledge appropriately and include any relevant
       model: selectedModel,
       messages: allMessages,
       temperature: modelSettings.temperature || temperature,
-      max_tokens: modelSettings.maxTokens || 4000,
+      max_completion_tokens: modelSettings.maxTokens || 4000, // Updated from max_tokens (deprecated)
       stream: true,
     });
 

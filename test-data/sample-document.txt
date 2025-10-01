@@ -1,0 +1,16 @@
+SIAM Test Document
+
+This is a test document for verifying file upload and curation functionality in SIAM.
+
+## Test Information
+- Purpose: Vector store upload testing
+- Date: October 1, 2025
+- Author: Test Suite
+
+## Key Features to Test
+1. File upload to OpenAI vector store
+2. File processing and vectorization
+3. File deletion from vector store
+4. Knowledge base integration
+
+This document contains enough text to be meaningful for vector embedding while remaining small enough for quick testing.

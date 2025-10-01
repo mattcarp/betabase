@@ -42,9 +42,9 @@ import { Alert, AlertDescription } from "../ui/alert";
 import { motion, AnimatePresence } from "framer-motion";
 // import { toast } from "sonner";
 const toast = { 
-  success: (msg: string) => console.log('✅', msg),
-  error: (msg: string) => console.error('❌', msg),
-  info: (msg: string) => console.info('ℹ️', msg)
+  success: (msg: string, options?: any) => console.log('✅', msg),
+  error: (msg: string, options?: any) => console.error('❌', msg),
+  info: (msg: string, options?: any) => console.info('ℹ️', msg)
 };
 
 // Import ALL AI SDK Elements for modern chat experience
@@ -1390,9 +1390,8 @@ export function AiSdkChatPanel({
   return (
     <div
       className={cn(
-        "flex flex-col h-full",
-        "bg-gradient-to-br from-background via-background to-muted/20",
-        "backdrop-blur-sm",
+        "flex flex-col h-full max-h-screen",
+        "bg-zinc-950",
         "overflow-hidden",
         className,
       )}
@@ -1464,9 +1463,9 @@ export function AiSdkChatPanel({
       )}
 
       {/* Main Chat Area */}
-      <div className="flex-1 min-h-0 overflow-hidden">
-        <Conversation className="h-full">
-          <ConversationContent className="px-6 py-4">
+      <div className="flex-1 min-h-0 overflow-hidden bg-zinc-950">
+        <Conversation className="h-full bg-zinc-950">
+          <ConversationContent className="px-6 py-4 bg-zinc-950">
             {messages.length === 0 && enableWelcomeScreen ? (
               /* Beautiful Welcome Screen */
               <motion.div
@@ -1529,7 +1528,7 @@ export function AiSdkChatPanel({
                             <Suggestion
                               suggestion={suggestion}
                               onClick={handleSuggestionClick}
-                              className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-gradient-to-r from-background to-muted/50 border border-border/50 backdrop-blur-sm h-auto whitespace-normal py-3 px-4"
+                              className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm h-auto whitespace-normal py-3 px-4"
                             />
                           </motion.div>
                         ))}
@@ -1781,7 +1780,7 @@ export function AiSdkChatPanel({
       </div>
 
       {/* Modern Input Area */}
-      <div className="flex-shrink-0 p-4 border-t border-border/50 bg-background/60 backdrop-blur-xl relative">
+      <div className="flex-shrink-0 p-4 pb-6 border-t border-zinc-800/50 bg-zinc-950 relative">
         {/* Real-Time Transcription Display */}
         {(isRecording || interimTranscript || transcript) && (
           <div className="mb-3 p-3 bg-black/30 rounded-lg backdrop-blur-sm border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-200">
@@ -1830,7 +1829,7 @@ export function AiSdkChatPanel({
 
         <PromptInput
           onSubmit={handleFormSubmit}
-          className="relative shadow-lg bg-background/80 border-border/50 hover:border-border transition-colors duration-200"
+          className="relative shadow-lg"
         >
           <PromptInputTextarea
             value={localInput}
@@ -1841,7 +1840,7 @@ export function AiSdkChatPanel({
             disabled={isMaxMessagesReached || isLoading}
             className="resize-none border-0 bg-transparent focus:ring-0 placeholder:text-muted-foreground/60"
           />
-          <PromptInputToolbar className="border-t border-border/30 bg-muted/20">
+          <PromptInputToolbar className="border-t border-zinc-800/50 bg-zinc-900/30">
             {/* Last prompt reminder */}
             {lastPrompt && (
               <div className="flex items-center gap-2 px-3 py-1.5 text-xs text-muted-foreground bg-muted/30 border border-border/30 rounded-md mb-2">
