@@ -26,14 +26,20 @@ interface ProcessedContent {
 }
 
 export class AomaFirecrawlService {
-  private firecrawl: FirecrawlApp;
+  private firecrawl: any; // Using Firecrawl SDK v4 which has v1 API under .v1 property
   private baseUrl: string;
-  
+
   constructor() {
-    this.firecrawl = new FirecrawlApp({
-      apiKey: process.env.FIRECRAWL_API_KEY!
+    if (!process.env.FIRECRAWL_API_KEY) {
+      throw new Error('FIRECRAWL_API_KEY environment variable is required');
+    }
+    const firecrawlInstance = new FirecrawlApp({
+      apiKey: process.env.FIRECRAWL_API_KEY
     });
+    // Access v1 API methods
+    this.firecrawl = firecrawlInstance.v1 || firecrawlInstance;
     this.baseUrl = process.env.AOMA_STAGE_URL || 'https://aoma-stage.smcdp-de.net';
+    console.log('✅ FirecrawlApp initialized');
   }
 
   /**
@@ -46,7 +52,7 @@ export class AomaFirecrawlService {
       // Get authentication cookies
       const cookieHeader = await aomaStageAuthenticator.getCookieHeader();
       
-      // Scrape the single page
+      // Scrape the single page (Firecrawl SDK v1 API)
       const result = await this.firecrawl.scrapeUrl(
         url.startsWith('http') ? url : `${this.baseUrl}${url}`,
         {
@@ -174,16 +180,17 @@ export class AomaFirecrawlService {
   }
 
   /**
-   * Execute the Firecrawl crawl
+   * Execute the Firecrawl crawl using v4 SDK API
    */
   private async executeCrawl(config: any) {
+    // Firecrawl SDK v4 uses crawlUrl which automatically polls for completion
     const result = await this.firecrawl.crawlUrl(
       config.url,
       {
         ...config.crawlerOptions,
         ...config.pageOptions
       },
-      true // wait for completion
+      2 // Poll interval in seconds
     );
 
     if (!result.success) {
