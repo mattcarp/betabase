@@ -1,5 +1,5 @@
 import { confluenceEnv, getAuthHeaders } from './confluenceAuthenticator';
-import { upsertVector } from '@/lib/supabase';
+import { upsertWikiDocument } from '@/lib/supabase';
 import { storageToMarkdown, extractLabels, buildPageUrl, buildSourceId, normalizeLinks } from '@/utils/confluenceHelpers';
 import { openai } from '@ai-sdk/openai';
 import { embed } from 'ai';
@@ -81,18 +81,25 @@ export async function crawlSpaces(options: { spaces?: string[]; maxPagesPerSpace
       let embedding: number[] = [];
       try { embedding = await generateEmbedding(markdown); } catch (e) { /* best-effort */ }
 
-      // Upsert into unified vector store via helper
-      await upsertVector(markdown, embedding, 'confluence', `${page.id}-${versionNum}`, {
-        url: canonUrl,
-        title: page.title,
-        space: page.space?.key || spaceKey,
-        sony_music: true,
-        categories: ['wiki','documentation'],
-        priority_content: ['AOMA','USM'].includes((page.space?.key || spaceKey).toUpperCase()),
-        labels: labels,
-        updated_at: page.version?.when,
-        author: page.version?.by?.displayName,
-      });
+      // Upsert into wiki_documents table
+      await upsertWikiDocument(
+        canonUrl,
+        'confluence',
+        page.title,
+        markdown,
+        embedding,
+        {
+          space: page.space?.key || spaceKey,
+          sony_music: true,
+          categories: ['wiki','documentation'],
+          priority_content: ['AOMA','USM'].includes((page.space?.key || spaceKey).toUpperCase()),
+          labels: labels,
+          updated_at: page.version?.when,
+          author: page.version?.by?.displayName,
+          page_id: page.id,
+          version: versionNum,
+        }
+      );
 
       vectorsUpserted += 1;
       pagesCrawled += 1;

@@ -28,185 +28,253 @@ export const supabaseAdmin = (() => {
   return supabaseAdminClient;
 })();
 
-// Types for our tables
-export interface AomaUnifiedVector {
+// Types for our ACTUAL tables (as they exist in Supabase)
+export interface CrawlerDocument {
   id: string;
-  content: string;
+  app_id?: string;
+  url: string;
+  title: string;
+  content?: string;
+  metadata?: Record<string, any>;
+  content_hash: string;
   embedding?: number[];
-  source_type: 'knowledge' | 'jira' | 'git' | 'email' | 'metrics' | 'openai_import' | 'cache' | 'firecrawl' | 'confluence';
-  source_id: string;
-  metadata: Record<string, any>;
   created_at: string;
   updated_at: string;
+  app_name?: string;
+  markdown_content?: string;
+  crawled_at?: string;
 }
+
+export interface WikiDocument {
+  id: string;
+  app_name: string;
+  url: string;
+  title?: string;
+  markdown_content?: string;
+  metadata?: Record<string, any>;
+  content_hash?: string;
+  crawled_at?: string;
+  embedding?: number[];
+}
+
+export interface JiraTicket {
+  id: string;
+  external_id: string;
+  title: string;
+  description?: string;
+  priority?: string;
+  status?: string;
+  metadata?: Record<string, any>;
+  created_at?: string;
+  updated_at?: string;
+  embedding?: number[];
+}
+
+export interface JiraTicketEmbedding {
+  id: number;
+  ticket_key: string;
+  summary?: string;
+  embedding: number[];
+  metadata?: Record<string, any>;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface FirecrawlAnalysis {
   id: string;
   url: string;
-  page_title: string;
-  ui_elements: Record<string, any>;
-  selectors: Record<string, any>;
-  navigation_paths: string[];
-  testable_features: string[];
-  user_flows: Record<string, any>;
+  app_name?: string;
+  analysis_type?: string;
+  testable_features?: Record<string, any>;
+  user_flows?: Record<string, any>;
+  api_endpoints?: string[];
+  selectors?: Record<string, any>;
+  accessibility_issues?: Record<string, any>;
+  performance_metrics?: Record<string, any>;
+  content_embedding?: number[];
+  analyzed_at?: string;
+  expires_at?: string;
+}
+
+export interface TestKnowledgeBase {
+  id: string;
+  source: string;
+  source_id?: string;
+  category: string;
+  title: string;
+  content: string;
+  solution?: string;
+  tags?: string[];
+  relevance_score?: number;
+  usage_count?: number;
+  helpful_count?: number;
   embedding?: number[];
-  metadata: Record<string, any>;
-  crawled_at: string;
-  created_at: string;
-  updated_at: string;
+  metadata?: Record<string, any>;
+  created_at?: string;
+  updated_at?: string;
+  content_tsvector?: any;
 }
 
-// Helper functions for vector operations
-export async function searchVectors(
-  queryEmbedding: number[],
-  matchThreshold = 0.78,
-  matchCount = 10,
-  sourceTypes?: string[]
-) {
-  const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error('Supabase client not initialized');
-  const { data, error } = await client.rpc('match_aoma_vectors', {
-    query_embedding: queryEmbedding,
-    match_threshold: matchThreshold,
-    match_count: matchCount,
-    filter_source_types: sourceTypes
-  });
-
-  if (error) throw error;
-  return data;
-}
-export async function upsertVector(
+// Helper functions for vector operations using ACTUAL tables
+export async function upsertCrawlerDocument(
+  url: string,
+  title: string,
   content: string,
   embedding: number[],
-  sourceType: string,
-  sourceId: string,
+  appName: string,
   metadata: Record<string, any> = {}
 ) {
   const client = supabase ?? supabaseAdmin;
   if (!client) throw new Error('Supabase client not initialized');
 
-  // Add content hash to metadata for deduplication
   const crypto = await import('crypto');
   const contentHash = crypto.createHash('md5').update(content.trim()).digest('hex');
 
-  const enrichedMetadata = {
-    ...metadata,
-    content_hash: contentHash,
-    updated_at: new Date().toISOString()
-  };
-
-  const { data, error } = await client.rpc('upsert_aoma_vector', {
-    p_content: content,
-    p_embedding: embedding,
-    p_source_type: sourceType,
-    p_source_id: sourceId,
-    p_metadata: enrichedMetadata
-  });
+  const { data, error } = await client
+    .from('crawler_documents')
+    .upsert({
+      url,
+      title,
+      content,
+      embedding,
+      content_hash: contentHash,
+      app_name: appName,
+      metadata,
+      updated_at: new Date().toISOString()
+    }, {
+      onConflict: 'url,app_name'
+    })
+    .select()
+    .single();
 
   if (error) throw error;
   return data;
 }
 
-/**
- * Upsert vector with deduplication check
- */
-export async function upsertVectorWithDedup(
-  content: string,
+export async function upsertWikiDocument(
+  url: string,
+  appName: string,
+  title: string,
+  markdownContent: string,
   embedding: number[],
-  sourceType: string,
-  sourceId: string,
-  metadata: Record<string, any> = {},
-  options: {
-    checkSemanticDuplicates?: boolean;
-    semanticThreshold?: number;
-    url?: string;
-  } = {}
-) {
-  const { getDeduplicationService } = await import('@/services/deduplicationService');
-  const dedupService = getDeduplicationService();
-
-  // Check for duplicates
-  const dedupResult = await dedupService.checkDuplicate(
-    content,
-    sourceType,
-    sourceId,
-    options.url,
-    embedding,
-    {
-      contentHashMatch: true,
-      semanticThreshold: options.semanticThreshold || 0.95,
-      crossSource: false, // Only check within same source type
-      normalizeUrls: true,
-    }
-  );
-
-  if (dedupResult.isDuplicate && !dedupResult.shouldUpdate) {
-    console.log(`Skipping duplicate: ${sourceType}:${sourceId} (${dedupResult.matchType})`);
-    return {
-      skipped: true,
-      reason: dedupResult.matchType,
-      existingId: dedupResult.existingId
-    };
-  }
-
-  // Not a duplicate or should update, proceed with upsert
-  const id = await upsertVector(content, embedding, sourceType, sourceId, metadata);
-
-  return {
-    skipped: false,
-    id,
-    updated: dedupResult.shouldUpdate
-  };
-}
-
-// Sony Music specific helpers
-export async function upsertSonyMusicJiraVector(
-  content: string,
-  embedding: number[],
-  sourceId: string,
   metadata: Record<string, any> = {}
 ) {
-  const enriched = { sony_music: true, ...metadata };
-  return upsertVector(content, embedding, 'jira', sourceId, enriched);
-}
-
-export async function searchSonyMusicKnowledge(
-  queryEmbedding: number[],
-  matchThreshold = 0.78,
-  matchCount = 20
-) {
-  // Restrict to Sony-relevant sources
-  return searchVectors(queryEmbedding, matchThreshold, matchCount, ['jira', 'confluence', 'firecrawl']);
-}
-
-export async function getSonyMusicProjectContent(projectKey: string, limit = 50) {
   const client = supabase ?? supabaseAdmin;
   if (!client) throw new Error('Supabase client not initialized');
+
+  const crypto = await import('crypto');
+  const contentHash = crypto.createHash('md5').update(markdownContent.trim()).digest('hex');
+
   const { data, error } = await client
-    .from('aoma_unified_vectors')
-    .select('*')
-    .in('source_type', ['jira', 'confluence', 'firecrawl'])
-    .contains('metadata', { project: projectKey })
-    .limit(limit);
+    .from('wiki_documents')
+    .upsert({
+      url,
+      app_name: appName,
+      title,
+      markdown_content: markdownContent,
+      embedding,
+      content_hash: contentHash,
+      metadata,
+      crawled_at: new Date().toISOString()
+    }, {
+      onConflict: 'url,app_name'
+    })
+    .select()
+    .single();
+
   if (error) throw error;
-  return data as AomaUnifiedVector[];
+  return data;
 }
 
+export async function upsertJiraTicket(
+  externalId: string,
+  title: string,
+  description: string,
+  embedding: number[],
+  metadata: Record<string, any> = {}
+) {
+  const client = supabase ?? supabaseAdmin;
+  if (!client) throw new Error('Supabase client not initialized');
+
+  const { data, error } = await client
+    .from('jira_tickets')
+    .upsert({
+      external_id: externalId,
+      title,
+      description,
+      embedding,
+      metadata,
+      updated_at: new Date().toISOString()
+    }, {
+      onConflict: 'external_id'
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function upsertJiraTicketEmbedding(
+  ticketKey: string,
+  summary: string,
+  embedding: number[],
+  metadata: Record<string, any> = {}
+) {
+  const client = supabase ?? supabaseAdmin;
+  if (!client) throw new Error('Supabase client not initialized');
+
+  const { data, error } = await client
+    .from('jira_ticket_embeddings')
+    .upsert({
+      ticket_key: ticketKey,
+      summary,
+      embedding,
+      metadata,
+      updated_at: new Date().toISOString()
+    }, {
+      onConflict: 'ticket_key'
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+// Sony Music specific helpers using ACTUAL tables
 export async function validateSonyMusicContent() {
   const client = supabase ?? supabaseAdmin;
   if (!client) throw new Error('Supabase client not initialized');
+
   const counts: Record<string, number> = {};
-  for (const type of ['jira', 'confluence', 'firecrawl']) {
-    const { count, error } = await client
-      .from('aoma_unified_vectors')
-      .select('*', { count: 'exact', head: true })
-      .eq('source_type', type);
-    if (error) throw error;
-    counts[type] = count ?? 0;
-  }
+
+  // Count jira tickets
+  const { count: jiraCount, error: jiraError } = await client
+    .from('jira_tickets')
+    .select('*', { count: 'exact', head: true });
+  if (jiraError) throw jiraError;
+  counts['jira'] = jiraCount ?? 0;
+
+  // Count wiki documents (confluence)
+  const { count: wikiCount, error: wikiError } = await client
+    .from('wiki_documents')
+    .select('*', { count: 'exact', head: true })
+    .eq('app_name', 'confluence');
+  if (wikiError) throw wikiError;
+  counts['confluence'] = wikiCount ?? 0;
+
+  // Count firecrawl analysis
+  const { count: firecrawlCount, error: firecrawlError } = await client
+    .from('firecrawl_analysis')
+    .select('*', { count: 'exact', head: true });
+  if (firecrawlError) throw firecrawlError;
+  counts['firecrawl'] = firecrawlCount ?? 0;
+
   return counts;
 }
 
-// Firecrawl-specific operations
+// Firecrawl-specific operations (matches actual schema)
 export async function storeFirecrawlData(
   url: string,
   crawlData: any,
@@ -216,20 +284,23 @@ export async function storeFirecrawlData(
     console.warn('Supabase client not initialized - skipping store');
     return null;
   }
-  
+
   const { data, error } = await supabase
     .from('firecrawl_analysis')
     .upsert({
       url,
-      page_title: crawlData.title || '',
-      ui_elements: crawlData.elements || {},
-      selectors: crawlData.selectors || {},
-      navigation_paths: crawlData.navigationPaths || [],
-      testable_features: crawlData.testableFeatures || [],
+      app_name: crawlData.appName || 'aoma',
+      analysis_type: crawlData.analysisType || 'ui_analysis',
+      testable_features: crawlData.testableFeatures || {},
       user_flows: crawlData.userFlows || {},
-      embedding,
-      metadata: crawlData.metadata || {},
-      crawled_at: new Date().toISOString()
+      api_endpoints: crawlData.apiEndpoints || [],
+      selectors: crawlData.selectors || {},
+      accessibility_issues: crawlData.accessibilityIssues || {},
+      performance_metrics: crawlData.performanceMetrics || {},
+      content_embedding: embedding,
+      analyzed_at: new Date().toISOString()
+    }, {
+      onConflict: 'url'
     })
     .select()
     .single();
@@ -255,10 +326,13 @@ export async function getFirecrawlAnalysis(url: string) {
 }
 
 export async function searchFirecrawlData(query: string, limit = 10) {
-  const { data, error } = await supabase
+  const client = supabase ?? supabaseAdmin;
+  if (!client) throw new Error('Supabase client not initialized');
+
+  const { data, error } = await client
     .from('firecrawl_analysis')
     .select('*')
-    .textSearch('page_title', query)
+    .ilike('app_name', `%${query}%`)
     .limit(limit);
 
   if (error) throw error;
