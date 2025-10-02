@@ -4,6 +4,27 @@
 
 This file contains essential commands, scripts, and known issues for the SIAM project.
 
+## 🧪 TESTING FUNDAMENTALS - CRITICAL
+
+**⚠️ MANDATORY READING**: See `TESTING_FUNDAMENTALS.md` for comprehensive test documentation.
+
+SIAM has a complete Playwright test suite covering:
+- **AOMA Chat Intelligence Tests** - Prevents hallucination, validates accurate knowledge base responses
+- **File Upload/Curation Tests** - Ensures knowledge base management (upload/delete files)
+- **Visual Regression Tests** - Prevents dark theme regressions and UI breaks
+- **Full Production E2E Tests** - Complete user journey validation
+
+**Before ANY deployment, run**:
+```bash
+# P0 Critical Tests (MUST PASS)
+npx playwright test tests/production/aoma-chat-test.spec.ts          # No hallucinations
+npx playwright test tests/curate-tab-test.spec.ts                    # File upload/delete
+npx playwright test tests/visual/dark-theme-regression.spec.ts       # UI consistency
+npx playwright test tests/e2e/smoke/smoke.spec.ts                    # Critical paths
+```
+
+**Full test documentation**: `TESTING_FUNDAMENTALS.md`, `tests/README.md`
+
 ## 🚀 DEPLOYMENT - Rock-Solid Production Deploy
 
 **NEW**: Automated deployment with comprehensive monitoring and verification!
