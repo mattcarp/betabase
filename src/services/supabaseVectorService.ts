@@ -12,28 +12,25 @@ import {
 } from "@/lib/supabase";
 // Prefer server-only admin client for RPC/writes; fallback to public for safe reads
 import { supabaseAdmin } from "../../lib/supabase";
-import OpenAI from "openai";
+import { openai } from "@ai-sdk/openai";
+import { embed } from "ai";
 
 export class SupabaseVectorService {
-  private openai: OpenAI;
-
-  constructor(openaiApiKey?: string) {
-    this.openai = new OpenAI({
-      apiKey: openaiApiKey || process.env.OPENAI_API_KEY!,
-    });
+  constructor() {
+    // No longer need to store OpenAI client
   }
 
   /**
-   * Generate embeddings using OpenAI's text-embedding-ada-002
+   * Generate embeddings using OpenAI's text-embedding-3-small (via Vercel AI SDK)
    */
   async generateEmbedding(text: string): Promise<number[]> {
     try {
-      const response = await this.openai.embeddings.create({
-        model: "text-embedding-ada-002",
-        input: text,
+      const { embedding } = await embed({
+        model: openai.embedding('text-embedding-3-small'),
+        value: text,
       });
 
-      return response.data[0].embedding;
+      return embedding;
     } catch (error) {
       console.error("Failed to generate embedding:", error);
       throw new Error("Embedding generation failed");

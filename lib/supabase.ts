@@ -83,16 +83,79 @@ export async function upsertVector(
 ) {
   const client = supabase ?? supabaseAdmin;
   if (!client) throw new Error('Supabase client not initialized');
+
+  // Add content hash to metadata for deduplication
+  const crypto = await import('crypto');
+  const contentHash = crypto.createHash('md5').update(content.trim()).digest('hex');
+
+  const enrichedMetadata = {
+    ...metadata,
+    content_hash: contentHash,
+    updated_at: new Date().toISOString()
+  };
+
   const { data, error } = await client.rpc('upsert_aoma_vector', {
     p_content: content,
     p_embedding: embedding,
     p_source_type: sourceType,
     p_source_id: sourceId,
-    p_metadata: metadata
+    p_metadata: enrichedMetadata
   });
 
   if (error) throw error;
   return data;
+}
+
+/**
+ * Upsert vector with deduplication check
+ */
+export async function upsertVectorWithDedup(
+  content: string,
+  embedding: number[],
+  sourceType: string,
+  sourceId: string,
+  metadata: Record<string, any> = {},
+  options: {
+    checkSemanticDuplicates?: boolean;
+    semanticThreshold?: number;
+    url?: string;
+  } = {}
+) {
+  const { getDeduplicationService } = await import('@/services/deduplicationService');
+  const dedupService = getDeduplicationService();
+
+  // Check for duplicates
+  const dedupResult = await dedupService.checkDuplicate(
+    content,
+    sourceType,
+    sourceId,
+    options.url,
+    embedding,
+    {
+      contentHashMatch: true,
+      semanticThreshold: options.semanticThreshold || 0.95,
+      crossSource: false, // Only check within same source type
+      normalizeUrls: true,
+    }
+  );
+
+  if (dedupResult.isDuplicate && !dedupResult.shouldUpdate) {
+    console.log(`Skipping duplicate: ${sourceType}:${sourceId} (${dedupResult.matchType})`);
+    return {
+      skipped: true,
+      reason: dedupResult.matchType,
+      existingId: dedupResult.existingId
+    };
+  }
+
+  // Not a duplicate or should update, proceed with upsert
+  const id = await upsertVector(content, embedding, sourceType, sourceId, metadata);
+
+  return {
+    skipped: false,
+    id,
+    updated: dedupResult.shouldUpdate
+  };
 }
 
 // Sony Music specific helpers
