@@ -7,7 +7,7 @@ const DEFAULT_PROJECTS = ['AOMA', 'USM', 'TECH', 'API'];
 const JIRA_BASE = (process.env.JIRA_BASE_URL || 'https://jira.smedigitalapps.com/jira').replace(/\/$/, '');
 const JIRA_USER = process.env.JIRA_USERNAME || '';
 const JIRA_PASSWORD = process.env.JIRA_PASSWORD || '';
-const JIRA_TOKEN = process.env.JIRA_API_TOKEN || '';
+// Note: We use Playwright with username/password login, NOT Jira REST API
 
 async function delay(ms: number) { return new Promise(res => setTimeout(res, ms)); }
 
@@ -172,127 +172,8 @@ export async function crawlProjects(options: CrawlOptions = {}) {
   return { issuesCrawled, vectorsUpserted, projects, sinceDays };
 }
 
-// ============================================================================
-// REST API Implementation (below)
-// Uses same constants and imports as Playwright version above
-// ============================================================================
-
-type JiraIssue = {
-  id: string;
-  key: string;
-  fields: {
-    summary: string;
-    description?: string;
-    issuetype?: { name?: string };
-    status?: { name?: string };
-    priority?: { name?: string };
-    project?: { key?: string };
-    assignee?: { displayName?: string };
-    labels?: string[];
-    updated?: string;
-  };
-};
-
-// Reuse constants from top of file (JIRA_BASE, JIRA_USER, JIRA_TOKEN already declared)
-
-function getJiraHeaders(): Record<string, string> {
-  if (!JIRA_TOKEN || !JIRA_USER) {
-    throw new Error('Missing JIRA credentials (JIRA_USERNAME, JIRA_API_TOKEN)');
-  }
-  const basic = Buffer.from(`${JIRA_USER}:${JIRA_TOKEN}`).toString('base64');
-  return {
-    Authorization: `Basic ${basic}`,
-    'Accept': 'application/json',
-    'User-Agent': 'Siam JIRA Crawler/1.0',
-    'Content-Type': 'application/json'
-  };
-}
-
-async function delay(ms: number) { return new Promise(res => setTimeout(res, ms)); }
-
-async function fetchWithRetry(url: string, init: RequestInit, retries = 3, backoffMs = 500): Promise<Response> {
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    const res = await fetch(url, init);
-    if (res.status !== 429 && res.status !== 502 && res.status !== 503) return res;
-    const wait = backoffMs * Math.pow(2, attempt);
-    await delay(wait);
-  }
-  return fetch(url, init);
-}
-
-// Reuse generateEmbedding function from above for REST API implementation
-
-export async function searchIssues(
-  projects: string[] = ['AOMA','USM','TECH','API'],
-  maxResults = 100
-): Promise<JiraIssue[]> {
-  const jqlParts: string[] = [];
-  if (projects.length) {
-    const proj = projects.map(p => `'${p}'`).join(',');
-    jqlParts.push(`project in (${proj})`);
-  }
-  jqlParts.push('ORDER BY updated DESC');
-  const jql = encodeURIComponent(jqlParts.join(' AND '));
-  const url = `${JIRA_BASE}/rest/api/3/search?jql=${jql}&maxResults=${Math.min(maxResults, 100)}`;
-  const res = await fetchWithRetry(url, { headers: getJiraHeaders() });
-  if (!res.ok) throw new Error(`JIRA search failed: ${res.status}`);
-  const data = await res.json();
-  return data.issues || [];
-}
-
-export async function crawlSonyMusicJira(options: { projects?: string[]; maxResults?: number } = {}) {
-  const projects = options.projects && options.projects.length ? options.projects : ['AOMA','USM','TECH','API'];
-  const maxResults = options.maxResults ?? 100;
-  const issues = await searchIssues(projects, maxResults);
-
-  let vectorsUpserted = 0;
-  for (const issue of issues) {
-    const projectKey = issue.fields.project?.key || issue.key.split('-')[0];
-    const title = issue.fields.summary || issue.key;
-    const description = issue.fields.description || '';
-    const body = `Title: ${title}\n\n${description}`.trim();
-    const embedding = await generateEmbedding(body).catch(() => []);
-
-    // Store in jira_tickets table
-    await upsertJiraTicket(
-      issue.key,
-      title,
-      description,
-      embedding,
-      {
-        url: `${JIRA_BASE}/browse/${issue.key}`,
-        project: projectKey,
-        issue_type: issue.fields.issuetype?.name,
-        status: issue.fields.status?.name,
-        priority: issue.fields.priority?.name,
-        assignee: issue.fields.assignee?.displayName,
-        labels: issue.fields.labels || [],
-        updated_at: issue.fields.updated,
-        sony_music: true,
-      }
-    );
-
-    // Also store in jira_ticket_embeddings for semantic search
-    await upsertJiraTicketEmbedding(
-      issue.key,
-      title,
-      embedding,
-      {
-        project: projectKey,
-        status: issue.fields.status?.name,
-        sony_music: true,
-      }
-    );
-
-    vectorsUpserted += 1;
-    await delay(150);
-  }
-
-  return { issuesCrawled: issues.length, vectorsUpserted };
-}
-
-// Export all functions
-const sonyMusicJiraCrawler = { crawlProjects, searchIssues, crawlSonyMusicJira };
+// Export Playwright-based crawler (ONLY implementation we use)
+const sonyMusicJiraCrawler = { crawlProjects };
 export default sonyMusicJiraCrawler;
 
 
