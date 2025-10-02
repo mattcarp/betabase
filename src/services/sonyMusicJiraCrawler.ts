@@ -1,7 +1,7 @@
 import { openai } from '@ai-sdk/openai';
 import { embed } from 'ai';
 import { chromium, Browser, Page } from 'playwright';
-import { upsertVector } from '@/lib/supabase';
+import { upsertJiraTicket, upsertJiraTicketEmbedding } from '@/lib/supabase';
 
 const DEFAULT_PROJECTS = ['AOMA', 'USM', 'TECH', 'API'];
 const JIRA_BASE = (process.env.JIRA_BASE_URL || 'https://jira.smedigitalapps.com/jira').replace(/\/$/, '');
@@ -128,15 +128,35 @@ export async function crawlProjects(options: CrawlOptions = {}) {
     for (const link of links) {
       const issue = await scrapeIssue(page, link);
       const embedding = await generateEmbedding(issue.content);
-      await upsertVector(issue.content, embedding, 'jira', issue.issueKey, {
-        url: link,
-        key: issue.issueKey,
-        title: issue.title,
-        project: issue.projectKey,
-        status: issue.status,
-        priority: issue.priority,
-        sony_music: true,
-      });
+
+      // Store in jira_tickets table
+      await upsertJiraTicket(
+        issue.issueKey,
+        issue.title,
+        issue.description,
+        embedding,
+        {
+          url: link,
+          project: issue.projectKey,
+          status: issue.status,
+          priority: issue.priority,
+          sony_music: true,
+          comments: issue.comments,
+        }
+      );
+
+      // Also store in jira_ticket_embeddings for semantic search
+      await upsertJiraTicketEmbedding(
+        issue.issueKey,
+        issue.title,
+        embedding,
+        {
+          project: issue.projectKey,
+          status: issue.status,
+          sony_music: true,
+        }
+      );
+
       issuesCrawled += 1;
       vectorsUpserted += 1;
       options.onProgress?.({ type: 'issue', key: issue.issueKey, project: issue.projectKey, upserted: true });
@@ -156,7 +176,7 @@ export default sonyMusicJiraCrawler;
 
 import { openai as openaiSdk } from '@ai-sdk/openai';
 import { embed } from 'ai';
-import { upsertVector } from '@/lib/supabase';
+import { upsertJiraTicket as upsertJiraTicketREST, upsertJiraTicketEmbedding as upsertJiraTicketEmbeddingREST } from '@/lib/supabase';
 
 type JiraIssue = {
   id: string;
@@ -246,21 +266,38 @@ export async function crawlSonyMusicJira(options: { projects?: string[]; maxResu
     const description = issue.fields.description || '';
     const body = `Title: ${title}\n\n${description}`.trim();
     const embedding = await generateEmbeddingForREST(body).catch(() => []);
-    const sourceId = `${projectKey}-${issue.key}`;
 
-    await upsertVector(body, embedding, 'jira', sourceId, {
-      url: `${JIRA_BASE}/browse/${issue.key}`,
-      key: issue.key,
+    // Store in jira_tickets table
+    await upsertJiraTicketREST(
+      issue.key,
       title,
-      project: projectKey,
-      issue_type: issue.fields.issuetype?.name,
-      status: issue.fields.status?.name,
-      priority: issue.fields.priority?.name,
-      assignee: issue.fields.assignee?.displayName,
-      labels: issue.fields.labels || [],
-      updated_at: issue.fields.updated,
-      sony_music: true,
-    });
+      description,
+      embedding,
+      {
+        url: `${JIRA_BASE}/browse/${issue.key}`,
+        project: projectKey,
+        issue_type: issue.fields.issuetype?.name,
+        status: issue.fields.status?.name,
+        priority: issue.fields.priority?.name,
+        assignee: issue.fields.assignee?.displayName,
+        labels: issue.fields.labels || [],
+        updated_at: issue.fields.updated,
+        sony_music: true,
+      }
+    );
+
+    // Also store in jira_ticket_embeddings for semantic search
+    await upsertJiraTicketEmbeddingREST(
+      issue.key,
+      title,
+      embedding,
+      {
+        project: projectKey,
+        status: issue.fields.status?.name,
+        sony_music: true,
+      }
+    );
+
     vectorsUpserted += 1;
     await delay(150);
   }
