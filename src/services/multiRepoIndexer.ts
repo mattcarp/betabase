@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import pLimit from 'p-limit';
 import { getSupabaseVectorService } from './supabaseVectorService';
 import { getCodeStructureAnalyzer } from './codeStructureAnalyzer';
-import { normalizeRepoName, scanRepository, getDefaultIndexingConfig } from '@/utils/gitIndexingHelpers';
+import { normalizeRepoName, scanRepository, getDefaultIndexingConfig } from '@/src/utils/gitIndexingHelpers';
 import { getGitVectorService } from './gitVectorService';
 
 export interface IndexSummary {

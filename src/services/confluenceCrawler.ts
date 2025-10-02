@@ -1,6 +1,6 @@
 import { confluenceEnv, getAuthHeaders } from './confluenceAuthenticator';
 import { upsertWikiDocument } from '@/lib/supabase';
-import { storageToMarkdown, extractLabels, buildPageUrl, buildSourceId, normalizeLinks } from '@/utils/confluenceHelpers';
+import { storageToMarkdown, extractLabels, buildPageUrl, buildSourceId, normalizeLinks } from '@/src/utils/confluenceHelpers';
 import { openai } from '@ai-sdk/openai';
 import { embed } from 'ai';
 
