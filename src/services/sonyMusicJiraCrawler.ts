@@ -7,6 +7,7 @@ const DEFAULT_PROJECTS = ['AOMA', 'USM', 'TECH', 'API'];
 const JIRA_BASE = (process.env.JIRA_BASE_URL || 'https://jira.smedigitalapps.com/jira').replace(/\/$/, '');
 const JIRA_USER = process.env.JIRA_USERNAME || '';
 const JIRA_PASSWORD = process.env.JIRA_PASSWORD || '';
+const JIRA_TOKEN = process.env.JIRA_API_TOKEN || '';
 
 async function delay(ms: number) { return new Promise(res => setTimeout(res, ms)); }
 
@@ -171,12 +172,10 @@ export async function crawlProjects(options: CrawlOptions = {}) {
   return { issuesCrawled, vectorsUpserted, projects, sinceDays };
 }
 
-const sonyMusicJiraCrawler = { crawlProjects };
-export default sonyMusicJiraCrawler;
-
-import { openai as openaiSdk } from '@ai-sdk/openai';
-import { embed } from 'ai';
-import { upsertJiraTicket as upsertJiraTicketREST, upsertJiraTicketEmbedding as upsertJiraTicketEmbeddingREST } from '@/lib/supabase';
+// ============================================================================
+// REST API Implementation (below)
+// Uses same constants and imports as Playwright version above
+// ============================================================================
 
 type JiraIssue = {
   id: string;
@@ -194,9 +193,7 @@ type JiraIssue = {
   };
 };
 
-const JIRA_BASE = (process.env.JIRA_BASE_URL || 'https://jira.smedigitalapps.com/jira').replace(/\/$/, '');
-const JIRA_TOKEN = process.env.JIRA_API_TOKEN || '';
-const JIRA_USER = process.env.JIRA_USERNAME || '';
+// Reuse constants from top of file (JIRA_BASE, JIRA_USER, JIRA_TOKEN already declared)
 
 function getJiraHeaders(): Record<string, string> {
   if (!JIRA_TOKEN || !JIRA_USER) {
@@ -223,18 +220,7 @@ async function fetchWithRetry(url: string, init: RequestInit, retries = 3, backo
   return fetch(url, init);
 }
 
-async function generateEmbeddingForREST(text: string): Promise<number[]> {
-  try {
-    const { embedding } = await embed({
-      model: openaiSdk.embedding('text-embedding-3-small'),
-      value: text,
-    });
-    return embedding;
-  } catch (error) {
-    console.error('Failed to generate embedding:', error);
-    return [];
-  }
-}
+// Reuse generateEmbedding function from above for REST API implementation
 
 export async function searchIssues(
   projects: string[] = ['AOMA','USM','TECH','API'],
@@ -265,10 +251,10 @@ export async function crawlSonyMusicJira(options: { projects?: string[]; maxResu
     const title = issue.fields.summary || issue.key;
     const description = issue.fields.description || '';
     const body = `Title: ${title}\n\n${description}`.trim();
-    const embedding = await generateEmbeddingForREST(body).catch(() => []);
+    const embedding = await generateEmbedding(body).catch(() => []);
 
     // Store in jira_tickets table
-    await upsertJiraTicketREST(
+    await upsertJiraTicket(
       issue.key,
       title,
       description,
@@ -287,7 +273,7 @@ export async function crawlSonyMusicJira(options: { projects?: string[]; maxResu
     );
 
     // Also store in jira_ticket_embeddings for semantic search
-    await upsertJiraTicketEmbeddingREST(
+    await upsertJiraTicketEmbedding(
       issue.key,
       title,
       embedding,
@@ -305,6 +291,8 @@ export async function crawlSonyMusicJira(options: { projects?: string[]; maxResu
   return { issuesCrawled: issues.length, vectorsUpserted };
 }
 
-export default { searchIssues, crawlSonyMusicJira };
+// Export all functions
+const sonyMusicJiraCrawler = { crawlProjects, searchIssues, crawlSonyMusicJira };
+export default sonyMusicJiraCrawler;
 
 
