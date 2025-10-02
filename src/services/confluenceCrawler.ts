@@ -1,9 +1,8 @@
 import { confluenceEnv, getAuthHeaders } from './confluenceAuthenticator';
 import { upsertVector } from '@/lib/supabase';
 import { storageToMarkdown, extractLabels, buildPageUrl, buildSourceId, normalizeLinks } from '@/utils/confluenceHelpers';
-import OpenAI from 'openai';
-
-const openai = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null;
+import { openai } from '@ai-sdk/openai';
+import { embed } from 'ai';
 
 type ConfluencePage = {
   id: string;
@@ -31,9 +30,16 @@ async function fetchWithRetry(url: string, init: RequestInit, retries = 3, backo
 // Removed local HTML→MD fallback in favor of shared utils
 
 async function generateEmbedding(text: string): Promise<number[]> {
-  if (!openai) return [];
-  const resp = await openai.embeddings.create({ model: 'text-embedding-ada-002', input: text });
-  return resp.data[0].embedding;
+  try {
+    const { embedding } = await embed({
+      model: openai.embedding('text-embedding-3-small'),
+      value: text,
+    });
+    return embedding;
+  } catch (error) {
+    console.error('Failed to generate embedding:', error);
+    return [];
+  }
 }
 
 export async function listPages(spaceKey: string, maxPages?: number): Promise<ConfluencePage[]> {

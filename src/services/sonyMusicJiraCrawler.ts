@@ -1,4 +1,5 @@
-import OpenAI from 'openai';
+import { openai } from '@ai-sdk/openai';
+import { embed } from 'ai';
 import { chromium, Browser, Page } from 'playwright';
 import { upsertVector } from '@/lib/supabase';
 
@@ -9,21 +10,15 @@ const JIRA_PASSWORD = process.env.JIRA_PASSWORD || '';
 
 async function delay(ms: number) { return new Promise(res => setTimeout(res, ms)); }
 
-let openai: OpenAI | null = null;
-function getOpenAI(): OpenAI | null {
-  if (!openai && process.env.OPENAI_API_KEY) {
-    openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  }
-  return openai;
-}
-
 async function generateEmbedding(text: string): Promise<number[]> {
   try {
-    const client = getOpenAI();
-    if (!client) return [];
-    const resp = await client.embeddings.create({ model: 'text-embedding-ada-002', input: text });
-    return resp.data[0].embedding;
-  } catch {
+    const { embedding } = await embed({
+      model: openai.embedding('text-embedding-3-small'),
+      value: text,
+    });
+    return embedding;
+  } catch (error) {
+    console.error('Failed to generate embedding:', error);
     return [];
   }
 }
@@ -159,7 +154,8 @@ export async function crawlProjects(options: CrawlOptions = {}) {
 const sonyMusicJiraCrawler = { crawlProjects };
 export default sonyMusicJiraCrawler;
 
-import OpenAI from 'openai';
+import { openai as openaiSdk } from '@ai-sdk/openai';
+import { embed } from 'ai';
 import { upsertVector } from '@/lib/supabase';
 
 type JiraIssue = {
@@ -207,12 +203,17 @@ async function fetchWithRetry(url: string, init: RequestInit, retries = 3, backo
   return fetch(url, init);
 }
 
-const openai = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null;
-
-async function generateEmbedding(text: string): Promise<number[]> {
-  if (!openai) return [];
-  const resp = await openai.embeddings.create({ model: 'text-embedding-ada-002', input: text });
-  return resp.data[0].embedding;
+async function generateEmbeddingForREST(text: string): Promise<number[]> {
+  try {
+    const { embedding } = await embed({
+      model: openaiSdk.embedding('text-embedding-3-small'),
+      value: text,
+    });
+    return embedding;
+  } catch (error) {
+    console.error('Failed to generate embedding:', error);
+    return [];
+  }
 }
 
 export async function searchIssues(
@@ -244,7 +245,7 @@ export async function crawlSonyMusicJira(options: { projects?: string[]; maxResu
     const title = issue.fields.summary || issue.key;
     const description = issue.fields.description || '';
     const body = `Title: ${title}\n\n${description}`.trim();
-    const embedding = await generateEmbedding(body).catch(() => []);
+    const embedding = await generateEmbeddingForREST(body).catch(() => []);
     const sourceId = `${projectKey}-${issue.key}`;
 
     await upsertVector(body, embedding, 'jira', sourceId, {
