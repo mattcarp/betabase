@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 /**
  * Console Error Detection Test
@@ -6,6 +7,17 @@ import { test, expect } from "@playwright/test";
  */
 
 test.describe("Production Readiness - Console Errors", () => {
+  test.beforeEach(async ({ page }) => {
+    setupConsoleMonitoring(page, {
+      ignoreWarnings: false, // Don't ignore warnings in this test
+      ignoreNetworkErrors: false, // Don't ignore network errors
+    });
+  });
+
+  test.afterEach(async () => {
+    assertNoConsoleErrors();
+  });
+
   test("should have NO console errors on main page load", async ({ page }) => {
     const consoleErrors: string[] = [];
     const consoleWarnings: string[] = [];

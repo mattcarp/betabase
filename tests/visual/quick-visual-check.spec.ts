@@ -1,17 +1,19 @@
 import { test, expect } from "@playwright/test";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 test.describe("Quick Visual Check - Identify Regressions", () => {
-  test("capture current UI state and console errors", async ({ page }) => {
-    const consoleLogs: string[] = [];
-    const consoleErrors: string[] = [];
-    
-    page.on("console", (msg) => {
-      const text = msg.text();
-      consoleLogs.push(`[${msg.type()}] ${text}`);
-      if (msg.type() === "error") {
-        consoleErrors.push(text);
-      }
+  test.beforeEach(async ({ page }) => {
+    setupConsoleMonitoring(page, {
+      ignoreWarnings: true,
+      ignoreNetworkErrors: true,
     });
+  });
+
+  test.afterEach(async () => {
+    assertNoConsoleErrors();
+  });
+
+  test("capture current UI state and console errors", async ({ page }) => {
 
     // Navigate with a shorter timeout and don't wait for networkidle
     await page.goto("http://localhost:3000/", { 
