@@ -1,11 +1,24 @@
 import { test, expect } from "@playwright/test";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 /**
  * SIAM Desktop Visual Tests
  * Tests the primary siam-desktop application for UI regression
  */
 
-test("should load main application without errors", async ({ page }) => {
+test.describe("SIAM Desktop Visual Tests", () => {
+  test.beforeEach(async ({ page }) => {
+    setupConsoleMonitoring(page, {
+      ignoreWarnings: true,
+      ignoreNetworkErrors: true,
+    });
+  });
+
+  test.afterEach(async () => {
+    assertNoConsoleErrors();
+  });
+
+  test("should load main application without errors", async ({ page }) => {
   await page.goto("/");
   await page.waitForLoadState("networkidle");
 

@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 /**
  * SIAM Electron Visual Tests
@@ -7,9 +8,17 @@ import { test, expect } from "@playwright/test";
 
 test.describe("SIAM Electron - Feature Reference", () => {
   test.beforeEach(async ({ page }) => {
+    setupConsoleMonitoring(page, {
+      ignoreWarnings: true,
+      ignoreNetworkErrors: true,
+    });
     await page.goto("/");
     // Wait for app to load
     await page.waitForLoadState("networkidle");
+  });
+
+  test.afterEach(async () => {
+    assertNoConsoleErrors();
   });
 
   test("should load siam-electron without errors", async ({ page }) => {

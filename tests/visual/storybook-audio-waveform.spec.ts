@@ -1,11 +1,24 @@
 import { test, expect } from "@playwright/test";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 /**
  * SIAM Storybook Audio Waveform Visual Tests
  * Tests the AudioWaveform component in Storybook for UI regression and functionality
  */
 
-test("should load Storybook without errors", async ({ page }) => {
+test.describe("Storybook Audio Waveform Visual Tests", () => {
+  test.beforeEach(async ({ page }) => {
+    setupConsoleMonitoring(page, {
+      ignoreWarnings: true,
+      ignoreNetworkErrors: true,
+    });
+  });
+
+  test.afterEach(async () => {
+    assertNoConsoleErrors();
+  });
+
+  test("should load Storybook without errors", async ({ page }) => {
   // Navigate to Storybook
   await page.goto("http://localhost:6006");
   await page.waitForLoadState("networkidle");

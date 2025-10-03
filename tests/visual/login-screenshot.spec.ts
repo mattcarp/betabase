@@ -1,11 +1,24 @@
 import { test, expect } from "@playwright/test";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 /**
  * SIAM Login Page Screenshot Test
  * Captures the login page to show MAC Design System integration
  */
 
-test("capture login page with MAC Design System", async ({ page }) => {
+test.describe("Login Page Screenshot", () => {
+  test.beforeEach(async ({ page }) => {
+    setupConsoleMonitoring(page, {
+      ignoreWarnings: true,
+      ignoreNetworkErrors: true,
+    });
+  });
+
+  test.afterEach(async () => {
+    assertNoConsoleErrors();
+  });
+
+  test("capture login page with MAC Design System", async ({ page }) => {
   // Navigate to the login page
   await page.goto("/");
   await page.waitForLoadState("networkidle");
@@ -45,4 +58,5 @@ test("capture login page with MAC Design System", async ({ page }) => {
 
   console.log(`Page title: ${await page.title()}`);
   console.log(`Current URL: ${page.url()}`);
+  });
 });

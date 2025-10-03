@@ -1,14 +1,22 @@
 import { test, expect } from "@playwright/test";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 test.describe("Chat Landing Page - AI Elements + MAC Theme", () => {
+  test.beforeEach(async ({ page }) => {
+    setupConsoleMonitoring(page, {
+      ignoreWarnings: true,
+      ignoreNetworkErrors: true,
+    });
+  });
+
+  test.afterEach(async () => {
+    assertNoConsoleErrors();
+  });
+
   // Capture console logs for inspection
   test("loads and renders chat landing, captures screenshot and logs", async ({
     page,
   }) => {
-    const consoleLogs: string[] = [];
-    page.on("console", (msg) => {
-      consoleLogs.push(`[${msg.type()}] ${msg.text()}`);
-    });
 
     await page.goto("http://localhost:3000/", { waitUntil: "networkidle" });
 

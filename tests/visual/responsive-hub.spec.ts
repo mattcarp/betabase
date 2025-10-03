@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { expectMacClassPresence } from "../helpers/design-system";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 type ViewportConfig = {
   name: string;
@@ -15,19 +16,18 @@ for (const config of viewports) {
   test.describe(`${config.name} viewport`, () => {
     test.use({ viewport: config.viewport });
 
-    test(`renders SIAM hub without regressions @visual @smoke`, async ({ page }, testInfo) => {
-      const consoleErrors: string[] = [];
-      page.on("console", (msg) => {
-        if (msg.type() === "error") {
-          const text = msg.text();
-          if (
-            !text.includes("AOMA health check") &&
-            !text.includes("Maximum update depth")
-          ) {
-            consoleErrors.push(text);
-          }
-        }
+    test.beforeEach(async ({ page }) => {
+      setupConsoleMonitoring(page, {
+        ignoreWarnings: true,
+        ignoreNetworkErrors: true,
       });
+    });
+
+    test.afterEach(async () => {
+      assertNoConsoleErrors();
+    });
+
+    test(`renders SIAM hub without regressions @visual @smoke`, async ({ page }, testInfo) => {
 
       await page.goto("/", { waitUntil: "networkidle" });
       await page.waitForTimeout(500);
