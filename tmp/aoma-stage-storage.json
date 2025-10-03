@@ -1,18 +1,8 @@
 {
   "cookies": [
     {
-      "name": "JSESSIONID",
-      "value": "DRFjBlP0azD2AtlxGXQIK4TKl19QjSLYBC_MK6R-.aoma-ui-service-585ffc5bbb-t24bz",
-      "domain": "aoma-stage.smcdp-de.net",
-      "path": "/aoma.ui.service",
-      "expires": -1,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "Lax"
-    },
-    {
       "name": "route",
-      "value": "1758587816.349.27.882817|7550be60bfd5bc751a7dccebfdce8242",
+      "value": "1759494293.935.27.909325|7550be60bfd5bc751a7dccebfdce8242",
       "domain": "aoma-stage.smcdp-de.net",
       "path": "/",
       "expires": -1,
@@ -21,11 +11,11 @@
       "sameSite": "Lax"
     },
     {
-      "name": "esctx-gsiB6Oxm0OU",
-      "value": "AQABCQEAAABVrSpeuWamRam2jAF1XRQEGEWXxvwUBLei0HAkc9_aQAtQAAxGfz4Zr_F9ohDoi8b-PbprPGgN8LgbZaTi2k4Y6P2_xyKIMXUdeoiYbF4M62Ri6n8yyBD98BaMNMiP-igM6bcwp57bCTodKM5b7YXB7ns2ZQsRyQJmobIYVZDIICAA",
+      "name": "esctx-3W7kOiV6SM",
+      "value": "AQABCQEAAABlMNzVhAPUTrARzfQjWPtKNtGYVbH79sKt0fIyTKsA2oZrT2ceE8zSFL93Dme9qrT4DhKCH4WV6h6HNU061f4zUz0NyVa8BiPYgJ11Lr6k4JGYgBNnWN9juDYPVqZrSdYHEqRiWuEDrkCFqeuyaXTiavFnu4smoczDXmYwovBbfSAA",
       "domain": ".login.microsoftonline.com",
       "path": "/",
-      "expires": 1758589329.167348,
+      "expires": 1759495796.838974,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
@@ -46,6 +36,256 @@
       "domain": "login.microsoftonline.com",
       "path": "/",
       "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "SSOCOOKIEPULLED",
+      "value": "1",
+      "domain": "login.microsoftonline.com",
+      "path": "/",
+      "expires": 1759494408,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "esctx-2q8ZOQBN3mY",
+      "value": "AQABCQEAAABlMNzVhAPUTrARzfQjWPtKO1nIRK_P8YdOETVyr53WbFQNuamImmTDfJo5IYecl6jAXKFd5W8W38PbwVZjRbj47I6ieCWj5b8mWgNaLpEdSugDJt7VLVeV01cRwAw41RjbKCOz1E27KG9rQ6JvN_kihrYrhI3Go9itF_jE86HpTyAA",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": 1759495799.174294,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "MicrosoftApplicationsTelemetryDeviceId",
+      "value": "86607b29-5fee-4960-b3eb-5f0dc860d6fa",
+      "domain": "login.microsoftonline.com",
+      "path": "/",
+      "expires": 1791030345.598736,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "brcap",
+      "value": "0",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": 1793193899,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "fpc",
+      "value": "An6WbR0BRSFHpofkB8fnrxE",
+      "domain": "autologon.microsoftazuread-sso.com",
+      "path": "/",
+      "expires": 1762086303.29403,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "x-ms-gateway-slice",
+      "value": "estsfd",
+      "domain": "autologon.microsoftazuread-sso.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "stsservicecookie",
+      "value": "estsfd",
+      "domain": "autologon.microsoftazuread-sso.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "MC1",
+      "value": "GUID=1f7425c2e2364fcc966d33247cc62489&HASH=1f74&LV=202510&V=4&LU=1759494304042",
+      "domain": ".microsoft.com",
+      "path": "/",
+      "expires": 1791030305.037976,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "MS0",
+      "value": "dfa0397f6c9e4d76bc6cdf7e7e06862c",
+      "domain": ".microsoft.com",
+      "path": "/",
+      "expires": 1759496105.038096,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "MSFPC",
+      "value": "GUID=1f7425c2e2364fcc966d33247cc62489&HASH=1f74&LV=202510&V=4&LU=1759494304042",
+      "domain": "login.microsoftonline.com",
+      "path": "/",
+      "expires": 1791030304.041514,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "wlidperf",
+      "value": "FR=L&ST=1759494304807",
+      "domain": ".microsoftonline.com",
+      "path": "/",
+      "expires": 1793193904,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ESTSAUTHLIGHT",
+      "value": "+00991399-e049-76d9-45d7-81204a44aa7a",
+      "domain": "login.microsoftonline.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "esctx-tmJ0O7KcVp0",
+      "value": "AQABCQEAAABlMNzVhAPUTrARzfQjWPtKY6vnixHfGmmiaagAh0AzPcjMjxASnFx0INITV760vg7hlkV1EKlPJ_-97n1nUGDi52brFEnKo-JGdQg_v1rX2LiL0zPlGL1rMBxdp6M_nQT1h8LLLomX0R1yn0vrcs9LrufHhP9SDeelBEmlFHCnUiAA",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": 1759495806.122491,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "fpc",
+      "value": "AkiKjO3KcKNLjA5Oo8G9WuQ",
+      "domain": "device.login.microsoftonline.com",
+      "path": "/",
+      "expires": 1762086320.804822,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "x-ms-gateway-slice",
+      "value": "estsfd",
+      "domain": "device.login.microsoftonline.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "stsservicecookie",
+      "value": "estsfd",
+      "domain": "device.login.microsoftonline.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "esctx-4611IeGfpVE",
+      "value": "AQABCQEAAABlMNzVhAPUTrARzfQjWPtK__TM03FeUz1LZY1rwg6dF3fEfmScIwc9CX-9vaemgJVsqzZ6hF-KInPHtdZV_tEal3EhYpnixckUSXCvtMyX9saueLffEgDOeVkJUI7dWLBIu4Qfu4GajMoRi9e6HrDIfYJ6_347tufKgYIGtdhe5yAA",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": 1759495822.155691,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "esctx",
+      "value": "PAQABBwEAAABlMNzVhAPUTrARzfQjWPtKBN7zO7hT1IArz8Cg9Llv6WdMnVAKvdjABruxuG77bR8G7k58S9QkF0XP16xPbnBmSvRChaA8i5g_8UCO3kBuWr2SUAlriu7SRtSrwvq69UT2xEiXnqDgyJUhtWR0V-LXmp5f4ElUWA1BBmlYG7CWK-MHxmryvoE3Wy39jBEAqP8gAA",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "esctx-G53eAtsQKCk",
+      "value": "AQABCQEAAABlMNzVhAPUTrARzfQjWPtKOTxb5UZklovkoz5bXl4kZMN-HfEbOBeuACL6RQnT0LdKVIkMjSKNod1hs9TuWyFeTZXyyoouZWTjh7RwEy_7zEz7tx4xgQCLqeu9ffkB9JUbQrKPQcm5vAWF8OpgJ-ElqSx2gysTx2jcJNGHFufKKiAA",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": 1759495846.23325,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "uaid",
+      "value": "eee90c5d43964285b0fd193d6fb36b4f",
+      "domain": ".login.live.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "MSPRequ",
+      "value": "id=N&lt=1759494345&co=0",
+      "domain": ".login.live.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ai_session",
+      "value": "AxVk2sn/pnnRqCXxJTQ7oM|1759494300927|1759494345890",
+      "domain": "login.microsoftonline.com",
+      "path": "/",
+      "expires": 1759496145,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "CURRENT_DEVICE",
+      "value": "eyJEZXZpY2VJZCI6bnVsbCwiQWFkSWQiOm51bGwsIk1hbmFnZW1lbnRUeXBlIjpudWxsLCJBdXRvSWRlbnRpZmllZCI6ZmFsc2UsIkNvTWFuYWdlbWVudEZlYXR1cmVzIjowLCJBbHRlcm5hdGl2ZXMiOltdLCJBcmNoaXRlY3R1cmUiOiJOb25lIiwiT3BlcmF0aW5nU3lzdGVtIjoiT3N4IiwiT1NTdWJ0eXBlIjoiTm9uZSIsIlZlcnNpb24iOiIxMC4xNS43IiwiTWFudWZhY3R1cmVyIjpudWxsLCJJc1dlYlZpZXciOmZhbHNlfQ",
+      "domain": ".manage.microsoft.com",
+      "path": "/",
+      "expires": 1794054348.66356,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": ".AspNetCore.Session",
+      "value": "CfDJ8H6VuujwR%2F9EmKiaZ7KhqDoXtgrpmiTMiAHycdSaJJ%2BTZ1InGeUerZM%2B9JI4puF4jc9tzyul%2BLaAMTO%2BCEvVUL0QU4%2B%2BCNeBA0e65LmAlYUPQXmDYN%2FiySU%2B9NpMU1J2rXy60we%2Fb2kQGesa%2Ffa2L7GhgnROA3XySgSCx4NEyQsv",
+      "domain": "portal.manage.microsoft.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "esctx-djMNW3Bz3xs",
+      "value": "AQABCQEAAABlMNzVhAPUTrARzfQjWPtKyPFlwohZuJysWRxkMKcwgVZ5j3KgHm0knEYJKedYS6kjTN2JPslqQEwbe6wb-wDQnMDPhPczLDSOTYzJc2xb4ESxp1rZ6yx5-t-gGpfqS1bSDF_auQtn4lIV4mEgNvPjpFprxg3mWxf07HWg6JiF5SAA",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": 1759495848.7684,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
@@ -61,228 +301,18 @@
       "sameSite": "None"
     },
     {
-      "name": "SSOCOOKIEPULLED",
-      "value": "1",
-      "domain": "login.microsoftonline.com",
-      "path": "/",
-      "expires": 1758587889,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "esctx-u9RRyxczh0",
-      "value": "AQABCQEAAABVrSpeuWamRam2jAF1XRQEgKtvXSuy-iTkeMWmO0oxwlh0W9sO9WQEhI7Mw5BObUN31NI8GjrrLhHdkEpBtn3sGogyJfH1cxPbA-7rzqkDM-b9JUsXRuhFkIJmehGxV5EZw2xKNwXpfBTj_9Gq6IZIIJvNhPiyDLXU3B5ksO3FRCAA",
-      "domain": ".login.microsoftonline.com",
-      "path": "/",
-      "expires": 1758589331.106119,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "MicrosoftApplicationsTelemetryDeviceId",
-      "value": "787a6b95-5bea-430b-ab53-5ef63164fcc2",
-      "domain": "login.microsoftonline.com",
-      "path": "/",
-      "expires": 1790123840.238996,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "brcap",
-      "value": "0",
-      "domain": ".login.microsoftonline.com",
-      "path": "/",
-      "expires": 1792283831,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "fpc",
-      "value": "Aho-DGg8NglDot0nRjr-Lsw",
-      "domain": "autologon.microsoftazuread-sso.com",
-      "path": "/",
-      "expires": 1761179833.927285,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "x-ms-gateway-slice",
-      "value": "estsfd",
-      "domain": "autologon.microsoftazuread-sso.com",
-      "path": "/",
-      "expires": -1,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "stsservicecookie",
-      "value": "estsfd",
-      "domain": "autologon.microsoftazuread-sso.com",
-      "path": "/",
-      "expires": -1,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "wlidperf",
-      "value": "FR=L&ST=1758587834672",
-      "domain": ".microsoftonline.com",
-      "path": "/",
-      "expires": 1792283834,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "ESTSAUTHLIGHT",
-      "value": "+008cde99-5f81-6b82-aae5-9a297d2d6965",
-      "domain": "login.microsoftonline.com",
-      "path": "/",
-      "expires": -1,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "esctx-KFiHiQvw6xs",
-      "value": "AQABCQEAAABVrSpeuWamRam2jAF1XRQE_qU8jHTfQ0bVFI50z0kUVBq9dDsXBhYTIieq1qyV57TprKA5CYmc0RuiGB6Hkw2-Bh5hf5_2_hYvDE37c5oqaP3lvkiN8lFlzVOkglnAsO6yfFcfvMgWs4L13QZAtIuEvbSJvJukicm4GMs1viSvryAA",
-      "domain": ".login.microsoftonline.com",
-      "path": "/",
-      "expires": 1758589334.94659,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "MC1",
-      "value": "GUID=051a3ce8a42d41c5a147501fa98042fd&HASH=051a&LV=202509&V=4&LU=1758587835884",
-      "domain": ".microsoft.com",
-      "path": "/",
-      "expires": 1790123835.842965,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "MS0",
-      "value": "89a24c10e8034a569cab55d26205dbdc",
-      "domain": ".microsoft.com",
-      "path": "/",
-      "expires": 1758589635.843018,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "fpc",
-      "value": "ArbQD6WDy-FHtEeFAxkdcBo",
-      "domain": "device.login.microsoftonline.com",
-      "path": "/",
-      "expires": 1761179839.724453,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "x-ms-gateway-slice",
-      "value": "estsfd",
-      "domain": "device.login.microsoftonline.com",
-      "path": "/",
-      "expires": -1,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "stsservicecookie",
-      "value": "estsfd",
-      "domain": "device.login.microsoftonline.com",
-      "path": "/",
-      "expires": -1,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "esctx",
-      "value": "PAQABBwEAAABVrSpeuWamRam2jAF1XRQEEwxveArx-Ls8BJPvF2k6uVNI2Hg06eKPmpSSS0ymOc8MrS4U_rCnrLtO3qJw7kUcbigTyOMpYRlAQSiFn6qZ4hwg2VztSL5Ps6sYnr1vWe6fRu4c-pofynmyx2FKSsFXU88WULiumKluMUyyGAsIPbjITYxY5dmKpmFsKrDpEW8gAA",
-      "domain": ".login.microsoftonline.com",
-      "path": "/",
-      "expires": -1,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "esctx-kn3D0ydmYA",
-      "value": "AQABCQEAAABVrSpeuWamRam2jAF1XRQE_jgcGM_ogED50bNX-qg_hV97YLXREYolxQ4vK3tEPjMBHMxFj2r9G7ZKSAMsr5OSxlD4DxEkJy7WSWaPE-eNLzpQl_LK7qKyZHZHSHmitxnYi-77Yiarypki5ayO2Sv-0FDFWIYgJkwiARCg3XmSSyAA",
-      "domain": ".login.microsoftonline.com",
-      "path": "/",
-      "expires": 1758589341.117357,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "ai_session",
-      "value": "K+z7ZO695JF5S20TZf9g3s|1758587831761|1758587840404",
-      "domain": "login.microsoftonline.com",
-      "path": "/",
-      "expires": 1758589640,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "uaid",
-      "value": "69d446b81dcc4d6a8b6e353b04c0c085",
-      "domain": ".login.live.com",
-      "path": "/",
-      "expires": -1,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "MSPRequ",
-      "value": "id=N&lt=1758587840&co=0",
-      "domain": ".login.live.com",
-      "path": "/",
-      "expires": -1,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "MSFPC",
-      "value": "GUID=051a3ce8a42d41c5a147501fa98042fd&HASH=051a&LV=202509&V=4&LU=1758587835884",
-      "domain": "login.microsoftonline.com",
-      "path": "/",
-      "expires": 1790123843.145748,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
       "name": "ESTSAUTHPERSISTENT",
-      "value": "1.AQkAt_Ov8KWRrkqvccY-HdogSWB96XJoaAZHnKpngQk9YcoJAAAJAA.AgABFwQAAABVrSpeuWamRam2jAF1XRQEAwDs_wUA9P-NNrJfmhQXxsxief2VP4jl68PExvkbAwMcXpt_qxe5vFA0fygIEmhh1Qx3VlnzQkZe0rDmkslUA8rgNepnPKDDEWAsUEitq4Vpnaai9xMX5YBi7vo_7wRUGlyARR5YDzjyvWkfnXGFq-HDbLDuQC35IjMt0Ows-heXr4ZQ5sqhxegp7BhfR68LU82ZNiZR3U4LEYaASzpRynCUTTaehjy5gOmKJkRsPPmKY8n83m-lBtkM5KL4vAO00GSBfBCdBIy6MrSnXJvMCRfdLSMA8FuF5IdcC3IwuH_EgXJqmD-SnC2mRSmiFRGGEfDTBmkohViBE6cyrADvK_u3WPo9SjiFzH8m1KSXk4B1EfE0RPmI5Ny69Nke7YNnvuDNKaayNBgZZ9GcQWsjCM-3yPixJFo-2vNNPfzijiviJEMcEgBMvmEHGPGxpifsQ4C9ZxHbmaautzkKL-v9Sw2GlmsX7o8ePTR1Cb5XoK3wCcmilMVV1eO4JNqVILeA2H3Ceb7pqawIIRiWcg",
+      "value": "1.AQkAt_Ov8KWRrkqvccY-HdogSdzavHTcL7NLhFl20GlSoOkJAAAJAA.AgABFwQAAABlMNzVhAPUTrARzfQjWPtKAwDs_wUA9P8nYTyl2wuGd9dufXPLPbO2yo8ayK28DF5KYVL1FnDUlFINGIHCDrNpeXjSzE_8a0zW9eSU2IBCSNJ1RfhTZS9pvF3nhKK4a-ll-ClwrI3rqnlPN0ZT8IlQ6AGF5RpVUqj8zbhSRi8P6rQEdVwjK7dz2LnHEzWkabo9bO9IpIbK_VrydW85SMbGdX4fjPevAG_B4aHCUwkZl5VEl7aKlY3QuMaFhdvDXqfjnQg0WMx7oymzJ5qnyKkODntNYnIfbqOUcjd7DqgyWy1dqa85mkw4mZsjTF25UuBpIshGMi0bdqxv7ow3v6527f36Y270r_WbbTZCMaFTJ4t_Ihj5ln_N0scuc0df8VH63fCjD0goot2wzubE7kr2FOVxl4ddHQDpWkhwdjVaT1pcgFsb30orpE6TyN0JVYpSAVmXq2LPASrzRwrJUBPvTvRTg7hBzLnUfStySlSFFSz7cEiw8gzhzqWJ2axi6dhQX_43PcEIW6ZsxLGzYGkB0eXpiP_xx0riTYZ3Yw",
       "domain": ".login.microsoftonline.com",
       "path": "/",
-      "expires": 1766363875.678927,
+      "expires": 1767270350.021155,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "ESTSAUTH",
-      "value": "1.AQkAt_Ov8KWRrkqvccY-HdogSWB96XJoaAZHnKpngQk9YcoJAAAJAA.AgABFwQAAABVrSpeuWamRam2jAF1XRQEAwDs_wUA9P86zUeEgCoYMRacNOQU3ZkOEWebuZDUEBuVMKKYQY3HwHouIhDAp3JeAoYRZYHfWRGXIi-3NuAn23z2icO1s6zHJs-pZfUD93pjTVMubXL3c2Z6TAgwlBkt2AnNZMa_nfmDRcMztlaWDyOQ_UQp7oBW2OCL3SF1a-14rseBg8ekKuRmOC8jESkUfV7aotsamoPojML612YwZ0hcrfrxMf4U3z8ctmyRyPrQ9fGrPh_mAIAAWzO75i5vOtPCLpovx3oGiquvgssoluIGVPdME7uEzwmnay4zAy5UUkYbuVYlVaTx_FImw18-bQV0p3L5TLDpg7kztWDDXtXqWJGqvH6Z1_BIBHu1ML0gbN20aSmWNveiS3URxoA3K_C-ieOm8ybXa9aab-XMv4l0v-1crRh_MVKXfjw4-fJ4xoSRUCtxH4sDcUxex4OXqQkdQdwL23rC9vOEf2j-kfc_i1Jc029Pt-tOmwjjs1zEOYa6VSQQ78ZJXkaA1dvDFcV8yeKXz8rMBOHXHLInM5-D_0kfsNLEMvmESIgRb0FcNV_vVlYdFEVVdeM0RfVHq1BhZ6vl-m73RRTpAEi5MDmZEearukkRCGbGLa6YRddNs1FhziQ-QQmrLntOVNa6ff05zpVNWHEGC2NyOl3N0nWwD1SGVa3KyQjFmRJu7WtIUJaEQsfnP1TTGpkE7P5jhP6TsUC7qMM50oK29uhBgpU72TnmrUSTtc4C8iDWG5EelGo1LaVDDC1ZntQnTqAityhCUhosYREsZZjn6pwJI0W9kxxEbigN5TCfKewhlJSqanypvc6qV8zKdXvTHw9EoAA",
+      "value": "1.AQkAt_Ov8KWRrkqvccY-HdogSdzavHTcL7NLhFl20GlSoOkJAAAJAA.AgABFwQAAABlMNzVhAPUTrARzfQjWPtKAwDs_wUA9P9CZ3vbNsQvcQ_ZzrZmrbvwVz9223CjOjLmGza7R5xykID-Dp8OxzYlm8fXiDhAboyPwqvv4f5d5Ucn1b_slzpYg9EL49etxdWkDI5fh4m18G3slLraqQzGDjEAxRdMUGmFwrRucduJROnM77Nj1U-hd_AOPNvHiShrUG_dKlQeckOnuv3CI4_y-h3bkMtQxvDAcGJ3csy2maJfuXtjl-i8bxEgAQ6Mw6UNb4Li6V58KLc36GILt79Qa9lPhKN_JdvC9sT2AgRfEVvpqp9ShuT8_VbZxc59SPO8kfg_uau0iaV1rjDOWXnTdN75y-k7FCjsTgV81G-62KZSkNXOS-0tzBT78BxCkQUGVt5YLKbgg9ErzGQSMX9P14sOE_1Fd7_awdDIGbVTwHR5SrcNYpvj8IerchlUWGVn3r6Aqod4s7wIibK8ltMG0lahbvj94bE8cKm0PH95VZyf5z9uFrtq8-9p-Oh3zPyXBCnNI3BP336McImVpEy_97amOZWsLED-naJoWSt0s3m69xzxQ3iF7taT7caFbP0w81yT0Z71uUOVpHWpReLmHysVi1OBEWpj1lka4PLcPzvSDWaGqw-aRoeq3Zjgzi3Q1jBTUVcNIfKCjmLtrnJn6oRj5Ov14_B7Cc66IHroxWAMaDDZ8JtFzqpABg9LXPiwi-Vkcqa2P6Gry-YRHE8RnS9alyMHxZcWRg_aAqlD7yB7cRELklIgF-OvAU-g7t43dpu0mpqsAamTBWHZuaK69srUjKM",
       "domain": ".login.microsoftonline.com",
       "path": "/",
       "expires": -1,
@@ -292,27 +322,27 @@
     },
     {
       "name": "buid",
-      "value": "1.AQkAt_Ov8KWRrkqvccY-HdogSWB96XJoaAZHnKpngQk9YcoJAAAJAA.AQABGgEAAABVrSpeuWamRam2jAF1XRQEL-RhcIdkYeam9HjwjaOaPQy8dpqkYH7p1Mk-xq8oESMOla5RexjkGaLC_JjSiYj0xjHLt0G22xpSR7HG3HTTdCiLOmIQUYr65jF_XVRXuOZuv-rSHbEPs87L7ECMPE-FEmpdfRfyFxoYeKp6_GZZPdBnuiNzlLWU70IOQwiNsMQgAA",
+      "value": "1.AQkAt_Ov8KWRrkqvccY-HdogSdzavHTcL7NLhFl20GlSoOkJAAAJAA.AQABGgEAAABlMNzVhAPUTrARzfQjWPtKFAWyXKej2jo7hZjlYZXyFS3VgCwZBs7kdG13QXjMRp7S6DY5nbu-YncaEg4MrvLSbXVhGxJU6Ak8kBom9bVirvYgS8wGNGk4xf9Ab_dG6VYIGh2-HAOEXoZlzhX9EfGa5BNC0-TXBLeeKH5oHWykst40jzakCRWSAF_IHOu4PqogAA",
       "domain": "login.microsoftonline.com",
       "path": "/",
-      "expires": 1761179875.679046,
+      "expires": 1762086350.021379,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "CCState",
-      "value": "RWhJS0VBczl2a2ZVN3oxSWw3VzZZZGF1VzU0PQ==",
+      "value": "RWhJS0VOTjl6dk5JRUdKT2xGdG9GV0ZHRlA0PQ==",
       "domain": ".login.microsoftonline.com",
       "path": "/",
-      "expires": 1759451875.679085,
+      "expires": 1760358350.02144,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "SignInStateCookie",
-      "value": "CAgABFgIAAABVrSpeuWamRam2jAF1XRQEAwDs_wUA9P87kmtFA4F7E4RwktJxsosrOIZIufAq6uuzTUrjiq12h_NJix2HzQPxnABzXecqaP1zfubT8WrQ-Guyp3DCCQEkPVkd8I_G46a-Wlo-6A4VkkaOw1tklxJ9mS84Rw-IL5NFQ_oYEoA8sXC2jhQ_6cbohFpwuCP_pMaKP8pGA33YbmF9-vYvhOEHt5DtHpdex-_0T3lGRXjSy-VxA_cybxw_7m9YlwAyXlV4J-XfWiBlbFzpqnVYVq-DpXVb4kAmdtbnUcRtNu8",
+      "value": "CAgABFgIAAABlMNzVhAPUTrARzfQjWPtKAwDs_wUA9P9T-wJxdgRIYO0rd0AHk1tIz0fTGntyxjrX2oeTI78i78NfmKSkt9EYLNGhOvMqKWhefqFS3VOtKhcXWVfLfax4J8taqudtLZ9bKVRG9eiitILFLQ62jkmA5t77BaPqWv8pwUVEQacaB-z-KEjFsOHRw1TbqE0MMu5zrwvioDfwMXND4bpc_KZs9g3JafkMlh9YHattC6-CC-ZCLX_5s5m7fnLzjDyU0UJyD8yNeXooBi4FzrU2gijbcdHhzB8LnPuHG6AoYXN10yM",
       "domain": ".login.microsoftonline.com",
       "path": "/",
       "expires": -1,
@@ -322,17 +352,57 @@
     },
     {
       "name": "fpc",
-      "value": "AsHDHaV_wd1IilyhzT_l6G1g7PIBAQAAALXiY-AOAAAA1FP3yAEAAAC64mPgDgAAACpuUJYCAAAAv-Jj4A4AAAA",
+      "value": "AjW1H8wrgwdCiLt9iGCNFeyBRDv7AQAAAMy3ceAOAAAA1FP3yAEAAACgt3HgDgAAACpuUJYCAAAAsLdx4A4AAAA",
       "domain": "login.microsoftonline.com",
       "path": "/",
-      "expires": 1761179875.679138,
+      "expires": 1762086350.021507,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": ".AspNetCore.Cookies",
+      "value": "chunks-3",
+      "domain": "portal.manage.microsoft.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": ".AspNetCore.CookiesC1",
+      "value": "CfDJ8H6VuujwR_9EmKiaZ7KhqDqxPbHZrylnEMc9zfkTQz6zgfLiXWpKtI4RDbHZOYjn2ay1bLrrcVQFq6ggmKYHeitI3_EV-TkznH9nCWkiExcYA1zim0Lpg4pQRzTbRdpEbgY-Oa_yo8-vEqCHy7-WR7PDV3gw-Srb1zpHZhqvoTj-iwL8YfxlMoDZDe4lHYHmX0OM9OU_601sge4t4GEmqGw2Bp0V_jzEWV8Ir7lAJYfgutGkU8-y9h1U4sjyofE5Et_KgNA8drsgGp4KX0aZgnnZtjFPtcVD59Q7xBSbtRKjuY5ZOpdxeksC-PtqaVcrHjnypAx_od0Gk_xMsMwmT3hLtXTM2sKw9EA5QBnvipW3iycYgzTZ0ZN8gq9nM07i7yVmDH2OltcWsBar3HmZgy_FwVFOn79Sa6gPp3PuBuFTsKTBzP64DHmxpl9LHh7FEwmBW_-c5C7Rpp8XZAyWpLQDiXPnM1CSzpsFS1GMwLXlyNDSbHj1ml_26N-ESJHFFPy8ka2yBPWdqyIBscMSIxNIy8qit2hsr5Tuk36q4kGVViVUvlk2ix-weWmhvY1MPhx64MtKfhYQTsdp5GP8J0vFbdD-8QNs7jCYiy71erqG3uuwzhVUIFefEh99b0dmFjqxm15KtAlIcafbS2GtMneIpsJi1eKx2mqklKFFY5E-oKS7QrY1ReQtdcTfunOR_RVDk643r8Fc-6CDzIs3Gniu3iJ-uhM2xgjWGZlB18MOagZZuvgRVo4fIH-L5Pi7fNCQoQ8M8sjxPCspircC7ozkbJXYqecmHp245hKx1W1a9PRRORkR6pXIdF96d2Ea_jdY07339JyaZpKM_TkbEFj0tAE9e5M4KrRC068hOSz_kza98ly2G4greJnnx4EnXvO4R4qmRDma4cW9F0rf9QZV5Xa4CNUPU3TjikI6wCfdvq4Z1GGZR6HNCHTW8L8EomnLG3jOC4h1xp4i69yO174vn9oRkMpJF82ZOruHy5tZsF8C5hPh1TuWgzyaIwsBAay-aD-mX8XZ4J-KNqgAWhys8X5z2U04jywKiqvOEbpiDCeTJST--rS3ia8tiBiunN1FYiJus9LYOfvs_dAC-F8cUlKbzBKPN6JjFla2FIONQ9xEBR9dyGsEX_bO_lhaP_wV_pyoWI6CQo-lJukejfmC6yNJDSa82eCwqx7JXqutOOv9vEdeHuHiF7q9HWaHZO1I9Tq8qspHbQQR0vFDYcY2z_7BJCX7etpm-S3Gy83EbkdJYM0_jb7XVrlUBZPvELoEkceIDuyWf86YIDNyw1V5o4c-eTJSVtBXKskKm6zWZzGdl_KgEHuqzTRk1M8H3gf7uiWz_J-00IaO1qxQ1ucYVv00Kj9Mr5qbyulZfzPTDufKRPFchHUItDACYNlQbXL3cDb6NdGRMm2XlXmODPV5YEzGGPKDUHt5jJGjryqHeOmTnc1LsfSRSYCFES2BTB0fzgkmG6g5dZCXqUchDvf6FekzqWuQmybKdX1vsHrYerzISwcmrdOpZ7cq0jVnkwC0Ydhk7WtIwRhUK-0CiTbKTw4hzA3YhQba81cPsa9-xif5zvt0CxYDmceFj035ClE0cAG-QW3NhVWXdGU-A3Dg785amhQGZgpjtM39cl-8NmsrRUTcc4qMtq4xrSD5_cCsyNrgu0QhE8ILxZyJhmXjhXeNx3tyn-O9qCizI805apkuiNskc4OZLjZDrzAYDgOfId-iP4h3w_szyCLufh4nNE2mUihvErdsVqXV5S-lzJfPoWSa81kR28Eou37vuTbd5jLtHlJOseq2Iddakae7OPEbeTcPrDNs2noUZmsKEI621C0Rc6uowHYYeYoFecJw21ldv5algpAi9hl_K0jMsbXp7GQYPXForaQsam1srLMC135tHFRgq4GmdL-XiPMIiKl8Su2zRh3VgT3KEtZOyTXyXuuEWNK9PL_KJjtg9a5CUjBuD1C5kOobyrNzVClJC7ZKJd8YEosBnUjaLFRp0o2H35aTO2BCcGk5PU994zYB_3mExLSpafWhuQ8PvrKHBKwDCoL5-kdg9qziyecfgJDDnSeJ56OEhHwmG_sFk-7t7PMkt3X3-8xMdIJW5id2wmSDITx_Mwpe08CAB0msuSaZCF1pYdwYr6-kvpi7yGs2WrOErBjamhboAZg_SybbScAtbkOt7zQPaV8QKWgtc3epmWygRAVU5G5UbKBc7G1XEdH7y5dE6RoESl5CL_EIbvCVhAt5a7n_6DQFT-Y8hOp9MnoPqqpWWTy751yp8HL_M54DgZApvWAL4P1bxuouZQ0w_RhSf0yvC03rHf9sKwebaPaL3zg1rHD5Nrdu6v57UXb2y3vaP-i2Gq_dB3lPoJbt2GfbaI4tyVW9CqTHryXEocNz9y2C-zUc5AcnN1YbcKpbce_zDwTITd6sku7RCjHwmXtGHXuR_kOndnyMWok-9jsyp0Fh6uBZ0TIM2CYx70SYPPYhtGyje-_dNVbNwh0LWJmeiEQ7STkK7GEXrzYvt0MQn-XWHufjllaFSajY_mKsS4jDyLZJQQP-lisNjPLu9uLVWvvS6YiMD5NW3FaQywoa_KedR2vdiEchMwL5ttNGCBU_vWAUiHyx2Hij3kIN834Z4vWsxYQQp2nKfrGR3wXKWAWttpSd-2Bmi-o9a9inKBrz9wWDsLBdplcJ-wbD_5MLpq-pr72r5QK-lZxhtNBXsFZ1kOYPn9jYA90HpjCIhGg4Rt9AwofPi-weKhCkr09jPedF3WHFFJfbcccZeZ9YIP2sqjLZTTqVmo2kIcY5yro9Qtb1dIKaLIkGROHGYWPIogQ4bHzAgSrX1IhFGyTZcPT9WsHv_Dehc8dneIph_D-4wUzpJqihH1C6k7KZMU_2YViNsyFlbfVMRPZKu1fZdExL7_Wg9iL8FKdfbcAmMiOJgltqGsMxWetSw-6eBX2o84D6vnZIJPr2ABvgOQ546D8MFgajIlx4lzzggz7vPaDoBTEy3ob59TwqosrVpMSd5EFMt_qA_2ePB-ChehitP-_NL3BC_HZjxakeoIOLTsLvszheeSKVrMwaZbquaDhnU_sjY52UVLXoLQj5SoS43ezcoqDysYyNBIh0mBSnpD7HNt-zAq5EE0Aa73ExbjZMXXjlrY2QCq1Xksxuwbdx89gVMFrxyyGDORqOr8_tAALSiWuE9XHLb6NmViXPTagnUHwI4ZiN5PchKXmzqBMUaYmKOI-i4rEGQg-SyY6zvv5CutuBS5kAzIEUGtMwpDlaLPYJv1EASy9LgpY-nH1cIWRSV3pmry66_KS6O4Zs9SDfz-3mXBbR-LyBhQgb4nZqNCWfFy1g4Y2uABibK3x_X1_uggzShXtjVYfhMBj_YgceM58bB8xQE_NTXbod7GCBP4QyQRlF2ydS-nipIYPCXgV87mpZKjux11nbhTJqWXXdLzbYMfEThkBlVni8NyhaRZiqpb_bjC9Bz8p7ohiO2aNHhQN33BbKskmYIDSdvAZewlze_NdNJW9-1gbH2UBqFUFiVsU37_PQepSCtI3MRZqeS4SkiH_axlFGSfi4Hu3hqaFL4vdUO3RUon2MCabSUOkPlLT9LRKreDjlu-w6nx_eCJox0eFbI4fZ_M7hA0lS5RkBGaSE2SAcoToUFvXXlbCaJsOW9LZT-sV35qU_nvMy5tuaJFveCZIfKXraIQQDyWohHakI_IiXGc1-cJLOeZpQ0QMQzfR-CRLgiA1XzG3_YRep8R6JyQTB5AyRyJFaM7SauipPnOTWav1YiyJ9sJj8tk24ZMyK4SJFfTVeOladeGsYZzxupMzDPuq4cJIpmIjZ2DP_XAjSdjXc7EUF_Ym17WlCb946xXtHORDbsVvCDuEp2MAEQjhvbWWhqGosVkPQzMJs8XLl-vv4XHyK-4hWv1xz6phH0meElSkMfc6D-tSuCmmQFcvkwHpoJY1AoHgJXfTa2PXXOq7qV4n780",
+      "domain": "portal.manage.microsoft.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": ".AspNetCore.CookiesC2",
+      "value": "H1L5z1FEYwQNmZH25h6fYeYfQHaS_JrwJOPmIfWNVwvuoWtxo3cTKLalqtjJ1m8_-hqrlK0JZhMK79F5Obb51xsyJMbU9JM7de53s4IGXpzu4QacPsMeDjaF-F1wU-BR5Ksg9dqjCz48Qp7EUtJM1O1fnoII7-30qu5fK6tNQ2Ht3YGXloWWsFau5UuzaWj8aZGyGZnmDfMgZim4xhL3P8QGwZLz7KkBA4WqVLhPcF1KgDQqAToa9r9x4MdkF4m_xxv3DQ-c2BVMuRxiPrtplFP3pY_LQvdF4VvZGfhfIUwcTg4iUm_6dVcNog_Y6cA5-IhMpZsQyzqoocH_qVY3FAhWJDjEtfrZlpbS1Wo6PRNUOoLKIIXM2i7ntXWQ3Rr0g5zR12YAsryWwpr15yNGLxFqNaNRw5HrqXNR2ov4dSZj0HdqQCI124l2V8w0YD2pdvtwA3zNxiezHUKKaheqjoz4Cwi78WozVXYjOE0AkqGhynocz5Cz4HX-oPBMKv6spYEphfKFaMzxJ9qghGN5QByytmn-EamcTuHZGxb2vIJnO5Wr7vRBRDrvmoc2MTKb6YiIOEvU7sHn3OKXK_pfIxoCISeKNcloMPii61B6eOEp6mIAgn_HftJ205eabArCjs71Mxze-y84uda5XQqeRKBgtSelrcGIypD5YCVaaCnCvzSdURFKB9EZ_NR1IhaaeiPLsHegmqiLzNjLKc9cxlpaBOJ9ks8yc9KzCjOdbTj-XBPZZX6WFbsKg44XtMYZwRVOYOvn28v4K9ZN0ANWAx8jW0KsHtfVF7KuBQrNSX7xeDJBgsr75H1rYXqbNr_PCzzYjy4SQt_mX9Dv-S5O8jf9M8bUbawXDRkAzer9jtVXdLFq9-_4iXN2UAMBHrSuWID0FiXowT7-yHRXOUNEHUNTeFOeN-EMhnHmmsZLeTp_ERj2McPesJxiVkfsgWDoI4gpkgb5UZhF6H5z6TSgl83GUNcWRK9lbBgXdGqaibnaw82QmzkT8c3VVvhkxOHXe3Vg3Xs2u37fPvyGX2rJ_HQP7V-YUt1KbwMx2KZN0-9MhcjoVI7yAIFgFS2fuXD0IH_cRocxFJgbqIi1ilM91_btfdD2dhetE9RKS3c2fd5zGT8CzeNHUw3BSv3OK0F11JhV-b1SlUpX-fZ9j5-g6WMhzW93fxIsYShZ1plKaiHEn3t8Kx5xiELb9tLJcMw3xXtzILEhxHjROntuL2K6dfIEPa0Na-W3u_j6wdT9BqeHaF2NvwHi5Z3zrsZPQz4VHVtenvIv19xKcS0aKA7SGDjRPpuIKr8iyhkAkHEYNEFd0G2vH9PkkEXtMpQa6FaE9nk4jC5ZZM0gCew4jgzUZzwsGL_SXJ5eH327svTLwJtl4RrmqrK-kXrYHuxDLlVa8omNBbct-QKB_CA3YklzoNygtuRqzjtMn27J9a6vkorC66gFkpFMr9tmAbH-6l61gF8XRW2q8n9EY1ovra_jqEeWWYiqRqgJ_bsMp04yRVqiI98DIbBG-w0u1_g3DyWeWcuRbPsQqUbNQnBz0jOBcc06FjnsS0xYOWz5Vy_Dt8oqBbfr_ipfLjegfRamso5y38szvAc6vIP2xhsh8U9pVdW2xdyzye4G0_xMgCyGVmTQqCf-XBMod6ymsxDcqMWJvCqlX8YifVmr8cL_Byaqa3kfmd82GhXscpOCB-meYOEFdpkskXA0PvAtRi04LedEYfg0Wi5ThClJvbTbhc_RIwoJEugxotoo2WkqqffBj0KKtfhpxP7BspMkQy7zti67NCNthosezgMsWwHJ8fydbCnK6cAafv3lu1k6advcnMpnXQLIvy3pAK8h69oU4zWFfLGIZV75k-ImmYyQn2-24wX3NVho9r0e-8K03sKCtPmEvUOYSs-AKSGIM3JmyypZNjTS7pdBxlHgp1bUD-lt3MQz9dFhBW5kKEOdsmImIRGdEZavmNLqtzCqGhbRAn1kJ9O76FcRnhNiNNxCaGxX_mtNMSztdEReO4CXAu5hVAXT3FqLlA6HhuXDGdTajUHJOQBTeRnSmFVzpijHvNj1WQNmPcUmFhZZIDEg-RWQ00GC0krQG4ekGxoWzvB_oVcoUOl_CRLkOYUVXuGJ9nViLx1nJpKsZxxxfXu8uje2V2qFRg1HBzYHS6sV9fnlHkvMVmhV6jHrGtRUAIXG1H--m9xU6IO2Wq432ykdgfXm1fj-yg_I4Lj-2GrVMTZKyr6Kbusk-N6cHfjkWs93mCcvY7CGxoYdCZdOkg3LIvjK2gcSraC2XMg6EvpdA_V3GcMtSbqI5WDr-kZ3DVTSgsxi6z6iJbiO-gILQUUDdH2X2cgszXMddXJ0lT6aAx15QtBlBQo0ftgnb4apfRnTZm79JYFlAaSNN7nHTZrtPAX-v8vUPJ9892yc6Cj41GTNZYq1L0Lsck87z7XyObpYpo1hGKj4gmVYRapJQiFy4sJO95oA164cTDwfY99oyUWwKufxjteyIKhAaodX5Oq3-RFSBIBhYkazCtJr5dwyNv-pXpMDa_wm5pe0G8b-v28gJryRaM3fGFLRL_uNo9XOnbD0JiC45-M3igkOxttbpRxCfCgm0rrfwOHISYCdEaC7D1xBagrTKFmZJJsliJNHMnhYL7ooBET0TMDU-poIJwnpK4qf3p5pCIZVQL7ddFV4PbsHBDYL-NeqsJEY0ax-Ixz56_Di9nAaW_PIxBW4AA_81NiEIvTASPhv502fFv0HVFFI0dDShoc6Cbrs8w-XWvpmWy_NiBgKWGyai0pFmLP59YoJhYCS_bgFZOX2Ai35TZYKSewH5AtiAwZVj55BEcxmIPGOuPJfZfgy1SItZgHkfjaV8Irasrl4XO4hazLBgE6L31URcbMH3CZemNDSinxfJ0PDF7sz13DX3rtEVZv4W8hAdMSPUIh9pDhmgw4yODxfHIXA1QtwpJwuEBS20VRcpFqtitb_yMSRv7v_WvgjKKOQn0akuCScVwXHvsTsZOAm7DOcW3SP66sLEJwGq7Ecmd3ziNX9aBZZ6o5JTByyYGwEHtOBXISkN1-wVurYa6uHINLisNRCIaxR-KIP-8jvg56TkNYoU_7ol9jaBXeLmr_3BLmGodMlnq6qLp9s2gGqXR6zudC_9c8cl5cYsS6BKf46zkMG3wSu-pZCWybbUOq-8jDnKG-ttAwOTkYtlp4g8k_QcpC_fpXpXDvRWFwnAy-lBiGBMJCyy1FX0oeNZNBKoWtsHtTMf15FglGYNSGKs8aHLT9_qrvD3ZF8nY6WnMuRXc0aTlgcdae2yxwGrSopzVJQjV4f7N_Q6qCULtBZA1TLpXKsSs_2QQlr8MK3sGIJgwXtIhyZQhnK3n3A393VrtPOxhF_OtmkBfBg4iFfMzhet6DoxtOXjKWxwP3WY7TDfPTI6llfAUF9OfT3zi7Td6x94471XUNUQgMfAPV0XgSGIFFZFUluMfeJi1dt3l9vIuRAEjVcKxIt7u-DyAVnj9n3Fs7tKJaejxtqR2tNT502d1wQFUBrTjg_QlLUsSPB4LsjtShqTNkANp3KCm8cQScbQDfQ7Fge0xc0yoAaudsr0cALfuIZkX-2Mbzxeg7idILbf_xHOUsDjY2VrggkdBDolc021detVahMsVcHWbFvITzcHhMbhEOY0INYCfGPyXLyFct0nrTvXWCYx1gbJSwPyEKwcTd974wRL3B7sN0xM3HnFTn6BXfF5xPTFowcc0pVdFsDFFm-Q6ru42DAX64pr0OvMd-l33LsGD55NBmgn3bqcK1t6F4yaqCTdxHOyiWe9JuZ6EcKYZsZpaUcFTAK2lQblpMYAX-cvOGBPHlVzGb2fuk2Av5aBizE_TGKaWquy10aOVtgm-_LWX4czIMV53QI_-8-hCHUbQGZw3wgGknia0mWX1Mqjv2fisNe10UqbIycP2h-B-jcsTRygBGeEa8c0XJ_3OU2AbGYagY8_IBacTVirrwnqY",
+      "domain": "portal.manage.microsoft.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": ".AspNetCore.CookiesC3",
+      "value": "QUia8aeU6N4G6krn1G5HNfUCCWV6E29O_LbFH5XaBSIejiuk7DclObwYFFOnY_9t1Fu-FlJQOkczNV02v5ugUy6e7kXw9DVeL-OZw65syqkErVTNNqRxPeI-xwCIXNARuB5cwkG_-WaVlmPwx7Xm-vsMojP83rc-fNPqPYEId3RILjXNBo8UWICO8cqUcmp8wcGXeJw9DOUgTzcCqugE5tWOLwCksjxuIdye4GL3njQxYOpU9Z8yyIDiyfrrBQxP6xKCRjn-J8ehXuGQKfbQNwKvGDLQvb0xFwoLiiAc2Mz9ru5-qAt8UKLaN07S28ur9XItRFV0Z3TpuQoqwevbnTT5qFEsomg9OGvWXpLpCbPFLPcMk_BY5LhuAlh21ZJh8qqJ8hjgb70IMQ2ZoTUIKjDaeb35veTaX4uTuH8m4Zeacnaj532MJxvvMzxqbZ5BRe-N6Xaeb2xBTkoEf1PsoNBwDeTTAWrs3yLAhOch6ViFerwgSJfPEJjulX11eOFf7EwIgIWrjb7ApPnhg-5HdYyNhA3laoqYdmwyI19NRUgB3lz_OE3kKSTSyRc4IYFPx5JUKS21ok8NYCQKkDpOh97VwvjPeJQ-NM0n02ARNtVp-RctS_BxMLbHsocZfZwUfslNvjN_lku1eCX6aELey7xRhL5AL5GfB086LCDO0wdP9ncxKPTy5JWhgJEupIPbIQsom9cgMP8IH2DXBLnmOFuF-fbTE8dcJ7lmfyM0gVd2BtsNQwbb2re3mVJl9PybxpxB84p2lyv-mpLpafvnnr1uYDzpwO09FH80hr_aqBJSeXD07bz12mODWJDTo_KmL_6sw8XgOPaPxuCq_T_vFk-X3fs-9N56UZtpOioH1K_CjirW5k9zRlemhj2RC1FkzVuYqw49lXjjBYk24DZUXpcZqjlAbOL0-tkypUcqclvHix7mLhkQqdr4Ym6i9HLfrEwKC_r1MsiM1pDH6eImdQcYqFysu0P_dnuSoSp0HHspgkfzHxcdlmryMLoqnI4waOTn7Z87ojKaXMhSDsLQb6iV1HMOhPnQ5zP-6L-AG-YKAxARomZSSK3MzSIkJdxb0vWBHnc4CuKJKH3ssf18jVJE-nmel2khCMhbMMH2-DHy6GVIWYnEldYdj4jRo1EAlpYLmWkJbUaSrSdIZfT9-DI0c0RW14S2QsWdHNhAqUikYW2rl_j-cRT97H6TpERpoCpf83mGN3GE2YHGUTsPOYndyjpgghO3FNmc8yzJpfXsGCTiq-3MUm8-sw8H01KJ__CadcUewGkCLTTdPY-g4IkuRA4BeOx1Cmn2fbJdcUw9SUU0OYYv_xwBbh-QzJVSEEXzdhQk9ENPnwqh0DMMrwM5udlI6_7KNU_PviHJkFnlmerixhz-xD--P_k_vhU2vYN8qzmZe3TSIeMwiEx5TEM_7BDTCVsG7Eu8ZGT7drmhGVqUWIrMxi-PaW2iDebSFNbuibohrRhDSojfv0mONILlDFJBO7K6wwzjj-ydx9hIa6n4bC6nBzvIAJCHbQXXlB02KkZ753GJMprsRL3x9JIn-bNU2C_Xz3mXNvL4NWvMMmP8ikiRaCt4DhV6T1aFitnI5mSzleyiD6SSGpBVckD1T_A2aStpcOyAxdwnZt5MoYFhw-yTVFgiDFzwyJLgmHEUmajgTdW6_M4CRJ1dxmxqLMWPxV3kryB-_Vnv4CVfNCxJI0O59nSj3XGus0fgf8UZmi4qs_DUpNFXbxw15O01Tjeg5iZxAF8Sx3mc4v1C4eM8cj3Cz-BX8xAAGzxcjkc3fYyizimMp2vJVnx43ASXkAP_knYuj3ZIBO7xpevaqhXX3Kv3SCTRxo84i8Ch-pKuDPU-BeMivZgwQejmo2kLkOgByYjx52994_HXTtMMkq4qJkWoG7GzJCdXK09TerlLaQImRJhj-xULZiPCdYgSWPicVOWYSFXW0PSx3McusdcL79IF5tIL6ZGRZ4JsECZZICJlADeQe28VyPmcaH5KBCf18ibcTkvNNN8DwrMuVdXSNlDgYTJ4w68R69_bKQcMfvoUKgFp-U83UCRp9n_YeY4sohdyR2Dm85-BngSbjAWmx5zvIxo8w5I7RZ-DqxKBy6BFuSk37F_xaNa55f37L0r1qgL7hdOJz5Bda0OSMayl5x9jAC1kA4qYjCUU8_6_kXP8LOtw-6sjDwSUz6W7bCPNeECjmaqLEQDLiiLpTxRHRV9AsMyglN2nfAtYvVq2MJbh_g3a93jsrvgl2qFp26y-flrW3nyKzdK082vqUGkx0YJgD22jLrCCFway_pIQO2rDvjox0OnSSmm_a7EEFjC9qYAnbWtYrfgajIGfeu9V-VRvdAKBmn8BwZhva83h0Ro8IJlhwdl9YxX0N_mYRnkRCSrHi52hNZR187CuigglsYirDMeGFRJgVQoiAqZMQjhnvFIj0_ZGbynOcyIYB3lFOZ7eYYm5OYSnDNS5KjEdQgjwCK_JS8k5H58jtiwbAoP0X8CZWCDqvBcjpsmih1jUt_g8vBJfdEjBw2v2X_sbhJYDLj3_UYdaJnfGA3YiZfYZZiJYRhbPgA06lylJTfTQiqc_5lfOpdXgkX5RiwRj9Y-3xAWcr5wBmzQx8OoutzVyzpdzcQG1XeKy2R8KxzpViyOcevUpDPwbB8-QeUCbOSEOIetPHA2E7gQgPNBvciespQ7wsUoBDfzjFSIR05Cwy0krNPhTcyY3ylSlgwZGlC2X_Wo0AD7p84vNYW-abxL6Y87j-2jdP0LUKntyhZYUmKg-RDpa7h_hldthv5ZoAbVmyBaFL19_vub7N0S-ht351imzL1IBxs69vFJ1xDWsirVFlZR2UX_7ha31Ib69pbRz-w6C5GDuaJ2eRalUOpZHMpNDwW0GsOwBlcVq272e9TlvG7f3LCIGOYCeaZFBCg3fSuPvE4usHAZrWmdpky9_a38awi0it9wXxkumZST7e-kzr8phI380HRlOf4oHEMcW_-MtW1rSN4jjrZZKUGqc2qMcuM3kbQ4Xth1SLcen0LoDl59PL2qLOsow2yg67WTd5xu7CzXBo_V_pYltiwfCYSEAcdENcGL9kCkDy4it9asv0CANKs_d-OEFDAPOEUglIzlKmWtKzXSWLOVI-nI2lnecjgfDMXxRdU8H-N3GX_1gc6sZekFZ7_vwsHgyR6UKnu_C2WR2xa0bh9AQTBdgXLQVbUWK_R8LBh36LcvN3W5J2JAnJeiV6am5cvPhtn7PnJuPmqDKMRhhIQKQ5V3U_aZ_9tCkcaAjwbsCu-bRS7roYPqg3blDKI1HIDXHVIl3gHKJ9nPxC7IEp-2mhs7ViHAWK0SayEO5pYe1Idyoh8gQ5rvxZOHCtloci7RJ-OkUrrawbs02zwKH77z8uPZY9iwWCTMQheeMNZA1xONzLM-SMBxhrIKXPUAVFRbOKY7BDvgzL4q5x0qrjhxhlvMFlC95r8fsbXZC5GL5vKmeQaky2vAvRZSKAxWslRUFcbbPY5zx6tiButlv3nD39O-bzco6_YRAEUkkyVngg5zbBq7eQLWmgc834f_mtc4sbGiyU9KjdhZgKkDMY9DGdhbBNWASbnW0bnb7UkrBL0IPpLC-vzugjhpRsxdWgZjY3pqksBV0ze1Kx2mPLKTKfHx2Es0efxrLaSYP-6wvXNrokHcijb1KuCDfpzmzqcKHhC-bdjKHH-JDOmD_m0wmKrnMvfKOHcSODWMGVBm1_0MF19EO0TtFpS9JZXS-71EfoyclBhOcnKZSSS6A5IT70QyyJHRd54br-DvKh6zktg_69ZPPTLezMbVw9omj9h0Y6UZPxpwiEsiXeHdAIvi5jcaA8yld",
+      "domain": "portal.manage.microsoft.com",
+      "path": "/",
+      "expires": -1,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "JSESSIONID",
-      "value": "DRFjBlP0azD2AtlxGXQIK4TKl19QjSLYBC_MK6R-.aoma-1",
+      "value": "welaYWlZ60RchNcDCMm_xcV12wSJb3RYyuWyWVE9.aoma-1",
       "domain": "aoma-stage.smcdp-de.net",
       "path": "/",
       "expires": -1,
@@ -346,40 +416,8 @@
       "origin": "https://aoma-stage.smcdp-de.net",
       "localStorage": [
         {
-          "name": "userAomaPermissions",
-          "value": "[{\"aomaPermissionId\":93,\"aomaPermissionName\":\"CONVERT_AUDIO_TIER_3\",\"description\":\"Convert audio to formats in tier 3 (low-mid resolution)\"},{\"aomaPermissionId\":261,\"aomaPermissionName\":\"AOMA3_AUDIO_EDIT_APPROVAL\",\"description\":\"Permission to edit approval of Audio in AOMA3\"},{\"aomaPermissionId\":167,\"aomaPermissionName\":\"QC_METADATA_VIEW_DELUXE_PACKAGING_PRODUCT\",\"description\":\"View deluxe packaging metadata\"},{\"aomaPermissionId\":233,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_DIGITAL_BOOKLET_STANDARD\",\"description\":\"Permission to swap Digital Booklet Standard master for a product\"},{\"aomaPermissionId\":231,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_VIRTUAL_MASTERS\",\"description\":\"Permission to swap virtual masters\"},{\"aomaPermissionId\":255,\"aomaPermissionName\":\"AOMA3_EDIT_APPROVAL\",\"description\":\"Permission to edit Approval in AOMA3\"},{\"aomaPermissionId\":193,\"aomaPermissionName\":\"UNREGISTER_VIDEO_BY_SECURITY_GROUP\",\"description\":\"Un-register video assets by security group\"},{\"aomaPermissionId\":57,\"aomaPermissionName\":\"UNREGISTER_GRAPHICS\",\"description\":\"Un-register graphic assets registered by your user.\"},{\"aomaPermissionId\":287,\"aomaPermissionName\":\"VIEW_ARTIST_PROJECT_SUMMARY\",\"description\":\"Permission to view Artist / Project Summary Page\"},{\"aomaPermissionId\":170,\"aomaPermissionName\":\"EXPORT_DIRECT_MAIL_DELIVERY\",\"description\":\"Export to direct mail delivery destination.\"},{\"aomaPermissionId\":181,\"aomaPermissionName\":\"REGISTER_AUDIO_CONSOLIDATED\",\"description\":\"Allow user to Register DDP Consolidate\"},{\"aomaPermissionId\":81,\"aomaPermissionName\":\"UNREGISTER_DVD\",\"description\":\"Un-register dvd assets registered by your user.\"},{\"aomaPermissionId\":319,\"aomaPermissionName\":\"LINK_ADMIN\",\"description\":\"Permission to allow Link Attempt Icon logic to be slackened, and admin easier can more easily manipulate product, via editing, unlinking and linking masters\"},{\"aomaPermissionId\":110,\"aomaPermissionName\":\"SEARCH_GAS_PRODUCT_NUMBER\",\"description\":\"Allows users to search GAS product numbers\"},{\"aomaPermissionId\":177,\"aomaPermissionName\":\"EXPORT_PRIORITY_MODIFY\",\"description\":\"Allow users to modify priority of export job\"},{\"aomaPermissionId\":22,\"aomaPermissionName\":\"SEARCH\",\"description\":\"Comprehensive search access.\"},{\"aomaPermissionId\":163,\"aomaPermissionName\":\"REGISTER_WAV\",\"description\":\"Register wave asstes.\"},{\"aomaPermissionId\":176,\"aomaPermissionName\":\"EXPORT_CREATE_SPACE_LOCAL_FILESHARE\",\"description\":\"Allow user to perform Create Space Audio Export to local file share\"},{\"aomaPermissionId\":126,\"aomaPermissionName\":\"OFFERING_VIDEO_BATCH_ALL_CONVERSION_TYPES\",\"description\":\"View and submit videos to all conversion types, regardless of whether or not they exist on the QuickConvert list or are gated by specific permissions.\"},{\"aomaPermissionId\":25,\"aomaPermissionName\":\"CONNECT\",\"description\":\"Privilege required to connect to AOMA.\"},{\"aomaPermissionId\":278,\"aomaPermissionName\":\"EXPORT_PAL_BSA\",\"description\":\"Permission to export video using CT ID 12196\"},{\"aomaPermissionId\":66,\"aomaPermissionName\":\"EXPORT_INTERNATIONAL_SUPPLY_CHAIN\",\"description\":\"Export to International Supply Chain Destinations\"},{\"aomaPermissionId\":160,\"aomaPermissionName\":\"CONVERT_VIDEO_TIER_HIGH\",\"description\":\"Convert video to formats in tier high\"},{\"aomaPermissionId\":164,\"aomaPermissionName\":\"UNREGISTER_WAV\",\"description\":\"Un-register wav assets registered by your user.\"},{\"aomaPermissionId\":173,\"aomaPermissionName\":\"UNREGISTRATION_SHOW_LEGACY_OPTION\",\"description\":\"To display legacy un-registration option to the user under Engineering menu.\"},{\"aomaPermissionId\":136,\"aomaPermissionName\":\"EXPORT_PROMOKIT\",\"description\":\"Allows users to perform Export PromoKIT for video products\"},{\"aomaPermissionId\":24,\"aomaPermissionName\":\"EXPORT_STATS_VIEW_ALL\",\"description\":\"Export stats view all deliveries.\"},{\"aomaPermissionId\":216,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_PACKAGING_GRAPHICS\",\"description\":\"Permission to swap Packaging Graphics master for a product\"},{\"aomaPermissionId\":139,\"aomaPermissionName\":\"EXPORT_CLEAR_CHANNEL_RADIO\",\"description\":\"Allows the users to view Clear Channel Radio option\"},{\"aomaPermissionId\":222,\"aomaPermissionName\":\"MANAGE_AUDIO_MOBILE\",\"description\":\"Permission to manage audio mobile products\"},{\"aomaPermissionId\":12,\"aomaPermissionName\":\"OFFERING_CREATE\",\"description\":\"Create offerings.\"},{\"aomaPermissionId\":265,\"aomaPermissionName\":\"GMP_ENGINEER_UNRESTRICTED\",\"description\":\"Permission for GMP Engineers\"},{\"aomaPermissionId\":225,\"aomaPermissionName\":\"REGISTER_DOWNCONVERTED_WAV\",\"description\":\"Permission to down convert Wav24bit and register as Wav16bit\"},{\"aomaPermissionId\":234,\"aomaPermissionName\":\"REGISTER_LEGACY_BOOKLET\",\"description\":\"Allows to create or register legacy booklet\"},{\"aomaPermissionId\":50,\"aomaPermissionName\":\"MONITOR_ALL_SYSTEMS\",\"description\":\"Allows user to monitor various systems in AOMA.\"},{\"aomaPermissionId\":207,\"aomaPermissionName\":\"QC_METADATA_EDIT_VIC_POST_PUBLISH\",\"description\":\"Permission to edit qc metadata after VIC Post Publish. \"},{\"aomaPermissionId\":178,\"aomaPermissionName\":\"DOWNLOAD_LONGFORM_ASSET\",\"description\":\"Download the asset from LFV detail page\"},{\"aomaPermissionId\":323,\"aomaPermissionName\":\"TEMP_UST_WAV_HEADER_REMOVAL\",\"description\":\"Temp permission to use AMPs header removal\"},{\"aomaPermissionId\":129,\"aomaPermissionName\":\"EXPORT_MANAGE_DESTINATIONS\",\"description\":\"Export Destinations Mange\"},{\"aomaPermissionId\":281,\"aomaPermissionName\":\"EXPORT_VIDEO_BROADCAST\",\"description\":\"Permission to export video using CT ID 12196, 12197, 12199, 12202, 12203\"},{\"aomaPermissionId\":42,\"aomaPermissionName\":\"QC_METADATA_EDIT_AUDIO_ARCHIVE\",\"description\":\"Edit audio archive metadata.\"},{\"aomaPermissionId\":220,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_LONG_FORM_VIDEO\",\"description\":\"Permission to swap Longform master for a product\"},{\"aomaPermissionId\":165,\"aomaPermissionName\":\"UNREGISTER_ALL_WAV\",\"description\":\"Un-register wav assets registered by any user.\"},{\"aomaPermissionId\":232,\"aomaPermissionName\":\"AOMA_BETA_ACCESS\",\"description\":\"Allows access to new AOMA UI\"},{\"aomaPermissionId\":219,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_AUDIO_DSD\",\"description\":\"Permission to swap DSD master for a product\"},{\"aomaPermissionId\":291,\"aomaPermissionName\":\"MEDIA_BATCH_CONVERT\",\"description\":\"Permission to use Batch Offering functionality in AOMA3\"},{\"aomaPermissionId\":75,\"aomaPermissionName\":\"EXPORT_ALL_SECURITY_GROUPS\",\"description\":\"Export assetsregardless of security group affiliation.\"},{\"aomaPermissionId\":13,\"aomaPermissionName\":\"QC_NOTES\",\"description\":\"Basic QC Notes access.\"},{\"aomaPermissionId\":212,\"aomaPermissionName\":\"UNREGISTER_LONG_FORM_VIDEO \",\"description\":\"UNREGISTER LONG FORM VIDEO\"},{\"aomaPermissionId\":238,\"aomaPermissionName\":\"SUPPLY_CHAIN_ADMIN\",\"description\":\"Permission to view supply chain Admin\"},{\"aomaPermissionId\":264,\"aomaPermissionName\":\"AOMA3_AUDIO_EDIT_QCNOTES\",\"description\":\"Permission to edit qc notes of Audio in AOMA3\"},{\"aomaPermissionId\":183,\"aomaPermissionName\":\"QC_METADATA_EDIT_PACKAGE_PRINTING_SPECIFICATION\",\"description\":\"QC metadata edit package printing specification\"},{\"aomaPermissionId\":79,\"aomaPermissionName\":\"METADATA_IMPORT_MODIFY\",\"description\":\"Allows users to create Metadata Import attempts\"},{\"aomaPermissionId\":257,\"aomaPermissionName\":\"AOMA3_EDIT_CLIP_POINTS\",\"description\":\"Permission to edit clip points in AOMA3\"},{\"aomaPermissionId\":254,\"aomaPermissionName\":\"AOMA3_EDIT_QCNOTES\",\"description\":\"Permission to edit QC notes in AOMA3\"},{\"aomaPermissionId\":40,\"aomaPermissionName\":\"MIGRATE_GRAPHICS\",\"description\":\"Migrate graphic assets.\"},{\"aomaPermissionId\":299,\"aomaPermissionName\":\"MEDIA_BATCH_CONVERT_HIGH_PRIORITY\",\"description\":\"Permission to allow users to proceed with media batch conversion\"},{\"aomaPermissionId\":332,\"aomaPermissionName\":\"TEMP_UST_VIEW_IMMERSIVE_AUDIO\",\"description\":\"Temporary permission for slow roll out for UST Immersive Audio\"},{\"aomaPermissionId\":171,\"aomaPermissionName\":\"EXPORT_SELF_DELIVERY\",\"description\":\"Export to self delivery destination.\"},{\"aomaPermissionId\":325,\"aomaPermissionName\":\"TEMP_AOMA3_TRACK_LINK_MODIFY_SWAP\",\"description\":\"This is a temp permission that gates hot swapping on A3 Track Linking\"},{\"aomaPermissionId\":96,\"aomaPermissionName\":\"SUPPLY_CHAIN_MODIFY_ORDER\",\"description\":\"Allows Users to\\nmodify supply chain orders\"},{\"aomaPermissionId\":246,\"aomaPermissionName\":\"REGISTER_VSC\",\"description\":\"Permission to Register Video Screen Capture\"},{\"aomaPermissionId\":314,\"aomaPermissionName\":\"TEMP_LEGACY_LFV\",\"description\":\"Permission for access in AOMA2 details display page (temporary)\"},{\"aomaPermissionId\":104,\"aomaPermissionName\":\"REGISTRATION_JOB_STATUS_VIEW_REPOSITORY\",\"description\":\"Display Repository Number to the Reg Status Page\"},{\"aomaPermissionId\":286,\"aomaPermissionName\":\"AOMA3_LINK\",\"description\":\"Permission to Link in AOMA3\"},{\"aomaPermissionId\":226,\"aomaPermissionName\":\"OVERRIDE_DDP_PLAYLENGTH_WARNING\",\"description\":\"Override DDP playlength warning for the user\"},{\"aomaPermissionId\":298,\"aomaPermissionName\":\"UST_MASTER_ONLY_REGISTRATION\",\"description\":\"Permission to allow users to proceed with master only UST registrations\"},{\"aomaPermissionId\":179,\"aomaPermissionName\":\"CONVERT_AUDIO_TEST_CONVERSIONS\",\"description\":\"Convert audio to formats setup for testing.\"},{\"aomaPermissionId\":169,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_COVER\",\"description\":\"Modify the cover swap link\"},{\"aomaPermissionId\":239,\"aomaPermissionName\":\"METADATAIMPORT_PROD (DO NOT USE)\",\"description\":\"Permission to import Product from Production to Satge Environment\"},{\"aomaPermissionId\":60,\"aomaPermissionName\":\"UNREGISTER_ALL_VIDEO\",\"description\":\"Un-register video assets registered by any user.\"},{\"aomaPermissionId\":266,\"aomaPermissionName\":\"EDIT_PARTNER_AUDIO_CLIP\",\"description\":\"Permission to edit Partner Audio Clip\"},{\"aomaPermissionId\":338,\"aomaPermissionName\":\"AOMA3_SUPPLY_CHAIN_ADMIN\",\"description\":\"This permission will gate the menu item \\\"Supply Chain Order Management (AOMA 3)\\\" which is under Asset Administration\"},{\"aomaPermissionId\":262,\"aomaPermissionName\":\"AOMA3_AUDIO_EDIT_CLIP_POINTS\",\"description\":\"Permission to edit clip points of Audio in AOMA3\"},{\"aomaPermissionId\":300,\"aomaPermissionName\":\"AOMA3_EXPORT_SFV\",\"description\":\"Permission to allow A3 Export button to be available for SFV and VSC masters\"},{\"aomaPermissionId\":16,\"aomaPermissionName\":\"QC_NOTES_EDIT\",\"description\":\"Edit QC Notes.\"},{\"aomaPermissionId\":141,\"aomaPermissionName\":\"SEARCH_MASTER_REPOSITORY\",\"description\":\"Allows users to perform master search using hibernate\"},{\"aomaPermissionId\":224,\"aomaPermissionName\":\"EXPORT_GRPS_WEB_SERVICE_DESTINATIONS\",\"description\":\"Export to GRPS web service destinations\"},{\"aomaPermissionId\":108,\"aomaPermissionName\":\"GAS_METADATA_IMPORT_MODIFY\",\"description\":\"Allows users to create Metadata Import GAS attempts\"},{\"aomaPermissionId\":204,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_WAV16\",\"description\":\"Permission to swap Wav 16 master for a product\"},{\"aomaPermissionId\":245,\"aomaPermissionName\":\"AMP_USER_MANAGEMENT\",\"description\":\"Permissions to view User management screen menu\"},{\"aomaPermissionId\":203,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_VIDEO\",\"description\":\"Permission to swap Video master for a product\"},{\"aomaPermissionId\":190,\"aomaPermissionName\":\"UNREGISTER_AUDIO_BY_SECURITY_GROUP\",\"description\":\"Un-register audio assets by security group\"},{\"aomaPermissionId\":191,\"aomaPermissionName\":\"UNREGISTER_GRAPHICS_BY_SECURITY_GROUP\",\"description\":\"Un-register g asraphicsets by security group\"},{\"aomaPermissionId\":124,\"aomaPermissionName\":\"QC_METADATA_EDIT_AUDIO\",\"description\":\"To view the qc metadata audio\"},{\"aomaPermissionId\":213,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_BLURAY\",\"description\":\"Permission to swap bluray Booklet master for a product\"},{\"aomaPermissionId\":307,\"aomaPermissionName\":\"MASTER_MODIFY\",\"description\":\"Permission to modify Track Master Details in AOMA3\"},{\"aomaPermissionId\":244,\"aomaPermissionName\":\"REGISTER_SKIP_KEYFRAME\",\"description\":\"Permission to Register Shortform video but skip Keyframe generation\"},{\"aomaPermissionId\":87,\"aomaPermissionName\":\"OFFERING_VIDEO_BATCH\",\"description\":\"Request and submit video batch conversions via the application.\"},{\"aomaPermissionId\":328,\"aomaPermissionName\":\"TEMP_WAV_SYSTEM_QC_CHECK\",\"description\":\"Temp permission for slow roll out for python based system qc generation for wav16&24 during ust reg. processes\"},{\"aomaPermissionId\":72,\"aomaPermissionName\":\"QC_METADATA_EDIT_DVD_PRODUCT\",\"description\":\"Edit DVD metadata.\"},{\"aomaPermissionId\":41,\"aomaPermissionName\":\"MIGRATE_VIDEO\",\"description\":\"Migrate video assets.\"},{\"aomaPermissionId\":320,\"aomaPermissionName\":\"UST_SFV_ENVELOPE\",\"description\":\"Permission to enable a self-addressed envelope\"},{\"aomaPermissionId\":127,\"aomaPermissionName\":\"MODIFY_MASTER_SECURITY_GROUPS_ALL\",\"description\":\"Modify asset security groups restricted\"},{\"aomaPermissionId\":201,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_CLOSEDCAPTION_TTML\",\"description\":\"Permission to swap Closed Caption TTML master for a product\"},{\"aomaPermissionId\":142,\"aomaPermissionName\":\"MIGRATE_LONGFORM\",\"description\":\"Migrate Long Form Video assets.\"},{\"aomaPermissionId\":45,\"aomaPermissionName\":\"LINK_MODIFY_AUDIO\",\"description\":\"Link or unlink audio products\"},{\"aomaPermissionId\":148,\"aomaPermissionName\":\"QC_STATUS_MODIFY_ALL_SECURITY_GROUPS\",\"description\":\"Approve assets regardless of security group affiliation\"},{\"aomaPermissionId\":113,\"aomaPermissionName\":\"SEARCH_MASTER_ID_ALL_DATA_PROVIDERS\",\"description\":\"Allows User to search Master id with all data provider\"},{\"aomaPermissionId\":158,\"aomaPermissionName\":\"EXPORT_DEV_FILESHARE\",\"description\":\"Allows the user to export test assets to dev file share\"},{\"aomaPermissionId\":331,\"aomaPermissionName\":\"TEMP_UST_VIEW_AMB\",\"description\":\"Temporary permission for slow roll out for UST Album Motion Bundle\"},{\"aomaPermissionId\":253,\"aomaPermissionName\":\"REGISTER_VSC_POST_PUBLISH\",\"description\":\"Register VSC Post Publish\"},{\"aomaPermissionId\":19,\"aomaPermissionName\":\"REGISTER_AUDIO\",\"description\":\"Register audio assets.\"},{\"aomaPermissionId\":56,\"aomaPermissionName\":\"UNREGISTER_ALL_AUDIO\",\"description\":\"Un-register graphic assets registered by any user.\"},{\"aomaPermissionId\":28,\"aomaPermissionName\":\"REPORTING\",\"description\":\"Allows users to view AOMA Reports\"},{\"aomaPermissionId\":189,\"aomaPermissionName\":\"UNREGISTER_WAV_BY_SECURITY_GROUP\",\"description\":\"Un-register wav assets by security group\"},{\"aomaPermissionId\":322,\"aomaPermissionName\":\"TEMP_TRANSFER_TUS\",\"description\":\"Permission to use TUS uploader\"},{\"aomaPermissionId\":267,\"aomaPermissionName\":\"EXPORT_AUDIO_360RA\",\"description\":\"Permission to export Audio in 360RA\"},{\"aomaPermissionId\":103,\"aomaPermissionName\":\"PRODUCT_HISTORY_VIEW\",\"description\":\"Displays history of products in Product Event History\\npage\"},{\"aomaPermissionId\":318,\"aomaPermissionName\":\"EXPORT_AMAZON\",\"description\":\"This permission gates destination EXPORT AMAZON (currently only LFV delivery)\"},{\"aomaPermissionId\":154,\"aomaPermissionName\":\"MASTER_HISTORY_VIEW\",\"description\":\"Displays history of masters in Master Event History page\"},{\"aomaPermissionId\":187,\"aomaPermissionName\":\"SEARCH_FULL_TEXT\",\"description\":\"Allows users to search full text\"},{\"aomaPermissionId\":17,\"aomaPermissionName\":\"QC_NOTES_VIEW\",\"description\":\"View QC Notes.\"},{\"aomaPermissionId\":280,\"aomaPermissionName\":\"EDIT_VIDEO_ASPECT_RATIO\",\"description\":\"Permission to Edit Video Aspect Ratio\"},{\"aomaPermissionId\":34,\"aomaPermissionName\":\"QC_METADATA_VIEW_VIDEO_PRODUCT\",\"description\":\"View video metadata\"},{\"aomaPermissionId\":274,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_QUADRAPHONIC_SOUND\",\"description\":\"Permission to swap a Quadraphonic Sound master for a product\"},{\"aomaPermissionId\":43,\"aomaPermissionName\":\"QC_METADATA_VIEW_AUDIO_ARCHIVE\",\"description\":\"View audio archive metadata.\"},{\"aomaPermissionId\":77,\"aomaPermissionName\":\"ADMINISTER_USER\",\"description\":\"Administer the User account creation.\"},{\"aomaPermissionId\":195,\"aomaPermissionName\":\"SIMPLE_UPLOAD\",\"description\":\"To view simple upload\"},{\"aomaPermissionId\":199,\"aomaPermissionName\":\"EXPORT_DISPLAY_EXPIRATION_DATE\",\"description\":\"Permission to display Export Expiration Date\"},{\"aomaPermissionId\":349,\"aomaPermissionName\":\"TEMP_UST_VIEW_VCA\",\"description\":\"Temporary permission for slow roll out for UST VCA\"},{\"aomaPermissionId\":157,\"aomaPermissionName\":\"EXPORT_UNAPPROVED_VIC\",\"description\":\"Export unapproved VIC.\"},{\"aomaPermissionId\":92,\"aomaPermissionName\":\"CONVERT_AUDIO_TIER_2\",\"description\":\"Convert audio to formats in tier 2 (mid-high resolution)\"},{\"aomaPermissionId\":159,\"aomaPermissionName\":\"CONVERT_VIDEO_TIER_NORMAL\",\"description\":\"Convert video to formats in tier normal\"},{\"aomaPermissionId\":29,\"aomaPermissionName\":\"REPORTING_MANAGE\",\"description\":\"Allows users to administer reports\"},{\"aomaPermissionId\":95,\"aomaPermissionName\":\"SUPPLY_CHAIN_CREATE_ORDER\",\"description\":\"Allows Users to\\ncreate supply chain orders\"},{\"aomaPermissionId\":117,\"aomaPermissionName\":\"EXPORT_PROMO\",\"description\":\"Allows users to perform Export Promo for Audio as well as Video products\"},{\"aomaPermissionId\":128,\"aomaPermissionName\":\"MODIFY_MASTER_SECURITY_GROUPS_RESTRICTED\",\"description\":\"Modify asset security groups restricted\"},{\"aomaPermissionId\":62,\"aomaPermissionName\":\"LINK_MODIFY_PRODUCT\",\"description\":\"Link or unlink products\"},{\"aomaPermissionId\":182,\"aomaPermissionName\":\"REGISTER_LONGFORM_VIDEO\",\"description\":\"Register long form video assets.\"},{\"aomaPermissionId\":90,\"aomaPermissionName\":\"EXPORT_AUDIO_CONVERTED\",\"description\":\"Export Converted Audio\"},{\"aomaPermissionId\":210,\"aomaPermissionName\":\"MANAGE_QC_PROVIDER_TEAMS\",\"description\":\"Permission to Manage QC Provider Teams\"},{\"aomaPermissionId\":55,\"aomaPermissionName\":\"UNREGISTER_AUDIO\",\"description\":\"Un-register audio assets registered by your user.\"},{\"aomaPermissionId\":326,\"aomaPermissionName\":\"LINK_MODIFY\",\"description\":\"Permission to link or unlink master for a product. This permission consolidates all existing LINK_MODIFY permissions\"},{\"aomaPermissionId\":185,\"aomaPermissionName\":\"WEB_UPLOAD\",\"description\":\"Allows users to use Web Upload\"},{\"aomaPermissionId\":27,\"aomaPermissionName\":\"EXPORT_DELIVERY_STATS_PURGE\",\"description\":\"Allows a user to purge records from AOMA_EXPORT_DELIVERY_STATUS that have been marked for deletion.\"},{\"aomaPermissionId\":149,\"aomaPermissionName\":\"SEARCH_UNREGISTERED_MASTER\",\"description\":\"Allows Search for Unregistered Masters\"},{\"aomaPermissionId\":237,\"aomaPermissionName\":\"JOB_DATA\",\"description\":\"Permissions for viewing export job data\"},{\"aomaPermissionId\":297,\"aomaPermissionName\":\"REGISTER_PRIORITY_SUPREME\",\"description\":\"Permission to allow users to have Supreme priority in the A3 Pseudo Video interface\"},{\"aomaPermissionId\":196,\"aomaPermissionName\":\"EXPORT MANUFACTURING PLANTS CES\",\"description\":\"Allows user to Export to Manufacturing plants CES\"},{\"aomaPermissionId\":135,\"aomaPermissionName\":\"LINK_MODIFY_DIGITALBOOKLET\",\"description\":\"Link or unlink digital booklets\"},{\"aomaPermissionId\":102,\"aomaPermissionName\":\"EXPORT_VIDEO_CONVERTED\",\"description\":\"Export Converted Video\"},{\"aomaPermissionId\":215,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_DOD_PACKAGING\",\"description\":\"Permission to swap DOD master for a product\"},{\"aomaPermissionId\":14,\"aomaPermissionName\":\"QC_NOTES_CDTEXT_EDIT\",\"description\":\"Edit CDTEXT for QC Notes.\"},{\"aomaPermissionId\":8,\"aomaPermissionName\":\"GENERATE_REPORTS\",\"description\":\"Generate reports on various system processes and outputs.\"},{\"aomaPermissionId\":5,\"aomaPermissionName\":\"EXPORT_GRAPHICS_PRE_RELEASE\",\"description\":\"Export pre-release graphic assets.\"},{\"aomaPermissionId\":80,\"aomaPermissionName\":\"METADATA_IMPORT_OVERRIDE\",\"description\":\"Allows users to create Metadata Import Attempts that will override data warnings\"},{\"aomaPermissionId\":153,\"aomaPermissionName\":\"AOMA_EXTJS_ACCESS\",\"description\":\"Allows access to new AOMA UI\"},{\"aomaPermissionId\":344,\"aomaPermissionName\":\"TEMP_UST_VIEW_DIGITAL_BOOKLET_STANDARD\",\"description\":\"Temporary permission for slow roll out for UST Digital Booklet Standard\"},{\"aomaPermissionId\":229,\"aomaPermissionName\":\"OFFERING_MEDIA_FILE_CONVERTER\",\"description\":\"Permission to view and submit OFFERING_MEDIA_FILE\"},{\"aomaPermissionId\":345,\"aomaPermissionName\":\"DA_BATCH_EXPORT\",\"description\":\"Permission to Perform Batch Export for DA Masters\"},{\"aomaPermissionId\":82,\"aomaPermissionName\":\"UNREGISTER_ALL_DVD\",\"description\":\"Un-register dvd assets registered by any user.\"},{\"aomaPermissionId\":313,\"aomaPermissionName\":\"TEMP_LEGACY_MIXED_MEDIA\",\"description\":\"Permission for access in AOMA2 details display page (temporary)\"},{\"aomaPermissionId\":202,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_AUDIO\",\"description\":\"Permission to swap Audio master for a product\"},{\"aomaPermissionId\":240,\"aomaPermissionName\":\"QC_NOTES_UNLOCK\",\"description\":\"Allows user to unlock the QC notes for the master\"},{\"aomaPermissionId\":54,\"aomaPermissionName\":\"IMPORT\",\"description\":\"Import\"},{\"aomaPermissionId\":236,\"aomaPermissionName\":\"REGISTER_ASSET_SUBMISSION\",\"description\":\"Permission for Register Asset Submission Interface\"},{\"aomaPermissionId\":198,\"aomaPermissionName\":\"EXPORT_MANUFACTURING_PLANTS_CES_AUTO\",\"description\":\"Permission to allow access to auto export CES destination\"},{\"aomaPermissionId\":304,\"aomaPermissionName\":\"VIEW_ARTIST_PROJECT_SUMMARY_PRE_RELEASE\",\"description\":\"Permission to View pre released products on artist summary page\"},{\"aomaPermissionId\":161,\"aomaPermissionName\":\"CONVERT_VIDEO_CT1030_TEMP\",\"description\":\"Temporary permission to allow access to CT1030 without the need of HIGH permission\"},{\"aomaPermissionId\":250,\"aomaPermissionName\":\"OFFERING_CREATE_CATALOG\",\"description\":\"Permission for Sync Licensing Ingestion\"},{\"aomaPermissionId\":131,\"aomaPermissionName\":\"EXPORT_LOAD_ALL_PROMO_GROUPS\",\"description\":\"Allows the users to view all promo groups.\"},{\"aomaPermissionId\":112,\"aomaPermissionName\":\"LINK_GAS_DATA\",\"description\":\"Allows users to see delete product linking.\"},{\"aomaPermissionId\":44,\"aomaPermissionName\":\"QC_NOTES_LOCK\",\"description\":\"Lock QC Notes from further editing\"},{\"aomaPermissionId\":263,\"aomaPermissionName\":\"AOMA3_AUDIO_EDIT_MASTER_SECURITY_GROUPS\",\"description\":\"Permission to edit security groups of Audio in AOMA3\"},{\"aomaPermissionId\":21,\"aomaPermissionName\":\"REGISTER_VIDEO\",\"description\":\"Register video assets.\"},{\"aomaPermissionId\":276,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_SURROUND_AUDIO_7.1\",\"description\":\"Permission to swap a Surround Audio 7.1 master for a product\"},{\"aomaPermissionId\":7,\"aomaPermissionName\":\"REPORTING_VIEW\",\"description\":\"View reports.\"},{\"aomaPermissionId\":76,\"aomaPermissionName\":\"OFFERING_CREATE_ALL_SECURITY_GROUPS\",\"description\":\"Create offerings for all assets regardless of security group.\"},{\"aomaPermissionId\":174,\"aomaPermissionName\":\"DIRECT_UPLOAD_ASPERA\",\"description\":\"All user to submit direct aspera upload registration\"},{\"aomaPermissionId\":273,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_DOLBY_ATMOS\",\"description\":\"Permission to swap a Dolby Atmos Audio master for a product\"},{\"aomaPermissionId\":138,\"aomaPermissionName\":\"EXPORT_MEDIA_PRODUCTION\",\"description\":\"Export to Media Production Destinations\"},{\"aomaPermissionId\":327,\"aomaPermissionName\":\"EXPORT_PRIORITY_SUPREME\",\"description\":\"Allow Export requests/jobs that are submitted with the highest priority\"},{\"aomaPermissionId\":2,\"aomaPermissionName\":\"EXPORT_GRAPHICS\",\"description\":\"Export graphic assets.\"},{\"aomaPermissionId\":109,\"aomaPermissionName\":\"GAS_METADATA_IMPORT_OVERRIDE\",\"description\":\"Allows users to create Metadata Import GAS Attempts that will override data warnings\"},{\"aomaPermissionId\":10,\"aomaPermissionName\":\"OFFERING_APPROVE\",\"description\":\"Approve offerings.\"},{\"aomaPermissionId\":311,\"aomaPermissionName\":\"EXPORT_ADVANCED\",\"description\":\"Permission for specialized Export workflows/given to power users when regular Export is not enough.Currently used for 360 RA MPEG-H Downloads, which is GMP only\"},{\"aomaPermissionId\":206,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_INTERACTIVE_MEDIA\",\"description\":\"Permission to swap Interactive Media master for a product. \"},{\"aomaPermissionId\":6,\"aomaPermissionName\":\"EXPORT_VIDEO_PRE_RELEASE\",\"description\":\"Export pre-release video assets.\"},{\"aomaPermissionId\":106,\"aomaPermissionName\":\"EXPORT_DOMESTIC_SUPPLY_CHAIN\",\"description\":\"Export to Domestic Supply Chain Destinations\"},{\"aomaPermissionId\":329,\"aomaPermissionName\":\"TEMP_UST_VIEW_VINYL\",\"description\":\"Temporary permission for slow roll out for UST Vinyl 16&24b\"},{\"aomaPermissionId\":258,\"aomaPermissionName\":\"UNIFIED_SUBMISSION_TOOL\",\"description\":\"Unified Submission Tool\"},{\"aomaPermissionId\":208,\"aomaPermissionName\":\"QC_METADATA_EDIT_VIC_POST_PUBLISH_ALL_SECURITY_GROUPS\",\"description\":\"Permission to edit qc metadata after VIC Post Publish for all security gropus\"},{\"aomaPermissionId\":296,\"aomaPermissionName\":\"BATCH_LINKING\",\"description\":\"Permission to allow users to perform batch linking in AOMA 3\"},{\"aomaPermissionId\":275,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_SURROUND_AUDIO_5.1\",\"description\":\"Permission to swap a Surround Audio 5.1 master for a product\"},{\"aomaPermissionId\":118,\"aomaPermissionName\":\"EXPORT_MMX\",\"description\":\"Allows users to perform Export Promo MMX for Audio products\"},{\"aomaPermissionId\":58,\"aomaPermissionName\":\"UNREGISTER_ALL_GRAPHICS\",\"description\":\"Un-register graphic assets registered by any user.\"},{\"aomaPermissionId\":188,\"aomaPermissionName\":\"OFFERING_CREATE_FOR_SALES_DATE\",\"description\":\"Create offerings for assets based on sales date\"},{\"aomaPermissionId\":211,\"aomaPermissionName\":\"SEARCH_VIEW_SYSTEM_DEFAULT_PRODUCT\",\"description\":\"View if an ISRC or track is preferred or not\"},{\"aomaPermissionId\":1,\"aomaPermissionName\":\"EXPORT_AUDIO\",\"description\":\"Export audio assets.\"},{\"aomaPermissionId\":272,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_360_AUDIO\",\"description\":\"Permission to swap a 360 Audio master for a product\"},{\"aomaPermissionId\":221,\"aomaPermissionName\":\"EXPORT_RESUBMIT\",\"description\":\"Permission to resubmit export jobs\"},{\"aomaPermissionId\":88,\"aomaPermissionName\":\"EXPORT_DVD\",\"description\":\"Export DVD assets.\"},{\"aomaPermissionId\":9,\"aomaPermissionName\":\"OFFERING\",\"description\":\"Basic offering access.\"},{\"aomaPermissionId\":20,\"aomaPermissionName\":\"REGISTER_GRAPHICS\",\"description\":\"Register graphics asstes.\"},{\"aomaPermissionId\":197,\"aomaPermissionName\":\"QC_NOTES_LOCK_VIDEO\",\"description\":\"Allows user to lock Video QC Notes\"},{\"aomaPermissionId\":172,\"aomaPermissionName\":\"SEND_GRAS_MESSAGES\",\"description\":\"Allows User to search  to view GRAS Messaging\"},{\"aomaPermissionId\":84,\"aomaPermissionName\":\"REGISTRATION_STATUS_VIEW\",\"description\":\"Displays registration status of current user in Registration Job Status page\"},{\"aomaPermissionId\":151,\"aomaPermissionName\":\"QC_METADATA_EDIT_VIDEO_POST_REGISTRATION\",\"description\":\"Edit video metadata,Post Registration\"},{\"aomaPermissionId\":217,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_WAV24_VINYL\",\"description\":\"Permission to swap Wav 24 vinyl master for a product\"},{\"aomaPermissionId\":53,\"aomaPermissionName\":\"METADATA_PUBLISH\",\"description\":\"Allows user to use web interface for metadata\\npublishing.\"},{\"aomaPermissionId\":243,\"aomaPermissionName\":\"DOWNLOAD_VIC\",\"description\":\"Permission to download VIC\"},{\"aomaPermissionId\":285,\"aomaPermissionName\":\"DOWNLOAD_PREVIEW\",\"description\":\"Permission to download Program Only and Full Clip previews in AOMA\"},{\"aomaPermissionId\":192,\"aomaPermissionName\":\"UNREGISTER_DVD_BY_SECURITY_GROUP\",\"description\":\"Un-register dvd assets by security group\"},{\"aomaPermissionId\":73,\"aomaPermissionName\":\"QC_METADATA_VIEW_DVD_PRODUCT\",\"description\":\"View DVD metadata.\"},{\"aomaPermissionId\":333,\"aomaPermissionName\":\"TEMP_UST_VIEW_CLOSEDCAPTION_SUBTITLE\",\"description\":\"Temporary permission for slow roll out for UST Timed Text\"},{\"aomaPermissionId\":39,\"aomaPermissionName\":\"MIGRATE_AUDIO\",\"description\":\"Migrate audio assets.\"},{\"aomaPermissionId\":85,\"aomaPermissionName\":\"REGISTRATION_STATUS_VIEW_ALL\",\"description\":\"Displays registration status of all users in Registration Job Status page\"},{\"aomaPermissionId\":279,\"aomaPermissionName\":\"ALLOW_PREVIEW_GENERATION\",\"description\":\"Permission to allow preview generations\"},{\"aomaPermissionId\":140,\"aomaPermissionName\":\"REPORTING_ISC\",\"description\":\"Allows users to generate ISC reports\"},{\"aomaPermissionId\":292,\"aomaPermissionName\":\"AOMA3_LFV_CHAPTER_METADATA_EDIT\",\"description\":\"Permission to allow chapter times to be edited for LFV\"},{\"aomaPermissionId\":52,\"aomaPermissionName\":\"LINK_VIEW\",\"description\":\"View product linking section\"},{\"aomaPermissionId\":209,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_DIGITAL_BOOKLET\",\"description\":\"Permission to swap Digital Booklet master for a product\"},{\"aomaPermissionId\":78,\"aomaPermissionName\":\"METADATA_IMPORT_VIEW\",\"description\":\"Allows User to view status of previously submitted Metadata Import attempts\"},{\"aomaPermissionId\":230,\"aomaPermissionName\":\"CONVERT_WAV24_To_WAV16\",\"description\":\"Permission to down convert Wav24bit and export or quickconvert as Wav16bit\"},{\"aomaPermissionId\":162,\"aomaPermissionName\":\"EXPORT_PROMO_VIDEO_MASTER\",\"description\":\"Export video master to promo destination.\"},{\"aomaPermissionId\":228,\"aomaPermissionName\":\"REGISTER_PRIORITY_HIGH\",\"description\":\"Permission to modify Registration Job to High Priority.\"},{\"aomaPermissionId\":308,\"aomaPermissionName\":\"UST_VIEW_COVER\",\"description\":\"Permission to View Cover in UST\"},{\"aomaPermissionId\":241,\"aomaPermissionName\":\"ARCHIVE_SUBMISSION_TOOL\",\"description\":\"Allows user to see ARCHIVE_SUBMISSION_TOOL menu option\"},{\"aomaPermissionId\":288,\"aomaPermissionName\":\"REGISTER_PRIORITY_LOW_BACKFILL\",\"description\":\"REGISTER_PRIORITY_LOW_BACKFILL\"},{\"aomaPermissionId\":316,\"aomaPermissionName\":\"LINK_MODIFY_SWAP\",\"description\":\"Permission to swap master for a product. This permission consolidates all existing LINK_MODIFY_SWAP permissions\"},{\"aomaPermissionId\":64,\"aomaPermissionName\":\"OFFERING_VIDEO\",\"description\":\"Request and submit video conversions via the application.\"},{\"aomaPermissionId\":51,\"aomaPermissionName\":\"LINK_MODIFY_COVER\",\"description\":\"Link or unlink cover products\"},{\"aomaPermissionId\":125,\"aomaPermissionName\":\"FULL_TEXT_SEARCH\",\"description\":\"Allows users to search using Hibernate Search\"},{\"aomaPermissionId\":312,\"aomaPermissionName\":\"DOWNLOAD_ASPERA\",\"description\":\"Permission for A3 & UST aspera based dowloads\"},{\"aomaPermissionId\":67,\"aomaPermissionName\":\"QC_STATUS_VIEW\",\"description\":\"View QC Status Information\"},{\"aomaPermissionId\":150,\"aomaPermissionName\":\"PRODUCT_METADATA_VIEW_PRODUCT\",\"description\":\"Product Metadata View Product\"},{\"aomaPermissionId\":35,\"aomaPermissionName\":\"QC_METADATA_EDIT_VIDEO_PRODUCT\",\"description\":\"Edit video metadata.\"},{\"aomaPermissionId\":83,\"aomaPermissionName\":\"ADMINISTER_ROLES\",\"description\":\"Administer the Roles creation\"},{\"aomaPermissionId\":94,\"aomaPermissionName\":\"CONVERT_AUDIO_TIER_4\",\"description\":\"Convert audio to formats in tier 4 (low resolution)\"},{\"aomaPermissionId\":252,\"aomaPermissionName\":\"REGISTER_EXTRACTED_VSC\",\"description\":\"Register Extracted VSC\"},{\"aomaPermissionId\":341,\"aomaPermissionName\":\"TEMP_UST_ASPERA\",\"description\":\"This permission allows a user to use aspera based uploads in UST\"},{\"aomaPermissionId\":23,\"aomaPermissionName\":\"SEARCH_RESTRICTED\",\"description\":\"Restricted search access.\"},{\"aomaPermissionId\":146,\"aomaPermissionName\":\"EXPORT_UNAPPROVED_AUDIO_MASTER\",\"description\":\"Export unapproved audio master assets.\"},{\"aomaPermissionId\":227,\"aomaPermissionName\":\"CREATE_PSEUDO_VIDEO\",\"description\":\"To create Pseudo Video\"},{\"aomaPermissionId\":295,\"aomaPermissionName\":\"AOMA3_EXPORT_HIGH_PRIORITY\",\"description\":\"Permission to allow high-level users to use highest priority exports\"},{\"aomaPermissionId\":114,\"aomaPermissionName\":\"SEND_EOM_MESSAGES\",\"description\":\"Allows User to search  to view EOM Messaging\"},{\"aomaPermissionId\":200,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_CLOSEDCAPTION_SCC\",\"description\":\"Permission to swap Closed Caption SCC master for a product\"},{\"aomaPermissionId\":134,\"aomaPermissionName\":\"EXPORT_LICENSING_DESTINATIONS\",\"description\":\"Export to licensing destinations.\"},{\"aomaPermissionId\":293,\"aomaPermissionName\":\"LINK_ATTEMPTS_VIEW_ALL\",\"description\":\"Permission to allow users to see all their link attempts in AOMA3\"},{\"aomaPermissionId\":143,\"aomaPermissionName\":\"CONVERSION_MONITOR_SYSTEM\",\"description\":\"Conversion Monitor System\"},{\"aomaPermissionId\":26,\"aomaPermissionName\":\"SET_USER_PREFERENCES\",\"description\":\"Allows the user to modify their AOMA preferences.\"},{\"aomaPermissionId\":242,\"aomaPermissionName\":\"CONVERT_VIDEO_TIER_MARKETING\",\"description\":\"CONVERT VIDEO TIER MARKETING\"},{\"aomaPermissionId\":166,\"aomaPermissionName\":\"DIRECT_UPLOAD\",\"description\":\"To view direct upload\"},{\"aomaPermissionId\":91,\"aomaPermissionName\":\"CONVERT_AUDIO_TIER_1\",\"description\":\"Convert audio to formats in tier 1 (highest resolution)\"},{\"aomaPermissionId\":133,\"aomaPermissionName\":\"AUDIO_DESCRIPTOR_FILE_EDIT\",\"description\":\"Allows the users to edit the contents of DDP Descriptor\"},{\"aomaPermissionId\":111,\"aomaPermissionName\":\"DELETE_MASTER_ID\",\"description\":\"Allows users to delete master id\"},{\"aomaPermissionId\":205,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_WAV24\",\"description\":\"Permission to swap Wav 24 master for a product\"},{\"aomaPermissionId\":144,\"aomaPermissionName\":\"DORITO_ACCESS\",\"description\":\"Permission for DORITO\"},{\"aomaPermissionId\":168,\"aomaPermissionName\":\"QC_METADATA_EDIT_DELUXE_PACKAGING_PRODUCT\",\"description\":\"Edit deluxe packaging metadata\"},{\"aomaPermissionId\":248,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_VSC\",\"description\":\"Permission to swap Video Screen Capture\"},{\"aomaPermissionId\":301,\"aomaPermissionName\":\"AOMA3_EXPORT_UNAPPROVED_MASTER\",\"description\":\"Allow the user to export AOMA3 unapproved master\"},{\"aomaPermissionId\":59,\"aomaPermissionName\":\"UNREGISTER_VIDEO\",\"description\":\"Un-register video assets registered by your user.\"},{\"aomaPermissionId\":186,\"aomaPermissionName\":\"MANAGE_AOMA_FILES\",\"description\":\"Allows users to manage Aoma Files\"},{\"aomaPermissionId\":256,\"aomaPermissionName\":\"AOMA3_EDIT_MASTER_SECURITY_GROUPS\",\"description\":\"Permission to edit master security groups in AOMA3\"},{\"aomaPermissionId\":69,\"aomaPermissionName\":\"EXPORT_PRINTING_PRESS_DESTINATIONS\",\"description\":\"Export to Printing Press Destinations\"},{\"aomaPermissionId\":107,\"aomaPermissionName\":\"GAS_METADATA_IMPORT_VIEW\",\"description\":\"Allows User to view status of previously submitted Metadata Import GAS attempts\"},{\"aomaPermissionId\":116,\"aomaPermissionName\":\"LINK_MODIFY_TRACK\",\"description\":\"unlink audio tracks\"},{\"aomaPermissionId\":290,\"aomaPermissionName\":\"AOMA3_EXPORT_SONY_CI\",\"description\":\"Permission to Export to Sony CI Destinations in AOMA3\"},{\"aomaPermissionId\":283,\"aomaPermissionName\":\"AOMA3_EXPORT\",\"description\":\"Permission to Export in AOMA3\"},{\"aomaPermissionId\":4,\"aomaPermissionName\":\"EXPORT_AUDIO_PRE_RELEASE\",\"description\":\"Export pre-release audio assets.\"},{\"aomaPermissionId\":11,\"aomaPermissionName\":\"OFFERING_CANCEL\",\"description\":\"Cancel offerings.\"},{\"aomaPermissionId\":152,\"aomaPermissionName\":\"CREATE_ORDER\",\"description\":\"Create Order privilege\"},{\"aomaPermissionId\":147,\"aomaPermissionName\":\"EXPORT_UNAPPROVED_VIDEO_MASTER\",\"description\":\"Export unapproved video master assets.\"},{\"aomaPermissionId\":74,\"aomaPermissionName\":\"EXPORT_AUDIO_MANUFACTURING_DESTINATIONS\",\"description\":\"Export to audio manufacturing destinations.\"},{\"aomaPermissionId\":218,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_WAV16_VINYL\",\"description\":\"Permission to swap Wav 16 vinyl master for a product\"},{\"aomaPermissionId\":3,\"aomaPermissionName\":\"EXPORT_VIDEO\",\"description\":\"Export video assets.\"},{\"aomaPermissionId\":339,\"aomaPermissionName\":\"TEMP_HIDE_LEGACY_REGISTRATION\",\"description\":\"Temporary permission to hide registration options in direct and simple upload\"},{\"aomaPermissionId\":71,\"aomaPermissionName\":\"QC_METADATA_VPL_EDIT\",\"description\":\"Use to Package Printing Specification\"},{\"aomaPermissionId\":269,\"aomaPermissionName\":\"LEGACY_MASTER_DETAILS\",\"description\":\"Permission for AOMA3 Master Details rollout\"},{\"aomaPermissionId\":115,\"aomaPermissionName\":\"CONVERT_VIDEO_TEST\",\"description\":\"Allows users to change the frame rates of profiles\"},{\"aomaPermissionId\":63,\"aomaPermissionName\":\"QC_APPROVAL_PRODUCT\",\"description\":\"Modify the product status\"},{\"aomaPermissionId\":68,\"aomaPermissionName\":\"QC_STATUS_MODIFY\",\"description\":\"Modify QC Status of products, masters or assets\"},{\"aomaPermissionId\":214,\"aomaPermissionName\":\"LINK_MODIFY_SWAP_DVDDDP\",\"description\":\"Permission to swap DVDDDP Booklet master for a product\"},{\"aomaPermissionId\":305,\"aomaPermissionName\":\"UST_VIEW_STEREO_AUDIO\",\"description\":\"Permission to View Stereo Audio in UST\"},{\"aomaPermissionId\":194,\"aomaPermissionName\":\"QC_METADATA_ENFORCE_VIC\",\"description\":\"Enforces user to specify VIC\"},{\"aomaPermissionId\":18,\"aomaPermissionName\":\"REGISTER\",\"description\":\"Basic registration access.\"}]"
-        },
-        {
-          "name": "userScreenPermissions",
-          "value": "[{\"ampPermissionId\":5,\"ampPermissionNm\":\"MTLS_VIEW\",\"description\":\"Permission to search Physical Archives\"}]"
-        },
-        {
-          "name": "legacyServerUrl",
-          "value": "https://aoma-stage.smcdp-de.net"
-        },
-        {
-          "name": "sessionId",
-          "value": "DRFjBlP0azD2AtlxGXQIK4TKl19QjSLYBC_MK6R-"
-        },
-        {
-          "name": "userFirstName",
-          "value": "Matt"
-        },
-        {
-          "name": "downtimeNotification",
-          "value": "true"
-        },
-        {
-          "name": "userLastName",
-          "value": "Carpenter"
-        },
-        {
-          "name": "userId",
-          "value": "1946"
-        },
-        {
-          "name": "username",
-          "value": "mcarpent"
+          "name": "originalUrl",
+          "value": "https://aoma-stage.smcdp-de.net/"
         }
       ]
     }

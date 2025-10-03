@@ -26,20 +26,19 @@ interface ProcessedContent {
 }
 
 export class AomaFirecrawlService {
-  private firecrawl: any; // Using Firecrawl SDK v4 which has v1 API under .v1 property
+  private firecrawl: any; // Using Firecrawl SDK v4 with v2 API
   private baseUrl: string;
 
   constructor() {
     if (!process.env.FIRECRAWL_API_KEY) {
       throw new Error('FIRECRAWL_API_KEY environment variable is required');
     }
-    const firecrawlInstance = new FirecrawlApp({
+    // Initialize Firecrawl with v2 API (default in v4.3.5+)
+    this.firecrawl = new FirecrawlApp({
       apiKey: process.env.FIRECRAWL_API_KEY
     });
-    // Access v1 API methods
-    this.firecrawl = firecrawlInstance.v1 || firecrawlInstance;
     this.baseUrl = process.env.AOMA_STAGE_URL || 'https://aoma-stage.smcdp-de.net';
-    console.log('✅ FirecrawlApp initialized');
+    console.log('✅ Firecrawl v2 API initialized');
   }
 
   /**
@@ -52,8 +51,8 @@ export class AomaFirecrawlService {
       // Get authentication cookies
       const cookieHeader = await aomaStageAuthenticator.getCookieHeader();
       
-      // Scrape the single page (Firecrawl SDK v1 API)
-      const result = await this.firecrawl.scrapeUrl(
+      // Scrape the single page (Firecrawl v2 API)
+      const result = await this.firecrawl.scrape(
         url.startsWith('http') ? url : `${this.baseUrl}${url}`,
         {
           headers: {
@@ -61,9 +60,14 @@ export class AomaFirecrawlService {
             'User-Agent': 'Mozilla/5.0 (compatible; SIAM-Crawler/1.0)',
             'Accept': 'text/html,application/xhtml+xml'
           },
-          formats: ['markdown'],
+          formats: ['markdown', 'summary'],  // v2: Added summary format
           onlyMainContent: true,
-          waitFor: 2000
+          waitFor: 2000,
+          // v2 performance defaults
+          blockAds: true,
+          skipTlsVerification: true,
+          removeBase64Images: true,
+          maxAge: 172800  // 2-day cache
         }
       );
 
@@ -145,12 +149,11 @@ export class AomaFirecrawlService {
   }
 
   /**
-   * Build Firecrawl v1 API configuration with auth headers
+   * Build Firecrawl v2 API configuration with auth headers
    */
   private buildCrawlConfig(config: CrawlConfig, cookieHeader: string) {
     return {
-      url: this.baseUrl,
-      // v1 API top-level crawl parameters
+      // v2 API: Flat configuration structure
       includePaths: config.includePaths || [
         '/apps/*',
         '/api/v1/docs/*',
@@ -164,37 +167,41 @@ export class AomaFirecrawlService {
         '.*\\.zip$'
       ],
       limit: config.maxPages || 10,
-      maxDepth: config.depth || 2,
-      allowBackwardLinks: false,
-      // Scrape options (nested under scrapeOptions)
-      scrapeOptions: {
-        headers: {
-          'Cookie': cookieHeader,
-          'User-Agent': 'Mozilla/5.0 (compatible; SIAM-Crawler/1.0)'
-        },
-        onlyMainContent: true,
-        formats: ['markdown'],
-        waitFor: 2000
-      }
+      maxDiscoveryDepth: config.depth || 2,  // v2: renamed from maxDepth
+      crawlEntireDomain: false,  // v2: renamed from allowBackwardLinks
+      
+      // Headers and scrape options (v2: flat, not nested)
+      headers: {
+        'Cookie': cookieHeader,
+        'User-Agent': 'Mozilla/5.0 (compatible; SIAM-Crawler/1.0)'
+      },
+      onlyMainContent: true,
+      formats: ['markdown', 'summary'],  // v2: Added summary format
+      waitFor: 2000,
+      
+      // v2 NEW: Performance defaults (faster by default)
+      blockAds: true,
+      skipTlsVerification: true,
+      removeBase64Images: true,
+      maxAge: 172800,  // 2-day cache (default in v2)
+      
+      // v2 NEW: Smart crawling with natural language prompt
+      prompt: 'Extract AOMA documentation, API reference, knowledge base, and help pages. Focus on technical content and user guides.'
     };
   }
 
   /**
-   * Execute the Firecrawl crawl using v1 API
+   * Execute the Firecrawl crawl using v2 API
    */
   private async executeCrawl(config: any) {
-    // Extract url and pass remaining config as params
-    const { url, ...params } = config;
-
-    // Firecrawl SDK v1 crawlUrl automatically polls for completion
-    const result = await this.firecrawl.crawlUrl(
-      url,
-      params,
-      2 // Poll interval in seconds
+    // v2 API: Use crawl() method (waiter that auto-polls for completion)
+    const result = await this.firecrawl.crawl(
+      this.baseUrl,
+      config
     );
 
     if (!result.success) {
-      throw new Error(`Crawl failed: ${result.error}`);
+      throw new Error(`Crawl failed: ${result.error || 'Unknown error'}`);
     }
 
     return result;
