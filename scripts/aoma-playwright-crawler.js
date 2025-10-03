@@ -7,12 +7,12 @@
  * and stores the content in Supabase vector store
  */
 
-const { chromium } = require('playwright');
+const { chromium } = require('playwright'); // Use Safari instead of Chromium
 const { createClient } = require('@supabase/supabase-js');
 const TurndownService = require('turndown');
 const fs = require('fs').promises;
 const path = require('path');
-const { Configuration, OpenAIApi } = require('openai');
+const OpenAI = require('openai');
 
 // Load environment variables
 require('dotenv').config({ path: '.env.local' });
@@ -24,9 +24,9 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-const openai = new OpenAIApi(new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
-}));
+});
 
 const turndown = new TurndownService({
   headingStyle: 'atx',
@@ -208,13 +208,13 @@ class AomaPlaywrightCrawler {
     try {
       // Truncate to fit token limits
       const truncatedText = text.substring(0, 8000);
-      
-      const response = await openai.createEmbedding({
+
+      const response = await openai.embeddings.create({
         model: "text-embedding-3-small",
         input: truncatedText
       });
-      
-      return response.data.data[0].embedding;
+
+      return response.data[0].embedding;
     } catch (error) {
       console.warn('Failed to generate embedding:', error.message);
       // Return zero vector as fallback

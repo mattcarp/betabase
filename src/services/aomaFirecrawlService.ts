@@ -145,51 +145,51 @@ export class AomaFirecrawlService {
   }
 
   /**
-   * Build Firecrawl configuration with auth headers
+   * Build Firecrawl v1 API configuration with auth headers
    */
   private buildCrawlConfig(config: CrawlConfig, cookieHeader: string) {
     return {
       url: this.baseUrl,
-      crawlerOptions: {
-        includes: config.includePaths || [
-          '/apps/*',
-          '/api/v1/docs/*',
-          '/knowledge/*',
-          '/help/*'
-        ],
-        excludes: config.excludePaths || [
-          '/admin/*',
-          '/logout',
-          '*.pdf',
-          '*.zip'
-        ],
-        maxCrawlPages: config.maxPages || 10,
-        maxCrawlDepth: config.depth || 2,
-        allowBackwardCrawling: false
-      },
-      pageOptions: {
+      // v1 API top-level crawl parameters
+      includePaths: config.includePaths || [
+        '/apps/*',
+        '/api/v1/docs/*',
+        '/knowledge/*',
+        '/help/*'
+      ],
+      excludePaths: config.excludePaths || [
+        '/admin/*',
+        '/logout',
+        '.*\\.pdf$',
+        '.*\\.zip$'
+      ],
+      limit: config.maxPages || 10,
+      maxDepth: config.depth || 2,
+      allowBackwardLinks: false,
+      // Scrape options (nested under scrapeOptions)
+      scrapeOptions: {
         headers: {
           'Cookie': cookieHeader,
           'User-Agent': 'Mozilla/5.0 (compatible; SIAM-Crawler/1.0)'
         },
         onlyMainContent: true,
-        formats: ['markdown'] as const,
+        formats: ['markdown'],
         waitFor: 2000
       }
     };
   }
 
   /**
-   * Execute the Firecrawl crawl using v4 SDK API
+   * Execute the Firecrawl crawl using v1 API
    */
   private async executeCrawl(config: any) {
-    // Firecrawl SDK v4 uses crawlUrl which automatically polls for completion
+    // Extract url and pass remaining config as params
+    const { url, ...params } = config;
+
+    // Firecrawl SDK v1 crawlUrl automatically polls for completion
     const result = await this.firecrawl.crawlUrl(
-      config.url,
-      {
-        ...config.crawlerOptions,
-        ...config.pageOptions
-      },
+      url,
+      params,
       2 // Poll interval in seconds
     );
 
