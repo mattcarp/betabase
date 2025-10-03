@@ -25,6 +25,51 @@ npx playwright test tests/e2e/smoke/smoke.spec.ts                    # Critical 
 
 **Full test documentation**: `TESTING_FUNDAMENTALS.md`, `tests/README.md`
 
+## 📚 AOMA DOCUMENTATION - COMPREHENSIVE INDEX
+
+**AOMA Stage Integration**: Complete documentation for AOMA authentication, crawling, and knowledge base integration.
+
+### 🚨 Current Status (START HERE)
+
+**[docs/AOMA-STAGE-AUTHENTICATION-STATUS.md](./docs/AOMA-STAGE-AUTHENTICATION-STATUS.md)** - **READ THIS FIRST**
+- **Status**: 🚫 **BLOCKED** - Certificate authentication failure
+- Microsoft Conditional Access + Jamf MDM enrollment requirement
+- Complete authentication flow and troubleshooting guide
+- Scripts status and path forward once admin resolves
+
+### 📖 Complete Documentation Index
+
+**[docs/AOMA-DOCUMENTATION-INDEX.md](./docs/AOMA-DOCUMENTATION-INDEX.md)** - Master index of all AOMA documentation
+- Architecture & Integration guides
+- Crawling & Data Collection documentation
+- Performance & Optimization analysis
+- Testing & Validation results
+- Quick reference by topic
+
+### 🔧 Quick Reference Scripts
+
+```bash
+# Manual login (for certificate handling)
+node scripts/aoma-manual-login-save.js
+
+# Automated login (HITL 2FA - blocked by certificate)
+AAD_USERNAME=matt.carpenter.ext@sonymusic.com AAD_PASSWORD=Dalkey1_Lisbon2 \
+node scripts/aoma-stage-login.js
+
+# Crawler (ready once authentication works)
+node scripts/aoma-playwright-crawler.js
+```
+
+### 📂 Key Files
+
+- `src/services/aomaStageAuthenticator.ts` - Authentication service
+- `src/services/aomaFirecrawlService.ts` - Firecrawl v2 crawler
+- `context/firecrawl-v2-migration.md` - API migration guide
+- `tmp/aoma-stage-storage.json` - Saved Playwright storage
+- `tmp/aoma-cookie.txt` - Saved cookies
+
+**See [AOMA-DOCUMENTATION-INDEX.md](./docs/AOMA-DOCUMENTATION-INDEX.md) for complete file listing and navigation.**
+
 ## 🚀 DEPLOYMENT - Rock-Solid Production Deploy
 
 **NEW**: Automated deployment with comprehensive monitoring and verification!
