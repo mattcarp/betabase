@@ -1,9 +1,16 @@
 import { test, expect } from "@playwright/test";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "./helpers/console-monitor";
 
 test.describe("SIAM Curate Tab File Upload Investigation", () => {
   test("examine Curate tab interface for file upload functionality", async ({
     page,
   }) => {
+    // Setup console monitoring
+    setupConsoleMonitoring(page, {
+      ignoreWarnings: true,
+      ignoreNetworkErrors: true,
+    });
+
     console.log("🚀 Testing SIAM Curate tab...");
 
     // Navigate to SIAM
@@ -115,5 +122,8 @@ test.describe("SIAM Curate Tab File Upload Investigation", () => {
     console.log("\n🏁 CURATE TAB INVESTIGATION SUMMARY:");
     console.log("- Curate tab accessible: " + (await curateTab.isVisible()));
     console.log("- Screenshots taken: curate-test-1 through curate-test-4");
+
+    // Assert no console errors
+    assertNoConsoleErrors();
   });
 });

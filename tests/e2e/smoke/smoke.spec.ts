@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../../helpers/console-monitor";
 
 /**
  * Smoke tests - Quick health checks that should always pass
@@ -8,6 +9,19 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Smoke Tests @smoke", () => {
   test.describe.configure({ mode: "parallel" });
+
+  // Setup console monitoring for each test
+  test.beforeEach(async ({ page }) => {
+    setupConsoleMonitoring(page, {
+      ignoreWarnings: true,
+      ignoreNetworkErrors: true,
+    });
+  });
+
+  // Assert no console errors after each test
+  test.afterEach(async () => {
+    assertNoConsoleErrors();
+  });
   
   test("Application is accessible", async ({ page }) => {
     const response = await page.goto("/");
@@ -19,20 +33,8 @@ test.describe("Smoke Tests @smoke", () => {
     const body = await page.locator('body');
     await expect(body).toBeVisible();
     
-    // Check for critical errors only (filter out auth-related warnings)
-    const errors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") {
-        const text = msg.text();
-        // Filter out expected auth/health check errors
-        if (!text.includes("AOMA health") && !text.includes("auth")) {
-          errors.push(text);
-        }
-      }
-    });
-    
     await page.waitForTimeout(2000);
-    expect(errors.length).toBeLessThanOrEqual(2); // Allow minor errors
+    // Console errors are now checked by afterEach hook
   });
   
   test("Health endpoint responds", async ({ request }) => {
@@ -61,24 +63,11 @@ test.describe("Smoke Tests @smoke", () => {
   });
   
   test("No JavaScript errors on load", async ({ page }) => {
-    const jsErrors: string[] = [];
-    
-    page.on("pageerror", (error) => {
-      jsErrors.push(error.message);
-    });
-    
     await page.goto("/");
     await page.waitForTimeout(3000);
     
-    // Filter out known acceptable errors
-    const criticalErrors = jsErrors.filter(error => 
-      !error.includes("ResizeObserver") && 
-      !error.includes("Non-Error promise rejection") &&
-      !error.includes("AOMA") &&
-      !error.includes("health check")
-    );
-    
-    expect(criticalErrors).toHaveLength(0);
+    // Page errors are captured by console monitor
+    // Console errors assertion happens in afterEach
   });
   
   test("Static assets load correctly", async ({ page }) => {

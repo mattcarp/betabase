@@ -7,9 +7,10 @@
  * - src/services/unified-test-intelligence.ts
  */
 
-import { supabase, searchVectors } from "../../lib/supabase";
+import { supabase } from "../../lib/supabase";
 import { embed } from "ai";
 import { openai } from "@ai-sdk/openai";
+import { OptimizedSupabaseVectorService } from "./optimizedSupabaseVectorService";
 
 export type KnowledgeSourceType =
   | "git"
@@ -122,8 +123,13 @@ export async function searchKnowledge(
     const embedding = await getQueryEmbedding(normalized);
     if (embedding) {
       usedEmbedding = true;
+      const vectorService = new OptimizedSupabaseVectorService();
       const data = await withinTimeout(
-        searchVectors(embedding, matchThreshold, matchCount, filterSources),
+        vectorService.smartSearch(normalized, {
+          matchThreshold,
+          matchCount,
+          sourceTypes: filterSources,
+        }),
         timeoutMs,
       );
       results = (data || []).map((row: any) => ({
@@ -224,5 +230,4 @@ export async function getKnowledgeSourceCounts(): Promise<KnowledgeCounts> {
   }
   return counts;
 }
-
 

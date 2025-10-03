@@ -74,17 +74,41 @@ export async function POST(req: Request) {
       );
     }
 
-    // Convert UI messages to OpenAI format
-    const openAIMessages: OpenAI.Chat.ChatCompletionMessageParam[] = messages.map((msg: any) => {
-      if (msg.role === 'system') {
-        return { role: 'system', content: msg.content };
-      } else if (msg.role === 'user') {
-        return { role: 'user', content: msg.content };
-      } else if (msg.role === 'assistant') {
-        return { role: 'assistant', content: msg.content };
-      }
-      return msg;
-    });
+    // Convert UI messages to OpenAI format with NULL content validation
+    const openAIMessages: OpenAI.Chat.ChatCompletionMessageParam[] = messages
+      .filter((msg: any) => {
+        // Filter out messages with null, undefined, or empty content
+        if (msg.content == null || msg.content === '') {
+          console.warn(`[API] Filtering out message with invalid content:`, { role: msg.role, content: msg.content });
+          return false;
+        }
+        return true;
+      })
+      .map((msg: any) => {
+        // Ensure content is always a string
+        const content = String(msg.content || '');
+        
+        if (msg.role === 'system') {
+          return { role: 'system', content };
+        } else if (msg.role === 'user') {
+          return { role: 'user', content };
+        } else if (msg.role === 'assistant') {
+          return { role: 'assistant', content };
+        }
+        return { ...msg, content };
+      });
+
+    // Validate we have at least one message after filtering
+    if (openAIMessages.length === 0) {
+      console.error('[API] No valid messages after filtering null content');
+      return new Response(
+        JSON.stringify({ error: "No valid messages provided. All messages had null or empty content." }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
 
     // Initialize AOMA context and knowledge elements
     let aomaContext = "";
