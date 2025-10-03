@@ -144,6 +144,9 @@ export class AomaStageAuthenticator {
   private async isSessionValid(cookieHeader: string): Promise<boolean> {
     try {
       const url = new URL(this.aomaStageUrl)
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+
       const res = await fetch(url.toString(), {
         method: 'HEAD',
         headers: {
@@ -151,13 +154,18 @@ export class AomaStageAuthenticator {
           Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         },
         redirect: 'manual',
+        signal: controller.signal,
       })
+
+      clearTimeout(timeoutId)
+
       if (res.status >= 200 && res.status < 300) return true
       const location = res.headers.get('location') || ''
       if (/login|signin|aad|microsoftonline|azure/i.test(location)) return false
       if (res.status === 401 || res.status === 403) return false
       return false
-    } catch {
+    } catch (error) {
+      console.log(`⚠️  Session validation failed:`, error instanceof Error ? error.message : 'Unknown error')
       return false
     }
   }
