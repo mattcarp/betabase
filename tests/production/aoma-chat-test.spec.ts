@@ -9,6 +9,7 @@
  */
 
 import { test, expect, Page, BrowserContext } from "@playwright/test";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 const MAILINATOR_INBOX =
@@ -130,20 +131,18 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
     });
     page = await context.newPage();
 
-    // Monitor console errors
-    page.on("console", (msg) => {
-      if (
-        msg.type() === "error" &&
-        !msg.text().includes("Failed to load resource")
-      ) {
-        console.error("❌ Console Error:", msg.text().substring(0, 100));
-      }
+    // Setup console monitoring with structured error tracking
+    setupConsoleMonitoring(page, {
+      ignoreWarnings: true,
+      ignoreNetworkErrors: true,
     });
 
     await loginToSIAM(page, context);
   });
 
   test.afterAll(async () => {
+    // Assert no console errors before closing
+    assertNoConsoleErrors();
     await context.close();
   });
 

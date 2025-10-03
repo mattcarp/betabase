@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 /**
  * CRITICAL REGRESSION TEST: Dark Theme Background
@@ -16,6 +17,12 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Dark Theme Regression Prevention", () => {
   test.beforeEach(async ({ page }) => {
+    // Setup console error monitoring
+    setupConsoleMonitoring(page, {
+      ignoreWarnings: true,
+      ignoreNetworkErrors: true, // Supabase 404s are expected in dev
+    });
+
     // Navigate with reasonable timeout
     await page.goto("http://localhost:3000/", { 
       waitUntil: "domcontentloaded",
@@ -24,6 +31,11 @@ test.describe("Dark Theme Regression Prevention", () => {
     
     // Wait for initial render
     await page.waitForTimeout(2000);
+  });
+
+  test.afterEach(async () => {
+    // Assert no console errors after EVERY test
+    assertNoConsoleErrors();
   });
 
   test("CRITICAL: Main chat panel must have dark background (not white)", async ({ page }) => {

@@ -321,7 +321,7 @@ export function AiSdkChatPanel({
     //   api: currentApiEndpoint, // Use the calculated endpoint directly
     // }),
     id: chatId,
-    messages: initialMessages || [],
+    messages: (initialMessages || []).filter(m => m.content != null && m.content !== ''), // CRITICAL: Filter null content
     // Note: body is not valid in v5 - system prompt and model should be handled differently
     onError: (err) => {
       console.error("Chat error:", err);
@@ -423,14 +423,46 @@ export function AiSdkChatPanel({
 
   const {
     messages = [],
-    sendMessage,
+    input,
+    setInput,
+    handleSubmit: originalHandleSubmit,
+    sendMessage: originalSendMessage,
+    append,
     setMessages,
     regenerate,
     clearError,
     stop,
     error,
     status,
+    isLoading: chatIsLoading,
   } = chatResult || {};
+
+  // CRITICAL: Wrap sendMessage to validate content before sending
+  const sendMessage = (message: any) => {
+    if (!originalSendMessage) {
+      console.error("[SIAM] sendMessage not available from useChat hook");
+      return;
+    }
+    
+    // AI SDK v5 uses 'text' property, older versions use 'content'
+    const messageText = message?.text || message?.content;
+    
+    // Validate message has content
+    if (!message || (messageText == null || messageText === '')) {
+      console.error("[SIAM] Attempted to send message with null/empty content:", message);
+      toast.error("Cannot send empty message");
+      return;
+    }
+    
+    // Ensure text is a string - AI SDK v5 format
+    const validatedMessage = {
+      ...message,
+      text: String(messageText)
+    };
+    
+    console.log("[SIAM] Sending validated message:", validatedMessage);
+    return originalSendMessage(validatedMessage);
+  };
 
   // Check if error exists and show toast
   useEffect(() => {
@@ -478,8 +510,8 @@ export function AiSdkChatPanel({
     }
   }, [messages]);
 
-  // Derive isLoading from status or manual loading state
-  const isLoading = (status as any) === "loading" || manualLoading;
+  // Derive isLoading from useChat isLoading, status, or manual loading state
+  const isLoading = chatIsLoading || (status as any) === "loading" || manualLoading;
 
   // Clear progress when loading completes
   useEffect(() => {
@@ -743,8 +775,20 @@ export function AiSdkChatPanel({
         }
       } catch {}
       
-      // In AI SDK v5, sendMessage takes an object with text property
-      sendMessage({ text: suggestion });
+      // Set input and trigger submit using AI SDK's built-in flow
+      if (typeof setInput === "function") {
+        setLocalInput(suggestion);
+        setInput(suggestion);
+        // Trigger form submit after setting input
+        setTimeout(() => {
+          const form = document.querySelector('form[data-chat-form="true"]') as HTMLFormElement;
+          if (form) {
+            form.requestSubmit();
+          }
+        }, 50);
+      } else {
+        console.error("[SIAM] setInput function not available");
+      }
     }
   };
 
@@ -775,10 +819,10 @@ export function AiSdkChatPanel({
     URL.revokeObjectURL(url);
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const messageToSend = localInput || "";
-    if (messageToSend.trim() && typeof sendMessage === "function") {
+    if (messageToSend.trim()) {
       // Debug logging for endpoint routing
       console.log("📨 Submitting message with:");
       console.log("  - Model:", selectedModel);
@@ -895,9 +939,83 @@ export function AiSdkChatPanel({
         }
       } catch {}
 
-      // In AI SDK v5, sendMessage takes an object with text property
-      sendMessage({ text: content });
-      setLocalInput(""); // Clear the input after sending
+      // Manually add the message to the messages array and let useChat handle the API call
+      // This works around AI SDK v5's complex message submission patterns
+      const newUserMessage = {
+        id: `user-${Date.now()}`,
+        role: "user" as const,
+        content,
+        createdAt: new Date(),
+      };
+
+      // Update messages array immediately for instant UI feedback
+      setMessages([...messages, newUserMessage]);
+      setLocalInput(""); // Clear the local input immediately
+
+      // Now trigger the API call manually with the full messages array
+      try {
+        const response = await fetch(currentApiEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: [...messages, newUserMessage],
+            model: selectedModel,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        // Handle streaming response
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error("No response body");
+
+        const decoder = new TextDecoder();
+        let assistantContent = "";
+        const assistantMessageId = `assistant-${Date.now()}`;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          const lines = chunk.split("\n").filter(line => line.trim());
+
+          for (const line of lines) {
+            if (line.startsWith("0:")) {
+              try {
+                const json = JSON.parse(line.slice(2));
+                if (json.content) {
+                  assistantContent += json.content;
+                  // Update assistant message in real-time
+                  setMessages(prev => {
+                    const withoutLastAssistant = prev.filter(m => m.id !== assistantMessageId);
+                    return [...withoutLastAssistant, {
+                      id: assistantMessageId,
+                      role: "assistant" as const,
+                      content: assistantContent,
+                      createdAt: new Date(),
+                    }];
+                  });
+                }
+              } catch (parseError) {
+                // Ignore JSON parse errors in streaming
+              }
+            }
+          }
+        }
+
+        setManualLoading(false);
+        setIsProcessing(false);
+      } catch (error: any) {
+        console.error("[SIAM] Message send error:", error);
+        toast.error(`Failed to send message: ${error.message || "Unknown error"}`);
+        setManualLoading(false);
+        setIsProcessing(false);
+        // Remove the optimistically added user message on error
+        setMessages(messages);
+      }
     }
   };
 
@@ -1830,10 +1948,17 @@ export function AiSdkChatPanel({
         <PromptInput
           onSubmit={handleFormSubmit}
           className="relative shadow-lg"
+          data-chat-form="true"
         >
           <PromptInputTextarea
             value={localInput}
-            onChange={(e) => setLocalInput(e.target.value)}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              setLocalInput(newValue);
+              if (typeof setInput === "function") {
+                setInput(newValue);
+              }
+            }}
             placeholder={
               isMaxMessagesReached ? "Message limit reached" : placeholder
             }
