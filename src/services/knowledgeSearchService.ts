@@ -221,13 +221,26 @@ export async function getKnowledgeSourceCounts(): Promise<KnowledgeCounts> {
     "firecrawl",
   ];
   const counts: KnowledgeCounts = {};
+  
   for (const t of types) {
-    const { count, error } = await supabase
-      .from("aoma_unified_vectors")
-      .select("id", { count: "exact", head: true })
-      .eq("source_type", t);
-    if (!error) counts[t] = count ?? 0;
+    try {
+      const { count, error } = await supabase
+        .from("aoma_unified_vectors")
+        .select("id", { count: "exact", head: true })
+        .eq("source_type", t);
+      
+      if (error) {
+        console.warn(`[Knowledge] Could not fetch count for ${t}:`, error.message);
+        counts[t] = 0;
+      } else {
+        counts[t] = count ?? 0;
+      }
+    } catch (err) {
+      console.warn(`[Knowledge] Exception querying ${t}:`, err);
+      counts[t] = 0;
+    }
   }
+  
   return counts;
 }
 
