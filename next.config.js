@@ -17,13 +17,6 @@ const nextConfig = {
   images: {
     domains: ['localhost', 'siam.onrender.com'],
   },
-  // webpack: (config) => {
-  //   config.resolve.alias = {
-  //     ...config.resolve.alias,
-  //     '@': '/Users/matt/Documents/projects/siam/src',
-  //   };
-  //   return config;
-  // },
   async headers() {
     return [
       {
