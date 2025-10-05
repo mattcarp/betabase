@@ -6,12 +6,11 @@
 
 import {
   supabase as publicSupabase,
+  supabaseAdmin,
   AOMAVector,
   VectorSearchResult,
   handleSupabaseError,
 } from "@/lib/supabase";
-// Prefer server-only admin client for RPC/writes; fallback to public for safe reads
-import { supabaseAdmin } from "../../lib/supabase";
 import { openai } from "@ai-sdk/openai";
 import { embed } from "ai";
 
