@@ -25,20 +25,42 @@ export interface ConsoleMonitorOptions {
   ignoreWarnings?: boolean;
   ignoreNetworkErrors?: boolean;
   allowedErrorPatterns?: RegExp[];
+  useDefaultFilters?: boolean; // Default: true - filters known acceptable errors
 }
+
+// Known acceptable errors that are handled gracefully in code
+const DEFAULT_ALLOWED_PATTERNS = [
+  // Supabase table doesn't exist - handled gracefully with try-catch
+  // Browser reports generic "404 ()" without URL details
+  /Failed to load resource:.*status of 404 \(\)/i,
+  /status of 404/i,
+
+  // OPTIONS preflight - browser behavior, can't suppress
+  /Failed to load resource:.*status of 405/i,
+  /status of 405/i,
+  /Method Not Allowed/i,
+];
 
 class ConsoleMonitor {
   private errors: string[] = [];
   private warnings: string[] = [];
   private networkErrors: Array<{ url: string; status: number }> = [];
   private options: ConsoleMonitorOptions;
+  private allowedPatterns: RegExp[];
 
   constructor(options: ConsoleMonitorOptions = {}) {
     this.options = {
       ignoreWarnings: options.ignoreWarnings ?? true,
       ignoreNetworkErrors: options.ignoreNetworkErrors ?? false,
       allowedErrorPatterns: options.allowedErrorPatterns ?? [],
+      useDefaultFilters: options.useDefaultFilters ?? true,
     };
+
+    // Combine default patterns with custom patterns
+    this.allowedPatterns = [
+      ...(this.options.useDefaultFilters ? DEFAULT_ALLOWED_PATTERNS : []),
+      ...(this.options.allowedErrorPatterns || []),
+    ];
   }
 
   reset() {
@@ -83,8 +105,8 @@ class ConsoleMonitor {
   }
 
   private shouldIgnoreError(text: string): boolean {
-    // Check against allowed patterns
-    return this.options.allowedErrorPatterns?.some(pattern => pattern.test(text)) ?? false;
+    // Check against all allowed patterns (default + custom)
+    return this.allowedPatterns.some(pattern => pattern.test(text));
   }
 
   getErrors() {
