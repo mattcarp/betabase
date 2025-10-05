@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { AiSdkChatPanel } from "../../ai/ai-sdk-chat-panel"; // Re-enabled after fixing zod-to-json-schema dependency
 import { ChatPanel } from "../../ai/chat-panel"; // For legacy tabs
 import { AppSidebar } from "../app-sidebar";
@@ -24,6 +25,7 @@ import {
   Library,
   Menu,
   X,
+  RefreshCw,
 } from "lucide-react";
 import { Badge } from "../badge";
 import { Button } from "../button";
@@ -35,9 +37,10 @@ import { SiamLogo } from "../SiamLogo";
 import { AOMAKnowledgePanel } from "../AOMAKnowledgePanel";
 import EnhancedKnowledgePanel from "../EnhancedKnowledgePanel";
 import { getKnowledgeSourceCounts } from "../../../services/knowledgeSearchService";
-import { EnhancedCurateTab } from "../EnhancedCurateTab";
 import { TestDashboard } from "../../test-dashboard/TestDashboard";
 import { IntrospectionDropdown } from "../IntrospectionDropdown";
+
+import { EnhancedCurateTab } from "../EnhancedCurateTab";
 
 interface ComponentMode {
   mode: "chat" | "hud" | "test" | "fix" | "curate";

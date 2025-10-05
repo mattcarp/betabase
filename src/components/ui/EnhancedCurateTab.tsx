@@ -78,6 +78,7 @@ import {
   DollarSign,
   LineChart,
   PieChart,
+  AreaChart, // Add this to avoid conflict with recharts AreaChart
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -109,9 +110,9 @@ import {
   PolarAngleAxis,
   PolarRadiusAxis,
   Radar,
-  Area,
-  AreaChart,
-  Treemap,
+  Area as RechartsArea,
+  AreaChart as RechartsAreaChart,
+  ComposedChart,
 } from "recharts";
 
 interface VectorStoreFile {
@@ -287,7 +288,26 @@ export function EnhancedCurateTab({
   className?: string;
   assistantId?: string;
 }) {
+  // Debug: Check if all Recharts components are defined
+  console.log('DEBUG EnhancedCurateTab - Recharts components:', {
+    ComposedChart: typeof ComposedChart,
+    RechartsArea: typeof RechartsArea,
+    RechartsAreaChart: typeof RechartsAreaChart,
+    RechartsLineChart: typeof RechartsLineChart,
+    RechartsPieChart: typeof RechartsPieChart,
+    Line: typeof Line,
+    Bar: typeof Bar,
+    Pie: typeof Pie,
+    Cell: typeof Cell,
+    XAxis: typeof XAxis,
+    YAxis: typeof YAxis,
+    CartesianGrid: typeof CartesianGrid,
+    Tooltip: typeof Tooltip,
+    Legend: typeof Legend,
+    ResponsiveContainer: typeof ResponsiveContainer,
+  });
   // State management
+  const [mounted, setMounted] = useState(false);
   const [files, setFiles] = useState<VectorStoreFile[]>([]);
   const [loading, setLoading] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
@@ -299,6 +319,11 @@ export function EnhancedCurateTab({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [filesToDelete, setFilesToDelete] = useState<string[]>([]);
   const [selectedInsight, setSelectedInsight] = useState<CurationInsight | null>(null);
+
+  // Ensure client-side rendering for Recharts
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   // Stub insights
   const insights: CurationInsight[] = [
@@ -519,6 +544,11 @@ export function EnhancedCurateTab({
     loadFiles();
   }, []);
 
+  // Prevent SSR rendering of Recharts - render nothing until mounted
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <Card className={cn("h-full flex flex-col", className)}>
       <CardHeader>
@@ -654,14 +684,14 @@ export function EnhancedCurateTab({
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={250}>
-                    <AreaChart data={stubCurationTrends}>
+                    <ComposedChart data={stubCurationTrends}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="period" />
                       <YAxis yAxisId="left" />
                       <YAxis yAxisId="right" orientation="right" />
                       <Tooltip formatter={(value: any) => formatCurrency(value)} />
                       <Legend />
-                      <Area
+                      <RechartsArea
                         yAxisId="left"
                         type="monotone"
                         dataKey="savings"
@@ -678,7 +708,7 @@ export function EnhancedCurateTab({
                         strokeWidth={2}
                         name="ROI Multiple"
                       />
-                    </AreaChart>
+                    </ComposedChart>
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
@@ -1190,16 +1220,16 @@ export function EnhancedCurateTab({
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={250}>
-                    <AreaChart data={stubCurationTrends}>
+                    <RechartsAreaChart data={stubCurationTrends}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="period" />
                       <YAxis />
                       <Tooltip />
                       <Legend />
-                      <Area type="monotone" dataKey="uploaded" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                      <Area type="monotone" dataKey="curated" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-                      <Area type="monotone" dataKey="deleted" stackId="1" stroke="#ffc658" fill="#ffc658" />
-                    </AreaChart>
+                      <RechartsArea type="monotone" dataKey="uploaded" stackId="1" stroke="#8884d8" fill="#8884d8" />
+                      <RechartsArea type="monotone" dataKey="curated" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+                      <RechartsArea type="monotone" dataKey="deleted" stackId="1" stroke="#ffc658" fill="#ffc658" />
+                    </RechartsAreaChart>
                   </ResponsiveContainer>
                 </CardContent>
               </Card>

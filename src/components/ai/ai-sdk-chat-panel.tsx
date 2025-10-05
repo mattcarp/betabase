@@ -776,19 +776,36 @@ export function AiSdkChatPanel({
       } catch {}
       
       // Set input and trigger submit using AI SDK's built-in flow
+      // Always set local input first
+      setLocalInput(suggestion);
+
+      // Try to use setInput if available (AI SDK v5 compatibility)
       if (typeof setInput === "function") {
-        setLocalInput(suggestion);
-        setInput(suggestion);
-        // Trigger form submit after setting input
-        setTimeout(() => {
+        try {
+          setInput(suggestion);
+        } catch (err) {
+          console.warn("[SIAM] setInput call failed, using fallback", err);
+        }
+      }
+
+      // Use append as primary method - more reliable than form submit
+      // This directly sends the message using AI SDK's append function
+      setTimeout(() => {
+        if (typeof append === "function") {
+          append({
+            role: "user",
+            content: suggestion,
+          });
+        } else {
+          // Fallback: trigger form submit if append not available
           const form = document.querySelector('form[data-chat-form="true"]') as HTMLFormElement;
           if (form) {
             form.requestSubmit();
+          } else {
+            console.error("[SIAM] Neither append function nor form available for suggestion submission");
           }
-        }, 50);
-      } else {
-        console.error("[SIAM] setInput function not available");
-      }
+        }
+      }, 50);
     }
   };
 
@@ -964,6 +981,21 @@ export function AiSdkChatPanel({
         });
 
         if (!response.ok) {
+          // Handle rate limiting gracefully
+          if (response.status === 429) {
+            const rateLimitMessage = "⚠️ Rate limit reached. Please wait a moment before sending another message.";
+            setMessages(prev => [
+              ...prev,
+              {
+                id: `error-${Date.now()}`,
+                role: "assistant",
+                content: rateLimitMessage,
+                createdAt: new Date(),
+              },
+            ]);
+            setIsLoading(false);
+            return; // Don't throw error, just show message
+          }
           throw new Error(`API error: ${response.status}`);
         }
 
