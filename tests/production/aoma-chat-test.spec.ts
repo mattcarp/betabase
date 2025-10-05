@@ -24,9 +24,12 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
   await page.click('button[type="submit"]');
   await page.waitForTimeout(3000);
 
+  // Wait for verification code input - it's a styled input without placeholder
   const verificationVisible = await page
-    .locator('input[placeholder*="code" i]')
-    .isVisible();
+    .locator('input[type="text"]')
+    .first()
+    .isVisible({ timeout: 10000 })
+    .catch(() => false);
   if (!verificationVisible) {
     throw new Error("Verification form didn't appear");
   }
@@ -67,7 +70,8 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
     if (code) {
       await page.fill('input[type="text"]', code);
       await page.click('button[type="submit"]');
-      await page.waitForSelector('h1:has-text("AOMA Intelligence Hub")', {
+      // Wait for the main app to load - look for the welcome heading or chat input
+      await page.waitForSelector('h1:has-text("Welcome to The Betabase"), textarea[placeholder*="Ask"]', {
         timeout: 15000,
       });
       console.log("✅ Logged in successfully!");
@@ -95,26 +99,61 @@ async function sendChatMessage(
   await page.keyboard.press("Enter");
 
   if (expectResponse) {
-    // Wait for thinking indicator to appear and disappear
+    // Wait for processing indicator to appear
     try {
-      await page.waitForSelector("text=/thinking|generating|processing/i", {
+      await page.waitForSelector("text=/processing|thinking|generating/i", {
         timeout: 5000,
         state: "visible",
       });
       console.log("   ⏳ AI is thinking...");
     } catch {
-      // Thinking indicator might be too fast to catch
+      // Processing might be too fast
     }
 
-    // Wait for response to appear
+    // Wait for the actual AI response to appear - AOMA can take up to 60 seconds
+    // The processing box disappears and the response appears in the chat
+    const messageCountBefore = await page.locator('div[role="log"] > div').count();
+
+    try {
+      // Wait for a new message to appear (response from AI)
+      await page.waitForFunction(
+        (expectedCount) => {
+          const messages = document.querySelectorAll('div[role="log"] > div');
+          return messages.length > expectedCount;
+        },
+        messageCountBefore,
+        { timeout: 90000 } // 90 seconds for AOMA to respond
+      );
+      console.log("   ✅ Response received!");
+    } catch (e) {
+      console.log("   ⚠️ Response timeout after 90s");
+    }
+
+    // Wait for DOM to settle after response
     await page.waitForTimeout(3000);
 
-    // Get the last message in the log
-    const messages = await page.locator('div[role="log"] > div').all();
-    if (messages.length > 0) {
-      const lastMessage = messages[messages.length - 1];
+    // Get all assistant messages and return the last one
+    const assistantMessages = await page.locator('[data-role="assistant"], .assistant-message, div[role="log"] > div').all();
+    if (assistantMessages.length > 0) {
+      const lastMessage = assistantMessages[assistantMessages.length - 1];
       const responseText = (await lastMessage.textContent()) || "";
-      return responseText;
+
+      // Filter out loading indicators and timestamps
+      const cleanedResponse = responseText
+        .replace(/🤖.*?(?=\n|$)/g, '') // Remove robot emoji loading messages
+        .replace(/\d{2}:\d{2} (AM|PM)/g, '') // Remove timestamps
+        .replace(/Establishing secure connection.*?(?=\n|$)/g, '')
+        .replace(/Parsing request.*?(?=\n|$)/g, '')
+        .replace(/Searching AOMA.*?(?=\n|$)/g, '')
+        .replace(/Building context.*?(?=\n|$)/g, '')
+        .replace(/Generating AI.*?(?=\n|$)/g, '')
+        .replace(/Formatting response.*?(?=\n|$)/g, '')
+        .replace(/This typically takes.*?(?=\n|$)/g, '')
+        .replace(/Estimated time.*?(?=\n|$)/g, '')
+        .replace(/\s+/g, ' ') // Normalize whitespace
+        .trim();
+
+      return cleanedResponse || responseText;
     }
   }
 
@@ -183,6 +222,7 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
       const startTime = Date.now();
 
       const response = await sendChatMessage(page, query.question);
+      console.log(`\n   💬 FULL RESPONSE:\n${response}\n`);
       const responseTime = Date.now() - startTime;
 
       console.log(`   ⏱️ Response time: ${responseTime}ms`);
