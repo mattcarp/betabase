@@ -387,17 +387,23 @@ When responding, structure your knowledge appropriately and include any relevant
 
   } catch (error) {
     console.error("Chat API error:", error);
-    
+
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    const isQuotaError = errorMessage.includes('quota') || errorMessage.includes('insufficient_quota');
-    const isRateLimitError = errorMessage.includes('rate_limit') || errorMessage.includes('Rate limit');
-    
+    const errorStr = String(error);
+
+    // Check for specific OpenAI error types
+    const is429RateLimit = errorMessage.includes('429') || errorStr.includes('429') ||
+                          errorMessage.includes('rate_limit_exceeded') || errorStr.includes('rate_limit_exceeded');
+    const isQuotaError = (errorMessage.includes('quota') || errorMessage.includes('insufficient_quota')) &&
+                        !is429RateLimit; // Don't confuse rate limits with quota
+    const isRateLimitError = is429RateLimit || errorMessage.includes('Rate limit');
+
     let userFriendlyMessage = "I'm experiencing technical difficulties. Please try again in a moment.";
-    
-    if (isQuotaError) {
+
+    if (isRateLimitError) {
+      userFriendlyMessage = "⚠️ Rate limit reached. Please wait a moment before sending another message.";
+    } else if (isQuotaError) {
       userFriendlyMessage = "I've reached my OpenAI API quota limit. Please contact support or try again later when the quota resets.";
-    } else if (isRateLimitError) {
-      userFriendlyMessage = "I'm currently handling too many requests. Please wait a moment and try again.";
     }
     
     // Track error for introspection
