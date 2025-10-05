@@ -53,7 +53,7 @@ npx playwright test tests/e2e/smoke/smoke.spec.ts                    # Critical 
 node scripts/aoma-manual-login-save.js
 
 # Automated login (HITL 2FA - blocked by certificate)
-AAD_USERNAME=matt.carpenter.ext@sonymusic.com AAD_PASSWORD=Dalkey1_Lisbon2 \
+AAD_USERNAME=your.email@sonymusic.com AAD_PASSWORD=your_password \
 node scripts/aoma-stage-login.js
 
 # Crawler (ready once authentication works)
