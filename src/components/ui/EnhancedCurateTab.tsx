@@ -57,6 +57,7 @@ import {
   TrendingUp,
   AlertTriangle,
   Hash,
+  BarChart as BarChartIcon, // Aliased to avoid conflict with Recharts BarChart
   BarChart3,
   Network,
   Lightbulb,
@@ -94,7 +95,7 @@ import { cn } from "../../lib/utils";
 import {
   LineChart as RechartsLineChart,
   Line,
-  BarChart,
+  BarChart as RechartsBarChart,
   Bar,
   PieChart as RechartsPieChart,
   Pie,
@@ -707,7 +708,7 @@ export function EnhancedCurateTab({
                   </CardHeader>
                   <CardContent>
                     <ResponsiveContainer width="100%" height={250}>
-                      <BarChart data={stubKnowledgeHealth}>
+                      <RechartsBarChart data={stubKnowledgeHealth}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="category" />
                         <YAxis />
@@ -720,7 +721,7 @@ export function EnhancedCurateTab({
                             />
                           ))}
                         </Bar>
-                      </BarChart>
+                      </RechartsBarChart>
                     </ResponsiveContainer>
                   </CardContent>
                 </Card>
