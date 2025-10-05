@@ -52,10 +52,12 @@ export class AomaStageAuthenticator {
     this.loginScriptPath = path.resolve(process.cwd(), 'scripts/aoma-stage-login.js')
     this.aomaStageUrl = process.env.AOMA_STAGE_URL || 'https://aoma-stage.smcdp-de.net'
     this.reauthCooldownMs = 10_000
-    this.assertEnv()
+    // Don't assert env in constructor - only when actually used to allow builds without credentials
   }
 
   public async ensureAuthenticated(): Promise<string> {
+    // Check env only when method is called, not at instantiation
+    this.assertEnv()
     const loaded = await this.tryLoadValidSession()
     if (loaded.ok && loaded.cookieHeader) {
       this.lastCookieHeader = loaded.cookieHeader
