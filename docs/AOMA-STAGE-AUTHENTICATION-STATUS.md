@@ -33,8 +33,8 @@ This appears to be related to:
 2. ✅ Navigate to `https://aoma-stage.smcdp-de.net`
 3. ✅ Click "Employee Login" button
 4. ✅ Redirect to Microsoft Azure AD OAuth
-5. ✅ Fill username: `matt.carpenter.ext@sonymusic.com`
-6. ✅ Fill password: `Dalkey1_Lisbon2`
+5. ✅ Fill username from environment
+6. ✅ Fill password from environment
 7. ✅ Click "Sign in"
 8. ✅ User approves 2FA on Microsoft Authenticator app
 
@@ -217,7 +217,7 @@ ERR_SSL_CLIENT_AUTH_SIGNATURE_FAILED
 
 2. **Test Automated Login**:
    ```bash
-   AAD_USERNAME=matt.carpenter.ext@sonymusic.com AAD_PASSWORD=Dalkey1_Lisbon2 \
+   # Set AAD_USERNAME and AAD_PASSWORD in .env.local first
    node scripts/aoma-stage-login.js
    ```
    - Verify 2FA flow works end-to-end
