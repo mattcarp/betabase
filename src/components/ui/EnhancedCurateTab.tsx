@@ -78,7 +78,7 @@ import {
   DollarSign,
   LineChart,
   PieChart,
-  AreaChart, // Add this to avoid conflict with recharts AreaChart
+  // Note: AreaChart is from recharts only, not used as lucide icon
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -288,24 +288,6 @@ export function EnhancedCurateTab({
   className?: string;
   assistantId?: string;
 }) {
-  // Debug: Check if all Recharts components are defined
-  console.log('DEBUG EnhancedCurateTab - Recharts components:', {
-    ComposedChart: typeof ComposedChart,
-    RechartsArea: typeof RechartsArea,
-    RechartsAreaChart: typeof RechartsAreaChart,
-    RechartsLineChart: typeof RechartsLineChart,
-    RechartsPieChart: typeof RechartsPieChart,
-    Line: typeof Line,
-    Bar: typeof Bar,
-    Pie: typeof Pie,
-    Cell: typeof Cell,
-    XAxis: typeof XAxis,
-    YAxis: typeof YAxis,
-    CartesianGrid: typeof CartesianGrid,
-    Tooltip: typeof Tooltip,
-    Legend: typeof Legend,
-    ResponsiveContainer: typeof ResponsiveContainer,
-  });
   // State management
   const [mounted, setMounted] = useState(false);
   const [files, setFiles] = useState<VectorStoreFile[]>([]);
@@ -544,9 +526,13 @@ export function EnhancedCurateTab({
     loadFiles();
   }, []);
 
-  // Prevent SSR rendering of Recharts - render nothing until mounted
+  // Prevent SSR rendering of Recharts - render loading state until mounted
   if (!mounted) {
-    return null;
+    return (
+      <div className={cn("h-full flex items-center justify-center", className)}>
+        <p className="text-muted-foreground">Loading curate interface...</p>
+      </div>
+    );
   }
 
   return (

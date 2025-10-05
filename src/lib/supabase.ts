@@ -60,7 +60,7 @@ export interface MigrationStatus {
   created_at: string;
 }
 
-// Helper function to handle Supabase errors
+// Helper function to handle Supabase errors - EXPORTED for use in services
 export function handleSupabaseError(error: any): string {
   if (error?.message) {
     return error.message;
