@@ -33,6 +33,8 @@ import {
   Eye,
   Filter,
   MoreVertical,
+  GitMerge,
+  Loader2,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -100,6 +102,12 @@ export function CurateTab({
   });
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [filesToDelete, setFilesToDelete] = useState<string[]>([]);
+  const [deduplicating, setDeduplicating] = useState(false);
+  const [dedupeResults, setDedupeResults] = useState<{
+    totalDuplicates: number;
+    duplicateGroups: number;
+    removed: number;
+  } | null>(null);
 
   // Load files from vector store
   const loadFiles = async () => {
@@ -192,6 +200,51 @@ export function CurateTab({
     }
   };
 
+  // Run deduplication
+  const runDeduplication = async () => {
+    setDeduplicating(true);
+    setDedupeResults(null);
+
+    try {
+      toast.info("Scanning for duplicate files...");
+
+      const response = await fetch("/api/vector-store/deduplicate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dryRun: false, // Actually remove duplicates
+          semanticThreshold: 0.95,
+          keepNewest: true,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setDedupeResults({
+          totalDuplicates: data.totalDuplicates,
+          duplicateGroups: data.duplicateGroups,
+          removed: data.removed,
+        });
+
+        if (data.removed > 0) {
+          toast.success(
+            `Removed ${data.removed} duplicate file(s) from ${data.duplicateGroups} group(s)`
+          );
+          await loadFiles(); // Reload files
+        } else {
+          toast.success("No duplicates found!");
+        }
+      } else {
+        throw new Error("Failed to deduplicate");
+      }
+    } catch (error) {
+      console.error("Error deduplicating:", error);
+      toast.error("Failed to deduplicate files");
+    } finally {
+      setDeduplicating(false);
+    }
+  };
+
   // Filter files based on search
   const filteredFiles = files.filter((file) =>
     file.filename.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -276,6 +329,19 @@ export function CurateTab({
                   <RefreshCw
                     className={cn("h-4 w-4", loading && "animate-spin")}
                   />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={runDeduplication}
+                  disabled={deduplicating || loading}
+                  title="Find and remove duplicate files"
+                >
+                  {deduplicating ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <GitMerge className="h-4 w-4" />
+                  )}
                 </Button>
                 {selectedFiles.size > 0 && (
                   <>
