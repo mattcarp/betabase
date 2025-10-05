@@ -13,34 +13,9 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY,
 });
 
-// Simple rate limiter: Track last request time per IP/session
-const requestTimestamps = new Map<string, number>();
-// GPT-5 has lower RPM limits than older models - enforce 10 second minimum to be safe
-const MIN_REQUEST_INTERVAL_MS = 10000; // Minimum 10 seconds between requests for GPT-5
-
-function checkRateLimit(identifier: string): { allowed: boolean; waitTime?: number } {
-  const now = Date.now();
-  const lastRequest = requestTimestamps.get(identifier);
-
-  if (lastRequest) {
-    const timeSinceLastRequest = now - lastRequest;
-    if (timeSinceLastRequest < MIN_REQUEST_INTERVAL_MS) {
-      const waitTime = MIN_REQUEST_INTERVAL_MS - timeSinceLastRequest;
-      return { allowed: false, waitTime };
-    }
-  }
-
-  requestTimestamps.set(identifier, now);
-
-  // Cleanup old entries (older than 1 minute)
-  for (const [key, timestamp] of requestTimestamps.entries()) {
-    if (now - timestamp > 60000) {
-      requestTimestamps.delete(key);
-    }
-  }
-
-  return { allowed: true };
-}
+// REMOVED: Client-side rate limiting
+// Let OpenAI handle rate limits naturally - we'll catch 429s and show friendly errors
+// This allows normal single-user usage while still handling rate limit errors gracefully
 
 // Enhanced query for context
 function enhanceQueryForContext(query: string): string {
@@ -98,27 +73,6 @@ export async function POST(req: Request) {
         {
           status: 503,
           headers: { "Content-Type": "application/json" },
-        },
-      );
-    }
-
-    // Rate limit check using IP or session identifier
-    const identifier = req.headers.get('x-forwarded-for') || req.headers.get('cf-connecting-ip') || 'anonymous';
-    const rateLimitCheck = checkRateLimit(identifier);
-
-    if (!rateLimitCheck.allowed) {
-      console.warn(`[API] Rate limit exceeded for ${identifier}, wait ${rateLimitCheck.waitTime}ms`);
-      return new Response(
-        JSON.stringify({
-          error: `Rate limit reached. Please wait ${Math.ceil((rateLimitCheck.waitTime || 0) / 1000)} seconds before sending another message.`,
-          retryAfter: rateLimitCheck.waitTime,
-        }),
-        {
-          status: 429,
-          headers: {
-            "Content-Type": "application/json",
-            "Retry-After": String(Math.ceil((rateLimitCheck.waitTime || 0) / 1000)),
-          },
         },
       );
     }
