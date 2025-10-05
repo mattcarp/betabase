@@ -1,13 +1,20 @@
 import FirecrawlApp from '@mendable/firecrawl-js';
 import { aomaStageAuthenticator } from './aomaStageAuthenticator';
 import { createClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { openai } from '@ai-sdk/openai';
 import { embed } from 'ai';
 
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Lazy initialization of Supabase client to avoid build-time errors
+let supabaseInstance: SupabaseClient | null = null;
+function getSupabase() {
+  if (!supabaseInstance) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+    supabaseInstance = createClient(supabaseUrl, supabaseKey);
+  }
+  return supabaseInstance;
+}
 
 interface CrawlConfig {
   maxPages?: number;
@@ -278,7 +285,7 @@ export class AomaFirecrawlService {
    * Store processed content in Supabase vector store
    */
   private async storeInVectorDatabase(content: ProcessedContent): Promise<void> {
-    const { error } = await supabase
+    const { error } = await getSupabase()
       .from('aoma_unified_vectors')
       .upsert({
         content: content.content,
@@ -353,10 +360,10 @@ export class AomaFirecrawlService {
    * Update sync status in database
    */
   private async updateSyncStatus(
-    recordsCount: number, 
+    recordsCount: number,
     errors: string[]
   ): Promise<void> {
-    await supabase
+    await getSupabase()
       .from('aoma_source_sync')
       .upsert({
         source_type: 'aoma_docs',
