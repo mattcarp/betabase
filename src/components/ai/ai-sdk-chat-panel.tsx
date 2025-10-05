@@ -993,7 +993,8 @@ export function AiSdkChatPanel({
                 createdAt: new Date(),
               },
             ]);
-            setIsLoading(false);
+            setManualLoading(false);
+            setIsProcessing(false);
             return; // Don't throw error, just show message
           }
           throw new Error(`API error: ${response.status}`);
