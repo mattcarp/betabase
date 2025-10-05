@@ -15,7 +15,7 @@ const openai = new OpenAI({
 
 // Simple rate limiter: Track last request time per IP/session
 const requestTimestamps = new Map<string, number>();
-const MIN_REQUEST_INTERVAL_MS = 20000; // Minimum 20 seconds between requests (OpenAI free tier limit)
+const MIN_REQUEST_INTERVAL_MS = 1000; // Minimum 1 second between requests (Tier 5 allows 10,000 RPM)
 
 function checkRateLimit(identifier: string): { allowed: boolean; waitTime?: number } {
   const now = Date.now();
