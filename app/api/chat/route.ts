@@ -13,6 +13,34 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY,
 });
 
+// Simple rate limiter: Track last request time per IP/session
+const requestTimestamps = new Map<string, number>();
+const MIN_REQUEST_INTERVAL_MS = 2000; // Minimum 2 seconds between requests
+
+function checkRateLimit(identifier: string): { allowed: boolean; waitTime?: number } {
+  const now = Date.now();
+  const lastRequest = requestTimestamps.get(identifier);
+
+  if (lastRequest) {
+    const timeSinceLastRequest = now - lastRequest;
+    if (timeSinceLastRequest < MIN_REQUEST_INTERVAL_MS) {
+      const waitTime = MIN_REQUEST_INTERVAL_MS - timeSinceLastRequest;
+      return { allowed: false, waitTime };
+    }
+  }
+
+  requestTimestamps.set(identifier, now);
+
+  // Cleanup old entries (older than 1 minute)
+  for (const [key, timestamp] of requestTimestamps.entries()) {
+    if (now - timestamp > 60000) {
+      requestTimestamps.delete(key);
+    }
+  }
+
+  return { allowed: true };
+}
+
 // Enhanced query for context
 function enhanceQueryForContext(query: string): string {
   const lowerQuery = query.toLowerCase();
@@ -57,18 +85,39 @@ export async function OPTIONS(req: Request) {
 
 export async function POST(req: Request) {
   const chatStartTime = Date.now();
-  
+
   try {
     // Check for API key first
     if (!process.env.OPENAI_API_KEY && !process.env.NEXT_PUBLIC_OPENAI_API_KEY) {
       console.error("[API] OPENAI_API_KEY is not set in environment variables");
       return new Response(
-        JSON.stringify({ 
-          error: "OpenAI API key is not configured. Please set OPENAI_API_KEY in your environment." 
+        JSON.stringify({
+          error: "OpenAI API key is not configured. Please set OPENAI_API_KEY in your environment."
         }),
         {
           status: 503,
           headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
+
+    // Rate limit check using IP or session identifier
+    const identifier = req.headers.get('x-forwarded-for') || req.headers.get('cf-connecting-ip') || 'anonymous';
+    const rateLimitCheck = checkRateLimit(identifier);
+
+    if (!rateLimitCheck.allowed) {
+      console.warn(`[API] Rate limit exceeded for ${identifier}, wait ${rateLimitCheck.waitTime}ms`);
+      return new Response(
+        JSON.stringify({
+          error: `Rate limit reached. Please wait ${Math.ceil((rateLimitCheck.waitTime || 0) / 1000)} seconds before sending another message.`,
+          retryAfter: rateLimitCheck.waitTime,
+        }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            "Retry-After": String(Math.ceil((rateLimitCheck.waitTime || 0) / 1000)),
+          },
         },
       );
     }
