@@ -37,12 +37,13 @@ export class AomaFirecrawlService {
   private baseUrl: string;
 
   constructor() {
-    if (!process.env.FIRECRAWL_API_KEY) {
+    const apiKey = process.env.FIRECRAWL_API_KEY;
+    if (!apiKey) {
       throw new Error('FIRECRAWL_API_KEY environment variable is required');
     }
     // Initialize Firecrawl with v2 API (default in v4.3.5+)
     this.firecrawl = new FirecrawlApp({
-      apiKey: process.env.FIRECRAWL_API_KEY
+      apiKey: apiKey
     });
     this.baseUrl = process.env.AOMA_STAGE_URL || 'https://aoma-stage.smcdp-de.net';
     console.log('✅ Firecrawl v2 API initialized');
@@ -375,4 +376,19 @@ export class AomaFirecrawlService {
   }
 }
 
-export const aomaFirecrawl = new AomaFirecrawlService();
+// Lazy initialization to avoid build-time errors
+let aomaFirecrawlInstance: AomaFirecrawlService | null = null;
+export const aomaFirecrawl = {
+  crawlAomaContent: async (config?: any) => {
+    if (!aomaFirecrawlInstance) {
+      aomaFirecrawlInstance = new AomaFirecrawlService();
+    }
+    return aomaFirecrawlInstance.crawlAomaContent(config);
+  },
+  crawlSinglePage: async (url: string) => {
+    if (!aomaFirecrawlInstance) {
+      aomaFirecrawlInstance = new AomaFirecrawlService();
+    }
+    return aomaFirecrawlInstance.crawlSinglePage(url);
+  }
+};
