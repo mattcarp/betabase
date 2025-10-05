@@ -15,7 +15,8 @@ const openai = new OpenAI({
 
 // Simple rate limiter: Track last request time per IP/session
 const requestTimestamps = new Map<string, number>();
-const MIN_REQUEST_INTERVAL_MS = 1000; // Minimum 1 second between requests (Tier 5 allows 10,000 RPM)
+// GPT-5 has lower RPM limits than older models - enforce 10 second minimum to be safe
+const MIN_REQUEST_INTERVAL_MS = 10000; // Minimum 10 seconds between requests for GPT-5
 
 function checkRateLimit(identifier: string): { allowed: boolean; waitTime?: number } {
   const now = Date.now();
@@ -388,6 +389,17 @@ When responding, structure your knowledge appropriately and include any relevant
   } catch (error) {
     console.error("Chat API error:", error);
 
+    // Log full error details for debugging
+    if (error && typeof error === 'object' && 'response' in error) {
+      const apiError = error as any;
+      console.error("OpenAI API Error Details:", {
+        status: apiError.status,
+        type: apiError.type,
+        message: apiError.message,
+        headers: apiError.response?.headers,
+      });
+    }
+
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     const errorStr = String(error);
 
@@ -401,7 +413,7 @@ When responding, structure your knowledge appropriately and include any relevant
     let userFriendlyMessage = "I'm experiencing technical difficulties. Please try again in a moment.";
 
     if (isRateLimitError) {
-      userFriendlyMessage = "⚠️ Rate limit reached. Please wait a moment before sending another message.";
+      userFriendlyMessage = "⚠️ Rate limit reached. GPT-5 has strict rate limits. Please wait 10-20 seconds before trying again.";
     } else if (isQuotaError) {
       userFriendlyMessage = "I've reached my OpenAI API quota limit. Please contact support or try again later when the quota resets.";
     }
