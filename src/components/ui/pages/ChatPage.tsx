@@ -40,7 +40,7 @@ import { getKnowledgeSourceCounts } from "../../../services/knowledgeSearchServi
 import { TestDashboard } from "../../test-dashboard/TestDashboard";
 import { IntrospectionDropdown } from "../IntrospectionDropdown";
 
-import { EnhancedCurateTab } from "../EnhancedCurateTab";
+import { CurateTab } from "../CurateTab";
 
 interface ComponentMode {
   mode: "chat" | "hud" | "test" | "fix" | "curate";
@@ -325,7 +325,7 @@ Be helpful, concise, and professional in your responses.`;
                   </p>
                 </div>
                 <div className="h-[calc(100%-81px)] p-6">
-                  <EnhancedCurateTab className="h-full" />
+                  <CurateTab className="h-full" />
                 </div>
               </div>
             )}
