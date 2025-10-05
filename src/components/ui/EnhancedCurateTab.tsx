@@ -76,9 +76,9 @@ import {
   GitBranch,
   ChevronRight,
   DollarSign,
-  LineChart,
-  PieChart,
-  // Note: AreaChart is from recharts only, not used as lucide icon
+  LineChart as LineChartIcon,
+  PieChart as PieChartIcon,
+  AreaChart as AreaChartIcon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -589,7 +589,7 @@ export function EnhancedCurateTab({
               Curators
             </TabsTrigger>
             <TabsTrigger value="analytics">
-              <LineChart className="h-4 w-4 mr-2" />
+              <LineChartIcon className="h-4 w-4 mr-2" />
               Analytics
             </TabsTrigger>
             <TabsTrigger value="upload">
