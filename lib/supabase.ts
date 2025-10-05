@@ -338,3 +338,14 @@ export async function searchFirecrawlData(query: string, limit = 10) {
   if (error) throw error;
   return data;
 }
+
+// Helper function to handle Supabase errors - EXPORTED for use in services
+export function handleSupabaseError(error: any): string {
+  if (error?.message) {
+    return error.message;
+  }
+  if (error?.details) {
+    return error.details;
+  }
+  return "Unknown Supabase error occurred";
+}
