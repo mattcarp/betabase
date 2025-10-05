@@ -190,67 +190,43 @@ export async function POST(req: Request) {
       const queryString = typeof latestUserMessage.content === "string"
         ? latestUserMessage.content
         : JSON.stringify(latestUserMessage.content);
-        
+
       console.log(
-        "🎯 Executing parallel AOMA queries for:",
+        "🎯 Using LangChain orchestrator for AOMA:",
         queryString.substring(0, 100),
       );
 
       try {
-        // Use parallel query service for better performance
-        const aomaResult = await aomaParallelQuery.queryWithParallelFallback(
-          queryString,
-          "rapid" // Use rapid strategy for fastest response
-        );
+        // SIMPLIFIED: Let the orchestrator (LangChain) handle ALL endpoint logic
+        // No more manual parallel queries - orchestrator manages retries, fallbacks, tool selection
+        const orchestratorResult = await aomaOrchestrator.executeOrchestration(queryString);
 
-        if (aomaResult.success && aomaResult.content) {
-          // Create knowledge element from AOMA response
+        if (orchestratorResult && (orchestratorResult.response || orchestratorResult.content)) {
+          const contextContent = orchestratorResult.response || orchestratorResult.content;
+
           knowledgeElements.push({
             type: 'context',
-            content: aomaResult.content,
+            content: contextContent,
             metadata: {
-              source: aomaResult.metadata?.source || 'aoma-mesh',
-              responseTime: aomaResult.metadata?.responseTime,
+              source: 'aoma-orchestrator',
               timestamp: new Date().toISOString(),
             }
           });
 
-          aomaContext = `\n\n[AOMA Context:\n${aomaResult.content}\n]`;
+          aomaContext = `\n\n[AOMA Context:\n${contextContent}\n]`;
           aomaConnectionStatus = "success";
-          console.log(`✅ AOMA query successful via ${aomaResult.metadata?.source} in ${Math.round(aomaResult.metadata?.responseTime || 0)}ms`);
+          console.log("✅ AOMA orchestration successful");
         } else {
-          // Fallback to orchestrator if parallel query fails
-          console.log("⚠️ Parallel query failed, trying orchestrator...");
-          
-          const orchestratorResult = await aomaOrchestrator.executeOrchestration(queryString);
-          
-          if (orchestratorResult && (orchestratorResult.response || orchestratorResult.content)) {
-            const contextContent = orchestratorResult.response || orchestratorResult.content;
-            
-            knowledgeElements.push({
-              type: 'context',
-              content: contextContent,
-              metadata: {
-                source: 'aoma-orchestrator',
-                timestamp: new Date().toISOString(),
-              }
-            });
-            
-            aomaContext = `\n\n[AOMA Orchestrated Context:\n${contextContent}\n]`;
-            aomaConnectionStatus = "success";
-            console.log("✅ AOMA orchestration fallback successful");
-          } else {
-            console.log("❌ All AOMA queries failed");
-            aomaConnectionStatus = "failed";
-            
-            knowledgeElements.push({
-              type: 'warning',
-              content: 'AOMA knowledge base is currently unavailable',
-              metadata: {
-                timestamp: new Date().toISOString(),
-              }
-            });
-          }
+          console.log("❌ AOMA orchestrator returned no content");
+          aomaConnectionStatus = "failed";
+
+          knowledgeElements.push({
+            type: 'warning',
+            content: 'AOMA knowledge base is currently unavailable',
+            metadata: {
+              timestamp: new Date().toISOString(),
+            }
+          });
         }
       } catch (error) {
         console.error("❌ AOMA query error:", error);

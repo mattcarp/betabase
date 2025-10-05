@@ -941,3 +941,4 @@ Last updated: August 26, 2025
 - when you deploy, it's a push to git remote main, and you should monitor logs via the render.com MCP, github CLI, and potentially the render.com CLI.
 - **CRITICAL**: We use Render.com EXCLUSIVELY for all deployments (main app AND aoma-mesh-mcp server). Railway has been completely removed from the project. All Railway references have been purged as of September 2024.
 - use AI Elements where appropriate, such as in conversations, code bloc, chat inputs, and inline citations: https://ai-sdk.dev/elements/overview
+- remember where the tests are. we have many.

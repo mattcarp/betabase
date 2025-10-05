@@ -257,8 +257,10 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
         path: `test-results/aoma-chat-${query.description.replace(/\s+/g, "-")}.png`,
       });
 
-      // Wait before next query
-      await page.waitForTimeout(2000);
+      // Wait 15 seconds between queries to respect GPT-5 rate limits
+      // Each query triggers multiple backend calls (AOMA + orchestrator + GPT-5)
+      console.log(`   ⏳ Waiting 15 seconds before next query to avoid rate limits...`);
+      await page.waitForTimeout(15000);
     }
   });
 
