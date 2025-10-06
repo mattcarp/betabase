@@ -1,4 +1,5 @@
-import OpenAI from "openai";
+import { streamText } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
 import { aomaCache } from "../../../src/services/aomaCache";
 import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
 import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
@@ -8,8 +9,8 @@ import { trackRequest } from "../introspection/route";
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
 
-// Initialize OpenAI client
-const openai = new OpenAI({
+// Initialize OpenAI provider for Vercel AI SDK
+const openai = createOpenAI({
   apiKey: process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY,
 });
 
@@ -216,33 +217,26 @@ When responding, structure your knowledge appropriately and include any relevant
     const modelSettings = modelConfig.getModelWithConfig(useCase);
     const selectedModel = model || modelSettings.model || "gpt-4o-mini";
 
-    console.log(`🤖 Creating OpenAI stream with model: ${selectedModel}`);
+    console.log(`🤖 Creating stream with model: ${selectedModel}`);
     console.log(`📊 Settings: temp=${modelSettings.temperature}, maxTokens=${modelSettings.maxTokens}`);
     console.log(`💬 Messages: ${allMessages.length} messages`);
 
-    // Use OpenAI SDK's .stream() method which returns a proper streaming runner
-    console.log('⏳ Calling OpenAI API with proper streaming...');
-    const stream = openai.chat.completions.stream({
-      model: selectedModel,
+    // Use Vercel AI SDK streamText for proper useChat hook compatibility
+    console.log('⏳ Calling AI SDK streamText...');
+    const result = streamText({
+      model: openai(selectedModel),
       messages: allMessages,
       temperature: modelSettings.temperature || temperature,
-      max_completion_tokens: modelSettings.maxTokens || 4000,
-      stream: true,
+      maxTokens: modelSettings.maxTokens || 4000,
     });
 
-    console.log('✅ OpenAI stream created successfully');
+    console.log('✅ Stream created successfully');
 
     // Track successful request
     trackRequest('/api/chat', 'POST', Date.now() - chatStartTime, 200);
 
-    // Convert to ReadableStream and return (this handles all the SSE formatting)
-    return new Response(stream.toReadableStream(), {
-      headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-      },
-    });
+    // Return Vercel AI SDK response format (compatible with useChat hook)
+    return result.toDataStreamResponse();
 
   } catch (error) {
     console.error("Chat API error:", error);
