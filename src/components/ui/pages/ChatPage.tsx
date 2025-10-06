@@ -164,12 +164,12 @@ Be helpful, concise, and professional in your responses.`;
     <SidebarProvider defaultOpen={true}>
       <div className="h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col w-full">
       {/* Sophisticated Header */}
-      <header className="border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/60">
-        <div className="px-6 py-3">
-          <div className="flex items-center justify-between gap-4">
+      <header className="border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/60 flex-shrink-0">
+        <div className="px-6 py-3 h-16">
+          <div className="flex flex-row items-center justify-between gap-4 h-full">
             {/* Brand Identity */}
             <div className="flex items-center space-x-3 flex-shrink-0">
-              <SiamLogo size="2xl" />
+              <SiamLogo size="sm" variant="icon" />
               <div>
                 <h1 className="text-xl font-extralight text-white tracking-tight whitespace-nowrap">
                   The Betabase
