@@ -220,16 +220,22 @@ When responding, structure your knowledge appropriately and include any relevant
     console.log(`📊 Settings: temp=${modelSettings.temperature}, maxTokens=${modelSettings.maxTokens}`);
     console.log(`💬 Messages: ${allMessages.length} messages`);
 
-    // Create streaming response
-    console.log('⏳ Calling OpenAI API...');
-    const stream = await openai.chat.completions.create({
+    // TEMPORARY: Test without streaming to diagnose Render issue
+    console.log('⏳ Calling OpenAI API (NON-STREAMING for debugging)...');
+    const completion = await openai.chat.completions.create({
       model: selectedModel,
       messages: allMessages,
       temperature: modelSettings.temperature || temperature,
-      max_completion_tokens: modelSettings.maxTokens || 4000, // Updated from max_tokens (deprecated)
-      stream: true,
+      max_completion_tokens: modelSettings.maxTokens || 4000,
+      stream: false, // TEMPORARY: Disable streaming
     });
-    console.log('✅ OpenAI stream created successfully');
+    console.log('✅ OpenAI completion received');
+
+    // Return non-streaming response
+    const content = completion.choices[0]?.message?.content || '';
+    return new Response(content, {
+      headers: { 'Content-Type': 'text/plain' },
+    });
 
     // Create a TransformStream to handle the streaming response and convert to Vercel format
     const encoder = new TextEncoder();
