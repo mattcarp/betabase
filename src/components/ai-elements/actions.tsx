@@ -39,7 +39,8 @@ export const Actions = ({ className, children, actions, ...props }: ActionsProps
               "transition-all duration-150 ease-out",
               "text-mac-text-secondary hover:text-mac-text-primary",
               "border border-transparent hover:border-mac-border/20",
-              action.variant === "destructive" && "text-red-400 hover:text-red-300 hover:bg-red-950/30 hover:border-red-900/30"
+              "bg-transparent",
+              action.variant === "destructive" && "text-red-400/80 hover:text-red-400 hover:bg-red-950/20 hover:border-red-900/20"
             )}
           >
             {action.icon && <span className="mr-2 opacity-70">{action.icon}</span>}
