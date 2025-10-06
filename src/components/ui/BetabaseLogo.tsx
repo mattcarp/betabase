@@ -32,24 +32,18 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
 
   const sizeClass = variant === "full" ? fullSizeClasses[size] : sizeClasses[size];
 
-  const dimensionMap = {
-    sm: { width: 32, height: 32 },
-    md: { width: 48, height: 48 },
-    lg: { width: 64, height: 64 },
-    xl: { width: 96, height: 96 },
-    "2xl": { width: 144, height: 144 },
-  };
-
-  const dimensions = dimensionMap[size];
-
+  // Use native img tag with actual dimensions to prevent CLS
+  // Image is 400x266, so we provide those dimensions and let CSS handle sizing
   return (
-    <Image
+    <img
       src="/betabase-logo.webp"
       alt="Betabase"
-      width={dimensions.width}
-      height={dimensions.height}
-      priority={priority}
+      width="400"
+      height="266"
+      loading={priority ? "eager" : "lazy"}
+      decoding="async"
       className={`${sizeClass} ${className} object-contain`}
+      style={{ aspectRatio: '400 / 266' }}
     />
   );
 };
