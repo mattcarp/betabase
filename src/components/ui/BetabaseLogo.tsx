@@ -29,10 +29,22 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
 
   const sizeClass = variant === "full" ? fullSizeClasses[size] : sizeClasses[size];
 
+  const dimensionMap = {
+    sm: { width: 32, height: 32 },
+    md: { width: 48, height: 48 },
+    lg: { width: 64, height: 64 },
+    xl: { width: 96, height: 96 },
+    "2xl": { width: 144, height: 144 },
+  };
+
+  const dimensions = dimensionMap[size];
+
   return (
     <img
       src="/betabase-logo.webp"
       alt="Betabase"
+      width={dimensions.width}
+      height={dimensions.height}
       className={`${sizeClass} ${className} object-contain`}
     />
   );
