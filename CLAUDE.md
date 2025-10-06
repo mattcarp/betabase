@@ -258,18 +258,36 @@ Testing isn't just about finding bugs - it's about understanding how the applica
 - Firecrawl discoveries become documentation
 - All knowledge is vector-embedded for semantic search
 
-## 🎯 IMPORTANT: Vercel AI SDK v5 Migration
+## 🎯 IMPORTANT: Vercel AI SDK v5 & AI Elements
 
-**We are gradually migrating from direct OpenAI API to Vercel AI SDK v5**
+**We are using Vercel AI SDK v5 with AI Elements for all chat interfaces**
 
-### Key Points:
+### Critical Rules:
 
-- **ALWAYS use** `toUIMessageStreamResponse()` NOT `toDataStreamResponse()`
-- **Use** `convertToModelMessages` for UI message format conversion
-- **Import from** `"ai"` package and `"@ai-sdk/openai"`, not direct OpenAI SDK
-- **Benefits**: Better streaming, error handling, and multi-provider support
+1. **ALWAYS use AI Elements for chat UI** (see `docs/AI-ELEMENTS-USAGE-GUIDE.md`)
+2. **ALWAYS use** `toUIMessageStreamResponse()` NOT `toDataStreamResponse()`
+3. **ALWAYS use** `<Response>` component for AI messages (handles markdown)
+4. **ALWAYS use** `<InlineCitation>` for source attribution
+5. **ALWAYS use** `<Message>`, `<MessageAvatar>`, `<MessageContent>` for messages
 
-### Correct Pattern:
+### AI Elements Pattern:
+
+```typescript
+import { Message, MessageContent, MessageAvatar } from "@/components/ai-elements/message";
+import { Response } from "@/components/ai-elements/response";
+import { InlineCitation } from "@/components/ai-elements/inline-citation";
+
+// In your component
+<Message from={message.role}>
+  <MessageAvatar src="/avatar.png" name="AI" />
+  <MessageContent>
+    <Response>{message.content}</Response>
+    {sources && <InlineCitation sources={sources} />}
+  </MessageContent>
+</Message>
+```
+
+### API Pattern:
 
 ```typescript
 import { openai } from "@ai-sdk/openai";
@@ -286,9 +304,14 @@ return result.toUIMessageStreamResponse(); // ✅ Correct for v5
 // NOT: result.toDataStreamResponse() ❌ Wrong
 ```
 
+### Complete Guide:
+
+**📖 Read**: `docs/AI-ELEMENTS-USAGE-GUIDE.md` for comprehensive usage examples
+
 ### Documentation:
 
-Use `mcp__context7__get-library-docs` with `/vercel/ai` for latest patterns
+- AI Elements: https://ai-sdk.dev/elements/overview
+- Vercel AI SDK: https://ai-sdk.dev/docs
 
 ## 🎨 UI Components - CRITICAL
 
