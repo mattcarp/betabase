@@ -48,12 +48,28 @@ interface KnowledgeElement {
   };
 }
 
+export async function GET(req: Request) {
+  // Handle GET requests - return API info/status
+  return new Response(
+    JSON.stringify({
+      status: 'ready',
+      version: '1.0.0',
+      models: ['gpt-4o', 'gpt-4o-mini', 'gpt-5'],
+      features: ['streaming', 'aoma-context', 'knowledge-base'],
+    }),
+    {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
+}
+
 export async function OPTIONS(req: Request) {
   return new Response(null, {
     status: 204,
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       'Access-Control-Max-Age': '86400',
     },
