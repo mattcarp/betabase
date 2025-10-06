@@ -197,7 +197,7 @@ export async function POST(req: Request) {
 
           knowledgeElements.push({
             type: 'warning',
-            content: 'AOMA knowledge base is currently unavailable',
+            content: 'The AOMA knowledge base is currently unavailable. This may be a temporary connection issue. If this persists, please contact matt@mattcarpenter.com for assistance.',
             metadata: {
               timestamp: new Date().toISOString(),
             }
@@ -206,10 +206,10 @@ export async function POST(req: Request) {
       } catch (error) {
         console.error("❌ AOMA query error:", error);
         aomaConnectionStatus = "failed";
-        
+
         knowledgeElements.push({
           type: 'warning',
-          content: 'Unable to access AOMA resources due to an error',
+          content: 'Unable to access AOMA resources due to a connection error. The AOMA-MCP server or knowledge bases may be offline. If this issue persists, please contact matt@mattcarpenter.com for support.',
           metadata: {
             error: error instanceof Error ? error.message : 'Unknown error',
             timestamp: new Date().toISOString(),
@@ -221,13 +221,21 @@ export async function POST(req: Request) {
     // Enhanced system prompt that includes AOMA orchestration context
     const enhancedSystemPrompt = `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
 
-**CRITICAL: ONLY answer questions using the AOMA context provided below. If the context below does not contain the answer, you MUST respond with: "I don't have that information in my knowledge base. The AOMA system may be unavailable or that information hasn't been indexed yet."**
+**CRITICAL ANTI-HALLUCINATION RULES:**
+1. ONLY answer questions using the AOMA context provided below
+2. If the context does not contain the answer, you MUST say: "I don't have that information in my knowledge base."
+3. DO NOT make up information, fabricate details, or guess
+4. DO NOT be overconfident about uncertain information
+5. If AOMA context indicates an error or unavailability, inform the user and suggest contacting matt@mattcarpenter.com
 
-**DO NOT make up information. DO NOT fabricate details. DO NOT guess. ONLY use the facts provided in the AOMA context below.**
-
+**AOMA CONTEXT:**
 ${aomaContext}
 
-When the AOMA context contains relevant information, structure your response appropriately and cite the sources. If the context is empty or doesn't answer the question, admit you don't have the information.`;
+**RESPONSE GUIDELINES:**
+- If context is empty or insufficient: Admit you don't have the information
+- If context contains relevant info: Answer based ONLY on that context and cite sources
+- If there's a connection error: Explain the issue and provide contact information
+- NEVER fabricate specific details like dates, numbers, names, or features that aren't in the context`;
 
     // Determine model based on AOMA involvement
     const hasAomaContent = aomaContext.trim() !== "";

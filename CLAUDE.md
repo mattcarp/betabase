@@ -17,13 +17,28 @@ SIAM has a complete Playwright test suite covering:
 **Before ANY deployment, run**:
 ```bash
 # P0 Critical Tests (MUST PASS)
-npx playwright test tests/production/aoma-chat-test.spec.ts          # No hallucinations
+npm run test:aoma                                                     # AOMA hallucination prevention (CRITICAL!)
 npx playwright test tests/curate-tab-test.spec.ts                    # File upload/delete
 npx playwright test tests/visual/dark-theme-regression.spec.ts       # UI consistency
 npx playwright test tests/e2e/smoke/smoke.spec.ts                    # Critical paths
 ```
 
-**Full test documentation**: `TESTING_FUNDAMENTALS.md`, `tests/README.md`
+**AOMA Chat Validation (Anti-Hallucination)**:
+```bash
+# Comprehensive AOMA validation suite
+npm run test:aoma              # Knowledge validation + anti-hallucination (recommended)
+npm run test:aoma:knowledge    # Test known facts from knowledge base
+npm run test:aoma:hallucination # Catch AI making up bullshit answers
+npm run test:aoma:all          # All AOMA tests (includes comprehensive chat tests)
+
+# Or use the test runner script
+./scripts/test-aoma-validation.sh
+```
+
+**Full test documentation**:
+- `TESTING_FUNDAMENTALS.md` - Complete testing guide
+- `tests/README.md` - Test suite overview
+- `tests/production/AOMA-TESTING-README.md` - **AOMA anti-hallucination testing guide**
 
 ## 📚 AOMA DOCUMENTATION - COMPREHENSIVE INDEX
 
