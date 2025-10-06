@@ -92,19 +92,23 @@ export async function POST(req: Request) {
     }
 
     // Convert UI messages to OpenAI format with NULL content validation
+    // AI SDK v5 sends messages with 'parts' array, v4 uses 'content' string
     const openAIMessages: OpenAI.Chat.ChatCompletionMessageParam[] = messages
       .filter((msg: any) => {
+        // Extract content from v5 parts array or v4 content string
+        const content = msg.parts?.find((p: any) => p.type === 'text')?.text || msg.content;
+
         // Filter out messages with null, undefined, or empty content
-        if (msg.content == null || msg.content === '') {
-          console.warn(`[API] Filtering out message with invalid content:`, { role: msg.role, content: msg.content });
+        if (content == null || content === '') {
+          console.warn(`[API] Filtering out message with invalid content:`, { role: msg.role, content, parts: msg.parts });
           return false;
         }
         return true;
       })
       .map((msg: any) => {
-        // Ensure content is always a string
-        const content = String(msg.content || '');
-        
+        // Extract content from v5 parts array or v4 content string
+        const content = String(msg.parts?.find((p: any) => p.type === 'text')?.text || msg.content || '');
+
         if (msg.role === 'system') {
           return { role: 'system', content };
         } else if (msg.role === 'user') {
