@@ -16,6 +16,8 @@ import { Label } from "../ui/label";
 import { Loader2, Mail, CheckCircle } from "lucide-react";
 import { getBuildInfo, getFormattedBuildTime } from "../../utils/buildInfo";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
+import { Field, FieldLabel, FieldDescription } from "../ui/field";
+import { Spinner } from "../ui/spinner";
 
 interface MagicLinkLoginFormProps {
   onLoginSuccess: () => void;
@@ -244,7 +246,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
     return (
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
-          <Loader2 className="mx-auto h-8 w-8 animate-spin text-motiff-primary" />
+          <Spinner className="mx-auto h-8 w-8 text-motiff-primary" />
         </div>
       </div>
     );
@@ -281,13 +283,13 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
             className="space-y-6"
             suppressHydrationWarning
           >
-            <div className="space-y-2">
-              <Label
+            <Field>
+              <FieldLabel
                 htmlFor="email"
                 className="block text-white text-sm font-medium mb-2"
               >
                 Email Address
-              </Label>
+              </FieldLabel>
               <div className="relative group">
                 <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-blue-400 transition-colors" />
                 <Input
@@ -298,6 +300,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
                   className="mac-input pl-12 h-12 text-base border-2 border-gray-600 bg-gray-800/50 backdrop-blur-sm focus:border-blue-400 focus:bg-gray-800/70 transition-all duration-200"
                   disabled={isLoading}
                   autoComplete="email"
+                  aria-invalid={!!emailForm.formState.errors.email}
                 />
               </div>
               {emailForm.formState.errors.email && (
@@ -306,7 +309,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
                   {emailForm.formState.errors.email.message}
                 </p>
               )}
-            </div>
+            </Field>
 
             <Button
               type="submit"
@@ -315,7 +318,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-3 h-5 w-5 animate-spin" />
+                  <Spinner className="mr-3 h-5 w-5" />
                   Sending Magic Link...
                 </>
               ) : (
@@ -364,13 +367,13 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
               className="space-y-6"
               suppressHydrationWarning
             >
-              <div className="space-y-2">
-                <Label
+              <Field>
+                <FieldLabel
                   htmlFor="code"
                   className="block text-white text-sm font-medium mb-2"
                 >
                   Verification Code
-                </Label>
+                </FieldLabel>
                 <Input
                   {...codeForm.register("code")}
                   id="code"
@@ -380,6 +383,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
                   disabled={isLoading}
                   maxLength={6}
                   autoComplete="one-time-code"
+                  aria-invalid={!!codeForm.formState.errors.code}
                 />
                 {codeForm.formState.errors.code && (
                   <p className="text-red-400 text-sm mt-2 flex items-center">
@@ -387,7 +391,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
                     {codeForm.formState.errors.code.message}
                   </p>
                 )}
-              </div>
+              </Field>
 
               <Button
                 type="submit"
@@ -396,7 +400,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-3 h-5 w-5 animate-spin" />
+                    <Spinner className="mr-3 h-5 w-5" />
                     Verifying Code...
                   </>
                 ) : (
