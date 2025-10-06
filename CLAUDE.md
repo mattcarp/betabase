@@ -942,3 +942,5 @@ Last updated: August 26, 2025
 - **CRITICAL**: We use Render.com EXCLUSIVELY for all deployments (main app AND aoma-mesh-mcp server). Railway has been completely removed from the project. All Railway references have been purged as of September 2024.
 - use AI Elements where appropriate, such as in conversations, code bloc, chat inputs, and inline citations: https://ai-sdk.dev/elements/overview
 - remember where the tests are. we have many.
+- none of our apps is AOMA. we have the aoma-mesh-mcp, and thebetase/siam. don't use the term AOMA when you mean something else.
+- you deploy thebetabase/siam to render.com. you deploy aoma-mesh-mcp to railway.com.

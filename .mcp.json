@@ -88,6 +88,11 @@
         "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}",
         "NODE_ENV": "development"
       }
+    },
+    "chrome-devtools": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["./node_modules/chrome-devtools-mcp/build/src/index.js"]
     }
   }
 }
