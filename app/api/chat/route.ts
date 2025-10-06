@@ -203,11 +203,15 @@ export async function POST(req: Request) {
     }
 
     // Enhanced system prompt that includes AOMA orchestration context
-    const enhancedSystemPrompt = `${systemPrompt || "You are SIAM, an AI assistant with access to Sony Music's AOMA orchestrated resources including knowledge base, Jira, Git, emails, and development context."}
+    const enhancedSystemPrompt = `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
+
+**CRITICAL: ONLY answer questions using the AOMA context provided below. If the context below does not contain the answer, you MUST respond with: "I don't have that information in my knowledge base. The AOMA system may be unavailable or that information hasn't been indexed yet."**
+
+**DO NOT make up information. DO NOT fabricate details. DO NOT guess. ONLY use the facts provided in the AOMA context below.**
 
 ${aomaContext}
 
-When responding, structure your knowledge appropriately and include any relevant context from AOMA resources.`;
+When the AOMA context contains relevant information, structure your response appropriately and cite the sources. If the context is empty or doesn't answer the question, admit you don't have the information.`;
 
     // Determine model based on AOMA involvement
     const hasAomaContent = aomaContext.trim() !== "";
