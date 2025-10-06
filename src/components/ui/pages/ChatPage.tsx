@@ -166,22 +166,22 @@ Be helpful, concise, and professional in your responses.`;
       {/* Sophisticated Header */}
       <header className="border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/60">
         <div className="px-6 py-3">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             {/* Brand Identity */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3 flex-shrink-0">
               <SiamLogo size="2xl" />
               <div>
-                <h1 className="text-2xl font-extralight text-white tracking-tight">
+                <h1 className="text-xl font-extralight text-white tracking-tight whitespace-nowrap">
                   The Betabase
                 </h1>
-                <p className="text-sm text-slate-400 font-light">
+                <p className="text-xs text-slate-400 font-light whitespace-nowrap">
                   Intelligence Platform
                 </p>
               </div>
             </div>
 
             {/* Navigation Tabs */}
-            <div className="flex items-center space-x-1 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50">
+            <div className="flex items-center space-x-1 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50 flex-shrink-0">
               {COMPONENT_MODES.map((mode) => (
                 <button
                   key={mode.mode}
@@ -200,21 +200,16 @@ Be helpful, concise, and professional in your responses.`;
             </div>
 
             {/* Controls */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 flex-shrink-0">
               <ConnectionStatusIndicator />
               <IntrospectionDropdown />
               {/* Knowledge status badges */}
-              <div className="hidden md:flex items-center gap-1">
-                <Badge variant="outline" title="Knowledge status">
+              <div className="hidden lg:flex items-center gap-1">
+                <Badge variant="outline" title="Knowledge status" className="whitespace-nowrap">
                   {knowledgeStatus === 'ok' ? 'Knowledge: OK' : knowledgeStatus === 'degraded' ? 'Knowledge: Degraded' : 'Knowledge: Unknown'}
                 </Badge>
-                {Object.entries(knowledgeCounts).map(([k,v]) => (
-                  <Badge key={k} variant="outline" className="text-xs" title={`Indexed ${k}`}>
-                    {k}:{v}
-                  </Badge>
-                ))}
                 {lastKnowledgeRefresh && (
-                  <Badge variant="outline" className="text-xs" title="Last refresh">
+                  <Badge variant="outline" className="text-xs whitespace-nowrap" title="Last refresh">
                     updated {lastKnowledgeRefresh}
                   </Badge>
                 )}

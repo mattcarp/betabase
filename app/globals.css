@@ -75,3 +75,16 @@ body {
   background: #0a0a0a;
   color: white;
 }
+
+/* Performance: Prevent CLS with aspect-ratio container */
+.betabase-logo-wrapper {
+  aspect-ratio: 1.5037;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Performance: GPU compositing for animations */
+.animate-pulse {
+  will-change: opacity, transform;
+}
