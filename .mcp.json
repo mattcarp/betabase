@@ -93,6 +93,11 @@
       "type": "stdio",
       "command": "node",
       "args": ["./node_modules/chrome-devtools-mcp/build/src/index.js"]
+    },
+    "shadcn": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
     }
   }
 }
