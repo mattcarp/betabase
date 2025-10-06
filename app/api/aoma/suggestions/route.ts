@@ -11,14 +11,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // High-confidence AOMA topics based on recent features and common support issues
+    // Generic AOMA suggestions - DO NOT suggest specific features unless verified in knowledge base
+    // These should be broad enough to work even if knowledge base is empty/degraded
     const aomaTopics = [
-      "How does the new automated QC for audio files work?",
-      "What's new with AOMA 3 linking and AMEBA service integration?",
-      "How do I export assets to Sony Ci workspaces?",
-      "What are the latest master details page enhancements?",
-      "How can I use the new batch media converter?",
-      "What are common AOMA support issues and solutions?",
+      "How do I use AOMA for my daily workflow?",
+      "What are the most common AOMA support issues?",
+      "How do I search for assets in AOMA?",
+      "What's the best way to organize my AOMA workspace?",
+      "How can I troubleshoot AOMA connection issues?",
+      "What AOMA features should I know about?",
     ];
 
     return NextResponse.json({
