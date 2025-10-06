@@ -205,12 +205,6 @@ ${aomaContext}
 
 When responding, structure your knowledge appropriately and include any relevant context from AOMA resources.`;
 
-    // Add system message with enhanced prompt
-    const allMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-      { role: "system", content: enhancedSystemPrompt },
-      ...openAIMessages,
-    ];
-
     // Determine model based on AOMA involvement
     const hasAomaContent = aomaContext.trim() !== "";
     const useCase = hasAomaContent ? "aoma-query" : "chat";
@@ -219,13 +213,14 @@ When responding, structure your knowledge appropriately and include any relevant
 
     console.log(`🤖 Creating stream with model: ${selectedModel}`);
     console.log(`📊 Settings: temp=${modelSettings.temperature}, maxTokens=${modelSettings.maxTokens}`);
-    console.log(`💬 Messages: ${allMessages.length} messages`);
+    console.log(`💬 Messages: ${openAIMessages.length} messages`);
 
     // Use Vercel AI SDK streamText for proper useChat hook compatibility
     console.log('⏳ Calling AI SDK streamText...');
     const result = streamText({
       model: openai(selectedModel),
-      messages: allMessages,
+      messages: openAIMessages, // Already in correct format after filtering/validation
+      system: enhancedSystemPrompt, // Use system parameter instead of adding to messages array
       temperature: modelSettings.temperature || temperature,
       maxTokens: modelSettings.maxTokens || 4000,
     });

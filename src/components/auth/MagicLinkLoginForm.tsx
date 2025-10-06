@@ -257,7 +257,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
         {/* SIAM Logo/Brand */}
         <div className="mb-8">
           <div className="inline-flex items-center justify-center mb-6">
-            <SiamLogo size="xl" variant="icon" className="drop-shadow-2xl" />
+            <SiamLogo size="2xl" variant="icon" className="drop-shadow-2xl" />
           </div>
           <h1 className="mac-display-text mb-2">The Betabase</h1>
           <p className="mac-body text-gray-300">
