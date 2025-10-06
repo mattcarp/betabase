@@ -236,7 +236,7 @@ When responding, structure your knowledge appropriately and include any relevant
     trackRequest('/api/chat', 'POST', Date.now() - chatStartTime, 200);
 
     // Return Vercel AI SDK response format (compatible with useChat hook)
-    return result.toDataStreamResponse();
+    return result.toUIMessageStreamResponse();
 
   } catch (error) {
     console.error("Chat API error:", error);
