@@ -168,13 +168,13 @@ Be helpful, concise, and professional in your responses.`;
         <div className="px-6 py-3">
           <div className="flex items-center justify-between">
             {/* Brand Identity */}
-            <div className="flex items-center space-x-3">
-              <SiamLogo size="md" />
+            <div className="flex items-center space-x-4">
+              <SiamLogo size="2xl" />
               <div>
-                <h1 className="text-lg font-extralight text-white tracking-tight">
+                <h1 className="text-2xl font-extralight text-white tracking-tight">
                   The Betabase
                 </h1>
-                <p className="text-xs text-slate-400 font-light">
+                <p className="text-sm text-slate-400 font-light">
                   Intelligence Platform
                 </p>
               </div>
