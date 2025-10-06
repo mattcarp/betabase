@@ -1,15 +1,18 @@
 import React from "react";
+import Image from "next/image";
 
 interface BetabaseLogoProps {
   className?: string;
   size?: "sm" | "md" | "lg" | "xl" | "2xl";
   variant?: "icon" | "full";
+  priority?: boolean;
 }
 
 export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
   className = "",
   size = "md",
   variant = "full",
+  priority = true,
 }) => {
   const sizeClasses = {
     sm: "w-8 h-8",
@@ -40,11 +43,12 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
   const dimensions = dimensionMap[size];
 
   return (
-    <img
+    <Image
       src="/betabase-logo.webp"
       alt="Betabase"
       width={dimensions.width}
       height={dimensions.height}
+      priority={priority}
       className={`${sizeClass} ${className} object-contain`}
     />
   );
