@@ -216,7 +216,12 @@ When responding, structure your knowledge appropriately and include any relevant
     const modelSettings = modelConfig.getModelWithConfig(useCase);
     const selectedModel = model || modelSettings.model || "gpt-4o-mini";
 
+    console.log(`🤖 Creating OpenAI stream with model: ${selectedModel}`);
+    console.log(`📊 Settings: temp=${modelSettings.temperature}, maxTokens=${modelSettings.maxTokens}`);
+    console.log(`💬 Messages: ${allMessages.length} messages`);
+
     // Create streaming response
+    console.log('⏳ Calling OpenAI API...');
     const stream = await openai.chat.completions.create({
       model: selectedModel,
       messages: allMessages,
@@ -224,6 +229,7 @@ When responding, structure your knowledge appropriately and include any relevant
       max_completion_tokens: modelSettings.maxTokens || 4000, // Updated from max_tokens (deprecated)
       stream: true,
     });
+    console.log('✅ OpenAI stream created successfully');
 
     // Create a TransformStream to handle the streaming response and convert to Vercel format
     const encoder = new TextEncoder();
@@ -284,12 +290,17 @@ When responding, structure your knowledge appropriately and include any relevant
     trackRequest('/api/chat', 'POST', Date.now() - chatStartTime, 200);
 
     // Create readable stream from async iterator
+    console.log('🔄 Starting stream processing...');
     const readableStream = new ReadableStream({
       async start(controller) {
         try {
+          console.log('📥 Reading chunks from OpenAI stream...');
+          let chunkCount = 0;
           for await (const chunk of stream) {
+            chunkCount++;
             await transformStream.writable.getWriter().write(chunk);
           }
+          console.log(`✅ Received ${chunkCount} chunks from OpenAI`);
           await transformStream.writable.close();
           
           // Pipe transformed data to response
