@@ -32,19 +32,28 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
 
   const sizeClass = variant === "full" ? fullSizeClasses[size] : sizeClasses[size];
 
-  // Use native img tag with actual dimensions to prevent CLS
-  // Image is 400x266, so we provide those dimensions and let CSS handle sizing
+  // Wrapper approach: Use container with aspect-ratio to prevent CLS
+  // Image is 400x266 = 1.5037:1 aspect ratio
   return (
-    <img
-      src="/betabase-logo.webp"
-      alt="Betabase"
-      width="400"
-      height="266"
-      loading={priority ? "eager" : "lazy"}
-      decoding="async"
-      className={`${sizeClass} ${className} object-contain`}
-      style={{ aspectRatio: '400 / 266' }}
-    />
+    <div
+      className={`${sizeClass} ${className}`}
+      style={{
+        aspectRatio: '1.5037',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      <img
+        src="/betabase-logo.webp"
+        alt="Betabase"
+        width="400"
+        height="266"
+        loading={priority ? "eager" : "lazy"}
+        decoding="async"
+        className="w-full h-full object-contain"
+      />
+    </div>
   );
 };
 
