@@ -316,13 +316,9 @@ export function AiSdkChatPanel({
   }, [currentApiEndpoint, selectedModel]);
   
   const chatResult = useChat({
-    api: currentApiEndpoint, // Use the calculated endpoint directly
-    // transport: new DefaultChatTransport({
-    //   api: currentApiEndpoint, // Use the calculated endpoint directly
-    // }),
+    api: currentApiEndpoint, // Use the calculated endpoint directly (v5 still supports this)
     id: chatId,
     messages: (initialMessages || []).filter(m => m.content != null && m.content !== ''), // CRITICAL: Filter null content
-    // Note: body is not valid in v5 - system prompt and model should be handled differently
     onError: (err) => {
       console.error("Chat error:", err);
       console.log("Error type:", typeof err);
@@ -788,21 +784,24 @@ export function AiSdkChatPanel({
         }
       }
 
-      // Use append as primary method - more reliable than form submit
-      // This directly sends the message using AI SDK's append function
+      // Use sendMessage as primary method (AI SDK v5)
+      // This directly sends the message using AI SDK's sendMessage function
       setTimeout(() => {
-        if (typeof append === "function") {
+        if (typeof sendMessage === "function") {
+          sendMessage({ text: suggestion }); // v5 format
+        } else if (typeof append === "function") {
+          // Fallback to v4 append if sendMessage not available
           append({
             role: "user",
             content: suggestion,
           });
         } else {
-          // Fallback: trigger form submit if append not available
+          // Final fallback: trigger form submit
           const form = document.querySelector('form[data-chat-form="true"]') as HTMLFormElement;
           if (form) {
             form.requestSubmit();
           } else {
-            console.error("[SIAM] Neither append function nor form available for suggestion submission");
+            console.error("[SIAM] No message sending method available");
           }
         }
       }, 50);
