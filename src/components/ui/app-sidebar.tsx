@@ -165,12 +165,12 @@ export function AppSidebar({ className }: AppSidebarProps) {
         {/* Search Bar with MAC styling */}
         <div className="px-2 pb-2">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mac-text-muted" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mac-text-secondary" />
             <SidebarInput
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="mac-input mac-sidebar-search pl-9 h-8 text-sm bg-mac-surface-bg/50"
+              className="mac-input mac-sidebar-search pl-9 h-8 text-sm bg-mac-surface-elevated border border-mac-border/30 text-mac-text-primary placeholder:text-mac-text-muted"
             />
           </div>
         </div>
@@ -257,19 +257,19 @@ export function AppSidebar({ className }: AppSidebarProps) {
                             </span>
                           </div>
                           {conversation.messages.length > 0 && (
-                            <p className="text-xs text-mac-text-muted truncate">
+                            <p className="text-xs text-mac-text-secondary truncate">
                               {conversation.messages[conversation.messages.length - 1].content.slice(0, 50)}...
                             </p>
                           )}
                           <div className="flex items-center gap-2 mt-1">
-                            <Clock className="h-3 w-3 text-mac-text-muted/70" />
-                            <span className="text-xs text-mac-text-muted/70">
+                            <Clock className="h-3 w-3 text-mac-text-secondary" />
+                            <span className="text-xs text-mac-text-secondary">
                               {formatTimestamp(new Date(conversation.updatedAt))}
                             </span>
                             {conversation.tags && conversation.tags.length > 0 && (
                               <>
-                                <Hash className="h-3 w-3 text-mac-text-muted/70" />
-                                <span className="text-xs text-mac-text-muted/70">
+                                <Hash className="h-3 w-3 text-mac-text-secondary" />
+                                <span className="text-xs text-mac-text-secondary">
                                   {conversation.tags.length}
                                 </span>
                               </>
@@ -343,14 +343,6 @@ export function AppSidebar({ className }: AppSidebarProps) {
                     label: "Import",
                     onClick: handleImportConversations,
                     icon: <Upload className="h-3 w-3" />,
-                  },
-                  {
-                    label: "Remove Duplicates",
-                    onClick: () => {
-                      removeDuplicateConversations();
-                    },
-                    icon: <Settings className="h-3 w-3" />,
-                    variant: "secondary",
                   },
                   {
                     label: "Clear All",
