@@ -2,7 +2,7 @@ import React from "react";
 
 interface BetabaseLogoProps {
   className?: string;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl";
   variant?: "icon" | "full";
 }
 
@@ -16,6 +16,7 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
     md: "w-12 h-12",
     lg: "w-16 h-16",
     xl: "w-24 h-24",
+    "2xl": "w-36 h-36", // 1.5x the xl size (144px)
   };
 
   const fullSizeClasses = {
@@ -23,6 +24,7 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
     md: "w-48 h-12",
     lg: "w-64 h-16",
     xl: "w-80 h-24",
+    "2xl": "w-120 h-36", // 1.5x the xl size
   };
 
   const sizeClass = variant === "full" ? fullSizeClasses[size] : sizeClasses[size];
