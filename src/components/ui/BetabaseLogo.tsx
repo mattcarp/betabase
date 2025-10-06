@@ -32,18 +32,10 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
 
   const sizeClass = variant === "full" ? fullSizeClasses[size] : sizeClasses[size];
 
-  // Wrapper approach: Use container with aspect-ratio to prevent CLS
+  // Global CSS approach: aspect-ratio class survives React hydration
   // Image is 400x266 = 1.5037:1 aspect ratio
   return (
-    <div
-      className={`${sizeClass} ${className}`}
-      style={{
-        aspectRatio: '1.5037',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
-    >
+    <div className={`betabase-logo-wrapper ${sizeClass} ${className}`}>
       <img
         src="/betabase-logo.webp"
         alt="Betabase"
