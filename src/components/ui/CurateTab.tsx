@@ -54,6 +54,9 @@ import {
 import { FileUpload } from "../ai-elements/file-upload";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
+import { Empty, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "./empty";
+import { Spinner } from "./spinner";
+import { InputGroup, InputGroupInput, InputGroupAddon } from "./input-group";
 
 interface VectorStoreFile {
   id: string;
@@ -311,24 +314,27 @@ export function CurateTab({
             <div className="space-y-4 h-full flex flex-col">
               {/* Search and Actions Bar */}
               <div className="flex items-center gap-2">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
+                <InputGroup className="flex-1">
+                  <InputGroupAddon>
+                    <Search className="h-4 w-4" />
+                  </InputGroupAddon>
+                  <InputGroupInput
                     placeholder="Search files..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9"
                   />
-                </div>
+                </InputGroup>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={loadFiles}
                   disabled={loading}
                 >
-                  <RefreshCw
-                    className={cn("h-4 w-4", loading && "animate-spin")}
-                  />
+                  {loading ? (
+                    <Spinner className="h-4 w-4" />
+                  ) : (
+                    <RefreshCw className="h-4 w-4" />
+                  )}
                 </Button>
                 <Button
                   variant="outline"
@@ -338,7 +344,7 @@ export function CurateTab({
                   title="Find and remove duplicate files"
                 >
                   {deduplicating ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Spinner className="h-4 w-4" />
                   ) : (
                     <GitMerge className="h-4 w-4" />
                   )}
@@ -369,13 +375,18 @@ export function CurateTab({
               <ScrollArea className="flex-1 border rounded-lg">
                 {loading && filteredFiles.length === 0 ? (
                   <div className="flex items-center justify-center h-32">
-                    <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
+                    <Spinner className="h-6 w-6" />
                   </div>
                 ) : filteredFiles.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
-                    <FileText className="h-8 w-8 mb-2" />
-                    <p>No files found</p>
-                  </div>
+                  <Empty className="h-32 border-0">
+                    <EmptyMedia variant="icon">
+                      <FileText />
+                    </EmptyMedia>
+                    <EmptyTitle>No files found</EmptyTitle>
+                    <EmptyDescription>
+                      {searchQuery ? `No files match "${searchQuery}"` : "Upload files to get started"}
+                    </EmptyDescription>
+                  </Empty>
                 ) : (
                   <div className="p-4 space-y-2">
                     {/* Select All */}
@@ -617,7 +628,7 @@ export function CurateTab({
             >
               {loading ? (
                 <>
-                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  <Spinner className="h-4 w-4 mr-2" />
                   Deleting...
                 </>
               ) : (
