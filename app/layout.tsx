@@ -16,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="preload" as="image" href="/betabase-logo.webp" />
         <link rel="stylesheet" href="/styles/motiff-glassmorphism.css" />
         <link rel="stylesheet" href="/styles/mac-design-system.css" />
       </head>
