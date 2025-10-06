@@ -220,112 +220,23 @@ When responding, structure your knowledge appropriately and include any relevant
     console.log(`📊 Settings: temp=${modelSettings.temperature}, maxTokens=${modelSettings.maxTokens}`);
     console.log(`💬 Messages: ${allMessages.length} messages`);
 
-    // TEMPORARY: Test without streaming to diagnose Render issue
-    console.log('⏳ Calling OpenAI API (NON-STREAMING for debugging)...');
-    const completion = await openai.chat.completions.create({
+    // Use OpenAI SDK's .stream() method which returns a proper streaming runner
+    console.log('⏳ Calling OpenAI API with proper streaming...');
+    const stream = openai.chat.completions.stream({
       model: selectedModel,
       messages: allMessages,
       temperature: modelSettings.temperature || temperature,
       max_completion_tokens: modelSettings.maxTokens || 4000,
-      stream: false, // TEMPORARY: Disable streaming
-    });
-    console.log('✅ OpenAI completion received');
-
-    // Return non-streaming response
-    const content = completion.choices[0]?.message?.content || '';
-    return new Response(content, {
-      headers: { 'Content-Type': 'text/plain' },
+      stream: true,
     });
 
-    // Create a TransformStream to handle the streaming response and convert to Vercel format
-    const encoder = new TextEncoder();
-    
-    const transformStream = new TransformStream({
-      async transform(chunk, controller) {
-        try {
-          // OpenAI chunks come as ChatCompletionChunk objects
-          const choices = chunk.choices;
-          
-          if (choices && choices[0]?.delta?.content) {
-            // Convert to Vercel AI SDK format for compatibility with useChat hook
-            const vercelFormatChunk = {
-              id: chunk.id,
-              object: 'chat.completion.chunk',
-              created: chunk.created || Date.now(),
-              model: chunk.model || selectedModel,
-              choices: [{
-                index: 0,
-                delta: {
-                  content: choices[0].delta.content,
-                  role: choices[0].delta.role
-                },
-                finish_reason: choices[0].finish_reason || null
-              }]
-            };
-            
-            // Send as SSE format
-            controller.enqueue(encoder.encode(`data: ${JSON.stringify(vercelFormatChunk)}\n\n`));
-          }
-          
-          // Check if stream is finished
-          if (choices && choices[0]?.finish_reason) {
-            // Send knowledge elements as a custom event if any
-            if (knowledgeElements.length > 0) {
-              const knowledgeEvent = {
-                type: 'knowledge',
-                knowledge: knowledgeElements,
-                metadata: {
-                  model: selectedModel,
-                  aomaConnectionStatus,
-                  responseTime: Date.now() - chatStartTime,
-                }
-              };
-              controller.enqueue(encoder.encode(`data: ${JSON.stringify(knowledgeEvent)}\n\n`));
-            }
-            
-            // Send done signal
-            controller.enqueue(encoder.encode('data: [DONE]\n\n'));
-          }
-        } catch (e) {
-          console.error('Transform error:', e);
-        }
-      },
-    });
+    console.log('✅ OpenAI stream created successfully');
 
     // Track successful request
     trackRequest('/api/chat', 'POST', Date.now() - chatStartTime, 200);
 
-    // Create readable stream from async iterator
-    console.log('🔄 Starting stream processing...');
-    const readableStream = new ReadableStream({
-      async start(controller) {
-        try {
-          console.log('📥 Reading chunks from OpenAI stream...');
-          let chunkCount = 0;
-          for await (const chunk of stream) {
-            chunkCount++;
-            await transformStream.writable.getWriter().write(chunk);
-          }
-          console.log(`✅ Received ${chunkCount} chunks from OpenAI`);
-          await transformStream.writable.close();
-          
-          // Pipe transformed data to response
-          const reader = transformStream.readable.getReader();
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            controller.enqueue(value);
-          }
-          controller.close();
-        } catch (error) {
-          console.error('Stream error:', error);
-          controller.error(error);
-        }
-      },
-    });
-
-    // Return SSE stream
-    return new Response(readableStream, {
+    // Convert to ReadableStream and return (this handles all the SSE formatting)
+    return new Response(stream.toReadableStream(), {
       headers: {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
