@@ -1038,8 +1038,26 @@ export function AiSdkChatPanel({
           }
         }
 
-        // DO NOT set manualLoading/isProcessing to false here!
-        // They will be cleared in onFinish or onError callbacks
+        // Streaming complete - manually trigger completion logic
+        // (onFinish callback doesn't fire for manual fetch streams)
+        if ((window as any).currentProgressInterval) {
+          clearInterval((window as any).currentProgressInterval);
+          (window as any).currentProgressInterval = null;
+        }
+
+        setCurrentProgress((prev) => prev ? {
+          ...prev,
+          status: "completed",
+          progress: 100,
+          title: "Response complete!",
+        } : null);
+
+        setTimeout(() => {
+          setCurrentProgress(null);
+          setManualLoading(false);
+          setIsProcessing(false);
+          setHasStartedStreaming(false);
+        }, 1500);
       } catch (error: any) {
         console.error("[SIAM] Message send error:", error);
         toast.error(`Failed to send message: ${error.message || "Unknown error"}`);
