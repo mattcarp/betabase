@@ -174,7 +174,15 @@ export async function POST(req: Request) {
       try {
         // SIMPLIFIED: Let the orchestrator (LangChain) handle ALL endpoint logic
         // No more manual parallel queries - orchestrator manages retries, fallbacks, tool selection
-        const orchestratorResult = await aomaOrchestrator.executeOrchestration(queryString);
+        console.log('⏳ Calling AOMA orchestrator with 30s timeout...');
+
+        // Wrap orchestrator call with timeout to prevent hanging
+        const orchestratorResult = await Promise.race([
+          aomaOrchestrator.executeOrchestration(queryString),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('AOMA orchestrator timeout after 30s')), 30000)
+          )
+        ]);
 
         if (orchestratorResult && (orchestratorResult.response || orchestratorResult.content)) {
           const contextContent = orchestratorResult.response || orchestratorResult.content;
