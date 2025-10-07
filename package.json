@@ -5,6 +5,10 @@
   "scripts": {
     "dev": "npx kill-port 3000 2>/dev/null || true && next dev -p 3000",
     "diagnose:aoma": "tsx scripts/diagnose-aoma-performance.ts",
+    "scrape:jira": "node scripts/data-collection/scrape-jira.js",
+    "scrape:jira:headless": "node scripts/data-collection/scrape-jira.js --headless",
+    "update:all-data": "./scripts/data-collection/update-all-data.sh",
+    "update:all-data:headless": "./scripts/data-collection/update-all-data.sh --headless",
     "test:performance": "playwright test tests/performance --reporter=list",
     "prebuild": "node scripts/generate-build-info.js || echo 'Build info script not found, skipping'",
     "build": "next build",

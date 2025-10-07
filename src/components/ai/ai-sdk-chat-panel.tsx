@@ -1015,11 +1015,17 @@ export function AiSdkChatPanel({
           const lines = chunk.split("\n").filter(line => line.trim());
 
           for (const line of lines) {
-            if (line.startsWith("0:")) {
+            // Handle SSE format: "data: {json}"
+            if (line.startsWith("data: ")) {
               try {
-                const json = JSON.parse(line.slice(2));
-                if (json.content) {
-                  assistantContent += json.content;
+                const jsonStr = line.slice(6); // Remove "data: " prefix
+                if (jsonStr === "[DONE]") break; // End of stream marker
+
+                const json = JSON.parse(jsonStr);
+
+                // Handle text-delta events (streaming response chunks)
+                if (json.type === "text-delta" && json.delta) {
+                  assistantContent += json.delta;
                   // Update assistant message in real-time
                   setMessages(prev => {
                     const withoutLastAssistant = prev.filter(m => m.id !== assistantMessageId);
