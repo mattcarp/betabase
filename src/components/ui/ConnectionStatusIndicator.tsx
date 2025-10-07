@@ -22,6 +22,8 @@ export const ConnectionStatusIndicator: React.FC = () => {
   const [primaryStatus, setPrimaryStatus] =
     useState<ConnectionStatus["type"]>("connected");
 
+  const [showDropdown, setShowDropdown] = useState(false);
+
   // Simulate connection health checks
   useEffect(() => {
     const checkConnections = async () => {
@@ -179,8 +181,10 @@ export const ConnectionStatusIndicator: React.FC = () => {
   const totalCount = statuses.length;
 
   return (
-    <div 
-      className="group relative flex items-center gap-2"
+    <div
+      className="relative flex items-center gap-2"
+      onMouseEnter={() => setShowDropdown(true)}
+      onMouseLeave={() => setShowDropdown(false)}
     >
       <Badge
         variant={primaryStatus === "connected" ? "default" : "secondary"}
@@ -208,9 +212,10 @@ export const ConnectionStatusIndicator: React.FC = () => {
       </Badge>
 
       {/* Enhanced Status Display - Shows on hover */}
-      <div
-        className="hidden absolute top-full right-0 mt-2 p-3 bg-black/95 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl min-w-[16rem] transition-opacity duration-200 group-hover:block"
-        style={{ zIndex: 9999 }}>
+      {showDropdown && (
+        <div
+          className="absolute top-full right-0 mt-2 p-3 bg-black/95 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl min-w-[16rem] animate-in fade-in slide-in-from-top-2 duration-200"
+          style={{ zIndex: 9999 }}>
           <div className="space-y-3">
           <div className="text-sm font-medium text-white border-b border-white/20 pb-2">
             Service Status
@@ -246,7 +251,8 @@ export const ConnectionStatusIndicator: React.FC = () => {
             </div>
           )}
         </div>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
