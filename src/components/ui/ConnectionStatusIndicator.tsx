@@ -208,8 +208,8 @@ export const ConnectionStatusIndicator: React.FC = () => {
       </Badge>
 
       {/* Enhanced Status Display - Shows on hover */}
-      <div 
-        className="absolute top-full right-0 z-[9999] mt-2 p-3 bg-black/95 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl min-w-[16rem] transition-all duration-200 opacity-0 invisible translate-y-[-10px] pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:pointer-events-auto"
+      <div
+        className="absolute top-full right-0 mt-2 p-3 bg-black/95 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl min-w-[16rem] transition-all duration-200 opacity-0 invisible scale-95 pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:scale-100 group-hover:pointer-events-auto"
         style={{ zIndex: 9999 }}>
           <div className="space-y-3">
           <div className="text-sm font-medium text-white border-b border-white/20 pb-2">
