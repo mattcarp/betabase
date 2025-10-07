@@ -12,9 +12,12 @@
  * - Confident assertions about things not in knowledge base
  */
 
-import { test, expect, Page } from "@playwright/test";
+import { test, expect, Page, BrowserContext } from "@playwright/test";
 
 const PRODUCTION_URL = "https://thebetabase.com";
+const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
+const MAILINATOR_INBOX =
+  "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
 
 // Patterns that indicate hallucination (making up specific details)
 const HALLUCINATION_PATTERNS = [
@@ -51,37 +54,165 @@ const SAFE_RESPONSE_PATTERNS = [
   /contact matt@mattcarpenter\.com/i,
 ];
 
+// Reusable login function
+async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
+  console.log("🔐 Logging into SIAM...");
+  await page.goto(PRODUCTION_URL, { waitUntil: "domcontentloaded" });
+  await page.fill('input[type="email"]', TEST_EMAIL);
+  await page.click('button[type="submit"]');
+
+  // Wait for success dialog to appear (Magic Link Sent!)
+  console.log("⏳ Waiting for magic link success dialog...");
+  await page.waitForSelector('text=/Magic Link Sent/i', { timeout: 15000 });
+
+  // Wait a bit for dialog to auto-dismiss and verification input to appear
+  await page.waitForTimeout(2000);
+
+  // Now wait for verification code input to be visible
+  console.log("⏳ Waiting for verification code input...");
+  const verificationVisible = await page
+    .locator('input[type="text"]')
+    .first()
+    .isVisible({ timeout: 10000 })
+    .catch(() => false);
+  if (!verificationVisible) {
+    throw new Error("Verification form didn't appear");
+  }
+
+  const mailPage = await context.newPage();
+  await mailPage.goto(MAILINATOR_INBOX, { waitUntil: "networkidle" });
+  await mailPage.waitForTimeout(3000);
+
+  const emails = await mailPage
+    .locator('tr[ng-repeat*="email in emails"]')
+    .count();
+  if (emails > 0) {
+    await mailPage.locator('tr[ng-repeat*="email in emails"]').first().click();
+    await mailPage.waitForTimeout(3000);
+
+    let code = null;
+    const iframe = await mailPage.$("iframe#html_msg_body");
+    if (iframe) {
+      const frame = await iframe.contentFrame();
+      if (frame) {
+        const frameText = await frame.$eval(
+          "body",
+          (el) => el.textContent || "",
+        );
+        const match = frameText.match(/\b(\d{6})\b/);
+        if (match) code = match[1];
+      }
+    }
+
+    if (!code) {
+      const pageText = await mailPage.content();
+      const match = pageText.match(/\b(\d{6})\b/);
+      if (match) code = match[1];
+    }
+
+    await mailPage.close();
+
+    if (code) {
+      await page.fill('input[type="text"]', code);
+      await page.click('button[type="submit"]');
+      await page.waitForSelector('h1:has-text("Welcome to The Betabase"), textarea[placeholder*="Ask"]', {
+        timeout: 15000,
+      });
+      console.log("✅ Logged in successfully!");
+    }
+  }
+}
+
 async function sendMessageAndGetResponse(page: Page, message: string): Promise<string> {
   const chatInput = page.locator('textarea[placeholder*="Ask"], input[placeholder*="Ask"]').first();
 
   await chatInput.clear();
   await chatInput.fill(message);
+
+  // Count messages before sending
+  const messageCountBefore = await page.locator('div[role="log"] > div').count();
+  console.log(`   📊 Messages before: ${messageCountBefore}`);
+
   await page.keyboard.press("Enter");
 
-  // Wait for response to appear
-  await page.waitForTimeout(8000); // Give AI time to respond
-
-  // Get the last assistant message
-  const messages = await page.locator('[data-role="assistant"], .assistant-message, .ai-message').all();
-
-  if (messages.length === 0) {
-    throw new Error("No assistant response found");
+  // Wait for processing indicator
+  try {
+    await page.waitForSelector("text=/processing|thinking|generating/i", {
+      timeout: 5000,
+      state: "visible",
+    });
+    console.log("   ⏳ AI is thinking...");
+  } catch {
+    // Processing might be too fast
   }
 
-  const lastMessage = messages[messages.length - 1];
-  const responseText = await lastMessage.textContent();
+  // Wait for a new message to appear (AI response) - AOMA can take up to 90 seconds
+  console.log("   ⏳ Waiting for AI response (up to 90s)...");
+  try {
+    await page.waitForFunction(
+      (expectedCount) => {
+        const messages = document.querySelectorAll('div[role="log"] > div');
+        return messages.length > expectedCount;
+      },
+      messageCountBefore,
+      { timeout: 90000 }
+    );
+    console.log("   ✅ Response received!");
+  } catch (e) {
+    console.log("   ⚠️ Response timeout after 90s");
+    throw new Error("AI did not respond within 90 seconds");
+  }
 
-  return responseText || "";
+  // Wait for DOM to settle
+  await page.waitForTimeout(3000);
+
+  // Get all assistant messages
+  const assistantMessages = await page.locator('[data-role="assistant"], .assistant-message, div[role="log"] > div').all();
+
+  if (assistantMessages.length === 0) {
+    throw new Error("No assistant response found after waiting");
+  }
+
+  const lastMessage = assistantMessages[assistantMessages.length - 1];
+  const responseText = (await lastMessage.textContent()) || "";
+
+  // Clean up the response (remove timestamps, loading indicators)
+  const cleanedResponse = responseText
+    .replace(/🤖.*?(?=\n|$)/g, '')
+    .replace(/\d{2}:\d{2} (AM|PM)/g, '')
+    .replace(/Establishing secure connection.*?(?=\n|$)/g, '')
+    .replace(/Parsing request.*?(?=\n|$)/g, '')
+    .replace(/Searching AOMA.*?(?=\n|$)/g, '')
+    .replace(/Building context.*?(?=\n|$)/g, '')
+    .replace(/Generating AI.*?(?=\n|$)/g, '')
+    .replace(/Formatting response.*?(?=\n|$)/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  console.log(`   💬 Response length: ${cleanedResponse.length} chars`);
+  return cleanedResponse || responseText;
 }
 
 test.describe("Anti-Hallucination Tests", () => {
-  test.setTimeout(120000); // 2 minute timeout for AI responses
+  test.setTimeout(180000); // 3 minute timeout for AI responses + login
 
-  test("should NOT fabricate details about non-existent AOMA features", async ({ page }) => {
-    await page.goto(PRODUCTION_URL);
+  let context: BrowserContext;
 
-    // Wait for page load
-    await page.waitForSelector('textarea[placeholder*="Ask"], input[placeholder*="Ask"]', { timeout: 15000 });
+  test.beforeEach(async ({ browser }) => {
+    context = await browser.newContext({
+      viewport: { width: 1920, height: 1080 },
+    });
+  });
+
+  test.afterEach(async () => {
+    await context.close();
+  });
+
+  test("should NOT fabricate details about non-existent AOMA features", async () => {
+    const page = await context.newPage();
+
+    // Login first
+    await loginToSIAM(page, context);
 
     // Ask about a feature that likely doesn't exist in knowledge base
     const response = await sendMessageAndGetResponse(
@@ -114,9 +245,9 @@ test.describe("Anti-Hallucination Tests", () => {
     ).toBe(true);
   });
 
-  test("should detect invented version numbers", async ({ page }) => {
-    await page.goto(PRODUCTION_URL);
-    await page.waitForSelector('textarea[placeholder*="Ask"], input[placeholder*="Ask"]', { timeout: 15000 });
+  test("should detect invented version numbers", async () => {
+    const page = await context.newPage();
+    await loginToSIAM(page, context);
 
     const response = await sendMessageAndGetResponse(
       page,
@@ -138,9 +269,9 @@ test.describe("Anti-Hallucination Tests", () => {
     }
   });
 
-  test("should detect fabricated feature lists", async ({ page }) => {
-    await page.goto(PRODUCTION_URL);
-    await page.waitForSelector('textarea[placeholder*="Ask"], input[placeholder*="Ask"]', { timeout: 15000 });
+  test("should detect fabricated feature lists", async () => {
+    const page = await context.newPage();
+    await loginToSIAM(page, context);
 
     const response = await sendMessageAndGetResponse(
       page,
@@ -161,9 +292,9 @@ test.describe("Anti-Hallucination Tests", () => {
     }
   });
 
-  test("should handle legitimate questions without false positives", async ({ page }) => {
-    await page.goto(PRODUCTION_URL);
-    await page.waitForSelector('textarea[placeholder*="Ask"], input[placeholder*="Ask"]', { timeout: 15000 });
+  test("should handle legitimate questions without false positives", async () => {
+    const page = await context.newPage();
+    await loginToSIAM(page, context);
 
     // Generic question that should work even with limited knowledge base
     const response = await sendMessageAndGetResponse(
