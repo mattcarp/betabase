@@ -1038,8 +1038,8 @@ export function AiSdkChatPanel({
           }
         }
 
-        setManualLoading(false);
-        setIsProcessing(false);
+        // DO NOT set manualLoading/isProcessing to false here!
+        // They will be cleared in onFinish or onError callbacks
       } catch (error: any) {
         console.error("[SIAM] Message send error:", error);
         toast.error(`Failed to send message: ${error.message || "Unknown error"}`);
