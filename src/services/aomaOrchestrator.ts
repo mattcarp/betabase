@@ -499,8 +499,8 @@ export class AOMAOrchestrator {
         case "query_aoma_knowledge":
           // Call Railway AOMA server directly in production to avoid circular references
           // In development, use the local API endpoint for easier testing
-          const aomaEndpoint = process.env.NODE_ENV === 'production' 
-            ? 'https://aoma-mesh-mcp.onrender.com/rpc' 
+          const aomaEndpoint = process.env.NODE_ENV === 'production'
+            ? 'https://luminous-dedication-production.up.railway.app/rpc'
             : 'http://localhost:3000/api/aoma';
           
           // For production Railway calls, we need to use JSON-RPC format
