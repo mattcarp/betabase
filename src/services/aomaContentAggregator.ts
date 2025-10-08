@@ -122,15 +122,15 @@ export class AomaContentAggregator {
     this.config = {
       serverUrl: getEnvVar(
         "NEXT_PUBLIC_AOMA_MESH_SERVER_URL",
-        "https://aoma-mesh-mcp.onrender.com",
+        "https://luminous-dedication-production.up.railway.app",
       ) as string,
       rpcUrl: getEnvVar(
         "NEXT_PUBLIC_AOMA_MESH_RPC_URL",
-        "https://aoma-mesh-mcp.onrender.com/rpc",
+        "https://luminous-dedication-production.up.railway.app/rpc",
       ) as string,
       healthUrl: getEnvVar(
         "NEXT_PUBLIC_AOMA_MESH_HEALTH_URL",
-        "https://aoma-mesh-mcp.onrender.com/health",
+        "https://luminous-dedication-production.up.railway.app/health",
       ) as string,
       enableAutoQuery:
         getEnvVar("NEXT_PUBLIC_ENABLE_MCP_INTEGRATION", true) !== "false",
