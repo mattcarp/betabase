@@ -32,8 +32,8 @@ class AOMAParallelRouter {
   // Railway removed; only Render is used
   private railwayUrl = '';
   
-  private renderUrl = process.env.NEXT_PUBLIC_RENDER_AOMA_URL || 
-    "https://aoma-mesh-mcp.onrender.com";
+  private renderUrl = process.env.NEXT_PUBLIC_RAILWAY_AOMA_URL ||
+    "https://luminous-dedication-production.up.railway.app";
   
   private metrics: PerformanceMetrics[] = [];
   private lastRequestTime: { [key: string]: number } = {};
