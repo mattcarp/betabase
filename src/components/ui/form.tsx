@@ -259,7 +259,7 @@ const FormMessage = React.forwardRef<
       id={formMessageId}
       className={cn(
         "mac-form-message", // MAC Design System form message
-        "text-xs font-medium flex items-center gap-1.5 mt-1.5",
+        "text-xs font-light flex items-center gap-1.5 mt-1.5",
         typeConfig[type].className,
         "transition-all duration-200",
         className,
