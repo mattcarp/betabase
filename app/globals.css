@@ -88,3 +88,99 @@ body {
 .animate-pulse {
   will-change: opacity, transform;
 }
+/* MAC Design System Component Styles */
+
+/* Button Styles */
+.mac-button-primary {
+  background: linear-gradient(135deg, #3385ff 0%, #8533ff 100%);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  font-weight: 300;
+}
+
+.mac-button-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(133, 51, 255, 0.6);
+}
+
+.mac-button-secondary {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 300;
+  backdrop-filter: blur(10px);
+}
+
+.mac-button-outline {
+  background: transparent;
+  border: 1px solid rgba(51, 133, 255, 0.5);
+  color: #3385ff;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 300;
+}
+
+.mac-button-outline:hover {
+  background: rgba(51, 133, 255, 0.1);
+  border-color: #3385ff;
+}
+
+/* Shimmer Effect */
+.mac-shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Glow Effect */
+.mac-glow {
+  box-shadow: 
+    0 0 20px rgba(133, 51, 255, 0.4),
+    0 0 40px rgba(133, 51, 255, 0.2);
+}
+
+/* Input Styles */
+.mac-input {
+  background: rgba(20, 20, 20, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: 300;
+}
+
+.mac-input:focus {
+  border-color: #3385ff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(51, 133, 255, 0.2);
+}
+
+/* Form Message */
+.mac-form-message {
+  font-weight: 300;
+}

@@ -13,7 +13,7 @@ const getButtonClasses = (
   size: ButtonSize = "default"
 ): string => {
   // Base MAC button styles
-  const baseClasses = "mac-button inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0";
+  const baseClasses = "mac-button inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-light transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0";
   
   // Variant-specific MAC classes
   const variantClasses: Record<ButtonVariant, string> = {

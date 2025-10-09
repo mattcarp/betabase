@@ -27,7 +27,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             // Additional shadcn-compatible styles
             "flex h-10 w-full text-base transition-all duration-200",
             // File input styles
-            "file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-[var(--mac-text-primary)]",
+            "file:border-0 file:bg-transparent file:text-sm file:font-light file:text-[var(--mac-text-primary)]",
             // Placeholder styles
             "placeholder:text-[var(--mac-text-muted)]",
             // Focus styles with MAC design
