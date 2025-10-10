@@ -206,7 +206,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
         <span>
           {connectedCount}/{totalCount}
         </span>
-        <span className="hidden sm:inline">{getPrimaryStatusText()}</span>
+        <span className="hidden lg:inline">{getPrimaryStatusText()}</span>
       </Badge>
 
       {/* MAC Design System Status Popup */}

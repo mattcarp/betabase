@@ -1963,7 +1963,7 @@ export function AiSdkChatPanel({
       </div>
 
       {/* Modern Input Area */}
-      <div className="flex-shrink-0 p-4 pb-6 border-t border-zinc-800/50 bg-zinc-950 relative">
+      <div className="flex-shrink-0 px-4 pt-4 pb-2 border-t border-zinc-800/50 bg-zinc-950 relative">
         {/* Real-Time Transcription Display */}
         {(isRecording || interimTranscript || transcript) && (
           <div className="mb-3 p-3 bg-black/30 rounded-lg backdrop-blur-sm border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-200">
@@ -2030,34 +2030,34 @@ export function AiSdkChatPanel({
             disabled={isMaxMessagesReached || isLoading}
             className="resize-none border-0 bg-transparent focus:ring-0 placeholder:text-muted-foreground/60"
           />
+          {/* Last prompt reminder - moved above toolbar */}
+          {lastPrompt && (
+            <div className="flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground bg-muted/30 border border-border/30 rounded-md mb-2">
+              <MessageCircle className="h-3 w-3 flex-shrink-0" />
+              <span className="text-xs opacity-75">Last:</span>
+              <span className="truncate flex-1 font-medium">
+                {lastPrompt}
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setLastPrompt("");
+                  try {
+                    if (typeof window !== "undefined") {
+                      window.localStorage.removeItem(`siam.lastPrompt.${chatId}`);
+                    }
+                  } catch {}
+                }}
+                className="h-4 w-4 p-0 hover:bg-destructive/20 opacity-60 hover:opacity-100 flex-shrink-0"
+                title="Clear last prompt reminder"
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            </div>
+          )}
+
           <PromptInputToolbar className="border-t border-zinc-800/50 bg-zinc-900/30">
-            {/* Last prompt reminder */}
-            {lastPrompt && (
-              <div className="flex items-center gap-2 px-3 py-1.5 text-xs text-muted-foreground bg-muted/30 border border-border/30 rounded-md mb-2">
-                <MessageCircle className="h-3 w-3 flex-shrink-0" />
-                <span className="text-xs opacity-75">Last:</span>
-                <span className="truncate max-w-[300px] font-medium">
-                  {lastPrompt}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setLastPrompt("");
-                    try {
-                      if (typeof window !== "undefined") {
-                        window.localStorage.removeItem(`siam.lastPrompt.${chatId}`);
-                      }
-                    } catch {}
-                  }}
-                  className="h-4 w-4 p-0 ml-auto hover:bg-destructive/20 opacity-60 hover:opacity-100"
-                  title="Clear last prompt reminder"
-                >
-                  <X className="h-3 w-3" />
-                </Button>
-              </div>
-            )}
-            
             <PromptInputTools className="gap-2">
               <FileUpload
                 compact={true}
