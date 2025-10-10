@@ -1,5 +1,8 @@
 import { streamText } from "ai";
 import { createOpenAI } from "@ai-sdk/openai";
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import { z } from 'zod';
 import { aomaCache } from "../../../src/services/aomaCache";
 import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
 import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
@@ -9,10 +12,15 @@ import { trackRequest } from "../introspection/route";
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
 
-// Initialize OpenAI provider for Vercel AI SDK
+// Initialize OpenAI provider for Vercel AI SDK (server-side only)
 const openai = createOpenAI({
-  apiKey: process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY!,
 });
+
+// Validate API key is configured
+if (!process.env.OPENAI_API_KEY) {
+  throw new Error('OPENAI_API_KEY environment variable is required');
+}
 
 // REMOVED: Client-side rate limiting
 // Let OpenAI handle rate limits naturally - we'll catch 429s and show friendly errors
@@ -48,6 +56,20 @@ interface KnowledgeElement {
   };
 }
 
+// Input validation schemas
+const MessageSchema = z.object({
+  role: z.enum(['user', 'assistant', 'system']),
+  content: z.string().min(1).max(10000).optional(), // 10KB limit per message, optional for v5 parts
+  parts: z.array(z.any()).optional(), // For AI SDK v5 format
+});
+
+const ChatRequestSchema = z.object({
+  messages: z.array(MessageSchema).min(1).max(50), // Max 50 messages in history
+  model: z.enum(['gpt-5', 'gpt-5-pro', 'gpt-4o', 'gpt-4o-mini', 'o3', 'o3-pro', 'o4-mini']).optional(),
+  temperature: z.number().min(0).max(2).optional(),
+  systemPrompt: z.string().max(5000).optional(), // 5KB limit for system prompt
+});
+
 export async function GET(req: Request) {
   // Handle GET requests - return API info/status
   return new Response(
@@ -80,12 +102,47 @@ export async function POST(req: Request) {
   const chatStartTime = Date.now();
 
   try {
-    // Check for API key first
-    if (!process.env.OPENAI_API_KEY && !process.env.NEXT_PUBLIC_OPENAI_API_KEY) {
+    // ========================================
+    // AUTHENTICATION CHECK (P0 CRITICAL FIX)
+    // ========================================
+    const cookieStore = cookies();
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return cookieStore.get(name)?.value;
+          },
+        },
+      }
+    );
+
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session) {
+      console.warn('[API] Unauthorized chat attempt');
+      return new Response(
+        JSON.stringify({ error: 'Authentication required' }),
+        {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    console.log(`[API] Authenticated request from user: ${session.user.email}`);
+    // ========================================
+    // END AUTHENTICATION CHECK
+    // ========================================
+
+    // Check for API key configuration
+    if (!process.env.OPENAI_API_KEY) {
       console.error("[API] OPENAI_API_KEY is not set in environment variables");
       return new Response(
         JSON.stringify({
-          error: "OpenAI API key is not configured. Please set OPENAI_API_KEY in your environment."
+          error: "Service temporarily unavailable",
+          code: "CONFIG_ERROR"
         }),
         {
           status: 503,
@@ -95,7 +152,31 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { messages = [], model, temperature = 0.7, systemPrompt } = body;
+
+    // ========================================
+    // INPUT VALIDATION (P0 CRITICAL FIX)
+    // ========================================
+    const validation = ChatRequestSchema.safeParse(body);
+    if (!validation.success) {
+      console.warn('[API] Invalid request:', validation.error.errors);
+      return new Response(
+        JSON.stringify({
+          error: 'Invalid request format',
+          details: process.env.NODE_ENV === 'development'
+            ? validation.error.errors
+            : undefined
+        }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    const { messages, model, temperature = 0.7, systemPrompt } = validation.data;
+    // ========================================
+    // END INPUT VALIDATION
+    // ========================================
 
     if (!messages || messages.length === 0) {
       return new Response(
@@ -152,9 +233,13 @@ export async function POST(req: Request) {
     let aomaConnectionStatus = "not-queried";
     const knowledgeElements: KnowledgeElement[] = [];
 
-    // PERFORMANCE FIX: Add bypass flag to skip slow AOMA orchestration
-    const bypassAOMA = process.env.NEXT_PUBLIC_BYPASS_AOMA === 'true';
-    console.log(`🔧 AOMA bypass flag: ${bypassAOMA} (env: ${process.env.NEXT_PUBLIC_BYPASS_AOMA})`);
+    // AOMA Integration Control (P0 CRITICAL FIX)
+    // Only bypass AOMA in development if explicitly requested
+    const bypassAOMA =
+      process.env.NODE_ENV === 'development' &&
+      process.env.NEXT_PUBLIC_BYPASS_AOMA === 'true';
+
+    console.log(`🔧 AOMA bypass: ${bypassAOMA} (dev=${process.env.NODE_ENV === 'development'}, flag=${process.env.NEXT_PUBLIC_BYPASS_AOMA})`);
     
     // Check if we need AOMA context
     const latestUserMessage = messages
@@ -212,14 +297,21 @@ export async function POST(req: Request) {
           });
         }
       } catch (error) {
-        console.error("❌ AOMA query error:", error);
+        // Log detailed error server-side
+        console.error("❌ AOMA query error:", {
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+          query: queryString.substring(0, 100),
+          timestamp: new Date().toISOString()
+        });
+
         aomaConnectionStatus = "failed";
 
+        // User-friendly warning (no implementation details)
         knowledgeElements.push({
           type: 'warning',
-          content: 'Unable to access AOMA resources due to a connection error. The AOMA-MCP server or knowledge bases may be offline. If this issue persists, please contact matt@mattcarpenter.com for support.',
+          content: 'AOMA knowledge base temporarily unavailable. Answers may be less comprehensive than usual.',
           metadata: {
-            error: error instanceof Error ? error.message : 'Unknown error',
             timestamp: new Date().toISOString(),
           }
         });

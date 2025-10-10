@@ -602,8 +602,8 @@ export class AOMAOrchestrator {
         case "search_outlook_emails":
         case "analyze_development_context":
           // Call the aoma-mesh-mcp server for these tools
-          // Use Render endpoint for aoma-mesh-mcp
-          const mcpEndpoint = 'https://aoma-mesh-mcp.onrender.com/rpc';
+          // Use Railway endpoint for aoma-mesh-mcp (Railway is the correct deployment platform)
+          const mcpEndpoint = 'https://luminous-dedication-production.up.railway.app/rpc';
           
           const mcpRequest = {
             jsonrpc: "2.0",
