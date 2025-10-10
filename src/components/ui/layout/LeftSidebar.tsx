@@ -247,14 +247,14 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
 
         {/* Enhanced Search Bar */}
         <div className="mt-3 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-mac-text-muted" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-mac-text-muted pointer-events-none" />
           <input
             ref={searchInputRef}
             type="text"
-            placeholder="Search conversations... (⌘K)"
+            placeholder="Search conversations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-3 py-2.5 bg-mac-surface-bg border border-mac-border rounded-lg text-sm text-mac-text-primary placeholder-mac-text-muted focus:outline-none focus:ring-2 focus:ring-mac-accent-purple-400/50 focus:border-mac-accent-purple-400/50 transition-all duration-200"
+            className="w-full pl-11 pr-10 py-2.5 bg-mac-surface-bg border border-mac-border rounded-lg text-sm text-mac-text-primary placeholder-mac-text-muted focus:outline-none focus:ring-2 focus:ring-mac-accent-purple-400/50 focus:border-mac-accent-purple-400/50 transition-all duration-200"
           />
           {searchQuery && (
             <button
@@ -321,10 +321,10 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                               onClick={() => onConversationSelect?.(conversation.id)}
                               onContextMenu={(e) => handleContextMenu(e, conversation.id)}
                               className={cn(
-                                "w-full text-left p-3 mx-2 rounded-lg transition-all duration-200 relative",
+                                "w-full text-left p-4 mx-3 rounded-lg transition-all duration-200 relative",
                                 "hover:bg-mac-state-hover group-hover/conversation:bg-mac-state-hover",
                                 conversation.isActive &&
-                                  "bg-mac-primary-blue-400/10 border-l-2 border-mac-primary-blue-400 shadow-sm",
+                                  "bg-mac-primary-blue-400/10 border-l-2 border-mac-primary-blue-400 shadow-sm pl-5",
                                 !conversation.isActive && "hover:bg-mac-surface-bg",
                               )}
                             >

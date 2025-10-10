@@ -8,6 +8,7 @@ import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
 import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
 import { modelConfig } from "../../../src/services/modelConfig";
 import { trackRequest } from "../introspection/route";
+import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
@@ -276,9 +277,15 @@ export async function POST(req: Request) {
       );
 
       try {
-        // SIMPLIFIED: Let the orchestrator (LangChain) handle ALL endpoint logic
-        // No more manual parallel queries - orchestrator manages retries, fallbacks, tool selection
-        console.log('⏳ Calling AOMA orchestrator with 30s timeout...');
+        // PARALLEL HYBRID APPROACH: Query both Railway MCP AND Supabase vector store
+        // This gives us comprehensive coverage from all knowledge sources
+        console.log('⏳ Starting parallel queries: AOMA orchestrator + Supabase vectors...');
+
+        // Start Supabase knowledge search in parallel
+        const ragPromise = searchKnowledge(queryString, {
+          matchThreshold: 0.78,
+          matchCount: 6,
+        });
 
         // Wrap orchestrator call with timeout to prevent hanging
         const orchestratorResult = await Promise.race([
@@ -314,6 +321,43 @@ export async function POST(req: Request) {
               timestamp: new Date().toISOString(),
             }
           });
+        }
+
+        // Await Supabase RAG results and merge with AOMA context
+        try {
+          console.log('⏳ Waiting for Supabase vector search...');
+          const rag = await ragPromise;
+
+          if (rag.results?.length) {
+            console.log(`✅ Supabase returned ${rag.results.length} results in ${rag.durationMs}ms`);
+
+            // Add top snippets to context
+            const snippets = rag.results
+              .slice(0, 4)
+              .map((r, i) => `(${i + 1}) [${r.source_type}] ${r.content?.slice(0, 400)}`)
+              .join("\n---\n");
+
+            aomaContext += `\n\n[SUPABASE KNOWLEDGE]\n${snippets}`;
+            aomaContext += `\n[CONTEXT_META]{"count":${rag.stats.count},"ms":${rag.durationMs},"sources":${JSON.stringify(
+              rag.stats.sourcesCovered,
+            )}}`;
+
+            // Add knowledge elements
+            knowledgeElements.push({
+              type: 'context',
+              content: `Found ${rag.stats.count} relevant documents from ${rag.stats.sourcesCovered.join(', ')}`,
+              metadata: {
+                source: 'supabase-vectors',
+                duration: rag.durationMs,
+                timestamp: new Date().toISOString(),
+              }
+            });
+          } else {
+            console.log('⚠️  Supabase vector search returned 0 results');
+          }
+        } catch (ragError) {
+          console.warn('⚠️  Supabase RAG search failed:', ragError);
+          // Don't fail the whole request if Supabase fails - we still have Railway MCP
         }
       } catch (error) {
         // Log detailed error server-side

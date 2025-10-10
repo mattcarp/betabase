@@ -1,0 +1,10 @@
+{
+  "url": "https://aoma-stage.smcdp-de.net/legacy-embed/3fd7c56407d343cca8224f12e0e30975/servlet|com%5Esonymusic%5Eaoma%5EAOMADispatcherServlet~chain*CustomHomePageViewAction",
+  "timestamp": "2025-10-10T13:14:24.710Z",
+  "lcp": 0,
+  "fid": 0,
+  "cls": "0.000",
+  "ttfb": 0,
+  "domContentLoaded": 642,
+  "loadTime": 731
+}

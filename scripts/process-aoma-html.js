@@ -58,19 +58,21 @@ async function processHtmlFile(htmlPath) {
   const embedding = embeddingResponse.data[0].embedding;
   console.log(`  ✅ Generated embedding (${embedding.length}D)`);
 
-  // Store in Supabase
-  const { error } = await supabase
+  // Store in Supabase using the existing optimized table
+  const { data, error } = await supabase
     .from('aoma_unified_vectors')
     .upsert({
       content: cleanedMarkdown,
-      embedding: embedding,
+      embedding: `[${embedding.join(',')}]`, // Convert array to PostgreSQL vector format
       source_type: 'knowledge',
       source_id: url,
       metadata: {
         url: url,
         title: `AOMA - ${filename}`,
         crawledAt: new Date().toISOString(),
-        contentLength: cleanedMarkdown.length
+        contentLength: cleanedMarkdown.length,
+        scrapedFrom: 'safari',
+        pageType: 'aoma_stage'
       },
       updated_at: new Date().toISOString()
     }, {
@@ -78,9 +80,9 @@ async function processHtmlFile(htmlPath) {
     });
 
   if (error) {
-    console.log(`  ❌ DB Error: ${error.message}`);
+    console.log(`  ❌ DB Error:`, JSON.stringify(error, null, 2));
   } else {
-    console.log(`  ✅ Stored in vector database`);
+    console.log(`  ✅ Stored in vector database (ID: ${data?.[0]?.id || 'unknown'})`);
   }
 
   // Save markdown locally

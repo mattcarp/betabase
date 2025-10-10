@@ -47,6 +47,7 @@
 
   /* Sidebar Variables */
   --sidebar-width: 16rem; /* 256px */
+  --sidebar-width-medium: 12.5rem; /* 200px - for medium viewports ~800px */
   --sidebar-width-mobile: 18rem; /* 288px */
   --sidebar-width-icon: 3rem; /* 48px - collapsed width */
 
@@ -499,5 +500,110 @@
 
 .mac-status-dot-error {
   background-color: #ef4444;
+}
+
+/* ========================
+   RESPONSIVE DESIGN
+   ======================== */
+
+/* Medium viewport (tablets and half-screen dev setups ~720-900px) */
+@media (min-width: 640px) and (max-width: 1024px) {
+  :root {
+    /* Reduce sidebar width for medium viewports */
+    --sidebar-width: var(--sidebar-width-medium);
+  }
+
+  /* More compact header for medium viewports */
+  header {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Reduce spacing in navigation tabs */
+  .space-x-1 {
+    gap: 0.25rem !important;
+  }
+
+  /* Make buttons more compact */
+  button {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* Hide less critical elements on smaller viewports */
+  .hidden\:md {
+    display: none !important;
+  }
+}
+
+/* Specific adjustments for ~750-800px (half of 15" Mac screen) */
+@media (min-width: 720px) and (max-width: 850px) {
+  :root {
+    --sidebar-width: 14rem; /* 224px - balanced width */
+  }
+
+  /* Further reduce header padding */
+  header {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  header .px-6 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* Make nav tabs smaller */
+  header button {
+    font-size: 0.8125rem !important;
+    padding: 0.375rem 0.5rem !important;
+  }
+
+  /* Reduce gaps between elements */
+  .space-x-1 {
+    gap: 0.125rem !important;
+  }
+
+  .space-x-2 {
+    gap: 0.25rem !important;
+  }
+
+  .space-x-3 {
+    gap: 0.375rem !important;
+  }
+
+  /* Reduce main header gap from 16px to 8px (saves 16px) */
+  header .gap-4 {
+    gap: 0.5rem !important;
+  }
+
+  /* Make nav tabs even more compact */
+  header .space-x-1 button {
+    padding-left: 0.375rem !important;
+    padding-right: 0.375rem !important;
+  }
+
+  /* Reduce spacing within nav tab buttons */
+  header .space-x-2 {
+    gap: 0.125rem !important;
+  }
+
+  /* Keep logo/branding readable - don't shrink too much */
+  /* Removed h1 and .text-xs overrides - keep them at normal size */
+
+  /* Hide Introspection dropdown to save space (~113px) */
+  .introspection-dropdown-container {
+    display: none !important;
+  }
+
+  /* Hide Sign Out text, show icon only (saves ~60px) */
+  .sign-out-text {
+    display: none !important;
+  }
+
+  .sign-out-button {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
 }
 
