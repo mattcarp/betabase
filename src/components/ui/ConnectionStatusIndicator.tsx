@@ -163,16 +163,13 @@ export const ConnectionStatusIndicator: React.FC = () => {
   };
 
   const getPrimaryStatusText = () => {
-    const onlineCount = statuses.filter((s) => s.type === "connected").length;
-    const total = statuses.length;
-
     switch (primaryStatus) {
       case "connected":
         return "All Systems Online";
       case "disconnected":
       case "error":
       case "connecting":
-        return `${onlineCount}/${total} Services Running`;
+        return "Services Running";
       default:
         return "Status Unknown";
     }
@@ -195,7 +192,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
             ? "motiff-status-connected bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/20"
             : primaryStatus === "connecting"
             ? "motiff-status-connecting bg-yellow-500/10 border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20"
-            : "motiff-status-disconnected bg-red-500/10 border-red-500/20 text-red-400 hover:bg-red-500/20",
+            : "motiff-status-disconnected bg-white/5 border-orange-400/30 text-orange-300 hover:bg-white/10",
         )}
       >
         <div
