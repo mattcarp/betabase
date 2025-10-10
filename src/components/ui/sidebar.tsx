@@ -165,6 +165,7 @@ const Sidebar = React.forwardRef<
           "group peer",
           "flex flex-col gap-2",
           "duration-200 relative h-full",
+          "w-[--sidebar-width]", // Use CSS variable for responsive width
           variant === "floating" && "ml-2 rounded-lg border shadow-sm",
           variant === "inset" && "ml-2 rounded-lg",
           className,

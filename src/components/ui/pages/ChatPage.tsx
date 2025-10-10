@@ -26,6 +26,7 @@ import {
   Menu,
   X,
   RefreshCw,
+  LogOut,
 } from "lucide-react";
 import { Badge } from "../badge";
 import { Button } from "../button";
@@ -169,7 +170,7 @@ Be helpful, concise, and professional in your responses.`;
           <div className="flex flex-row items-center justify-between gap-4 h-full">
             {/* Brand Identity */}
             <div className="flex items-center space-x-3 flex-shrink-0">
-              <SiamLogo size="sm" variant="icon" />
+              <SiamLogo size="md" variant="icon" />
               <div>
                 <h1 className="text-xl font-extralight text-white tracking-tight whitespace-nowrap">
                   The Betabase
@@ -202,7 +203,9 @@ Be helpful, concise, and professional in your responses.`;
             {/* Controls */}
             <div className="flex items-center space-x-2 flex-shrink-0">
               <ConnectionStatusIndicator />
-              <IntrospectionDropdown />
+              <div className="introspection-dropdown-container">
+                <IntrospectionDropdown />
+              </div>
               {/* Knowledge status badges */}
               <div className="hidden lg:flex items-center gap-1">
                 <Badge variant="outline" title="Knowledge status" className="whitespace-nowrap">
@@ -232,9 +235,10 @@ Be helpful, concise, and professional in your responses.`;
                   variant="ghost"
                   size="sm"
                   onClick={onLogout}
-                  className="text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 text-xs px-3"
+                  className="sign-out-button text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 text-xs px-3 flex items-center gap-2"
                 >
-                  Sign Out
+                  <LogOut className="h-4 w-4" />
+                  <span className="sign-out-text">Sign Out</span>
                 </Button>
               )}
             </div>
