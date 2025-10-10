@@ -984,3 +984,4 @@ Last updated: August 26, 2025
 - none of our apps is AOMA. we have the aoma-mesh-mcp, and thebetase/siam. don't use the term AOMA when you mean something else.
 - you deploy thebetabase/siam to render.com. you deploy aoma-mesh-mcp to railway.com.
 - let's be really clear. railway is for the aoma-mesh-mcp server, and render is for the siam project. are we clear on that?
+- you should be testing basic chatfor out right console errors. always. every playwright test should also check for console errors, and take performance measurments.
