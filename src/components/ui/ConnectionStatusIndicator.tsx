@@ -163,15 +163,16 @@ export const ConnectionStatusIndicator: React.FC = () => {
   };
 
   const getPrimaryStatusText = () => {
+    const onlineCount = statuses.filter((s) => s.type === "connected").length;
+    const total = statuses.length;
+
     switch (primaryStatus) {
       case "connected":
         return "All Systems Online";
       case "disconnected":
-        return "Some Services Offline";
-      case "connecting":
-        return "Connecting...";
       case "error":
-        return "Connection Issues";
+      case "connecting":
+        return `${onlineCount}/${total} Services Running`;
       default:
         return "Status Unknown";
     }
@@ -211,46 +212,138 @@ export const ConnectionStatusIndicator: React.FC = () => {
         <span className="hidden sm:inline">{getPrimaryStatusText()}</span>
       </Badge>
 
-      {/* Enhanced Status Display - Shows on hover */}
+      {/* MAC Design System Status Popup */}
       {showDropdown && (
         <div
-          className="absolute top-full right-0 mt-2 p-3 bg-black/95 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl min-w-[16rem] animate-in fade-in slide-in-from-top-2 duration-200"
-          style={{ zIndex: 9999 }}>
-          <div className="space-y-3">
-          <div className="text-sm font-medium text-white border-b border-white/20 pb-2">
-            Service Status
-          </div>
-          {statuses.map((status, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between text-sm hover:bg-white/5 rounded-lg p-2 transition-colors"
-            >
-              <span className="flex items-center gap-2">
-                {getStatusIcon(status.type)}
-                <span className="text-white font-medium">{status.service}</span>
-              </span>
+          className="absolute top-full right-0 mt-3 min-w-[22rem] animate-in fade-in slide-in-from-top-2 duration-300 rounded-xl shadow-2xl border border-white/20"
+          style={{
+            zIndex: 99999,
+            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)'
+          }}>
+          <div className="p-5 space-y-4">
+            {/* Header with visual flair */}
+            <div className="flex items-center justify-between border-b border-white/20 pb-3">
               <div className="flex items-center gap-2">
-                <div className={cn(
-                  "w-2 h-2 rounded-full",
-                  status.type === "connected" ? "bg-green-500 animate-pulse" :
-                  status.type === "error" ? "bg-orange-500" :
-                  status.type === "disconnected" ? "bg-red-500" :
-                  "bg-yellow-500 animate-pulse"
-                )} />
-                <span className={cn("capitalize text-xs font-medium", getStatusColor(status.type))}>
-                  {status.type === "connected" ? "Online" :
-                   status.type === "disconnected" ? "Offline" :
-                   status.type === "error" ? "Error" : "Connecting"}
-                </span>
+                <div className="mac-floating-orb h-2 w-2" />
+                <h3 className="text-base font-[400] tracking-wide text-white">
+                  System Health
+                </h3>
+              </div>
+              <div className="text-xs font-[300] text-white/70">
+                {connectedCount}/{totalCount} Online
               </div>
             </div>
-          ))}
-          {statuses[0]?.lastChecked && (
-            <div className="mt-3 pt-2 border-t border-white/10 text-xs text-gray-400 text-center">
-              Last checked: {statuses[0].lastChecked.toLocaleTimeString()}
+
+            {/* Service Status Cards */}
+            <div className="space-y-2">
+              {statuses.map((status, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "group relative overflow-hidden rounded-lg p-3 transition-all duration-300",
+                    "hover:scale-[1.02] hover:shadow-lg cursor-pointer",
+                    status.type === "connected"
+                      ? "bg-green-500/20 hover:bg-green-500/30 border border-green-500/40"
+                      : status.type === "error"
+                      ? "bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40"
+                      : status.type === "disconnected"
+                      ? "bg-red-500/20 hover:bg-red-500/30 border border-red-500/40"
+                      : "bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/40"
+                  )}
+                >
+                  {/* Status gradient overlay */}
+                  <div className={cn(
+                    "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+                    "bg-gradient-to-r",
+                    status.type === "connected" ? "from-green-500/5 to-transparent" :
+                    status.type === "error" ? "from-orange-500/5 to-transparent" :
+                    status.type === "disconnected" ? "from-red-500/5 to-transparent" :
+                    "from-yellow-500/5 to-transparent"
+                  )} />
+
+                  <div className="relative flex items-center justify-between">
+                    {/* Service Info */}
+                    <div className="flex items-center gap-3">
+                      <div className={cn(
+                        "flex items-center justify-center h-8 w-8 rounded-lg",
+                        status.type === "connected" ? "bg-green-500/20" :
+                        status.type === "error" ? "bg-orange-500/20" :
+                        status.type === "disconnected" ? "bg-red-500/20" :
+                        "bg-yellow-500/20"
+                      )}>
+                        {React.cloneElement(getStatusIcon(status.type) as React.ReactElement, {
+                          className: cn(
+                            "h-4 w-4",
+                            status.type === "connected" ? "text-green-400" :
+                            status.type === "error" ? "text-orange-400" :
+                            status.type === "disconnected" ? "text-red-400" :
+                            "text-yellow-400"
+                          )
+                        })}
+                      </div>
+                      <div>
+                        <div className="text-sm font-[400] text-white">
+                          {status.service}
+                        </div>
+                        <div className="text-xs font-[200] text-white/60">
+                          {status.type === "connected" ? "All systems operational" :
+                           status.type === "disconnected" ? "Service unavailable" :
+                           status.type === "error" ? "Connection error detected" :
+                           "Establishing connection"}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Status Badge */}
+                    <div className="flex items-center gap-2">
+                      <div className={cn(
+                        "relative h-2 w-2 rounded-full",
+                        status.type === "connected" || status.type === "connecting" ? "animate-pulse" : ""
+                      )}>
+                        <div className={cn(
+                          "absolute inset-0 rounded-full blur-sm",
+                          status.type === "connected" ? "bg-green-400" :
+                          status.type === "error" ? "bg-orange-400" :
+                          status.type === "disconnected" ? "bg-red-400" :
+                          "bg-yellow-400"
+                        )} />
+                        <div className={cn(
+                          "relative h-full w-full rounded-full",
+                          status.type === "connected" ? "bg-green-500" :
+                          status.type === "error" ? "bg-orange-500" :
+                          status.type === "disconnected" ? "bg-red-500" :
+                          "bg-yellow-500"
+                        )} />
+                      </div>
+                      <span className={cn(
+                        "text-xs font-[300] uppercase tracking-wider",
+                        status.type === "connected" ? "text-green-400" :
+                        status.type === "error" ? "text-orange-400" :
+                        status.type === "disconnected" ? "text-red-400" :
+                        "text-yellow-400"
+                      )}>
+                        {status.type === "connected" ? "Online" :
+                         status.type === "disconnected" ? "Offline" :
+                         status.type === "error" ? "Error" : "Connecting"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
-        </div>
+
+            {/* Footer with timestamp */}
+            {statuses[0]?.lastChecked && (
+              <div className="flex items-center justify-center gap-2 pt-2 border-t border-white/10">
+                <div className="h-1 w-1 rounded-full bg-white/50 animate-pulse" />
+                <span className="text-xs font-[200] text-white/50 tracking-wide">
+                  Last checked {statuses[0].lastChecked.toLocaleTimeString()}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

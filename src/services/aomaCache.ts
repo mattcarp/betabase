@@ -251,14 +251,25 @@ class AOMACache {
   }
 }
 
-// Export singleton instance
-export const aomaCache = new AOMACache(100);
+// Use globalThis to ensure singleton persistence across module reloads in Next.js
+declare global {
+  var __aomaCache: AOMACache | undefined;
+}
 
-// Set up periodic cache pruning (every 5 minutes)
-if (typeof setInterval !== "undefined") {
-  setInterval(() => {
-    aomaCache.pruneExpired();
-  }, 300000);
+// Export singleton instance with persistence across hot reloads
+export const aomaCache = globalThis.__aomaCache ?? new AOMACache(100);
+
+if (!globalThis.__aomaCache) {
+  globalThis.__aomaCache = aomaCache;
+
+  // Set up periodic cache pruning (every 5 minutes)
+  if (typeof setInterval !== "undefined") {
+    setInterval(() => {
+      aomaCache.pruneExpired();
+    }, 300000);
+  }
+
+  console.log("🔥 AOMA Cache initialized as persistent global singleton");
 }
 
 // Export type for use in other modules
