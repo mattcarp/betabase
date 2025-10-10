@@ -211,9 +211,58 @@ export interface KnowledgeCounts {
   [key: string]: number;
 }
 
+// Cache table availability to avoid repeated 404 errors in console
+let tableAvailabilityCache: { available: boolean; checkedAt: number } | null = null;
+const TABLE_CHECK_TTL = 5 * 60 * 1000; // Cache for 5 minutes
+
 export async function getKnowledgeSourceCounts(): Promise<KnowledgeCounts> {
   // Counts by source_type for quick dashboard indicators
   if (!supabase) return {};
+
+  const ZERO_COUNTS = {
+    git: 0,
+    confluence: 0,
+    jira: 0,
+    firecrawl: 0,
+  };
+
+  // Check cache first to avoid repeated 404 errors
+  if (tableAvailabilityCache) {
+    const age = Date.now() - tableAvailabilityCache.checkedAt;
+    if (age < TABLE_CHECK_TTL) {
+      if (!tableAvailabilityCache.available) {
+        // Table is known to be unavailable - return zeros without querying
+        return ZERO_COUNTS;
+      }
+    }
+  }
+
+  // First time or cache expired - check if table exists
+  try {
+    const { error: tableCheckError } = await supabase
+      .from("aoma_unified_vectors")
+      .select("id", { count: "exact", head: true })
+      .limit(0);
+
+    if (tableCheckError) {
+      // Table doesn't exist - cache this result to prevent future queries
+      if (tableCheckError.message?.includes('404') || tableCheckError.code === 'PGRST204' || tableCheckError.code === 'PGRST116') {
+        console.info('[Knowledge] aoma_unified_vectors table not yet available, caching unavailable status');
+        tableAvailabilityCache = { available: false, checkedAt: Date.now() };
+        return ZERO_COUNTS;
+      }
+    }
+
+    // Table exists - cache this and proceed with counts
+    tableAvailabilityCache = { available: true, checkedAt: Date.now() };
+
+  } catch (err) {
+    // Table check failed - cache unavailable status
+    console.info('[Knowledge] Unable to access aoma_unified_vectors table, caching unavailable status');
+    tableAvailabilityCache = { available: false, checkedAt: Date.now() };
+    return ZERO_COUNTS;
+  }
+
   const types: KnowledgeSourceType[] = [
     "git",
     "confluence",
@@ -221,14 +270,14 @@ export async function getKnowledgeSourceCounts(): Promise<KnowledgeCounts> {
     "firecrawl",
   ];
   const counts: KnowledgeCounts = {};
-  
+
   for (const t of types) {
     try {
       const { count, error } = await supabase
         .from("aoma_unified_vectors")
         .select("id", { count: "exact", head: true })
         .eq("source_type", t);
-      
+
       if (error) {
         console.warn(`[Knowledge] Could not fetch count for ${t}:`, error.message);
         counts[t] = 0;
@@ -240,7 +289,7 @@ export async function getKnowledgeSourceCounts(): Promise<KnowledgeCounts> {
       counts[t] = 0;
     }
   }
-  
+
   return counts;
 }
 

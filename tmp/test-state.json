@@ -1,0 +1,37 @@
+{
+  "cookies": [
+    {
+      "name": "__next_hmr_refresh_hash__",
+      "value": "9d4d5cf198c0e1fc488c407f3daf7e4fa9117536af00030b",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "siam.chat.conv-1760093670625-j3yuoe7ah",
+          "value": "[]"
+        },
+        {
+          "name": "siam.chatId",
+          "value": "7e95e7f0-366f-4cce-8c6c-d0d0312919ca"
+        },
+        {
+          "name": "siam-conversations",
+          "value": "{\"state\":{\"conversations\":[{\"id\":\"conv-1760093670625-j3yuoe7ah\",\"title\":\"The Betabase\",\"messages\":[],\"createdAt\":\"2025-10-10T10:54:30.625Z\",\"updatedAt\":\"2025-10-10T10:54:30.625Z\",\"isPinned\":false,\"tags\":[]}],\"activeConversationId\":\"conv-1760093670625-j3yuoe7ah\"},\"version\":1}"
+        },
+        {
+          "name": "siam.chat.7e95e7f0-366f-4cce-8c6c-d0d0312919ca",
+          "value": "[]"
+        }
+      ]
+    }
+  ]
+}

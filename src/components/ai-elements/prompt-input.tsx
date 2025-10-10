@@ -101,7 +101,7 @@ export const PromptInputTools = ({
 }: PromptInputToolsProps) => (
   <div
     className={cn(
-      "flex items-center gap-1",
+      "flex flex-wrap items-center gap-1",
       "[&_button:first-child]:rounded-bl-xl",
       className,
     )}
