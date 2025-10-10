@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+// AOMA Mesh MCP server on Railway (production deployment)
 const RAILWAY_URL = "https://luminous-dedication-production.up.railway.app";
 
 export async function POST(req: Request) {

@@ -152,22 +152,22 @@ python3 ./scripts/monitor-deployment.py  # Monitor existing deployment
 
 ## 🎨 MAC Design System Integration
 
-**CENTRALIZED DESIGN SYSTEM**: All MAC design files are now centralized in `~/Documents/projects/mc-design-system/`
+**CENTRALIZED DESIGN SYSTEM**: All MAC design files are now centralized in `~/Documents/projects/mc-ai-standards/`
 
 ### Design System References
-The following files are symlinked from the central mc-design-system repository:
-- **CSS Reference**: `src/styles/mac-design-system.css` → `~/Documents/projects/mc-design-system/tokens/mac-design-system.css`
-- **Design Principles**: `context/mac-design-principles.md` → `~/Documents/projects/mc-design-system/docs/mac-design-principles.md`
-- **Design Review Tool**: `design-review-automation.js` → `~/Documents/projects/mc-design-system/tools/design-review-automation.js`
-- **Fiona Agent**: `~/Documents/projects/mc-design-system/agents/fiona-design-review.md`
+The following files are symlinked from the central mc-ai-standards repository:
+- **Design System Master**: `.claude/design-system.md` → `~/Documents/projects/mc-ai-standards/design-system.md`
+- **Design System Docs**: `.claude/design-system-docs/` → `~/Documents/projects/mc-ai-standards/design-system/`
+- **Agents**: `.claude/agents/` → `~/Documents/projects/mc-ai-standards/claude-agents/`
+- **Commands**: `.claude/commands/` → `~/Documents/projects/mc-ai-standards/claude-commands/`
 
 ### Design Review Commands
 ```bash
-# Run comprehensive design review
-node ~/Documents/projects/mc-design-system/tools/design-review-automation.js
-
-# Use slash command for full 8-phase review
+# Use slash command for full 8-phase review (via symlinked commands)
 /design-review
+
+# Or invoke Fiona agent directly
+@fiona "Please perform a comprehensive design review"
 ```
 
 ### When Making UI Changes
@@ -178,9 +178,10 @@ node ~/Documents/projects/mc-design-system/tools/design-review-automation.js
 5. **Validate with Fiona**: Run design review before committing
 
 ### Design System Development
-- **Central repo**: `~/Documents/projects/mc-design-system/`
-- **Edit once, update everywhere**: Changes to design system files automatically reflect in all projects
+- **Central repo**: `~/Documents/projects/mc-ai-standards/`
+- **Edit once, update everywhere**: Changes to design system files automatically reflect in all projects via symlinks
 - **Development-only**: These are guides and validators, not production dependencies
+- **Latest version**: Fiona v2.0.0 SOTA with memory, reflection, and security scanning
 
 ## 🧪 CRITICAL: ALWAYS TEST THE UI
 
@@ -410,7 +411,7 @@ When Fiona is invoked with `subagent_type: fiona` or `fiona-enhanced`, she shoul
 
 ```bash
 # MAC Design System Source Document
-src/styles/mac-design-system.css
+.claude/design-system.md  # Symlinked from mc-ai-standards
 ```
 
 **Fiona's Design System Validation Workflow**:
@@ -982,3 +983,4 @@ Last updated: August 26, 2025
 - remember where the tests are. we have many.
 - none of our apps is AOMA. we have the aoma-mesh-mcp, and thebetase/siam. don't use the term AOMA when you mean something else.
 - you deploy thebetabase/siam to render.com. you deploy aoma-mesh-mcp to railway.com.
+- let's be really clear. railway is for the aoma-mesh-mcp server, and render is for the siam project. are we clear on that?
