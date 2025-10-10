@@ -105,33 +105,50 @@ export async function POST(req: Request) {
     // ========================================
     // AUTHENTICATION CHECK (P0 CRITICAL FIX)
     // ========================================
-    const cookieStore = cookies();
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value;
-          },
-        },
-      }
-    );
+    // Check if auth is bypassed for development
+    const bypassAuth = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true';
 
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (!session) {
-      console.warn('[API] Unauthorized chat attempt');
-      return new Response(
-        JSON.stringify({ error: 'Authentication required' }),
+    if (!bypassAuth) {
+      const cookieStore = await cookies();
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {
-          status: 401,
-          headers: { 'Content-Type': 'application/json' }
+          cookies: {
+            getAll() {
+              return cookieStore.getAll();
+            },
+            setAll(cookiesToSet) {
+              try {
+                cookiesToSet.forEach(({ name, value, options }) =>
+                  cookieStore.set(name, value, options)
+                );
+              } catch {
+                // The `setAll` method was called from a Server Component.
+                // This can be ignored if you have middleware refreshing user sessions.
+              }
+            },
+          },
         }
       );
-    }
 
-    console.log(`[API] Authenticated request from user: ${session.user.email}`);
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        console.warn('[API] Unauthorized chat attempt');
+        return new Response(
+          JSON.stringify({ error: 'Authentication required' }),
+          {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+      }
+
+      console.log(`[API] Authenticated request from user: ${session.user.email}`);
+    } else {
+      console.log('[API] BYPASS_AUTH enabled - skipping authentication check');
+    }
     // ========================================
     // END AUTHENTICATION CHECK
     // ========================================
