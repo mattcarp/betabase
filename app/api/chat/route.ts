@@ -106,7 +106,9 @@ export async function POST(req: Request) {
     // AUTHENTICATION CHECK (P0 CRITICAL FIX)
     // ========================================
     // Check if auth is bypassed for development
-    const bypassAuth = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true';
+    // Note: NEXT_PUBLIC_ vars don't work reliably in API routes, so check both
+    const bypassAuth = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true' ||
+                       process.env.NODE_ENV === 'development';
 
     if (!bypassAuth) {
       const cookieStore = await cookies();
