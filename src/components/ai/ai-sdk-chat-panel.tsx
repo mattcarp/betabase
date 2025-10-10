@@ -41,10 +41,19 @@ import {
 import { Alert, AlertDescription } from "../ui/alert";
 import { motion, AnimatePresence } from "framer-motion";
 // import { toast } from "sonner";
-const toast = { 
-  success: (msg: string, options?: any) => console.log('✅', msg),
-  error: (msg: string, options?: any) => console.error('❌', msg),
-  info: (msg: string, options?: any) => console.info('ℹ️', msg)
+const toast = {
+  success: (msg: string, options?: any) => {
+    console.log('✅', msg);
+    if (options?.description) console.log('  ', options.description);
+  },
+  error: (msg: string, options?: any) => {
+    console.error('❌', msg);
+    if (options?.description) console.error('  ', options.description);
+  },
+  info: (msg: string, options?: any) => {
+    console.info('ℹ️', msg);
+    if (options?.description) console.info('  ', options.description);
+  }
 };
 
 // Import ALL AI SDK Elements for modern chat experience
