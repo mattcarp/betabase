@@ -542,15 +542,15 @@
     --sidebar-width: 14rem; /* 224px - balanced width */
   }
 
-  /* Further reduce header padding */
+  /* Minimal header padding for 750px viewport */
   header {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
   }
 
   header .px-6 {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
   }
 
   /* Make nav tabs smaller */
@@ -572,9 +572,9 @@
     gap: 0.375rem !important;
   }
 
-  /* Reduce main header gap from 16px to 8px (saves 16px) */
+  /* Reduce main header gap to 4px for tighter spacing */
   header .gap-4 {
-    gap: 0.5rem !important;
+    gap: 0.25rem !important;
   }
 
   /* Make nav tabs even more compact */

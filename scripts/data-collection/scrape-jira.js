@@ -19,6 +19,9 @@
  * @module scripts/data-collection/scrape-jira
  */
 
+// Load environment variables FIRST
+require('dotenv').config({ path: '.env.local' });
+
 const { chromium } = require('playwright');
 const fs = require('fs').promises;
 const path = require('path');
@@ -29,27 +32,29 @@ const { generateEmbeddingsBatch, createJiraEmbeddingText } = require('../../util
 const { deduplicateJiraTickets, insertJiraTickets, updateJiraTickets, upsertJiraEmbeddings } = require('../../utils/supabase/deduplication');
 
 // Configuration
-const JIRA_BASE_URL = process.env.JIRA_BASE_URL || 'https://jia.smedigitalapp.com';
+const JIRA_BASE_URL = process.env.JIRA_BASE_URL || 'https://jira.smedigitalapps.com/jira';
 const AUTH_STORAGE_PATH = path.join(__dirname, '../../tmp/jira-auth.json');
 const LOG_FILE = path.join(__dirname, '../../logs/jira-scrape.log');
 
 // JQL queries to run
+// Last update was July 3, 2025 (99 days ago)
+// Using 110d to cover gap + buffer
 const JQL_QUERIES = [
   {
-    name: 'Recent updates (last 30 days)',
-    jql: 'updated >= -30d ORDER BY updated DESC'
+    name: 'All updates since last run (110 days)',
+    jql: 'updated >= -110d ORDER BY updated DESC'
   },
   {
     name: 'Open tickets',
-    jql: 'status in ("To Do", "In Progress", "In Review") ORDER BY priority DESC, created DESC'
+    jql: 'status in ("To Do", "In Progress", "In Review") AND updated >= -110d ORDER BY priority DESC, created DESC'
   },
   {
     name: 'Recent bugs',
-    jql: 'type = Bug AND created >= -90d ORDER BY priority DESC'
+    jql: 'type = Bug AND updated >= -110d ORDER BY priority DESC'
   },
   {
     name: 'AOMA project tickets',
-    jql: 'project = AOMA ORDER BY updated DESC'
+    jql: 'project = AOMA AND updated >= -110d ORDER BY updated DESC'
   }
 ];
 
