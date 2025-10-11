@@ -23,7 +23,7 @@ const SelectTrigger = React.forwardRef<
     ref={ref}
     className={cn(
       // MAC Select styling
-      "mac-input mac-shimmer",
+      "mac-input",
       "flex h-10 w-full items-center justify-between whitespace-nowrap transition-all duration-200",
       // Placeholder styles
       "data-[placeholder]:text-[var(--mac-text-muted)]",
