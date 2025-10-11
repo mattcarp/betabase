@@ -112,8 +112,8 @@ async function authenticateWithMicrosoft(page, config) {
 
     console.log(`   Filling username: ${username}`);
 
-    // Use fill() which works with hidden fields
-    await page.fill('#login-form-username', username);
+    // Use fill() with force:true to bypass visibility checks
+    await page.fill('#login-form-username', username, { force: true });
     await page.waitForTimeout(1000);
 
     // VERIFY username was filled correctly
@@ -159,8 +159,8 @@ async function authenticateWithMicrosoft(page, config) {
 
     console.log(`   Filling password into #login-form-password`);
 
-    // Use fill() which works with hidden fields
-    await page.fill('#login-form-password[type="password"]', password);
+    // Use fill() with force:true to bypass visibility checks
+    await page.fill('#login-form-password[type="password"]', password, { force: true });
     await page.waitForTimeout(1000);
 
     // VERIFY password was filled correctly (check length since it's masked)
