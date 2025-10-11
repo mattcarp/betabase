@@ -3,6 +3,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
+import type OpenAI from 'openai';
 import { aomaCache } from "../../../src/services/aomaCache";
 import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
 import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
@@ -434,7 +435,7 @@ ${aomaContext}
       messages: openAIMessages, // Already in correct format after filtering/validation
       system: enhancedSystemPrompt, // Use system parameter instead of adding to messages array
       temperature: modelSettings.temperature || temperature,
-      maxTokens: modelSettings.maxTokens || 4000,
+      // Note: AI SDK handles token limits via the model config, not maxTokens parameter
     });
 
     console.log('✅ Stream created successfully');
