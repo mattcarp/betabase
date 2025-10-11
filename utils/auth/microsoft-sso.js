@@ -92,11 +92,11 @@ async function authenticateWithMicrosoft(page, config) {
   console.log(`📧 Filling username in login form...`);
 
   try {
-    // Wait for login form to be ready
-    await page.waitForSelector('#login-form-username', { timeout: 10000 });
+    // Wait for login form to exist (even if hidden)
+    await page.waitForSelector('#login-form-username', { state: 'attached', timeout: 10000 });
     await page.waitForTimeout(1000);
 
-    // Clear the username field first
+    // Make visible and clear the username field
     await page.evaluate(() => {
       const field = document.querySelector('#login-form-username');
       if (field) {
@@ -141,11 +141,11 @@ async function authenticateWithMicrosoft(page, config) {
   try {
     await page.waitForTimeout(1000);
 
-    // Wait for password field to exist
-    await page.waitForSelector('#login-form-password[type="password"]', { timeout: 10000 });
+    // Wait for password field to exist (even if hidden)
+    await page.waitForSelector('#login-form-password[type="password"]', { state: 'attached', timeout: 10000 });
     await page.waitForTimeout(500);
 
-    // Clear the password field and prepare it
+    // Make visible and clear the password field
     await page.evaluate(() => {
       const field = document.querySelector('#login-form-password[type="password"]');
       if (field) {
