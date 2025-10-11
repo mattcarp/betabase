@@ -21,7 +21,7 @@ const getButtonClasses = (
     destructive: "bg-red-950/80 border border-red-500/50 text-red-100 hover:bg-red-900/90 hover:border-red-400 shadow-sm rounded-[0.5rem]",
     outline: "mac-button-outline hover:scale-[1.01]",
     secondary: "mac-button-secondary shadow-md hover:shadow-lg",
-    ghost: "bg-transparent border-transparent hover:bg-[var(--mac-state-hover)] hover:border-[var(--mac-utility-border)] rounded-[0.5rem] px-4 py-2",
+    ghost: "bg-transparent border-transparent hover:bg-zinc-800/50 hover:border-zinc-700 rounded-md",
     link: "text-[var(--mac-primary-blue-400)] p-0 bg-transparent border-transparent underline-offset-4 hover:underline hover:text-[var(--mac-primary-blue-600)]",
   };
   
@@ -30,7 +30,7 @@ const getButtonClasses = (
     default: "h-9 px-4 py-2",
     sm: "h-8 rounded-md px-3 text-xs",
     lg: "h-10 rounded-md px-8",
-    icon: "h-9 w-9",
+    icon: "h-8 w-8 p-0",
   };
   
   return cn(baseClasses, variantClasses[variant], sizeClasses[size]);
