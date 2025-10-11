@@ -282,11 +282,15 @@ export async function POST(req: Request) {
         // This gives us comprehensive coverage from all knowledge sources
         console.log('⏳ Starting parallel queries: AOMA orchestrator + Supabase vectors...');
 
+        // TEMPORARY: Disable Supabase until migration is deployed
         // Start Supabase knowledge search in parallel
+        const ragPromise = Promise.resolve({ results: [], durationMs: 0, stats: { count: 0, sourcesCovered: [] } })
+        /* Disabled until aoma_unified_vectors table exists:
         const ragPromise = searchKnowledge(queryString, {
           matchThreshold: 0.78,
           matchCount: 6,
         });
+        */
 
         // Wrap orchestrator call with timeout to prevent hanging
         const orchestratorResult = await Promise.race([
