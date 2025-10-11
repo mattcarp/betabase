@@ -69,13 +69,13 @@ export const Action = ({
   label,
   className,
   variant = "ghost",
-  size = "sm",
+  size = "icon",
   ...props
 }: ActionProps) => {
   const button = (
     <Button
       className={cn(
-        "size-9 p-1.5 text-muted-foreground hover:text-foreground",
+        "!h-8 !w-8 !p-0 text-muted-foreground hover:text-foreground shrink-0",
         className,
       )}
       size={size}
