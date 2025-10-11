@@ -255,7 +255,7 @@ export function AiSdkChatPanel({
   })();
 
   const availableModels = [
-    { id: "gpt-5", name: "GPT-5 🔥" },
+    { id: "gpt-5", name: "GPT-5" },
     { id: "gpt-5-mini", name: "GPT-5 Mini" },
     { id: "gpt-5-nano", name: "GPT-5 Nano" },
     { id: "gpt-4o", name: "GPT-4o" },
@@ -2080,10 +2080,7 @@ export function AiSdkChatPanel({
                     "bg-gradient-to-r from-red-500 to-red-600",
                     "border-red-400/50 shadow-[0_0_20px_rgba(239,68,68,0.6)]",
                     "text-white font-semibold",
-                    "animate-pulse",
-                    "before:absolute before:inset-0",
-                    "before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent",
-                    "before:translate-x-[-200%] before:animate-[shimmer_2s_infinite]"
+                    "animate-pulse"
                   ] : [
                     "hover:bg-white/10 hover:border-white/20",
                     "hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
@@ -2152,10 +2149,7 @@ export function AiSdkChatPanel({
                   "mac-glass mac-surface-elevated",
                   isTTSEnabled ? [
                     "bg-gradient-to-r from-emerald-500/80 to-teal-600/80",
-                    "border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]",
-                    "before:absolute before:inset-0",
-                    "before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent",
-                    "before:translate-x-[-200%] before:animate-[shimmer_2s_infinite]"
+                    "border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]"
                   ] : [
                     "hover:bg-white/10 hover:border-white/20",
                     "hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
