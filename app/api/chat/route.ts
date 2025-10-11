@@ -105,6 +105,12 @@ export async function POST(req: Request) {
   const chatStartTime = Date.now();
 
   try {
+    console.log('[API] ========== POST /api/chat REQUEST START ==========');
+    console.log('[API] Timestamp:', new Date().toISOString());
+    console.log('[API] NODE_ENV:', process.env.NODE_ENV);
+    console.log('[API] NEXT_PUBLIC_BYPASS_AUTH:', process.env.NEXT_PUBLIC_BYPASS_AUTH);
+    console.log('[API] OPENAI_API_KEY present:', !!process.env.OPENAI_API_KEY);
+
     // ========================================
     // AUTHENTICATION CHECK (P0 CRITICAL FIX)
     // ========================================
@@ -113,7 +119,10 @@ export async function POST(req: Request) {
     const bypassAuth = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true' ||
                        process.env.NODE_ENV === 'development';
 
+    console.log('[API] Bypass auth:', bypassAuth);
+
     if (!bypassAuth) {
+      console.log('[API] Checking authentication...');
       const cookieStore = await cookies();
       const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -137,10 +146,24 @@ export async function POST(req: Request) {
         }
       );
 
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError) {
+        console.error('[API] Session check error:', sessionError);
+        return new Response(
+          JSON.stringify({
+            error: 'Authentication error',
+            details: process.env.NODE_ENV === 'development' ? sessionError.message : undefined
+          }),
+          {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+      }
 
       if (!session) {
-        console.warn('[API] Unauthorized chat attempt');
+        console.warn('[API] Unauthorized chat attempt - no session');
         return new Response(
           JSON.stringify({ error: 'Authentication required' }),
           {
@@ -154,6 +177,7 @@ export async function POST(req: Request) {
     } else {
       console.log('[API] BYPASS_AUTH enabled - skipping authentication check');
     }
+    console.log('[API] ✅ Authentication check complete');
     // ========================================
     // END AUTHENTICATION CHECK
     // ========================================
@@ -173,11 +197,14 @@ export async function POST(req: Request) {
       );
     }
 
+    console.log('[API] Parsing request body...');
     const body = await req.json();
+    console.log('[API] Body parsed. Messages count:', body.messages?.length);
 
     // ========================================
     // INPUT VALIDATION (P0 CRITICAL FIX)
     // ========================================
+    console.log('[API] Validating request...');
     const validation = ChatRequestSchema.safeParse(body);
     if (!validation.success) {
       console.warn('[API] Invalid request:', validation.error.errors);
@@ -452,7 +479,11 @@ ${aomaContext}
     return result.toUIMessageStreamResponse();
 
   } catch (error) {
-    console.error("Chat API error:", error);
+    console.error("❌ Chat API error:", error);
+    console.error("❌ Error type:", typeof error);
+    console.error("❌ Error name:", error instanceof Error ? error.name : 'Unknown');
+    console.error("❌ Error message:", error instanceof Error ? error.message : String(error));
+    console.error("❌ Error stack:", error instanceof Error ? error.stack : 'No stack trace');
 
     // Log full error details for debugging
     if (error && typeof error === 'object' && 'response' in error) {
