@@ -51,10 +51,6 @@ const JQL_QUERIES = [
   {
     name: 'Recent bugs',
     jql: 'type = Bug AND updated >= -110d ORDER BY priority DESC'
-  },
-  {
-    name: 'AOMA project tickets',
-    jql: 'project = AOMA AND updated >= -110d ORDER BY updated DESC'
   }
 ];
 
@@ -192,6 +188,25 @@ async function runJQLQuery(page, jql, queryName) {
   const searchUrl = `${JIRA_BASE_URL}/issues/?jql=${encodeURIComponent(jql)}`;
   await page.goto(searchUrl, { waitUntil: 'networkidle', timeout: 30000 });
   await page.waitForTimeout(3000);
+
+  // DEBUG: Take screenshot and log page info
+  const screenshotPath = path.join(__dirname, `../../tmp/jira-query-${Date.now()}.png`);
+  await page.screenshot({ path: screenshotPath, fullPage: false });
+  await log(`   📸 Screenshot saved: ${screenshotPath}`);
+
+  // Check for error messages
+  const errorMessage = await page.evaluate(() => {
+    const errorDiv = document.querySelector('.aui-message-error, .error-message, .issue-error');
+    return errorDiv ? errorDiv.textContent.trim() : null;
+  });
+
+  if (errorMessage) {
+    await log(`   ⚠️  Error on page: ${errorMessage}`);
+  }
+
+  // Check page title
+  const title = await page.title();
+  await log(`   📄 Page title: ${title}`);
 
   // Extract tickets from search results
   const tickets = await extractTicketsFromPage(page);
