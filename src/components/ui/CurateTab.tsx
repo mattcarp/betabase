@@ -236,14 +236,16 @@ export function CurateTab({
     setDedupeResults(null);
 
     try {
-      toast.info("Scanning for duplicate files...");
+      toast.info("Scanning knowledge base for duplicates...", {
+        description: "Using semantic similarity analysis (85% threshold)",
+      });
 
       const response = await fetch("/api/vector-store/deduplicate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           dryRun: false, // Actually remove duplicates
-          semanticThreshold: 0.95,
+          semanticThreshold: 0.85, // Lower threshold = catch more duplicates
           keepNewest: true,
         }),
       });
@@ -258,18 +260,26 @@ export function CurateTab({
 
         if (data.removed > 0) {
           toast.success(
-            `Removed ${data.removed} duplicate file(s) from ${data.duplicateGroups} group(s)`
+            `🎯 Cleaned up ${data.removed} duplicate file(s) from ${data.duplicateGroups} group(s)`,
+            {
+              description: "Knowledge base optimized - newer versions kept",
+              duration: 5000,
+            }
           );
           await loadFiles(); // Reload files
         } else {
-          toast.success("No duplicates found!");
+          toast.success("✨ Knowledge base is clean!", {
+            description: "No duplicates found - all files are unique",
+          });
         }
       } else {
         throw new Error("Failed to deduplicate");
       }
     } catch (error) {
       console.error("Error deduplicating:", error);
-      toast.error("Failed to deduplicate files");
+      toast.error("Failed to deduplicate files", {
+        description: error instanceof Error ? error.message : "Unknown error",
+      });
     } finally {
       setDeduplicating(false);
     }
