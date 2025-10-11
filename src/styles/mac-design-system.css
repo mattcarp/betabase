@@ -364,13 +364,6 @@
   }
 }
 
-/* Shimmer Effect for Active Voice States */
-@keyframes shimmer {
-  to {
-    transform: translateX(200%);
-  }
-}
-
 /* Pulse Animation for Recording State */
 @keyframes recordingPulse {
   0%, 100% {
@@ -381,28 +374,6 @@
     opacity: 0.7;
     transform: scale(1.05);
   }
-}
-
-/* Voice Button Active States */
-.mac-voice-active {
-  position: relative;
-  overflow: hidden;
-}
-
-.mac-voice-active::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  animation: shimmer 2s infinite;
 }
 
 /* Audio Visualizer Bars */
