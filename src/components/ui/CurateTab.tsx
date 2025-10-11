@@ -539,7 +539,7 @@ export function CurateTab({
                           <p className="font-light text-sm truncate text-[var(--mac-text-primary)]">
                             {file.filename}
                           </p>
-                          <div className="flex items-center gap-4 text-xs text-[var(--mac-text-secondary)] font-light">
+                          <div className="flex items-center gap-2 text-xs text-[var(--mac-text-secondary)] font-light flex-wrap">
                             <span>{formatFileSize(file.bytes)}</span>
                             <span className="text-[var(--mac-utility-border-elevated)]">│</span>
                             <span>{formatDate(file.created_at)}</span>
@@ -555,6 +555,46 @@ export function CurateTab({
                             >
                               {file.status}
                             </Badge>
+                            {/* Knowledge Quality Indicators */}
+                            {(() => {
+                              const now = Date.now();
+                              const fileAge = now - (file.created_at * 1000);
+                              const sevenDays = 7 * 24 * 60 * 60 * 1000;
+                              const isNew = fileAge < sevenDays;
+                              const isLarge = file.bytes > 1024 * 1024; // > 1MB
+
+                              return (
+                                <>
+                                  {isNew && (
+                                    <Badge
+                                      variant="outline"
+                                      className={cn(
+                                        "text-xs h-4 font-light",
+                                        "bg-[var(--mac-accent-purple-400)]/10",
+                                        "border-[var(--mac-accent-purple-400)]/30",
+                                        "text-[var(--mac-accent-purple-400)]"
+                                      )}
+                                    >
+                                      New
+                                    </Badge>
+                                  )}
+                                  {isLarge && (
+                                    <Badge
+                                      variant="outline"
+                                      className={cn(
+                                        "text-xs h-4 font-light",
+                                        "bg-[var(--mac-primary-blue-400)]/10",
+                                        "border-[var(--mac-primary-blue-400)]/30",
+                                        "text-[var(--mac-primary-blue-400)]"
+                                      )}
+                                      title="Comprehensive document"
+                                    >
+                                      Detailed
+                                    </Badge>
+                                  )}
+                                </>
+                              );
+                            })()}
                           </div>
                         </div>
 
