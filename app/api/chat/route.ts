@@ -9,7 +9,8 @@ import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
 import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
 import { modelConfig } from "../../../src/services/modelConfig";
 import { trackRequest } from "../introspection/route";
-import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
+// Temporarily disabled until Supabase migration deployed:
+// import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
