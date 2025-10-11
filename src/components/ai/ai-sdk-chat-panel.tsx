@@ -2071,19 +2071,17 @@ export function AiSdkChatPanel({
               {/* Voice Input Button (Push-to-Talk) */}
               <Button
                 type="button"
-                size="sm"
+                size="icon"
                 variant={isRecording ? "destructive" : "ghost"}
                 className={cn(
-                  "h-8 px-3 transition-all duration-300 relative overflow-hidden",
-                  "mac-glass mac-surface-elevated",
+                  "h-8 w-8 transition-all duration-300 relative overflow-visible",
                   isRecording ? [
                     "bg-gradient-to-r from-red-500 to-red-600",
                     "border-red-400/50 shadow-[0_0_20px_rgba(239,68,68,0.6)]",
-                    "text-white font-semibold",
+                    "text-white",
                     "animate-pulse"
                   ] : [
-                    "hover:bg-white/10 hover:border-white/20",
-                    "hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                    "hover:bg-zinc-800/50 hover:border-zinc-700",
                   ]
                 )}
                 onMouseDown={(e) => {
@@ -2116,43 +2114,27 @@ export function AiSdkChatPanel({
                 title={isRecording ? "Release to stop recording" : "Hold to record"}
               >
                 {isRecording ? (
-                  <>
-                    <MicOff className="h-4 w-4 text-white animate-pulse" />
-                    <span className="ml-2 text-xs text-white font-medium">Recording...</span>
-                    <span className="absolute top-1 right-1 h-2 w-2 bg-white rounded-full animate-pulse" />
-                    {/* Audio waveform visualization */}
-                    <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 flex items-end gap-px">
-                      {[...Array(3)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="w-px bg-white/80 rounded-full mac-audio-bar"
-                          style={{
-                            height: `${Math.random() * 4 + 2}px`,
-                            animationDelay: `${i * 0.1}s`
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </>
+                  <MicOff className="h-4 w-4 text-white" />
                 ) : (
                   <Mic className="h-4 w-4" />
+                )}
+                {isRecording && (
+                  <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full animate-pulse border border-white" />
                 )}
               </Button>
               
               {/* TTS Toggle Button */}
               <Button
                 type="button"
-                size="sm"
+                size="icon"
                 variant={isTTSEnabled ? "default" : "ghost"}
                 className={cn(
-                  "h-8 px-3 transition-all duration-300 relative overflow-hidden",
-                  "mac-glass mac-surface-elevated",
+                  "h-8 w-8 transition-all duration-300 relative overflow-visible",
                   isTTSEnabled ? [
                     "bg-gradient-to-r from-emerald-500/80 to-teal-600/80",
                     "border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]"
                   ] : [
-                    "hover:bg-white/10 hover:border-white/20",
-                    "hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                    "hover:bg-zinc-800/50 hover:border-zinc-700",
                   ]
                 )}
                 onClick={() => {
@@ -2166,18 +2148,12 @@ export function AiSdkChatPanel({
                 title={isTTSEnabled ? "Disable voice responses" : "Enable voice responses"}
               >
                 {isTTSEnabled ? (
-                  <>
-                    <Volume2 className="h-4 w-4 text-white" />
-                    {isPlaying && (
-                      <span className="ml-2 flex items-center gap-1">
-                        <span className="w-1 h-3 bg-white/80 rounded-full animate-[audioWave_1s_ease-in-out_infinite]" />
-                        <span className="w-1 h-4 bg-white/80 rounded-full animate-[audioWave_1s_ease-in-out_infinite_0.1s]" />
-                        <span className="w-1 h-2 bg-white/80 rounded-full animate-[audioWave_1s_ease-in-out_infinite_0.2s]" />
-                      </span>
-                    )}
-                  </>
+                  <Volume2 className="h-4 w-4 text-white" />
                 ) : (
                   <VolumeX className="h-4 w-4" />
+                )}
+                {isPlaying && (
+                  <span className="absolute -top-1 -right-1 h-2 w-2 bg-emerald-500 rounded-full animate-pulse border border-white" />
                 )}
               </Button>
 
@@ -2196,7 +2172,7 @@ export function AiSdkChatPanel({
                 onValueChange={setSelectedModel}
                 disabled={isMaxMessagesReached || isLoading}
               >
-                <PromptInputModelSelectTrigger className="h-8 bg-transparent border-border/50">
+                <PromptInputModelSelectTrigger className="h-8 w-auto min-w-[120px] bg-transparent border-zinc-700/50 px-3">
                   <PromptInputModelSelectValue />
                 </PromptInputModelSelectTrigger>
                 <PromptInputModelSelectContent>
@@ -2226,7 +2202,7 @@ export function AiSdkChatPanel({
             <PromptInputSubmit
               disabled={isMaxMessagesReached || !localInput?.trim()}
               status={isLoading ? "streaming" : undefined}
-              className="h-8 px-4 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200"
+              className="h-8 w-8 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 flex-shrink-0"
             />
           </PromptInputToolbar>
         </PromptInput>

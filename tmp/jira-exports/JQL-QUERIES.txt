@@ -1,0 +1,102 @@
+═══════════════════════════════════════════════════════════════
+JIRA EXPORT - JQL QUERIES (Copy/Paste Exactly)
+═══════════════════════════════════════════════════════════════
+
+📋 EXPORT 1: AOMA Project
+─────────────────────────────────────────────────────────────
+File: aoma-tickets.csv
+
+project = AOMA AND updated >= -110d ORDER BY updated DESC
+─────────────────────────────────────────────────────────────
+
+
+📋 EXPORT 2: ITSM Project
+─────────────────────────────────────────────────────────────
+File: itsm-tickets.csv
+
+project = ITSM AND updated >= -110d ORDER BY updated DESC
+─────────────────────────────────────────────────────────────
+
+
+📋 EXPORT 3: DPSA Project
+─────────────────────────────────────────────────────────────
+File: dpsa-tickets.csv
+
+project = DPSA AND updated >= -110d ORDER BY updated DESC
+─────────────────────────────────────────────────────────────
+
+
+📋 EXPORT 4: SMDA Project
+─────────────────────────────────────────────────────────────
+File: smda-tickets.csv
+
+project = SMDA AND updated >= -110d ORDER BY updated DESC
+─────────────────────────────────────────────────────────────
+
+
+📋 EXPORT 5: ALL PROJECTS COMBINED (Recommended)
+─────────────────────────────────────────────────────────────
+File: all-projects-tickets.csv
+
+project in (AOMA, ITSM, DPSA, SMDA) AND updated >= -110d ORDER BY updated DESC
+─────────────────────────────────────────────────────────────
+
+
+═══════════════════════════════════════════════════════════════
+QUICK STEPS:
+═══════════════════════════════════════════════════════════════
+
+1. Go to: https://jira.smedigitalapps.com/jira
+2. Click: Filters → Advanced issue search
+3. Paste ONE of the JQL queries above
+4. Click: Export → Export Excel CSV (all fields)
+5. Save with the EXACT filename shown
+6. Move to: /Users/mcarpent/Documents/projects/siam/tmp/jira-exports/
+7. Repeat for each project (or just do #5 for all projects combined)
+
+
+═══════════════════════════════════════════════════════════════
+AFTER EXPORTING ALL FILES, RUN:
+═══════════════════════════════════════════════════════════════
+
+cd /Users/mcarpent/Documents/projects/siam
+
+# Option A: Import each project separately
+node scripts/data-collection/import-jira-csv.js tmp/jira-exports/aoma-tickets.csv
+node scripts/data-collection/import-jira-csv.js tmp/jira-exports/itsm-tickets.csv
+node scripts/data-collection/import-jira-csv.js tmp/jira-exports/dpsa-tickets.csv
+node scripts/data-collection/import-jira-csv.js tmp/jira-exports/smda-tickets.csv
+
+# Option B: Import all at once (if you used query #5)
+node scripts/data-collection/import-jira-csv.js tmp/jira-exports/all-projects-tickets.csv
+
+
+═══════════════════════════════════════════════════════════════
+DEDUPLICATION INFO:
+═══════════════════════════════════════════════════════════════
+
+✅ SAFE: Script uses ticket key (AOMA-123, ITSM-456, etc.) for deduplication
+✅ SAFE: Running import multiple times just updates existing tickets
+✅ SAFE: No duplicates will be created
+✅ VERIFIED: UPSERT logic - INSERT new, UPDATE existing
+
+
+═══════════════════════════════════════════════════════════════
+WHAT HAPPENS DURING IMPORT:
+═══════════════════════════════════════════════════════════════
+
+1. ✓ Parse CSV file
+2. ✓ Transform records to ticket objects
+3. ✓ Upsert to jira_tickets table (deduped by external_id)
+4. ✓ Generate OpenAI embeddings for each ticket
+5. ✓ Upsert embeddings to jira_ticket_embeddings table
+6. ✓ Show progress and summary
+
+
+═══════════════════════════════════════════════════════════════
+EXPECTED RESULTS:
+═══════════════════════════════════════════════════════════════
+
+Time Range: Last 110 days (July 3, 2025 → October 11, 2025)
+Est. Tickets: ~6,000+ across all projects
+Processing: ~10-15 minutes per 1,000 tickets
