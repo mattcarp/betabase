@@ -112,8 +112,16 @@ async function authenticateWithMicrosoft(page, config) {
 
     console.log(`   Filling username: ${username}`);
 
-    // Use fill() with force:true to bypass visibility checks
-    await page.fill('#login-form-username', username, { force: true });
+    // Use JavaScript to directly set value and trigger events
+    await page.evaluate((user) => {
+      const field = document.querySelector('#login-form-username');
+      if (field) {
+        field.value = user;
+        // Trigger input event to notify form
+        field.dispatchEvent(new Event('input', { bubbles: true }));
+        field.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }, username);
     await page.waitForTimeout(1000);
 
     // VERIFY username was filled correctly
@@ -159,8 +167,16 @@ async function authenticateWithMicrosoft(page, config) {
 
     console.log(`   Filling password into #login-form-password`);
 
-    // Use fill() with force:true to bypass visibility checks
-    await page.fill('#login-form-password[type="password"]', password, { force: true });
+    // Use JavaScript to directly set value and trigger events
+    await page.evaluate((pass) => {
+      const field = document.querySelector('#login-form-password[type="password"]');
+      if (field) {
+        field.value = pass;
+        // Trigger input event to notify form
+        field.dispatchEvent(new Event('input', { bubbles: true }));
+        field.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }, password);
     await page.waitForTimeout(1000);
 
     // VERIFY password was filled correctly (check length since it's masked)
