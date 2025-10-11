@@ -1573,7 +1573,7 @@ export function AiSdkChatPanel({
   return (
     <div
       className={cn(
-        "flex flex-col h-full max-h-screen",
+        "flex flex-col flex-1 min-h-0",
         "bg-zinc-950",
         "overflow-hidden",
         className,
@@ -1646,9 +1646,9 @@ export function AiSdkChatPanel({
       )}
 
       {/* Main Chat Area */}
-      <div className="flex-1 min-h-0 overflow-hidden bg-zinc-950">
-        <Conversation className="h-full bg-zinc-950">
-          <ConversationContent className="px-6 py-4 bg-zinc-950">
+      <div className="flex-1 min-h-0 overflow-y-auto bg-zinc-950">
+        <Conversation className="bg-zinc-950">
+          <ConversationContent className="px-6 py-4 pb-8 bg-zinc-950">
             {messages.length === 0 && enableWelcomeScreen ? (
               /* Beautiful Welcome Screen */
               <motion.div
@@ -1963,7 +1963,7 @@ export function AiSdkChatPanel({
       </div>
 
       {/* Modern Input Area */}
-      <div className="flex-shrink-0 px-4 pt-4 pb-2 border-t border-zinc-800/50 bg-zinc-950 relative">
+      <div className="flex-shrink-0 px-4 pt-4 pb-6 border-t border-zinc-800/50 bg-zinc-950 relative">
         {/* Real-Time Transcription Display */}
         {(isRecording || interimTranscript || transcript) && (
           <div className="mb-3 p-3 bg-black/30 rounded-lg backdrop-blur-sm border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-200">

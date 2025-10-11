@@ -170,7 +170,7 @@ Be helpful, concise, and professional in your responses.`;
           <div className="flex flex-row items-center justify-between gap-4 h-full">
             {/* Brand Identity */}
             <div className="flex items-center space-x-3 flex-shrink-0">
-              <SiamLogo size="md" variant="icon" />
+              <SiamLogo size="lg" variant="icon" />
               <div>
                 <h1 className="text-xl font-extralight text-white tracking-tight whitespace-nowrap">
                   The Betabase
@@ -252,7 +252,7 @@ Be helpful, concise, and professional in your responses.`;
         <AppSidebar className="border-r border-zinc-800/50" />
 
         {/* Main Content with SidebarInset */}
-        <SidebarInset className="flex-1 bg-transparent flex flex-col">
+        <SidebarInset className="flex-1 min-h-0 bg-transparent flex flex-col">
           <div className="flex-1 flex flex-col min-h-0">
             {activeMode === "chat" && (
               <div className="flex-1 flex flex-col min-h-0">
