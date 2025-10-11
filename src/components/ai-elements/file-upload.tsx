@@ -286,9 +286,14 @@ export function FileUpload({
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         className={cn(
-          "relative border-2 border-dashed rounded-lg p-8 text-center transition-colors",
-          "hover:border-primary/50 hover:bg-muted/50",
-          "focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20",
+          "relative border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200",
+          "mac-glass",
+          "border-[var(--mac-utility-border)]",
+          "hover:border-[var(--mac-primary-blue-400)]/50",
+          "hover:bg-[var(--mac-state-hover)]",
+          "hover:shadow-lg hover:shadow-[var(--mac-primary-blue-400)]/10",
+          "focus-within:border-[var(--mac-primary-blue-400)]",
+          "focus-within:ring-2 focus-within:ring-[var(--mac-primary-blue-400)]/20",
           isUploading && "pointer-events-none opacity-50",
         )}
       >
@@ -302,15 +307,15 @@ export function FileUpload({
         />
 
         <div className="space-y-4">
-          <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-            <Upload className="h-6 w-6 text-primary" />
+          <div className="mx-auto w-12 h-12 rounded-full bg-[var(--mac-primary-blue-400)]/10 flex items-center justify-center">
+            <Upload className="h-6 w-6 text-[var(--mac-primary-blue-400)]" />
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-1">
+            <h3 className="text-lg font-light mb-1 text-[var(--mac-text-primary)]">
               Upload to Knowledge Base
             </h3>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-[var(--mac-text-secondary)] mb-4 font-light">
               Drag and drop files or click to browse
             </p>
             <Button
@@ -332,7 +337,7 @@ export function FileUpload({
             </Button>
           </div>
 
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-[var(--mac-text-muted)] font-light">
             Max file size: {formatFileSize(maxFileSize)} • Supported: PDF, TXT,
             MD, DOC, DOCX, JSON, CSV, Images
           </p>
@@ -380,11 +385,11 @@ export function FileUpload({
                     )}
 
                     {item.status === "error" && (
-                      <p className="text-xs text-red-500">{item.error}</p>
+                      <p className="text-xs text-[var(--mac-status-error-text)] font-light">{item.error}</p>
                     )}
 
                     {item.status === "completed" && (
-                      <p className="text-xs text-green-600">
+                      <p className="text-xs text-[var(--mac-status-success-text)] font-light">
                         Successfully uploaded
                       </p>
                     )}
@@ -392,16 +397,16 @@ export function FileUpload({
 
                   <div className="flex-shrink-0">
                     {item.status === "pending" && (
-                      <div className="h-5 w-5 rounded-full bg-gray-200" />
+                      <div className="h-5 w-5 rounded-full bg-[var(--mac-utility-border)]" />
                     )}
                     {item.status === "uploading" && (
-                      <Loader2 className="h-5 w-5 animate-spin text-blue-500" />
+                      <Loader2 className="h-5 w-5 animate-spin text-[var(--mac-primary-blue-400)]" />
                     )}
                     {item.status === "completed" && (
-                      <Check className="h-5 w-5 text-green-500" />
+                      <Check className="h-5 w-5 text-[var(--mac-status-success-text)]" />
                     )}
                     {item.status === "error" && (
-                      <AlertCircle className="h-5 w-5 text-red-500" />
+                      <AlertCircle className="h-5 w-5 text-[var(--mac-status-error-text)]" />
                     )}
                   </div>
 

@@ -1,0 +1,1079 @@
+{
+  "config": {
+    "configFile": "/Users/mcarpent/Documents/projects/siam/playwright.config.ts",
+    "rootDir": "/Users/mcarpent/Documents/projects/siam/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 5
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/mcarpent/Documents/projects/siam/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/mcarpent/Documents/projects/siam/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 5,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "curate-tab-comprehensive-test.spec.ts",
+      "file": "curate-tab-comprehensive-test.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Curate Tab - Phase 1: Functional Testing",
+          "file": "curate-tab-comprehensive-test.spec.ts",
+          "line": 46,
+          "column": 6,
+          "specs": [
+            {
+              "title": "1.1 - Page Load and Initial State",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10913,
+                      "error": {
+                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=Knowledge Curation') resolved to 2 elements:\n    1) <h2 class=\"text-lg font-semibold text-zinc-100 flex items-center gap-2\">…</h2> aka getByRole('heading', { name: 'Knowledge Curation' })\n    2) <div class=\"leading-none tracking-tight flex items-center gap-2 font-light text-[var(--mac-text-primary)]\">…</div> aka locator('div').filter({ hasText: /^Knowledge Curation$/ })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Knowledge Curation')\u001b[22m\n",
+                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=Knowledge Curation') resolved to 2 elements:\n    1) <h2 class=\"text-lg font-semibold text-zinc-100 flex items-center gap-2\">…</h2> aka getByRole('heading', { name: 'Knowledge Curation' })\n    2) <div class=\"leading-none tracking-tight flex items-center gap-2 font-light text-[var(--mac-text-primary)]\">…</div> aka locator('div').filter({ hasText: /^Knowledge Curation$/ })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Knowledge Curation')\u001b[22m\n\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:54:59",
+                        "location": {
+                          "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                          "column": 59,
+                          "line": 54
+                        },
+                        "snippet": "  52 |   test('1.1 - Page Load and Initial State', async ({ page }) => {\n  53 |     // Verify main components are visible\n> 54 |     await expect(page.locator('text=Knowledge Curation')).toBeVisible();\n     |                                                           ^\n  55 |     await expect(page.locator('text=AOMA vector storage')).toBeVisible();\n  56 |\n  57 |     // Check that tabs are present"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                            "column": 59,
+                            "line": 54
+                          },
+                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=Knowledge Curation') resolved to 2 elements:\n    1) <h2 class=\"text-lg font-semibold text-zinc-100 flex items-center gap-2\">…</h2> aka getByRole('heading', { name: 'Knowledge Curation' })\n    2) <div class=\"leading-none tracking-tight flex items-center gap-2 font-light text-[var(--mac-text-primary)]\">…</div> aka locator('div').filter({ hasText: /^Knowledge Curation$/ })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Knowledge Curation')\u001b[22m\n\n\n  52 |   test('1.1 - Page Load and Initial State', async ({ page }) => {\n  53 |     // Verify main components are visible\n> 54 |     await expect(page.locator('text=Knowledge Curation')).toBeVisible();\n     |                                                           ^\n  55 |     await expect(page.locator('text=AOMA vector storage')).toBeVisible();\n  56 |\n  57 |     // Check that tabs are present\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:54:59"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:11.128Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-7ed67-Page-Load-and-Initial-State-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-7ed67-Page-Load-and-Initial-State-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                        "column": 59,
+                        "line": 54
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-1c7d1ec0cbc466fcb90a",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 52,
+              "column": 7
+            },
+            {
+              "title": "1.2 - Tab Navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 11979,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:12.959Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-f93d38dc85343822a60b",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 72,
+              "column": 7
+            },
+            {
+              "title": "1.3 - File Upload - Drag & Drop Detection",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 8870,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:10.352Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-d051915eb5d065ace83e",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 89,
+              "column": 7
+            },
+            {
+              "title": "1.4 - File Upload - Click to Browse",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "timedOut",
+                      "duration": 30304,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                            "column": 16,
+                            "line": 116
+                          },
+                          "message": "Error: page.waitForSelector: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=uploaded successfully') to be visible\u001b[22m\n\n\n  114 |\n  115 |     // Wait for upload to complete (look for success toast or completed status)\n> 116 |     await page.waitForSelector('text=uploaded successfully', { timeout: TIMEOUT });\n      |                ^\n  117 |\n  118 |     // Take screenshot\n  119 |     await page.screenshot({ path: 'tmp/screenshots/curate-upload-success.png' });\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:116:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:11.850Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-0e057-le-Upload---Click-to-Browse-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-0e057-le-Upload---Click-to-Browse-chromium/error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-23587f9953f6eebf4f1a",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 103,
+              "column": 7
+            },
+            {
+              "title": "1.5 - Search Functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 13438,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Files before search: 0, after search: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:10.772Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-d15fdce2b5a07ee6b83f",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 122,
+              "column": 7
+            },
+            {
+              "title": "1.6 - File Selection",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 27855,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:20.551Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-a6689f18f1d17a74943a",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 151,
+              "column": 7
+            },
+            {
+              "title": "1.7 - Delete Confirmation Dialog",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 22476,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:25.781Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-c1171b9a73e37e01dc8d",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 178,
+              "column": 7
+            },
+            {
+              "title": "1.8 - Refresh Files",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 21250,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:28.335Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-9aed98c585f512749cc4",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 207,
+              "column": 7
+            },
+            {
+              "title": "1.9 - Deduplicate Button",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16343,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:33.507Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-bf3a0de2e862b2b72a55",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 224,
+              "column": 7
+            },
+            {
+              "title": "1.10 - Console Errors Check",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 30110,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:51.170Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-e36754f7b2413b158c3d",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 243,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Curate Tab - Phase 2: UX & Interaction Quality",
+          "file": "curate-tab-comprehensive-test.spec.ts",
+          "line": 273,
+          "column": 6,
+          "specs": [
+            {
+              "title": "2.1 - Upload Progress Feedback",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 21195,
+                      "error": {
+                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=Uploading').or(locator('[role=\"progressbar\"]')) resolved to 2 elements:\n    1) <button disabled class=\"mac-button inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-light transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 mac-button-outline hover:scale-[1.01] h-9 px-4 py-2\">…</button> aka getByRole('button', { name: 'Uploading...' })\n    2) <div data-max=\"100\" aria-valuemin=\"0\" role=\"progressbar\" aria-valuemax=\"100\" data-state=\"indeterminate\" class=\"relative w-full overflow-hidden rounded-full bg-primary/20 h-1.5\">…</div> aka getByRole('progressbar')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Uploading').or(locator('[role=\"progressbar\"]'))\u001b[22m\n",
+                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=Uploading').or(locator('[role=\"progressbar\"]')) resolved to 2 elements:\n    1) <button disabled class=\"mac-button inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-light transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 mac-button-outline hover:scale-[1.01] h-9 px-4 py-2\">…</button> aka getByRole('button', { name: 'Uploading...' })\n    2) <div data-max=\"100\" aria-valuemin=\"0\" role=\"progressbar\" aria-valuemax=\"100\" data-state=\"indeterminate\" class=\"relative w-full overflow-hidden rounded-full bg-primary/20 h-1.5\">…</div> aka getByRole('progressbar')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Uploading').or(locator('[role=\"progressbar\"]'))\u001b[22m\n\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:288:91",
+                        "location": {
+                          "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                          "column": 91,
+                          "line": 288
+                        },
+                        "snippet": "  286 |\n  287 |     // Check for progress indicator\n> 288 |     await expect(page.locator('text=Uploading').or(page.locator('[role=\"progressbar\"]'))).toBeVisible({ timeout: 5000 });\n      |                                                                                           ^\n  289 |\n  290 |     // Wait for completion\n  291 |     await page.waitForSelector('text=uploaded successfully', { timeout: TIMEOUT });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                            "column": 91,
+                            "line": 288
+                          },
+                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=Uploading').or(locator('[role=\"progressbar\"]')) resolved to 2 elements:\n    1) <button disabled class=\"mac-button inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-light transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 mac-button-outline hover:scale-[1.01] h-9 px-4 py-2\">…</button> aka getByRole('button', { name: 'Uploading...' })\n    2) <div data-max=\"100\" aria-valuemin=\"0\" role=\"progressbar\" aria-valuemax=\"100\" data-state=\"indeterminate\" class=\"relative w-full overflow-hidden rounded-full bg-primary/20 h-1.5\">…</div> aka getByRole('progressbar')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Uploading').or(locator('[role=\"progressbar\"]'))\u001b[22m\n\n\n  286 |\n  287 |     // Check for progress indicator\n> 288 |     await expect(page.locator('text=Uploading').or(page.locator('[role=\"progressbar\"]'))).toBeVisible({ timeout: 5000 });\n      |                                                                                           ^\n  289 |\n  290 |     // Wait for completion\n  291 |     await page.waitForSelector('text=uploaded successfully', { timeout: TIMEOUT });\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:288:91"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:48.278Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-1cacd----Upload-Progress-Feedback-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-1cacd----Upload-Progress-Feedback-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                        "column": 91,
+                        "line": 288
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-0162859a32d67ba50d45",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 279,
+              "column": 7
+            },
+            {
+              "title": "2.2 - Empty State Messaging",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 26306,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('text=No files found').or(locator('text=No files match'))\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=No files found').or(locator('text=No files match'))\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('text=No files found').or(locator('text=No files match'))\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=No files found').or(locator('text=No files match'))\u001b[22m\n\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:305:95",
+                        "location": {
+                          "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                          "column": 95,
+                          "line": 305
+                        },
+                        "snippet": "  303 |\n  304 |     // Check for empty state message\n> 305 |     await expect(page.locator('text=No files found').or(page.locator('text=No files match'))).toBeVisible();\n      |                                                                                               ^\n  306 |\n  307 |     await page.screenshot({ path: 'tmp/screenshots/curate-empty-state.png' });\n  308 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                            "column": 95,
+                            "line": 305
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('text=No files found').or(locator('text=No files match'))\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=No files found').or(locator('text=No files match'))\u001b[22m\n\n\n  303 |\n  304 |     // Check for empty state message\n> 305 |     await expect(page.locator('text=No files found').or(page.locator('text=No files match'))).toBeVisible();\n      |                                                                                               ^\n  306 |\n  307 |     await page.screenshot({ path: 'tmp/screenshots/curate-empty-state.png' });\n  308 |   });\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:305:95"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:48.432Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-78a58-2-2---Empty-State-Messaging-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-78a58-2-2---Empty-State-Messaging-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                        "column": 95,
+                        "line": 305
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-cf48fc71c7f20ebd4c76",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 294,
+              "column": 7
+            },
+            {
+              "title": "2.3 - Hover Effects and Visual Feedback",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 20415,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:49.604Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-5db2c8707ee29ea1a0c8",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 310,
+              "column": 7
+            },
+            {
+              "title": "2.4 - Tab Transition Smoothness",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 27641,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Tab switching took 213ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:07:54.519Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-77b9b7dd35f252cb01a5",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 327,
+              "column": 7
+            },
+            {
+              "title": "2.5 - File Type Icon Display",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 16965,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('text=.pdf, text=.txt, text=.md').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=.pdf, text=.txt, text=.md').first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('text=.pdf, text=.txt, text=.md').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=.pdf, text=.txt, text=.md').first()\u001b[22m\n\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:357:34",
+                        "location": {
+                          "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                          "column": 34,
+                          "line": 357
+                        },
+                        "snippet": "  355 |     // Verify at least some file type badges exist\n  356 |     const fileTypeBadges = page.locator('text=.pdf, text=.txt, text=.md').first();\n> 357 |     await expect(fileTypeBadges).toBeVisible();\n      |                                  ^\n  358 |   });\n  359 | });\n  360 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                            "column": 34,
+                            "line": 357
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('text=.pdf, text=.txt, text=.md').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=.pdf, text=.txt, text=.md').first()\u001b[22m\n\n\n  355 |     // Verify at least some file type badges exist\n  356 |     const fileTypeBadges = page.locator('text=.pdf, text=.txt, text=.md').first();\n> 357 |     await expect(fileTypeBadges).toBeVisible();\n      |                                  ^\n  358 |   });\n  359 | });\n  360 |\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:357:34"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:08:10.040Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-050ae--5---File-Type-Icon-Display-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-050ae--5---File-Type-Icon-Display-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                        "column": 34,
+                        "line": 357
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-49644afe56335c3cb80b",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 349,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Curate Tab - Phase 3: Accessibility",
+          "file": "curate-tab-comprehensive-test.spec.ts",
+          "line": 361,
+          "column": 6,
+          "specs": [
+            {
+              "title": "3.1 - Keyboard Navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7122,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:08:22.189Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-e7fbeb07fcbce1b55bb8",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 367,
+              "column": 7
+            },
+            {
+              "title": "3.2 - ARIA Labels and Roles",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 7456,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:08:23.966Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-69d1329d37c047399345",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 377,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Curate Tab - Phase 4: Performance",
+          "file": "curate-tab-comprehensive-test.spec.ts",
+          "line": 389,
+          "column": 6,
+          "specs": [
+            {
+              "title": "4.1 - Page Load Performance",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 4604,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m3000\u001b[39m\nReceived:   \u001b[31m3290\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m3000\u001b[39m\nReceived:   \u001b[31m3290\u001b[39m\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:404:22",
+                        "location": {
+                          "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                          "column": 22,
+                          "line": 404
+                        },
+                        "snippet": "  402 |\n  403 |     // Should load in under 3 seconds\n> 404 |     expect(loadTime).toBeLessThan(3000);\n      |                      ^\n  405 |   });\n  406 |\n  407 |   test('4.2 - File List Rendering Performance', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                            "column": 22,
+                            "line": 404
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m3000\u001b[39m\nReceived:   \u001b[31m3290\u001b[39m\n\n  402 |\n  403 |     // Should load in under 3 seconds\n> 404 |     expect(loadTime).toBeLessThan(3000);\n      |                      ^\n  405 |   });\n  406 |\n  407 |   test('4.2 - File List Rendering Performance', async ({ page }) => {\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:404:22"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Curate tab loaded in 3290ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:08:31.744Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-071a9-4-1---Page-Load-Performance-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-071a9-4-1---Page-Load-Performance-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                        "column": 22,
+                        "line": 404
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-aceb1d180a1b2f409436",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 391,
+              "column": 7
+            },
+            {
+              "title": "4.2 - File List Rendering Performance",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7402,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "File list rendered in 1922ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:08:29.332Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-6bd4a8014924c4f6564a",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 407,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Curate Tab - Phase 5: Error Handling",
+          "file": "curate-tab-comprehensive-test.spec.ts",
+          "line": 426,
+          "column": 6,
+          "specs": [
+            {
+              "title": "5.1 - Invalid File Upload",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 11476,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('text=exceeds maximum size').or(locator('text=too large'))\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=exceeds maximum size').or(locator('text=too large'))\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('text=exceeds maximum size').or(locator('text=too large'))\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=exceeds maximum size').or(locator('text=too large'))\u001b[22m\n\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:439:96",
+                        "location": {
+                          "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                          "column": 96,
+                          "line": 439
+                        },
+                        "snippet": "  437 |\n  438 |     // Should show error message\n> 439 |     await expect(page.locator('text=exceeds maximum size').or(page.locator('text=too large'))).toBeVisible({ timeout: 5000 });\n      |                                                                                                ^\n  440 |   });\n  441 |\n  442 |   test('5.2 - Network Error Simulation', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                            "column": 96,
+                            "line": 439
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('text=exceeds maximum size').or(locator('text=too large'))\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=exceeds maximum size').or(locator('text=too large'))\u001b[22m\n\n\n  437 |\n  438 |     // Should show error message\n> 439 |     await expect(page.locator('text=exceeds maximum size').or(page.locator('text=too large'))).toBeVisible({ timeout: 5000 });\n      |                                                                                                ^\n  440 |   });\n  441 |\n  442 |   test('5.2 - Network Error Simulation', async ({ page }) => {\n    at /Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts:439:96"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:08:31.441Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-6ca20-g-5-1---Invalid-File-Upload-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mcarpent/Documents/projects/siam/test-results/curate-tab-comprehensive-t-6ca20-g-5-1---Invalid-File-Upload-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mcarpent/Documents/projects/siam/tests/curate-tab-comprehensive-test.spec.ts",
+                        "column": 96,
+                        "line": 439
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-9f0cbe9d9b13dad216f2",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 428,
+              "column": 7
+            },
+            {
+              "title": "5.2 - Network Error Simulation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8057,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-11T05:08:36.748Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d7223ead39078cc74abc-d402b19d08b56dacdfdd",
+              "file": "curate-tab-comprehensive-test.spec.ts",
+              "line": 442,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-10-11T05:07:09.351Z",
+    "duration": 95999.693,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 7,
+    "flaky": 0
+  }
+}
