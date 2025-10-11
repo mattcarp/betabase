@@ -2073,7 +2073,7 @@ export function AiSdkChatPanel({
                 type="button"
                 variant={isRecording ? "destructive" : "ghost"}
                 className={cn(
-                  "h-8 w-8 p-0 transition-all duration-300 relative overflow-visible shrink-0",
+                  "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
                   isRecording ? [
                     "bg-gradient-to-r from-red-500 to-red-600",
                     "border-red-400/50 shadow-[0_0_20px_rgba(239,68,68,0.6)]",
@@ -2127,7 +2127,7 @@ export function AiSdkChatPanel({
                 type="button"
                 variant={isTTSEnabled ? "default" : "ghost"}
                 className={cn(
-                  "h-8 w-8 p-0 transition-all duration-300 relative overflow-visible shrink-0",
+                  "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
                   isTTSEnabled ? [
                     "bg-gradient-to-r from-emerald-500/80 to-teal-600/80",
                     "border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]"
@@ -2200,6 +2200,7 @@ export function AiSdkChatPanel({
             <PromptInputSubmit
               disabled={isMaxMessagesReached || !localInput?.trim()}
               status={isLoading ? "streaming" : undefined}
+              shimmer={false}
               className="!h-8 !w-8 !p-0 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 shrink-0"
             />
           </PromptInputToolbar>

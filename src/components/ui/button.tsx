@@ -48,16 +48,17 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "default", size = "default", shimmer, glow, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
-    
+
     // Get MAC classes for the button
     const buttonClasses = getButtonClasses(variant, size);
-    
+
     // Add optional MAC effects
     const effectClasses = cn(
       shimmer && "mac-shimmer",
-      glow && "mac-glow"
+      glow && "mac-glow",
+      shimmer === false && "[&.mac-shimmer]:animate-none" // Disable shimmer if explicitly set to false
     );
-    
+
     return (
       <Comp
         className={cn(buttonClasses, effectClasses, className)}
