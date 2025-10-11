@@ -60,51 +60,111 @@ async function authenticateWithMicrosoft(page, config) {
   const currentUrl = page.url();
   console.log(`📍 Current URL: ${currentUrl}`);
 
-  // Check if we're already authenticated
-  if (!currentUrl.includes('Login') && !currentUrl.includes('microsoftonline')) {
-    console.log('✅ Already authenticated!');
+  // First, check if there's a "Log In" button we need to click
+  console.log('🔍 Looking for Log In button...');
+  try {
+    const loginButtonClicked = await page.evaluate(() => {
+      const loginButtons = [
+        'a:has-text("Log In")',
+        'button:has-text("Log In")',
+        'a[href*="login"]',
+        '.login-link',
+        '#login-button'
+      ];
+
+      for (const selector of loginButtons) {
+        try {
+          const elem = document.querySelector(selector);
+          if (elem && elem.offsetParent !== null) {
+            elem.click();
+            return true;
+          }
+        } catch {}
+      }
+      return false;
+    });
+
+    if (loginButtonClicked) {
+      console.log('✅ Clicked "Log In" button');
+      await page.waitForTimeout(3000);
+    } else {
+      console.log('   No "Log In" button found');
+    }
+  } catch (e) {
+    console.log('   Could not click login button:', e.message);
+  }
+
+  // Now check for login form elements
+  const hasLoginForm = await page.evaluate(() => {
+    const loginIndicators = [
+      'input[type="email"]',
+      'input[name="loginfmt"]',
+      'input[name="username"]',
+      'input[type="password"]',
+      'input[name="passwd"]',
+      'input[name="password"]',
+      '#aadLoginBtn',
+      'button:has-text("Employee Login")',
+      'a:has-text("Employee Login")',
+      'form[name="login"]',
+      '#login-form'
+    ];
+
+    return loginIndicators.some(selector => {
+      try {
+        const elem = document.querySelector(selector);
+        return elem && elem.offsetParent !== null;
+      } catch {
+        return false;
+      }
+    });
+  });
+
+  // Check current URL after potential login button click
+  const updatedUrl = page.url();
+
+  // If no login form and not on Microsoft login, we might be authenticated
+  if (!hasLoginForm && !updatedUrl.includes('microsoftonline') && !updatedUrl.includes('login')) {
+    console.log('✅ No login form detected - assuming authenticated');
     return true;
   }
 
-  // Handle Employee Login button if present
-  if (currentUrl.includes('Login')) {
-    console.log('👤 Login page detected. Looking for Employee Login button...');
+  console.log('🔑 Login form detected, proceeding with authentication...');
 
-    try {
-      const clicked = await page.evaluate(() => {
-        const selectors = [
-          '#aadLoginBtn',
-          'button:has-text("Employee Login")',
-          'a:has-text("Employee Login")',
-          'a:has-text("Sign in")',
-          '[onclick*="employee"]',
-          '[onclick*="aad"]',
-          '[href*="microsoftonline"]'
-        ];
+  // Handle Employee Login / Microsoft SSO button
+  console.log('👤 Looking for Employee Login / Microsoft SSO button...');
+  try {
+    const clicked = await page.evaluate(() => {
+      const selectors = [
+        '#aadLoginBtn',
+        'button:has-text("Employee Login")',
+        'a:has-text("Employee Login")',
+        'a:has-text("Sign in with Microsoft")',
+        '[onclick*="employee"]',
+        '[onclick*="aad"]',
+        '[href*="microsoftonline"]'
+      ];
 
-        for (const selector of selectors) {
-          try {
-            const elem = document.querySelector(selector);
-            if (elem && elem.offsetParent !== null) { // Check if visible
-              elem.click();
-              return true;
-            }
-          } catch (e) {
-            // Try next selector
+      for (const selector of selectors) {
+        try {
+          const elem = document.querySelector(selector);
+          if (elem && elem.offsetParent !== null) {
+            elem.click();
+            return true;
           }
-        }
-        return false;
-      });
-
-      if (clicked) {
-        console.log('✅ Clicked Employee Login');
-        await page.waitForTimeout(3000);
-      } else {
-        console.log('⚠️  No Employee Login button found, continuing...');
+        } catch {}
       }
-    } catch (e) {
-      console.log('⚠️  Could not click Employee Login:', e.message);
+      return false;
+    });
+
+    if (clicked) {
+      console.log('✅ Clicked Employee Login / SSO button');
+      await page.waitForTimeout(3000);
+    } else {
+      console.log('   No SSO button found, checking for direct login fields...');
     }
+  } catch (e) {
+    console.log('⚠️  Could not click SSO button:', e.message);
   }
 
   // Check if we're on Microsoft login page
