@@ -382,23 +382,38 @@ export async function POST(req: Request) {
     }
 
     // Enhanced system prompt that includes AOMA orchestration context
-    const enhancedSystemPrompt = `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
+    const enhancedSystemPrompt = aomaContext.trim()
+      ? `${systemPrompt || "You are SIAM, an AI assistant for Sony Music with access to AOMA knowledge."}
 
-**CRITICAL ANTI-HALLUCINATION RULES:**
-1. ONLY answer questions using the AOMA context provided below
-2. If the context does not contain the answer, you MUST say: "I don't have that information in my knowledge base."
-3. DO NOT make up information, fabricate details, or guess
-4. DO NOT be overconfident about uncertain information
-5. If AOMA context indicates an error or unavailability, inform the user and suggest contacting matt@mattcarpenter.com
-
-**AOMA CONTEXT:**
+**AOMA KNOWLEDGE CONTEXT:**
 ${aomaContext}
 
 **RESPONSE GUIDELINES:**
-- If context is empty or insufficient: Admit you don't have the information
-- If context contains relevant info: Answer based ONLY on that context and cite sources
-- If there's a connection error: Explain the issue and provide contact information
-- NEVER fabricate specific details like dates, numbers, names, or features that aren't in the context`;
+1. **Primary source**: Use the AOMA context above for specific, detailed answers about AOMA features and workflows
+2. **Cite sources**: When using context, indicate it's from AOMA documentation
+3. **Fallback knowledge**: If context doesn't cover the question, you can provide general helpful information about AOMA based on common enterprise asset management practices
+4. **Be honest**: If you're unsure about specific Sony Music/AOMA details, acknowledge it
+5. **No fabrication**: Don't make up specific dates, numbers, UI details, or features that aren't in the context
+
+**ANTI-HALLUCINATION RULES:**
+- DON'T fabricate specific Sony Music policies or AOMA features
+- DON'T make up URLs, email addresses, or contact information
+- DO provide helpful general guidance when specific context is unavailable
+- DO suggest contacting matt@mattcarpenter.com if the question requires internal Sony Music knowledge`
+      : `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
+
+**CURRENT STATUS:** AOMA knowledge base connection is unavailable.
+
+**RESPONSE GUIDELINES:**
+1. You can still provide helpful general information about enterprise asset management systems
+2. Be honest that specific AOMA documentation isn't currently accessible
+3. Suggest general best practices and common workflows
+4. For Sony Music-specific details, suggest contacting matt@mattcarpenter.com
+
+**DO NOT:**
+- Fabricate specific Sony Music policies
+- Make up AOMA features or URLs
+- Claim access to documentation you don't have`;
 
     // Determine model based on AOMA involvement
     const hasAomaContent = aomaContext.trim() !== "";
@@ -409,6 +424,8 @@ ${aomaContext}
     console.log(`🤖 Creating stream with model: ${selectedModel}`);
     console.log(`📊 Settings: temp=${modelSettings.temperature}, maxTokens=${modelSettings.maxTokens}`);
     console.log(`💬 Messages: ${openAIMessages.length} messages`);
+    console.log(`📚 AOMA Context: ${hasAomaContent ? `${aomaContext.length} chars` : 'NONE'}`);
+    console.log(`🎯 Connection Status: ${aomaConnectionStatus}`);
 
     // Use Vercel AI SDK streamText for proper useChat hook compatibility
     console.log('⏳ Calling AI SDK streamText...');
