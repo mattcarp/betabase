@@ -2170,7 +2170,7 @@ export function AiSdkChatPanel({
                 onValueChange={setSelectedModel}
                 disabled={isMaxMessagesReached || isLoading}
               >
-                <PromptInputModelSelectTrigger className="!h-8 !w-[100px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0">
+                <PromptInputModelSelectTrigger className="!h-8 !w-[100px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
                   <PromptInputModelSelectValue />
                 </PromptInputModelSelectTrigger>
                 <PromptInputModelSelectContent>
