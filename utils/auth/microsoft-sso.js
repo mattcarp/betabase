@@ -88,125 +88,138 @@ async function authenticateWithMicrosoft(page, config) {
     console.log('⚠️  Error clicking Log In:', e.message);
   }
 
-  // STEP 2: Fill username in the LOGIN FORM (not search box!)
+  // STEP 2: Fill username in login form with verification
   console.log(`📧 Filling username in login form...`);
 
   try {
-    // Target the LOGIN FORM specifically - use #login-form or form context
-    const formInfo = await page.evaluate(() => {
-      // Look for login form specifically
-      const loginForm = document.querySelector('#login-form, form[name="loginform"], .login-form');
-      if (!loginForm) {
-        // Fallback: find input with name containing "username"
-        const field = document.querySelector('input[name*="username"], input[id*="username"]');
-        if (field) {
-          return {
-            selector: field.id ? `#${field.id}` : `input[name="${field.name}"]`,
-            inForm: false
-          };
-        }
-        return null;
-      }
+    // Wait for login form to be ready
+    await page.waitForSelector('#login-form-username', { timeout: 10000 });
+    await page.waitForTimeout(1000);
 
-      // Find username field WITHIN the login form
-      const field = loginForm.querySelector('input[name="os_username"], input[name="username"], input[type="text"]');
-      if (!field) return null;
-
-      return {
-        selector: field.id ? `#${field.id}` : `input[name="${field.name}"]`,
-        inForm: true,
-        name: field.name || field.id
-      };
-    });
-
-    if (!formInfo) {
-      console.log('⚠️  Could not find login form username field!');
-      return false;
-    }
-
-    console.log(`   Found username field: ${formInfo.selector} (in form: ${formInfo.inForm})`);
-    console.log(`   Filling: ${username}`);
-
-    // Make the field visible and interactable
-    await page.evaluate((selector) => {
-      const field = document.querySelector(selector);
+    // Clear the username field first
+    await page.evaluate(() => {
+      const field = document.querySelector('#login-form-username');
       if (field) {
+        field.value = '';
         field.style.opacity = '1';
         field.style.visibility = 'visible';
         field.style.display = 'block';
-        field.style.pointerEvents = 'auto';
         field.disabled = false;
         field.readOnly = false;
       }
-    }, formInfo.selector);
+    });
     await page.waitForTimeout(500);
 
-    // Type the username
-    await page.type(formInfo.selector, username, { delay: 100 });
-    console.log(`✅ Username filled: ${username}`);
+    console.log(`   Filling username: ${username}`);
+
+    // Click to focus, then type
+    await page.click('#login-form-username');
+    await page.waitForTimeout(300);
+    await page.type('#login-form-username', username, { delay: 50 });
+    await page.waitForTimeout(500);
+
+    // VERIFY username was filled correctly
+    const usernameValue = await page.evaluate(() => {
+      const field = document.querySelector('#login-form-username');
+      return field ? field.value : null;
+    });
+
+    if (usernameValue !== username) {
+      console.error(`❌ Username verification failed! Expected: "${username}", Got: "${usernameValue}"`);
+      return false;
+    }
+
+    console.log(`✅ Username filled and verified: ${username}`);
   } catch (error) {
     console.log('⚠️  Error filling username:', error.message);
     return false;
   }
 
-  // STEP 3: Fill password field (VERIFY it's the password field!)
+  // STEP 3: Fill password field with strict verification
   console.log('🔑 Filling password field...');
 
   try {
     await page.waitForTimeout(1000);
 
-    // Find and verify the PASSWORD field specifically
-    const passwordFieldInfo = await page.evaluate(() => {
-      const field = document.querySelector('input[type="password"]#login-form-password');
-      if (!field) {
-        return { found: false };
-      }
-      return {
-        found: true,
-        id: field.id,
-        name: field.name,
-        type: field.type
-      };
-    });
+    // Wait for password field to exist
+    await page.waitForSelector('#login-form-password[type="password"]', { timeout: 10000 });
+    await page.waitForTimeout(500);
 
-    if (!passwordFieldInfo.found) {
-      console.log('⚠️  Could not find PASSWORD field (type="password")!');
-      return false;
-    }
-
-    console.log(`   Found PASSWORD field: id="${passwordFieldInfo.id}" type="${passwordFieldInfo.type}"`);
-
-    // Make password field visible and focus it
+    // Clear the password field and prepare it
     await page.evaluate(() => {
-      const field = document.querySelector('input[type="password"]#login-form-password');
+      const field = document.querySelector('#login-form-password[type="password"]');
       if (field) {
+        field.value = '';
         field.style.opacity = '1';
         field.style.visibility = 'visible';
         field.style.display = 'block';
-        field.style.pointerEvents = 'auto';
         field.disabled = false;
         field.readOnly = false;
-        field.value = ''; // Clear any existing value
-        field.focus();
       }
     });
     await page.waitForTimeout(500);
 
-    // Type password into the PASSWORD field using the most specific selector
-    await page.type('input[type="password"]#login-form-password', password, { delay: 100 });
-    console.log(`✅ Password filled into PASSWORD field`);
-    await page.waitForTimeout(1000);
+    console.log(`   Filling password into #login-form-password`);
 
-    // STEP 4: Submit the login form
-    console.log('   Submitting login form...');
-    await page.evaluate(() => {
-      const btn = document.querySelector('#login-form-submit');
-      if (btn) {
-        console.log('Clicking submit button:', btn.textContent);
-        btn.click();
-      }
+    // Click to focus the password field explicitly
+    await page.click('#login-form-password[type="password"]');
+    await page.waitForTimeout(300);
+
+    // Type the password
+    await page.type('#login-form-password[type="password"]', password, { delay: 50 });
+    await page.waitForTimeout(500);
+
+    // VERIFY password was filled correctly (check length since it's masked)
+    const passwordLength = await page.evaluate(() => {
+      const field = document.querySelector('#login-form-password[type="password"]');
+      return field ? field.value.length : 0;
     });
 
+    if (passwordLength !== password.length) {
+      console.error(`❌ Password verification failed! Expected length: ${password.length}, Got: ${passwordLength}`);
+      return false;
+    }
+
+    console.log(`✅ Password filled and verified (length: ${passwordLength})`);
+    await page.waitForTimeout(1000);
+
+    // STEP 4: Final verification before submit
+    console.log('🔍 Final verification before submit...');
+
+    const finalCheck = await page.evaluate(() => {
+      const usernameField = document.querySelector('#login-form-username');
+      const passwordField = document.querySelector('#login-form-password[type="password"]');
+
+      return {
+        usernameValue: usernameField ? usernameField.value : null,
+        passwordLength: passwordField ? passwordField.value.length : 0,
+        usernameType: usernameField ? usernameField.type : null,
+        passwordType: passwordField ? passwordField.type : null
+      };
+    });
+
+    console.log(`   Username field value: "${finalCheck.usernameValue}" (type: ${finalCheck.usernameType})`);
+    console.log(`   Password field length: ${finalCheck.passwordLength} (type: ${finalCheck.passwordType})`);
+
+    if (finalCheck.usernameValue !== username) {
+      console.error(`❌ PRE-SUBMIT CHECK FAILED: Username field has wrong value!`);
+      console.error(`   Expected: "${username}"`);
+      console.error(`   Got: "${finalCheck.usernameValue}"`);
+      return false;
+    }
+
+    if (finalCheck.passwordLength !== password.length) {
+      console.error(`❌ PRE-SUBMIT CHECK FAILED: Password field has wrong length!`);
+      console.error(`   Expected: ${password.length}`);
+      console.error(`   Got: ${finalCheck.passwordLength}`);
+      return false;
+    }
+
+    console.log('✅ Pre-submit verification passed');
+
+    // STEP 5: Submit the login form
+    console.log('📤 Submitting login form...');
+    await page.click('#login-form-submit');
     await page.waitForTimeout(5000);
     console.log('✅ Login form submitted');
   } catch (error) {
