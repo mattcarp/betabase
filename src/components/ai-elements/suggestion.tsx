@@ -40,14 +40,14 @@ export const Suggestion = ({
 
   return (
     <Button
-      className={cn("cursor-pointer rounded-lg px-4 w-full", className)}
+      className={cn("cursor-pointer rounded-lg px-4 w-full !text-left !justify-start items-start", className)}
       onClick={handleClick}
       size={size}
       type="button"
       variant={variant}
       {...props}
     >
-      {children || suggestion}
+      <span className="text-left w-full">{children || suggestion}</span>
     </Button>
   );
 };

@@ -88,13 +88,48 @@ async function authenticateWithMicrosoft(page, config) {
     console.log('⚠️  Error clicking Log In:', e.message);
   }
 
-  // STEP 2: Fill username (make field visible first, then type)
-  console.log(`📧 Filling username: ${username}`);
+  // STEP 2: Fill username in the LOGIN FORM (not search box!)
+  console.log(`📧 Filling username in login form...`);
 
   try {
+    // Target the LOGIN FORM specifically - use #login-form or form context
+    const formInfo = await page.evaluate(() => {
+      // Look for login form specifically
+      const loginForm = document.querySelector('#login-form, form[name="loginform"], .login-form');
+      if (!loginForm) {
+        // Fallback: find input with name containing "username"
+        const field = document.querySelector('input[name*="username"], input[id*="username"]');
+        if (field) {
+          return {
+            selector: field.id ? `#${field.id}` : `input[name="${field.name}"]`,
+            inForm: false
+          };
+        }
+        return null;
+      }
+
+      // Find username field WITHIN the login form
+      const field = loginForm.querySelector('input[name="os_username"], input[name="username"], input[type="text"]');
+      if (!field) return null;
+
+      return {
+        selector: field.id ? `#${field.id}` : `input[name="${field.name}"]`,
+        inForm: true,
+        name: field.name || field.id
+      };
+    });
+
+    if (!formInfo) {
+      console.log('⚠️  Could not find login form username field!');
+      return false;
+    }
+
+    console.log(`   Found username field: ${formInfo.selector} (in form: ${formInfo.inForm})`);
+    console.log(`   Filling: ${username}`);
+
     // Make the field visible and interactable
-    await page.evaluate(() => {
-      const field = document.querySelector('input[name="os_username"]');
+    await page.evaluate((selector) => {
+      const field = document.querySelector(selector);
       if (field) {
         field.style.opacity = '1';
         field.style.visibility = 'visible';
@@ -103,108 +138,80 @@ async function authenticateWithMicrosoft(page, config) {
         field.disabled = false;
         field.readOnly = false;
       }
-    });
+    }, formInfo.selector);
     await page.waitForTimeout(500);
 
-    // Now type the username
-    await page.type('input[name="os_username"]', username, { delay: 100 });
+    // Type the username
+    await page.type(formInfo.selector, username, { delay: 100 });
     console.log(`✅ Username filled: ${username}`);
   } catch (error) {
     console.log('⚠️  Error filling username:', error.message);
     return false;
   }
 
-  // STEP 3: Click Continue/Next button
-  console.log('🔘 Clicking Continue button...');
-  const continueClicked = await page.evaluate(() => {
-    // Try by value attribute
-    const byValue = document.querySelector('input[value="Next"], input[value="Continue"]');
-    if (byValue) {
-      byValue.click();
-      return true;
+  // STEP 3: Fill password field (VERIFY it's the password field!)
+  console.log('🔑 Filling password field...');
+
+  try {
+    await page.waitForTimeout(1000);
+
+    // Find and verify the PASSWORD field specifically
+    const passwordFieldInfo = await page.evaluate(() => {
+      const field = document.querySelector('input[type="password"]#login-form-password');
+      if (!field) {
+        return { found: false };
+      }
+      return {
+        found: true,
+        id: field.id,
+        name: field.name,
+        type: field.type
+      };
+    });
+
+    if (!passwordFieldInfo.found) {
+      console.log('⚠️  Could not find PASSWORD field (type="password")!');
+      return false;
     }
 
-    // Try by ID
-    const byId = document.querySelector('#login-form-submit, #login');
-    if (byId) {
-      byId.click();
-      return true;
-    }
+    console.log(`   Found PASSWORD field: id="${passwordFieldInfo.id}" type="${passwordFieldInfo.type}"`);
 
-    // Try submit buttons
-    const submitBtn = document.querySelector('button[type="submit"], input[type="submit"]');
-    if (submitBtn) {
-      submitBtn.click();
-      return true;
-    }
+    // Make password field visible and focus it
+    await page.evaluate(() => {
+      const field = document.querySelector('input[type="password"]#login-form-password');
+      if (field) {
+        field.style.opacity = '1';
+        field.style.visibility = 'visible';
+        field.style.display = 'block';
+        field.style.pointerEvents = 'auto';
+        field.disabled = false;
+        field.readOnly = false;
+        field.value = ''; // Clear any existing value
+        field.focus();
+      }
+    });
+    await page.waitForTimeout(500);
 
+    // Type password into the PASSWORD field using the most specific selector
+    await page.type('input[type="password"]#login-form-password', password, { delay: 100 });
+    console.log(`✅ Password filled into PASSWORD field`);
+    await page.waitForTimeout(1000);
+
+    // STEP 4: Submit the login form
+    console.log('   Submitting login form...');
+    await page.evaluate(() => {
+      const btn = document.querySelector('#login-form-submit');
+      if (btn) {
+        console.log('Clicking submit button:', btn.textContent);
+        btn.click();
+      }
+    });
+
+    await page.waitForTimeout(5000);
+    console.log('✅ Login form submitted');
+  } catch (error) {
+    console.log(`⚠️  Error filling password: ${error.message}`);
     return false;
-  });
-
-  if (!continueClicked) {
-    console.log('⚠️  Could not find Continue button');
-    return false;
-  }
-
-  console.log('✅ Clicked Continue');
-
-  // STEP 4: Wait for redirect - if already logged in from previous session, we're in!
-  console.log('⏳ Waiting for redirect (checking if already logged in)...');
-  await page.waitForTimeout(5000);
-
-  const currentUrl = page.url();
-  console.log(`📍 Current URL after Continue: ${currentUrl}`);
-
-  // Check for success: "Dashboard for Matt Carpenter"
-  const loggedIn = await page.evaluate(() => {
-    return document.body.textContent.includes('Dashboard for Matt Carpenter');
-  });
-
-  if (loggedIn) {
-    console.log('✅ Already logged in! Dashboard detected.');
-    return true;
-  }
-
-  // If not logged in yet, might need password - check for password field
-  const needsPassword = await page.evaluate(() => {
-    return !!document.querySelector('input[type="password"]');
-  });
-
-  if (needsPassword) {
-    console.log('🔑 Password required, filling it...');
-
-    try {
-      // Make password field visible
-      await page.evaluate(() => {
-        const field = document.querySelector('input[type="password"]');
-        if (field) {
-          field.style.opacity = '1';
-          field.style.visibility = 'visible';
-          field.style.display = 'block';
-          field.style.pointerEvents = 'auto';
-          field.disabled = false;
-          field.readOnly = false;
-        }
-      });
-      await page.waitForTimeout(500);
-
-      // Type password
-      await page.type('input[type="password"]', password, { delay: 100 });
-      console.log('✅ Password filled');
-      await page.waitForTimeout(1000);
-
-      // Submit password and wait for navigation
-      console.log('   Submitting password...');
-      await page.evaluate(() => {
-        const btn = document.querySelector('button[type="submit"], input[type="submit"], #login-form-submit');
-        if (btn) btn.click();
-      });
-
-      await page.waitForTimeout(3000);
-      console.log('✅ Password submitted');
-    } catch (error) {
-      console.log(`⚠️  Error filling password: ${error.message}`);
-    }
   }
 
   // Final check
@@ -220,27 +227,73 @@ async function authenticateWithMicrosoft(page, config) {
       return false;
     }
 
-    // Fill username
-    console.log(`📧 Filling username: ${username}`);
+    // Fill email for Microsoft SSO (with visibility override)
+    const msEmail = process.env.JIRA_EMAIL || process.env.AAD_USERNAME || 'matt.carpenter.ext@sonymusic.com';
+    console.log(`📧 Filling Microsoft email: ${msEmail}`);
     try {
-      await page.fill('input[type="email"], input[name="loginfmt"], #i0116', username, {
-        timeout: 10000
+      await page.waitForTimeout(2000);
+
+      // Make email field visible
+      await page.evaluate(() => {
+        const selectors = ['input[type="email"]', 'input[name="loginfmt"]', '#i0116'];
+        for (const sel of selectors) {
+          const field = document.querySelector(sel);
+          if (field) {
+            field.style.opacity = '1';
+            field.style.visibility = 'visible';
+            field.style.display = 'block';
+            field.style.pointerEvents = 'auto';
+            field.disabled = false;
+            field.readOnly = false;
+            break;
+          }
+        }
       });
+      await page.waitForTimeout(500);
+
+      // Type email
+      await page.type('input[type="email"], input[name="loginfmt"], #i0116', msEmail, { delay: 100 });
+      console.log('✅ Email filled');
+      await page.waitForTimeout(1000);
+
+      // Click submit
       await page.click('#idSIButton9, input[type="submit"]');
       await page.waitForTimeout(2000);
-      console.log('✅ Username submitted');
+      console.log('✅ Email submitted');
     } catch (e) {
-      console.error('❌ Failed to fill username:', e.message);
+      console.error('❌ Failed to fill email:', e.message);
       return false;
     }
 
-    // Fill password
+    // Fill password (with visibility override)
     console.log('🔑 Filling password...');
     try {
-      await page.waitForSelector('input[type="password"], input[name="passwd"], #i0118', {
-        timeout: 10000
+      await page.waitForTimeout(2000); // Wait for password field to appear
+
+      // Make password field visible
+      await page.evaluate(() => {
+        const selectors = ['input[type="password"]', 'input[name="passwd"]', '#i0118'];
+        for (const sel of selectors) {
+          const field = document.querySelector(sel);
+          if (field) {
+            field.style.opacity = '1';
+            field.style.visibility = 'visible';
+            field.style.display = 'block';
+            field.style.pointerEvents = 'auto';
+            field.disabled = false;
+            field.readOnly = false;
+            break;
+          }
+        }
       });
-      await page.fill('input[type="password"], input[name="passwd"], #i0118', password);
+      await page.waitForTimeout(500);
+
+      // Type password
+      await page.type('input[type="password"], input[name="passwd"], #i0118', password, { delay: 100 });
+      console.log('✅ Password filled');
+      await page.waitForTimeout(1000);
+
+      // Click submit
       await page.click('#idSIButton9, input[type="submit"]');
       await page.waitForTimeout(2000);
       console.log('✅ Password submitted');
