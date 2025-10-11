@@ -1,0 +1,66 @@
+{
+  "captured_at": "2025-10-11T12:00:00Z",
+  "total_screenshots": 10,
+  "screenshots": [
+    {
+      "screenshot": "home.png",
+      "url": "https://aoma-stage.smcdp-de.net/",
+      "title": "AOMA Homepage",
+      "description": "Main landing page for AOMA Stage"
+    },
+    {
+      "screenshot": "aoma-ui_direct-upload.png",
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/direct-upload",
+      "title": "Direct Upload",
+      "description": "Direct upload interface for assets"
+    },
+    {
+      "screenshot": "aoma-ui_simple-upload.png",
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/simple-upload",
+      "title": "Simple Upload",
+      "description": "Simple upload interface"
+    },
+    {
+      "screenshot": "aoma-ui_my-aoma-files.png",
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/my-aoma-files",
+      "title": "My AOMA Files",
+      "description": "User's uploaded files dashboard"
+    },
+    {
+      "screenshot": "aoma-ui_product-metadata-viewer.png",
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/product-metadata-viewer",
+      "title": "Product Metadata Viewer",
+      "description": "View and edit product metadata"
+    },
+    {
+      "screenshot": "aoma-ui_qc-notes.png",
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/qc-notes",
+      "title": "QC Notes",
+      "description": "Quality control notes interface"
+    },
+    {
+      "screenshot": "aoma-ui_registration-job-status.png",
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/registration-job-status",
+      "title": "Registration Job Status",
+      "description": "Track asset registration jobs"
+    },
+    {
+      "screenshot": "aoma-ui_unified-submission-tool.png",
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/unified-submission-tool",
+      "title": "Unified Submission Tool",
+      "description": "Unified tool for asset submission"
+    },
+    {
+      "screenshot": "aoma-ui_unregister-assets.png",
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/unregister-assets",
+      "title": "Unregister Assets",
+      "description": "Interface to unregister assets from AOMA"
+    },
+    {
+      "screenshot": "aoma-ui_qc-providers.png",
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/qc-providers",
+      "title": "QC Providers",
+      "description": "Manage QC Provider Teams"
+    }
+  ]
+}
