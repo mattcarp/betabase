@@ -1551,11 +1551,22 @@
         ],
         "priority": "medium",
         "subtasks": []
+      },
+      {
+        "id": 87,
+        "title": "Automate AOMA Screenshot Capture",
+        "description": "Design and implement automated AOMA screenshot capture solution using Safari's authenticated session. Create script to navigate all AOMA pages and capture screenshots automatically.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "high",
+        "subtasks": []
       }
     ],
     "metadata": {
       "created": "2025-06-17T15:28:52.280Z",
-      "updated": "2025-09-11T11:51:21.274Z",
+      "updated": "2025-10-11T10:58:47.028Z",
       "description": "Tasks for master context"
     }
   }
