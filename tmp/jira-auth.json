@@ -1,0 +1,51 @@
+{
+  "cookies": [
+    {
+      "name": "JSESSIONID",
+      "value": "C3D627DBEC7955B3AE8622C126A46C32",
+      "domain": "jira.smedigitalapps.com",
+      "path": "/jira",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "atlassian.xsrf.token",
+      "value": "A1TC-B0TB-ACDD-Q6T9_9ffdb0886452b6cca281bf3a555fd4ebef768b55_lout",
+      "domain": "jira.smedigitalapps.com",
+      "path": "/jira",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://jira.smedigitalapps.com",
+      "localStorage": [
+        {
+          "name": "jira-app-header-skeleton-dimensions",
+          "value": "{\"headerDimensions\":[{\"x\":10,\"y\":0,\"width\":28,\"height\":40,\"top\":0,\"right\":38,\"bottom\":40,\"left\":10},{\"x\":68,\"y\":5,\"width\":122,\"height\":30,\"top\":5,\"right\":190,\"bottom\":35,\"left\":68},{\"x\":220,\"y\":0,\"width\":93.609375,\"height\":40,\"top\":0,\"right\":313.609375,\"bottom\":40,\"left\":220},{\"x\":942.6328125,\"y\":5,\"width\":170,\"height\":30,\"top\":5,\"right\":1112.6328125,\"bottom\":35,\"left\":942.6328125},{\"x\":1132.6328125,\"y\":8,\"width\":24,\"height\":24,\"top\":8,\"right\":1156.6328125,\"bottom\":32,\"left\":1132.6328125},{\"x\":1176.6328125,\"y\":8,\"width\":24,\"height\":24,\"top\":8,\"right\":1200.6328125,\"bottom\":32,\"left\":1176.6328125},{\"x\":1210.6328125,\"y\":0,\"width\":59.3671875,\"height\":40,\"top\":0,\"right\":1270,\"bottom\":40,\"left\":1210.6328125}],\"headerWidth\":1280}"
+        },
+        {
+          "name": "loglevel",
+          "value": "WARN"
+        },
+        {
+          "name": "atst.healthcheck.sensors.page-protocols",
+          "value": "p0v7rv"
+        },
+        {
+          "name": "AG.congolmerate.cookie",
+          "value": "-fh=108"
+        },
+        {
+          "name": "atlassian-analytics.jira.lock",
+          "value": "null"
+        }
+      ]
+    }
+  ]
+}
