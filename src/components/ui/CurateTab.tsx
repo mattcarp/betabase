@@ -609,6 +609,7 @@ export function CurateTab({
             <div className="space-y-4">
               <FileUpload
                 assistantId={assistantId}
+                apiEndpoint="/api/vector-store/files"
                 onUploadComplete={handleUploadComplete}
                 onUploadError={(error) => toast.error(error)}
               />
