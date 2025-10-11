@@ -227,9 +227,14 @@ async function authenticateWithMicrosoft(page, config) {
 
     console.log('✅ Pre-submit verification passed');
 
-    // STEP 5: Submit the login form
+    // STEP 5: Submit the login form using JavaScript
     console.log('📤 Submitting login form...');
-    await page.click('#login-form-submit');
+    await page.evaluate(() => {
+      const btn = document.querySelector('#login-form-submit');
+      if (btn) {
+        btn.click();
+      }
+    });
     await page.waitForTimeout(5000);
     console.log('✅ Login form submitted');
   } catch (error) {
