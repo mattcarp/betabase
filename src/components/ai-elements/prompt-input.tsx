@@ -76,6 +76,7 @@ export const PromptInputTextarea = ({
       }}
       onKeyDown={handleKeyDown}
       placeholder={placeholder}
+      shimmer={false}
       {...props}
     />
   );
