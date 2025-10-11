@@ -40,8 +40,8 @@ const path = require('path');
 async function authenticateWithMicrosoft(page, config) {
   const {
     url,
-    username = process.env.AAD_USERNAME,
-    password = process.env.AAD_PASSWORD,
+    username = process.env.JIRA_USERNAME || process.env.AAD_USERNAME,
+    password = process.env.JIRA_PASSWORD || process.env.AAD_PASSWORD,
     mfaTimeout = 180,
     onMFAPrompt = null
   } = config;
@@ -55,119 +55,159 @@ async function authenticateWithMicrosoft(page, config) {
     timeout: 30000
   });
 
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(2000);
 
-  const currentUrl = page.url();
-  console.log(`📍 Current URL: ${currentUrl}`);
-
-  // First, check if there's a "Log In" button we need to click
-  console.log('🔍 Looking for Log In button...');
+  // STEP 1: Click "Log In" button in upper right
+  console.log('🔘 Clicking Log In button (upper right)...');
   try {
-    const loginButtonClicked = await page.evaluate(() => {
-      const loginButtons = [
-        'a:has-text("Log In")',
-        'button:has-text("Log In")',
-        'a[href*="login"]',
-        '.login-link',
-        '#login-button'
-      ];
-
-      for (const selector of loginButtons) {
-        try {
-          const elem = document.querySelector(selector);
-          if (elem && elem.offsetParent !== null) {
-            elem.click();
-            return true;
-          }
-        } catch {}
+    // Use exact selector from JIRA HTML: a.login-link
+    const loginClicked = await page.evaluate(() => {
+      const loginLink = document.querySelector('a.login-link');
+      if (loginLink) {
+        loginLink.click();
+        return true;
       }
       return false;
     });
 
-    if (loginButtonClicked) {
-      console.log('✅ Clicked "Log In" button');
-      await page.waitForTimeout(3000);
+    if (loginClicked) {
+      console.log('✅ Clicked Log In, waiting for form to load...');
+
+      // WAIT FOR LOGIN FORM TO APPEAR
+      try {
+        await page.waitForSelector('input[name="os_username"], input[name="username"]', { timeout: 10000 });
+        await page.waitForTimeout(2000); // Extra time for form to fully render
+        console.log('✅ Login form loaded');
+      } catch (waitError) {
+        console.log('⚠️  Timeout waiting for login form');
+      }
     } else {
-      console.log('   No "Log In" button found');
+      console.log('⚠️  No Log In button found (might already be on login page)');
     }
   } catch (e) {
-    console.log('   Could not click login button:', e.message);
+    console.log('⚠️  Error clicking Log In:', e.message);
   }
 
-  // Now check for login form elements
-  const hasLoginForm = await page.evaluate(() => {
-    const loginIndicators = [
-      'input[type="email"]',
-      'input[name="loginfmt"]',
-      'input[name="username"]',
-      'input[type="password"]',
-      'input[name="passwd"]',
-      'input[name="password"]',
-      '#aadLoginBtn',
-      'button:has-text("Employee Login")',
-      'a:has-text("Employee Login")',
-      'form[name="login"]',
-      '#login-form'
-    ];
+  // STEP 2: Fill username (make field visible first, then type)
+  console.log(`📧 Filling username: ${username}`);
 
-    return loginIndicators.some(selector => {
-      try {
-        const elem = document.querySelector(selector);
-        return elem && elem.offsetParent !== null;
-      } catch {
-        return false;
+  try {
+    // Make the field visible and interactable
+    await page.evaluate(() => {
+      const field = document.querySelector('input[name="os_username"]');
+      if (field) {
+        field.style.opacity = '1';
+        field.style.visibility = 'visible';
+        field.style.display = 'block';
+        field.style.pointerEvents = 'auto';
+        field.disabled = false;
+        field.readOnly = false;
       }
     });
+    await page.waitForTimeout(500);
+
+    // Now type the username
+    await page.type('input[name="os_username"]', username, { delay: 100 });
+    console.log(`✅ Username filled: ${username}`);
+  } catch (error) {
+    console.log('⚠️  Error filling username:', error.message);
+    return false;
+  }
+
+  // STEP 3: Click Continue/Next button
+  console.log('🔘 Clicking Continue button...');
+  const continueClicked = await page.evaluate(() => {
+    // Try by value attribute
+    const byValue = document.querySelector('input[value="Next"], input[value="Continue"]');
+    if (byValue) {
+      byValue.click();
+      return true;
+    }
+
+    // Try by ID
+    const byId = document.querySelector('#login-form-submit, #login');
+    if (byId) {
+      byId.click();
+      return true;
+    }
+
+    // Try submit buttons
+    const submitBtn = document.querySelector('button[type="submit"], input[type="submit"]');
+    if (submitBtn) {
+      submitBtn.click();
+      return true;
+    }
+
+    return false;
   });
 
-  // Check current URL after potential login button click
-  const updatedUrl = page.url();
+  if (!continueClicked) {
+    console.log('⚠️  Could not find Continue button');
+    return false;
+  }
 
-  // If no login form and not on Microsoft login, we might be authenticated
-  if (!hasLoginForm && !updatedUrl.includes('microsoftonline') && !updatedUrl.includes('login')) {
-    console.log('✅ No login form detected - assuming authenticated');
+  console.log('✅ Clicked Continue');
+
+  // STEP 4: Wait for redirect - if already logged in from previous session, we're in!
+  console.log('⏳ Waiting for redirect (checking if already logged in)...');
+  await page.waitForTimeout(5000);
+
+  const currentUrl = page.url();
+  console.log(`📍 Current URL after Continue: ${currentUrl}`);
+
+  // Check for success: "Dashboard for Matt Carpenter"
+  const loggedIn = await page.evaluate(() => {
+    return document.body.textContent.includes('Dashboard for Matt Carpenter');
+  });
+
+  if (loggedIn) {
+    console.log('✅ Already logged in! Dashboard detected.');
     return true;
   }
 
-  console.log('🔑 Login form detected, proceeding with authentication...');
+  // If not logged in yet, might need password - check for password field
+  const needsPassword = await page.evaluate(() => {
+    return !!document.querySelector('input[type="password"]');
+  });
 
-  // Handle Employee Login / Microsoft SSO button
-  console.log('👤 Looking for Employee Login / Microsoft SSO button...');
-  try {
-    const clicked = await page.evaluate(() => {
-      const selectors = [
-        '#aadLoginBtn',
-        'button:has-text("Employee Login")',
-        'a:has-text("Employee Login")',
-        'a:has-text("Sign in with Microsoft")',
-        '[onclick*="employee"]',
-        '[onclick*="aad"]',
-        '[href*="microsoftonline"]'
-      ];
+  if (needsPassword) {
+    console.log('🔑 Password required, filling it...');
 
-      for (const selector of selectors) {
-        try {
-          const elem = document.querySelector(selector);
-          if (elem && elem.offsetParent !== null) {
-            elem.click();
-            return true;
-          }
-        } catch {}
-      }
-      return false;
-    });
+    try {
+      // Make password field visible
+      await page.evaluate(() => {
+        const field = document.querySelector('input[type="password"]');
+        if (field) {
+          field.style.opacity = '1';
+          field.style.visibility = 'visible';
+          field.style.display = 'block';
+          field.style.pointerEvents = 'auto';
+          field.disabled = false;
+          field.readOnly = false;
+        }
+      });
+      await page.waitForTimeout(500);
 
-    if (clicked) {
-      console.log('✅ Clicked Employee Login / SSO button');
+      // Type password
+      await page.type('input[type="password"]', password, { delay: 100 });
+      console.log('✅ Password filled');
+      await page.waitForTimeout(1000);
+
+      // Submit password and wait for navigation
+      console.log('   Submitting password...');
+      await page.evaluate(() => {
+        const btn = document.querySelector('button[type="submit"], input[type="submit"], #login-form-submit');
+        if (btn) btn.click();
+      });
+
       await page.waitForTimeout(3000);
-    } else {
-      console.log('   No SSO button found, checking for direct login fields...');
+      console.log('✅ Password submitted');
+    } catch (error) {
+      console.log(`⚠️  Error filling password: ${error.message}`);
     }
-  } catch (e) {
-    console.log('⚠️  Could not click SSO button:', e.message);
   }
 
-  // Check if we're on Microsoft login page
+  // Final check
   await page.waitForTimeout(2000);
   const loginUrl = page.url();
 
@@ -227,12 +267,27 @@ async function authenticateWithMicrosoft(page, config) {
   for (let i = 0; i < maxAttempts; i++) {
     await page.waitForTimeout(3000);
 
-    const currentUrl = page.url();
+    // PROPER CHECK: Look for actual logged-in indicators
+    const loginCheck = await page.evaluate(() => {
+      // Check 1: "Log In" button should NOT be visible
+      const loginButton = document.querySelector('a.login-link');
+      const hasLoginButton = loginButton && loginButton.textContent.includes('Log In');
 
-    // Check if we're back on the target site (not login/microsoft)
-    if (!currentUrl.includes('Login') &&
-        !currentUrl.includes('microsoftonline') &&
-        !currentUrl.includes('login.microsoftonline')) {
+      // Check 2: Should see user-specific content
+      const hasUserContent = document.body.textContent.includes('Dashboard for Matt Carpenter') ||
+                           document.body.textContent.includes('Log Out') ||
+                           document.querySelector('a[title="Log Out"]');
+
+      return {
+        hasLoginButton,
+        hasUserContent,
+        isLoggedIn: !hasLoginButton && hasUserContent
+      };
+    });
+
+    console.log(`   🔍 Login check: ${loginCheck.isLoggedIn ? '✅ LOGGED IN' : '❌ NOT LOGGED IN'} (loginButton: ${loginCheck.hasLoginButton}, userContent: ${loginCheck.hasUserContent})`);
+
+    if (loginCheck.isLoggedIn) {
       authenticated = true;
       console.log('\n✅ AUTHENTICATED SUCCESSFULLY!');
       break;

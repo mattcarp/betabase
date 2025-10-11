@@ -23,7 +23,6 @@ import {
   RefreshCw,
   FileText,
   Search,
-  Download,
   AlertCircle,
   CheckCircle,
   Clock,
@@ -31,8 +30,6 @@ import {
   FolderOpen,
   Info,
   X,
-  Eye,
-  Filter,
   MoreVertical,
   GitMerge,
   Loader2,
@@ -330,8 +327,9 @@ export function CurateTab({
                 "font-light",
                 "data-[state=active]:bg-[var(--mac-primary-blue-400)]/10",
                 "data-[state=active]:text-[var(--mac-primary-blue-400)]",
-                "data-[state=active]:border-b-2",
+                "data-[state=active]:border-b-[3px]",
                 "data-[state=active]:border-[var(--mac-primary-blue-400)]",
+                "data-[state=active]:shadow-[0_2px_8px_rgba(51,133,255,0.3)]",
                 "transition-all duration-200"
               )}
             >
@@ -344,8 +342,9 @@ export function CurateTab({
                 "font-light",
                 "data-[state=active]:bg-[var(--mac-primary-blue-400)]/10",
                 "data-[state=active]:text-[var(--mac-primary-blue-400)]",
-                "data-[state=active]:border-b-2",
+                "data-[state=active]:border-b-[3px]",
                 "data-[state=active]:border-[var(--mac-primary-blue-400)]",
+                "data-[state=active]:shadow-[0_2px_8px_rgba(51,133,255,0.3)]",
                 "transition-all duration-200"
               )}
             >
@@ -358,8 +357,9 @@ export function CurateTab({
                 "font-light",
                 "data-[state=active]:bg-[var(--mac-primary-blue-400)]/10",
                 "data-[state=active]:text-[var(--mac-primary-blue-400)]",
-                "data-[state=active]:border-b-2",
+                "data-[state=active]:border-b-[3px]",
                 "data-[state=active]:border-[var(--mac-primary-blue-400)]",
+                "data-[state=active]:shadow-[0_2px_8px_rgba(51,133,255,0.3)]",
                 "transition-all duration-200"
               )}
             >
@@ -374,7 +374,7 @@ export function CurateTab({
               <div className="flex items-center gap-2">
                 <InputGroup className="flex-1">
                   <InputGroupAddon className="bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
-                    <Search className="h-4 w-4 text-[var(--mac-text-muted)]" />
+                    <Search className="h-4 w-4 text-[var(--mac-text-secondary)]" />
                   </InputGroupAddon>
                   <InputGroupInput
                     placeholder="Search files..."
@@ -475,7 +475,7 @@ export function CurateTab({
                     "bg-[var(--mac-surface-elevated)]/50"
                   )}>
                     <EmptyMedia variant="icon" className="text-[var(--mac-text-muted)]">
-                      <FileText className="h-12 w-12" />
+                      <FileText className="h-10 w-10" />
                     </EmptyMedia>
                     <EmptyTitle className="text-[var(--mac-text-primary)] font-light">
                       No files found
@@ -487,7 +487,7 @@ export function CurateTab({
                 ) : (
                   <div className="p-4 space-y-2">
                     {/* Select All */}
-                    <div className="flex items-center gap-3 pb-2 border-b border-[var(--mac-utility-border)]">
+                    <div className="flex items-center gap-3 pb-3 border-b border-[var(--mac-utility-border)]">
                       <Checkbox
                         checked={selectedFiles.size === filteredFiles.length && filteredFiles.length > 0}
                         onCheckedChange={selectAllFiles}
@@ -497,9 +497,9 @@ export function CurateTab({
                           "data-[state=checked]:border-[var(--mac-primary-blue-400)]"
                         )}
                       />
-                      <span className="text-sm text-[var(--mac-text-secondary)] font-light">
+                      <label className="text-sm text-[var(--mac-text-secondary)] font-light cursor-pointer" onClick={selectAllFiles}>
                         Select all ({filteredFiles.length})
-                      </span>
+                      </label>
                     </div>
 
                     {/* File Items */}
@@ -512,9 +512,9 @@ export function CurateTab({
                           "bg-[var(--mac-surface-elevated)]",
                           "transition-all duration-200 ease-out",
                           "hover:bg-[var(--mac-state-hover)]",
-                          "hover:border-[var(--mac-utility-border-elevated)]",
-                          "hover:shadow-lg hover:shadow-[var(--mac-utility-shadow)]",
-                          "hover:-translate-y-0.5",
+                          "hover:border-[var(--mac-primary-blue-400)]/40",
+                          "hover:shadow-xl hover:shadow-[var(--mac-primary-blue-400)]/20",
+                          "hover:-translate-y-1",
                           "cursor-pointer",
                           selectedFiles.has(file.id) && [
                             "bg-[var(--mac-surface-card)]",
@@ -539,16 +539,16 @@ export function CurateTab({
                           <p className="font-light text-sm truncate text-[var(--mac-text-primary)]">
                             {file.filename}
                           </p>
-                          <div className="flex items-center gap-3 text-xs text-[var(--mac-text-secondary)] font-light">
+                          <div className="flex items-center gap-4 text-xs text-[var(--mac-text-secondary)] font-light">
                             <span>{formatFileSize(file.bytes)}</span>
-                            <span>•</span>
+                            <span className="text-[var(--mac-utility-border-elevated)]">│</span>
                             <span>{formatDate(file.created_at)}</span>
-                            <span>•</span>
+                            <span className="text-[var(--mac-utility-border-elevated)]">│</span>
                             <Badge
-                              variant={file.status === "processed" ? "default" : "secondary"}
+                              variant={file.status === "processed" || file.status === "ready" ? "default" : "secondary"}
                               className={cn(
                                 "text-xs h-4 font-light",
-                                file.status === "processed"
+                                file.status === "processed" || file.status === "ready"
                                   ? "mac-status-connected"
                                   : "mac-status-warning"
                               )}
@@ -576,21 +576,12 @@ export function CurateTab({
                               "bg-[var(--mac-surface-elevated)]"
                             )}
                           >
-                            <DropdownMenuItem className="font-light">
-                              <Eye className="h-4 w-4 mr-2" />
-                              View Details
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="font-light">
-                              <Download className="h-4 w-4 mr-2" />
-                              Download
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator className="bg-[var(--mac-utility-border)]" />
                             <DropdownMenuItem
-                              className="text-[var(--mac-status-error-text)] font-light"
+                              className="text-[var(--mac-status-error-text)] font-light focus:text-[var(--mac-status-error-text)]"
                               onClick={() => confirmDeleteFiles([file.id])}
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
+                              Delete File
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
