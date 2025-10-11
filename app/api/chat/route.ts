@@ -55,6 +55,7 @@ interface KnowledgeElement {
     source?: string;
     confidence?: number;
     timestamp?: string;
+    screenshot_path?: string; // NEW: Screenshot path for visual context
     [key: string]: any;
   };
 }
@@ -364,10 +365,15 @@ export async function POST(req: Request) {
           if (rag.results?.length) {
             console.log(`✅ Supabase returned ${rag.results.length} results in ${rag.durationMs}ms`);
 
-            // Add top snippets to context
+            // Add top snippets to context with screenshot paths
             const snippets = rag.results
               .slice(0, 4)
-              .map((r, i) => `(${i + 1}) [${r.source_type}] ${r.content?.slice(0, 400)}`)
+              .map((r, i) => {
+                const screenshotInfo = r.metadata?.screenshot_path
+                  ? `\n📸 Screenshot: ${r.metadata.screenshot_path}`
+                  : '';
+                return `(${i + 1}) [${r.source_type}] ${r.content?.slice(0, 400)}${screenshotInfo}`;
+              })
               .join("\n---\n");
 
             aomaContext += `\n\n[SUPABASE KNOWLEDGE]\n${snippets}`;
@@ -375,7 +381,21 @@ export async function POST(req: Request) {
               rag.stats.sourcesCovered,
             )}}`;
 
-            // Add knowledge elements
+            // Add knowledge elements with screenshots
+            rag.results.slice(0, 4).forEach((r) => {
+              if (r.metadata?.screenshot_path) {
+                knowledgeElements.push({
+                  type: 'reference',
+                  content: r.content || '',
+                  metadata: {
+                    source: 'supabase-vectors',
+                    screenshot_path: r.metadata.screenshot_path,
+                    timestamp: new Date().toISOString(),
+                  }
+                });
+              }
+            });
+
             knowledgeElements.push({
               type: 'context',
               content: `Found ${rag.stats.count} relevant documents from ${rag.stats.sourcesCovered.join(', ')}`,
@@ -424,9 +444,10 @@ ${aomaContext}
 **RESPONSE GUIDELINES:**
 1. **Primary source**: Use the AOMA context above for specific, detailed answers about AOMA features and workflows
 2. **Cite sources**: When using context, indicate it's from AOMA documentation
-3. **Fallback knowledge**: If context doesn't cover the question, you can provide general helpful information about AOMA based on common enterprise asset management practices
-4. **Be honest**: If you're unsure about specific Sony Music/AOMA details, acknowledge it
-5. **No fabrication**: Don't make up specific dates, numbers, UI details, or features that aren't in the context
+3. **Visual context**: When screenshots are available (indicated by 📸 Screenshot: paths), mention that visual references are available and reference specific UI elements shown in them
+4. **Fallback knowledge**: If context doesn't cover the question, you can provide general helpful information about AOMA based on common enterprise asset management practices
+5. **Be honest**: If you're unsure about specific Sony Music/AOMA details, acknowledge it
+6. **No fabrication**: Don't make up specific dates, numbers, UI details, or features that aren't in the context
 
 **ANTI-HALLUCINATION RULES:**
 - DON'T fabricate specific Sony Music policies or AOMA features
