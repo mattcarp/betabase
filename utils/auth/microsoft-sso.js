@@ -112,11 +112,9 @@ async function authenticateWithMicrosoft(page, config) {
 
     console.log(`   Filling username: ${username}`);
 
-    // Click to focus, then type
-    await page.click('#login-form-username');
-    await page.waitForTimeout(300);
-    await page.type('#login-form-username', username, { delay: 50 });
-    await page.waitForTimeout(500);
+    // Use fill() which works with hidden fields
+    await page.fill('#login-form-username', username);
+    await page.waitForTimeout(1000);
 
     // VERIFY username was filled correctly
     const usernameValue = await page.evaluate(() => {
@@ -161,13 +159,9 @@ async function authenticateWithMicrosoft(page, config) {
 
     console.log(`   Filling password into #login-form-password`);
 
-    // Click to focus the password field explicitly
-    await page.click('#login-form-password[type="password"]');
-    await page.waitForTimeout(300);
-
-    // Type the password
-    await page.type('#login-form-password[type="password"]', password, { delay: 50 });
-    await page.waitForTimeout(500);
+    // Use fill() which works with hidden fields
+    await page.fill('#login-form-password[type="password"]', password);
+    await page.waitForTimeout(1000);
 
     // VERIFY password was filled correctly (check length since it's masked)
     const passwordLength = await page.evaluate(() => {
