@@ -119,7 +119,12 @@ test.describe('AOMA Comprehensive Visual & Performance Tests', () => {
 
     // Save to file for visualization
     const fs = require('fs');
-    const vitalsPath = `test-results/web-vitals/vitals-${Date.now()}.json`;
+    const path = require('path');
+    const vitalsDir = 'test-results/web-vitals';
+    if (!fs.existsSync(vitalsDir)) {
+      fs.mkdirSync(vitalsDir, { recursive: true });
+    }
+    const vitalsPath = path.join(vitalsDir, `vitals-${Date.now()}.json`);
     fs.writeFileSync(vitalsPath, JSON.stringify(vitals, null, 2));
     console.log(`\n💾 Web Vitals saved: ${vitalsPath}`);
 
@@ -277,7 +282,12 @@ test.describe('AOMA Comprehensive Visual & Performance Tests', () => {
     // Save Web Vitals summary
     if (webVitals) {
       const fs = require('fs');
-      const summaryPath = 'test-results/web-vitals/latest-summary.json';
+      const path = require('path');
+      const vitalsDir = 'test-results/web-vitals';
+      if (!fs.existsSync(vitalsDir)) {
+        fs.mkdirSync(vitalsDir, { recursive: true });
+      }
+      const summaryPath = path.join(vitalsDir, 'latest-summary.json');
       const summary = {
         ...webVitals,
         consoleErrors: consoleErrors.length,
