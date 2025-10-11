@@ -33,6 +33,7 @@ import {
   MoreVertical,
   GitMerge,
   Loader2,
+  Eye,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -109,6 +110,10 @@ export function CurateTab({
     duplicateGroups: number;
     removed: number;
   } | null>(null);
+  const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
+  const [previewFile, setPreviewFile] = useState<VectorStoreFile | null>(null);
+  const [previewContent, setPreviewContent] = useState<string>("");
+  const [previewLoading, setPreviewLoading] = useState(false);
 
   // Load files from vector store
   const loadFiles = async () => {
@@ -198,6 +203,30 @@ export function CurateTab({
       setSelectedFiles(new Set());
     } else {
       setSelectedFiles(new Set(filteredFiles.map((f) => f.id)));
+    }
+  };
+
+  // Preview file content
+  const previewFileContent = async (file: VectorStoreFile) => {
+    setPreviewFile(file);
+    setPreviewDialogOpen(true);
+    setPreviewLoading(true);
+    setPreviewContent("");
+
+    try {
+      const response = await fetch(`/api/vector-store/files/content?fileId=${file.id}`);
+
+      if (response.ok) {
+        const data = await response.json();
+        setPreviewContent(data.content || "No content available");
+      } else {
+        setPreviewContent("Failed to load file content");
+      }
+    } catch (error) {
+      console.error("Error loading file preview:", error);
+      setPreviewContent("Error loading file content");
+    } finally {
+      setPreviewLoading(false);
     }
   };
 
@@ -617,6 +646,14 @@ export function CurateTab({
                             )}
                           >
                             <DropdownMenuItem
+                              className="text-[var(--mac-text-primary)] font-light"
+                              onClick={() => previewFileContent(file)}
+                            >
+                              <Eye className="h-4 w-4 mr-2 text-[var(--mac-primary-blue-400)]" />
+                              Preview File
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator className="bg-[var(--mac-utility-border)]" />
+                            <DropdownMenuItem
                               className="text-[var(--mac-status-error-text)] font-light focus:text-[var(--mac-status-error-text)]"
                               onClick={() => confirmDeleteFiles([file.id])}
                             >
@@ -819,6 +856,58 @@ export function CurateTab({
                   Delete {filesToDelete.length} file{filesToDelete.length !== 1 ? 's' : ''}
                 </>
               )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* File Preview Dialog */}
+      <Dialog open={previewDialogOpen} onOpenChange={setPreviewDialogOpen}>
+        <DialogContent className={cn(
+          "mac-glass max-w-4xl max-h-[80vh]",
+          "border-[var(--mac-utility-border-elevated)]",
+          "bg-[var(--mac-surface-elevated)]"
+        )}>
+          <DialogHeader>
+            <DialogTitle className="text-[var(--mac-text-primary)] font-light flex items-center gap-2">
+              <Eye className="h-5 w-5 text-[var(--mac-primary-blue-400)]" />
+              File Preview
+            </DialogTitle>
+            {previewFile && (
+              <DialogDescription className="text-[var(--mac-text-secondary)] font-light">
+                {previewFile.filename} • {formatFileSize(previewFile.bytes)} • {formatDate(previewFile.created_at)}
+              </DialogDescription>
+            )}
+          </DialogHeader>
+
+          <ScrollArea className={cn(
+            "h-96 rounded-lg p-4",
+            "border border-[var(--mac-utility-border)]",
+            "bg-[var(--mac-surface-background)]"
+          )}>
+            {previewLoading ? (
+              <div className="flex items-center justify-center h-full">
+                <Spinner className="h-8 w-8" />
+                <span className="ml-3 text-[var(--mac-text-secondary)] font-light">Loading content...</span>
+              </div>
+            ) : (
+              <pre className={cn(
+                "text-xs font-mono whitespace-pre-wrap",
+                "text-[var(--mac-text-primary)]",
+                "font-light"
+              )}>
+                {previewContent}
+              </pre>
+            )}
+          </ScrollArea>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setPreviewDialogOpen(false)}
+              className="mac-button-outline"
+            >
+              Close
             </Button>
           </DialogFooter>
         </DialogContent>
