@@ -9,8 +9,7 @@ import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
 import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
 import { modelConfig } from "../../../src/services/modelConfig";
 import { trackRequest } from "../introspection/route";
-// Temporarily disabled until Supabase migration deployed:
-// import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
+import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
@@ -311,15 +310,11 @@ export async function POST(req: Request) {
         // This gives us comprehensive coverage from all knowledge sources
         console.log('⏳ Starting parallel queries: AOMA orchestrator + Supabase vectors...');
 
-        // TEMPORARY: Disable Supabase until migration is deployed
         // Start Supabase knowledge search in parallel
-        const ragPromise = Promise.resolve({ results: [], durationMs: 0, stats: { count: 0, sourcesCovered: [] } })
-        /* Disabled until aoma_unified_vectors table exists:
         const ragPromise = searchKnowledge(queryString, {
           matchThreshold: 0.78,
           matchCount: 6,
         });
-        */
 
         // Wrap orchestrator call with timeout to prevent hanging
         const orchestratorResult = await Promise.race([
@@ -345,7 +340,7 @@ export async function POST(req: Request) {
           aomaConnectionStatus = "success";
           console.log("✅ AOMA orchestration successful");
         } else {
-          console.log("❌ AOMA orchestrator returned no content");
+          console.error("❌ AOMA orchestrator returned no content", orchestratorResult);
           aomaConnectionStatus = "failed";
 
           knowledgeElements.push({
@@ -413,9 +408,11 @@ export async function POST(req: Request) {
           // Don't fail the whole request if Supabase fails - we still have Railway MCP
         }
       } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+
         // Log detailed error server-side
         console.error("❌ AOMA query error:", {
-          error: error instanceof Error ? error.message : String(error),
+          error: errorMessage,
           stack: error instanceof Error ? error.stack : undefined,
           query: queryString.substring(0, 100),
           timestamp: new Date().toISOString()
@@ -423,12 +420,27 @@ export async function POST(req: Request) {
 
         aomaConnectionStatus = "failed";
 
-        // User-friendly warning (no implementation details)
+        // Provide specific user-facing error messages based on error type
+        let userMessage = 'AOMA knowledge base temporarily unavailable.';
+
+        if (errorMessage.includes('API key') || errorMessage.includes('401')) {
+          userMessage = '⚠️ AOMA MCP server authentication error. The OpenAI API key needs to be updated. Please contact support.';
+          console.error('🔑 CRITICAL: AOMA MCP server has invalid OpenAI API key!');
+        } else if (errorMessage.includes('unreachable') || errorMessage.includes('ECONNREFUSED')) {
+          userMessage = '⚠️ AOMA MCP server is not responding. Please check that it\'s running.';
+          console.error('🔌 CRITICAL: Cannot connect to AOMA MCP server!');
+        } else if (errorMessage.includes('timeout')) {
+          userMessage = '⚠️ AOMA query timed out. The server may be overloaded.';
+        }
+
         knowledgeElements.push({
           type: 'warning',
-          content: 'AOMA knowledge base temporarily unavailable. Answers may be less comprehensive than usual.',
+          content: userMessage,
           metadata: {
             timestamp: new Date().toISOString(),
+            errorType: errorMessage.includes('API key') ? 'auth_error' :
+                       errorMessage.includes('unreachable') ? 'connection_error' :
+                       errorMessage.includes('timeout') ? 'timeout_error' : 'unknown_error'
           }
         });
       }
