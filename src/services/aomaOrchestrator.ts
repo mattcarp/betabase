@@ -526,10 +526,13 @@ export class AOMAOrchestrator {
           });
 
           if (!response.ok) {
-            throw new Error(`AOMA query failed: ${response.statusText}`);
+            const errorText = await response.text();
+            console.error(`❌ AOMA MCP ERROR [${response.status}]:`, errorText);
+            throw new Error(`AOMA query failed: ${response.statusText} - ${errorText}`);
           }
 
           const result = await response.json();
+          console.log('✅ AOMA MCP response:', JSON.stringify(result).substring(0, 200));
           
           // Handle different response formats (JSON-RPC in production vs direct in dev)
           const actualResult = process.env.NODE_ENV === 'production' 
@@ -656,11 +659,31 @@ export class AOMAOrchestrator {
           };
       }
     } catch (error) {
-      console.error(`❌ Error calling AOMA tool ${toolName}:`, error);
-      throw new Error(
-        `AOMA knowledge base is currently unavailable. Unable to connect to MCP server for ${toolName}. ` +
-          `Please check that the AOMA MCP server is running and properly configured.`,
-      );
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(`❌ Error calling AOMA tool ${toolName}:`, {
+        error: errorMessage,
+        stack: error instanceof Error ? error.stack : undefined,
+        toolName,
+        args,
+        timestamp: new Date().toISOString()
+      });
+
+      // Provide specific error messages based on error type
+      if (errorMessage.includes('401') || errorMessage.includes('API key')) {
+        throw new Error(
+          `AOMA MCP server authentication failed. The OpenAI API key is invalid or expired. ` +
+          `Server error: ${errorMessage}`
+        );
+      } else if (errorMessage.includes('fetch') || errorMessage.includes('ECONNREFUSED')) {
+        throw new Error(
+          `AOMA MCP server is unreachable. Please check that it's running on the correct port. ` +
+          `Connection error: ${errorMessage}`
+        );
+      } else {
+        throw new Error(
+          `AOMA knowledge base error for ${toolName}: ${errorMessage}`,
+        );
+      }
     }
   }
 
