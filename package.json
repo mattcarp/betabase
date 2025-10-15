@@ -44,6 +44,7 @@
     "test:aoma:knowledge": "npx playwright test tests/production/aoma-knowledge-validation.spec.ts --reporter=list",
     "test:aoma:hallucination": "npx playwright test tests/production/aoma-anti-hallucination.spec.ts --reporter=list",
     "test:aoma:chat": "npx playwright test tests/production/aoma-chat-test.spec.ts --reporter=list",
+    "test:aoma:errors": "npx playwright test tests/production/aoma-error-handling.spec.ts --reporter=list",
     "test:aoma:all": "npx playwright test tests/production/aoma-*.spec.ts --reporter=list",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
@@ -96,6 +97,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
+    "csv-parse": "^6.1.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.1.5",
     "framer-motion": "^11.2.10",
@@ -130,6 +132,7 @@
     "uuid": "^11.0.5",
     "vaul": "^1.1.2",
     "victory-vendor": "^37.3.6",
+    "xlsx": "^0.18.5",
     "zod": "^3.23.8",
     "zustand": "^5.0.5"
   },
