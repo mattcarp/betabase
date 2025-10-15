@@ -154,10 +154,12 @@ async function upsertEmbeddings(tickets) {
   // Prepare embeddings for upsert
   console.log(`\n💾 Upserting embeddings to database...`);
   
+  // Match actual table schema: uses ticket_key instead of external_id
   const embeddingRecords = embeddings.map((embedding, index) => ({
-    external_id: tickets[index].external_id,
+    ticket_key: tickets[index].external_id,  // Table uses ticket_key, not external_id
     summary: tickets[index].title,
-    embedding: JSON.stringify(embedding) // Store as JSON string
+    embedding: JSON.stringify(embedding), // Store as JSON string
+    metadata: { generated_at: new Date().toISOString() }
   }));
 
   const batchSize = 100;
@@ -165,11 +167,11 @@ async function upsertEmbeddings(tickets) {
 
   for (let i = 0; i < embeddingRecords.length; i += batchSize) {
     const batch = embeddingRecords.slice(i, i + batchSize);
-    
+
     const { error } = await supabase
       .from('jira_ticket_embeddings')
       .upsert(batch, {
-        onConflict: 'external_id',
+        onConflict: 'ticket_key',  // Table uses ticket_key as unique constraint
         ignoreDuplicates: false
       });
 

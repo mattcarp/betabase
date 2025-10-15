@@ -1,0 +1,1139 @@
+Summary,Issue key,Issue id,Parent id,Issue Type,Status,Project key,Project name,Project type,Project lead,Project description,Project url,Priority,Resolution,Assignee,Reporter,Creator,Created,Updated,Last Viewed,Resolved,Affects Version/s,Affects Version/s,Fix Version/s,Component/s,Component/s,Component/s,Votes,Labels,Labels,Description,Watchers,Watchers,Watchers,Watchers,Watchers,Watchers,Watchers,Watchers,Watchers,Watchers,Watchers,Watchers,Watchers,Watchers,Watchers,Log Work,Log Work,Log Work,Original Estimate,Remaining Estimate,Time Spent,Work Ratio,Σ Original Estimate,Σ Remaining Estimate,Σ Time Spent,Inward issue link (Block),Outward issue link (Block),Outward issue link (Block),Inward issue link (Dependency),Inward issue link (Dependency),Inward issue link (Dependency),Outward issue link (Dependency),Outward issue link (Dependency),Inward issue link (Problem/Incident),Outward issue link (Problem/Incident),Inward issue link (Project Phasing),Inward issue link (Related Item),Inward issue link (Related Item),Inward issue link (Related Item),Inward issue link (Related Item),Inward issue link (Related Item),Inward issue link (Related Item),Inward issue link (Related Item),Inward issue link (Related Item),Inward issue link (Related Item),Inward issue link (Related Item),Inward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (Related Item),Outward issue link (XSC Link),Inward issue link (is related to),Outward issue link (is related to),Attachment,Attachment,Attachment,Attachment,Attachment,Attachment,Attachment,Attachment,Attachment,Custom field (AOMA Team),Custom field (Account),Custom field (Account Information),Custom field (Account Number),Custom field (Affected System),Custom field (Agile Story Points),Custom field (Application Pattern),Custom field (Approved By),Custom field (Artist),Custom field (Assignable users),Custom field (Assignable users),Custom field (Attachments),Custom field (Bugzilla Id),Custom field (Bus. Date Reason),Custom field (Business Analyst),Custom field (Business Due Date),Custom field (Business Owner),Custom field (Business Owner Email),Custom field (Business Owner's Manager Email),Custom field (Business User's Email),Custom field (Business Value),Custom field (Category),Custom field (Category),Custom field (Category/Screen),Custom field (Checklists),Custom field (City),Custom field (Colorspace),Custom field (Comments),Custom field (Committed Due Date),Custom field (Component),Custom field (Countries),Custom field (Country),Custom field (Country - Subregion),Custom field (Cumulative Remaining Estimate (seconds)),Custom field (Current Status),Custom field (Customer Contacts),Customer Request Type,Custom field (Data Source),Custom field (Delivery Story Point),Custom field (Deployed On),Custom field (Device),Custom field (EP Created by),Custom field (EP Mandatory),Custom field (EP Mandatory Label),Custom field (EP Summary Label),Custom field (Email Chain),Custom field (End Date),Custom field (Environment),Custom field (Epic Color),Custom field (Epic Link),Custom field (Epic Name),"Custom field (Epic Name [deprecated, this field is no longer being used])",Custom field (Epic Status),Custom field (Epic/Theme),Custom field (Equal Created Due),Custom field (Escalation Message),Custom field (Est. End Date),Custom field (Est. Start Date),Custom field (Feature),GA Raised time to resolution NZ,GA Raised time to resolution UK,GA Raised time to resolution US,GA Raised time to response NZ,GA Raised time to response UK,GA Raised time to response US,Custom field (GFSS Region),GFSS Time to response,Custom field (GSA Email),Custom field (Glores Issue Priority),Custom field (Group),Custom field (Groups),Custom field (IS&T Assignee),Custom field (IT User's Email),Custom field (Impacts),Custom field (Inquirer's Name),Custom field (Inquiry Source),Custom field (Issue Categories),Custom field (Iteration),Custom field (JML Action),LA Raised time to resolution NZ,LA Raised time to resolution UK,LA Raised time to resolution US,LA Raised time to response NZ,LA Raised time to response UK,LA Raised time to response US,Custom field (Label),Custom field (Label),Custom field (Label),Custom field (Linked major incidents),Custom field (Management Owner),Custom field (Manager),Custom field (Mapping PPP Country To Owners_Business),Custom field (Mapping PPP Country To Owners_IT_Lead),Custom field (Modules),Custom field (NEW Payee Number),Custom field (Number of Emails),Custom field (Number of Phone Calls),OTC Account Owner Review Time to resolution,OTC Accruals time to resolution,OTC Accruals time to response,OTC CRG time to resolution,OTC Cash App time to resolution,OTC Cash App time to response,OTC Credit Insurance time to resolution,OTC Credit Insurance time to response,OTC Customer/Deal time to resolution,OTC Customer/Deal time to response,OTC General time to resolution,OTC General time to response,OTC Journal/Invoicing time to resolution,OTC Journal/Invoicing time to response,OTC Statement Formatting time to resolution,Custom field (Organizations),Custom field (Original story points),PTP time to resolution,PTP time to response,Custom field (Parent Link),Custom field (Participant Name),Custom field (Payee #),Custom field (Payee Balance),Custom field (Payee Name),Custom field (Phase),Custom field (Priority),Custom field (Priority Level),Custom field (Product),Custom field (Project ID),Custom field (Proposed fixture/solution),Custom field (Provider Key (if one already exists)),RTR /by GFSS time to resolution,RTR time to resolution,RTR time to response,Custom field (Raised By),Custom field (Rank),Custom field (Rank (Obsolete)),Custom field (Reason For Rejection),Custom field (Reason For Urgency),Custom field (Region),Custom field (Release Highlight),Custom field (Reopen Comment),Custom field (Request participants),Custom field (Requestor),Custom field (Requestor Email),Custom field (Root Cause),Royalties time to resolution,Royalties time to response,Custom field (SAP Customer name [field 2] to remove),Custom field (SAP Customer name [field 3] to remove),Custom field (SAP Customer name [field 4] to remove),Custom field (SAP Region(s)),SC time to resolution,SC time to response,SC(Internal) GFSS time to resolution,SC(Internal) time to resolution,SC(Internal) time to response,Custom field (SLA Variables),SU Raised time to resolution NZ,SU Raised time to resolution UK,SU Raised time to resolution US,SU Raised time to response NZ,SU Raised time to response UK,SU Raised time to response US,Satisfaction score (out of 5),Custom field (Screen/Area),Custom field (Security based on),Custom field (SendScriptRunnerEmails_project_CRM),Custom field (Severity Level),Custom field (Smart Checklist),Custom field (Smart Checklist Progress),Custom field (Specific Component),Sprint,Custom field (Start Date),Custom field (Start date),Custom field (Status),Custom field (Story Points),Custom field (Structure Index Monitor),Custom field (System),Custom field (Systems Affected),TE Authorization NZ to resolution,TE Authorization NZ to response,TE Authorization UK to resolution,TE Authorization UK to response,TE Authorization US to resolution,TE Authorization US to response,TE NZ time to resolution,TE NZ time to response,TE UK time to resolution,TE UK time to response,TE US time to resolution,TE US time to response,TE time to resolution,TE time to response,Custom field (Target end),Custom field (Target start),Custom field (Tax ID),Custom field (Team),Custom field (Team),Custom field (Team),Custom field (Team Role),Custom field (Techincal Owner),Custom field (Territory (es)),Custom field (Testcase),Time to Complete UAT,Time to first response,Time to resolution,Time to response,Custom field (Tower),Custom field (Type),Custom field (URL),Custom field (Urgent Transport),Custom field (Use comment as description),Custom field (User Action),Custom field (Version),Custom field (Work Category),Custom field (Work Log Comment),Custom field (Work Started),Custom field (XSC Dependency),Custom field (gitBranch),Custom field (gitBranch),Custom field (gitBranch),Custom field (gitBranch),Custom field (gitBranch),Custom field (gitBranch),Custom field (gitCommitsReferenced),Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment,Comment
+Request Cloud-Ops for new EC2 & S3 Instances,AOMA-16541,1255347,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,zeki001,dono002,dono002,10/May/22 10:37 PM,08/Oct/25 9:21 AM,12/Oct/25 4:13 PM,30/Nov/22 1:42 PM,,,,,,,0,,,"Request:
+ -2 new EC2 instances in Dev-
+ 4 new EC2 instances in Stage (using existing EC2 instances to model after) with new Task Definition that will point to new image
+
+Stage should be as closely similar to Prod as possible. FW needs to be set for existing connections and also new Postgres connection. (see CLOUDSD-1838 as an example)
+
+New S3 buckets (using existing S3 to model after)",cmiller,dono002,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CLOUDOPS-11862,CLOUDOPS-11988,CLOUDOPS-12102,CLOUDOPS-12115,CLOUDOPS-20478,CLOUDOPS-18310,CLOUDOPS-19980,CLOUDOPS-20670,CLOUDOPS-20412,CLOUDOPS-20426,CLOUDOPS-22734,CLOUDOPS-22430,CLOUDOPS-23406,CLOUDOPS-23407,CLOUDOPS-10815,CLOUDOPS-11052,CLOUDOPS-23409,CLOUDOPS-11572,CLOUDOPS-11647,CLOUDOPS-11724,CLOUDOPS-11704,CLOUDOPS-12548,CLOUDOPS-23435,CLOUDOPS-22672,CLOUDOPS-22872,CLOUDOPS-22085,CLOUDOPS-22169,CLOUDOPS-22170,CLOUDOPS-22203,CLOUDOPS-22204,CLOUDOPS-22206,,,,"21/Jun/22 11:40 AM;zeki001;image-2022-06-21-11-40-02-609.png;https://jira.smedigitalapps.com/jira/secure/attachment/1432637/image-2022-06-21-11-40-02-609.png","17/Jun/22 7:03 PM;cmiller;mi-postgres-migration-v2-20220520.png;https://jira.smedigitalapps.com/jira/secure/attachment/1431243/mi-postgres-migration-v2-20220520.png",,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,DSCE-2025,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i0ime7:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"17/Jun/22 7:03 PM;cmiller;[~ZEKI001]-
+
+As noted in a separate email, we should be able to proceed with getting these instances provisioned.
+
+Thanks,
+-Craig
+;;;","17/Jun/22 7:04 PM;cmiller;Added the latest diagram, but note that this will need another change that was noted in the recent email:
+
+* The PG-MIG database environment will be solely for use by the AWS/L&T AWS/L&T Postgres Migration team and we will NOT need a Tx Mgr development cluster linked to it. Instead, we should plan on doing the small amount of development work we need to do (DB connections, modifications of error handling, dictionary load changes) directly in environment linked to PG-TEST.
+
+Will update the diagram whenever a new one is published.
+;;;","21/Jun/22 11:57 AM;zeki001;Hello [~cmiller], just to confirm one more time before requesting new instances from CloudOps. 
+We need to request instances marked with a blue pen in the following image (two TxMgr environments, one will be linked to ORA-TEST and another one will be linked to PG-TEST)? 
+
+!image-2022-06-21-11-40-02-609.png|width=319,height=457!;;;","21/Jun/22 4:11 PM;cmiller;[~ZEKI001]-
+
+Yes, that's correct.
+The cluster depicted on the left hand side with PG_MIG will not be required.
+
+Thanks,
+-Craig
+;;;","22/Jun/22 12:03 PM;zeki001;[~cmiller], I have created a ticket. If you have a chance, you can also take a look. 
+https://jira.smedigitalapps.com/jira/browse/CLOUDOPS-10815 ;;;","30/Nov/22 1:42 PM;zeki001;Hello [~DONO002]  and [~cmiller],
+
+Now, we have two new up-and-running environments, and I'm going to close this ticket. If something comes up I will create a support ticket for CloudOps.
+
+We need to make some additional code adaptations - regarding the using PG driver and handling PG concurrency issues, but on that part, we will work using separate tickets. 
+
+Thanks,
+Alem;;;",,,,,,,,,,,,,,,,,,,,,
+AOMA3: User managed email subscriptions,AOMA-13047,606799,,Issue,Canceled,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Duplicate,aomacoredev,sala072,sala072,13/Dec/16 9:48 PM,07/Oct/25 11:01 PM,12/Oct/25 4:13 PM,22/Jun/20 8:18 PM,,,Enhancements-Standard,aoma user management,,,0,AOMA3,,"Hi Brittney,
+Please add the following enhancements:
+
+1)	Export: Add exported by user name and email address to email notifications (add the below image for example)
+2)	AOMA3: User managed email subscriptions
+3)	Unifying email notifications
+
+First one can be done early next year. 
+
+Thanks,
+Rohit 
+
+From: Catandella, Michael, Sony Music 
+Sent: Tuesday, December 13, 2016 9:42 AM
+
+Hey Rohit/Ralph, 
+
+Could we get the sender added to these notifications? 
+
+Also, I’m wondering if we should have an audit of all e-mail notifications and message configurations scheduled for some time in our future.  It seems like there are multiple export notification types and they appear to differ in ways that could probably be made more uniform? 
+What do you think? 
+
+Maybe try to clean up the logic around notifications.  I think it would even be cool for future to allow users to manage their own notifications through a user preference or profile in AOMA3. 
+
+Thanks,
+
+Michael Catandella",frie010,sala072,,,,,,,,,,,,,,,,,,,,,,,,,,,AMSE-75,,,,,,,,AOMA-15953,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AMSE-587,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|hv4x2n:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,,Minor,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"16/Mar/20 7:50 PM;frie010;Per [~SHAR051]:
+
+One way to do this would be to create a new permission so that a user can see/edit their own system notification user settings (vs. an admin who an edit anyone's user settings).;;;","22/Jun/20 8:18 PM;frie010;This will be covered by AOMA-16051;;;",,,,,,,,,,,,,,,,,,,,,,,,,
+Please resend the AOMA message for this release:   G010003442858Q Bruce Springsteen - Wings for Wheels: The Making of Born to Run,AOMA-16977,1957833,,Task,Open,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,,gvamsik,ekba001,ekba001,12/Aug/25 8:31 PM,01/Oct/25 2:26 PM,12/Oct/25 4:13 PM,,,,,,,,0,,,,burg036,coconne,ekba001,gvamsik,hale002,kmccar1,poth003,rbarry1,roraj01,vdutta,,,,,,,,,,,,,,,,,,,,,,,,,,,DPSRP-1822,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,DPSA-31264,,"30/Sep/25 9:45 PM;vdutta;image-2025-09-30-15-45-56-087.png;https://jira.smedigitalapps.com/jira/secure/attachment/2700233/image-2025-09-30-15-45-56-087.png","30/Sep/25 10:28 PM;ekba001;image-2025-09-30-16-28-55-966.png;https://jira.smedigitalapps.com/jira/secure/attachment/2700338/image-2025-09-30-16-28-55-966.png","30/Sep/25 9:01 PM;ekba001;screenshot-1.png;https://jira.smedigitalapps.com/jira/secure/attachment/2700165/screenshot-1.png",,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3nglr:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"12/Aug/25 8:32 PM;ekba001;Hi Keith,  Can you please resend the AOMA message for this release:
+
+ 
+
+G010003442858Q Bruce Springsteen - Wings for Wheels: The Making of Born to Run;;;","12/Aug/25 8:52 PM;kmccar1;G010003442858Q has been resent, Laura. Let me know how it goes...
+
+Thanks,
+
+Keith;;;","13/Aug/25 8:58 PM;ekba001;Hi Keith,
+
+ 
+
+Can you please do this for this one as well?
+
+ 
+
+G010003177946H;;;","13/Aug/25 10:25 PM;kmccar1;Sure thing, Laura. G010003177946H has been resent now.
+
+Thanks,
+
+Keith;;;","20/Aug/25 10:44 PM;ekba001;Hey Keith,
+
+ 
+
+I've got another list of titles that I need this done for: 
+|G0100010246361|
+|G010003471432X|
+|G0100036739295|
+|G010004214000L|
+|G010004214000L|
+|G010004248830S|
+|G010004267404G|
+|G010004468875N|
+|G0100045684570|
+|G010004609747H|
+|G010004671041Q|
+|G010004671041Q|
+|G010004692524J|
+|G010004692531L|
+|G0100046925379|
+|G010004845500J|
+|G010005009283U|
+|G010005087582R|
+|G0100051658522|
+|G0100053895307|
+|G0100053923830|
+|G010005393493C|
+|G010005394556X|
+|G010005397071T|
+|G010005400813P|
+|G010005416121J|
+|G0100054453964|
+|G0100054465164|
+|G010005460139H|
+|G010005485192B|
+|G010005512022T|
+|G0100055122510|
+|G0100055135266|
+
+thanks!;;;","20/Aug/25 10:59 PM;kmccar1;Sure thing, Laura - will let you know once complete. 
+
+Thanks,
+
+Keith;;;","20/Aug/25 11:33 PM;kmccar1;These products have been resent now, [~ekba001].
+
+Thanks,
+
+Keith;;;","02/Sep/25 6:35 PM;ekba001;Hi Keith, 
+
+ 
+
+Can you please do this for this one too?
+
+ 
+G010005430739K
+ 
+thanks! ;;;","02/Sep/25 6:46 PM;kmccar1;Sure thing, Laura - G010005430739K has been resent now.
+
+Thanks,
+
+Keith;;;","12/Sep/25 10:23 PM;ekba001;Hi Keith,
+
+Can you please do this for this product:
+
+G010004720264Q
+
+thanks! ;;;","12/Sep/25 10:30 PM;kmccar1;Hey sure thing Laura - will be back on this.;;;","12/Sep/25 10:49 PM;kmccar1;G010004720264Q has been resent now, Laura.
+
+All the best,
+
+Keith;;;","30/Sep/25 8:38 PM;ekba001;Hi Keith,
+
+can you please do this for these too:
+
+G010001264993W
+G010002829124W
+G010003067188R
+G010003177957B
+G010003264882Z
+G010003283019E
+G0100032936518
+G010003395004B
+G010003496687U
+
+
+thanks! ;;;","30/Sep/25 8:57 PM;gvamsik;We have received the data extract from EOM for product # G010001264993W. At first glance, all the data appears to match with EOM. We are currently in discussions with the EOM team to identify if anything might be missing. We will update you as soon as we have more information. In the meantime, please *hold off* on re-sending until we have analyzed the cause of this error.
+
+ 
+
+[~ekba001]  Could you please share the error screenshot for product # G010001264993W?;;;","30/Sep/25 9:01 PM;ekba001;here you go:   !screenshot-1.png|thumbnail! ;;;","30/Sep/25 9:03 PM;gvamsik;Thanks [~ekba001]  - taking to EOM Team ( CC [~vdutta]  ) , Will get back to you .. Can this wait till tomorrow or you need this to be done today ? ;;;","30/Sep/25 9:34 PM;ekba001;tomorrow is fine, thanks!;;;","30/Sep/25 9:36 PM;gvamsik;[~ekba001]  -  We discussed with [~vdutta] , and he confirmed that product #G010001264993W is not orderable for Google as it only has a 2000x3000 poster which is iTunes format. We have also re-sent messages regarding this product alone, but this will not change anything. Could you please take a look?;;;","30/Sep/25 9:46 PM;vdutta;Hi [~ekba001]  - 
+
+Looks like Google Via Deluxe is configured to get the Google Poster and is required. We don't have Google Poster in AOMA (I think from Vamsi's comment).  
+
+Best,
+
+-Vivek
+
+ 
+
+!image-2025-09-30-15-45-56-087.png!;;;","30/Sep/25 10:14 PM;gvamsik;Here is the summary:
+ 
+The following four products do not have Google Dimensions posters:
+ - G010002829124W
+ - G010003264882Z
+ - G0100032936518
+ - G010003395004B
+ 
+For product {*}G010003283019E{*}, both AOMA and EOM have the Google format but missing required closed caption assets which is causing failure . (Thanks to [~vdutta]  for checking and confirming.)
+ 
+For the following three products, AOMA has the Google format poster, but it is missing in EOM. These are old registered posters which might be missing in EOM due to some older issues. Messages have been re-sent for these products:
+ - G010003067188R
+ - G010003177957B
+ - G010003496687U;;;","30/Sep/25 10:31 PM;ekba001;Thanks All,  I was able to order the last 3 now.   I think some type of clean up needs to be done for any products that have these older issues.   Are you going to work on that?
+
+For the following three products, AOMA has the Google format poster, but it is missing in EOM. These are old registered posters which might be missing in EOM due to some older issues. Messages have been re-sent for these products:
+G010003067188R
+G010003177957B
+G010003496687U;;;","01/Oct/25 2:26 PM;gvamsik;Yes, we are working with EOM to identify all LFV masters that have discrepancies with AOMA and EOM. These discrepancies mostly be for older registrations. We have received complete LFV data extract from EOM with DPSRP-1822 and will now compare them against AOMA to identify any inconsistencies. We will keep you updated on our progress.;;;",,,,,
+DB BACKFILL: AOMA DSD Asset metadata (sample_rate) in AOMA using MediaInfo tool Descriptor Conversion.,AOMA-16033,978476,,Story,Canceled,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Fixed,roraj01,sdonipu,sdonipu,04/Jun/20 9:17 PM,25/Sep/25 2:24 PM,12/Oct/25 4:13 PM,25/Sep/25 2:24 PM,,,,,,,0,,,A story for AOMA to backfill the metadata of all DSD assets using MediaInfo tool which were previously registered with the FFMpeg tool.,aomacoredev,bsahoo1,coconne,gule001,jdunca1,jguadal,lemo022,mcatande,pcharle,psalvio,rich014,roraj01,sdonipu,shan,vsubram,,,,,,,,,,,MCSE-129,ACS-1271,DPSO-74756,,,,ACS-1210,AOMA2-226,,,ACS-1287,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"06/Jul/20 3:02 PM;bsahoo1;000005017494_001_001.dsf.descriptor.xml;https://jira.smedigitalapps.com/jira/secure/attachment/1022233/000005017494_001_001.dsf.descriptor.xml","06/Jul/20 3:19 PM;sdonipu;image-2020-07-06-09-19-35-073.png;https://jira.smedigitalapps.com/jira/secure/attachment/1022249/image-2020-07-06-09-19-35-073.png","06/Jul/20 3:47 PM;sdonipu;image-2020-07-06-09-47-59-071.png;https://jira.smedigitalapps.com/jira/secure/attachment/1022281/image-2020-07-06-09-47-59-071.png","06/Jul/20 3:50 PM;sdonipu;image-2020-07-06-09-50-24-773.png;https://jira.smedigitalapps.com/jira/secure/attachment/1022284/image-2020-07-06-09-50-24-773.png","07/Jul/20 3:50 PM;sdonipu;image-2020-07-07-09-50-47-696.png;https://jira.smedigitalapps.com/jira/secure/attachment/1022987/image-2020-07-07-09-50-47-696.png","07/Jul/20 4:40 PM;sdonipu;image-2020-07-07-10-40-30-433.png;https://jira.smedigitalapps.com/jira/secure/attachment/1023028/image-2020-07-07-10-40-30-433.png","07/Jul/20 4:42 PM;sdonipu;image-2020-07-07-10-42-46-137.png;https://jira.smedigitalapps.com/jira/secure/attachment/1023031/image-2020-07-07-10-42-46-137.png","07/Jul/20 4:52 PM;sdonipu;image-2020-07-07-10-52-48-165.png;https://jira.smedigitalapps.com/jira/secure/attachment/1023048/image-2020-07-07-10-52-48-165.png","17/Jul/20 10:09 PM;sdonipu;image-2020-07-17-16-09-51-330.png;https://jira.smedigitalapps.com/jira/secure/attachment/1028719/image-2020-07-17-16-09-51-330.png",,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|hz8wu7:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,true,Minor,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"04/Jun/20 9:20 PM;sdonipu;This story originated from the 06/04/2020 conversion meeting and will be assigned to the AOMA team *ONLY* after Conversion side changes are completed and ready for AOMA to proceed with Backfill in DEV, STAGE and PROD.;;;","15/Jun/20 9:20 PM;gule001;Per [~shan] - this should considered a blocker for SMEJ Mora partner deliveries. 
+
+[~shan] is asking if the values in AOMA that were registered can be overriden via a mass database update. ;;;","26/Jun/20 6:18 PM;sdonipu;[~aomacoredev] [~roraj01] - Please check on the above query from Sang above regarding the DSD Sampling Rate backfill.
+
+On a side note, the below 
+ # New CT is {color:#de350b}CTID 2600{color} is shared on https://jira.smedigitalapps.com/jira/browse/AOMA2-226.
+ # Sample MediaInfoDescriptor XML for DSD28 is shared on https://jira.smedigitalapps.com/jira/browse/AOMA2-226.
+ # MediaInfoDescriptor.XSD is also shared on https://jira.smedigitalapps.com/jira/browse/AOMA2-226
+
+Thanks,
+ Sharada;;;","30/Jun/20 6:25 PM;rich014;[~bsahoo1], [~SAMA030] : Brajesh/Ralph, Please provide an estimate for when you believe this will be completed.  It is required for a release we need to implement soon.  Thank you, Reid;;;","06/Jul/20 2:57 PM;sdonipu;[~bsahoo1] - To fix compilation errors (reported in AOMA2-226) you will need to add JAXB binding file. For the bit-depth issue, the DSD file doesn't have a bit-depth when I view it in the MediaInfo tool, so you are not able to see it. To validate whether bit-depth was read from the DSD file previously, Can you please attach a sample descriptor file generated by current/old *CTID 1066* which uses the FFMpeg tool? 
+
+The issue reported for DSD assets by SCOPs (ACS-1096) was for the discrepant data found for the SAMPLE_RATE metadata on the DSD file versus the value of sample_rate delivered in the partner XML files by Delivery. So in order to fix the discrepancy, the AOMA-Core system needs to use new CT 2600  and parse the Descriptor files generated by the MediaInfo tool which is driven by the new *CTID 2600* and backfill all of the registered DSD assets with the accurate SAMPLE_RATE value. That way, when Delivery reads the metadata of a DSD file from the AOMA asset management tool, they read the correct sample_rate and put it in their partner XML files.
+
+Let me know if any further doubts/questions.
+
+Thanks,
+Sharada
+
+ ;;;","06/Jul/20 3:02 PM;bsahoo1;[~sdonipu] Please see attached sample DSD descriptor.xml  [^000005017494_001_001.dsf.descriptor.xml] ;;;","06/Jul/20 3:19 PM;sdonipu;Thanks. Also, I am getting below error with an empty CT list while trying to look up CTID 1066 and CT2600 in Media File Converter in AOMA-Dev. Can you check once and let me know if there is an issue? 
+
+!image-2020-07-06-09-19-35-073.png!;;;","06/Jul/20 3:48 PM;sdonipu;The attached descriptor XML (000005017494_001_001.dsf.descriptor) shows 0 for bit-depth. So looks like there was no bit-depth info available for DSD files even previously in the past. You will have to check on your end how currently AOMA system and wherefrom it gets bit-depth for DSD files and persists to AOMA DB. The media Conversion system is not providing a bit-depth for DSD Descriptors because neither FFMpeg nor MediaInfo tools were able to extract it from the DSD file as DSD file
+
+ 
+
+Please note, BIT_DEPTH and SAMPLE_RATE both metadata are different and serve a different purpose. Please check with [~roraj01] which all values need to be backfilled along with SAMPLE_RATE using the new CTID 2600 and make decisions accordingly. 
+
+ 
+
+{color:#172b4d}In both of the below XML outputs, there is no BIT_DEPTH with a valid value. Can you please check where is AOMA reading/persisting bit_depth as 1 for the current and registered ~3000 DSD assets in production?{color}
+
+ 
+
+*FFMpeg Descriptor XML Output:*
+{code:xml}
+<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
+<wav
+    xmlns=""http://xml.common.asset.aoma.sonymusic.com/WavDescriptor.xsd"">
+    <wavAttributes>
+        <wavAttribute value=""20475"" name=""Duration""/>
+        <wavAttribute value=""352800"" name=""Sample Rate""/>
+        <wavAttribute value=""0"" name=""Bit Depth""/>
+        <wavAttribute value=""2"" name=""Number Of Channels""/>
+    </wavAttributes>
+</wav>
+{code}
+ 
+
+*MediaInfo Descriptor XML Output:*
+{code:xml}
+<?xml version=""1.0"" encoding=""UTF-8""?>
+<MediaInfo xmlns=""https://mediaarea.net/mediainfo"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xsi:schemaLocation=""https://mediaarea.net/mediainfo https://mediaarea.net/mediainfo/mediainfo_2_0.xsd"" version=""2.0"">
+   <creatingLibrary version=""20.03"" url=""https://mediaarea.net/MediaInfo"">MediaInfoLib</creatingLibrary>
+   <media ref=""C:\conversion\ConversionWorkingDirectory\09 - Boulez NY Philharmonic - Pulcinella Suite Toccata_2_8MHz.dsf"">
+      <track type=""General"">
+         <AudioCount>1</AudioCount>
+         <FileExtension>dsf</FileExtension>
+         <Format>DSF</Format>
+         <Format_Version>1</Format_Version>
+         <FileSize>41885969</FileSize>
+         <Duration>59.360</Duration>
+         <OverallBitRate>5645009</OverallBitRate>
+         <StreamSize>273</StreamSize>
+         <Title>Pulcinella Suite  Toccata</Title>
+         <Album>Boulez counducts Stravinsky</Album>
+         <Track>Pulcinella Suite  Toccata</Track>
+         <Track_Position>9</Track_Position>
+         <Performer>Boulez NY Philharmonic</Performer>
+         <Genre>Classical</Genre>
+         <Recorded_Date>2017-04-10</Recorded_Date>
+         <File_Created_Date>UTC 2020-06-24 13:59:58.452</File_Created_Date>
+         <File_Created_Date_Local>2020-06-24 09:59:58.452</File_Created_Date_Local>
+         <File_Modified_Date>UTC 2020-06-24 14:00:07.273</File_Modified_Date>
+         <File_Modified_Date_Local>2020-06-24 10:00:07.273</File_Modified_Date_Local>
+      </track>
+      <track type=""Audio"">
+         <Format>DSD</Format>
+         <Format_Commercial_IfAny>DSD64</Format_Commercial_IfAny>
+         <Format_Settings_Endianness>Little</Format_Settings_Endianness>
+         <Duration>59.360</Duration>
+         <BitRate>5644973</BitRate>
+         <Channels>2</Channels>
+         <ChannelPositions>Front: L R</ChannelPositions>
+         <ChannelLayout>L R</ChannelLayout>
+         <SamplingRate>2822400</SamplingRate>
+         <SamplingCount>167537664</SamplingCount>
+         <Compression_Mode>Lossless</Compression_Mode>
+         <StreamSize>41885696</StreamSize>
+         <StreamSize_Proportion>0.99999</StreamSize_Proportion>
+      </track>
+   </media>
+</MediaInfo>
+{code}
+ 
+
+*MediaInfo GUI for DSD Sample shared by GMP:*
+
+*!image-2020-07-06-09-50-24-773.png!*;;;","06/Jul/20 3:49 PM;bsahoo1;Yes [~sdonipu]. I'm looking into it. I will update once this is resolved.;;;","06/Jul/20 9:27 PM;sdonipu;Thanks [~bsahoo1]. Let us know once the MFC issue is fixed. We can run some test conversions for DSD new CTID 2600. Also, please let us know how and from where BIT_DEPTH for DSD assets is currently read? Is it hard-coded to 1 as default on the AOMA side anywhere? ;;;","06/Jul/20 9:47 PM;bsahoo1;[~sdonipu] MFC is working as expected in Dev now. 
+Regarding Bit_Depth, AOMA is currently reading from http://xml.conversion.aoma.sonymusic.com/FFMpegDescriptor.xsd. 
+Yes Bit_Depth is hard coded for DSDs to 1 in DSD Details UI from beginning of its implementation;;;","07/Jul/20 3:04 PM;rich014;[~bsahoo1] : Brajesh, is this task ready for Sharada now?  If possible, please provide a status before 10AM so we can discuss in our stand up.  Release is scheduled for next Monday and we must assess the practicality of getting through the testing processes in time.  Thank you.;;;","07/Jul/20 3:35 PM;sdonipu;Hi [~bsahoo1] - Please let us know when will you be able to submit some DSD registrations/conversions for CTID 2600. We will check on our end. This integration is planned for conversion upcoming build on 13th July 2020. 
+
+Regarding MFC, I will try to run some test conversions for CT2600 and let you know. This testing should not block your work. 
+
+Please let us know if you have passed through the JAXB binding issue or you need any help from us on that. 
+
+Thanks,
+Sharada;;;","07/Jul/20 3:35 PM;bsahoo1;[~RICH014], This is not ready yet. I'm working on it. There is an open question about the bit_depth which were read earlier from FFMpegDescriptor.xsd but the sample descriptor.xml attached in AOMA2-226 doesn't contain that. Please review above comments and the sample descriptor.xml and let me know.;;;","07/Jul/20 3:42 PM;sdonipu;[~bsahoo1] - Regarding bit_depth open question, I have already answered above. Please check my comments from 06/Jul/2020 at 9:48 AM.
+
+https://jira.smedigitalapps.com/jira/browse/AOMA-16033?focusedCommentId=2964766&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-2964766
+
+ 
+
+Also, you confirmed that bit_depth on the AOMA side is being hard-coded to 1 for DSD assets from the beginning of its implementation. Hope this will clarify your open question/doubt on BIT_DEPTH for DSD assets.
+
+Let us know.  
+
+!image-2020-07-07-09-50-47-696.png!;;;","07/Jul/20 4:03 PM;bsahoo1;[~sdonipu], The hard coded value is only for display purpose i.e. in DSD Product Details page. We are not persisting anything hard coded to DB. The value which is read from the xsd is being persisted to DB.;;;","07/Jul/20 4:55 PM;sdonipu;[~bsahoo1] -
+
+Okay. In that case, please check with the @GlobalMediaProduction team to understand what will be the BIT_DEPTH for all the 3 flavors DSD assets. because we don't see any bit depth metadata for the sample set of DSF files that [~LEMO022] shared with us initially to fix and test around the sample_rate problem.
+
++*For DSD64:*+ 
+
+!image-2020-07-07-10-40-30-433.png!
+
++*For DSD128:*+
+
+!image-2020-07-07-10-42-46-137.png!
+
+*+For DSD256:+*
+
+!image-2020-07-07-10-52-48-165.png!;;;","07/Jul/20 5:05 PM;gule001;[~bsahoo1] we are going to break out the Bit depth issue to separate tickets as addressing it alongside this requirement is scope creep - it was not part of the initial requirements. Also, no one has complained about the bit depth value.  The SMEJ MORA partner only has an issue with the Sample Rate value being incorrect (DPSO-74756). ;;;","09/Jul/20 3:19 PM;sdonipu;Bit_Depth issue will be addressed via https://jira.smedigitalapps.com/jira/browse/ACS-1287. I will add required analysis and details to this ticket.
+
+[~bsahoo1] [~mish003] - Let us know once the integration of CT2600 to AOMA DSD Registrations is completed on the AOMA side in Dev/Stage and if you encounter any issues with parsing Descriptor XML. 
+
+ ;;;","10/Jul/20 2:19 AM;bsahoo1;[~sdonipu], All,
+
+DSD registrations are going through now in AOMA DEV using CT2600 and new MediaInfoDescriptor.xsd. Please verify and let me know if you see any issue.
+
+Thanks,
+Brajesh;;;","13/Jul/20 2:32 PM;sdonipu;That's great news [~bsahoo1]. Thanks for letting us know that the integration with the new CT 2600 for DSDs works.
+
+Thanks,
+ Sharada;;;","13/Jul/20 2:41 PM;sdonipu;Just a thought/idea/recommendation/suggestion to share :
+
+We can also leverage this *CT2600* as a solution for generating DESCRIPTOR XMLs of other audio and video asset types as well like *AUDIO* (WAV16, WAV24, DDP, Bluray DDP, DVD DDP, Vinyl WAV16, Vinyl WAV24, etc) and *VIDEO* (ProRes, MPEG-2, LFV, etc) if we want to standardized the tool and method of extracting metadata with the same tool and move off from FFMpeg for Asset Creation (Descriptor Generation) Phase. 
+
+That's said, the MediaInfo tool is much more verbose and efficient than FFMpeg in terms of extracting the metadata of any AUDIO and VIDEO file. Please give it a thought, discuss it with [~mish003], and let us know what you guys decide. 
+
+I will break out this topic as well, as a separate ACS ticket so that we can address it separately in the future.
+
+Added ACS ticket: https://jira.smedigitalapps.com/jira/browse/ACS-1305 to our backlog.
+  
+ Thanks,
+ Sharada
+
+ ;;;","13/Jul/20 4:19 PM;bsahoo1;Thanks for your inputs [~sdonipu]. We will discuss this among team and with Rohit. I will link the new JIRA ticket(s) associated with the implementation once finalized.
+
+Thanks,
+Brajesh;;;","17/Jul/20 10:09 PM;sdonipu;Hi [~bsahoo1], [~SAMA030],
+
+During the e2e testing in STAGE: https://jira.smedigitalapps.com/jira/browse/ACS-1271 and review of the Mora DSD sample_rate fix by GMP [~jdunca1] found out that the product ""G010001279180Z"" in AOMA STAGE is not showing the correct sample rate in UI. Looks like a data issue on the AOMA side.
+
+Can you please check in the backend if the ""dsd_assets"" table has the right values?
+
+The sample_rate value in UI should match with that on the source DSD file.
+
+cc: [~jdunca1]
+
+ 
+
+!image-2020-07-17-16-09-51-330.png!
+
+ 
+
+Thanks,
+ Sharada;;;","20/Jul/20 6:05 PM;sama030;Hi [~sdonipu], [~jdunca1],
+
+ 
+
+The temporary backfill for DSD was done using AOMA2-286 with a default value of a single-DSD to expedite the process for SMEJ as a majority of products are single-DSD (confirmed by business in weekly meetings). The backfill with real descriptors is a more involved process that will be handled by AOMA2-287 (pending internal discussion).
+
+ 
+
+Any new registrations should have correct data as confirmed in our E2E testing.
+
+ 
+
+Please let me know if there are any questions/concerns on this.
+
+ 
+
+Thanks,
+
+Ralph;;;","20/Jul/20 6:50 PM;sama030;After speaking to [~bsahoo1] I realized this is regarding the hardcoded UI value and not the database values. We have a story AOMA2-308 to fix the UI issue with our next sprint.;;;","21/Jul/20 4:01 AM;sdonipu;Thanks [~SAMA030] for the update. ;;;"
+AOMA 2 - Post VSC Rollout,AOMA-15489,902161,,Epic,Open,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,,hale002,park007,park007,02/Oct/19 6:15 PM,25/Sep/25 2:22 PM,12/Oct/25 4:13 PM,,,,,,,,0,VSC-AOMA2,XSC_YES_Dependency,This Epic covers stories that should be worked on by AOMA 2 team post 2.55 build VSC roll out. We aim to completely decommission VIC and replace with VSC.,mpadsal,park007,roraj01,,,,,,,,,,,,,,,,,,,,,,,,,,AMSE-361,AMSE-9,AMSE-386,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,XSC-196,MCSE-37,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,ghx-label-8,,Post VSC Rollout,,To Do,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|hv4s2f:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,,Minor,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,XSC_Exists,,,,,,,,"04/Jun/24 4:57 PM;mpadsal;Do you still need this?;;;","25/Sep/25 2:22 PM;roraj01;[~hale002] Could you please review this with [~spag001] to see what's remaining here. Otherwise close all the already completed tickets.;;;",,,,,,,,,,,,,,,,,,,,,,,,,
+Submit Priority Import thru Kafka - SMEJ,AOMA-16980,1970124,,Task,In Progress,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,,gvamsik,vleung1,vleung1,02/Sep/25 8:57 PM,24/Sep/25 7:45 PM,12/Oct/25 4:13 PM,,,,,AOMA,Metadata Import,,0,,,"It looks like not everything was switch over to Kafka for priority imports.  In certain cases, registration also creates priority import attempts and this code need to switch to Kafka/AMEBA Graphql as well.",hinz001,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,ATF-703,,,,,AMEBA-1174,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AOMA-16787,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AOMA-16889,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3pirj:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,"Checklist(id=104080, issueId=1970124, _items=[])",0/0 - Done,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"02/Sep/25 8:58 PM;vleung1;Hi Vamsi, can you please have Ameba team look into this?;;;",,,,,,,,,,,,,,,,,,,,,,,,,,
+Provision role/policy for aoma2 apps to access Kafka MSK STAGE/PROD,AOMA-16978,1964616,,Task,Open,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,,poty002,poty002,poty002,22/Aug/25 1:46 PM,15/Sep/25 5:38 PM,12/Oct/25 4:13 PM,,,,,Messaging,,,0,,,"Hi Team, 
+Could you please provision next items for *ameba-dev:aoma2-stage* & *ameba-prod:aoma2-prod* clusters:
+
+1. *GlobalDS* role and policy .
+2. ** Schema Registry (SR). Username & password.
+3. ** MSK Endpoints. 
+
+The topic is the same as on dev: *txmgr-metadata-import-events.* 
+You can use this ticket as reference [https://jira.smedigitalapps.com/jira/browse/AOMA-16976] This is what have been done for dev environment. 
+
+Thank you,
+Igor",gvamsik,poty002,sira001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,ATF-701,,,,,,,,,,,AOMA data developers,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3okx3:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"02/Sep/25 9:00 PM;gvamsik;[~poty002] -Can you give the service accounts of your application for stage and PROD ? ;;;","04/Sep/25 10:04 AM;poty002;Hi [~gvamsik] 
+Waiting for cloudops, they are working on this.;;;","04/Sep/25 7:29 PM;gvamsik;[~poty002] -  Use below roles when connection to Kafka .. 
+
+Stage : arn:aws:iam::107577002119:role/gdsd-aoma-service-msk-role
+PROD : arn:aws:iam::635220336377:role/gdsp-aoma-service-msk-role;;;","12/Sep/25 4:00 PM;gvamsik;globads SATGE  MSK : 
+b-3.sme-global-msk-uat.rfpotk.c8.kafka.eu-central-1.amazonaws.com:9098,b-1.sme-global-msk-uat.rfpotk.c8.kafka.eu-central-1.amazonaws.com:9098,b-2.sme-global-msk-uat.rfpotk.c8.kafka.eu-central-1.amazonaws.com:9098
+
+globads SATGE SR : 
+https://global-ds-uat-gw.smcdp-aws.net/sr
+
+
+globads PROD MSK : 
+b-3.sme-global-msk-prod.1eov6q.c5.kafka.eu-central-1.amazonaws.com:9098,b-1.sme-global-msk-prod.1eov6q.c5.kafka.eu-central-1.amazonaws.com:9098,b-2.sme-global-msk-prod.1eov6q.c5.kafka.eu-central-1.amazonaws.com:9098
+
+globads PROD SR : 
+https://global-ds-gw.smcdp-aws.net/sr;;;","12/Sep/25 4:26 PM;sira001;[~poty002] ,
+
+Here are the credentials.
+
+username: aoma_app
+
+Stage Password: buqBRlKyE8xFnjQs
+
+Prod password is shared in teams
+
+Regards,
+
+Vinodhan;;;","12/Sep/25 4:42 PM;poty002;Hi [~sira001] 
+Thank you;;;",,,,,,,,,,,,,,,,,,,,,
+EOMNotificationMessageManager.getAudioMasterEntity throwing NullPointerException,AOMA-3,10092,,Issue,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Fixed,internal_admin,internal_admin,rm_int_rm_int_mzbyszynski,04/May/07 7:03 PM,09/Sep/25 4:00 PM,12/Oct/25 4:13 PM,08/May/07 6:31 PM,1.0,2.3,2.3.1,Metadata Import,,,0,,,"java.lang.NullPointerException
+	at com.sonymusic.aoma.metadata.EOMNotificationMessageManager.getAudioMasterEntity(EOMNotificationMessageManager.java:676)
+	at com.sonymusic.aoma.metadata.EOMNotificationMessageManager.getTrackEntityUpdateMsg(EOMNotificationMessageManager.java:585)
+	at com.sonymusic.aoma.metadata.mapping.SMEMapProductTrack.updateEOM(SMEMapProductTrack.java:201)
+	at com.sonymusic.aoma.metadata.mapping.SMEMapProductTrack.mapChildren(SMEMapProductTrack.java:126)
+	at com.sonymusic.aoma.metadata.mapping.MappingBase.execute(MappingBase.java:194)
+	at com.sonymusic.aoma.metadata.mapping.DefaultMapProductSession.mapProductTracks(DefaultMapProductSession.java:295)
+	at com.sonymusic.aoma.metadata.mapping.DefaultMapProductSession.mapChildren(DefaultMapProductSession.java:150)
+	at com.sonymusic.aoma.metadata.mapping.MappingBase.execute(MappingBase.java:194)
+	at com.sonymusic.aoma.metadata.mapping.DefaultMapProductSide.mapSessions(DefaultMapProductSide.java:227)
+	at com.sonymusic.aoma.metadata.mapping.DefaultMapProductSide.mapChildren(DefaultMapProductSide.java:130)
+	at com.sonymusic.aoma.metadata.mapping.SMEMapProductSide.mapChildren(SMEMapProductSide.java:72)
+	at com.sonymusic.aoma.metadata.mapping.MappingBase.execute(MappingBase.java:194)
+	at com.sonymusic.aoma.metadata.mapping.DefaultMapProduct.mapSides(DefaultMapProduct.java:593)
+	at com.sonymusic.aoma.metadata.mapping.DefaultMapProduct.mapChildren(DefaultMapProduct.java:301)
+	at com.sonymusic.aoma.metadata.mapping.SMEMapProduct.mapChildren(SMEMapProduct.java:126)
+	at com.sonymusic.aoma.metadata.mapping.MappingBase.execute(MappingBase.java:194)
+	at com.sonymusic.aoma.metadata.mapping.DefaultMap.mapping(DefaultMap.java:129)
+	at com.sonymusic.aoma.metadata.mapping.MappingBase.execute(MappingBase.java:192)
+	at com.sonymusic.aoma.metadata.mapping.DefaultMap.doMap(DefaultMap.java:460)
+	at com.sonymusic.aoma.metadata.mapping.SMEMap.doMap(SMEMap.java:176)
+	at com.sonymusic.aoma.metadata.ImportXMLCommand.execute(ImportXMLCommand.java:216)
+	at com.sonymusic.aoma.metadata.DatabaseInvoker.executeCommand(DatabaseInvoker.java:58)
+	at com.sonymusic.aoma.metadata.daemon.MetadataImportDaemon$MetadataImportDaemonDAO$MetadataImportDaemonDAOOracleImpl.processMetadataImport(MetadataImportDaemon.java:215)
+	at com.sonymusic.aoma.metadata.daemon.MetadataImportDaemon$MetadataImportDaemonDAO$MetadataImportDaemonDAOOracleImpl.processNextMetadataImport(MetadataImportDaemon.java:277)
+	at com.sonymusic.aoma.metadata.daemon.MetadataImportDaemon$MetadataImportDaemonDAO$MetadataImportDaemonDAOOracleImpl.processNextMetadataImportTx(MetadataImportDaemon.java:310)
+	at com.sonymusic.aoma.metadata.daemon.MetadataImportDaemon.processNextMetadataImport(MetadataImportDaemon.java:388)
+	at com.sonymusic.aoma.metadata.daemon.MetadataImportDaemon.run(MetadataImportDaemon.java:404)
+	at java.lang.Thread.run(Thread.java:595)",,,,,,,,,,,,,,,,,,,,,,,,,,,DPS-49,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,27/Jul/07 12:00 AM,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|hvxvav:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,,Major - With Workaround,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,hotfix,UST-2627-filetype-restriction-mbc-release,release,develop,hotfix-feature-AOMA3-2873-UI-A3-Export-Vinyl-Workspace-name-and-CT-usage,master,true,"10/May/07 6:18 PM;rm_int_rm_int_mzbyszynski;Released.;;;",,,,,,,,,,,,,,,,,,,,,,,,,,
+Fix attemptInitiatorType in AMEBA Graphql,AOMA-16971,1944551,,Issue,In Progress,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,,gvamsik,vleung1,vleung1,18/Jul/25 3:46 PM,09/Sep/25 3:17 PM,12/Oct/25 4:13 PM,,,,,AOMA,,,0,,,"After switching to AMEBA Graphql for creating labelcopy import attempts, all attempts are being set to attempt_initiator_type_id = 1.  This needs to be set according to where this is being called from.  Added an action needed column to indicate what needs to be changed.
+||attempt_initiator_type_id||attempt_initiator_type_nm||description_tx||action needed||
+|1|AOMAUI|AOMA Web UI|This should be set for any import attempt created by the AOMA UI only (priority imports triggered by users).|
+|2|DAEMON|AOMA ImporterDaemon|Please change the name to CDC, as this is a change data capture coming from RDX.|
+|3|REGISTRATION|AOMA Asset Registration|This should be set for any import attempt created by the registration process.|
+|4|TEST|Attempt Initiated by an Application Unit Test|For unit tests.|
+|5|AOMAAPI|Attempt Initiated by AOMA API|Should be for import attempts being called by systems like GRPS (for publish status), CSA, etc.  [~gvamsik]  please confirm if this is correct.|
+
+Also, for the Kafka messages, we need to set the correct SendingSystem attribute for the messages originating from AOMA/AMEBA. We need to distinguish user-submitted messages and system-submitted messages (GRPS, CSA, etc).
+
+From the list below, we need to choose appropriate values or ask the RDX team to introduce new values if necessary. 
+{code:java}
+          {
+            ""name"": ""sendingSystem"",
+            ""type"": {
+              ""type"": ""enum"",
+              ""name"": ""SendingSystem"",
+              ""namespace"": ""com.sonymusic.global.ds.schema.avro.constant"",
+              ""doc"": ""Schema for SendingSystem Enum"",
+              ""symbols"": [
+                ""FILE_WATCHER"",
+                ""DDEX_RELEASE_INGESTER"",
+                ""GRPS"",
+                ""RELEASE_INGESTER_MANAGER"",
+                ""ASSET_INGESTER"",
+                ""RDX_CHD"",
+                ""EROS"",
+                ""METADATA_IMPORT"",
+                ""EOM"",
+                ""CONVERSION"",
+                ""DELIVERY"",
+                ""AOMA"",
+                ""MEDIA_CONVERSION"",
+                ""AMEBA"",
+                ""AMPSV""
+              ]
+            }
+          } {code}",cort004,gvamsik,hinz001,prag008,sira001,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"18/Jul/25 6:27 PM;zeki001;image-2025-07-18-18-27-38-588.png;https://jira.smedigitalapps.com/jira/secure/attachment/2609190/image-2025-07-18-18-27-38-588.png",,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3l72f:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,Major - With Workaround,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"18/Jul/25 4:30 PM;gvamsik;[~vleung1] - Currently, the client's information name is recorded in labelcopy_import_attempts.ClientSystemName. We need to utilize this client system to determine attempt_initiator_type in AMEBA Graphql. 
+So, we need to modify the AOMA code to pass the client system for both AOMAUI and registration requests, as they both use the same username. This will enable AMEBA to identify which system or process is calling it and update attempt_initiator_type accordingly.
+
+Yes , attempts from GRPS , CSA etc .. should be recorded as AOMAAPI as per existing types .. maybe we should also rename AOMAAPI to AMEBA API . ;;;","18/Jul/25 4:32 PM;gvamsik;[~zeki001] - Just saw your comment . If you need to record SendingSystem from Kafka , then I think its better to use existing  labelcopy_import_attempts.ClientSystemName ?;;;","18/Jul/25 5:21 PM;vleung1;[~gvamsik] , sounds good for both points.;;;","18/Jul/25 6:29 PM;zeki001;Hi [~gvamsik],
+
+I think it's fine for logging to use what we have already. 
+
+But, this is more to consider setting the correct parameter when AMEBA publishes a Kafka message, for consistent evidence in the DB and Kafka stream. 
+
+It seems that all messages are using the default value ""RDX_CHD"". 
+
+!image-2025-07-18-18-27-38-588.png!
+
+Does it make sense for you to set it when AMEBA publishes a message to Kafka? 
+
+If we need to re-route a message or do something similar in the future, then we don't need to make a query to the DB to check the initiator system, we can do it with the information from the message header. This can correspond to the DB values. 
+
+Thanks,
+Alem;;;","22/Jul/25 8:55 PM;sira001;[~gvamsik] ,
+
+As discussed, I have updated the following attempt initiator type names in dev and parallel dev environments.
+|Existing attempt initiator type nm|Updated|
+|DAEMON|CDC|
+|AOMAAPI|AMEBAAPI|
+
+Regards,
+
+Vinodhan;;;","06/Aug/25 3:38 PM;gvamsik;[~zeki001] - Regarding your comment about the sending system in Kafka always being RDX_CHD, for the requests coming via AMEBA GQL , we know who will be sending and AMEBA GQL will set the attempt initiator type. When the same attempt comes through CDC for TxMgr to process, TxMgr should not update the attempt initiator type if it already exists for the attempt. I believe this should address the issue, correct?;;;","06/Aug/25 3:58 PM;zeki001;[~gvamsik] - Correct. We will not update the attempt initiator type if it already exists for the attempt.;;;",,,,,,,,,,,,,,,,,,,,
+GRAS Export Decom - Phase 2 - CDC,AOMA-16889,1841788,,Epic,In Progress,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,,vleung1,vleung1,vleung1,07/Feb/25 3:41 PM,02/Sep/25 8:58 PM,12/Oct/25 4:13 PM,,,,,Metadata Import,Transaction Manager,,0,,,,cmiller,cort004,hinz001,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,ghx-label-1,,GRAS Export Decom - Phase 2 - CDC,,To Do,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i33x1b:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,Major - With Workaround,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Submit Priority Import thru Kafka,AOMA-16787,1702194,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,gvamsik,vleung1,vleung1,25/Jun/24 3:57 PM,02/Sep/25 8:57 PM,12/Oct/25 4:13 PM,04/Jun/25 6:42 PM,,,2.110.0,Metadata Import,,,0,GrasExportDecom,P2-CDC," 
+
+This is part of Phase 2 of the GRAS Export decommissioning project.  
+
+Currently, when a user submit a priority import via the UI, it will create a record in the import attempt table and send a jms message to the priority queue for Transaction Manager to pick up.
+
+Since we are switching to Kafka, we need to send a kafka message instead to the priority topic.
+
+We should have a flag to be able to send a message via jms or kafka or both, for testing or in case of rollback.
+
+ ",gvamsik,hinz001,prag008,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AOMA-16980,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AOMA-16889,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i2gctr:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"26/Jun/24 4:51 PM;gvamsik;[~vleung1]  [~ZEKI001]  - Can you give sample kafka message for Product and Project ? ;;;","26/Jun/24 5:06 PM;hinz001;Hi [~gvamsik] , below are samples of RecordingProject and Participant messages.
+
+I took them from the existing rdx-chd-dev-publish-trxmgr topic. I believe that messages for the priority topic should have the same format.
+
+ 
+
+{
+  ""header"": {
+    ""namespace"": ""global-ds/rdx-chd/v1"",
+    ""sendingSystem"": ""RDX_CHD"",
+    ""messageContext"": ""ENTITY_CHANGE"",
+    ""messageType"": ""PUBLISH_CHANGE_EVENT"",
+    ""messageId"": ""86d01a7d-f1ac-49be-8a51-cb01dfb13259"",
+    ""globalCorrelationId"": ""6620ac1c-9036-4b4b-b93e-97b85ca08736"",
+    ""correlationId"": ""86d01a7d-f1ac-49be-8a51-cb01dfb13259"",
+    ""createDateTime"": 1719399290247,
+    ""eventTimestamp"": 1719399289990,
+    ""tags"": {
+      ""OriginChangeEventSystem"": ""GRPS""
+    }
+  },
+  ""payload"": [
+    {
+      ""queryId"": ""recordingProjectById-221d79b5-98c4-4754-a83a-2d6f8d76b7dc"",
+      ""entity"": ""RecordingProject"",
+      ""ids"": [
+        ""1443805""
+      ]
+    }
+  ]
+}
+
+ 
+
+ 
+
+{
+  ""header"": {
+    ""namespace"": ""global-ds/rdx-chd/v1"",
+    ""sendingSystem"": ""RDX_CHD"",
+    ""messageContext"": ""ENTITY_CHANGE"",
+    ""messageType"": ""PUBLISH_CHANGE_EVENT"",
+    ""messageId"": ""a3b11652-2a1a-4711-884a-327f57170a23"",
+    ""globalCorrelationId"": ""32007d8a-6606-4d0d-8c73-d461de47e96f"",
+    ""correlationId"": ""a3b11652-2a1a-4711-884a-327f57170a23"",
+    ""createDateTime"": 1719400530910,
+    ""eventTimestamp"": 1719400526200,
+    ""tags"": {
+      ""OriginChangeEventSystem"": ""GRPS""
+    }
+  },
+  ""payload"": [
+    {
+      ""queryId"": ""participantById-26c2a89a-579e-4577-9192-76908b4f350f"",
+      ""entity"": ""Participant"",
+      ""ids"": [
+        ""1940034""
+      ]
+    }
+  ]
+}
+
+ 
+
+ 
+
+ ;;;","26/Jun/24 5:15 PM;zeki001;Hi [~gvamsik], 
+Please also look at this repository [https://github.com/SME-AOMA/avro-binder]  maybe you can reuse it as a maven dependency in your apps. 
+Thanks,
+Alem;;;","26/Jun/24 5:42 PM;gvamsik;Thanks [~ZEKI001]  and [~hinz001]   . We should change messageContext , messageType and some other metadata attributes in header for priority imports which will be triggered via GQL and/or AOMA UI  .. I will take a look and get back to you . ;;;",,,,,,,,,,,,,,,,,,,,,,,
+Create Kafka topic txmgr-metadata-import-events,AOMA-16973,1950146,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,zeki001,vleung1,vleung1,29/Jul/25 5:31 PM,28/Aug/25 3:14 PM,12/Oct/25 4:13 PM,28/Aug/25 3:14 PM,,,AOMA-2.113.0,General,,,0,,," 
+
+Please create a kafka topic named txmgr-metadata-import-events.  This will include all attempts (successful, failed, cancelled, etc).  This will be published by TxMgr.",gvamsik,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,ATF-687,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3m5fr:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"30/Jul/25 7:52 PM;gvamsik;Topic created on dev . 
+
+Pending : Access to TxMgr role - ;;;","30/Jul/25 9:33 PM;gvamsik;Created topic with name : txmgr-metadata-import-events and access granted to TxMgr app role on dev . ;;;","30/Jul/25 10:23 PM;vleung1;Thanks [~gvamsik] ;;;","06/Aug/25 3:10 PM;zeki001;Hi [~gvamsik], 
+
+We are done in DEV. Everything looks good.
+Please proceed with creating the topic in the STAGE and PROD environments. 
+
+Thanks,
+Alem;;;","06/Aug/25 6:23 PM;gvamsik;[~zeki001] - Topics and permissions added to TxMgr user on stage. ;;;","07/Aug/25 11:37 AM;zeki001;Hi [~gvamsik], 
+
+We performed a test in STAGE, and it looks good. 
+
+Thanks,
+Alem;;;","11/Aug/25 7:36 PM;gvamsik;Topic created on prod and access granted to TxMgr PROD IAM role;;;","28/Aug/25 3:13 PM;zeki001;It works well in PROD. I'm going to close this ticket. ;;;",,,,,,,,,,,,,,,,,,,
+Create connection to the Kafka MSK from aoma2 apps DEV,AOMA-16976,1955232,,Task,Open,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,,poty002,poty002,poty002,07/Aug/25 3:25 PM,22/Aug/25 1:30 PM,12/Oct/25 4:13 PM,,,,,Messaging,,,0,,,"Hi team, 
+We are going to connect aoma2 applications to Amazon Managed Streaming for Apache Kafka (MSK), and listen messages from Txnmgr app. 
+Applications located in arvatok8s-dev-ns and ameba-dev clusters. 
+
+As I know we need to have connection to this servers on dev:
+{quote}b-1.sme-global-msk-dev.3i225f.c6.kafka.eu-central-1.amazonaws.com:9098
+
+b-2.sme-global-msk-dev.3i225f.c6.kafka.eu-central-1.amazonaws.com:9098
+
+b-3.sme-global-msk-dev.3i225f.c6.kafka.eu-central-1.amazonaws.com:9098
+{quote}
+Could you please create next for our apps: 
+
+1. '{*}basic_auth_credentials_source{*}';
+2. '{*}awsRoleArn{*}' (it should be write and read access for consuming and publishing)
+3. Not sure if we can use same *group-id = TXMGR.dev*  as in tnxmgr app{*}.{*} Should we also have {*}client-Id (unique app's name){*}?
+4. And I suppose FW also should opened for aoma2 apps.
+5. Which *schema_registry_url* to use?
+6. *basic_auth_user_info*
+
+Thank you,
+Igor",bsahoo1,gvamsik,hinz001,poty002,vleung1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,ATF-701,,,,,,,,,,,AOMA data developers,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3n0mf:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"11/Aug/25 3:28 PM;gvamsik;hi [~poty002] , 
+
+As discussed , let me know the app names and namespaces which needs access to this MSK . ;;;","11/Aug/25 5:01 PM;poty002;Hi [~gvamsik] 
+Apps from {*}arvatok8s-dev-ns:aoma-dev{*}:
+- aoma-service
+{color:#de350b}- aoma{color}
+{color:#de350b}- aoma-api{color}
+
+Apps from ameba-dev{*}:aoma2-dev{*}:
+- {color:#de350b}aoma-service-timer{color}
+- {color:#de350b}aoma-api-topic-listener
+{color}- amp-search
+
+“The highlighted applications define a JMS connection and depend on the aoma-service, which calls RemoteTxMgrJms. We’ve opened a ticket to identify apps that don’t use this connection and to remove the related JMS configuration.”;;;","11/Aug/25 5:03 PM;poty002;Once the configuration is complete and the connection is created, we’ll have promote these changes to staging as well.;;;","11/Aug/25 7:34 PM;gvamsik;Here are the MSK UAT details:
+
+**MSK Endpoints:**
+- b-1.sme-global-msk-dev.3i225f.c6.kafka.eu-central-1.amazonaws.com:9098 ,b-2.sme-global-msk-dev.3i225f.c6.kafka.eu-central-1.amazonaws.com:9098 ,b-3.sme-global-msk-dev.3i225f.c6.kafka.eu-central-1.amazonaws.com:9098
+
+**Schema Registry (SR):**
+- https://global-ds-dev-gw.smcdp-aws.net/sr/
+Username : aoma_app
+password : aCbRiDBVT6dHmri
+
+**Topic Name:**
+- txmgr-metadata-import-events
+
+**Consumer Groups:**
+- Access granted to create consumer groups with the prefix AOMA2.* (e.g., AOMA2.AMP.01, AOMA2.AMP.test, etc.)
+
+**Connecting to GlobalDS:**
+- Use IAM role: arn:aws:iam::107577002119:role/gdsd-aoma-service-msk-role
+- Policy ARN: arn:aws:iam::107577002119:policy/gdsd-aoma-service-msk-policy
+
+**AWS Applications:**
+- To connect to MSK, work with the CloudOps team to create service accounts for your applications. These applications should utilize the created service accounts.
+- Ensure the CloudOps team adds the following policy to your app IAM roles when creating them:
+```json
+{
+""Action"": ""sts:AssumeRole"",
+""Effect"": ""Allow"",
+""Resource"": ""arn:aws:iam::107577002119:role/gdsd-aoma-service-msk-role"",
+""Sid"": ""VisualEditor1""
+}
+```
+
+**Arvato EKS Applications:**
+- Coordinate with the CloudOps team to enable the use of the role: arn:aws:iam::107577002119:role/gdsd-aoma-service-msk-role for connecting to MSK.
+
+ ;;;","19/Aug/25 5:58 PM;gvamsik;[~poty002] - I modified APP SR policy : arn:aws:iam::969009837416:role/ameba-dev-ns-aoma2-dev-sa-amp-search-role  .. 
+As discussed once you have APP service account fixed on EKS cluster you can use Role :  arn:aws:iam::107577002119:role/gdsd-aoma-service-msk-role to connect to MSK .  ;;;",,,,,,,,,,,,,,,,,,,,,,
+Supply Chain Order: Add Comments section to Daily Report,AOMA-14023,705355,,Issue,Canceled,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Obsolete,aomacoredev,sala072,sala072,19/Dec/17 6:27 PM,22/Aug/25 2:37 AM,12/Oct/25 4:13 PM,22/Aug/25 2:37 AM,,,2.x,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,DPSA-21996,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|hy5ka7:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,,Minor,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+CDText Issue when exporting via Supply Chain Order Fulfillment vs. Product Details,AOMA-14980,837268,,Issue,Canceled,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Invalid,aomacoredev,cohe022,cohe022,25/Jan/19 10:35 PM,22/Aug/25 2:29 AM,12/Oct/25 4:13 PM,22/Aug/25 2:29 AM,,,2.54.x,,,,0,,,"This error has been encountered on two separate occasions in the Supply Chain Order fulfillment UI:
+
+1) *Product: 88985307142* (07/31/2017)
+Destination: ISC Sony Music Chile [Aspera - Pickup]
+CDText: Saved and approved 07/19/2016 3:35 PM (screenshot-1)
+
+a. Exporting to the destination via the Product Details UI: 3 options for CDText inclusion are visible (screenshot-2)
+Include CD Text (AOMA Generated)
+Include Native CD Text
+Do not include CD Text
+
+b.Exporting to the destination via the Supply Chain Orders -> Fulfill button (Order ID 56918): ""[Add CD Text (AOMA Generated)]
+CD Text has not been saved / approved for this asset master. To add CD Text, click the [ADD CD TEXT] link."" (screenshot-3)
+
+*Advised the user to export via the Product Details UI rather than Supply Chain Orders as a workaround for the time being.*
+
+2) *Order #61071*. *This has been manually delivered*. (1/25/2019)
+José Luis Perales	
+82876810872 (Info) 
+Canciones De Amor
+DDP Audio Master	
+laiz01 2019-01-23 11:53:40.0	
+Delivered	SME US LATIN LLC
+Audios approved by GCLS 0215.2018.05622 ",cohe022,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,DPSA-21260,,,,,,,,,,,,,,,,,,,,,,,"25/Jan/19 10:38 PM;cohe022;screenshot-1.png;https://jira.smedigitalapps.com/jira/secure/attachment/803674/screenshot-1.png","25/Jan/19 10:38 PM;cohe022;screenshot-2.png;https://jira.smedigitalapps.com/jira/secure/attachment/803675/screenshot-2.png","25/Jan/19 10:38 PM;cohe022;screenshot-3.png;https://jira.smedigitalapps.com/jira/secure/attachment/803676/screenshot-3.png",,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|hylztz:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,,Minor,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Product Event History: capture link attempt modified,AOMA-13444,661737,,Issue,Canceled,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Obsolete,aomacoredev,sala072,sala072,22/Jun/17 6:51 PM,22/Aug/25 2:28 AM,12/Oct/25 4:13 PM,22/Aug/25 2:28 AM,,,2.x,,,,0,,,"Problem: The burg036 account removed the virtual master link that was created by voge036, and then re-linked the same virtual master. The UI should display the account username burg036 for these events. Instead, it displays the original username, voge036. This causes confusion on our end, as we are not getting an accurate representation of who performed these actions.
+
+
+Project: we display the original creator of link attempt but we should capture another event Link Attmpt modified or so to capture the person who modified it the last.",sala072,,,,,,,,,,,,,,,,,,,,,,,,,,,,DPSA-21098,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|hxyi5j:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,,Minor,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TxMgr/DigitalAssurance: Report JMS Queue size info separately,AOMA-16929,1889887,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,hinz001,hinz001,hinz001,17/Apr/25 1:10 PM,15/Aug/25 3:10 PM,12/Oct/25 4:13 PM,15/Aug/25 3:10 PM,,,2.110.0,Transaction Manager,,,0,GrasExportDecom,,"Since there is no direct mapping between RDX topics and JMS queues it no longer makes sense to combine stats from these two sources into a single item.
+
+For example, messages from the Normal and Low priority topics are routed to a single queue - MetadataImportXML.
+
+It makes sense to report Kafka topic lags and message queue depths as separate entities.
+
+In addition, since the [Delivery Dashboard|https://ddb-dev-ext.smecde.com/delivery-dashboard-ui/] have instruments to mark a service as in maintenance, there is no need in our own UI and HTTP endpoints for controlling the downtime. Those can be removed to simplify the code.
+
+!image-2025-04-17-13-10-40-696.png|width=428,height=183!",hinz001,,,,,,,,,,,,,,,"Working on issue AOMA-16929;30/Apr/25 9:24 PM;hinz001;28800",,,,,28800,,,,28800,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"17/Apr/25 1:10 PM;hinz001;image-2025-04-17-13-10-40-696.png;https://jira.smedigitalapps.com/jira/secure/attachment/2487093/image-2025-04-17-13-10-40-696.png","18/Apr/25 1:08 PM;hinz001;image-2025-04-18-13-08-04-375.png;https://jira.smedigitalapps.com/jira/secure/attachment/2488544/image-2025-04-18-13-08-04-375.png",,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3bz3r:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,develop,,,,,,true,"18/Apr/25 1:08 PM;hinz001;The queue statistics has been added.
+
+Now the dashboard displays both topics and queues.
+
+ 
+
+!image-2025-04-18-13-08-04-375.png|width=908,height=312!;;;",,,,,,,,,,,,,,,,,,,,,,,,,,
+AOMA Labelcopy Load : Change DRD End point. ,AOMA-16975,1951198,,Issue,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,prag008,gvamsik,gvamsik,30/Jul/25 9:37 PM,12/Aug/25 4:19 PM,12/Oct/25 4:13 PM,12/Aug/25 4:19 PM,,,,,,,0,,,"on prod , change DRD endpoints to - 
+
+New endpoints- 
+
++[https://drd.medigitalapps.com/drdsvc/rs/api/v1/coverart-info/byProductId|https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdrd.medigitalapps.com%2Fdrdsvc%2Frs%2Fapi%2Fv1%2Fcoverart-info%2FbyProductId&data=05%7C02%7CVamsikrishna.Gollapudi%40sonymusic.com%7Cab3d02b63c024d62fda508ddcf753be2%7Cf0aff3b791a54aaeaf71c63e1dda2049%7C0%7C0%7C638894824597001412%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=sLmhsnUUMkbHWI25VVe%2FhCBAJeRibXtPIyKwkRjAFmk%3D&reserved=0]+
+
++[https://drd.medigitalapps.com/drdsvc/rs/api/v1/coverart-info/byIsrc|https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdrd.medigitalapps.com%2Fdrdsvc%2Frs%2Fapi%2Fv1%2Fcoverart-info%2FbyIsrc&data=05%7C02%7CVamsikrishna.Gollapudi%40sonymusic.com%7Cab3d02b63c024d62fda508ddcf753be2%7Cf0aff3b791a54aaeaf71c63e1dda2049%7C0%7C0%7C638894824597013978%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=XrhxNH4eqW%2BVbRUwD%2FvE65OkAyVKgH32ptvfZTKFUQM%3D&reserved=0]+
+
+ 
+
+Old endpoints are - 
+
+'[https://drd.smedigitalapps.com/drdsvc/rs/api/v1/coverart-info/byIsrc/]
+
+'https://drd.smedigitalapps.com/drdsvc/rs/api/v1/coverart-info/{+}[byProductId|https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdrd.medigitalapps.com%2Fdrdsvc%2Frs%2Fapi%2Fv1%2Fcoverart-info%2FbyProductId&data=05%7C02%7CVamsikrishna.Gollapudi%40sonymusic.com%7Cab3d02b63c024d62fda508ddcf753be2%7Cf0aff3b791a54aaeaf71c63e1dda2049%7C0%7C0%7C638894824597001412%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=sLmhsnUUMkbHWI25VVe%2FhCBAJeRibXtPIyKwkRjAFmk%3D&reserved=0]{+}
+
+ 
+
+ ",gvamsik,prag008,vleung1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3mbx3:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,Minor,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,develop,,,,,,true,"06/Aug/25 7:00 PM;vleung1;Hi [~prag008] , we don't really use the aoma-deployment repo anymore.  All properties have been move to its own respective repo that it needs to run on.  In this case, it would be in the aoma-transactionmanager repo, under configuration/application-resources/*-aws/.;;;","07/Aug/25 3:15 PM;prag008;Hi [~vleung1] ,
+
+Just to be in sync I updated in aoma-deployment as well. Thank you!
+
+Thanks,
+
+Ganesh;;;","12/Aug/25 4:19 PM;gvamsik;Closing this as this released to prod as Hot Fix on 8/11;;;",,,,,,,,,,,,,,,,,,,,,,,,
+Avro schema for metadata import attempts kafka topic,AOMA-16974,1951003,,Task,In Progress,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,,vleung1,vleung1,vleung1,30/Jul/25 5:49 PM,06/Aug/25 3:09 PM,12/Oct/25 4:13 PM,,,,,General,,,0,,,"This is to replace the MetadataImportSuccessful topic in the TxMgr queue.  The only current client is AMP Search and it needs fields like entity no, document type, and import status.
+
+We will be moving this to Kafka and incorporating this into the DDEX Asset ingestion flow as well.  Initial discussion is that above fields are enough but we will need the new requirements for this if the above fields does not suffice.",gvamsik,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"04/Aug/25 3:23 PM;zeki001;image-2025-08-04-15-23-59-758.png;https://jira.smedigitalapps.com/jira/secure/attachment/2627554/image-2025-08-04-15-23-59-758.png",,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,ATF-687,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3mapr:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"30/Jul/25 5:50 PM;vleung1;Hi [~gvamsik] , created this ticket as discussed.  Please add your sample here. And I believe we mentioned there is no need to add attempt failure messages to keep this light.;;;","30/Jul/25 7:50 PM;gvamsik;Hi [~vleung1]  
+
+ 
+Here are the sample AVRO messages. The schemas have been uploaded to Nexus; please use version 2.12.
+ 
+{code:java}
+<dependency>    
+<groupId>com.sonymusic.global.ds</groupId>   
+<artifactId>AvroSchemas</artifactId>    
+<version>2.12-SNAPSHOT</version> 
+</dependency>
+{code}
+ 
+Sample Message :
+{code:java}
+{
+  ""header"" : {
+    ""namespace"" : ""DDEX"",
+    ""sendingSystem"" : ""ASSET_INGESTER"",
+    ""messageContext"" : ""METADATA_IMPORT"",
+    ""messageType"" : ""METADATA_IMPORT_EVENT"",
+    ""messageId"" : ""d52b1824-f89c-4342-bd0c-c5eaaf2422fb"",
+    ""globalCorrelationId"" : ""c014b2dd-511c-42da-bf24-0b2687eca046"",
+    ""correlationId"" : ""51ca72cd-67e9-48ca-a861-6c599dce8016"",
+    ""messageKey"" : {
+      ""string"" : ""TqYShKl8J""
+    },
+    ""createDateTime"" : 1753896700286,
+    ""eventTimestamp"" : 1753896700286,
+    ""tags"" : null
+  },
+  ""payload"" : {
+    ""catalogKey"" : ""8jIF2Z"",
+    ""documentType"" : ""PRODUCT_METADATA"",
+    ""status"" : ""FAILED"",
+    ""upc"" : {
+      ""string"" : ""5JhoB7x""
+    },
+    ""configKey"" : {
+      ""string"" : ""jzWpoC6Dx""
+    },
+    ""isComplete"" : {
+      ""boolean"" : false
+    },
+    ""error"" : {
+      ""com.sonymusic.global.ds.schema.avro.common.Error"" : {
+        ""code"" : ""ERROR_CODE"",
+        ""severity"" : ""WARNING"",
+        ""message"" : ""ERROR_MESSAGE""
+      }
+    }
+  }
+}
+
+{code}
+In the AVRO schema, we've added UPC, IsCompleteFl, and ConfigKey ( NULL is valid value ) . This information will be beneficial for Mobile Auto linking and DDEX - Asset flow. Including these fields in the message will help avoid unnecessary callbacks.
+ 
+
+Schema also has failure object , I think we would to good to publish failed events as well and DDEX can record failures for DDEX UPCs . 
+ 
+Let me know if you have any questions or concerns . ;;;","01/Aug/25 3:03 PM;zeki001;Hi [~gvamsik], 
+
+What information should we include in the messageKey header? 
+
+Thanks,
+Alem;;;","01/Aug/25 3:12 PM;gvamsik;Hi Alem ,
+
+I would say CatalogKy should be set in message key and also same key should be used when sending Kafka Message . 
+
+Thanks,
+
+Vamsi;;;","04/Aug/25 3:33 PM;zeki001;Hi [~gvamsik], 
+
+Can we have a collection instead of a single element for errors? 
+So, we provide a list of errors, similar to the AOMA UI? 
+
+!image-2025-08-04-15-23-59-758.png|width=1304,height=316!
+
+Thanks,
+Alem;;;","04/Aug/25 5:48 PM;gvamsik;Yes , it makes sense . Published the schema with error as an array . Can you check now ?  ( no changes to version no ) . ;;;","05/Aug/25 8:52 AM;zeki001;Thanks [~gvamsik]. It looks good now. ;;;","06/Aug/25 3:09 PM;zeki001;Hi [~gvamsik], 
+
+We have implemented changes in the TxMgr.
+Please plan to promote this change to STAGE and PROD in the upcoming release (2.113.0, Aug 26, 2025). 
+
+Thanks,
+Alem;;;",,,,,,,,,,,,,,,,,,,
+TxMgr: Enable Large Track processing only on weekends,AOMA-16926,1888570,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,hinz001,hinz001,hinz001,15/Apr/25 6:32 PM,01/Aug/25 1:01 AM,12/Oct/25 4:13 PM,01/Aug/25 1:01 AM,,,2.110.0,Transaction Manager,,,0,GrasExportDecom,P2-CDC,"To prevent consumer and thread exhaustion during weekdays, restrict Large Track processing from the ISOLATE_PRIORITY topic to weekends only.",hinz001,,,,,,,,,,,,,,,"Working on issue AOMA-16926;30/Apr/25 9:23 PM;hinz001;28800",,,,,28800,,,,28800,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3br1j:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,develop,,,,,,true,,,,,,,,,,,,,,,,,,,,,,,,,,,
+"TxMgr: Remove Isolate Priority queue; route messages to Large Track queue instead",AOMA-16928,1889109,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,hinz001,hinz001,hinz001,16/Apr/25 3:01 PM,01/Aug/25 1:01 AM,12/Oct/25 4:13 PM,01/Aug/25 1:01 AM,,,2.110.0,Transaction Manager,,,0,,,"The Isolate Priority Kafka topic will contain only messages with Large Tracks, which we should send to the Large Track message queue.
+
+The Isolate Priority queue created specifically for this topic is no longer needed, so we should delete it.",hinz001,,,,,,,,,,,,,,,"Working on issue AOMA-16928;30/Apr/25 9:27 PM;hinz001;7200",,,,,7200,,,,7200,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3buc7:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,develop,,,,,,true,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TxMgr: Pause low-priority processing when there are more than 8000 items in the queue,AOMA-16927,1888941,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,hinz001,hinz001,hinz001,16/Apr/25 9:45 AM,01/Aug/25 1:01 AM,12/Oct/25 4:13 PM,01/Aug/25 1:01 AM,,,2.110.0,Transaction Manager,,,0,GrasExportDecom,P2-CDC,"In the GRAS Export/TxMgr architecture, there is a feedback loop, and when the TxMgr queue has more than 8000 items, it sends a signal to GRAS Export to stop producing low-priority XMLs for a certain time. 
+
+
+Accordingly, we should be able to stop consuming Kafka messages from the LOW-PRIORITY topic.",hinz001,,,,,,,,,,,,,,,"Working on issue AOMA-16927;30/Apr/25 9:24 PM;hinz001;28800",,,,,28800,,,,28800,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3btbb:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,develop,feature_16926_weekly_scheduler,,,,,true,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TxMgr: Make TxMgr RDX Client a separate Maven artifact,AOMA-16899,1852983,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,hinz001,hinz001,hinz001,25/Feb/25 2:16 PM,01/Aug/25 1:00 AM,12/Oct/25 4:13 PM,01/Aug/25 1:00 AM,,,2.108.0,Transaction Manager,,,0,GrasExportDecom,P2-CDC,To make it reusable we need to make the RDX GraphQL client a separate Maven artifact.,hinz001,,,,,,,,,,,,,,,"Working on issue AOMA-16899;28/Feb/25 8:18 PM;hinz001;14400","Working on issue AOMA-16899;28/Feb/25 8:18 PM;hinz001;14400",,,,28800,,,,28800,,,,,,,,,RXPT-718,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i35qrj:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TxMgr/RDX: Remove redundant fetching of the companySalesActivity ,AOMA-16786,1698518,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,hinz001,zeki001,zeki001,19/Jun/24 10:39 AM,01/Aug/25 1:00 AM,12/Oct/25 4:13 PM,01/Aug/25 1:00 AM,,,2.110.0,Transaction Manager,,,0,GrasExportDecom,P1-Product,"Initially, the companySalesActivity wasn't planned to be part of the cntryInfo type in the RDX.
+
+After our discussions, it has been added to the cntryInfo type. Also, it remains the standalone type in the RDX schema. 
+
+After two rounds of testing, we are sure, that we are getting all the necessary data from the cntryInfo node, and that we can remove companySalesActivity from our query at the product level.  
+
+In our query, it looks like:
+ * Product 
+ ** prodNo
+ ** ...
+ **  cntryInfo
+ *** companySalesActivity (to remain)
+ ** companySalesActivity (to remove)
+ ** ...
+
+!image-2024-06-19-10-39-16-722.png|width=572,height=461!
+
+ ",segu002,vleung1,zeki001,,,,,,,,,,,,,"Working on issue AOMA-16786;30/Sep/24 4:25 PM;hinz001;28800","revert and retest;01/Nov/24 12:28 PM;hinz001;14400","Working on issue AOMA-16786;30/Apr/25 9:27 PM;hinz001;7200",,,50400,,,,50400,,,,,,,AOMA-16881,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"19/Jun/24 10:39 AM;zeki001;image-2024-06-19-10-39-16-722.png;https://jira.smedigitalapps.com/jira/secure/attachment/2102327/image-2024-06-19-10-39-16-722.png",,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i2ftb3:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,develop,,,,,,true,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RDX Data Preprocessor: Sonar qube,AOMA-16736,1613023,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,hinz001,zeki001,zeki001,06/Feb/24 1:46 PM,01/Aug/25 1:00 AM,12/Oct/25 4:13 PM,01/Aug/25 1:00 AM,,,,RdxDataReprocessor,Transaction Manager,,0,GrasExportDecom,,"We need to start scanning ""aoma-rdx-data-reprocessor"" project by Sonar Qube.",hinz001,segu002,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i21erz:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"20/Jun/25 6:33 AM;hinz001;SonarQube scans for aoma-rdx-data-reprocessor are now available at:
+
+[https://sonarqube.smeperforce.com/dashboard?id=aoma-rdx-data-reprocessor] ;;;",,,,,,,,,,,,,,,,,,,,,,,,,,
+Ensure TxMgr console properties are retained even when restart ,AOMA-16876,1825688,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,hinz001,zeki001,zeki001,15/Jan/25 3:28 PM,01/Aug/25 12:59 AM,12/Oct/25 4:13 PM,01/Aug/25 12:59 AM,,,2.110.0,Transaction Manager,,,0,,,"We must ensure that TxMgr console properties are retained even when a restart happens. 
+
+To achieve that, every change in the console must be persisted outside the docker container and initialized from the persistent storage after restart. 
+
+ 
+
+*Update:* It's being tested in DEV.
+
+The feature description is on Wiki: [https://wiki.smedigitalapps.com/wiki/display/MI/Transaction+manager%3A+Application+properties+management]
+
+The PR: [https://github.com/SME-AOMA/aoma-transactionmanager/pull/877]",vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,CLOUDOPS-21724,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i316rr:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,develop,,,,,,true,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AMEBA GQL User for Metadata import test project - Dev,AOMA-16972,1949008,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,zeki001,zeki001,zeki001,28/Jul/25 12:54 PM,30/Jul/25 1:57 PM,12/Oct/25 4:13 PM,30/Jul/25 1:57 PM,,,,,,,0,,,"Hello [~aomadatadevs], 
+
+We are launching a project to automate end-to-end testing for the Metadata import process. A few tests should cover the priority import interface through AMEBA GQL.  
+
+We need a new UAA user with privileges to execute the ""MetadataImport"" mutation and the ""MetadataImportHistory"" query.
+
+The username can be: ""mitest_app"". 
+
+Thanks,
+Alem",gvamsik,sira001,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3lyg7:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"30/Jul/25 5:21 AM;sira001;Hi Alem,
+
+I have created mitest_app user in dev. And the credentials are sent to you on an encrypted email.
+
+Regards,
+Vinodhan;;;","30/Jul/25 1:57 PM;zeki001;Hi [~sira001], 
+
+It's okay. 
+
+Thanks,
+Alem;;;",,,,,,,,,,,,,,,,,,,,,,,,,
+New record in metadata_publisher.attempt_initiator_types - TXMGR,AOMA-16965,1927948,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,zeki001,zeki001,zeki001,20/Jun/25 12:13 PM,28/Jul/25 3:11 PM,12/Oct/25 4:13 PM,28/Jul/25 3:11 PM,,,AOMA-2.112.0,AOMA DB,Metadata Import,Transaction Manager,0,Database,,"Hello AOMA DB team, 
+
+We need to add a new record to the metadata_publisher.attempt_initiator_types table in DEV, STAGE, and PROD environments. 
+||Column||Value||
+|attempt_initiator_type_id|6|
+|attempt_initiator_type_nm|TXMGR|
+|description_tx|Import attempts outside the RDX CDC scope|
+
+After migration to the new RDX CDC, some import attempts must be triggered from TxMgr, as described in this wiki page: 
+
+[https://wiki.smedigitalapps.com/wiki/spaces/MI/pages/264405781/Transaction+manager+Processing+Rules#Transactionmanager:ProcessingRules-ImportrequestsoutsidetheCDCScope] . 
+
+Thanks,
+Alem",gvamsik,hinz001,poth003,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AOMA2-1779,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3idon:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"20/Jun/25 6:58 PM;poth003;Hi [~zeki001],
+
+New record has been added to metadata_publisher.attempt_initiator_types table on AOMA Dev. Please check and let me know if you see any issues.
+
+Thanks,
+
+Phani;;;","24/Jun/25 2:42 PM;zeki001;Hi [~poth003], 
+
+It looks good, please plan to promote this change to stage and prod in the 2.112.0 version. 
+
+Thanks,
+Alem;;;","23/Jul/25 3:58 AM;poth003;Hi [~zeki001],
+
+The new record has been added to the metadata_publisher.attempt_initiator_types table on AOMA Prod with todays build. Please check.
+
+Thanks,
+
+Phani;;;","28/Jul/25 3:11 PM;zeki001;Everything works well. I'm going to close this ticket. ;;;",,,,,,,,,,,,,,,,,,,,,,,
+AOMA Parallel databases issue - participantType is null for taskTypeKey:382,AOMA-16969,1943478,,Issue,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,zeki001,zeki001,zeki001,17/Jul/25 9:39 AM,21/Jul/25 10:04 AM,12/Oct/25 4:13 PM,21/Jul/25 10:04 AM,,,,AOMA DB,Transaction Manager,,0,,,"Hello [~aomadatadevs], 
+
+For the databases that we requested in the following tickets for parallel processing:
+[https://jira.smedigitalapps.com/jira/browse/AOMA-16964] (Prod)
+[https://jira.smedigitalapps.com/jira/browse/AOMA-16912] (Stage)
+
+I can see the following issue in the application logs. Looks like a missing records. 
+{code:java}
+java.lang.IllegalArgumentException: findParticipantType error:findParticipantType participantType is null for taskTypeKey:382	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.RAASMapPerformance.findParticipantType(RAASMapPerformance.java:107)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.DefaultMapPerformance.mapChildren(DefaultMapPerformance.java:321)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.RAASMapPerformance.mapChildren(RAASMapPerformance.java:49)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.MappingBase.execute(MappingBase.java:84)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.DefaultMapProductTrack.mapTrackChildren(DefaultMapProductTrack.java:319)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.DefaultMapProductTrack.mapChildren(DefaultMapProductTrack.java:105)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.RAASMapProductTrack.mapChildren(RAASMapProductTrack.java:153)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.MappingBase.execute(MappingBase.java:84)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.RAASMapProductSession.mapProductTracks(RAASMapProductSession.java:189)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.DefaultMapProductSession.mapChildren(DefaultMapProductSession.java:46)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.MappingBase.execute(MappingBase.java:84)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.DefaultMapProductSide.mapSessions(DefaultMapProductSide.java:182)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.DefaultMapProductSide.mapChildren(DefaultMapProductSide.java:88)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.RAASMapProductSide.mapChildren(RAASMapProductSide.java:52)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.MappingBase.execute(MappingBase.java:84)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.DefaultMapProduct.mapSides(DefaultMapProduct.java:770)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.DefaultMapProduct.mapChildren(DefaultMapProduct.java:300)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.RAASMapProduct.mapChildren(RAASMapProduct.java:82)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.MappingBase.execute(MappingBase.java:84)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.DefaultMap.mapping(DefaultMap.java:71)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.labelcopy.load.mappingJsonEntity.MappingBase.execute(MappingBase.java:82)	at deployment.aoma.transactionmanager.ear.aoma.transactionmanager.war//com.sonymusic.aoma.la {code}
+Could you please take a look and fix in both environments?  
+
+Thanks,
+Alem",gvamsik,nanj001,sira001,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AOMA-16964,AOMA-16912,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3l0hz:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,Minor,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"17/Jul/25 4:20 PM;nanj001;Same issue happens in Production PG parallel env also.;;;","18/Jul/25 3:30 PM;nanj001;Hi [~sira001] ,
+
+Any update on this request?;;;","18/Jul/25 4:35 PM;sira001;[~zeki001] , [~nanj001] ,
+
+We do not have import of task types in the parallel environments. So task type syncing needed to be done manually. I just added the new ones manually in stage and prod. Please verify. And note, this may happen again in case of new task types and it will need manual syncing. Please reach out to us if you encounter this issue again.
+
+Regards,
+
+Vinodhan;;;","18/Jul/25 5:06 PM;nanj001;Thanks [~sira001] ;;;","21/Jul/25 10:03 AM;zeki001;It looks good. 
+Thanks [~sira001]. 
+The full list of the reprocessed products is below. 
+
+Reprocessed in stage parallel env (failed after 6/1/2025):
+
+G0100041437988
+G0100041437996
+SRCL11279B00Z
+SRXX03192B00Z
+SRXX03193B00Z
+SRXX03198B00Z
+SRXX03234B00Z
+SRXX03235B00Z
+
+Reprocessed in prod parallel env (failed after 7/16/2025): 
+
+19802942672
+G010005439642D
+G010005439643B
+G0100054396449
+G0100054396457
+G0100054396465
+G010005449820E
+G010005449821C
+G010005453927F
+G010005453928D
+G0100054797665
+G0100054797673
+G0100054797681
+G0100054797690
+G010005479770D
+G010005479771B
+G010005494275Q
+G010005509337Q
+G010005509338O
+G010005509341Y
+G0100055148095
+G010005520581Z
+G010005520583V
+G010005520585R
+G010005520586P
+G010005520587N
+G010005520588L
+G010005594369G
+G010005601067S
+G010005601068Q
+G010005601069O
+G0100056010701
+G0100056010710
+G010005601072Y
+G010005601073W
+G010005601074U
+G010005601075S
+G010005601076Q
+G010005601077O
+G010005601078M
+G010005601079K
+G010005601080Y
+G010005601081W
+G010005601082U
+G010005602471P
+G010005602472N
+G010005602473L
+G010005602476F
+G010005602477D
+G010005602478B
+G0100056024799
+G010005602481L
+G010005602482J
+G010005602483H
+G010005602485D
+G010005602486B
+G0100056024887
+G0100056024895
+G010005602492F
+G0100056034807
+G010005604260F
+G0100056042760
+G010005604278W
+G0100056042815
+G0100056042823
+G0100056042831
+G0100056042840
+G010005604285Y
+G010005604287U
+G010005604288S
+G010005604289Q
+G010005604306J
+G010005604307H
+G010005604308F
+G010005604312N
+G010005604315H
+G010005604316F
+G010005604317D
+G0100056043199
+G010005605031P;;;",,,,,,,,,,,,,,,,,,,,,,
+Add NULL check for the TrackMediaKey attribute,AOMA-16954,1918556,,Issue,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,zeki001,zeki001,zeki001,04/Jun/25 3:43 PM,21/Jul/25 9:06 AM,12/Oct/25 4:13 PM,21/Jul/25 9:06 AM,,,2.110.0,RdxDataReprocessor,,,0,,,"It has been noticed that a few products failed due to ""com.sonymusic.gras.jsonbinder.entities.TrackEntity.getTrackMediaKey()"" exception. This attribute is defined as NULL in the GRPS. 
+
+The reprocessing lambda function utilizes this attribute in logic to include/exclude tracks from the product tracks list and to determine track type (track, video, work, booklet). Before accessing it, it's necessary to check whether it's NULL or has a value. ",zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,DPSO-92155,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3gtqn:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,Minor,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,feature_AOMA-16954_TrackMediaKey_attribute_master,feature_MI-85_exclude_doubly_atmos_master,feature_AOMA-16954_TrackMediaKey_attribute,develop,master,,true,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Set up Hudson to build promo,AOMA-112,12173,12033,AOMA Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Won't Fix,internal_admin,internal_admin,rm_int_poswald,02/Aug/07 2:22 PM,18/Jul/25 7:39 PM,12/Oct/25 4:13 PM,04/Sep/07 6:57 PM,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|hvyo5r:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,release,master_ATF-668_fix,master,,,,true,"04/Sep/07 6:57 PM;rm_int_poswald;There's still some issues with this... I'm going to postpone this until i can get it figured out in Hudson;;;",,,,,,,,,,,,,,,,,,,,,,,,,,
+Need delete permission for S3 Bucket,AOMA-16970,1943767,,Issue,Canceled,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Fixed,aomacoredev,nanj001,nanj001,17/Jul/25 4:50 PM,17/Jul/25 4:52 PM,12/Oct/25 4:13 PM,17/Jul/25 4:52 PM,,,,,,,0,,,"*Below is the Dev/Stage env permission.* 
+
+*AWSReservedSSO_DigiSys-Dev-ReadOnly_679ca2bc7071df82*
+
+ 
+
+*I need the similar permission for below prod.* 
+
+*AWSReservedSSO_DigiSys-Prod-ReadOnly_94f605b20b6923d1*",nanj001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3l29j:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,Minor,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AOMA DB instance in PROD for parallel environment ,AOMA-16964,1925804,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,zeki001,zeki001,zeki001,17/Jun/25 9:56 AM,17/Jul/25 9:44 AM,12/Oct/25 4:13 PM,02/Jul/25 9:33 AM,,,,AOMA DB,,,0,,,"The parallel TxMgr environment should be started soon to meet the needs of the MI/EOM team and the migration process from Oracle to PostgreSQL. 
+
+Since TxMgr uses tables from the AOMA DB, it's necessary to create a new AOMA DB. It should be a copy of the current production database. ",gvamsik,mish008,nanj001,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AOMA-16967,AOMA-16969,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CLOUDSD-7481,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3i0i7:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"25/Jun/25 6:40 PM;mish008;Hi [~zeki001] 
+
+A copy of the current AOMA production database is ready: [aoma-mi-parallel-test|https://613871678587-alg5ly3a.eu-central-1.console.aws.amazon.com/rds/home?region=eu-central-1#database:id=aoma-mi-parallel-test;is-cluster=false]
+
+Use the following pgbouncer to connect: aomap-miptpgbouncer03
+
+IP Address: 10.11.106.219
+port: 6432
+
+Your AOMA DB Credentials should work as usual.
+
+Please {color:#FF0000}*ONLY USE THIS DB FOR PARALLEL TESTING*{color} 
+
+Let me know if you have any questions or concerns.
+
+Thanks
+Utkarsh;;;","26/Jun/25 12:09 PM;zeki001;Sure, we will use this one only for parallel testing. 
+
+It seems good. I'll proceed with the setup and let you know if I face any issues.;;;",,,,,,,,,,,,,,,,,,,,,,,,,
+New AOMA DB schema in STAGE ,AOMA-16912,1868611,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,zeki001,zeki001,zeki001,19/Mar/25 4:27 PM,17/Jul/25 9:40 AM,12/Oct/25 4:13 PM,27/Mar/25 10:57 AM,,,,AOMA DB,Transaction Manager,,0,,,"As we discussed, to test a two-phase commit between the MI PG DB instance and the AOMA DB, it's necessary to have a new AOMA DB instance in STAGE, only for this purpose. 
+
+[https://wiki.smedigitalapps.com/wiki/display/MI/PG+Parallel+testing] ",nanj001,sira001,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AOMA-16967,AOMA-16969,,,,,,,,,,DSCE-2452,,,,,,,,,,,,,,,,,,,,,,,"19/Mar/25 4:30 PM;zeki001;image-2025-03-19-16-30-07-981.png;https://jira.smedigitalapps.com/jira/secure/attachment/2440362/image-2025-03-19-16-30-07-981.png",,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i38ec7:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"25/Mar/25 4:17 PM;sira001;Hi Alem,
+
+I have created 'aoma_rdx' database in Stage. Please note that data in the new DB is from 21-Mar-2025 copy of aoma Stage DB. Please verify and let me know if there are any issues.
+
+Regards,
+
+Vinodhan;;;","27/Mar/25 10:55 AM;zeki001;Hi [~sira001], 
+
+This looks good. I'm going to close a ticket.
+
+Thanks,
+Alem;;;",,,,,,,,,,,,,,,,,,,,,,,,,
+AMEBA PROD Gateway - TxMgr vault service route and user,AOMA-16968,1937459,,Task,Closed,AOMA,AOMA,software,roraj01,AOMA Project,http://wiki.smedigitalapps.com/display/AOMA,Normal,Resolved,zeki001,zeki001,zeki001,07/Jul/25 3:48 PM,09/Jul/25 9:54 AM,12/Oct/25 4:13 PM,09/Jul/25 9:54 AM,,,,Transaction Manager,,,0,,,"Hello [~aomadatadevs], 
+
+We need to add a new route to the AMEBA Prod Gateway:
+ * [https://ameba-prod-gw.smcdp-aws.net/txmgr-vault-service/] 
+
+It needs to point to: 
+ * ""txmgr-vault-service"" service, running on ""ameba-prod"" EKS cluster, ""txmgr-prod"" namespace, port 8099 (This is already configured in dev and stage)
+
+Localhost example URL: 
+{code:java}
+http://localhost:8099/vaultSecret/v1?secretName=aomap-aoma-txmgr-user  {code}
+Also, we need a new user who has access to this route. The username in dev/stage is: txmgr_app. 
+
+Thanks,
+Alem",sira001,vleung1,zeki001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,No,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2|i3jzmf:",9223372036854775807,,,,,,,,,,,,,,,,,,,,,<i>Time to resolution</i>,,,,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"09/Jul/25 4:57 AM;sira001;[~zeki001] ,
+
+Route has been created and I have sent the credentials in an encrypted email.
+
+Regards,
+
+Vinodhan;;;","09/Jul/25 9:54 AM;zeki001;Thanks [~sira001]. 
+
+It seems good. I will close this ticket. If I face any issue, I'll let you know. ;;;",,,,,,,,,,,,,,,,,,,,,,,,,
