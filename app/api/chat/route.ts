@@ -123,10 +123,29 @@ export async function POST(req: Request) {
 
     if (!bypassAuth) {
       console.log('[API] Checking authentication...');
+
+      // Validate Supabase configuration before attempting auth check
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        console.error('[API] Supabase configuration missing! Cannot perform authentication.');
+        console.error('[API] NEXT_PUBLIC_SUPABASE_URL:', !!process.env.NEXT_PUBLIC_SUPABASE_URL);
+        console.error('[API] NEXT_PUBLIC_SUPABASE_ANON_KEY:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+        return new Response(
+          JSON.stringify({
+            error: 'Service configuration error',
+            code: 'SUPABASE_CONFIG_MISSING',
+            message: 'Authentication is enabled but Supabase credentials are not configured. Please contact support.'
+          }),
+          {
+            status: 503,
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+      }
+
       const cookieStore = await cookies();
       const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         {
           cookies: {
             getAll() {
