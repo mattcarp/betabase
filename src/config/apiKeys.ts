@@ -10,6 +10,7 @@ interface ApiConfig {
   vectorStoreId: string;
   // MCP configuration
   mcpUrl?: string;
+  mcpLambdaUrl?: string;
   mcpAuthEnabled?: boolean;
 }
 
@@ -25,6 +26,7 @@ const defaultConfig: ApiConfig = {
     typeof window !== "undefined" && window.location.hostname !== "localhost"
       ? "https://aoma-mesh-mcp.replit.app" // Production AOMA MCP server
       : "http://localhost:3333", // Local AOMA MCP server
+  mcpLambdaUrl: "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws",
   mcpAuthEnabled: false,
 };
 
@@ -45,6 +47,8 @@ class ApiKeysService {
         this.getEnvVar("VECTOR_STORE_ID") || defaultConfig.vectorStoreId,
       // MCP configuration
       mcpUrl: this.getEnvVar("MCP_URL") || defaultConfig.mcpUrl,
+      mcpLambdaUrl:
+        this.getEnvVar("MCP_LAMBDA_URL") || defaultConfig.mcpLambdaUrl,
       mcpAuthEnabled:
         this.getEnvVar("MCP_AUTH_ENABLED") === "false"
           ? false
@@ -84,6 +88,14 @@ class ApiKeysService {
     );
   }
 
+  getMcpLambdaUrl(): string {
+    return (
+      this.config.mcpLambdaUrl ||
+      defaultConfig.mcpLambdaUrl ||
+      "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws"
+    );
+  }
+
   isMcpAuthEnabled(): boolean {
     return this.config.mcpAuthEnabled ?? false;
   }
@@ -117,6 +129,7 @@ export const getElevenLabsApiKey = () => apiKeysService.getElevenLabsApiKey();
 export const getElevenLabsAgentId = () => apiKeysService.getElevenLabsAgentId();
 export const getVectorStoreId = () => apiKeysService.getVectorStoreId();
 export const getMcpUrl = () => apiKeysService.getMcpUrl();
+export const getMcpLambdaUrl = () => apiKeysService.getMcpLambdaUrl();
 export const isMcpAuthEnabled = () => apiKeysService.isMcpAuthEnabled();
 
 export default apiKeysService;
