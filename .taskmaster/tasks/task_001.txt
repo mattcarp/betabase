@@ -305,7 +305,7 @@ Health Check: https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.a
 2. Update connection to use HTTP-based protocol (not SSE)
 3. Handle Lambda's 30-second timeout constraints
 4. Configure authentication for secure communication
-5. Integrate with Pinecone vector database (aoma-mesh-index in us-east-1-aws)
+5. Integrate with Supabase vector database (aoma_vectors in us-east-1-aws)
 
 CloudFormation Stack: AOMAMeshMCPLambdaStack
 IAM Role: arn:aws:iam::145023127572:role/AOMAMeshMCPLambdaStack-AOMAMeshMCPRole-Ej5Ej5Ej5Ej5
