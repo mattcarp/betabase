@@ -118,7 +118,7 @@ Your **project manager** - keeps track of what needs doing, what's blocking what
 
 ### Unique Capabilities:
 
-- **Vector Database (Pinecone)**: Semantic search across documents
+- **Vector Database (Supabase)**: Semantic search across documents
 - **Document RAG**: Retrieval-augmented generation for intelligent responses
 - **OpenAI Integration**: Direct GPT-4 access with 647ms latency
 - **Supabase Storage**: Persistent data storage with 133ms latency

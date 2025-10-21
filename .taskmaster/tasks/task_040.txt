@@ -5,7 +5,7 @@
 # Priority: high
 # Description: Complete the MCP (Model Context Protocol) server integration and set up vector database for RAG functionality using the deployed AWS Lambda MCP server.
 # Details:
-Implement MCP server integration using the deployed AWS Lambda function (aoma-mesh-mcp-server) in us-east-2. The server is already deployed with Pinecone vector storage and OpenAI integration. Develop a document ingestion pipeline that works with the existing ElevenLabs transcription flow. Implement RAG capabilities that integrate with the JARVIS-style interface for intelligent document retrieval and meeting insights using the Lambda-based MCP server.
+Implement MCP server integration using the deployed AWS Lambda function (aoma-mesh-mcp-server) in us-east-2. The server is already deployed with Supabase vector storage and OpenAI integration. Develop a document ingestion pipeline that works with the existing ElevenLabs transcription flow. Implement RAG capabilities that integrate with the JARVIS-style interface for intelligent document retrieval and meeting insights using the Lambda-based MCP server.
 
 # Test Strategy:
 Verify MCP server connectivity via Lambda function URLs and document retrieval accuracy within the Electron app, testing integration with existing transcription workflow using the production Lambda deployment.
@@ -82,17 +82,17 @@ Client is now ready to handle authenticated requests once AWS credentials are pr
 1. Obtain AWS credentials from user for production access
 2. OR request Lambda function URL to be configured for NONE auth type (development)
 3. Test authenticated connection with real credentials
-4. Move to task 40.4 (Pinecone integration) once connectivity confirmed
+4. Move to task 40.4 (Supabase integration) once connectivity confirmed
 
 **💡 Recommendation:**
 The Lambda MCP client implementation is now comprehensive and production-ready. We can proceed with other urgent tasks while AWS credentials are being configured.
 </info added on 2025-07-16T23:25:14.273Z>
 
-## 4. Set Up Pinecone Vector Database Integration [pending]
+## 4. Set Up Supabase Vector Database Integration [pending]
 ### Dependencies: 40.3
-### Description: Configure integration with the Pinecone vector database already deployed in the Lambda function for document storage and retrieval.
+### Description: Configure integration with the Supabase vector database already deployed in the Lambda function for document storage and retrieval.
 ### Details:
-Connect the ElevenLabs transcription flow to the Lambda MCP server's Pinecone integration (index: aoma-mesh-index, environment: us-east-1-aws). Implement document ingestion pipeline that sends transcribed content to the Lambda server for vector storage and enables RAG functionality.
+Connect the ElevenLabs transcription flow to the Lambda MCP server's Supabase integration (index: aoma_vectors, environment: us-east-1-aws). Implement document ingestion pipeline that sends transcribed content to the Lambda server for vector storage and enables RAG functionality.
 <info added on 2025-07-13T10:56:43.089Z>
 Successfully tested live AOMA server on port 3333, verifying real knowledge queries returning authentic Sony Music data. AOMA server is healthy with OpenAI, Supabase, and Vector Store all functioning correctly. Real response: "AOMA (Asset and Offering Management Application) is Sony Music's Digital Asset Management system for managing audio/video files, with Sony Ci and Jira integrations." Next step is to test full SIAM + AOMA integration in the Electron app.
 </info added on 2025-07-13T10:56:43.089Z>
@@ -105,7 +105,7 @@ Design and build UI elements for presenting search results, insights, and contex
 
 ## 6. Implement End-to-End Testing and Validation [pending]
 ### Dependencies: 40.5
-### Description: Develop and execute comprehensive tests to validate the full Lambda-based integration, including server, client, Pinecone database, pipeline, and UI components.
+### Description: Develop and execute comprehensive tests to validate the full Lambda-based integration, including server, client, Supabase database, pipeline, and UI components.
 ### Details:
 Write automated and manual test cases covering Lambda deployment, data flow, error handling, timeout management, and user interaction. Validate system performance and reliability with AWS Lambda constraints.
 
