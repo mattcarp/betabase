@@ -51,6 +51,7 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "prepare": "husky install || true",
     "analyze": "ANALYZE=true npm run build",
     "analyze:server": "ANALYZE=true BUNDLE_ANALYZE=server npm run build",
     "analyze:browser": "ANALYZE=true BUNDLE_ANALYZE=browser npm run build",
@@ -62,6 +63,11 @@
     "deploy:monitor": "./scripts/deploy-with-monitoring.sh",
     "analyze:bundle": "./scripts/analyze-bundle.sh",
     "analyze:deps": "depcheck"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,md}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.42",
