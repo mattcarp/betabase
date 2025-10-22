@@ -8,7 +8,8 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    // PERFORMANCE OPTIMIZATION: Enable strict type checking
+    "strict": true,
     "noEmit": true,
     "incremental": true,
     "module": "esnext",
@@ -25,7 +26,13 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    // PERFORMANCE OPTIMIZATION: Additional strict checks
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "next-env.d.ts",
