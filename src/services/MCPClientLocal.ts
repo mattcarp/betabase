@@ -47,15 +47,12 @@ export class MCPClientLocal {
       this.state.isConnecting = false;
       this.state.connectionQuality = "excellent";
 
-      console.log(
-        `✅ Connected to local AOMA MCP proxy with ${this.state.tools.length} tools`,
-      );
+      console.log(`✅ Connected to local AOMA MCP proxy with ${this.state.tools.length} tools`);
       return true;
     } catch (error) {
       console.error("❌ Failed to connect to local AOMA MCP proxy:", error);
       this.state.isConnecting = false;
-      this.state.error =
-        error instanceof Error ? error.message : "Connection failed";
+      this.state.error = error instanceof Error ? error.message : "Connection failed";
       this.state.connectionQuality = "disconnected";
       return false;
     }
@@ -84,9 +81,7 @@ export class MCPClientLocal {
       });
 
       if (!response.ok) {
-        throw new Error(
-          `Tool call failed: ${response.status} ${response.statusText}`,
-        );
+        throw new Error(`Tool call failed: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();

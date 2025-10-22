@@ -27,9 +27,7 @@ export default function MACComponentsTestPage() {
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-4xl font-light text-white mb-2">
-            MAC Design System Components Test
-          </h1>
+          <h1 className="text-4xl font-light text-white mb-2">MAC Design System Components Test</h1>
           <p className="text-[var(--mac-text-secondary)]">
             Testing Button, Input, and Form components with MAC styling
           </p>
@@ -38,7 +36,7 @@ export default function MACComponentsTestPage() {
         {/* Button Component Section */}
         <section className="mac-card p-8">
           <h2 className="text-2xl font-light text-white mb-6">Button Components</h2>
-          
+
           <div className="space-y-6">
             {/* Button Variants */}
             <div>
@@ -80,7 +78,7 @@ export default function MACComponentsTestPage() {
         {/* Input Component Section */}
         <section className="mac-card p-8">
           <h2 className="text-2xl font-light text-white mb-6">Input Components</h2>
-          
+
           <div className="space-y-6">
             {/* Basic Inputs */}
             <div>
@@ -111,7 +109,7 @@ export default function MACComponentsTestPage() {
         {/* Form Component Section */}
         <section className="mac-card p-8">
           <h2 className="text-2xl font-light text-white mb-6">Form Components</h2>
-          
+
           <Form {...form}>
             <form className="space-y-6 max-w-md">
               <FormField
@@ -123,9 +121,7 @@ export default function MACComponentsTestPage() {
                     <FormControl>
                       <Input placeholder="Enter your username" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This is your public display name.
-                    </FormDescription>
+                    <FormDescription>This is your public display name.</FormDescription>
                   </FormItem>
                 )}
               />
@@ -155,16 +151,16 @@ export default function MACComponentsTestPage() {
                     <FormControl>
                       <Input type="password" placeholder="Enter password" {...field} />
                     </FormControl>
-                    <FormMessage type="error">
-                      Password must be at least 8 characters
-                    </FormMessage>
+                    <FormMessage type="error">Password must be at least 8 characters</FormMessage>
                   </FormItem>
                 )}
               />
 
               <div className="flex gap-4">
                 <Button type="submit">Submit Form</Button>
-                <Button type="button" variant="outline">Cancel</Button>
+                <Button type="button" variant="outline">
+                  Cancel
+                </Button>
               </div>
             </form>
           </Form>

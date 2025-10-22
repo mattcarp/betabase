@@ -7,8 +7,8 @@
  * @module utils/auth/microsoft-sso
  */
 
-const fs = require('fs').promises;
-const path = require('path');
+const fs = require("fs").promises;
+const path = require("path");
 
 /**
  * Configuration for Microsoft SSO authentication
@@ -43,26 +43,26 @@ async function authenticateWithMicrosoft(page, config) {
     username = process.env.JIRA_USERNAME || process.env.AAD_USERNAME,
     password = process.env.JIRA_PASSWORD || process.env.AAD_PASSWORD,
     mfaTimeout = 180,
-    onMFAPrompt = null
+    onMFAPrompt = null,
   } = config;
 
   console.log(`🔐 Starting Microsoft SSO authentication for ${url}`);
 
   // Navigate to target URL
-  console.log('🌐 Navigating to target URL...');
+  console.log("🌐 Navigating to target URL...");
   await page.goto(url, {
-    waitUntil: 'domcontentloaded',
-    timeout: 30000
+    waitUntil: "domcontentloaded",
+    timeout: 30000,
   });
 
   await page.waitForTimeout(2000);
 
   // STEP 1: Click "Log In" button in upper right
-  console.log('🔘 Clicking Log In button (upper right)...');
+  console.log("🔘 Clicking Log In button (upper right)...");
   try {
     // Use exact selector from JIRA HTML: a.login-link
     const loginClicked = await page.evaluate(() => {
-      const loginLink = document.querySelector('a.login-link');
+      const loginLink = document.querySelector("a.login-link");
       if (loginLink) {
         loginLink.click();
         return true;
@@ -71,21 +71,23 @@ async function authenticateWithMicrosoft(page, config) {
     });
 
     if (loginClicked) {
-      console.log('✅ Clicked Log In, waiting for form to load...');
+      console.log("✅ Clicked Log In, waiting for form to load...");
 
       // WAIT FOR LOGIN FORM TO APPEAR
       try {
-        await page.waitForSelector('input[name="os_username"], input[name="username"]', { timeout: 10000 });
+        await page.waitForSelector('input[name="os_username"], input[name="username"]', {
+          timeout: 10000,
+        });
         await page.waitForTimeout(2000); // Extra time for form to fully render
-        console.log('✅ Login form loaded');
+        console.log("✅ Login form loaded");
       } catch (waitError) {
-        console.log('⚠️  Timeout waiting for login form');
+        console.log("⚠️  Timeout waiting for login form");
       }
     } else {
-      console.log('⚠️  No Log In button found (might already be on login page)');
+      console.log("⚠️  No Log In button found (might already be on login page)");
     }
   } catch (e) {
-    console.log('⚠️  Error clicking Log In:', e.message);
+    console.log("⚠️  Error clicking Log In:", e.message);
   }
 
   // STEP 2: Fill username in login form with verification
@@ -93,17 +95,17 @@ async function authenticateWithMicrosoft(page, config) {
 
   try {
     // Wait for login form to exist (even if hidden)
-    await page.waitForSelector('#login-form-username', { state: 'attached', timeout: 10000 });
+    await page.waitForSelector("#login-form-username", { state: "attached", timeout: 10000 });
     await page.waitForTimeout(1000);
 
     // Make visible and clear the username field
     await page.evaluate(() => {
-      const field = document.querySelector('#login-form-username');
+      const field = document.querySelector("#login-form-username");
       if (field) {
-        field.value = '';
-        field.style.opacity = '1';
-        field.style.visibility = 'visible';
-        field.style.display = 'block';
+        field.value = "";
+        field.style.opacity = "1";
+        field.style.visibility = "visible";
+        field.style.display = "block";
         field.disabled = false;
         field.readOnly = false;
       }
@@ -114,51 +116,56 @@ async function authenticateWithMicrosoft(page, config) {
 
     // Use JavaScript to directly set value and trigger events
     await page.evaluate((user) => {
-      const field = document.querySelector('#login-form-username');
+      const field = document.querySelector("#login-form-username");
       if (field) {
         field.value = user;
         // Trigger input event to notify form
-        field.dispatchEvent(new Event('input', { bubbles: true }));
-        field.dispatchEvent(new Event('change', { bubbles: true }));
+        field.dispatchEvent(new Event("input", { bubbles: true }));
+        field.dispatchEvent(new Event("change", { bubbles: true }));
       }
     }, username);
     await page.waitForTimeout(1000);
 
     // VERIFY username was filled correctly
     const usernameValue = await page.evaluate(() => {
-      const field = document.querySelector('#login-form-username');
+      const field = document.querySelector("#login-form-username");
       return field ? field.value : null;
     });
 
     if (usernameValue !== username) {
-      console.error(`❌ Username verification failed! Expected: "${username}", Got: "${usernameValue}"`);
+      console.error(
+        `❌ Username verification failed! Expected: "${username}", Got: "${usernameValue}"`
+      );
       return false;
     }
 
     console.log(`✅ Username filled and verified: ${username}`);
   } catch (error) {
-    console.log('⚠️  Error filling username:', error.message);
+    console.log("⚠️  Error filling username:", error.message);
     return false;
   }
 
   // STEP 3: Fill password field with strict verification
-  console.log('🔑 Filling password field...');
+  console.log("🔑 Filling password field...");
 
   try {
     await page.waitForTimeout(1000);
 
     // Wait for password field to exist (even if hidden)
-    await page.waitForSelector('#login-form-password[type="password"]', { state: 'attached', timeout: 10000 });
+    await page.waitForSelector('#login-form-password[type="password"]', {
+      state: "attached",
+      timeout: 10000,
+    });
     await page.waitForTimeout(500);
 
     // Make visible and clear the password field
     await page.evaluate(() => {
       const field = document.querySelector('#login-form-password[type="password"]');
       if (field) {
-        field.value = '';
-        field.style.opacity = '1';
-        field.style.visibility = 'visible';
-        field.style.display = 'block';
+        field.value = "";
+        field.style.opacity = "1";
+        field.style.visibility = "visible";
+        field.style.display = "block";
         field.disabled = false;
         field.readOnly = false;
       }
@@ -173,8 +180,8 @@ async function authenticateWithMicrosoft(page, config) {
       if (field) {
         field.value = pass;
         // Trigger input event to notify form
-        field.dispatchEvent(new Event('input', { bubbles: true }));
-        field.dispatchEvent(new Event('change', { bubbles: true }));
+        field.dispatchEvent(new Event("input", { bubbles: true }));
+        field.dispatchEvent(new Event("change", { bubbles: true }));
       }
     }, password);
     await page.waitForTimeout(1000);
@@ -186,7 +193,9 @@ async function authenticateWithMicrosoft(page, config) {
     });
 
     if (passwordLength !== password.length) {
-      console.error(`❌ Password verification failed! Expected length: ${password.length}, Got: ${passwordLength}`);
+      console.error(
+        `❌ Password verification failed! Expected length: ${password.length}, Got: ${passwordLength}`
+      );
       return false;
     }
 
@@ -194,22 +203,26 @@ async function authenticateWithMicrosoft(page, config) {
     await page.waitForTimeout(1000);
 
     // STEP 4: Final verification before submit
-    console.log('🔍 Final verification before submit...');
+    console.log("🔍 Final verification before submit...");
 
     const finalCheck = await page.evaluate(() => {
-      const usernameField = document.querySelector('#login-form-username');
+      const usernameField = document.querySelector("#login-form-username");
       const passwordField = document.querySelector('#login-form-password[type="password"]');
 
       return {
         usernameValue: usernameField ? usernameField.value : null,
         passwordLength: passwordField ? passwordField.value.length : 0,
         usernameType: usernameField ? usernameField.type : null,
-        passwordType: passwordField ? passwordField.type : null
+        passwordType: passwordField ? passwordField.type : null,
       };
     });
 
-    console.log(`   Username field value: "${finalCheck.usernameValue}" (type: ${finalCheck.usernameType})`);
-    console.log(`   Password field length: ${finalCheck.passwordLength} (type: ${finalCheck.passwordType})`);
+    console.log(
+      `   Username field value: "${finalCheck.usernameValue}" (type: ${finalCheck.usernameType})`
+    );
+    console.log(
+      `   Password field length: ${finalCheck.passwordLength} (type: ${finalCheck.passwordType})`
+    );
 
     if (finalCheck.usernameValue !== username) {
       console.error(`❌ PRE-SUBMIT CHECK FAILED: Username field has wrong value!`);
@@ -225,18 +238,18 @@ async function authenticateWithMicrosoft(page, config) {
       return false;
     }
 
-    console.log('✅ Pre-submit verification passed');
+    console.log("✅ Pre-submit verification passed");
 
     // STEP 5: Submit the login form using JavaScript
-    console.log('📤 Submitting login form...');
+    console.log("📤 Submitting login form...");
     await page.evaluate(() => {
-      const btn = document.querySelector('#login-form-submit');
+      const btn = document.querySelector("#login-form-submit");
       if (btn) {
         btn.click();
       }
     });
     await page.waitForTimeout(5000);
-    console.log('✅ Login form submitted');
+    console.log("✅ Login form submitted");
   } catch (error) {
     console.log(`⚠️  Error filling password: ${error.message}`);
     return false;
@@ -246,31 +259,32 @@ async function authenticateWithMicrosoft(page, config) {
   await page.waitForTimeout(2000);
   const loginUrl = page.url();
 
-  if (loginUrl.includes('microsoftonline')) {
-    console.log('🔐 Microsoft login page detected');
+  if (loginUrl.includes("microsoftonline")) {
+    console.log("🔐 Microsoft login page detected");
 
     if (!username || !password) {
-      console.error('❌ AAD_USERNAME or AAD_PASSWORD not set in environment!');
-      console.log('   Please set these environment variables and try again.');
+      console.error("❌ AAD_USERNAME or AAD_PASSWORD not set in environment!");
+      console.log("   Please set these environment variables and try again.");
       return false;
     }
 
     // Fill email for Microsoft SSO (with visibility override)
-    const msEmail = process.env.JIRA_EMAIL || process.env.AAD_USERNAME || 'matt.carpenter.ext@sonymusic.com';
+    const msEmail =
+      process.env.JIRA_EMAIL || process.env.AAD_USERNAME || "matt.carpenter.ext@sonymusic.com";
     console.log(`📧 Filling Microsoft email: ${msEmail}`);
     try {
       await page.waitForTimeout(2000);
 
       // Make email field visible
       await page.evaluate(() => {
-        const selectors = ['input[type="email"]', 'input[name="loginfmt"]', '#i0116'];
+        const selectors = ['input[type="email"]', 'input[name="loginfmt"]', "#i0116"];
         for (const sel of selectors) {
           const field = document.querySelector(sel);
           if (field) {
-            field.style.opacity = '1';
-            field.style.visibility = 'visible';
-            field.style.display = 'block';
-            field.style.pointerEvents = 'auto';
+            field.style.opacity = "1";
+            field.style.visibility = "visible";
+            field.style.display = "block";
+            field.style.pointerEvents = "auto";
             field.disabled = false;
             field.readOnly = false;
             break;
@@ -280,34 +294,36 @@ async function authenticateWithMicrosoft(page, config) {
       await page.waitForTimeout(500);
 
       // Type email
-      await page.type('input[type="email"], input[name="loginfmt"], #i0116', msEmail, { delay: 100 });
-      console.log('✅ Email filled');
+      await page.type('input[type="email"], input[name="loginfmt"], #i0116', msEmail, {
+        delay: 100,
+      });
+      console.log("✅ Email filled");
       await page.waitForTimeout(1000);
 
       // Click submit
       await page.click('#idSIButton9, input[type="submit"]');
       await page.waitForTimeout(2000);
-      console.log('✅ Email submitted');
+      console.log("✅ Email submitted");
     } catch (e) {
-      console.error('❌ Failed to fill email:', e.message);
+      console.error("❌ Failed to fill email:", e.message);
       return false;
     }
 
     // Fill password (with visibility override)
-    console.log('🔑 Filling password...');
+    console.log("🔑 Filling password...");
     try {
       await page.waitForTimeout(2000); // Wait for password field to appear
 
       // Make password field visible
       await page.evaluate(() => {
-        const selectors = ['input[type="password"]', 'input[name="passwd"]', '#i0118'];
+        const selectors = ['input[type="password"]', 'input[name="passwd"]', "#i0118"];
         for (const sel of selectors) {
           const field = document.querySelector(sel);
           if (field) {
-            field.style.opacity = '1';
-            field.style.visibility = 'visible';
-            field.style.display = 'block';
-            field.style.pointerEvents = 'auto';
+            field.style.opacity = "1";
+            field.style.visibility = "visible";
+            field.style.display = "block";
+            field.style.pointerEvents = "auto";
             field.disabled = false;
             field.readOnly = false;
             break;
@@ -317,22 +333,24 @@ async function authenticateWithMicrosoft(page, config) {
       await page.waitForTimeout(500);
 
       // Type password
-      await page.type('input[type="password"], input[name="passwd"], #i0118', password, { delay: 100 });
-      console.log('✅ Password filled');
+      await page.type('input[type="password"], input[name="passwd"], #i0118', password, {
+        delay: 100,
+      });
+      console.log("✅ Password filled");
       await page.waitForTimeout(1000);
 
       // Click submit
       await page.click('#idSIButton9, input[type="submit"]');
       await page.waitForTimeout(2000);
-      console.log('✅ Password submitted');
+      console.log("✅ Password submitted");
     } catch (e) {
-      console.error('❌ Failed to fill password:', e.message);
+      console.error("❌ Failed to fill password:", e.message);
       return false;
     }
 
     // Wait for MFA approval
-    console.log('\n⏰ WAITING FOR MFA APPROVAL ON YOUR PHONE!');
-    console.log('   Please approve the authentication request...');
+    console.log("\n⏰ WAITING FOR MFA APPROVAL ON YOUR PHONE!");
+    console.log("   Please approve the authentication request...");
     console.log(`   Will wait up to ${mfaTimeout} seconds\n`);
 
     if (onMFAPrompt) {
@@ -341,7 +359,7 @@ async function authenticateWithMicrosoft(page, config) {
   }
 
   // Poll for successful authentication
-  console.log('⏳ Polling for authentication completion...');
+  console.log("⏳ Polling for authentication completion...");
   let authenticated = false;
   const maxAttempts = Math.floor(mfaTimeout / 3); // Check every 3 seconds
 
@@ -351,32 +369,37 @@ async function authenticateWithMicrosoft(page, config) {
     // PROPER CHECK: Look for actual logged-in indicators
     const loginCheck = await page.evaluate(() => {
       // Check 1: "Log In" button should NOT be visible
-      const loginButton = document.querySelector('a.login-link');
-      const hasLoginButton = loginButton && loginButton.textContent.includes('Log In');
+      const loginButton = document.querySelector("a.login-link");
+      const hasLoginButton = loginButton && loginButton.textContent.includes("Log In");
 
       // Check 2: Should see user-specific content
-      const hasUserContent = document.body.textContent.includes('Dashboard for Matt Carpenter') ||
-                           document.body.textContent.includes('Log Out') ||
-                           document.querySelector('a[title="Log Out"]');
+      const hasUserContent =
+        document.body.textContent.includes("Dashboard for Matt Carpenter") ||
+        document.body.textContent.includes("Log Out") ||
+        document.querySelector('a[title="Log Out"]');
 
       return {
         hasLoginButton,
         hasUserContent,
-        isLoggedIn: !hasLoginButton && hasUserContent
+        isLoggedIn: !hasLoginButton && hasUserContent,
       };
     });
 
-    console.log(`   🔍 Login check: ${loginCheck.isLoggedIn ? '✅ LOGGED IN' : '❌ NOT LOGGED IN'} (loginButton: ${loginCheck.hasLoginButton}, userContent: ${loginCheck.hasUserContent})`);
+    console.log(
+      `   🔍 Login check: ${loginCheck.isLoggedIn ? "✅ LOGGED IN" : "❌ NOT LOGGED IN"} (loginButton: ${loginCheck.hasLoginButton}, userContent: ${loginCheck.hasUserContent})`
+    );
 
     if (loginCheck.isLoggedIn) {
       authenticated = true;
-      console.log('\n✅ AUTHENTICATED SUCCESSFULLY!');
+      console.log("\n✅ AUTHENTICATED SUCCESSFULLY!");
       break;
     }
 
     // Handle "Stay signed in?" prompt
     try {
-      const stayButton = page.locator('#idSIButton9, button:has-text("Yes"), button:has-text("Stay signed in")').first();
+      const stayButton = page
+        .locator('#idSIButton9, button:has-text("Yes"), button:has-text("Stay signed in")')
+        .first();
       if (await stayButton.isVisible({ timeout: 500 })) {
         await stayButton.click();
         console.log('   ✓ Clicked "Stay signed in"');
@@ -390,8 +413,8 @@ async function authenticateWithMicrosoft(page, config) {
   }
 
   if (!authenticated) {
-    console.error('\n❌ Authentication timeout!');
-    console.log('   MFA approval was not completed within the timeout period.');
+    console.error("\n❌ Authentication timeout!");
+    console.log("   MFA approval was not completed within the timeout period.");
     return false;
   }
 
@@ -415,15 +438,15 @@ async function saveAuthState(context, storagePath) {
     console.log(`💾 Saved authentication to ${storagePath}`);
 
     // Also save cookies separately for debugging
-    const cookiePath = storagePath.replace('.json', '-cookies.txt');
+    const cookiePath = storagePath.replace(".json", "-cookies.txt");
     const cookies = await context.cookies();
-    const cookieHeader = cookies.map(c => `${c.name}=${c.value}`).join('; ');
+    const cookieHeader = cookies.map((c) => `${c.name}=${c.value}`).join("; ");
     await fs.writeFile(cookiePath, cookieHeader);
     console.log(`🍪 Saved cookies to ${cookiePath}`);
 
     return true;
   } catch (error) {
-    console.error('❌ Failed to save auth state:', error.message);
+    console.error("❌ Failed to save auth state:", error.message);
     return false;
   }
 }
@@ -436,17 +459,20 @@ async function saveAuthState(context, storagePath) {
  */
 async function loadAuthState(storagePath) {
   try {
-    const exists = await fs.access(storagePath).then(() => true).catch(() => false);
+    const exists = await fs
+      .access(storagePath)
+      .then(() => true)
+      .catch(() => false);
     if (!exists) {
-      console.log('📂 No existing authentication found');
+      console.log("📂 No existing authentication found");
       return null;
     }
 
     console.log(`📂 Loading existing authentication from ${storagePath}`);
-    const data = await fs.readFile(storagePath, 'utf8');
+    const data = await fs.readFile(storagePath, "utf8");
     return JSON.parse(data);
   } catch (error) {
-    console.log('⚠️  Could not load auth state:', error.message);
+    console.log("⚠️  Could not load auth state:", error.message);
     return null;
   }
 }
@@ -466,8 +492,8 @@ async function isVPNConnected() {
   // 2. Check for specific network interface
   // 3. Ping internal service
 
-  console.log('🔍 VPN detection not yet implemented');
-  console.log('   Assuming VPN is connected...');
+  console.log("🔍 VPN detection not yet implemented");
+  console.log("   Assuming VPN is connected...");
   return true;
 }
 
@@ -475,5 +501,5 @@ module.exports = {
   authenticateWithMicrosoft,
   saveAuthState,
   loadAuthState,
-  isVPNConnected
+  isVPNConnected,
 };

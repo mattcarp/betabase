@@ -17,14 +17,12 @@ dotenv.config({ path: ".env.test" });
 
 // Configuration - prioritize custom domain if available
 const MAILGUN_API_KEY =
-  process.env.MAILGUN_API_KEY ||
-  "49b4045e0b9738de459452c1f45c88ee-97129d72-5def87c6";
+  process.env.MAILGUN_API_KEY || "49b4045e0b9738de459452c1f45c88ee-97129d72-5def87c6";
 const MAILGUN_DOMAIN =
   process.env.MAILGUN_CUSTOM_DOMAIN ||
   process.env.MAILGUN_TEST_DOMAIN ||
   "sandbox49c351db5fa3448da004612643bf99d3.mailgun.org";
-const TEST_EMAIL =
-  process.env.MAILGUN_CUSTOM_TEST_EMAIL || `test@${MAILGUN_DOMAIN}`;
+const TEST_EMAIL = process.env.MAILGUN_CUSTOM_TEST_EMAIL || `test@${MAILGUN_DOMAIN}`;
 const BASE_URL = process.env.TEST_URL || "https://iamsiam.ai";
 
 console.log("📧 Test Configuration:");
@@ -35,36 +33,28 @@ console.log(`   URL: ${BASE_URL}`);
 /**
  * Retrieves the latest email from Mailgun storage
  */
-async function getLatestEmail(
-  toEmail: string,
-  sinceTimestamp?: number,
-): Promise<any> {
+async function getLatestEmail(toEmail: string, sinceTimestamp?: number): Promise<any> {
   const timestamp = sinceTimestamp || Math.floor(Date.now() / 1000) - 600; // Last 10 minutes
 
   console.log(`⏳ Polling Mailgun for emails to ${toEmail}...`);
 
   try {
     // First, get stored email events
-    const eventsResponse = await axios.get(
-      `https://api.mailgun.net/v3/${MAILGUN_DOMAIN}/events`,
-      {
-        auth: {
-          username: "api",
-          password: MAILGUN_API_KEY,
-        },
-        params: {
-          event: "stored",
-          recipient: toEmail,
-          begin: timestamp,
-          ascending: "no",
-          limit: 5,
-        },
+    const eventsResponse = await axios.get(`https://api.mailgun.net/v3/${MAILGUN_DOMAIN}/events`, {
+      auth: {
+        username: "api",
+        password: MAILGUN_API_KEY,
       },
-    );
+      params: {
+        event: "stored",
+        recipient: toEmail,
+        begin: timestamp,
+        ascending: "no",
+        limit: 5,
+      },
+    });
 
-    console.log(
-      `   Found ${eventsResponse.data.items?.length || 0} stored email events`,
-    );
+    console.log(`   Found ${eventsResponse.data.items?.length || 0} stored email events`);
 
     if (!eventsResponse.data.items || eventsResponse.data.items.length === 0) {
       // Also check for accepted/delivered events (might not be stored yet)
@@ -82,7 +72,7 @@ async function getLatestEmail(
             ascending: "no",
             limit: 5,
           },
-        },
+        }
       );
 
       if (acceptedResponse.data.items?.length > 0) {
@@ -117,10 +107,7 @@ async function getLatestEmail(
     console.log("   Email event found but no content available");
     return null;
   } catch (error: any) {
-    console.error(
-      "❌ Mailgun API error:",
-      error.response?.data || error.message,
-    );
+    console.error("❌ Mailgun API error:", error.response?.data || error.message);
     return null;
   }
 }
@@ -192,9 +179,7 @@ test.describe("Mailgun Integration Tests", () => {
 
       // Find and click the submit button
       const submitButton = page
-        .locator(
-          'button[type="submit"]:has-text("Send"), button:has-text("Send Magic Link")',
-        )
+        .locator('button[type="submit"]:has-text("Send"), button:has-text("Send Magic Link")')
         .first();
       await submitButton.click();
       console.log("✅ Clicked send magic link");
@@ -205,13 +190,11 @@ test.describe("Mailgun Integration Tests", () => {
           'h2:has-text("Enter"), h2:has-text("Verification"), .error-message',
           {
             timeout: 15000,
-          },
+          }
         );
 
         // Check if we got an error
-        const errorElement = await page
-          .locator('.error-message, [role="alert"]')
-          .first();
+        const errorElement = await page.locator('.error-message, [role="alert"]').first();
         if (await errorElement.isVisible()) {
           const errorText = await errorElement.textContent();
           throw new Error(`Login failed: ${errorText}`);
@@ -249,12 +232,8 @@ test.describe("Mailgun Integration Tests", () => {
         // Log debug info
         console.log("\n🔍 Debug Information:");
         console.log("- Check Mailgun logs: https://app.mailgun.com/app/logs");
-        console.log(
-          "- Check Mailgun routes: https://app.mailgun.com/app/receiving/routes",
-        );
-        console.log(
-          "- Verify domain is active: https://app.mailgun.com/app/domains",
-        );
+        console.log("- Check Mailgun routes: https://app.mailgun.com/app/receiving/routes");
+        console.log("- Verify domain is active: https://app.mailgun.com/app/domains");
         console.log("- Ensure Cognito has the test email in allowed list");
 
         throw new Error("Failed to retrieve magic code from Mailgun");
@@ -267,18 +246,14 @@ test.describe("Mailgun Integration Tests", () => {
     await test.step("Complete login with magic code", async () => {
       // Find code input - try different selectors
       const codeInput = await page
-        .locator(
-          'input[type="text"], input[type="number"], input[inputmode="numeric"]',
-        )
+        .locator('input[type="text"], input[type="number"], input[inputmode="numeric"]')
         .first();
       await codeInput.fill(magicCode!);
       console.log("✅ Entered magic code");
 
       // Submit verification
       const verifyButton = page
-        .locator(
-          'button[type="submit"]:has-text("Verify"), button:has-text("Submit")',
-        )
+        .locator('button[type="submit"]:has-text("Verify"), button:has-text("Submit")')
         .first();
       await verifyButton.click();
       console.log("✅ Clicked verify");
@@ -289,9 +264,7 @@ test.describe("Mailgun Integration Tests", () => {
         console.log("✅ Successfully logged in!");
       } catch {
         // Alternative: Check for logged-in indicators
-        const mainContent = page
-          .locator('[role="main"], .dashboard, .chat-interface')
-          .first();
+        const mainContent = page.locator('[role="main"], .dashboard, .chat-interface').first();
         await expect(mainContent).toBeVisible({ timeout: 15000 });
         console.log("✅ Successfully logged in!");
       }
@@ -338,25 +311,19 @@ test.describe("Mailgun Integration Tests", () => {
 
     try {
       // Test API access
-      const response = await axios.get(
-        `https://api.mailgun.net/v3/${MAILGUN_DOMAIN}/stats/total`,
-        {
-          auth: {
-            username: "api",
-            password: MAILGUN_API_KEY,
-          },
-          params: {
-            event: "accepted,delivered,failed",
-            duration: "1d",
-          },
+      const response = await axios.get(`https://api.mailgun.net/v3/${MAILGUN_DOMAIN}/stats/total`, {
+        auth: {
+          username: "api",
+          password: MAILGUN_API_KEY,
         },
-      );
+        params: {
+          event: "accepted,delivered,failed",
+          duration: "1d",
+        },
+      });
 
       console.log("✅ Mailgun API is accessible");
-      console.log(
-        "📊 Domain stats:",
-        response.data.stats?.[0] || "No recent activity",
-      );
+      console.log("📊 Domain stats:", response.data.stats?.[0] || "No recent activity");
 
       // Check domain status
       const domainResponse = await axios.get(
@@ -366,19 +333,13 @@ test.describe("Mailgun Integration Tests", () => {
             username: "api",
             password: MAILGUN_API_KEY,
           },
-        },
+        }
       );
 
-      console.log(
-        "📧 Domain status:",
-        domainResponse.data.domain?.state || "Unknown",
-      );
+      console.log("📧 Domain status:", domainResponse.data.domain?.state || "Unknown");
       console.log("✅ Mailgun domain is configured");
     } catch (error: any) {
-      console.error(
-        "❌ Mailgun API test failed:",
-        error.response?.data || error.message,
-      );
+      console.error("❌ Mailgun API test failed:", error.response?.data || error.message);
       throw error;
     }
   });

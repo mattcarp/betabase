@@ -18,18 +18,20 @@ test("Verify deployment code is live", async ({ page }) => {
   console.log("📝 Checking page content for deployment artifacts...");
 
   // Try to trigger an API call to see the error response
-  const response = await page.request.post("https://thebetabase.com/api/chat", {
-    headers: {
-      "Content-Type": "application/json"
-    },
-    data: {
-      messages: [{ role: "user", content: "test" }]
-    },
-    timeout: 5000
-  }).catch(e => {
-    console.log("❌ API request failed:", e.message);
-    return null;
-  });
+  const response = await page.request
+    .post("https://thebetabase.com/api/chat", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        messages: [{ role: "user", content: "test" }],
+      },
+      timeout: 5000,
+    })
+    .catch((e) => {
+      console.log("❌ API request failed:", e.message);
+      return null;
+    });
 
   if (response) {
     const body = await response.text();

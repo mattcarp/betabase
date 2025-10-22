@@ -34,14 +34,8 @@ interface PasswordInputProps extends React.ComponentProps<"input"> {
   onRequirementsChange?: (met: boolean) => void;
 }
 
-export const PasswordInput = React.forwardRef<
-  HTMLInputElement,
-  PasswordInputProps
->(
-  (
-    { showRequirements = true, onRequirementsChange, className, ...props },
-    ref,
-  ) => {
+export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
+  ({ showRequirements = true, onRequirementsChange, className, ...props }, ref) => {
     const [requirements, setRequirements] = useState<Record<string, boolean>>({
       length: false,
       uppercase: false,
@@ -76,7 +70,7 @@ export const PasswordInput = React.forwardRef<
             Object.values(requirements).every((r) => r) &&
               password.length > 0 &&
               "border-green-400/50 focus:border-green-400",
-            className,
+            className
           )}
           {...props}
         />
@@ -89,7 +83,7 @@ export const PasswordInput = React.forwardRef<
                   key={key}
                   className={cn(
                     "flex items-center text-xs transition-all duration-200",
-                    met ? "text-green-400" : "text-muted-foreground",
+                    met ? "text-green-400" : "text-muted-foreground"
                   )}
                 >
                   <div
@@ -97,21 +91,12 @@ export const PasswordInput = React.forwardRef<
                       "w-4 h-4 rounded-full mr-2 flex items-center justify-center transition-all duration-200",
                       met
                         ? "bg-green-400/20 border border-green-400/50"
-                        : "bg-muted/20 border border-muted/50",
+                        : "bg-muted/20 border border-muted/50"
                     )}
                   >
-                    {met ? (
-                      <Check className="w-2.5 h-2.5" />
-                    ) : (
-                      <X className="w-2.5 h-2.5" />
-                    )}
+                    {met ? <Check className="w-2.5 h-2.5" /> : <X className="w-2.5 h-2.5" />}
                   </div>
-                  <span
-                    className={cn(
-                      "transition-all duration-200",
-                      met && "font-medium",
-                    )}
-                  >
+                  <span className={cn("transition-all duration-200", met && "font-medium")}>
                     {label}
                   </span>
                 </div>
@@ -121,7 +106,7 @@ export const PasswordInput = React.forwardRef<
         )}
       </div>
     );
-  },
+  }
 );
 
 PasswordInput.displayName = "PasswordInput";

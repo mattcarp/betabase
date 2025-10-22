@@ -77,68 +77,55 @@
       <p>Welcome Back</p>
       <p style="font-size: 14px">Sign in with your authorized email</p>
       <form id="loginForm">
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="your.name@company.com"
-          required
-        />
+        <input type="email" id="email" name="email" placeholder="your.name@company.com" required />
         <button type="submit">Send Magic Link</button>
       </form>
-      <div
-        id="message"
-        style="color: #4ade80; margin: 10px 0; display: none"
-      ></div>
+      <div id="message" style="color: #4ade80; margin: 10px 0; display: none"></div>
       <div class="version">v0.1.0-dev | Emergency Static Login</div>
     </div>
 
     <script>
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const email = document.getElementById("email").value;
-          const messageDiv = document.getElementById("message");
+      document.getElementById("loginForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const messageDiv = document.getElementById("message");
 
-          try {
-            const response = await fetch("/api/auth/magic-link", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ action: "send", email: email }),
-            });
+        try {
+          const response = await fetch("/api/auth/magic-link", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "send", email: email }),
+          });
 
-            const data = await response.json();
-            if (response.ok) {
-              messageDiv.style.color = "#4ade80";
-              messageDiv.textContent =
-                data.message || "Magic link sent! Check your email.";
-              messageDiv.style.display = "block";
+          const data = await response.json();
+          if (response.ok) {
+            messageDiv.style.color = "#4ade80";
+            messageDiv.textContent = data.message || "Magic link sent! Check your email.";
+            messageDiv.style.display = "block";
 
-              // If dev code is provided, show it
-              if (data.devCode) {
-                messageDiv.innerHTML += "<br>Dev Code: " + data.devCode;
-              }
-
-              // Show verification form
-              if (data.success) {
-                messageDiv.innerHTML +=
-                  "<br><br>Enter verification code:<br>" +
-                  '<input type="text" id="verifyCode" maxlength="6" style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white;">' +
-                  '<button onclick="verifyCode()" style="margin-left: 10px; padding: 10px 20px; background: #4ade80; border: none; border-radius: 8px; color: black; cursor: pointer;">Verify</button>';
-              }
-            } else {
-              messageDiv.style.color = "#ef4444";
-              messageDiv.textContent =
-                data.error || "Failed to send magic link";
-              messageDiv.style.display = "block";
+            // If dev code is provided, show it
+            if (data.devCode) {
+              messageDiv.innerHTML += "<br>Dev Code: " + data.devCode;
             }
-          } catch (err) {
+
+            // Show verification form
+            if (data.success) {
+              messageDiv.innerHTML +=
+                "<br><br>Enter verification code:<br>" +
+                '<input type="text" id="verifyCode" maxlength="6" style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white;">' +
+                '<button onclick="verifyCode()" style="margin-left: 10px; padding: 10px 20px; background: #4ade80; border: none; border-radius: 8px; color: black; cursor: pointer;">Verify</button>';
+            }
+          } else {
             messageDiv.style.color = "#ef4444";
-            messageDiv.textContent = "Network error. Please try again.";
+            messageDiv.textContent = data.error || "Failed to send magic link";
             messageDiv.style.display = "block";
           }
-        });
+        } catch (err) {
+          messageDiv.style.color = "#ef4444";
+          messageDiv.textContent = "Network error. Please try again.";
+          messageDiv.style.display = "block";
+        }
+      });
 
       // Add verification function
       window.verifyCode = async function () {
@@ -166,12 +153,11 @@
                 email: email,
                 authToken: data.authToken || "verified-" + Date.now(),
                 verifiedAt: new Date().toISOString(),
-              }),
+              })
             );
 
             messageDiv.style.color = "#4ade80";
-            messageDiv.innerHTML =
-              "✅ Authentication successful! Redirecting...";
+            messageDiv.innerHTML = "✅ Authentication successful! Redirecting...";
 
             // Redirect to app
             setTimeout(() => {

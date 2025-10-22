@@ -19,6 +19,7 @@ claude> fix test          # Debugs and fixes failing test
 ## 🤖 Claude Code MCP Server Integration
 
 ### Testing through MCP
+
 ```typescript
 // Claude Code can directly interact with tests via MCP
 {
@@ -34,6 +35,7 @@ claude> fix test          # Debugs and fixes failing test
 ## 📁 File Structure Recognition
 
 Claude Code should recognize this structure:
+
 ```
 tests/
 ├── __TESTING_RULES__.md      ← START HERE ALWAYS
@@ -48,6 +50,7 @@ tests/
 ## 🎨 Claude Code Testing Patterns
 
 ### 1. Creating a New Test
+
 ```typescript
 // Claude Code should ALWAYS use this template
 /**
@@ -65,6 +68,7 @@ test.describe('[FEATURE] [Name]', () => {
 ```
 
 ### 2. Running Tests via Claude Code
+
 ```bash
 # Direct execution
 npx playwright test tests/03-e2e/smoke/chat.e2e.test.ts
@@ -77,7 +81,9 @@ DEBUG=pw:api npx playwright test --debug
 ```
 
 ### 3. Test Discovery Pattern
+
 When Claude Code needs to find tests:
+
 1. Check `__TESTING_RULES__.md` for patterns
 2. Look in numbered directories by layer
 3. Use `*.test.ts` or `*.spec.ts` pattern
@@ -86,6 +92,7 @@ When Claude Code needs to find tests:
 ## 🔧 Claude Code Specific Settings
 
 ### MCP Configuration
+
 ```json
 {
   "claude-code": {
@@ -101,6 +108,7 @@ When Claude Code needs to find tests:
 ```
 
 ### Environment Variables
+
 ```bash
 # Claude Code should set these
 export CLAUDE_CODE_TEST=true
@@ -111,13 +119,13 @@ export TEST_WORKERS=1
 
 ## 🚀 Claude Code Quick Actions
 
-| Action | Command | Description |
-|--------|---------|-------------|
-| Test Current File | `test:current` | Tests file in active editor |
-| Test Related | `test:related` | Tests files related to changes |
-| Test Changed | `test:changed` | Tests only modified files |
-| Fix Selector | `test:fix-selector` | Updates broken selectors |
-| Update Snapshot | `test:update-snapshot` | Updates visual snapshots |
+| Action            | Command                | Description                    |
+| ----------------- | ---------------------- | ------------------------------ |
+| Test Current File | `test:current`         | Tests file in active editor    |
+| Test Related      | `test:related`         | Tests files related to changes |
+| Test Changed      | `test:changed`         | Tests only modified files      |
+| Fix Selector      | `test:fix-selector`    | Updates broken selectors       |
+| Update Snapshot   | `test:update-snapshot` | Updates visual snapshots       |
 
 ## 📊 Test Execution Strategy for Claude Code
 
@@ -193,5 +201,6 @@ npx playwright show-trace trace.zip
 - ✅ Report results to `test-results/`
 
 ---
+
 Last Updated: 2024
 Priority: CRITICAL for Claude Code

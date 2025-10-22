@@ -28,16 +28,21 @@ for (const config of viewports) {
     });
 
     test(`renders SIAM hub without regressions @visual @smoke`, async ({ page }, testInfo) => {
-
       await page.goto("/", { waitUntil: "networkidle" });
       await page.waitForTimeout(500);
 
       // Check for either login form or app container (smoke test without auth)
-      const hasLogin = await page.locator('input[type="email"]').isVisible({ timeout: 5000 }).catch(() => false);
-      const hasApp = await page.getByTestId("app-container").isVisible({ timeout: 5000 }).catch(() => false);
-      
+      const hasLogin = await page
+        .locator('input[type="email"]')
+        .isVisible({ timeout: 5000 })
+        .catch(() => false);
+      const hasApp = await page
+        .getByTestId("app-container")
+        .isVisible({ timeout: 5000 })
+        .catch(() => false);
+
       expect(hasLogin || hasApp, "Neither login nor app container found").toBeTruthy();
-      
+
       // Only check MAC design if app is loaded (not login page)
       if (hasApp) {
         await expectMacClassPresence(page, 1);
@@ -47,10 +52,10 @@ for (const config of viewports) {
       if (hasApp) {
         const panelLocator = page.locator("[data-testid='app-container'] main").last();
         const isPanelVisible = await panelLocator.isVisible({ timeout: 3000 }).catch(() => false);
-        
+
         if (isPanelVisible) {
-          const panelColor = await panelLocator.evaluate((node) =>
-            window.getComputedStyle(node as HTMLElement).backgroundColor,
+          const panelColor = await panelLocator.evaluate(
+            (node) => window.getComputedStyle(node as HTMLElement).backgroundColor
           );
 
           const rgbMatch = panelColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);

@@ -39,11 +39,7 @@ export default function LiveTranscription({
     const lastWord = words[words.length - 1] || "";
     let i = 0;
     const interval = setInterval(() => {
-      setDisplayedText(
-        words.slice(0, words.length - 1).join(" ") +
-          " " +
-          lastWord.substring(0, i),
-      );
+      setDisplayedText(words.slice(0, words.length - 1).join(" ") + " " + lastWord.substring(0, i));
       i++;
       if (i > lastWord.length) {
         clearInterval(interval);
@@ -100,7 +96,7 @@ export default function LiveTranscription({
                       index === currentWordIndex - 1 && isRecording
                         ? "bg-blue-600/20 px-1 rounded"
                         : "",
-                      getWordConfidence(),
+                      getWordConfidence()
                     )}
                   >
                     {word}{" "}
@@ -131,9 +127,7 @@ export default function LiveTranscription({
               <div className="text-center">
                 <div className="w-12 h-12 border-2 border-gray-600 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
                 <p className="font-mono text-sm">
-                  {isRecording
-                    ? "Listening for speech..."
-                    : "Ready to transcribe..."}
+                  {isRecording ? "Listening for speech..." : "Ready to transcribe..."}
                 </p>
               </div>
             </div>
@@ -145,16 +139,10 @@ export default function LiveTranscription({
         <div className="absolute top-2 right-2 bg-gray-800/80 backdrop-blur-sm rounded-lg px-3 py-1">
           <div className="flex items-center gap-4 text-xs font-mono">
             <span className="text-gray-400">
-              Words:{" "}
-              <span className="text-blue-600">
-                {displayedText.split(" ").length}
-              </span>
+              Words: <span className="text-blue-600">{displayedText.split(" ").length}</span>
             </span>
             <span className="text-gray-400">
-              WPM:{" "}
-              <span className="text-green-400">
-                {Math.floor(Math.random() * 50 + 120)}
-              </span>
+              WPM: <span className="text-green-400">{Math.floor(Math.random() * 50 + 120)}</span>
             </span>
           </div>
         </div>

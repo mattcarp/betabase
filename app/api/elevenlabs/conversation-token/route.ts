@@ -16,10 +16,7 @@ export async function POST(request: NextRequest) {
     const { agentId } = body;
 
     if (!agentId) {
-      return NextResponse.json(
-        { error: "Agent ID is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Agent ID is required" }, { status: 400 });
     }
 
     // Get API key from server-side configuration (never exposed to client)
@@ -27,10 +24,7 @@ export async function POST(request: NextRequest) {
 
     if (!apiKey) {
       console.error("❌ ElevenLabs API key not configured");
-      return NextResponse.json(
-        { error: "ElevenLabs API key not configured" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "ElevenLabs API key not configured" }, { status: 500 });
     }
 
     console.log(`🔐 Requesting signed URL for agent: ${agentId}`);
@@ -44,7 +38,7 @@ export async function POST(request: NextRequest) {
           "xi-api-key": apiKey,
           "Content-Type": "application/json",
         },
-      },
+      }
     );
 
     if (!response.ok) {
@@ -55,7 +49,7 @@ export async function POST(request: NextRequest) {
           error: "Failed to get conversation token",
           details: errorText,
         },
-        { status: response.status },
+        { status: response.status }
       );
     }
 
@@ -75,7 +69,7 @@ export async function POST(request: NextRequest) {
         error: "Internal server error",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

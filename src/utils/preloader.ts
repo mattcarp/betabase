@@ -15,12 +15,7 @@ interface PreloadResource {
 /**
  * Preload critical resources using link rel="preload"
  */
-export function preloadResource({
-  href,
-  as,
-  crossorigin,
-  type,
-}: PreloadResource): Promise<void> {
+export function preloadResource({ href, as, crossorigin, type }: PreloadResource): Promise<void> {
   return new Promise((resolve, reject) => {
     // Check if resource is already loaded
     const existing = document.querySelector(`link[href="${href}"]`);
@@ -47,9 +42,7 @@ export function preloadResource({
 /**
  * Preload multiple resources concurrently
  */
-export async function preloadResources(
-  resources: PreloadResource[],
-): Promise<void> {
+export async function preloadResources(resources: PreloadResource[]): Promise<void> {
   try {
     await Promise.all(resources.map((resource) => preloadResource(resource)));
     // console.log('All resources preloaded successfully');
@@ -93,7 +86,7 @@ export function createImageLazyLoader() {
     {
       rootMargin: "50px 0px", // Start loading 50px before the image enters viewport
       threshold: 0.01,
-    },
+    }
   );
 
   return {
@@ -105,9 +98,7 @@ export function createImageLazyLoader() {
 /**
  * Prefetch module chunks for components that might be needed
  */
-export async function prefetchComponent(
-  importFn: () => Promise<any>,
-): Promise<void> {
+export async function prefetchComponent(importFn: () => Promise<any>): Promise<void> {
   try {
     // Prefetch in the background without executing
     if ("requestIdleCallback" in window) {
@@ -178,13 +169,10 @@ export async function loadResourcesByPriority() {
  */
 export function measureLoadingPerformance() {
   if ("performance" in window) {
-    const navigation = performance.getEntriesByType(
-      "navigation",
-    )[0] as PerformanceNavigationTiming;
+    const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
 
     const metrics = {
-      domContentLoaded:
-        navigation.domContentLoadedEventEnd - navigation.fetchStart,
+      domContentLoaded: navigation.domContentLoadedEventEnd - navigation.fetchStart,
       loadComplete: navigation.loadEventEnd - navigation.fetchStart,
       firstPaint: 0,
       firstContentfulPaint: 0,

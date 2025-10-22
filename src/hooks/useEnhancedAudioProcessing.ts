@@ -1,7 +1,12 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { enhancedAudioProcessor, EnhancedProcessingResult, ProcessingConfig, ContentAnalysisResult } from "../services/enhancedAudioProcessor";
+import {
+  enhancedAudioProcessor,
+  EnhancedProcessingResult,
+  ProcessingConfig,
+  ContentAnalysisResult,
+} from "../services/enhancedAudioProcessor";
 import { audioProcessor } from "../services/realTimeAudioProcessor";
 
 interface UseEnhancedAudioProcessingOptions {
@@ -35,12 +40,12 @@ export function useEnhancedAudioProcessing(options: UseEnhancedAudioProcessingOp
     enableVoiceIsolation: true,
     enableRealTimeTranscription: true,
     enableContentAnalysis: true,
-    transcriptionModel: 'gpt-4o-transcribe',
-    voiceIsolationQuality: 'high',
-    contentModerationLevel: 'moderate',
+    transcriptionModel: "gpt-4o-transcribe",
+    voiceIsolationQuality: "high",
+    contentModerationLevel: "moderate",
     realTimeCallbacks: {
       onVoiceIsolated: (result) => {
-        console.log('🔊 Voice isolation completed:', result);
+        console.log("🔊 Voice isolation completed:", result);
       },
       onTranscriptionChunk: (chunk, isFinal) => {
         if (isFinal) {
@@ -50,7 +55,7 @@ export function useEnhancedAudioProcessing(options: UseEnhancedAudioProcessingOp
       onContentAnalysis: (analysis) => {
         setContentAnalysis(analysis);
         setExplicitContentWarning(analysis.isExplicit);
-        
+
         if (analysis.isExplicit) {
           options.onExplicitContentDetected?.(analysis);
         }
@@ -69,13 +74,13 @@ export function useEnhancedAudioProcessing(options: UseEnhancedAudioProcessingOp
    */
   const startRecording = useCallback(async () => {
     if (isRecording) {
-      console.warn('Recording already in progress');
+      console.warn("Recording already in progress");
       return;
     }
 
     try {
-      console.log('🎤 Starting enhanced audio recording...');
-      
+      console.log("🎤 Starting enhanced audio recording...");
+
       // Initialize real-time audio processor for live monitoring
       await audioProcessor.initialize({
         sampleRate: 44100,
@@ -91,7 +96,7 @@ export function useEnhancedAudioProcessing(options: UseEnhancedAudioProcessingOp
           if (options.autoStop && !features.voiceActivity && isRecording) {
             if (!silenceTimeoutRef.current) {
               silenceTimeoutRef.current = setTimeout(() => {
-                console.log('🔇 Auto-stopping due to silence');
+                console.log("🔇 Auto-stopping due to silence");
                 stopRecording();
               }, 3000); // Stop after 3 seconds of silence
             }
@@ -104,25 +109,25 @@ export function useEnhancedAudioProcessing(options: UseEnhancedAudioProcessingOp
         (metrics) => {
           // Log audio quality metrics
           if (metrics.audioQuality < 50) {
-            console.warn('⚠️ Low audio quality detected:', metrics.audioQuality);
+            console.warn("⚠️ Low audio quality detected:", metrics.audioQuality);
           }
         }
       );
 
       // Request microphone access
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           sampleRate: 44100,
           channelCount: 1,
           echoCancellation: true,
           noiseSuppression: false, // We'll use ElevenLabs for this
           autoGainControl: true,
-        }
+        },
       });
 
       // Set up MediaRecorder for capturing audio data
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus' // High-quality format
+        mimeType: "audio/webm;codecs=opus", // High-quality format
       });
 
       mediaRecorderRef.current = mediaRecorder;
@@ -136,41 +141,40 @@ export function useEnhancedAudioProcessing(options: UseEnhancedAudioProcessingOp
       };
 
       mediaRecorder.onstop = async () => {
-        console.log('🛑 Recording stopped, processing audio...');
+        console.log("🛑 Recording stopped, processing audio...");
         setIsRecording(false);
         setIsProcessing(true);
 
         try {
           // Create audio blob from recorded chunks
-          const audioBlob = new Blob(audioChunksRef.current, { 
-            type: 'audio/webm;codecs=opus' 
+          const audioBlob = new Blob(audioChunksRef.current, {
+            type: "audio/webm;codecs=opus",
           });
 
           console.log(`📁 Audio recorded: ${(audioBlob.size / 1024).toFixed(1)}KB`);
 
           // Process through enhanced pipeline
           const result = await enhancedAudioProcessor.processAudio(audioBlob);
-          
+
           setLastResult(result);
           setCurrentTranscript(result.transcription.text || "");
-          
+
           // Trigger completion callback
           options.onTranscriptionComplete?.(result);
 
-          console.log('✅ Enhanced audio processing completed');
+          console.log("✅ Enhanced audio processing completed");
           console.log(`   Transcription: "${result.transcription.text}"`);
-          console.log(`   Explicit: ${result.contentAnalysis.isExplicit ? 'Yes' : 'No'}`);
+          console.log(`   Explicit: ${result.contentAnalysis.isExplicit ? "Yes" : "No"}`);
           console.log(`   Content Type: ${result.contentAnalysis.contentType}`);
-
         } catch (error) {
-          console.error('❌ Enhanced audio processing failed:', error);
+          console.error("❌ Enhanced audio processing failed:", error);
           options.onError?.(error as Error);
         } finally {
           setIsProcessing(false);
           options.onEnd?.();
-          
+
           // Cleanup
-          stream.getTracks().forEach(track => track.stop());
+          stream.getTracks().forEach((track) => track.stop());
           audioProcessor.stopProcessing();
         }
       };
@@ -189,10 +193,9 @@ export function useEnhancedAudioProcessing(options: UseEnhancedAudioProcessingOp
         }, options.maxRecordingDuration);
       }
 
-      console.log('✅ Enhanced audio recording started');
-
+      console.log("✅ Enhanced audio recording started");
     } catch (error) {
-      console.error('❌ Failed to start enhanced audio recording:', error);
+      console.error("❌ Failed to start enhanced audio recording:", error);
       setIsRecording(false);
       setIsProcessing(false);
       options.onError?.(error as Error);
@@ -204,12 +207,12 @@ export function useEnhancedAudioProcessing(options: UseEnhancedAudioProcessingOp
    */
   const stopRecording = useCallback(() => {
     if (!isRecording || !mediaRecorderRef.current) {
-      console.warn('No recording in progress');
+      console.warn("No recording in progress");
       return;
     }
 
-    console.log('🛑 Stopping enhanced audio recording...');
-    
+    console.log("🛑 Stopping enhanced audio recording...");
+
     // Clear any silence timeout
     if (silenceTimeoutRef.current) {
       clearTimeout(silenceTimeoutRef.current);
@@ -245,39 +248,43 @@ export function useEnhancedAudioProcessing(options: UseEnhancedAudioProcessingOp
   /**
    * Process an existing audio file through the enhanced pipeline
    */
-  const processAudioFile = useCallback(async (audioFile: File): Promise<EnhancedProcessingResult> => {
-    if (isProcessing) {
-      throw new Error('Another processing operation is already in progress');
-    }
-
-    setIsProcessing(true);
-    
-    try {
-      console.log(`📁 Processing audio file: ${audioFile.name} (${(audioFile.size / 1024).toFixed(1)}KB)`);
-      
-      const result = await enhancedAudioProcessor.processAudio(audioFile);
-      
-      setLastResult(result);
-      setCurrentTranscript(result.transcription.text || "");
-      setContentAnalysis(result.contentAnalysis);
-      setExplicitContentWarning(result.contentAnalysis.isExplicit);
-
-      if (result.contentAnalysis.isExplicit) {
-        options.onExplicitContentDetected?.(result.contentAnalysis);
+  const processAudioFile = useCallback(
+    async (audioFile: File): Promise<EnhancedProcessingResult> => {
+      if (isProcessing) {
+        throw new Error("Another processing operation is already in progress");
       }
 
-      options.onTranscriptionComplete?.(result);
-      
-      return result;
-      
-    } catch (error) {
-      console.error('❌ Audio file processing failed:', error);
-      options.onError?.(error as Error);
-      throw error;
-    } finally {
-      setIsProcessing(false);
-    }
-  }, [isProcessing, options]);
+      setIsProcessing(true);
+
+      try {
+        console.log(
+          `📁 Processing audio file: ${audioFile.name} (${(audioFile.size / 1024).toFixed(1)}KB)`
+        );
+
+        const result = await enhancedAudioProcessor.processAudio(audioFile);
+
+        setLastResult(result);
+        setCurrentTranscript(result.transcription.text || "");
+        setContentAnalysis(result.contentAnalysis);
+        setExplicitContentWarning(result.contentAnalysis.isExplicit);
+
+        if (result.contentAnalysis.isExplicit) {
+          options.onExplicitContentDetected?.(result.contentAnalysis);
+        }
+
+        options.onTranscriptionComplete?.(result);
+
+        return result;
+      } catch (error) {
+        console.error("❌ Audio file processing failed:", error);
+        options.onError?.(error as Error);
+        throw error;
+      } finally {
+        setIsProcessing(false);
+      }
+    },
+    [isProcessing, options]
+  );
 
   /**
    * Get current processing statistics

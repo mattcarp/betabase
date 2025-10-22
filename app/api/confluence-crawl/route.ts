@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { testConnection } from '@/src/services/confluenceAuthenticator';
-import crawler from '@/src/services/confluenceCrawler';
+import { NextRequest, NextResponse } from "next/server";
+import { testConnection } from "@/src/services/confluenceAuthenticator";
+import crawler from "@/src/services/confluenceCrawler";
 
 // dynamic to ensure env available at runtime
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 let lastSummary: { pagesCrawled: number; vectorsUpserted: number; at: string } | null = null;
 
@@ -14,15 +14,22 @@ export async function POST(req: NextRequest) {
 
     const auth = await testConnection();
     if (!auth.ok) {
-      return NextResponse.json({ error: auth.message || 'Confluence auth failed' }, { status: auth.status || 500 });
+      return NextResponse.json(
+        { error: auth.message || "Confluence auth failed" },
+        { status: auth.status || 500 }
+      );
     }
 
     const result = await crawler.crawlSpaces({ spaces, maxPagesPerSpace });
-    lastSummary = { pagesCrawled: result.pagesCrawled, vectorsUpserted: result.vectorsUpserted, at: new Date().toISOString() };
+    lastSummary = {
+      pagesCrawled: result.pagesCrawled,
+      vectorsUpserted: result.vectorsUpserted,
+      at: new Date().toISOString(),
+    };
 
     return NextResponse.json(result);
   } catch (e: any) {
-    return NextResponse.json({ error: e?.message || 'Crawl failed' }, { status: 500 });
+    return NextResponse.json({ error: e?.message || "Crawl failed" }, { status: 500 });
   }
 }
 
@@ -32,5 +39,3 @@ export async function GET() {
   }
   return NextResponse.json(lastSummary);
 }
-
-

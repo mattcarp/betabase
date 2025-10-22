@@ -20,6 +20,7 @@ A complete metrics collection and vectorization service with:
 - **Future-Ready**: Prepared for Prometheus and Grafana integration
 
 **Key Features**:
+
 - 5 metric types: performance, resource, api, error, custom
 - Flexible metadata and tagging system
 - Automated collection intervals
@@ -28,26 +29,34 @@ A complete metrics collection and vectorization service with:
 ### 2. API Endpoints
 
 #### POST /api/metrics/ingest
+
 Ingest metrics with three actions:
+
 - `snapshot`: Capture current system snapshot
 - `custom`: Record a single custom metric
 - `batch`: Ingest multiple metrics at once
 
 #### POST /api/metrics/search
+
 Semantic search for metrics with:
+
 - Configurable similarity threshold
 - Result count limiting
 - Metric type filtering
 - Time range filtering
 
 #### GET /api/metrics/stats
+
 Statistics about vectorized metrics:
+
 - Vector store counts
 - In-memory metrics breakdown
 - Oldest and latest metric timestamps
 
 #### GET /api/metrics/ingest
+
 Retrieve in-memory metrics history with:
+
 - Type filtering
 - Name pattern filtering
 - Result limiting
@@ -57,6 +66,7 @@ Retrieve in-memory metrics history with:
 **File**: `tests/metrics-ingestion.spec.ts`
 
 10 comprehensive Playwright tests covering:
+
 - System snapshot capture and vectorization
 - Custom metric recording
 - Batch metric ingestion
@@ -71,6 +81,7 @@ Retrieve in-memory metrics history with:
 **File**: `scripts/test-metrics-ingestion.ts`
 
 Standalone test script demonstrating:
+
 - System snapshot capture
 - Custom metric recording
 - Batch ingestion
@@ -83,6 +94,7 @@ Standalone test script demonstrating:
 **File**: `docs/METRICS-INGESTION-PIPELINE.md`
 
 Complete documentation including:
+
 - Architecture overview
 - Component descriptions
 - API reference with examples
@@ -108,7 +120,7 @@ System Metrics → Collection → Vectorization → Vector Store → Semantic Se
 ```typescript
 interface SystemMetric {
   timestamp: string;
-  metricType: 'performance' | 'resource' | 'api' | 'error' | 'custom';
+  metricType: "performance" | "resource" | "api" | "error" | "custom";
   name: string;
   value: number | string | Record<string, any>;
   unit?: string;
@@ -165,7 +177,7 @@ curl -X POST http://localhost:3000/api/metrics/search \
 ### Automated Collection
 
 ```typescript
-import { getSystemMetricsVectorService } from '@/services/systemMetricsVectorService';
+import { getSystemMetricsVectorService } from "@/services/systemMetricsVectorService";
 
 const metricsService = getSystemMetricsVectorService();
 
@@ -183,18 +195,14 @@ const startTime = Date.now();
 const response = await orchestrateQuery(query);
 const duration = Date.now() - startTime;
 
-await metricsService.recordCustomMetric(
-  'aoma.orchestration.duration',
-  duration,
-  {
-    metricType: 'performance',
-    unit: 'milliseconds',
-    tags: {
-      complexity: response.complexity,
-      sourcesQueried: response.sources.length
-    }
-  }
-);
+await metricsService.recordCustomMetric("aoma.orchestration.duration", duration, {
+  metricType: "performance",
+  unit: "milliseconds",
+  tags: {
+    complexity: response.complexity,
+    sourcesQueried: response.sources.length,
+  },
+});
 ```
 
 ## Testing
@@ -276,6 +284,7 @@ As specified in Task 71:
 > **Test Strategy**: Ingest a sample set of system metrics, process them into vectors, and verify their accuracy and presence in the vector store.
 
 ✅ **VERIFIED**:
+
 - Sample metrics ingested via multiple methods (snapshot, custom, batch)
 - All metrics processed into vectors successfully
 - Accuracy verified through semantic search
@@ -321,4 +330,4 @@ All requirements for Task 71 have been successfully implemented:
 
 **Task 71: COMPLETE** ✅
 
-*Implemented by Claude Code on October 22, 2025*
+_Implemented by Claude Code on October 22, 2025_

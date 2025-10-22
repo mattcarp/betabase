@@ -1,12 +1,6 @@
 import React, { Suspense } from "react";
-import {
-  AudioWaveformResponse,
-  type AudioWaveformResponseData,
-} from "./AudioWaveformResponse";
-import {
-  SearchResultsResponse,
-  type SearchResultsResponseData,
-} from "./SearchResultsResponse";
+import { AudioWaveformResponse, type AudioWaveformResponseData } from "./AudioWaveformResponse";
+import { SearchResultsResponse, type SearchResultsResponseData } from "./SearchResultsResponse";
 
 // Define our response types
 export interface BaseResponse {
@@ -86,9 +80,7 @@ export type StructuredResponse =
   | SearchResultsResponseData;
 
 // Server Components for each response type
-const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({
-  response,
-}) => {
+const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ response }) => {
   const { data } = response;
 
   const statusColors: Record<string, string> = {
@@ -116,9 +108,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-blue-400 font-mono text-sm">
-                {data.key}
-              </span>
+              <span className="text-blue-400 font-mono text-sm">{data.key}</span>
               <span
                 className={`px-2 py-1 rounded-full text-xs text-white ${statusColors[data.status] || "bg-gray-500"}`}
               >
@@ -128,9 +118,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({
             <h3 className="text-gray-100 font-semibold mt-1">{data.summary}</h3>
           </div>
         </div>
-        <div
-          className={`text-sm font-medium ${priorityColors[data.priority] || "text-gray-400"}`}
-        >
+        <div className={`text-sm font-medium ${priorityColors[data.priority] || "text-gray-400"}`}>
           {data.priority}
         </div>
       </div>
@@ -143,9 +131,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({
         </div>
         <div>
           <span className="text-gray-400">Created:</span>
-          <span className="text-gray-200 ml-2">
-            {data.created.toLocaleDateString()}
-          </span>
+          <span className="text-gray-200 ml-2">{data.created.toLocaleDateString()}</span>
         </div>
       </div>
 
@@ -166,24 +152,18 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({
       {/* Description */}
       <div className="bg-gray-900/50 rounded-lg p-4 mb-4">
         <h4 className="text-gray-300 font-medium mb-2">Description</h4>
-        <p className="text-gray-200 text-sm leading-relaxed">
-          {data.description}
-        </p>
+        <p className="text-gray-200 text-sm leading-relaxed">{data.description}</p>
       </div>
 
       {/* Comments */}
       {data.comments.length > 0 && (
         <div>
-          <h4 className="text-gray-300 font-medium mb-3">
-            Comments ({data.comments.length})
-          </h4>
+          <h4 className="text-gray-300 font-medium mb-3">Comments ({data.comments.length})</h4>
           <div className="space-y-3 max-h-48 overflow-y-auto">
             {data.comments.map((comment, index) => (
               <div key={index} className="bg-gray-800/50 rounded-lg p-3">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-blue-400 text-sm font-medium">
-                    {comment.author}
-                  </span>
+                  <span className="text-blue-400 text-sm font-medium">{comment.author}</span>
                   <span className="text-gray-400 text-xs">
                     {comment.created.toLocaleDateString()}
                   </span>
@@ -219,18 +199,14 @@ const ChartRenderer: React.FC<{ response: ChartResponse }> = ({ response }) => {
 
                 return (
                   <div key={index} className="flex items-center gap-3">
-                    <span className="text-gray-400 text-sm w-20 truncate">
-                      {label}
-                    </span>
+                    <span className="text-gray-400 text-sm w-20 truncate">{label}</span>
                     <div className="flex-1 bg-gray-700 rounded-full h-2">
                       <div
                         className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
-                    <span className="text-gray-300 text-sm w-12 text-right">
-                      {value}
-                    </span>
+                    <span className="text-gray-300 text-sm w-12 text-right">{value}</span>
                   </div>
                 );
               })}
@@ -240,16 +216,14 @@ const ChartRenderer: React.FC<{ response: ChartResponse }> = ({ response }) => {
       </div>
 
       <div className="mt-4 text-xs text-gray-400">
-        Chart Type: {data.chartType} • {data.datasets.length} dataset(s) •{" "}
-        {data.labels.length} labels
+        Chart Type: {data.chartType} • {data.datasets.length} dataset(s) • {data.labels.length}{" "}
+        labels
       </div>
     </div>
   );
 };
 
-const CodeBlockRenderer: React.FC<{ response: CodeBlockResponse }> = ({
-  response,
-}) => {
+const CodeBlockRenderer: React.FC<{ response: CodeBlockResponse }> = ({ response }) => {
   const { data } = response;
 
   return (
@@ -276,26 +250,20 @@ const CodeBlockRenderer: React.FC<{ response: CodeBlockResponse }> = ({
             </button>
           )}
         </div>
-        {data.description && (
-          <p className="text-gray-400 text-sm mt-2">{data.description}</p>
-        )}
+        {data.description && <p className="text-gray-400 text-sm mt-2">{data.description}</p>}
       </div>
 
       {/* Code */}
       <div className="p-4 overflow-x-auto">
         <pre className="text-sm">
-          <code className="text-gray-100 font-mono whitespace-pre">
-            {data.code}
-          </code>
+          <code className="text-gray-100 font-mono whitespace-pre">{data.code}</code>
         </pre>
       </div>
     </div>
   );
 };
 
-const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({
-  response,
-}) => {
+const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({ response }) => {
   const { data } = response;
 
   const getGridCols = (size: string) => {
@@ -328,9 +296,7 @@ const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({
             {widget.type === "metric" && (
               <div className="text-2xl font-bold text-blue-400">
                 {widget.data.value}
-                <span className="text-sm text-gray-400 ml-2">
-                  {widget.data.unit}
-                </span>
+                <span className="text-sm text-gray-400 ml-2">{widget.data.unit}</span>
               </div>
             )}
             {widget.type === "status" && (
@@ -354,9 +320,7 @@ const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({
 };
 
 // Main Response Renderer Component
-export const ResponseRenderer: React.FC<{ response: StructuredResponse }> = ({
-  response,
-}) => {
+export const ResponseRenderer: React.FC<{ response: StructuredResponse }> = ({ response }) => {
   const renderResponse = () => {
     switch (response.type) {
       case "jira_ticket":
@@ -364,11 +328,7 @@ export const ResponseRenderer: React.FC<{ response: StructuredResponse }> = ({
 
       case "chart":
         return (
-          <Suspense
-            fallback={
-              <div className="animate-pulse bg-gray-800 rounded-lg h-64" />
-            }
-          >
+          <Suspense fallback={<div className="animate-pulse bg-gray-800 rounded-lg h-64" />}>
             <ChartRenderer response={response} />
           </Suspense>
         );
@@ -381,11 +341,7 @@ export const ResponseRenderer: React.FC<{ response: StructuredResponse }> = ({
 
       case "audio_waveform":
         return (
-          <Suspense
-            fallback={
-              <div className="animate-pulse bg-gray-800 rounded-lg h-64" />
-            }
-          >
+          <Suspense fallback={<div className="animate-pulse bg-gray-800 rounded-lg h-64" />}>
             <AudioWaveformResponse response={response} />
           </Suspense>
         );
@@ -394,11 +350,7 @@ export const ResponseRenderer: React.FC<{ response: StructuredResponse }> = ({
         return <SearchResultsResponse response={response} />;
 
       default:
-        return (
-          <div className="text-red-400">
-            Unknown response type: {(response as any).type}
-          </div>
-        );
+        return <div className="text-red-400">Unknown response type: {(response as any).type}</div>;
     }
   };
 

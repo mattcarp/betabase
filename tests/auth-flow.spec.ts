@@ -13,8 +13,7 @@ test.describe("SIAM Authentication Flow", () => {
 
     // Intercept the API call
     const responsePromise = page.waitForResponse(
-      (resp) =>
-        resp.url().includes("/api/auth/magic-link") && resp.status() === 200,
+      (resp) => resp.url().includes("/api/auth/magic-link") && resp.status() === 200
     );
 
     await page.click('button[type="submit"]');
@@ -24,9 +23,7 @@ test.describe("SIAM Authentication Flow", () => {
     expect(json.success).toBe(true);
   });
 
-  test("Main app page eventually loads without hydration errors", async ({
-    page,
-  }) => {
+  test("Main app page eventually loads without hydration errors", async ({ page }) => {
     // Set authentication in localStorage first
     await page.goto("https://siam-app.onrender.com/emergency-login.html");
     await page.evaluate(() => {
@@ -36,7 +33,7 @@ test.describe("SIAM Authentication Flow", () => {
           email: "test@example.com",
           authToken: "test-token",
           verifiedAt: new Date().toISOString(),
-        }),
+        })
       );
     });
 

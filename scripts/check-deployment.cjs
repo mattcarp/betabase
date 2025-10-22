@@ -9,8 +9,7 @@ const https = require("https");
 const { execSync } = require("child_process");
 
 const DEPLOYMENT_URL = "https://siam-app-mc.netlify.app";
-const MCP_LAMBDA_URL =
-  "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws";
+const MCP_LAMBDA_URL = "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws";
 
 async function fetchWithTimeout(url, timeout = 10000) {
   return new Promise((resolve, reject) => {
@@ -22,7 +21,7 @@ async function fetchWithTimeout(url, timeout = 10000) {
           status: res.statusCode,
           data,
           headers: res.headers,
-        }),
+        })
       );
     });
 
@@ -56,9 +55,7 @@ async function checkDeployment() {
       console.log("✅ Deployment is live");
 
       // Extract version from HTML
-      const versionMatch = deploymentResponse.data.match(
-        /v\d+\.\d+\.\d+-[a-f0-9]{7}/,
-      );
+      const versionMatch = deploymentResponse.data.match(/v\d+\.\d+\.\d+-[a-f0-9]{7}/);
       if (versionMatch) {
         const deployedVersion = versionMatch[0];
         console.log(`📦 Deployed Version: ${deployedVersion}`);

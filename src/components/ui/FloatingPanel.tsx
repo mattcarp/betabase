@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  ReactNode,
-  useCallback,
-  useEffect,
-} from "react";
+import React, { useState, useRef, ReactNode, useCallback, useEffect } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 import { X, Minimize2, Maximize2, Move, RotateCcw } from "lucide-react";
 import { cn } from "../../lib/utils";
@@ -35,12 +29,7 @@ interface FloatingPanelProps {
   initialPosition?: PanelPosition;
   initialSize?: PanelSize;
   className?: string;
-  panelType?:
-    | "transcription"
-    | "ai-insights"
-    | "system-monitor"
-    | "audio"
-    | "default";
+  panelType?: "transcription" | "ai-insights" | "system-monitor" | "audio" | "default";
   onClose?: () => void;
   onMinimize?: () => void;
   onMaximize?: () => void;
@@ -192,19 +181,14 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
       setIsDragging(false);
       setPosition({ x: data.x, y: data.y });
     },
-    [id],
+    [id]
   );
 
   // Reset panel to center
   const handleReset = useCallback(() => {
-    const centerX =
-      (window.innerWidth -
-        (typeof size.width === "number" ? size.width : 350)) /
-      2;
+    const centerX = (window.innerWidth - (typeof size.width === "number" ? size.width : 350)) / 2;
     const centerY =
-      (window.innerHeight -
-        (typeof size.height === "number" ? size.height : 250)) /
-      2;
+      (window.innerHeight - (typeof size.height === "number" ? size.height : 250)) / 2;
     setPosition({ x: centerX, y: centerY });
     setSize(initialSize);
     setIsMinimized(false);
@@ -231,7 +215,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
           "transition-all duration-200 ease-out",
           isFocused && "ring-2 ring-blue-600/50",
           isMinimized && "h-auto",
-          className,
+          className
         )}
         style={{
           width: isMinimized ? "auto" : isMaximized ? "90vw" : size.width,
@@ -248,9 +232,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
         >
           <div className="flex items-center gap-2">
             {icon && <div className="text-blue-600">{icon}</div>}
-            <h3 className="text-blue-600 text-sm font-medium select-none truncate">
-              {title}
-            </h3>
+            <h3 className="text-blue-600 text-sm font-medium select-none truncate">{title}</h3>
           </div>
 
           <div className="flex items-center gap-1">

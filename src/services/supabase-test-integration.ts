@@ -87,9 +87,7 @@ export class SupabaseTestIntegration {
   /**
    * Store test execution record
    */
-  async createTestExecution(
-    data: Omit<TestExecution, "id">,
-  ): Promise<TestExecution | null> {
+  async createTestExecution(data: Omit<TestExecution, "id">): Promise<TestExecution | null> {
     const { data: execution, error } = await this.supabase
       .from("test_executions")
       .insert(data)
@@ -109,7 +107,7 @@ export class SupabaseTestIntegration {
    */
   async updateTestExecution(
     executionId: string,
-    updates: Partial<TestExecution>,
+    updates: Partial<TestExecution>
   ): Promise<boolean> {
     const { error } = await this.supabase
       .from("test_executions")
@@ -160,14 +158,12 @@ export class SupabaseTestIntegration {
    * Store testable features discovered by Firecrawl
    */
   async storeTestableFeatures(
-    features: Omit<TestableFeature, "id" | "created_at" | "updated_at">[],
+    features: Omit<TestableFeature, "id" | "created_at" | "updated_at">[]
   ): Promise<boolean> {
-    const { error } = await this.supabase
-      .from("testable_features")
-      .upsert(features, {
-        onConflict: "app_name,feature_name",
-        ignoreDuplicates: false,
-      });
+    const { error } = await this.supabase.from("testable_features").upsert(features, {
+      onConflict: "app_name,feature_name",
+      ignoreDuplicates: false,
+    });
 
     if (error) {
       console.error("Error storing testable features:", error);
@@ -180,9 +176,7 @@ export class SupabaseTestIntegration {
   /**
    * Get testable features for an app
    */
-  async getTestableFeatures(
-    appName: string = "SIAM",
-  ): Promise<TestableFeature[]> {
+  async getTestableFeatures(appName: string = "SIAM"): Promise<TestableFeature[]> {
     const { data, error } = await this.supabase
       .from("testable_features")
       .select("*")
@@ -200,12 +194,8 @@ export class SupabaseTestIntegration {
   /**
    * Store test patterns
    */
-  async storeTestPatterns(
-    patterns: Omit<TestPattern, "id" | "created_at">[],
-  ): Promise<boolean> {
-    const { error } = await this.supabase
-      .from("test_patterns")
-      .insert(patterns);
+  async storeTestPatterns(patterns: Omit<TestPattern, "id" | "created_at">[]): Promise<boolean> {
+    const { error } = await this.supabase.from("test_patterns").insert(patterns);
 
     if (error) {
       console.error("Error storing test patterns:", error);
@@ -222,9 +212,7 @@ export class SupabaseTestIntegration {
     const { data, error } = await this.supabase
       .from("test_patterns")
       .select("*")
-      .or(
-        `pattern_name.ilike.%${query}%,description.ilike.%${query}%,tags.cs.{${query}}`,
-      )
+      .or(`pattern_name.ilike.%${query}%,description.ilike.%${query}%,tags.cs.{${query}}`)
       .limit(10);
 
     if (error) {
@@ -239,11 +227,9 @@ export class SupabaseTestIntegration {
    * Store knowledge for customer support
    */
   async storeSupportKnowledge(
-    knowledge: Omit<SupportKnowledge, "id" | "created_at">,
+    knowledge: Omit<SupportKnowledge, "id" | "created_at">
   ): Promise<boolean> {
-    const { error } = await this.supabase
-      .from("support_knowledge")
-      .insert(knowledge);
+    const { error } = await this.supabase.from("support_knowledge").insert(knowledge);
 
     if (error) {
       console.error("Error storing support knowledge:", error);
@@ -256,18 +242,13 @@ export class SupabaseTestIntegration {
   /**
    * Search support knowledge using vector similarity
    */
-  async searchSupportKnowledge(
-    query: string,
-    limit: number = 5,
-  ): Promise<SupportKnowledge[]> {
+  async searchSupportKnowledge(query: string, limit: number = 5): Promise<SupportKnowledge[]> {
     // This would use vector similarity search if embeddings are configured
     // For now, using text search
     const { data, error } = await this.supabase
       .from("support_knowledge")
       .select("*")
-      .or(
-        `title.ilike.%${query}%,content.ilike.%${query}%,category.ilike.%${query}%`,
-      )
+      .or(`title.ilike.%${query}%,content.ilike.%${query}%,category.ilike.%${query}%`)
       .order("relevance_score", { ascending: false })
       .limit(limit);
 
@@ -327,10 +308,7 @@ export class SupabaseTestIntegration {
       const successful = data.filter((e) => e.status === "completed");
       stats.successRate = (successful.length / data.length) * 100;
 
-      const totalDuration = data.reduce(
-        (sum, e) => sum + (e.duration_ms || 0),
-        0,
-      );
+      const totalDuration = data.reduce((sum, e) => sum + (e.duration_ms || 0), 0);
       stats.averageDuration = totalDuration / data.length;
 
       const failed = data.filter((e) => e.status === "failed");

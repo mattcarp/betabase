@@ -6,15 +6,13 @@ const openai = new OpenAI({
 });
 
 // Get Assistant ID from environment variable
-const ASSISTANT_ID =
-  process.env.OPENAI_ASSISTANT_ID || "asst_VvOHL1c4S6YapYKun4mY29fM";
+const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID || "asst_VvOHL1c4S6YapYKun4mY29fM";
 
 export async function GET(request: NextRequest) {
   try {
     // Get the assistant's vector store
     const assistant = await openai.beta.assistants.retrieve(ASSISTANT_ID);
-    const vectorStoreId =
-      assistant.tool_resources?.file_search?.vector_store_ids?.[0];
+    const vectorStoreId = assistant.tool_resources?.file_search?.vector_store_ids?.[0];
 
     // List all files with purpose "assistants"
     // In SDK v5, files uploaded with purpose "assistants" are available to the assistant
@@ -42,7 +40,7 @@ export async function GET(request: NextRequest) {
         error: "Failed to list vector store files",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -54,10 +52,7 @@ export async function DELETE(request: NextRequest) {
     const fileId = searchParams.get("fileId");
 
     if (!fileId) {
-      return NextResponse.json(
-        { error: "File ID is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "File ID is required" }, { status: 400 });
     }
 
     console.log("Deleting file:", fileId);
@@ -76,7 +71,7 @@ export async function DELETE(request: NextRequest) {
         error: "Failed to delete file",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
