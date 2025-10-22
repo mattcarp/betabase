@@ -223,5 +223,4 @@ For questions or issues:
 
 ---
 
-*Integration completed with [Claude Code](https://claude.com/claude-code)*
 *Next: Test chat responses and proceed to Phase 3 (visual display)*
