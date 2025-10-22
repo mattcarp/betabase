@@ -297,5 +297,4 @@ After implementation:
 
 ---
 
-*Generated with [Claude Code](https://claude.com/claude-code)*
 *Next: Execute `./scripts/capture-all-aoma-screenshots.sh`*
