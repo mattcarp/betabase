@@ -37,9 +37,7 @@ type FormFieldContextValue<
   name: TName;
 };
 
-const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue,
-);
+const FormFieldContext = React.createContext<FormFieldContextValue>({} as FormFieldContextValue);
 
 /**
  * FormField Component - handles field registration
@@ -87,9 +85,7 @@ type FormItemContextValue = {
   id: string;
 };
 
-const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue,
-);
+const FormItemContext = React.createContext<FormItemContextValue>({} as FormItemContextValue);
 
 /**
  * FormItem Component - container for form field
@@ -118,7 +114,7 @@ const FormItem = React.forwardRef<
           "mac-form-field", // MAC Design System form field
           variantClasses[variant],
           "transition-all duration-200", // MAC standard transition
-          className,
+          className
         )}
         {...props}
       />
@@ -146,7 +142,7 @@ const FormLabel = React.forwardRef<
         "text-sm font-light text-[var(--mac-text-primary)]",
         "transition-colors duration-200",
         error && "text-red-500",
-        className,
+        className
       )}
       htmlFor={formItemId}
       {...props}
@@ -170,18 +166,13 @@ const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
   React.ComponentPropsWithoutRef<typeof Slot>
 >(({ ...props }, ref) => {
-  const { error, formItemId, formDescriptionId, formMessageId } =
-    useFormField();
+  const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
 
   return (
     <Slot
       ref={ref}
       id={formItemId}
-      aria-describedby={
-        !error
-          ? formDescriptionId
-          : `${formDescriptionId} ${formMessageId}`
-      }
+      aria-describedby={!error ? formDescriptionId : `${formDescriptionId} ${formMessageId}`}
       aria-invalid={!!error}
       aria-required={props["aria-required"]}
       data-state={error ? "error" : "valid"}
@@ -210,7 +201,7 @@ const FormDescription = React.forwardRef<
         "text-xs text-[var(--mac-text-muted)]",
         "mt-1.5 font-light",
         "transition-opacity duration-200",
-        className,
+        className
       )}
       {...props}
     />
@@ -262,7 +253,7 @@ const FormMessage = React.forwardRef<
         "text-xs font-light flex items-center gap-1.5 mt-1.5",
         typeConfig[type].className,
         "transition-all duration-200",
-        className,
+        className
       )}
       role={type === "error" ? "alert" : "status"}
       aria-live="polite"
@@ -292,7 +283,7 @@ const FormFieldset = React.forwardRef<
       className={cn(
         "mac-glass p-6 rounded-lg border border-mac-utility-border",
         "space-y-4",
-        className,
+        className
       )}
       {...props}
     />
@@ -303,22 +294,17 @@ FormFieldset.displayName = "FormFieldset";
 /**
  * FormLegend Component - fieldset legend
  */
-const FormLegend = React.forwardRef<
-  HTMLLegendElement,
-  React.HTMLAttributes<HTMLLegendElement>
->(({ className, ...props }, ref) => {
-  return (
-    <legend
-      ref={ref}
-      className={cn(
-        "text-lg font-light text-mac-text-primary",
-        "px-2 -ml-2",
-        className,
-      )}
-      {...props}
-    />
-  );
-});
+const FormLegend = React.forwardRef<HTMLLegendElement, React.HTMLAttributes<HTMLLegendElement>>(
+  ({ className, ...props }, ref) => {
+    return (
+      <legend
+        ref={ref}
+        className={cn("text-lg font-light text-mac-text-primary", "px-2 -ml-2", className)}
+        {...props}
+      />
+    );
+  }
+);
 FormLegend.displayName = "FormLegend";
 
 // Export all components and utilities

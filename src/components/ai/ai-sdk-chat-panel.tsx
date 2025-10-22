@@ -43,17 +43,17 @@ import { motion, AnimatePresence } from "framer-motion";
 // import { toast } from "sonner";
 const toast = {
   success: (msg: string, options?: any) => {
-    console.log('✅', msg);
-    if (options?.description) console.log('  ', options.description);
+    console.log("✅", msg);
+    if (options?.description) console.log("  ", options.description);
   },
   error: (msg: string, options?: any) => {
-    console.error('❌', msg);
-    if (options?.description) console.error('  ', options.description);
+    console.error("❌", msg);
+    if (options?.description) console.error("  ", options.description);
   },
   info: (msg: string, options?: any) => {
-    console.info('ℹ️', msg);
-    if (options?.description) console.info('  ', options.description);
-  }
+    console.info("ℹ️", msg);
+    if (options?.description) console.info("  ", options.description);
+  },
 };
 
 // Import ALL AI SDK Elements for modern chat experience
@@ -88,28 +88,13 @@ import {
   PromptInputModelSelectItem,
   PromptInputModelSelectValue,
 } from "../ai-elements/prompt-input";
-import {
-  Reasoning,
-  ReasoningTrigger,
-  ReasoningContent,
-} from "../ai-elements/reasoning";
+import { Reasoning, ReasoningTrigger, ReasoningContent } from "../ai-elements/reasoning";
 import { Response } from "../ai-elements/response";
 import { AOMAResponse } from "./AOMAResponse";
-import {
-  Sources,
-  SourcesTrigger,
-  SourcesContent,
-  Source,
-} from "../ai-elements/source";
+import { Sources, SourcesTrigger, SourcesContent, Source } from "../ai-elements/source";
 import { Suggestions, Suggestion } from "../ai-elements/suggestion";
 import { Task, TaskTrigger, TaskContent, TaskItem } from "../ai-elements/task";
-import {
-  Tool,
-  ToolHeader,
-  ToolContent,
-  ToolInput,
-  ToolOutput,
-} from "../ai-elements/tool";
+import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from "../ai-elements/tool";
 import {
   WebPreview,
   WebPreviewNavigation,
@@ -179,9 +164,9 @@ export function AiSdkChatPanel({
   const [currentBranch, setCurrentBranch] = useState<string | null>(null);
   const [activeTasks, setActiveTasks] = useState<any[]>([]);
   const [sources, setSources] = useState<any[]>([]);
-  const [uploadedFiles, setUploadedFiles] = useState<
-    Array<{ fileId: string; filename: string }>
-  >([]);
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{ fileId: string; filename: string }>>(
+    []
+  );
   const [currentProgress, setCurrentProgress] = useState<{
     phase: string;
     status: "pending" | "in-progress" | "completed" | "failed";
@@ -193,11 +178,11 @@ export function AiSdkChatPanel({
   const [manualLoading, setManualLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false); // Simpler loading state
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
-  
+
   // Voice feature states - define before using in hooks
   const [isTTSEnabled, setIsTTSEnabled] = useState(false);
   const [selectedVoiceId, setSelectedVoiceId] = useState("21m00Tcm4TlvDq8ikWAM"); // Rachel as default
-  
+
   // Voice integration hooks
   const {
     speak,
@@ -239,20 +224,22 @@ export function AiSdkChatPanel({
   });
 
   // Use conversationId prop or create fallback
-  const chatId = conversationId || (() => {
-    if (typeof window === "undefined") {
-      return "siam-default";
-    }
+  const chatId =
+    conversationId ||
+    (() => {
+      if (typeof window === "undefined") {
+        return "siam-default";
+      }
 
-    const existingId = window.localStorage.getItem("siam.chatId");
-    if (existingId) {
-      return existingId;
-    }
+      const existingId = window.localStorage.getItem("siam.chatId");
+      if (existingId) {
+        return existingId;
+      }
 
-    const newId = crypto.randomUUID();
-    window.localStorage.setItem("siam.chatId", newId);
-    return newId;
-  })();
+      const newId = crypto.randomUUID();
+      window.localStorage.setItem("siam.chatId", newId);
+      return newId;
+    })();
 
   const availableModels = [
     { id: "gpt-5", name: "GPT-5" },
@@ -270,64 +257,64 @@ export function AiSdkChatPanel({
     // The /api/chat endpoint integrates with AOMA's LangChain orchestration
     // which brings together multiple knowledge sources (VITAL requirement per user)
     console.log("🎯 Using AOMA-MESH-MCP orchestrated endpoint for model:", selectedModel);
-    
+
     // Never use vercel endpoint or bypass AOMA
     if (api && api !== "/api/chat-vercel" && api !== "/api/gpt5-responses" && api !== "") {
       // If a custom API is provided that's not Vercel or GPT5-direct, use it
       return api;
     }
-    
+
     // ALWAYS use /api/chat for ALL models to ensure AOMA orchestration
     return "/api/chat";
   };
 
   // CRITICAL: Use the actual endpoint dynamically
   const currentApiEndpoint = getApiEndpoint();
-  
+
   // Debug logging
   console.log("🎯 Chat configuration:", {
     selectedModel,
     currentApiEndpoint,
-    shouldUseGPT5: selectedModel.toLowerCase().includes('gpt-5'),
-    apiProp: api
+    shouldUseGPT5: selectedModel.toLowerCase().includes("gpt-5"),
+    apiProp: api,
   });
-  
+
   // Override fetch to ensure AOMA orchestration
   useEffect(() => {
     console.log("🎯 Ensuring AOMA orchestration for endpoint:", currentApiEndpoint);
-    
+
     // CRITICAL: Override fetch to intercept wrong endpoints
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const originalFetch = window.fetch;
-      window.fetch = async function(...args) {
+      window.fetch = async function (...args) {
         let url = args[0];
         const options = args[1];
-        
+
         // Intercept and redirect wrong endpoints to ensure AOMA orchestration
-        if (typeof url === 'string') {
+        if (typeof url === "string") {
           // CRITICAL: ALL requests must go through AOMA-MESH-MCP (/api/chat)
-          if (url === '/api/chat-vercel' || url === '/api/gpt5-responses') {
+          if (url === "/api/chat-vercel" || url === "/api/gpt5-responses") {
             console.log(`🚫 Intercepting endpoint that bypasses AOMA: ${url}`);
             console.log(`✅ Redirecting to AOMA-orchestrated endpoint: /api/chat`);
-            url = '/api/chat';
+            url = "/api/chat";
             args[0] = url;
           }
         }
-        
+
         return originalFetch.apply(this, args);
       };
-      
+
       // Cleanup on unmount
       return () => {
         window.fetch = originalFetch;
       };
     }
   }, [currentApiEndpoint, selectedModel]);
-  
+
   const chatResult = useChat({
     api: currentApiEndpoint, // Use the calculated endpoint directly (v5 still supports this)
     id: chatId,
-    messages: (initialMessages || []).filter(m => m.content != null && m.content !== ''), // CRITICAL: Filter null content
+    messages: (initialMessages || []).filter((m) => m.content != null && m.content !== ""), // CRITICAL: Filter null content
     onError: (err) => {
       console.error("Chat error:", err);
       console.log("Error type:", typeof err);
@@ -349,7 +336,7 @@ export function AiSdkChatPanel({
 
       // Parse the error message - check different possible structures
       let errorMessage = err.message || (err as any).error?.message || err.toString();
-      
+
       // Try to parse JSON error messages from AI SDK streaming errors
       try {
         const parsedError = JSON.parse(errorMessage);
@@ -375,10 +362,7 @@ export function AiSdkChatPanel({
           description: "Please check your OpenAI API key configuration.",
           duration: 5000,
         });
-      } else if (
-        errorMessage.includes("network") ||
-        errorMessage.includes("fetch")
-      ) {
+      } else if (errorMessage.includes("network") || errorMessage.includes("fetch")) {
         toast.error("Connection Error", {
           description:
             "Unable to connect to the AI service. Please check your internet connection.",
@@ -407,15 +391,19 @@ export function AiSdkChatPanel({
         clearInterval((window as any).currentProgressInterval);
         (window as any).currentProgressInterval = null;
       }
-      
+
       // Show completion state briefly
-      setCurrentProgress((prev) => prev ? {
-        ...prev,
-        status: "completed",
-        progress: 100,
-        title: "Response complete!",
-      } : null);
-      
+      setCurrentProgress((prev) =>
+        prev
+          ? {
+              ...prev,
+              status: "completed",
+              progress: 100,
+              title: "Response complete!",
+            }
+          : null
+      );
+
       // Clear progress indicator after a delay
       setTimeout(() => {
         setCurrentProgress(null);
@@ -448,23 +436,23 @@ export function AiSdkChatPanel({
       console.error("[SIAM] sendMessage not available from useChat hook");
       return;
     }
-    
+
     // AI SDK v5 uses 'text' property, older versions use 'content'
     const messageText = message?.text || message?.content;
-    
+
     // Validate message has content
-    if (!message || (messageText == null || messageText === '')) {
+    if (!message || messageText == null || messageText === "") {
       console.error("[SIAM] Attempted to send message with null/empty content:", message);
       toast.error("Cannot send empty message");
       return;
     }
-    
+
     // Ensure text is a string - AI SDK v5 format
     const validatedMessage = {
       ...message,
-      text: String(messageText)
+      text: String(messageText),
     };
-    
+
     console.log("[SIAM] Sending validated message:", validatedMessage);
     return originalSendMessage(validatedMessage);
   };
@@ -485,8 +473,7 @@ export function AiSdkChatPanel({
         });
       } else {
         toast.error("Chat Error", {
-          description:
-            errorMessage || "Something went wrong. Please try again.",
+          description: errorMessage || "Something went wrong. Please try again.",
           duration: 5000,
         });
       }
@@ -533,10 +520,7 @@ export function AiSdkChatPanel({
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
       // If last message is from assistant and we were processing, streaming has started
-      if (
-        lastMessage?.role === "assistant" &&
-        (isProcessing || manualLoading)
-      ) {
+      if (lastMessage?.role === "assistant" && (isProcessing || manualLoading)) {
         setHasStartedStreaming(true);
         // Don't clear loading states immediately - let the progress indicator continue
         // The onFinish handler will clear everything when done
@@ -546,7 +530,7 @@ export function AiSdkChatPanel({
 
   // Create a local state for input since setInput might not exist in v5
   const [localInput, setLocalInput] = useState("");
-  
+
   // State for storing and displaying the last prompt
   const [lastPrompt, setLastPrompt] = useState<string>("");
 
@@ -556,7 +540,7 @@ export function AiSdkChatPanel({
       onMessagesChange(messages);
     }
   }, [messages, onMessagesChange]);
-  
+
   // Auto-speak AI responses when TTS is enabled
   useEffect(() => {
     if (isTTSEnabled && messages.length > 0) {
@@ -610,7 +594,7 @@ export function AiSdkChatPanel({
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector(
-        "[data-radix-scroll-area-viewport]",
+        "[data-radix-scroll-area-viewport]"
       );
       if (scrollContainer) {
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
@@ -626,10 +610,7 @@ export function AiSdkChatPanel({
     // Persist messages for basic chat memory across reloads
     try {
       if (typeof window !== "undefined") {
-        window.localStorage.setItem(
-          `siam.chat.${chatId}`,
-          JSON.stringify(messages),
-        );
+        window.localStorage.setItem(`siam.chat.${chatId}`, JSON.stringify(messages));
       }
     } catch {}
   }, [messages, chatId]);
@@ -645,14 +626,14 @@ export function AiSdkChatPanel({
             setMessages(saved);
           }
         }
-        
+
         // Restore last prompt for this chat session
         const lastPromptRaw = window.localStorage.getItem(`siam.lastPrompt.${chatId}`);
         if (lastPromptRaw) {
           const savedPrompt = JSON.parse(lastPromptRaw);
           if (savedPrompt && savedPrompt.text && savedPrompt.timestamp) {
             // Only show prompts from the last 24 hours
-            const dayAgo = Date.now() - (24 * 60 * 60 * 1000);
+            const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
             if (savedPrompt.timestamp > dayAgo) {
               setLastPrompt(savedPrompt.text);
             }
@@ -674,49 +655,60 @@ export function AiSdkChatPanel({
       // Test toast - remove this after testing
       if (suggestion.includes("capabilities")) {
         toast.info("Test Toast", {
-          description:
-            "This is a test notification to verify Sonner is working.",
+          description: "This is a test notification to verify Sonner is working.",
         });
       }
-      
+
       // Set loading states for progress indicator
       setManualLoading(true);
       setIsProcessing(true);
-      
+
       // Initialize progress tracking for suggestions with context-aware title
       const getProgressTitle = (message: string) => {
         // Extract key intent from the message for better task descriptions
         const lowerMessage = message.toLowerCase();
-        
+
         if (lowerMessage.includes("code") || lowerMessage.includes("implement")) {
           return "Analyzing code requirements and preparing implementation strategy";
-        } else if (lowerMessage.includes("fix") || lowerMessage.includes("debug") || lowerMessage.includes("error")) {
+        } else if (
+          lowerMessage.includes("fix") ||
+          lowerMessage.includes("debug") ||
+          lowerMessage.includes("error")
+        ) {
           return "Diagnosing issues and formulating solutions";
         } else if (lowerMessage.includes("analyze") || lowerMessage.includes("review")) {
           return "Performing comprehensive analysis of your request";
-        } else if (lowerMessage.includes("explain") || lowerMessage.includes("what") || lowerMessage.includes("how")) {
+        } else if (
+          lowerMessage.includes("explain") ||
+          lowerMessage.includes("what") ||
+          lowerMessage.includes("how")
+        ) {
           return "Researching and preparing detailed explanation";
         } else if (lowerMessage.includes("test") || lowerMessage.includes("verify")) {
           return "Setting up test scenarios and validation checks";
         } else if (lowerMessage.includes("optimize") || lowerMessage.includes("improve")) {
           return "Analyzing optimization opportunities and best practices";
-        } else if (lowerMessage.includes("create") || lowerMessage.includes("generate") || lowerMessage.includes("build")) {
+        } else if (
+          lowerMessage.includes("create") ||
+          lowerMessage.includes("generate") ||
+          lowerMessage.includes("build")
+        ) {
           return "Designing architecture and generating components";
         } else {
           return "Understanding your request and preparing comprehensive response";
         }
       };
-      
+
       const initialProgress = {
         phase: "initializing",
         status: "in-progress" as const,
         title: getProgressTitle(suggestion),
         progress: 5,
       };
-      
+
       console.log("📊 Setting initial progress from suggestion:", initialProgress);
       setCurrentProgress(initialProgress);
-      
+
       // Start progress simulation with more descriptive phases
       const progressInterval = setInterval(() => {
         setCurrentProgress((prev) => {
@@ -724,12 +716,12 @@ export function AiSdkChatPanel({
             clearInterval(progressInterval);
             return prev;
           }
-          
+
           // Update progress based on phase with more descriptive titles
           let newProgress = prev.progress;
           let newPhase = prev.phase;
           let newTitle = prev.title;
-          
+
           if (prev.progress < 20) {
             newProgress = prev.progress + 5;
             newPhase = "connecting";
@@ -755,7 +747,7 @@ export function AiSdkChatPanel({
             newPhase = "formatting";
             newTitle = "Formatting response with code blocks, citations, and structure";
           }
-          
+
           return {
             ...prev,
             phase: newPhase,
@@ -764,22 +756,22 @@ export function AiSdkChatPanel({
           };
         });
       }, 1000);
-      
+
       // Store interval ID for cleanup
       (window as any).currentProgressInterval = progressInterval;
-      
+
       // Store the prompt for display
       try {
         if (typeof window !== "undefined") {
           const promptData = {
             text: suggestion.trim(),
-            timestamp: Date.now()
+            timestamp: Date.now(),
           };
           window.localStorage.setItem(`siam.lastPrompt.${chatId}`, JSON.stringify(promptData));
           setLastPrompt(suggestion.trim());
         }
       } catch {}
-      
+
       // Set input and trigger submit using AI SDK's built-in flow
       // Always set local input first
       setLocalInput(suggestion);
@@ -853,13 +845,11 @@ export function AiSdkChatPanel({
       console.log("  - Model:", selectedModel);
       console.log("  - Endpoint:", currentApiEndpoint);
       console.log("  - Chat ID:", chatId);
-      
+
       // Include uploaded files context if any
       let content = messageToSend;
       if (uploadedFiles.length > 0) {
-        const filesList = uploadedFiles
-          .map((f) => `- ${f.filename} (ID: ${f.fileId})`)
-          .join("\n");
+        const filesList = uploadedFiles.map((f) => `- ${f.filename} (ID: ${f.fileId})`).join("\n");
         content = `${messageToSend}\n\n[Attached files in AOMA knowledge base:\n${filesList}]`;
       }
 
@@ -871,33 +861,45 @@ export function AiSdkChatPanel({
       const getProgressTitle = (message: string) => {
         // Extract key intent from the message for better task descriptions
         const lowerMessage = message.toLowerCase();
-        
+
         if (lowerMessage.includes("code") || lowerMessage.includes("implement")) {
           return "Analyzing code requirements and preparing implementation strategy";
-        } else if (lowerMessage.includes("fix") || lowerMessage.includes("debug") || lowerMessage.includes("error")) {
+        } else if (
+          lowerMessage.includes("fix") ||
+          lowerMessage.includes("debug") ||
+          lowerMessage.includes("error")
+        ) {
           return "Diagnosing issues and formulating solutions";
         } else if (lowerMessage.includes("analyze") || lowerMessage.includes("review")) {
           return "Performing comprehensive analysis of your request";
-        } else if (lowerMessage.includes("explain") || lowerMessage.includes("what") || lowerMessage.includes("how")) {
+        } else if (
+          lowerMessage.includes("explain") ||
+          lowerMessage.includes("what") ||
+          lowerMessage.includes("how")
+        ) {
           return "Researching and preparing detailed explanation";
         } else if (lowerMessage.includes("test") || lowerMessage.includes("verify")) {
           return "Setting up test scenarios and validation checks";
         } else if (lowerMessage.includes("optimize") || lowerMessage.includes("improve")) {
           return "Analyzing optimization opportunities and best practices";
-        } else if (lowerMessage.includes("create") || lowerMessage.includes("generate") || lowerMessage.includes("build")) {
+        } else if (
+          lowerMessage.includes("create") ||
+          lowerMessage.includes("generate") ||
+          lowerMessage.includes("build")
+        ) {
           return "Designing architecture and generating components";
         } else {
           return "Understanding your request and preparing comprehensive response";
         }
       };
-      
+
       const initialProgress = {
         phase: "initializing",
         status: "in-progress" as const,
         title: getProgressTitle(messageToSend),
         progress: 5,
       };
-      
+
       console.log("📊 Setting initial progress:", initialProgress);
       setCurrentProgress(initialProgress);
 
@@ -908,12 +910,12 @@ export function AiSdkChatPanel({
             clearInterval(progressInterval);
             return prev;
           }
-          
+
           // Update progress based on phase with more descriptive titles
           let newProgress = prev.progress;
           let newPhase = prev.phase;
           let newTitle = prev.title;
-          
+
           if (prev.progress < 20) {
             newProgress = prev.progress + 5;
             newPhase = "connecting";
@@ -939,7 +941,7 @@ export function AiSdkChatPanel({
             newPhase = "formatting";
             newTitle = "Formatting response with code blocks, citations, and structure";
           }
-          
+
           return {
             ...prev,
             phase: newPhase,
@@ -957,7 +959,7 @@ export function AiSdkChatPanel({
         if (typeof window !== "undefined") {
           const promptData = {
             text: messageToSend.trim(),
-            timestamp: Date.now()
+            timestamp: Date.now(),
           };
           window.localStorage.setItem(`siam.lastPrompt.${chatId}`, JSON.stringify(promptData));
           setLastPrompt(messageToSend.trim());
@@ -991,8 +993,9 @@ export function AiSdkChatPanel({
         if (!response.ok) {
           // Handle rate limiting gracefully
           if (response.status === 429) {
-            const rateLimitMessage = "⚠️ Rate limit reached. Please wait a moment before sending another message.";
-            setMessages(prev => [
+            const rateLimitMessage =
+              "⚠️ Rate limit reached. Please wait a moment before sending another message.";
+            setMessages((prev) => [
               ...prev,
               {
                 id: `error-${Date.now()}`,
@@ -1021,7 +1024,7 @@ export function AiSdkChatPanel({
           if (done) break;
 
           const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split("\n").filter(line => line.trim());
+          const lines = chunk.split("\n").filter((line) => line.trim());
 
           for (const line of lines) {
             // Handle SSE format: "data: {json}"
@@ -1036,14 +1039,17 @@ export function AiSdkChatPanel({
                 if (json.type === "text-delta" && json.delta) {
                   assistantContent += json.delta;
                   // Update assistant message in real-time
-                  setMessages(prev => {
-                    const withoutLastAssistant = prev.filter(m => m.id !== assistantMessageId);
-                    return [...withoutLastAssistant, {
-                      id: assistantMessageId,
-                      role: "assistant" as const,
-                      content: assistantContent,
-                      createdAt: new Date(),
-                    }];
+                  setMessages((prev) => {
+                    const withoutLastAssistant = prev.filter((m) => m.id !== assistantMessageId);
+                    return [
+                      ...withoutLastAssistant,
+                      {
+                        id: assistantMessageId,
+                        role: "assistant" as const,
+                        content: assistantContent,
+                        createdAt: new Date(),
+                      },
+                    ];
                   });
                 }
               } catch (parseError) {
@@ -1060,12 +1066,16 @@ export function AiSdkChatPanel({
           (window as any).currentProgressInterval = null;
         }
 
-        setCurrentProgress((prev) => prev ? {
-          ...prev,
-          status: "completed",
-          progress: 100,
-          title: "Response complete!",
-        } : null);
+        setCurrentProgress((prev) =>
+          prev
+            ? {
+                ...prev,
+                status: "completed",
+                progress: 100,
+                title: "Response complete!",
+              }
+            : null
+        );
 
         setTimeout(() => {
           setCurrentProgress(null);
@@ -1094,7 +1104,7 @@ export function AiSdkChatPanel({
       case "copy":
         const message = messages.find((m) => m.id === messageId);
         if (message) {
-          const messageContent = (message as any).content || '';
+          const messageContent = (message as any).content || "";
           navigator.clipboard.writeText(messageContent);
         }
         break;
@@ -1134,9 +1144,7 @@ export function AiSdkChatPanel({
             name={isUser ? userName : botName}
             className={cn(
               "ring-2 transition-all duration-200",
-              isUser
-                ? "ring-blue-200 dark:ring-blue-800"
-                : "ring-emerald-200 dark:ring-emerald-800",
+              isUser ? "ring-blue-200 dark:ring-blue-800" : "ring-emerald-200 dark:ring-emerald-800"
             )}
           />
 
@@ -1147,7 +1155,7 @@ export function AiSdkChatPanel({
               "transition-all duration-200 hover:shadow-md",
               isUser
                 ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white"
-                : "bg-background/80 hover:bg-background/90",
+                : "bg-background/80 hover:bg-background/90"
             )}
           >
             {/* Typing indicator for streaming */}
@@ -1182,9 +1190,7 @@ export function AiSdkChatPanel({
                       <Source
                         key={idx}
                         href={source.url}
-                        title={
-                          source.title || source.name || `Source ${idx + 1}`
-                        }
+                        title={source.title || source.name || `Source ${idx + 1}`}
                         className="text-muted-foreground hover:text-foreground transition-colors"
                       />
                     ))}
@@ -1199,7 +1205,7 @@ export function AiSdkChatPanel({
                 "prose prose-sm max-w-none",
                 isUser
                   ? "prose-invert [&>*]:text-white"
-                  : "prose-invert [&>*]:text-zinc-100 [&>p]:text-zinc-100 [&>div]:text-zinc-100",
+                  : "prose-invert [&>*]:text-zinc-100 [&>p]:text-zinc-100 [&>div]:text-zinc-100"
               )}
             >
               {/* Handle AI SDK v5 message parts or fallback to content */}
@@ -1209,7 +1215,7 @@ export function AiSdkChatPanel({
                     // Check if this is an AOMA response with sources
                     const hasAOMAMarkers = /\[\d+\]/.test(part.text);
                     const aomaMetadata = message.metadata?.aoma;
-                    
+
                     if (!isUser && (hasAOMAMarkers || aomaMetadata?.sources)) {
                       return (
                         <AOMAResponse
@@ -1220,12 +1226,9 @@ export function AiSdkChatPanel({
                         />
                       );
                     }
-                    
+
                     return (
-                      <Response
-                        key={index}
-                        className={isUser ? "[&>*]:text-white" : ""}
-                      >
+                      <Response key={index} className={isUser ? "[&>*]:text-white" : ""}>
                         {part.text}
                       </Response>
                     );
@@ -1302,10 +1305,7 @@ export function AiSdkChatPanel({
                   Tool Executions
                 </div>
                 {message.toolCalls.map((tool: any, idx: number) => (
-                  <Tool
-                    key={idx}
-                    className="border border-border/30 rounded-lg bg-muted/20"
-                  >
+                  <Tool key={idx} className="border border-border/30 rounded-lg bg-muted/20">
                     <ToolHeader
                       type={tool.name || `Tool ${idx + 1}`}
                       state={
@@ -1324,9 +1324,7 @@ export function AiSdkChatPanel({
                         output={tool.result}
                         errorText={
                           tool.error ||
-                          (tool.status === "error"
-                            ? "Tool execution failed"
-                            : undefined)
+                          (tool.status === "error" ? "Tool execution failed" : undefined)
                         }
                       />
                     </ToolContent>
@@ -1343,21 +1341,14 @@ export function AiSdkChatPanel({
                   Active Tasks
                 </div>
                 {message.tasks.map((task: any, idx: number) => (
-                  <Task
-                    key={idx}
-                    className="border border-border/30 rounded-lg bg-muted/20 p-3"
-                  >
+                  <Task key={idx} className="border border-border/30 rounded-lg bg-muted/20 p-3">
                     <TaskTrigger title={task.title || `Task ${idx + 1}`} />
                     <TaskContent>
                       <TaskItem>
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm">
-                            Status: {task.status || "pending"}
-                          </span>
+                          <span className="text-sm">Status: {task.status || "pending"}</span>
                           {task.progress !== undefined && (
-                            <span className="text-xs text-muted-foreground">
-                              {task.progress}%
-                            </span>
+                            <span className="text-xs text-muted-foreground">{task.progress}%</span>
                           )}
                         </div>
                         {task.progress !== undefined && (
@@ -1371,9 +1362,7 @@ export function AiSdkChatPanel({
                           </div>
                         )}
                         {task.description && (
-                          <p className="text-xs text-muted-foreground mt-2">
-                            {task.description}
-                          </p>
+                          <p className="text-xs text-muted-foreground mt-2">{task.description}</p>
                         )}
                       </TaskItem>
                     </TaskContent>
@@ -1432,7 +1421,7 @@ export function AiSdkChatPanel({
                 <div
                   className={cn(
                     "grid gap-3 rounded-lg overflow-hidden",
-                    message.images.length === 1 ? "grid-cols-1" : "grid-cols-2",
+                    message.images.length === 1 ? "grid-cols-1" : "grid-cols-2"
                   )}
                 >
                   {message.images.map((img: string, idx: number) => (
@@ -1452,16 +1441,13 @@ export function AiSdkChatPanel({
               <span
                 className={cn(
                   "text-xs opacity-60",
-                  isUser ? "text-white/70" : "text-muted-foreground",
+                  isUser ? "text-white/70" : "text-muted-foreground"
                 )}
               >
-                {new Date(message.createdAt || Date.now()).toLocaleTimeString(
-                  [],
-                  {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  },
-                )}
+                {new Date(message.createdAt || Date.now()).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </span>
 
               {/* Message actions for assistant messages */}
@@ -1518,9 +1504,7 @@ export function AiSdkChatPanel({
                 <div className="border border-border/30 rounded-lg bg-muted/20 p-3">
                   <Branch
                     defaultBranch={0}
-                    onBranchChange={(branchIndex) =>
-                      console.log("Selected branch:", branchIndex)
-                    }
+                    onBranchChange={(branchIndex) => console.log("Selected branch:", branchIndex)}
                   >
                     <BranchSelector from="assistant" className="mb-2">
                       <BranchPrevious />
@@ -1529,10 +1513,7 @@ export function AiSdkChatPanel({
                     </BranchSelector>
                     <BranchMessages>
                       {message.branches.map((branch: any, idx: number) => (
-                        <div
-                          key={idx}
-                          className="text-sm text-muted-foreground"
-                        >
+                        <div key={idx} className="text-sm text-muted-foreground">
                           {branch.content || `Alternative response ${idx + 1}`}
                         </div>
                       ))}
@@ -1566,18 +1547,11 @@ export function AiSdkChatPanel({
     );
   };
 
-  const isMaxMessagesReached = maxMessages
-    ? messages.length >= maxMessages
-    : false;
+  const isMaxMessagesReached = maxMessages ? messages.length >= maxMessages : false;
 
   return (
     <div
-      className={cn(
-        "flex flex-col flex-1 min-h-0",
-        "bg-zinc-950",
-        "overflow-hidden",
-        className,
-      )}
+      className={cn("flex flex-col flex-1 min-h-0", "bg-zinc-950", "overflow-hidden", className)}
     >
       {/* Modern Header - Only show if showHeader is true */}
       {showHeader && (
@@ -1587,19 +1561,14 @@ export function AiSdkChatPanel({
             <div className="flex items-center gap-4">
               <SiamLogo size="sm" />
               <div>
-                <h1 className="text-xl font-light text-white tracking-tight">
-                  {title}
-                </h1>
+                <h1 className="text-xl font-light text-white tracking-tight">{title}</h1>
                 <p className="text-sm text-muted-foreground">{description}</p>
               </div>
             </div>
 
             {/* Control Panel */}
             <div className="flex items-center gap-2">
-              <Badge
-                variant="secondary"
-                className="text-xs font-medium px-2 py-1"
-              >
+              <Badge variant="secondary" className="text-xs font-medium px-2 py-1">
                 <MessageCircle className="w-3 h-3 mr-1" />
                 {messages.length}
               </Badge>
@@ -1633,7 +1602,7 @@ export function AiSdkChatPanel({
                   onClick={() => setShowReasoning(!showReasoning)}
                   className={cn(
                     "h-8 w-8 transition-colors",
-                    showReasoning ? "bg-muted text-primary" : "hover:bg-muted/50",
+                    showReasoning ? "bg-muted text-primary" : "hover:bg-muted/50"
                   )}
                   title={showReasoning ? "Hide reasoning" : "Show reasoning"}
                 >
@@ -1672,18 +1641,14 @@ export function AiSdkChatPanel({
                     Welcome to The Betabase
                   </h2>
                   <p className="text-lg font-light text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                    Ready to assist you with advanced AI capabilities, code
-                    analysis, creative tasks, and intelligent problem-solving.
-                    Again, don't be a dick.
+                    Ready to assist you with advanced AI capabilities, code analysis, creative
+                    tasks, and intelligent problem-solving. Again, don't be a dick.
                   </p>
                 </motion.div>
 
                 {/* Enhanced Suggestions */}
                 {showSuggestions &&
-                  (dynamicSuggestions.length > 0
-                    ? dynamicSuggestions
-                    : suggestions
-                  ).length > 0 && (
+                  (dynamicSuggestions.length > 0 ? dynamicSuggestions : suggestions).length > 0 && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -1697,24 +1662,23 @@ export function AiSdkChatPanel({
                         </h3>
                       </div>
                       <div className="grid grid-cols-2 gap-3 max-w-3xl mx-auto w-full">
-                        {(dynamicSuggestions.length > 0
-                          ? dynamicSuggestions
-                          : suggestions
-                        ).map((suggestion, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 * index, duration: 0.4 }}
-                            className="w-full"
-                          >
-                            <Suggestion
-                              suggestion={suggestion}
-                              onClick={handleSuggestionClick}
-                              className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm h-auto whitespace-normal py-3 px-4"
-                            />
-                          </motion.div>
-                        ))}
+                        {(dynamicSuggestions.length > 0 ? dynamicSuggestions : suggestions).map(
+                          (suggestion, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.1 * index, duration: 0.4 }}
+                              className="w-full"
+                            >
+                              <Suggestion
+                                suggestion={suggestion}
+                                onClick={handleSuggestionClick}
+                                className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm h-auto whitespace-normal py-3 px-4"
+                              />
+                            </motion.div>
+                          )
+                        )}
                       </div>
                     </motion.div>
                   )}
@@ -1725,15 +1689,15 @@ export function AiSdkChatPanel({
                 <div className="space-y-6">
                   {/* Enhanced Loading Indicator with Progress Bar - MOVED TO TOP */}
                   {(isLoading || manualLoading || isProcessing || currentProgress) &&
-                    !hasStartedStreaming && (
-                      console.log("🔄 Rendering progress indicator:", {
-                        isLoading,
-                        manualLoading,
-                        isProcessing,
-                        hasCurrentProgress: !!currentProgress,
-                        currentProgress,
-                        hasStartedStreaming
-                      }) ||
+                    !hasStartedStreaming &&
+                    (console.log("🔄 Rendering progress indicator:", {
+                      isLoading,
+                      manualLoading,
+                      isProcessing,
+                      hasCurrentProgress: !!currentProgress,
+                      currentProgress,
+                      hasStartedStreaming,
+                    }) || (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -1756,7 +1720,9 @@ export function AiSdkChatPanel({
                               ></div>
                             </div>
                             <span className="text-base font-medium">
-                              🤖 {currentProgress?.title || "The Betabase is processing your request..."}
+                              🤖{" "}
+                              {currentProgress?.title ||
+                                "The Betabase is processing your request..."}
                             </span>
                           </div>
 
@@ -1771,9 +1737,11 @@ export function AiSdkChatPanel({
                                 <div
                                   className={cn(
                                     "h-2 rounded-full transition-all duration-500",
-                                    currentProgress.status === "failed" ? "bg-red-500" :
-                                    currentProgress.status === "completed" ? "bg-green-500" :
-                                    "bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse"
+                                    currentProgress.status === "failed"
+                                      ? "bg-red-500"
+                                      : currentProgress.status === "completed"
+                                        ? "bg-green-500"
+                                        : "bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse"
                                   )}
                                   style={{ width: `${currentProgress.progress}%` }}
                                 />
@@ -1784,10 +1752,14 @@ export function AiSdkChatPanel({
                           {/* Progress Steps - Show all phases with current one highlighted */}
                           <div className="space-y-2.5">
                             {/* Phase 1: Connection */}
-                            <div className={cn(
-                              "flex items-center gap-3 transition-opacity duration-300",
-                              currentProgress?.phase === "connecting" ? "opacity-100" : "opacity-40"
-                            )}>
+                            <div
+                              className={cn(
+                                "flex items-center gap-3 transition-opacity duration-300",
+                                currentProgress?.phase === "connecting"
+                                  ? "opacity-100"
+                                  : "opacity-40"
+                              )}
+                            >
                               {currentProgress?.phase === "connecting" ? (
                                 <LoaderIcon className="w-4 h-4 animate-spin text-blue-400" />
                               ) : currentProgress?.progress && currentProgress.progress > 20 ? (
@@ -1799,12 +1771,14 @@ export function AiSdkChatPanel({
                                 Establishing secure connection to AI service
                               </span>
                             </div>
-                            
+
                             {/* Phase 2: Parsing */}
-                            <div className={cn(
-                              "flex items-center gap-3 transition-opacity duration-300",
-                              currentProgress?.phase === "parsing" ? "opacity-100" : "opacity-40"
-                            )}>
+                            <div
+                              className={cn(
+                                "flex items-center gap-3 transition-opacity duration-300",
+                                currentProgress?.phase === "parsing" ? "opacity-100" : "opacity-40"
+                              )}
+                            >
                               {currentProgress?.phase === "parsing" ? (
                                 <LoaderIcon className="w-4 h-4 animate-spin text-yellow-400" />
                               ) : currentProgress?.progress && currentProgress.progress > 35 ? (
@@ -1816,12 +1790,16 @@ export function AiSdkChatPanel({
                                 Parsing request and extracting requirements
                               </span>
                             </div>
-                            
+
                             {/* Phase 3: Knowledge Search */}
-                            <div className={cn(
-                              "flex items-center gap-3 transition-opacity duration-300",
-                              currentProgress?.phase === "knowledge-search" ? "opacity-100" : "opacity-40"
-                            )}>
+                            <div
+                              className={cn(
+                                "flex items-center gap-3 transition-opacity duration-300",
+                                currentProgress?.phase === "knowledge-search"
+                                  ? "opacity-100"
+                                  : "opacity-40"
+                              )}
+                            >
                               {currentProgress?.phase === "knowledge-search" ? (
                                 <LoaderIcon className="w-4 h-4 animate-spin text-green-400" />
                               ) : currentProgress?.progress && currentProgress.progress > 50 ? (
@@ -1833,12 +1811,16 @@ export function AiSdkChatPanel({
                                 Searching AOMA knowledge base for context
                               </span>
                             </div>
-                            
+
                             {/* Phase 4: Context Building */}
-                            <div className={cn(
-                              "flex items-center gap-3 transition-opacity duration-300",
-                              currentProgress?.phase === "context-building" ? "opacity-100" : "opacity-40"
-                            )}>
+                            <div
+                              className={cn(
+                                "flex items-center gap-3 transition-opacity duration-300",
+                                currentProgress?.phase === "context-building"
+                                  ? "opacity-100"
+                                  : "opacity-40"
+                              )}
+                            >
                               {currentProgress?.phase === "context-building" ? (
                                 <LoaderIcon className="w-4 h-4 animate-spin text-purple-400" />
                               ) : currentProgress?.progress && currentProgress.progress > 65 ? (
@@ -1850,12 +1832,16 @@ export function AiSdkChatPanel({
                                 Building context from previous interactions
                               </span>
                             </div>
-                            
+
                             {/* Phase 5: Generating */}
-                            <div className={cn(
-                              "flex items-center gap-3 transition-opacity duration-300",
-                              currentProgress?.phase === "generating" ? "opacity-100" : "opacity-40"
-                            )}>
+                            <div
+                              className={cn(
+                                "flex items-center gap-3 transition-opacity duration-300",
+                                currentProgress?.phase === "generating"
+                                  ? "opacity-100"
+                                  : "opacity-40"
+                              )}
+                            >
                               {currentProgress?.phase === "generating" ? (
                                 <LoaderIcon className="w-4 h-4 animate-spin text-indigo-400" />
                               ) : currentProgress?.progress && currentProgress.progress > 80 ? (
@@ -1867,12 +1853,16 @@ export function AiSdkChatPanel({
                                 Generating AI response with selected model
                               </span>
                             </div>
-                            
+
                             {/* Phase 6: Formatting */}
-                            <div className={cn(
-                              "flex items-center gap-3 transition-opacity duration-300",
-                              currentProgress?.phase === "formatting" ? "opacity-100" : "opacity-40"
-                            )}>
+                            <div
+                              className={cn(
+                                "flex items-center gap-3 transition-opacity duration-300",
+                                currentProgress?.phase === "formatting"
+                                  ? "opacity-100"
+                                  : "opacity-40"
+                              )}
+                            >
                               {currentProgress?.phase === "formatting" ? (
                                 <LoaderIcon className="w-4 h-4 animate-spin text-cyan-400" />
                               ) : currentProgress?.status === "completed" ? (
@@ -1890,10 +1880,10 @@ export function AiSdkChatPanel({
                           <div className="flex items-center gap-2 mt-4 pt-3 border-t border-gray-600">
                             <ClockIcon className="w-4 h-4 text-amber-400" />
                             <span className="text-sm text-gray-300">
-                              {currentProgress?.status === "in-progress" && currentProgress?.progress ? 
-                                `Estimated time remaining: ${Math.max(5, Math.round((100 - currentProgress.progress) / 3))} seconds` :
-                                "This typically takes 30-45 seconds"
-                              }
+                              {currentProgress?.status === "in-progress" &&
+                              currentProgress?.progress
+                                ? `Estimated time remaining: ${Math.max(5, Math.round((100 - currentProgress.progress) / 3))} seconds`
+                                : "This typically takes 30-45 seconds"}
                             </span>
                           </div>
 
@@ -1905,8 +1895,8 @@ export function AiSdkChatPanel({
                           </div>
                         </div>
                       </motion.div>
-                    )}
-                  
+                    ))}
+
                   {/* Messages rendered AFTER progress indicator */}
                   {messages.map((message, index) => (
                     <motion.div
@@ -1950,8 +1940,8 @@ export function AiSdkChatPanel({
               <Alert className="mt-6 border-amber-500/50 bg-amber-500/10">
                 <AlertCircle className="h-4 w-4 text-amber-500" />
                 <AlertDescription className="text-amber-700 dark:text-amber-400">
-                  Maximum message limit ({maxMessages}) reached. Start a new
-                  conversation to continue.
+                  Maximum message limit ({maxMessages}) reached. Start a new conversation to
+                  continue.
                 </AlertDescription>
               </Alert>
             )}
@@ -1978,7 +1968,7 @@ export function AiSdkChatPanel({
                         className="w-1 bg-red-400 rounded-full mac-audio-bar"
                         style={{
                           height: `${Math.random() * 20 + 10}px`,
-                          animationDelay: `${i * 0.1}s`
+                          animationDelay: `${i * 0.1}s`,
                         }}
                       />
                     ))}
@@ -1990,13 +1980,9 @@ export function AiSdkChatPanel({
                   {isRecording ? "Listening..." : "Transcription"}
                 </div>
                 <div className="text-sm text-white">
-                  {transcript && (
-                    <span className="text-white/90">{transcript}</span>
-                  )}
+                  {transcript && <span className="text-white/90">{transcript}</span>}
                   {interimTranscript && (
-                    <span className="text-white/50 italic ml-1">
-                      {interimTranscript}
-                    </span>
+                    <span className="text-white/50 italic ml-1">{interimTranscript}</span>
                   )}
                   {!transcript && !interimTranscript && isRecording && (
                     <span className="text-white/30 italic">Start speaking...</span>
@@ -2006,7 +1992,7 @@ export function AiSdkChatPanel({
             </div>
           </div>
         )}
-        
+
         {/* Voice buttons moved to form section below for better integration */}
         {/* Duplicate buttons removed - see MAC-styled versions in form below */}
 
@@ -2024,9 +2010,7 @@ export function AiSdkChatPanel({
                 setInput(newValue);
               }
             }}
-            placeholder={
-              isMaxMessagesReached ? "Message limit reached" : placeholder
-            }
+            placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
             disabled={isMaxMessagesReached || isLoading}
             className="resize-none border-0 bg-transparent focus:ring-0 placeholder:text-muted-foreground/60"
           />
@@ -2035,9 +2019,7 @@ export function AiSdkChatPanel({
             <div className="flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground bg-muted/30 border border-border/30 rounded-md mb-2">
               <MessageCircle className="h-3 w-3 flex-shrink-0" />
               <span className="text-xs opacity-75">Last:</span>
-              <span className="truncate flex-1 font-medium">
-                {lastPrompt}
-              </span>
+              <span className="truncate flex-1 font-medium">{lastPrompt}</span>
               <Button
                 variant="ghost"
                 size="sm"
@@ -2063,25 +2045,23 @@ export function AiSdkChatPanel({
                 compact={true}
                 assistantId="asst_VvOHL1c4S6YapYKun4mY29fM"
                 onUploadComplete={handleFileUploadComplete}
-                onUploadError={(error) =>
-                  toast.error(`Upload failed: ${error}`)
-                }
+                onUploadError={(error) => toast.error(`Upload failed: ${error}`)}
               />
-              
+
               {/* Voice Input Button (Push-to-Talk) */}
               <Button
                 type="button"
                 variant={isRecording ? "destructive" : "ghost"}
                 className={cn(
                   "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
-                  isRecording ? [
-                    "bg-gradient-to-r from-red-500 to-red-600",
-                    "border-red-400/50 shadow-[0_0_20px_rgba(239,68,68,0.6)]",
-                    "text-white",
-                    "animate-pulse"
-                  ] : [
-                    "hover:bg-zinc-800/50 hover:border-zinc-700",
-                  ]
+                  isRecording
+                    ? [
+                        "bg-gradient-to-r from-red-500 to-red-600",
+                        "border-red-400/50 shadow-[0_0_20px_rgba(239,68,68,0.6)]",
+                        "text-white",
+                        "animate-pulse",
+                      ]
+                    : ["hover:bg-zinc-800/50 hover:border-zinc-700"]
                 )}
                 onMouseDown={(e) => {
                   e.preventDefault();
@@ -2121,19 +2101,19 @@ export function AiSdkChatPanel({
                   <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full animate-pulse border border-white" />
                 )}
               </Button>
-              
+
               {/* TTS Toggle Button */}
               <Button
                 type="button"
                 variant={isTTSEnabled ? "default" : "ghost"}
                 className={cn(
                   "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
-                  isTTSEnabled ? [
-                    "bg-gradient-to-r from-emerald-500/80 to-teal-600/80",
-                    "border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]"
-                  ] : [
-                    "hover:bg-zinc-800/50 hover:border-zinc-700",
-                  ]
+                  isTTSEnabled
+                    ? [
+                        "bg-gradient-to-r from-emerald-500/80 to-teal-600/80",
+                        "border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]",
+                      ]
+                    : ["hover:bg-zinc-800/50 hover:border-zinc-700"]
                 )}
                 onClick={() => {
                   setIsTTSEnabled(!isTTSEnabled);

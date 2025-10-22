@@ -46,7 +46,7 @@ Technical Implementation:
 - Microservices deployment on cloud infrastructure
 - Integration with Sony Music's content management systems
 
-This document contains authoritative information about AOMA functionality.`,
+This document contains authoritative information about AOMA functionality.`
   );
 
   // JSON configuration file
@@ -77,17 +77,13 @@ This document contains authoritative information about AOMA functionality.`,
         },
         usm_framework: {
           version: "3.0",
-          components: [
-            "service_model",
-            "universal_standards",
-            "management_layer",
-          ],
+          components: ["service_model", "universal_standards", "management_layer"],
           compatibility: "backward_compatible_v2",
         },
       },
       null,
-      2,
-    ),
+      2
+    )
   );
 
   // Markdown documentation
@@ -136,7 +132,7 @@ This document contains authoritative information about AOMA functionality.`,
 - Monitor resource usage during peak times
 - Configure appropriate timeout values for long operations
 
-For additional support, contact the AOMA technical team.`,
+For additional support, contact the AOMA technical team.`
   );
 
   console.log("✅ YOLO test files created");
@@ -190,9 +186,7 @@ test.describe("🔥 YOLO FILE MANAGEMENT COMPLETE TESTS", () => {
     console.log("\n🔥 TESTING COMPLETE FILE UPLOAD & AI PROCESSING...");
 
     // Find and click upload button
-    const uploadButton = page
-      .locator('button:has-text("Upload files to knowledge base")')
-      .first();
+    const uploadButton = page.locator('button:has-text("Upload files to knowledge base")').first();
     await uploadButton.click();
     console.log("   📤 Clicked upload button");
 
@@ -229,9 +223,7 @@ test.describe("🔥 YOLO FILE MANAGEMENT COMPLETE TESTS", () => {
     for (const filePath of testFiles) {
       const fileName = path.basename(filePath);
       const fileVisible = await page.locator(`text="${fileName}"`).isVisible();
-      console.log(
-        `   File "${fileName}": ${fileVisible ? "✅ Visible" : "❌ Not found"}`,
-      );
+      console.log(`   File "${fileName}": ${fileVisible ? "✅ Visible" : "❌ Not found"}`);
       expect(fileVisible).toBe(true);
     }
 
@@ -245,14 +237,12 @@ test.describe("🔥 YOLO FILE MANAGEMENT COMPLETE TESTS", () => {
         expectedAnswer: ["mp3", "wav", "flac", "aac"],
       },
       {
-        question:
-          "What are the common solutions for AMEBA integration problems?",
+        question: "What are the common solutions for AMEBA integration problems?",
         expectedInFile: "aoma-troubleshooting.md",
         expectedAnswer: ["status", "api version", "authentication", "network"],
       },
       {
-        question:
-          "What is the maximum number of links per asset in AOMA linking workflows?",
+        question: "What is the maximum number of links per asset in AOMA linking workflows?",
         expectedInFile: "aoma-config.json",
         expectedAnswer: ["50"],
       },
@@ -282,16 +272,14 @@ test.describe("🔥 YOLO FILE MANAGEMENT COMPLETE TESTS", () => {
 
         // Check if response contains expected information
         const hasExpectedInfo = query.expectedAnswer.some((keyword) =>
-          responseText.toLowerCase().includes(keyword.toLowerCase()),
+          responseText.toLowerCase().includes(keyword.toLowerCase())
         );
 
         if (hasExpectedInfo) {
           console.log(`   ✅ AI successfully referenced uploaded file content`);
         } else {
           console.log(`   ⚠️ Response may not include file content`);
-          console.log(
-            `   Response preview: ${responseText.substring(0, 200)}...`,
-          );
+          console.log(`   Response preview: ${responseText.substring(0, 200)}...`);
         }
       }
 
@@ -326,9 +314,7 @@ test.describe("🔥 YOLO FILE MANAGEMENT COMPLETE TESTS", () => {
     // Look for uploaded files in the curation interface
     await page.waitForTimeout(3000);
 
-    const filesList = await page
-      .locator('text="aoma-knowledge.txt"')
-      .isVisible();
+    const filesList = await page.locator('text="aoma-knowledge.txt"').isVisible();
     if (filesList) {
       console.log("   ✅ Files visible in curation interface");
 
@@ -382,9 +368,7 @@ test.describe("🔥 YOLO FILE MANAGEMENT COMPLETE TESTS", () => {
     fs.writeFileSync(largeFilePath, largeContent);
 
     console.log("   📈 Testing large file upload...");
-    const uploadButton = page
-      .locator('button:has-text("Upload files to knowledge base")')
-      .first();
+    const uploadButton = page.locator('button:has-text("Upload files to knowledge base")').first();
     await uploadButton.click();
 
     await page.evaluate(() => {

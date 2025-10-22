@@ -11,11 +11,9 @@ export const Message = ({ className, from, ...props }: MessageProps) => (
   <div
     className={cn(
       "group flex w-full items-end gap-2 py-4",
-      from === "user" 
-        ? "is-user justify-end" 
-        : "is-assistant justify-start",
+      from === "user" ? "is-user justify-end" : "is-assistant justify-start",
       "[&>div]:max-w-[80%] [&>div]:break-words",
-      className,
+      className
     )}
     {...props}
   />
@@ -23,18 +21,14 @@ export const Message = ({ className, from, ...props }: MessageProps) => (
 
 export type MessageContentProps = HTMLAttributes<HTMLDivElement>;
 
-export const MessageContent = ({
-  children,
-  className,
-  ...props
-}: MessageContentProps) => (
+export const MessageContent = ({ children, className, ...props }: MessageContentProps) => (
   <div
     className={cn(
       "flex flex-col gap-2 rounded-lg text-sm text-foreground px-4 py-3",
       "overflow-hidden break-words word-wrap min-w-0",
       "group-[.is-user]:bg-primary group-[.is-user]:text-primary-foreground",
       "group-[.is-assistant]:bg-secondary group-[.is-assistant]:text-foreground",
-      className,
+      className
     )}
     {...props}
   >
@@ -47,16 +41,8 @@ export type MessageAvatarProps = ComponentProps<typeof Avatar> & {
   name?: string;
 };
 
-export const MessageAvatar = ({
-  src,
-  name,
-  className,
-  ...props
-}: MessageAvatarProps) => (
-  <Avatar
-    className={cn("size-8 ring ring-1 ring-border", className)}
-    {...props}
-  >
+export const MessageAvatar = ({ src, name, className, ...props }: MessageAvatarProps) => (
+  <Avatar className={cn("size-8 ring ring-1 ring-border", className)} {...props}>
     <AvatarImage alt="" className="mt-0 mb-0" src={src} />
     <AvatarFallback>{name?.slice(0, 2) || "ME"}</AvatarFallback>
   </Avatar>

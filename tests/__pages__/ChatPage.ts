@@ -1,5 +1,5 @@
-import { Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
 /**
  * Chat Page Object
@@ -10,19 +10,19 @@ export class ChatPage extends BasePage {
     // Input area
     chatInput: '[data-testid="chat-input"], textarea[placeholder*="Message"], #message-input',
     sendButton: '[data-testid="send-button"], button[aria-label="Send"], button:has-text("Send")',
-    
+
     // Messages
     messageContainer: '[data-testid="messages"], .messages-container, [role="log"]',
     message: '[data-testid="message"], .message, [role="article"]',
     userMessage: '[data-testid="user-message"], .user-message',
     aiMessage: '[data-testid="ai-message"], .ai-message, .assistant-message',
-    
+
     // UI elements
     clearButton: '[data-testid="clear-chat"], button:has-text("Clear")',
     newChatButton: '[data-testid="new-chat"], button:has-text("New Chat")',
-    
+
     // Tab navigation
-    chatTab: 'button[role="tab"]:has-text("Chat")'
+    chatTab: 'button[role="tab"]:has-text("Chat")',
   };
 
   constructor(page: Page) {
@@ -30,7 +30,7 @@ export class ChatPage extends BasePage {
   }
 
   async navigate(): Promise<void> {
-    await this.page.goto('/');
+    await this.page.goto("/");
     await this.selectChatTab();
   }
   async selectChatTab(): Promise<void> {
@@ -47,9 +47,9 @@ export class ChatPage extends BasePage {
   async waitForResponse(): Promise<void> {
     // Wait for AI message to appear
     await this.page.waitForSelector(this.selectors.aiMessage, {
-      timeout: this.timeout.long
+      timeout: this.timeout.long,
     });
-    
+
     // Wait for streaming to complete (no loading indicators)
     await this.page.waitForFunction(
       () => !document.querySelector('.loading, .typing-indicator, [data-loading="true"]'),
@@ -60,24 +60,24 @@ export class ChatPage extends BasePage {
   async getLastMessage(): Promise<string> {
     const messages = this.page.locator(this.selectors.message);
     const lastMessage = messages.last();
-    return await lastMessage.textContent() || '';
+    return (await lastMessage.textContent()) || "";
   }
 
   async getLastAIMessage(): Promise<string> {
     const aiMessages = this.page.locator(this.selectors.aiMessage);
     const lastAI = aiMessages.last();
-    return await lastAI.textContent() || '';
+    return (await lastAI.textContent()) || "";
   }
   async getAllMessages(): Promise<string[]> {
     const messages = this.page.locator(this.selectors.message);
     const count = await messages.count();
     const allMessages: string[] = [];
-    
+
     for (let i = 0; i < count; i++) {
       const text = await messages.nth(i).textContent();
       if (text) allMessages.push(text);
     }
-    
+
     return allMessages;
   }
 
@@ -100,6 +100,6 @@ export class ChatPage extends BasePage {
   }
 
   async getInputPlaceholder(): Promise<string> {
-    return await this.page.getAttribute(this.selectors.chatInput, 'placeholder') || '';
+    return (await this.page.getAttribute(this.selectors.chatInput, "placeholder")) || "";
   }
 }

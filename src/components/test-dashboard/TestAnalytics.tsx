@@ -4,13 +4,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import {
   LineChart,
   Line,
@@ -158,9 +152,7 @@ export const TestAnalytics: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {keyMetrics.avgExecutionTime}
-            </div>
+            <div className="text-2xl font-bold">{keyMetrics.avgExecutionTime}</div>
             <Badge className="bg-green-500/20 text-green-500 mt-1">
               <TrendingDown className="h-3 w-3 mr-1" />
               -15%
@@ -221,12 +213,8 @@ export const TestAnalytics: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {keyMetrics.testEfficiency}
-            </div>
-            <Badge className="bg-yellow-500/20 text-yellow-500 mt-1">
-              Good
-            </Badge>
+            <div className="text-2xl font-bold">{keyMetrics.testEfficiency}</div>
+            <Badge className="bg-yellow-500/20 text-yellow-500 mt-1">Good</Badge>
           </CardContent>
         </Card>
 
@@ -238,9 +226,7 @@ export const TestAnalytics: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {keyMetrics.automationRate}
-            </div>
+            <div className="text-2xl font-bold">{keyMetrics.automationRate}</div>
             <Badge className="bg-green-500/20 text-green-500 mt-1">
               <TrendingUp className="h-3 w-3 mr-1" />
               +5%
@@ -259,10 +245,7 @@ export const TestAnalytics: React.FC = () => {
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={executionTrend}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-muted"
-                  />
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                   <XAxis dataKey="date" className="text-xs" />
                   <YAxis className="text-xs" />
                   <Tooltip />
@@ -335,10 +318,7 @@ export const TestAnalytics: React.FC = () => {
             <CardContent>
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={durationDistribution}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-muted"
-                  />
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                   <XAxis dataKey="range" className="text-xs" />
                   <YAxis className="text-xs" />
                   <Tooltip />
@@ -360,11 +340,7 @@ export const TestAnalytics: React.FC = () => {
                 <RadarChart data={teamMetrics}>
                   <PolarGrid className="stroke-muted" />
                   <PolarAngleAxis dataKey="name" className="text-xs" />
-                  <PolarRadiusAxis
-                    angle={90}
-                    domain={[0, 100]}
-                    className="text-xs"
-                  />
+                  <PolarRadiusAxis angle={90} domain={[0, 100]} className="text-xs" />
                   <Radar
                     name="Performance"
                     dataKey="value"
@@ -395,33 +371,25 @@ export const TestAnalytics: React.FC = () => {
                     <div className="flex items-center gap-4">
                       <div>
                         <p className="font-medium">{suite.suite}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {suite.tests} tests
-                        </p>
+                        <p className="text-sm text-muted-foreground">{suite.tests} tests</p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-8">
                       <div className="text-center">
-                        <p className="text-sm text-muted-foreground">
-                          Avg Duration
-                        </p>
+                        <p className="text-sm text-muted-foreground">Avg Duration</p>
                         <p className="font-medium">{suite.avgDuration}s</p>
                       </div>
 
                       <div className="text-center">
-                        <p className="text-sm text-muted-foreground">
-                          Success Rate
-                        </p>
+                        <p className="text-sm text-muted-foreground">Success Rate</p>
                         <Badge
                           className={cn(
-                            suite.successRate >= 90 &&
-                              "bg-green-500/20 text-green-500",
+                            suite.successRate >= 90 && "bg-green-500/20 text-green-500",
                             suite.successRate >= 80 &&
                               suite.successRate < 90 &&
                               "bg-yellow-500/20 text-yellow-500",
-                            suite.successRate < 80 &&
-                              "bg-red-500/20 text-red-500",
+                            suite.successRate < 80 && "bg-red-500/20 text-red-500"
                           )}
                         >
                           {suite.successRate}%
@@ -434,10 +402,8 @@ export const TestAnalytics: React.FC = () => {
                             className={cn(
                               "h-full transition-all",
                               suite.successRate >= 90 && "bg-green-500",
-                              suite.successRate >= 80 &&
-                                suite.successRate < 90 &&
-                                "bg-yellow-500",
-                              suite.successRate < 80 && "bg-red-500",
+                              suite.successRate >= 80 && suite.successRate < 90 && "bg-yellow-500",
+                              suite.successRate < 80 && "bg-red-500"
                             )}
                             style={{ width: `${suite.successRate}%` }}
                           />

@@ -17,9 +17,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
 
     // Wait for Test Dashboard to load
     await expect(page.locator("text=Test Dashboard")).toBeVisible();
-    await expect(
-      page.locator("text=AI-Powered Testing Command Center"),
-    ).toBeVisible();
+    await expect(page.locator("text=AI-Powered Testing Command Center")).toBeVisible();
   });
 
   test.describe("Tab Navigation", () => {
@@ -207,15 +205,11 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
         const input = page.locator(selector).first();
         if (await input.isVisible()) {
           // Test natural language input
-          await input.fill(
-            "Create a test that verifies user login functionality",
-          );
+          await input.fill("Create a test that verifies user login functionality");
           await page.waitForTimeout(500);
 
           // Look for generate button or submit
-          const generateButton = page
-            .locator('button:has-text("Generate")')
-            .first();
+          const generateButton = page.locator('button:has-text("Generate")').first();
           if (await generateButton.isVisible()) {
             await generateButton.click();
             await page.waitForTimeout(2000);
@@ -266,12 +260,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
         });
       } else {
         // Look for alternative button texts
-        const alternativeButtons = [
-          "Start",
-          "Crawl",
-          "Begin Crawl",
-          "Run Crawl",
-        ];
+        const alternativeButtons = ["Start", "Crawl", "Begin Crawl", "Run Crawl"];
 
         for (const buttonText of alternativeButtons) {
           const button = page.locator(`text=${buttonText}`).first();
@@ -436,9 +425,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
       // Check for critical errors (filter out known non-critical warnings)
       const criticalErrors = errors.filter(
         (error) =>
-          !error.includes("favicon") &&
-          !error.includes("Warning") &&
-          !error.includes("DevTools"),
+          !error.includes("favicon") && !error.includes("Warning") && !error.includes("DevTools")
       );
 
       expect(criticalErrors).toHaveLength(0);
@@ -449,14 +436,10 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
     test("should verify all UI components render correctly", async () => {
       // Verify main dashboard elements
       await expect(page.locator("text=Test Dashboard")).toBeVisible();
-      await expect(
-        page.locator("text=AI-Powered Testing Command Center"),
-      ).toBeVisible();
+      await expect(page.locator("text=AI-Powered Testing Command Center")).toBeVisible();
 
       // Verify statistics cards
-      const statsCards = page.locator(
-        '[data-testid*="stat"], .stat-card, .metric-card',
-      );
+      const statsCards = page.locator('[data-testid*="stat"], .stat-card, .metric-card');
       if ((await statsCards.count()) > 0) {
         for (let i = 0; i < (await statsCards.count()); i++) {
           await expect(statsCards.nth(i)).toBeVisible();
@@ -465,7 +448,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
 
       // Verify all tab buttons are clickable
       const tabButtons = page.locator(
-        'button:has-text("Execution"), button:has-text("Results"), button:has-text("AI Generate"), button:has-text("Trace Viewer"), button:has-text("Coverage"), button:has-text("Flaky Tests"), button:has-text("Analytics"), button:has-text("Firecrawl")',
+        'button:has-text("Execution"), button:has-text("Results"), button:has-text("AI Generate"), button:has-text("Trace Viewer"), button:has-text("Coverage"), button:has-text("Flaky Tests"), button:has-text("Analytics"), button:has-text("Firecrawl")'
       );
       for (let i = 0; i < (await tabButtons.count()); i++) {
         await expect(tabButtons.nth(i)).toBeVisible();
@@ -501,9 +484,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
         await page.waitForTimeout(1000);
 
         // Look for data containers, charts, or tables
-        const dataContainers = page.locator(
-          ".chart, .table, .data-container, .metric, .graph",
-        );
+        const dataContainers = page.locator(".chart, .table, .data-container, .metric, .graph");
 
         // Take screenshot for each tab
         await page.screenshot({
@@ -531,13 +512,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
     });
 
     test("should handle rapid tab switching", async () => {
-      const tabs = [
-        "Execution",
-        "Results",
-        "AI Generate",
-        "Trace Viewer",
-        "Coverage",
-      ];
+      const tabs = ["Execution", "Results", "AI Generate", "Trace Viewer", "Coverage"];
 
       // Rapidly switch between tabs
       for (let i = 0; i < 3; i++) {

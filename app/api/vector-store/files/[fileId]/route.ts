@@ -18,18 +18,15 @@ async function getVectorStoreId(assistantId: string): Promise<string | null> {
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ fileId: string }> },
+  { params }: { params: Promise<{ fileId: string }> }
 ) {
   try {
     const resolvedParams = await params;
     const fileId = resolvedParams.fileId;
     const assistantId =
-      request.nextUrl.searchParams.get("assistantId") ||
-      "asst_VvOHL1c4S6YapYKun4mY29fM";
+      request.nextUrl.searchParams.get("assistantId") || "asst_VvOHL1c4S6YapYKun4mY29fM";
 
-    console.log(
-      `[VECTOR_STORE] Deleting file ${fileId} from assistant ${assistantId}`,
-    );
+    console.log(`[VECTOR_STORE] Deleting file ${fileId} from assistant ${assistantId}`);
 
     // Get vector store ID from assistant
     const vectorStoreId = await getVectorStoreId(assistantId);
@@ -37,7 +34,7 @@ export async function DELETE(
     if (!vectorStoreId) {
       return NextResponse.json(
         { error: "No vector store found for this assistant" },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -53,7 +50,9 @@ export async function DELETE(
       vectorStoreDeleted = true;
     } catch (error) {
       console.error(`[VECTOR_STORE] Error removing from vector store:`, error);
-      errors.push(`Vector store deletion failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      errors.push(
+        `Vector store deletion failed: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     }
 
     // Delete the file from OpenAI
@@ -63,7 +62,9 @@ export async function DELETE(
       fileDeleted = true;
     } catch (error) {
       console.error(`[VECTOR_STORE] Error deleting file from OpenAI:`, error);
-      errors.push(`File deletion failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      errors.push(
+        `File deletion failed: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     }
 
     // Return appropriate response based on what succeeded
@@ -92,14 +93,14 @@ export async function DELETE(
         error: "Failed to delete file",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ fileId: string }> },
+  { params }: { params: Promise<{ fileId: string }> }
 ) {
   try {
     const resolvedParams = await params;
@@ -123,7 +124,7 @@ export async function GET(
         error: "Failed to get file details",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 404 },
+      { status: 404 }
     );
   }
 }

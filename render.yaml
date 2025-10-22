@@ -4,11 +4,11 @@ services:
     name: siam-app
     runtime: node
     plan: starter # or standard for production
-    
+
     # Build command - manually install TypeScript then build
     buildCommand: npm install --legacy-peer-deps && npm install --save-dev typescript @types/react && npm run build
-    
-    # Start command  
+
+    # Start command
     startCommand: npm start
 
     # Health check
@@ -64,7 +64,7 @@ services:
     # Auto-deploy from main branch
     autoDeploy: true
     branch: main
-    
+
     # Force redeploy - YOLO MODE ACTIVATED
     # Last forced: 2025-08-23T07:09:00Z
 

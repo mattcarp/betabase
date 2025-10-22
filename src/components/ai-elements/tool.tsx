@@ -10,11 +10,7 @@ import {
 } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 import { Badge } from "../ui/badge";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { cn } from "../../lib/utils";
 import type { ToolUIPart } from "ai";
 import { CodeBlock } from "./code-block";
@@ -22,10 +18,7 @@ import { CodeBlock } from "./code-block";
 export type ToolProps = ComponentProps<typeof Collapsible>;
 
 export const Tool = ({ className, ...props }: ToolProps) => (
-  <Collapsible
-    className={cn("not-prose mb-4 w-full rounded-md border", className)}
-    {...props}
-  />
+  <Collapsible className={cn("not-prose mb-4 w-full rounded-md border", className)} {...props} />
 );
 
 export type ToolHeaderProps = {
@@ -57,17 +50,9 @@ const getStatusBadge = (status: ToolUIPart["state"]) => {
   );
 };
 
-export const ToolHeader = ({
-  className,
-  type,
-  state,
-  ...props
-}: ToolHeaderProps) => (
+export const ToolHeader = ({ className, type, state, ...props }: ToolHeaderProps) => (
   <CollapsibleTrigger
-    className={cn(
-      "flex w-full items-center justify-between gap-4 p-3",
-      className,
-    )}
+    className={cn("flex w-full items-center justify-between gap-4 p-3", className)}
     {...props}
   >
     <div className="flex items-center gap-2">
@@ -85,7 +70,7 @@ export const ToolContent = ({ className, ...props }: ToolContentProps) => (
   <CollapsibleContent
     className={cn(
       "text-popover-foreground outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2",
-      className,
+      className
     )}
     {...props}
   />
@@ -111,12 +96,7 @@ export type ToolOutputProps = ComponentProps<"div"> & {
   errorText: ToolUIPart["errorText"];
 };
 
-export const ToolOutput = ({
-  className,
-  output,
-  errorText,
-  ...props
-}: ToolOutputProps) => {
+export const ToolOutput = ({ className, output, errorText, ...props }: ToolOutputProps) => {
   if (!(output || errorText)) {
     return null;
   }
@@ -129,9 +109,7 @@ export const ToolOutput = ({
       <div
         className={cn(
           "overflow-x-auto rounded-md text-xs [&_table]:w-full",
-          errorText
-            ? "bg-destructive/10 text-destructive"
-            : "bg-muted/50 text-foreground",
+          errorText ? "bg-destructive/10 text-destructive" : "bg-muted/50 text-foreground"
         )}
       >
         {errorText && <div>{errorText}</div>}

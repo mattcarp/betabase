@@ -101,7 +101,7 @@ function withinTimeout<T>(promise: Promise<T>, timeoutMs = 3000): Promise<T> {
 
 export async function searchKnowledge(
   query: string,
-  options?: KnowledgeSearchOptions,
+  options?: KnowledgeSearchOptions
 ): Promise<KnowledgeSearchResponse> {
   const startedAt = Date.now();
   const normalized = preprocessQuery(query);
@@ -130,7 +130,7 @@ export async function searchKnowledge(
           matchCount,
           sourceTypes: filterSources,
         }),
-        timeoutMs,
+        timeoutMs
       );
       results = (data || []).map((row: any) => ({
         id: row.id,
@@ -151,7 +151,7 @@ export async function searchKnowledge(
           .select("id, content, source_type, source_id, metadata, created_at")
           .ilike("content", `%${normalized}%`)
           .limit(matchCount),
-        timeoutMs,
+        timeoutMs
       );
       if (error) throw error;
       results = (data || []).map((row: any) => ({
@@ -171,7 +171,7 @@ export async function searchKnowledge(
 
   const durationMs = Date.now() - startedAt;
   const sourcesCovered = Array.from(
-    new Set(results.map((r) => String(r.source_type || "unknown"))),
+    new Set(results.map((r) => String(r.source_type || "unknown")))
   );
   const response: KnowledgeSearchResponse = {
     query: normalized,
@@ -187,7 +187,7 @@ export async function searchKnowledge(
 
 export async function batchSearch(
   queries: string[],
-  options?: KnowledgeSearchOptions,
+  options?: KnowledgeSearchOptions
 ): Promise<KnowledgeSearchResponse[]> {
   const tasks = queries.map((q) => searchKnowledge(q, options));
   return Promise.all(tasks);
@@ -246,8 +246,14 @@ export async function getKnowledgeSourceCounts(): Promise<KnowledgeCounts> {
 
     if (tableCheckError) {
       // Table doesn't exist - cache this result to prevent future queries
-      if (tableCheckError.message?.includes('404') || tableCheckError.code === 'PGRST204' || tableCheckError.code === 'PGRST116') {
-        console.info('[Knowledge] aoma_unified_vectors table not yet available, caching unavailable status');
+      if (
+        tableCheckError.message?.includes("404") ||
+        tableCheckError.code === "PGRST204" ||
+        tableCheckError.code === "PGRST116"
+      ) {
+        console.info(
+          "[Knowledge] aoma_unified_vectors table not yet available, caching unavailable status"
+        );
         tableAvailabilityCache = { available: false, checkedAt: Date.now() };
         return ZERO_COUNTS;
       }
@@ -255,20 +261,16 @@ export async function getKnowledgeSourceCounts(): Promise<KnowledgeCounts> {
 
     // Table exists - cache this and proceed with counts
     tableAvailabilityCache = { available: true, checkedAt: Date.now() };
-
   } catch (err) {
     // Table check failed - cache unavailable status
-    console.info('[Knowledge] Unable to access aoma_unified_vectors table, caching unavailable status');
+    console.info(
+      "[Knowledge] Unable to access aoma_unified_vectors table, caching unavailable status"
+    );
     tableAvailabilityCache = { available: false, checkedAt: Date.now() };
     return ZERO_COUNTS;
   }
 
-  const types: KnowledgeSourceType[] = [
-    "git",
-    "confluence",
-    "jira",
-    "firecrawl",
-  ];
+  const types: KnowledgeSourceType[] = ["git", "confluence", "jira", "firecrawl"];
   const counts: KnowledgeCounts = {};
 
   for (const t of types) {
@@ -292,4 +294,3 @@ export async function getKnowledgeSourceCounts(): Promise<KnowledgeCounts> {
 
   return counts;
 }
-

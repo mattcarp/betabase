@@ -61,6 +61,7 @@ npm run test:aoma:chat          # Chat functionality
 ### Key Findings from Initial Test Run
 
 The tests immediately discovered a real production issue:
+
 - Production chat API returning 500 errors
 - Health endpoint showing "healthy" while chat was failing
 - Confirmed the need for enhanced error detection
@@ -72,6 +73,7 @@ This validates the test suite's effectiveness at catching real issues!
 ### Problem
 
 The original health check made a full MCP server call on every request:
+
 - Added 500-5000ms latency per health check
 - Increased load on MCP server
 - Expensive for monitoring tools that poll frequently
@@ -153,6 +155,7 @@ curl http://localhost:3000/api/aoma/health
 The health endpoint now provides specific, actionable error messages:
 
 #### OpenAI Authentication Error
+
 ```json
 {
   "status": "degraded",
@@ -167,6 +170,7 @@ The health endpoint now provides specific, actionable error messages:
 ```
 
 #### MCP Connection Error
+
 ```json
 {
   "status": "error",
@@ -177,6 +181,7 @@ The health endpoint now provides specific, actionable error messages:
 ```
 
 #### Service Degradation
+
 ```json
 {
   "status": "degraded",
@@ -205,7 +210,7 @@ import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/consol
 
 setupConsoleMonitoring(page, {
   ignoreWarnings: true,
-  ignoreNetworkErrors: false,  // Catch MCP connectivity errors
+  ignoreNetworkErrors: false, // Catch MCP connectivity errors
 });
 
 // At end of test
@@ -215,18 +220,20 @@ assertNoConsoleErrors();
 ### Error Scenario Testing
 
 Tests verify both:
+
 1. **Happy path** - System works correctly
 2. **Sad path** - Errors are handled gracefully
 
 Example:
+
 ```typescript
 test("MCP CONNECTIVITY - Test handling of unreachable MCP server", async () => {
   const response = await sendChatMessage(page, "What is AOMA?");
 
   // Verify app doesn't crash
-  const chatInput = page.locator('textarea').first();
+  const chatInput = page.locator("textarea").first();
   const isInputEnabled = await chatInput.isEnabled();
-  expect(isInputEnabled).toBe(true);  // Still functional!
+  expect(isInputEnabled).toBe(true); // Still functional!
 
   // Check for error indicator
   const hasErrorMessage = response.includes("⚠️") || response.includes("error");

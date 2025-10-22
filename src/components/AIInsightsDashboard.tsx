@@ -69,15 +69,8 @@ export function AIInsightsDashboard({
       setActionItems(actions.slice(0, Math.floor(Math.random() * 3) + 2));
 
       // Generate new insight
-      const insightTypes: Insight["type"][] = [
-        "sentiment",
-        "topic",
-        "action",
-        "summary",
-      ];
-      const randomType =
-        insightTypes[Math.floor(Math.random() * insightTypes.length)] ||
-        "summary";
+      const insightTypes: Insight["type"][] = ["sentiment", "topic", "action", "summary"];
+      const randomType = insightTypes[Math.floor(Math.random() * insightTypes.length)] || "summary";
 
       const newInsight: Insight = {
         id: Math.random().toString(36).substr(2, 9),
@@ -107,8 +100,7 @@ export function AIInsightsDashboard({
 
   const getInsightContent = (type: Insight["type"]) => {
     const content = {
-      sentiment:
-        "Discussion tone has become more positive in the last 2 minutes",
+      sentiment: "Discussion tone has become more positive in the last 2 minutes",
       topic: "Technical implementation details are being discussed",
       action: "Consider scheduling a follow-up meeting to discuss budget",
       summary: "Team alignment on project goals and next steps",
@@ -145,9 +137,7 @@ export function AIInsightsDashboard({
             <TrendingUp className="w-4 h-4 text-green-400" />
             <span className="text-xs font-mono text-gray-400">SENTIMENT</span>
           </div>
-          <div className="text-lg font-bold text-green-400">
-            {sentiment.positive.toFixed(0)}%
-          </div>
+          <div className="text-lg font-bold text-green-400">{sentiment.positive.toFixed(0)}%</div>
           <div className="text-xs text-gray-500">Positive</div>
         </div>
 
@@ -156,9 +146,7 @@ export function AIInsightsDashboard({
             <Target className="w-4 h-4 text-blue-600" />
             <span className="text-xs font-mono text-gray-400">TOPICS</span>
           </div>
-          <div className="text-lg font-bold text-blue-600">
-            {keyTopics.length}
-          </div>
+          <div className="text-lg font-bold text-blue-600">{keyTopics.length}</div>
           <div className="text-xs text-gray-500">Identified</div>
         </div>
 
@@ -167,9 +155,7 @@ export function AIInsightsDashboard({
             <Lightbulb className="w-4 h-4 text-yellow-400" />
             <span className="text-xs font-mono text-gray-400">ACTIONS</span>
           </div>
-          <div className="text-lg font-bold text-yellow-400">
-            {actionItems.length}
-          </div>
+          <div className="text-lg font-bold text-yellow-400">{actionItems.length}</div>
           <div className="text-xs text-gray-500">Suggested</div>
         </div>
 
@@ -189,9 +175,7 @@ export function AIInsightsDashboard({
       <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
         <div className="flex items-center gap-2 mb-4">
           <Brain className="w-5 h-5 text-blue-600" />
-          <h3 className="text-lg font-bold text-blue-600 font-mono">
-            AI Insights
-          </h3>
+          <h3 className="text-lg font-bold text-blue-600 font-mono">AI Insights</h3>
           {isRecording && (
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse ml-auto"></div>
           )}
@@ -206,23 +190,19 @@ export function AIInsightsDashboard({
                   key={insight.id}
                   className={cn(
                     "p-3 rounded-lg border transition-all duration-300",
-                    getInsightColor(insight.type),
+                    getInsightColor(insight.type)
                   )}
                 >
                   <div className="flex items-start gap-3">
                     <Icon className="w-4 h-4 mt-0.5 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        <h4 className="text-sm font-semibold">
-                          {insight.title}
-                        </h4>
+                        <h4 className="text-sm font-semibold">{insight.title}</h4>
                         <span className="text-xs opacity-60">
                           {Math.floor(insight.confidence * 100)}%
                         </span>
                       </div>
-                      <p className="text-xs opacity-80 leading-relaxed">
-                        {insight.content}
-                      </p>
+                      <p className="text-xs opacity-80 leading-relaxed">{insight.content}</p>
                       <div className="text-xs opacity-50 mt-1">
                         {insight.timestamp.toLocaleTimeString()}
                       </div>
@@ -235,9 +215,7 @@ export function AIInsightsDashboard({
             <div className="text-center text-gray-500 py-8">
               <Brain className="w-12 h-12 mx-auto mb-4 opacity-50" />
               <p className="font-mono text-sm">
-                {isRecording
-                  ? "Analyzing conversation..."
-                  : "Start recording to see AI insights"}
+                {isRecording ? "Analyzing conversation..." : "Start recording to see AI insights"}
               </p>
             </div>
           )}
@@ -247,9 +225,7 @@ export function AIInsightsDashboard({
       {/* Key Topics */}
       {keyTopics.length > 0 && (
         <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
-          <h3 className="text-sm font-bold text-blue-600 font-mono mb-3">
-            KEY TOPICS
-          </h3>
+          <h3 className="text-sm font-bold text-blue-600 font-mono mb-3">KEY TOPICS</h3>
           <div className="flex flex-wrap gap-2">
             {keyTopics.map((topic, index) => (
               <span
@@ -266,9 +242,7 @@ export function AIInsightsDashboard({
       {/* Action Items */}
       {actionItems.length > 0 && (
         <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
-          <h3 className="text-sm font-bold text-yellow-400 font-mono mb-3">
-            ACTION ITEMS
-          </h3>
+          <h3 className="text-sm font-bold text-yellow-400 font-mono mb-3">ACTION ITEMS</h3>
           <div className="space-y-2">
             {actionItems.map((action, index) => (
               <div key={index} className="flex items-start gap-2">

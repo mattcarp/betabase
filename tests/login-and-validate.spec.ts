@@ -39,9 +39,7 @@ test.describe("SIAM Application Validation", () => {
     await page.screenshot({ path: "after-login.png" });
 
     // Check for chat page elements
-    const chatInterface = page.locator(
-      '[data-testid="chat-interface"], .chat-interface, #chat',
-    );
+    const chatInterface = page.locator('[data-testid="chat-interface"], .chat-interface, #chat');
     const hasChat = (await chatInterface.count()) > 0;
 
     // Check for error messages
@@ -58,9 +56,7 @@ test.describe("SIAM Application Validation", () => {
       Authentication: currentUrl.includes("/chat") || hasChat,
       "Chat Interface": hasChat,
       Settings:
-        (await page
-          .locator('[aria-label*="settings"], button:has-text("Settings")')
-          .count()) > 0,
+        (await page.locator('[aria-label*="settings"], button:has-text("Settings")').count()) > 0,
       Navigation: (await page.locator('nav, [role="navigation"]').count()) > 0,
     };
 

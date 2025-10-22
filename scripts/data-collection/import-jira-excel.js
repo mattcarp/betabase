@@ -10,14 +10,14 @@
  *   node scripts/data-collection/import-jira-excel.js tmp/jira-exports/all-projects-tickets.xls
  */
 
-require('dotenv').config({ path: '.env.local' });
-const fs = require('fs').promises;
-const path = require('path');
-const XLSX = require('xlsx');
+require("dotenv").config({ path: ".env.local" });
+const fs = require("fs").promises;
+const path = require("path");
+const XLSX = require("xlsx");
 
 // Import utilities
-const { generateEmbeddingsBatch } = require('../../utils/embeddings/openai');
-const { createClient } = require('@supabase/supabase-js');
+const { generateEmbeddingsBatch } = require("../../utils/embeddings/openai");
+const { createClient } = require("@supabase/supabase-js");
 
 // Supabase client
 const supabase = createClient(
@@ -50,24 +50,24 @@ function transformRecord(record) {
   // Issue key, Summary, Description, Status, Priority, Assignee, Reporter, Created, Updated, etc.
 
   return {
-    external_id: record['Issue key'] || record['Key'] || record['Issue Key'],
-    title: record['Summary'] || '',
-    description: record['Description'] || '',
-    status: record['Status'] || '',
-    priority: record['Priority'] || '',
+    external_id: record["Issue key"] || record["Key"] || record["Issue Key"],
+    title: record["Summary"] || "",
+    description: record["Description"] || "",
+    status: record["Status"] || "",
+    priority: record["Priority"] || "",
     metadata: {
-      assignee: record['Assignee'] || '',
-      reporter: record['Reporter'] || '',
-      type: record['Issue Type'] || record['Type'] || '',
-      project: record['Project'] || '',
-      created: record['Created'] || '',
-      updated: record['Updated'] || '',
-      resolution: record['Resolution'] || '',
-      labels: record['Labels'] || '',
-      components: record['Components'] || '',
-      affects_versions: record['Affects Version/s'] || '',
-      fix_versions: record['Fix Version/s'] || ''
-    }
+      assignee: record["Assignee"] || "",
+      reporter: record["Reporter"] || "",
+      type: record["Issue Type"] || record["Type"] || "",
+      project: record["Project"] || "",
+      created: record["Created"] || "",
+      updated: record["Updated"] || "",
+      resolution: record["Resolution"] || "",
+      labels: record["Labels"] || "",
+      components: record["Components"] || "",
+      affects_versions: record["Affects Version/s"] || "",
+      fix_versions: record["Fix Version/s"] || "",
+    },
   };
 }
 
@@ -79,7 +79,7 @@ function createEmbeddingText(ticket) {
     `Ticket: ${ticket.external_id}`,
     `Title: ${ticket.title}`,
     `Status: ${ticket.status}`,
-    `Priority: ${ticket.priority}`
+    `Priority: ${ticket.priority}`,
   ];
 
   if (ticket.description) {
@@ -94,7 +94,7 @@ function createEmbeddingText(ticket) {
     parts.push(`Project: ${ticket.metadata.project}`);
   }
 
-  return parts.join('\n');
+  return parts.join("\n");
 }
 
 /**
@@ -111,20 +111,17 @@ async function upsertTickets(tickets) {
     const batch = tickets.slice(i, i + batchSize);
 
     // Check which tickets already exist
-    const externalIds = batch.map(t => t.external_id);
+    const externalIds = batch.map((t) => t.external_id);
     const { data: existing } = await supabase
-      .from('jira_tickets')
-      .select('external_id')
-      .in('external_id', externalIds);
+      .from("jira_tickets")
+      .select("external_id")
+      .in("external_id", externalIds);
 
-    const existingIds = new Set((existing || []).map(t => t.external_id));
-    const newTickets = batch.filter(t => !existingIds.has(t.external_id));
+    const existingIds = new Set((existing || []).map((t) => t.external_id));
+    const newTickets = batch.filter((t) => !existingIds.has(t.external_id));
 
     if (newTickets.length > 0) {
-      const { data, error } = await supabase
-        .from('jira_tickets')
-        .insert(newTickets)
-        .select();
+      const { data, error } = await supabase.from("jira_tickets").insert(newTickets).select();
 
       if (error) {
         console.error(`❌ Error inserting batch ${i}-${i + batch.length}:`, error);
@@ -135,7 +132,9 @@ async function upsertTickets(tickets) {
     }
 
     skipped += batch.length - newTickets.length;
-    console.log(`   ✓ Processed ${i + batch.length}/${tickets.length} tickets (${newTickets.length} new, ${batch.length - newTickets.length} skipped)`);
+    console.log(
+      `   ✓ Processed ${i + batch.length}/${tickets.length} tickets (${newTickets.length} new, ${batch.length - newTickets.length} skipped)`
+    );
   }
 
   console.log(`✅ Inserted ${inserted} new tickets (skipped ${skipped} existing)`);
@@ -148,14 +147,16 @@ async function upsertTickets(tickets) {
 async function upsertEmbeddings(tickets) {
   console.log(`\n🧠 Generating embeddings for ${tickets.length} tickets...`);
 
-  const textsForEmbedding = tickets.map(ticket => createEmbeddingText(ticket));
+  const textsForEmbedding = tickets.map((ticket) => createEmbeddingText(ticket));
 
   const embeddings = await generateEmbeddingsBatch(textsForEmbedding, {
     batchSize: 100,
     delayMs: 1000,
     onProgress: (progress) => {
-      console.log(`   Progress: ${progress.processed}/${progress.total} (${Math.round(progress.processed / progress.total * 100)}%)`);
-    }
+      console.log(
+        `   Progress: ${progress.processed}/${progress.total} (${Math.round((progress.processed / progress.total) * 100)}%)`
+      );
+    },
   });
 
   console.log(`✅ Generated ${embeddings.length} embeddings`);
@@ -164,9 +165,9 @@ async function upsertEmbeddings(tickets) {
   console.log(`\n💾 Upserting embeddings to database...`);
 
   const embeddingRecords = embeddings.map((embedding, index) => ({
-    ticket_key: tickets[index].external_id,  // Use ticket_key, not external_id
+    ticket_key: tickets[index].external_id, // Use ticket_key, not external_id
     summary: tickets[index].title,
-    embedding: embedding  // Store as array, not JSON string
+    embedding: embedding, // Store as array, not JSON string
   }));
 
   const batchSize = 100;
@@ -177,19 +178,17 @@ async function upsertEmbeddings(tickets) {
     const batch = embeddingRecords.slice(i, i + batchSize);
 
     // Check which embeddings already exist
-    const ticketKeys = batch.map(e => e.ticket_key);
+    const ticketKeys = batch.map((e) => e.ticket_key);
     const { data: existing } = await supabase
-      .from('jira_ticket_embeddings')
-      .select('ticket_key')
-      .in('ticket_key', ticketKeys);
+      .from("jira_ticket_embeddings")
+      .select("ticket_key")
+      .in("ticket_key", ticketKeys);
 
-    const existingKeys = new Set((existing || []).map(e => e.ticket_key));
-    const newEmbeddings = batch.filter(e => !existingKeys.has(e.ticket_key));
+    const existingKeys = new Set((existing || []).map((e) => e.ticket_key));
+    const newEmbeddings = batch.filter((e) => !existingKeys.has(e.ticket_key));
 
     if (newEmbeddings.length > 0) {
-      const { error } = await supabase
-        .from('jira_ticket_embeddings')
-        .insert(newEmbeddings);
+      const { error } = await supabase.from("jira_ticket_embeddings").insert(newEmbeddings);
 
       if (error) {
         console.error(`❌ Error inserting embeddings batch ${i}-${i + batch.length}:`, error);
@@ -200,7 +199,9 @@ async function upsertEmbeddings(tickets) {
     }
 
     skipped += batch.length - newEmbeddings.length;
-    console.log(`   ✓ Processed ${i + batch.length}/${embeddingRecords.length} embeddings (${newEmbeddings.length} new, ${batch.length - newEmbeddings.length} skipped)`);
+    console.log(
+      `   ✓ Processed ${i + batch.length}/${embeddingRecords.length} embeddings (${newEmbeddings.length} new, ${batch.length - newEmbeddings.length} skipped)`
+    );
   }
 
   console.log(`✅ Inserted ${inserted} new embeddings (skipped ${skipped} existing)`);
@@ -214,12 +215,14 @@ async function importJiraExcel() {
   const excelPath = process.argv[2];
 
   if (!excelPath) {
-    console.error('❌ Usage: node import-jira-excel.js <path-to-xls-or-xlsx>');
-    console.error('   Example: node import-jira-excel.js tmp/jira-exports/all-projects-tickets.xls');
+    console.error("❌ Usage: node import-jira-excel.js <path-to-xls-or-xlsx>");
+    console.error(
+      "   Example: node import-jira-excel.js tmp/jira-exports/all-projects-tickets.xls"
+    );
     process.exit(1);
   }
 
-  console.log('🚀 Starting JIRA Excel import');
+  console.log("🚀 Starting JIRA Excel import");
   console.log(`   Excel file: ${excelPath}`);
 
   try {
@@ -227,21 +230,21 @@ async function importJiraExcel() {
     const records = await parseJiraExcel(excelPath);
 
     // Transform to ticket objects
-    console.log('\n🔄 Transforming records...');
+    console.log("\n🔄 Transforming records...");
     const tickets = records.map(transformRecord);
 
     // Filter out tickets without external_id
-    const validTickets = tickets.filter(t => t.external_id);
+    const validTickets = tickets.filter((t) => t.external_id);
     console.log(`✅ Transformed ${validTickets.length} valid tickets`);
 
     if (validTickets.length === 0) {
-      console.error('❌ No valid tickets found in Excel!');
+      console.error("❌ No valid tickets found in Excel!");
       console.log('   Check that Excel has "Issue key" or "Key" column');
       process.exit(1);
     }
 
     // Show sample ticket
-    console.log('\n📋 Sample ticket:');
+    console.log("\n📋 Sample ticket:");
     console.log(JSON.stringify(validTickets[0], null, 2));
 
     // Upsert tickets
@@ -250,15 +253,14 @@ async function importJiraExcel() {
     // Generate and upsert embeddings
     const embeddingCount = await upsertEmbeddings(validTickets);
 
-    console.log('\n✅ JIRA Excel import completed successfully!');
+    console.log("\n✅ JIRA Excel import completed successfully!");
     console.log(`\n📊 Summary:`);
     console.log(`   Total records in Excel: ${records.length}`);
     console.log(`   Valid tickets: ${validTickets.length}`);
     console.log(`   Tickets upserted: ${insertedCount}`);
     console.log(`   Embeddings generated: ${embeddingCount}`);
-
   } catch (error) {
-    console.error('\n❌ Error:', error.message);
+    console.error("\n❌ Error:", error.message);
     console.error(error.stack);
     process.exit(1);
   }
@@ -268,11 +270,11 @@ async function importJiraExcel() {
 if (require.main === module) {
   importJiraExcel()
     .then(() => {
-      console.log('\n👋 Done!');
+      console.log("\n👋 Done!");
       process.exit(0);
     })
     .catch((error) => {
-      console.error('\n💥 Failed:', error);
+      console.error("\n💥 Failed:", error);
       process.exit(1);
     });
 }

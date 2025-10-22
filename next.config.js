@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
-const path = require('path');
-const isProd = process.env.NODE_ENV === 'production';
+const path = require("path");
+const isProd = process.env.NODE_ENV === "production";
 const nextConfig = {
   // output: 'standalone', // Only needed for Docker deployments
   eslint: {
@@ -15,16 +15,16 @@ const nextConfig = {
   ...(isProd ? {} : { outputFileTracingRoot: __dirname }),
   reactStrictMode: false,
   images: {
-    domains: ['localhost', 'siam.onrender.com'],
+    domains: ["localhost", "siam.onrender.com"],
   },
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: "/:path*",
         headers: [
           {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
           },
         ],
       },

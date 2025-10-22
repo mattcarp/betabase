@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { cn } from "../../lib/utils";
-import { CircularProfessionalProgress as RadialProgress } from "./ProfessionalProgress"
+import { CircularProfessionalProgress as RadialProgress } from "./ProfessionalProgress";
 
 export interface DataPoint {
   timestamp: number;
@@ -164,13 +164,10 @@ export const DataVisualization: React.FC<DataVisualizationProps> = ({
           break;
       }
     },
-    [width, height, showGrid, type, colors, glowEffect],
+    [width, height, showGrid, type, colors, glowEffect]
   );
 
-  const drawWaveform = (
-    ctx: CanvasRenderingContext2D,
-    currentData: DataPoint[],
-  ) => {
+  const drawWaveform = (ctx: CanvasRenderingContext2D, currentData: DataPoint[]) => {
     const step = width / (currentData.length - 1);
 
     // Create gradient
@@ -221,10 +218,7 @@ export const DataVisualization: React.FC<DataVisualizationProps> = ({
     ctx.shadowBlur = 0;
   };
 
-  const drawSpectrum = (
-    ctx: CanvasRenderingContext2D,
-    currentData: DataPoint[],
-  ) => {
+  const drawSpectrum = (ctx: CanvasRenderingContext2D, currentData: DataPoint[]) => {
     const barWidth = width / currentData.length;
 
     currentData.forEach((point, index) => {
@@ -249,10 +243,7 @@ export const DataVisualization: React.FC<DataVisualizationProps> = ({
     });
   };
 
-  const drawRealtime = (
-    ctx: CanvasRenderingContext2D,
-    currentData: DataPoint[],
-  ) => {
+  const drawRealtime = (ctx: CanvasRenderingContext2D, currentData: DataPoint[]) => {
     const step = width / (currentData.length - 1);
 
     // Draw multiple lines with different opacities for depth effect
@@ -276,9 +267,7 @@ export const DataVisualization: React.FC<DataVisualizationProps> = ({
           ctx.moveTo(x, y);
         } else {
           const prevX = (index - 1) * step;
-          const prevY =
-            height -
-            ((currentData[index - 1]?.value || 0 + offset) / 100) * height;
+          const prevY = height - ((currentData[index - 1]?.value || 0 + offset) / 100) * height;
 
           // Smooth curves
           const cpX = (prevX + x) / 2;
@@ -291,10 +280,7 @@ export const DataVisualization: React.FC<DataVisualizationProps> = ({
     }
   };
 
-  const drawHybrid = (
-    ctx: CanvasRenderingContext2D,
-    currentData: DataPoint[],
-  ) => {
+  const drawHybrid = (ctx: CanvasRenderingContext2D, currentData: DataPoint[]) => {
     // Combine waveform and spectrum
     drawWaveform(ctx, currentData);
 
@@ -354,9 +340,7 @@ export const DataVisualization: React.FC<DataVisualizationProps> = ({
         height={height}
         className="block bg-transparent"
         style={{
-          filter: glowEffect
-            ? `drop-shadow(0 0 5px ${colors.glow})`
-            : undefined,
+          filter: glowEffect ? `drop-shadow(0 0 5px ${colors.glow})` : undefined,
         }}
       />
 
@@ -387,15 +371,11 @@ export const DataVisualization: React.FC<DataVisualizationProps> = ({
           <div className="text-xs text-holographic font-mono space-y-1">
             <div className="flex justify-between">
               <span className="opacity-70">FREQ:</span>
-              <span className="text-[var(--jarvis-primary)]">
-                {metrics.frequency}Hz
-              </span>
+              <span className="text-[var(--jarvis-primary)]">{metrics.frequency}Hz</span>
             </div>
             <div className="flex justify-between">
               <span className="opacity-70">QUAL:</span>
-              <span className="text-[var(--jarvis-accent)]">
-                {metrics.quality}%
-              </span>
+              <span className="text-[var(--jarvis-accent)]">{metrics.quality}%</span>
             </div>
           </div>
         </div>
@@ -403,9 +383,7 @@ export const DataVisualization: React.FC<DataVisualizationProps> = ({
 
       {/* Type indicator */}
       <div className="absolute bottom-2 left-2">
-        <div className="text-xs text-holographic font-mono opacity-60 uppercase">
-          {type}
-        </div>
+        <div className="text-xs text-holographic font-mono opacity-60 uppercase">{type}</div>
       </div>
     </div>
   );

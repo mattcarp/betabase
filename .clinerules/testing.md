@@ -3,6 +3,7 @@
 ## 🎯 Testing Architecture Overview
 
 ### Directory Structure (MEMORIZE THIS)
+
 ```
 tests/
 ├── __TESTING_RULES__.md      ← START HERE ALWAYS
@@ -17,6 +18,7 @@ tests/
 ## 🚀 Quick Commands for Claude Code
 
 When user says → You execute:
+
 ```bash
 "test this"        → npm run test:smoke
 "test chat"        → npm run test:feature -- chat
@@ -40,7 +42,7 @@ import { TestFactory } from '../../__fixtures__';
 
 test.describe('[FEATURE] [FeatureName]', () => {
   let page: [Feature]Page;
-  
+
   test.beforeEach(async ({ page: pwPage }) => {
     page = new [Feature]Page(pwPage);
     await page.navigate();
@@ -49,10 +51,10 @@ test.describe('[FEATURE] [FeatureName]', () => {
   test('[MUST] do critical action @smoke', async () => {
     // Arrange
     const data = TestFactory.createData();
-    
+
     // Act
     await page.performAction(data);
-    
+
     // Assert
     await expect(page.getResult()).toBe(expected);
   });
@@ -62,15 +64,17 @@ test.describe('[FEATURE] [FeatureName]', () => {
 ## 🏭 Page Object Model (MANDATORY)
 
 ### NEVER write selectors in tests:
+
 ```typescript
 // ❌ WRONG - Never do this
-await page.click('.submit-btn');
+await page.click(".submit-btn");
 
 // ✅ CORRECT - Always use page objects
-await chatPage.sendMessage('Hello');
+await chatPage.sendMessage("Hello");
 ```
 
 ### Page Object Template:
+
 ```typescript
 export class [Feature]Page extends BasePage {
   private selectors = {
@@ -88,7 +92,7 @@ export class [Feature]Page extends BasePage {
 ## 🎯 Selector Strategy (IN ORDER)
 
 1. `[data-testid="..."]` - BEST
-2. `[role="..."]` - GOOD  
+2. `[role="..."]` - GOOD
 3. `[aria-label="..."]` - OK
 4. `text=...` - FALLBACK
 5. `.class`, `#id` - AVOID
@@ -96,12 +100,14 @@ export class [Feature]Page extends BasePage {
 ## 🏷️ Test Tagging Rules
 
 ### Priority (REQUIRED):
+
 - `@p0` - Blocks deployment
 - `@p1` - Fix in 24 hours
 - `@p2` - Fix this sprint
 - `@p3` - Nice to have
 
 ### Execution:
+
 - `@smoke` - Every commit (2 min)
 - `@regression` - Before deploy (30 min)
 - `@nightly` - Overnight runs
@@ -130,9 +136,10 @@ npm run test:ui           # Playwright UI
 ## 📊 Test Data Factory
 
 ### NEVER hardcode data:
+
 ```typescript
 // ❌ WRONG
-const email = 'test@example.com';
+const email = "test@example.com";
 
 // ✅ CORRECT
 const user = TestFactory.createUser();
@@ -150,6 +157,7 @@ const file = TestFactory.createFile();
 ## 📁 File Naming Convention
 
 ALWAYS: `[feature].[layer].test.ts`
+
 - `chat.unit.test.ts`
 - `chat.integration.test.ts`
 - `chat.e2e.test.ts`
@@ -193,6 +201,7 @@ test-results/
 ## 🎯 Claude Code Intelligence
 
 When working on:
+
 - Component → Create unit test in `01-unit/`
 - API endpoint → Create integration test in `02-integration/`
 - User flow → Create E2E test in `03-e2e/`
@@ -209,6 +218,7 @@ When working on:
 7. Commit when green
 
 ---
+
 Priority: CRITICAL for Claude Code
-Source: tests/__TESTING_RULES__.md
+Source: tests/**TESTING_RULES**.md
 Last Updated: 2024

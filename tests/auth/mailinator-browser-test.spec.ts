@@ -18,8 +18,7 @@
 import { test, expect, Page, BrowserContext } from "@playwright/test";
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
-const MAILINATOR_INBOX =
-  "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
+const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
 const SIAM_URL = process.env.TEST_URL || "https://iamsiam.ai";
 
 // Helper to wait with retries
@@ -33,11 +32,9 @@ async function extractCodeFromMailinator(mailPage: Page): Promise<string> {
   console.log("   📧 Opening latest email...");
 
   // Click on the first email in the list
-  const emailItem = await waitForElement(
-    mailPage,
-    'tr[ng-repeat*="email in emails"]',
-    { timeout: 60000 },
-  );
+  const emailItem = await waitForElement(mailPage, 'tr[ng-repeat*="email in emails"]', {
+    timeout: 60000,
+  });
   await emailItem.click();
 
   // Wait for email content to load
@@ -45,9 +42,7 @@ async function extractCodeFromMailinator(mailPage: Page): Promise<string> {
 
   // Try to find the code in the email body
   // Mailinator uses an iframe for email content
-  const iframeElement = await mailPage.$(
-    "iframe#html_msg_body, iframe#msg_body",
-  );
+  const iframeElement = await mailPage.$("iframe#html_msg_body, iframe#msg_body");
 
   if (iframeElement) {
     const frame = await iframeElement.contentFrame();
@@ -62,9 +57,7 @@ async function extractCodeFromMailinator(mailPage: Page): Promise<string> {
         return codeMatch[1];
       }
 
-      console.log(
-        "   ⚠️ No code found in iframe, trying alternative extraction...",
-      );
+      console.log("   ⚠️ No code found in iframe, trying alternative extraction...");
     }
   }
 
@@ -114,12 +107,12 @@ test.describe("SIAM Authentication - Mailinator Integration", () => {
 
       // Wait for verification form or error
       const verificationForm = page.locator(
-        'h3:has-text("Magic Link Sent"), h2:has-text("Magic Link Sent"), h2:has-text("Enter"), h2:has-text("Verification"), input[placeholder*="code" i], input[placeholder*="verification" i]',
+        'h3:has-text("Magic Link Sent"), h2:has-text("Magic Link Sent"), h2:has-text("Enter"), h2:has-text("Verification"), input[placeholder*="code" i], input[placeholder*="verification" i]'
       );
 
       // More specific error selector that won't match the loading button
       const errorMessage = page.locator(
-        '.error-message, div[role="alert"]:has-text("error"), div[role="alert"]:has-text("failed")',
+        '.error-message, div[role="alert"]:has-text("error"), div[role="alert"]:has-text("failed")'
       );
 
       // Wait for the form to appear (not the error)
@@ -160,9 +153,7 @@ test.describe("SIAM Authentication - Mailinator Integration", () => {
 
       while (attempts < maxAttempts) {
         // Check if any emails are present
-        const emailCount = await mailPage
-          .locator('tr[ng-repeat*="email in emails"]')
-          .count();
+        const emailCount = await mailPage.locator('tr[ng-repeat*="email in emails"]').count();
 
         if (emailCount > 0) {
           console.log(`   ✅ Found ${emailCount} email(s)`);
@@ -170,9 +161,7 @@ test.describe("SIAM Authentication - Mailinator Integration", () => {
         }
 
         attempts++;
-        console.log(
-          `   ⏳ No emails yet, waiting... (attempt ${attempts}/${maxAttempts})`,
-        );
+        console.log(`   ⏳ No emails yet, waiting... (attempt ${attempts}/${maxAttempts})`);
 
         // Refresh the page to check for new emails
         if (attempts % 5 === 0) {
@@ -210,7 +199,7 @@ test.describe("SIAM Authentication - Mailinator Integration", () => {
       // Find the code input field
       const codeInput = page
         .locator(
-          'input[type="text"], input[type="number"], input[placeholder*="code" i], input[placeholder*="verification" i]',
+          'input[type="text"], input[type="number"], input[placeholder*="code" i], input[placeholder*="verification" i]'
         )
         .first();
       await expect(codeInput).toBeVisible({ timeout: 5000 });
@@ -221,21 +210,16 @@ test.describe("SIAM Authentication - Mailinator Integration", () => {
 
       // Submit the verification form
       const verifyButton = page
-        .locator(
-          'button:has-text("Verify"), button:has-text("Sign In"), button[type="submit"]',
-        )
+        .locator('button:has-text("Verify"), button:has-text("Sign In"), button[type="submit"]')
         .first();
       await verifyButton.click();
       console.log("   ✅ Clicked verify button");
 
       // Wait for successful login
       // The app shows the AOMA Intelligence Hub after login
-      await page.waitForSelector(
-        'h1:has-text("AOMA Intelligence Hub"), h1:has-text("SIAM")',
-        {
-          timeout: 15000,
-        },
-      );
+      await page.waitForSelector('h1:has-text("AOMA Intelligence Hub"), h1:has-text("SIAM")', {
+        timeout: 15000,
+      });
 
       console.log("   ✅ Successfully logged in!\n");
       await page.screenshot({
@@ -249,9 +233,7 @@ test.describe("SIAM Authentication - Mailinator Integration", () => {
       console.log("4️⃣ Testing application functionality...");
 
       // Check that main UI elements are present
-      const mainContent = page
-        .locator('[role="main"], .dashboard, .chat-interface, main')
-        .first();
+      const mainContent = page.locator('[role="main"], .dashboard, .chat-interface, main').first();
       await expect(mainContent).toBeVisible({ timeout: 10000 });
       console.log("   ✅ Main interface loaded");
 
@@ -268,9 +250,7 @@ test.describe("SIAM Authentication - Mailinator Integration", () => {
 
       if (consoleErrors.length > 0) {
         console.log(`   ⚠️ Found ${consoleErrors.length} console error(s):`);
-        consoleErrors.forEach((err) =>
-          console.log(`      - ${err.substring(0, 100)}`),
-        );
+        consoleErrors.forEach((err) => console.log(`      - ${err.substring(0, 100)}`));
       } else {
         console.log("   ✅ No console errors detected");
       }
@@ -309,12 +289,10 @@ test.describe("SIAM Authentication - Mailinator Integration", () => {
           timeout: 10000,
         })
         .then(() => "not_authorized"),
-      page
-        .waitForSelector('[role="alert"]', { timeout: 10000 })
-        .then(async (el) => {
-          const text = await el.textContent();
-          return text?.includes("500") ? "server_error" : "other_error";
-        }),
+      page.waitForSelector('[role="alert"]', { timeout: 10000 }).then(async (el) => {
+        const text = await el.textContent();
+        return text?.includes("500") ? "server_error" : "other_error";
+      }),
     ]);
 
     switch (result) {
@@ -323,9 +301,7 @@ test.describe("SIAM Authentication - Mailinator Integration", () => {
         break;
       case "not_authorized":
         console.log("❌ Test email is not in the allowed list");
-        console.log(
-          "   Fix: Add 'siam-test-x7j9k2p4@mailinator.com' to ALLOWED_EMAILS in backend",
-        );
+        console.log("   Fix: Add 'siam-test-x7j9k2p4@mailinator.com' to ALLOWED_EMAILS in backend");
         break;
       case "server_error":
         console.log("❌ Server error (500) - Cognito user might not exist");

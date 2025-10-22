@@ -7,16 +7,12 @@ interface SkeletonProps {
   style?: React.CSSProperties;
 }
 
-export const Skeleton: React.FC<SkeletonProps> = ({
-  className,
-  animate = true,
-  style,
-}) => (
+export const Skeleton: React.FC<SkeletonProps> = ({ className, animate = true, style }) => (
   <div
     className={cn(
       "bg-gradient-to-r from-gray-700/20 via-gray-600/30 to-gray-700/20 rounded",
       animate && "animate-pulse",
-      className,
+      className
     )}
     style={style}
     data-testid="skeleton-loader"
@@ -59,15 +55,9 @@ export const TranscriptionSkeleton: React.FC = () => (
     <div className="space-y-3">
       {Array.from({ length: 6 }).map((_, i) => (
         <div key={i} className="space-y-2">
-          <Skeleton
-            className="h-4"
-            style={{ width: `${Math.random() * 40 + 60}%` }}
-          />
+          <Skeleton className="h-4" style={{ width: `${Math.random() * 40 + 60}%` }} />
           {Math.random() > 0.5 && (
-            <Skeleton
-              className="h-4"
-              style={{ width: `${Math.random() * 60 + 40}%` }}
-            />
+            <Skeleton className="h-4" style={{ width: `${Math.random() * 60 + 40}%` }} />
           )}
         </div>
       ))}
@@ -89,10 +79,7 @@ export const AIInsightsSkeleton: React.FC = () => (
 
     {/* Insight cards */}
     {Array.from({ length: 3 }).map((_, i) => (
-      <div
-        key={i}
-        className="space-y-3 p-4 border border-gray-700/30 rounded-lg"
-      >
+      <div key={i} className="space-y-3 p-4 border border-gray-700/30 rounded-lg">
         <div className="flex items-center justify-between">
           <Skeleton className="h-4 w-20" />
           <Skeleton className="h-4 w-12" />
@@ -138,9 +125,7 @@ export const SystemMonitorSkeleton: React.FC = () => (
   </div>
 );
 
-export const CircularHUDSkeleton: React.FC<{ size?: number }> = ({
-  size = 400,
-}) => (
+export const CircularHUDSkeleton: React.FC<{ size?: number }> = ({ size = 400 }) => (
   <div
     className="relative flex items-center justify-center"
     style={{ width: size, height: size }}
@@ -173,19 +158,11 @@ export const CircularHUDSkeleton: React.FC<{ size?: number }> = ({
 
 // Panel skeleton that adapts to panel type
 interface PanelSkeletonProps {
-  panelType:
-    | "audio"
-    | "transcription"
-    | "ai-insights"
-    | "system-monitor"
-    | "default";
+  panelType: "audio" | "transcription" | "ai-insights" | "system-monitor" | "default";
   className?: string;
 }
 
-export const PanelSkeleton: React.FC<PanelSkeletonProps> = ({
-  panelType,
-  className,
-}) => {
+export const PanelSkeleton: React.FC<PanelSkeletonProps> = ({ panelType, className }) => {
   const renderSkeletonContent = () => {
     switch (panelType) {
       case "audio":
@@ -229,7 +206,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   <div
     className={cn(
       "fixed inset-0 bg-black/60 flex items-center justify-center z-50 backdrop-blur-sm",
-      className,
+      className
     )}
     data-testid="loading-overlay"
   >
@@ -256,9 +233,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
             strokeLinecap="round"
             className="text-[var(--jarvis-primary)] animate-pulse"
             pathLength="100"
-            strokeDasharray={
-              progress ? `${progress} ${100 - progress}` : "20 80"
-            }
+            strokeDasharray={progress ? `${progress} ${100 - progress}` : "20 80"}
             style={{
               animation: progress ? "none" : "spin 2s linear infinite",
             }}

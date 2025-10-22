@@ -32,26 +32,20 @@ test.describe("Assistant Functionality - Comprehensive", () => {
 
       // Input field
       const inputField = page.locator(
-        'textarea[placeholder*="Ask"], input[placeholder*="Ask"], [contenteditable="true"]',
+        'textarea[placeholder*="Ask"], input[placeholder*="Ask"], [contenteditable="true"]'
       );
       await expect(inputField).toBeVisible();
 
       // Submit button
       const submitButton = page.locator(
-        'button[aria-label*="Send"], button:has-text("Send"), button[type="submit"]',
+        'button[aria-label*="Send"], button:has-text("Send"), button[type="submit"]'
       );
       await expect(submitButton).toBeVisible();
     });
 
     test("should show assistant capabilities", async ({ page }) => {
       // Look for capability indicators or help text
-      const capabilities = [
-        "help",
-        "assist",
-        "analyze",
-        "suggest",
-        "recommend",
-      ];
+      const capabilities = ["help", "assist", "analyze", "suggest", "recommend"];
 
       let hasCapabilities = false;
       for (const capability of capabilities) {
@@ -62,9 +56,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
       }
 
       // Or check for a help/info button
-      const helpButton = page.locator(
-        'button[aria-label*="Help"], button[aria-label*="Info"]',
-      );
+      const helpButton = page.locator('button[aria-label*="Help"], button[aria-label*="Info"]');
       if (await helpButton.isVisible()) {
         hasCapabilities = true;
       }
@@ -75,15 +67,11 @@ test.describe("Assistant Functionality - Comprehensive", () => {
     test("should display system prompts or context", async ({ page }) => {
       // Check for system prompt or context display
       const hasSystemContext = await page
-        .locator(
-          '[class*="system"], [class*="context"], [data-testid="system-prompt"]',
-        )
+        .locator('[class*="system"], [class*="context"], [data-testid="system-prompt"]')
         .isVisible();
 
       // Or check for configuration panel
-      const hasConfig = await page
-        .locator('[class*="config"], [class*="settings"]')
-        .isVisible();
+      const hasConfig = await page.locator('[class*="config"], [class*="settings"]').isVisible();
 
       expect(hasSystemContext || hasConfig).toBeTruthy();
     });
@@ -93,7 +81,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
     test("should create a new thread", async ({ page }) => {
       // Look for new thread button
       const newThreadButton = page.locator(
-        'button:has-text("New Thread"), button:has-text("New Conversation"), button[aria-label*="New"]',
+        'button:has-text("New Thread"), button:has-text("New Conversation"), button[aria-label*="New"]'
       );
 
       if (await newThreadButton.isVisible()) {
@@ -114,9 +102,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
         const inputField = page
           .locator('textarea, input[type="text"], [contenteditable="true"]')
           .first();
-        const inputValue = await inputField
-          .inputValue()
-          .catch(() => inputField.textContent());
+        const inputValue = await inputField.inputValue().catch(() => inputField.textContent());
         expect(inputValue).toBe("");
       }
     });
@@ -138,7 +124,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
 
         // Create new thread for next iteration
         const newThreadButton = page.locator(
-          'button:has-text("New Thread"), button:has-text("New")',
+          'button:has-text("New Thread"), button:has-text("New")'
         );
         if ((await newThreadButton.isVisible()) && i < 3) {
           await newThreadButton.click();
@@ -146,9 +132,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
       }
 
       // Check thread list
-      const threadList = page.locator(
-        '[class*="thread-list"], [class*="conversation-list"]',
-      );
+      const threadList = page.locator('[class*="thread-list"], [class*="conversation-list"]');
       if (await threadList.isVisible()) {
         const threadItems = await page
           .locator('[class*="thread-item"], [class*="conversation-item"]')
@@ -175,9 +159,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
       await page.waitForTimeout(1000);
 
       // Create second thread
-      const newThreadButton = page.locator(
-        'button:has-text("New Thread"), button:has-text("New")',
-      );
+      const newThreadButton = page.locator('button:has-text("New Thread"), button:has-text("New")');
       if (await newThreadButton.isVisible()) {
         await newThreadButton.click();
         await page.waitForTimeout(500);
@@ -216,16 +198,14 @@ test.describe("Assistant Functionality - Comprehensive", () => {
 
       // Look for delete option
       const deleteButton = page.locator(
-        'button[aria-label*="Delete thread"], button[aria-label*="Remove"]',
+        'button[aria-label*="Delete thread"], button[aria-label*="Remove"]'
       );
 
       if (await deleteButton.isVisible()) {
         await deleteButton.click();
 
         // Confirm deletion
-        const confirmButton = page.locator(
-          'button:has-text("Confirm"), button:has-text("Yes")',
-        );
+        const confirmButton = page.locator('button:has-text("Confirm"), button:has-text("Yes")');
         if (await confirmButton.isVisible({ timeout: 1000 })) {
           await confirmButton.click();
         }
@@ -233,8 +213,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
         await page.waitForTimeout(1000);
 
         // Thread should be removed
-        const threadStillVisible =
-          await helpers.checkTextVisible("Thread to delete");
+        const threadStillVisible = await helpers.checkTextVisible("Thread to delete");
         expect(threadStillVisible).toBeFalsy();
       }
     });
@@ -338,9 +317,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
       await page.waitForTimeout(3000);
 
       // Check for code block in response
-      const hasCodeBlock = await page
-        .locator('pre, code, [class*="code-block"]')
-        .isVisible();
+      const hasCodeBlock = await page.locator('pre, code, [class*="code-block"]').isVisible();
       expect(hasCodeBlock).toBeTruthy();
 
       // Check for Python syntax
@@ -354,14 +331,14 @@ test.describe("Assistant Functionality - Comprehensive", () => {
       // Check if file reference is available
       const hasFileReference = await page
         .locator(
-          '[class*="file-reference"], button:has-text("Attach"), button[aria-label*="Upload"]',
+          '[class*="file-reference"], button:has-text("Attach"), button[aria-label*="Upload"]'
         )
         .isVisible();
 
       if (hasFileReference) {
         // Test file attachment UI
         const attachButton = page.locator(
-          'button:has-text("Attach"), button[aria-label*="Upload"]',
+          'button:has-text("Attach"), button[aria-label*="Upload"]'
         );
         await attachButton.click();
 
@@ -407,7 +384,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
     test("should allow model selection", async ({ page }) => {
       // Look for settings or model selector
       const settingsButton = page.locator(
-        'button[aria-label*="Settings"], button:has-text("Settings")',
+        'button[aria-label*="Settings"], button:has-text("Settings")'
       );
 
       if (await settingsButton.isVisible()) {
@@ -419,9 +396,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
           .isVisible();
 
         if (hasModelSelector) {
-          const modelSelector = page.locator(
-            'select[name*="model"], [class*="model-select"]',
-          );
+          const modelSelector = page.locator('select[name*="model"], [class*="model-select"]');
           const options = await modelSelector.locator("option").count();
           expect(options).toBeGreaterThan(1);
         }
@@ -430,7 +405,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
 
     test("should allow temperature adjustment", async ({ page }) => {
       const settingsButton = page.locator(
-        'button[aria-label*="Settings"], button:has-text("Settings")',
+        'button[aria-label*="Settings"], button:has-text("Settings")'
       );
 
       if (await settingsButton.isVisible()) {
@@ -456,24 +431,20 @@ test.describe("Assistant Functionality - Comprehensive", () => {
 
     test("should save assistant preferences", async ({ page }) => {
       const settingsButton = page.locator(
-        'button[aria-label*="Settings"], button:has-text("Settings")',
+        'button[aria-label*="Settings"], button:has-text("Settings")'
       );
 
       if (await settingsButton.isVisible()) {
         await settingsButton.click();
 
         // Make a change
-        const modelSelector = page.locator(
-          'select[name*="model"], [class*="model-select"]',
-        );
+        const modelSelector = page.locator('select[name*="model"], [class*="model-select"]');
         if (await modelSelector.isVisible()) {
           await modelSelector.selectOption({ index: 1 });
         }
 
         // Save settings
-        const saveButton = page.locator(
-          'button:has-text("Save"), button:has-text("Apply")',
-        );
+        const saveButton = page.locator('button:has-text("Save"), button:has-text("Apply")');
         if (await saveButton.isVisible()) {
           await saveButton.click();
         }
@@ -607,7 +578,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
 
       // Look for export button
       const exportButton = page.locator(
-        'button:has-text("Export"), button[aria-label*="Export"], button[aria-label*="Download"]',
+        'button:has-text("Export"), button[aria-label*="Export"], button[aria-label*="Download"]'
       );
 
       if (await exportButton.isVisible()) {
@@ -618,7 +589,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
 
         // Check for format options
         const formatOptions = page.locator(
-          'button:has-text("JSON"), button:has-text("Markdown"), button:has-text("Text")',
+          'button:has-text("JSON"), button:has-text("Markdown"), button:has-text("Text")'
         );
         if (await formatOptions.first().isVisible()) {
           await formatOptions.first().click();
@@ -650,9 +621,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
       await page.waitForTimeout(2000);
 
       // Look for share button
-      const shareButton = page.locator(
-        'button:has-text("Share"), button[aria-label*="Share"]',
-      );
+      const shareButton = page.locator('button:has-text("Share"), button[aria-label*="Share"]');
 
       if (await shareButton.isVisible()) {
         await shareButton.click();

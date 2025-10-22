@@ -14,11 +14,10 @@ test.describe("Quick Visual Check - Identify Regressions", () => {
   });
 
   test("capture current UI state and console errors", async ({ page }) => {
-
     // Navigate with a shorter timeout and don't wait for networkidle
-    await page.goto("http://localhost:3000/", { 
+    await page.goto("http://localhost:3000/", {
       waitUntil: "domcontentloaded",
-      timeout: 10000 
+      timeout: 10000,
     });
 
     // Wait a bit for initial render
@@ -43,7 +42,7 @@ test.describe("Quick Visual Check - Identify Regressions", () => {
 
     // Check main container background
     const mainBg = await page.evaluate(() => {
-      const main = document.querySelector('main');
+      const main = document.querySelector("main");
       return main ? window.getComputedStyle(main).backgroundColor : null;
     });
 
@@ -57,21 +56,21 @@ test.describe("Quick Visual Check - Identify Regressions", () => {
     console.log("Main background:", mainBg);
     console.log("App container found:", appContainerExists > 0);
     console.log("\n=== Console Errors ===");
-    consoleErrors.forEach(err => console.log("ERROR:", err));
+    consoleErrors.forEach((err) => console.log("ERROR:", err));
     console.log("\n=== All Console Logs (last 20) ===");
-    consoleLogs.slice(-20).forEach(log => console.log(log));
+    consoleLogs.slice(-20).forEach((log) => console.log(log));
 
     // Check for button styling issues
     const buttons = await page.evaluate(() => {
-      const buttons = Array.from(document.querySelectorAll('button'));
-      return buttons.slice(0, 5).map(btn => {
+      const buttons = Array.from(document.querySelectorAll("button"));
+      return buttons.slice(0, 5).map((btn) => {
         const styles = window.getComputedStyle(btn);
         return {
           text: btn.textContent?.trim().substring(0, 20),
           backgroundColor: styles.backgroundColor,
           color: styles.color,
           border: styles.border,
-          classes: btn.className
+          classes: btn.className,
         };
       });
     });

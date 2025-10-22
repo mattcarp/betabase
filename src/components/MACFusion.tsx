@@ -25,8 +25,7 @@ export const MACFusionCard: React.FC<MACFusionCardProps> = ({
     switch (variant) {
       case "professional":
         return {
-          container:
-            "bg-mac-surface-elevated border-mac-border-elevated backdrop-blur-xl",
+          container: "bg-mac-surface-elevated border-mac-border-elevated backdrop-blur-xl",
           title: "font-mac-display font-extralight text-mac-text-primary",
           description: "font-mac-body font-light text-mac-text-secondary",
           glow: "shadow-mac-purple-glow",
@@ -41,8 +40,7 @@ export const MACFusionCard: React.FC<MACFusionCardProps> = ({
       case "hybrid":
       default:
         return {
-          container:
-            "bg-mac-surface-elevated/90 border-mac-border-elevated backdrop-blur-2xl",
+          container: "bg-mac-surface-elevated/90 border-mac-border-elevated backdrop-blur-2xl",
           title: "font-mac-display font-light text-mac-text-primary",
           description: "font-mac-body font-light text-mac-text-secondary",
           glow: isHovered ? "shadow-mac-purple-glow" : "shadow-mac-card",
@@ -81,9 +79,7 @@ export const MACFusionCard: React.FC<MACFusionCardProps> = ({
       <div className="relative z-10">
         <h3 className={`text-xl mb-3 ${classes.title}`}>{title}</h3>
 
-        <p className={`mb-4 leading-relaxed ${classes.description}`}>
-          {description}
-        </p>
+        <p className={`mb-4 leading-relaxed ${classes.description}`}>{description}</p>
 
         {children && <div className="mt-6">{children}</div>}
 
@@ -163,9 +159,7 @@ export const MACShowcase: React.FC = () => {
       <div className="relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="">
-            SIAM × MAC
-          </h1>
+          <h1 className="">SIAM × MAC</h1>
           <p className="text-mac-text-secondary font-mac-body font-light text-lg">
             Professional elegance meets futuristic innovation
           </p>

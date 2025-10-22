@@ -6,53 +6,53 @@ import { baseConfig } from "./base.config";
  */
 export default defineConfig({
   ...baseConfig,
-  
+
   // Local-specific settings
   use: {
     ...baseConfig.use,
     baseURL: process.env.BASE_URL || "http://localhost:3000",
-    
+
     // Faster timeouts for local development
     actionTimeout: 10000,
     navigationTimeout: 20000,
-    
+
     // More verbose output locally
     screenshot: "on",
     trace: "on",
     video: "off",
-    
+
     // Bypass auth for faster testing
     extraHTTPHeaders: {
-      "x-bypass-auth": process.env.NEXT_PUBLIC_BYPASS_AUTH || "true"
-    }
+      "x-bypass-auth": process.env.NEXT_PUBLIC_BYPASS_AUTH || "true",
+    },
   },
-  
+
   // Projects
   projects: [
     {
       name: "chromium",
-      use: { 
+      use: {
         ...devices["Desktop Chrome"],
         channel: "chrome",
         launchOptions: {
-          args: ["--disable-web-security", "--disable-features=IsolateOrigins,site-per-process"]
-        }
-      }
+          args: ["--disable-web-security", "--disable-features=IsolateOrigins,site-per-process"],
+        },
+      },
     },
     {
       name: "firefox",
-      use: { ...devices["Desktop Firefox"] }
+      use: { ...devices["Desktop Firefox"] },
     },
     {
       name: "webkit",
-      use: { ...devices["Desktop Safari"] }
+      use: { ...devices["Desktop Safari"] },
     },
     {
       name: "mobile",
-      use: { ...devices["iPhone 14"] }
-    }
+      use: { ...devices["iPhone 14"] },
+    },
   ],
-  
+
   // Web server configuration for local testing
   webServer: {
     command: "NEXT_PUBLIC_BYPASS_AUTH=true npm run dev",
@@ -63,13 +63,13 @@ export default defineConfig({
     stderr: "pipe",
     env: {
       NEXT_PUBLIC_BYPASS_AUTH: "true",
-      NODE_ENV: "development"
-    }
+      NODE_ENV: "development",
+    },
   },
-  
+
   // Faster retries locally
   retries: 0,
-  
+
   // More parallel workers locally
-  workers: 4
+  workers: 4,
 });

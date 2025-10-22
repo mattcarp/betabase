@@ -53,18 +53,12 @@ export function EnhancedMessageThread({
             >
               <Message
                 role={message.role}
-                className={cn(
-                  message.role === "user" && "flex-row-reverse",
-                  "relative",
-                )}
+                className={cn(message.role === "user" && "flex-row-reverse", "relative")}
               >
                 <MessageContent>
                   {/* Show reasoning if available and enabled */}
                   {enableReasoning && reasoningPart && (
-                    <Reasoning
-                      reasoning={reasoningPart.content}
-                      className="mb-4"
-                    />
+                    <Reasoning reasoning={reasoningPart.content} className="mb-4" />
                   )}
 
                   {/* Main message content with enhanced markdown rendering */}
@@ -85,11 +79,7 @@ export function EnhancedMessageThread({
                             key={idx}
                             toolName={invocation.toolName}
                             args={invocation.args}
-                            result={
-                              invocation.state === "result"
-                                ? invocation.result
-                                : undefined
-                            }
+                            result={invocation.state === "result" ? invocation.result : undefined}
                             isLoading={invocation.state === "call"}
                           />
                         ))}
@@ -114,9 +104,7 @@ export function EnhancedMessageThread({
                   {/* Show sources if available */}
                   {sourceParts.length > 0 && (
                     <div className="mt-4 space-y-2">
-                      <div className="text-sm font-medium text-muted-foreground">
-                        Sources:
-                      </div>
+                      <div className="text-sm font-medium text-muted-foreground">Sources:</div>
                       {sourceParts.map((source: any, idx: number) => (
                         <Source
                           key={idx}
@@ -135,21 +123,14 @@ export function EnhancedMessageThread({
                         <div className="text-sm font-medium text-muted-foreground">
                           Attachments:
                         </div>
-                        {(message as any).experimental_attachments.map(
-                          (attachment, idx) => (
-                            <div
-                              key={idx}
-                              className="flex items-center gap-2 text-sm"
-                            >
-                              <span className="font-medium">
-                                {attachment.name}
-                              </span>
-                              <span className="text-muted-foreground">
-                                ({attachment.contentType})
-                              </span>
-                            </div>
-                          ),
-                        )}
+                        {(message as any).experimental_attachments.map((attachment, idx) => (
+                          <div key={idx} className="flex items-center gap-2 text-sm">
+                            <span className="font-medium">{attachment.name}</span>
+                            <span className="text-muted-foreground">
+                              ({attachment.contentType})
+                            </span>
+                          </div>
+                        ))}
                       </div>
                     )}
                 </MessageContent>
@@ -169,10 +150,7 @@ export function EnhancedMessageThread({
 
         {/* Loading indicator */}
         {isLoading && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <Message role="assistant">
               <MessageContent>
                 <Loader />

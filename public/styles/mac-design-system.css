@@ -223,45 +223,22 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
 }
 
 /* MAC Animations */
 
-
-
 /* MAC Floating Orbs */
 
-
-
-
 /* Shimmer Effect */
-
 
 /* Professional Dark Background */
 .mac-background {
   background-color: var(--mac-surface-background);
   background-image:
-    radial-gradient(
-      circle at 25% 25%,
-      rgba(51, 133, 255, 0.15) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 75% 75%,
-      rgba(139, 92, 246, 0.15) 0%,
-      transparent 50%
-    ),
-    linear-gradient(
-      135deg,
-      rgba(51, 133, 255, 0.05) 0%,
-      rgba(139, 92, 246, 0.05) 100%
-    );
+    radial-gradient(circle at 25% 25%, rgba(51, 133, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+    linear-gradient(135deg, rgba(51, 133, 255, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
   background-size: 100% 100%;
   background-attachment: fixed;
 }
@@ -354,11 +331,12 @@
 
 /* Audio Wave Animation for Voice Indicators */
 @keyframes audioWave {
-  0%, 100% { 
+  0%,
+  100% {
     transform: scaleY(0.5);
     opacity: 0.5;
   }
-  50% { 
+  50% {
     transform: scaleY(1);
     opacity: 1;
   }
@@ -373,7 +351,8 @@
 
 /* Pulse Animation for Recording State */
 @keyframes recordingPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
@@ -390,18 +369,13 @@
 }
 
 .mac-voice-active::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   animation: shimmer 2s infinite;
 }
 
@@ -606,4 +580,3 @@
     padding-right: 0.5rem !important;
   }
 }
-

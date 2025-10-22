@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
  */
 export async function GET() {
   // ONLY allow in development
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === "production") {
     return NextResponse.json(
       { error: "This endpoint is only available in development" },
       { status: 403 }
@@ -24,6 +24,6 @@ export async function GET() {
       NEXT_PUBLIC_BYPASS_AUTH: process.env.NEXT_PUBLIC_BYPASS_AUTH,
       NEXT_PUBLIC_BYPASS_AOMA: process.env.NEXT_PUBLIC_BYPASS_AOMA,
     },
-    supabase_url_preview: process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 30) + '...',
+    supabase_url_preview: process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 30) + "...",
   });
 }

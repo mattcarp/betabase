@@ -21,13 +21,7 @@ export interface SearchResult {
   fullContent?: string;
   url?: string;
   relevanceScore: number;
-  type:
-    | "document"
-    | "api_doc"
-    | "knowledge_base"
-    | "manual"
-    | "specification"
-    | "tutorial";
+  type: "document" | "api_doc" | "knowledge_base" | "manual" | "specification" | "tutorial";
   source: {
     name: string;
     system: "aoma" | "confluence" | "sharepoint" | "jira" | "internal_docs";
@@ -152,9 +146,7 @@ const ResultCard: React.FC<{
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(result.highlighted.title) }}
             />
             <div className="flex items-center gap-2 text-xs text-gray-400 mt-1">
-              <span className="capitalize">
-                {result.type.replace("_", " ")}
-              </span>
+              <span className="capitalize">{result.type.replace("_", " ")}</span>
               <span>•</span>
               <span>{result.source.name}</span>
               {result.readTime && (
@@ -178,9 +170,7 @@ const ResultCard: React.FC<{
               {formatRelevanceScore(result.relevanceScore)}
             </span>
           </div>
-          <span
-            className={`px-2 py-1 rounded text-xs border ${getAccessLevelColor()}`}
-          >
+          <span className={`px-2 py-1 rounded text-xs border ${getAccessLevelColor()}`}>
             {result.metadata.accessLevel}
           </span>
         </div>
@@ -234,9 +224,7 @@ const ResultCard: React.FC<{
       {/* Footer */}
       <div className="flex items-center justify-between pt-3 border-t border-gray-700/50">
         <div className="flex items-center gap-4 text-xs text-gray-400">
-          <span>
-            Modified {result.metadata.lastModified.toLocaleDateString()}
-          </span>
+          <span>Modified {result.metadata.lastModified.toLocaleDateString()}</span>
           {result.metadata.author && <span>by {result.metadata.author}</span>}
           {result.metadata.fileSize && <span>{result.metadata.fileSize}</span>}
         </div>
@@ -258,10 +246,7 @@ const ResultCard: React.FC<{
               <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
             </button>
           )}
-          <button
-            className="p-1.5 hover:bg-gray-700/50 rounded transition-colors"
-            title="Download"
-          >
+          <button className="p-1.5 hover:bg-gray-700/50 rounded transition-colors" title="Download">
             <Download className="w-3.5 h-3.5 text-gray-400" />
           </button>
         </div>
@@ -274,9 +259,7 @@ export const SearchResultsResponse: React.FC<{
   response: SearchResultsResponseData;
 }> = ({ response }) => {
   const { data } = response;
-  const [selectedResult, setSelectedResult] = useState<SearchResult | null>(
-    null,
-  );
+  const [selectedResult, setSelectedResult] = useState<SearchResult | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
   const handleOpenResult = (result: SearchResult) => {
@@ -305,9 +288,7 @@ export const SearchResultsResponse: React.FC<{
             <Search className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-100">
-              Search Results
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-100">Search Results</h3>
             <div className="text-sm text-gray-400">
               <span className="font-medium">"{data.query}"</span> •{" "}
               {data.totalResults.toLocaleString()} results in {data.searchTime}
@@ -370,42 +351,33 @@ export const SearchResultsResponse: React.FC<{
       )}
 
       {/* Expanded Search Terms */}
-      {data.searchStrategy.expandedTerms &&
-        data.searchStrategy.expandedTerms.length > 0 && (
-          <div className="mb-6">
-            <div className="text-sm text-gray-400 mb-2">
-              Also searching for:
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {data.searchStrategy.expandedTerms.map((term, index) => (
-                <span
-                  key={index}
-                  className="px-2 py-1 bg-purple-600/20 text-purple-300 rounded text-sm"
-                >
-                  {term}
-                </span>
-              ))}
-            </div>
+      {data.searchStrategy.expandedTerms && data.searchStrategy.expandedTerms.length > 0 && (
+        <div className="mb-6">
+          <div className="text-sm text-gray-400 mb-2">Also searching for:</div>
+          <div className="flex flex-wrap gap-2">
+            {data.searchStrategy.expandedTerms.map((term, index) => (
+              <span
+                key={index}
+                className="px-2 py-1 bg-purple-600/20 text-purple-300 rounded text-sm"
+              >
+                {term}
+              </span>
+            ))}
           </div>
-        )}
+        </div>
+      )}
 
       {/* Results */}
       <div className="space-y-4 mb-6">
         {data.results.map((result) => (
-          <ResultCard
-            key={result.id}
-            result={result}
-            onOpen={handleOpenResult}
-          />
+          <ResultCard key={result.id} result={result} onOpen={handleOpenResult} />
         ))}
       </div>
 
       {/* Suggestions */}
       {data.suggestions && data.suggestions.length > 0 && (
         <div className="bg-gray-900/50 rounded-lg p-4">
-          <div className="text-gray-300 font-medium mb-3">
-            Try these related searches:
-          </div>
+          <div className="text-gray-300 font-medium mb-3">Try these related searches:</div>
           <div className="flex flex-wrap gap-2">
             {data.suggestions.map((suggestion, index) => (
               <button
@@ -423,8 +395,7 @@ export const SearchResultsResponse: React.FC<{
       {data.resultsShown < data.totalResults && (
         <div className="text-center mt-6">
           <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
-            Load More Results ({data.totalResults - data.resultsShown}{" "}
-            remaining)
+            Load More Results ({data.totalResults - data.resultsShown} remaining)
           </button>
         </div>
       )}

@@ -13,8 +13,7 @@ import { test, expect, Page, BrowserContext } from "@playwright/test";
 import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
-const MAILINATOR_INBOX =
-  "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
+const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
 const SIAM_URL = "https://thebetabase.com";
 const HEALTH_ENDPOINT = `${SIAM_URL}/api/aoma/health`;
 
@@ -39,9 +38,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
   await mailPage.goto(MAILINATOR_INBOX, { waitUntil: "networkidle" });
   await mailPage.waitForTimeout(3000);
 
-  const emails = await mailPage
-    .locator('tr[ng-repeat*="email in emails"]')
-    .count();
+  const emails = await mailPage.locator('tr[ng-repeat*="email in emails"]').count();
   if (emails > 0) {
     await mailPage.locator('tr[ng-repeat*="email in emails"]').first().click();
     await mailPage.waitForTimeout(3000);
@@ -51,10 +48,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
     if (iframe) {
       const frame = await iframe.contentFrame();
       if (frame) {
-        const frameText = await frame.$eval(
-          "body",
-          (el) => el.textContent || "",
-        );
+        const frameText = await frame.$eval("body", (el) => el.textContent || "");
         const match = frameText.match(/\b(\d{6})\b/);
         if (match) code = match[1];
       }
@@ -71,9 +65,12 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
     if (code) {
       await page.fill('input[type="text"]', code);
       await page.click('button[type="submit"]');
-      await page.waitForSelector('h1:has-text("Welcome to The Betabase"), textarea[placeholder*="Ask"]', {
-        timeout: 15000,
-      });
+      await page.waitForSelector(
+        'h1:has-text("Welcome to The Betabase"), textarea[placeholder*="Ask"]',
+        {
+          timeout: 15000,
+        }
+      );
       console.log("✅ Logged in successfully!");
     }
   }
@@ -83,12 +80,10 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
 async function sendChatMessage(
   page: Page,
   message: string,
-  expectResponse: boolean = true,
+  expectResponse: boolean = true
 ): Promise<string> {
   const chatInput = page
-    .locator(
-      'textarea[placeholder*="Ask me anything"], input[placeholder*="Ask me anything"]',
-    )
+    .locator('textarea[placeholder*="Ask me anything"], input[placeholder*="Ask me anything"]')
     .first();
 
   await chatInput.clear();
@@ -122,23 +117,25 @@ async function sendChatMessage(
 
     await page.waitForTimeout(3000);
 
-    const assistantMessages = await page.locator('[data-role="assistant"], .assistant-message, div[role="log"] > div').all();
+    const assistantMessages = await page
+      .locator('[data-role="assistant"], .assistant-message, div[role="log"] > div')
+      .all();
     if (assistantMessages.length > 0) {
       const lastMessage = assistantMessages[assistantMessages.length - 1];
       const responseText = (await lastMessage.textContent()) || "";
 
       const cleanedResponse = responseText
-        .replace(/🤖.*?(?=\n|$)/g, '')
-        .replace(/\d{2}:\d{2} (AM|PM)/g, '')
-        .replace(/Establishing secure connection.*?(?=\n|$)/g, '')
-        .replace(/Parsing request.*?(?=\n|$)/g, '')
-        .replace(/Searching AOMA.*?(?=\n|$)/g, '')
-        .replace(/Building context.*?(?=\n|$)/g, '')
-        .replace(/Generating AI.*?(?=\n|$)/g, '')
-        .replace(/Formatting response.*?(?=\n|$)/g, '')
-        .replace(/This typically takes.*?(?=\n|$)/g, '')
-        .replace(/Estimated time.*?(?=\n|$)/g, '')
-        .replace(/\s+/g, ' ')
+        .replace(/🤖.*?(?=\n|$)/g, "")
+        .replace(/\d{2}:\d{2} (AM|PM)/g, "")
+        .replace(/Establishing secure connection.*?(?=\n|$)/g, "")
+        .replace(/Parsing request.*?(?=\n|$)/g, "")
+        .replace(/Searching AOMA.*?(?=\n|$)/g, "")
+        .replace(/Building context.*?(?=\n|$)/g, "")
+        .replace(/Generating AI.*?(?=\n|$)/g, "")
+        .replace(/Formatting response.*?(?=\n|$)/g, "")
+        .replace(/This typically takes.*?(?=\n|$)/g, "")
+        .replace(/Estimated time.*?(?=\n|$)/g, "")
+        .replace(/\s+/g, " ")
         .trim();
 
       return cleanedResponse || responseText;
@@ -191,12 +188,16 @@ test.describe("🚨 AOMA ERROR HANDLING & RESILIENCE TESTS", () => {
       expect(healthData).toHaveProperty("services");
 
       if (healthData.services?.openai) {
-        console.log(`   🔑 OpenAI service status: ${healthData.services.openai.status ? "✅" : "❌"}`);
+        console.log(
+          `   🔑 OpenAI service status: ${healthData.services.openai.status ? "✅" : "❌"}`
+        );
         expect(healthData.services.openai.status).toBeTruthy();
       }
 
       if (healthData.services?.supabase) {
-        console.log(`   🗄️ Supabase service status: ${healthData.services.supabase.status ? "✅" : "❌"}`);
+        console.log(
+          `   🗄️ Supabase service status: ${healthData.services.supabase.status ? "✅" : "❌"}`
+        );
       }
     } else {
       console.log(`   ⚠️ Status: ${healthData.status}`);
@@ -219,10 +220,7 @@ test.describe("🚨 AOMA ERROR HANDLING & RESILIENCE TESTS", () => {
     // In production, we can't actually break the MCP server, so we test
     // that error messages are clear and the app doesn't crash
 
-    const response = await sendChatMessage(
-      page,
-      "What is AOMA used for at Sony Music?"
-    );
+    const response = await sendChatMessage(page, "What is AOMA used for at Sony Music?");
 
     console.log(`   📝 Response received: ${response.substring(0, 200)}...`);
 
@@ -272,16 +270,13 @@ test.describe("🚨 AOMA ERROR HANDLING & RESILIENCE TESTS", () => {
       console.log("   ✅ No API key errors detected (healthy state)");
 
       // Send a query to verify AOMA is working
-      const response = await sendChatMessage(
-        page,
-        "What is the purpose of AOMA?"
-      );
+      const response = await sendChatMessage(page, "What is the purpose of AOMA?");
 
       const isValidResponse =
         response.length > 50 &&
         (response.toLowerCase().includes("aoma") ||
-         response.toLowerCase().includes("asset") ||
-         response.toLowerCase().includes("orchestration"));
+          response.toLowerCase().includes("asset") ||
+          response.toLowerCase().includes("orchestration"));
 
       console.log(`   📊 Valid AOMA response: ${isValidResponse ? "✅" : "❌"}`);
       console.log(`   Response length: ${response.length} chars`);
@@ -304,7 +299,7 @@ test.describe("🚨 AOMA ERROR HANDLING & RESILIENCE TESTS", () => {
     const queries = [
       "Tell me about AOMA",
       "How do I use the media batch converter?",
-      "What is Sony Ci integration?"
+      "What is Sony Ci integration?",
     ];
 
     for (const query of queries) {
@@ -349,10 +344,7 @@ test.describe("🚨 AOMA ERROR HANDLING & RESILIENCE TESTS", () => {
       console.log("   ⚠️ Error state detected, checking visibility...");
 
       // Send a query that would trigger MCP
-      const response = await sendChatMessage(
-        page,
-        "What are the latest AOMA features?"
-      );
+      const response = await sendChatMessage(page, "What are the latest AOMA features?");
 
       // Check if error is communicated to user
       const hasVisibleError =
@@ -386,17 +378,14 @@ test.describe("🚨 AOMA ERROR HANDLING & RESILIENCE TESTS", () => {
     // We check the browser console for any error messages
 
     const consoleMessages: string[] = [];
-    page.on('console', msg => {
-      if (msg.type() === 'error') {
+    page.on("console", (msg) => {
+      if (msg.type() === "error") {
         consoleMessages.push(msg.text());
       }
     });
 
     // Trigger a query
-    await sendChatMessage(
-      page,
-      "How does AOMA integrate with other Sony systems?"
-    );
+    await sendChatMessage(page, "How does AOMA integrate with other Sony systems?");
 
     await page.waitForTimeout(3000);
 
@@ -409,11 +398,12 @@ test.describe("🚨 AOMA ERROR HANDLING & RESILIENCE TESTS", () => {
       });
 
       // Check if errors are descriptive
-      const hasDescriptiveErrors = consoleMessages.some(msg =>
-        msg.includes("AOMA") ||
-        msg.includes("MCP") ||
-        msg.includes("API") ||
-        msg.includes("OpenAI")
+      const hasDescriptiveErrors = consoleMessages.some(
+        (msg) =>
+          msg.includes("AOMA") ||
+          msg.includes("MCP") ||
+          msg.includes("API") ||
+          msg.includes("OpenAI")
       );
 
       if (hasDescriptiveErrors) {
@@ -474,7 +464,7 @@ test.describe("🚨 AOMA ERROR HANDLING & RESILIENCE TESTS", () => {
       "Tell me about USM",
       "How does linking work?",
       "What are QC features?",
-      "Explain Sony Ci export"
+      "Explain Sony Ci export",
     ];
 
     let successCount = 0;
@@ -504,7 +494,9 @@ test.describe("🚨 AOMA ERROR HANDLING & RESILIENCE TESTS", () => {
     console.log(`\n   📊 Recovery Results:`);
     console.log(`      Successful: ${successCount}/${recoveryQueries.length}`);
     console.log(`      Failed: ${failCount}/${recoveryQueries.length}`);
-    console.log(`      Success rate: ${((successCount / recoveryQueries.length) * 100).toFixed(0)}%`);
+    console.log(
+      `      Success rate: ${((successCount / recoveryQueries.length) * 100).toFixed(0)}%`
+    );
 
     // Verify majority of queries succeeded
     expect(successCount).toBeGreaterThan(recoveryQueries.length / 2);

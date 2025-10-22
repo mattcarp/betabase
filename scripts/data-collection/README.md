@@ -5,6 +5,7 @@ Complete guide to the SIAM/BetaBase data collection infrastructure for JIRA, Con
 ## Overview
 
 This system handles all data ingestion for the AOMA ecosystem:
+
 - **JIRA tickets** via Playwright + JQL queries
 - **Confluence/Alexandria docs** (planned)
 - **AOMA app UI** (planned)
@@ -57,9 +58,11 @@ All data flows into Supabase with vector embeddings for semantic search.
 ## Prerequisites
 
 ### 1. VPN Connection
+
 **MUST** be connected to corporate VPN before running any scrapers.
 
 ### 2. Environment Variables
+
 Create a `.env.local` file in project root:
 
 ```bash
@@ -79,12 +82,14 @@ JIRA_BASE_URL=https://jia.smedigitalapp.com
 ```
 
 ### 3. Dependencies
+
 ```bash
 npm install playwright @supabase/supabase-js openai
 npx playwright install chromium
 ```
 
 ### 4. 2FA Device
+
 Keep your phone handy for Microsoft MFA approval!
 
 ---
@@ -92,11 +97,13 @@ Keep your phone handy for Microsoft MFA approval!
 ## Quick Start
 
 ### Run JIRA Scraper (Interactive)
+
 ```bash
 npm run scrape:jira
 ```
 
 This will:
+
 1. Open browser (non-headless)
 2. Navigate to JIRA
 3. Handle Microsoft SSO login
@@ -107,11 +114,13 @@ This will:
 8. Save to Supabase
 
 ### Run JIRA Scraper (Headless)
+
 ```bash
 npm run scrape:jira:headless
 ```
 
 ### Run All Scrapers
+
 ```bash
 npm run update:all-data
 ```
@@ -150,9 +159,11 @@ siam/
 ### 1. Microsoft SSO Authentication (`utils/auth/microsoft-sso.js`)
 
 #### `authenticateWithMicrosoft(page, config)`
+
 Handles complete Microsoft SSO flow with 2FA.
 
 **Parameters:**
+
 - `page`: Playwright page object
 - `config`: Configuration object
   - `url`: Target URL requiring authentication
@@ -164,20 +175,23 @@ Handles complete Microsoft SSO flow with 2FA.
 **Returns:** `Promise<boolean>` - True if authentication successful
 
 **Example:**
+
 ```javascript
-const { authenticateWithMicrosoft } = require('../../utils/auth/microsoft-sso');
+const { authenticateWithMicrosoft } = require("../../utils/auth/microsoft-sso");
 
 const authenticated = await authenticateWithMicrosoft(page, {
-  url: 'https://jia.smedigitalapp.com',
+  url: "https://jia.smedigitalapp.com",
   mfaTimeout: 180,
-  onMFAPrompt: () => console.log('Check your phone!')
+  onMFAPrompt: () => console.log("Check your phone!"),
 });
 ```
 
 #### `saveAuthState(context, storagePath)`
+
 Saves authentication state to file for reuse.
 
 #### `loadAuthState(storagePath)`
+
 Loads previously saved authentication state.
 
 ---
@@ -185,18 +199,22 @@ Loads previously saved authentication state.
 ### 2. Embedding Generation (`utils/embeddings/openai.js`)
 
 #### `generateEmbedding(text, model)`
+
 Generates single embedding vector.
 
 **Parameters:**
+
 - `text`: Text to embed (max 8000 chars)
 - `model`: OpenAI model (default: `text-embedding-3-small`)
 
 **Returns:** `Promise<number[]>` - Embedding vector
 
 #### `generateEmbeddingsBatch(texts, options)`
+
 Generates embeddings for multiple texts with rate limiting.
 
 **Parameters:**
+
 - `texts`: Array of texts to embed
 - `options`: Configuration object
   - `model`: OpenAI model (default: `text-embedding-3-small`)
@@ -207,19 +225,21 @@ Generates embeddings for multiple texts with rate limiting.
 **Returns:** `Promise<number[][]>` - Array of embedding vectors
 
 **Example:**
+
 ```javascript
-const { generateEmbeddingsBatch } = require('../../utils/embeddings/openai');
+const { generateEmbeddingsBatch } = require("../../utils/embeddings/openai");
 
 const embeddings = await generateEmbeddingsBatch(texts, {
   batchSize: 100,
   delayMs: 1000,
   onProgress: (progress) => {
     console.log(`${progress.processed}/${progress.total} completed`);
-  }
+  },
 });
 ```
 
 #### `createJiraEmbeddingText(ticket)`
+
 Creates optimized text for JIRA ticket embedding.
 
 Combines: ticket key + summary + status + priority + description
@@ -229,16 +249,19 @@ Combines: ticket key + summary + status + priority + description
 ### 3. De-duplication (`utils/supabase/deduplication.js`)
 
 #### `deduplicateJiraTickets(tickets)`
+
 Checks which tickets are new, updated, or unchanged.
 
 **Returns:** Object with three arrays:
+
 - `new`: Tickets not in database
 - `updated`: Tickets with changes
 - `unchanged`: Tickets with no changes
 
 **Example:**
+
 ```javascript
-const { deduplicateJiraTickets } = require('../../utils/supabase/deduplication');
+const { deduplicateJiraTickets } = require("../../utils/supabase/deduplication");
 
 const { new: newTickets, updated, unchanged } = await deduplicateJiraTickets(allTickets);
 
@@ -246,12 +269,15 @@ console.log(`New: ${newTickets.length}, Updated: ${updated.length}`);
 ```
 
 #### `insertJiraTickets(tickets)`
+
 Inserts new tickets into `jira_tickets` table.
 
 #### `updateJiraTickets(tickets)`
+
 Updates existing tickets in `jira_tickets` table.
 
 #### `upsertJiraEmbeddings(embeddings)`
+
 Upserts embeddings into `jira_ticket_embeddings` table.
 
 ---
@@ -259,19 +285,23 @@ Upserts embeddings into `jira_ticket_embeddings` table.
 ## JIRA Scraper Details
 
 ### JQL Queries
+
 Default queries in `scrape-jira.js`:
 
 1. **Recent updates (last 30 days)**
+
    ```jql
    updated >= -30d ORDER BY updated DESC
    ```
 
 2. **Open tickets**
+
    ```jql
    status in ("To Do", "In Progress", "In Review") ORDER BY priority DESC
    ```
 
 3. **Recent bugs**
+
    ```jql
    type = Bug AND created >= -90d ORDER BY priority DESC
    ```
@@ -282,14 +312,15 @@ Default queries in `scrape-jira.js`:
    ```
 
 ### Customizing Queries
+
 Edit the `JQL_QUERIES` array in `scrape-jira.js`:
 
 ```javascript
 const JQL_QUERIES = [
   {
-    name: 'Your custom query',
-    jql: 'project = MYPROJECT AND status = "In Progress"'
-  }
+    name: "Your custom query",
+    jql: 'project = MYPROJECT AND status = "In Progress"',
+  },
 ];
 ```
 
@@ -316,6 +347,7 @@ node scripts/data-collection/scrape-jira.js --headless --limit 500
 The `update-all-data.sh` script orchestrates all scrapers.
 
 ### Usage
+
 ```bash
 # Interactive mode
 ./scripts/data-collection/update-all-data.sh
@@ -328,6 +360,7 @@ npm run update:all-data:headless
 ```
 
 ### Features
+
 - ✅ Environment variable validation
 - ✅ Sequential execution of all scrapers
 - ✅ Detailed logging to file
@@ -336,6 +369,7 @@ npm run update:all-data:headless
 - ✅ Continues on individual scraper failure
 
 ### Logs
+
 Logs are saved to: `logs/update-all-data-YYYYMMDD-HHMMSS.log`
 
 ---
@@ -343,12 +377,15 @@ Logs are saved to: `logs/update-all-data-YYYYMMDD-HHMMSS.log`
 ## Scheduling Options
 
 ### Option 1: Manual Execution (Recommended to Start)
+
 Run scripts manually when connected to VPN:
+
 ```bash
 npm run update:all-data
 ```
 
 ### Option 2: Local Cron Job
+
 ```bash
 # Edit crontab
 crontab -e
@@ -358,7 +395,9 @@ crontab -e
 ```
 
 ### Option 3: macOS Launchd
+
 Create `~/Library/LaunchAgents/com.siam.data-collection.plist`:
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN">
@@ -390,6 +429,7 @@ Create `~/Library/LaunchAgents/com.siam.data-collection.plist`:
 ```
 
 Load it:
+
 ```bash
 launchctl load ~/Library/LaunchAgents/com.siam.data-collection.plist
 ```
@@ -397,6 +437,7 @@ launchctl load ~/Library/LaunchAgents/com.siam.data-collection.plist
 ### Option 4: GitHub Actions Self-Hosted Runner (Best Long-term)
 
 #### Setup Runner
+
 ```bash
 cd ~/actions-runner
 ./config.sh --url https://github.com/yourusername/siam
@@ -404,14 +445,16 @@ cd ~/actions-runner
 ```
 
 #### Create Workflow
+
 `.github/workflows/data-collection.yml`:
+
 ```yaml
 name: Data Collection
 
 on:
   schedule:
-    - cron: '0 9 * * 1-5'  # 9am weekdays
-  workflow_dispatch:  # Manual trigger
+    - cron: "0 9 * * 1-5" # 9am weekdays
+  workflow_dispatch: # Manual trigger
 
 jobs:
   scrape:
@@ -422,7 +465,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install dependencies
         run: npm ci
@@ -445,6 +488,7 @@ jobs:
 ```
 
 **Benefits:**
+
 - GitHub UI for logs and monitoring
 - Manual trigger button
 - Runs on your VPN-connected laptop
@@ -458,6 +502,7 @@ jobs:
 ### Authentication Issues
 
 **Problem:** "AAD_USERNAME or AAD_PASSWORD not set"
+
 ```bash
 # Solution: Check environment variables
 echo $AAD_USERNAME
@@ -469,6 +514,7 @@ export AAD_PASSWORD="your-password"
 ```
 
 **Problem:** MFA timeout
+
 ```bash
 # Solution: Increase timeout (default 180s)
 # Edit scrape-jira.js and change:
@@ -476,6 +522,7 @@ mfaTimeout: 300  # 5 minutes
 ```
 
 **Problem:** "Authentication failed"
+
 - Check VPN connection
 - Verify credentials in environment variables
 - Try interactive mode first: `npm run scrape:jira`
@@ -483,11 +530,13 @@ mfaTimeout: 300  # 5 minutes
 ### Scraping Issues
 
 **Problem:** No tickets found
+
 - Check JQL queries are valid
 - Verify JIRA_BASE_URL is correct
 - Test JQL in JIRA web UI first
 
 **Problem:** Playwright errors
+
 ```bash
 # Reinstall Playwright browsers
 npx playwright install chromium --force
@@ -496,11 +545,13 @@ npx playwright install chromium --force
 ### Database Issues
 
 **Problem:** "Failed to insert tickets"
+
 - Check Supabase credentials
 - Verify service role key (not anon key!)
 - Check table exists: `jira_tickets`
 
 **Problem:** Embedding errors
+
 - Check OPENAI_API_KEY is valid
 - Verify API quota/billing
 - Check for rate limits (increase `delayMs`)
@@ -508,6 +559,7 @@ npx playwright install chromium --force
 ### VPN Issues
 
 **Problem:** Can't reach JIRA
+
 - Confirm VPN is connected
 - Test manually: `curl https://jia.smedigitalapp.com`
 - Check network settings
@@ -517,6 +569,7 @@ npx playwright install chromium --force
 ## Performance Optimization
 
 ### Batch Size Tuning
+
 ```javascript
 // In generateEmbeddingsBatch options
 batchSize: 100,  // Increase for faster, decrease if rate limited
@@ -524,16 +577,19 @@ delayMs: 1000,   // Increase if hitting rate limits
 ```
 
 ### Ticket Limit
+
 ```bash
 # Process only first 100 tickets (testing)
 node scripts/data-collection/scrape-jira.js --limit 100
 ```
 
 ### Parallel Queries
+
 Edit `scrape-jira.js` to run queries in parallel (advanced):
+
 ```javascript
 const results = await Promise.all(
-  JQL_QUERIES.map(query => runJQLQuery(page, query.jql, query.name))
+  JQL_QUERIES.map((query) => runJQLQuery(page, query.jql, query.name))
 );
 ```
 

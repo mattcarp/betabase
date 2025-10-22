@@ -61,9 +61,7 @@ To add this server, update your `.mcp.json`:
     },
     "aoma-mesh": {
       "command": "node",
-      "args": [
-        "/Users/matt/Documents/projects/aoma-mesh-mcp/dist/aoma-mesh-server.js"
-      ],
+      "args": ["/Users/matt/Documents/projects/aoma-mesh-mcp/dist/aoma-mesh-server.js"],
       "env": {
         "NODE_ENV": "development"
       }

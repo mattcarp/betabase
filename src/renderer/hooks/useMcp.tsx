@@ -6,14 +6,8 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import type {
-  MCPGetStatusResponse,
-  MCPServerStatus,
-} from "../../shared/ipc/mcp";
-import type {
-  AOMAReshConfig,
-  AOMAReshRequest,
-} from "../../services/aomaMeshMcp";
+import type { MCPGetStatusResponse, MCPServerStatus } from "../../shared/ipc/mcp";
+import type { AOMAReshConfig, AOMAReshRequest } from "../../services/aomaMeshMcp";
 
 /**
  * Type alias for MCP status - using the server status from the response

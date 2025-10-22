@@ -214,12 +214,7 @@ This design system establishes a comprehensive visual language for SIAM's futuri
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(14, 165, 233, 0.5),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.5), transparent);
 }
 ```
 
@@ -230,11 +225,7 @@ This design system establishes a comprehensive visual language for SIAM's futuri
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(14, 165, 233, 0.1) 0%,
-    transparent 70%
-  );
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
   border: 2px solid rgba(14, 165, 233, 0.3);
   display: flex;
   align-items: center;
@@ -248,12 +239,7 @@ This design system establishes a comprehensive visual language for SIAM's futuri
   inset: -2px;
   border-radius: inherit;
   padding: 2px;
-  background: conic-gradient(
-    from 0deg,
-    transparent,
-    rgba(14, 165, 233, 0.5),
-    transparent
-  );
+  background: conic-gradient(from 0deg, transparent, rgba(14, 165, 233, 0.5), transparent);
   mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -290,12 +276,7 @@ This design system establishes a comprehensive visual language for SIAM's futuri
 .data-stream {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(14, 165, 233, 0.1) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg, transparent 0%, rgba(14, 165, 233, 0.1) 50%, transparent 100%);
   height: 2px;
   margin: 0.5rem 0;
 }
@@ -307,12 +288,7 @@ This design system establishes a comprehensive visual language for SIAM's futuri
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(14, 165, 233, 0.8),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.8), transparent);
   animation: data-flow 2s linear infinite;
 }
 

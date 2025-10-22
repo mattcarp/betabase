@@ -18,8 +18,7 @@ export async function POST(request: NextRequest) {
       case "analyze-aut": {
         // Analyze Application Under Test
         const { url = "https://aoma-stage.smcdp-de.net" } = params;
-        const analysis =
-          await unifiedTestIntelligence.gatherAUTIntelligence(url);
+        const analysis = await unifiedTestIntelligence.gatherAUTIntelligence(url);
 
         return NextResponse.json({
           success: true,
@@ -37,12 +36,11 @@ export async function POST(request: NextRequest) {
               success: false,
               error: "Test result data required",
             },
-            { status: 400 },
+            { status: 400 }
           );
         }
 
-        const knowledge =
-          await unifiedTestIntelligence.processTestFailure(testResult);
+        const knowledge = await unifiedTestIntelligence.processTestFailure(testResult);
 
         return NextResponse.json({
           success: true,
@@ -60,18 +58,15 @@ export async function POST(request: NextRequest) {
               success: false,
               error: "Search query required",
             },
-            { status: 400 },
+            { status: 400 }
           );
         }
 
-        const results = await unifiedTestIntelligence.searchTestKnowledge(
-          query,
-          {
-            sources,
-            minRelevance,
-            limit,
-          },
-        );
+        const results = await unifiedTestIntelligence.searchTestKnowledge(query, {
+          sources,
+          minRelevance,
+          limit,
+        });
 
         return NextResponse.json({
           success: true,
@@ -89,7 +84,7 @@ export async function POST(request: NextRequest) {
               success: false,
               error: "Question required",
             },
-            { status: 400 },
+            { status: 400 }
           );
         }
 
@@ -107,8 +102,7 @@ export async function POST(request: NextRequest) {
 
       case "generate-tests": {
         // Generate tests from support issues
-        const recommendations =
-          await unifiedTestIntelligence.generateTestsFromSupport();
+        const recommendations = await unifiedTestIntelligence.generateTestsFromSupport();
 
         return NextResponse.json({
           success: true,
@@ -126,16 +120,11 @@ export async function POST(request: NextRequest) {
               success: false,
               error: "Question and answer required",
             },
-            { status: 400 },
+            { status: 400 }
           );
         }
 
-        await supportChatIntelligence.learnFromInteraction(
-          question,
-          answer,
-          wasHelpful,
-          feedback,
-        );
+        await supportChatIntelligence.learnFromInteraction(question, answer, wasHelpful, feedback);
 
         return NextResponse.json({
           success: true,
@@ -162,8 +151,7 @@ export async function POST(request: NextRequest) {
           message: "Test Intelligence API is healthy",
           configuration: {
             firecrawl:
-              !!process.env.FIRECRAWL_API_KEY &&
-              !process.env.FIRECRAWL_API_KEY.includes("YOUR_"),
+              !!process.env.FIRECRAWL_API_KEY && !process.env.FIRECRAWL_API_KEY.includes("YOUR_"),
             supabase: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
             aoma: !!process.env.NEXT_PUBLIC_AOMA_MESH_SERVER_URL,
           },
@@ -186,7 +174,7 @@ export async function POST(request: NextRequest) {
               "health",
             ],
           },
-          { status: 400 },
+          { status: 400 }
         );
     }
   } catch (error) {
@@ -198,7 +186,7 @@ export async function POST(request: NextRequest) {
         error: error instanceof Error ? error.message : "Internal server error",
         timestamp: new Date().toISOString(),
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -225,8 +213,7 @@ export async function GET() {
     },
     configuration: {
       firecrawl:
-        !!process.env.FIRECRAWL_API_KEY &&
-        !process.env.FIRECRAWL_API_KEY.includes("YOUR_"),
+        !!process.env.FIRECRAWL_API_KEY && !process.env.FIRECRAWL_API_KEY.includes("YOUR_"),
       supabase: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
       aoma: !!process.env.NEXT_PUBLIC_AOMA_MESH_SERVER_URL,
     },

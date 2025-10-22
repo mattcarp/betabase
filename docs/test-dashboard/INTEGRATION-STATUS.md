@@ -115,9 +115,7 @@ const flakyTests = await enhancedSupabaseTestDB.getFlakyTests();
 ```typescript
 // Failed tests auto-sync to knowledge base
 // Support team can search:
-const solutions = await enhancedSupabaseTestDB.searchTestKnowledge(
-  "authentication error",
-);
+const solutions = await enhancedSupabaseTestDB.searchTestKnowledge("authentication error");
 ```
 
 ## 📋 What Needs Configuration

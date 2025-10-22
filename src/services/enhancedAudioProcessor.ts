@@ -1,17 +1,17 @@
 /**
  * Enhanced Audio Processing Service
- * 
+ *
  * Modern audio processing pipeline:
  * Audio Input → ElevenLabs Voice Isolation → OpenAI Whisper STT → Content Analysis
- * 
+ *
  * Features:
  * - ElevenLabs Voice Isolation for background noise removal
- * - OpenAI Whisper for high-accuracy transcription  
+ * - OpenAI Whisper for high-accuracy transcription
  * - Explicit content detection and categorization
  * - Real-time and batch processing modes
  */
 
-import { audioProcessor, AudioFeatures, AudioMetrics } from './realTimeAudioProcessor';
+import { audioProcessor, AudioFeatures, AudioMetrics } from "./realTimeAudioProcessor";
 
 // Types for the enhanced pipeline
 export interface VoiceIsolationResult {
@@ -33,9 +33,9 @@ export interface TranscriptionResult {
 export interface ContentAnalysisResult {
   isExplicit: boolean;
   explicitScore: number; // 0-1 confidence
-  contentType: 'music' | 'speech' | 'conversation' | 'lyrics' | 'unknown';
+  contentType: "music" | "speech" | "conversation" | "lyrics" | "unknown";
   categories: string[];
-  sentiment: 'positive' | 'negative' | 'neutral';
+  sentiment: "positive" | "negative" | "neutral";
   sentimentScore: number; // -1 to 1
   keywords: string[];
   containsLyrics: boolean;
@@ -57,9 +57,9 @@ export interface ProcessingConfig {
   enableVoiceIsolation: boolean;
   enableRealTimeTranscription: boolean;
   enableContentAnalysis: boolean;
-  transcriptionModel: 'whisper-1' | 'gpt-4o-transcribe' | 'gpt-4o-mini-transcribe';
-  voiceIsolationQuality: 'standard' | 'high';
-  contentModerationLevel: 'strict' | 'moderate' | 'lenient';
+  transcriptionModel: "whisper-1" | "gpt-4o-transcribe" | "gpt-4o-mini-transcribe";
+  voiceIsolationQuality: "standard" | "high";
+  contentModerationLevel: "strict" | "moderate" | "lenient";
   realTimeCallbacks?: {
     onVoiceIsolated?: (result: VoiceIsolationResult) => void;
     onTranscriptionChunk?: (chunk: string, isFinal: boolean) => void;
@@ -71,10 +71,12 @@ export class EnhancedAudioProcessor {
   private config: ProcessingConfig;
   private isProcessing = false;
   private processingStartTime = 0;
-  
+
   // API keys from environment
-  private readonly elevenLabsApiKey = process.env.ELEVENLABS_API_KEY || process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY;
-  private readonly openAiApiKey = process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+  private readonly elevenLabsApiKey =
+    process.env.ELEVENLABS_API_KEY || process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY;
+  private readonly openAiApiKey =
+    process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 
   // Processing statistics
   private stats = {
@@ -89,26 +91,26 @@ export class EnhancedAudioProcessor {
       enableVoiceIsolation: true,
       enableRealTimeTranscription: true,
       enableContentAnalysis: true,
-      transcriptionModel: 'gpt-4o-transcribe',
-      voiceIsolationQuality: 'high',
-      contentModerationLevel: 'moderate',
+      transcriptionModel: "gpt-4o-transcribe",
+      voiceIsolationQuality: "high",
+      contentModerationLevel: "moderate",
       ...config,
     };
 
     if (!this.elevenLabsApiKey) {
-      console.warn('⚠️ ElevenLabs API key not found - voice isolation will be disabled');
+      console.warn("⚠️ ElevenLabs API key not found - voice isolation will be disabled");
       this.config.enableVoiceIsolation = false;
     }
 
     if (!this.openAiApiKey) {
-      console.warn('⚠️ OpenAI API key not found - transcription will be disabled');
+      console.warn("⚠️ OpenAI API key not found - transcription will be disabled");
       this.config.enableRealTimeTranscription = false;
     }
 
-    console.log('🎵 Enhanced Audio Processor initialized');
-    console.log(`   Voice Isolation: ${this.config.enableVoiceIsolation ? '✅' : '❌'}`);
-    console.log(`   Transcription: ${this.config.enableRealTimeTranscription ? '✅' : '❌'}`);
-    console.log(`   Content Analysis: ${this.config.enableContentAnalysis ? '✅' : '❌'}`);
+    console.log("🎵 Enhanced Audio Processor initialized");
+    console.log(`   Voice Isolation: ${this.config.enableVoiceIsolation ? "✅" : "❌"}`);
+    console.log(`   Transcription: ${this.config.enableRealTimeTranscription ? "✅" : "❌"}`);
+    console.log(`   Content Analysis: ${this.config.enableContentAnalysis ? "✅" : "❌"}`);
     console.log(`   Model: ${this.config.transcriptionModel}`);
   }
 
@@ -119,13 +121,12 @@ export class EnhancedAudioProcessor {
     this.processingStartTime = performance.now();
     this.isProcessing = true;
 
-    console.log('🎤 Starting enhanced audio processing pipeline...');
+    console.log("🎤 Starting enhanced audio processing pipeline...");
 
     try {
       // Convert input to Blob if needed
-      const audioBlob = audioData instanceof Blob 
-        ? audioData 
-        : new Blob([audioData], { type: 'audio/webm' });
+      const audioBlob =
+        audioData instanceof Blob ? audioData : new Blob([audioData], { type: "audio/webm" });
 
       // Get original audio quality metrics
       const originalMetrics = await this.getAudioMetrics(audioBlob);
@@ -135,7 +136,7 @@ export class EnhancedAudioProcessor {
       let processedAudio = audioBlob;
 
       if (this.config.enableVoiceIsolation) {
-        console.log('🔊 Applying voice isolation...');
+        console.log("🔊 Applying voice isolation...");
         voiceIsolationResult = await this.isolateVoice(audioBlob);
         if (voiceIsolationResult.success && voiceIsolationResult.isolatedAudio) {
           processedAudio = voiceIsolationResult.isolatedAudio;
@@ -143,37 +144,41 @@ export class EnhancedAudioProcessor {
       } else {
         voiceIsolationResult = {
           success: false,
-          error: 'Voice isolation disabled',
+          error: "Voice isolation disabled",
           processingTime: 0,
         };
       }
 
       // Step 2: Speech-to-Text Transcription (OpenAI Whisper)
       let transcriptionResult: TranscriptionResult;
-      
+
       if (this.config.enableRealTimeTranscription) {
-        console.log('📝 Transcribing audio...');
+        console.log("📝 Transcribing audio...");
         transcriptionResult = await this.transcribeAudio(processedAudio);
       } else {
         transcriptionResult = {
           success: false,
-          error: 'Transcription disabled',
+          error: "Transcription disabled",
           processingTime: 0,
         };
       }
 
       // Step 3: Content Analysis
       let contentAnalysis: ContentAnalysisResult;
-      
-      if (this.config.enableContentAnalysis && transcriptionResult.success && transcriptionResult.text) {
-        console.log('🔍 Analyzing content...');
+
+      if (
+        this.config.enableContentAnalysis &&
+        transcriptionResult.success &&
+        transcriptionResult.text
+      ) {
+        console.log("🔍 Analyzing content...");
         contentAnalysis = await this.analyzeContent(transcriptionResult.text);
       } else {
         contentAnalysis = this.getDefaultContentAnalysis();
       }
 
       // Get processed audio quality metrics
-      const isolatedMetrics = voiceIsolationResult.success 
+      const isolatedMetrics = voiceIsolationResult.success
         ? await this.getAudioMetrics(processedAudio)
         : undefined;
 
@@ -192,18 +197,17 @@ export class EnhancedAudioProcessor {
 
       // Update statistics
       this.updateStats(result);
-      
+
       // Trigger callbacks
       this.triggerCallbacks(result);
 
       console.log(`✅ Enhanced audio processing completed in ${totalTime.toFixed(0)}ms`);
-      console.log(`   Explicit content: ${contentAnalysis.isExplicit ? '⚠️ Yes' : '✅ No'}`);
+      console.log(`   Explicit content: ${contentAnalysis.isExplicit ? "⚠️ Yes" : "✅ No"}`);
       console.log(`   Content type: ${contentAnalysis.contentType}`);
-      
-      return result;
 
+      return result;
     } catch (error) {
-      console.error('❌ Enhanced audio processing failed:', error);
+      console.error("❌ Enhanced audio processing failed:", error);
       throw error;
     } finally {
       this.isProcessing = false;
@@ -218,17 +222,17 @@ export class EnhancedAudioProcessor {
 
     try {
       const formData = new FormData();
-      formData.append('audio', audioBlob);
-      
+      formData.append("audio", audioBlob);
+
       // Set audio format for better processing
-      if (this.config.voiceIsolationQuality === 'high') {
-        formData.append('file_format', 'pcm_s16le_16');
+      if (this.config.voiceIsolationQuality === "high") {
+        formData.append("file_format", "pcm_s16le_16");
       }
 
-      const response = await fetch('https://api.elevenlabs.io/v1/audio-isolation', {
-        method: 'POST',
+      const response = await fetch("https://api.elevenlabs.io/v1/audio-isolation", {
+        method: "POST",
         headers: {
-          'xi-api-key': this.elevenLabsApiKey!,
+          "xi-api-key": this.elevenLabsApiKey!,
         },
         body: formData,
       });
@@ -250,11 +254,10 @@ export class EnhancedAudioProcessor {
         isolatedAudio: isolatedAudioBlob,
         processingTime,
       };
-
     } catch (error: any) {
       const processingTime = performance.now() - startTime;
-      console.error('❌ Voice isolation failed:', error);
-      
+      console.error("❌ Voice isolation failed:", error);
+
       return {
         success: false,
         error: error.message,
@@ -271,15 +274,15 @@ export class EnhancedAudioProcessor {
 
     try {
       const formData = new FormData();
-      formData.append('file', audioBlob, 'audio.webm');
-      formData.append('model', this.config.transcriptionModel);
-      formData.append('response_format', 'verbose_json');
-      formData.append('language', 'en'); // Can be made configurable
+      formData.append("file", audioBlob, "audio.webm");
+      formData.append("model", this.config.transcriptionModel);
+      formData.append("response_format", "verbose_json");
+      formData.append("language", "en"); // Can be made configurable
 
-      const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-        method: 'POST',
+      const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${this.openAiApiKey}`,
+          Authorization: `Bearer ${this.openAiApiKey}`,
         },
         body: formData,
       });
@@ -294,7 +297,7 @@ export class EnhancedAudioProcessor {
 
       console.log(`📝 Transcription completed in ${processingTime.toFixed(0)}ms`);
       console.log(`   Text length: ${result.text.length} characters`);
-      console.log(`   Language: ${result.language || 'unknown'}`);
+      console.log(`   Language: ${result.language || "unknown"}`);
 
       return {
         success: true,
@@ -303,11 +306,10 @@ export class EnhancedAudioProcessor {
         language: result.language,
         processingTime,
       };
-
     } catch (error: any) {
       const processingTime = performance.now() - startTime;
-      console.error('❌ Transcription failed:', error);
-      
+      console.error("❌ Transcription failed:", error);
+
       return {
         success: false,
         error: error.message,
@@ -322,20 +324,20 @@ export class EnhancedAudioProcessor {
   private async analyzeContent(text: string): Promise<ContentAnalysisResult> {
     try {
       // Import explicit content detector
-      const { explicitContentDetector } = await import('./explicitContentDetector');
-      
+      const { explicitContentDetector } = await import("./explicitContentDetector");
+
       // Enhanced explicit content detection with industry-standard libraries
       const explicitResult = await explicitContentDetector.detectExplicitContent(text);
-      
+
       // Content type classification
       const contentType = this.classifyContentType(text);
-      
+
       // Lyrics detection
       const lyricsAnalysis = this.detectLyrics(text);
-      
+
       // Sentiment analysis
       const sentimentAnalysis = this.analyzeSentiment(text);
-      
+
       // Extract keywords
       const keywords = this.extractKeywords(text);
 
@@ -350,9 +352,8 @@ export class EnhancedAudioProcessor {
         containsLyrics: lyricsAnalysis.containsLyrics,
         lyricsConfidence: lyricsAnalysis.confidence,
       };
-
     } catch (error) {
-      console.error('❌ Content analysis failed:', error);
+      console.error("❌ Content analysis failed:", error);
       // Fallback to basic detection if enhanced detector fails
       const explicitAnalysis = this.detectExplicitContent(text);
       const contentType = this.classifyContentType(text);
@@ -380,46 +381,52 @@ export class EnhancedAudioProcessor {
   private detectExplicitContent(text: string): { isExplicit: boolean; score: number } {
     // Basic explicit content detection
     // In production, you might want to use a more sophisticated service
-    
+
     const explicitKeywords = [
       // Add your explicit keywords here - being careful about false positives
-      'explicit', 'nsfw', 'adult', 'inappropriate'
+      "explicit",
+      "nsfw",
+      "adult",
+      "inappropriate",
     ];
-    
+
     const lowerText = text.toLowerCase();
     let explicitMatches = 0;
-    
+
     for (const keyword of explicitKeywords) {
       if (lowerText.includes(keyword)) {
         explicitMatches++;
       }
     }
-    
+
     // Check for excessive profanity patterns
     const profanityPatterns = [
       /f\*+k|f\.\.\.|f---/gi,
       /s\*+t|s\.\.\.|s---/gi,
       // Add more patterns as needed
     ];
-    
+
     let profanityMatches = 0;
     for (const pattern of profanityPatterns) {
       const matches = text.match(pattern);
       if (matches) profanityMatches += matches.length;
     }
-    
+
     const totalWords = text.split(/\s+/).length;
-    const explicitScore = Math.min((explicitMatches + profanityMatches) / Math.max(totalWords, 1), 1);
-    
+    const explicitScore = Math.min(
+      (explicitMatches + profanityMatches) / Math.max(totalWords, 1),
+      1
+    );
+
     // Adjust threshold based on moderation level
     const thresholds = {
       strict: 0.01,
       moderate: 0.05,
       lenient: 0.1,
     };
-    
+
     const threshold = thresholds[this.config.contentModerationLevel];
-    
+
     return {
       isExplicit: explicitScore > threshold,
       score: explicitScore,
@@ -429,9 +436,9 @@ export class EnhancedAudioProcessor {
   /**
    * Content type classification
    */
-  private classifyContentType(text: string): ContentAnalysisResult['contentType'] {
+  private classifyContentType(text: string): ContentAnalysisResult["contentType"] {
     const lowerText = text.toLowerCase();
-    
+
     // Lyrics indicators
     const lyricsIndicators = [
       /verse|chorus|bridge|hook/i,
@@ -439,36 +446,36 @@ export class EnhancedAudioProcessor {
       /repeat|x2|x3|x4/i,
       /oh+|ah+|yeah+|na na|la la/i,
     ];
-    
-    // Music indicators  
+
+    // Music indicators
     const musicIndicators = [
       /song|track|album|artist|band/i,
       /music|melody|rhythm|beat/i,
       /singing|vocalist|instrumental/i,
     ];
-    
+
     // Conversation indicators
     const conversationIndicators = [
       /hello|hi|hey|goodbye|bye/i,
       /how are you|what's up|see you/i,
       /thank you|thanks|please|sorry/i,
     ];
-    
+
     // Check patterns
-    if (lyricsIndicators.some(pattern => pattern.test(text))) {
-      return 'lyrics';
+    if (lyricsIndicators.some((pattern) => pattern.test(text))) {
+      return "lyrics";
     }
-    
-    if (musicIndicators.some(pattern => pattern.test(text))) {
-      return 'music';
+
+    if (musicIndicators.some((pattern) => pattern.test(text))) {
+      return "music";
     }
-    
-    if (conversationIndicators.some(pattern => pattern.test(text))) {
-      return 'conversation';
+
+    if (conversationIndicators.some((pattern) => pattern.test(text))) {
+      return "conversation";
     }
-    
+
     // Default to speech for other content
-    return text.length > 50 ? 'speech' : 'unknown';
+    return text.length > 50 ? "speech" : "unknown";
   }
 
   /**
@@ -481,21 +488,21 @@ export class EnhancedAudioProcessor {
       /(oh|ah|yeah|na na|la la) (oh|ah|yeah|na na|la la)/gi,
       /repeat x\d+/gi,
     ];
-    
+
     let matches = 0;
     for (const pattern of lyricsPatterns) {
       const found = text.match(pattern);
       if (found) matches += found.length;
     }
-    
+
     // Check for repetitive patterns common in lyrics
     const words = text.toLowerCase().split(/\s+/);
     const wordCounts = new Map<string, number>();
-    
+
     for (const word of words) {
       wordCounts.set(word, (wordCounts.get(word) || 0) + 1);
     }
-    
+
     // Look for repeated phrases
     let repetitiveScore = 0;
     for (const [word, count] of wordCounts.entries()) {
@@ -503,9 +510,9 @@ export class EnhancedAudioProcessor {
         repetitiveScore += count / words.length;
       }
     }
-    
-    const confidence = Math.min((matches * 0.2) + (repetitiveScore * 0.8), 1);
-    
+
+    const confidence = Math.min(matches * 0.2 + repetitiveScore * 0.8, 1);
+
     return {
       containsLyrics: confidence > 0.3,
       confidence,
@@ -515,33 +522,56 @@ export class EnhancedAudioProcessor {
   /**
    * Simple sentiment analysis
    */
-  private analyzeSentiment(text: string): { sentiment: ContentAnalysisResult['sentiment']; score: number } {
+  private analyzeSentiment(text: string): {
+    sentiment: ContentAnalysisResult["sentiment"];
+    score: number;
+  } {
     // Simple sentiment analysis - in production, you might want to use a dedicated service
-    const positiveWords = ['good', 'great', 'awesome', 'excellent', 'wonderful', 'amazing', 'love', 'happy', 'joy'];
-    const negativeWords = ['bad', 'terrible', 'awful', 'horrible', 'hate', 'angry', 'sad', 'frustrated', 'annoyed'];
-    
+    const positiveWords = [
+      "good",
+      "great",
+      "awesome",
+      "excellent",
+      "wonderful",
+      "amazing",
+      "love",
+      "happy",
+      "joy",
+    ];
+    const negativeWords = [
+      "bad",
+      "terrible",
+      "awful",
+      "horrible",
+      "hate",
+      "angry",
+      "sad",
+      "frustrated",
+      "annoyed",
+    ];
+
     const lowerText = text.toLowerCase();
     let positiveCount = 0;
     let negativeCount = 0;
-    
+
     for (const word of positiveWords) {
       if (lowerText.includes(word)) positiveCount++;
     }
-    
+
     for (const word of negativeWords) {
       if (lowerText.includes(word)) negativeCount++;
     }
-    
+
     const totalSentimentWords = positiveCount + negativeCount;
     if (totalSentimentWords === 0) {
-      return { sentiment: 'neutral', score: 0 };
+      return { sentiment: "neutral", score: 0 };
     }
-    
+
     const score = (positiveCount - negativeCount) / totalSentimentWords;
-    
-    if (score > 0.2) return { sentiment: 'positive', score };
-    if (score < -0.2) return { sentiment: 'negative', score };
-    return { sentiment: 'neutral', score };
+
+    if (score > 0.2) return { sentiment: "positive", score };
+    if (score < -0.2) return { sentiment: "negative", score };
+    return { sentiment: "neutral", score };
   }
 
   /**
@@ -550,41 +580,78 @@ export class EnhancedAudioProcessor {
   private extractKeywords(text: string): string[] {
     // Simple keyword extraction - remove common stop words
     const stopWords = new Set([
-      'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'should', 'could', 'can', 'may', 'might', 'must', 'shall'
+      "the",
+      "a",
+      "an",
+      "and",
+      "or",
+      "but",
+      "in",
+      "on",
+      "at",
+      "to",
+      "for",
+      "of",
+      "with",
+      "by",
+      "is",
+      "are",
+      "was",
+      "were",
+      "be",
+      "been",
+      "have",
+      "has",
+      "had",
+      "do",
+      "does",
+      "did",
+      "will",
+      "would",
+      "should",
+      "could",
+      "can",
+      "may",
+      "might",
+      "must",
+      "shall",
     ]);
-    
+
     return text
       .toLowerCase()
       .split(/\W+/)
-      .filter(word => word.length > 2 && !stopWords.has(word))
+      .filter((word) => word.length > 2 && !stopWords.has(word))
       .slice(0, 10); // Top 10 keywords
   }
 
   /**
    * Categorize content based on type and analysis
    */
-  private categorizeContent(text: string, contentType: ContentAnalysisResult['contentType']): string[] {
+  private categorizeContent(
+    text: string,
+    contentType: ContentAnalysisResult["contentType"]
+  ): string[] {
     const categories: string[] = [contentType];
-    
+
     const lowerText = text.toLowerCase();
-    
+
     // Add genre-based categories
-    if (lowerText.includes('music') || lowerText.includes('song')) {
-      categories.push('musical');
+    if (lowerText.includes("music") || lowerText.includes("song")) {
+      categories.push("musical");
     }
-    
-    if (lowerText.includes('conversation') || lowerText.includes('interview')) {
-      categories.push('conversational');
+
+    if (lowerText.includes("conversation") || lowerText.includes("interview")) {
+      categories.push("conversational");
     }
-    
-    if (lowerText.includes('story') || lowerText.includes('narrative')) {
-      categories.push('storytelling');
+
+    if (lowerText.includes("story") || lowerText.includes("narrative")) {
+      categories.push("storytelling");
     }
-    
-    if (lowerText.includes('news') || lowerText.includes('report')) {
-      categories.push('informational');
+
+    if (lowerText.includes("news") || lowerText.includes("report")) {
+      categories.push("informational");
     }
-    
+
     return [...new Set(categories)]; // Remove duplicates
   }
 
@@ -595,7 +662,7 @@ export class EnhancedAudioProcessor {
     // This would require analyzing the audio blob
     // For now, return default metrics
     // In a full implementation, you'd decode the audio and analyze it
-    
+
     return {
       peakLevel: 0.8,
       averageLevel: 0.4,
@@ -615,9 +682,9 @@ export class EnhancedAudioProcessor {
     return {
       isExplicit: false,
       explicitScore: 0,
-      contentType: 'unknown',
-      categories: ['unknown'],
-      sentiment: 'neutral',
+      contentType: "unknown",
+      categories: ["unknown"],
+      sentiment: "neutral",
       sentimentScore: 0,
       keywords: [],
       containsLyrics: false,
@@ -630,12 +697,17 @@ export class EnhancedAudioProcessor {
    */
   private updateStats(result: EnhancedProcessingResult): void {
     this.stats.totalProcessed++;
-    
+
     const wasSuccessful = result.transcription.success && result.voiceIsolation.success;
-    this.stats.successRate = ((this.stats.successRate * (this.stats.totalProcessed - 1)) + (wasSuccessful ? 1 : 0)) / this.stats.totalProcessed;
-    
-    this.stats.averageProcessingTime = ((this.stats.averageProcessingTime * (this.stats.totalProcessed - 1)) + result.totalProcessingTime) / this.stats.totalProcessed;
-    
+    this.stats.successRate =
+      (this.stats.successRate * (this.stats.totalProcessed - 1) + (wasSuccessful ? 1 : 0)) /
+      this.stats.totalProcessed;
+
+    this.stats.averageProcessingTime =
+      (this.stats.averageProcessingTime * (this.stats.totalProcessed - 1) +
+        result.totalProcessingTime) /
+      this.stats.totalProcessed;
+
     if (result.contentAnalysis.isExplicit) {
       this.stats.explicitContentDetected++;
     }
@@ -653,7 +725,11 @@ export class EnhancedAudioProcessor {
         callbacks.onVoiceIsolated(result.voiceIsolation);
       }
 
-      if (callbacks.onTranscriptionChunk && result.transcription.success && result.transcription.text) {
+      if (
+        callbacks.onTranscriptionChunk &&
+        result.transcription.success &&
+        result.transcription.text
+      ) {
         callbacks.onTranscriptionChunk(result.transcription.text, true);
       }
 
@@ -661,7 +737,7 @@ export class EnhancedAudioProcessor {
         callbacks.onContentAnalysis(result.contentAnalysis);
       }
     } catch (error) {
-      console.error('❌ Callback error:', error);
+      console.error("❌ Callback error:", error);
     }
   }
 
@@ -677,7 +753,7 @@ export class EnhancedAudioProcessor {
    */
   updateConfig(newConfig: Partial<ProcessingConfig>): void {
     this.config = { ...this.config, ...newConfig };
-    console.log('🔧 Enhanced audio processor configuration updated');
+    console.log("🔧 Enhanced audio processor configuration updated");
   }
 
   /**

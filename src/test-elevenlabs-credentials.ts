@@ -6,9 +6,7 @@
 import { elevenLabsMCPService } from "./services/elevenLabsMCPService";
 
 async function testElevenLabsCredentials() {
-  console.log(
-    "🚀 Testing ElevenLabs API Credentials and MCP Server Setup...\n",
-  );
+  console.log("🚀 Testing ElevenLabs API Credentials and MCP Server Setup...\n");
 
   try {
     // Display configuration summary
@@ -26,9 +24,7 @@ async function testElevenLabsCredentials() {
     const credentialsCheck = await elevenLabsMCPService.validateCredentials();
 
     if (!credentialsCheck.valid) {
-      console.error(
-        `❌ Credentials validation failed: ${credentialsCheck.error}`,
-      );
+      console.error(`❌ Credentials validation failed: ${credentialsCheck.error}`);
       process.exit(1);
     }
 
@@ -44,9 +40,7 @@ async function testElevenLabsCredentials() {
     const existingServers = await elevenLabsMCPService.listMcpServers();
 
     if (existingServers.success) {
-      console.log(
-        `✅ Found ${existingServers.servers?.length || 0} existing MCP servers`,
-      );
+      console.log(`✅ Found ${existingServers.servers?.length || 0} existing MCP servers`);
       if (existingServers.servers && existingServers.servers.length > 0) {
         existingServers.servers.forEach((server, index) => {
           console.log(`   ${index + 1}. ${server.name} (${server.id})`);
@@ -56,9 +50,7 @@ async function testElevenLabsCredentials() {
         });
       }
     } else {
-      console.warn(
-        `⚠️ Could not list existing servers: ${existingServers.error}`,
-      );
+      console.warn(`⚠️ Could not list existing servers: ${existingServers.error}`);
     }
     console.log("");
 
@@ -72,9 +64,7 @@ async function testElevenLabsCredentials() {
         console.log(`   Name: ${agentDetails.agent.name || "Unknown"}`);
         console.log(`   ID: ${agentDetails.agent.id || "Unknown"}`);
         if (agentDetails.agent.mcp_servers) {
-          console.log(
-            `   Associated MCP Servers: ${agentDetails.agent.mcp_servers.length}`,
-          );
+          console.log(`   Associated MCP Servers: ${agentDetails.agent.mcp_servers.length}`);
         }
       }
     } else {

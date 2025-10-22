@@ -55,8 +55,7 @@ class ElevenLabsMCPRegistrationService {
     name: "AOMA Mesh MCP Server",
     approval_policy: "auto_approve_all",
     transport: "SSE",
-    description:
-      "AOMA knowledge base and system integration for SIAM conversational AI",
+    description: "AOMA knowledge base and system integration for SIAM conversational AI",
     tool_approval_hashes: [
       {
         tool_name: "query_aoma_knowledge",
@@ -101,7 +100,7 @@ class ElevenLabsMCPRegistrationService {
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(
-          `ElevenLabs MCP registration failed: ${response.status} ${response.statusText} - ${errorText}`,
+          `ElevenLabs MCP registration failed: ${response.status} ${response.statusText} - ${errorText}`
         );
       }
 
@@ -137,7 +136,7 @@ class ElevenLabsMCPRegistrationService {
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(
-          `Failed to list MCP servers: ${response.status} ${response.statusText} - ${errorText}`,
+          `Failed to list MCP servers: ${response.status} ${response.statusText} - ${errorText}`
         );
       }
 
@@ -168,7 +167,7 @@ class ElevenLabsMCPRegistrationService {
       const aomaMeshServer = serverList.mcp_servers.find(
         (server) =>
           server.config.name === this.aomaMeshConfig.name ||
-          server.config.url === this.aomaMeshConfig.url,
+          server.config.url === this.aomaMeshConfig.url
       );
 
       if (aomaMeshServer) {
@@ -201,7 +200,7 @@ class ElevenLabsMCPRegistrationService {
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(
-          `Failed to delete MCP server: ${response.status} ${response.statusText} - ${errorText}`,
+          `Failed to delete MCP server: ${response.status} ${response.statusText} - ${errorText}`
         );
       }
 
@@ -290,8 +289,7 @@ class ElevenLabsMCPRegistrationService {
     console.log("🧪 Testing AOMA Mesh MCP tools...");
 
     const results: Record<string, any> = {};
-    const mcpRpcUrl =
-      "https://5so2f6gefeuoaywpuymjikix5e0rhqyo.lambda-url.us-east-2.on.aws/rpc";
+    const mcpRpcUrl = "https://5so2f6gefeuoaywpuymjikix5e0rhqyo.lambda-url.us-east-2.on.aws/rpc";
 
     try {
       // Test 1: List available tools
@@ -361,8 +359,4 @@ export const createElevenLabsMCPService = (apiKey: string) => {
   return new ElevenLabsMCPRegistrationService(apiKey);
 };
 
-export type {
-  ElevenLabsMCPServerConfig,
-  ElevenLabsMCPServerResponse,
-  ElevenLabsMCPListResponse,
-};
+export type { ElevenLabsMCPServerConfig, ElevenLabsMCPServerResponse, ElevenLabsMCPListResponse };
