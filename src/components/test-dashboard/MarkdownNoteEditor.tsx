@@ -69,11 +69,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
     const end = textarea.selectionEnd;
     const selectedText = content.substring(start, end);
     const newText =
-      content.substring(0, start) +
-      before +
-      selectedText +
-      after +
-      content.substring(end);
+      content.substring(0, start) + before + selectedText + after + content.substring(end);
 
     setContent(newText);
 
@@ -180,21 +176,11 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
             >
               <Italic className="h-4 w-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => insertMarkdown("`", "`")}
-              title="Code"
-            >
+            <Button variant="ghost" size="sm" onClick={() => insertMarkdown("`", "`")} title="Code">
               <Code className="h-4 w-4" />
             </Button>
             <div className="w-px h-6 bg-border mx-1" />
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => insertMarkdown("- ", "")}
-              title="List"
-            >
+            <Button variant="ghost" size="sm" onClick={() => insertMarkdown("- ", "")} title="List">
               <List className="h-4 w-4" />
             </Button>
             <Button
@@ -224,10 +210,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent
-              value="edit"
-              className="flex-1 overflow-hidden mt-3"
-            >
+            <TabsContent value="edit" className="flex-1 overflow-hidden mt-3">
               <Textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
@@ -245,10 +228,7 @@ Examples:
               />
             </TabsContent>
 
-            <TabsContent
-              value="preview"
-              className="flex-1 overflow-auto mt-3"
-            >
+            <TabsContent value="preview" className="flex-1 overflow-auto mt-3">
               <div className="prose prose-sm dark:prose-invert max-w-none">
                 {content ? (
                   <div

@@ -60,9 +60,7 @@ const AnnotationManagerContent: React.FC<AnnotationManagerContentProps> = ({
         const reader = new FileReader();
         reader.onload = (event) => {
           try {
-            const importedAnnotations = JSON.parse(
-              event.target?.result as string
-            );
+            const importedAnnotations = JSON.parse(event.target?.result as string);
             // In a real implementation, we would validate and merge
             console.log("Imported annotations:", importedAnnotations);
             alert("Annotations imported successfully!");
@@ -88,29 +86,17 @@ const AnnotationManagerContent: React.FC<AnnotationManagerContentProps> = ({
   return (
     <>
       {/* Floating Toolbar */}
-      <AnnotationToolbar
-        onExport={handleExport}
-        onImport={handleImport}
-      />
+      <AnnotationToolbar onExport={handleExport} onImport={handleImport} />
 
       {/* Annotation Tools */}
-      <HighlighterCanvas
-        enabled={currentTool === "highlight"}
-        timestamp={timestamp}
-      />
+      <HighlighterCanvas enabled={currentTool === "highlight"} timestamp={timestamp} />
       <StickyNoteLayer
         enabled={currentTool === "note"}
         timestamp={timestamp}
         onOpenDetailedEditor={(noteId) => setEditorNoteId(noteId)}
       />
-      <ScreenshotCapture
-        enabled={currentTool === "screenshot"}
-        timestamp={timestamp}
-      />
-      <FlagIssueLayer
-        enabled={currentTool === "flag"}
-        timestamp={timestamp}
-      />
+      <ScreenshotCapture enabled={currentTool === "screenshot"} timestamp={timestamp} />
+      <FlagIssueLayer enabled={currentTool === "flag"} timestamp={timestamp} />
 
       {/* Markdown Editor Modal */}
       <MarkdownNoteEditor

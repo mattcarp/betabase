@@ -40,10 +40,7 @@ describe("EmailParser", () => {
 
       expect(result.content).toContain("cc1@example.com");
       expect(result.content).toContain("cc2@example.com");
-      expect(result.metadata.cc).toEqual([
-        "cc1@example.com",
-        "cc2@example.com",
-      ]);
+      expect(result.metadata.cc).toEqual(["cc1@example.com", "cc2@example.com"]);
     });
 
     test("should extract thread participants correctly", () => {
@@ -55,15 +52,9 @@ describe("EmailParser", () => {
 
       const result = EmailParser.parseEmail(emailWithMultipleParticipants);
 
-      expect(result.metadata.threadParticipants).toContain(
-        "sender@example.com"
-      );
-      expect(result.metadata.threadParticipants).toContain(
-        "recipient1@example.com"
-      );
-      expect(result.metadata.threadParticipants).toContain(
-        "recipient2@example.com"
-      );
+      expect(result.metadata.threadParticipants).toContain("sender@example.com");
+      expect(result.metadata.threadParticipants).toContain("recipient1@example.com");
+      expect(result.metadata.threadParticipants).toContain("recipient2@example.com");
       expect(result.metadata.threadParticipants).toContain("cc@example.com");
       expect(result.metadata.threadParticipants.length).toBe(4);
     });
@@ -114,8 +105,7 @@ describe("EmailParser", () => {
       const htmlEmail: EmailData = {
         ...sampleEmail,
         body: "",
-        htmlBody:
-          "<html><body><p>This is <strong>HTML</strong> content.</p></body></html>",
+        htmlBody: "<html><body><p>This is <strong>HTML</strong> content.</p></body></html>",
       };
 
       const result = EmailParser.parseEmail(htmlEmail);
@@ -186,8 +176,7 @@ describe("EmailParser", () => {
     test("should remove quoted replies", () => {
       const emailWithQuotes: EmailData = {
         ...sampleEmail,
-        body:
-          "My response here.\n\n> Original message\n> More original content\n> End of quote",
+        body: "My response here.\n\n> Original message\n> More original content\n> End of quote",
       };
 
       const result = EmailParser.parseEmail(emailWithQuotes);
@@ -342,17 +331,14 @@ describe("EmailParser", () => {
 
       expect(result.content).toContain("[URGENT]");
       expect(result.content).toContain("#123");
-      expect(result.metadata.subject).toBe(
-        "Re: [URGENT] Project #123 - Status Update! 🚀"
-      );
+      expect(result.metadata.subject).toBe("Re: [URGENT] Project #123 - Status Update! 🚀");
     });
 
     test("should handle malformed HTML gracefully", () => {
       const malformedHtmlEmail: EmailData = {
         ...sampleEmail,
         body: "",
-        htmlBody:
-          "<html><body><p>Unclosed paragraph<div>Nested improperly</p></div>Content",
+        htmlBody: "<html><body><p>Unclosed paragraph<div>Nested improperly</p></div>Content",
       };
 
       const result = EmailParser.parseEmail(malformedHtmlEmail);
