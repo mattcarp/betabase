@@ -62,15 +62,29 @@ npm run format
 
 ### ESLint Rules
 
-Key rules enforced by ESLint (see `.eslintrc.json`):
+**Philosophy**: The ESLint config is intentionally relaxed to accommodate the existing codebase while still catching critical issues.
 
-- **No `var`**: Use `const` or `let` instead
+**Enforced rules** (will fail builds):
+
+- **No `var`**: Use `const` or `let` instead (ERROR)
+- **React hooks**: Must follow rules of hooks (ERROR)
+
+**Warning rules** (won't block builds, but should be addressed):
+
+- **Unused variables**: Clean up unused imports and variables (prefix with `_` if intentionally unused)
 - **Prefer `const`**: Use `const` by default, `let` only when reassignment is needed
-- **No unused variables**: Clean up unused imports and variables (prefix with `_` if intentionally unused)
-- **No `console.log`**: Use `console.error`, `console.warn`, or `console.info` instead (or use the logger utility)
-- **Complexity limit**: Maximum cyclomatic complexity of 15
-- **Function length**: Maximum 150 lines per function (excluding comments and blank lines)
-- **Max depth**: Maximum nesting depth of 4
+- **No debugger**: Remove debugger statements before committing
+- **Duplicate imports**: Avoid importing the same module twice
+
+**Disabled rules** (no enforcement):
+
+- `console.log` - Allowed (use judgment)
+- `any` types - Allowed (but avoid when possible)
+- Complexity limits - No enforcement
+- Function length limits - No enforcement
+- Max nesting depth - No enforcement
+- camelCase naming - No enforcement
+- Line length - No enforcement (Prettier handles this)
 
 ## TypeScript Guidelines
 
@@ -90,13 +104,13 @@ interface UserProfile {
   createdAt: Date;
 }
 
-// ⚠️ Avoid - Using `any` (use only when absolutely necessary)
+// ⚠️ Acceptable but not ideal - Using `any`
 function processData(data: any) {
-  // Triggers warning
+  // TypeScript `any` is allowed but should be avoided when possible
   // ...
 }
 
-// ✅ Better - Use proper types or generics
+// ✅ Preferred - Use proper types or generics when practical
 function processData<T extends Record<string, unknown>>(data: T) {
   // ...
 }
