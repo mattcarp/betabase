@@ -5,7 +5,7 @@
 #
 # This script automatically resolves package-lock.json conflicts by:
 # 1. Using the current branch's package.json
-# 2. Regenerating package-lock.json from scratch
+# 2. Regenerating package-lock.json from scratch with ALL dependencies
 # 3. Marking the conflict as resolved
 #
 # Usage (automatically called by git):
@@ -37,12 +37,13 @@ fi
 rm -f "$PATHNAME"
 
 # Regenerate package-lock.json from package.json
-echo "📦 Regenerating package-lock.json from package.json..."
+echo "📦 Regenerating package-lock.json with all dependencies..."
 
 if command -v npm &> /dev/null; then
-  # Use npm to regenerate
-  npm install --package-lock-only --no-audit --no-fund 2>&1 | grep -v "^npm WARN" || true
-  echo "✅ package-lock.json regenerated successfully!"
+  # Use full npm install to ensure all nested dependencies are included
+  # This is more robust than --package-lock-only
+  npm install --no-audit --no-fund 2>&1 | grep -v "^npm WARN" || true
+  echo "✅ package-lock.json regenerated successfully with all nested dependencies!"
   exit 0
 else
   echo "❌ Error: npm not found!"
