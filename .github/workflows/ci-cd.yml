@@ -45,6 +45,10 @@ jobs:
         run: npm run lint
         # REMOVED: || true - fail on linting errors
 
+      - name: Prettier formatting check
+        run: npm run format:check
+        # Fail build if code is not properly formatted
+
       - name: Security audit (high/critical only)
         run: npm audit --audit-level=high
         continue-on-error: true # Allow minor vulnerabilities, but log them
