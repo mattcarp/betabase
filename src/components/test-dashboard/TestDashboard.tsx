@@ -30,6 +30,7 @@ import { TestExecutionPanel } from "./TestExecutionPanel";
 import { TestResultsViewer } from "./TestResultsViewer";
 import { AITestGenerator } from "./AITestGenerator";
 import { TraceViewer } from "./TraceViewer";
+import { SessionPlaybackViewer } from "./SessionPlaybackViewer";
 import { CoverageReport } from "./CoverageReport";
 import { FlakyTestExplorer } from "./FlakyTestExplorer";
 import { TestAnalytics } from "./TestAnalytics";
@@ -484,6 +485,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             <Eye className="h-4 w-4" />
             Trace Viewer
           </TabsTrigger>
+          <TabsTrigger value="session-playback" className="gap-2">
+            <Play className="h-4 w-4" />
+            Session Playback
+          </TabsTrigger>
           <TabsTrigger value="coverage" className="gap-2">
             <GitBranch className="h-4 w-4" />
             Coverage
@@ -521,6 +526,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
           <TabsContent value="trace" className="m-0 p-6">
             <TraceViewer />
+          </TabsContent>
+
+          <TabsContent value="session-playback" className="m-0 p-6">
+            <SessionPlaybackViewer />
           </TabsContent>
 
           <TabsContent value="coverage" className="m-0 p-6">
