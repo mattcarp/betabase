@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import React from "react";
 import { CustomElementGuard } from "../src/components/CustomElementGuard";
+import { WebVitalsReporter } from "../src/components/WebVitalsReporter";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <CustomElementGuard />
+        <WebVitalsReporter />
         {children}
       </body>
     </html>
