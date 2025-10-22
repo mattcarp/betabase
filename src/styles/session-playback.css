@@ -1,0 +1,399 @@
+/**
+ * Session Playback Viewer - Custom Animations
+ * MAC Design System Compliant
+ */
+
+/* Ripple Effect for Click Interactions */
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+.session-playback-ripple {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.5);
+  animation: ripple 600ms ease-out;
+  pointer-events: none;
+}
+
+/* Input Highlight Animation */
+@keyframes input-highlight {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    border-color: rgba(34, 197, 94, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+    border-color: rgba(34, 197, 94, 1);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    border-color: rgba(34, 197, 94, 0.5);
+  }
+}
+
+.session-playback-input-highlight {
+  animation: input-highlight 800ms ease-in-out;
+}
+
+/* Hover Glow Effect */
+@keyframes hover-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(234, 179, 8, 0.3);
+    border-color: rgba(234, 179, 8, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(234, 179, 8, 0.6);
+    border-color: rgba(234, 179, 8, 0.8);
+  }
+}
+
+.session-playback-hover-glow {
+  animation: hover-glow 1000ms ease-in-out infinite;
+}
+
+/* Cursor Trail Effect */
+@keyframes cursor-trail {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+.session-playback-cursor-trail {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.8) 0%, rgba(168, 85, 247, 0) 70%);
+  animation: cursor-trail 400ms ease-out;
+  pointer-events: none;
+}
+
+/* Step Transition Animation */
+@keyframes step-transition {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.session-playback-step-enter {
+  animation: step-transition 300ms ease-out;
+}
+
+/* Playback Progress Indicator */
+@keyframes progress-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.session-playback-progress {
+  position: relative;
+  overflow: hidden;
+}
+
+.session-playback-progress::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+  animation: progress-pulse 2s ease-in-out infinite;
+}
+
+/* Viewport Loading Shimmer */
+@keyframes viewport-shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.session-playback-viewport-loading {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02) 25%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.02) 75%
+  );
+  background-size: 1000px 100%;
+  animation: viewport-shimmer 2s linear infinite;
+}
+
+/* Annotation Slide In */
+@keyframes annotation-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.session-playback-annotation {
+  animation: annotation-slide-in 300ms ease-out;
+}
+
+/* Timeline Step Active Pulse */
+@keyframes timeline-active-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0);
+  }
+}
+
+.session-playback-timeline-active {
+  animation: timeline-active-pulse 1500ms ease-out infinite;
+}
+
+/* Export Progress Animation */
+@keyframes export-progress {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.session-playback-export-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--mac-primary-blue-400),
+    transparent
+  );
+  animation: export-progress 1.5s ease-in-out infinite;
+}
+
+/* Fullscreen Transition */
+.session-playback-fullscreen-enter {
+  animation: fullscreen-zoom-in 300ms ease-out;
+}
+
+.session-playback-fullscreen-exit {
+  animation: fullscreen-zoom-out 300ms ease-out;
+}
+
+@keyframes fullscreen-zoom-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fullscreen-zoom-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* Interaction Details Fade In */
+@keyframes details-fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.session-playback-details-enter {
+  animation: details-fade-in 200ms ease-out;
+}
+
+/* Network Request Indicator */
+@keyframes network-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.session-playback-network-active {
+  animation: network-pulse 1000ms ease-in-out infinite;
+}
+
+/* Console Log Scroll Animation */
+@keyframes console-log-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.session-playback-console-log {
+  animation: console-log-enter 200ms ease-out;
+}
+
+/* Speed Indicator Flash */
+@keyframes speed-flash {
+  0%,
+  100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+}
+
+.session-playback-speed-change {
+  animation: speed-flash 400ms ease-out;
+}
+
+/* Browser Chrome Simulation */
+.session-playback-browser-chrome {
+  position: relative;
+  border-radius: 8px 8px 0 0;
+  background: var(--mac-surface-elevated);
+  padding: 8px;
+  border-bottom: 1px solid var(--mac-utility-border);
+}
+
+.session-playback-browser-chrome::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff5f57;
+  box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #28ca42;
+}
+
+.session-playback-url-bar {
+  margin-left: 72px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: var(--mac-surface-bg);
+  border: 1px solid var(--mac-utility-border);
+  color: var(--mac-text-secondary);
+  font-size: 12px;
+  font-family: monospace;
+}
+
+/* Interaction Overlay Variants */
+.session-playback-overlay-enter {
+  animation: overlay-pop-in 200ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes overlay-pop-in {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+/* MAC Design System Compliance */
+.session-playback-card {
+  background: var(--mac-surface-card);
+  border: 1px solid var(--mac-utility-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px var(--mac-utility-shadow);
+}
+
+.session-playback-card:hover {
+  border-color: var(--mac-utility-border-elevated);
+  box-shadow: 0 8px 12px var(--mac-utility-shadow);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .session-playback-viewport {
+    aspect-ratio: 9 / 16;
+    max-width: 100%;
+  }
+
+  .session-playback-controls {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .session-playback-timeline {
+    max-height: 300px;
+  }
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .session-playback-ripple,
+  .session-playback-input-highlight,
+  .session-playback-hover-glow,
+  .session-playback-cursor-trail,
+  .session-playback-step-enter,
+  .session-playback-annotation,
+  .session-playback-timeline-active,
+  .session-playback-export-progress,
+  .session-playback-details-enter,
+  .session-playback-network-active,
+  .session-playback-console-log,
+  .session-playback-speed-change,
+  .session-playback-overlay-enter,
+  .session-playback-viewport-loading {
+    animation: none;
+  }
+}
