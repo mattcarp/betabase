@@ -15,6 +15,7 @@ npm run build:analyze
 ```
 
 This will generate an interactive HTML report showing:
+
 - Bundle sizes by page
 - Which packages contribute most to bundle size
 - Duplicate dependencies
@@ -25,6 +26,7 @@ The report will automatically open in your browser after the build completes.
 ### Bundle Size Targets
 
 **Target bundle sizes:**
+
 - First Load JS: < 250 KB (Critical)
 - Route chunks: < 100 KB each
 - Total JavaScript: < 500 KB
@@ -163,10 +165,10 @@ npm run build:analyze
 
 ```typescript
 // ✅ Good - Tree-shakeable
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 
 // ❌ Bad - Imports entire library
-import * as UI from '@/components/ui';
+import * as UI from "@/components/ui";
 ```
 
 ### 2. Use Image Component

@@ -17,6 +17,7 @@ If you encounter a package-lock.json conflict:
 ```
 
 **That's it!** The script will:
+
 - Remove the conflicted file
 - Regenerate it from `package.json`
 - Stage the changes
@@ -25,11 +26,13 @@ If you encounter a package-lock.json conflict:
 ### How It Works
 
 We use a **custom git merge driver** that automatically:
+
 1. Detects `package-lock.json` conflicts
 2. Regenerates the lockfile from `package.json`
 3. Resolves the conflict automatically
 
 **Configuration files:**
+
 - `.gitattributes` - Tells git to use custom merge strategy
 - `.git-merge-drivers/npm-merge-lockfile.sh` - Auto-regeneration script
 - Git config (set automatically in repo)
@@ -39,12 +42,14 @@ We use a **custom git merge driver** that automatically:
 ### Verification
 
 Check if auto-merge is configured:
+
 ```bash
 git config --get merge.npm-merge-lockfile.driver
 # Should output: .git-merge-drivers/npm-merge-lockfile.sh %O %A %B %P
 ```
 
 If not configured, run:
+
 ```bash
 git config merge.npm-merge-lockfile.name "Auto-regenerate package-lock.json"
 git config merge.npm-merge-lockfile.driver ".git-merge-drivers/npm-merge-lockfile.sh %O %A %B %P"

@@ -44,20 +44,42 @@ import { IntrospectionDropdown } from "../IntrospectionDropdown";
 // PERFORMANCE OPTIMIZATION: Dynamic imports for heavy components
 // These components contain charts and heavy dependencies (recharts, etc.)
 // and are only loaded when the user navigates to their respective tabs
-const TestDashboard = dynamic(() => import("../../test-dashboard/TestDashboard").then(mod => ({ default: mod.TestDashboard })), {
-  loading: () => <div className="flex items-center justify-center h-full"><div>Loading Test Dashboard...</div></div>,
-  ssr: false,
-});
+const TestDashboard = dynamic(
+  () =>
+    import("../../test-dashboard/TestDashboard").then((mod) => ({ default: mod.TestDashboard })),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center h-full">
+        <div>Loading Test Dashboard...</div>
+      </div>
+    ),
+    ssr: false,
+  }
+);
 
-const HUDInterface = dynamic(() => import("../HUDInterface").then(mod => ({ default: mod.HUDInterface })), {
-  loading: () => <div className="flex items-center justify-center h-full"><div>Loading HUD Interface...</div></div>,
-  ssr: false,
-});
+const HUDInterface = dynamic(
+  () => import("../HUDInterface").then((mod) => ({ default: mod.HUDInterface })),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center h-full">
+        <div>Loading HUD Interface...</div>
+      </div>
+    ),
+    ssr: false,
+  }
+);
 
-const CurateTab = dynamic(() => import("../CurateTab").then(mod => ({ default: mod.CurateTab })), {
-  loading: () => <div className="flex items-center justify-center h-full"><div>Loading Curate...</div></div>,
-  ssr: false,
-});
+const CurateTab = dynamic(
+  () => import("../CurateTab").then((mod) => ({ default: mod.CurateTab })),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center h-full">
+        <div>Loading Curate...</div>
+      </div>
+    ),
+    ssr: false,
+  }
+);
 
 interface ComponentMode {
   mode: "chat" | "hud" | "test" | "fix" | "curate";
