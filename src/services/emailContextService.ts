@@ -71,9 +71,7 @@ export class EmailContextService {
     for (let i = 0; i < emails.length; i += batchSize) {
       const batch = emails.slice(i, i + batchSize);
 
-      const batchResults = await Promise.all(
-        batch.map((email) => this.ingestEmail(email))
-      );
+      const batchResults = await Promise.all(batch.map((email) => this.ingestEmail(email)));
 
       batchResults.forEach((result) => {
         results.push(result);
@@ -104,9 +102,7 @@ export class EmailContextService {
   /**
    * Store parsed email context as a vector
    */
-  private async storeEmailVector(
-    parsed: ParsedEmailContext
-  ): Promise<string> {
+  private async storeEmailVector(parsed: ParsedEmailContext): Promise<string> {
     const vectorId = await this.vectorService.upsertVector(
       parsed.content,
       "email",
@@ -143,23 +139,17 @@ export class EmailContextService {
     let filtered = results;
 
     if (options.dateFrom) {
-      filtered = filtered.filter(
-        (r) => new Date(r.metadata.date) >= new Date(options.dateFrom!)
-      );
+      filtered = filtered.filter((r) => new Date(r.metadata.date) >= new Date(options.dateFrom!));
     }
 
     if (options.dateTo) {
-      filtered = filtered.filter(
-        (r) => new Date(r.metadata.date) <= new Date(options.dateTo!)
-      );
+      filtered = filtered.filter((r) => new Date(r.metadata.date) <= new Date(options.dateTo!));
     }
 
     if (options.participants && options.participants.length > 0) {
       filtered = filtered.filter((r) => {
         const threadParticipants = r.metadata.threadParticipants || [];
-        return options.participants!.some((p) =>
-          threadParticipants.includes(p)
-        );
+        return options.participants!.some((p) => threadParticipants.includes(p));
       });
     }
 
@@ -210,10 +200,7 @@ export class EmailContextService {
    */
   async deleteEmail(messageId: string): Promise<boolean> {
     try {
-      const count = await this.vectorService.deleteVectorsBySource(
-        "email",
-        messageId
-      );
+      const count = await this.vectorService.deleteVectorsBySource("email", messageId);
       return count > 0;
     } catch (error) {
       console.error(`Failed to delete email ${messageId}:`, error);

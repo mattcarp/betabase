@@ -138,7 +138,7 @@ Customer Success Manager`,
 
 async function testEmailExtraction() {
   console.log("🧪 Testing Email Context Extraction System\n");
-  console.log("=" .repeat(60));
+  console.log("=".repeat(60));
 
   const service = getEmailContextService();
 
@@ -165,13 +165,10 @@ async function testEmailExtraction() {
   console.log("\n\n🔍 Test 2: Search for Project Management Emails");
   console.log("-".repeat(60));
 
-  const projectSearchResults = await service.searchEmails(
-    "sprint planning action items deadline",
-    {
-      matchThreshold: 0.75,
-      matchCount: 5,
-    }
-  );
+  const projectSearchResults = await service.searchEmails("sprint planning action items deadline", {
+    matchThreshold: 0.75,
+    matchCount: 5,
+  });
 
   console.log(`Found ${projectSearchResults.length} relevant emails:`);
   projectSearchResults.forEach((result, index) => {

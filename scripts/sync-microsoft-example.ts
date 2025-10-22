@@ -22,7 +22,7 @@ if (!ACCESS_TOKEN) {
 
 async function syncMicrosoftData() {
   console.log("🚀 Microsoft Teams/Outlook Sync");
-  console.log("=" .repeat(60));
+  console.log("=".repeat(60));
 
   const graphService = getMicrosoftGraphService({
     accessToken: ACCESS_TOKEN,
@@ -69,15 +69,11 @@ async function syncMicrosoftData() {
         // Sync first 2 channels
         console.log(`\n  📱 Syncing: ${channel.displayName}`);
 
-        const teamsResult = await graphService.syncTeamsMessages(
-          firstTeam.id,
-          channel.id,
-          { top: 20 }
-        );
+        const teamsResult = await graphService.syncTeamsMessages(firstTeam.id, channel.id, {
+          top: 20,
+        });
 
-        console.log(
-          `  ✅ ${teamsResult.successful} messages synced from ${channel.displayName}`
-        );
+        console.log(`  ✅ ${teamsResult.successful} messages synced from ${channel.displayName}`);
         if (teamsResult.failed > 0) {
           console.log(`  ⚠️  ${teamsResult.failed} messages failed`);
         }
@@ -113,10 +109,7 @@ async function syncMicrosoftData() {
       (teams.length > 0 ? 20 : 0) + // Rough estimate from Teams
       meetingsResult.successful;
 
-    const totalFailed =
-      outlookResult.failed +
-      (teams.length > 0 ? 0 : 0) +
-      meetingsResult.failed;
+    const totalFailed = outlookResult.failed + (teams.length > 0 ? 0 : 0) + meetingsResult.failed;
 
     console.log(`\n📊 Summary:`);
     console.log(`   Total synced: ${totalSuccessful}`);
@@ -126,18 +119,13 @@ async function syncMicrosoftData() {
     console.log("\n🔍 Testing Search...");
     console.log("-".repeat(60));
 
-    const { getEmailContextService } = await import(
-      "@/services/emailContextService"
-    );
+    const { getEmailContextService } = await import("@/services/emailContextService");
     const emailService = getEmailContextService();
 
-    const searchResults = await emailService.searchEmails(
-      "meeting project update",
-      {
-        matchThreshold: 0.7,
-        matchCount: 5,
-      }
-    );
+    const searchResults = await emailService.searchEmails("meeting project update", {
+      matchThreshold: 0.7,
+      matchCount: 5,
+    });
 
     console.log(`Found ${searchResults.length} relevant items:`);
     searchResults.slice(0, 3).forEach((result, index) => {

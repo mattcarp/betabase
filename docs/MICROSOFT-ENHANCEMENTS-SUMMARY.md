@@ -19,6 +19,7 @@ Based on your requirement that the system will be **almost entirely focused on M
 - ✅ **Safe Links unwrapping**: Automatically extracts original URLs from Microsoft Safe Links
 
 **Example Urgency Score Calculation**:
+
 ```typescript
 Base score: 5
 + High importance: +2
@@ -44,6 +45,7 @@ Base score: 5
 - ✅ **Error handling**: Graceful failures with detailed errors
 
 **Example Usage**:
+
 ```typescript
 const graphService = getMicrosoftGraphService({ accessToken });
 
@@ -73,6 +75,7 @@ await graphService.syncMeetings({
 - ✅ `GET /api/microsoft-sync/channels` - List team channels
 
 **Example Request**:
+
 ```bash
 curl -X POST http://localhost:3000/api/microsoft-sync \
   -H "Content-Type: application/json" \
@@ -180,11 +183,13 @@ curl -X POST http://localhost:3000/api/microsoft-sync \
 ### Safe Links Unwrapping
 
 **Before**:
+
 ```
 https://nam12.safelinks.protection.outlook.com/?url=https%3A%2F%2Fexample.com
 ```
 
 **After**:
+
 ```
 https://example.com
 ```
@@ -192,6 +197,7 @@ https://example.com
 ### Outlook HTML Cleaning
 
 **Removes**:
+
 - `<o:p>` and `</o:p>` tags
 - `<v:*>` vector markup language
 - `<!--[if...]>` conditional comments
@@ -201,13 +207,15 @@ https://example.com
 ### Teams @Mentions Extraction
 
 **From body text**:
+
 ```
 "Please review @[Sarah Johnson] and @[Bob Smith]"
 ```
 
 **Extracted**:
+
 ```typescript
-mentionedUsers: ["Sarah Johnson", "Bob Smith"]
+mentionedUsers: ["Sarah Johnson", "Bob Smith"];
 ```
 
 ## Search Examples
@@ -217,23 +225,24 @@ mentionedUsers: ["Sarah Johnson", "Bob Smith"]
 ```typescript
 const results = await emailService.searchEmails("project deadline");
 
-const urgent = results.filter(r => r.metadata.urgencyScore >= 8);
+const urgent = results.filter((r) => r.metadata.urgencyScore >= 8);
 ```
 
 ### Find Teams Messages in Channel
 
 ```typescript
-const teamsMessages = results.filter(r =>
-  r.metadata.isTeamsMessage &&
-  r.metadata.teamName === "Engineering" &&
-  r.metadata.teamsChannel === "General"
+const teamsMessages = results.filter(
+  (r) =>
+    r.metadata.isTeamsMessage &&
+    r.metadata.teamName === "Engineering" &&
+    r.metadata.teamsChannel === "General"
 );
 ```
 
 ### Find Upcoming Meetings
 
 ```typescript
-const meetings = results.filter(r => {
+const meetings = results.filter((r) => {
   if (!r.metadata.isMeeting) return false;
 
   const meetingTime = new Date(r.metadata.meetingTime.start);
@@ -246,9 +255,7 @@ const meetings = results.filter(r => {
 ### Find Emails Where You're @Mentioned
 
 ```typescript
-const mentionedEmails = results.filter(r =>
-  r.metadata.mentionedUsers?.includes("Your Name")
-);
+const mentionedEmails = results.filter((r) => r.metadata.mentionedUsers?.includes("Your Name"));
 ```
 
 ## Integration Flow
@@ -358,11 +365,13 @@ npm test tests/unit/emailParser.test.ts tests/unit/microsoftEmailParser.test.ts
 ## Benefits Over Generic Email Parsing
 
 ### Generic Parser:
+
 - Basic email fields (from, to, subject, body)
 - Simple HTML stripping
 - No urgency detection
 
 ### Microsoft Parser:
+
 - ✅ **Urgency scoring** (0-10) based on Microsoft signals
 - ✅ **Actionable detection** (flags, mentions, meetings)
 - ✅ **Teams context** (team/channel names)
@@ -377,6 +386,7 @@ npm test tests/unit/emailParser.test.ts tests/unit/microsoftEmailParser.test.ts
 ### Rate Limits
 
 Microsoft Graph API limits:
+
 - Outlook: 10,000 requests / 10 minutes
 - Teams: 500 requests / 10 minutes
 - Calendar: 1,500 requests / 30 seconds
