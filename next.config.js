@@ -43,9 +43,6 @@ const nextConfig = {
     },
   }),
 
-  // PERFORMANCE OPTIMIZATION: Enable SWC minification
-  swcMinify: true,
-
   // PERFORMANCE OPTIMIZATION: Optimize package imports
   experimental: {
     optimizePackageImports: [
