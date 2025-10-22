@@ -1,5 +1,3 @@
-
-
 # Microsoft Teams & Outlook Email Integration
 
 ## Overview
@@ -7,6 +5,7 @@
 **Primary Focus**: This email extraction system is optimized for **Microsoft Teams and Outlook** emails, with specialized parsing for Microsoft-specific features.
 
 The system handles:
+
 - ✅ **Outlook emails** with importance, categories, and flags
 - ✅ **Teams channel messages** with @mentions and reactions
 - ✅ **Meeting invites** from Outlook Calendar
@@ -19,6 +18,7 @@ The system handles:
 ### 1. Get Microsoft Access Token
 
 You'll need a Microsoft Graph API access token with these permissions:
+
 - `Mail.Read` - Read Outlook emails
 - `ChannelMessage.Read.All` - Read Teams messages
 - `Calendars.Read` - Read calendar events
@@ -93,6 +93,7 @@ curl -X POST http://localhost:3000/api/microsoft-sync \
 ### Outlook Email Metadata
 
 Captured Microsoft-specific fields:
+
 - **Importance**: `low`, `normal`, `high`
 - **Sensitivity**: `normal`, `personal`, `private`, `confidential`
 - **Categories**: Outlook color categories
@@ -103,6 +104,7 @@ Captured Microsoft-specific fields:
 ### Teams Message Metadata
 
 Captured Teams-specific fields:
+
 - **Team Name**: Which team the message belongs to
 - **Channel Name**: Which channel (General, etc.)
 - **Mentions**: @mentioned users
@@ -112,6 +114,7 @@ Captured Teams-specific fields:
 ### Meeting Metadata
 
 Captured meeting details:
+
 - **Start/End Time**: Meeting schedule
 - **Location**: Physical or online
 - **Join URL**: Teams meeting link
@@ -121,6 +124,7 @@ Captured meeting details:
 ### Urgency Scoring
 
 Automatic 0-10 urgency score based on:
+
 - ✅ High importance (+2 points)
 - ✅ Flagged for follow-up (+2 points)
 - ✅ Meeting within 24 hours (+2 points)
@@ -130,6 +134,7 @@ Automatic 0-10 urgency score based on:
 - ✅ Confidential sensitivity (+1 point)
 
 Example:
+
 ```json
 {
   "metadata": {
@@ -163,11 +168,7 @@ const outlookResult = await graphService.syncOutlookEmails({
 console.log(`Synced ${outlookResult.successful} emails`);
 
 // Sync Teams messages
-const teamsResult = await graphService.syncTeamsMessages(
-  "team-id",
-  "channel-id",
-  { top: 50 }
-);
+const teamsResult = await graphService.syncTeamsMessages("team-id", "channel-id", { top: 50 });
 
 console.log(`Synced ${teamsResult.successful} Teams messages`);
 
@@ -230,18 +231,13 @@ console.log("Mentioned:", parsed.metadata.mentionedUsers); // ["Jane Smith"]
 ### Find High-Priority Outlook Emails
 
 ```typescript
-const results = await emailContextService.searchEmails(
-  "quarterly budget review",
-  {
-    matchThreshold: 0.75,
-    matchCount: 10,
-  }
-);
+const results = await emailContextService.searchEmails("quarterly budget review", {
+  matchThreshold: 0.75,
+  matchCount: 10,
+});
 
 // Filter for high urgency
-const urgentEmails = results.filter(
-  (r) => r.metadata.urgencyScore >= 8
-);
+const urgentEmails = results.filter((r) => r.metadata.urgencyScore >= 8);
 ```
 
 ### Find Teams Messages in Specific Channel
@@ -274,9 +270,7 @@ const meetings = results.filter((r) => {
 ```typescript
 const userEmail = "john@company.com";
 const mentionedEmails = results.filter(
-  (r) =>
-    r.metadata.mentionedUsers?.includes("John Doe") ||
-    r.metadata.to?.includes(userEmail)
+  (r) => r.metadata.mentionedUsers?.includes("John Doe") || r.metadata.to?.includes(userEmail)
 );
 ```
 
@@ -312,11 +306,10 @@ async function dailySync(accessToken: string) {
     const channels = await graphService.getTeamChannels(team.id);
 
     for (const channel of channels) {
-      const teamsResult = await graphService.syncTeamsMessages(
-        team.id,
-        channel.id,
-        { since: yesterdayISO, top: 100 }
-      );
+      const teamsResult = await graphService.syncTeamsMessages(team.id, channel.id, {
+        since: yesterdayISO,
+        top: 100,
+      });
 
       console.log(
         `✅ Synced ${teamsResult.successful} messages from ${team.displayName} > ${channel.displayName}`
@@ -347,6 +340,7 @@ dailySync(process.env.MICROSOFT_ACCESS_TOKEN!);
 Sync Outlook, Teams, and Calendar data in one request.
 
 **Request Body**:
+
 ```json
 {
   "accessToken": "required",
@@ -370,6 +364,7 @@ Sync Outlook, Teams, and Calendar data in one request.
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -406,6 +401,7 @@ Sync Outlook, Teams, and Calendar data in one request.
 List all teams the user is a member of.
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -421,6 +417,7 @@ List all teams the user is a member of.
 List all channels in a team.
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -443,10 +440,14 @@ The parser automatically handles:
 5. **Signature Separators**: Removes Outlook signature dividers
 
 Example:
+
 ```html
 <!-- Before -->
 <html xmlns:o="urn:schemas-microsoft-com:office:office">
-  <p>Check this: <a href="https://nam12.safelinks.protection.outlook.com/?url=https%3A%2F%2Fexample.com">link</a></p>
+  <p>
+    Check this:
+    <a href="https://nam12.safelinks.protection.outlook.com/?url=https%3A%2F%2Fexample.com">link</a>
+  </p>
   <o:p>Extra content</o:p>
 </html>
 
@@ -508,7 +509,7 @@ for (let skip = 0; skip < 1000; skip += 50) {
   });
 
   // Wait between batches
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 }
 ```
 
@@ -520,7 +521,7 @@ for (let skip = 0; skip < 1000; skip += 50) {
 
 ```typescript
 // Check token expiration
-const tokenPayload = JSON.parse(atob(accessToken.split('.')[1]));
+const tokenPayload = JSON.parse(atob(accessToken.split(".")[1]));
 const expiresAt = new Date(tokenPayload.exp * 1000);
 console.log("Token expires:", expiresAt);
 ```
@@ -562,6 +563,7 @@ MICROSOFT_ACCESS_TOKEN=your-access-token  # For testing
 ## Microsoft Graph API Quotas
 
 Be aware of Microsoft's rate limits:
+
 - **Outlook Mail**: 10,000 requests per 10 minutes
 - **Teams Messages**: 500 requests per 10 minutes per app
 - **Calendar Events**: 1,500 requests per 30 seconds
@@ -577,7 +579,7 @@ async function syncWithBackoff(fn: () => Promise<any>, maxRetries = 3) {
       if (error.message.includes("429") && i < maxRetries - 1) {
         const waitTime = Math.pow(2, i) * 1000; // Exponential backoff
         console.log(`Rate limited, waiting ${waitTime}ms...`);
-        await new Promise(resolve => setTimeout(resolve, waitTime));
+        await new Promise((resolve) => setTimeout(resolve, waitTime));
       } else {
         throw error;
       }
