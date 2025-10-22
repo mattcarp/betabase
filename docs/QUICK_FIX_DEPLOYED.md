@@ -6,6 +6,7 @@
 ## What Was Wrong
 
 **My Mistake:** Trying to "optimize" by bypassing the Assistant API
+
 - Sent 50KB+ document contexts directly to GPT-4o
 - Caused 93-second response times
 - Truncating would lose critical information
@@ -13,7 +14,8 @@
 ## The Quick Fix
 
 **Use the tool designed for the job:**
-- Switched back to `queryKnowledge()` using GPT-5 Assistant API  
+
+- Switched back to `queryKnowledge()` using GPT-5 Assistant API
 - Assistant API handles large documents INTERNALLY
 - No massive contexts sent over API
 - OpenAI's infrastructure is optimized for this exact use case
@@ -48,18 +50,21 @@ const response = await this.openaiService.queryKnowledge(query, strategy, additi
 ## Expected Performance
 
 **With Assistant API (GPT-5):**
+
 - Initial request: 15-25s (thread creation + run)
 - Subsequent requests: May be faster with thread reuse
 - Quality: Excellent (full document access)
 - Handles any document size
 
 **Why it was slow before:**
+
 - Creating NEW assistants each time (fixed now - we reuse)
 - Thread polling overhead (unavoidable with Assistant API)
 
 ## Long-Term Plan (Your Direction)
 
 You mentioned:
+
 > "I could migrate the vector store from OpenAI to Supabase, chuck the OpenAI assistant, and use LangGraph with the best LLM"
 
 **That's the RIGHT long-term strategy:**
@@ -82,12 +87,14 @@ You mentioned:
 ## But For Now...
 
 **This quick fix gets us back to working:**
+
 - ✅ Uses the proper tool (Assistant API)
 - ✅ GPT-5 quality
 - ✅ Handles large documents correctly
 - ✅ No information loss from truncation
 
 **Accept the tradeoff:**
+
 - Response times: 15-30s (not 8s, but not 93s either)
 - Quality: Excellent
 - Reliability: High
@@ -95,11 +102,13 @@ You mentioned:
 ## Testing After Deployment
 
 Will test the problematic query:
+
 ```bash
 "What are the steps for AOMA cover hot swap?"
 ```
 
 **Expected:**
+
 - Time: 15-30s (acceptable)
 - Quality: Complete workflow with all steps
 - No truncation or information loss

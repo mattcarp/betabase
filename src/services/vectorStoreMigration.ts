@@ -27,9 +27,7 @@ export class VectorStoreMigrationService {
     });
     this.supabaseVector = getSupabaseVectorService();
     this.vectorStoreId =
-      vectorStoreId ||
-      process.env.VECTOR_STORE_ID ||
-      "vs_3dqHL3Wcmt1WrUof0qS4UQqo"; // The actual AOMA Agent vector store
+      vectorStoreId || process.env.VECTOR_STORE_ID || "vs_3dqHL3Wcmt1WrUof0qS4UQqo"; // The actual AOMA Agent vector store
   }
 
   /**
@@ -37,18 +35,13 @@ export class VectorStoreMigrationService {
    */
   async listOpenAIVectorStoreFiles(): Promise<any[]> {
     try {
-      console.log(
-        "📋 Listing files from OpenAI vector store:",
-        this.vectorStoreId,
-      );
+      console.log("📋 Listing files from OpenAI vector store:", this.vectorStoreId);
 
       // First verify the vector store exists (now at top level)
       try {
-        const vectorStore = await this.openai.vectorStores.retrieve(
-          this.vectorStoreId,
-        );
+        const vectorStore = await this.openai.vectorStores.retrieve(this.vectorStoreId);
         console.log(
-          `✅ Vector store found: ${vectorStore.name || "Unnamed"} (${vectorStore.file_counts?.total || 0} files)`,
+          `✅ Vector store found: ${vectorStore.name || "Unnamed"} (${vectorStore.file_counts?.total || 0} files)`
         );
       } catch (error) {
         console.error("❌ Vector store not found:", this.vectorStoreId);
@@ -56,9 +49,7 @@ export class VectorStoreMigrationService {
       }
 
       // List files in the vector store (now at top level)
-      const vectorStoreFiles = await this.openai.vectorStores.files.list(
-        this.vectorStoreId,
-      );
+      const vectorStoreFiles = await this.openai.vectorStores.files.list(this.vectorStoreId);
 
       const files = [];
       for await (const file of vectorStoreFiles) {
@@ -122,12 +113,7 @@ export class VectorStoreMigrationService {
       };
 
       // Upsert to Supabase
-      await this.supabaseVector.upsertVector(
-        content,
-        "openai_import",
-        fileId,
-        metadata,
-      );
+      await this.supabaseVector.upsertVector(content, "openai_import", fileId, metadata);
 
       console.log(`✅ Migrated ${file.filename} successfully!`);
     } catch (error) {
@@ -141,18 +127,14 @@ export class VectorStoreMigrationService {
    */
   async migrateAllFiles(): Promise<MigrationResult> {
     const startTime = Date.now();
-    const errors: Array<{ fileId: string; filename: string; error: string }> =
-      [];
+    const errors: Array<{ fileId: string; filename: string; error: string }> = [];
 
     try {
       console.log("🚀 STARTING EPIC VECTOR STORE MIGRATION!");
       console.log("================================================");
 
       // Update migration status
-      await this.supabaseVector.updateMigrationStatus(
-        "openai_import",
-        "in_progress",
-      );
+      await this.supabaseVector.updateMigrationStatus("openai_import", "in_progress");
 
       // List all files
       const files = await this.listOpenAIVectorStoreFiles();
@@ -169,9 +151,7 @@ export class VectorStoreMigrationService {
         };
       }
 
-      console.log(
-        `\n🎯 Migrating ${totalFiles} files from OpenAI to Supabase...`,
-      );
+      console.log(`\n🎯 Migrating ${totalFiles} files from OpenAI to Supabase...`);
       console.log("================================================\n");
 
       let successCount = 0;
@@ -182,9 +162,7 @@ export class VectorStoreMigrationService {
         const file = files[i];
         const progress = Math.round(((i + 1) / totalFiles) * 100);
 
-        console.log(
-          `\n[${i + 1}/${totalFiles}] (${progress}%) Processing file...`,
-        );
+        console.log(`\n[${i + 1}/${totalFiles}] (${progress}%) Processing file...`);
 
         try {
           await this.migrateFile(file);
@@ -192,19 +170,14 @@ export class VectorStoreMigrationService {
 
           // Update migration status periodically
           if ((i + 1) % 5 === 0 || i === files.length - 1) {
-            await this.supabaseVector.updateMigrationStatus(
-              "openai_import",
-              "in_progress",
-              {
-                totalCount: totalFiles,
-                migratedCount: successCount,
-              },
-            );
+            await this.supabaseVector.updateMigrationStatus("openai_import", "in_progress", {
+              totalCount: totalFiles,
+              migratedCount: successCount,
+            });
           }
         } catch (error) {
           failedCount++;
-          const errorMessage =
-            error instanceof Error ? error.message : "Unknown error";
+          const errorMessage = error instanceof Error ? error.message : "Unknown error";
 
           // Try to get filename for error reporting
           let filename = "unknown";
@@ -219,9 +192,7 @@ export class VectorStoreMigrationService {
             error: errorMessage,
           });
 
-          console.error(
-            `❌ Failed to migrate file ${file.id}: ${errorMessage}`,
-          );
+          console.error(`❌ Failed to migrate file ${file.id}: ${errorMessage}`);
         }
       }
 
@@ -230,25 +201,16 @@ export class VectorStoreMigrationService {
 
       // Update final migration status
       const finalStatus = failedCount === 0 ? "completed" : "completed";
-      await this.supabaseVector.updateMigrationStatus(
-        "openai_import",
-        finalStatus,
-        {
-          totalCount: totalFiles,
-          migratedCount: successCount,
-          errorMessage:
-            failedCount > 0
-              ? `${failedCount} files failed to migrate`
-              : undefined,
-        },
-      );
+      await this.supabaseVector.updateMigrationStatus("openai_import", finalStatus, {
+        totalCount: totalFiles,
+        migratedCount: successCount,
+        errorMessage: failedCount > 0 ? `${failedCount} files failed to migrate` : undefined,
+      });
 
       console.log("\n================================================");
       console.log("🎉 MIGRATION COMPLETE!");
       console.log("================================================");
-      console.log(
-        `✅ Successfully migrated: ${successCount}/${totalFiles} files`,
-      );
+      console.log(`✅ Successfully migrated: ${successCount}/${totalFiles} files`);
       if (failedCount > 0) {
         console.log(`❌ Failed: ${failedCount} files`);
       }
@@ -265,14 +227,9 @@ export class VectorStoreMigrationService {
     } catch (error) {
       console.error("Migration failed:", error);
 
-      await this.supabaseVector.updateMigrationStatus(
-        "openai_import",
-        "failed",
-        {
-          errorMessage:
-            error instanceof Error ? error.message : "Unknown error",
-        },
-      );
+      await this.supabaseVector.updateMigrationStatus("openai_import", "failed", {
+        errorMessage: error instanceof Error ? error.message : "Unknown error",
+      });
 
       throw error;
     }
@@ -294,8 +251,7 @@ export class VectorStoreMigrationService {
       // Count Supabase vectors
       const stats = await this.supabaseVector.getVectorStats();
       const supabaseCount =
-        stats.find((s: any) => s.source_type === "openai_import")
-          ?.document_count || 0;
+        stats.find((s: any) => s.source_type === "openai_import")?.document_count || 0;
 
       const match = openaiCount === supabaseCount;
 

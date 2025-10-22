@@ -57,10 +57,7 @@ export async function POST(request: NextRequest) {
     });
     */
 
-    return NextResponse.json(
-      { success: true, message: "Web Vital recorded" },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, message: "Web Vital recorded" }, { status: 200 });
   } catch (error) {
     console.error("Error processing Web Vital:", error);
     return NextResponse.json(

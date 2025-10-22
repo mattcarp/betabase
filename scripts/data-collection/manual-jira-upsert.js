@@ -44,34 +44,36 @@
  *   ]
  */
 
-const { createClient } = require('@supabase/supabase-js');
-const { embed } = require('ai');
-const { openai } = require('@ai-sdk/openai');
-const fs = require('fs').promises;
-const path = require('path');
-const csv = require('csv-parser');
-const { createReadStream } = require('fs');
+const { createClient } = require("@supabase/supabase-js");
+const { embed } = require("ai");
+const { openai } = require("@ai-sdk/openai");
+const fs = require("fs").promises;
+const path = require("path");
+const csv = require("csv-parser");
+const { createReadStream } = require("fs");
 
-require('dotenv').config({ path: '.env.local' });
+require("dotenv").config({ path: ".env.local" });
 
 // Configuration
 const BATCH_SIZE = 100; // Embeddings per batch (OpenAI rate limit friendly)
-const CHECKPOINT_FILE = 'tmp/jira-upsert-checkpoint.json';
-const LOG_FILE = 'logs/jira-upsert.log';
+const CHECKPOINT_FILE = "tmp/jira-upsert-checkpoint.json";
+const LOG_FILE = "logs/jira-upsert.log";
 
 // Parse arguments
 const args = process.argv.slice(2);
-const fileIndex = args.indexOf('--file');
-const dryRun = args.includes('--dry-run');
-const batchSizeIndex = args.indexOf('--batch-size');
-const resumeFlag = args.includes('--resume');
+const fileIndex = args.indexOf("--file");
+const dryRun = args.includes("--dry-run");
+const batchSizeIndex = args.indexOf("--batch-size");
+const resumeFlag = args.includes("--resume");
 
 const inputFile = fileIndex !== -1 ? args[fileIndex + 1] : null;
 const customBatchSize = batchSizeIndex !== -1 ? parseInt(args[batchSizeIndex + 1]) : BATCH_SIZE;
 
 // Validate arguments
 if (!inputFile && !resumeFlag) {
-  console.error('❌ Usage: node manual-jira-upsert.js --file <path-to-jira-export> [--dry-run] [--batch-size N] [--resume]');
+  console.error(
+    "❌ Usage: node manual-jira-upsert.js --file <path-to-jira-export> [--dry-run] [--batch-size N] [--resume]"
+  );
   process.exit(1);
 }
 
@@ -92,7 +94,7 @@ async function log(message) {
   try {
     const logDir = path.dirname(LOG_FILE);
     await fs.mkdir(logDir, { recursive: true });
-    await fs.appendFile(LOG_FILE, logMessage + '\n');
+    await fs.appendFile(LOG_FILE, logMessage + "\n");
   } catch (error) {
     // Fail silently
   }
@@ -106,9 +108,9 @@ async function parseCSV(filePath) {
     const results = [];
     createReadStream(filePath)
       .pipe(csv())
-      .on('data', (data) => results.push(data))
-      .on('end', () => resolve(results))
-      .on('error', reject);
+      .on("data", (data) => results.push(data))
+      .on("end", () => resolve(results))
+      .on("error", reject);
   });
 }
 
@@ -116,7 +118,7 @@ async function parseCSV(filePath) {
  * Parse JSON file
  */
 async function parseJSON(filePath) {
-  const content = await fs.readFile(filePath, 'utf-8');
+  const content = await fs.readFile(filePath, "utf-8");
   return JSON.parse(content);
 }
 
@@ -126,12 +128,15 @@ async function parseJSON(filePath) {
 function normalizeTicket(rawTicket) {
   return {
     ticket_key: rawTicket.key || rawTicket.ticket_key || rawTicket.Key,
-    summary: rawTicket.summary || rawTicket.Summary || rawTicket.title || '',
-    description: rawTicket.description || rawTicket.Description || '',
-    status: rawTicket.status || rawTicket.Status || '',
-    priority: rawTicket.priority || rawTicket.Priority || '',
-    project: rawTicket.project || rawTicket.Project || (rawTicket.ticket_key || rawTicket.key || '').split('-')[0],
-    metadata: rawTicket.fields || rawTicket.metadata || {}
+    summary: rawTicket.summary || rawTicket.Summary || rawTicket.title || "",
+    description: rawTicket.description || rawTicket.Description || "",
+    status: rawTicket.status || rawTicket.Status || "",
+    priority: rawTicket.priority || rawTicket.Priority || "",
+    project:
+      rawTicket.project ||
+      rawTicket.Project ||
+      (rawTicket.ticket_key || rawTicket.key || "").split("-")[0],
+    metadata: rawTicket.fields || rawTicket.metadata || {},
   };
 }
 
@@ -139,21 +144,23 @@ function normalizeTicket(rawTicket) {
  * Generate embedding for a ticket
  */
 async function generateEmbedding(ticket) {
-  const model = openai.embedding('text-embedding-3-small');
+  const model = openai.embedding("text-embedding-3-small");
 
   // Create embedding text from ticket
   const text = [
     `Ticket: ${ticket.ticket_key}`,
     `Summary: ${ticket.summary}`,
-    ticket.description ? `Description: ${ticket.description.substring(0, 2000)}` : '',
+    ticket.description ? `Description: ${ticket.description.substring(0, 2000)}` : "",
     `Status: ${ticket.status}`,
     `Priority: ${ticket.priority}`,
-    `Project: ${ticket.project}`
-  ].filter(Boolean).join('\n');
+    `Project: ${ticket.project}`,
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   const result = await embed({
     model,
-    value: text
+    value: text,
   });
 
   return result.embedding;
@@ -164,16 +171,16 @@ async function generateEmbedding(ticket) {
  */
 async function checkExistingTickets(ticketKeys) {
   const { data, error } = await supabase
-    .from('jira_ticket_embeddings')
-    .select('ticket_key, updated_at')
-    .in('ticket_key', ticketKeys);
+    .from("jira_ticket_embeddings")
+    .select("ticket_key, updated_at")
+    .in("ticket_key", ticketKeys);
 
   if (error) {
     throw new Error(`Failed to check existing tickets: ${error.message}`);
   }
 
   const existing = new Map();
-  data.forEach(row => {
+  data.forEach((row) => {
     existing.set(row.ticket_key, new Date(row.updated_at));
   });
 
@@ -184,18 +191,18 @@ async function checkExistingTickets(ticketKeys) {
  * Upsert ticket embeddings (avoids duplicates)
  */
 async function upsertTickets(ticketsWithEmbeddings) {
-  const records = ticketsWithEmbeddings.map(t => ({
+  const records = ticketsWithEmbeddings.map((t) => ({
     ticket_key: t.ticket_key,
     summary: t.summary,
-    embedding: `[${t.embedding.join(',')}]`, // Store as TEXT format (current schema)
+    embedding: `[${t.embedding.join(",")}]`, // Store as TEXT format (current schema)
     metadata: {
       ...t.metadata,
       status: t.status,
       priority: t.priority,
       project: t.project,
-      description: t.description ? t.description.substring(0, 500) : '',
-      generated_at: new Date().toISOString()
-    }
+      description: t.description ? t.description.substring(0, 500) : "",
+      generated_at: new Date().toISOString(),
+    },
   }));
 
   // Upsert in batches to avoid timeout
@@ -208,10 +215,10 @@ async function upsertTickets(ticketsWithEmbeddings) {
 
     // Use upsert to handle both inserts and updates
     const { data, error } = await supabase
-      .from('jira_ticket_embeddings')
+      .from("jira_ticket_embeddings")
       .upsert(batch, {
-        onConflict: 'ticket_key',
-        ignoreDuplicates: false
+        onConflict: "ticket_key",
+        ignoreDuplicates: false,
       })
       .select();
 
@@ -243,7 +250,7 @@ async function saveCheckpoint(checkpoint) {
  */
 async function loadCheckpoint() {
   try {
-    const content = await fs.readFile(CHECKPOINT_FILE, 'utf-8');
+    const content = await fs.readFile(CHECKPOINT_FILE, "utf-8");
     return JSON.parse(content);
   } catch (error) {
     return null;
@@ -256,10 +263,10 @@ async function loadCheckpoint() {
 async function main() {
   const startTime = Date.now();
 
-  await log('🚀 JIRA Manual Upsert - October 2025');
-  await log(`   Mode: ${dryRun ? 'DRY RUN' : 'LIVE UPSERT'}`);
+  await log("🚀 JIRA Manual Upsert - October 2025");
+  await log(`   Mode: ${dryRun ? "DRY RUN" : "LIVE UPSERT"}`);
   await log(`   Batch size: ${customBatchSize}`);
-  await log('');
+  await log("");
 
   let tickets;
   let processedKeys = new Set();
@@ -282,31 +289,29 @@ async function main() {
     await log(`📂 Loading tickets from: ${inputFile}`);
 
     const ext = path.extname(inputFile).toLowerCase();
-    const rawTickets = ext === '.csv'
-      ? await parseCSV(inputFile)
-      : await parseJSON(inputFile);
+    const rawTickets = ext === ".csv" ? await parseCSV(inputFile) : await parseJSON(inputFile);
 
     tickets = rawTickets.map(normalizeTicket);
     await log(`   Loaded: ${tickets.length} tickets`);
   }
 
   // Validate ticket format
-  const invalidTickets = tickets.filter(t => !t.ticket_key || !t.summary);
+  const invalidTickets = tickets.filter((t) => !t.ticket_key || !t.summary);
   if (invalidTickets.length > 0) {
     await log(`⚠️  Found ${invalidTickets.length} tickets without key or summary`);
     await log(`   First invalid: ${JSON.stringify(invalidTickets[0])}`);
   }
 
-  const validTickets = tickets.filter(t => t.ticket_key && t.summary);
+  const validTickets = tickets.filter((t) => t.ticket_key && t.summary);
   await log(`   Valid tickets: ${validTickets.length}`);
 
   // Check for existing tickets
   await log(`\n🔍 Checking for existing tickets...`);
-  const ticketKeys = validTickets.map(t => t.ticket_key);
+  const ticketKeys = validTickets.map((t) => t.ticket_key);
   const existing = await checkExistingTickets(ticketKeys);
 
-  const newTickets = validTickets.filter(t => !existing.has(t.ticket_key));
-  const existingTickets = validTickets.filter(t => existing.has(t.ticket_key));
+  const newTickets = validTickets.filter((t) => !existing.has(t.ticket_key));
+  const existingTickets = validTickets.filter((t) => existing.has(t.ticket_key));
 
   await log(`   New tickets: ${newTickets.length}`);
   await log(`   Existing tickets (will update): ${existingTickets.length}`);
@@ -324,7 +329,7 @@ async function main() {
   // Process tickets in batches
   await log(`\n🧠 Generating embeddings and upserting...`);
 
-  const ticketsToProcess = validTickets.filter(t => !processedKeys.has(t.ticket_key));
+  const ticketsToProcess = validTickets.filter((t) => !processedKeys.has(t.ticket_key));
   const totalBatches = Math.ceil(ticketsToProcess.length / customBatchSize);
 
   for (let i = 0; i < ticketsToProcess.length; i += customBatchSize) {
@@ -344,7 +349,7 @@ async function main() {
         const embedding = await generateEmbedding(ticket);
         ticketsWithEmbeddings.push({
           ...ticket,
-          embedding
+          embedding,
         });
 
         if ((j + 1) % 10 === 0) {
@@ -352,7 +357,7 @@ async function main() {
         }
 
         // Rate limit: 1000 requests/min = ~60ms delay
-        await new Promise(resolve => setTimeout(resolve, 70));
+        await new Promise((resolve) => setTimeout(resolve, 70));
       } catch (error) {
         await log(`   ⚠️  Failed to generate embedding for ${ticket.ticket_key}: ${error.message}`);
       }
@@ -365,11 +370,11 @@ async function main() {
     await log(`   ✅ Batch complete: ${updated} tickets upserted`);
 
     // Update checkpoint
-    batch.forEach(t => processedKeys.add(t.ticket_key));
+    batch.forEach((t) => processedKeys.add(t.ticket_key));
     await saveCheckpoint({
       processed: Array.from(processedKeys),
       remaining: ticketsToProcess.slice(i + customBatchSize),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -389,11 +394,11 @@ async function main() {
 if (require.main === module) {
   main()
     .then(() => {
-      console.log('\n✅ Done!');
+      console.log("\n✅ Done!");
       process.exit(0);
     })
     .catch((error) => {
-      console.error('\n❌ Failed:', error.message);
+      console.error("\n❌ Failed:", error.message);
       console.error(error.stack);
       process.exit(1);
     });

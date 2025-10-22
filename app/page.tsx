@@ -7,7 +7,7 @@ import { useSettings } from "../src/hooks/useSettings";
 
 // Dynamic import for SettingsPanel (863 lines, only shown when settings open)
 const SettingsPanel = dynamic(
-  () => import("../src/components/SettingsPanel").then(mod => ({ default: mod.SettingsPanel })),
+  () => import("../src/components/SettingsPanel").then((mod) => ({ default: mod.SettingsPanel })),
   {
     loading: () => <div className="fixed inset-0 z-50 bg-black/50" />,
     ssr: false,
@@ -21,8 +21,8 @@ import { cognitoAuth } from "../src/services/cognitoAuth";
 // import { Toaster } from "../src/components/ui/sonner";
 
 // YOLO ARCHITECTURE FIX: Migrated from src/App.tsx to proper App Router!
-const ChatPage = React.lazy(
-  () => import("../src/components/ui/pages/ChatPage").catch((error) => {
+const ChatPage = React.lazy(() =>
+  import("../src/components/ui/pages/ChatPage").catch((error) => {
     console.error("Failed to load ChatPage:", error);
     // Return a fallback component
     return {
@@ -31,8 +31,8 @@ const ChatPage = React.lazy(
           <div className="text-center">
             <p className="text-red-500 mb-4">Failed to load chat interface</p>
             <p className="text-white mb-4">Error: {error.message}</p>
-            <button 
-              onClick={() => window.location.reload()} 
+            <button
+              onClick={() => window.location.reload()}
               className="px-4 py-2 bg-blue-500 text-white rounded"
             >
               Reload Page
@@ -41,7 +41,7 @@ const ChatPage = React.lazy(
         </div>
       ),
     };
-  }),
+  })
 );
 
 export default function Home() {
@@ -62,7 +62,7 @@ export default function Home() {
     if (buildInfo?.buildTime && buildInfo?.versionString) {
       const formattedBuildTime = getFormattedBuildTime(buildInfo.buildTime);
       console.log(
-        `🚀 SIAM version ${buildInfo.versionString} - Built ${formattedBuildTime}\nBut seriously, `,
+        `🚀 SIAM version ${buildInfo.versionString} - Built ${formattedBuildTime}\nBut seriously, `
       );
     }
   }, [buildInfo?.versionString, buildInfo?.buildTime]);
@@ -114,10 +114,7 @@ export default function Home() {
     if (settingsLoading || !settings) return;
 
     document.documentElement.setAttribute("data-theme", settings.theme);
-    document.documentElement.setAttribute(
-      "data-color-scheme",
-      settings.colorScheme,
-    );
+    document.documentElement.setAttribute("data-color-scheme", settings.colorScheme);
     document.documentElement.setAttribute("data-font-size", settings.fontSize);
 
     if (!settings.animationsEnabled) {
@@ -165,10 +162,7 @@ export default function Home() {
 
   // Wrap with ThemeProvider only after mount to avoid hydration issues
   const content = (
-    <div
-      className={cn("h-screen w-screen text-white font-sans")}
-      data-testid="app-container"
-    >
+    <div className={cn("h-screen w-screen text-white font-sans")} data-testid="app-container">
       {/* Main Content - Full Screen Chat Interface */}
       <main className="h-screen w-screen">
         <React.Suspense
@@ -183,8 +177,8 @@ export default function Home() {
               <div className="text-center">
                 <p className="text-red-500 mb-4">Failed to load application</p>
                 <p className="text-white mb-4">{loadError}</p>
-                <button 
-                  onClick={() => window.location.reload()} 
+                <button
+                  onClick={() => window.location.reload()}
                   className="px-4 py-2 bg-blue-500 text-white rounded"
                 >
                   Reload

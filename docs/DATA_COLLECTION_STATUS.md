@@ -29,7 +29,7 @@
    - `jira_ticket_embeddings`: 6,040 records
    - `document_chunks`: Table exists but EMPTY (0 records)
 
-### ⚠️  **What Needs Fixing:**
+### ⚠️ **What Needs Fixing:**
 
 1. **Supabase Vector Search** - INTEGRATED BUT RETURNS 0 RESULTS
    - ✅ Integration: NOW queries Supabase in parallel with Railway MCP
@@ -48,43 +48,48 @@
 ## 📊 **DATA INVENTORY**
 
 ### **Source: wiki_documents (393 docs)**
-| Metric | Value |
-|--------|-------|
-| Total Records | 393 |
-| With Embeddings | 391 (99.5%) |
-| Embedding Format | ❌ TEXT (~19,370 dimensions) |
-| Embedding Type | Should be `vector(1536)` |
-| Apps | AOMA: 238, AOMA_WIKI: 70, TK_PLATFORM: 85 |
-| Status | ⚠️ **Data exists but wrong format** |
+
+| Metric           | Value                                     |
+| ---------------- | ----------------------------------------- |
+| Total Records    | 393                                       |
+| With Embeddings  | 391 (99.5%)                               |
+| Embedding Format | ❌ TEXT (~19,370 dimensions)              |
+| Embedding Type   | Should be `vector(1536)`                  |
+| Apps             | AOMA: 238, AOMA_WIKI: 70, TK_PLATFORM: 85 |
+| Status           | ⚠️ **Data exists but wrong format**       |
 
 ### **Source: jira_tickets (6,554 tickets)**
-| Metric | Value |
-|--------|-------|
-| Total Records | 6,554 |
-| With Embeddings | 1,456 (22%) |
-| Embedding Format | ❌ TEXT (~19,200 dimensions) |
-| Status | ⚠️ **Partial embeddings, wrong format** |
+
+| Metric           | Value                                   |
+| ---------------- | --------------------------------------- |
+| Total Records    | 6,554                                   |
+| With Embeddings  | 1,456 (22%)                             |
+| Embedding Format | ❌ TEXT (~19,200 dimensions)            |
+| Status           | ⚠️ **Partial embeddings, wrong format** |
 
 ### **Source: jira_ticket_embeddings (6,040 tickets)**
-| Metric | Value |
-|--------|-------|
-| Total Records | 6,040 |
-| With Embeddings | 6,040 (100%) |
-| Embedding Format | ❌ TEXT (~19,207 dimensions) |
-| Status | ⚠️ **Good coverage, wrong format** |
+
+| Metric           | Value                              |
+| ---------------- | ---------------------------------- |
+| Total Records    | 6,040                              |
+| With Embeddings  | 6,040 (100%)                       |
+| Embedding Format | ❌ TEXT (~19,207 dimensions)       |
+| Status           | ⚠️ **Good coverage, wrong format** |
 
 ### **Source: document_chunks (0 chunks)**
-| Metric | Value |
-|--------|-------|
-| Total Records | 0 |
-| Schema | ✅ Correct (`vector(1536)`) |
-| Status | ⚠️ **Table exists but empty** |
+
+| Metric        | Value                         |
+| ------------- | ----------------------------- |
+| Total Records | 0                             |
+| Schema        | ✅ Correct (`vector(1536)`)   |
+| Status        | ⚠️ **Table exists but empty** |
 
 ---
 
 ## 🔧 **THE MISSING INTEGRATION**
 
 ### **Current Data Flow:**
+
 ```
 User Query
   ↓
@@ -98,6 +103,7 @@ Returns OpenAI Vector Store results
 ```
 
 ### **What's Missing:**
+
 ```
 aomaOrchestrator should ALSO query:
   ↓
@@ -116,6 +122,7 @@ Merge with Railway MCP results
 ### **Path 1: Fix Supabase Embeddings (4-6 hours)**
 
 **Steps:**
+
 1. Re-process existing documents
 2. Generate proper `vector(1536)` embeddings
 3. Store in `document_chunks` table
@@ -129,7 +136,9 @@ Merge with Railway MCP results
 ### **Path 2: Deploy Unified Vector Store (1-2 days)**
 
 **Steps:**
+
 1. Run migration:
+
    ```bash
    supabase db push
    ```
@@ -152,9 +161,10 @@ Merge with Railway MCP results
 **Phase 1 (NOW)**: Keep using Railway MCP (works perfectly)
 
 **Phase 2 (THIS WEEK)**: Add Supabase as supplementary source
-   - Fix embedding format
-   - Integrate with orchestrator
-   - Use as fallback/enrichment
+
+- Fix embedding format
+- Integrate with orchestrator
+- Use as fallback/enrichment
 
 **Phase 3 (NEXT SPRINT)**: Migrate to unified store for long-term
 
@@ -211,12 +221,14 @@ Keep current setup, ignore Supabase for now
 **TODAY**: Continue using Railway MCP (it works!)
 
 **THIS WEEK**:
+
 1. Fix Supabase embedding format
 2. Populate `document_chunks` properly
 3. Create RPC functions for vector search
 4. Integrate as hybrid source
 
 **NEXT SPRINT**:
+
 1. Deploy unified migration
 2. Migrate all data to `aoma_unified_vectors`
 3. Optimize and scale

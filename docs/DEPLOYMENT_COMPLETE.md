@@ -15,22 +15,22 @@
 
 ### Before Optimization (OLD Code - Assistant API)
 
-| Query Type | Time | Method |
-|-----------|------|--------|
-| Complex workflow | 44.4s | Assistant API + polling |
-| Technical details | 21.0s | Assistant API + polling |
-| Integration | 22.9s | Assistant API + polling |
-| **Average** | **29.4s** | **Slow** |
+| Query Type        | Time      | Method                  |
+| ----------------- | --------- | ----------------------- |
+| Complex workflow  | 44.4s     | Assistant API + polling |
+| Technical details | 21.0s     | Assistant API + polling |
+| Integration       | 22.9s     | Assistant API + polling |
+| **Average**       | **29.4s** | **Slow**                |
 
 ### After Optimization (NEW Code - Direct Vector Search)
 
-| Query Type | Time | Method |
-|-----------|------|--------|
-| Complex workflow | 24.1s | Direct vector + GPT-4o |
-| Technical details | 10.5s | Direct vector + GPT-4o |
-| Integration (outlier) | 44.6s | Direct vector + GPT-4o |
-| Simple queries (avg) | 15-17s | Direct vector + GPT-4o |
-| **New Average** | **~18s** | **Improved** |
+| Query Type            | Time     | Method                 |
+| --------------------- | -------- | ---------------------- |
+| Complex workflow      | 24.1s    | Direct vector + GPT-4o |
+| Technical details     | 10.5s    | Direct vector + GPT-4o |
+| Integration (outlier) | 44.6s    | Direct vector + GPT-4o |
+| Simple queries (avg)  | 15-17s   | Direct vector + GPT-4o |
+| **New Average**       | **~18s** | **Improved**           |
 
 ### Performance Improvement
 
@@ -56,7 +56,7 @@
 
 2. **Network latency to Railway**
    - Direct vector search: 1-3s
-   - GPT-4o completion: 5-7s  
+   - GPT-4o completion: 5-7s
    - Network overhead: 7-10s extra
    - Railway → OpenAI round trips add up
 
@@ -71,8 +71,9 @@
 ## Quality Assessment
 
 ✅ **Quality remains excellent:**
+
 - Accurate answers to sophisticated questions
-- Proper citations and file references  
+- Proper citations and file references
 - Well-structured responses
 - Handles complex multi-part queries
 
@@ -81,6 +82,7 @@
 **Question:** "Explain how AOMA digital archiving infrastructure handles metadata validation"
 
 **Answer:** Comprehensive explanation including:
+
 - Mandatory fields (Archive Name, Participant, Parent-Rep Owner, Asset Type)
 - Metadata validation procedures
 - Proper PDF file citations
@@ -99,7 +101,7 @@ railway up --service luminous-dedication
 
 ### Code Changes Deployed
 
-1. **New Fast Method:** `queryKnowledgeFast()` 
+1. **New Fast Method:** `queryKnowledgeFast()`
    - Direct vector store search (1-3s)
    - GPT-4o completions (5-7s)
    - No Assistant API polling
@@ -152,7 +154,7 @@ After:  2.7.0-railway_20251002-132030
 
 2. **Add performance monitoring**
    - Log vector search duration
-   - Log GPT completion duration  
+   - Log GPT completion duration
    - Log total request duration
    - Identify bottlenecks
 

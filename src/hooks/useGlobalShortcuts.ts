@@ -5,10 +5,7 @@ import useNotifications from "./useNotifications";
 declare global {
   interface Window {
     electronAPI: {
-      registerGlobalShortcut: (
-        accelerator: string,
-        id: string,
-      ) => Promise<boolean>;
+      registerGlobalShortcut: (accelerator: string, id: string) => Promise<boolean>;
       unregisterGlobalShortcut: (accelerator: string) => Promise<boolean>;
       unregisterAllGlobalShortcuts: () => Promise<boolean>;
       setWindowFocus: () => Promise<void>;
@@ -18,8 +15,7 @@ declare global {
 }
 
 // Check if we're running in Electron
-const isElectronAvailable =
-  typeof window !== "undefined" && "electronAPI" in window;
+const isElectronAvailable = typeof window !== "undefined" && "electronAPI" in window;
 
 export interface ShortcutConfig {
   key: string;
@@ -164,18 +160,13 @@ export const useGlobalShortcuts = ({
 
           if (shouldTrigger) {
             event.preventDefault();
-            console.log(
-              `Web shortcut triggered: ${shortcut.webKey} - ${shortcut.description}`,
-            );
+            console.log(`Web shortcut triggered: ${shortcut.webKey} - ${shortcut.description}`);
 
             try {
               const result = shortcut.action();
               if (result instanceof Promise) {
                 result.catch((actionErr) => {
-                  console.error(
-                    `Async error executing shortcut ${shortcut.key}:`,
-                    actionErr,
-                  );
+                  console.error(`Async error executing shortcut ${shortcut.key}:`, actionErr);
                   error(`Failed to execute: ${shortcut.description}`);
                 });
               }
@@ -190,7 +181,7 @@ export const useGlobalShortcuts = ({
         }
       }
     },
-    [defaultShortcuts, success, error, isElectron],
+    [defaultShortcuts, success, error, isElectron]
   );
 
   // Register a single Electron shortcut with improved error handling
@@ -204,22 +195,18 @@ export const useGlobalShortcuts = ({
         // Register with Electron
         const success = await window.electronAPI.registerGlobalShortcut(
           shortcut.key,
-          `shortcut-${shortcut.key}`,
+          `shortcut-${shortcut.key}`
         );
 
         if (success) {
           // Handle shortcut activation via a global event listener (would be set up in main process)
-          console.log(
-            `✅ Registered global shortcut: ${shortcut.key} - ${shortcut.description}`,
-          );
+          console.log(`✅ Registered global shortcut: ${shortcut.key} - ${shortcut.description}`);
           return true;
         } else {
           throw new Error("Registration failed");
         }
 
-        console.log(
-          `✅ Registered global shortcut: ${shortcut.key} - ${shortcut.description}`,
-        );
+        console.log(`✅ Registered global shortcut: ${shortcut.key} - ${shortcut.description}`);
         return true;
       } catch (err) {
         console.error(`❌ Failed to register shortcut ${shortcut.key}:`, err);
@@ -227,7 +214,7 @@ export const useGlobalShortcuts = ({
         return false;
       }
     },
-    [success, error, isElectron],
+    [success, error, isElectron]
   );
 
   // Unregister a single Electron shortcut
@@ -244,7 +231,7 @@ export const useGlobalShortcuts = ({
         console.error(`❌ Failed to unregister shortcut ${key}:`, err);
       }
     },
-    [isElectron],
+    [isElectron]
   );
 
   // Register all shortcuts

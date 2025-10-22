@@ -26,13 +26,9 @@ async function waitForStreamingResponse(page: Page, timeout = 10000) {
     () => {
       const messages = document.querySelectorAll('[data-testid="message"]');
       const lastMessage = messages[messages.length - 1];
-      return (
-        lastMessage &&
-        lastMessage.textContent &&
-        lastMessage.textContent.length > 10
-      );
+      return lastMessage && lastMessage.textContent && lastMessage.textContent.length > 10;
     },
-    { timeout },
+    { timeout }
   );
 }
 
@@ -65,10 +61,7 @@ Object.entries(ENVIRONMENTS).forEach(([envKey, env]) => {
           .isVisible()
           .catch(() => false);
         if (loginButton) {
-          await page.fill(
-            'input[type="email"]',
-            "siam-test-x7j9k2p4@mailinator.com",
-          );
+          await page.fill('input[type="email"]', "siam-test-x7j9k2p4@mailinator.com");
           await page.click('button:has-text("Send Magic Link")');
           // Note: In real production test, you'd need to handle email verification
           console.log("Auth required - using test email");
@@ -84,9 +77,7 @@ Object.entries(ENVIRONMENTS).forEach(([envKey, env]) => {
         expect(data.status).toBe("healthy");
       });
 
-      test("Vercel AI SDK endpoint exists and responds", async ({
-        request,
-      }) => {
+      test("Vercel AI SDK endpoint exists and responds", async ({ request }) => {
         const response = await request.post(`${env.url}/api/chat-vercel`, {
           data: {
             messages: [{ role: "user", content: "Hello" }],
@@ -112,9 +103,7 @@ Object.entries(ENVIRONMENTS).forEach(([envKey, env]) => {
         expect(data.services).toBeDefined();
       });
 
-      test("Legacy chat-responses endpoint should NOT exist", async ({
-        request,
-      }) => {
+      test("Legacy chat-responses endpoint should NOT exist", async ({ request }) => {
         const response = await request.post(`${env.url}/api/chat-responses`, {
           data: {
             messages: [{ role: "user", content: "Test" }],
@@ -134,9 +123,7 @@ Object.entries(ENVIRONMENTS).forEach(([envKey, env]) => {
         // Check for essential UI components
         await expect(page.locator("text=SIAM")).toBeVisible();
         await expect(
-          page.locator(
-            '[data-testid="chat-input"], textarea[placeholder*="Message"]',
-          ),
+          page.locator('[data-testid="chat-input"], textarea[placeholder*="Message"]')
         ).toBeVisible();
 
         // Verify model selector exists
@@ -191,19 +178,13 @@ Object.entries(ENVIRONMENTS).forEach(([envKey, env]) => {
         await page.click("text=GPT-4o Mini");
       });
 
-      test("Connection status indicators show correct state", async ({
-        page,
-      }) => {
+      test("Connection status indicators show correct state", async ({ page }) => {
         // Look for connection status
-        const connectionStatus = page.locator(
-          "text=/Systems Online|connected/i",
-        );
+        const connectionStatus = page.locator("text=/Systems Online|connected/i");
         await expect(connectionStatus.first()).toBeVisible();
 
         // Check for service indicators
-        const aomaStatus = page
-          .locator("text=AOMA")
-          .or(page.locator("text=AOMA-MESH"));
+        const aomaStatus = page.locator("text=AOMA").or(page.locator("text=AOMA-MESH"));
         await expect(aomaStatus.first()).toBeVisible();
       });
     });

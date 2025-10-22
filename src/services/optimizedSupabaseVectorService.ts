@@ -4,11 +4,7 @@
  * Performance: 5-10x faster than IVFFlat implementation
  */
 
-import {
-  supabase,
-  VectorSearchResult,
-  handleSupabaseError,
-} from "@/lib/supabase";
+import { supabase, VectorSearchResult, handleSupabaseError } from "@/lib/supabase";
 import OpenAI from "openai";
 import SupabaseVectorService from "./supabaseVectorService";
 
@@ -23,7 +19,7 @@ export class OptimizedSupabaseVectorService extends SupabaseVectorService {
     options: {
       matchCount?: number;
       sourceTypes?: string[];
-    } = {},
+    } = {}
   ): Promise<VectorSearchResult[]> {
     const { matchCount = 10, sourceTypes = null } = options;
 
@@ -60,19 +56,13 @@ export class OptimizedSupabaseVectorService extends SupabaseVectorService {
       matchCount?: number;
       sourceTypes?: string[];
       mode?: "fast" | "accurate" | "auto";
-    } = {},
+    } = {}
   ): Promise<VectorSearchResult[]> {
-    const {
-      matchThreshold = 0.78,
-      matchCount = 10,
-      sourceTypes = null,
-      mode = "auto",
-    } = options;
+    const { matchThreshold = 0.78, matchCount = 10, sourceTypes = null, mode = "auto" } = options;
 
     // Decision logic for search strategy
     const useFastSearch =
-      mode === "fast" ||
-      (mode === "auto" && !matchThreshold && matchCount <= 20);
+      mode === "fast" || (mode === "auto" && !matchThreshold && matchCount <= 20);
 
     if (useFastSearch) {
       // Use fast HNSW search without threshold
@@ -100,21 +90,18 @@ export class OptimizedSupabaseVectorService extends SupabaseVectorService {
       matchCount?: number;
       sourceTypes?: string[];
       mode?: "fast" | "accurate";
-    } = {},
+    } = {}
   ): Promise<VectorSearchResult[][]> {
     const { matchCount = 10, sourceTypes = null, mode = "fast" } = options;
 
     try {
       // Generate embeddings in parallel
-      const embeddings = await Promise.all(
-        queries.map(q => this.generateEmbedding(q))
-      );
+      const embeddings = await Promise.all(queries.map((q) => this.generateEmbedding(q)));
 
       // Execute searches in parallel
-      const searchPromises = embeddings.map(embedding => {
-        const rpcFunction =
-          mode === "fast" ? "match_aoma_vectors_fast" : "match_aoma_vectors";
-        
+      const searchPromises = embeddings.map((embedding) => {
+        const rpcFunction = mode === "fast" ? "match_aoma_vectors_fast" : "match_aoma_vectors";
+
         return supabase.rpc(rpcFunction, {
           query_embedding: embedding,
           match_count: matchCount,
@@ -144,9 +131,7 @@ export class OptimizedSupabaseVectorService extends SupabaseVectorService {
    */
   async checkIndexPerformance(): Promise<any> {
     try {
-      const { data, error } = await supabase.rpc(
-        "check_vector_index_performance"
-      );
+      const { data, error } = await supabase.rpc("check_vector_index_performance");
 
       if (error) {
         throw error;
@@ -155,9 +140,7 @@ export class OptimizedSupabaseVectorService extends SupabaseVectorService {
       return data;
     } catch (error) {
       console.error("Failed to check index performance:", error);
-      throw new Error(
-        `Performance check failed: ${handleSupabaseError(error)}`
-      );
+      throw new Error(`Performance check failed: ${handleSupabaseError(error)}`);
     }
   }
 
@@ -180,7 +163,7 @@ export class OptimizedSupabaseVectorService extends SupabaseVectorService {
 
       // Run fast searches to warm up the HNSW index
       await Promise.all(
-        queries.map(q =>
+        queries.map((q) =>
           this.searchVectorsFast(q, { matchCount: 5 }).catch(() => {
             // Ignore errors during warmup
           })

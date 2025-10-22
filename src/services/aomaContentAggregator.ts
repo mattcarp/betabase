@@ -108,12 +108,10 @@ export class AomaContentAggregator {
     // Handle import.meta.env availability (not available in Node.js tests)
     const getEnvVar = (
       key: string,
-      defaultValue: string | boolean | number,
+      defaultValue: string | boolean | number
     ): string | boolean | number => {
       try {
-        return (
-          process.env[`NEXT_PUBLIC_${key}`] ?? process.env[key] ?? defaultValue
-        );
+        return process.env[`NEXT_PUBLIC_${key}`] ?? process.env[key] ?? defaultValue;
       } catch {
         return defaultValue;
       }
@@ -122,18 +120,17 @@ export class AomaContentAggregator {
     this.config = {
       serverUrl: getEnvVar(
         "NEXT_PUBLIC_AOMA_MESH_SERVER_URL",
-        "https://luminous-dedication-production.up.railway.app",
+        "https://luminous-dedication-production.up.railway.app"
       ) as string,
       rpcUrl: getEnvVar(
         "NEXT_PUBLIC_AOMA_MESH_RPC_URL",
-        "https://luminous-dedication-production.up.railway.app/rpc",
+        "https://luminous-dedication-production.up.railway.app/rpc"
       ) as string,
       healthUrl: getEnvVar(
         "NEXT_PUBLIC_AOMA_MESH_HEALTH_URL",
-        "https://luminous-dedication-production.up.railway.app/health",
+        "https://luminous-dedication-production.up.railway.app/health"
       ) as string,
-      enableAutoQuery:
-        getEnvVar("NEXT_PUBLIC_ENABLE_MCP_INTEGRATION", true) !== "false",
+      enableAutoQuery: getEnvVar("NEXT_PUBLIC_ENABLE_MCP_INTEGRATION", true) !== "false",
       queryTimeout: 10000,
       maxItems: 50,
       keywords: [
@@ -185,9 +182,7 @@ export class AomaContentAggregator {
       });
 
       if (!response.ok) {
-        throw new Error(
-          `MCP query failed: ${response.status} ${response.statusText}`,
-        );
+        throw new Error(`MCP query failed: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -263,31 +258,25 @@ export class AomaContentAggregator {
   /**
    * Calculate relevance score for an item
    */
-  private calculateRelevanceScore(
-    item: any,
-    source: DigestItem["source"],
-  ): number {
+  private calculateRelevanceScore(item: any, source: DigestItem["source"]): number {
     let score = 0;
     const weights = this.config.scoringWeights;
 
     // Keyword matching score
-    const text =
-      `${item.title} ${item.description || item.content || ""}`.toLowerCase();
+    const text = `${item.title} ${item.description || item.content || ""}`.toLowerCase();
     const keywordMatches = this.config.keywords.filter((keyword) =>
-      text.includes(keyword.toLowerCase()),
+      text.includes(keyword.toLowerCase())
     ).length;
     const highPriorityMatches = this.HIGH_PRIORITY_KEYWORDS.filter((keyword) =>
-      text.includes(keyword.toLowerCase()),
+      text.includes(keyword.toLowerCase())
     ).length;
 
-    const keywordScore =
-      keywordMatches / this.config.keywords.length + highPriorityMatches * 0.5; // Bonus for high-priority keywords
+    const keywordScore = keywordMatches / this.config.keywords.length + highPriorityMatches * 0.5; // Bonus for high-priority keywords
     score += keywordScore * weights.keyword;
 
     // Freshness score (recent content gets higher score)
     const updatedAt = new Date(item.updatedAt || item.timestamp || Date.now());
-    const hoursSinceUpdate =
-      (Date.now() - updatedAt.getTime()) / (1000 * 60 * 60);
+    const hoursSinceUpdate = (Date.now() - updatedAt.getTime()) / (1000 * 60 * 60);
     const freshnessScore = Math.max(0, 1 - hoursSinceUpdate / 24); // Decay over 24 hours
     score += freshnessScore * weights.freshness;
 
@@ -295,8 +284,7 @@ export class AomaContentAggregator {
     if (item.priority) {
       const priorityMap = { critical: 1, high: 0.8, medium: 0.5, low: 0.2 };
       const priorityScore =
-        priorityMap[item.priority.toLowerCase() as keyof typeof priorityMap] ||
-        0;
+        priorityMap[item.priority.toLowerCase() as keyof typeof priorityMap] || 0;
       score += priorityScore * weights.priority;
     }
 
@@ -304,9 +292,7 @@ export class AomaContentAggregator {
     if (item.tags || item.labels) {
       const tags = item.tags || item.labels || [];
       const relevantTags = tags.filter((tag: string) =>
-        this.config.keywords.some((keyword) =>
-          tag.toLowerCase().includes(keyword.toLowerCase()),
-        ),
+        this.config.keywords.some((keyword) => tag.toLowerCase().includes(keyword.toLowerCase()))
       );
       const tagsScore = relevantTags.length / Math.max(tags.length, 1);
       score += tagsScore * weights.tags;
@@ -318,10 +304,7 @@ export class AomaContentAggregator {
   /**
    * Convert various content types to DigestItem format
    */
-  private convertToDigestItem(
-    item: any,
-    source: DigestItem["source"],
-  ): DigestItem {
+  private convertToDigestItem(item: any, source: DigestItem["source"]): DigestItem {
     const baseItem = {
       id: item.id || item.key || `${source}-${Date.now()}`,
       source,
@@ -458,8 +441,6 @@ const aggregatorConfig: AomaContentAggregatorConfig = {
   scoringWeights: { keyword: 0.4, freshness: 0.3, priority: 0.2, tags: 0.1 },
 };
 
-export const aomaContentAggregator = new AomaContentAggregator(
-  aggregatorConfig,
-);
+export const aomaContentAggregator = new AomaContentAggregator(aggregatorConfig);
 
 // Exports are already handled above

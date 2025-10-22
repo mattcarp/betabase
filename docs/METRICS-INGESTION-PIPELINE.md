@@ -32,7 +32,7 @@ System Metrics → Collection → Vectorization → Vector Store → Semantic Se
 Core service for collecting and vectorizing metrics:
 
 ```typescript
-import { getSystemMetricsVectorService } from '@/services/systemMetricsVectorService';
+import { getSystemMetricsVectorService } from "@/services/systemMetricsVectorService";
 
 const metricsService = getSystemMetricsVectorService();
 
@@ -40,18 +40,14 @@ const metricsService = getSystemMetricsVectorService();
 const result = await metricsService.captureAndVectorize();
 
 // Record custom metric
-await metricsService.recordCustomMetric(
-  'api.responseTime',
-  125.5,
-  {
-    metricType: 'api',
-    unit: 'milliseconds',
-    tags: { endpoint: '/api/chat' }
-  }
-);
+await metricsService.recordCustomMetric("api.responseTime", 125.5, {
+  metricType: "api",
+  unit: "milliseconds",
+  tags: { endpoint: "/api/chat" },
+});
 
 // Search metrics
-const results = await metricsService.searchMetrics('API response time');
+const results = await metricsService.searchMetrics("API response time");
 ```
 
 ### 2. API Endpoints
@@ -169,7 +165,7 @@ The system supports the following metric types:
 ```typescript
 interface SystemMetric {
   timestamp: string;
-  metricType: 'performance' | 'resource' | 'api' | 'error' | 'custom';
+  metricType: "performance" | "resource" | "api" | "error" | "custom";
   name: string;
   value: number | string | Record<string, any>;
   unit?: string;
@@ -185,7 +181,7 @@ interface SystemMetric {
 Set up automated collection that runs every minute:
 
 ```typescript
-import { getSystemMetricsVectorService } from '@/services/systemMetricsVectorService';
+import { getSystemMetricsVectorService } from "@/services/systemMetricsVectorService";
 
 const metricsService = getSystemMetricsVectorService();
 
@@ -199,7 +195,7 @@ clearInterval(interval);
 ### 2. Track API Performance
 
 ```typescript
-import { getSystemMetricsVectorService } from '@/services/systemMetricsVectorService';
+import { getSystemMetricsVectorService } from "@/services/systemMetricsVectorService";
 
 const metricsService = getSystemMetricsVectorService();
 
@@ -213,34 +209,26 @@ export async function POST(request: NextRequest) {
     const duration = Date.now() - startTime;
 
     // Record the metric
-    await metricsService.recordCustomMetric(
-      'api.endpoint.responseTime',
-      duration,
-      {
-        metricType: 'api',
-        unit: 'milliseconds',
-        tags: {
-          endpoint: request.nextUrl.pathname,
-          method: request.method,
-          status: 'success'
-        }
-      }
-    );
+    await metricsService.recordCustomMetric("api.endpoint.responseTime", duration, {
+      metricType: "api",
+      unit: "milliseconds",
+      tags: {
+        endpoint: request.nextUrl.pathname,
+        method: request.method,
+        status: "success",
+      },
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
     // Record error metric
-    await metricsService.recordCustomMetric(
-      'api.endpoint.error',
-      1,
-      {
-        metricType: 'error',
-        tags: {
-          endpoint: request.nextUrl.pathname,
-          errorType: error.name
-        }
-      }
-    );
+    await metricsService.recordCustomMetric("api.endpoint.error", 1, {
+      metricType: "error",
+      tags: {
+        endpoint: request.nextUrl.pathname,
+        errorType: error.name,
+      },
+    });
 
     throw error;
   }
@@ -250,31 +238,25 @@ export async function POST(request: NextRequest) {
 ### 3. Search Historical Metrics
 
 ```typescript
-import { getSystemMetricsVectorService } from '@/services/systemMetricsVectorService';
+import { getSystemMetricsVectorService } from "@/services/systemMetricsVectorService";
 
 const metricsService = getSystemMetricsVectorService();
 
 // Find slow API endpoints
-const slowEndpoints = await metricsService.searchMetrics(
-  'slow API response time over 2 seconds',
-  {
-    matchThreshold: 0.7,
-    metricType: 'api',
-    timeRange: {
-      start: '2025-10-22T00:00:00Z',
-      end: '2025-10-22T23:59:59Z'
-    }
-  }
-);
+const slowEndpoints = await metricsService.searchMetrics("slow API response time over 2 seconds", {
+  matchThreshold: 0.7,
+  metricType: "api",
+  timeRange: {
+    start: "2025-10-22T00:00:00Z",
+    end: "2025-10-22T23:59:59Z",
+  },
+});
 
 // Find error spikes
-const errors = await metricsService.searchMetrics(
-  'authentication errors',
-  {
-    matchThreshold: 0.75,
-    metricType: 'error'
-  }
-);
+const errors = await metricsService.searchMetrics("authentication errors", {
+  matchThreshold: 0.75,
+  metricType: "error",
+});
 ```
 
 ## Testing
@@ -317,7 +299,7 @@ curl -X POST http://localhost:3000/api/metrics/search \
 The metrics ingestion pipeline is designed to work seamlessly with the AOMA orchestrator:
 
 ```typescript
-import { getSystemMetricsVectorService } from '@/services/systemMetricsVectorService';
+import { getSystemMetricsVectorService } from "@/services/systemMetricsVectorService";
 
 // In AOMA orchestrator, track performance
 const metricsService = getSystemMetricsVectorService();
@@ -326,18 +308,14 @@ const startTime = Date.now();
 const response = await orchestrateQuery(query);
 const duration = Date.now() - startTime;
 
-await metricsService.recordCustomMetric(
-  'aoma.orchestration.duration',
-  duration,
-  {
-    metricType: 'performance',
-    unit: 'milliseconds',
-    tags: {
-      complexity: response.complexity,
-      sourcesQueried: response.sources.length
-    }
-  }
-);
+await metricsService.recordCustomMetric("aoma.orchestration.duration", duration, {
+  metricType: "performance",
+  unit: "milliseconds",
+  tags: {
+    complexity: response.complexity,
+    sourcesQueried: response.sources.length,
+  },
+});
 ```
 
 ## Future Enhancements
@@ -346,17 +324,14 @@ await metricsService.recordCustomMetric(
 
 ```typescript
 // Will support pulling metrics from Prometheus
-await metricsService.ingestPrometheusMetrics('http://prometheus:9090');
+await metricsService.ingestPrometheusMetrics("http://prometheus:9090");
 ```
 
 ### Grafana Integration
 
 ```typescript
 // Will support pulling dashboard metrics from Grafana
-await metricsService.ingestGrafanaMetrics(
-  'http://grafana:3000',
-  'grafana_api_key'
-);
+await metricsService.ingestGrafanaMetrics("http://grafana:3000", "grafana_api_key");
 ```
 
 ### Real-time Monitoring Dashboard

@@ -1,4 +1,5 @@
 # Visual Regression Fix Report
+
 **Date:** October 1, 2025  
 **Status:** ✅ **RESOLVED**
 
@@ -31,8 +32,9 @@ The issues were caused by CSS variable references resolving to light theme color
 ```
 
 Also added explicit dark backgrounds to nested containers:
+
 - Main chat area: `bg-zinc-950`
-- Conversation container: `bg-zinc-950`  
+- Conversation container: `bg-zinc-950`
 - ConversationContent: `bg-zinc-950`
 
 ### 2. Badge Component Outline Variant (badge.tsx)
@@ -45,6 +47,7 @@ Also added explicit dark backgrounds to nested containers:
 ```
 
 This gives outline badges:
+
 - Dark semi-transparent background (zinc-800/50)
 - Visible border (zinc-700/50)
 - Light text (zinc-300) that changes to white on hover
@@ -66,6 +69,7 @@ This gives outline badges:
 **Test:** `tests/visual/quick-visual-check.spec.ts`
 
 ✅ **PASSED** - Screenshots confirm:
+
 - Main chat area now has proper dark background
 - Header badges are clearly visible with good contrast
 - Suggestion buttons have appropriate dark styling
@@ -74,11 +78,13 @@ This gives outline badges:
 ### Before vs After Comparison
 
 **Before:**
+
 - White/light center panel
 - Barely visible white outline badges
 - Light gray suggestion buttons
 
 **After:**
+
 - Consistent dark theme (zinc-950 background)
 - Visible badges with dark backgrounds and light text
 - Dark suggestion buttons with clear borders and readable text
@@ -99,7 +105,7 @@ All visual regressions have been resolved. The application now maintains a consi
 ## Files Modified
 
 1. `src/components/ai/ai-sdk-chat-panel.tsx` - Main chat panel backgrounds
-2. `src/components/ui/badge.tsx` - Badge outline variant styling  
+2. `src/components/ui/badge.tsx` - Badge outline variant styling
 3. `tests/visual/quick-visual-check.spec.ts` - New comprehensive visual test (created)
 
 ## Recommendations

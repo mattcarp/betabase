@@ -32,9 +32,7 @@ export class AOMACacheService {
    * Generate a unique cache key from the query
    */
   private generateCacheKey(query: string): string {
-    return createHash("sha256")
-      .update(query.toLowerCase().trim())
-      .digest("hex");
+    return createHash("sha256").update(query.toLowerCase().trim()).digest("hex");
   }
 
   /**
@@ -79,11 +77,7 @@ export class AOMACacheService {
   /**
    * Cache a response from OpenAI for future use
    */
-  async cacheResponse(
-    query: string,
-    response: string,
-    sources: any[] = [],
-  ): Promise<void> {
+  async cacheResponse(query: string, response: string, sources: any[] = []): Promise<void> {
     try {
       const cacheKey = this.generateCacheKey(query);
 
@@ -98,12 +92,7 @@ export class AOMACacheService {
         hit_count: 0,
       };
 
-      await this.supabaseVector.upsertVector(
-        content,
-        "cache",
-        cacheKey,
-        metadata,
-      );
+      await this.supabaseVector.upsertVector(content, "cache", cacheKey, metadata);
 
       console.log("✅ Response cached for future queries!");
     } catch (error) {

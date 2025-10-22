@@ -14,6 +14,7 @@ On September 4, 2024, the SIAM project was fully migrated from Railway.com to Re
 ## What Was Removed
 
 ### Files Deleted (27 total):
+
 ```
 check-railway.sh
 fix-railway-deploy.sh
@@ -45,9 +46,11 @@ RAILWAY_DEV_MODE_VARS.txt
 ```
 
 ### Directory Removed:
+
 - `.railway/` - Complete Railway configuration directory
 
 ### Code Changes:
+
 - `src/services/aomaContentAggregator.ts` - Updated URLs to Render
 - `src/services/aomaConversationIntegration.ts` - Updated URLs to Render
 - `src/services/aomaOrchestrator.ts` - Updated deployment URLs
@@ -57,11 +60,13 @@ RAILWAY_DEV_MODE_VARS.txt
 ## New Render Configuration
 
 ### Production URLs:
+
 - Main Application: `https://siam.onrender.com`
 - AOMA MCP Service: `https://aoma-mesh-mcp.onrender.com`
 - Health Check: `https://siam.onrender.com/api/health`
 
 ### Deployment Configuration:
+
 - **Service Type**: Web Service
 - **Runtime**: Docker
 - **Plan**: Starter (upgradeable to Standard)
@@ -71,17 +76,22 @@ RAILWAY_DEV_MODE_VARS.txt
 ### New Helper Scripts:
 
 #### `check-render-status.sh`
+
 Quick health check for Render deployment status.
 
 #### `run-render-tests.sh`
+
 Orchestrates Playwright test execution against Render deployment:
+
 - Smoke tests
 - Auth tests
 - Visual tests
 - Full test suite
 
 #### `playwright.config.render.ts`
+
 Dedicated Playwright configuration for Render production testing with:
+
 - Multiple browser support (Chrome, Firefox, Safari)
 - Mobile viewport testing
 - Proper retry logic
@@ -90,6 +100,7 @@ Dedicated Playwright configuration for Render production testing with:
 ## Testing Infrastructure
 
 ### Playwright Test Orchestration:
+
 ```bash
 # Local development
 npm run test:local
@@ -105,6 +116,7 @@ npm run test:render
 ```
 
 ### Test Configuration Files:
+
 - `playwright.config.ts` - Default (Render production)
 - `playwright.config.render.ts` - Explicit Render config
 - `playwright.config.local.ts` - Local development
@@ -114,6 +126,7 @@ npm run test:render
 All environment variables are now managed through Render Dashboard:
 
 ### Required Variables:
+
 ```
 NODE_ENV=production
 PORT=10000
@@ -139,6 +152,7 @@ NEXT_PUBLIC_AOMA_MESH_HEALTH_URL=https://aoma-mesh-mcp.onrender.com/health
 ## Deployment Process
 
 ### Automatic Deployment:
+
 ```bash
 git add -A
 git commit -m "Your changes"
@@ -147,11 +161,13 @@ git push origin main
 ```
 
 ### Manual Deployment:
+
 1. Log into Render Dashboard
 2. Navigate to siam-app service
 3. Click "Manual Deploy" → "Deploy latest commit"
 
 ### Monitoring:
+
 ```bash
 # Check status
 ./check-render-status.sh
@@ -210,12 +226,13 @@ If issues arise with Render deployment:
    - Review Render build logs
 
 ### Contact:
+
 - Render Support: https://render.com/support
 - Render Status: https://status.render.com
 - Documentation: https://render.com/docs
 
 ---
 
-*Migration completed by: Matt Carpenter*
-*Date: September 4, 2024*
-*Verified working: All Playwright tests passing against Render deployment*
+_Migration completed by: Matt Carpenter_
+_Date: September 4, 2024_
+_Verified working: All Playwright tests passing against Render deployment_

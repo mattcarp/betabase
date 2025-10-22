@@ -21,10 +21,7 @@ export async function GET(request: NextRequest) {
   // Add CORS headers
   response.headers.set("Access-Control-Allow-Origin", "*");
   response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  response.headers.set(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization",
-  );
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   return response;
 }
@@ -50,14 +47,8 @@ export async function POST(request: NextRequest) {
           },
         });
         healthResponse.headers.set("Access-Control-Allow-Origin", "*");
-        healthResponse.headers.set(
-          "Access-Control-Allow-Methods",
-          "GET, POST, OPTIONS",
-        );
-        healthResponse.headers.set(
-          "Access-Control-Allow-Headers",
-          "Content-Type, Authorization",
-        );
+        healthResponse.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        healthResponse.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
         return healthResponse;
 
       case "tools/list":
@@ -105,14 +96,8 @@ export async function POST(request: NextRequest) {
           ],
         });
         toolsResponse.headers.set("Access-Control-Allow-Origin", "*");
-        toolsResponse.headers.set(
-          "Access-Control-Allow-Methods",
-          "GET, POST, OPTIONS",
-        );
-        toolsResponse.headers.set(
-          "Access-Control-Allow-Headers",
-          "Content-Type, Authorization",
-        );
+        toolsResponse.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        toolsResponse.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
         return toolsResponse;
 
       case "tools/call":
@@ -156,7 +141,7 @@ export async function POST(request: NextRequest) {
 
           if (!aomaResponse.ok) {
             throw new Error(
-              `AOMA request failed: ${aomaResponse.status} ${aomaResponse.statusText}`,
+              `AOMA request failed: ${aomaResponse.status} ${aomaResponse.statusText}`
             );
           }
 
@@ -173,13 +158,10 @@ export async function POST(request: NextRequest) {
             data: aomaData.result,
           });
           successResponse.headers.set("Access-Control-Allow-Origin", "*");
-          successResponse.headers.set(
-            "Access-Control-Allow-Methods",
-            "GET, POST, OPTIONS",
-          );
+          successResponse.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
           successResponse.headers.set(
             "Access-Control-Allow-Headers",
-            "Content-Type, Authorization",
+            "Content-Type, Authorization"
           );
           return successResponse;
         } catch (error) {
@@ -192,37 +174,27 @@ export async function POST(request: NextRequest) {
               error: "AOMA MCP server unavailable",
               message:
                 "Sorry, I couldn't connect to the AOMA knowledge servers right now. Please try again later.",
-              details:
-                error instanceof Error ? error.message : "Connection failed",
+              details: error instanceof Error ? error.message : "Connection failed",
               timestamp: new Date().toISOString(),
             },
-            { status: 503 },
+            { status: 503 }
           );
           errorResponse.headers.set("Access-Control-Allow-Origin", "*");
-          errorResponse.headers.set(
-            "Access-Control-Allow-Methods",
-            "GET, POST, OPTIONS",
-          );
-          errorResponse.headers.set(
-            "Access-Control-Allow-Headers",
-            "Content-Type, Authorization",
-          );
+          errorResponse.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+          errorResponse.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
           return errorResponse;
         }
 
       default:
         const invalidActionResponse = NextResponse.json(
           { error: "Invalid action" },
-          { status: 400 },
+          { status: 400 }
         );
         invalidActionResponse.headers.set("Access-Control-Allow-Origin", "*");
-        invalidActionResponse.headers.set(
-          "Access-Control-Allow-Methods",
-          "GET, POST, OPTIONS",
-        );
+        invalidActionResponse.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         invalidActionResponse.headers.set(
           "Access-Control-Allow-Headers",
-          "Content-Type, Authorization",
+          "Content-Type, Authorization"
         );
         return invalidActionResponse;
     }
@@ -233,17 +205,11 @@ export async function POST(request: NextRequest) {
         error: "Internal server error",
         message: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
     serverErrorResponse.headers.set("Access-Control-Allow-Origin", "*");
-    serverErrorResponse.headers.set(
-      "Access-Control-Allow-Methods",
-      "GET, POST, OPTIONS",
-    );
-    serverErrorResponse.headers.set(
-      "Access-Control-Allow-Headers",
-      "Content-Type, Authorization",
-    );
+    serverErrorResponse.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    serverErrorResponse.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
     return serverErrorResponse;
   }
 }

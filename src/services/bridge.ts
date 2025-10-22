@@ -51,8 +51,7 @@ export const getAIInsights = async (): Promise<any> => {
 export const getEnvironmentInfo = () => {
   return {
     isElectron: isElectronEnvironment(),
-    hasWebAudio:
-      typeof navigator !== "undefined" && "mediaDevices" in navigator,
+    hasWebAudio: typeof navigator !== "undefined" && "mediaDevices" in navigator,
     platform: isElectronEnvironment() ? "desktop" : "web",
   };
 };

@@ -5,6 +5,7 @@
 ## Problem Identified
 
 User correctly identified that:
+
 1. ❌ Console errors exist when clicking suggestion buttons
 2. ❌ Tests were NOT checking for console errors
 3. ❌ Tests were passing with FALSE POSITIVES
@@ -18,22 +19,23 @@ User correctly identified that:
 **Issue**: `sendMessage` wrapper was checking for `content` property, but AI SDK v5 uses `text` property
 
 **Fix**:
+
 ```typescript
 // BEFORE (broken)
-if (!message || message.content == null || message.content === '') {
+if (!message || message.content == null || message.content === "") {
   // ...validation
 }
 
 // AFTER (fixed)
 const messageText = message?.text || message?.content; // Support both
-if (!message || (messageText == null || messageText === '')) {
+if (!message || messageText == null || messageText === "") {
   console.error("[SIAM] Attempted to send message with null/empty content:", message);
   toast.error("Cannot send empty message");
   return;
 }
 const validatedMessage = {
   ...message,
-  text: String(messageText)  // AI SDK v5 format
+  text: String(messageText), // AI SDK v5 format
 };
 ```
 
@@ -48,7 +50,7 @@ const validatedMessage = {
 Reusable helper for console error detection across ALL tests:
 
 ```typescript
-import { setupConsoleMonitoring, assertNoConsoleErrors } from './helpers/console-monitor';
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "./helpers/console-monitor";
 
 test.beforeEach(async ({ page }) => {
   setupConsoleMonitoring(page, {
@@ -64,6 +66,7 @@ test.afterEach(async () => {
 ```
 
 **Features**:
+
 - Captures console errors automatically
 - Captures console warnings (optional)
 - Captures network errors (optional)
@@ -74,10 +77,12 @@ test.afterEach(async () => {
 ### 4. Updated Test Files
 
 #### ✅ Updated:
+
 - `tests/visual/dark-theme-regression.spec.ts` - Now checks console errors
 - `tests/critical/console-error-check.spec.ts` - New dedicated console error test
 
 #### ⏳ To Update:
+
 - `tests/curate-tab-test.spec.ts` - File upload tests
 - `tests/production/aoma-chat-test.spec.ts` - AOMA intelligence tests
 - `tests/e2e/smoke/smoke.spec.ts` - Smoke tests
@@ -86,18 +91,23 @@ test.afterEach(async () => {
 ## Testing Protocol Updates
 
 ### Before This Fix
+
 ❌ Tests checked:
+
 - Page loads
 - Elements visible
 - No navigation errors
 
 ❌ Tests did NOT check:
+
 - Console errors
 - Actual functionality usage (e.g., sending messages)
 - API response validation
 
 ### After This Fix
+
 ✅ Tests MUST check:
+
 - **Console errors** (via `console-monitor.ts`)
 - **Actual functionality** (click buttons, send messages)
 - **API responses** (no 400/500 errors)
@@ -107,6 +117,7 @@ test.afterEach(async () => {
 ## Next Steps
 
 ### High Priority (Must Complete Before ANY Deployment)
+
 1. ⏳ Add console monitoring to ALL P0 tests:
    - Curate tab file upload
    - AOMA chat intelligence
@@ -121,6 +132,7 @@ test.afterEach(async () => {
    - Update P0 checklist
 
 ### Medium Priority
+
 4. ⏳ Update `TESTING_FUNDAMENTALS.md` with console monitoring guide
 
 5. ⏳ Add pre-commit hook to run console error tests
@@ -130,11 +142,13 @@ test.afterEach(async () => {
 ## Files Modified
 
 ### New Files:
+
 - `/tests/helpers/console-monitor.ts` - Reusable console monitoring helper
 - `/tests/critical/console-error-check.spec.ts` - Dedicated console error test
 - `/context/console-error-bug-postmortem.md` - Root cause analysis
 
 ### Modified Files:
+
 - `/src/components/ai/ai-sdk-chat-panel.tsx` - Fixed `text` vs `content` validation
 - `/app/api/chat/route.ts` - Added OpenAI import, null content filtering
 - `/tests/visual/dark-theme-regression.spec.ts` - Added console monitoring

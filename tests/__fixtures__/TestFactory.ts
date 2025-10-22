@@ -7,7 +7,7 @@ interface User {
   email: string;
   password: string;
   name: string;
-  role?: 'user' | 'admin';
+  role?: "user" | "admin";
 }
 
 interface TestFile {
@@ -31,10 +31,10 @@ export class TestFactory {
     this.counter++;
     return {
       email: `test-${this.counter}-${Date.now()}@siam.ai`,
-      password: 'Test123!@#',
+      password: "Test123!@#",
       name: `Test User ${this.counter}`,
-      role: 'user',
-      ...overrides
+      role: "user",
+      ...overrides,
     };
   }
 
@@ -42,9 +42,9 @@ export class TestFactory {
    * Create an admin user
    */
   static createAdmin(): User {
-    return this.createUser({ 
-      role: 'admin',
-      email: `admin-${this.counter}@siam.ai`
+    return this.createUser({
+      role: "admin",
+      email: `admin-${this.counter}@siam.ai`,
     });
   }
   /**
@@ -52,7 +52,7 @@ export class TestFactory {
    */
   static createSonyUser(): User {
     return this.createUser({
-      email: `test-${this.counter}@sonymusic.com`
+      email: `test-${this.counter}@sonymusic.com`,
     });
   }
 
@@ -64,8 +64,8 @@ export class TestFactory {
     return {
       name: `test-file-${this.counter}.txt`,
       content: `Test content ${this.counter}\n${new Date().toISOString()}`,
-      type: 'text/plain',
-      ...overrides
+      type: "text/plain",
+      ...overrides,
     };
   }
 
@@ -75,8 +75,8 @@ export class TestFactory {
   static createPDF(): TestFile {
     return this.createFile({
       name: `document-${this.counter}.pdf`,
-      type: 'application/pdf',
-      content: 'PDF content would go here'
+      type: "application/pdf",
+      content: "PDF content would go here",
     });
   }
 
@@ -86,8 +86,8 @@ export class TestFactory {
   static createCSV(): TestFile {
     return this.createFile({
       name: `data-${this.counter}.csv`,
-      type: 'text/csv',
-      content: 'header1,header2,header3\nvalue1,value2,value3'
+      type: "text/csv",
+      content: "header1,header2,header3\nvalue1,value2,value3",
     });
   }
   /**
@@ -97,8 +97,8 @@ export class TestFactory {
     this.counter++;
     return {
       text: `Test message ${this.counter}: What is the capital of France?`,
-      expectResponse: 'Paris',
-      ...overrides
+      expectResponse: "Paris",
+      ...overrides,
     };
   }
 
@@ -107,9 +107,9 @@ export class TestFactory {
    */
   static createConversation(): ChatMessage[] {
     return [
-      { text: 'Hello, can you help me?', expectResponse: 'help' },
-      { text: 'What can you do?', expectResponse: 'assist' },
-      { text: 'Tell me a joke', expectResponse: undefined } // Don't check specific response
+      { text: "Hello, can you help me?", expectResponse: "help" },
+      { text: "What can you do?", expectResponse: "assist" },
+      { text: "Tell me a joke", expectResponse: undefined }, // Don't check specific response
     ];
   }
 
@@ -117,8 +117,8 @@ export class TestFactory {
    * Generate random string
    */
   static randomString(length = 10): string {
-    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
     for (let i = 0; i < length; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }

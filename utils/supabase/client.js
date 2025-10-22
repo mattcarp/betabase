@@ -6,7 +6,7 @@
  * @module utils/supabase/client
  */
 
-const { createClient } = require('@supabase/supabase-js');
+const { createClient } = require("@supabase/supabase-js");
 
 /**
  * Get configured Supabase client
@@ -23,19 +23,19 @@ function getSupabaseClient() {
 
   if (!supabaseUrl || !supabaseKey) {
     throw new Error(
-      'Missing Supabase credentials! ' +
-      'Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in your environment.'
+      "Missing Supabase credentials! " +
+        "Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in your environment."
     );
   }
 
   return createClient(supabaseUrl, supabaseKey, {
     auth: {
       autoRefreshToken: false,
-      persistSession: false
-    }
+      persistSession: false,
+    },
   });
 }
 
 module.exports = {
-  getSupabaseClient
+  getSupabaseClient,
 };

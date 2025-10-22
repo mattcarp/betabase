@@ -38,16 +38,19 @@ Since you're doing this manually (not using Sony Music JIRA API), choose one met
 ### Step 2: Prepare Your Export File
 
 **Required columns**:
+
 - `ticket_key` or `key` or `Key` (e.g., "ITSM-12345")
 - `summary` or `Summary` (ticket title)
 
 **Optional but recommended**:
+
 - `description` or `Description`
 - `status` or `Status`
 - `priority` or `Priority`
 - `project` or `Project`
 
 **Example CSV format**:
+
 ```csv
 Key,Summary,Description,Status,Priority,Project
 ITSM-12345,Login issue on production,Users cannot login to the portal,Open,High,ITSM
@@ -56,6 +59,7 @@ AOMA-5001,File upload timeout,Large files fail to upload,Closed,High,AOMA
 ```
 
 **Example JSON format**:
+
 ```json
 [
   {
@@ -82,6 +86,7 @@ node scripts/data-collection/manual-jira-upsert.js \
 ```
 
 **Output will show**:
+
 - ✅ How many tickets loaded
 - ✅ How many are new vs. existing
 - ✅ Which tickets have invalid format
@@ -96,6 +101,7 @@ node scripts/data-collection/manual-jira-upsert.js \
 ```
 
 **What happens**:
+
 1. ✅ Loads tickets from CSV/JSON
 2. ✅ Checks against existing 6,040 tickets
 3. ✅ Generates embeddings for new/changed tickets
@@ -191,6 +197,7 @@ NEW (October): Built-in UPSERT using ticket_key as unique constraint
 ```
 
 **How it works**:
+
 - Script checks existing tickets by `ticket_key`
 - New tickets: INSERT
 - Existing tickets: UPDATE (refreshes embedding & metadata)
@@ -213,6 +220,7 @@ NEW (October): Detailed batch-by-batch progress with ETA
 ```
 
 **Example output**:
+
 ```
 📦 Batch 1/10 (100 tickets)
    Generating embeddings...
@@ -271,6 +279,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS jira_ticket_embeddings_ticket_key_unique
 ```
 
 **What this means**:
+
 - ✅ **Safe to run multiple times** - won't create duplicates
 - ✅ **Updates overwrite** - latest data wins
 - ✅ **Idempotent** - same result every time
@@ -278,6 +287,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS jira_ticket_embeddings_ticket_key_unique
 ### Rate Limits
 
 **OpenAI Embeddings**:
+
 - Tier 1: 500 requests/min
 - Tier 2: 3,000 requests/min
 - Script includes 70ms delay per request (~857 req/min)
@@ -299,6 +309,7 @@ embedding TEXT  -- "[0.123,0.456,...]" format
 ### "No tickets loaded"
 
 **Check**:
+
 - File path is correct
 - CSV has headers
 - Columns are named correctly (see template above)
@@ -306,6 +317,7 @@ embedding TEXT  -- "[0.123,0.456,...]" format
 ### "Failed to generate embedding"
 
 **Possible causes**:
+
 - OpenAI API key not set
 - Rate limit exceeded (script will auto-retry)
 - Network timeout
@@ -313,6 +325,7 @@ embedding TEXT  -- "[0.123,0.456,...]" format
 ### "Upsert failed: duplicate key"
 
 This shouldn't happen with the new script, but if it does:
+
 ```bash
 # Check for duplicate ticket_keys in your CSV
 awk -F',' 'NR>1 {print $1}' jira-export.csv | sort | uniq -d
@@ -323,12 +336,14 @@ awk -F',' 'NR>1 {print $1}' jira-export.csv | sort | uniq -d
 ## 📖 Next Steps After Upsert
 
 1. **Verify data quality**:
+
    ```bash
    # Check recent tickets
    node -e "require('./scripts/check-jira-data.js')"
    ```
 
 2. **Test vector search**:
+
    ```bash
    # Once migration is deployed
    node scripts/test-hybrid-integration.js

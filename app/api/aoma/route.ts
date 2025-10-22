@@ -16,9 +16,9 @@ export async function POST(req: Request) {
     // Call Railway AOMA server via RPC endpoint
     const response = await fetch(`${RAILWAY_URL}/rpc`, {
       method: "POST",
-      headers: { 
+      headers: {
         "Content-Type": "application/json",
-        "User-Agent": "SIAM-AOMA-Client/1.0"
+        "User-Agent": "SIAM-AOMA-Client/1.0",
       },
       body: JSON.stringify({
         jsonrpc: "2.0",
@@ -28,18 +28,20 @@ export async function POST(req: Request) {
           name: "query_aoma_knowledge",
           arguments: {
             query: query,
-            strategy: strategy
-          }
-        }
+            strategy: strategy,
+          },
+        },
       }),
     });
 
     if (!response.ok) {
-      throw new Error(`Railway AOMA server responded with ${response.status}: ${response.statusText}`);
+      throw new Error(
+        `Railway AOMA server responded with ${response.status}: ${response.statusText}`
+      );
     }
 
     const rpcResponse = await response.json();
-    
+
     console.log("✅ AOMA Railway query successful");
 
     // Extract the actual result from JSON-RPC wrapper
@@ -61,7 +63,7 @@ export async function POST(req: Request) {
         message: "Unable to connect to AOMA knowledge base on Railway.",
         timestamp: new Date().toISOString(),
       },
-      { status: 503 },
+      { status: 503 }
     );
   }
 }
@@ -72,10 +74,10 @@ export async function GET() {
     // Quick health check to Railway
     const response = await fetch(`${RAILWAY_URL}/health`, {
       method: "GET",
-      headers: { 
-        "User-Agent": "SIAM-AOMA-Client/1.0"
+      headers: {
+        "User-Agent": "SIAM-AOMA-Client/1.0",
       },
-      signal: AbortSignal.timeout(5000) // 5 second timeout
+      signal: AbortSignal.timeout(5000), // 5 second timeout
     });
 
     if (response.ok) {
@@ -97,6 +99,6 @@ export async function GET() {
       railway_url: RAILWAY_URL,
       timestamp: new Date().toISOString(),
     },
-    { status: 503 },
+    { status: 503 }
   );
 }

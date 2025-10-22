@@ -29,7 +29,7 @@ export class MCPClient {
     private serverArgs: string[] = [
       "/Users/matt/Documents/projects/aoma-mesh-mcp/dist/aoma-mesh-server.js",
     ],
-    private serverPort: number = 3342,
+    private serverPort: number = 3342
   ) {}
 
   /**
@@ -60,7 +60,7 @@ export class MCPClient {
           capabilities: {
             tools: {},
           },
-        },
+        }
       );
 
       // Connect to server
@@ -233,7 +233,7 @@ export class MCPClient {
       dateTo?: string;
       fromEmail?: string[];
       toEmail?: string[];
-    },
+    }
   ): Promise<MCPResponse> {
     return this.callTool("search_outlook_emails", {
       query,
@@ -271,7 +271,7 @@ export class MCPClient {
       dateFrom?: string;
       dateTo?: string;
       author?: string;
-    },
+    }
   ): Promise<MCPResponse> {
     return this.callTool("search_git_commits", {
       query,
@@ -290,7 +290,7 @@ export class MCPClient {
       language?: string;
       repository?: string;
       filePattern?: string;
-    },
+    }
   ): Promise<MCPResponse> {
     return this.callTool("search_code_files", {
       query,
@@ -303,10 +303,7 @@ export class MCPClient {
   /**
    * Multi-agent swarm analysis for complex problems
    */
-  async swarmAnalyzeCrossVector(
-    analysisType: string,
-    data: any,
-  ): Promise<MCPResponse> {
+  async swarmAnalyzeCrossVector(analysisType: string, data: any): Promise<MCPResponse> {
     return this.callTool("swarm_analyze_cross_vector", {
       analysis_type: analysisType,
       input_data: data,
@@ -339,7 +336,7 @@ export class MCPClient {
       modelType?: string;
       trainingPeriod?: number;
       predictionHorizon?: number;
-    },
+    }
   ): Promise<MCPResponse> {
     return this.callTool("build_predictive_model", {
       targetVariable,

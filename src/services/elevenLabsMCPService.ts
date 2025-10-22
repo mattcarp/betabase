@@ -3,11 +3,7 @@
  * Handles registration of external MCP servers with ElevenLabs and agent association
  */
 
-import {
-  getElevenLabsApiKey,
-  getElevenLabsAgentId,
-  getMcpLambdaUrl,
-} from "../config/apiKeys";
+import { getElevenLabsApiKey, getElevenLabsAgentId, getMcpLambdaUrl } from "../config/apiKeys";
 
 export interface McpServerConfig {
   name: string;
@@ -99,8 +95,7 @@ export class ElevenLabsMCPService {
     } catch (error) {
       return {
         valid: false,
-        error:
-          error instanceof Error ? error.message : "Unknown validation error",
+        error: error instanceof Error ? error.message : "Unknown validation error",
       };
     }
   }
@@ -143,19 +138,14 @@ export class ElevenLabsMCPService {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error(
-          "❌ MCP server registration failed:",
-          response.status,
-          errorText,
-        );
+        console.error("❌ MCP server registration failed:", response.status, errorText);
         return {
           success: false,
           error: `Registration failed: ${response.status} ${response.statusText} - ${errorText}`,
         };
       }
 
-      const registrationResponse: McpServerRegistrationResponse =
-        await response.json();
+      const registrationResponse: McpServerRegistrationResponse = await response.json();
       console.log("✅ MCP server registered successfully");
       console.log(`🆔 Server ID: ${registrationResponse.id}`);
 
@@ -168,8 +158,7 @@ export class ElevenLabsMCPService {
       console.error("❌ MCP server registration error:", error);
       return {
         success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown registration error",
+        error: error instanceof Error ? error.message : "Unknown registration error",
       };
     }
   }
@@ -183,39 +172,29 @@ export class ElevenLabsMCPService {
     response?: AgentAssociationResponse;
   }> {
     try {
-      console.log(
-        `🔗 Associating MCP server ${serverId} with agent ${this.agentId}...`,
-      );
+      console.log(`🔗 Associating MCP server ${serverId} with agent ${this.agentId}...`);
 
-      const response = await fetch(
-        `${this.baseUrl}/v1/convai/agents/${this.agentId}/mcp-servers`,
-        {
-          method: "POST",
-          headers: {
-            "xi-api-key": this.apiKey,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            mcp_server_id: serverId,
-          }),
+      const response = await fetch(`${this.baseUrl}/v1/convai/agents/${this.agentId}/mcp-servers`, {
+        method: "POST",
+        headers: {
+          "xi-api-key": this.apiKey,
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          mcp_server_id: serverId,
+        }),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error(
-          "❌ Agent association failed:",
-          response.status,
-          errorText,
-        );
+        console.error("❌ Agent association failed:", response.status, errorText);
         return {
           success: false,
           error: `Association failed: ${response.status} ${response.statusText} - ${errorText}`,
         };
       }
 
-      const associationResponse: AgentAssociationResponse =
-        await response.json();
+      const associationResponse: AgentAssociationResponse = await response.json();
       console.log("✅ MCP server associated with agent successfully");
 
       return {
@@ -226,8 +205,7 @@ export class ElevenLabsMCPService {
       console.error("❌ Agent association error:", error);
       return {
         success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown association error",
+        error: error instanceof Error ? error.message : "Unknown association error",
       };
     }
   }
@@ -285,16 +263,13 @@ export class ElevenLabsMCPService {
     try {
       console.log(`🤖 Getting agent details for ${this.agentId}...`);
 
-      const response = await fetch(
-        `${this.baseUrl}/v1/convai/agents/${this.agentId}`,
-        {
-          method: "GET",
-          headers: {
-            "xi-api-key": this.apiKey,
-            "Content-Type": "application/json",
-          },
+      const response = await fetch(`${this.baseUrl}/v1/convai/agents/${this.agentId}`, {
+        method: "GET",
+        headers: {
+          "xi-api-key": this.apiKey,
+          "Content-Type": "application/json",
         },
-      );
+      });
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -314,10 +289,7 @@ export class ElevenLabsMCPService {
     } catch (error) {
       return {
         success: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unknown agent details error",
+        error: error instanceof Error ? error.message : "Unknown agent details error",
       };
     }
   }
@@ -325,9 +297,7 @@ export class ElevenLabsMCPService {
   /**
    * Complete end-to-end MCP server registration and agent association
    */
-  async completeRegistration(
-    config?: Partial<McpServerConfig>,
-  ): Promise<McpRegistrationResult> {
+  async completeRegistration(config?: Partial<McpServerConfig>): Promise<McpRegistrationResult> {
     try {
       console.log("🚀 Starting complete MCP server registration process...");
 
@@ -350,13 +320,11 @@ export class ElevenLabsMCPService {
         const aomaServer = existingServers.servers.find(
           (server) =>
             server.name === "AOMA Mesh MCP Server" ||
-            server.url?.includes("ochwh4pvfaigb65koqxgf33ruy0rxnhy"),
+            server.url?.includes("ochwh4pvfaigb65koqxgf33ruy0rxnhy")
         );
 
         if (aomaServer) {
-          console.log(
-            "⚠️ AOMA Mesh MCP server already exists, skipping registration",
-          );
+          console.log("⚠️ AOMA Mesh MCP server already exists, skipping registration");
           console.log(`🆔 Existing Server ID: ${aomaServer.id}`);
 
           // Still try to associate with agent
@@ -399,8 +367,7 @@ export class ElevenLabsMCPService {
     } catch (error) {
       return {
         success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown registration error",
+        error: error instanceof Error ? error.message : "Unknown registration error",
       };
     }
   }
@@ -410,9 +377,7 @@ export class ElevenLabsMCPService {
    */
   getConfigSummary() {
     return {
-      apiKey: this.apiKey
-        ? `${this.apiKey.substring(0, 8)}...`
-        : "Not configured",
+      apiKey: this.apiKey ? `${this.apiKey.substring(0, 8)}...` : "Not configured",
       agentId: this.agentId,
       lambdaUrl: this.lambdaUrl,
       baseUrl: this.baseUrl,

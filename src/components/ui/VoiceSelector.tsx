@@ -41,7 +41,8 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
 
   // Use external voice ID if provided, otherwise use internal state
   const currentVoiceId = externalSelectedVoiceId || internalSelectedVoiceId;
-  const currentVoice = voices.find(voice => voice.voice_id === currentVoiceId) || getSelectedVoice();
+  const currentVoice =
+    voices.find((voice) => voice.voice_id === currentVoiceId) || getSelectedVoice();
 
   const handleVoiceSelect = (voiceId: string) => {
     selectVoice(voiceId);
@@ -50,7 +51,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
 
   const handlePreviewToggle = (e: React.MouseEvent, voiceId: string) => {
     e.stopPropagation();
-    
+
     if (isPreviewPlaying === voiceId) {
       stopPreview();
     } else {
@@ -70,18 +71,36 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
     const parts = [];
     if (voice.labels?.gender) parts.push(voice.labels.gender);
     if (voice.labels?.accent) parts.push(voice.labels.accent);
-    if (voice.labels?.age) parts.push(voice.labels.age.replace('_', ' '));
-    return parts.join(' • ') || voice.description || "AI voice";
+    if (voice.labels?.age) parts.push(voice.labels.age.replace("_", " "));
+    return parts.join(" • ") || voice.description || "AI voice";
   };
 
   const getCategoryBadge = (voice: ElevenLabsVoice) => {
     switch (voice.category) {
       case "premade":
-        return <Badge variant="secondary" className="text-xs px-1.5 py-0.5">Default</Badge>;
+        return (
+          <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
+            Default
+          </Badge>
+        );
       case "cloned":
-        return <Badge variant="outline" className="text-xs px-1.5 py-0.5 text-purple-400 border-purple-400/30">Cloned</Badge>;
+        return (
+          <Badge
+            variant="outline"
+            className="text-xs px-1.5 py-0.5 text-purple-400 border-purple-400/30"
+          >
+            Cloned
+          </Badge>
+        );
       case "generated":
-        return <Badge variant="outline" className="text-xs px-1.5 py-0.5 text-blue-400 border-blue-400/30">Generated</Badge>;
+        return (
+          <Badge
+            variant="outline"
+            className="text-xs px-1.5 py-0.5 text-blue-400 border-blue-400/30"
+          >
+            Generated
+          </Badge>
+        );
       default:
         return null;
     }
@@ -93,11 +112,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         variant="ghost"
         size="sm"
         disabled
-        className={cn(
-          "h-8 px-3 gap-2 mac-glass mac-surface-elevated",
-          "animate-pulse",
-          className
-        )}
+        className={cn("h-8 px-3 gap-2 mac-glass mac-surface-elevated", "animate-pulse", className)}
       >
         <Volume2 className="h-4 w-4" />
         <span className="text-sm">Loading voices...</span>
@@ -129,7 +144,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
           <ChevronDown className="h-3 w-3 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
-      
+
       <DropdownMenuContent
         align="end"
         className={cn(
@@ -149,7 +164,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
           {voices.map((voice) => {
             const isSelected = voice.voice_id === currentVoiceId;
             const isPreviewing = isPreviewPlaying === voice.voice_id;
-            
+
             return (
               <DropdownMenuItem
                 key={voice.voice_id}
@@ -164,17 +179,18 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center gap-2">
                     {getVoiceIcon(voice)}
-                    <span className="font-medium text-white text-sm">
-                      {voice.name}
-                    </span>
+                    <span className="font-medium text-white text-sm">{voice.name}</span>
                     {getCategoryBadge(voice)}
                     {isSelected && (
-                      <Badge variant="default" className="text-xs px-1.5 py-0.5 bg-green-500/20 text-green-400 border-green-400/30">
+                      <Badge
+                        variant="default"
+                        className="text-xs px-1.5 py-0.5 bg-green-500/20 text-green-400 border-green-400/30"
+                      >
                         Selected
                       </Badge>
                     )}
                   </div>
-                  
+
                   <Button
                     variant="ghost"
                     size="sm"
@@ -185,18 +201,14 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                       isPreviewing && "bg-blue-500/20 text-blue-400"
                     )}
                   >
-                    {isPreviewing ? (
-                      <Pause className="h-3 w-3" />
-                    ) : (
-                      <Play className="h-3 w-3" />
-                    )}
+                    {isPreviewing ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
                   </Button>
                 </div>
-                
+
                 <p className="text-xs text-white/60 leading-relaxed">
                   {getVoiceDescription(voice)}
                 </p>
-                
+
                 {voice.description && voice.description !== getVoiceDescription(voice) && (
                   <p className="text-xs text-white/40 leading-relaxed italic">
                     "{voice.description}"
@@ -211,9 +223,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
           <div className="p-4 text-center">
             <Volume2 className="h-8 w-8 mx-auto mb-2 text-white/30" />
             <p className="text-sm text-white/60">No voices available</p>
-            <p className="text-xs text-white/40 mt-1">
-              Check your API key configuration
-            </p>
+            <p className="text-xs text-white/40 mt-1">Check your API key configuration</p>
           </div>
         )}
       </DropdownMenuContent>

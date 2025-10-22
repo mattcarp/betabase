@@ -21,9 +21,7 @@ test.describe("SIAM File Upload Functionality Investigation", () => {
     // Look for authentication (check if we need to login first)
     const emailInput = page.locator('input[type="email"]');
     if (await emailInput.isVisible()) {
-      console.log(
-        "🔐 Authentication required - using hidden password field for testing",
-      );
+      console.log("🔐 Authentication required - using hidden password field for testing");
 
       // Fill email
       await emailInput.fill("matt@mattcarpenter.com");
@@ -48,7 +46,7 @@ test.describe("SIAM File Upload Functionality Investigation", () => {
 
       // Click login/submit button
       const loginButton = page.locator(
-        'button[type="submit"], button:has-text("Send"), button:has-text("Login")',
+        'button[type="submit"], button:has-text("Send"), button:has-text("Login")'
       );
       if (await loginButton.isVisible()) {
         await loginButton.click();
@@ -66,14 +64,12 @@ test.describe("SIAM File Upload Functionality Investigation", () => {
 
     // Look for navigation tabs
     console.log("🔍 Searching for navigation tabs...");
-    const tabs = await page
-      .locator('button, a, [role="tab"]')
-      .allTextContents();
+    const tabs = await page.locator('button, a, [role="tab"]').allTextContents();
     console.log("Found potential tabs:", tabs);
 
     // Look specifically for Curate tab
     const curateTab = page.locator(
-      'button:has-text("Curate"), a:has-text("Curate"), [role="tab"]:has-text("Curate")',
+      'button:has-text("Curate"), a:has-text("Curate"), [role="tab"]:has-text("Curate")'
     );
     if ((await curateTab.count()) > 0) {
       console.log("✅ Found Curate tab!");
@@ -106,15 +102,13 @@ test.describe("SIAM File Upload Functionality Investigation", () => {
         const input = fileInputs.nth(i);
         const isVisible = await input.isVisible();
         const accept = await input.getAttribute("accept");
-        console.log(
-          `File input ${i + 1}: visible=${isVisible}, accept="${accept}"`,
-        );
+        console.log(`File input ${i + 1}: visible=${isVisible}, accept="${accept}"`);
       }
     }
 
     // Check for upload-related buttons
     const uploadButtons = page.locator(
-      'button:has-text("Upload"), button:has-text("upload"), button:has-text("Choose"), button:has-text("Select"), button:has-text("Browse")',
+      'button:has-text("Upload"), button:has-text("upload"), button:has-text("Choose"), button:has-text("Select"), button:has-text("Browse")'
     );
     const uploadButtonCount = await uploadButtons.count();
     console.log(`Found ${uploadButtonCount} potential upload buttons`);
@@ -126,26 +120,24 @@ test.describe("SIAM File Upload Functionality Investigation", () => {
 
     // Look for the specific "Upload files to AOMA knowledge base" button
     const aomaUploadButton = page.locator(
-      'button:has-text("Upload files to AOMA"), button:has-text("AOMA knowledge"), button:has-text("knowledge base")',
+      'button:has-text("Upload files to AOMA"), button:has-text("AOMA knowledge"), button:has-text("knowledge base")'
     );
     const aomaButtonCount = await aomaUploadButton.count();
     console.log(`Found ${aomaButtonCount} AOMA upload buttons`);
 
     // Check for drag and drop areas
     const dropZones = page.locator(
-      '[data-testid*="drop"], [data-testid*="upload"], .drop-zone, .upload-zone, [role="button"]:has-text("drop")',
+      '[data-testid*="drop"], [data-testid*="upload"], .drop-zone, .upload-zone, [role="button"]:has-text("drop")'
     );
     const dropZoneCount = await dropZones.count();
     console.log(`Found ${dropZoneCount} potential drop zones`);
 
     // Check for existing files in knowledge base
     const fileList = page.locator(
-      '.file-list, [data-testid*="file"], .knowledge-base-files, ul li:has-text(".pdf"), ul li:has-text(".txt"), ul li:has-text(".doc")',
+      '.file-list, [data-testid*="file"], .knowledge-base-files, ul li:has-text(".pdf"), ul li:has-text(".txt"), ul li:has-text(".doc")'
     );
     const fileListCount = await fileList.count();
-    console.log(
-      `Found ${fileListCount} elements that might contain file lists`,
-    );
+    console.log(`Found ${fileListCount} elements that might contain file lists`);
 
     // Take screenshot of current state
     await page.screenshot({
@@ -157,32 +149,26 @@ test.describe("SIAM File Upload Functionality Investigation", () => {
     // Check the chat interface specifically
     console.log("🔍 Examining chat interface for upload capabilities...");
 
-    const chatContainer = page.locator(
-      '.chat, [data-testid*="chat"], .conversation, .messages',
-    );
+    const chatContainer = page.locator('.chat, [data-testid*="chat"], .conversation, .messages');
     if ((await chatContainer.count()) > 0) {
       console.log("✅ Found chat interface");
 
       // Look for upload elements in chat
       const chatUploadButton = page.locator(
-        '.chat button:has-text("Upload"), .chat input[type="file"], [data-testid*="chat"] button:has-text("Upload")',
+        '.chat button:has-text("Upload"), .chat input[type="file"], [data-testid*="chat"] button:has-text("Upload")'
       );
       const chatUploadCount = await chatUploadButton.count();
       console.log(`Found ${chatUploadCount} upload elements in chat interface`);
 
       // Take screenshot focused on chat area
       if (await chatContainer.first().isVisible()) {
-        await chatContainer
-          .first()
-          .screenshot({ path: "siam-chat-interface.png" });
+        await chatContainer.first().screenshot({ path: "siam-chat-interface.png" });
         console.log("📸 Screenshot: siam-chat-interface.png");
       }
     }
 
     // Final comprehensive element search
-    console.log(
-      "🔍 Final comprehensive search for any upload-related elements...",
-    );
+    console.log("🔍 Final comprehensive search for any upload-related elements...");
 
     // Get all elements that might be related to file upload
     const allUploadElements = await page.evaluate(() => {
@@ -228,9 +214,7 @@ test.describe("SIAM File Upload Functionality Investigation", () => {
 
     console.log("📋 All upload-related elements found:");
     allUploadElements.forEach((el, index) => {
-      console.log(
-        `${index + 1}. ${el.tagName} - "${el.text}" (visible: ${el.visible})`,
-      );
+      console.log(`${index + 1}. ${el.tagName} - "${el.text}" (visible: ${el.visible})`);
     });
 
     // Take final comprehensive screenshot
@@ -251,10 +235,7 @@ test.describe("SIAM File Upload Functionality Investigation", () => {
 
     // Check if any upload functionality is actually present
     const hasUploadCapability =
-      fileInputCount > 0 ||
-      uploadButtonCount > 0 ||
-      aomaButtonCount > 0 ||
-      dropZoneCount > 0;
+      fileInputCount > 0 || uploadButtonCount > 0 || aomaButtonCount > 0 || dropZoneCount > 0;
     console.log(`- Upload capability detected: ${hasUploadCapability}`);
 
     // Ensure we have at least some evidence of the interface

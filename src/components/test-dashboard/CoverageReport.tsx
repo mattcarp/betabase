@@ -57,13 +57,9 @@ interface FileCoverage {
 }
 
 export const CoverageReport: React.FC = () => {
-  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
-    new Set(),
-  );
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
   const [selectedFile, setSelectedFile] = useState<FileCoverage | null>(null);
-  const [coverageFilter, setCoverageFilter] = useState<
-    "all" | "low" | "medium" | "high"
-  >("all");
+  const [coverageFilter, setCoverageFilter] = useState<"all" | "low" | "medium" | "high">("all");
 
   const coverageData: CoverageData = {
     statements: { covered: 3421, total: 4100, percentage: 83.4 },
@@ -152,10 +148,8 @@ export const CoverageReport: React.FC = () => {
   };
 
   const getCoverageBadge = (percentage: number) => {
-    if (percentage >= 80)
-      return { variant: "default" as const, className: "bg-green-500" };
-    if (percentage >= 60)
-      return { variant: "default" as const, className: "bg-yellow-500" };
+    if (percentage >= 80) return { variant: "default" as const, className: "bg-green-500" };
+    if (percentage >= 60) return { variant: "default" as const, className: "bg-yellow-500" };
     return { variant: "destructive" as const, className: "" };
   };
 
@@ -187,12 +181,7 @@ export const CoverageReport: React.FC = () => {
             <CardContent>
               <div className="space-y-2">
                 <div className="flex items-baseline justify-between">
-                  <span
-                    className={cn(
-                      "text-2xl font-bold",
-                      getCoverageColor(data.percentage),
-                    )}
-                  >
+                  <span className={cn("text-2xl font-bold", getCoverageColor(data.percentage))}>
                     {data.percentage}%
                   </span>
                   <span className="text-xs text-muted-foreground">
@@ -222,10 +211,7 @@ export const CoverageReport: React.FC = () => {
             <CardContent>
               <ResponsiveContainer width="100%" height={250}>
                 <LineChart data={trendData}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-muted"
-                  />
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                   <XAxis dataKey="date" className="text-xs" />
                   <YAxis className="text-xs" domain={[70, 90]} />
                   <Tooltip />
@@ -270,10 +256,7 @@ export const CoverageReport: React.FC = () => {
               <div className="flex justify-center gap-4 mt-4">
                 {pieData.map((entry) => (
                   <div key={entry.name} className="flex items-center gap-2">
-                    <div
-                      className="w-3 h-3 rounded"
-                      style={{ backgroundColor: entry.color }}
-                    />
+                    <div className="w-3 h-3 rounded" style={{ backgroundColor: entry.color }} />
                     <span className="text-sm">
                       {entry.name}: {entry.value}%
                     </span>
@@ -338,9 +321,7 @@ export const CoverageReport: React.FC = () => {
                     Low
                   </Button>
                   <Button
-                    variant={
-                      coverageFilter === "medium" ? "default" : "outline"
-                    }
+                    variant={coverageFilter === "medium" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setCoverageFilter("medium")}
                   >
@@ -363,31 +344,21 @@ export const CoverageReport: React.FC = () => {
                     .filter((file) => {
                       if (coverageFilter === "all") return true;
                       const avg =
-                        (file.statements +
-                          file.branches +
-                          file.functions +
-                          file.lines) /
-                        4;
+                        (file.statements + file.branches + file.functions + file.lines) / 4;
                       if (coverageFilter === "low") return avg < 60;
-                      if (coverageFilter === "medium")
-                        return avg >= 60 && avg < 80;
+                      if (coverageFilter === "medium") return avg >= 60 && avg < 80;
                       if (coverageFilter === "high") return avg >= 80;
                       return true;
                     })
                     .map((file) => {
                       const avgCoverage =
-                        (file.statements +
-                          file.branches +
-                          file.functions +
-                          file.lines) /
-                        4;
+                        (file.statements + file.branches + file.functions + file.lines) / 4;
                       return (
                         <Card
                           key={file.path}
                           className={cn(
                             "cursor-pointer transition-all hover:shadow-md",
-                            selectedFile?.path === file.path &&
-                              "ring-2 ring-primary",
+                            selectedFile?.path === file.path && "ring-2 ring-primary"
                           )}
                           onClick={() => setSelectedFile(file)}
                         >
@@ -404,15 +375,9 @@ export const CoverageReport: React.FC = () => {
                               </Badge>
                             </div>
                             <div className="text-xs text-muted-foreground">
-                              {file.path.substring(
-                                0,
-                                file.path.lastIndexOf("/"),
-                              )}
+                              {file.path.substring(0, file.path.lastIndexOf("/"))}
                             </div>
-                            <Progress
-                              value={avgCoverage}
-                              className="h-1 mt-2"
-                            />
+                            <Progress value={avgCoverage} className="h-1 mt-2" />
                           </CardContent>
                         </Card>
                       );
@@ -429,12 +394,8 @@ export const CoverageReport: React.FC = () => {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg">
-                      {selectedFile.path.split("/").pop()}
-                    </CardTitle>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {selectedFile.path}
-                    </p>
+                    <CardTitle className="text-lg">{selectedFile.path.split("/").pop()}</CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1">{selectedFile.path}</p>
                   </div>
                   <Button variant="outline" size="sm">
                     <FileCode className="h-4 w-4 mr-2" />
@@ -454,10 +415,7 @@ export const CoverageReport: React.FC = () => {
                             {selectedFile.statements}%
                           </Badge>
                         </div>
-                        <Progress
-                          value={selectedFile.statements}
-                          className="h-2"
-                        />
+                        <Progress value={selectedFile.statements} className="h-2" />
                       </div>
                     </CardContent>
                   </Card>
@@ -471,10 +429,7 @@ export const CoverageReport: React.FC = () => {
                             {selectedFile.branches}%
                           </Badge>
                         </div>
-                        <Progress
-                          value={selectedFile.branches}
-                          className="h-2"
-                        />
+                        <Progress value={selectedFile.branches} className="h-2" />
                       </div>
                     </CardContent>
                   </Card>
@@ -488,10 +443,7 @@ export const CoverageReport: React.FC = () => {
                             {selectedFile.functions}%
                           </Badge>
                         </div>
-                        <Progress
-                          value={selectedFile.functions}
-                          className="h-2"
-                        />
+                        <Progress value={selectedFile.functions} className="h-2" />
                       </div>
                     </CardContent>
                   </Card>

@@ -42,9 +42,7 @@ export default function HomePage() {
         setError("Authentication failed");
       }
     } catch (err: any) {
-      setError(
-        err.message || "An unexpected error occurred. Please try again.",
-      );
+      setError(err.message || "An unexpected error occurred. Please try again.");
       console.error("Login error:", err);
     } finally {
       setIsLoading(false);
@@ -70,9 +68,7 @@ export default function HomePage() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">
-                Email
-              </label>
+              <label className="block text-sm font-medium text-gray-300 mb-1">Email</label>
               <input
                 type="email"
                 value={email}
@@ -84,9 +80,7 @@ export default function HomePage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">
-                Password
-              </label>
+              <label className="block text-sm font-medium text-gray-300 mb-1">Password</label>
               <input
                 type="password"
                 value={password}
@@ -167,17 +161,12 @@ export default function HomePage() {
           </div>
 
           <div className="mt-8 bg-green-500/20 border border-green-500/50 rounded-lg p-6">
-            <h3 className="text-green-400 font-semibold text-lg mb-2">
-              🎉 Deployment Successful!
-            </h3>
+            <h3 className="text-green-400 font-semibold text-lg mb-2">🎉 Deployment Successful!</h3>
             <p className="text-gray-300">
-              SIAM has been successfully deployed to production. The
-              authentication system is working, and the application is ready for
-              users.
+              SIAM has been successfully deployed to production. The authentication system is
+              working, and the application is ready for users.
             </p>
-            <div className="mt-4 text-sm text-gray-400">
-              Build Time: {new Date().toISOString()}
-            </div>
+            <div className="mt-4 text-sm text-gray-400">Build Time: {new Date().toISOString()}</div>
           </div>
         </div>
       </main>

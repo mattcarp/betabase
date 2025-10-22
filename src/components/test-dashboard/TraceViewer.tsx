@@ -30,13 +30,7 @@ import { cn } from "../../lib/utils";
 
 interface TraceStep {
   id: string;
-  type:
-    | "navigation"
-    | "click"
-    | "input"
-    | "assertion"
-    | "screenshot"
-    | "network";
+  type: "navigation" | "click" | "input" | "assertion" | "screenshot" | "network";
   timestamp: number;
   description: string;
   selector?: string;
@@ -209,20 +203,12 @@ export const TraceViewer: React.FC = () => {
                 <SkipBack className="h-4 w-4" />
               </Button>
               <Button variant="default" size="icon" onClick={handlePlayPause}>
-                {isPlaying ? (
-                  <Pause className="h-4 w-4" />
-                ) : (
-                  <Play className="h-4 w-4" />
-                )}
+                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
               </Button>
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() =>
-                  setCurrentStep(
-                    Math.min(traceSteps.length - 1, currentStep + 1),
-                  )
-                }
+                onClick={() => setCurrentStep(Math.min(traceSteps.length - 1, currentStep + 1))}
               >
                 <SkipForward className="h-4 w-4" />
               </Button>
@@ -266,9 +252,7 @@ export const TraceViewer: React.FC = () => {
             />
             <div className="flex justify-between text-xs text-muted-foreground mt-1">
               <span>{formatTime(traceSteps[currentStep]?.timestamp || 0)}</span>
-              <span>
-                {formatTime(traceSteps[traceSteps.length - 1]?.timestamp || 0)}
-              </span>
+              <span>{formatTime(traceSteps[traceSteps.length - 1]?.timestamp || 0)}</span>
             </div>
           </div>
         </CardContent>
@@ -292,10 +276,9 @@ export const TraceViewer: React.FC = () => {
                       key={step.id}
                       className={cn(
                         "cursor-pointer transition-all",
-                        currentStep === index &&
-                          "ring-2 ring-primary bg-primary/5",
+                        currentStep === index && "ring-2 ring-primary bg-primary/5",
                         step.status === "failure" && "border-red-500/20",
-                        step.status === "warning" && "border-yellow-500/20",
+                        step.status === "warning" && "border-yellow-500/20"
                       )}
                       onClick={() => handleStepClick(index)}
                     >
@@ -304,20 +287,15 @@ export const TraceViewer: React.FC = () => {
                           <div
                             className={cn(
                               "p-2 rounded-lg",
-                              step.status === "success" &&
-                                "bg-green-500/10 text-green-500",
-                              step.status === "failure" &&
-                                "bg-red-500/10 text-red-500",
-                              step.status === "warning" &&
-                                "bg-yellow-500/10 text-yellow-500",
+                              step.status === "success" && "bg-green-500/10 text-green-500",
+                              step.status === "failure" && "bg-red-500/10 text-red-500",
+                              step.status === "warning" && "bg-yellow-500/10 text-yellow-500"
                             )}
                           >
                             {getStepIcon(step.type)}
                           </div>
                           <div className="flex-1">
-                            <p className="text-sm font-medium">
-                              {step.description}
-                            </p>
+                            <p className="text-sm font-medium">{step.description}</p>
                             <p className="text-xs text-muted-foreground mt-1">
                               {formatTime(step.timestamp)}
                               {step.duration && ` • ${step.duration}ms`}
@@ -344,18 +322,14 @@ export const TraceViewer: React.FC = () => {
                 <CardTitle className="text-lg">Viewport</CardTitle>
                 <div className="flex gap-2">
                   <Button
-                    variant={
-                      selectedDevice === "desktop" ? "default" : "outline"
-                    }
+                    variant={selectedDevice === "desktop" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedDevice("desktop")}
                   >
                     <Monitor className="h-4 w-4" />
                   </Button>
                   <Button
-                    variant={
-                      selectedDevice === "mobile" ? "default" : "outline"
-                    }
+                    variant={selectedDevice === "mobile" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedDevice("mobile")}
                   >
@@ -370,7 +344,7 @@ export const TraceViewer: React.FC = () => {
                   "bg-muted rounded-lg flex items-center justify-center",
                   selectedDevice === "desktop"
                     ? "aspect-video"
-                    : "aspect-[9/16] max-w-[300px] mx-auto",
+                    : "aspect-[9/16] max-w-[300px] mx-auto"
                 )}
               >
                 {traceSteps[currentStep]?.screenshot ? (
@@ -382,12 +356,8 @@ export const TraceViewer: React.FC = () => {
                   </div>
                 ) : (
                   <div className="text-center">
-                    <div className="mb-4">
-                      {getStepIcon(traceSteps[currentStep]?.type || "")}
-                    </div>
-                    <p className="text-sm font-medium">
-                      {traceSteps[currentStep]?.description}
-                    </p>
+                    <div className="mb-4">{getStepIcon(traceSteps[currentStep]?.type || "")}</div>
+                    <p className="text-sm font-medium">{traceSteps[currentStep]?.description}</p>
                     {traceSteps[currentStep]?.selector && (
                       <code className="text-xs bg-muted-foreground/10 px-2 py-1 rounded mt-2 inline-block">
                         {traceSteps[currentStep].selector}
@@ -422,17 +392,12 @@ export const TraceViewer: React.FC = () => {
                           key={index}
                           className={cn(
                             "flex items-start gap-2 p-2 rounded text-xs font-mono",
-                            log.type === "error" &&
-                              "bg-red-500/10 text-red-400",
-                            log.type === "warn" &&
-                              "bg-yellow-500/10 text-yellow-400",
-                            log.type === "info" &&
-                              "bg-blue-500/10 text-blue-400",
+                            log.type === "error" && "bg-red-500/10 text-red-400",
+                            log.type === "warn" && "bg-yellow-500/10 text-yellow-400",
+                            log.type === "info" && "bg-blue-500/10 text-blue-400"
                           )}
                         >
-                          <span className="text-muted-foreground">
-                            {log.timestamp}
-                          </span>
+                          <span className="text-muted-foreground">{log.timestamp}</span>
                           <span>{log.message}</span>
                         </div>
                       ))}
@@ -464,33 +429,25 @@ export const TraceViewer: React.FC = () => {
                           </Badge>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">
-                            Duration:
-                          </span>
+                          <span className="text-muted-foreground">Duration:</span>
                           <span className="ml-2">
                             {traceSteps[currentStep].networkData.duration}ms
                           </span>
                         </div>
                         <div>
                           <span className="text-muted-foreground">Size:</span>
-                          <span className="ml-2">
-                            {traceSteps[currentStep].networkData.size}
-                          </span>
+                          <span className="ml-2">{traceSteps[currentStep].networkData.size}</span>
                         </div>
                       </div>
                       <div>
-                        <span className="text-sm text-muted-foreground">
-                          URL:
-                        </span>
+                        <span className="text-sm text-muted-foreground">URL:</span>
                         <code className="block text-xs bg-muted p-2 rounded mt-1">
                           {traceSteps[currentStep].networkData.url}
                         </code>
                       </div>
                     </div>
                   ) : (
-                    <p className="text-sm text-muted-foreground">
-                      No network activity
-                    </p>
+                    <p className="text-sm text-muted-foreground">No network activity</p>
                   )}
                 </TabsContent>
 

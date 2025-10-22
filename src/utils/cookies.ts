@@ -66,11 +66,7 @@ export function getClientCookie(name: string): string | null {
 /**
  * Set client-side cookie (for non-sensitive data only)
  */
-export function setClientCookie(
-  name: string,
-  value: string,
-  maxAge: number = 86400,
-): void {
+export function setClientCookie(name: string, value: string, maxAge: number = 86400): void {
   if (typeof document === "undefined") return;
 
   document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${maxAge}; path=/; samesite=strict`;

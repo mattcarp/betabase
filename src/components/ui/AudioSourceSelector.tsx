@@ -60,12 +60,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
     switch (type) {
       case "microphone":
         return (
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -76,12 +71,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
         );
       case "system":
         return (
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -92,12 +82,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
         );
       case "application":
         return (
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -108,12 +93,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
         );
       case "virtual":
         return (
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -156,9 +136,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
           </svg>
           <div>
             <h3 className="mac-title text-mac-text-primary">Audio Sources</h3>
-            <p className="mac-body text-xs text-mac-text-muted mt-0.5">
-              Select audio input device
-            </p>
+            <p className="mac-body text-xs text-mac-text-muted mt-0.5">Select audio input device</p>
           </div>
         </div>
         <button
@@ -166,12 +144,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
           className="hud-icon-button"
           aria-label="Close audio source selector"
         >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -252,9 +225,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-mac-text-muted capitalize mt-0.5">
-                        {source.type}
-                      </p>
+                      <p className="text-xs text-mac-text-muted capitalize mt-0.5">{source.type}</p>
 
                       {/* Audio Level Indicator */}
                       {source.isActive && (
@@ -297,9 +268,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
                               min="0"
                               max="100"
                               value={source.volume || 100}
-                              onChange={(e) =>
-                                onVolumeChange(source.id, parseInt(e.target.value))
-                              }
+                              onChange={(e) => onVolumeChange(source.id, parseInt(e.target.value))}
                               onClick={(e) => e.stopPropagation()}
                               className="flex-1 h-1 bg-jarvis-panel-dark-bg-start rounded-full appearance-none cursor-pointer accent-jarvis-cyan"
                               aria-label={`Volume for ${source.name}`}
@@ -331,14 +300,10 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
       <div className="px-4 py-3 border-t border-jarvis-panel-border bg-jarvis-panel-dark-bg-start/50">
         <div className="flex items-center justify-between">
           <p className="text-xs text-mac-text-muted">
-            {filteredSources.length} source{filteredSources.length !== 1 ? "s" : ""}{" "}
-            available
+            {filteredSources.length} source{filteredSources.length !== 1 ? "s" : ""} available
           </p>
           <p className="text-xs text-mac-text-muted">
-            <kbd className="px-1 py-0.5 rounded bg-jarvis-panel-dark-bg-end">
-              Alt+↑/↓
-            </kbd>{" "}
-            Navigate
+            <kbd className="px-1 py-0.5 rounded bg-jarvis-panel-dark-bg-end">Alt+↑/↓</kbd> Navigate
           </p>
         </div>
       </div>

@@ -23,9 +23,7 @@ export function DialogDemo() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here.
-          </DialogDescription>
+          <DialogDescription>Make changes to your profile here.</DialogDescription>
         </DialogHeader>
         {/* Content here */}
       </DialogContent>
@@ -70,9 +68,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" side="left">
-      <SidebarHeader>
-        {/* Header content - stays visible when collapsed */}
-      </SidebarHeader>
+      <SidebarHeader>{/* Header content - stays visible when collapsed */}</SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
