@@ -31,6 +31,11 @@ import {
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { enhancedSupabaseTestDB } from "../../services/supabase-test-integration-enhanced";
+import {
+  VisualRegressionComparison,
+  VisualRegressionComparisonType,
+} from "../visual-regression";
+import { visualRegressionService } from "../../services/visualRegressionService";
 
 interface TestResult {
   id: string;
@@ -48,6 +53,7 @@ interface TestResult {
   logs?: string[];
   screenshots?: string[];
   video?: string;
+  visualComparison?: VisualRegressionComparisonType; // Visual regression data
 }
 
 export const TestResultsViewer: React.FC = () => {
@@ -640,11 +646,17 @@ export const TestResultsViewer: React.FC = () => {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="error" className="h-full">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className={cn(
+                  "grid w-full",
+                  selectedResult.visualComparison ? "grid-cols-5" : "grid-cols-4"
+                )}>
                   <TabsTrigger value="error">Error</TabsTrigger>
                   <TabsTrigger value="logs">Logs</TabsTrigger>
                   <TabsTrigger value="media">Media</TabsTrigger>
                   <TabsTrigger value="code">Code</TabsTrigger>
+                  {selectedResult.visualComparison && (
+                    <TabsTrigger value="visual">Visual Diff</TabsTrigger>
+                  )}
                 </TabsList>
 
                 <TabsContent value="error" className="space-y-4">
@@ -788,6 +800,52 @@ export const TestResultsViewer: React.FC = () => {
                     </CardContent>
                   </Card>
                 </TabsContent>
+
+                {/* Visual Regression Tab */}
+                {selectedResult.visualComparison && (
+                  <TabsContent value="visual" className="space-y-4">
+                    <VisualRegressionComparison
+                      comparison={selectedResult.visualComparison}
+                      onApprove={async (id, comment) => {
+                        try {
+                          await visualRegressionService.approveComparison(id, comment);
+                          alert("Visual regression approved!");
+                          fetchTestResults(); // Refresh
+                        } catch (error) {
+                          console.error("Failed to approve:", error);
+                          alert("Failed to approve comparison");
+                        }
+                      }}
+                      onReject={async (id, reason) => {
+                        try {
+                          await visualRegressionService.rejectComparison(id, reason);
+                          alert("Visual regression rejected!");
+                          fetchTestResults(); // Refresh
+                        } catch (error) {
+                          console.error("Failed to reject:", error);
+                          alert("Failed to reject comparison");
+                        }
+                      }}
+                      onUpdateBaseline={async (id) => {
+                        try {
+                          await visualRegressionService.updateBaseline(id);
+                          alert("Baseline updated!");
+                          fetchTestResults(); // Refresh
+                        } catch (error) {
+                          console.error("Failed to update baseline:", error);
+                          alert("Failed to update baseline");
+                        }
+                      }}
+                      onAddComment={async (id, comment) => {
+                        try {
+                          await visualRegressionService.addComment(id, comment);
+                        } catch (error) {
+                          console.error("Failed to add comment:", error);
+                        }
+                      }}
+                    />
+                  </TabsContent>
+                )}
               </Tabs>
             </CardContent>
           </Card>
