@@ -5,16 +5,7 @@ import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
-import {
-  Highlighter,
-  StickyNote,
-  Camera,
-  Flag,
-  X,
-  Trash2,
-  Download,
-  Upload,
-} from "lucide-react";
+import { Highlighter, StickyNote, Camera, Flag, X, Trash2, Download, Upload } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAnnotations } from "../../contexts/AnnotationContext";
 import { AnnotationType } from "../../types/annotations";
@@ -142,12 +133,7 @@ export const AnnotationToolbar: React.FC<AnnotationToolbarProps> = ({
             <Download className="h-3 w-3" />
             Export
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full gap-2 text-xs"
-            onClick={onImport}
-          >
+          <Button variant="outline" size="sm" className="w-full gap-2 text-xs" onClick={onImport}>
             <Upload className="h-3 w-3" />
             Import
           </Button>
@@ -167,11 +153,9 @@ export const AnnotationToolbar: React.FC<AnnotationToolbarProps> = ({
         {currentTool && (
           <div className="mt-3 p-2 rounded-md bg-primary/10 border border-primary/20">
             <p className="text-xs text-muted-foreground">
-              {currentTool === "highlight" &&
-                "Click and drag to draw highlights on the screen"}
+              {currentTool === "highlight" && "Click and drag to draw highlights on the screen"}
               {currentTool === "note" && "Click anywhere to add a sticky note"}
-              {currentTool === "screenshot" &&
-                "Click to capture screenshot (drag to crop)"}
+              {currentTool === "screenshot" && "Click to capture screenshot (drag to crop)"}
               {currentTool === "flag" && "Click to flag an issue with severity level"}
             </p>
           </div>

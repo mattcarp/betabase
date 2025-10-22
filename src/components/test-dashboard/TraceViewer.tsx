@@ -195,312 +195,312 @@ export const TraceViewer: React.FC = () => {
   return (
     <AnnotationProvider>
       <div className="space-y-6 relative">
-      {/* Playback Controls */}
-      <Card>
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
-              >
-                <SkipBack className="h-4 w-4" />
-              </Button>
-              <Button variant="default" size="icon" onClick={handlePlayPause}>
-                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setCurrentStep(Math.min(traceSteps.length - 1, currentStep + 1))}
-              >
-                <SkipForward className="h-4 w-4" />
-              </Button>
+        {/* Playback Controls */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+                >
+                  <SkipBack className="h-4 w-4" />
+                </Button>
+                <Button variant="default" size="icon" onClick={handlePlayPause}>
+                  {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setCurrentStep(Math.min(traceSteps.length - 1, currentStep + 1))}
+                >
+                  <SkipForward className="h-4 w-4" />
+                </Button>
 
-              <div className="ml-4 flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Speed:</span>
-                <div className="flex gap-1">
-                  {[0.5, 1, 2, 4].map((speed) => (
-                    <Button
-                      key={speed}
-                      variant={playbackSpeed === speed ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setPlaybackSpeed(speed)}
-                    >
-                      {speed}x
-                    </Button>
-                  ))}
+                <div className="ml-4 flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Speed:</span>
+                  <div className="flex gap-1">
+                    {[0.5, 1, 2, 4].map((speed) => (
+                      <Button
+                        key={speed}
+                        variant={playbackSpeed === speed ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setPlaybackSpeed(speed)}
+                      >
+                        {speed}x
+                      </Button>
+                    ))}
+                  </div>
                 </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={annotationsEnabled ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setAnnotationsEnabled(!annotationsEnabled)}
+                  className="gap-2"
+                >
+                  <Pencil className="h-4 w-4" />
+                  Annotations
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Maximize2 className="h-4 w-4 mr-2" />
+                  Fullscreen
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export
+                </Button>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <Button
-                variant={annotationsEnabled ? "default" : "outline"}
-                size="sm"
-                onClick={() => setAnnotationsEnabled(!annotationsEnabled)}
-                className="gap-2"
-              >
-                <Pencil className="h-4 w-4" />
-                Annotations
-              </Button>
-              <Button variant="outline" size="sm">
-                <Maximize2 className="h-4 w-4 mr-2" />
-                Fullscreen
-              </Button>
-              <Button variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Export
-              </Button>
-            </div>
-          </div>
-
-          <div className="mt-4 space-y-3">
-            <Slider
-              value={[currentStep]}
-              max={traceSteps.length - 1}
-              step={1}
-              onValueChange={(value) => setCurrentStep(value[0])}
-              className="w-full"
-            />
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>{formatTime(traceSteps[currentStep]?.timestamp || 0)}</span>
-              <span>{formatTime(traceSteps[traceSteps.length - 1]?.timestamp || 0)}</span>
-            </div>
-
-            {/* Annotation Pins */}
-            {annotationsEnabled && (
-              <AnnotationPins
-                currentStep={currentStep}
-                totalSteps={traceSteps.length}
-                onPinClick={(annotation) => {
-                  console.log("Annotation clicked:", annotation);
-                }}
+            <div className="mt-4 space-y-3">
+              <Slider
+                value={[currentStep]}
+                max={traceSteps.length - 1}
+                step={1}
+                onValueChange={(value) => setCurrentStep(value[0])}
+                className="w-full"
               />
-            )}
-          </div>
-        </CardContent>
-      </Card>
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>{formatTime(traceSteps[currentStep]?.timestamp || 0)}</span>
+                <span>{formatTime(traceSteps[traceSteps.length - 1]?.timestamp || 0)}</span>
+              </div>
 
-      <div className="grid grid-cols-12 gap-6">
-        {/* Timeline */}
-        <div className="col-span-3">
-          <Card className="h-[600px]">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Clock className="h-5 w-5" />
-                Timeline
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <ScrollArea className="h-[530px]">
-                <div className="p-4 space-y-2">
-                  {traceSteps.map((step, index) => (
-                    <Card
-                      key={step.id}
-                      className={cn(
-                        "cursor-pointer transition-all",
-                        currentStep === index && "ring-2 ring-primary bg-primary/5",
-                        step.status === "failure" && "border-red-500/20",
-                        step.status === "warning" && "border-yellow-500/20"
-                      )}
-                      onClick={() => handleStepClick(index)}
-                    >
-                      <CardContent className="p-3">
-                        <div className="flex items-start gap-3">
-                          <div
-                            className={cn(
-                              "p-2 rounded-lg",
-                              step.status === "success" && "bg-green-500/10 text-green-500",
-                              step.status === "failure" && "bg-red-500/10 text-red-500",
-                              step.status === "warning" && "bg-yellow-500/10 text-yellow-500"
+              {/* Annotation Pins */}
+              {annotationsEnabled && (
+                <AnnotationPins
+                  currentStep={currentStep}
+                  totalSteps={traceSteps.length}
+                  onPinClick={(annotation) => {
+                    console.log("Annotation clicked:", annotation);
+                  }}
+                />
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="grid grid-cols-12 gap-6">
+          {/* Timeline */}
+          <div className="col-span-3">
+            <Card className="h-[600px]">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Clock className="h-5 w-5" />
+                  Timeline
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <ScrollArea className="h-[530px]">
+                  <div className="p-4 space-y-2">
+                    {traceSteps.map((step, index) => (
+                      <Card
+                        key={step.id}
+                        className={cn(
+                          "cursor-pointer transition-all",
+                          currentStep === index && "ring-2 ring-primary bg-primary/5",
+                          step.status === "failure" && "border-red-500/20",
+                          step.status === "warning" && "border-yellow-500/20"
+                        )}
+                        onClick={() => handleStepClick(index)}
+                      >
+                        <CardContent className="p-3">
+                          <div className="flex items-start gap-3">
+                            <div
+                              className={cn(
+                                "p-2 rounded-lg",
+                                step.status === "success" && "bg-green-500/10 text-green-500",
+                                step.status === "failure" && "bg-red-500/10 text-red-500",
+                                step.status === "warning" && "bg-yellow-500/10 text-yellow-500"
+                              )}
+                            >
+                              {getStepIcon(step.type)}
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">{step.description}</p>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {formatTime(step.timestamp)}
+                                {step.duration && ` • ${step.duration}ms`}
+                              </p>
+                            </div>
+                            {currentStep === index && (
+                              <ChevronRight className="h-4 w-4 text-primary" />
                             )}
-                          >
-                            {getStepIcon(step.type)}
                           </div>
-                          <div className="flex-1">
-                            <p className="text-sm font-medium">{step.description}</p>
-                            <p className="text-xs text-muted-foreground mt-1">
-                              {formatTime(step.timestamp)}
-                              {step.duration && ` • ${step.duration}ms`}
-                            </p>
-                          </div>
-                          {currentStep === index && (
-                            <ChevronRight className="h-4 w-4 text-primary" />
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Viewport */}
-        <div className="col-span-6">
-          <Card className="h-[600px]">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg">Viewport</CardTitle>
-                <div className="flex gap-2">
-                  <Button
-                    variant={selectedDevice === "desktop" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setSelectedDevice("desktop")}
-                  >
-                    <Monitor className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant={selectedDevice === "mobile" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setSelectedDevice("mobile")}
-                  >
-                    <Smartphone className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div
-                className={cn(
-                  "bg-muted rounded-lg flex items-center justify-center",
-                  selectedDevice === "desktop"
-                    ? "aspect-video"
-                    : "aspect-[9/16] max-w-[300px] mx-auto"
-                )}
-              >
-                {traceSteps[currentStep]?.screenshot ? (
-                  <div className="text-center">
-                    <Monitor className="h-16 w-16 text-muted-foreground mb-2" />
-                    <p className="text-sm text-muted-foreground">
-                      Screenshot: {traceSteps[currentStep].screenshot}
-                    </p>
+                        </CardContent>
+                      </Card>
+                    ))}
                   </div>
-                ) : (
-                  <div className="text-center">
-                    <div className="mb-4">{getStepIcon(traceSteps[currentStep]?.type || "")}</div>
-                    <p className="text-sm font-medium">{traceSteps[currentStep]?.description}</p>
-                    {traceSteps[currentStep]?.selector && (
-                      <code className="text-xs bg-muted-foreground/10 px-2 py-1 rounded mt-2 inline-block">
-                        {traceSteps[currentStep].selector}
-                      </code>
-                    )}
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Viewport */}
+          <div className="col-span-6">
+            <Card className="h-[600px]">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg">Viewport</CardTitle>
+                  <div className="flex gap-2">
+                    <Button
+                      variant={selectedDevice === "desktop" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedDevice("desktop")}
+                    >
+                      <Monitor className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant={selectedDevice === "mobile" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedDevice("mobile")}
+                    >
+                      <Smartphone className="h-4 w-4" />
+                    </Button>
                   </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Details Panel */}
-        <div className="col-span-3">
-          <Card className="h-[600px]">
-            <CardHeader>
-              <CardTitle className="text-lg">Details</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Tabs defaultValue="console" className="h-full">
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="console">Console</TabsTrigger>
-                  <TabsTrigger value="network">Network</TabsTrigger>
-                  <TabsTrigger value="source">Source</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="console">
-                  <ScrollArea className="h-[450px]">
-                    <div className="space-y-2">
-                      {consoleLog.map((log, index) => (
-                        <div
-                          key={index}
-                          className={cn(
-                            "flex items-start gap-2 p-2 rounded text-xs font-mono",
-                            log.type === "error" && "bg-red-500/10 text-red-400",
-                            log.type === "warn" && "bg-yellow-500/10 text-yellow-400",
-                            log.type === "info" && "bg-blue-500/10 text-blue-400"
-                          )}
-                        >
-                          <span className="text-muted-foreground">{log.timestamp}</span>
-                          <span>{log.message}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-
-                <TabsContent value="network">
-                  {traceSteps[currentStep]?.networkData ? (
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 gap-2 text-sm">
-                        <div>
-                          <span className="text-muted-foreground">Method:</span>
-                          <Badge variant="outline" className="ml-2">
-                            {traceSteps[currentStep].networkData.method}
-                          </Badge>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Status:</span>
-                          <Badge
-                            variant={
-                              traceSteps[currentStep].networkData.status === 200
-                                ? "default"
-                                : "destructive"
-                            }
-                            className="ml-2"
-                          >
-                            {traceSteps[currentStep].networkData.status}
-                          </Badge>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Duration:</span>
-                          <span className="ml-2">
-                            {traceSteps[currentStep].networkData.duration}ms
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Size:</span>
-                          <span className="ml-2">{traceSteps[currentStep].networkData.size}</span>
-                        </div>
-                      </div>
-                      <div>
-                        <span className="text-sm text-muted-foreground">URL:</span>
-                        <code className="block text-xs bg-muted p-2 rounded mt-1">
-                          {traceSteps[currentStep].networkData.url}
-                        </code>
-                      </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div
+                  className={cn(
+                    "bg-muted rounded-lg flex items-center justify-center",
+                    selectedDevice === "desktop"
+                      ? "aspect-video"
+                      : "aspect-[9/16] max-w-[300px] mx-auto"
+                  )}
+                >
+                  {traceSteps[currentStep]?.screenshot ? (
+                    <div className="text-center">
+                      <Monitor className="h-16 w-16 text-muted-foreground mb-2" />
+                      <p className="text-sm text-muted-foreground">
+                        Screenshot: {traceSteps[currentStep].screenshot}
+                      </p>
                     </div>
                   ) : (
-                    <p className="text-sm text-muted-foreground">No network activity</p>
+                    <div className="text-center">
+                      <div className="mb-4">{getStepIcon(traceSteps[currentStep]?.type || "")}</div>
+                      <p className="text-sm font-medium">{traceSteps[currentStep]?.description}</p>
+                      {traceSteps[currentStep]?.selector && (
+                        <code className="text-xs bg-muted-foreground/10 px-2 py-1 rounded mt-2 inline-block">
+                          {traceSteps[currentStep].selector}
+                        </code>
+                      )}
+                    </div>
                   )}
-                </TabsContent>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
-                <TabsContent value="source">
-                  <Card className="bg-muted/50">
-                    <CardContent className="p-3">
-                      <pre className="text-xs font-mono overflow-x-auto">
-                        {`await page.goto('${traceSteps[currentStep]?.url || "/"}');
+          {/* Details Panel */}
+          <div className="col-span-3">
+            <Card className="h-[600px]">
+              <CardHeader>
+                <CardTitle className="text-lg">Details</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Tabs defaultValue="console" className="h-full">
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="console">Console</TabsTrigger>
+                    <TabsTrigger value="network">Network</TabsTrigger>
+                    <TabsTrigger value="source">Source</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="console">
+                    <ScrollArea className="h-[450px]">
+                      <div className="space-y-2">
+                        {consoleLog.map((log, index) => (
+                          <div
+                            key={index}
+                            className={cn(
+                              "flex items-start gap-2 p-2 rounded text-xs font-mono",
+                              log.type === "error" && "bg-red-500/10 text-red-400",
+                              log.type === "warn" && "bg-yellow-500/10 text-yellow-400",
+                              log.type === "info" && "bg-blue-500/10 text-blue-400"
+                            )}
+                          >
+                            <span className="text-muted-foreground">{log.timestamp}</span>
+                            <span>{log.message}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </TabsContent>
+
+                  <TabsContent value="network">
+                    {traceSteps[currentStep]?.networkData ? (
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div>
+                            <span className="text-muted-foreground">Method:</span>
+                            <Badge variant="outline" className="ml-2">
+                              {traceSteps[currentStep].networkData.method}
+                            </Badge>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Status:</span>
+                            <Badge
+                              variant={
+                                traceSteps[currentStep].networkData.status === 200
+                                  ? "default"
+                                  : "destructive"
+                              }
+                              className="ml-2"
+                            >
+                              {traceSteps[currentStep].networkData.status}
+                            </Badge>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Duration:</span>
+                            <span className="ml-2">
+                              {traceSteps[currentStep].networkData.duration}ms
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Size:</span>
+                            <span className="ml-2">{traceSteps[currentStep].networkData.size}</span>
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-sm text-muted-foreground">URL:</span>
+                          <code className="block text-xs bg-muted p-2 rounded mt-1">
+                            {traceSteps[currentStep].networkData.url}
+                          </code>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">No network activity</p>
+                    )}
+                  </TabsContent>
+
+                  <TabsContent value="source">
+                    <Card className="bg-muted/50">
+                      <CardContent className="p-3">
+                        <pre className="text-xs font-mono overflow-x-auto">
+                          {`await page.goto('${traceSteps[currentStep]?.url || "/"}');
 ${traceSteps[currentStep]?.selector ? `await page.click('${traceSteps[currentStep].selector}');` : ""}
 ${traceSteps[currentStep]?.value ? `await page.fill('input', '${traceSteps[currentStep].value}');` : ""}`}
-                      </pre>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
+                        </pre>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
 
-      {/* Annotation Manager - Overlay when enabled */}
-      {annotationsEnabled && (
-        <AnnotationManager
-          timestamp={traceSteps[currentStep]?.timestamp || 0}
-          totalSteps={traceSteps.length}
-          currentStep={currentStep}
-        />
-      )}
+        {/* Annotation Manager - Overlay when enabled */}
+        {annotationsEnabled && (
+          <AnnotationManager
+            timestamp={traceSteps[currentStep]?.timestamp || 0}
+            totalSteps={traceSteps.length}
+            currentStep={currentStep}
+          />
+        )}
       </div>
     </AnnotationProvider>
   );

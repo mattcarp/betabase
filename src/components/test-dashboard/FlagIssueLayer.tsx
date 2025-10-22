@@ -270,11 +270,7 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
                 <Button variant="outline" onClick={handleCancel}>
                   Cancel
                 </Button>
-                <Button
-                  variant="default"
-                  onClick={handleSubmit}
-                  disabled={!title.trim()}
-                >
+                <Button variant="default" onClick={handleSubmit} disabled={!title.trim()}>
                   Flag Issue
                 </Button>
               </div>

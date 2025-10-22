@@ -40,9 +40,7 @@ export class MicrosoftGraphService {
   /**
    * Fetch and ingest emails from Outlook
    */
-  async syncOutlookEmails(
-    options: FetchEmailsOptions = {}
-  ): Promise<SyncResult> {
+  async syncOutlookEmails(options: FetchEmailsOptions = {}): Promise<SyncResult> {
     try {
       const emails = await this.fetchOutlookEmails(options);
       const microsoftEmails = this.convertToMicrosoftEmailData(emails);
@@ -91,9 +89,7 @@ export class MicrosoftGraphService {
   /**
    * Fetch raw emails from Microsoft Graph API
    */
-  private async fetchOutlookEmails(
-    options: FetchEmailsOptions = {}
-  ): Promise<any[]> {
+  private async fetchOutlookEmails(options: FetchEmailsOptions = {}): Promise<any[]> {
     const {
       folder = "inbox",
       top = 50,
@@ -140,9 +136,7 @@ export class MicrosoftGraphService {
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Microsoft Graph API error: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Microsoft Graph API error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -159,11 +153,7 @@ export class MicrosoftGraphService {
   ): Promise<SyncResult> {
     try {
       const messages = await this.fetchTeamsMessages(teamId, channelId, options);
-      const microsoftEmails = this.convertTeamsMessagesToEmailData(
-        messages,
-        teamId,
-        channelId
-      );
+      const microsoftEmails = this.convertTeamsMessagesToEmailData(messages, teamId, channelId);
 
       console.log(`Fetched ${microsoftEmails.length} Teams messages`);
 
@@ -231,9 +221,7 @@ export class MicrosoftGraphService {
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Microsoft Graph API error: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Microsoft Graph API error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -252,8 +240,7 @@ export class MicrosoftGraphService {
       bcc: (email.bccRecipients || []).map((r: any) => r.emailAddress.address),
       subject: email.subject || "(No Subject)",
       body: email.body?.contentType === "text" ? email.body.content : "",
-      htmlBody:
-        email.body?.contentType === "html" ? email.body.content : undefined,
+      htmlBody: email.body?.contentType === "html" ? email.body.content : undefined,
       date: new Date(email.receivedDateTime),
       threadId: email.conversationId,
       inReplyTo: undefined, // Not directly available
@@ -287,8 +274,7 @@ export class MicrosoftGraphService {
       to: [], // Teams messages don't have explicit recipients
       subject: msg.subject || "(Teams Message)",
       body: msg.body?.contentType === "text" ? msg.body.content : "",
-      htmlBody:
-        msg.body?.contentType === "html" ? msg.body.content : undefined,
+      htmlBody: msg.body?.contentType === "html" ? msg.body.content : undefined,
       date: new Date(msg.createdDateTime),
 
       // Teams-specific
@@ -382,9 +368,7 @@ export class MicrosoftGraphService {
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Microsoft Graph API error: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Microsoft Graph API error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -401,8 +385,7 @@ export class MicrosoftGraphService {
       to: (meeting.attendees || []).map((a: any) => a.emailAddress.address),
       subject: `Meeting: ${meeting.subject}`,
       body: meeting.bodyPreview || meeting.body?.content || "",
-      htmlBody:
-        meeting.body?.contentType === "html" ? meeting.body.content : undefined,
+      htmlBody: meeting.body?.contentType === "html" ? meeting.body.content : undefined,
       date: new Date(meeting.createdDateTime),
 
       // Meeting-specific
@@ -415,9 +398,7 @@ export class MicrosoftGraphService {
         isOnlineMeeting: meeting.isOnlineMeeting,
         joinUrl: meeting.onlineMeeting?.joinUrl,
         organizer: meeting.organizer?.emailAddress?.address,
-        attendees: (meeting.attendees || []).map(
-          (a: any) => a.emailAddress.address
-        ),
+        attendees: (meeting.attendees || []).map((a: any) => a.emailAddress.address),
       },
       importance: meeting.importance as "low" | "normal" | "high",
     }));
@@ -437,9 +418,7 @@ export class MicrosoftGraphService {
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Microsoft Graph API error: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Microsoft Graph API error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -452,9 +431,7 @@ export class MicrosoftGraphService {
   /**
    * Get all channels in a team
    */
-  async getTeamChannels(
-    teamId: string
-  ): Promise<Array<{ id: string; displayName: string }>> {
+  async getTeamChannels(teamId: string): Promise<Array<{ id: string; displayName: string }>> {
     const url = `${this.baseUrl}/teams/${teamId}/channels`;
 
     const response = await fetch(url, {
@@ -465,9 +442,7 @@ export class MicrosoftGraphService {
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Microsoft Graph API error: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Microsoft Graph API error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -481,9 +456,7 @@ export class MicrosoftGraphService {
 // Singleton factory
 let instance: MicrosoftGraphService | null = null;
 
-export function getMicrosoftGraphService(
-  config: GraphAPIConfig
-): MicrosoftGraphService {
+export function getMicrosoftGraphService(config: GraphAPIConfig): MicrosoftGraphService {
   if (!instance || instance["accessToken"] !== config.accessToken) {
     instance = new MicrosoftGraphService(config);
   }

@@ -102,9 +102,7 @@ export const AnnotationPins: React.FC<AnnotationPinsProps> = ({
             onClick={() => onPinClick?.(annotation)}
             title={getPreviewText(annotation)}
           >
-            <span className="text-white">
-              {getIconForType(annotation.data.type)}
-            </span>
+            <span className="text-white">{getIconForType(annotation.data.type)}</span>
           </button>
 
           {/* Tooltip on hover */}
