@@ -92,9 +92,9 @@ const results = await service.searchEmails("project deadline");
 
 // Advanced search with filters
 const results = await service.searchEmails("budget approval", {
-  matchThreshold: 0.8,        // Similarity threshold (0-1)
-  matchCount: 10,             // Max results
-  dateFrom: "2024-01-01",     // Filter by date range
+  matchThreshold: 0.8, // Similarity threshold (0-1)
+  matchCount: 10, // Max results
+  dateFrom: "2024-01-01", // Filter by date range
   dateTo: "2024-12-31",
   participants: ["alice@example.com"], // Filter by participants
 });
@@ -135,19 +135,20 @@ curl -X POST http://localhost:3000/api/email-context/search \
 
 ```typescript
 interface EmailData {
-  messageId: string;              // Required: Unique identifier
-  from: string;                   // Required: Sender email
-  to: string[];                   // Required: Recipient emails
-  cc?: string[];                  // Optional: CC recipients
-  bcc?: string[];                 // Optional: BCC recipients
-  subject: string;                // Required: Email subject
-  body: string;                   // Email plain text (required if no htmlBody)
-  htmlBody?: string;              // HTML email content
-  date: Date | string;            // Required: Email date
-  threadId?: string;              // Optional: Conversation thread ID
-  inReplyTo?: string;             // Optional: Parent message ID
-  references?: string[];          // Optional: Reference message IDs
-  attachments?: Array<{           // Optional: Attachment metadata
+  messageId: string; // Required: Unique identifier
+  from: string; // Required: Sender email
+  to: string[]; // Required: Recipient emails
+  cc?: string[]; // Optional: CC recipients
+  bcc?: string[]; // Optional: BCC recipients
+  subject: string; // Required: Email subject
+  body: string; // Email plain text (required if no htmlBody)
+  htmlBody?: string; // HTML email content
+  date: Date | string; // Required: Email date
+  threadId?: string; // Optional: Conversation thread ID
+  inReplyTo?: string; // Optional: Parent message ID
+  references?: string[]; // Optional: Reference message IDs
+  attachments?: Array<{
+    // Optional: Attachment metadata
     filename: string;
     contentType: string;
     size: number;
@@ -162,7 +163,7 @@ interface EmailData {
 interface ParsedEmailContext {
   messageId: string;
   threadId?: string;
-  content: string;                // Vectorized content
+  content: string; // Vectorized content
   metadata: {
     from: string;
     to: string[];
@@ -217,6 +218,7 @@ npm test tests/unit/emailParser.test.ts
 ```
 
 Tests cover:
+
 - Email parsing and content extraction
 - HTML parsing and entity decoding
 - Signature and quote removal
@@ -232,6 +234,7 @@ npm test tests/integration/emailContextApi.test.ts
 ```
 
 Tests cover:
+
 - End-to-end email ingestion
 - Vector generation and storage
 - Semantic search accuracy
@@ -249,6 +252,7 @@ tsx scripts/test-email-extraction.ts
 ```
 
 This demonstrates:
+
 - Ingesting realistic sample emails
 - Various search scenarios
 - Date filtering
@@ -357,16 +361,16 @@ Example error response:
 // Fetch emails from Gmail and ingest
 async function ingestGmailEmails(gmail: any, query: string) {
   const messages = await gmail.users.messages.list({
-    userId: 'me',
+    userId: "me",
     q: query,
   });
 
   const emails: EmailData[] = await Promise.all(
     messages.data.messages.map(async (msg) => {
       const email = await gmail.users.messages.get({
-        userId: 'me',
+        userId: "me",
         id: msg.id,
-        format: 'full',
+        format: "full",
       });
 
       return {
@@ -390,8 +394,9 @@ async function ingestGmailEmails(gmail: any, query: string) {
 ```typescript
 // Fetch emails from Outlook and ingest
 async function ingestOutlookEmails(client: any, folderId: string) {
-  const messages = await client.api(`/me/mailFolders/${folderId}/messages`)
-    .select('id,from,toRecipients,subject,body,receivedDateTime')
+  const messages = await client
+    .api(`/me/mailFolders/${folderId}/messages`)
+    .select("id,from,toRecipients,subject,body,receivedDateTime")
     .top(50)
     .get();
 
@@ -425,21 +430,25 @@ async function ingestOutlookEmails(client: any, folderId: string) {
 ### Common Issues
 
 **Issue**: Emails not being found in search
+
 - Check similarity threshold (try lowering to 0.6)
 - Verify email was successfully ingested (check result.success)
 - Wait a moment after ingestion for indexing
 
 **Issue**: Slow ingestion
+
 - Use batch operations instead of individual ingests
 - Check OpenAI API rate limits
 - Verify network connectivity
 
 **Issue**: HTML not parsing correctly
+
 - Email parser handles most HTML gracefully
 - Check console for specific parsing errors
 - HTML entities are automatically decoded
 
 **Issue**: Memory issues with large batches
+
 - Reduce EMAIL_BATCH_SIZE in environment
 - Process emails in smaller chunks
 - Monitor server memory usage
@@ -460,6 +469,7 @@ Potential improvements for future iterations:
 ## Support
 
 For issues or questions:
+
 - Review test files for usage examples
 - Check API error messages for debugging hints
 - Run verification script: `./scripts/verify-email-system.sh`
