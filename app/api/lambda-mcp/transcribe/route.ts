@@ -3,40 +3,39 @@
  * Server-side endpoint for processing audio through Lambda MCP pipeline
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { lambdaMcpTranscriptionPipeline } from '@/services/lambdaMcpTranscriptionPipeline';
+import { NextRequest, NextResponse } from "next/server";
+import { lambdaMcpTranscriptionPipeline } from "@/services/lambdaMcpTranscriptionPipeline";
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('🎤 Lambda MCP Transcription API: Received request');
+    console.log("🎤 Lambda MCP Transcription API: Received request");
 
     // Parse multipart form data
     const formData = await request.formData();
-    const audioFile = formData.get('audio') as File | null;
-    const options = formData.get('options') ? JSON.parse(formData.get('options') as string) : {};
+    const audioFile = formData.get("audio") as File | null;
+    const options = formData.get("options") ? JSON.parse(formData.get("options") as string) : {};
 
     if (!audioFile) {
-      return NextResponse.json(
-        { error: 'No audio file provided' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "No audio file provided" }, { status: 400 });
     }
 
-    console.log(`📦 Audio file received: ${audioFile.name} (${(audioFile.size / 1024).toFixed(1)}KB)`);
+    console.log(
+      `📦 Audio file received: ${audioFile.name} (${(audioFile.size / 1024).toFixed(1)}KB)`
+    );
 
     // Convert File to ArrayBuffer
     const audioBuffer = await audioFile.arrayBuffer();
 
     // Process through Lambda MCP pipeline
-    console.log('🚀 Processing audio through Lambda MCP pipeline...');
+    console.log("🚀 Processing audio through Lambda MCP pipeline...");
 
     const result = await lambdaMcpTranscriptionPipeline.processAudio(audioBuffer);
 
     if (!result.transcription.success) {
-      console.error('❌ Transcription failed:', result.transcription.error);
+      console.error("❌ Transcription failed:", result.transcription.error);
       return NextResponse.json(
         {
-          error: 'Transcription failed',
+          error: "Transcription failed",
           details: result.transcription.error,
           processingMode: result.processingMode,
           fallbackUsed: result.fallbackUsed,
@@ -74,14 +73,13 @@ export async function POST(request: NextRequest) {
         metrics: result.metrics,
       },
     });
-
   } catch (error) {
-    console.error('❌ Lambda MCP Transcription API error:', error);
+    console.error("❌ Lambda MCP Transcription API error:", error);
 
     return NextResponse.json(
       {
-        error: 'Internal server error',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error",
         timestamp: new Date().toISOString(),
       },
       { status: 500 }
@@ -96,7 +94,7 @@ export async function GET(request: NextRequest) {
     const stats = lambdaMcpTranscriptionPipeline.getStats();
 
     return NextResponse.json({
-      status: 'healthy',
+      status: "healthy",
       lambdaMcp: {
         healthy: healthCheck.healthy,
         latency: healthCheck.latency,
@@ -109,14 +107,13 @@ export async function GET(request: NextRequest) {
       },
       timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('❌ Health check error:', error);
+    console.error("❌ Health check error:", error);
 
     return NextResponse.json(
       {
-        status: 'unhealthy',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        status: "unhealthy",
+        error: error instanceof Error ? error.message : "Unknown error",
         timestamp: new Date().toISOString(),
       },
       { status: 503 }
@@ -129,9 +126,9 @@ export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },
   });
 }
