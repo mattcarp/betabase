@@ -43,10 +43,7 @@ async function testAUTIntelligence() {
     log("Analyzing AOMA application...", colors.cyan);
     const analysis = await unifiedTestIntelligence.gatherAUTIntelligence();
 
-    log(
-      `✅ Found ${analysis.testableFeatures.length} testable features:`,
-      colors.green,
-    );
+    log(`✅ Found ${analysis.testableFeatures.length} testable features:`, colors.green);
     analysis.testableFeatures.forEach((feature: any) => {
       console.log(`  - ${feature.name} (${feature.testPriority} priority)`);
     });
@@ -56,14 +53,8 @@ async function testAUTIntelligence() {
       console.log(`  - ${flow.name} ${flow.criticalPath ? "⚠️ CRITICAL" : ""}`);
     });
 
-    log(
-      `\n✅ Found ${analysis.apiEndpoints.length} API endpoints`,
-      colors.green,
-    );
-    log(
-      `✅ Extracted ${analysis.knowledgeExtracted.length} knowledge items`,
-      colors.green,
-    );
+    log(`\n✅ Found ${analysis.apiEndpoints.length} API endpoints`, colors.green);
+    log(`✅ Extracted ${analysis.knowledgeExtracted.length} knowledge items`, colors.green);
 
     return true;
   } catch (error) {
@@ -79,15 +70,13 @@ async function testProcessTestFailure() {
     id: "test-001",
     test_name: "AOMA Login Test",
     test_file: "auth.spec.ts",
-    error_message:
-      'TimeoutError: Element [data-testid="login-button"] not visible after 30000ms',
+    error_message: 'TimeoutError: Element [data-testid="login-button"] not visible after 30000ms',
     status: "failed",
   };
 
   try {
     log("Processing mock test failure...", colors.cyan);
-    const knowledge =
-      await unifiedTestIntelligence.processTestFailure(mockTestFailure);
+    const knowledge = await unifiedTestIntelligence.processTestFailure(mockTestFailure);
 
     log("✅ Generated solution:", colors.green);
     console.log(`  Title: ${knowledge.title}`);
@@ -125,9 +114,7 @@ async function testSupportChat() {
       console.log(`  Sources: ${response.sources.join(", ")}`);
 
       if (response.suggestedActions && response.suggestedActions.length > 0) {
-        console.log(
-          `  Suggested actions: ${response.suggestedActions.join(", ")}`,
-        );
+        console.log(`  Suggested actions: ${response.suggestedActions.join(", ")}`);
       }
     }
 
@@ -143,13 +130,9 @@ async function testGenerateTestsFromSupport() {
 
   try {
     log("Generating test recommendations from support tickets...", colors.cyan);
-    const recommendations =
-      await unifiedTestIntelligence.generateTestsFromSupport();
+    const recommendations = await unifiedTestIntelligence.generateTestsFromSupport();
 
-    log(
-      `✅ Generated ${recommendations.length} test recommendations:`,
-      colors.green,
-    );
+    log(`✅ Generated ${recommendations.length} test recommendations:`, colors.green);
     recommendations.forEach((rec: any) => {
       console.log(`  - ${rec.title} (Priority: ${rec.priority})`);
       console.log(`    Suggested tests: ${rec.suggestedTests.join(", ")}`);
@@ -167,13 +150,10 @@ async function testKnowledgeSearch() {
 
   try {
     log("Searching for upload-related knowledge...", colors.cyan);
-    const results = await unifiedTestIntelligence.searchTestKnowledge(
-      "upload",
-      {
-        sources: ["firecrawl", "documentation", "test_failure"],
-        minRelevance: 60,
-      },
-    );
+    const results = await unifiedTestIntelligence.searchTestKnowledge("upload", {
+      sources: ["firecrawl", "documentation", "test_failure"],
+      minRelevance: 60,
+    });
 
     log(`✅ Found ${results.length} relevant entries`, colors.green);
     results.slice(0, 3).forEach((result: any) => {
@@ -196,7 +176,7 @@ async function testLearningFromFeedback() {
       "How to export assets from AOMA?",
       "Navigate to Assets > Select items > Click Export > Choose format (CSV/JSON/XML)",
       true,
-      "This was very helpful!",
+      "This was very helpful!"
     );
     log("✅ Recorded helpful interaction", colors.green);
 
@@ -205,7 +185,7 @@ async function testLearningFromFeedback() {
       "Why is search slow?",
       "Try refreshing the page",
       false,
-      "This did not solve the performance issue",
+      "This did not solve the performance issue"
     );
     log("✅ Recorded unhelpful interaction for improvement", colors.green);
 
@@ -243,7 +223,7 @@ async function testAOMAIntegration() {
     log("Testing AOMA knowledge query...", colors.cyan);
     const response = await aomaOrchestrator.orchestrateQuery(
       "What is AOMA and what are its main features?",
-      { strategy: "rapid" },
+      { strategy: "rapid" }
     );
 
     if (response.response) {
@@ -262,14 +242,8 @@ async function testAOMAIntegration() {
 }
 
 async function runAllTests() {
-  log(
-    "\n🚀 UNIFIED TEST INTELLIGENCE SYSTEM - COMPREHENSIVE TEST",
-    colors.bright + colors.cyan,
-  );
-  log(
-    "Testing the complete pipeline: Firecrawl → Supabase → Support Intelligence\n",
-    colors.cyan,
-  );
+  log("\n🚀 UNIFIED TEST INTELLIGENCE SYSTEM - COMPREHENSIVE TEST", colors.bright + colors.cyan);
+  log("Testing the complete pipeline: Firecrawl → Supabase → Support Intelligence\n", colors.cyan);
 
   const tests = [
     { name: "AUT Intelligence", fn: testAUTIntelligence },
@@ -307,10 +281,7 @@ async function runAllTests() {
 
   const successRate = ((passed / results.length) * 100).toFixed(1);
   if (passed === results.length) {
-    log(
-      `\n🎉 ALL TESTS PASSED! (${successRate}%)`,
-      colors.bright + colors.green,
-    );
+    log(`\n🎉 ALL TESTS PASSED! (${successRate}%)`, colors.bright + colors.green);
   } else {
     log(`\n⚠️ Success Rate: ${successRate}%`, colors.yellow);
   }
@@ -319,34 +290,21 @@ async function runAllTests() {
   logSection("CONFIGURATION STATUS");
   console.log(
     "Firecrawl API Key:",
-    process.env.FIRECRAWL_API_KEY ? "✅ Configured" : "❌ Not configured",
+    process.env.FIRECRAWL_API_KEY ? "✅ Configured" : "❌ Not configured"
   );
   console.log(
     "Supabase URL:",
-    process.env.NEXT_PUBLIC_SUPABASE_URL
-      ? "✅ Configured"
-      : "❌ Not configured",
+    process.env.NEXT_PUBLIC_SUPABASE_URL ? "✅ Configured" : "❌ Not configured"
   );
   console.log(
     "AOMA Mesh URL:",
-    process.env.NEXT_PUBLIC_AOMA_MESH_SERVER_URL
-      ? "✅ Configured"
-      : "❌ Not configured",
+    process.env.NEXT_PUBLIC_AOMA_MESH_SERVER_URL ? "✅ Configured" : "❌ Not configured"
   );
 
-  if (
-    !process.env.FIRECRAWL_API_KEY ||
-    process.env.FIRECRAWL_API_KEY.includes("YOUR_")
-  ) {
-    log(
-      "\n💡 Using mock data for AUT analysis (Firecrawl not configured)",
-      colors.yellow,
-    );
+  if (!process.env.FIRECRAWL_API_KEY || process.env.FIRECRAWL_API_KEY.includes("YOUR_")) {
+    log("\n💡 Using mock data for AUT analysis (Firecrawl not configured)", colors.yellow);
   } else {
-    log(
-      "\n🔥 Firecrawl is configured and ready for real AUT analysis!",
-      colors.green,
-    );
+    log("\n🔥 Firecrawl is configured and ready for real AUT analysis!", colors.green);
   }
 }
 

@@ -10,15 +10,15 @@
  * - Progress tracking
  */
 
-import { config } from 'dotenv';
-import { aomaFirecrawl } from '@/services/aomaFirecrawlService';
-import confluenceCrawler from '@/services/confluenceCrawler';
-import sonyMusicJiraCrawler from '@/services/sonyMusicJiraCrawler';
-import { getDeduplicationService } from '@/services/deduplicationService';
-import { validateSonyMusicContent } from '@/lib/supabase';
+import { config } from "dotenv";
+import { aomaFirecrawl } from "@/services/aomaFirecrawlService";
+import confluenceCrawler from "@/services/confluenceCrawler";
+import sonyMusicJiraCrawler from "@/services/sonyMusicJiraCrawler";
+import { getDeduplicationService } from "@/services/deduplicationService";
+import { validateSonyMusicContent } from "@/lib/supabase";
 
 // Load environment variables
-config({ path: '.env.local' });
+config({ path: ".env.local" });
 
 interface CrawlResult {
   source: string;
@@ -48,7 +48,7 @@ class MasterCrawler {
   constructor() {
     this.summary = {
       startTime: new Date().toISOString(),
-      endTime: '',
+      endTime: "",
       duration: 0,
       results: [],
       totalItems: 0,
@@ -61,24 +61,26 @@ class MasterCrawler {
   /**
    * Run all crawlers
    */
-  async runAll(options: {
-    sources?: ('aoma' | 'confluence' | 'jira')[];
-    deduplicate?: boolean;
-    cleanFirst?: boolean;
-  } = {}) {
+  async runAll(
+    options: {
+      sources?: ("aoma" | "confluence" | "jira")[];
+      deduplicate?: boolean;
+      cleanFirst?: boolean;
+    } = {}
+  ) {
     const {
-      sources = ['aoma', 'confluence', 'jira'],
+      sources = ["aoma", "confluence", "jira"],
       deduplicate = true,
       cleanFirst = false,
     } = options;
 
-    console.log('🚀 MASTER CRAWLER STARTING\n');
-    console.log('═'.repeat(70));
+    console.log("🚀 MASTER CRAWLER STARTING\n");
+    console.log("═".repeat(70));
     console.log(`\nOptions:`);
-    console.log(`  Sources: ${sources.join(', ')}`);
-    console.log(`  Deduplication: ${deduplicate ? 'ON' : 'OFF'}`);
-    console.log(`  Clean first: ${cleanFirst ? 'YES' : 'NO'}`);
-    console.log('\n' + '═'.repeat(70) + '\n');
+    console.log(`  Sources: ${sources.join(", ")}`);
+    console.log(`  Deduplication: ${deduplicate ? "ON" : "OFF"}`);
+    console.log(`  Clean first: ${cleanFirst ? "YES" : "NO"}`);
+    console.log("\n" + "═".repeat(70) + "\n");
 
     // Optional: Clean duplicates first
     if (cleanFirst) {
@@ -86,41 +88,28 @@ class MasterCrawler {
     }
 
     // Run each crawler
-    if (sources.includes('aoma')) {
+    if (sources.includes("aoma")) {
       await this.crawlAOMA();
     }
 
-    if (sources.includes('confluence')) {
+    if (sources.includes("confluence")) {
       await this.crawlConfluence();
     }
 
-    if (sources.includes('jira')) {
+    if (sources.includes("jira")) {
       await this.crawlJira();
     }
 
     // Finalize summary
     this.summary.endTime = new Date().toISOString();
     this.summary.duration =
-      new Date(this.summary.endTime).getTime() -
-      new Date(this.summary.startTime).getTime();
+      new Date(this.summary.endTime).getTime() - new Date(this.summary.startTime).getTime();
 
     // Calculate totals
-    this.summary.totalItems = this.summary.results.reduce(
-      (sum, r) => sum + r.itemsCrawled,
-      0
-    );
-    this.summary.totalVectors = this.summary.results.reduce(
-      (sum, r) => sum + r.vectorsUpserted,
-      0
-    );
-    this.summary.totalSkipped = this.summary.results.reduce(
-      (sum, r) => sum + r.skipped,
-      0
-    );
-    this.summary.totalErrors = this.summary.results.reduce(
-      (sum, r) => sum + r.errors.length,
-      0
-    );
+    this.summary.totalItems = this.summary.results.reduce((sum, r) => sum + r.itemsCrawled, 0);
+    this.summary.totalVectors = this.summary.results.reduce((sum, r) => sum + r.vectorsUpserted, 0);
+    this.summary.totalSkipped = this.summary.results.reduce((sum, r) => sum + r.skipped, 0);
+    this.summary.totalErrors = this.summary.results.reduce((sum, r) => sum + r.errors.length, 0);
 
     // Print summary
     this.printSummary();
@@ -140,25 +129,25 @@ class MasterCrawler {
    * Crawl AOMA with Firecrawl
    */
   private async crawlAOMA() {
-    console.log('\n📱 CRAWLING AOMA (Firecrawl)\n');
+    console.log("\n📱 CRAWLING AOMA (Firecrawl)\n");
     const startTime = Date.now();
 
     try {
       const result = await aomaFirecrawl.crawlAomaContent({
         maxPages: 10,
         includePaths: [
-          '/aoma-ui/my-aoma-files',
-          '/aoma-ui/simple-upload',
-          '/aoma-ui/direct-upload',
-          '/aoma-ui/product-metadata-viewer',
-          '/aoma-ui/unified-submission-tool',
+          "/aoma-ui/my-aoma-files",
+          "/aoma-ui/simple-upload",
+          "/aoma-ui/direct-upload",
+          "/aoma-ui/product-metadata-viewer",
+          "/aoma-ui/unified-submission-tool",
         ],
       });
 
       const duration = Date.now() - startTime;
 
       this.summary.results.push({
-        source: 'aoma',
+        source: "aoma",
         success: result.success,
         itemsCrawled: result.pagesProcessed,
         vectorsUpserted: result.pagesProcessed - result.errors.length,
@@ -175,7 +164,7 @@ class MasterCrawler {
       console.error(`❌ AOMA crawl failed: ${error.message}`);
 
       this.summary.results.push({
-        source: 'aoma',
+        source: "aoma",
         success: false,
         itemsCrawled: 0,
         vectorsUpserted: 0,
@@ -190,19 +179,19 @@ class MasterCrawler {
    * Crawl Confluence
    */
   private async crawlConfluence() {
-    console.log('\n📚 CRAWLING CONFLUENCE\n');
+    console.log("\n📚 CRAWLING CONFLUENCE\n");
     const startTime = Date.now();
 
     try {
       const result = await confluenceCrawler.crawlSpaces({
-        spaces: ['AOMA', 'USM', 'TECH', 'API'],
+        spaces: ["AOMA", "USM", "TECH", "API"],
         maxPagesPerSpace: 50,
       });
 
       const duration = Date.now() - startTime;
 
       this.summary.results.push({
-        source: 'confluence',
+        source: "confluence",
         success: true,
         itemsCrawled: result.pagesCrawled,
         vectorsUpserted: result.vectorsUpserted,
@@ -219,7 +208,7 @@ class MasterCrawler {
       console.error(`❌ Confluence crawl failed: ${error.message}`);
 
       this.summary.results.push({
-        source: 'confluence',
+        source: "confluence",
         success: false,
         itemsCrawled: 0,
         vectorsUpserted: 0,
@@ -234,19 +223,19 @@ class MasterCrawler {
    * Crawl Jira
    */
   private async crawlJira() {
-    console.log('\n🎫 CRAWLING JIRA (Sony Music)\n');
+    console.log("\n🎫 CRAWLING JIRA (Sony Music)\n");
     const startTime = Date.now();
 
     try {
       const result = await sonyMusicJiraCrawler.crawlProjects({
-        projects: ['AOMA', 'USM', 'TECH', 'API'],
+        projects: ["AOMA", "USM", "TECH", "API"],
         sinceDays: 30, // Last 30 days
       });
 
       const duration = Date.now() - startTime;
 
       this.summary.results.push({
-        source: 'jira',
+        source: "jira",
         success: true,
         itemsCrawled: result.issuesCrawled,
         vectorsUpserted: result.vectorsUpserted,
@@ -263,7 +252,7 @@ class MasterCrawler {
       console.error(`❌ Jira crawl failed: ${error.message}`);
 
       this.summary.results.push({
-        source: 'jira',
+        source: "jira",
         success: false,
         itemsCrawled: 0,
         vectorsUpserted: 0,
@@ -278,16 +267,15 @@ class MasterCrawler {
    * Clean existing duplicates before crawling
    */
   private async cleanExistingDuplicates() {
-    console.log('\n🧹 CLEANING EXISTING DUPLICATES\n');
+    console.log("\n🧹 CLEANING EXISTING DUPLICATES\n");
 
     try {
-      const { duplicates, totalDuplicates } =
-        await this.dedupService.findDuplicatesInDatabase({
-          keepNewest: true,
-        });
+      const { duplicates, totalDuplicates } = await this.dedupService.findDuplicatesInDatabase({
+        keepNewest: true,
+      });
 
       if (totalDuplicates === 0) {
-        console.log('   ✅ No duplicates found');
+        console.log("   ✅ No duplicates found");
         return;
       }
 
@@ -310,16 +298,15 @@ class MasterCrawler {
    * Final deduplication pass after all crawls
    */
   private async finalDeduplicationPass() {
-    console.log('\n🔍 FINAL DEDUPLICATION PASS\n');
+    console.log("\n🔍 FINAL DEDUPLICATION PASS\n");
 
     try {
-      const { duplicates, totalDuplicates } =
-        await this.dedupService.findDuplicatesInDatabase({
-          keepNewest: true,
-        });
+      const { duplicates, totalDuplicates } = await this.dedupService.findDuplicatesInDatabase({
+        keepNewest: true,
+      });
 
       if (totalDuplicates === 0) {
-        console.log('   ✅ No duplicates found');
+        console.log("   ✅ No duplicates found");
         return;
       }
 
@@ -344,12 +331,12 @@ class MasterCrawler {
    * Validate final database state
    */
   private async validateFinalState() {
-    console.log('\n✅ VALIDATING FINAL STATE\n');
+    console.log("\n✅ VALIDATING FINAL STATE\n");
 
     try {
       const counts = await validateSonyMusicContent();
 
-      console.log('   Final vector counts:');
+      console.log("   Final vector counts:");
       Object.entries(counts).forEach(([source, count]) => {
         console.log(`   📦 ${source}: ${count} vectors`);
       });
@@ -365,12 +352,12 @@ class MasterCrawler {
    * Print final summary
    */
   private printSummary() {
-    console.log('\n' + '═'.repeat(70));
-    console.log('\n📊 CRAWL SUMMARY\n');
-    console.log('═'.repeat(70));
+    console.log("\n" + "═".repeat(70));
+    console.log("\n📊 CRAWL SUMMARY\n");
+    console.log("═".repeat(70));
 
     this.summary.results.forEach((result) => {
-      const icon = result.success ? '✅' : '❌';
+      const icon = result.success ? "✅" : "❌";
       console.log(`\n${icon} ${result.source.toUpperCase()}`);
       console.log(`   Duration: ${(result.duration / 1000).toFixed(1)}s`);
       console.log(`   Items Crawled: ${result.itemsCrawled}`);
@@ -389,16 +376,14 @@ class MasterCrawler {
       }
     });
 
-    console.log('\n' + '═'.repeat(70));
-    console.log('\n📈 TOTALS:\n');
+    console.log("\n" + "═".repeat(70));
+    console.log("\n📈 TOTALS:\n");
     console.log(`   Total Items: ${this.summary.totalItems}`);
     console.log(`   Total Vectors: ${this.summary.totalVectors}`);
     console.log(`   Total Skipped: ${this.summary.totalSkipped}`);
     console.log(`   Total Errors: ${this.summary.totalErrors}`);
-    console.log(
-      `   Total Duration: ${(this.summary.duration / 1000 / 60).toFixed(1)} minutes`
-    );
-    console.log('\n' + '═'.repeat(70) + '\n');
+    console.log(`   Total Duration: ${(this.summary.duration / 1000 / 60).toFixed(1)} minutes`);
+    console.log("\n" + "═".repeat(70) + "\n");
   }
 }
 
@@ -408,28 +393,28 @@ if (require.main === module) {
 
   const args = process.argv.slice(2);
   const options: any = {
-    sources: ['aoma', 'confluence', 'jira'],
+    sources: ["aoma", "confluence", "jira"],
     deduplicate: true,
-    cleanFirst: args.includes('--clean'),
+    cleanFirst: args.includes("--clean"),
   };
 
   // Parse source flags
-  if (args.includes('--aoma-only')) {
-    options.sources = ['aoma'];
-  } else if (args.includes('--confluence-only')) {
-    options.sources = ['confluence'];
-  } else if (args.includes('--jira-only')) {
-    options.sources = ['jira'];
+  if (args.includes("--aoma-only")) {
+    options.sources = ["aoma"];
+  } else if (args.includes("--confluence-only")) {
+    options.sources = ["confluence"];
+  } else if (args.includes("--jira-only")) {
+    options.sources = ["jira"];
   }
 
   crawler
     .runAll(options)
     .then(() => {
-      console.log('✨ Master crawl complete!');
+      console.log("✨ Master crawl complete!");
       process.exit(0);
     })
     .catch((error) => {
-      console.error('❌ Master crawl failed:', error);
+      console.error("❌ Master crawl failed:", error);
       process.exit(1);
     });
 }

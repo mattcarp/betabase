@@ -2,9 +2,7 @@ import { test, expect } from "@playwright/test";
 import { setupConsoleMonitoring, assertNoConsoleErrors } from "./helpers/console-monitor";
 
 test.describe("SIAM Curate Tab File Upload Investigation", () => {
-  test("examine Curate tab interface for file upload functionality", async ({
-    page,
-  }) => {
+  test("examine Curate tab interface for file upload functionality", async ({ page }) => {
     // Setup console monitoring
     setupConsoleMonitoring(page, {
       ignoreWarnings: true,
@@ -49,7 +47,7 @@ test.describe("SIAM Curate Tab File Upload Investigation", () => {
 
       // Look for upload buttons
       const uploadButtons = page.locator(
-        'button:has-text("Upload"), button:has-text("upload"), button:has-text("Choose"), button:has-text("Select"), button:has-text("Browse"), button:has-text("Add")',
+        'button:has-text("Upload"), button:has-text("upload"), button:has-text("Choose"), button:has-text("Select"), button:has-text("Browse"), button:has-text("Add")'
       );
       const uploadButtonCount = await uploadButtons.count();
       console.log(`Upload buttons in Curate tab: ${uploadButtonCount}`);
@@ -61,21 +59,21 @@ test.describe("SIAM Curate Tab File Upload Investigation", () => {
 
       // Look for specific AOMA upload functionality
       const aomaUpload = page.locator(
-        '*:has-text("Upload files to AOMA"), *:has-text("knowledge base"), *:has-text("AOMA")',
+        '*:has-text("Upload files to AOMA"), *:has-text("knowledge base"), *:has-text("AOMA")'
       );
       const aomaCount = await aomaUpload.count();
       console.log(`AOMA upload elements: ${aomaCount}`);
 
       // Look for drag and drop areas
       const dropZones = page.locator(
-        '[data-testid*="drop"], .drop-zone, .upload-zone, *:has-text("drag"), *:has-text("drop")',
+        '[data-testid*="drop"], .drop-zone, .upload-zone, *:has-text("drag"), *:has-text("drop")'
       );
       const dropZoneCount = await dropZones.count();
       console.log(`Drop zones: ${dropZoneCount}`);
 
       // Check for existing file lists
       const fileLists = page.locator(
-        '.file-list, ul li, [data-testid*="file"], *:has-text(".pdf"), *:has-text(".txt"), *:has-text(".doc")',
+        '.file-list, ul li, [data-testid*="file"], *:has-text(".pdf"), *:has-text(".txt"), *:has-text(".doc")'
       );
       const fileListCount = await fileLists.count();
       console.log(`File list elements: ${fileListCount}`);
@@ -110,7 +108,7 @@ test.describe("SIAM Curate Tab File Upload Investigation", () => {
       const chatFileInputs = await page.locator('input[type="file"]').count();
       const chatUploadButtons = await page
         .locator(
-          'button:has-text("Upload"), button:has-text("upload"), [data-testid*="upload"], *:has-text("Paperclip"), *:has-text("Attach")',
+          'button:has-text("Upload"), button:has-text("upload"), [data-testid*="upload"], *:has-text("Paperclip"), *:has-text("Attach")'
         )
         .count();
 

@@ -28,9 +28,7 @@ async function setupWebhookSite() {
 }
 
 async function getEmailsFromWebhookSite(token: string) {
-  const response = await axios.get(
-    `https://webhook.site/token/${token}/requests?sorting=newest`,
-  );
+  const response = await axios.get(`https://webhook.site/token/${token}/requests?sorting=newest`);
   return response.data.data;
 }
 

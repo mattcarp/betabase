@@ -4,14 +4,14 @@
 
 ### 🎯 When User Says...
 
-| User Says | You Should |
-|-----------|------------|
-| "test this" | Run the most specific test for the current file |
-| "test login" | Run: `npm run test:feature -- login` |
-| "quick test" | Run: `npm run test:smoke` (2 min max) |
-| "test everything" | Run: `npm run test:regression` |
-| "fix the test" | 1. Read error 2. Check page object 3. Update selector |
-| "make a test" | Use the EXACT template below |
+| User Says         | You Should                                            |
+| ----------------- | ----------------------------------------------------- |
+| "test this"       | Run the most specific test for the current file       |
+| "test login"      | Run: `npm run test:feature -- login`                  |
+| "quick test"      | Run: `npm run test:smoke` (2 min max)                 |
+| "test everything" | Run: `npm run test:regression`                        |
+| "fix the test"    | 1. Read error 2. Check page object 3. Update selector |
+| "make a test"     | Use the EXACT template below                          |
 
 ## 📁 WHERE TESTS LIVE (MEMORIZE THIS)
 
@@ -39,7 +39,7 @@ import { TestFactory } from '../__fixtures__';
 
 test.describe('[FEATURE] [FeatureName]', () => {
   let page: [Feature]Page;
-  
+
   test.beforeEach(async ({ page: pwPage }) => {
     page = new [Feature]Page(pwPage);
     await page.navigate();
@@ -48,10 +48,10 @@ test.describe('[FEATURE] [FeatureName]', () => {
   test('[MUST] do something critical @smoke', async () => {
     // Arrange
     const data = TestFactory.create[DataType]();
-    
+
     // Act
     await page.doAction(data);
-    
+
     // Assert
     await expect(page.getResult()).toBe(expected);
   });
@@ -138,6 +138,7 @@ npm run test:ui           # Open Playwright UI
 ## 📊 TEST LAYERS EXPLAINED
 
 ### Unit Tests (01-unit/)
+
 - Test single components/functions
 - No external dependencies
 - Mock everything
@@ -145,6 +146,7 @@ npm run test:ui           # Open Playwright UI
 - Example: Button component renders
 
 ### Integration Tests (02-integration/)
+
 - Test component interactions
 - Real API calls allowed
 - Database can be used
@@ -152,6 +154,7 @@ npm run test:ui           # Open Playwright UI
 - Example: Login flow with API
 
 ### E2E Tests (03-e2e/)
+
 - Test complete user journeys
 - Full browser automation
 - Real backend required
@@ -161,12 +164,14 @@ npm run test:ui           # Open Playwright UI
 ## 🏷️ TAGGING RULES
 
 ### Priority Tags (REQUIRED)
+
 - `@p0` - Blocks deployment
 - `@p1` - Fix in 24 hours
 - `@p2` - Fix this sprint
 - `@p3` - Nice to have
 
 ### Execution Tags
+
 - `@smoke` - Every commit
 - `@regression` - Before deploy
 - `@nightly` - Overnight run
@@ -175,6 +180,7 @@ npm run test:ui           # Open Playwright UI
 ## 🎯 IDE INTEGRATION
 
 ### VSCode Settings (Auto-applied)
+
 ```json
 {
   "typescript.preferences.importModuleSpecifier": "relative",
@@ -187,10 +193,12 @@ npm run test:ui           # Open Playwright UI
 ```
 
 ### File Associations
+
 - `*.test.ts` → Test file
 - `*.page.ts` → Page object
 - `*.factory.ts` → Data factory
 
 ---
+
 REMEMBER: This file is the SINGLE SOURCE OF TRUTH for testing.
 When in doubt, follow these rules EXACTLY.

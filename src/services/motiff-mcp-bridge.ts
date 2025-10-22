@@ -89,7 +89,7 @@ export class MotiffMCPBridge {
           tools: {},
           resources: {},
         },
-      },
+      }
     );
 
     // Initialize Motiff API with configuration
@@ -107,15 +107,12 @@ export class MotiffMCPBridge {
       { method: "tools/call", params: { name: "import-design-frame" } },
       async (request) => {
         const { frameUrl, componentName, outputPath } = DesignFrameSchema.parse(
-          request.params.arguments,
+          request.params.arguments
         );
 
         try {
           const frameData = await this.motiffAPI.getFrameData(frameUrl);
-          const component = await this.processDesignFrame(
-            frameData,
-            componentName,
-          );
+          const component = await this.processDesignFrame(frameData, componentName);
           const result = await this.generateComponent(component, outputPath);
 
           return {
@@ -141,7 +138,7 @@ export class MotiffMCPBridge {
             isError: true,
           };
         }
-      },
+      }
     );
 
     // Tool: Generate Component from Design
@@ -153,10 +150,7 @@ export class MotiffMCPBridge {
 
         try {
           const frameData = await this.motiffAPI.getFrameById(frameId);
-          const componentDef = await this.processDesignFrame(
-            frameData,
-            componentName,
-          );
+          const componentDef = await this.processDesignFrame(frameData, componentName);
 
           const generator = new ComponentGenerator();
           const result = await generator.generateComponent(componentDef, {
@@ -187,16 +181,14 @@ export class MotiffMCPBridge {
             isError: true,
           };
         }
-      },
+      }
     );
 
     // Tool: Sync Design Changes
     this.server.setRequestHandler(
       { method: "tools/call", params: { name: "sync-design" } },
       async (request) => {
-        const { frameId, forceUpdate } = SyncDesignSchema.parse(
-          request.params.arguments,
-        );
+        const { frameId, forceUpdate } = SyncDesignSchema.parse(request.params.arguments);
 
         try {
           const syncResult = await this.syncDesignChanges(frameId, forceUpdate);
@@ -228,7 +220,7 @@ export class MotiffMCPBridge {
             isError: true,
           };
         }
-      },
+      }
     );
   }
 
@@ -252,7 +244,7 @@ export class MotiffMCPBridge {
         } catch (error) {
           throw new Error(`Failed to fetch frames: ${error.message}`);
         }
-      },
+      }
     );
 
     // Resource: Design System Tokens
@@ -274,13 +266,13 @@ export class MotiffMCPBridge {
         } catch (error) {
           throw new Error(`Failed to fetch design tokens: ${error.message}`);
         }
-      },
+      }
     );
   }
 
   private async processDesignFrame(
     frameData: MotiffFrame,
-    componentName?: string,
+    componentName?: string
   ): Promise<ComponentDefinition> {
     const processor = new DesignProcessor();
     return await processor.processFrame(frameData, componentName);
@@ -288,16 +280,13 @@ export class MotiffMCPBridge {
 
   private async generateComponent(
     definition: ComponentDefinition,
-    outputPath?: string,
+    outputPath?: string
   ): Promise<GenerationResult> {
     const generator = new ComponentGenerator();
     return await generator.generateComponent(definition, { outputPath });
   }
 
-  private async syncDesignChanges(
-    frameId: string,
-    forceUpdate: boolean,
-  ): Promise<SyncResult> {
+  private async syncDesignChanges(frameId: string, forceUpdate: boolean): Promise<SyncResult> {
     const syncer = new DesignSyncer();
     return await syncer.syncFrame(frameId, { forceUpdate });
   }
@@ -445,9 +434,7 @@ class MotiffAPI {
       });
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to fetch design tokens: ${response.statusText}`,
-        );
+        throw new Error(`Failed to fetch design tokens: ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -473,29 +460,24 @@ class MotiffAPI {
   async exportFrameAsHTML(frameUrl: string): Promise<string> {
     try {
       const frameId = this.extractFrameId(frameUrl);
-      const response = await fetch(
-        `${this.baseUrl}/v1/frames/${frameId}/export/html`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${this.apiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            format: "html",
-            options: {
-              includeStyles: true,
-              useRelativeUnits: false,
-              optimizeForLLM: true,
-            },
-          }),
+      const response = await fetch(`${this.baseUrl}/v1/frames/${frameId}/export/html`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          format: "html",
+          options: {
+            includeStyles: true,
+            useRelativeUnits: false,
+            optimizeForLLM: true,
+          },
+        }),
+      });
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to export frame as HTML: ${response.statusText}`,
-        );
+        throw new Error(`Failed to export frame as HTML: ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -529,10 +511,7 @@ class MotiffAPI {
 }
 
 class DesignProcessor {
-  async processFrame(
-    frameData: MotiffFrame,
-    componentName?: string,
-  ): Promise<ComponentDefinition> {
+  async processFrame(frameData: MotiffFrame, componentName?: string): Promise<ComponentDefinition> {
     try {
       const name = componentName || this.generateComponentName(frameData.name);
       const htmlContent = frameData.html;
@@ -621,16 +600,7 @@ class DesignProcessor {
     }
 
     // Extract common HTML attributes
-    const attrs = [
-      "id",
-      "src",
-      "alt",
-      "href",
-      "title",
-      "placeholder",
-      "value",
-      "type",
-    ];
+    const attrs = ["id", "src", "alt", "href", "title", "placeholder", "value", "type"];
     for (const attr of attrs) {
       const value = element.getAttribute(attr);
       if (value) {
@@ -692,8 +662,7 @@ class DesignProcessor {
     });
 
     // Extract font references from CSS
-    const fontFaceRegex =
-      /@font-face\s*{[^}]*font-family:\s*['"]([^'"]+)['"][^}]*}/g;
+    const fontFaceRegex = /@font-face\s*{[^}]*font-family:\s*['"]([^'"]+)['"][^}]*}/g;
     const cssContent = this.extractStyles(doc).css;
     let fontMatch;
 
@@ -742,10 +711,7 @@ class DesignProcessor {
     return props;
   }
 
-  private findPropsInStructure(
-    structure: ComponentStructure,
-    props: ComponentProps,
-  ): void {
+  private findPropsInStructure(structure: ComponentStructure, props: ComponentProps): void {
     // Look for dynamic content that should be props
     if (structure.text && structure.text.includes("{{")) {
       const propName = structure.text.match(/\{\{(\w+)\}\}/)?.[1];
@@ -779,7 +745,7 @@ class DesignProcessor {
 class ComponentGenerator extends BaseComponentGenerator {
   async generateComponent(
     definition: ComponentDefinition,
-    options: GenerationOptions,
+    options: GenerationOptions
   ): Promise<GenerationResult> {
     try {
       // Use the base generator to create the component files

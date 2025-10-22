@@ -125,17 +125,14 @@ export function useSettings() {
       try {
         const updatedSettings = { ...settings, ...newSettings };
         setSettings(updatedSettings);
-        localStorage.setItem(
-          SETTINGS_STORAGE_KEY,
-          JSON.stringify(updatedSettings),
-        );
+        localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(updatedSettings));
         setError(null);
       } catch (err) {
         console.error("Failed to save settings:", err);
         setError("Failed to save settings.");
       }
     },
-    [settings, isLoading],
+    [settings, isLoading]
   );
 
   // Reset to defaults
@@ -143,10 +140,7 @@ export function useSettings() {
     try {
       setSettings(defaultSettings);
       if (typeof window !== "undefined") {
-        localStorage.setItem(
-          SETTINGS_STORAGE_KEY,
-          JSON.stringify(defaultSettings),
-        );
+        localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(defaultSettings));
       }
       setError(null);
     } catch (err) {
@@ -184,10 +178,7 @@ export function useSettings() {
             const content = e.target?.result as string;
             const importedSettings = JSON.parse(content);
             // Validate the imported settings structure
-            if (
-              typeof importedSettings === "object" &&
-              importedSettings !== null
-            ) {
+            if (typeof importedSettings === "object" && importedSettings !== null) {
               const mergedSettings = {
                 ...defaultSettings,
                 ...importedSettings,
@@ -201,12 +192,11 @@ export function useSettings() {
             reject(new Error("Failed to parse settings file"));
           }
         };
-        reader.onerror = () =>
-          reject(new Error("Failed to read settings file"));
+        reader.onerror = () => reject(new Error("Failed to read settings file"));
         reader.readAsText(file);
       });
     },
-    [saveSettings],
+    [saveSettings]
   );
 
   return {

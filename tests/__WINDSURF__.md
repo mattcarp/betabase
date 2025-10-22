@@ -45,6 +45,7 @@ Run tests affected by my changes
 ## 🎨 Windsurf Cascade Flow Integration
 
 ### Cascade Flow for Testing
+
 ```mermaid
 graph LR
     A[Write Code] --> B[Cascade Suggests Test]
@@ -54,6 +55,7 @@ graph LR
 ```
 
 ### Cascade Test Generation
+
 ```typescript
 // When you write this component:
 export function ChatInput({ onSend }) {
@@ -66,17 +68,19 @@ export function ChatInput({ onSend }) {
 ## 🔧 Windsurf Flow Commands
 
 ### Multi-file Test Operations
+
 ```bash
 # Windsurf Flow can coordinate:
 Flow: Create complete test suite for authentication
   → Creates auth.page.ts
-  → Creates auth.factory.ts  
+  → Creates auth.factory.ts
   → Creates auth.e2e.test.ts
   → Creates auth.unit.test.ts
   → Updates test index files
 ```
 
 ### Windsurf Terminal Integration
+
 ```bash
 # Windsurf terminal commands
 ws-test                 # Run contextual tests
@@ -89,6 +93,7 @@ ws-test:coverage       # With coverage
 ## 📊 Windsurf Cascade Suggestions
 
 ### Contextual Test Suggestions
+
 ```typescript
 // Writing a function? Cascade suggests:
 function calculateTotal(items) {
@@ -104,13 +109,16 @@ export default function ChatPage() {
 ## 🎯 Windsurf-Specific Features
 
 ### 1. Cascade Test Understanding
+
 Cascade automatically understands:
+
 - Test structure from directory names
 - Page objects from `__pages__`
 - Factories from `__fixtures__`
 - Test layers from numbering
 
 ### 2. Flow Multi-File Operations
+
 ```
 Flow command: "Refactor all chat tests to use new page object"
 → Updates all files simultaneously
@@ -119,6 +127,7 @@ Flow command: "Refactor all chat tests to use new page object"
 ```
 
 ### 3. Windsurf Superpowers
+
 - **Auto-import** page objects and factories
 - **Smart suggestions** based on code context
 - **Parallel editing** of test and implementation
@@ -128,13 +137,13 @@ Flow command: "Refactor all chat tests to use new page object"
 
 ```typescript
 // Windsurf Debug Protocol
-test('chat flow', async ({ page }) => {
+test("chat flow", async ({ page }) => {
   // Windsurf shows inline:
   // 🔍 Current state
   // 📊 Performance metrics
   // 🌐 Network calls
   // 📸 Screenshots on hover
-  await chatPage.sendMessage('Hello');
+  await chatPage.sendMessage("Hello");
 });
 ```
 
@@ -149,6 +158,7 @@ test('chat flow', async ({ page }) => {
 ## 🌊 Windsurf Flow Patterns
 
 ### Complete Test Flow
+
 ```
 Flow: Complete test coverage for feature
 1. Analyze code coverage
@@ -160,6 +170,7 @@ Flow: Complete test coverage for feature
 ```
 
 ### Refactoring Flow
+
 ```
 Flow: Modernize test suite
 1. Convert to page objects
@@ -187,6 +198,7 @@ Flow: Modernize test suite
 ## 🎯 Windsurf Cascade Prompts
 
 Effective prompts for Windsurf:
+
 - "Create comprehensive tests for this feature"
 - "Convert these tests to use page objects"
 - "Add visual regression tests"
@@ -194,6 +206,7 @@ Effective prompts for Windsurf:
 - "Update all tests to new structure"
 
 ---
+
 Windsurf Version: Latest
 Last Updated: 2024
 Priority: Cascade-Optimized

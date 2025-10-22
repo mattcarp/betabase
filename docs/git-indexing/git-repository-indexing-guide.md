@@ -12,16 +12,19 @@ This system indexes local frontend and backend Git repositories, extracts code s
 ### Content Extraction Capabilities
 
 #### Code Structure Analysis
+
 - TypeScript/JavaScript: extract imports/exports, functions, classes
 - React Components: classification via file path heuristics (components/pages/hooks)
 - API Endpoints: discover via file locations and exports
 - Module Dependencies: import map extraction
 
 #### Documentation Processing
+
 - README files prioritized when `GIT_INCLUDE_README=true`
 - Markdown parsing at a basic level (section text preserved in chunks)
 
 #### Configuration & Metadata
+
 - Package and config files included via extensions list
 - Rich metadata: repository tag, file path, language, classification, imports/exports, functions/classes, chunk index, summary
 
@@ -47,5 +50,3 @@ This system indexes local frontend and backend Git repositories, extracts code s
 
 - Re-run `scripts/index-local-git-repos.sh` after changes
 - Use `scripts/validate-git-indexing.sh` for quick checks
-
-

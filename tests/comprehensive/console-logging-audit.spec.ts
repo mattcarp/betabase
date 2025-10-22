@@ -27,7 +27,7 @@ test.describe("Console Logging Audit @comprehensive", () => {
     allConsoleMessages = [];
 
     // Capture ALL console messages (not just errors)
-    page.on('console', msg => {
+    page.on("console", (msg) => {
       allConsoleMessages.push({
         type: msg.type(),
         text: msg.text(),
@@ -46,11 +46,11 @@ test.describe("Console Logging Audit @comprehensive", () => {
     await page.waitForTimeout(3000); // Give time for all console messages
 
     const byType = {
-      log: allConsoleMessages.filter(m => m.type === 'log'),
-      warn: allConsoleMessages.filter(m => m.type === 'warning'),
-      error: allConsoleMessages.filter(m => m.type === 'error'),
-      info: allConsoleMessages.filter(m => m.type === 'info'),
-      debug: allConsoleMessages.filter(m => m.type === 'debug'),
+      log: allConsoleMessages.filter((m) => m.type === "log"),
+      warn: allConsoleMessages.filter((m) => m.type === "warning"),
+      error: allConsoleMessages.filter((m) => m.type === "error"),
+      info: allConsoleMessages.filter((m) => m.type === "info"),
+      debug: allConsoleMessages.filter((m) => m.type === "debug"),
     };
 
     console.log("📊 Console Activity Summary:");
@@ -83,13 +83,9 @@ test.describe("Console Logging Audit @comprehensive", () => {
     }
 
     // Filter out known acceptable errors
-    const unhandledErrors = byType.error.filter(msg => {
+    const unhandledErrors = byType.error.filter((msg) => {
       const text = msg.text.toLowerCase();
-      return !(
-        text.includes('404') ||
-        text.includes('405') ||
-        text.includes('method not allowed')
-      );
+      return !(text.includes("404") || text.includes("405") || text.includes("method not allowed"));
     });
 
     expect(unhandledErrors).toHaveLength(0);
@@ -102,9 +98,12 @@ test.describe("Console Logging Audit @comprehensive", () => {
     allConsoleMessages = [];
 
     // Click a suggestion
-    const suggestion = page.locator('button').filter({
-      hasText: /How|What/i
-    }).first();
+    const suggestion = page
+      .locator("button")
+      .filter({
+        hasText: /How|What/i,
+      })
+      .first();
 
     const isVisible = await suggestion.isVisible().catch(() => false);
     if (isVisible) {
@@ -114,7 +113,9 @@ test.describe("Console Logging Audit @comprehensive", () => {
     }
 
     // Type in input
-    const chatInput = page.locator('textarea[placeholder*="Ask"], input[placeholder*="Ask"]').first();
+    const chatInput = page
+      .locator('textarea[placeholder*="Ask"], input[placeholder*="Ask"]')
+      .first();
     const isInputVisible = await chatInput.isVisible().catch(() => false);
     if (isInputVisible) {
       console.log("  ⌨️  Typing in chat input...");
@@ -125,8 +126,8 @@ test.describe("Console Logging Audit @comprehensive", () => {
     console.log("\n📊 Console Activity During Interactions:");
     console.log(`  Total messages: ${allConsoleMessages.length}`);
 
-    const errors = allConsoleMessages.filter(m => m.type === 'error');
-    const warnings = allConsoleMessages.filter(m => m.type === 'warning');
+    const errors = allConsoleMessages.filter((m) => m.type === "error");
+    const warnings = allConsoleMessages.filter((m) => m.type === "warning");
 
     console.log(`  Errors: ${errors.length}`);
     console.log(`  Warnings: ${warnings.length}`);
@@ -139,13 +140,9 @@ test.describe("Console Logging Audit @comprehensive", () => {
     }
 
     // Filter acceptable errors
-    const unhandledErrors = errors.filter(msg => {
+    const unhandledErrors = errors.filter((msg) => {
       const text = msg.text.toLowerCase();
-      return !(
-        text.includes('404') ||
-        text.includes('405') ||
-        text.includes('method not allowed')
-      );
+      return !(text.includes("404") || text.includes("405") || text.includes("method not allowed"));
     });
 
     expect(unhandledErrors).toHaveLength(0);
@@ -158,7 +155,7 @@ test.describe("Console Logging Audit @comprehensive", () => {
 
     // Count messages per type
     const messagesByText = new Map<string, number>();
-    allConsoleMessages.forEach(msg => {
+    allConsoleMessages.forEach((msg) => {
       const key = msg.text.substring(0, 50); // Group similar messages
       messagesByText.set(key, (messagesByText.get(key) || 0) + 1);
     });

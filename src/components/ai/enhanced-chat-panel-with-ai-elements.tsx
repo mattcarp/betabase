@@ -5,13 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { cn } from "../../lib/utils";
 import { ChatInput } from "./chat-input";
 import { ScrollArea } from "../ui/scroll-area";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { Bot, Sparkles, Trash2, Download, Loader2, AlertCircle, User } from "lucide-react";
@@ -34,7 +28,7 @@ import {
   InlineCitationCarouselIndex,
   InlineCitationCarouselPrev,
   InlineCitationCarouselNext,
-  InlineCitationSource
+  InlineCitationSource,
 } from "../ai-elements/inline-citation";
 import { Loader } from "../ai-elements/loader";
 import { CodeBlock } from "../ai-elements/code-block";
@@ -59,7 +53,7 @@ interface ChatPanelProps {
 // Parse AOMA response to extract sources and content
 function parseAOMAResponse(content: string): {
   text: string;
-  sources: Array<{ id: string; title: string; url?: string; description?: string }>
+  sources: Array<{ id: string; title: string; url?: string; description?: string }>;
 } {
   const sources: Array<{ id: string; title: string; url?: string; description?: string }> = [];
   let text = content;
@@ -74,17 +68,17 @@ function parseAOMAResponse(content: string): {
 
   sourceMatches.forEach((match, index) => {
     const sourceName = match[1];
-    if (!sources.find(s => s.title === sourceName)) {
+    if (!sources.find((s) => s.title === sourceName)) {
       sources.push({
         id: `source-${index + 1}`,
         title: sourceName,
-        description: `Referenced from AOMA knowledge base`
+        description: `Referenced from AOMA knowledge base`,
       });
     }
   });
 
   // Remove source markers from text for cleaner display
-  text = text.replace(sourcePattern, '');
+  text = text.replace(sourcePattern, "");
 
   return { text, sources };
 }
@@ -141,7 +135,7 @@ export function EnhancedChatPanelWithAIElements({
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector(
-        "[data-radix-scroll-area-viewport]",
+        "[data-radix-scroll-area-viewport]"
       );
       if (scrollContainer) {
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
@@ -194,9 +188,7 @@ export function EnhancedChatPanelWithAIElements({
     }
   };
 
-  const isMaxMessagesReached = maxMessages
-    ? messages.length >= maxMessages
-    : false;
+  const isMaxMessagesReached = maxMessages ? messages.length >= maxMessages : false;
 
   return (
     <Card className={cn("flex flex-col h-full", className)}>
@@ -211,9 +203,7 @@ export function EnhancedChatPanelWithAIElements({
               <div>
                 <CardTitle className="text-lg">{title}</CardTitle>
                 {description && (
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {description}
-                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
                 )}
               </div>
             </div>
@@ -226,23 +216,13 @@ export function EnhancedChatPanelWithAIElements({
               )}
 
               {allowClear && messages.length > 0 && (
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-8 w-8"
-                  onClick={handleClear}
-                >
+                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleClear}>
                   <Trash2 className="h-4 w-4" />
                 </Button>
               )}
 
               {allowExport && messages.length > 0 && (
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-8 w-8"
-                  onClick={handleExport}
-                >
+                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleExport}>
                   <Download className="h-4 w-4" />
                 </Button>
               )}
@@ -265,11 +245,10 @@ export function EnhancedChatPanelWithAIElements({
                   <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2" />
                 </div>
 
-                <h3 className="text-lg font-semibold mb-2">
-                  Welcome to {title}
-                </h3>
+                <h3 className="text-lg font-semibold mb-2">Welcome to {title}</h3>
                 <p className="text-sm text-muted-foreground mb-6 max-w-md">
-                  I have access to the AOMA knowledge base and can answer questions about Sony Music systems, USM, and enterprise tools.
+                  I have access to the AOMA knowledge base and can answer questions about Sony Music
+                  systems, USM, and enterprise tools.
                 </p>
 
                 {showSuggestions && suggestions.length > 0 && (
@@ -300,11 +279,7 @@ export function EnhancedChatPanelWithAIElements({
                     : parseAOMAResponse(content);
 
                   return (
-                    <Message
-                      key={message.id || index}
-                      from={message.role}
-                      className="py-2"
-                    >
+                    <Message key={message.id || index} from={message.role} className="py-2">
                       <MessageAvatar
                         src={isUser ? "/user-avatar.png" : "/aoma-avatar.png"}
                         name={isUser ? "You" : "AOMA"}
@@ -316,9 +291,7 @@ export function EnhancedChatPanelWithAIElements({
                         ) : (
                           // AI responses - use Response component with markdown
                           <>
-                            <Response className="text-sm">
-                              {text}
-                            </Response>
+                            <Response className="text-sm">{text}</Response>
 
                             {/* Display sources if available */}
                             {sources.length > 0 && (
@@ -330,9 +303,7 @@ export function EnhancedChatPanelWithAIElements({
                                   {sources.map((source, idx) => (
                                     <InlineCitation key={source.id}>
                                       <InlineCitationCard>
-                                        <InlineCitationCardTrigger
-                                          sources={[source.title]}
-                                        />
+                                        <InlineCitationCardTrigger sources={[source.title]} />
                                         <InlineCitationCardBody>
                                           <InlineCitationCarousel>
                                             <InlineCitationCarouselContent>
@@ -367,10 +338,7 @@ export function EnhancedChatPanelWithAIElements({
                 {/* Loading state with AI Elements Loader */}
                 {isLoading && (
                   <Message from="assistant" className="py-2">
-                    <MessageAvatar
-                      src="/aoma-avatar.png"
-                      name="AOMA"
-                    />
+                    <MessageAvatar src="/aoma-avatar.png" name="AOMA" />
                     <MessageContent>
                       <Loader className="text-muted-foreground">
                         <div className="flex items-center gap-2">
@@ -405,8 +373,7 @@ export function EnhancedChatPanelWithAIElements({
               <Alert className="mt-4">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  Maximum message limit ({maxMessages}) reached. Please start a
-                  new conversation.
+                  Maximum message limit ({maxMessages}) reached. Please start a new conversation.
                 </AlertDescription>
               </Alert>
             )}
@@ -423,9 +390,7 @@ export function EnhancedChatPanelWithAIElements({
               onSubmit={handleFormSubmit}
               onStop={stop}
               isLoading={isLoading}
-              placeholder={
-                isMaxMessagesReached ? "Message limit reached" : placeholder
-              }
+              placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
               className="w-full"
               allowAttachments={false}
               allowVoice={false}
@@ -437,12 +402,7 @@ export function EnhancedChatPanelWithAIElements({
               <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
                 <Loader2 className="h-3 w-3 animate-spin" />
                 AI is querying AOMA knowledge base...
-                <Button
-                  variant="link"
-                  size="sm"
-                  onClick={stop}
-                  className="h-auto p-0 text-xs"
-                >
+                <Button variant="link" size="sm" onClick={stop} className="h-auto p-0 text-xs">
                   Stop
                 </Button>
               </div>

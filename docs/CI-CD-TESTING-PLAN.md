@@ -3,6 +3,7 @@
 ## 🎯 Objective
 
 Thoroughly test the new CI/CD pipeline before merging to main to ensure:
+
 - All test stages execute correctly
 - Deployment gating works as expected
 - Failure scenarios are handled properly
@@ -47,6 +48,7 @@ npx tsc --noEmit -p tsconfig.ci.json
 ```
 
 **What to check:**
+
 - No TypeScript errors in source code
 - CI config properly excludes test files
 - Compilation completes successfully
@@ -64,6 +66,7 @@ npm run lint
 ```
 
 **What to check:**
+
 - No critical ESLint errors
 - Warnings are acceptable
 - Config is valid
@@ -81,6 +84,7 @@ npm run build
 ```
 
 **What to check:**
+
 - Build completes without errors
 - All pages compile correctly
 - No missing dependencies
@@ -100,6 +104,7 @@ npm run test:aoma:hallucination -- --project=chromium --headed
 ```
 
 **What to check:**
+
 - Tests can be found by Playwright
 - No import/syntax errors
 - Tests attempt to run (results don't matter yet)
@@ -124,6 +129,7 @@ kill $DEV_PID
 ```
 
 **What to check:**
+
 - Dev server starts successfully
 - Smoke tests can connect to localhost:3000
 - Basic functionality works
@@ -211,6 +217,7 @@ EOF
 **Immediately after creating PR:**
 
 1. **Go to GitHub Actions tab**
+
    ```
    https://github.com/mattcarp/siam/actions
    ```
@@ -265,19 +272,20 @@ EOF
 **Check the PR page for automatic comment:**
 
 Expected comment format:
+
 ```markdown
 ## 🧪 Test Results
 
 ### ✅ All Tests Passed!
 
-| Test Suite | Status |
-|------------|--------|
-| Code Quality & Security | ✅ success |
-| Build | ✅ success |
+| Test Suite                   | Status     |
+| ---------------------------- | ---------- |
+| Code Quality & Security      | ✅ success |
+| Build                        | ✅ success |
 | AOMA Anti-Hallucination (P0) | ✅ success |
-| Visual Regression | ✅ success |
-| E2E Smoke Tests | ✅ success |
-| File Upload/Curation | ✅ success |
+| Visual Regression            | ✅ success |
+| E2E Smoke Tests              | ✅ success |
+| File Upload/Curation         | ✅ success |
 
 🚀 **Ready to merge!** All quality gates passed.
 
@@ -285,6 +293,7 @@ Expected comment format:
 ```
 
 **If comment doesn't appear:**
+
 - Check Actions tab for `pr-comment` job
 - Look for errors in job logs
 - Verify GITHUB_TOKEN permissions
@@ -296,6 +305,7 @@ Expected comment format:
 ### Why Test Failures?
 
 We need to verify that:
+
 - Tests actually fail when they should
 - Failed tests block the pipeline
 - Issues are created automatically
@@ -328,12 +338,14 @@ gh pr create \
 ```
 
 **Expected Result:**
+
 - ❌ Quality stage fails
 - ❌ Build stage doesn't run (blocked by quality)
 - ❌ PR shows failed status
 - ❌ Red X on GitHub
 
 **Cleanup:**
+
 ```bash
 # Close PR and delete branch
 gh pr close test/typescript-failure --delete-branch
@@ -364,12 +376,14 @@ gh pr create \
 ```
 
 **Expected Result:**
+
 - ✅ Quality passes
 - ❌ Build fails
 - ❌ Tests don't run (blocked by build)
 - ❌ PR shows failed status
 
 **Cleanup:**
+
 ```bash
 gh pr close test/build-failure --delete-branch
 git checkout claude/review-ci-pipeline-011CULLAfwHxiJTbCj6Ciwgi
@@ -477,6 +491,7 @@ Stage 6: Post-Deployment Validation
 **Monitor these key points:**
 
 1. **Pre-deployment gate:**
+
    ```
    ==========================================
    ✅ PRE-DEPLOYMENT QUALITY GATE PASSED
@@ -495,12 +510,14 @@ Stage 6: Post-Deployment Validation
    ```
 
 2. **Render deployment:**
+
    ```
    🚀 Waiting for Render to auto-deploy...
    ⏳ Waiting 60 seconds for deployment to stabilize...
    ```
 
 3. **Health checks:**
+
    ```
    Attempt 1 of 20...
      Health endpoint: 200
@@ -511,6 +528,7 @@ Stage 6: Post-Deployment Validation
    ```
 
 4. **Post-deployment:**
+
    ```
    🔥 PRODUCTION SMOKE TESTS
    ✅ Passed: https://iamsiam.ai (HTTP 200)
@@ -529,12 +547,14 @@ Stage 6: Post-Deployment Validation
 ### If Health Checks Fail
 
 **What happens:**
+
 1. Health check retries 20 times
 2. Creates GitHub issue with P0 priority
 3. Issue auto-assigned to @mattcarp
 4. Deployment marked as failed
 
 **What to do:**
+
 1. Check Render dashboard immediately
 2. Review Render logs for errors
 3. Check if site is accessible manually
@@ -545,12 +565,14 @@ Stage 6: Post-Deployment Validation
 ### If AOMA Tests Fail on Main
 
 **What happens:**
+
 1. AOMA test failure blocks deployment
 2. Pre-deployment gate never runs
 3. Creates CRITICAL issue
 4. Deployment does NOT proceed
 
 **What to do:**
+
 1. Review AOMA test failures in artifacts
 2. Fix knowledge base or AI configuration
 3. Do NOT merge again until fixed
@@ -563,12 +585,14 @@ Stage 6: Post-Deployment Validation
 ### Pipeline Performance
 
 **Target Metrics:**
+
 - Total PR pipeline time: 5-8 minutes
 - Total main pipeline time: 8-12 minutes
 - Health check success rate: >95%
 - Test pass rate: >95%
 
 **Monitor:**
+
 - Pipeline duration trends
 - Test flakiness
 - Deployment success rate
@@ -579,6 +603,7 @@ Stage 6: Post-Deployment Validation
 ### Test Coverage
 
 **Verify:**
+
 - All P0 tests running on every deployment
 - AOMA tests preventing hallucination
 - Visual tests catching regressions
@@ -675,18 +700,23 @@ The pipeline is considered successful when:
 ### Common Issues
 
 #### Issue: Tests timeout
+
 **Solution:** Increase timeout in workflow or optimize tests
 
 #### Issue: AOMA tests fail
+
 **Solution:** Check if production AOMA endpoint is configured
 
 #### Issue: Health checks fail
+
 **Solution:** Increase retry count or check Render logs
 
 #### Issue: PR comment not posted
+
 **Solution:** Check GITHUB_TOKEN permissions
 
 #### Issue: Artifacts not uploaded
+
 **Solution:** Check paths in workflow match actual file locations
 
 ---

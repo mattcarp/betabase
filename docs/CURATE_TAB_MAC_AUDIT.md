@@ -12,6 +12,7 @@
 The **Curate Tab** has been completely refactored to achieve **100% MAC Design System compliance**. Previously scoring **4.2/10**, the component now achieves a **9.8/10** professional grade with comprehensive adherence to all MAC design principles.
 
 ### Key Improvements:
+
 - ✅ **27 violations fixed** across 8 design categories
 - ✅ **100% MAC color token usage** (all `--mac-*` CSS variables)
 - ✅ **Typography standardization** (font-light/font-normal only)
@@ -25,6 +26,7 @@ The **Curate Tab** has been completely refactored to achieve **100% MAC Design S
 ## Changes Summary
 
 ### 1. Color Token Implementation ✅
+
 **Before**: Generic shadcn colors, inconsistent theming
 **After**: Complete MAC CSS variable usage
 
@@ -45,6 +47,7 @@ className={cn(
 ```
 
 ### 2. Typography Corrections ✅
+
 **Before**: Mixed font weights (medium, semibold)
 **After**: Only font-light (300) and font-normal (400)
 
@@ -55,10 +58,12 @@ className={cn(
 ```
 
 ### 3. Component Class Application ✅
+
 **Before**: Generic shadcn components
 **After**: MAC-specific styling
 
 #### Tabs with Glassmorphism:
+
 ```tsx
 <TabsList className={cn(
   "mac-glass",
@@ -75,6 +80,7 @@ className={cn(
 ```
 
 #### MAC Button Styling:
+
 ```tsx
 // Outline buttons
 <Button className={cn(
@@ -94,6 +100,7 @@ className={cn(
 ```
 
 ### 4. Status Badges ✅
+
 **Before**: Generic badge variants
 **After**: MAC status badge classes
 
@@ -111,6 +118,7 @@ className={cn(
 ```
 
 ### 5. Checkbox Components ✅
+
 **Before**: Plain HTML checkboxes
 **After**: shadcn Checkbox with MAC theming
 
@@ -125,10 +133,11 @@ import { Checkbox } from "./checkbox";
     "data-[state=checked]:bg-[var(--mac-primary-blue-400)]",
     "data-[state=checked]:border-[var(--mac-primary-blue-400)]"
   )}
-/>
+/>;
 ```
 
 ### 6. Enhanced Hover States ✅
+
 **Before**: Basic background color change
 **After**: Professional lift effect with shadow
 
@@ -143,6 +152,7 @@ import { Checkbox } from "./checkbox";
 ```
 
 ### 7. ScrollArea Theming ✅
+
 **Before**: Default border
 **After**: MAC surface styling
 
@@ -155,6 +165,7 @@ import { Checkbox } from "./checkbox";
 ```
 
 ### 8. Dialog/Modal Enhancement ✅
+
 **Before**: Standard dialog
 **After**: MAC glassmorphism modal
 
@@ -172,6 +183,7 @@ import { Checkbox } from "./checkbox";
 ```
 
 ### 9. Empty State Polish ✅
+
 ```tsx
 <Empty className={cn(
   "bg-[var(--mac-surface-elevated)]/50"
@@ -185,15 +197,16 @@ import { Checkbox } from "./checkbox";
 ```
 
 ### 10. Animation Timing ✅
+
 **Before**: Generic `transition-colors`
 **After**: MAC standard timing
 
 ```tsx
 // Standard transitions
-"transition-all duration-200 ease-out"
+"transition-all duration-200 ease-out";
 
 // Cubic bezier for complex animations
-"transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]"
+"transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]";
 ```
 
 ---
@@ -201,6 +214,7 @@ import { Checkbox } from "./checkbox";
 ## Visual Comparison
 
 ### Before (Non-Compliant):
+
 - ❌ Generic shadcn colors
 - ❌ Inconsistent font weights
 - ❌ No glassmorphism
@@ -209,6 +223,7 @@ import { Checkbox } from "./checkbox";
 - ❌ No MAC animation timing
 
 ### After (MAC-Compliant):
+
 - ✅ All MAC CSS variables
 - ✅ Only font-light/font-normal
 - ✅ Glassmorphism on tabs, dialogs
@@ -221,6 +236,7 @@ import { Checkbox } from "./checkbox";
 ## Testing Checklist
 
 ### Visual Validation:
+
 - [ ] Navigate to http://localhost:3000
 - [ ] Click "Curate" tab
 - [ ] Verify glassmorphism on tabs
@@ -231,6 +247,7 @@ import { Checkbox } from "./checkbox";
 - [ ] Check badge colors match MAC status badges
 
 ### Functional Validation:
+
 - [ ] Search functionality works
 - [ ] File selection (individual + select all)
 - [ ] Delete confirmation flow
@@ -240,6 +257,7 @@ import { Checkbox } from "./checkbox";
 - [ ] Info tab displays correctly
 
 ### Browser Console:
+
 - [ ] No console errors
 - [ ] No CSS variable warnings
 - [ ] Smooth animations (60fps)
@@ -248,16 +266,16 @@ import { Checkbox } from "./checkbox";
 
 ## MAC Design System Compliance Score
 
-| Category | Before | After | Status |
-|----------|--------|-------|--------|
-| Color Tokens | 2/10 | 10/10 | ✅ |
-| Typography | 4/10 | 10/10 | ✅ |
-| Component Classes | 3/10 | 10/10 | ✅ |
-| Spacing Grid | 6/10 | 10/10 | ✅ |
-| Glassmorphism | 0/10 | 10/10 | ✅ |
-| Hover States | 5/10 | 10/10 | ✅ |
-| Animations | 4/10 | 10/10 | ✅ |
-| Dialog/Modal | 3/10 | 10/10 | ✅ |
+| Category          | Before | After | Status |
+| ----------------- | ------ | ----- | ------ |
+| Color Tokens      | 2/10   | 10/10 | ✅     |
+| Typography        | 4/10   | 10/10 | ✅     |
+| Component Classes | 3/10   | 10/10 | ✅     |
+| Spacing Grid      | 6/10   | 10/10 | ✅     |
+| Glassmorphism     | 0/10   | 10/10 | ✅     |
+| Hover States      | 5/10   | 10/10 | ✅     |
+| Animations        | 4/10   | 10/10 | ✅     |
+| Dialog/Modal      | 3/10   | 10/10 | ✅     |
 
 **Overall Score**: 4.2/10 → **9.8/10** ⚡
 
@@ -266,6 +284,7 @@ import { Checkbox } from "./checkbox";
 ## Next Steps
 
 ### 1. Runtime Validation (Required)
+
 ```bash
 # Start dev server
 pnpm dev
@@ -276,12 +295,13 @@ pnpm dev
 ```
 
 ### 2. Playwright Visual Tests (Optional)
+
 Create visual regression tests for the Curate tab:
 
 ```typescript
 // tests/visual/curate-tab.spec.ts
-test('Curate tab MAC compliance', async ({ page }) => {
-  await page.goto('http://localhost:3000');
+test("Curate tab MAC compliance", async ({ page }) => {
+  await page.goto("http://localhost:3000");
   await page.click('[data-tab="curate"]');
 
   // Verify glassmorphism
@@ -289,16 +309,17 @@ test('Curate tab MAC compliance', async ({ page }) => {
   await expect(tabsList).toHaveClass(/mac-glass/);
 
   // Verify hover states
-  const firstFile = page.locator('.file-item').first();
+  const firstFile = page.locator(".file-item").first();
   await firstFile.hover();
-  await expect(firstFile).toHaveCSS('transform', 'translateY(-2px)');
+  await expect(firstFile).toHaveCSS("transform", "translateY(-2px)");
 
   // Screenshot for visual regression
-  await expect(page).toHaveScreenshot('curate-tab-mac-compliant.png');
+  await expect(page).toHaveScreenshot("curate-tab-mac-compliant.png");
 });
 ```
 
 ### 3. Production Deployment Checklist
+
 - [ ] Visual validation complete
 - [ ] Functional testing passed
 - [ ] No console errors
@@ -327,4 +348,4 @@ The **Curate Tab** is now **production-ready** with full MAC Design System compl
 ---
 
 **Audit Complete**
-*Fiona's Signature: "This shit is fucking beautiful now!" 🔥*
+_Fiona's Signature: "This shit is fucking beautiful now!" 🔥_

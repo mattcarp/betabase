@@ -114,7 +114,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
           const processStream = async () => {
             while (true) {
               const { done, value } = await reader.read();
-              
+
               if (done) {
                 console.log("✅ Test stream completed");
                 setIsRunning(false);
@@ -122,10 +122,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               }
 
               const chunk = decoder.decode(value);
-              const lines = chunk.split('\n').filter(line => line.trim());
+              const lines = chunk.split("\n").filter((line) => line.trim());
 
               for (const line of lines) {
-                if (line.startsWith('data: ')) {
+                if (line.startsWith("data: ")) {
                   try {
                     const event = JSON.parse(line.slice(6));
                     handleStreamEvent(event);
@@ -137,13 +137,12 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             }
           };
 
-          processStream().catch(error => {
+          processStream().catch((error) => {
             console.error("Stream processing error:", error);
             setIsRunning(false);
             alert("Test execution stream failed. Please try again.");
           });
         }
-
       } else {
         // Fallback to polling method
         const response = await fetch("/api/test/execute", {
@@ -171,12 +170,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
         // Poll for status updates
         const pollInterval = setInterval(async () => {
-          const statusResponse = await fetch(
-            `/api/test/execute?executionId=${data.executionId}`,
-          );
+          const statusResponse = await fetch(`/api/test/execute?executionId=${data.executionId}`);
           if (statusResponse.ok) {
             const status = await statusResponse.json();
-            
+
             // Update stats from polling
             setTestStats({
               total: status.results.total || 0,
@@ -188,10 +185,14 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             });
 
             if (status.recentOutput) {
-              setRecentLogs(prev => [...prev, ...status.recentOutput].slice(-10));
+              setRecentLogs((prev) => [...prev, ...status.recentOutput].slice(-10));
             }
 
-            if (status.status === "completed" || status.status === "failed" || status.status === "error") {
+            if (
+              status.status === "completed" ||
+              status.status === "failed" ||
+              status.status === "error"
+            ) {
               clearInterval(pollInterval);
               setIsRunning(false);
             }
@@ -204,7 +205,6 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
           setIsRunning(false);
         }, 300000); // 5 minutes timeout
       }
-
     } catch (error) {
       console.error("Error running tests:", error);
       setIsRunning(false);
@@ -217,43 +217,51 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
     console.log("📡 Stream event:", event);
 
     switch (event.type) {
-      case 'begin':
-        setTestStats(prev => ({
+      case "begin":
+        setTestStats((prev) => ({
           ...prev,
           total: event.totalTests || 0,
           running: event.totalTests || 0,
         }));
-        setRecentLogs(prev => [...prev, `🏁 Test execution started with ${event.totalTests} tests`].slice(-10));
+        setRecentLogs((prev) =>
+          [...prev, `🏁 Test execution started with ${event.totalTests} tests`].slice(-10)
+        );
         break;
 
-      case 'testEnd':
+      case "testEnd":
         if (event.stats) {
           setTestStats(event.stats);
         }
-        const status = event.test?.status || 'unknown';
-        const emoji = status === 'passed' ? '✅' : status === 'failed' ? '❌' : '⚠️';
-        setRecentLogs(prev => [...prev, `${emoji} ${event.test?.title || 'Test'} - ${status}`].slice(-10));
+        const status = event.test?.status || "unknown";
+        const emoji = status === "passed" ? "✅" : status === "failed" ? "❌" : "⚠️";
+        setRecentLogs((prev) =>
+          [...prev, `${emoji} ${event.test?.title || "Test"} - ${status}`].slice(-10)
+        );
         break;
 
-      case 'end':
+      case "end":
         setTestStats(event.stats || {});
-        setRecentLogs(prev => [...prev, `🏁 Test execution completed - Status: ${event.status}`].slice(-10));
+        setRecentLogs((prev) =>
+          [...prev, `🏁 Test execution completed - Status: ${event.status}`].slice(-10)
+        );
         setIsRunning(false);
         break;
 
-      case 'error':
-      case 'process_error':
-        setRecentLogs(prev => [...prev, `❌ Error: ${event.message || event.error}`].slice(-10));
+      case "error":
+      case "process_error":
+        setRecentLogs((prev) => [...prev, `❌ Error: ${event.message || event.error}`].slice(-10));
         break;
 
-      case 'complete':
-        const completionStatus = event.status === 'success' ? '✅ Success' : '❌ Failed';
-        setRecentLogs(prev => [...prev, `🎯 Execution completed: ${completionStatus}`].slice(-10));
+      case "complete":
+        const completionStatus = event.status === "success" ? "✅ Success" : "❌ Failed";
+        setRecentLogs((prev) =>
+          [...prev, `🎯 Execution completed: ${completionStatus}`].slice(-10)
+        );
         setIsRunning(false);
         break;
 
-      case 'log':
-        setRecentLogs(prev => [...prev, `📝 ${event.message}`].slice(-10));
+      case "log":
+        setRecentLogs((prev) => [...prev, `📝 ${event.message}`].slice(-10));
         break;
 
       default:
@@ -335,12 +343,8 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
           <Card className="border-border">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">
-                  Total
-                </span>
-                <span className="text-lg font-semibold text-foreground">
-                  {testStats.total}
-                </span>
+                <span className="text-sm font-medium text-muted-foreground">Total</span>
+                <span className="text-lg font-semibold text-foreground">{testStats.total}</span>
               </div>
             </CardContent>
           </Card>
@@ -350,13 +354,9 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-emerald-600" />
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Passed
-                  </span>
+                  <span className="text-sm font-medium text-muted-foreground">Passed</span>
                 </div>
-                <span className="text-lg font-semibold text-emerald-700">
-                  {testStats.passed}
-                </span>
+                <span className="text-lg font-semibold text-emerald-700">{testStats.passed}</span>
               </div>
             </CardContent>
           </Card>
@@ -366,13 +366,9 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <XCircle className="h-4 w-4 text-rose-600" />
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Failed
-                  </span>
+                  <span className="text-sm font-medium text-muted-foreground">Failed</span>
                 </div>
-                <span className="text-lg font-semibold text-rose-700">
-                  {testStats.failed}
-                </span>
+                <span className="text-lg font-semibold text-rose-700">{testStats.failed}</span>
               </div>
             </CardContent>
           </Card>
@@ -382,13 +378,9 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <AlertCircle className="h-4 w-4 text-amber-600" />
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Skipped
-                  </span>
+                  <span className="text-sm font-medium text-muted-foreground">Skipped</span>
                 </div>
-                <span className="text-lg font-semibold text-amber-700">
-                  {testStats.skipped}
-                </span>
+                <span className="text-lg font-semibold text-amber-700">{testStats.skipped}</span>
               </div>
             </CardContent>
           </Card>
@@ -398,9 +390,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-slate-600" />
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Duration
-                  </span>
+                  <span className="text-sm font-medium text-muted-foreground">Duration</span>
                 </div>
                 <span className="text-lg font-semibold text-slate-700">
                   {formatDuration(testStats.duration)}
@@ -414,13 +404,9 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Zap className="h-4 w-4 text-blue-600" />
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Success
-                  </span>
+                  <span className="text-sm font-medium text-muted-foreground">Success</span>
                 </div>
-                <span className="text-lg font-semibold text-blue-700">
-                  {getSuccessRate()}%
-                </span>
+                <span className="text-lg font-semibold text-blue-700">{getSuccessRate()}%</span>
               </div>
             </CardContent>
           </Card>
@@ -432,8 +418,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             <Progress
               value={
                 testStats.total > 0
-                  ? ((testStats.passed + testStats.failed + testStats.skipped) /
-                      testStats.total) *
+                  ? ((testStats.passed + testStats.failed + testStats.skipped) / testStats.total) *
                     100
                   : 0
               }
@@ -441,7 +426,8 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             />
             <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
               <span>
-                {testStats.passed + testStats.failed + testStats.skipped} of {testStats.total} tests completed
+                {testStats.passed + testStats.failed + testStats.skipped} of {testStats.total} tests
+                completed
               </span>
               <span>Execution ID: {currentExecutionId}</span>
             </div>
@@ -459,7 +445,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                 onClick={() => setUseRealTimeStreaming(!useRealTimeStreaming)}
                 className="text-xs"
               >
-                {useRealTimeStreaming ? '📡 Streaming' : '🔄 Polling'}
+                {useRealTimeStreaming ? "📡 Streaming" : "🔄 Polling"}
               </Button>
             </div>
             <div className="bg-muted/50 rounded-lg p-3 max-h-24 overflow-y-auto">
@@ -471,7 +457,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                 ))
               ) : (
                 <div className="text-xs text-muted-foreground italic">
-                  {isRunning ? 'Waiting for test output...' : 'No recent logs'}
+                  {isRunning ? "Waiting for test output..." : "No recent logs"}
                 </div>
               )}
             </div>
@@ -480,11 +466,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
       </div>
 
       {/* Main Content Area */}
-      <Tabs
-        value={activeView}
-        onValueChange={setActiveView}
-        className="flex-1 flex flex-col"
-      >
+      <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col">
         <TabsList className="grid grid-cols-8 w-full rounded-none border-b bg-muted/30">
           <TabsTrigger value="execution" className="gap-2">
             <Activity className="h-4 w-4" />

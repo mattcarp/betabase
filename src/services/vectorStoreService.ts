@@ -24,10 +24,7 @@ export class VectorStoreService {
   private baseUrl = "https://api.openai.com/v1";
   private vectorStoreId: string;
 
-  constructor(
-    apiKey: string,
-    vectorStoreId: string = "vs_wJF8HgBFrYtdNaXUbUC2nfM",
-  ) {
+  constructor(apiKey: string, vectorStoreId: string = "vs_wJF8HgBFrYtdNaXUbUC2nfM") {
     this.apiKey = apiKey;
     this.vectorStoreId = vectorStoreId;
   }
@@ -74,7 +71,7 @@ export class VectorStoreService {
           body: JSON.stringify({
             file_id: fileId,
           }),
-        },
+        }
       );
 
       if (!addToVectorStoreResponse.ok) {
@@ -98,8 +95,7 @@ export class VectorStoreService {
       console.error("Vector store upload error:", error);
       return {
         success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
+        error: error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
   }
@@ -115,7 +111,7 @@ export class VectorStoreService {
           headers: {
             Authorization: `Bearer ${this.apiKey}`,
           },
-        },
+        }
       );
 
       if (!response.ok) {
@@ -135,14 +131,11 @@ export class VectorStoreService {
    */
   async listFiles(): Promise<VectorStoreFile[]> {
     try {
-      const response = await fetch(
-        `${this.baseUrl}/vector_stores/${this.vectorStoreId}/files`,
-        {
-          headers: {
-            Authorization: `Bearer ${this.apiKey}`,
-          },
+      const response = await fetch(`${this.baseUrl}/vector_stores/${this.vectorStoreId}/files`, {
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
         },
-      );
+      });
 
       if (!response.ok) {
         console.error("Failed to list files:", response.statusText);
@@ -169,7 +162,7 @@ export class VectorStoreService {
           headers: {
             Authorization: `Bearer ${this.apiKey}`,
           },
-        },
+        }
       );
 
       return response.ok;
@@ -184,14 +177,11 @@ export class VectorStoreService {
    */
   async getVectorStoreInfo() {
     try {
-      const response = await fetch(
-        `${this.baseUrl}/vector_stores/${this.vectorStoreId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${this.apiKey}`,
-          },
+      const response = await fetch(`${this.baseUrl}/vector_stores/${this.vectorStoreId}`, {
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
         },
-      );
+      });
 
       if (!response.ok) {
         console.error("Failed to get vector store info:", response.statusText);
@@ -212,9 +202,7 @@ let vectorStoreService: VectorStoreService | null = null;
 export const getVectorStoreService = (apiKey?: string): VectorStoreService => {
   if (!vectorStoreService) {
     if (!apiKey) {
-      throw new Error(
-        "OpenAI API key required to initialize VectorStoreService",
-      );
+      throw new Error("OpenAI API key required to initialize VectorStoreService");
     }
     // Get the vector store ID from config
     const { getVectorStoreId } = require("../config/apiKeys");

@@ -138,6 +138,7 @@ validate-deployment:
 ```
 
 **Improvements**:
+
 - Better retry logic
 - Automatic issue creation
 - More verbose logging
@@ -188,23 +189,24 @@ workflow_dispatch
 ```
 
 **Features**:
+
 - Detailed rollback instructions
 - Creates tracking issue
 - Three rollback methods documented
 
 ## Test Coverage Matrix
 
-| Test Suite | PR | Main Branch | Manual | Status |
-|------------|------|-------------|--------|--------|
-| Code Quality | ✅ | ✅ | ✅ | Required |
-| Build | ✅ | ✅ | ✅ | Required |
-| AOMA Validation | ✅ | ✅ | ⏭️ | P0 CRITICAL |
-| Visual Regression | ✅ | ✅ | ⏭️ | Required |
-| E2E Smoke | ✅ | ✅ | ⏭️ | Required |
-| File Upload/Curation | ✅ | ✅ | ⏭️ | Required |
-| Pre-Deployment Gate | ❌ | ✅ | ⏭️ | Main only |
-| Deployment Validation | ❌ | ✅ | ⏭️ | Main only |
-| Post-Deployment | ❌ | ✅ | ⏭️ | Main only |
+| Test Suite            | PR  | Main Branch | Manual | Status      |
+| --------------------- | --- | ----------- | ------ | ----------- |
+| Code Quality          | ✅  | ✅          | ✅     | Required    |
+| Build                 | ✅  | ✅          | ✅     | Required    |
+| AOMA Validation       | ✅  | ✅          | ⏭️     | P0 CRITICAL |
+| Visual Regression     | ✅  | ✅          | ⏭️     | Required    |
+| E2E Smoke             | ✅  | ✅          | ⏭️     | Required    |
+| File Upload/Curation  | ✅  | ✅          | ⏭️     | Required    |
+| Pre-Deployment Gate   | ❌  | ✅          | ⏭️     | Main only   |
+| Deployment Validation | ❌  | ✅          | ⏭️     | Main only   |
+| Post-Deployment       | ❌  | ✅          | ⏭️     | Main only   |
 
 ## Deployment Flow
 
@@ -240,11 +242,11 @@ Test Failure → Job Fails → Create Issue → Assign to @mattcarp
 
 ## Performance Budgets
 
-| Metric | Warning | Failure |
-|--------|---------|---------|
-| Page Load Time | >3s | >5s |
-| Health Check Response | - | 20 retries |
-| Build Time | - | (none set) |
+| Metric                | Warning | Failure    |
+| --------------------- | ------- | ---------- |
+| Page Load Time        | >3s     | >5s        |
+| Health Check Response | -       | 20 retries |
+| Build Time            | -       | (none set) |
 
 ## Issue Creation
 
@@ -351,18 +353,21 @@ Body:
 ### Risk: Tests Take Too Long
 
 **Mitigation**: Tests run in parallel where possible
+
 - AOMA, Visual, E2E, Curate all run simultaneously
 - Total runtime: ~5-8 minutes for all tests
 
 ### Risk: False Positives Block Deployment
 
 **Mitigation**: Emergency skip option available
+
 - `workflow_dispatch` with `skip_tests: true`
 - Use only for critical hotfixes
 
 ### Risk: AOMA Tests May Not Exist Yet
 
 **Mitigation**: Tests are optional via conditional
+
 - `if: github.event.inputs.skip_tests != 'true'`
 - Will skip gracefully if tests don't exist
 

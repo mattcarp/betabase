@@ -6,13 +6,13 @@ This file ensures EVERY development environment understands the SIAM testing arc
 
 ### 🚀 Quick Reference Matrix
 
-| IDE | Config File | Priority Features |
-|-----|------------|-------------------|
-| **Claude Code** | `__CLAUDE_CODE__.md` | MCP integration, Natural language |
-| **Cursor** | `__CURSOR__.md` | Copilot++, Tab completion |
-| **Windsurf** | `__WINDSURF__.md` | Cascade AI, Flow operations |
-| **VS Code** | `.vscode/settings.json` | Extensions, Debug |
-| **WebStorm** | `.idea/` | Built-in runner |
+| IDE             | Config File             | Priority Features                 |
+| --------------- | ----------------------- | --------------------------------- |
+| **Claude Code** | `__CLAUDE_CODE__.md`    | MCP integration, Natural language |
+| **Cursor**      | `__CURSOR__.md`         | Copilot++, Tab completion         |
+| **Windsurf**    | `__WINDSURF__.md`       | Cascade AI, Flow operations       |
+| **VS Code**     | `.vscode/settings.json` | Extensions, Debug                 |
+| **WebStorm**    | `.idea/`                | Built-in runner                   |
 
 ## 📁 Universal File Structure
 
@@ -72,17 +72,18 @@ npm run test:related      # Test related files
 
 ## 📊 IDE Feature Comparison
 
-| Feature | Claude Code | Cursor | Windsurf | VS Code |
-|---------|------------|--------|----------|---------|
-| Natural Language | ✅ Best | ✅ Good | ✅ Good | ❌ |
-| Multi-file Ops | ✅ MCP | ⚠️ Limited | ✅ Flow | ❌ |
-| Auto-complete | ✅ | ✅ Best | ✅ | ✅ |
-| Debug Integration | ✅ | ✅ | ✅ | ✅ Best |
-| AI Suggestions | ✅ | ✅ Copilot | ✅ Cascade | ⚠️ |
+| Feature           | Claude Code | Cursor     | Windsurf   | VS Code |
+| ----------------- | ----------- | ---------- | ---------- | ------- |
+| Natural Language  | ✅ Best     | ✅ Good    | ✅ Good    | ❌      |
+| Multi-file Ops    | ✅ MCP      | ⚠️ Limited | ✅ Flow    | ❌      |
+| Auto-complete     | ✅          | ✅ Best    | ✅         | ✅      |
+| Debug Integration | ✅          | ✅         | ✅         | ✅ Best |
+| AI Suggestions    | ✅          | ✅ Copilot | ✅ Cascade | ⚠️      |
 
 ## 🔧 Universal Configuration
 
 ### Package.json Scripts (Required for ALL IDEs)
+
 ```json
 {
   "scripts": {
@@ -102,6 +103,7 @@ npm run test:related      # Test related files
 ```
 
 ### TypeScript Config (tsconfig.json)
+
 ```json
 {
   "compilerOptions": {
@@ -118,6 +120,7 @@ npm run test:related      # Test related files
 ## 🎨 Universal Testing Patterns
 
 ### 1. Test File Template (ALL IDEs must use)
+
 ```typescript
 /**
  * @feature [FeatureName]
@@ -135,6 +138,7 @@ test.describe('[FEATURE] Name', () => {
 ```
 
 ### 2. Page Object Template (ALL IDEs must follow)
+
 ```typescript
 import { Page } from '@playwright/test';
 import { BasePage } from './BasePage';
@@ -143,7 +147,7 @@ export class [Feature]Page extends BasePage {
   private selectors = {
     // Group selectors by feature
   };
-  
+
   // Public methods only
 }
 ```
@@ -164,21 +168,25 @@ export class [Feature]Page extends BasePage {
 ## 🔍 Troubleshooting by IDE
 
 ### Claude Code Issues
+
 - Check MCP server is running
 - Verify `__CLAUDE_CODE__.md` is accessible
 - Ensure test commands are in PATH
 
 ### Cursor Issues
+
 - Update to latest version
 - Check Copilot++ is enabled
 - Verify workspace settings
 
 ### Windsurf Issues
+
 - Ensure Cascade is activated
 - Check Flow permissions
 - Verify multi-file operations
 
 ### VS Code Issues
+
 - Install Playwright extension
 - Check Jest extension
 - Verify debug configurations
@@ -186,6 +194,7 @@ export class [Feature]Page extends BasePage {
 ## 📈 Testing Metrics Dashboard
 
 All IDEs should report to:
+
 ```
 test-results/
 ├── coverage/           # Coverage reports
@@ -208,16 +217,17 @@ test-results/
 ```javascript
 // THIS IS LAW
 const RULES = {
-  structure: 'MUST follow numbered directories',
-  pageObjects: 'MUST use for ALL E2E tests',
-  factories: 'MUST use for ALL test data',
-  naming: 'MUST be [feature].[layer].test.ts',
-  timeouts: 'MUST use config values',
-  tags: 'MUST include priority and type'
+  structure: "MUST follow numbered directories",
+  pageObjects: "MUST use for ALL E2E tests",
+  factories: "MUST use for ALL test data",
+  naming: "MUST be [feature].[layer].test.ts",
+  timeouts: "MUST use config values",
+  tags: "MUST include priority and type",
 };
 ```
 
 ---
+
 Version: 1.0.0
 Last Updated: 2024
 Maintained by: Matthew Adam Carpenter

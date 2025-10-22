@@ -216,7 +216,7 @@ export class TopicExtractionService extends EventEmitter {
    */
   public async processDocument(
     document: Document,
-    options: ProcessingOptions = {},
+    options: ProcessingOptions = {}
   ): Promise<ExtractedTopic[]> {
     const {
       minTermLength = 3,
@@ -235,12 +235,7 @@ export class TopicExtractionService extends EventEmitter {
 
     // Tokenize and clean content
     const tokens = this.tokenize(document.content);
-    const terms = this.extractTerms(
-      tokens,
-      minTermLength,
-      includeNgrams,
-      ngramSize,
-    );
+    const terms = this.extractTerms(tokens, minTermLength, includeNgrams, ngramSize);
 
     // Calculate term frequencies for this document
     const termFrequencies = this.calculateTermFrequency(terms);
@@ -253,12 +248,7 @@ export class TopicExtractionService extends EventEmitter {
     const tfidfResults = this.calculateTFIDF(document.id);
 
     // Convert to ExtractedTopic format
-    const topics = this.convertToTopics(
-      tfidfResults,
-      document,
-      minScore,
-      maxTerms,
-    );
+    const topics = this.convertToTopics(tfidfResults, document, minScore, maxTerms);
 
     // Cache the results
     this.topicCache.set(document.id, topics);
@@ -274,7 +264,7 @@ export class TopicExtractionService extends EventEmitter {
    */
   public async processBatch(
     documents: Document[],
-    options: ProcessingOptions = {},
+    options: ProcessingOptions = {}
   ): Promise<Map<string, ExtractedTopic[]>> {
     const results = new Map<string, ExtractedTopic[]>();
 
@@ -290,7 +280,7 @@ export class TopicExtractionService extends EventEmitter {
         tfidfResults,
         doc,
         options.minScore || 0.1,
-        options.maxTerms || 20,
+        options.maxTerms || 20
       );
       results.set(doc.id, topics);
       this.topicCache.set(doc.id, topics);
@@ -321,7 +311,7 @@ export class TopicExtractionService extends EventEmitter {
     tokens: string[],
     minLength: number,
     includeNgrams: boolean,
-    ngramSize: number,
+    ngramSize: number
   ): string[] {
     const terms: string[] = [];
 
@@ -372,7 +362,7 @@ export class TopicExtractionService extends EventEmitter {
    */
   private updateTermDocumentFrequency(
     documentId: string,
-    termFrequencies: Map<string, number>,
+    termFrequencies: Map<string, number>
   ): void {
     for (const term of termFrequencies.keys()) {
       if (!this.termDocumentFrequency.has(term)) {
@@ -425,7 +415,7 @@ export class TopicExtractionService extends EventEmitter {
     tfidfResults: TFIDFResult[],
     document: Document,
     minScore: number,
-    maxTerms: number,
+    maxTerms: number
   ): ExtractedTopic[] {
     const topics: ExtractedTopic[] = [];
     const termFreqs = this.documentTermFrequency.get(document.id);
@@ -435,9 +425,7 @@ export class TopicExtractionService extends EventEmitter {
 
       if (result.tfidf < minScore) break;
 
-      const documentIds = Array.from(
-        this.termDocumentFrequency.get(result.term) || new Set(),
-      );
+      const documentIds = Array.from(this.termDocumentFrequency.get(result.term) || new Set());
 
       topics.push({
         id: `topic_${document.id}_${i}`,
@@ -514,7 +502,7 @@ export class TopicExtractionService extends EventEmitter {
   private findRelatedTerms(
     term: string,
     allTerms: TFIDFResult[],
-    maxRelated: number = 5,
+    maxRelated: number = 5
   ): string[] {
     const related: string[] = [];
 
@@ -524,11 +512,8 @@ export class TopicExtractionService extends EventEmitter {
     for (const result of allTerms) {
       if (result.term === term) continue;
 
-      const otherDocs =
-        this.termDocumentFrequency.get(result.term) || new Set();
-      const intersection = new Set(
-        [...termDocs].filter((x) => otherDocs.has(x)),
-      );
+      const otherDocs = this.termDocumentFrequency.get(result.term) || new Set();
+      const intersection = new Set([...termDocs].filter((x) => otherDocs.has(x)));
 
       // Calculate Jaccard similarity
       const union = new Set([...termDocs, ...otherDocs]);
@@ -591,14 +576,12 @@ export class TopicExtractionService extends EventEmitter {
         // Check if topic belongs to this cluster
         const similarity = this.calculateTermSimilarity(
           topic.term,
-          cluster.topics.map((t) => t.term),
+          cluster.topics.map((t) => t.term)
         );
 
         if (similarity > 0.5) {
           cluster.topics.push(topic);
-          cluster.documentCount = new Set(
-            cluster.topics.flatMap((t) => t.documentIds),
-          ).size;
+          cluster.documentCount = new Set(cluster.topics.flatMap((t) => t.documentIds)).size;
           foundCluster = true;
           break;
         }
@@ -767,10 +750,7 @@ export class TopicExtractionService extends EventEmitter {
   /**
    * Find documents related to a topic
    */
-  public findRelatedDocuments(
-    topicTerm: string,
-    limit: number = 10,
-  ): Document[] {
+  public findRelatedDocuments(topicTerm: string, limit: number = 10): Document[] {
     const termLower = topicTerm.toLowerCase();
     const relatedDocs: Array<{ doc: Document; score: number }> = [];
 
@@ -781,9 +761,7 @@ export class TopicExtractionService extends EventEmitter {
       for (const topic of topics) {
         if (topic.term.toLowerCase().includes(termLower)) {
           score += topic.score;
-        } else if (
-          topic.relatedTerms.some((t) => t.toLowerCase().includes(termLower))
-        ) {
+        } else if (topic.relatedTerms.some((t) => t.toLowerCase().includes(termLower))) {
           score += topic.score * 0.5; // Lower weight for related terms
         }
       }
@@ -819,7 +797,7 @@ export class TopicExtractionService extends EventEmitter {
         timestamp: new Date().toISOString(),
       },
       null,
-      2,
+      2
     );
   }
 

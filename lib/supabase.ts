@@ -1,4 +1,4 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 // Lazy initialization to avoid build-time errors
 let supabaseClient: SupabaseClient | null = null;
@@ -18,7 +18,7 @@ export const supabase = (() => {
 
 // Service client for server-side operations (use carefully!)
 export const supabaseAdmin = (() => {
-  if (typeof window === 'undefined' && !supabaseAdminClient) {
+  if (typeof window === "undefined" && !supabaseAdminClient) {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (url && key) {
@@ -125,25 +125,28 @@ export async function upsertCrawlerDocument(
   metadata: Record<string, any> = {}
 ) {
   const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error('Supabase client not initialized');
+  if (!client) throw new Error("Supabase client not initialized");
 
-  const crypto = await import('crypto');
-  const contentHash = crypto.createHash('md5').update(content.trim()).digest('hex');
+  const crypto = await import("crypto");
+  const contentHash = crypto.createHash("md5").update(content.trim()).digest("hex");
 
   const { data, error } = await client
-    .from('crawler_documents')
-    .upsert({
-      url,
-      title,
-      content,
-      embedding,
-      content_hash: contentHash,
-      app_name: appName,
-      metadata,
-      updated_at: new Date().toISOString()
-    }, {
-      onConflict: 'url,app_name'
-    })
+    .from("crawler_documents")
+    .upsert(
+      {
+        url,
+        title,
+        content,
+        embedding,
+        content_hash: contentHash,
+        app_name: appName,
+        metadata,
+        updated_at: new Date().toISOString(),
+      },
+      {
+        onConflict: "url,app_name",
+      }
+    )
     .select()
     .single();
 
@@ -160,25 +163,28 @@ export async function upsertWikiDocument(
   metadata: Record<string, any> = {}
 ) {
   const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error('Supabase client not initialized');
+  if (!client) throw new Error("Supabase client not initialized");
 
-  const crypto = await import('crypto');
-  const contentHash = crypto.createHash('md5').update(markdownContent.trim()).digest('hex');
+  const crypto = await import("crypto");
+  const contentHash = crypto.createHash("md5").update(markdownContent.trim()).digest("hex");
 
   const { data, error } = await client
-    .from('wiki_documents')
-    .upsert({
-      url,
-      app_name: appName,
-      title,
-      markdown_content: markdownContent,
-      embedding,
-      content_hash: contentHash,
-      metadata,
-      crawled_at: new Date().toISOString()
-    }, {
-      onConflict: 'url,app_name'
-    })
+    .from("wiki_documents")
+    .upsert(
+      {
+        url,
+        app_name: appName,
+        title,
+        markdown_content: markdownContent,
+        embedding,
+        content_hash: contentHash,
+        metadata,
+        crawled_at: new Date().toISOString(),
+      },
+      {
+        onConflict: "url,app_name",
+      }
+    )
     .select()
     .single();
 
@@ -194,20 +200,23 @@ export async function upsertJiraTicket(
   metadata: Record<string, any> = {}
 ) {
   const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error('Supabase client not initialized');
+  if (!client) throw new Error("Supabase client not initialized");
 
   const { data, error } = await client
-    .from('jira_tickets')
-    .upsert({
-      external_id: externalId,
-      title,
-      description,
-      embedding,
-      metadata,
-      updated_at: new Date().toISOString()
-    }, {
-      onConflict: 'external_id'
-    })
+    .from("jira_tickets")
+    .upsert(
+      {
+        external_id: externalId,
+        title,
+        description,
+        embedding,
+        metadata,
+        updated_at: new Date().toISOString(),
+      },
+      {
+        onConflict: "external_id",
+      }
+    )
     .select()
     .single();
 
@@ -222,19 +231,22 @@ export async function upsertJiraTicketEmbedding(
   metadata: Record<string, any> = {}
 ) {
   const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error('Supabase client not initialized');
+  if (!client) throw new Error("Supabase client not initialized");
 
   const { data, error } = await client
-    .from('jira_ticket_embeddings')
-    .upsert({
-      ticket_key: ticketKey,
-      summary,
-      embedding,
-      metadata,
-      updated_at: new Date().toISOString()
-    }, {
-      onConflict: 'ticket_key'
-    })
+    .from("jira_ticket_embeddings")
+    .upsert(
+      {
+        ticket_key: ticketKey,
+        summary,
+        embedding,
+        metadata,
+        updated_at: new Date().toISOString(),
+      },
+      {
+        onConflict: "ticket_key",
+      }
+    )
     .select()
     .single();
 
@@ -245,63 +257,62 @@ export async function upsertJiraTicketEmbedding(
 // Sony Music specific helpers using ACTUAL tables
 export async function validateSonyMusicContent() {
   const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error('Supabase client not initialized');
+  if (!client) throw new Error("Supabase client not initialized");
 
   const counts: Record<string, number> = {};
 
   // Count jira tickets
   const { count: jiraCount, error: jiraError } = await client
-    .from('jira_tickets')
-    .select('*', { count: 'exact', head: true });
+    .from("jira_tickets")
+    .select("*", { count: "exact", head: true });
   if (jiraError) throw jiraError;
-  counts['jira'] = jiraCount ?? 0;
+  counts["jira"] = jiraCount ?? 0;
 
   // Count wiki documents (confluence)
   const { count: wikiCount, error: wikiError } = await client
-    .from('wiki_documents')
-    .select('*', { count: 'exact', head: true })
-    .eq('app_name', 'confluence');
+    .from("wiki_documents")
+    .select("*", { count: "exact", head: true })
+    .eq("app_name", "confluence");
   if (wikiError) throw wikiError;
-  counts['confluence'] = wikiCount ?? 0;
+  counts["confluence"] = wikiCount ?? 0;
 
   // Count firecrawl analysis
   const { count: firecrawlCount, error: firecrawlError } = await client
-    .from('firecrawl_analysis')
-    .select('*', { count: 'exact', head: true });
+    .from("firecrawl_analysis")
+    .select("*", { count: "exact", head: true });
   if (firecrawlError) throw firecrawlError;
-  counts['firecrawl'] = firecrawlCount ?? 0;
+  counts["firecrawl"] = firecrawlCount ?? 0;
 
   return counts;
 }
 
 // Firecrawl-specific operations (matches actual schema)
-export async function storeFirecrawlData(
-  url: string,
-  crawlData: any,
-  embedding?: number[]
-) {
+export async function storeFirecrawlData(url: string, crawlData: any, embedding?: number[]) {
   if (!supabase) {
-    console.warn('Supabase client not initialized - skipping store');
+    console.warn("Supabase client not initialized - skipping store");
     return null;
   }
 
   const { data, error } = await supabase
-    .from('firecrawl_analysis')
-    .upsert({
-      url,
-      app_name: crawlData.appName || 'aoma',
-      analysis_type: crawlData.analysisType || 'ui_analysis',
-      testable_features: crawlData.testableFeatures || {},
-      user_flows: crawlData.userFlows || {},
-      api_endpoints: crawlData.apiEndpoints || [],
-      selectors: crawlData.selectors || {},
-      accessibility_issues: crawlData.accessibilityIssues || {},
-      performance_metrics: crawlData.performanceMetrics || {},
-      content_embedding: embedding,
-      analyzed_at: new Date().toISOString()
-    }, {
-      onConflict: 'url'
-    })
+    .from("firecrawl_analysis")
+    .upsert(
+      {
+        url,
+        app_name: crawlData.appName || "aoma",
+        analysis_type: crawlData.analysisType || "ui_analysis",
+        testable_features: crawlData.testableFeatures || {},
+        user_flows: crawlData.userFlows || {},
+        api_endpoints: crawlData.apiEndpoints || [],
+        selectors: crawlData.selectors || {},
+        accessibility_issues: crawlData.accessibilityIssues || {},
+        performance_metrics: crawlData.performanceMetrics || {},
+        content_embedding: embedding,
+        analyzed_at: new Date().toISOString(),
+      },
+      {
+        onConflict: "url",
+      }
+    )
     .select()
     .single();
 
@@ -311,28 +322,28 @@ export async function storeFirecrawlData(
 
 export async function getFirecrawlAnalysis(url: string) {
   if (!supabase) {
-    console.warn('Supabase client not initialized - skipping fetch');
+    console.warn("Supabase client not initialized - skipping fetch");
     return null;
   }
-  
+
   const { data, error } = await supabase
-    .from('firecrawl_analysis')
-    .select('*')
-    .eq('url', url)
+    .from("firecrawl_analysis")
+    .select("*")
+    .eq("url", url)
     .single();
 
-  if (error && error.code !== 'PGRST116') throw error; // Ignore not found errors
+  if (error && error.code !== "PGRST116") throw error; // Ignore not found errors
   return data;
 }
 
 export async function searchFirecrawlData(query: string, limit = 10) {
   const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error('Supabase client not initialized');
+  if (!client) throw new Error("Supabase client not initialized");
 
   const { data, error } = await client
-    .from('firecrawl_analysis')
-    .select('*')
-    .ilike('app_name', `%${query}%`)
+    .from("firecrawl_analysis")
+    .select("*")
+    .ilike("app_name", `%${query}%`)
     .limit(limit);
 
   if (error) throw error;

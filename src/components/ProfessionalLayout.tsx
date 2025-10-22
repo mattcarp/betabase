@@ -20,8 +20,7 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
   return (
     <div className="min-h-screen bg-mac-surface-bg relative">
       {/* MAC Floating Orbs Background */}
-      <div className="mac-floating-background">
-      </div>
+      <div className="mac-floating-background"></div>
 
       {/* Professional Header */}
       <header className="relative z-10 border-b border-mac-border bg-mac-surface-elevated/50 backdrop-blur-xl">
@@ -31,40 +30,24 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
             <div className="flex items-center space-x-4">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent opacity-90"></div>
               <div>
-                <h1 className="text-xl font-light text-mac-text-primary">
-                  {title}
-                </h1>
-                {subtitle && (
-                  <p className="text-sm font-light text-mac-text-muted">
-                    {subtitle}
-                  </p>
-                )}
+                <h1 className="text-xl font-light text-mac-text-primary">{title}</h1>
+                {subtitle && <p className="text-sm font-light text-mac-text-muted">{subtitle}</p>}
               </div>
             </div>
 
             {/* Professional Navigation */}
             <nav className="hidden md:flex items-center space-x-1">
-              <button className="mac-button mac-button-ghost px-4 py-2">
-                Dashboard
-              </button>
-              <button className="mac-button mac-button-ghost px-4 py-2">
-                Meetings
-              </button>
-              <button className="mac-button mac-button-ghost px-4 py-2">
-                Analytics
-              </button>
-              <button className="mac-button mac-button-outline px-4 py-2">
-                Settings
-              </button>
+              <button className="mac-button mac-button-ghost px-4 py-2">Dashboard</button>
+              <button className="mac-button mac-button-ghost px-4 py-2">Meetings</button>
+              <button className="mac-button mac-button-ghost px-4 py-2">Analytics</button>
+              <button className="mac-button mac-button-outline px-4 py-2">Settings</button>
             </nav>
 
             {/* Status Indicator */}
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 rounded-full bg-green-400 animate-mac-pulse"></div>
-                <span className="text-sm font-light text-mac-text-secondary">
-                  Connected
-                </span>
+                <span className="text-sm font-light text-mac-text-secondary">Connected</span>
               </div>
             </div>
           </div>
@@ -72,9 +55,7 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
       </header>
 
       {/* Main Content Area */}
-      <main className="relative z-10 container mx-auto px-6 py-8">
-        {children}
-      </main>
+      <main className="relative z-10 container mx-auto px-6 py-8">{children}</main>
 
       {/* Professional Footer */}
       <footer className="relative z-10 border-t border-mac-border bg-mac-surface-elevated/30 backdrop-blur-xl mt-auto">
@@ -98,14 +79,8 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
 };
 
 // Professional Dashboard Grid Component
-export const DashboardGrid: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {children}
-    </div>
-  );
+export const DashboardGrid: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{children}</div>;
 };
 
 // Professional Card Component (replacing cyberpunk cards)
@@ -120,9 +95,7 @@ export const ProfessionalCard: React.FC<{
       {/* Professional card header */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="mac-title">{title}</h3>
-        {actions && (
-          <div className="flex items-center space-x-2">{actions}</div>
-        )}
+        {actions && <div className="flex items-center space-x-2">{actions}</div>}
       </div>
 
       {/* Card content */}
@@ -168,7 +141,5 @@ export const ButtonGroup: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className = "" }) => {
-  return (
-    <div className={`flex items-center space-x-3 ${className}`}>{children}</div>
-  );
+  return <div className={`flex items-center space-x-3 ${className}`}>{children}</div>;
 };

@@ -8,16 +8,17 @@
 
 ### 1. Method Name Changes (v1 → v2)
 
-| v1 Method | v2 Method | Notes |
-|-----------|-----------|-------|
-| `crawlUrl(url, ...)` | `crawl(url, options?)` | Waiter method (auto-polls) |
-| `asyncCrawlUrl(url, ...)` | `startCrawl(url, options?)` | Start job, manual polling |
-| `scrapeUrl(url, ...)` | `scrape(url, options?)` | Single page scrape |
-| `checkCrawlStatus(id)` | `getCrawlStatus(id)` | Get crawl job status |
+| v1 Method                 | v2 Method                   | Notes                      |
+| ------------------------- | --------------------------- | -------------------------- |
+| `crawlUrl(url, ...)`      | `crawl(url, options?)`      | Waiter method (auto-polls) |
+| `asyncCrawlUrl(url, ...)` | `startCrawl(url, options?)` | Start job, manual polling  |
+| `scrapeUrl(url, ...)`     | `scrape(url, options?)`     | Single page scrape         |
+| `checkCrawlStatus(id)`    | `getCrawlStatus(id)`        | Get crawl job status       |
 
 ### 2. Configuration Structure Changes
 
 **v1 (OLD - DON'T USE)**:
+
 ```typescript
 {
   url: 'https://example.com',
@@ -36,6 +37,7 @@
 ```
 
 **v2 (NEW - USE THIS)**:
+
 ```typescript
 {
   // Flat, top-level crawl parameters
@@ -43,18 +45,18 @@
   excludePaths: ['/admin/*'],
   limit: 10,
   maxDiscoveryDepth: 2,  // Was maxDepth in v1
-  
+
   // Scrape options
   headers: { ... },
   formats: ['markdown', 'summary'],  // Can use new 'summary' format
   onlyMainContent: true,
-  
+
   // v2 NEW: Smart crawling with natural language
   prompt: 'Extract documentation and API reference pages',
-  
+
   // v2 NEW: Caching (default 2 days)
   maxAge: 172800,  // seconds
-  
+
   // v2 NEW: Performance defaults
   blockAds: true,
   skipTlsVerification: true,
@@ -65,66 +67,69 @@
 ### 3. New Format Options
 
 **JSON Extraction (v2)**:
+
 ```typescript
 formats: [
   {
-    type: 'json',
-    prompt: 'Extract the company mission from the page',
-    schema: JsonSchema  // Optional Pydantic/Zod schema
-  }
-]
+    type: "json",
+    prompt: "Extract the company mission from the page",
+    schema: JsonSchema, // Optional Pydantic/Zod schema
+  },
+];
 ```
 
 **Summary Format (v2 NEW)**:
+
 ```typescript
-formats: ['markdown', 'summary']
+formats: ["markdown", "summary"];
 // Returns concise summary of page content
 ```
 
 **Screenshot with Options (v2)**:
+
 ```typescript
 formats: [
   {
-    type: 'screenshot',
+    type: "screenshot",
     fullPage: true,
     quality: 80,
-    viewport: { width: 1280, height: 800 }
-  }
-]
+    viewport: { width: 1280, height: 800 },
+  },
+];
 ```
 
 ### 4. Crawl Parameter Mappings
 
-| v1 Parameter | v2 Parameter | Notes |
-|--------------|--------------|-------|
-| `maxCrawlPages` | `limit` | Max pages to crawl |
-| `maxCrawlDepth` | `maxDiscoveryDepth` | Removed `maxDepth` |
-| `allowBackwardCrawling` | `crawlEntireDomain` | Renamed |
-| `ignoreSitemap` (bool) | `sitemap` | Now: `"only"`, `"skip"`, `"include"` |
-| N/A | `prompt` | **NEW** - Natural language crawl instructions |
+| v1 Parameter            | v2 Parameter        | Notes                                         |
+| ----------------------- | ------------------- | --------------------------------------------- |
+| `maxCrawlPages`         | `limit`             | Max pages to crawl                            |
+| `maxCrawlDepth`         | `maxDiscoveryDepth` | Removed `maxDepth`                            |
+| `allowBackwardCrawling` | `crawlEntireDomain` | Renamed                                       |
+| `ignoreSitemap` (bool)  | `sitemap`           | Now: `"only"`, `"skip"`, `"include"`          |
+| N/A                     | `prompt`            | **NEW** - Natural language crawl instructions |
 
 ### 5. Smart Crawling with Prompts (v2 NEW)
 
 ```typescript
 // Let Firecrawl derive paths/limits from natural language
 const params = await firecrawl.crawlParamsPreview(
-  'https://docs.firecrawl.dev',
-  'Extract docs and blog posts'
+  "https://docs.firecrawl.dev",
+  "Extract docs and blog posts"
 );
-console.log(params);  // Shows derived configuration
+console.log(params); // Shows derived configuration
 
 // Then use in actual crawl
-const result = await firecrawl.crawl('https://docs.firecrawl.dev', {
-  prompt: 'Extract docs and blog posts'
+const result = await firecrawl.crawl("https://docs.firecrawl.dev", {
+  prompt: "Extract docs and blog posts",
 });
 ```
 
 ### 6. Initialization (No Change)
 
 ```typescript
-import Firecrawl from '@mendable/firecrawl-js';
+import Firecrawl from "@mendable/firecrawl-js";
 
-const firecrawl = new Firecrawl({ apiKey: 'fc-YOUR-API-KEY' });
+const firecrawl = new Firecrawl({ apiKey: "fc-YOUR-API-KEY" });
 ```
 
 ### 7. Response Format (Check `next` parameter)

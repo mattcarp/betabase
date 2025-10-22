@@ -51,20 +51,14 @@ async function runAomaIntegrationTest() {
       if (result.needsAomaContext) {
         console.log("✅ AOMA context triggered");
         console.log(`📝 Query processed: ${result.aomaResponse?.query}`);
-        console.log(
-          `📊 Response length: ${result.aomaResponse?.response.length} characters`,
-        );
-        console.log(
-          `⏱️  Processing time: ${result.aomaResponse?.metadata.processingTime}ms`,
-        );
+        console.log(`📊 Response length: ${result.aomaResponse?.response.length} characters`);
+        console.log(`⏱️  Processing time: ${result.aomaResponse?.metadata.processingTime}ms`);
         console.log(`🎯 Strategy: ${result.aomaResponse?.metadata.strategy}`);
 
         // Show first 150 characters of AOMA response
         if (result.aomaResponse?.response) {
           console.log("💬 AOMA Knowledge Preview:");
-          console.log(
-            `   "${result.aomaResponse.response.substring(0, 150)}..."`,
-          );
+          console.log(`   "${result.aomaResponse.response.substring(0, 150)}..."`);
         }
 
         // Show enhanced prompt structure
@@ -86,7 +80,7 @@ async function runAomaIntegrationTest() {
   try {
     const directQuery = await aomaIntegration.queryAomaKnowledge(
       "What is AOMA and how does it help Sony Music manage digital assets?",
-      "comprehensive",
+      "comprehensive"
     );
 
     if (directQuery) {
@@ -107,9 +101,7 @@ async function runAomaIntegrationTest() {
   console.log("\n🎫 Step 4: Testing JIRA Integration...");
 
   try {
-    const jiraResults = await aomaIntegration.searchJiraTickets(
-      "AOMA audio export issues",
-    );
+    const jiraResults = await aomaIntegration.searchJiraTickets("AOMA audio export issues");
 
     if (jiraResults) {
       console.log("✅ JIRA search successful");
@@ -120,7 +112,7 @@ async function runAomaIntegrationTest() {
   } catch (error) {
     console.warn(
       "⚠️  JIRA search failed (may be expected):",
-      error instanceof Error ? error.message : String(error),
+      error instanceof Error ? error.message : String(error)
     );
   }
 
@@ -134,9 +126,7 @@ async function runAomaIntegrationTest() {
   console.log(`   Auto Query: ${status.config.enableAutoQuery}`);
   console.log(`   Confidence Threshold: ${status.config.confidenceThreshold}`);
   console.log(`   Query Timeout: ${status.config.queryTimeout}ms`);
-  console.log(
-    `   Health Status: ${status.healthy ? "✅ Healthy" : "❌ Unhealthy"}`,
-  );
+  console.log(`   Health Status: ${status.healthy ? "✅ Healthy" : "❌ Unhealthy"}`);
   console.log(`   Last Check: ${status.lastHealthCheck.toLocaleTimeString()}`);
 
   // Final summary

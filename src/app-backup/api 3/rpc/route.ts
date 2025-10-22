@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
           message: "Parse error",
         },
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
 }

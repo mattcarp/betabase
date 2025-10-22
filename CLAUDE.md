@@ -9,12 +9,14 @@ This file contains essential commands, scripts, and known issues for the SIAM pr
 **⚠️ MANDATORY READING**: See `TESTING_FUNDAMENTALS.md` for comprehensive test documentation.
 
 SIAM has a complete Playwright test suite covering:
+
 - **AOMA Chat Intelligence Tests** - Prevents hallucination, validates accurate knowledge base responses
 - **File Upload/Curation Tests** - Ensures knowledge base management (upload/delete files)
 - **Visual Regression Tests** - Prevents dark theme regressions and UI breaks
 - **Full Production E2E Tests** - Complete user journey validation
 
 **Before ANY deployment, run**:
+
 ```bash
 # P0 Critical Tests (MUST PASS)
 npm run test:aoma                                                     # AOMA hallucination prevention (CRITICAL!)
@@ -24,6 +26,7 @@ npx playwright test tests/e2e/smoke/smoke.spec.ts                    # Critical 
 ```
 
 **AOMA Chat Validation (Anti-Hallucination)**:
+
 ```bash
 # Comprehensive AOMA validation suite
 npm run test:aoma              # Knowledge validation + anti-hallucination (recommended)
@@ -36,6 +39,7 @@ npm run test:aoma:all          # All AOMA tests (includes comprehensive chat tes
 ```
 
 **Full test documentation**:
+
 - `TESTING_FUNDAMENTALS.md` - Complete testing guide
 - `tests/README.md` - Test suite overview
 - `tests/production/AOMA-TESTING-README.md` - **AOMA anti-hallucination testing guide**
@@ -47,6 +51,7 @@ npm run test:aoma:all          # All AOMA tests (includes comprehensive chat tes
 ### 🚨 Current Status (START HERE)
 
 **[docs/AOMA-STAGE-AUTHENTICATION-STATUS.md](./docs/AOMA-STAGE-AUTHENTICATION-STATUS.md)** - **READ THIS FIRST**
+
 - **Status**: 🚫 **BLOCKED** - Certificate authentication failure
 - Microsoft Conditional Access + Jamf MDM enrollment requirement
 - Complete authentication flow and troubleshooting guide
@@ -55,6 +60,7 @@ npm run test:aoma:all          # All AOMA tests (includes comprehensive chat tes
 ### 📖 Complete Documentation Index
 
 **[docs/AOMA-DOCUMENTATION-INDEX.md](./docs/AOMA-DOCUMENTATION-INDEX.md)** - Master index of all AOMA documentation
+
 - Architecture & Integration guides
 - Crawling & Data Collection documentation
 - Performance & Optimization analysis
@@ -96,6 +102,7 @@ node scripts/aoma-playwright-crawler.js
 ```
 
 This handles EVERYTHING:
+
 - Git branch management (merges to main)
 - Version bumping (triggers Render deploy)
 - Render MCP monitoring
@@ -155,13 +162,16 @@ python3 ./scripts/monitor-deployment.py  # Monitor existing deployment
 **CENTRALIZED DESIGN SYSTEM**: All MAC design files are now centralized in `~/Documents/projects/mc-ai-standards/`
 
 ### Design System References
+
 The following files are symlinked from the central mc-ai-standards repository:
+
 - **Design System Master**: `.claude/design-system.md` → `~/Documents/projects/mc-ai-standards/design-system.md`
 - **Design System Docs**: `.claude/design-system-docs/` → `~/Documents/projects/mc-ai-standards/design-system/`
 - **Agents**: `.claude/agents/` → `~/Documents/projects/mc-ai-standards/claude-agents/`
 - **Commands**: `.claude/commands/` → `~/Documents/projects/mc-ai-standards/claude-commands/`
 
 ### Design Review Commands
+
 ```bash
 # Use slash command for full 8-phase review (via symlinked commands)
 /design-review
@@ -171,6 +181,7 @@ The following files are symlinked from the central mc-ai-standards repository:
 ```
 
 ### When Making UI Changes
+
 1. **Reference MAC tokens**: Always use `--mac-*` CSS variables
 2. **Follow typography weights**: Only use 100, 200, 300, 400
 3. **Maintain spacing grid**: 8px base unit
@@ -178,6 +189,7 @@ The following files are symlinked from the central mc-ai-standards repository:
 5. **Validate with Fiona**: Run design review before committing
 
 ### Design System Development
+
 - **Central repo**: `~/Documents/projects/mc-ai-standards/`
 - **Edit once, update everywhere**: Changes to design system files automatically reflect in all projects via symlinks
 - **Development-only**: These are guides and validators, not production dependencies
@@ -381,10 +393,11 @@ Custom AI-specific components in `src/components/ai-elements/`:
 ```
 
 **Fiona's Security Scanning Workflow**:
+
 1. **Initial Analysis**: Run `semgrep_scan` to detect security vulnerabilities
-2. **Focus Areas**: 
+2. **Focus Areas**:
    - Exposed API keys and credentials
-   - Authentication bypass mechanisms  
+   - Authentication bypass mechanisms
    - Client-side security vulnerabilities
    - SQL injection and XSS risks
    - Insecure configurations
@@ -393,12 +406,14 @@ Custom AI-specific components in `src/components/ai-elements/`:
 
 **Integration Instructions for Fiona Agent**:
 When Fiona is invoked with `subagent_type: fiona` or `fiona-enhanced`, she should:
+
 1. First run Semgrep security analysis using the MCP tool
 2. Include security findings in her comprehensive report
 3. Prioritize security issues as CRITICAL in her recommendations
 4. Cross-reference findings with her architectural analysis
 
 **Available Semgrep MCP Tools**:
+
 - `mcp__semgrep__security_check` - General vulnerability scan
 - `mcp__semgrep__semgrep_scan` - Scan with specific configuration
 - `mcp__semgrep__semgrep_scan_with_custom_rule` - Custom security rules
@@ -417,6 +432,7 @@ When Fiona is invoked with `subagent_type: fiona` or `fiona-enhanced`, she shoul
 **Fiona's Design System Validation Workflow**:
 
 When Fiona is invoked, she should:
+
 1. **Read the MAC Design System file**: Load `src/styles/mac-design-system.css`
 2. **Extract design tokens**: Parse CSS variables and class definitions
 3. **Validate against standards**: Check components for `.mac-*` class usage
@@ -425,13 +441,15 @@ When Fiona is invoked, she should:
 6. **Suggest alternatives**: Provide MAC Design System compliant solutions
 
 **Key Validation Areas** (from mac-design-system.css):
+
 - Color token compliance (CSS variables)
 - Typography weights (100-400 only)
-- Component patterns (.mac-* classes)
+- Component patterns (.mac-\* classes)
 - Animation timings and easing functions
 - Glassmorphism and visual effects
 
 **Integration with Testing Tools**:
+
 - TestSprite: Visual regression for MAC components
 - Playwright: Verify MAC class presence
 - Browserbase: Test MAC animations and interactions
@@ -471,6 +489,7 @@ Fiona now executes systematic design reviews following Silicon Valley standards:
 #### Triage Matrix for Issues
 
 All issues are categorized by priority:
+
 - **[Blocker]** - Critical failures requiring immediate fix
 - **[High-Priority]** - Significant issues to fix before merge
 - **[Medium-Priority]** - Improvements for follow-up
@@ -488,10 +507,11 @@ All issues are categorized by priority:
 Complete design checklist available at: `context/mac-design-principles.md`
 
 Key validation areas:
-- Color token compliance (--mac-* variables)
+
+- Color token compliance (--mac-\* variables)
 - Typography weights (100-400 only)
 - Spacing grid (8px base unit)
-- Component patterns (.mac-* classes)
+- Component patterns (.mac-\* classes)
 - Animation timings (150-300ms)
 
 ### 📸 UI/UX Visual Scoring System with Fiona
@@ -499,17 +519,18 @@ Key validation areas:
 **MANDATORY**: Fiona MUST perform comprehensive visual UI/UX scoring using Playwright screenshots:
 
 **Screenshot Capture Workflow**:
+
 ```javascript
 // Fiona should use Playwright MCP to capture all app sections
 const sections = [
-  { name: 'login', url: '/', selector: '.mac-card' },
-  { name: 'dashboard', url: '/dashboard', selector: '.mac-professional' },
-  { name: 'chat-interface', url: '/chat', selector: '.mac-glass' },
-  { name: 'hud-view', url: '/hud', selector: '.mac-floating-orb' },
-  { name: 'test-dashboard', url: '/test', selector: '.mac-surface-elevated' },
-  { name: 'fix-interface', url: '/fix', selector: '.mac-button' },
-  { name: 'curate-view', url: '/curate', selector: '.mac-input' },
-  { name: 'settings', url: '/settings', selector: '.mac-card-elevated' }
+  { name: "login", url: "/", selector: ".mac-card" },
+  { name: "dashboard", url: "/dashboard", selector: ".mac-professional" },
+  { name: "chat-interface", url: "/chat", selector: ".mac-glass" },
+  { name: "hud-view", url: "/hud", selector: ".mac-floating-orb" },
+  { name: "test-dashboard", url: "/test", selector: ".mac-surface-elevated" },
+  { name: "fix-interface", url: "/fix", selector: ".mac-button" },
+  { name: "curate-view", url: "/curate", selector: ".mac-input" },
+  { name: "settings", url: "/settings", selector: ".mac-card-elevated" },
 ];
 ```
 
@@ -568,22 +589,26 @@ Fiona should evaluate each screenshot against these criteria:
     - Responsive layouts
 
 **Scoring Output Format**:
+
 ```markdown
 ## UI/UX Visual Analysis Report
 
 ### Overall Score: [X.X/10]
 
 #### Section Scores:
+
 - Login Page: 8.5/10
 - Dashboard: 7.2/10
 - Chat Interface: 9.1/10
-[etc...]
+  [etc...]
 
 #### Top Issues (Priority Order):
+
 1. **[Section]**: [Specific issue] - Suggested fix: [MAC-compliant solution]
 2. **[Section]**: [Specific issue] - Suggested fix: [MAC-compliant solution]
 
 #### Specific Improvements:
+
 - **Login Page**: Add shimmer effect to submit button (use .mac-shimmer class)
 - **Dashboard**: Increase contrast on secondary text (use --mac-text-secondary)
 - **Chat Interface**: Add floating orbs for visual interest (implement .mac-floating-orb)
@@ -592,6 +617,7 @@ Fiona should evaluate each screenshot against these criteria:
 **Automated Improvement Suggestions**:
 
 Fiona should provide specific, actionable improvements:
+
 - Reference exact MAC Design System classes to use
 - Suggest specific CSS variable changes
 - Recommend component replacements from the design system
@@ -599,6 +625,7 @@ Fiona should provide specific, actionable improvements:
 - Suggest animation improvements with timing values
 
 **Integration with MCP Tools**:
+
 - Use `mcp__playwright-mcp__playwright_navigate` for navigation
 - Use `mcp__playwright-mcp__playwright_screenshot` for captures
 - Use `mcp__playwright-mcp__playwright_evaluate` for CSS analysis
@@ -668,8 +695,7 @@ cat .env.production.local  # Should show NEXT_PUBLIC_BUILD_TIME
 **Solution**: Use fallback values in code:
 
 ```javascript
-const CLIENT_ID =
-  process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID || "5c6ll37299p351to549lkg3o0d";
+const CLIENT_ID = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID || "5c6ll37299p351to549lkg3o0d";
 ```
 
 ### 4. Vite Confusion
@@ -703,6 +729,7 @@ git add -A && git commit -m "Your message" && git push origin main
 **IMPORTANT**: Railway.com has been completely removed from this project. All deployments now use Render.com exclusively.
 
 ### What Was Removed:
+
 - 27 Railway-specific files (.sh scripts, configs, logs)
 - .railway directory
 - All Railway URLs in source code
@@ -711,10 +738,12 @@ git add -A && git commit -m "Your message" && git push origin main
 ### New Render-Only Setup:
 
 #### Production URL:
+
 - Main app: `https://siam.onrender.com`
 - AOMA MCP: `https://aoma-mesh-mcp.onrender.com`
 
 #### Helper Scripts:
+
 ```bash
 # Check Render deployment status
 ./check-render-status.sh
@@ -727,6 +756,7 @@ git add -A && git commit -m "Your message" && git push origin main
 ```
 
 #### Playwright Configurations:
+
 - `playwright.config.ts` - Default config (points to Render)
 - `playwright.config.render.ts` - Explicit Render production testing
 - `playwright.config.local.ts` - Local development testing
@@ -763,13 +793,15 @@ Must be set in Render dashboard:
 ## 🧪 Production Testing Documentation
 
 **COMPREHENSIVE GUIDE**: See `docs/PRODUCTION_TESTING.md` for complete testing strategies, especially:
+
 - Production deployment verification
-- Authentication flow testing  
+- Authentication flow testing
 - Web component conflict prevention
 - Browser console monitoring
 - CI/CD integration
 
 ### Critical Production Fix (September 2024)
+
 **CustomElementGuard**: Prevents third-party web component registration conflicts that can break authentication.
 Always test production after deployment to verify no external script conflicts.
 
@@ -915,6 +947,7 @@ Last updated: August 26, 2025
    - Copy the API key
 
 2. **Set the environment variable**:
+
    ```bash
    # Add to your .env.local
    RENDER_API_KEY=your_render_api_key_here
@@ -927,11 +960,11 @@ Last updated: August 26, 2025
 ```bash
 # Deployment Management
 "List my Render services"
-"Show deployment status for siam-app"  
+"Show deployment status for siam-app"
 "Check recent logs for my SIAM service"
 "Why isn't iamsiam.ai responding?"
 
-# Service Operations  
+# Service Operations
 "Update environment variables for siam-app"
 "Show metrics for the last 24 hours"
 "What was the busiest traffic day this month?"

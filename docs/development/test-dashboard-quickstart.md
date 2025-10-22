@@ -41,8 +41,7 @@ const results = await enhancedSupabaseTestDB.getTestResults({
 
 const flakyTests = await enhancedSupabaseTestDB.getFlakyTests(7);
 
-const knowledge =
-  await enhancedSupabaseTestDB.searchTestKnowledge("login error");
+const knowledge = await enhancedSupabaseTestDB.searchTestKnowledge("login error");
 ```
 
 #### 3. The UI is Ready
@@ -108,9 +107,7 @@ const flaky = await supabase.from("flaky_tests_view").select("*");
 ```typescript
 // Failed tests auto-sync to knowledge base
 // Support team can search for solutions:
-const solutions = await enhancedSupabaseTestDB.searchTestKnowledge(
-  "authentication error",
-);
+const solutions = await enhancedSupabaseTestDB.searchTestKnowledge("authentication error");
 // Returns relevant test failures and solutions
 ```
 

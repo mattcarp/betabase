@@ -1,7 +1,5 @@
 /* Enhanced JARVIS-style HUD animations */
 
-
-
 @keyframes glow {
   0%,
   100% {
@@ -65,12 +63,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(0, 255, 255, 0.5),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.5), transparent);
   animation: scanLine 2s linear infinite;
 }
 
@@ -108,7 +101,7 @@
 
 /* Text holographic effect */
 .text-holographic {
-  background: linear-gradient(45deg, #3B82F6, #0080ff, #3B82F6);
+  background: linear-gradient(45deg, #3b82f6, #0080ff, #3b82f6);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;

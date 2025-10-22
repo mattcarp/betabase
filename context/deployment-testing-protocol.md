@@ -38,6 +38,7 @@ npm run dev
 ```
 
 **Verify server is ready**:
+
 - Open http://localhost:3000 in browser
 - Check console for errors
 - Ensure page loads completely
@@ -109,6 +110,7 @@ npm test
 ## ⚠️ What NOT To Do
 
 ### ❌ **NEVER**:
+
 - Deploy without running localhost tests first
 - Skip P0 tests "because it's just a small change"
 - Assume production tests are enough
@@ -118,6 +120,7 @@ npm test
 - Deploy if there are console errors on localhost
 
 ### ❌ **NEVER Say**:
+
 - "It's just a config change, doesn't need testing"
 - "I'll test in production"
 - "The tests are flaky anyway"
@@ -129,6 +132,7 @@ npm test
 ## 🎯 Test Priorities
 
 ### P0 - BLOCKER (Must pass before ANY deploy)
+
 - ✅ AOMA chat anti-hallucination tests
 - ✅ File upload/delete to knowledge base
 - ✅ Dark theme visual regression
@@ -137,6 +141,7 @@ npm test
 **If P0 fails → NO DEPLOY**
 
 ### P1 - HIGH (Should pass before deploy)
+
 - ✅ Full production test suite
 - ✅ Authentication flow
 - ✅ Chat functionality
@@ -147,6 +152,7 @@ npm test
 **If P1 fails → Fix before deploy or document known issues**
 
 ### P2 - MEDIUM (Run regularly)
+
 - ✅ Assistant functionality
 - ✅ API endpoint tests
 - ✅ Performance tests
@@ -215,12 +221,14 @@ npm test
 6. **Run full P0 tests ASAP** after emergency is resolved
 
 **Emergency criteria**:
+
 - Production is completely down
 - Critical security vulnerability being exploited
 - Data loss in progress
 - Legal/compliance requirement
 
 **NOT emergencies**:
+
 - "We need this feature today"
 - "Client is waiting"
 - "It's just a small change"
@@ -256,6 +264,7 @@ npm test
 ## 🔧 Test Environment Setup
 
 ### Prerequisites:
+
 - Node.js 18+
 - npm 10+
 - Playwright browsers installed
@@ -263,6 +272,7 @@ npm test
 - Localhost port 3000 available
 
 ### Quick Setup:
+
 ```bash
 # Install dependencies
 npm install
@@ -276,7 +286,9 @@ npm run lint
 ```
 
 ### Environment Variables:
+
 Ensure these are set in `.env.local`:
+
 - `NEXT_PUBLIC_COGNITO_USER_POOL_ID`
 - `NEXT_PUBLIC_COGNITO_CLIENT_ID`
 - `OPENAI_API_KEY`
@@ -289,6 +301,7 @@ Ensure these are set in `.env.local`:
 ## 📊 Testing Best Practices
 
 ### Before Running Tests:
+
 1. **Clear test artifacts**:
    ```bash
    rm -rf test-results/ playwright-report/
@@ -298,12 +311,14 @@ Ensure these are set in `.env.local`:
 4. **Verify environment variables** loaded
 
 ### During Tests:
+
 1. **Monitor console output** for errors
 2. **Watch for browser windows** (if headed mode)
 3. **Check for hanging processes**
 4. **Note any flaky tests** for investigation
 
 ### After Tests:
+
 1. **Review HTML report**:
    ```bash
    npx playwright show-report
@@ -370,7 +385,8 @@ git push origin main --force
 
 ---
 
-**REMEMBER**: 
+**REMEMBER**:
+
 - ⏱️ 10 minutes of testing saves HOURS of debugging in production
 - 🎯 Quality > Speed
 - 🛡️ Production stability is paramount

@@ -39,10 +39,7 @@ test.describe("SIAM Authentication - Triple Validation", () => {
     await page.goto("http://localhost:3000");
 
     // Test with first email
-    await page.fill(
-      '[data-testid="email-input"]',
-      "fiona.burgess.ext@sonymusic.com",
-    );
+    await page.fill('[data-testid="email-input"]', "fiona.burgess.ext@sonymusic.com");
 
     // Reveal hidden password field (Fiona's secret weapon!)
     await page.evaluate(() => {
@@ -70,7 +67,7 @@ test.describe("SIAM Authentication - Triple Validation", () => {
       return {
         backgroundColor: computedStyle.backgroundColor,
         hasGradients: Array.from(document.querySelectorAll("*")).some((el) =>
-          window.getComputedStyle(el).backgroundImage.includes("gradient"),
+          window.getComputedStyle(el).backgroundImage.includes("gradient")
         ),
       };
     });

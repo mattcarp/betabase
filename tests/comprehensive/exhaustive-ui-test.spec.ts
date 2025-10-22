@@ -17,7 +17,6 @@ import { test, expect } from "@playwright/test";
 import { setupConsoleMonitoring, getConsoleMonitor } from "../helpers/console-monitor";
 
 test.describe("Exhaustive UI Element Tests @comprehensive", () => {
-
   let performanceLog: Array<{
     element: string;
     action: string;
@@ -168,7 +167,9 @@ test.describe("Exhaustive UI Element Tests @comprehensive", () => {
     console.log("🎯 Testing ALL form inputs...\n");
 
     // Main chat input
-    const chatInput = page.locator('textarea[placeholder*="Ask"], input[placeholder*="Ask"]').first();
+    const chatInput = page
+      .locator('textarea[placeholder*="Ask"], input[placeholder*="Ask"]')
+      .first();
     const isChatInputVisible = await chatInput.isVisible().catch(() => false);
 
     if (isChatInputVisible) {
@@ -278,8 +279,8 @@ test.describe("Exhaustive UI Element Tests @comprehensive", () => {
   test("Test ALL suggestion buttons (comprehensive)", async ({ page }) => {
     console.log("🎯 Testing ALL suggestion buttons...\n");
 
-    const suggestions = page.locator('button').filter({
-      hasText: /How|What|Can you/i
+    const suggestions = page.locator("button").filter({
+      hasText: /How|What|Can you/i,
     });
 
     const count = await suggestions.count();
@@ -292,9 +293,12 @@ test.describe("Exhaustive UI Element Tests @comprehensive", () => {
       await page.goto("/");
       await page.waitForLoadState("networkidle");
 
-      const button = page.locator('button').filter({
-        hasText: /How|What|Can you/i
-      }).nth(i);
+      const button = page
+        .locator("button")
+        .filter({
+          hasText: /How|What|Can you/i,
+        })
+        .nth(i);
 
       const isVisible = await button.isVisible().catch(() => false);
       if (!isVisible) continue;
@@ -334,9 +338,15 @@ test.describe("Exhaustive UI Element Tests @comprehensive", () => {
 
     const toolbarButtons = [
       { selector: 'button:has-text("Upload"), button[aria-label*="upload"]', name: "Upload Files" },
-      { selector: 'button:has-text("record"), button[aria-label*="record"]', name: "Voice Recording" },
+      {
+        selector: 'button:has-text("record"), button[aria-label*="record"]',
+        name: "Voice Recording",
+      },
       { selector: 'button:has-text("voice"), button[aria-label*="voice"]', name: "Voice Response" },
-      { selector: 'button:has-text("knowledge"), button[aria-label*="knowledge"]', name: "Knowledge Panel" },
+      {
+        selector: 'button:has-text("knowledge"), button[aria-label*="knowledge"]',
+        name: "Knowledge Panel",
+      },
     ];
 
     for (const btn of toolbarButtons) {
@@ -400,12 +410,15 @@ test.describe("Exhaustive UI Element Tests @comprehensive", () => {
     });
 
     console.log("\n⚡ FASTEST OPERATIONS:");
-    sorted.slice(-5).reverse().forEach((entry, i) => {
-      console.log(`  ${i + 1}. ${entry.element} (${entry.action}): ${entry.duration}ms`);
-    });
+    sorted
+      .slice(-5)
+      .reverse()
+      .forEach((entry, i) => {
+        console.log(`  ${i + 1}. ${entry.element} (${entry.action}): ${entry.duration}ms`);
+      });
 
     // Calculate statistics
-    const durations = performanceLog.map(e => e.duration);
+    const durations = performanceLog.map((e) => e.duration);
     const avg = durations.reduce((a, b) => a + b, 0) / durations.length;
     const max = Math.max(...durations);
     const min = Math.min(...durations);
@@ -416,14 +429,14 @@ test.describe("Exhaustive UI Element Tests @comprehensive", () => {
     console.log(`  Max: ${max}ms`);
     console.log(`  Total operations: ${performanceLog.length}`);
 
-    const withErrors = performanceLog.filter(e => e.consoleErrors > 0).length;
+    const withErrors = performanceLog.filter((e) => e.consoleErrors > 0).length;
     console.log(`  Operations with errors: ${withErrors}`);
 
     if (withErrors > 0) {
       console.log("\n❌ OPERATIONS WITH CONSOLE ERRORS:");
       performanceLog
-        .filter(e => e.consoleErrors > 0)
-        .forEach(entry => {
+        .filter((e) => e.consoleErrors > 0)
+        .forEach((entry) => {
           console.log(`  - ${entry.element}: ${entry.consoleErrors} errors`);
         });
     }

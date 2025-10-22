@@ -7,9 +7,7 @@ export default function AuthDemoPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
       <div className="text-white text-center">
         <h1 className="text-4xl font-bold mb-4">Auth Demo Page</h1>
-        <p className="text-lg">
-          Enhanced LoginForm-Production component will be loaded here
-        </p>
+        <p className="text-lg">Enhanced LoginForm-Production component will be loaded here</p>
         <div className="mt-8 p-4 border border-gray-600 rounded-lg">
           <p className="text-sm text-gray-400">
             The enhanced login form has been successfully implemented with:
