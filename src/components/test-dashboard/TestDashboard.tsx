@@ -34,6 +34,8 @@ import { CoverageReport } from "./CoverageReport";
 import { FlakyTestExplorer } from "./FlakyTestExplorer";
 import { TestAnalytics } from "./TestAnalytics";
 import { FirecrawlPanel } from "./FirecrawlPanel";
+import SessionTimeline from "./SessionTimeline";
+import { SessionInteraction } from "../../types/session-timeline";
 
 interface TestDashboardProps {
   className?: string;
@@ -53,6 +55,11 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
     duration: 0,
   });
   const [recentLogs, setRecentLogs] = useState<string[]>([]);
+
+  // Session Timeline state
+  const [sessionInteractions, setSessionInteractions] = useState<SessionInteraction[]>([]);
+  const [selectedInteractionId, setSelectedInteractionId] = useState<string | undefined>();
+  const [isTimelineCollapsed, setIsTimelineCollapsed] = useState(false);
 
   // Mock real-time test status updates
   useEffect(() => {
@@ -212,6 +219,23 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
     }
   };
 
+  // Capture interaction for timeline
+  const captureInteraction = (interaction: Omit<SessionInteraction, "id" | "timestamp">) => {
+    const newInteraction: SessionInteraction = {
+      ...interaction,
+      id: `interaction-${Date.now()}-${Math.random()}`,
+      timestamp: Date.now(),
+    };
+    setSessionInteractions((prev) => [...prev, newInteraction]);
+  };
+
+  // Handle interaction click from timeline
+  const handleInteractionClick = (interaction: SessionInteraction) => {
+    setSelectedInteractionId(interaction.id);
+    console.log("Selected interaction:", interaction);
+    // Here you would typically scroll to or highlight the relevant test result
+  };
+
   // Handle real-time stream events
   const handleStreamEvent = (event: any) => {
     console.log("📡 Stream event:", event);
@@ -226,6 +250,12 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
         setRecentLogs((prev) =>
           [...prev, `🏁 Test execution started with ${event.totalTests} tests`].slice(-10)
         );
+        // Capture test start interaction
+        captureInteraction({
+          type: "navigate",
+          description: `Test execution started (${event.totalTests} tests)`,
+          status: "info",
+        });
         break;
 
       case "testEnd":
@@ -237,6 +267,13 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
         setRecentLogs((prev) =>
           [...prev, `${emoji} ${event.test?.title || "Test"} - ${status}`].slice(-10)
         );
+        // Capture test completion interaction
+        captureInteraction({
+          type: status === "passed" ? "assertion" : "error",
+          description: event.test?.title || "Test completed",
+          status: status === "passed" ? "success" : "error",
+          duration: event.test?.duration,
+        });
         break;
 
       case "end":
@@ -245,11 +282,27 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
           [...prev, `🏁 Test execution completed - Status: ${event.status}`].slice(-10)
         );
         setIsRunning(false);
+        // Capture execution completion
+        captureInteraction({
+          type: "screenshot",
+          description: "Test execution completed",
+          status: event.status === "success" ? "success" : "error",
+        });
         break;
 
       case "error":
       case "process_error":
         setRecentLogs((prev) => [...prev, `❌ Error: ${event.message || event.error}`].slice(-10));
+        // Capture error interaction
+        captureInteraction({
+          type: "error",
+          description: event.message || event.error || "Test error occurred",
+          status: "error",
+          error: {
+            message: event.message || event.error || "Unknown error",
+            stack: event.stack,
+          },
+        });
         break;
 
       case "complete":
@@ -287,9 +340,23 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
   };
 
   return (
-    <div className={cn("flex flex-col h-full bg-background", className)}>
-      {/* Header with Stats */}
-      <div className="border-b bg-background/50 p-6">
+    <div className={cn("flex h-full bg-background", className)}>
+      {/* Session Timeline Sidebar */}
+      <SessionTimeline
+        interactions={sessionInteractions}
+        currentInteractionId={selectedInteractionId}
+        onInteractionClick={handleInteractionClick}
+        isCollapsed={isTimelineCollapsed}
+        onToggleCollapse={() => setIsTimelineCollapsed(!isTimelineCollapsed)}
+        defaultWidth={320}
+        minWidth={240}
+        maxWidth={600}
+      />
+
+      {/* Main Dashboard Content */}
+      <div className="flex flex-col flex-1 overflow-hidden">
+        {/* Header with Stats */}
+        <div className="border-b bg-background/50 p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-md bg-muted/50">
@@ -540,6 +607,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
           </TabsContent>
         </ScrollArea>
       </Tabs>
+      </div>
     </div>
   );
 };
