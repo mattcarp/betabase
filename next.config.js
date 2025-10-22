@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
-const path = require("path");
-const isProd = process.env.NODE_ENV === "production";
+const path = require('path');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+const isProd = process.env.NODE_ENV === 'production';
+
 const nextConfig = {
   // output: 'standalone', // Only needed for Docker deployments
   eslint: {
@@ -17,6 +21,15 @@ const nextConfig = {
   images: {
     domains: ["localhost", "siam.onrender.com"],
   },
+  // Performance optimizations
+  experimental: {
+    optimizePackageImports: [
+      '@radix-ui/react-icons',
+      'lucide-react',
+      'recharts',
+      'framer-motion',
+    ],
+  },
   async headers() {
     return [
       {
@@ -32,4 +45,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);
