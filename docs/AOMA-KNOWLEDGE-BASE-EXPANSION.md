@@ -209,5 +209,3 @@ The AOMA knowledge base expansion successfully tripled the coverage of AOMA tool
 **Performance**: 🟢 **Excellent**
 
 ---
-
-_Generated with [Claude Code](https://claude.com/claude-code)_

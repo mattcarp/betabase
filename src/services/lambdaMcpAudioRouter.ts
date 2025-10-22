@@ -10,7 +10,7 @@
  * - Error handling and fallbacks
  */
 
-import { getMcpLambdaUrl } from '../config/apiKeys';
+import { getMcpLambdaUrl } from "../config/apiKeys";
 
 export interface AudioRouterConfig {
   lambdaUrl: string;
@@ -30,7 +30,7 @@ export interface AudioProcessingRequest {
   };
   options?: {
     enableVoiceIsolation?: boolean;
-    transcriptionModel?: 'whisper-1' | 'gpt-4o-transcribe';
+    transcriptionModel?: "whisper-1" | "gpt-4o-transcribe";
     language?: string;
   };
 }
@@ -83,7 +83,7 @@ class LambdaMcpAudioRouter {
       ...config,
     };
 
-    console.log('🎤 Lambda MCP Audio Router initialized');
+    console.log("🎤 Lambda MCP Audio Router initialized");
     console.log(`   Lambda URL: ${this.config.lambdaUrl}`);
     console.log(`   Timeout: ${this.config.timeout}ms`);
     console.log(`   Max Retries: ${this.config.maxRetries}`);
@@ -95,13 +95,14 @@ class LambdaMcpAudioRouter {
   async processAudio(request: AudioProcessingRequest): Promise<AudioProcessingResponse> {
     const startTime = performance.now();
 
-    console.log('🚀 Lambda MCP Audio Router: Starting audio processing...');
+    console.log("🚀 Lambda MCP Audio Router: Starting audio processing...");
 
     try {
       // Convert to Blob if needed
-      const audioBlob = request.audioData instanceof Blob
-        ? request.audioData
-        : new Blob([request.audioData], { type: request.metadata?.format || 'audio/webm' });
+      const audioBlob =
+        request.audioData instanceof Blob
+          ? request.audioData
+          : new Blob([request.audioData], { type: request.metadata?.format || "audio/webm" });
 
       console.log(`   Audio size: ${(audioBlob.size / 1024).toFixed(1)}KB`);
 
@@ -109,20 +110,19 @@ class LambdaMcpAudioRouter {
       const shouldChunk = this.config.enableChunking && audioBlob.size > this.config.chunkSize;
 
       if (shouldChunk) {
-        console.log('📦 Audio file is large, processing in chunks...');
+        console.log("📦 Audio file is large, processing in chunks...");
         return await this.processAudioInChunks(audioBlob, request);
       } else {
-        console.log('📤 Processing audio in single request...');
+        console.log("📤 Processing audio in single request...");
         return await this.processSingleAudio(audioBlob, request);
       }
-
     } catch (error) {
       const processingTime = performance.now() - startTime;
-      console.error('❌ Lambda MCP Audio Router: Processing failed:', error);
+      console.error("❌ Lambda MCP Audio Router: Processing failed:", error);
 
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown processing error',
+        error: error instanceof Error ? error.message : "Unknown processing error",
         metadata: {
           processingTime,
         },
@@ -149,19 +149,21 @@ class LambdaMcpAudioRouter {
 
       // Prepare form data for Lambda MCP server
       const formData = new FormData();
-      formData.append('audio', audioBlob, 'audio.webm');
-      formData.append('options', JSON.stringify(request.options || {}));
-      formData.append('metadata', JSON.stringify(request.metadata || {}));
+      formData.append("audio", audioBlob, "audio.webm");
+      formData.append("options", JSON.stringify(request.options || {}));
+      formData.append("metadata", JSON.stringify(request.metadata || {}));
 
-      console.log(`🔄 Sending audio to Lambda MCP server (attempt ${retryCount + 1}/${this.config.maxRetries + 1})...`);
+      console.log(
+        `🔄 Sending audio to Lambda MCP server (attempt ${retryCount + 1}/${this.config.maxRetries + 1})...`
+      );
 
       // Call Lambda MCP server
       const response = await fetch(`${this.config.lambdaUrl}/transcribe`, {
-        method: 'POST',
+        method: "POST",
         body: formData,
         signal: this.abortController.signal,
         headers: {
-          'Accept': 'application/json',
+          Accept: "application/json",
         },
       });
 
@@ -186,12 +188,11 @@ class LambdaMcpAudioRouter {
         },
         retryCount,
       };
-
     } catch (error: any) {
       const processingTime = performance.now() - startTime;
 
       // Handle timeout
-      if (error.name === 'AbortError') {
+      if (error.name === "AbortError") {
         console.error(`⏱️ Lambda MCP request timed out after ${this.config.timeout}ms`);
 
         // Retry with exponential backoff
@@ -204,7 +205,7 @@ class LambdaMcpAudioRouter {
       }
 
       // Handle other errors
-      console.error('❌ Lambda MCP single audio processing failed:', error);
+      console.error("❌ Lambda MCP single audio processing failed:", error);
 
       // Retry logic
       if (retryCount < this.config.maxRetries && this.isRetryableError(error)) {
@@ -216,7 +217,7 @@ class LambdaMcpAudioRouter {
 
       return {
         success: false,
-        error: error.message || 'Lambda MCP processing failed',
+        error: error.message || "Lambda MCP processing failed",
         metadata: {
           processingTime,
         },
@@ -243,7 +244,9 @@ class LambdaMcpAudioRouter {
 
     for (let i = 0; i < chunks.length; i++) {
       const chunk = chunks[i];
-      console.log(`   Processing chunk ${i + 1}/${chunks.length} (${(chunk.size / 1024).toFixed(1)}KB)...`);
+      console.log(
+        `   Processing chunk ${i + 1}/${chunks.length} (${(chunk.size / 1024).toFixed(1)}KB)...`
+      );
 
       const chunkStartTime = performance.now();
 
@@ -269,13 +272,12 @@ class LambdaMcpAudioRouter {
         });
 
         console.log(`   ✅ Chunk ${i + 1} processed successfully`);
-
       } catch (error) {
         console.error(`   ❌ Chunk ${i + 1} failed:`, error);
         chunkResults.push({
           chunkIndex: i,
           success: false,
-          error: error instanceof Error ? error.message : 'Unknown chunk error',
+          error: error instanceof Error ? error.message : "Unknown chunk error",
           processingTime: performance.now() - chunkStartTime,
         });
       }
@@ -283,8 +285,8 @@ class LambdaMcpAudioRouter {
 
     // Combine chunk results
     const totalProcessingTime = performance.now() - startTime;
-    const successfulChunks = chunkResults.filter(r => r.success);
-    const failedChunks = chunkResults.filter(r => !r.success);
+    const successfulChunks = chunkResults.filter((r) => r.success);
+    const failedChunks = chunkResults.filter((r) => !r.success);
 
     console.log(`📊 Chunk processing summary:`);
     console.log(`   Total chunks: ${chunks.length}`);
@@ -295,7 +297,7 @@ class LambdaMcpAudioRouter {
     if (successfulChunks.length === 0) {
       return {
         success: false,
-        error: 'All audio chunks failed to process',
+        error: "All audio chunks failed to process",
         metadata: {
           processingTime: totalProcessingTime,
           chunkCount: chunks.length,
@@ -306,9 +308,9 @@ class LambdaMcpAudioRouter {
     // Combine transcriptions from successful chunks
     const combinedTranscription = successfulChunks
       .sort((a, b) => a.chunkIndex - b.chunkIndex)
-      .map(r => r.transcription)
+      .map((r) => r.transcription)
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     return {
       success: true,
@@ -346,23 +348,23 @@ class LambdaMcpAudioRouter {
    */
   private isRetryableError(error: any): boolean {
     const retryableErrors = [
-      'ECONNRESET',
-      'ETIMEDOUT',
-      'ENOTFOUND',
-      'ECONNREFUSED',
-      'NetworkError',
-      'FetchError',
+      "ECONNRESET",
+      "ETIMEDOUT",
+      "ENOTFOUND",
+      "ECONNREFUSED",
+      "NetworkError",
+      "FetchError",
     ];
 
     const errorMessage = error.message || error.toString();
-    return retryableErrors.some(retryable => errorMessage.includes(retryable));
+    return retryableErrors.some((retryable) => errorMessage.includes(retryable));
   }
 
   /**
    * Delay helper for retry backoff
    */
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
@@ -370,7 +372,7 @@ class LambdaMcpAudioRouter {
    */
   cancelProcessing(): void {
     if (this.abortController) {
-      console.log('🛑 Cancelling Lambda MCP audio processing...');
+      console.log("🛑 Cancelling Lambda MCP audio processing...");
       this.abortController.abort();
       this.abortController = null;
     }
@@ -388,7 +390,7 @@ class LambdaMcpAudioRouter {
    */
   updateConfig(config: Partial<AudioRouterConfig>): void {
     this.config = { ...this.config, ...config };
-    console.log('🔧 Lambda MCP Audio Router configuration updated');
+    console.log("🔧 Lambda MCP Audio Router configuration updated");
   }
 
   /**
@@ -409,7 +411,7 @@ class LambdaMcpAudioRouter {
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 
       const response = await fetch(`${this.config.lambdaUrl}/health`, {
-        method: 'GET',
+        method: "GET",
         signal: controller.signal,
       });
 
@@ -431,11 +433,10 @@ class LambdaMcpAudioRouter {
         healthy: true,
         latency,
       };
-
     } catch (error) {
       return {
         healthy: false,
-        error: error instanceof Error ? error.message : 'Health check failed',
+        error: error instanceof Error ? error.message : "Health check failed",
       };
     }
   }
