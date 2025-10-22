@@ -15,22 +15,14 @@ interface HelpSection {
   }>;
 }
 
-export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({
-  isOpen,
-  onClose,
-}) => {
+export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose }) => {
   const [selectedSection, setSelectedSection] = useState<number>(0);
 
   const helpSections: HelpSection[] = [
     {
       title: "Panel Management",
       icon: (
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -49,12 +41,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({
     {
       title: "Navigation",
       icon: (
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -73,12 +60,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({
     {
       title: "Customization",
       icon: (
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -98,12 +80,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({
     {
       title: "Audio Control",
       icon: (
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -122,12 +99,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({
     {
       title: "Accessibility",
       icon: (
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -146,12 +118,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({
     {
       title: "General",
       icon: (
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -214,10 +181,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({
               </svg>
             </div>
             <div>
-              <h2
-                id="help-overlay-title"
-                className="mac-heading text-mac-text-primary"
-              >
+              <h2 id="help-overlay-title" className="mac-heading text-mac-text-primary">
                 JARVIS HUD Help
               </h2>
               <p className="mac-body text-xs text-mac-text-muted mt-1">
@@ -225,17 +189,8 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({
               </p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="hud-icon-button"
-            aria-label="Close help overlay"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+          <button onClick={onClose} className="hud-icon-button" aria-label="Close help overlay">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -297,9 +252,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({
 
             {/* Additional Tips */}
             <div className="mt-8 p-4 rounded-lg border-l-4 border-jarvis-cyan bg-jarvis-cyan/5">
-              <h4 className="mac-body font-semibold text-jarvis-cyan mb-2">
-                Pro Tip
-              </h4>
+              <h4 className="mac-body font-semibold text-jarvis-cyan mb-2">Pro Tip</h4>
               <p className="mac-body text-sm text-mac-text-secondary">
                 {selectedSection === 0 &&
                   "Drag panel headers to reposition them anywhere on screen. Your layout will be saved automatically."}
@@ -322,9 +275,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({
         <div className="px-6 py-4 border-t border-jarvis-panel-border bg-jarvis-panel-dark-bg-start/50 flex items-center justify-between">
           <p className="text-sm text-mac-text-muted">
             Press{" "}
-            <kbd className="px-2 py-1 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">
-              F1
-            </kbd>{" "}
+            <kbd className="px-2 py-1 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">F1</kbd>{" "}
             or{" "}
             <kbd className="px-2 py-1 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">
               Ctrl+Shift+H

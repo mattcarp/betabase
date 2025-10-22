@@ -3,13 +3,13 @@
 
 :root {
   /* Professional MAC-compliant Color Palette */
-  --motiff-primary: #3b82f6;    /* Professional blue */
-  --motiff-secondary: #6b7280;  /* Neutral gray */
-  --motiff-accent: #8b5cf6;     /* Subtle purple */
-  --motiff-green: #10b981;      /* Professional green */
-  --motiff-orange: #f59e0b;     /* Muted amber */
-  --motiff-purple: #8b5cf6;     /* Professional purple */
-  --motiff-blue: #3b82f6;       /* Standard blue */
+  --motiff-primary: #3b82f6; /* Professional blue */
+  --motiff-secondary: #6b7280; /* Neutral gray */
+  --motiff-accent: #8b5cf6; /* Subtle purple */
+  --motiff-green: #10b981; /* Professional green */
+  --motiff-orange: #f59e0b; /* Muted amber */
+  --motiff-purple: #8b5cf6; /* Professional purple */
+  --motiff-blue: #3b82f6; /* Standard blue */
 
   /* Glassmorphism Variables */
   --glass-bg-light: rgba(255, 255, 255, 0.03);
@@ -24,28 +24,16 @@
   /* Voice UI Elements */
   --voice-active: var(--motiff-primary);
   --voice-inactive: rgba(255, 255, 255, 0.4);
-  --voice-waveform: linear-gradient(
-    90deg,
-    #3b82f6,
-    #6b7280
-  );
+  --voice-waveform: linear-gradient(90deg, #3b82f6, #6b7280);
 
   /* Enhanced Gradients */
-  --motiff-gradient-primary: linear-gradient(
-    135deg,
-    var(--motiff-primary),
-    var(--motiff-accent)
-  );
+  --motiff-gradient-primary: linear-gradient(135deg, var(--motiff-primary), var(--motiff-accent));
   --motiff-gradient-secondary: linear-gradient(
     135deg,
     var(--motiff-secondary),
     var(--motiff-orange)
   );
-  --motiff-gradient-success: linear-gradient(
-    135deg,
-    var(--motiff-green),
-    var(--motiff-blue)
-  );
+  --motiff-gradient-success: linear-gradient(135deg, var(--motiff-green), var(--motiff-blue));
 
   /* Card Glow Effects - Removed for professional look */
   --card-glow: none;
@@ -116,11 +104,7 @@
 
 /* Enhanced Message Bubbles */
 .motiff-message-user {
-  background: linear-gradient(
-    135deg,
-    var(--motiff-primary),
-    var(--motiff-blue)
-  );
+  background: linear-gradient(135deg, var(--motiff-primary), var(--motiff-blue));
   color: white;
   border-radius: 18px 18px 4px 18px;
   padding: 12px 16px;
@@ -157,12 +141,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   animation: waveformShimmer 2s infinite;
 }
 
@@ -374,11 +353,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(
-    circle,
-    var(--motiff-primary) 0%,
-    transparent 70%
-  );
+  background: radial-gradient(circle, var(--motiff-primary) 0%, transparent 70%);
   opacity: 0.1;
   animation: chartGlow 4s ease-in-out infinite;
 }

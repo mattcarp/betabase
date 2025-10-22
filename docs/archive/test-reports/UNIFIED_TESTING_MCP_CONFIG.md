@@ -96,8 +96,7 @@ browserbase_stagehand_act({
 
 ```javascript
 playwright_evaluate({
-  script:
-    "document.querySelector('[data-testid=\"password-input\"]').style.display = 'block'",
+  script: "document.querySelector('[data-testid=\"password-input\"]').style.display = 'block'",
 });
 playwright_fill({
   selector: "[data-testid='password-input']",

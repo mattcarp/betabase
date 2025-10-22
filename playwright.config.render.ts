@@ -6,43 +6,43 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests",
   testMatch: ["**/*.spec.ts", "**/*.spec.js"],
-  
+
   // Parallel execution settings
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1,
   workers: process.env.CI ? 1 : 4,
-  
+
   // Reporting
   reporter: [
     ["html", { open: "never" }],
     ["list"],
-    ["junit", { outputFile: "test-results/junit.xml" }]
+    ["junit", { outputFile: "test-results/junit.xml" }],
   ],
-  
+
   use: {
     // Render.com deployment URL
     baseURL: process.env.BASE_URL || "https://siam.onrender.com",
-    
+
     // Tracing and screenshots
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
-    
+
     // Timeouts
     actionTimeout: 15000,
     navigationTimeout: 30000,
   },
-  
+
   // Test timeout
   timeout: 60000,
-  
+
   projects: [
     {
       name: "chromium",
-      use: { 
+      use: {
         ...devices["Desktop Chrome"],
-        channel: "chrome"
+        channel: "chrome",
       },
     },
     {
@@ -63,6 +63,6 @@ export default defineConfig({
       use: { ...devices["iPhone 13"] },
     },
   ],
-  
+
   // No local server - testing against Render deployment
 });

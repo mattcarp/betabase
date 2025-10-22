@@ -31,9 +31,7 @@ export default function AudioWaveform({
           <div className="text-blue-600 text-sm mb-2">
             {isRecording ? "🎤 Recording..." : "🌊 Audio Waveform"}
           </div>
-          <div className="text-xs text-blue-600/60">
-            WaveSurfer.js integration coming soon
-          </div>
+          <div className="text-xs text-blue-600/60">WaveSurfer.js integration coming soon</div>
         </div>
       </div>
 

@@ -3,7 +3,7 @@ import * as React from "react";
 import { cn } from "../../lib/utils";
 
 export interface InputProps extends React.ComponentProps<"input"> {
-  glow?: boolean;  // Add MAC glow effect on focus
+  glow?: boolean; // Add MAC glow effect on focus
   error?: boolean; // Indicate error state
   helperText?: string; // Helper text for additional context
   label?: string; // Accessible label for screen readers
@@ -15,7 +15,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const inputId = id || React.useId();
     const helperId = helperText ? `${inputId}-helper` : undefined;
     const errorId = error && helperText ? `${inputId}-error` : undefined;
-    
+
     return (
       <>
         <input
@@ -34,21 +34,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             "focus-visible:outline-none focus-visible:border-[var(--mac-primary-blue-400)]",
             glow && "focus-visible:shadow-[0_0_20px_rgba(74,158,255,0.3)]",
             // Error state
-            error && "border-red-500/50 focus-visible:border-red-400 focus-visible:shadow-[0_0_20px_rgba(239,68,68,0.2)]",
+            error &&
+              "border-red-500/50 focus-visible:border-red-400 focus-visible:shadow-[0_0_20px_rgba(239,68,68,0.2)]",
             // Disabled state
             "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[var(--mac-state-disabled)]",
             // Text size responsive
             "md:text-sm",
-            className,
+            className
           )}
           ref={ref}
           // Enhanced ARIA attributes
           aria-invalid={error ? "true" : undefined}
-          aria-describedby={cn(
-            helperId,
-            errorId,
-            props["aria-describedby"]
-          )}
+          aria-describedby={cn(helperId, errorId, props["aria-describedby"])}
           aria-label={label || props["aria-label"]}
           aria-required={props.required ? "true" : undefined}
           {...props}
@@ -56,10 +53,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {helperText && (
           <span
             id={errorId || helperId}
-            className={cn(
-              "mt-1 text-xs",
-              error ? "text-red-400" : "text-[var(--mac-text-muted)]"
-            )}
+            className={cn("mt-1 text-xs", error ? "text-red-400" : "text-[var(--mac-text-muted)]")}
             role={error ? "alert" : undefined}
           >
             {helperText}
@@ -67,7 +61,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       </>
     );
-  },
+  }
 );
 Input.displayName = "Input";
 

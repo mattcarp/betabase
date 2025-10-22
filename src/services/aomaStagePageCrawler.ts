@@ -22,7 +22,11 @@ export interface BatchCrawlSummary {
   results: CrawlResult[];
 }
 
-async function callFirecrawlApi(url: string, cookieHeader: string, baseUrl: string): Promise<CrawlResult> {
+async function callFirecrawlApi(
+  url: string,
+  cookieHeader: string,
+  baseUrl: string
+): Promise<CrawlResult> {
   const res = await fetch(`${baseUrl}/api/firecrawl-crawl`, {
     method: "POST",
     headers: {
@@ -94,5 +98,3 @@ export class AomaStagePageCrawler {
 }
 
 export const aomaStagePageCrawler = new AomaStagePageCrawler();
-
-

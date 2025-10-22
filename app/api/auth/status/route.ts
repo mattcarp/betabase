@@ -10,11 +10,7 @@ export async function GET(request: NextRequest) {
     const idToken = cookieStore.get("cognito_id_token");
     const userInfo = cookieStore.get("cognito_user");
 
-    const isAuthenticated = !!(
-      accessToken?.value &&
-      refreshToken?.value &&
-      idToken?.value
-    );
+    const isAuthenticated = !!(accessToken?.value && refreshToken?.value && idToken?.value);
 
     if (isAuthenticated && userInfo?.value) {
       try {
@@ -36,9 +32,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ isAuthenticated: false, user: null });
   } catch (error) {
     console.error("Auth status error:", error);
-    return NextResponse.json(
-      { error: "Failed to get auth status" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to get auth status" }, { status: 500 });
   }
 }

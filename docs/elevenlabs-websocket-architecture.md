@@ -63,9 +63,11 @@ This document outlines the architecture for integrating ElevenLabs Conversationa
 ## Component Architecture
 
 ### 1. ConversationalAI Component
+
 **File**: `src/components/ConversationalAI.tsx`
 
 **Responsibilities**:
+
 - Render conversation UI
 - Display live transcription
 - Show speaker indicators (User vs AI)
@@ -74,28 +76,32 @@ This document outlines the architecture for integrating ElevenLabs Conversationa
 - Handle interrupt feedback
 
 **Props**:
+
 ```typescript
 interface ConversationalAIProps {
   agentId?: string;
   className?: string;
   onTranscriptionUpdate?: (transcription: string) => void;
   onConversationStateChange?: (state: ConversationState) => void;
-  mode?: 'push-to-talk' | 'voice-activated';
+  mode?: "push-to-talk" | "voice-activated";
 }
 ```
 
 ### 2. useElevenLabsConversation Hook
+
 **File**: `src/hooks/useElevenLabsConversation.ts`
 
 **Purpose**: Custom hook that wraps the official `@elevenlabs/react` SDK and adds SIAM-specific features.
 
 **Key Features**:
+
 - **Interrupt Detection**: Uses VAD from `realTimeAudioProcessor` to detect when user speaks
 - **Turn-Taking State Machine**: Manages conversation state (idle, user-speaking, ai-speaking, transitioning)
 - **Audio Activity Monitoring**: Tracks both user and AI audio levels
 - **Reconnection Logic**: Handles WebSocket disconnects and reconnects
 
 **API**:
+
 ```typescript
 interface UseElevenLabsConversationReturn {
   // Connection state
@@ -109,7 +115,7 @@ interface UseElevenLabsConversationReturn {
   resumeConversation: () => void;
 
   // Turn-taking
-  conversationState: 'idle' | 'user-speaking' | 'ai-speaking' | 'transitioning';
+  conversationState: "idle" | "user-speaking" | "ai-speaking" | "transitioning";
   interruptAgent: () => void; // Manually interrupt AI
 
   // Transcription
@@ -131,6 +137,7 @@ interface UseElevenLabsConversationReturn {
 ### 3. Conversation State Machine
 
 **States**:
+
 1. **idle**: No one is speaking, waiting for input
 2. **user-speaking**: User is actively speaking (VAD detected voice)
 3. **ai-speaking**: AI is generating/playing response
@@ -138,6 +145,7 @@ interface UseElevenLabsConversationReturn {
 5. **interrupted**: User interrupted AI mid-response
 
 **Transitions**:
+
 ```
 idle → user-speaking (VAD detects voice)
 user-speaking → transitioning (VAD detects silence)
@@ -150,11 +158,13 @@ interrupted → user-speaking (Interrupt confirmed)
 ### 4. Interrupt Handling Logic
 
 **Detection**:
+
 - Monitor user audio via `realTimeAudioProcessor`
 - If VAD detects voice while AI is speaking → trigger interrupt
 - Use audio level thresholds to prevent false positives
 
 **Response**:
+
 - Immediately pause AI audio playback
 - Send interrupt signal to WebSocket
 - Clear AI audio buffer
@@ -162,12 +172,13 @@ interrupted → user-speaking (Interrupt confirmed)
 - Resume user audio input
 
 **Implementation**:
+
 ```typescript
 // In useElevenLabsConversation.ts
 const handleInterruptDetection = useCallback(() => {
-  if (conversationState === 'ai-speaking' && audioFeatures.voiceActivity) {
+  if (conversationState === "ai-speaking" && audioFeatures.voiceActivity) {
     // User started speaking while AI is talking
-    console.log('🚨 Interrupt detected - user speaking over AI');
+    console.log("🚨 Interrupt detected - user speaking over AI");
 
     // Pause AI playback
     audioElement.current?.pause();
@@ -176,7 +187,7 @@ const handleInterruptDetection = useCallback(() => {
     conversation.interrupt?.();
 
     // Update state
-    setConversationState('interrupted');
+    setConversationState("interrupted");
     setIsUserSpeaking(true);
 
     // Clear AI audio buffer
@@ -188,6 +199,7 @@ const handleInterruptDetection = useCallback(() => {
 ## Audio Format Specifications
 
 ### Input Audio (User → ElevenLabs)
+
 - **Format**: PCM (Pulse-Code Modulation)
 - **Sample Rate**: 16 kHz (recommended) or 44.1 kHz
 - **Bit Depth**: 16-bit
@@ -196,6 +208,7 @@ const handleInterruptDetection = useCallback(() => {
 - **Chunk Size**: 250ms recommended for optimal latency
 
 ### Output Audio (ElevenLabs → User)
+
 - **Format**: PCM
 - **Sample Rates**: 8 kHz / 16 kHz / 22.05 kHz / 24 kHz / 44.1 kHz
 - **Encoding**: Base64 decoded to PCM
@@ -206,6 +219,7 @@ const handleInterruptDetection = useCallback(() => {
 ### Client → Server Messages
 
 1. **Audio Input**:
+
 ```json
 {
   "type": "audio",
@@ -215,6 +229,7 @@ const handleInterruptDetection = useCallback(() => {
 ```
 
 2. **Interrupt Signal**:
+
 ```json
 {
   "type": "interrupt",
@@ -223,6 +238,7 @@ const handleInterruptDetection = useCallback(() => {
 ```
 
 3. **Context Update** (non-interrupting):
+
 ```json
 {
   "type": "context",
@@ -235,6 +251,7 @@ const handleInterruptDetection = useCallback(() => {
 ### Server → Client Messages
 
 1. **User Transcript**:
+
 ```json
 {
   "type": "user_transcript",
@@ -244,6 +261,7 @@ const handleInterruptDetection = useCallback(() => {
 ```
 
 2. **Agent Response (Text)**:
+
 ```json
 {
   "type": "agent_response",
@@ -252,6 +270,7 @@ const handleInterruptDetection = useCallback(() => {
 ```
 
 3. **Agent Audio**:
+
 ```json
 {
   "type": "audio",
@@ -261,6 +280,7 @@ const handleInterruptDetection = useCallback(() => {
 ```
 
 4. **Conversation Metadata**:
+
 ```json
 {
   "type": "conversation_initiation_metadata",
@@ -272,11 +292,13 @@ const handleInterruptDetection = useCallback(() => {
 ## Security Considerations
 
 ### API Key Management
+
 - **Never expose API key in client code**
 - Use server-side endpoint to generate signed URLs
 - Signed URLs are time-limited and conversation-specific
 
 ### Authentication Flow
+
 ```
 Client → Server: Request conversation token
 Server → ElevenLabs: Get signed URL with API key
@@ -286,6 +308,7 @@ Client → WebSocket: Connect with signed URL
 ```
 
 **Implementation**:
+
 ```typescript
 // app/api/elevenlabs/conversation-token/route.ts
 export async function POST(req: Request) {
@@ -297,7 +320,7 @@ export async function POST(req: Request) {
   const response = await fetch(
     `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${agentId}`,
     {
-      headers: { 'xi-api-key': apiKey }
+      headers: { "xi-api-key": apiKey },
     }
   );
 
@@ -323,15 +346,17 @@ NEXT_PUBLIC_INTERRUPT_THRESHOLD=0.02
 ## Testing Strategy
 
 ### Unit Tests
+
 - Hook state transitions
 - Interrupt detection logic
 - Audio encoding/decoding
 - Error handling
 
 ### Integration Tests
+
 ```typescript
 // tests/elevenlabs-websocket-integration.spec.ts
-test('should establish WebSocket connection', async () => {
+test("should establish WebSocket connection", async () => {
   const { result } = renderHook(() => useElevenLabsConversation());
 
   await act(async () => {
@@ -339,10 +364,10 @@ test('should establish WebSocket connection', async () => {
   });
 
   expect(result.current.isConnected).toBe(true);
-  expect(result.current.status).toBe('connected');
+  expect(result.current.status).toBe("connected");
 });
 
-test('should detect user interrupt during AI speech', async () => {
+test("should detect user interrupt during AI speech", async () => {
   // Simulate AI speaking
   // Trigger VAD with user audio
   // Verify interrupt signal sent
@@ -351,6 +376,7 @@ test('should detect user interrupt during AI speech', async () => {
 ```
 
 ### E2E Tests
+
 - Full conversation flow
 - Interrupt handling
 - Reconnection scenarios
@@ -359,16 +385,19 @@ test('should detect user interrupt during AI speech', async () => {
 ## Performance Optimization
 
 ### Audio Buffering
+
 - Use ring buffer for smooth playback
 - Pre-buffer 500ms of audio
 - Handle network jitter
 
 ### Latency Reduction
+
 - Send audio chunks every 250ms
 - Use WebRTC fallback for lower latency
 - Monitor round-trip time with ping/pong
 
 ### Resource Management
+
 - Clean up audio contexts on unmount
 - Release microphone when not in use
 - Implement connection pooling
@@ -376,12 +405,14 @@ test('should detect user interrupt during AI speech', async () => {
 ## Browser Compatibility
 
 ### Required Features
+
 - WebSocket API
 - Web Audio API
 - MediaDevices API (getUserMedia)
 - AudioContext
 
 ### Fallback Strategy
+
 - Detect feature support
 - Graceful degradation
 - Inform user of limitations

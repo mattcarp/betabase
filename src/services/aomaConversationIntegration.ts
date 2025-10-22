@@ -33,7 +33,7 @@ async function retryFetch(
   url: string,
   options: RequestInit,
   retries = 3,
-  backoff = 300,
+  backoff = 300
 ): Promise<Response> {
   let lastError: Error | null = null;
   for (let i = 0; i < retries; i++) {
@@ -41,9 +41,7 @@ async function retryFetch(
       return await fetch(url, options);
     } catch (error) {
       lastError = error as Error;
-      await new Promise((resolve) =>
-        setTimeout(resolve, backoff * Math.pow(2, i)),
-      );
+      await new Promise((resolve) => setTimeout(resolve, backoff * Math.pow(2, i)));
     }
   }
   throw lastError || new Error("Fetch failed after retries");
@@ -86,14 +84,9 @@ class AomaConversationIntegration {
 
   constructor(config?: Partial<AomaIntegrationConfig>) {
     // Handle import.meta.env availability (not available in Node.js tests)
-    const getEnvVar = (
-      key: string,
-      defaultValue: string | boolean,
-    ): string | boolean => {
+    const getEnvVar = (key: string, defaultValue: string | boolean): string | boolean => {
       try {
-        return (
-          process.env[`NEXT_PUBLIC_${key}`] ?? process.env[key] ?? defaultValue
-        );
+        return process.env[`NEXT_PUBLIC_${key}`] ?? process.env[key] ?? defaultValue;
       } catch {
         return defaultValue;
       }
@@ -102,15 +95,14 @@ class AomaConversationIntegration {
     // Use environment variables with Railway fallback
     const baseUrl = getEnvVar(
       "NEXT_PUBLIC_AOMA_MESH_SERVER_URL",
-      "https://luminous-dedication-production.up.railway.app",
+      "https://luminous-dedication-production.up.railway.app"
     ) as string;
 
     this.config = {
       serverUrl: baseUrl,
       rpcUrl: `${baseUrl}/rpc`,
       healthUrl: `${baseUrl}/api/health`,
-      enableAutoQuery:
-        getEnvVar("NEXT_PUBLIC_ENABLE_MCP_INTEGRATION", true) !== "false",
+      enableAutoQuery: getEnvVar("NEXT_PUBLIC_ENABLE_MCP_INTEGRATION", true) !== "false",
       confidenceThreshold: 0.7,
       queryTimeout: 25000, // Increase timeout to 25 seconds to account for slow OpenAI responses
       ...config,
@@ -118,10 +110,7 @@ class AomaConversationIntegration {
 
     // Only start health monitoring if integration is enabled
     if (this.config.enableAutoQuery) {
-      console.log(
-        "🔍 Starting AOMA health monitoring with config:",
-        this.config,
-      );
+      console.log("🔍 Starting AOMA health monitoring with config:", this.config);
       this.startHealthMonitoring();
     }
   }
@@ -136,10 +125,7 @@ class AomaConversationIntegration {
 
     // Always query AOMA - let the MCP server determine relevance
     // The server will return null/empty if no relevant knowledge exists
-    console.log(
-      "🔍 Querying AOMA for all inputs - server will determine relevance:",
-      userInput,
-    );
+    console.log("🔍 Querying AOMA for all inputs - server will determine relevance:", userInput);
 
     return true;
   }
@@ -185,7 +171,7 @@ class AomaConversationIntegration {
    */
   async queryAomaKnowledge(
     query: string,
-    strategy: "comprehensive" | "focused" | "rapid" = "focused",
+    strategy: "comprehensive" | "focused" | "rapid" = "focused"
   ): Promise<AOMAResponse | null> {
     try {
       const startTime = performance.now();
@@ -217,10 +203,7 @@ class AomaConversationIntegration {
       };
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(
-        () => controller.abort(),
-        this.config.queryTimeout,
-      );
+      const timeoutId = setTimeout(() => controller.abort(), this.config.queryTimeout);
 
       const response = await retryFetch(`${this.config.rpcUrl}`, {
         method: "POST",
@@ -240,9 +223,7 @@ class AomaConversationIntegration {
       });
 
       if (!response.ok) {
-        throw new Error(
-          `AOMA query failed: ${response.status} ${response.statusText}`,
-        );
+        throw new Error(`AOMA query failed: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -267,7 +248,7 @@ class AomaConversationIntegration {
       // Convert raw filename citations to readable format
       cleanedResponse = cleanedResponse.replace(
         /\[(\d+):(\d+)([^[\]]*\.(?:md|txt|pdf|doc|docx))\]/g,
-        "[[Source $1]($3)]",
+        "[[Source $1]($3)]"
       );
 
       // Clean up any remaining ugly formatting
@@ -296,7 +277,7 @@ class AomaConversationIntegration {
    */
   private async queryAomaLocal(
     query: string,
-    strategy: "comprehensive" | "focused" | "rapid" = "focused",
+    strategy: "comprehensive" | "focused" | "rapid" = "focused"
   ): Promise<AOMAResponse | null> {
     try {
       const startTime = performance.now();
@@ -330,8 +311,7 @@ class AomaConversationIntegration {
 
       return {
         query,
-        response:
-          data.data.result || `Local development response for: ${query}`,
+        response: data.data.result || `Local development response for: ${query}`,
         metadata: {
           strategy,
           resultsCount: 1,
@@ -350,10 +330,7 @@ class AomaConversationIntegration {
   /**
    * Create an enhanced prompt with AOMA context
    */
-  private createEnhancedPrompt(
-    originalQuery: string,
-    aomaData: AOMAResponse,
-  ): string {
+  private createEnhancedPrompt(originalQuery: string, aomaData: AOMAResponse): string {
     return `User Query: "${originalQuery}"
 
 AOMA Knowledge Context:
@@ -374,10 +351,7 @@ Please respond naturally and conversationally, incorporating the AOMA context wh
     responseTime?: number;
   }> {
     try {
-      console.log(
-        "🔍 AOMA Health Check: Starting check to",
-        this.config.healthUrl,
-      );
+      console.log("🔍 AOMA Health Check: Starting check to", this.config.healthUrl);
       const startTime = performance.now();
 
       // Add CORS-compliant headers for browser requests
@@ -399,10 +373,7 @@ Please respond naturally and conversationally, incorporating the AOMA context wh
       });
 
       if (!response.ok) {
-        console.log(
-          "🔍 AOMA Health Check: Response not OK, status:",
-          response.status,
-        );
+        console.log("🔍 AOMA Health Check: Response not OK, status:", response.status);
         // For CORS errors, treat as "server exists but not accessible from browser"
         return {
           healthy: false,
@@ -427,9 +398,7 @@ Please respond naturally and conversationally, incorporating the AOMA context wh
 
       // If server is degraded (can't reach OpenAI/Supabase), it's useless
       if (healthData.status === "degraded") {
-        console.log(
-          "🔍 AOMA Health Check: Server is degraded - marking as unhealthy",
-        );
+        console.log("🔍 AOMA Health Check: Server is degraded - marking as unhealthy");
         this.healthyStatus = false;
         return {
           healthy: false,
@@ -450,27 +419,25 @@ Please respond naturally and conversationally, incorporating the AOMA context wh
       const errorObj = error as Error;
       console.log(
         "🔍 AOMA Health Check: Failed with error (expected for CORS)",
-        errorObj.message || error,
+        errorObj.message || error
       );
       this.healthyStatus = false;
       this.consecutiveFailures++;
 
       // Determine if this is a CORS error or network error
       const isCorsError = errorObj.message && errorObj.message.includes("CORS");
-      const isNetworkError =
-        errorObj.name === "TypeError" && errorObj.message.includes("fetch");
+      const isNetworkError = errorObj.name === "TypeError" && errorObj.message.includes("fetch");
 
       // For browser environments, CORS errors are expected when calling Lambda directly
       if (isCorsError || isNetworkError) {
         console.log(
-          "🔍 AOMA Health Check: CORS error - Lambda server needs CORS headers for browser access",
+          "🔍 AOMA Health Check: CORS error - Lambda server needs CORS headers for browser access"
         );
         return {
           healthy: false,
           details: {
             error: "CORS headers missing",
-            message:
-              "Lambda server needs CORS configuration for browser requests",
+            message: "Lambda server needs CORS configuration for browser requests",
             serverUrl: this.config.healthUrl,
             fix: "Add Access-Control-Allow-Origin: * to Lambda responses",
           },

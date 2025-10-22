@@ -7,7 +7,7 @@
  * @module utils/supabase/deduplication
  */
 
-const { getSupabaseClient } = require('./client');
+const { getSupabaseClient } = require("./client");
 
 /**
  * Check if JIRA ticket already exists in database
@@ -19,13 +19,13 @@ async function checkJiraTicketExists(externalId) {
   const supabase = getSupabaseClient();
 
   const { data, error } = await supabase
-    .from('jira_tickets')
-    .select('id, external_id, title, description, updated_at')
-    .eq('external_id', externalId)
+    .from("jira_tickets")
+    .select("id, external_id, title, description, updated_at")
+    .eq("external_id", externalId)
     .single();
 
   if (error) {
-    if (error.code === 'PGRST116') {
+    if (error.code === "PGRST116") {
       // Not found - this is OK
       return null;
     }
@@ -44,11 +44,11 @@ async function checkJiraTicketExists(externalId) {
  */
 function hasJiraTicketChanged(existingTicket, newTicket) {
   // Compare key fields
-  const fieldsToCompare = ['title', 'description', 'status', 'priority'];
+  const fieldsToCompare = ["title", "description", "status", "priority"];
 
   for (const field of fieldsToCompare) {
-    const existingValue = existingTicket[field] || '';
-    const newValue = newTicket[field] || '';
+    const existingValue = existingTicket[field] || "";
+    const newValue = newTicket[field] || "";
 
     if (existingValue.trim() !== newValue.trim()) {
       return true;
@@ -85,7 +85,7 @@ async function deduplicateJiraTickets(tickets) {
         if (hasJiraTicketChanged(existing, ticket)) {
           updatedTickets.push({
             ...ticket,
-            id: existing.id // Preserve ID for update
+            id: existing.id, // Preserve ID for update
           });
         } else {
           unchangedTickets.push(ticket);
@@ -104,7 +104,7 @@ async function deduplicateJiraTickets(tickets) {
   return {
     new: newTickets,
     updated: updatedTickets,
-    unchanged: unchangedTickets
+    unchanged: unchangedTickets,
   };
 }
 
@@ -116,7 +116,7 @@ async function deduplicateJiraTickets(tickets) {
  */
 async function insertJiraTickets(tickets) {
   if (tickets.length === 0) {
-    console.log('   No new tickets to insert');
+    console.log("   No new tickets to insert");
     return [];
   }
 
@@ -124,21 +124,18 @@ async function insertJiraTickets(tickets) {
   const supabase = getSupabaseClient();
 
   // Prepare tickets for insertion
-  const ticketsToInsert = tickets.map(ticket => ({
+  const ticketsToInsert = tickets.map((ticket) => ({
     external_id: ticket.external_id,
     title: ticket.title || ticket.summary,
-    description: ticket.description || '',
+    description: ticket.description || "",
     status: ticket.status || null,
     priority: ticket.priority || null,
     metadata: ticket.metadata || {},
     created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
+    updated_at: new Date().toISOString(),
   }));
 
-  const { data, error } = await supabase
-    .from('jira_tickets')
-    .insert(ticketsToInsert)
-    .select();
+  const { data, error } = await supabase.from("jira_tickets").insert(ticketsToInsert).select();
 
   if (error) {
     throw new Error(`Failed to insert tickets: ${error.message}`);
@@ -156,7 +153,7 @@ async function insertJiraTickets(tickets) {
  */
 async function updateJiraTickets(tickets) {
   if (tickets.length === 0) {
-    console.log('   No tickets to update');
+    console.log("   No tickets to update");
     return 0;
   }
 
@@ -167,16 +164,16 @@ async function updateJiraTickets(tickets) {
   for (const ticket of tickets) {
     try {
       const { error } = await supabase
-        .from('jira_tickets')
+        .from("jira_tickets")
         .update({
           title: ticket.title || ticket.summary,
-          description: ticket.description || '',
+          description: ticket.description || "",
           status: ticket.status || null,
           priority: ticket.priority || null,
           metadata: ticket.metadata || {},
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', ticket.id);
+        .eq("id", ticket.id);
 
       if (error) {
         console.error(`❌ Failed to update ticket ${ticket.external_id}:`, error.message);
@@ -200,7 +197,7 @@ async function updateJiraTickets(tickets) {
  */
 async function upsertJiraEmbeddings(embeddings) {
   if (embeddings.length === 0) {
-    console.log('   No embeddings to save');
+    console.log("   No embeddings to save");
     return 0;
   }
 
@@ -208,11 +205,11 @@ async function upsertJiraEmbeddings(embeddings) {
   const supabase = getSupabaseClient();
 
   // Get ticket IDs for external_ids
-  const externalIds = embeddings.map(e => e.external_id);
+  const externalIds = embeddings.map((e) => e.external_id);
   const { data: tickets, error: fetchError } = await supabase
-    .from('jira_tickets')
-    .select('id, external_id')
-    .in('external_id', externalIds);
+    .from("jira_tickets")
+    .select("id, external_id")
+    .in("external_id", externalIds);
 
   if (fetchError) {
     throw new Error(`Failed to fetch ticket IDs: ${fetchError.message}`);
@@ -220,28 +217,28 @@ async function upsertJiraEmbeddings(embeddings) {
 
   // Create a map of external_id -> ticket_id
   const idMap = {};
-  tickets.forEach(t => {
+  tickets.forEach((t) => {
     idMap[t.external_id] = t.id;
   });
 
   // Prepare embeddings for upsert
-  const embeddingsToUpsert = embeddings.map(e => ({
-    ticket_id: idMap[e.external_id],
-    ticket_key: e.external_id,
-    summary: e.summary || '',
-    embedding: e.embedding
-  })).filter(e => e.ticket_id); // Only include if we found the ticket_id
+  const embeddingsToUpsert = embeddings
+    .map((e) => ({
+      ticket_id: idMap[e.external_id],
+      ticket_key: e.external_id,
+      summary: e.summary || "",
+      embedding: e.embedding,
+    }))
+    .filter((e) => e.ticket_id); // Only include if we found the ticket_id
 
   if (embeddingsToUpsert.length === 0) {
-    console.log('⚠️  No embeddings matched existing tickets');
+    console.log("⚠️  No embeddings matched existing tickets");
     return 0;
   }
 
-  const { data, error } = await supabase
-    .from('jira_ticket_embeddings')
-    .upsert(embeddingsToUpsert, {
-      onConflict: 'ticket_id'
-    });
+  const { data, error } = await supabase.from("jira_ticket_embeddings").upsert(embeddingsToUpsert, {
+    onConflict: "ticket_id",
+  });
 
   if (error) {
     throw new Error(`Failed to upsert embeddings: ${error.message}`);
@@ -257,5 +254,5 @@ module.exports = {
   deduplicateJiraTickets,
   insertJiraTickets,
   updateJiraTickets,
-  upsertJiraEmbeddings
+  upsertJiraEmbeddings,
 };

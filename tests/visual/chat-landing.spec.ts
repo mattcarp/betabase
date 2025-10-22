@@ -14,10 +14,7 @@ test.describe("Chat Landing Page - AI Elements + MAC Theme", () => {
   });
 
   // Capture console logs for inspection
-  test("loads and renders chat landing, captures screenshot and logs", async ({
-    page,
-  }) => {
-
+  test("loads and renders chat landing, captures screenshot and logs", async ({ page }) => {
     await page.goto("http://localhost:3000/", { waitUntil: "networkidle" });
 
     // App container present

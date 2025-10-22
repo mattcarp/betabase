@@ -29,15 +29,11 @@ async function validateDeployment() {
       });
 
       res.on("end", () => {
-        const isHtml =
-          res.headers["content-type"] &&
-          res.headers["content-type"].includes("html");
+        const isHtml = res.headers["content-type"] && res.headers["content-type"].includes("html");
         const hasReactContent = data.includes("react") || data.includes("SIAM");
 
         console.log(`📄 Response contains HTML: ${isHtml ? "Yes" : "No"}`);
-        console.log(
-          `⚛️ Contains React/SIAM content: ${hasReactContent ? "Yes" : "No"}`,
-        );
+        console.log(`⚛️ Contains React/SIAM content: ${hasReactContent ? "Yes" : "No"}`);
 
         if (res.statusCode === 200) {
           console.log("✅ Deployment is accessible and responding");
@@ -82,9 +78,7 @@ async function checkPrerequisites() {
     const testspritePackage = require("@testsprite/playwright/package.json");
     console.log(`✅ TestSprite: ${testspritePackage.version}`);
   } catch (error) {
-    console.log(
-      "⚠️ TestSprite package not found - tests may run without visual regression",
-    );
+    console.log("⚠️ TestSprite package not found - tests may run without visual regression");
   }
 
   return true;
@@ -99,9 +93,7 @@ async function main() {
 
   console.log("\n📋 Validation Summary:");
   console.log("=".repeat(25));
-  console.log(
-    `🌐 Deployment accessible: ${deploymentResult.success ? "✅" : "❌"}`,
-  );
+  console.log(`🌐 Deployment accessible: ${deploymentResult.success ? "✅" : "❌"}`);
   console.log(`🔧 Prerequisites ready: ${prerequisitesOk ? "✅" : "❌"}`);
 
   if (deploymentResult.success && prerequisitesOk) {

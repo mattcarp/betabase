@@ -1,3 +1,59 @@
 {
-  "extends": "next"
+  "extends": ["next", "next/core-web-vitals"],
+  "plugins": ["@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    // TypeScript specific rules - relaxed for existing codebase
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+
+    // Code quality rules - only block on critical issues
+    "no-console": "off",
+    "no-debugger": "warn",
+    "no-duplicate-imports": "warn",
+    "prefer-const": "warn",
+    "no-var": "error",
+
+    // React specific rules
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "react/no-unescaped-entities": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+
+    // Naming conventions - relaxed
+    "camelcase": "off",
+
+    // Code style - disabled (let Prettier handle formatting)
+    "max-len": "off",
+    "complexity": "off",
+    "max-depth": "off",
+    "max-lines-per-function": "off"
+  },
+  "overrides": [
+    {
+      "files": ["*.test.ts", "*.test.tsx", "*.spec.ts", "*.spec.tsx"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "max-lines-per-function": "off",
+        "no-console": "off"
+      }
+    }
+  ]
 }

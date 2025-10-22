@@ -41,7 +41,7 @@ interface LeftSidebarProps {
   onNewConversation?: () => void;
   className?: string;
   onToggle?: () => void;
-  onConversationAction?: (id: string, action: 'rename' | 'pin' | 'archive' | 'delete') => void;
+  onConversationAction?: (id: string, action: "rename" | "pin" | "archive" | "delete") => void;
 }
 
 export const LeftSidebar: React.FC<LeftSidebarProps> = ({
@@ -53,8 +53,14 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   onConversationAction,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set(["Today", "Yesterday"]));
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; conversationId: string } | null>(null);
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
+    new Set(["Today", "Yesterday"])
+  );
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+    conversationId: string;
+  } | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Sample conversations for development - will be replaced with real data
@@ -71,7 +77,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             messageCount: 12,
           },
           {
-            id: "2", 
+            id: "2",
             title: "Design System Review",
             lastMessage: "The MAC design system integration looks great! I love the new...",
             timestamp: new Date(Date.now() - 7200000),
@@ -134,31 +140,35 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   };
 
   const groupConversations = (conversations: ConversationItem[]): ConversationGroup[] => {
-    const filtered = conversations.filter(conv =>
-      conv.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conv.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
+    const filtered = conversations.filter(
+      (conv) =>
+        conv.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        conv.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const grouped = filtered.reduce((groups, conv) => {
-      const group = getTimeGroup(conv.timestamp);
-      if (!groups[group]) groups[group] = [];
-      groups[group].push(conv);
-      return groups;
-    }, {} as Record<string, ConversationItem[]>);
+    const grouped = filtered.reduce(
+      (groups, conv) => {
+        const group = getTimeGroup(conv.timestamp);
+        if (!groups[group]) groups[group] = [];
+        groups[group].push(conv);
+        return groups;
+      },
+      {} as Record<string, ConversationItem[]>
+    );
 
     // Sort conversations within each group by timestamp (newest first)
-    Object.keys(grouped).forEach(key => {
+    Object.keys(grouped).forEach((key) => {
       grouped[key].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
     });
 
     // Convert to array with proper ordering
     const groupOrder = ["Today", "Yesterday", "This Week", "Older"];
     return groupOrder
-      .filter(group => grouped[group]?.length > 0)
-      .map(group => ({
+      .filter((group) => grouped[group]?.length > 0)
+      .map((group) => ({
         label: group,
         conversations: grouped[group],
-        defaultExpanded: group === "Today" || group === "Yesterday"
+        defaultExpanded: group === "Today" || group === "Yesterday",
       }));
   };
 
@@ -177,11 +187,11 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
     setContextMenu({
       x: e.clientX,
       y: e.clientY,
-      conversationId
+      conversationId,
     });
   };
 
-  const handleContextAction = (action: 'rename' | 'pin' | 'archive' | 'delete') => {
+  const handleContextAction = (action: "rename" | "pin" | "archive" | "delete") => {
     if (contextMenu) {
       onConversationAction?.(contextMenu.conversationId, action);
       setContextMenu(null);
@@ -192,13 +202,13 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Cmd+K or Ctrl+K to focus search
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         searchInputRef.current?.focus();
       }
-      
+
       // Escape to close context menu or clear search
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         if (contextMenu) {
           setContextMenu(null);
         } else if (searchQuery) {
@@ -207,12 +217,12 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('click', () => setContextMenu(null));
-    
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("click", () => setContextMenu(null));
+
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('click', () => setContextMenu(null));
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("click", () => setContextMenu(null));
     };
   }, [contextMenu, searchQuery]);
 
@@ -223,7 +233,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
       className={cn(
         "h-full bg-mac-surface-elevated/50 backdrop-blur-xl border-r border-mac-border",
         "flex flex-col relative",
-        className,
+        className
       )}
     >
       {/* Collapse Toggle */}
@@ -274,10 +284,12 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             <div className="p-6 text-center">
               <MessageCircle className="w-8 h-8 text-mac-text-muted mx-auto mb-3" />
               <p className="text-sm text-mac-text-muted mb-2">
-                {searchQuery ? 'No conversations found' : 'No conversations yet'}
+                {searchQuery ? "No conversations found" : "No conversations yet"}
               </p>
               <p className="text-xs text-mac-text-muted">
-                {searchQuery ? 'Try a different search term' : 'Start a new conversation to get started'}
+                {searchQuery
+                  ? "Try a different search term"
+                  : "Start a new conversation to get started"}
               </p>
             </div>
           ) : (
@@ -313,10 +325,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                     >
                       <div className="space-y-1 pb-2">
                         {group.conversations.map((conversation) => (
-                          <div
-                            key={conversation.id}
-                            className="relative group/conversation"
-                          >
+                          <div key={conversation.id} className="relative group/conversation">
                             <button
                               onClick={() => onConversationSelect?.(conversation.id)}
                               onContextMenu={(e) => handleContextMenu(e, conversation.id)}
@@ -325,7 +334,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                                 "hover:bg-mac-state-hover group-hover/conversation:bg-mac-state-hover",
                                 conversation.isActive &&
                                   "bg-mac-primary-blue-400/10 border-l-2 border-mac-primary-blue-400 shadow-sm pl-5",
-                                !conversation.isActive && "hover:bg-mac-surface-bg",
+                                !conversation.isActive && "hover:bg-mac-surface-bg"
                               )}
                             >
                               <div className="flex items-start gap-3">
@@ -335,7 +344,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                                       "w-4 h-4",
                                       conversation.isActive
                                         ? "text-mac-primary-blue-400"
-                                        : "text-mac-text-muted",
+                                        : "text-mac-text-muted"
                                     )}
                                   />
                                 </div>
@@ -395,11 +404,8 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
         {contextMenu && (
           <>
             {/* Backdrop */}
-            <div
-              className="fixed inset-0 z-40"
-              onClick={() => setContextMenu(null)}
-            />
-            
+            <div className="fixed inset-0 z-40" onClick={() => setContextMenu(null)} />
+
             {/* Menu */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -410,25 +416,25 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
               style={{
                 left: contextMenu.x,
                 top: contextMenu.y,
-                transform: 'translate(-50%, -10px)',
+                transform: "translate(-50%, -10px)",
               }}
             >
               <button
-                onClick={() => handleContextAction('rename')}
+                onClick={() => handleContextAction("rename")}
                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
               >
                 <Edit className="w-4 h-4" />
                 Rename
               </button>
               <button
-                onClick={() => handleContextAction('pin')}
+                onClick={() => handleContextAction("pin")}
                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
               >
                 <Pin className="w-4 h-4" />
                 Pin conversation
               </button>
               <button
-                onClick={() => handleContextAction('archive')}
+                onClick={() => handleContextAction("archive")}
                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
               >
                 <Archive className="w-4 h-4" />
@@ -436,7 +442,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
               </button>
               <div className="border-t border-mac-border my-1" />
               <button
-                onClick={() => handleContextAction('delete')}
+                onClick={() => handleContextAction("delete")}
                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
               >
                 <Trash2 className="w-4 h-4" />
@@ -451,7 +457,8 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
       <div className="p-4 border-t border-mac-border">
         <div className="text-xs text-mac-text-muted text-center">
           {sampleConversations.length} conversations
-          {searchQuery && ` • ${conversationGroups.reduce((acc, group) => acc + group.conversations.length, 0)} results`}
+          {searchQuery &&
+            ` • ${conversationGroups.reduce((acc, group) => acc + group.conversations.length, 0)} results`}
         </div>
       </div>
     </div>

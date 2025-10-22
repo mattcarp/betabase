@@ -1,10 +1,13 @@
 # SIAM Documentation Tag System
 
 ## Purpose
+
 Enable efficient content discovery and video production for technical demonstrations to senior engineering colleagues.
 
 ## Tag Format
+
 Tags are embedded in markdown files using HTML comments to keep them invisible in rendered docs:
+
 ```markdown
 <!-- TAGS: architecture, ai-integration, production -->
 ```
@@ -12,6 +15,7 @@ Tags are embedded in markdown files using HTML comments to keep them invisible i
 ## Tag Taxonomy
 
 ### 🏗️ Architecture Tags
+
 - `architecture` - System design and structure
 - `microservices` - Service-oriented architecture
 - `infrastructure` - Deployment and hosting
@@ -21,6 +25,7 @@ Tags are embedded in markdown files using HTML comments to keep them invisible i
 - `integration` - System integration points
 
 ### 🤖 AI/ML Tags
+
 - `ai-integration` - AI service integration
 - `llm` - Large Language Model features
 - `rag` - Retrieval Augmented Generation
@@ -31,6 +36,7 @@ Tags are embedded in markdown files using HTML comments to keep them invisible i
 - `prompt-engineering` - Prompt design patterns
 
 ### 🧪 Technical Implementation
+
 - `mcp-servers` - Model Context Protocol servers
 - `api-design` - API architecture and patterns
 - `real-time` - Real-time features and WebSockets
@@ -41,6 +47,7 @@ Tags are embedded in markdown files using HTML comments to keep them invisible i
 - `testing` - Testing strategies and frameworks
 
 ### 📊 Knowledge Management
+
 - `knowledge-curation` - Content curation features
 - `deduplication` - Duplicate detection algorithms
 - `metadata` - Metadata extraction and enrichment
@@ -50,6 +57,7 @@ Tags are embedded in markdown files using HTML comments to keep them invisible i
 - `roi-metrics` - ROI and value measurement
 
 ### 🎯 Feature Categories
+
 - `dashboard` - Dashboard implementations
 - `visualization` - Data visualization (charts, graphs)
 - `search` - Search functionality
@@ -59,6 +67,7 @@ Tags are embedded in markdown files using HTML comments to keep them invisible i
 - `automation` - Automated workflows
 
 ### 🚀 Production & Operations
+
 - `production` - Production deployment
 - `monitoring` - System monitoring
 - `logging` - Logging strategies
@@ -68,6 +77,7 @@ Tags are embedded in markdown files using HTML comments to keep them invisible i
 - `troubleshooting` - Debug and troubleshooting
 
 ### 💡 Innovation & Advanced
+
 - `innovation` - Cutting-edge features
 - `experimental` - Experimental features
 - `poc` - Proof of concepts
@@ -76,6 +86,7 @@ Tags are embedded in markdown files using HTML comments to keep them invisible i
 - `best-practices` - Recommended patterns
 
 ### 📹 Video Production Helper Tags
+
 - `demo-ready` - Polished features ready for demo
 - `visual-impact` - Visually impressive features
 - `technical-depth` - Deep technical content
@@ -87,38 +98,51 @@ Tags are embedded in markdown files using HTML comments to keep them invisible i
 ## Usage Examples
 
 ### Example 1: Architecture Document
+
 ```markdown
 <!-- TAGS: architecture, microservices, mcp-servers, technical-depth, architecture-decision -->
+
 # SIAM System Architecture
+
 ...
 ```
 
 ### Example 2: AI Curation Feature
+
 ```markdown
 <!-- TAGS: ai-curation, knowledge-curation, roi-metrics, demo-ready, innovation-highlight -->
+
 # Enhanced Knowledge Curation with AI
+
 ...
 ```
 
 ### Example 3: Production Deployment
+
 ```markdown
 <!-- TAGS: production, render-deployment, ci-cd, monitoring, lessons-learned -->
+
 # Production Deployment Strategy
+
 ...
 ```
 
 ## Video Production Queries
 
 ### For Architecture Overview Video
+
 Search for: `architecture, infrastructure, data-flow, technical-depth`
 
 ### For AI Innovation Video
+
 Search for: `ai-integration, llm, innovation-highlight, demo-ready`
 
 ### For Knowledge Management Deep Dive
+
 Search for: `knowledge-curation, deduplication, roi-metrics, visual-impact`
 
 ### For Production Engineering Video
+
 Search for: `production, monitoring, troubleshooting, lessons-learned`
 
 ## Tag Search Script
@@ -144,6 +168,7 @@ grep -r "TAGS:.*$TAG" docs/ --include="*.md" | cut -d: -f1 | sort -u
 ## Tag Maintenance
 
 Periodically run tag analysis:
+
 ```bash
 # Count tag usage
 grep -rh "TAGS:" docs/ --include="*.md" | \
@@ -153,6 +178,7 @@ grep -rh "TAGS:" docs/ --include="*.md" | \
 ```
 
 This helps identify:
+
 - Overused tags (too generic)
 - Underused tags (too specific)
 - Missing tag categories

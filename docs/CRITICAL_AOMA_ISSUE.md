@@ -11,6 +11,7 @@
 ## What's Broken
 
 ### AOMA Mesh MCP Server Status
+
 **URL:** `https://luminous-dedication-production.up.railway.app` (Railway)  
 **Fallback URL:** `https://aoma-mesh-mcp.onrender.com` (Render)  
 **Status:** 🔴 Returns 404 on ALL endpoints
@@ -18,13 +19,14 @@
 ```bash
 # All these return "Not Found":
 curl https://aoma-mesh-mcp.onrender.com/health         # 404
-curl https://aoma-mesh-mcp.onrender.com/api/health     # 404  
+curl https://aoma-mesh-mcp.onrender.com/api/health     # 404
 curl https://aoma-mesh-mcp.onrender.com/rpc            # 404
 ```
 
 ### Impact on SIAM
 
 **Chat API is unusable** - Every chat request:
+
 1. Tries to query AOMA Mesh MCP for context
 2. Waits 15-35 seconds for timeout
 3. Eventually fails or returns without AOMA intelligence
@@ -35,14 +37,14 @@ curl https://aoma-mesh-mcp.onrender.com/rpc            # 404
 ### What We Know
 
 1. **Server is deployed** - Cloudflare responds, SSL works
-2. **Server is NOT running** - All routes return 404  
+2. **Server is NOT running** - All routes return 404
 3. **Expected behavior:** Should respond on `/health` and `/rpc` endpoints
 4. **Actual behavior:** Returns "Not Found" from Cloudflare (server not started)
 
 ### Evidence
 
 ```
-< HTTP/2 404 
+< HTTP/2 404
 < x-render-routing: no-server    # ← Render says no server running!
 < server: cloudflare
 < content-type: text/plain; charset=utf-8
@@ -69,12 +71,14 @@ The `x-render-routing: no-server` header means Render cannot route to the server
 ## What We Tried (WRONG APPROACH)
 
 ### ❌ Attempted Bypass (NEVER DO THIS)
+
 ```typescript
 // WRONG - tried to bypass AOMA for testing
-const bypassAOMA = process.env.NEXT_PUBLIC_BYPASS_AOMA === 'true';
+const bypassAOMA = process.env.NEXT_PUBLIC_BYPASS_AOMA === "true";
 ```
 
 **Why this was wrong:**
+
 - Defeats the entire purpose of SIAM
 - Removes all enterprise intelligence
 - Makes SIAM just another generic chatbot
@@ -173,13 +177,15 @@ User gets slow, unintelligent response
 ## Performance Impact
 
 ### Current State (BROKEN)
+
 - **First attempt:** 15s timeout on lambda endpoint
-- **Second attempt:** 25s timeout on render endpoint  
+- **Second attempt:** 25s timeout on render endpoint
 - **Third attempt:** 35s sequential fallback
 - **Total:** 30-75 seconds before giving up
 - **Result:** No AOMA context, generic GPT-5 response
 
 ### Expected State (WORKING)
+
 - **AOMA query:** 200-500ms (cached) to 2-3s (live)
 - **GPT-5 response:** 1-2s streaming
 - **Total:** 2-5 seconds with full enterprise intelligence
@@ -187,12 +193,14 @@ User gets slow, unintelligent response
 ## Files Involved
 
 ### SIAM (Consumer)
+
 - `app/api/chat/route.ts` - Calls AOMA orchestrator
 - `src/services/aomaOrchestrator.ts` - Routes to appropriate tools
 - `src/services/aomaParallelQuery.ts` - Parallel queries with fallbacks
 - `src/services/aomaMeshMcp.ts` - MCP client
 
 ### AOMA Mesh MCP (Provider - BROKEN)
+
 - `src/aoma-mesh-server.ts` - Main server file
 - `src/http-bridge.ts` - HTTP endpoints (health, rpc)
 - `render.yaml` - Render deployment config
@@ -222,6 +230,7 @@ User gets slow, unintelligent response
 **SIAM is completely broken without AOMA.** This isn't a performance optimization - it's a critical system failure that must be fixed before any other testing can proceed.
 
 The bypass approach was wrong. We need to:
+
 1. Fix the AOMA Mesh MCP server deployment on Render
 2. Verify it's responding on `/health` and `/rpc`
 3. Test AOMA integration end-to-end

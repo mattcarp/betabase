@@ -5,28 +5,25 @@
  * Expected performance: <1s for vector queries (vs 20-25s for external APIs)
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-const TEST_API_URL = 'http://localhost:3000';
+const TEST_API_URL = "http://localhost:3000";
 const PERFORMANCE_THRESHOLDS = {
-  VECTOR_QUERY: 2000,        // 2s - vector store queries should be fast
-  CACHE_HIT: 500,            // 500ms - cached responses should be instant
-  EXTERNAL_API: 10000,       // 10s - fallback to external APIs (acceptable)
+  VECTOR_QUERY: 2000, // 2s - vector store queries should be fast
+  CACHE_HIT: 500, // 500ms - cached responses should be instant
+  EXTERNAL_API: 10000, // 10s - fallback to external APIs (acceptable)
 };
 
-test.describe('AOMA Orchestrator - Vector Store Integration', () => {
-
-  test('should use vector store for AOMA knowledge queries', async () => {
+test.describe("AOMA Orchestrator - Vector Store Integration", () => {
+  test("should use vector store for AOMA knowledge queries", async () => {
     const startTime = performance.now();
 
     const response = await fetch(`${TEST_API_URL}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        messages: [
-          { role: 'user', content: 'What is AOMA metadata management?' }
-        ]
-      })
+        messages: [{ role: "user", content: "What is AOMA metadata management?" }],
+      }),
     });
 
     const duration = performance.now() - startTime;
@@ -47,17 +44,15 @@ test.describe('AOMA Orchestrator - Vector Store Integration', () => {
     expect(text.length).toBeGreaterThan(0);
   });
 
-  test('should intelligently select source types for Jira queries', async () => {
+  test("should intelligently select source types for Jira queries", async () => {
     const startTime = performance.now();
 
     const response = await fetch(`${TEST_API_URL}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        messages: [
-          { role: 'user', content: 'Show me recent Jira tickets about bugs' }
-        ]
-      })
+        messages: [{ role: "user", content: "Show me recent Jira tickets about bugs" }],
+      }),
     });
 
     const duration = performance.now() - startTime;
@@ -70,17 +65,15 @@ test.describe('AOMA Orchestrator - Vector Store Integration', () => {
     console.log(`📊 Expected to query jira source type only`);
   });
 
-  test('should intelligently select source types for Git queries', async () => {
+  test("should intelligently select source types for Git queries", async () => {
     const startTime = performance.now();
 
     const response = await fetch(`${TEST_API_URL}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        messages: [
-          { role: 'user', content: 'What are the recent git commits?' }
-        ]
-      })
+        messages: [{ role: "user", content: "What are the recent git commits?" }],
+      }),
     });
 
     const duration = performance.now() - startTime;
@@ -93,19 +86,17 @@ test.describe('AOMA Orchestrator - Vector Store Integration', () => {
     console.log(`📊 Expected to query git source type only`);
   });
 
-  test('should cache vector store results for repeat queries', async () => {
+  test("should cache vector store results for repeat queries", async () => {
     const query = {
-      messages: [
-        { role: 'user', content: 'What is AOMA cover hot swap functionality?' }
-      ]
+      messages: [{ role: "user", content: "What is AOMA cover hot swap functionality?" }],
     };
 
     // First request - should hit vector store
     const start1 = performance.now();
     const response1 = await fetch(`${TEST_API_URL}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(query)
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(query),
     });
     const duration1 = performance.now() - start1;
 
@@ -115,9 +106,9 @@ test.describe('AOMA Orchestrator - Vector Store Integration', () => {
     // Second request - should hit cache
     const start2 = performance.now();
     const response2 = await fetch(`${TEST_API_URL}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(query)
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(query),
     });
     const duration2 = performance.now() - start2;
 
@@ -126,22 +117,28 @@ test.describe('AOMA Orchestrator - Vector Store Integration', () => {
 
     // Cached response should be significantly faster
     if (duration2 < duration1 * 0.5) {
-      console.log(`✅ CACHE HIT: Second query was ${((1 - duration2/duration1) * 100).toFixed(0)}% faster`);
+      console.log(
+        `✅ CACHE HIT: Second query was ${((1 - duration2 / duration1) * 100).toFixed(0)}% faster`
+      );
     }
   });
 
-  test('should fall back to external APIs when vector store has no results', async () => {
+  test("should fall back to external APIs when vector store has no results", async () => {
     const startTime = performance.now();
 
     // Query something very specific that might not be in vector store
     const response = await fetch(`${TEST_API_URL}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         messages: [
-          { role: 'user', content: 'Query for something extremely specific that definitely does not exist in any knowledge base' }
-        ]
-      })
+          {
+            role: "user",
+            content:
+              "Query for something extremely specific that definitely does not exist in any knowledge base",
+          },
+        ],
+      }),
     });
 
     const duration = performance.now() - startTime;
@@ -156,15 +153,13 @@ test.describe('AOMA Orchestrator - Vector Store Integration', () => {
     }
   });
 
-  test('should include source citations in vector store responses', async () => {
+  test("should include source citations in vector store responses", async () => {
     const response = await fetch(`${TEST_API_URL}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        messages: [
-          { role: 'user', content: 'What is AOMA?' }
-        ]
-      })
+        messages: [{ role: "user", content: "What is AOMA?" }],
+      }),
     });
 
     expect(response.ok).toBeTruthy();
@@ -180,15 +175,13 @@ test.describe('AOMA Orchestrator - Vector Store Integration', () => {
     }
   });
 
-  test('should provide metadata about vector search results', async () => {
+  test("should provide metadata about vector search results", async () => {
     const response = await fetch(`${TEST_API_URL}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        messages: [
-          { role: 'user', content: 'Tell me about AOMA asset management' }
-        ]
-      })
+        messages: [{ role: "user", content: "Tell me about AOMA asset management" }],
+      }),
     });
 
     expect(response.ok).toBeTruthy();
@@ -203,25 +196,24 @@ test.describe('AOMA Orchestrator - Vector Store Integration', () => {
   });
 });
 
-test.describe('AOMA Orchestrator - Performance Regression Prevention', () => {
-
-  test('should not exceed 5s for standard AOMA queries', async () => {
+test.describe("AOMA Orchestrator - Performance Regression Prevention", () => {
+  test("should not exceed 5s for standard AOMA queries", async () => {
     const queries = [
-      'What is AOMA?',
-      'How does metadata management work?',
-      'Explain the asset ingestion process',
-      'What are the main AOMA features?'
+      "What is AOMA?",
+      "How does metadata management work?",
+      "Explain the asset ingestion process",
+      "What are the main AOMA features?",
     ];
 
     for (const query of queries) {
       const startTime = performance.now();
 
       const response = await fetch(`${TEST_API_URL}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [{ role: 'user', content: query }]
-        })
+          messages: [{ role: "user", content: query }],
+        }),
       });
 
       const duration = performance.now() - startTime;
@@ -232,7 +224,9 @@ test.describe('AOMA Orchestrator - Performance Regression Prevention', () => {
 
       // CRITICAL: Must be under 5s threshold
       if (duration > 5000) {
-        console.error(`❌ PERFORMANCE REGRESSION: Query took ${duration.toFixed(0)}ms (threshold: 5000ms)`);
+        console.error(
+          `❌ PERFORMANCE REGRESSION: Query took ${duration.toFixed(0)}ms (threshold: 5000ms)`
+        );
       }
 
       expect(duration).toBeLessThan(5000);

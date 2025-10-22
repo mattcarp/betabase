@@ -40,6 +40,7 @@ When using Cursor's AI (Cmd+K or Cmd+L), these commands work:
 ## 🎨 Cursor Copilot++ Integration
 
 ### Test Generation Triggers
+
 ```typescript
 // Type these comments to trigger Cursor's test generation:
 
@@ -50,6 +51,7 @@ When using Cursor's AI (Cmd+K or Cmd+L), these commands work:
 ```
 
 ### Cursor Tab Autocomplete for Tests
+
 ```typescript
 // Start typing these patterns:
 describe('[FEATURE]   // Cursor will complete the template
@@ -61,6 +63,7 @@ TestFactory.         // Cursor will show factory methods
 ## 🔧 Cursor Test Runner Integration
 
 ### Quick Panel Commands (Cmd+Shift+P)
+
 ```
 > Run Test at Cursor
 > Debug Test at Cursor
@@ -70,6 +73,7 @@ TestFactory.         // Cursor will show factory methods
 ```
 
 ### Cursor Terminal Commands
+
 ```bash
 # Cursor's integrated terminal recognizes:
 cursor-test              # Runs contextual test
@@ -81,7 +85,8 @@ cursor-test:failed       # Re-runs failures
 ## 📊 Cursor Code Actions
 
 ### On test files, Cursor provides:
-- 💡 "Run this test" 
+
+- 💡 "Run this test"
 - 💡 "Debug this test"
 - 💡 "Add test case"
 - 💡 "Convert to Page Object"
@@ -90,20 +95,24 @@ cursor-test:failed       # Re-runs failures
 ## 🎯 Cursor-Specific Features
 
 ### 1. Inline Test Results
+
 ```typescript
-test('should work', async () => {
+test("should work", async () => {
   // Cursor shows: ✅ Passed (2.3s)
   expect(true).toBe(true);
 });
 ```
 
 ### 2. Smart Test Navigation
+
 - `Cmd+Click` on page object → Jump to implementation
 - `Cmd+Click` on factory → Jump to factory method
 - `Cmd+Click` on selector → Jump to element definition
 
 ### 3. Cursor AI Understanding
+
 Tell Cursor:
+
 - "Make this test more robust"
 - "Add error handling to this test"
 - "Convert this to use page objects"
@@ -117,7 +126,7 @@ await page.click(selector); // Set breakpoint here
 
 // Cursor shows inline:
 // - Current URL
-// - Page title  
+// - Page title
 // - Element state
 // - Network activity
 ```
@@ -146,5 +155,6 @@ await page.click(selector); // Set breakpoint here
 - ✅ Let Cursor auto-import from `__pages__`
 
 ---
+
 Cursor Version: Latest
 Last Updated: 2024

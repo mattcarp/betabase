@@ -3,36 +3,36 @@
  * POST endpoint for ingesting and vectorizing system metrics
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getSystemMetricsVectorService, SystemMetric } from '@/services/systemMetricsVectorService';
+import { NextRequest, NextResponse } from "next/server";
+import { getSystemMetricsVectorService, SystemMetric } from "@/services/systemMetricsVectorService";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { metrics, action = 'ingest' } = body;
+    const { metrics, action = "ingest" } = body;
 
     const metricsService = getSystemMetricsVectorService();
 
     // Handle different actions
-    if (action === 'snapshot') {
+    if (action === "snapshot") {
       // Capture and vectorize current system snapshot
-      console.log('📊 Capturing system snapshot via API...');
+      console.log("📊 Capturing system snapshot via API...");
       const result = await metricsService.captureAndVectorize();
 
       return NextResponse.json({
         success: true,
-        action: 'snapshot',
+        action: "snapshot",
         result,
       });
     }
 
-    if (action === 'custom') {
+    if (action === "custom") {
       // Record a single custom metric
       const { name, value, metricType, unit, tags, metadata } = body;
 
       if (!name || value === undefined) {
         return NextResponse.json(
-          { error: 'Missing required fields: name and value' },
+          { error: "Missing required fields: name and value" },
           { status: 400 }
         );
       }
@@ -47,17 +47,17 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        action: 'custom',
+        action: "custom",
         vectorId,
         metric: { name, value, metricType, unit },
       });
     }
 
-    if (action === 'batch') {
+    if (action === "batch") {
       // Ingest multiple metrics
       if (!metrics || !Array.isArray(metrics)) {
         return NextResponse.json(
-          { error: 'Invalid request: metrics array required for batch action' },
+          { error: "Invalid request: metrics array required for batch action" },
           { status: 400 }
         );
       }
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        action: 'batch',
+        action: "batch",
         result,
       });
     }
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
     // Default: ingest metrics
     if (!metrics || !Array.isArray(metrics)) {
       return NextResponse.json(
-        { error: 'Invalid request: metrics array required' },
+        { error: "Invalid request: metrics array required" },
         { status: 400 }
       );
     }
@@ -85,15 +85,15 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      action: 'ingest',
+      action: "ingest",
       result,
     });
   } catch (error) {
-    console.error('Metrics ingestion error:', error);
+    console.error("Metrics ingestion error:", error);
     return NextResponse.json(
       {
-        error: 'Failed to ingest metrics',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: "Failed to ingest metrics",
+        details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );
@@ -106,9 +106,9 @@ export async function GET(request: NextRequest) {
 
     // Get metrics history
     const searchParams = request.nextUrl.searchParams;
-    const metricType = searchParams.get('metricType') as SystemMetric['metricType'] | null;
-    const namePattern = searchParams.get('namePattern');
-    const limit = searchParams.get('limit');
+    const metricType = searchParams.get("metricType") as SystemMetric["metricType"] | null;
+    const namePattern = searchParams.get("namePattern");
+    const limit = searchParams.get("limit");
 
     const history = metricsService.getMetricsHistory({
       metricType: metricType || undefined,
@@ -122,11 +122,11 @@ export async function GET(request: NextRequest) {
       metrics: history,
     });
   } catch (error) {
-    console.error('Failed to get metrics history:', error);
+    console.error("Failed to get metrics history:", error);
     return NextResponse.json(
       {
-        error: 'Failed to get metrics history',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: "Failed to get metrics history",
+        details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );

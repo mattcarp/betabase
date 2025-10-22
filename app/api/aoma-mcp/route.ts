@@ -89,8 +89,7 @@ export async function POST(request: NextRequest) {
         // Proxy the request to the AOMA MCP Railway server
         try {
           const railwayUrl =
-            process.env.MCP_RAILWAY_URL ||
-            "https://luminous-dedication-production.up.railway.app";
+            process.env.MCP_RAILWAY_URL || "https://luminous-dedication-production.up.railway.app";
 
           console.log("🔧 Environment check:", {
             MCP_RAILWAY_URL: process.env.MCP_RAILWAY_URL,
@@ -125,7 +124,7 @@ export async function POST(request: NextRequest) {
 
           if (!railwayResponse.ok) {
             throw new Error(
-              `Railway request failed: ${railwayResponse.status} ${railwayResponse.statusText}`,
+              `Railway request failed: ${railwayResponse.status} ${railwayResponse.statusText}`
             );
           }
 
@@ -151,11 +150,10 @@ export async function POST(request: NextRequest) {
               error: "AOMA MCP server unavailable",
               message:
                 "Sorry, I couldn't connect to the AOMA knowledge servers right now. Please try again later.",
-              details:
-                error instanceof Error ? error.message : "Connection failed",
+              details: error instanceof Error ? error.message : "Connection failed",
               timestamp: new Date().toISOString(),
             },
-            { status: 503 },
+            { status: 503 }
           );
         }
 
@@ -169,7 +167,7 @@ export async function POST(request: NextRequest) {
         error: "Internal server error",
         message: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -182,8 +180,7 @@ export async function OPTIONS(request: NextRequest) {
       : ["http://localhost:3000", "http://127.0.0.1:3000"];
 
   const origin = request.headers.get("origin");
-  const corsOrigin =
-    origin && allowedOrigins.includes(origin) ? origin : "null";
+  const corsOrigin = origin && allowedOrigins.includes(origin) ? origin : "null";
 
   return new NextResponse(null, {
     status: 200,

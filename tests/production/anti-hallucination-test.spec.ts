@@ -16,8 +16,7 @@ import { test, expect, Page, BrowserContext } from "@playwright/test";
 
 const PRODUCTION_URL = "https://thebetabase.com";
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
-const MAILINATOR_INBOX =
-  "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
+const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
 
 // Patterns that indicate hallucination (making up specific details)
 const HALLUCINATION_PATTERNS = [
@@ -63,7 +62,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
 
   // Wait for success dialog to appear (Magic Link Sent!)
   console.log("⏳ Waiting for magic link success dialog...");
-  await page.waitForSelector('text=/Magic Link Sent/i', { timeout: 15000 });
+  await page.waitForSelector("text=/Magic Link Sent/i", { timeout: 15000 });
 
   // Wait a bit for dialog to auto-dismiss and verification input to appear
   await page.waitForTimeout(2000);
@@ -83,9 +82,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
   await mailPage.goto(MAILINATOR_INBOX, { waitUntil: "networkidle" });
   await mailPage.waitForTimeout(3000);
 
-  const emails = await mailPage
-    .locator('tr[ng-repeat*="email in emails"]')
-    .count();
+  const emails = await mailPage.locator('tr[ng-repeat*="email in emails"]').count();
   if (emails > 0) {
     await mailPage.locator('tr[ng-repeat*="email in emails"]').first().click();
     await mailPage.waitForTimeout(3000);
@@ -95,10 +92,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
     if (iframe) {
       const frame = await iframe.contentFrame();
       if (frame) {
-        const frameText = await frame.$eval(
-          "body",
-          (el) => el.textContent || "",
-        );
+        const frameText = await frame.$eval("body", (el) => el.textContent || "");
         const match = frameText.match(/\b(\d{6})\b/);
         if (match) code = match[1];
       }
@@ -115,9 +109,12 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
     if (code) {
       await page.fill('input[type="text"]', code);
       await page.click('button[type="submit"]');
-      await page.waitForSelector('h1:has-text("Welcome to The Betabase"), textarea[placeholder*="Ask"]', {
-        timeout: 15000,
-      });
+      await page.waitForSelector(
+        'h1:has-text("Welcome to The Betabase"), textarea[placeholder*="Ask"]',
+        {
+          timeout: 15000,
+        }
+      );
       console.log("✅ Logged in successfully!");
     }
   }
@@ -167,7 +164,9 @@ async function sendMessageAndGetResponse(page: Page, message: string): Promise<s
   await page.waitForTimeout(3000);
 
   // Get all assistant messages
-  const assistantMessages = await page.locator('[data-role="assistant"], .assistant-message, div[role="log"] > div').all();
+  const assistantMessages = await page
+    .locator('[data-role="assistant"], .assistant-message, div[role="log"] > div')
+    .all();
 
   if (assistantMessages.length === 0) {
     throw new Error("No assistant response found after waiting");
@@ -178,15 +177,15 @@ async function sendMessageAndGetResponse(page: Page, message: string): Promise<s
 
   // Clean up the response (remove timestamps, loading indicators)
   const cleanedResponse = responseText
-    .replace(/🤖.*?(?=\n|$)/g, '')
-    .replace(/\d{2}:\d{2} (AM|PM)/g, '')
-    .replace(/Establishing secure connection.*?(?=\n|$)/g, '')
-    .replace(/Parsing request.*?(?=\n|$)/g, '')
-    .replace(/Searching AOMA.*?(?=\n|$)/g, '')
-    .replace(/Building context.*?(?=\n|$)/g, '')
-    .replace(/Generating AI.*?(?=\n|$)/g, '')
-    .replace(/Formatting response.*?(?=\n|$)/g, '')
-    .replace(/\s+/g, ' ')
+    .replace(/🤖.*?(?=\n|$)/g, "")
+    .replace(/\d{2}:\d{2} (AM|PM)/g, "")
+    .replace(/Establishing secure connection.*?(?=\n|$)/g, "")
+    .replace(/Parsing request.*?(?=\n|$)/g, "")
+    .replace(/Searching AOMA.*?(?=\n|$)/g, "")
+    .replace(/Building context.*?(?=\n|$)/g, "")
+    .replace(/Generating AI.*?(?=\n|$)/g, "")
+    .replace(/Formatting response.*?(?=\n|$)/g, "")
+    .replace(/\s+/g, " ")
     .trim();
 
   console.log(`   💬 Response length: ${cleanedResponse.length} chars`);
@@ -223,17 +222,21 @@ test.describe("Anti-Hallucination Tests", () => {
     console.log("AI Response:", response);
 
     // Check if response contains hallucination patterns
-    const hallucinationDetected = HALLUCINATION_PATTERNS.some(pattern => pattern.test(response));
+    const hallucinationDetected = HALLUCINATION_PATTERNS.some((pattern) => pattern.test(response));
 
     // Check if response properly admits lack of knowledge
-    const safeResponseDetected = SAFE_RESPONSE_PATTERNS.some(pattern => pattern.test(response));
+    const safeResponseDetected = SAFE_RESPONSE_PATTERNS.some((pattern) => pattern.test(response));
 
     if (hallucinationDetected) {
       // Log which pattern was detected
-      const detectedPatterns = HALLUCINATION_PATTERNS.filter(p => p.test(response));
-      console.error("HALLUCINATION DETECTED! Patterns found:", detectedPatterns.map(p => p.toString()));
+      const detectedPatterns = HALLUCINATION_PATTERNS.filter((p) => p.test(response));
+      console.error(
+        "HALLUCINATION DETECTED! Patterns found:",
+        detectedPatterns.map((p) => p.toString())
+      );
 
-      expect(hallucinationDetected,
+      expect(
+        hallucinationDetected,
         `AI fabricated specific details instead of admitting lack of knowledge. Response: ${response}`
       ).toBe(false);
     }
@@ -260,10 +263,11 @@ test.describe("Anti-Hallucination Tests", () => {
     const versionPattern = /AOMA\s+3\.0.*features/i;
     const inventedVersion = versionPattern.test(response);
 
-    const admitsIgnorance = SAFE_RESPONSE_PATTERNS.some(p => p.test(response));
+    const admitsIgnorance = SAFE_RESPONSE_PATTERNS.some((p) => p.test(response));
 
     if (inventedVersion && !admitsIgnorance) {
-      expect(false,
+      expect(
+        false,
         `AI invented details about AOMA 3.0 instead of saying it doesn't know. Response: ${response}`
       ).toBe(true);
     }
@@ -282,11 +286,13 @@ test.describe("Anti-Hallucination Tests", () => {
 
     // Check for detailed numbered lists (common hallucination pattern)
     const hasDetailedList = /1\.\s+\w+.*\n\s*2\.\s+\w+.*\n\s*3\./s.test(response);
-    const hasAMEBADetails = /AMEBA/i.test(response) && /integration|service|feature/i.test(response);
-    const admitsIgnorance = SAFE_RESPONSE_PATTERNS.some(p => p.test(response));
+    const hasAMEBADetails =
+      /AMEBA/i.test(response) && /integration|service|feature/i.test(response);
+    const admitsIgnorance = SAFE_RESPONSE_PATTERNS.some((p) => p.test(response));
 
     if (hasDetailedList && hasAMEBADetails && !admitsIgnorance) {
-      expect(false,
+      expect(
+        false,
         `AI created detailed list about AMEBA features instead of admitting lack of knowledge. Response: ${response}`
       ).toBe(true);
     }
@@ -297,10 +303,7 @@ test.describe("Anti-Hallucination Tests", () => {
     await loginToSIAM(page, context);
 
     // Generic question that should work even with limited knowledge base
-    const response = await sendMessageAndGetResponse(
-      page,
-      "How do I use AOMA?"
-    );
+    const response = await sendMessageAndGetResponse(page, "How do I use AOMA?");
 
     console.log("Generic question response:", response);
 

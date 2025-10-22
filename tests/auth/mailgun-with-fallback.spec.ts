@@ -25,7 +25,7 @@ async function isMailgunStillAlive(): Promise<boolean> {
           password: MAILGUN_CONFIG.apiKey,
         },
         timeout: 5000,
-      },
+      }
     );
     return response.status === 200;
   } catch (error) {
@@ -35,9 +35,7 @@ async function isMailgunStillAlive(): Promise<boolean> {
 }
 
 test.describe("Magic Link Testing (Fuck Mailgun Edition)", () => {
-  test("authenticate with magic link - with Mailgun fallback", async ({
-    page,
-  }) => {
+  test("authenticate with magic link - with Mailgun fallback", async ({ page }) => {
     // Check if Mailgun is still working
     const mailgunAlive = await isMailgunStillAlive();
 
@@ -112,7 +110,7 @@ test.describe("Magic Link Testing (Fuck Mailgun Edition)", () => {
                 limit: 1,
               },
               timeout: 5000,
-            },
+            }
           );
 
           const event = response.data.items?.[0];

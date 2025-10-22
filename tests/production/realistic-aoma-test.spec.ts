@@ -59,7 +59,7 @@ test("AOMA responds with actual knowledge (not rate limit)", async ({ page, cont
 
   const input = page.locator('textarea[placeholder*="Ask"], input[placeholder*="Ask"]').first();
   await input.fill("What is AOMA?");
-  await page.keyboard.press('Enter');
+  await page.keyboard.press("Enter");
 
   console.log("⏳ Waiting for AI response (up to 120 seconds)...");
 
@@ -78,7 +78,7 @@ test("AOMA responds with actual knowledge (not rate limit)", async ({ page, cont
 
   const messages = await page.locator('div[role="log"] > div').all();
   const lastMessage = messages[messages.length - 1];
-  const response = await lastMessage.textContent() || "";
+  const response = (await lastMessage.textContent()) || "";
 
   console.log("\n💬 RESPONSE:");
   console.log(response.substring(0, 500));

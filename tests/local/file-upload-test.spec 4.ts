@@ -27,29 +27,25 @@ async function setupTestFiles() {
   // Create a small text file
   fs.writeFileSync(
     path.join(TEST_FILES_DIR, "test-document.txt"),
-    "This is a test document for SIAM file upload testing.\n".repeat(100),
+    "This is a test document for SIAM file upload testing.\n".repeat(100)
   );
 
   // Create a JSON file
   fs.writeFileSync(
     path.join(TEST_FILES_DIR, "test-data.json"),
-    JSON.stringify(
-      { test: "data", array: [1, 2, 3], nested: { key: "value" } },
-      null,
-      2,
-    ),
+    JSON.stringify({ test: "data", array: [1, 2, 3], nested: { key: "value" } }, null, 2)
   );
 
   // Create a markdown file
   fs.writeFileSync(
     path.join(TEST_FILES_DIR, "test-readme.md"),
-    "# Test Document\n\nThis is a **test** markdown file with:\n- Bullet points\n- Code blocks\n```javascript\nconsole.log('test');\n```",
+    "# Test Document\n\nThis is a **test** markdown file with:\n- Bullet points\n- Code blocks\n```javascript\nconsole.log('test');\n```"
   );
 
   // Create a CSV file
   fs.writeFileSync(
     path.join(TEST_FILES_DIR, "test-data.csv"),
-    "Name,Age,City\nJohn Doe,30,New York\nJane Smith,25,Los Angeles\nBob Johnson,35,Chicago",
+    "Name,Age,City\nJohn Doe,30,New York\nJane Smith,25,Los Angeles\nBob Johnson,35,Chicago"
   );
 
   // Create a large file (5MB)
@@ -107,9 +103,7 @@ test.describe("📎 FILE UPLOAD COMPREHENSIVE TESTS", () => {
 
     // Look for file upload area
     const uploadButton = page
-      .locator(
-        'button:has-text("Upload"), label:has-text("Upload"), input[type="file"]',
-      )
+      .locator('button:has-text("Upload"), label:has-text("Upload"), input[type="file"]')
       .first();
     const uploadInput = page.locator('input[type="file"]').first();
 
@@ -139,12 +133,8 @@ test.describe("📎 FILE UPLOAD COMPREHENSIVE TESTS", () => {
       }
 
       if (!uploadSuccess) {
-        console.log(
-          "   ⚠️ No clear success indicator, checking for file in list",
-        );
-        const fileInList = await page
-          .locator('text="test-document.txt"')
-          .isVisible();
+        console.log("   ⚠️ No clear success indicator, checking for file in list");
+        const fileInList = await page.locator('text="test-document.txt"').isVisible();
         if (fileInList) {
           console.log("   ✅ File appears in uploaded files list");
         }
@@ -198,15 +188,11 @@ test.describe("📎 FILE UPLOAD COMPREHENSIVE TESTS", () => {
         // Check if all files appear
         for (const file of files) {
           const fileName = path.basename(file);
-          const fileVisible = await page
-            .locator(`text="${fileName}"`)
-            .isVisible();
+          const fileVisible = await page.locator(`text="${fileName}"`).isVisible();
           console.log(`   File "${fileName}": ${fileVisible ? "✅" : "❌"}`);
         }
       } else {
-        console.log(
-          "   ℹ️ Input doesn't accept multiple files, uploading one by one",
-        );
+        console.log("   ℹ️ Input doesn't accept multiple files, uploading one by one");
 
         for (const file of files) {
           await uploadInput.setInputFiles(file);
@@ -301,9 +287,7 @@ test.describe("📎 FILE UPLOAD COMPREHENSIVE TESTS", () => {
       for (const indicator of errorIndicators) {
         if (await indicator.isVisible()) {
           const errorText = await indicator.textContent();
-          console.log(
-            `   ❌ Size limit error: ${errorText?.substring(0, 50)}...`,
-          );
+          console.log(`   ❌ Size limit error: ${errorText?.substring(0, 50)}...`);
           errorDetected = true;
           break;
         }
@@ -311,9 +295,7 @@ test.describe("📎 FILE UPLOAD COMPREHENSIVE TESTS", () => {
 
       if (!errorDetected) {
         // Check if file was actually uploaded
-        const fileVisible = await page
-          .locator('text="large-file.txt"')
-          .isVisible();
+        const fileVisible = await page.locator('text="large-file.txt"').isVisible();
         if (fileVisible) {
           console.log("   ✅ Large file uploaded successfully (no size limit)");
         } else {
@@ -351,21 +333,15 @@ test.describe("📎 FILE UPLOAD COMPREHENSIVE TESTS", () => {
       for (const indicator of warningIndicators) {
         if (await indicator.isVisible()) {
           const warningText = await indicator.textContent();
-          console.log(
-            `   ⚠️ Empty file warning: ${warningText?.substring(0, 50)}...`,
-          );
+          console.log(`   ⚠️ Empty file warning: ${warningText?.substring(0, 50)}...`);
           warningFound = true;
           break;
         }
       }
 
       if (!warningFound) {
-        const fileVisible = await page
-          .locator('text="empty-file.txt"')
-          .isVisible();
-        console.log(
-          `   Empty file ${fileVisible ? "accepted" : "not visible"}`,
-        );
+        const fileVisible = await page.locator('text="empty-file.txt"').isVisible();
+        console.log(`   Empty file ${fileVisible ? "accepted" : "not visible"}`);
       }
 
       await page.screenshot({
@@ -411,9 +387,7 @@ test.describe("📎 FILE UPLOAD COMPREHENSIVE TESTS", () => {
       await uploadPromise;
 
       if (!progressFound) {
-        console.log(
-          "   ⚠️ No progress indicator detected (upload might be too fast)",
-        );
+        console.log("   ⚠️ No progress indicator detected (upload might be too fast)");
       }
     }
   });
@@ -447,9 +421,7 @@ test.describe("📎 FILE UPLOAD COMPREHENSIVE TESTS", () => {
       for (const error of validationErrors) {
         if (await error.isVisible()) {
           const errorText = await error.textContent();
-          console.log(
-            `   ❌ Type validation error: ${errorText?.substring(0, 50)}...`,
-          );
+          console.log(`   ❌ Type validation error: ${errorText?.substring(0, 50)}...`);
           validationError = true;
           break;
         }
@@ -457,9 +429,7 @@ test.describe("📎 FILE UPLOAD COMPREHENSIVE TESTS", () => {
 
       if (!validationError) {
         const fileVisible = await page.locator('text="test.xyz"').isVisible();
-        console.log(
-          `   File ${fileVisible ? "accepted (no type restriction)" : "not visible"}`,
-        );
+        console.log(`   File ${fileVisible ? "accepted (no type restriction)" : "not visible"}`);
       }
 
       // Clean up weird file
@@ -513,9 +483,7 @@ test.describe("📎 FILE UPLOAD COMPREHENSIVE TESTS", () => {
       }
 
       await uploadPromise.catch(() => {
-        console.log(
-          "   ✅ Upload promise rejected (expected for cancellation)",
-        );
+        console.log("   ✅ Upload promise rejected (expected for cancellation)");
       });
 
       if (!cancelFound) {
@@ -532,9 +500,7 @@ test.describe("📎 FILE UPLOAD COMPREHENSIVE TESTS", () => {
     console.log("\n💬 Testing file upload in AOMA chat context...");
 
     // Navigate to AOMA chat if not already there
-    const aomaLink = page
-      .locator('a:has-text("AOMA"), button:has-text("AOMA")')
-      .first();
+    const aomaLink = page.locator('a:has-text("AOMA"), button:has-text("AOMA")').first();
     if (await aomaLink.isVisible()) {
       await aomaLink.click();
       await page.waitForTimeout(2000);

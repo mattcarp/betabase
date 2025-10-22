@@ -5,10 +5,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 // import { toast } from "sonner";
-const toast = { 
-  success: (msg: string) => console.log('✅', msg),
-  error: (msg: string) => console.error('❌', msg),
-  info: (msg: string) => console.info('ℹ️', msg)
+const toast = {
+  success: (msg: string) => console.log("✅", msg),
+  error: (msg: string) => console.error("❌", msg),
+  info: (msg: string) => console.info("ℹ️", msg),
 };
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -25,10 +25,7 @@ interface MagicLinkLoginFormProps {
 
 // FIONA P0 FIX: Magic Link Authentication Schema
 const emailSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
+  email: z.string().min(1, "Email is required").email("Please enter a valid email address"),
   // No client-side validation of allowed emails - let the server handle it securely
 });
 
@@ -42,9 +39,7 @@ const codeSchema = z.object({
 type EmailFormData = z.infer<typeof emailSchema>;
 type CodeFormData = z.infer<typeof codeSchema>;
 
-export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
-  onLoginSuccess,
-}) => {
+export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginSuccess }) => {
   const [step, setStep] = useState<"email" | "code">("email");
   const [currentEmail, setCurrentEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -91,16 +86,12 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
       // Handle server errors (502, 503, etc) with retry
       if (response.status >= 500) {
         if (retryCount < 2) {
-          console.log(
-            `Server error ${response.status}, retrying... (attempt ${retryCount + 2}/3)`,
-          );
+          console.log(`Server error ${response.status}, retrying... (attempt ${retryCount + 2}/3)`);
           toast.info("Server temporarily unavailable, retrying...");
           await new Promise((resolve) => setTimeout(resolve, 1500));
           return sendMagicLink(data, retryCount + 1);
         }
-        throw new Error(
-          "Server is temporarily unavailable. Please try again in a moment.",
-        );
+        throw new Error("Server is temporarily unavailable. Please try again in a moment.");
       }
 
       // Try to parse JSON response
@@ -110,15 +101,9 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
         result = await response.json();
       } else {
         // Server returned non-JSON (likely an error page)
-        console.error(
-          "Server returned non-JSON response:",
-          response.status,
-          response.statusText,
-        );
+        console.error("Server returned non-JSON response:", response.status, response.statusText);
         if (response.status === 405) {
-          throw new Error(
-            "Method not allowed. The server configuration may have an issue.",
-          );
+          throw new Error("Method not allowed. The server configuration may have an issue.");
         }
         throw new Error(`Server error (${response.status}). Please try again.`);
       }
@@ -138,26 +123,16 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
           duration: 10000,
         });
       } else {
-        toast.success(
-          "Magic link sent! Check your email for the verification code.",
-          {
-            duration: 5000,
-          },
-        );
+        toast.success("Magic link sent! Check your email for the verification code.", {
+          duration: 5000,
+        });
       }
     } catch (error) {
       console.error("Send magic link error:", error);
-      if (
-        error instanceof TypeError &&
-        error.message.includes("Failed to fetch")
-      ) {
-        toast.error(
-          "Unable to connect to the server. Please check your internet connection.",
-        );
+      if (error instanceof TypeError && error.message.includes("Failed to fetch")) {
+        toast.error("Unable to connect to the server. Please check your internet connection.");
       } else {
-        toast.error(
-          error instanceof Error ? error.message : "Failed to send magic link",
-        );
+        toast.error(error instanceof Error ? error.message : "Failed to send magic link");
       }
     } finally {
       setIsLoading(false);
@@ -182,16 +157,12 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
       // Handle server errors (502, 503, etc) with retry
       if (response.status >= 500) {
         if (retryCount < 2) {
-          console.log(
-            `Server error ${response.status}, retrying... (attempt ${retryCount + 2}/3)`,
-          );
+          console.log(`Server error ${response.status}, retrying... (attempt ${retryCount + 2}/3)`);
           toast.info("Server temporarily unavailable, retrying...");
           await new Promise((resolve) => setTimeout(resolve, 1500));
           return verifyCode(data, retryCount + 1);
         }
-        throw new Error(
-          "Server is temporarily unavailable. Please try again in a moment.",
-        );
+        throw new Error("Server is temporarily unavailable. Please try again in a moment.");
       }
 
       // Try to parse JSON response
@@ -201,11 +172,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
         result = await response.json();
       } else {
         // Server returned non-JSON (likely an error page)
-        console.error(
-          "Server returned non-JSON response:",
-          response.status,
-          response.statusText,
-        );
+        console.error("Server returned non-JSON response:", response.status, response.statusText);
         throw new Error(`Server error (${response.status}). Please try again.`);
       }
 
@@ -222,19 +189,10 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
       onLoginSuccess();
     } catch (error) {
       console.error("Verify code error:", error);
-      if (
-        error instanceof TypeError &&
-        error.message.includes("Failed to fetch")
-      ) {
-        toast.error(
-          "Unable to connect to the server. Please check your internet connection.",
-        );
+      if (error instanceof TypeError && error.message.includes("Failed to fetch")) {
+        toast.error("Unable to connect to the server. Please check your internet connection.");
       } else {
-        toast.error(
-          error instanceof Error
-            ? error.message
-            : "Invalid code. Please try again.",
-        );
+        toast.error(error instanceof Error ? error.message : "Invalid code. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -262,9 +220,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
             <SiamLogo size="2xl" variant="icon" className="drop-shadow-2xl" />
           </div>
           <h1 className="mac-display-text mb-2">The Betabase</h1>
-          <p className="mac-body text-gray-300">
-            yup. it's back.
-          </p>
+          <p className="mac-body text-gray-300">yup. it's back.</p>
         </div>
 
         {/* Welcome Message */}
@@ -284,10 +240,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
             suppressHydrationWarning
           >
             <Field>
-              <FieldLabel
-                htmlFor="email"
-                className="block text-white text-sm font-medium mb-2"
-              >
+              <FieldLabel htmlFor="email" className="block text-white text-sm font-medium mb-2">
                 Email Address
               </FieldLabel>
               <div className="relative group">
@@ -335,15 +288,9 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
             {/* Success Message */}
             <div className="text-center p-6 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl border border-green-500/20 backdrop-blur-sm">
               <CheckCircle className="mx-auto h-12 w-12 text-green-400 mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">
-                Magic Link Sent!
-              </h3>
-              <p className="text-sm text-gray-300">
-                We've sent a verification code to
-              </p>
-              <p className="text-sm font-medium text-white mt-1">
-                {currentEmail}
-              </p>
+              <h3 className="text-lg font-semibold text-white mb-2">Magic Link Sent!</h3>
+              <p className="text-sm text-gray-300">We've sent a verification code to</p>
+              <p className="text-sm font-medium text-white mt-1">{currentEmail}</p>
               <p className="text-xs text-gray-400 mt-2">
                 Check your email for the 6-digit verification code
               </p>
@@ -354,9 +301,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
               <div className="text-center p-4 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 rounded-xl border border-orange-500/20 backdrop-blur-sm">
                 <p className="text-sm text-orange-300 font-medium">
                   Development Code:{" "}
-                  <span className="font-mono text-lg text-orange-200">
-                    {devCode}
-                  </span>
+                  <span className="font-mono text-lg text-orange-200">{devCode}</span>
                 </p>
               </div>
             )}
@@ -368,10 +313,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
               suppressHydrationWarning
             >
               <Field>
-                <FieldLabel
-                  htmlFor="code"
-                  className="block text-white text-sm font-medium mb-2"
-                >
+                <FieldLabel htmlFor="code" className="block text-white text-sm font-medium mb-2">
                   Verification Code
                 </FieldLabel>
                 <Input
@@ -431,8 +373,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({
         <div className="mt-8 pt-6 border-t border-gray-600/30">
           <div className="text-center space-y-2">
             <p className="text-xs text-gray-400 font-mono">
-              v{buildInfo.appVersion} • Built{" "}
-              {getFormattedBuildTime(buildInfo.buildTime)}
+              v{buildInfo.appVersion} • Built {getFormattedBuildTime(buildInfo.buildTime)}
             </p>
             <p className="text-xs text-gray-500">Eat • Me</p>
           </div>

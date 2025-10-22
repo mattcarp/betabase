@@ -1,9 +1,9 @@
-import path from 'path';
-import { chunkContent, classifyFile, readTextFileSafe } from '@/src/utils/gitIndexingHelpers';
+import path from "path";
+import { chunkContent, classifyFile, readTextFileSafe } from "@/src/utils/gitIndexingHelpers";
 
 export interface AnalyzedChunk {
   content: string;
-  sourceType: 'git';
+  sourceType: "git";
   sourceId: string;
   metadata: Record<string, any>;
 }
@@ -22,7 +22,8 @@ export class CodeStructureAnalyzer {
     const exportNamedListRegex = /export\s*\{\s*([^}]+)\s*\}/g;
     const exportFromRegex = /export\s*\{[^}]*\}\s*from\s*['"]([^'"]+)['"]/g;
     const exportAllFromRegex = /export\s*\*\s*from\s*['"]([^'"]+)['"]/g;
-    const exportRegex = /export\s+(?:default\s+)?(?:class|function|const|let|var|interface|type)\s+([A-Za-z0-9_]+)/g;
+    const exportRegex =
+      /export\s+(?:default\s+)?(?:class|function|const|let|var|interface|type)\s+([A-Za-z0-9_]+)/g;
     const imports = new Set<string>();
     const exports = new Set<string>();
 
@@ -44,11 +45,11 @@ export class CodeStructureAnalyzer {
     }
     while ((match = exportNamedListRegex.exec(source))) {
       const names = match[1]
-        .split(',')
-        .map(s => s.trim())
+        .split(",")
+        .map((s) => s.trim())
         .filter(Boolean)
-        .map(s => s.replace(/\sas\s+\w+$/, ''));
-      names.forEach(n => exports.add(n));
+        .map((s) => s.replace(/\sas\s+\w+$/, ""));
+      names.forEach((n) => exports.add(n));
     }
     return { imports: Array.from(imports), exports: Array.from(exports) };
   }
@@ -73,33 +74,33 @@ export class CodeStructureAnalyzer {
     imports: string[],
     exports: string[],
     functions: string[],
-    classes: string[],
+    classes: string[]
   ): string {
     return [
       `File: ${relativePath}`,
       `Language: ${language}`,
-      imports.length ? `Imports: ${imports.slice(0, 10).join(', ')}` : 'Imports: none',
-      exports.length ? `Exports: ${exports.join(', ')}` : 'Exports: none',
-      functions.length ? `Functions: ${functions.slice(0, 10).join(', ')}` : 'Functions: none',
-      classes.length ? `Classes: ${classes.join(', ')}` : 'Classes: none',
-    ].join('\n');
+      imports.length ? `Imports: ${imports.slice(0, 10).join(", ")}` : "Imports: none",
+      exports.length ? `Exports: ${exports.join(", ")}` : "Exports: none",
+      functions.length ? `Functions: ${functions.slice(0, 10).join(", ")}` : "Functions: none",
+      classes.length ? `Classes: ${classes.join(", ")}` : "Classes: none",
+    ].join("\n");
   }
 
   detectLanguage(filePath: string): string {
     const ext = path.extname(filePath).toLowerCase();
-    if (ext === '.ts' || ext === '.tsx') return 'TypeScript';
-    if (ext === '.js' || ext === '.jsx') return 'JavaScript';
-    if (ext === '.md') return 'Markdown';
-    if (ext === '.json') return 'JSON';
-    if (ext === '.yml' || ext === '.yaml') return 'YAML';
-    return ext.replace('.', '').toUpperCase() || 'Unknown';
+    if (ext === ".ts" || ext === ".tsx") return "TypeScript";
+    if (ext === ".js" || ext === ".jsx") return "JavaScript";
+    if (ext === ".md") return "Markdown";
+    if (ext === ".json") return "JSON";
+    if (ext === ".yml" || ext === ".yaml") return "YAML";
+    return ext.replace(".", "").toUpperCase() || "Unknown";
   }
 
   async analyzeFile(
     repoRoot: string,
     absolutePath: string,
     relativePath: string,
-    repositoryTag: string,
+    repositoryTag: string
   ): Promise<FileAnalysisResult | null> {
     const content = await readTextFileSafe(absolutePath);
     if (!content) return null;
@@ -131,7 +132,7 @@ export class CodeStructureAnalyzer {
         dependency_count: dependencyCount,
         vectorizedAt: new Date().toISOString(),
       };
-      return { content: chunk, sourceType: 'git' as const, sourceId, metadata };
+      return { content: chunk, sourceType: "git" as const, sourceId, metadata };
     });
 
     return { filePath: absolutePath, relativePath, chunks, summary };
@@ -145,5 +146,3 @@ export function getCodeStructureAnalyzer(): CodeStructureAnalyzer {
 }
 
 export default CodeStructureAnalyzer;
-
-

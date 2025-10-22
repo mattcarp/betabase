@@ -6,8 +6,8 @@
  * Finds duplicate ticket_keys and keeps only the most recently updated version.
  */
 
-require('dotenv').config({ path: '.env.local' });
-const { createClient } = require('@supabase/supabase-js');
+require("dotenv").config({ path: ".env.local" });
+const { createClient } = require("@supabase/supabase-js");
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -15,7 +15,7 @@ const supabase = createClient(
 );
 
 async function findAndRemoveDuplicates() {
-  console.log('🔍 Scanning for duplicate ticket_keys in jira_ticket_embeddings...\n');
+  console.log("🔍 Scanning for duplicate ticket_keys in jira_ticket_embeddings...\n");
 
   // Fetch ALL records with pagination
   let allRecords = [];
@@ -23,16 +23,16 @@ async function findAndRemoveDuplicates() {
   const pageSize = 1000;
   let hasMore = true;
 
-  console.log('📥 Fetching records from database...');
+  console.log("📥 Fetching records from database...");
   while (hasMore) {
     const { data, error } = await supabase
-      .from('jira_ticket_embeddings')
-      .select('ticket_key, id, updated_at')
-      .order('ticket_key')
+      .from("jira_ticket_embeddings")
+      .select("ticket_key, id, updated_at")
+      .order("ticket_key")
       .range(offset, offset + pageSize - 1);
 
     if (error) {
-      console.error('❌ Error fetching records:', error);
+      console.error("❌ Error fetching records:", error);
       return;
     }
 
@@ -49,7 +49,7 @@ async function findAndRemoveDuplicates() {
 
   // Group by ticket_key
   const keyMap = {};
-  allRecords.forEach(record => {
+  allRecords.forEach((record) => {
     if (!keyMap[record.ticket_key]) {
       keyMap[record.ticket_key] = [];
     }
@@ -60,7 +60,7 @@ async function findAndRemoveDuplicates() {
   const duplicates = Object.entries(keyMap).filter(([key, records]) => records.length > 1);
 
   if (duplicates.length === 0) {
-    console.log('✅ No duplicates found! Database is clean.');
+    console.log("✅ No duplicates found! Database is clean.");
     return;
   }
 
@@ -74,7 +74,7 @@ async function findAndRemoveDuplicates() {
 
   for (const [ticketKey, records] of duplicates) {
     // Extract project from ticket key (e.g., "ITSM-1234" -> "ITSM")
-    const project = ticketKey.split('-')[0];
+    const project = ticketKey.split("-")[0];
     if (!projectStats[project]) {
       projectStats[project] = { duplicates: 0, deleted: 0 };
     }
@@ -91,7 +91,7 @@ async function findAndRemoveDuplicates() {
     console.log(`   ❌ Deleting ${deleteRecords.length} older copies...`);
 
     // Add to deletion batch
-    deleteRecords.forEach(record => {
+    deleteRecords.forEach((record) => {
       deletionBatch.push(record.id);
       projectStats[project].deleted++;
       console.log(`      🗑️  Will delete ID ${record.id} (updated: ${record.updated_at})`);
@@ -102,35 +102,39 @@ async function findAndRemoveDuplicates() {
 
   // Confirm deletion
   console.log(`\n⚠️  About to delete ${totalDeleted} duplicate records...`);
-  console.log('   Press Ctrl+C to cancel, or continuing in 3 seconds...\n');
+  console.log("   Press Ctrl+C to cancel, or continuing in 3 seconds...\n");
 
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  await new Promise((resolve) => setTimeout(resolve, 3000));
 
   // Delete in batches of 100
-  console.log('🗑️  Deleting duplicates...\n');
+  console.log("🗑️  Deleting duplicates...\n");
   for (let i = 0; i < deletionBatch.length; i += 100) {
     const batch = deletionBatch.slice(i, i + 100);
     const { error: deleteError } = await supabase
-      .from('jira_ticket_embeddings')
+      .from("jira_ticket_embeddings")
       .delete()
-      .in('id', batch);
+      .in("id", batch);
 
     if (deleteError) {
       console.error(`❌ Error deleting batch ${i}-${i + batch.length}:`, deleteError);
     } else {
-      console.log(`   ✓ Deleted batch ${i + 1}-${Math.min(i + batch.length, deletionBatch.length)}/${deletionBatch.length}`);
+      console.log(
+        `   ✓ Deleted batch ${i + 1}-${Math.min(i + batch.length, deletionBatch.length)}/${deletionBatch.length}`
+      );
     }
   }
 
   // Final count
   const { count: finalCount } = await supabase
-    .from('jira_ticket_embeddings')
-    .select('*', { count: 'exact', head: true });
+    .from("jira_ticket_embeddings")
+    .select("*", { count: "exact", head: true });
 
-  console.log('\n✅ Deduplication complete!\n');
-  console.log('📊 Summary by Project:');
+  console.log("\n✅ Deduplication complete!\n");
+  console.log("📊 Summary by Project:");
   for (const [project, stats] of Object.entries(projectStats)) {
-    console.log(`   ${project}: ${stats.duplicates} tickets had duplicates, ${stats.deleted} records deleted`);
+    console.log(
+      `   ${project}: ${stats.duplicates} tickets had duplicates, ${stats.deleted} records deleted`
+    );
   }
   console.log(`\n   Total unique tickets with duplicates: ${duplicates.length}`);
   console.log(`   Total duplicate records deleted: ${totalDeleted}`);
@@ -140,10 +144,10 @@ async function findAndRemoveDuplicates() {
 
 findAndRemoveDuplicates()
   .then(() => {
-    console.log('\n👋 Done!');
+    console.log("\n👋 Done!");
     process.exit(0);
   })
-  .catch(error => {
-    console.error('\n💥 Error:', error);
+  .catch((error) => {
+    console.error("\n💥 Error:", error);
     process.exit(1);
   });
