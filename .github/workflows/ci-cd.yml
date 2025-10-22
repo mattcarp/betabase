@@ -6,17 +6,27 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: 'Skip tests (emergency deploy only)'
+        required: false
+        default: 'false'
 
 env:
   NODE_VERSION: "22"
+  PRODUCTION_URL: "https://iamsiam.ai"
 
 jobs:
-  # Stage 1: Code Quality & Security
+  # ============================================================================
+  # STAGE 1: CODE QUALITY & SECURITY
+  # ============================================================================
+
   quality:
-    name: Code Quality Check
+    name: Code Quality & Security
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -27,33 +37,47 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: TypeScript check
-        run: npx tsc --noEmit -p tsconfig.ci.json || true
-        continue-on-error: true
+      - name: TypeScript type check
+        run: npx tsc --noEmit -p tsconfig.ci.json
+        # REMOVED: || true and continue-on-error - fail fast on type errors
 
       - name: ESLint check
-        run: npm run lint || true
-        continue-on-error: true
+        run: npm run lint
+        # REMOVED: || true - fail on linting errors
 
-      - name: Security audit
-        run: npm audit --audit-level=high || true
-        continue-on-error: true
+      - name: Security audit (high/critical only)
+        run: npm audit --audit-level=high
+        continue-on-error: true  # Allow minor vulnerabilities, but log them
 
       - name: Check for exposed secrets
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
-          base: main
+          base: ${{ github.event.pull_request.base.sha || 'main' }}
           head: HEAD
-        continue-on-error: true
+        continue-on-error: true  # Don't block on false positives
 
-  # Stage 2: Build & Test
+      - name: Upload quality report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-report
+          path: |
+            eslint-report.json
+            audit-report.json
+          retention-days: 7
+
+  # ============================================================================
+  # STAGE 2: BUILD APPLICATION
+  # ============================================================================
+
   build:
-    name: Build & Test
+    name: Build Application
     runs-on: ubuntu-latest
     needs: quality
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -64,29 +88,39 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Build application
+      - name: Generate build info
+        run: node scripts/generate-build-info.js
+
+      - name: Build Next.js application
         run: npm run build
         env:
           NEXT_PUBLIC_COGNITO_USER_POOL_ID: ${{ secrets.NEXT_PUBLIC_COGNITO_USER_POOL_ID }}
           NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_COGNITO_CLIENT_ID }}
           NEXT_PUBLIC_CLOUDFRONT_URL: ${{ secrets.NEXT_PUBLIC_CLOUDFRONT_URL }}
           NEXT_PUBLIC_AWS_REGION: us-east-2
+          NODE_ENV: production
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: .next/
+          path: |
+            .next/
+            public/
           retention-days: 1
 
-  # Stage 3: E2E Tests (for PRs)
-  e2e:
-    name: E2E Tests
+  # ============================================================================
+  # STAGE 3: CRITICAL TESTS (P0 - MUST PASS)
+  # ============================================================================
+
+  aoma-validation:
+    name: AOMA Anti-Hallucination Tests (P0 CRITICAL)
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == 'pull_request'
+    if: github.event.inputs.skip_tests != 'true'
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -97,31 +131,212 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Install Playwright
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run E2E tests
+      - name: Run AOMA knowledge validation
+        run: npm run test:aoma:knowledge
+        continue-on-error: false  # MUST PASS - prevents hallucination
+
+      - name: Run AOMA anti-hallucination tests
+        run: npm run test:aoma:hallucination
+        continue-on-error: false  # MUST PASS - critical for accuracy
+
+      - name: Upload AOMA test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aoma-test-results
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+      - name: Create issue on AOMA test failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 CRITICAL: AOMA Anti-Hallucination Tests Failed',
+              body: `## AOMA Validation Failure
+
+              The AOMA anti-hallucination tests have failed. This is a P0 CRITICAL issue.
+
+              **What this means:**
+              - AI may be providing inaccurate information
+              - Knowledge base validation failed
+              - **DO NOT DEPLOY** until this is resolved
+
+              **Action Required:**
+              1. Review test failures in artifacts
+              2. Check knowledge base integrity
+              3. Verify AI model responses
+              4. Fix issues before deployment
+
+              **Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+              **Commit:** ${{ github.sha }}
+              `,
+              labels: ['critical', 'P0', 'aoma', 'testing'],
+              assignees: ['mattcarp']
+            });
+
+  visual-regression:
+    name: Visual Regression Tests
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event.inputs.skip_tests != 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run visual regression tests
+        run: npx playwright test tests/visual/dark-theme-regression.spec.ts
+        continue-on-error: false  # Fail on visual regressions
+
+      - name: Upload visual test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-results
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  e2e-smoke:
+    name: E2E Smoke Tests
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event.inputs.skip_tests != 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Start development server
         run: |
           npm run dev &
-          sleep 15
-          npx playwright test --project=chromium || true
+          # Wait for server to be ready
+          npx wait-on http://localhost:3000 --timeout 60000
         env:
           NEXT_PUBLIC_BYPASS_AUTH: true
-        continue-on-error: true
 
-      - uses: actions/upload-artifact@v4
+      - name: Run smoke tests
+        run: npx playwright test tests/e2e/smoke/smoke.spec.ts
+        env:
+          NEXT_PUBLIC_BYPASS_AUTH: true
+        continue-on-error: false  # REMOVED: smoke tests must pass
+
+      - name: Run critical path tests
+        run: npm run test:critical
+        env:
+          NEXT_PUBLIC_BYPASS_AUTH: true
+        continue-on-error: false
+
+      - name: Upload E2E test results
         if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: e2e-test-results
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  curate-functionality:
+    name: File Upload/Curation Tests
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event.inputs.skip_tests != 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run curate tab tests
+        run: npx playwright test tests/curate-tab-test.spec.ts
+        continue-on-error: false
+
+      - name: Upload curate test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: curate-test-results
           path: playwright-report/
           retention-days: 7
 
-  # Stage 4: Render Deployment (Automatic)
-  # NOTE: Render automatically deploys when commits are pushed to main
+  # ============================================================================
+  # STAGE 4: DEPLOYMENT QUALITY GATE
+  # ============================================================================
+
+  pre-deployment-gate:
+    name: Pre-Deployment Quality Gate
+    runs-on: ubuntu-latest
+    needs: [quality, build, aoma-validation, visual-regression, e2e-smoke, curate-functionality]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: All quality gates passed
+        run: |
+          echo "=========================================="
+          echo "✅ PRE-DEPLOYMENT QUALITY GATE PASSED"
+          echo "=========================================="
+          echo ""
+          echo "All critical tests have passed:"
+          echo "  ✅ Code Quality & Security"
+          echo "  ✅ Build Success"
+          echo "  ✅ AOMA Anti-Hallucination Tests (P0)"
+          echo "  ✅ Visual Regression Tests"
+          echo "  ✅ E2E Smoke Tests"
+          echo "  ✅ File Upload/Curation Tests"
+          echo ""
+          echo "🚀 DEPLOYMENT AUTHORIZED"
+          echo "=========================================="
+
+  # ============================================================================
+  # STAGE 5: RENDER DEPLOYMENT VALIDATION
+  # ============================================================================
+
   validate-deployment:
     name: Validate Production Deployment
     runs-on: ubuntu-latest
-    needs: build
+    needs: pre-deployment-gate
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment:
       name: production
@@ -129,54 +344,79 @@ jobs:
     outputs:
       deployment_status: ${{ steps.health_check.outcome }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Wait for Render auto-deployment
         run: |
-          echo "🚀 Waiting for Render to auto-deploy from main branch..."
-          echo "ℹ️  Render automatically deploys when commits are pushed to main"
+          echo "=========================================="
+          echo "🚀 RENDER AUTO-DEPLOYMENT"
+          echo "=========================================="
+          echo ""
+          echo "Render automatically deploys when commits are pushed to main"
+          echo "Waiting for deployment to complete..."
+          echo ""
 
       - name: Wait for deployment to stabilize
         run: |
-          echo "⏳ Waiting for deployment to stabilize..."
-          sleep 45
+          echo "⏳ Waiting 60 seconds for deployment to stabilize..."
+          sleep 60
 
       - name: Health check with retries
         id: health_check
         run: |
-          echo "🔍 Starting health checks..."
-          MAX_RETRIES=15
-          RETRY_DELAY=10
+          echo "=========================================="
+          echo "🔍 PRODUCTION HEALTH CHECKS"
+          echo "=========================================="
+          echo ""
+
+          MAX_RETRIES=20
+          RETRY_DELAY=15
+          SUCCESS=false
 
           for i in $(seq 1 $MAX_RETRIES); do
             echo "Attempt $i of $MAX_RETRIES..."
-            
+
             # Check health endpoint
-            if curl -f -s -o /dev/null -w "%{http_code}" https://iamsiam.ai/api/health | grep -q "200"; then
+            HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${{ env.PRODUCTION_URL }}/api/health || echo "000")
+            echo "  Health endpoint: $HEALTH_STATUS"
+
+            # Check main page
+            MAIN_STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${{ env.PRODUCTION_URL }} || echo "000")
+            echo "  Main page: $MAIN_STATUS"
+
+            if [ "$HEALTH_STATUS" = "200" ] && [ "$MAIN_STATUS" = "200" ]; then
+              echo ""
               echo "✅ Health check passed!"
-              
-              # Verify main page loads
-              if curl -f -s https://iamsiam.ai > /dev/null; then
-                echo "✅ Main page loads successfully!"
-                exit 0
-              fi
+              echo "✅ Main page loads successfully!"
+              SUCCESS=true
+              break
             fi
-            
+
             if [ $i -lt $MAX_RETRIES ]; then
-              echo "⏳ Waiting ${RETRY_DELAY}s before retry..."
+              echo "  ⏳ Waiting ${RETRY_DELAY}s before retry..."
+              echo ""
               sleep $RETRY_DELAY
             fi
           done
 
-          echo "❌ Health check failed after $MAX_RETRIES attempts"
-          exit 1
+          echo "=========================================="
+          if [ "$SUCCESS" = true ]; then
+            echo "✅ DEPLOYMENT SUCCESSFUL"
+            exit 0
+          else
+            echo "❌ DEPLOYMENT FAILED"
+            echo "Health check failed after $MAX_RETRIES attempts"
+            exit 1
+          fi
 
-      - name: Create deployment annotation
+      - name: Create deployment status
         if: always()
         uses: actions/github-script@v7
         with:
           script: |
             const status = '${{ steps.health_check.outcome }}' === 'success' ? '✅' : '❌';
+            const state = '${{ steps.health_check.outcome }}' === 'success' ? 'success' : 'failure';
             const sha = context.sha.substring(0, 7);
             const message = context.payload.head_commit?.message || 'No commit message';
 
@@ -184,27 +424,80 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: context.sha,
-              state: '${{ steps.health_check.outcome }}' === 'success' ? 'success' : 'failure',
-              target_url: 'https://iamsiam.ai',
+              state: state,
+              target_url: '${{ env.PRODUCTION_URL }}',
               description: `Deployment ${status}: ${message}`.substring(0, 140),
               context: 'render/deployment'
             });
 
-  # Stage 5: Post-deployment Validation
-  validate:
-    name: Validate Production
+      - name: Create issue on deployment failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 PRODUCTION DEPLOYMENT FAILED',
+              body: `## Deployment Health Check Failed
+
+              The production deployment failed health checks.
+
+              **Status:**
+              - Health endpoint: Failed to respond
+              - Main page: Failed to load
+
+              **Action Required:**
+              1. Check Render dashboard: https://dashboard.render.com
+              2. Review deployment logs
+              3. Consider rollback if site is down
+              4. Investigate health check failures
+
+              **Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+              **Commit:** ${{ github.sha }}
+              **Time:** ${new Date().toISOString()}
+              `,
+              labels: ['deployment', 'critical', 'P0', 'production'],
+              assignees: ['mattcarp']
+            });
+
+  # ============================================================================
+  # STAGE 6: POST-DEPLOYMENT VALIDATION
+  # ============================================================================
+
+  post-deployment-validation:
+    name: Post-Deployment Validation
     runs-on: ubuntu-latest
-    needs: deploy
-    if: needs.deploy.outputs.deployment_status == 'success'
+    needs: validate-deployment
+    if: needs.validate-deployment.outputs.deployment_status == 'success'
     steps:
-      - name: Smoke tests
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Production smoke tests
         run: |
-          echo "🔥 Running smoke tests..."
+          echo "=========================================="
+          echo "🔥 PRODUCTION SMOKE TESTS"
+          echo "=========================================="
+          echo ""
 
           # Test main endpoints
           endpoints=(
-            "https://iamsiam.ai"
-            "https://iamsiam.ai/api/health"
+            "${{ env.PRODUCTION_URL }}"
+            "${{ env.PRODUCTION_URL }}/api/health"
+            "${{ env.PRODUCTION_URL }}/chat"
           )
 
           for endpoint in "${endpoints[@]}"; do
@@ -213,44 +506,186 @@ jobs:
               echo "❌ Failed: $endpoint returned $response"
               exit 1
             fi
-            echo "✅ Passed: $endpoint"
+            echo "✅ Passed: $endpoint (HTTP $response)"
           done
 
       - name: Performance check
         run: |
-          echo "⚡ Checking performance..."
+          echo ""
+          echo "=========================================="
+          echo "⚡ PERFORMANCE CHECK"
+          echo "=========================================="
+          echo ""
 
           # Measure response time
-          response_time=$(curl -o /dev/null -s -w '%{time_total}' https://iamsiam.ai)
-          echo "Response time: ${response_time}s"
+          response_time=$(curl -o /dev/null -s -w '%{time_total}' ${{ env.PRODUCTION_URL }})
+          response_ms=$(echo "$response_time * 1000" | bc)
 
-          # Alert if slow (>3 seconds)
-          if (( $(echo "$response_time > 3" | bc -l) )); then
-            echo "⚠️ Warning: Response time exceeds 3 seconds"
+          echo "Response time: ${response_ms}ms (${response_time}s)"
+
+          # Fail if extremely slow (>5 seconds)
+          if (( $(echo "$response_time > 5" | bc -l) )); then
+            echo "❌ ERROR: Response time exceeds 5 seconds!"
+            exit 1
           fi
 
-      - name: Send deployment notification
-        if: always()
-        run: |
-          echo "📢 Deployment completed successfully!"
-          echo "🌐 URL: https://iamsiam.ai"
-          echo "📝 Commit: ${{ github.sha }}"
-          echo "🕐 Time: $(date)"
+          # Warn if slow (>3 seconds)
+          if (( $(echo "$response_time > 3" | bc -l) )); then
+            echo "⚠️  Warning: Response time exceeds 3 seconds"
+          else
+            echo "✅ Performance: Good"
+          fi
 
-  # Rollback job (manual trigger only)
+      - name: Console error check
+        run: |
+          echo ""
+          echo "=========================================="
+          echo "🔍 CONSOLE ERROR DETECTION"
+          echo "=========================================="
+          echo ""
+
+          npx playwright test tests/e2e/smoke/smoke.spec.ts --grep "console errors" || true
+
+          echo "✅ Console error check complete"
+
+      - name: Send success notification
+        if: success()
+        run: |
+          echo ""
+          echo "=========================================="
+          echo "✅ DEPLOYMENT SUCCESSFUL"
+          echo "=========================================="
+          echo ""
+          echo "🌐 URL: ${{ env.PRODUCTION_URL }}"
+          echo "📝 Commit: ${{ github.sha }}"
+          echo "👤 Author: ${{ github.actor }}"
+          echo "🕐 Time: $(date)"
+          echo "=========================================="
+
+  # ============================================================================
+  # STAGE 7: PR FEEDBACK
+  # ============================================================================
+
+  pr-comment:
+    name: PR Test Summary
+    runs-on: ubuntu-latest
+    needs: [quality, build, aoma-validation, visual-regression, e2e-smoke, curate-functionality]
+    if: github.event_name == 'pull_request' && always()
+    steps:
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const jobs = {
+              quality: '${{ needs.quality.result }}',
+              build: '${{ needs.build.result }}',
+              aoma: '${{ needs.aoma-validation.result }}',
+              visual: '${{ needs.visual-regression.result }}',
+              e2e: '${{ needs.e2e-smoke.result }}',
+              curate: '${{ needs.curate-functionality.result }}'
+            };
+
+            const getEmoji = (status) => {
+              if (status === 'success') return '✅';
+              if (status === 'failure') return '❌';
+              if (status === 'skipped') return '⏭️';
+              return '⏳';
+            };
+
+            const allPassed = Object.values(jobs).every(status =>
+              status === 'success' || status === 'skipped'
+            );
+
+            const comment = `## 🧪 Test Results
+
+            ${allPassed ? '### ✅ All Tests Passed!' : '### ❌ Some Tests Failed'}
+
+            | Test Suite | Status |
+            |------------|--------|
+            | Code Quality & Security | ${getEmoji(jobs.quality)} ${jobs.quality} |
+            | Build | ${getEmoji(jobs.build)} ${jobs.build} |
+            | AOMA Anti-Hallucination (P0) | ${getEmoji(jobs.aoma)} ${jobs.aoma} |
+            | Visual Regression | ${getEmoji(jobs.visual)} ${jobs.visual} |
+            | E2E Smoke Tests | ${getEmoji(jobs.e2e)} ${jobs.e2e} |
+            | File Upload/Curation | ${getEmoji(jobs.curate)} ${jobs.curate} |
+
+            ${allPassed ?
+              '🚀 **Ready to merge!** All quality gates passed.' :
+              '⚠️ **Fix failing tests before merging.**'
+            }
+
+            [View Details](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  # ============================================================================
+  # EMERGENCY ROLLBACK (Manual Trigger Only)
+  # ============================================================================
+
   rollback:
-    name: Rollback Deployment
+    name: Emergency Rollback
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
     environment:
       name: production
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Manual rollback instructions
+      - name: Rollback instructions
         run: |
-          echo "⏮️ Manual rollback required via Render dashboard..."
-          echo "🔧 Go to https://dashboard.render.com to rollback deployment"
-          echo "📋 Or revert the commit and push to main branch"
+          echo "=========================================="
+          echo "⏮️  MANUAL ROLLBACK PROCEDURE"
+          echo "=========================================="
+          echo ""
+          echo "To rollback the deployment:"
+          echo ""
+          echo "1. Via Render Dashboard:"
+          echo "   → https://dashboard.render.com"
+          echo "   → Select your service"
+          echo "   → Click 'Rollback' button"
+          echo ""
+          echo "2. Via Git Revert:"
+          echo "   → git revert ${{ github.sha }}"
+          echo "   → git push origin main"
+          echo ""
+          echo "3. Via Git Reset (destructive):"
+          echo "   → git reset --hard HEAD~1"
+          echo "   → git push --force origin main"
+          echo ""
+          echo "=========================================="
+
+      - name: Create rollback tracking issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '⏮️ Production Rollback Initiated',
+              body: `## Rollback Tracking
+
+              A manual rollback was initiated for commit ${{ github.sha }}
+
+              **Initiated by:** ${{ github.actor }}
+              **Time:** ${new Date().toISOString()}
+
+              **Next Steps:**
+              1. Complete rollback via Render dashboard
+              2. Verify production is stable
+              3. Investigate what caused the rollback
+              4. Create fix and re-deploy
+
+              **Rollback Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+              `,
+              labels: ['deployment', 'rollback', 'P0'],
+              assignees: ['mattcarp']
+            });
