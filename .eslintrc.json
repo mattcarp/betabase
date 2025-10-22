@@ -10,6 +10,10 @@
     }
   },
   "rules": {
+    // PERFORMANCE OPTIMIZATION: Next.js best practices
+    "@next/next/no-img-element": "error",
+    "@next/next/no-html-link-for-pages": "error",
+
     // TypeScript specific rules - relaxed for existing codebase
     "@typescript-eslint/no-unused-vars": [
       "warn",
@@ -36,6 +40,9 @@
     "react/no-unescaped-entities": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+
+    // Import rules
+    "import/no-anonymous-default-export": "warn",
 
     // Naming conventions - relaxed
     "camelcase": "off",
