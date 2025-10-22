@@ -359,264 +359,265 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Header with Stats */}
         <div className="border-b bg-background/50 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-md bg-muted/50">
-              <Activity className="h-5 w-5 text-foreground" />
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-md bg-muted/50">
+                <Activity className="h-5 w-5 text-foreground" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+                  Test Dashboard
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Unified testing and quality assurance platform
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-                Test Dashboard
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Unified testing and quality assurance platform
-              </p>
-            </div>
-          </div>
 
-          {/* Control Buttons */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant={isRunning ? "destructive" : "default"}
-              size="sm"
-              onClick={isRunning ? () => setIsRunning(false) : handleRunTests}
-              className="gap-2"
-            >
-              {isRunning ? (
-                <>
-                  <Pause className="h-4 w-4" />
-                  Stop
-                </>
-              ) : (
-                <>
-                  <Play className="h-4 w-4" />
-                  Run Tests
-                </>
-              )}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-2"
-              onClick={handleRerunFailed}
-              disabled={isRunning || testStats.failed === 0}
-            >
-              <RefreshCw className="h-4 w-4" />
-              Re-run Failed
-            </Button>
-          </div>
-        </div>
-
-        {/* Test Statistics Bar */}
-        <div className="grid grid-cols-6 gap-3">
-          <Card className="border-border">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">Total</span>
-                <span className="text-lg font-semibold text-foreground">{testStats.total}</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-600" />
-                  <span className="text-sm font-medium text-muted-foreground">Passed</span>
-                </div>
-                <span className="text-lg font-semibold text-emerald-700">{testStats.passed}</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <XCircle className="h-4 w-4 text-rose-600" />
-                  <span className="text-sm font-medium text-muted-foreground">Failed</span>
-                </div>
-                <span className="text-lg font-semibold text-rose-700">{testStats.failed}</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <AlertCircle className="h-4 w-4 text-amber-600" />
-                  <span className="text-sm font-medium text-muted-foreground">Skipped</span>
-                </div>
-                <span className="text-lg font-semibold text-amber-700">{testStats.skipped}</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-slate-600" />
-                  <span className="text-sm font-medium text-muted-foreground">Duration</span>
-                </div>
-                <span className="text-lg font-semibold text-slate-700">
-                  {formatDuration(testStats.duration)}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-blue-600" />
-                  <span className="text-sm font-medium text-muted-foreground">Success</span>
-                </div>
-                <span className="text-lg font-semibold text-blue-700">{getSuccessRate()}%</span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Progress Bar */}
-        {isRunning && (
-          <div className="mt-4">
-            <Progress
-              value={
-                testStats.total > 0
-                  ? ((testStats.passed + testStats.failed + testStats.skipped) / testStats.total) *
-                    100
-                  : 0
-              }
-              className="h-2"
-            />
-            <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
-              <span>
-                {testStats.passed + testStats.failed + testStats.skipped} of {testStats.total} tests
-                completed
-              </span>
-              <span>Execution ID: {currentExecutionId}</span>
-            </div>
-          </div>
-        )}
-
-        {/* Real-time Logs Display */}
-        {(isRunning || recentLogs.length > 0) && (
-          <div className="mt-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-foreground">Live Test Output</span>
+            {/* Control Buttons */}
+            <div className="flex items-center gap-2">
               <Button
-                variant="ghost"
+                variant={isRunning ? "destructive" : "default"}
                 size="sm"
-                onClick={() => setUseRealTimeStreaming(!useRealTimeStreaming)}
-                className="text-xs"
+                onClick={isRunning ? () => setIsRunning(false) : handleRunTests}
+                className="gap-2"
               >
-                {useRealTimeStreaming ? "📡 Streaming" : "🔄 Polling"}
+                {isRunning ? (
+                  <>
+                    <Pause className="h-4 w-4" />
+                    Stop
+                  </>
+                ) : (
+                  <>
+                    <Play className="h-4 w-4" />
+                    Run Tests
+                  </>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2"
+                onClick={handleRerunFailed}
+                disabled={isRunning || testStats.failed === 0}
+              >
+                <RefreshCw className="h-4 w-4" />
+                Re-run Failed
               </Button>
             </div>
-            <div className="bg-muted/50 rounded-lg p-3 max-h-24 overflow-y-auto">
-              {recentLogs.length > 0 ? (
-                recentLogs.map((log, index) => (
-                  <div key={index} className="text-xs text-muted-foreground font-mono">
-                    {log}
-                  </div>
-                ))
-              ) : (
-                <div className="text-xs text-muted-foreground italic">
-                  {isRunning ? "Waiting for test output..." : "No recent logs"}
-                </div>
-              )}
-            </div>
           </div>
-        )}
-      </div>
 
-      {/* Main Content Area */}
-      <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col">
-        <TabsList className="grid grid-cols-9 w-full rounded-none border-b bg-muted/30">
-          <TabsTrigger value="execution" className="gap-2">
-            <Activity className="h-4 w-4" />
-            Execution
-          </TabsTrigger>
-          <TabsTrigger value="results" className="gap-2">
-            <CheckCircle className="h-4 w-4" />
-            Results
-          </TabsTrigger>
-          <TabsTrigger value="manual" className="gap-2">
-            <MousePointerClick className="h-4 w-4" />
-            Manual Testing
-          </TabsTrigger>
-          <TabsTrigger value="ai-generate" className="gap-2">
-            <Brain className="h-4 w-4" />
-            AI Generate
-          </TabsTrigger>
-          <TabsTrigger value="trace" className="gap-2">
-            <Eye className="h-4 w-4" />
-            Trace Viewer
-          </TabsTrigger>
-          <TabsTrigger value="coverage" className="gap-2">
-            <GitBranch className="h-4 w-4" />
-            Coverage
-          </TabsTrigger>
-          <TabsTrigger value="flaky" className="gap-2">
-            <Bug className="h-4 w-4" />
-            Flaky Tests
-          </TabsTrigger>
-          <TabsTrigger value="analytics" className="gap-2">
-            <LineChart className="h-4 w-4" />
-            Analytics
-          </TabsTrigger>
-          <TabsTrigger value="firecrawl" className="gap-2">
-            <FileSearch className="h-4 w-4" />
-            Firecrawl
-          </TabsTrigger>
-        </TabsList>
+          {/* Test Statistics Bar */}
+          <div className="grid grid-cols-6 gap-3">
+            <Card className="border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-muted-foreground">Total</span>
+                  <span className="text-lg font-semibold text-foreground">{testStats.total}</span>
+                </div>
+              </CardContent>
+            </Card>
 
-        <ScrollArea className="flex-1">
-          <TabsContent value="execution" className="m-0 p-6">
-            <TestExecutionPanel
-              isRunning={isRunning}
-              onRunTests={handleRunTests}
-              testStats={testStats}
-            />
-          </TabsContent>
+            <Card className="border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-emerald-600" />
+                    <span className="text-sm font-medium text-muted-foreground">Passed</span>
+                  </div>
+                  <span className="text-lg font-semibold text-emerald-700">{testStats.passed}</span>
+                </div>
+              </CardContent>
+            </Card>
 
-          <TabsContent value="results" className="m-0 p-6">
-            <TestResultsViewer />
-          </TabsContent>
+            <Card className="border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <XCircle className="h-4 w-4 text-rose-600" />
+                    <span className="text-sm font-medium text-muted-foreground">Failed</span>
+                  </div>
+                  <span className="text-lg font-semibold text-rose-700">{testStats.failed}</span>
+                </div>
+              </CardContent>
+            </Card>
 
-          <TabsContent value="manual" className="m-0 p-6 h-full">
-            <ManualTestingPanel />
-          </TabsContent>
+            <Card className="border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 text-amber-600" />
+                    <span className="text-sm font-medium text-muted-foreground">Skipped</span>
+                  </div>
+                  <span className="text-lg font-semibold text-amber-700">{testStats.skipped}</span>
+                </div>
+              </CardContent>
+            </Card>
 
-          <TabsContent value="ai-generate" className="m-0 p-6">
-            <AITestGenerator />
-          </TabsContent>
+            <Card className="border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-slate-600" />
+                    <span className="text-sm font-medium text-muted-foreground">Duration</span>
+                  </div>
+                  <span className="text-lg font-semibold text-slate-700">
+                    {formatDuration(testStats.duration)}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
 
-          <TabsContent value="trace" className="m-0 p-6">
-            <TraceViewer />
-          </TabsContent>
+            <Card className="border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Zap className="h-4 w-4 text-blue-600" />
+                    <span className="text-sm font-medium text-muted-foreground">Success</span>
+                  </div>
+                  <span className="text-lg font-semibold text-blue-700">{getSuccessRate()}%</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
-          <TabsContent value="coverage" className="m-0 p-6">
-            <CoverageReport />
-          </TabsContent>
+          {/* Progress Bar */}
+          {isRunning && (
+            <div className="mt-4">
+              <Progress
+                value={
+                  testStats.total > 0
+                    ? ((testStats.passed + testStats.failed + testStats.skipped) /
+                        testStats.total) *
+                      100
+                    : 0
+                }
+                className="h-2"
+              />
+              <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
+                <span>
+                  {testStats.passed + testStats.failed + testStats.skipped} of {testStats.total}{" "}
+                  tests completed
+                </span>
+                <span>Execution ID: {currentExecutionId}</span>
+              </div>
+            </div>
+          )}
 
-          <TabsContent value="flaky" className="m-0 p-6">
-            <FlakyTestExplorer />
-          </TabsContent>
+          {/* Real-time Logs Display */}
+          {(isRunning || recentLogs.length > 0) && (
+            <div className="mt-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-foreground">Live Test Output</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setUseRealTimeStreaming(!useRealTimeStreaming)}
+                  className="text-xs"
+                >
+                  {useRealTimeStreaming ? "📡 Streaming" : "🔄 Polling"}
+                </Button>
+              </div>
+              <div className="bg-muted/50 rounded-lg p-3 max-h-24 overflow-y-auto">
+                {recentLogs.length > 0 ? (
+                  recentLogs.map((log, index) => (
+                    <div key={index} className="text-xs text-muted-foreground font-mono">
+                      {log}
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-xs text-muted-foreground italic">
+                    {isRunning ? "Waiting for test output..." : "No recent logs"}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
 
-          <TabsContent value="analytics" className="m-0 p-6">
-            <TestAnalytics />
-          </TabsContent>
+        {/* Main Content Area */}
+        <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col">
+          <TabsList className="grid grid-cols-9 w-full rounded-none border-b bg-muted/30">
+            <TabsTrigger value="execution" className="gap-2">
+              <Activity className="h-4 w-4" />
+              Execution
+            </TabsTrigger>
+            <TabsTrigger value="results" className="gap-2">
+              <CheckCircle className="h-4 w-4" />
+              Results
+            </TabsTrigger>
+            <TabsTrigger value="manual" className="gap-2">
+              <MousePointerClick className="h-4 w-4" />
+              Manual Testing
+            </TabsTrigger>
+            <TabsTrigger value="ai-generate" className="gap-2">
+              <Brain className="h-4 w-4" />
+              AI Generate
+            </TabsTrigger>
+            <TabsTrigger value="trace" className="gap-2">
+              <Eye className="h-4 w-4" />
+              Trace Viewer
+            </TabsTrigger>
+            <TabsTrigger value="coverage" className="gap-2">
+              <GitBranch className="h-4 w-4" />
+              Coverage
+            </TabsTrigger>
+            <TabsTrigger value="flaky" className="gap-2">
+              <Bug className="h-4 w-4" />
+              Flaky Tests
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="gap-2">
+              <LineChart className="h-4 w-4" />
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="firecrawl" className="gap-2">
+              <FileSearch className="h-4 w-4" />
+              Firecrawl
+            </TabsTrigger>
+          </TabsList>
 
-          <TabsContent value="firecrawl" className="m-0 p-6">
-            <FirecrawlPanel />
-          </TabsContent>
-        </ScrollArea>
-      </Tabs>
+          <ScrollArea className="flex-1">
+            <TabsContent value="execution" className="m-0 p-6">
+              <TestExecutionPanel
+                isRunning={isRunning}
+                onRunTests={handleRunTests}
+                testStats={testStats}
+              />
+            </TabsContent>
+
+            <TabsContent value="results" className="m-0 p-6">
+              <TestResultsViewer />
+            </TabsContent>
+
+            <TabsContent value="manual" className="m-0 p-6 h-full">
+              <ManualTestingPanel />
+            </TabsContent>
+
+            <TabsContent value="ai-generate" className="m-0 p-6">
+              <AITestGenerator />
+            </TabsContent>
+
+            <TabsContent value="trace" className="m-0 p-6">
+              <TraceViewer />
+            </TabsContent>
+
+            <TabsContent value="coverage" className="m-0 p-6">
+              <CoverageReport />
+            </TabsContent>
+
+            <TabsContent value="flaky" className="m-0 p-6">
+              <FlakyTestExplorer />
+            </TabsContent>
+
+            <TabsContent value="analytics" className="m-0 p-6">
+              <TestAnalytics />
+            </TabsContent>
+
+            <TabsContent value="firecrawl" className="m-0 p-6">
+              <FirecrawlPanel />
+            </TabsContent>
+          </ScrollArea>
+        </Tabs>
       </div>
     </div>
   );

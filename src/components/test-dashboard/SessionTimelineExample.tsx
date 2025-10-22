@@ -22,11 +22,21 @@ export const SessionTimelineExample: React.FC = () => {
 
   // Generate mock interactions for demo
   const generateMockInteraction = (): SessionInteraction => {
-    const types = ["click", "type", "navigate", "scroll", "hover", "screenshot", "network", "error"] as const;
+    const types = [
+      "click",
+      "type",
+      "navigate",
+      "scroll",
+      "hover",
+      "screenshot",
+      "network",
+      "error",
+    ] as const;
     const statuses = ["success", "warning", "error", "info"] as const;
 
     const type = types[Math.floor(Math.random() * types.length)];
-    const status = type === "error" ? "error" : statuses[Math.floor(Math.random() * statuses.length)];
+    const status =
+      type === "error" ? "error" : statuses[Math.floor(Math.random() * statuses.length)];
 
     const mockInteractions = {
       click: {
@@ -55,7 +65,8 @@ export const SessionTimelineExample: React.FC = () => {
       },
       screenshot: {
         description: "Captured page screenshot",
-        thumbnail: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Crect fill='%23141414' width='200' height='100'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='14' fill='%234a9eff' text-anchor='middle' dominant-baseline='middle'%3EScreenshot%3C/text%3E%3C/svg%3E",
+        thumbnail:
+          "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Crect fill='%23141414' width='200' height='100'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='14' fill='%234a9eff' text-anchor='middle' dominant-baseline='middle'%3EScreenshot%3C/text%3E%3C/svg%3E",
       },
       network: {
         description: "API request completed",
@@ -187,7 +198,10 @@ export const SessionTimelineExample: React.FC = () => {
             </Button>
 
             {isRecording && (
-              <Badge variant="outline" className="animate-pulse bg-rose-500/10 text-rose-500 border-rose-500/30">
+              <Badge
+                variant="outline"
+                className="animate-pulse bg-rose-500/10 text-rose-500 border-rose-500/30"
+              >
                 Recording...
               </Badge>
             )}
@@ -206,10 +220,10 @@ export const SessionTimelineExample: React.FC = () => {
                       selectedInteraction.status === "success"
                         ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/30"
                         : selectedInteraction.status === "error"
-                        ? "bg-rose-500/10 text-rose-500 border-rose-500/30"
-                        : selectedInteraction.status === "warning"
-                        ? "bg-amber-500/10 text-amber-500 border-amber-500/30"
-                        : "bg-blue-500/10 text-blue-500 border-blue-500/30"
+                          ? "bg-rose-500/10 text-rose-500 border-rose-500/30"
+                          : selectedInteraction.status === "warning"
+                            ? "bg-amber-500/10 text-amber-500 border-amber-500/30"
+                            : "bg-blue-500/10 text-blue-500 border-blue-500/30"
                     }
                   >
                     {selectedInteraction.type.toUpperCase()}
@@ -229,9 +243,7 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Element Description */}
                 {selectedInteraction.elementDescription && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-1">
-                      Element
-                    </h4>
+                    <h4 className="text-sm font-medium text-mac-text-secondary mb-1">Element</h4>
                     <code className="text-sm text-mac-text-primary bg-mac-surface-card px-2 py-1 rounded">
                       {selectedInteraction.elementDescription}
                     </code>
@@ -241,9 +253,7 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Selector */}
                 {selectedInteraction.selector && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-1">
-                      Selector
-                    </h4>
+                    <h4 className="text-sm font-medium text-mac-text-secondary mb-1">Selector</h4>
                     <code className="text-sm text-mac-text-primary bg-mac-surface-card px-2 py-1 rounded">
                       {selectedInteraction.selector}
                     </code>
@@ -273,9 +283,7 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Duration */}
                 {selectedInteraction.duration && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-1">
-                      Duration
-                    </h4>
+                    <h4 className="text-sm font-medium text-mac-text-secondary mb-1">Duration</h4>
                     <p className="text-sm text-mac-text-primary">
                       {selectedInteraction.duration}ms
                     </p>
@@ -343,9 +351,7 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Screenshot */}
                 {selectedInteraction.thumbnail && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-2">
-                      Screenshot
-                    </h4>
+                    <h4 className="text-sm font-medium text-mac-text-secondary mb-2">Screenshot</h4>
                     <img
                       src={selectedInteraction.thumbnail}
                       alt="Interaction screenshot"
@@ -357,9 +363,7 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Metadata */}
                 {selectedInteraction.metadata && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-2">
-                      Metadata
-                    </h4>
+                    <h4 className="text-sm font-medium text-mac-text-secondary mb-2">Metadata</h4>
                     <pre className="text-xs text-mac-text-primary bg-mac-surface-card p-3 rounded overflow-auto max-h-48">
                       {JSON.stringify(selectedInteraction.metadata, null, 2)}
                     </pre>
