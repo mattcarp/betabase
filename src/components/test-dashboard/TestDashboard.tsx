@@ -34,13 +34,14 @@ import { CoverageReport } from "./CoverageReport";
 import { FlakyTestExplorer } from "./FlakyTestExplorer";
 import { TestAnalytics } from "./TestAnalytics";
 import { FirecrawlPanel } from "./FirecrawlPanel";
+import { UnifiedResultsDashboard } from "./UnifiedResultsDashboard";
 
 interface TestDashboardProps {
   className?: string;
 }
 
 export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
-  const [activeView, setActiveView] = useState("execution");
+  const [activeView, setActiveView] = useState("unified");
   const [isRunning, setIsRunning] = useState(false);
   const [useRealTimeStreaming, setUseRealTimeStreaming] = useState(true);
   const [currentExecutionId, setCurrentExecutionId] = useState<string | null>(null);
@@ -467,7 +468,11 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
       {/* Main Content Area */}
       <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col">
-        <TabsList className="grid grid-cols-8 w-full rounded-none border-b bg-muted/30">
+        <TabsList className="grid grid-cols-9 w-full rounded-none border-b bg-muted/30">
+          <TabsTrigger value="unified" className="gap-2">
+            <Sparkles className="h-4 w-4" />
+            Unified Results
+          </TabsTrigger>
           <TabsTrigger value="execution" className="gap-2">
             <Activity className="h-4 w-4" />
             Execution
@@ -503,6 +508,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
         </TabsList>
 
         <ScrollArea className="flex-1">
+          <TabsContent value="unified" className="m-0 p-6">
+            <UnifiedResultsDashboard />
+          </TabsContent>
+
           <TabsContent value="execution" className="m-0 p-6">
             <TestExecutionPanel
               isRunning={isRunning}
