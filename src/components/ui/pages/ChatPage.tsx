@@ -27,6 +27,8 @@ import {
   X,
   RefreshCw,
   LogOut,
+  BarChart3,
+  Activity,
 } from "lucide-react";
 import { Badge } from "../badge";
 import { Button } from "../button";
@@ -226,8 +228,20 @@ Be helpful, concise, and professional in your responses.`;
                 size="icon"
                 className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50"
                 onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
+                title="Knowledge Base"
               >
                 <Database className="h-4 w-4" />
+              </Button>
+
+              {/* Performance Dashboard Link */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50"
+                onClick={() => window.location.href = '/performance'}
+                title="Performance Dashboard"
+              >
+                <Activity className="h-4 w-4" />
               </Button>
 
               {onLogout && (
