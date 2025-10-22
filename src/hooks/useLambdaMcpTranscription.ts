@@ -3,7 +3,7 @@
  * React hook for processing audio through Lambda MCP transcription pipeline
  */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from "react";
 
 export interface TranscriptionResult {
   text: string;
@@ -20,7 +20,7 @@ export interface ContentAnalysis {
 }
 
 export interface TranscriptionMetadata {
-  processingMode: 'lambda-mcp' | 'local' | 'hybrid';
+  processingMode: "lambda-mcp" | "local" | "hybrid";
   lambdaAttempted: boolean;
   lambdaSuccess: boolean;
   fallbackUsed: boolean;
@@ -70,7 +70,7 @@ export function useLambdaMcpTranscription(): UseLambdaMcpTranscriptionResult {
     setMetadata(null);
 
     try {
-      console.log('🎤 Starting Lambda MCP transcription...');
+      console.log("🎤 Starting Lambda MCP transcription...");
       console.log(`   Audio size: ${(audioBlob.size / 1024).toFixed(1)}KB`);
 
       // Create abort controller for cancellation
@@ -78,16 +78,19 @@ export function useLambdaMcpTranscription(): UseLambdaMcpTranscriptionResult {
 
       // Prepare form data
       const formData = new FormData();
-      formData.append('audio', audioBlob, 'audio.webm');
-      formData.append('options', JSON.stringify({
-        enableVoiceIsolation: true,
-        transcriptionModel: 'gpt-4o-transcribe',
-        language: 'en',
-      }));
+      formData.append("audio", audioBlob, "audio.webm");
+      formData.append(
+        "options",
+        JSON.stringify({
+          enableVoiceIsolation: true,
+          transcriptionModel: "gpt-4o-transcribe",
+          language: "en",
+        })
+      );
 
       // Call Lambda MCP transcription API
-      const response = await fetch('/api/lambda-mcp/transcribe', {
-        method: 'POST',
+      const response = await fetch("/api/lambda-mcp/transcribe", {
+        method: "POST",
         body: formData,
         signal: abortControllerRef.current.signal,
       });
@@ -99,7 +102,7 @@ export function useLambdaMcpTranscription(): UseLambdaMcpTranscriptionResult {
 
       const result = await response.json();
 
-      console.log('✅ Lambda MCP transcription completed');
+      console.log("✅ Lambda MCP transcription completed");
       console.log(`   Mode: ${result.metadata.processingMode}`);
       console.log(`   Processing time: ${result.metadata.processingTime.toFixed(0)}ms`);
 
@@ -107,14 +110,13 @@ export function useLambdaMcpTranscription(): UseLambdaMcpTranscriptionResult {
       setTranscription(result.transcription);
       setContentAnalysis(result.contentAnalysis);
       setMetadata(result.metadata);
-
     } catch (err: any) {
-      if (err.name === 'AbortError') {
-        console.log('🛑 Transcription cancelled');
-        setError('Transcription cancelled');
+      if (err.name === "AbortError") {
+        console.log("🛑 Transcription cancelled");
+        setError("Transcription cancelled");
       } else {
-        console.error('❌ Transcription error:', err);
-        setError(err.message || 'Transcription failed');
+        console.error("❌ Transcription error:", err);
+        setError(err.message || "Transcription failed");
       }
     } finally {
       setIsTranscribing(false);
@@ -137,7 +139,7 @@ export function useLambdaMcpTranscription(): UseLambdaMcpTranscriptionResult {
    */
   const cancelTranscription = useCallback(() => {
     if (abortControllerRef.current) {
-      console.log('🛑 Cancelling transcription...');
+      console.log("🛑 Cancelling transcription...");
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
     }
@@ -148,20 +150,20 @@ export function useLambdaMcpTranscription(): UseLambdaMcpTranscriptionResult {
    */
   const checkHealth = useCallback(async () => {
     try {
-      const response = await fetch('/api/lambda-mcp/transcribe');
+      const response = await fetch("/api/lambda-mcp/transcribe");
       const data = await response.json();
 
       return {
-        healthy: data.status === 'healthy',
+        healthy: data.status === "healthy",
         stats: data.statistics,
         lambdaMcp: data.lambdaMcp,
       };
     } catch (error) {
-      console.error('❌ Health check failed:', error);
+      console.error("❌ Health check failed:", error);
       return {
         healthy: false,
         stats: null,
-        error: error instanceof Error ? error.message : 'Health check failed',
+        error: error instanceof Error ? error.message : "Health check failed",
       };
     }
   }, []);

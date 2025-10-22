@@ -229,4 +229,3 @@ All 6 test questions about NEW content received:
 
 _Tested on: October 11, 2025_
 _Environment: localhost:3000 (production mirror)_
-_Generated with [Claude Code](https://claude.com/claude-code)_

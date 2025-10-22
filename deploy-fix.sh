@@ -43,9 +43,7 @@ if [ $? -eq 0 ]; then
 - Restored package.json with all dependencies
 - Fixed environment variables for production
 - Added Railway configuration
-- Password auth for claude@test.siam.ai ready
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
+- Password auth for claude@test.siam.ai ready"
   
   # Push to GitHub (Railway auto-deploys from GitHub)
   git push origin main

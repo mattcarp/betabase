@@ -252,5 +252,4 @@ For questions or issues:
 
 ---
 
-_Integration completed with [Claude Code](https://claude.com/claude-code)_
 _Next: Test chat responses and proceed to Phase 3 (visual display)_
