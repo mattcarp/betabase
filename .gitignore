@@ -120,4 +120,8 @@ processed/
 
 # Task files
 # tasks.json
-# tasks/ 
+# tasks/
+
+# TypeScript build cache
+*.tsbuildinfo
+tsconfig.tsbuildinfo
