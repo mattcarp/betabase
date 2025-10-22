@@ -1,11 +1,11 @@
 /* Jarvis/Iron Man HUD Theme Variables */
 :root {
   /* Core Jarvis Colors */
-  --jarvis-primary: #3B82F6;
-  --jarvis-secondary: #6366F1;
-  --jarvis-accent: #10B981;
-  --jarvis-danger: #EF4444;
-  --jarvis-warning: #F59E0B;
+  --jarvis-primary: #3b82f6;
+  --jarvis-secondary: #6366f1;
+  --jarvis-accent: #10b981;
+  --jarvis-danger: #ef4444;
+  --jarvis-warning: #f59e0b;
 
   /* Glass Panel Variables */
   --jarvis-glass-bg: rgba(0, 20, 40, 0.15);
@@ -43,16 +43,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-<<<<<<< HEAD
-    rgba(59, 130, 246, 0.05),
-=======
-    rgba(59, 130, 246, 0.1),
->>>>>>> fix-gaming-ui-nightmare
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
   transition: left 0.8s ease;
   pointer-events: none;
 }
@@ -77,15 +68,9 @@
 }
 
 .floating-panel.dragging-panel {
-<<<<<<< HEAD
-  transform: scale(1.01);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  border-color: var(--jarvis-primary);
-=======
   transform: scale(1.02);
   box-shadow: 0 20px 60px rgba(59, 130, 246, 0.3);
   border-color: var(--jarvis-accent);
->>>>>>> fix-gaming-ui-nightmare
 }
 
 /* Panel Header Styling */
@@ -102,13 +87,8 @@
 
 /* HUD Icon Buttons */
 .hud-icon-button {
-<<<<<<< HEAD
-  background: rgba(59, 130, 246, 0.05);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-=======
   background: rgba(59, 130, 246, 0.1);
   border: 1px solid rgba(59, 130, 246, 0.3);
->>>>>>> fix-gaming-ui-nightmare
   border-radius: 4px;
   color: var(--jarvis-primary);
   transition: var(--jarvis-transition-fast);
@@ -118,15 +98,9 @@
 }
 
 .hud-icon-button:hover {
-<<<<<<< HEAD
-  background: rgba(59, 130, 246, 0.1);
-  border-color: var(--jarvis-primary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-=======
   background: rgba(59, 130, 246, 0.2);
   border-color: var(--jarvis-primary);
   box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
->>>>>>> fix-gaming-ui-nightmare
   transform: scale(1.05);
 }
 
@@ -137,7 +111,7 @@
 /* Holographic Text Effect */
 .text-holographic {
   color: var(--jarvis-primary);
-  text-shadow: none;  /* No glow effects - professional only */
+  text-shadow: none; /* No glow effects - professional only */
   font-family: "Orbitron", monospace;
   font-weight: 500;
 }
@@ -244,15 +218,10 @@
 
 /* Panel Focus State */
 .panel-focused {
-<<<<<<< HEAD
-  border-color: var(--jarvis-primary) !important;
-  box-shadow: var(--jarvis-glass-shadow-hover) !important;
-=======
   border-color: var(--jarvis-accent) !important;
   box-shadow:
     var(--jarvis-glass-shadow-hover),
     0 0 20px rgba(16, 185, 129, 0.2) !important;
->>>>>>> fix-gaming-ui-nightmare
 }
 
 /* Custom Panel Types */
