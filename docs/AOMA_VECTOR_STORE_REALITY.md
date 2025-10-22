@@ -7,6 +7,7 @@
 ### What I Got Wrong Initially
 
 I thought:
+
 ```
 Supabase Vector Store → Contains AOMA docs → Fast access
 OpenAI Assistant API → Just formatting → Can be replaced
@@ -25,6 +26,7 @@ Supabase → Contains JIRA, git, etc. (supplementary data)
 **You CANNOT directly query OpenAI Vector Stores without using the Assistant API.**
 
 OpenAI's API structure:
+
 - ✅ Can upload files to vector store
 - ✅ Can attach vector store to Assistant
 - ❌ CANNOT query vector store directly with embeddings
@@ -59,10 +61,10 @@ const gpt5AssistantId = await this.ensureGPT5Assistant();
 // 2. Optimize run parameters
 const run = await this.client.beta.threads.runs.create(thread.id, {
   assistant_id: gpt5AssistantId,
-  temperature: 0.1,  // Lower for faster
-  max_completion_tokens: 2000,  // Fewer tokens = faster (currently using 2000-8000)
+  temperature: 0.1, // Lower for faster
+  max_completion_tokens: 2000, // Fewer tokens = faster (currently using 2000-8000)
   // NEW: Can we use streaming?
-  stream: true  // If supported, eliminates polling!
+  stream: true, // If supported, eliminates polling!
 });
 
 // 3. Reduce polling interval (currently checking every 500ms)
@@ -76,12 +78,14 @@ const run = await this.client.beta.threads.runs.create(thread.id, {
 **Move ALL AOMA knowledge from OpenAI → Supabase**
 
 **Pros:**
+
 - ✅ Direct vector search (no Assistant API)
 - ✅ 10-20x faster (200ms-2s instead of 20s+)
 - ✅ More control over search
 - ✅ Can use direct completions
 
 **Cons:**
+
 - ❌ Requires migrating all AOMA documents
 - ❌ Need to regenerate embeddings
 - ❌ Lose OpenAI's file_search optimization
@@ -97,7 +101,7 @@ const run = await this.client.beta.threads.runs.create(thread.id, {
 async queryKnowledge(query, strategy) {
   // Quick check: Is this query already in Supabase?
   const supabaseResults = await this.supabaseService.searchKnowledge(query, 5, 0.8);
-  
+
   if (supabaseResults.length > 0 && supabaseResults[0].similarity > 0.85) {
     // HIGH confidence match in Supabase (FAST path - 2s)
     return this.useDirectCompletion(supabaseResults, query);
@@ -109,13 +113,15 @@ async queryKnowledge(query, strategy) {
 ```
 
 **Pros:**
+
 - ✅ Fast for common queries (Supabase cache)
 - ✅ Comprehensive for complex queries (OpenAI Vector Store)
 - ✅ No migration needed
 
 **Cons:**
-- ⚠️  Still slow for novel queries
-- ⚠️  Two systems to maintain
+
+- ⚠️ Still slow for novel queries
+- ⚠️ Two systems to maintain
 
 ### Option 4: OpenAI Streaming (If Available)
 
@@ -124,7 +130,7 @@ async queryKnowledge(query, strategy) {
 ```typescript
 const stream = await this.client.beta.threads.runs.create(thread.id, {
   assistant_id: gpt5AssistantId,
-  stream: true  // Eliminate polling!
+  stream: true, // Eliminate polling!
 });
 
 // Stream results as they come
@@ -149,6 +155,7 @@ for await (const chunk of stream) {
 ```
 
 **Plus aggressive caching:**
+
 ```typescript
 // Cache for 24 hours
 aomaCache.set(query, response, strategy, 24 * 60 * 60 * 1000);
@@ -163,41 +170,44 @@ aomaCache.set(query, response, strategy, 24 * 60 * 60 * 1000);
 
 ### With Current Architecture (OpenAI Vector Store)
 
-| Optimization | Cold Query | Warm Query | Effort |
-|--------------|------------|------------|--------|
-| **Current (baseline)** | 25s | <1s (cached) | - |
-| + Streaming | 25s (feels faster) | <1s | Low |
-| + Optimized params | 15-18s | <1s | Low |
-| + Keep-alive | 12-15s | <1s | Low |
-| + Aggressive caching | 12-15s | <500ms | Low |
-| **Best possible** | **10-15s** | **<500ms** | Medium |
+| Optimization           | Cold Query         | Warm Query   | Effort |
+| ---------------------- | ------------------ | ------------ | ------ |
+| **Current (baseline)** | 25s                | <1s (cached) | -      |
+| + Streaming            | 25s (feels faster) | <1s          | Low    |
+| + Optimized params     | 15-18s             | <1s          | Low    |
+| + Keep-alive           | 12-15s             | <1s          | Low    |
+| + Aggressive caching   | 12-15s             | <500ms       | Low    |
+| **Best possible**      | **10-15s**         | **<500ms**   | Medium |
 
 ### With Supabase Migration
 
-| Optimization | Cold Query | Warm Query | Effort |
-|--------------|------------|------------|--------|
-| **Supabase vector store** | 2-3s | <500ms | High |
-| + Optimized search | 1-2s | <200ms | High |
-| **Best possible** | **1-2s** | **<200ms** | Very High |
+| Optimization              | Cold Query | Warm Query | Effort    |
+| ------------------------- | ---------- | ---------- | --------- |
+| **Supabase vector store** | 2-3s       | <500ms     | High      |
+| + Optimized search        | 1-2s       | <200ms     | High      |
+| **Best possible**         | **1-2s**   | **<200ms** | Very High |
 
 ## Recommended Path Forward
 
 ### Phase 1: Quick Wins (This Week) ✅
 
 1. **Add keep-alive pings** (eliminates cold starts)
+
    ```bash
    */3 * * * * curl .../health
    ```
 
 2. **Optimize Assistant API parameters**
+
    ```typescript
    max_completion_tokens: 2000 (not 8000)
    temperature: 0.1 (not 0.5)
    ```
 
 3. **Check if streaming is supported**
+
    ```typescript
-   stream: true // In runs.create()
+   stream: true; // In runs.create()
    ```
 
 4. **Extend cache TTL**
@@ -212,12 +222,14 @@ aomaCache.set(query, response, strategy, 24 * 60 * 60 * 1000);
 **Decision point:** Migrate to Supabase or accept 10-15s latency?
 
 **Factors to consider:**
+
 - How often are cold queries hit?
 - What's the cache hit rate?
 - Is 15s acceptable with good loading UX?
 - Resources available for migration?
 
 **If migration:**
+
 - Export OpenAI Vector Store
 - Generate embeddings (OpenAI text-embedding-3)
 - Store in Supabase pgvector
@@ -225,6 +237,7 @@ aomaCache.set(query, response, strategy, 24 * 60 * 60 * 1000);
 - Gradual rollout
 
 **If staying with OpenAI:**
+
 - Focus on UX (loading states, progress bars)
 - Optimize caching strategy
 - Accept 10-15s as baseline
@@ -243,6 +256,7 @@ aomaCache.set(query, response, strategy, 24 * 60 * 60 * 1000);
 **With OpenAI Vector Store, we CANNOT get sub-5-second responses.**
 
 The Assistant API is the ONLY interface to OpenAI Vector Stores, and it's inherently slow due to:
+
 - Thread/run lifecycle
 - File search execution
 - Polling mechanism
@@ -257,6 +271,7 @@ The Assistant API is the ONLY interface to OpenAI Vector Stores, and it's inhere
 ## Recommendation
 
 ### Short-term (Do Now):
+
 1. ✅ Implement keep-alive
 2. ✅ Optimize parameters
 3. ✅ Extend caching
@@ -265,7 +280,9 @@ The Assistant API is the ONLY interface to OpenAI Vector Stores, and it's inhere
 **Target: 25s → 12-15s**
 
 ### Medium-term (Evaluate):
+
 **Research OpenAI Vector Store export options**
+
 ```bash
 # Can we export the vector store?
 curl https://api.openai.com/v1/vector_stores/vs_3dqHL3Wcmt1WrUof0qS4UQqo/files \
@@ -276,6 +293,7 @@ curl https://api.openai.com/v1/vector_stores/vs_3dqHL3Wcmt1WrUof0qS4UQqo/files \
 ```
 
 ### Long-term (If migrating):
+
 1. Export AOMA documents from OpenAI
 2. Generate embeddings with text-embedding-3
 3. Store in Supabase with pgvector
@@ -285,11 +303,12 @@ curl https://api.openai.com/v1/vector_stores/vs_3dqHL3Wcmt1WrUof0qS4UQqo/files \
 
 ## Bottom Line
 
-**You were right to question my initial suggestion.** 
+**You were right to question my initial suggestion.**
 
 Direct completions WON'T work without access to the OpenAI Vector Store, and we can't access it without the Assistant API.
 
 Our real choice is:
+
 - **Keep current** (optimize to 10-15s)
 - **Migrate to Supabase** (2-3s but major work)
 - **Hybrid** (complex but best performance)

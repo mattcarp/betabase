@@ -1,9 +1,11 @@
 ## Render MCP Server Configuration
 
 ### Overview
+
 This documents the transition from a local stdio proxy (`aoma-mcp-proxy.js`) to Render HTTP transport for the `aoma-mesh` MCP server integration.
 
 ### Render Deployment Details
+
 - **Server URL**: `https://aoma-mesh-mcp.onrender.com`
 - **Health Endpoint**: `/health` — Returns server health status
 - **RPC Endpoint**: `/rpc` — JSON-RPC 2.0 protocol for MCP communication
@@ -12,6 +14,7 @@ This documents the transition from a local stdio proxy (`aoma-mcp-proxy.js`) to 
 ### MCP Configuration Changes
 
 #### Before: Local Stdio Proxy
+
 ```json
 "aoma-mesh": {
   "type": "stdio",
@@ -21,6 +24,7 @@ This documents the transition from a local stdio proxy (`aoma-mcp-proxy.js`) to 
 ```
 
 #### After: Direct HTTP Transport
+
 ```json
 "aoma-mesh": {
   "type": "http",
@@ -32,6 +36,7 @@ This documents the transition from a local stdio proxy (`aoma-mcp-proxy.js`) to 
 ```
 
 ### Available Tools
+
 - `query_aoma_knowledge` — Query Sony Music AOMA knowledge base
 - `search_jira_tickets` — Search JIRA tickets and issues
 - `get_jira_ticket_count` — Get ticket counts and statistics
@@ -45,6 +50,7 @@ This documents the transition from a local stdio proxy (`aoma-mcp-proxy.js`) to 
 ### Testing and Validation
 
 #### Health Check Commands
+
 ```bash
 # Test server health
 curl -X GET https://aoma-mesh-mcp.onrender.com/health
@@ -56,6 +62,7 @@ curl -X POST https://aoma-mesh-mcp.onrender.com/rpc \
 ```
 
 #### Knowledge Query Testing
+
 ```bash
 # Test AOMA knowledge query
 curl -X POST https://aoma-mesh-mcp.onrender.com/rpc \
@@ -75,6 +82,7 @@ curl -X POST https://aoma-mesh-mcp.onrender.com/rpc \
 ```
 
 ### Demo Preparation Checklist
+
 - [ ] Render server health verified
 - [ ] All MCP tools responding correctly
 - [ ] Knowledge queries returning accurate results
@@ -85,21 +93,22 @@ curl -X POST https://aoma-mesh-mcp.onrender.com/rpc \
 ### Troubleshooting
 
 #### Common Issues
+
 - **502 Bad Gateway**: Check Render deployment status
 - **Timeout Errors**: Verify network connectivity and server load
 - **Tool Not Found**: Verify tool name spelling and availability
 - **Authentication Errors**: Check API keys and headers
 
 #### Performance Optimization
+
 - Use appropriate query strategies (`rapid` for quick responses)
 - Cache frequently used queries
 - Monitor response times and adjust timeouts
 - Use concurrent requests judiciously
 
 ### Security Considerations
+
 - API key management and rotation
 - CORS configuration for client access
 - Rate limiting and abuse prevention
 - Secure header configuration
-
-

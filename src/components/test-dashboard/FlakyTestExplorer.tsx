@@ -207,12 +207,8 @@ export const FlakyTestExplorer: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-semibold text-foreground">
-              {flakyTests.length}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Across all suites
-            </p>
+            <div className="text-2xl font-semibold text-foreground">{flakyTests.length}</div>
+            <p className="text-xs text-muted-foreground mt-1">Across all suites</p>
           </CardContent>
         </Card>
 
@@ -227,9 +223,7 @@ export const FlakyTestExplorer: React.FC = () => {
             <div className="text-2xl font-semibold text-rose-700">
               {flakyTests.filter((t) => t.severity === "critical").length}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Require immediate attention
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">Require immediate attention</p>
           </CardContent>
         </Card>
 
@@ -242,17 +236,12 @@ export const FlakyTestExplorer: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-semibold text-foreground">
-              {(
-                flakyTests.reduce((sum, t) => sum + t.flakiness, 0) /
-                flakyTests.length
-              ).toFixed(1)}
+              {(flakyTests.reduce((sum, t) => sum + t.flakiness, 0) / flakyTests.length).toFixed(1)}
               %
             </div>
             <div className="flex items-center gap-1 mt-2">
               <TrendingDown className="h-3 w-3 text-emerald-600" />
-              <span className="text-xs text-emerald-700 font-medium">
-                -2.3% this week
-              </span>
+              <span className="text-xs text-emerald-700 font-medium">-2.3% this week</span>
             </div>
           </CardContent>
         </Card>
@@ -266,9 +255,7 @@ export const FlakyTestExplorer: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-semibold text-foreground">2h ago</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              WebSocket reconnection
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">WebSocket reconnection</p>
           </CardContent>
         </Card>
       </div>
@@ -289,9 +276,7 @@ export const FlakyTestExplorer: React.FC = () => {
                     All
                   </Button>
                   <Button
-                    variant={
-                      severityFilter === "critical" ? "default" : "outline"
-                    }
+                    variant={severityFilter === "critical" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSeverityFilter("critical")}
                   >
@@ -305,9 +290,7 @@ export const FlakyTestExplorer: React.FC = () => {
                     High
                   </Button>
                   <Button
-                    variant={
-                      severityFilter === "medium" ? "default" : "outline"
-                    }
+                    variant={severityFilter === "medium" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSeverityFilter("medium")}
                   >
@@ -325,7 +308,7 @@ export const FlakyTestExplorer: React.FC = () => {
                       className={cn(
                         "cursor-pointer transition-all hover:shadow-md",
                         selectedTest?.id === test.id && "ring-2 ring-primary",
-                        getSeverityColor(test.severity),
+                        getSeverityColor(test.severity)
                       )}
                       onClick={() => setSelectedTest(test)}
                     >
@@ -333,9 +316,7 @@ export const FlakyTestExplorer: React.FC = () => {
                         <div className="flex items-start justify-between mb-2">
                           <div>
                             <p className="font-medium text-sm">{test.name}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {test.suite}
-                            </p>
+                            <p className="text-xs text-muted-foreground">{test.suite}</p>
                           </div>
                           <Badge variant="outline" className="text-xs">
                             {test.flakiness}%
@@ -367,12 +348,8 @@ export const FlakyTestExplorer: React.FC = () => {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-lg">
-                        {selectedTest.name}
-                      </CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {selectedTest.suite}
-                      </p>
+                      <CardTitle className="text-lg">{selectedTest.name}</CardTitle>
+                      <p className="text-sm text-muted-foreground mt-1">{selectedTest.suite}</p>
                     </div>
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm">
@@ -392,22 +369,16 @@ export const FlakyTestExplorer: React.FC = () => {
                     <Card>
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-muted-foreground">
-                            Flakiness
-                          </span>
+                          <span className="text-sm text-muted-foreground">Flakiness</span>
                           <Bug className="h-4 w-4 text-muted-foreground" />
                         </div>
-                        <div className="text-2xl font-bold">
-                          {selectedTest.flakiness}%
-                        </div>
+                        <div className="text-2xl font-bold">{selectedTest.flakiness}%</div>
                       </CardContent>
                     </Card>
                     <Card>
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-muted-foreground">
-                            Failure Rate
-                          </span>
+                          <span className="text-sm text-muted-foreground">Failure Rate</span>
                           <XCircle className="h-4 w-4 text-red-500" />
                         </div>
                         <div className="text-2xl font-bold">
@@ -418,9 +389,7 @@ export const FlakyTestExplorer: React.FC = () => {
                     <Card>
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-muted-foreground">
-                            Last Failed
-                          </span>
+                          <span className="text-sm text-muted-foreground">Last Failed</span>
                           <Clock className="h-4 w-4 text-muted-foreground" />
                         </div>
                         <div className="text-sm font-medium">
@@ -433,9 +402,7 @@ export const FlakyTestExplorer: React.FC = () => {
                   {/* Pass/Fail History */}
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base">
-                        Pass/Fail History
-                      </CardTitle>
+                      <CardTitle className="text-base">Pass/Fail History</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="flex gap-2">
@@ -447,9 +414,7 @@ export const FlakyTestExplorer: React.FC = () => {
                             <div
                               className={cn(
                                 "h-8 rounded flex items-center justify-center",
-                                run.passed
-                                  ? "bg-green-500/20"
-                                  : "bg-red-500/20",
+                                run.passed ? "bg-green-500/20" : "bg-red-500/20"
                               )}
                             >
                               {run.passed ? (
@@ -474,25 +439,19 @@ export const FlakyTestExplorer: React.FC = () => {
                     </CardHeader>
                     <CardContent className="space-y-3">
                       <div>
-                        <span className="text-sm font-medium">
-                          Pattern Detected:
-                        </span>
+                        <span className="text-sm font-medium">Pattern Detected:</span>
                         <Badge variant="outline" className="ml-2">
                           {selectedTest.pattern}
                         </Badge>
                       </div>
                       <div>
-                        <span className="text-sm font-medium">
-                          Estimated Impact:
-                        </span>
+                        <span className="text-sm font-medium">Estimated Impact:</span>
                         <p className="text-sm text-muted-foreground mt-1">
                           {selectedTest.estimatedImpact}
                         </p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium">
-                          Suggested Fix:
-                        </span>
+                        <span className="text-sm font-medium">Suggested Fix:</span>
                         <p className="text-sm text-muted-foreground mt-1">
                           {selectedTest.suggestedFix}
                         </p>
@@ -518,10 +477,7 @@ export const FlakyTestExplorer: React.FC = () => {
             <CardContent>
               <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={flakinessOverTime}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-muted"
-                  />
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                   <XAxis dataKey="date" className="text-xs" />
                   <YAxis className="text-xs" />
                   <Tooltip />
@@ -545,10 +501,7 @@ export const FlakyTestExplorer: React.FC = () => {
             <CardContent>
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={patternDistribution}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-muted"
-                  />
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                   <XAxis
                     dataKey="pattern"
                     className="text-xs"

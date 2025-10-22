@@ -65,7 +65,9 @@ test.describe("Debug Login Flow", () => {
 
     if (isVisible) {
       const html = await page.content();
-      console.log(`   Page contains "verification": ${html.includes("verification") || html.includes("code") || html.includes("enter")}`);
+      console.log(
+        `   Page contains "verification": ${html.includes("verification") || html.includes("code") || html.includes("enter")}`
+      );
     }
   });
 

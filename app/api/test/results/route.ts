@@ -135,7 +135,7 @@ export async function GET(request: NextRequest) {
         acc[result.suite].stats[result.status]++;
         return acc;
       },
-      {} as Record<string, any>,
+      {} as Record<string, any>
     );
 
     return NextResponse.json(
@@ -145,14 +145,11 @@ export async function GET(request: NextRequest) {
         results: groupedResults,
         timestamp: new Date().toISOString(),
       },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (error) {
     console.error("Error fetching test results:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch test results" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to fetch test results" }, { status: 500 });
   }
 }
 
@@ -169,13 +166,10 @@ export async function POST(request: NextRequest) {
         executionId,
         savedCount: results?.length || 0,
       },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (error) {
     console.error("Error saving test results:", error);
-    return NextResponse.json(
-      { error: "Failed to save test results" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to save test results" }, { status: 500 });
   }
 }

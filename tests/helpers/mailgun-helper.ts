@@ -57,19 +57,15 @@ export class MailgunTestHelper {
     // Load from environment if not provided
     this.apiKey = config?.apiKey || process.env.MAILGUN_API_KEY || "";
     this.domain = config?.domain || process.env.MAILGUN_TEST_DOMAIN || "";
-    const region =
-      config?.region || (process.env.MAILGUN_REGION as "us" | "eu") || "us";
+    const region = config?.region || (process.env.MAILGUN_REGION as "us" | "eu") || "us";
 
     if (!this.apiKey || !this.domain) {
       throw new Error(
-        "Mailgun API key and domain are required. Set MAILGUN_API_KEY and MAILGUN_TEST_DOMAIN in .env.test",
+        "Mailgun API key and domain are required. Set MAILGUN_API_KEY and MAILGUN_TEST_DOMAIN in .env.test"
       );
     }
 
-    this.baseUrl =
-      region === "eu"
-        ? "https://api.eu.mailgun.net/v3"
-        : "https://api.mailgun.net/v3";
+    this.baseUrl = region === "eu" ? "https://api.eu.mailgun.net/v3" : "https://api.mailgun.net/v3";
 
     // Create axios instance with auth
     this.axiosClient = axios.create({
@@ -99,7 +95,7 @@ export class MailgunTestHelper {
       timeout?: number;
       pollInterval?: number;
       sinceTimestamp?: number;
-    } = {},
+    } = {}
   ): Promise<EmailMessage> {
     const {
       timeout = 30000,
@@ -142,9 +138,7 @@ export class MailgunTestHelper {
       await new Promise((resolve) => setTimeout(resolve, pollInterval));
     }
 
-    throw new Error(
-      `Magic link email not received within ${timeout}ms timeout`,
-    );
+    throw new Error(`Magic link email not received within ${timeout}ms timeout`);
   }
 
   /**
@@ -253,9 +247,7 @@ export class MailgunTestHelper {
   async cleanupTestEmails(recipientEmail: string): Promise<void> {
     // This is optional as Mailgun automatically deletes stored messages after 3 days
     // You could implement this if you want immediate cleanup
-    console.log(
-      `Test emails for ${recipientEmail} will be auto-deleted by Mailgun in 3 days`,
-    );
+    console.log(`Test emails for ${recipientEmail} will be auto-deleted by Mailgun in 3 days`);
   }
 }
 
@@ -273,5 +265,5 @@ export function getMailgunHelper(): MailgunTestHelper {
 export const mailgunHelper = new Proxy({} as MailgunTestHelper, {
   get(_target, prop) {
     return getMailgunHelper()[prop as keyof MailgunTestHelper];
-  }
+  },
 });

@@ -11,9 +11,7 @@ import "../src/styles/jarvis-theme-variations.css";
 
 export default function EnhancedHUDExample() {
   // Simulated live transcription
-  const [transcription, setTranscription] = useState(
-    "Waiting for audio input..."
-  );
+  const [transcription, setTranscription] = useState("Waiting for audio input...");
 
   // Simulated AI insights
   const [insights, setInsights] = useState<string[]>([
@@ -69,7 +67,7 @@ export default function EnhancedHUDExample() {
     // 3. Update the transcription service
 
     // Example Electron integration:
-    if (typeof window !== 'undefined' && 'electronAPI' in window) {
+    if (typeof window !== "undefined" && "electronAPI" in window) {
       // @ts-ignore
       window.electronAPI.setAudioSource(sourceId).then(() => {
         console.log("Audio source updated in Electron");

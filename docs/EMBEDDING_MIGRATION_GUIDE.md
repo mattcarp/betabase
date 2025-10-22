@@ -11,11 +11,13 @@
 ## 🎯 What This Fixes
 
 ### Current Problem
+
 - **wiki_documents**: 393 docs with TEXT embeddings (~19k dimensions)
 - **jira_ticket_embeddings**: 6,040 tickets with TEXT embeddings
 - **Supabase vector search**: Returns 0 results (wrong format)
 
 ### After Migration
+
 - ✅ **aoma_unified_vectors**: 6,433 docs with proper `vector(1536)` format
 - ✅ **Vector search**: Returns relevant results in ~500ms
 - ✅ **Hybrid system**: Railway MCP + Supabase both working
@@ -25,18 +27,21 @@
 ## 🚀 Quick Start
 
 ### Option A: Automated (Recommended)
+
 ```bash
 # Run the complete deployment and migration
 ./scripts/deploy-and-migrate-embeddings.sh
 ```
 
 This will:
+
 1. Deploy the aoma_unified_vectors migration
 2. Migrate all embeddings
 3. Verify the integration
 4. Run tests
 
 ### Option B: Manual Steps
+
 ```bash
 # 1. Deploy migration
 supabase db push
@@ -53,6 +58,7 @@ node scripts/test-hybrid-integration.js
 ## 📋 Prerequisites
 
 ### 1. Environment Variables (.env.local)
+
 ```bash
 OPENAI_API_KEY=sk-...                           # Required for embeddings
 NEXT_PUBLIC_SUPABASE_URL=https://...            # Supabase project URL
@@ -60,6 +66,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...                # Service role key (not anon!)
 ```
 
 ### 2. Supabase CLI (Optional but recommended)
+
 ```bash
 npm install -g supabase
 ```
@@ -67,7 +74,9 @@ npm install -g supabase
 If you don't have it, you can deploy the migration manually via the Supabase dashboard.
 
 ### 3. OpenAI API Credits
+
 Estimated cost:
+
 - 393 wiki docs × $0.0001/embedding = $0.04
 - 6,040 JIRA tickets × $0.0001/embedding = $0.60
 - **Total: ~$0.65**
@@ -77,28 +86,33 @@ Estimated cost:
 ## 🔄 Migration Process
 
 ### Phase 1: Deploy Migration (5 mins)
+
 ```bash
 supabase db push
 ```
 
 Creates:
+
 - `aoma_unified_vectors` table with `vector(1536)` column
 - HNSW index for fast similarity search
 - RPC functions: `match_aoma_vectors`, `upsert_aoma_vector`
 - Migration tracking table
 
 ### Phase 2: Migrate Wiki Documents (~4 mins)
+
 ```bash
 node scripts/fix-supabase-embeddings.js
 ```
 
 For each of 393 wiki documents:
+
 1. Read content from `wiki_documents`
 2. Generate OpenAI embedding (1536 dimensions)
 3. Insert into `aoma_unified_vectors` via `upsert_aoma_vector()`
 4. Track progress in checkpoint file
 
 Progress output:
+
 ```
 📚 MIGRATING WIKI DOCUMENTS
 📊 Found 393 wiki documents
@@ -117,18 +131,22 @@ Progress output:
 ```
 
 ### Phase 3: Migrate JIRA Tickets (~60 mins)
+
 Same process for 6,040 JIRA tickets:
+
 1. Read from `jira_ticket_embeddings`
 2. Generate embeddings
 3. Insert into `aoma_unified_vectors`
 4. Track progress
 
 ### Phase 4: Verification
+
 ```bash
 node scripts/test-hybrid-integration.js
 ```
 
 Tests:
+
 - Railway MCP endpoint (should work)
 - Supabase vector search (should now return results!)
 - Integration check (both sources active)
@@ -138,6 +156,7 @@ Tests:
 ## 💾 Resumability
 
 ### Checkpoint File
+
 The script saves progress to `.embedding-migration-checkpoint.json`:
 
 ```json
@@ -152,6 +171,7 @@ The script saves progress to `.embedding-migration-checkpoint.json`:
 ```
 
 ### Resume After Interruption
+
 If the script is interrupted (network, rate limits, etc.):
 
 ```bash
@@ -160,6 +180,7 @@ node scripts/fix-supabase-embeddings.js
 ```
 
 Output:
+
 ```
 📂 Loaded checkpoint from previous run
    Wiki docs: 150 completed
@@ -175,30 +196,37 @@ Output:
 ## ⚠️ Troubleshooting
 
 ### OpenAI Rate Limits
+
 **Symptom**: `429 Rate limit exceeded`
 
 **Solution**:
+
 - Script automatically retries with 1s delay between batches
 - If it fails, just run again - checkpoint will resume
 
 **Manual delay**:
 Edit `RATE_LIMIT_DELAY` in `fix-supabase-embeddings.js`:
+
 ```javascript
 const RATE_LIMIT_DELAY = 2000; // Increase to 2s
 ```
 
 ### Supabase Connection Errors
+
 **Symptom**: `Failed to insert into aoma_unified_vectors`
 
 **Check**:
+
 1. Migration deployed? `supabase db push`
 2. Service role key correct in .env.local?
 3. Table exists? Check Supabase dashboard
 
 ### Embedding Generation Fails
+
 **Symptom**: `Embedding generation failed`
 
 **Common causes**:
+
 - Empty content (script skips automatically)
 - Content too long (script truncates to 8000 chars)
 - OpenAI API key invalid
@@ -208,11 +236,13 @@ const RATE_LIMIT_DELAY = 2000; // Increase to 2s
 ## 🧪 Testing After Migration
 
 ### 1. Test Vector Search
+
 ```bash
 node scripts/test-vector-search.js
 ```
 
 Should now return results:
+
 ```
 ✅ Wiki search: 492ms, 5 results
 📄 Top result:
@@ -222,11 +252,13 @@ Should now return results:
 ```
 
 ### 2. Test Hybrid Integration
+
 ```bash
 node scripts/test-hybrid-integration.js
 ```
 
 Should show:
+
 ```
 ✅ Railway MCP: 10756ms
 ✅ Supabase: 492ms, 5 results  ← NOW RETURNS RESULTS!
@@ -235,6 +267,7 @@ Should show:
 ```
 
 ### 3. Test Live Chat
+
 ```bash
 npm run dev
 # Open http://localhost:3000
@@ -242,6 +275,7 @@ npm run dev
 ```
 
 Check console for:
+
 ```
 ⏳ Starting parallel queries: AOMA orchestrator + Supabase vectors...
 ✅ AOMA orchestration successful
@@ -255,6 +289,7 @@ Check console for:
 ### Database State After Migration
 
 **aoma_unified_vectors table**:
+
 ```
 | id   | content | embedding | source_type | source_id |
 |------|---------|-----------|-------------|-----------|
@@ -267,15 +302,18 @@ Total rows: 6,433
 ```
 
 **By source type**:
+
 - `knowledge`: 393 (wiki documents)
 - `jira`: 6,040 (JIRA tickets)
 
 ### Vector Search Performance
+
 - **Query time**: 5-20ms (HNSW index)
 - **Results**: Top-K most similar documents
 - **Similarity scores**: 0.0-1.0 (higher = more relevant)
 
 ### Hybrid Integration
+
 ```
 User query → /api/chat
   ├─ Railway MCP: 10s (comprehensive AOMA docs)
@@ -313,6 +351,7 @@ If you encounter issues:
 ## 🚀 After Migration
 
 ### Deploy to Production
+
 ```bash
 git add -A
 git commit -m "feat: migrate embeddings to proper vector(1536) format"
@@ -320,11 +359,13 @@ git push origin main
 ```
 
 ### Monitor Deployment
+
 - Render will auto-deploy
 - Check logs for errors
 - Test live at https://thebetabase.com
 
 ### Demo Script
+
 ```
 👤 "How do I upload files in AOMA?"
 

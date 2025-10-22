@@ -1,19 +1,10 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import {
-  PanelState,
-  PanelPosition,
-  PanelSize,
-} from "../components/ui/FloatingPanel";
+import { PanelState, PanelPosition, PanelSize } from "../components/ui/FloatingPanel";
 
 export interface PanelConfig {
   id: string;
   title: string;
-  type:
-    | "transcription"
-    | "ai-insights"
-    | "system-monitor"
-    | "audio"
-    | "default";
+  type: "transcription" | "ai-insights" | "system-monitor" | "audio" | "default";
   initialPosition?: PanelPosition;
   initialSize?: PanelSize;
   icon?: React.ReactNode;
@@ -117,7 +108,7 @@ export const usePanelManager = () => {
         showPanel(panelId);
       }
     },
-    [visiblePanels, hidePanel, showPanel],
+    [visiblePanels, hidePanel, showPanel]
   );
 
   // Focus a panel (brings to front)
@@ -139,23 +130,20 @@ export const usePanelManager = () => {
   }, []);
 
   // Update panel state
-  const updatePanelState = useCallback(
-    (panelId: string, newState: Partial<PanelState>) => {
-      setState((prev) => {
-        const currentPanel = prev.panels.get(panelId);
-        if (!currentPanel) return prev;
+  const updatePanelState = useCallback((panelId: string, newState: Partial<PanelState>) => {
+    setState((prev) => {
+      const currentPanel = prev.panels.get(panelId);
+      if (!currentPanel) return prev;
 
-        const updatedPanel = { ...currentPanel, ...newState };
-        const newPanels = new Map(prev.panels).set(panelId, updatedPanel);
+      const updatedPanel = { ...currentPanel, ...newState };
+      const newPanels = new Map(prev.panels).set(panelId, updatedPanel);
 
-        return {
-          ...prev,
-          panels: newPanels,
-        };
-      });
-    },
-    [],
-  );
+      return {
+        ...prev,
+        panels: newPanels,
+      };
+    });
+  }, []);
 
   // Minimize all panels
   const minimizeAll = useCallback(() => {
@@ -204,7 +192,7 @@ export const usePanelManager = () => {
     const cols = Math.ceil(Math.sqrt(panelArray.length));
     const panelWidth = Math.floor((window.innerWidth - 100) / cols);
     const panelHeight = Math.floor(
-      (window.innerHeight - 200) / Math.ceil(panelArray.length / cols),
+      (window.innerHeight - 200) / Math.ceil(panelArray.length / cols)
     );
 
     setState((prev) => {
@@ -229,14 +217,14 @@ export const usePanelManager = () => {
     (panelId: string) => {
       return visiblePanels.has(panelId);
     },
-    [visiblePanels],
+    [visiblePanels]
   );
 
   const getPanelState = useCallback(
     (panelId: string) => {
       return state.panels.get(panelId);
     },
-    [state.panels],
+    [state.panels]
   );
 
   const getAllPanels = useCallback(() => {
@@ -244,9 +232,7 @@ export const usePanelManager = () => {
   }, [state.panels]);
 
   const getVisiblePanels = useCallback(() => {
-    return Array.from(state.panels.entries()).filter(([id]) =>
-      visiblePanels.has(id),
-    );
+    return Array.from(state.panels.entries()).filter(([id]) => visiblePanels.has(id));
   }, [state.panels, visiblePanels]);
 
   useEffect(() => {

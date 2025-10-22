@@ -21,16 +21,16 @@ export async function expectMacClassPresence(page: Page, minimum = 1) {
 }
 
 export async function expectMacTypographyWeights(page: Page, selector: string) {
-  const weights = await page.locator(selector).evaluateAll((nodes) =>
-    nodes.map((node) => getComputedStyle(node as HTMLElement).fontWeight),
-  );
+  const weights = await page
+    .locator(selector)
+    .evaluateAll((nodes) => nodes.map((node) => getComputedStyle(node as HTMLElement).fontWeight));
 
   for (const weight of weights) {
     const normalized = weight === "normal" ? "400" : weight;
     const parsed = Number(normalized);
     expect(
       [100, 200, 300, 400].includes(parsed),
-      `Unexpected typography weight ${weight} for selector ${selector}`,
+      `Unexpected typography weight ${weight} for selector ${selector}`
     ).toBeTruthy();
   }
 }

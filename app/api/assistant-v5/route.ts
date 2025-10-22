@@ -22,9 +22,7 @@ async function ensureAssistantHasFileSearch() {
 
   try {
     const assistant = await openai.beta.assistants.retrieve(ASSISTANT_ID);
-    const hasFileSearch = assistant.tools?.some(
-      (tool) => tool.type === "file_search",
-    );
+    const hasFileSearch = assistant.tools?.some((tool) => tool.type === "file_search");
 
     if (!hasFileSearch) {
       console.log("Adding file_search tool to assistant...");
@@ -39,11 +37,7 @@ async function ensureAssistantHasFileSearch() {
 }
 
 // Initialize on first load
-if (
-  typeof global !== "undefined" &&
-  !global.assistantInitialized &&
-  ASSISTANT_ID
-) {
+if (typeof global !== "undefined" && !global.assistantInitialized && ASSISTANT_ID) {
   ensureAssistantHasFileSearch();
   global.assistantInitialized = true;
 }
@@ -60,14 +54,13 @@ export async function GET() {
         {
           status: 500,
           headers: { "Content-Type": "application/json" },
-        },
+        }
       );
     }
 
     // Get the assistant's vector store
     const assistant = await openai.beta.assistants.retrieve(ASSISTANT_ID);
-    const vectorStoreId =
-      assistant.tool_resources?.file_search?.vector_store_ids?.[0];
+    const vectorStoreId = assistant.tool_resources?.file_search?.vector_store_ids?.[0];
 
     if (!vectorStoreId) {
       return new Response(
@@ -78,7 +71,7 @@ export async function GET() {
         {
           status: 200,
           headers: { "Content-Type": "application/json" },
-        },
+        }
       );
     }
 
@@ -103,7 +96,7 @@ export async function GET() {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     );
   } catch (error) {
     console.error("Error listing files:", error);
@@ -115,7 +108,7 @@ export async function GET() {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     );
   }
 }
@@ -131,7 +124,7 @@ export async function POST(req: NextRequest) {
         {
           status: 500,
           headers: { "Content-Type": "application/json" },
-        },
+        }
       );
     }
 
@@ -164,10 +157,7 @@ export async function POST(req: NextRequest) {
       }));
     }
 
-    const createdMessage = await openai.beta.threads.messages.create(
-      thread.id,
-      messageData,
-    );
+    const createdMessage = await openai.beta.threads.messages.create(thread.id, messageData);
 
     console.log("Message created:", createdMessage.id);
 
@@ -198,7 +188,7 @@ export async function POST(req: NextRequest) {
     // Get the messages
     const messages = await openai.beta.threads.messages.list(thread.id);
     const assistantMessage = messages.data.find(
-      (msg) => msg.role === "assistant" && msg.run_id === run.id,
+      (msg) => msg.role === "assistant" && msg.run_id === run.id
     );
 
     if (!assistantMessage || !assistantMessage.content[0]) {
@@ -218,7 +208,7 @@ export async function POST(req: NextRequest) {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     );
   } catch (error) {
     console.error("Assistant V5 API error:", error);
@@ -230,7 +220,7 @@ export async function POST(req: NextRequest) {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     );
   }
 }
@@ -247,7 +237,7 @@ export async function PUT(req: NextRequest) {
         {
           status: 500,
           headers: { "Content-Type": "application/json" },
-        },
+        }
       );
     }
 
@@ -279,8 +269,7 @@ export async function PUT(req: NextRequest) {
 
     // Get or create vector store for the assistant
     const assistant = await openai.beta.assistants.retrieve(ASSISTANT_ID);
-    let vectorStoreId =
-      assistant.tool_resources?.file_search?.vector_store_ids?.[0];
+    let vectorStoreId = assistant.tool_resources?.file_search?.vector_store_ids?.[0];
 
     // In OpenAI SDK v5, vector stores are managed differently
     // The file is already uploaded and can be used with the assistant
@@ -302,7 +291,7 @@ export async function PUT(req: NextRequest) {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     );
   } catch (error) {
     console.error("File upload error:", error);
@@ -314,7 +303,7 @@ export async function PUT(req: NextRequest) {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     );
   }
 }

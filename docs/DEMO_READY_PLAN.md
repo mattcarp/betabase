@@ -27,9 +27,10 @@
 
 ---
 
-## ⚠️  What Needs Fixing (ONE ISSUE)
+## ⚠️ What Needs Fixing (ONE ISSUE)
 
 **Embedding Format Problem**:
+
 - Current: TEXT strings with ~19,000 dimensions (concatenated chunks)
 - Needed: Proper `vector(1536)` pgvector format
 - Impact: Supabase returns 0 results despite having data
@@ -39,6 +40,7 @@
 ## 🎯 Three Paths to Demo
 
 ### Option A: Quick Fix - Use What Works (15 mins)
+
 **Goal**: Show impressive demo with Railway MCP only
 
 ```bash
@@ -49,9 +51,10 @@ git push origin main
 ```
 
 **Demo Script**:
+
 - ✅ "SIAM searches AOMA knowledge base in 10 seconds"
 - ✅ "Returns comprehensive AOMA documentation"
-- ⚠️  Don't mention Supabase (it's ready but needs data fix)
+- ⚠️ Don't mention Supabase (it's ready but needs data fix)
 
 **Pros**: Working NOW, impressive response quality
 **Cons**: Not using the 6,433 Supabase documents
@@ -59,39 +62,47 @@ git push origin main
 ---
 
 ### Option B: Fix Embeddings - Full Power (4-6 hours)
+
 **Goal**: Show hybrid system with 6,433 searchable documents
 
 #### Steps:
 
 1. **Create Re-embedding Script** (1 hour)
+
 ```bash
 # Create script to re-process embeddings
 touch scripts/fix-supabase-embeddings.js
 ```
 
 Script should:
+
 - Query wiki_documents for all docs with TEXT embeddings
 - Generate proper vector(1536) embeddings via OpenAI
 - Insert into document_chunks table
 - Same for jira_ticket_embeddings
 
 2. **Run Re-embedding** (2-3 hours)
+
 ```bash
 node scripts/fix-supabase-embeddings.js
 ```
+
 - 393 wiki docs × ~500ms = ~3 minutes
 - 6,040 JIRA tickets × ~500ms = ~50 minutes
 - Total: ~1 hour actual API calls
 
 3. **Test Vector Search** (30 mins)
+
 ```bash
 node scripts/test-vector-search.js
 ```
+
 - Should now return results!
 - Verify similarity scores
 - Check response quality
 
 4. **Deploy & Verify** (1 hour)
+
 ```bash
 git add -A && git commit -m "fix: re-process embeddings to proper vector(1536) format"
 git push origin main
@@ -100,6 +111,7 @@ git push origin main
 ```
 
 **Demo Script**:
+
 - 🎉 "SIAM searches 6,433 documents across multiple sources"
 - 🎉 "Railway MCP: AOMA docs (10s) + Supabase: wiki + JIRA (500ms)"
 - 🎉 "Hybrid knowledge from OpenAI vectors + Supabase pgvector"
@@ -110,6 +122,7 @@ git push origin main
 ---
 
 ### Option C: Deploy Unified Vector Store (1-2 days)
+
 **Goal**: Clean architecture for long-term
 
 Not recommended for immediate demo. Better as follow-up after Option B.
@@ -119,6 +132,7 @@ Not recommended for immediate demo. Better as follow-up after Option B.
 ## 🎬 Recommended: Hybrid Approach
 
 ### Phase 1 (NOW - 15 mins): Deploy Current State
+
 ```bash
 # Show it works with Railway MCP
 git add app/api/chat/route.ts
@@ -127,11 +141,13 @@ git push origin main
 ```
 
 **You can demo RIGHT NOW**:
+
 - ✅ Working hybrid architecture
 - ✅ Fast, comprehensive AOMA responses
 - ✅ Professional quality
 
 ### Phase 2 (THIS WEEK - 4-6 hours): Fix Supabase Data
+
 ```bash
 # Create and run re-embedding script
 node scripts/fix-supabase-embeddings.js
@@ -142,11 +158,13 @@ git push origin main
 ```
 
 **Enhanced demo**:
+
 - 🚀 All 6,433 documents searchable
 - 🚀 Sub-second Supabase responses
 - 🚀 Source attribution showing wiki + JIRA
 
 ### Phase 3 (NEXT SPRINT): Unified Store
+
 - Deploy migration
 - Optimize performance
 - Scale to more data sources
@@ -180,6 +198,7 @@ git push origin main
 ```
 
 **Enhancement after Phase 2**:
+
 ```
    📚 Sources:
       - AOMA Knowledge Base (OpenAI Vector Store)
@@ -194,6 +213,7 @@ git push origin main
 ## 🎯 Immediate Next Steps
 
 ### 1. Deploy Current State (15 mins)
+
 ```bash
 # Commit the hybrid integration
 git status
@@ -216,6 +236,7 @@ git push origin main
 ```
 
 ### 2. Monitor Deployment
+
 ```bash
 # Use Render MCP to monitor deployment
 # Check logs for errors
@@ -224,6 +245,7 @@ git push origin main
 ```
 
 ### 3. Test Production
+
 ```bash
 # Open https://thebetabase.com
 # Ask AOMA question
@@ -232,6 +254,7 @@ git push origin main
 ```
 
 ### 4. Prepare Demo
+
 ```bash
 # Choose 3-5 good AOMA questions
 # Practice delivery
@@ -250,6 +273,7 @@ git push origin main
 - [ ] 3-5 demo questions prepared
 
 **Optional (impressive but not required)**:
+
 - [ ] Supabase embeddings fixed (6,433 documents searchable)
 - [ ] Source attribution showing multiple sources
 - [ ] Performance metrics displayed
@@ -259,12 +283,14 @@ git push origin main
 ## 💡 Talking Points for Demo
 
 ### Current State (Strong):
+
 - "SIAM integrates with Sony Music's AOMA platform"
 - "Searches comprehensive AOMA documentation in ~10 seconds"
 - "Hybrid architecture: Railway MCP + Supabase vectors"
 - "Returns detailed, accurate AOMA knowledge"
 
 ### After Embedding Fix (Exceptional):
+
 - "Searches 6,433 documents across multiple sources"
 - "Combines OpenAI vectors + Supabase pgvector"
 - "Includes Confluence wiki + JIRA tickets"

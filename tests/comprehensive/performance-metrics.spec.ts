@@ -12,7 +12,6 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Performance Metrics @comprehensive", () => {
-
   test("Measure complete page load performance", async ({ page }) => {
     console.log("⏱️  Measuring page load performance...\n");
 
@@ -30,8 +29,8 @@ test.describe("Performance Metrics @comprehensive", () => {
     // Get Web Vitals using Performance API
     const metrics = await page.evaluate(() => {
       const perf = performance as any;
-      const navigation = perf.getEntriesByType?.('navigation')?.[0] as any;
-      const paint = perf.getEntriesByType?.('paint') || [];
+      const navigation = perf.getEntriesByType?.("navigation")?.[0] as any;
+      const paint = perf.getEntriesByType?.("paint") || [];
 
       return {
         // Navigation Timing
@@ -42,11 +41,12 @@ test.describe("Performance Metrics @comprehensive", () => {
         domComplete: navigation?.domComplete,
 
         // Paint Timing
-        firstPaint: paint.find((p: any) => p.name === 'first-paint')?.startTime,
-        firstContentfulPaint: paint.find((p: any) => p.name === 'first-contentful-paint')?.startTime,
+        firstPaint: paint.find((p: any) => p.name === "first-paint")?.startTime,
+        firstContentfulPaint: paint.find((p: any) => p.name === "first-contentful-paint")
+          ?.startTime,
 
         // Resource Timing
-        resources: perf.getEntriesByType?.('resource')?.length || 0,
+        resources: perf.getEntriesByType?.("resource")?.length || 0,
       };
     });
 
@@ -78,9 +78,9 @@ test.describe("Performance Metrics @comprehensive", () => {
     const apiCalls: Array<{ url: string; duration: number; status: number }> = [];
 
     // Monitor all API calls
-    page.on('response', async (response) => {
+    page.on("response", async (response) => {
       const url = response.url();
-      if (url.includes('/api/')) {
+      if (url.includes("/api/")) {
         const request = response.request();
         const timing = request.timing();
         const duration = timing.responseEnd - timing.startTime;
@@ -96,7 +96,9 @@ test.describe("Performance Metrics @comprehensive", () => {
     await page.waitForLoadState("networkidle");
 
     // Trigger some API calls
-    const chatInput = page.locator('textarea[placeholder*="Ask"], input[placeholder*="Ask"]').first();
+    const chatInput = page
+      .locator('textarea[placeholder*="Ask"], input[placeholder*="Ask"]')
+      .first();
     const isVisible = await chatInput.isVisible().catch(() => false);
 
     if (isVisible) {
@@ -109,13 +111,13 @@ test.describe("Performance Metrics @comprehensive", () => {
 
     console.log("\n📊 API Response Times:");
     if (apiCalls.length > 0) {
-      apiCalls.forEach(call => {
-        const endpoint = call.url.split('/api/')[1]?.split('?')[0] || 'unknown';
+      apiCalls.forEach((call) => {
+        const endpoint = call.url.split("/api/")[1]?.split("?")[0] || "unknown";
         console.log(`  ${endpoint}: ${call.duration.toFixed(0)}ms (${call.status})`);
       });
 
       // Calculate stats
-      const durations = apiCalls.map(c => c.duration);
+      const durations = apiCalls.map((c) => c.duration);
       const avg = durations.reduce((a, b) => a + b, 0) / durations.length;
       const max = Math.max(...durations);
 
@@ -138,7 +140,7 @@ test.describe("Performance Metrics @comprehensive", () => {
     const interactions: Array<{ element: string; duration: number }> = [];
 
     // Test button click responsiveness
-    const testButton = page.locator('button').first();
+    const testButton = page.locator("button").first();
     const isVisible = await testButton.isVisible().catch(() => false);
 
     if (isVisible) {
@@ -151,7 +153,7 @@ test.describe("Performance Metrics @comprehensive", () => {
     }
 
     // Test input responsiveness
-    const input = page.locator('input, textarea').first();
+    const input = page.locator("input, textarea").first();
     const isInputVisible = await input.isVisible().catch(() => false);
 
     if (isInputVisible) {
@@ -181,7 +183,7 @@ test.describe("Performance Metrics @comprehensive", () => {
 
     // Get initial memory
     const initialMemory = await page.evaluate(() => {
-      if ('memory' in performance) {
+      if ("memory" in performance) {
         const mem = (performance as any).memory;
         return {
           used: mem.usedJSHeapSize,
@@ -213,7 +215,7 @@ test.describe("Performance Metrics @comprehensive", () => {
 
     const requests: Array<{ type: string; size: number; time: number }> = [];
 
-    page.on('response', async (response) => {
+    page.on("response", async (response) => {
       const url = response.url();
       const request = response.request();
       const type = request.resourceType();
@@ -237,15 +239,18 @@ test.describe("Performance Metrics @comprehensive", () => {
     await page.waitForLoadState("networkidle");
 
     // Group by type
-    const byType = requests.reduce((acc, req) => {
-      if (!acc[req.type]) {
-        acc[req.type] = { count: 0, totalSize: 0, totalTime: 0 };
-      }
-      acc[req.type].count++;
-      acc[req.type].totalSize += req.size;
-      acc[req.type].totalTime += req.time;
-      return acc;
-    }, {} as Record<string, { count: number; totalSize: number; totalTime: number }>);
+    const byType = requests.reduce(
+      (acc, req) => {
+        if (!acc[req.type]) {
+          acc[req.type] = { count: 0, totalSize: 0, totalTime: 0 };
+        }
+        acc[req.type].count++;
+        acc[req.type].totalSize += req.size;
+        acc[req.type].totalTime += req.time;
+        return acc;
+      },
+      {} as Record<string, { count: number; totalSize: number; totalTime: number }>
+    );
 
     console.log("📊 Network Activity by Type:");
     Object.entries(byType).forEach(([type, stats]) => {

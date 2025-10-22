@@ -163,9 +163,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
   return (
     <div className="w-full max-w-2xl mx-auto p-6">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-white mb-2">
-          Document Upload
-        </h3>
+        <h3 className="text-lg font-semibold text-white mb-2">Document Upload</h3>
         <p className="text-sm text-gray-400">
           Upload documents to the AOMA knowledge base for enhanced assistance
         </p>
@@ -196,9 +194,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
             {uploadStatus === "idle" && (
               <>
                 <Upload className="w-12 h-12 text-cyan-500 mb-4" />
-                <p className="text-white mb-2">
-                  Drop files here or click to browse
-                </p>
+                <p className="text-white mb-2">Drop files here or click to browse</p>
                 <p className="text-sm text-gray-400">
                   Supports PDF, TXT, MD, DOC, DOCX, Images, CSV, JSON (max 50MB)
                 </p>
@@ -209,10 +205,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
               <>
                 <Loader2 className="w-12 h-12 text-cyan-500 mb-4 animate-spin" />
                 <p className="text-white mb-2">Uploading...</p>
-                <Progress
-                  value={uploadProgress}
-                  className="w-full max-w-xs mt-2"
-                />
+                <Progress value={uploadProgress} className="w-full max-w-xs mt-2" />
               </>
             )}
 
@@ -220,9 +213,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
               <>
                 <Loader2 className="w-12 h-12 text-cyan-500 mb-4 animate-spin" />
                 <p className="text-white mb-2">Processing document...</p>
-                <p className="text-sm text-gray-400">
-                  Adding to knowledge base
-                </p>
+                <p className="text-sm text-gray-400">Adding to knowledge base</p>
               </>
             )}
 
@@ -230,9 +221,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
               <>
                 <CheckCircle className="w-12 h-12 text-green-500 mb-4" />
                 <p className="text-white mb-2">Upload complete!</p>
-                <p className="text-sm text-gray-400">
-                  Document added to knowledge base
-                </p>
+                <p className="text-sm text-gray-400">Document added to knowledge base</p>
               </>
             )}
 
@@ -250,9 +239,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       {/* Uploaded Files List */}
       {uploadedFiles.length > 0 && (
         <div className="mt-6">
-          <h4 className="text-sm font-semibold text-white mb-3">
-            Uploaded Documents
-          </h4>
+          <h4 className="text-sm font-semibold text-white mb-3">Uploaded Documents</h4>
           <div className="space-y-2">
             {uploadedFiles.map((file) => (
               <div
@@ -263,9 +250,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                   <File className="w-5 h-5 text-cyan-500" />
                   <div>
                     <p className="text-sm text-white">{file.name}</p>
-                    <p className="text-xs text-gray-400">
-                      {formatFileSize(file.size)}
-                    </p>
+                    <p className="text-xs text-gray-400">{formatFileSize(file.size)}</p>
                   </div>
                 </div>
                 <CheckCircle className="w-5 h-5 text-green-500" />
@@ -279,9 +264,8 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       <Alert className="mt-6 border-cyan-500/20 bg-cyan-500/5">
         <AlertCircle className="h-4 w-4 text-cyan-500" />
         <AlertDescription className="text-gray-300">
-          Documents are indexed and searchable immediately after upload. The AI
-          will use this knowledge to provide more accurate AOMA-specific
-          answers.
+          Documents are indexed and searchable immediately after upload. The AI will use this
+          knowledge to provide more accurate AOMA-specific answers.
         </AlertDescription>
       </Alert>
     </div>

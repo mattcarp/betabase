@@ -15,7 +15,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
     key: !!supabaseAnonKey,
   });
   throw new Error(
-    "Missing required Supabase environment variables. Please check your .env.local file.",
+    "Missing required Supabase environment variables. Please check your .env.local file."
   );
 }
 
@@ -43,13 +43,7 @@ export interface AOMAVector {
   id: string;
   content: string;
   embedding?: number[];
-  source_type:
-    | "knowledge"
-    | "jira"
-    | "git"
-    | "email"
-    | "metrics"
-    | "openai_import";
+  source_type: "knowledge" | "jira" | "git" | "email" | "metrics" | "openai_import";
   source_id: string;
   metadata: Record<string, any>;
   created_at: string;

@@ -36,10 +36,8 @@ export class SupportChatIntelligence {
 
   constructor() {
     this.supabaseIntegration = new EnhancedSupabaseTestIntegration(
-      process.env.NEXT_PUBLIC_SUPABASE_URL ||
-        "https://kfxetwuuzljhybfgmpuc.supabase.co",
-      process.env.SUPABASE_SERVICE_ROLE_KEY ||
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      process.env.NEXT_PUBLIC_SUPABASE_URL || "https://kfxetwuuzljhybfgmpuc.supabase.co",
+      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     );
   }
 
@@ -48,9 +46,7 @@ export class SupportChatIntelligence {
    */
   async querySupportKnowledge(query: SupportQuery): Promise<SupportResponse> {
     try {
-      console.log(
-        `🤖 Processing support query: ${query.question.substring(0, 100)}...`,
-      );
+      console.log(`🤖 Processing support query: ${query.question.substring(0, 100)}...`);
 
       // Check cache first
       const cacheKey = `support_${this.hashQuery(query.question)}`;
@@ -61,36 +57,22 @@ export class SupportChatIntelligence {
       }
 
       // 1. Search test knowledge base
-      const testKnowledge = await unifiedTestIntelligence.searchTestKnowledge(
-        query.question,
-        {
-          sources: [
-            "test_failure",
-            "firecrawl",
-            "documentation",
-            "support_ticket",
-          ],
-          minRelevance: 70,
-          limit: 5,
-        },
-      );
+      const testKnowledge = await unifiedTestIntelligence.searchTestKnowledge(query.question, {
+        sources: ["test_failure", "firecrawl", "documentation", "support_ticket"],
+        minRelevance: 70,
+        limit: 5,
+      });
 
       // 2. Query AOMA mesh for business context
       const aomaContext = await this.queryAOMAKnowledge(query.question);
 
       // 3. Combine and synthesize response
-      const response = await this.synthesizeResponse(
-        query,
-        testKnowledge,
-        aomaContext,
-      );
+      const response = await this.synthesizeResponse(query, testKnowledge, aomaContext);
 
       // Cache the response
       aomaCache.set(cacheKey, response, "rapid");
 
-      console.log(
-        `✅ Generated support response with confidence: ${response.confidence}%`,
-      );
+      console.log(`✅ Generated support response with confidence: ${response.confidence}%`);
       return response;
     } catch (error) {
       console.error("❌ Error processing support query:", error);
@@ -105,12 +87,10 @@ export class SupportChatIntelligence {
     question: string,
     answer: string,
     wasHelpful: boolean,
-    feedback?: string,
+    feedback?: string
   ) {
     try {
-      console.log(
-        `📝 Recording support interaction feedback: ${wasHelpful ? "👍" : "👎"}`,
-      );
+      console.log(`📝 Recording support interaction feedback: ${wasHelpful ? "👍" : "👎"}`);
 
       if (wasHelpful) {
         // Store successful Q&A as knowledge
@@ -144,8 +124,7 @@ export class SupportChatIntelligence {
       console.log("📊 Fetching common support issues...");
 
       // Get most helpful knowledge entries
-      const commonIssues =
-        await this.supabaseIntegration.getMostHelpfulKnowledge(limit);
+      const commonIssues = await this.supabaseIntegration.getMostHelpfulKnowledge(limit);
 
       console.log(`✅ Retrieved ${commonIssues.length} common issues`);
       return commonIssues;
@@ -165,7 +144,7 @@ export class SupportChatIntelligence {
       // Get support tickets in time range
       const tickets = await this.supabaseIntegration.getSupportTicketsInRange(
         timeRange.start,
-        timeRange.end,
+        timeRange.end
       );
 
       // Analyze patterns
@@ -185,7 +164,7 @@ export class SupportChatIntelligence {
     try {
       const response = await aomaOrchestrator.orchestrateQuery(
         `Answer this AOMA support question: ${question}`,
-        { strategy: "rapid" },
+        { strategy: "rapid" }
       );
       return response.response;
     } catch (error) {
@@ -197,7 +176,7 @@ export class SupportChatIntelligence {
   private async synthesizeResponse(
     query: SupportQuery,
     testKnowledge: any[],
-    aomaContext: string | null,
+    aomaContext: string | null
   ): Promise<SupportResponse> {
     const sources: string[] = [];
     const suggestedActions: string[] = [];
@@ -259,10 +238,7 @@ export class SupportChatIntelligence {
         suggestedActions.push("View documentation", "Watch tutorial video");
         break;
       case "feature":
-        suggestedActions.push(
-          "Check feature availability",
-          "Review release notes",
-        );
+        suggestedActions.push("Check feature availability", "Review release notes");
         break;
     }
 
@@ -325,30 +301,16 @@ export class SupportChatIntelligence {
     return [...new Set(tags)]; // Remove duplicates
   }
 
-  private classifyQuestion(
-    question: string,
-  ): "error" | "howto" | "feature" | "general" {
+  private classifyQuestion(question: string): "error" | "howto" | "feature" | "general" {
     const lowerQ = question.toLowerCase();
 
-    if (
-      lowerQ.includes("error") ||
-      lowerQ.includes("fail") ||
-      lowerQ.includes("not work")
-    ) {
+    if (lowerQ.includes("error") || lowerQ.includes("fail") || lowerQ.includes("not work")) {
       return "error";
     }
-    if (
-      lowerQ.includes("how to") ||
-      lowerQ.includes("how do") ||
-      lowerQ.includes("how can")
-    ) {
+    if (lowerQ.includes("how to") || lowerQ.includes("how do") || lowerQ.includes("how can")) {
       return "howto";
     }
-    if (
-      lowerQ.includes("feature") ||
-      lowerQ.includes("support") ||
-      lowerQ.includes("can i")
-    ) {
+    if (lowerQ.includes("feature") || lowerQ.includes("support") || lowerQ.includes("can i")) {
       return "feature";
     }
 
@@ -379,11 +341,7 @@ export class SupportChatIntelligence {
     };
   }
 
-  private async recordFailedInteraction(
-    question: string,
-    answer: string,
-    feedback?: string,
-  ) {
+  private async recordFailedInteraction(question: string, answer: string, feedback?: string) {
     // Store failed interactions for analysis
     await this.supabaseIntegration.storeTestKnowledge({
       source: "support_ticket",
@@ -409,15 +367,13 @@ export class SupportChatIntelligence {
       {
         title: "Upload Failures",
         content: "Files fail to upload or process",
-        solution:
-          "Check file format compatibility, ensure file size is under 2GB limit",
+        solution: "Check file format compatibility, ensure file size is under 2GB limit",
         helpful_count: 38,
       },
       {
         title: "Search Not Working",
         content: "Search returns no results or incorrect results",
-        solution:
-          "Verify metadata is properly indexed, use specific search terms",
+        solution: "Verify metadata is properly indexed, use specific search terms",
         helpful_count: 32,
       },
     ];

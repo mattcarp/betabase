@@ -42,13 +42,8 @@ interface FileUploadProps {
 const getFileIcon = (fileType: string) => {
   if (fileType.startsWith("image/")) return FileImage;
   if (fileType.includes("pdf")) return FileText;
-  if (fileType.includes("sheet") || fileType.includes("excel"))
-    return FileSpreadsheet;
-  if (
-    fileType.includes("code") ||
-    fileType.includes("javascript") ||
-    fileType.includes("json")
-  )
+  if (fileType.includes("sheet") || fileType.includes("excel")) return FileSpreadsheet;
+  if (fileType.includes("code") || fileType.includes("javascript") || fileType.includes("json"))
     return FileCode;
   return FileIcon;
 };
@@ -94,9 +89,7 @@ export function FileUpload({
 
         // Validate file size
         if (file.size > maxFileSize) {
-          toast.error(
-            `File "${file.name}" exceeds maximum size of ${formatFileSize(maxFileSize)}`,
-          );
+          toast.error(`File "${file.name}" exceeds maximum size of ${formatFileSize(maxFileSize)}`);
           continue;
         }
 
@@ -115,7 +108,7 @@ export function FileUpload({
         uploadFiles(newFiles);
       }
     },
-    [maxFileSize],
+    [maxFileSize]
   );
 
   const uploadFiles = async (files: FileUploadItem[]) => {
@@ -125,9 +118,7 @@ export function FileUpload({
       try {
         // Update status to uploading
         setUploadQueue((prev) =>
-          prev.map((f) =>
-            f.id === item.id ? { ...f, status: "uploading", progress: 10 } : f,
-          ),
+          prev.map((f) => (f.id === item.id ? { ...f, status: "uploading", progress: 10 } : f))
         );
 
         // Create FormData
@@ -158,23 +149,18 @@ export function FileUpload({
                   progress: 100,
                   fileId: result.fileId,
                 }
-              : f,
-          ),
+              : f
+          )
         );
 
         toast.success(`"${item.file.name}" uploaded successfully`);
         onUploadComplete?.(result.fileId, item.file.name);
       } catch (error) {
         console.error("Upload error:", error);
-        const errorMessage =
-          error instanceof Error ? error.message : "Upload failed";
+        const errorMessage = error instanceof Error ? error.message : "Upload failed";
 
         setUploadQueue((prev) =>
-          prev.map((f) =>
-            f.id === item.id
-              ? { ...f, status: "error", error: errorMessage }
-              : f,
-          ),
+          prev.map((f) => (f.id === item.id ? { ...f, status: "error", error: errorMessage } : f))
         );
 
         toast.error(`Failed to upload "${item.file.name}": ${errorMessage}`);
@@ -198,7 +184,7 @@ export function FileUpload({
       e.preventDefault();
       handleFileSelect(e.dataTransfer.files);
     },
-    [handleFileSelect],
+    [handleFileSelect]
   );
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -232,12 +218,7 @@ export function FileUpload({
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Uploads</span>
               {uploadQueue.some((f) => f.status === "completed") && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearCompleted}
-                  className="h-6 text-xs"
-                >
+                <Button variant="ghost" size="sm" onClick={clearCompleted} className="h-6 text-xs">
                   Clear completed
                 </Button>
               )}
@@ -248,15 +229,9 @@ export function FileUpload({
                   {item.status === "uploading" && (
                     <Loader2 className="h-3 w-3 animate-spin text-blue-500" />
                   )}
-                  {item.status === "completed" && (
-                    <Check className="h-3 w-3 text-green-500" />
-                  )}
-                  {item.status === "error" && (
-                    <AlertCircle className="h-3 w-3 text-red-500" />
-                  )}
-                  <span className="text-xs flex-1 truncate">
-                    {item.file.name}
-                  </span>
+                  {item.status === "completed" && <Check className="h-3 w-3 text-green-500" />}
+                  {item.status === "error" && <AlertCircle className="h-3 w-3 text-red-500" />}
+                  <span className="text-xs flex-1 truncate">{item.file.name}</span>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -266,12 +241,8 @@ export function FileUpload({
                     <X className="h-3 w-3" />
                   </Button>
                 </div>
-                {item.status === "uploading" && (
-                  <Progress value={item.progress} className="h-1" />
-                )}
-                {item.status === "error" && (
-                  <p className="text-xs text-red-500">{item.error}</p>
-                )}
+                {item.status === "uploading" && <Progress value={item.progress} className="h-1" />}
+                {item.status === "error" && <p className="text-xs text-red-500">{item.error}</p>}
               </div>
             ))}
           </div>
@@ -294,7 +265,7 @@ export function FileUpload({
           "hover:shadow-lg hover:shadow-[var(--mac-primary-blue-400)]/10",
           "focus-within:border-[var(--mac-primary-blue-400)]",
           "focus-within:ring-2 focus-within:ring-[var(--mac-primary-blue-400)]/20",
-          isUploading && "pointer-events-none opacity-50",
+          isUploading && "pointer-events-none opacity-50"
         )}
       >
         <input
@@ -338,8 +309,8 @@ export function FileUpload({
           </div>
 
           <p className="text-xs text-[var(--mac-text-muted)] font-light">
-            Max file size: {formatFileSize(maxFileSize)} • Supported: PDF, TXT,
-            MD, DOC, DOCX, JSON, CSV, Images
+            Max file size: {formatFileSize(maxFileSize)} • Supported: PDF, TXT, MD, DOC, DOCX, JSON,
+            CSV, Images
           </p>
         </div>
       </div>
@@ -349,12 +320,7 @@ export function FileUpload({
           <div className="flex items-center justify-between">
             <h4 className="text-sm font-medium">Upload Queue</h4>
             {uploadQueue.some((f) => f.status === "completed") && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={clearCompleted}
-                className="h-7 text-xs"
-              >
+              <Button variant="ghost" size="sm" onClick={clearCompleted} className="h-7 text-xs">
                 Clear completed
               </Button>
             )}
@@ -372,9 +338,7 @@ export function FileUpload({
 
                   <div className="flex-1 min-w-0 space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium truncate">
-                        {item.file.name}
-                      </span>
+                      <span className="text-sm font-medium truncate">{item.file.name}</span>
                       <span className="text-xs text-muted-foreground">
                         {formatFileSize(item.file.size)}
                       </span>
@@ -385,7 +349,9 @@ export function FileUpload({
                     )}
 
                     {item.status === "error" && (
-                      <p className="text-xs text-[var(--mac-status-error-text)] font-light">{item.error}</p>
+                      <p className="text-xs text-[var(--mac-status-error-text)] font-light">
+                        {item.error}
+                      </p>
                     )}
 
                     {item.status === "completed" && (

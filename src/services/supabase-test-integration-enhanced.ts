@@ -109,12 +109,7 @@ interface FirecrawlAnalysis {
 
 interface TestKnowledge {
   id: string;
-  source:
-    | "test_failure"
-    | "firecrawl"
-    | "documentation"
-    | "support_ticket"
-    | "ai_generated";
+  source: "test_failure" | "firecrawl" | "documentation" | "support_ticket" | "ai_generated";
   source_id?: string;
   category: string;
   title: string;
@@ -146,9 +141,7 @@ export class EnhancedSupabaseTestIntegration {
         this.supabase = null;
       }
     } else {
-      console.warn(
-        "Supabase credentials not found. Test dashboard will use mock data.",
-      );
+      console.warn("Supabase credentials not found. Test dashboard will use mock data.");
     }
   }
 
@@ -157,9 +150,7 @@ export class EnhancedSupabaseTestIntegration {
   /**
    * Create a new test run (existing table)
    */
-  async createTestRun(
-    data: Omit<TestRun, "id" | "created_at">,
-  ): Promise<TestRun | null> {
+  async createTestRun(data: Omit<TestRun, "id" | "created_at">): Promise<TestRun | null> {
     if (!this.supabase) {
       console.warn("Supabase not initialized");
       return null;
@@ -183,7 +174,7 @@ export class EnhancedSupabaseTestIntegration {
    * Store test results (existing table)
    */
   async storeTestResults(
-    results: Omit<TestResult, "id" | "created_at" | "updated_at">[],
+    results: Omit<TestResult, "id" | "created_at" | "updated_at">[]
   ): Promise<boolean> {
     if (!this.supabase) {
       console.warn("Supabase not initialized");
@@ -249,7 +240,7 @@ export class EnhancedSupabaseTestIntegration {
    * Store AI-generated test (existing table)
    */
   async storeGeneratedTest(
-    test: Omit<GeneratedTest, "id" | "created_at">,
+    test: Omit<GeneratedTest, "id" | "created_at">
   ): Promise<GeneratedTest | null> {
     if (!this.supabase) {
       console.warn("Supabase not initialized");
@@ -274,16 +265,14 @@ export class EnhancedSupabaseTestIntegration {
    * Add test feedback (existing table)
    */
   async addTestFeedback(
-    feedback: Omit<TestFeedback, "id" | "created_at" | "updated_at">,
+    feedback: Omit<TestFeedback, "id" | "created_at" | "updated_at">
   ): Promise<boolean> {
     if (!this.supabase) {
       console.warn("Supabase not initialized");
       return false;
     }
 
-    const { error } = await this.supabase
-      .from("test_feedback")
-      .insert(feedback);
+    const { error } = await this.supabase.from("test_feedback").insert(feedback);
 
     if (error) {
       console.error("Error adding test feedback:", error);
@@ -347,7 +336,7 @@ export class EnhancedSupabaseTestIntegration {
         if (result.status === "failed") acc[result.test_name].failed++;
         return acc;
       },
-      {} as Record<string, any>,
+      {} as Record<string, any>
     );
 
     // Calculate flakiness score
@@ -356,25 +345,18 @@ export class EnhancedSupabaseTestIntegration {
       .map(([testName, stats]) => {
         const failureRate = stats.failed / stats.total;
         const isFlaky =
-          stats.passed > 0 &&
-          stats.failed > 0 &&
-          failureRate > 0.1 &&
-          failureRate < 0.9;
+          stats.passed > 0 && stats.failed > 0 && failureRate > 0.1 && failureRate < 0.9;
         return {
           test_name: testName,
           total_runs: stats.total,
           failures: stats.failed,
           passes: stats.passed,
           failure_rate: (failureRate * 100).toFixed(2),
-          flakiness_score: isFlaky
-            ? (failureRate * (1 - failureRate) * 4).toFixed(2)
-            : 0,
+          flakiness_score: isFlaky ? (failureRate * (1 - failureRate) * 4).toFixed(2) : 0,
         };
       })
       .filter((test) => parseFloat(test.flakiness_score) > 0)
-      .sort(
-        (a, b) => parseFloat(b.flakiness_score) - parseFloat(a.flakiness_score),
-      );
+      .sort((a, b) => parseFloat(b.flakiness_score) - parseFloat(a.flakiness_score));
   }
 
   // ============= New Tables (Minimal Additions) =============
@@ -383,7 +365,7 @@ export class EnhancedSupabaseTestIntegration {
    * Create test execution record (new table needed)
    */
   async createTestExecution(
-    data: Omit<TestExecution, "id" | "created_at">,
+    data: Omit<TestExecution, "id" | "created_at">
   ): Promise<TestExecution | null> {
     if (!this.supabase) {
       console.warn("Supabase not initialized, returning mock execution");
@@ -417,7 +399,7 @@ export class EnhancedSupabaseTestIntegration {
    * Store Firecrawl analysis (new table needed)
    */
   async storeFirecrawlAnalysis(
-    analysis: Omit<FirecrawlAnalysis, "id" | "analyzed_at">,
+    analysis: Omit<FirecrawlAnalysis, "id" | "analyzed_at">
   ): Promise<boolean> {
     if (!this.supabase) {
       console.warn("Supabase not initialized");
@@ -442,7 +424,7 @@ export class EnhancedSupabaseTestIntegration {
    * Add to test knowledge base (new table needed)
    */
   async addTestKnowledge(
-    knowledge: Omit<TestKnowledge, "id" | "created_at" | "updated_at">,
+    knowledge: Omit<TestKnowledge, "id" | "created_at" | "updated_at">
   ): Promise<boolean> {
     if (!this.supabase) {
       console.warn("Supabase not initialized");
@@ -497,7 +479,7 @@ export class EnhancedSupabaseTestIntegration {
           content: f.feedback_reason || "",
           solution: f.improved_test_content,
           relevance: f.feedback_score || 50,
-        })),
+        }))
       );
     }
 
@@ -509,7 +491,7 @@ export class EnhancedSupabaseTestIntegration {
           content: r.error_message || "",
           solution: null,
           relevance: 40,
-        })),
+        }))
       );
     }
 
@@ -567,7 +549,7 @@ export class EnhancedSupabaseTestIntegration {
           schema: "public",
           table: "test_runs",
         },
-        callback,
+        callback
       )
       .subscribe();
   }
@@ -632,7 +614,7 @@ export class EnhancedSupabaseTestIntegration {
           acc[test.test_name] = (acc[test.test_name] || 0) + 1;
           return acc;
         },
-        {} as Record<string, number>,
+        {} as Record<string, number>
       );
 
       stats.topFailingTests = Object.entries(testFailCounts)
@@ -744,7 +726,7 @@ export class EnhancedSupabaseTestIntegration {
    */
   async updateTestExecution(
     executionId: string,
-    updates: Partial<TestExecution>,
+    updates: Partial<TestExecution>
   ): Promise<TestExecution | null> {
     if (!this.supabase) {
       console.warn("Supabase not initialized");

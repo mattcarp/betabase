@@ -37,28 +37,20 @@ async function testElevenLabsCapabilities() {
       console.log("✅ User data retrieved successfully");
       console.log(`   - Name: ${userData.first_name} ${userData.last_name}`);
       console.log(`   - Email: ${userData.email}`);
+      console.log(`   - Subscription: ${userData.subscription?.tier || "Unknown"}`);
+      console.log(`   - Character count: ${userData.subscription?.character_count || 0}`);
+      console.log(`   - Character limit: ${userData.subscription?.character_limit || 0}`);
       console.log(
-        `   - Subscription: ${userData.subscription?.tier || "Unknown"}`,
+        `   - Can extend character limit: ${userData.subscription?.can_extend_character_limit || false}`
       );
       console.log(
-        `   - Character count: ${userData.subscription?.character_count || 0}`,
+        `   - Can use instant voice cloning: ${userData.subscription?.can_use_instant_voice_cloning || false}`
       );
       console.log(
-        `   - Character limit: ${userData.subscription?.character_limit || 0}`,
-      );
-      console.log(
-        `   - Can extend character limit: ${userData.subscription?.can_extend_character_limit || false}`,
-      );
-      console.log(
-        `   - Can use instant voice cloning: ${userData.subscription?.can_use_instant_voice_cloning || false}`,
-      );
-      console.log(
-        `   - Can use professional voice cloning: ${userData.subscription?.can_use_professional_voice_cloning || false}`,
+        `   - Can use professional voice cloning: ${userData.subscription?.can_use_professional_voice_cloning || false}`
       );
     } else {
-      console.log(
-        `❌ Failed to get user data: ${response.status} ${response.statusText}`,
-      );
+      console.log(`❌ Failed to get user data: ${response.status} ${response.statusText}`);
     }
   } catch (error) {
     console.log("❌ Error getting user data:", error);
@@ -78,9 +70,7 @@ async function testElevenLabsCapabilities() {
         console.log(`   - ${voice.name} (${voice.voice_id})`);
       });
     } else {
-      console.log(
-        `❌ Failed to get voices: ${response.status} ${response.statusText}`,
-      );
+      console.log(`❌ Failed to get voices: ${response.status} ${response.statusText}`);
     }
   } catch (error) {
     console.log("❌ Error getting voices:", error);
@@ -95,18 +85,14 @@ async function testElevenLabsCapabilities() {
 
     if (response.ok) {
       const agentsData = await response.json();
-      console.log(
-        `✅ Found ${agentsData.agents?.length || 0} conversational AI agents`,
-      );
+      console.log(`✅ Found ${agentsData.agents?.length || 0} conversational AI agents`);
       if (agentsData.agents) {
         agentsData.agents.forEach((agent: any) => {
           console.log(`   - ${agent.name} (${agent.agent_id})`);
         });
       }
     } else {
-      console.log(
-        `❌ Failed to get agents: ${response.status} ${response.statusText}`,
-      );
+      console.log(`❌ Failed to get agents: ${response.status} ${response.statusText}`);
       const errorText = await response.text();
       console.log(`   Error details: ${errorText}`);
     }
@@ -121,9 +107,7 @@ async function testElevenLabsCapabilities() {
       headers: { "xi-api-key": apiKey },
     });
 
-    console.log(
-      `📊 MCP endpoint response: ${response.status} ${response.statusText}`,
-    );
+    console.log(`📊 MCP endpoint response: ${response.status} ${response.statusText}`);
     const responseText = await response.text();
 
     if (response.ok) {
@@ -135,9 +119,7 @@ async function testElevenLabsCapabilities() {
       console.log(`   Response: ${responseText}`);
 
       if (responseText.includes("convai_mcp_servers_disabled")) {
-        console.log(
-          "   🔒 MCP server registration is disabled for your account",
-        );
+        console.log("   🔒 MCP server registration is disabled for your account");
       }
     }
   } catch (error) {
@@ -161,9 +143,7 @@ async function testElevenLabsCapabilities() {
         console.log(`   - LLM: ${agentData.llm?.type || "Unknown"}`);
         console.log(`   - Tools enabled: ${agentData.tools?.length || 0}`);
       } else {
-        console.log(
-          `❌ Failed to get agent details: ${response.status} ${response.statusText}`,
-        );
+        console.log(`❌ Failed to get agent details: ${response.status} ${response.statusText}`);
       }
     } catch (error) {
       console.log("❌ Error getting agent details:", error);
@@ -172,13 +152,9 @@ async function testElevenLabsCapabilities() {
 
   console.log("\n✨ Capability test completed!");
   console.log("\n💡 Next Steps:");
-  console.log(
-    "1. If MCP servers are disabled, contact ElevenLabs support to enable them",
-  );
+  console.log("1. If MCP servers are disabled, contact ElevenLabs support to enable them");
   console.log("2. Consider upgrading your subscription if needed");
-  console.log(
-    "3. Alternatively, use direct MCP integration without ElevenLabs registration",
-  );
+  console.log("3. Alternatively, use direct MCP integration without ElevenLabs registration");
 }
 
 // Run the test if this file is executed directly

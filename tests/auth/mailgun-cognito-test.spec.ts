@@ -14,9 +14,7 @@ import { test, expect } from "@playwright/test";
  */
 
 test.describe("Magic Link with Real Email", () => {
-  test("manual test - send magic link to authorized email", async ({
-    page,
-  }) => {
+  test("manual test - send magic link to authorized email", async ({ page }) => {
     // Use YOUR real email that's authorized in Cognito
     const testEmail = "matt@mattcarpenter.com"; // This is already in ALLOWED_EMAILS
 

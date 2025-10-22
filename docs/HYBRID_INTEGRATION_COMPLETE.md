@@ -8,9 +8,11 @@
 ## 🚀 What Just Got Fixed
 
 ### Problem
+
 The user had built Supabase vector search integration in `/app/api/chat-vercel/route.ts` ~5 months ago, but the main chat endpoint (`/app/api/chat/route.ts`) was NOT using it. Only Railway MCP was being queried.
 
 ### Solution
+
 Ported the Supabase integration from chat-vercel to the main chat endpoint:
 
 ```typescript
@@ -65,6 +67,7 @@ Query: "How do I upload files in AOMA?"
 ## 🎯 Current Data Flow
 
 ### Before (BROKEN):
+
 ```
 User Query
   ↓
@@ -78,6 +81,7 @@ Return single source
 ```
 
 ### After (FIXED):
+
 ```
 User Query
   ↓
@@ -99,13 +103,15 @@ Return hybrid context with:
 ## 📈 Data Availability
 
 ### Railway MCP (OpenAI Vector Store)
+
 - **Status**: ✅ FULLY OPERATIONAL
 - **Response time**: ~10-12 seconds
 - **Coverage**: AOMA documentation (10+ pages)
 - **Quality**: Excellent, returns detailed responses
 
 ### Supabase Vector Stores
-- **Status**: ⚠️  INTEGRATION WORKS, DATA FORMAT ISSUE
+
+- **Status**: ⚠️ INTEGRATION WORKS, DATA FORMAT ISSUE
 - **wiki_documents**: 393 docs, 391 with embeddings
 - **jira_ticket_embeddings**: 6,040 tickets with embeddings
 - **Response time**: ~500ms
@@ -117,10 +123,12 @@ Return hybrid context with:
 ## 🔧 What Still Needs Fixing
 
 ### 1. Embedding Format Issue (HIGH PRIORITY)
+
 **Problem**: Embeddings stored as concatenated TEXT strings (~19k dimensions)
 **Expected**: Proper `vector(1536)` pgvector format
 
 **Options**:
+
 - **A. Re-process existing data** (4-6 hours)
   - Extract wiki_documents and jira_tickets
   - Generate proper vector(1536) embeddings
@@ -134,12 +142,14 @@ Return hybrid context with:
   - Long-term scalable solution
 
 ### 2. Testing & Validation
+
 - [ ] Test with real AOMA queries
 - [ ] Verify both sources contribute to responses
 - [ ] Measure response quality improvement
 - [ ] Monitor performance (Railway 10s + Supabase 500ms)
 
 ### 3. Production Deployment
+
 - [ ] Commit changes to git
 - [ ] Push to main branch
 - [ ] Monitor Render deployment
@@ -151,17 +161,20 @@ Return hybrid context with:
 ## 🎬 Next Steps for Demo
 
 ### Immediate (Working Now):
+
 1. ✅ Hybrid integration is ACTIVE
 2. ✅ Railway MCP returns AOMA knowledge
-3. ⚠️  Supabase returns 0 results (data format issue)
+3. ⚠️ Supabase returns 0 results (data format issue)
 
 ### For Impressive Demo (THIS WEEK):
+
 1. **Fix Supabase embeddings** - Get the 393 wiki docs + 6,040 JIRA tickets working
 2. **Test comprehensive queries** - Show both sources contributing
 3. **Performance metrics** - Display "Searched 6,433 documents in 500ms"
 4. **Source attribution** - Show which knowledge came from Railway vs Supabase
 
 ### Demo Script:
+
 ```
 👤 "How do I upload files in AOMA?"
 
@@ -209,18 +222,21 @@ Return hybrid context with:
 ## 🔥 TL;DR for Demo
 
 **YOU NOW HAVE:**
+
 - ✅ Hybrid AOMA knowledge system (Railway + Supabase)
 - ✅ Parallel queries for speed
 - ✅ 393 wiki docs + 6,040 JIRA tickets ready to use
-- ⚠️  Need to fix embedding format to see Supabase results
+- ⚠️ Need to fix embedding format to see Supabase results
 
 **DEMO READY AFTER:**
+
 - Fix embedding format (4-6 hours work)
 - Test queries return from both sources
 - Deploy to production
 - Verify no console errors
 
 **IMPRESSIVE FACTOR:**
+
 - Searches 6,433 documents across multiple sources
 - Sub-second Supabase response + 10s Railway response
 - Hybrid knowledge from OpenAI vectors + Supabase pgvector

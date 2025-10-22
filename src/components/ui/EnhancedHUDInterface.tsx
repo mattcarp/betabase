@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { cn } from "../../lib/utils";
 import { useHUDShortcuts } from "../../hooks/useHUDShortcuts";
-import HUDCustomizationPanel, {
-  GlassmorphismSettings,
-} from "./HUDCustomizationPanel";
+import HUDCustomizationPanel, { GlassmorphismSettings } from "./HUDCustomizationPanel";
 import AudioSourceSelector, { AudioSource } from "./AudioSourceSelector";
 import HUDHelpOverlay from "./HUDHelpOverlay";
 
@@ -85,10 +83,10 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
     transition: isDragging
       ? "none"
       : settings.animationSpeed === "fast"
-      ? "all 150ms ease"
-      : settings.animationSpeed === "slow"
-      ? "all 500ms ease"
-      : "all 300ms ease",
+        ? "all 150ms ease"
+        : settings.animationSpeed === "slow"
+          ? "all 500ms ease"
+          : "all 300ms ease",
   };
 
   return (
@@ -126,12 +124,7 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
           aria-label={isMinimized ? "Maximize panel" : "Minimize panel"}
           aria-expanded={!isMinimized}
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {isMinimized ? (
               <path
                 strokeLinecap="round"
@@ -166,11 +159,7 @@ interface EnhancedHUDInterfaceProps {
 
 export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
   transcription = "Listening for audio input...",
-  insights = [
-    "AI analysis will appear here",
-    "Real-time insights",
-    "Contextual information",
-  ],
+  insights = ["AI analysis will appear here", "Real-time insights", "Contextual information"],
   audioLevel = 0,
   onAudioSourceChange,
 }) => {
@@ -245,22 +234,13 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
   const [selectedAudioSource, setSelectedAudioSource] = useState("default-mic");
 
   // Panel management functions
-  const updatePanelPosition = useCallback(
-    (id: string, position: { x: number; y: number }) => {
-      setPanels((prev) =>
-        prev.map((panel) => (panel.id === id ? { ...panel, position } : panel))
-      );
-    },
-    []
-  );
+  const updatePanelPosition = useCallback((id: string, position: { x: number; y: number }) => {
+    setPanels((prev) => prev.map((panel) => (panel.id === id ? { ...panel, position } : panel)));
+  }, []);
 
   const togglePanelMinimize = useCallback((id: string) => {
     setPanels((prev) =>
-      prev.map((panel) =>
-        panel.id === id
-          ? { ...panel, isMinimized: !panel.isMinimized }
-          : panel
-      )
+      prev.map((panel) => (panel.id === id ? { ...panel, isMinimized: !panel.isMinimized } : panel))
     );
   }, []);
 
@@ -291,9 +271,7 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
   }, [transcription, insights, audioLevel]);
 
   const minimizeAllPanels = useCallback(() => {
-    setPanels((prev) =>
-      prev.map((panel) => ({ ...panel, isMinimized: true }))
-    );
+    setPanels((prev) => prev.map((panel) => ({ ...panel, isMinimized: true })));
   }, []);
 
   const focusNextPanel = useCallback(() => {
@@ -306,8 +284,7 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
 
   const focusPreviousPanel = useCallback(() => {
     setFocusedPanelIndex((prev) => {
-      const next =
-        prev === null ? panels.length - 1 : (prev - 1 + panels.length) % panels.length;
+      const next = prev === null ? panels.length - 1 : (prev - 1 + panels.length) % panels.length;
       document.getElementById(panels[next].id)?.focus();
       return next;
     });
@@ -366,20 +343,15 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
 
   // Audio source functions
   const selectNextAudioSource = useCallback(() => {
-    const currentIndex = audioSources.findIndex(
-      (s) => s.id === selectedAudioSource
-    );
+    const currentIndex = audioSources.findIndex((s) => s.id === selectedAudioSource);
     const nextIndex = (currentIndex + 1) % audioSources.length;
     setSelectedAudioSource(audioSources[nextIndex].id);
     onAudioSourceChange?.(audioSources[nextIndex].id);
   }, [audioSources, selectedAudioSource, onAudioSourceChange]);
 
   const selectPreviousAudioSource = useCallback(() => {
-    const currentIndex = audioSources.findIndex(
-      (s) => s.id === selectedAudioSource
-    );
-    const nextIndex =
-      (currentIndex - 1 + audioSources.length) % audioSources.length;
+    const currentIndex = audioSources.findIndex((s) => s.id === selectedAudioSource);
+    const nextIndex = (currentIndex - 1 + audioSources.length) % audioSources.length;
     setSelectedAudioSource(audioSources[nextIndex].id);
     onAudioSourceChange?.(audioSources[nextIndex].id);
   }, [audioSources, selectedAudioSource, onAudioSourceChange]);
@@ -445,9 +417,7 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
 
       {/* HUD Title */}
       <header className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
-        <h1 className="mac-display text-mac-text-primary">
-          SIAM HUD Interface
-        </h1>
+        <h1 className="mac-display text-mac-text-primary">SIAM HUD Interface</h1>
         <p className="text-center mac-body mt-2">
           Smart In A Meeting • Floating Intelligence Panels
         </p>
@@ -549,19 +519,14 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
       />
 
       {/* Help Overlay */}
-      <HUDHelpOverlay
-        isOpen={showHelp}
-        onClose={() => setShowHelp(false)}
-      />
+      <HUDHelpOverlay isOpen={showHelp} onClose={() => setShowHelp(false)} />
 
       {/* Instructions Footer */}
       <footer className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
         <div className="text-center space-y-2">
           <p className="mac-body text-mac-text-muted">
             Drag panels to reposition • Press{" "}
-            <kbd className="px-2 py-1 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">
-              F1
-            </kbd>{" "}
+            <kbd className="px-2 py-1 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">F1</kbd>{" "}
             for help
           </p>
           <div className="flex items-center justify-center gap-4 text-xs text-mac-text-muted">

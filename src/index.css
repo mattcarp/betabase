@@ -57,17 +57,8 @@
 
     /* MAC Professional Background */
     background:
-      radial-gradient(
-        circle at 25% 25%,
-        rgba(51, 133, 255, 0.03) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at 75% 75%,
-        rgba(133, 51, 255, 0.03) 0%,
-        transparent 50%
-      ),
-      #0a0a0a;
+      radial-gradient(circle at 25% 25%, rgba(51, 133, 255, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(133, 51, 255, 0.03) 0%, transparent 50%), #0a0a0a;
     background-attachment: fixed;
     overflow-x: hidden;
   }
@@ -106,12 +97,7 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.3),
-      transparent
-    );
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   }
 
   /* MAC Card Components */
@@ -196,7 +182,7 @@
     overflow: hidden;
     z-index: -1;
   }
-
+}
 
 /* Remove all cyberpunk/matrix styling - keep only professional elegance */
 @keyframes spin {

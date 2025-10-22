@@ -20,23 +20,14 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useMCPClient } from "../../hooks/useMCPClient";
-import {
-  useTopicExtraction,
-  useTopicVisualization,
-} from "../../hooks/useTopicExtraction";
+import { useTopicExtraction, useTopicVisualization } from "../../hooks/useTopicExtraction";
 import { aomaTopicIntegration } from "../../services/aomaTopicIntegration";
 
 interface WisdomEntry {
   id: string;
   title: string;
   content: string;
-  category:
-    | "strategy"
-    | "innovation"
-    | "leadership"
-    | "process"
-    | "insight"
-    | "technical";
+  category: "strategy" | "innovation" | "leadership" | "process" | "insight" | "technical";
   tags: string[];
   confidence: number;
   relevance: number;
@@ -177,9 +168,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
     ];
 
     [...businessThemes, ...techThemes].forEach((theme) => {
-      const count = keywords.filter(
-        (word) => word.includes(theme) || theme.includes(word),
-      ).length;
+      const count = keywords.filter((word) => word.includes(theme) || theme.includes(word)).length;
       if (count > 0) themeMap[theme] = count;
     });
 
@@ -194,11 +183,8 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
     if (["strategy", "planning", "growth"].includes(theme)) return "strategy";
     if (["innovation", "ai", "digital"].includes(theme)) return "innovation";
     if (["leadership", "management"].includes(theme)) return "leadership";
-    if (["process", "efficiency", "execution"].includes(theme))
-      return "process";
-    if (
-      ["technology", "system", "platform", "data", "analytics"].includes(theme)
-    )
+    if (["process", "efficiency", "execution"].includes(theme)) return "process";
+    if (["technology", "system", "platform", "data", "analytics"].includes(theme))
       return "technical";
     return "insight";
   };
@@ -250,9 +236,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
           ) {
             try {
               // Parse the JSON string from the response
-              const aomaResponse = JSON.parse(
-                knowledgeData.result.content[0].text,
-              );
+              const aomaResponse = JSON.parse(knowledgeData.result.content[0].text);
               console.log("Parsed AOMA Wisdom Response:", aomaResponse);
 
               const responseText = aomaResponse.response || "";
@@ -267,15 +251,12 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
                   id: "aoma-strategic-insights",
                   title: "Sony Music AOMA Strategy",
                   content:
-                    responseText.substring(0, 200) +
-                    (responseText.length > 200 ? "..." : ""),
+                    responseText.substring(0, 200) + (responseText.length > 200 ? "..." : ""),
                   category: "strategy",
                   tags: ["AOMA", "strategy", "Sony Music", "digital assets"],
                   confidence: 92,
                   relevance: 95,
-                  lastAccessed: new Date(
-                    aomaResponse.metadata?.timestamp || Date.now(),
-                  ),
+                  lastAccessed: new Date(aomaResponse.metadata?.timestamp || Date.now()),
                   source: "aoma",
                   interactionCount: insightsList.length * 3,
                   featured: true,
@@ -288,8 +269,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
               entries.push({
                 id: "aoma-strategic-insights",
                 title: "Strategic AOMA Insights",
-                content:
-                  "Key strategic insights from Sony Music AOMA knowledge base",
+                content: "Key strategic insights from Sony Music AOMA knowledge base",
                 category: "strategy",
                 tags: ["AOMA", "strategy", "Sony Music"],
                 confidence: 92,
@@ -298,8 +278,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
                 source: "aoma",
                 interactionCount: 15,
                 featured: true,
-                summary:
-                  "Comprehensive strategic insights from the AOMA knowledge base",
+                summary: "Comprehensive strategic insights from the AOMA knowledge base",
               });
             }
           }
@@ -337,9 +316,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
           ) {
             try {
               // Parse the JSON string from the response
-              const aomaResponse = JSON.parse(
-                workflowData.result.content[0].text,
-              );
+              const aomaResponse = JSON.parse(workflowData.result.content[0].text);
               console.log("Parsed AOMA Workflow Response:", aomaResponse);
 
               const responseText = aomaResponse.response || "";
@@ -351,7 +328,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
                   (line: string) =>
                     line.trim().startsWith("**") ||
                     line.includes("workflow") ||
-                    line.includes("process"),
+                    line.includes("process")
                 );
 
               if (workflowInsights.length > 0) {
@@ -359,15 +336,12 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
                   id: "aoma-workflow-optimization",
                   title: "AOMA Workflow Optimization",
                   content:
-                    responseText.substring(0, 200) +
-                    (responseText.length > 200 ? "..." : ""),
+                    responseText.substring(0, 200) + (responseText.length > 200 ? "..." : ""),
                   category: "process",
                   tags: ["workflow", "optimization", "process", "AOMA"],
                   confidence: 88,
                   relevance: 87,
-                  lastAccessed: new Date(
-                    aomaResponse.metadata?.timestamp || Date.now(),
-                  ),
+                  lastAccessed: new Date(aomaResponse.metadata?.timestamp || Date.now()),
                   source: "aoma",
                   interactionCount: workflowInsights.length * 2,
                   featured: false,
@@ -375,16 +349,12 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
                 });
               }
             } catch (parseError) {
-              console.error(
-                "Error parsing AOMA workflow response:",
-                parseError,
-              );
+              console.error("Error parsing AOMA workflow response:", parseError);
               // Fallback entry
               entries.push({
                 id: "aoma-workflow-optimization",
                 title: "Workflow Optimization",
-                content:
-                  "Latest workflow optimization insights and process improvements",
+                content: "Latest workflow optimization insights and process improvements",
                 category: "process",
                 tags: ["workflow", "optimization", "process"],
                 confidence: 88,
@@ -408,8 +378,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
             title: "Digital Asset Management Best Practices",
             content:
               "Comprehensive guide to managing digital assets in enterprise environments with focus on metadata, versioning, and access control.",
-            summary:
-              "Essential strategies for DAM implementation and optimization.",
+            summary: "Essential strategies for DAM implementation and optimization.",
             category: "technical",
             tags: ["dam", "assets", "metadata", "enterprise"],
             confidence: 92,
@@ -435,8 +404,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
       title: "Effective Meeting Facilitation",
       content:
         "Techniques for running productive meetings that drive decision-making and maintain engagement.",
-      summary:
-        "Key principles for meeting effectiveness and participant engagement.",
+      summary: "Key principles for meeting effectiveness and participant engagement.",
       category: "leadership",
       tags: ["meetings", "facilitation", "productivity"],
       confidence: 85,
@@ -469,12 +437,9 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
       searchQuery === "" ||
       entry.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       entry.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      entry.tags.some((tag) =>
-        tag.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
+      entry.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    const matchesCategory =
-      selectedCategory === "all" || entry.category === selectedCategory;
+    const matchesCategory = selectedCategory === "all" || entry.category === selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
@@ -511,13 +476,9 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
   return (
     <div className={`space-y-4 ${className}`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-motiff-accent">
-          Wisdom Library
-        </h3>
+        <h3 className="text-lg font-semibold text-motiff-accent">Wisdom Library</h3>
         <div className="flex items-center gap-2">
-          {mcpState.isConnected && (
-            <span className="motiff-status-connected text-xs">AOMA</span>
-          )}
+          {mcpState.isConnected && <span className="motiff-status-connected text-xs">AOMA</span>}
           <button className="text-motiff-accent/70 hover:text-motiff-accent text-sm transition-colors">
             Browse All
           </button>
@@ -599,14 +560,9 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-medium text-white text-sm truncate">
-                        {entry.title}
-                      </h4>
+                      <h4 className="font-medium text-white text-sm truncate">{entry.title}</h4>
                       {entry.featured && (
-                        <Star
-                          size={12}
-                          className="text-motiff-orange flex-shrink-0"
-                        />
+                        <Star size={12} className="text-motiff-orange flex-shrink-0" />
                       )}
                     </div>
                     <p className="text-xs text-white/60 mb-2 line-clamp-2">
@@ -616,9 +572,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
                       <span className="motiff-metric-value text-xs">
                         {Math.round(entry.confidence)}% relevant
                       </span>
-                      <span className="text-xs text-white/40">
-                        {entry.interactionCount} views
-                      </span>
+                      <span className="text-xs text-white/40">{entry.interactionCount} views</span>
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {entry.tags.slice(0, 3).map((tag) => (

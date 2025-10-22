@@ -26,11 +26,7 @@ class MCPConnectionManager {
   constructor() {
     // Determine mode based on environment
     const isProduction = process.env.NODE_ENV === "production";
-    const mcpMode = process.env.NEXT_PUBLIC_MCP_MODE as
-      | "local"
-      | "production"
-      | "auto"
-      | undefined;
+    const mcpMode = process.env.NEXT_PUBLIC_MCP_MODE as "local" | "production" | "auto" | undefined;
 
     this.config = {
       mode: mcpMode || (isProduction ? "production" : "auto"),
@@ -137,9 +133,7 @@ class MCPConnectionManager {
     try {
       if (config.type === "production") {
         // Connect via HTTP to production server
-        const connected = await this.connectToProductionServer(
-          config.endpoint!,
-        );
+        const connected = await this.connectToProductionServer(config.endpoint!);
         if (connected) {
           this.serverInfo = {
             type: "production",
@@ -151,10 +145,7 @@ class MCPConnectionManager {
         }
       } else {
         // Connect via stdio to local server
-        const connected = await this.connectToLocalServer(
-          config.command!,
-          config.args!,
-        );
+        const connected = await this.connectToLocalServer(config.command!, config.args!);
         if (connected) {
           this.serverInfo = {
             type: "local",
@@ -168,8 +159,7 @@ class MCPConnectionManager {
     } catch (error) {
       console.error("❌ MCP connection failed:", error);
       this.serverInfo.status = "error";
-      this.serverInfo.lastError =
-        error instanceof Error ? error.message : "Unknown error";
+      this.serverInfo.lastError = error instanceof Error ? error.message : "Unknown error";
     }
 
     return false;
@@ -202,10 +192,7 @@ class MCPConnectionManager {
   /**
    * Connect to local MCP server via stdio
    */
-  private async connectToLocalServer(
-    command: string,
-    args: string[],
-  ): Promise<boolean> {
+  private async connectToLocalServer(command: string, args: string[]): Promise<boolean> {
     // This would use the StdioClientTransport from MCP SDK
     // For now, return false as this needs to be handled by MCPClient
     console.log("📍 Local server connection requested:", { command, args });

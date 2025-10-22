@@ -70,8 +70,7 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const strokeDasharray = circumference;
-  const strokeDashoffset =
-    circumference - (animatedValue / 100) * circumference;
+  const strokeDashoffset = circumference - (animatedValue / 100) * circumference;
 
   const colors = colorMap[color];
   const centerX = size / 2;
@@ -122,10 +121,7 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
 
   return (
     <div
-      className={cn(
-        "relative inline-flex items-center justify-center",
-        className,
-      )}
+      className={cn("relative inline-flex items-center justify-center", className)}
       style={{ width: size, height: size }}
       data-testid="radial-progress"
     >
@@ -157,14 +153,9 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
           strokeDasharray={strokeDasharray}
           strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
-          className={cn(
-            "transition-all duration-300 ease-out",
-            glowEffect && "drop-shadow-md",
-          )}
+          className={cn("transition-all duration-300 ease-out", glowEffect && "drop-shadow-md")}
           style={{
-            filter: glowEffect
-              ? `drop-shadow(0 0 8px ${colors.glow})`
-              : undefined,
+            filter: glowEffect ? `drop-shadow(0 0 8px ${colors.glow})` : undefined,
             transition: animated ? "stroke-dashoffset 0.3s ease-out" : "none",
           }}
         />
@@ -199,13 +190,9 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
               </div>
             )}
             {label && (
-              <div className="text-xs text-holographic opacity-90 mt-1 font-mono">
-                {label}
-              </div>
+              <div className="text-xs text-holographic opacity-90 mt-1 font-mono">{label}</div>
             )}
-            {subLabel && (
-              <div className="text-xs opacity-60 mt-0.5">{subLabel}</div>
-            )}
+            {subLabel && <div className="text-xs opacity-60 mt-0.5">{subLabel}</div>}
           </div>
         )}
       </div>
@@ -213,10 +200,7 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
       {/* Pulsing center dot for active states */}
       {animatedValue > 0 && (
         <div
-          className={cn(
-            "absolute rounded-full animate-pulse",
-            colors.text.replace("text-", "bg-"),
-          )}
+          className={cn("absolute rounded-full animate-pulse", colors.text.replace("text-", "bg-"))}
           style={{
             width: 4,
             height: 4,

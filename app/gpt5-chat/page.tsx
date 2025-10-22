@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useGPT5Responses } from '../../src/hooks/useGPT5Responses';
-import { Button } from '../../src/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../../src/components/ui/card';
-import { Textarea } from '../../src/components/ui/textarea';
-import { ScrollArea } from '../../src/components/ui/scroll-area';
-import { Badge } from '../../src/components/ui/badge';
-import { Loader2, Send, Trash2, Settings } from 'lucide-react';
+import React, { useState } from "react";
+import { useGPT5Responses } from "../../src/hooks/useGPT5Responses";
+import { Button } from "../../src/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../src/components/ui/card";
+import { Textarea } from "../../src/components/ui/textarea";
+import { ScrollArea } from "../../src/components/ui/scroll-area";
+import { Badge } from "../../src/components/ui/badge";
+import { Loader2, Send, Trash2, Settings } from "lucide-react";
 
 export default function GPT5Chat() {
   const [showSettings, setShowSettings] = useState(false);
   const [settings, setSettings] = useState({
-    reasoningEffort: 'medium' as 'minimal' | 'low' | 'medium' | 'high',
-    verbosity: 'medium' as 'low' | 'medium' | 'high',
+    reasoningEffort: "medium" as "minimal" | "low" | "medium" | "high",
+    verbosity: "medium" as "low" | "medium" | "high",
     temperature: 0.7,
     maxTokens: 4096,
   });
@@ -34,9 +34,10 @@ export default function GPT5Chat() {
                    Be concise but thorough in your responses.`,
     ...settings,
     onError: (error) => {
-      console.error('GPT-5 Error:', error);
-    },    onFinish: (message) => {
-      console.log('Response completed:', message);
+      console.error("GPT-5 Error:", error);
+    },
+    onFinish: (message) => {
+      console.log("Response completed:", message);
     },
   });
 
@@ -65,7 +66,8 @@ export default function GPT5Chat() {
               </Button>
               <Button
                 variant="ghost"
-                size="icon"                onClick={clearConversation}
+                size="icon"
+                onClick={clearConversation}
                 title="Clear conversation"
               >
                 <Trash2 className="h-4 w-4" />
@@ -82,10 +84,12 @@ export default function GPT5Chat() {
                 <select
                   className="w-full mt-1 p-2 border rounded"
                   value={settings.reasoningEffort}
-                  onChange={(e) => setSettings({
-                    ...settings,
-                    reasoningEffort: e.target.value as any
-                  })}
+                  onChange={(e) =>
+                    setSettings({
+                      ...settings,
+                      reasoningEffort: e.target.value as any,
+                    })
+                  }
                 >
                   <option value="minimal">Minimal</option>
                   <option value="low">Low</option>
@@ -94,13 +98,16 @@ export default function GPT5Chat() {
                 </select>
               </div>
               <div>
-                <label className="text-sm font-medium">Verbosity</label>                <select
+                <label className="text-sm font-medium">Verbosity</label>{" "}
+                <select
                   className="w-full mt-1 p-2 border rounded"
                   value={settings.verbosity}
-                  onChange={(e) => setSettings({
-                    ...settings,
-                    verbosity: e.target.value as any
-                  })}
+                  onChange={(e) =>
+                    setSettings({
+                      ...settings,
+                      verbosity: e.target.value as any,
+                    })
+                  }
                 >
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -116,24 +123,29 @@ export default function GPT5Chat() {
                   min="0"
                   max="2"
                   step="0.1"
-                  onChange={(e) => setSettings({
-                    ...settings,
-                    temperature: parseFloat(e.target.value)
-                  })}
+                  onChange={(e) =>
+                    setSettings({
+                      ...settings,
+                      temperature: parseFloat(e.target.value),
+                    })
+                  }
                 />
               </div>
               <div>
-                <label className="text-sm font-medium">Max Tokens</label>                <input
+                <label className="text-sm font-medium">Max Tokens</label>{" "}
+                <input
                   type="number"
                   className="w-full mt-1 p-2 border rounded"
                   value={settings.maxTokens}
                   min="100"
                   max="128000"
                   step="100"
-                  onChange={(e) => setSettings({
-                    ...settings,
-                    maxTokens: parseInt(e.target.value)
-                  })}
+                  onChange={(e) =>
+                    setSettings({
+                      ...settings,
+                      maxTokens: parseInt(e.target.value),
+                    })
+                  }
                 />
               </div>
             </div>
@@ -150,28 +162,25 @@ export default function GPT5Chat() {
                 </p>
               </div>
             )}
-            
-            {messages.map((message) => (              <div
+
+            {messages.map((message) => (
+              <div
                 key={message.id}
-                className={`mb-4 ${
-                  message.role === 'user' ? 'text-right' : 'text-left'
-                }`}
+                className={`mb-4 ${message.role === "user" ? "text-right" : "text-left"}`}
               >
                 <div
                   className={`inline-block p-3 rounded-lg max-w-[80%] ${
-                    message.role === 'user'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted'
+                    message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
                   }`}
                 >
                   <div className="text-xs font-medium mb-1 opacity-70">
-                    {message.role === 'user' ? 'You' : 'GPT-5'}
+                    {message.role === "user" ? "You" : "GPT-5"}
                   </div>
                   <div className="whitespace-pre-wrap">{message.content}</div>
                 </div>
               </div>
             ))}
-            
+
             {isThinking && (
               <div className="mb-4 text-left">
                 <div className="inline-block p-3 rounded-lg bg-muted">
@@ -179,9 +188,10 @@ export default function GPT5Chat() {
                     <Loader2 className="h-4 w-4 animate-spin" />
                     <span className="text-sm">GPT-5 is thinking deeply...</span>
                   </div>
-                </div>              </div>
+                </div>{" "}
+              </div>
             )}
-            
+
             {isLoading && !isThinking && (
               <div className="mb-4 text-left">
                 <div className="inline-block p-3 rounded-lg bg-muted">
@@ -192,7 +202,7 @@ export default function GPT5Chat() {
                 </div>
               </div>
             )}
-            
+
             {error && (
               <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
                 Error: {error.message}
@@ -207,19 +217,16 @@ export default function GPT5Chat() {
               value={input}
               onChange={handleInputChange}
               placeholder="Type your message here..."
-              className="flex-1"              rows={3}
+              className="flex-1"
+              rows={3}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
+                if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   handleSubmit();
                 }
               }}
             />
-            <Button
-              type="submit"
-              disabled={isLoading || !input.trim()}
-              className="self-end"
-            >
+            <Button type="submit" disabled={isLoading || !input.trim()} className="self-end">
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (

@@ -565,9 +565,7 @@ interface FirecrawlConfig {
 class FirecrawlService {
   async crawlDocumentation(url: string): Promise<CrawledDocument>;
   async extractTestPatterns(content: string): Promise<TestPattern[]>;
-  async generateTestSuggestions(
-    document: CrawledDocument,
-  ): Promise<TestSuggestion[]>;
+  async generateTestSuggestions(document: CrawledDocument): Promise<TestSuggestion[]>;
   async indexForSearch(documents: CrawledDocument[]): Promise<void>;
   async semanticSearch(query: string): Promise<SearchResult[]>;
   async monitorChanges(sourceId: string): Promise<ChangeSet>;

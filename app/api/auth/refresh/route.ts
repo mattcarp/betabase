@@ -6,8 +6,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 
 const REGION = "us-east-2";
-const CLIENT_ID =
-  process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID || "5c6ll37299p351to549lkg3o0d";
+const CLIENT_ID = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID || "5c6ll37299p351to549lkg3o0d";
 
 const cognitoClient = new CognitoIdentityProviderClient({ region: REGION });
 
@@ -17,10 +16,7 @@ export async function POST(request: NextRequest) {
 
     const refreshToken = cookieStore.get("cognito_refresh_token");
     if (!refreshToken?.value) {
-      return NextResponse.json(
-        { error: "No refresh token available" },
-        { status: 401 },
-      );
+      return NextResponse.json({ error: "No refresh token available" }, { status: 401 });
     }
 
     const command = new InitiateAuthCommand({
@@ -36,7 +32,7 @@ export async function POST(request: NextRequest) {
     if (response.AuthenticationResult) {
       // Create response with updated tokens in secure httpOnly cookies
       const jsonResponse = NextResponse.json({ success: true });
-      
+
       jsonResponse.cookies.set({
         name: "cognito_access_token",
         value: response.AuthenticationResult.AccessToken || "",
@@ -62,15 +58,9 @@ export async function POST(request: NextRequest) {
       return jsonResponse;
     }
 
-    return NextResponse.json(
-      { error: "Token refresh failed" },
-      { status: 401 },
-    );
+    return NextResponse.json({ error: "Token refresh failed" }, { status: 401 });
   } catch (error) {
     console.error("Token refresh error:", error);
-    return NextResponse.json(
-      { error: "Token refresh failed" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Token refresh failed" }, { status: 500 });
   }
 }

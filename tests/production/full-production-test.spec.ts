@@ -9,8 +9,7 @@
 import { test, expect, Page, BrowserContext } from "@playwright/test";
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
-const MAILINATOR_INBOX =
-  "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
+const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
 const SIAM_URL = "https://iamsiam.ai";
 
 // Helper function to login (reuse from mailinator test)
@@ -25,9 +24,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
   // Wait for form to appear
   await page.waitForTimeout(3000);
   const verificationVisible = await page
-    .locator(
-      'input[placeholder*="code" i], input[placeholder*="verification" i]',
-    )
+    .locator('input[placeholder*="code" i], input[placeholder*="verification" i]')
     .isVisible();
 
   if (!verificationVisible) {
@@ -40,9 +37,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
   await mailPage.waitForTimeout(3000);
 
   // Click latest email
-  const emails = await mailPage
-    .locator('tr[ng-repeat*="email in emails"]')
-    .count();
+  const emails = await mailPage.locator('tr[ng-repeat*="email in emails"]').count();
   if (emails > 0) {
     await mailPage.locator('tr[ng-repeat*="email in emails"]').first().click();
     await mailPage.waitForTimeout(3000);
@@ -53,10 +48,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
     if (iframe) {
       const frame = await iframe.contentFrame();
       if (frame) {
-        const frameText = await frame.$eval(
-          "body",
-          (el) => el.textContent || "",
-        );
+        const frameText = await frame.$eval("body", (el) => el.textContent || "");
         const match = frameText.match(/\b(\d{6})\b/);
         if (match) code = match[1];
       }
@@ -75,10 +67,9 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
       // Enter code and login
       await page.fill('input[type="text"], input[type="number"]', code);
       await page.click('button[type="submit"]');
-      await page.waitForSelector(
-        'h1:has-text("AOMA Intelligence Hub"), h1:has-text("SIAM")',
-        { timeout: 15000 },
-      );
+      await page.waitForSelector('h1:has-text("AOMA Intelligence Hub"), h1:has-text("SIAM")', {
+        timeout: 15000,
+      });
       console.log("✅ Logged in successfully!");
     } else {
       throw new Error("Could not extract verification code");
@@ -121,7 +112,7 @@ test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
 
     // Find the chat input
     const chatInput = page.locator(
-      'textarea[placeholder*="Ask me anything"], input[placeholder*="Ask me anything"]',
+      'textarea[placeholder*="Ask me anything"], input[placeholder*="Ask me anything"]'
     );
     await expect(chatInput).toBeVisible();
 
@@ -146,7 +137,7 @@ test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
         'div[role="log"] >> text=/thinking|generating|\\.\\.\\./i, div[role="log"] >> text=/[A-Z]/',
         {
           timeout: 30000,
-        },
+        }
       );
 
       // Take screenshot of response
@@ -183,9 +174,7 @@ test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
           await page.waitForTimeout(2000);
 
           // Check for errors
-          const hasErrors = await page
-            .locator('[role="alert"], .error, .error-boundary')
-            .count();
+          const hasErrors = await page.locator('[role="alert"], .error, .error-boundary').count();
           if (hasErrors > 0) {
             console.log(`   ⚠️ Error found after clicking ${btn.name}`);
           } else {
@@ -237,9 +226,7 @@ test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
     console.log("\n💬 Testing Conversation History...");
 
     // Check for conversation items
-    const conversations = page.locator(
-      'button[class*="conversation"], button:has-text("ago")',
-    );
+    const conversations = page.locator('button[class*="conversation"], button:has-text("ago")');
     const count = await conversations.count();
 
     console.log(`   📚 Found ${count} conversations`);
@@ -258,9 +245,7 @@ test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
     }
 
     // Test New Conversation button
-    const newConvoButton = page
-      .locator('button:has-text("New Conversation")')
-      .first();
+    const newConvoButton = page.locator('button:has-text("New Conversation")').first();
     if (await newConvoButton.isVisible()) {
       await newConvoButton.click();
       await page.waitForTimeout(1000);
@@ -341,9 +326,7 @@ test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
     console.log("\n💥 Testing Error Handling...");
 
     // Try sending empty message
-    const chatInput = page
-      .locator('textarea[placeholder*="Ask me anything"]')
-      .first();
+    const chatInput = page.locator('textarea[placeholder*="Ask me anything"]').first();
     if (await chatInput.isVisible()) {
       await chatInput.fill("");
       await page.keyboard.press("Enter");
@@ -364,9 +347,7 @@ test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
     });
 
     await page.waitForTimeout(1000);
-    console.log(
-      `   XSS Protection: ${xssTriggered ? "❌ VULNERABLE!" : "✅ SECURE"}`,
-    );
+    console.log(`   XSS Protection: ${xssTriggered ? "❌ VULNERABLE!" : "✅ SECURE"}`);
 
     // Try SQL injection in search
     const searchInput = page.locator('input[placeholder*="Search"]').first();
@@ -382,9 +363,7 @@ test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
     console.log("\n⚡ Testing Performance...");
 
     // Measure chat response time
-    const chatInput = page
-      .locator('textarea[placeholder*="Ask me anything"]')
-      .first();
+    const chatInput = page.locator('textarea[placeholder*="Ask me anything"]').first();
 
     const startTime = Date.now();
     await chatInput.fill("Quick test");
@@ -408,13 +387,9 @@ test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
 
     // Check for memory leaks by monitoring console
     const memoryErrors = await page.evaluate(() => {
-      return window.performance.memory
-        ? window.performance.memory.usedJSHeapSize
-        : 0;
+      return window.performance.memory ? window.performance.memory.usedJSHeapSize : 0;
     });
-    console.log(
-      `   💾 Memory usage: ${(memoryErrors / 1024 / 1024).toFixed(2)}MB`,
-    );
+    console.log(`   💾 Memory usage: ${(memoryErrors / 1024 / 1024).toFixed(2)}MB`);
   });
 
   test("🔟 TEST ACCESSIBILITY - Basic a11y checks", async () => {
@@ -438,9 +413,7 @@ test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
     // Check for ARIA labels
     const buttonsWithoutLabel = await page.evaluate(() => {
       const buttons = Array.from(document.querySelectorAll("button"));
-      return buttons.filter(
-        (btn) => !btn.textContent && !btn.getAttribute("aria-label"),
-      ).length;
+      return buttons.filter((btn) => !btn.textContent && !btn.getAttribute("aria-label")).length;
     });
     console.log(`   Buttons without labels: ${buttonsWithoutLabel}`);
 
@@ -454,9 +427,7 @@ test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
   test("1️⃣1️⃣ STRESS TEST - Rapid interactions", async () => {
     console.log("\n🏃 Stress Testing...");
 
-    const chatInput = page
-      .locator('textarea[placeholder*="Ask me anything"]')
-      .first();
+    const chatInput = page.locator('textarea[placeholder*="Ask me anything"]').first();
 
     // Send multiple messages rapidly
     console.log("   🚀 Sending rapid messages...");
@@ -484,8 +455,7 @@ test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
     }
 
     // Check for crashes
-    const hasError =
-      (await page.locator(".error-boundary, [data-error]").count()) > 0;
+    const hasError = (await page.locator(".error-boundary, [data-error]").count()) > 0;
     console.log(`   Survived stress test: ${hasError ? "❌" : "✅"}`);
   });
 

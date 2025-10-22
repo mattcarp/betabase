@@ -3,10 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useConversation } from "@elevenlabs/react";
 import { RealTimeAudioProcessor } from "../services/realTimeAudioProcessor";
-import type {
-  AudioFeatures,
-  AudioMetrics,
-} from "../services/realTimeAudioProcessor";
+import type { AudioFeatures, AudioMetrics } from "../services/realTimeAudioProcessor";
 
 /**
  * Conversation State Machine States
@@ -21,11 +18,7 @@ export type ConversationState =
 /**
  * Conversation Status
  */
-export type ConversationStatus =
-  | "disconnected"
-  | "connecting"
-  | "connected"
-  | "error";
+export type ConversationStatus = "disconnected" | "connecting" | "connected" | "error";
 
 /**
  * Conversation Configuration
@@ -88,8 +81,7 @@ export interface UseElevenLabsConversationReturn {
 export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
   // State
   const [status, setStatus] = useState<ConversationStatus>("disconnected");
-  const [conversationState, setConversationState] =
-    useState<ConversationState>("idle");
+  const [conversationState, setConversationState] = useState<ConversationState>("idle");
   const [userTranscript, setUserTranscript] = useState("");
   const [aiTranscript, setAiTranscript] = useState("");
   const [userAudioLevel, setUserAudioLevel] = useState(0);
@@ -97,9 +89,7 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
   const [isUserSpeaking, setIsUserSpeaking] = useState(false);
   const [isAISpeaking, setIsAISpeaking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [audioFeatures, setAudioFeatures] = useState<AudioFeatures | null>(
-    null,
-  );
+  const [audioFeatures, setAudioFeatures] = useState<AudioFeatures | null>(null);
   const [audioMetrics, setAudioMetrics] = useState<AudioMetrics | null>(null);
 
   // Refs
@@ -239,7 +229,7 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
         }, 1000);
       }
     },
-    [conversationState],
+    [conversationState]
   );
 
   /**
@@ -265,9 +255,7 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(
-        errorData.error || "Failed to get conversation token",
-      );
+      throw new Error(errorData.error || "Failed to get conversation token");
     }
 
     const data = await response.json();
@@ -294,10 +282,7 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
 
         // Start audio processor for VAD (if voice-activated mode)
         if (config.mode === "voice-activated" && audioProcessorRef.current) {
-          await audioProcessorRef.current.startProcessing(
-            handleAudioFeatures,
-            handleAudioMetrics,
-          );
+          await audioProcessorRef.current.startProcessing(handleAudioFeatures, handleAudioMetrics);
         }
 
         // Start conversation with signed URL
@@ -314,7 +299,7 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
         throw err;
       }
     },
-    [conversation, handleAudioFeatures, handleAudioMetrics],
+    [conversation, handleAudioFeatures, handleAudioMetrics]
   );
 
   /**
@@ -359,10 +344,7 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
   const resumeConversation = useCallback(async () => {
     console.log("▶️ Resuming conversation...");
     if (configRef.current?.mode === "voice-activated" && audioProcessorRef.current) {
-      await audioProcessorRef.current.startProcessing(
-        handleAudioFeatures,
-        handleAudioMetrics,
-      );
+      await audioProcessorRef.current.startProcessing(handleAudioFeatures, handleAudioMetrics);
     }
   }, [handleAudioFeatures, handleAudioMetrics]);
 

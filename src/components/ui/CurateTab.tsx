@@ -1,13 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "./card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./card";
 import { Button } from "./button";
 import { Badge } from "./badge";
 import { Alert, AlertDescription } from "./alert";
@@ -127,7 +121,7 @@ export function CurateTab({
         // Calculate stats
         const totalSize = data.files.reduce(
           (sum: number, file: VectorStoreFile) => sum + file.bytes,
-          0,
+          0
         );
         setStats({
           totalFiles: data.files.length,
@@ -287,7 +281,7 @@ export function CurateTab({
 
   // Filter files based on search
   const filteredFiles = files.filter((file) =>
-    file.filename.toLowerCase().includes(searchQuery.toLowerCase()),
+    file.filename.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Load files on mount
@@ -301,13 +295,15 @@ export function CurateTab({
   };
 
   return (
-    <Card className={cn(
-      "h-full flex flex-col",
-      "mac-glass",
-      "bg-[var(--mac-surface-elevated)]",
-      "border-[var(--mac-utility-border)]",
-      className
-    )}>
+    <Card
+      className={cn(
+        "h-full flex flex-col",
+        "mac-glass",
+        "bg-[var(--mac-surface-elevated)]",
+        "border-[var(--mac-utility-border)]",
+        className
+      )}
+    >
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
@@ -349,17 +345,15 @@ export function CurateTab({
       </CardHeader>
 
       <CardContent className="flex-1 overflow-hidden">
-        <Tabs
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="h-full flex flex-col"
-        >
-          <TabsList className={cn(
-            "grid w-full grid-cols-3",
-            "mac-glass",
-            "border-[var(--mac-utility-border)]",
-            "bg-[var(--mac-surface-card)]"
-          )}>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
+          <TabsList
+            className={cn(
+              "grid w-full grid-cols-3",
+              "mac-glass",
+              "border-[var(--mac-utility-border)]",
+              "bg-[var(--mac-surface-card)]"
+            )}
+          >
             <TabsTrigger
               value="files"
               className={cn(
@@ -441,11 +435,7 @@ export function CurateTab({
                     "transition-all duration-200"
                   )}
                 >
-                  {loading ? (
-                    <Spinner className="h-4 w-4" />
-                  ) : (
-                    <RefreshCw className="h-4 w-4" />
-                  )}
+                  {loading ? <Spinner className="h-4 w-4" /> : <RefreshCw className="h-4 w-4" />}
                 </Button>
                 <Button
                   variant="outline"
@@ -498,21 +488,20 @@ export function CurateTab({
               </div>
 
               {/* Files List */}
-              <ScrollArea className={cn(
-                "flex-1 rounded-lg",
-                "border border-[var(--mac-utility-border)]",
-                "bg-[var(--mac-surface-elevated)]",
-                "[&_[data-radix-scroll-area-viewport]]:bg-[var(--mac-surface-elevated)]"
-              )}>
+              <ScrollArea
+                className={cn(
+                  "flex-1 rounded-lg",
+                  "border border-[var(--mac-utility-border)]",
+                  "bg-[var(--mac-surface-elevated)]",
+                  "[&_[data-radix-scroll-area-viewport]]:bg-[var(--mac-surface-elevated)]"
+                )}
+              >
                 {loading && filteredFiles.length === 0 ? (
                   <div className="flex items-center justify-center h-32">
                     <Spinner className="h-6 w-6" />
                   </div>
                 ) : filteredFiles.length === 0 ? (
-                  <Empty className={cn(
-                    "h-32 border-0",
-                    "bg-[var(--mac-surface-elevated)]/50"
-                  )}>
+                  <Empty className={cn("h-32 border-0", "bg-[var(--mac-surface-elevated)]/50")}>
                     <EmptyMedia variant="icon" className="text-[var(--mac-text-muted)]">
                       <FileText className="h-10 w-10" />
                     </EmptyMedia>
@@ -520,7 +509,9 @@ export function CurateTab({
                       No files found
                     </EmptyTitle>
                     <EmptyDescription className="text-[var(--mac-text-secondary)] font-light">
-                      {searchQuery ? `No files match "${searchQuery}"` : "Upload files to get started"}
+                      {searchQuery
+                        ? `No files match "${searchQuery}"`
+                        : "Upload files to get started"}
                     </EmptyDescription>
                   </Empty>
                 ) : (
@@ -528,7 +519,9 @@ export function CurateTab({
                     {/* Select All */}
                     <div className="flex items-center gap-3 pb-3 border-b border-[var(--mac-utility-border)]">
                       <Checkbox
-                        checked={selectedFiles.size === filteredFiles.length && filteredFiles.length > 0}
+                        checked={
+                          selectedFiles.size === filteredFiles.length && filteredFiles.length > 0
+                        }
                         onCheckedChange={selectAllFiles}
                         className={cn(
                           "border-[var(--mac-utility-border-elevated)]",
@@ -536,7 +529,10 @@ export function CurateTab({
                           "data-[state=checked]:border-[var(--mac-primary-blue-400)]"
                         )}
                       />
-                      <label className="text-sm text-[var(--mac-text-secondary)] font-light cursor-pointer" onClick={selectAllFiles}>
+                      <label
+                        className="text-sm text-[var(--mac-text-secondary)] font-light cursor-pointer"
+                        onClick={selectAllFiles}
+                      >
                         Select all ({filteredFiles.length})
                       </label>
                     </div>
@@ -558,7 +554,7 @@ export function CurateTab({
                           selectedFiles.has(file.id) && [
                             "bg-[var(--mac-surface-card)]",
                             "border-[var(--mac-primary-blue-400)]",
-                            "shadow-lg shadow-[var(--mac-primary-blue-400)]/10"
+                            "shadow-lg shadow-[var(--mac-primary-blue-400)]/10",
                           ]
                         )}
                       >
@@ -584,7 +580,11 @@ export function CurateTab({
                             <span>{formatDate(file.created_at)}</span>
                             <span className="text-[var(--mac-utility-border-elevated)]">│</span>
                             <Badge
-                              variant={file.status === "processed" || file.status === "ready" ? "default" : "secondary"}
+                              variant={
+                                file.status === "processed" || file.status === "ready"
+                                  ? "default"
+                                  : "secondary"
+                              }
                               className={cn(
                                 "text-xs h-4 font-light",
                                 file.status === "processed" || file.status === "ready"
@@ -597,7 +597,7 @@ export function CurateTab({
                             {/* Knowledge Quality Indicators */}
                             {(() => {
                               const now = Date.now();
-                              const fileAge = now - (file.created_at * 1000);
+                              const fileAge = now - file.created_at * 1000;
                               const sevenDays = 7 * 24 * 60 * 60 * 1000;
                               const isNew = fileAge < sevenDays;
                               const isLarge = file.bytes > 1024 * 1024; // > 1MB
@@ -681,9 +681,7 @@ export function CurateTab({
               {/* Status Bar */}
               {stats.lastUpdated && (
                 <div className="flex items-center justify-between text-xs text-[var(--mac-text-muted)] font-light">
-                  <span>
-                    Last updated: {stats.lastUpdated.toLocaleTimeString()}
-                  </span>
+                  <span>Last updated: {stats.lastUpdated.toLocaleTimeString()}</span>
                   <span>
                     {filteredFiles.length} of {files.length} files shown
                   </span>
@@ -701,15 +699,16 @@ export function CurateTab({
                 onUploadError={(error) => toast.error(error)}
               />
 
-              <Alert className={cn(
-                "border-[var(--mac-utility-border)]",
-                "bg-[var(--mac-surface-elevated)]/50"
-              )}>
+              <Alert
+                className={cn(
+                  "border-[var(--mac-utility-border)]",
+                  "bg-[var(--mac-surface-elevated)]/50"
+                )}
+              >
                 <Info className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
                 <AlertDescription className="font-light text-[var(--mac-text-secondary)]">
-                  Uploaded files are automatically processed and indexed in the
-                  AOMA vector store. They become immediately available for
-                  semantic search and AI-powered analysis.
+                  Uploaded files are automatically processed and indexed in the AOMA vector store.
+                  They become immediately available for semantic search and AI-powered analysis.
                 </AlertDescription>
               </Alert>
             </div>
@@ -728,12 +727,14 @@ export function CurateTab({
                     <span className="text-sm text-[var(--mac-text-secondary)] font-light">
                       Assistant ID
                     </span>
-                    <code className={cn(
-                      "text-xs px-2 py-1 rounded font-light",
-                      "bg-[var(--mac-surface-background)]",
-                      "text-[var(--mac-text-primary)]",
-                      "border border-[var(--mac-utility-border)]"
-                    )}>
+                    <code
+                      className={cn(
+                        "text-xs px-2 py-1 rounded font-light",
+                        "bg-[var(--mac-surface-background)]",
+                        "text-[var(--mac-text-primary)]",
+                        "border border-[var(--mac-utility-border)]"
+                      )}
+                    >
                       {assistantId}
                     </code>
                   </div>
@@ -742,7 +743,9 @@ export function CurateTab({
                     <span className="text-sm text-[var(--mac-text-secondary)] font-light">
                       Total Files
                     </span>
-                    <span className="font-normal text-[var(--mac-text-primary)]">{stats.totalFiles}</span>
+                    <span className="font-normal text-[var(--mac-text-primary)]">
+                      {stats.totalFiles}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-[var(--mac-text-secondary)] font-light">
@@ -775,16 +778,7 @@ export function CurateTab({
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-2">
-                    {[
-                      "PDF",
-                      "TXT",
-                      "MD",
-                      "DOCX",
-                      "JSON",
-                      "CSV",
-                      "PNG",
-                      "JPG",
-                    ].map((type) => (
+                    {["PDF", "TXT", "MD", "DOCX", "JSON", "CSV", "PNG", "JPG"].map((type) => (
                       <Badge
                         key={type}
                         variant="outline"
@@ -802,15 +796,16 @@ export function CurateTab({
                 </CardContent>
               </Card>
 
-              <Alert className={cn(
-                "border-[var(--mac-utility-border)]",
-                "bg-[var(--mac-surface-elevated)]/50"
-              )}>
+              <Alert
+                className={cn(
+                  "border-[var(--mac-utility-border)]",
+                  "bg-[var(--mac-surface-elevated)]/50"
+                )}
+              >
                 <AlertCircle className="h-4 w-4 text-[var(--mac-status-warning-text)]" />
                 <AlertDescription className="font-light text-[var(--mac-text-secondary)]">
-                  Files in the vector store are used to enhance AI responses
-                  with domain-specific knowledge. Deleting files will
-                  permanently remove them from the knowledge base.
+                  Files in the vector store are used to enhance AI responses with domain-specific
+                  knowledge. Deleting files will permanently remove them from the knowledge base.
                 </AlertDescription>
               </Alert>
             </div>
@@ -820,19 +815,21 @@ export function CurateTab({
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className={cn(
-          "mac-glass",
-          "border-[var(--mac-utility-border-elevated)]",
-          "bg-[var(--mac-surface-elevated)]"
-        )}>
+        <DialogContent
+          className={cn(
+            "mac-glass",
+            "border-[var(--mac-utility-border-elevated)]",
+            "bg-[var(--mac-surface-elevated)]"
+          )}
+        >
           <DialogHeader>
             <DialogTitle className="text-[var(--mac-text-primary)] font-light flex items-center gap-2">
               <AlertCircle className="h-5 w-5 text-[var(--mac-status-error-text)]" />
               Delete Files
             </DialogTitle>
             <DialogDescription className="text-[var(--mac-text-secondary)] font-light">
-              Are you sure you want to delete {filesToDelete.length} file(s)?
-              This action cannot be undone and will permanently remove the files from the knowledge base.
+              Are you sure you want to delete {filesToDelete.length} file(s)? This action cannot be
+              undone and will permanently remove the files from the knowledge base.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
@@ -863,7 +860,7 @@ export function CurateTab({
               ) : (
                 <>
                   <Trash2 className="h-4 w-4 mr-2" />
-                  Delete {filesToDelete.length} file{filesToDelete.length !== 1 ? 's' : ''}
+                  Delete {filesToDelete.length} file{filesToDelete.length !== 1 ? "s" : ""}
                 </>
               )}
             </Button>
@@ -873,11 +870,13 @@ export function CurateTab({
 
       {/* File Preview Dialog */}
       <Dialog open={previewDialogOpen} onOpenChange={setPreviewDialogOpen}>
-        <DialogContent className={cn(
-          "mac-glass max-w-4xl max-h-[80vh]",
-          "border-[var(--mac-utility-border-elevated)]",
-          "bg-[var(--mac-surface-elevated)]"
-        )}>
+        <DialogContent
+          className={cn(
+            "mac-glass max-w-4xl max-h-[80vh]",
+            "border-[var(--mac-utility-border-elevated)]",
+            "bg-[var(--mac-surface-elevated)]"
+          )}
+        >
           <DialogHeader>
             <DialogTitle className="text-[var(--mac-text-primary)] font-light flex items-center gap-2">
               <Eye className="h-5 w-5 text-[var(--mac-primary-blue-400)]" />
@@ -885,27 +884,34 @@ export function CurateTab({
             </DialogTitle>
             {previewFile && (
               <DialogDescription className="text-[var(--mac-text-secondary)] font-light">
-                {previewFile.filename} • {formatFileSize(previewFile.bytes)} • {formatDate(previewFile.created_at)}
+                {previewFile.filename} • {formatFileSize(previewFile.bytes)} •{" "}
+                {formatDate(previewFile.created_at)}
               </DialogDescription>
             )}
           </DialogHeader>
 
-          <ScrollArea className={cn(
-            "h-96 rounded-lg p-4",
-            "border border-[var(--mac-utility-border)]",
-            "bg-[var(--mac-surface-background)]"
-          )}>
+          <ScrollArea
+            className={cn(
+              "h-96 rounded-lg p-4",
+              "border border-[var(--mac-utility-border)]",
+              "bg-[var(--mac-surface-background)]"
+            )}
+          >
             {previewLoading ? (
               <div className="flex items-center justify-center h-full">
                 <Spinner className="h-8 w-8" />
-                <span className="ml-3 text-[var(--mac-text-secondary)] font-light">Loading content...</span>
+                <span className="ml-3 text-[var(--mac-text-secondary)] font-light">
+                  Loading content...
+                </span>
               </div>
             ) : (
-              <pre className={cn(
-                "text-xs font-mono whitespace-pre-wrap",
-                "text-[var(--mac-text-primary)]",
-                "font-light"
-              )}>
+              <pre
+                className={cn(
+                  "text-xs font-mono whitespace-pre-wrap",
+                  "text-[var(--mac-text-primary)]",
+                  "font-light"
+                )}
+              >
                 {previewContent}
               </pre>
             )}

@@ -35,9 +35,7 @@ async function main() {
     "VECTOR_STORE_ID",
   ];
 
-  const missingVars = requiredEnvVars.filter(
-    (varName) => !process.env[varName],
-  );
+  const missingVars = requiredEnvVars.filter((varName) => !process.env[varName]);
 
   if (missingVars.length > 0) {
     console.error("❌ Missing required environment variables:");
@@ -70,7 +68,7 @@ async function main() {
     // Create migration service
     const migrationService = new VectorStoreMigrationService(
       process.env.OPENAI_API_KEY,
-      process.env.VECTOR_STORE_ID,
+      process.env.VECTOR_STORE_ID
     );
 
     // Run the migration
@@ -88,12 +86,8 @@ async function main() {
     console.log(`   Total files processed: ${result.totalFiles}`);
     console.log(`   ✅ Successful: ${result.successfulMigrations}`);
     console.log(`   ❌ Failed: ${result.failedMigrations}`);
-    console.log(
-      `   ⏱️  Duration: ${(result.duration / 1000).toFixed(2)} seconds`,
-    );
-    console.log(
-      `   🔍 Verification: ${verification.match ? "PASSED ✅" : "NEEDS ATTENTION ⚠️"}`,
-    );
+    console.log(`   ⏱️  Duration: ${(result.duration / 1000).toFixed(2)} seconds`);
+    console.log(`   🔍 Verification: ${verification.match ? "PASSED ✅" : "NEEDS ATTENTION ⚠️"}`);
 
     if (result.errors.length > 0) {
       console.log("\n   Failed files:");
@@ -106,14 +100,10 @@ async function main() {
     console.log("\n");
 
     if (result.failedMigrations === 0 && verification.match) {
-      console.log(
-        "🎉 PERFECT MIGRATION! Your vector store is now in Supabase!",
-      );
+      console.log("🎉 PERFECT MIGRATION! Your vector store is now in Supabase!");
       console.log("🚀 Next step: Update the orchestrator to use Supabase!");
     } else if (result.failedMigrations > 0) {
-      console.log(
-        "⚠️  Some files failed to migrate. You may want to retry them.",
-      );
+      console.log("⚠️  Some files failed to migrate. You may want to retry them.");
     }
 
     process.exit(result.failedMigrations === 0 ? 0 : 1);

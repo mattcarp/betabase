@@ -56,8 +56,7 @@ curl -X POST https://5so2f6gefeuoaywpuymjikix5e0rhqyo.lambda-url.us-east-2.on.aw
 ### JavaScript/Node.js
 
 ```javascript
-const MCP_SERVER_URL =
-  "https://5so2f6gefeuoaywpuymjikix5e0rhqyo.lambda-url.us-east-2.on.aws";
+const MCP_SERVER_URL = "https://5so2f6gefeuoaywpuymjikix5e0rhqyo.lambda-url.us-east-2.on.aws";
 
 async function queryAOMA(question) {
   const response = await fetch(`${MCP_SERVER_URL}/rpc`, {
