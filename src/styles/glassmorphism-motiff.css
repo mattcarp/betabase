@@ -162,11 +162,7 @@
 
 .message-bubble.user {
   @apply ml-auto;
-  background: linear-gradient(
-    135deg,
-    var(--motiff-primary),
-    var(--motiff-accent)
-  );
+  background: linear-gradient(135deg, var(--motiff-primary), var(--motiff-accent));
   color: #000;
   border: 1px solid rgba(0, 229, 255, 0.3);
 }
@@ -194,7 +190,6 @@
   border-color: var(--voice-active);
   box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
 }
-
 
 /* Waveform Visualization */
 .waveform {
@@ -267,11 +262,7 @@
 }
 
 .sidebar-section h3 {
-  background: linear-gradient(
-    90deg,
-    var(--motiff-primary),
-    var(--motiff-secondary)
-  );
+  background: linear-gradient(90deg, var(--motiff-primary), var(--motiff-secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -294,7 +285,6 @@
   background: var(--motiff-green);
   border-radius: 50%;
 }
-
 
 /* Connection Status Indicators */
 .connection-status {

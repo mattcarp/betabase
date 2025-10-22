@@ -2,30 +2,16 @@
 
 import type { ComponentProps } from "react";
 import { cn } from "../../lib/utils";
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from "../ui/collapsible";
-import {
-  ChevronDownIcon,
-  CheckIcon,
-  LoaderIcon,
-  XCircleIcon,
-  ClockIcon,
-} from "lucide-react";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "../ui/collapsible";
+import { ChevronDownIcon, CheckIcon, LoaderIcon, XCircleIcon, ClockIcon } from "lucide-react";
 
 export type TaskItemFileProps = ComponentProps<"div">;
 
-export const TaskItemFile = ({
-  children,
-  className,
-  ...props
-}: TaskItemFileProps) => (
+export const TaskItemFile = ({ children, className, ...props }: TaskItemFileProps) => (
   <div
     className={cn(
       "text-xs inline-flex items-center gap-1 px-1.5 py-0.5 text-foreground border bg-secondary rounded-md",
-      className,
+      className
     )}
     {...props}
   >
@@ -43,16 +29,12 @@ export const TaskItem = ({ children, className, ...props }: TaskItemProps) => (
 
 export type TaskProps = ComponentProps<typeof Collapsible>;
 
-export const Task = ({
-  defaultOpen = true,
-  className,
-  ...props
-}: TaskProps) => (
+export const Task = ({ defaultOpen = true, className, ...props }: TaskProps) => (
   <Collapsible
     defaultOpen={defaultOpen}
     className={cn(
       "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2",
-      className,
+      className
     )}
     {...props}
   />
@@ -102,7 +84,7 @@ export const TaskTrigger = ({
         <div
           className={cn(
             "flex items-center gap-2 cursor-pointer hover:text-foreground transition-colors",
-            getStatusColor(),
+            getStatusColor()
           )}
         >
           {getStatusIcon()}
@@ -116,20 +98,14 @@ export const TaskTrigger = ({
 
 export type TaskContentProps = ComponentProps<typeof CollapsibleContent>;
 
-export const TaskContent = ({
-  children,
-  className,
-  ...props
-}: TaskContentProps) => (
+export const TaskContent = ({ children, className, ...props }: TaskContentProps) => (
   <CollapsibleContent
     className={cn(
       "text-popover-foreground outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2",
-      className,
+      className
     )}
     {...props}
   >
-    <div className="border-l-2 border-muted pl-4 mt-4 space-y-2">
-      {children}
-    </div>
+    <div className="border-l-2 border-muted pl-4 mt-4 space-y-2">{children}</div>
   </CollapsibleContent>
 );

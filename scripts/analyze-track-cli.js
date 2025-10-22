@@ -2,35 +2,35 @@
 
 /**
  * CLI Tool for Music Label Explicit Content Analysis
- * 
+ *
  * Usage: node scripts/analyze-track-cli.js [options]
- * 
+ *
  * This tool helps major music labels identify explicit content
  * for retailer compliance and RIAA Parental Advisory labeling.
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 // CLI colors for better output
 const colors = {
-  reset: '\x1b[0m',
-  bright: '\x1b[1m',
-  dim: '\x1b[2m',
-  red: '\x1b[31m',
-  green: '\x1b[32m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[34m',
-  magenta: '\x1b[35m',
-  cyan: '\x1b[36m',
-  white: '\x1b[37m',
+  reset: "\x1b[0m",
+  bright: "\x1b[1m",
+  dim: "\x1b[2m",
+  red: "\x1b[31m",
+  green: "\x1b[32m",
+  yellow: "\x1b[33m",
+  blue: "\x1b[34m",
+  magenta: "\x1b[35m",
+  cyan: "\x1b[36m",
+  white: "\x1b[37m",
 };
 
 const c = colors; // Shorthand
 
 class TrackAnalysisCLI {
   constructor() {
-    this.version = '1.0.0';
+    this.version = "1.0.0";
   }
 
   showHeader() {
@@ -244,29 +244,29 @@ ${c.bright}Quality Assurance:${c.reset}
 
   run() {
     const args = process.argv.slice(2);
-    
+
     this.showHeader();
-    
-    if (args.includes('--help') || args.includes('-h')) {
+
+    if (args.includes("--help") || args.includes("-h")) {
       this.showUsageHelp();
       return;
     }
-    
-    if (args.includes('--standards') || args.includes('-s')) {
+
+    if (args.includes("--standards") || args.includes("-s")) {
       this.showStandardsInformation();
       return;
     }
-    
-    if (args.includes('--config') || args.includes('-c')) {
+
+    if (args.includes("--config") || args.includes("-c")) {
       this.showConfigurationInfo();
       return;
     }
-    
-    if (args.includes('--sample') || args.includes('--demo')) {
+
+    if (args.includes("--sample") || args.includes("--demo")) {
       this.showSampleAnalysis();
       return;
     }
-    
+
     // Default: Show overview
     console.log(`${c.bright}SYSTEM OVERVIEW:${c.reset}
 
@@ -299,7 +299,7 @@ ${c.bright}INTEGRATION STATUS:${c.reset}
 
 ${c.green}Ready for production use by major music labels.${c.reset}
 `);
-    
+
     console.log(`${c.dim}Run with --standards to see detailed compliance requirements.${c.reset}`);
   }
 }

@@ -26,36 +26,36 @@ const KNOWN_FACTS = [
     question: "What is AOMA?",
     expectedKeywords: ["asset", "orchestration", "management", "sony music"],
     mustNotContain: ["I don't know", "not sure", "unavailable"],
-    description: "AOMA definition should be in knowledge base"
+    description: "AOMA definition should be in knowledge base",
   },
   {
     category: "AOMA Basics",
     question: "What does AOMA stand for?",
     expectedKeywords: ["asset", "orchestration", "management", "application"],
     mustNotContain: ["I don't know", "not sure"],
-    description: "AOMA acronym should be known"
+    description: "AOMA acronym should be known",
   },
   {
     category: "USM",
     question: "What is the Universal Service Model?",
     expectedKeywords: ["usm", "service", "model", "framework"],
     mustNotContain: ["I don't know", "not sure"],
-    description: "USM should be in knowledge base"
+    description: "USM should be in knowledge base",
   },
   {
     category: "AOMA Features",
     question: "What are AOMA's linking capabilities?",
     expectedKeywords: ["link", "linking", "asset", "relationship"],
     mustNotContain: ["I don't know", "not sure"],
-    description: "Linking features should be documented"
+    description: "Linking features should be documented",
   },
   {
     category: "AOMA Integration",
     question: "How does AOMA integrate with Sony Ci?",
     expectedKeywords: ["sony ci", "workspace", "export", "integration"],
     mustNotContain: ["I don't know", "not sure"],
-    description: "Sony Ci integration should be documented"
-  }
+    description: "Sony Ci integration should be documented",
+  },
 ];
 
 // Questions that should trigger "I don't know" responses
@@ -63,31 +63,49 @@ const UNKNOWN_FACTS = [
   {
     category: "Out of Scope",
     question: "What is the weather in Tokyo today?",
-    shouldContain: ["don't know", "don't have", "unavailable", "not available", "outside my knowledge"],
+    shouldContain: [
+      "don't know",
+      "don't have",
+      "unavailable",
+      "not available",
+      "outside my knowledge",
+    ],
     mustNotContain: ["sunny", "cloudy", "rainy", "degrees", "temperature"],
-    description: "Weather is not in AOMA knowledge base"
+    description: "Weather is not in AOMA knowledge base",
   },
   {
     category: "Out of Scope",
     question: "What is the recipe for chocolate chip cookies?",
-    shouldContain: ["don't know", "don't have", "unavailable", "not available", "outside my knowledge"],
+    shouldContain: [
+      "don't know",
+      "don't have",
+      "unavailable",
+      "not available",
+      "outside my knowledge",
+    ],
     mustNotContain: ["flour", "butter", "sugar", "bake"],
-    description: "Recipes are not in AOMA knowledge base"
+    description: "Recipes are not in AOMA knowledge base",
   },
   {
     category: "Out of Scope",
     question: "Who won the 2023 World Series?",
-    shouldContain: ["don't know", "don't have", "unavailable", "not available", "outside my knowledge"],
+    shouldContain: [
+      "don't know",
+      "don't have",
+      "unavailable",
+      "not available",
+      "outside my knowledge",
+    ],
     mustNotContain: ["texas rangers", "arizona"],
-    description: "Sports results are not in AOMA knowledge base"
+    description: "Sports results are not in AOMA knowledge base",
   },
   {
     category: "Fabricated Sony Info",
     question: "What is Sony Music's employee cafeteria menu for today?",
     shouldContain: ["don't know", "don't have", "unavailable", "not available"],
     mustNotContain: ["pizza", "salad", "sandwich"],
-    description: "Specific internal details not in knowledge base"
-  }
+    description: "Specific internal details not in knowledge base",
+  },
 ];
 
 // Reusable login function
@@ -139,9 +157,12 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
     if (code) {
       await page.fill('input[type="text"]', code);
       await page.click('button[type="submit"]');
-      await page.waitForSelector('h1:has-text("Welcome to The Betabase"), textarea[placeholder*="Ask"]', {
-        timeout: 15000,
-      });
+      await page.waitForSelector(
+        'h1:has-text("Welcome to The Betabase"), textarea[placeholder*="Ask"]',
+        {
+          timeout: 15000,
+        }
+      );
       console.log("✅ Logged in successfully!");
     }
   }
@@ -151,7 +172,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
 async function sendChatMessage(
   page: Page,
   message: string,
-  expectResponse: boolean = true,
+  expectResponse: boolean = true
 ): Promise<string> {
   const chatInput = page
     .locator('textarea[placeholder*="Ask me anything"], input[placeholder*="Ask me anything"]')
@@ -188,23 +209,25 @@ async function sendChatMessage(
 
     await page.waitForTimeout(3000);
 
-    const assistantMessages = await page.locator('[data-role="assistant"], .assistant-message, div[role="log"] > div').all();
+    const assistantMessages = await page
+      .locator('[data-role="assistant"], .assistant-message, div[role="log"] > div')
+      .all();
     if (assistantMessages.length > 0) {
       const lastMessage = assistantMessages[assistantMessages.length - 1];
       const responseText = (await lastMessage.textContent()) || "";
 
       const cleanedResponse = responseText
-        .replace(/🤖.*?(?=\n|$)/g, '')
-        .replace(/\d{2}:\d{2} (AM|PM)/g, '')
-        .replace(/Establishing secure connection.*?(?=\n|$)/g, '')
-        .replace(/Parsing request.*?(?=\n|$)/g, '')
-        .replace(/Searching AOMA.*?(?=\n|$)/g, '')
-        .replace(/Building context.*?(?=\n|$)/g, '')
-        .replace(/Generating AI.*?(?=\n|$)/g, '')
-        .replace(/Formatting response.*?(?=\n|$)/g, '')
-        .replace(/This typically takes.*?(?=\n|$)/g, '')
-        .replace(/Estimated time.*?(?=\n|$)/g, '')
-        .replace(/\s+/g, ' ')
+        .replace(/🤖.*?(?=\n|$)/g, "")
+        .replace(/\d{2}:\d{2} (AM|PM)/g, "")
+        .replace(/Establishing secure connection.*?(?=\n|$)/g, "")
+        .replace(/Parsing request.*?(?=\n|$)/g, "")
+        .replace(/Searching AOMA.*?(?=\n|$)/g, "")
+        .replace(/Building context.*?(?=\n|$)/g, "")
+        .replace(/Generating AI.*?(?=\n|$)/g, "")
+        .replace(/Formatting response.*?(?=\n|$)/g, "")
+        .replace(/This typically takes.*?(?=\n|$)/g, "")
+        .replace(/Estimated time.*?(?=\n|$)/g, "")
+        .replace(/\s+/g, " ")
         .trim();
 
       return cleanedResponse || responseText;
@@ -254,12 +277,12 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
 
       // Check for expected keywords
       const responseLower = response.toLowerCase();
-      const foundKeywords = fact.expectedKeywords.filter(kw =>
+      const foundKeywords = fact.expectedKeywords.filter((kw) =>
         responseLower.includes(kw.toLowerCase())
       );
 
       // Check for mustNotContain phrases
-      const forbiddenPhrases = fact.mustNotContain.filter(phrase =>
+      const forbiddenPhrases = fact.mustNotContain.filter((phrase) =>
         responseLower.includes(phrase.toLowerCase())
       );
 
@@ -273,10 +296,10 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
         passed: keywordScore >= 50 && !hasForbiddenContent,
         keywordScore: keywordScore.toFixed(0),
         foundKeywords,
-        missingKeywords: fact.expectedKeywords.filter(kw => !foundKeywords.includes(kw)),
+        missingKeywords: fact.expectedKeywords.filter((kw) => !foundKeywords.includes(kw)),
         forbiddenPhrases,
         responseLength: response.length,
-        responseTime
+        responseTime,
       };
 
       results.push(result);
@@ -299,7 +322,7 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
 
       // Take screenshot for evidence
       await page.screenshot({
-        path: `test-results/aoma-known-fact-${fact.category.replace(/\s+/g, "-")}.png`
+        path: `test-results/aoma-known-fact-${fact.category.replace(/\s+/g, "-")}.png`,
       });
 
       // Wait between queries to respect rate limits
@@ -308,7 +331,7 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
     }
 
     // Summary
-    const passedTests = results.filter(r => r.passed).length;
+    const passedTests = results.filter((r) => r.passed).length;
     const totalTests = results.length;
     const passRate = ((passedTests / totalTests) * 100).toFixed(0);
 
@@ -338,12 +361,12 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
       const responseLower = response.toLowerCase();
 
       // Check if response contains "I don't know" type phrases
-      const hasAdmission = fact.shouldContain.some(phrase =>
+      const hasAdmission = fact.shouldContain.some((phrase) =>
         responseLower.includes(phrase.toLowerCase())
       );
 
       // Check if response fabricates information
-      const hasFabrication = fact.mustNotContain.some(phrase =>
+      const hasFabrication = fact.mustNotContain.some((phrase) =>
         responseLower.includes(phrase.toLowerCase())
       );
 
@@ -353,14 +376,14 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
         passed: hasAdmission && !hasFabrication,
         hasAdmission,
         hasFabrication,
-        admissionPhrases: fact.shouldContain.filter(phrase =>
+        admissionPhrases: fact.shouldContain.filter((phrase) =>
           responseLower.includes(phrase.toLowerCase())
         ),
-        fabricatedContent: fact.mustNotContain.filter(phrase =>
+        fabricatedContent: fact.mustNotContain.filter((phrase) =>
           responseLower.includes(phrase.toLowerCase())
         ),
         responseLength: response.length,
-        responseTime
+        responseTime,
       };
 
       results.push(result);
@@ -376,14 +399,16 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
           console.log(`   🚨 This is a HALLUCINATION - making up answers!`);
         }
         if (hasFabrication) {
-          console.log(`   🚨 CRITICAL: Found fabricated content: ${result.fabricatedContent.join(", ")}`);
+          console.log(
+            `   🚨 CRITICAL: Found fabricated content: ${result.fabricatedContent.join(", ")}`
+          );
           console.log(`   🚨 AOMA is making up bullshit answers!`);
         }
       }
 
       // Take screenshot for evidence
       await page.screenshot({
-        path: `test-results/aoma-unknown-fact-${fact.category.replace(/\s+/g, "-")}.png`
+        path: `test-results/aoma-unknown-fact-${fact.category.replace(/\s+/g, "-")}.png`,
       });
 
       // Wait between queries
@@ -392,10 +417,10 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
     }
 
     // Summary
-    const passedTests = results.filter(r => r.passed).length;
+    const passedTests = results.filter((r) => r.passed).length;
     const totalTests = results.length;
     const passRate = ((passedTests / totalTests) * 100).toFixed(0);
-    const hallucinationCount = results.filter(r => !r.hasAdmission || r.hasFabrication).length;
+    const hallucinationCount = results.filter((r) => !r.hasAdmission || r.hasFabrication).length;
 
     console.log(`\n\n📊 UNKNOWN FACTS SUMMARY:`);
     console.log(`   ✅ Passed: ${passedTests}/${totalTests} (${passRate}%)`);
@@ -413,13 +438,13 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
       {
         question: "What is AOMA?",
         shouldHaveSources: true,
-        description: "Should cite AOMA knowledge base"
+        description: "Should cite AOMA knowledge base",
       },
       {
         question: "Explain USM",
         shouldHaveSources: true,
-        description: "Should cite USM documentation"
-      }
+        description: "Should cite USM documentation",
+      },
     ];
 
     for (const query of testQueries) {
@@ -428,10 +453,11 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
       const response = await sendChatMessage(page, query.question);
 
       // Check for citation markers like [1], [2], or source indicators
-      const hasCitationMarkers = /\[\d+\]/.test(response) ||
-                                response.includes("Source:") ||
-                                response.includes("According to") ||
-                                response.includes("【");
+      const hasCitationMarkers =
+        /\[\d+\]/.test(response) ||
+        response.includes("Source:") ||
+        response.includes("According to") ||
+        response.includes("【");
 
       console.log(`   📝 Has citations: ${hasCitationMarkers ? "✅" : "❌"}`);
 
@@ -442,7 +468,7 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
 
       // Take screenshot
       await page.screenshot({
-        path: `test-results/aoma-citations-${query.description.replace(/\s+/g, "-")}.png`
+        path: `test-results/aoma-citations-${query.description.replace(/\s+/g, "-")}.png`,
       });
 
       await page.waitForTimeout(15000);
@@ -476,9 +502,10 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
     const responseLower = response.toLowerCase();
 
     // Should mention AOMA or system health
-    const usesAOMA = responseLower.includes("aoma") ||
-                     responseLower.includes("system") ||
-                     responseLower.includes("health");
+    const usesAOMA =
+      responseLower.includes("aoma") ||
+      responseLower.includes("system") ||
+      responseLower.includes("health");
 
     console.log(`   💬 Response mentions AOMA/system: ${usesAOMA ? "✅" : "❌"}`);
 
@@ -488,7 +515,7 @@ test.describe("🎯 AOMA KNOWLEDGE VALIDATION - Prevent Hallucinations", () => {
     }
 
     await page.screenshot({
-      path: "test-results/aoma-mcp-connection-test.png"
+      path: "test-results/aoma-mcp-connection-test.png",
     });
   });
 });

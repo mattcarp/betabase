@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 // import { toast } from "sonner";
-const toast = { 
-  success: (msg: string) => console.log('✅', msg),
-  error: (msg: string) => console.error('❌', msg),
-  info: (msg: string) => console.info('ℹ️', msg)
+const toast = {
+  success: (msg: string) => console.log("✅", msg),
+  error: (msg: string) => console.error("❌", msg),
+  info: (msg: string) => console.info("ℹ️", msg),
 };
 
 type NotificationType = "success" | "error" | "info" | "warning" | "loading";
@@ -50,17 +50,8 @@ const getNotificationStyle = (type: NotificationType) => {
 
 export const useNotifications = () => {
   const showNotification = useCallback(
-    (
-      type: NotificationType,
-      message: string,
-      options: NotificationOptions = {},
-    ) => {
-      const {
-        duration = 4000,
-        position = "top-right",
-        dismissible = true,
-        action,
-      } = options;
+    (type: NotificationType, message: string, options: NotificationOptions = {}) => {
+      const { duration = 4000, position = "top-right", dismissible = true, action } = options;
 
       const toastOptions = {
         duration: type === "loading" ? Infinity : duration,
@@ -106,42 +97,42 @@ export const useNotifications = () => {
 
       return toastId;
     },
-    [],
+    []
   );
 
   const success = useCallback(
     (message: string, options?: NotificationOptions) => {
       return showNotification("success", message, options);
     },
-    [showNotification],
+    [showNotification]
   );
 
   const error = useCallback(
     (message: string, options?: NotificationOptions) => {
       return showNotification("error", message, options);
     },
-    [showNotification],
+    [showNotification]
   );
 
   const warning = useCallback(
     (message: string, options?: NotificationOptions) => {
       return showNotification("warning", message, options);
     },
-    [showNotification],
+    [showNotification]
   );
 
   const info = useCallback(
     (message: string, options?: NotificationOptions) => {
       return showNotification("info", message, options);
     },
-    [showNotification],
+    [showNotification]
   );
 
   const loading = useCallback(
     (message: string, options?: NotificationOptions) => {
       return showNotification("loading", message, options);
     },
-    [showNotification],
+    [showNotification]
   );
 
   const dismiss = useCallback((toastId?: string) => {
@@ -160,14 +151,12 @@ export const useNotifications = () => {
         success: string | ((data: T) => string);
         error: string | ((error: any) => string);
       },
-      options?: NotificationOptions,
+      options?: NotificationOptions
     ) => {
       const style = getNotificationStyle("loading");
 
       return toast.promise(
-        typeof promiseOrFunction === "function"
-          ? promiseOrFunction()
-          : promiseOrFunction,
+        typeof promiseOrFunction === "function" ? promiseOrFunction() : promiseOrFunction,
         {
           loading: messages.loading,
           success: messages.success,
@@ -177,10 +166,10 @@ export const useNotifications = () => {
           style,
           position: options?.position || "top-right",
           ...options,
-        },
+        }
       );
     },
-    [],
+    []
   );
 
   return {

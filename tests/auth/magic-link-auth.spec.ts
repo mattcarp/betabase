@@ -6,9 +6,7 @@ test.describe("Magic Link Authentication", () => {
     await page.goto("/");
   });
 
-  test("should display login form with magic link as default", async ({
-    page,
-  }) => {
+  test("should display login form with magic link as default", async ({ page }) => {
     // Check that the login form is displayed with current UI text
     await expect(page.locator("h2")).toContainText("Welcome Back");
 
@@ -17,14 +15,12 @@ test.describe("Magic Link Authentication", () => {
     await expect(page.locator("text=yup. it's back.")).toBeVisible();
 
     // Check that magic link is the default option
-    await expect(page.locator('button[type="submit"]')).toContainText(
-      "Send Magic Link",
-    );
+    await expect(page.locator('button[type="submit"]')).toContainText("Send Magic Link");
 
     // Check email input placeholder
     await expect(page.locator('input[type="email"]')).toHaveAttribute(
       "placeholder",
-      "Enter your email address",
+      "Enter your email address"
     );
   });
 
@@ -39,7 +35,7 @@ test.describe("Magic Link Authentication", () => {
 
     // Should not show domain validation error
     await expect(
-      page.locator("text=Only sonymusic.com email addresses are allowed"),
+      page.locator("text=Only sonymusic.com email addresses are allowed")
     ).not.toBeVisible();
   });
 
@@ -54,7 +50,7 @@ test.describe("Magic Link Authentication", () => {
 
     // Should not show domain validation error
     await expect(
-      page.locator("text=Only sonymusic.com email addresses are allowed"),
+      page.locator("text=Only sonymusic.com email addresses are allowed")
     ).not.toBeVisible();
   });
 
@@ -80,13 +76,9 @@ test.describe("Magic Link Authentication", () => {
     }
   });
 
-  test("should only have magic link mode - no password option", async ({
-    page,
-  }) => {
+  test("should only have magic link mode - no password option", async ({ page }) => {
     // Should show magic link mode only
-    await expect(page.locator('button[type="submit"]')).toContainText(
-      "Send Magic Link",
-    );
+    await expect(page.locator('button[type="submit"]')).toContainText("Send Magic Link");
 
     // Should not have password input or toggle options
     await expect(page.locator('input[type="password"]')).not.toBeVisible();
@@ -94,9 +86,7 @@ test.describe("Magic Link Authentication", () => {
     await expect(page.locator("text=Use magic link instead")).not.toBeVisible();
   });
 
-  test("should show verification form after sending magic link", async ({
-    page,
-  }) => {
+  test("should show verification form after sending magic link", async ({ page }) => {
     const validEmail = "siam-test-x7j9k2p4@mailinator.com";
 
     // Fill in valid email
@@ -116,15 +106,11 @@ test.describe("Magic Link Authentication", () => {
 
     // Should show verification form with current UI text
     await expect(page.locator("h3")).toContainText("Magic Link Sent!");
+    await expect(page.locator("text=We've sent a verification code to")).toBeVisible();
     await expect(
-      page.locator("text=We've sent a verification code to"),
+      page.locator("text=Check your email for the 6-digit verification code")
     ).toBeVisible();
-    await expect(
-      page.locator("text=Check your email for the 6-digit verification code"),
-    ).toBeVisible();
-    await expect(
-      page.locator('input[placeholder="000000"]'),
-    ).toBeVisible();
+    await expect(page.locator('input[placeholder="000000"]')).toBeVisible();
   });
 
   test("should handle verification code submission", async ({ page }) => {
@@ -165,22 +151,16 @@ test.describe("Magic Link Authentication", () => {
     // Should attempt to verify the code and potentially redirect
   });
 
-  test("should NOT have a sign up option - this is a closed system", async ({
-    page,
-  }) => {
+  test("should NOT have a sign up option - this is a closed system", async ({ page }) => {
     // FIONA FIX: This is a CLOSED SYSTEM - no public registration allowed!
 
     // Verify NO sign up button exists
-    await expect(
-      page.locator("text=Don't have an account? Sign Up"),
-    ).not.toBeVisible();
+    await expect(page.locator("text=Don't have an account? Sign Up")).not.toBeVisible();
     await expect(page.locator("text=Sign Up")).not.toBeVisible();
     await expect(page.locator("text=Create Account")).not.toBeVisible();
 
     // Only magic link login should be available
-    await expect(page.locator('button[type="submit"]')).toContainText(
-      "Send Magic Link",
-    );
+    await expect(page.locator('button[type="submit"]')).toContainText("Send Magic Link");
 
     // The current UI doesn't show domain restrictions prominently, but the system is still closed
     // Only allowed emails will work in practice
@@ -195,11 +175,7 @@ test.describe("Magic Link Authentication", () => {
   });
 
   test("should handle case-insensitive email validation", async ({ page }) => {
-    const emails = [
-      "JOHN.DOE@SONYMUSIC.COM",
-      "jane.smith@SONYMUSIC.COM",
-      "MATT@MATTCARPENTER.COM",
-    ];
+    const emails = ["JOHN.DOE@SONYMUSIC.COM", "jane.smith@SONYMUSIC.COM", "MATT@MATTCARPENTER.COM"];
 
     for (const email of emails) {
       await page.fill('input[type="email"]', email);
@@ -207,7 +183,7 @@ test.describe("Magic Link Authentication", () => {
 
       // Should not show domain validation error for uppercase emails
       await expect(
-        page.locator("text=Only sonymusic.com email addresses are allowed"),
+        page.locator("text=Only sonymusic.com email addresses are allowed")
       ).not.toBeVisible();
 
       // Reset form for next test

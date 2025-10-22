@@ -25,10 +25,7 @@ import {
   FileText,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
-import {
-  ExtractedTopic,
-  TopicCluster,
-} from "../../services/topicExtractionService";
+import { ExtractedTopic, TopicCluster } from "../../services/topicExtractionService";
 import { Badge } from "./badge";
 import { Card, CardContent, CardHeader, CardTitle } from "./card";
 import { ScrollArea } from "./scroll-area";
@@ -87,16 +84,14 @@ export const TopicBadge: React.FC<TopicBadgeProps> = ({
         "hover:scale-105 hover:shadow-lg cursor-pointer",
         getCategoryColor(topic.category),
         sizeClasses[size],
-        className,
+        className
       )}
       title={`Score: ${topic.score.toFixed(2)} | Documents: ${topic.documentIds.length}`}
     >
       <Hash className="h-3 w-3 opacity-60" />
       <span className="font-medium">{topic.term}</span>
       {showScore && (
-        <span className="opacity-60 text-[0.7em]">
-          {(topic.score * 100).toFixed(0)}
-        </span>
+        <span className="opacity-60 text-[0.7em]">{(topic.score * 100).toFixed(0)}</span>
       )}
       {topic.trend && size !== "sm" && getTrendIcon()}
     </button>
@@ -120,10 +115,7 @@ export const TopicCloud: React.FC<TopicCloudProps> = ({
     return [...topics].sort((a, b) => b.score - a.score).slice(0, maxTopics);
   }, [topics, maxTopics]);
 
-  const getTopicSize = (
-    score: number,
-    maxScore: number,
-  ): "sm" | "md" | "lg" => {
+  const getTopicSize = (score: number, maxScore: number): "sm" | "md" | "lg" => {
     const relative = score / maxScore;
     if (relative > 0.7) return "lg";
     if (relative > 0.4) return "md";
@@ -194,17 +186,14 @@ export const TrendingTopics: React.FC<TrendingTopicsProps> = ({
           onClick={() => onTopicClick?.(topic)}
         >
           <div className="flex items-center gap-3">
-            <span className="text-lg font-bold text-zinc-500">
-              #{index + 1}
-            </span>
+            <span className="text-lg font-bold text-zinc-500">#{index + 1}</span>
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-medium text-zinc-200">{topic.term}</span>
                 <TrendingUp className="h-3 w-3 text-green-400" />
               </div>
               <div className="text-xs text-zinc-500">
-                {topic.documentIds.length} documents • Score:{" "}
-                {(topic.score * 100).toFixed(0)}
+                {topic.documentIds.length} documents • Score: {(topic.score * 100).toFixed(0)}
               </div>
             </div>
           </div>
@@ -257,11 +246,7 @@ export const TopicClusters: React.FC<TopicClustersProps> = ({
           <CardContent className="space-y-2">
             <div className="flex flex-wrap gap-1">
               {cluster.topics.slice(0, 5).map((topic) => (
-                <Badge
-                  key={topic.id}
-                  variant="outline"
-                  className="text-xs border-zinc-700"
-                >
+                <Badge key={topic.id} variant="outline" className="text-xs border-zinc-700">
                   {topic.term}
                 </Badge>
               ))}
@@ -278,14 +263,10 @@ export const TopicClusters: React.FC<TopicClustersProps> = ({
                   <div>Jira: {cluster.metadata.jiraTickets.length} tickets</div>
                 )}
                 {cluster.metadata.releaseNotes?.length > 0 && (
-                  <div>
-                    Releases: {cluster.metadata.releaseNotes.length} notes
-                  </div>
+                  <div>Releases: {cluster.metadata.releaseNotes.length} notes</div>
                 )}
                 {cluster.metadata.supportDocs?.length > 0 && (
-                  <div>
-                    Docs: {cluster.metadata.supportDocs.length} documents
-                  </div>
+                  <div>Docs: {cluster.metadata.supportDocs.length} documents</div>
                 )}
               </div>
             )}
@@ -332,17 +313,12 @@ export const TopicStats: React.FC<TopicStatsProps> = ({
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
-          <div
-            key={stat.label}
-            className="bg-zinc-900/50 rounded-lg p-3 border border-zinc-800"
-          >
+          <div key={stat.label} className="bg-zinc-900/50 rounded-lg p-3 border border-zinc-800">
             <div className="flex items-center gap-2 mb-1">
               <Icon className={cn("h-4 w-4", stat.color)} />
               <span className="text-xs text-zinc-500">{stat.label}</span>
             </div>
-            <div className="text-2xl font-bold text-zinc-200">
-              {stat.value.toLocaleString()}
-            </div>
+            <div className="text-2xl font-bold text-zinc-200">{stat.value.toLocaleString()}</div>
           </div>
         );
       })}
@@ -405,19 +381,13 @@ export const TopicPanel: React.FC<TopicPanelProps> = ({
 
           <TabsContent value="trending" className="mt-4">
             <ScrollArea className="h-[300px]">
-              <TrendingTopics
-                topics={trendingTopics}
-                onTopicClick={onTopicClick}
-              />
+              <TrendingTopics topics={trendingTopics} onTopicClick={onTopicClick} />
             </ScrollArea>
           </TabsContent>
 
           <TabsContent value="clusters" className="mt-4">
             <ScrollArea className="h-[300px]">
-              <TopicClusters
-                clusters={clusters}
-                onClusterClick={onClusterClick}
-              />
+              <TopicClusters clusters={clusters} onClusterClick={onClusterClick} />
             </ScrollArea>
           </TabsContent>
 

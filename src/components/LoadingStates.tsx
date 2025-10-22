@@ -6,9 +6,7 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ className }: SkeletonProps) {
-  return (
-    <div className={cn("animate-pulse rounded-md bg-gray-700/50", className)} />
-  );
+  return <div className={cn("animate-pulse rounded-md bg-gray-700/50", className)} />;
 }
 
 interface PulsingDotProps {
@@ -19,10 +17,7 @@ interface PulsingDotProps {
 export function PulsingDot({ className, delay = "0s" }: PulsingDotProps) {
   return (
     <div
-      className={cn(
-        "w-2 h-2 bg-blue-600 rounded-full animate-pulse",
-        className,
-      )}
+      className={cn("w-2 h-2 bg-blue-600 rounded-full animate-pulse", className)}
       style={{ animationDelay: delay }}
     />
   );
@@ -34,11 +29,7 @@ interface LoadingSpinnerProps {
   className?: string;
 }
 
-export function LoadingSpinner({
-  size = "md",
-  color = "cyan",
-  className,
-}: LoadingSpinnerProps) {
+export function LoadingSpinner({ size = "md", color = "cyan", className }: LoadingSpinnerProps) {
   const sizeClasses = {
     sm: "w-4 h-4",
     md: "w-6 h-6",
@@ -53,14 +44,7 @@ export function LoadingSpinner({
   };
 
   return (
-    <Loader2
-      className={cn(
-        "animate-spin",
-        sizeClasses[size],
-        colorClasses[color],
-        className,
-      )}
-    />
+    <Loader2 className={cn("animate-spin", sizeClasses[size], colorClasses[color], className)} />
   );
 }
 
@@ -81,11 +65,7 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className={cn("text-center py-8", className)}>
-      <div
-        className={cn("mx-auto mb-4 opacity-50", animated && "animate-pulse")}
-      >
-        {icon}
-      </div>
+      <div className={cn("mx-auto mb-4 opacity-50", animated && "animate-pulse")}>{icon}</div>
       <h3 className="text-lg font-mono text-gray-300 mb-2">{title}</h3>
       <p className="text-sm text-gray-400 font-mono">{description}</p>
       {animated && (
@@ -103,16 +83,11 @@ interface TranscriptionSkeletonProps {
   count?: number;
 }
 
-export function TranscriptionSkeleton({
-  count = 3,
-}: TranscriptionSkeletonProps) {
+export function TranscriptionSkeleton({ count = 3 }: TranscriptionSkeletonProps) {
   return (
     <div className="space-y-3">
       {Array.from({ length: count }).map((_, index) => (
-        <div
-          key={index}
-          className="bg-gray-700/50 border border-gray-600 rounded p-3"
-        >
+        <div key={index} className="bg-gray-700/50 border border-gray-600 rounded p-3">
           <div className="flex items-center gap-2 mb-2">
             <Skeleton className="w-2 h-2 rounded-full" />
             <Skeleton className="h-4 w-32" />
@@ -153,16 +128,11 @@ interface VectorMatchesSkeletonProps {
   count?: number;
 }
 
-export function VectorMatchesSkeleton({
-  count = 3,
-}: VectorMatchesSkeletonProps) {
+export function VectorMatchesSkeleton({ count = 3 }: VectorMatchesSkeletonProps) {
   return (
     <div className="space-y-2">
       {Array.from({ length: count }).map((_, index) => (
-        <div
-          key={index}
-          className="bg-gray-700/50 border border-gray-600 rounded p-2"
-        >
+        <div key={index} className="bg-gray-700/50 border border-gray-600 rounded p-2">
           <div className="flex justify-between items-center mb-1">
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-4 w-8" />
@@ -180,11 +150,7 @@ interface AnimatedWaitingProps {
   subMessage?: string;
 }
 
-export function AnimatedWaiting({
-  message,
-  icon,
-  subMessage,
-}: AnimatedWaitingProps) {
+export function AnimatedWaiting({ message, icon, subMessage }: AnimatedWaitingProps) {
   return (
     <div className="text-center py-8">
       <div className="flex justify-center mb-4">
@@ -204,9 +170,7 @@ export function AnimatedWaiting({
           </span>
         </span>
       </div>
-      {subMessage && (
-        <p className="text-sm text-gray-400 font-mono">{subMessage}</p>
-      )}
+      {subMessage && <p className="text-sm text-gray-400 font-mono">{subMessage}</p>}
       <div className="flex justify-center gap-1 mt-4">
         <PulsingDot delay="0s" />
         <PulsingDot delay="0.3s" />
@@ -222,19 +186,13 @@ interface StatusIndicatorProps {
   size?: "sm" | "md";
 }
 
-export function StatusIndicator({
-  status,
-  message,
-  size = "md",
-}: StatusIndicatorProps) {
+export function StatusIndicator({ status, message, size = "md" }: StatusIndicatorProps) {
   const getStatusConfig = () => {
     switch (status) {
       case "loading":
         return {
           color: "text-blue-600",
-          icon: (
-            <LoadingSpinner size={size === "sm" ? "sm" : "md"} color="cyan" />
-          ),
+          icon: <LoadingSpinner size={size === "sm" ? "sm" : "md"} color="cyan" />,
         };
       case "success":
         return {

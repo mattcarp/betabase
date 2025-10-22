@@ -20,8 +20,10 @@ export async function GET() {
   try {
     // Check if we have a valid cached response
     const now = Date.now();
-    if (healthCache && (now - healthCache.timestamp) < CACHE_DURATION_MS) {
-      console.log(`[Health] ⚡ Returning cached health check (${Math.round((now - healthCache.timestamp) / 1000)}s old)`);
+    if (healthCache && now - healthCache.timestamp < CACHE_DURATION_MS) {
+      console.log(
+        `[Health] ⚡ Returning cached health check (${Math.round((now - healthCache.timestamp) / 1000)}s old)`
+      );
       return NextResponse.json({
         ...healthCache.data,
         cached: true,
@@ -30,11 +32,12 @@ export async function GET() {
     }
 
     // Cache miss or expired - perform actual health check
-    console.log('[Health] 🔄 Performing fresh health check (cache expired or missing)');
+    console.log("[Health] 🔄 Performing fresh health check (cache expired or missing)");
 
-    const mcpEndpoint = process.env.NODE_ENV === 'production'
-      ? 'https://luminous-dedication-production.up.railway.app/rpc'
-      : 'http://localhost:3333/rpc';
+    const mcpEndpoint =
+      process.env.NODE_ENV === "production"
+        ? "https://luminous-dedication-production.up.railway.app/rpc"
+        : "http://localhost:3333/rpc";
 
     console.log(`[Health] Testing AOMA MCP at: ${mcpEndpoint}`);
 
@@ -47,14 +50,14 @@ export async function GET() {
         method: "tools/call",
         params: {
           name: "get_system_health",
-          arguments: {}
-        }
+          arguments: {},
+        },
       }),
       signal: AbortSignal.timeout(5000), // 5 second timeout
     });
 
     const healthResult = await healthCheck.json();
-    console.log('[Health] MCP response:', JSON.stringify(healthResult).substring(0, 300));
+    console.log("[Health] MCP response:", JSON.stringify(healthResult).substring(0, 300));
 
     let responseData: any;
 
@@ -64,11 +67,11 @@ export async function GET() {
         const healthContent = healthResult.result?.content?.[0]?.text;
         if (healthContent) {
           const healthData = JSON.parse(healthContent);
-          console.log('[Health] Parsed health data:', healthData);
+          console.log("[Health] Parsed health data:", healthData);
 
           // Check if OpenAI is working
           if (healthData.services?.openai?.status === false) {
-            console.error('[Health] 🔑 CRITICAL: OpenAI service is down in AOMA MCP');
+            console.error("[Health] 🔑 CRITICAL: OpenAI service is down in AOMA MCP");
             responseData = {
               status: "degraded",
               service: "AOMA-MESH",
@@ -99,11 +102,11 @@ export async function GET() {
             responseData = {
               status: "degraded",
               service: "AOMA-MESH",
-              error: `Services down: ${failedServices.join(', ')}`,
+              error: `Services down: ${failedServices.join(", ")}`,
               errorType: "service_degraded",
               timestamp: new Date().toISOString(),
               endpoint: mcpEndpoint,
-              message: `⚠️ AOMA MCP is degraded - ${failedServices.join(', ')} not responding`,
+              message: `⚠️ AOMA MCP is degraded - ${failedServices.join(", ")} not responding`,
               services: healthData.services,
               cached: false,
             };
@@ -118,10 +121,10 @@ export async function GET() {
           }
         }
       } catch (parseError) {
-        console.warn('[Health] Could not parse health response:', parseError);
+        console.warn("[Health] Could not parse health response:", parseError);
       }
 
-      console.log('[Health] ✅ AOMA MCP server is healthy');
+      console.log("[Health] ✅ AOMA MCP server is healthy");
       responseData = {
         status: "healthy",
         service: "AOMA-MESH",
@@ -140,11 +143,11 @@ export async function GET() {
 
       return NextResponse.json(responseData);
     } else {
-      const errorMsg = healthResult.error?.message || healthResult.message || 'Unknown error';
-      console.error('[Health] ❌ AOMA MCP server error:', errorMsg);
+      const errorMsg = healthResult.error?.message || healthResult.message || "Unknown error";
+      console.error("[Health] ❌ AOMA MCP server error:", errorMsg);
 
       // Detect specific errors
-      if (errorMsg.includes('401') || errorMsg.includes('API key')) {
+      if (errorMsg.includes("401") || errorMsg.includes("API key")) {
         responseData = {
           status: "error",
           service: "AOMA-MESH",
@@ -192,7 +195,11 @@ export async function GET() {
     let responseData: any;
 
     // Detect connection errors
-    if (errorMessage.includes('fetch') || errorMessage.includes('ECONNREFUSED') || errorMessage.includes('timeout')) {
+    if (
+      errorMessage.includes("fetch") ||
+      errorMessage.includes("ECONNREFUSED") ||
+      errorMessage.includes("timeout")
+    ) {
       responseData = {
         status: "error",
         service: "AOMA-MESH",

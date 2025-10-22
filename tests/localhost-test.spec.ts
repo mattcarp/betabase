@@ -10,27 +10,27 @@ test.describe("Local Development Tests", () => {
     // Try to connect to localhost
     const response = await page.goto("http://localhost:3000", {
       waitUntil: "domcontentloaded",
-      timeout: 30000
+      timeout: 30000,
     });
 
     // Check if we got a response
     if (response) {
       console.log(`📊 Response status: ${response.status()}`);
-      
+
       // Even if there's an error, let's see what we get
       const title = await page.title();
       console.log(`📄 Page title: "${title}"`);
-      
+
       // Try to find any text on the page
-      const bodyText = await page.textContent('body');
+      const bodyText = await page.textContent("body");
       console.log(`📝 Body contains: ${bodyText?.substring(0, 100)}...`);
-      
+
       // Take a screenshot regardless
-      await page.screenshot({ 
+      await page.screenshot({
         path: "screenshots/localhost-test.png",
-        fullPage: true 
+        fullPage: true,
       });
-      
+
       // Basic assertion - page should load
       expect(response.status()).toBeLessThanOrEqual(500);
     }
@@ -39,15 +39,15 @@ test.describe("Local Development Tests", () => {
   test("should check for authentication UI", async ({ page }) => {
     await page.goto("http://localhost:3000", {
       waitUntil: "networkidle",
-      timeout: 30000
+      timeout: 30000,
     });
 
     // Look for any form elements
-    const hasForm = await page.locator('form, input, button').count();
+    const hasForm = await page.locator("form, input, button").count();
     console.log(`🔍 Found ${hasForm} form-related elements`);
 
     // Look for SIAM branding
-    const hasSiam = await page.locator('text=/siam/i').count();
+    const hasSiam = await page.locator("text=/siam/i").count();
     console.log(`🏷️ Found ${hasSiam} SIAM references`);
 
     // Check for tabs (main app)
@@ -55,9 +55,9 @@ test.describe("Local Development Tests", () => {
     console.log(`📑 Found ${hasTabs} tab elements`);
 
     // Take screenshot
-    await page.screenshot({ 
+    await page.screenshot({
       path: "screenshots/localhost-ui.png",
-      fullPage: true 
+      fullPage: true,
     });
 
     // At least something should be on the page
@@ -67,11 +67,11 @@ test.describe("Local Development Tests", () => {
   test("should test API health endpoint", async ({ request }) => {
     try {
       const response = await request.get("http://localhost:3000/api/health", {
-        timeout: 10000
+        timeout: 10000,
       });
-      
+
       console.log(`🏥 Health endpoint status: ${response.status()}`);
-      
+
       if (response.ok()) {
         const data = await response.json();
         console.log(`📊 Health data:`, data);

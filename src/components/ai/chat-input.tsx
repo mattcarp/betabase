@@ -19,12 +19,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "../ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { Suggestions, Suggestion } from "../ai-elements/suggestion";
 
 interface Attachment {
@@ -190,9 +185,7 @@ export function ChatInput({
                         className="flex items-center gap-1.5 pr-1 bg-background/80 border border-border/50 shadow-sm"
                       >
                         {getFileIcon(attachment.type)}
-                        <span className="max-w-[120px] truncate text-xs">
-                          {attachment.name}
-                        </span>
+                        <span className="max-w-[120px] truncate text-xs">{attachment.name}</span>
                         <span className="text-xs text-muted-foreground/70">
                           {formatFileSize(attachment.size)}
                         </span>
@@ -232,7 +225,7 @@ export function ChatInput({
                 "min-h-[60px] max-h-[200px] resize-none pr-20 border-0 bg-transparent",
                 "focus:ring-0 focus:outline-none placeholder:text-muted-foreground/60",
                 "text-sm leading-relaxed p-4",
-                (isLoading || isRecording) && "opacity-50 cursor-not-allowed",
+                (isLoading || isRecording) && "opacity-50 cursor-not-allowed"
               )}
             />
 
@@ -244,9 +237,7 @@ export function ChatInput({
                 className="absolute bottom-3 left-4"
               >
                 <Badge
-                  variant={
-                    value.length >= maxLength ? "destructive" : "secondary"
-                  }
+                  variant={value.length >= maxLength ? "destructive" : "secondary"}
                   className="text-xs px-2 py-0.5"
                 >
                   {value.length} / {maxLength}
@@ -293,7 +284,7 @@ export function ChatInput({
                       variant={isRecording ? "destructive" : "ghost"}
                       className={cn(
                         "h-9 w-9 transition-all duration-200",
-                        isRecording ? "animate-pulse" : "hover:bg-muted/50",
+                        isRecording ? "animate-pulse" : "hover:bg-muted/50"
                       )}
                       onClick={isRecording ? onVoiceEnd : onVoiceStart}
                     >
@@ -339,7 +330,7 @@ export function ChatInput({
                         "bg-gradient-to-r from-blue-500 to-emerald-500",
                         "hover:from-blue-600 hover:to-emerald-600",
                         "disabled:opacity-50 disabled:cursor-not-allowed",
-                        value?.trim() && !isRecording && "hover:scale-105",
+                        value?.trim() && !isRecording && "hover:scale-105"
                       )}
                     >
                       {isLoading ? (

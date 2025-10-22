@@ -3,12 +3,7 @@
 import React from "react";
 import type { ComponentProps, ReactNode } from "react";
 import { Button } from "../ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { cn } from "../../lib/utils";
 
 export interface ActionItem {
@@ -40,7 +35,8 @@ export const Actions = ({ className, children, actions, ...props }: ActionsProps
               "text-mac-text-secondary hover:text-mac-text-primary",
               "border border-transparent hover:border-mac-border/20",
               "bg-transparent",
-              action.variant === "destructive" && "text-red-400/80 hover:text-red-400 hover:bg-red-950/20 hover:border-red-900/20"
+              action.variant === "destructive" &&
+                "text-red-400/80 hover:text-red-400 hover:bg-red-950/20 hover:border-red-900/20"
             )}
           >
             {action.icon && <span className="mr-2 opacity-70">{action.icon}</span>}
@@ -50,7 +46,7 @@ export const Actions = ({ className, children, actions, ...props }: ActionsProps
       </div>
     );
   }
-  
+
   return (
     <div className={cn("flex items-center gap-1", className)} {...props}>
       {children}
@@ -76,7 +72,7 @@ export const Action = ({
     <Button
       className={cn(
         "!h-8 !w-8 !p-0 text-muted-foreground hover:text-foreground shrink-0",
-        className,
+        className
       )}
       size={size}
       type="button"

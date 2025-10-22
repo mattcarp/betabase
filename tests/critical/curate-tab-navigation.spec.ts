@@ -9,7 +9,6 @@ import { test, expect } from "@playwright/test";
 import { setupConsoleMonitoring, getConsoleMonitor } from "../helpers/console-monitor";
 
 test.describe("Curate Tab Navigation - CRITICAL @smoke", () => {
-
   test.beforeEach(async ({ page }) => {
     setupConsoleMonitoring(page, {
       ignoreWarnings: true,
@@ -21,22 +20,26 @@ test.describe("Curate Tab Navigation - CRITICAL @smoke", () => {
     const testUrl = process.env.BASE_URL || "http://localhost:3000";
 
     // Set bypass auth cookie if on localhost
-    if (testUrl.includes('localhost')) {
-      await page.context().addCookies([{
-        name: 'bypass_auth',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      }]);
+    if (testUrl.includes("localhost")) {
+      await page.context().addCookies([
+        {
+          name: "bypass_auth",
+          value: "true",
+          domain: "localhost",
+          path: "/",
+        },
+      ]);
     }
 
     await page.goto(testUrl);
     await page.waitForLoadState("networkidle");
 
     // Wait for app to be ready (sidebar should be visible)
-    await page.waitForSelector('button:has-text("Chat"), [data-sidebar="trigger"]', { timeout: 10000 }).catch(() => {
-      console.log("⚠️  App sidebar not ready - may need authentication");
-    });
+    await page
+      .waitForSelector('button:has-text("Chat"), [data-sidebar="trigger"]', { timeout: 10000 })
+      .catch(() => {
+        console.log("⚠️  App sidebar not ready - may need authentication");
+      });
   });
 
   test("CRITICAL: Clicking Curate button should not cause React errors", async ({ page }) => {
@@ -49,7 +52,7 @@ test.describe("Curate Tab Navigation - CRITICAL @smoke", () => {
     await page.waitForTimeout(1000);
 
     // Try to find and click the Curate button in the sidebar
-    const curateButton = page.locator('button').filter({ hasText: 'Curate' }).first();
+    const curateButton = page.locator("button").filter({ hasText: "Curate" }).first();
 
     const isVisible = await curateButton.isVisible().catch(() => false);
 
@@ -60,7 +63,7 @@ test.describe("Curate Tab Navigation - CRITICAL @smoke", () => {
       const alternatives = [
         page.locator('[data-tab="curate"]'),
         page.locator('button:has-text("Curate")'),
-        page.getByRole('button', { name: /curate/i }),
+        page.getByRole("button", { name: /curate/i }),
       ];
 
       let found = false;
@@ -99,15 +102,13 @@ test.describe("Curate Tab Navigation - CRITICAL @smoke", () => {
     expect(errors).toHaveLength(0);
 
     // Verify the Curate content is visible
-    const curateContent = page.locator('text=Knowledge Curation').or(
-      page.locator('text=Curation').or(
-        page.locator('text=Files')
-      )
-    );
+    const curateContent = page
+      .locator("text=Knowledge Curation")
+      .or(page.locator("text=Curation").or(page.locator("text=Files")));
 
     const contentVisible = await curateContent.isVisible({ timeout: 5000 }).catch(() => false);
 
-    console.log(`\\n📄 Curate content visible: ${contentVisible ? 'YES ✅' : 'NO ❌'}`);
+    console.log(`\\n📄 Curate content visible: ${contentVisible ? "YES ✅" : "NO ❌"}`);
 
     expect(contentVisible).toBe(true);
   });

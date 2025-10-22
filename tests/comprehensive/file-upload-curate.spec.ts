@@ -22,15 +22,11 @@ test.describe("File Upload and Curation - Comprehensive", () => {
       await helpers.selectTab("Curate");
 
       // Check for upload elements
-      await expect(
-        page.locator("text=/Upload files|Drop files here/i"),
-      ).toBeVisible();
+      await expect(page.locator("text=/Upload files|Drop files here/i")).toBeVisible();
       await expect(page.locator('input[type="file"]')).toBeAttached();
 
       // Check for file management UI
-      const hasFileList = await helpers.checkElementVisible(
-        '[data-testid="file-list"]',
-      );
+      const hasFileList = await helpers.checkElementVisible('[data-testid="file-list"]');
       const hasVectorStore = await helpers.checkTextVisible("Vector Store");
 
       expect(hasFileList || hasVectorStore).toBeTruthy();
@@ -88,9 +84,7 @@ test.describe("File Upload and Curation - Comprehensive", () => {
 
         // Check all files appear
         for (let i = 1; i <= 3; i++) {
-          const fileVisible = await helpers.checkTextVisible(
-            `test-file-${i}.txt`,
-          );
+          const fileVisible = await helpers.checkTextVisible(`test-file-${i}.txt`);
           expect(fileVisible).toBeTruthy();
         }
       } finally {
@@ -116,9 +110,7 @@ test.describe("File Upload and Curation - Comprehensive", () => {
           .locator('[data-testid="drop-zone"], .drop-zone, [class*="upload"]')
           .first();
 
-        const dataTransfer = await page.evaluateHandle(
-          () => new DataTransfer(),
-        );
+        const dataTransfer = await page.evaluateHandle(() => new DataTransfer());
 
         // This is a simplified simulation - real drag-drop is complex in Playwright
         const fileInput = page.locator('input[type="file"]');
@@ -126,8 +118,7 @@ test.describe("File Upload and Curation - Comprehensive", () => {
 
         // Verify file uploaded
         await page.waitForTimeout(1000);
-        const fileVisible =
-          await helpers.checkTextVisible("drag-drop-test.txt");
+        const fileVisible = await helpers.checkTextVisible("drag-drop-test.txt");
         expect(fileVisible).toBeTruthy();
       } finally {
         if (fs.existsSync(testFile)) {
@@ -164,10 +155,7 @@ test.describe("File Upload and Curation - Comprehensive", () => {
       }
     });
 
-    test("should handle upload errors gracefully", async ({
-      page,
-      context,
-    }) => {
+    test("should handle upload errors gracefully", async ({ page, context }) => {
       await helpers.selectTab("Curate");
 
       // Mock upload failure
@@ -189,8 +177,7 @@ test.describe("File Upload and Curation - Comprehensive", () => {
         // Check for error message
         await page.waitForTimeout(1000);
         const hasError =
-          (await helpers.checkTextVisible("error")) ||
-          (await helpers.checkTextVisible("failed"));
+          (await helpers.checkTextVisible("error")) || (await helpers.checkTextVisible("failed"));
         expect(hasError).toBeTruthy();
       } finally {
         if (fs.existsSync(testFile)) {
@@ -205,20 +192,14 @@ test.describe("File Upload and Curation - Comprehensive", () => {
       await helpers.selectTab("Curate");
 
       // Check for file list structure
-      const fileList = page.locator(
-        '[data-testid="file-list"], [class*="file-list"], table',
-      );
+      const fileList = page.locator('[data-testid="file-list"], [class*="file-list"], table');
 
       if (await fileList.isVisible()) {
         // Check for file management controls
         const hasActions =
-          (await page
-            .locator('button:has-text("Delete"), button:has-text("Remove")')
-            .count()) > 0;
+          (await page.locator('button:has-text("Delete"), button:has-text("Remove")').count()) > 0;
         const hasFileInfo =
-          (await page
-            .locator('[class*="file-name"], [class*="file-size"]')
-            .count()) > 0;
+          (await page.locator('[class*="file-name"], [class*="file-size"]').count()) > 0;
 
         expect(hasActions || hasFileInfo).toBeTruthy();
       }
@@ -240,7 +221,7 @@ test.describe("File Upload and Curation - Comprehensive", () => {
         // Find and click delete button
         const deleteBtn = page
           .locator(
-            'button:has-text("Delete"), button:has-text("Remove"), button[aria-label*="delete"]',
+            'button:has-text("Delete"), button:has-text("Remove"), button[aria-label*="delete"]'
           )
           .first();
 
@@ -248,17 +229,14 @@ test.describe("File Upload and Curation - Comprehensive", () => {
           await deleteBtn.click();
 
           // Confirm deletion if dialog appears
-          const confirmBtn = page.locator(
-            'button:has-text("Confirm"), button:has-text("Yes")',
-          );
+          const confirmBtn = page.locator('button:has-text("Confirm"), button:has-text("Yes")');
           if (await confirmBtn.isVisible({ timeout: 1000 })) {
             await confirmBtn.click();
           }
 
           // File should be removed from list
           await page.waitForTimeout(1000);
-          const fileStillVisible =
-            await helpers.checkTextVisible("delete-test.txt");
+          const fileStillVisible = await helpers.checkTextVisible("delete-test.txt");
           expect(fileStillVisible).toBeFalsy();
         }
       } finally {
@@ -321,16 +299,14 @@ test.describe("File Upload and Curation - Comprehensive", () => {
 
         // Look for vector store controls
         const addToVectorBtn = page.locator(
-          'button:has-text("Add to Vector Store"), button:has-text("Embed")',
+          'button:has-text("Add to Vector Store"), button:has-text("Embed")'
         );
 
         if (await addToVectorBtn.isVisible()) {
           await addToVectorBtn.click();
 
           // Wait for processing
-          const processingIndicator = page.locator(
-            "text=/processing|embedding|indexing/i",
-          );
+          const processingIndicator = page.locator("text=/processing|embedding|indexing/i");
           if (await processingIndicator.isVisible()) {
             await processingIndicator.waitFor({
               state: "hidden",
@@ -364,9 +340,7 @@ test.describe("File Upload and Curation - Comprehensive", () => {
 
       if (hasVectorInfo) {
         // Look for status indicators
-        const statusElements = await page
-          .locator('[class*="status"], [class*="badge"]')
-          .count();
+        const statusElements = await page.locator('[class*="status"], [class*="badge"]').count();
         expect(statusElements).toBeGreaterThan(0);
       }
     });
@@ -393,15 +367,14 @@ test.describe("File Upload and Curation - Comprehensive", () => {
         await page.waitForTimeout(1000);
 
         const addToVectorBtn = page.locator(
-          'button:has-text("Add to Vector Store"), button:has-text("Embed")',
+          'button:has-text("Add to Vector Store"), button:has-text("Embed")'
         );
         if (await addToVectorBtn.isVisible()) {
           await addToVectorBtn.click();
 
           // Check for error message
           const hasError =
-            (await helpers.checkTextVisible("error")) ||
-            (await helpers.checkTextVisible("failed"));
+            (await helpers.checkTextVisible("error")) || (await helpers.checkTextVisible("failed"));
           expect(hasError).toBeTruthy();
         }
       } finally {
@@ -427,7 +400,7 @@ test.describe("File Upload and Curation - Comprehensive", () => {
 
         // Look for progress indicator
         const progressBar = page.locator(
-          '[role="progressbar"], [class*="progress"], [class*="loading"]',
+          '[role="progressbar"], [class*="progress"], [class*="loading"]'
         );
         const hasProgress = await progressBar.isVisible({ timeout: 1000 });
 

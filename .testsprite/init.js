@@ -30,10 +30,7 @@ const config = {
 };
 
 // Create initialization marker
-fs.writeFileSync(
-  path.join(__dirname, ".initialized"),
-  JSON.stringify(config, null, 2),
-);
+fs.writeFileSync(path.join(__dirname, ".initialized"), JSON.stringify(config, null, 2));
 
 console.log("✅ TestSprite MCP initialized successfully");
 console.log("   API Key:", config.apiKey.substring(0, 20) + "...");
@@ -42,12 +39,9 @@ console.log("   Base URL:", config.baseUrl);
 console.log("   Environment:", config.environment);
 console.log(
   "   Optimization:",
-  config.settings.optimization.parallelExecution ? "Enabled" : "Disabled",
+  config.settings.optimization.parallelExecution ? "Enabled" : "Disabled"
 );
-console.log(
-  "   AI Features:",
-  config.settings.ai.autoGenerateTests ? "Enabled" : "Disabled",
-);
+console.log("   AI Features:", config.settings.ai.autoGenerateTests ? "Enabled" : "Disabled");
 
 // Export for MCP usage
 module.exports = config;

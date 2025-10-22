@@ -4,14 +4,7 @@
  * By Matthew Adam Carpenter - Enhanced with AI Agent System
  */
 
-import {
-    Activity,
-    Brain,
-    FileText,
-    MessageCircle,
-    Mic,
-    Settings
-} from "lucide-react";
+import { Activity, Brain, FileText, MessageCircle, Mic, Settings } from "lucide-react";
 import React, { useState } from "react";
 import { cn } from "../../../lib/utils";
 
@@ -90,13 +83,12 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
       className={cn(
         "h-screen bg-mac-surface-bg text-mac-text-primary overflow-hidden relative",
         "mac-background",
-        className,
+        className
       )}
       style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
     >
       {/* MAC Floating Background Orbs */}
-      <div className="mac-floating-background">
-      </div>
+      <div className="mac-floating-background"></div>
 
       {/* Professional Header */}
       <header className="relative z-10 border-b border-mac-border bg-mac-surface-elevated/50 backdrop-blur-xl">
@@ -105,9 +97,7 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
           <div className="flex items-center space-x-4">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent opacity-90" />
             <div>
-              <h1 className="text-lg font-extralight text-mac-text-primary tracking-wide">
-                SIAM
-              </h1>
+              <h1 className="text-lg font-extralight text-mac-text-primary tracking-wide">SIAM</h1>
               <p className="text-xs font-thin text-mac-text-muted tracking-wider uppercase">
                 Professional Meeting Intelligence
               </p>
@@ -123,7 +113,7 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
                   onClick={item.onClick}
                   className={cn(
                     "mac-button mac-button-ghost px-3 py-2 flex items-center space-x-2",
-                    item.isActive && "mac-button-primary",
+                    item.isActive && "mac-button-primary"
                   )}
                 >
                   {item.icon}
@@ -139,9 +129,7 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
               <div
                 className={cn(
                   "w-2 h-2 rounded-full",
-                  isRecording
-                    ? "bg-red-400 animate-mac-pulse"
-                    : "bg-green-400 animate-mac-pulse",
+                  isRecording ? "bg-red-400 animate-mac-pulse" : "bg-green-400 animate-mac-pulse"
                 )}
               />
               <span className="text-sm font-thin text-mac-text-secondary">
@@ -150,10 +138,7 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
             </div>
 
             {onToggleSettings && (
-              <button
-                onClick={onToggleSettings}
-                className="mac-button mac-button-ghost p-2"
-              >
+              <button onClick={onToggleSettings} className="mac-button mac-button-ghost p-2">
                 <Settings className="w-5 h-5" />
               </button>
             )}
@@ -195,9 +180,7 @@ export const ProfessionalCard: React.FC<{
     <div className={cn("mac-card mac-shimmer", className)}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="mac-title">{title}</h3>
-        {actions && (
-          <div className="flex items-center space-x-2">{actions}</div>
-        )}
+        {actions && <div className="flex items-center space-x-2">{actions}</div>}
       </div>
       <div className="mac-body">{children}</div>
     </div>
@@ -228,7 +211,7 @@ export const StatusBadge: React.FC<{
     <span
       className={cn(
         "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-light border",
-        getStatusStyles(),
+        getStatusStyles()
       )}
     >
       {children}
@@ -237,14 +220,8 @@ export const StatusBadge: React.FC<{
 };
 
 // Dashboard Grid Component
-export const DashboardGrid: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {children}
-    </div>
-  );
+export const DashboardGrid: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{children}</div>;
 };
 
 // Button Group Component
@@ -252,9 +229,5 @@ export const ButtonGroup: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className = "" }) => {
-  return (
-    <div className={cn("flex items-center space-x-3", className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn("flex items-center space-x-3", className)}>{children}</div>;
 };

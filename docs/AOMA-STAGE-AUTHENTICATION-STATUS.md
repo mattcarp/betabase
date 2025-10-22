@@ -19,6 +19,7 @@ ERR_SSL_CLIENT_AUTH_SIGNATURE_FAILED
 ```
 
 This appears to be related to:
+
 1. **Jamf MDM Enrollment Requirement** - Device must be enrolled in Sony's Jamf Pro MDM system
 2. **Certificate-based Authentication** - Browser-level certificate selection that cannot be automated
 3. **Microsoft Conditional Access** - Azure AD policy enforcing device compliance
@@ -56,6 +57,7 @@ This appears to be related to:
 ## 🔍 Technical Details
 
 ### Environment
+
 - **AOMA Stage URL**: `https://aoma-stage.smcdp-de.net`
 - **OAuth App ID**: `72e97d60-6868-4706-9caa-6781093d61ca`
 - **VPN Required**: GlobalProtect VPN must be connected
@@ -80,6 +82,7 @@ This appears to be related to:
 ### Cookie Domains Captured
 
 When authentication "succeeds" but lands on enrollment page:
+
 - `portal.manage.microsoft.com` - Microsoft Intune portal
 - `device.login.microsoftonline.com` - Device authentication
 - `jss.sonymusic.com` - Jamf Pro MDM server
@@ -92,6 +95,7 @@ When authentication "succeeds" but lands on enrollment page:
 **Previous Success**: User confirmed Playwright automation worked previously: "id did, before" [sic]
 
 This suggests:
+
 - Device WAS enrolled in Jamf MDM at some point
 - Certificate authentication WAS working
 - The enforcement of certificate/device requirements is **new** or **recently re-enabled**
@@ -101,8 +105,10 @@ This suggests:
 ## 🛠️ Scripts Status
 
 ### `scripts/aoma-stage-login.js` ✅
+
 **Status**: Fully functional automation up to certificate modal
 **Handles**:
+
 - VPN detection
 - Employee login button click
 - Username/password filling
@@ -113,19 +119,23 @@ This suggests:
 - Comprehensive logging with screenshots every 10 seconds
 
 **Cannot Handle**:
+
 - Certificate modal interaction (browser-level security)
 - Device enrollment requirement bypass
 
 ### `scripts/aoma-manual-login-save.js` ✅
+
 **Status**: Working for manual certificate handling
 **Purpose**: Opens browser, lets user manually handle certificate modal and 2FA, saves cookies
 **Timeout**: 10 minutes for manual authentication
 **Usage**:
+
 ```bash
 node scripts/aoma-manual-login-save.js
 ```
 
 ### `scripts/aoma-playwright-crawler.js` ✅
+
 **Status**: Ready to crawl once authentication succeeds
 **Purpose**: Uses saved cookies to crawl AOMA pages and store in vector database
 **Blocked by**: Cannot get valid authentication cookies due to enrollment requirement
@@ -139,6 +149,7 @@ node scripts/aoma-manual-login-save.js
 **Issue**: User cannot access AOMA stage due to certificate authentication failure.
 
 **Error Message**:
+
 ```
 Access to device.login.microsoftonline.com was denied
 ERR_SSL_CLIENT_AUTH_SIGNATURE_FAILED
@@ -159,6 +170,7 @@ ERR_SSL_CLIENT_AUTH_SIGNATURE_FAILED
    - Ensure certificate authentication works after enrollment
 
 **Additional Context**:
+
 - VPN (GlobalProtect) is connected
 - Username/password authentication works
 - 2FA approval works
@@ -170,25 +182,30 @@ ERR_SSL_CLIENT_AUTH_SIGNATURE_FAILED
 ## 📁 Related Files
 
 ### Authentication Scripts
+
 - `scripts/aoma-stage-login.js` - Main automated login (Chromium + HITL 2FA)
 - `scripts/aoma-manual-login-save.js` - Manual login with cookie saving
 - `scripts/aoma-playwright-crawler.js` - Crawler using saved cookies
 - `scripts/aoma-login-playwright.js` - Original working login script
 
 ### Services
+
 - `src/services/aomaStageAuthenticator.ts` - Authentication service wrapper
 - `src/services/aomaFirecrawlService.ts` - Firecrawl-based crawler service
 
 ### Configuration
+
 - `.env.local` - Credentials (not in git)
 - `tmp/aoma-stage-storage.json` - Saved Playwright storage state
 - `tmp/aoma-cookie.txt` - Saved cookie header
 
 ### Documentation
+
 - `context/firecrawl-v2-migration.md` - Firecrawl v2 API migration guide
 - `docs/AOMA-STAGE-AUTHENTICATION-STATUS.md` - This file
 
 ### Debug Artifacts
+
 - `tmp/auth-flow-end.png` - Screenshot after auth flow
 - `tmp/check-*s.png` - Screenshots every 10 seconds during auth
 - `tmp/jamf-redirect.png` - Screenshot of Jamf redirect
@@ -209,24 +226,30 @@ ERR_SSL_CLIENT_AUTH_SIGNATURE_FAILED
 ### Once Admin Resolves
 
 1. **Test Manual Login**:
+
    ```bash
    node scripts/aoma-manual-login-save.js
    ```
+
    - Verify certificate modal works or is bypassed
    - Verify cookies are saved at AOMA app page (not login servlet)
 
 2. **Test Automated Login**:
+
    ```bash
    # Set AAD_USERNAME and AAD_PASSWORD in .env.local first
    node scripts/aoma-stage-login.js
    ```
+
    - Verify 2FA flow works end-to-end
    - Verify session cookies are valid
 
 3. **Test Crawler**:
+
    ```bash
    node scripts/aoma-playwright-crawler.js
    ```
+
    - Verify saved cookies work for crawling
    - Verify pages are scraped and stored in vector database
 
@@ -259,6 +282,7 @@ ERR_SSL_CLIENT_AUTH_SIGNATURE_FAILED
 ### Known Working Configuration
 
 **From when it worked before**:
+
 - Browser: Chromium (Playwright)
 - VPN: GlobalProtect connected
 - Account: `matt.carpenter.ext@sonymusic.com`

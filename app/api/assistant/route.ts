@@ -14,8 +14,7 @@ const openaiClient = new OpenAI({
 });
 
 // Get Assistant ID from environment variable
-const ASSISTANT_ID =
-  process.env.OPENAI_ASSISTANT_ID || "asst_VvOHL1c4S6YapYKun4mY29fM";
+const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID || "asst_VvOHL1c4S6YapYKun4mY29fM";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -31,10 +30,7 @@ export async function POST(req: NextRequest) {
       const file = formData.get("file") as File;
 
       if (!file) {
-        return NextResponse.json(
-          { error: "No file provided" },
-          { status: 400 },
-        );
+        return NextResponse.json({ error: "No file provided" }, { status: 400 });
       }
 
       // Upload file to OpenAI - using proper File constructor
@@ -52,13 +48,11 @@ export async function POST(req: NextRequest) {
       });
 
       // Attach file to assistant's vector store
-      const assistant =
-        await openaiClient.beta.assistants.retrieve(ASSISTANT_ID);
+      const assistant = await openaiClient.beta.assistants.retrieve(ASSISTANT_ID);
 
       // Check if assistant has a vector store
       if (assistant.tool_resources?.file_search?.vector_store_ids?.[0]) {
-        const vectorStoreId =
-          assistant.tool_resources.file_search.vector_store_ids[0];
+        const vectorStoreId = assistant.tool_resources.file_search.vector_store_ids[0];
 
         // Add file to vector store
         await (openaiClient.beta as any).vectorStores.files.create(vectorStoreId, {
@@ -91,10 +85,7 @@ export async function POST(req: NextRequest) {
 
     // Handle chat with assistant
     if (!messages || !Array.isArray(messages)) {
-      return NextResponse.json(
-        { error: "Invalid messages format" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Invalid messages format" }, { status: 400 });
     }
 
     // Create a thread
@@ -128,23 +119,15 @@ export async function POST(req: NextRequest) {
 
     while (runStatus.status !== "completed") {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      runStatus = await openaiClient.beta.threads.runs.retrieve(
-        thread.id,
-        runStatus.id as any,
-      );
+      runStatus = await openaiClient.beta.threads.runs.retrieve(thread.id, runStatus.id as any);
 
       if (runStatus.status === "failed" || runStatus.status === "cancelled") {
-        return NextResponse.json(
-          { error: "Assistant run failed" },
-          { status: 500 },
-        );
+        return NextResponse.json({ error: "Assistant run failed" }, { status: 500 });
       }
     }
 
     // Get the assistant's response
-    const messagesResponse = await openaiClient.beta.threads.messages.list(
-      thread.id,
-    );
+    const messagesResponse = await openaiClient.beta.threads.messages.list(thread.id);
     const assistantMessage = messagesResponse.data[0];
 
     // For now, return a simple JSON response
@@ -164,7 +147,7 @@ export async function POST(req: NextRequest) {
         error: "Failed to process assistant request",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -175,10 +158,7 @@ export async function PUT(req: NextRequest) {
     console.log("PUT /api/assistant - File upload request received");
 
     if (!apiKey) {
-      return NextResponse.json(
-        { error: "OpenAI API key not configured" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "OpenAI API key not configured" }, { status: 500 });
     }
 
     const formData = await req.formData();
@@ -247,7 +227,7 @@ export async function PUT(req: NextRequest) {
         error: "Failed to upload file",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

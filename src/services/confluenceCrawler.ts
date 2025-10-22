@@ -1,8 +1,14 @@
-import { confluenceEnv, getAuthHeaders } from './confluenceAuthenticator';
-import { upsertWikiDocument } from '@/lib/supabase';
-import { storageToMarkdown, extractLabels, buildPageUrl, buildSourceId, normalizeLinks } from '@/src/utils/confluenceHelpers';
-import { openai } from '@ai-sdk/openai';
-import { embed } from 'ai';
+import { confluenceEnv, getAuthHeaders } from "./confluenceAuthenticator";
+import { upsertWikiDocument } from "@/lib/supabase";
+import {
+  storageToMarkdown,
+  extractLabels,
+  buildPageUrl,
+  buildSourceId,
+  normalizeLinks,
+} from "@/src/utils/confluenceHelpers";
+import { openai } from "@ai-sdk/openai";
+import { embed } from "ai";
 
 type ConfluencePage = {
   id: string;
@@ -15,9 +21,16 @@ type ConfluencePage = {
   _links?: { webui?: string };
 };
 
-async function delay(ms: number) { return new Promise(res => setTimeout(res, ms)); }
+async function delay(ms: number) {
+  return new Promise((res) => setTimeout(res, ms));
+}
 
-async function fetchWithRetry(url: string, init: RequestInit, retries = 3, backoffMs = 500): Promise<Response> {
+async function fetchWithRetry(
+  url: string,
+  init: RequestInit,
+  retries = 3,
+  backoffMs = 500
+): Promise<Response> {
   for (let attempt = 0; attempt <= retries; attempt++) {
     const res = await fetch(url, init);
     if (res.status !== 429 && res.status !== 502 && res.status !== 503) return res;
@@ -32,19 +45,24 @@ async function fetchWithRetry(url: string, init: RequestInit, retries = 3, backo
 async function generateEmbedding(text: string): Promise<number[]> {
   try {
     const { embedding } = await embed({
-      model: openai.embedding('text-embedding-3-small'),
+      model: openai.embedding("text-embedding-3-small"),
       value: text,
     });
     return embedding;
   } catch (error) {
-    console.error('Failed to generate embedding:', error);
+    console.error("Failed to generate embedding:", error);
     return [];
   }
 }
 
 export async function listPages(spaceKey: string, maxPages?: number): Promise<ConfluencePage[]> {
-  const base = confluenceEnv.BASE_URL.replace(/\/$/, '');
-  const params = new URLSearchParams({ spaceKey, type: 'page', expand: 'version,metadata.labels,body.storage', limit: '200' });
+  const base = confluenceEnv.BASE_URL.replace(/\/$/, "");
+  const params = new URLSearchParams({
+    spaceKey,
+    type: "page",
+    expand: "version,metadata.labels,body.storage",
+    limit: "200",
+  });
   const url = `${base}/wiki/rest/api/content?${params.toString()}`;
   const res = await fetchWithRetry(url, { headers: getAuthHeaders() });
   if (!res.ok) throw new Error(`Failed to list pages for ${spaceKey}: ${res.status}`);
@@ -54,14 +72,19 @@ export async function listPages(spaceKey: string, maxPages?: number): Promise<Co
 }
 
 export async function crawlSpaces(options: { spaces?: string[]; maxPagesPerSpace?: number } = {}) {
-  const defaultSonySpaces = ['AOMA','USM','TECH','API','RELEASE'];
-  const spaces = options.spaces && options.spaces.length > 0
-    ? options.spaces
-    : ((process.env.CONFLUENCE_SPACES || '').split(',').map(s => s.trim()).filter(Boolean));
+  const defaultSonySpaces = ["AOMA", "USM", "TECH", "API", "RELEASE"];
+  const spaces =
+    options.spaces && options.spaces.length > 0
+      ? options.spaces
+      : (process.env.CONFLUENCE_SPACES || "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
   // Fallback to Sony Music spaces if none provided
   const targetSpaces = spaces.length ? spaces : defaultSonySpaces;
 
-  if (!spaces.length) throw new Error('No Confluence spaces provided (CONFLUENCE_SPACES or payload.spaces).');
+  if (!spaces.length)
+    throw new Error("No Confluence spaces provided (CONFLUENCE_SPACES or payload.spaces).");
 
   let pagesCrawled = 0;
   let vectorsUpserted = 0;
@@ -72,34 +95,31 @@ export async function crawlSpaces(options: { spaces?: string[]; maxPagesPerSpace
       const versionNum = page.version?.number || 1;
       const sourceId = buildSourceId(page.id, versionNum);
       const canonUrl = page._links?.webui
-        ? `${confluenceEnv.BASE_URL.replace(/\/$/, '')}${page._links.webui}`
+        ? `${confluenceEnv.BASE_URL.replace(/\/$/, "")}${page._links.webui}`
         : buildPageUrl(confluenceEnv.BASE_URL, page.id);
-      const rawMd = storageToMarkdown(page.body?.storage?.value || '');
+      const rawMd = storageToMarkdown(page.body?.storage?.value || "");
       const markdown = normalizeLinks(rawMd, confluenceEnv.BASE_URL);
       const labels = extractLabels(page.metadata);
 
       let embedding: number[] = [];
-      try { embedding = await generateEmbedding(markdown); } catch (e) { /* best-effort */ }
+      try {
+        embedding = await generateEmbedding(markdown);
+      } catch (e) {
+        /* best-effort */
+      }
 
       // Upsert into wiki_documents table
-      await upsertWikiDocument(
-        canonUrl,
-        'confluence',
-        page.title,
-        markdown,
-        embedding,
-        {
-          space: page.space?.key || spaceKey,
-          sony_music: true,
-          categories: ['wiki','documentation'],
-          priority_content: ['AOMA','USM'].includes((page.space?.key || spaceKey).toUpperCase()),
-          labels: labels,
-          updated_at: page.version?.when,
-          author: page.version?.by?.displayName,
-          page_id: page.id,
-          version: versionNum,
-        }
-      );
+      await upsertWikiDocument(canonUrl, "confluence", page.title, markdown, embedding, {
+        space: page.space?.key || spaceKey,
+        sony_music: true,
+        categories: ["wiki", "documentation"],
+        priority_content: ["AOMA", "USM"].includes((page.space?.key || spaceKey).toUpperCase()),
+        labels: labels,
+        updated_at: page.version?.when,
+        author: page.version?.by?.displayName,
+        page_id: page.id,
+        version: versionNum,
+      });
 
       vectorsUpserted += 1;
       pagesCrawled += 1;
@@ -111,5 +131,3 @@ export async function crawlSpaces(options: { spaces?: string[]; maxPagesPerSpace
 }
 
 export default { listPages, crawlSpaces };
-
-

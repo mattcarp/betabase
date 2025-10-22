@@ -23,13 +23,7 @@ import {
   Layers,
   Eye,
 } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "./dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
 
 interface LangSmithTrace {
   id: string;
@@ -38,7 +32,7 @@ interface LangSmithTrace {
   startTime: string;
   endTime?: string;
   duration?: number;
-  status: 'success' | 'error' | 'pending';
+  status: "success" | "error" | "pending";
   error?: string;
   inputs?: any;
   outputs?: any;
@@ -67,10 +61,10 @@ export function IntrospectionDropdown() {
     setLoading(true);
     try {
       // Call the AOMA API endpoint to get LangSmith data
-      const response = await fetch('/api/introspection', {
-        method: 'GET',
+      const response = await fetch("/api/introspection", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -80,7 +74,7 @@ export function IntrospectionDropdown() {
         setTraces(data.traces || []);
       }
     } catch (error) {
-      console.error('Failed to fetch introspection data:', error);
+      console.error("Failed to fetch introspection data:", error);
     } finally {
       setLoading(false);
     }
@@ -97,11 +91,11 @@ export function IntrospectionDropdown() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'success':
+      case "success":
         return <CheckCircle className="h-3 w-3 text-green-500" />;
-      case 'error':
+      case "error":
         return <AlertCircle className="h-3 w-3 text-red-500" />;
-      case 'pending':
+      case "pending":
         return <Loader2 className="h-3 w-3 animate-spin text-yellow-500" />;
       default:
         return <Clock className="h-3 w-3 text-gray-500" />;
@@ -110,21 +104,21 @@ export function IntrospectionDropdown() {
 
   const getRunTypeColor = (runType: string) => {
     switch (runType) {
-      case 'tool':
-        return 'bg-blue-500/10 text-blue-500';
-      case 'chain':
-        return 'bg-purple-500/10 text-purple-500';
-      case 'llm':
-        return 'bg-green-500/10 text-green-500';
-      case 'retriever':
-        return 'bg-orange-500/10 text-orange-500';
+      case "tool":
+        return "bg-blue-500/10 text-blue-500";
+      case "chain":
+        return "bg-purple-500/10 text-purple-500";
+      case "llm":
+        return "bg-green-500/10 text-green-500";
+      case "retriever":
+        return "bg-orange-500/10 text-orange-500";
       default:
-        return 'bg-gray-500/10 text-gray-500';
+        return "bg-gray-500/10 text-gray-500";
     }
   };
 
   const formatDuration = (ms?: number) => {
-    if (!ms) return '-';
+    if (!ms) return "-";
     if (ms < 1000) return `${ms}ms`;
     if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
     return `${(ms / 60000).toFixed(1)}m`;
@@ -132,10 +126,10 @@ export function IntrospectionDropdown() {
 
   const formatTime = (timeString: string) => {
     const date = new Date(timeString);
-    return date.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
+    return date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
     });
   };
 
@@ -143,11 +137,7 @@ export function IntrospectionDropdown() {
     <>
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="relative flex items-center gap-2"
-          >
+          <Button variant="ghost" size="sm" className="relative flex items-center gap-2">
             <Activity className="h-4 w-4" />
             <span className="hidden sm:inline">Introspection</span>
             {status?.tracingEnabled && (
@@ -166,15 +156,18 @@ export function IntrospectionDropdown() {
             </span>
             {loading && <Loader2 className="h-3 w-3 animate-spin" />}
           </DropdownMenuLabel>
-          
+
           {status && (
             <>
               <DropdownMenuSeparator />
               <div className="px-2 py-1.5 text-xs">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-muted-foreground">LangSmith Status:</span>
-                  <Badge variant={status.tracingEnabled ? "default" : "secondary"} className="text-xs">
-                    {status.tracingEnabled ? 'Active' : 'Inactive'}
+                  <Badge
+                    variant={status.tracingEnabled ? "default" : "secondary"}
+                    className="text-xs"
+                  >
+                    {status.tracingEnabled ? "Active" : "Inactive"}
                   </Badge>
                 </div>
                 {status.tracingEnabled && (
@@ -194,7 +187,7 @@ export function IntrospectionDropdown() {
           )}
 
           <DropdownMenuSeparator />
-          
+
           <DropdownMenuLabel className="text-xs text-muted-foreground">
             Recent Agent Activity
           </DropdownMenuLabel>
@@ -236,20 +229,17 @@ export function IntrospectionDropdown() {
                     <ChevronRight className="h-3 w-3 opacity-50" />
                   </div>
                   <div className="flex items-center gap-2 text-xs">
-                    <Badge variant="outline" className={`text-xs px-1 py-0 ${getRunTypeColor(trace.runType)}`}>
+                    <Badge
+                      variant="outline"
+                      className={`text-xs px-1 py-0 ${getRunTypeColor(trace.runType)}`}
+                    >
                       {trace.runType}
                     </Badge>
-                    <span className="text-muted-foreground">
-                      {formatTime(trace.startTime)}
-                    </span>
-                    <span className="text-muted-foreground">
-                      {formatDuration(trace.duration)}
-                    </span>
+                    <span className="text-muted-foreground">{formatTime(trace.startTime)}</span>
+                    <span className="text-muted-foreground">{formatDuration(trace.duration)}</span>
                   </div>
                   {trace.error && (
-                    <span className="text-xs text-red-500 truncate w-full">
-                      {trace.error}
-                    </span>
+                    <span className="text-xs text-red-500 truncate w-full">{trace.error}</span>
                   )}
                 </DropdownMenuItem>
               ))
@@ -261,7 +251,12 @@ export function IntrospectionDropdown() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="text-xs text-center justify-center cursor-pointer"
-                onClick={() => window.open(`https://smith.langchain.com/o/aoma-mesh/projects/p/${status.project}`, '_blank')}
+                onClick={() =>
+                  window.open(
+                    `https://smith.langchain.com/o/aoma-mesh/projects/p/${status.project}`,
+                    "_blank"
+                  )
+                }
               >
                 <Eye className="h-3 w-3 mr-1" />
                 View in LangSmith Dashboard
@@ -279,11 +274,9 @@ export function IntrospectionDropdown() {
               {selectedTrace && getStatusIcon(selectedTrace.status)}
               {selectedTrace?.name}
             </DialogTitle>
-            <DialogDescription>
-              Trace ID: {selectedTrace?.id}
-            </DialogDescription>
+            <DialogDescription>Trace ID: {selectedTrace?.id}</DialogDescription>
           </DialogHeader>
-          
+
           {selectedTrace && (
             <ScrollArea className="h-[500px] pr-4">
               <div className="space-y-4">
@@ -313,7 +306,9 @@ export function IntrospectionDropdown() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Status:</span>
-                      <Badge variant={selectedTrace.status === 'success' ? 'default' : 'destructive'}>
+                      <Badge
+                        variant={selectedTrace.status === "success" ? "default" : "destructive"}
+                      >
                         {selectedTrace.status}
                       </Badge>
                     </div>

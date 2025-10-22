@@ -16,14 +16,11 @@ const labelVariants = cva(
         // Default MAC style
         default: "text-[var(--mac-text-secondary)] font-light tracking-wide",
         // MAC Professional style with subtle animation
-        "mac-professional": 
-          "text-[var(--mac-text-primary)] font-light",
+        "mac-professional": "text-[var(--mac-text-primary)] font-light",
         // MAC accent style for important labels
-        "mac-accent": 
-          "text-[var(--mac-primary-blue-400)] font-normal",
+        "mac-accent": "text-[var(--mac-primary-blue-400)] font-normal",
         // MAC muted style
-        "mac-muted": 
-          "text-[var(--mac-text-muted)] font-light text-xs",
+        "mac-muted": "text-[var(--mac-text-muted)] font-light text-xs",
       },
       glow: {
         true: "hover:text-shadow-[0_0_8px_rgba(74,158,255,0.3)]",
@@ -34,19 +31,14 @@ const labelVariants = cva(
       variant: "mac-professional",
       glow: false,
     },
-  },
+  }
 );
 
 const Label = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
-    VariantProps<typeof labelVariants>
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & VariantProps<typeof labelVariants>
 >(({ className, variant, ...props }, ref) => (
-  <LabelPrimitive.Root
-    ref={ref}
-    className={cn(labelVariants({ variant }), className)}
-    {...props}
-  />
+  <LabelPrimitive.Root ref={ref} className={cn(labelVariants({ variant }), className)} {...props} />
 ));
 Label.displayName = LabelPrimitive.Root.displayName;
 

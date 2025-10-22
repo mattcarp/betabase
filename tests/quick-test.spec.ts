@@ -30,9 +30,7 @@ test.describe("Quick Validation Test", () => {
     await page.waitForTimeout(500);
 
     // Check for Curate content
-    const curateContent = await page
-      .locator("text=/Upload|Curate/i")
-      .isVisible();
+    const curateContent = await page.locator("text=/Upload|Curate/i").isVisible();
     expect(curateContent).toBeTruthy();
 
     // Click on Chat tab

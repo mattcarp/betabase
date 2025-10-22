@@ -13,18 +13,21 @@ const getButtonClasses = (
   size: ButtonSize = "default"
 ): string => {
   // Base MAC button styles (removed gap-2 to prevent spacing issues)
-  const baseClasses = "mac-button inline-flex items-center justify-center whitespace-nowrap text-sm font-light transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0";
-  
+  const baseClasses =
+    "mac-button inline-flex items-center justify-center whitespace-nowrap text-sm font-light transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0";
+
   // Variant-specific MAC classes
   const variantClasses: Record<ButtonVariant, string> = {
     default: "mac-button-primary mac-shimmer shadow-lg hover:shadow-xl hover:scale-[1.02]",
-    destructive: "bg-red-950/80 border border-red-500/50 text-red-100 hover:bg-red-900/90 hover:border-red-400 shadow-sm rounded-[0.5rem]",
+    destructive:
+      "bg-red-950/80 border border-red-500/50 text-red-100 hover:bg-red-900/90 hover:border-red-400 shadow-sm rounded-[0.5rem]",
     outline: "mac-button-outline hover:scale-[1.01]",
     secondary: "mac-button-secondary shadow-md hover:shadow-lg",
-    ghost: "bg-transparent border-transparent hover:bg-zinc-800/50 hover:border-zinc-700 rounded-md",
+    ghost:
+      "bg-transparent border-transparent hover:bg-zinc-800/50 hover:border-zinc-700 rounded-md",
     link: "text-[var(--mac-primary-blue-400)] p-0 bg-transparent border-transparent underline-offset-4 hover:underline hover:text-[var(--mac-primary-blue-600)]",
   };
-  
+
   // Size-specific classes
   const sizeClasses: Record<ButtonSize, string> = {
     default: "h-9 px-4 py-2",
@@ -32,21 +35,23 @@ const getButtonClasses = (
     lg: "h-10 rounded-md px-8",
     icon: "h-8 w-8 p-0",
   };
-  
+
   return cn(baseClasses, variantClasses[variant], sizeClasses[size]);
 };
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   asChild?: boolean;
-  shimmer?: boolean;  // Add MAC shimmer effect
-  glow?: boolean;     // Add MAC glow effect
+  shimmer?: boolean; // Add MAC shimmer effect
+  glow?: boolean; // Add MAC glow effect
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "default", size = "default", shimmer, glow, asChild = false, ...props }, ref) => {
+  (
+    { className, variant = "default", size = "default", shimmer, glow, asChild = false, ...props },
+    ref
+  ) => {
     const Comp = asChild ? Slot : "button";
 
     // Get MAC classes for the button
@@ -59,19 +64,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       shimmer === false && "[&.mac-shimmer]:animate-none" // Disable shimmer if explicitly set to false
     );
 
-    return (
-      <Comp
-        className={cn(buttonClasses, effectClasses, className)}
-        ref={ref}
-        {...props}
-      />
-    );
-  },
+    return <Comp className={cn(buttonClasses, effectClasses, className)} ref={ref} {...props} />;
+  }
 );
 Button.displayName = "Button";
 
 // Export a compatibility function for components still using buttonVariants
-const buttonVariants = (props?: { variant?: ButtonVariant; size?: ButtonSize; className?: string }) => {
+const buttonVariants = (props?: {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  className?: string;
+}) => {
   if (!props) return getButtonClasses();
   return getButtonClasses(props.variant, props.size);
 };

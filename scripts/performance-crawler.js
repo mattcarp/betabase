@@ -10,7 +10,7 @@ const { createClient } = require("@supabase/supabase-js");
 const fs = require("fs").promises;
 
 // 🌐 Supabase Configuration
-require('dotenv').config({ path: '.env.local' });
+require("dotenv").config({ path: ".env.local" });
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -60,7 +60,7 @@ class PerformanceCrawler {
 
     if (!this.config) {
       throw new Error(
-        `Application ${appId} not configured. Available: ${Object.keys(APP_CONFIGS).join(", ")}`,
+        `Application ${appId} not configured. Available: ${Object.keys(APP_CONFIGS).join(", ")}`
       );
     }
 
@@ -96,9 +96,7 @@ class PerformanceCrawler {
           new PerformanceObserver((list) => {
             const firstInput = list.getEntries()[0];
             if (firstInput) {
-              vitals.fid = Math.round(
-                firstInput.processingStart - firstInput.startTime,
-              );
+              vitals.fid = Math.round(firstInput.processingStart - firstInput.startTime);
             }
           }).observe({ type: "first-input", buffered: true });
 
@@ -119,32 +117,26 @@ class PerformanceCrawler {
             vitals.ttfb = Math.round(navigation.responseStart);
             vitals.fcp = Math.round(navigation.domContentLoadedEventEnd);
             vitals.tti = Math.round(navigation.loadEventEnd);
-            vitals.resource_load_time = Math.round(
-              navigation.loadEventEnd - navigation.fetchStart,
-            );
+            vitals.resource_load_time = Math.round(navigation.loadEventEnd - navigation.fetchStart);
           }
 
           // Resource Performance
           const resources = performance.getEntriesByType("resource");
           vitals.js_execution_time = Math.round(
-            resources
-              .filter((r) => r.name.includes(".js"))
-              .reduce((sum, r) => sum + r.duration, 0),
+            resources.filter((r) => r.name.includes(".js")).reduce((sum, r) => sum + r.duration, 0)
           );
           vitals.css_load_time = Math.round(
-            resources
-              .filter((r) => r.name.includes(".css"))
-              .reduce((sum, r) => sum + r.duration, 0),
+            resources.filter((r) => r.name.includes(".css")).reduce((sum, r) => sum + r.duration, 0)
           );
           vitals.image_load_time = Math.round(
             resources
               .filter((r) => /\.(jpg|jpeg|png|gif|webp|svg)/.test(r.name))
-              .reduce((sum, r) => sum + r.duration, 0),
+              .reduce((sum, r) => sum + r.duration, 0)
           );
           vitals.font_load_time = Math.round(
             resources
               .filter((r) => /\.(woff|woff2|ttf|otf)/.test(r.name))
-              .reduce((sum, r) => sum + r.duration, 0),
+              .reduce((sum, r) => sum + r.duration, 0)
           );
           vitals.network_requests = resources.length;
 
@@ -166,8 +158,7 @@ class PerformanceCrawler {
 
         return {
           content_length: text.length,
-          word_count: text.split(/\s+/).filter((word) => word.length > 0)
-            .length,
+          word_count: text.split(/\s+/).filter((word) => word.length > 0).length,
           image_count: images,
           link_count: links,
           form_count: forms,
@@ -178,9 +169,7 @@ class PerformanceCrawler {
       const memoryInfo = await page.evaluate(() => {
         if (performance.memory) {
           return {
-            memory_usage_mb: Math.round(
-              performance.memory.usedJSHeapSize / 1024 / 1024,
-            ),
+            memory_usage_mb: Math.round(performance.memory.usedJSHeapSize / 1024 / 1024),
           };
         }
         return { memory_usage_mb: null };
@@ -196,10 +185,8 @@ class PerformanceCrawler {
         ...contentMetrics,
         ...memoryInfo,
         console_errors: consoleErrors.filter((e) => e.type === "error").length,
-        console_warnings: consoleErrors.filter((e) => e.type === "warning")
-          .length,
-        js_errors: consoleErrors.filter((e) => e.message.includes("Error"))
-          .length,
+        console_warnings: consoleErrors.filter((e) => e.type === "warning").length,
+        js_errors: consoleErrors.filter((e) => e.message.includes("Error")).length,
         page_size_kb: Math.round(pageSize / 1024),
         status: response.status(),
       });
@@ -234,9 +221,7 @@ class PerformanceCrawler {
       return {
         lighthouse_performance: Math.round(scores.performance.score * 100),
         lighthouse_accessibility: Math.round(scores.accessibility.score * 100),
-        lighthouse_best_practices: Math.round(
-          scores["best-practices"].score * 100,
-        ),
+        lighthouse_best_practices: Math.round(scores["best-practices"].score * 100),
         lighthouse_seo: Math.round(scores.seo.score * 100),
         lighthouse_pwa: scores.pwa ? Math.round(scores.pwa.score * 100) : null,
       };
@@ -304,8 +289,7 @@ class PerformanceCrawler {
       const visitedUrls = new Set();
 
       for (const url of urlsToVisit) {
-        if (visitedUrls.has(url) || crawledPages.length >= this.config.maxPages)
-          continue;
+        if (visitedUrls.has(url) || crawledPages.length >= this.config.maxPages) continue;
 
         console.log(`🔍 Crawling: ${url}`);
         visitedUrls.add(url);
@@ -327,10 +311,7 @@ class PerformanceCrawler {
           const content = await page.evaluate(() => {
             return {
               title: document.title,
-              html_content: document.documentElement.outerHTML.substring(
-                0,
-                50000,
-              ), // Limit size
+              html_content: document.documentElement.outerHTML.substring(0, 50000), // Limit size
               main_content: document.body?.innerText?.substring(0, 5000) || "",
             };
           });
@@ -366,9 +347,7 @@ class PerformanceCrawler {
 
       for (const pageData of crawledPages) {
         try {
-          const { error } = await supabase
-            .from("crawled_pages")
-            .insert(pageData);
+          const { error } = await supabase.from("crawled_pages").insert(pageData);
 
           if (error) {
             console.error("❌ Database error:", error.message);
@@ -378,9 +357,7 @@ class PerformanceCrawler {
         }
       }
 
-      console.log(
-        `🎉 Crawl completed! ${crawledPages.length} pages processed.`,
-      );
+      console.log(`🎉 Crawl completed! ${crawledPages.length} pages processed.`);
       console.log(`📊 Performance data saved to Supabase`);
 
       return {

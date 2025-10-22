@@ -45,11 +45,7 @@
         "timestamp": "2025-08-06T15:50:25.624Z"
       }
     },
-    "screenshots": [
-      "siam-initial-load.png",
-      "siam-deployment-pending.png",
-      "siam-final-state.png"
-    ],
+    "screenshots": ["siam-initial-load.png", "siam-deployment-pending.png", "siam-final-state.png"],
     "errors": []
   }
 }

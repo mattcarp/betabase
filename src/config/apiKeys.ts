@@ -36,19 +36,13 @@ class ApiKeysService {
   constructor() {
     // Try to get from environment first, fallback to defaults
     this.config = {
-      openaiApiKey:
-        this.getEnvVar("OPENAI_API_KEY") || defaultConfig.openaiApiKey,
-      elevenLabsApiKey:
-        this.getEnvVar("ELEVENLABS_API_KEY") || defaultConfig.elevenLabsApiKey,
-      elevenLabsAgentId:
-        this.getEnvVar("ELEVENLABS_AGENT_ID") ||
-        defaultConfig.elevenLabsAgentId,
-      vectorStoreId:
-        this.getEnvVar("VECTOR_STORE_ID") || defaultConfig.vectorStoreId,
+      openaiApiKey: this.getEnvVar("OPENAI_API_KEY") || defaultConfig.openaiApiKey,
+      elevenLabsApiKey: this.getEnvVar("ELEVENLABS_API_KEY") || defaultConfig.elevenLabsApiKey,
+      elevenLabsAgentId: this.getEnvVar("ELEVENLABS_AGENT_ID") || defaultConfig.elevenLabsAgentId,
+      vectorStoreId: this.getEnvVar("VECTOR_STORE_ID") || defaultConfig.vectorStoreId,
       // MCP configuration
       mcpUrl: this.getEnvVar("MCP_URL") || defaultConfig.mcpUrl,
-      mcpLambdaUrl:
-        this.getEnvVar("MCP_LAMBDA_URL") || defaultConfig.mcpLambdaUrl,
+      mcpLambdaUrl: this.getEnvVar("MCP_LAMBDA_URL") || defaultConfig.mcpLambdaUrl,
       mcpAuthEnabled:
         this.getEnvVar("MCP_AUTH_ENABLED") === "false"
           ? false
@@ -83,9 +77,7 @@ class ApiKeysService {
   }
 
   getMcpUrl(): string {
-    return (
-      this.config.mcpUrl || defaultConfig.mcpUrl || "http://localhost:3333"
-    );
+    return this.config.mcpUrl || defaultConfig.mcpUrl || "http://localhost:3333";
   }
 
   getMcpLambdaUrl(): string {

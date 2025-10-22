@@ -33,7 +33,7 @@ export const CodeBlock = ({
     <div
       className={cn(
         "relative w-full overflow-hidden rounded-md border bg-background text-foreground",
-        className,
+        className
       )}
       {...props}
     >
@@ -42,7 +42,7 @@ export const CodeBlock = ({
         <pre className="overflow-x-auto p-4 text-sm">
           <code className="font-mono" data-language={language}>
             {showLineNumbers
-              ? code.split('\n').map((line, i) => (
+              ? code.split("\n").map((line, i) => (
                   <div key={i} className="table-row">
                     <span className="table-cell pr-4 text-muted-foreground select-none">
                       {i + 1}
@@ -54,9 +54,7 @@ export const CodeBlock = ({
           </code>
         </pre>
         {children && (
-          <div className="absolute right-2 top-2 flex items-center gap-2">
-            {children}
-          </div>
+          <div className="absolute right-2 top-2 flex items-center gap-2">{children}</div>
         )}
       </div>
     </div>

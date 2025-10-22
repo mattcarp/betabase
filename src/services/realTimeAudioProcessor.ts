@@ -105,8 +105,9 @@ export class RealTimeAudioProcessor {
         latencyHint: isElectron ? "playback" : "interactive", // Electron: optimize for stability over latency
       };
 
-      this.audioContext = new (window.AudioContext ||
-        (window as any).webkitAudioContext)(audioContextOptions);
+      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)(
+        audioContextOptions
+      );
 
       // Enhanced Electron lifecycle handling
       if (isElectron) {
@@ -122,31 +123,21 @@ export class RealTimeAudioProcessor {
 
       // Listen for state changes
       this.audioContext.addEventListener("statechange", () => {
-        console.log(
-          `🎵 Audio context state changed to: ${this.audioContext?.state}`,
-        );
+        console.log(`🎵 Audio context state changed to: ${this.audioContext?.state}`);
         if (this.audioContext?.state === "suspended" && this.isProcessing) {
-          console.warn(
-            "⚠️ Audio context suspended during processing - attempting resume",
-          );
+          console.warn("⚠️ Audio context suspended during processing - attempting resume");
           this.audioContext
             .resume()
-            .catch((err) =>
-              console.error("Failed to resume audio context:", err),
-            );
+            .catch((err) => console.error("Failed to resume audio context:", err));
         }
       });
 
-      console.log(
-        "🎵 Real-time audio processor initialized with enhanced features",
-      );
+      console.log("🎵 Real-time audio processor initialized with enhanced features");
       console.log(`   Platform: ${isElectron ? "Electron" : "Web"}`);
       console.log(`   Sample Rate: ${this.audioContext.sampleRate}Hz`);
       console.log(`   FFT Size: ${this.config.fftSize}`);
       console.log(`   SPL Reference: ${this.config.splReferenceLevel}dB`);
-      console.log(
-        `   Rolling Window: ${this.config.rollingAverageWindow} frames`,
-      );
+      console.log(`   Rolling Window: ${this.config.rollingAverageWindow} frames`);
       console.log(`   Audio Context State: ${this.audioContext.state}`);
     } catch (error) {
       console.error("Failed to initialize audio processor:", error);
@@ -165,9 +156,7 @@ export class RealTimeAudioProcessor {
           console.log("🔄 App focused - resuming audio context");
           this.audioContext
             .resume()
-            .catch((err) =>
-              console.error("Failed to resume audio context on focus:", err),
-            );
+            .catch((err) => console.error("Failed to resume audio context on focus:", err));
         }
       });
 
@@ -194,7 +183,7 @@ export class RealTimeAudioProcessor {
   async startProcessing(
     onAudioFeatures?: (features: AudioFeatures) => void,
     onAudioMetrics?: (metrics: AudioMetrics) => void,
-    onFrequencyData?: (data: Uint8Array) => void,
+    onFrequencyData?: (data: Uint8Array) => void
   ): Promise<void> {
     if (!this.audioContext) {
       throw new Error("Audio processor not initialized");
@@ -259,24 +248,20 @@ export class RealTimeAudioProcessor {
           throw new Error(
             isElectron
               ? "Microphone access denied. Please check Electron app permissions in System Preferences."
-              : "Microphone access denied. Please allow microphone access and try again.",
+              : "Microphone access denied. Please allow microphone access and try again."
           );
         } else if (micError.name === "NotFoundError") {
-          throw new Error(
-            "No microphone found. Please connect a microphone and try again.",
-          );
+          throw new Error("No microphone found. Please connect a microphone and try again.");
         } else if (micError.name === "NotReadableError") {
           throw new Error(
-            "Microphone is in use by another application. Please close other apps using the microphone.",
+            "Microphone is in use by another application. Please close other apps using the microphone."
           );
         }
         throw micError;
       }
 
       // Create audio nodes with optimized settings
-      this.sourceNode = this.audioContext.createMediaStreamSource(
-        this.mediaStream,
-      );
+      this.sourceNode = this.audioContext.createMediaStreamSource(this.mediaStream);
       this.analyser = this.audioContext.createAnalyser();
 
       this.analyser.fftSize = this.config.fftSize;
@@ -303,40 +288,33 @@ export class RealTimeAudioProcessor {
       this.processingInterval = window.setInterval(
         () => {
           const startTime = performance.now();
-          this.processAudioFrame(
-            onAudioFeatures,
-            onAudioMetrics,
-            onFrequencyData,
-          );
+          this.processAudioFrame(onAudioFeatures, onAudioMetrics, onFrequencyData);
           const endTime = performance.now();
 
           // Update performance stats
           const processTime = endTime - startTime;
           this.processingStats.frameCount++;
           this.processingStats.averageProcessTime =
-            (this.processingStats.averageProcessTime *
-              (this.processingStats.frameCount - 1) +
+            (this.processingStats.averageProcessTime * (this.processingStats.frameCount - 1) +
               processTime) /
             this.processingStats.frameCount;
           this.processingStats.maxProcessTime = Math.max(
             this.processingStats.maxProcessTime,
-            processTime,
+            processTime
           );
 
           // Log performance warnings
           if (processTime > 10) {
             // More than 10ms processing time
-            console.warn(
-              `⚠️ Slow audio processing: ${processTime.toFixed(2)}ms`,
-            );
+            console.warn(`⚠️ Slow audio processing: ${processTime.toFixed(2)}ms`);
           }
         },
-        (this.config.hopSize / this.config.sampleRate) * 1000,
+        (this.config.hopSize / this.config.sampleRate) * 1000
       ); // Convert to milliseconds
 
       console.log("🎤 Enhanced real-time audio processing started");
       console.log(
-        `   Processing interval: ${((this.config.hopSize / this.config.sampleRate) * 1000).toFixed(1)}ms`,
+        `   Processing interval: ${((this.config.hopSize / this.config.sampleRate) * 1000).toFixed(1)}ms`
       );
     } catch (error) {
       console.error("Failed to start audio processing:", error);
@@ -378,11 +356,9 @@ export class RealTimeAudioProcessor {
     console.log("🛑 Real-time audio processing stopped");
     console.log(`   Processed ${this.processingStats.frameCount} frames`);
     console.log(
-      `   Average processing time: ${this.processingStats.averageProcessTime.toFixed(2)}ms`,
+      `   Average processing time: ${this.processingStats.averageProcessTime.toFixed(2)}ms`
     );
-    console.log(
-      `   Max processing time: ${this.processingStats.maxProcessTime.toFixed(2)}ms`,
-    );
+    console.log(`   Max processing time: ${this.processingStats.maxProcessTime.toFixed(2)}ms`);
   }
 
   /**
@@ -439,7 +415,7 @@ export class RealTimeAudioProcessor {
   private processAudioFrame(
     onAudioFeatures?: (features: AudioFeatures) => void,
     onAudioMetrics?: (metrics: AudioMetrics) => void,
-    onFrequencyData?: (data: Uint8Array) => void,
+    onFrequencyData?: (data: Uint8Array) => void
   ): void {
     if (!this.analyser || !this.isProcessing) return;
 
@@ -465,9 +441,7 @@ export class RealTimeAudioProcessor {
     }
 
     // Store frame for temporal analysis
-    const normalizedFrame = Array.from(this.frequencyData).map(
-      (val) => val / 255,
-    );
+    const normalizedFrame = Array.from(this.frequencyData).map((val) => val / 255);
     this.previousFrames.push(normalizedFrame);
     if (this.previousFrames.length > this.config.rollingAverageWindow) {
       this.previousFrames.shift();
@@ -478,17 +452,12 @@ export class RealTimeAudioProcessor {
    * Extract enhanced audio features with SPL and rolling averages
    */
   private extractEnhancedAudioFeatures(): AudioFeatures {
-    const timeDataFloat = Array.from(this.timeData).map(
-      (val) => (val - 128) / 128,
-    );
-    const freqDataFloat = Array.from(this.frequencyData).map(
-      (val) => val / 255,
-    );
+    const timeDataFloat = Array.from(this.timeData).map((val) => (val - 128) / 128);
+    const freqDataFloat = Array.from(this.frequencyData).map((val) => val / 255);
 
     // Calculate RMS energy
     const rms = Math.sqrt(
-      timeDataFloat.reduce((sum, val) => sum + val * val, 0) /
-        timeDataFloat.length,
+      timeDataFloat.reduce((sum, val) => sum + val * val, 0) / timeDataFloat.length
     );
 
     // Calculate SPL (Sound Pressure Level)
@@ -521,8 +490,7 @@ export class RealTimeAudioProcessor {
     let weightedSum = 0;
     let magnitudeSum = 0;
     for (let i = 0; i < freqDataFloat.length; i++) {
-      const frequency =
-        (i * this.config.sampleRate) / (2 * freqDataFloat.length);
+      const frequency = (i * this.config.sampleRate) / (2 * freqDataFloat.length);
       weightedSum += frequency * freqDataFloat[i];
       magnitudeSum += freqDataFloat[i];
     }
@@ -535,7 +503,7 @@ export class RealTimeAudioProcessor {
     const voiceActivity = this.detectEnhancedVoiceActivity(
       rmsRollingAverage,
       spectralCentroid,
-      zeroCrossingRate,
+      zeroCrossingRate
     );
 
     // Update VAD buffer
@@ -572,8 +540,7 @@ export class RealTimeAudioProcessor {
     // Convert RMS to SPL using reference level
     // SPL = 20 * log10(RMS / Reference) + Reference_dB
     const referencePressure = 0.00002; // 20 µPa (threshold of hearing)
-    const spl =
-      20 * Math.log10(rms / referencePressure) + this.config.splReferenceLevel;
+    const spl = 20 * Math.log10(rms / referencePressure) + this.config.splReferenceLevel;
 
     // Clamp to reasonable range
     return Math.max(-80, Math.min(140, spl));
@@ -591,11 +558,7 @@ export class RealTimeAudioProcessor {
     let bestPeriod = 0;
     let bestCorrelation = 0;
 
-    for (
-      let period = minPeriod;
-      period < maxPeriod && period < timeData.length / 2;
-      period++
-    ) {
+    for (let period = minPeriod; period < maxPeriod && period < timeData.length / 2; period++) {
       let correlation = 0;
       for (let i = 0; i < timeData.length - period; i++) {
         correlation += timeData[i] * timeData[i + period];
@@ -616,7 +579,7 @@ export class RealTimeAudioProcessor {
   private detectEnhancedVoiceActivity(
     rms: number,
     spectralCentroid: number,
-    zeroCrossingRate: number,
+    zeroCrossingRate: number
   ): boolean {
     // Multi-feature VAD algorithm
     const energyThreshold = this.config.vadSensitivity * 0.02;
@@ -627,15 +590,13 @@ export class RealTimeAudioProcessor {
     const energyVAD = rms > energyThreshold;
 
     // Spectral-based detection (voice typically has lower spectral centroid)
-    const spectralVAD =
-      spectralCentroid > 200 && spectralCentroid < spectralThreshold;
+    const spectralVAD = spectralCentroid > 200 && spectralCentroid < spectralThreshold;
 
     // Zero-crossing rate based detection (voice has moderate ZCR)
     const zcrVAD = zeroCrossingRate > 0.01 && zeroCrossingRate < zcrThreshold;
 
     // Combine features with weights
-    const vadScore =
-      (energyVAD ? 0.5 : 0) + (spectralVAD ? 0.3 : 0) + (zcrVAD ? 0.2 : 0);
+    const vadScore = (energyVAD ? 0.5 : 0) + (spectralVAD ? 0.3 : 0) + (zcrVAD ? 0.2 : 0);
 
     return vadScore > 0.6; // Threshold for voice activity
   }
@@ -654,31 +615,20 @@ export class RealTimeAudioProcessor {
    * Calculate enhanced audio quality metrics
    */
   private calculateEnhancedAudioMetrics(): AudioMetrics {
-    const freqDataFloat = Array.from(this.frequencyData).map(
-      (val) => val / 255,
-    );
-    const timeDataFloat = Array.from(this.timeData).map(
-      (val) => (val - 128) / 128,
-    );
+    const freqDataFloat = Array.from(this.frequencyData).map((val) => val / 255);
+    const timeDataFloat = Array.from(this.timeData).map((val) => (val - 128) / 128);
 
     // Peak and average levels
     const peakLevel = Math.max(...timeDataFloat.map(Math.abs));
     const averageLevel =
-      timeDataFloat.reduce((sum, val) => sum + Math.abs(val), 0) /
-      timeDataFloat.length;
+      timeDataFloat.reduce((sum, val) => sum + Math.abs(val), 0) / timeDataFloat.length;
 
     // Enhanced signal to noise ratio estimation
-    const signal = freqDataFloat.slice(
-      0,
-      Math.floor(freqDataFloat.length * 0.7),
-    );
+    const signal = freqDataFloat.slice(0, Math.floor(freqDataFloat.length * 0.7));
     const noise = freqDataFloat.slice(Math.floor(freqDataFloat.length * 0.8));
-    const signalPower =
-      signal.reduce((sum, val) => sum + val * val, 0) / signal.length;
-    const noisePower =
-      noise.reduce((sum, val) => sum + val * val, 0) / noise.length;
-    const signalToNoiseRatio =
-      noisePower > 0 ? 10 * Math.log10(signalPower / noisePower) : 0;
+    const signalPower = signal.reduce((sum, val) => sum + val * val, 0) / signal.length;
+    const noisePower = noise.reduce((sum, val) => sum + val * val, 0) / noise.length;
+    const signalToNoiseRatio = noisePower > 0 ? 10 * Math.log10(signalPower / noisePower) : 0;
 
     // Enhanced clipping detection
     const clippingDetected = timeDataFloat.some((val) => Math.abs(val) > 0.95);
@@ -695,16 +645,14 @@ export class RealTimeAudioProcessor {
         smoothedFreqData[i] > smoothedFreqData[i + 2] &&
         smoothedFreqData[i] > 0.1
       ) {
-        const frequency =
-          (i * this.config.sampleRate) / (2 * freqDataFloat.length);
+        const frequency = (i * this.config.sampleRate) / (2 * freqDataFloat.length);
         frequencyPeaks.push(frequency);
       }
     }
 
     // Dominant frequency with better accuracy
     const maxIndex = freqDataFloat.indexOf(Math.max(...freqDataFloat));
-    const dominantFrequency =
-      (maxIndex * this.config.sampleRate) / (2 * freqDataFloat.length);
+    const dominantFrequency = (maxIndex * this.config.sampleRate) / (2 * freqDataFloat.length);
 
     // VAD confidence based on recent history
     const vadConfidence =
@@ -716,7 +664,7 @@ export class RealTimeAudioProcessor {
     const audioQuality = this.calculateAudioQualityScore(
       signalToNoiseRatio,
       clippingDetected,
-      vadConfidence,
+      vadConfidence
     );
 
     return {
@@ -737,7 +685,7 @@ export class RealTimeAudioProcessor {
   private calculateAudioQualityScore(
     snr: number,
     clipping: boolean,
-    vadConfidence: number,
+    vadConfidence: number
   ): number {
     let score = 50; // Base score
 
@@ -810,9 +758,7 @@ export class RealTimeAudioProcessor {
   async getAvailableAudioDevices(): Promise<MediaDeviceInfo[]> {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
-      const audioInputs = devices.filter(
-        (device) => device.kind === "audioinput",
-      );
+      const audioInputs = devices.filter((device) => device.kind === "audioinput");
 
       console.log(
         "🎤 Available audio input devices:",
@@ -820,7 +766,7 @@ export class RealTimeAudioProcessor {
           deviceId: d.deviceId,
           label: d.label || "Unknown Device",
           groupId: d.groupId,
-        })),
+        }))
       );
 
       return audioInputs;
@@ -898,17 +844,10 @@ export class RealTimeAudioProcessor {
 
     return {
       spl: this.splBuffer[this.splBuffer.length - 1],
-      splAverage:
-        this.splBuffer.reduce((sum, val) => sum + val, 0) /
-        this.splBuffer.length,
+      splAverage: this.splBuffer.reduce((sum, val) => sum + val, 0) / this.splBuffer.length,
       rms: this.rmsBuffer[this.rmsBuffer.length - 1],
-      rmsAverage:
-        this.rmsBuffer.reduce((sum, val) => sum + val, 0) /
-        this.rmsBuffer.length,
-      vadActive:
-        this.vadBuffer.length > 0
-          ? this.vadBuffer[this.vadBuffer.length - 1]
-          : false,
+      rmsAverage: this.rmsBuffer.reduce((sum, val) => sum + val, 0) / this.rmsBuffer.length,
+      vadActive: this.vadBuffer.length > 0 ? this.vadBuffer[this.vadBuffer.length - 1] : false,
     };
   }
 }

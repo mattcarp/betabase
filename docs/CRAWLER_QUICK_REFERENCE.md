@@ -7,12 +7,14 @@
 ## 📋 Essential Commands
 
 ### Check Database State
+
 ```bash
 # Check what tables exist and row counts
 node scripts/check-schema-state.js
 ```
 
 ### Clean Duplicates
+
 ```bash
 # Preview what would be removed (dry run)
 npx ts-node scripts/clean-duplicates.ts --dry-run
@@ -28,6 +30,7 @@ npx ts-node scripts/clean-duplicates.ts --threshold=0.99
 ```
 
 ### Run Master Crawler
+
 ```bash
 # Full crawl (all sources)
 npx ts-node scripts/master-crawler.ts
@@ -46,6 +49,7 @@ npx ts-node scripts/master-crawler.ts --jira-only
 ## 🔧 Individual Crawlers
 
 ### AOMA (Firecrawl)
+
 ```bash
 # API endpoint
 curl -X POST http://localhost:3000/api/firecrawl-crawl \
@@ -54,6 +58,7 @@ curl -X POST http://localhost:3000/api/firecrawl-crawl \
 ```
 
 ### Confluence
+
 ```bash
 # API endpoint
 curl -X POST http://localhost:3000/api/confluence-crawl \
@@ -65,6 +70,7 @@ curl http://localhost:3000/api/confluence-crawl
 ```
 
 ### Jira
+
 ```bash
 # API endpoint
 curl -X POST http://localhost:3000/api/sony-music-jira-crawl \
@@ -80,8 +86,9 @@ curl http://localhost:3000/api/sony-music-jira-crawl
 ## 📊 Monitoring & Validation
 
 ### Check Vector Counts
+
 ```typescript
-import { validateSonyMusicContent } from '@/lib/supabase';
+import { validateSonyMusicContent } from "@/lib/supabase";
 
 const counts = await validateSonyMusicContent();
 console.log(counts);
@@ -89,23 +96,24 @@ console.log(counts);
 ```
 
 ### Search Vectors
+
 ```typescript
-import { searchVectors } from '@/lib/supabase';
-import { openai } from '@ai-sdk/openai';
-import { embed } from 'ai';
+import { searchVectors } from "@/lib/supabase";
+import { openai } from "@ai-sdk/openai";
+import { embed } from "ai";
 
 // Generate embedding for query
 const { embedding } = await embed({
-  model: openai.embedding('text-embedding-3-small'),
-  value: 'How do I upload files to AOMA?',
+  model: openai.embedding("text-embedding-3-small"),
+  value: "How do I upload files to AOMA?",
 });
 
 // Search
 const results = await searchVectors(
   embedding,
   0.78, // threshold
-  10,   // max results
-  ['firecrawl', 'confluence'] // optional: filter by source
+  10, // max results
+  ["firecrawl", "confluence"] // optional: filter by source
 );
 ```
 
@@ -114,23 +122,24 @@ const results = await searchVectors(
 ## 🛠️ Programmatic Usage
 
 ### Deduplication Service
+
 ```typescript
-import { getDeduplicationService } from '@/services/deduplicationService';
+import { getDeduplicationService } from "@/services/deduplicationService";
 
 const dedupService = getDeduplicationService();
 
 // Check if content is duplicate
 const result = await dedupService.checkDuplicate(
   content,
-  'confluence',
-  'PAGE-123',
-  'https://confluence.../page-123',
+  "confluence",
+  "PAGE-123",
+  "https://confluence.../page-123",
   embedding,
   {
     contentHashMatch: true,
     semanticThreshold: 0.95,
     crossSource: false,
-    normalizeUrls: true
+    normalizeUrls: true,
   }
 );
 
@@ -140,31 +149,31 @@ if (result.isDuplicate) {
 }
 
 // Find duplicates in database
-const { duplicates, totalDuplicates } =
-  await dedupService.findDuplicatesInDatabase({
-    sourceType: 'confluence',
-    keepNewest: true
-  });
+const { duplicates, totalDuplicates } = await dedupService.findDuplicatesInDatabase({
+  sourceType: "confluence",
+  keepNewest: true,
+});
 
 // Remove duplicates
-const removeIds = duplicates.flatMap(d => d.removeIds);
+const removeIds = duplicates.flatMap((d) => d.removeIds);
 const { removed, errors } = await dedupService.removeDuplicates(removeIds);
 ```
 
 ### Upsert with Deduplication
+
 ```typescript
-import { upsertVectorWithDedup } from '@/lib/supabase';
+import { upsertVectorWithDedup } from "@/lib/supabase";
 
 const result = await upsertVectorWithDedup(
   content,
   embedding,
-  'confluence',
-  'PAGE-123',
-  { title: 'AOMA Docs', space: 'AOMA' },
+  "confluence",
+  "PAGE-123",
+  { title: "AOMA Docs", space: "AOMA" },
   {
     checkSemanticDuplicates: true,
     semanticThreshold: 0.95,
-    url: 'https://confluence.../page-123'
+    url: "https://confluence.../page-123",
   }
 );
 
@@ -176,15 +185,16 @@ if (result.skipped) {
 ```
 
 ### Master Crawler Class
+
 ```typescript
-import MasterCrawler from '@/scripts/master-crawler';
+import MasterCrawler from "@/scripts/master-crawler";
 
 const crawler = new MasterCrawler();
 
 const summary = await crawler.runAll({
-  sources: ['aoma', 'confluence', 'jira'],
+  sources: ["aoma", "confluence", "jira"],
   deduplicate: true,
-  cleanFirst: false
+  cleanFirst: false,
 });
 
 console.log(`Total vectors: ${summary.totalVectors}`);
@@ -198,6 +208,7 @@ console.log(`Duplicates removed: ${summary.totalSkipped}`);
 ### Authentication Issues
 
 **AOMA (AAD)**:
+
 ```bash
 # Check if auth session exists
 ls -la tmp/aoma-stage-storage.json
@@ -207,6 +218,7 @@ node scripts/aoma-stage-login.js
 ```
 
 **Confluence**:
+
 ```bash
 # Test connection
 curl -u $CONFLUENCE_USERNAME:$CONFLUENCE_PASSWORD \
@@ -214,6 +226,7 @@ curl -u $CONFLUENCE_USERNAME:$CONFLUENCE_PASSWORD \
 ```
 
 **Jira**:
+
 ```bash
 # Test connection
 curl -u $JIRA_USERNAME:$JIRA_API_TOKEN \
@@ -241,6 +254,7 @@ curl -u $JIRA_USERNAME:$JIRA_API_TOKEN \
 ### Database Issues
 
 **RPC functions not found**:
+
 ```bash
 # Deploy migration
 supabase db push
@@ -250,6 +264,7 @@ psql $DATABASE_URL < supabase/migrations/001_aoma_vector_store_optimized.sql
 ```
 
 **HNSW index missing**:
+
 ```sql
 -- Create HNSW index
 CREATE INDEX IF NOT EXISTS aoma_unified_vectors_embedding_hnsw_idx
@@ -259,6 +274,7 @@ CREATE INDEX IF NOT EXISTS aoma_unified_vectors_embedding_hnsw_idx
 ```
 
 **Too many duplicates**:
+
 ```bash
 # Run dedup with stricter threshold
 npx ts-node scripts/clean-duplicates.ts --threshold=0.99
@@ -327,6 +343,7 @@ JIRA_API_TOKEN=your-api-token
 ## 🎯 Common Workflows
 
 ### Daily Workflow
+
 ```bash
 # 1. Check current state
 node scripts/check-schema-state.js
@@ -340,6 +357,7 @@ npx ts-node scripts/clean-duplicates.ts --dry-run
 ```
 
 ### Weekly Workflow
+
 ```bash
 # 1. Clean existing duplicates
 npx ts-node scripts/clean-duplicates.ts
@@ -352,6 +370,7 @@ node scripts/check-schema-state.js
 ```
 
 ### Monthly Workflow
+
 ```bash
 # 1. Full crawl with cleaning
 npx ts-node scripts/master-crawler.ts --clean

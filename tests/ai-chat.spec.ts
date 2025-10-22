@@ -13,13 +13,11 @@ test.describe("SIAM AI Chat Interface", () => {
 
   test("should load the chat interface", async ({ page }) => {
     // Check if the main heading is visible
-    await expect(
-      page.locator('h1:has-text("SIAM Intelligence Hub")'),
-    ).toBeVisible();
+    await expect(page.locator('h1:has-text("SIAM Intelligence Hub")')).toBeVisible();
 
     // Check if the subtitle is visible
     await expect(
-      page.locator("text=Sentient Intelligence & Augmented Memory System"),
+      page.locator("text=Sentient Intelligence & Augmented Memory System")
     ).toBeVisible();
 
     // Check if the connection status badge is visible
@@ -42,7 +40,7 @@ test.describe("SIAM AI Chat Interface", () => {
     // Check for chat interface elements
     await expect(page.locator("text=SIAM Assistant")).toBeVisible();
     await expect(
-      page.locator("text=AI-powered conversation with knowledge enhancement"),
+      page.locator("text=AI-powered conversation with knowledge enhancement")
     ).toBeVisible();
 
     // Check for the input field
@@ -51,9 +49,7 @@ test.describe("SIAM AI Chat Interface", () => {
 
     // Check for welcome message or suggestions
     const welcomeText = page.locator("text=Welcome to SIAM Assistant");
-    const suggestionsText = page.locator(
-      "text=What can you help me with today?",
-    );
+    const suggestionsText = page.locator("text=What can you help me with today?");
 
     // Either welcome message or suggestions should be visible
     const welcomeOrSuggestions = await Promise.race([
@@ -132,9 +128,7 @@ test.describe("SIAM AI Chat Interface", () => {
 
   test("should have responsive sidebar toggle", async ({ page }) => {
     // Look for the database/sidebar toggle button
-    const sidebarToggle = page
-      .locator('button:has(svg[class*="h-4 w-4"])')
-      .last();
+    const sidebarToggle = page.locator('button:has(svg[class*="h-4 w-4"])').last();
 
     // Click to open sidebar
     await sidebarToggle.click();
@@ -147,15 +141,11 @@ test.describe("SIAM AI Chat Interface", () => {
 
   test("should display proper UI styling and animations", async ({ page }) => {
     // Check for glassmorphism effects
-    const glassElements = await page
-      .locator('[class*="backdrop-blur"]')
-      .count();
+    const glassElements = await page.locator('[class*="backdrop-blur"]').count();
     expect(glassElements).toBeGreaterThan(0);
 
     // Check for gradient backgrounds
-    const gradientElements = await page
-      .locator('[class*="bg-gradient"]')
-      .count();
+    const gradientElements = await page.locator('[class*="bg-gradient"]').count();
     expect(gradientElements).toBeGreaterThan(0);
 
     // Check for the animated sparkles icon

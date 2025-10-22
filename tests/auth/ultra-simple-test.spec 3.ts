@@ -7,8 +7,7 @@
 import { test, expect } from "@playwright/test";
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
-const MAILINATOR_INBOX =
-  "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
+const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
 
 test("dead simple login test", async ({ page, context }) => {
   console.log("🚀 Starting simple test with:", TEST_EMAIL);
