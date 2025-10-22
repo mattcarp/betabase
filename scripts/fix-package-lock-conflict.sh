@@ -30,14 +30,20 @@ echo ""
 rm -f package-lock.json
 
 # Regenerate from package.json
-echo "🔄 Regenerating package-lock.json from package.json..."
-npm install --package-lock-only --no-audit --no-fund 2>&1 | tail -5
+echo "🔄 Regenerating package-lock.json with all dependencies..."
+echo ""
+
+# Use full npm install to ensure all nested dependencies are included
+npm install --no-audit --no-fund 2>&1 | tail -10
 
 # Add the regenerated file
 git add package-lock.json
 
 echo ""
 echo "✅ package-lock.json conflict resolved!"
+echo "   - All dependencies regenerated"
+echo "   - Nested dependencies included"
+echo "   - Ready to commit"
 echo ""
 echo "Next steps:"
 echo "  1. Review the changes: git diff --cached package-lock.json"
