@@ -1,1 +1,1 @@
- integration. All code is committed and ready for use.*
+integration. All code is committed and ready for use.\*

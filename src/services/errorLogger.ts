@@ -90,7 +90,7 @@ class ErrorLogger {
       context?: Record<string, any>;
       componentStack?: string;
       errorBoundary?: boolean;
-    } = {},
+    } = {}
   ): void {
     if (typeof window === "undefined") {
       if (this.config.enableConsoleLogging) {
@@ -131,10 +131,7 @@ class ErrorLogger {
   private logToConsole(errorData: ErrorLogData): void {
     const style = this.getConsoleStyle(errorData.severity);
 
-    console.group(
-      `%c🚨 SIAM Error [${errorData.severity.toUpperCase()}]`,
-      style,
-    );
+    console.group(`%c🚨 SIAM Error [${errorData.severity.toUpperCase()}]`, style);
     console.error("Message:", errorData.message);
     console.error("Timestamp:", errorData.timestamp);
     console.error("Session ID:", errorData.sessionId);
@@ -159,16 +156,12 @@ class ErrorLogger {
       low: "color: #fbbf24; font-weight: bold;",
       medium: "color: #f97316; font-weight: bold;",
       high: "color: #ef4444; font-weight: bold;",
-      critical:
-        "color: #dc2626; font-weight: bold; background: #fef2f2; padding: 2px 4px;",
+      critical: "color: #dc2626; font-weight: bold; background: #fef2f2; padding: 2px 4px;",
     };
     return styles[severity as keyof typeof styles] || styles.medium;
   }
 
-  private async sendToRemote(
-    errorData: ErrorLogData,
-    retryCount = 0,
-  ): Promise<void> {
+  private async sendToRemote(errorData: ErrorLogData, retryCount = 0): Promise<void> {
     if (!this.config.apiEndpoint) {
       return;
     }
@@ -195,7 +188,7 @@ class ErrorLogger {
           () => {
             this.sendToRemote(errorData, retryCount + 1);
           },
-          this.config.retryDelay * Math.pow(2, retryCount),
+          this.config.retryDelay * Math.pow(2, retryCount)
         ); // Exponential backoff
       } else {
         // Store in queue for later retry

@@ -1,25 +1,25 @@
 /**
  * Console Monitor Helper
- * 
+ *
  * Provides reusable console error/warning monitoring for Playwright tests.
  * Use this in ALL test files to ensure no console errors slip through.
- * 
+ *
  * Usage:
  * ```typescript
  * import { setupConsoleMonitoring, assertNoConsoleErrors } from './helpers/console-monitor';
- * 
+ *
  * test.beforeEach(async ({ page }) => {
  *   setupConsoleMonitoring(page);
  *   // ... rest of beforeEach
  * });
- * 
+ *
  * test.afterEach(async () => {
  *   assertNoConsoleErrors();
  * });
  * ```
  */
 
-import { Page, expect } from '@playwright/test';
+import { Page, expect } from "@playwright/test";
 
 export interface ConsoleMonitorOptions {
   ignoreWarnings?: boolean;
@@ -73,30 +73,30 @@ class ConsoleMonitor {
     this.reset();
 
     // Capture console messages
-    page.on('console', msg => {
+    page.on("console", (msg) => {
       const text = msg.text();
-      
+
       // Check if this error should be ignored
       if (this.shouldIgnoreError(text)) {
         return;
       }
 
-      if (msg.type() === 'error') {
+      if (msg.type() === "error") {
         this.errors.push(text);
-        console.log('🔴 Console Error:', text);
-      } else if (msg.type() === 'warning' && !this.options.ignoreWarnings) {
+        console.log("🔴 Console Error:", text);
+      } else if (msg.type() === "warning" && !this.options.ignoreWarnings) {
         this.warnings.push(text);
-        console.log('⚠️  Console Warning:', text);
+        console.log("⚠️  Console Warning:", text);
       }
     });
 
     // Capture network errors
     if (!this.options.ignoreNetworkErrors) {
-      page.on('response', response => {
+      page.on("response", (response) => {
         if (response.status() >= 400) {
           this.networkErrors.push({
             url: response.url(),
-            status: response.status()
+            status: response.status(),
           });
           console.log(`🌐 Network Error: ${response.status()} ${response.url()}`);
         }
@@ -106,7 +106,7 @@ class ConsoleMonitor {
 
   private shouldIgnoreError(text: string): boolean {
     // Check against all allowed patterns (default + custom)
-    return this.allowedPatterns.some(pattern => pattern.test(text));
+    return this.allowedPatterns.some((pattern) => pattern.test(text));
   }
 
   getErrors() {
@@ -126,20 +126,20 @@ class ConsoleMonitor {
   }
 
   printSummary() {
-    console.log('\n📊 Console Monitor Summary:');
+    console.log("\n📊 Console Monitor Summary:");
     console.log(`  Errors: ${this.errors.length}`);
     console.log(`  Warnings: ${this.warnings.length}`);
     console.log(`  Network Errors: ${this.networkErrors.length}`);
 
     if (this.errors.length > 0) {
-      console.log('\n🔴 Console Errors:');
+      console.log("\n🔴 Console Errors:");
       this.errors.forEach((err, i) => {
         console.log(`  ${i + 1}. ${err.substring(0, 200)}`);
       });
     }
 
     if (this.warnings.length > 0 && !this.options.ignoreWarnings) {
-      console.log('\n⚠️  Console Warnings:');
+      console.log("\n⚠️  Console Warnings:");
       this.warnings.forEach((warn, i) => {
         console.log(`  ${i + 1}. ${warn.substring(0, 200)}`);
       });
@@ -148,10 +148,8 @@ class ConsoleMonitor {
 
   assertNoErrors() {
     this.printSummary();
-    
-    expect(this.errors,
-      `Console errors detected:\n${this.errors.join('\n')}`
-    ).toHaveLength(0);
+
+    expect(this.errors, `Console errors detected:\n${this.errors.join("\n")}`).toHaveLength(0);
   }
 }
 
@@ -172,7 +170,7 @@ export function setupConsoleMonitoring(page: Page, options?: ConsoleMonitorOptio
  */
 export function assertNoConsoleErrors() {
   if (!globalMonitor) {
-    throw new Error('Console monitoring not setup. Call setupConsoleMonitoring first.');
+    throw new Error("Console monitoring not setup. Call setupConsoleMonitoring first.");
   }
   globalMonitor.assertNoErrors();
 }
@@ -182,7 +180,7 @@ export function assertNoConsoleErrors() {
  */
 export function getConsoleMonitor(): ConsoleMonitor {
   if (!globalMonitor) {
-    throw new Error('Console monitoring not setup. Call setupConsoleMonitoring first.');
+    throw new Error("Console monitoring not setup. Call setupConsoleMonitoring first.");
   }
   return globalMonitor;
 }

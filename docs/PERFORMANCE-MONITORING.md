@@ -149,11 +149,13 @@ The dashboard shows overall system status:
 Retrieves comprehensive performance metrics.
 
 **Query Parameters:**
+
 - `timeRange` (optional): Time window for metrics
   - Values: `1h`, `6h`, `24h`, `7d`
   - Default: `1h`
 
 **Response:**
+
 ```typescript
 {
   queryMetrics: {
@@ -208,6 +210,7 @@ Retrieves comprehensive performance metrics.
 Records a new performance metric.
 
 **Request Body:**
+
 ```typescript
 {
   type: string,           // e.g., "query:chat", "api:vector-search"
@@ -221,9 +224,10 @@ Records a new performance metric.
 ```
 
 **Response:**
+
 ```typescript
 {
-  success: boolean
+  success: boolean;
 }
 ```
 
@@ -232,27 +236,24 @@ Records a new performance metric.
 ### Usage in Code
 
 ```typescript
-import { performanceTracker } from '@/services/performanceTracker';
+import { performanceTracker } from "@/services/performanceTracker";
 
 // Track a query
 const result = await performanceTracker.trackQuery(
-  'user-search',
+  "user-search",
   async () => {
     return await searchVectorStore(query);
   },
-  { userId: 'user-123' }
+  { userId: "user-123" }
 );
 
 // Track an API call
-const data = await performanceTracker.trackApiCall(
-  '/api/chat',
-  async () => {
-    return await fetch('/api/chat', { method: 'POST', body });
-  }
-);
+const data = await performanceTracker.trackApiCall("/api/chat", async () => {
+  return await fetch("/api/chat", { method: "POST", body });
+});
 
 // Track a render operation
-const stopTracking = performanceTracker.trackRender('ChatComponent');
+const stopTracking = performanceTracker.trackRender("ChatComponent");
 // ... component renders ...
 stopTracking();
 ```
@@ -260,18 +261,18 @@ stopTracking();
 ### Hook for React Components
 
 ```typescript
-import { usePerformanceTracking } from '@/services/performanceTracker';
+import { usePerformanceTracking } from "@/services/performanceTracker";
 
 function MyComponent() {
   const { trackQuery, trackRender } = usePerformanceTracking();
 
   useEffect(() => {
-    const stop = trackRender('MyComponent');
+    const stop = trackRender("MyComponent");
     return stop;
   }, []);
 
   const handleSearch = async (query: string) => {
-    const results = await trackQuery('search', async () => {
+    const results = await trackQuery("search", async () => {
       return await searchAPI(query);
     });
   };
@@ -310,6 +311,7 @@ npx playwright test tests/performance-dashboard.spec.ts -g "should load performa
 ## Performance Targets
 
 ### Query Performance
+
 - **P50**: < 500ms
 - **P95**: < 1000ms
 - **P99**: < 2000ms
@@ -317,16 +319,19 @@ npx playwright test tests/performance-dashboard.spec.ts -g "should load performa
 - **Error Rate**: < 5%
 
 ### System Resources
+
 - **CPU**: < 70% normal, < 90% peak
 - **Memory**: < 70% normal, < 90% peak
 - **Disk**: < 80% capacity
 
 ### Data Freshness
+
 - **Vector Store**: < 24h staleness
 - **Cache Hit Rate**: > 80%
 - **Knowledge Base**: < 7d since last update
 
 ### API Performance
+
 - **Average Latency**: < 300ms
 - **Error Rate**: < 2%
 - **Availability**: > 99.5%
@@ -334,21 +339,25 @@ npx playwright test tests/performance-dashboard.spec.ts -g "should load performa
 ## Monitoring Best Practices
 
 ### 1. Regular Review
+
 - Check dashboard daily
 - Review weekly trends
 - Investigate anomalies promptly
 
 ### 2. Threshold Alerts
+
 - Set up alerts for critical thresholds
 - Monitor staleness indicators
 - Track error rate spikes
 
 ### 3. Performance Optimization
+
 - Use metrics to identify bottlenecks
 - Track impact of code changes
 - Optimize based on P95/P99 metrics
 
 ### 4. Capacity Planning
+
 - Monitor resource trends
 - Plan upgrades before hitting limits
 - Track growth patterns
@@ -358,6 +367,7 @@ npx playwright test tests/performance-dashboard.spec.ts -g "should load performa
 ### Dashboard Not Loading
 
 1. Check API endpoint is accessible:
+
    ```bash
    curl http://localhost:3000/api/performance/metrics
    ```

@@ -15,8 +15,7 @@ import axios from "axios";
 
 // Configuration
 const BASE_URL = process.env.TEST_URL || "https://iamsiam.ai";
-const WEBHOOK_URL =
-  process.env.MAILGUN_WEBHOOK_URL || `${BASE_URL}/api/mailgun-webhook`;
+const WEBHOOK_URL = process.env.MAILGUN_WEBHOOK_URL || `${BASE_URL}/api/mailgun-webhook`;
 const TEST_EMAIL = process.env.TEST_EMAIL || "test@mattcarpenter.com";
 
 console.log("🪝 Webhook Test Configuration:");
@@ -27,17 +26,12 @@ console.log(`   Email: ${TEST_EMAIL}`);
 /**
  * Retrieve email from webhook endpoint
  */
-async function getEmailFromWebhook(
-  email: string,
-  maxAttempts = 20,
-): Promise<any> {
+async function getEmailFromWebhook(email: string, maxAttempts = 20): Promise<any> {
   console.log(`⏳ Checking webhook for email to ${email}...`);
 
   for (let i = 0; i < maxAttempts; i++) {
     try {
-      const response = await axios.get(
-        `${WEBHOOK_URL}?email=${encodeURIComponent(email)}`,
-      );
+      const response = await axios.get(`${WEBHOOK_URL}?email=${encodeURIComponent(email)}`);
 
       if (response.data.email) {
         console.log("✅ Email found in webhook!");
@@ -51,9 +45,7 @@ async function getEmailFromWebhook(
 
     // Wait 3 seconds before next attempt
     if (i < maxAttempts - 1) {
-      console.log(
-        `   Attempt ${i + 1}/${maxAttempts} - Email not yet received`,
-      );
+      console.log(`   Attempt ${i + 1}/${maxAttempts} - Email not yet received`);
       await new Promise((resolve) => setTimeout(resolve, 3000));
     }
   }
@@ -67,7 +59,7 @@ async function getEmailFromWebhook(
     if (allResponse.data.emails?.length > 0) {
       console.log(
         "   Recent recipients:",
-        allResponse.data.emails.slice(-3).map((e: any) => e.recipient),
+        allResponse.data.emails.slice(-3).map((e: any) => e.recipient)
       );
     }
   } catch {}
@@ -118,9 +110,7 @@ test.describe("Webhook Magic Link Tests", () => {
       console.log(`✅ Entered email: ${TEST_EMAIL}`);
 
       // Click send button (handle different button texts)
-      const submitButton = page
-        .locator('button[type="submit"], button:has-text("Send")')
-        .first();
+      const submitButton = page.locator('button[type="submit"], button:has-text("Send")').first();
 
       // Use a more robust click with retry
       await submitButton.click({ force: true });
@@ -128,13 +118,9 @@ test.describe("Webhook Magic Link Tests", () => {
 
       // Wait for verification form or error
       const verificationHeader = page
-        .locator(
-          'h2:has-text("Enter"), h2:has-text("Verification"), h2:has-text("Magic")',
-        )
+        .locator('h2:has-text("Enter"), h2:has-text("Verification"), h2:has-text("Magic")')
         .first();
-      const errorMessage = page
-        .locator('.error-message, [role="alert"], .text-red-500')
-        .first();
+      const errorMessage = page.locator('.error-message, [role="alert"], .text-red-500').first();
 
       // Wait for either success or error
       await Promise.race([
@@ -167,8 +153,7 @@ test.describe("Webhook Magic Link Tests", () => {
       magicCode = emailData.verificationCode;
       if (!magicCode) {
         // Try to extract from email body
-        const body =
-          emailData.email?.bodyPlain || emailData.email?.bodyHtml || "";
+        const body = emailData.email?.bodyPlain || emailData.email?.bodyHtml || "";
         const match = body.match(/\b(\d{6})\b/);
         magicCode = match ? match[1] : null;
       }
@@ -185,30 +170,22 @@ test.describe("Webhook Magic Link Tests", () => {
     await test.step("Complete login with magic code", async () => {
       // Find code input field
       const codeInput = page
-        .locator(
-          'input[type="text"], input[type="number"], input[placeholder*="code" i]',
-        )
+        .locator('input[type="text"], input[type="number"], input[placeholder*="code" i]')
         .first();
       await codeInput.fill(magicCode!);
       console.log("✅ Entered magic code");
 
       // Submit verification
-      const verifyButton = page
-        .locator('button[type="submit"], button:has-text("Verify")')
-        .first();
+      const verifyButton = page.locator('button[type="submit"], button:has-text("Verify")').first();
       await verifyButton.click();
       console.log("✅ Clicked verify");
 
       // Wait for successful login
-      await page
-        .waitForURL(/\/(dashboard|chat|app)/, { timeout: 15000 })
-        .catch(async () => {
-          // Alternative: Check for main content
-          const mainContent = page.locator(
-            '[role="main"], .dashboard, .chat-interface',
-          );
-          await expect(mainContent.first()).toBeVisible({ timeout: 5000 });
-        });
+      await page.waitForURL(/\/(dashboard|chat|app)/, { timeout: 15000 }).catch(async () => {
+        // Alternative: Check for main content
+        const mainContent = page.locator('[role="main"], .dashboard, .chat-interface');
+        await expect(mainContent.first()).toBeVisible({ timeout: 5000 });
+      });
 
       console.log("✅ Successfully logged in!");
       await page.screenshot({
@@ -256,15 +233,13 @@ test.describe("Webhook Magic Link Tests", () => {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
-        },
+        }
       );
 
       console.log("✅ Webhook accepted test data");
 
       // Retrieve the test email
-      const getResponse = await axios.get(
-        `${WEBHOOK_URL}?email=webhook-test@example.com`,
-      );
+      const getResponse = await axios.get(`${WEBHOOK_URL}?email=webhook-test@example.com`);
 
       expect(getResponse.data.verificationCode).toBe("654321");
       console.log("✅ Webhook storage and retrieval working");
@@ -273,10 +248,7 @@ test.describe("Webhook Magic Link Tests", () => {
       const allResponse = await axios.get(`${WEBHOOK_URL}?all=true`);
       console.log(`📊 Total emails in webhook: ${allResponse.data.count}`);
     } catch (error: any) {
-      console.error(
-        "❌ Webhook test failed:",
-        error.response?.data || error.message,
-      );
+      console.error("❌ Webhook test failed:", error.response?.data || error.message);
       throw error;
     }
   });

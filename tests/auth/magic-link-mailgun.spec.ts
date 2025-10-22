@@ -45,35 +45,30 @@ test.describe("Magic Link Authentication with Mailgun", () => {
       // Should show verification form
       await expect(page.locator("h2")).toContainText("Enter Magic Link Code");
       await expect(
-        page.locator(
-          "text=Enter the verification code from your magic link email",
-        ),
+        page.locator("text=Enter the verification code from your magic link email")
       ).toBeVisible();
     });
 
     // Step 2: Retrieve magic link code from Mailgun
-    const magicLinkCode =
-      await test.step("Retrieve magic link code from email", async () => {
-        // Wait for email to arrive at Mailgun
-        const email = await mailgun.waitForMagicLinkEmail(testEmail, {
-          timeout: 15000,
-          pollInterval: 1000,
-        });
-
-        expect(email).toBeDefined();
-        expect(email.subject).toContain("SIAM");
-
-        // Extract the 6-digit code from email body
-        const code = mailgun.extractMagicLinkCode(
-          email.bodyHtml || email.bodyPlain,
-        );
-
-        expect(code).toBeTruthy();
-        expect(code).toMatch(/^\d{6}$/);
-
-        console.log(`✅ Magic link code retrieved: ${code}`);
-        return code;
+    const magicLinkCode = await test.step("Retrieve magic link code from email", async () => {
+      // Wait for email to arrive at Mailgun
+      const email = await mailgun.waitForMagicLinkEmail(testEmail, {
+        timeout: 15000,
+        pollInterval: 1000,
       });
+
+      expect(email).toBeDefined();
+      expect(email.subject).toContain("SIAM");
+
+      // Extract the 6-digit code from email body
+      const code = mailgun.extractMagicLinkCode(email.bodyHtml || email.bodyPlain);
+
+      expect(code).toBeTruthy();
+      expect(code).toMatch(/^\d{6}$/);
+
+      console.log(`✅ Magic link code retrieved: ${code}`);
+      return code;
+    });
 
     // Step 3: Enter verification code
     await test.step("Enter and verify code", async () => {
@@ -132,7 +127,7 @@ test.describe("Magic Link Authentication with Mailgun", () => {
       page
         .locator("text=Invalid verification code")
         .or(page.locator("text=Code is incorrect"))
-        .or(page.locator(".error-message")),
+        .or(page.locator(".error-message"))
     ).toBeVisible({ timeout: 5000 });
   });
 
@@ -157,7 +152,7 @@ test.describe("Magic Link Authentication with Mailgun", () => {
       page
         .locator("text=New code sent")
         .or(page.locator("text=Verification code resent"))
-        .or(page.locator(".success-message")),
+        .or(page.locator(".success-message"))
     ).toBeVisible({ timeout: 5000 });
 
     // Verify new email was sent
@@ -176,9 +171,7 @@ test.describe("Magic Link Authentication with Mailgun", () => {
 
     // Get first code
     const firstEmail = await mailgun.waitForMagicLinkEmail(testEmail);
-    const firstCode = mailgun.extractMagicLinkCode(
-      firstEmail.bodyHtml || firstEmail.bodyPlain,
-    );
+    const firstCode = mailgun.extractMagicLinkCode(firstEmail.bodyHtml || firstEmail.bodyPlain);
 
     // Go back and request another code
     await page.goto("http://localhost:3000");
@@ -189,9 +182,7 @@ test.describe("Magic Link Authentication with Mailgun", () => {
     const secondEmail = await mailgun.waitForMagicLinkEmail(testEmail, {
       sinceTimestamp: Math.floor(Date.now() / 1000) - 30,
     });
-    const secondCode = mailgun.extractMagicLinkCode(
-      secondEmail.bodyHtml || secondEmail.bodyPlain,
-    );
+    const secondCode = mailgun.extractMagicLinkCode(secondEmail.bodyHtml || secondEmail.bodyPlain);
 
     // Codes should be different
     expect(firstCode).not.toBe(secondCode);

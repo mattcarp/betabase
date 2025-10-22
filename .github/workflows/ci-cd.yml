@@ -8,9 +8,9 @@ on:
   workflow_dispatch:
     inputs:
       skip_tests:
-        description: 'Skip tests (emergency deploy only)'
+        description: "Skip tests (emergency deploy only)"
         required: false
-        default: 'false'
+        default: "false"
 
 env:
   NODE_VERSION: "22"
@@ -32,7 +32,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
@@ -47,7 +47,7 @@ jobs:
 
       - name: Security audit (high/critical only)
         run: npm audit --audit-level=high
-        continue-on-error: true  # Allow minor vulnerabilities, but log them
+        continue-on-error: true # Allow minor vulnerabilities, but log them
 
       - name: Check for exposed secrets
         uses: trufflesecurity/trufflehog@main
@@ -55,7 +55,7 @@ jobs:
           path: ./
           base: ${{ github.event.pull_request.base.sha || 'main' }}
           head: HEAD
-        continue-on-error: true  # Don't block on false positives
+        continue-on-error: true # Don't block on false positives
 
       - name: Upload quality report
         if: always()
@@ -83,7 +83,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
@@ -126,7 +126,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
@@ -136,11 +136,11 @@ jobs:
 
       - name: Run AOMA knowledge validation
         run: npm run test:aoma:knowledge
-        continue-on-error: false  # MUST PASS - prevents hallucination
+        continue-on-error: false # MUST PASS - prevents hallucination
 
       - name: Run AOMA anti-hallucination tests
         run: npm run test:aoma:hallucination
-        continue-on-error: false  # MUST PASS - critical for accuracy
+        continue-on-error: false # MUST PASS - critical for accuracy
 
       - name: Upload AOMA test results
         if: always()
@@ -196,7 +196,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
@@ -206,7 +206,7 @@ jobs:
 
       - name: Run visual regression tests
         run: npx playwright test tests/visual/dark-theme-regression.spec.ts
-        continue-on-error: false  # Fail on visual regressions
+        continue-on-error: false # Fail on visual regressions
 
       - name: Upload visual test results
         if: always()
@@ -231,7 +231,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
@@ -251,7 +251,7 @@ jobs:
         run: npx playwright test tests/e2e/smoke/smoke.spec.ts
         env:
           NEXT_PUBLIC_BYPASS_AUTH: true
-        continue-on-error: false  # REMOVED: smoke tests must pass
+        continue-on-error: false # REMOVED: smoke tests must pass
 
       - name: Run critical path tests
         run: npm run test:critical
@@ -282,7 +282,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
@@ -478,7 +478,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps

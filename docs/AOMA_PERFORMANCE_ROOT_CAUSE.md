@@ -16,8 +16,9 @@
 **The OpenAI Assistant API is taking 23+ seconds to respond.**
 
 ### Breakdown
+
 - Network latency: ~1.8s
-- RPC overhead: ~0.7s  
+- RPC overhead: ~0.7s
 - **OpenAI Assistant processing: ~22.5s** ← THE PROBLEM
 
 ### Why So Slow?
@@ -38,9 +39,11 @@ The `query_aoma_knowledge` tool uses OpenAI's Assistant API which involves:
 ### 🔥 IMMEDIATE (Do This Now)
 
 #### 1. Switch from Assistant API to Direct Completions
+
 **Impact:** 10-20x faster (2-3s instead of 25s)
 
 **Current (slow):**
+
 ```typescript
 // Uses OpenAI Assistant API (25s)
 await openai.beta.assistants.retrieve(AOMA_ASSISTANT_ID);
@@ -51,22 +54,24 @@ await polling for completion...
 ```
 
 **Better (fast):**
+
 ```typescript
 // Use direct completions with embeddings (2-3s)
 const embedding = await openai.embeddings.create({ input: query });
-const docs = await supabase.rpc('match_documents', { embedding, limit: 5 });
+const docs = await supabase.rpc("match_documents", { embedding, limit: 5 });
 const completion = await openai.chat.completions.create({
-  model: 'gpt-4o',
+  model: "gpt-4o",
   messages: [
-    { role: 'system', content: 'Context: ' + docs.join('\n') },
-    { role: 'user', content: query }
-  ]
+    { role: "system", content: "Context: " + docs.join("\n") },
+    { role: "user", content: query },
+  ],
 });
 ```
 
 **File to modify:** `/Users/mcarpent/Documents/projects/aoma-mesh-mcp/src/tools/aoma-knowledge.tool.ts`
 
 #### 2. Add Keep-Alive Service
+
 **Impact:** Eliminates Railway cold starts
 
 ```bash
@@ -77,12 +82,14 @@ const completion = await openai.chat.completions.create({
 **Create:** `scripts/keep-aoma-warm.sh`
 
 #### 3. Aggressive Response Caching
+
 **Impact:** Instant for repeated queries
 
 **Already implemented but can improve:**
+
 ```typescript
 // Cache for longer (currently works well)
-aomaCache.set(query, response, 'rapid', TTL_1_HOUR);
+aomaCache.set(query, response, "rapid", TTL_1_HOUR);
 
 // Add semantic similarity matching
 // "What is AOMA?" should hit cache for "Tell me about AOMA"
@@ -91,28 +98,34 @@ aomaCache.set(query, response, 'rapid', TTL_1_HOUR);
 ### 🚀 SHORT-TERM (This Week)
 
 #### 4. Optimize Vector Search
+
 - Reduce similarity threshold
 - Limit results to top 3-5 (not 10)
 - Pre-filter by source type
 
 #### 5. Implement Streaming
+
 - Start streaming AOMA context while still processing
 - User sees partial results faster
 
 #### 6. Add Query Classification
+
 - Skip AOMA for simple queries ("hello", "thanks")
 - Only use AOMA for knowledge-requiring queries
 
 ### 💰 MEDIUM-TERM (Upgrade Required)
 
 #### 7. Upgrade Railway Plan
+
 **Cost:** ~$20/month  
 **Benefit:** Faster CPU, no cold starts, more memory
 
 #### 8. Add Redis Cache Layer
+
 **Benefit:** Persistent cache across deployments
 
 #### 9. Optimize OpenAI Assistant Configuration
+
 - Review assistant instructions (shorter = faster)
 - Reduce vector store scope
 - Use function calling for targeted queries
@@ -120,16 +133,19 @@ aomaCache.set(query, response, 'rapid', TTL_1_HOUR);
 ## Implementation Priority
 
 ### P0 - DO NOW (Biggest Impact)
+
 1. ✅ Add performance monitoring (DONE - created tests)
 2. ⏭️ **Switch to direct completions API** (20x faster)
 3. ⏭️ Add keep-alive pings
 
 ### P1 - This Week
+
 4. Optimize vector search queries
 5. Add query classification
 6. Implement response streaming
 
 ### P2 - Future
+
 7. Upgrade Railway plan
 8. Add Redis caching
 9. Fine-tune OpenAI settings
@@ -137,15 +153,18 @@ aomaCache.set(query, response, 'rapid', TTL_1_HOUR);
 ## Expected Results
 
 ### Current State
+
 - Cold query: 25 seconds
 - Warm query (cached): <1 second
 
 ### After P0 Changes
+
 - Cold query: 2-3 seconds (8-10x improvement!)
 - Warm query: <1 second
 - Railway always warm: <2 seconds consistently
 
 ### After All Changes
+
 - Cold query: 1-2 seconds
 - Warm query: <500ms
 - 99th percentile: <3 seconds
@@ -153,6 +172,7 @@ aomaCache.set(query, response, 'rapid', TTL_1_HOUR);
 ## Action Items
 
 ### For AOMA Mesh MCP Server
+
 ```bash
 cd ~/Documents/projects/aoma-mesh-mcp
 
@@ -169,6 +189,7 @@ git push origin main
 ```
 
 ### For SIAM
+
 ```bash
 cd ~/Documents/projects/siam
 
@@ -185,11 +206,13 @@ node scripts/diagnose-aoma-performance.js
 ## Files to Modify
 
 ### AOMA Mesh MCP
+
 1. `src/tools/aoma-knowledge.tool.ts` - Replace Assistant API
 2. `src/services/openai.service.ts` - Add direct completion method
 3. `src/services/supabase.service.ts` - Optimize vector queries
 
 ### SIAM
+
 1. ✅ `tests/performance/aoma-performance.spec.ts` - DONE
 2. ✅ `scripts/diagnose-aoma-performance.js` - DONE
 3. ⏭️ `scripts/keep-aoma-warm.sh` - TODO
@@ -198,6 +221,7 @@ node scripts/diagnose-aoma-performance.js
 ## Monitoring
 
 ### Run Performance Tests
+
 ```bash
 # Automated (add to CI)
 npm run test:performance
@@ -210,7 +234,9 @@ npm run test:performance -- --reporter=json > perf-results-$(date +%Y%m%d).json
 ```
 
 ### Performance Alerts
+
 Set up alerts if:
+
 - AOMA query > 10s (should be <3s)
 - Health check > 2s (should be <1s)
 - Error rate > 5%

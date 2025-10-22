@@ -15,9 +15,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
 
       await expect(page.locator("h1")).toContainText("Welcome to SIAM");
       await expect(page.locator('input[type="email"]')).toBeVisible();
-      await expect(
-        page.locator('button:has-text("Send Magic Link")'),
-      ).toBeVisible();
+      await expect(page.locator('button:has-text("Send Magic Link")')).toBeVisible();
 
       const logo = await page.locator('img[alt*="SIAM"]').isVisible();
       expect(logo).toBeTruthy();
@@ -29,21 +27,14 @@ test.describe("Authentication Flow - Comprehensive", () => {
       await page.fill('input[type="email"]', "invalid-email");
       await page.click('button:has-text("Send Magic Link")');
 
-      const errorVisible = await helpers.checkTextVisible(
-        "Please enter a valid email",
-      );
+      const errorVisible = await helpers.checkTextVisible("Please enter a valid email");
       expect(errorVisible).toBeTruthy();
     });
 
-    test("should successfully request magic link for allowed email", async ({
-      page,
-    }) => {
+    test("should successfully request magic link for allowed email", async ({ page }) => {
       await page.goto("/");
 
-      const responsePromise = helpers.waitForAPIResponse(
-        "/api/auth/magic-link",
-        { status: 200 },
-      );
+      const responsePromise = helpers.waitForAPIResponse("/api/auth/magic-link", { status: 200 });
 
       await page.fill('input[type="email"]', TEST_USERS.admin.email);
       await page.click('button:has-text("Send Magic Link")');
@@ -94,9 +85,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
       await helpers.waitForPageReady();
 
       // Should see main app content
-      const chatVisible = await helpers.checkElementVisible(
-        '[data-testid="chat-interface"]',
-      );
+      const chatVisible = await helpers.checkElementVisible('[data-testid="chat-interface"]');
       const tabsVisible = await helpers.checkElementVisible('[role="tablist"]');
 
       expect(chatVisible || tabsVisible).toBeTruthy();
@@ -134,9 +123,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
       await helpers.waitForPageReady();
 
       // Look for logout button
-      const logoutBtn = page.locator(
-        'button:has-text("Logout"), button:has-text("Sign Out")',
-      );
+      const logoutBtn = page.locator('button:has-text("Logout"), button:has-text("Sign Out")');
       if (await logoutBtn.isVisible()) {
         await logoutBtn.click();
 
@@ -144,9 +131,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
         await expect(page.locator('input[type="email"]')).toBeVisible();
 
         // Check auth is cleared
-        const authState = await page.evaluate(() =>
-          localStorage.getItem("siam_user"),
-        );
+        const authState = await page.evaluate(() => localStorage.getItem("siam_user"));
         expect(authState).toBeNull();
       }
     });
@@ -167,7 +152,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
             email: "test@example.com",
             authToken: "expired-token",
             verifiedAt: expiredDate.toISOString(),
-          }),
+          })
         );
       });
 
@@ -203,10 +188,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
   });
 
   test.describe("Error Handling", () => {
-    test("should handle network errors gracefully", async ({
-      page,
-      context,
-    }) => {
+    test("should handle network errors gracefully", async ({ page, context }) => {
       await context.route("**/api/auth/magic-link", (route) => {
         route.abort("failed");
       });
@@ -219,10 +201,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
       expect(errorVisible).toBeTruthy();
     });
 
-    test("should handle server errors gracefully", async ({
-      page,
-      context,
-    }) => {
+    test("should handle server errors gracefully", async ({ page, context }) => {
       await context.route("**/api/auth/magic-link", (route) => {
         route.fulfill({
           status: 500,

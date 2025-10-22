@@ -68,18 +68,14 @@ export interface MCPPreloadAPI {
    * @param callback - Function to call when server updates
    * @returns Cleanup function to remove listener
    */
-  onServerUpdate(
-    callback: (serverId: string, status: MCPServerStatus) => void,
-  ): () => void;
+  onServerUpdate(callback: (serverId: string, status: MCPServerStatus) => void): () => void;
 
   /**
    * Listen for MCP connection changes
    * @param callback - Function to call when connection changes
    * @returns Cleanup function to remove listener
    */
-  onConnectionChange(
-    callback: (connected: boolean, serverId?: string) => void,
-  ): () => void;
+  onConnectionChange(callback: (connected: boolean, serverId?: string) => void): () => void;
 
   /**
    * Remove all MCP event listeners

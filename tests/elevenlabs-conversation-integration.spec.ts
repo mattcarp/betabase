@@ -57,9 +57,7 @@ test.describe("ElevenLabs Conversational AI Integration", () => {
     await expect(page.locator("text=Mode:")).toBeVisible();
 
     // Should show either "Push-to-Talk" or "Voice-Activated"
-    const modeText = page.locator(
-      "text=Push-to-Talk, text=Voice-Activated",
-    ).first();
+    const modeText = page.locator("text=Push-to-Talk, text=Voice-Activated").first();
     await expect(modeText).toBeVisible();
   });
 
@@ -90,18 +88,13 @@ test.describe("ElevenLabs Conversational AI Integration", () => {
     });
 
     // Should eventually connect (or show error)
-    await page.waitForSelector(
-      "text=Connected, text=Error",
-      { timeout: 10000 },
-    );
+    await page.waitForSelector("text=Connected, text=Error", { timeout: 10000 });
 
     // If connected, verify state
     const isConnected = await page.locator("text=Connected").isVisible();
     if (isConnected) {
       // Should show connected indicator
-      const connectedIndicator = page.locator(
-        ".bg-green-400.rounded-full.animate-pulse",
-      );
+      const connectedIndicator = page.locator(".bg-green-400.rounded-full.animate-pulse");
       await expect(connectedIndicator).toBeVisible();
 
       // Should show conversation state
@@ -151,9 +144,7 @@ test.describe("ElevenLabs Conversational AI Integration", () => {
     await toggleButton.click();
   });
 
-  test("should display audio level indicators when connected", async ({
-    page,
-  }) => {
+  test("should display audio level indicators when connected", async ({ page }) => {
     // This is a visual check - we can't fully test without real connection
     // Just verify the UI elements exist
 
@@ -171,13 +162,7 @@ test.describe("ElevenLabs Conversational AI Integration", () => {
     // Verify that all possible state text exists in the component code
     // (will only be visible during actual conversation)
 
-    const stateTexts = [
-      "Idle",
-      "You're speaking",
-      "AI speaking",
-      "Transitioning",
-      "Interrupted",
-    ];
+    const stateTexts = ["Idle", "You're speaking", "AI speaking", "Transitioning", "Interrupted"];
 
     // We can't verify visibility without a real connection,
     // but we can verify the component has the logic for these states
@@ -194,9 +179,7 @@ test.describe("ElevenLabs Conversational AI Integration", () => {
     await expect(component).toBeVisible();
 
     // Error display should not be visible initially
-    const errorDisplay = page.locator(
-      ".bg-red-900\\/20.border-red-500",
-    );
+    const errorDisplay = page.locator(".bg-red-900\\/20.border-red-500");
     const initialErrorCount = await errorDisplay.count();
 
     // Errors will be shown if they occur during connection attempt
@@ -221,9 +204,7 @@ test.describe("ElevenLabs Conversational AI Integration", () => {
     await expect(toggleButton).toBeEnabled();
 
     // Check for proper test IDs
-    expect(await toggleButton.getAttribute("data-testid")).toBe(
-      "toggle-conversation",
-    );
+    expect(await toggleButton.getAttribute("data-testid")).toBe("toggle-conversation");
   });
 
   test("should check for console errors", async ({ page }) => {
@@ -247,9 +228,7 @@ test.describe("ElevenLabs Conversational AI Integration", () => {
     const unexpectedErrors = errors.filter((error) => {
       // Filter out expected errors like network errors in dev mode
       return (
-        !error.includes("Failed to fetch") &&
-        !error.includes("network") &&
-        !error.includes("CORS")
+        !error.includes("Failed to fetch") && !error.includes("network") && !error.includes("CORS")
       );
     });
 
@@ -280,9 +259,7 @@ test.describe("ElevenLabs API Integration", () => {
     }
   });
 
-  test("should reject conversation token request without agent ID", async ({
-    request,
-  }) => {
+  test("should reject conversation token request without agent ID", async ({ request }) => {
     const response = await request.post("/api/elevenlabs/conversation-token", {
       data: {},
     });

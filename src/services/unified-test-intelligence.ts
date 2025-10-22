@@ -26,12 +26,7 @@ interface TestRecommendation {
 }
 
 interface KnowledgeEntry {
-  source:
-    | "test_failure"
-    | "firecrawl"
-    | "documentation"
-    | "support_ticket"
-    | "ai_generated";
+  source: "test_failure" | "firecrawl" | "documentation" | "support_ticket" | "ai_generated";
   source_id?: string;
   category: string;
   title: string;
@@ -49,10 +44,8 @@ export class UnifiedTestIntelligence {
   constructor() {
     // Use Supabase credentials from aoma-mesh-mcp .env
     this.supabaseIntegration = new EnhancedSupabaseTestIntegration(
-      process.env.NEXT_PUBLIC_SUPABASE_URL ||
-        "https://kfxetwuuzljhybfgmpuc.supabase.co",
-      process.env.SUPABASE_SERVICE_ROLE_KEY ||
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      process.env.NEXT_PUBLIC_SUPABASE_URL || "https://kfxetwuuzljhybfgmpuc.supabase.co",
+      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     );
   }
 
@@ -91,22 +84,20 @@ export class UnifiedTestIntelligence {
       });
 
       // 3. Convert to test knowledge
-      const knowledge: KnowledgeEntry[] = analysis.knowledgeExtracted.map(
-        (k) => ({
-          source: "firecrawl" as const,
-          category: k.category,
-          title: `AOMA Feature: ${k.category}`,
-          content: k.content,
-          relevance_score: k.relevance,
-          tags: ["aoma", "aut", k.category.toLowerCase()],
-          helpful_count: 0,
-        }),
-      );
+      const knowledge: KnowledgeEntry[] = analysis.knowledgeExtracted.map((k) => ({
+        source: "firecrawl" as const,
+        category: k.category,
+        title: `AOMA Feature: ${k.category}`,
+        content: k.content,
+        relevance_score: k.relevance,
+        tags: ["aoma", "aut", k.category.toLowerCase()],
+        helpful_count: 0,
+      }));
 
       await this.storeTestKnowledge(knowledge);
 
       console.log(
-        `✅ Gathered intelligence: ${analysis.testableFeatures.length} features, ${analysis.userFlows.length} flows`,
+        `✅ Gathered intelligence: ${analysis.testableFeatures.length} features, ${analysis.userFlows.length} flows`
       );
       return analysis;
     } catch (error) {
@@ -133,7 +124,7 @@ export class UnifiedTestIntelligence {
       if (!aomaResponse) {
         const orchestratorResponse = await aomaOrchestrator.orchestrateQuery(
           `How to fix test error in AOMA: ${errorPattern}. Provide specific steps.`,
-          { strategy: "focused" },
+          { strategy: "focused" }
         );
         aomaResponse = orchestratorResponse.response;
         aomaCache.set(cacheKey, aomaResponse, "focused");
@@ -175,7 +166,7 @@ export class UnifiedTestIntelligence {
       if (!supportIssues) {
         const response = await aomaOrchestrator.orchestrateQuery(
           "What are the most common AOMA support issues? List specific features that users struggle with.",
-          { strategy: "comprehensive" },
+          { strategy: "comprehensive" }
         );
         supportIssues = response.response;
         aomaCache.set(cacheKey, supportIssues, "comprehensive");
@@ -197,9 +188,7 @@ export class UnifiedTestIntelligence {
 
       await this.storeTestKnowledge(knowledge);
 
-      console.log(
-        `✅ Generated ${testRecommendations.length} test recommendations`,
-      );
+      console.log(`✅ Generated ${testRecommendations.length} test recommendations`);
       return testRecommendations;
     } catch (error) {
       console.error("❌ Error generating tests from support:", error);
@@ -216,7 +205,7 @@ export class UnifiedTestIntelligence {
       sources?: string[];
       minRelevance?: number;
       limit?: number;
-    },
+    }
   ) {
     try {
       console.log(`🔍 Searching test knowledge for: ${query}`);
@@ -225,7 +214,7 @@ export class UnifiedTestIntelligence {
         query,
         options?.sources,
         options?.minRelevance || 70,
-        options?.limit || 10,
+        options?.limit || 10
       );
 
       console.log(`✅ Found ${results.length} relevant knowledge entries`);
@@ -243,8 +232,7 @@ export class UnifiedTestIntelligence {
       const result = await this.supabaseIntegration.getFirecrawlAnalysis(url);
       if (result && result.analyzed_at) {
         const analyzedDate = new Date(result.analyzed_at);
-        const daysSinceAnalysis =
-          (Date.now() - analyzedDate.getTime()) / (1000 * 60 * 60 * 24);
+        const daysSinceAnalysis = (Date.now() - analyzedDate.getTime()) / (1000 * 60 * 60 * 24);
         if (daysSinceAnalysis < 7) {
           return result;
         }
@@ -304,8 +292,7 @@ export class UnifiedTestIntelligence {
       knowledgeExtracted: [
         {
           category: "authentication",
-          content:
-            "AOMA uses SSO authentication with Sony Music corporate credentials",
+          content: "AOMA uses SSO authentication with Sony Music corporate credentials",
           relevance: 95,
         },
         {

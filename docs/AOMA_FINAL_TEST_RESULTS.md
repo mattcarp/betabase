@@ -7,12 +7,14 @@
 ## Test Results - Sophisticated Queries
 
 ### Query 1: Complex Workflow (Focused Strategy)
+
 **Question:** "What are all the steps, permissions, and system integrations required for the AOMA cover hot swap workflow? Include role-based permissions and any GRAS or USM dependencies."
 
 **⏱️ Response Time: 44.4 seconds** (44,369ms)
 
 **✅ Quality: Excellent**
 Response included:
+
 - Complete step-by-step workflow
 - Product linking procedures
 - Master number replacement process
@@ -22,12 +24,14 @@ Response included:
 ---
 
 ### Query 2: Technical Infrastructure (Focused Strategy)
+
 **Question:** "Explain how AOMA's digital archiving infrastructure handles metadata validation and what are the mandatory versus recommended metadata fields for audio master submissions?"
 
 **⏱️ Response Time: 21.0 seconds** (21,039ms)
 
 **✅ Quality: Excellent**
 Response included:
+
 - Mandatory fields: Archive Name, Participant, Parent-Rep Owner, Asset Type
 - Metadata validation procedures
 - File reference citations【AOMA Digital Archiving Functionalities.pdf】
@@ -36,12 +40,14 @@ Response included:
 ---
 
 ### Query 3: Integration Details (Rapid Strategy)
+
 **Question:** "How does AOMA integrate with USM for session management, and what are the OAuth 2.0 authentication requirements?"
 
 **⏱️ Response Time: 22.9 seconds** (22,897ms)
 
 **✅ Quality: Excellent**
 Response included:
+
 - OAuth 2.0 protocol details
 - Session validation process
 - ID token and email validation
@@ -52,18 +58,19 @@ Response included:
 
 ## Performance Summary (OLD Code - Assistant API)
 
-| Query Complexity | Strategy | Time | Status |
-|-----------------|----------|------|--------|
-| **Complex Workflow** | focused | 44.4s | ✅ Working but slow |
-| **Technical Details** | focused | 21.0s | ✅ Working |
-| **Integration** | rapid | 22.9s | ✅ Working |
-| **Average** | - | **29.4s** | Need optimization |
+| Query Complexity      | Strategy | Time      | Status              |
+| --------------------- | -------- | --------- | ------------------- |
+| **Complex Workflow**  | focused  | 44.4s     | ✅ Working but slow |
+| **Technical Details** | focused  | 21.0s     | ✅ Working          |
+| **Integration**       | rapid    | 22.9s     | ✅ Working          |
+| **Average**           | -        | **29.4s** | Need optimization   |
 
 ## Quality Assessment
 
 ### ✅ Response Quality: EXCELLENT
 
 All responses were:
+
 - **Accurate** - Matched AOMA documentation
 - **Comprehensive** - Answered all aspects of questions
 - **Well-structured** - Clear organization and formatting
@@ -92,11 +99,13 @@ All responses were:
 **Current Version:** `2.7.0-railway_20250923-023107` (OLD CODE)
 
 **Why So Slow?**
-- Still using **Assistant API with polling** 
+
+- Still using **Assistant API with polling**
 - Has **NOT** deployed our optimized direct vector search code yet
 - Average health metrics show 9.2s (but individual queries much slower)
 
 **Evidence Railway hasn't deployed:**
+
 - Version string unchanged (September 23 build)
 - Query times match OLD performance (20-45s)
 - Not seeing the 8-10s we expect from new code
@@ -105,12 +114,12 @@ All responses were:
 
 ### With NEW Code (Direct Vector Store Search + GPT-4o)
 
-| Query Complexity | Current (Old) | Expected (New) | Improvement |
-|-----------------|---------------|----------------|-------------|
-| Complex Workflow | 44.4s | **12-15s** | **3x faster** |
-| Technical Details | 21.0s | **8-10s** | **2x faster** |
-| Integration | 22.9s | **6-8s** | **3x faster** |
-| **Average** | **29.4s** | **~10s** | **3x faster!** |
+| Query Complexity  | Current (Old) | Expected (New) | Improvement    |
+| ----------------- | ------------- | -------------- | -------------- |
+| Complex Workflow  | 44.4s         | **12-15s**     | **3x faster**  |
+| Technical Details | 21.0s         | **8-10s**      | **2x faster**  |
+| Integration       | 22.9s         | **6-8s**       | **3x faster**  |
+| **Average**       | **29.4s**     | **~10s**       | **3x faster!** |
 
 ## Why Railway Might Not Have Deployed
 
@@ -155,6 +164,7 @@ curl https://luminous-dedication-production.up.railway.app/health | jq '.version
 ### If Railway Doesn't Deploy:
 
 1. **Manual Deploy**
+
    ```bash
    # If Railway CLI is installed
    cd ~/Documents/projects/aoma-mesh-mcp
@@ -169,7 +179,7 @@ curl https://luminous-dedication-production.up.railway.app/health | jq '.version
 3. **Rollback Option**
    ```bash
    # If new code breaks something
-   cd ~/Documents/projects/aoma-mesh-mcp  
+   cd ~/Documents/projects/aoma-mesh-mcp
    git revert HEAD
    git push origin main
    ```

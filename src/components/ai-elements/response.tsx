@@ -123,8 +123,7 @@ function parseIncompleteMarkdown(text: string): string {
         if (result[i] === "`") {
           // Check if this backtick is part of a triple backtick sequence
           const isTripleStart = result.substring(i, i + 3) === "```";
-          const isTripleMiddle =
-            i > 0 && result.substring(i - 1, i + 2) === "```";
+          const isTripleMiddle = i > 0 && result.substring(i - 1, i + 2) === "```";
           const isTripleEnd = i > 1 && result.substring(i - 2, i + 1) === "```";
 
           if (!isTripleStart && !isTripleMiddle && !isTripleEnd) {
@@ -168,9 +167,7 @@ export type ResponseProps = HTMLAttributes<HTMLDivElement> & {
   allowedLinkPrefixes?: ComponentProps<
     ReturnType<typeof hardenReactMarkdown>
   >["allowedLinkPrefixes"];
-  defaultOrigin?: ComponentProps<
-    ReturnType<typeof hardenReactMarkdown>
-  >["defaultOrigin"];
+  defaultOrigin?: ComponentProps<ReturnType<typeof hardenReactMarkdown>>["defaultOrigin"];
   parseIncompleteMarkdown?: boolean;
 };
 
@@ -206,18 +203,12 @@ const components: Options["components"] = {
     </a>
   ),
   h1: ({ node, children, className, ...props }) => (
-    <h1
-      className={cn("mt-6 mb-2 font-semibold text-3xl", className)}
-      {...props}
-    >
+    <h1 className={cn("mt-6 mb-2 font-semibold text-3xl", className)} {...props}>
       {children}
     </h1>
   ),
   h2: ({ node, children, className, ...props }) => (
-    <h2
-      className={cn("mt-6 mb-2 font-semibold text-2xl", className)}
-      {...props}
-    >
+    <h2 className={cn("mt-6 mb-2 font-semibold text-2xl", className)} {...props}>
       {children}
     </h2>
   ),
@@ -232,10 +223,7 @@ const components: Options["components"] = {
     </h4>
   ),
   h5: ({ node, children, className, ...props }) => (
-    <h5
-      className={cn("mt-6 mb-2 font-semibold text-base", className)}
-      {...props}
-    >
+    <h5 className={cn("mt-6 mb-2 font-semibold text-base", className)} {...props}>
       {children}
     </h5>
   ),
@@ -246,10 +234,7 @@ const components: Options["components"] = {
   ),
   table: ({ node, children, className, ...props }) => (
     <div className="my-4 overflow-x-auto">
-      <table
-        className={cn("w-full border-collapse border border-border", className)}
-        {...props}
-      >
+      <table className={cn("w-full border-collapse border border-border", className)} {...props}>
         {children}
       </table>
     </div>
@@ -270,10 +255,7 @@ const components: Options["components"] = {
     </tr>
   ),
   th: ({ node, children, className, ...props }) => (
-    <th
-      className={cn("px-4 py-2 text-left font-semibold text-sm", className)}
-      {...props}
-    >
+    <th className={cn("px-4 py-2 text-left font-semibold text-sm", className)} {...props}>
       {children}
     </th>
   ),
@@ -286,7 +268,7 @@ const components: Options["components"] = {
     <blockquote
       className={cn(
         "my-4 border-l-4 border-muted-foreground/30 pl-4 italic text-muted-foreground",
-        className,
+        className
       )}
       {...props}
     >
@@ -302,10 +284,7 @@ const components: Options["components"] = {
 
     return (
       <code
-        className={cn(
-          "rounded bg-muted px-1.5 py-0.5 font-mono text-sm",
-          className,
-        )}
+        className={cn("rounded bg-muted px-1.5 py-0.5 font-mono text-sm", className)}
         {...props}
       />
     );
@@ -322,7 +301,7 @@ const components: Options["components"] = {
     if (
       isValidElement(children) &&
       children.props &&
-      'children' in children.props &&
+      "children" in children.props &&
       typeof children.props.children === "string"
     ) {
       code = children.props.children;
@@ -331,11 +310,7 @@ const components: Options["components"] = {
     }
 
     return (
-      <CodeBlock
-        className={cn("my-4 h-auto", className)}
-        code={code}
-        language={language}
-      >
+      <CodeBlock className={cn("my-4 h-auto", className)} code={code} language={language}>
         <CodeBlockCopyButton
           onCopy={() => console.log("Copied code to clipboard")}
           onError={() => console.error("Failed to copy code to clipboard")}
@@ -364,10 +339,7 @@ export const Response = memo(
 
     return (
       <div
-        className={cn(
-          "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
-          className,
-        )}
+        className={cn("size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0", className)}
         {...props}
       >
         <HardenedMarkdown
@@ -384,7 +356,7 @@ export const Response = memo(
       </div>
     );
   },
-  (prevProps, nextProps) => prevProps.children === nextProps.children,
+  (prevProps, nextProps) => prevProps.children === nextProps.children
 );
 
 Response.displayName = "Response";

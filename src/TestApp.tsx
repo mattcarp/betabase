@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { CircularProfessionalProgress as RadialProgress } from "./components/ui/ProfessionalProgress"
+import { CircularProfessionalProgress as RadialProgress } from "./components/ui/ProfessionalProgress";
 import { HUDMeter } from "./components/ui/HUDMeter";
 import { DataStream } from "./components/ui/DataStream";
 import { CircularHUD } from "./components/ui/CircularHUD";
 import { FloatingPanel } from "./components/ui/FloatingPanel";
-import {
-  Activity,
-  Cpu,
-  Gauge,
-  TrendingUp,
-  Play,
-  Pause,
-  RotateCcw,
-} from "lucide-react";
+import { Activity, Cpu, Gauge, TrendingUp, Play, Pause, RotateCcw } from "lucide-react";
 
 export default function TestApp() {
   const [isRunning, setIsRunning] = useState(false);
@@ -28,20 +20,13 @@ export default function TestApp() {
     if (isRunning) {
       interval = setInterval(() => {
         // Simulate realistic system metrics
-        setCpuValue((prev) =>
-          Math.max(10, Math.min(95, prev + (Math.random() - 0.5) * 15)),
-        );
-        setMemoryValue((prev) =>
-          Math.max(20, Math.min(90, prev + (Math.random() - 0.5) * 10)),
-        );
-        setNetworkSpeed((prev) =>
-          Math.max(5, Math.min(100, prev + (Math.random() - 0.5) * 20)),
-        );
+        setCpuValue((prev) => Math.max(10, Math.min(95, prev + (Math.random() - 0.5) * 15)));
+        setMemoryValue((prev) => Math.max(20, Math.min(90, prev + (Math.random() - 0.5) * 10)));
+        setNetworkSpeed((prev) => Math.max(5, Math.min(100, prev + (Math.random() - 0.5) * 20)));
 
         // Add to data stream history
         setDataHistory((prev) => {
-          const newValue =
-            30 + Math.sin(Date.now() / 1000) * 20 + Math.random() * 15;
+          const newValue = 30 + Math.sin(Date.now() / 1000) * 20 + Math.random() * 15;
           return [...prev, newValue].slice(-25); // Keep last 25 points
         });
       }, 1000);
@@ -56,7 +41,7 @@ export default function TestApp() {
   useEffect(() => {
     const initialData = Array.from(
       { length: 10 },
-      (_, i) => 40 + Math.sin(i * 0.5) * 15 + Math.random() * 10,
+      (_, i) => 40 + Math.sin(i * 0.5) * 15 + Math.random() * 10
     );
     setDataHistory(initialData);
   }, []);
@@ -66,10 +51,7 @@ export default function TestApp() {
     setMemoryValue(65);
     setNetworkSpeed(78);
     setDataHistory(
-      Array.from(
-        { length: 10 },
-        (_, i) => 40 + Math.sin(i * 0.5) * 15 + Math.random() * 10,
-      ),
+      Array.from({ length: 10 }, (_, i) => 40 + Math.sin(i * 0.5) * 15 + Math.random() * 10)
     );
   };
 
@@ -77,12 +59,9 @@ export default function TestApp() {
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-blue-900 text-white font-mono p-8">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-holographic mb-2">
-          JARVIS UI COMPONENT SHOWCASE
-        </h1>
+        <h1 className="text-4xl font-bold text-holographic mb-2">JARVIS UI COMPONENT SHOWCASE</h1>
         <p className="text-jarvis-secondary text-lg">
-          Testing RadialProgress, HUDMeter, DataStream &amp; CircularHUD
-          Components
+          Testing RadialProgress, HUDMeter, DataStream &amp; CircularHUD Components
         </p>
 
         {/* Control Panel */}
@@ -125,13 +104,7 @@ export default function TestApp() {
                 value={cpuValue}
                 size={100}
                 strokeWidth={8}
-                color={
-                  cpuValue > 80
-                    ? "danger"
-                    : cpuValue > 60
-                      ? "warning"
-                      : "primary"
-                }
+                color={cpuValue > 80 ? "danger" : cpuValue > 60 ? "warning" : "primary"}
                 label="CPU"
                 showValue={true}
                 animated={true}
@@ -145,21 +118,13 @@ export default function TestApp() {
                 value={memoryValue}
                 size={100}
                 strokeWidth={8}
-                color={
-                  memoryValue > 80
-                    ? "danger"
-                    : memoryValue > 60
-                      ? "warning"
-                      : "accent"
-                }
+                color={memoryValue > 80 ? "danger" : memoryValue > 60 ? "warning" : "accent"}
                 label="RAM"
                 showValue={true}
                 animated={true}
                 glowEffect={true}
               />
-              <span className="text-xs text-jarvis-secondary">
-                Memory Usage
-              </span>
+              <span className="text-xs text-jarvis-secondary">Memory Usage</span>
             </div>
           </div>
 
@@ -175,9 +140,7 @@ export default function TestApp() {
                 animated={true}
                 glowEffect={true}
               />
-              <span className="text-xs text-jarvis-secondary">
-                Network Speed
-              </span>
+              <span className="text-xs text-jarvis-secondary">Network Speed</span>
             </div>
           </div>
         </div>
@@ -196,13 +159,7 @@ export default function TestApp() {
                 thickness={8}
                 startAngle={-120}
                 endAngle={120}
-                color={
-                  cpuValue > 80
-                    ? "danger"
-                    : cpuValue > 60
-                      ? "warning"
-                      : "primary"
-                }
+                color={cpuValue > 80 ? "danger" : cpuValue > 60 ? "warning" : "primary"}
                 label="CPU Load"
                 unit="%"
                 criticalThreshold={85}
@@ -219,13 +176,7 @@ export default function TestApp() {
                 thickness={8}
                 startAngle={-90}
                 endAngle={90}
-                color={
-                  memoryValue > 80
-                    ? "danger"
-                    : memoryValue > 60
-                      ? "warning"
-                      : "accent"
-                }
+                color={memoryValue > 80 ? "danger" : memoryValue > 60 ? "warning" : "accent"}
                 label="Memory"
                 unit="%"
                 criticalThreshold={85}
@@ -271,9 +222,7 @@ export default function TestApp() {
             />
 
             <DataStream
-              data={dataHistory.map(
-                (v) => Math.abs(Math.sin(v / 10)) * 80 + 10,
-              )}
+              data={dataHistory.map((v) => Math.abs(Math.sin(v / 10)) * 80 + 10)}
               height={80}
               width={280}
               color="warning"
@@ -301,22 +250,13 @@ export default function TestApp() {
                     {isRunning ? "SYSTEM ACTIVE" : "SYSTEM IDLE"}
                   </div>
                   <div className="text-jarvis-secondary">
-                    CPU:{" "}
-                    <span className="text-jarvis-primary">
-                      {cpuValue.toFixed(1)}%
-                    </span>
+                    CPU: <span className="text-jarvis-primary">{cpuValue.toFixed(1)}%</span>
                   </div>
                   <div className="text-jarvis-secondary">
-                    Memory:{" "}
-                    <span className="text-jarvis-accent">
-                      {memoryValue.toFixed(1)}%
-                    </span>
+                    Memory: <span className="text-jarvis-accent">{memoryValue.toFixed(1)}%</span>
                   </div>
                   <div className="text-jarvis-secondary">
-                    Network:{" "}
-                    <span className="text-jarvis-warning">
-                      {networkSpeed.toFixed(1)}%
-                    </span>
+                    Network: <span className="text-jarvis-warning">{networkSpeed.toFixed(1)}%</span>
                   </div>
                   <div className="text-xs text-jarvis-secondary/70 mt-4">
                     {new Date().toLocaleTimeString()}
@@ -331,14 +271,12 @@ export default function TestApp() {
       {/* Status Footer */}
       <div className="text-center mt-8 text-jarvis-secondary text-sm">
         <p>
-          All components feature: Jarvis theming • Smooth animations • Glow
-          effects • Real-time updates
+          All components feature: Jarvis theming • Smooth animations • Glow effects • Real-time
+          updates
         </p>
         <p className="mt-1">
           Status:{" "}
-          <span
-            className={isRunning ? "text-jarvis-accent" : "text-jarvis-warning"}
-          >
+          <span className={isRunning ? "text-jarvis-accent" : "text-jarvis-warning"}>
             {isRunning ? "SIMULATION RUNNING" : "SIMULATION STOPPED"}
           </span>
         </p>

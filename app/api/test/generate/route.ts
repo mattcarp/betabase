@@ -9,10 +9,7 @@ export async function POST(request: NextRequest) {
     const { prompt, testType, targetFile, context } = body;
 
     if (!prompt) {
-      return NextResponse.json(
-        { error: "Prompt is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
     }
 
     // Build the system prompt based on test type
@@ -70,10 +67,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(generatedTest, { status: 200 });
   } catch (error) {
     console.error("Test generation error:", error);
-    return NextResponse.json(
-      { error: "Failed to generate test" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to generate test" }, { status: 500 });
   }
 }
 
@@ -148,13 +142,10 @@ describe('File Upload', () => {
         tests: mockTests,
         total: mockTests.length,
       },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (error) {
     console.error("Error fetching generated tests:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch generated tests" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to fetch generated tests" }, { status: 500 });
   }
 }

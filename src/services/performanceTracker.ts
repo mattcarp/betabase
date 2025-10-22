@@ -7,7 +7,7 @@
 
 interface PerformanceEntry {
   id: string;
-  type: 'query' | 'api' | 'system' | 'render';
+  type: "query" | "api" | "system" | "render";
   operation: string;
   startTime: number;
   endTime?: number;
@@ -29,7 +29,7 @@ class PerformanceTracker {
    * Start tracking a new operation
    */
   startTracking(
-    type: PerformanceEntry['type'],
+    type: PerformanceEntry["type"],
     operation: string,
     metadata?: Record<string, any>
   ): string {
@@ -86,7 +86,7 @@ class PerformanceTracker {
     queryFn: () => Promise<T>,
     metadata?: Record<string, any>
   ): Promise<T> {
-    const id = this.startTracking('query', operation, metadata);
+    const id = this.startTracking("query", operation, metadata);
 
     try {
       const result = await queryFn();
@@ -106,7 +106,7 @@ class PerformanceTracker {
     apiFn: () => Promise<T>,
     metadata?: Record<string, any>
   ): Promise<T> {
-    const id = this.startTracking('api', endpoint, metadata);
+    const id = this.startTracking("api", endpoint, metadata);
 
     try {
       const result = await apiFn();
@@ -122,7 +122,7 @@ class PerformanceTracker {
    * Track a render operation
    */
   trackRender(componentName: string, metadata?: Record<string, any>): () => void {
-    const id = this.startTracking('render', componentName, metadata);
+    const id = this.startTracking("render", componentName, metadata);
 
     return () => {
       this.stopTracking(id, true);
@@ -132,11 +132,11 @@ class PerformanceTracker {
   /**
    * Get statistics for a specific operation type
    */
-  getStatistics(type?: PerformanceEntry['type'], operation?: string) {
+  getStatistics(type?: PerformanceEntry["type"], operation?: string) {
     const entries = Array.from(this.entries.values())
-      .filter(entry => entry.duration !== undefined)
-      .filter(entry => !type || entry.type === type)
-      .filter(entry => !operation || entry.operation === operation);
+      .filter((entry) => entry.duration !== undefined)
+      .filter((entry) => !type || entry.type === type)
+      .filter((entry) => !operation || entry.operation === operation);
 
     if (entries.length === 0) {
       return {
@@ -151,8 +151,8 @@ class PerformanceTracker {
       };
     }
 
-    const durations = entries.map(e => e.duration!).sort((a, b) => a - b);
-    const successCount = entries.filter(e => e.success).length;
+    const durations = entries.map((e) => e.duration!).sort((a, b) => a - b);
+    const successCount = entries.filter((e) => e.success).length;
 
     return {
       count: entries.length,
@@ -169,10 +169,10 @@ class PerformanceTracker {
   /**
    * Get all entries for a specific type
    */
-  getEntries(type?: PerformanceEntry['type']): PerformanceEntry[] {
+  getEntries(type?: PerformanceEntry["type"]): PerformanceEntry[] {
     return Array.from(this.entries.values())
-      .filter(entry => !type || entry.type === type)
-      .filter(entry => entry.duration !== undefined);
+      .filter((entry) => !type || entry.type === type)
+      .filter((entry) => entry.duration !== undefined);
   }
 
   /**
@@ -198,10 +198,10 @@ class PerformanceTracker {
 
     // Don't block on persistence
     try {
-      await fetch('/api/performance/metrics', {
-        method: 'POST',
+      await fetch("/api/performance/metrics", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           type: `${entry.type}:${entry.operation}`,
@@ -215,7 +215,7 @@ class PerformanceTracker {
       });
     } catch (error) {
       // Silently fail - don't disrupt user experience
-      console.debug('Failed to persist metric:', error);
+      console.debug("Failed to persist metric:", error);
     }
   }
 
@@ -224,10 +224,10 @@ class PerformanceTracker {
    */
   getSummary() {
     return {
-      query: this.getStatistics('query'),
-      api: this.getStatistics('api'),
-      render: this.getStatistics('render'),
-      system: this.getStatistics('system'),
+      query: this.getStatistics("query"),
+      api: this.getStatistics("api"),
+      render: this.getStatistics("render"),
+      system: this.getStatistics("system"),
     };
   }
 
@@ -240,8 +240,8 @@ class PerformanceTracker {
     // Check if any operation type is slow
     const thresholds = {
       query: 1000, // 1 second
-      api: 500,    // 500ms
-      render: 16,  // 16ms (one frame at 60fps)
+      api: 500, // 500ms
+      render: 16, // 16ms (one frame at 60fps)
       system: 100, // 100ms
     };
 
@@ -256,7 +256,7 @@ class PerformanceTracker {
    */
   getSlowOperations(threshold: number = 1000): PerformanceEntry[] {
     return Array.from(this.entries.values())
-      .filter(entry => entry.duration && entry.duration > threshold)
+      .filter((entry) => entry.duration && entry.duration > threshold)
       .sort((a, b) => (b.duration || 0) - (a.duration || 0));
   }
 }

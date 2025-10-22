@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-      target: ""  # Explicitly remove the target
+      target: "" # Explicitly remove the target
       cache_from:
         - node:22-alpine
     environment:

@@ -5,22 +5,22 @@
  * Run this to set up the database schema
  */
 
-const { createClient } = require('@supabase/supabase-js');
-require('dotenv').config({ path: '.env.local' });
+const { createClient } = require("@supabase/supabase-js");
+require("dotenv").config({ path: ".env.local" });
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-console.log('🚀 Creating AOMA vector store tables...\n');
-console.log('⚠️ IMPORTANT: This script shows you the SQL to run.\n');
-console.log('Since we can\'t run DDL commands directly via the JS client,');
-console.log('you need to run this SQL in the Supabase SQL Editor:\n');
-console.log('1. Go to: https://supabase.com/dashboard/project/kfxetwuuzljhybfgmpuc/sql');
-console.log('2. Copy and paste the SQL below');
+console.log("🚀 Creating AOMA vector store tables...\n");
+console.log("⚠️ IMPORTANT: This script shows you the SQL to run.\n");
+console.log("Since we can't run DDL commands directly via the JS client,");
+console.log("you need to run this SQL in the Supabase SQL Editor:\n");
+console.log("1. Go to: https://supabase.com/dashboard/project/kfxetwuuzljhybfgmpuc/sql");
+console.log("2. Copy and paste the SQL below");
 console.log('3. Click "Run"\n');
-console.log('=' * 80 + '\n');
+console.log("=" * 80 + "\n");
 
 const sql = `
 -- Enable vector extension if not already enabled
@@ -104,7 +104,7 @@ SELECT 'Tables created successfully!' as message;
 `;
 
 console.log(sql);
-console.log('\n' + '=' * 80 + '\n');
-console.log('After running the SQL above in Supabase, run:');
-console.log('  node scripts/process-aoma-html-no-embeddings.js');
-console.log('\nto process your HTML files into the database.');
+console.log("\n" + "=" * 80 + "\n");
+console.log("After running the SQL above in Supabase, run:");
+console.log("  node scripts/process-aoma-html-no-embeddings.js");
+console.log("\nto process your HTML files into the database.");

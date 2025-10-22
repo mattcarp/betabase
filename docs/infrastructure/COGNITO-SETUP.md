@@ -32,8 +32,7 @@ exports.handler = async (event) => {
   ];
 
   const isAllowed =
-    allowedDomains.some((domain) => email.endsWith(domain)) ||
-    allowedEmails.includes(email);
+    allowedDomains.some((domain) => email.endsWith(domain)) || allowedEmails.includes(email);
 
   if (!isAllowed) {
     throw new Error("Registration restricted to authorized domains");

@@ -7,28 +7,34 @@ All components are implemented, tested, and documented. The feature is complete 
 ## 📍 How Users Access the Dashboard
 
 ### Method 1: Navigation Button (Primary)
+
 Users can access the Performance Dashboard via an **Activity icon button** in the main header:
 
 **Location**: Top-right corner of the main interface, between the Knowledge Base icon and Sign Out button
 
 **Visual**:
+
 - Icon: Activity/pulse icon (⚡)
 - Tooltip: "Performance Dashboard"
 - Hover state: Highlights on hover
 
 **Steps**:
+
 1. Log into SIAM
 2. Look at the top-right header controls
 3. Click the Activity icon button (between Database and Sign Out)
 4. Dashboard opens at `/performance`
 
 ### Method 2: Direct URL
+
 Users can also navigate directly to:
+
 ```
 http://localhost:3000/performance
 ```
 
 Or in production:
+
 ```
 https://iamsiam.ai/performance
 ```
@@ -70,21 +76,25 @@ https://iamsiam.ai/performance
 ### Dashboard Tabs
 
 #### 1. Query Analytics
+
 - **Response Time Trends**: Real-time line chart showing avg and P95 latencies
 - **Query Type Distribution**: Bar chart of query types (user, assistant, system)
 - **Performance Metrics**: P50, P95, P99 latencies, success rate, error rate
 
 #### 2. System Health
+
 - **Resource Usage Chart**: Area chart showing CPU, Memory, Disk over time
 - **Current Usage**: Three cards showing CPU, Memory, Disk percentages with progress bars
 - **Color-coded warnings**: Green (healthy), Yellow (warning 70%+), Red (critical 90%+)
 
 #### 3. Data Freshness
+
 - **Vector Store**: Document count, last update, staleness indicator
 - **AOMA Cache**: Hit rate, miss rate, effectiveness metrics
 - **Knowledge Base**: File count, last update timestamp
 
 #### 4. API Performance
+
 - **Per-Endpoint Metrics**: Latency, request count, error count for each API endpoint
 - **Error Rate Badges**: Color-coded by severity
 - **Endpoints Monitored**: `/api/chat`, `/api/aoma-mcp`, `/api/vector-store`, `/api/upload`
@@ -92,6 +102,7 @@ https://iamsiam.ai/performance
 ## 📦 What's Included in This PR
 
 ### New Files
+
 1. **`/app/api/performance/metrics/route.ts`** (240 lines)
    - GET endpoint for retrieving metrics
    - POST endpoint for recording metrics
@@ -121,6 +132,7 @@ https://iamsiam.ai/performance
    - Troubleshooting guide
 
 ### Modified Files
+
 1. **`/src/components/ui/pages/ChatPage.tsx`**
    - Added navigation button with Activity icon
    - Added imports for BarChart3 and Activity icons
@@ -128,16 +140,19 @@ https://iamsiam.ai/performance
 ## 🧪 Testing Instructions
 
 ### 1. Start Development Server
+
 ```bash
 npm run dev
 ```
 
 ### 2. Access Dashboard
+
 Navigate to: http://localhost:3000
 
 Click the Activity icon (⚡) in the top-right header
 
 ### 3. Run Automated Tests
+
 ```bash
 # Run all performance dashboard tests
 npx playwright test tests/performance-dashboard.spec.ts
@@ -150,6 +165,7 @@ npx playwright test tests/performance-dashboard.spec.ts -g "should load"
 ```
 
 ### 4. Manual Testing Checklist
+
 - [ ] Click Activity button in header → Dashboard opens
 - [ ] All 4 tabs are visible
 - [ ] Charts render correctly
@@ -164,25 +180,29 @@ npx playwright test tests/performance-dashboard.spec.ts -g "should load"
 
 The dashboard monitors against these targets:
 
-| Metric | Target | Warning | Critical |
-|--------|--------|---------|----------|
-| P50 Response Time | < 500ms | > 500ms | > 1000ms |
+| Metric            | Target   | Warning  | Critical |
+| ----------------- | -------- | -------- | -------- |
+| P50 Response Time | < 500ms  | > 500ms  | > 1000ms |
 | P95 Response Time | < 1000ms | > 1000ms | > 2000ms |
-| Success Rate | > 95% | < 95% | < 90% |
-| CPU Usage | < 70% | 70-90% | > 90% |
-| Memory Usage | < 70% | 70-90% | > 90% |
-| Data Staleness | < 24h | 24-72h | > 72h |
+| Success Rate      | > 95%    | < 95%    | < 90%    |
+| CPU Usage         | < 70%    | 70-90%   | > 90%    |
+| Memory Usage      | < 70%    | 70-90%   | > 90%    |
+| Data Staleness    | < 24h    | 24-72h   | > 72h    |
 
 ## 📊 API Reference
 
 ### GET /api/performance/metrics
+
 **Query Parameters:**
+
 - `timeRange`: `1h`, `6h`, `24h`, `7d` (default: `1h`)
 
 **Response:** JSON with comprehensive metrics
 
 ### POST /api/performance/metrics
+
 **Body:**
+
 ```json
 {
   "type": "query:chat",
@@ -238,6 +258,7 @@ Screenshots will be saved to `test-results/` directory.
 **This PR is READY for review and merge.**
 
 All functionality is:
+
 - ✅ Implemented
 - ✅ Tested (20+ automated tests)
 - ✅ Documented

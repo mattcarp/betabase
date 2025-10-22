@@ -15,7 +15,8 @@ NEXT_PUBLIC_AOMA_MESH_RPC_URL=https://luminous-dedication-production.up.railway.
 NEXT_PUBLIC_AOMA_MESH_HEALTH_URL=https://luminous-dedication-production.up.railway.app/health
 ```
 
-**Why Railway?** 
+**Why Railway?**
+
 - aoma-mesh-mcp has always been deployed to Railway
 - Railway URL: https://luminous-dedication-production.up.railway.app
 - Health check: https://luminous-dedication-production.up.railway.app/health
@@ -107,11 +108,13 @@ NEXT_PUBLIC_BYPASS_AUTH=false  # NEVER set to true in production!
 5. Add each variable from above
 
 **Test with:**
+
 ```bash
 curl https://your-siam-app.onrender.com/api/health
 ```
 
 Should return:
+
 ```json
 {
   "status": "ok",
@@ -133,11 +136,13 @@ After setting environment variables in Render:
 - [ ] Authentication flow works (if not bypassed)
 
 **Test AOMA connection:**
+
 ```bash
 curl https://luminous-dedication-production.up.railway.app/health
 ```
 
 Should return:
+
 ```json
 {
   "status": "healthy",
@@ -154,12 +159,12 @@ Should return:
 
 ## Common Mistakes to Avoid
 
-1. ❌ **Using Render URL for aoma-mesh-mcp** 
+1. ❌ **Using Render URL for aoma-mesh-mcp**
    - aoma-mesh-mcp is NOT deployed to Render
    - Must use Railway URL
 
-2. ❌ **Missing NEXT_PUBLIC_ prefix**
-   - Frontend needs NEXT_PUBLIC_* vars
+2. ❌ **Missing NEXT*PUBLIC* prefix**
+   - Frontend needs NEXT*PUBLIC*\* vars
    - Backend can use without prefix
 
 3. ❌ **Wrong Cognito region**
@@ -174,6 +179,7 @@ Should return:
 ## Need Help?
 
 **Check logs:**
+
 ```bash
 # From Render dashboard → Logs tab
 # Or via CLI:
@@ -181,15 +187,17 @@ render logs <service-name> --tail 100
 ```
 
 **Test endpoints:**
+
 ```bash
 # SIAM health
 curl https://your-siam-app.onrender.com/api/health
 
-# AOMA mesh health  
+# AOMA mesh health
 curl https://luminous-dedication-production.up.railway.app/health
 ```
 
 **Debug connection:**
+
 ```bash
 # Check if SIAM can reach aoma-mesh-mcp
 curl https://your-siam-app.onrender.com/api/aoma/health

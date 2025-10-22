@@ -1,11 +1,11 @@
 /**
  * AOMA Parallel Query Service - Performance Optimized
- * 
+ *
  * Executes multiple AOMA queries in parallel for faster response times
  * Uses Promise.race for quickest response with fallback options
  */
 
-import { aomaCache } from './aomaCache';
+import { aomaCache } from "./aomaCache";
 
 interface AOMAQueryResult {
   success: boolean;
@@ -21,12 +21,13 @@ interface AOMAQueryResult {
 
 class AOMAParallelQueryService {
   // AOMA Mesh MCP is deployed to Railway, NOT Render
-  private readonly RAILWAY_URL = process.env.NEXT_PUBLIC_AOMA_MESH_SERVER_URL ||
+  private readonly RAILWAY_URL =
+    process.env.NEXT_PUBLIC_AOMA_MESH_SERVER_URL ||
     "https://luminous-dedication-production.up.railway.app";
-  
+
   // No Render deployment - Railway only
-  private readonly RENDER_URL = '';
-    
+  private readonly RENDER_URL = "";
+
   // Primary URL is Railway
   private readonly FALLBACK_URL = this.RAILWAY_URL;
 
@@ -43,17 +44,17 @@ class AOMAParallelQueryService {
     // Check cache first for instant response
     const cachedResponse = aomaCache.get(query, strategy);
     if (cachedResponse) {
-      console.log('⚡ Cache hit! Returning instantly');
+      console.log("⚡ Cache hit! Returning instantly");
       return {
         success: true,
         content: cachedResponse,
         metadata: {
-          queryType: 'cached',
+          queryType: "cached",
           strategy,
           cached: true,
           responseTime: performance.now() - startTime,
-          source: 'cache'
-        }
+          source: "cache",
+        },
       };
     }
 
@@ -62,61 +63,59 @@ class AOMAParallelQueryService {
 
     // Query Railway endpoint (primary deployment)
     const queries = [
-      this.queryEndpoint(enhancedQuery, strategy, this.RAILWAY_URL, 'railway', 10000)
+      this.queryEndpoint(enhancedQuery, strategy, this.RAILWAY_URL, "railway", 10000),
     ];
 
     try {
       // Race all queries - return the first successful one
       const result = await Promise.race(queries);
-      
+
       if (result && result.success) {
         // Cache the successful result
         aomaCache.set(query, result.content!, strategy);
-        
+
         return {
           ...result,
           metadata: {
             ...result.metadata,
-            responseTime: performance.now() - startTime
-          }
+            responseTime: performance.now() - startTime,
+          },
         };
       }
     } catch (error) {
-      console.error('All AOMA queries failed:', error);
+      console.error("All AOMA queries failed:", error);
     }
 
     // If first attempt fails, retry Railway with longer timeout
-    for (const endpoint of [
-      { url: this.RAILWAY_URL, name: 'railway-retry', timeout: 15000 }
-    ]) {
+    for (const endpoint of [{ url: this.RAILWAY_URL, name: "railway-retry", timeout: 15000 }]) {
       const result = await this.queryEndpoint(
-        enhancedQuery, 
-        strategy, 
-        endpoint.url, 
-        endpoint.name, 
+        enhancedQuery,
+        strategy,
+        endpoint.url,
+        endpoint.name,
         endpoint.timeout
       );
-      
+
       if (result.success) {
         aomaCache.set(query, result.content!, strategy);
         return {
           ...result,
           metadata: {
             ...result.metadata,
-            responseTime: performance.now() - startTime
-          }
+            responseTime: performance.now() - startTime,
+          },
         };
       }
     }
 
-    return { 
-      success: false, 
+    return {
+      success: false,
       content: null,
       metadata: {
-        queryType: 'failed',
+        queryType: "failed",
         strategy,
-        responseTime: performance.now() - startTime
-      }
+        responseTime: performance.now() - startTime,
+      },
     };
   }
 
@@ -139,15 +138,15 @@ class AOMAParallelQueryService {
         method: "tools/call",
         params: {
           name: "query_aoma_knowledge",
-          arguments: { query, strategy }
-        }
+          arguments: { query, strategy },
+        },
       };
 
       const response = await fetch(`${baseUrl}/rpc`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(rpcPayload),
-        signal: AbortSignal.timeout(timeout)
+        signal: AbortSignal.timeout(timeout),
       });
 
       if (!response.ok) {
@@ -169,14 +168,14 @@ class AOMAParallelQueryService {
           success: true,
           content: resultContent,
           metadata: {
-            queryType: 'live',
+            queryType: "live",
             strategy,
-            source
-          }
+            source,
+          },
         };
       }
     } catch (error) {
-      if (error instanceof Error && error.name === 'AbortError') {
+      if (error instanceof Error && error.name === "AbortError") {
         console.log(`⏱️ ${source} query timed out after ${timeout}ms`);
       } else {
         console.error(`${source} query error:`, error);
@@ -193,11 +192,19 @@ class AOMAParallelQueryService {
     const lowerQuery = originalQuery.toLowerCase();
 
     // Add Sony Music context for known ambiguous terms
-    if (lowerQuery.includes("usm") && !lowerQuery.includes("unified") && !lowerQuery.includes("session")) {
+    if (
+      lowerQuery.includes("usm") &&
+      !lowerQuery.includes("unified") &&
+      !lowerQuery.includes("session")
+    ) {
       return `${originalQuery} (USM: Unified Session Manager in Sony Music AOMA context)`;
     }
 
-    if (lowerQuery.includes("dam") && !lowerQuery.includes("digital") && !lowerQuery.includes("asset")) {
+    if (
+      lowerQuery.includes("dam") &&
+      !lowerQuery.includes("digital") &&
+      !lowerQuery.includes("asset")
+    ) {
       return `${originalQuery} (DAM: Digital Asset Management in Sony Music context)`;
     }
 
@@ -221,18 +228,16 @@ class AOMAParallelQueryService {
       "What is USM?",
       "How does cover hot swap work?",
       "AOMA architecture overview",
-      "Digital asset management workflow"
+      "Digital asset management workflow",
     ];
 
-    console.log('🔥 Warming AOMA cache with common queries...');
-    
+    console.log("🔥 Warming AOMA cache with common queries...");
+
     await Promise.all(
-      commonQueries.map(query => 
-        this.queryWithParallelFallback(query, 'rapid').catch(() => {})
-      )
+      commonQueries.map((query) => this.queryWithParallelFallback(query, "rapid").catch(() => {}))
     );
-    
-    console.log('✅ Cache warming complete');
+
+    console.log("✅ Cache warming complete");
   }
 }
 

@@ -15,13 +15,9 @@ export async function POST(request: NextRequest) {
     const startTime = new Date().toISOString();
 
     console.log(`🚀 Starting Playwright test execution: ${executionId}`);
-    
+
     // Prepare Playwright command arguments
-    const playwrightArgs = [
-      "playwright", 
-      "test", 
-      "--config=playwright.config.dashboard.ts"
-    ];
+    const playwrightArgs = ["playwright", "test", "--config=playwright.config.dashboard.ts"];
 
     // Add specific test files if provided
     if (testFiles && testFiles.length > 0) {
@@ -34,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Ensure results directory exists
-    const resultsDir = path.join(process.cwd(), '.playwright-results');
+    const resultsDir = path.join(process.cwd(), ".playwright-results");
     try {
       await fs.mkdir(resultsDir, { recursive: true });
     } catch (error) {
@@ -44,12 +40,12 @@ export async function POST(request: NextRequest) {
     // Start Playwright test execution
     const testProcess = spawn("npx", playwrightArgs, {
       cwd: process.cwd(),
-      env: { 
-        ...process.env, 
+      env: {
+        ...process.env,
         EXECUTION_ID: executionId,
-        PLAYWRIGHT_SKIP_WEBSERVER: options?.skipWebServer ? "1" : "0"
+        PLAYWRIGHT_SKIP_WEBSERVER: options?.skipWebServer ? "1" : "0",
       },
-      stdio: ['ignore', 'pipe', 'pipe']
+      stdio: ["ignore", "pipe", "pipe"],
     });
 
     // Store execution info
@@ -60,21 +56,24 @@ export async function POST(request: NextRequest) {
       testSuite,
       totalTests: 0, // Will be updated from reporter
       output: [],
-      error: null
+      error: null,
     });
 
     // Capture stdout (our custom reporter output)
-    testProcess.stdout?.on('data', (data) => {
+    testProcess.stdout?.on("data", (data) => {
       const execution = activeExecutions.get(executionId);
       if (execution) {
-        const lines = data.toString().split('\n').filter(line => line.trim());
+        const lines = data
+          .toString()
+          .split("\n")
+          .filter((line) => line.trim());
         execution.output.push(...lines);
-        
+
         // Parse JSON output from our custom reporter
-        lines.forEach(line => {
+        lines.forEach((line) => {
           try {
             const event = JSON.parse(line);
-            if (event.type === 'begin' && event.totalTests) {
+            if (event.type === "begin" && event.totalTests) {
               execution.totalTests = event.totalTests;
             }
           } catch (error) {
@@ -85,7 +84,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Capture stderr
-    testProcess.stderr?.on('data', (data) => {
+    testProcess.stderr?.on("data", (data) => {
       const execution = activeExecutions.get(executionId);
       if (execution) {
         const errorMsg = data.toString();
@@ -95,7 +94,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Handle process completion
-    testProcess.on('close', (code) => {
+    testProcess.on("close", (code) => {
       const execution = activeExecutions.get(executionId);
       if (execution) {
         execution.status = code === 0 ? "completed" : "failed";
@@ -105,7 +104,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Handle process errors
-    testProcess.on('error', (error) => {
+    testProcess.on("error", (error) => {
       const execution = activeExecutions.get(executionId);
       if (execution) {
         execution.status = "error";
@@ -127,10 +126,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     console.error("Test execution error:", error);
-    return NextResponse.json(
-      { error: "Failed to start test execution" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to start test execution" }, { status: 500 });
   }
 }
 
@@ -140,47 +136,44 @@ export async function GET(request: NextRequest) {
     const executionId = searchParams.get("executionId");
 
     if (!executionId) {
-      return NextResponse.json(
-        { error: "Execution ID is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Execution ID is required" }, { status: 400 });
     }
 
     // Get execution from memory
     const execution = activeExecutions.get(executionId);
-    
+
     if (!execution) {
       // Try to load from file system
       try {
-        const resultsPath = path.join(process.cwd(), '.playwright-results', `${executionId}.json`);
-        const resultData = await fs.readFile(resultsPath, 'utf8');
+        const resultsPath = path.join(process.cwd(), ".playwright-results", `${executionId}.json`);
+        const resultData = await fs.readFile(resultsPath, "utf8");
         const result = JSON.parse(resultData);
-        
-        return NextResponse.json({
-          executionId,
-          status: result.status === 'passed' ? 'completed' : 'failed',
-          startTime: result.startTime,
-          endTime: result.endTime,
-          duration: result.duration,
-          results: result.stats,
-          progress: 100,
-          testResults: result.results || []
-        }, { status: 200 });
-        
-      } catch (error) {
+
         return NextResponse.json(
-          { error: "Execution not found" },
-          { status: 404 },
+          {
+            executionId,
+            status: result.status === "passed" ? "completed" : "failed",
+            startTime: result.startTime,
+            endTime: result.endTime,
+            duration: result.duration,
+            results: result.stats,
+            progress: 100,
+            testResults: result.results || [],
+          },
+          { status: 200 }
         );
+      } catch (error) {
+        return NextResponse.json({ error: "Execution not found" }, { status: 404 });
       }
     }
 
     // Calculate progress
     let progress = 0;
     let currentStats = { total: 0, passed: 0, failed: 0, skipped: 0, running: 0 };
-    
+
     // Parse latest stats from output
-    for (const line of execution.output.slice(-10)) { // Check last 10 lines
+    for (const line of execution.output.slice(-10)) {
+      // Check last 10 lines
       try {
         const event = JSON.parse(line);
         if (event.stats) {
@@ -191,9 +184,12 @@ export async function GET(request: NextRequest) {
         // Not JSON, continue
       }
     }
-    
+
     if (currentStats.total > 0) {
-      progress = Math.round(((currentStats.passed + currentStats.failed + currentStats.skipped) / currentStats.total) * 100);
+      progress = Math.round(
+        ((currentStats.passed + currentStats.failed + currentStats.skipped) / currentStats.total) *
+          100
+      );
     }
 
     const status = {
@@ -201,21 +197,20 @@ export async function GET(request: NextRequest) {
       status: execution.status,
       startTime: execution.startTime,
       endTime: execution.endTime,
-      duration: execution.endTime 
-        ? Math.floor((new Date(execution.endTime).getTime() - new Date(execution.startTime).getTime()) / 1000)
+      duration: execution.endTime
+        ? Math.floor(
+            (new Date(execution.endTime).getTime() - new Date(execution.startTime).getTime()) / 1000
+          )
         : Math.floor((Date.now() - new Date(execution.startTime).getTime()) / 1000),
       results: currentStats,
       progress,
       error: execution.error,
-      recentOutput: execution.output.slice(-5) // Last 5 log lines
+      recentOutput: execution.output.slice(-5), // Last 5 log lines
     };
 
     return NextResponse.json(status, { status: 200 });
   } catch (error) {
     console.error("Error fetching execution status:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch execution status" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to fetch execution status" }, { status: 500 });
   }
 }

@@ -15,9 +15,7 @@ test.describe("Test Dashboard - Quick Validation", () => {
   test("should display Test Dashboard with all 8 tabs", async ({ page }) => {
     // Verify main dashboard is loaded
     await expect(page.locator("text=Test Dashboard")).toBeVisible();
-    await expect(
-      page.locator("text=AI-Powered Testing Command Center"),
-    ).toBeVisible();
+    await expect(page.locator("text=AI-Powered Testing Command Center")).toBeVisible();
 
     // Verify all 8 tabs are present and clickable
     const tabs = [
@@ -80,17 +78,13 @@ test.describe("Test Dashboard - Quick Validation", () => {
     });
 
     // Look for Start Crawl button or similar
-    const crawlButton = page
-      .locator("text=Start Crawl, text=Start, text=Crawl")
-      .first();
+    const crawlButton = page.locator("text=Start Crawl, text=Start, text=Crawl").first();
     if (await crawlButton.isVisible()) {
       await expect(crawlButton).toBeVisible();
     }
   });
 
-  test("should verify responsive design on different viewports", async ({
-    page,
-  }) => {
+  test("should verify responsive design on different viewports", async ({ page }) => {
     // Test mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
     await page.reload();
@@ -129,7 +123,7 @@ test.describe("Test Dashboard - Quick Validation", () => {
         !error.includes("favicon") &&
         !error.includes("Warning") &&
         !error.includes("DevTools") &&
-        !error.includes("chrome-extension"),
+        !error.includes("chrome-extension")
     );
 
     expect(criticalErrors).toHaveLength(0);
