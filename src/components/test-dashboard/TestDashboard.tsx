@@ -24,6 +24,7 @@ import {
   GitBranch,
   Zap,
   Eye,
+  MousePointerClick,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { TestExecutionPanel } from "./TestExecutionPanel";
@@ -36,6 +37,7 @@ import { TestAnalytics } from "./TestAnalytics";
 import { FirecrawlPanel } from "./FirecrawlPanel";
 import SessionTimeline from "./SessionTimeline";
 import { SessionInteraction } from "../../types/session-timeline";
+import { ManualTestingPanel } from "./ManualTestingPanel";
 
 interface TestDashboardProps {
   className?: string;
@@ -534,7 +536,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
       {/* Main Content Area */}
       <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col">
-        <TabsList className="grid grid-cols-8 w-full rounded-none border-b bg-muted/30">
+        <TabsList className="grid grid-cols-9 w-full rounded-none border-b bg-muted/30">
           <TabsTrigger value="execution" className="gap-2">
             <Activity className="h-4 w-4" />
             Execution
@@ -542,6 +544,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
           <TabsTrigger value="results" className="gap-2">
             <CheckCircle className="h-4 w-4" />
             Results
+          </TabsTrigger>
+          <TabsTrigger value="manual" className="gap-2">
+            <MousePointerClick className="h-4 w-4" />
+            Manual Testing
           </TabsTrigger>
           <TabsTrigger value="ai-generate" className="gap-2">
             <Brain className="h-4 w-4" />
@@ -580,6 +586,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
           <TabsContent value="results" className="m-0 p-6">
             <TestResultsViewer />
+          </TabsContent>
+
+          <TabsContent value="manual" className="m-0 p-6 h-full">
+            <ManualTestingPanel />
           </TabsContent>
 
           <TabsContent value="ai-generate" className="m-0 p-6">

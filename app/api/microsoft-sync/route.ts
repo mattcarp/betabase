@@ -50,14 +50,10 @@ export async function POST(request: NextRequest) {
           continue;
         }
 
-        const teamResult = await graphService.syncTeamsMessages(
-          team.teamId,
-          team.channelId,
-          {
-            top: team.top || 50,
-            since: team.since,
-          }
-        );
+        const teamResult = await graphService.syncTeamsMessages(team.teamId, team.channelId, {
+          top: team.top || 50,
+          since: team.since,
+        });
 
         results.teams.push({
           teamId: team.teamId,
