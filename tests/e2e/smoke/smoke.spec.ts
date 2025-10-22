@@ -22,92 +22,98 @@ test.describe("Smoke Tests @smoke", () => {
   test.afterEach(async () => {
     assertNoConsoleErrors();
   });
-  
+
   test("Application is accessible", async ({ page }) => {
     const response = await page.goto("/");
-    
+
     // Check response status
     expect(response?.status()).toBeLessThan(400);
-    
+
     // Verify page loads (either login or main app)
-    const body = await page.locator('body');
+    const body = await page.locator("body");
     await expect(body).toBeVisible();
-    
+
     await page.waitForTimeout(2000);
     // Console errors are now checked by afterEach hook
   });
-  
+
   test("Health endpoint responds", async ({ request }) => {
     const response = await request.get("/api/health");
-    
+
     expect(response.status()).toBe(200);
-    
+
     const body = await response.json();
     expect(body).toHaveProperty("status", "healthy");
   });
-  
+
   test("Main page loads with expected elements", async ({ page }) => {
     await page.goto("/");
-    
+
     // Check that EITHER login form OR app container loads
     // This smoke test validates the app loads, not that it's authenticated
-    const hasLoginForm = await page.locator('input[type="email"]').isVisible({ timeout: 5000 }).catch(() => false);
-    const hasAppContainer = await page.locator('[data-testid="app-container"]').isVisible({ timeout: 5000 }).catch(() => false);
-    
+    const hasLoginForm = await page
+      .locator('input[type="email"]')
+      .isVisible({ timeout: 5000 })
+      .catch(() => false);
+    const hasAppContainer = await page
+      .locator('[data-testid="app-container"]')
+      .isVisible({ timeout: 5000 })
+      .catch(() => false);
+
     // At least one should be visible
     expect(hasLoginForm || hasAppContainer).toBeTruthy();
-    
+
     // Ensure body has content
-    const bodyText = (await page.locator('body').innerText()).trim();
+    const bodyText = (await page.locator("body").innerText()).trim();
     expect(bodyText.length).toBeGreaterThan(0);
   });
-  
+
   test("No JavaScript errors on load", async ({ page }) => {
     await page.goto("/");
     await page.waitForTimeout(3000);
-    
+
     // Page errors are captured by console monitor
     // Console errors assertion happens in afterEach
   });
-  
+
   test("Static assets load correctly", async ({ page }) => {
     await page.goto("/");
-    
+
     // Check CSS loads
     const styles = await page.evaluate(() => {
       return Array.from(document.styleSheets).length;
     });
     expect(styles).toBeGreaterThan(0);
-    
+
     // Loosen font assertion for CI/local variability: require fonts API to exist
     const hasFontsApi = await page.evaluate(() => !!document.fonts);
     expect(hasFontsApi).toBeTruthy();
   });
-  
+
   test("Mobile viewport renders correctly", async ({ browser }) => {
     const context = await browser.newContext({
       viewport: { width: 375, height: 667 },
-      userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15"
+      userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15",
     });
-    
+
     const page = await context.newPage();
     await page.goto("/");
-    
+
     // Check viewport meta tag
     const viewportMeta = await page.evaluate(() => {
       const meta = document.querySelector('meta[name="viewport"]');
       return meta?.getAttribute("content");
     });
-    
+
     expect(viewportMeta).toContain("width=device-width");
-    
+
     // Check responsive elements
     const mobileMenu = page.locator('[data-testid="mobile-menu"], [class*="mobile"]').first();
     const isMenuVisible = await mobileMenu.isVisible().catch(() => false);
-    
+
     // Either mobile menu exists or page is responsive
     expect(isMenuVisible || viewportMeta).toBeTruthy();
-    
+
     await context.close();
   });
 });

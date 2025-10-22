@@ -11,30 +11,12 @@ import { aomaProgressStream, type AOMASource } from "./aomaProgressStream";
 const AOMA_TOOLS = {
   query_aoma_knowledge: {
     description: "Query Sony Music AOMA knowledge base for general information",
-    keywords: [
-      "what is",
-      "explain",
-      "tell me about",
-      "how does",
-      "aoma",
-      "usm",
-      "dam",
-      "metadata",
-    ],
+    keywords: ["what is", "explain", "tell me about", "how does", "aoma", "usm", "dam", "metadata"],
     priority: 1,
   },
   search_jira_tickets: {
     description: "Search Jira for tickets, issues, bugs, features",
-    keywords: [
-      "jira",
-      "ticket",
-      "issue",
-      "bug",
-      "feature",
-      "task",
-      "story",
-      "epic",
-    ],
+    keywords: ["jira", "ticket", "issue", "bug", "feature", "task", "story", "epic"],
     priority: 2,
   },
   get_jira_ticket_count: {
@@ -66,40 +48,17 @@ const AOMA_TOOLS = {
   },
   search_code_files: {
     description: "Search through code files and repositories",
-    keywords: [
-      "code",
-      "file",
-      "function",
-      "class",
-      "implementation",
-      "source",
-      "repository",
-    ],
+    keywords: ["code", "file", "function", "class", "implementation", "source", "repository"],
     priority: 3,
   },
   search_outlook_emails: {
     description: "Search Outlook emails and communications",
-    keywords: [
-      "email",
-      "outlook",
-      "message",
-      "communication",
-      "sent",
-      "received",
-      "mail",
-    ],
+    keywords: ["email", "outlook", "message", "communication", "sent", "received", "mail"],
     priority: 4,
   },
   analyze_development_context: {
     description: "Analyze development context and provide insights",
-    keywords: [
-      "analyze",
-      "context",
-      "development",
-      "insight",
-      "assessment",
-      "review",
-    ],
+    keywords: ["analyze", "context", "development", "insight", "assessment", "review"],
     priority: 5,
   },
   get_system_health: {
@@ -128,21 +87,21 @@ export class AOMAOrchestrator {
   private analyzeQuery(query: string | any): OrchestrationResult {
     // Ensure query is a string
     let queryString: string;
-    if (typeof query === 'string') {
+    if (typeof query === "string") {
       queryString = query;
-    } else if (query && typeof query === 'object') {
+    } else if (query && typeof query === "object") {
       // Handle object format (e.g., {type: 'text', text: '...'})
       if (query.text) {
         queryString = query.text;
       } else if (Array.isArray(query)) {
-        queryString = query.map((part: any) => part.text || part.content || '').join(' ');
+        queryString = query.map((part: any) => part.text || part.content || "").join(" ");
       } else {
         queryString = JSON.stringify(query);
       }
     } else {
-      queryString = String(query || '');
+      queryString = String(query || "");
     }
-    
+
     const lowerQuery = queryString.toLowerCase();
     const selectedTools: ToolCall[] = [];
 
@@ -169,9 +128,7 @@ export class AOMAOrchestrator {
     }
 
     // Sort tools by score
-    const sortedTools = Array.from(toolScores.entries()).sort(
-      (a, b) => b[1] - a[1],
-    );
+    const sortedTools = Array.from(toolScores.entries()).sort((a, b) => b[1] - a[1]);
 
     // Determine strategy based on query analysis
     let strategy: "single" | "parallel" | "sequential" = "single";
@@ -184,8 +141,7 @@ export class AOMAOrchestrator {
         args: { query, strategy: "rapid" },
         reason: "General query - using knowledge base",
       });
-      reasoning =
-        "No specific tool keywords found, defaulting to knowledge base";
+      reasoning = "No specific tool keywords found, defaulting to knowledge base";
     } else if (hasMultipleTopics && sortedTools.length > 1) {
       // Multiple topics - run tools in parallel
       strategy = "parallel";
@@ -234,69 +190,69 @@ export class AOMAOrchestrator {
    */
   private extractSources(toolName: string, result: any): AOMASource[] {
     const sources: AOMASource[] = [];
-    
+
     if (!result) return sources;
-    
+
     switch (toolName) {
       case "query_aoma_knowledge":
         sources.push({
-          type: 'knowledge_base',
-          title: 'AOMA Knowledge Base',
-          description: result.topic || 'General AOMA information',
-          relevance: 1.0
+          type: "knowledge_base",
+          title: "AOMA Knowledge Base",
+          description: result.topic || "General AOMA information",
+          relevance: 1.0,
         });
         break;
-        
+
       case "search_jira_tickets":
         if (Array.isArray(result)) {
           result.forEach((ticket: any) => {
             sources.push({
-              type: 'jira',
-              title: `Jira ${ticket.key || 'Ticket'}`,
+              type: "jira",
+              title: `Jira ${ticket.key || "Ticket"}`,
               url: ticket.url,
               description: ticket.summary || ticket.description,
-              timestamp: ticket.created || ticket.updated
+              timestamp: ticket.created || ticket.updated,
             });
           });
         }
         break;
-        
+
       case "search_git_commits":
         if (Array.isArray(result)) {
           result.forEach((commit: any) => {
             sources.push({
-              type: 'git',
-              title: `Git Commit ${commit.sha?.substring(0, 7) || ''}`,
+              type: "git",
+              title: `Git Commit ${commit.sha?.substring(0, 7) || ""}`,
               description: commit.message || commit.description,
-              timestamp: commit.date
+              timestamp: commit.date,
             });
           });
         }
         break;
-        
+
       case "search_outlook_emails":
         if (Array.isArray(result)) {
           result.forEach((email: any) => {
             sources.push({
-              type: 'outlook',
-              title: email.subject || 'Email',
+              type: "outlook",
+              title: email.subject || "Email",
               description: email.preview || email.body?.substring(0, 100),
-              timestamp: email.receivedDateTime || email.sentDateTime
+              timestamp: email.receivedDateTime || email.sentDateTime,
             });
           });
         }
         break;
-        
+
       case "get_system_health":
         sources.push({
-          type: 'system',
-          title: 'System Health Check',
-          description: 'Current system status and metrics',
-          timestamp: new Date().toISOString()
+          type: "system",
+          title: "System Health Check",
+          description: "Current system status and metrics",
+          timestamp: new Date().toISOString(),
         });
         break;
     }
-    
+
     return sources;
   }
 
@@ -337,10 +293,13 @@ export class AOMAOrchestrator {
   /**
    * Execute orchestrated tool calls with progress tracking
    */
-  async executeOrchestration(query: string, progressCallback?: (update: any) => void): Promise<any> {
+  async executeOrchestration(
+    query: string,
+    progressCallback?: (update: any) => void
+  ): Promise<any> {
     // Start progress tracking
     aomaProgressStream.startQuery(query);
-    
+
     // Check cache first
     const cacheKey = `orchestrated:${query}`;
     const cached = aomaCache.get(cacheKey, "rapid");
@@ -348,21 +307,19 @@ export class AOMAOrchestrator {
       console.log("⚡ Returning cached orchestrated response");
       aomaProgressStream.recordCacheHit("orchestrated");
       aomaProgressStream.completeQuery();
-      
+
       // Send progress updates if callback provided
       if (progressCallback) {
-        aomaProgressStream.getUpdates().forEach(update => progressCallback(update));
+        aomaProgressStream.getUpdates().forEach((update) => progressCallback(update));
       }
-      
+
       return cached;
     }
 
     // Analyze query to determine tool strategy
     const orchestration = this.analyzeQuery(query);
     console.log(`🎯 Orchestration strategy: ${orchestration.strategy}`);
-    console.log(
-      `📋 Tools selected: ${orchestration.tools.map((t) => t.tool).join(", ")}`,
-    );
+    console.log(`📋 Tools selected: ${orchestration.tools.map((t) => t.tool).join(", ")}`);
     console.log(`💭 Reasoning: ${orchestration.reasoning}`);
 
     let results: any = {};
@@ -373,28 +330,28 @@ export class AOMAOrchestrator {
         const promises = orchestration.tools.map((toolCall) => {
           // Track start of each service
           aomaProgressStream.startService(toolCall.tool);
-          
+
           return this.callAOMATool(toolCall.tool, toolCall.args)
             .then((result) => {
               // Extract sources if available
               const sources = this.extractSources(toolCall.tool, result);
               aomaProgressStream.completeService(toolCall.tool, sources.length, sources);
-              
+
               // Send progress update if callback provided
               if (progressCallback) {
                 progressCallback(aomaProgressStream.getLatestUpdate());
               }
-              
+
               return { tool: toolCall.tool, result, sources };
             })
             .catch((error) => {
               aomaProgressStream.errorService(toolCall.tool, error.message);
-              
+
               // Send progress update if callback provided
               if (progressCallback) {
                 progressCallback(aomaProgressStream.getLatestUpdate());
               }
-              
+
               return { tool: toolCall.tool, error: error.message };
             });
         });
@@ -409,7 +366,7 @@ export class AOMAOrchestrator {
             allSources.push(...sources);
           }
         }
-        
+
         // Add sources to results
         results._sources = allSources;
       } else if (orchestration.strategy === "sequential") {
@@ -438,20 +395,17 @@ export class AOMAOrchestrator {
       }
 
       // Format the combined response
-      const formattedResponse = this.formatOrchestratedResponse(
-        results,
-        orchestration,
-      );
+      const formattedResponse = this.formatOrchestratedResponse(results, orchestration);
 
       // Cache the orchestrated response
       aomaCache.set(cacheKey, formattedResponse, "rapid");
-      
+
       // Mark query as complete
       aomaProgressStream.completeQuery();
-      
+
       // Send final progress update if callback provided
       if (progressCallback) {
-        aomaProgressStream.getUpdates().forEach(update => progressCallback(update));
+        aomaProgressStream.getUpdates().forEach((update) => progressCallback(update));
       }
 
       return formattedResponse;
@@ -461,26 +415,26 @@ export class AOMAOrchestrator {
       // Fallback to knowledge base with progress tracking
       console.log("🔄 Falling back to knowledge base query");
       aomaProgressStream.startService("query_aoma_knowledge");
-      
+
       const fallbackResult = await this.callAOMATool("query_aoma_knowledge", {
         query,
         strategy: "rapid",
       });
-      
+
       const sources = this.extractSources("query_aoma_knowledge", fallbackResult);
       aomaProgressStream.completeService("query_aoma_knowledge", sources.length, sources);
       aomaProgressStream.completeQuery();
-      
+
       // Send progress updates if callback provided
       if (progressCallback) {
-        aomaProgressStream.getUpdates().forEach(update => progressCallback(update));
+        aomaProgressStream.getUpdates().forEach((update) => progressCallback(update));
       }
-      
+
       // Add sources to result
-      if (fallbackResult && typeof fallbackResult === 'object') {
+      if (fallbackResult && typeof fallbackResult === "object") {
         fallbackResult._sources = sources;
       }
-      
+
       return fallbackResult;
     }
   }
@@ -499,28 +453,30 @@ export class AOMAOrchestrator {
         case "query_aoma_knowledge":
           // Call Railway AOMA server directly in production to avoid circular references
           // In development, use the local API endpoint for easier testing
-          const aomaEndpoint = process.env.NODE_ENV === 'production'
-            ? 'https://luminous-dedication-production.up.railway.app/rpc'
-            : 'http://localhost:3000/api/aoma';
-          
+          const aomaEndpoint =
+            process.env.NODE_ENV === "production"
+              ? "https://luminous-dedication-production.up.railway.app/rpc"
+              : "http://localhost:3000/api/aoma";
+
           // For production Railway calls, we need to use JSON-RPC format
-          const requestBody = process.env.NODE_ENV === 'production'
-            ? {
-                jsonrpc: "2.0",
-                id: 1,
-                method: "tools/call",
-                params: {
-                  name: "query_aoma_knowledge",
-                  arguments: { query: args.query, strategy: args.strategy }
+          const requestBody =
+            process.env.NODE_ENV === "production"
+              ? {
+                  jsonrpc: "2.0",
+                  id: 1,
+                  method: "tools/call",
+                  params: {
+                    name: "query_aoma_knowledge",
+                    arguments: { query: args.query, strategy: args.strategy },
+                  },
                 }
-              }
-            : { query: args.query, strategy: args.strategy };
-          
+              : { query: args.query, strategy: args.strategy };
+
           const response = await fetch(aomaEndpoint, {
             method: "POST",
-            headers: { 
+            headers: {
               "Content-Type": "application/json",
-              "User-Agent": "SIAM-Orchestrator/1.0"
+              "User-Agent": "SIAM-Orchestrator/1.0",
             },
             body: JSON.stringify(requestBody),
           });
@@ -532,19 +488,20 @@ export class AOMAOrchestrator {
           }
 
           const result = await response.json();
-          console.log('✅ AOMA MCP response:', JSON.stringify(result).substring(0, 200));
-          
+          console.log("✅ AOMA MCP response:", JSON.stringify(result).substring(0, 200));
+
           // Handle different response formats (JSON-RPC in production vs direct in dev)
-          const actualResult = process.env.NODE_ENV === 'production' 
-            ? result.result  // Extract from JSON-RPC wrapper
-            : result;
-          
+          const actualResult =
+            process.env.NODE_ENV === "production"
+              ? result.result // Extract from JSON-RPC wrapper
+              : result;
+
           // Handle new AOMA response format with content array
           if ((actualResult.success && actualResult.result?.content) || actualResult.content) {
             const content = actualResult.content || actualResult.result?.content;
             // Extract text from the structured content
             const textContent = content
-              .filter((item: any) => item.type === 'text')
+              .filter((item: any) => item.type === "text")
               .map((item: any) => {
                 // Parse the JSON text if it contains a response
                 try {
@@ -555,16 +512,16 @@ export class AOMAOrchestrator {
                     const sourceMatches = parsed.response.match(/【[^】]+】/g);
                     if (sourceMatches) {
                       sourceMatches.forEach((match: string) => {
-                        const cleaned = match.replace(/【|】/g, '');
+                        const cleaned = match.replace(/【|】/g, "");
                         if (!sources.includes(cleaned)) {
                           sources.push(cleaned);
                         }
                       });
                     }
-                    
+
                     return {
                       response: parsed.response,
-                      sources: sources.length > 0 ? sources : ['AOMA Knowledge Base'],
+                      sources: sources.length > 0 ? sources : ["AOMA Knowledge Base"],
                       metadata: parsed.metadata || result.result.metadata,
                     };
                   }
@@ -573,16 +530,17 @@ export class AOMAOrchestrator {
                   return item.text;
                 }
               })[0];
-            
+
             return textContent || result;
           }
-          
+
           return result;
 
         case "get_system_health":
           // Return a simple health check response
           return {
-            response: "System Health Check:\n\n✅ AOMA Services: Online\n✅ MCP Integration: Connected\n✅ Knowledge Base: Available\n✅ Orchestrator: Operational\n✅ Cache: Active\n\nAll systems operational.",
+            response:
+              "System Health Check:\n\n✅ AOMA Services: Online\n✅ MCP Integration: Connected\n✅ Knowledge Base: Available\n✅ Orchestrator: Operational\n✅ Cache: Active\n\nAll systems operational.",
             sources: ["System Health Monitor"],
             metadata: {
               tool: "get_system_health",
@@ -593,9 +551,9 @@ export class AOMAOrchestrator {
                 mcp: "connected",
                 knowledge_base: "available",
                 orchestrator: "operational",
-                cache: "active"
-              }
-            }
+                cache: "active",
+              },
+            },
           };
 
         case "search_jira_tickets":
@@ -606,16 +564,16 @@ export class AOMAOrchestrator {
         case "analyze_development_context":
           // Call the aoma-mesh-mcp server for these tools
           // Use Railway endpoint for aoma-mesh-mcp (Railway is the correct deployment platform)
-          const mcpEndpoint = 'https://luminous-dedication-production.up.railway.app/rpc';
-          
+          const mcpEndpoint = "https://luminous-dedication-production.up.railway.app/rpc";
+
           const mcpRequest = {
             jsonrpc: "2.0",
             id: Math.random(),
             method: "tools/call",
             params: {
               name: toolName,
-              arguments: args
-            }
+              arguments: args,
+            },
           };
 
           const mcpResponse = await fetch(mcpEndpoint, {
@@ -630,9 +588,9 @@ export class AOMAOrchestrator {
           }
 
           const mcpResult = await mcpResponse.json();
-          
+
           if (mcpResult.error) {
-            throw new Error(mcpResult.error.message || 'MCP tool error');
+            throw new Error(mcpResult.error.message || "MCP tool error");
           }
 
           // Parse the MCP response
@@ -644,7 +602,7 @@ export class AOMAOrchestrator {
               // If not JSON, return as-is
               return {
                 response: mcpResult.result.content[0].text,
-                metadata: { tool: toolName }
+                metadata: { tool: toolName },
               };
             }
           }
@@ -665,24 +623,22 @@ export class AOMAOrchestrator {
         stack: error instanceof Error ? error.stack : undefined,
         toolName,
         args,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       // Provide specific error messages based on error type
-      if (errorMessage.includes('401') || errorMessage.includes('API key')) {
+      if (errorMessage.includes("401") || errorMessage.includes("API key")) {
         throw new Error(
           `AOMA MCP server authentication failed. The OpenAI API key is invalid or expired. ` +
-          `Server error: ${errorMessage}`
+            `Server error: ${errorMessage}`
         );
-      } else if (errorMessage.includes('fetch') || errorMessage.includes('ECONNREFUSED')) {
+      } else if (errorMessage.includes("fetch") || errorMessage.includes("ECONNREFUSED")) {
         throw new Error(
           `AOMA MCP server is unreachable. Please check that it's running on the correct port. ` +
-          `Connection error: ${errorMessage}`
+            `Connection error: ${errorMessage}`
         );
       } else {
-        throw new Error(
-          `AOMA knowledge base error for ${toolName}: ${errorMessage}`,
-        );
+        throw new Error(`AOMA knowledge base error for ${toolName}: ${errorMessage}`);
       }
     }
   }
@@ -690,10 +646,7 @@ export class AOMAOrchestrator {
   /**
    * Format orchestrated responses into a coherent answer
    */
-  private formatOrchestratedResponse(
-    results: any,
-    orchestration: OrchestrationResult,
-  ): any {
+  private formatOrchestratedResponse(results: any, orchestration: OrchestrationResult): any {
     if (orchestration.strategy === "single") {
       // Format single responses with citation markers if sources exist
       if (results.sources && Array.isArray(results.sources)) {
@@ -703,9 +656,9 @@ export class AOMAOrchestrator {
           response: formattedResponse,
           formattedSources: results.sources.map((source: any, idx: number) => ({
             id: `source-${idx + 1}`,
-            title: typeof source === 'string' ? source : source.title,
-            url: typeof source === 'object' ? source.url : undefined,
-            description: typeof source === 'object' ? source.description : source,
+            title: typeof source === "string" ? source : source.title,
+            url: typeof source === "object" ? source.url : undefined,
+            description: typeof source === "object" ? source.description : source,
           })),
         };
       }
@@ -734,7 +687,7 @@ export class AOMAOrchestrator {
 
         if (result.response) {
           let toolResponse = result.response;
-          
+
           // Add citations if this tool has sources
           if (result.sources && Array.isArray(result.sources)) {
             const citationMap = new Map();
@@ -744,25 +697,24 @@ export class AOMAOrchestrator {
               combined.sources.push(source);
               combined.formattedSources.push({
                 id: `source-${sourceIndex}`,
-                title: typeof source === 'string' ? source : source.title,
-                url: typeof source === 'object' ? source.url : undefined,
-                description: typeof source === 'object' ? source.description : source,
+                title: typeof source === "string" ? source : source.title,
+                url: typeof source === "object" ? source.url : undefined,
+                description: typeof source === "object" ? source.description : source,
                 tool: tool,
               });
             });
-            
+
             // Add citation markers to this tool's response
-            toolResponse = `${toolResponse} [${Array.from(citationMap.values()).join(',')}]`;
+            toolResponse = `${toolResponse} [${Array.from(citationMap.values()).join(",")}]`;
           }
-          
+
           combined.response += `\n\n${toolResponse}`;
         }
       }
     }
 
     if (!combined.response) {
-      combined.response =
-        "Unable to retrieve information from the requested sources.";
+      combined.response = "Unable to retrieve information from the requested sources.";
     }
 
     return combined;
@@ -773,21 +725,21 @@ export class AOMAOrchestrator {
    */
   private addCitationMarkers(response: string, sources: any[]): string {
     if (!sources || sources.length === 0) return response;
-    
+
     // Simple approach: Add citations at the end of sentences that might reference the sources
     // In a real implementation, you'd want more sophisticated matching
     const sentences = response.split(/(?<=[.!?])\s+/);
     const citationIndices = sources.map((_, idx) => idx + 1);
-    
+
     // Distribute citations throughout the response
     const citedSentences = sentences.map((sentence, idx) => {
-      if (idx < sources.length && !sentence.includes('[')) {
+      if (idx < sources.length && !sentence.includes("[")) {
         return `${sentence} [${idx + 1}]`;
       }
       return sentence;
     });
-    
-    return citedSentences.join(' ');
+
+    return citedSentences.join(" ");
   }
 }
 

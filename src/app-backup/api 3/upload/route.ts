@@ -42,8 +42,7 @@ export async function POST(request: NextRequest) {
         const assistant = await openai.beta.assistants.retrieve(assistantId);
 
         if (assistant.tool_resources?.file_search?.vector_store_ids?.[0]) {
-          const vectorStoreId =
-            assistant.tool_resources.file_search.vector_store_ids[0];
+          const vectorStoreId = assistant.tool_resources.file_search.vector_store_ids[0];
 
           // Add file to vector store
           await openai.beta.vectorStores.files.create(vectorStoreId, {
@@ -89,7 +88,7 @@ export async function POST(request: NextRequest) {
         error: "Upload failed",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -110,9 +109,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("[UPLOAD] Error listing files:", error);
-    return NextResponse.json(
-      { error: "Failed to list files" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to list files" }, { status: 500 });
   }
 }

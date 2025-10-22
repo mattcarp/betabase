@@ -128,7 +128,7 @@ export const usePerformance = () => {
         // console.log(`Failed to prefetch ${componentName}:`, error);
       }
     },
-    [prefetchedComponents],
+    [prefetchedComponents]
   );
 
   // Mark critical path complete (when main UI is ready)
@@ -175,7 +175,7 @@ export const usePerformance = () => {
         throw error;
       }
     },
-    [reportPerformanceIssue],
+    [reportPerformanceIssue]
   );
 
   // Get current performance state
@@ -205,7 +205,7 @@ export const usePerformance = () => {
         }
       };
     },
-    [reportPerformanceIssue],
+    [reportPerformanceIssue]
   );
 
   return {

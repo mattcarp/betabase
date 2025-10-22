@@ -9,17 +9,20 @@
 ## The Problem
 
 ### Query That Fails:
+
 ```
 "What are the steps for AOMA cover hot swap?"
 ```
 
 ### Performance:
+
 - **Expected:** 8-10 seconds
 - **Actual:** **81-93 seconds** (10x slower than target!)
 - **Consistent:** EVERY test shows 35-93s range
 - **Strategy independent:** Even "rapid" strategy takes 93s!
 
 ### Test Results:
+
 ```
 Test 1 (focused): 43.1s
 Test 2 (focused): 36.5s
@@ -28,6 +31,7 @@ Test 4 (rapid): 93.5s  ← Even WORSE with rapid!
 ```
 
 ### Simple Query Comparison:
+
 ```
 "What is AOMA?": 12.8s ✅ (acceptable)
 "What is GRAS in AOMA?": ~15s ✅ (acceptable)
@@ -49,20 +53,22 @@ Test 4 (rapid): 93.5s  ← Even WORSE with rapid!
 ### 🎯 Likely Culprits:
 
 #### 1. **Vector Search Content Size** (PRIMARY SUSPECT)
+
 ```typescript
 // Current code at line 191-196:
 const knowledgeContext = filteredResults
   .slice(0, resultCount)
-  .map(r => {
-    const content = r.content?.[0]?.text || '';
+  .map((r) => {
+    const content = r.content?.[0]?.text || "";
     return `[Source: ${r.filename} (relevance: ${r.score.toFixed(2)})]\n${content}`;
   })
-  .join('\n\n---\n\n');
+  .join("\n\n---\n\n");
 ```
 
 **Issue:** The "cover hot swap" query probably returns HUGE documents from vector search!
 
 **Evidence:**
+
 - Vector search retrieves FULL document content
 - No truncation applied before sending to GPT
 - Documents could be 50KB+ each
@@ -70,6 +76,7 @@ const knowledgeContext = filteredResults
 - GPT-4o slows down dramatically with huge contexts
 
 **The Smoking Gun:**
+
 - Rapid strategy (2 results) = 93s
 - Focused strategy (3 results) = 35s
 - **Rapid is SLOWER** because it's hitting ONE MASSIVE document!
@@ -77,6 +84,7 @@ const knowledgeContext = filteredResults
 #### 2. **GPT-4o Context Processing Bottleneck**
 
 When context is huge (50KB+):
+
 - GPT-4o processing time increases exponentially
 - Not linear with token count
 - Rate limiting may kick in
@@ -86,12 +94,13 @@ When context is huge (50KB+):
 
 ```typescript
 // Problem: Sending entire document content
-const content = r.content?.[0]?.text || '';  // UNLIMITED SIZE!
+const content = r.content?.[0]?.text || ""; // UNLIMITED SIZE!
 ```
 
 Should be:
+
 ```typescript
-const content = (r.content?.[0]?.text || '').slice(0, 2000);  // Truncate to 2KB
+const content = (r.content?.[0]?.text || "").slice(0, 2000); // Truncate to 2KB
 ```
 
 ---
@@ -108,14 +117,14 @@ const MAX_CONTENT_PER_RESULT = 2000; // 2KB per document (~500 tokens)
 
 const knowledgeContext = filteredResults
   .slice(0, resultCount)
-  .map(r => {
-    const fullContent = r.content?.[0]?.text || '';
+  .map((r) => {
+    const fullContent = r.content?.[0]?.text || "";
     const truncatedContent = fullContent.slice(0, MAX_CONTENT_PER_RESULT);
     const wasTruncated = fullContent.length > MAX_CONTENT_PER_RESULT;
-    
-    return `[Source: ${r.filename} (relevance: ${r.score.toFixed(2)})${wasTruncated ? ' [truncated]' : ''}]\n${truncatedContent}`;
+
+    return `[Source: ${r.filename} (relevance: ${r.score.toFixed(2)})${wasTruncated ? " [truncated]" : ""}]\n${truncatedContent}`;
   })
-  .join('\n\n---\n\n');
+  .join("\n\n---\n\n");
 ```
 
 **Expected impact:** 93s → 8-15s
@@ -127,36 +136,36 @@ Add intelligent chunking and relevance-based extraction:
 ```typescript
 function extractRelevantSnippet(content: string, query: string, maxLength: number = 2000): string {
   // Find the most relevant section of the content
-  const queryTerms = query.toLowerCase().split(' ');
-  const paragraphs = content.split('\n\n');
-  
+  const queryTerms = query.toLowerCase().split(" ");
+  const paragraphs = content.split("\n\n");
+
   // Score each paragraph by query term matches
-  const scored = paragraphs.map(p => ({
+  const scored = paragraphs.map((p) => ({
     text: p,
-    score: queryTerms.filter(term => p.toLowerCase().includes(term)).length
+    score: queryTerms.filter((term) => p.toLowerCase().includes(term)).length,
   }));
-  
+
   // Sort by relevance and take top paragraphs until maxLength
   scored.sort((a, b) => b.score - a.score);
-  
-  let result = '';
+
+  let result = "";
   for (const para of scored) {
     if ((result + para.text).length > maxLength) break;
-    result += para.text + '\n\n';
+    result += para.text + "\n\n";
   }
-  
+
   return result.trim() || content.slice(0, maxLength);
 }
 
 const knowledgeContext = filteredResults
   .slice(0, resultCount)
-  .map(r => {
-    const fullContent = r.content?.[0]?.text || '';
+  .map((r) => {
+    const fullContent = r.content?.[0]?.text || "";
     const relevantSnippet = extractRelevantSnippet(fullContent, query, 2000);
-    
+
     return `[Source: ${r.filename} (relevance: ${r.score.toFixed(2)})]\n${relevantSnippet}`;
   })
-  .join('\n\n---\n\n');
+  .join("\n\n---\n\n");
 ```
 
 **Expected impact:** 93s → 6-10s + better quality (more relevant content)
@@ -166,15 +175,17 @@ const knowledgeContext = filteredResults
 Add comprehensive performance monitoring and optimization:
 
 1. **Log content sizes:**
+
 ```typescript
-logger.info('Vector search results', {
+logger.info("Vector search results", {
   resultCount: vectorResults.length,
-  contentSizes: vectorResults.map(r => (r.content?.[0]?.text || '').length),
-  totalContextSize: knowledgeContext.length
+  contentSizes: vectorResults.map((r) => (r.content?.[0]?.text || "").length),
+  totalContextSize: knowledgeContext.length,
 });
 ```
 
 2. **Add context size limits:**
+
 ```typescript
 const MAX_TOTAL_CONTEXT = 10000; // 10KB total (~2500 tokens)
 const MAX_PER_RESULT = 3000; // 3KB per document
@@ -182,31 +193,32 @@ const MAX_PER_RESULT = 3000; // 3KB per document
 let totalSize = 0;
 const knowledgeContext = filteredResults
   .slice(0, resultCount)
-  .map(r => {
+  .map((r) => {
     if (totalSize >= MAX_TOTAL_CONTEXT) return null;
-    
+
     const content = extractRelevantSnippet(
-      r.content?.[0]?.text || '', 
-      query, 
+      r.content?.[0]?.text || "",
+      query,
       Math.min(MAX_PER_RESULT, MAX_TOTAL_CONTEXT - totalSize)
     );
-    
+
     totalSize += content.length;
     return `[Source: ${r.filename}]\n${content}`;
   })
   .filter(Boolean)
-  .join('\n\n---\n\n');
+  .join("\n\n---\n\n");
 ```
 
 3. **Add performance breakdown:**
+
 ```typescript
-logger.info('Performance breakdown', {
+logger.info("Performance breakdown", {
   vectorSearchMs: searchDuration,
   contextBuildingMs: Date.now() - contextStart,
   gptCompletionMs: completionDuration,
   totalMs: Date.now() - overallStart,
   totalContextSize: knowledgeContext.length,
-  resultsUsed: filteredResults.length
+  resultsUsed: filteredResults.length,
 });
 ```
 
@@ -248,11 +260,13 @@ curl -X POST "https://luminous-dedication-production.up.railway.app/rpc" \
 ## Impact
 
 ### Current State:
+
 - ❌ **Unusable:** 93 seconds for common workflow queries
 - ❌ **Worse than before:** Old code was 29s average
 - ❌ **Unpredictable:** 8s to 93s variance
 
 ### After Fix:
+
 - ✅ **Usable:** All queries 8-15s
 - ✅ **Consistent:** Predictable performance
 - ✅ **Better than goal:** Meeting 10s target

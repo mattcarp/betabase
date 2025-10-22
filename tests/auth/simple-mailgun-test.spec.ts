@@ -21,22 +21,19 @@ async function getLatestEmail(toEmail: string, sinceTimestamp?: number) {
   const timestamp = sinceTimestamp || Math.floor(Date.now() / 1000) - 300; // Last 5 minutes
 
   // Get events from Mailgun
-  const response = await axios.get(
-    `https://api.mailgun.net/v3/${MAILGUN_DOMAIN}/events`,
-    {
-      auth: {
-        username: "api",
-        password: MAILGUN_API_KEY,
-      },
-      params: {
-        event: "stored",
-        to: toEmail,
-        begin: timestamp,
-        ascending: "no",
-        limit: 1,
-      },
+  const response = await axios.get(`https://api.mailgun.net/v3/${MAILGUN_DOMAIN}/events`, {
+    auth: {
+      username: "api",
+      password: MAILGUN_API_KEY,
     },
-  );
+    params: {
+      event: "stored",
+      to: toEmail,
+      begin: timestamp,
+      ascending: "no",
+      limit: 1,
+    },
+  });
 
   const event = response.data.items[0];
   if (!event || !event.storage) {

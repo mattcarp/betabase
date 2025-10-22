@@ -12,9 +12,7 @@ const ALLOWED_EMAILS = [
 
 function isEmailAllowed(email: string): boolean {
   const emailLower = email.toLowerCase();
-  return (
-    emailLower.endsWith("@sonymusic.com") || ALLOWED_EMAILS.includes(emailLower)
-  );
+  return emailLower.endsWith("@sonymusic.com") || ALLOWED_EMAILS.includes(emailLower);
 }
 
 export async function POST(request: NextRequest) {
@@ -26,10 +24,7 @@ export async function POST(request: NextRequest) {
       case "send":
         // Validate email is allowed
         if (!isEmailAllowed(email)) {
-          return NextResponse.json(
-            { error: "Email not authorized" },
-            { status: 403 },
-          );
+          return NextResponse.json({ error: "Email not authorized" }, { status: 403 });
         }
 
         // Send magic link
@@ -54,10 +49,7 @@ export async function POST(request: NextRequest) {
         const isValid = emailService.verifyCode(email, code);
 
         if (!isValid) {
-          return NextResponse.json(
-            { error: "Invalid or expired code" },
-            { status: 401 },
-          );
+          return NextResponse.json({ error: "Invalid or expired code" }, { status: 401 });
         }
 
         // Create a session token
@@ -79,9 +71,6 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     console.error("[MAGIC LINK] Error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

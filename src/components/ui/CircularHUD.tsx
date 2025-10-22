@@ -20,11 +20,7 @@ export function CircularHUD({
 
   useEffect(() => {
     const handleResize = () => {
-      const newSize = Math.min(
-        window.innerWidth * 0.4,
-        window.innerHeight * 0.4,
-        initialSize,
-      );
+      const newSize = Math.min(window.innerWidth * 0.4, window.innerHeight * 0.4, initialSize);
       setSize(newSize);
     };
 
@@ -34,10 +30,7 @@ export function CircularHUD({
     return () => window.removeEventListener("resize", handleResize);
   }, [initialSize]);
   return (
-    <div
-      className={`relative ${className}`}
-      style={{ width: size, height: size }}
-    >
+    <div className={`relative ${className}`} style={{ width: size, height: size }}>
       {/* Background Glow */}
       <div
         className={`absolute inset-0 rounded-full bg-blue-500/10 blur-2xl transition-opacity duration-500 ${isActive ? "opacity-50" : "opacity-20"}`}
@@ -52,9 +45,7 @@ export function CircularHUD({
       <div className="absolute inset-3 rounded-full border-b-2 border-b-blue-600/50 animate-spin-fast" />
 
       {/* Active pulse ring */}
-      {isActive && (
-        <div className="" />
-      )}
+      {isActive && <div className="" />}
 
       {/* Main HUD container with glassmorphism */}
       <div
@@ -62,9 +53,7 @@ export function CircularHUD({
           isActive ? "glass-panel-active" : ""
         } ${pulseEffect ? "animate-pulse-border" : ""} flex items-center justify-center`}
       >
-        <Suspense fallback={<LoadingSpinner size="md" color="cyan" />}>
-          {children}
-        </Suspense>
+        <Suspense fallback={<LoadingSpinner size="md" color="cyan" />}>{children}</Suspense>
       </div>
 
       {/* Scan line effect */}

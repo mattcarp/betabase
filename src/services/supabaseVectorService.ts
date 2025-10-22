@@ -25,7 +25,7 @@ export class SupabaseVectorService {
   async generateEmbedding(text: string): Promise<number[]> {
     try {
       const { embedding } = await embed({
-        model: openai.embedding('text-embedding-3-small'),
+        model: openai.embedding("text-embedding-3-small"),
         value: text,
       });
 
@@ -46,13 +46,9 @@ export class SupabaseVectorService {
       matchThreshold?: number;
       matchCount?: number;
       sourceTypes?: string[];
-    } = {},
+    } = {}
   ): Promise<VectorSearchResult[]> {
-    const {
-      matchThreshold = 0.78,
-      matchCount = 10,
-      sourceTypes = null,
-    } = options;
+    const { matchThreshold = 0.78, matchCount = 10, sourceTypes = null } = options;
 
     try {
       // Generate embedding for the query
@@ -89,7 +85,7 @@ export class SupabaseVectorService {
     content: string,
     sourceType: AOMAVector["source_type"],
     sourceId: string,
-    metadata: Record<string, any> = {},
+    metadata: Record<string, any> = {}
   ): Promise<string> {
     try {
       // Generate embedding
@@ -98,7 +94,7 @@ export class SupabaseVectorService {
       // Writes/RPC must use admin client
       if (!supabaseAdmin) {
         throw new Error(
-          "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server.",
+          "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server."
         );
       }
 
@@ -130,13 +126,13 @@ export class SupabaseVectorService {
       sourceType: AOMAVector["source_type"];
       sourceId: string;
       metadata?: Record<string, any>;
-    }>,
+    }>
   ): Promise<{ success: number; failed: number }> {
     let success = 0;
     let failed = 0;
 
     // Process in batches to avoid overwhelming the API
-    const batchSize = Math.max(1, parseInt(process.env.VECTOR_BATCH_SIZE || '5', 10));
+    const batchSize = Math.max(1, parseInt(process.env.VECTOR_BATCH_SIZE || "5", 10));
     for (let i = 0; i < vectors.length; i += batchSize) {
       const batch = vectors.slice(i, i + batchSize);
 
@@ -146,7 +142,7 @@ export class SupabaseVectorService {
             vector.content,
             vector.sourceType,
             vector.sourceId,
-            vector.metadata || {},
+            vector.metadata || {}
           );
           success++;
         } catch (error) {
@@ -159,7 +155,7 @@ export class SupabaseVectorService {
 
       // Log progress
       console.log(
-        `Migration progress: ${success + failed}/${vectors.length} (${success} success, ${failed} failed)`,
+        `Migration progress: ${success + failed}/${vectors.length} (${success} success, ${failed} failed)`
       );
     }
 
@@ -177,9 +173,7 @@ export class SupabaseVectorService {
         throw new Error("Supabase client is not initialized");
       }
 
-      const { data, error } = await readClient
-        .from("aoma_vector_stats")
-        .select("*");
+      const { data, error } = await readClient.from("aoma_vector_stats").select("*");
 
       if (error) {
         throw error;
@@ -195,22 +189,16 @@ export class SupabaseVectorService {
   /**
    * Delete vectors by source
    */
-  async deleteVectorsBySource(
-    sourceType: string,
-    sourceId?: string,
-  ): Promise<number> {
+  async deleteVectorsBySource(sourceType: string, sourceId?: string): Promise<number> {
     try {
       // Deletions must use admin client
       if (!supabaseAdmin) {
         throw new Error(
-          "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server.",
+          "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server."
         );
       }
 
-      let query = supabaseAdmin
-        .from("aoma_unified_vectors")
-        .delete()
-        .eq("source_type", sourceType);
+      let query = supabaseAdmin.from("aoma_unified_vectors").delete().eq("source_type", sourceType);
 
       if (sourceId) {
         query = query.eq("source_id", sourceId);
@@ -266,7 +254,7 @@ export class SupabaseVectorService {
       totalCount?: number;
       migratedCount?: number;
       errorMessage?: string;
-    } = {},
+    } = {}
   ): Promise<void> {
     try {
       const updateData: any = {
@@ -283,15 +271,13 @@ export class SupabaseVectorService {
 
       if (!supabaseAdmin) {
         throw new Error(
-          "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server.",
+          "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server."
         );
       }
 
-      const { error } = await supabaseAdmin
-        .from("aoma_migration_status")
-        .upsert(updateData, {
-          onConflict: "source_type",
-        });
+      const { error } = await supabaseAdmin.from("aoma_migration_status").upsert(updateData, {
+        onConflict: "source_type",
+      });
 
       if (error) {
         throw error;

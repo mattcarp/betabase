@@ -52,7 +52,9 @@ export class FirecrawlIntegrationService {
     console.log(`🔍 Analyzing AUT at ${baseUrl}...`);
 
     if (!this.firecrawl) {
-      throw new Error("Firecrawl API key not configured. Set FIRECRAWL_API_KEY environment variable.");
+      throw new Error(
+        "Firecrawl API key not configured. Set FIRECRAWL_API_KEY environment variable."
+      );
     }
 
     try {
@@ -266,22 +268,11 @@ export class FirecrawlIntegrationService {
    * Calculate content relevance for knowledge base
    */
   private calculateRelevance(content: string): number {
-    const keywords = [
-      "test",
-      "testing",
-      "qa",
-      "quality",
-      "automation",
-      "feature",
-      "bug",
-      "error",
-    ];
+    const keywords = ["test", "testing", "qa", "quality", "automation", "feature", "bug", "error"];
     let score = 0;
 
     keywords.forEach((keyword) => {
-      const matches = (
-        content.toLowerCase().match(new RegExp(keyword, "g")) || []
-      ).length;
+      const matches = (content.toLowerCase().match(new RegExp(keyword, "g")) || []).length;
       score += matches;
     });
 
@@ -296,42 +287,36 @@ export class FirecrawlIntegrationService {
 
     try {
       // Store testable features
-      const { error: featuresError } = await supabaseClient
-        .from("testable_features")
-        .upsert(
-          data.testableFeatures.map((f) => ({
-            ...f,
-            app_name: "SIAM",
-            created_at: new Date().toISOString(),
-          })),
-        );
+      const { error: featuresError } = await supabaseClient.from("testable_features").upsert(
+        data.testableFeatures.map((f) => ({
+          ...f,
+          app_name: "SIAM",
+          created_at: new Date().toISOString(),
+        }))
+      );
 
       if (featuresError) throw featuresError;
 
       // Store user flows
-      const { error: flowsError } = await supabaseClient
-        .from("user_flows")
-        .upsert(
-          data.userFlows.map((f) => ({
-            ...f,
-            app_name: "SIAM",
-            created_at: new Date().toISOString(),
-          })),
-        );
+      const { error: flowsError } = await supabaseClient.from("user_flows").upsert(
+        data.userFlows.map((f) => ({
+          ...f,
+          app_name: "SIAM",
+          created_at: new Date().toISOString(),
+        }))
+      );
 
       if (flowsError) throw flowsError;
 
       // Store extracted knowledge for customer support
-      const { error: knowledgeError } = await supabaseClient
-        .from("support_knowledge")
-        .upsert(
-          data.knowledgeExtracted.map((k) => ({
-            ...k,
-            source: "firecrawl",
-            app_name: "SIAM",
-            created_at: new Date().toISOString(),
-          })),
-        );
+      const { error: knowledgeError } = await supabaseClient.from("support_knowledge").upsert(
+        data.knowledgeExtracted.map((k) => ({
+          ...k,
+          source: "firecrawl",
+          app_name: "SIAM",
+          created_at: new Date().toISOString(),
+        }))
+      );
 
       if (knowledgeError) throw knowledgeError;
 

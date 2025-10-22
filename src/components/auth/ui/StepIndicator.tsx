@@ -23,17 +23,12 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
             key={i}
             className={cn(
               "w-2 h-2 rounded-full mx-1 transition-all duration-300",
-              i <= currentStep
-                ? "bg-neon-cyan shadow-[0_0_10px_rgba(6,255,165,0.5)]"
-                : "bg-muted",
+              i <= currentStep ? "bg-neon-cyan shadow-[0_0_10px_rgba(6,255,165,0.5)]" : "bg-muted"
             )}
           />
         ))}
       </div>
-      <Progress
-        value={progress}
-        className=""
-      />
+      <Progress value={progress} className="" />
       <p className="text-xs text-muted-foreground mt-2 text-center">
         Step {currentStep + 1} of {totalSteps}
       </p>
@@ -47,17 +42,10 @@ interface FormProgressProps {
   className?: string;
 }
 
-export const FormProgress: React.FC<FormProgressProps> = ({
-  step,
-  totalSteps,
-  className,
-}) => {
+export const FormProgress: React.FC<FormProgressProps> = ({ step, totalSteps, className }) => {
   return (
     <div className={cn("mb-6", className)}>
-      <Progress
-        value={(step / totalSteps) * 100}
-        className=""
-      />
+      <Progress value={(step / totalSteps) * 100} className="" />
       <p className="text-xs text-muted-foreground mt-2 text-center">
         Step {step} of {totalSteps}
       </p>

@@ -16,9 +16,7 @@ const NotFoundContent = () => (
   <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
     <div className="text-center">
       <h2 className="text-white mb-4">Page Not Found</h2>
-      <p className="text-[#9ca3af]">
-        The page you're looking for doesn't exist.
-      </p>
+      <p className="text-[#9ca3af]">The page you're looking for doesn't exist.</p>
       <a href="/" className="text-[#3b82f6] hover:text-white mt-4 inline-block">
         Go back home
       </a>
@@ -61,9 +59,7 @@ Create pages/\_error.js (without Html import):
 function Error({ statusCode }) {
   return (
     <p>
-      {statusCode
-        ? `An error ${statusCode} occurred on server`
-        : "An error occurred on client"}
+      {statusCode ? `An error ${statusCode} occurred on server` : "An error occurred on client"}
     </p>
   );
 }

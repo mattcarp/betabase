@@ -42,13 +42,7 @@ const tabs: TabDefinition[] = [
 ];
 
 export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
-  const {
-    settings,
-    saveSettings,
-    resetSettings,
-    exportSettings,
-    importSettings,
-  } = useSettings();
+  const { settings, saveSettings, resetSettings, exportSettings, importSettings } = useSettings();
   const { success, error } = useNotifications();
   const [activeTab, setActiveTab] = useState("appearance");
   const [localSettings, setLocalSettings] = useState<SiamSettings>(settings);
@@ -88,27 +82,18 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
     }
   };
 
-  const updateSetting = <K extends keyof SiamSettings>(
-    key: K,
-    value: SiamSettings[K],
-  ) => {
+  const updateSetting = <K extends keyof SiamSettings>(key: K, value: SiamSettings[K]) => {
     setLocalSettings((prev) => ({ ...prev, [key]: value }));
   };
 
-  const updateNestedSetting = <
-    T extends keyof SiamSettings,
-    K extends keyof SiamSettings[T],
-  >(
+  const updateNestedSetting = <T extends keyof SiamSettings, K extends keyof SiamSettings[T]>(
     parentKey: T,
     key: K,
-    value: SiamSettings[T][K],
+    value: SiamSettings[T][K]
   ) => {
     setLocalSettings((prev) => {
       const newSettings = { ...prev };
-      if (
-        typeof newSettings[parentKey] === "object" &&
-        newSettings[parentKey] !== null
-      ) {
+      if (typeof newSettings[parentKey] === "object" && newSettings[parentKey] !== null) {
         return {
           ...newSettings,
           [parentKey]: {
@@ -133,9 +118,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
           <div className="flex items-center gap-2">
             <Settings className="w-5 h-5 text-blue-600" />
-            <h2 className="text-xl font-bold text-blue-600 font-mono">
-              Settings
-            </h2>
+            <h2 className="text-xl font-bold text-blue-600 font-mono">Settings</h2>
           </div>
           <button
             onClick={onClose}
@@ -161,7 +144,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                       "w-full flex items-center gap-3 px-3 py-2 rounded font-mono text-sm transition-colors",
                       activeTab === tab.id
                         ? "bg-blue-600/20 text-blue-300 border border-blue-600/30"
-                        : "text-gray-300 hover:text-blue-300 hover:bg-gray-700/50",
+                        : "text-gray-300 hover:text-blue-300 hover:bg-gray-700/50"
                     )}
                     data-testid={`settings-tab-${tab.id}`}
                   >
@@ -176,22 +159,13 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
           {/* Settings Content */}
           <div className="flex-1 p-6 overflow-y-auto">
             {activeTab === "appearance" && (
-              <AppearanceSettings
-                settings={localSettings}
-                updateSetting={updateSetting}
-              />
+              <AppearanceSettings settings={localSettings} updateSetting={updateSetting} />
             )}
             {activeTab === "audio" && (
-              <AudioSettings
-                settings={localSettings}
-                updateSetting={updateSetting}
-              />
+              <AudioSettings settings={localSettings} updateSetting={updateSetting} />
             )}
             {activeTab === "recording" && (
-              <RecordingSettings
-                settings={localSettings}
-                updateSetting={updateSetting}
-              />
+              <RecordingSettings settings={localSettings} updateSetting={updateSetting} />
             )}
             {activeTab === "layout" && (
               <LayoutSettings
@@ -207,16 +181,10 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
               />
             )}
             {activeTab === "mcp" && (
-              <McpSettings
-                isOpen={true}
-                onSave={() => success("MCP settings updated")}
-              />
+              <McpSettings isOpen={true} onSave={() => success("MCP settings updated")} />
             )}
             {activeTab === "data" && (
-              <DataPrivacySettings
-                settings={localSettings}
-                updateSetting={updateSetting}
-              />
+              <DataPrivacySettings settings={localSettings} updateSetting={updateSetting} />
             )}
           </div>
         </div>
@@ -274,10 +242,7 @@ function AppearanceSettings({
   updateSetting,
 }: {
   settings: SiamSettings;
-  updateSetting: <K extends keyof SiamSettings>(
-    key: K,
-    value: SiamSettings[K],
-  ) => void;
+  updateSetting: <K extends keyof SiamSettings>(key: K, value: SiamSettings[K]) => void;
 }) {
   const [isElectron, setIsElectron] = useState(false);
 
@@ -289,22 +254,16 @@ function AppearanceSettings({
   const handleOpacityChange = async (value: number) => {
     updateSetting("windowOpacity", value);
     // Web environment - window opacity control not available
-    console.log(
-      `Window opacity setting updated to ${value}% (web environment)`,
-    );
+    console.log(`Window opacity setting updated to ${value}% (web environment)`);
   };
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-bold text-blue-600 font-mono">
-        Appearance Settings
-      </h3>
+      <h3 className="text-lg font-bold text-blue-600 font-mono">Appearance Settings</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Theme
-          </label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Theme</label>
           <select
             value={settings.theme}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -321,16 +280,11 @@ function AppearanceSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Color Scheme
-          </label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Color Scheme</label>
           <select
             value={settings.colorScheme}
             onChange={(e) =>
-              updateSetting(
-                "colorScheme",
-                e.target.value as SiamSettings["colorScheme"],
-              )
+              updateSetting("colorScheme", e.target.value as SiamSettings["colorScheme"])
             }
             className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="colorscheme-select"
@@ -342,17 +296,10 @@ function AppearanceSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Font Size
-          </label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Font Size</label>
           <select
             value={settings.fontSize}
-            onChange={(e) =>
-              updateSetting(
-                "fontSize",
-                e.target.value as SiamSettings["fontSize"],
-              )
-            }
+            onChange={(e) => updateSetting("fontSize", e.target.value as SiamSettings["fontSize"])}
             className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="fontsize-select"
           >
@@ -379,10 +326,7 @@ function AppearanceSettings({
 
       {/* MAIN TRANSPARENCY SLIDER - This is the primary one */}
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor="window-opacity"
-          className="font-mono text-sm text-gray-300"
-        >
+        <label htmlFor="window-opacity" className="font-mono text-sm text-gray-300">
           🔄 Window Transparency: {settings.windowOpacity}%
         </label>
         <div className="flex items-center gap-4">
@@ -423,16 +367,11 @@ function AudioSettings({
   updateSetting,
 }: {
   settings: SiamSettings;
-  updateSetting: <K extends keyof SiamSettings>(
-    key: K,
-    value: SiamSettings[K],
-  ) => void;
+  updateSetting: <K extends keyof SiamSettings>(key: K, value: SiamSettings[K]) => void;
 }) {
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-bold text-blue-600 font-mono">
-        Audio Settings
-      </h3>
+      <h3 className="text-lg font-bold text-blue-600 font-mono">Audio Settings</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -444,9 +383,7 @@ function AudioSettings({
             min="0"
             max="100"
             value={settings.audioGain}
-            onChange={(e) =>
-              updateSetting("audioGain", parseInt(e.target.value))
-            }
+            onChange={(e) => updateSetting("audioGain", parseInt(e.target.value))}
             className="w-full"
             data-testid="audio-gain-slider"
           />
@@ -473,9 +410,7 @@ function AudioSettings({
             type="checkbox"
             id="audioVisualization"
             checked={settings.audioVisualizationEnabled}
-            onChange={(e) =>
-              updateSetting("audioVisualizationEnabled", e.target.checked)
-            }
+            onChange={(e) => updateSetting("audioVisualizationEnabled", e.target.checked)}
             className="mr-2"
             data-testid="audio-visualization-checkbox"
           />
@@ -493,16 +428,11 @@ function RecordingSettings({
   updateSetting,
 }: {
   settings: SiamSettings;
-  updateSetting: <K extends keyof SiamSettings>(
-    key: K,
-    value: SiamSettings[K],
-  ) => void;
+  updateSetting: <K extends keyof SiamSettings>(key: K, value: SiamSettings[K]) => void;
 }) {
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-bold text-blue-600 font-mono">
-        Recording Settings
-      </h3>
+      <h3 className="text-lg font-bold text-blue-600 font-mono">Recording Settings</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -511,9 +441,7 @@ function RecordingSettings({
           </label>
           <select
             value={settings.transcriptionLanguage}
-            onChange={(e) =>
-              updateSetting("transcriptionLanguage", e.target.value)
-            }
+            onChange={(e) => updateSetting("transcriptionLanguage", e.target.value)}
             className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="language-select"
           >
@@ -536,9 +464,7 @@ function RecordingSettings({
             min="0"
             max="480"
             value={settings.maxRecordingDuration}
-            onChange={(e) =>
-              updateSetting("maxRecordingDuration", parseInt(e.target.value))
-            }
+            onChange={(e) => updateSetting("maxRecordingDuration", parseInt(e.target.value))}
             className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="max-duration-input"
           />
@@ -551,9 +477,7 @@ function RecordingSettings({
             type="checkbox"
             id="autoStart"
             checked={settings.autoStartRecording}
-            onChange={(e) =>
-              updateSetting("autoStartRecording", e.target.checked)
-            }
+            onChange={(e) => updateSetting("autoStartRecording", e.target.checked)}
             className="mr-2"
             data-testid="auto-start-checkbox"
           />
@@ -567,9 +491,7 @@ function RecordingSettings({
             type="checkbox"
             id="autoSave"
             checked={settings.autoSaveTranscriptions}
-            onChange={(e) =>
-              updateSetting("autoSaveTranscriptions", e.target.checked)
-            }
+            onChange={(e) => updateSetting("autoSaveTranscriptions", e.target.checked)}
             className="mr-2"
             data-testid="auto-save-checkbox"
           />
@@ -588,24 +510,16 @@ function LayoutSettings({
   updateNestedSetting,
 }: {
   settings: SiamSettings;
-  updateSetting: <K extends keyof SiamSettings>(
-    key: K,
-    value: SiamSettings[K],
-  ) => void;
-  updateNestedSetting: <
-    T extends keyof SiamSettings,
-    K extends keyof SiamSettings[T],
-  >(
+  updateSetting: <K extends keyof SiamSettings>(key: K, value: SiamSettings[K]) => void;
+  updateNestedSetting: <T extends keyof SiamSettings, K extends keyof SiamSettings[T]>(
     parentKey: T,
     key: K,
-    value: SiamSettings[T][K],
+    value: SiamSettings[T][K]
   ) => void;
 }) {
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-bold text-blue-600 font-mono">
-        Layout Settings
-      </h3>
+      <h3 className="text-lg font-bold text-blue-600 font-mono">Layout Settings</h3>
 
       <div className="grid grid-cols-3 gap-4">
         <div>
@@ -617,13 +531,7 @@ function LayoutSettings({
             min="15"
             max="40"
             value={settings.panelSizes.left}
-            onChange={(e) =>
-              updateNestedSetting(
-                "panelSizes",
-                "left",
-                parseInt(e.target.value),
-              )
-            }
+            onChange={(e) => updateNestedSetting("panelSizes", "left", parseInt(e.target.value))}
             className="w-full"
             data-testid="left-panel-slider"
           />
@@ -638,13 +546,7 @@ function LayoutSettings({
             min="30"
             max="60"
             value={settings.panelSizes.middle}
-            onChange={(e) =>
-              updateNestedSetting(
-                "panelSizes",
-                "middle",
-                parseInt(e.target.value),
-              )
-            }
+            onChange={(e) => updateNestedSetting("panelSizes", "middle", parseInt(e.target.value))}
             className="w-full"
             data-testid="middle-panel-slider"
           />
@@ -659,13 +561,7 @@ function LayoutSettings({
             min="15"
             max="40"
             value={settings.panelSizes.right}
-            onChange={(e) =>
-              updateNestedSetting(
-                "panelSizes",
-                "right",
-                parseInt(e.target.value),
-              )
-            }
+            onChange={(e) => updateNestedSetting("panelSizes", "right", parseInt(e.target.value))}
             className="w-full"
             data-testid="right-panel-slider"
           />
@@ -678,9 +574,7 @@ function LayoutSettings({
             type="checkbox"
             id="performanceStats"
             checked={settings.showPerformanceStats}
-            onChange={(e) =>
-              updateSetting("showPerformanceStats", e.target.checked)
-            }
+            onChange={(e) => updateSetting("showPerformanceStats", e.target.checked)}
             className="mr-2"
             data-testid="performance-stats-checkbox"
           />
@@ -726,13 +620,10 @@ function ShortcutsSettings({
   updateNestedSetting,
 }: {
   settings: SiamSettings;
-  updateNestedSetting: <
-    T extends keyof SiamSettings,
-    K extends keyof SiamSettings[T],
-  >(
+  updateNestedSetting: <T extends keyof SiamSettings, K extends keyof SiamSettings[T]>(
     parentKey: T,
     key: K,
-    value: SiamSettings[T][K],
+    value: SiamSettings[T][K]
   ) => void;
 }) {
   const shortcuts = [
@@ -749,9 +640,7 @@ function ShortcutsSettings({
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-bold text-blue-600 font-mono">
-        Keyboard Shortcuts
-      </h3>
+      <h3 className="text-lg font-bold text-blue-600 font-mono">Keyboard Shortcuts</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {shortcuts.map(({ key, label }) => (
@@ -760,9 +649,7 @@ function ShortcutsSettings({
             <input
               type="text"
               value={settings.shortcuts[key]}
-              onChange={(e) =>
-                updateNestedSetting("shortcuts", key, e.target.value)
-              }
+              onChange={(e) => updateNestedSetting("shortcuts", key, e.target.value)}
               className="w-24 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-center font-mono text-sm focus:border-blue-600 focus:outline-none"
               data-testid={`shortcut-${key}`}
             />
@@ -778,16 +665,11 @@ function DataPrivacySettings({
   updateSetting,
 }: {
   settings: SiamSettings;
-  updateSetting: <K extends keyof SiamSettings>(
-    key: K,
-    value: SiamSettings[K],
-  ) => void;
+  updateSetting: <K extends keyof SiamSettings>(key: K, value: SiamSettings[K]) => void;
 }) {
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-bold text-blue-600 font-mono">
-        Data & Privacy Settings
-      </h3>
+      <h3 className="text-lg font-bold text-blue-600 font-mono">Data & Privacy Settings</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -799,9 +681,7 @@ function DataPrivacySettings({
             min="10"
             max="1000"
             value={settings.maxSessionHistory}
-            onChange={(e) =>
-              updateSetting("maxSessionHistory", parseInt(e.target.value))
-            }
+            onChange={(e) => updateSetting("maxSessionHistory", parseInt(e.target.value))}
             className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="max-sessions-input"
           />
@@ -816,9 +696,7 @@ function DataPrivacySettings({
             min="1"
             max="365"
             value={settings.sessionRetentionDays}
-            onChange={(e) =>
-              updateSetting("sessionRetentionDays", parseInt(e.target.value))
-            }
+            onChange={(e) => updateSetting("sessionRetentionDays", parseInt(e.target.value))}
             className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="retention-days-input"
           />
@@ -831,9 +709,7 @@ function DataPrivacySettings({
             type="checkbox"
             id="localOnly"
             checked={settings.localStorageOnly}
-            onChange={(e) =>
-              updateSetting("localStorageOnly", e.target.checked)
-            }
+            onChange={(e) => updateSetting("localStorageOnly", e.target.checked)}
             className="mr-2"
             data-testid="local-only-checkbox"
           />
@@ -847,9 +723,7 @@ function DataPrivacySettings({
             type="checkbox"
             id="autoDelete"
             checked={settings.autoDeleteOldSessions}
-            onChange={(e) =>
-              updateSetting("autoDeleteOldSessions", e.target.checked)
-            }
+            onChange={(e) => updateSetting("autoDeleteOldSessions", e.target.checked)}
             className="mr-2"
             data-testid="auto-delete-checkbox"
           />

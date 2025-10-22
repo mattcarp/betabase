@@ -5,6 +5,7 @@
 ### ✅ Completed & Tested
 
 #### Docker Development Environment
+
 - [x] `Dockerfile.dev` - Simple dev container with hot reload
 - [x] `docker-compose.yml` - Base configuration
 - [x] `docker-compose.dev.yml` - Development overrides
@@ -13,6 +14,7 @@
 - [x] Tested on macOS with Docker Desktop 28.3.2
 
 #### Production Build
+
 - [x] Multi-stage `Dockerfile` for production
 - [x] Standalone Next.js build (265MB image!)
 - [x] Non-root user security
@@ -21,6 +23,7 @@
 - [x] Tested production build locally on port 10000
 
 #### Documentation
+
 - [x] `DOCKER-README.md` - Complete Docker guide
 - [x] `DOCKER-DEPLOYMENT-STRATEGY.md` - Cross-machine strategy
 - [x] Inline comments in all Docker files
@@ -30,6 +33,7 @@
 Before merging to main, we need to:
 
 1. **[ ] Clean up non-Docker changes**
+
    ```bash
    # This branch has changes to:
    - API routes (chat-vercel, aoma/health)
@@ -39,6 +43,7 @@ Before merging to main, we need to:
    ```
 
 2. **[ ] Add missing files**
+
    ```bash
    # Create .env.example
    cp .env .env.example
@@ -64,6 +69,7 @@ Before merging to main, we need to:
 **READY FOR STAGED MERGE:**
 
 1. **First PR: Docker Infrastructure Only**
+
    ```bash
    # Cherry-pick just Docker files:
    - Dockerfile*
@@ -75,6 +81,7 @@ Before merging to main, we need to:
    ```
 
 2. **Second PR: Update package.json**
+
    ```bash
    # Remove kill-port from dev script
    # This is the only required app change
@@ -90,11 +97,13 @@ Before merging to main, we need to:
 ### 🚦 Risk Assessment
 
 **LOW RISK** - Docker is ADDITIVE, not destructive:
+
 - Existing `npm run dev` still works
 - Render deployment unchanged (uses same Dockerfile)
 - Developers can choose Docker or native Node.js
 
 **Benefits:**
+
 - Eliminates "works on my machine" forever
 - Consistent dev environment across team
 - Faster onboarding for new developers
@@ -102,17 +111,17 @@ Before merging to main, we need to:
 
 ### 📊 Testing Coverage
 
-| Test | Status | Notes |
-|------|--------|-------|
-| Dev hot reload | ✅ | Working perfectly |
-| Production build | ✅ | 265MB image size |
-| Health checks | ✅ | /api/health responding |
-| Port management | ✅ | 3000 (dev), 10000 (prod) |
-| Volume mounts | ✅ | Hot reload confirmed |
-| Multi-stage build | ✅ | Efficient layers |
-| Non-root user | ✅ | Security best practice |
-| Signal handling | ✅ | Tini configured |
-| Render compatibility | ✅ | linux/amd64 platform |
+| Test                 | Status | Notes                    |
+| -------------------- | ------ | ------------------------ |
+| Dev hot reload       | ✅     | Working perfectly        |
+| Production build     | ✅     | 265MB image size         |
+| Health checks        | ✅     | /api/health responding   |
+| Port management      | ✅     | 3000 (dev), 10000 (prod) |
+| Volume mounts        | ✅     | Hot reload confirmed     |
+| Multi-stage build    | ✅     | Efficient layers         |
+| Non-root user        | ✅     | Security best practice   |
+| Signal handling      | ✅     | Tini configured          |
+| Render compatibility | ✅     | linux/amd64 platform     |
 
 ### 🎬 Next Steps
 
@@ -127,13 +136,14 @@ Before merging to main, we need to:
 **This Docker setup is PRODUCTION-READY** but should be merged carefully due to other changes in the branch. Recommend extracting just the Docker infrastructure into a clean PR.
 
 The Docker implementation itself is:
+
 - ✅ Well-tested
-- ✅ Well-documented  
+- ✅ Well-documented
 - ✅ Following best practices
 - ✅ Ready for production
 
 ---
 
-*Generated: 2025-08-22*
-*Docker Desktop: 28.3.2*
-*Next.js: 15.4.6*
+_Generated: 2025-08-22_
+_Docker Desktop: 28.3.2_
+_Next.js: 15.4.6_

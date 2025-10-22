@@ -5,10 +5,7 @@ export async function POST(request: NextRequest) {
     const { query } = await request.json();
 
     if (!query) {
-      return NextResponse.json(
-        { error: "Query parameter is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Query parameter is required" }, { status: 400 });
     }
 
     // Generic AOMA suggestions - DO NOT suggest specific features unless verified in knowledge base
@@ -36,7 +33,7 @@ export async function POST(request: NextRequest) {
         details: error instanceof Error ? error.message : "Unknown error",
         timestamp: new Date().toISOString(),
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

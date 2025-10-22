@@ -12,21 +12,16 @@ import axios from "axios";
 const TEST_EMAIL = `siam-test-${Date.now()}@mailinator.com`;
 const MAILINATOR_API_KEY = "get-free-key-from-mailinator.com"; // Optional for public inbox
 
-async function getMagicCodeFromMailinator(
-  email: string,
-): Promise<string | null> {
+async function getMagicCodeFromMailinator(email: string): Promise<string | null> {
   const inbox = email.split("@")[0];
 
   // Mailinator public API - no key needed for public inboxes!
   const response = await axios
-    .get(
-      `https://www.mailinator.com/api/v2/domains/mailinator.com/inboxes/${inbox}`,
-      {
-        headers: {
-          Accept: "application/json",
-        },
+    .get(`https://www.mailinator.com/api/v2/domains/mailinator.com/inboxes/${inbox}`, {
+      headers: {
+        Accept: "application/json",
       },
-    )
+    })
     .catch(() => null);
 
   if (!response?.data?.msgs?.[0]) {
@@ -39,7 +34,7 @@ async function getMagicCodeFromMailinator(
   // Get the latest message
   const messageId = response.data.msgs[0].id;
   const msgResponse = await axios.get(
-    `https://www.mailinator.com/api/v2/domains/mailinator.com/inboxes/${inbox}/messages/${messageId}`,
+    `https://www.mailinator.com/api/v2/domains/mailinator.com/inboxes/${inbox}/messages/${messageId}`
   );
 
   const body = msgResponse.data.body || msgResponse.data.text;
@@ -50,7 +45,7 @@ async function getMagicCodeFromMailinator(
 test("simple production login with Mailinator", async ({ page }) => {
   console.log(`📧 Test email: ${TEST_EMAIL}`);
   console.log(
-    `📬 Check inbox: https://www.mailinator.com/v3/index.jsp?zone=public&query=${TEST_EMAIL.split("@")[0]}`,
+    `📬 Check inbox: https://www.mailinator.com/v3/index.jsp?zone=public&query=${TEST_EMAIL.split("@")[0]}`
   );
 
   // 1. Go to production
@@ -75,7 +70,7 @@ test("simple production login with Mailinator", async ({ page }) => {
 
   if (!code) {
     throw new Error(
-      `No code found. Check: https://www.mailinator.com/v3/index.jsp?zone=public&query=${TEST_EMAIL.split("@")[0]}`,
+      `No code found. Check: https://www.mailinator.com/v3/index.jsp?zone=public&query=${TEST_EMAIL.split("@")[0]}`
     );
   }
 

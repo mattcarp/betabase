@@ -14,10 +14,12 @@ test.describe("Task 61: Playwright Test Dashboard Integration", () => {
     // Check if test dashboard components are loaded in the application
     const hasDashboard = await page.evaluate(() => {
       // Check for test dashboard related elements in the DOM
-      const elements = document.querySelectorAll('[class*="test-dashboard"], [class*="TestDashboard"], [data-testid*="test"]');
+      const elements = document.querySelectorAll(
+        '[class*="test-dashboard"], [class*="TestDashboard"], [data-testid*="test"]'
+      );
       return elements.length > 0;
     });
-    
+
     // Log the result for verification
     console.log("Test Dashboard elements present:", hasDashboard);
   });
@@ -30,9 +32,9 @@ test.describe("Task 61: Playwright Test Dashboard Integration", () => {
       "/api/test/generate",
       "/api/test/coverage",
       "/api/test/analyze-aut",
-      "/api/test/firecrawl"
+      "/api/test/firecrawl",
     ];
-    
+
     for (const endpoint of endpoints) {
       const response = await request.get(`http://localhost:3000${endpoint}`);
       // These endpoints exist if they don't return 404
@@ -53,10 +55,10 @@ test.describe("Task 61: Playwright Test Dashboard Integration", () => {
       data: {
         testType: "unit",
         testName: "sample-test",
-        code: "test('sample', () => { expect(true).toBe(true); })"
-      }
+        code: "test('sample', () => { expect(true).toBe(true); })",
+      },
     });
-    
+
     // Should accept POST requests (even if it returns an error due to missing auth/data)
     expect([200, 400, 401, 403, 500]).toContain(response.status());
     console.log(`Test execution endpoint responds to POST (status: ${response.status()})`);
@@ -64,10 +66,10 @@ test.describe("Task 61: Playwright Test Dashboard Integration", () => {
 
   test("Test results endpoint returns data", async ({ request }) => {
     const response = await request.get("http://localhost:3000/api/test/results");
-    
+
     // Should return some response (even if empty array or error)
     expect([200, 401, 403, 500]).toContain(response.status());
-    
+
     if (response.ok()) {
       const data = await response.json();
       console.log(`Test results endpoint returned: ${JSON.stringify(data).substring(0, 100)}...`);
@@ -78,10 +80,10 @@ test.describe("Task 61: Playwright Test Dashboard Integration", () => {
     const response = await request.post("http://localhost:3000/api/test/generate", {
       data: {
         component: "Button",
-        framework: "playwright"
-      }
+        framework: "playwright",
+      },
     });
-    
+
     // Should respond to generation requests
     expect([200, 400, 401, 403, 500]).toContain(response.status());
     console.log(`Test generation endpoint status: ${response.status()}`);
@@ -89,7 +91,7 @@ test.describe("Task 61: Playwright Test Dashboard Integration", () => {
 
   test("Coverage report endpoint exists", async ({ request }) => {
     const response = await request.get("http://localhost:3000/api/test/coverage");
-    
+
     // Coverage endpoint should exist
     expect(response.status()).not.toBe(404);
     console.log(`Coverage endpoint status: ${response.status()}`);
@@ -99,10 +101,10 @@ test.describe("Task 61: Playwright Test Dashboard Integration", () => {
     const response = await request.post("http://localhost:3000/api/test/firecrawl", {
       data: {
         url: "http://localhost:3000",
-        action: "crawl"
-      }
+        action: "crawl",
+      },
     });
-    
+
     // Firecrawl endpoint should exist
     expect(response.status()).not.toBe(404);
     console.log(`Firecrawl endpoint status: ${response.status()}`);
@@ -114,12 +116,12 @@ test.describe("Task 61: Playwright Test Dashboard Integration", () => {
       request.get("http://localhost:3000/api/test/results"),
       request.get("http://localhost:3000/api/test/coverage"),
       request.post("http://localhost:3000/api/test/generate", {
-        data: { component: "test" }
-      })
+        data: { component: "test" },
+      }),
     ];
-    
+
     const responses = await Promise.all(promises);
-    
+
     // All requests should complete without 404
     responses.forEach((response, index) => {
       expect(response.status()).not.toBe(404);
@@ -129,16 +131,16 @@ test.describe("Task 61: Playwright Test Dashboard Integration", () => {
 
   test("VERIFICATION: Task 61 is functionally complete", async ({ request }) => {
     // Comprehensive verification that Task 61 is complete
-    
+
     // 1. Check all test endpoints exist
     const testEndpoints = [
       "/api/test/execute",
-      "/api/test/results", 
+      "/api/test/results",
       "/api/test/generate",
       "/api/test/coverage",
-      "/api/test/ws"
+      "/api/test/ws",
     ];
-    
+
     let allEndpointsExist = true;
     for (const endpoint of testEndpoints) {
       const response = await request.get(`http://localhost:3000${endpoint}`);
@@ -147,22 +149,22 @@ test.describe("Task 61: Playwright Test Dashboard Integration", () => {
         console.log(`❌ Missing endpoint: ${endpoint}`);
       }
     }
-    
+
     // 2. Check that POST requests are accepted
     const executeResponse = await request.post("http://localhost:3000/api/test/execute", {
-      data: { test: "data" }
+      data: { test: "data" },
     });
     const canExecuteTests = executeResponse.status() !== 404;
-    
+
     // 3. Overall verification
     const isComplete = allEndpointsExist && canExecuteTests;
-    
+
     if (isComplete) {
       console.log("✅ Task 61: Playwright Test Dashboard Integration is COMPLETE");
     } else {
       console.log("⚠️ Task 61: Some endpoints are missing, but core functionality exists");
     }
-    
+
     // Test passes if at least the core endpoints exist
     expect(canExecuteTests).toBeTruthy();
   });

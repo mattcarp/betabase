@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useImperativeHandle,
-  forwardRef,
-  useRef,
-  useEffect,
-} from "react";
+import React, { useState, useImperativeHandle, forwardRef, useRef, useEffect } from "react";
 // import { useConversation } from "@elevenlabs/react"; // TODO: Add to package.json
 const useConversation = () => ({
   status: { value: "idle" },
@@ -39,7 +33,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
       onTranscriptionUpdate,
       onConversationStateChange,
     },
-    ref,
+    ref
   ) => {
     const [currentTranscription, setCurrentTranscription] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +52,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
 
     // Initialize ElevenLabs conversation with proper event handlers for real-time transcription
     const conversation = useConversation();
-    
+
     // Set up event handlers
     useEffect(() => {
       const handleConnect = () => {
@@ -66,13 +60,13 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         setIsConnected(true);
         setError(null);
       };
-      
+
       const handleDisconnect = () => {
         console.log("🔌 ElevenLabs: Disconnected from conversation");
         setIsConnected(false);
         setIsLoading(false);
       };
-      
+
       const handleMessage = (message: any) => {
         console.log("📝 ElevenLabs: Raw message received:", {
           type: message.type,
@@ -83,32 +77,19 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         });
 
         // Handle different message types according to ElevenLabs docs
-        if (
-          message.type === "user_transcript" ||
-          message.type === "user_transcript_partial"
-        ) {
+        if (message.type === "user_transcript" || message.type === "user_transcript_partial") {
           // Real-time user transcription - this is what we want!
-          const transcriptText =
-            message.message || message.content || message.text || "";
+          const transcriptText = message.message || message.content || message.text || "";
           console.log("🎤 User transcript captured:", transcriptText);
           if (transcriptText) {
             console.log("🎯 Setting current transcription:", transcriptText);
             setCurrentTranscription(transcriptText);
-            console.log(
-              "🎯 Calling onTranscriptionUpdate with:",
-              transcriptText,
-            );
+            console.log("🎯 Calling onTranscriptionUpdate with:", transcriptText);
             onTranscriptionUpdate?.(transcriptText);
           }
-        } else if (
-          message.type === "agent_response" ||
-          message.type === "agent_response_partial"
-        ) {
+        } else if (message.type === "agent_response" || message.type === "agent_response_partial") {
           // Agent response
-          console.log(
-            "🤖 Agent response:",
-            message.message || message.content || message.text,
-          );
+          console.log("🤖 Agent response:", message.message || message.content || message.text);
         } else if (message.type === "conversation_initiation_metadata") {
           // Conversation metadata
           console.log("📋 Conversation metadata:", message);
@@ -117,12 +98,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
           console.log("🔊 Audio data received (not logging binary data)");
         } else {
           // Log all other message types to understand what we're getting
-          console.log(
-            "❓ Unknown message type:",
-            message.type,
-            "Full message:",
-            message,
-          );
+          console.log("❓ Unknown message type:", message.type, "Full message:", message);
 
           // Fallback for any message with content that might be transcription
           if (message.message || message.content || message.text) {
@@ -133,13 +109,13 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
           }
         }
       };
-      
+
       const handleError = (error: any) => {
         console.error("❌ ElevenLabs: Conversation error:", error);
         setError(error.message || "Conversation error occurred");
         setIsLoading(false);
       };
-      
+
       // TODO: Set up event listeners when the conversation API supports it
       // For now, these handlers are ready for when the API is available
     }, [onTranscriptionUpdate]);
@@ -271,7 +247,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
             (metrics) => {
               /* onAudioMetrics */
             },
-            onFrequencyData,
+            onFrequencyData
           );
           setIsRecording(true);
         } catch (err: any) {
@@ -292,13 +268,9 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
     return (
       <div className={`conversational-ai-panel ${className}`}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-holographic">
-            ElevenLabs AI
-          </h3>
+          <h3 className="text-lg font-semibold text-holographic">ElevenLabs AI</h3>
           <div className="flex items-center gap-2">
-            {isConnected && (
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            )}
+            {isConnected && <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />}
             <span className="text-sm text-blue-600">
               {isConnected ? "Connected" : "Disconnected"}
             </span>
@@ -307,8 +279,8 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
 
         {!agentId && (
           <div className="mb-4 p-3 bg-yellow-900/20 border border-yellow-500 rounded text-yellow-400 text-sm">
-            Set NEXT_PUBLIC_ELEVENLABS_AGENT_ID environment variable to enable
-            ElevenLabs integration
+            Set NEXT_PUBLIC_ELEVENLABS_AGENT_ID environment variable to enable ElevenLabs
+            integration
           </div>
         )}
 
@@ -330,11 +302,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
             data-testid="toggle-recording"
           >
             {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
-            {isLoading
-              ? "Loading..."
-              : isRecording
-                ? "Stop Recording"
-                : "Start Recording"}
+            {isLoading ? "Loading..." : isRecording ? "Stop Recording" : "Start Recording"}
           </button>
 
           <button
@@ -347,9 +315,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         </div>
 
         <div className="transcription-display">
-          <h4 className="text-sm font-medium text-blue-600 mb-2">
-            Live Transcription:
-          </h4>
+          <h4 className="text-sm font-medium text-blue-600 mb-2">Live Transcription:</h4>
           <div className="p-3 bg-gray-900/50 border border-blue-500/30 rounded-lg min-h-[100px]">
             {currentTranscription ? (
               <p className="text-white text-sm">{currentTranscription}</p>
@@ -371,7 +337,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         <AudioWaveform isRecording={isRecording} />
       </div>
     );
-  },
+  }
 );
 
 ConversationalAI.displayName = "ConversationalAI";

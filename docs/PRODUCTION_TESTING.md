@@ -12,7 +12,8 @@ This guide documents our comprehensive testing strategy for production deploymen
 
 **Solution**: Implemented `CustomElementGuard` component that intercepts and safely handles duplicate custom element registrations.
 
-**Prevention**: 
+**Prevention**:
+
 - Always test with real production environment
 - Monitor browser console for DOMException errors
 - Check for third-party script conflicts
@@ -39,11 +40,11 @@ npm run test:e2e                    # All E2E tests
 
 ### Test Configurations
 
-| Config File | Target | Use Case |
-|------------|--------|----------|
-| `playwright.config.ts` | Default | General testing |
-| `playwright.config.local.ts` | localhost:3000 | Development |
-| `playwright.config.render.ts` | siam.onrender.com | Production |
+| Config File                   | Target            | Use Case        |
+| ----------------------------- | ----------------- | --------------- |
+| `playwright.config.ts`        | Default           | General testing |
+| `playwright.config.local.ts`  | localhost:3000    | Development     |
+| `playwright.config.render.ts` | siam.onrender.com | Production      |
 
 ## 🔐 Authentication Testing
 
@@ -52,11 +53,11 @@ npm run test:e2e                    # All E2E tests
 ```javascript
 // Allowed test emails (configured in Cognito)
 const testAccounts = [
-  'matt@mattcarpenter.com',
-  'fiona.burgess.ext@sonymusic.com',
-  'fiona@fionaburgess.com',
-  'claude@test.siam.ai',
-  'siam-test-x7j9k2p4@mailinator.com'  // Public Mailinator inbox
+  "matt@mattcarpenter.com",
+  "fiona.burgess.ext@sonymusic.com",
+  "fiona@fionaburgess.com",
+  "claude@test.siam.ai",
+  "siam-test-x7j9k2p4@mailinator.com", // Public Mailinator inbox
 ];
 ```
 
@@ -64,27 +65,27 @@ const testAccounts = [
 
 ```typescript
 // tests/auth/production-auth.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('Magic link authentication flow', async ({ page }) => {
+test("Magic link authentication flow", async ({ page }) => {
   // Navigate to production
-  await page.goto('https://iamsiam.ai');
-  
+  await page.goto("https://iamsiam.ai");
+
   // Enter email
-  await page.fill('input[type="email"]', 'siam-test-x7j9k2p4@mailinator.com');
+  await page.fill('input[type="email"]', "siam-test-x7j9k2p4@mailinator.com");
   await page.click('button:has-text("Send Magic Link")');
-  
+
   // Check for success message
-  await expect(page.locator('text=/check your email/i')).toBeVisible();
-  
+  await expect(page.locator("text=/check your email/i")).toBeVisible();
+
   // Monitor for console errors
   const errors = [];
-  page.on('console', msg => {
-    if (msg.type() === 'error') errors.push(msg.text());
+  page.on("console", (msg) => {
+    if (msg.type() === "error") errors.push(msg.text());
   });
-  
+
   // Verify no web component conflicts
-  expect(errors.filter(e => e.includes('CustomElementRegistry'))).toHaveLength(0);
+  expect(errors.filter((e) => e.includes("CustomElementRegistry"))).toHaveLength(0);
 });
 ```
 
@@ -130,50 +131,51 @@ echo "✅ All checks passed - ready to deploy!"
 
 ```typescript
 // tests/production/deployment-verification.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Production Deployment Verification', () => {
-  test('Health check endpoint', async ({ request }) => {
-    const response = await request.get('https://iamsiam.ai/api/health');
+test.describe("Production Deployment Verification", () => {
+  test("Health check endpoint", async ({ request }) => {
+    const response = await request.get("https://iamsiam.ai/api/health");
     expect(response.status()).toBe(200);
     const body = await response.json();
-    expect(body.status).toBe('healthy');
+    expect(body.status).toBe("healthy");
   });
 
-  test('No console errors on load', async ({ page }) => {
+  test("No console errors on load", async ({ page }) => {
     const errors = [];
-    page.on('console', msg => {
-      if (msg.type() === 'error') errors.push(msg.text());
+    page.on("console", (msg) => {
+      if (msg.type() === "error") errors.push(msg.text());
     });
-    
-    await page.goto('https://iamsiam.ai');
-    await page.waitForLoadState('networkidle');
-    
+
+    await page.goto("https://iamsiam.ai");
+    await page.waitForLoadState("networkidle");
+
     // Filter out known benign errors
-    const criticalErrors = errors.filter(e => 
-      !e.includes('Failed to load resource') && // CDN timeouts
-      !e.includes('ResizeObserver') // Browser quirk
+    const criticalErrors = errors.filter(
+      (e) =>
+        !e.includes("Failed to load resource") && // CDN timeouts
+        !e.includes("ResizeObserver") // Browser quirk
     );
-    
+
     expect(criticalErrors).toHaveLength(0);
   });
 
-  test('Authentication flow works', async ({ page }) => {
-    await page.goto('https://iamsiam.ai');
-    
+  test("Authentication flow works", async ({ page }) => {
+    await page.goto("https://iamsiam.ai");
+
     // Check login form is present
     await expect(page.locator('input[type="email"]')).toBeVisible();
-    
+
     // No web component errors
     const hasComponentError = await page.evaluate(() => {
-      return window.console.error.toString().includes('CustomElementRegistry');
+      return window.console.error.toString().includes("CustomElementRegistry");
     });
     expect(hasComponentError).toBeFalsy();
   });
 
-  test('Critical routes are accessible', async ({ page }) => {
-    const routes = ['/login', '/debug', '/gpt5-chat'];
-    
+  test("Critical routes are accessible", async ({ page }) => {
+    const routes = ["/login", "/debug", "/gpt5-chat"];
+
     for (const route of routes) {
       const response = await page.goto(`https://iamsiam.ai${route}`);
       expect(response?.status()).toBeLessThan(400);
@@ -188,16 +190,16 @@ test.describe('Production Deployment Verification', () => {
 
 ```javascript
 // Add to your test setup
-page.on('console', msg => {
+page.on("console", (msg) => {
   console.log(`${msg.type()}: ${msg.text()}`);
 });
 
-page.on('pageerror', error => {
-  console.error('Page error:', error.message);
+page.on("pageerror", (error) => {
+  console.error("Page error:", error.message);
 });
 
-page.on('requestfailed', request => {
-  console.error('Request failed:', request.url());
+page.on("requestfailed", (request) => {
+  console.error("Request failed:", request.url());
 });
 ```
 
@@ -209,7 +211,7 @@ page.on('requestfailed', request => {
    - CDN script loading failures
 
 2. **Environment Variable Issues**
-   - Missing NEXT_PUBLIC_* variables
+   - Missing NEXT*PUBLIC*\* variables
    - Incorrect API endpoints
    - Auth configuration problems
 
@@ -256,22 +258,22 @@ jobs:
   test:
     if: github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Install Playwright
         run: npx playwright install
-      
+
       - name: Run production tests
         run: npm run test:e2e:render
         env:
           BASE_URL: ${{ github.event.deployment_status.target_url }}
-      
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v3
@@ -305,7 +307,7 @@ npx playwright test --trace on
 await page.pause();
 
 // Take screenshot at any point
-await page.screenshot({ path: 'debug.png' });
+await page.screenshot({ path: "debug.png" });
 
 // Evaluate in browser context
 const result = await page.evaluate(() => {
@@ -318,7 +320,7 @@ const result = await page.evaluate(() => {
 ### 1. Always Test Happy Path First
 
 ```typescript
-test('User can complete full journey', async ({ page }) => {
+test("User can complete full journey", async ({ page }) => {
   // Login
   // Navigate
   // Perform action
@@ -329,9 +331,9 @@ test('User can complete full journey', async ({ page }) => {
 ### 2. Test Error Conditions
 
 ```typescript
-test('Handles network failure gracefully', async ({ page }) => {
+test("Handles network failure gracefully", async ({ page }) => {
   // Simulate offline
-  await page.route('**/api/**', route => route.abort());
+  await page.route("**/api/**", (route) => route.abort());
   // Verify error handling
 });
 ```
@@ -341,7 +343,7 @@ test('Handles network failure gracefully', async ({ page }) => {
 ```typescript
 class LoginPage {
   constructor(private page: Page) {}
-  
+
   async login(email: string) {
     await this.page.fill('input[type="email"]', email);
     await this.page.click('button:has-text("Send Magic Link")');
@@ -362,11 +364,11 @@ test.beforeEach(async () => {
 ## 🎭 Visual Regression Testing
 
 ```typescript
-test('Login page visual consistency', async ({ page }) => {
-  await page.goto('https://iamsiam.ai');
-  await expect(page).toHaveScreenshot('login-page.png', {
+test("Login page visual consistency", async ({ page }) => {
+  await page.goto("https://iamsiam.ai");
+  await expect(page).toHaveScreenshot("login-page.png", {
     maxDiffPixels: 100,
-    threshold: 0.2
+    threshold: 0.2,
   });
 });
 ```
@@ -374,12 +376,12 @@ test('Login page visual consistency', async ({ page }) => {
 ## 📱 Mobile Testing
 
 ```typescript
-test.use({ 
-  ...devices['iPhone 13'] 
+test.use({
+  ...devices["iPhone 13"],
 });
 
-test('Mobile responsive design', async ({ page }) => {
-  await page.goto('https://iamsiam.ai');
+test("Mobile responsive design", async ({ page }) => {
+  await page.goto("https://iamsiam.ai");
   // Test mobile-specific interactions
 });
 ```
@@ -425,5 +427,5 @@ When adding new tests:
 
 ---
 
-*Last Updated: September 2024*
-*After CustomElementGuard implementation*
+_Last Updated: September 2024_
+_After CustomElementGuard implementation_

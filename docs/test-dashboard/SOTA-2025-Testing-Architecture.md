@@ -11,6 +11,7 @@ This document outlines a state-of-the-art testing architecture for SIAM's Test D
 ### 1. Database Multi-Tenancy Status: ✅ ALREADY IMPLEMENTED
 
 Your database **already has multi-tenant capabilities** using an elegant design:
+
 - **`app_name` field** serves as the tenant identifier
 - **UNIQUE constraint on `(url, app_name)`** allows testing same URLs for different apps
 - **Default to 'SIAM'** but supports any application (AOMA, etc.)
@@ -19,6 +20,7 @@ Your database **already has multi-tenant capabilities** using an elegant design:
 ### 2. Current Testing Capabilities Already in Place
 
 Your existing infrastructure already includes:
+
 - **Firecrawl Integration** - Web scraping and analysis (MCP configured)
 - **TestSprite** - AI test generation (MCP configured)
 - **Playwright** - Browser automation (MCP configured)
@@ -32,12 +34,14 @@ Your existing infrastructure already includes:
 Based on industry research, the cutting-edge features for September 2025 include:
 
 #### **Agentic AI Testing** (The Big Shift)
+
 - **Autonomous test agents** that plan, execute, and adapt without human intervention
 - AI agents using GPT-5/Claude 3.5+ for intelligent test generation
 - Self-healing tests that adapt to UI changes automatically
 - 81% of teams now using AI in testing workflows (up from <20% in 2023)
 
 #### **HITL (Human-In-The-Loop) Integration**
+
 - Strategic human checkpoints for critical decisions
 - Expert review workflows for complex scenarios
 - Manager approval dashboards with real-time metrics
@@ -98,14 +102,14 @@ CREATE POLICY "App isolation for test_results" ON test_results
 interface AgenticTestOrchestrator {
   // Autonomous test planning
   planTestStrategy(app: AUT): TestStrategy;
-  
+
   // Self-healing capability
   detectUIChanges(previousRun: TestRun): UIChange[];
   adaptTestsToChanges(changes: UIChange[]): UpdatedTests;
-  
+
   // Intelligent test selection
   selectTestsBasedOnRisk(codeChanges: Diff[]): Test[];
-  
+
   // Continuous learning
   learnFromFailures(failures: TestFailure[]): ImprovedStrategy;
 }
@@ -114,10 +118,10 @@ interface AgenticTestOrchestrator {
 interface HITLWorkflow {
   // Manager approval gates
   requestApproval(testPlan: TestPlan): ApprovalRequest;
-  
+
   // Expert review triggers
   escalateComplexFailure(failure: TestFailure): ExpertReview;
-  
+
   // Crowd validation
   distributeForValidation(test: Test): CrowdTask;
 }
@@ -126,13 +130,13 @@ interface HITLWorkflow {
 interface TestIsolation {
   // Browser profile per app
   createIsolatedBrowser(appName: string): BrowserContext;
-  
+
   // Separate test data per app
   getTestData(appName: string): TestData;
-  
+
   // Independent test queues per app
   queueTests(appName: string, tests: Test[]): Queue;
-  
+
   // App-specific configuration
   getAppConfig(appName: string): ApplicationConfig;
 }
@@ -143,6 +147,7 @@ interface TestIsolation {
 EvilCharts provides beautiful, animated charts perfect for executive dashboards:
 
 ### Installation
+
 ```bash
 # Add EvilCharts components
 npx shadcn@latest add https://evilcharts.com/chart/default-bar-chart.json
@@ -154,7 +159,7 @@ npx shadcn@latest add https://evilcharts.com/chart/radar-chart.json
 
 ```typescript
 // Test execution trends
-<AnimatedAreaChart 
+<AnimatedAreaChart
   data={testExecutionTrends}
   title="Test Coverage Over Time"
   gradient={true}
@@ -182,6 +187,7 @@ npx shadcn@latest add https://evilcharts.com/chart/radar-chart.json
 ## 🚀 Implementation Roadmap
 
 ### Phase 1: Enhance Multi-Tenant Foundation (Week 1)
+
 1. ✅ Multi-tenancy already exists via `app_name`
 2. Add applications_registry table for better management
 3. Extend `app_name` to remaining tables
@@ -189,18 +195,21 @@ npx shadcn@latest add https://evilcharts.com/chart/radar-chart.json
 5. Add per-app configuration management
 
 ### Phase 2: AI Agent Integration (Week 3-4)
+
 1. Integrate with AI providers (OpenAI, Anthropic)
 2. Implement self-healing test logic
 3. Build autonomous test planner
 4. Add intelligent failure analysis
 
 ### Phase 3: HITL Workflows (Week 5-6)
+
 1. Manager approval dashboard with EvilCharts
 2. Expert review queue system
 3. Escalation workflows
 4. Feedback loops to AI
 
 ### Phase 4: Advanced Features (Week 7-8)
+
 1. Cross-browser testing at scale
 2. Visual regression with AI
 3. Performance testing integration
@@ -209,23 +218,27 @@ npx shadcn@latest add https://evilcharts.com/chart/radar-chart.json
 ## 🔧 Technology Stack
 
 ### Core Testing
+
 - **Playwright** - Primary automation framework
 - **TestSprite** - AI test generation (you have MCP)
 - **Firecrawl** - Web scraping and analysis (you have MCP)
 - **Browserbase** - Cloud browser infrastructure (you have MCP)
 
 ### AI/ML
+
 - **OpenAI GPT-4/5** - Test generation and analysis
 - **Claude 3.5** - Complex reasoning and debugging
 - **Vector embeddings** - Similar failure detection
 - **Supabase pgvector** - Vector storage (already configured)
 
 ### Visualization
+
 - **EvilCharts** - Executive dashboards
 - **shadcn/ui** - Component library (already using)
 - **Recharts** - Base charting library
 
 ### Infrastructure
+
 - **Supabase** - Database and real-time
 - **Render.com** - Deployment
 - **GitHub Actions** - CI/CD
@@ -233,6 +246,7 @@ npx shadcn@latest add https://evilcharts.com/chart/radar-chart.json
 ## 📈 Expected Outcomes
 
 ### Metrics to Track
+
 - **Test creation time**: 90% reduction with AI
 - **Maintenance effort**: 75% reduction with self-healing
 - **Test coverage**: 40% increase with intelligent generation
@@ -240,18 +254,20 @@ npx shadcn@latest add https://evilcharts.com/chart/radar-chart.json
 - **Time to feedback**: 80% faster with parallel execution
 
 ### ROI Calculation
+
 ```typescript
 const roi = {
   manualTestingCost: 100_000, // per month
   automatedTestingCost: 25_000, // including AI costs
   savings: 75_000, // per month
-  paybackPeriod: "1.5 months"
+  paybackPeriod: "1.5 months",
 };
 ```
 
 ## 🎯 Managing Multiple AUTs (Applications Under Test)
 
 ### Current Setup
+
 - **SIAM** - Your own app (default)
 - **AOMA** - Enterprise app (already configured)
 
@@ -261,27 +277,27 @@ const roi = {
 // Simple function to add new app to test
 async function registerNewAUT(appName: string, config: AppConfig) {
   // 1. Add to applications_registry
-  await supabase.from('applications_registry').insert({
+  await supabase.from("applications_registry").insert({
     app_name: appName,
     display_name: config.displayName,
     base_url: config.baseUrl,
     auth_config: config.auth,
-    test_user_pools: config.testUsers
+    test_user_pools: config.testUsers,
   });
-  
+
   // 2. Run initial Firecrawl analysis
   await firecrawlService.analyzeAUT(config.baseUrl, appName);
-  
+
   // 3. Generate initial test suite
   await testSprite.generateTests(appName);
 }
 
 // Example: Add a new app
-await registerNewAUT('SPOTIFY_ENTERPRISE', {
-  displayName: 'Spotify for Enterprise',
-  baseUrl: 'https://enterprise.spotify.com',
-  auth: { type: 'oauth', clientId: '...' },
-  testUsers: [{ email: 'test@spotify.com', role: 'admin' }]
+await registerNewAUT("SPOTIFY_ENTERPRISE", {
+  displayName: "Spotify for Enterprise",
+  baseUrl: "https://enterprise.spotify.com",
+  auth: { type: "oauth", clientId: "..." },
+  testUsers: [{ email: "test@spotify.com", role: "admin" }],
 });
 ```
 
@@ -290,17 +306,17 @@ await registerNewAUT('SPOTIFY_ENTERPRISE', {
 ```typescript
 // Run tests for specific app
 await testRunner.execute({
-  app_name: 'AOMA',  // Specify which app
-  suite: 'smoke',
-  parallel: true
+  app_name: "AOMA", // Specify which app
+  suite: "smoke",
+  parallel: true,
 });
 
 // Query results by app
 const aomaResults = await supabase
-  .from('test_results')
-  .select('*')
-  .eq('app_name', 'AOMA')
-  .order('created_at', { ascending: false });
+  .from("test_results")
+  .select("*")
+  .eq("app_name", "AOMA")
+  .order("created_at", { ascending: false });
 ```
 
 ## 🎯 Next Steps

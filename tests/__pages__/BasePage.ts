@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { Page, expect } from "@playwright/test";
 
 /**
  * Base Page Object - All page objects extend this
@@ -8,7 +8,7 @@ export abstract class BasePage {
   protected readonly timeout = {
     short: 5000,
     medium: 15000,
-    long: 30000
+    long: 30000,
   };
 
   constructor(protected readonly page: Page) {}
@@ -22,15 +22,16 @@ export abstract class BasePage {
    * Wait for page to be ready
    */
   async waitForLoad(): Promise<void> {
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   /**
    * Take a screenshot for visual testing
    */
   async screenshot(name: string): Promise<string> {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const path = `tests/04-visual/screenshots/${name}-${timestamp}.png`;    await this.page.screenshot({ path, fullPage: true });
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const path = `tests/04-visual/screenshots/${name}-${timestamp}.png`;
+    await this.page.screenshot({ path, fullPage: true });
     return path;
   }
 
@@ -46,7 +47,7 @@ export abstract class BasePage {
    */
   async getText(selector: string): Promise<string> {
     await this.page.waitForSelector(selector, { timeout: this.timeout.short });
-    return this.page.textContent(selector) || '';
+    return this.page.textContent(selector) || "";
   }
 
   /**
@@ -85,7 +86,7 @@ export abstract class BasePage {
     if (urlPattern) {
       await this.page.waitForURL(urlPattern, { timeout: this.timeout.medium });
     } else {
-      await this.page.waitForLoadState('domcontentloaded');
+      await this.page.waitForLoadState("domcontentloaded");
     }
   }
 
@@ -95,11 +96,11 @@ export abstract class BasePage {
   async hasError(): Promise<boolean> {
     const errorSelectors = [
       '[data-testid="error"]',
-      '.error-message',
+      ".error-message",
       '[role="alert"]',
-      '.toast-error'
+      ".toast-error",
     ];
-    
+
     for (const selector of errorSelectors) {
       if (await this.isVisible(selector)) {
         return true;

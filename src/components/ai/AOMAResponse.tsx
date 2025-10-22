@@ -18,12 +18,7 @@ import {
   InlineCitationQuote,
 } from "../ai-elements/inline-citation";
 import { Response } from "../ai-elements/response";
-import { 
-  Sources, 
-  SourcesTrigger, 
-  SourcesContent, 
-  Source 
-} from "../ai-elements/source";
+import { Sources, SourcesTrigger, SourcesContent, Source } from "../ai-elements/source";
 
 interface AOMASource {
   title?: string;
@@ -64,23 +59,25 @@ export function AOMAResponse({ content, sources = [], metadata }: AOMAResponsePr
 
     // Split content by citation markers [1], [2], etc.
     const parts = content.split(/(\[\d+\])/g);
-    
+
     return (
       <Response>
         {parts.map((part, index) => {
           const citationMatch = part.match(/\[(\d+)\]/);
-          
+
           if (citationMatch) {
             const citationIndex = parseInt(citationMatch[1]) - 1;
             const citation = normalizedSources[citationIndex];
-            
+
             if (!citation) return <InlineCitationText key={index}>{part}</InlineCitationText>;
-            
+
             return (
               <InlineCitation key={index}>
                 <InlineCitationCard>
-                  <InlineCitationCardTrigger 
-                    sources={citation.url ? [citation.url] : [citation.title || "AOMA Knowledge Base"]}
+                  <InlineCitationCardTrigger
+                    sources={
+                      citation.url ? [citation.url] : [citation.title || "AOMA Knowledge Base"]
+                    }
                   />
                   <InlineCitationCardBody>
                     {normalizedSources.length > 1 ? (
@@ -99,9 +96,7 @@ export function AOMAResponse({ content, sources = [], metadata }: AOMAResponsePr
                                 description={source.description}
                               />
                               {source.quote && (
-                                <InlineCitationQuote>
-                                  {source.quote}
-                                </InlineCitationQuote>
+                                <InlineCitationQuote>{source.quote}</InlineCitationQuote>
                               )}
                             </InlineCitationCarouselItem>
                           ))}
@@ -119,10 +114,10 @@ export function AOMAResponse({ content, sources = [], metadata }: AOMAResponsePr
               </InlineCitation>
             );
           }
-          
+
           return <InlineCitationText key={index}>{part}</InlineCitationText>;
         })}
-        
+
         {metadata && (
           <div className="mt-4 text-xs text-muted-foreground">
             {metadata.model && <span>Model: {metadata.model} • </span>}
@@ -137,17 +132,16 @@ export function AOMAResponse({ content, sources = [], metadata }: AOMAResponsePr
   return (
     <div className="aoma-response space-y-4">
       {renderContentWithCitations()}
-      
+
       {/* Add Sources list at the bottom using AI Elements */}
       {sources && sources.length > 0 && (
         <Sources>
           <SourcesTrigger count={sources.length} />
           <SourcesContent>
             {sources.map((source, index) => {
-              const normalizedSource = typeof source === "string" 
-                ? { title: source, description: source }
-                : source;
-                
+              const normalizedSource =
+                typeof source === "string" ? { title: source, description: source } : source;
+
               return (
                 <Source
                   key={index}

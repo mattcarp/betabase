@@ -1,11 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import {
-  Conversation,
-  ConversationFilters,
-  ConversationManagerState,
-} from "../types/conversation";
+import { Conversation, ConversationFilters, ConversationManagerState } from "../types/conversation";
 
 const STORAGE_KEY = "siam_conversations";
 const ACTIVE_CONVERSATION_KEY = "siam_active_conversation";
@@ -101,8 +97,7 @@ export function useConversationManager() {
       {
         id: "conv-2",
         title: "UI Component Design Review",
-        lastMessage:
-          "The sidebar components look great with the new shadcn integration...",
+        lastMessage: "The sidebar components look great with the new shadcn integration...",
         timestamp: new Date(now.getTime() - 7200000), // 2 hours ago
         messageCount: 8,
         isActive: true,
@@ -155,10 +150,7 @@ export function useConversationManager() {
       }));
 
       // Add new conversation and set it as active
-      const newConversations = [
-        { ...newConversation, isActive: true },
-        ...updatedConversations,
-      ];
+      const newConversations = [{ ...newConversation, isActive: true }, ...updatedConversations];
 
       return {
         ...prev,
@@ -184,9 +176,7 @@ export function useConversationManager() {
 
   const deleteConversation = useCallback((conversationId: string) => {
     setState((prev) => {
-      const filteredConversations = prev.conversations.filter(
-        (conv) => conv.id !== conversationId,
-      );
+      const filteredConversations = prev.conversations.filter((conv) => conv.id !== conversationId);
       const wasActive = prev.activeConversationId === conversationId;
 
       let newActiveId = prev.activeConversationId;
@@ -209,7 +199,7 @@ export function useConversationManager() {
     setState((prev) => ({
       ...prev,
       conversations: prev.conversations.map((conv) =>
-        conv.id === conversationId ? { ...conv, isPinned: true } : conv,
+        conv.id === conversationId ? { ...conv, isPinned: true } : conv
       ),
     }));
   }, []);
@@ -218,30 +208,25 @@ export function useConversationManager() {
     setState((prev) => ({
       ...prev,
       conversations: prev.conversations.map((conv) =>
-        conv.id === conversationId ? { ...conv, isPinned: false } : conv,
+        conv.id === conversationId ? { ...conv, isPinned: false } : conv
       ),
     }));
   }, []);
 
-  const renameConversation = useCallback(
-    (conversationId: string, newTitle: string) => {
-      setState((prev) => ({
-        ...prev,
-        conversations: prev.conversations.map((conv) =>
-          conv.id === conversationId
-            ? { ...conv, title: newTitle.trim() || "Untitled Conversation" }
-            : conv,
-        ),
-      }));
-    },
-    [],
-  );
+  const renameConversation = useCallback((conversationId: string, newTitle: string) => {
+    setState((prev) => ({
+      ...prev,
+      conversations: prev.conversations.map((conv) =>
+        conv.id === conversationId
+          ? { ...conv, title: newTitle.trim() || "Untitled Conversation" }
+          : conv
+      ),
+    }));
+  }, []);
 
   const duplicateConversation = useCallback(
     (conversationId: string) => {
-      const conversation = state.conversations.find(
-        (conv) => conv.id === conversationId,
-      );
+      const conversation = state.conversations.find((conv) => conv.id === conversationId);
       if (!conversation) return;
 
       const duplicated: Conversation = {
@@ -259,7 +244,7 @@ export function useConversationManager() {
         totalCount: prev.totalCount + 1,
       }));
     },
-    [state.conversations],
+    [state.conversations]
   );
 
   const setFilters = useCallback((filters: ConversationFilters) => {
@@ -281,7 +266,7 @@ export function useConversationManager() {
         (conv) =>
           conv.title.toLowerCase().includes(search) ||
           conv.lastMessage.toLowerCase().includes(search) ||
-          conv.tags?.some((tag) => tag.toLowerCase().includes(search)),
+          conv.tags?.some((tag) => tag.toLowerCase().includes(search))
       );
     }
 
@@ -293,16 +278,14 @@ export function useConversationManager() {
     // Apply tag filters
     if (state.filters.tags?.length) {
       filtered = filtered.filter((conv) =>
-        conv.tags?.some((tag) => state.filters.tags!.includes(tag)),
+        conv.tags?.some((tag) => state.filters.tags!.includes(tag))
       );
     }
 
     // Apply date range filter
     if (state.filters.dateRange) {
       const { start, end } = state.filters.dateRange;
-      filtered = filtered.filter(
-        (conv) => conv.timestamp >= start && conv.timestamp <= end,
-      );
+      filtered = filtered.filter((conv) => conv.timestamp >= start && conv.timestamp <= end);
     }
 
     // Sort: pinned first, then by timestamp (newest first)
@@ -340,7 +323,7 @@ export function useConversationManager() {
               ...msg,
               timestamp: new Date(msg.timestamp),
             })) || [],
-        }),
+        })
       );
 
       setState((prev) => ({
@@ -356,31 +339,24 @@ export function useConversationManager() {
     }
   }, []);
 
-  const updateConversationMessage = useCallback(
-    (conversationId: string, lastMessage: string) => {
-      setState((prev) => ({
-        ...prev,
-        conversations: prev.conversations.map((conv) =>
-          conv.id === conversationId
-            ? {
-                ...conv,
-                lastMessage,
-                timestamp: new Date(),
-                messageCount: conv.messageCount + 1,
-              }
-            : conv,
-        ),
-      }));
-    },
-    [],
-  );
+  const updateConversationMessage = useCallback((conversationId: string, lastMessage: string) => {
+    setState((prev) => ({
+      ...prev,
+      conversations: prev.conversations.map((conv) =>
+        conv.id === conversationId
+          ? {
+              ...conv,
+              lastMessage,
+              timestamp: new Date(),
+              messageCount: conv.messageCount + 1,
+            }
+          : conv
+      ),
+    }));
+  }, []);
 
   const getActiveConversation = useCallback(() => {
-    return (
-      state.conversations.find(
-        (conv) => conv.id === state.activeConversationId,
-      ) || null
-    );
+    return state.conversations.find((conv) => conv.id === state.activeConversationId) || null;
   }, [state.conversations, state.activeConversationId]);
 
   return {

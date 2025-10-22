@@ -1,15 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  Activity,
-  Cpu,
-  HardDrive,
-  Wifi,
-  WifiOff,
-  AlertTriangle,
-  CheckCircle,
-} from "lucide-react";
+import { Activity, Cpu, HardDrive, Wifi, WifiOff, AlertTriangle, CheckCircle } from "lucide-react";
 import { HUDMeter } from "./ui/HUDMeter";
-import { CircularProfessionalProgress as RadialProgress } from "./ui/ProfessionalProgress"
+import { CircularProfessionalProgress as RadialProgress } from "./ui/ProfessionalProgress";
 import { DataStream } from "./ui/DataStream";
 
 interface SystemHealth {
@@ -46,18 +38,9 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
       setHealth((prevHealth) => {
         // Simulate realistic system monitoring with some variation
         const newHealth: SystemHealth = {
-          cpu: Math.max(
-            10,
-            Math.min(95, prevHealth.cpu + (Math.random() - 0.5) * 10),
-          ),
-          memory: Math.max(
-            15,
-            Math.min(90, prevHealth.memory + (Math.random() - 0.5) * 8),
-          ),
-          diskSpace: Math.max(
-            30,
-            Math.min(85, prevHealth.diskSpace + (Math.random() - 0.5) * 5),
-          ),
+          cpu: Math.max(10, Math.min(95, prevHealth.cpu + (Math.random() - 0.5) * 10)),
+          memory: Math.max(15, Math.min(90, prevHealth.memory + (Math.random() - 0.5) * 8)),
+          diskSpace: Math.max(30, Math.min(85, prevHealth.diskSpace + (Math.random() - 0.5) * 5)),
           networkStatus: navigator.onLine ? "online" : "offline",
           lastUpdate: new Date(),
         };
@@ -139,15 +122,9 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
         data-testid="health-toggle"
       >
         <div className="flex items-center space-x-3">
-          {overallStatus === "healthy" && (
-            <CheckCircle className="w-5 h-5 text-jarvis-accent" />
-          )}
-          {overallStatus === "warning" && (
-            <AlertTriangle className="w-5 h-5 text-jarvis-warning" />
-          )}
-          {overallStatus === "critical" && (
-            <AlertTriangle className="w-5 h-5 text-jarvis-danger" />
-          )}
+          {overallStatus === "healthy" && <CheckCircle className="w-5 h-5 text-jarvis-accent" />}
+          {overallStatus === "warning" && <AlertTriangle className="w-5 h-5 text-jarvis-warning" />}
+          {overallStatus === "critical" && <AlertTriangle className="w-5 h-5 text-jarvis-danger" />}
           <span className="text-holographic font-display text-sm">
             SYSTEM STATUS:{" "}
             <span
@@ -178,13 +155,7 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
                 value={health.cpu}
                 size={80}
                 strokeWidth={6}
-                color={
-                  health.cpu > 80
-                    ? "danger"
-                    : health.cpu > 60
-                      ? "warning"
-                      : "primary"
-                }
+                color={health.cpu > 80 ? "danger" : health.cpu > 60 ? "warning" : "primary"}
                 label="CPU"
                 showValue={true}
                 animated={true}
@@ -197,13 +168,7 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
                 value={health.memory}
                 size={80}
                 strokeWidth={6}
-                color={
-                  health.memory > 80
-                    ? "danger"
-                    : health.memory > 60
-                      ? "warning"
-                      : "accent"
-                }
+                color={health.memory > 80 ? "danger" : health.memory > 60 ? "warning" : "accent"}
                 label="RAM"
                 showValue={true}
                 animated={true}
@@ -217,11 +182,7 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
                 size={80}
                 strokeWidth={6}
                 color={
-                  health.diskSpace > 80
-                    ? "danger"
-                    : health.diskSpace > 60
-                      ? "warning"
-                      : "secondary"
+                  health.diskSpace > 80 ? "danger" : health.diskSpace > 60 ? "warning" : "secondary"
                 }
                 label="DISK"
                 showValue={true}
@@ -240,13 +201,7 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
                 thickness={6}
                 startAngle={-90}
                 endAngle={90}
-                color={
-                  health.cpu > 80
-                    ? "danger"
-                    : health.cpu > 60
-                      ? "warning"
-                      : "primary"
-                }
+                color={health.cpu > 80 ? "danger" : health.cpu > 60 ? "warning" : "primary"}
                 label="CPU Load"
                 unit="%"
                 criticalThreshold={85}
@@ -263,13 +218,7 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
                 thickness={6}
                 startAngle={-90}
                 endAngle={90}
-                color={
-                  health.memory > 80
-                    ? "danger"
-                    : health.memory > 60
-                      ? "warning"
-                      : "accent"
-                }
+                color={health.memory > 80 ? "danger" : health.memory > 60 ? "warning" : "accent"}
                 label="Memory"
                 unit="%"
                 criticalThreshold={85}

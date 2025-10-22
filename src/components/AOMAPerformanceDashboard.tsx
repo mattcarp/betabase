@@ -1,25 +1,25 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Progress } from './ui/progress';
-import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Alert, AlertDescription, AlertTitle } from './ui/alert';
-import { aomaRouter, PerformanceMetrics } from '@/services/aomaParallelRouter';
-import { 
-  Activity, 
-  AlertCircle, 
-  CheckCircle, 
-  Clock, 
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { Progress } from "./ui/progress";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { aomaRouter, PerformanceMetrics } from "@/services/aomaParallelRouter";
+import {
+  Activity,
+  AlertCircle,
+  CheckCircle,
+  Clock,
   Database,
   Gauge,
   Server,
   TrendingDown,
   TrendingUp,
-  Zap
-} from 'lucide-react';
+  Zap,
+} from "lucide-react";
 import {
   LineChart,
   Line,
@@ -32,8 +32,8 @@ import {
   Legend,
   ResponsiveContainer,
   Area,
-  AreaChart
-} from 'recharts';
+  AreaChart,
+} from "recharts";
 
 interface DashboardStats {
   railway: ProviderMetrics;
@@ -54,7 +54,7 @@ interface ProviderMetrics {
 }
 
 interface ComparisonMetrics {
-  winner: 'railway' | 'render';
+  winner: "railway" | "render";
   improvement: number;
   recommendation: string;
 }
@@ -64,35 +64,36 @@ export const AOMAPerformanceDashboard: React.FC = () => {
   const [realtimeMetrics, setRealtimeMetrics] = useState<PerformanceMetrics[]>([]);
   const [isRunningBenchmark, setIsRunningBenchmark] = useState(false);
   const [abTestConfig, setAbTestConfig] = useState(aomaRouter.getConfig());
-  const [selectedTimeRange, setSelectedTimeRange] = useState<'1m' | '5m' | '15m' | '1h'>('5m');
+  const [selectedTimeRange, setSelectedTimeRange] = useState<"1m" | "5m" | "15m" | "1h">("5m");
 
   // Fetch stats periodically
   useEffect(() => {
     const fetchStats = () => {
-      const railwayStats = aomaRouter.getStatistics('railway');
-      const renderStats = aomaRouter.getStatistics('render');
-      
-      const improvement = railwayStats.avgLatency > 0 
-        ? ((railwayStats.avgLatency - renderStats.avgLatency) / railwayStats.avgLatency) * 100
-        : 0;
+      const railwayStats = aomaRouter.getStatistics("railway");
+      const renderStats = aomaRouter.getStatistics("render");
 
-      const winner = renderStats.avgLatency < railwayStats.avgLatency ? 'render' : 'railway';
-      
-      let recommendation = '';
+      const improvement =
+        railwayStats.avgLatency > 0
+          ? ((railwayStats.avgLatency - renderStats.avgLatency) / railwayStats.avgLatency) * 100
+          : 0;
+
+      const winner = renderStats.avgLatency < railwayStats.avgLatency ? "render" : "railway";
+
+      let recommendation = "";
       if (improvement > 30) {
-        recommendation = 'Switch to Render immediately for significant gains';
+        recommendation = "Switch to Render immediately for significant gains";
       } else if (improvement > 10) {
-        recommendation = 'Gradually increase Render traffic percentage';
+        recommendation = "Gradually increase Render traffic percentage";
       } else if (improvement > 0) {
-        recommendation = 'Continue monitoring before full migration';
+        recommendation = "Continue monitoring before full migration";
       } else {
-        recommendation = 'Railway performing better - investigate Render config';
+        recommendation = "Railway performing better - investigate Render config";
       }
 
       setStats({
         railway: railwayStats,
         render: renderStats,
-        comparison: { winner, improvement, recommendation }
+        comparison: { winner, improvement, recommendation },
       });
 
       setRealtimeMetrics(aomaRouter.exportMetrics().slice(-100)); // Last 100 metrics
@@ -107,45 +108,54 @@ export const AOMAPerformanceDashboard: React.FC = () => {
   // Run benchmark
   const runQuickBenchmark = useCallback(async () => {
     setIsRunningBenchmark(true);
-    
+
     try {
       // Run 10 quick comparisons
       for (let i = 0; i < 10; i++) {
-        await aomaRouter.compareProviders('/api/health', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+        await aomaRouter.compareProviders("/api/health", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
         });
       }
     } catch (error) {
-      console.error('Benchmark failed:', error);
+      console.error("Benchmark failed:", error);
     }
 
     setIsRunningBenchmark(false);
   }, []);
 
   // Update A/B test configuration
-  const updateAbConfig = useCallback((updates: Partial<typeof abTestConfig>) => {
-    const newConfig = { ...abTestConfig, ...updates };
-    aomaRouter.updateConfig(newConfig);
-    setAbTestConfig(newConfig);
-  }, [abTestConfig]);
+  const updateAbConfig = useCallback(
+    (updates: Partial<typeof abTestConfig>) => {
+      const newConfig = { ...abTestConfig, ...updates };
+      aomaRouter.updateConfig(newConfig);
+      setAbTestConfig(newConfig);
+    },
+    [abTestConfig]
+  );
 
   // Prepare chart data
   const latencyChartData = realtimeMetrics
-    .filter(m => m.success)
+    .filter((m) => m.success)
     .map((m, index) => ({
       index,
-      railway: m.provider === 'railway' ? m.latency : null,
-      render: m.provider === 'render' ? m.latency : null,
-      timestamp: new Date(m.startTime).toLocaleTimeString()
+      railway: m.provider === "railway" ? m.latency : null,
+      render: m.provider === "render" ? m.latency : null,
+      timestamp: new Date(m.startTime).toLocaleTimeString(),
     }));
 
-  const performanceComparison = stats ? [
-    { metric: 'Avg Latency', railway: stats.railway.avgLatency, render: stats.render.avgLatency },
-    { metric: 'P50', railway: stats.railway.p50Latency, render: stats.render.p50Latency },
-    { metric: 'P95', railway: stats.railway.p95Latency, render: stats.render.p95Latency },
-    { metric: 'P99', railway: stats.railway.p99Latency, render: stats.render.p99Latency }
-  ] : [];
+  const performanceComparison = stats
+    ? [
+        {
+          metric: "Avg Latency",
+          railway: stats.railway.avgLatency,
+          render: stats.render.avgLatency,
+        },
+        { metric: "P50", railway: stats.railway.p50Latency, render: stats.render.p50Latency },
+        { metric: "P95", railway: stats.railway.p95Latency, render: stats.render.p95Latency },
+        { metric: "P99", railway: stats.railway.p99Latency, render: stats.render.p99Latency },
+      ]
+    : [];
 
   if (!stats) {
     return (
@@ -167,11 +177,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
           <p className="text-muted-foreground">Real-time A/B testing: Railway vs Render</p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            onClick={runQuickBenchmark} 
-            disabled={isRunningBenchmark}
-            variant="outline"
-          >
+          <Button onClick={runQuickBenchmark} disabled={isRunningBenchmark} variant="outline">
             {isRunningBenchmark ? (
               <>
                 <Activity className="h-4 w-4 mr-2 animate-spin" />
@@ -184,10 +190,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
               </>
             )}
           </Button>
-          <Button 
-            onClick={() => aomaRouter.clearMetrics()}
-            variant="ghost"
-          >
+          <Button onClick={() => aomaRouter.clearMetrics()} variant="ghost">
             Clear Metrics
           </Button>
         </div>
@@ -253,13 +256,13 @@ export const AOMAPerformanceDashboard: React.FC = () => {
           <CardContent>
             <div className="flex items-center justify-between">
               <span className="text-2xl font-bold capitalize">
-                {stats.comparison.winner === 'render' ? (
+                {stats.comparison.winner === "render" ? (
                   <span className="text-green-600">Render</span>
                 ) : (
                   <span className="text-blue-600">Railway</span>
                 )}
               </span>
-              {stats.comparison.winner === 'render' ? (
+              {stats.comparison.winner === "render" ? (
                 <TrendingUp className="h-8 w-8 text-green-600" />
               ) : (
                 <TrendingDown className="h-8 w-8 text-blue-600" />
@@ -285,8 +288,12 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                 <span className="text-sm">Render</span>
                 <span className="font-semibold">{stats.render.totalRequests}</span>
               </div>
-              <Progress 
-                value={(stats.render.totalRequests / (stats.railway.totalRequests + stats.render.totalRequests)) * 100}
+              <Progress
+                value={
+                  (stats.render.totalRequests /
+                    (stats.railway.totalRequests + stats.render.totalRequests)) *
+                  100
+                }
                 className="h-2"
               />
             </div>
@@ -352,21 +359,21 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                 <LineChart data={latencyChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="timestamp" />
-                  <YAxis label={{ value: 'Latency (ms)', angle: -90, position: 'insideLeft' }} />
+                  <YAxis label={{ value: "Latency (ms)", angle: -90, position: "insideLeft" }} />
                   <Tooltip />
                   <Legend />
-                  <Line 
-                    type="monotone" 
-                    dataKey="railway" 
-                    stroke="#3b82f6" 
+                  <Line
+                    type="monotone"
+                    dataKey="railway"
+                    stroke="#3b82f6"
                     strokeWidth={2}
                     dot={false}
                     name="Railway"
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="render" 
-                    stroke="#10b981" 
+                  <Line
+                    type="monotone"
+                    dataKey="render"
+                    stroke="#10b981"
                     strokeWidth={2}
                     dot={false}
                     name="Render"
@@ -388,7 +395,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                 <BarChart data={performanceComparison}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="metric" />
-                  <YAxis label={{ value: 'Latency (ms)', angle: -90, position: 'insideLeft' }} />
+                  <YAxis label={{ value: "Latency (ms)", angle: -90, position: "insideLeft" }} />
                   <Tooltip />
                   <Legend />
                   <Bar dataKey="railway" fill="#3b82f6" name="Railway" />
@@ -436,7 +443,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div>
                   <h4 className="font-semibold mb-4 flex items-center gap-2">
                     <Database className="h-4 w-4" />
@@ -507,13 +514,23 @@ export const AOMAPerformanceDashboard: React.FC = () => {
               <div className="flex justify-between">
                 <span>Avg Request</span>
                 <span className="font-semibold">
-                  {((stats.railway.avgPayloadSize + stats.render.avgPayloadSize) / 2 / 1024).toFixed(2)}KB
+                  {(
+                    (stats.railway.avgPayloadSize + stats.render.avgPayloadSize) /
+                    2 /
+                    1024
+                  ).toFixed(2)}
+                  KB
                 </span>
               </div>
               <div className="flex justify-between">
                 <span>Avg Response</span>
                 <span className="font-semibold">
-                  {((stats.railway.avgResponseSize + stats.render.avgResponseSize) / 2 / 1024).toFixed(2)}KB
+                  {(
+                    (stats.railway.avgResponseSize + stats.render.avgResponseSize) /
+                    2 /
+                    1024
+                  ).toFixed(2)}
+                  KB
                 </span>
               </div>
             </div>

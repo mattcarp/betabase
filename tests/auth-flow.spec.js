@@ -6,9 +6,7 @@ test.describe("SIAM Authentication Flow - Fiona's Critical P0 Tests", () => {
     await page.waitForLoadState("networkidle");
   });
 
-  test("P0-1: Login form should be visible and functional", async ({
-    page,
-  }) => {
+  test("P0-1: Login form should be visible and functional", async ({ page }) => {
     // Should show login form since not authenticated
     await expect(page.locator("h2")).toContainText("Welcome to SIAM");
 
@@ -47,9 +45,7 @@ test.describe("SIAM Authentication Flow - Fiona's Critical P0 Tests", () => {
     await expect(page.locator('input[type="password"]:visible')).toHaveCount(0);
 
     // Should show "Send Magic Link" button
-    await expect(page.locator('button[type="submit"]')).toContainText(
-      "Send Magic Link",
-    );
+    await expect(page.locator('button[type="submit"]')).toContainText("Send Magic Link");
   });
 
   test("P0-4: Email validation works correctly", async ({ page }) => {
@@ -78,9 +74,7 @@ test.describe("SIAM Authentication Flow - Fiona's Critical P0 Tests", () => {
         await expect(page.locator('input[type="password"]')).toBeVisible();
       } else {
         // Should attempt to send magic link (won't succeed in test but shouldn't error on email validation)
-        await expect(page.locator('button[type="submit"]')).toContainText(
-          "Send Magic Link",
-        );
+        await expect(page.locator('button[type="submit"]')).toContainText("Send Magic Link");
       }
 
       await page.reload();

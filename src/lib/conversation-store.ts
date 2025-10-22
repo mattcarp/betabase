@@ -1,11 +1,11 @@
 "use client";
 
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export interface Message {
   id: string;
-  role: 'user' | 'assistant' | 'system';
+  role: "user" | "assistant" | "system";
   content: string;
   timestamp: Date;
   citations?: Citation[];
@@ -39,7 +39,7 @@ export interface Conversation {
 interface ConversationStore {
   conversations: Conversation[];
   activeConversationId: string | null;
-  
+
   // Actions
   createConversation: (title?: string) => Conversation;
   deleteConversation: (id: string) => void;
@@ -59,7 +59,7 @@ export const useConversationStore = create<ConversationStore>()(
       conversations: [],
       activeConversationId: null,
 
-      createConversation: (title = 'New Conversation') => {
+      createConversation: (title = "New Conversation") => {
         const newConversation: Conversation = {
           id: `conv-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           title,
@@ -81,16 +81,15 @@ export const useConversationStore = create<ConversationStore>()(
       deleteConversation: (id) => {
         set((state) => ({
           conversations: state.conversations.filter((c) => c.id !== id),
-          activeConversationId: state.activeConversationId === id ? null : state.activeConversationId,
+          activeConversationId:
+            state.activeConversationId === id ? null : state.activeConversationId,
         }));
       },
 
       updateConversation: (id, updates) => {
         set((state) => ({
           conversations: state.conversations.map((c) =>
-            c.id === id
-              ? { ...c, ...updates, updatedAt: new Date() }
-              : c
+            c.id === id ? { ...c, ...updates, updatedAt: new Date() } : c
           ),
         }));
       },
@@ -108,12 +107,17 @@ export const useConversationStore = create<ConversationStore>()(
                 messages: [...c.messages, message],
                 updatedAt: new Date(),
               };
-              
+
               // Auto-generate title from first user message if still default
-              if (c.title === 'New Conversation' && message.role === 'user' && c.messages.length === 0) {
-                updatedConversation.title = message.content.slice(0, 50) + (message.content.length > 50 ? '...' : '');
+              if (
+                c.title === "New Conversation" &&
+                message.role === "user" &&
+                c.messages.length === 0
+              ) {
+                updatedConversation.title =
+                  message.content.slice(0, 50) + (message.content.length > 50 ? "..." : "");
               }
-              
+
               return updatedConversation;
             }
             return c;
@@ -131,10 +135,11 @@ export const useConversationStore = create<ConversationStore>()(
 
       searchConversations: (query) => {
         const lowerQuery = query.toLowerCase();
-        return get().conversations.filter((c) =>
-          c.title.toLowerCase().includes(lowerQuery) ||
-          c.messages.some((m) => m.content.toLowerCase().includes(lowerQuery)) ||
-          c.tags?.some((t) => t.toLowerCase().includes(lowerQuery))
+        return get().conversations.filter(
+          (c) =>
+            c.title.toLowerCase().includes(lowerQuery) ||
+            c.messages.some((m) => m.content.toLowerCase().includes(lowerQuery)) ||
+            c.tags?.some((t) => t.toLowerCase().includes(lowerQuery))
         );
       },
 
@@ -150,7 +155,7 @@ export const useConversationStore = create<ConversationStore>()(
         set((state) => {
           const seenTitles = new Map<string, Conversation>();
           const uniqueConversations: Conversation[] = [];
-          
+
           // Keep the most recent conversation for each title
           for (const conv of state.conversations) {
             const existing = seenTitles.get(conv.title);
@@ -166,40 +171,42 @@ export const useConversationStore = create<ConversationStore>()(
               uniqueConversations.push(conv);
             }
           }
-          
+
           return {
             conversations: uniqueConversations,
-            activeConversationId: state.activeConversationId && 
-              uniqueConversations.some(c => c.id === state.activeConversationId) 
-                ? state.activeConversationId 
-                : uniqueConversations[0]?.id || null
+            activeConversationId:
+              state.activeConversationId &&
+              uniqueConversations.some((c) => c.id === state.activeConversationId)
+                ? state.activeConversationId
+                : uniqueConversations[0]?.id || null,
           };
         });
       },
     }),
     {
-      name: 'siam-conversations',
+      name: "siam-conversations",
       version: 1,
       storage: {
         getItem: (name) => {
           const str = localStorage.getItem(name);
           if (!str) return null;
-          
+
           const parsed = JSON.parse(str);
-          
+
           // Convert date strings back to Date objects
           if (parsed.state?.conversations) {
             parsed.state.conversations = parsed.state.conversations.map((conv: any) => ({
               ...conv,
               createdAt: new Date(conv.createdAt),
               updatedAt: new Date(conv.updatedAt),
-              messages: conv.messages?.map((msg: any) => ({
-                ...msg,
-                timestamp: new Date(msg.timestamp)
-              })) || []
+              messages:
+                conv.messages?.map((msg: any) => ({
+                  ...msg,
+                  timestamp: new Date(msg.timestamp),
+                })) || [],
             }));
           }
-          
+
           return parsed;
         },
         setItem: (name, value) => {

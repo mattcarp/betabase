@@ -17,8 +17,8 @@ The authentication code in `/app/api/chat/route.ts` was attempting to create a S
 ```typescript
 // BROKEN CODE (lines 127-129)
 const supabase = createServerClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,  // undefined in production!
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,  // undefined in production!
+  process.env.NEXT_PUBLIC_SUPABASE_URL!, // undefined in production!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY! // undefined in production!
   // ...
 );
 ```
@@ -28,6 +28,7 @@ When these variables are undefined, `createServerClient()` throws an error, caus
 ### Why This Happened
 
 The production Render deployment did not have these environment variables configured:
+
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
@@ -40,30 +41,34 @@ Added validation before attempting to create the Supabase client:
 ```typescript
 // FIXED CODE (lines 127-143)
 if (!bypassAuth) {
-  console.log('[API] Checking authentication...');
+  console.log("[API] Checking authentication...");
 
   // Validate Supabase configuration before attempting auth check
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    console.error('[API] Supabase configuration missing! Cannot perform authentication.');
-    console.error('[API] NEXT_PUBLIC_SUPABASE_URL:', !!process.env.NEXT_PUBLIC_SUPABASE_URL);
-    console.error('[API] NEXT_PUBLIC_SUPABASE_ANON_KEY:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+    console.error("[API] Supabase configuration missing! Cannot perform authentication.");
+    console.error("[API] NEXT_PUBLIC_SUPABASE_URL:", !!process.env.NEXT_PUBLIC_SUPABASE_URL);
+    console.error(
+      "[API] NEXT_PUBLIC_SUPABASE_ANON_KEY:",
+      !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    );
     return new Response(
       JSON.stringify({
-        error: 'Service configuration error',
-        code: 'SUPABASE_CONFIG_MISSING',
-        message: 'Authentication is enabled but Supabase credentials are not configured. Please contact support.'
+        error: "Service configuration error",
+        code: "SUPABASE_CONFIG_MISSING",
+        message:
+          "Authentication is enabled but Supabase credentials are not configured. Please contact support.",
       }),
       {
         status: 503,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { "Content-Type": "application/json" },
       }
     );
   }
 
   // Only create Supabase client after validation
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,  // Validated to exist
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,  // Validated to exist
+    process.env.NEXT_PUBLIC_SUPABASE_URL, // Validated to exist
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY // Validated to exist
     // ...
   );
 }
@@ -93,18 +98,20 @@ NEXT_PUBLIC_BYPASS_AUTH=true
 This skips the authentication check entirely (lines 119-120):
 
 ```typescript
-const bypassAuth = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true' ||
-                   process.env.NODE_ENV === 'development';
+const bypassAuth =
+  process.env.NEXT_PUBLIC_BYPASS_AUTH === "true" || process.env.NODE_ENV === "development";
 ```
 
 ### Impact
 
 **Before Fix**:
+
 - All chat API requests returned 500 errors
 - No error logs explaining the issue
 - Users saw generic "technical difficulties" message
 
 **After Fix**:
+
 - Graceful error message with clear service configuration error
 - Detailed server-side logging for debugging
 - Returns 503 (Service Unavailable) instead of 500 (Internal Server Error)
