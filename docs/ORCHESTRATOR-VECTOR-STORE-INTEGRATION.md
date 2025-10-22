@@ -11,16 +11,19 @@ The AOMA orchestrator has been refactored to use the unified Supabase vector sto
 ## Performance Improvements
 
 ### Before (External APIs)
+
 - **Average Response Time:** 20-25 seconds
 - **Method:** Multiple HTTP calls to AOMA MCP, Jira, Git, etc.
 - **Bottleneck:** Network latency + API processing time
 
 ### After (Vector Store)
+
 - **Average Response Time:** <1 second (target: sub-second)
 - **Method:** Local Supabase vector similarity search
 - **Fallback:** External APIs for real-time data if vector store has no results
 
 ### Expected Performance Gains
+
 - **95%+ latency reduction** for cached/vector queries
 - **Sub-second responses** for 80%+ of queries
 - **Intelligent caching** with multi-level strategy
@@ -46,6 +49,7 @@ Query → Orchestrator
 #### 1. Vector Store Query (`queryVectorStore`)
 
 Primary query method that:
+
 - Generates embeddings using OpenAI text-embedding-3-small
 - Performs vector similarity search in Supabase
 - Filters by source types (knowledge, jira, git, email, metrics)
@@ -53,10 +57,10 @@ Primary query method that:
 
 ```typescript
 const result = await aomaOrchestrator.queryVectorStore(query, {
-  matchThreshold: 0.75,    // Similarity threshold
-  matchCount: 10,          // Number of results
-  sourceTypes: ['knowledge', 'jira'],  // Filter by source
-  useCache: true           // Enable caching
+  matchThreshold: 0.75, // Similarity threshold
+  matchCount: 10, // Number of results
+  sourceTypes: ["knowledge", "jira"], // Filter by source
+  useCache: true, // Enable caching
 });
 ```
 
@@ -64,17 +68,18 @@ const result = await aomaOrchestrator.queryVectorStore(query, {
 
 Analyzes query text to determine relevant data sources:
 
-| Keywords | Source Type | Example Query |
-|----------|-------------|---------------|
-| jira, ticket, issue, bug | `jira` | "Show me Jira tickets about bugs" |
-| commit, git, code, repository | `git` | "What are recent git commits?" |
-| email, outlook, message | `email` | "Find emails about the project" |
-| metric, performance, health | `metrics` | "Show system performance metrics" |
-| aoma, usm, dam, metadata | `knowledge` | "What is AOMA metadata?" |
+| Keywords                      | Source Type | Example Query                     |
+| ----------------------------- | ----------- | --------------------------------- |
+| jira, ticket, issue, bug      | `jira`      | "Show me Jira tickets about bugs" |
+| commit, git, code, repository | `git`       | "What are recent git commits?"    |
+| email, outlook, message       | `email`     | "Find emails about the project"   |
+| metric, performance, health   | `metrics`   | "Show system performance metrics" |
+| aoma, usm, dam, metadata      | `knowledge` | "What is AOMA metadata?"          |
 
 #### 3. Response Synthesis (`synthesizeVectorResponse`)
 
 Combines vector search results into coherent responses:
+
 - Groups results by source type
 - Prioritizes knowledge base → jira → git → email → metrics
 - Adds citation markers [1], [2], etc.
@@ -83,6 +88,7 @@ Combines vector search results into coherent responses:
 #### 4. Fallback Mechanism
 
 If vector store returns no results or fails:
+
 - Falls back to original external API orchestration
 - Maintains same quality and functionality
 - Logs fallback reason for monitoring
@@ -103,18 +109,15 @@ The vector store supports multiple data sources:
 ### Direct Vector Store Query
 
 ```typescript
-import { aomaOrchestrator } from '@/services/aomaOrchestrator';
+import { aomaOrchestrator } from "@/services/aomaOrchestrator";
 
 // Query with automatic source type detection
-const result = await aomaOrchestrator.queryVectorStore(
-  "What is AOMA metadata management?"
-);
+const result = await aomaOrchestrator.queryVectorStore("What is AOMA metadata management?");
 
 // Query specific source types
-const jiraResult = await aomaOrchestrator.queryVectorStore(
-  "Find bugs related to ingestion",
-  { sourceTypes: ['jira'] }
-);
+const jiraResult = await aomaOrchestrator.queryVectorStore("Find bugs related to ingestion", {
+  sourceTypes: ["jira"],
+});
 
 // Custom threshold for higher precision
 const preciseResult = await aomaOrchestrator.queryVectorStore(
@@ -127,9 +130,7 @@ const preciseResult = await aomaOrchestrator.queryVectorStore(
 
 ```typescript
 // This automatically tries vector store first, then falls back
-const result = await aomaOrchestrator.executeOrchestration(
-  "Explain the AOMA asset workflow"
-);
+const result = await aomaOrchestrator.executeOrchestration("Explain the AOMA asset workflow");
 ```
 
 ## Response Format
@@ -189,6 +190,7 @@ Three-tier caching system:
 3. **L3: External APIs** - Fallback for real-time data (10-25s)
 
 Cache keys:
+
 - `vector:{query}:{sourceTypes}` - Vector store results
 - `orchestrated:{query}` - Full orchestrated results
 
@@ -206,16 +208,19 @@ Cache keys:
 ## Future Enhancements
 
 ### Phase 1 (Immediate)
+
 - Monitor performance in production
 - Fine-tune similarity thresholds per source type
 - Optimize cache TTL based on usage patterns
 
 ### Phase 2 (Next Sprint)
+
 - Add vector store population from external APIs
 - Implement incremental sync for Jira/Git data
 - Add hybrid search (vector + keyword)
 
 ### Phase 3 (Future)
+
 - Real-time vector updates from API webhooks
 - Multi-modal embeddings (text + code + images)
 - Query expansion and reformulation
@@ -237,12 +242,12 @@ This implementation depends on:
 
 ## Performance Targets
 
-| Metric | Target | Current (Before) | Expected (After) |
-|--------|--------|------------------|------------------|
-| AOMA Query (cold) | <5s | 20-24s | <1s |
-| AOMA Query (cached) | <500ms | N/A | <100ms |
-| Multi-source Query | <2s | 30s+ | <1.5s |
-| Cache Hit Ratio | >80% | ~20% | >80% |
+| Metric              | Target | Current (Before) | Expected (After) |
+| ------------------- | ------ | ---------------- | ---------------- |
+| AOMA Query (cold)   | <5s    | 20-24s           | <1s              |
+| AOMA Query (cached) | <500ms | N/A              | <100ms           |
+| Multi-source Query  | <2s    | 30s+             | <1.5s            |
+| Cache Hit Ratio     | >80%   | ~20%             | >80%             |
 
 ## Success Criteria
 
@@ -257,6 +262,7 @@ This implementation depends on:
 The vector store integration provides a **95%+ performance improvement** while maintaining the same response quality. The intelligent fallback mechanism ensures reliability, and the comprehensive testing suite prevents regressions.
 
 **Expected Production Impact:**
+
 - User queries respond in <1 second (vs 20-25s before)
 - Reduced load on external APIs (Jira, Git, AOMA MCP)
 - Better user experience with instant responses
@@ -264,4 +270,4 @@ The vector store integration provides a **95%+ performance improvement** while m
 
 ---
 
-*This integration represents a major leap forward in AOMA system performance. Let's ship it! 🚀*
+_This integration represents a major leap forward in AOMA system performance. Let's ship it! 🚀_

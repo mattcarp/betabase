@@ -1,5 +1,5 @@
 :root {
-  --jarvis-cyan: #3B82F6;
+  --jarvis-cyan: #3b82f6;
   --jarvis-electric-blue: #0080ff;
   --jarvis-dark-bg: #050a10;
 
@@ -51,12 +51,7 @@
   );
   --jarvis-hud-element-border: rgba(0, 255, 255, 0.4);
   --jarvis-hud-element-radius: 12px;
-  --jarvis-hud-scan-bg: linear-gradient(
-    90deg,
-    transparent,
-    rgba(0, 255, 255, 0.2),
-    transparent
-  );
+  --jarvis-hud-scan-bg: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
 
   /* Circular Progress */
   --jarvis-circular-progress-base-border: rgba(0, 255, 255, 0.2);
@@ -76,9 +71,8 @@
   --jarvis-button-hover-inset-shadow: rgba(0, 255, 255, 0.1);
 
   /* Glows & Accents */
-  --jarvis-glow-cyan: #3B82F6;
+  --jarvis-glow-cyan: #3b82f6;
   --jarvis-glow-blue: #0080ff;
-  --jarvis-none;
 
   /* Animations */
   --animation-scan-duration: 3s;
@@ -90,11 +84,7 @@
 
 /* Core Glassmorphism Foundation */
 .glass-panel {
-  background: linear-gradient(
-    135deg,
-    var(--jarvis-panel-bg-start),
-    var(--jarvis-panel-bg-end)
-  );
+  background: linear-gradient(135deg, var(--jarvis-panel-bg-start), var(--jarvis-panel-bg-end));
   backdrop-filter: blur(var(--jarvis-panel-blur));
   -webkit-backdrop-filter: blur(var(--jarvis-panel-blur));
   border: 1px solid var(--jarvis-panel-border);
@@ -242,16 +232,11 @@
     0 0 10px var(--jarvis-glow-cyan),
     0 0 15px var(--jarvis-glow-cyan),
     0 0 20px var(--jarvis-glow-cyan);
-  animation: holographic-flicker var(--animation-flicker-duration) ease-in-out
-    infinite alternate;
+  animation: holographic-flicker var(--animation-flicker-duration) ease-in-out infinite alternate;
 }
 
 .hud-button {
-  background: linear-gradient(
-    135deg,
-    var(--jarvis-button-bg-start),
-    var(--jarvis-button-bg-end)
-  );
+  background: linear-gradient(135deg, var(--jarvis-button-bg-start), var(--jarvis-button-bg-end));
   backdrop-filter: blur(var(--jarvis-button-blur));
   -webkit-backdrop-filter: blur(var(--jarvis-button-blur));
   border: 1px solid var(--jarvis-button-border);
@@ -295,7 +280,6 @@
     opacity: 0.8;
   }
 }
-
 
 @keyframes data-stream {
   0% {
