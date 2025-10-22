@@ -67,13 +67,21 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// Support GET for health check
+export async function GET() {
+  return NextResponse.json({
+    status: "ok",
+    message: "Web Vitals endpoint is active",
+  });
+}
+
 // Support OPTIONS for CORS preflight
 export async function OPTIONS() {
   return new NextResponse(null, {
     status: 204,
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
     },
   });

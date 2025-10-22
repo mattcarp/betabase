@@ -4,6 +4,59 @@
 
 This file contains essential commands, scripts, and known issues for the SIAM project.
 
+## 🔧 Git Merge Strategies - AUTO-RESOLVE package-lock.json Conflicts
+
+**PROBLEM SOLVED**: `package-lock.json` conflicts now resolve automatically!
+
+### Quick Fix for Conflicts
+
+If you encounter a package-lock.json conflict:
+
+```bash
+./scripts/fix-package-lock-conflict.sh
+```
+
+**That's it!** The script will:
+
+- Remove the conflicted file
+- Regenerate it from `package.json`
+- Stage the changes
+- Tell you what to do next
+
+### How It Works
+
+We use a **custom git merge driver** that automatically:
+
+1. Detects `package-lock.json` conflicts
+2. Regenerates the lockfile from `package.json`
+3. Resolves the conflict automatically
+
+**Configuration files:**
+
+- `.gitattributes` - Tells git to use custom merge strategy
+- `.git-merge-drivers/npm-merge-lockfile.sh` - Auto-regeneration script
+- Git config (set automatically in repo)
+
+**See full documentation:** `docs/GIT-MERGE-STRATEGIES.md`
+
+### Verification
+
+Check if auto-merge is configured:
+
+```bash
+git config --get merge.npm-merge-lockfile.driver
+# Should output: .git-merge-drivers/npm-merge-lockfile.sh %O %A %B %P
+```
+
+If not configured, run:
+
+```bash
+git config merge.npm-merge-lockfile.name "Auto-regenerate package-lock.json"
+git config merge.npm-merge-lockfile.driver ".git-merge-drivers/npm-merge-lockfile.sh %O %A %B %P"
+```
+
+---
+
 ## 🧪 TESTING FUNDAMENTALS - CRITICAL
 
 **⚠️ MANDATORY READING**: See `TESTING_FUNDAMENTALS.md` for comprehensive test documentation.
