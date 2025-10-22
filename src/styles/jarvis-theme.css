@@ -1,24 +1,5 @@
 /* Jarvis/Iron Man HUD Theme Variables */
 :root {
-<<<<<<< HEAD
-  /* Core Professional Colors - No Gaming Aesthetics */
-  --jarvis-primary: #3B82F6;      /* Professional blue instead of neon cyan */
-  --jarvis-secondary: #6366F1;    /* Subtle indigo instead of bright cyan */
-  --jarvis-accent: #10B981;       /* Muted green instead of neon green */
-  --jarvis-danger: #EF4444;       /* Standard red instead of bright red */
-  --jarvis-warning: #F59E0B;      /* Amber instead of bright orange */
-
-  /* Glass Panel Variables - Subtle Professional */
-  --jarvis-glass-bg: rgba(20, 20, 30, 0.15);
-  --jarvis-glass-border: rgba(59, 130, 246, 0.2);      /* Subtle blue border */
-  --jarvis-glass-border-hover: rgba(59, 130, 246, 0.3);
-  --jarvis-glass-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  --jarvis-glass-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.15);
-
-  /* Panel Header Variables - Professional Dark */
-  --jarvis-header-bg: rgba(30, 30, 40, 0.2);
-  --jarvis-header-border: rgba(59, 130, 246, 0.25);
-=======
   /* Core Jarvis Colors */
   --jarvis-primary: #3B82F6;
   --jarvis-secondary: #6366F1;
@@ -36,7 +17,6 @@
   /* Panel Header Variables */
   --jarvis-header-bg: rgba(0, 50, 100, 0.2);
   --jarvis-header-border: rgba(59, 130, 246, 0.4);
->>>>>>> fix-gaming-ui-nightmare
 
   /* Animation Variables */
   --jarvis-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

@@ -96,23 +96,18 @@ export class AOMAOrchestrator {
       matchCount?: number;
       sourceTypes?: string[];
       useCache?: boolean;
-    } = {},
+    } = {}
   ): Promise<{
     response: string;
     sources: AOMASource[];
     metadata: any;
     fromCache?: boolean;
   }> {
-    const {
-      matchThreshold = 0.78,
-      matchCount = 10,
-      sourceTypes,
-      useCache = true,
-    } = options;
+    const { matchThreshold = 0.78, matchCount = 10, sourceTypes, useCache = true } = options;
 
     // Check cache first
     if (useCache) {
-      const cacheKey = `vector:${query}:${sourceTypes?.join(',')}`;
+      const cacheKey = `vector:${query}:${sourceTypes?.join(",")}`;
       const cached = aomaCache.get(cacheKey, "rapid");
       if (cached) {
         console.log("⚡ Returning cached vector response");
@@ -122,16 +117,17 @@ export class AOMAOrchestrator {
 
     try {
       // Perform vector similarity search
-      const vectorResults: VectorSearchResult[] = await this.vectorService.searchVectors(
-        query,
-        { matchThreshold, matchCount, sourceTypes }
-      );
+      const vectorResults: VectorSearchResult[] = await this.vectorService.searchVectors(query, {
+        matchThreshold,
+        matchCount,
+        sourceTypes,
+      });
 
       if (!vectorResults || vectorResults.length === 0) {
         return {
           response: "No relevant information found in the knowledge base.",
           sources: [],
-          metadata: { vectorSearch: true, resultsCount: 0 }
+          metadata: { vectorSearch: true, resultsCount: 0 },
         };
       }
 
@@ -139,7 +135,7 @@ export class AOMAOrchestrator {
       const sources: AOMASource[] = vectorResults.map((result, idx) => ({
         type: result.source_type as any,
         title: result.metadata?.title || result.metadata?.filename || `Source ${idx + 1}`,
-        description: result.content.substring(0, 150) + '...',
+        description: result.content.substring(0, 150) + "...",
         relevance: result.similarity,
         url: result.metadata?.url,
         timestamp: result.metadata?.created_at || result.metadata?.updated_at,
@@ -154,14 +150,15 @@ export class AOMAOrchestrator {
         metadata: {
           vectorSearch: true,
           resultsCount: vectorResults.length,
-          avgSimilarity: vectorResults.reduce((sum, r) => sum + r.similarity, 0) / vectorResults.length,
-          sourceTypes: [...new Set(vectorResults.map(r => r.source_type))],
-        }
+          avgSimilarity:
+            vectorResults.reduce((sum, r) => sum + r.similarity, 0) / vectorResults.length,
+          sourceTypes: [...new Set(vectorResults.map((r) => r.source_type))],
+        },
       };
 
       // Cache the result
       if (useCache) {
-        const cacheKey = `vector:${query}:${sourceTypes?.join(',')}`;
+        const cacheKey = `vector:${query}:${sourceTypes?.join(",")}`;
         aomaCache.set(cacheKey, result, "rapid");
       }
 
@@ -181,26 +178,52 @@ export class AOMAOrchestrator {
     const sourceTypes: string[] = [];
 
     // Check for specific source type indicators
-    if (lowerQuery.includes('jira') || lowerQuery.includes('ticket') || lowerQuery.includes('issue') || lowerQuery.includes('bug')) {
-      sourceTypes.push('jira');
+    if (
+      lowerQuery.includes("jira") ||
+      lowerQuery.includes("ticket") ||
+      lowerQuery.includes("issue") ||
+      lowerQuery.includes("bug")
+    ) {
+      sourceTypes.push("jira");
     }
 
-    if (lowerQuery.includes('commit') || lowerQuery.includes('git') || lowerQuery.includes('code') || lowerQuery.includes('repository')) {
-      sourceTypes.push('git');
+    if (
+      lowerQuery.includes("commit") ||
+      lowerQuery.includes("git") ||
+      lowerQuery.includes("code") ||
+      lowerQuery.includes("repository")
+    ) {
+      sourceTypes.push("git");
     }
 
-    if (lowerQuery.includes('email') || lowerQuery.includes('outlook') || lowerQuery.includes('message') || lowerQuery.includes('communication')) {
-      sourceTypes.push('email');
+    if (
+      lowerQuery.includes("email") ||
+      lowerQuery.includes("outlook") ||
+      lowerQuery.includes("message") ||
+      lowerQuery.includes("communication")
+    ) {
+      sourceTypes.push("email");
     }
 
-    if (lowerQuery.includes('metric') || lowerQuery.includes('performance') || lowerQuery.includes('monitoring') || lowerQuery.includes('health')) {
-      sourceTypes.push('metrics');
+    if (
+      lowerQuery.includes("metric") ||
+      lowerQuery.includes("performance") ||
+      lowerQuery.includes("monitoring") ||
+      lowerQuery.includes("health")
+    ) {
+      sourceTypes.push("metrics");
     }
 
     // Always search knowledge base for AOMA-related queries
-    if (lowerQuery.includes('aoma') || lowerQuery.includes('usm') || lowerQuery.includes('dam') ||
-        lowerQuery.includes('metadata') || lowerQuery.includes('asset') || sourceTypes.length === 0) {
-      sourceTypes.push('knowledge');
+    if (
+      lowerQuery.includes("aoma") ||
+      lowerQuery.includes("usm") ||
+      lowerQuery.includes("dam") ||
+      lowerQuery.includes("metadata") ||
+      lowerQuery.includes("asset") ||
+      sourceTypes.length === 0
+    ) {
+      sourceTypes.push("knowledge");
     }
 
     // If no specific types matched, search all sources
@@ -208,7 +231,7 @@ export class AOMAOrchestrator {
       return undefined; // undefined means search all source types
     }
 
-    console.log(`🎯 Determined source types for query: ${sourceTypes.join(', ')}`);
+    console.log(`🎯 Determined source types for query: ${sourceTypes.join(", ")}`);
     return sourceTypes;
   }
 
@@ -221,22 +244,25 @@ export class AOMAOrchestrator {
     }
 
     // Group results by source type for better organization
-    const bySourceType = results.reduce((acc, result) => {
-      const type = result.source_type;
-      if (!acc[type]) acc[type] = [];
-      acc[type].push(result);
-      return acc;
-    }, {} as Record<string, VectorSearchResult[]>);
+    const bySourceType = results.reduce(
+      (acc, result) => {
+        const type = result.source_type;
+        if (!acc[type]) acc[type] = [];
+        acc[type].push(result);
+        return acc;
+      },
+      {} as Record<string, VectorSearchResult[]>
+    );
 
     let response = "";
     let citationIndex = 1;
 
     // Prioritize knowledge base results first
-    const priorityOrder = ['knowledge', 'jira', 'git', 'email', 'metrics'];
-    const orderedTypes = priorityOrder.filter(type => bySourceType[type]);
+    const priorityOrder = ["knowledge", "jira", "git", "email", "metrics"];
+    const orderedTypes = priorityOrder.filter((type) => bySourceType[type]);
 
     // Add remaining types not in priority order
-    Object.keys(bySourceType).forEach(type => {
+    Object.keys(bySourceType).forEach((type) => {
       if (!priorityOrder.includes(type)) {
         orderedTypes.push(type);
       }
@@ -513,12 +539,16 @@ export class AOMAOrchestrator {
       // If we got good results from vector store, use them
       if (vectorResult.sources.length > 0) {
         console.log(`✅ Vector store returned ${vectorResult.sources.length} results`);
-        aomaProgressStream.completeService("vector_store", vectorResult.sources.length, vectorResult.sources);
+        aomaProgressStream.completeService(
+          "vector_store",
+          vectorResult.sources.length,
+          vectorResult.sources
+        );
         aomaProgressStream.completeQuery();
 
         // Send progress updates
         if (progressCallback) {
-          aomaProgressStream.getUpdates().forEach(update => progressCallback(update));
+          aomaProgressStream.getUpdates().forEach((update) => progressCallback(update));
         }
 
         // Cache the result
@@ -531,7 +561,10 @@ export class AOMAOrchestrator {
       aomaProgressStream.completeService("vector_store", 0, []);
     } catch (error) {
       console.error("❌ Vector store query failed:", error);
-      aomaProgressStream.errorService("vector_store", error instanceof Error ? error.message : String(error));
+      aomaProgressStream.errorService(
+        "vector_store",
+        error instanceof Error ? error.message : String(error)
+      );
       console.log("🔄 Falling back to external API orchestration...");
     }
 

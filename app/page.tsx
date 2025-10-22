@@ -7,7 +7,7 @@ import { useSettings } from "../src/hooks/useSettings";
 
 // Dynamic import for SettingsPanel (863 lines, only shown when settings open)
 const SettingsPanel = dynamic(
-  () => import("../src/components/SettingsPanel").then(mod => ({ default: mod.SettingsPanel })),
+  () => import("../src/components/SettingsPanel").then((mod) => ({ default: mod.SettingsPanel })),
   {
     loading: () => <div className="fixed inset-0 z-50 bg-black/50" />,
     ssr: false,
