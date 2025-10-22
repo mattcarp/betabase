@@ -197,7 +197,10 @@ export const ManualTestingPanel: React.FC = () => {
           )}
         >
           <Circle
-            className={cn("h-3 w-3 mr-2 fill-current transition-colors duration-300", getRecordingColor())}
+            className={cn(
+              "h-3 w-3 mr-2 fill-current transition-colors duration-300",
+              getRecordingColor()
+            )}
           />
           <span className="text-sm font-medium">
             {recordingState === "recording" && "Recording"}
