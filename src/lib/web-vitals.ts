@@ -10,13 +10,13 @@
  * - INP (Interaction to Next Paint)
  */
 
-import type { Metric } from 'web-vitals';
+import type { Metric } from "web-vitals";
 
-const vitalsUrl = '/api/web-vitals';
+const vitalsUrl = "/api/web-vitals";
 
 function sendToAnalytics(metric: Metric) {
   // Log to console in development
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     console.log(`[Web Vitals] ${metric.name}:`, {
       value: metric.value,
       rating: metric.rating,
@@ -40,13 +40,13 @@ function sendToAnalytics(metric: Metric) {
   } else {
     fetch(vitalsUrl, {
       body,
-      method: 'POST',
+      method: "POST",
       keepalive: true,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }).catch((error) => {
-      console.error('[Web Vitals] Error sending metric:', error);
+      console.error("[Web Vitals] Error sending metric:", error);
     });
   }
 }

@@ -17,6 +17,7 @@ We've implemented a **custom git merge driver** that automatically regenerates `
 ### Configuration Files
 
 #### 1. `.gitattributes`
+
 ```
 # package-lock.json: Always regenerate instead of trying to merge
 package-lock.json merge=npm-merge-lockfile
@@ -29,15 +30,18 @@ tsconfig.tsbuildinfo merge=ours
 ```
 
 #### 2. Git Config (per-repository)
+
 ```bash
 git config merge.npm-merge-lockfile.name "Auto-regenerate package-lock.json"
 git config merge.npm-merge-lockfile.driver ".git-merge-drivers/npm-merge-lockfile.sh %O %A %B %P"
 ```
 
 #### 3. Custom Merge Driver
+
 Location: `.git-merge-drivers/npm-merge-lockfile.sh`
 
 This script:
+
 - Removes the conflicted `package-lock.json`
 - Runs `npm install --package-lock-only` to regenerate it
 - Marks the conflict as resolved
@@ -47,6 +51,7 @@ This script:
 ### Automatic (Recommended)
 
 When you merge branches, git will automatically:
+
 1. Detect `package-lock.json` conflict
 2. Call the custom merge driver
 3. Regenerate the lockfile
@@ -63,6 +68,7 @@ If you're already in a conflicted state, run:
 ```
 
 This helper script will:
+
 - Remove the conflicted `package-lock.json`
 - Regenerate it from `package.json`
 - Stage the changes
@@ -89,6 +95,7 @@ cat .gitattributes | grep package-lock.json
 ## Benefits
 
 ### Before (Manual Resolution)
+
 ```bash
 ❌ Merge conflict in package-lock.json
 ❌ Open file, find conflict markers
@@ -100,6 +107,7 @@ cat .gitattributes | grep package-lock.json
 ```
 
 ### After (Automatic Resolution)
+
 ```bash
 ✅ Auto-resolving package-lock.json conflict...
 ✅ Regenerated successfully!
@@ -109,24 +117,31 @@ cat .gitattributes | grep package-lock.json
 ## Best Practices
 
 ### 1. Keep package.json Clean
+
 The lockfile is regenerated from `package.json`, so ensure:
+
 - Version ranges are correct
 - No conflicting dependency versions
 - package.json is properly merged before regenerating lockfile
 
 ### 2. Review Changes
+
 After a merge with lockfile regeneration:
+
 ```bash
 git diff HEAD package-lock.json
 ```
 
 Check for:
+
 - Unexpected version bumps
 - Removed packages
 - New packages
 
 ### 3. Test After Merge
+
 Always run after merging:
+
 ```bash
 npm ci              # Clean install from lockfile
 npm test            # Run tests
@@ -134,10 +149,12 @@ npm run build       # Verify build works
 ```
 
 ### 4. CI/CD Integration
+
 Our GitHub Actions already handle this:
+
 ```yaml
 - name: Install dependencies
-  run: npm ci  # Uses exact versions from package-lock.json
+  run: npm ci # Uses exact versions from package-lock.json
 ```
 
 ## Other Merge Strategies
@@ -145,6 +162,7 @@ Our GitHub Actions already handle this:
 We also configure automatic strategies for other files:
 
 ### Generated Files (Always Use Ours)
+
 ```
 tsconfig.tsbuildinfo merge=ours
 .next/** merge=ours
@@ -153,6 +171,7 @@ tsconfig.tsbuildinfo merge=ours
 **Why?** These are build artifacts that should be regenerated, not merged.
 
 ### Binary Files
+
 ```
 *.png binary
 *.jpg binary
@@ -166,24 +185,28 @@ tsconfig.tsbuildinfo merge=ours
 ### Problem: Merge driver not running
 
 **Check 1: Is .gitattributes committed?**
+
 ```bash
 git ls-files .gitattributes
 # Should show: .gitattributes
 ```
 
 **Check 2: Is git config set?**
+
 ```bash
 git config --get merge.npm-merge-lockfile.driver
 # Should show the driver path
 ```
 
 **Check 3: Is script executable?**
+
 ```bash
 ls -la .git-merge-drivers/npm-merge-lockfile.sh
 # Should show: -rwxr-xr-x (executable)
 ```
 
 **Fix:**
+
 ```bash
 # Set config (run from repo root)
 git config merge.npm-merge-lockfile.name "Auto-regenerate package-lock.json"
