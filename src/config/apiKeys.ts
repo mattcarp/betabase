@@ -18,7 +18,7 @@ interface ApiConfig {
 const defaultConfig: ApiConfig = {
   openaiApiKey:
     "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",
-  elevenLabsApiKey: "sk_3bdf311f445bb15d57306a7171b31c7257faf5acd69322df",
+  elevenLabsApiKey: "sk_b495cffb8979229634b620c1bddbf5583f5c9fd69e5785fb",
   elevenLabsAgentId: "agent_01jz1ar6k2e8tvst14g6cbgc7m",
   vectorStoreId: "vs_68a6c6337b10819194ce40498ca7dd6a", // SIAM Knowledge Base (active)
   // MCP configuration - use proper URLs
