@@ -46,6 +46,16 @@ const nextConfig = {
   // PERFORMANCE OPTIMIZATION: Enable SWC minification
   swcMinify: true,
 
+  // PERFORMANCE OPTIMIZATION: Optimize package imports
+  experimental: {
+    optimizePackageImports: [
+      '@radix-ui/react-icons',
+      'lucide-react',
+      'recharts',
+      'framer-motion',
+    ],
+  },
+
   async headers() {
     return [
       {
