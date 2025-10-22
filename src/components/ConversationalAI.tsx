@@ -1,374 +1,359 @@
 import React, {
-  useState,
   useImperativeHandle,
   forwardRef,
-  useRef,
   useEffect,
 } from "react";
-// import { useConversation } from "@elevenlabs/react"; // TODO: Add to package.json
-const useConversation = () => ({
-  status: { value: "idle" },
-  start: () => {},
-  stop: () => {},
-  endSession: () => {},
-}); // Mock for now
-import { Mic, MicOff } from "lucide-react";
-import { getAIInsights, getPipelineStatus } from "../services/bridge";
-import { RealTimeAudioProcessor } from "../services/realTimeAudioProcessor";
+import { Mic, MicOff, Loader2, AlertCircle, Radio, Activity } from "lucide-react";
 import AudioWaveform from "./AudioWaveform";
+import { useElevenLabsConversation } from "../hooks/useElevenLabsConversation";
+import type { ConversationState } from "../hooks/useElevenLabsConversation";
+import { getElevenLabsAgentId } from "@/config/apiKeys";
 
 interface ConversationalAIProps {
   agentId?: string;
   className?: string;
   onTranscriptionUpdate?: (transcription: string) => void;
-  onConversationStateChange?: (state: any) => void;
+  onConversationStateChange?: (state: ConversationState) => void;
+  mode?: "push-to-talk" | "voice-activated";
+  vadSensitivity?: number;
+  interruptThreshold?: number;
 }
 
 interface ConversationalAIRef {
   startConversation: () => Promise<void>;
   stopConversation: () => Promise<void>;
   toggleConversation: () => Promise<void>;
-  testTranscription: () => void;
+  interruptAgent: () => void;
 }
 
 const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
   (
     {
-      agentId = process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID || "",
+      agentId,
       className = "",
       onTranscriptionUpdate,
       onConversationStateChange,
+      mode = "push-to-talk",
+      vadSensitivity = 0.5,
+      interruptThreshold = 0.02,
     },
     ref,
   ) => {
-    const [currentTranscription, setCurrentTranscription] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [isConnected, setIsConnected] = useState(false);
-    const [isRecording, setIsRecording] = useState(false);
-    const [transcription, setTranscription] = useState("");
-    const [pipelineStatus, setPipelineStatus] = useState<any>(null);
-    const [aiInsights, setAIInsights] = useState<any>(null);
-    const [frequencyData, setFrequencyData] = useState<Uint8Array | null>(null);
-    const audioProcessorRef = useRef<RealTimeAudioProcessor | null>(null);
+    // Get agent ID from props or config
+    const effectiveAgentId = agentId || getElevenLabsAgentId();
 
-    const onFrequencyData = (data: Uint8Array) => {
-      setFrequencyData(data);
-    };
+    // Use the real ElevenLabs conversation hook
+    const {
+      status,
+      isConnected,
+      startConversation: startConv,
+      stopConversation: stopConv,
+      toggleConversation: toggleConv,
+      conversationState,
+      interruptAgent,
+      userTranscript,
+      aiTranscript,
+      userAudioLevel,
+      aiAudioLevel,
+      isUserSpeaking,
+      isAISpeaking,
+      error: conversationError,
+      audioFeatures,
+      audioMetrics,
+    } = useElevenLabsConversation();
 
-    // Initialize ElevenLabs conversation with proper event handlers for real-time transcription
-    const conversation = useConversation();
-    
-    // Set up event handlers
+    // Notify parent of transcription updates
     useEffect(() => {
-      const handleConnect = () => {
-        console.log("🔗 ElevenLabs: Connected to conversation");
-        setIsConnected(true);
-        setError(null);
-      };
-      
-      const handleDisconnect = () => {
-        console.log("🔌 ElevenLabs: Disconnected from conversation");
-        setIsConnected(false);
-        setIsLoading(false);
-      };
-      
-      const handleMessage = (message: any) => {
-        console.log("📝 ElevenLabs: Raw message received:", {
-          type: message.type,
-          message: message.message,
-          content: message.content,
-          text: message.text,
-          fullMessage: message,
-        });
-
-        // Handle different message types according to ElevenLabs docs
-        if (
-          message.type === "user_transcript" ||
-          message.type === "user_transcript_partial"
-        ) {
-          // Real-time user transcription - this is what we want!
-          const transcriptText =
-            message.message || message.content || message.text || "";
-          console.log("🎤 User transcript captured:", transcriptText);
-          if (transcriptText) {
-            console.log("🎯 Setting current transcription:", transcriptText);
-            setCurrentTranscription(transcriptText);
-            console.log(
-              "🎯 Calling onTranscriptionUpdate with:",
-              transcriptText,
-            );
-            onTranscriptionUpdate?.(transcriptText);
-          }
-        } else if (
-          message.type === "agent_response" ||
-          message.type === "agent_response_partial"
-        ) {
-          // Agent response
-          console.log(
-            "🤖 Agent response:",
-            message.message || message.content || message.text,
-          );
-        } else if (message.type === "conversation_initiation_metadata") {
-          // Conversation metadata
-          console.log("📋 Conversation metadata:", message);
-        } else if (message.type === "audio") {
-          // Audio data - don't log this as it's binary
-          console.log("🔊 Audio data received (not logging binary data)");
-        } else {
-          // Log all other message types to understand what we're getting
-          console.log(
-            "❓ Unknown message type:",
-            message.type,
-            "Full message:",
-            message,
-          );
-
-          // Fallback for any message with content that might be transcription
-          if (message.message || message.content || message.text) {
-            const content = message.message || message.content || message.text;
-            console.log("💬 Fallback transcription capture:", content);
-            setCurrentTranscription(content);
-            onTranscriptionUpdate?.(content);
-          }
-        }
-      };
-      
-      const handleError = (error: any) => {
-        console.error("❌ ElevenLabs: Conversation error:", error);
-        setError(error.message || "Conversation error occurred");
-        setIsLoading(false);
-      };
-      
-      // TODO: Set up event listeners when the conversation API supports it
-      // For now, these handlers are ready for when the API is available
-    }, [onTranscriptionUpdate]);
-
-    // Start conversation
-    const startConversation = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        console.log("🚀 Starting ElevenLabs conversation...");
-
-        if (!agentId) {
-          throw new Error("Agent ID is required");
-        }
-
-        conversation.start();
-        console.log("✅ ElevenLabs conversation started successfully");
-      } catch (err: any) {
-        console.error("❌ Failed to start conversation:", err);
-        setError(err.message || "Failed to start conversation");
-        setIsLoading(false);
+      if (userTranscript) {
+        onTranscriptionUpdate?.(userTranscript);
       }
-    };
+    }, [userTranscript, onTranscriptionUpdate]);
 
-    // Stop conversation
-    const stopConversation = async () => {
-      try {
-        console.log("🛑 Stopping ElevenLabs conversation...");
-        conversation.stop();
-        console.log("✅ ElevenLabs conversation stopped successfully");
-      } catch (err: any) {
-        console.error("❌ Failed to stop conversation:", err);
-        setError(err.message || "Failed to stop conversation");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    // Toggle conversation
-    const toggleConversation = async () => {
-      if (conversation.status.value === "connected") {
-        await stopConversation();
-      } else {
-        await startConversation();
-      }
-    };
-
-    // Test transcription function
-    const testTranscription = () => {
-      const testText = `Test transcription at ${new Date().toLocaleTimeString()}`;
-      console.log("🧪 Test transcription:", testText);
-      setCurrentTranscription(testText);
-      onTranscriptionUpdate?.(testText);
-    };
-
+    // Notify parent of conversation state changes
     useEffect(() => {
-      // Web-only environment - no Electron IPC
-      const ipcRenderer = null;
-      // Initialize the audio processor
-      if (!audioProcessorRef.current) {
-        audioProcessorRef.current = new RealTimeAudioProcessor();
-        audioProcessorRef.current.initialize();
-      }
-
-      const onTranscription = (text: string) => {
-        setTranscription(text);
-        // Web environment - no IPC communication needed
-      };
-
-      const onWaveformData = (data: Float32Array) => {
-        // This is not used by AudioWaveform, but can be used for other visualizations
-      };
-
-      const onError = (err: string) => {
-        setError(err);
-      };
-
-      const handleStartRecording = () => {
-        handleToggleRecording();
-      };
-
-      const handleStopRecording = () => {
-        if (isRecording) {
-          handleToggleRecording();
-        }
-      };
-
-      const handleGetTranscription = () => {
-        // Web environment - transcription handled locally
-      };
-
-      const handleGetWaveformData = () => {
-        // This would need to be implemented in the audio processor
-      };
-
-      // Web environment - no IPC event listeners needed
-
-      // Fetch initial status and insights
-      fetchStatusAndInsights();
-
-      const interval = setInterval(fetchStatusAndInsights, 5000); // Poll every 5 seconds
-
-      return () => {
-        clearInterval(interval);
-        audioProcessorRef.current?.stopProcessing();
-        // Web environment - no IPC cleanup needed
-      };
-    }, [isRecording, transcription]);
-
-    const fetchStatusAndInsights = async () => {
-      // ... existing code ...
-    };
-
-    const handleToggleRecording = async () => {
-      setError(null);
-      if (isRecording) {
-        audioProcessorRef.current?.stopProcessing();
-        setIsRecording(false);
-      } else {
-        try {
-          if (!audioProcessorRef.current) {
-            audioProcessorRef.current = new RealTimeAudioProcessor();
-            await audioProcessorRef.current.initialize();
-          }
-          await audioProcessorRef.current.startProcessing(
-            (features) => {
-              /* onAudioFeatures */
-            },
-            (metrics) => {
-              /* onAudioMetrics */
-            },
-            onFrequencyData,
-          );
-          setIsRecording(true);
-        } catch (err: any) {
-          setError(err.message || "Failed to start recording.");
-          setIsRecording(false);
-        }
-      }
-    };
+      onConversationStateChange?.(conversationState);
+    }, [conversationState, onConversationStateChange]);
 
     // Expose methods via ref
     useImperativeHandle(ref, () => ({
-      startConversation,
-      stopConversation,
-      toggleConversation,
-      testTranscription,
+      startConversation: async () => {
+        await startConv({
+          agentId: effectiveAgentId,
+          mode,
+          vadSensitivity,
+          interruptThreshold,
+          autoReconnect: true,
+        });
+      },
+      stopConversation: async () => {
+        await stopConv();
+      },
+      toggleConversation: async () => {
+        if (isConnected) {
+          await stopConv();
+        } else {
+          await startConv({
+            agentId: effectiveAgentId,
+            mode,
+            vadSensitivity,
+            interruptThreshold,
+            autoReconnect: true,
+          });
+        }
+      },
+      interruptAgent,
     }));
+
+    // Handler for toggle button
+    const handleToggle = async () => {
+      if (isConnected) {
+        await stopConv();
+      } else {
+        await startConv({
+          agentId: effectiveAgentId,
+          mode,
+          vadSensitivity,
+          interruptThreshold,
+          autoReconnect: true,
+        });
+      }
+    };
+
+    // Get conversation state display info
+    const getStateInfo = (state: ConversationState) => {
+      switch (state) {
+        case "idle":
+          return { text: "Idle", color: "text-gray-400", icon: null };
+        case "user-speaking":
+          return {
+            text: "You're speaking",
+            color: "text-blue-400",
+            icon: <Mic className="w-4 h-4 animate-pulse" />,
+          };
+        case "ai-speaking":
+          return {
+            text: "AI speaking",
+            color: "text-green-400",
+            icon: <Radio className="w-4 h-4 animate-pulse" />,
+          };
+        case "transitioning":
+          return {
+            text: "Transitioning",
+            color: "text-yellow-400",
+            icon: <Activity className="w-4 h-4" />,
+          };
+        case "interrupted":
+          return {
+            text: "Interrupted",
+            color: "text-orange-400",
+            icon: <AlertCircle className="w-4 h-4" />,
+          };
+        default:
+          return { text: "Unknown", color: "text-gray-400", icon: null };
+      }
+    };
+
+    const stateInfo = getStateInfo(conversationState);
+    const displayError = conversationError?.message || null;
 
     return (
       <div className={`conversational-ai-panel ${className}`}>
+        {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-holographic">
-            ElevenLabs AI
+            ElevenLabs Conversational AI
           </h3>
           <div className="flex items-center gap-2">
+            {/* Connection status */}
             {isConnected && (
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
             )}
-            <span className="text-sm text-blue-600">
-              {isConnected ? "Connected" : "Disconnected"}
+            {status === "connecting" && (
+              <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
+            )}
+            {status === "error" && (
+              <AlertCircle className="w-4 h-4 text-red-400" />
+            )}
+            <span
+              className={`text-sm ${isConnected ? "text-green-400" : "text-gray-400"}`}
+            >
+              {status === "connecting"
+                ? "Connecting..."
+                : isConnected
+                  ? "Connected"
+                  : status === "error"
+                    ? "Error"
+                    : "Disconnected"}
             </span>
           </div>
         </div>
 
-        {!agentId && (
+        {/* Agent ID warning */}
+        {!effectiveAgentId && (
           <div className="mb-4 p-3 bg-yellow-900/20 border border-yellow-500 rounded text-yellow-400 text-sm">
             Set NEXT_PUBLIC_ELEVENLABS_AGENT_ID environment variable to enable
             ElevenLabs integration
           </div>
         )}
 
-        {error && (
+        {/* Error display */}
+        {displayError && (
           <div className="mb-4 p-3 bg-red-900/20 border border-red-500 rounded text-red-400 text-sm">
-            {error}
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4" />
+              <span>{displayError}</span>
+            </div>
           </div>
         )}
 
-        <div className="flex items-center gap-4 mb-4">
-          <button
-            onClick={toggleConversation}
-            disabled={isLoading}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-              isRecording
-                ? "bg-red-600 hover:bg-red-700 text-white"
-                : "bg-blue-400 hover:bg-blue-700 text-white"
-            } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-            data-testid="toggle-recording"
-          >
-            {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
-            {isLoading
-              ? "Loading..."
-              : isRecording
-                ? "Stop Recording"
-                : "Start Recording"}
-          </button>
+        {/* Conversation state indicator */}
+        {isConnected && (
+          <div className="mb-4 p-3 bg-blue-900/10 border border-blue-500/30 rounded">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {stateInfo.icon}
+                <span className={`text-sm font-medium ${stateInfo.color}`}>
+                  {stateInfo.text}
+                </span>
+              </div>
+              <div className="flex items-center gap-4 text-xs text-gray-400">
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full" />
+                  <span>User: {(userAudioLevel * 100).toFixed(0)}%</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-green-400 rounded-full" />
+                  <span>AI: {(aiAudioLevel * 100).toFixed(0)}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
-          <button
-            onClick={testTranscription}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-all"
-            data-testid="test-transcription"
-          >
-            Test Transcription
-          </button>
+        {/* Mode indicator */}
+        <div className="mb-4 flex items-center gap-2 text-xs text-gray-400">
+          <span>Mode:</span>
+          <span className="font-medium text-blue-400">
+            {mode === "push-to-talk" ? "Push-to-Talk" : "Voice-Activated"}
+          </span>
+          {mode === "voice-activated" && (
+            <span className="text-gray-500">
+              (VAD: {(vadSensitivity * 100).toFixed(0)}%)
+            </span>
+          )}
         </div>
 
-        <div className="transcription-display">
-          <h4 className="text-sm font-medium text-blue-600 mb-2">
-            Live Transcription:
-          </h4>
-          <div className="p-3 bg-gray-900/50 border border-blue-500/30 rounded-lg min-h-[100px]">
-            {currentTranscription ? (
-              <p className="text-white text-sm">{currentTranscription}</p>
+        {/* Control buttons */}
+        <div className="flex items-center gap-4 mb-4">
+          <button
+            onClick={handleToggle}
+            disabled={status === "connecting" || !effectiveAgentId}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              isConnected
+                ? "bg-red-600 hover:bg-red-700 text-white"
+                : "bg-blue-600 hover:bg-blue-700 text-white"
+            } ${status === "connecting" || !effectiveAgentId ? "opacity-50 cursor-not-allowed" : ""}`}
+            data-testid="toggle-conversation"
+          >
+            {status === "connecting" ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : isConnected ? (
+              <MicOff size={20} />
             ) : (
-              <p className="text-gray-400 text-sm italic">
-                {isRecording
-                  ? "Listening for speech..."
-                  : 'Click "Start Recording" to begin transcription'}
-              </p>
+              <Mic size={20} />
             )}
+            {status === "connecting"
+              ? "Connecting..."
+              : isConnected
+                ? "Stop Conversation"
+                : "Start Conversation"}
+          </button>
+
+          {/* Interrupt button (only when AI is speaking) */}
+          {isAISpeaking && (
+            <button
+              onClick={interruptAgent}
+              className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition-all"
+              data-testid="interrupt-button"
+            >
+              Interrupt
+            </button>
+          )}
+        </div>
+
+        {/* Transcription displays */}
+        <div className="space-y-4">
+          {/* User transcription */}
+          <div className="transcription-display">
+            <h4 className="text-sm font-medium text-blue-400 mb-2 flex items-center gap-2">
+              <Mic className="w-4 h-4" />
+              Your Speech:
+            </h4>
+            <div className="p-3 bg-blue-900/10 border border-blue-500/30 rounded-lg min-h-[60px]">
+              {userTranscript ? (
+                <p className="text-white text-sm">{userTranscript}</p>
+              ) : (
+                <p className="text-gray-400 text-sm italic">
+                  {isConnected && isUserSpeaking
+                    ? "Listening..."
+                    : isConnected
+                      ? "Waiting for your input..."
+                      : "Start conversation to begin"}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* AI transcription */}
+          <div className="transcription-display">
+            <h4 className="text-sm font-medium text-green-400 mb-2 flex items-center gap-2">
+              <Radio className="w-4 h-4" />
+              AI Response:
+            </h4>
+            <div className="p-3 bg-green-900/10 border border-green-500/30 rounded-lg min-h-[60px]">
+              {aiTranscript ? (
+                <p className="text-white text-sm">{aiTranscript}</p>
+              ) : (
+                <p className="text-gray-400 text-sm italic">
+                  {isConnected
+                    ? "AI will respond here..."
+                    : "No response yet"}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="mt-4 text-xs text-gray-400">
-          <p>Status: {conversation.status.value}</p>
-          <p>Agent ID: {agentId || "Not configured"}</p>
-        </div>
+        {/* Audio waveform visualization */}
+        {isConnected && (
+          <div className="mt-4">
+            <AudioWaveform
+              isRecording={isUserSpeaking || isAISpeaking}
+              frequencyData={audioFeatures ? new Uint8Array([audioFeatures.energy * 255]) : undefined}
+            />
+          </div>
+        )}
 
-        <AudioWaveform isRecording={isRecording} />
+        {/* Debug info (optional, can be hidden in production) */}
+        {process.env.NODE_ENV === "development" && isConnected && (
+          <div className="mt-4 text-xs text-gray-500 space-y-1">
+            <p>Agent ID: {effectiveAgentId}</p>
+            <p>State: {conversationState}</p>
+            {audioFeatures && (
+              <>
+                <p>Voice Activity: {audioFeatures.voiceActivity ? "Yes" : "No"}</p>
+                <p>SPL: {audioFeatures.spl.toFixed(1)} dB</p>
+                <p>RMS: {audioFeatures.rms.toFixed(4)}</p>
+              </>
+            )}
+            {audioMetrics && (
+              <>
+                <p>Quality Score: {audioMetrics.audioQuality.toFixed(0)}/100</p>
+                <p>VAD Confidence: {(audioMetrics.vadConfidence * 100).toFixed(0)}%</p>
+              </>
+            )}
+          </div>
+        )}
       </div>
     );
   },
