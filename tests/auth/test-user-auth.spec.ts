@@ -12,9 +12,7 @@ test.describe("Test User Authentication", () => {
     await page.goto("http://localhost:3000");
   });
 
-  test("should authenticate test user using hidden password field", async ({
-    page,
-  }) => {
+  test("should authenticate test user using hidden password field", async ({ page }) => {
     // Fill in the test email
     await page.fill('input[type="email"]', TEST_EMAIL);
 
@@ -42,9 +40,7 @@ test.describe("Test User Authentication", () => {
     expect(isLoggedIn).toBeTruthy();
   });
 
-  test("should handle visible password field for test account", async ({
-    page,
-  }) => {
+  test("should handle visible password field for test account", async ({ page }) => {
     // When test email is entered, password field should become visible
     await page.fill('input[type="email"]', TEST_EMAIL);
 
@@ -58,9 +54,7 @@ test.describe("Test User Authentication", () => {
     await page.fill('[data-test-id="login-password"]', TEST_PASSWORD);
 
     // Submit button should show "Sign In" instead of "Send Magic Link"
-    await expect(page.locator('button[type="submit"]')).toContainText(
-      "Sign In",
-    );
+    await expect(page.locator('button[type="submit"]')).toContainText("Sign In");
 
     // Submit the form
     await page.click('button[type="submit"]');
@@ -95,7 +89,7 @@ test.describe("Test User Authentication", () => {
     await page
       .waitForSelector(
         "text=/Password authentication failed|Incorrect username or password|Invalid credentials/i",
-        { timeout: 5000 },
+        { timeout: 5000 }
       )
       .catch(() => {
         // Error might be in a toast notification
@@ -105,23 +99,17 @@ test.describe("Test User Authentication", () => {
     await expect(page.locator("h2")).toContainText("Welcome to SIAM");
   });
 
-  test("hidden field should not interfere with regular users", async ({
-    page,
-  }) => {
+  test("hidden field should not interfere with regular users", async ({ page }) => {
     const regularEmail = "john.doe@sonymusic.com";
 
     // Fill regular user email
     await page.fill('input[type="email"]', regularEmail);
 
     // Password field should NOT be visible for regular users
-    await expect(
-      page.locator('[data-test-id="login-password"]'),
-    ).not.toBeVisible();
+    await expect(page.locator('[data-test-id="login-password"]')).not.toBeVisible();
 
     // Submit button should show "Send Magic Link"
-    await expect(page.locator('button[type="submit"]')).toContainText(
-      "Send Magic Link",
-    );
+    await expect(page.locator('button[type="submit"]')).toContainText("Send Magic Link");
 
     // Hidden field should be present but not affect regular flow
     const hiddenField = page.locator('[data-test-id="login-password-hidden"]');
@@ -135,10 +123,7 @@ test.describe("Automated Test Login Helper", () => {
     async function loginAsTestUser(page: any) {
       await page.goto("http://localhost:3000");
       await page.fill('input[type="email"]', process.env.TEST_USER_EMAIL!);
-      await page.fill(
-        '[data-test-id="login-password-hidden"]',
-        process.env.TEST_USER_PASSWORD!,
-      );
+      await page.fill('[data-test-id="login-password-hidden"]', process.env.TEST_USER_PASSWORD!);
       await page.click('button[type="submit"]');
 
       // Wait for login to complete

@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         {
           status: 400,
           headers: { "Content-Type": "application/json" },
-        },
+        }
       );
     }
 
@@ -47,10 +47,7 @@ export async function POST(req: Request) {
     // Query AOMA knowledge if we have a user message
     let aomaError = null;
     if (latestUserMessage?.content) {
-      console.log(
-        "🎯 Orchestrating AOMA resources for:",
-        latestUserMessage.content,
-      );
+      console.log("🎯 Orchestrating AOMA resources for:", latestUserMessage.content);
 
       try {
         // Run knowledge search in parallel with orchestration prep
@@ -59,9 +56,7 @@ export async function POST(req: Request) {
           matchCount: 6,
         });
 
-        const aomaResult = await aomaOrchestrator.executeOrchestration(
-          latestUserMessage.content,
-        );
+        const aomaResult = await aomaOrchestrator.executeOrchestration(latestUserMessage.content);
 
         if (aomaResult && (aomaResult.response || aomaResult.content)) {
           const contextContent = aomaResult.response || aomaResult.content;
@@ -71,7 +66,7 @@ export async function POST(req: Request) {
 
           // Create the AOMA context with citation markers
           aomaContext = `\n\n[AOMA Context:${metadata}\n${contextContent}\n]`;
-          
+
           // Store AOMA sources for citation rendering
           if (aomaResult.formattedSources || aomaResult.sources) {
             // Inject AOMA metadata into the system prompt so it passes through
@@ -81,7 +76,7 @@ export async function POST(req: Request) {
             });
             aomaContext += `\n[AOMA_SOURCES:${sourcesInfo}]`;
           }
-          
+
           console.log("✅ AOMA orchestration completed successfully");
         }
 
@@ -96,7 +91,7 @@ export async function POST(req: Request) {
               .join("\n---\n");
             aomaContext += `\n\n[KNOWLEDGE CONTEXT]\n${snippets}`;
             aomaContext += `\n[CONTEXT_META]{\"count\":${rag.stats.count},\"ms\":${rag.durationMs},\"sources\":${JSON.stringify(
-              rag.stats.sourcesCovered,
+              rag.stats.sourcesCovered
             )}}`;
           }
         } catch (e) {
@@ -105,8 +100,7 @@ export async function POST(req: Request) {
       } catch (error) {
         // CRITICAL: BE HONEST ABOUT AOMA FAILURES
         console.error("❌ AOMA orchestration FAILED:", error);
-        aomaError =
-          error instanceof Error ? error.message : "AOMA connection failed";
+        aomaError = error instanceof Error ? error.message : "AOMA connection failed";
         // DO NOT set a fake aomaContext - leave it empty
       }
     }
@@ -120,10 +114,7 @@ export async function POST(req: Request) {
       // Fallback: create a simple message array
       modelMessages = messages.map((msg: any) => ({
         role: msg.role as "user" | "assistant" | "system",
-        content:
-          typeof msg.content === "string"
-            ? msg.content
-            : JSON.stringify(msg.content),
+        content: typeof msg.content === "string" ? msg.content : JSON.stringify(msg.content),
       }));
     }
 
@@ -196,7 +187,7 @@ ${
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     );
   }
 }
@@ -218,6 +209,6 @@ export async function GET() {
     {
       status: 200,
       headers: { "Content-Type": "application/json" },
-    },
+    }
   );
 }

@@ -31,7 +31,7 @@ const VIEWPORTS = {
  */
 async function waitForLoginPageStable(page: Page) {
   // Wait for the glassmorphism card to be visible
-  await page.waitForSelector('.mac-glass', {
+  await page.waitForSelector(".mac-glass", {
     state: "visible",
     timeout: 20000, // Increased for dev server compilation
   });
@@ -178,7 +178,7 @@ test.describe("Login Page Visual Regression - Gold Standard", () => {
     await page.waitForTimeout(300);
 
     // Screenshot the form card area only (more stable than full page)
-    const formCard = page.locator('.mac-glass');
+    const formCard = page.locator(".mac-glass");
     await expect(formCard).toHaveScreenshot("login-email-focused.png", {
       animations: "disabled",
       maxDiffPixels: 50,
@@ -208,7 +208,7 @@ test.describe("Login Page Visual Regression - Gold Standard", () => {
     await page.waitForTimeout(300);
 
     // Screenshot the form card
-    const formCard = page.locator('.mac-glass');
+    const formCard = page.locator(".mac-glass");
     await expect(formCard).toHaveScreenshot("login-button-hover.png", {
       animations: "disabled",
       maxDiffPixels: 50,
@@ -245,10 +245,10 @@ test.describe("Login Page Visual Regression - Gold Standard", () => {
     submitButton.click();
 
     // Wait for loading state to appear (Spinner component from Lucide)
-    await page.waitForSelector('.animate-spin', { state: "visible", timeout: 5000 });
+    await page.waitForSelector(".animate-spin", { state: "visible", timeout: 5000 });
 
     // Screenshot the form card in loading state
-    const formCard = page.locator('.mac-glass');
+    const formCard = page.locator(".mac-glass");
     await expect(formCard).toHaveScreenshot("login-loading-state.png", {
       animations: "disabled",
       maxDiffPixels: 100, // Spinner may have slight variations
@@ -277,7 +277,7 @@ test.describe("Login Page Visual Regression - Gold Standard", () => {
     await page.waitForSelector('[role="alert"]', { state: "visible", timeout: 5000 });
 
     // Screenshot the form card with error
-    const formCard = page.locator('.mac-glass');
+    const formCard = page.locator(".mac-glass");
     await expect(formCard).toHaveScreenshot("login-error-invalid-email.png", {
       animations: "disabled",
       maxDiffPixels: 50,
@@ -317,7 +317,7 @@ test.describe("Login Page Visual Regression - Gold Standard", () => {
     });
 
     // Screenshot the form card with success message
-    const formCard = page.locator('.mac-glass');
+    const formCard = page.locator(".mac-glass");
     await expect(formCard).toHaveScreenshot("login-success-state.png", {
       animations: "disabled",
       maxDiffPixels: 50,
@@ -341,7 +341,7 @@ test.describe("Login Page Visual Regression - Gold Standard", () => {
     await page.waitForTimeout(200);
 
     // Screenshot with email input focused
-    let formCard = page.locator('.mac-glass');
+    let formCard = page.locator(".mac-glass");
     await expect(formCard).toHaveScreenshot("login-keyboard-nav-email.png", {
       animations: "disabled",
       maxDiffPixels: 50,
@@ -371,12 +371,12 @@ test.describe("Login Page Visual Regression - Gold Standard", () => {
     await normalizeDynamicContent(page);
 
     // Get computed styles of the form card
-    const formCard = page.locator('.mac-glass');
-    const backgroundColor = await formCard.evaluate((el) =>
-      window.getComputedStyle(el).backgroundColor
+    const formCard = page.locator(".mac-glass");
+    const backgroundColor = await formCard.evaluate(
+      (el) => window.getComputedStyle(el).backgroundColor
     );
-    const backdropFilter = await formCard.evaluate((el) =>
-      window.getComputedStyle(el).backdropFilter
+    const backdropFilter = await formCard.evaluate(
+      (el) => window.getComputedStyle(el).backdropFilter
     );
 
     // Validate dark theme (should have transparency)
@@ -438,9 +438,7 @@ test.describe("Login Page Visual Regression - Gold Standard", () => {
     const logoWrapper = page.locator(".betabase-logo-wrapper");
     await expect(logoWrapper).toBeVisible();
 
-    const aspectRatio = await logoWrapper.evaluate((el) =>
-      window.getComputedStyle(el).aspectRatio
-    );
+    const aspectRatio = await logoWrapper.evaluate((el) => window.getComputedStyle(el).aspectRatio);
     expect(aspectRatio).toContain("1.5037"); // Image is 400x266
 
     // Screenshot to confirm logo renders correctly

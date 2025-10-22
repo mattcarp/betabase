@@ -41,9 +41,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Magic link error:", error);
-    return NextResponse.json(
-      { error: "Failed to process request" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to process request" }, { status: 500 });
   }
 }

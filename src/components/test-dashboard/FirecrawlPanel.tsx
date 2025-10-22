@@ -84,8 +84,7 @@ export const FirecrawlPanel: React.FC = () => {
   const [crawlProgress, setCrawlProgress] = useState(0);
   const [autAnalysis, setAutAnalysis] = useState<AUTAnalysis | null>(null);
   const [supportQuery, setSupportQuery] = useState("");
-  const [supportResponse, setSupportResponse] =
-    useState<SupportResponse | null>(null);
+  const [supportResponse, setSupportResponse] = useState<SupportResponse | null>(null);
   const [isLoadingSupport, setIsLoadingSupport] = useState(false);
   const [apiHealth, setApiHealth] = useState<any>(null);
   const [commonIssues, setCommonIssues] = useState<any[]>([]);
@@ -229,11 +228,7 @@ export const FirecrawlPanel: React.FC = () => {
     <div className="space-y-6">
       {/* API Status Banner */}
       {apiHealth && (
-        <Alert
-          className={
-            apiHealth.firecrawl ? "border-green-500/20" : "border-yellow-500/20"
-          }
-        >
+        <Alert className={apiHealth.firecrawl ? "border-green-500/20" : "border-yellow-500/20"}>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription className="flex items-center justify-between">
             <span>
@@ -270,11 +265,7 @@ export const FirecrawlPanel: React.FC = () => {
               onChange={(e) => setNewSourceUrl(e.target.value)}
               className="flex-1"
             />
-            <Button
-              onClick={handleAnalyzeAUT}
-              disabled={isScanning}
-              className="min-w-[120px]"
-            >
+            <Button onClick={handleAnalyzeAUT} disabled={isScanning} className="min-w-[120px]">
               {isScanning ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -322,9 +313,7 @@ export const FirecrawlPanel: React.FC = () => {
                               <h5 className="font-medium">{feature.name}</h5>
                               <Badge
                                 variant="outline"
-                                className={getPriorityColor(
-                                  feature.testPriority,
-                                )}
+                                className={getPriorityColor(feature.testPriority)}
                               >
                                 {feature.testPriority}
                               </Badge>
@@ -334,11 +323,7 @@ export const FirecrawlPanel: React.FC = () => {
                             </p>
                             <div className="flex flex-wrap gap-1 mt-2">
                               {feature.testTypes.map((type, i) => (
-                                <Badge
-                                  key={i}
-                                  variant="secondary"
-                                  className="text-xs"
-                                >
+                                <Badge key={i} variant="secondary" className="text-xs">
                                   {type}
                                 </Badge>
                               ))}
@@ -412,9 +397,7 @@ export const FirecrawlPanel: React.FC = () => {
                             </Badge>
                             <p className="text-sm">{item.content}</p>
                           </div>
-                          <div className="text-sm text-muted-foreground">
-                            {item.relevance}%
-                          </div>
+                          <div className="text-sm text-muted-foreground">{item.relevance}%</div>
                         </div>
                       </CardContent>
                     </Card>
@@ -472,9 +455,7 @@ export const FirecrawlPanel: React.FC = () => {
                   {supportResponse.suggestedActions &&
                     supportResponse.suggestedActions.length > 0 && (
                       <div className="pt-2 border-t">
-                        <p className="text-xs font-medium mb-1">
-                          Suggested Actions:
-                        </p>
+                        <p className="text-xs font-medium mb-1">Suggested Actions:</p>
                         <ul className="list-disc list-inside text-xs text-muted-foreground">
                           {supportResponse.suggestedActions.map((action, i) => (
                             <li key={i}>{action}</li>

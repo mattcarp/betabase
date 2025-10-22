@@ -47,24 +47,21 @@ function calculatePercentile(arr: number[], percentile: number): number {
 // Update performance metrics
 function updatePerformanceMetrics() {
   const recentRequests = metrics.requests.slice(-100);
-  const durations = recentRequests.map(r => r.duration);
-  
+  const durations = recentRequests.map((r) => r.duration);
+
   if (durations.length > 0) {
-    metrics.performance.avgResponseTime = 
-      durations.reduce((a, b) => a + b, 0) / durations.length;
+    metrics.performance.avgResponseTime = durations.reduce((a, b) => a + b, 0) / durations.length;
     metrics.performance.p95ResponseTime = calculatePercentile(durations, 95);
     metrics.performance.p99ResponseTime = calculatePercentile(durations, 99);
   }
-  
+
   metrics.performance.totalRequests = metrics.requests.length;
   const recentErrors = metrics.errors.filter(
-    e => e.timestamp > Date.now() - 5 * 60 * 1000 // Last 5 minutes
+    (e) => e.timestamp > Date.now() - 5 * 60 * 1000 // Last 5 minutes
   ).length;
-  metrics.performance.errorRate = 
-    recentRequests.length > 0 
-      ? (recentErrors / recentRequests.length) * 100 
-      : 0;
-  
+  metrics.performance.errorRate =
+    recentRequests.length > 0 ? (recentErrors / recentRequests.length) * 100 : 0;
+
   metrics.performance.lastUpdated = Date.now();
 }
 
@@ -84,12 +81,12 @@ export function trackRequest(
     status,
     error,
   });
-  
+
   // Keep only recent requests
   if (metrics.requests.length > MAX_STORED_REQUESTS) {
     metrics.requests = metrics.requests.slice(-MAX_STORED_REQUESTS);
   }
-  
+
   updatePerformanceMetrics();
 }
 
@@ -101,7 +98,7 @@ export function trackError(message: string, stack?: string, path?: string) {
     stack,
     path,
   });
-  
+
   // Keep only recent errors
   if (metrics.errors.length > MAX_STORED_ERRORS) {
     metrics.errors = metrics.errors.slice(-MAX_STORED_ERRORS);
@@ -113,44 +110,49 @@ export async function GET(request: NextRequest) {
   try {
     // Track this introspection request
     const startTime = Date.now();
-    
+
     // Update system metrics
     metrics.system.memoryUsage = process.memoryUsage();
     metrics.system.uptime = process.uptime();
-    
+
     // Generate some sample internal activity if we don't have real data yet
     if (metrics.requests.length === 0) {
       // Simulate recent chat requests for demo
       const now = Date.now();
       const sampleRequests = [
-        { path: '/api/chat', method: 'POST', duration: 3200, status: 200, timestamp: now - 30000 },
-        { path: '/api/vector-store/files', method: 'GET', duration: 150, status: 200, timestamp: now - 25000 },
-        { path: '/api/chat', method: 'POST', duration: 5400, status: 200, timestamp: now - 20000 },
-        { path: '/api/health', method: 'GET', duration: 45, status: 200, timestamp: now - 15000 },
-        { path: '/api/chat', method: 'POST', duration: 2800, status: 200, timestamp: now - 10000 },
+        { path: "/api/chat", method: "POST", duration: 3200, status: 200, timestamp: now - 30000 },
+        {
+          path: "/api/vector-store/files",
+          method: "GET",
+          duration: 150,
+          status: 200,
+          timestamp: now - 25000,
+        },
+        { path: "/api/chat", method: "POST", duration: 5400, status: 200, timestamp: now - 20000 },
+        { path: "/api/health", method: "GET", duration: 45, status: 200, timestamp: now - 15000 },
+        { path: "/api/chat", method: "POST", duration: 2800, status: 200, timestamp: now - 10000 },
       ];
-      
-      sampleRequests.forEach(req => {
+
+      sampleRequests.forEach((req) => {
         metrics.requests.push({
           ...req,
         });
       });
       updatePerformanceMetrics();
     }
-    
+
     // Get recent activity (last 20 requests)
     const recentActivity = metrics.requests
       .slice(-20)
       .reverse()
-      .map(req => ({
+      .map((req) => ({
         id: `req_${req.timestamp}`,
         name: `${req.method} ${req.path}`,
-        runType: req.path.includes('/chat') ? 'llm' : 
-                 req.path.includes('/api/') ? 'tool' : 'chain',
+        runType: req.path.includes("/chat") ? "llm" : req.path.includes("/api/") ? "tool" : "chain",
         startTime: new Date(req.timestamp).toISOString(),
         endTime: new Date(req.timestamp + req.duration).toISOString(),
         duration: req.duration,
-        status: req.status >= 400 ? 'error' : 'success',
+        status: req.status >= 400 ? "error" : "success",
         error: req.error,
         inputs: { method: req.method, path: req.path },
         outputs: { status: req.status },
@@ -159,17 +161,14 @@ export async function GET(request: NextRequest) {
           statusCode: req.status,
         },
       }));
-    
+
     // Track this request completion
     const endTime = Date.now();
-    trackRequest('/api/introspection', 'GET', endTime - startTime, 200);
-    
+    trackRequest("/api/introspection", "GET", endTime - startTime, 200);
+
     // Check if LangSmith environment variables are set
-    const langsmithEnabled = !!(
-      process.env.LANGCHAIN_TRACING_V2 || 
-      process.env.LANGSMITH_API_KEY
-    );
-    
+    const langsmithEnabled = !!(process.env.LANGCHAIN_TRACING_V2 || process.env.LANGSMITH_API_KEY);
+
     // Format response for IntrospectionDropdown
     return NextResponse.json({
       status: {
@@ -191,7 +190,7 @@ export async function GET(request: NextRequest) {
             heapUsed: Math.round(metrics.system.memoryUsage.heapUsed / 1024 / 1024),
             external: Math.round(metrics.system.memoryUsage.external / 1024 / 1024),
           },
-          uptimeHours: Math.round(metrics.system.uptime / 3600 * 10) / 10,
+          uptimeHours: Math.round((metrics.system.uptime / 3600) * 10) / 10,
         },
         recentErrors: metrics.errors.slice(-10).reverse(),
       },
@@ -204,7 +203,7 @@ export async function GET(request: NextRequest) {
       error instanceof Error ? error.stack : undefined,
       "/api/introspection"
     );
-    
+
     return NextResponse.json(
       {
         error: "Failed to get introspection data",
@@ -220,19 +219,13 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { type, ...data } = body;
-    
-    if (type === 'request') {
-      trackRequest(
-        data.path,
-        data.method,
-        data.duration,
-        data.status,
-        data.error
-      );
-    } else if (type === 'error') {
+
+    if (type === "request") {
+      trackRequest(data.path, data.method, data.duration, data.status, data.error);
+    } else if (type === "error") {
       trackError(data.message, data.stack, data.path);
     }
-    
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("[INTROSPECTION] Error tracking event:", error);

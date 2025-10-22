@@ -1,29 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getMultiRepoIndexer } from '@/src/services/multiRepoIndexer';
+import { NextRequest, NextResponse } from "next/server";
+import { getMultiRepoIndexer } from "@/src/services/multiRepoIndexer";
 
 function authorize(req: NextRequest) {
-  const headerKey = req.headers.get('x-api-key') || '';
-  const envKey = process.env.GIT_INDEX_API_KEY || '';
+  const headerKey = req.headers.get("x-api-key") || "";
+  const envKey = process.env.GIT_INDEX_API_KEY || "";
   if (!envKey) return true; // if not set, allow local usage
   return headerKey === envKey;
 }
 
 export async function GET() {
   return NextResponse.json({
-    status: 'ready',
-    configuredRepos: (process.env.GIT_ADDITIONAL_REPOS || '')
-      .split(',')
-      .map(s => s.trim())
+    status: "ready",
+    configuredRepos: (process.env.GIT_ADDITIONAL_REPOS || "")
+      .split(",")
+      .map((s) => s.trim())
       .filter(Boolean)
-      .concat([process.env.GIT_FRONTEND_REPO_PATH || '', process.env.GIT_BACKEND_REPO_PATH || '']
-        .filter(Boolean)),
+      .concat(
+        [process.env.GIT_FRONTEND_REPO_PATH || "", process.env.GIT_BACKEND_REPO_PATH || ""].filter(
+          Boolean
+        )
+      ),
   });
 }
 
 export async function POST(req: NextRequest) {
   try {
     if (!authorize(req)) {
-      return new NextResponse('Unauthorized', { status: 401 });
+      return new NextResponse("Unauthorized", { status: 401 });
     }
     const body = await req.json().catch(() => ({}));
     const includeCommits = body.includeCommits !== false;
@@ -42,7 +45,7 @@ export async function POST(req: NextRequest) {
             controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
           }
 
-          send('start', { includeCommits, includeFiles, repos: specificRepos });
+          send("start", { includeCommits, includeFiles, repos: specificRepos });
           try {
             if (specificRepos && specificRepos.length > 0) {
               const summaries: any[] = [];
@@ -52,37 +55,37 @@ export async function POST(req: NextRequest) {
                   if (includeFiles) {
                     const summary = await indexer.indexRepository(repo);
                     summaries.push(summary);
-                    send('progress', { type: 'files', repo, summary });
+                    send("progress", { type: "files", repo, summary });
                   }
                   if (includeCommits) {
                     const res = await indexer.indexCommits(repo);
-                    send('progress', { type: 'commits', repo, res });
+                    send("progress", { type: "commits", repo, res });
                   }
                 } catch (e: any) {
                   const err = { repo, error: e?.message || String(e) };
                   errors.push(err);
-                  send('error', err);
+                  send("error", err);
                 }
               }
               result = { summaries, errors };
             } else {
               const r = await indexer.indexAll({ includeCommits, includeFiles });
               result = r;
-              send('progress', r);
+              send("progress", r);
             }
-            send('done', result);
+            send("done", result);
             controller.close();
           } catch (e: any) {
-            send('error', { error: e?.message || String(e) });
+            send("error", { error: e?.message || String(e) });
             controller.error(e);
           }
         },
       });
       return new NextResponse(stream, {
         headers: {
-          'Content-Type': 'text/event-stream',
-          'Cache-Control': 'no-cache, no-transform',
-          Connection: 'keep-alive',
+          "Content-Type": "text/event-stream",
+          "Cache-Control": "no-cache, no-transform",
+          Connection: "keep-alive",
         },
       });
     }
@@ -107,5 +110,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: e?.message || String(e) }, { status: 500 });
   }
 }
-
-

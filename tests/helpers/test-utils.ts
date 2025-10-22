@@ -11,10 +11,10 @@ export async function login(page: Page, email: string, password: string) {
   await page.fill(TEST_CONFIG.selectors.emailInput, email);
   await page.fill(TEST_CONFIG.selectors.passwordInput, password);
   await page.click(TEST_CONFIG.selectors.submitButton);
-  
+
   // Wait for redirect or main app to load
-  await page.waitForURL(url => !url.pathname.includes('login'), { 
-    timeout: TEST_CONFIG.timeouts.navigation 
+  await page.waitForURL((url) => !url.pathname.includes("login"), {
+    timeout: TEST_CONFIG.timeouts.navigation,
   });
 }
 
@@ -22,12 +22,12 @@ export async function logout(page: Page) {
   const logoutButton = page.locator(TEST_CONFIG.selectors.logoutButton);
   if (await logoutButton.isVisible()) {
     await logoutButton.click();
-    await page.waitForURL('**/login', { timeout: TEST_CONFIG.timeouts.navigation });
+    await page.waitForURL("**/login", { timeout: TEST_CONFIG.timeouts.navigation });
   }
 }
 
 // Navigation helpers
-export async function navigateToTab(page: Page, tabName: 'Chat' | 'Curate' | 'Analytics') {
+export async function navigateToTab(page: Page, tabName: "Chat" | "Curate" | "Analytics") {
   const tabSelector = `button[role="tab"]:has-text("${tabName}")`;
   await page.click(tabSelector);
   await page.waitForTimeout(500); // Brief wait for tab content to load
@@ -36,7 +36,7 @@ export async function navigateToTab(page: Page, tabName: 'Chat' | 'Curate' | 'An
 // Wait helpers
 export async function waitForAPIResponse(page: Page, endpoint: string) {
   return page.waitForResponse(
-    response => response.url().includes(endpoint) && response.status() === 200,
+    (response) => response.url().includes(endpoint) && response.status() === 200,
     { timeout: TEST_CONFIG.timeouts.api }
   );
 }
@@ -44,12 +44,12 @@ export async function waitForAPIResponse(page: Page, endpoint: string) {
 export async function waitForLoadingComplete(page: Page) {
   // Wait for any loading indicators to disappear
   const loadingIndicators = page.locator('.loading, .spinner, [data-loading="true"]');
-  await loadingIndicators.waitFor({ state: 'hidden', timeout: TEST_CONFIG.timeouts.action });
+  await loadingIndicators.waitFor({ state: "hidden", timeout: TEST_CONFIG.timeouts.action });
 }
 
 // Screenshot helpers
 export async function captureScreenshot(page: Page, name: string, fullPage = true) {
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const filename = `tests/screenshots/${name}-${timestamp}.png`;
   await page.screenshot({ path: filename, fullPage });
   return filename;
@@ -63,7 +63,7 @@ export async function fillForm(page: Page, formData: Record<string, string>) {
   }
 }
 
-export async function submitForm(page: Page, buttonText = 'Submit') {
+export async function submitForm(page: Page, buttonText = "Submit") {
   const submitButton = page.locator(`button:has-text("${buttonText}")`);
   await submitButton.click();
 }
@@ -91,7 +91,7 @@ export function generateTestData() {
     email: `test-${timestamp}@sonymusic.com`,
     username: `testuser${timestamp}`,
     message: `Test message ${timestamp}`,
-    filename: `test-file-${timestamp}.txt`
+    filename: `test-file-${timestamp}.txt`,
   };
 }
 
@@ -110,7 +110,7 @@ export async function clearCookies(page: Page) {
 
 // Debug helpers
 export async function pauseIfDebug(page: Page) {
-  if (process.env.DEBUG === 'true') {
+  if (process.env.DEBUG === "true") {
     await page.pause();
   }
 }
@@ -126,18 +126,18 @@ export async function retryOperation<T>(
   delay = 1000
 ): Promise<T> {
   let lastError: Error | undefined;
-  
+
   for (let i = 0; i < maxRetries; i++) {
     try {
       return await operation();
     } catch (error) {
       lastError = error as Error;
       if (i < maxRetries - 1) {
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
   }
-  
+
   throw lastError;
 }
 
@@ -159,5 +159,5 @@ export default {
   clearCookies,
   pauseIfDebug,
   logTestInfo,
-  retryOperation
+  retryOperation,
 };

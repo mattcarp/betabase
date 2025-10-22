@@ -19,8 +19,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
     { type: "connecting", service: "ElevenLabs" },
   ]);
 
-  const [primaryStatus, setPrimaryStatus] =
-    useState<ConnectionStatus["type"]>("connected");
+  const [primaryStatus, setPrimaryStatus] = useState<ConnectionStatus["type"]>("connected");
 
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -77,15 +76,12 @@ export const ConnectionStatusIndicator: React.FC = () => {
           });
         } else {
           // Test ElevenLabs API with a quick user info request
-          const elevenLabsTest = await fetch(
-            "https://api.elevenlabs.io/v1/user",
-            {
-              method: "GET",
-              headers: {
-                "xi-api-key": elevenLabsApiKey,
-              },
-            }
-          );
+          const elevenLabsTest = await fetch("https://api.elevenlabs.io/v1/user", {
+            method: "GET",
+            headers: {
+              "xi-api-key": elevenLabsApiKey,
+            },
+          });
           newStatuses.push({
             type: elevenLabsTest.ok ? "connected" : "error",
             service: "ElevenLabs",
@@ -104,9 +100,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
 
       // Determine primary status
       const hasError = newStatuses.some((s) => s.type === "error");
-      const hasDisconnected = newStatuses.some(
-        (s) => s.type === "disconnected",
-      );
+      const hasDisconnected = newStatuses.some((s) => s.type === "disconnected");
       const hasConnected = newStatuses.some((s) => s.type === "connected");
       const allConnecting = newStatuses.every((s) => s.type === "connecting");
 
@@ -191,16 +185,19 @@ export const ConnectionStatusIndicator: React.FC = () => {
           primaryStatus === "connected"
             ? "motiff-status-connected bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/20"
             : primaryStatus === "connecting"
-            ? "motiff-status-connecting bg-yellow-500/10 border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20"
-            : "motiff-status-disconnected bg-white/5 border-orange-400/30 text-orange-300 hover:bg-white/10",
+              ? "motiff-status-connecting bg-yellow-500/10 border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20"
+              : "motiff-status-disconnected bg-white/5 border-orange-400/30 text-orange-300 hover:bg-white/10"
         )}
       >
         <div
           className={cn(
             "h-2 w-2 rounded-full animate-pulse",
             getStatusColor(primaryStatus),
-            primaryStatus === "connected" ? "bg-green-500" : 
-            primaryStatus === "connecting" ? "bg-yellow-500" : "bg-red-500",
+            primaryStatus === "connected"
+              ? "bg-green-500"
+              : primaryStatus === "connecting"
+                ? "bg-yellow-500"
+                : "bg-red-500"
           )}
         />
         <span>
@@ -215,18 +212,18 @@ export const ConnectionStatusIndicator: React.FC = () => {
           className="absolute top-full right-0 mt-3 min-w-[22rem] animate-in fade-in slide-in-from-top-2 duration-300 rounded-xl shadow-2xl border border-white/20"
           style={{
             zIndex: 99999,
-            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)'
-          }}>
+            background:
+              "linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+          }}
+        >
           <div className="p-5 space-y-4">
             {/* Header with visual flair */}
             <div className="flex items-center justify-between border-b border-white/20 pb-3">
               <div className="flex items-center gap-2">
                 <div className="mac-floating-orb h-2 w-2" />
-                <h3 className="text-base font-[400] tracking-wide text-white">
-                  System Health
-                </h3>
+                <h3 className="text-base font-[400] tracking-wide text-white">System Health</h3>
               </div>
               <div className="text-xs font-[300] text-white/70">
                 {connectedCount}/{totalCount} Online
@@ -244,86 +241,123 @@ export const ConnectionStatusIndicator: React.FC = () => {
                     status.type === "connected"
                       ? "bg-green-500/20 hover:bg-green-500/30 border border-green-500/40"
                       : status.type === "error"
-                      ? "bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40"
-                      : status.type === "disconnected"
-                      ? "bg-red-500/20 hover:bg-red-500/30 border border-red-500/40"
-                      : "bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/40"
+                        ? "bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40"
+                        : status.type === "disconnected"
+                          ? "bg-red-500/20 hover:bg-red-500/30 border border-red-500/40"
+                          : "bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/40"
                   )}
                 >
                   {/* Status gradient overlay */}
-                  <div className={cn(
-                    "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300",
-                    "bg-gradient-to-r",
-                    status.type === "connected" ? "from-green-500/5 to-transparent" :
-                    status.type === "error" ? "from-orange-500/5 to-transparent" :
-                    status.type === "disconnected" ? "from-red-500/5 to-transparent" :
-                    "from-yellow-500/5 to-transparent"
-                  )} />
+                  <div
+                    className={cn(
+                      "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+                      "bg-gradient-to-r",
+                      status.type === "connected"
+                        ? "from-green-500/5 to-transparent"
+                        : status.type === "error"
+                          ? "from-orange-500/5 to-transparent"
+                          : status.type === "disconnected"
+                            ? "from-red-500/5 to-transparent"
+                            : "from-yellow-500/5 to-transparent"
+                    )}
+                  />
 
                   <div className="relative flex items-center justify-between">
                     {/* Service Info */}
                     <div className="flex items-center gap-3">
-                      <div className={cn(
-                        "flex items-center justify-center h-8 w-8 rounded-lg",
-                        status.type === "connected" ? "bg-green-500/20" :
-                        status.type === "error" ? "bg-orange-500/20" :
-                        status.type === "disconnected" ? "bg-red-500/20" :
-                        "bg-yellow-500/20"
-                      )}>
+                      <div
+                        className={cn(
+                          "flex items-center justify-center h-8 w-8 rounded-lg",
+                          status.type === "connected"
+                            ? "bg-green-500/20"
+                            : status.type === "error"
+                              ? "bg-orange-500/20"
+                              : status.type === "disconnected"
+                                ? "bg-red-500/20"
+                                : "bg-yellow-500/20"
+                        )}
+                      >
                         {React.cloneElement(getStatusIcon(status.type) as React.ReactElement, {
                           className: cn(
                             "h-4 w-4",
-                            status.type === "connected" ? "text-green-400" :
-                            status.type === "error" ? "text-orange-400" :
-                            status.type === "disconnected" ? "text-red-400" :
-                            "text-yellow-400"
-                          )
+                            status.type === "connected"
+                              ? "text-green-400"
+                              : status.type === "error"
+                                ? "text-orange-400"
+                                : status.type === "disconnected"
+                                  ? "text-red-400"
+                                  : "text-yellow-400"
+                          ),
                         })}
                       </div>
                       <div>
-                        <div className="text-sm font-[400] text-white">
-                          {status.service}
-                        </div>
+                        <div className="text-sm font-[400] text-white">{status.service}</div>
                         <div className="text-xs font-[200] text-white/60">
-                          {status.type === "connected" ? "All systems operational" :
-                           status.type === "disconnected" ? "Service unavailable" :
-                           status.type === "error" ? "Connection error detected" :
-                           "Establishing connection"}
+                          {status.type === "connected"
+                            ? "All systems operational"
+                            : status.type === "disconnected"
+                              ? "Service unavailable"
+                              : status.type === "error"
+                                ? "Connection error detected"
+                                : "Establishing connection"}
                         </div>
                       </div>
                     </div>
 
                     {/* Status Badge */}
                     <div className="flex items-center gap-2">
-                      <div className={cn(
-                        "relative h-2 w-2 rounded-full",
-                        status.type === "connected" || status.type === "connecting" ? "animate-pulse" : ""
-                      )}>
-                        <div className={cn(
-                          "absolute inset-0 rounded-full blur-sm",
-                          status.type === "connected" ? "bg-green-400" :
-                          status.type === "error" ? "bg-orange-400" :
-                          status.type === "disconnected" ? "bg-red-400" :
-                          "bg-yellow-400"
-                        )} />
-                        <div className={cn(
-                          "relative h-full w-full rounded-full",
-                          status.type === "connected" ? "bg-green-500" :
-                          status.type === "error" ? "bg-orange-500" :
-                          status.type === "disconnected" ? "bg-red-500" :
-                          "bg-yellow-500"
-                        )} />
+                      <div
+                        className={cn(
+                          "relative h-2 w-2 rounded-full",
+                          status.type === "connected" || status.type === "connecting"
+                            ? "animate-pulse"
+                            : ""
+                        )}
+                      >
+                        <div
+                          className={cn(
+                            "absolute inset-0 rounded-full blur-sm",
+                            status.type === "connected"
+                              ? "bg-green-400"
+                              : status.type === "error"
+                                ? "bg-orange-400"
+                                : status.type === "disconnected"
+                                  ? "bg-red-400"
+                                  : "bg-yellow-400"
+                          )}
+                        />
+                        <div
+                          className={cn(
+                            "relative h-full w-full rounded-full",
+                            status.type === "connected"
+                              ? "bg-green-500"
+                              : status.type === "error"
+                                ? "bg-orange-500"
+                                : status.type === "disconnected"
+                                  ? "bg-red-500"
+                                  : "bg-yellow-500"
+                          )}
+                        />
                       </div>
-                      <span className={cn(
-                        "text-xs font-[300] uppercase tracking-wider",
-                        status.type === "connected" ? "text-green-400" :
-                        status.type === "error" ? "text-orange-400" :
-                        status.type === "disconnected" ? "text-red-400" :
-                        "text-yellow-400"
-                      )}>
-                        {status.type === "connected" ? "Online" :
-                         status.type === "disconnected" ? "Offline" :
-                         status.type === "error" ? "Error" : "Connecting"}
+                      <span
+                        className={cn(
+                          "text-xs font-[300] uppercase tracking-wider",
+                          status.type === "connected"
+                            ? "text-green-400"
+                            : status.type === "error"
+                              ? "text-orange-400"
+                              : status.type === "disconnected"
+                                ? "text-red-400"
+                                : "text-yellow-400"
+                        )}
+                      >
+                        {status.type === "connected"
+                          ? "Online"
+                          : status.type === "disconnected"
+                            ? "Offline"
+                            : status.type === "error"
+                              ? "Error"
+                              : "Connecting"}
                       </span>
                     </div>
                   </div>

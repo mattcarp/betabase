@@ -3,6 +3,7 @@
 ## 🎯 What Are AI Elements?
 
 AI Elements are pre-built, accessible React components from Vercel AI SDK designed specifically for AI applications. They handle common patterns like:
+
 - Chat messages with proper semantics
 - Code blocks with syntax highlighting
 - Source citations with hover cards
@@ -14,6 +15,7 @@ AI Elements are pre-built, accessible React components from Vercel AI SDK design
 ## 🚀 Why Use AI Elements?
 
 ### ✅ Benefits:
+
 - **Accessibility**: Built-in ARIA labels and keyboard navigation
 - **Consistency**: Uniform UX across AI features
 - **Performance**: Optimized for streaming responses
@@ -21,6 +23,7 @@ AI Elements are pre-built, accessible React components from Vercel AI SDK design
 - **Best Practices**: Follow Vercel AI SDK patterns
 
 ### ❌ DON'T Do This:
+
 ```tsx
 // Bad: Plain divs for messages
 <div className="message">
@@ -30,6 +33,7 @@ AI Elements are pre-built, accessible React components from Vercel AI SDK design
 ```
 
 ### ✅ DO This:
+
 ```tsx
 // Good: AI Elements for messages
 <Message from="assistant">
@@ -43,39 +47,36 @@ AI Elements are pre-built, accessible React components from Vercel AI SDK design
 ## 📦 Available AI Elements
 
 ### 1. Message Components
+
 **When to use**: Every chat message (user or AI)
 
 ```tsx
 import { Message, MessageContent, MessageAvatar } from "@/components/ai-elements/message";
 
 <Message from={message.role}>
-  <MessageAvatar
-    src={isUser ? "/user.png" : "/ai.png"}
-    name={isUser ? "You" : "AI"}
-  />
-  <MessageContent>
-    {/* Message content here */}
-  </MessageContent>
-</Message>
+  <MessageAvatar src={isUser ? "/user.png" : "/ai.png"} name={isUser ? "You" : "AI"} />
+  <MessageContent>{/* Message content here */}</MessageContent>
+</Message>;
 ```
 
 **Features**:
+
 - Automatic role-based styling (`.is-user`, `.is-assistant`)
 - Proper semantic HTML
 - Responsive layout
 
 ### 2. Response Component
+
 **When to use**: AI-generated responses with markdown
 
 ```tsx
 import { Response } from "@/components/ai-elements/response";
 
-<Response parseIncompleteMarkdown={true}>
-  {message.content}
-</Response>
+<Response parseIncompleteMarkdown={true}>{message.content}</Response>;
 ```
 
 **Features**:
+
 - Markdown parsing with GitHub Flavored Markdown
 - Code block syntax highlighting
 - Auto-completion of incomplete markdown during streaming
@@ -83,6 +84,7 @@ import { Response } from "@/components/ai-elements/response";
 - LaTeX math support (if dependencies installed)
 
 ### 3. Inline Citation Components
+
 **When to use**: AI responses with source attribution
 
 ```tsx
@@ -91,7 +93,7 @@ import {
   InlineCitationCard,
   InlineCitationCardTrigger,
   InlineCitationCardBody,
-  InlineCitationSource
+  InlineCitationSource,
 } from "@/components/ai-elements/inline-citation";
 
 <InlineCitation>
@@ -105,16 +107,18 @@ import {
       />
     </InlineCitationCardBody>
   </InlineCitationCard>
-</InlineCitation>
+</InlineCitation>;
 ```
 
 **Features**:
+
 - Hover card with source details
 - Multiple source carousel
 - Badge showing source count
 - URL hostname extraction
 
 ### 4. Code Block Component
+
 **When to use**: Code snippets in responses
 
 ```tsx
@@ -125,57 +129,67 @@ import { CodeBlock, CodeBlockCopyButton } from "@/components/ai-elements/code-bl
     onCopy={() => console.log("Copied!")}
     onError={() => console.error("Failed to copy")}
   />
-</CodeBlock>
+</CodeBlock>;
 ```
 
 **Features**:
+
 - Syntax highlighting (Prism.js)
 - Copy to clipboard button
 - Language badges
 - Line numbers
 
 ### 5. Loader Component
+
 **When to use**: Loading/thinking states
 
 ```tsx
 import { Loader } from "@/components/ai-elements/loader";
 
-{isLoading && (
-  <Loader>
-    <Loader2 className="h-4 w-4 animate-spin" />
-    <span>Searching knowledge base...</span>
-  </Loader>
-)}
+{
+  isLoading && (
+    <Loader>
+      <Loader2 className="h-4 w-4 animate-spin" />
+      <span>Searching knowledge base...</span>
+    </Loader>
+  );
+}
 ```
 
 ### 6. Other AI Elements
 
 **Conversation**: For conversation containers
+
 ```tsx
 import { Conversation } from "@/components/ai-elements/conversation";
 ```
 
 **Actions**: For AI-suggested actions
+
 ```tsx
 import { Actions } from "@/components/ai-elements/actions";
 ```
 
 **Suggestion**: For suggested prompts
+
 ```tsx
 import { Suggestion } from "@/components/ai-elements/suggestion";
 ```
 
 **Tool**: For tool call results
+
 ```tsx
 import { Tool } from "@/components/ai-elements/tool";
 ```
 
 **Branch**: For conversation branching
+
 ```tsx
 import { Branch } from "@/components/ai-elements/branch";
 ```
 
 **Reasoning**: For chain-of-thought reasoning
+
 ```tsx
 import { Reasoning } from "@/components/ai-elements/reasoning";
 ```
@@ -188,14 +202,17 @@ import { Reasoning } from "@/components/ai-elements/reasoning";
 import { useChat } from "@ai-sdk/react";
 import { Message, MessageContent, MessageAvatar } from "@/components/ai-elements/message";
 import { Response } from "@/components/ai-elements/response";
-import { InlineCitation, InlineCitationCardTrigger } from "@/components/ai-elements/inline-citation";
+import {
+  InlineCitation,
+  InlineCitationCardTrigger,
+} from "@/components/ai-elements/inline-citation";
 import { Loader } from "@/components/ai-elements/loader";
 
 function parseAOMAResponse(content: string) {
   // Extract sources from AOMA response
   const sourcePattern = /【([^】]+)】/g;
-  const sources = [...content.matchAll(sourcePattern)].map(m => m[1]);
-  const text = content.replace(sourcePattern, '');
+  const sources = [...content.matchAll(sourcePattern)].map((m) => m[1]);
+  const text = content.replace(sourcePattern, "");
   return { text, sources };
 }
 
@@ -267,6 +284,7 @@ export function AOMAChat() {
 ### Example Migration
 
 **Before**:
+
 ```tsx
 <div className="flex gap-3">
   <div className="w-8 h-8 rounded-full bg-gray-500">
@@ -279,6 +297,7 @@ export function AOMAChat() {
 ```
 
 **After**:
+
 ```tsx
 <Message from="assistant">
   <MessageAvatar src="/ai-avatar.png" name="AI" />
@@ -290,20 +309,21 @@ export function AOMAChat() {
 
 ## 🎯 When to Use Each Component
 
-| Scenario | AI Element | Why |
-|----------|-----------|-----|
-| User/AI message | `<Message>` | Semantic HTML, accessibility |
-| AI response text | `<Response>` | Markdown parsing, streaming |
-| Source attribution | `<InlineCitation>` | Hover cards, citations |
-| Code in response | `<CodeBlock>` | Syntax highlighting, copy button |
-| Loading AI response | `<Loader>` | Consistent loading UX |
-| Tool call result | `<Tool>` | Structured tool output |
-| Suggested prompts | `<Suggestion>` | Interactive suggestions |
-| Conversation container | `<Conversation>` | Semantic conversation wrapper |
+| Scenario               | AI Element         | Why                              |
+| ---------------------- | ------------------ | -------------------------------- |
+| User/AI message        | `<Message>`        | Semantic HTML, accessibility     |
+| AI response text       | `<Response>`       | Markdown parsing, streaming      |
+| Source attribution     | `<InlineCitation>` | Hover cards, citations           |
+| Code in response       | `<CodeBlock>`      | Syntax highlighting, copy button |
+| Loading AI response    | `<Loader>`         | Consistent loading UX            |
+| Tool call result       | `<Tool>`           | Structured tool output           |
+| Suggested prompts      | `<Suggestion>`     | Interactive suggestions          |
+| Conversation container | `<Conversation>`   | Semantic conversation wrapper    |
 
 ## 🚨 Common Mistakes
 
 ### ❌ Mistake 1: Not using Response for markdown
+
 ```tsx
 // Bad: Markdown won't parse
 <div>{message.content}</div>
@@ -315,6 +335,7 @@ export function AOMAChat() {
 ```
 
 ### ❌ Mistake 2: Not showing sources
+
 ```tsx
 // Bad: No attribution
 <Response>{message.content}</Response>
@@ -329,21 +350,26 @@ export function AOMAChat() {
 ```
 
 ### ❌ Mistake 3: Custom loading state
+
 ```tsx
 // Bad: Custom loading
-{isLoading && <div>Loading...</div>}
+{
+  isLoading && <div>Loading...</div>;
+}
 ```
 
 ```tsx
 // Good: AI Elements loader
-{isLoading && (
-  <Message from="assistant">
-    <MessageAvatar src="/ai.png" name="AI" />
-    <MessageContent>
-      <Loader>Thinking...</Loader>
-    </MessageContent>
-  </Message>
-)}
+{
+  isLoading && (
+    <Message from="assistant">
+      <MessageAvatar src="/ai.png" name="AI" />
+      <MessageContent>
+        <Loader>Thinking...</Loader>
+      </MessageContent>
+    </Message>
+  );
+}
 ```
 
 ## 📚 Additional Resources

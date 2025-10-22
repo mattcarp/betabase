@@ -57,7 +57,7 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
         "absolute z-10 select-none transition-all duration-300 mac-card-elevated",
         isDragging && "cursor-grabbing scale-105",
         !isDragging && "cursor-grab hover:scale-[1.02]",
-        className,
+        className
       )}
       style={{
         left: position.x,
@@ -86,11 +86,7 @@ interface HUDInterfaceProps {
 
 export const HUDInterface: React.FC<HUDInterfaceProps> = ({
   transcription = "Listening for audio input...",
-  insights = [
-    "AI analysis will appear here",
-    "Real-time insights",
-    "Contextual information",
-  ],
+  insights = ["AI analysis will appear here", "Real-time insights", "Contextual information"],
   audioLevel = 0,
 }) => {
   const [panels, setPanels] = useState([
@@ -114,20 +110,14 @@ export const HUDInterface: React.FC<HUDInterfaceProps> = ({
     },
   ]);
 
-  const updatePanelPosition = (
-    id: string,
-    position: { x: number; y: number },
-  ) => {
-    setPanels((prev) =>
-      prev.map((panel) => (panel.id === id ? { ...panel, position } : panel)),
-    );
+  const updatePanelPosition = (id: string, position: { x: number; y: number }) => {
+    setPanels((prev) => prev.map((panel) => (panel.id === id ? { ...panel, position } : panel)));
   };
 
   return (
     <div className="relative w-full h-screen overflow-hidden mac-background">
       {/* MAC Floating Background Orbs */}
-      <div className="mac-floating-background">
-      </div>
+      <div className="mac-floating-background"></div>
 
       {/* Background Grid */}
       <div
@@ -143,9 +133,7 @@ export const HUDInterface: React.FC<HUDInterfaceProps> = ({
 
       {/* HUD Title */}
       <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
-        <h1 className="mac-display text-mac-text-primary">
-          SIAM HUD Interface
-        </h1>
+        <h1 className="mac-display text-mac-text-primary">SIAM HUD Interface</h1>
         <p className="text-center mac-body mt-2">
           Smart In A Meeting • Floating Intelligence Panels
         </p>
@@ -214,8 +202,7 @@ export const HUDInterface: React.FC<HUDInterfaceProps> = ({
       {/* Instructions */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
         <p className="mac-body text-mac-text-muted text-center">
-          Drag panels to reposition • Hover for interaction • Real-time meeting
-          intelligence
+          Drag panels to reposition • Hover for interaction • Real-time meeting intelligence
         </p>
       </div>
     </div>

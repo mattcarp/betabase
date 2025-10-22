@@ -44,32 +44,21 @@ class AOMAReshMCPService {
     this.config = { ...this.config, ...config };
 
     if (!this.config.enabled) {
-      console.log(
-        "🔌 AOMA Mesh MCP: Service disabled, skipping initialization",
-      );
+      console.log("🔌 AOMA Mesh MCP: Service disabled, skipping initialization");
       return;
     }
 
     try {
-      console.log(
-        "🚀 AOMA Mesh MCP: Connecting to server at",
-        this.config.serverUrl,
-      );
+      console.log("🚀 AOMA Mesh MCP: Connecting to server at", this.config.serverUrl);
 
       // Test connection to the running server
       const controller = new AbortController();
-      const timeoutId = setTimeout(
-        () => controller.abort(),
-        this.config.timeout,
-      );
+      const timeoutId = setTimeout(() => controller.abort(), this.config.timeout);
 
-      const healthResponse = await fetch(
-        `${this.config.serverUrl}/api/health`,
-        {
-          method: "GET",
-          signal: controller.signal,
-        },
-      );
+      const healthResponse = await fetch(`${this.config.serverUrl}/api/health`, {
+        method: "GET",
+        signal: controller.signal,
+      });
 
       clearTimeout(timeoutId);
 
@@ -81,9 +70,7 @@ class AOMAReshMCPService {
       console.log("✅ AOMA Mesh MCP: Server health check passed:", healthData);
 
       this.isInitialized = true;
-      console.log(
-        "✅ AOMA Mesh MCP: Successfully connected to running server!",
-      );
+      console.log("✅ AOMA Mesh MCP: Successfully connected to running server!");
     } catch (error) {
       console.error("❌ AOMA Mesh MCP: Connection failed:", error);
       // Don't disable - allow fallback to work
@@ -105,14 +92,12 @@ class AOMAReshMCPService {
     try {
       console.log(
         "💬 AOMA Mesh MCP: Processing message...",
-        request.message.substring(0, 50) + "...",
+        request.message.substring(0, 50) + "..."
       );
 
       // Note: AOMA server appears to be running but tools may have different names
       // For now, provide enhanced response with server connection confirmed
-      console.log(
-        "🔄 AOMA Mesh MCP: Server connected, providing enhanced response",
-      );
+      console.log("🔄 AOMA Mesh MCP: Server connected, providing enhanced response");
 
       return {
         success: true,
@@ -143,8 +128,7 @@ class AOMAReshMCPService {
       console.error("❌ AOMA Mesh MCP: Message processing failed:", error);
       return {
         success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown processing error",
+        error: error instanceof Error ? error.message : "Unknown processing error",
       };
     }
   }
@@ -154,14 +138,11 @@ class AOMAReshMCPService {
    */
   private async callAOMATool(
     toolName: string,
-    args: any,
+    args: any
   ): Promise<{ success: boolean; data?: any; error?: string }> {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(
-        () => controller.abort(),
-        this.config.timeout,
-      );
+      const timeoutId = setTimeout(() => controller.abort(), this.config.timeout);
 
       const response = await fetch(`${this.config.serverUrl}/rpc`, {
         method: "POST",
@@ -183,9 +164,7 @@ class AOMAReshMCPService {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        throw new Error(
-          `Tool ${toolName} failed: ${response.status} ${response.statusText}`,
-        );
+        throw new Error(`Tool ${toolName} failed: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();

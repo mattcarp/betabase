@@ -139,12 +139,7 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   animation: shimmer 3s infinite;
 }
 
@@ -159,7 +154,7 @@ body {
 
 /* Glow Effect */
 .mac-glow {
-  box-shadow: 
+  box-shadow:
     0 0 20px rgba(133, 51, 255, 0.4),
     0 0 40px rgba(133, 51, 255, 0.2);
 }

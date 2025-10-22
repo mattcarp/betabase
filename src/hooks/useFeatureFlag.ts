@@ -13,9 +13,7 @@ const FEATURE_FLAGS = {
 
 export type FeatureFlagKey = keyof typeof FEATURE_FLAGS;
 
-export function useFeatureFlag(
-  flagKey: FeatureFlagKey,
-): [boolean, (value: boolean) => void] {
+export function useFeatureFlag(flagKey: FeatureFlagKey): [boolean, (value: boolean) => void] {
   const flag = FEATURE_FLAGS[flagKey];
 
   const [enabled, setEnabled] = useState(() => {

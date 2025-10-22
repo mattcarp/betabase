@@ -1,13 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "./card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./card";
 import { Button } from "./button";
 import { Badge } from "./badge";
 import { Alert, AlertDescription, AlertTitle } from "./alert";
@@ -26,13 +20,7 @@ import { ScrollArea } from "./scroll-area";
 import { Separator } from "./separator";
 import { Input } from "./input";
 import { Progress } from "./progress";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 import {
   Database,
   Upload,
@@ -192,70 +180,136 @@ const executiveMetrics = {
 };
 
 const stubCuratorPerformance: CuratorPerformance[] = [
-  { 
-    name: "Sarah Chen", 
-    filesProcessed: 342, 
-    qualityScore: 94, 
-    duplicatesFound: 87, 
+  {
+    name: "Sarah Chen",
+    filesProcessed: 342,
+    qualityScore: 94,
+    duplicatesFound: 87,
     metadataEnriched: 298,
     valueGenerated: 125000,
     badge: "master",
     department: "Legal",
-    lastActive: new Date()
+    lastActive: new Date(),
   },
-  { 
-    name: "Marcus Johnson", 
-    filesProcessed: 298, 
-    qualityScore: 87, 
-    duplicatesFound: 62, 
+  {
+    name: "Marcus Johnson",
+    filesProcessed: 298,
+    qualityScore: 87,
+    duplicatesFound: 62,
     metadataEnriched: 241,
     valueGenerated: 98000,
     badge: "champion",
     department: "A&R",
-    lastActive: new Date()
+    lastActive: new Date(),
   },
-  { 
-    name: "Emily Rodriguez", 
-    filesProcessed: 156, 
-    qualityScore: 91, 
-    duplicatesFound: 31, 
+  {
+    name: "Emily Rodriguez",
+    filesProcessed: 156,
+    qualityScore: 91,
+    duplicatesFound: 31,
     metadataEnriched: 142,
     valueGenerated: 67000,
     badge: "expert",
     department: "Marketing",
-    lastActive: new Date()
+    lastActive: new Date(),
   },
-  { 
-    name: "David Kim", 
-    filesProcessed: 89, 
-    qualityScore: 85, 
-    duplicatesFound: 15, 
+  {
+    name: "David Kim",
+    filesProcessed: 89,
+    qualityScore: 85,
+    duplicatesFound: 15,
     metadataEnriched: 76,
     valueGenerated: 34000,
     badge: "rookie",
     department: "Finance",
-    lastActive: new Date()
+    lastActive: new Date(),
   },
 ];
 
 const stubKnowledgeHealth: KnowledgeHealth[] = [
-  { category: "Contracts", health: 85, documents: 1240, coverage: 92, lastUpdated: new Date(), trend: "up" },
-  { category: "Artist Info", health: 92, documents: 3421, coverage: 88, lastUpdated: new Date(), trend: "stable" },
-  { category: "Financials", health: 78, documents: 892, coverage: 71, lastUpdated: new Date(), trend: "down" },
-  { category: "Marketing", health: 65, documents: 567, coverage: 58, lastUpdated: new Date(), trend: "down" },
-  { category: "Compliance", health: 71, documents: 234, coverage: 64, lastUpdated: new Date(), trend: "up" },
-  { category: "Catalog", health: 88, documents: 4567, coverage: 95, lastUpdated: new Date(), trend: "up" },
+  {
+    category: "Contracts",
+    health: 85,
+    documents: 1240,
+    coverage: 92,
+    lastUpdated: new Date(),
+    trend: "up",
+  },
+  {
+    category: "Artist Info",
+    health: 92,
+    documents: 3421,
+    coverage: 88,
+    lastUpdated: new Date(),
+    trend: "stable",
+  },
+  {
+    category: "Financials",
+    health: 78,
+    documents: 892,
+    coverage: 71,
+    lastUpdated: new Date(),
+    trend: "down",
+  },
+  {
+    category: "Marketing",
+    health: 65,
+    documents: 567,
+    coverage: 58,
+    lastUpdated: new Date(),
+    trend: "down",
+  },
+  {
+    category: "Compliance",
+    health: 71,
+    documents: 234,
+    coverage: 64,
+    lastUpdated: new Date(),
+    trend: "up",
+  },
+  {
+    category: "Catalog",
+    health: 88,
+    documents: 4567,
+    coverage: 95,
+    lastUpdated: new Date(),
+    trend: "up",
+  },
 ];
 
 const stubCurationTrends: CurationTrend[] = [
   { period: "Jan", uploaded: 120, curated: 98, deleted: 15, quality: 82, roi: 2.1, savings: 12000 },
-  { period: "Feb", uploaded: 145, curated: 132, deleted: 22, quality: 85, roi: 2.4, savings: 15000 },
+  {
+    period: "Feb",
+    uploaded: 145,
+    curated: 132,
+    deleted: 22,
+    quality: 85,
+    roi: 2.4,
+    savings: 15000,
+  },
   { period: "Mar", uploaded: 98, curated: 95, deleted: 8, quality: 88, roi: 2.8, savings: 18000 },
-  { period: "Apr", uploaded: 167, curated: 155, deleted: 31, quality: 91, roi: 3.2, savings: 24000 },
-  { period: "May", uploaded: 134, curated: 128, deleted: 19, quality: 94, roi: 3.5, savings: 28000 },
+  {
+    period: "Apr",
+    uploaded: 167,
+    curated: 155,
+    deleted: 31,
+    quality: 91,
+    roi: 3.2,
+    savings: 24000,
+  },
+  {
+    period: "May",
+    uploaded: 134,
+    curated: 128,
+    deleted: 19,
+    quality: 94,
+    roi: 3.5,
+    savings: 28000,
+  },
 ];
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8", "#82CA9D"];
 
 const formatFileSize = (bytes: number): string => {
   if (bytes < 1024) return `${bytes} B`;
@@ -274,9 +328,9 @@ const formatDate = (timestamp: number): string => {
 };
 
 const formatCurrency = (value: number): string => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(value);
@@ -307,7 +361,7 @@ export function EnhancedCurateTab({
   useEffect(() => {
     setMounted(true);
   }, []);
-  
+
   // Stub insights
   const insights: CurationInsight[] = [
     {
@@ -318,7 +372,7 @@ export function EnhancedCurateTab({
       affectedFiles: ["Contract_v1.pdf", "Contract_final.pdf", "Contract_FINAL2.pdf"],
       suggestedAction: "Merge into single authoritative template library",
       potentialSavings: 45000,
-      riskScore: 75
+      riskScore: 75,
     },
     {
       type: "compliance",
@@ -327,7 +381,7 @@ export function EnhancedCurateTab({
       description: "Privacy policies haven't been updated for new EU regulations",
       affectedFiles: ["Privacy_Policy_2023.pdf"],
       suggestedAction: "Urgent: Update with latest GDPR requirements",
-      riskScore: 95
+      riskScore: 95,
     },
     {
       type: "high-value",
@@ -336,7 +390,7 @@ export function EnhancedCurateTab({
       description: "Master recordings catalog showing 5x average usage",
       affectedFiles: ["Master_Catalog_2024.xlsx"],
       suggestedAction: "Promote to featured knowledge base",
-      potentialSavings: -120000 // Negative means value generated
+      potentialSavings: -120000, // Negative means value generated
     },
     {
       type: "gap",
@@ -345,18 +399,19 @@ export function EnhancedCurateTab({
       description: "No documentation for Spotify, Apple Music submission processes",
       affectedFiles: [],
       suggestedAction: "Create streaming platform playbooks",
-      riskScore: 60
-    }
+      riskScore: 60,
+    },
   ];
 
   // Statistics with executive metrics
   const stats = useMemo(() => {
     const totalSize = files.reduce((sum, file) => sum + file.bytes, 0);
-    const avgQuality = files.length > 0
-      ? files.reduce((sum, file) => sum + (file.quality_score || 0), 0) / files.length
-      : 0;
+    const avgQuality =
+      files.length > 0
+        ? files.reduce((sum, file) => sum + (file.quality_score || 0), 0) / files.length
+        : 0;
     const topics = new Set(files.flatMap((f) => f.topics || []));
-    
+
     return {
       totalFiles: files.length,
       totalSize,
@@ -439,7 +494,7 @@ export function EnhancedCurateTab({
 
   const deleteFiles = async () => {
     if (filesToDelete.length === 0) return;
-    
+
     setDeleteDialogOpen(false);
     setLoading(true);
     let successCount = 0;
@@ -470,34 +525,38 @@ export function EnhancedCurateTab({
   // Filter files
   const filteredFiles = useMemo(() => {
     let filtered = files;
-    
+
     if (searchQuery) {
-      filtered = filtered.filter(file =>
+      filtered = filtered.filter((file) =>
         file.filename.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    
+
     if (filterTopic !== "all") {
-      filtered = filtered.filter(file => file.topics?.includes(filterTopic));
+      filtered = filtered.filter((file) => file.topics?.includes(filterTopic));
     }
-    
+
     filtered.sort((a, b) => {
       switch (sortBy) {
-        case "name": return a.filename.localeCompare(b.filename);
-        case "size": return b.bytes - a.bytes;
-        case "quality": return (b.quality_score || 0) - (a.quality_score || 0);
-        default: return b.created_at - a.created_at;
+        case "name":
+          return a.filename.localeCompare(b.filename);
+        case "size":
+          return b.bytes - a.bytes;
+        case "quality":
+          return (b.quality_score || 0) - (a.quality_score || 0);
+        default:
+          return b.created_at - a.created_at;
       }
     });
-    
+
     return filtered;
   }, [files, searchQuery, filterTopic, sortBy]);
 
   // Get unique topics
   const allTopics = useMemo(() => {
     const topics = new Set<string>();
-    files.forEach(file => {
-      (file.topics || []).forEach(topic => topics.add(topic));
+    files.forEach((file) => {
+      (file.topics || []).forEach((topic) => topics.add(topic));
     });
     return Array.from(topics).sort();
   }, [files]);
@@ -518,7 +577,7 @@ export function EnhancedCurateTab({
     if (selectedFiles.size === filteredFiles.length) {
       setSelectedFiles(new Set());
     } else {
-      setSelectedFiles(new Set(filteredFiles.map(f => f.id)));
+      setSelectedFiles(new Set(filteredFiles.map((f) => f.id)));
     }
   };
 
@@ -642,7 +701,9 @@ export function EnhancedCurateTab({
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold">{executiveMetrics.complianceScore}%</span>
+                      <span className="text-2xl font-bold">
+                        {executiveMetrics.complianceScore}%
+                      </span>
                       <Shield className="h-8 w-8 text-purple-600" />
                     </div>
                     <Progress value={executiveMetrics.complianceScore} className="mt-2 h-1" />
@@ -656,7 +717,9 @@ export function EnhancedCurateTab({
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold">{executiveMetrics.curationVelocity}</span>
+                      <span className="text-2xl font-bold">
+                        {executiveMetrics.curationVelocity}
+                      </span>
                       <Activity className="h-8 w-8 text-orange-600" />
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">Files/week processed</p>
@@ -715,9 +778,15 @@ export function EnhancedCurateTab({
                         <Tooltip />
                         <Bar dataKey="health" name="Health Score">
                           {stubKnowledgeHealth.map((entry, index) => (
-                            <Cell 
-                              key={`cell-${index}`} 
-                              fill={entry.health > 80 ? '#10b981' : entry.health > 60 ? '#f59e0b' : '#ef4444'} 
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={
+                                entry.health > 80
+                                  ? "#10b981"
+                                  : entry.health > 60
+                                    ? "#f59e0b"
+                                    : "#ef4444"
+                              }
                             />
                           ))}
                         </Bar>
@@ -755,7 +824,11 @@ export function EnhancedCurateTab({
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                    <Button variant="outline" className="justify-start" onClick={runSmartDeduplication}>
+                    <Button
+                      variant="outline"
+                      className="justify-start"
+                      onClick={runSmartDeduplication}
+                    >
                       <Sparkles className="h-4 w-4 mr-2" />
                       Smart Dedup
                     </Button>
@@ -809,8 +882,10 @@ export function EnhancedCurateTab({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Topics</SelectItem>
-                    {allTopics.map(topic => (
-                      <SelectItem key={topic} value={topic}>{topic}</SelectItem>
+                    {allTopics.map((topic) => (
+                      <SelectItem key={topic} value={topic}>
+                        {topic}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -852,7 +927,9 @@ export function EnhancedCurateTab({
                     <div className="flex items-center gap-2 pb-2 border-b">
                       <input
                         type="checkbox"
-                        checked={selectedFiles.size === filteredFiles.length && filteredFiles.length > 0}
+                        checked={
+                          selectedFiles.size === filteredFiles.length && filteredFiles.length > 0
+                        }
                         onChange={selectAllFiles}
                         className="rounded border-gray-300"
                       />
@@ -862,7 +939,7 @@ export function EnhancedCurateTab({
                     </div>
 
                     {/* File Items */}
-                    {filteredFiles.map(file => (
+                    {filteredFiles.map((file) => (
                       <div
                         key={file.id}
                         className={cn(
@@ -910,7 +987,7 @@ export function EnhancedCurateTab({
                           </div>
                           {file.topics && file.topics.length > 0 && (
                             <div className="flex gap-1 mt-1">
-                              {file.topics.map(topic => (
+                              {file.topics.map((topic) => (
                                 <Badge key={topic} variant="secondary" className="text-xs">
                                   {topic}
                                 </Badge>
@@ -980,10 +1057,18 @@ export function EnhancedCurateTab({
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3">
-                        {insight.type === "duplicate" && <Copy className="h-5 w-5 mt-0.5 text-orange-600" />}
-                        {insight.type === "compliance" && <Shield className="h-5 w-5 mt-0.5 text-red-600" />}
-                        {insight.type === "high-value" && <Award className="h-5 w-5 mt-0.5 text-green-600" />}
-                        {insight.type === "gap" && <AlertTriangle className="h-5 w-5 mt-0.5 text-yellow-600" />}
+                        {insight.type === "duplicate" && (
+                          <Copy className="h-5 w-5 mt-0.5 text-orange-600" />
+                        )}
+                        {insight.type === "compliance" && (
+                          <Shield className="h-5 w-5 mt-0.5 text-red-600" />
+                        )}
+                        {insight.type === "high-value" && (
+                          <Award className="h-5 w-5 mt-0.5 text-green-600" />
+                        )}
+                        {insight.type === "gap" && (
+                          <AlertTriangle className="h-5 w-5 mt-0.5 text-yellow-600" />
+                        )}
                         <div className="flex-1">
                           <CardTitle className="text-base">{insight.title}</CardTitle>
                           <CardDescription className="mt-1">{insight.description}</CardDescription>
@@ -991,9 +1076,11 @@ export function EnhancedCurateTab({
                       </div>
                       <Badge
                         variant={
-                          insight.severity === "critical" ? "destructive" :
-                          insight.severity === "high" ? "default" :
-                          "secondary"
+                          insight.severity === "critical"
+                            ? "destructive"
+                            : insight.severity === "high"
+                              ? "default"
+                              : "secondary"
                         }
                       >
                         {insight.severity}
@@ -1004,18 +1091,18 @@ export function EnhancedCurateTab({
                     <div className="flex items-center justify-between">
                       <div className="flex gap-4 text-sm">
                         {insight.potentialSavings && (
-                          <span className={cn(
-                            "font-medium",
-                            insight.potentialSavings > 0 ? "text-green-600" : "text-blue-600"
-                          )}>
-                            {insight.potentialSavings > 0 ? 'Save: ' : 'Generate: '}
+                          <span
+                            className={cn(
+                              "font-medium",
+                              insight.potentialSavings > 0 ? "text-green-600" : "text-blue-600"
+                            )}
+                          >
+                            {insight.potentialSavings > 0 ? "Save: " : "Generate: "}
                             {formatCurrency(Math.abs(insight.potentialSavings))}
                           </span>
                         )}
                         {insight.riskScore && (
-                          <span className="text-muted-foreground">
-                            Risk: {insight.riskScore}%
-                          </span>
+                          <span className="text-muted-foreground">Risk: {insight.riskScore}%</span>
                         )}
                       </div>
                       <Button variant="ghost" size="sm">
@@ -1051,7 +1138,10 @@ export function EnhancedCurateTab({
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
-                            {curator.name.split(' ').map(n => n[0]).join('')}
+                            {curator.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
                           </div>
                           <div>
                             <CardTitle className="text-base">{curator.name}</CardTitle>
@@ -1127,18 +1217,26 @@ export function EnhancedCurateTab({
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
-                    <RadarChart data={[
-                      { metric: 'Speed', value: 87 },
-                      { metric: 'Accuracy', value: 92 },
-                      { metric: 'Coverage', value: 78 },
-                      { metric: 'Quality', value: 85 },
-                      { metric: 'Collaboration', value: 94 },
-                      { metric: 'Innovation', value: 81 },
-                    ]}>
+                    <RadarChart
+                      data={[
+                        { metric: "Speed", value: 87 },
+                        { metric: "Accuracy", value: 92 },
+                        { metric: "Coverage", value: 78 },
+                        { metric: "Quality", value: 85 },
+                        { metric: "Collaboration", value: 94 },
+                        { metric: "Innovation", value: 81 },
+                      ]}
+                    >
                       <PolarGrid />
                       <PolarAngleAxis dataKey="metric" />
                       <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                      <Radar name="Team Average" dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                      <Radar
+                        name="Team Average"
+                        dataKey="value"
+                        stroke="#8884d8"
+                        fill="#8884d8"
+                        fillOpacity={0.6}
+                      />
                     </RadarChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -1150,7 +1248,7 @@ export function EnhancedCurateTab({
           <TabsContent value="analytics" className="flex-1 overflow-auto mt-4">
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Knowledge Base Analytics</h3>
-              
+
               {/* Content Distribution */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Card>
@@ -1186,7 +1284,7 @@ export function EnhancedCurateTab({
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {stubKnowledgeHealth.map(category => (
+                      {stubKnowledgeHealth.map((category) => (
                         <div key={category.category}>
                           <div className="flex justify-between text-sm mb-1">
                             <span>{category.category}</span>
@@ -1213,9 +1311,27 @@ export function EnhancedCurateTab({
                       <YAxis />
                       <Tooltip />
                       <Legend />
-                      <RechartsArea type="monotone" dataKey="uploaded" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                      <RechartsArea type="monotone" dataKey="curated" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-                      <RechartsArea type="monotone" dataKey="deleted" stackId="1" stroke="#ffc658" fill="#ffc658" />
+                      <RechartsArea
+                        type="monotone"
+                        dataKey="uploaded"
+                        stackId="1"
+                        stroke="#8884d8"
+                        fill="#8884d8"
+                      />
+                      <RechartsArea
+                        type="monotone"
+                        dataKey="curated"
+                        stackId="1"
+                        stroke="#82ca9d"
+                        fill="#82ca9d"
+                      />
+                      <RechartsArea
+                        type="monotone"
+                        dataKey="deleted"
+                        stackId="1"
+                        stroke="#ffc658"
+                        fill="#ffc658"
+                      />
                     </RechartsAreaChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -1251,7 +1367,9 @@ export function EnhancedCurateTab({
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600" />
-                      <span className="text-sm">Semantic duplicate detection (save ~$45K/year)</span>
+                      <span className="text-sm">
+                        Semantic duplicate detection (save ~$45K/year)
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600" />
@@ -1280,9 +1398,9 @@ export function EnhancedCurateTab({
               <Alert>
                 <Info className="h-4 w-4" />
                 <AlertDescription>
-                  Your Knowledge Curators process an average of 120 files per week,
-                  generating {formatCurrency(45000)} in monthly savings through
-                  intelligent curation and deduplication.
+                  Your Knowledge Curators process an average of 120 files per week, generating{" "}
+                  {formatCurrency(45000)} in monthly savings through intelligent curation and
+                  deduplication.
                 </AlertDescription>
               </Alert>
             </div>
@@ -1296,14 +1414,17 @@ export function EnhancedCurateTab({
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Files</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete {filesToDelete.length} file(s)?
-              This will permanently remove them from the knowledge base.
+              Are you sure you want to delete {filesToDelete.length} file(s)? This will permanently
+              remove them from the knowledge base.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={deleteFiles} className="bg-destructive text-destructive-foreground">
-              Delete {filesToDelete.length} file{filesToDelete.length !== 1 ? 's' : ''}
+            <AlertDialogAction
+              onClick={deleteFiles}
+              className="bg-destructive text-destructive-foreground"
+            >
+              Delete {filesToDelete.length} file{filesToDelete.length !== 1 ? "s" : ""}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

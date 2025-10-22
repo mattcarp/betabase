@@ -32,11 +32,8 @@ import { chromium } from "playwright";
     console.log("✅ Screenshot saved as siam-local-screenshot.png");
 
     // Check for signup button (should NOT be there in Professional form)
-    const hasSignupButton =
-      (await page.locator("text=/Don't have an account/i").count()) > 0;
-    console.log(
-      `🔍 Signup button present: ${hasSignupButton ? "YES (old code)" : "NO (correct)"}`,
-    );
+    const hasSignupButton = (await page.locator("text=/Don't have an account/i").count()) > 0;
+    console.log(`🔍 Signup button present: ${hasSignupButton ? "YES (old code)" : "NO (correct)"}`);
 
     // Get build timestamp from footer
     const buildTimestamp = await page.locator("footer").textContent();

@@ -11,12 +11,14 @@
 ### 1. **Multimodal AI Responses**
 
 **Before (Text-Only)**:
+
 ```
 User: "How do I use the QC Providers tool?"
 AI: "Navigate to Asset Administration, then click Manage QC Provider Teams..."
 ```
 
 **After (With Screenshots)**:
+
 ```
 User: "How do I use the QC Providers tool?"
 AI: "Navigate to Asset Administration, then click Manage QC Provider Teams...
@@ -25,13 +27,13 @@ AI: "Navigate to Asset Administration, then click Manage QC Provider Teams...
 
 ### 2. **Visual Context Benefits**
 
-| Capability | Text-Only | With Screenshots |
-|------------|-----------|------------------|
-| UI Element Identification | ❌ Vague | ✅ Precise |
-| Workflow Understanding | ❌ Abstract | ✅ Visual |
-| Error Troubleshooting | ❌ Guesswork | ✅ Compare screens |
-| User Confidence | ❌ Low | ✅ High |
-| Support Ticket Resolution | ❌ Slow | ✅ Fast |
+| Capability                | Text-Only    | With Screenshots   |
+| ------------------------- | ------------ | ------------------ |
+| UI Element Identification | ❌ Vague     | ✅ Precise         |
+| Workflow Understanding    | ❌ Abstract  | ✅ Visual          |
+| Error Troubleshooting     | ❌ Guesswork | ✅ Compare screens |
+| User Confidence           | ❌ Low       | ✅ High            |
+| Support Ticket Resolution | ❌ Slow      | ✅ Fast            |
 
 ### 3. **Knowledge Base Architecture Enhancement**
 
@@ -42,10 +44,10 @@ interface KnowledgeEntry {
   content: string;
   embedding: number[]; // 1536D vector
   metadata: {
-    source_type: 'knowledge';
+    source_type: "knowledge";
     url: string;
     title: string;
-  }
+  };
 }
 
 // Enhanced with screenshots
@@ -54,19 +56,20 @@ interface KnowledgeEntry {
   content: string;
   embedding: number[]; // 1536D text embedding
   metadata: {
-    source_type: 'knowledge';
+    source_type: "knowledge";
     url: string;
     title: string;
-    screenshot_path: string;        // ← NEW: Path to screenshot
+    screenshot_path: string; // ← NEW: Path to screenshot
     screenshot_captured_at: string; // ← NEW: Timestamp
-    visual_embedding?: number[];    // ← FUTURE: CLIP embedding
-  }
+    visual_embedding?: number[]; // ← FUTURE: CLIP embedding
+  };
 }
 ```
 
 ### 4. **AI Chat Integration**
 
 The AI can now:
+
 - **Reference specific UI elements**: "Click the blue 'Export' button in the top-right"
 - **Show visual comparisons**: "Your screen should look like this..."
 - **Highlight interactive elements**: "The dropdown menu circled in red"
@@ -88,6 +91,7 @@ The AI can now:
 ```
 
 **What It Does**:
+
 1. Navigates to all 28 AOMA pages via Safari
 2. Waits 5 seconds for page load
 3. Captures full Safari window screenshot
@@ -95,6 +99,7 @@ The AI can now:
 5. Creates `manifest.json` linking screenshots to knowledge entries
 
 **Output**:
+
 ```
 tmp/aoma-screenshots-20251011/
 ├── home.png
@@ -135,12 +140,14 @@ node scripts/update-kb-with-screenshots.js
 ```
 
 **What It Does**:
+
 1. Reads latest screenshot directory and manifest
 2. Matches screenshots to knowledge base entries by URL
 3. Updates `metadata.screenshot_path` for each entry
 4. Adds `screenshot_captured_at` timestamp
 
 **Example Update**:
+
 ```sql
 UPDATE aoma_unified_vectors
 SET metadata = jsonb_set(
@@ -159,14 +166,14 @@ Update the chat API to include screenshots in responses:
 // src/app/api/chat/route.ts
 async function enhanceWithVisuals(context: string[], question: string) {
   const { data: entries } = await supabase
-    .from('aoma_unified_vectors')
-    .select('content, metadata')
-    .textSearch('content', question)
+    .from("aoma_unified_vectors")
+    .select("content, metadata")
+    .textSearch("content", question)
     .limit(5);
 
-  return entries.map(entry => ({
+  return entries.map((entry) => ({
     content: entry.content,
-    screenshot: entry.metadata?.screenshot_path // Include screenshot
+    screenshot: entry.metadata?.screenshot_path, // Include screenshot
   }));
 }
 ```
@@ -176,24 +183,28 @@ async function enhanceWithVisuals(context: string[], question: string) {
 ## 🚀 Implementation Plan
 
 ### Phase 1: Screenshot Capture (Today)
+
 - [x] Create capture script
 - [ ] Execute script with Safari authentication
 - [ ] Verify all 28 screenshots captured
 - [ ] Review quality and completeness
 
 ### Phase 2: Knowledge Base Integration (Today)
+
 - [x] Create update script
 - [ ] Run update to add screenshot paths
 - [ ] Verify metadata updated correctly
 - [ ] Test retrieval queries
 
 ### Phase 3: Chat Enhancement (Next)
+
 - [ ] Update chat API to return screenshot paths
 - [ ] Add `<Image>` component to AI Elements
 - [ ] Display screenshots in chat responses
 - [ ] Test visual responses
 
 ### Phase 4: Advanced Features (Future)
+
 - [ ] Generate CLIP embeddings for visual search
 - [ ] Support "Find screens that look like this" queries
 - [ ] Add screenshot annotations (arrows, highlights)
@@ -205,35 +216,41 @@ async function enhanceWithVisuals(context: string[], question: string) {
 
 ### Knowledge Quality Metrics
 
-| Metric | Before Screenshots | After Screenshots |
-|--------|-------------------|-------------------|
-| **Answer Precision** | 80% | 95% |
-| **User Confidence** | Medium | High |
-| **Support Ticket Resolution Time** | ~15 min | ~5 min |
-| **First Response Accuracy** | 75% | 90% |
-| **Visual Context** | 0% | 100% |
+| Metric                             | Before Screenshots | After Screenshots |
+| ---------------------------------- | ------------------ | ----------------- |
+| **Answer Precision**               | 80%                | 95%               |
+| **User Confidence**                | Medium             | High              |
+| **Support Ticket Resolution Time** | ~15 min            | ~5 min            |
+| **First Response Accuracy**        | 75%                | 90%               |
+| **Visual Context**                 | 0%                 | 100%              |
 
 ### Use Case Examples
 
 #### Example 1: QC Provider Management
+
 **Question**: "How do I add users to QC Provider Teams?"
 
 **Text-Only Response**:
+
 > Go to Asset Administration, open "Manage QC Provider Teams", select "QC Providers 2", add users, and save.
 
 **With Screenshot Response**:
+
 > Go to Asset Administration, open "Manage QC Provider Teams", select "QC Providers 2", add users, and save.
 >
 > Here's what the interface looks like:
 > [Screenshot shows the exact screen with the dropdown menu and user list]
 
 #### Example 2: Troubleshooting
+
 **Question**: "I can't find the Export Status tool"
 
 **Text-Only Response**:
+
 > The Export Status tool should be under Asset Administration.
 
 **With Screenshot Response**:
+
 > The Export Status tool is located under Asset Administration. Here's where to find it:
 > [Screenshot shows navigation menu with Export Status highlighted]
 > If you don't see this option, you may need the "EXPORT_STATUS_VIEW" permission.
@@ -243,18 +260,21 @@ async function enhanceWithVisuals(context: string[], question: string) {
 ## 🔧 Technical Details
 
 ### Screenshot Capture Technology
+
 - **Tool**: macOS `screencapture` command
 - **Mode**: Window capture (`-w` flag)
 - **Format**: PNG (lossless)
 - **Navigation**: Safari + AppleScript automation
 
 ### Storage Strategy
+
 - **Location**: `tmp/aoma-screenshots-YYYYMMDD/`
 - **Naming**: URL-based descriptive names
 - **Manifest**: JSON mapping screenshots to knowledge entries
 - **Database**: Screenshot paths stored in `metadata` JSONB field
 
 ### Future Enhancements
+
 1. **CLIP Embeddings**: Visual similarity search
 2. **OCR Integration**: Extract text from screenshots for enhanced search
 3. **Screenshot Annotations**: Add arrows, highlights, and callouts
@@ -281,16 +301,19 @@ After implementation:
 ## 🎯 Success Criteria
 
 **MVP Success** (Phase 1-2):
+
 - ✅ All 28 screenshots captured
 - ✅ Knowledge base updated with screenshot references
 - ✅ Screenshots accessible via file paths
 
 **Enhanced Success** (Phase 3):
+
 - ✅ Screenshots display in chat responses
 - ✅ Visual context improves answer quality
 - ✅ User feedback confirms higher satisfaction
 
 **Advanced Success** (Phase 4):
+
 - ✅ Visual similarity search working
 - ✅ Annotated screenshots with highlights
 - ✅ Workflow diagrams auto-generated

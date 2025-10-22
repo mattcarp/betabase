@@ -29,8 +29,7 @@ test.describe("Magic Link with Mailgun Sandbox", () => {
   test.beforeAll(() => {
     // Initialize with sandbox configuration
     sandboxDomain =
-      process.env.MAILGUN_TEST_DOMAIN ||
-      "sandbox49c351db5fa3448da004612643bf99d3.mailgun.org";
+      process.env.MAILGUN_TEST_DOMAIN || "sandbox49c351db5fa3448da004612643bf99d3.mailgun.org";
     authorizedEmail = process.env.MAILGUN_AUTHORIZED_EMAIL || "";
 
     if (!authorizedEmail) {
@@ -82,9 +81,7 @@ test.describe("Magic Link with Mailgun Sandbox", () => {
         .catch(() => false);
 
       if (errorVisible) {
-        throw new Error(
-          `Email ${testEmail} is not in ALLOWED_EMAILS list in the API route`,
-        );
+        throw new Error(`Email ${testEmail} is not in ALLOWED_EMAILS list in the API route`);
       }
 
       expect(verificationFormVisible).toBeTruthy();
@@ -104,9 +101,7 @@ test.describe("Magic Link with Mailgun Sandbox", () => {
       console.log(`   Subject: ${email.subject}`);
 
       // Extract the verification code
-      const code = mailgun.extractMagicLinkCode(
-        email.bodyHtml || email.bodyPlain,
-      );
+      const code = mailgun.extractMagicLinkCode(email.bodyHtml || email.bodyPlain);
 
       expect(code).toBeTruthy();
       expect(code).toMatch(/^\d{6}$/);
@@ -143,14 +138,10 @@ test.describe("Magic Link with Mailgun Sandbox", () => {
 
     if (!email) {
       console.log("\n⚠️  Troubleshooting Tips:");
-      console.log(
-        "1. Is your email verified as an authorized recipient in Mailgun?",
-      );
+      console.log("1. Is your email verified as an authorized recipient in Mailgun?");
       console.log("2. Check Mailgun logs: https://app.mailgun.com/app/logs");
       console.log("3. Verify API key is correct in .env.mailgun");
-      console.log(
-        `4. Ensure ${testEmail} is in ALLOWED_EMAILS in the API route`,
-      );
+      console.log(`4. Ensure ${testEmail} is in ALLOWED_EMAILS in the API route`);
     }
 
     expect(email).toBeDefined();

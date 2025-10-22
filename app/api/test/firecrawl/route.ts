@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
             message: "Crawl initiated successfully",
             estimatedTime: 30, // seconds
           },
-          { status: 200 },
+          { status: 200 }
         );
       }
 
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
             message: "Sync started for source",
             timestamp: new Date().toISOString(),
           },
-          { status: 200 },
+          { status: 200 }
         );
       }
 
@@ -80,10 +80,7 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     console.error("Firecrawl operation error:", error);
-    return NextResponse.json(
-      { error: "Failed to perform Firecrawl operation" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to perform Firecrawl operation" }, { status: 500 });
   }
 }
 
@@ -104,7 +101,7 @@ export async function GET(request: NextRequest) {
           patternsExtracted: 8,
           completedAt: new Date().toISOString(),
         },
-        { status: 200 },
+        { status: 200 }
       );
     }
 
@@ -210,13 +207,10 @@ export async function GET(request: NextRequest) {
         total: documents.length,
         timestamp: new Date().toISOString(),
       },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (error) {
     console.error("Error fetching Firecrawl data:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch Firecrawl data" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to fetch Firecrawl data" }, { status: 500 });
   }
 }

@@ -40,14 +40,10 @@ async function demoMCPIntegration() {
     const healthCheck = await mcpService.checkAomaMeshHealth();
 
     if (healthCheck.healthy) {
-      console.log(
-        `✅ AOMA Mesh server is healthy (${Math.round(healthCheck.responseTime)}ms)`,
-      );
+      console.log(`✅ AOMA Mesh server is healthy (${Math.round(healthCheck.responseTime)}ms)`);
       console.log("📊 Health details:", healthCheck.details);
     } else {
-      console.log(
-        `❌ AOMA Mesh server is unhealthy (${Math.round(healthCheck.responseTime)}ms)`,
-      );
+      console.log(`❌ AOMA Mesh server is unhealthy (${Math.round(healthCheck.responseTime)}ms)`);
       console.log("📊 Error details:", healthCheck.details);
       return;
     }
@@ -67,13 +63,8 @@ async function demoMCPIntegration() {
       }
 
       if (toolTest.results.aoma_query?.result?.content?.[0]?.text) {
-        const queryResult = JSON.parse(
-          toolTest.results.aoma_query.result.content[0].text,
-        );
-        console.log(
-          "💬 Sample AOMA query result:",
-          queryResult.response.substring(0, 100) + "...",
-        );
+        const queryResult = JSON.parse(toolTest.results.aoma_query.result.content[0].text);
+        console.log("💬 Sample AOMA query result:", queryResult.response.substring(0, 100) + "...");
       }
     } else {
       console.log("❌ Some AOMA Mesh tools failed:", toolTest.results.error);
@@ -83,16 +74,12 @@ async function demoMCPIntegration() {
     console.log("\n📋 Step 3: Checking Existing MCP Servers...");
     const existingServers = await mcpService.listMcpServers();
 
-    console.log(
-      `📊 Found ${existingServers.mcp_servers.length} registered MCP servers:`,
-    );
+    console.log(`📊 Found ${existingServers.mcp_servers.length} registered MCP servers:`);
     existingServers.mcp_servers.forEach((server) => {
       console.log(`   - ${server.config.name} (${server.id})`);
       console.log(`     URL: ${server.config.url}`);
       console.log(`     Transport: ${server.config.transport}`);
-      console.log(
-        `     Tools: ${server.config.tool_approval_hashes?.length || 0}`,
-      );
+      console.log(`     Tools: ${server.config.tool_approval_hashes?.length || 0}`);
     });
 
     // Step 4: Register/ensure AOMA Mesh server
@@ -104,12 +91,8 @@ async function demoMCPIntegration() {
     console.log(`   Name: ${registeredServer.config.name}`);
     console.log(`   URL: ${registeredServer.config.url}`);
     console.log(`   Transport: ${registeredServer.config.transport}`);
-    console.log(
-      `   Approval Policy: ${registeredServer.config.approval_policy}`,
-    );
-    console.log(
-      `   Tools: ${registeredServer.config.tool_approval_hashes?.length || 0}`,
-    );
+    console.log(`   Approval Policy: ${registeredServer.config.approval_policy}`);
+    console.log(`   Tools: ${registeredServer.config.tool_approval_hashes?.length || 0}`);
 
     // Log server ID for environment configuration
     console.log("\n💡 Configuration Update Required:");
@@ -131,20 +114,11 @@ async function demoMCPIntegration() {
     console.error("❌ Demo failed:", error);
 
     if (error instanceof Error) {
-      if (
-        error.message.includes("401") ||
-        error.message.includes("unauthorized")
-      ) {
+      if (error.message.includes("401") || error.message.includes("unauthorized")) {
         console.log("🔑 Authentication issue - check your ElevenLabs API key");
-      } else if (
-        error.message.includes("403") ||
-        error.message.includes("forbidden")
-      ) {
+      } else if (error.message.includes("403") || error.message.includes("forbidden")) {
         console.log("🚫 Permission issue - ensure your API key has MCP access");
-      } else if (
-        error.message.includes("network") ||
-        error.message.includes("fetch")
-      ) {
+      } else if (error.message.includes("network") || error.message.includes("fetch")) {
         console.log("🌐 Network issue - check internet connection");
       }
     }

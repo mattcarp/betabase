@@ -112,12 +112,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
           className="hud-icon-button"
           aria-label="Close customization panel"
         >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -132,19 +127,14 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
       <div className="p-4 space-y-6 max-h-[70vh] overflow-y-auto">
         {/* Theme Selection */}
         <section aria-labelledby="theme-section">
-          <h4
-            id="theme-section"
-            className="mac-body font-semibold text-mac-text-primary mb-3"
-          >
+          <h4 id="theme-section" className="mac-body font-semibold text-mac-text-primary mb-3">
             Theme Preset
           </h4>
           <div className="grid grid-cols-1 gap-2">
             {Object.entries(THEME_PRESETS).map(([key, preset]) => (
               <button
                 key={key}
-                onClick={() =>
-                  handleSettingChange("theme", key as GlassmorphismSettings["theme"])
-                }
+                onClick={() => handleSettingChange("theme", key as GlassmorphismSettings["theme"])}
                 className={cn(
                   "p-3 rounded-lg border transition-all duration-200",
                   localSettings.theme === key
@@ -155,12 +145,8 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
               >
                 <div className="flex items-center justify-between">
                   <div className="text-left">
-                    <p className="mac-body font-medium text-mac-text-primary">
-                      {preset.name}
-                    </p>
-                    <p className="text-xs text-mac-text-muted">
-                      {preset.description}
-                    </p>
+                    <p className="mac-body font-medium text-mac-text-primary">{preset.name}</p>
+                    <p className="text-xs text-mac-text-muted">{preset.description}</p>
                   </div>
                   <div className="flex gap-1">
                     <div
@@ -194,9 +180,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
             max="30"
             step="1"
             value={localSettings.blur}
-            onChange={(e) =>
-              handleSettingChange("blur", parseInt(e.target.value))
-            }
+            onChange={(e) => handleSettingChange("blur", parseInt(e.target.value))}
             className="w-full h-2 bg-jarvis-panel-dark-bg-start rounded-lg appearance-none cursor-pointer accent-jarvis-cyan"
             aria-valuemin={0}
             aria-valuemax={30}
@@ -224,9 +208,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
             max="0.3"
             step="0.01"
             value={localSettings.opacity}
-            onChange={(e) =>
-              handleSettingChange("opacity", parseFloat(e.target.value))
-            }
+            onChange={(e) => handleSettingChange("opacity", parseFloat(e.target.value))}
             className="w-full h-2 bg-jarvis-panel-dark-bg-start rounded-lg appearance-none cursor-pointer accent-jarvis-cyan"
             aria-valuemin={2}
             aria-valuemax={30}
@@ -254,9 +236,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
             max="0.5"
             step="0.05"
             value={localSettings.borderOpacity}
-            onChange={(e) =>
-              handleSettingChange("borderOpacity", parseFloat(e.target.value))
-            }
+            onChange={(e) => handleSettingChange("borderOpacity", parseFloat(e.target.value))}
             className="w-full h-2 bg-jarvis-panel-dark-bg-start rounded-lg appearance-none cursor-pointer accent-jarvis-cyan"
             aria-valuemin={5}
             aria-valuemax={50}
@@ -266,10 +246,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
 
         {/* Animation Speed */}
         <section aria-labelledby="animation-section">
-          <h4
-            id="animation-section"
-            className="mac-body font-semibold text-mac-text-primary mb-3"
-          >
+          <h4 id="animation-section" className="mac-body font-semibold text-mac-text-primary mb-3">
             Animation Speed
           </h4>
           <div className="flex gap-2">
@@ -295,10 +272,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
         <section aria-labelledby="contrast-section">
           <div className="flex items-center justify-between p-3 rounded-lg border border-jarvis-panel-border bg-jarvis-panel-bg-start">
             <div>
-              <h4
-                id="contrast-section"
-                className="mac-body font-semibold text-mac-text-primary"
-              >
+              <h4 id="contrast-section" className="mac-body font-semibold text-mac-text-primary">
                 High Contrast Mode
               </h4>
               <p className="text-xs text-mac-text-muted mt-1">
@@ -306,14 +280,10 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
               </p>
             </div>
             <button
-              onClick={() =>
-                handleSettingChange("highContrast", !localSettings.highContrast)
-              }
+              onClick={() => handleSettingChange("highContrast", !localSettings.highContrast)}
               className={cn(
                 "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
-                localSettings.highContrast
-                  ? "bg-jarvis-cyan"
-                  : "bg-jarvis-panel-dark-bg-start"
+                localSettings.highContrast ? "bg-jarvis-cyan" : "bg-jarvis-panel-dark-bg-start"
               )}
               role="switch"
               aria-checked={localSettings.highContrast}
@@ -330,10 +300,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
         </section>
 
         {/* Reset Button */}
-        <button
-          onClick={handleReset}
-          className="w-full hud-button text-center"
-        >
+        <button onClick={handleReset} className="w-full hud-button text-center">
           Reset to Defaults
         </button>
       </div>
@@ -341,14 +308,8 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
       {/* Keyboard Shortcuts Info */}
       <div className="px-4 py-3 border-t border-jarvis-panel-border bg-jarvis-panel-dark-bg-start/50">
         <p className="text-xs text-mac-text-muted text-center">
-          <kbd className="px-1 py-0.5 rounded bg-jarvis-panel-dark-bg-end">
-            Ctrl+↑/↓
-          </kbd>{" "}
-          Blur •{" "}
-          <kbd className="px-1 py-0.5 rounded bg-jarvis-panel-dark-bg-end">
-            Ctrl+←/→
-          </kbd>{" "}
-          Opacity
+          <kbd className="px-1 py-0.5 rounded bg-jarvis-panel-dark-bg-end">Ctrl+↑/↓</kbd> Blur •{" "}
+          <kbd className="px-1 py-0.5 rounded bg-jarvis-panel-dark-bg-end">Ctrl+←/→</kbd> Opacity
         </p>
       </div>
     </div>

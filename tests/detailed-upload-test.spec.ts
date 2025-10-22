@@ -40,13 +40,11 @@ test.describe("SIAM Detailed File Upload Testing", () => {
       const fileInputs = await page.locator('input[type="file"]').count();
       const uploadButtons = await page
         .locator(
-          'button:has-text("Upload"), button:has-text("Add"), button:has-text("Import"), button:has-text("Choose")',
+          'button:has-text("Upload"), button:has-text("Add"), button:has-text("Import"), button:has-text("Choose")'
         )
         .count();
       const dropZones = await page
-        .locator(
-          '[data-testid*="drop"], .drop-zone, *:has-text("drag"), *:has-text("Drop")',
-        )
+        .locator('[data-testid*="drop"], .drop-zone, *:has-text("drag"), *:has-text("Drop")')
         .count();
 
       console.log(`Files tab - File inputs: ${fileInputs}`);
@@ -55,11 +53,11 @@ test.describe("SIAM Detailed File Upload Testing", () => {
 
       // Get all visible text to analyze
       const filesTabText = await page.textContent(
-        '.knowledge-curation, [data-testid="files-content"], .files-section, main',
+        '.knowledge-curation, [data-testid="files-content"], .files-section, main'
       );
       console.log(
         "Files tab contains text about upload:",
-        filesTabText?.toLowerCase().includes("upload") || false,
+        filesTabText?.toLowerCase().includes("upload") || false
       );
     } else {
       console.log("❌ Files tab not found in Curate section");
@@ -78,7 +76,7 @@ test.describe("SIAM Detailed File Upload Testing", () => {
 
     // Look for the paperclip/attach button
     const paperclipButton = page.locator(
-      '[data-testid="file-upload"], button:has([data-testid="paperclip"]), button[aria-label*="attach"], button[aria-label*="file"], .upload-button',
+      '[data-testid="file-upload"], button:has([data-testid="paperclip"]), button[aria-label*="attach"], button[aria-label*="file"], .upload-button'
     );
     const paperclipCount = await paperclipButton.count();
     console.log(`Paperclip/attach buttons found: ${paperclipCount}`);
@@ -117,21 +115,19 @@ test.describe("SIAM Detailed File Upload Testing", () => {
     for (let i = 0; i < allFileInputs.length; i++) {
       const input = allFileInputs[i];
       const isVisible = await input.isVisible();
-      const accept =
-        (await input.getAttribute("accept")) || "no accept attribute";
+      const accept = (await input.getAttribute("accept")) || "no accept attribute";
       const id = (await input.getAttribute("id")) || "no id";
-      const dataTestId =
-        (await input.getAttribute("data-testid")) || "no data-testid";
+      const dataTestId = (await input.getAttribute("data-testid")) || "no data-testid";
 
       console.log(
-        `File input ${i + 1}: visible=${isVisible}, accept="${accept}", id="${id}", data-testid="${dataTestId}"`,
+        `File input ${i + 1}: visible=${isVisible}, accept="${accept}", id="${id}", data-testid="${dataTestId}"`
       );
     }
 
     // Look for AOMA upload buttons specifically
     console.log("🔍 Searching for AOMA upload functionality...");
     const aomaUploadButton = page.locator(
-      'button:has-text("Upload files to AOMA"), button:has-text("AOMA knowledge"), button:has-text("knowledge base")',
+      'button:has-text("Upload files to AOMA"), button:has-text("AOMA knowledge"), button:has-text("knowledge base")'
     );
     const aomaButtonCount = await aomaUploadButton.count();
     console.log(`AOMA upload buttons found: ${aomaButtonCount}`);
@@ -151,9 +147,7 @@ test.describe("SIAM Detailed File Upload Testing", () => {
     console.log("\n🏁 DETAILED UPLOAD FUNCTIONALITY REPORT:");
     console.log("=".repeat(50));
     console.log("📁 Curate Tab:");
-    console.log(
-      `  - Accessible: ${await page.locator("text=Curate").isVisible()}`,
-    );
+    console.log(`  - Accessible: ${await page.locator("text=Curate").isVisible()}`);
     console.log(`  - Files sub-tab: ${await filesTab.isVisible()}`);
     console.log("");
     console.log("💬 Chat Interface:");

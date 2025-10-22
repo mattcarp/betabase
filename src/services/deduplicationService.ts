@@ -8,10 +8,10 @@
  * - Cross-source deduplication
  */
 
-import crypto from 'crypto';
-import { supabase } from '@/lib/supabase';
-import { openai } from '@ai-sdk/openai';
-import { embed } from 'ai';
+import crypto from "crypto";
+import { supabase } from "@/lib/supabase";
+import { openai } from "@ai-sdk/openai";
+import { embed } from "ai";
 
 export interface DedupConfig {
   // Content hash threshold (0 = exact match only)
@@ -32,7 +32,7 @@ export interface DedupResult {
   existingId?: string;
   existingSourceType?: string;
   existingSourceId?: string;
-  matchType?: 'exact_hash' | 'semantic' | 'url' | 'source_id';
+  matchType?: "exact_hash" | "semantic" | "url" | "source_id";
   similarity?: number;
   shouldUpdate?: boolean; // If content is newer/better
 }
@@ -80,10 +80,7 @@ export class DeduplicationService {
     // 3. Check URL if provided (fast)
     if (url && normalizeUrls) {
       const normalizedUrl = this.normalizeUrl(url);
-      const urlCheck = await this.checkByUrl(
-        normalizedUrl,
-        crossSource ? undefined : sourceType
-      );
+      const urlCheck = await this.checkByUrl(normalizedUrl, crossSource ? undefined : sourceType);
       if (urlCheck.isDuplicate) {
         return urlCheck;
       }
@@ -108,16 +105,13 @@ export class DeduplicationService {
   /**
    * Check by source_type + source_id (UNIQUE constraint check)
    */
-  private async checkBySourceId(
-    sourceType: string,
-    sourceId: string
-  ): Promise<DedupResult> {
+  private async checkBySourceId(sourceType: string, sourceId: string): Promise<DedupResult> {
     try {
       const { data, error } = await supabase
-        .from('aoma_unified_vectors')
-        .select('id, source_type, source_id, created_at')
-        .eq('source_type', sourceType)
-        .eq('source_id', sourceId)
+        .from("aoma_unified_vectors")
+        .select("id, source_type, source_id, created_at")
+        .eq("source_type", sourceType)
+        .eq("source_id", sourceId)
         .single();
 
       if (error || !data) {
@@ -129,7 +123,7 @@ export class DeduplicationService {
         existingId: data.id,
         existingSourceType: data.source_type,
         existingSourceId: data.source_id,
-        matchType: 'source_id',
+        matchType: "source_id",
       };
     } catch {
       return { isDuplicate: false };
@@ -139,18 +133,15 @@ export class DeduplicationService {
   /**
    * Check by content hash
    */
-  private async checkByContentHash(
-    contentHash: string,
-    sourceType?: string
-  ): Promise<DedupResult> {
+  private async checkByContentHash(contentHash: string, sourceType?: string): Promise<DedupResult> {
     try {
       let query = supabase
-        .from('aoma_unified_vectors')
-        .select('id, source_type, source_id, metadata')
-        .eq('metadata->>content_hash', contentHash);
+        .from("aoma_unified_vectors")
+        .select("id, source_type, source_id, metadata")
+        .eq("metadata->>content_hash", contentHash);
 
       if (sourceType) {
-        query = query.eq('source_type', sourceType);
+        query = query.eq("source_type", sourceType);
       }
 
       const { data, error } = await query.limit(1).single();
@@ -164,7 +155,7 @@ export class DeduplicationService {
         existingId: data.id,
         existingSourceType: data.source_type,
         existingSourceId: data.source_id,
-        matchType: 'exact_hash',
+        matchType: "exact_hash",
       };
     } catch {
       return { isDuplicate: false };
@@ -174,18 +165,15 @@ export class DeduplicationService {
   /**
    * Check by normalized URL
    */
-  private async checkByUrl(
-    normalizedUrl: string,
-    sourceType?: string
-  ): Promise<DedupResult> {
+  private async checkByUrl(normalizedUrl: string, sourceType?: string): Promise<DedupResult> {
     try {
       let query = supabase
-        .from('aoma_unified_vectors')
-        .select('id, source_type, source_id, metadata')
-        .eq('metadata->>url', normalizedUrl);
+        .from("aoma_unified_vectors")
+        .select("id, source_type, source_id, metadata")
+        .eq("metadata->>url", normalizedUrl);
 
       if (sourceType) {
-        query = query.eq('source_type', sourceType);
+        query = query.eq("source_type", sourceType);
       }
 
       const { data, error } = await query.limit(1).single();
@@ -199,7 +187,7 @@ export class DeduplicationService {
         existingId: data.id,
         existingSourceType: data.source_type,
         existingSourceId: data.source_id,
-        matchType: 'url',
+        matchType: "url",
       };
     } catch {
       return { isDuplicate: false };
@@ -215,7 +203,7 @@ export class DeduplicationService {
     sourceType?: string
   ): Promise<DedupResult> {
     try {
-      const { data, error } = await supabase.rpc('match_aoma_vectors', {
+      const { data, error } = await supabase.rpc("match_aoma_vectors", {
         query_embedding: embedding,
         match_threshold: threshold,
         match_count: 1,
@@ -233,7 +221,7 @@ export class DeduplicationService {
         existingId: match.id,
         existingSourceType: match.source_type,
         existingSourceId: match.source_id,
-        matchType: 'semantic',
+        matchType: "semantic",
         similarity: match.similarity,
       };
     } catch {
@@ -245,7 +233,7 @@ export class DeduplicationService {
    * Generate MD5 content hash
    */
   generateContentHash(content: string): string {
-    return crypto.createHash('md5').update(content.trim()).digest('hex');
+    return crypto.createHash("md5").update(content.trim()).digest("hex");
   }
 
   /**
@@ -255,18 +243,21 @@ export class DeduplicationService {
     try {
       const parsed = new URL(url);
       // Remove query params and hash
-      parsed.search = '';
-      parsed.hash = '';
+      parsed.search = "";
+      parsed.hash = "";
       // Remove trailing slash
       let pathname = parsed.pathname;
-      if (pathname.endsWith('/') && pathname.length > 1) {
+      if (pathname.endsWith("/") && pathname.length > 1) {
         pathname = pathname.slice(0, -1);
       }
       parsed.pathname = pathname;
       return parsed.toString();
     } catch {
       // If URL parsing fails, just normalize string
-      return url.toLowerCase().replace(/[?#].*$/, '').replace(/\/$/, '');
+      return url
+        .toLowerCase()
+        .replace(/[?#].*$/, "")
+        .replace(/\/$/, "");
     }
   }
 
@@ -298,11 +289,11 @@ export class DeduplicationService {
 
     // Get all vectors
     let query = supabase
-      .from('aoma_unified_vectors')
-      .select('id, content, source_type, source_id, metadata, created_at, embedding');
+      .from("aoma_unified_vectors")
+      .select("id, content, source_type, source_id, metadata, created_at, embedding");
 
     if (sourceType) {
-      query = query.eq('source_type', sourceType);
+      query = query.eq("source_type", sourceType);
     }
 
     const { data: vectors, error } = await query;
@@ -334,15 +325,12 @@ export class DeduplicationService {
         duplicates.push({
           keepId: sorted[0].id,
           removeIds: sorted.slice(1).map((v) => v.id),
-          reason: 'exact_content_match',
+          reason: "exact_content_match",
         });
       }
     });
 
-    const totalDuplicates = duplicates.reduce(
-      (sum, dup) => sum + dup.removeIds.length,
-      0
-    );
+    const totalDuplicates = duplicates.reduce((sum, dup) => sum + dup.removeIds.length, 0);
 
     return { duplicates, totalDuplicates };
   }
@@ -350,9 +338,7 @@ export class DeduplicationService {
   /**
    * Remove duplicates from database
    */
-  async removeDuplicates(
-    duplicateIds: string[]
-  ): Promise<{ removed: number; errors: number }> {
+  async removeDuplicates(duplicateIds: string[]): Promise<{ removed: number; errors: number }> {
     let removed = 0;
     let errors = 0;
 
@@ -360,14 +346,11 @@ export class DeduplicationService {
     for (let i = 0; i < duplicateIds.length; i += 100) {
       const batch = duplicateIds.slice(i, i + 100);
 
-      const { error } = await supabase
-        .from('aoma_unified_vectors')
-        .delete()
-        .in('id', batch);
+      const { error } = await supabase.from("aoma_unified_vectors").delete().in("id", batch);
 
       if (error) {
         errors += batch.length;
-        console.error('Failed to delete batch:', error);
+        console.error("Failed to delete batch:", error);
       } else {
         removed += batch.length;
       }

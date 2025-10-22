@@ -165,14 +165,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Icons
-import {
-  Play,
-  Pause,
-  RotateCw,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-} from "lucide-react";
+import { Play, Pause, RotateCw, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 
 // Utils
 import { cn } from "@/lib/utils";

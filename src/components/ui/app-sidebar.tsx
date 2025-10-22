@@ -88,14 +88,14 @@ export function AppSidebar({ className }: AppSidebarProps) {
   const sortedConversations = [...filteredConversations].sort((a, b) => {
     if (a.isPinned && !b.isPinned) return -1;
     if (!a.isPinned && b.isPinned) return 1;
-    
+
     // Ensure dates are valid and convert to Date objects if needed
     const getValidDate = (date: any): Date => {
       if (date instanceof Date) return date;
-      if (typeof date === 'string' || typeof date === 'number') return new Date(date);
+      if (typeof date === "string" || typeof date === "number") return new Date(date);
       return new Date(); // Fallback to current date if invalid
     };
-    
+
     const dateA = getValidDate(a.updatedAt);
     const dateB = getValidDate(b.updatedAt);
     return dateB.getTime() - dateA.getTime();
@@ -103,15 +103,15 @@ export function AppSidebar({ className }: AppSidebarProps) {
 
   const formatTimestamp = (date: Date | string | undefined | null) => {
     const now = new Date();
-    
+
     // Handle null/undefined dates
     if (!date) return "Just now";
-    
+
     const dateObj = date instanceof Date ? date : new Date(date);
-    
+
     // Check for invalid dates
     if (isNaN(dateObj.getTime())) return "Just now";
-    
+
     const diff = now.getTime() - dateObj.getTime();
     const hours = Math.floor(diff / 3600000);
 
@@ -130,12 +130,12 @@ export function AppSidebar({ className }: AppSidebarProps) {
 
   const handleExportConversations = () => {
     const dataStr = JSON.stringify(conversations, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    const exportFileDefaultName = `siam-conversations-${new Date().toISOString().split('T')[0]}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+    const exportFileDefaultName = `siam-conversations-${new Date().toISOString().split("T")[0]}.json`;
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
   };
 
@@ -161,7 +161,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
             <Plus className="h-4 w-4" />
           </Button>
         </div>
-        
+
         {/* Search Bar with MAC styling */}
         <div className="px-2 pb-2">
           <div className="relative">
@@ -178,24 +178,18 @@ export function AppSidebar({ className }: AppSidebarProps) {
         {/* AI Suggestions */}
         {!searchQuery && conversations.length > 3 && (
           <div className="px-2 pb-2 flex gap-1">
-            <Suggestion 
-              label="Recent" 
-              onClick={() => setSearchQuery("")}
-              className="text-xs"
-            />
-            <Suggestion 
-              label="Pinned" 
+            <Suggestion label="Recent" onClick={() => setSearchQuery("")} className="text-xs" />
+            <Suggestion
+              label="Pinned"
               onClick={() => setSearchQuery("pinned")}
               className="text-xs"
             />
-            <Suggestion 
-              label="Today" 
+            <Suggestion
+              label="Today"
               onClick={() => {
                 const today = new Date().toDateString();
                 setFilteredConversations(
-                  conversations.filter(c => 
-                    new Date(c.updatedAt).toDateString() === today
-                  )
+                  conversations.filter((c) => new Date(c.updatedAt).toDateString() === today)
                 );
               }}
               className="text-xs"
@@ -239,7 +233,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
                       )}
                     >
                       <div className="flex items-start gap-3 w-full">
-                        <MessageCircle 
+                        <MessageCircle
                           className={cn(
                             "h-4 w-4 mt-0.5 shrink-0",
                             activeConversationId === conversation.id
@@ -258,7 +252,10 @@ export function AppSidebar({ className }: AppSidebarProps) {
                           </div>
                           {conversation.messages.length > 0 && (
                             <p className="text-xs text-mac-text-secondary truncate">
-                              {conversation.messages[conversation.messages.length - 1].content.slice(0, 50)}...
+                              {conversation.messages[
+                                conversation.messages.length - 1
+                              ].content.slice(0, 50)}
+                              ...
                             </p>
                           )}
                           <div className="flex items-center gap-2 mt-1">
@@ -278,22 +275,19 @@ export function AppSidebar({ className }: AppSidebarProps) {
                         </div>
                       </div>
                     </SidebarMenuButton>
-                    
+
                     {/* Conversation Actions */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <SidebarMenuAction 
+                        <SidebarMenuAction
                           showOnHover
                           className="opacity-0 group-hover:opacity-100"
                         >
                           <ChevronDown className="h-4 w-4" />
                         </SidebarMenuAction>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent 
-                        align="end" 
-                        className="mac-glass mac-dropdown w-48"
-                      >
-                        <DropdownMenuItem 
+                      <DropdownMenuContent align="end" className="mac-glass mac-dropdown w-48">
+                        <DropdownMenuItem
                           onClick={() => pinConversation(conversation.id, !conversation.isPinned)}
                           className="mac-dropdown-item"
                         >
@@ -309,7 +303,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
                           Export
                         </DropdownMenuItem>
                         <DropdownMenuSeparator className="bg-mac-border" />
-                        <DropdownMenuItem 
+                        <DropdownMenuItem
                           onClick={() => deleteConversation(conversation.id)}
                           className="mac-dropdown-item text-red-400 hover:text-red-300"
                         >
@@ -328,9 +322,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
         {/* AI-Powered Actions Section */}
         {conversations.length > 0 && (
           <SidebarGroup>
-            <SidebarGroupLabel className="text-mac-text-muted">
-              Quick Actions
-            </SidebarGroupLabel>
+            <SidebarGroupLabel className="text-mac-text-muted">Quick Actions</SidebarGroupLabel>
             <SidebarGroupContent className="px-2">
               <Actions
                 actions={[
@@ -367,22 +359,19 @@ export function AppSidebar({ className }: AppSidebarProps) {
             <div className="text-xs text-mac-text-muted">
               {conversations.length} conversation{conversations.length !== 1 ? "s" : ""}
             </div>
-            {conversations.filter(c => c.isPinned).length > 0 && (
-              <Badge 
-                variant="outline" 
-                className="mac-badge text-xs px-1.5 py-0"
-              >
+            {conversations.filter((c) => c.isPinned).length > 0 && (
+              <Badge variant="outline" className="mac-badge text-xs px-1.5 py-0">
                 <Pin className="h-3 w-3 mr-1" />
-                {conversations.filter(c => c.isPinned).length}
+                {conversations.filter((c) => c.isPinned).length}
               </Badge>
             )}
           </div>
-          
+
           {/* Storage indicator */}
           <div className="mt-2">
             <div className="text-xs text-mac-text-muted mb-1">Local Storage</div>
             <div className="h-1 bg-mac-surface-bg rounded-full overflow-hidden mac-storage-bar">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-purple-400"
                 style={{ width: `${Math.min((conversations.length / 100) * 100, 100)}%` }}
               />

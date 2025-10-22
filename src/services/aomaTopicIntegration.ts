@@ -5,11 +5,7 @@
  * processing documents from the vector store and MCP server.
  */
 
-import {
-  topicExtractionService,
-  Document,
-  DocumentType,
-} from "./topicExtractionService";
+import { topicExtractionService, Document, DocumentType } from "./topicExtractionService";
 import { VectorStoreService } from "./vectorStoreService";
 
 interface AOMADocument {
@@ -328,7 +324,7 @@ export class AOMATopicIntegration {
    */
   async processUploadedDocument(
     file: File,
-    additionalMetadata?: Record<string, any>,
+    additionalMetadata?: Record<string, any>
   ): Promise<void> {
     try {
       // Read file content
@@ -403,10 +399,7 @@ export class AOMATopicIntegration {
     const seen = new Set<string>();
 
     for (const topic of topics) {
-      const related = topicExtractionService.findRelatedDocuments(
-        topic.term,
-        5,
-      );
+      const related = topicExtractionService.findRelatedDocuments(topic.term, 5);
       for (const doc of related) {
         if (!seen.has(doc.id)) {
           seen.add(doc.id);

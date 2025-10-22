@@ -1,8 +1,4 @@
-import React, {
-  useImperativeHandle,
-  forwardRef,
-  useEffect,
-} from "react";
+import React, { useImperativeHandle, forwardRef, useEffect } from "react";
 import { Mic, MicOff, Loader2, AlertCircle, Radio, Activity } from "lucide-react";
 import AudioWaveform from "./AudioWaveform";
 import { useElevenLabsConversation } from "../hooks/useElevenLabsConversation";
@@ -37,7 +33,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
       vadSensitivity = 0.5,
       interruptThreshold = 0.02,
     },
-    ref,
+    ref
   ) => {
     // Get agent ID from props or config
     const effectiveAgentId = agentId || getElevenLabsAgentId();
@@ -160,23 +156,13 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
       <div className={`conversational-ai-panel ${className}`}>
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-holographic">
-            ElevenLabs Conversational AI
-          </h3>
+          <h3 className="text-lg font-semibold text-holographic">ElevenLabs Conversational AI</h3>
           <div className="flex items-center gap-2">
             {/* Connection status */}
-            {isConnected && (
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            )}
-            {status === "connecting" && (
-              <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
-            )}
-            {status === "error" && (
-              <AlertCircle className="w-4 h-4 text-red-400" />
-            )}
-            <span
-              className={`text-sm ${isConnected ? "text-green-400" : "text-gray-400"}`}
-            >
+            {isConnected && <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />}
+            {status === "connecting" && <Loader2 className="w-4 h-4 animate-spin text-blue-400" />}
+            {status === "error" && <AlertCircle className="w-4 h-4 text-red-400" />}
+            <span className={`text-sm ${isConnected ? "text-green-400" : "text-gray-400"}`}>
               {status === "connecting"
                 ? "Connecting..."
                 : isConnected
@@ -191,8 +177,8 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         {/* Agent ID warning */}
         {!effectiveAgentId && (
           <div className="mb-4 p-3 bg-yellow-900/20 border border-yellow-500 rounded text-yellow-400 text-sm">
-            Set NEXT_PUBLIC_ELEVENLABS_AGENT_ID environment variable to enable
-            ElevenLabs integration
+            Set NEXT_PUBLIC_ELEVENLABS_AGENT_ID environment variable to enable ElevenLabs
+            integration
           </div>
         )}
 
@@ -212,9 +198,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 {stateInfo.icon}
-                <span className={`text-sm font-medium ${stateInfo.color}`}>
-                  {stateInfo.text}
-                </span>
+                <span className={`text-sm font-medium ${stateInfo.color}`}>{stateInfo.text}</span>
               </div>
               <div className="flex items-center gap-4 text-xs text-gray-400">
                 <div className="flex items-center gap-1">
@@ -237,9 +221,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
             {mode === "push-to-talk" ? "Push-to-Talk" : "Voice-Activated"}
           </span>
           {mode === "voice-activated" && (
-            <span className="text-gray-500">
-              (VAD: {(vadSensitivity * 100).toFixed(0)}%)
-            </span>
+            <span className="text-gray-500">(VAD: {(vadSensitivity * 100).toFixed(0)}%)</span>
           )}
         </div>
 
@@ -315,9 +297,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
                 <p className="text-white text-sm">{aiTranscript}</p>
               ) : (
                 <p className="text-gray-400 text-sm italic">
-                  {isConnected
-                    ? "AI will respond here..."
-                    : "No response yet"}
+                  {isConnected ? "AI will respond here..." : "No response yet"}
                 </p>
               )}
             </div>
@@ -329,7 +309,9 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
           <div className="mt-4">
             <AudioWaveform
               isRecording={isUserSpeaking || isAISpeaking}
-              frequencyData={audioFeatures ? new Uint8Array([audioFeatures.energy * 255]) : undefined}
+              frequencyData={
+                audioFeatures ? new Uint8Array([audioFeatures.energy * 255]) : undefined
+              }
             />
           </div>
         )}
@@ -356,7 +338,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
 ConversationalAI.displayName = "ConversationalAI";

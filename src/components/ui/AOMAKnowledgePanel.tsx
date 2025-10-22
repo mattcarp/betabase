@@ -1,13 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card";
 import { Button } from "./button";
 import { Input } from "./input";
 import { ScrollArea } from "./scroll-area";
@@ -52,15 +46,10 @@ interface AOMAKnowledgePanelProps {
   onQueryResult?: (result: any) => void;
 }
 
-export function AOMAKnowledgePanel({
-  className,
-  onQueryResult,
-}: AOMAKnowledgePanelProps) {
+export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePanelProps) {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [strategy, setStrategy] = useState<
-    "comprehensive" | "focused" | "rapid"
-  >("focused");
+  const [strategy, setStrategy] = useState<"comprehensive" | "focused" | "rapid">("focused");
   const [queryHistory, setQueryHistory] = useState<QueryHistoryItem[]>([]);
   const [currentResponse, setCurrentResponse] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
@@ -76,7 +65,7 @@ export function AOMAKnowledgePanel({
           parsed.map((item: any) => ({
             ...item,
             timestamp: new Date(item.timestamp),
-          })),
+          }))
         );
       } catch (e) {
         console.error("Failed to load query history:", e);
@@ -148,9 +137,7 @@ export function AOMAKnowledgePanel({
           const data = await response.json();
           if (data.success && data.data?.response) {
             // Parse the response to extract questions
-            const lines = data.data.response
-              .split("\n")
-              .filter((line: string) => line.trim());
+            const lines = data.data.response.split("\n").filter((line: string) => line.trim());
             const newSuggestions: QuerySuggestion[] = [];
 
             const categories = [
@@ -177,9 +164,7 @@ export function AOMAKnowledgePanel({
                 newSuggestions.push({
                   text: match[1].trim(),
                   category: categories[newSuggestions.length] || "General",
-                  icon: icons[newSuggestions.length] || (
-                    <BookOpen className="h-3 w-3" />
-                  ),
+                  icon: icons[newSuggestions.length] || <BookOpen className="h-3 w-3" />,
                 });
               }
             });
@@ -225,9 +210,7 @@ export function AOMAKnowledgePanel({
         const data = await response.json();
 
         if (!response.ok || !data.success) {
-          throw new Error(
-            data.message || "Failed to query AOMA knowledge base",
-          );
+          throw new Error(data.message || "Failed to query AOMA knowledge base");
         }
 
         setCurrentResponse(data.data);
@@ -265,7 +248,7 @@ export function AOMAKnowledgePanel({
         setIsLoading(false);
       }
     },
-    [strategy, onQueryResult],
+    [strategy, onQueryResult]
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -315,8 +298,7 @@ export function AOMAKnowledgePanel({
           </div>
         </div>
         <CardDescription>
-          Query Sony Music's AOMA knowledge system for insights and
-          documentation
+          Query Sony Music's AOMA knowledge system for insights and documentation
         </CardDescription>
       </CardHeader>
 
@@ -374,11 +356,7 @@ export function AOMAKnowledgePanel({
         </div>
 
         {/* Main Content Area */}
-        <Tabs
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="flex-1 flex flex-col"
-        >
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="search">Search</TabsTrigger>
             <TabsTrigger value="suggestions">Suggestions</TabsTrigger>
@@ -393,9 +371,7 @@ export function AOMAKnowledgePanel({
                   <p className="text-sm text-muted-foreground mt-4">
                     Querying AOMA knowledge base...
                   </p>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Strategy: {strategy}
-                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">Strategy: {strategy}</p>
                 </div>
               )}
 
@@ -411,9 +387,7 @@ export function AOMAKnowledgePanel({
                   <div className="prose prose-sm dark:prose-invert max-w-none">
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: formatResponse(
-                          currentResponse.response || currentResponse,
-                        ),
+                        __html: formatResponse(currentResponse.response || currentResponse),
                       }}
                     />
                   </div>
@@ -422,9 +396,7 @@ export function AOMAKnowledgePanel({
                     <div className="flex flex-wrap gap-2 pt-4 border-t">
                       <Badge variant="outline" className="text-xs">
                         <Clock className="h-3 w-3 mr-1" />
-                        {new Date(
-                          currentResponse.metadata.timestamp,
-                        ).toLocaleTimeString()}
+                        {new Date(currentResponse.metadata.timestamp).toLocaleTimeString()}
                       </Badge>
                       {currentResponse.metadata.version && (
                         <Badge variant="outline" className="text-xs">
@@ -444,9 +416,7 @@ export function AOMAKnowledgePanel({
               {!isLoading && !error && !currentResponse && (
                 <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
                   <Brain className="h-12 w-12 mb-4 opacity-50" />
-                  <p className="text-sm">
-                    Query the AOMA knowledge base to get started
-                  </p>
+                  <p className="text-sm">Query the AOMA knowledge base to get started</p>
                   <p className="text-xs mt-2">
                     Try searching for architecture, workflows, or features
                   </p>
@@ -455,10 +425,7 @@ export function AOMAKnowledgePanel({
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent
-            value="suggestions"
-            className="flex-1 overflow-hidden mt-4"
-          >
+          <TabsContent value="suggestions" className="flex-1 overflow-hidden mt-4">
             <ScrollArea className="h-full">
               <div className="grid gap-2">
                 {querySuggestions.map((suggestion, index) => (
@@ -471,9 +438,7 @@ export function AOMAKnowledgePanel({
                     <div className="flex items-start gap-3 w-full">
                       <div className="mt-1">{suggestion.icon}</div>
                       <div className="flex-1">
-                        <div className="font-medium text-sm">
-                          {suggestion.text}
-                        </div>
+                        <div className="font-medium text-sm">{suggestion.text}</div>
                         <div className="text-xs text-muted-foreground mt-1">
                           {suggestion.category}
                         </div>
@@ -491,15 +456,8 @@ export function AOMAKnowledgePanel({
               {queryHistory.length > 0 ? (
                 <div className="space-y-2">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs text-muted-foreground">
-                      Recent queries
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={clearHistory}
-                      className="text-xs"
-                    >
+                    <span className="text-xs text-muted-foreground">Recent queries</span>
+                    <Button variant="ghost" size="sm" onClick={clearHistory} className="text-xs">
                       Clear all
                     </Button>
                   </div>
@@ -514,7 +472,7 @@ export function AOMAKnowledgePanel({
                           <span
                             className={cn(
                               "text-sm font-medium",
-                              !item.success && "text-destructive",
+                              !item.success && "text-destructive"
                             )}
                           >
                             {item.query}
@@ -547,9 +505,7 @@ export function AOMAKnowledgePanel({
                 <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
                   <History className="h-12 w-12 mb-4 opacity-50" />
                   <p className="text-sm">No query history yet</p>
-                  <p className="text-xs mt-2">
-                    Your recent queries will appear here
-                  </p>
+                  <p className="text-xs mt-2">Your recent queries will appear here</p>
                 </div>
               )}
             </ScrollArea>
@@ -572,10 +528,7 @@ function formatResponse(text: any): string {
   // Convert markdown-like syntax to HTML
   let formatted = text
     // Headers
-    .replace(
-      /^### (.*?)$/gm,
-      '<h3 class="font-semibold text-base mt-4 mb-2">$1</h3>',
-    )
+    .replace(/^### (.*?)$/gm, '<h3 class="font-semibold text-base mt-4 mb-2">$1</h3>')
     .replace(/^## (.*?)$/gm, '<h2 class="font-bold text-lg mt-4 mb-2">$1</h2>')
     .replace(/^# (.*?)$/gm, '<h1 class="font-bold text-xl mt-4 mb-2">$1</h1>')
     // Bold
@@ -586,10 +539,7 @@ function formatResponse(text: any): string {
     // Line breaks
     .replace(/\n\n/g, '</p><p class="mb-3">')
     // Code blocks
-    .replace(
-      /`([^`]+)`/g,
-      '<code class="px-1 py-0.5 bg-muted rounded text-sm">$1</code>',
-    );
+    .replace(/`([^`]+)`/g, '<code class="px-1 py-0.5 bg-muted rounded text-sm">$1</code>');
 
   // Wrap in paragraph if not already wrapped
   if (!formatted.startsWith("<")) {

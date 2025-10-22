@@ -199,8 +199,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
           } else {
             const runningSuite = updated.find((s) => s.status === "running");
             if (runningSuite) {
-              if (runningSuite.progress === undefined)
-                runningSuite.progress = 0;
+              if (runningSuite.progress === undefined) runningSuite.progress = 0;
               runningSuite.progress += 25;
 
               if (runningSuite.progress >= 100) {
@@ -225,17 +224,11 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
 
         // Update system resources
         setSystemResources({
-          cpu: Math.min(
-            100,
-            Math.max(20, systemResources.cpu + (Math.random() - 0.5) * 10),
-          ),
-          memory: Math.min(
-            100,
-            Math.max(30, systemResources.memory + (Math.random() - 0.5) * 5),
-          ),
+          cpu: Math.min(100, Math.max(20, systemResources.cpu + (Math.random() - 0.5) * 10)),
+          memory: Math.min(100, Math.max(30, systemResources.memory + (Math.random() - 0.5) * 5)),
           network: Math.min(
             100,
-            Math.max(10, systemResources.network + (Math.random() - 0.5) * 15),
+            Math.max(10, systemResources.network + (Math.random() - 0.5) * 15)
           ),
         });
       }, 1000);
@@ -294,7 +287,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                     className={cn(
                       "cursor-pointer transition-all hover:shadow-md",
                       selectedSuite === suite.id && "ring-2 ring-primary",
-                      getStatusColor(suite.status),
+                      getStatusColor(suite.status)
                     )}
                     onClick={() => setSelectedSuite(suite.id)}
                   >
@@ -310,13 +303,9 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                         <span>{suite.tests.length} tests</span>
                         {suite.duration && <span>{suite.duration}ms</span>}
                       </div>
-                      {suite.status === "running" &&
-                        suite.progress !== undefined && (
-                          <Progress
-                            value={suite.progress}
-                            className="h-1 mt-2"
-                          />
-                        )}
+                      {suite.status === "running" && suite.progress !== undefined && (
+                        <Progress value={suite.progress} className="h-1 mt-2" />
+                      )}
                     </CardContent>
                   </Card>
                 ))}
@@ -339,10 +328,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                   {testSuites
                     .find((s) => s.id === selectedSuite)
                     ?.tests.map((test) => (
-                      <Card
-                        key={test.id}
-                        className={cn("border", getStatusColor(test.status))}
-                      >
+                      <Card key={test.id} className={cn("border", getStatusColor(test.status))}>
                         <CardContent className="p-3">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2 flex-1">
@@ -385,9 +371,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Cpu className="h-4 w-4 text-blue-600" />
-                  <span className="text-sm font-medium text-foreground">
-                    CPU Usage
-                  </span>
+                  <span className="text-sm font-medium text-foreground">CPU Usage</span>
                 </div>
                 <span className="text-sm font-semibold text-foreground">
                   {systemResources.cpu}%
@@ -400,9 +384,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <HardDrive className="h-4 w-4 text-emerald-600" />
-                  <span className="text-sm font-medium text-foreground">
-                    Memory
-                  </span>
+                  <span className="text-sm font-medium text-foreground">Memory</span>
                 </div>
                 <span className="text-sm font-semibold text-foreground">
                   {systemResources.memory}%
@@ -415,9 +397,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Wifi className="h-4 w-4 text-purple-600" />
-                  <span className="text-sm font-medium text-foreground">
-                    Network I/O
-                  </span>
+                  <span className="text-sm font-medium text-foreground">Network I/O</span>
                 </div>
                 <span className="text-sm font-semibold text-foreground">
                   {systemResources.network}%

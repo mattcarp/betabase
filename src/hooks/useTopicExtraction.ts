@@ -44,7 +44,7 @@ interface UseTopicExtractionActions {
       type?: DocumentType;
       source?: string;
     },
-    options?: ProcessingOptions,
+    options?: ProcessingOptions
   ) => Promise<ExtractedTopic[]>;
 
   processBatch: (
@@ -54,7 +54,7 @@ interface UseTopicExtractionActions {
       type?: DocumentType;
       metadata?: Record<string, any>;
     }>,
-    options?: ProcessingOptions,
+    options?: ProcessingOptions
   ) => Promise<void>;
 
   // Topic operations
@@ -73,10 +73,7 @@ interface UseTopicExtractionActions {
   importTopics: (jsonData: string) => boolean;
 }
 
-export function useTopicExtraction(): [
-  UseTopicExtractionState,
-  UseTopicExtractionActions,
-] {
+export function useTopicExtraction(): [UseTopicExtractionState, UseTopicExtractionActions] {
   const [state, setState] = useState<UseTopicExtractionState>({
     topics: [],
     documentTopics: new Map(),
@@ -141,10 +138,7 @@ export function useTopicExtraction(): [
 
     return () => {
       topicExtractionService.off("topicsExtracted", handleTopicsExtracted);
-      topicExtractionService.off(
-        "clusteringComplete",
-        handleClusteringComplete,
-      );
+      topicExtractionService.off("clusteringComplete", handleClusteringComplete);
       topicExtractionService.off("error", handleError);
     };
   }, []);
@@ -158,7 +152,7 @@ export function useTopicExtraction(): [
         type?: DocumentType;
         source?: string;
       },
-      options?: ProcessingOptions,
+      options?: ProcessingOptions
     ): Promise<ExtractedTopic[]> => {
       const documentId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
@@ -181,10 +175,7 @@ export function useTopicExtraction(): [
           source: metadata?.source,
         };
 
-        const topics = await topicExtractionService.processDocument(
-          document,
-          options,
-        );
+        const topics = await topicExtractionService.processDocument(document, options);
 
         // Refresh trending topics
         const trending = topicExtractionService.getTrendingTopics(10);
@@ -203,7 +194,7 @@ export function useTopicExtraction(): [
         setState((prev) => ({ ...prev, isProcessing: false }));
       }
     },
-    [],
+    []
   );
 
   // Process multiple documents
@@ -215,7 +206,7 @@ export function useTopicExtraction(): [
         type?: DocumentType;
         metadata?: Record<string, any>;
       }>,
-      options?: ProcessingOptions,
+      options?: ProcessingOptions
     ): Promise<void> => {
       setState((prev) => ({ ...prev, isProcessing: true, error: null }));
 
@@ -245,32 +236,23 @@ export function useTopicExtraction(): [
         setState((prev) => ({ ...prev, isProcessing: false }));
       }
     },
-    [],
+    []
   );
 
   // Search topics
-  const searchTopics = useCallback(
-    (query: string, limit: number = 10): ExtractedTopic[] => {
-      return topicExtractionService.searchTopics(query, limit);
-    },
-    [],
-  );
+  const searchTopics = useCallback((query: string, limit: number = 10): ExtractedTopic[] => {
+    return topicExtractionService.searchTopics(query, limit);
+  }, []);
 
   // Get topics for a specific document
-  const getDocumentTopics = useCallback(
-    (documentId: string): ExtractedTopic[] => {
-      return topicExtractionService.getDocumentTopics(documentId);
-    },
-    [],
-  );
+  const getDocumentTopics = useCallback((documentId: string): ExtractedTopic[] => {
+    return topicExtractionService.getDocumentTopics(documentId);
+  }, []);
 
   // Find related documents
-  const findRelatedDocuments = useCallback(
-    (topicTerm: string, limit: number = 10): Document[] => {
-      return topicExtractionService.findRelatedDocuments(topicTerm, limit);
-    },
-    [],
-  );
+  const findRelatedDocuments = useCallback((topicTerm: string, limit: number = 10): Document[] => {
+    return topicExtractionService.findRelatedDocuments(topicTerm, limit);
+  }, []);
 
   // Get all clusters
   const getClusters = useCallback((): TopicCluster[] => {
@@ -278,17 +260,12 @@ export function useTopicExtraction(): [
   }, []);
 
   // Get cluster by topic
-  const getClusterByTopic = useCallback(
-    (topicTerm: string): TopicCluster | undefined => {
-      const clusters = topicExtractionService.getClusters();
-      return clusters.find((cluster) =>
-        cluster.topics.some((topic) =>
-          topic.term.toLowerCase().includes(topicTerm.toLowerCase()),
-        ),
-      );
-    },
-    [],
-  );
+  const getClusterByTopic = useCallback((topicTerm: string): TopicCluster | undefined => {
+    const clusters = topicExtractionService.getClusters();
+    return clusters.find((cluster) =>
+      cluster.topics.some((topic) => topic.term.toLowerCase().includes(topicTerm.toLowerCase()))
+    );
+  }, []);
 
   // Clear cache
   const clearCache = useCallback((): void => {
@@ -369,10 +346,7 @@ export function useChatTopicExtraction() {
   const messageCache = useRef<Map<string, ExtractedTopic[]>>(new Map());
 
   const extractTopicsFromMessage = useCallback(
-    async (
-      messageContent: string,
-      messageId: string,
-    ): Promise<ExtractedTopic[]> => {
+    async (messageContent: string, messageId: string): Promise<ExtractedTopic[]> => {
       // Check cache first
       if (messageCache.current.has(messageId)) {
         return messageCache.current.get(messageId)!;
@@ -389,7 +363,7 @@ export function useChatTopicExtraction() {
           maxTerms: 5, // Fewer topics for chat messages
           minScore: 0.2, // Higher threshold for relevance
           includeNgrams: false, // Single words only for chat
-        },
+        }
       );
 
       // Cache results
@@ -399,15 +373,13 @@ export function useChatTopicExtraction() {
       setChatTopics((prev) => {
         const newTopics = [...prev, ...topics];
         // Keep only unique topics by term
-        const uniqueTopics = Array.from(
-          new Map(newTopics.map((t) => [t.term, t])).values(),
-        );
+        const uniqueTopics = Array.from(new Map(newTopics.map((t) => [t.term, t])).values());
         return uniqueTopics.slice(0, 20); // Limit to 20 most recent
       });
 
       return topics;
     },
-    [topicActions],
+    [topicActions]
   );
 
   const findRelatedContent = useCallback(
@@ -427,7 +399,7 @@ export function useChatTopicExtraction() {
 
       return allRelated.slice(0, 10); // Top 10 related documents
     },
-    [topicActions],
+    [topicActions]
   );
 
   return {

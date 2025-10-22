@@ -117,7 +117,7 @@ export const DataStream: React.FC<DataStreamProps> = ({
     const range = maxValue - minValue || 1;
 
     const normalizedData = internalData.map(
-      (value) => height - ((value - minValue) / range) * height,
+      (value) => height - ((value - minValue) / range) * height
     );
 
     // Draw filled area under the curve
@@ -195,11 +195,7 @@ export const DataStream: React.FC<DataStreamProps> = ({
       const latestValue = internalData[internalData.length - 1];
       const latestY = normalizedData[normalizedData.length - 1];
 
-      ctx.fillText(
-        latestValue?.toFixed(1) || "0.0",
-        width - 5,
-        (latestY || 0) - 5,
-      );
+      ctx.fillText(latestValue?.toFixed(1) || "0.0", width - 5, (latestY || 0) - 5);
     }
   };
 
@@ -234,20 +230,12 @@ export const DataStream: React.FC<DataStreamProps> = ({
 
   return (
     <div className={cn("relative", className)} data-testid="data-stream">
-      {label && (
-        <div className="text-xs text-holographic opacity-90 mb-2 font-mono">
-          {label}
-        </div>
-      )}
+      {label && <div className="text-xs text-holographic opacity-90 mb-2 font-mono">{label}</div>}
       <div
         className="relative border border-jarvis-primary/20 rounded bg-black/20 backdrop-blur-sm"
         style={{ width, height }}
       >
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0"
-          style={{ width, height }}
-        />
+        <canvas ref={canvasRef} className="absolute inset-0" style={{ width, height }} />
 
         {/* Scanning line effect */}
         {animated && (

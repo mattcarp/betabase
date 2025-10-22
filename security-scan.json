@@ -1,1 +1,1634 @@
-{"version":"1.133.0","results":[{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/components/ui 2/CurateTab.tsx","start":{"line":147,"col":23,"offset":3660},"end":{"line":147,"col":54,"offset":3691},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/components/ui 2/FloatingPanel.tsx","start":{"line":188,"col":19,"offset":5122},"end":{"line":188,"col":67,"offset":5170},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml","path":"src/components/ui 2/SearchResultsResponse.tsx","start":{"line":151,"col":50,"offset":3963},"end":{"line":151,"col":74,"offset":3987},"extra":{"message":"Detection of dangerouslySetInnerHTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use dangerouslySetInnerHTML, consider using a sanitization library such as DOMPurify to sanitize your HTML.","metadata":{"cwe":["CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"],"owasp":["A07:2017 - Cross-Site Scripting (XSS)","A03:2021 - Injection"],"references":["https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html"],"category":"security","confidence":"MEDIUM","technology":["react"],"cwe2022-top25":true,"cwe2021-top25":true,"subcategory":["vuln"],"likelihood":"MEDIUM","impact":"MEDIUM","license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Cross-Site-Scripting (XSS)"],"source":"https://semgrep.dev/r/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml","shortlink":"https://sg.run/rAx6"},"severity":"WARNING","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml","path":"src/components/ui 2/SearchResultsResponse.tsx","start":{"line":192,"col":46,"offset":5426},"end":{"line":192,"col":72,"offset":5452},"extra":{"message":"Detection of dangerouslySetInnerHTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use dangerouslySetInnerHTML, consider using a sanitization library such as DOMPurify to sanitize your HTML.","metadata":{"cwe":["CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"],"owasp":["A07:2017 - Cross-Site Scripting (XSS)","A03:2021 - Injection"],"references":["https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html"],"category":"security","confidence":"MEDIUM","technology":["react"],"cwe2022-top25":true,"cwe2021-top25":true,"subcategory":["vuln"],"likelihood":"MEDIUM","impact":"MEDIUM","license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Cross-Site-Scripting (XSS)"],"source":"https://semgrep.dev/r/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml","shortlink":"https://sg.run/rAx6"},"severity":"WARNING","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/components/ui/CurateTab.tsx","start":{"line":159,"col":23,"offset":4009},"end":{"line":159,"col":54,"offset":4040},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/components/ui/FloatingPanel.tsx","start":{"line":188,"col":19,"offset":5122},"end":{"line":188,"col":67,"offset":5170},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml","path":"src/components/ui/SearchResultsResponse.tsx","start":{"line":151,"col":50,"offset":3963},"end":{"line":151,"col":74,"offset":3987},"extra":{"message":"Detection of dangerouslySetInnerHTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use dangerouslySetInnerHTML, consider using a sanitization library such as DOMPurify to sanitize your HTML.","metadata":{"cwe":["CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"],"owasp":["A07:2017 - Cross-Site Scripting (XSS)","A03:2021 - Injection"],"references":["https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html"],"category":"security","confidence":"MEDIUM","technology":["react"],"cwe2022-top25":true,"cwe2021-top25":true,"subcategory":["vuln"],"likelihood":"MEDIUM","impact":"MEDIUM","license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Cross-Site-Scripting (XSS)"],"source":"https://semgrep.dev/r/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml","shortlink":"https://sg.run/rAx6"},"severity":"WARNING","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml","path":"src/components/ui/SearchResultsResponse.tsx","start":{"line":192,"col":46,"offset":5426},"end":{"line":192,"col":72,"offset":5452},"extra":{"message":"Detection of dangerouslySetInnerHTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use dangerouslySetInnerHTML, consider using a sanitization library such as DOMPurify to sanitize your HTML.","metadata":{"cwe":["CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"],"owasp":["A07:2017 - Cross-Site Scripting (XSS)","A03:2021 - Injection"],"references":["https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html"],"category":"security","confidence":"MEDIUM","technology":["react"],"cwe2022-top25":true,"cwe2021-top25":true,"subcategory":["vuln"],"likelihood":"MEDIUM","impact":"MEDIUM","license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Cross-Site-Scripting (XSS)"],"source":"https://semgrep.dev/r/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml","shortlink":"https://sg.run/rAx6"},"severity":"WARNING","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/examples/mcp-api-usage 2.ts","start":{"line":130,"col":17,"offset":3432},"end":{"line":130,"col":44,"offset":3459},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/examples/mcp-api-usage 2.ts","start":{"line":136,"col":21,"offset":3675},"end":{"line":136,"col":54,"offset":3708},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/examples/mcp-api-usage.ts","start":{"line":130,"col":17,"offset":3432},"end":{"line":130,"col":44,"offset":3459},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/examples/mcp-api-usage.ts","start":{"line":136,"col":21,"offset":3675},"end":{"line":136,"col":54,"offset":3708},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/hooks/useGlobalShortcuts 2.ts","start":{"line":176,"col":21,"offset":4979},"end":{"line":176,"col":69,"offset":5027},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/hooks/useGlobalShortcuts 2.ts","start":{"line":184,"col":29,"offset":5305},"end":{"line":184,"col":71,"offset":5347},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/hooks/useGlobalShortcuts 2.ts","start":{"line":225,"col":23,"offset":6496},"end":{"line":225,"col":72,"offset":6545},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/hooks/useGlobalShortcuts 2.ts","start":{"line":244,"col":23,"offset":7059},"end":{"line":244,"col":65,"offset":7101},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/hooks/useGlobalShortcuts.ts","start":{"line":176,"col":21,"offset":4979},"end":{"line":176,"col":69,"offset":5027},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/hooks/useGlobalShortcuts.ts","start":{"line":184,"col":29,"offset":5305},"end":{"line":184,"col":71,"offset":5347},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/hooks/useGlobalShortcuts.ts","start":{"line":225,"col":23,"offset":6496},"end":{"line":225,"col":72,"offset":6545},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/hooks/useGlobalShortcuts.ts","start":{"line":244,"col":23,"offset":7059},"end":{"line":244,"col":65,"offset":7101},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/MCPClient.ts","start":{"line":148,"col":19,"offset":3487},"end":{"line":148,"col":53,"offset":3521},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/MCPClient.ts","start":{"line":165,"col":21,"offset":3896},"end":{"line":165,"col":54,"offset":3929},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/MCPClientLocal.ts","start":{"line":107,"col":21,"offset":2972},"end":{"line":107,"col":51,"offset":3002},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/MCPClientWrapper.ts","start":{"line":132,"col":9,"offset":3516},"end":{"line":132,"col":77,"offset":3584},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/aomaContentAggregator.ts","start":{"line":203,"col":21,"offset":4794},"end":{"line":203,"col":60,"offset":4833},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/aomaMeshMcp.ts","start":{"line":210,"col":21,"offset":5528},"end":{"line":210,"col":55,"offset":5562},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/aomaOrchestrator 2.ts","start":{"line":371,"col":21,"offset":10003},"end":{"line":371,"col":50,"offset":10032},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/aomaOrchestrator.ts","start":{"line":485,"col":19,"offset":14345},"end":{"line":485,"col":54,"offset":14380},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/aomaOrchestrator.ts","start":{"line":597,"col":21,"offset":19127},"end":{"line":597,"col":62,"offset":19168},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/errorLogger.ts","start":{"line":135,"col":7,"offset":3623},"end":{"line":135,"col":63,"offset":3679},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp","path":"src/services/firecrawl-integration.ts","start":{"line":259,"col":37,"offset":6982},"end":{"line":259,"col":61,"offset":7006},"extra":{"message":"RegExp() called with a `keyword` function argument, this might allow an attacker to cause a Regular Expression Denial-of-Service (ReDoS) within your application as RegExP blocks the main thread. For this reason, it is recommended to use hardcoded regexes instead. If your regex is run on user-controlled input, consider performing input validation or use a regex checking/sanitization library such as https://www.npmjs.com/package/recheck to verify that the regex does not appear vulnerable to ReDoS.","metadata":{"owasp":["A05:2021 - Security Misconfiguration","A06:2017 - Security Misconfiguration"],"cwe":["CWE-1333: Inefficient Regular Expression Complexity"],"references":["https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS"],"source-rule-url":"https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-non-literal-regexp.js","category":"security","technology":["javascript"],"subcategory":["vuln"],"likelihood":"MEDIUM","impact":"MEDIUM","confidence":"LOW","license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Denial-of-Service (DoS)"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp","shortlink":"https://sg.run/gr65"},"severity":"WARNING","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/supabaseVectorService.ts","start":{"line":144,"col":25,"offset":3662},"end":{"line":144,"col":69,"offset":3706},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/vectorStoreMigration.ts","start":{"line":95,"col":21,"offset":2898},"end":{"line":95,"col":56,"offset":2933},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}},{"check_id":"javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","path":"src/services/vectorStoreMigration.ts","start":{"line":134,"col":21,"offset":3948},"end":{"line":134,"col":59,"offset":3986},"extra":{"message":"Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.","metadata":{"cwe":["CWE-134: Use of Externally-Controlled Format String"],"owasp":["A01:2021 - Broken Access Control"],"category":"security","technology":["javascript"],"subcategory":["audit"],"likelihood":"MEDIUM","impact":"LOW","confidence":"LOW","references":["https://cwe.mitre.org/data/definitions/134.html"],"license":"Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license","vulnerability_class":["Improper Validation"],"source":"https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring","shortlink":"https://sg.run/7Y5R"},"severity":"INFO","fingerprint":"requires login","lines":"requires login","validation_state":"NO_VALIDATOR","engine_kind":"OSS"}}],"errors":[{"code":3,"level":"warn","type":["PartialParsing",[{"path":"src/components/SettingsPanel 2.tsx","start":{"line":789,"col":14,"offset":0},"end":{"line":789,"col":32,"offset":18}}]],"message":"Syntax error at line src/components/SettingsPanel 2.tsx:789:\n `& Privacy Settings` was unexpected","path":"src/components/SettingsPanel 2.tsx","spans":[{"file":"src/components/SettingsPanel 2.tsx","start":{"line":789,"col":14,"offset":0},"end":{"line":789,"col":32,"offset":18}}]},{"code":3,"level":"warn","type":["PartialParsing",[{"path":"src/components/SettingsPanel.tsx","start":{"line":789,"col":14,"offset":0},"end":{"line":789,"col":32,"offset":18}}]],"message":"Syntax error at line src/components/SettingsPanel.tsx:789:\n `& Privacy Settings` was unexpected","path":"src/components/SettingsPanel.tsx","spans":[{"file":"src/components/SettingsPanel.tsx","start":{"line":789,"col":14,"offset":0},"end":{"line":789,"col":32,"offset":18}}]},{"code":3,"level":"warn","type":["PartialParsing",[{"path":"src/components/auth 2/MagicLinkLoginForm 2.tsx","start":{"line":282,"col":32,"offset":0},"end":{"line":282,"col":41,"offset":9}}]],"message":"Syntax error at line src/components/auth 2/MagicLinkLoginForm 2.tsx:282:\n `& Sign In` was unexpected","path":"src/components/auth 2/MagicLinkLoginForm 2.tsx","spans":[{"file":"src/components/auth 2/MagicLinkLoginForm 2.tsx","start":{"line":282,"col":32,"offset":0},"end":{"line":282,"col":41,"offset":9}}]},{"code":3,"level":"warn","type":["PartialParsing",[{"path":"src/components/auth 2/MagicLinkLoginForm.tsx","start":{"line":302,"col":28,"offset":0},"end":{"line":302,"col":37,"offset":9}}]],"message":"Syntax error at line src/components/auth 2/MagicLinkLoginForm.tsx:302:\n `& Sign In` was unexpected","path":"src/components/auth 2/MagicLinkLoginForm.tsx","spans":[{"file":"src/components/auth 2/MagicLinkLoginForm.tsx","start":{"line":302,"col":28,"offset":0},"end":{"line":302,"col":37,"offset":9}}]},{"code":3,"level":"warn","type":["PartialParsing",[{"path":"src/components/auth/LoginForm.tsx","start":{"line":104,"col":37,"offset":0},"end":{"line":104,"col":55,"offset":18}}]],"message":"Syntax error at line src/components/auth/LoginForm.tsx:104:\n `& Augmented Memory` was unexpected","path":"src/components/auth/LoginForm.tsx","spans":[{"file":"src/components/auth/LoginForm.tsx","start":{"line":104,"col":37,"offset":0},"end":{"line":104,"col":55,"offset":18}}]},{"code":3,"level":"warn","type":["PartialParsing",[{"path":"src/components/auth/MagicLinkLoginForm.tsx","start":{"line":400,"col":28,"offset":0},"end":{"line":400,"col":37,"offset":9}}]],"message":"Syntax error at line src/components/auth/MagicLinkLoginForm.tsx:400:\n `& Sign In` was unexpected","path":"src/components/auth/MagicLinkLoginForm.tsx","spans":[{"file":"src/components/auth/MagicLinkLoginForm.tsx","start":{"line":400,"col":28,"offset":0},"end":{"line":400,"col":37,"offset":9}}]},{"code":3,"level":"warn","type":["PartialParsing",[{"path":"src/components/ui 2/pages/ChatPage.tsx","start":{"line":1017,"col":35,"offset":0},"end":{"line":1017,"col":48,"offset":13}}]],"message":"Syntax error at line src/components/ui 2/pages/ChatPage.tsx:1017:\n `& Diagnostics` was unexpected","path":"src/components/ui 2/pages/ChatPage.tsx","spans":[{"file":"src/components/ui 2/pages/ChatPage.tsx","start":{"line":1017,"col":35,"offset":0},"end":{"line":1017,"col":48,"offset":13}}]}],"paths":{"scanned":["src/App.css","src/ComponentPlayground.tsx","src/TestApp.tsx","src/app-backup/api 3/aoma-mcp/route.ts","src/app-backup/api 3/auth/magic-link/route.ts","src/app-backup/api 3/health/route.ts","src/app-backup/api 3/rpc/route.ts","src/app-backup/api 3/upload/route.ts","src/app-backup/auth-demo 3/page.tsx","src/app-backup/chat 3/page.tsx","src/app-backup/globals 2.css","src/app-backup/globals 3.css","src/app-backup/globals 4.css","src/app-backup/globals.css","src/app-backup/layout 2.tsx","src/app-backup/layout 3.tsx","src/app-backup/layout 4.tsx","src/app-backup/layout 5.tsx","src/app-backup/layout.tsx","src/app-backup/page 2.tsx","src/app-backup/page 3.tsx","src/app-backup/page 4.tsx","src/app-backup/page.tsx","src/app-backup/test-login 3/page.tsx","src/assets/images 2/README.md","src/assets/react 2.svg","src/assets/react.svg","src/components/AIInsightsDashboard 2.tsx","src/components/AIInsightsDashboard.tsx","src/components/AudioWaveform 2.tsx","src/components/AudioWaveform.tsx","src/components/ConversationalAI 2.tsx","src/components/ConversationalAI.tsx","src/components/DocumentUpload 3.tsx","src/components/DocumentUpload 4.tsx","src/components/DocumentUpload 5.tsx","src/components/DocumentUpload.tsx","src/components/ErrorBoundary 2.tsx","src/components/ErrorBoundary.tsx","src/components/ErrorTest 2.tsx","src/components/ErrorTest.tsx","src/components/HUDLayout 2.tsx","src/components/HUDLayout.tsx","src/components/LiveTranscription 2.tsx","src/components/LiveTranscription.tsx","src/components/LoadingStates 2.tsx","src/components/LoadingStates.tsx","src/components/MACFusion 2.tsx","src/components/MACFusion.tsx","src/components/ProfessionalLayout 2.tsx","src/components/ProfessionalLayout.tsx","src/components/SettingsPanel 2.tsx","src/components/SettingsPanel.tsx","src/components/SkeletonLoader 2.tsx","src/components/SkeletonLoader.tsx","src/components/SystemHealthMonitor 2.tsx","src/components/SystemHealthMonitor.tsx","src/components/TopicCloud 2.tsx","src/components/TopicCloud.tsx","src/components/ai/AOMAProgress.tsx","src/components/ai/AOMAResponse.tsx","src/components/ai/ai-sdk-chat-panel.tsx","src/components/ai/chat-input.tsx","src/components/ai/chat-panel.tsx","src/components/ai/chat-wrapper 3.tsx","src/components/ai/chat-wrapper.tsx","src/components/ai/enhanced-chat-panel 3.tsx","src/components/ai/enhanced-chat-panel.tsx","src/components/ai/enhanced-message-thread 3.tsx","src/components/ai/enhanced-message-thread.tsx","src/components/ai/index.ts","src/components/ai/message-thread 3.tsx","src/components/ai/message-thread.tsx","src/components/ai 2/ai-sdk-chat-panel.tsx","src/components/ai 2/chat-input.tsx","src/components/ai 2/chat-panel.tsx","src/components/ai 2/chat-wrapper 3.tsx","src/components/ai 2/chat-wrapper.tsx","src/components/ai 2/enhanced-chat-panel 3.tsx","src/components/ai 2/enhanced-chat-panel.tsx","src/components/ai 2/enhanced-message-thread 3.tsx","src/components/ai 2/enhanced-message-thread.tsx","src/components/ai 2/index.ts","src/components/ai 2/message-thread 3.tsx","src/components/ai 2/message-thread.tsx","src/components/ai-elements/actions.tsx","src/components/ai-elements/branch.tsx","src/components/ai-elements/code-block.tsx","src/components/ai-elements/conversation.tsx","src/components/ai-elements/file-upload.tsx","src/components/ai-elements/image.tsx","src/components/ai-elements/inline-citation.tsx","src/components/ai-elements/loader.tsx","src/components/ai-elements/message.tsx","src/components/ai-elements/prompt-input.tsx","src/components/ai-elements/reasoning.tsx","src/components/ai-elements/response.tsx","src/components/ai-elements/source.tsx","src/components/ai-elements/suggestion.tsx","src/components/ai-elements/task.tsx","src/components/ai-elements/tool.tsx","src/components/ai-elements/web-preview.tsx","src/components/ai-elements 2/actions 2.tsx","src/components/ai-elements 2/actions.tsx","src/components/ai-elements 2/branch 2.tsx","src/components/ai-elements 2/branch.tsx","src/components/ai-elements 2/code-block 2.tsx","src/components/ai-elements 2/code-block.tsx","src/components/ai-elements 2/conversation 2.tsx","src/components/ai-elements 2/conversation.tsx","src/components/ai-elements 2/image 2.tsx","src/components/ai-elements 2/image.tsx","src/components/ai-elements 2/inline-citation 2.tsx","src/components/ai-elements 2/inline-citation.tsx","src/components/ai-elements 2/loader 2.tsx","src/components/ai-elements 2/loader.tsx","src/components/ai-elements 2/message 2.tsx","src/components/ai-elements 2/message.tsx","src/components/ai-elements 2/prompt-input 2.tsx","src/components/ai-elements 2/prompt-input.tsx","src/components/ai-elements 2/reasoning 2.tsx","src/components/ai-elements 2/reasoning.tsx","src/components/ai-elements 2/response 2.tsx","src/components/ai-elements 2/response.tsx","src/components/ai-elements 2/source 2.tsx","src/components/ai-elements 2/source.tsx","src/components/ai-elements 2/suggestion 2.tsx","src/components/ai-elements 2/suggestion.tsx","src/components/ai-elements 2/task 2.tsx","src/components/ai-elements 2/task.tsx","src/components/ai-elements 2/tool 2.tsx","src/components/ai-elements 2/tool.tsx","src/components/ai-elements 2/web-preview 2.tsx","src/components/ai-elements 2/web-preview.tsx","src/components/auth/LoginForm.tsx","src/components/auth/MagicLinkLoginForm.tsx","src/components/auth/ui/LoadingButton.tsx","src/components/auth/ui/PasswordInput.tsx","src/components/auth/ui/StepIndicator.tsx","src/components/auth/ui/VerificationCodeInput.tsx","src/components/auth 2/LoginForm.tsx","src/components/auth 2/MagicLinkLoginForm 2.tsx","src/components/auth 2/MagicLinkLoginForm.tsx","src/components/auth 2/ui/LoadingButton.tsx","src/components/auth 2/ui/PasswordInput.tsx","src/components/auth 2/ui/StepIndicator.tsx","src/components/auth 2/ui/VerificationCodeInput.tsx","src/components/layout-backup 2/HUDLayout.tsx","src/components/layout-backup 2/ProfessionalLayout.tsx","src/components/layout-backup 2/SiamLayout.tsx","src/components/test-dashboard/AITestGenerator.tsx","src/components/test-dashboard/CoverageReport.tsx","src/components/test-dashboard/FirecrawlPanel.tsx","src/components/test-dashboard/FlakyTestExplorer.tsx","src/components/test-dashboard/TestAnalytics.tsx","src/components/test-dashboard/TestDashboard.tsx","src/components/test-dashboard/TestExecutionPanel.tsx","src/components/test-dashboard/TestResultsViewer.tsx","src/components/test-dashboard/TraceViewer.tsx","src/components/test-dashboard 2/AITestGenerator.tsx","src/components/test-dashboard 2/CoverageReport.tsx","src/components/test-dashboard 2/FirecrawlPanel.tsx","src/components/test-dashboard 2/FlakyTestExplorer.tsx","src/components/test-dashboard 2/TestAnalytics.tsx","src/components/test-dashboard 2/TestDashboard.tsx","src/components/test-dashboard 2/TestExecutionPanel.tsx","src/components/test-dashboard 2/TestResultsViewer.tsx","src/components/test-dashboard 2/TraceViewer.tsx","src/components/ui/AOMAKnowledgePanel.tsx","src/components/ui/AudioWaveformResponse.tsx","src/components/ui/CircularHUD.tsx","src/components/ui/ConnectionStatusIndicator.tsx","src/components/ui/CurateTab.tsx","src/components/ui/DataStream.tsx","src/components/ui/DataVisualization.tsx","src/components/ui/EnhancedCurateTab.tsx","src/components/ui/FloatingPanel.tsx","src/components/ui/HUDInterface.tsx","src/components/ui/HUDMeter.tsx","src/components/ui/IntrospectionDropdown.tsx","src/components/ui/LiveInsights.tsx","src/components/ui/RadialProgress.tsx","src/components/ui/ResponseRenderer.tsx","src/components/ui/SearchResultsResponse.tsx","src/components/ui/SiamLogo.tsx","src/components/ui/TopicVisualization.tsx","src/components/ui/WisdomLibrary.tsx","src/components/ui/alert.tsx","src/components/ui/avatar.tsx","src/components/ui/badge.tsx","src/components/ui/button.tsx","src/components/ui/calendar.tsx","src/components/ui/card.tsx","src/components/ui/carousel.tsx","src/components/ui/collapsible.tsx","src/components/ui/dialog.tsx","src/components/ui/dropdown-menu.tsx","src/components/ui/form.tsx","src/components/ui/hover-card.tsx","src/components/ui/index.ts","src/components/ui/input.tsx","src/components/ui/label.tsx","src/components/ui/layout/EnhancedProfessionalLayout.tsx","src/components/ui/layout/LeftSidebar.tsx","src/components/ui/layout/RightSidebar.tsx","src/components/ui/layout/SiamLayout.tsx","src/components/ui/pages/ChatPage.tsx","src/components/ui/popover.tsx","src/components/ui/progress.tsx","src/components/ui/scroll-area.tsx","src/components/ui/select.tsx","src/components/ui/separator.tsx","src/components/ui/sidebar.tsx","src/components/ui/skeleton.tsx","src/components/ui/slider.tsx","src/components/ui/sonner.tsx","src/components/ui/tabs.tsx","src/components/ui/textarea.tsx","src/components/ui/toast.tsx","src/components/ui/toaster.tsx","src/components/ui/tooltip.tsx","src/components/ui 2/AOMAKnowledgePanel.tsx","src/components/ui 2/AudioWaveformResponse.tsx","src/components/ui 2/CircularHUD.tsx","src/components/ui 2/ConnectionStatusIndicator.tsx","src/components/ui 2/CurateTab.tsx","src/components/ui 2/DataStream.tsx","src/components/ui 2/DataVisualization.tsx","src/components/ui 2/EnhancedCurateTab.tsx","src/components/ui 2/FloatingPanel.tsx","src/components/ui 2/HUDInterface.tsx","src/components/ui 2/HUDMeter.tsx","src/components/ui 2/LiveInsights.tsx","src/components/ui 2/RadialProgress.tsx","src/components/ui 2/ResponseRenderer.tsx","src/components/ui 2/SearchResultsResponse.tsx","src/components/ui 2/WisdomLibrary.tsx","src/components/ui 2/alert.tsx","src/components/ui 2/avatar 2.tsx","src/components/ui 2/avatar.tsx","src/components/ui 2/badge.tsx","src/components/ui 2/button.tsx","src/components/ui 2/calendar.tsx","src/components/ui 2/card 2.tsx","src/components/ui 2/card.tsx","src/components/ui 2/carousel 2.tsx","src/components/ui 2/carousel.tsx","src/components/ui 2/chat/ChatInterface.tsx","src/components/ui 2/collapsible 2.tsx","src/components/ui 2/collapsible.tsx","src/components/ui 2/dropdown-menu.tsx","src/components/ui 2/form.tsx","src/components/ui 2/hover-card.tsx","src/components/ui 2/index.ts","src/components/ui 2/input.tsx","src/components/ui 2/label.tsx","src/components/ui 2/layout/EnhancedProfessionalLayout.tsx","src/components/ui 2/layout/LeftSidebar.tsx","src/components/ui 2/layout/RightSidebar.tsx","src/components/ui 2/layout/SiamLayout.tsx","src/components/ui 2/navigation/TopNavigation.tsx","src/components/ui 2/pages/ChatPage.tsx","src/components/ui 2/popover.tsx","src/components/ui 2/progress.tsx","src/components/ui 2/scroll-area 2.tsx","src/components/ui 2/scroll-area.tsx","src/components/ui 2/select 2.tsx","src/components/ui 2/select.tsx","src/components/ui 2/separator.tsx","src/components/ui 2/sidebar.tsx","src/components/ui 2/slider.tsx","src/components/ui 2/sonner.tsx","src/components/ui 2/tabs 2.tsx","src/components/ui 2/tabs.tsx","src/components/ui 2/textarea 2.tsx","src/components/ui 2/textarea.tsx","src/components/ui 2/toast 2.tsx","src/components/ui 2/toast.tsx","src/components/ui 2/toaster 2.tsx","src/components/ui 2/toaster.tsx","src/components/ui 2/tooltip 2.tsx","src/components/ui 2/tooltip.tsx","src/config/apiKeys 2.ts","src/config/apiKeys.ts","src/config/deployment 2.ts","src/config/deployment.ts","src/config/featureFlags.ts","src/demo-mcp-integration.ts","src/deployment-check.ts","src/examples/mcp-api-usage 2.ts","src/examples/mcp-api-usage.ts","src/hooks/use-toast 2.ts","src/hooks/use-toast 3.ts","src/hooks/use-toast 4.ts","src/hooks/use-toast.ts","src/hooks/useAOMAStream.ts","src/hooks/useAuthenticationFlow 2.ts","src/hooks/useAuthenticationFlow.ts","src/hooks/useConversationManager.ts","src/hooks/useFeatureFlag 2.ts","src/hooks/useFeatureFlag.ts","src/hooks/useGPT5Responses.ts","src/hooks/useGlobalShortcuts 2.ts","src/hooks/useGlobalShortcuts.ts","src/hooks/useKeyboardShortcuts 2.ts","src/hooks/useKeyboardShortcuts.ts","src/hooks/useMCPClient 2.ts","src/hooks/useMCPClient.ts","src/hooks/useNotifications 2.tsx","src/hooks/useNotifications.tsx","src/hooks/usePanelManager 2.ts","src/hooks/usePanelManager.ts","src/hooks/usePerformance 2.ts","src/hooks/usePerformance.ts","src/hooks/useSettings 2.ts","src/hooks/useSettings.ts","src/hooks/useTopicExtraction.ts","src/index.css","src/lib/supabase.ts","src/lib/utils 2.ts","src/lib/utils.ts","src/main.tsx","src/renderer/components/settings/McpSettings.tsx","src/renderer/components 2/settings/McpSettings.tsx","src/renderer/hooks/useMcp.tsx","src/renderer/hooks 2/useMcp.tsx","src/services/MCPClient.ts","src/services/MCPClientLocal.ts","src/services/MCPClientWrapper.ts","src/services/MCPConnectionManager.ts","src/services/MCPFeatureDiscovery.ts","src/services/__tests__/elevenlabsGenfm.integration.example.ts","src/services/aomaCache 2.ts","src/services/aomaCache.ts","src/services/aomaCacheService.ts","src/services/aomaContentAggregator.ts","src/services/aomaConversationIntegration.ts","src/services/aomaMeshMcp.ts","src/services/aomaOrchestrator 2.ts","src/services/aomaOrchestrator.ts","src/services/aomaProgressStream.ts","src/services/aomaTopicIntegration.ts","src/services/bridge.ts","src/services/cognitoAuth.ts","src/services/elevenLabsMCPService.ts","src/services/elevenlabsMcpRegistration.ts","src/services/emailService 2.ts","src/services/emailService.ts","src/services/errorLogger.ts","src/services/firecrawl-integration.ts","src/services/index.ts","src/services/lambdaHealthVerifier.ts","src/services/modelConfig.ts","src/services/motiff-mcp-bridge.ts","src/services/realTimeAudioProcessor.ts","src/services/supabase-test-integration-enhanced.ts","src/services/supabase-test-integration.ts","src/services/supabaseVectorService.ts","src/services/support-chat-intelligence 2.ts","src/services/support-chat-intelligence.ts","src/services/topicExtractionService.ts","src/services/unified-test-intelligence 2.ts","src/services/unified-test-intelligence.ts","src/services/vectorStoreMigration.ts","src/services/vectorStoreService.ts","src/shared/ipc 2/mcp.ts","src/styles/cinematic-ui 2.css","src/styles/cinematic-ui.css","src/styles/glassmorphism-motiff 2.css","src/styles/glassmorphism-motiff.css","src/styles/hud-animations 2.css","src/styles/hud-animations.css","src/styles/jarvis-theme 2.css","src/styles/jarvis-theme.css","src/styles/jarvis-ui 2.css","src/styles/jarvis-ui.css","src/styles/mac-design-system 2.css","src/styles/mac-design-system.css","src/styles/motiff-glassmorphism 2.css","src/styles/motiff-glassmorphism.css","src/test-aoma-integration.ts","src/test-elevenlabs-capabilities.ts","src/test-elevenlabs-credentials.ts","src/test-lambda-health.ts","src/test-setup.ts","src/test-topic-extraction.ts","src/types/conversation.ts","src/types/mcp-preload.d 2.ts","src/types/mcp-preload.d.ts","src/utils/buildInfo 2.ts","src/utils/buildInfo.ts","src/utils/cookies 2.ts","src/utils/cookies 3.ts","src/utils/cookies 4.ts","src/utils/cookies.ts","src/utils/logger 2.ts","src/utils/logger.ts","src/utils/mailinatorHelper 2.ts","src/utils/mailinatorHelper.ts","src/utils/preloader 2.ts","src/utils/preloader.ts"]},"time":{"rules":[],"rules_parse_time":0.8808860778808594,"profiling_times":{"config_time":3.527790069580078,"core_time":6.114694833755493,"ignores_time":0.0022721290588378906,"total_time":9.645340204238892},"parsing_time":{"total_time":0.0,"per_file_time":{"mean":0.0,"std_dev":0.0},"very_slow_stats":{"time_ratio":0.0,"count_ratio":0.0},"very_slow_files":[]},"scanning_time":{"total_time":32.83674168586731,"per_file_time":{"mean":0.027827747191412986,"std_dev":0.006260787200011069},"very_slow_stats":{"time_ratio":0.0,"count_ratio":0.0},"very_slow_files":[]},"matching_time":{"total_time":0.0,"per_file_and_rule_time":{"mean":0.0,"std_dev":0.0},"very_slow_stats":{"time_ratio":0.0,"count_ratio":0.0},"very_slow_rules_on_files":[]},"tainting_time":{"total_time":0.0,"per_def_and_rule_time":{"mean":0.0,"std_dev":0.0},"very_slow_stats":{"time_ratio":0.0,"count_ratio":0.0},"very_slow_rules_on_defs":[]},"fixpoint_timeouts":[],"prefiltering":{"project_level_time":0.0,"file_level_time":0.0,"rules_with_project_prefilters_ratio":0.0,"rules_with_file_prefilters_ratio":0.9861690450054885,"rules_selected_ratio":0.0323210147578973,"rules_matched_ratio":0.0323210147578973},"targets":[],"total_bytes":0,"max_memory_bytes":1097299520},"engine_requested":"OSS","skipped_rules":[]}
+{
+  "version": "1.133.0",
+  "results": [
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/components/ui 2/CurateTab.tsx",
+      "start": { "line": 147, "col": 23, "offset": 3660 },
+      "end": { "line": 147, "col": 54, "offset": 3691 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/components/ui 2/FloatingPanel.tsx",
+      "start": { "line": 188, "col": 19, "offset": 5122 },
+      "end": { "line": 188, "col": 67, "offset": 5170 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml",
+      "path": "src/components/ui 2/SearchResultsResponse.tsx",
+      "start": { "line": 151, "col": 50, "offset": 3963 },
+      "end": { "line": 151, "col": 74, "offset": 3987 },
+      "extra": {
+        "message": "Detection of dangerouslySetInnerHTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use dangerouslySetInnerHTML, consider using a sanitization library such as DOMPurify to sanitize your HTML.",
+        "metadata": {
+          "cwe": [
+            "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+          ],
+          "owasp": ["A07:2017 - Cross-Site Scripting (XSS)", "A03:2021 - Injection"],
+          "references": [
+            "https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html"
+          ],
+          "category": "security",
+          "confidence": "MEDIUM",
+          "technology": ["react"],
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": ["vuln"],
+          "likelihood": "MEDIUM",
+          "impact": "MEDIUM",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Cross-Site-Scripting (XSS)"],
+          "source": "https://semgrep.dev/r/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml",
+          "shortlink": "https://sg.run/rAx6"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml",
+      "path": "src/components/ui 2/SearchResultsResponse.tsx",
+      "start": { "line": 192, "col": 46, "offset": 5426 },
+      "end": { "line": 192, "col": 72, "offset": 5452 },
+      "extra": {
+        "message": "Detection of dangerouslySetInnerHTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use dangerouslySetInnerHTML, consider using a sanitization library such as DOMPurify to sanitize your HTML.",
+        "metadata": {
+          "cwe": [
+            "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+          ],
+          "owasp": ["A07:2017 - Cross-Site Scripting (XSS)", "A03:2021 - Injection"],
+          "references": [
+            "https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html"
+          ],
+          "category": "security",
+          "confidence": "MEDIUM",
+          "technology": ["react"],
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": ["vuln"],
+          "likelihood": "MEDIUM",
+          "impact": "MEDIUM",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Cross-Site-Scripting (XSS)"],
+          "source": "https://semgrep.dev/r/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml",
+          "shortlink": "https://sg.run/rAx6"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/components/ui/CurateTab.tsx",
+      "start": { "line": 159, "col": 23, "offset": 4009 },
+      "end": { "line": 159, "col": 54, "offset": 4040 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/components/ui/FloatingPanel.tsx",
+      "start": { "line": 188, "col": 19, "offset": 5122 },
+      "end": { "line": 188, "col": 67, "offset": 5170 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml",
+      "path": "src/components/ui/SearchResultsResponse.tsx",
+      "start": { "line": 151, "col": 50, "offset": 3963 },
+      "end": { "line": 151, "col": 74, "offset": 3987 },
+      "extra": {
+        "message": "Detection of dangerouslySetInnerHTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use dangerouslySetInnerHTML, consider using a sanitization library such as DOMPurify to sanitize your HTML.",
+        "metadata": {
+          "cwe": [
+            "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+          ],
+          "owasp": ["A07:2017 - Cross-Site Scripting (XSS)", "A03:2021 - Injection"],
+          "references": [
+            "https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html"
+          ],
+          "category": "security",
+          "confidence": "MEDIUM",
+          "technology": ["react"],
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": ["vuln"],
+          "likelihood": "MEDIUM",
+          "impact": "MEDIUM",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Cross-Site-Scripting (XSS)"],
+          "source": "https://semgrep.dev/r/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml",
+          "shortlink": "https://sg.run/rAx6"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml",
+      "path": "src/components/ui/SearchResultsResponse.tsx",
+      "start": { "line": 192, "col": 46, "offset": 5426 },
+      "end": { "line": 192, "col": 72, "offset": 5452 },
+      "extra": {
+        "message": "Detection of dangerouslySetInnerHTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use dangerouslySetInnerHTML, consider using a sanitization library such as DOMPurify to sanitize your HTML.",
+        "metadata": {
+          "cwe": [
+            "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+          ],
+          "owasp": ["A07:2017 - Cross-Site Scripting (XSS)", "A03:2021 - Injection"],
+          "references": [
+            "https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html"
+          ],
+          "category": "security",
+          "confidence": "MEDIUM",
+          "technology": ["react"],
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": ["vuln"],
+          "likelihood": "MEDIUM",
+          "impact": "MEDIUM",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Cross-Site-Scripting (XSS)"],
+          "source": "https://semgrep.dev/r/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml",
+          "shortlink": "https://sg.run/rAx6"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/examples/mcp-api-usage 2.ts",
+      "start": { "line": 130, "col": 17, "offset": 3432 },
+      "end": { "line": 130, "col": 44, "offset": 3459 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/examples/mcp-api-usage 2.ts",
+      "start": { "line": 136, "col": 21, "offset": 3675 },
+      "end": { "line": 136, "col": 54, "offset": 3708 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/examples/mcp-api-usage.ts",
+      "start": { "line": 130, "col": 17, "offset": 3432 },
+      "end": { "line": 130, "col": 44, "offset": 3459 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/examples/mcp-api-usage.ts",
+      "start": { "line": 136, "col": 21, "offset": 3675 },
+      "end": { "line": 136, "col": 54, "offset": 3708 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/hooks/useGlobalShortcuts 2.ts",
+      "start": { "line": 176, "col": 21, "offset": 4979 },
+      "end": { "line": 176, "col": 69, "offset": 5027 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/hooks/useGlobalShortcuts 2.ts",
+      "start": { "line": 184, "col": 29, "offset": 5305 },
+      "end": { "line": 184, "col": 71, "offset": 5347 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/hooks/useGlobalShortcuts 2.ts",
+      "start": { "line": 225, "col": 23, "offset": 6496 },
+      "end": { "line": 225, "col": 72, "offset": 6545 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/hooks/useGlobalShortcuts 2.ts",
+      "start": { "line": 244, "col": 23, "offset": 7059 },
+      "end": { "line": 244, "col": 65, "offset": 7101 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/hooks/useGlobalShortcuts.ts",
+      "start": { "line": 176, "col": 21, "offset": 4979 },
+      "end": { "line": 176, "col": 69, "offset": 5027 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/hooks/useGlobalShortcuts.ts",
+      "start": { "line": 184, "col": 29, "offset": 5305 },
+      "end": { "line": 184, "col": 71, "offset": 5347 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/hooks/useGlobalShortcuts.ts",
+      "start": { "line": 225, "col": 23, "offset": 6496 },
+      "end": { "line": 225, "col": 72, "offset": 6545 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/hooks/useGlobalShortcuts.ts",
+      "start": { "line": 244, "col": 23, "offset": 7059 },
+      "end": { "line": 244, "col": 65, "offset": 7101 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/MCPClient.ts",
+      "start": { "line": 148, "col": 19, "offset": 3487 },
+      "end": { "line": 148, "col": 53, "offset": 3521 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/MCPClient.ts",
+      "start": { "line": 165, "col": 21, "offset": 3896 },
+      "end": { "line": 165, "col": 54, "offset": 3929 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/MCPClientLocal.ts",
+      "start": { "line": 107, "col": 21, "offset": 2972 },
+      "end": { "line": 107, "col": 51, "offset": 3002 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/MCPClientWrapper.ts",
+      "start": { "line": 132, "col": 9, "offset": 3516 },
+      "end": { "line": 132, "col": 77, "offset": 3584 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/aomaContentAggregator.ts",
+      "start": { "line": 203, "col": 21, "offset": 4794 },
+      "end": { "line": 203, "col": 60, "offset": 4833 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/aomaMeshMcp.ts",
+      "start": { "line": 210, "col": 21, "offset": 5528 },
+      "end": { "line": 210, "col": 55, "offset": 5562 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/aomaOrchestrator 2.ts",
+      "start": { "line": 371, "col": 21, "offset": 10003 },
+      "end": { "line": 371, "col": 50, "offset": 10032 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/aomaOrchestrator.ts",
+      "start": { "line": 485, "col": 19, "offset": 14345 },
+      "end": { "line": 485, "col": 54, "offset": 14380 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/aomaOrchestrator.ts",
+      "start": { "line": 597, "col": 21, "offset": 19127 },
+      "end": { "line": 597, "col": 62, "offset": 19168 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/errorLogger.ts",
+      "start": { "line": 135, "col": 7, "offset": 3623 },
+      "end": { "line": 135, "col": 63, "offset": 3679 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp",
+      "path": "src/services/firecrawl-integration.ts",
+      "start": { "line": 259, "col": 37, "offset": 6982 },
+      "end": { "line": 259, "col": 61, "offset": 7006 },
+      "extra": {
+        "message": "RegExp() called with a `keyword` function argument, this might allow an attacker to cause a Regular Expression Denial-of-Service (ReDoS) within your application as RegExP blocks the main thread. For this reason, it is recommended to use hardcoded regexes instead. If your regex is run on user-controlled input, consider performing input validation or use a regex checking/sanitization library such as https://www.npmjs.com/package/recheck to verify that the regex does not appear vulnerable to ReDoS.",
+        "metadata": {
+          "owasp": ["A05:2021 - Security Misconfiguration", "A06:2017 - Security Misconfiguration"],
+          "cwe": ["CWE-1333: Inefficient Regular Expression Complexity"],
+          "references": [
+            "https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS"
+          ],
+          "source-rule-url": "https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-non-literal-regexp.js",
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["vuln"],
+          "likelihood": "MEDIUM",
+          "impact": "MEDIUM",
+          "confidence": "LOW",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Denial-of-Service (DoS)"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp",
+          "shortlink": "https://sg.run/gr65"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/supabaseVectorService.ts",
+      "start": { "line": 144, "col": 25, "offset": 3662 },
+      "end": { "line": 144, "col": 69, "offset": 3706 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/vectorStoreMigration.ts",
+      "start": { "line": 95, "col": 21, "offset": 2898 },
+      "end": { "line": 95, "col": 56, "offset": 2933 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+      "path": "src/services/vectorStoreMigration.ts",
+      "start": { "line": 134, "col": 21, "offset": 3948 },
+      "end": { "line": 134, "col": 59, "offset": 3986 },
+      "extra": {
+        "message": "Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects a format specifier in the string, it will forge the log message. Try to use constant values for the format string.",
+        "metadata": {
+          "cwe": ["CWE-134: Use of Externally-Controlled Format String"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "category": "security",
+          "technology": ["javascript"],
+          "subcategory": ["audit"],
+          "likelihood": "MEDIUM",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "references": ["https://cwe.mitre.org/data/definitions/134.html"],
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": ["Improper Validation"],
+          "source": "https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+          "shortlink": "https://sg.run/7Y5R"
+        },
+        "severity": "INFO",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 3,
+      "level": "warn",
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "path": "src/components/SettingsPanel 2.tsx",
+            "start": { "line": 789, "col": 14, "offset": 0 },
+            "end": { "line": 789, "col": 32, "offset": 18 }
+          }
+        ]
+      ],
+      "message": "Syntax error at line src/components/SettingsPanel 2.tsx:789:\n `& Privacy Settings` was unexpected",
+      "path": "src/components/SettingsPanel 2.tsx",
+      "spans": [
+        {
+          "file": "src/components/SettingsPanel 2.tsx",
+          "start": { "line": 789, "col": 14, "offset": 0 },
+          "end": { "line": 789, "col": 32, "offset": 18 }
+        }
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "path": "src/components/SettingsPanel.tsx",
+            "start": { "line": 789, "col": 14, "offset": 0 },
+            "end": { "line": 789, "col": 32, "offset": 18 }
+          }
+        ]
+      ],
+      "message": "Syntax error at line src/components/SettingsPanel.tsx:789:\n `& Privacy Settings` was unexpected",
+      "path": "src/components/SettingsPanel.tsx",
+      "spans": [
+        {
+          "file": "src/components/SettingsPanel.tsx",
+          "start": { "line": 789, "col": 14, "offset": 0 },
+          "end": { "line": 789, "col": 32, "offset": 18 }
+        }
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "path": "src/components/auth 2/MagicLinkLoginForm 2.tsx",
+            "start": { "line": 282, "col": 32, "offset": 0 },
+            "end": { "line": 282, "col": 41, "offset": 9 }
+          }
+        ]
+      ],
+      "message": "Syntax error at line src/components/auth 2/MagicLinkLoginForm 2.tsx:282:\n `& Sign In` was unexpected",
+      "path": "src/components/auth 2/MagicLinkLoginForm 2.tsx",
+      "spans": [
+        {
+          "file": "src/components/auth 2/MagicLinkLoginForm 2.tsx",
+          "start": { "line": 282, "col": 32, "offset": 0 },
+          "end": { "line": 282, "col": 41, "offset": 9 }
+        }
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "path": "src/components/auth 2/MagicLinkLoginForm.tsx",
+            "start": { "line": 302, "col": 28, "offset": 0 },
+            "end": { "line": 302, "col": 37, "offset": 9 }
+          }
+        ]
+      ],
+      "message": "Syntax error at line src/components/auth 2/MagicLinkLoginForm.tsx:302:\n `& Sign In` was unexpected",
+      "path": "src/components/auth 2/MagicLinkLoginForm.tsx",
+      "spans": [
+        {
+          "file": "src/components/auth 2/MagicLinkLoginForm.tsx",
+          "start": { "line": 302, "col": 28, "offset": 0 },
+          "end": { "line": 302, "col": 37, "offset": 9 }
+        }
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "path": "src/components/auth/LoginForm.tsx",
+            "start": { "line": 104, "col": 37, "offset": 0 },
+            "end": { "line": 104, "col": 55, "offset": 18 }
+          }
+        ]
+      ],
+      "message": "Syntax error at line src/components/auth/LoginForm.tsx:104:\n `& Augmented Memory` was unexpected",
+      "path": "src/components/auth/LoginForm.tsx",
+      "spans": [
+        {
+          "file": "src/components/auth/LoginForm.tsx",
+          "start": { "line": 104, "col": 37, "offset": 0 },
+          "end": { "line": 104, "col": 55, "offset": 18 }
+        }
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "path": "src/components/auth/MagicLinkLoginForm.tsx",
+            "start": { "line": 400, "col": 28, "offset": 0 },
+            "end": { "line": 400, "col": 37, "offset": 9 }
+          }
+        ]
+      ],
+      "message": "Syntax error at line src/components/auth/MagicLinkLoginForm.tsx:400:\n `& Sign In` was unexpected",
+      "path": "src/components/auth/MagicLinkLoginForm.tsx",
+      "spans": [
+        {
+          "file": "src/components/auth/MagicLinkLoginForm.tsx",
+          "start": { "line": 400, "col": 28, "offset": 0 },
+          "end": { "line": 400, "col": 37, "offset": 9 }
+        }
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "path": "src/components/ui 2/pages/ChatPage.tsx",
+            "start": { "line": 1017, "col": 35, "offset": 0 },
+            "end": { "line": 1017, "col": 48, "offset": 13 }
+          }
+        ]
+      ],
+      "message": "Syntax error at line src/components/ui 2/pages/ChatPage.tsx:1017:\n `& Diagnostics` was unexpected",
+      "path": "src/components/ui 2/pages/ChatPage.tsx",
+      "spans": [
+        {
+          "file": "src/components/ui 2/pages/ChatPage.tsx",
+          "start": { "line": 1017, "col": 35, "offset": 0 },
+          "end": { "line": 1017, "col": 48, "offset": 13 }
+        }
+      ]
+    }
+  ],
+  "paths": {
+    "scanned": [
+      "src/App.css",
+      "src/ComponentPlayground.tsx",
+      "src/TestApp.tsx",
+      "src/app-backup/api 3/aoma-mcp/route.ts",
+      "src/app-backup/api 3/auth/magic-link/route.ts",
+      "src/app-backup/api 3/health/route.ts",
+      "src/app-backup/api 3/rpc/route.ts",
+      "src/app-backup/api 3/upload/route.ts",
+      "src/app-backup/auth-demo 3/page.tsx",
+      "src/app-backup/chat 3/page.tsx",
+      "src/app-backup/globals 2.css",
+      "src/app-backup/globals 3.css",
+      "src/app-backup/globals 4.css",
+      "src/app-backup/globals.css",
+      "src/app-backup/layout 2.tsx",
+      "src/app-backup/layout 3.tsx",
+      "src/app-backup/layout 4.tsx",
+      "src/app-backup/layout 5.tsx",
+      "src/app-backup/layout.tsx",
+      "src/app-backup/page 2.tsx",
+      "src/app-backup/page 3.tsx",
+      "src/app-backup/page 4.tsx",
+      "src/app-backup/page.tsx",
+      "src/app-backup/test-login 3/page.tsx",
+      "src/assets/images 2/README.md",
+      "src/assets/react 2.svg",
+      "src/assets/react.svg",
+      "src/components/AIInsightsDashboard 2.tsx",
+      "src/components/AIInsightsDashboard.tsx",
+      "src/components/AudioWaveform 2.tsx",
+      "src/components/AudioWaveform.tsx",
+      "src/components/ConversationalAI 2.tsx",
+      "src/components/ConversationalAI.tsx",
+      "src/components/DocumentUpload 3.tsx",
+      "src/components/DocumentUpload 4.tsx",
+      "src/components/DocumentUpload 5.tsx",
+      "src/components/DocumentUpload.tsx",
+      "src/components/ErrorBoundary 2.tsx",
+      "src/components/ErrorBoundary.tsx",
+      "src/components/ErrorTest 2.tsx",
+      "src/components/ErrorTest.tsx",
+      "src/components/HUDLayout 2.tsx",
+      "src/components/HUDLayout.tsx",
+      "src/components/LiveTranscription 2.tsx",
+      "src/components/LiveTranscription.tsx",
+      "src/components/LoadingStates 2.tsx",
+      "src/components/LoadingStates.tsx",
+      "src/components/MACFusion 2.tsx",
+      "src/components/MACFusion.tsx",
+      "src/components/ProfessionalLayout 2.tsx",
+      "src/components/ProfessionalLayout.tsx",
+      "src/components/SettingsPanel 2.tsx",
+      "src/components/SettingsPanel.tsx",
+      "src/components/SkeletonLoader 2.tsx",
+      "src/components/SkeletonLoader.tsx",
+      "src/components/SystemHealthMonitor 2.tsx",
+      "src/components/SystemHealthMonitor.tsx",
+      "src/components/TopicCloud 2.tsx",
+      "src/components/TopicCloud.tsx",
+      "src/components/ai/AOMAProgress.tsx",
+      "src/components/ai/AOMAResponse.tsx",
+      "src/components/ai/ai-sdk-chat-panel.tsx",
+      "src/components/ai/chat-input.tsx",
+      "src/components/ai/chat-panel.tsx",
+      "src/components/ai/chat-wrapper 3.tsx",
+      "src/components/ai/chat-wrapper.tsx",
+      "src/components/ai/enhanced-chat-panel 3.tsx",
+      "src/components/ai/enhanced-chat-panel.tsx",
+      "src/components/ai/enhanced-message-thread 3.tsx",
+      "src/components/ai/enhanced-message-thread.tsx",
+      "src/components/ai/index.ts",
+      "src/components/ai/message-thread 3.tsx",
+      "src/components/ai/message-thread.tsx",
+      "src/components/ai 2/ai-sdk-chat-panel.tsx",
+      "src/components/ai 2/chat-input.tsx",
+      "src/components/ai 2/chat-panel.tsx",
+      "src/components/ai 2/chat-wrapper 3.tsx",
+      "src/components/ai 2/chat-wrapper.tsx",
+      "src/components/ai 2/enhanced-chat-panel 3.tsx",
+      "src/components/ai 2/enhanced-chat-panel.tsx",
+      "src/components/ai 2/enhanced-message-thread 3.tsx",
+      "src/components/ai 2/enhanced-message-thread.tsx",
+      "src/components/ai 2/index.ts",
+      "src/components/ai 2/message-thread 3.tsx",
+      "src/components/ai 2/message-thread.tsx",
+      "src/components/ai-elements/actions.tsx",
+      "src/components/ai-elements/branch.tsx",
+      "src/components/ai-elements/code-block.tsx",
+      "src/components/ai-elements/conversation.tsx",
+      "src/components/ai-elements/file-upload.tsx",
+      "src/components/ai-elements/image.tsx",
+      "src/components/ai-elements/inline-citation.tsx",
+      "src/components/ai-elements/loader.tsx",
+      "src/components/ai-elements/message.tsx",
+      "src/components/ai-elements/prompt-input.tsx",
+      "src/components/ai-elements/reasoning.tsx",
+      "src/components/ai-elements/response.tsx",
+      "src/components/ai-elements/source.tsx",
+      "src/components/ai-elements/suggestion.tsx",
+      "src/components/ai-elements/task.tsx",
+      "src/components/ai-elements/tool.tsx",
+      "src/components/ai-elements/web-preview.tsx",
+      "src/components/ai-elements 2/actions 2.tsx",
+      "src/components/ai-elements 2/actions.tsx",
+      "src/components/ai-elements 2/branch 2.tsx",
+      "src/components/ai-elements 2/branch.tsx",
+      "src/components/ai-elements 2/code-block 2.tsx",
+      "src/components/ai-elements 2/code-block.tsx",
+      "src/components/ai-elements 2/conversation 2.tsx",
+      "src/components/ai-elements 2/conversation.tsx",
+      "src/components/ai-elements 2/image 2.tsx",
+      "src/components/ai-elements 2/image.tsx",
+      "src/components/ai-elements 2/inline-citation 2.tsx",
+      "src/components/ai-elements 2/inline-citation.tsx",
+      "src/components/ai-elements 2/loader 2.tsx",
+      "src/components/ai-elements 2/loader.tsx",
+      "src/components/ai-elements 2/message 2.tsx",
+      "src/components/ai-elements 2/message.tsx",
+      "src/components/ai-elements 2/prompt-input 2.tsx",
+      "src/components/ai-elements 2/prompt-input.tsx",
+      "src/components/ai-elements 2/reasoning 2.tsx",
+      "src/components/ai-elements 2/reasoning.tsx",
+      "src/components/ai-elements 2/response 2.tsx",
+      "src/components/ai-elements 2/response.tsx",
+      "src/components/ai-elements 2/source 2.tsx",
+      "src/components/ai-elements 2/source.tsx",
+      "src/components/ai-elements 2/suggestion 2.tsx",
+      "src/components/ai-elements 2/suggestion.tsx",
+      "src/components/ai-elements 2/task 2.tsx",
+      "src/components/ai-elements 2/task.tsx",
+      "src/components/ai-elements 2/tool 2.tsx",
+      "src/components/ai-elements 2/tool.tsx",
+      "src/components/ai-elements 2/web-preview 2.tsx",
+      "src/components/ai-elements 2/web-preview.tsx",
+      "src/components/auth/LoginForm.tsx",
+      "src/components/auth/MagicLinkLoginForm.tsx",
+      "src/components/auth/ui/LoadingButton.tsx",
+      "src/components/auth/ui/PasswordInput.tsx",
+      "src/components/auth/ui/StepIndicator.tsx",
+      "src/components/auth/ui/VerificationCodeInput.tsx",
+      "src/components/auth 2/LoginForm.tsx",
+      "src/components/auth 2/MagicLinkLoginForm 2.tsx",
+      "src/components/auth 2/MagicLinkLoginForm.tsx",
+      "src/components/auth 2/ui/LoadingButton.tsx",
+      "src/components/auth 2/ui/PasswordInput.tsx",
+      "src/components/auth 2/ui/StepIndicator.tsx",
+      "src/components/auth 2/ui/VerificationCodeInput.tsx",
+      "src/components/layout-backup 2/HUDLayout.tsx",
+      "src/components/layout-backup 2/ProfessionalLayout.tsx",
+      "src/components/layout-backup 2/SiamLayout.tsx",
+      "src/components/test-dashboard/AITestGenerator.tsx",
+      "src/components/test-dashboard/CoverageReport.tsx",
+      "src/components/test-dashboard/FirecrawlPanel.tsx",
+      "src/components/test-dashboard/FlakyTestExplorer.tsx",
+      "src/components/test-dashboard/TestAnalytics.tsx",
+      "src/components/test-dashboard/TestDashboard.tsx",
+      "src/components/test-dashboard/TestExecutionPanel.tsx",
+      "src/components/test-dashboard/TestResultsViewer.tsx",
+      "src/components/test-dashboard/TraceViewer.tsx",
+      "src/components/test-dashboard 2/AITestGenerator.tsx",
+      "src/components/test-dashboard 2/CoverageReport.tsx",
+      "src/components/test-dashboard 2/FirecrawlPanel.tsx",
+      "src/components/test-dashboard 2/FlakyTestExplorer.tsx",
+      "src/components/test-dashboard 2/TestAnalytics.tsx",
+      "src/components/test-dashboard 2/TestDashboard.tsx",
+      "src/components/test-dashboard 2/TestExecutionPanel.tsx",
+      "src/components/test-dashboard 2/TestResultsViewer.tsx",
+      "src/components/test-dashboard 2/TraceViewer.tsx",
+      "src/components/ui/AOMAKnowledgePanel.tsx",
+      "src/components/ui/AudioWaveformResponse.tsx",
+      "src/components/ui/CircularHUD.tsx",
+      "src/components/ui/ConnectionStatusIndicator.tsx",
+      "src/components/ui/CurateTab.tsx",
+      "src/components/ui/DataStream.tsx",
+      "src/components/ui/DataVisualization.tsx",
+      "src/components/ui/EnhancedCurateTab.tsx",
+      "src/components/ui/FloatingPanel.tsx",
+      "src/components/ui/HUDInterface.tsx",
+      "src/components/ui/HUDMeter.tsx",
+      "src/components/ui/IntrospectionDropdown.tsx",
+      "src/components/ui/LiveInsights.tsx",
+      "src/components/ui/RadialProgress.tsx",
+      "src/components/ui/ResponseRenderer.tsx",
+      "src/components/ui/SearchResultsResponse.tsx",
+      "src/components/ui/SiamLogo.tsx",
+      "src/components/ui/TopicVisualization.tsx",
+      "src/components/ui/WisdomLibrary.tsx",
+      "src/components/ui/alert.tsx",
+      "src/components/ui/avatar.tsx",
+      "src/components/ui/badge.tsx",
+      "src/components/ui/button.tsx",
+      "src/components/ui/calendar.tsx",
+      "src/components/ui/card.tsx",
+      "src/components/ui/carousel.tsx",
+      "src/components/ui/collapsible.tsx",
+      "src/components/ui/dialog.tsx",
+      "src/components/ui/dropdown-menu.tsx",
+      "src/components/ui/form.tsx",
+      "src/components/ui/hover-card.tsx",
+      "src/components/ui/index.ts",
+      "src/components/ui/input.tsx",
+      "src/components/ui/label.tsx",
+      "src/components/ui/layout/EnhancedProfessionalLayout.tsx",
+      "src/components/ui/layout/LeftSidebar.tsx",
+      "src/components/ui/layout/RightSidebar.tsx",
+      "src/components/ui/layout/SiamLayout.tsx",
+      "src/components/ui/pages/ChatPage.tsx",
+      "src/components/ui/popover.tsx",
+      "src/components/ui/progress.tsx",
+      "src/components/ui/scroll-area.tsx",
+      "src/components/ui/select.tsx",
+      "src/components/ui/separator.tsx",
+      "src/components/ui/sidebar.tsx",
+      "src/components/ui/skeleton.tsx",
+      "src/components/ui/slider.tsx",
+      "src/components/ui/sonner.tsx",
+      "src/components/ui/tabs.tsx",
+      "src/components/ui/textarea.tsx",
+      "src/components/ui/toast.tsx",
+      "src/components/ui/toaster.tsx",
+      "src/components/ui/tooltip.tsx",
+      "src/components/ui 2/AOMAKnowledgePanel.tsx",
+      "src/components/ui 2/AudioWaveformResponse.tsx",
+      "src/components/ui 2/CircularHUD.tsx",
+      "src/components/ui 2/ConnectionStatusIndicator.tsx",
+      "src/components/ui 2/CurateTab.tsx",
+      "src/components/ui 2/DataStream.tsx",
+      "src/components/ui 2/DataVisualization.tsx",
+      "src/components/ui 2/EnhancedCurateTab.tsx",
+      "src/components/ui 2/FloatingPanel.tsx",
+      "src/components/ui 2/HUDInterface.tsx",
+      "src/components/ui 2/HUDMeter.tsx",
+      "src/components/ui 2/LiveInsights.tsx",
+      "src/components/ui 2/RadialProgress.tsx",
+      "src/components/ui 2/ResponseRenderer.tsx",
+      "src/components/ui 2/SearchResultsResponse.tsx",
+      "src/components/ui 2/WisdomLibrary.tsx",
+      "src/components/ui 2/alert.tsx",
+      "src/components/ui 2/avatar 2.tsx",
+      "src/components/ui 2/avatar.tsx",
+      "src/components/ui 2/badge.tsx",
+      "src/components/ui 2/button.tsx",
+      "src/components/ui 2/calendar.tsx",
+      "src/components/ui 2/card 2.tsx",
+      "src/components/ui 2/card.tsx",
+      "src/components/ui 2/carousel 2.tsx",
+      "src/components/ui 2/carousel.tsx",
+      "src/components/ui 2/chat/ChatInterface.tsx",
+      "src/components/ui 2/collapsible 2.tsx",
+      "src/components/ui 2/collapsible.tsx",
+      "src/components/ui 2/dropdown-menu.tsx",
+      "src/components/ui 2/form.tsx",
+      "src/components/ui 2/hover-card.tsx",
+      "src/components/ui 2/index.ts",
+      "src/components/ui 2/input.tsx",
+      "src/components/ui 2/label.tsx",
+      "src/components/ui 2/layout/EnhancedProfessionalLayout.tsx",
+      "src/components/ui 2/layout/LeftSidebar.tsx",
+      "src/components/ui 2/layout/RightSidebar.tsx",
+      "src/components/ui 2/layout/SiamLayout.tsx",
+      "src/components/ui 2/navigation/TopNavigation.tsx",
+      "src/components/ui 2/pages/ChatPage.tsx",
+      "src/components/ui 2/popover.tsx",
+      "src/components/ui 2/progress.tsx",
+      "src/components/ui 2/scroll-area 2.tsx",
+      "src/components/ui 2/scroll-area.tsx",
+      "src/components/ui 2/select 2.tsx",
+      "src/components/ui 2/select.tsx",
+      "src/components/ui 2/separator.tsx",
+      "src/components/ui 2/sidebar.tsx",
+      "src/components/ui 2/slider.tsx",
+      "src/components/ui 2/sonner.tsx",
+      "src/components/ui 2/tabs 2.tsx",
+      "src/components/ui 2/tabs.tsx",
+      "src/components/ui 2/textarea 2.tsx",
+      "src/components/ui 2/textarea.tsx",
+      "src/components/ui 2/toast 2.tsx",
+      "src/components/ui 2/toast.tsx",
+      "src/components/ui 2/toaster 2.tsx",
+      "src/components/ui 2/toaster.tsx",
+      "src/components/ui 2/tooltip 2.tsx",
+      "src/components/ui 2/tooltip.tsx",
+      "src/config/apiKeys 2.ts",
+      "src/config/apiKeys.ts",
+      "src/config/deployment 2.ts",
+      "src/config/deployment.ts",
+      "src/config/featureFlags.ts",
+      "src/demo-mcp-integration.ts",
+      "src/deployment-check.ts",
+      "src/examples/mcp-api-usage 2.ts",
+      "src/examples/mcp-api-usage.ts",
+      "src/hooks/use-toast 2.ts",
+      "src/hooks/use-toast 3.ts",
+      "src/hooks/use-toast 4.ts",
+      "src/hooks/use-toast.ts",
+      "src/hooks/useAOMAStream.ts",
+      "src/hooks/useAuthenticationFlow 2.ts",
+      "src/hooks/useAuthenticationFlow.ts",
+      "src/hooks/useConversationManager.ts",
+      "src/hooks/useFeatureFlag 2.ts",
+      "src/hooks/useFeatureFlag.ts",
+      "src/hooks/useGPT5Responses.ts",
+      "src/hooks/useGlobalShortcuts 2.ts",
+      "src/hooks/useGlobalShortcuts.ts",
+      "src/hooks/useKeyboardShortcuts 2.ts",
+      "src/hooks/useKeyboardShortcuts.ts",
+      "src/hooks/useMCPClient 2.ts",
+      "src/hooks/useMCPClient.ts",
+      "src/hooks/useNotifications 2.tsx",
+      "src/hooks/useNotifications.tsx",
+      "src/hooks/usePanelManager 2.ts",
+      "src/hooks/usePanelManager.ts",
+      "src/hooks/usePerformance 2.ts",
+      "src/hooks/usePerformance.ts",
+      "src/hooks/useSettings 2.ts",
+      "src/hooks/useSettings.ts",
+      "src/hooks/useTopicExtraction.ts",
+      "src/index.css",
+      "src/lib/supabase.ts",
+      "src/lib/utils 2.ts",
+      "src/lib/utils.ts",
+      "src/main.tsx",
+      "src/renderer/components/settings/McpSettings.tsx",
+      "src/renderer/components 2/settings/McpSettings.tsx",
+      "src/renderer/hooks/useMcp.tsx",
+      "src/renderer/hooks 2/useMcp.tsx",
+      "src/services/MCPClient.ts",
+      "src/services/MCPClientLocal.ts",
+      "src/services/MCPClientWrapper.ts",
+      "src/services/MCPConnectionManager.ts",
+      "src/services/MCPFeatureDiscovery.ts",
+      "src/services/__tests__/elevenlabsGenfm.integration.example.ts",
+      "src/services/aomaCache 2.ts",
+      "src/services/aomaCache.ts",
+      "src/services/aomaCacheService.ts",
+      "src/services/aomaContentAggregator.ts",
+      "src/services/aomaConversationIntegration.ts",
+      "src/services/aomaMeshMcp.ts",
+      "src/services/aomaOrchestrator 2.ts",
+      "src/services/aomaOrchestrator.ts",
+      "src/services/aomaProgressStream.ts",
+      "src/services/aomaTopicIntegration.ts",
+      "src/services/bridge.ts",
+      "src/services/cognitoAuth.ts",
+      "src/services/elevenLabsMCPService.ts",
+      "src/services/elevenlabsMcpRegistration.ts",
+      "src/services/emailService 2.ts",
+      "src/services/emailService.ts",
+      "src/services/errorLogger.ts",
+      "src/services/firecrawl-integration.ts",
+      "src/services/index.ts",
+      "src/services/lambdaHealthVerifier.ts",
+      "src/services/modelConfig.ts",
+      "src/services/motiff-mcp-bridge.ts",
+      "src/services/realTimeAudioProcessor.ts",
+      "src/services/supabase-test-integration-enhanced.ts",
+      "src/services/supabase-test-integration.ts",
+      "src/services/supabaseVectorService.ts",
+      "src/services/support-chat-intelligence 2.ts",
+      "src/services/support-chat-intelligence.ts",
+      "src/services/topicExtractionService.ts",
+      "src/services/unified-test-intelligence 2.ts",
+      "src/services/unified-test-intelligence.ts",
+      "src/services/vectorStoreMigration.ts",
+      "src/services/vectorStoreService.ts",
+      "src/shared/ipc 2/mcp.ts",
+      "src/styles/cinematic-ui 2.css",
+      "src/styles/cinematic-ui.css",
+      "src/styles/glassmorphism-motiff 2.css",
+      "src/styles/glassmorphism-motiff.css",
+      "src/styles/hud-animations 2.css",
+      "src/styles/hud-animations.css",
+      "src/styles/jarvis-theme 2.css",
+      "src/styles/jarvis-theme.css",
+      "src/styles/jarvis-ui 2.css",
+      "src/styles/jarvis-ui.css",
+      "src/styles/mac-design-system 2.css",
+      "src/styles/mac-design-system.css",
+      "src/styles/motiff-glassmorphism 2.css",
+      "src/styles/motiff-glassmorphism.css",
+      "src/test-aoma-integration.ts",
+      "src/test-elevenlabs-capabilities.ts",
+      "src/test-elevenlabs-credentials.ts",
+      "src/test-lambda-health.ts",
+      "src/test-setup.ts",
+      "src/test-topic-extraction.ts",
+      "src/types/conversation.ts",
+      "src/types/mcp-preload.d 2.ts",
+      "src/types/mcp-preload.d.ts",
+      "src/utils/buildInfo 2.ts",
+      "src/utils/buildInfo.ts",
+      "src/utils/cookies 2.ts",
+      "src/utils/cookies 3.ts",
+      "src/utils/cookies 4.ts",
+      "src/utils/cookies.ts",
+      "src/utils/logger 2.ts",
+      "src/utils/logger.ts",
+      "src/utils/mailinatorHelper 2.ts",
+      "src/utils/mailinatorHelper.ts",
+      "src/utils/preloader 2.ts",
+      "src/utils/preloader.ts"
+    ]
+  },
+  "time": {
+    "rules": [],
+    "rules_parse_time": 0.8808860778808594,
+    "profiling_times": {
+      "config_time": 3.527790069580078,
+      "core_time": 6.114694833755493,
+      "ignores_time": 0.0022721290588378906,
+      "total_time": 9.645340204238892
+    },
+    "parsing_time": {
+      "total_time": 0.0,
+      "per_file_time": { "mean": 0.0, "std_dev": 0.0 },
+      "very_slow_stats": { "time_ratio": 0.0, "count_ratio": 0.0 },
+      "very_slow_files": []
+    },
+    "scanning_time": {
+      "total_time": 32.83674168586731,
+      "per_file_time": { "mean": 0.027827747191412986, "std_dev": 0.006260787200011069 },
+      "very_slow_stats": { "time_ratio": 0.0, "count_ratio": 0.0 },
+      "very_slow_files": []
+    },
+    "matching_time": {
+      "total_time": 0.0,
+      "per_file_and_rule_time": { "mean": 0.0, "std_dev": 0.0 },
+      "very_slow_stats": { "time_ratio": 0.0, "count_ratio": 0.0 },
+      "very_slow_rules_on_files": []
+    },
+    "tainting_time": {
+      "total_time": 0.0,
+      "per_def_and_rule_time": { "mean": 0.0, "std_dev": 0.0 },
+      "very_slow_stats": { "time_ratio": 0.0, "count_ratio": 0.0 },
+      "very_slow_rules_on_defs": []
+    },
+    "fixpoint_timeouts": [],
+    "prefiltering": {
+      "project_level_time": 0.0,
+      "file_level_time": 0.0,
+      "rules_with_project_prefilters_ratio": 0.0,
+      "rules_with_file_prefilters_ratio": 0.9861690450054885,
+      "rules_selected_ratio": 0.0323210147578973,
+      "rules_matched_ratio": 0.0323210147578973
+    },
+    "targets": [],
+    "total_bytes": 0,
+    "max_memory_bytes": 1097299520
+  },
+  "engine_requested": "OSS",
+  "skipped_rules": []
+}

@@ -30,8 +30,7 @@ class ModelConfigService {
 
   private modelConfigs: Record<ModelUseCase, ModelConfig> = {
     chat: {
-      model:
-        (process.env.NEXT_PUBLIC_DEFAULT_CHAT_MODEL as OpenAIModel) || "gpt-5",
+      model: (process.env.NEXT_PUBLIC_DEFAULT_CHAT_MODEL as OpenAIModel) || "gpt-5",
       temperature: 1, // GPT-5 only supports default temperature (1)
       maxTokens: 8000,
       description: "Standard chat conversations with GPT-5",
@@ -143,23 +142,13 @@ class ModelConfigService {
   }
 
   getAvailableModels(): OpenAIModel[] {
-    return [
-      "gpt-5",
-      "gpt-5-pro",
-      "o3",
-      "o3-pro",
-      "o4-mini",
-      "gpt-4o",
-      "gpt-4o-mini",
-    ];
+    return ["gpt-5", "gpt-5-pro", "o3", "o3-pro", "o4-mini", "gpt-4o", "gpt-4o-mini"];
   }
 
   getModelDescription(model: OpenAIModel): string {
     const descriptions: Record<OpenAIModel, string> = {
-      "gpt-5":
-        "Latest GPT-5 with 45% fewer errors, excellent for general tasks",
-      "gpt-5-pro":
-        "Premium GPT-5 Pro with unlimited access and priority processing",
+      "gpt-5": "Latest GPT-5 with 45% fewer errors, excellent for general tasks",
+      "gpt-5-pro": "Premium GPT-5 Pro with unlimited access and priority processing",
       o3: "Advanced reasoning model with tool integration",
       "o3-pro": "Premium o3 with extended thinking for complex problems",
       "o4-mini": "Fast, cost-efficient model for simple tasks",

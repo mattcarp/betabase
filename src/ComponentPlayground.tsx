@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CircularProfessionalProgress as RadialProgress } from "./components/ui/ProfessionalProgress"
+import { CircularProfessionalProgress as RadialProgress } from "./components/ui/ProfessionalProgress";
 
 const ComponentPlayground = () => {
   const [progressValue, setProgressValue] = useState(75);
@@ -12,19 +12,13 @@ const ComponentPlayground = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8">
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-blue-600 mb-4">
-            SIAM UI Component Playground
-          </h1>
-          <p className="text-gray-300">
-            Interactive component testing environment
-          </p>
+          <h1 className="text-4xl font-bold text-blue-600 mb-4">SIAM UI Component Playground</h1>
+          <p className="text-gray-300">Interactive component testing environment</p>
         </header>
 
         {/* RadialProgress Section */}
         <section className="mb-16">
-          <h2 className="text-2xl font-bold text-blue-600 mb-8">
-            RadialProgress Component
-          </h2>
+          <h2 className="text-2xl font-bold text-blue-600 mb-8">RadialProgress Component</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Component Display */}
@@ -45,9 +39,7 @@ const ComponentPlayground = () => {
 
             {/* Controls */}
             <div className="bg-gray-800/50 rounded-lg p-8 border border-gray-700">
-              <h3 className="text-lg font-semibold text-blue-600 mb-6">
-                Component Controls
-              </h3>
+              <h3 className="text-lg font-semibold text-blue-600 mb-6">Component Controls</h3>
 
               <div className="space-y-6">
                 <div>
@@ -81,9 +73,7 @@ const ComponentPlayground = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Color
-                  </label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Color</label>
                   <select
                     value={progressColor}
                     onChange={(e) => setProgressColor(e.target.value as any)}
@@ -103,9 +93,7 @@ const ComponentPlayground = () => {
 
           {/* Multiple Variants */}
           <div className="mt-12">
-            <h3 className="text-lg font-semibold text-blue-600 mb-6">
-              Component Variants
-            </h3>
+            <h3 className="text-lg font-semibold text-blue-600 mb-6">Component Variants</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
               {[
                 { value: 25, color: "danger" as const, label: "Low" },
@@ -133,9 +121,7 @@ const ComponentPlayground = () => {
 
         {/* System Status Dashboard */}
         <section className="mb-16">
-          <h2 className="text-2xl font-bold text-blue-600 mb-8">
-            System Dashboard Example
-          </h2>
+          <h2 className="text-2xl font-bold text-blue-600 mb-8">System Dashboard Example</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700 text-center">
               <RadialProgress

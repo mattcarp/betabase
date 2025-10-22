@@ -8,12 +8,7 @@ import { mcpClient } from "./MCPClient";
 export interface MCPFeature {
   toolName: string;
   description: string;
-  category:
-    | "knowledge"
-    | "analytics"
-    | "integration"
-    | "observability"
-    | "system";
+  category: "knowledge" | "analytics" | "integration" | "observability" | "system";
   inputSchema: any;
   isAdvanced: boolean;
   version: string;
@@ -70,9 +65,7 @@ class MCPFeatureDiscoveryService {
       const capabilitiesResponse = await mcpClient.getServerCapabilities();
 
       if (!capabilitiesResponse.success) {
-        throw new Error(
-          `Failed to get capabilities: ${capabilitiesResponse.error}`,
-        );
+        throw new Error(`Failed to get capabilities: ${capabilitiesResponse.error}`);
       }
 
       // Load all available tools
@@ -85,16 +78,14 @@ class MCPFeatureDiscoveryService {
         totalTools: tools.length,
         features,
         lastUpdated: new Date().toISOString(),
-        connectionStatus: mcpClient.isClientConnected()
-          ? "connected"
-          : "disconnected",
+        connectionStatus: mcpClient.isClientConnected() ? "connected" : "disconnected",
       };
 
       // Notify listeners
       this.notifyListeners(this.capabilities);
 
       console.log(
-        `✅ Discovered ${features.length} MCP features across ${this.getCategories().length} categories`,
+        `✅ Discovered ${features.length} MCP features across ${this.getCategories().length} categories`
       );
 
       return this.capabilities;
@@ -136,11 +127,7 @@ class MCPFeatureDiscoveryService {
    * Determine category for a tool
    */
   private getCategoryForTool(toolName: string): MCPFeature["category"] {
-    if (
-      toolName.includes("aoma") ||
-      toolName.includes("knowledge") ||
-      toolName.includes("query")
-    ) {
+    if (toolName.includes("aoma") || toolName.includes("knowledge") || toolName.includes("query")) {
       return "knowledge";
     }
     if (
@@ -227,9 +214,7 @@ class MCPFeatureDiscoveryService {
   /**
    * Add listener for capability updates
    */
-  onCapabilitiesUpdate(
-    listener: (capabilities: MCPCapabilities) => void,
-  ): void {
+  onCapabilitiesUpdate(listener: (capabilities: MCPCapabilities) => void): void {
     this.listeners.push(listener);
   }
 
@@ -260,16 +245,12 @@ class MCPFeatureDiscoveryService {
    * Get feature usage recommendations based on context
    */
   getRecommendedFeatures(
-    context: "meeting" | "development" | "analytics" | "debugging",
+    context: "meeting" | "development" | "analytics" | "debugging"
   ): MCPFeature[] {
     if (!this.capabilities) return [];
 
     const recommendations: { [key: string]: string[] } = {
-      meeting: [
-        "query_aoma_knowledge",
-        "search_outlook_emails",
-        "analyze_development_context",
-      ],
+      meeting: ["query_aoma_knowledge", "search_outlook_emails", "analyze_development_context"],
       development: [
         "search_git_commits",
         "search_code_files",
@@ -290,9 +271,7 @@ class MCPFeatureDiscoveryService {
     };
 
     const recommendedToolNames = recommendations[context] || [];
-    return this.capabilities.features.filter((f) =>
-      recommendedToolNames.includes(f.toolName),
-    );
+    return this.capabilities.features.filter((f) => recommendedToolNames.includes(f.toolName));
   }
 }
 
