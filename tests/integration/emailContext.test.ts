@@ -145,16 +145,12 @@ describe("EmailContextService Integration", () => {
     }, 70000);
 
     test("should find emails by content similarity", async () => {
-      const searchResults = await service.searchEmails(
-        "project deadline March"
-      );
+      const searchResults = await service.searchEmails("project deadline March");
 
       expect(searchResults.length).toBeGreaterThan(0);
 
       // Should find the project update email
-      const projectEmail = searchResults.find(
-        (r) => r.source_id === "test-email-1"
-      );
+      const projectEmail = searchResults.find((r) => r.source_id === "test-email-1");
       expect(projectEmail).toBeDefined();
       expect(projectEmail?.similarity).toBeGreaterThan(0.7); // High similarity
     }, 30000);
@@ -164,9 +160,7 @@ describe("EmailContextService Integration", () => {
 
       expect(searchResults.length).toBeGreaterThan(0);
 
-      const budgetEmail = searchResults.find(
-        (r) => r.source_id === "test-email-3"
-      );
+      const budgetEmail = searchResults.find((r) => r.source_id === "test-email-3");
       expect(budgetEmail).toBeDefined();
     }, 30000);
 
@@ -189,9 +183,7 @@ describe("EmailContextService Integration", () => {
       expect(searchResults.length).toBeGreaterThan(0);
 
       // Should find emails from Charlie
-      const charlieEmail = searchResults.find(
-        (r) => r.source_id === "test-email-3"
-      );
+      const charlieEmail = searchResults.find((r) => r.source_id === "test-email-3");
       expect(charlieEmail).toBeDefined();
     }, 30000);
 
@@ -205,9 +197,7 @@ describe("EmailContextService Integration", () => {
       });
 
       // Lower threshold should return more results
-      expect(lowThresholdResults.length).toBeGreaterThanOrEqual(
-        highThresholdResults.length
-      );
+      expect(lowThresholdResults.length).toBeGreaterThanOrEqual(highThresholdResults.length);
     }, 30000);
 
     test("should limit search results", async () => {
@@ -270,9 +260,7 @@ describe("EmailContextService Integration", () => {
 
       // Search should find the updated content
       const searchResults = await service.searchEmails("new information");
-      const found = searchResults.find(
-        (r) => r.source_id === "test-reindex-email"
-      );
+      const found = searchResults.find((r) => r.source_id === "test-reindex-email");
       expect(found).toBeDefined();
 
       // Cleanup

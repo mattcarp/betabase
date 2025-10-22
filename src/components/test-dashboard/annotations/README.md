@@ -5,6 +5,7 @@ A comprehensive annotation system for the SIAM test dashboard, allowing users to
 ## Features
 
 ### 🎨 Highlighter Tool
+
 - Draw freehand highlights on the screen
 - Multiple colors available (yellow, green, blue, red, purple)
 - Adjustable brush width (3px, 5px, 8px, 12px)
@@ -12,6 +13,7 @@ A comprehensive annotation system for the SIAM test dashboard, allowing users to
 - Paths persist across sessions
 
 ### 📝 Sticky Notes
+
 - Click anywhere to place a sticky note
 - Quick text editing
 - Open detailed markdown editor for rich formatting
@@ -19,6 +21,7 @@ A comprehensive annotation system for the SIAM test dashboard, allowing users to
 - Edit or delete individual notes
 
 ### 📸 Screenshot Tool
+
 - Quick capture entire viewport
 - Click and drag to crop specific areas
 - Preview before saving
@@ -26,6 +29,7 @@ A comprehensive annotation system for the SIAM test dashboard, allowing users to
 - Saved with crop metadata
 
 ### 🚩 Flag Issues
+
 - Mark bugs and issues on the screen
 - Four severity levels: Low, Medium, High, Critical
 - Add title and description
@@ -37,6 +41,7 @@ A comprehensive annotation system for the SIAM test dashboard, allowing users to
 ### Core Components
 
 #### `AnnotationManager`
+
 Main orchestrator component that provides annotation functionality.
 
 ```tsx
@@ -46,24 +51,27 @@ import { AnnotationManager } from "@/components/test-dashboard/AnnotationManager
   timestamp={currentTimestamp}
   totalSteps={traceSteps.length}
   currentStep={currentStepIndex}
-  onExportAnnotations={() => {/* custom export logic */}}
-  onImportAnnotations={() => {/* custom import logic */}}
-/>
+  onExportAnnotations={() => {
+    /* custom export logic */
+  }}
+  onImportAnnotations={() => {
+    /* custom import logic */
+  }}
+/>;
 ```
 
 #### `AnnotationToolbar`
+
 Floating toolbar with tool selection buttons.
 
 ```tsx
 import { AnnotationToolbar } from "@/components/test-dashboard/AnnotationToolbar";
 
-<AnnotationToolbar
-  onExport={handleExport}
-  onImport={handleImport}
-/>
+<AnnotationToolbar onExport={handleExport} onImport={handleImport} />;
 ```
 
 #### `AnnotationPins`
+
 Timeline visualization of annotations.
 
 ```tsx
@@ -73,7 +81,7 @@ import { AnnotationPins } from "@/components/test-dashboard/AnnotationPins";
   currentStep={currentStep}
   totalSteps={totalSteps}
   onPinClick={(annotation) => console.log(annotation)}
-/>
+/>;
 ```
 
 ### Individual Tool Components
@@ -100,9 +108,7 @@ function TraceViewer() {
       {/* Your trace viewer UI */}
 
       {/* Toggle button */}
-      <Button onClick={() => setAnnotationsEnabled(!annotationsEnabled)}>
-        Annotations
-      </Button>
+      <Button onClick={() => setAnnotationsEnabled(!annotationsEnabled)}>Annotations</Button>
 
       {/* Annotation pins on timeline */}
       {annotationsEnabled && (
@@ -144,11 +150,7 @@ interface Annotation {
   data: AnnotationData;
 }
 
-type AnnotationData =
-  | HighlightAnnotation
-  | NoteAnnotation
-  | ScreenshotAnnotation
-  | FlagAnnotation;
+type AnnotationData = HighlightAnnotation | NoteAnnotation | ScreenshotAnnotation | FlagAnnotation;
 ```
 
 ### Annotation Types

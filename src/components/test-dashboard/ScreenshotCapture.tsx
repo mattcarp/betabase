@@ -73,12 +73,8 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
 
       if (!ctx) return;
 
-      const width = crop
-        ? Math.abs(crop.endX - crop.startX)
-        : window.innerWidth;
-      const height = crop
-        ? Math.abs(crop.endY - crop.startY)
-        : window.innerHeight;
+      const width = crop ? Math.abs(crop.endX - crop.startX) : window.innerWidth;
+      const height = crop ? Math.abs(crop.endY - crop.startY) : window.innerHeight;
 
       canvas.width = width;
       canvas.height = height;
@@ -89,16 +85,8 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
       ctx.fillStyle = "#333";
       ctx.font = "16px monospace";
       ctx.textAlign = "center";
-      ctx.fillText(
-        "Screenshot Preview",
-        width / 2,
-        height / 2
-      );
-      ctx.fillText(
-        `${width}x${height}`,
-        width / 2,
-        height / 2 + 24
-      );
+      ctx.fillText("Screenshot Preview", width / 2, height / 2);
+      ctx.fillText(`${width}x${height}`, width / 2, height / 2 + 24);
 
       const dataUrl = canvas.toDataURL("image/png");
       setCapturedImage(dataUrl);
@@ -187,19 +175,13 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
       {/* Crop overlay */}
       {enabled && !showPreview && (
         <div
-          className={cn(
-            "fixed inset-0 z-40 cursor-crosshair",
-            className
-          )}
+          className={cn("fixed inset-0 z-40 cursor-crosshair", className)}
           onMouseDown={handleStartCrop}
           onMouseMove={handleMoveCrop}
           onMouseUp={handleEndCrop}
         >
           {isCropping && cropArea && (
-            <div
-              className="absolute border-2 border-primary bg-primary/10"
-              style={getCropStyle()}
-            >
+            <div className="absolute border-2 border-primary bg-primary/10" style={getCropStyle()}>
               <div className="absolute top-2 left-2 bg-primary text-primary-foreground px-2 py-1 rounded text-xs">
                 {Math.abs(cropArea.endX - cropArea.startX)} x{" "}
                 {Math.abs(cropArea.endY - cropArea.startY)}
@@ -231,37 +213,21 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Screenshot Preview</h3>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleCancel}
-                >
+                <Button variant="ghost" size="icon" onClick={handleCancel}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
 
               <div className="bg-muted rounded-lg p-4 mb-4 max-h-[60vh] overflow-auto">
-                <img
-                  src={capturedImage}
-                  alt="Screenshot preview"
-                  className="w-full h-auto"
-                />
+                <img src={capturedImage} alt="Screenshot preview" className="w-full h-auto" />
               </div>
 
               <div className="flex items-center justify-end gap-2">
-                <Button
-                  variant="outline"
-                  onClick={handleDownload}
-                  className="gap-2"
-                >
+                <Button variant="outline" onClick={handleDownload} className="gap-2">
                   <Download className="h-4 w-4" />
                   Download
                 </Button>
-                <Button
-                  variant="default"
-                  onClick={handleSaveScreenshot}
-                  className="gap-2"
-                >
+                <Button variant="default" onClick={handleSaveScreenshot} className="gap-2">
                   <Check className="h-4 w-4" />
                   Save to Annotations
                 </Button>

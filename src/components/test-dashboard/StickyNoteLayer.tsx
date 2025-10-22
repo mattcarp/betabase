@@ -30,9 +30,7 @@ const StickyNote: React.FC<StickyNoteProps> = ({
   onOpenEditor,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [text, setText] = useState(
-    (annotation.data as NoteAnnotation).text
-  );
+  const [text, setText] = useState((annotation.data as NoteAnnotation).text);
 
   const handleSave = () => {
     onUpdate(annotation.id, text);
@@ -59,18 +57,11 @@ const StickyNote: React.FC<StickyNoteProps> = ({
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1">
             <FileText className="h-3 w-3 text-yellow-700 dark:text-yellow-300" />
-            <span className="text-xs text-yellow-700 dark:text-yellow-300 font-medium">
-              Note
-            </span>
+            <span className="text-xs text-yellow-700 dark:text-yellow-300 font-medium">Note</span>
           </div>
           <div className="flex items-center gap-1">
             {isEditing ? (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-5 w-5"
-                onClick={handleSave}
-              >
+              <Button variant="ghost" size="icon" className="h-5 w-5" onClick={handleSave}>
                 <Check className="h-3 w-3" />
               </Button>
             ) : (
@@ -129,8 +120,7 @@ export const StickyNoteLayer: React.FC<StickyNoteLayerProps> = ({
   className,
   onOpenDetailedEditor,
 }) => {
-  const { annotations, addAnnotation, updateAnnotation, deleteAnnotation } =
-    useAnnotations();
+  const { annotations, addAnnotation, updateAnnotation, deleteAnnotation } = useAnnotations();
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!enabled) return;
@@ -175,19 +165,14 @@ export const StickyNoteLayer: React.FC<StickyNoteLayerProps> = ({
     });
   };
 
-  const noteAnnotations = annotations.filter(
-    (ann) => ann.data.type === "note"
-  );
+  const noteAnnotations = annotations.filter((ann) => ann.data.type === "note");
 
   return (
     <>
       {/* Click layer for adding notes */}
       {enabled && (
         <div
-          className={cn(
-            "fixed inset-0 z-40 cursor-crosshair",
-            className
-          )}
+          className={cn("fixed inset-0 z-40 cursor-crosshair", className)}
           onClick={handleClick}
         />
       )}
