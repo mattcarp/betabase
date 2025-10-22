@@ -2,8 +2,17 @@
 
 import React, { useState, useEffect } from "react";
 import { cn } from "../src/lib/utils";
-import { SettingsPanel } from "../src/components/SettingsPanel";
+import dynamic from "next/dynamic";
 import { useSettings } from "../src/hooks/useSettings";
+
+// Dynamic import for SettingsPanel (863 lines, only shown when settings open)
+const SettingsPanel = dynamic(
+  () => import("../src/components/SettingsPanel").then(mod => ({ default: mod.SettingsPanel })),
+  {
+    loading: () => <div className="fixed inset-0 z-50 bg-black/50" />,
+    ssr: false,
+  }
+);
 // Use MagicLinkLoginForm for authentication (MAGIC LINKS ONLY - NO PASSWORDS)
 import { MagicLinkLoginForm as LoginForm } from "../src/components/auth/MagicLinkLoginForm";
 import { getBuildInfo, getFormattedBuildTime } from "../src/utils/buildInfo";

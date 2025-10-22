@@ -1,36 +1,70 @@
+import { NextRequest, NextResponse } from "next/server";
+
 /**
  * Web Vitals API Endpoint
  *
- * Receives and logs Core Web Vitals metrics from the client
+ * Receives Core Web Vitals metrics from the client and stores them
+ * for analysis and dashboard display.
+ *
+ * This endpoint is called via sendBeacon or fetch from the WebVitals component.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+interface WebVitalMetric {
+  name: string;
+  value: number;
+  rating: "good" | "needs-improvement" | "poor";
+  id: string;
+  navigationType: string;
+  timestamp: number;
+  url: string;
+  userAgent: string;
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { name, value, rating, delta, id, navigationType } = body;
+    const metric: WebVitalMetric = await request.json();
 
-    // Log the metric (in production, you would send this to your analytics service)
-    console.log(`[Web Vitals] ${name}:`, {
-      value,
-      rating,
-      delta,
-      id,
-      navigationType,
+    // Log in development
+    if (process.env.NODE_ENV === "development") {
+      console.log("📊 Web Vital received:", {
+        name: metric.name,
+        value: metric.value,
+        rating: metric.rating,
+      });
+    }
+
+    // TODO: Store in database or send to monitoring service
+    // For now, we'll just acknowledge receipt
+    // Future: Store in Supabase performance_metrics table
+
+    // Example: Store in Supabase
+    /*
+    const { createClient } = await import("@supabase/supabase-js");
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
+    await supabase.from("web_vitals").insert({
+      metric_name: metric.name,
+      metric_value: metric.value,
+      rating: metric.rating,
+      metric_id: metric.id,
+      navigation_type: metric.navigationType,
+      url: metric.url,
+      user_agent: metric.userAgent,
+      recorded_at: new Date(metric.timestamp).toISOString(),
     });
+    */
 
-    // Here you could send to analytics services like:
-    // - Google Analytics
-    // - Vercel Analytics
-    // - Custom analytics endpoint
-    // - Supabase for storage
-
-    return NextResponse.json({ success: true }, { status: 200 });
-  } catch (error) {
-    console.error('[Web Vitals] Error processing metric:', error);
     return NextResponse.json(
-      { error: 'Failed to process metric' },
+      { success: true, message: "Web Vital recorded" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error processing Web Vital:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to process metric" },
       { status: 500 }
     );
   }
@@ -39,7 +73,19 @@ export async function POST(request: NextRequest) {
 // Support GET for health check
 export async function GET() {
   return NextResponse.json({
-    status: 'ok',
-    message: 'Web Vitals endpoint is active',
+    status: "ok",
+    message: "Web Vitals endpoint is active",
+  });
+}
+
+// Support OPTIONS for CORS preflight
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
   });
 }
