@@ -12,9 +12,11 @@
     "test:performance": "playwright test tests/performance --reporter=list",
     "prebuild": "node scripts/generate-build-info.js || echo 'Build info script not found, skipping'",
     "build": "next build",
+    "build:analyze": "ANALYZE=true next build",
     "start": "next start -p $PORT",
     "start:prod": "NODE_ENV=production next start -p $PORT",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -57,7 +59,9 @@
     "deploy:quick": "./scripts/deploy-bulletproof.sh --skip-tests",
     "deploy:local-first": "npm run test:e2e:local && npm run deploy",
     "deploy:status": "./scripts/deployment-status.sh",
-    "deploy:monitor": "./scripts/deploy-with-monitoring.sh"
+    "deploy:monitor": "./scripts/deploy-with-monitoring.sh",
+    "analyze:bundle": "./scripts/analyze-bundle.sh",
+    "analyze:deps": "depcheck"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.42",
@@ -119,6 +123,7 @@
     "turndown": "^7.2.1",
     "typescript": "^5.9.2",
     "use-stick-to-bottom": "^1.1.1",
+    "uuid": "^11.0.5",
     "web-vitals": "^5.1.0",
     "xlsx": "^0.18.5",
     "zod": "^3.23.8",

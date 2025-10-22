@@ -1,0 +1,27 @@
+# Git Attributes for SIAM Project
+# Defines merge strategies for specific files to avoid conflicts
+
+# package-lock.json: Always regenerate instead of trying to merge
+# This prevents merge conflicts by using "union" strategy, then regenerating
+package-lock.json merge=npm-merge-lockfile
+
+# TypeScript build info: Always use ours (it's a generated file)
+tsconfig.tsbuildinfo merge=ours
+
+# Next.js build artifacts: Always use ours (generated files)
+.next/** merge=ours
+
+# Large binary files: Use binary merge strategy
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.avif binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.otf binary
