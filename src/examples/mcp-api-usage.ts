@@ -40,19 +40,10 @@ export async function processMessage(conversationId: string, message: string) {
     });
 
     if (response.success && response.data) {
-      console.log(
-        "Enhanced message:",
-        (response.data as any)?.enhancedMessage || "N/A",
-      );
+      console.log("Enhanced message:", (response.data as any)?.enhancedMessage || "N/A");
       console.log("Insights:", (response.data as any)?.insights || "N/A");
-      console.log(
-        "Recommendations:",
-        (response.data as any)?.recommendations || "N/A",
-      );
-      console.log(
-        "Mesh actions:",
-        (response.data as any)?.meshActions || "N/A",
-      );
+      console.log("Recommendations:", (response.data as any)?.recommendations || "N/A");
+      console.log("Mesh actions:", (response.data as any)?.meshActions || "N/A");
       return response.data;
     } else {
       console.error("Message processing failed:", response.error);
@@ -70,16 +61,13 @@ export async function updateMCPConfig(
     enabled: boolean;
     serverUrl: string;
     timeout: number;
-  }>,
+  }>
 ) {
   try {
     const response = await window.mcp.updateConfig(config);
 
     if (response.success) {
-      console.log(
-        "MCP config updated successfully:",
-        (response as any).config || "N/A",
-      );
+      console.log("MCP config updated successfully:", (response as any).config || "N/A");
     } else {
       console.error("MCP config update failed:", response.error);
     }
@@ -138,19 +126,13 @@ export function setupMCPEventListeners() {
   });
 
   // Listen for connection changes
-  const connectionCleanup = window.mcp.onConnectionChange(
-    (connected, serverId) => {
-      if (connected) {
-        console.log(
-          `MCP connection established${serverId ? ` for server ${serverId}` : ""}`,
-        );
-      } else {
-        console.log(
-          `MCP connection lost${serverId ? ` for server ${serverId}` : ""}`,
-        );
-      }
-    },
-  );
+  const connectionCleanup = window.mcp.onConnectionChange((connected, serverId) => {
+    if (connected) {
+      console.log(`MCP connection established${serverId ? ` for server ${serverId}` : ""}`);
+    } else {
+      console.log(`MCP connection lost${serverId ? ` for server ${serverId}` : ""}`);
+    }
+  });
 
   // Return cleanup function
   return () => {
@@ -182,12 +164,9 @@ export function useMCP() {
     };
   }, []);
 
-  const processMessage = React.useCallback(
-    async (conversationId: string, message: string) => {
-      return await processMessage(conversationId, message);
-    },
-    [],
-  );
+  const processMessage = React.useCallback(async (conversationId: string, message: string) => {
+    return await processMessage(conversationId, message);
+  }, []);
 
   const updateConfig = React.useCallback(async (config: any) => {
     await updateMCPConfig(config);
@@ -210,7 +189,7 @@ export function useMCP() {
 export async function safeMCPCall<T>(
   operation: () => Promise<T>,
   fallbackValue: T,
-  errorMessage: string = "MCP operation failed",
+  errorMessage: string = "MCP operation failed"
 ): Promise<T> {
   try {
     return await operation();

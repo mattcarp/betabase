@@ -29,6 +29,7 @@ make nuke
 ## 🎯 Environment Management
 
 ### Local Development
+
 ```bash
 # Create .env.local (git-ignored)
 cp .env.example .env.local
@@ -36,6 +37,7 @@ cp .env.example .env.local
 ```
 
 ### Production (Render)
+
 - Set environment variables in Render dashboard
 - Docker image uses ENV vars at runtime
 - Never commit secrets to git!
@@ -43,6 +45,7 @@ cp .env.example .env.local
 ## 🔄 Cross-Machine Development
 
 ### Method 1: Docker Everywhere (RECOMMENDED)
+
 ```bash
 # Machine A
 git commit -am "WIP: feature X"
@@ -54,6 +57,7 @@ make dev  # Everything just fucking works!
 ```
 
 ### Method 2: Git Worktrees (Advanced)
+
 ```bash
 # Multiple branches, no conflicts
 git worktree add ../siam-feature-x feature/x
@@ -67,12 +71,14 @@ cd ../siam-hotfix && make dev      # Change port in docker-compose.yml
 ## 🚢 Render Deployment
 
 ### Automatic (Push to main)
+
 ```bash
 git push origin main
 # Render auto-deploys using Dockerfile
 ```
 
 ### Manual Testing
+
 ```bash
 # Test EXACT Render build locally
 make render-build
@@ -84,6 +90,7 @@ docker images siam-render:latest
 ## 🐳 Docker Commands Cheatsheet
 
 ### Development
+
 ```bash
 make dev          # Start dev with hot reload
 make dev-bg       # Run in background
@@ -92,12 +99,14 @@ make shell        # Enter container shell
 ```
 
 ### Production
+
 ```bash
 make prod         # Run production build
 make prod-test    # Test production locally
 ```
 
 ### Cleanup
+
 ```bash
 make clean        # Remove containers
 make nuke         # DESTROY EVERYTHING
@@ -106,6 +115,7 @@ make nuke         # DESTROY EVERYTHING
 ## 🔧 Troubleshooting
 
 ### Port Conflicts
+
 ```bash
 # Find what's using port 3000
 lsof -i :3000
@@ -117,6 +127,7 @@ kill -9 <PID>
 ```
 
 ### Docker Daemon Issues
+
 ```bash
 # Restart Docker Desktop
 osascript -e 'quit app "Docker Desktop"'
@@ -124,7 +135,9 @@ open -a "Docker Desktop"
 ```
 
 ### Permission Errors
+
 Already fixed in Dockerfile:
+
 - Directories created before USER switch
 - Proper ownership with chown
 - Non-root user (nextjs) for security
@@ -136,14 +149,14 @@ Already fixed in Dockerfile:
 services:
   app:
     # ... existing config
-  
+
   postgres:
     image: postgres:16-alpine
     environment:
       POSTGRES_DB: siam
     volumes:
       - postgres_data:/var/lib/postgresql/data
-  
+
   redis:
     image: redis:7-alpine
     command: redis-server --maxmemory 256mb

@@ -8,13 +8,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   CheckCircle,
@@ -59,9 +53,7 @@ interface TestResult {
 export const TestResultsViewer: React.FC = () => {
   const [selectedResult, setSelectedResult] = useState<TestResult | null>(null);
   const [expandedSuites, setExpandedSuites] = useState<Set<string>>(new Set());
-  const [filter, setFilter] = useState<"all" | "passed" | "failed" | "skipped">(
-    "all",
-  );
+  const [filter, setFilter] = useState<"all" | "passed" | "failed" | "skipped">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [dateRange, setDateRange] = useState<{
     from: Date | null;
@@ -210,7 +202,7 @@ export const TestResultsViewer: React.FC = () => {
       acc[result.suite].push(result);
       return acc;
     },
-    {} as Record<string, TestResult[]>,
+    {} as Record<string, TestResult[]>
   );
 
   // Enhanced filtering with search and date range
@@ -229,7 +221,7 @@ export const TestResultsViewer: React.FC = () => {
         (r) =>
           r.name.toLowerCase().includes(query) ||
           r.suite.toLowerCase().includes(query) ||
-          r.error?.message.toLowerCase().includes(query),
+          r.error?.message.toLowerCase().includes(query)
       );
     }
 
@@ -309,9 +301,7 @@ export const TestResultsViewer: React.FC = () => {
       });
 
       // Update UI to show test is running
-      alert(
-        `Re-running test: ${testToRerun.name}\nExecution ID: ${data.executionId}`,
-      );
+      alert(`Re-running test: ${testToRerun.name}\nExecution ID: ${data.executionId}`);
 
       // Refresh test results after a delay
       setTimeout(fetchTestResults, 3000);
@@ -386,11 +376,7 @@ export const TestResultsViewer: React.FC = () => {
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">Test Results</CardTitle>
                 <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleExportResults}
-                  >
+                  <Button variant="outline" size="sm" onClick={handleExportResults}>
                     <Download className="h-4 w-4 mr-1" />
                     Export
                   </Button>
@@ -412,9 +398,7 @@ export const TestResultsViewer: React.FC = () => {
                               onChange={(e) =>
                                 setDateRange({
                                   ...dateRange,
-                                  from: e.target.value
-                                    ? new Date(e.target.value)
-                                    : null,
+                                  from: e.target.value ? new Date(e.target.value) : null,
                                 })
                               }
                             />
@@ -424,9 +408,7 @@ export const TestResultsViewer: React.FC = () => {
                               onChange={(e) =>
                                 setDateRange({
                                   ...dateRange,
-                                  to: e.target.value
-                                    ? new Date(e.target.value)
-                                    : null,
+                                  to: e.target.value ? new Date(e.target.value) : null,
                                 })
                               }
                             />
@@ -434,10 +416,7 @@ export const TestResultsViewer: React.FC = () => {
                         </div>
                         <div>
                           <Label className="text-sm">Sort By</Label>
-                          <Select
-                            value={sortBy}
-                            onValueChange={(v: any) => setSortBy(v)}
-                          >
+                          <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
                             <SelectTrigger className="mt-2">
                               <SelectValue />
                             </SelectTrigger>
@@ -450,10 +429,7 @@ export const TestResultsViewer: React.FC = () => {
                         </div>
                         <div>
                           <Label className="text-sm">Sort Order</Label>
-                          <Select
-                            value={sortOrder}
-                            onValueChange={(v: any) => setSortOrder(v)}
-                          >
+                          <Select value={sortOrder} onValueChange={(v: any) => setSortOrder(v)}>
                             <SelectTrigger className="mt-2">
                               <SelectValue />
                             </SelectTrigger>
@@ -509,8 +485,7 @@ export const TestResultsViewer: React.FC = () => {
                   onClick={() => setFilter("passed")}
                 >
                   <CheckCircle className="h-3 w-3 mr-1" />
-                  Passed (
-                  {testResults.filter((r) => r.status === "passed").length})
+                  Passed ({testResults.filter((r) => r.status === "passed").length})
                 </Button>
                 <Button
                   variant={filter === "failed" ? "default" : "outline"}
@@ -518,8 +493,7 @@ export const TestResultsViewer: React.FC = () => {
                   onClick={() => setFilter("failed")}
                 >
                   <XCircle className="h-3 w-3 mr-1" />
-                  Failed (
-                  {testResults.filter((r) => r.status === "failed").length})
+                  Failed ({testResults.filter((r) => r.status === "failed").length})
                 </Button>
                 <Button
                   variant={filter === "skipped" ? "default" : "outline"}
@@ -527,8 +501,7 @@ export const TestResultsViewer: React.FC = () => {
                   onClick={() => setFilter("skipped")}
                 >
                   <AlertTriangle className="h-3 w-3 mr-1" />
-                  Skipped (
-                  {testResults.filter((r) => r.status === "skipped").length})
+                  Skipped ({testResults.filter((r) => r.status === "skipped").length})
                 </Button>
               </div>
             </div>
@@ -539,32 +512,22 @@ export const TestResultsViewer: React.FC = () => {
                 <div className="flex items-center justify-center h-full p-8">
                   <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-muted-foreground">
-                      Loading test results...
-                    </p>
+                    <p className="text-muted-foreground">Loading test results...</p>
                   </div>
                 </div>
               ) : (
                 <div className="p-4 space-y-4">
                   {Object.entries(groupedResults)
-                    .filter(([suite, results]) =>
-                      results.some((r) => filteredResults.includes(r)),
-                    )
+                    .filter(([suite, results]) => results.some((r) => filteredResults.includes(r)))
                     .map(([suite, results]) => {
                       const filteredSuiteResults = results.filter((r) =>
-                        filteredResults.includes(r),
+                        filteredResults.includes(r)
                       );
                       const stats = {
                         total: filteredSuiteResults.length,
-                        passed: filteredSuiteResults.filter(
-                          (r) => r.status === "passed",
-                        ).length,
-                        failed: filteredSuiteResults.filter(
-                          (r) => r.status === "failed",
-                        ).length,
-                        skipped: filteredSuiteResults.filter(
-                          (r) => r.status === "skipped",
-                        ).length,
+                        passed: filteredSuiteResults.filter((r) => r.status === "passed").length,
+                        failed: filteredSuiteResults.filter((r) => r.status === "failed").length,
+                        skipped: filteredSuiteResults.filter((r) => r.status === "skipped").length,
                       };
                       const isExpanded = expandedSuites.has(suite);
 
@@ -590,9 +553,7 @@ export const TestResultsViewer: React.FC = () => {
                                 </Badge>
                               )}
                               {stats.failed > 0 && (
-                                <Badge className="bg-red-500/20 text-red-500">
-                                  {stats.failed}
-                                </Badge>
+                                <Badge className="bg-red-500/20 text-red-500">{stats.failed}</Badge>
                               )}
                               {stats.skipped > 0 && (
                                 <Badge className="bg-yellow-500/20 text-yellow-500">
@@ -609,14 +570,10 @@ export const TestResultsViewer: React.FC = () => {
                                   key={result.id}
                                   className={cn(
                                     "cursor-pointer transition-all hover:shadow-md",
-                                    selectedResult?.id === result.id &&
-                                      "ring-2 ring-primary",
-                                    result.status === "failed" &&
-                                      "border-red-500/20",
-                                    result.status === "passed" &&
-                                      "border-green-500/20",
-                                    result.status === "skipped" &&
-                                      "border-yellow-500/20",
+                                    selectedResult?.id === result.id && "ring-2 ring-primary",
+                                    result.status === "failed" && "border-red-500/20",
+                                    result.status === "passed" && "border-green-500/20",
+                                    result.status === "skipped" && "border-yellow-500/20"
                                   )}
                                   onClick={() => setSelectedResult(result)}
                                 >
@@ -624,14 +581,9 @@ export const TestResultsViewer: React.FC = () => {
                                     <div className="flex items-center justify-between">
                                       <div className="flex items-center gap-2 flex-1">
                                         {getStatusIcon(result.status)}
-                                        <span className="text-sm truncate">
-                                          {result.name}
-                                        </span>
+                                        <span className="text-sm truncate">{result.name}</span>
                                       </div>
-                                      <Badge
-                                        variant="secondary"
-                                        className="text-xs"
-                                      >
+                                      <Badge variant="secondary" className="text-xs">
                                         {result.duration}ms
                                       </Badge>
                                     </div>
@@ -657,12 +609,9 @@ export const TestResultsViewer: React.FC = () => {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-lg">
-                    {selectedResult.name}
-                  </CardTitle>
+                  <CardTitle className="text-lg">{selectedResult.name}</CardTitle>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {selectedResult.suite} •{" "}
-                    {selectedResult.timestamp.toLocaleString()}
+                    {selectedResult.suite} • {selectedResult.timestamp.toLocaleString()}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -703,23 +652,16 @@ export const TestResultsViewer: React.FC = () => {
                     <>
                       <Card className="bg-red-500/10 border-red-500/20">
                         <CardContent className="p-4">
-                          <h3 className="font-medium text-red-500 mb-2">
-                            Error Message
-                          </h3>
-                          <p className="text-sm font-mono">
-                            {selectedResult.error.message}
-                          </p>
+                          <h3 className="font-medium text-red-500 mb-2">Error Message</h3>
+                          <p className="text-sm font-mono">{selectedResult.error.message}</p>
                         </CardContent>
                       </Card>
 
-                      {(selectedResult.error.expected ||
-                        selectedResult.error.actual) && (
+                      {(selectedResult.error.expected || selectedResult.error.actual) && (
                         <div className="grid grid-cols-2 gap-4">
                           <Card>
                             <CardContent className="p-4">
-                              <h3 className="font-medium text-green-500 mb-2">
-                                Expected
-                              </h3>
+                              <h3 className="font-medium text-green-500 mb-2">Expected</h3>
                               <p className="text-sm font-mono">
                                 {selectedResult.error.expected || "N/A"}
                               </p>
@@ -727,9 +669,7 @@ export const TestResultsViewer: React.FC = () => {
                           </Card>
                           <Card>
                             <CardContent className="p-4">
-                              <h3 className="font-medium text-red-500 mb-2">
-                                Actual
-                              </h3>
+                              <h3 className="font-medium text-red-500 mb-2">Actual</h3>
                               <p className="text-sm font-mono">
                                 {selectedResult.error.actual || "N/A"}
                               </p>
@@ -797,8 +737,7 @@ export const TestResultsViewer: React.FC = () => {
                 </TabsContent>
 
                 <TabsContent value="media">
-                  {selectedResult.screenshots &&
-                  selectedResult.screenshots.length > 0 ? (
+                  {selectedResult.screenshots && selectedResult.screenshots.length > 0 ? (
                     <div className="space-y-4">
                       <h3 className="font-medium">Screenshots</h3>
                       <div className="grid grid-cols-2 gap-4">

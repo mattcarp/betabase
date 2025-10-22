@@ -47,16 +47,17 @@ POST https://api.openai.com/v1/vector_stores/{vector_store_id}/search
 ## Performance Results
 
 ### Test Query
+
 "What is AOMA cover hot swap functionality?"
 
 ### Measured Performance
 
-| Method | Time | Details |
-|--------|------|---------|
-| **Vector Search** | 1.2-2.5s | Direct API call |
-| **GPT-4o Completion** | 7.1s | Generate answer |
-| **TOTAL** | **8.3s** | End-to-end |
-| **Current (Assistant API)** | 23s | With polling overhead |
+| Method                      | Time     | Details               |
+| --------------------------- | -------- | --------------------- |
+| **Vector Search**           | 1.2-2.5s | Direct API call       |
+| **GPT-4o Completion**       | 7.1s     | Generate answer       |
+| **TOTAL**                   | **8.3s** | End-to-end            |
+| **Current (Assistant API)** | 23s      | With polling overhead |
 
 **Improvement: 2.8x FASTER (23s → 8.3s)**
 
@@ -65,9 +66,9 @@ POST https://api.openai.com/v1/vector_stores/{vector_store_id}/search
 The response quality is **excellent**:
 
 ```
-The AOMA system's cover hot swap functionality primarily relates to 
-swapping closed caption SCC assets. This process is essential for 
-updating or replacing closed caption assets associated with video products. 
+The AOMA system's cover hot swap functionality primarily relates to
+swapping closed caption SCC assets. This process is essential for
+updating or replacing closed caption assets associated with video products.
 
 The procedure involves the following steps:
 1. Ingest a new closed caption SCC asset into AOMA.
@@ -79,6 +80,7 @@ The procedure involves the following steps:
 ```
 
 **Key observations:**
+
 - ✅ Accurate information from AOMA knowledge base
 - ✅ Proper source citations
 - ✅ Detailed step-by-step instructions
@@ -119,11 +121,11 @@ async queryVectorStoreDirect(query: string): Promise<any[]> {
       body: JSON.stringify({ query })
     }
   );
-  
+
   if (!response.ok) {
     throw new Error(`Vector store search failed: ${response.status}`);
   }
-  
+
   const data = await response.json();
   return data.data || [];
 }
@@ -138,14 +140,14 @@ async queryKnowledgeFast(
 ): Promise<string> {
   // 1. Direct vector search (1-2s)
   const searchResults = await this.queryVectorStoreDirect(query);
-  
+
   // 2. Build context from top results
   const resultCount = strategy === 'comprehensive' ? 5 : strategy === 'focused' ? 3 : 2;
   const context = searchResults
     .slice(0, resultCount)
     .map(r => `[Source: ${r.filename} (score: ${r.score.toFixed(2)})]\n${r.content[0]?.text || ''}`)
     .join('\n\n---\n\n');
-  
+
   // 3. GPT completion (5-7s with GPT-4o, 15-16s with GPT-5)
   const completion = await this.client.chat.completions.create({
     model: 'gpt-4o', // or 'gpt-5' for best quality
@@ -162,7 +164,7 @@ async queryKnowledgeFast(
     temperature: 1, // GPT-5 only supports 1
     max_completion_tokens: strategy === 'comprehensive' ? 2000 : strategy === 'focused' ? 1000 : 500
   });
-  
+
   return completion.choices[0]?.message?.content || '';
 }
 ```
@@ -200,11 +202,11 @@ git push origin main
 
 ### Performance Targets
 
-| Strategy | Current | NEW | Improvement |
-|----------|---------|-----|-------------|
-| **rapid** | 23s | 6-8s | **3x faster** |
-| **focused** | 23s | 8-10s | **2.5x faster** |
-| **comprehensive** | 23s | 10-12s | **2x faster** |
+| Strategy          | Current | NEW    | Improvement     |
+| ----------------- | ------- | ------ | --------------- |
+| **rapid**         | 23s     | 6-8s   | **3x faster**   |
+| **focused**       | 23s     | 8-10s  | **2.5x faster** |
+| **comprehensive** | 23s     | 10-12s | **2x faster**   |
 
 ### Quality Targets
 
@@ -251,6 +253,7 @@ But with the direct API, we can get **2.8x improvement TODAY** with **zero migra
 ## Rollout Plan
 
 ### Week 1 (This Week)
+
 - ✅ Research complete
 - ✅ Testing complete
 - ⏭️ Implement in aoma-mesh-mcp
@@ -258,12 +261,14 @@ But with the direct API, we can get **2.8x improvement TODAY** with **zero migra
 - ⏭️ Monitor performance
 
 ### Week 2
+
 - Gather real-world metrics
 - Fine-tune result counts per strategy
 - Optimize GPT model selection (GPT-4o vs GPT-5)
 - Consider caching improvements
 
 ### Week 3
+
 - Evaluate if further optimization needed
 - Consider Supabase migration if <5s required
 - Document final architecture

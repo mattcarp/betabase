@@ -7,11 +7,13 @@
 ## 🎯 Core Test Categories
 
 ### 1. **AOMA Chat Intelligence Tests** 🤖
+
 **Location**: `tests/production/aoma-chat-test.spec.ts`
 
 **Purpose**: Validates that AOMA doesn't hallucinate and provides accurate answers from the knowledge base.
 
 **What it tests**:
+
 - ✅ Real AOMA questions (What is AOMA? USM? AOMA 3 features?)
 - ✅ Complex queries (integration workflows, QC processes)
 - ✅ Multi-turn conversations (context retention)
@@ -21,12 +23,14 @@
 - ✅ Response quality metrics (structure, completeness, keywords)
 
 **Why it's critical**:
+
 - Prevents hallucination - ensures AI only answers from knowledge base
 - Validates AOMA knowledge base integration
 - Tests end-to-end chat functionality
 - Ensures production-level quality
 
 **How to run**:
+
 ```bash
 # Full AOMA chat test suite
 npx playwright test tests/production/aoma-chat-test.spec.ts
@@ -39,7 +43,9 @@ npx playwright test tests/production/aoma-chat-test.spec.ts -g "COMPLEX QUERIES"
 ---
 
 ### 2. **File Upload & Curation Tests** 📁
-**Location**: 
+
+**Location**:
+
 - `tests/curate-tab-test.spec.ts`
 - `tests/comprehensive/file-upload-curate.spec.ts`
 - `tests/enhanced-curate-tab.spec.ts`
@@ -47,6 +53,7 @@ npx playwright test tests/production/aoma-chat-test.spec.ts -g "COMPLEX QUERIES"
 **Purpose**: Ensures users can upload files to AOMA knowledge base and manage them.
 
 **What it tests**:
+
 - ✅ Single file upload
 - ✅ Multiple file upload
 - ✅ Drag and drop functionality
@@ -59,18 +66,21 @@ npx playwright test tests/production/aoma-chat-test.spec.ts -g "COMPLEX QUERIES"
 - ✅ Upload error handling
 
 **Curate tab subtabs tested**:
+
 - Upload interface
 - File management list
 - Vector store status
 - Knowledge base curation
 
 **Why it's critical**:
+
 - Core AOMA feature - knowledge base management
 - Data integrity - ensures files are properly stored
 - User experience - upload/delete must work reliably
 - Vector embeddings - critical for AI search quality
 
 **How to run**:
+
 ```bash
 # All curation tests
 npx playwright test tests/curate-tab-test.spec.ts
@@ -83,11 +93,13 @@ npx playwright test tests/enhanced-curate-tab.spec.ts
 ---
 
 ### 3. **Visual Regression Tests** 🎨
+
 **Location**: `tests/visual/`
 
 **Purpose**: Prevents UI regressions, especially the recurring dark theme bug.
 
 **What it tests**:
+
 - ✅ Dark theme consistency (main chat panel)
 - ✅ Background colors (prevents white background regression)
 - ✅ UI component visibility and contrast
@@ -96,17 +108,20 @@ npx playwright test tests/enhanced-curate-tab.spec.ts
 - ✅ Console error detection
 
 **Critical test**: `dark-theme-regression.spec.ts`
+
 - **History**: White background has regressed multiple times
 - **Root cause**: CSS variables resolving to light colors
 - **Protection**: Automated RGB value checks + snapshot comparison
 
 **Why it's critical**:
+
 - User experience - dark theme is core to SIAM's design
 - Brand consistency - MAC Design System compliance
 - Accessibility - proper contrast ratios
 - Quality gate - catches unintended UI changes
 
 **How to run**:
+
 ```bash
 # All visual tests
 npx playwright test tests/visual/
@@ -121,11 +136,13 @@ npx playwright test tests/visual/ --update-snapshots
 ---
 
 ### 4. **Full Production Test Suite** 🚀
+
 **Location**: `tests/production/full-production-test.spec.ts`
 
 **Purpose**: Complete end-to-end production validation.
 
 **What it tests**:
+
 - ✅ Authentication flow (magic link)
 - ✅ Chat functionality
 - ✅ File upload/download
@@ -135,6 +152,7 @@ npx playwright test tests/visual/ --update-snapshots
 - ✅ Error handling
 
 **How to run**:
+
 ```bash
 npx playwright test tests/production/full-production-test.spec.ts
 ```
@@ -144,9 +162,11 @@ npx playwright test tests/production/full-production-test.spec.ts
 ## 🎭 Comprehensive Test Suite
 
 ### Authentication Tests
+
 **Location**: `tests/comprehensive/auth-flow.spec.ts`, `tests/auth/`
 
 **Coverage**:
+
 - Login form validation
 - Magic link authentication
 - Email verification via Mailinator
@@ -156,9 +176,11 @@ npx playwright test tests/production/full-production-test.spec.ts
 - Rate limiting
 
 ### Chat Functionality Tests
+
 **Location**: `tests/comprehensive/chat-functionality.spec.ts`
 
 **Coverage**:
+
 - Message sending/receiving
 - Multi-line messages
 - Message history
@@ -168,9 +190,11 @@ npx playwright test tests/production/full-production-test.spec.ts
 - Error recovery
 
 ### Assistant Tests
+
 **Location**: `tests/comprehensive/assistant-functionality.spec.ts`
 
 **Coverage**:
+
 - Thread management
 - Context retention
 - Follow-up questions
@@ -186,21 +210,25 @@ npx playwright test tests/production/full-production-test.spec.ts
 **MANDATORY TESTS BEFORE DEPLOYMENT**:
 
 1. ✅ **AOMA Chat Tests** - No hallucinations
+
    ```bash
    npx playwright test tests/production/aoma-chat-test.spec.ts
    ```
 
 2. ✅ **Curation Tests** - File upload/delete works
+
    ```bash
    npx playwright test tests/curate-tab-test.spec.ts
    ```
 
 3. ✅ **Visual Regression** - No UI breaks
+
    ```bash
    npx playwright test tests/visual/dark-theme-regression.spec.ts
    ```
 
 4. ✅ **Smoke Tests** - Critical paths work
+
    ```bash
    npx playwright test tests/e2e/smoke/smoke.spec.ts
    ```
@@ -215,6 +243,7 @@ npx playwright test tests/production/full-production-test.spec.ts
 ## 📊 Test Execution Guide
 
 ### Local Development Testing
+
 ```bash
 # Run all tests with dev server
 npm run test:e2e:local
@@ -230,6 +259,7 @@ npx playwright test --headed
 ```
 
 ### Production Testing (against iamsiam.ai)
+
 ```bash
 # Run production tests
 npm run test:e2e:render
@@ -239,6 +269,7 @@ npx playwright test --config=playwright.config.render.ts
 ```
 
 ### Debugging Failed Tests
+
 ```bash
 # Debug mode with inspector
 npx playwright test --debug tests/[test-file].spec.ts
@@ -260,6 +291,7 @@ npx playwright show-report
 **Location**: `tests/helpers/test-utils.ts`
 
 **Key helpers**:
+
 - `bypassAuth()` - Skip auth for faster local testing
 - `monitorConsoleErrors()` - Detect JS errors
 - `waitForAPIResponse()` - Wait for specific API calls
@@ -269,6 +301,7 @@ npx playwright show-report
 - `checkElementVisible()` - Element detection
 
 **Page Objects**:
+
 - `ChatPage` - Chat interface interactions
 - `CuratePage` - File upload/management
 - `BasePage` - Common page operations
@@ -311,23 +344,27 @@ tests/
 ## 🎯 Test Priorities
 
 ### P0 - BLOCKER (Must pass before deploy)
+
 - ✅ AOMA chat anti-hallucination tests
 - ✅ File upload/delete to knowledge base
 - ✅ Dark theme visual regression
 - ✅ Smoke tests (critical paths)
 
 ### P1 - HIGH (Should pass before deploy)
+
 - ✅ Full production test suite
 - ✅ Authentication flow
 - ✅ Chat functionality
 - ✅ Console error checks
 
 ### P2 - MEDIUM (Run regularly)
+
 - ✅ Assistant functionality
 - ✅ API endpoint tests
 - ✅ Performance tests
 
 ### P3 - LOW (Run periodically)
+
 - ✅ Visual regressions (non-critical)
 - ✅ Edge cases
 - ✅ Load testing
@@ -337,7 +374,9 @@ tests/
 ## 🚀 CI/CD Integration
 
 ### GitHub Actions
+
 Tests are configured to run automatically on:
+
 - Pull requests to main
 - Push to main branch
 - Manual workflow dispatch
@@ -345,7 +384,9 @@ Tests are configured to run automatically on:
 **Workflow file**: `.github/workflows/ci-cd.yml`
 
 ### Render Deployment
+
 After Render auto-deploys:
+
 1. Health check validation (45s wait)
 2. Smoke test execution
 3. Performance check
@@ -356,6 +397,7 @@ After Render auto-deploys:
 ## 💡 Best Practices
 
 ### When Writing New Tests
+
 1. **Use data-testid attributes** for stable selectors
 2. **Implement proper waits** (not arbitrary timeouts)
 3. **Test both success and failure paths**
@@ -365,6 +407,7 @@ After Render auto-deploys:
 7. **Use helpers** for common operations
 
 ### When Tests Fail
+
 1. **Review the HTML report** with screenshots
 2. **Check console errors** in test output
 3. **Run locally** in headed mode to see issue
@@ -373,6 +416,7 @@ After Render auto-deploys:
 6. **Review recent code changes**
 
 ### When Updating UI
+
 1. **Run visual tests first** (before changes)
 2. **Run tests after** UI changes
 3. **Review snapshot diffs** carefully
@@ -420,22 +464,27 @@ npx playwright test tests/visual/ --update-snapshots
 ## ⚠️ Common Pitfalls
 
 ### 1. **Forgetting to run AOMA chat tests**
+
 - **Risk**: Deploying hallucinating AI
 - **Solution**: Add to pre-commit hook or CI/CD
 
 ### 2. **Updating snapshots without review**
+
 - **Risk**: Accepting unintended UI regressions
 - **Solution**: Always review diffs before updating
 
 ### 3. **Not testing file upload/delete**
+
 - **Risk**: Breaking AOMA knowledge base curation
 - **Solution**: Run curation tests on every API change
 
 ### 4. **Skipping visual regression tests**
+
 - **Risk**: Dark theme breaking again (known issue)
 - **Solution**: Make visual tests mandatory in CI
 
 ### 5. **Testing only locally**
+
 - **Risk**: Environment-specific issues in production
 - **Solution**: Always run production tests before deploy
 
@@ -444,6 +493,7 @@ npx playwright test tests/visual/ --update-snapshots
 ## 🎉 Success Metrics
 
 **Test suite is working correctly when**:
+
 - ✅ All P0 tests pass consistently
 - ✅ No hallucinated AOMA responses
 - ✅ File upload/delete works reliably

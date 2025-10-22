@@ -5,11 +5,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 // Direct import to avoid barrel export issues on Linux
-import {
-  mcpClientWrapper,
-  MCPTool,
-  MCPResponse,
-} from "../services/MCPClientWrapper";
+import { mcpClientWrapper, MCPTool, MCPResponse } from "../services/MCPClientWrapper";
 
 export interface MCPClientState {
   isConnected: boolean;
@@ -70,11 +66,7 @@ export function useMCPClient(): [MCPClientState, MCPClientActions] {
           tools,
           error: null,
         });
-        console.log(
-          "✅ SIAM: Connected to AOMA Mesh MCP Server with",
-          tools.length,
-          "tools",
-        );
+        console.log("✅ SIAM: Connected to AOMA Mesh MCP Server with", tools.length, "tools");
         return true;
       } else {
         updateState({
@@ -85,8 +77,7 @@ export function useMCPClient(): [MCPClientState, MCPClientActions] {
         return false;
       }
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown connection error";
+      const errorMessage = error instanceof Error ? error.message : "Unknown connection error";
       console.error("❌ SIAM: MCP connection failed:", errorMessage);
       updateState({
         isConnected: false,
@@ -109,8 +100,7 @@ export function useMCPClient(): [MCPClientState, MCPClientActions] {
       });
       console.log("🔌 SIAM: Disconnected from AOMA Mesh MCP Server");
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown disconnection error";
+      const errorMessage = error instanceof Error ? error.message : "Unknown disconnection error";
       console.error("❌ SIAM: MCP disconnection failed:", errorMessage);
       updateState({ error: errorMessage });
     }
@@ -135,13 +125,12 @@ export function useMCPClient(): [MCPClientState, MCPClientActions] {
 
         return response;
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "Tool call error";
+        const errorMessage = error instanceof Error ? error.message : "Tool call error";
         updateState({ error: errorMessage });
         return { success: false, error: errorMessage };
       }
     },
-    [state.isConnected, updateState],
+    [state.isConnected, updateState]
   );
 
   // Analyze transcription using AOMA's analysis tools
@@ -150,7 +139,7 @@ export function useMCPClient(): [MCPClientState, MCPClientActions] {
       console.log("🔍 SIAM: Analyzing transcription with AOMA Mesh...");
       return callTool("analyze_transcription", { text });
     },
-    [callTool],
+    [callTool]
   );
 
   // Search AOMA knowledge base
@@ -159,7 +148,7 @@ export function useMCPClient(): [MCPClientState, MCPClientActions] {
       console.log("🔍 SIAM: Searching AOMA knowledge base for:", query);
       return callTool("search_knowledge_base", { query });
     },
-    [callTool],
+    [callTool]
   );
 
   // Get meeting insights
@@ -168,7 +157,7 @@ export function useMCPClient(): [MCPClientState, MCPClientActions] {
       console.log("💡 SIAM: Getting meeting insights from AOMA...");
       return callTool("get_meeting_insights", { text });
     },
-    [callTool],
+    [callTool]
   );
 
   // Store meeting context
@@ -177,7 +166,7 @@ export function useMCPClient(): [MCPClientState, MCPClientActions] {
       console.log("💾 SIAM: Storing meeting context in AOMA...");
       return callTool("store_meeting_context", { meetingData });
     },
-    [callTool],
+    [callTool]
   );
 
   // Clear error state
@@ -187,11 +176,7 @@ export function useMCPClient(): [MCPClientState, MCPClientActions] {
 
   // Auto-connect on mount (with debounce)
   useEffect(() => {
-    if (
-      !connectionAttemptRef.current &&
-      !state.isConnected &&
-      !state.isConnecting
-    ) {
+    if (!connectionAttemptRef.current && !state.isConnected && !state.isConnecting) {
       connectionAttemptRef.current = true;
 
       const timer = setTimeout(() => {

@@ -24,6 +24,7 @@ tests/
 ## Test Naming Conventions
 
 ### File Naming
+
 - **Unit/Component**: `[component-name].spec.ts`
 - **Feature Tests**: `[feature-name]-test.spec.ts`
 - **Integration**: `[system]-integration.spec.ts`
@@ -31,6 +32,7 @@ tests/
 - **Visual Tests**: `[page-name]-visual.spec.ts`
 
 ### Test Organization
+
 ```typescript
 // Standard test structure
 import { test, expect } from "@playwright/test";
@@ -40,13 +42,13 @@ test.describe("Feature Name", () => {
   // Setup hooks
   test.beforeAll(async () => {});
   test.beforeEach(async ({ page }) => {});
-  
+
   // Grouped tests
   test.describe("Specific Functionality", () => {
     test("should perform action @smoke", async ({ page }) => {});
     test("should handle edge case @regression", async ({ page }) => {});
   });
-  
+
   // Cleanup
   test.afterEach(async () => {});
   test.afterAll(async () => {});
@@ -56,6 +58,7 @@ test.describe("Feature Name", () => {
 ## Test Tags System
 
 Use tags for test categorization and selective execution:
+
 - `@smoke` - Critical path tests, run on every commit
 - `@regression` - Full regression suite
 - `@visual` - Visual regression tests
@@ -68,6 +71,7 @@ Use tags for test categorization and selective execution:
 ## Running Tests
 
 ### Local Development
+
 ```bash
 # Run all tests locally
 npm run test:e2e:local
@@ -86,6 +90,7 @@ npx playwright test --headed
 ```
 
 ### Against Render Deployment
+
 ```bash
 # Run all tests against Render
 npm run test:e2e
@@ -100,12 +105,14 @@ npx playwright test --config=playwright.config.render.ts
 ## Writing New Tests
 
 ### 1. Choose the Right Directory
+
 - **api/**: Testing REST endpoints, GraphQL queries
 - **auth/**: Login, logout, password reset, permissions
 - **e2e/**: Complete user workflows
 - **visual/**: Screenshot comparisons, UI consistency
 
 ### 2. Use Helpers
+
 ```typescript
 import { login, logout } from "../helpers/auth";
 import { generateTestData } from "../helpers/test-data-generator";
@@ -119,17 +126,19 @@ test("authenticated user flow", async ({ page }) => {
 ```
 
 ### 3. Page Object Model (Recommended)
+
 Create page objects for reusable interactions:
+
 ```typescript
 // tests/pages/chat-page.ts
 export class ChatPage {
   constructor(private page: Page) {}
-  
+
   async sendMessage(text: string) {
     await this.page.fill('[data-testid="chat-input"]', text);
     await this.page.click('[data-testid="send-button"]');
   }
-  
+
   async getLastMessage() {
     return this.page.textContent('[data-testid="message"]:last-child');
   }
@@ -139,12 +148,15 @@ export class ChatPage {
 ## Environment Configuration
 
 ### Test Data Attributes
+
 Add data-testid attributes to components for reliable selection:
+
 ```tsx
 <button data-testid="submit-button">Submit</button>
 ```
 
 ### Environment Variables
+
 ```bash
 # .env.test
 BASE_URL=http://localhost:3000
@@ -155,6 +167,7 @@ TEST_USER_PASSWORD=secure_password
 ## CI/CD Integration
 
 ### GitHub Actions
+
 ```yaml
 - name: Run Playwright tests
   run: |
@@ -193,11 +206,13 @@ DEBUG=pw:api npx playwright test
 ## Reports
 
 Test reports are generated in:
+
 - `playwright-report/` - HTML report
 - `test-results/` - JSON results and failure artifacts
 - `screenshots/` - Visual test screenshots
 
 View HTML report:
+
 ```bash
 npx playwright show-report
 ```
@@ -205,13 +220,17 @@ npx playwright show-report
 ## IDE Integration
 
 ### VS Code
+
 Install the "Playwright Test for VSCode" extension for:
+
 - Run tests from editor
 - Debug breakpoints
 - Auto-completion
 
 ### WebStorm/IntelliJ
+
 Built-in Playwright support:
+
 - Right-click to run tests
 - Debugging support
 - Test generation
@@ -226,15 +245,16 @@ test.describe("New Feature", () => {
   test("should do something @smoke", async ({ page }) => {
     // Arrange
     await page.goto("/");
-    
+
     // Act
     await page.click('[data-testid="feature-button"]');
-    
+
     // Assert
     await expect(page.locator('[data-testid="result"]')).toBeVisible();
   });
 });
 ```
+
 reenshots during tests
 
 ```bash

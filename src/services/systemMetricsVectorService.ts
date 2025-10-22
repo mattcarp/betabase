@@ -10,13 +10,13 @@
  * - Web Vitals and client-side performance metrics
  */
 
-import { getSupabaseVectorService } from './supabaseVectorService';
-import * as os from 'os';
-import * as v8 from 'v8';
+import { getSupabaseVectorService } from "./supabaseVectorService";
+import * as os from "os";
+import * as v8 from "v8";
 
 export interface SystemMetric {
   timestamp: string;
-  metricType: 'performance' | 'resource' | 'api' | 'error' | 'custom';
+  metricType: "performance" | "resource" | "api" | "error" | "custom";
   name: string;
   value: number | string | Record<string, any>;
   unit?: string;
@@ -122,66 +122,66 @@ export class SystemMetricsVectorService {
     // System metrics
     metrics.push({
       timestamp,
-      metricType: 'resource',
-      name: 'system.cpu.usage',
+      metricType: "resource",
+      name: "system.cpu.usage",
       value: snapshot.system.cpuUsage,
-      unit: 'load',
+      unit: "load",
       tags: { platform: snapshot.system.platform },
     });
 
     metrics.push({
       timestamp,
-      metricType: 'resource',
-      name: 'system.memory.usage',
+      metricType: "resource",
+      name: "system.memory.usage",
       value: snapshot.system.memoryUsage.usagePercent,
-      unit: 'percent',
+      unit: "percent",
       tags: { platform: snapshot.system.platform },
       metadata: snapshot.system.memoryUsage,
     });
 
     metrics.push({
       timestamp,
-      metricType: 'resource',
-      name: 'system.memory.used',
+      metricType: "resource",
+      name: "system.memory.used",
       value: snapshot.system.memoryUsage.used,
-      unit: 'bytes',
+      unit: "bytes",
       tags: { platform: snapshot.system.platform },
     });
 
     // Process metrics
     metrics.push({
       timestamp,
-      metricType: 'performance',
-      name: 'process.memory.heapUsed',
+      metricType: "performance",
+      name: "process.memory.heapUsed",
       value: snapshot.process.memoryUsage.heapUsed,
-      unit: 'bytes',
+      unit: "bytes",
       tags: { nodeVersion: snapshot.system.nodeVersion },
     });
 
     metrics.push({
       timestamp,
-      metricType: 'performance',
-      name: 'process.memory.external',
+      metricType: "performance",
+      name: "process.memory.external",
       value: snapshot.process.memoryUsage.external,
-      unit: 'bytes',
+      unit: "bytes",
       tags: { nodeVersion: snapshot.system.nodeVersion },
     });
 
     metrics.push({
       timestamp,
-      metricType: 'performance',
-      name: 'process.cpu.user',
+      metricType: "performance",
+      name: "process.cpu.user",
       value: snapshot.process.cpuUsage.user,
-      unit: 'microseconds',
+      unit: "microseconds",
       tags: { nodeVersion: snapshot.system.nodeVersion },
     });
 
     metrics.push({
       timestamp,
-      metricType: 'performance',
-      name: 'process.cpu.system',
+      metricType: "performance",
+      name: "process.cpu.system",
       value: snapshot.process.cpuUsage.system,
-      unit: 'microseconds',
+      unit: "microseconds",
       tags: { nodeVersion: snapshot.system.nodeVersion },
     });
 
@@ -190,20 +190,20 @@ export class SystemMetricsVectorService {
       if (snapshot.application.avgResponseTime !== undefined) {
         metrics.push({
           timestamp,
-          metricType: 'api',
-          name: 'application.api.responseTime',
+          metricType: "api",
+          name: "application.api.responseTime",
           value: snapshot.application.avgResponseTime,
-          unit: 'milliseconds',
+          unit: "milliseconds",
         });
       }
 
       if (snapshot.application.errorRate !== undefined) {
         metrics.push({
           timestamp,
-          metricType: 'error',
-          name: 'application.errorRate',
+          metricType: "error",
+          name: "application.errorRate",
           value: snapshot.application.errorRate,
-          unit: 'percent',
+          unit: "percent",
         });
       }
     }
@@ -215,17 +215,20 @@ export class SystemMetricsVectorService {
    * Create searchable content from metric data
    */
   private createMetricContent(metric: SystemMetric): string {
-    const formattedValue = typeof metric.value === 'object'
-      ? JSON.stringify(metric.value, null, 2)
-      : `${metric.value}${metric.unit ? ' ' + metric.unit : ''}`;
+    const formattedValue =
+      typeof metric.value === "object"
+        ? JSON.stringify(metric.value, null, 2)
+        : `${metric.value}${metric.unit ? " " + metric.unit : ""}`;
 
     const tagsContext = metric.tags
-      ? `\nTags: ${Object.entries(metric.tags).map(([k, v]) => `${k}=${v}`).join(', ')}`
-      : '';
+      ? `\nTags: ${Object.entries(metric.tags)
+          .map(([k, v]) => `${k}=${v}`)
+          .join(", ")}`
+      : "";
 
     const metadataContext = metric.metadata
       ? `\nMetadata: ${JSON.stringify(metric.metadata, null, 2)}`
-      : '';
+      : "";
 
     return `${metric.name}: ${formattedValue}
 Type: ${metric.metricType}
@@ -256,12 +259,7 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
     const metadata = this.createMetricMetadata(metric);
     const sourceId = `${metric.metricType}:${metric.name}:${metric.timestamp}`;
 
-    return await this.vectorService.upsertVector(
-      content,
-      'metrics',
-      sourceId,
-      metadata
-    );
+    return await this.vectorService.upsertVector(content, "metrics", sourceId, metadata);
   }
 
   /**
@@ -274,15 +272,15 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
     console.log(`🚀 Starting vectorization of ${metrics.length} system metrics...`);
 
     // Update migration status
-    await this.vectorService.updateMigrationStatus('metrics', 'in_progress', {
+    await this.vectorService.updateMigrationStatus("metrics", "in_progress", {
       totalCount: metrics.length,
       migratedCount: 0,
     });
 
     // Prepare vectors for batch processing
-    const vectors = metrics.map(metric => ({
+    const vectors = metrics.map((metric) => ({
       content: this.createMetricContent(metric),
-      sourceType: 'metrics' as const,
+      sourceType: "metrics" as const,
       sourceId: `${metric.metricType}:${metric.name}:${metric.timestamp}`,
       metadata: this.createMetricMetadata(metric),
     }));
@@ -293,8 +291,8 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
     const duration = Date.now() - startTime;
 
     // Update final migration status
-    const status = result.failed === 0 ? 'completed' : 'failed';
-    await this.vectorService.updateMigrationStatus('metrics', status, {
+    const status = result.failed === 0 ? "completed" : "failed";
+    await this.vectorService.updateMigrationStatus("metrics", status, {
       totalCount: metrics.length,
       migratedCount: result.success,
     });
@@ -316,7 +314,7 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
    * Capture and vectorize current system snapshot
    */
   async captureAndVectorize(): Promise<MetricsVectorizationResult> {
-    console.log('📊 Capturing system snapshot...');
+    console.log("📊 Capturing system snapshot...");
     const snapshot = await this.captureSystemSnapshot();
     const metrics = this.snapshotToMetrics(snapshot);
 
@@ -336,20 +334,14 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
     name: string,
     value: number | string | Record<string, any>,
     options: {
-      metricType?: SystemMetric['metricType'];
+      metricType?: SystemMetric["metricType"];
       unit?: string;
       tags?: Record<string, string>;
       metadata?: Record<string, any>;
       vectorize?: boolean;
     } = {}
   ): Promise<string | null> {
-    const {
-      metricType = 'custom',
-      unit,
-      tags,
-      metadata,
-      vectorize = true,
-    } = options;
+    const { metricType = "custom", unit, tags, metadata, vectorize = true } = options;
 
     const metric: SystemMetric = {
       timestamp: new Date().toISOString(),
@@ -383,7 +375,7 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
     options: {
       matchThreshold?: number;
       matchCount?: number;
-      metricType?: SystemMetric['metricType'];
+      metricType?: SystemMetric["metricType"];
       timeRange?: { start: string; end: string };
     } = {}
   ) {
@@ -393,7 +385,7 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
     const results = await this.vectorService.searchVectors(query, {
       matchThreshold,
       matchCount,
-      sourceTypes: ['metrics'],
+      sourceTypes: ["metrics"],
     });
 
     // Additional filtering by metadata
@@ -401,14 +393,14 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
 
     if (metricType) {
       filteredResults = filteredResults.filter(
-        result => result.metadata?.metricType === metricType
+        (result) => result.metadata?.metricType === metricType
       );
     }
 
     if (timeRange) {
       const startDate = new Date(timeRange.start);
       const endDate = new Date(timeRange.end);
-      filteredResults = filteredResults.filter(result => {
+      filteredResults = filteredResults.filter((result) => {
         if (!result.metadata?.timestamp) return false;
         const metricDate = new Date(result.metadata.timestamp);
         return metricDate >= startDate && metricDate <= endDate;
@@ -423,7 +415,7 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
    */
   getMetricsHistory(
     filters: {
-      metricType?: SystemMetric['metricType'];
+      metricType?: SystemMetric["metricType"];
       namePattern?: string;
       limit?: number;
     } = {}
@@ -431,12 +423,12 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
     let filtered = [...this.metricsHistory];
 
     if (filters.metricType) {
-      filtered = filtered.filter(m => m.metricType === filters.metricType);
+      filtered = filtered.filter((m) => m.metricType === filters.metricType);
     }
 
     if (filters.namePattern) {
-      const pattern = new RegExp(filters.namePattern, 'i');
-      filtered = filtered.filter(m => pattern.test(m.name));
+      const pattern = new RegExp(filters.namePattern, "i");
+      filtered = filtered.filter((m) => pattern.test(m.name));
     }
 
     if (filters.limit) {
@@ -451,7 +443,7 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
    */
   async getMetricsVectorStats() {
     const allStats = await this.vectorService.getVectorStats();
-    return allStats?.filter((stat: any) => stat.source_type === 'metrics') || [];
+    return allStats?.filter((stat: any) => stat.source_type === "metrics") || [];
   }
 
   /**
@@ -465,7 +457,7 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
       try {
         await this.captureAndVectorize();
       } catch (error) {
-        console.error('Failed to capture and vectorize metrics:', error);
+        console.error("Failed to capture and vectorize metrics:", error);
       }
     }, intervalMs);
   }
@@ -475,7 +467,7 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
    * Future: Pull metrics from Prometheus endpoint
    */
   async ingestPrometheusMetrics(prometheusUrl: string): Promise<MetricsVectorizationResult> {
-    console.log('📊 Prometheus integration not yet implemented');
+    console.log("📊 Prometheus integration not yet implemented");
     console.log(`💡 Future: Pull metrics from ${prometheusUrl}`);
 
     // Placeholder for future Prometheus integration
@@ -484,7 +476,7 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
       totalMetrics: 0,
       successfulVectorizations: 0,
       failedVectorizations: 0,
-      errors: [{ metricName: 'prometheus', error: 'Not implemented' }],
+      errors: [{ metricName: "prometheus", error: "Not implemented" }],
       duration: 0,
     };
   }
@@ -493,8 +485,11 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
    * Integration point for Grafana dashboards
    * Future: Pull metrics from Grafana API
    */
-  async ingestGrafanaMetrics(grafanaUrl: string, apiKey: string): Promise<MetricsVectorizationResult> {
-    console.log('📊 Grafana integration not yet implemented');
+  async ingestGrafanaMetrics(
+    grafanaUrl: string,
+    apiKey: string
+  ): Promise<MetricsVectorizationResult> {
+    console.log("📊 Grafana integration not yet implemented");
     console.log(`💡 Future: Pull metrics from ${grafanaUrl}`);
 
     // Placeholder for future Grafana integration
@@ -502,7 +497,7 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
       totalMetrics: 0,
       successfulVectorizations: 0,
       failedVectorizations: 0,
-      errors: [{ metricName: 'grafana', error: 'Not implemented' }],
+      errors: [{ metricName: "grafana", error: "Not implemented" }],
       duration: 0,
     };
   }

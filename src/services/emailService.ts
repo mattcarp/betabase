@@ -14,8 +14,7 @@ const sesClient = new SESClient({
 
 export class EmailService {
   private static instance: EmailService;
-  private verificationCodes: Map<string, { code: string; expires: number }> =
-    new Map();
+  private verificationCodes: Map<string, { code: string; expires: number }> = new Map();
 
   private constructor() {}
 
@@ -44,10 +43,7 @@ export class EmailService {
     this.verificationCodes.set(email.toLowerCase(), { code, expires });
 
     // For development/testing, just return the code without sending email
-    if (
-      process.env.NODE_ENV === "development" ||
-      !process.env.AWS_ACCESS_KEY_ID
-    ) {
+    if (process.env.NODE_ENV === "development" || !process.env.AWS_ACCESS_KEY_ID) {
       console.log(`[EMAIL] Magic link code for ${email}: ${code}`);
       return code;
     }

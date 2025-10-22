@@ -3,6 +3,7 @@
 ## 🎯 Purpose
 
 This test suite prevents AI hallucinations by validating that AOMA chat responses:
+
 1. ✅ Return accurate information from the knowledge base
 2. ✅ Say "I don't know" when information isn't available
 3. ✅ Cite sources correctly
@@ -12,6 +13,7 @@ This test suite prevents AI hallucinations by validating that AOMA chat response
 ## 🚨 Why This Matters
 
 We kept getting regressions where AOMA would:
+
 - Give confident **wrong** answers instead of admitting lack of knowledge
 - Fabricate specific details (dates, numbers, features) that don't exist
 - Make up information instead of saying "unavailable"
@@ -22,9 +24,11 @@ We kept getting regressions where AOMA would:
 ## 📁 Test Files
 
 ### 1. `aoma-knowledge-validation.spec.ts`
+
 **Purpose**: Validate accurate answers from the knowledge base
 
 **What it tests**:
+
 - ✅ **Known Facts**: Questions that SHOULD be in the knowledge base
   - "What is AOMA?" → Should have accurate answer
   - "What is USM?" → Should explain Universal Service Model
@@ -40,6 +44,7 @@ We kept getting regressions where AOMA would:
 - 🔗 **MCP Connection**: Test AOMA-MCP server connectivity
 
 **Example Output**:
+
 ```
 📚 Testing Known Facts from AOMA Knowledge Base...
    🔍 Testing: AOMA Basics - "What is AOMA?"
@@ -49,9 +54,11 @@ We kept getting regressions where AOMA would:
 ```
 
 ### 2. `aoma-anti-hallucination.spec.ts`
+
 **Purpose**: Catch AI making up bullshit answers
 
 **What it tests**:
+
 - 🎣 **Hallucination Triggers**: Questions designed to make AI hallucinate
   - "When exactly was AOMA 3.0 released?" → AI shouldn't fabricate dates
   - "How many users does AOMA have?" → AI shouldn't make up numbers
@@ -66,6 +73,7 @@ We kept getting regressions where AOMA would:
   - Avoid words like "definitely", "absolutely" for uncertain info
 
 **Example Output**:
+
 ```
 🎣 Testing Hallucination Triggers...
    🎯 Testing: Specific Dates
@@ -76,9 +84,11 @@ We kept getting regressions where AOMA would:
 ```
 
 ### 3. `aoma-chat-test.spec.ts` (Existing)
+
 **Purpose**: Comprehensive end-to-end chat functionality tests
 
 **What it tests**:
+
 - Basic queries, complex queries
 - Multi-turn conversations
 - Error handling
@@ -135,16 +145,19 @@ npx playwright test tests/production/aoma-knowledge-validation.spec.ts --headed
 ### Success Criteria
 
 **Known Facts Test**:
+
 - ✅ At least 80% of known facts should return accurate answers
 - ✅ Zero "I don't know" responses for documented features
 - ✅ Keyword match score ≥ 50% for each query
 
 **Unknown Facts Test**:
+
 - ✅ 100% of unknown facts should trigger "I don't know" responses
 - ✅ **ZERO hallucinations** (zero tolerance!)
 - ✅ No fabricated content in responses
 
 **Anti-Hallucination Test**:
+
 - ✅ **ZERO hallucinations** on tricky questions
 - ✅ No made-up dates, numbers, or features
 - ✅ Appropriate uncertainty markers on edge cases
@@ -152,6 +165,7 @@ npx playwright test tests/production/aoma-knowledge-validation.spec.ts --headed
 ### Screenshots
 
 All tests capture screenshots for evidence:
+
 - `test-results/aoma-known-fact-*.png`
 - `test-results/aoma-unknown-fact-*.png`
 - `test-results/aoma-hallucination-*.png`
@@ -194,12 +208,14 @@ Edit `HALLUCINATION_TRIGGERS` array in `aoma-anti-hallucination.spec.ts`:
 **Symptom**: AOMA says "I don't know" for a documented feature
 
 **Possible Causes**:
+
 1. Knowledge base not properly indexed
 2. AOMA-MCP server connection issue
 3. Documentation not in the knowledge base yet
 4. Query wording doesn't match indexed content
 
 **Actions**:
+
 1. Check AOMA-MCP server health: `https://aoma-mesh-mcp.onrender.com/api/health`
 2. Verify knowledge base has the content
 3. Contact matt@mattcarpenter.com if persists
@@ -209,11 +225,13 @@ Edit `HALLUCINATION_TRIGGERS` array in `aoma-anti-hallucination.spec.ts`:
 **Symptom**: AOMA gives confident answer instead of "I don't know"
 
 **Possible Causes**:
+
 1. **HALLUCINATION** - AI making up answers
 2. System prompt not being followed
 3. Context bleed from previous conversations
 
 **Actions**:
+
 1. 🚨 **CRITICAL** - This is a hallucination!
 2. Review the response in the screenshot
 3. Check system prompt in `app/api/chat/route.ts`
@@ -224,11 +242,13 @@ Edit `HALLUCINATION_TRIGGERS` array in `aoma-anti-hallucination.spec.ts`:
 **Symptom**: AI fabricates specific details (dates, numbers, names)
 
 **Possible Causes**:
+
 1. **HALLUCINATION** - AI being overconfident
 2. Model ignoring system prompt constraints
 3. Training data bias leaking through
 
 **Actions**:
+
 1. 🚨 **ZERO TOLERANCE** - Fix immediately
 2. Strengthen system prompt constraints
 3. Add the failing case to the test suite
@@ -237,6 +257,7 @@ Edit `HALLUCINATION_TRIGGERS` array in `aoma-anti-hallucination.spec.ts`:
 ## 📞 Support
 
 If tests fail consistently or you need help:
+
 - **Contact**: matt@mattcarpenter.com
 - **AOMA-MCP Server**: https://aoma-mesh-mcp.onrender.com
 - **Production App**: https://thebetabase.com
@@ -265,6 +286,7 @@ npm run test:smoke               # Critical paths
 4. **Regression Prevention**: Catches issues before they reach users
 
 **Our Standards**:
+
 - ✅ Accurate answers for known facts
 - ✅ Honest "I don't know" for unknown facts
 - ❌ **ZERO tolerance** for hallucinations
@@ -273,6 +295,7 @@ npm run test:smoke               # Critical paths
 ## 🎉 Success Metrics
 
 When tests pass, you know:
+
 - ✅ AOMA returns accurate information from knowledge base
 - ✅ AOMA admits when it doesn't know something
 - ✅ No fabricated dates, numbers, or features

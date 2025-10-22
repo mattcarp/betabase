@@ -8,13 +8,7 @@ import { PromptInput } from "../ai-elements/prompt-input";
 import { Suggestion } from "../ai-elements/suggestion";
 import { Conversation } from "../ai-elements/conversation";
 import { ScrollArea } from "../ui/scroll-area";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { Bot, Sparkles, Trash2, Download, AlertCircle } from "lucide-react";
@@ -72,9 +66,7 @@ export function EnhancedChatPanel({
 }: EnhancedChatPanelProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
-  const [selectedModel, setSelectedModel] = useState(
-    availableModels[0]?.id || "gpt-4o",
-  );
+  const [selectedModel, setSelectedModel] = useState(availableModels[0]?.id || "gpt-4o");
 
   const {
     messages,
@@ -96,47 +88,52 @@ export function EnhancedChatPanel({
     },
     onError: (error) => {
       console.error("Chat error:", error);
-      
+
       // Transform AI SDK errors to user-friendly messages
       let userFriendlyError = error;
-      
+
       // Parse JSON error messages from AI SDK
       let errorMessage = error.message || error.toString();
-      
+
       try {
         // Try to parse if it's a JSON string
         const parsedError = JSON.parse(errorMessage);
         if (parsedError.error && parsedError.error.type) {
           const errorType = parsedError.error.type;
-          const originalMessage = parsedError.error.message || '';
-          
-          if (errorType === 'insufficient_quota' || originalMessage.includes('quota')) {
+          const originalMessage = parsedError.error.message || "";
+
+          if (errorType === "insufficient_quota" || originalMessage.includes("quota")) {
             userFriendlyError = new Error(
               "I've reached my OpenAI API quota limit. Please contact support or try again later when the quota resets."
             );
-          } else if (errorType === 'rate_limit_exceeded' || originalMessage.includes('rate_limit') || originalMessage.includes('Rate limit')) {
+          } else if (
+            errorType === "rate_limit_exceeded" ||
+            originalMessage.includes("rate_limit") ||
+            originalMessage.includes("Rate limit")
+          ) {
             userFriendlyError = new Error(
               "I'm currently handling too many requests. Please wait a moment and try again."
             );
           } else {
             userFriendlyError = new Error(
-              originalMessage || "I'm experiencing technical difficulties. Please try again in a moment."
+              originalMessage ||
+                "I'm experiencing technical difficulties. Please try again in a moment."
             );
           }
         }
       } catch (parseError) {
         // If it's not JSON, check if it contains quota/rate limit keywords
-        if (errorMessage.includes('quota') || errorMessage.includes('insufficient_quota')) {
+        if (errorMessage.includes("quota") || errorMessage.includes("insufficient_quota")) {
           userFriendlyError = new Error(
             "I've reached my OpenAI API quota limit. Please contact support or try again later when the quota resets."
           );
-        } else if (errorMessage.includes('rate_limit') || errorMessage.includes('Rate limit')) {
+        } else if (errorMessage.includes("rate_limit") || errorMessage.includes("Rate limit")) {
           userFriendlyError = new Error(
             "I'm currently handling too many requests. Please wait a moment and try again."
           );
         }
       }
-      
+
       onError?.(userFriendlyError);
     },
     onFinish: () => {
@@ -150,7 +147,7 @@ export function EnhancedChatPanel({
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector(
-        "[data-radix-scroll-area-viewport]",
+        "[data-radix-scroll-area-viewport]"
       );
       if (scrollContainer) {
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
@@ -201,9 +198,7 @@ export function EnhancedChatPanel({
     }
   };
 
-  const isMaxMessagesReached = maxMessages
-    ? messages.length >= maxMessages
-    : false;
+  const isMaxMessagesReached = maxMessages ? messages.length >= maxMessages : false;
 
   return (
     <Card className={cn("flex flex-col h-full", className)}>
@@ -218,9 +213,7 @@ export function EnhancedChatPanel({
               <div>
                 <CardTitle className="text-lg">{title}</CardTitle>
                 {description && (
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {description}
-                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
                 )}
               </div>
             </div>
@@ -274,12 +267,10 @@ export function EnhancedChatPanel({
                   <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2" />
                 </div>
 
-                <h3 className="text-lg font-semibold mb-2">
-                  Welcome to {title}
-                </h3>
+                <h3 className="text-lg font-semibold mb-2">Welcome to {title}</h3>
                 <p className="text-sm text-muted-foreground mb-6 max-w-md">
-                  I'm here to help you with your questions. You can ask me
-                  anything or choose from the suggestions below.
+                  I'm here to help you with your questions. You can ask me anything or choose from
+                  the suggestions below.
                 </p>
 
                 {showSuggestions && suggestions.length > 0 && (
@@ -331,8 +322,7 @@ export function EnhancedChatPanel({
               <Alert className="mt-4">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  Maximum message limit ({maxMessages}) reached. Please start a
-                  new conversation.
+                  Maximum message limit ({maxMessages}) reached. Please start a new conversation.
                 </AlertDescription>
               </Alert>
             )}
@@ -346,9 +336,7 @@ export function EnhancedChatPanel({
             <PromptInput
               value={input}
               onChange={(e) => handleInputChange(e as any)}
-              placeholder={
-                isMaxMessagesReached ? "Message limit reached" : placeholder
-              }
+              placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
               disabled={isMaxMessagesReached || isLoading}
               className="w-full"
               models={showModelSelector ? availableModels : undefined}

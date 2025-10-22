@@ -45,7 +45,7 @@ export function useElevenLabsSTT(options: UseElevenLabsSTTOptions = {}) {
           setTranscript((prev) => prev + final);
           options.onTranscript?.(final, true);
         }
-        
+
         setInterimTranscript(interim);
         if (interim) {
           options.onTranscript?.(interim, false);
@@ -58,11 +58,11 @@ export function useElevenLabsSTT(options: UseElevenLabsSTTOptions = {}) {
           // Silently ignore - this is expected on localhost without HTTPS
           return;
         }
-        
+
         // Log and handle other errors
         console.error("Speech recognition error:", event.error);
         options.onError?.(new Error(`Speech recognition error: ${event.error}`));
-        
+
         if (event.error === "not-allowed") {
           options.onError?.(new Error("Microphone permission denied"));
         }
@@ -97,7 +97,7 @@ export function useElevenLabsSTT(options: UseElevenLabsSTTOptions = {}) {
     try {
       // Request microphone permission
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      
+
       // Start Web Speech API recognition
       if (recognitionRef.current) {
         try {
@@ -119,12 +119,12 @@ export function useElevenLabsSTT(options: UseElevenLabsSTTOptions = {}) {
 
       mediaRecorderRef.current.onstop = async () => {
         const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
-        
+
         // Here we could send to ElevenLabs API for server-side transcription
         // For now, we rely on Web Speech API
-        
+
         // Clean up
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach((track) => track.stop());
       };
 
       mediaRecorderRef.current.start();

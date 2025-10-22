@@ -8,7 +8,11 @@
  */
 
 import { test, expect } from "@playwright/test";
-import { setupConsoleMonitoring, assertNoConsoleErrors, getConsoleMonitor } from "../helpers/console-monitor";
+import {
+  setupConsoleMonitoring,
+  assertNoConsoleErrors,
+  getConsoleMonitor,
+} from "../helpers/console-monitor";
 
 test.describe("Suggestion Button Click Tests @critical", () => {
   // Don't use serial mode - each test needs independent page state
@@ -25,10 +29,13 @@ test.describe("Suggestion Button Click Tests @critical", () => {
     await page.waitForLoadState("networkidle");
 
     // Wait for suggestions to appear
-    await page.waitForSelector('button:has-text("analyze"), button:has-text("How can I"), button:has-text("What are"), button:has-text("Can you help")', {
-      timeout: 10000,
-      state: "visible"
-    });
+    await page.waitForSelector(
+      'button:has-text("analyze"), button:has-text("How can I"), button:has-text("What are"), button:has-text("Can you help")',
+      {
+        timeout: 10000,
+        state: "visible",
+      }
+    );
   });
 
   // Assert no console errors after each test
@@ -50,8 +57,9 @@ test.describe("Suggestion Button Click Tests @critical", () => {
     console.log("🎯 Testing first suggestion button click...");
 
     // Find all suggestion buttons (look for the actual suggestion text patterns)
-    const suggestionButtons = page.locator('button').filter({
-      hasText: /How can I|What are|Can you help|analyze complex|best practices|optimize my code|effective documentation/i
+    const suggestionButtons = page.locator("button").filter({
+      hasText:
+        /How can I|What are|Can you help|analyze complex|best practices|optimize my code|effective documentation/i,
     });
 
     const count = await suggestionButtons.count();
@@ -87,8 +95,10 @@ test.describe("Suggestion Button Click Tests @critical", () => {
     console.log("🎯 Testing ALL suggestion button clicks...");
 
     // Find all suggestion buttons
-    const suggestionButtons = page.locator('button').filter({
-      has: page.locator('*:has-text("Get started"), *:has-text("Help me"), *:has-text("Show me"), *:has-text("Explain"), *:has-text("capabilities"), *:has-text("features")')
+    const suggestionButtons = page.locator("button").filter({
+      has: page.locator(
+        '*:has-text("Get started"), *:has-text("Help me"), *:has-text("Show me"), *:has-text("Explain"), *:has-text("capabilities"), *:has-text("features")'
+      ),
     });
 
     const count = await suggestionButtons.count();
@@ -123,7 +133,9 @@ test.describe("Suggestion Button Click Tests @critical", () => {
         });
 
         // Fail the test with detailed info
-        throw new Error(`Suggestion button "${buttonText}" triggered ${errors.length} console error(s): ${errors.join(", ")}`);
+        throw new Error(
+          `Suggestion button "${buttonText}" triggered ${errors.length} console error(s): ${errors.join(", ")}`
+        );
       } else {
         console.log(`  ✅ Button "${buttonText}" works correctly - no errors`);
       }
@@ -132,10 +144,13 @@ test.describe("Suggestion Button Click Tests @critical", () => {
       if (i < count - 1) {
         await page.goto("/");
         await page.waitForLoadState("networkidle");
-        await page.waitForSelector('button:has-text("How can I"), button:has-text("What are"), button:has-text("Can you help")', {
-          timeout: 5000,
-          state: "visible"
-        });
+        await page.waitForSelector(
+          'button:has-text("How can I"), button:has-text("What are"), button:has-text("Can you help")',
+          {
+            timeout: 5000,
+            state: "visible",
+          }
+        );
       }
     }
   });
@@ -144,8 +159,9 @@ test.describe("Suggestion Button Click Tests @critical", () => {
     console.log("🎯 Testing suggestion button functionality...");
 
     // Find first suggestion button
-    const suggestionButtons = page.locator('button').filter({
-      hasText: /How can I|What are|Can you help|analyze complex|best practices|optimize my code|effective documentation/i
+    const suggestionButtons = page.locator("button").filter({
+      hasText:
+        /How can I|What are|Can you help|analyze complex|best practices|optimize my code|effective documentation/i,
     });
 
     const firstButton = suggestionButtons.first();
@@ -157,7 +173,9 @@ test.describe("Suggestion Button Click Tests @critical", () => {
 
     // Verify message was added to conversation
     // Look for the message in the chat (could be loading state or actual message)
-    const chatContainer = page.locator('[role="log"], .conversation-content, .messages-container').first();
+    const chatContainer = page
+      .locator('[role="log"], .conversation-content, .messages-container')
+      .first();
 
     // Wait for either loading indicator or message
     try {
@@ -180,8 +198,9 @@ test.describe("Suggestion Button Click Tests @critical", () => {
   test("Clicking suggestion hides suggestions (expected behavior)", async ({ page }) => {
     console.log("🎯 Testing suggestion UI behavior...");
 
-    const suggestionButtons = page.locator('button').filter({
-      hasText: /How can I|What are|Can you help|analyze complex|best practices|optimize my code|effective documentation/i
+    const suggestionButtons = page.locator("button").filter({
+      hasText:
+        /How can I|What are|Can you help|analyze complex|best practices|optimize my code|effective documentation/i,
     });
 
     const initialCount = await suggestionButtons.count();
@@ -221,13 +240,17 @@ test.describe("Suggestion Button Click Tests @critical", () => {
     await page.waitForLoadState("networkidle");
 
     // Wait for suggestions
-    await page.waitForSelector('button:has-text("How can I"), button:has-text("What are"), button:has-text("Can you help")', {
-      timeout: 5000,
-      state: "visible"
-    });
+    await page.waitForSelector(
+      'button:has-text("How can I"), button:has-text("What are"), button:has-text("Can you help")',
+      {
+        timeout: 5000,
+        state: "visible",
+      }
+    );
 
-    const suggestionButtons = page.locator('button').filter({
-      hasText: /How can I|What are|Can you help|analyze complex|best practices|optimize my code|effective documentation/i
+    const suggestionButtons = page.locator("button").filter({
+      hasText:
+        /How can I|What are|Can you help|analyze complex|best practices|optimize my code|effective documentation/i,
     });
 
     const firstButton = suggestionButtons.first();

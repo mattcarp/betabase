@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import React from "react";
 import { CustomElementGuard } from "../src/components/CustomElementGuard";
+import { ClientErrorBoundary } from "../src/components/ClientErrorBoundary";
 import { ClientWebVitals } from "../src/components/ClientWebVitals";
 import "./globals.css";
 
@@ -9,11 +10,7 @@ export const metadata: Metadata = {
   description: "AI-Powered Intelligence Platform",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -24,7 +21,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <CustomElementGuard />
         <ClientWebVitals />
-        {children}
+        <ClientErrorBoundary>{children}</ClientErrorBoundary>
       </body>
     </html>
   );

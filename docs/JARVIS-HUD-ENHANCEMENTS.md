@@ -133,6 +133,7 @@ function MyHUD() {
 A JARVIS-styled audio source selection interface with real-time audio level monitoring.
 
 **Features**:
+
 - Visual audio level indicators
 - Device type icons (microphone, system, application, virtual)
 - Default device marking
@@ -196,6 +197,7 @@ function MyHUD() {
 A comprehensive help system that displays all available keyboard shortcuts and usage instructions.
 
 **Features**:
+
 - Categorized shortcut listings
 - Interactive section navigation
 - Visual shortcut keys display
@@ -204,6 +206,7 @@ A comprehensive help system that displays all available keyboard shortcuts and u
 - Accessible modal implementation
 
 **Help Sections**:
+
 1. Panel Management
 2. Navigation
 3. Customization
@@ -235,6 +238,7 @@ function MyHUD() {
 The complete, enhanced HUD interface integrating all features.
 
 **New Capabilities**:
+
 - Dynamic glassmorphism settings application
 - Real-time theme switching
 - Keyboard-driven panel management
@@ -272,8 +276,8 @@ Theme colors are applied dynamically via CSS custom properties:
 
 ```css
 :root[data-jarvis-theme="cyan"] {
-  --jarvis-theme-primary: #00E5FF;
-  --jarvis-theme-accent: #0080FF;
+  --jarvis-theme-primary: #00e5ff;
+  --jarvis-theme-accent: #0080ff;
   --jarvis-theme-glow: rgba(0, 229, 255, 0.5);
   --jarvis-theme-border: rgba(0, 229, 255, 0.4);
 }
@@ -285,19 +289,19 @@ Themes are applied by setting a data attribute on the root element:
 
 ```typescript
 useEffect(() => {
-  document.documentElement.setAttribute('data-jarvis-theme', settings.theme);
+  document.documentElement.setAttribute("data-jarvis-theme", settings.theme);
 }, [settings.theme]);
 ```
 
 ### Available Themes
 
-| Theme | Primary Color | Accent Color | Description |
-|-------|---------------|--------------|-------------|
-| `default` | #3B82F6 | #00FFFF | Classic JARVIS blue/cyan |
-| `cyan` | #00E5FF | #0080FF | Bright arctic cyan |
-| `purple` | #A855F7 | #C77DFF | Royal purple gradient |
-| `green` | #00FFA3 | #00FF7F | Matrix green terminal |
-| `amber` | #FFB347 | #FF9500 | Warm solar amber |
+| Theme     | Primary Color | Accent Color | Description              |
+| --------- | ------------- | ------------ | ------------------------ |
+| `default` | #3B82F6       | #00FFFF      | Classic JARVIS blue/cyan |
+| `cyan`    | #00E5FF       | #0080FF      | Bright arctic cyan       |
+| `purple`  | #A855F7       | #C77DFF      | Royal purple gradient    |
+| `green`   | #00FFA3       | #00FF7F      | Matrix green terminal    |
+| `amber`   | #FFB347       | #FF9500      | Warm solar amber         |
 
 ## Accessibility Features
 
@@ -396,16 +400,16 @@ function ElectronHUD() {
 Test keyboard shortcuts:
 
 ```typescript
-import { renderHook } from '@testing-library/react-hooks';
-import { useHUDShortcuts } from './useHUDShortcuts';
+import { renderHook } from "@testing-library/react-hooks";
+import { useHUDShortcuts } from "./useHUDShortcuts";
 
-test('calls onResetPanels when Ctrl+Shift+R is pressed', () => {
+test("calls onResetPanels when Ctrl+Shift+R is pressed", () => {
   const onResetPanels = jest.fn();
   renderHook(() => useHUDShortcuts({ onResetPanels }));
 
   // Simulate Ctrl+Shift+R
   fireEvent.keyDown(window, {
-    key: 'R',
+    key: "R",
     ctrlKey: true,
     shiftKey: true,
   });
@@ -445,6 +449,7 @@ test('updates blur setting when slider is changed', () => {
 ### Accessibility Testing
 
 Use tools like:
+
 - **axe-core**: Automated accessibility testing
 - **jest-axe**: Accessibility testing in Jest
 - **NVDA/JAWS**: Screen reader testing
@@ -507,6 +512,7 @@ None - all features use modern browser APIs with fallbacks.
 ### From Basic HUD to Enhanced HUD
 
 1. **Replace Component Import**:
+
    ```typescript
    // Before
    import { HUDInterface } from "./HUDInterface";
@@ -516,6 +522,7 @@ None - all features use modern browser APIs with fallbacks.
    ```
 
 2. **Update Props**:
+
    ```typescript
    // Add optional callback
    <EnhancedHUDInterface
@@ -527,6 +534,7 @@ None - all features use modern browser APIs with fallbacks.
    ```
 
 3. **Import CSS**:
+
    ```typescript
    // In your main app file
    import "../styles/jarvis-theme-variations.css";
@@ -550,6 +558,7 @@ Potential improvements for future versions:
 ## Support
 
 For issues or questions:
+
 - Check existing documentation in `/docs`
 - Review CLAUDE.md for project guidelines
 - Test in local Electron environment before deployment

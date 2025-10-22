@@ -80,9 +80,7 @@ export class MCPClientWrapper {
       const startTime = Date.now();
 
       // First check server health
-      console.log(
-        `🔌 MCP Client: Connecting to MCP server at ${this.baseUrl}...`,
-      );
+      console.log(`🔌 MCP Client: Connecting to MCP server at ${this.baseUrl}...`);
       const healthStatus = await this.checkHealth();
       if (!healthStatus || healthStatus.status === "unhealthy") {
         throw new Error("MCP server health check failed");
@@ -95,43 +93,33 @@ export class MCPClientWrapper {
       this.state.isConnecting = false;
 
       if (connectionResult) {
-        this.state.connectionQuality = this.determineConnectionQuality(
-          Date.now() - startTime,
-        );
+        this.state.connectionQuality = this.determineConnectionQuality(Date.now() - startTime);
         this.state.lastHealthCheck = new Date();
 
         // Start health monitoring
         this.startHealthMonitoring();
 
-        console.log(
-          `✅ MCP Client: Connected with ${this.state.connectionQuality} quality`,
-        );
-        console.log(
-          `🛠️ MCP Client: ${this.state.tools.length} tools available`,
-        );
+        console.log(`✅ MCP Client: Connected with ${this.state.connectionQuality} quality`);
+        console.log(`🛠️ MCP Client: ${this.state.tools.length} tools available`);
       }
 
       return connectionResult;
     } catch (error) {
       this.state.isConnecting = false;
-      this.state.error =
-        error instanceof Error ? error.message : "Connection failed";
+      this.state.error = error instanceof Error ? error.message : "Connection failed";
       this.state.connectionQuality = "disconnected";
 
       // Attempt automatic retry
       if (this.state.retryCount < this.maxRetries) {
         console.log(
-          `🔄 MCP Client: Retrying connection (${this.state.retryCount + 1}/${this.maxRetries})...`,
+          `🔄 MCP Client: Retrying connection (${this.state.retryCount + 1}/${this.maxRetries})...`
         );
         await this.delay(this.retryDelay * Math.pow(2, this.state.retryCount)); // Exponential backoff
         this.state.retryCount++;
         return this.connect();
       }
 
-      console.error(
-        `❌ MCP Client: Failed to connect after ${this.maxRetries} retries:`,
-        error,
-      );
+      console.error(`❌ MCP Client: Failed to connect after ${this.maxRetries} retries:`, error);
       return false;
     }
   }
@@ -148,13 +136,10 @@ export class MCPClientWrapper {
         return true;
       }
 
-      throw new Error(
-        toolsResponse.error || "Failed to fetch tools from MCP server",
-      );
+      throw new Error(toolsResponse.error || "Failed to fetch tools from MCP server");
     } catch (error) {
       console.error("❌ MCP connection failed:", error);
-      this.state.error =
-        error instanceof Error ? error.message : "Connection failed";
+      this.state.error = error instanceof Error ? error.message : "Connection failed";
       return false;
     }
   }
@@ -169,10 +154,7 @@ export class MCPClientWrapper {
       const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
       // For local development, we should use the API route instead
-      if (
-        this.baseUrl.includes("localhost") ||
-        this.baseUrl.includes("127.0.0.1")
-      ) {
+      if (this.baseUrl.includes("localhost") || this.baseUrl.includes("127.0.0.1")) {
         // Use the local API route
         const apiResponse = await fetch("/api/aoma-mcp", {
           method: "POST",
@@ -225,7 +207,7 @@ export class MCPClientWrapper {
           // Ignore if can't read body
         }
         throw new Error(
-          `Tools fetch failed: ${response.status} ${response.statusText}${errorDetails}`,
+          `Tools fetch failed: ${response.status} ${response.statusText}${errorDetails}`
         );
       }
 
@@ -233,9 +215,7 @@ export class MCPClientWrapper {
 
       // Check for RPC error
       if (rpcResponse.error) {
-        throw new Error(
-          `MCP RPC Error: ${rpcResponse.error.message || "Unknown error"}`,
-        );
+        throw new Error(`MCP RPC Error: ${rpcResponse.error.message || "Unknown error"}`);
       }
 
       // Extract tools from RPC response
@@ -249,15 +229,13 @@ export class MCPClientWrapper {
       };
     } catch (error) {
       const err = error as any;
-      let errorMessage =
-        error instanceof Error ? error.message : "Tools fetch failed";
+      let errorMessage = error instanceof Error ? error.message : "Tools fetch failed";
 
       // Handle CORS errors specifically
       if (
         err.name === "TypeError" &&
         err.message &&
-        (err.message.includes("Failed to fetch") ||
-          err.message.includes("CORS"))
+        (err.message.includes("Failed to fetch") || err.message.includes("CORS"))
       ) {
         errorMessage = `CORS error: Server at ${this.baseUrl} needs CORS headers for origin ${window.location.origin}`;
         console.error("❌ CORS Error Details:", {
@@ -336,9 +314,7 @@ export class MCPClientWrapper {
         clearTimeout(timeoutId);
 
         if (!response.ok) {
-          throw new Error(
-            `Tool call failed: ${response.status} ${response.statusText}`,
-          );
+          throw new Error(`Tool call failed: ${response.status} ${response.statusText}`);
         }
 
         const rpcResponse = await response.json();
@@ -346,9 +322,7 @@ export class MCPClientWrapper {
 
         // Check for RPC error
         if (rpcResponse.error) {
-          throw new Error(
-            `MCP RPC Error: ${rpcResponse.error.message || "Unknown error"}`,
-          );
+          throw new Error(`MCP RPC Error: ${rpcResponse.error.message || "Unknown error"}`);
         }
 
         return {
@@ -364,9 +338,7 @@ export class MCPClientWrapper {
         retryCount++;
 
         if (retryCount <= this.maxRetries) {
-          console.log(
-            `🔄 MCP Tool ${name}: Retry ${retryCount}/${this.maxRetries}`,
-          );
+          console.log(`🔄 MCP Tool ${name}: Retry ${retryCount}/${this.maxRetries}`);
           await this.delay(this.retryDelay * Math.pow(2, retryCount - 1));
 
           // Check if we need to reconnect
@@ -447,22 +419,17 @@ export class MCPClientWrapper {
       const err = error as any;
       const isCorsError = err.message && err.message.includes("CORS");
       const isNetworkError =
-        err.name === "AbortError" ||
-        (err.name === "TypeError" && err.message.includes("fetch"));
+        err.name === "AbortError" || (err.name === "TypeError" && err.message.includes("fetch"));
 
       if (isCorsError || isNetworkError) {
-        console.log(
-          "🔍 MCP Health Check: CORS/Network error (expected in browser)",
-          err.message,
-        );
+        console.log("🔍 MCP Health Check: CORS/Network error (expected in browser)", err.message);
         this.state.connectionQuality = "poor";
         return {
           status: "degraded",
           latency: 0,
           uptime: 0,
           services: {},
-          error:
-            "CORS/Network restriction - server not accessible from browser",
+          error: "CORS/Network restriction - server not accessible from browser",
         };
       }
 
@@ -483,9 +450,7 @@ export class MCPClientWrapper {
     this.healthCheckInterval = setInterval(async () => {
       const health = await this.checkHealth();
       if (!health || health.status === "unhealthy") {
-        console.warn(
-          "⚠️ MCP Server health degraded, attempting reconnection...",
-        );
+        console.warn("⚠️ MCP Server health degraded, attempting reconnection...");
         if (this.state.isConnected) {
           this.state.isConnected = false;
           this.state.connectionQuality = "poor";
@@ -500,7 +465,7 @@ export class MCPClientWrapper {
    * Determine connection quality based on latency
    */
   private determineConnectionQuality(
-    latency: number,
+    latency: number
   ): "excellent" | "good" | "poor" | "disconnected" {
     if (latency < 100) return "excellent";
     if (latency < 500) return "good";

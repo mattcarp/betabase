@@ -1,10 +1,12 @@
 # MAC Design System Principles & Checklist
-*Professional Design Standards by Matthew Adam Carpenter*
-*Inspired by Stripe, Airbnb, Linear, and Silicon Valley Excellence*
+
+_Professional Design Standards by Matthew Adam Carpenter_
+_Inspired by Stripe, Airbnb, Linear, and Silicon Valley Excellence_
 
 ## I. Core Design Philosophy - The MAC Way
 
 ### Foundation Principles
+
 - [ ] **Professional First**: Every pixel serves a business purpose
 - [ ] **Sophisticated Simplicity**: Complex functionality with clean interface
 - [ ] **Performance Obsessed**: Sub-second interactions, instant feedback
@@ -14,6 +16,7 @@
 - [ ] **Precision Craft**: Pixel-perfect alignment and spacing
 
 ### The MAC Standard
+
 - [ ] **No Compromises**: Professional quality in every component
 - [ ] **User Delight**: Subtle animations that feel premium
 - [ ] **Consistent Experience**: Identical quality across all touchpoints
@@ -22,6 +25,7 @@
 ## II. MAC Design System Foundation
 
 ### Color Architecture
+
 ```css
 /* Primary Palette - Professional Blues & Purples */
 --mac-primary-blue-400: #4a9eff;
@@ -50,6 +54,7 @@
 ```
 
 ### Typography Scale (MAC Professional)
+
 ```css
 /* Display - Ultra Light Impact */
 .mac-display-text {
@@ -82,6 +87,7 @@
 ```
 
 ### Spacing System (8px Grid)
+
 - [ ] **Base Unit**: 8px strictly enforced
 - [ ] **Scale**: 0, 2, 4, 8, 12, 16, 24, 32, 48, 64, 96
 - [ ] **Component Padding**: Minimum 12px, standard 16px
@@ -89,6 +95,7 @@
 - [ ] **Micro-spacing**: 2px, 4px for fine adjustments only
 
 ### Border & Radius Standards
+
 - [ ] **Small Radius**: 6px (inputs, buttons)
 - [ ] **Medium Radius**: 8px (cards, dropdowns)
 - [ ] **Large Radius**: 12px (modals, major containers)
@@ -98,6 +105,7 @@
 ## III. Component Standards
 
 ### Button Hierarchy
+
 ```css
 /* Primary - Main Actions */
 .mac-button-primary {
@@ -130,23 +138,23 @@
 ```
 
 ### Form Elements
-- [ ] **Input Fields**: 
+
+- [ ] **Input Fields**:
   - Height: 40px minimum
   - Padding: 12px horizontal
   - Border: 1px solid var(--mac-utility-border)
   - Focus: Blue glow with 0 0 0 3px rgba(74, 158, 255, 0.2)
-  
 - [ ] **Labels**:
   - Font-size: 14px
   - Color: var(--mac-text-secondary)
   - Margin-bottom: 6px
-  
 - [ ] **Error States**:
   - Border-color: #ef4444
   - Error text: 12px, #ef4444
   - Icon: Error icon left of message
 
 ### Card Components
+
 ```css
 .mac-card {
   background: var(--mac-surface-card);
@@ -168,6 +176,7 @@
 ```
 
 ### Tables & Data Display
+
 - [ ] **Row Height**: Minimum 48px
 - [ ] **Cell Padding**: 16px horizontal, 12px vertical
 - [ ] **Header Style**: Font-weight 400, uppercase, 12px
@@ -178,6 +187,7 @@
 ## IV. Interaction & Animation Standards
 
 ### Micro-interactions Timing
+
 ```css
 /* Standard Transitions */
 --mac-transition-fast: 100ms ease;
@@ -201,12 +211,14 @@
 ```
 
 ### Loading States
+
 - [ ] **Skeleton Screens**: Shimmer animation, matching component shape
 - [ ] **Spinners**: 24px standard, centered, subtle rotation
 - [ ] **Progress Bars**: 4px height, gradient fill
 - [ ] **Placeholder Content**: Realistic data structure
 
 ### Animation Principles
+
 - [ ] **Purpose**: Every animation has functional value
 - [ ] **Performance**: GPU-accelerated properties only
 - [ ] **Subtlety**: Enhance, don't distract
@@ -215,6 +227,7 @@
 ## V. Visual Effects & Polish
 
 ### Glass Morphism
+
 ```css
 .mac-glass {
   background: rgba(20, 20, 20, 0.8);
@@ -225,65 +238,73 @@
 ```
 
 ### Glow Effects
+
 ```css
 .mac-glow {
-  box-shadow: 
+  box-shadow:
     0 0 20px rgba(74, 158, 255, 0.3),
     0 0 40px rgba(168, 85, 247, 0.2);
 }
 ```
 
 ### Shimmer Animation
+
 ```css
 @keyframes mac-shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 .mac-shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.05),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
   background-size: 200% 100%;
   animation: mac-shimmer 2s infinite;
 }
 ```
 
 ### Floating Elements
+
 ```css
 .mac-floating-orb {
   animation: mac-float 6s ease-in-out infinite;
 }
 
 @keyframes mac-float {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-10px) scale(1.05); }
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.05);
+  }
 }
 ```
 
 ## VI. Responsive Design Standards
 
 ### Breakpoint System
+
 ```scss
 // Mobile First Approach
-$mobile: 375px;   // iPhone 13 mini
-$tablet: 768px;   // iPad portrait
+$mobile: 375px; // iPhone 13 mini
+$tablet: 768px; // iPad portrait
 $desktop: 1440px; // MacBook Pro 14"
-$wide: 1920px;    // External monitors
+$wide: 1920px; // External monitors
 
 // Container Widths
 .mac-container {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 16px; // Mobile
-  
+
   @media (min-width: $tablet) {
     padding: 0 32px;
   }
-  
+
   @media (min-width: $desktop) {
     padding: 0 48px;
   }
@@ -291,6 +312,7 @@ $wide: 1920px;    // External monitors
 ```
 
 ### Touch Targets
+
 - [ ] **Minimum Size**: 44x44px (iOS standard)
 - [ ] **Spacing**: 8px minimum between targets
 - [ ] **Hover States**: Disabled on touch devices
@@ -299,24 +321,28 @@ $wide: 1920px;    // External monitors
 ## VII. Accessibility Standards (WCAG 2.1 AA+)
 
 ### Color Contrast Requirements
+
 - [ ] **Normal Text**: 4.5:1 minimum ratio
 - [ ] **Large Text**: 3:1 minimum ratio (18px+ or 14px+ bold)
 - [ ] **Interactive Elements**: 3:1 minimum
 - [ ] **Focus Indicators**: Visible, non-color dependent
 
 ### Keyboard Navigation
+
 - [ ] **Tab Order**: Logical, follows visual flow
 - [ ] **Focus Trap**: Modals and overlays contain focus
 - [ ] **Skip Links**: Available for main content
 - [ ] **Shortcuts**: Document and test all shortcuts
 
 ### Screen Reader Support
+
 - [ ] **Semantic HTML**: Proper heading hierarchy
 - [ ] **ARIA Labels**: All interactive elements labeled
 - [ ] **Live Regions**: Dynamic content announced
 - [ ] **Alt Text**: Meaningful descriptions for images
 
 ### Form Accessibility
+
 - [ ] **Label Association**: Every input has label
 - [ ] **Error Messages**: Associated with inputs
 - [ ] **Required Fields**: Clearly marked
@@ -325,12 +351,14 @@ $wide: 1920px;    // External monitors
 ## VIII. Performance Standards
 
 ### Visual Performance
+
 - [ ] **First Paint**: < 1 second
 - [ ] **Interactive**: < 2 seconds
 - [ ] **Animation FPS**: 60fps minimum
 - [ ] **Image Optimization**: WebP with fallbacks
 
 ### Perceived Performance
+
 - [ ] **Instant Feedback**: < 100ms for user actions
 - [ ] **Loading States**: Shown after 300ms delay
 - [ ] **Progressive Enhancement**: Core functionality first
@@ -339,6 +367,7 @@ $wide: 1920px;    // External monitors
 ## IX. Testing & Validation Checklist
 
 ### Visual Testing
+
 - [ ] **Desktop**: 1440px (primary development target)
 - [ ] **Tablet**: 768px (responsive check)
 - [ ] **Mobile**: 375px (minimum supported)
@@ -346,18 +375,21 @@ $wide: 1920px;    // External monitors
 - [ ] **Light Mode**: Graceful degradation if supported
 
 ### Cross-Browser Testing
+
 - [ ] **Chrome**: Latest version (primary)
 - [ ] **Safari**: Latest version (critical for Mac users)
 - [ ] **Firefox**: Latest version
 - [ ] **Edge**: Latest version
 
 ### Accessibility Testing
+
 - [ ] **Keyboard Only**: Full navigation possible
 - [ ] **Screen Reader**: NVDA/JAWS tested
 - [ ] **Color Blind**: All modes tested
 - [ ] **Zoom**: 200% functional
 
 ### Performance Testing
+
 - [ ] **Lighthouse**: 90+ scores
 - [ ] **Bundle Size**: < 200KB initial
 - [ ] **Image Optimization**: All images optimized
@@ -366,6 +398,7 @@ $wide: 1920px;    // External monitors
 ## X. Component Implementation Patterns
 
 ### React/Next.js Standards
+
 ```typescript
 // Component Structure
 interface ComponentProps {
@@ -395,27 +428,36 @@ const Component: React.FC<ComponentProps> = ({
 ```
 
 ### CSS Architecture
+
 ```scss
 // BEM with MAC prefix
 .mac-component {
   // Base styles
-  &--primary { }
-  &--secondary { }
-  
-  &__element { }
-  
-  &--modifier { }
-  
+  &--primary {
+  }
+  &--secondary {
+  }
+
+  &__element {
+  }
+
+  &--modifier {
+  }
+
   // State classes
-  &.is-active { }
-  &.is-disabled { }
-  &.is-loading { }
+  &.is-active {
+  }
+  &.is-disabled {
+  }
+  &.is-loading {
+  }
 }
 ```
 
 ## XI. Quality Assurance Checklist
 
 ### Pre-Merge Requirements
+
 - [ ] **Design Tokens**: 100% usage, no magic numbers
 - [ ] **Responsive**: All breakpoints tested
 - [ ] **Accessibility**: WCAG AA passing
@@ -425,6 +467,7 @@ const Component: React.FC<ComponentProps> = ({
 - [ ] **Screenshots**: Visual evidence captured
 
 ### Code Review Focus
+
 - [ ] **Consistency**: Matches existing patterns
 - [ ] **Reusability**: DRY principles followed
 - [ ] **Maintainability**: Clear, readable code
@@ -435,6 +478,7 @@ const Component: React.FC<ComponentProps> = ({
 ## XII. Special MAC Components
 
 ### Floating Orbs Background
+
 ```css
 .mac-floating-orbs {
   position: fixed;
@@ -454,6 +498,7 @@ const Component: React.FC<ComponentProps> = ({
 ```
 
 ### Professional Gradients
+
 ```css
 .mac-gradient-primary {
   background: linear-gradient(
@@ -473,6 +518,7 @@ const Component: React.FC<ComponentProps> = ({
 ```
 
 ### Data Visualization
+
 - [ ] **Charts**: Dark theme optimized
 - [ ] **Colors**: MAC palette only
 - [ ] **Animations**: Smooth entry/exit
@@ -482,12 +528,14 @@ const Component: React.FC<ComponentProps> = ({
 ## Success Metrics
 
 ### Design Compliance
+
 - **Token Usage**: >95% design tokens
 - **Consistency Score**: 100% component reuse
 - **Accessibility**: WCAG AA 100% pass
 - **Performance**: <2s interactive time
 
 ### User Experience
+
 - **Task Completion**: <3 clicks average
 - **Error Recovery**: Clear path always available
 - **Visual Hierarchy**: F-pattern scanning optimized
@@ -496,6 +544,7 @@ const Component: React.FC<ComponentProps> = ({
 ## The MAC Standard Promise
 
 Every interface element adheres to:
+
 1. **Professional** - Enterprise-ready quality
 2. **Beautiful** - Aesthetically superior
 3. **Functional** - Purpose-driven design
@@ -505,5 +554,5 @@ Every interface element adheres to:
 
 ---
 
-*"Design is not just what it looks like. Design is how it works."*
-*The MAC Design System - Where Professional Meets Perfect*
+_"Design is not just what it looks like. Design is how it works."_
+_The MAC Design System - Where Professional Meets Perfect_

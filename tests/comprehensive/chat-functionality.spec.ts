@@ -19,25 +19,23 @@ test.describe("Chat Functionality - Comprehensive", () => {
   test.describe("Chat Interface", () => {
     test("should display chat interface elements", async ({ page }) => {
       // Check for essential chat elements
-      await expect(
-        page.locator('[data-testid="chat-interface"], [class*="chat"]'),
-      ).toBeVisible();
+      await expect(page.locator('[data-testid="chat-interface"], [class*="chat"]')).toBeVisible();
 
       // Input field
       const inputField = page.locator(
-        'textarea[placeholder*="Type"], input[placeholder*="Type"], [contenteditable="true"]',
+        'textarea[placeholder*="Type"], input[placeholder*="Type"], [contenteditable="true"]'
       );
       await expect(inputField).toBeVisible();
 
       // Send button
       const sendButton = page.locator(
-        'button[aria-label*="Send"], button:has-text("Send"), button[type="submit"]',
+        'button[aria-label*="Send"], button:has-text("Send"), button[type="submit"]'
       );
       await expect(sendButton).toBeVisible();
 
       // Chat history area
       const chatArea = page.locator(
-        '[data-testid="chat-messages"], [class*="messages"], [role="log"]',
+        '[data-testid="chat-messages"], [class*="messages"], [role="log"]'
       );
       expect(await chatArea.count()).toBeGreaterThan(0);
     });
@@ -53,9 +51,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
 
       // Send message
       const sendButton = page
-        .locator(
-          'button[aria-label*="Send"], button:has-text("Send"), button[type="submit"]',
-        )
+        .locator('button[aria-label*="Send"], button:has-text("Send"), button[type="submit"]')
         .first();
       await sendButton.click();
 
@@ -82,9 +78,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
     test("should handle multi-line messages", async ({ page }) => {
       const multiLineMessage = "Line 1\nLine 2\nLine 3";
 
-      const inputField = page
-        .locator('textarea, [contenteditable="true"]')
-        .first();
+      const inputField = page.locator('textarea, [contenteditable="true"]').first();
       await inputField.fill(multiLineMessage);
 
       // Send message
@@ -100,9 +94,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
       await page.waitForTimeout(1000);
 
       // Check message formatting is preserved
-      const messageElement = page.locator(
-        `text="${multiLineMessage.split("\n")[0]}"`,
-      );
+      const messageElement = page.locator(`text="${multiLineMessage.split("\n")[0]}"`);
       expect(await messageElement.isVisible()).toBeTruthy();
     });
 
@@ -121,9 +113,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
       await page.waitForTimeout(500);
 
       // Input should be cleared
-      const inputValue = await inputField
-        .inputValue()
-        .catch(() => inputField.textContent());
+      const inputValue = await inputField.inputValue().catch(() => inputField.textContent());
       expect(inputValue).toBe("");
     });
 
@@ -202,9 +192,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
       expect(latestVisible).toBeTruthy();
 
       // Check scroll position
-      const chatContainer = page
-        .locator('[class*="messages"], [class*="chat-container"]')
-        .first();
+      const chatContainer = page.locator('[class*="messages"], [class*="chat-container"]').first();
       const scrollInfo = await chatContainer.evaluate((el) => ({
         scrollTop: el.scrollTop,
         scrollHeight: el.scrollHeight,
@@ -213,8 +201,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
 
       // Should be scrolled near bottom
       const isNearBottom =
-        scrollInfo.scrollTop + scrollInfo.clientHeight >=
-        scrollInfo.scrollHeight - 100;
+        scrollInfo.scrollTop + scrollInfo.clientHeight >= scrollInfo.scrollHeight - 100;
       expect(isNearBottom).toBeTruthy();
     });
 
@@ -293,9 +280,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
       // Check for AI response indicators
       const hasAIResponse =
         (await page
-          .locator(
-            '[class*="assistant"], [class*="ai-message"], [data-role="assistant"]',
-          )
+          .locator('[class*="assistant"], [class*="ai-message"], [data-role="assistant"]')
           .isVisible()) || (await helpers.checkTextVisible("Hello World"));
 
       expect(hasAIResponse).toBeTruthy();
@@ -319,9 +304,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
       for (let i = 0; i < 5; i++) {
         await page.waitForTimeout(500);
 
-        const aiMessage = page
-          .locator('[class*="assistant"], [class*="ai-message"]')
-          .last();
+        const aiMessage = page.locator('[class*="assistant"], [class*="ai-message"]').last();
         if (await aiMessage.isVisible()) {
           const currentText = await aiMessage.textContent();
           if (currentText && currentText.length > previousLength) {
@@ -350,9 +333,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
       await page.waitForTimeout(3000);
 
       // Check for code block
-      const hasCodeBlock = await page
-        .locator('pre, code, [class*="code-block"]')
-        .isVisible();
+      const hasCodeBlock = await page.locator('pre, code, [class*="code-block"]').isVisible();
 
       if (hasCodeBlock) {
         // Check for copy button
@@ -458,9 +439,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
 
       // Look for retry button
       await page.waitForTimeout(2000);
-      const retryButton = page.locator(
-        'button:has-text("Retry"), button:has-text("Try again")',
-      );
+      const retryButton = page.locator('button:has-text("Retry"), button:has-text("Try again")');
 
       if (await retryButton.isVisible()) {
         await retryButton.click();
@@ -474,8 +453,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
 
   test.describe("Chat Features", () => {
     test("should support markdown formatting", async ({ page }) => {
-      const markdownMessage =
-        "**Bold** *Italic* `code` [link](http://example.com)";
+      const markdownMessage = "**Bold** *Italic* `code` [link](http://example.com)";
 
       const inputField = page
         .locator('textarea, input[type="text"], [contenteditable="true"]')
@@ -490,12 +468,8 @@ test.describe("Chat Functionality - Comprehensive", () => {
       await page.waitForTimeout(1000);
 
       // Check for formatted elements
-      const hasBold = await page
-        .locator('strong, b, [style*="bold"]')
-        .isVisible();
-      const hasItalic = await page
-        .locator('em, i, [style*="italic"]')
-        .isVisible();
+      const hasBold = await page.locator('strong, b, [style*="bold"]').isVisible();
+      const hasItalic = await page.locator('em, i, [style*="italic"]').isVisible();
       const hasCode = await page.locator("code").isVisible();
 
       expect(hasBold || hasItalic || hasCode).toBeTruthy();
@@ -525,16 +499,12 @@ test.describe("Chat Functionality - Comprehensive", () => {
         await editButton.click();
 
         // Edit the message
-        const editField = page
-          .locator('[contenteditable="true"], textarea')
-          .first();
+        const editField = page.locator('[contenteditable="true"], textarea').first();
         await editField.clear();
         await editField.fill("Edited message");
 
         // Save edit
-        const saveButton = page.locator(
-          'button:has-text("Save"), button:has-text("Update")',
-        );
+        const saveButton = page.locator('button:has-text("Save"), button:has-text("Update")');
         await saveButton.click();
 
         // Check message is updated
@@ -567,9 +537,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
         await deleteButton.click();
 
         // Confirm deletion if needed
-        const confirmButton = page.locator(
-          'button:has-text("Confirm"), button:has-text("Yes")',
-        );
+        const confirmButton = page.locator('button:has-text("Confirm"), button:has-text("Yes")');
         if (await confirmButton.isVisible({ timeout: 1000 })) {
           await confirmButton.click();
         }
@@ -577,8 +545,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
         await page.waitForTimeout(1000);
 
         // Message should be gone
-        const messageStillVisible =
-          await helpers.checkTextVisible(messageToDelete);
+        const messageStillVisible = await helpers.checkTextVisible(messageToDelete);
         expect(messageStillVisible).toBeFalsy();
       }
     });
@@ -601,16 +568,14 @@ test.describe("Chat Functionality - Comprehensive", () => {
 
       // Look for clear/new chat button
       const clearButton = page.locator(
-        'button:has-text("Clear"), button:has-text("New Chat"), button[aria-label*="Clear"]',
+        'button:has-text("Clear"), button:has-text("New Chat"), button[aria-label*="Clear"]'
       );
 
       if (await clearButton.isVisible()) {
         await clearButton.click();
 
         // Confirm if needed
-        const confirmButton = page.locator(
-          'button:has-text("Confirm"), button:has-text("Yes")',
-        );
+        const confirmButton = page.locator('button:has-text("Confirm"), button:has-text("Yes")');
         if (await confirmButton.isVisible({ timeout: 1000 })) {
           await confirmButton.click();
         }

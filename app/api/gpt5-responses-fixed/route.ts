@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
 
 /**
  * FIXED GPT-5 Implementation using available OpenAI methods
@@ -25,28 +25,25 @@ export async function POST(req: NextRequest) {
   try {
     const client = getOpenAIClient();
     if (!client) {
-      return NextResponse.json(
-        { error: 'OpenAI API key not configured' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "OpenAI API key not configured" }, { status: 500 });
     }
-    const { 
+    const {
       message,
       conversationId,
-      tools = ['web_search', 'file_search'],
+      tools = ["web_search", "file_search"],
       temperature = 0.7,
       maxTokens = 4096,
     } = await req.json();
 
     // Get or create conversation history
     let messages = conversationStore.get(conversationId) || [];
-    
+
     // Add the new user message
-    messages.push({ role: 'user', content: message });
-    
+    messages.push({ role: "user", content: message });
+
     // Create streaming response using available API
     const stream = await client.chat.completions.create({
-      model: 'gpt-4-turbo-preview', // Use until GPT-5 is available
+      model: "gpt-4-turbo-preview", // Use until GPT-5 is available
       messages: messages,
       temperature: temperature,
       max_tokens: maxTokens,
@@ -60,28 +57,28 @@ export async function POST(req: NextRequest) {
     const encoder = new TextEncoder();
     const responseStream = new ReadableStream({
       async start(controller) {
-        let fullResponse = '';
-        
+        let fullResponse = "";
+
         for await (const chunk of stream) {
-          const content = chunk.choices[0]?.delta?.content || '';
+          const content = chunk.choices[0]?.delta?.content || "";
           if (content) {
             fullResponse += content;
             const data = JSON.stringify({
-              type: 'text',
+              type: "text",
               content: content,
               conversationId: conversationId,
             });
             controller.enqueue(encoder.encode(`data: ${data}\n\n`));
           }
         }
-        
+
         // Store assistant response in history
-        messages.push({ role: 'assistant', content: fullResponse });
+        messages.push({ role: "assistant", content: fullResponse });
         conversationStore.set(conversationId, messages);
-        
+
         // Send completion signal
         const finalData = JSON.stringify({
-          type: 'done',
+          type: "done",
           conversationId: conversationId,
         });
         controller.enqueue(encoder.encode(`data: ${finalData}\n\n`));
@@ -91,16 +88,15 @@ export async function POST(req: NextRequest) {
 
     return new Response(responseStream, {
       headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
       },
     });
-    
   } catch (error: any) {
-    console.error('API Error:', error);
+    console.error("API Error:", error);
     return NextResponse.json(
-      { error: 'Failed to process request', details: error.message },
+      { error: "Failed to process request", details: error.message },
       { status: 500 }
     );
   }
@@ -108,13 +104,13 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
-  const conversationId = searchParams.get('conversationId');
-  
+  const conversationId = searchParams.get("conversationId");
+
   if (conversationId) {
     conversationStore.delete(conversationId);
   } else {
     conversationStore.clear();
   }
-  
-  return NextResponse.json({ message: 'Conversation cleared' });
+
+  return NextResponse.json({ message: "Conversation cleared" });
 }

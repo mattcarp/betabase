@@ -25,9 +25,7 @@ test.describe("SIAM File Upload UI Direct Access", () => {
     console.log("Navigation elements found:", navElements);
 
     // Look specifically for Curate tab
-    const curateElements = page.locator(
-      '*:has-text("Curate"), *:has-text("curate")',
-    );
+    const curateElements = page.locator('*:has-text("Curate"), *:has-text("curate")');
     const curateCount = await curateElements.count();
     console.log(`Found ${curateCount} elements containing "Curate"`);
 
@@ -53,16 +51,14 @@ test.describe("SIAM File Upload UI Direct Access", () => {
     // Upload buttons
     const uploadButtons = await page
       .locator(
-        'button:has-text("Upload"), button:has-text("upload"), button:has-text("Choose"), button:has-text("Select"), button:has-text("Browse"), button:has-text("Add"), button:has-text("Import")',
+        'button:has-text("Upload"), button:has-text("upload"), button:has-text("Choose"), button:has-text("Select"), button:has-text("Browse"), button:has-text("Add"), button:has-text("Import")'
       )
       .count();
     console.log(`Upload buttons found: ${uploadButtons}`);
 
     // AOMA specific
     const aomaElements = await page
-      .locator(
-        '*:has-text("AOMA"), *:has-text("knowledge base"), *:has-text("Knowledge Base")',
-      )
+      .locator('*:has-text("AOMA"), *:has-text("knowledge base"), *:has-text("Knowledge Base")')
       .count();
     console.log(`AOMA/Knowledge base elements found: ${aomaElements}`);
 

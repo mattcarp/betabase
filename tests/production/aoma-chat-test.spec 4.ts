@@ -11,8 +11,7 @@
 import { test, expect, Page, BrowserContext } from "@playwright/test";
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
-const MAILINATOR_INBOX =
-  "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
+const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
 const SIAM_URL = "https://iamsiam.ai";
 
 // Reusable login function
@@ -23,9 +22,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
   await page.click('button[type="submit"]');
   await page.waitForTimeout(3000);
 
-  const verificationVisible = await page
-    .locator('input[placeholder*="code" i]')
-    .isVisible();
+  const verificationVisible = await page.locator('input[placeholder*="code" i]').isVisible();
   if (!verificationVisible) {
     throw new Error("Verification form didn't appear");
   }
@@ -34,9 +31,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
   await mailPage.goto(MAILINATOR_INBOX, { waitUntil: "networkidle" });
   await mailPage.waitForTimeout(3000);
 
-  const emails = await mailPage
-    .locator('tr[ng-repeat*="email in emails"]')
-    .count();
+  const emails = await mailPage.locator('tr[ng-repeat*="email in emails"]').count();
   if (emails > 0) {
     await mailPage.locator('tr[ng-repeat*="email in emails"]').first().click();
     await mailPage.waitForTimeout(3000);
@@ -46,10 +41,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
     if (iframe) {
       const frame = await iframe.contentFrame();
       if (frame) {
-        const frameText = await frame.$eval(
-          "body",
-          (el) => el.textContent || "",
-        );
+        const frameText = await frame.$eval("body", (el) => el.textContent || "");
         const match = frameText.match(/\b(\d{6})\b/);
         if (match) code = match[1];
       }
@@ -78,12 +70,10 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
 async function sendChatMessage(
   page: Page,
   message: string,
-  expectResponse: boolean = true,
+  expectResponse: boolean = true
 ): Promise<string> {
   const chatInput = page
-    .locator(
-      'textarea[placeholder*="Ask me anything"], input[placeholder*="Ask me anything"]',
-    )
+    .locator('textarea[placeholder*="Ask me anything"], input[placeholder*="Ask me anything"]')
     .first();
 
   // Clear and type message
@@ -132,10 +122,7 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
 
     // Monitor console errors
     page.on("console", (msg) => {
-      if (
-        msg.type() === "error" &&
-        !msg.text().includes("Failed to load resource")
-      ) {
+      if (msg.type() === "error" && !msg.text().includes("Failed to load resource")) {
         console.error("❌ Console Error:", msg.text().substring(0, 100));
       }
     });
@@ -153,13 +140,7 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
     const queries = [
       {
         question: "What is AOMA?",
-        expectedKeywords: [
-          "asset",
-          "orchestration",
-          "management",
-          "sony",
-          "music",
-        ],
+        expectedKeywords: ["asset", "orchestration", "management", "sony", "music"],
         description: "Basic AOMA definition",
       },
       {
@@ -190,14 +171,10 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
 
       // Check if response contains expected keywords
       const responseLower = response.toLowerCase();
-      const foundKeywords = query.expectedKeywords.filter((kw) =>
-        responseLower.includes(kw),
-      );
+      const foundKeywords = query.expectedKeywords.filter((kw) => responseLower.includes(kw));
 
       if (foundKeywords.length > 0) {
-        console.log(
-          `   ✅ Response contains keywords: ${foundKeywords.join(", ")}`,
-        );
+        console.log(`   ✅ Response contains keywords: ${foundKeywords.join(", ")}`);
       } else {
         console.log(`   ⚠️ Response missing expected keywords`);
       }
@@ -208,9 +185,7 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
       } else if (response.length > 5000) {
         console.log(`   ⚠️ Response too long: ${response.length} chars`);
       } else {
-        console.log(
-          `   ✅ Response length appropriate: ${response.length} chars`,
-        );
+        console.log(`   ✅ Response length appropriate: ${response.length} chars`);
       }
 
       // Take screenshot
@@ -242,14 +217,10 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
       // Check if response is substantive
       const hasDetail = response.length > 200;
       const hasStructure =
-        response.includes("\n") ||
-        response.includes("•") ||
-        response.includes("-");
+        response.includes("\n") || response.includes("•") || response.includes("-");
 
       console.log(`   📏 Response quality:`);
-      console.log(
-        `      Length: ${response.length} chars ${hasDetail ? "✅" : "⚠️"}`,
-      );
+      console.log(`      Length: ${response.length} chars ${hasDetail ? "✅" : "⚠️"}`);
       console.log(`      Structured: ${hasStructure ? "✅" : "⚠️"}`);
 
       await page.waitForTimeout(2000);
@@ -314,16 +285,13 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
         await page.waitForTimeout(2000);
 
         // Check if app is still responsive
-        const chatInput = page
-          .locator('textarea[placeholder*="Ask me anything"]')
-          .first();
+        const chatInput = page.locator('textarea[placeholder*="Ask me anything"]').first();
         const isResponsive = await chatInput.isEnabled();
 
         console.log(`   App still responsive: ${isResponsive ? "✅" : "❌"}`);
 
         // Check for error messages
-        const hasError =
-          (await page.locator('.error, [role="alert"]').count()) > 0;
+        const hasError = (await page.locator('.error, [role="alert"]').count()) > 0;
         if (hasError) {
           console.log(`   Error displayed: ✅`);
         }
@@ -348,21 +316,15 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
     const startTime = Date.now();
 
     for (const query of rapidQueries) {
-      const chatInput = page
-        .locator('textarea[placeholder*="Ask me anything"]')
-        .first();
+      const chatInput = page.locator('textarea[placeholder*="Ask me anything"]').first();
       await chatInput.fill(query);
       await page.keyboard.press("Enter");
       await page.waitForTimeout(500); // Very short delay
     }
 
     const totalTime = Date.now() - startTime;
-    console.log(
-      `   ⏱️ Total time for ${rapidQueries.length} queries: ${totalTime}ms`,
-    );
-    console.log(
-      `   📊 Average: ${(totalTime / rapidQueries.length).toFixed(0)}ms per query`,
-    );
+    console.log(`   ⏱️ Total time for ${rapidQueries.length} queries: ${totalTime}ms`);
+    console.log(`   📊 Average: ${(totalTime / rapidQueries.length).toFixed(0)}ms per query`);
 
     // Wait for all responses
     await page.waitForTimeout(5000);
@@ -370,7 +332,7 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
     // Check if chat is still functional
     const finalTest = await sendChatMessage(page, "Are you still working?");
     console.log(
-      `   Final test response: ${finalTest.length > 0 ? "✅ Still working!" : "❌ Not responding"}`,
+      `   Final test response: ${finalTest.length > 0 ? "✅ Still working!" : "❌ Not responding"}`
     );
   });
 
@@ -390,9 +352,7 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
 
       try {
         const response = await sendChatMessage(page, query);
-        console.log(
-          `   Response received: ${response.length > 0 ? "✅" : "❌"}`,
-        );
+        console.log(`   Response received: ${response.length > 0 ? "✅" : "❌"}`);
       } catch (error) {
         console.log(`   Error handling special chars: ❌`);
       }
@@ -411,13 +371,7 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
       },
       {
         question: "What are common AOMA support issues?",
-        shouldInclude: [
-          "issue",
-          "problem",
-          "solution",
-          "troubleshoot",
-          "common",
-        ],
+        shouldInclude: ["issue", "problem", "solution", "troubleshoot", "common"],
       },
       {
         question: "Explain the automated QC process",
@@ -432,7 +386,7 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
       const responseLower = response.toLowerCase();
 
       const foundTerms = check.shouldInclude.filter((term) =>
-        responseLower.includes(term.toLowerCase()),
+        responseLower.includes(term.toLowerCase())
       );
 
       const quality = (foundTerms.length / check.shouldInclude.length) * 100;
@@ -443,7 +397,7 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
       } else {
         console.log(`   ⚠️ Response may lack detail`);
         console.log(
-          `   Missing terms: ${check.shouldInclude.filter((t) => !foundTerms.includes(t)).join(", ")}`,
+          `   Missing terms: ${check.shouldInclude.filter((t) => !foundTerms.includes(t)).join(", ")}`
         );
       }
 
@@ -455,9 +409,7 @@ test.describe("🤖 AOMA CHAT DESTRUCTION TESTS", () => {
     console.log("\n🔥 FINAL STRESS TEST...");
 
     // Clear conversation
-    const newConvoBtn = page
-      .locator('button:has-text("New Conversation")')
-      .first();
+    const newConvoBtn = page.locator('button:has-text("New Conversation")').first();
     if (await newConvoBtn.isVisible()) {
       await newConvoBtn.click();
       await page.waitForTimeout(1000);

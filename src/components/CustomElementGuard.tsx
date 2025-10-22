@@ -8,8 +8,12 @@ export function CustomElementGuard() {
     // This is typically caused by browser extensions or third-party scripts
     if (typeof window !== "undefined" && window.customElements) {
       const originalDefine = window.customElements.define.bind(window.customElements);
-      
-      window.customElements.define = function(name: string, constructor: any, options?: ElementDefinitionOptions) {
+
+      window.customElements.define = function (
+        name: string,
+        constructor: any,
+        options?: ElementDefinitionOptions
+      ) {
         try {
           // Check if element is already defined
           if (!window.customElements.get(name)) {
@@ -19,7 +23,7 @@ export function CustomElementGuard() {
           }
         } catch (error) {
           // Silently handle duplicate registration errors
-          if (error instanceof DOMException && error.name === 'NotSupportedError') {
+          if (error instanceof DOMException && error.name === "NotSupportedError") {
             console.info(`Prevented duplicate registration of custom element '${name}'`);
           } else {
             console.error(`Error registering custom element '${name}':`, error);

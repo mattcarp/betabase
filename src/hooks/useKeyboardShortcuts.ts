@@ -35,7 +35,7 @@ export const useKeyboardShortcuts = (config: KeyboardShortcutsConfig) => {
     {
       enableOnFormTags: false,
       description: "Toggle recording (Space)",
-    },
+    }
   );
 
   useHotkeys(
@@ -47,7 +47,7 @@ export const useKeyboardShortcuts = (config: KeyboardShortcutsConfig) => {
     {
       enableOnFormTags: false,
       description: "Toggle transcription (Shift+Space)",
-    },
+    }
   );
 
   // Session management
@@ -60,7 +60,7 @@ export const useKeyboardShortcuts = (config: KeyboardShortcutsConfig) => {
     {
       enableOnFormTags: true,
       description: "Save session (Ctrl+S)",
-    },
+    }
   );
 
   useHotkeys(
@@ -72,7 +72,7 @@ export const useKeyboardShortcuts = (config: KeyboardShortcutsConfig) => {
     {
       enableOnFormTags: false,
       description: "Export data (Ctrl+E)",
-    },
+    }
   );
 
   useHotkeys(
@@ -84,7 +84,7 @@ export const useKeyboardShortcuts = (config: KeyboardShortcutsConfig) => {
     {
       enableOnFormTags: false,
       description: "Clear transcription (Ctrl+Shift+C)",
-    },
+    }
   );
 
   // UI controls
@@ -97,7 +97,7 @@ export const useKeyboardShortcuts = (config: KeyboardShortcutsConfig) => {
     {
       enableOnFormTags: true,
       description: "Toggle fullscreen (F11)",
-    },
+    }
   );
 
   useHotkeys(
@@ -109,7 +109,7 @@ export const useKeyboardShortcuts = (config: KeyboardShortcutsConfig) => {
     {
       enableOnFormTags: false,
       description: "Show help (Ctrl+Shift+H)",
-    },
+    }
   );
 
   useHotkeys(
@@ -121,7 +121,7 @@ export const useKeyboardShortcuts = (config: KeyboardShortcutsConfig) => {
     {
       enableOnFormTags: false,
       description: "Quick search (Ctrl+K)",
-    },
+    }
   );
 
   useHotkeys(
@@ -133,7 +133,7 @@ export const useKeyboardShortcuts = (config: KeyboardShortcutsConfig) => {
     {
       enableOnFormTags: false,
       description: "Toggle settings (Ctrl+,)",
-    },
+    }
   );
 
   // Return available shortcuts for display

@@ -104,9 +104,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
     }
 
     // AOMA knowledge integration
-    const aomaEnhanced = messages.filter(
-      (m) => m.metadata?.knowledge_enhanced,
-    ).length;
+    const aomaEnhanced = messages.filter((m) => m.metadata?.knowledge_enhanced).length;
     if (aomaEnhanced > 0) {
       conversationMetrics.push({
         id: "aoma-enhanced",
@@ -210,9 +208,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
           ) {
             try {
               // Parse the JSON string from the response
-              const aomaResponse = JSON.parse(
-                knowledgeData.result.content[0].text,
-              );
+              const aomaResponse = JSON.parse(knowledgeData.result.content[0].text);
               // console.log('Parsed AOMA Response:', aomaResponse);
 
               // Extract key insights from the response
@@ -235,9 +231,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
                 confidence: 92,
                 icon: Brain,
                 color: "primary",
-                timestamp: new Date(
-                  aomaResponse.metadata?.timestamp || Date.now(),
-                ),
+                timestamp: new Date(aomaResponse.metadata?.timestamp || Date.now()),
                 source: "aoma",
               });
 
@@ -402,8 +396,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
 
       try {
         setIsLoading(true);
-        const conversationInsights =
-          generateConversationInsights(currentConversation);
+        const conversationInsights = generateConversationInsights(currentConversation);
         const aomaInsights = await fetchAOMAInsights();
         if (!cancelled) {
           // Combine and sort by timestamp (newest first)
@@ -453,9 +446,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
       case "up":
         return <TrendingUp size={12} className="text-motiff-green" />;
       case "down":
-        return (
-          <TrendingUp size={12} className="text-motiff-secondary rotate-180" />
-        );
+        return <TrendingUp size={12} className="text-motiff-secondary rotate-180" />;
       case "stable":
         return <div className="w-3 h-0.5 bg-motiff-primary rounded" />;
       default:
@@ -473,15 +464,9 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
   return (
     <div className={`space-y-3 ${className}`} data-test-id="live-insights-root">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-motiff-green">
-          Live Insights
-        </h3>
+        <h3 className="text-lg font-semibold text-motiff-green">Live Insights</h3>
         <div className="flex items-center gap-2">
-          {isLoading && (
-            <span className="text-xs text-white/60 animate-pulse">
-              Loading...
-            </span>
-          )}
+          {isLoading && <span className="text-xs text-white/60 animate-pulse">Loading...</span>}
         </div>
       </div>
       {/* Debug Config Info */}
@@ -500,12 +485,8 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
       {insights.length === 0 ? (
         <div className="motiff-glass-panel p-4 text-center">
           <Brain className="mx-auto mb-2 text-motiff-primary" size={24} />
-          <p className="text-sm text-white/60">
-            Start a conversation to see live insights
-          </p>
-          <p className="text-xs text-white/40 mt-1">
-            Real-time analysis will appear here
-          </p>
+          <p className="text-sm text-white/60">Start a conversation to see live insights</p>
+          <p className="text-xs text-white/40 mt-1">Real-time analysis will appear here</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -528,19 +509,13 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-medium text-white text-sm truncate">
-                          {insight.title}
-                        </h4>
+                        <h4 className="font-medium text-white text-sm truncate">{insight.title}</h4>
                         {insight.trend && getTrendIcon(insight.trend)}
                       </div>
-                      <p className="text-xs text-white/60 mb-2">
-                        {insight.content}
-                      </p>
+                      <p className="text-xs text-white/60 mb-2">{insight.content}</p>
                       {insight.value && (
                         <div className="flex items-center gap-2">
-                          <span className="motiff-metric-value text-sm">
-                            {insight.value}
-                          </span>
+                          <span className="motiff-metric-value text-sm">{insight.value}</span>
                           {insight.confidence && (
                             <span className="text-xs text-white/40">
                               {insight.confidence}% confidence

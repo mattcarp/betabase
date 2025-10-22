@@ -1,4 +1,5 @@
 # SIAM Architecture Overview
+
 <!-- TAGS: architecture, infrastructure, mcp-servers, technical-depth, architecture-decision, production -->
 
 **Last Updated**: August 20, 2025  

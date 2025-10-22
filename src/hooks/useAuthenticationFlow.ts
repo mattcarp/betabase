@@ -1,10 +1,10 @@
 import { useState, useCallback, useMemo } from "react";
 import { cognitoAuth } from "../services/cognitoAuth";
 // import { toast } from "sonner";
-const toast = { 
-  success: (msg: string) => console.log('✅', msg),
-  error: (msg: string) => console.error('❌', msg),
-  info: (msg: string) => console.info('ℹ️', msg)
+const toast = {
+  success: (msg: string) => console.log("✅", msg),
+  error: (msg: string) => console.error("❌", msg),
+  info: (msg: string) => console.info("ℹ️", msg),
 };
 
 export interface EmailFormData {
@@ -38,15 +38,12 @@ export const useAuthenticationFlow = (onLoginSuccess: () => void) => {
     setStatusMessage("Sending magic link to your email...");
     try {
       await cognitoAuth.sendMagicLink(data.email);
-      toast.success(
-        "Magic link sent! Check your email for the verification code.",
-        { id: "magic-link-sent" },
-      );
+      toast.success("Magic link sent! Check your email for the verification code.", {
+        id: "magic-link-sent",
+      });
       setMagicLinkSent(true);
       setNeedsVerification(true);
-      setStatusMessage(
-        "Magic link sent successfully. Please check your email.",
-      );
+      setStatusMessage("Magic link sent successfully. Please check your email.");
     } catch (error: any) {
       const errorMessage = error.message || "Failed to send magic link";
       toast.error(errorMessage, { id: "magic-link-error" });
@@ -77,7 +74,7 @@ export const useAuthenticationFlow = (onLoginSuccess: () => void) => {
         setLoading(false);
       }
     },
-    [email, magicLinkSent, onLoginSuccess],
+    [email, magicLinkSent, onLoginSuccess]
   );
 
   const handleBackFromVerification = useCallback(() => {

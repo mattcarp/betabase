@@ -14,7 +14,7 @@ export async function loginAsTestUser(page: Page): Promise<void> {
 
   if (!testPassword) {
     throw new Error(
-      "TEST_USER_PASSWORD not found in environment variables. Please check your .env file.",
+      "TEST_USER_PASSWORD not found in environment variables. Please check your .env file."
     );
   }
 
@@ -67,8 +67,7 @@ export async function isUserLoggedIn(page: Page): Promise<boolean> {
   }
 
   // Also check if we're NOT on the login page
-  const onLoginPage =
-    (await page.locator('text="The Betabase"').count()) > 0;
+  const onLoginPage = (await page.locator('text="The Betabase"').count()) > 0;
   return !onLoginPage;
 }
 

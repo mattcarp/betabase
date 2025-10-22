@@ -83,6 +83,7 @@ RENDER_API_KEY=your_render_api_key
 ## 📋 Server Status
 
 ### ✅ Ready to Use (No additional setup required)
+
 - Browserbase (API key already configured)
 - Playwright MCP
 - TestSprite (API key already configured)
@@ -92,6 +93,7 @@ RENDER_API_KEY=your_render_api_key
 - Semgrep
 
 ### ⚙️ Requires Environment Variables
+
 - Task Master AI (needs AI provider API keys)
 - Supabase (needs Supabase credentials)
 - Render (needs Render API key)

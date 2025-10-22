@@ -324,35 +324,53 @@ export const useHUDShortcuts = (config: HUDShortcutsConfig) => {
 
   // Return shortcuts list for display
   const shortcuts = [
-    { category: "Panel Management", shortcuts: [
-      { key: "Ctrl+Shift+R", description: "Reset all panels" },
-      { key: "Ctrl+Shift+M", description: "Minimize all panels" },
-      { key: "Ctrl+1-9", description: "Toggle specific panel" },
-    ]},
-    { category: "Navigation", shortcuts: [
-      { key: "Tab", description: "Focus next panel" },
-      { key: "Shift+Tab", description: "Focus previous panel" },
-      { key: "Ctrl+Tab", description: "Cycle through panels" },
-    ]},
-    { category: "Customization", shortcuts: [
-      { key: "Ctrl+Shift+C", description: "Toggle customization" },
-      { key: "Ctrl+Shift+T", description: "Cycle themes" },
-      { key: "Ctrl+↑/↓", description: "Adjust blur" },
-      { key: "Ctrl+←/→", description: "Adjust opacity" },
-    ]},
-    { category: "Audio", shortcuts: [
-      { key: "Ctrl+Shift+A", description: "Toggle audio source selector" },
-      { key: "Alt+↑/↓", description: "Select audio source" },
-    ]},
-    { category: "Help & Accessibility", shortcuts: [
-      { key: "F1 / Ctrl+Shift+H", description: "Toggle help" },
-      { key: "Ctrl+Shift+X", description: "Toggle accessibility" },
-      { key: "Ctrl+Shift+K", description: "Toggle high contrast" },
-    ]},
-    { category: "General", shortcuts: [
-      { key: "F11", description: "Toggle fullscreen" },
-      { key: "F5", description: "Refresh HUD" },
-    ]},
+    {
+      category: "Panel Management",
+      shortcuts: [
+        { key: "Ctrl+Shift+R", description: "Reset all panels" },
+        { key: "Ctrl+Shift+M", description: "Minimize all panels" },
+        { key: "Ctrl+1-9", description: "Toggle specific panel" },
+      ],
+    },
+    {
+      category: "Navigation",
+      shortcuts: [
+        { key: "Tab", description: "Focus next panel" },
+        { key: "Shift+Tab", description: "Focus previous panel" },
+        { key: "Ctrl+Tab", description: "Cycle through panels" },
+      ],
+    },
+    {
+      category: "Customization",
+      shortcuts: [
+        { key: "Ctrl+Shift+C", description: "Toggle customization" },
+        { key: "Ctrl+Shift+T", description: "Cycle themes" },
+        { key: "Ctrl+↑/↓", description: "Adjust blur" },
+        { key: "Ctrl+←/→", description: "Adjust opacity" },
+      ],
+    },
+    {
+      category: "Audio",
+      shortcuts: [
+        { key: "Ctrl+Shift+A", description: "Toggle audio source selector" },
+        { key: "Alt+↑/↓", description: "Select audio source" },
+      ],
+    },
+    {
+      category: "Help & Accessibility",
+      shortcuts: [
+        { key: "F1 / Ctrl+Shift+H", description: "Toggle help" },
+        { key: "Ctrl+Shift+X", description: "Toggle accessibility" },
+        { key: "Ctrl+Shift+K", description: "Toggle high contrast" },
+      ],
+    },
+    {
+      category: "General",
+      shortcuts: [
+        { key: "F11", description: "Toggle fullscreen" },
+        { key: "F5", description: "Refresh HUD" },
+      ],
+    },
   ];
 
   return { shortcuts };

@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
             timestamp: new Date().toISOString(),
             message: `Analyzed ${analysis.testableFeatures.length} features and ${analysis.userFlows.length} user flows`,
           },
-          { status: 200 },
+          { status: 200 }
         );
       }
 
@@ -30,10 +30,7 @@ export async function POST(request: NextRequest) {
         // Conduct deep research on a testing topic
         const { query } = body;
         if (!query) {
-          return NextResponse.json(
-            { error: "Query is required for research" },
-            { status: 400 },
-          );
+          return NextResponse.json({ error: "Query is required for research" }, { status: 400 });
         }
 
         const research = await firecrawlService.conductTestingResearch(query);
@@ -44,7 +41,7 @@ export async function POST(request: NextRequest) {
             research,
             timestamp: new Date().toISOString(),
           },
-          { status: 200 },
+          { status: 200 }
         );
       }
 
@@ -54,12 +51,11 @@ export async function POST(request: NextRequest) {
         if (!documentationUrls || !Array.isArray(documentationUrls)) {
           return NextResponse.json(
             { error: "Documentation URLs array is required" },
-            { status: 400 },
+            { status: 400 }
           );
         }
 
-        const patterns =
-          await firecrawlService.generateTestPatterns(documentationUrls);
+        const patterns = await firecrawlService.generateTestPatterns(documentationUrls);
 
         return NextResponse.json(
           {
@@ -68,17 +64,16 @@ export async function POST(request: NextRequest) {
             count: patterns.length,
             timestamp: new Date().toISOString(),
           },
-          { status: 200 },
+          { status: 200 }
         );
       }
 
       default:
         return NextResponse.json(
           {
-            error:
-              "Invalid action. Use 'analyze', 'research', or 'extract-patterns'",
+            error: "Invalid action. Use 'analyze', 'research', or 'extract-patterns'",
           },
-          { status: 400 },
+          { status: 400 }
         );
     }
   } catch (error) {
@@ -88,7 +83,7 @@ export async function POST(request: NextRequest) {
         error: "Failed to analyze AUT",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -102,40 +97,28 @@ export async function GET(request: NextRequest) {
         description: "Magic link authentication with AWS Cognito",
         testPriority: "high",
         testTypes: ["e2e", "integration", "security"],
-        selectors: [
-          "[data-testid='email-input']",
-          "[data-testid='send-magic-link']",
-        ],
+        selectors: ["[data-testid='email-input']", "[data-testid='send-magic-link']"],
       },
       {
         name: "AI Chat Interface",
         description: "Streaming chat responses with multiple AI providers",
         testPriority: "high",
         testTypes: ["e2e", "integration", "performance"],
-        selectors: [
-          "[data-testid='chat-input']",
-          "[data-testid='send-button']",
-        ],
+        selectors: ["[data-testid='chat-input']", "[data-testid='send-button']"],
       },
       {
         name: "Test Dashboard",
         description: "Comprehensive testing command center with 8 panels",
         testPriority: "high",
         testTypes: ["e2e", "unit", "visual"],
-        selectors: [
-          "[data-testid='test-dashboard']",
-          "[data-testid='run-tests']",
-        ],
+        selectors: ["[data-testid='test-dashboard']", "[data-testid='run-tests']"],
       },
       {
         name: "Document Upload",
         description: "File upload with multiple format support",
         testPriority: "medium",
         testTypes: ["e2e", "integration", "boundary"],
-        selectors: [
-          "[data-testid='file-upload']",
-          "[data-testid='upload-button']",
-        ],
+        selectors: ["[data-testid='file-upload']", "[data-testid='upload-button']"],
       },
       {
         name: "AOMA Knowledge Panel",
@@ -249,9 +232,8 @@ export async function GET(request: NextRequest) {
       success: true,
       analysis: mockAnalysis,
       timestamp: new Date().toISOString(),
-      message:
-        "Mock analysis data (configure FIRECRAWL_API_KEY for real analysis)",
+      message: "Mock analysis data (configure FIRECRAWL_API_KEY for real analysis)",
     },
-    { status: 200 },
+    { status: 200 }
   );
 }

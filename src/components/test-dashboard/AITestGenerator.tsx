@@ -8,13 +8,7 @@ import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
 import { ScrollArea } from "../ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import {
   Brain,
   Sparkles,
@@ -102,8 +96,7 @@ test.describe('Authentication Flow', () => {
       name: "API Response Validation",
       type: "integration",
       language: "typescript",
-      description:
-        "Test API endpoints for correct response structure and error handling",
+      description: "Test API endpoints for correct response structure and error handling",
       coverage: ["API Response", "Error Codes", "Data Validation"],
       timestamp: new Date(),
       code: `import { describe, it, expect } from 'vitest';
@@ -131,9 +124,7 @@ describe('API Integration Tests', () => {
     },
   ]);
 
-  const [selectedTest, setSelectedTest] = useState<GeneratedTest | null>(
-    generatedTests[0],
-  );
+  const [selectedTest, setSelectedTest] = useState<GeneratedTest | null>(generatedTests[0]);
 
   const handleGenerate = async () => {
     setIsGenerating(true);
@@ -146,11 +137,7 @@ describe('API Integration Tests', () => {
         type: testType,
         language: language,
         description: `AI-generated ${testType} test based on: ${prompt}`,
-        coverage: [
-          "Component Rendering",
-          "User Interactions",
-          "State Management",
-        ],
+        coverage: ["Component Rendering", "User Interactions", "State Management"],
         timestamp: new Date(),
         code: `// AI-Generated Test
 import { test, expect } from '@playwright/test';
@@ -341,7 +328,7 @@ test.describe('${prompt}', () => {
                     key={test.id}
                     className={cn(
                       "cursor-pointer transition-all hover:shadow-md",
-                      selectedTest?.id === test.id && "ring-2 ring-primary",
+                      selectedTest?.id === test.id && "ring-2 ring-primary"
                     )}
                     onClick={() => setSelectedTest(test)}
                   >
@@ -352,9 +339,7 @@ test.describe('${prompt}', () => {
                           {test.type}
                         </Badge>
                       </div>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {test.description}
-                      </p>
+                      <p className="text-xs text-muted-foreground truncate">{test.description}</p>
                     </CardContent>
                   </Card>
                 ))}
@@ -372,9 +357,7 @@ test.describe('${prompt}', () => {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-lg">{selectedTest.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {selectedTest.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">{selectedTest.description}</p>
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm">
@@ -413,9 +396,7 @@ test.describe('${prompt}', () => {
                 <TabsContent value="coverage" className="space-y-4">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base">
-                        Test Coverage Areas
-                      </CardTitle>
+                      <CardTitle className="text-base">Test Coverage Areas</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
@@ -431,23 +412,17 @@ test.describe('${prompt}', () => {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base">
-                        Potential Gaps
-                      </CardTitle>
+                      <CardTitle className="text-base">Potential Gaps</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <AlertCircle className="h-4 w-4 text-yellow-500" />
-                          <span className="text-sm">
-                            Edge case: Empty input handling
-                          </span>
+                          <span className="text-sm">Edge case: Empty input handling</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <AlertCircle className="h-4 w-4 text-yellow-500" />
-                          <span className="text-sm">
-                            Network timeout scenarios
-                          </span>
+                          <span className="text-sm">Network timeout scenarios</span>
                         </div>
                       </div>
                     </CardContent>
@@ -462,13 +437,8 @@ test.describe('${prompt}', () => {
                         AI Recommendations
                       </h3>
                       <ul className="space-y-2 text-sm">
-                        <li>
-                          • Consider adding retry logic for flaky network
-                          requests
-                        </li>
-                        <li>
-                          • Add data-testid attributes to improve test stability
-                        </li>
+                        <li>• Consider adding retry logic for flaky network requests</li>
+                        <li>• Add data-testid attributes to improve test stability</li>
                         <li>• Include accessibility checks using axe-core</li>
                         <li>• Add visual regression tests for UI components</li>
                       </ul>
@@ -477,33 +447,19 @@ test.describe('${prompt}', () => {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base">
-                        Related Tests to Generate
-                      </CardTitle>
+                      <CardTitle className="text-base">Related Tests to Generate</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start"
-                          size="sm"
-                        >
+                        <Button variant="outline" className="w-full justify-start" size="sm">
                           <MessageSquare className="h-4 w-4 mr-2" />
                           Test error boundary behavior
                         </Button>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start"
-                          size="sm"
-                        >
+                        <Button variant="outline" className="w-full justify-start" size="sm">
                           <FileText className="h-4 w-4 mr-2" />
                           Test data persistence
                         </Button>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start"
-                          size="sm"
-                        >
+                        <Button variant="outline" className="w-full justify-start" size="sm">
                           <Settings className="h-4 w-4 mr-2" />
                           Test configuration changes
                         </Button>

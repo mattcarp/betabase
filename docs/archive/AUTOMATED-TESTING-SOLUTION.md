@@ -69,8 +69,7 @@ npx playwright test tests/auth/mailinator-browser-test.spec.ts --reporter=html
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 
 // Mailinator inbox URL (publicly accessible)
-const MAILINATOR_INBOX =
-  "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
+const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
 
 // Target site
 const SIAM_URL = "https://iamsiam.ai";

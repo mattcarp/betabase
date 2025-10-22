@@ -12,12 +12,14 @@ This document provides a comprehensive analysis of SIAM's crawling infrastructur
 ### Key Findings
 
 ✅ **GOOD NEWS**:
+
 - Both modern and legacy schemas exist in Supabase
 - Database is currently EMPTY - clean slate for fresh start
 - All crawlers are functional
 - HNSW indexing configured for fast queries
 
 ⚠️ **CRITICAL ISSUES FOUND**:
+
 1. **Dual Schema Problem** - Two different table structures
 2. **Missing Deduplication** - No cross-crawler dedup logic
 3. **Inconsistent Embeddings** - Different models used
@@ -31,16 +33,17 @@ This document provides a comprehensive analysis of SIAM's crawling infrastructur
 
 ### **Data Sources**
 
-| Source | Status | Crawler | Auth Method | API Endpoint |
-|--------|--------|---------|-------------|--------------|
-| **AOMA** | ✅ Active | `aomaFirecrawlService.ts` | AAD/Azure AD | `/api/firecrawl-crawl` |
-| **Confluence** | ✅ Active | `confluenceCrawler.ts` | Basic Auth | `/api/confluence-crawl` |
-| **Jira** | ✅ Active | `sonyMusicJiraCrawler.ts` | Basic Auth + API Token | `/api/sony-music-jira-crawl` |
-| **Alexandria** | ❌ Missing | N/A | N/A | N/A |
+| Source         | Status     | Crawler                   | Auth Method            | API Endpoint                 |
+| -------------- | ---------- | ------------------------- | ---------------------- | ---------------------------- |
+| **AOMA**       | ✅ Active  | `aomaFirecrawlService.ts` | AAD/Azure AD           | `/api/firecrawl-crawl`       |
+| **Confluence** | ✅ Active  | `confluenceCrawler.ts`    | Basic Auth             | `/api/confluence-crawl`      |
+| **Jira**       | ✅ Active  | `sonyMusicJiraCrawler.ts` | Basic Auth + API Token | `/api/sony-music-jira-crawl` |
+| **Alexandria** | ❌ Missing | N/A                       | N/A                    | N/A                          |
 
 ### **Database Schema**
 
 #### Modern Schema (Unified)
+
 ```sql
 aoma_unified_vectors
 ├── id: uuid
@@ -59,6 +62,7 @@ Indexes:
 ```
 
 #### Legacy Schema (Separate Tables)
+
 ```sql
 - aoma_knowledge
 - confluence_knowledge
@@ -75,12 +79,14 @@ Indexes:
 ### 1. **Deduplication** ❌ → ✅ **FIXED**
 
 **Problem**:
+
 - Only `unified-crawler.js` had basic dedup (MD5 hash)
 - No cross-source deduplication
 - No semantic similarity checking
 - Same content from different sources = duplicate vectors
 
 **Solution Implemented**:
+
 - ✅ Created `deduplicationService.ts` with 4-layer dedup:
   1. **Source ID check** (fastest - uses UNIQUE constraint)
   2. **Content hash check** (MD5 hash comparison)
@@ -90,12 +96,14 @@ Indexes:
 ### 2. **Crawler Orchestration** ❌ → ✅ **FIXED**
 
 **Problem**:
+
 - 27+ crawler scripts scattered across `scripts/` directory
 - No centralized orchestration
 - Manual triggering required
 - No error recovery or retry logic
 
 **Solution Implemented**:
+
 - ✅ Created `master-crawler.ts` orchestrator
 - ✅ Runs all crawlers sequentially with error handling
 - ✅ Progress tracking and comprehensive reporting
@@ -105,11 +113,13 @@ Indexes:
 ### 3. **Embedding Inconsistency** ⚠️ **NEEDS STANDARDIZATION**
 
 **Current State**:
+
 - `aomaFirecrawlService.ts`: Uses `text-embedding-3-small`
 - Other crawlers: Use `text-embedding-ada-002`
 - Both produce 1536-dimensional vectors BUT different embedding spaces
 
 **Recommendation**:
+
 - Standardize on ONE model (prefer `text-embedding-3-small` - newer, better)
 - Migrate existing vectors if any exist
 - Update all services to use Vercel AI SDK for consistency
@@ -117,6 +127,7 @@ Indexes:
 ### 4. **Alexandria Crawler** ❌ **NOT IMPLEMENTED**
 
 **Status**: Referenced in:
+
 - SQL schema: `alexandria_knowledge` table exists
 - CLAUDE.md: Listed as a data source
 - ❌ **NO CODE EXISTS**
@@ -132,6 +143,7 @@ Indexes:
 **Created**: `scripts/check-schema-state.js`
 
 **Results**:
+
 - Both schemas exist in Supabase
 - All tables have 0 rows (clean slate)
 - Vector search functions `match_aoma_vectors` NOT deployed yet
@@ -143,6 +155,7 @@ Indexes:
 **Created**: `src/services/deduplicationService.ts`
 
 **Features**:
+
 - 4-layer duplicate detection
 - Content hash generation (MD5)
 - URL normalization
@@ -151,24 +164,18 @@ Indexes:
 - Configurable thresholds
 
 **Usage**:
+
 ```typescript
-import { getDeduplicationService } from '@/services/deduplicationService';
+import { getDeduplicationService } from "@/services/deduplicationService";
 
 const dedupService = getDeduplicationService();
 
-const result = await dedupService.checkDuplicate(
-  content,
-  sourceType,
-  sourceId,
-  url,
-  embedding,
-  {
-    contentHashMatch: true,
-    semanticThreshold: 0.95,
-    crossSource: false,
-    normalizeUrls: true
-  }
-);
+const result = await dedupService.checkDuplicate(content, sourceType, sourceId, url, embedding, {
+  contentHashMatch: true,
+  semanticThreshold: 0.95,
+  crossSource: false,
+  normalizeUrls: true,
+});
 
 if (result.isDuplicate) {
   console.log(`Duplicate found: ${result.matchType}`);
@@ -180,23 +187,25 @@ if (result.isDuplicate) {
 **Updated**: `lib/supabase.ts`
 
 **New Functions**:
+
 1. `upsertVector()` - Now adds content_hash to metadata automatically
 2. `upsertVectorWithDedup()` - Checks for duplicates before inserting
 
 **Usage**:
+
 ```typescript
-import { upsertVectorWithDedup } from '@/lib/supabase';
+import { upsertVectorWithDedup } from "@/lib/supabase";
 
 const result = await upsertVectorWithDedup(
   content,
   embedding,
-  'confluence',
-  'PAGE-123',
-  { title: 'AOMA Docs', space: 'AOMA' },
+  "confluence",
+  "PAGE-123",
+  { title: "AOMA Docs", space: "AOMA" },
   {
     checkSemanticDuplicates: true,
     semanticThreshold: 0.95,
-    url: 'https://confluence.../page-123'
+    url: "https://confluence.../page-123",
   }
 );
 
@@ -212,6 +221,7 @@ if (result.skipped) {
 **Created**: `scripts/master-crawler.ts`
 
 **Features**:
+
 - Orchestrates all crawlers (AOMA, Confluence, Jira)
 - Unified error handling
 - Progress tracking
@@ -221,6 +231,7 @@ if (result.skipped) {
 - Selectable sources (`--aoma-only`, `--confluence-only`, `--jira-only`)
 
 **Usage**:
+
 ```bash
 # Run all crawlers
 npx ts-node scripts/master-crawler.ts
@@ -239,6 +250,7 @@ npx ts-node scripts/master-crawler.ts --jira-only
 ```
 
 **Output Example**:
+
 ```
 🚀 MASTER CRAWLER STARTING
 ══════════════════════════════════════════════════════════════════════
@@ -430,12 +442,12 @@ Based on the optimized HNSW indexing:
 
 ### Typical Crawl Times
 
-| Source | Items | Duration | Notes |
-|--------|-------|----------|-------|
-| AOMA | 6-10 pages | 30-60s | Depends on auth + Firecrawl |
-| Confluence | 100-200 pages | 2-5 min | Rate limited |
-| Jira | 50-100 issues | 1-3 min | Depends on date range |
-| **Total** | 156-310 items | **4-10 min** | With deduplication |
+| Source     | Items         | Duration     | Notes                       |
+| ---------- | ------------- | ------------ | --------------------------- |
+| AOMA       | 6-10 pages    | 30-60s       | Depends on auth + Firecrawl |
+| Confluence | 100-200 pages | 2-5 min      | Rate limited                |
+| Jira       | 50-100 issues | 1-3 min      | Depends on date range       |
+| **Total**  | 156-310 items | **4-10 min** | With deduplication          |
 
 ---
 
@@ -444,6 +456,7 @@ Based on the optimized HNSW indexing:
 ### Regular Crawl Schedule
 
 **Recommended**:
+
 - **Daily**: Jira (last 7 days)
 - **Weekly**: Confluence (updated pages)
 - **Monthly**: AOMA (full crawl)
@@ -451,6 +464,7 @@ Based on the optimized HNSW indexing:
 ### Monitoring
 
 **Key Metrics**:
+
 - Total vectors by source type
 - Duplicate detection rate
 - Crawl success/failure rate
@@ -493,12 +507,14 @@ Based on the optimized HNSW indexing:
 ## 🎯 Success Criteria
 
 ✅ **Phase 1 & 2 Complete**:
+
 - [x] Database schema verified
 - [x] Deduplication service implemented
 - [x] Master crawler orchestrator created
 - [x] Enhanced Supabase helpers
 
 🎯 **Phase 3-6 In Progress**:
+
 - [ ] Embeddings standardized
 - [ ] Alexandria crawler implemented
 - [ ] Monitoring dashboard created
@@ -509,4 +525,3 @@ Based on the optimized HNSW indexing:
 
 **Last Updated**: January 2025
 **Status**: ✅ **READY FOR PHASE 3** - Embeddings standardization and Alexandria implementation
-
