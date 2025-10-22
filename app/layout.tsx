@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import React from "react";
 import { CustomElementGuard } from "../src/components/CustomElementGuard";
 import { ClientErrorBoundary } from "../src/components/ClientErrorBoundary";
+import { ClientWebVitals } from "../src/components/ClientWebVitals";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body suppressHydrationWarning>
         <CustomElementGuard />
+        <ClientWebVitals />
         <ClientErrorBoundary>{children}</ClientErrorBoundary>
       </body>
     </html>
