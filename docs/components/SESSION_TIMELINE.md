@@ -76,18 +76,18 @@ See `src/components/test-dashboard/SessionTimelineExample.tsx` for a complete wo
 
 ### `SessionTimelineProps`
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `interactions` | `SessionInteraction[]` | **Required** | Array of captured interactions |
-| `currentInteractionId` | `string?` | `undefined` | ID of currently selected interaction |
-| `onInteractionClick` | `(interaction: SessionInteraction) => void` | `undefined` | Callback when interaction is clicked |
-| `onFilterChange` | `(filter: SessionTimelineFilter) => void` | `undefined` | Callback when filters change |
-| `className` | `string` | `undefined` | Additional CSS classes |
-| `defaultWidth` | `number` | `320` | Initial width in pixels |
-| `minWidth` | `number` | `240` | Minimum resizable width |
-| `maxWidth` | `number` | `600` | Maximum resizable width |
-| `isCollapsed` | `boolean` | `false` | Whether sidebar is collapsed |
-| `onToggleCollapse` | `() => void` | `undefined` | Callback to toggle collapse state |
+| Prop                   | Type                                        | Default      | Description                          |
+| ---------------------- | ------------------------------------------- | ------------ | ------------------------------------ |
+| `interactions`         | `SessionInteraction[]`                      | **Required** | Array of captured interactions       |
+| `currentInteractionId` | `string?`                                   | `undefined`  | ID of currently selected interaction |
+| `onInteractionClick`   | `(interaction: SessionInteraction) => void` | `undefined`  | Callback when interaction is clicked |
+| `onFilterChange`       | `(filter: SessionTimelineFilter) => void`   | `undefined`  | Callback when filters change         |
+| `className`            | `string`                                    | `undefined`  | Additional CSS classes               |
+| `defaultWidth`         | `number`                                    | `320`        | Initial width in pixels              |
+| `minWidth`             | `number`                                    | `240`        | Minimum resizable width              |
+| `maxWidth`             | `number`                                    | `600`        | Maximum resizable width              |
+| `isCollapsed`          | `boolean`                                   | `false`      | Whether sidebar is collapsed         |
+| `onToggleCollapse`     | `() => void`                                | `undefined`  | Callback to toggle collapse state    |
 
 ## Data Types
 
@@ -97,20 +97,20 @@ The main data structure for captured interactions:
 
 ```typescript
 interface SessionInteraction {
-  id: string;                    // Unique identifier
-  type: InteractionType;         // Type of interaction
-  timestamp: number;             // Unix timestamp in milliseconds
-  description: string;           // Human-readable description
-  elementDescription?: string;   // CSS selector or element description
-  selector?: string;             // CSS/XPath selector
-  value?: string;               // Input value or text
-  url?: string;                 // URL for navigation events
-  status: InteractionStatus;    // Success, error, warning, info
-  duration?: number;            // Duration in milliseconds
-  thumbnail?: string;           // Base64 or URL to screenshot
-  metadata?: object;            // Additional metadata
-  networkData?: object;         // Network request details
-  error?: object;               // Error details if applicable
+  id: string; // Unique identifier
+  type: InteractionType; // Type of interaction
+  timestamp: number; // Unix timestamp in milliseconds
+  description: string; // Human-readable description
+  elementDescription?: string; // CSS selector or element description
+  selector?: string; // CSS/XPath selector
+  value?: string; // Input value or text
+  url?: string; // URL for navigation events
+  status: InteractionStatus; // Success, error, warning, info
+  duration?: number; // Duration in milliseconds
+  thumbnail?: string; // Base64 or URL to screenshot
+  metadata?: object; // Additional metadata
+  networkData?: object; // Network request details
+  error?: object; // Error details if applicable
 }
 ```
 
@@ -155,6 +155,7 @@ const handleFilterChange = (filter: SessionTimelineFilter) => {
 ### Search
 
 The search bar filters interactions by:
+
 - Description text
 - Element description
 - CSS selector
@@ -178,7 +179,7 @@ const captureInteraction = (interaction: Omit<SessionInteraction, "id" | "timest
     id: `interaction-${Date.now()}-${Math.random()}`,
     timestamp: Date.now(),
   };
-  setSessionInteractions(prev => [...prev, newInteraction]);
+  setSessionInteractions((prev) => [...prev, newInteraction]);
 };
 
 // Example: Capture test completion
@@ -221,12 +222,12 @@ Apply custom classes via the `className` prop:
 
 ## Keyboard Shortcuts
 
-| Key | Action |
-|-----|--------|
-| `/` | Focus search bar |
-| `Escape` | Clear search |
+| Key             | Action                               |
+| --------------- | ------------------------------------ |
+| `/`             | Focus search bar                     |
+| `Escape`        | Clear search                         |
 | `Arrow Up/Down` | Navigate interactions (when focused) |
-| `Enter` | Select highlighted interaction |
+| `Enter`         | Select highlighted interaction       |
 
 ## Performance
 
@@ -329,9 +330,13 @@ handleStreamEvent = (event) => {
 **Solution**: Ensure the parent container has proper layout:
 
 ```tsx
-<div className="flex h-screen"> {/* Must be flex container */}
+<div className="flex h-screen">
+  {" "}
+  {/* Must be flex container */}
   <SessionTimeline {...props} />
-  <div className="flex-1"> {/* Main content must be flex-1 */}
+  <div className="flex-1">
+    {" "}
+    {/* Main content must be flex-1 */}
     {/* content */}
   </div>
 </div>

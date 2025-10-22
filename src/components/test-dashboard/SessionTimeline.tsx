@@ -6,13 +6,7 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import {
   MousePointer,
   Type,
@@ -104,12 +98,15 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
   });
 
   // Handle drag start for resizing
-  const handleDragStart = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-    dragStartX.current = e.clientX;
-    dragStartWidth.current = width;
-  }, [width]);
+  const handleDragStart = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      setIsDragging(true);
+      dragStartX.current = e.clientX;
+      dragStartWidth.current = width;
+    },
+    [width]
+  );
 
   // Handle dragging
   useEffect(() => {
@@ -117,10 +114,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
       if (!isDragging) return;
 
       const deltaX = e.clientX - dragStartX.current;
-      const newWidth = Math.max(
-        minWidth,
-        Math.min(maxWidth, dragStartWidth.current + deltaX)
-      );
+      const newWidth = Math.max(minWidth, Math.min(maxWidth, dragStartWidth.current + deltaX));
       setWidth(newWidth);
     };
 
@@ -231,12 +225,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
         )}
         style={{ width: "48px" }}
       >
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onToggleCollapse}
-          className="mb-4"
-        >
+        <Button variant="ghost" size="icon" onClick={onToggleCollapse} className="mb-4">
           <ChevronRight className="h-4 w-4" />
         </Button>
         <div className="writing-mode-vertical-rl text-sm text-mac-text-secondary font-light tracking-wide">
@@ -281,11 +270,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
               className="h-7 w-7"
               title={isExpanded ? "Collapse all" : "Expand all"}
             >
-              {isExpanded ? (
-                <Minimize2 className="h-4 w-4" />
-              ) : (
-                <Maximize2 className="h-4 w-4" />
-              )}
+              {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
             </Button>
             <Button
               variant="ghost"
@@ -331,23 +316,14 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
           >
             <Filter className="h-3 w-3" />
             Filters
-            {showFilters ? (
-              <ChevronUp className="h-3 w-3" />
-            ) : (
-              <ChevronDown className="h-3 w-3" />
-            )}
+            {showFilters ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
           </Button>
           <div className="flex items-center gap-2 text-xs text-mac-text-muted">
             <span>
               {filteredInteractions.length} of {interactions.length}
             </span>
             {(searchQuery || filter.types || filter.statuses) && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={clearFilters}
-                className="h-6 text-xs"
-              >
+              <Button variant="ghost" size="sm" onClick={clearFilters} className="h-6 text-xs">
                 Clear
               </Button>
             )}
@@ -386,9 +362,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
             </div>
 
             <div>
-              <label className="text-xs text-mac-text-secondary mb-1.5 block">
-                Status
-              </label>
+              <label className="text-xs text-mac-text-secondary mb-1.5 block">Status</label>
               <Select
                 value={filter.statuses?.[0] || "all"}
                 onValueChange={(value) => {
@@ -434,8 +408,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                   "cursor-pointer transition-all hover:border-mac-primary-blue-400/50 mac-card",
                   currentInteractionId === interaction.id &&
                     "ring-2 ring-mac-primary-blue-400 bg-mac-primary-blue-400/5 border-mac-primary-blue-400",
-                  interaction.status === "error" &&
-                    "border-rose-500/20 hover:border-rose-500/40",
+                  interaction.status === "error" && "border-rose-500/20 hover:border-rose-500/40",
                   interaction.status === "warning" &&
                     "border-amber-500/20 hover:border-amber-500/40"
                 )}
@@ -447,14 +420,10 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                     <div
                       className={cn(
                         "p-1.5 rounded-md flex-shrink-0",
-                        interaction.status === "success" &&
-                          "bg-emerald-500/10 text-emerald-500",
-                        interaction.status === "error" &&
-                          "bg-rose-500/10 text-rose-500",
-                        interaction.status === "warning" &&
-                          "bg-amber-500/10 text-amber-500",
-                        interaction.status === "info" &&
-                          "bg-blue-500/10 text-blue-500"
+                        interaction.status === "success" && "bg-emerald-500/10 text-emerald-500",
+                        interaction.status === "error" && "bg-rose-500/10 text-rose-500",
+                        interaction.status === "warning" && "bg-amber-500/10 text-amber-500",
+                        interaction.status === "info" && "bg-blue-500/10 text-blue-500"
                       )}
                     >
                       {getInteractionIcon(interaction.type)}
@@ -527,15 +496,11 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="flex items-center justify-between">
             <span className="text-mac-text-muted">Total:</span>
-            <span className="text-mac-text-primary font-medium">
-              {interactions.length}
-            </span>
+            <span className="text-mac-text-primary font-medium">{interactions.length}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-mac-text-muted">Filtered:</span>
-            <span className="text-mac-text-primary font-medium">
-              {filteredInteractions.length}
-            </span>
+            <span className="text-mac-text-primary font-medium">{filteredInteractions.length}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-mac-text-muted">Errors:</span>
@@ -547,9 +512,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
             <span className="text-mac-text-muted">Duration:</span>
             <span className="text-mac-text-primary font-medium">
               {interactions.length > 0
-                ? formatRelativeTime(
-                    interactions[interactions.length - 1].timestamp
-                  )
+                ? formatRelativeTime(interactions[interactions.length - 1].timestamp)
                 : "0ms"}
             </span>
           </div>
