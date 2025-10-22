@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { onCLS, onFID, onFCP, onLCP, onTTFB, onINP, Metric } from "web-vitals";
+import { onCLS, onFCP, onLCP, onTTFB, onINP, type Metric } from "web-vitals";
 
 /**
  * Web Vitals Tracking Component
@@ -10,19 +10,19 @@ import { onCLS, onFID, onFCP, onLCP, onTTFB, onINP, Metric } from "web-vitals";
  *
  * Metrics tracked:
  * - LCP (Largest Contentful Paint): Loading performance
- * - FID (First Input Delay): Interactivity (deprecated, replaced by INP)
- * - INP (Interaction to Next Paint): Responsiveness
+ * - INP (Interaction to Next Paint): Responsiveness (replaced FID in web-vitals v4+)
  * - CLS (Cumulative Layout Shift): Visual stability
  * - FCP (First Contentful Paint): Perceived load speed
  * - TTFB (Time to First Byte): Server response time
  *
  * Thresholds (Google recommendations):
  * - LCP: Good < 2.5s, Needs Improvement < 4s, Poor >= 4s
- * - FID: Good < 100ms, Needs Improvement < 300ms, Poor >= 300ms
  * - INP: Good < 200ms, Needs Improvement < 500ms, Poor >= 500ms
  * - CLS: Good < 0.1, Needs Improvement < 0.25, Poor >= 0.25
  * - FCP: Good < 1.8s, Needs Improvement < 3s, Poor >= 3s
  * - TTFB: Good < 800ms, Needs Improvement < 1800ms, Poor >= 1800ms
+ *
+ * Note: FID (First Input Delay) was deprecated in web-vitals v4 and replaced with INP
  */
 
 interface WebVitalsProps {
@@ -39,7 +39,6 @@ export enum Rating {
 
 const WEB_VITALS_THRESHOLDS = {
   LCP: { good: 2500, poor: 4000 },
-  FID: { good: 100, poor: 300 },
   INP: { good: 200, poor: 500 },
   CLS: { good: 0.1, poor: 0.25 },
   FCP: { good: 1800, poor: 3000 },
@@ -126,7 +125,6 @@ export function WebVitals({ onMetric, enableConsoleLogging = false }: WebVitalsP
 
     // Register all Core Web Vitals
     onCLS(handleMetric);
-    onFID(handleMetric);
     onFCP(handleMetric);
     onLCP(handleMetric);
     onTTFB(handleMetric);
