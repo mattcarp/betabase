@@ -28,9 +28,11 @@ import {
   Calendar,
   RefreshCw,
   PlayCircle,
+  Wand2,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { enhancedSupabaseTestDB } from "../../services/supabase-test-integration-enhanced";
+import { AITestGenerationModal } from "./AITestGenerationModal";
 
 interface TestResult {
   id: string;
@@ -64,6 +66,7 @@ export const TestResultsViewer: React.FC = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isGenerationModalOpen, setIsGenerationModalOpen] = useState(false);
 
   // Fetch test results from Supabase on mount
   useEffect(() => {
@@ -618,6 +621,14 @@ export const TestResultsViewer: React.FC = () => {
                   <Button
                     variant="outline"
                     size="sm"
+                    onClick={() => setIsGenerationModalOpen(true)}
+                  >
+                    <Wand2 className="h-4 w-4 mr-1" />
+                    Convert to Test
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => handleRerunTest(selectedResult.id)}
                   >
                     <RefreshCw className="h-4 w-4 mr-1" />
@@ -799,6 +810,15 @@ export const TestResultsViewer: React.FC = () => {
           </Card>
         )}
       </div>
+
+      {/* AI Test Generation Modal */}
+      {selectedResult && (
+        <AITestGenerationModal
+          testResult={selectedResult}
+          isOpen={isGenerationModalOpen}
+          onClose={() => setIsGenerationModalOpen(false)}
+        />
+      )}
     </div>
   );
 };
