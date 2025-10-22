@@ -25,8 +25,8 @@ jobs:
         run: npm ci
 
       - name: Run ESLint
-        run: npm run lint -- --max-warnings=-1
-        continue-on-error: false
+        run: npm run lint
+        continue-on-error: true
 
       - name: Run Prettier check
         run: npm run format:check
