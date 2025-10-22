@@ -69,6 +69,7 @@ Routes audio processing requests to the Lambda MCP server with intelligent handl
 - **Cancellation Support**: Abort controller for graceful cancellation
 
 **Key Methods**:
+
 ```typescript
 processAudio(request: AudioProcessingRequest): Promise<AudioProcessingResponse>
 healthCheck(): Promise<{ healthy: boolean; latency?: number }>
@@ -80,12 +81,14 @@ cancelProcessing(): void
 Integration layer that orchestrates audio processing through Lambda MCP with automatic fallback to local processing.
 
 **Features**:
+
 - **Hybrid Processing**: Attempts Lambda MCP first, falls back to local on failure
 - **Content Analysis**: Performs local content analysis on transcriptions
 - **Metrics Tracking**: Comprehensive performance and success rate monitoring
 - **Real-time Callbacks**: Progress updates during processing
 
 **Key Methods**:
+
 ```typescript
 processAudio(audioData: Blob | ArrayBuffer): Promise<PipelineResult>
 healthCheck(): Promise<{ healthy: boolean; stats: any }>
@@ -97,10 +100,12 @@ getStats(): PipelineStatistics
 Server-side Next.js API route for processing audio requests.
 
 **Endpoints**:
+
 - `POST /api/lambda-mcp/transcribe` - Process audio file
 - `GET /api/lambda-mcp/transcribe` - Health check and statistics
 
 **Request Format**:
+
 ```typescript
 FormData {
   audio: Blob,
@@ -113,6 +118,7 @@ FormData {
 ```
 
 **Response Format**:
+
 ```typescript
 {
   success: boolean,
@@ -145,6 +151,7 @@ FormData {
 Frontend React hook for easy integration with UI components.
 
 **Usage Example**:
+
 ```typescript
 import { useLambdaMcpTranscription } from '@/hooks/useLambdaMcpTranscription';
 
@@ -185,7 +192,7 @@ function MyComponent() {
 ```typescript
 export const getMcpLambdaUrl = () =>
   process.env.MCP_LAMBDA_URL ||
-  'https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws';
+  "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws";
 ```
 
 ### Environment Variables
@@ -203,13 +210,13 @@ OPENAI_API_KEY=your_openai_key
 
 ```typescript
 const pipeline = new LambdaMcpTranscriptionPipeline({
-  useLambdaMcp: true,              // Enable Lambda MCP
-  fallbackToLocal: true,           // Enable fallback
-  lambdaTimeout: 28000,            // 28-second timeout
-  enableVoiceIsolation: true,      // Voice isolation
-  transcriptionModel: 'gpt-4o-transcribe',
-  contentModerationLevel: 'moderate',
-  enableMetrics: true,             // Track performance
+  useLambdaMcp: true, // Enable Lambda MCP
+  fallbackToLocal: true, // Enable fallback
+  lambdaTimeout: 28000, // 28-second timeout
+  enableVoiceIsolation: true, // Voice isolation
+  transcriptionModel: "gpt-4o-transcribe",
+  contentModerationLevel: "moderate",
+  enableMetrics: true, // Track performance
 });
 ```
 
@@ -218,15 +225,18 @@ const pipeline = new LambdaMcpTranscriptionPipeline({
 AWS Lambda has a maximum execution time of **30 seconds** for HTTP requests. The integration handles this with:
 
 ### 1. Aggressive Timeout (28 seconds)
+
 Abort requests after 28 seconds to leave 2-second buffer for Lambda overhead.
 
 ### 2. Exponential Backoff Retry
+
 - **Attempt 1**: Immediate
 - **Attempt 2**: Wait 1 second
 - **Attempt 3**: Wait 2 seconds
 - **Attempt 4**: Wait 4 seconds
 
 ### 3. Audio Chunking
+
 Large audio files (>5MB) are automatically split into chunks and processed sequentially.
 
 ```typescript
@@ -235,13 +245,14 @@ const chunkSize = 5 * 1024 * 1024;
 ```
 
 ### 4. Local Fallback
+
 If Lambda processing fails after retries, automatically fall back to local processing:
 
 ```typescript
 if (lambdaFailed && config.fallbackToLocal) {
-  console.log('🔄 Falling back to local processing...');
+  console.log("🔄 Falling back to local processing...");
   const result = await localProcessor.processAudio(audioData);
-  return { ...result, processingMode: 'hybrid' };
+  return { ...result, processingMode: "hybrid" };
 }
 ```
 
@@ -313,14 +324,14 @@ For realistic testing, use actual audio files:
 
 ```typescript
 // Load real audio file for testing
-const audioFile = fs.readFileSync('./test-audio/sample.webm');
-const audioBlob = new Blob([audioFile], { type: 'audio/webm' });
+const audioFile = fs.readFileSync("./test-audio/sample.webm");
+const audioBlob = new Blob([audioFile], { type: "audio/webm" });
 
-const response = await request.post('/api/lambda-mcp/transcribe', {
+const response = await request.post("/api/lambda-mcp/transcribe", {
   multipart: {
     audio: {
-      name: 'sample.webm',
-      mimeType: 'audio/webm',
+      name: "sample.webm",
+      mimeType: "audio/webm",
       buffer: audioFile,
     },
   },
@@ -345,6 +356,7 @@ The pipeline tracks comprehensive metrics:
 ```
 
 **Access metrics**:
+
 ```typescript
 const stats = lambdaMcpTranscriptionPipeline.getStats();
 console.log(`Lambda success rate: ${(stats.lambdaSuccessRate * 100).toFixed(1)}%`);
@@ -400,7 +412,7 @@ All errors are caught and logged with context:
 try {
   const result = await lambdaMcpTranscriptionPipeline.processAudio(audioBlob);
 } catch (error) {
-  console.error('❌ Transcription failed:', error);
+  console.error("❌ Transcription failed:", error);
   // Error includes:
   // - Error message
   // - Processing mode attempted
@@ -416,32 +428,32 @@ try {
 ```typescript
 const pipeline = new LambdaMcpTranscriptionPipeline({
   useLambdaMcp: true,
-  fallbackToLocal: true,  // CRITICAL for reliability
+  fallbackToLocal: true, // CRITICAL for reliability
 });
 ```
 
 ### 2. Handle Processing Modes in UI
 
 ```typescript
-if (metadata.processingMode === 'lambda-mcp') {
+if (metadata.processingMode === "lambda-mcp") {
   // Pure Lambda MCP processing
   showSuccessIndicator();
-} else if (metadata.processingMode === 'hybrid') {
+} else if (metadata.processingMode === "hybrid") {
   // Lambda failed, fallback used
-  showWarningIndicator('Processed locally due to server issues');
+  showWarningIndicator("Processed locally due to server issues");
 } else {
   // Local processing only
-  showInfoIndicator('Processed locally');
+  showInfoIndicator("Processed locally");
 }
 ```
 
 ### 3. Monitor Lambda Success Rate
 
 ```typescript
-const stats = await fetch('/api/lambda-mcp/transcribe').then(r => r.json());
+const stats = await fetch("/api/lambda-mcp/transcribe").then((r) => r.json());
 
 if (stats.statistics.lambdaSuccessRate < 0.8) {
-  console.warn('⚠️ Lambda MCP success rate below 80%');
+  console.warn("⚠️ Lambda MCP success rate below 80%");
   // Alert ops team
 }
 ```
@@ -451,7 +463,7 @@ if (stats.statistics.lambdaSuccessRate < 0.8) {
 ```typescript
 // Compress audio before sending to Lambda
 const compressedAudio = await compressAudio(audioBlob, {
-  bitrate: 96,      // 96kbps (balance quality vs. size)
+  bitrate: 96, // 96kbps (balance quality vs. size)
   sampleRate: 16000, // 16kHz (sufficient for speech)
 });
 
@@ -482,6 +494,7 @@ return (
 **Symptoms**: All requests timeout, fallback always used
 
 **Solutions**:
+
 1. Check Lambda URL is correct
 2. Verify Lambda function is deployed and active
 3. Check Lambda CloudWatch logs for errors
@@ -497,6 +510,7 @@ curl https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws/health
 **Symptoms**: Most requests fall back to local processing
 
 **Solutions**:
+
 1. Increase Lambda timeout configuration
 2. Optimize Lambda function performance
 3. Check Lambda memory allocation
@@ -507,6 +521,7 @@ curl https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws/health
 **Symptoms**: Transcription accuracy varies
 
 **Solutions**:
+
 1. Use consistent audio format (webm recommended)
 2. Ensure adequate sample rate (16kHz minimum)
 3. Apply voice isolation before transcription
@@ -517,23 +532,26 @@ curl https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws/health
 ### Migrating Existing Code
 
 **Before** (Direct Enhanced Audio Processor):
+
 ```typescript
-import { enhancedAudioProcessor } from '@/services/enhancedAudioProcessor';
+import { enhancedAudioProcessor } from "@/services/enhancedAudioProcessor";
 
 const result = await enhancedAudioProcessor.processAudio(audioBlob);
 ```
 
 **After** (Lambda MCP Pipeline):
+
 ```typescript
-import { lambdaMcpTranscriptionPipeline } from '@/services/lambdaMcpTranscriptionPipeline';
+import { lambdaMcpTranscriptionPipeline } from "@/services/lambdaMcpTranscriptionPipeline";
 
 const result = await lambdaMcpTranscriptionPipeline.processAudio(audioBlob);
 // Result format is compatible, adds metadata.processingMode
 ```
 
 **Or** (React Hook):
+
 ```typescript
-import { useLambdaMcpTranscription } from '@/hooks/useLambdaMcpTranscription';
+import { useLambdaMcpTranscription } from "@/hooks/useLambdaMcpTranscription";
 
 const { transcribeAudio, transcription } = useLambdaMcpTranscription();
 
@@ -573,6 +591,7 @@ For issues or questions about the Lambda MCP transcription integration:
 The Lambda MCP Transcription Pipeline provides a robust, production-ready solution for processing audio through AWS Lambda-deployed MCP servers with automatic fallback to local processing. The integration respects Lambda timeout constraints, handles errors gracefully, and provides comprehensive metrics and monitoring.
 
 **Key Benefits**:
+
 - ✅ Seamless Lambda MCP integration
 - ✅ Automatic fallback for reliability
 - ✅ Intelligent timeout handling

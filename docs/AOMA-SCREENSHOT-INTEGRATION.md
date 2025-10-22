@@ -320,4 +320,4 @@ After implementation:
 
 ---
 
-*Next: Execute `./scripts/capture-all-aoma-screenshots.sh`*
+_Next: Execute `./scripts/capture-all-aoma-screenshots.sh`_

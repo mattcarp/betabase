@@ -228,6 +228,7 @@ npm run dev  # Without bypass flag
 ## 📝 Git Commit Guidelines
 
 **NEVER** add promotional references to commit messages, PRs, or documentation:
+
 - ❌ "Co-Authored-By: Claude"
 - ❌ "Generated with Claude Code"
 - ❌ Links to claude.com/claude-code

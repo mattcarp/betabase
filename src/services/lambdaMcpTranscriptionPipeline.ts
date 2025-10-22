@@ -10,7 +10,11 @@
  * - Performance metrics and monitoring
  */
 
-import { lambdaMcpAudioRouter, AudioProcessingRequest, AudioProcessingResponse } from './lambdaMcpAudioRouter';
+import {
+  lambdaMcpAudioRouter,
+  AudioProcessingRequest,
+  AudioProcessingResponse,
+} from "./lambdaMcpAudioRouter";
 import {
   EnhancedAudioProcessor,
   EnhancedProcessingResult,
@@ -18,7 +22,7 @@ import {
   VoiceIsolationResult,
   TranscriptionResult,
   ContentAnalysisResult,
-} from './enhancedAudioProcessor';
+} from "./enhancedAudioProcessor";
 
 export interface PipelineConfig extends ProcessingConfig {
   useLambdaMcp: boolean;
@@ -28,7 +32,7 @@ export interface PipelineConfig extends ProcessingConfig {
 }
 
 export interface PipelineResult extends EnhancedProcessingResult {
-  processingMode: 'lambda-mcp' | 'local' | 'hybrid';
+  processingMode: "lambda-mcp" | "local" | "hybrid";
   lambdaAttempted: boolean;
   lambdaSuccess: boolean;
   fallbackUsed: boolean;
@@ -67,9 +71,9 @@ export class LambdaMcpTranscriptionPipeline {
       enableVoiceIsolation: true,
       enableRealTimeTranscription: true,
       enableContentAnalysis: true,
-      transcriptionModel: 'gpt-4o-transcribe',
-      voiceIsolationQuality: 'high',
-      contentModerationLevel: 'moderate',
+      transcriptionModel: "gpt-4o-transcribe",
+      voiceIsolationQuality: "high",
+      contentModerationLevel: "moderate",
 
       ...config,
     };
@@ -85,9 +89,9 @@ export class LambdaMcpTranscriptionPipeline {
       realTimeCallbacks: this.config.realTimeCallbacks,
     });
 
-    console.log('🎙️ Lambda MCP Transcription Pipeline initialized');
-    console.log(`   Lambda MCP: ${this.config.useLambdaMcp ? '✅' : '❌'}`);
-    console.log(`   Local Fallback: ${this.config.fallbackToLocal ? '✅' : '❌'}`);
+    console.log("🎙️ Lambda MCP Transcription Pipeline initialized");
+    console.log(`   Lambda MCP: ${this.config.useLambdaMcp ? "✅" : "❌"}`);
+    console.log(`   Local Fallback: ${this.config.fallbackToLocal ? "✅" : "❌"}`);
     console.log(`   Timeout: ${this.config.lambdaTimeout}ms`);
   }
 
@@ -98,10 +102,10 @@ export class LambdaMcpTranscriptionPipeline {
     const startTime = performance.now();
     this.isProcessing = true;
 
-    console.log('🎤 Lambda MCP Transcription Pipeline: Starting processing...');
+    console.log("🎤 Lambda MCP Transcription Pipeline: Starting processing...");
 
     try {
-      let processingMode: 'lambda-mcp' | 'local' | 'hybrid' = 'local';
+      let processingMode: "lambda-mcp" | "local" | "hybrid" = "local";
       let lambdaAttempted = false;
       let lambdaSuccess = false;
       let fallbackUsed = false;
@@ -118,7 +122,7 @@ export class LambdaMcpTranscriptionPipeline {
         lambdaAttempted = true;
         const lambdaStartTime = performance.now();
 
-        console.log('🚀 Attempting Lambda MCP processing...');
+        console.log("🚀 Attempting Lambda MCP processing...");
 
         try {
           const lambdaRequest: AudioProcessingRequest = {
@@ -126,7 +130,7 @@ export class LambdaMcpTranscriptionPipeline {
             options: {
               enableVoiceIsolation: this.config.enableVoiceIsolation,
               transcriptionModel: this.config.transcriptionModel,
-              language: 'en',
+              language: "en",
             },
           };
 
@@ -136,7 +140,7 @@ export class LambdaMcpTranscriptionPipeline {
 
           if (lambdaResponse.success && lambdaResponse.transcription) {
             lambdaSuccess = true;
-            processingMode = 'lambda-mcp';
+            processingMode = "lambda-mcp";
 
             console.log(`✅ Lambda MCP processing succeeded in ${lambdaLatency.toFixed(0)}ms`);
 
@@ -156,23 +160,24 @@ export class LambdaMcpTranscriptionPipeline {
 
             // Perform content analysis locally on the transcription
             if (this.config.enableContentAnalysis && transcriptionResult.text) {
-              console.log('🔍 Performing local content analysis on Lambda transcription...');
+              console.log("🔍 Performing local content analysis on Lambda transcription...");
               contentAnalysis = await this.performContentAnalysis(transcriptionResult.text);
             }
-
           } else {
-            throw new Error(lambdaResponse.error || 'Lambda MCP processing failed');
+            throw new Error(lambdaResponse.error || "Lambda MCP processing failed");
           }
-
         } catch (error) {
           lambdaLatency = performance.now() - lambdaStartTime;
-          console.error(`❌ Lambda MCP processing failed after ${lambdaLatency.toFixed(0)}ms:`, error);
+          console.error(
+            `❌ Lambda MCP processing failed after ${lambdaLatency.toFixed(0)}ms:`,
+            error
+          );
 
           // Fall back to local processing if enabled
           if (this.config.fallbackToLocal) {
-            console.log('🔄 Falling back to local processing...');
+            console.log("🔄 Falling back to local processing...");
             fallbackUsed = true;
-            processingMode = 'hybrid';
+            processingMode = "hybrid";
 
             const localStartTime = performance.now();
             const localResult = await this.localProcessor.processAudio(audioData);
@@ -187,10 +192,9 @@ export class LambdaMcpTranscriptionPipeline {
             throw error;
           }
         }
-
       } else {
         // Use local processing only
-        console.log('🏠 Using local processing (Lambda MCP disabled)...');
+        console.log("🏠 Using local processing (Lambda MCP disabled)...");
         const localStartTime = performance.now();
         const localResult = await this.localProcessor.processAudio(audioData);
         localLatency = performance.now() - localStartTime;
@@ -208,12 +212,12 @@ export class LambdaMcpTranscriptionPipeline {
       const result: PipelineResult = {
         voiceIsolation: voiceIsolationResult || {
           success: false,
-          error: 'Voice isolation not performed',
+          error: "Voice isolation not performed",
           processingTime: 0,
         },
         transcription: transcriptionResult || {
           success: false,
-          error: 'Transcription failed',
+          error: "Transcription failed",
           processingTime: 0,
         },
         contentAnalysis: contentAnalysis || this.getDefaultContentAnalysis(),
@@ -225,12 +229,14 @@ export class LambdaMcpTranscriptionPipeline {
         lambdaAttempted,
         lambdaSuccess,
         fallbackUsed,
-        metrics: this.config.enableMetrics ? {
-          lambdaLatency,
-          localLatency,
-          totalLatency,
-          retryCount,
-        } : undefined,
+        metrics: this.config.enableMetrics
+          ? {
+              lambdaLatency,
+              localLatency,
+              totalLatency,
+              retryCount,
+            }
+          : undefined,
       };
 
       // Update statistics
@@ -241,13 +247,12 @@ export class LambdaMcpTranscriptionPipeline {
 
       console.log(`✅ Pipeline processing completed in ${totalLatency.toFixed(0)}ms`);
       console.log(`   Mode: ${processingMode}`);
-      console.log(`   Lambda success: ${lambdaSuccess ? '✅' : '❌'}`);
-      console.log(`   Fallback used: ${fallbackUsed ? '✅' : '❌'}`);
+      console.log(`   Lambda success: ${lambdaSuccess ? "✅" : "❌"}`);
+      console.log(`   Fallback used: ${fallbackUsed ? "✅" : "❌"}`);
 
       return result;
-
     } catch (error) {
-      console.error('❌ Pipeline processing failed:', error);
+      console.error("❌ Pipeline processing failed:", error);
       throw error;
     } finally {
       this.isProcessing = false;
@@ -259,7 +264,7 @@ export class LambdaMcpTranscriptionPipeline {
    */
   private async performContentAnalysis(text: string): Promise<ContentAnalysisResult> {
     try {
-      const { explicitContentDetector } = await import('./explicitContentDetector');
+      const { explicitContentDetector } = await import("./explicitContentDetector");
       const explicitResult = await explicitContentDetector.detectExplicitContent(text);
 
       return {
@@ -267,14 +272,14 @@ export class LambdaMcpTranscriptionPipeline {
         explicitScore: explicitResult.confidence,
         contentType: this.classifyContentType(text),
         categories: [],
-        sentiment: 'neutral',
+        sentiment: "neutral",
         sentimentScore: 0,
         keywords: this.extractKeywords(text),
         containsLyrics: false,
         lyricsConfidence: 0,
       };
     } catch (error) {
-      console.error('❌ Content analysis failed:', error);
+      console.error("❌ Content analysis failed:", error);
       return this.getDefaultContentAnalysis();
     }
   }
@@ -282,25 +287,37 @@ export class LambdaMcpTranscriptionPipeline {
   /**
    * Simple content type classification
    */
-  private classifyContentType(text: string): ContentAnalysisResult['contentType'] {
+  private classifyContentType(text: string): ContentAnalysisResult["contentType"] {
     const lowerText = text.toLowerCase();
 
-    if (/verse|chorus|bridge|lyrics/.test(lowerText)) return 'lyrics';
-    if (/music|song|album/.test(lowerText)) return 'music';
-    if (/hello|hi|conversation/.test(lowerText)) return 'conversation';
-    if (text.length > 50) return 'speech';
-    return 'unknown';
+    if (/verse|chorus|bridge|lyrics/.test(lowerText)) return "lyrics";
+    if (/music|song|album/.test(lowerText)) return "music";
+    if (/hello|hi|conversation/.test(lowerText)) return "conversation";
+    if (text.length > 50) return "speech";
+    return "unknown";
   }
 
   /**
    * Extract keywords from text
    */
   private extractKeywords(text: string): string[] {
-    const stopWords = new Set(['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for']);
+    const stopWords = new Set([
+      "the",
+      "a",
+      "an",
+      "and",
+      "or",
+      "but",
+      "in",
+      "on",
+      "at",
+      "to",
+      "for",
+    ]);
     return text
       .toLowerCase()
       .split(/\W+/)
-      .filter(word => word.length > 2 && !stopWords.has(word))
+      .filter((word) => word.length > 2 && !stopWords.has(word))
       .slice(0, 10);
   }
 
@@ -311,9 +328,9 @@ export class LambdaMcpTranscriptionPipeline {
     return {
       isExplicit: false,
       explicitScore: 0,
-      contentType: 'unknown',
+      contentType: "unknown",
       categories: [],
-      sentiment: 'neutral',
+      sentiment: "neutral",
       sentimentScore: 0,
       keywords: [],
       containsLyrics: false,
@@ -357,14 +374,16 @@ export class LambdaMcpTranscriptionPipeline {
 
     if (result.metrics?.lambdaLatency) {
       this.stats.averageLambdaLatency =
-        ((this.stats.averageLambdaLatency * (this.stats.lambdaSuccessCount - 1)) + result.metrics.lambdaLatency)
-        / this.stats.lambdaSuccessCount;
+        (this.stats.averageLambdaLatency * (this.stats.lambdaSuccessCount - 1) +
+          result.metrics.lambdaLatency) /
+        this.stats.lambdaSuccessCount;
     }
 
     if (result.metrics?.localLatency) {
       this.stats.averageLocalLatency =
-        ((this.stats.averageLocalLatency * (this.stats.fallbackCount - 1)) + result.metrics.localLatency)
-        / this.stats.fallbackCount;
+        (this.stats.averageLocalLatency * (this.stats.fallbackCount - 1) +
+          result.metrics.localLatency) /
+        this.stats.fallbackCount;
     }
   }
 
@@ -380,7 +399,11 @@ export class LambdaMcpTranscriptionPipeline {
         callbacks.onVoiceIsolated(result.voiceIsolation);
       }
 
-      if (callbacks.onTranscriptionChunk && result.transcription.success && result.transcription.text) {
+      if (
+        callbacks.onTranscriptionChunk &&
+        result.transcription.success &&
+        result.transcription.text
+      ) {
         callbacks.onTranscriptionChunk(result.transcription.text, true);
       }
 
@@ -388,7 +411,7 @@ export class LambdaMcpTranscriptionPipeline {
         callbacks.onContentAnalysis(result.contentAnalysis);
       }
     } catch (error) {
-      console.error('❌ Callback error:', error);
+      console.error("❌ Callback error:", error);
     }
   }
 
@@ -427,7 +450,7 @@ export class LambdaMcpTranscriptionPipeline {
       realTimeCallbacks: this.config.realTimeCallbacks,
     });
 
-    console.log('🔧 Lambda MCP Transcription Pipeline configuration updated');
+    console.log("🔧 Lambda MCP Transcription Pipeline configuration updated");
   }
 
   /**
