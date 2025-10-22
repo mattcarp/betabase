@@ -25,8 +25,11 @@ import {
   ChevronRight,
   AlertCircle,
   Info,
+  Pencil,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { AnnotationManager, AnnotationPins } from "./AnnotationManager";
+import { AnnotationProvider } from "../../contexts/AnnotationContext";
 
 interface TraceStep {
   id: string;
@@ -55,6 +58,7 @@ export const TraceViewer: React.FC = () => {
   const [selectedDevice, setSelectedDevice] = useState("desktop");
   const [showNetwork, setShowNetwork] = useState(true);
   const [showConsole, setShowConsole] = useState(true);
+  const [annotationsEnabled, setAnnotationsEnabled] = useState(false);
 
   const traceSteps: TraceStep[] = [
     {
@@ -189,7 +193,8 @@ export const TraceViewer: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <AnnotationProvider>
+      <div className="space-y-6 relative">
       {/* Playback Controls */}
       <Card>
         <CardContent className="p-4">
@@ -231,6 +236,15 @@ export const TraceViewer: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-2">
+              <Button
+                variant={annotationsEnabled ? "default" : "outline"}
+                size="sm"
+                onClick={() => setAnnotationsEnabled(!annotationsEnabled)}
+                className="gap-2"
+              >
+                <Pencil className="h-4 w-4" />
+                Annotations
+              </Button>
               <Button variant="outline" size="sm">
                 <Maximize2 className="h-4 w-4 mr-2" />
                 Fullscreen
@@ -242,7 +256,7 @@ export const TraceViewer: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-4">
+          <div className="mt-4 space-y-3">
             <Slider
               value={[currentStep]}
               max={traceSteps.length - 1}
@@ -250,10 +264,21 @@ export const TraceViewer: React.FC = () => {
               onValueChange={(value) => setCurrentStep(value[0])}
               className="w-full"
             />
-            <div className="flex justify-between text-xs text-muted-foreground mt-1">
+            <div className="flex justify-between text-xs text-muted-foreground">
               <span>{formatTime(traceSteps[currentStep]?.timestamp || 0)}</span>
               <span>{formatTime(traceSteps[traceSteps.length - 1]?.timestamp || 0)}</span>
             </div>
+
+            {/* Annotation Pins */}
+            {annotationsEnabled && (
+              <AnnotationPins
+                currentStep={currentStep}
+                totalSteps={traceSteps.length}
+                onPinClick={(annotation) => {
+                  console.log("Annotation clicked:", annotation);
+                }}
+              />
+            )}
           </div>
         </CardContent>
       </Card>
@@ -467,7 +492,17 @@ ${traceSteps[currentStep]?.value ? `await page.fill('input', '${traceSteps[curre
           </Card>
         </div>
       </div>
-    </div>
+
+      {/* Annotation Manager - Overlay when enabled */}
+      {annotationsEnabled && (
+        <AnnotationManager
+          timestamp={traceSteps[currentStep]?.timestamp || 0}
+          totalSteps={traceSteps.length}
+          currentStep={currentStep}
+        />
+      )}
+      </div>
+    </AnnotationProvider>
   );
 };
 
