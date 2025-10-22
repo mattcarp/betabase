@@ -227,5 +227,5 @@ All 6 test questions about NEW content received:
 
 ---
 
-*Tested on: October 11, 2025*
-*Environment: localhost:3000 (production mirror)*
+_Tested on: October 11, 2025_
+_Environment: localhost:3000 (production mirror)_

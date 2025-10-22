@@ -252,4 +252,4 @@ For questions or issues:
 
 ---
 
-*Next: Test chat responses and proceed to Phase 3 (visual display)*
+_Next: Test chat responses and proceed to Phase 3 (visual display)_
