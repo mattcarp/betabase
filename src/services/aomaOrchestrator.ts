@@ -6,6 +6,8 @@
 
 import { aomaCache } from "./aomaCache";
 import { aomaProgressStream, type AOMASource } from "./aomaProgressStream";
+import { getSupabaseVectorService } from "./supabaseVectorService";
+import type { VectorSearchResult } from "@/lib/supabase";
 
 // Available AOMA-mesh-mcp tools and their capabilities
 const AOMA_TOOLS = {
@@ -81,6 +83,181 @@ interface OrchestrationResult {
 }
 
 export class AOMAOrchestrator {
+  private vectorService = getSupabaseVectorService();
+
+  /**
+   * Query unified vector store (FAST PATH - sub-second responses)
+   * This is the primary query method that replaces multiple API calls
+   */
+  async queryVectorStore(
+    query: string,
+    options: {
+      matchThreshold?: number;
+      matchCount?: number;
+      sourceTypes?: string[];
+      useCache?: boolean;
+    } = {},
+  ): Promise<{
+    response: string;
+    sources: AOMASource[];
+    metadata: any;
+    fromCache?: boolean;
+  }> {
+    const {
+      matchThreshold = 0.78,
+      matchCount = 10,
+      sourceTypes,
+      useCache = true,
+    } = options;
+
+    // Check cache first
+    if (useCache) {
+      const cacheKey = `vector:${query}:${sourceTypes?.join(',')}`;
+      const cached = aomaCache.get(cacheKey, "rapid");
+      if (cached) {
+        console.log("⚡ Returning cached vector response");
+        return { ...cached, fromCache: true };
+      }
+    }
+
+    try {
+      // Perform vector similarity search
+      const vectorResults: VectorSearchResult[] = await this.vectorService.searchVectors(
+        query,
+        { matchThreshold, matchCount, sourceTypes }
+      );
+
+      if (!vectorResults || vectorResults.length === 0) {
+        return {
+          response: "No relevant information found in the knowledge base.",
+          sources: [],
+          metadata: { vectorSearch: true, resultsCount: 0 }
+        };
+      }
+
+      // Extract sources for citation
+      const sources: AOMASource[] = vectorResults.map((result, idx) => ({
+        type: result.source_type as any,
+        title: result.metadata?.title || result.metadata?.filename || `Source ${idx + 1}`,
+        description: result.content.substring(0, 150) + '...',
+        relevance: result.similarity,
+        url: result.metadata?.url,
+        timestamp: result.metadata?.created_at || result.metadata?.updated_at,
+      }));
+
+      // Format response with citations
+      const formattedResponse = this.synthesizeVectorResponse(query, vectorResults);
+
+      const result = {
+        response: formattedResponse,
+        sources,
+        metadata: {
+          vectorSearch: true,
+          resultsCount: vectorResults.length,
+          avgSimilarity: vectorResults.reduce((sum, r) => sum + r.similarity, 0) / vectorResults.length,
+          sourceTypes: [...new Set(vectorResults.map(r => r.source_type))],
+        }
+      };
+
+      // Cache the result
+      if (useCache) {
+        const cacheKey = `vector:${query}:${sourceTypes?.join(',')}`;
+        aomaCache.set(cacheKey, result, "rapid");
+      }
+
+      return result;
+    } catch (error) {
+      console.error("❌ Vector store query failed:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Determine which source types are relevant for a query
+   * This enables intelligent source selection for vector search
+   */
+  private determineSourceTypes(query: string): string[] | undefined {
+    const lowerQuery = query.toLowerCase();
+    const sourceTypes: string[] = [];
+
+    // Check for specific source type indicators
+    if (lowerQuery.includes('jira') || lowerQuery.includes('ticket') || lowerQuery.includes('issue') || lowerQuery.includes('bug')) {
+      sourceTypes.push('jira');
+    }
+
+    if (lowerQuery.includes('commit') || lowerQuery.includes('git') || lowerQuery.includes('code') || lowerQuery.includes('repository')) {
+      sourceTypes.push('git');
+    }
+
+    if (lowerQuery.includes('email') || lowerQuery.includes('outlook') || lowerQuery.includes('message') || lowerQuery.includes('communication')) {
+      sourceTypes.push('email');
+    }
+
+    if (lowerQuery.includes('metric') || lowerQuery.includes('performance') || lowerQuery.includes('monitoring') || lowerQuery.includes('health')) {
+      sourceTypes.push('metrics');
+    }
+
+    // Always search knowledge base for AOMA-related queries
+    if (lowerQuery.includes('aoma') || lowerQuery.includes('usm') || lowerQuery.includes('dam') ||
+        lowerQuery.includes('metadata') || lowerQuery.includes('asset') || sourceTypes.length === 0) {
+      sourceTypes.push('knowledge');
+    }
+
+    // If no specific types matched, search all sources
+    if (sourceTypes.length === 0) {
+      return undefined; // undefined means search all source types
+    }
+
+    console.log(`🎯 Determined source types for query: ${sourceTypes.join(', ')}`);
+    return sourceTypes;
+  }
+
+  /**
+   * Synthesize a coherent response from vector search results
+   */
+  private synthesizeVectorResponse(query: string, results: VectorSearchResult[]): string {
+    if (results.length === 0) {
+      return "No relevant information found.";
+    }
+
+    // Group results by source type for better organization
+    const bySourceType = results.reduce((acc, result) => {
+      const type = result.source_type;
+      if (!acc[type]) acc[type] = [];
+      acc[type].push(result);
+      return acc;
+    }, {} as Record<string, VectorSearchResult[]>);
+
+    let response = "";
+    let citationIndex = 1;
+
+    // Prioritize knowledge base results first
+    const priorityOrder = ['knowledge', 'jira', 'git', 'email', 'metrics'];
+    const orderedTypes = priorityOrder.filter(type => bySourceType[type]);
+
+    // Add remaining types not in priority order
+    Object.keys(bySourceType).forEach(type => {
+      if (!priorityOrder.includes(type)) {
+        orderedTypes.push(type);
+      }
+    });
+
+    // Build response from top results
+    orderedTypes.forEach((sourceType) => {
+      const typeResults = bySourceType[sourceType];
+      const topResults = typeResults.slice(0, 3); // Take top 3 per source type
+
+      topResults.forEach((result) => {
+        // Add content with citation marker
+        const content = result.content.trim();
+        response += `${content} [${citationIndex}]\n\n`;
+        citationIndex++;
+      });
+    });
+
+    return response.trim();
+  }
+
   /**
    * Analyze query to determine which tools to call
    */
@@ -292,6 +469,8 @@ export class AOMAOrchestrator {
 
   /**
    * Execute orchestrated tool calls with progress tracking
+   * PRIMARY PATH: Vector store query (fast, local, sub-second)
+   * FALLBACK PATH: External API calls (slow, but comprehensive)
    */
   async executeOrchestration(
     query: string,
@@ -314,6 +493,46 @@ export class AOMAOrchestrator {
       }
 
       return cached;
+    }
+
+    // FAST PATH: Try vector store first
+    try {
+      console.log("🚀 Attempting vector store query (fast path)...");
+      aomaProgressStream.startService("vector_store");
+
+      // Determine relevant source types from query
+      const sourceTypes = this.determineSourceTypes(query);
+
+      const vectorResult = await this.queryVectorStore(query, {
+        matchThreshold: 0.75, // Slightly lower threshold for better recall
+        matchCount: 10,
+        sourceTypes,
+        useCache: true,
+      });
+
+      // If we got good results from vector store, use them
+      if (vectorResult.sources.length > 0) {
+        console.log(`✅ Vector store returned ${vectorResult.sources.length} results`);
+        aomaProgressStream.completeService("vector_store", vectorResult.sources.length, vectorResult.sources);
+        aomaProgressStream.completeQuery();
+
+        // Send progress updates
+        if (progressCallback) {
+          aomaProgressStream.getUpdates().forEach(update => progressCallback(update));
+        }
+
+        // Cache the result
+        aomaCache.set(cacheKey, vectorResult, "rapid");
+
+        return vectorResult;
+      }
+
+      console.log("⚠️ Vector store returned no results, falling back to external APIs...");
+      aomaProgressStream.completeService("vector_store", 0, []);
+    } catch (error) {
+      console.error("❌ Vector store query failed:", error);
+      aomaProgressStream.errorService("vector_store", error instanceof Error ? error.message : String(error));
+      console.log("🔄 Falling back to external API orchestration...");
     }
 
     // Analyze query to determine tool strategy
