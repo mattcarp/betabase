@@ -7,7 +7,7 @@
  * @module utils/embeddings/openai
  */
 
-const OpenAI = require('openai');
+const OpenAI = require("openai");
 
 /**
  * Generate embedding for a single text
@@ -16,15 +16,15 @@ const OpenAI = require('openai');
  * @param {string} model - OpenAI embedding model (default: text-embedding-3-small)
  * @returns {Promise<number[]>} - Embedding vector
  */
-async function generateEmbedding(text, model = 'text-embedding-3-small') {
+async function generateEmbedding(text, model = "text-embedding-3-small") {
   const apiKey = process.env.OPENAI_API_KEY;
 
   if (!apiKey) {
-    throw new Error('OPENAI_API_KEY not set in environment!');
+    throw new Error("OPENAI_API_KEY not set in environment!");
   }
 
   if (!text || text.trim().length === 0) {
-    throw new Error('Cannot generate embedding for empty text');
+    throw new Error("Cannot generate embedding for empty text");
   }
 
   const openai = new OpenAI({ apiKey });
@@ -37,7 +37,7 @@ async function generateEmbedding(text, model = 'text-embedding-3-small') {
 
     return response.data[0].embedding;
   } catch (error) {
-    console.error('❌ Failed to generate embedding:', error.message);
+    console.error("❌ Failed to generate embedding:", error.message);
     throw error;
   }
 }
@@ -57,16 +57,16 @@ async function generateEmbedding(text, model = 'text-embedding-3-small') {
  */
 async function generateEmbeddingsBatch(texts, options = {}) {
   const {
-    model = 'text-embedding-3-small',
+    model = "text-embedding-3-small",
     batchSize = 100,
     delayMs = 1000,
-    onProgress = null
+    onProgress = null,
   } = options;
 
   const apiKey = process.env.OPENAI_API_KEY;
 
   if (!apiKey) {
-    throw new Error('OPENAI_API_KEY not set in environment!');
+    throw new Error("OPENAI_API_KEY not set in environment!");
   }
 
   const openai = new OpenAI({ apiKey });
@@ -83,8 +83,8 @@ async function generateEmbeddingsBatch(texts, options = {}) {
 
     try {
       // Truncate texts to avoid token limits
-      const truncatedBatch = batch.map(text =>
-        typeof text === 'string' ? text.substring(0, 8000) : ''
+      const truncatedBatch = batch.map((text) =>
+        typeof text === "string" ? text.substring(0, 8000) : ""
       );
 
       const response = await openai.embeddings.create({
@@ -92,7 +92,7 @@ async function generateEmbeddingsBatch(texts, options = {}) {
         input: truncatedBatch,
       });
 
-      const batchEmbeddings = response.data.map(item => item.embedding);
+      const batchEmbeddings = response.data.map((item) => item.embedding);
       embeddings.push(...batchEmbeddings);
 
       if (onProgress) {
@@ -100,16 +100,15 @@ async function generateEmbeddingsBatch(texts, options = {}) {
           processed: embeddings.length,
           total: texts.length,
           batchNum,
-          totalBatches
+          totalBatches,
         });
       }
 
       // Rate limiting delay between batches
       if (i + batchSize < texts.length) {
         console.log(`   Waiting ${delayMs}ms before next batch...`);
-        await new Promise(resolve => setTimeout(resolve, delayMs));
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
       }
-
     } catch (error) {
       console.error(`❌ Failed to process batch ${batchNum}:`, error.message);
       throw error;
@@ -133,26 +132,22 @@ async function generateEmbeddingsBatch(texts, options = {}) {
  * @returns {string} - Cleaned text
  */
 function prepareTextForEmbedding(text, options = {}) {
-  const {
-    maxLength = 8000,
-    removeNewlines = true,
-    removeExtraSpaces = true
-  } = options;
+  const { maxLength = 8000, removeNewlines = true, removeExtraSpaces = true } = options;
 
-  if (!text || typeof text !== 'string') {
-    return '';
+  if (!text || typeof text !== "string") {
+    return "";
   }
 
   let cleaned = text;
 
   // Remove newlines if requested
   if (removeNewlines) {
-    cleaned = cleaned.replace(/\n+/g, ' ');
+    cleaned = cleaned.replace(/\n+/g, " ");
   }
 
   // Remove extra spaces if requested
   if (removeExtraSpaces) {
-    cleaned = cleaned.replace(/\s+/g, ' ');
+    cleaned = cleaned.replace(/\s+/g, " ");
   }
 
   // Trim
@@ -204,7 +199,7 @@ function createJiraEmbeddingText(ticket) {
     parts.push(`Description: ${desc}`);
   }
 
-  const combined = parts.join(' | ');
+  const combined = parts.join(" | ");
   return prepareTextForEmbedding(combined);
 }
 
@@ -212,5 +207,5 @@ module.exports = {
   generateEmbedding,
   generateEmbeddingsBatch,
   prepareTextForEmbedding,
-  createJiraEmbeddingText
+  createJiraEmbeddingText,
 };

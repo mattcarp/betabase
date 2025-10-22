@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
-const path = require('path');
-const isProd = process.env.NODE_ENV === 'production';
+const path = require("path");
+const isProd = process.env.NODE_ENV === "production";
 
 // Bundle analyzer configuration
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
 });
 
 const nextConfig = {
@@ -30,45 +30,40 @@ const nextConfig = {
 
   // PERFORMANCE OPTIMIZATION: Image optimization
   images: {
-    domains: ['localhost', 'siam.onrender.com'],
-    formats: ['image/avif', 'image/webp'],
+    domains: ["localhost", "siam.onrender.com"],
+    formats: ["image/avif", "image/webp"],
   },
 
   // PERFORMANCE OPTIMIZATION: Production optimizations
   ...(isProd && {
     compiler: {
       removeConsole: {
-        exclude: ['error', 'warn'],
+        exclude: ["error", "warn"],
       },
     },
   }),
 
   // PERFORMANCE OPTIMIZATION: Optimize package imports
   experimental: {
-    optimizePackageImports: [
-      '@radix-ui/react-icons',
-      'lucide-react',
-      'recharts',
-      'framer-motion',
-    ],
+    optimizePackageImports: ["@radix-ui/react-icons", "lucide-react", "recharts", "framer-motion"],
   },
 
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: "/:path*",
         headers: [
           {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
           },
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
           {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
           },
         ],
       },

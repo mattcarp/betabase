@@ -27,7 +27,7 @@ export function useElevenLabsVoice(options: UseElevenLabsVoiceOptions = {}) {
   const speak = useCallback(
     async (text: string) => {
       const apiKey = options.apiKey || process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY;
-      
+
       if (!apiKey) {
         options.onError?.(new Error("ElevenLabs API key not found"));
         return;

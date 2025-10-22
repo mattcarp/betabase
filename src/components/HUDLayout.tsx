@@ -3,14 +3,7 @@ import { CircularHUD, CircularNavigation } from "./ui/CircularHUD";
 import AudioWaveform from "./AudioWaveform";
 import { SystemHealthMonitor } from "./SystemHealthMonitor";
 import ConversationalAI from "./ConversationalAI";
-import {
-  Mic,
-  FileText,
-  Brain,
-  Activity,
-  Settings,
-  MessageCircle,
-} from "lucide-react";
+import { Mic, FileText, Brain, Activity, Settings, MessageCircle } from "lucide-react";
 
 interface HUDLayoutProps {
   children?: React.ReactNode;
@@ -89,9 +82,7 @@ export function HUDLayout({
               className="w-full h-32 border border-blue-500/30 rounded-lg p-2"
             />
             <div className="mt-4 text-blue-600 font-mono text-sm">
-              <div
-                className={`inline-flex items-center ${isRecording ? "animate-pulse" : ""}`}
-              >
+              <div className={`inline-flex items-center ${isRecording ? "animate-pulse" : ""}`}>
                 <div
                   className={`w-2 h-2 rounded-full mr-2 ${isRecording ? "bg-red-500 animate-ping" : "bg-green-500"}`}
                 ></div>
@@ -108,21 +99,14 @@ export function HUDLayout({
             </h3>
             <div className="space-y-4">
               <div className="hud-element p-4 border border-blue-500/30 rounded-lg hover:border-blue-600/50 transition-all duration-300">
-                <div className="text-blue-600 text-sm font-mono">
-                  SENTIMENT ANALYSIS
-                </div>
+                <div className="text-blue-600 text-sm font-mono">SENTIMENT ANALYSIS</div>
                 <div className="text-green-400 mt-1 font-mono">● NEUTRAL ●</div>
                 <div className="w-full bg-gray-800 rounded-full h-1 mt-2">
-                  <div
-                    className="bg-green-400 h-1 rounded-full"
-                    style={{ width: "65%" }}
-                  ></div>
+                  <div className="bg-green-400 h-1 rounded-full" style={{ width: "65%" }}></div>
                 </div>
               </div>
               <div className="hud-element p-4 border border-blue-500/30 rounded-lg hover:border-blue-600/50 transition-all duration-300">
-                <div className="text-blue-600 text-sm font-mono">
-                  KEY TOPICS DETECTED
-                </div>
+                <div className="text-blue-600 text-sm font-mono">KEY TOPICS DETECTED</div>
                 <div className="flex flex-wrap gap-1 mt-2">
                   <span className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs font-mono">
                     TECHNOLOGY
@@ -136,9 +120,7 @@ export function HUDLayout({
                 </div>
               </div>
               <div className="hud-element p-4 border border-blue-500/30 rounded-lg hover:border-blue-600/50 transition-all duration-300">
-                <div className="text-blue-600 text-sm font-mono">
-                  PROCESSING STATUS
-                </div>
+                <div className="text-blue-600 text-sm font-mono">PROCESSING STATUS</div>
                 <div className="flex items-center mt-2">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2"></div>
                   <span className="text-green-400 text-xs font-mono">
@@ -154,15 +136,10 @@ export function HUDLayout({
           <div className="glass-panel p-0 w-80 h-80 overflow-hidden border border-blue-500/30">
             <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-r from-blue-500/20 to-blue-500/20 flex items-center px-3">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2"></div>
-              <span className="text-blue-300 text-xs font-mono">
-                ELEVENLABS AI ACTIVE
-              </span>
+              <span className="text-blue-300 text-xs font-mono">ELEVENLABS AI ACTIVE</span>
             </div>
             <ConversationalAI
-              agentId={
-                process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID ||
-                "demo-agent-siam-dev"
-              }
+              agentId={process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID || "demo-agent-siam-dev"}
               className="w-full h-full pt-8"
               onTranscriptionUpdate={(text) => {
                 console.log("ElevenLabs transcription:", text);
@@ -211,9 +188,7 @@ export function HUDLayout({
                   <div className="text-center opacity-60">
                     <div className="animate-pulse mb-2">🎤</div>
                     <div>READY TO TRANSCRIBE...</div>
-                    <div className="text-xs mt-2 opacity-40">
-                      Speak to begin transcription
-                    </div>
+                    <div className="text-xs mt-2 opacity-40">Speak to begin transcription</div>
                   </div>
                 )}
               </div>
@@ -230,9 +205,7 @@ export function HUDLayout({
   };
 
   return (
-    <div
-      className={`relative w-full h-full overflow-hidden ${className} bg-black`}
-    >
+    <div className={`relative w-full h-full overflow-hidden ${className} bg-black`}>
       {/* Animated background grid with depth */}
       <div
         className="absolute inset-0 opacity-20"
@@ -276,12 +249,7 @@ export function HUDLayout({
         </CircularHUD>
 
         {/* Navigation overlay */}
-        <CircularNavigation
-          items={navigationItems}
-          radius={280}
-          size={56}
-          className="z-20"
-        />
+        <CircularNavigation items={navigationItems} radius={280} size={56} className="z-20" />
       </div>
 
       {/* Status indicators */}

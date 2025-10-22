@@ -164,7 +164,7 @@ export const createMockComponent = (name: string) => {
         "data-testid": name.toLowerCase(),
         ...props,
       },
-      children,
+      children
     );
   };
   Component.displayName = name;

@@ -31,7 +31,7 @@ async function testTopicExtraction() {
   console.log(`  Found ${searchResults.length} topics matching "aspera":`);
   searchResults.forEach((topic) => {
     console.log(
-      `    - "${topic.term}" (score: ${topic.score.toFixed(3)}, docs: ${topic.documentIds.length})`,
+      `    - "${topic.term}" (score: ${topic.score.toFixed(3)}, docs: ${topic.documentIds.length})`
     );
   });
 
@@ -47,7 +47,7 @@ async function testTopicExtraction() {
       `    Top terms: ${cluster.topics
         .slice(0, 3)
         .map((t) => t.term)
-        .join(", ")}`,
+        .join(", ")}`
     );
     if (cluster.metadata) {
       const meta = cluster.metadata;
@@ -66,14 +66,10 @@ async function testTopicExtraction() {
   if (trending.length > 0) {
     console.log(`  Found ${trending.length} trending topics:`);
     trending.forEach((topic) => {
-      console.log(
-        `    - "${topic.term}" ↗️ (score: ${topic.score.toFixed(3)})`,
-      );
+      console.log(`    - "${topic.term}" ↗️ (score: ${topic.score.toFixed(3)})`);
     });
   } else {
-    console.log(
-      "  No trending topics found (expected with limited sample data)",
-    );
+    console.log("  No trending topics found (expected with limited sample data)");
   }
 
   // Test document processing
@@ -101,9 +97,7 @@ async function testTopicExtraction() {
   const newTopics = await topicExtractionService.processDocument(testDocument);
   console.log(`  Extracted ${newTopics.length} topics from test document:`);
   newTopics.slice(0, 5).forEach((topic) => {
-    console.log(
-      `    - "${topic.term}" [${topic.category}] (score: ${topic.score.toFixed(3)})`,
-    );
+    console.log(`    - "${topic.term}" [${topic.category}] (score: ${topic.score.toFixed(3)})`);
   });
 
   // Test cross-document relationships
@@ -134,9 +128,7 @@ async function testTopicExtraction() {
   console.log("\n📊 Summary:");
   console.log(`  - Successfully extracted ${stats.totalTopics} topics`);
   console.log(`  - Created ${stats.totalClusters} topic clusters`);
-  console.log(
-    `  - Processed ${stats.totalTopics > 0 ? "AOMA documents" : "sample documents"}`,
-  );
+  console.log(`  - Processed ${stats.totalTopics > 0 ? "AOMA documents" : "sample documents"}`);
   console.log(`  - TF-IDF algorithm working correctly`);
   console.log(`  - Clustering algorithm grouping related topics`);
   console.log(`  - Search and filtering functioning properly`);

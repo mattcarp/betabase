@@ -72,12 +72,13 @@ export async function GET(request: NextRequest) {
     const timeRange = searchParams.get("timeRange") || "1h"; // 1h, 6h, 24h, 7d
 
     // Calculate time range in minutes
-    const timeRangeMinutes = {
-      "1h": 60,
-      "6h": 360,
-      "24h": 1440,
-      "7d": 10080,
-    }[timeRange] || 60;
+    const timeRangeMinutes =
+      {
+        "1h": 60,
+        "6h": 360,
+        "24h": 1440,
+        "7d": 10080,
+      }[timeRange] || 60;
 
     const startTime = new Date(Date.now() - timeRangeMinutes * 60 * 1000);
 
@@ -166,10 +167,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(metrics);
   } catch (error) {
     console.error("Error fetching performance metrics:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch performance metrics" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch performance metrics" }, { status: 500 });
   }
 }
 
@@ -192,19 +190,13 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("Error storing metric:", error);
-      return NextResponse.json(
-        { error: "Failed to store metric" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to store metric" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error recording metric:", error);
-    return NextResponse.json(
-      { error: "Failed to record metric" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to record metric" }, { status: 500 });
   }
 }
 
@@ -234,8 +226,7 @@ function calculateQueryMetrics(logs: any[]) {
 
   responseTimes.sort((a, b) => a - b);
 
-  const avgResponseTime =
-    responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
+  const avgResponseTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
   const p50ResponseTime = responseTimes[Math.floor(responseTimes.length * 0.5)];
   const p95ResponseTime = responseTimes[Math.floor(responseTimes.length * 0.95)];
   const p99ResponseTime = responseTimes[Math.floor(responseTimes.length * 0.99)];

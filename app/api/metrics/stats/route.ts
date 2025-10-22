@@ -3,8 +3,8 @@
  * Get statistics about vectorized metrics
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getSystemMetricsVectorService } from '@/services/systemMetricsVectorService';
+import { NextRequest, NextResponse } from "next/server";
+import { getSystemMetricsVectorService } from "@/services/systemMetricsVectorService";
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,10 +16,13 @@ export async function GET(request: NextRequest) {
     // Get in-memory metrics history stats
     const history = metricsService.getMetricsHistory();
 
-    const metricTypeBreakdown = history.reduce((acc, metric) => {
-      acc[metric.metricType] = (acc[metric.metricType] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const metricTypeBreakdown = history.reduce(
+      (acc, metric) => {
+        acc[metric.metricType] = (acc[metric.metricType] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     return NextResponse.json({
       success: true,
@@ -35,11 +38,11 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Failed to get metrics stats:', error);
+    console.error("Failed to get metrics stats:", error);
     return NextResponse.json(
       {
-        error: 'Failed to get metrics stats',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: "Failed to get metrics stats",
+        details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );

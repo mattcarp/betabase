@@ -60,10 +60,7 @@
       {
         "name": "Magic Link Authentication",
         "description": "Passwordless authentication using AWS Cognito with domain restriction to @sonymusic.com and matt@mattcarpenter.com",
-        "files": [
-          "src/components/auth/LoginForm.tsx",
-          "src/services/cognitoAuth.ts"
-        ]
+        "files": ["src/components/auth/LoginForm.tsx", "src/services/cognitoAuth.ts"]
       },
       {
         "name": "Login Form Component",

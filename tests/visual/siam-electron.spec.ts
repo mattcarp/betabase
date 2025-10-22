@@ -34,8 +34,7 @@ test.describe("SIAM Electron - Feature Reference", () => {
 
     // Should not have critical errors (ignore CSP warnings)
     const criticalErrors = errors.filter(
-      (error) =>
-        !error.includes("Content Security Policy") && !error.includes("CSP"),
+      (error) => !error.includes("Content Security Policy") && !error.includes("CSP")
     );
     expect(criticalErrors).toHaveLength(0);
   });
@@ -51,9 +50,7 @@ test.describe("SIAM Electron - Feature Reference", () => {
 
   test("should display circular navigation system", async ({ page }) => {
     // Check for circular navigation
-    const circularNav = page.locator(
-      '[data-testid="circular-navigation"], .circular-navigation',
-    );
+    const circularNav = page.locator('[data-testid="circular-navigation"], .circular-navigation');
     await expect(circularNav).toBeVisible();
 
     // Take screenshot of navigation
@@ -62,9 +59,7 @@ test.describe("SIAM Electron - Feature Reference", () => {
 
   test("should have multiple navigation tabs", async ({ page }) => {
     // Look for navigation tabs (Audio, Transcription, AI Insights, ElevenLabs AI, System Health, Settings)
-    const navTabs = page.locator(
-      '[data-testid*="nav-"], .nav-tab, .navigation-item',
-    );
+    const navTabs = page.locator('[data-testid*="nav-"], .nav-tab, .navigation-item');
     const tabCount = await navTabs.count();
 
     // Should have multiple tabs
@@ -77,7 +72,7 @@ test.describe("SIAM Electron - Feature Reference", () => {
   test("should display transcription panel", async ({ page }) => {
     // Look for transcription-related elements
     const transcriptionPanel = page.locator(
-      '[data-testid*="transcription"], .transcription, .live-transcription',
+      '[data-testid*="transcription"], .transcription, .live-transcription'
     );
 
     if ((await transcriptionPanel.count()) > 0) {
@@ -89,7 +84,7 @@ test.describe("SIAM Electron - Feature Reference", () => {
   test("should display ElevenLabs conversational AI", async ({ page }) => {
     // Look for ElevenLabs/conversational AI elements
     const elevenLabsPanel = page.locator(
-      '[data-testid*="elevenlabs"], .elevenlabs, .conversational-ai',
+      '[data-testid*="elevenlabs"], .elevenlabs, .conversational-ai'
     );
 
     if ((await elevenLabsPanel.count()) > 0) {
@@ -100,9 +95,7 @@ test.describe("SIAM Electron - Feature Reference", () => {
 
   test("should display AI insights panel", async ({ page }) => {
     // Look for AI insights
-    const aiInsights = page.locator(
-      '[data-testid*="insights"], .ai-insights, .insights-panel',
-    );
+    const aiInsights = page.locator('[data-testid*="insights"], .ai-insights, .insights-panel');
 
     if ((await aiInsights.count()) > 0) {
       await expect(aiInsights).toBeVisible();
@@ -112,9 +105,7 @@ test.describe("SIAM Electron - Feature Reference", () => {
 
   test("should have functional panel switching", async ({ page }) => {
     // Test panel switching functionality
-    const navItems = page.locator(
-      '[data-testid*="nav-"], .nav-item, .navigation-button',
-    );
+    const navItems = page.locator('[data-testid*="nav-"], .nav-item, .navigation-button');
     const count = await navItems.count();
 
     if (count > 1) {
@@ -132,7 +123,7 @@ test.describe("SIAM Electron - Feature Reference", () => {
   test("should display settings panel", async ({ page }) => {
     // Look for settings navigation or button
     const settingsNav = page.locator(
-      '[data-testid*="settings"], .settings-nav, [aria-label*="settings"]',
+      '[data-testid*="settings"], .settings-nav, [aria-label*="settings"]'
     );
 
     if ((await settingsNav.count()) > 0) {
@@ -140,9 +131,7 @@ test.describe("SIAM Electron - Feature Reference", () => {
       await page.waitForTimeout(500);
 
       // Check for settings panel content
-      const settingsPanel = page.locator(
-        '[data-testid="settings-panel"], .settings-panel',
-      );
+      const settingsPanel = page.locator('[data-testid="settings-panel"], .settings-panel');
       await expect(settingsPanel).toBeVisible();
 
       await expect(page).toHaveScreenshot("siam-electron-settings.png");
@@ -152,7 +141,7 @@ test.describe("SIAM Electron - Feature Reference", () => {
   test("should have JARVIS-style design elements", async ({ page }) => {
     // Check for JARVIS design elements
     const jarvisElements = page.locator(
-      ".jarvis-panel, .jarvis-glow, .glassmorphism, .holographic, .circular-hud",
+      ".jarvis-panel, .jarvis-glow, .glassmorphism, .holographic, .circular-hud"
     );
 
     if ((await jarvisElements.count()) > 0) {
@@ -178,9 +167,7 @@ test.describe("SIAM Electron - Feature Catalog", () => {
       .locator('button, [role="button"], .clickable, .nav-item')
       .all();
 
-    console.log(
-      `Found ${interactiveElements.length} interactive elements in siam-electron`,
-    );
+    console.log(`Found ${interactiveElements.length} interactive elements in siam-electron`);
 
     // Take comprehensive screenshot
     await expect(page).toHaveScreenshot("siam-electron-feature-catalog.png", {

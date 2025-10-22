@@ -19,10 +19,7 @@ import {
 import { LiveInsights } from "../LiveInsights";
 import { WisdomLibrary } from "../WisdomLibrary";
 import { TopicPanel } from "../TopicVisualization";
-import {
-  useTopicExtraction,
-  useTopicVisualization,
-} from "../../../hooks/useTopicExtraction";
+import { useTopicExtraction, useTopicVisualization } from "../../../hooks/useTopicExtraction";
 
 interface RightSidebarProps {
   className?: string;
@@ -67,12 +64,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
   };
 
   const handleClusterClick = (cluster: any) => {
-    console.log(
-      "Cluster clicked:",
-      cluster.name,
-      cluster.topics.length,
-      "topics",
-    );
+    console.log("Cluster clicked:", cluster.name, cluster.topics.length, "topics");
   };
 
   return (
@@ -88,9 +80,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Navigation Section */}
       <div>
-        <h3 className="">
-          Navigation
-        </h3>
+        <h3 className="">Navigation</h3>
         <div className="space-y-2">
           {navigationItems.map((item) => (
             <button
@@ -100,31 +90,24 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
                 "glass-panel border text-sm",
                 item.isActive
                   ? "bg-neon-blue/20 border-neon-blue/30 text-neon-blue"
-                  : "bg-white/5 border-white/20 text-white hover:bg-white/10",
+                  : "bg-white/5 border-white/20 text-white hover:bg-white/10"
               )}
             >
               <item.icon size={16} />
               <span className="font-medium">{item.label}</span>
-              {item.isActive && (
-                <div className="" />
-              )}
+              {item.isActive && <div className="" />}
             </button>
           ))}
         </div>
       </div>
 
       {/* Live Insights */}
-      <LiveInsights
-        currentConversation={currentConversation}
-        className="mb-6"
-      />
+      <LiveInsights currentConversation={currentConversation} className="mb-6" />
 
       {/* Wisdom Library */}
       <WisdomLibrary
         conversationContext={
-          currentConversation?.length > 0
-            ? JSON.stringify(currentConversation)
-            : undefined
+          currentConversation?.length > 0 ? JSON.stringify(currentConversation) : undefined
         }
         className="mb-6"
       />
@@ -165,9 +148,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Session Metrics */}
       <div className="mt-auto">
-        <h3 className="text-lg font-semibold text-white mb-4">
-          Meeting Metrics
-        </h3>
+        <h3 className="text-lg font-semibold text-white mb-4">Meeting Metrics</h3>
         <div className="space-y-3">
           {sessionMetrics.length > 0 ? (
             sessionMetrics.map((metric, index) => (
@@ -177,12 +158,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs text-white/70">{metric.label}</span>
-                  <span
-                    className={cn(
-                      "text-sm font-semibold",
-                      `text-${metric.color}`,
-                    )}
-                  >
+                  <span className={cn("text-sm font-semibold", `text-${metric.color}`)}>
                     {metric.value}
                   </span>
                 </div>
@@ -197,9 +173,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
           ) : (
             <div className="glass-panel p-3 rounded-lg border border-white/20 bg-white/5 text-center">
               <p className="text-sm text-white/60">No active meeting metrics</p>
-              <p className="text-xs text-white/40 mt-1">
-                Metrics will appear during conversations
-              </p>
+              <p className="text-xs text-white/40 mt-1">Metrics will appear during conversations</p>
             </div>
           )}
         </div>

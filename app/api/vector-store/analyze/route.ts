@@ -67,16 +67,13 @@ Document title: ${file.filename}`;
           summary: extractSummary(response),
           entities: extractEntities(response),
         };
-      }),
+      })
     );
 
     return NextResponse.json({ analyzed: analyses });
   } catch (error) {
     console.error("Content analysis error:", error);
-    return NextResponse.json(
-      { error: "Failed to analyze content" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to analyze content" }, { status: 500 });
   }
 }
 
@@ -185,7 +182,7 @@ async function testKnowledge(topic: string) {
           passed: hasAnswer,
           confidence: hasAnswer ? Math.random() * 0.3 + 0.7 : 0,
         };
-      }),
+      })
     );
 
     const score = results.filter((r) => r.passed).length / results.length;
@@ -203,10 +200,7 @@ async function testKnowledge(topic: string) {
     });
   } catch (error) {
     console.error("Knowledge test error:", error);
-    return NextResponse.json(
-      { error: "Failed to test knowledge" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to test knowledge" }, { status: 500 });
   }
 }
 
@@ -225,10 +219,7 @@ async function mergeFiles(fileIds: string[]) {
     });
   } catch (error) {
     console.error("Merge error:", error);
-    return NextResponse.json(
-      { error: "Failed to merge files" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to merge files" }, { status: 500 });
   }
 }
 
@@ -247,12 +238,8 @@ function extractTopics(text: string): string[] {
 
 function extractSummary(text: string): string {
   const lines = text.split("\n");
-  const summaryLine = lines.find(
-    (l) => l.includes("summary") || l.includes("Summary"),
-  );
-  return summaryLine
-    ? summaryLine.replace(/.*:/, "").trim()
-    : "Document analysis pending...";
+  const summaryLine = lines.find((l) => l.includes("summary") || l.includes("Summary"));
+  return summaryLine ? summaryLine.replace(/.*:/, "").trim() : "Document analysis pending...";
 }
 
 function extractEntities(text: string): string[] {

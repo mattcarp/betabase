@@ -6,13 +6,7 @@ import { cn } from "../../lib/utils";
 // MessageThread component removed - using inline message display
 import { ChatInput } from "./chat-input";
 import { ScrollArea } from "../ui/scroll-area";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
@@ -101,7 +95,7 @@ export function ChatPanel({
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector(
-        "[data-radix-scroll-area-viewport]",
+        "[data-radix-scroll-area-viewport]"
       );
       if (scrollContainer) {
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
@@ -155,9 +149,7 @@ export function ChatPanel({
     }
   };
 
-  const isMaxMessagesReached = maxMessages
-    ? messages.length >= maxMessages
-    : false;
+  const isMaxMessagesReached = maxMessages ? messages.length >= maxMessages : false;
 
   return (
     <Card className={cn("flex flex-col h-full", className)}>
@@ -172,9 +164,7 @@ export function ChatPanel({
               <div>
                 <CardTitle className="text-lg">{title}</CardTitle>
                 {description && (
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {description}
-                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
                 )}
               </div>
             </div>
@@ -187,23 +177,13 @@ export function ChatPanel({
               )}
 
               {allowClear && messages.length > 0 && (
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-8 w-8"
-                  onClick={handleClear}
-                >
+                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleClear}>
                   <Trash2 className="h-4 w-4" />
                 </Button>
               )}
 
               {allowExport && messages.length > 0 && (
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-8 w-8"
-                  onClick={handleExport}
-                >
+                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleExport}>
                   <Download className="h-4 w-4" />
                 </Button>
               )}
@@ -226,12 +206,10 @@ export function ChatPanel({
                   <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2" />
                 </div>
 
-                <h3 className="text-lg font-semibold mb-2">
-                  Welcome to {title}
-                </h3>
+                <h3 className="text-lg font-semibold mb-2">Welcome to {title}</h3>
                 <p className="text-sm text-muted-foreground mb-6 max-w-md">
-                  I'm here to help you with your questions. You can ask me
-                  anything or choose from the suggestions below.
+                  I'm here to help you with your questions. You can ask me anything or choose from
+                  the suggestions below.
                 </p>
 
                 {showSuggestions && suggestions.length > 0 && (
@@ -308,8 +286,7 @@ export function ChatPanel({
               <Alert className="mt-4">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  Maximum message limit ({maxMessages}) reached. Please start a
-                  new conversation.
+                  Maximum message limit ({maxMessages}) reached. Please start a new conversation.
                 </AlertDescription>
               </Alert>
             )}
@@ -326,9 +303,7 @@ export function ChatPanel({
               onSubmit={handleFormSubmit}
               onStop={stop}
               isLoading={isLoading}
-              placeholder={
-                isMaxMessagesReached ? "Message limit reached" : placeholder
-              }
+              placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
               className="w-full"
               allowAttachments={false}
               allowVoice={false}
@@ -340,12 +315,7 @@ export function ChatPanel({
               <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
                 <Loader2 className="h-3 w-3 animate-spin" />
                 AI is generating response...
-                <Button
-                  variant="link"
-                  size="sm"
-                  onClick={stop}
-                  className="h-auto p-0 text-xs"
-                >
+                <Button variant="link" size="sm" onClick={stop} className="h-auto p-0 text-xs">
                   Stop
                 </Button>
               </div>

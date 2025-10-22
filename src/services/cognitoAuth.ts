@@ -15,13 +15,11 @@ const REGION = "us-east-2";
 // CRITICAL FIX: Use hardcoded fallbacks since Next.js env vars aren't loading properly
 // These are your actual Cognito values from AWS Console
 const USER_POOL_ID =
-  (typeof process !== "undefined"
-    ? process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID
-    : undefined) || "us-east-2_A0veaJRLo";
+  (typeof process !== "undefined" ? process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID : undefined) ||
+  "us-east-2_A0veaJRLo";
 const CLIENT_ID =
-  (typeof process !== "undefined"
-    ? process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID
-    : undefined) || "5c6ll37299p351to549lkg3o0d";
+  (typeof process !== "undefined" ? process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID : undefined) ||
+  "5c6ll37299p351to549lkg3o0d";
 
 // Security: Remove Cognito configuration logging to prevent information disclosure
 // Configuration validation happens silently
@@ -180,11 +178,7 @@ export class CognitoAuthService {
   /**
    * Confirm password reset with code
    */
-  async confirmForgotPassword(
-    email: string,
-    code: string,
-    newPassword: string,
-  ): Promise<void> {
+  async confirmForgotPassword(email: string, code: string, newPassword: string): Promise<void> {
     try {
       const command = new ConfirmForgotPasswordCommand({
         ClientId: CLIENT_ID,
@@ -205,8 +199,7 @@ export class CognitoAuthService {
    * Generate a temporary password that meets Cognito requirements
    */
   private generateTempPassword(): string {
-    const chars =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
     let password = "";
     for (let i = 0; i < 16; i++) {
       password += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -268,7 +261,7 @@ export class CognitoAuthService {
       await Promise.all([
         this.setSecureCookie(
           "cognito_user",
-          JSON.stringify({ username: user.username, email: user.email }),
+          JSON.stringify({ username: user.username, email: user.email })
         ),
         this.setSecureCookie("cognito_access_token", user.accessToken),
         this.setSecureCookie("cognito_refresh_token", user.refreshToken),

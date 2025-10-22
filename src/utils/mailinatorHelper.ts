@@ -54,14 +54,11 @@ export class MailinatorHelper {
 
     try {
       // Use the public web endpoint (no auth required)
-      const response = await fetch(
-        `${this.BASE_URL}/v3/public/inboxes/?inbox=${inbox}`,
-        {
-          headers: {
-            Accept: "application/json",
-          },
+      const response = await fetch(`${this.BASE_URL}/v3/public/inboxes/?inbox=${inbox}`, {
+        headers: {
+          Accept: "application/json",
         },
-      );
+      });
 
       if (!response.ok) {
         throw new Error(`Failed to fetch inbox: ${response.status}`);
@@ -78,10 +75,7 @@ export class MailinatorHelper {
   /**
    * Get a specific email message content
    */
-  static async getEmailContent(
-    email: string,
-    messageId: string,
-  ): Promise<string | null> {
+  static async getEmailContent(email: string, messageId: string): Promise<string | null> {
     const inbox = this.getInboxName(email);
 
     try {
@@ -92,7 +86,7 @@ export class MailinatorHelper {
           headers: {
             Accept: "application/json",
           },
-        },
+        }
       );
 
       if (!response.ok) {
@@ -149,13 +143,13 @@ export class MailinatorHelper {
   static async waitForVerificationCode(
     email: string,
     maxWaitMs: number = 60000,
-    pollIntervalMs: number = 2000,
+    pollIntervalMs: number = 2000
   ): Promise<string | null> {
     const startTime = Date.now();
 
     console.log(`Waiting for verification email at: ${email}`);
     console.log(
-      `Public inbox URL: https://www.mailinator.com/v4/public/inboxes.jsp?to=${this.getInboxName(email)}`,
+      `Public inbox URL: https://www.mailinator.com/v4/public/inboxes.jsp?to=${this.getInboxName(email)}`
     );
 
     while (Date.now() - startTime < maxWaitMs) {
@@ -169,9 +163,7 @@ export class MailinatorHelper {
 
           // Check if it's recent (within last 5 minutes)
           if (latestEmail.seconds_ago < 300) {
-            console.log(
-              `Found email from ${latestEmail.from}: ${latestEmail.subject}`,
-            );
+            console.log(`Found email from ${latestEmail.from}: ${latestEmail.subject}`);
 
             // Get email content
             const content = await this.getEmailContent(email, latestEmail.id);

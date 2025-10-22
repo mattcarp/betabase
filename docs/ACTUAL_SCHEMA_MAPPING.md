@@ -8,13 +8,13 @@
 
 ## 🎯 Crawler-to-Table Mapping
 
-| Crawler | Target Table | Columns | Purpose |
-|---------|--------------|---------|---------|
-| **AOMA Firecrawl** | `firecrawl_analysis` | 13 | UI analysis, testable features |
-| **Confluence** | `wiki_documents` | 9 | Wiki/documentation content |
-| **Jira (Playwright)** | `jira_tickets` + `jira_ticket_embeddings` | 10 + 7 | Issues and semantic search |
-| **Jira (REST API)** | `jira_tickets` + `jira_ticket_embeddings` | 10 + 7 | Issues and semantic search |
-| **Generic Crawls** | `crawler_documents` | 13 | General purpose documents |
+| Crawler               | Target Table                              | Columns | Purpose                        |
+| --------------------- | ----------------------------------------- | ------- | ------------------------------ |
+| **AOMA Firecrawl**    | `firecrawl_analysis`                      | 13      | UI analysis, testable features |
+| **Confluence**        | `wiki_documents`                          | 9       | Wiki/documentation content     |
+| **Jira (Playwright)** | `jira_tickets` + `jira_ticket_embeddings` | 10 + 7  | Issues and semantic search     |
+| **Jira (REST API)**   | `jira_tickets` + `jira_ticket_embeddings` | 10 + 7  | Issues and semantic search     |
+| **Generic Crawls**    | `crawler_documents`                       | 13      | General purpose documents      |
 
 ---
 
@@ -180,6 +180,7 @@ User has **86 production tables** with a thoroughly researched schema. The crawl
 ### `lib/supabase.ts`
 
 **Exports**:
+
 ```typescript
 // Types matching ACTUAL schema
 export interface FirecrawlAnalysis { ... }
@@ -201,28 +202,32 @@ export async function validateSonyMusicContent()  // Updated to query actual tab
 ### `src/services/confluenceCrawler.ts`
 
 **Before**:
+
 ```typescript
-import { upsertVector } from '@/lib/supabase';
-await upsertVector(markdown, embedding, 'confluence', sourceId, metadata);
+import { upsertVector } from "@/lib/supabase";
+await upsertVector(markdown, embedding, "confluence", sourceId, metadata);
 ```
 
 **After**:
+
 ```typescript
-import { upsertWikiDocument } from '@/lib/supabase';
-await upsertWikiDocument(url, 'confluence', title, markdown, embedding, metadata);
+import { upsertWikiDocument } from "@/lib/supabase";
+await upsertWikiDocument(url, "confluence", title, markdown, embedding, metadata);
 ```
 
 ### `src/services/sonyMusicJiraCrawler.ts`
 
 **Before**:
+
 ```typescript
-import { upsertVector } from '@/lib/supabase';
-await upsertVector(content, embedding, 'jira', issueKey, metadata);
+import { upsertVector } from "@/lib/supabase";
+await upsertVector(content, embedding, "jira", issueKey, metadata);
 ```
 
 **After**:
+
 ```typescript
-import { upsertJiraTicket, upsertJiraTicketEmbedding } from '@/lib/supabase';
+import { upsertJiraTicket, upsertJiraTicketEmbedding } from "@/lib/supabase";
 await upsertJiraTicket(issueKey, title, description, embedding, metadata);
 await upsertJiraTicketEmbedding(issueKey, title, embedding, metadata);
 ```
@@ -264,6 +269,7 @@ await upsertJiraTicketEmbedding(issueKey, title, embedding, metadata);
 ### For Future Development
 
 1. **NEVER assume tables exist** - Always verify with:
+
    ```sql
    SELECT table_name, COUNT(*) as column_count
    FROM information_schema.columns
@@ -272,6 +278,7 @@ await upsertJiraTicketEmbedding(issueKey, title, embedding, metadata);
    ```
 
 2. **Check actual column names** - Don't assume from migration files:
+
    ```sql
    SELECT column_name, data_type
    FROM information_schema.columns
@@ -284,9 +291,10 @@ await upsertJiraTicketEmbedding(issueKey, title, embedding, metadata);
    - Ask for schema details if unsure
 
 4. **Supabase JS cannot introspect empty tables** - Must query via SQL:
+
    ```javascript
    // ❌ This returns 0 columns for empty tables
-   const { data } = await supabase.from('table').select('*').limit(1);
+   const { data } = await supabase.from("table").select("*").limit(1);
 
    // ✅ Must use information_schema via SQL
    // Run in Supabase Dashboard SQL Editor
@@ -332,9 +340,7 @@ ORDER BY table_name, ordinal_position;
 ### Check Row Counts
 
 ```javascript
-const { count } = await supabase
-  .from('wiki_documents')
-  .select('*', { count: 'exact', head: true });
+const { count } = await supabase.from("wiki_documents").select("*", { count: "exact", head: true });
 
 console.log(`wiki_documents: ${count} rows`);
 ```
@@ -353,12 +359,14 @@ console.log(`wiki_documents: ${count} rows`);
 ### Future Improvements
 
 1. **Add HNSW Indexes** (if not present):
+
    ```sql
    CREATE INDEX crawler_documents_embedding_idx
    ON crawler_documents USING hnsw (embedding vector_cosine_ops);
    ```
 
 2. **Add Unique Constraints** (if not present):
+
    ```sql
    ALTER TABLE wiki_documents
    ADD CONSTRAINT unique_wiki_url_per_app UNIQUE(app_name, url);

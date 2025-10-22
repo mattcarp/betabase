@@ -12,10 +12,7 @@ export async function GET(request: NextRequest) {
     const fileId = searchParams.get("fileId");
 
     if (!fileId) {
-      return NextResponse.json(
-        { error: "File ID is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "File ID is required" }, { status: 400 });
     }
 
     console.log("[FILE_CONTENT] Fetching content for file:", fileId);
@@ -30,8 +27,7 @@ export async function GET(request: NextRequest) {
     const maxLength = 50000;
     const truncatedContent =
       contentText.length > maxLength
-        ? contentText.substring(0, maxLength) +
-          "\n\n... (content truncated for preview)"
+        ? contentText.substring(0, maxLength) + "\n\n... (content truncated for preview)"
         : contentText;
 
     return NextResponse.json({
@@ -48,7 +44,7 @@ export async function GET(request: NextRequest) {
         error: "Failed to fetch file content",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

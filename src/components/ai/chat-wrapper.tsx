@@ -8,16 +8,7 @@ import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
-import {
-  Send,
-  Loader2,
-  User,
-  Bot,
-  AlertCircle,
-  Sparkles,
-  Zap,
-  Clock,
-} from "lucide-react";
+import { Send, Loader2, User, Bot, AlertCircle, Sparkles, Zap, Clock } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import { motion, AnimatePresence } from "framer-motion";
@@ -63,7 +54,7 @@ export function ChatWrapper({
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector(
-        "[data-radix-scroll-area-viewport]",
+        "[data-radix-scroll-area-viewport]"
       );
       if (scrollContainer) {
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
@@ -133,7 +124,7 @@ export function ChatWrapper({
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className={cn(
                       "flex gap-3",
-                      message.role === "user" ? "justify-end" : "justify-start",
+                      message.role === "user" ? "justify-end" : "justify-start"
                     )}
                   >
                     {message.role !== "user" && (
@@ -149,7 +140,7 @@ export function ChatWrapper({
                         "max-w-[80%] rounded-2xl px-4 py-2.5 shadow-sm",
                         message.role === "user"
                           ? "bg-primary text-primary-foreground"
-                          : "bg-muted/50 backdrop-blur-sm border border-border/50",
+                          : "bg-muted/50 backdrop-blur-sm border border-border/50"
                       )}
                     >
                       <div className="prose prose-sm dark:prose-invert">
@@ -159,9 +150,7 @@ export function ChatWrapper({
                         <div className="mt-2 pt-2 border-t border-border/50">
                           <div className="flex items-center gap-1 text-xs text-muted-foreground">
                             <Clock className="h-3 w-3" />
-                            <span>
-                              Used {(message as any).toolInvocations.length} tool(s)
-                            </span>
+                            <span>Used {(message as any).toolInvocations.length} tool(s)</span>
                           </div>
                         </div>
                       )}

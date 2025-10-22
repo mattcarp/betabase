@@ -102,7 +102,7 @@ class AOMACache {
       this.cache.set(key, entry);
 
       console.log(
-        `📦 Cache HIT for query: "${query.substring(0, 50)}..." (${entry.hitCount} hits)`,
+        `📦 Cache HIT for query: "${query.substring(0, 50)}..." (${entry.hitCount} hits)`
       );
       return entry.response;
     }
@@ -112,9 +112,7 @@ class AOMACache {
     if (similarEntry) {
       similarEntry.hitCount++;
       this.stats.hits++;
-      console.log(
-        `📦 Cache HIT (similar) for query: "${query.substring(0, 50)}..."`,
-      );
+      console.log(`📦 Cache HIT (similar) for query: "${query.substring(0, 50)}..."`);
       return similarEntry.response;
     }
 
@@ -134,9 +132,7 @@ class AOMACache {
       const firstKey = this.cache.keys().next().value;
       this.cache.delete(firstKey);
       this.stats.evictions++;
-      console.log(
-        `🗑️ Cache eviction (LRU) - cache at capacity (${this.maxSize})`,
-      );
+      console.log(`🗑️ Cache eviction (LRU) - cache at capacity (${this.maxSize})`);
     }
 
     const entry: CacheEntry = {
@@ -150,7 +146,7 @@ class AOMACache {
 
     this.cache.set(key, entry);
     console.log(
-      `💾 Cache SET for query: "${query.substring(0, 50)}..." (cache size: ${this.cache.size})`,
+      `💾 Cache SET for query: "${query.substring(0, 50)}..." (cache size: ${this.cache.size})`
     );
   }
 
@@ -171,9 +167,7 @@ class AOMACache {
       }
 
       const entryWords = new Set(entry.normalizedQuery.split(" "));
-      const intersection = new Set(
-        [...queryWords].filter((x) => entryWords.has(x)),
-      );
+      const intersection = new Set([...queryWords].filter((x) => entryWords.has(x)));
       const union = new Set([...queryWords, ...entryWords]);
 
       // Jaccard similarity coefficient
@@ -219,9 +213,7 @@ class AOMACache {
    */
   getStats(): CacheStats & { size: number; hitRate: number } {
     const hitRate =
-      this.stats.totalQueries > 0
-        ? (this.stats.hits / this.stats.totalQueries) * 100
-        : 0;
+      this.stats.totalQueries > 0 ? (this.stats.hits / this.stats.totalQueries) * 100 : 0;
 
     return {
       ...this.stats,

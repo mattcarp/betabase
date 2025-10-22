@@ -31,9 +31,7 @@ async function exampleUsage() {
     // 2. Check quota before creating podcast
     console.log("Checking account quota...");
     const quota = await service.getQuota();
-    console.log(
-      `Characters remaining: ${quota.characters_remaining}/${quota.character_limit}`,
-    );
+    console.log(`Characters remaining: ${quota.characters_remaining}/${quota.character_limit}`);
 
     if (quota.characters_remaining < 1000) {
       console.warn("⚠️ Low character quota remaining");
@@ -51,31 +49,24 @@ async function exampleUsage() {
         language: "en",
         intro_music: true,
         outro_music: true,
-      },
+      }
     );
 
     // 4. Create the podcast
     console.log("Creating podcast...");
     const creationResponse = await service.createPodcast(podcastRequest);
-    console.log(
-      `✓ Podcast creation started. ID: ${creationResponse.podcast_id}`,
-    );
+    console.log(`✓ Podcast creation started. ID: ${creationResponse.podcast_id}`);
     console.log(`Status: ${creationResponse.status}`);
 
     // 5. Wait for completion with progress updates
     console.log("Waiting for podcast completion...");
-    const completedPodcast = await service.waitForCompletion(
-      creationResponse.podcast_id,
-      {
-        pollInterval: 10000, // Check every 10 seconds
-        maxWaitTime: 600000, // Wait up to 10 minutes
-        onProgress: (status) => {
-          console.log(
-            `Progress: ${status.progress_percentage}% - ${status.status}`,
-          );
-        },
+    const completedPodcast = await service.waitForCompletion(creationResponse.podcast_id, {
+      pollInterval: 10000, // Check every 10 seconds
+      maxWaitTime: 600000, // Wait up to 10 minutes
+      onProgress: (status) => {
+        console.log(`Progress: ${status.progress_percentage}% - ${status.status}`);
       },
-    );
+    });
 
     console.log("✓ Podcast completed successfully!");
     console.log(`Duration: ${completedPodcast.duration} seconds`);
@@ -84,9 +75,7 @@ async function exampleUsage() {
     // 6. Download the podcast
     if (completedPodcast.audio_url) {
       console.log("Downloading podcast audio...");
-      const audioData = await service.downloadPodcast(
-        creationResponse.podcast_id,
-      );
+      const audioData = await service.downloadPodcast(creationResponse.podcast_id);
       console.log(`✓ Downloaded ${audioData.byteLength} bytes of audio data`);
 
       // In a real application, you would save this to a file:
@@ -102,15 +91,11 @@ async function exampleUsage() {
     console.log(`Completed: ${completedPodcast.completed_at}`);
     console.log(`Duration: ${completedPodcast.duration} seconds`);
     if (completedPodcast.transcript) {
-      console.log(
-        `Transcript preview: ${completedPodcast.transcript.substring(0, 200)}...`,
-      );
+      console.log(`Transcript preview: ${completedPodcast.transcript.substring(0, 200)}...`);
     }
   } catch (error) {
     if (error instanceof ElevenLabsGenfmError) {
-      console.error(
-        `ElevenLabs API Error (${error.statusCode}): ${error.message}`,
-      );
+      console.error(`ElevenLabs API Error (${error.statusCode}): ${error.message}`);
       if (error.response) {
         console.error("Response details:", error.response);
       }

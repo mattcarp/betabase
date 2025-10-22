@@ -42,7 +42,10 @@ const SOURCE_OPTIONS: { label: string; value?: KnowledgeSourceType }[] = [
   { label: "Web (Firecrawl)", value: "firecrawl" },
 ];
 
-export function EnhancedKnowledgePanel({ className, onResultSelected }: EnhancedKnowledgePanelProps) {
+export function EnhancedKnowledgePanel({
+  className,
+  onResultSelected,
+}: EnhancedKnowledgePanelProps) {
   const [query, setQuery] = useState("");
   const [strategy, setStrategy] = useState<Strategy>("focused");
   const [sourceFilter, setSourceFilter] = useState<string>("All");
@@ -118,8 +121,16 @@ export function EnhancedKnowledgePanel({ className, onResultSelected }: Enhanced
               data-test-id="enhanced-knowledge-input"
             />
           </div>
-          <Button type="submit" disabled={isSearching || !query.trim()} data-test-id="enhanced-knowledge-search">
-            {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+          <Button
+            type="submit"
+            disabled={isSearching || !query.trim()}
+            data-test-id="enhanced-knowledge-search"
+          >
+            {isSearching ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Search className="h-4 w-4" />
+            )}
           </Button>
         </form>
 
@@ -136,7 +147,7 @@ export function EnhancedKnowledgePanel({ className, onResultSelected }: Enhanced
                   key={o.label}
                   className={cn(
                     "w-full text-left px-3 py-2 text-xs hover:bg-muted",
-                    sourceFilter === o.label && "bg-muted/60",
+                    sourceFilter === o.label && "bg-muted/60"
                   )}
                   onClick={() => setSourceFilter(o.label)}
                 >
@@ -202,11 +213,11 @@ export function EnhancedKnowledgePanel({ className, onResultSelected }: Enhanced
           </TabsList>
           <TabsContent value="search" className="flex-1 overflow-hidden mt-3">
             <ScrollArea className="h-full">
-              {error && (
-                <div className="text-xs text-destructive">{error}</div>
-              )}
+              {error && <div className="text-xs text-destructive">{error}</div>}
               {!error && !resp && (
-                <div className="text-xs text-muted-foreground">Try a query like "How does AOMA handle file uploads?"</div>
+                <div className="text-xs text-muted-foreground">
+                  Try a query like "How does AOMA handle file uploads?"
+                </div>
               )}
               {resp && (
                 <div className="space-y-3">
@@ -233,7 +244,9 @@ export function EnhancedKnowledgePanel({ className, onResultSelected }: Enhanced
                               {String(r.source_type || "unknown")}
                             </Badge>
                             {typeof r.similarity === "number" && (
-                              <span className="text-[10px] text-muted-foreground">sim {r.similarity.toFixed(3)}</span>
+                              <span className="text-[10px] text-muted-foreground">
+                                sim {r.similarity.toFixed(3)}
+                              </span>
                             )}
                           </div>
                           {r.url && (
@@ -248,7 +261,8 @@ export function EnhancedKnowledgePanel({ className, onResultSelected }: Enhanced
                           )}
                         </div>
                         <div className="text-sm whitespace-pre-wrap">
-                          {r.content?.slice(0, 500)}{r.content && r.content.length > 500 ? "…" : ""}
+                          {r.content?.slice(0, 500)}
+                          {r.content && r.content.length > 500 ? "…" : ""}
                         </div>
                       </div>
                     ))}
@@ -284,5 +298,3 @@ export function EnhancedKnowledgePanel({ className, onResultSelected }: Enhanced
 }
 
 export default EnhancedKnowledgePanel;
-
-

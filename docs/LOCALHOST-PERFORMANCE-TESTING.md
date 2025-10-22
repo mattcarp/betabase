@@ -36,7 +36,7 @@ export class ChatPerformanceMonitor {
 
   startRequest() {
     this.startTime = performance.now();
-    console.log('🏁 Chat request started');
+    console.log("🏁 Chat request started");
   }
 
   recordFirstToken() {
@@ -53,7 +53,7 @@ export class ChatPerformanceMonitor {
     return {
       totalTime: total,
       timeToFirstToken: this.firstTokenTime - this.startTime,
-      streamingTime: this.endTime - this.firstTokenTime
+      streamingTime: this.endTime - this.firstTokenTime,
     };
   }
 }
@@ -64,7 +64,7 @@ export class ChatPerformanceMonitor {
 In `app/api/chat/route.ts`:
 
 ```typescript
-import { ChatPerformanceMonitor } from '@/utils/performance';
+import { ChatPerformanceMonitor } from "@/utils/performance";
 
 export async function POST(req: Request) {
   const monitor = new ChatPerformanceMonitor();
@@ -77,14 +77,14 @@ export async function POST(req: Request) {
       messages: convertToModelMessages(uiMessages),
       onStart: () => {
         monitor.recordFirstToken();
-      }
+      },
     });
 
     return result.toUIMessageStreamResponse({
       onComplete: () => {
         const metrics = monitor.endRequest();
         // Log metrics or send to analytics
-      }
+      },
     });
   } catch (error) {
     monitor.endRequest();
@@ -133,12 +133,12 @@ useEffect(() => {
 
 When testing localhost → Railway MCP:
 
-| Metric | Expected Time | Notes |
-|--------|--------------|-------|
-| Time to First Token | 800-1500ms | Includes Railway cold start if needed |
-| Simple Query (math, greetings) | 1-2s total | Should bypass AOMA orchestration |
-| Complex Query (AOMA knowledge) | 2-4s total | Full orchestration pipeline |
-| Streaming Completion | +1-3s | Depends on response length |
+| Metric                         | Expected Time | Notes                                 |
+| ------------------------------ | ------------- | ------------------------------------- |
+| Time to First Token            | 800-1500ms    | Includes Railway cold start if needed |
+| Simple Query (math, greetings) | 1-2s total    | Should bypass AOMA orchestration      |
+| Complex Query (AOMA knowledge) | 2-4s total    | Full orchestration pipeline           |
+| Streaming Completion           | +1-3s         | Depends on response length            |
 
 ## 🔍 Performance Debugging
 
@@ -175,7 +175,7 @@ EOF
 Enable detailed logging in browser console:
 
 ```javascript
-localStorage.setItem('debug', 'chat:*');
+localStorage.setItem("debug", "chat:*");
 ```
 
 ## ⚡ Performance Optimization Tips
@@ -203,6 +203,7 @@ localStorage.setItem('debug', 'chat:*');
 ## Summary
 
 Testing on localhost with Railway MCP server provides:
+
 - **Accurate backend performance**: Same server, same latency
 - **Isolated frontend testing**: No deployment variables
 - **Real-world API timings**: Actual network round-trips

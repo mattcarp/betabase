@@ -73,9 +73,7 @@ export const HUDMeter: React.FC<HUDMeterProps> = ({
   criticalThreshold = 90,
   warningThreshold = 75,
 }) => {
-  const [animatedValue, setAnimatedValue] = useState(
-    animated ? minValue : value,
-  );
+  const [animatedValue, setAnimatedValue] = useState(animated ? minValue : value);
   const animationRef = useRef<number>();
   const startTimeRef = useRef<number>();
 
@@ -104,11 +102,7 @@ export const HUDMeter: React.FC<HUDMeterProps> = ({
   const progressAngle = startAngleRad + progress * totalAngle;
 
   // Create arc path
-  const createArcPath = (
-    startAngle: number,
-    endAngle: number,
-    radius: number,
-  ) => {
+  const createArcPath = (startAngle: number, endAngle: number, radius: number) => {
     const largeArcFlag = endAngle - startAngle <= Math.PI ? "0" : "1";
     const x1 = centerX + radius * Math.cos(startAngle);
     const y1 = centerY + radius * Math.sin(startAngle);
@@ -204,10 +198,7 @@ export const HUDMeter: React.FC<HUDMeterProps> = ({
 
   return (
     <div
-      className={cn(
-        "relative inline-flex items-center justify-center",
-        className,
-      )}
+      className={cn("relative inline-flex items-center justify-center", className)}
       style={{ width: size + 40, height: size + 40 }}
       data-testid="hud-meter"
     >
@@ -234,9 +225,7 @@ export const HUDMeter: React.FC<HUDMeterProps> = ({
           strokeLinecap="round"
           fill="transparent"
           style={{
-            filter: glowEffect
-              ? `drop-shadow(0 0 8px ${colors.glow})`
-              : undefined,
+            filter: glowEffect ? `drop-shadow(0 0 8px ${colors.glow})` : undefined,
             transition: animated ? "all 0.3s ease-out" : "none",
           }}
         />
@@ -273,9 +262,7 @@ export const HUDMeter: React.FC<HUDMeterProps> = ({
           r={4}
           fill={colors.stroke}
           style={{
-            filter: glowEffect
-              ? `drop-shadow(0 0 6px ${colors.glow})`
-              : undefined,
+            filter: glowEffect ? `drop-shadow(0 0 6px ${colors.glow})` : undefined,
           }}
         />
 
@@ -289,9 +276,7 @@ export const HUDMeter: React.FC<HUDMeterProps> = ({
           strokeWidth={2}
           strokeLinecap="round"
           style={{
-            filter: glowEffect
-              ? `drop-shadow(0 0 4px ${colors.glow})`
-              : undefined,
+            filter: glowEffect ? `drop-shadow(0 0 4px ${colors.glow})` : undefined,
             transition: animated ? "all 0.3s ease-out" : "none",
           }}
         />
@@ -307,9 +292,7 @@ export const HUDMeter: React.FC<HUDMeterProps> = ({
             </div>
           )}
           {label && (
-            <div className="text-xs text-holographic opacity-90 mt-1 font-mono">
-              {label}
-            </div>
+            <div className="text-xs text-holographic opacity-90 mt-1 font-mono">{label}</div>
           )}
         </div>
       </div>

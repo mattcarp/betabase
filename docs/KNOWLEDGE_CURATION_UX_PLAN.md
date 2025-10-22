@@ -11,6 +11,7 @@
 The Curate Tab is functional but needs significant UX polish and innovative features to become a world-class knowledge management interface. Current score: **8.8/10** → Target: **9.8/10**
 
 **Critical Issues Found**:
+
 1. FileUpload component NOT using MAC design tokens
 2. API endpoint mismatch (using `/api/assistant-v5` instead of `/api/vector-store/files`)
 3. Missing innovative knowledge curation features
@@ -22,6 +23,7 @@ The Curate Tab is functional but needs significant UX polish and innovative feat
 ## Phase 1: Functional Analysis
 
 ### Files Tab ✅ WORKING
+
 - **Load**: 184 files loading successfully
 - **Search**: Input visible and functional
 - **Select**: Checkboxes with "Select all" working
@@ -30,7 +32,9 @@ The Curate Tab is functional but needs significant UX polish and innovative feat
 - **Visual**: MAC compliant with recent improvements
 
 ### Upload Tab ⚠️ NEEDS IMPROVEMENT
+
 **Current Implementation** (`file-upload.tsx`):
+
 - ✅ Drag & drop zone
 - ✅ File validation (20MB max)
 - ✅ Upload queue with progress
@@ -42,6 +46,7 @@ The Curate Tab is functional but needs significant UX polish and innovative feat
 - ❌ No MAC typography
 
 ### Info Tab ✅ WORKING
+
 - Clean card layout
 - Assistant ID, file count, size
 - Supported file types grid
@@ -54,5 +59,7 @@ The Curate Tab is functional but needs significant UX polish and innovative feat
 ### Issue 1: FileUpload Component NOT MAC Compliant
 
 **Current Code Problems** (lines 284-340):
+
 ```tsx
 //
+```

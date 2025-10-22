@@ -6,8 +6,7 @@ const openai = new OpenAI({
 });
 
 // Get Assistant ID from environment variable
-const ASSISTANT_ID =
-  process.env.OPENAI_ASSISTANT_ID || "asst_VvOHL1c4S6YapYKun4mY29fM";
+const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID || "asst_VvOHL1c4S6YapYKun4mY29fM";
 
 interface DuplicateGroup {
   files: Array<{
@@ -56,7 +55,7 @@ function calculateSimilarity(str1: string, str2: string): number {
 function areFilenamesSimilar(
   filename1: string,
   filename2: string,
-  threshold: number = 0.85,
+  threshold: number = 0.85
 ): boolean {
   // Normalize filenames (lowercase, remove extensions)
   const normalize = (name: string) => {
@@ -84,11 +83,7 @@ function areExactDuplicates(bytes1: number, bytes2: number): boolean {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const {
-      dryRun = false,
-      semanticThreshold = 0.85,
-      keepNewest = true,
-    } = body;
+    const { dryRun = false, semanticThreshold = 0.85, keepNewest = true } = body;
 
     console.log("[DEDUPLICATE] Starting deduplication process");
     console.log("[DEDUPLICATE] Settings:", {
@@ -144,7 +139,7 @@ export async function POST(request: NextRequest) {
         const isSimilarName = areFilenamesSimilar(
           file1.filename,
           file2.filename,
-          semanticThreshold,
+          semanticThreshold
         );
 
         // Calculate overall similarity
@@ -169,14 +164,12 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log(
-      `[DEDUPLICATE] Found ${duplicateGroups.length} duplicate groups`,
-    );
+    console.log(`[DEDUPLICATE] Found ${duplicateGroups.length} duplicate groups`);
 
     // Count total duplicates (excluding one file to keep per group)
     const totalDuplicates = duplicateGroups.reduce(
       (sum, group) => sum + (group.files.length - 1),
-      0,
+      0
     );
 
     // Dry run - just report what would be deleted
@@ -187,12 +180,8 @@ export async function POST(request: NextRequest) {
         removed: 0,
         dryRun: true,
         groups: duplicateGroups.map((group) => ({
-          keepFile: keepNewest
-            ? group.files[group.files.length - 1]
-            : group.files[0],
-          removeFiles: keepNewest
-            ? group.files.slice(0, -1)
-            : group.files.slice(1),
+          keepFile: keepNewest ? group.files[group.files.length - 1] : group.files[0],
+          removeFiles: keepNewest ? group.files.slice(0, -1) : group.files.slice(1),
           similarity: group.similarity,
         })),
       });
@@ -204,18 +193,12 @@ export async function POST(request: NextRequest) {
 
     for (const group of duplicateGroups) {
       // Sort by creation date to determine which to keep
-      const sortedFiles = [...group.files].sort(
-        (a, b) => a.created_at - b.created_at,
-      );
+      const sortedFiles = [...group.files].sort((a, b) => a.created_at - b.created_at);
 
       // Keep newest or oldest based on preference
-      const filesToRemove = keepNewest
-        ? sortedFiles.slice(0, -1)
-        : sortedFiles.slice(1);
+      const filesToRemove = keepNewest ? sortedFiles.slice(0, -1) : sortedFiles.slice(1);
 
-      console.log(
-        `[DEDUPLICATE] Removing ${filesToRemove.length} duplicates from group`,
-      );
+      console.log(`[DEDUPLICATE] Removing ${filesToRemove.length} duplicates from group`);
 
       for (const file of filesToRemove) {
         try {
@@ -224,12 +207,8 @@ export async function POST(request: NextRequest) {
           removedCount++;
           console.log(`[DEDUPLICATE] Deleted duplicate: ${file.filename}`);
         } catch (error) {
-          const errorMsg =
-            error instanceof Error ? error.message : "Unknown error";
-          console.error(
-            `[DEDUPLICATE] Failed to delete ${file.filename}:`,
-            errorMsg,
-          );
+          const errorMsg = error instanceof Error ? error.message : "Unknown error";
+          console.error(`[DEDUPLICATE] Failed to delete ${file.filename}:`, errorMsg);
           removalResults.push({ id: file.id, success: false, error: errorMsg });
         }
       }
@@ -250,7 +229,7 @@ export async function POST(request: NextRequest) {
         error: "Failed to deduplicate files",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

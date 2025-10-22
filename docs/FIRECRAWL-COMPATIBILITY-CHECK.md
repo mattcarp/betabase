@@ -8,12 +8,12 @@ Firecrawl v2 returns data in the following structure:
 interface FirecrawlResult {
   success: boolean;
   data?: {
-    markdown?: string;      // Main content in markdown format
-    content?: string;       // Plain text content
-    html?: string;         // Raw HTML (if requested)
-    rawHtml?: string;      // Original HTML
-    links?: string[];      // Links found on page
-    screenshot?: string;   // Base64 screenshot (if requested)
+    markdown?: string; // Main content in markdown format
+    content?: string; // Plain text content
+    html?: string; // Raw HTML (if requested)
+    rawHtml?: string; // Original HTML
+    links?: string[]; // Links found on page
+    screenshot?: string; // Base64 screenshot (if requested)
     metadata: {
       title?: string;
       description?: string;
@@ -48,7 +48,7 @@ interface FirecrawlResult {
       statusCode?: number;
       error?: string;
     };
-    llm_extraction?: any;  // If LLM extraction is enabled
+    llm_extraction?: any; // If LLM extraction is enabled
     warning?: string;
   }[];
   error?: string;
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS aoma_unified_vectors (
   metadata JSONB DEFAULT '{}',      -- ✅ Maps to: entire metadata object from Firecrawl
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   CONSTRAINT unique_source UNIQUE(source_type, source_id)
 );
 ```
@@ -78,13 +78,13 @@ CREATE TABLE IF NOT EXISTS aoma_unified_vectors (
 
 Your existing table structure is **perfectly compatible** with Firecrawl v2 output. Here's the mapping:
 
-| Firecrawl v2 Field | Your Table Column | Notes |
-|-------------------|-------------------|-------|
-| `data.markdown` or `data.content` | `content` | Store the markdown version preferably |
-| Generated embedding | `embedding` | Create using OpenAI from content |
-| 'aoma_docs' | `source_type` | Hardcode this value |
-| `metadata.sourceURL` | `source_id` | Use the URL as unique identifier |
-| `metadata` object | `metadata` | Store entire metadata as JSONB |
+| Firecrawl v2 Field                | Your Table Column | Notes                                 |
+| --------------------------------- | ----------------- | ------------------------------------- |
+| `data.markdown` or `data.content` | `content`         | Store the markdown version preferably |
+| Generated embedding               | `embedding`       | Create using OpenAI from content      |
+| 'aoma_docs'                       | `source_type`     | Hardcode this value                   |
+| `metadata.sourceURL`              | `source_id`       | Use the URL as unique identifier      |
+| `metadata` object                 | `metadata`        | Store entire metadata as JSONB        |
 
 ## Implementation Code (Already Correct!)
 
@@ -94,7 +94,7 @@ Your `aomaFirecrawlService.ts` correctly maps the data:
 // This is already correct in your service:
 private async processPageContent(page: any): Promise<Omit<ProcessedContent, 'embedding'>> {
   const { markdown, metadata, url } = page;  // ✅ Destructures Firecrawl output
-  
+
   const processedMetadata = {
     originalUrl: url,                        // ✅ Preserves URL
     title: metadata?.title,                  // ✅ Gets title from metadata
@@ -129,6 +129,7 @@ Your existing table structure and implementation are fully compatible with Firec
 ## Additional Tables You Have
 
 You also have other compatible tables for the test dashboard:
+
 - `test_knowledge_base` - For test-related knowledge
 - `support_knowledge` - For support documentation
 - `firecrawl_analysis` - For storing Firecrawl analysis results

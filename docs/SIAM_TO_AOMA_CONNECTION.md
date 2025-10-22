@@ -84,7 +84,7 @@ Components like `AOMAKnowledgePanel.tsx` and `ai-sdk-chat-panel.tsx` make API ca
 
 ```typescript
 // Example from src/services/aomaParallelQuery.ts
-private readonly RAILWAY_URL = 
+private readonly RAILWAY_URL =
   process.env.NEXT_PUBLIC_AOMA_MESH_SERVER_URL ||
   "https://luminous-dedication-production.up.railway.app";
 ```
@@ -108,7 +108,7 @@ async queryEndpoint(query: string, strategy: string) {
       }
     })
   });
-  
+
   return await response.json();
 }
 ```
@@ -118,6 +118,7 @@ async queryEndpoint(query: string, strategy: string) {
 Uses JSON-RPC 2.0 format:
 
 **Request:**
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -134,15 +135,18 @@ Uses JSON-RPC 2.0 format:
 ```
 
 **Response:**
+
 ```json
 {
   "jsonrpc": "2.0",
   "id": 1,
   "result": {
-    "content": [{
-      "type": "text",
-      "text": "{\"response\": \"The steps for...\", \"metadata\": {...}}"
-    }]
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"response\": \"The steps for...\", \"metadata\": {...}}"
+      }
+    ]
   }
 }
 ```
@@ -153,24 +157,24 @@ Uses JSON-RPC 2.0 format:
 
 ### SIAM Files
 
-| File | Purpose |
-|------|---------|
-| `src/services/aomaParallelQuery.ts` | Main connection logic, parallel queries |
-| `src/services/aomaMeshMcp.ts` | MCP client wrapper |
-| `src/services/aomaOrchestrator.ts` | Orchestrates AOMA queries |
-| `src/components/ui/AOMAKnowledgePanel.tsx` | UI component |
-| `src/components/ai/ai-sdk-chat-panel.tsx` | Chat integration |
-| `.env.render` | Render environment config |
-| `.env.local` | Local development config |
+| File                                       | Purpose                                 |
+| ------------------------------------------ | --------------------------------------- |
+| `src/services/aomaParallelQuery.ts`        | Main connection logic, parallel queries |
+| `src/services/aomaMeshMcp.ts`              | MCP client wrapper                      |
+| `src/services/aomaOrchestrator.ts`         | Orchestrates AOMA queries               |
+| `src/components/ui/AOMAKnowledgePanel.tsx` | UI component                            |
+| `src/components/ai/ai-sdk-chat-panel.tsx`  | Chat integration                        |
+| `.env.render`                              | Render environment config               |
+| `.env.local`                               | Local development config                |
 
 ### aoma-mesh-mcp Files
 
-| File | Purpose |
-|------|---------|
-| `src/index.ts` | MCP server entry point |
-| `src/tools/aoma-knowledge.tool.ts` | Query handler |
-| `src/services/openai.service.ts` | GPT-5 Assistant API integration |
-| `src/services/supabase.service.ts` | Vector search fallback |
+| File                               | Purpose                         |
+| ---------------------------------- | ------------------------------- |
+| `src/index.ts`                     | MCP server entry point          |
+| `src/tools/aoma-knowledge.tool.ts` | Query handler                   |
+| `src/services/openai.service.ts`   | GPT-5 Assistant API integration |
+| `src/services/supabase.service.ts` | Vector search fallback          |
 
 ---
 
@@ -228,6 +232,7 @@ curl -X POST https://luminous-dedication-production.up.railway.app/rpc \
 **Symptom:** SIAM shows connection errors in browser console
 
 **Fix:**
+
 1. Check environment variables in Render dashboard
 2. Ensure `NEXT_PUBLIC_AOMA_MESH_SERVER_URL` is set to Railway URL
 3. Verify aoma-mesh-mcp is running: `curl https://luminous-dedication-production.up.railway.app/health`
@@ -237,6 +242,7 @@ curl -X POST https://luminous-dedication-production.up.railway.app/rpc \
 **Symptom:** RPC endpoint returns 404
 
 **Fix:**
+
 1. Verify aoma-mesh-mcp is deployed and running on Railway
 2. Check Railway logs for errors
 3. Ensure `/rpc` endpoint is exposed in aoma-mesh-mcp
@@ -246,6 +252,7 @@ curl -X POST https://luminous-dedication-production.up.railway.app/rpc \
 **Symptom:** Queries take >60s and timeout
 
 **Fix:**
+
 1. Expected: 30-75s for complex queries (using GPT-5 Assistant API)
 2. Increase timeout in `aomaParallelQuery.ts` if needed
 3. Use "rapid" strategy for faster responses
@@ -255,6 +262,7 @@ curl -X POST https://luminous-dedication-production.up.railway.app/rpc \
 **Symptom:** Browser blocks requests to aoma-mesh-mcp
 
 **Fix:**
+
 1. aoma-mesh-mcp should have CORS headers set
 2. Check `src/index.ts` in aoma-mesh-mcp for CORS config
 3. Ensure Railway URL is in allowed origins
@@ -263,11 +271,11 @@ curl -X POST https://luminous-dedication-production.up.railway.app/rpc \
 
 ## Performance Expectations
 
-| Query Type | Strategy | Expected Time | Quality |
-|-----------|----------|---------------|---------|
-| Simple | rapid | 10-20s | Good |
-| Workflow | focused | 30-45s | Excellent |
-| Complex | comprehensive | 60-75s | Very detailed |
+| Query Type | Strategy      | Expected Time | Quality       |
+| ---------- | ------------- | ------------- | ------------- |
+| Simple     | rapid         | 10-20s        | Good          |
+| Workflow   | focused       | 30-45s        | Excellent     |
+| Complex    | comprehensive | 60-75s        | Very detailed |
 
 **Note:** These times are with GPT-5 Assistant API. Future migration to Supabase + LangGraph should reduce to 10-15s.
 
@@ -276,16 +284,19 @@ curl -X POST https://luminous-dedication-production.up.railway.app/rpc \
 ## Security Considerations
 
 ### 1. API Keys
+
 - OpenAI API key stored in aoma-mesh-mcp (Railway)
 - Not exposed to SIAM frontend
 - Only backend-to-backend communication
 
 ### 2. Network
+
 - All connections over HTTPS
 - Railway provides SSL certificates automatically
 - No authentication required between SIAM and aoma-mesh-mcp (public endpoints)
 
 ### 3. Rate Limiting
+
 - Consider adding rate limiting to aoma-mesh-mcp `/rpc` endpoint
 - Prevent abuse of expensive GPT-5 queries
 
@@ -309,11 +320,13 @@ When deploying SIAM to Render:
 ## Future Improvements
 
 ### Short Term
+
 1. Add caching for common queries
 2. Implement request retry logic
 3. Add connection health monitoring
 
 ### Long Term (per ROADMAP.md)
+
 1. Migrate from OpenAI Vector Store to Supabase
 2. Replace GPT-5 Assistant API with LangGraph pipeline
 3. Reduce response times from 30-75s to 10-15s

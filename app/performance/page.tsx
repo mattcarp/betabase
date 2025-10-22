@@ -212,9 +212,7 @@ export default function PerformanceDashboard() {
         <div className="flex justify-between items-center mb-4">
           <div>
             <h1 className="text-4xl font-bold mb-2">Performance Dashboard</h1>
-            <p className="text-gray-400">
-              Real-time system monitoring and analytics
-            </p>
+            <p className="text-gray-400">Real-time system monitoring and analytics</p>
           </div>
           <div className="flex gap-2">
             <Button
@@ -289,9 +287,7 @@ export default function PerformanceDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <Card className="bg-white/5 border-white/10">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">
-              Avg Response Time
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-400">Avg Response Time</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">
@@ -305,14 +301,10 @@ export default function PerformanceDashboard() {
 
         <Card className="bg-white/5 border-white/10">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">
-              Total Queries
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-400">Total Queries</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">
-              {metrics.queryMetrics.totalQueries}
-            </div>
+            <div className="text-2xl font-bold text-white">{metrics.queryMetrics.totalQueries}</div>
             <p className="text-xs text-gray-400 mt-1">
               Success rate: {metrics.queryMetrics.successRate.toFixed(1)}%
             </p>
@@ -321,9 +313,7 @@ export default function PerformanceDashboard() {
 
         <Card className="bg-white/5 border-white/10">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">
-              System Load
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-400">System Load</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">
@@ -337,9 +327,7 @@ export default function PerformanceDashboard() {
 
         <Card className="bg-white/5 border-white/10">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">
-              Uptime
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-400">Uptime</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">
@@ -381,7 +369,10 @@ export default function PerformanceDashboard() {
                 <LineChart data={queryMetricsHistory}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
                   <XAxis dataKey="time" stroke="#ffffff60" />
-                  <YAxis stroke="#ffffff60" label={{ value: "Time (ms)", angle: -90, position: "insideLeft" }} />
+                  <YAxis
+                    stroke="#ffffff60"
+                    label={{ value: "Time (ms)", angle: -90, position: "insideLeft" }}
+                  />
                   <Tooltip
                     contentStyle={{ backgroundColor: "#1a1a1a", border: "1px solid #ffffff20" }}
                     labelStyle={{ color: "#ffffff" }}
@@ -457,9 +448,7 @@ export default function PerformanceDashboard() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400">Success Rate</span>
-                    <Badge variant="default">
-                      {metrics.queryMetrics.successRate.toFixed(1)}%
-                    </Badge>
+                    <Badge variant="default">{metrics.queryMetrics.successRate.toFixed(1)}%</Badge>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400">Error Rate</span>
@@ -489,7 +478,10 @@ export default function PerformanceDashboard() {
                 <AreaChart data={systemMetricsHistory}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
                   <XAxis dataKey="time" stroke="#ffffff60" />
-                  <YAxis stroke="#ffffff60" label={{ value: "Usage (%)", angle: -90, position: "insideLeft" }} />
+                  <YAxis
+                    stroke="#ffffff60"
+                    label={{ value: "Usage (%)", angle: -90, position: "insideLeft" }}
+                  />
                   <Tooltip
                     contentStyle={{ backgroundColor: "#1a1a1a", border: "1px solid #ffffff20" }}
                     labelStyle={{ color: "#ffffff" }}
@@ -696,7 +688,9 @@ export default function PerformanceDashboard() {
                   <div className="flex justify-between">
                     <span className="text-gray-400">Last Update</span>
                     <span className="text-white font-semibold">
-                      {new Date(metrics.dataFreshness.knowledgeBase.lastUpdate).toLocaleDateString()}
+                      {new Date(
+                        metrics.dataFreshness.knowledgeBase.lastUpdate
+                      ).toLocaleDateString()}
                     </span>
                   </div>
                 </div>
@@ -725,7 +719,8 @@ export default function PerformanceDashboard() {
                       <div className="font-semibold text-white mb-2">{api.endpoint}</div>
                       <div className="flex gap-4 text-sm">
                         <span className="text-gray-400">
-                          Latency: <span className="text-white">{formatDuration(api.avgLatency)}</span>
+                          Latency:{" "}
+                          <span className="text-white">{formatDuration(api.avgLatency)}</span>
                         </span>
                         <span className="text-gray-400">
                           Requests: <span className="text-white">{api.requestCount}</span>

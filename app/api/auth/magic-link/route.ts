@@ -68,10 +68,7 @@ export async function POST(request: NextRequest) {
       case "send":
         // Validate email is allowed
         if (!isEmailAllowed(email)) {
-          return NextResponse.json(
-            { error: "Email not authorized" },
-            { status: 403 },
-          );
+          return NextResponse.json({ error: "Email not authorized" }, { status: 403 });
         }
 
         // Special handling for test email in development
@@ -151,10 +148,7 @@ export async function POST(request: NextRequest) {
 
           return NextResponse.json({ success: true, user });
         } catch (error: any) {
-          return NextResponse.json(
-            { error: "Invalid or expired code" },
-            { status: 400 },
-          );
+          return NextResponse.json({ error: "Invalid or expired code" }, { status: 400 });
         }
 
       default:
@@ -162,10 +156,7 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     console.error("Magic link API error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 // Force rebuild Tue Aug 19 18:56:57 CEST 2025

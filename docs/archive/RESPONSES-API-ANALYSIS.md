@@ -13,24 +13,29 @@ Our initial implementation **completely misunderstood** how the Responses API wo
 
 ## ✅ Correct Implementation Features
 
-### 1. **Automatic Conversation Context** 
+### 1. **Automatic Conversation Context**
+
 From the official docs: In the Responses API - in each response you get has a unique id, and to continue the conversation you include that as previous_response_id in the next request. This tells OpenAI to retrieve the entire conversation history associated with that response ID automatically – you don't need to resend old messages
 
 **This is HUGE!** You only send:
+
 - The new user message
 - The `previous_response_id`
 - OpenAI handles ALL the context automatically
 
 ### 2. **Built-in Tools That Work Out of the Box**
+
 all the built-in tools you relied on (web browsing, file-based knowledge retrieval, code execution, etc.) are still supported in the Responses API
 
 Available tools:
+
 - **Web Search**: Real-time information retrieval
 - **File Search**: Your vector store (`vs_3dqHL3Wcmt1WrUof0qS4UQqo`) still works!
 - **Computer Use**: Code execution (formerly Code Interpreter)
 - **MCP Support**: Model Context Protocol integration
 
 ### 3. **GPT-5 Specific Features**
+
 - **Reasoning Effort**: Control thinking depth (`minimal`, `low`, `medium`, `high`)
 - **Verbosity**: Control response length (`low`, `medium`, `high`)
 - **Streaming**: Real-time responses with tool usage visibility
@@ -39,17 +44,20 @@ Available tools:
 ## 🚀 Expected Improvements Over Assistants API
 
 ### Performance Improvements:
+
 1. **50-80% Fewer Tokens**: GPT-5 (with thinking) performs better than OpenAI o3 with 50-80% less output tokens
 2. **Faster Responses**: The Responses API was designed as a superset of the old system – combining the user-friendly simplicity of chat completions with the powerful tool-use features of Assistants
 3. **Lower Latency**: Direct API calls without thread management overhead
 
 ### Developer Experience:
+
 1. **Simpler Code**: Many developers report that migrating to the Responses API is quicker and easier than expected
 2. **Better TypeScript Support**: Strong type definitions in OpenAI's SDK
 3. **No Thread Management**: Automatic context handling via `previous_response_id`
 4. **Unified API**: No switching between chat completions and assistants
 
 ### New Capabilities:
+
 1. **Web Search**: Built-in real-time web search
 2. **Better File Handling**: Improved file search and retrieval
 3. **Code Execution**: Enhanced code interpreter capabilities
@@ -57,57 +65,62 @@ Available tools:
 
 ## 📊 Comparison Table
 
-| Feature | Assistants API | Responses API (Correct) | Our Wrong Implementation |
-|---------|---------------|------------------------|-------------------------|
-| Context Management | Threads | `previous_response_id` | Manual message array |
-| API Endpoint | `beta.assistants` | `responses.create` | Chat completions |
-| Tools | External setup | Built-in | None |
-| State | Stateful threads | Stateful via ID | Stateless |
-| Complexity | High | Low | Medium |
-| Token Usage | Higher | 50-80% less | Same as chat |
-| Migration Effort | - | Minimal | Wrong direction |
+| Feature            | Assistants API    | Responses API (Correct) | Our Wrong Implementation |
+| ------------------ | ----------------- | ----------------------- | ------------------------ |
+| Context Management | Threads           | `previous_response_id`  | Manual message array     |
+| API Endpoint       | `beta.assistants` | `responses.create`      | Chat completions         |
+| Tools              | External setup    | Built-in                | None                     |
+| State              | Stateful threads  | Stateful via ID         | Stateless                |
+| Complexity         | High              | Low                     | Medium                   |
+| Token Usage        | Higher            | 50-80% less             | Same as chat             |
+| Migration Effort   | -                 | Minimal                 | Wrong direction          |
 
 ## 🔧 How to Use the Correct Implementation
 
 ### 1. Initial Request (No Context)
+
 ```typescript
 const response = await openai.responses.create({
-  model: 'gpt-5',
-  input: 'Hello, can you help me?',
-  tools: [{ type: 'web_search' }, { type: 'file_search' }],
-  reasoning_effort: 'medium',
+  model: "gpt-5",
+  input: "Hello, can you help me?",
+  tools: [{ type: "web_search" }, { type: "file_search" }],
+  reasoning_effort: "medium",
 });
 // Save response.id for next turn
 ```
 
 ### 2. Follow-up Request (With Context)
+
 ```typescript
 const response = await openai.responses.create({
-  model: 'gpt-5',
-  input: 'What did I just ask you?',
-  previous_response_id: 'resp_abc123', // From previous response
+  model: "gpt-5",
+  input: "What did I just ask you?",
+  previous_response_id: "resp_abc123", // From previous response
   // OpenAI automatically knows the full conversation!
 });
 ```
 
 ### 3. Using Built-in Tools
+
 ```typescript
 const response = await openai.responses.create({
-  model: 'gpt-5',
-  input: 'Search the web for the latest GPT-5 benchmarks',
-  tools: [{ type: 'web_search' }], // Automatic web search!
+  model: "gpt-5",
+  input: "Search the web for the latest GPT-5 benchmarks",
+  tools: [{ type: "web_search" }], // Automatic web search!
 });
 ```
 
 ## ⚡ Migration Priority
 
 ### Immediate Actions:
+
 1. **Use the correct API route**: `/api/gpt5-responses-proper/route.ts`
 2. **Update your hook** to handle `previous_response_id`
 3. **Enable built-in tools** (web search, file search)
 4. **Remove message history management** - let OpenAI handle it
 
 ### Benefits You'll See:
+
 - ✅ 50-80% reduction in token costs
 - ✅ Faster response times
 - ✅ Automatic web search capability
@@ -126,6 +139,7 @@ Based on your feedback for the Assistants API beta, we've incorporated key impro
 ## 📝 Key Takeaway
 
 The Responses API is NOT just a renamed Assistants API. It's a completely different architecture that:
+
 - Automatically manages conversation state
 - Includes powerful built-in tools
 - Reduces complexity while adding features

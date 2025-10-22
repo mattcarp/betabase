@@ -113,25 +113,30 @@ function MyComponent() {
 ### Props
 
 #### `agentId` (optional)
+
 - **Type**: `string`
 - **Default**: `process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID`
 - **Description**: The ElevenLabs agent ID to connect to
 
 #### `className` (optional)
+
 - **Type**: `string`
 - **Default**: `""`
 - **Description**: Additional CSS classes for the component
 
 #### `onTranscriptionUpdate` (optional)
+
 - **Type**: `(text: string) => void`
 - **Description**: Callback when user transcription updates
 
 #### `onConversationStateChange` (optional)
+
 - **Type**: `(state: ConversationState) => void`
 - **Description**: Callback when conversation state changes
 - **States**: `'idle' | 'user-speaking' | 'ai-speaking' | 'transitioning' | 'interrupted'`
 
 #### `mode` (optional)
+
 - **Type**: `'push-to-talk' | 'voice-activated'`
 - **Default**: `'push-to-talk'`
 - **Description**: Conversation mode
@@ -139,6 +144,7 @@ function MyComponent() {
   - **voice-activated**: Automatic speech detection
 
 #### `vadSensitivity` (optional)
+
 - **Type**: `number` (0-1)
 - **Default**: `0.5`
 - **Description**: Voice Activity Detection sensitivity (voice-activated mode only)
@@ -146,6 +152,7 @@ function MyComponent() {
   - Higher = less sensitive (requires louder voice)
 
 #### `interruptThreshold` (optional)
+
 - **Type**: `number`
 - **Default**: `0.02`
 - **Description**: Audio level threshold for interrupt detection
@@ -155,18 +162,22 @@ function MyComponent() {
 ### Ref Methods
 
 #### `startConversation()`
+
 - **Returns**: `Promise<void>`
 - **Description**: Start the conversation
 
 #### `stopConversation()`
+
 - **Returns**: `Promise<void>`
 - **Description**: Stop the conversation
 
 #### `toggleConversation()`
+
 - **Returns**: `Promise<void>`
 - **Description**: Toggle conversation on/off
 
 #### `interruptAgent()`
+
 - **Returns**: `void`
 - **Description**: Manually interrupt the AI agent
 
@@ -181,16 +192,19 @@ function MyComponent() {
 ```
 
 **How it works**:
+
 1. Click "Start Conversation" to connect
 2. Click "Stop Conversation" to disconnect
 3. User controls when to speak
 
 **Pros**:
+
 - No false triggers from background noise
 - Clear start/stop control
 - Lower resource usage
 
 **Cons**:
+
 - Less natural conversation flow
 - Requires manual control
 
@@ -207,17 +221,20 @@ function MyComponent() {
 ```
 
 **How it works**:
+
 1. Click "Start Conversation" to connect
 2. AI automatically detects when you speak (VAD)
 3. AI automatically stops when you're silent
 4. Can interrupt AI by speaking while it talks
 
 **Pros**:
+
 - Natural, hands-free conversation
 - Automatic turn-taking
 - Can interrupt AI naturally
 
 **Cons**:
+
 - May trigger from background noise
 - Requires careful sensitivity tuning
 - Higher resource usage
@@ -295,6 +312,7 @@ conversationRef.current?.interruptAgent();
 ```
 
 **interruptThreshold values**:
+
 - `0.01`: Very sensitive - easy to interrupt
 - `0.02`: Default - balanced
 - `0.05`: Less sensitive - requires louder voice
@@ -330,10 +348,10 @@ The system provides real-time audio quality metrics:
 
 ```typescript
 audioMetrics: {
-  audioQuality: number;        // 0-100 score
-  signalToNoiseRatio: number;  // dB
-  clippingDetected: boolean;   // Distortion detection
-  vadConfidence: number;       // 0-1 VAD confidence
+  audioQuality: number; // 0-100 score
+  signalToNoiseRatio: number; // dB
+  clippingDetected: boolean; // Distortion detection
+  vadConfidence: number; // 0-1 VAD confidence
 }
 ```
 
@@ -344,6 +362,7 @@ audioMetrics: {
 **CRITICAL**: Never expose your ElevenLabs API key in client code!
 
 ✅ **Correct** (Server-Side):
+
 ```env
 ELEVENLABS_API_KEY=sk_your_key_here
 ```
@@ -359,6 +378,7 @@ export async function POST(request: NextRequest) {
 ```
 
 ❌ **WRONG** (Client-Side):
+
 ```env
 NEXT_PUBLIC_ELEVENLABS_API_KEY=sk_your_key_here  # NEVER DO THIS!
 ```
@@ -402,6 +422,7 @@ Handle permission denials gracefully:
 **Problem**: "Failed to get conversation token"
 
 **Solutions**:
+
 1. Check `ELEVENLABS_API_KEY` is set in `.env.local`
 2. Verify API key is valid in ElevenLabs dashboard
 3. Check server logs for detailed error
@@ -409,6 +430,7 @@ Handle permission denials gracefully:
 **Problem**: "Agent ID is required"
 
 **Solutions**:
+
 1. Set `NEXT_PUBLIC_ELEVENLABS_AGENT_ID` in `.env.local`
 2. Pass `agentId` prop to component
 3. Create an agent in ElevenLabs dashboard if you don't have one
@@ -418,6 +440,7 @@ Handle permission denials gracefully:
 **Problem**: No audio / VAD not detecting voice
 
 **Solutions**:
+
 1. Check microphone permissions in browser
 2. Verify microphone is working in system settings
 3. Lower `vadSensitivity` for easier detection
@@ -426,6 +449,7 @@ Handle permission denials gracefully:
 **Problem**: Too many false triggers (voice-activated mode)
 
 **Solutions**:
+
 1. Increase `vadSensitivity` value
 2. Use push-to-talk mode instead
 3. Move to quieter environment
@@ -435,6 +459,7 @@ Handle permission denials gracefully:
 **Problem**: Can't interrupt AI
 
 **Solutions**:
+
 1. Use voice-activated mode (not push-to-talk)
 2. Lower `interruptThreshold` value
 3. Speak louder to exceed threshold
@@ -443,23 +468,23 @@ Handle permission denials gracefully:
 ### Browser Compatibility
 
 **Supported Browsers**:
+
 - ✅ Chrome 89+
 - ✅ Edge 89+
 - ✅ Firefox 90+
 - ✅ Safari 15+
 
 **Required Features**:
+
 - WebSocket API
 - Web Audio API
 - MediaDevices getUserMedia
 - AudioContext
 
 **Check Support**:
+
 ```javascript
-const supported =
-  'WebSocket' in window &&
-  'AudioContext' in window &&
-  'mediaDevices' in navigator;
+const supported = "WebSocket" in window && "AudioContext" in window && "mediaDevices" in navigator;
 ```
 
 ## Performance Optimization
@@ -485,6 +510,7 @@ useEffect(() => {
 ### Memory Leaks Prevention
 
 The hook automatically cleans up:
+
 - Audio contexts
 - WebSocket connections
 - Audio processors
@@ -659,6 +685,7 @@ const handleStateChange = (state: ConversationState) => {
 ### 5. Provide Visual Feedback
 
 Always show:
+
 - Connection status
 - Who is speaking
 - Audio levels
@@ -686,6 +713,7 @@ Always show:
 ## Support
 
 For issues or questions:
+
 1. Check this guide and architecture docs
 2. Review error messages in browser console
 3. Test with minimal configuration
