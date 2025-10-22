@@ -141,8 +141,6 @@ After this PR merges to main, deployments will be gated by:
 - [ ] PR comment posted
 
 /cc @mattcarp
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
 EOF
 )" \
   --base main \

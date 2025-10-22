@@ -215,7 +215,13 @@ npm run dev  # Without bypass flag
 
 ## 📝 Git Commit Guidelines
 
-**NEVER** add "Co-Authored-By: Claude" to commit messages - it's unnecessary and slows down work.
+**NEVER** add promotional references to commit messages, PRs, or documentation:
+- ❌ "Co-Authored-By: Claude"
+- ❌ "Generated with Claude Code"
+- ❌ Links to claude.com/claude-code
+- ❌ Any other promotional/advertising content
+
+These references are unnecessary and unwanted.
 
 ### Useful Git Aliases
 
