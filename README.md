@@ -134,4 +134,3 @@ Built with ❤️ by Matt Carpenter & Fiona Burgess
 ![Fiona context](./siam-current-preview.png)
 
 _Fiona’s note: a little context from the launch that inspired the tag she loved._
-

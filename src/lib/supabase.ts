@@ -10,7 +10,8 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 // Check if using placeholder values
-const isPlaceholder = supabaseUrl?.includes('placeholder') || supabaseAnonKey?.includes('placeholder');
+const isPlaceholder =
+  supabaseUrl?.includes("placeholder") || supabaseAnonKey?.includes("placeholder");
 
 // Lazy initialization to avoid build-time errors
 let _supabase: ReturnType<typeof createClient> | null = null;
