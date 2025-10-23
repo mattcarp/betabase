@@ -1,5 +1,3 @@
-import { openai } from "@ai-sdk/openai";
-import { streamText, convertToCoreMessages } from "ai";
 import { OpenAI } from "openai";
 import { NextRequest, NextResponse } from "next/server";
 

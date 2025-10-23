@@ -9,6 +9,8 @@ import { EnhancedSupabaseTestIntegration } from "./supabase-test-integration-enh
 import { aomaOrchestrator } from "./aomaOrchestrator";
 import { aomaCache } from "./aomaCache";
 
+// Unused interface - keeping for future use
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface TestableFeature {
   name: string;
   description: string;
