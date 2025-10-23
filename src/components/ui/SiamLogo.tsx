@@ -12,35 +12,33 @@ export const SiamLogo: React.FC<SiamLogoProps> = ({
   size = "md",
   variant = "full",
 }) => {
-  const sizeClasses = {
-    xs: "w-6 h-6",
-    sm: "w-8 h-8",
-    md: "w-12 h-12",
-    lg: "w-16 h-16",
-    xl: "w-24 h-24",
-    "2xl": "w-32 h-32",
+  const sizeMap = {
+    xs: { w: 24, h: 16 },
+    sm: { w: 32, h: 21 },
+    md: { w: 48, h: 32 },
+    lg: { w: 64, h: 43 },
+    xl: { w: 80, h: 53 },
+    "2xl": { w: 96, h: 64 },
   };
 
-  const fullSizeClasses = {
-    xs: "w-24 h-6",
-    sm: "w-32 h-8",
-    md: "w-48 h-12",
-    lg: "w-64 h-16",
-    xl: "w-80 h-24",
-    "2xl": "w-96 h-32",
+  const fullSizeMap = {
+    xs: { w: 96, h: 24 },
+    sm: { w: 128, h: 32 },
+    md: { w: 192, h: 48 },
+    lg: { w: 256, h: 64 },
+    xl: { w: 320, h: 80 },
+    "2xl": { w: 384, h: 96 },
   };
 
-  const sizeClass = variant === "full" ? fullSizeClasses[size] : sizeClasses[size];
-
-  const dimensions = variant === "full" ? { width: 480, height: 120 } : { width: 120, height: 120 };
+  const dimensions = variant === "full" ? fullSizeMap[size] : sizeMap[size];
 
   return (
     <Image
       src="/betabase-logo.webp"
       alt="Betabase"
-      width={dimensions.width}
-      height={dimensions.height}
-      className={`${sizeClass} ${className} object-contain`}
+      width={dimensions.w}
+      height={dimensions.h}
+      className={`${className} object-contain`}
     />
   );
 };
