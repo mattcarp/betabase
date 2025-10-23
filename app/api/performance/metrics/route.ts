@@ -125,9 +125,9 @@ export async function GET(request: NextRequest) {
       ? (Date.now() - new Date(latestVectorUpdate.created_at).getTime()) / (1000 * 60 * 60)
       : 0;
 
-    const _fileStaleness = latestFileUpdate
-      ? (Date.now() - new Date(latestFileUpdate.created_at).getTime()) / (1000 * 60 * 60)
-      : 0;
+    // const fileStaleness = latestFileUpdate
+    //   ? (Date.now() - new Date(latestFileUpdate.created_at).getTime()) / (1000 * 60 * 60)
+    //   : 0;
 
     // Get system metrics (simulated - in production, these would come from actual monitoring)
     const systemMetrics = {
