@@ -60,6 +60,18 @@
   --sidebar-accent-foreground: var(--mac-text-primary);
   --sidebar-border: var(--mac-utility-border);
   --sidebar-ring: var(--mac-state-focus);
+
+  /* Session Timeline Variables */
+  --timeline-width-default: 320px;
+  --timeline-width-min: 240px;
+  --timeline-width-max: 600px;
+  --timeline-width-collapsed: 48px;
+}
+
+/* Vertical text for collapsed timeline */
+.writing-mode-vertical-rl {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
 }
 
 /* MAC Professional Component Styles */
