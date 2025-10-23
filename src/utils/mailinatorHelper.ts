@@ -15,6 +15,8 @@ interface MailinatorEmail {
   seconds_ago: number;
 }
 
+// Unused interface - keeping for future use
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface MailinatorMessage {
   data: {
     text?: string;

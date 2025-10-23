@@ -1,40 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
+import { trackRequest, trackError, getMetrics } from "./metrics";
 
-// In-memory storage for metrics (consider Redis for production)
-const metrics = {
-  requests: [] as Array<{
-    timestamp: number;
-    path: string;
-    method: string;
-    duration: number;
-    status: number;
-    error?: string;
-  }>,
-  errors: [] as Array<{
-    timestamp: number;
-    message: string;
-    stack?: string;
-    path?: string;
-  }>,
-  performance: {
-    avgResponseTime: 0,
-    p95ResponseTime: 0,
-    p99ResponseTime: 0,
-    totalRequests: 0,
-    errorRate: 0,
-    lastUpdated: Date.now(),
-  },
-  system: {
-    memoryUsage: {} as NodeJS.MemoryUsage,
-    uptime: 0,
-    nodeVersion: process.version,
-    platform: process.platform,
-  },
+// Performance metrics (separate from raw metrics)
+const performanceMetrics = {
+  avgResponseTime: 0,
+  p95ResponseTime: 0,
+  p99ResponseTime: 0,
+  totalRequests: 0,
+  errorRate: 0,
+  lastUpdated: Date.now(),
 };
 
-// Keep only last 100 requests
-const MAX_STORED_REQUESTS = 100;
-const MAX_STORED_ERRORS = 50;
+// System metrics
+const systemMetrics = {
+  memoryUsage: {} as NodeJS.MemoryUsage,
+  uptime: 0,
+  nodeVersion: process.version,
+  platform: process.platform,
+};
 
 // Calculate percentiles
 function calculatePercentile(arr: number[], percentile: number): number {
@@ -66,7 +49,7 @@ function updatePerformanceMetrics() {
 }
 
 // Add request to metrics
-export function trackRequest(
+function trackRequest(
   path: string,
   method: string,
   duration: number,
@@ -91,7 +74,7 @@ export function trackRequest(
 }
 
 // Add error to metrics
-export function trackError(message: string, stack?: string, path?: string) {
+function trackError(message: string, stack?: string, path?: string) {
   metrics.errors.push({
     timestamp: Date.now(),
     message,
