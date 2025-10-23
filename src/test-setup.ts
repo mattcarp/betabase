@@ -3,7 +3,7 @@ import React from "react";
 
 // Simple mock function factory
 const createMockFunction = () => {
-  const fn = (...args: any[]) => {};
+  const fn = (..._args: any[]) => {};
   fn.mockImplementation = (impl: any) => impl;
   fn.mockResolvedValue = (value: any) => Promise.resolve(value);
   fn.mockReturnValue = (value: any) => value;

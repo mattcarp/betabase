@@ -630,7 +630,7 @@ export class EnhancedSupabaseTestIntegration {
    * Create minimal new tables if they don't exist
    */
   async initializeNewTables(): Promise<void> {
-    const createTablesSQL = `
+    const _createTablesSQL = `
       -- Test executions table (aggregates test runs)
       CREATE TABLE IF NOT EXISTS test_executions (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,

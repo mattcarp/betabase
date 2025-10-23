@@ -20,7 +20,7 @@ export interface ExplicitDetectionResult {
     lyricsPattern: boolean;
     contextAnalysis: boolean;
   };
-  explicitWords: string[];
+  _explicitWords: string[];
   category: "clean" | "mild" | "moderate" | "explicit" | "severe";
   riaaCompliant: boolean; // RIAA Parental Advisory standards
 }
@@ -264,7 +264,7 @@ export class ExplicitContentDetector {
     };
 
     const reasons: string[] = [];
-    const explicitWords: string[] = [];
+    const _explicitWords: string[] = [];
     let confidence = 0;
     let isExplicit = false;
 
@@ -534,7 +534,7 @@ export class ExplicitContentDetector {
    */
   private categorizeContent(
     confidence: number,
-    explicitWords: string[]
+    _explicitWords: string[]
   ): ExplicitDetectionResult["category"] {
     if (confidence === 0) return "clean";
     if (confidence < 0.3) return "mild";

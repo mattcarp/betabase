@@ -487,7 +487,7 @@ Timestamp: ${metric.timestamp}${tagsContext}${metadataContext}`;
    */
   async ingestGrafanaMetrics(
     grafanaUrl: string,
-    apiKey: string
+    _apiKey: string
   ): Promise<MetricsVectorizationResult> {
     console.log("📊 Grafana integration not yet implemented");
     console.log(`💡 Future: Pull metrics from ${grafanaUrl}`);
