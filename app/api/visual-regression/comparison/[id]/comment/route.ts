@@ -24,10 +24,7 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
     const { comment, author, coordinates, createdAt } = body;
 
     if (!comment) {
-      return NextResponse.json(
-        { error: "Comment content is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Comment content is required" }, { status: 400 });
     }
 
     // TODO: Add comment to database
@@ -46,9 +43,6 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
     return NextResponse.json(newComment, { status: 201 });
   } catch (error) {
     console.error("Failed to add comment:", error);
-    return NextResponse.json(
-      { error: "Failed to add comment" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to add comment" }, { status: 500 });
   }
 }

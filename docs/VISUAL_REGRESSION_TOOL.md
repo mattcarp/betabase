@@ -137,10 +137,7 @@ const testResult = await visualRegressionService.getTestComparisons(testId);
 const comparison = await visualRegressionService.getComparison(comparisonId);
 
 // Approve comparison
-const updated = await visualRegressionService.approveComparison(
-  comparisonId,
-  "Looks good!"
-);
+const updated = await visualRegressionService.approveComparison(comparisonId, "Looks good!");
 
 // Reject comparison
 const rejected = await visualRegressionService.rejectComparison(
@@ -159,20 +156,14 @@ const commented = await visualRegressionService.addComment(
 );
 
 // Generate diff
-const diffData = await visualRegressionService.generateDiff(
-  baselineUrl,
-  currentUrl
-);
+const diffData = await visualRegressionService.generateDiff(baselineUrl, currentUrl);
 
 // Upload screenshot
-const uploadedScreenshot = await visualRegressionService.uploadScreenshot(
-  file,
-  {
-    testId: "test-123",
-    testName: "Login Page",
-    type: "baseline",
-  }
-);
+const uploadedScreenshot = await visualRegressionService.uploadScreenshot(file, {
+  testId: "test-123",
+  testName: "Login Page",
+  type: "baseline",
+});
 
 // Batch operations
 const approved = await visualRegressionService.batchApprove(
@@ -181,10 +172,7 @@ const approved = await visualRegressionService.batchApprove(
 );
 
 // Get history
-const history = await visualRegressionService.getComparisonHistory(
-  "Login Page Test",
-  10
-);
+const history = await visualRegressionService.getComparisonHistory("Login Page Test", 10);
 
 // Export
 const blob = await visualRegressionService.exportComparisons(testId);

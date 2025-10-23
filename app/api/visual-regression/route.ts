@@ -37,10 +37,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Visual regression API error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch visual regression data" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch visual regression data" }, { status: 500 });
   }
 }
 
@@ -54,10 +51,7 @@ export async function POST(request: NextRequest) {
     const { testId, testName, baselineUrl, currentUrl, metadata } = body;
 
     if (!testId || !testName || !baselineUrl || !currentUrl) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
     // TODO: Create comparison in database

@@ -47,9 +47,6 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
     return NextResponse.json(updatedComparison);
   } catch (error) {
     console.error("Failed to approve comparison:", error);
-    return NextResponse.json(
-      { error: "Failed to approve comparison" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to approve comparison" }, { status: 500 });
   }
 }
