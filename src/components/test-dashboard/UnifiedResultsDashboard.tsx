@@ -413,9 +413,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                 <span className="text-sm font-medium text-muted-foreground">Avg Duration</span>
               </div>
               <span className="text-2xl font-bold text-slate-600">
-                {formatDuration(
-                  (metrics.manual.avgDuration + metrics.automated.avgDuration) / 2
-                )}
+                {formatDuration((metrics.manual.avgDuration + metrics.automated.avgDuration) / 2)}
               </span>
             </div>
             <div className="mt-2 text-xs text-muted-foreground">Per test execution</div>
@@ -483,9 +481,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
             <CardHeader>
               <CardTitle className="text-base flex items-center justify-between">
                 <span>Test Timeline ({filteredResults.length} results)</span>
-                <Badge variant="outline">
-                  {viewMode === "combined" ? "Mixed View" : viewMode}
-                </Badge>
+                <Badge variant="outline">{viewMode === "combined" ? "Mixed View" : viewMode}</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
@@ -628,12 +624,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
         )}
 
         {/* Result Details */}
-        <div
-          className={cn(
-            "col-span-12",
-            showHeatmap ? "hidden" : "lg:col-span-7"
-          )}
-        >
+        <div className={cn("col-span-12", showHeatmap ? "hidden" : "lg:col-span-7")}>
           {selectedResult ? (
             <Card className="h-full">
               <CardHeader>
@@ -644,8 +635,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                       {selectedResult.name}
                     </CardTitle>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {selectedResult.area} •{" "}
-                      {selectedResult.timestamp.toLocaleString()}
+                      {selectedResult.area} • {selectedResult.timestamp.toLocaleString()}
                       {selectedResult.tester && ` • by ${selectedResult.tester}`}
                     </p>
                   </div>
@@ -677,14 +667,10 @@ export const UnifiedResultsDashboard: React.FC = () => {
                     <div className="grid grid-cols-2 gap-4">
                       <Card>
                         <CardContent className="p-4">
-                          <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                            Type
-                          </h4>
+                          <h4 className="text-sm font-medium text-muted-foreground mb-2">Type</h4>
                           <div className="flex items-center gap-2">
                             {getTypeIcon(selectedResult.type)}
-                            <span className="font-medium capitalize">
-                              {selectedResult.type}
-                            </span>
+                            <span className="font-medium capitalize">{selectedResult.type}</span>
                           </div>
                         </CardContent>
                       </Card>
@@ -711,9 +697,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                           <p className="text-sm font-mono">{selectedResult.error.message}</p>
                           {selectedResult.error.stack && (
                             <>
-                              <h4 className="font-medium text-red-500 mt-4 mb-2">
-                                Stack Trace
-                              </h4>
+                              <h4 className="font-medium text-red-500 mt-4 mb-2">Stack Trace</h4>
                               <pre className="text-xs font-mono bg-muted p-3 rounded overflow-x-auto">
                                 {selectedResult.error.stack}
                               </pre>

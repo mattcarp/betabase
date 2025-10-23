@@ -27,10 +27,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Limit batch size to prevent abuse
-    const maxBatchSize = parseInt(
-      process.env.MAX_EMAIL_BATCH_SIZE || "100",
-      10
-    );
+    const maxBatchSize = parseInt(process.env.MAX_EMAIL_BATCH_SIZE || "100", 10);
     if (body.emails.length > maxBatchSize) {
       return NextResponse.json(
         {
