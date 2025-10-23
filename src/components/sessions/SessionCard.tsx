@@ -1,17 +1,17 @@
 "use client";
 
-import React from 'react';
-import { Session } from '@/types/session';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { Session } from "@/types/session";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   MoreVertical,
   Play,
@@ -23,8 +23,8 @@ import {
   MousePointerClick,
   User,
   Calendar,
-} from 'lucide-react';
-import { formatDuration, formatRelativeTime } from '@/lib/mockSessions';
+} from "lucide-react";
+import { formatDuration, formatRelativeTime } from "@/lib/mockSessions";
 
 interface SessionCardProps {
   session: Session;
@@ -35,27 +35,27 @@ interface SessionCardProps {
   onExport: (session: Session) => void;
 }
 
-const getStatusBadgeVariant = (status: Session['status']) => {
+const getStatusBadgeVariant = (status: Session["status"]) => {
   switch (status) {
-    case 'completed':
-      return 'default';
-    case 'in-progress':
-      return 'secondary';
-    case 'has-issues':
-      return 'destructive';
+    case "completed":
+      return "default";
+    case "in-progress":
+      return "secondary";
+    case "has-issues":
+      return "destructive";
     default:
-      return 'outline';
+      return "outline";
   }
 };
 
-const getStatusLabel = (status: Session['status']) => {
+const getStatusLabel = (status: Session["status"]) => {
   switch (status) {
-    case 'completed':
-      return 'Completed';
-    case 'in-progress':
-      return 'In Progress';
-    case 'has-issues':
-      return 'Has Issues';
+    case "completed":
+      return "Completed";
+    case "in-progress":
+      return "In Progress";
+    case "has-issues":
+      return "Has Issues";
     default:
       return status;
   }

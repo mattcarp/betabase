@@ -1,9 +1,15 @@
 "use client";
 
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../src/components/ui/card';
-import { Button } from '../../src/components/ui/button';
-import { Play, FileVideo, BookOpen } from 'lucide-react';
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../src/components/ui/card";
+import { Button } from "../../src/components/ui/button";
+import { Play, FileVideo, BookOpen } from "lucide-react";
 
 interface EmptyStateProps {
   onGetStarted?: () => void;
@@ -69,11 +75,7 @@ export function EmptyState({ onGetStarted }: EmptyStateProps) {
               </Button>
             )}
             <Button variant="outline" className="mac-button-outline gap-2" asChild>
-              <a
-                href="https://docs.testsprite.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="https://docs.testsprite.com" target="_blank" rel="noopener noreferrer">
                 <BookOpen className="h-4 w-4" />
                 View Documentation
               </a>
