@@ -31,5 +31,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "scripts/**/*", "src/app-backup/**/*", "**/* [0-9]*.ts", "**/* [0-9]*.tsx"]
 }
