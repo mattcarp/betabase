@@ -7,7 +7,7 @@ import * as os from "os";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { code, testName } = body;
+    const { code } = body;
 
     if (!code) {
       return NextResponse.json({ error: "Test code is required" }, { status: 400 });

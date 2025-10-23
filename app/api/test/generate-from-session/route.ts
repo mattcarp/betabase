@@ -130,7 +130,7 @@ Generate a complete Playwright test that reproduces this test scenario with prop
   }
 }
 
-function generateAssertionMappings(code: string, context: any): AssertionMapping[] {
+function generateAssertionMappings(code: string, _context: any): AssertionMapping[] {
   const mappings: AssertionMapping[] = [];
   const lines = code.split("\n");
 
