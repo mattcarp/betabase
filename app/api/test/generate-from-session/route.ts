@@ -103,7 +103,10 @@ Generate a complete Playwright test that reproduces this test scenario with prop
     let generatedCode = result.text.trim();
 
     // Remove markdown code blocks if present
-    generatedCode = generatedCode.replace(/^```typescript\n/, "").replace(/^```\n/, "").replace(/\n```$/, "");
+    generatedCode = generatedCode
+      .replace(/^```typescript\n/, "")
+      .replace(/^```\n/, "")
+      .replace(/\n```$/, "");
 
     // Generate action-to-assertion mappings by analyzing the code
     const assertions = generateAssertionMappings(generatedCode, context);
@@ -123,10 +126,7 @@ Generate a complete Playwright test that reproduces this test scenario with prop
     );
   } catch (error) {
     console.error("Test generation from session error:", error);
-    return NextResponse.json(
-      { error: "Failed to generate test from session" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to generate test from session" }, { status: 500 });
   }
 }
 
@@ -165,7 +165,8 @@ function generateAssertionMappings(code: string, context: any): AssertionMapping
 
     // Detect click actions
     if (line.includes("page.click") || line.includes(".click()")) {
-      const selectorMatch = line.match(/click\(['"`]([^'"`]+)['"`]\)/) || line.match(/locator\(['"`]([^'"`]+)['"`]\)/);
+      const selectorMatch =
+        line.match(/click\(['"`]([^'"`]+)['"`]\)/) || line.match(/locator\(['"`]([^'"`]+)['"`]\)/);
       const selector = selectorMatch ? selectorMatch[1] : "unknown";
 
       mappings.push({
