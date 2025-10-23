@@ -70,4 +70,3 @@ const confluenceHelpers = {
 };
 
 export default confluenceHelpers;
-
