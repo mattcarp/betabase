@@ -9,34 +9,49 @@ import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error("Missing Supabase environment variables:", {
-    url: !!supabaseUrl,
-    key: !!supabaseAnonKey,
-  });
-  throw new Error(
-    "Missing required Supabase environment variables. Please check your .env.local file."
-  );
+// Check if using placeholder values
+const isPlaceholder = supabaseUrl?.includes('placeholder') || supabaseAnonKey?.includes('placeholder');
+
+// Lazy initialization to avoid build-time errors
+let _supabase: ReturnType<typeof createClient> | null = null;
+let _supabaseAdmin: ReturnType<typeof createClient> | null = null;
+
+function getSupabase() {
+  if (!_supabase) {
+    if (!supabaseUrl || !supabaseAnonKey || isPlaceholder) {
+      console.warn("⚠️  Supabase not configured - vector search features disabled:", {
+        url: !!supabaseUrl && !isPlaceholder,
+        key: !!supabaseAnonKey && !isPlaceholder,
+      });
+      return null;
+    }
+    _supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: false, // We're not using auth for vector operations
+      },
+    });
+  }
+  return _supabase;
 }
 
-// Create a single supabase client for interacting with your database
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: false, // We're not using auth for vector operations
-  },
-});
+function getSupabaseAdmin() {
+  if (!_supabaseAdmin) {
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (supabaseServiceKey && supabaseUrl && !isPlaceholder) {
+      _supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
+      });
+    }
+  }
+  return _supabaseAdmin;
+}
 
-// Admin client with service role key (for write operations)
-// Only use this server-side!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-export const supabaseAdmin = supabaseServiceKey
-  ? createClient(supabaseUrl, supabaseServiceKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-    })
-  : null;
+// Export clients with lazy initialization
+export const supabase = getSupabase();
+export const supabaseAdmin = getSupabaseAdmin();
 
 // Type definitions for our vector store
 export interface AOMAVector {
