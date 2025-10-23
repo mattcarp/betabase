@@ -84,8 +84,16 @@ When you commit code, Husky triggers `lint-staged` which:
 
 ```bash
 npm run lint:check       # Check both linting and formatting (no changes)
+npm run lint:quick       # Fast check with helpful output
 npm run format:check     # Check Prettier formatting only
 npm run lint             # Check ESLint only
+```
+
+**Check specific file or directory:**
+
+```bash
+npm run lint:file src/components/MyComponent.tsx
+npm run lint:file src/app/
 ```
 
 **Auto-fix all issues:**
@@ -95,6 +103,36 @@ npm run lint:fix-all     # Fix both linting and formatting
 npm run lint:fix         # Fix ESLint issues only
 npm run format           # Fix Prettier formatting only
 ```
+
+### 🤖 Claude Code Workflow (IMPORTANT FOR AI)
+
+**MANDATORY**: When Claude writes code, Claude MUST run lint checks before committing:
+
+**After writing/editing TypeScript/JavaScript files:**
+
+```bash
+# Option 1: Check specific files you just edited
+npm run lint:file src/components/NewComponent.tsx
+
+# Option 2: Run quick check on all files
+npm run lint:quick
+
+# If issues found, auto-fix:
+npm run lint:fix-all
+
+# Then commit
+git add . && git commit -m "your message"
+```
+
+**Recommended Claude workflow:**
+
+1. ✍️ Write/edit code using Edit, Write, or NotebookEdit tools
+2. 🔍 Run `npm run lint:file <file-path>` on files you just edited
+3. 🔧 If errors found, run `npm run lint:fix-all` or manually fix
+4. ✅ Verify with `npm run lint:quick`
+5. 💾 Commit the code
+
+**This prevents hours of PR failures later!**
 
 ### What Gets Caught
 
