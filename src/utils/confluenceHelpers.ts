@@ -61,10 +61,13 @@ export function normalizeLinks(markdown: string, baseUrl: string): string {
     .replace(/\]\((\/spaces[^\)]*)\)/g, (_, path) => `](${base}${path})`);
 }
 
-export default {
+const confluenceHelpers = {
   storageToMarkdown,
   extractLabels,
   buildPageUrl,
   buildSourceId,
   normalizeLinks,
 };
+
+export default confluenceHelpers;
+

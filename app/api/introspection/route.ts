@@ -106,7 +106,7 @@ export function trackError(message: string, stack?: string, path?: string) {
 }
 
 // Introspection API endpoint for SIAM internal monitoring
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Track this introspection request
     const startTime = Date.now();
