@@ -309,15 +309,78 @@ export const useHUDShortcuts = (config: HUDShortcutsConfig) => {
 
   // Individual Panel Shortcuts (1-9)
   // Note: Must call hooks outside of loops per Rules of Hooks
-  useHotkeys("ctrl+1", (e) => { e.preventDefault(); onTogglePanel?.("panel-1"); }, { enableOnFormTags: false, description: "Toggle panel 1" });
-  useHotkeys("ctrl+2", (e) => { e.preventDefault(); onTogglePanel?.("panel-2"); }, { enableOnFormTags: false, description: "Toggle panel 2" });
-  useHotkeys("ctrl+3", (e) => { e.preventDefault(); onTogglePanel?.("panel-3"); }, { enableOnFormTags: false, description: "Toggle panel 3" });
-  useHotkeys("ctrl+4", (e) => { e.preventDefault(); onTogglePanel?.("panel-4"); }, { enableOnFormTags: false, description: "Toggle panel 4" });
-  useHotkeys("ctrl+5", (e) => { e.preventDefault(); onTogglePanel?.("panel-5"); }, { enableOnFormTags: false, description: "Toggle panel 5" });
-  useHotkeys("ctrl+6", (e) => { e.preventDefault(); onTogglePanel?.("panel-6"); }, { enableOnFormTags: false, description: "Toggle panel 6" });
-  useHotkeys("ctrl+7", (e) => { e.preventDefault(); onTogglePanel?.("panel-7"); }, { enableOnFormTags: false, description: "Toggle panel 7" });
-  useHotkeys("ctrl+8", (e) => { e.preventDefault(); onTogglePanel?.("panel-8"); }, { enableOnFormTags: false, description: "Toggle panel 8" });
-  useHotkeys("ctrl+9", (e) => { e.preventDefault(); onTogglePanel?.("panel-9"); }, { enableOnFormTags: false, description: "Toggle panel 9" });
+  useHotkeys(
+    "ctrl+1",
+    (e) => {
+      e.preventDefault();
+      onTogglePanel?.("panel-1");
+    },
+    { enableOnFormTags: false, description: "Toggle panel 1" }
+  );
+  useHotkeys(
+    "ctrl+2",
+    (e) => {
+      e.preventDefault();
+      onTogglePanel?.("panel-2");
+    },
+    { enableOnFormTags: false, description: "Toggle panel 2" }
+  );
+  useHotkeys(
+    "ctrl+3",
+    (e) => {
+      e.preventDefault();
+      onTogglePanel?.("panel-3");
+    },
+    { enableOnFormTags: false, description: "Toggle panel 3" }
+  );
+  useHotkeys(
+    "ctrl+4",
+    (e) => {
+      e.preventDefault();
+      onTogglePanel?.("panel-4");
+    },
+    { enableOnFormTags: false, description: "Toggle panel 4" }
+  );
+  useHotkeys(
+    "ctrl+5",
+    (e) => {
+      e.preventDefault();
+      onTogglePanel?.("panel-5");
+    },
+    { enableOnFormTags: false, description: "Toggle panel 5" }
+  );
+  useHotkeys(
+    "ctrl+6",
+    (e) => {
+      e.preventDefault();
+      onTogglePanel?.("panel-6");
+    },
+    { enableOnFormTags: false, description: "Toggle panel 6" }
+  );
+  useHotkeys(
+    "ctrl+7",
+    (e) => {
+      e.preventDefault();
+      onTogglePanel?.("panel-7");
+    },
+    { enableOnFormTags: false, description: "Toggle panel 7" }
+  );
+  useHotkeys(
+    "ctrl+8",
+    (e) => {
+      e.preventDefault();
+      onTogglePanel?.("panel-8");
+    },
+    { enableOnFormTags: false, description: "Toggle panel 8" }
+  );
+  useHotkeys(
+    "ctrl+9",
+    (e) => {
+      e.preventDefault();
+      onTogglePanel?.("panel-9");
+    },
+    { enableOnFormTags: false, description: "Toggle panel 9" }
+  );
 
   // Return shortcuts list for display
   const shortcuts = [
