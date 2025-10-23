@@ -115,7 +115,9 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
 
         {pixelDifference > 0 && (
           <Badge
-            variant={pixelDifference < 1 ? "default" : pixelDifference < 5 ? "secondary" : "destructive"}
+            variant={
+              pixelDifference < 1 ? "default" : pixelDifference < 5 ? "secondary" : "destructive"
+            }
             className="text-xs"
           >
             {pixelDifference.toFixed(2)}% difference
@@ -126,10 +128,7 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
       {/* Comparison Container */}
       <Card
         ref={containerRef}
-        className={cn(
-          "relative overflow-hidden select-none",
-          isDragging && "cursor-grabbing"
-        )}
+        className={cn("relative overflow-hidden select-none", isDragging && "cursor-grabbing")}
         style={{ width, height }}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}

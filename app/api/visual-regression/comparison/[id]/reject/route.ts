@@ -24,10 +24,7 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
     const { reason, rejectedBy, rejectedAt } = body;
 
     if (!reason) {
-      return NextResponse.json(
-        { error: "Rejection reason is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Rejection reason is required" }, { status: 400 });
     }
 
     // TODO: Update comparison status in database
@@ -52,9 +49,6 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
     return NextResponse.json(updatedComparison);
   } catch (error) {
     console.error("Failed to reject comparison:", error);
-    return NextResponse.json(
-      { error: "Failed to reject comparison" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to reject comparison" }, { status: 500 });
   }
 }

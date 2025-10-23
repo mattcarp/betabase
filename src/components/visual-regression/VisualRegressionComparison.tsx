@@ -58,7 +58,9 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
   const [comment, setComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showComments, setShowComments] = useState(true);
-  const [localComments, setLocalComments] = useState<ComparisonComment[]>(comparison.comments || []);
+  const [localComments, setLocalComments] = useState<ComparisonComment[]>(
+    comparison.comments || []
+  );
 
   // Status badge styling
   const getStatusBadge = (status: ComparisonStatus) => {
@@ -66,7 +68,11 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
       pending: { variant: "secondary" as const, text: "Pending Review", icon: MessageSquare },
       approved: { variant: "default" as const, text: "Approved", icon: CheckCircle },
       rejected: { variant: "destructive" as const, text: "Rejected", icon: XCircle },
-      "baseline-updated": { variant: "default" as const, text: "Baseline Updated", icon: RotateCcw },
+      "baseline-updated": {
+        variant: "default" as const,
+        text: "Baseline Updated",
+        icon: RotateCcw,
+      },
     };
 
     const config = variants[status] || variants.pending;
@@ -117,7 +123,11 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
   const handleUpdateBaseline = async () => {
     if (!onUpdateBaseline) return;
 
-    if (!confirm("Are you sure you want to update the baseline? This will replace the current baseline screenshot.")) {
+    if (
+      !confirm(
+        "Are you sure you want to update the baseline? This will replace the current baseline screenshot."
+      )
+    ) {
       return;
     }
 
@@ -199,7 +209,8 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
                 )}
                 {comparison.metadata?.viewport && (
                   <span>
-                    Viewport: {comparison.metadata.viewport.width}x{comparison.metadata.viewport.height}
+                    Viewport: {comparison.metadata.viewport.width}x
+                    {comparison.metadata.viewport.height}
                   </span>
                 )}
               </div>
@@ -231,11 +242,15 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
           <CardContent className="pt-6">
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <div className="text-2xl font-bold">{comparison.diff.pixelDifference.toFixed(2)}%</div>
+                <div className="text-2xl font-bold">
+                  {comparison.diff.pixelDifference.toFixed(2)}%
+                </div>
                 <div className="text-sm text-muted-foreground">Pixel Difference</div>
               </div>
               <div>
-                <div className="text-2xl font-bold">{comparison.diff.pixelCount.toLocaleString()}</div>
+                <div className="text-2xl font-bold">
+                  {comparison.diff.pixelCount.toLocaleString()}
+                </div>
                 <div className="text-sm text-muted-foreground">Changed Pixels</div>
               </div>
               <div>
@@ -326,8 +341,8 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
             <div className="flex items-center gap-2 text-sm">
               <User className="h-4 w-4 text-green-500" />
               <span>
-                <strong>{comparison.approvedBy}</strong> {comparison.status === "approved" ? "approved" : "updated"}{" "}
-                this comparison
+                <strong>{comparison.approvedBy}</strong>{" "}
+                {comparison.status === "approved" ? "approved" : "updated"} this comparison
               </span>
               {comparison.approvedAt && (
                 <span className="text-muted-foreground">

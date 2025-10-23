@@ -4,10 +4,7 @@
  */
 
 import { describe, test, expect } from "@jest/globals";
-import {
-  MicrosoftEmailParser,
-  MicrosoftEmailData,
-} from "@/utils/microsoftEmailParser";
+import { MicrosoftEmailParser, MicrosoftEmailData } from "@/utils/microsoftEmailParser";
 
 describe("MicrosoftEmailParser", () => {
   describe("Outlook email parsing", () => {

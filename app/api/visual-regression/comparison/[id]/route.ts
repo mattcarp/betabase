@@ -61,10 +61,7 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
     return NextResponse.json(comparison);
   } catch (error) {
     console.error("Failed to fetch comparison:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch comparison" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch comparison" }, { status: 500 });
   }
 }
 
@@ -82,9 +79,6 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
     return NextResponse.json({ success: true, id });
   } catch (error) {
     console.error("Failed to delete comparison:", error);
-    return NextResponse.json(
-      { error: "Failed to delete comparison" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to delete comparison" }, { status: 500 });
   }
 }
