@@ -36,6 +36,7 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
   // Image is 400x266 = 1.5037:1 aspect ratio
   return (
     <div className={`betabase-logo-wrapper ${sizeClass} ${className}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/betabase-logo.webp"
         alt="Betabase"
