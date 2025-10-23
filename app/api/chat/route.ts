@@ -3,7 +3,6 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { z } from "zod";
-import type OpenAI from "openai";
 import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
 import { modelConfig } from "../../../src/services/modelConfig";
 import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
@@ -83,7 +82,8 @@ export async function OPTIONS(_req: Request) {
 }
 
 export async function POST(req: Request) {
-  const chatStartTime = Date.now();
+  // TODO: Re-enable performance tracking once monitoring utility is extracted
+  // const chatStartTime = Date.now();
 
   try {
     console.log("[API] ========== POST /api/chat REQUEST START ==========");
@@ -236,9 +236,10 @@ export async function POST(req: Request) {
       });
     }
 
-    // Convert UI messages to OpenAI format with NULL content validation
+    // Convert UI messages to AI SDK format with NULL content validation
     // AI SDK v5 sends messages with 'parts' array, v4 uses 'content' string
-    const openAIMessages: OpenAI.Chat.ChatCompletionMessageParam[] = messages
+    // Note: AI SDK only supports user/assistant/system roles (no developer/tool roles)
+    const openAIMessages = messages
       .filter((msg: any) => {
         // Extract content from v5 parts array or v4 content string
         const content = msg.parts?.find((p: any) => p.type === "text")?.text || msg.content;
@@ -252,6 +253,16 @@ export async function POST(req: Request) {
           });
           return false;
         }
+
+        // Filter out unsupported roles (developer, tool, etc.)
+        const supportedRoles = ["system", "user", "assistant"];
+        if (!supportedRoles.includes(msg.role)) {
+          console.warn(`[API] Filtering out message with unsupported role:`, {
+            role: msg.role,
+          });
+          return false;
+        }
+
         return true;
       })
       .map((msg: any) => {
@@ -260,14 +271,14 @@ export async function POST(req: Request) {
           msg.parts?.find((p: any) => p.type === "text")?.text || msg.content || ""
         );
 
+        // Return properly typed message for AI SDK
         if (msg.role === "system") {
-          return { role: "system", content };
+          return { role: "system" as const, content };
         } else if (msg.role === "user") {
-          return { role: "user", content };
-        } else if (msg.role === "assistant") {
-          return { role: "assistant", content };
+          return { role: "user" as const, content };
+        } else {
+          return { role: "assistant" as const, content };
         }
-        return { ...msg, content };
       });
 
     // Validate we have at least one message after filtering
@@ -520,7 +531,8 @@ ${aomaContext}
     console.log("✅ Stream created successfully");
 
     // Track successful request
-    trackRequest("/api/chat", "POST", Date.now() - chatStartTime, 200);
+    // TODO: Re-enable tracking once monitoring utility is extracted
+    // trackRequest("/api/chat", "POST", Date.now() - chatStartTime, 200);
 
     // Return Vercel AI SDK response format (compatible with useChat hook)
     return result.toUIMessageStreamResponse();
@@ -568,13 +580,14 @@ ${aomaContext}
     }
 
     // Track error for introspection
-    trackRequest(
-      "/api/chat",
-      "POST",
-      Date.now() - chatStartTime,
-      isQuotaError || isRateLimitError ? 429 : 500,
-      errorMessage
-    );
+    // TODO: Re-enable tracking once monitoring utility is extracted
+    // trackRequest(
+    //   "/api/chat",
+    //   "POST",
+    //   Date.now() - chatStartTime,
+    //   isQuotaError || isRateLimitError ? 429 : 500,
+    //   errorMessage
+    // );
 
     return new Response(
       JSON.stringify({
