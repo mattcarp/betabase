@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../src/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../src/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../src/components/ui/tabs";
 import { Button } from "../../src/components/ui/button";
 import { Badge } from "../../src/components/ui/badge";
