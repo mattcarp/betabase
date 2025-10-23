@@ -455,6 +455,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                           {/* Thumbnail */}
                           {interaction.thumbnail && (
                             <div className="mt-2 rounded overflow-hidden border border-mac-utility-border">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
                                 src={interaction.thumbnail}
                                 alt="Interaction screenshot"
