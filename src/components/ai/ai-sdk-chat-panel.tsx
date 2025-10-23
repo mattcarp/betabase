@@ -1378,7 +1378,7 @@ export function AiSdkChatPanel({
                     <div className="p-4">
                       <div className="flex items-start gap-3">
                         {preview.image && (
-                          /* eslint-disable-next-line @next/next/no-img-element */
+                          // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={preview.image}
                             alt={preview.title || "Preview"}

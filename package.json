@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.5.0",
+  "version": "0.5.3",
   "private": true,
   "scripts": {
     "dev": "npx kill-port 3000 2>/dev/null || true && next dev -p 3000",
@@ -17,6 +17,10 @@
     "start:prod": "NODE_ENV=production next start -p $PORT",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
+    "lint:check": "npm run format:check && npm run lint",
+    "lint:quick": "./scripts/quick-lint-check.sh",
+    "lint:file": "./scripts/lint-file.sh",
+    "lint:fix-all": "npm run lint:fix && npm run format",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -65,7 +69,11 @@
     "analyze:deps": "depcheck"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,md}": [
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
       "prettier --write"
     ]
   },
