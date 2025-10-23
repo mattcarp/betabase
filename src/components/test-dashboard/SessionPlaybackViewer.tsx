@@ -90,139 +90,142 @@ export const SessionPlaybackViewer: React.FC = () => {
   const playbackTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Mock session data
-  const sessionSteps: SessionStep[] = React.useMemo(() => [
-    {
-      id: "1",
-      type: "navigation",
-      timestamp: 0,
-      description: "Navigate to /login",
-      url: "https://app.example.com/login",
-      status: "success",
-      duration: 1234,
-      interactions: [],
-    },
-    {
-      id: "2",
-      type: "screenshot",
-      timestamp: 1500,
-      description: "Page loaded",
-      screenshot: "screenshot-1.png",
-      status: "success",
-      interactions: [],
-    },
-    {
-      id: "3",
-      type: "input",
-      timestamp: 2000,
-      description: "Fill email field",
-      selector: '[data-testid="email"]',
-      value: "user@example.com",
-      status: "success",
-      duration: 150,
-      interactions: [
-        {
-          id: "int-1",
-          type: "click",
-          x: 200,
-          y: 150,
-          timestamp: 2000,
-          duration: 100,
-          selector: '[data-testid="email"]',
-        },
-        {
-          id: "int-2",
-          type: "input",
-          x: 200,
-          y: 150,
-          timestamp: 2050,
-          duration: 100,
-          value: "user@example.com",
-        },
-      ],
-    },
-    {
-      id: "4",
-      type: "input",
-      timestamp: 2500,
-      description: "Fill password field",
-      selector: '[data-testid="password"]',
-      value: "••••••••",
-      status: "success",
-      duration: 120,
-      interactions: [
-        {
-          id: "int-3",
-          type: "click",
-          x: 200,
-          y: 220,
-          timestamp: 2500,
-          duration: 100,
-          selector: '[data-testid="password"]',
-        },
-        {
-          id: "int-4",
-          type: "input",
-          x: 200,
-          y: 220,
-          timestamp: 2550,
-          duration: 70,
-          value: "••••••••",
-        },
-      ],
-    },
-    {
-      id: "5",
-      type: "network",
-      timestamp: 3000,
-      description: "API Request: POST /api/auth",
-      networkData: {
-        method: "POST",
-        url: "/api/auth",
-        status: 200,
-        duration: 450,
-        size: "2.3 KB",
+  const sessionSteps: SessionStep[] = React.useMemo(
+    () => [
+      {
+        id: "1",
+        type: "navigation",
+        timestamp: 0,
+        description: "Navigate to /login",
+        url: "https://app.example.com/login",
+        status: "success",
+        duration: 1234,
+        interactions: [],
       },
-      status: "success",
-      interactions: [],
-    },
-    {
-      id: "6",
-      type: "click",
-      timestamp: 3500,
-      description: "Click login button",
-      selector: '[data-testid="login-button"]',
-      status: "success",
-      duration: 50,
-      interactions: [
-        {
-          id: "int-5",
-          type: "click",
-          x: 250,
-          y: 300,
-          timestamp: 3500,
-          duration: 50,
-          selector: '[data-testid="login-button"]',
+      {
+        id: "2",
+        type: "screenshot",
+        timestamp: 1500,
+        description: "Page loaded",
+        screenshot: "screenshot-1.png",
+        status: "success",
+        interactions: [],
+      },
+      {
+        id: "3",
+        type: "input",
+        timestamp: 2000,
+        description: "Fill email field",
+        selector: '[data-testid="email"]',
+        value: "user@example.com",
+        status: "success",
+        duration: 150,
+        interactions: [
+          {
+            id: "int-1",
+            type: "click",
+            x: 200,
+            y: 150,
+            timestamp: 2000,
+            duration: 100,
+            selector: '[data-testid="email"]',
+          },
+          {
+            id: "int-2",
+            type: "input",
+            x: 200,
+            y: 150,
+            timestamp: 2050,
+            duration: 100,
+            value: "user@example.com",
+          },
+        ],
+      },
+      {
+        id: "4",
+        type: "input",
+        timestamp: 2500,
+        description: "Fill password field",
+        selector: '[data-testid="password"]',
+        value: "••••••••",
+        status: "success",
+        duration: 120,
+        interactions: [
+          {
+            id: "int-3",
+            type: "click",
+            x: 200,
+            y: 220,
+            timestamp: 2500,
+            duration: 100,
+            selector: '[data-testid="password"]',
+          },
+          {
+            id: "int-4",
+            type: "input",
+            x: 200,
+            y: 220,
+            timestamp: 2550,
+            duration: 70,
+            value: "••••••••",
+          },
+        ],
+      },
+      {
+        id: "5",
+        type: "network",
+        timestamp: 3000,
+        description: "API Request: POST /api/auth",
+        networkData: {
+          method: "POST",
+          url: "/api/auth",
+          status: 200,
+          duration: 450,
+          size: "2.3 KB",
         },
-      ],
-    },
-    {
-      id: "7",
-      type: "assertion",
-      timestamp: 4000,
-      description: "Assert URL changed to /dashboard",
-      status: "success",
-      interactions: [],
-    },
-    {
-      id: "8",
-      type: "screenshot",
-      timestamp: 4500,
-      description: "Dashboard loaded",
-      screenshot: "screenshot-2.png",
-      status: "success",
-      interactions: [],
-    },
-  ], []);
+        status: "success",
+        interactions: [],
+      },
+      {
+        id: "6",
+        type: "click",
+        timestamp: 3500,
+        description: "Click login button",
+        selector: '[data-testid="login-button"]',
+        status: "success",
+        duration: 50,
+        interactions: [
+          {
+            id: "int-5",
+            type: "click",
+            x: 250,
+            y: 300,
+            timestamp: 3500,
+            duration: 50,
+            selector: '[data-testid="login-button"]',
+          },
+        ],
+      },
+      {
+        id: "7",
+        type: "assertion",
+        timestamp: 4000,
+        description: "Assert URL changed to /dashboard",
+        status: "success",
+        interactions: [],
+      },
+      {
+        id: "8",
+        type: "screenshot",
+        timestamp: 4500,
+        description: "Dashboard loaded",
+        screenshot: "screenshot-2.png",
+        status: "success",
+        interactions: [],
+      },
+    ],
+    []
+  );
 
   const annotations: SessionAnnotation[] = [
     {
@@ -323,10 +326,7 @@ export const SessionPlaybackViewer: React.FC = () => {
       );
 
       // Download the video
-      SessionVideoExporter.downloadVideo(
-        videoBlob,
-        `session-playback-${Date.now()}.webm`
-      );
+      SessionVideoExporter.downloadVideo(videoBlob, `session-playback-${Date.now()}.webm`);
 
       console.log("Video export completed successfully");
     } catch (error) {
@@ -407,9 +407,7 @@ export const SessionPlaybackViewer: React.FC = () => {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() =>
-                  setCurrentStep(Math.min(sessionSteps.length - 1, currentStep + 1))
-                }
+                onClick={() => setCurrentStep(Math.min(sessionSteps.length - 1, currentStep + 1))}
                 disabled={currentStep >= sessionSteps.length - 1}
               >
                 <SkipForward className="h-4 w-4" />
@@ -774,9 +772,7 @@ export const SessionPlaybackViewer: React.FC = () => {
                             log.type === "info" && "bg-blue-500/10 text-blue-400"
                           )}
                         >
-                          <span className="text-muted-foreground shrink-0">
-                            {log.timestamp}
-                          </span>
+                          <span className="text-muted-foreground shrink-0">{log.timestamp}</span>
                           <span className="break-all">{log.message}</span>
                         </div>
                       ))}
