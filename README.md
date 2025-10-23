@@ -45,7 +45,7 @@ SIAM uses magic link authentication:
 - **Frontend**: Next.js 14 (App Router), React 18, TypeScript
 - **Styling**: Tailwind CSS, shadcn/ui components
 - **Authentication**: AWS Cognito + Magic Links
-- **Backend**: Render (aoma-mesh-mcp server)
+- **Backend**: Railway (aoma-mesh-mcp server)
 - **Deployment**: Render.com
 
 ### Project Structure
@@ -73,30 +73,7 @@ Create `.env.local`:
 NEXT_PUBLIC_COGNITO_USER_POOL_ID=your-pool-id
 NEXT_PUBLIC_COGNITO_CLIENT_ID=your-client-id
 NEXT_PUBLIC_AWS_REGION=us-east-2
-NEXT_PUBLIC_AOMA_ENDPOINT=https://aoma-mesh-mcp.onrender.com
-# Sony Music JIRA UI automation (no API token)
-JIRA_BASE_URL=https://jira.smedigitalapps.com/jira
-JIRA_USERNAME=your.sony.username@sonymusic.com
-JIRA_PASSWORD=your-strong-password
-# Optional: OpenAI for embeddings
-# OPENAI_API_KEY=sk-...
-
-# Git Indexer configuration
-# GIT_FRONTEND_REPO_PATH=/absolute/path/to/frontend
-# GIT_BACKEND_REPO_PATH=/absolute/path/to/backend
-# GIT_ADDITIONAL_REPOS=/abs/path/one,/abs/path/two
-# GIT_MAX_COMMITS=500
-# GIT_SINCE="6 months ago"
-# GIT_BRANCH=HEAD
-# GIT_SKIP_EXISTING=false
-# GIT_FILE_EXTENSIONS=.ts,.js,.tsx,.jsx,.md,.json,.yml,.yaml
-# GIT_EXCLUDE_PATTERNS=node_modules,dist,build,.git,.next
-# GIT_INCLUDE_README=true
-# VECTOR_BATCH_SIZE=5
-# VECTOR_FILE_BATCH_SIZE=100
-# VECTOR_FILE_CONCURRENCY=4
-# GIT_GLOBAL_CONCURRENCY=2
-# GIT_INDEX_API_KEY=optional-secret-to-protect-API
+NEXT_PUBLIC_AOMA_ENDPOINT=https://luminous-dedication-production.up.railway.app
 ```
 
 ### Common Commands
@@ -113,24 +90,6 @@ pnpm lint
 
 # Format code
 pnpm format
-```
-
-## 🧩 Confluence Crawling (Docs Import)
-
-To ingest Confluence documentation into `aoma_unified_vectors`:
-
-```bash
-# Configure environment (see .env.example for keys under the Confluence section)
-export CONFLUENCE_BASE_URL="https://your-org.atlassian.net"
-export CONFLUENCE_API_TOKEN="<token>"
-export CONFLUENCE_USERNAME="you@your-org.com"
-export CONFLUENCE_SPACES="AOMA,TECH,API,USM"
-
-# Trigger crawl (auth is validated before crawl)
-./scripts/crawl-confluence-docs.sh
-
-# Validate ingestion and run smoke semantic queries
-./scripts/validate-confluence-knowledge.sh
 ```
 
 ## 🐛 Troubleshooting
@@ -169,3 +128,10 @@ Proprietary - Sony Music Entertainment
 ---
 
 Built with ❤️ by Matt Carpenter & Fiona Burgess
+
+<!-- Fiona credit block -->
+
+![Fiona context](./siam-current-preview.png)
+
+_Fiona’s note: a little context from the launch that inspired the tag she loved._
+
