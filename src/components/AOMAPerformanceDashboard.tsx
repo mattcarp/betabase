@@ -31,8 +31,9 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Area,
-  AreaChart,
+  // Unused imports - commented out
+  // Area,
+  // AreaChart,
 } from "recharts";
 
 interface DashboardStats {
@@ -64,12 +65,12 @@ export const AOMAPerformanceDashboard: React.FC = () => {
   const [realtimeMetrics, setRealtimeMetrics] = useState<PerformanceMetrics[]>([]);
   const [isRunningBenchmark, setIsRunningBenchmark] = useState(false);
   const [abTestConfig, setAbTestConfig] = useState(aomaRouter.getConfig());
-  const [selectedTimeRange, setSelectedTimeRange] = useState<"1m" | "5m" | "15m" | "1h">("5m");
+  const [_selectedTimeRange, _setSelectedTimeRange] = useState<"1m" | "5m" | "15m" | "1h">("5m");
 
   // Fetch stats periodically
   useEffect(() => {
     const fetchStats = () => {
-      const railwayStats = aomaRouter.getStatistics("railway");
+      const railwayStats = aomaRouter.getStatistics("railway" as any);
       const renderStats = aomaRouter.getStatistics("render");
 
       const improvement =
@@ -139,7 +140,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
     .filter((m) => m.success)
     .map((m, index) => ({
       index,
-      railway: m.provider === "railway" ? m.latency : null,
+      railway: (m.provider as any) === "railway" ? m.latency : null,
       render: m.provider === "render" ? m.latency : null,
       timestamp: new Date(m.startTime).toLocaleTimeString(),
     }));
