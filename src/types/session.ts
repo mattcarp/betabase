@@ -2,7 +2,7 @@
  * Session Types for TestSprite Playback Sessions
  */
 
-export type SessionStatus = 'in-progress' | 'completed' | 'has-issues';
+export type SessionStatus = "in-progress" | "completed" | "has-issues";
 
 export interface Session {
   id: string;
