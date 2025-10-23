@@ -3,8 +3,10 @@ import { CircularProfessionalProgress as RadialProgress } from "./components/ui/
 import { HUDMeter } from "./components/ui/HUDMeter";
 import { DataStream } from "./components/ui/DataStream";
 import { CircularHUD } from "./components/ui/CircularHUD";
-import { FloatingPanel } from "./components/ui/FloatingPanel";
-import { Activity, Cpu, Gauge, TrendingUp, Play, Pause, RotateCcw } from "lucide-react";
+// Unused imports - commented out to fix build
+// import { FloatingPanel } from "./components/ui/FloatingPanel";
+// import { Activity, Cpu, Gauge, TrendingUp } from "lucide-react";
+import { Play, Pause, RotateCcw } from "lucide-react";
 
 export default function TestApp() {
   const [isRunning, setIsRunning] = useState(false);
