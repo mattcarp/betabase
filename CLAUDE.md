@@ -171,6 +171,77 @@ This handles EVERYTHING:
 python3 ./scripts/monitor-deployment.py  # Monitor existing deployment
 ```
 
+### 🎯 Automated PR Merge → Production Pipeline
+
+**FULLY AUTOMATED**: When you merge a PR to `main`, production deployment happens automatically!
+
+**How It Works:**
+
+1. **Merge PR to main** - GitHub detects the merge event
+2. **GitHub Actions runs** - `.github/workflows/pr-merge-deploy.yml` triggers
+3. **Render deploys** - Auto-deploy from main branch (configured in `render.yaml`)
+4. **Health monitoring** - Automated health checks verify deployment
+5. **PR comment** - Status posted back to the merged PR
+6. **Branch cleanup** - `claude/*` branches auto-deleted after merge
+
+**What Gets Monitored:**
+
+- Health endpoint (`/api/health`)
+- Main page load
+- Build timestamp verification
+- Stable response checks (3 consecutive healthy checks)
+- Console error detection
+
+**Workflow Files:**
+
+- `.github/workflows/pr-merge-deploy.yml` - PR merge detection & deployment
+- `.github/workflows/ci-cd.yml` - Full CI/CD pipeline with tests
+- `render.yaml` - Render service configuration with auto-deploy
+
+**Setting Up Deploy Hook (Optional - for faster deploys):**
+
+1. Get your Render Deploy Hook URL:
+   - Go to [Render Dashboard](https://dashboard.render.com)
+   - Select your service (siam-app)
+   - Go to Settings → Deploy Hook
+   - Copy the deploy hook URL
+
+2. Add it to GitHub as a repository variable:
+   ```bash
+   # Via GitHub UI:
+   # Settings → Secrets and variables → Actions → Variables
+   # Name: RENDER_DEPLOY_HOOK_URL
+   # Value: https://api.render.com/deploy/srv-xxxxx?key=xxxxx
+
+   # Or via gh CLI:
+   gh variable set RENDER_DEPLOY_HOOK_URL --body "https://api.render.com/deploy/srv-xxxxx?key=xxxxx"
+   ```
+
+3. The workflow will automatically use it if present!
+
+**Monitoring Your Deployment:**
+
+```bash
+# Watch GitHub Actions
+gh run watch
+
+# Check production health
+curl https://iamsiam.ai/api/health
+
+# View Render logs via MCP
+# Use Render MCP tools in Claude Code to check logs and status
+```
+
+**What You See After Merging PR:**
+
+- ✅ Automated comment on PR with deployment status
+- ✅ GitHub deployment record created
+- ✅ Health verification results
+- ✅ Build timestamp confirmation
+- ⚠️ Issue created if deployment fails (auto-assigned to you)
+
+**No Manual Steps Required!** Just merge the PR and the pipeline handles everything.
+
 ## 🔥 YOLO MODE - FUCK APPROVALS, SHIP CODE NOW!
 
 **YOLO MODE**: Because YOU ONLY LIVE ONCE! Why ask permission when you could be building awesome shit?
