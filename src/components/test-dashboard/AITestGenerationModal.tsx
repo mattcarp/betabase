@@ -1,13 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -239,7 +233,7 @@ test.describe('${testResult.suite}', () => {
         },
         assertion: {
           type: "toHaveValue",
-          code: 'await expect(page.locator(\'[data-testid="email-input"]\')).toHaveValue(\'test@example.com\');',
+          code: "await expect(page.locator('[data-testid=\"email-input\"]')).toHaveValue('test@example.com');",
           description: "Verify email input contains correct value",
         },
         confidence: 88,
@@ -269,7 +263,7 @@ test.describe('${testResult.suite}', () => {
         },
         assertion: {
           type: "toBeVisible",
-          code: 'await expect(page.locator(\'[data-testid="user-avatar"]\')).toBeVisible();',
+          code: "await expect(page.locator('[data-testid=\"user-avatar\"]')).toBeVisible();",
           description: "Confirm user avatar appears after login",
         },
         confidence: 85,
@@ -354,7 +348,9 @@ test.describe('${testResult.suite}', () => {
       console.log("Test saved:", data);
 
       // Show success message
-      alert(`Test saved successfully to ${data.filePath || "tests/" + testResult.suite + ".spec.ts"}`);
+      alert(
+        `Test saved successfully to ${data.filePath || "tests/" + testResult.suite + ".spec.ts"}`
+      );
       onClose();
     } catch (error) {
       console.error("Error saving test:", error);
@@ -601,7 +597,12 @@ test.describe('${testResult.suite}', () => {
 
                           {/* Confidence Score */}
                           <div className="flex flex-col items-center gap-1 flex-shrink-0">
-                            <div className={cn("flex items-center gap-1", getConfidenceColor(mapping.confidence))}>
+                            <div
+                              className={cn(
+                                "flex items-center gap-1",
+                                getConfidenceColor(mapping.confidence)
+                              )}
+                            >
                               {getConfidenceIcon(mapping.confidence)}
                               <span className="text-lg font-bold">{mapping.confidence}%</span>
                             </div>

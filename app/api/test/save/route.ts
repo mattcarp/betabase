@@ -13,7 +13,9 @@ export async function POST(request: NextRequest) {
 
     // Determine file path
     const testsDir = path.join(process.cwd(), "tests");
-    const suiteDir = suite ? path.join(testsDir, suite.toLowerCase().replace(/\s+/g, "-")) : testsDir;
+    const suiteDir = suite
+      ? path.join(testsDir, suite.toLowerCase().replace(/\s+/g, "-"))
+      : testsDir;
     const fileName = `${testName.toLowerCase().replace(/\s+/g, "-")}.spec.ts`;
     const filePath = path.join(suiteDir, fileName);
 
