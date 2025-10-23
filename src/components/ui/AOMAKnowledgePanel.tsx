@@ -148,14 +148,7 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
               "Data Flow",
               "Updates",
             ];
-            const iconComponents = [
-              RefreshCw,
-              Zap,
-              AlertCircle,
-              BookOpen,
-              TrendingUp,
-              Sparkles,
-            ];
+            const iconComponents = [RefreshCw, Zap, AlertCircle, BookOpen, TrendingUp, Sparkles];
 
             lines.forEach((line: string, index: number) => {
               // Extract questions from numbered format
