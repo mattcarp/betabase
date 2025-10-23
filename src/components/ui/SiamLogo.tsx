@@ -32,6 +32,7 @@ export const SiamLogo: React.FC<SiamLogoProps> = ({
   const sizeClass = variant === "full" ? fullSizeClasses[size] : sizeClasses[size];
 
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src="/betabase-logo.webp"
       alt="Betabase"

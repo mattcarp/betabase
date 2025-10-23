@@ -4,11 +4,8 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import type OpenAI from "openai";
-import { aomaCache } from "../../../src/services/aomaCache";
 import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
-import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
 import { modelConfig } from "../../../src/services/modelConfig";
-import { trackRequest } from "../introspection/route";
 import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
@@ -27,24 +24,6 @@ if (!process.env.OPENAI_API_KEY) {
 // REMOVED: Client-side rate limiting
 // Let OpenAI handle rate limits naturally - we'll catch 429s and show friendly errors
 // This allows normal single-user usage while still handling rate limit errors gracefully
-
-// Enhanced query for context
-function enhanceQueryForContext(query: string): string {
-  const lowerQuery = query.toLowerCase();
-
-  // SIAM-specific terms
-  if (lowerQuery.includes("siam") && !lowerQuery.includes("sony")) {
-    return `${query} [Context: SIAM is Sony Music's AI assistant that integrates with the AOMA platform for accessing enterprise resources]`;
-  }
-
-  // AOMA-specific terms
-  if (lowerQuery.includes("aoma") && !lowerQuery.includes("sony")) {
-    return `${query} [Context: AOMA is Sony Music's enterprise platform that integrates various tools including Jira, Git, knowledge bases, and email systems]`;
-  }
-
-  // Default case - no enhancement needed
-  return query;
-}
 
 // Knowledge object structure for structured responses
 interface KnowledgeElement {
@@ -75,7 +54,7 @@ const ChatRequestSchema = z.object({
   systemPrompt: z.string().max(5000).optional(), // 5KB limit for system prompt
 });
 
-export async function GET(req: Request) {
+export async function GET(_req: Request) {
   // Handle GET requests - return API info/status
   return new Response(
     JSON.stringify({
@@ -91,7 +70,7 @@ export async function GET(req: Request) {
   );
 }
 
-export async function OPTIONS(req: Request) {
+export async function OPTIONS(_req: Request) {
   return new Response(null, {
     status: 204,
     headers: {
