@@ -9,14 +9,20 @@ import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error("Missing Supabase environment variables:", {
-    url: !!supabaseUrl,
-    key: !!supabaseAnonKey,
+// Check if using placeholder values
+const isPlaceholder = supabaseUrl?.includes('placeholder') || supabaseAnonKey?.includes('placeholder');
+
+if (!supabaseUrl || !supabaseAnonKey || isPlaceholder) {
+  console.warn("⚠️  Supabase not configured - vector search features disabled:", {
+    url: !!supabaseUrl && !isPlaceholder,
+    key: !!supabaseAnonKey && !isPlaceholder,
   });
-  throw new Error(
-    "Missing required Supabase environment variables. Please check your .env.local file."
-  );
+  // Don't throw error in dev mode - just log a warning
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      "Missing required Supabase environment variables. Please check your .env.local file."
+    );
+  }
 }
 
 // Create a single supabase client for interacting with your database
