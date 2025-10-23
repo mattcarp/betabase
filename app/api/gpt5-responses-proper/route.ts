@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
       tools = ["web_search", "file_search"], // Built-in tools
       reasoningEffort = "medium",
       verbosity = "medium",
-      temperature = 0.7,
+      temperature: _temperature = 0.7, // Reserved for future use
       maxOutputTokens = 4096,
       vectorStoreIds = ["vs_3dqHL3Wcmt1WrUof0qS4UQqo"], // Your existing vector store
     } = await req.json();
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
       max_output_tokens: maxOutputTokens,
 
       // Enable built-in tools - these work out of the box!
-      tools: tools.map((tool) => {
+      tools: tools.map((tool: string) => {
         if (tool === "file_search") {
           return {
             type: "file_search" as const,
