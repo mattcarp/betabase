@@ -57,6 +57,82 @@ git config merge.npm-merge-lockfile.driver ".git-merge-drivers/npm-merge-lockfil
 
 ---
 
+## ✨ Pre-Commit Linting - CATCH ERRORS BEFORE COMMIT
+
+**AUTOMATIC QUALITY CHECKS**: ESLint and Prettier run automatically on every commit!
+
+### How It Works
+
+When you commit code, Husky triggers `lint-staged` which:
+
+1. **Runs ESLint** on all staged `.js`, `.jsx`, `.ts`, `.tsx` files
+   - Auto-fixes issues where possible (formatting, simple errors)
+   - Uses `--max-warnings=0` (warnings block commits)
+   - Catches unused variables, type errors, code quality issues
+
+2. **Runs Prettier** on all staged files
+   - Formats code to project standards
+   - Ensures consistent style across codebase
+
+3. **Blocks the commit** if unfixable errors exist
+   - You must fix the issues before committing
+   - Prevents broken code from reaching PRs
+
+### Manual Lint Checks
+
+**Check for issues without committing:**
+
+```bash
+npm run lint:check       # Check both linting and formatting (no changes)
+npm run format:check     # Check Prettier formatting only
+npm run lint             # Check ESLint only
+```
+
+**Auto-fix all issues:**
+
+```bash
+npm run lint:fix-all     # Fix both linting and formatting
+npm run lint:fix         # Fix ESLint issues only
+npm run format           # Fix Prettier formatting only
+```
+
+### What Gets Caught
+
+**ESLint errors (block commit):**
+- `no-var` - Using `var` instead of `const`/`let`
+- `react-hooks/rules-of-hooks` - Invalid React Hook usage
+- `@next/next/no-img-element` - Using `<img>` instead of Next.js `<Image>`
+- `@next/next/no-html-link-for-pages` - Using `<a>` instead of Next.js `<Link>`
+
+**ESLint warnings (block commit with --max-warnings=0):**
+- `@typescript-eslint/no-unused-vars` - Unused variables/imports
+- `react-hooks/exhaustive-deps` - Missing dependencies in hooks
+- `prefer-const` - Variable that should be `const`
+- `no-debugger` - Debugger statements
+
+**Prettier formatting:**
+- Semicolons, quotes, line length, indentation, etc.
+- All formatting is auto-fixed
+
+### Bypassing the Hook (NOT RECOMMENDED)
+
+Only in emergencies:
+
+```bash
+git commit --no-verify -m "emergency fix"
+```
+
+**IMPORTANT**: CI/CD will still catch these errors, so fix them ASAP.
+
+### Configuration Files
+
+- `.husky/pre-commit` - Git hook that runs lint-staged
+- `package.json` (lint-staged section) - Defines what runs on staged files
+- `.eslintrc.json` - ESLint rules configuration
+- `.prettierrc` - Prettier formatting configuration
+
+---
+
 ## 🧪 TESTING FUNDAMENTALS - CRITICAL
 
 **⚠️ MANDATORY READING**: See `TESTING_FUNDAMENTALS.md` for comprehensive test documentation.
