@@ -10,7 +10,8 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 // Check if using placeholder values
-const isPlaceholder = supabaseUrl?.includes('placeholder') || supabaseAnonKey?.includes('placeholder');
+const isPlaceholder =
+  supabaseUrl?.includes("placeholder") || supabaseAnonKey?.includes("placeholder");
 
 if (!supabaseUrl || !supabaseAnonKey || isPlaceholder) {
   console.warn("⚠️  Supabase not configured - vector search features disabled:", {
@@ -18,7 +19,7 @@ if (!supabaseUrl || !supabaseAnonKey || isPlaceholder) {
     key: !!supabaseAnonKey && !isPlaceholder,
   });
   // Don't throw error in dev mode - just log a warning
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === "production") {
     throw new Error(
       "Missing required Supabase environment variables. Please check your .env.local file."
     );
