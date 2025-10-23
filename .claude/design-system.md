@@ -1,1 +1,1 @@
-/Users/mcarpent/Documents/projects/mc-ai-standards/design-system.md
+/Users/matt/Documents/projects/mc-ai-standards/design-system.md
