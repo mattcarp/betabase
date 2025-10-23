@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 interface SiamLogoProps {
   className?: string;
@@ -31,10 +32,16 @@ export const SiamLogo: React.FC<SiamLogoProps> = ({
 
   const sizeClass = variant === "full" ? fullSizeClasses[size] : sizeClasses[size];
 
+  const dimensions = variant === "full"
+    ? { width: 480, height: 120 }
+    : { width: 120, height: 120 };
+
   return (
-    <img
+    <Image
       src="/betabase-logo.webp"
       alt="Betabase"
+      width={dimensions.width}
+      height={dimensions.height}
       className={`${sizeClass} ${className} object-contain`}
     />
   );
