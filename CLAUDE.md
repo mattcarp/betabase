@@ -207,6 +207,7 @@ python3 ./scripts/monitor-deployment.py  # Monitor existing deployment
    - Copy the deploy hook URL
 
 2. Add it to GitHub as a repository variable:
+
    ```bash
    # Via GitHub UI:
    # Settings → Secrets and variables → Actions → Variables
