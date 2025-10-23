@@ -51,6 +51,7 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "pre-pr-check": "npm run format:check && npm run lint && git diff --check",
     "prepare": "husky install || true",
     "analyze": "ANALYZE=true npm run build",
     "analyze:server": "ANALYZE=true BUNDLE_ANALYZE=server npm run build",
