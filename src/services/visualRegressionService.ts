@@ -145,10 +145,7 @@ export class VisualRegressionService {
    * Generate diff between two screenshots
    * This would typically be handled server-side using image processing libraries
    */
-  async generateDiff(
-    baselineUrl: string,
-    currentUrl: string
-  ): Promise<DiffData> {
+  async generateDiff(baselineUrl: string, currentUrl: string): Promise<DiffData> {
     const response = await fetch(`${this.apiBase}/diff/generate`, {
       method: "POST",
       headers: {
@@ -224,10 +221,7 @@ export class VisualRegressionService {
   /**
    * Get comparison history for a test
    */
-  async getComparisonHistory(
-    testName: string,
-    limit = 10
-  ): Promise<VisualRegressionComparison[]> {
+  async getComparisonHistory(testName: string, limit = 10): Promise<VisualRegressionComparison[]> {
     const response = await fetch(
       `${this.apiBase}/history/${encodeURIComponent(testName)}?limit=${limit}`
     );

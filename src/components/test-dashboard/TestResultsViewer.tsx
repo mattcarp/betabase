@@ -31,10 +31,7 @@ import {
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { enhancedSupabaseTestDB } from "../../services/supabase-test-integration-enhanced";
-import {
-  VisualRegressionComparison,
-  VisualRegressionComparisonType,
-} from "../visual-regression";
+import { VisualRegressionComparison, VisualRegressionComparisonType } from "../visual-regression";
 import { visualRegressionService } from "../../services/visualRegressionService";
 
 interface TestResult {
@@ -646,10 +643,12 @@ export const TestResultsViewer: React.FC = () => {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="error" className="h-full">
-                <TabsList className={cn(
-                  "grid w-full",
-                  selectedResult.visualComparison ? "grid-cols-5" : "grid-cols-4"
-                )}>
+                <TabsList
+                  className={cn(
+                    "grid w-full",
+                    selectedResult.visualComparison ? "grid-cols-5" : "grid-cols-4"
+                  )}
+                >
                   <TabsTrigger value="error">Error</TabsTrigger>
                   <TabsTrigger value="logs">Logs</TabsTrigger>
                   <TabsTrigger value="media">Media</TabsTrigger>

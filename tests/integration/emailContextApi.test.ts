@@ -22,12 +22,9 @@ describe("Email Context API Integration", () => {
     // Cleanup test emails
     for (const messageId of testMessageIds) {
       try {
-        await fetch(
-          `${API_BASE_URL}/api/email-context?messageId=${messageId}`,
-          {
-            method: "DELETE",
-          }
-        );
+        await fetch(`${API_BASE_URL}/api/email-context?messageId=${messageId}`, {
+          method: "DELETE",
+        });
       } catch (error) {
         console.warn(`Failed to cleanup test email ${messageId}`);
       }
@@ -123,16 +120,13 @@ describe("Email Context API Integration", () => {
         ],
       };
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/email-context/batch`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(batchEmails),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/email-context/batch`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(batchEmails),
+      });
 
       expect(response.status).toBe(200);
 
@@ -146,16 +140,13 @@ describe("Email Context API Integration", () => {
     }, 60000);
 
     test("should reject non-array input", async () => {
-      const response = await fetch(
-        `${API_BASE_URL}/api/email-context/batch`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ emails: "not-an-array" }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/email-context/batch`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ emails: "not-an-array" }),
+      });
 
       expect(response.status).toBe(400);
 
@@ -181,16 +172,13 @@ describe("Email Context API Integration", () => {
         ],
       };
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/email-context/batch`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(batchWithErrors),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/email-context/batch`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(batchWithErrors),
+      });
 
       expect(response.status).toBe(400);
 
@@ -228,18 +216,15 @@ describe("Email Context API Integration", () => {
     }, 35000);
 
     test("should search emails by content", async () => {
-      const response = await fetch(
-        `${API_BASE_URL}/api/email-context/search`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            query: "machine learning neural networks",
-          }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/email-context/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: "machine learning neural networks",
+        }),
+      });
 
       expect(response.status).toBe(200);
 
@@ -248,23 +233,18 @@ describe("Email Context API Integration", () => {
       expect(Array.isArray(data.results)).toBe(true);
 
       // Should find our test email
-      const found = data.results.find(
-        (r: any) => r.messageId === "api-search-test-email"
-      );
+      const found = data.results.find((r: any) => r.messageId === "api-search-test-email");
       expect(found).toBeDefined();
     }, 30000);
 
     test("should reject search without query", async () => {
-      const response = await fetch(
-        `${API_BASE_URL}/api/email-context/search`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({}),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/email-context/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      });
 
       expect(response.status).toBe(400);
 
@@ -274,20 +254,17 @@ describe("Email Context API Integration", () => {
     });
 
     test("should support search filters", async () => {
-      const response = await fetch(
-        `${API_BASE_URL}/api/email-context/search`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            query: "machine learning",
-            matchThreshold: 0.7,
-            matchCount: 5,
-          }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/email-context/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: "machine learning",
+          matchThreshold: 0.7,
+          matchCount: 5,
+        }),
+      });
 
       expect(response.status).toBe(200);
 

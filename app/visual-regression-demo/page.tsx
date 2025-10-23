@@ -17,9 +17,8 @@ import { ArrowLeft } from "lucide-react";
  * Demonstrates the visual regression testing tool with mock data
  */
 export default function VisualRegressionDemoPage() {
-  const [selectedComparison, setSelectedComparison] = useState<VisualRegressionComparisonType | null>(
-    null
-  );
+  const [selectedComparison, setSelectedComparison] =
+    useState<VisualRegressionComparisonType | null>(null);
 
   // Mock data for demonstration
   const mockTestResult: VisualRegressionTestResult = {
@@ -221,8 +220,8 @@ export default function VisualRegressionDemoPage() {
           <CardHeader>
             <CardTitle className="text-2xl">Visual Regression Testing Tool Demo</CardTitle>
             <p className="text-muted-foreground mt-2">
-              Comprehensive visual regression testing with side-by-side comparison, diff highlighting,
-              and approval workflow.
+              Comprehensive visual regression testing with side-by-side comparison, diff
+              highlighting, and approval workflow.
             </p>
           </CardHeader>
         </Card>
@@ -240,11 +239,7 @@ export default function VisualRegressionDemoPage() {
         ) : (
           /* Detail View */
           <div className="space-y-4">
-            <Button
-              variant="outline"
-              onClick={() => setSelectedComparison(null)}
-              className="mb-4"
-            >
+            <Button variant="outline" onClick={() => setSelectedComparison(null)} className="mb-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Gallery
             </Button>
@@ -267,7 +262,10 @@ export default function VisualRegressionDemoPage() {
           <CardContent>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>✅ Side-by-side image comparison with draggable slider</li>
-              <li>✅ Diff overlay mode with color-coded changes (red=removed, green=added, yellow=changed)</li>
+              <li>
+                ✅ Diff overlay mode with color-coded changes (red=removed, green=added,
+                yellow=changed)
+              </li>
               <li>✅ Pixel difference percentage calculation</li>
               <li>✅ Approve/reject workflow with comments</li>
               <li>✅ Update baseline functionality</li>

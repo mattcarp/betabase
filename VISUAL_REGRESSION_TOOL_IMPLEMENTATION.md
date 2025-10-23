@@ -187,18 +187,18 @@ Updated `TestResultsViewer.tsx` to include:
 
 ### Components Breakdown
 
-| Component                     | Lines | Purpose                      |
-| ----------------------------- | ----- | ---------------------------- |
-| ImageComparisonSlider         | ~280  | Side-by-side comparison      |
-| VisualRegressionComparison    | ~380  | Complete comparison UI       |
-| VisualRegressionGallery       | ~420  | Gallery view                 |
-| visualRegressionService       | ~280  | API client                   |
-| API Routes (total)            | ~400  | Backend endpoints            |
-| Demo Page                     | ~320  | Demonstration                |
-| Documentation                 | ~600  | User guide                   |
-| Type Definitions              | ~90   | TypeScript interfaces        |
-| TestResultsViewer Integration | ~50   | Dashboard integration        |
-| **TOTAL**                     | 2,820 | Complete implementation      |
+| Component                     | Lines | Purpose                 |
+| ----------------------------- | ----- | ----------------------- |
+| ImageComparisonSlider         | ~280  | Side-by-side comparison |
+| VisualRegressionComparison    | ~380  | Complete comparison UI  |
+| VisualRegressionGallery       | ~420  | Gallery view            |
+| visualRegressionService       | ~280  | API client              |
+| API Routes (total)            | ~400  | Backend endpoints       |
+| Demo Page                     | ~320  | Demonstration           |
+| Documentation                 | ~600  | User guide              |
+| Type Definitions              | ~90   | TypeScript interfaces   |
+| TestResultsViewer Integration | ~50   | Dashboard integration   |
+| **TOTAL**                     | 2,820 | Complete implementation |
 
 ## 🚀 Usage
 

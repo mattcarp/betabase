@@ -6,13 +6,7 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import {
   CheckCircle,
   XCircle,
@@ -68,8 +62,7 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
   const filteredComparisons = testResult.comparisons.filter((comparison) => {
     const matchesStatus = filterStatus === "all" || comparison.status === filterStatus;
     const matchesSearch =
-      !searchQuery ||
-      comparison.testName.toLowerCase().includes(searchQuery.toLowerCase());
+      !searchQuery || comparison.testName.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesStatus && matchesSearch;
   });
 
@@ -188,10 +181,7 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
       return (
         <Card
           key={comparison.id}
-          className={cn(
-            "cursor-pointer transition-all hover:shadow-md",
-            statusDisplay.borderColor
-          )}
+          className={cn("cursor-pointer transition-all hover:shadow-md", statusDisplay.borderColor)}
           onClick={() => onSelectComparison(comparison)}
         >
           <CardContent className="p-4">
@@ -254,12 +244,7 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">{testResult.testName}</CardTitle>
               <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleRefresh}
-                  disabled={isRefreshing}
-                >
+                <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefreshing}>
                   <RefreshCw className={cn("h-4 w-4", isRefreshing && "animate-spin")} />
                 </Button>
                 {onExport && (
