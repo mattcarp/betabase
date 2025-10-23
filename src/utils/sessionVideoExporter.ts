@@ -85,7 +85,9 @@ export class SessionVideoExporter {
       return finalBlob;
     } catch (error) {
       console.error("Video export failed:", error);
-      throw new Error(`Failed to export video: ${error instanceof Error ? error.message : "Unknown error"}`);
+      throw new Error(
+        `Failed to export video: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     } finally {
       this.cleanup();
     }
@@ -140,9 +142,7 @@ export class SessionVideoExporter {
   /**
    * Simulate recording process (in real implementation, this would capture actual playback)
    */
-  private async simulateRecording(
-    onProgress?: (progress: ExportProgress) => void
-  ): Promise<void> {
+  private async simulateRecording(onProgress?: (progress: ExportProgress) => void): Promise<void> {
     // In a real implementation, this would:
     // 1. Play back each step of the session
     // 2. Render each frame to the canvas
@@ -171,11 +171,7 @@ export class SessionVideoExporter {
         this.context.fillStyle = "white";
         this.context.font = "24px sans-serif";
         this.context.textAlign = "center";
-        this.context.fillText(
-          `Frame ${i}/${steps}`,
-          this.canvas.width / 2,
-          this.canvas.height / 2
-        );
+        this.context.fillText(`Frame ${i}/${steps}`, this.canvas.width / 2, this.canvas.height / 2);
       }
     }
   }
@@ -204,10 +200,7 @@ export class SessionVideoExporter {
   /**
    * Process final encoding (format conversion if needed)
    */
-  private async processEncoding(
-    blob: Blob,
-    options: ExportOptions
-  ): Promise<Blob> {
+  private async processEncoding(blob: Blob, options: ExportOptions): Promise<Blob> {
     // In a real implementation, this would handle:
     // - Format conversion (WebM to MP4)
     // - Quality adjustments
@@ -278,10 +271,7 @@ export class SessionVideoExporter {
   /**
    * Get estimated file size
    */
-  static estimateFileSize(
-    durationSeconds: number,
-    quality: ExportOptions["quality"]
-  ): string {
+  static estimateFileSize(durationSeconds: number, quality: ExportOptions["quality"]): string {
     const bitrates = {
       low: 1_000_000,
       medium: 2_500_000,

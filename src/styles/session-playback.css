@@ -198,12 +198,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--mac-primary-blue-400),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, var(--mac-primary-blue-400), transparent);
   animation: export-progress 1.5s ease-in-out infinite;
 }
 
@@ -318,7 +313,9 @@
   height: 12px;
   border-radius: 50%;
   background: #ff5f57;
-  box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #28ca42;
+  box-shadow:
+    20px 0 0 #ffbd2e,
+    40px 0 0 #28ca42;
 }
 
 .session-playback-url-bar {
