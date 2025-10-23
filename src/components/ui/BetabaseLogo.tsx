@@ -36,13 +36,12 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
   // Image is 400x266 = 1.5037:1 aspect ratio
   return (
     <div className={`betabase-logo-wrapper ${sizeClass} ${className}`}>
-      <img
+      <Image
         src="/betabase-logo.webp"
         alt="Betabase"
-        width="400"
-        height="266"
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
+        width={400}
+        height={266}
+        priority={priority}
         className="w-full h-full object-contain"
       />
     </div>
