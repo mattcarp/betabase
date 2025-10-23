@@ -5,6 +5,18 @@
 
 import { createClient } from "@supabase/supabase-js";
 
+// Re-export functions from root lib/supabase for compatibility
+export {
+  upsertWikiDocument,
+  upsertJiraTicket,
+  upsertJiraTicketEmbedding,
+  upsertCrawlerDocument,
+  storeFirecrawlData,
+  getFirecrawlAnalysis,
+  searchFirecrawlData,
+  validateSonyMusicContent,
+} from "../../lib/supabase";
+
 // Get environment variables with validation
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
