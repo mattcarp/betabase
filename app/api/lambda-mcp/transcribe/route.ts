@@ -6,14 +6,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { lambdaMcpTranscriptionPipeline } from "@/services/lambdaMcpTranscriptionPipeline";
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     console.log("🎤 Lambda MCP Transcription API: Received request");
 
     // Parse multipart form data
     const formData = await request.formData();
     const audioFile = formData.get("audio") as File | null;
-    const options = formData.get("options") ? JSON.parse(formData.get("options") as string) : {};
+    const _options = formData.get("options") ? JSON.parse(formData.get("options") as string) : {};
 
     if (!audioFile) {
       return NextResponse.json({ error: "No audio file provided" }, { status: 400 });
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Health check endpoint
     const healthCheck = await lambdaMcpTranscriptionPipeline.healthCheck();

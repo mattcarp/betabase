@@ -125,7 +125,7 @@ export async function GET(request: NextRequest) {
       ? (Date.now() - new Date(latestVectorUpdate.created_at).getTime()) / (1000 * 60 * 60)
       : 0;
 
-    const fileStaleness = latestFileUpdate
+    const _fileStaleness = latestFileUpdate
       ? (Date.now() - new Date(latestFileUpdate.created_at).getTime()) / (1000 * 60 * 60)
       : 0;
 
