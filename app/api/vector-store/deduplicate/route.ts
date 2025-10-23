@@ -6,7 +6,7 @@ const openai = new OpenAI({
 });
 
 // Get Assistant ID from environment variable
-const _ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID || "asst_VvOHL1c4S6YapYKun4mY29fM";
+// const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID || "asst_VvOHL1c4S6YapYKun4mY29fM";
 
 interface DuplicateGroup {
   files: Array<{

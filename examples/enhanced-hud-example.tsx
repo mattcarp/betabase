@@ -158,7 +158,7 @@ export default function EnhancedHUDExample() {
  */
 export function useWebAudioLevel() {
   const [audioLevel, setAudioLevel] = useState(0);
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [_audioContext, setAudioContext] = useState<AudioContext | null>(null);
 
   useEffect(() => {
     // Create audio context
