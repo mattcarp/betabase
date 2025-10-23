@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 
 // Extend global type to include our custom property
 declare global {
+  // eslint-disable-next-line no-var
   var assistantInitialized: boolean | undefined;
 }
 
