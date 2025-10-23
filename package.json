@@ -18,6 +18,8 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "lint:check": "npm run format:check && npm run lint",
+    "lint:quick": "./scripts/quick-lint-check.sh",
+    "lint:file": "./scripts/lint-file.sh",
     "lint:fix-all": "npm run lint:fix && npm run format",
     "test": "jest",
     "test:watch": "jest --watch",
