@@ -589,7 +589,7 @@ export class TopicExtractionService extends EventEmitter {
 
       // Create new cluster if no match found
       if (!foundCluster) {
-        const clusterId = `cluster_${clusters.size}`;
+        const _clusterId = `cluster_${clusters.size}`;
         clusters.set(clusterId, {
           id: clusterId,
           name: this.generateClusterName([topic]),
