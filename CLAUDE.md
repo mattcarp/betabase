@@ -137,18 +137,21 @@ git add . && git commit -m "your message"
 ### What Gets Caught
 
 **ESLint errors (block commit):**
+
 - `no-var` - Using `var` instead of `const`/`let`
 - `react-hooks/rules-of-hooks` - Invalid React Hook usage
 - `@next/next/no-img-element` - Using `<img>` instead of Next.js `<Image>`
 - `@next/next/no-html-link-for-pages` - Using `<a>` instead of Next.js `<Link>`
 
 **ESLint warnings (block commit with --max-warnings=0):**
+
 - `@typescript-eslint/no-unused-vars` - Unused variables/imports
 - `react-hooks/exhaustive-deps` - Missing dependencies in hooks
 - `prefer-const` - Variable that should be `const`
 - `no-debugger` - Debugger statements
 
 **Prettier formatting:**
+
 - Semicolons, quotes, line length, indentation, etc.
 - All formatting is auto-fixed
 
