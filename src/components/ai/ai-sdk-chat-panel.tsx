@@ -8,12 +8,10 @@ import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { Skeleton } from "../ui/skeleton";
-import { getAPIConfig, featureFlags } from "../../config/featureFlags";
 import { useElevenLabsSTT } from "../../hooks/useElevenLabsSTT";
 import { useElevenLabsVoice } from "../../hooks/useElevenLabsVoice";
 import { VoiceSelector } from "../ui/VoiceSelector";
 import {
-  Bot,
   Sparkles,
   Trash2,
   Download,
@@ -29,14 +27,12 @@ import {
   MoreHorizontal,
   LoaderIcon,
   ClockIcon,
-  XCircleIcon,
   X,
   CheckCircle,
   Mic,
   MicOff,
   Volume2,
   VolumeX,
-  AudioWaveform,
 } from "lucide-react";
 import { Alert, AlertDescription } from "../ui/alert";
 import { motion, AnimatePresence } from "framer-motion";
@@ -73,7 +69,6 @@ import {
   ConversationScrollButton,
 } from "../ai-elements/conversation";
 import { Image as AIImage } from "../ai-elements/image";
-import { InlineCitation } from "../ai-elements/inline-citation";
 import { Loader } from "../ai-elements/loader";
 import { Message, MessageContent, MessageAvatar } from "../ai-elements/message";
 import {
@@ -92,7 +87,6 @@ import { Reasoning, ReasoningTrigger, ReasoningContent } from "../ai-elements/re
 import { Response } from "../ai-elements/response";
 import { AOMAResponse } from "./AOMAResponse";
 import { Sources, SourcesTrigger, SourcesContent, Source } from "../ai-elements/source";
-import { Suggestions, Suggestion } from "../ai-elements/suggestion";
 import { Task, TaskTrigger, TaskContent, TaskItem } from "../ai-elements/task";
 import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from "../ai-elements/tool";
 import {

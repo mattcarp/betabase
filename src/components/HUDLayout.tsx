@@ -17,7 +17,7 @@ interface HUDLayoutProps {
 export function HUDLayout({
   isRecording,
   transcription,
-  waveform,
+  waveform: _waveform,
   onToggleSettings,
   className = "",
 }: HUDLayoutProps) {
