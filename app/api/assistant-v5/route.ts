@@ -36,6 +36,12 @@ async function ensureAssistantHasFileSearch() {
   }
 }
 
+// Augment global namespace for initialization tracking
+declare global {
+  // eslint-disable-next-line no-var
+  var assistantInitialized: boolean | undefined;
+}
+
 // Initialize on first load
 if (typeof global !== "undefined" && !global.assistantInitialized && ASSISTANT_ID) {
   ensureAssistantHasFileSearch();

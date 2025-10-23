@@ -219,6 +219,7 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
               </div>
 
               <div className="bg-muted rounded-lg p-4 mb-4 max-h-[60vh] overflow-auto">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={capturedImage} alt="Screenshot preview" className="w-full h-auto" />
               </div>
 

@@ -66,7 +66,7 @@ function updatePerformanceMetrics() {
 }
 
 // Add request to metrics
-export function trackRequest(
+function trackRequest(
   path: string,
   method: string,
   duration: number,
@@ -91,7 +91,7 @@ export function trackRequest(
 }
 
 // Add error to metrics
-export function trackError(message: string, stack?: string, path?: string) {
+function trackError(message: string, stack?: string, path?: string) {
   metrics.errors.push({
     timestamp: Date.now(),
     message,
