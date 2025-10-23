@@ -32,9 +32,7 @@ export const SiamLogo: React.FC<SiamLogoProps> = ({
 
   const sizeClass = variant === "full" ? fullSizeClasses[size] : sizeClasses[size];
 
-  const dimensions = variant === "full"
-    ? { width: 480, height: 120 }
-    : { width: 120, height: 120 };
+  const dimensions = variant === "full" ? { width: 480, height: 120 } : { width: 120, height: 120 };
 
   return (
     <Image
