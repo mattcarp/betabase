@@ -8,7 +8,7 @@ const openai = new OpenAI({
 // Get Assistant ID from environment variable
 const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID || "asst_VvOHL1c4S6YapYKun4mY29fM";
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Get the assistant's vector store
     const assistant = await openai.beta.assistants.retrieve(ASSISTANT_ID);

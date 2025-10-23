@@ -200,7 +200,7 @@ export class SessionVideoExporter {
   /**
    * Process final encoding (format conversion if needed)
    */
-  private async processEncoding(blob: Blob, options: ExportOptions): Promise<Blob> {
+  private async processEncoding(blob: Blob, _options: ExportOptions): Promise<Blob> {
     // In a real implementation, this would handle:
     // - Format conversion (WebM to MP4)
     // - Quality adjustments
@@ -214,7 +214,7 @@ export class SessionVideoExporter {
   /**
    * Get MIME type based on format and quality
    */
-  private getMimeType(format: string, quality: string): string {
+  private getMimeType(format: string, _quality: string): string {
     if (format === "webm") {
       return "video/webm;codecs=vp9";
     } else if (format === "mp4") {
