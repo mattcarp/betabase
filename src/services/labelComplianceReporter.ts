@@ -197,7 +197,7 @@ export class LabelComplianceReporter {
     }
 
     // Check if this appears to be an edited version
-    const editedIndicators = [
+    const _editedIndicators = [
       "edited",
       "clean version",
       "radio edit",

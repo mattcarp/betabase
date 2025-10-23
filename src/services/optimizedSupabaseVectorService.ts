@@ -5,7 +5,7 @@
  */
 
 import { supabase, VectorSearchResult, handleSupabaseError } from "@/lib/supabase";
-import OpenAI from "openai";
+// import OpenAI from "openai";
 import SupabaseVectorService from "./supabaseVectorService";
 
 export class OptimizedSupabaseVectorService extends SupabaseVectorService {
