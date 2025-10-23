@@ -104,9 +104,7 @@ export class EmailParser {
 
     // Attachment context (names only, not content)
     if (email.attachments && email.attachments.length > 0) {
-      const attachmentNames = email.attachments
-        .map((a) => a.filename)
-        .join(", ");
+      const attachmentNames = email.attachments.map((a) => a.filename).join(", ");
       parts.push(`\nAttachments: ${attachmentNames}`);
     }
 
