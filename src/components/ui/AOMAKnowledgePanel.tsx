@@ -149,12 +149,12 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
               "Updates",
             ];
             const icons = [
-              <RefreshCw className="h-3 w-3" />,
-              <Zap className="h-3 w-3" />,
-              <AlertCircle className="h-3 w-3" />,
-              <BookOpen className="h-3 w-3" />,
-              <TrendingUp className="h-3 w-3" />,
-              <Sparkles className="h-3 w-3" />,
+              <RefreshCw key="icon-0" className="h-3 w-3" />,
+              <Zap key="icon-1" className="h-3 w-3" />,
+              <AlertCircle key="icon-2" className="h-3 w-3" />,
+              <BookOpen key="icon-3" className="h-3 w-3" />,
+              <TrendingUp key="icon-4" className="h-3 w-3" />,
+              <Sparkles key="icon-5" className="h-3 w-3" />,
             ];
 
             lines.forEach((line: string, index: number) => {
