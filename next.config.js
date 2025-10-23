@@ -2,10 +2,17 @@
 const path = require("path");
 const isProd = process.env.NODE_ENV === "production";
 
-// Bundle analyzer configuration
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
-});
+// Bundle analyzer configuration - only require if ANALYZE is enabled
+let withBundleAnalyzer = (config) => config;
+try {
+  if (process.env.ANALYZE === "true") {
+    withBundleAnalyzer = require("@next/bundle-analyzer")({
+      enabled: true,
+    });
+  }
+} catch (e) {
+  console.warn("Bundle analyzer not available, skipping...");
+}
 
 const nextConfig = {
   // output: 'standalone', // Only needed for Docker deployments
