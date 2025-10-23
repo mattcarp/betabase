@@ -352,6 +352,7 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.thumbnail && (
                   <div>
                     <h4 className="text-sm font-medium text-mac-text-secondary mb-2">Screenshot</h4>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={selectedInteraction.thumbnail}
                       alt="Interaction screenshot"

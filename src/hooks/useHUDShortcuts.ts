@@ -308,19 +308,16 @@ export const useHUDShortcuts = (config: HUDShortcutsConfig) => {
   );
 
   // Individual Panel Shortcuts (1-9)
-  for (let i = 1; i <= 9; i++) {
-    useHotkeys(
-      `ctrl+${i}`,
-      (e) => {
-        e.preventDefault();
-        onTogglePanel?.(`panel-${i}`);
-      },
-      {
-        enableOnFormTags: false,
-        description: `Toggle panel ${i}`,
-      }
-    );
-  }
+  // Using separate calls to comply with React Hooks rules
+  useHotkeys("ctrl+1", (e) => { e.preventDefault(); onTogglePanel?.("panel-1"); }, { enableOnFormTags: false });
+  useHotkeys("ctrl+2", (e) => { e.preventDefault(); onTogglePanel?.("panel-2"); }, { enableOnFormTags: false });
+  useHotkeys("ctrl+3", (e) => { e.preventDefault(); onTogglePanel?.("panel-3"); }, { enableOnFormTags: false });
+  useHotkeys("ctrl+4", (e) => { e.preventDefault(); onTogglePanel?.("panel-4"); }, { enableOnFormTags: false });
+  useHotkeys("ctrl+5", (e) => { e.preventDefault(); onTogglePanel?.("panel-5"); }, { enableOnFormTags: false });
+  useHotkeys("ctrl+6", (e) => { e.preventDefault(); onTogglePanel?.("panel-6"); }, { enableOnFormTags: false });
+  useHotkeys("ctrl+7", (e) => { e.preventDefault(); onTogglePanel?.("panel-7"); }, { enableOnFormTags: false });
+  useHotkeys("ctrl+8", (e) => { e.preventDefault(); onTogglePanel?.("panel-8"); }, { enableOnFormTags: false });
+  useHotkeys("ctrl+9", (e) => { e.preventDefault(); onTogglePanel?.("panel-9"); }, { enableOnFormTags: false });
 
   // Return shortcuts list for display
   const shortcuts = [
