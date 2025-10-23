@@ -127,10 +127,20 @@ git add . && git commit -m "your message"
 **Recommended Claude workflow:**
 
 1. ✍️ Write/edit code using Edit, Write, or NotebookEdit tools
-2. 🔍 Run `npm run lint:file <file-path>` on files you just edited
-3. 🔧 If errors found, run `npm run lint:fix-all` or manually fix
-4. ✅ Verify with `npm run lint:quick`
-5. 💾 Commit the code
+2. 🔍 **CRITICAL**: Run `npx prettier --check .` to catch formatting issues
+3. 🔧 If Prettier issues found, run `npx prettier --write .` to fix
+4. ✅ Verify formatting with `npx prettier --check .` again
+5. 💾 Commit the code with `git add . && git commit -m "message"`
+
+**NEVER skip step 2-4!** Prettier failures block PRs and waste time.
+
+**Alternative (faster for single files):**
+
+```bash
+# After editing a specific file
+npx prettier --write src/components/NewComponent.tsx
+git add . && git commit -m "your message"
+```
 
 **This prevents hours of PR failures later!**
 
