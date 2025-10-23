@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
@@ -94,14 +94,8 @@ export const AITestGenerationModal: React.FC<AITestGenerationModalProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const editorRef = useRef<any>(null);
 
-  // Start generation when modal opens
-  useEffect(() => {
-    if (isOpen) {
-      generateTest();
-    }
-  }, [isOpen]);
-
-  const generateTest = async () => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const generateTest = useCallback(async () => {
     try {
       // Phase 1: Analyzing
       setPhase({
@@ -178,7 +172,15 @@ export const AITestGenerationModal: React.FC<AITestGenerationModalProps> = ({
         });
       }, 2000);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [testResult, existingTest]);
+
+  // Start generation when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      generateTest();
+    }
+  }, [isOpen, generateTest]);
 
   const getMockGeneratedCode = () => {
     return `import { test, expect } from '@playwright/test';
