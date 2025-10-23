@@ -1,6 +1,11 @@
 import OpenAI from "openai";
 import { NextRequest } from "next/server";
 
+// Extend global type to include our custom property
+declare global {
+  var assistantInitialized: boolean | undefined;
+}
+
 // Initialize OpenAI client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
@@ -269,7 +274,7 @@ export async function PUT(req: NextRequest) {
 
     // Get or create vector store for the assistant
     const assistant = await openai.beta.assistants.retrieve(ASSISTANT_ID);
-    let vectorStoreId = assistant.tool_resources?.file_search?.vector_store_ids?.[0];
+    const vectorStoreId = assistant.tool_resources?.file_search?.vector_store_ids?.[0];
 
     // In OpenAI SDK v5, vector stores are managed differently
     // The file is already uploaded and can be used with the assistant

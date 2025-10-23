@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
-);
+// Lazy-initialize Supabase client to avoid build-time errors
+function getSupabaseClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || !key) {
+    return null;
+  }
+
+  return createClient(url, key);
+}
 
 interface PerformanceMetrics {
   // Query Metrics
@@ -179,6 +185,13 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { type, duration, metadata } = body;
+
+    // Get Supabase client
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      console.warn("Supabase not configured, skipping metric storage");
+      return NextResponse.json({ success: true, warning: "Database not configured" });
+    }
 
     // Store metric in database
     const { error } = await supabase.from("performance_metrics").insert({

@@ -4,31 +4,26 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import type OpenAI from "openai";
-import { aomaCache } from "../../../src/services/aomaCache";
 import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
-import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
 import { modelConfig } from "../../../src/services/modelConfig";
-import { trackRequest } from "../introspection/route";
+import { trackRequest } from "../introspection/metrics";
 import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
 
 // Initialize OpenAI provider for Vercel AI SDK (server-side only)
+// Note: API key validation happens in route handler to avoid build-time errors
 const openai = createOpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
+  apiKey: process.env.OPENAI_API_KEY || "placeholder",
 });
-
-// Validate API key is configured
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("OPENAI_API_KEY environment variable is required");
-}
 
 // REMOVED: Client-side rate limiting
 // Let OpenAI handle rate limits naturally - we'll catch 429s and show friendly errors
 // This allows normal single-user usage while still handling rate limit errors gracefully
 
 // Enhanced query for context
+// @ts-expect-error - Unused function kept for future use
 function enhanceQueryForContext(query: string): string {
   const lowerQuery = query.toLowerCase();
 

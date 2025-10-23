@@ -24,6 +24,8 @@ interface SupportResponse {
   suggestedActions?: string[];
 }
 
+// Unused interface - keeping for future use
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface KnowledgeSource {
   type: "test_failure" | "documentation" | "firecrawl" | "aoma_knowledge";
   content: string;
