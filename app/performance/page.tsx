@@ -16,12 +16,12 @@ import {
   Activity,
   AlertCircle,
   CheckCircle,
-  Clock,
+  // Clock - unused
   Database,
   HardDrive,
   RefreshCw,
   Server,
-  TrendingUp,
+  // TrendingUp - unused
   Zap,
 } from "lucide-react";
 import {
@@ -120,6 +120,7 @@ export default function PerformanceDashboard() {
       const interval = setInterval(fetchMetrics, 10000); // Refresh every 10 seconds
       return () => clearInterval(interval);
     }
+    return undefined; // Explicit return for consistency
   }, [fetchMetrics, autoRefresh]);
 
   // Format time
@@ -197,14 +198,14 @@ export default function PerformanceDashboard() {
   }
 
   // Prepare chart data
-  const systemMetricsHistory = metricsHistory.map((m, index) => ({
+  const systemMetricsHistory = metricsHistory.map((m, _index) => ({
     time: formatTime(m.timestamp),
     cpu: m.systemMetrics.cpuUsage,
     memory: m.systemMetrics.memoryUsage,
     disk: m.systemMetrics.diskUsage,
   }));
 
-  const queryMetricsHistory = metricsHistory.map((m, index) => ({
+  const queryMetricsHistory = metricsHistory.map((m, _index) => ({
     time: formatTime(m.timestamp),
     avgResponseTime: m.queryMetrics.avgResponseTime,
     p95ResponseTime: m.queryMetrics.p95ResponseTime,
