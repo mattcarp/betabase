@@ -147,24 +147,19 @@ export class MicrosoftEmailParser {
   /**
    * Build searchable content optimized for Teams/Outlook emails
    */
-  private static buildMicrosoftSearchableContent(
-    email: MicrosoftEmailData
-  ): string {
+  private static buildMicrosoftSearchableContent(email: MicrosoftEmailData): string {
     const parts: string[] = [];
 
     // Subject with importance indicator
     if (email.subject) {
-      const importancePrefix =
-        email.importance === "high" ? "[IMPORTANT] " : "";
+      const importancePrefix = email.importance === "high" ? "[IMPORTANT] " : "";
       parts.push(`Subject: ${importancePrefix}${email.subject}`);
     }
 
     // Teams context
     if (email.isTeamsMessage) {
       if (email.teamName && email.teamsChannelName) {
-        parts.push(
-          `Teams: ${email.teamName} > ${email.teamsChannelName}`
-        );
+        parts.push(`Teams: ${email.teamName} > ${email.teamsChannelName}`);
       }
     }
 
@@ -207,9 +202,7 @@ export class MicrosoftEmailParser {
 
     // Attachments
     if (email.attachments && email.attachments.length > 0) {
-      const attachmentNames = email.attachments
-        .map((a) => a.filename)
-        .join(", ");
+      const attachmentNames = email.attachments.map((a) => a.filename).join(", ");
       parts.push(`\nAttachments: ${attachmentNames}`);
     }
 
@@ -220,9 +213,7 @@ export class MicrosoftEmailParser {
    * Extract clean text from Microsoft email body
    * Handles Outlook's specific HTML patterns
    */
-  private static extractMicrosoftBodyText(
-    email: MicrosoftEmailData
-  ): string {
+  private static extractMicrosoftBodyText(email: MicrosoftEmailData): string {
     if (email.htmlBody) {
       return this.cleanMicrosoftHtml(email.htmlBody);
     }
@@ -246,16 +237,10 @@ export class MicrosoftEmailParser {
     text = text.replace(/<!--\[if.*?\]>.*?<!\[endif\]-->/gi, "");
 
     // Remove Teams-specific elements
-    text = text.replace(
-      /<div[^>]*class="[^"]*teams-message-wrapper[^"]*"[^>]*>.*?<\/div>/gi,
-      ""
-    );
+    text = text.replace(/<div[^>]*class="[^"]*teams-message-wrapper[^"]*"[^>]*>.*?<\/div>/gi, "");
 
     // Remove Microsoft tracking pixels
-    text = text.replace(
-      /<img[^>]*src="[^"]*safelink[^"]*"[^>]*>/gi,
-      ""
-    );
+    text = text.replace(/<img[^>]*src="[^"]*safelink[^"]*"[^>]*>/gi, "");
 
     // Remove Microsoft Safe Links wrapping
     text = text.replace(
@@ -359,8 +344,7 @@ export class MicrosoftEmailParser {
       if (email.meetingDetails) {
         const meetingTime = new Date(email.meetingDetails.startTime);
         const now = new Date();
-        const hoursUntil =
-          (meetingTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+        const hoursUntil = (meetingTime.getTime() - now.getTime()) / (1000 * 60 * 60);
         if (hoursUntil < 24) score += 2;
         if (hoursUntil < 2) score += 2;
       }
@@ -396,14 +380,8 @@ export class MicrosoftEmailParser {
    * Standard helper methods
    */
   private static stripHtml(html: string): string {
-    let text = html.replace(
-      /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-      ""
-    );
-    text = text.replace(
-      /<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi,
-      ""
-    );
+    let text = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+    text = text.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "");
     text = text.replace(/<br\s*\/?>/gi, "\n");
     text = text.replace(/<\/p>/gi, "\n\n");
     text = text.replace(/<\/div>/gi, "\n");
@@ -421,9 +399,7 @@ export class MicrosoftEmailParser {
     return text.trim();
   }
 
-  private static extractThreadParticipants(
-    email: MicrosoftEmailData
-  ): string[] {
+  private static extractThreadParticipants(email: MicrosoftEmailData): string[] {
     const participants = new Set<string>();
     participants.add(email.from);
     email.to.forEach((addr) => participants.add(addr));
