@@ -31,11 +31,13 @@ async function runIntegration() {
     console.log("\n📋 Step 2: Checking existing MCP servers...");
     const serverList = await elevenLabsMCPService.listMcpServers();
 
-    if (serverList.success && serverList.servers) {
+    if (serverList.success && serverList.servers && Array.isArray(serverList.servers)) {
       console.log(`   Found ${serverList.servers.length} existing MCP server(s)`);
       serverList.servers.forEach((server: any) => {
         console.log(`   - ${server.name} (ID: ${server.id})`);
       });
+    } else {
+      console.log(`   Found 0 existing MCP servers`);
     }
 
     // Step 3: Get agent details
