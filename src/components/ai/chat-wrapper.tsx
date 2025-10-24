@@ -6,7 +6,7 @@ import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
-import { Avatar, AvatarFallback, /* AvatarImage */ } from "../ui/avatar";
+import { Avatar, AvatarFallback /* AvatarImage */ } from "../ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Send, Loader2, User, Bot, AlertCircle, Sparkles, Zap, Clock } from "lucide-react";
 import { Badge } from "../ui/badge";
@@ -78,9 +78,7 @@ export function ChatWrapper({
               <Sparkles className="h-5 w-5 text-primary animate-pulse" />
               <div className="absolute inset-0 bg-primary/20 blur-xl" />
             </div>
-            <h3 className="mac-title font-semibold text-lg">
-              AI Assistant
-            </h3>
+            <h3 className="mac-title font-semibold text-lg">AI Assistant</h3>
             <Badge variant="secondary" className="text-xs">
               Powered by Vercel AI SDK
             </Badge>

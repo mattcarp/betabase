@@ -77,7 +77,9 @@ async function askQuestion(page: Page, question: string): Promise<string> {
 
   await page.waitForTimeout(3000);
 
-  const assistantMessages = await page.locator('[data-role="assistant"], .assistant-message, div[role="log"] > div').all();
+  const assistantMessages = await page
+    .locator('[data-role="assistant"], .assistant-message, div[role="log"] > div')
+    .all();
   const lastMessage = assistantMessages[assistantMessages.length - 1];
   const responseText = (await lastMessage.textContent()) || "";
 
@@ -183,7 +185,9 @@ test.describe("🎯 Silly Questions Demo - GPT-5 Anti-Hallucination", () => {
 
   test("⭐ THE PRESENTATION QUESTION: Teleportation (again!) 🚀", async () => {
     console.log("\n🎯 THE BIG ONE: Does AOMA have a teleportation feature?");
-    console.log("📋 Expected: 'Based on the AOMA stuff I know about, there is no teleportation feature.'");
+    console.log(
+      "📋 Expected: 'Based on the AOMA stuff I know about, there is no teleportation feature.'"
+    );
     console.log();
 
     const response = await askQuestion(page, "Does AOMA have a teleportation feature?");

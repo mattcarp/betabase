@@ -464,9 +464,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
   return (
     <div className={`space-y-3 ${className}`} data-test-id="live-insights-root">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="mac-title text-lg font-semibold text-motiff-green">
-          Live Insights
-        </h3>
+        <h3 className="mac-title text-lg font-semibold text-motiff-green">Live Insights</h3>
         <div className="flex items-center gap-2">
           {isLoading && <span className="text-xs text-white/60 animate-pulse">Loading...</span>}
         </div>
@@ -511,9 +509,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-2">
-                        <h4
-                          className="mac-title font-medium text-white text-sm truncate"
-                        >
+                        <h4 className="mac-title font-medium text-white text-sm truncate">
                           {insight.title}
                         </h4>
                         {insight.trend && getTrendIcon(insight.trend)}

@@ -15,12 +15,14 @@ Successfully integrated the ElevenLabs conversational AI agent with the AOMA Mes
 ## What Was Completed
 
 ### 1. Configuration Setup ✅
+
 - Added ElevenLabs API keys to `.env.local`:
   - `ELEVENLABS_API_KEY`: sk_b495cffb8979229634b620c1bddbf5583f5c9fd69e5785fb
   - `ELEVENLABS_AGENT_ID`: agent_01jz1ar6k2e8tvst14g6cbgc7m
   - `MCP_LAMBDA_URL`: https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws
 
 ### 2. MCP Server Registration ✅
+
 - **MCP Server ID**: `uR5cKaU7GOZQyS04RVXP`
 - **Server Name**: "AOMA Mesh MCP Server"
 - **Transport**: STREAMABLE_HTTP (Lambda-compatible)
@@ -28,11 +30,13 @@ Successfully integrated the ElevenLabs conversational AI agent with the AOMA Mes
 - **Tool Approval Mode**: fine_grained
 
 ### 3. Agent Association ✅
+
 - Successfully associated MCP server with agent `agent_01jz1ar6k2e8tvst14g6cbgc7m`
 - Agent can now invoke MCP tools during conversations
 - Verified integration via ElevenLabs API
 
 ### 4. All Subtasks Complete ✅
+
 - 48.1: Configure ElevenLabs Agent with Lambda MCP Server
 - 48.2: Configure Lambda-Specific Communication Settings
 - 48.3: Set Up Tool Access Permissions and Authorization Controls
@@ -90,12 +94,14 @@ AOMA Knowledge Base
 ## Testing the Integration
 
 ### Via ElevenLabs Dashboard
+
 1. Go to https://elevenlabs.io/app/conversational-ai
 2. Select agent `agent_01jz1ar6k2e8tvst14g6cbgc7m`
 3. Check "MCP Servers" section
 4. Should see "AOMA Mesh MCP Server" listed
 
 ### Via API
+
 ```bash
 # Check agent configuration
 curl -s https://api.elevenlabs.io/v1/convai/agents/agent_01jz1ar6k2e8tvst14g6cbgc7m \
@@ -106,7 +112,9 @@ curl -s https://api.elevenlabs.io/v1/convai/agents/agent_01jz1ar6k2e8tvst14g6cbg
 ```
 
 ### Via Voice Conversation
+
 Start a conversation with the agent and ask questions about:
+
 - AOMA knowledge base content
 - Documents in the system
 - Asset and Offering Management Application features

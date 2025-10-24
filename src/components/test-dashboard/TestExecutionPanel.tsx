@@ -192,49 +192,46 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
     }
 
     const interval = setInterval(() => {
-        setTestSuites((prev) => {
-          const updated = [...prev];
-          const pendingSuite = updated.find((s) => s.status === "pending");
+      setTestSuites((prev) => {
+        const updated = [...prev];
+        const pendingSuite = updated.find((s) => s.status === "pending");
 
-          if (pendingSuite) {
-            pendingSuite.status = "running";
-            pendingSuite.progress = 0;
-          } else {
-            const runningSuite = updated.find((s) => s.status === "running");
-            if (runningSuite) {
-              if (runningSuite.progress === undefined) runningSuite.progress = 0;
-              runningSuite.progress += 25;
+        if (pendingSuite) {
+          pendingSuite.status = "running";
+          pendingSuite.progress = 0;
+        } else {
+          const runningSuite = updated.find((s) => s.status === "running");
+          if (runningSuite) {
+            if (runningSuite.progress === undefined) runningSuite.progress = 0;
+            runningSuite.progress += 25;
 
-              if (runningSuite.progress >= 100) {
-                runningSuite.status = Math.random() > 0.1 ? "passed" : "failed";
-                runningSuite.duration = Math.floor(Math.random() * 5000) + 1000;
-              }
-
-              // Update individual tests
-              runningSuite.tests.forEach((test) => {
-                if (test.status === "pending" && Math.random() > 0.5) {
-                  test.status = "running";
-                } else if (test.status === "running" && Math.random() > 0.3) {
-                  test.status = Math.random() > 0.15 ? "passed" : "failed";
-                  test.duration = Math.floor(Math.random() * 2000) + 100;
-                }
-              });
+            if (runningSuite.progress >= 100) {
+              runningSuite.status = Math.random() > 0.1 ? "passed" : "failed";
+              runningSuite.duration = Math.floor(Math.random() * 5000) + 1000;
             }
+
+            // Update individual tests
+            runningSuite.tests.forEach((test) => {
+              if (test.status === "pending" && Math.random() > 0.5) {
+                test.status = "running";
+              } else if (test.status === "running" && Math.random() > 0.3) {
+                test.status = Math.random() > 0.15 ? "passed" : "failed";
+                test.duration = Math.floor(Math.random() * 2000) + 100;
+              }
+            });
           }
+        }
 
-          return updated;
-        });
+        return updated;
+      });
 
-        // Update system resources
-        setSystemResources({
-          cpu: Math.min(100, Math.max(20, systemResources.cpu + (Math.random() - 0.5) * 10)),
-          memory: Math.min(100, Math.max(30, systemResources.memory + (Math.random() - 0.5) * 5)),
-          network: Math.min(
-            100,
-            Math.max(10, systemResources.network + (Math.random() - 0.5) * 15)
-          ),
-        });
-      }, 1000);
+      // Update system resources
+      setSystemResources({
+        cpu: Math.min(100, Math.max(20, systemResources.cpu + (Math.random() - 0.5) * 10)),
+        memory: Math.min(100, Math.max(30, systemResources.memory + (Math.random() - 0.5) * 5)),
+        network: Math.min(100, Math.max(10, systemResources.network + (Math.random() - 0.5) * 15)),
+      });
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [isRunning]);
