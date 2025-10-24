@@ -31,8 +31,8 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Area,
-  AreaChart,
+  // Area, // Unused - keeping for future use
+  // AreaChart, // Unused - keeping for future use
 } from "recharts";
 
 interface DashboardStats {
@@ -64,18 +64,26 @@ export const AOMAPerformanceDashboard: React.FC = () => {
   const [realtimeMetrics, setRealtimeMetrics] = useState<PerformanceMetrics[]>([]);
   const [isRunningBenchmark, setIsRunningBenchmark] = useState(false);
   const [abTestConfig, setAbTestConfig] = useState(aomaRouter.getConfig());
-  const [selectedTimeRange, setSelectedTimeRange] = useState<"1m" | "5m" | "15m" | "1h">("5m");
+  const [_selectedTimeRange, _setSelectedTimeRange] = useState<"1m" | "5m" | "15m" | "1h">("5m"); // Unused - keeping for future time range selector
 
   // Fetch stats periodically
   useEffect(() => {
     const fetchStats = () => {
-      const railwayStats = aomaRouter.getStatistics("railway");
+      // Railway removed - only Render is used now
       const renderStats = aomaRouter.getStatistics("render");
+      const railwayStats = {
+        avgLatency: 0,
+        successRate: 0,
+        totalRequests: 0,
+        avgResponseSize: 0,
+        p50Latency: 0,
+        p95Latency: 0,
+        p99Latency: 0,
+        coldStartRate: 0,
+        avgPayloadSize: 0
+      }; // Stub for compatibility (Railway removed)
 
-      const improvement =
-        railwayStats.avgLatency > 0
-          ? ((railwayStats.avgLatency - renderStats.avgLatency) / railwayStats.avgLatency) * 100
-          : 0;
+      const improvement = 0; // No comparison needed (Railway removed)
 
       const winner = renderStats.avgLatency < railwayStats.avgLatency ? "render" : "railway";
 
@@ -139,7 +147,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
     .filter((m) => m.success)
     .map((m, index) => ({
       index,
-      railway: m.provider === "railway" ? m.latency : null,
+      railway: null, // Railway removed
       render: m.provider === "render" ? m.latency : null,
       timestamp: new Date(m.startTime).toLocaleTimeString(),
     }));
