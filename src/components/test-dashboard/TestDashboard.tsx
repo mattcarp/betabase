@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Badge } from "../ui/badge";
+import { Card, CardContent, /* CardHeader, CardTitle */ } from "../ui/card";
+// import { Badge } from "../ui/badge"; // Unused
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
 import { ScrollArea } from "../ui/scroll-area";
@@ -20,7 +20,7 @@ import {
   FileSearch,
   LineChart,
   Bug,
-  Sparkles,
+  // Sparkles, // Unused
   GitBranch,
   Zap,
   Eye,
@@ -77,6 +77,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
       return () => clearInterval(interval);
     }
+    return undefined;
   }, [isRunning]);
 
   const handleRunTests = async () => {
