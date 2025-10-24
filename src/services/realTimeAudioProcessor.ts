@@ -67,8 +67,8 @@ export class RealTimeAudioProcessor {
   private frequencyData: Uint8Array = new Uint8Array(0);
   private timeData: Uint8Array = new Uint8Array(0);
   private previousFrames: number[][] = [];
-  private vadThreshold = 0.01;
-  private silenceCounter = 0;
+  // private _vadThreshold = 0.01; // Unused - keeping for future use
+  // private _silenceCounter = 0; // Unused - keeping for future use
 
   // Rolling average buffers
   private splBuffer: number[] = [];
@@ -76,7 +76,7 @@ export class RealTimeAudioProcessor {
   private vadBuffer: boolean[] = [];
 
   // Performance optimization
-  private lastProcessTime = 0;
+  // private _lastProcessTime = 0; // Unused - keeping for future use
   private processingStats = {
     averageProcessTime: 0,
     maxProcessTime: 0,
@@ -420,8 +420,8 @@ export class RealTimeAudioProcessor {
     if (!this.analyser || !this.isProcessing) return;
 
     // Get frequency and time domain data
-    this.analyser.getByteFrequencyData(this.frequencyData);
-    this.analyser.getByteTimeDomainData(this.timeData);
+    this.analyser.getByteFrequencyData(this.frequencyData as Uint8Array<ArrayBuffer>);
+    this.analyser.getByteTimeDomainData(this.timeData as Uint8Array<ArrayBuffer>);
 
     // Callback with raw frequency data
     if (onFrequencyData) {
