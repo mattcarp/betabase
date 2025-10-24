@@ -1,7 +1,7 @@
 import { openai } from "@ai-sdk/openai";
 import { embed } from "ai";
 import type { Browser, Page } from "playwright";
-import { upsertJiraTicket, upsertJiraTicketEmbedding } from "../../lib/supabase";
+import { upsertJiraTicket, upsertJiraTicketEmbedding } from "../lib/supabase";
 
 // Dynamic import of playwright to avoid bundling in production
 async function getPlaywright() {
