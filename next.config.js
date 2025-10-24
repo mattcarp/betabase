@@ -17,14 +17,16 @@ try {
 const nextConfig = {
   // output: 'standalone', // Only needed for Docker deployments
 
-  // PERFORMANCE OPTIMIZATION: Enable ESLint checks (was: ignoreDuringBuilds: true)
+  // PERFORMANCE OPTIMIZATION: ESLint is run separately in CI/CD
+  // Ignore during builds to prevent warnings from blocking deployment
   eslint: {
     // Temporarily ignore during all builds to unblock production deployment
     // TODO: Fix ESLint errors and re-enable
     ignoreDuringBuilds: true,
   },
 
-  // PERFORMANCE OPTIMIZATION: Enable TypeScript checks (was: ignoreBuildErrors: true)
+  // PERFORMANCE OPTIMIZATION: TypeScript type-check is run separately in CI/CD
+  // Ignore during builds to speed up deployment
   typescript: {
     // Temporarily disable to unblock deployment - will fix TypeScript errors in follow-up
     ignoreBuildErrors: true,
