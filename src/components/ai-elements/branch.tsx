@@ -128,6 +128,7 @@ export const BranchPrevious = ({ className, children, ...props }: BranchPrevious
     <Button
       aria-label="Previous branch"
       className={cn(
+        "mac-button mac-button-outline",
         "size-7 shrink-0 rounded-full text-muted-foreground transition-colors",
         "hover:bg-accent hover:text-foreground",
         "disabled:pointer-events-none disabled:opacity-50",
@@ -138,6 +139,7 @@ export const BranchPrevious = ({ className, children, ...props }: BranchPrevious
       size="icon"
       type="button"
       variant="ghost"
+      className="mac-button mac-button-outline"
       {...props}
     >
       {children ?? <ChevronLeftIcon size={14} />}
@@ -154,6 +156,7 @@ export const BranchNext = ({ className, children, ...props }: BranchNextProps) =
     <Button
       aria-label="Next branch"
       className={cn(
+        "mac-button mac-button-outline",
         "size-7 shrink-0 rounded-full text-muted-foreground transition-colors",
         "hover:bg-accent hover:text-foreground",
         "disabled:pointer-events-none disabled:opacity-50",
@@ -164,6 +167,7 @@ export const BranchNext = ({ className, children, ...props }: BranchNextProps) =
       size="icon"
       type="button"
       variant="ghost"
+      className="mac-button mac-button-outline"
       {...props}
     >
       {children ?? <ChevronRightIcon size={14} />}

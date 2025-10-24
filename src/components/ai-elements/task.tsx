@@ -10,7 +10,7 @@ export type TaskItemFileProps = ComponentProps<"div">;
 export const TaskItemFile = ({ children, className, ...props }: TaskItemFileProps) => (
   <div
     className={cn(
-      "text-xs inline-flex items-center gap-1 px-1.5 py-0.5 text-foreground border bg-secondary rounded-md",
+      "text-xs inline-flex items-center gap-2 px-2.5 py-0.5 text-foreground border bg-secondary rounded-md",
       className
     )}
     {...props}

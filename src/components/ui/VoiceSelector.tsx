@@ -79,7 +79,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
     switch (voice.category) {
       case "premade":
         return (
-          <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
+          <Badge variant="secondary" className="text-xs px-2.5 py-0.5">
             Default
           </Badge>
         );
@@ -87,7 +87,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         return (
           <Badge
             variant="outline"
-            className="text-xs px-1.5 py-0.5 text-purple-400 border-purple-400/30"
+            className="text-xs px-2.5 py-0.5 text-purple-400 border-purple-400/30"
           >
             Cloned
           </Badge>
@@ -96,7 +96,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         return (
           <Badge
             variant="outline"
-            className="text-xs px-1.5 py-0.5 text-blue-400 border-blue-400/30"
+            className="text-xs px-2.5 py-0.5 text-blue-400 border-blue-400/30"
           >
             Generated
           </Badge>
@@ -112,7 +112,12 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         variant="ghost"
         size="sm"
         disabled
-        className={cn("h-8 px-3 gap-2 mac-glass mac-surface-elevated", "animate-pulse", className)}
+        className={cn(
+          "mac-button mac-button-outline",
+          "h-8 px-4 gap-2 mac-glass mac-surface-elevated",
+          "animate-pulse",
+          className
+        )}
       >
         <Volume2 className="h-4 w-4" />
         <span className="text-sm">Loading voices...</span>
@@ -128,7 +133,8 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
           size="sm"
           disabled={disabled}
           className={cn(
-            "h-8 px-3 gap-2 justify-between min-w-[140px]",
+            "mac-button mac-button-outline",
+            "h-8 px-4 gap-2 justify-between min-w-[140px]",
             "mac-glass mac-surface-elevated",
             "hover:bg-white/10 hover:border-white/20",
             "transition-all duration-200",
@@ -155,7 +161,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         )}
         sideOffset={8}
       >
-        <DropdownMenuLabel className="text-xs font-medium text-white/70 px-2 py-1.5">
+        <DropdownMenuLabel className="text-xs font-medium text-white/70 px-2 py-2.5">
           Select Voice Assistant
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-white/10" />
@@ -170,10 +176,10 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                 key={voice.voice_id}
                 onClick={() => handleVoiceSelect(voice.voice_id)}
                 className={cn(
-                  "p-3 rounded-lg cursor-pointer transition-all duration-200",
+                  "p-4 rounded-lg cursor-pointer transition-all duration-200",
                   "hover:bg-white/10 focus:bg-white/10",
                   isSelected && "bg-white/15 border border-white/20",
-                  "flex flex-col items-start gap-1"
+                  "flex flex-col items-start gap-2"
                 )}
               >
                 <div className="flex items-center justify-between w-full">
@@ -184,7 +190,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                     {isSelected && (
                       <Badge
                         variant="default"
-                        className="text-xs px-1.5 py-0.5 bg-green-500/20 text-green-400 border-green-400/30"
+                        className="text-xs px-2.5 py-0.5 bg-green-500/20 text-green-400 border-green-400/30"
                       >
                         Selected
                       </Badge>
@@ -192,7 +198,9 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                   </div>
 
                   <Button
+                    className="mac-button mac-button-outline"
                     variant="ghost"
+                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={(e) => handlePreviewToggle(e, voice.voice_id)}
                     className={cn(
@@ -223,7 +231,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
           <div className="p-4 text-center">
             <Volume2 className="h-8 w-8 mx-auto mb-2 text-white/30" />
             <p className="text-sm text-white/60">No voices available</p>
-            <p className="text-xs text-white/40 mt-1">Check your API key configuration</p>
+            <p className="text-xs text-white/40 mt-2">Check your API key configuration</p>
           </div>
         )}
       </DropdownMenuContent>

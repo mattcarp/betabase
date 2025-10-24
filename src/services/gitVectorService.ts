@@ -279,7 +279,7 @@ Commit: ${commit.hash}`;
     }
 
     // Filter out existing commits if requested
-    let commitsToProcess = commits;
+    const commitsToProcess = commits;
     if (options.skipExisting) {
       console.log("🔍 Checking for existing commits...");
       // This would require a method to check existing vectors, which we could add

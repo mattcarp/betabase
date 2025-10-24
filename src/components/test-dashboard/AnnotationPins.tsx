@@ -114,7 +114,7 @@ export const AnnotationPins: React.FC<AnnotationPinsProps> = ({
             )}
           >
             <div className="bg-background border rounded-lg shadow-lg p-2 min-w-[150px]">
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center gap-2 mb-2">
                 <Badge
                   variant="outline"
                   className={cn("text-xs", getColorForType(annotation.data.type))}
@@ -125,7 +125,7 @@ export const AnnotationPins: React.FC<AnnotationPinsProps> = ({
               <p className="text-xs text-muted-foreground line-clamp-2">
                 {getPreviewText(annotation)}
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-2">
                 {new Date(annotation.createdAt).toLocaleTimeString()}
               </p>
             </div>

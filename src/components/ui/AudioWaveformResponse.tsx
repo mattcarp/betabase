@@ -150,14 +150,16 @@ export const AudioWaveformResponse: React.FC<{
     <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-gray-700/50 backdrop-blur-sm">
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
             {getSourceIcon()}
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-100">{data.filename}</h3>
+            <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-gray-100">
+              {data.filename}
+            </h3>
             <div className="flex items-center gap-4 text-sm text-gray-400">
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-2">
                 <Clock className="w-3 h-3" />
                 {formatTime(data.duration)}
               </span>
@@ -203,7 +205,7 @@ export const AudioWaveformResponse: React.FC<{
         </button>
 
         <div className="flex-1">
-          <div className="flex items-center justify-between text-sm text-gray-400 mb-1">
+          <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
             <span>{formatTime(currentTime)}</span>
             <span>{formatTime(data.duration)}</span>
           </div>
@@ -231,29 +233,29 @@ export const AudioWaveformResponse: React.FC<{
 
       {/* Audio Analysis */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-gray-800/50 rounded-lg p-3">
-          <div className="text-xs text-gray-400 mb-1">RMS Energy</div>
+        <div className="bg-gray-800/50 rounded-lg p-4">
+          <div className="text-xs text-gray-400 mb-2">RMS Energy</div>
           <div className={`font-semibold ${getQualityColor(data.analysis.rmsEnergy)}`}>
             {(data.analysis.rmsEnergy * 100).toFixed(1)}%
           </div>
         </div>
 
-        <div className="bg-gray-800/50 rounded-lg p-3">
-          <div className="text-xs text-gray-400 mb-1">SNR</div>
+        <div className="bg-gray-800/50 rounded-lg p-4">
+          <div className="text-xs text-gray-400 mb-2">SNR</div>
           <div className={`font-semibold ${getQualityColor(data.analysis.snrDb / 40)}`}>
             {data.analysis.snrDb.toFixed(1)} dB
           </div>
         </div>
 
-        <div className="bg-gray-800/50 rounded-lg p-3">
-          <div className="text-xs text-gray-400 mb-1">Dynamic Range</div>
+        <div className="bg-gray-800/50 rounded-lg p-4">
+          <div className="text-xs text-gray-400 mb-2">Dynamic Range</div>
           <div className={`font-semibold ${getQualityColor(data.analysis.dynamicRange / 30)}`}>
             {data.analysis.dynamicRange.toFixed(1)} dB
           </div>
         </div>
 
-        <div className="bg-gray-800/50 rounded-lg p-3">
-          <div className="text-xs text-gray-400 mb-1">Voice Activity</div>
+        <div className="bg-gray-800/50 rounded-lg p-4">
+          <div className="text-xs text-gray-400 mb-2">Voice Activity</div>
           <div
             className={`font-semibold ${data.analysis.voiceActivity ? "text-green-400" : "text-red-400"}`}
           >
@@ -265,8 +267,10 @@ export const AudioWaveformResponse: React.FC<{
       {/* Transcription */}
       {data.transcription && (
         <div className="bg-gray-900/50 rounded-lg p-4 mb-4">
-          <div className="flex items-center justify-between mb-3">
-            <h4 className="text-gray-300 font-medium">Transcription</h4>
+          <div className="flex items-center justify-between mb-4">
+            <h4 c className="mac-title" lassName="mac-title text-gray-300 font-medium">
+              Transcription
+            </h4>
             <div className="flex items-center gap-2 text-xs text-gray-400">
               <span>{data.transcription.language}</span>
               <span>•</span>
@@ -275,19 +279,21 @@ export const AudioWaveformResponse: React.FC<{
               <span>{data.transcription.speaker}</span>
             </div>
           </div>
-          <p className="text-gray-200 leading-relaxed">{data.transcription.text}</p>
+          <p className="mac-body text-gray-200 leading-relaxed">{data.transcription.text}</p>
         </div>
       )}
 
       {/* Emotion Analysis */}
       {data.analysis.emotionScore && (
         <div className="bg-gray-900/50 rounded-lg p-4">
-          <h4 className="text-gray-300 font-medium mb-3">Emotion Analysis</h4>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <h4 c className="mac-title" lassName="mac-title text-gray-300 font-medium mb-4">
+            Emotion Analysis
+          </h4>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {Object.entries(data.analysis.emotionScore).map(([emotion, score]) => (
               <div key={emotion} className="text-center">
-                <div className="text-xs text-gray-400 mb-1 capitalize">{emotion}</div>
-                <div className="w-full bg-gray-700 rounded-full h-2 mb-1">
+                <div className="text-xs text-gray-400 mb-2 capitalize">{emotion}</div>
+                <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
                   <div
                     className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${score * 100}%` }}

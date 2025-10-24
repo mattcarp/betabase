@@ -11,8 +11,9 @@ export interface InputProps extends React.ComponentProps<"input"> {
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, glow = true, error, helperText, label, id, ...props }, ref) => {
-    // Generate IDs for accessibility
-    const inputId = id || React.useId();
+    // Generate IDs for accessibility - useId must be called unconditionally
+    const generatedId = React.useId();
+    const inputId = id || generatedId;
     const helperId = helperText ? `${inputId}-helper` : undefined;
     const errorId = error && helperText ? `${inputId}-error` : undefined;
 
@@ -53,7 +54,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {helperText && (
           <span
             id={errorId || helperId}
-            className={cn("mt-1 text-xs", error ? "text-red-400" : "text-[var(--mac-text-muted)]")}
+            className={cn("mt-2 text-xs", error ? "text-red-400" : "text-[var(--mac-text-muted)]")}
             role={error ? "alert" : undefined}
           >
             {helperText}

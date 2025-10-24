@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Badge } from "../ui/badge";
+import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
 import { ScrollArea } from "../ui/scroll-area";
@@ -20,17 +19,18 @@ import {
   FileSearch,
   LineChart,
   Bug,
-  Sparkles,
   GitBranch,
   Zap,
   Eye,
   MousePointerClick,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { TestExecutionPanel } from "./TestExecutionPanel";
 import { TestResultsViewer } from "./TestResultsViewer";
 import { AITestGenerator } from "./AITestGenerator";
 import { TraceViewer } from "./TraceViewer";
+import { SessionPlaybackViewer } from "./SessionPlaybackViewer";
 import { CoverageReport } from "./CoverageReport";
 import { FlakyTestExplorer } from "./FlakyTestExplorer";
 import { TestAnalytics } from "./TestAnalytics";
@@ -361,12 +361,16 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
         {/* Header with Stats */}
         <div className="border-b bg-background/50 p-6">
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <div className="p-2 rounded-md bg-muted/50">
                 <Activity className="h-5 w-5 text-foreground" />
               </div>
               <div>
-                <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+                <h1
+                  c
+                  className="mac-heading"
+                  lassName="mac-heading text-2xl font-semibold tracking-tight text-foreground"
+                >
                   Test Dashboard
                 </h1>
                 <p className="text-sm text-muted-foreground">
@@ -378,6 +382,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             {/* Control Buttons */}
             <div className="flex items-center gap-2">
               <Button
+                className="mac-button mac-button-primary"
                 variant={isRunning ? "destructive" : "default"}
                 size="sm"
                 onClick={isRunning ? () => setIsRunning(false) : handleRunTests}
@@ -398,7 +403,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <Button
                 variant="outline"
                 size="sm"
-                className="gap-2"
+                className="gap-2 mac-button mac-button-outline"
                 onClick={handleRerunFailed}
                 disabled={isRunning || testStats.failed === 0}
               >
@@ -409,8 +414,8 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
           </div>
 
           {/* Test Statistics Bar */}
-          <div className="grid grid-cols-6 gap-3">
-            <Card className="border-border">
+          <div className="grid grid-cols-6 gap-4">
+            <Card className="mac-card border-border">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-muted-foreground">Total</span>
@@ -419,7 +424,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               </CardContent>
             </Card>
 
-            <Card className="border-border">
+            <Card className="mac-card border-border">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -431,7 +436,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               </CardContent>
             </Card>
 
-            <Card className="border-border">
+            <Card className="mac-card border-border">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -443,7 +448,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               </CardContent>
             </Card>
 
-            <Card className="border-border">
+            <Card className="mac-card border-border">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -455,7 +460,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               </CardContent>
             </Card>
 
-            <Card className="border-border">
+            <Card className="mac-card border-border">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -469,7 +474,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               </CardContent>
             </Card>
 
-            <Card className="border-border">
+            <Card className="mac-card border-border">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -511,7 +516,9 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-foreground">Live Test Output</span>
                 <Button
+                  className="mac-button mac-button-outline"
                   variant="ghost"
+                  className="mac-button mac-button-outline"
                   size="sm"
                   onClick={() => setUseRealTimeStreaming(!useRealTimeStreaming)}
                   className="text-xs"
@@ -519,7 +526,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                   {useRealTimeStreaming ? "📡 Streaming" : "🔄 Polling"}
                 </Button>
               </div>
-              <div className="bg-muted/50 rounded-lg p-3 max-h-24 overflow-y-auto">
+              <div className="bg-muted/50 rounded-lg p-4 max-h-24 overflow-y-auto">
                 {recentLogs.length > 0 ? (
                   recentLogs.map((log, index) => (
                     <div key={index} className="text-xs text-muted-foreground font-mono">
@@ -562,6 +569,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             <TabsTrigger value="trace" className="gap-2">
               <Eye className="h-4 w-4" />
               Trace Viewer
+            </TabsTrigger>
+            <TabsTrigger value="session-playback" className="gap-2">
+              <Play className="h-4 w-4" />
+              Session Playback
             </TabsTrigger>
             <TabsTrigger value="coverage" className="gap-2">
               <GitBranch className="h-4 w-4" />
@@ -624,6 +635,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
             <TabsContent value="firecrawl" className="m-0 p-6">
               <FirecrawlPanel />
+            </TabsContent>
+
+            <TabsContent value="session-playback" className="m-0 p-6">
+              <SessionPlaybackViewer />
             </TabsContent>
           </ScrollArea>
         </Tabs>

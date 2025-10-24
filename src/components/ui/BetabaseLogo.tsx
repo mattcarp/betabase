@@ -32,17 +32,16 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
 
   const sizeClass = variant === "full" ? fullSizeClasses[size] : sizeClasses[size];
 
-  // Global CSS approach: aspect-ratio class survives React hydration
+  // Using Next.js Image component for optimized loading
   // Image is 400x266 = 1.5037:1 aspect ratio
   return (
     <div className={`betabase-logo-wrapper ${sizeClass} ${className}`}>
-      <img
+      <Image
         src="/betabase-logo.webp"
         alt="Betabase"
-        width="400"
-        height="266"
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
+        width={400}
+        height={266}
+        priority={priority}
         className="w-full h-full object-contain"
       />
     </div>
