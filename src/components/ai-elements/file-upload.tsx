@@ -18,7 +18,7 @@ import {
   FileSpreadsheet,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Action, Actions } from "./actions";
+import { Action } from "./actions";
 
 interface FileUploadItem {
   file: File;
@@ -218,7 +218,12 @@ export function FileUpload({
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Uploads</span>
               {uploadQueue.some((f) => f.status === "completed") && (
-                <Button variant="ghost" size="sm" onClick={clearCompleted} className="h-6 text-xs">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearCompleted}
+                  className="h-6 text-xs mac-button mac-button-outline"
+                >
                   Clear completed
                 </Button>
               )}
@@ -233,7 +238,9 @@ export function FileUpload({
                   {item.status === "error" && <AlertCircle className="h-3 w-3 text-red-500" />}
                   <span className="text-xs flex-1 truncate">{item.file.name}</span>
                   <Button
+                    className="mac-button mac-button-outline"
                     variant="ghost"
+                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => removeFile(item.id)}
                     className="h-5 w-5 p-0"
@@ -283,13 +290,18 @@ export function FileUpload({
           </div>
 
           <div>
-            <h3 className="text-lg font-light mb-1 text-[var(--mac-text-primary)]">
+            <h3
+              c
+              className="mac-title"
+              lassName="mac-title text-lg font-light mb-2 text-[var(--mac-text-primary)]"
+            >
               Upload to Knowledge Base
             </h3>
             <p className="text-sm text-[var(--mac-text-secondary)] mb-4 font-light">
               Drag and drop files or click to browse
             </p>
             <Button
+              className="mac-button mac-button-primary"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
               variant="outline"
@@ -318,9 +330,16 @@ export function FileUpload({
       {uploadQueue.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-medium">Upload Queue</h4>
+            <h4 c className="mac-title" lassName="mac-title text-sm font-medium">
+              Upload Queue
+            </h4>
             {uploadQueue.some((f) => f.status === "completed") && (
-              <Button variant="ghost" size="sm" onClick={clearCompleted} className="h-7 text-xs">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearCompleted}
+                className="h-7 text-xs mac-button mac-button-outline"
+              >
                 Clear completed
               </Button>
             )}
@@ -332,7 +351,7 @@ export function FileUpload({
               return (
                 <div
                   key={item.id}
-                  className="flex items-center gap-3 p-3 rounded-lg border bg-card"
+                  className="flex items-center gap-4 p-4 rounded-lg border bg-card"
                 >
                   <FileIconComponent className="h-5 w-5 text-muted-foreground flex-shrink-0" />
 
@@ -377,7 +396,9 @@ export function FileUpload({
                   </div>
 
                   <Button
+                    className="mac-button mac-button-outline"
                     variant="ghost"
+                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => removeFile(item.id)}
                     className="h-8 w-8 p-0"

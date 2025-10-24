@@ -10,7 +10,7 @@ const TopicCloud: React.FC<TopicCloudProps> = ({ topics }) => {
       {topics.map((topic, index) => (
         <div
           key={index}
-          className="bg-blue-600/10 text-blue-600 text-sm font-mono px-3 py-1 rounded-full border border-blue-600/20"
+          className="bg-blue-600/10 text-blue-600 text-sm font-mono px-4 py-2 rounded-full border border-blue-600/20"
         >
           {topic}
         </div>

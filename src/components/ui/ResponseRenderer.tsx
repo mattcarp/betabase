@@ -102,7 +102,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
     <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-gray-700/50 backdrop-blur-sm">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">
             J
           </div>
@@ -110,12 +110,14 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
             <div className="flex items-center gap-2">
               <span className="text-blue-400 font-mono text-sm">{data.key}</span>
               <span
-                className={`px-2 py-1 rounded-full text-xs text-white ${statusColors[data.status] || "bg-gray-500"}`}
+                className={`px-2 py-2 rounded-full text-xs text-white ${statusColors[data.status] || "bg-gray-500"}`}
               >
                 {data.status}
               </span>
             </div>
-            <h3 className="text-gray-100 font-semibold mt-1">{data.summary}</h3>
+            <h3 c className="mac-title" lassName="mac-title text-gray-100 font-semibold mt-2">
+              {data.summary}
+            </h3>
           </div>
         </div>
         <div className={`text-sm font-medium ${priorityColors[data.priority] || "text-gray-400"}`}>
@@ -141,7 +143,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
           {data.labels.map((label, index) => (
             <span
               key={index}
-              className="px-2 py-1 bg-purple-600/20 text-purple-300 rounded text-xs border border-purple-500/30"
+              className="px-2 py-2 bg-purple-600/20 text-purple-300 rounded text-xs border border-purple-500/30"
             >
               {label}
             </span>
@@ -151,17 +153,21 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
 
       {/* Description */}
       <div className="bg-gray-900/50 rounded-lg p-4 mb-4">
-        <h4 className="text-gray-300 font-medium mb-2">Description</h4>
+        <h4 c className="mac-title" lassName="mac-title text-gray-300 font-medium mb-2">
+          Description
+        </h4>
         <p className="text-gray-200 text-sm leading-relaxed">{data.description}</p>
       </div>
 
       {/* Comments */}
       {data.comments.length > 0 && (
         <div>
-          <h4 className="text-gray-300 font-medium mb-3">Comments ({data.comments.length})</h4>
+          <h4 c className="mac-title" lassName="mac-title text-gray-300 font-medium mb-4">
+            Comments ({data.comments.length})
+          </h4>
           <div className="space-y-3 max-h-48 overflow-y-auto">
             {data.comments.map((comment, index) => (
-              <div key={index} className="bg-gray-800/50 rounded-lg p-3">
+              <div key={index} className="bg-gray-800/50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-blue-400 text-sm font-medium">{comment.author}</span>
                   <span className="text-gray-400 text-xs">
@@ -184,13 +190,17 @@ const ChartRenderer: React.FC<{ response: ChartResponse }> = ({ response }) => {
 
   return (
     <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-gray-700/50">
-      <h3 className="text-xl font-semibold text-gray-100 mb-4">{data.title}</h3>
+      <h3 c className="mac-title" lassName="mac-title text-xl font-semibold text-gray-100 mb-4">
+        {data.title}
+      </h3>
 
       {/* Simple bar chart visualization */}
       <div className="space-y-4">
         {data.datasets.map((dataset, datasetIndex) => (
           <div key={datasetIndex}>
-            <h4 className="text-gray-300 font-medium mb-2">{dataset.label}</h4>
+            <h4 c className="mac-title" lassName="mac-title text-gray-300 font-medium mb-2">
+              {dataset.label}
+            </h4>
             <div className="space-y-2">
               {data.labels.map((label, index) => {
                 const value = dataset.data[index] || 0;
@@ -198,7 +208,7 @@ const ChartRenderer: React.FC<{ response: ChartResponse }> = ({ response }) => {
                 const percentage = maxValue > 0 ? (value / maxValue) * 100 : 0;
 
                 return (
-                  <div key={index} className="flex items-center gap-3">
+                  <div key={index} className="flex items-center gap-4">
                     <span className="text-gray-400 text-sm w-20 truncate">{label}</span>
                     <div className="flex-1 bg-gray-700 rounded-full h-2">
                       <div
@@ -229,10 +239,10 @@ const CodeBlockRenderer: React.FC<{ response: CodeBlockResponse }> = ({ response
   return (
     <div className="bg-gradient-to-br from-gray-900/90 to-black/90 rounded-xl overflow-hidden border border-gray-700/50">
       {/* Header */}
-      <div className="bg-gray-800/80 px-4 py-3 border-b border-gray-700/50">
+      <div className="bg-gray-800/80 px-4 py-4 border-b border-gray-700/50">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex gap-1.5">
+          <div className="flex items-center gap-4">
+            <div className="flex gap-2.5">
               <div className="w-3 h-3 rounded-full bg-red-500"></div>
               <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
               <div className="w-3 h-3 rounded-full bg-green-500"></div>
@@ -240,12 +250,12 @@ const CodeBlockRenderer: React.FC<{ response: CodeBlockResponse }> = ({ response
             <span className="text-gray-300 text-sm font-mono">
               {data.filename || `code.${data.language}`}
             </span>
-            <span className="px-2 py-1 bg-blue-600/20 text-blue-300 rounded text-xs border border-blue-500/30">
+            <span className="px-2 py-2 bg-blue-600/20 text-blue-300 rounded text-xs border border-blue-500/30">
               {data.language}
             </span>
           </div>
           {data.executable && (
-            <button className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded transition-colors">
+            <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-xs rounded transition-colors">
               Run
             </button>
           )}
@@ -283,7 +293,9 @@ const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({ response
 
   return (
     <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-gray-700/50">
-      <h3 className="text-xl font-semibold text-gray-100 mb-6">{data.title}</h3>
+      <h3 c className="mac-title" lassName="mac-title text-xl font-semibold text-gray-100 mb-6">
+        {data.title}
+      </h3>
 
       <div className="grid grid-cols-4 gap-4">
         {data.widgets.map((widget) => (
@@ -291,7 +303,9 @@ const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({ response
             key={widget.id}
             className={`${getGridCols(widget.size)} bg-gray-800/50 rounded-lg p-4`}
           >
-            <h4 className="text-gray-300 font-medium mb-3">{widget.title}</h4>
+            <h4 c className="mac-title" lassName="mac-title text-gray-300 font-medium mb-4">
+              {widget.title}
+            </h4>
             {/* Widget content based on type */}
             {widget.type === "metric" && (
               <div className="text-2xl font-bold text-blue-400">
@@ -301,7 +315,7 @@ const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({ response
             )}
             {widget.type === "status" && (
               <div
-                className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
+                className={`inline-flex px-4 py-2 rounded-full text-sm font-medium ${
                   widget.data.status === "healthy"
                     ? "bg-green-600/20 text-green-300 border border-green-500/30"
                     : widget.data.status === "warning"

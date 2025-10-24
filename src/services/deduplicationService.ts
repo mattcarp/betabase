@@ -10,8 +10,8 @@
 
 import crypto from "crypto";
 import { supabase } from "@/lib/supabase";
-import { openai } from "@ai-sdk/openai";
-import { embed } from "ai";
+// import { openai } from "@ai-sdk/openai";
+// import { embed } from "ai";
 
 export interface DedupConfig {
   // Content hash threshold (0 = exact match only)

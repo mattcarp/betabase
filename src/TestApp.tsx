@@ -3,8 +3,7 @@ import { CircularProfessionalProgress as RadialProgress } from "./components/ui/
 import { HUDMeter } from "./components/ui/HUDMeter";
 import { DataStream } from "./components/ui/DataStream";
 import { CircularHUD } from "./components/ui/CircularHUD";
-import { FloatingPanel } from "./components/ui/FloatingPanel";
-import { Activity, Cpu, Gauge, TrendingUp, Play, Pause, RotateCcw } from "lucide-react";
+import { Play, Pause, RotateCcw } from "lucide-react";
 
 export default function TestApp() {
   const [isRunning, setIsRunning] = useState(false);
@@ -59,7 +58,13 @@ export default function TestApp() {
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-blue-900 text-white font-mono p-8">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-holographic mb-2">JARVIS UI COMPONENT SHOWCASE</h1>
+        <h1
+          c
+          className="mac-heading"
+          lassName="mac-heading text-4xl font-bold text-holographic mb-2"
+        >
+          JARVIS UI COMPONENT SHOWCASE
+        </h1>
         <p className="text-jarvis-secondary text-lg">
           Testing RadialProgress, HUDMeter, DataStream &amp; CircularHUD Components
         </p>
@@ -68,7 +73,7 @@ export default function TestApp() {
         <div className="flex items-center justify-center gap-4 mt-6">
           <button
             onClick={() => setIsRunning(!isRunning)}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg font-bold transition-all ${
+            className={`flex items-center gap-2 px-6 py-4 rounded-lg font-bold transition-all ${
               isRunning
                 ? "bg-jarvis-danger/20 border-2 border-jarvis-danger text-jarvis-danger hover:bg-jarvis-danger/30"
                 : "bg-jarvis-primary/20 border-2 border-jarvis-primary text-jarvis-primary hover:bg-jarvis-primary/30"
@@ -81,7 +86,7 @@ export default function TestApp() {
 
           <button
             onClick={resetValues}
-            className="flex items-center gap-2 px-6 py-3 rounded-lg font-bold bg-jarvis-secondary/20 border-2 border-jarvis-secondary text-jarvis-secondary hover:bg-jarvis-secondary/30 transition-all"
+            className="flex items-center gap-2 px-6 py-4 rounded-lg font-bold bg-jarvis-secondary/20 border-2 border-jarvis-secondary text-jarvis-secondary hover:bg-jarvis-secondary/30 transition-all"
             data-testid="reset-values"
           >
             <RotateCcw size={20} />
@@ -94,7 +99,11 @@ export default function TestApp() {
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
         {/* RadialProgress Components */}
         <div className="glass-panel p-6 space-y-6">
-          <h2 className="text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2">
+          <h2
+            c
+            className="mac-heading"
+            lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
+          >
             RADIAL PROGRESS METERS
           </h2>
 
@@ -147,7 +156,11 @@ export default function TestApp() {
 
         {/* HUDMeter Components */}
         <div className="glass-panel p-6 space-y-6">
-          <h2 className="text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2">
+          <h2
+            c
+            className="mac-heading"
+            lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
+          >
             HUD ARC METERS
           </h2>
 
@@ -190,7 +203,11 @@ export default function TestApp() {
 
         {/* DataStream Components */}
         <div className="glass-panel p-6 space-y-6">
-          <h2 className="text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2">
+          <h2
+            c
+            className="mac-heading"
+            lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
+          >
             REAL-TIME DATA STREAMS
           </h2>
 
@@ -239,7 +256,11 @@ export default function TestApp() {
         {/* Central HUD Demo */}
         <div className="lg:col-span-2 xl:col-span-3">
           <div className="glass-panel p-6 space-y-6">
-            <h2 className="text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2 text-center">
+            <h2
+              c
+              className="mac-heading"
+              lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2 text-center"
+            >
               CENTRAL CIRCULAR HUD INTERFACE
             </h2>
 
@@ -274,7 +295,7 @@ export default function TestApp() {
           All components feature: Jarvis theming • Smooth animations • Glow effects • Real-time
           updates
         </p>
-        <p className="mt-1">
+        <p className="mac-body mt-2">
           Status:{" "}
           <span className={isRunning ? "text-jarvis-accent" : "text-jarvis-warning"}>
             {isRunning ? "SIMULATION RUNNING" : "SIMULATION STOPPED"}

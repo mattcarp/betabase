@@ -114,7 +114,9 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
         className="px-4 py-2 border-b border-mac-border cursor-grab active:cursor-grabbing bg-mac-state-hover flex items-center justify-between"
         onMouseDown={handleMouseDown}
       >
-        <h3 className="mac-title text-mac-text-primary">{title}</h3>
+        <h3 c className="mac-title" lassName="mac-title text-mac-text-primary">
+          {title}
+        </h3>
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -417,7 +419,9 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
 
       {/* HUD Title */}
       <header className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
-        <h1 className="mac-display text-mac-text-primary">SIAM HUD Interface</h1>
+        <h1 c className="mac-heading" lassName="mac-heading mac-display text-mac-text-primary">
+          SIAM HUD Interface
+        </h1>
         <p className="text-center mac-body mt-2">
           Smart In A Meeting • Floating Intelligence Panels
         </p>
@@ -448,7 +452,7 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
               {(panel.content as string[]).map((insight, idx) => (
                 <div
                   key={idx}
-                  className="mb-2 p-3 rounded-lg border-l-2 border-mac-accent-purple-400 bg-mac-accent-purple-400/10"
+                  className="mb-2 p-4 rounded-lg border-l-2 border-mac-accent-purple-400 bg-mac-accent-purple-400/10"
                 >
                   <p className="mac-body text-mac-text-secondary">{insight}</p>
                 </div>
@@ -484,11 +488,11 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="p-2 rounded text-center bg-mac-primary-blue-400/10">
                   <p className="mac-body text-mac-text-muted">Status</p>
-                  <p className="text-mac-text-primary">Active</p>
+                  <p className="mac-body text-mac-text-primary">Active</p>
                 </div>
                 <div className="p-2 rounded text-center bg-mac-accent-purple-400/10">
                   <p className="mac-body text-mac-text-muted">Quality</p>
-                  <p className="text-mac-text-primary">HD</p>
+                  <p className="mac-body text-mac-text-primary">HD</p>
                 </div>
               </div>
             </div>
@@ -526,7 +530,7 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
         <div className="text-center space-y-2">
           <p className="mac-body text-mac-text-muted">
             Drag panels to reposition • Press{" "}
-            <kbd className="px-2 py-1 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">F1</kbd>{" "}
+            <kbd className="px-2 py-2 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">F1</kbd>{" "}
             for help
           </p>
           <div className="flex items-center justify-center gap-4 text-xs text-mac-text-muted">

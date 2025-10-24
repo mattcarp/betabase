@@ -256,7 +256,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
         </button>
 
         {/* Enhanced Search Bar */}
-        <div className="mt-3 relative">
+        <div className="mt-4 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-mac-text-muted pointer-events-none" />
           <input
             ref={searchInputRef}
@@ -282,7 +282,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
         <div className="space-y-1">
           {conversationGroups.length === 0 ? (
             <div className="p-6 text-center">
-              <MessageCircle className="w-8 h-8 text-mac-text-muted mx-auto mb-3" />
+              <MessageCircle className="w-8 h-8 text-mac-text-muted mx-auto mb-4" />
               <p className="text-sm text-mac-text-muted mb-2">
                 {searchQuery ? "No conversations found" : "No conversations yet"}
               </p>
@@ -294,7 +294,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             </div>
           ) : (
             conversationGroups.map((group) => (
-              <div key={group.label} className="py-1">
+              <div key={group.label} className="py-2">
                 {/* Group Header */}
                 <button
                   onClick={() => toggleGroup(group.label)}
@@ -330,15 +330,15 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                               onClick={() => onConversationSelect?.(conversation.id)}
                               onContextMenu={(e) => handleContextMenu(e, conversation.id)}
                               className={cn(
-                                "w-full text-left p-4 mx-3 rounded-lg transition-all duration-200 relative",
+                                "w-full text-left p-4 mx-4 rounded-lg transition-all duration-200 relative",
                                 "hover:bg-mac-state-hover group-hover/conversation:bg-mac-state-hover",
                                 conversation.isActive &&
-                                  "bg-mac-primary-blue-400/10 border-l-2 border-mac-primary-blue-400 shadow-sm pl-5",
+                                  "bg-mac-primary-blue-400/10 border-l-2 border-mac-primary-blue-400 shadow-sm pl-6",
                                 !conversation.isActive && "hover:bg-mac-surface-bg"
                               )}
                             >
-                              <div className="flex items-start gap-3">
-                                <div className="mt-1 flex-shrink-0">
+                              <div className="flex items-start gap-4">
+                                <div className="mt-2 flex-shrink-0">
                                   <MessageCircle
                                     className={cn(
                                       "w-4 h-4",
@@ -349,8 +349,12 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                                   />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2 mb-1">
-                                    <h4 className="text-sm font-medium text-mac-text-primary truncate flex-1">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <h4
+                                      c
+                                      className="mac-title"
+                                      lassName="mac-title text-sm font-medium text-mac-text-primary truncate flex-1"
+                                    >
                                       {conversation.title}
                                     </h4>
                                     {conversation.isPinned && (
@@ -361,14 +365,14 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                                     {conversation.lastMessage}
                                   </p>
                                   <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-1">
+                                    <div className="flex items-center gap-2">
                                       <Clock className="w-3 h-3 text-mac-text-muted" />
                                       <span className="text-xs text-mac-text-muted">
                                         {formatTimestamp(conversation.timestamp)}
                                       </span>
                                     </div>
                                     {conversation.messageCount && (
-                                      <span className="text-xs text-mac-text-muted bg-mac-surface-bg px-1.5 py-0.5 rounded">
+                                      <span className="text-xs text-mac-text-muted bg-mac-surface-bg px-2.5 py-0.5 rounded">
                                         {conversation.messageCount}
                                       </span>
                                     )}
@@ -383,7 +387,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                                 e.stopPropagation();
                                 handleContextMenu(e, conversation.id);
                               }}
-                              className="absolute right-4 top-3 opacity-0 group-hover/conversation:opacity-100 transition-opacity duration-200 p-1 hover:bg-mac-state-hover rounded"
+                              className="absolute right-4 top-3 opacity-0 group-hover/conversation:opacity-100 transition-opacity duration-200 p-2 hover:bg-mac-state-hover rounded"
                             >
                               <MoreVertical className="w-3 h-3 text-mac-text-muted" />
                             </button>
@@ -412,7 +416,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.1 }}
-              className="fixed z-50 bg-mac-surface-elevated border border-mac-border rounded-lg shadow-xl py-1 min-w-[180px]"
+              className="fixed z-50 bg-mac-surface-elevated border border-mac-border rounded-lg shadow-xl py-2 min-w-[180px]"
               style={{
                 left: contextMenu.x,
                 top: contextMenu.y,
@@ -421,29 +425,29 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             >
               <button
                 onClick={() => handleContextAction("rename")}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
+                className="w-full flex items-center gap-4 px-4 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
               >
                 <Edit className="w-4 h-4" />
                 Rename
               </button>
               <button
                 onClick={() => handleContextAction("pin")}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
+                className="w-full flex items-center gap-4 px-4 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
               >
                 <Pin className="w-4 h-4" />
                 Pin conversation
               </button>
               <button
                 onClick={() => handleContextAction("archive")}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
+                className="w-full flex items-center gap-4 px-4 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
               >
                 <Archive className="w-4 h-4" />
                 Archive
               </button>
-              <div className="border-t border-mac-border my-1" />
+              <div className="border-t border-mac-border my-2" />
               <button
                 onClick={() => handleContextAction("delete")}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
+                className="w-full flex items-center gap-4 px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
               >
                 <Trash2 className="w-4 h-4" />
                 Delete

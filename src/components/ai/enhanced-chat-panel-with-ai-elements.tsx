@@ -191,11 +191,11 @@ export function EnhancedChatPanelWithAIElements({
   const isMaxMessagesReached = maxMessages ? messages.length >= maxMessages : false;
 
   return (
-    <Card className={cn("flex flex-col h-full", className)}>
+    <Card className={cn("mac-card", "flex flex-col h-full", className)}>
       {showHeader && (
-        <CardHeader className="px-4 py-3 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
+        <CardHeader className="mac-card px-4 py-4 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <div className="relative">
                 <Bot className="h-6 w-6 text-primary" />
                 <Sparkles className="h-3 w-3 text-primary absolute -top-1 -right-1 animate-pulse" />
@@ -208,7 +208,7 @@ export function EnhancedChatPanelWithAIElements({
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
               {messages.length > 0 && (
                 <Badge variant="secondary" className="text-xs">
                   {messages.length} messages
@@ -216,13 +216,23 @@ export function EnhancedChatPanelWithAIElements({
               )}
 
               {allowClear && messages.length > 0 && (
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleClear}>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-8 w-8 mac-button mac-button-outline"
+                  onClick={handleClear}
+                >
                   <Trash2 className="h-4 w-4" />
                 </Button>
               )}
 
               {allowExport && messages.length > 0 && (
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleExport}>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-8 w-8 mac-button mac-button-outline"
+                  onClick={handleExport}
+                >
                   <Download className="h-4 w-4" />
                 </Button>
               )}
@@ -245,7 +255,9 @@ export function EnhancedChatPanelWithAIElements({
                   <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2" />
                 </div>
 
-                <h3 className="text-lg font-semibold mb-2">Welcome to {title}</h3>
+                <h3 c className="mac-title" lassName="mac-title text-lg font-semibold mb-2">
+                  Welcome to {title}
+                </h3>
                 <p className="text-sm text-muted-foreground mb-6 max-w-md">
                   I have access to the AOMA knowledge base and can answer questions about Sony Music
                   systems, USM, and enterprise tools.
@@ -258,7 +270,7 @@ export function EnhancedChatPanelWithAIElements({
                         key={index}
                         variant="outline"
                         size="sm"
-                        className="text-xs"
+                        className="text-xs mac-button mac-button-outline"
                         onClick={() => handleSuggestionClick(suggestion)}
                       >
                         {suggestion}
@@ -295,7 +307,7 @@ export function EnhancedChatPanelWithAIElements({
 
                             {/* Display sources if available */}
                             {sources.length > 0 && (
-                              <div className="mt-3 pt-3 border-t border-border/50">
+                              <div className="mt-4 pt-4 border-t border-border/50">
                                 <p className="text-xs text-muted-foreground mb-2">
                                   📚 Sources ({sources.length}):
                                 </p>
@@ -358,7 +370,9 @@ export function EnhancedChatPanelWithAIElements({
                 <AlertDescription>
                   {error.message || "An error occurred. Please try again."}
                   <Button
+                    className="mac-button mac-button-primary"
                     variant="link"
+                    className="mac-button"
                     size="sm"
                     onClick={() => reload()}
                     className="ml-2 h-auto p-0"
@@ -402,7 +416,12 @@ export function EnhancedChatPanelWithAIElements({
               <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
                 <Loader2 className="h-3 w-3 animate-spin" />
                 AI is querying AOMA knowledge base...
-                <Button variant="link" size="sm" onClick={stop} className="h-auto p-0 text-xs">
+                <Button
+                  variant="link"
+                  size="sm"
+                  onClick={stop}
+                  className="h-auto p-0 text-xs mac-button mac-button-primary"
+                >
                   Stop
                 </Button>
               </div>

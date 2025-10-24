@@ -10,7 +10,7 @@ const CLIENT_ID = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID || "5c6ll37299p351to
 
 const cognitoClient = new CognitoIdentityProviderClient({ region: REGION });
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const cookieStore = await cookies();
 

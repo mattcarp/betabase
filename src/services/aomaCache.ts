@@ -245,6 +245,7 @@ class AOMACache {
 
 // Use globalThis to ensure singleton persistence across module reloads in Next.js
 declare global {
+  // eslint-disable-next-line no-var
   var __aomaCache: AOMACache | undefined;
 }
 
