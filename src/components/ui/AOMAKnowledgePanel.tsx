@@ -148,23 +148,17 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
               "Data Flow",
               "Updates",
             ];
-            const icons = [
-              <RefreshCw className="h-3 w-3" />,
-              <Zap className="h-3 w-3" />,
-              <AlertCircle className="h-3 w-3" />,
-              <BookOpen className="h-3 w-3" />,
-              <TrendingUp className="h-3 w-3" />,
-              <Sparkles className="h-3 w-3" />,
-            ];
+            const iconComponents = [RefreshCw, Zap, AlertCircle, BookOpen, TrendingUp, Sparkles];
 
             lines.forEach((line: string, index: number) => {
               // Extract questions from numbered format
               const match = line.match(/^\d+\.\s+\*\*.*?\*\*:?\s*(.+)/);
               if (match && newSuggestions.length < 6) {
+                const IconComponent = iconComponents[newSuggestions.length] || BookOpen;
                 newSuggestions.push({
                   text: match[1].trim(),
                   category: categories[newSuggestions.length] || "General",
-                  icon: icons[newSuggestions.length] || <BookOpen className="h-3 w-3" />,
+                  icon: <IconComponent className="h-3 w-3" />,
                 });
               }
             });
@@ -272,12 +266,12 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
   };
 
   return (
-    <Card className={cn("flex flex-col h-full", className)}>
-      <CardHeader className="pb-3">
+    <Card className={cn("mac-card", "flex flex-col h-full", className)}>
+      <CardHeader className="mac-card pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-primary" />
-            <CardTitle>AOMA Knowledge Base</CardTitle>
+            <CardTitle className="mac-card">AOMA Knowledge Base</CardTitle>
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-xs">
@@ -297,7 +291,7 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
             </Badge>
           </div>
         </div>
-        <CardDescription>
+        <CardDescription className="mac-card">
           Query Sony Music's AOMA knowledge system for insights and documentation
         </CardDescription>
       </CardHeader>
@@ -308,6 +302,7 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
+              className="mac-input"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ask about AOMA, SIAM, or Sony Music systems..."
@@ -315,7 +310,11 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
               disabled={isLoading}
             />
           </div>
-          <Button type="submit" disabled={isLoading || !query.trim()}>
+          <Button
+            className="mac-button mac-button-primary"
+            type="submit"
+            disabled={isLoading || !query.trim()}
+          >
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
@@ -327,30 +326,33 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
         {/* Strategy Selector */}
         <div className="flex gap-2">
           <Button
+            className="mac-button mac-button-primary"
             size="sm"
             variant={strategy === "rapid" ? "default" : "outline"}
             onClick={() => setStrategy("rapid")}
             className="text-xs"
           >
-            <Zap className="h-3 w-3 mr-1" />
+            <Zap className="h-3 w-3 mr-2" />
             Rapid
           </Button>
           <Button
+            className="mac-button mac-button-primary"
             size="sm"
             variant={strategy === "focused" ? "default" : "outline"}
             onClick={() => setStrategy("focused")}
             className="text-xs"
           >
-            <Search className="h-3 w-3 mr-1" />
+            <Search className="h-3 w-3 mr-2" />
             Focused
           </Button>
           <Button
+            className="mac-button mac-button-primary"
             size="sm"
             variant={strategy === "comprehensive" ? "default" : "outline"}
             onClick={() => setStrategy("comprehensive")}
             className="text-xs"
           >
-            <BookOpen className="h-3 w-3 mr-1" />
+            <BookOpen className="h-3 w-3 mr-2" />
             Comprehensive
           </Button>
         </div>
@@ -395,7 +397,7 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
                   {currentResponse.metadata && (
                     <div className="flex flex-wrap gap-2 pt-4 border-t">
                       <Badge variant="outline" className="text-xs">
-                        <Clock className="h-3 w-3 mr-1" />
+                        <Clock className="h-3 w-3 mr-2" />
                         {new Date(currentResponse.metadata.timestamp).toLocaleTimeString()}
                       </Badge>
                       {currentResponse.metadata.version && (
@@ -432,18 +434,18 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
                   <Button
                     key={index}
                     variant="outline"
-                    className="justify-start text-left h-auto p-3"
+                    className="justify-start text-left h-auto p-4 mac-button mac-button-outline"
                     onClick={() => handleSuggestionClick(suggestion.text)}
                   >
-                    <div className="flex items-start gap-3 w-full">
-                      <div className="mt-1">{suggestion.icon}</div>
+                    <div className="flex items-start gap-4 w-full">
+                      <div className="mt-2">{suggestion.icon}</div>
                       <div className="flex-1">
                         <div className="font-medium text-sm">{suggestion.text}</div>
-                        <div className="text-xs text-muted-foreground mt-1">
+                        <div className="text-xs text-muted-foreground mt-2">
                           {suggestion.category}
                         </div>
                       </div>
-                      <ChevronRight className="h-4 w-4 mt-1 opacity-50" />
+                      <ChevronRight className="h-4 w-4 mt-2 opacity-50" />
                     </div>
                   </Button>
                 ))}
@@ -457,7 +459,12 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
                 <div className="space-y-2">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-xs text-muted-foreground">Recent queries</span>
-                    <Button variant="ghost" size="sm" onClick={clearHistory} className="text-xs">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={clearHistory}
+                      className="text-xs mac-button mac-button-outline"
+                    >
                       Clear all
                     </Button>
                   </div>
@@ -482,17 +489,19 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
                           </Badge>
                         </div>
                         {item.responsePreview && (
-                          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                          <p className="text-xs text-muted-foreground mt-2 line-clamp-2">
                             {item.responsePreview}...
                           </p>
                         )}
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-xs text-muted-foreground mt-2">
                           {item.timestamp.toLocaleString()}
                         </p>
                       </div>
                       <Button
+                        className="mac-button mac-button-outline"
                         size="sm"
                         variant="ghost"
+                        className="mac-button mac-button-outline"
                         onClick={() => handleHistoryRerun(item)}
                         className="opacity-0 group-hover:opacity-100 transition-opacity"
                       >
@@ -528,22 +537,31 @@ function formatResponse(text: any): string {
   // Convert markdown-like syntax to HTML
   let formatted = text
     // Headers
-    .replace(/^### (.*?)$/gm, '<h3 class="font-semibold text-base mt-4 mb-2">$1</h3>')
-    .replace(/^## (.*?)$/gm, '<h2 class="font-bold text-lg mt-4 mb-2">$1</h2>')
-    .replace(/^# (.*?)$/gm, '<h1 class="font-bold text-xl mt-4 mb-2">$1</h1>')
+    .replace(
+      /^### (.*?)$/gm,
+      '<h3  className="mac-title"class="font-semibold text-base mt-4 mb-2">$1</h3>'
+    )
+    .replace(
+      /^## (.*?)$/gm,
+      '<h2  className="mac-heading"class="font-bold text-lg mt-4 mb-2">$1</h2>'
+    )
+    .replace(
+      /^# (.*?)$/gm,
+      '<h1  className="mac-heading"class="font-bold text-xl mt-4 mb-2">$1</h1>'
+    )
     // Bold
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
     // Lists
     .replace(/^- (.*?)$/gm, '<li class="ml-4">$1</li>')
     .replace(/^\d+\. (.*?)$/gm, '<li class="ml-4">$1</li>')
     // Line breaks
-    .replace(/\n\n/g, '</p><p class="mb-3">')
+    .replace(/\n\n/g, '</p><p class="mb-4">')
     // Code blocks
-    .replace(/`([^`]+)`/g, '<code class="px-1 py-0.5 bg-muted rounded text-sm">$1</code>');
+    .replace(/`([^`]+)`/g, '<code class="px-2 py-0.5 bg-muted rounded text-sm">$1</code>');
 
   // Wrap in paragraph if not already wrapped
   if (!formatted.startsWith("<")) {
-    formatted = `<p class="mb-3">${formatted}</p>`;
+    formatted = `<p class="mb-4">${formatted}</p>`;
   }
 
   return formatted;

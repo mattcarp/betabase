@@ -221,12 +221,12 @@ export class EmailParser {
     }
 
     // Decode numeric entities
-    decoded = decoded.replace(/&#(\d+);/g, (match, dec) => {
+    decoded = decoded.replace(/&#(\d+);/g, (_match, dec) => {
       return String.fromCharCode(parseInt(dec, 10));
     });
 
     // Decode hex entities
-    decoded = decoded.replace(/&#x([0-9a-f]+);/gi, (match, hex) => {
+    decoded = decoded.replace(/&#x([0-9a-f]+);/gi, (_match, hex) => {
       return String.fromCharCode(parseInt(hex, 16));
     });
 

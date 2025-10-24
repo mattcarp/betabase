@@ -31,6 +31,8 @@ import {
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { enhancedSupabaseTestDB } from "../../services/supabase-test-integration-enhanced";
+import { VisualRegressionComparison, VisualRegressionComparisonType } from "../visual-regression";
+import { visualRegressionService } from "../../services/visualRegressionService";
 
 interface TestResult {
   id: string;
@@ -48,6 +50,7 @@ interface TestResult {
   logs?: string[];
   screenshots?: string[];
   video?: string;
+  visualComparison?: VisualRegressionComparisonType; // Visual regression data
 }
 
 export const TestResultsViewer: React.FC = () => {
@@ -369,21 +372,32 @@ export const TestResultsViewer: React.FC = () => {
     <div className="grid grid-cols-12 gap-6">
       {/* Results List */}
       <div className="col-span-5">
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <div className="space-y-4">
               {/* Title and Action Buttons */}
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">Test Results</CardTitle>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={handleExportResults}>
-                    <Download className="h-4 w-4 mr-1" />
+                  <Button
+                    className="mac-button mac-button-outline"
+                    variant="outline"
+                    className="mac-button mac-button-outline"
+                    size="sm"
+                    onClick={handleExportResults}
+                  >
+                    <Download className="h-4 w-4 mr-2" />
                     Export
                   </Button>
                   <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" size="sm">
-                        <Filter className="h-4 w-4 mr-1" />
+                      <Button
+                        className="mac-button mac-button-outline"
+                        variant="outline"
+                        className="mac-button mac-button-outline"
+                        size="sm"
+                      >
+                        <Filter className="h-4 w-4 mr-2" />
                         Filters
                       </Button>
                     </PopoverTrigger>
@@ -393,6 +407,7 @@ export const TestResultsViewer: React.FC = () => {
                           <Label className="text-sm">Date Range</Label>
                           <div className="flex gap-2 mt-2">
                             <Input
+                              className="mac-input"
                               type="date"
                               placeholder="From"
                               onChange={(e) =>
@@ -403,6 +418,7 @@ export const TestResultsViewer: React.FC = () => {
                               }
                             />
                             <Input
+                              className="mac-input"
                               type="date"
                               placeholder="To"
                               onChange={(e) =>
@@ -442,7 +458,7 @@ export const TestResultsViewer: React.FC = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="w-full"
+                          className="w-full mac-button mac-button-outline"
                           onClick={() => {
                             setDateRange({ from: null, to: null });
                             setSortBy("date");
@@ -463,6 +479,7 @@ export const TestResultsViewer: React.FC = () => {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
+                  className="mac-input"
                   placeholder="Search tests by name, suite, or error..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -473,6 +490,7 @@ export const TestResultsViewer: React.FC = () => {
               {/* Status Filter Buttons */}
               <div className="flex gap-2">
                 <Button
+                  className="mac-button mac-button-primary"
                   variant={filter === "all" ? "default" : "outline"}
                   size="sm"
                   onClick={() => setFilter("all")}
@@ -480,27 +498,30 @@ export const TestResultsViewer: React.FC = () => {
                   All ({testResults.length})
                 </Button>
                 <Button
+                  className="mac-button mac-button-primary"
                   variant={filter === "passed" ? "default" : "outline"}
                   size="sm"
                   onClick={() => setFilter("passed")}
                 >
-                  <CheckCircle className="h-3 w-3 mr-1" />
+                  <CheckCircle className="h-3 w-3 mr-2" />
                   Passed ({testResults.filter((r) => r.status === "passed").length})
                 </Button>
                 <Button
+                  className="mac-button mac-button-primary"
                   variant={filter === "failed" ? "default" : "outline"}
                   size="sm"
                   onClick={() => setFilter("failed")}
                 >
-                  <XCircle className="h-3 w-3 mr-1" />
+                  <XCircle className="h-3 w-3 mr-2" />
                   Failed ({testResults.filter((r) => r.status === "failed").length})
                 </Button>
                 <Button
+                  className="mac-button mac-button-primary"
                   variant={filter === "skipped" ? "default" : "outline"}
                   size="sm"
                   onClick={() => setFilter("skipped")}
                 >
-                  <AlertTriangle className="h-3 w-3 mr-1" />
+                  <AlertTriangle className="h-3 w-3 mr-2" />
                   Skipped ({testResults.filter((r) => r.status === "skipped").length})
                 </Button>
               </div>
@@ -512,7 +533,7 @@ export const TestResultsViewer: React.FC = () => {
                 <div className="flex items-center justify-center h-full p-8">
                   <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-muted-foreground">Loading test results...</p>
+                    <p className="mac-body text-muted-foreground">Loading test results...</p>
                   </div>
                 </div>
               ) : (
@@ -534,7 +555,7 @@ export const TestResultsViewer: React.FC = () => {
                       return (
                         <div key={suite}>
                           <div
-                            className="flex items-center justify-between p-3 bg-muted/50 rounded-lg cursor-pointer hover:bg-muted/70 transition-colors"
+                            className="flex items-center justify-between p-4 bg-muted/50 rounded-lg cursor-pointer hover:bg-muted/70 transition-colors"
                             onClick={() => toggleSuite(suite)}
                           >
                             <div className="flex items-center gap-2">
@@ -569,6 +590,7 @@ export const TestResultsViewer: React.FC = () => {
                                 <Card
                                   key={result.id}
                                   className={cn(
+                                    "mac-card",
                                     "cursor-pointer transition-all hover:shadow-md",
                                     selectedResult?.id === result.id && "ring-2 ring-primary",
                                     result.status === "failed" && "border-red-500/20",
@@ -577,7 +599,7 @@ export const TestResultsViewer: React.FC = () => {
                                   )}
                                   onClick={() => setSelectedResult(result)}
                                 >
-                                  <CardContent className="p-3">
+                                  <CardContent className="p-4">
                                     <div className="flex items-center justify-between">
                                       <div className="flex items-center gap-2 flex-1">
                                         {getStatusIcon(result.status)}
@@ -605,22 +627,24 @@ export const TestResultsViewer: React.FC = () => {
       {/* Result Details */}
       <div className="col-span-7">
         {selectedResult ? (
-          <Card className="h-full">
-            <CardHeader>
+          <Card className="mac-card h-full">
+            <CardHeader className="mac-card">
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-lg">{selectedResult.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="text-sm text-muted-foreground mt-2">
                     {selectedResult.suite} • {selectedResult.timestamp.toLocaleString()}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
+                    className="mac-button mac-button-outline"
                     variant="outline"
+                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => handleRerunTest(selectedResult.id)}
                   >
-                    <RefreshCw className="h-4 w-4 mr-1" />
+                    <RefreshCw className="h-4 w-4 mr-2" />
                     Re-run
                   </Button>
                   {getStatusIcon(selectedResult.status)}
@@ -638,38 +662,64 @@ export const TestResultsViewer: React.FC = () => {
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <Tabs defaultValue="error" className="h-full">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList
+                  className={cn(
+                    "grid w-full",
+                    selectedResult.visualComparison ? "grid-cols-5" : "grid-cols-4"
+                  )}
+                >
                   <TabsTrigger value="error">Error</TabsTrigger>
                   <TabsTrigger value="logs">Logs</TabsTrigger>
                   <TabsTrigger value="media">Media</TabsTrigger>
                   <TabsTrigger value="code">Code</TabsTrigger>
+                  {selectedResult.visualComparison && (
+                    <TabsTrigger value="visual">Visual Diff</TabsTrigger>
+                  )}
                 </TabsList>
 
                 <TabsContent value="error" className="space-y-4">
                   {selectedResult.error ? (
                     <>
-                      <Card className="bg-red-500/10 border-red-500/20">
+                      <Card className="mac-card bg-red-500/10 border-red-500/20">
                         <CardContent className="p-4">
-                          <h3 className="font-medium text-red-500 mb-2">Error Message</h3>
+                          <h3
+                            c
+                            className="mac-title"
+                            lassName="mac-title font-medium text-red-500 mb-2"
+                          >
+                            Error Message
+                          </h3>
                           <p className="text-sm font-mono">{selectedResult.error.message}</p>
                         </CardContent>
                       </Card>
 
                       {(selectedResult.error.expected || selectedResult.error.actual) && (
                         <div className="grid grid-cols-2 gap-4">
-                          <Card>
+                          <Card className="mac-card">
                             <CardContent className="p-4">
-                              <h3 className="font-medium text-green-500 mb-2">Expected</h3>
+                              <h3
+                                c
+                                className="mac-title"
+                                lassName="mac-title font-medium text-green-500 mb-2"
+                              >
+                                Expected
+                              </h3>
                               <p className="text-sm font-mono">
                                 {selectedResult.error.expected || "N/A"}
                               </p>
                             </CardContent>
                           </Card>
-                          <Card>
+                          <Card className="mac-card">
                             <CardContent className="p-4">
-                              <h3 className="font-medium text-red-500 mb-2">Actual</h3>
+                              <h3
+                                c
+                                className="mac-title"
+                                lassName="mac-title font-medium text-red-500 mb-2"
+                              >
+                                Actual
+                              </h3>
                               <p className="text-sm font-mono">
                                 {selectedResult.error.actual || "N/A"}
                               </p>
@@ -678,15 +728,22 @@ export const TestResultsViewer: React.FC = () => {
                         </div>
                       )}
 
-                      <Card>
+                      <Card className="mac-card">
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between mb-2">
-                            <h3 className="font-medium">Stack Trace</h3>
-                            <Button variant="ghost" size="sm">
+                            <h3 c className="mac-title" lassName="mac-title font-medium">
+                              Stack Trace
+                            </h3>
+                            <Button
+                              className="mac-button mac-button-outline"
+                              variant="ghost"
+                              className="mac-button mac-button-outline"
+                              size="sm"
+                            >
                               <Copy className="h-4 w-4" />
                             </Button>
                           </div>
-                          <pre className="text-xs font-mono bg-muted p-3 rounded overflow-x-auto">
+                          <pre className="text-xs font-mono bg-muted p-4 rounded overflow-x-auto">
                             {selectedResult.error.stack}
                           </pre>
                         </CardContent>
@@ -701,14 +758,23 @@ export const TestResultsViewer: React.FC = () => {
 
                 <TabsContent value="logs">
                   {selectedResult.logs && selectedResult.logs.length > 0 ? (
-                    <Card>
+                    <Card className="mac-card">
                       <CardContent className="p-4">
-                        <div className="flex items-center justify-between mb-3">
-                          <h3 className="font-medium flex items-center gap-2">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3
+                            c
+                            className="mac-title"
+                            lassName="mac-title font-medium flex items-center gap-2"
+                          >
                             <Terminal className="h-4 w-4" />
                             Console Output
                           </h3>
-                          <Button variant="ghost" size="sm">
+                          <Button
+                            className="mac-button mac-button-outline"
+                            variant="ghost"
+                            className="mac-button mac-button-outline"
+                            size="sm"
+                          >
                             <Download className="h-4 w-4" />
                           </Button>
                         </div>
@@ -719,7 +785,7 @@ export const TestResultsViewer: React.FC = () => {
                                 key={index}
                                 className="font-mono text-xs p-2 hover:bg-muted rounded"
                               >
-                                <span className="text-muted-foreground mr-3">
+                                <span className="text-muted-foreground mr-4">
                                   {String(index + 1).padStart(3, "0")}
                                 </span>
                                 {log}
@@ -739,10 +805,12 @@ export const TestResultsViewer: React.FC = () => {
                 <TabsContent value="media">
                   {selectedResult.screenshots && selectedResult.screenshots.length > 0 ? (
                     <div className="space-y-4">
-                      <h3 className="font-medium">Screenshots</h3>
+                      <h3 c className="mac-title" lassName="mac-title font-medium">
+                        Screenshots
+                      </h3>
                       <div className="grid grid-cols-2 gap-4">
                         {selectedResult.screenshots.map((screenshot, index) => (
-                          <Card key={index}>
+                          <Card className="mac-card" key={index}>
                             <CardContent className="p-4">
                               <div className="aspect-video bg-muted rounded flex items-center justify-center">
                                 <FileText className="h-8 w-8 text-muted-foreground" />
@@ -761,14 +829,23 @@ export const TestResultsViewer: React.FC = () => {
                 </TabsContent>
 
                 <TabsContent value="code">
-                  <Card>
+                  <Card className="mac-card">
                     <CardContent className="p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="font-medium flex items-center gap-2">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3
+                          c
+                          className="mac-title"
+                          lassName="mac-title font-medium flex items-center gap-2"
+                        >
                           <Code className="h-4 w-4" />
                           Test Source
                         </h3>
-                        <Button variant="ghost" size="sm">
+                        <Button
+                          className="mac-button mac-button-outline"
+                          variant="ghost"
+                          className="mac-button mac-button-outline"
+                          size="sm"
+                        >
                           <ExternalLink className="h-4 w-4" />
                         </Button>
                       </div>
@@ -788,11 +865,57 @@ export const TestResultsViewer: React.FC = () => {
                     </CardContent>
                   </Card>
                 </TabsContent>
+
+                {/* Visual Regression Tab */}
+                {selectedResult.visualComparison && (
+                  <TabsContent value="visual" className="space-y-4">
+                    <VisualRegressionComparison
+                      comparison={selectedResult.visualComparison}
+                      onApprove={async (id, comment) => {
+                        try {
+                          await visualRegressionService.approveComparison(id, comment);
+                          alert("Visual regression approved!");
+                          fetchTestResults(); // Refresh
+                        } catch (error) {
+                          console.error("Failed to approve:", error);
+                          alert("Failed to approve comparison");
+                        }
+                      }}
+                      onReject={async (id, reason) => {
+                        try {
+                          await visualRegressionService.rejectComparison(id, reason);
+                          alert("Visual regression rejected!");
+                          fetchTestResults(); // Refresh
+                        } catch (error) {
+                          console.error("Failed to reject:", error);
+                          alert("Failed to reject comparison");
+                        }
+                      }}
+                      onUpdateBaseline={async (id) => {
+                        try {
+                          await visualRegressionService.updateBaseline(id);
+                          alert("Baseline updated!");
+                          fetchTestResults(); // Refresh
+                        } catch (error) {
+                          console.error("Failed to update baseline:", error);
+                          alert("Failed to update baseline");
+                        }
+                      }}
+                      onAddComment={async (id, comment) => {
+                        try {
+                          await visualRegressionService.addComment(id, comment);
+                        } catch (error) {
+                          console.error("Failed to add comment:", error);
+                        }
+                      }}
+                    />
+                  </TabsContent>
+                )}
               </Tabs>
             </CardContent>
           </Card>
         ) : (
-          <Card className="h-full">
+          <Card className="mac-card h-full">
             <CardContent className="flex items-center justify-center h-full text-muted-foreground">
               Select a test result to view details
             </CardContent>

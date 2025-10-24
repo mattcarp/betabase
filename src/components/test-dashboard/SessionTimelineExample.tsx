@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { cn } from "../../lib/utils";
 import SessionTimeline from "./SessionTimeline";
 import { SessionInteraction, SessionTimelineFilter } from "../../types/session-timeline";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -161,19 +162,23 @@ export const SessionTimelineExample: React.FC = () => {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <div className="border-b border-mac-utility-border p-6 bg-mac-surface-elevated">
-          <h1 className="text-2xl font-light text-mac-text-primary mac-heading mb-2">
+          <h1
+            c
+            className="mac-heading"
+            lassName="text-2xl font-light text-mac-text-primary mac-heading mb-2"
+          >
             Session Timeline Demo
           </h1>
           <p className="text-sm text-mac-text-secondary mb-4">
             Demonstrates real-time interaction capture and timeline visualization
           </p>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Button
               onClick={toggleRecording}
               variant={isRecording ? "destructive" : "default"}
               size="sm"
-              className="gap-2"
+              className="gap-2 mac-button mac-button-primary"
             >
               {isRecording ? (
                 <>
@@ -189,8 +194,10 @@ export const SessionTimelineExample: React.FC = () => {
             </Button>
 
             <Button
+              className="mac-button mac-button-outline"
               onClick={clearInteractions}
               variant="outline"
+              className="mac-button mac-button-outline"
               size="sm"
               disabled={interactions.length === 0}
             >
@@ -212,8 +219,8 @@ export const SessionTimelineExample: React.FC = () => {
         <div className="flex-1 overflow-auto p-6">
           {selectedInteraction ? (
             <Card className="mac-card max-w-3xl mx-auto">
-              <CardHeader>
-                <CardTitle className="text-lg font-light flex items-center gap-3">
+              <CardHeader className="mac-card">
+                <CardTitle className="text-lg font-light flex items-center gap-4">
                   <Badge
                     variant="outline"
                     className={
@@ -234,7 +241,13 @@ export const SessionTimelineExample: React.FC = () => {
               <CardContent className="space-y-4">
                 {/* Timestamp */}
                 <div>
-                  <h4 className="text-sm font-medium text-mac-text-secondary mb-1">Timestamp</h4>
+                  <h4
+                    c
+                    className="mac-title"
+                    lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                  >
+                    Timestamp
+                  </h4>
                   <p className="text-sm text-mac-text-primary">
                     {new Date(selectedInteraction.timestamp).toLocaleString()}
                   </p>
@@ -243,8 +256,14 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Element Description */}
                 {selectedInteraction.elementDescription && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-1">Element</h4>
-                    <code className="text-sm text-mac-text-primary bg-mac-surface-card px-2 py-1 rounded">
+                    <h4
+                      c
+                      className="mac-title"
+                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                    >
+                      Element
+                    </h4>
+                    <code className="text-sm text-mac-text-primary bg-mac-surface-card px-2 py-2 rounded">
                       {selectedInteraction.elementDescription}
                     </code>
                   </div>
@@ -253,8 +272,14 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Selector */}
                 {selectedInteraction.selector && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-1">Selector</h4>
-                    <code className="text-sm text-mac-text-primary bg-mac-surface-card px-2 py-1 rounded">
+                    <h4
+                      c
+                      className="mac-title"
+                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                    >
+                      Selector
+                    </h4>
+                    <code className="text-sm text-mac-text-primary bg-mac-surface-card px-2 py-2 rounded">
                       {selectedInteraction.selector}
                     </code>
                   </div>
@@ -263,7 +288,13 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Value */}
                 {selectedInteraction.value && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-1">Value</h4>
+                    <h4
+                      c
+                      className="mac-title"
+                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                    >
+                      Value
+                    </h4>
                     <p className="text-sm text-mac-text-primary italic">
                       "{selectedInteraction.value}"
                     </p>
@@ -273,7 +304,13 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* URL */}
                 {selectedInteraction.url && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-1">URL</h4>
+                    <h4
+                      c
+                      className="mac-title"
+                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                    >
+                      URL
+                    </h4>
                     <p className="text-sm text-mac-text-primary break-all">
                       {selectedInteraction.url}
                     </p>
@@ -283,7 +320,13 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Duration */}
                 {selectedInteraction.duration && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-1">Duration</h4>
+                    <h4
+                      c
+                      className="mac-title"
+                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                    >
+                      Duration
+                    </h4>
                     <p className="text-sm text-mac-text-primary">
                       {selectedInteraction.duration}ms
                     </p>
@@ -293,10 +336,14 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Network Data */}
                 {selectedInteraction.networkData && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-2">
+                    <h4
+                      c
+                      className="mac-title"
+                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                    >
                       Network Details
                     </h4>
-                    <div className="bg-mac-surface-card p-3 rounded space-y-2 text-sm">
+                    <div className="bg-mac-surface-card p-4 rounded space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-mac-text-muted">Method:</span>
                         <span className="text-mac-text-primary font-medium">
@@ -323,7 +370,7 @@ export const SessionTimelineExample: React.FC = () => {
                       </div>
                       <div className="pt-2 border-t border-mac-utility-border">
                         <span className="text-mac-text-muted">URL:</span>
-                        <p className="text-mac-text-primary break-all mt-1">
+                        <p className="mac-body text-mac-text-primary break-all mt-2">
                           {selectedInteraction.networkData.url}
                         </p>
                       </div>
@@ -334,8 +381,14 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Error */}
                 {selectedInteraction.error && (
                   <div>
-                    <h4 className="text-sm font-medium text-rose-500 mb-2">Error Details</h4>
-                    <div className="bg-rose-500/5 border border-rose-500/20 p-3 rounded space-y-2">
+                    <h4
+                      c
+                      className="mac-title"
+                      lassName="mac-title text-sm font-medium text-rose-500 mb-2"
+                    >
+                      Error Details
+                    </h4>
+                    <div className="bg-rose-500/5 border border-rose-500/20 p-4 rounded space-y-2">
                       <p className="text-sm text-rose-400 font-medium">
                         {selectedInteraction.error.message}
                       </p>
@@ -351,7 +404,14 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Screenshot */}
                 {selectedInteraction.thumbnail && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-2">Screenshot</h4>
+                    <h4
+                      c
+                      className="mac-title"
+                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                    >
+                      Screenshot
+                    </h4>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={selectedInteraction.thumbnail}
                       alt="Interaction screenshot"
@@ -363,8 +423,14 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Metadata */}
                 {selectedInteraction.metadata && (
                   <div>
-                    <h4 className="text-sm font-medium text-mac-text-secondary mb-2">Metadata</h4>
-                    <pre className="text-xs text-mac-text-primary bg-mac-surface-card p-3 rounded overflow-auto max-h-48">
+                    <h4
+                      c
+                      className="mac-title"
+                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                    >
+                      Metadata
+                    </h4>
+                    <pre className="text-xs text-mac-text-primary bg-mac-surface-card p-4 rounded overflow-auto max-h-48">
                       {JSON.stringify(selectedInteraction.metadata, null, 2)}
                     </pre>
                   </div>
@@ -374,7 +440,11 @@ export const SessionTimelineExample: React.FC = () => {
           ) : (
             <div className="flex items-center justify-center h-full">
               <div className="text-center max-w-md">
-                <h3 className="text-lg font-light text-mac-text-primary mb-2">
+                <h3
+                  c
+                  className="mac-title"
+                  lassName="mac-title text-lg font-light text-mac-text-primary mb-2"
+                >
                   No Interaction Selected
                 </h3>
                 <p className="text-sm text-mac-text-secondary">

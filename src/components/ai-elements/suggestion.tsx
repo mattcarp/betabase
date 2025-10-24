@@ -35,6 +35,7 @@ export const Suggestion = ({
   return (
     <Button
       className={cn(
+        "mac-button mac-button-primary",
         "cursor-pointer rounded-lg px-4 w-full !text-left !justify-start items-start",
         className
       )}

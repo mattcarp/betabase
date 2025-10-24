@@ -3,7 +3,8 @@
  * Works with existing tables and adds minimal new functionality
  */
 
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { supabase as sharedSupabaseClient } from "../lib/supabase";
 
 // Existing table interfaces based on actual schema
 interface TestResult {
@@ -129,20 +130,9 @@ export class EnhancedSupabaseTestIntegration {
   private supabase: SupabaseClient | null = null;
 
   constructor(supabaseUrl?: string, supabaseKey?: string) {
-    const url = supabaseUrl || process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-    const key = supabaseKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
-
-    // Only create client if both URL and key are available
-    if (url && key) {
-      try {
-        this.supabase = createClient(url, key);
-      } catch (error) {
-        console.warn("Failed to create Supabase client:", error);
-        this.supabase = null;
-      }
-    } else {
-      console.warn("Supabase credentials not found. Test dashboard will use mock data.");
-    }
+    // Use shared Supabase client to avoid multiple GoTrueClient instances
+    // Ignore custom URL/key params - use shared singleton
+    this.supabase = sharedSupabaseClient;
   }
 
   // ============= Working with Existing Tables =============
@@ -630,7 +620,7 @@ export class EnhancedSupabaseTestIntegration {
    * Create minimal new tables if they don't exist
    */
   async initializeNewTables(): Promise<void> {
-    const createTablesSQL = `
+    const _createTablesSQL = `
       -- Test executions table (aggregates test runs)
       CREATE TABLE IF NOT EXISTS test_executions (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,

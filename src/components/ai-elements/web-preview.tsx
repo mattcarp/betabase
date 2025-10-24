@@ -72,7 +72,7 @@ export const WebPreviewNavigation = ({
   children,
   ...props
 }: WebPreviewNavigationProps) => (
-  <div className={cn("flex items-center gap-1 border-b p-2", className)} {...props}>
+  <div className={cn("flex items-center gap-2 border-b p-2", className)} {...props}>
     {children}
   </div>
 );
@@ -94,7 +94,7 @@ export const WebPreviewNavigationButton = ({
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 w-8 p-0 hover:text-foreground"
+          className="h-8 w-8 p-0 hover:text-foreground mac-button mac-button-outline"
           onClick={onClick}
           disabled={disabled}
           {...props}
@@ -124,7 +124,7 @@ export const WebPreviewUrl = ({ value, onChange, onKeyDown, ...props }: WebPrevi
 
   return (
     <Input
-      className="flex-1 h-8 text-sm"
+      className="flex-1 h-8 text-sm mac-input"
       placeholder="Enter URL..."
       value={value ?? url}
       onChange={onChange}
@@ -181,7 +181,7 @@ export const WebPreviewConsole = ({
       <CollapsibleTrigger asChild>
         <Button
           variant="ghost"
-          className="flex w-full items-center justify-between p-4 text-left font-medium hover:bg-muted/50"
+          className="flex w-full items-center justify-between p-4 text-left font-medium hover:bg-muted/50 mac-button mac-button-outline"
         >
           Console
           <ChevronDownIcon
@@ -197,7 +197,7 @@ export const WebPreviewConsole = ({
       >
         <div className="space-y-1 max-h-48 overflow-y-auto">
           {logs.length === 0 ? (
-            <p className="text-muted-foreground">No console output</p>
+            <p className="mac-body text-muted-foreground">No console output</p>
           ) : (
             logs.map((log, index) => (
               <div

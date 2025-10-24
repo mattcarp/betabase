@@ -5,63 +5,63 @@
 
 /* Custom neon color utilities */
 .text-neon-blue {
-  color: #3b82f6;
+  color: var(--mac-primary-blue-400);
 }
 
 .text-neon-green {
-  color: #10b981;
+  color: var(--mac-status-connected-text);
 }
 
 .text-neon-purple {
-  color: #8b5cf6;
+  color: var(--mac-accent-purple-400);
 }
 
 .text-neon-pink {
-  color: #ff006e;
+  color: var(--mac-accent-pink-400);
 }
 
 .text-neon-cyan {
-  color: #06ffa5;
+  color: var(--mac-accent-cyan-400);
 }
 
 .bg-neon-blue {
-  background-color: #3b82f6;
+  background-color: var(--mac-primary-blue-400);
 }
 
 .bg-neon-green {
-  background-color: #10b981;
+  background-color: var(--mac-status-connected-text);
 }
 
 .bg-neon-purple {
-  background-color: #8b5cf6;
+  background-color: var(--mac-accent-purple-400);
 }
 
 .bg-neon-pink {
-  background-color: #ff006e;
+  background-color: var(--mac-accent-pink-400);
 }
 
 .bg-neon-cyan {
-  background-color: #06ffa5;
+  background-color: var(--mac-accent-cyan-400);
 }
 
 .border-neon-blue {
-  border-color: #3b82f6;
+  border-color: var(--mac-primary-blue-400);
 }
 
 .border-neon-green {
-  border-color: #10b981;
+  border-color: var(--mac-status-connected-text);
 }
 
 .border-neon-purple {
-  border-color: #8b5cf6;
+  border-color: var(--mac-accent-purple-400);
 }
 
 .border-neon-pink {
-  border-color: #ff006e;
+  border-color: var(--mac-accent-pink-400);
 }
 
 .border-neon-cyan {
-  border-color: #06ffa5;
+  border-color: var(--mac-accent-cyan-400);
 }
 
 /* Custom animations */
@@ -197,16 +197,16 @@
   }
 
   .recording-indicator {
-    background: #ef4444;
-    box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    background: var(--mac-status-error);
+    box-shadow: 0 0 10px var(--mac-status-error-bg);
   }
 }
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   .recording-indicator {
-    background: #ff0000;
-    border: 1px solid #ffffff;
+    background: var(--mac-status-error);
+    border: 1px solid var(--mac-text-primary);
   }
 }
 
@@ -317,11 +317,11 @@
 
 /* Holographic Text Effects */
 .holographic-text {
-  color: #3b82f6;
+  color: var(--mac-primary-blue-400);
   text-shadow:
-    0 0 5px #3b82f6,
-    0 0 10px #3b82f6,
-    0 0 15px #3b82f6;
+    0 0 5px var(--mac-primary-blue-400),
+    0 0 10px var(--mac-primary-blue-400),
+    0 0 15px var(--mac-primary-blue-400);
 }
 
 /* Custom Tailwind Extensions */
@@ -337,13 +337,13 @@
 
 /* Audio Visualizer Enhancements */
 .audio-bar {
-  background: linear-gradient(to top, #3b82f6, #0080ff);
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  background: linear-gradient(to top, var(--mac-primary-blue-400), var(--mac-primary-blue-600));
+  box-shadow: 0 0 10px var(--mac-accent-cyan-glow);
   transition: height 0.1s ease;
 }
 
 .audio-bar.active {
   box-shadow:
-    0 0 20px rgba(0, 255, 255, 0.8),
-    0 0 40px rgba(0, 255, 255, 0.4);
+    0 0 20px var(--mac-accent-cyan-glow),
+    0 0 40px var(--mac-accent-cyan-glow-subtle);
 }
