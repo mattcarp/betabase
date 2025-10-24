@@ -3,10 +3,6 @@
  * We want full visibility while troubleshooting
  */
 
-// FORCE DEBUG MODE - we're actively developing
-const _isDevelopment = true; // Always true for now
-const _isDebugEnabled = true; // Always true for now
-
 export const debugLog = (...args: any[]) => {
   console.log(...args);
 };
