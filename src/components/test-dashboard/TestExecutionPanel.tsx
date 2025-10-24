@@ -3,15 +3,15 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
+// import { Button } from "../ui/button"; // Unused
 import { Progress } from "../ui/progress";
 import { ScrollArea } from "../ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"; // Unused
 import {
-  Play,
-  Pause,
-  Square,
-  RefreshCw,
+  // Play, // Unused
+  // Pause, // Unused
+  // Square, // Unused
+  // RefreshCw, // Unused
   CheckCircle,
   XCircle,
   Clock,
@@ -59,8 +59,8 @@ interface Test {
 
 export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
   isRunning,
-  onRunTests,
-  testStats,
+  onRunTests: _onRunTests, // Unused - test execution is simulated
+  testStats: _testStats, // Unused - using local state for demo
 }) => {
   const [selectedSuite, setSelectedSuite] = useState<string | null>(null);
   const [testSuites, setTestSuites] = useState<TestSuite[]>([
@@ -187,8 +187,11 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
 
   // Simulate test execution
   useEffect(() => {
-    if (isRunning) {
-      const interval = setInterval(() => {
+    if (!isRunning) {
+      return; // No cleanup needed when not running
+    }
+
+    const interval = setInterval(() => {
         setTestSuites((prev) => {
           const updated = [...prev];
           const pendingSuite = updated.find((s) => s.status === "pending");
@@ -233,8 +236,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
         });
       }, 1000);
 
-      return () => clearInterval(interval);
-    }
+    return () => clearInterval(interval);
   }, [isRunning]);
 
   const getStatusIcon = (status: string) => {
