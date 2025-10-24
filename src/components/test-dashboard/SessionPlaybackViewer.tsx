@@ -379,6 +379,7 @@ export const SessionPlaybackViewer: React.FC = () => {
       return () => clearTimeout(timer);
     } else {
       setActiveOverlays([]);
+      return undefined;
     }
   }, [currentStep, sessionSteps]);
 
