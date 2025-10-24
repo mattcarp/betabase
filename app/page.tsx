@@ -49,8 +49,8 @@ export default function Home() {
   // Always start with false to match server/client
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
-  const [isMounted, setIsMounted] = useState(false);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const [_isMounted, setIsMounted] = useState(false);
+  const [loadError, _setLoadError] = useState<string | null>(null);
   const { settings, isLoading: settingsLoading } = useSettings();
 
   // Build-time version info
