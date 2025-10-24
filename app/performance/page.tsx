@@ -16,12 +16,10 @@ import {
   Activity,
   AlertCircle,
   CheckCircle,
-  // Clock - unused
   Database,
   HardDrive,
   RefreshCw,
   Server,
-  // TrendingUp - unused
   Zap,
 } from "lucide-react";
 import {
@@ -120,7 +118,7 @@ export default function PerformanceDashboard() {
       const interval = setInterval(fetchMetrics, 10000); // Refresh every 10 seconds
       return () => clearInterval(interval);
     }
-    return undefined; // Explicit return for consistency
+    return undefined;
   }, [fetchMetrics, autoRefresh]);
 
   // Format time

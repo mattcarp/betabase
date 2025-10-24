@@ -83,6 +83,8 @@ export interface MicrosoftEmailMetadata {
   // Enhanced context
   hasActionableContent: boolean; // Flags, meetings, mentions
   urgencyScore: number; // 0-10 based on importance, flags, keywords
+  contentLength: number;
+  extractedAt: string;
 }
 
 export class MicrosoftEmailParser {

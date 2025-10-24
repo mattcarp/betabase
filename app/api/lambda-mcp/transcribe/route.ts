@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     // Parse multipart form data
     const formData = await request.formData();
     const audioFile = formData.get("audio") as File | null;
-    // TODO: Parse options if needed: formData.get("options")
+    // const options = formData.get("options") ? JSON.parse(formData.get("options") as string) : {};
 
     if (!audioFile) {
       return NextResponse.json({ error: "No audio file provided" }, { status: 400 });

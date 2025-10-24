@@ -49,9 +49,7 @@ export default function Home() {
   // Always start with false to match server/client
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
-  // TODO: Use isMounted if needed for preventing state updates after unmount
-  // const [isMounted, setIsMounted] = useState(false);
-  // TODO: Use loadError if needed for error handling
+  const [_isMounted, setIsMounted] = useState(false);
   const [loadError, _setLoadError] = useState<string | null>(null);
   const { settings, isLoading: settingsLoading } = useSettings();
 
@@ -60,8 +58,7 @@ export default function Home() {
 
   // Startup console log with version info
   useEffect(() => {
-    // TODO: Re-enable if isMounted tracking is needed
-    // setIsMounted(true);
+    setIsMounted(true);
     if (buildInfo?.buildTime && buildInfo?.versionString) {
       const formattedBuildTime = getFormattedBuildTime(buildInfo.buildTime);
       console.log(

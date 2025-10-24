@@ -15,19 +15,11 @@ interface MailinatorEmail {
   seconds_ago: number;
 }
 
-interface MailinatorMessage {
-  data: {
-    text?: string;
-    html?: string;
-    parts?: Array<{
-      body: string;
-    }>;
-  };
-}
+// Removed unused interface _MailinatorMessage
 
 export class MailinatorHelper {
   private static readonly BASE_URL = "https://www.mailinator.com";
-  private static readonly API_BASE = "https://www.mailinator.com/api/v2";
+  // Removed unused constant _API_BASE
 
   /**
    * Generate a unique test email address

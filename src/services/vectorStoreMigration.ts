@@ -6,7 +6,7 @@
 
 import OpenAI from "openai";
 import { getSupabaseVectorService } from "./supabaseVectorService";
-import { getVectorStoreService } from "./vectorStoreService";
+// import { getVectorStoreService } from "./vectorStoreService";
 
 export interface MigrationResult {
   totalFiles: number;

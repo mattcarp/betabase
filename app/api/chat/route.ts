@@ -3,7 +3,10 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { z } from "zod";
+// import type OpenAI from "openai"; // Not needed for Vercel AI SDK
+// import { aomaCache } from "../../../src/services/aomaCache";
 import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
+// import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
 import { modelConfig } from "../../../src/services/modelConfig";
 import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 
@@ -23,6 +26,24 @@ if (!process.env.OPENAI_API_KEY) {
 // REMOVED: Client-side rate limiting
 // Let OpenAI handle rate limits naturally - we'll catch 429s and show friendly errors
 // This allows normal single-user usage while still handling rate limit errors gracefully
+
+// Enhanced query for context (currently unused)
+/* function enhanceQueryForContext(query: string): string {
+  const lowerQuery = query.toLowerCase();
+
+  // SIAM-specific terms
+  if (lowerQuery.includes("siam") && !lowerQuery.includes("sony")) {
+    return `${query} [Context: SIAM is Sony Music's AI assistant that integrates with the AOMA platform for accessing enterprise resources]`;
+  }
+
+  // AOMA-specific terms
+  if (lowerQuery.includes("aoma") && !lowerQuery.includes("sony")) {
+    return `${query} [Context: AOMA is Sony Music's enterprise platform that integrates various tools including Jira, Git, knowledge bases, and email systems]`;
+  }
+
+  // Default case - no enhancement needed
+  return query;
+} */
 
 // Knowledge object structure for structured responses
 interface KnowledgeElement {
@@ -82,8 +103,7 @@ export async function OPTIONS(_req: Request) {
 }
 
 export async function POST(req: Request) {
-  // TODO: Re-enable performance tracking once monitoring utility is extracted
-  // const chatStartTime = Date.now();
+  // const chatStartTime = Date.now(); // Used for tracking (currently disabled)
 
   try {
     console.log("[API] ========== POST /api/chat REQUEST START ==========");
@@ -236,10 +256,9 @@ export async function POST(req: Request) {
       });
     }
 
-    // Convert UI messages to AI SDK format with NULL content validation
+    // Convert UI messages to Vercel AI SDK format with NULL content validation
     // AI SDK v5 sends messages with 'parts' array, v4 uses 'content' string
-    // Note: AI SDK only supports user/assistant/system roles (no developer/tool roles)
-    const openAIMessages = messages
+    const openAIMessages: any[] = messages
       .filter((msg: any) => {
         // Extract content from v5 parts array or v4 content string
         const content = msg.parts?.find((p: any) => p.type === "text")?.text || msg.content;
@@ -254,12 +273,10 @@ export async function POST(req: Request) {
           return false;
         }
 
-        // Filter out unsupported roles (developer, tool, etc.)
-        const supportedRoles = ["system", "user", "assistant"];
+        // Filter out unsupported roles
+        const supportedRoles = ["system", "user", "assistant", "tool"];
         if (!supportedRoles.includes(msg.role)) {
-          console.warn(`[API] Filtering out message with unsupported role:`, {
-            role: msg.role,
-          });
+          console.warn(`Skipping message with unsupported role: ${msg.role}`);
           return false;
         }
 
@@ -271,14 +288,18 @@ export async function POST(req: Request) {
           msg.parts?.find((p: any) => p.type === "text")?.text || msg.content || ""
         );
 
-        // Return properly typed message for AI SDK
         if (msg.role === "system") {
-          return { role: "system" as const, content };
+          return { role: "system", content };
         } else if (msg.role === "user") {
-          return { role: "user" as const, content };
-        } else {
-          return { role: "assistant" as const, content };
+          return { role: "user", content };
+        } else if (msg.role === "assistant") {
+          return { role: "assistant", content };
+        } else if (msg.role === "tool") {
+          // Handle tool messages - convert to proper format
+          return { role: "tool", content, tool_call_id: msg.tool_call_id || "unknown" };
         }
+        // This should never happen due to filter above, but TypeScript needs this
+        return { role: "user", content };
       });
 
     // Validate we have at least one message after filtering
@@ -530,8 +551,7 @@ ${aomaContext}
 
     console.log("✅ Stream created successfully");
 
-    // Track successful request
-    // TODO: Re-enable tracking once monitoring utility is extracted
+    // Track successful request (disabled - trackRequest no longer exported from introspection)
     // trackRequest("/api/chat", "POST", Date.now() - chatStartTime, 200);
 
     // Return Vercel AI SDK response format (compatible with useChat hook)
@@ -579,8 +599,7 @@ ${aomaContext}
         "I've reached my OpenAI API quota limit. Please contact support or try again later when the quota resets.";
     }
 
-    // Track error for introspection
-    // TODO: Re-enable tracking once monitoring utility is extracted
+    // Track error for introspection (disabled - trackRequest no longer exported from introspection)
     // trackRequest(
     //   "/api/chat",
     //   "POST",

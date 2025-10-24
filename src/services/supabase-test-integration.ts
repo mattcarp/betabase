@@ -355,7 +355,7 @@ export class SupabaseTestIntegration {
    */
   async initializeTables(): Promise<void> {
     // SQL to create tables if needed
-    const createTablesSQL = `
+    const _createTablesSQL = `
       -- Test executions table
       CREATE TABLE IF NOT EXISTS test_executions (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
