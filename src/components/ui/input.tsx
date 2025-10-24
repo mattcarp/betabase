@@ -54,7 +54,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {helperText && (
           <span
             id={errorId || helperId}
-            className={cn("mt-1 text-xs", error ? "text-red-400" : "text-[var(--mac-text-muted)]")}
+            className={cn("mt-2 text-xs", error ? "text-red-400" : "text-[var(--mac-text-muted)]")}
             role={error ? "alert" : undefined}
           >
             {helperText}

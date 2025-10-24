@@ -165,6 +165,19 @@ git add . && git commit -m "your message"
 - Semicolons, quotes, line length, indentation, etc.
 - All formatting is auto-fixed
 
+**MAC Design System Compliance (NEW - blocks commit):**
+
+- Hardcoded colors (must use `--mac-*` CSS variables)
+- Non-8px spacing grid violations (gap-1/3/5/7, p-1/3/5/7, etc.)
+- Invalid font weights (only 100-400 allowed, blocks font-bold/semibold/etc.)
+
+**Manual MAC compliance checks:**
+
+```bash
+npm run mac:check         # Check staged files (used by pre-commit hook)
+npm run mac:check-all     # Check all source files
+```
+
 ### Bypassing the Hook (NOT RECOMMENDED)
 
 Only in emergencies:
@@ -337,10 +350,10 @@ SIAM has a complete Playwright test suite covering:
 
 ```bash
 # P0 Critical Tests (MUST PASS)
-npm run test:aoma                                                     # AOMA hallucination prevention (CRITICAL!)
-npx playwright test tests/curate-tab-test.spec.ts                    # File upload/delete
-npx playwright test tests/visual/dark-theme-regression.spec.ts       # UI consistency
-npx playwright test tests/e2e/smoke/smoke.spec.ts                    # Critical paths
+npm run test:aoma                                  # AOMA hallucination prevention (CRITICAL!)
+npm run test:visual                                # Visual regression (MAC compliance + dark theme)
+npx playwright test tests/curate-tab-test.spec.ts # File upload/delete
+npx playwright test tests/e2e/smoke/smoke.spec.ts # Critical paths
 ```
 
 **AOMA Chat Validation (Anti-Hallucination)**:
@@ -356,11 +369,29 @@ npm run test:aoma:all          # All AOMA tests (includes comprehensive chat tes
 ./scripts/test-aoma-validation.sh
 ```
 
+**Visual Regression Testing (MAC Design System & UI)**:
+
+```bash
+# Run all visual regression tests
+npm run test:visual
+
+# Test MAC Design System compliance (colors, spacing, typography)
+npm run test:visual:mac
+
+# Test dark theme consistency (prevent white background regressions)
+npm run test:visual:dark-theme
+
+# Update visual snapshots (after intentional UI changes)
+npm run test:visual:update-snapshots
+```
+
 **Full test documentation**:
 
 - `TESTING_FUNDAMENTALS.md` - Complete testing guide
 - `tests/README.md` - Test suite overview
 - `tests/production/AOMA-TESTING-README.md` - **AOMA anti-hallucination testing guide**
+- `tests/visual/mac-design-system-regression.spec.ts` - MAC Design System visual regression tests
+- `tests/visual/dark-theme-regression.spec.ts` - Dark theme regression prevention
 
 ## 📚 AOMA DOCUMENTATION - COMPREHENSIVE INDEX
 

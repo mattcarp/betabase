@@ -259,7 +259,7 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
           </div>
 
           {/* Network Status */}
-          <div className="flex items-center justify-between glass-panel p-3 border border-jarvis-primary/20">
+          <div className="flex items-center justify-between glass-panel p-4 border border-jarvis-primary/20">
             <div className="flex items-center space-x-3">
               {getNetworkIcon()}
               <span className="text-holographic">Network Status:</span>

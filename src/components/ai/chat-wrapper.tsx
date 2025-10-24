@@ -70,15 +70,17 @@ export function ChatWrapper({
   };
 
   return (
-    <Card className={cn("flex flex-col h-full", className)}>
-      <CardHeader className="px-4 py-3 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
+    <Card className={cn("mac-card", "flex flex-col h-full", className)}>
+      <CardHeader className="px-4 py-4 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="relative">
               <Sparkles className="h-5 w-5 text-primary animate-pulse" />
               <div className="absolute inset-0 bg-primary/20 blur-xl" />
             </div>
-            <h3 className="font-semibold text-lg">AI Assistant</h3>
+            <h3 c className="mac-title" lassName="mac-title font-semibold text-lg">
+              AI Assistant
+            </h3>
             <Badge variant="secondary" className="text-xs">
               Powered by Vercel AI SDK
             </Badge>
@@ -93,7 +95,7 @@ export function ChatWrapper({
       </CardHeader>
 
       <CardContent className="flex-1 p-0 overflow-hidden">
-        <ScrollArea ref={scrollAreaRef} className="h-full px-4 py-3">
+        <ScrollArea ref={scrollAreaRef} className="h-full px-4 py-4">
           <AnimatePresence mode="popLayout">
             {messages.length === 0 ? (
               <motion.div
@@ -106,7 +108,7 @@ export function ChatWrapper({
                   <Bot className="h-12 w-12 text-muted-foreground/50" />
                   <Zap className="h-4 w-4 text-primary absolute -top-1 -right-1" />
                 </div>
-                <p className="text-muted-foreground mb-2">
+                <p className="mac-body text-muted-foreground mb-2">
                   Start a conversation with your AI assistant
                 </p>
                 <p className="text-sm text-muted-foreground/70">
@@ -123,7 +125,7 @@ export function ChatWrapper({
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className={cn(
-                      "flex gap-3",
+                      "flex gap-4",
                       message.role === "user" ? "justify-end" : "justify-start"
                     )}
                   >
@@ -148,7 +150,7 @@ export function ChatWrapper({
                       </div>
                       {message.role !== "user" && (message as any).toolInvocations && (
                         <div className="mt-2 pt-2 border-t border-border/50">
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
                             <Clock className="h-3 w-3" />
                             <span>Used {(message as any).toolInvocations.length} tool(s)</span>
                           </div>
@@ -170,15 +172,15 @@ export function ChatWrapper({
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="flex gap-3"
+                    className="flex gap-4"
                   >
                     <Avatar className="h-8 w-8 border-2 border-primary/20">
                       <AvatarFallback className="bg-primary/10">
                         <Bot className="h-4 w-4 text-primary animate-pulse" />
                       </AvatarFallback>
                     </Avatar>
-                    <div className="bg-muted/50 backdrop-blur-sm border border-border/50 rounded-2xl px-4 py-3">
-                      <div className="flex gap-1">
+                    <div className="bg-muted/50 backdrop-blur-sm border border-border/50 rounded-2xl px-4 py-4">
+                      <div className="flex gap-2">
                         <span
                           className="h-2 w-2 bg-primary/60 rounded-full animate-bounce"
                           style={{ animationDelay: "0ms" }}
@@ -203,7 +205,7 @@ export function ChatWrapper({
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg"
+              className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg"
             >
               <div className="flex items-start gap-2">
                 <AlertCircle className="h-4 w-4 text-destructive mt-0.5" />
@@ -212,6 +214,7 @@ export function ChatWrapper({
                     {error.message || "An error occurred. Please try again."}
                   </p>
                   <Button
+                    className="mac-button mac-button-outline"
                     variant="ghost"
                     size="sm"
                     onClick={() => reload()}
@@ -233,7 +236,7 @@ export function ChatWrapper({
             onChange={handleInputChange}
             placeholder={placeholder}
             disabled={isLoading}
-            className="flex-1 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary/50 transition-colors"
+            className="flex-1 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary/50 transition-colors mac-input"
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -245,7 +248,7 @@ export function ChatWrapper({
             type="submit"
             size="icon"
             disabled={!input.trim() || isLoading}
-            className="relative overflow-hidden group"
+            className="relative overflow-hidden group mac-button mac-button-primary"
           >
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -258,6 +261,7 @@ export function ChatWrapper({
           </Button>
           {isLoading && (
             <Button
+              className="mac-button mac-button-outline"
               type="button"
               size="icon"
               variant="outline"

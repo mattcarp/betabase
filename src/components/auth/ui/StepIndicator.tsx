@@ -17,12 +17,12 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
 
   return (
     <div className={cn("mb-6", className)}>
-      <div className="flex justify-center mb-3">
+      <div className="flex justify-center mb-4">
         {Array.from({ length: totalSteps }, (_, i) => (
           <div
             key={i}
             className={cn(
-              "w-2 h-2 rounded-full mx-1 transition-all duration-300",
+              "w-2 h-2 rounded-full mx-2 transition-all duration-300",
               i <= currentStep ? "bg-neon-cyan shadow-[0_0_10px_rgba(6,255,165,0.5)]" : "bg-muted"
             )}
           />

@@ -73,7 +73,7 @@ export const useNotifications = () => {
                 action.onClick();
                 if (dismissible) toast.dismiss();
               }}
-              className="ml-4 px-2 py-1 text-xs bg-transparent border border-current hover:bg-current hover:text-black transition-colors"
+              className="ml-4 px-2 py-2 text-xs bg-transparent border border-current hover:bg-current hover:text-black transition-colors"
               data-testid="notification-action"
             >
               {action.label}

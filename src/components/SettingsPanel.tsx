@@ -118,7 +118,13 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
           <div className="flex items-center gap-2">
             <Settings className="w-5 h-5 text-blue-600" />
-            <h2 className="text-xl font-bold text-blue-600 font-mono">Settings</h2>
+            <h2
+              c
+              className="mac-heading"
+              lassName="mac-heading text-xl font-bold text-blue-600 font-mono"
+            >
+              Settings
+            </h2>
           </div>
           <button
             onClick={onClose}
@@ -141,7 +147,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={cn(
-                      "w-full flex items-center gap-3 px-3 py-2 rounded font-mono text-sm transition-colors",
+                      "w-full flex items-center gap-4 px-4 py-2 rounded font-mono text-sm transition-colors",
                       activeTab === tab.id
                         ? "bg-blue-600/20 text-blue-300 border border-blue-600/30"
                         : "text-gray-300 hover:text-blue-300 hover:bg-gray-700/50"
@@ -194,13 +200,13 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
           <div className="flex items-center gap-2">
             <button
               onClick={exportSettings}
-              className="flex items-center gap-2 px-3 py-2 bg-blue-600/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-600/30 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-600/30 transition-colors"
               data-testid="settings-export"
             >
               <Download className="w-4 h-4" />
               Export
             </button>
-            <label className="flex items-center gap-2 px-3 py-2 bg-green-600/20 border border-green-500 text-green-300 rounded font-mono text-sm hover:bg-green-600/30 transition-colors cursor-pointer">
+            <label className="flex items-center gap-2 px-4 py-2 bg-green-600/20 border border-green-500 text-green-300 rounded font-mono text-sm hover:bg-green-600/30 transition-colors cursor-pointer">
               <Upload className="w-4 h-4" />
               Import
               <input
@@ -259,7 +265,9 @@ function AppearanceSettings({
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-bold text-blue-600 font-mono">Appearance Settings</h3>
+      <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
+        Appearance Settings
+      </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -269,7 +277,7 @@ function AppearanceSettings({
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
               updateSetting("theme", e.target.value as SiamSettings["theme"])
             }
-            className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="theme-select"
           >
             <option value="matrix">Matrix</option>
@@ -286,7 +294,7 @@ function AppearanceSettings({
             onChange={(e) =>
               updateSetting("colorScheme", e.target.value as SiamSettings["colorScheme"])
             }
-            className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="colorscheme-select"
           >
             <option value="default">Default</option>
@@ -300,7 +308,7 @@ function AppearanceSettings({
           <select
             value={settings.fontSize}
             onChange={(e) => updateSetting("fontSize", e.target.value as SiamSettings["fontSize"])}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="fontsize-select"
           >
             <option value="small">Small</option>
@@ -371,7 +379,9 @@ function AudioSettings({
 }) {
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-bold text-blue-600 font-mono">Audio Settings</h3>
+      <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
+        Audio Settings
+      </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -432,7 +442,9 @@ function RecordingSettings({
 }) {
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-bold text-blue-600 font-mono">Recording Settings</h3>
+      <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
+        Recording Settings
+      </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -442,7 +454,7 @@ function RecordingSettings({
           <select
             value={settings.transcriptionLanguage}
             onChange={(e) => updateSetting("transcriptionLanguage", e.target.value)}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="language-select"
           >
             <option value="en-US">English (US)</option>
@@ -465,7 +477,7 @@ function RecordingSettings({
             max="480"
             value={settings.maxRecordingDuration}
             onChange={(e) => updateSetting("maxRecordingDuration", parseInt(e.target.value))}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="max-duration-input"
           />
         </div>
@@ -519,7 +531,9 @@ function LayoutSettings({
 }) {
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-bold text-blue-600 font-mono">Layout Settings</h3>
+      <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
+        Layout Settings
+      </h3>
 
       <div className="grid grid-cols-3 gap-4">
         <div>
@@ -640,7 +654,9 @@ function ShortcutsSettings({
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-bold text-blue-600 font-mono">Keyboard Shortcuts</h3>
+      <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
+        Keyboard Shortcuts
+      </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {shortcuts.map(({ key, label }) => (
@@ -650,7 +666,7 @@ function ShortcutsSettings({
               type="text"
               value={settings.shortcuts[key]}
               onChange={(e) => updateNestedSetting("shortcuts", key, e.target.value)}
-              className="w-24 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-center font-mono text-sm focus:border-blue-600 focus:outline-none"
+              className="w-24 bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white text-center font-mono text-sm focus:border-blue-600 focus:outline-none"
               data-testid={`shortcut-${key}`}
             />
           </div>
@@ -669,7 +685,9 @@ function DataPrivacySettings({
 }) {
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-bold text-blue-600 font-mono">Data & Privacy Settings</h3>
+      <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
+        Data & Privacy Settings
+      </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -682,7 +700,7 @@ function DataPrivacySettings({
             max="1000"
             value={settings.maxSessionHistory}
             onChange={(e) => updateSetting("maxSessionHistory", parseInt(e.target.value))}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="max-sessions-input"
           />
         </div>
@@ -697,7 +715,7 @@ function DataPrivacySettings({
             max="365"
             value={settings.sessionRetentionDays}
             onChange={(e) => updateSetting("sessionRetentionDays", parseInt(e.target.value))}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="retention-days-input"
           />
         </div>

@@ -297,6 +297,7 @@ export function CurateTab({
   return (
     <Card
       className={cn(
+        "mac-card",
         "h-full flex flex-col",
         "mac-glass",
         "bg-[var(--mac-surface-elevated)]",
@@ -319,7 +320,7 @@ export function CurateTab({
             <Badge
               variant="secondary"
               className={cn(
-                "flex items-center gap-1",
+                "flex items-center gap-2",
                 "mac-status-badge mac-status-connected",
                 "font-light"
               )}
@@ -330,7 +331,7 @@ export function CurateTab({
             <Badge
               variant="outline"
               className={cn(
-                "flex items-center gap-1",
+                "flex items-center gap-2",
                 "bg-[var(--mac-surface-elevated)]/50",
                 "border-[var(--mac-utility-border-elevated)]",
                 "text-[var(--mac-text-secondary)]",
@@ -460,6 +461,7 @@ export function CurateTab({
                 {selectedFiles.size > 0 && (
                   <>
                     <Button
+                      className="mac-button mac-button-primary"
                       variant="destructive"
                       size="sm"
                       onClick={() => confirmDeleteFiles(Array.from(selectedFiles))}
@@ -472,10 +474,11 @@ export function CurateTab({
                         "transition-all duration-200"
                       )}
                     >
-                      <Trash2 className="h-4 w-4 mr-1" />
+                      <Trash2 className="h-4 w-4 mr-2" />
                       Delete ({selectedFiles.size})
                     </Button>
                     <Button
+                      className="mac-button mac-button-outline"
                       variant="ghost"
                       size="sm"
                       onClick={() => setSelectedFiles(new Set())}
@@ -517,7 +520,7 @@ export function CurateTab({
                 ) : (
                   <div className="p-4 space-y-2">
                     {/* Select All */}
-                    <div className="flex items-center gap-3 pb-3 border-b border-[var(--mac-utility-border)]">
+                    <div className="flex items-center gap-4 pb-4 border-b border-[var(--mac-utility-border)]">
                       <Checkbox
                         checked={
                           selectedFiles.size === filteredFiles.length && filteredFiles.length > 0
@@ -642,7 +645,7 @@ export function CurateTab({
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="h-8 w-8 p-0 hover:bg-[var(--mac-state-hover)]"
+                              className="h-8 w-8 p-0 hover:bg-[var(--mac-state-hover)] mac-button mac-button-outline"
                             >
                               <MoreVertical className="h-4 w-4" />
                             </Button>
@@ -729,7 +732,7 @@ export function CurateTab({
                     </span>
                     <code
                       className={cn(
-                        "text-xs px-2 py-1 rounded font-light",
+                        "text-xs px-2 py-2 rounded font-light",
                         "bg-[var(--mac-surface-background)]",
                         "text-[var(--mac-text-primary)]",
                         "border border-[var(--mac-utility-border)]"
@@ -761,7 +764,7 @@ export function CurateTab({
                     </span>
                     <Badge
                       variant="default"
-                      className="flex items-center gap-1 mac-status-connected font-light"
+                      className="flex items-center gap-2 mac-status-connected font-light"
                     >
                       <CheckCircle className="h-3 w-3" />
                       Active
@@ -834,6 +837,7 @@ export function CurateTab({
           </DialogHeader>
           <DialogFooter className="gap-2">
             <Button
+              className="mac-button mac-button-outline"
               variant="outline"
               onClick={() => setDeleteDialogOpen(false)}
               className="mac-button-outline"
@@ -845,6 +849,7 @@ export function CurateTab({
               onClick={deleteFiles}
               disabled={loading}
               className={cn(
+                "mac-button mac-button-primary",
                 "bg-[var(--mac-status-error-bg)]",
                 "border border-[var(--mac-status-error-border)]",
                 "text-[var(--mac-status-error-text)]",
@@ -900,7 +905,7 @@ export function CurateTab({
             {previewLoading ? (
               <div className="flex items-center justify-center h-full">
                 <Spinner className="h-8 w-8" />
-                <span className="ml-3 text-[var(--mac-text-secondary)] font-light">
+                <span className="ml-4 text-[var(--mac-text-secondary)] font-light">
                   Loading content...
                 </span>
               </div>
@@ -919,6 +924,7 @@ export function CurateTab({
 
           <DialogFooter>
             <Button
+              className="mac-button mac-button-outline"
               variant="outline"
               onClick={() => setPreviewDialogOpen(false)}
               className="mac-button-outline"

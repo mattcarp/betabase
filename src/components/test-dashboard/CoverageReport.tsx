@@ -168,8 +168,8 @@ export const CoverageReport: React.FC = () => {
       {/* Overall Coverage Summary */}
       <div className="grid grid-cols-4 gap-4">
         {Object.entries(coverageData).map(([key, data]) => (
-          <Card key={key}>
-            <CardHeader className="pb-3">
+          <Card className="mac-card" key={key}>
+            <CardHeader className="pb-4">
               <CardTitle className="text-sm font-medium capitalize flex items-center gap-2">
                 {key === "branches" && <GitBranch className="h-4 w-4" />}
                 {key === "functions" && <FileCode className="h-4 w-4" />}
@@ -203,7 +203,7 @@ export const CoverageReport: React.FC = () => {
               <div className="flex items-center justify-between">
                 <CardTitle>Coverage Trend</CardTitle>
                 <Badge className="bg-green-500/20 text-green-500">
-                  <TrendingUp className="h-3 w-3 mr-1" />
+                  <TrendingUp className="h-3 w-3 mr-2" />
                   +3.4%
                 </Badge>
               </div>
@@ -289,7 +289,7 @@ export const CoverageReport: React.FC = () => {
                 </div>
               </div>
 
-              <Button className="w-full" variant="outline">
+              <Button className="w-full mac-button mac-button-outline" variant="outline">
                 <Download className="h-4 w-4 mr-2" />
                 Export Coverage Report
               </Button>
@@ -307,6 +307,7 @@ export const CoverageReport: React.FC = () => {
                 <CardTitle>File Coverage</CardTitle>
                 <div className="flex gap-2">
                   <Button
+                    className="mac-button mac-button-primary"
                     variant={coverageFilter === "all" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setCoverageFilter("all")}
@@ -314,6 +315,7 @@ export const CoverageReport: React.FC = () => {
                     All
                   </Button>
                   <Button
+                    className="mac-button mac-button-primary"
                     variant={coverageFilter === "low" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setCoverageFilter("low")}
@@ -321,6 +323,7 @@ export const CoverageReport: React.FC = () => {
                     Low
                   </Button>
                   <Button
+                    className="mac-button mac-button-primary"
                     variant={coverageFilter === "medium" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setCoverageFilter("medium")}
@@ -328,6 +331,7 @@ export const CoverageReport: React.FC = () => {
                     Medium
                   </Button>
                   <Button
+                    className="mac-button mac-button-primary"
                     variant={coverageFilter === "high" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setCoverageFilter("high")}
@@ -357,12 +361,13 @@ export const CoverageReport: React.FC = () => {
                         <Card
                           key={file.path}
                           className={cn(
+                            "mac-card",
                             "cursor-pointer transition-all hover:shadow-md",
                             selectedFile?.path === file.path && "ring-2 ring-primary"
                           )}
                           onClick={() => setSelectedFile(file)}
                         >
-                          <CardContent className="p-3">
+                          <CardContent className="p-4">
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2">
                                 <File className="h-4 w-4 text-muted-foreground" />
@@ -395,9 +400,9 @@ export const CoverageReport: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="text-lg">{selectedFile.path.split("/").pop()}</CardTitle>
-                    <p className="text-sm text-muted-foreground mt-1">{selectedFile.path}</p>
+                    <p className="text-sm text-muted-foreground mt-2">{selectedFile.path}</p>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button className="mac-button mac-button-outline" variant="outline" size="sm">
                     <FileCode className="h-4 w-4 mr-2" />
                     View Source
                   </Button>
@@ -464,7 +469,7 @@ export const CoverageReport: React.FC = () => {
                 </div>
 
                 {/* Uncovered Lines */}
-                <Card className="bg-red-500/10 border-red-500/20">
+                <Card className="mac-card bg-red-500/10 border-red-500/20">
                   <CardHeader>
                     <CardTitle className="text-base flex items-center gap-2">
                       <AlertTriangle className="h-4 w-4 text-red-500" />
@@ -484,7 +489,7 @@ export const CoverageReport: React.FC = () => {
               </CardContent>
             </Card>
           ) : (
-            <Card className="h-full">
+            <Card className="mac-card h-full">
               <CardContent className="flex items-center justify-center h-full text-muted-foreground">
                 Select a file to view detailed coverage
               </CardContent>

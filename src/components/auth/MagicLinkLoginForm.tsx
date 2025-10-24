@@ -219,13 +219,17 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
           <div className="inline-flex items-center justify-center mb-6">
             <SiamLogo size="2xl" variant="icon" className="drop-shadow-2xl" />
           </div>
-          <h1 className="mac-display-text mb-2">The Betabase</h1>
+          <h1 c className="mac-heading" lassName="mac-heading mac-display-text mb-2">
+            The Betabase
+          </h1>
           <p className="mac-body text-gray-300">yup. it's back.</p>
         </div>
 
         {/* Welcome Message */}
         <div className="mb-8">
-          <h2 className="mac-heading text-white mb-2">Welcome Back</h2>
+          <h2 c className="mac-heading" lassName="mac-heading text-white mb-2">
+            Welcome Back
+          </h2>
           <p className="mac-body">Sign in to continue to your dashboard</p>
         </div>
       </div>
@@ -271,12 +275,12 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
             >
               {isLoading ? (
                 <>
-                  <Spinner className="mr-3 h-5 w-5" />
+                  <Spinner className="mr-4 h-5 w-5" />
                   Sending Magic Link...
                 </>
               ) : (
                 <>
-                  <Mail className="mr-3 h-5 w-5" />
+                  <Mail className="mr-4 h-5 w-5" />
                   Send Magic Link
                 </>
               )}
@@ -288,9 +292,15 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
             {/* Success Message */}
             <div className="text-center p-6 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl border border-green-500/20 backdrop-blur-sm">
               <CheckCircle className="mx-auto h-12 w-12 text-green-400 mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">Magic Link Sent!</h3>
+              <h3
+                c
+                className="mac-title"
+                lassName="mac-title text-lg font-semibold text-white mb-2"
+              >
+                Magic Link Sent!
+              </h3>
               <p className="text-sm text-gray-300">We've sent a verification code to</p>
-              <p className="text-sm font-medium text-white mt-1">{currentEmail}</p>
+              <p className="text-sm font-medium text-white mt-2">{currentEmail}</p>
               <p className="text-xs text-gray-400 mt-2">
                 Check your email for the 6-digit verification code
               </p>
@@ -342,18 +352,19 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
               >
                 {isLoading ? (
                   <>
-                    <Spinner className="mr-3 h-5 w-5" />
+                    <Spinner className="mr-4 h-5 w-5" />
                     Verifying Code...
                   </>
                 ) : (
                   <>
-                    <CheckCircle className="mr-3 h-5 w-5" />
+                    <CheckCircle className="mr-4 h-5 w-5" />
                     Verify & Sign In
                   </>
                 )}
               </Button>
 
               <Button
+                className="mac-button mac-button-outline"
                 type="button"
                 variant="ghost"
                 onClick={() => {

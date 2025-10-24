@@ -168,11 +168,18 @@ export const AOMAPerformanceDashboard: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold">AOMA Performance Dashboard</h2>
-          <p className="text-muted-foreground">Real-time A/B testing: Railway vs Render</p>
+          <h2 c className="mac-heading" lassName="mac-heading text-3xl font-bold">
+            AOMA Performance Dashboard
+          </h2>
+          <p className="mac-body text-muted-foreground">Real-time A/B testing: Railway vs Render</p>
         </div>
         <div className="flex gap-2">
-          <Button onClick={runQuickBenchmark} disabled={isRunningBenchmark} variant="outline">
+          <Button
+            className="mac-button mac-button-outline"
+            onClick={runQuickBenchmark}
+            disabled={isRunningBenchmark}
+            variant="outline"
+          >
             {isRunningBenchmark ? (
               <>
                 <Activity className="h-4 w-4 mr-2 animate-spin" />
@@ -185,7 +192,11 @@ export const AOMAPerformanceDashboard: React.FC = () => {
               </>
             )}
           </Button>
-          <Button onClick={() => aomaRouter.clearMetrics()} variant="ghost">
+          <Button
+            className="mac-button mac-button-primary"
+            onClick={() => aomaRouter.clearMetrics()}
+            variant="ghost"
+          >
             Clear Metrics
           </Button>
         </div>
@@ -203,7 +214,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="text-sm font-medium">Render Traffic %</label>
-              <div className="flex items-center gap-2 mt-1">
+              <div className="flex items-center gap-2 mt-2">
                 <input
                   type="range"
                   min="0"
@@ -263,7 +274,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                 <TrendingDown className="h-8 w-8 text-blue-600" />
               )}
             </div>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-2">
               {Math.abs(stats.comparison.improvement).toFixed(1)}% faster
             </p>
           </CardContent>
@@ -303,7 +314,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm">Railway</span>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   {stats.railway.successRate > 95 ? (
                     <CheckCircle className="h-4 w-4 text-green-600" />
                   ) : (
@@ -314,7 +325,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Render</span>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   {stats.render.successRate > 95 ? (
                     <CheckCircle className="h-4 w-4 text-green-600" />
                   ) : (
@@ -410,27 +421,31 @@ export const AOMAPerformanceDashboard: React.FC = () => {
             <CardContent>
               <div className="grid grid-cols-2 gap-8">
                 <div>
-                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <h4
+                    c
+                    className="mac-title"
+                    lassName="mac-title font-semibold mb-4 flex items-center gap-2"
+                  >
                     <Server className="h-4 w-4" />
                     Railway
                   </h4>
                   <div className="space-y-3">
                     <div>
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P50</span>
                         <span>{stats.railway.p50Latency.toFixed(2)}ms</span>
                       </div>
                       <Progress value={50} className="h-2" />
                     </div>
                     <div>
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P95</span>
                         <span>{stats.railway.p95Latency.toFixed(2)}ms</span>
                       </div>
                       <Progress value={95} className="h-2" />
                     </div>
                     <div>
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P99</span>
                         <span>{stats.railway.p99Latency.toFixed(2)}ms</span>
                       </div>
@@ -440,27 +455,31 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <h4
+                    c
+                    className="mac-title"
+                    lassName="mac-title font-semibold mb-4 flex items-center gap-2"
+                  >
                     <Database className="h-4 w-4" />
                     Render
                   </h4>
                   <div className="space-y-3">
                     <div>
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P50</span>
                         <span>{stats.render.p50Latency.toFixed(2)}ms</span>
                       </div>
                       <Progress value={50} className="h-2 bg-green-100" />
                     </div>
                     <div>
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P95</span>
                         <span>{stats.render.p95Latency.toFixed(2)}ms</span>
                       </div>
                       <Progress value={95} className="h-2 bg-green-100" />
                     </div>
                     <div>
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P99</span>
                         <span>{stats.render.p99Latency.toFixed(2)}ms</span>
                       </div>

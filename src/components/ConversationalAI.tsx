@@ -156,7 +156,9 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
       <div className={`conversational-ai-panel ${className}`}>
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-holographic">ElevenLabs Conversational AI</h3>
+          <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-holographic">
+            ElevenLabs Conversational AI
+          </h3>
           <div className="flex items-center gap-2">
             {/* Connection status */}
             {isConnected && <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />}
@@ -176,7 +178,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
 
         {/* Agent ID warning */}
         {!effectiveAgentId && (
-          <div className="mb-4 p-3 bg-yellow-900/20 border border-yellow-500 rounded text-yellow-400 text-sm">
+          <div className="mb-4 p-4 bg-yellow-900/20 border border-yellow-500 rounded text-yellow-400 text-sm">
             Set NEXT_PUBLIC_ELEVENLABS_AGENT_ID environment variable to enable ElevenLabs
             integration
           </div>
@@ -184,7 +186,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
 
         {/* Error display */}
         {displayError && (
-          <div className="mb-4 p-3 bg-red-900/20 border border-red-500 rounded text-red-400 text-sm">
+          <div className="mb-4 p-4 bg-red-900/20 border border-red-500 rounded text-red-400 text-sm">
             <div className="flex items-center gap-2">
               <AlertCircle className="w-4 h-4" />
               <span>{displayError}</span>
@@ -194,18 +196,18 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
 
         {/* Conversation state indicator */}
         {isConnected && (
-          <div className="mb-4 p-3 bg-blue-900/10 border border-blue-500/30 rounded">
+          <div className="mb-4 p-4 bg-blue-900/10 border border-blue-500/30 rounded">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 {stateInfo.icon}
                 <span className={`text-sm font-medium ${stateInfo.color}`}>{stateInfo.text}</span>
               </div>
               <div className="flex items-center gap-4 text-xs text-gray-400">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-400 rounded-full" />
                   <span>User: {(userAudioLevel * 100).toFixed(0)}%</span>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-400 rounded-full" />
                   <span>AI: {(aiAudioLevel * 100).toFixed(0)}%</span>
                 </div>
@@ -267,11 +269,15 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         <div className="space-y-4">
           {/* User transcription */}
           <div className="transcription-display">
-            <h4 className="text-sm font-medium text-blue-400 mb-2 flex items-center gap-2">
+            <h4
+              c
+              className="mac-title"
+              lassName="mac-title text-sm font-medium text-blue-400 mb-2 flex items-center gap-2"
+            >
               <Mic className="w-4 h-4" />
               Your Speech:
             </h4>
-            <div className="p-3 bg-blue-900/10 border border-blue-500/30 rounded-lg min-h-[60px]">
+            <div className="p-4 bg-blue-900/10 border border-blue-500/30 rounded-lg min-h-[60px]">
               {userTranscript ? (
                 <p className="text-white text-sm">{userTranscript}</p>
               ) : (
@@ -288,11 +294,15 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
 
           {/* AI transcription */}
           <div className="transcription-display">
-            <h4 className="text-sm font-medium text-green-400 mb-2 flex items-center gap-2">
+            <h4
+              c
+              className="mac-title"
+              lassName="mac-title text-sm font-medium text-green-400 mb-2 flex items-center gap-2"
+            >
               <Radio className="w-4 h-4" />
               AI Response:
             </h4>
-            <div className="p-3 bg-green-900/10 border border-green-500/30 rounded-lg min-h-[60px]">
+            <div className="p-4 bg-green-900/10 border border-green-500/30 rounded-lg min-h-[60px]">
               {aiTranscript ? (
                 <p className="text-white text-sm">{aiTranscript}</p>
               ) : (

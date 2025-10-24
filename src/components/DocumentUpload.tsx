@@ -151,7 +151,9 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
   return (
     <div className="w-full max-w-2xl mx-auto p-6">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-white mb-2">Document Upload</h3>
+        <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-white mb-2">
+          Document Upload
+        </h3>
         <p className="text-sm text-gray-400">
           Upload documents to the AOMA knowledge base for enhanced assistance
         </p>
@@ -182,7 +184,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
             {uploadStatus === "idle" && (
               <>
                 <Upload className="w-12 h-12 text-blue-500 mb-4" />
-                <p className="text-white mb-2">Drop files here or click to browse</p>
+                <p className="mac-body text-white mb-2">Drop files here or click to browse</p>
                 <p className="text-sm text-gray-400">
                   Supports PDF, TXT, MD, DOC, DOCX, Images, CSV, JSON (max 50MB)
                 </p>
@@ -192,7 +194,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
             {uploadStatus === "uploading" && (
               <>
                 <Loader2 className="w-12 h-12 text-blue-500 mb-4 animate-spin" />
-                <p className="text-white mb-2">Uploading...</p>
+                <p className="mac-body text-white mb-2">Uploading...</p>
                 <Progress value={uploadProgress} className="w-full max-w-xs mt-2" />
               </>
             )}
@@ -200,7 +202,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
             {uploadStatus === "processing" && (
               <>
                 <Loader2 className="w-12 h-12 text-blue-500 mb-4 animate-spin" />
-                <p className="text-white mb-2">Processing document...</p>
+                <p className="mac-body text-white mb-2">Processing document...</p>
                 <p className="text-sm text-gray-400">Adding to knowledge base</p>
               </>
             )}
@@ -208,7 +210,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
             {uploadStatus === "complete" && (
               <>
                 <CheckCircle className="w-12 h-12 text-green-500 mb-4" />
-                <p className="text-white mb-2">Upload complete!</p>
+                <p className="mac-body text-white mb-2">Upload complete!</p>
                 <p className="text-sm text-gray-400">Document added to knowledge base</p>
               </>
             )}
@@ -216,7 +218,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
             {uploadStatus === "error" && (
               <>
                 <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
-                <p className="text-white mb-2">Upload failed</p>
+                <p className="mac-body text-white mb-2">Upload failed</p>
                 <p className="text-sm text-red-400">{errorMessage}</p>
               </>
             )}
@@ -227,14 +229,16 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       {/* Uploaded Files List */}
       {uploadedFiles.length > 0 && (
         <div className="mt-6">
-          <h4 className="text-sm font-semibold text-white mb-3">Uploaded Documents</h4>
+          <h4 c className="mac-title" lassName="mac-title text-sm font-semibold text-white mb-4">
+            Uploaded Documents
+          </h4>
           <div className="space-y-2">
             {uploadedFiles.map((file) => (
               <div
                 key={file.id}
-                className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg border border-gray-700"
+                className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg border border-gray-700"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   <File className="w-5 h-5 text-blue-500" />
                   <div>
                     <p className="text-sm text-white">{file.name}</p>

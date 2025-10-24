@@ -171,7 +171,7 @@ const components: Options["components"] = {
     </ol>
   ),
   li: ({ node, children, className, ...props }) => (
-    <li className={cn("py-1", className)} {...props}>
+    <li className={cn("py-2", className)} {...props}>
       {children}
     </li>
   ),
@@ -196,22 +196,42 @@ const components: Options["components"] = {
     </a>
   ),
   h1: ({ node, children, className, ...props }) => (
-    <h1 className={cn("mt-6 mb-2 font-semibold text-3xl", className)} {...props}>
+    <h1
+      c
+      className="mac-heading"
+      lassName={cn("mt-6 mb-2 font-semibold text-3xl", className)}
+      {...props}
+    >
       {children}
     </h1>
   ),
   h2: ({ node, children, className, ...props }) => (
-    <h2 className={cn("mt-6 mb-2 font-semibold text-2xl", className)} {...props}>
+    <h2
+      c
+      className="mac-heading"
+      lassName={cn("mt-6 mb-2 font-semibold text-2xl", className)}
+      {...props}
+    >
       {children}
     </h2>
   ),
   h3: ({ node, children, className, ...props }) => (
-    <h3 className={cn("mt-6 mb-2 font-semibold text-xl", className)} {...props}>
+    <h3
+      c
+      className="mac-title"
+      lassName={cn("mt-6 mb-2 font-semibold text-xl", className)}
+      {...props}
+    >
       {children}
     </h3>
   ),
   h4: ({ node, children, className, ...props }) => (
-    <h4 className={cn("mt-6 mb-2 font-semibold text-lg", className)} {...props}>
+    <h4
+      c
+      className="mac-title"
+      lassName={cn("mt-6 mb-2 font-semibold text-lg", className)}
+      {...props}
+    >
       {children}
     </h4>
   ),
@@ -277,7 +297,7 @@ const components: Options["components"] = {
 
     return (
       <code
-        className={cn("rounded bg-muted px-1.5 py-0.5 font-mono text-sm", className)}
+        className={cn("rounded bg-muted px-2.5 py-0.5 font-mono text-sm", className)}
         {...props}
       />
     );

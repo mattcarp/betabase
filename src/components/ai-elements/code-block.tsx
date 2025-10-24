@@ -98,7 +98,7 @@ export const CodeBlockCopyButton = ({
 
   return (
     <Button
-      className={cn("shrink-0", className)}
+      className={cn("mac-button mac-button-outline", "shrink-0", className)}
       onClick={copyToClipboard}
       size="icon"
       variant="ghost"

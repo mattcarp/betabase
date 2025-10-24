@@ -100,10 +100,12 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
       aria-modal="true"
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-jarvis-panel-border">
+      <div className="flex items-center justify-between px-4 py-4 border-b border-jarvis-panel-border">
         <div>
-          <h3 className="mac-title text-mac-text-primary">HUD Customization</h3>
-          <p className="mac-body text-xs text-mac-text-muted mt-1">
+          <h3 c className="mac-title" lassName="mac-title text-mac-text-primary">
+            HUD Customization
+          </h3>
+          <p className="mac-body text-xs text-mac-text-muted mt-2">
             Personalize your JARVIS interface
           </p>
         </div>
@@ -127,7 +129,11 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
       <div className="p-4 space-y-6 max-h-[70vh] overflow-y-auto">
         {/* Theme Selection */}
         <section aria-labelledby="theme-section">
-          <h4 id="theme-section" className="mac-body font-semibold text-mac-text-primary mb-3">
+          <h4
+            className="mac-title"
+            id="theme-section"
+            className="mac-title mac-body font-semibold text-mac-text-primary mb-4"
+          >
             Theme Preset
           </h4>
           <div className="grid grid-cols-1 gap-2">
@@ -136,7 +142,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
                 key={key}
                 onClick={() => handleSettingChange("theme", key as GlassmorphismSettings["theme"])}
                 className={cn(
-                  "p-3 rounded-lg border transition-all duration-200",
+                  "p-4 rounded-lg border transition-all duration-200",
                   localSettings.theme === key
                     ? "border-jarvis-cyan bg-jarvis-panel-active-bg-start"
                     : "border-jarvis-panel-border bg-jarvis-panel-bg-start hover:bg-jarvis-panel-bg-end"
@@ -148,7 +154,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
                     <p className="mac-body font-medium text-mac-text-primary">{preset.name}</p>
                     <p className="text-xs text-mac-text-muted">{preset.description}</p>
                   </div>
-                  <div className="flex gap-1">
+                  <div className="flex gap-2">
                     <div
                       className="w-6 h-6 rounded-full border border-white/20"
                       style={{ backgroundColor: preset.primary }}
@@ -186,7 +192,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
             aria-valuemax={30}
             aria-valuenow={localSettings.blur}
           />
-          <div className="flex justify-between text-xs text-mac-text-muted mt-1">
+          <div className="flex justify-between text-xs text-mac-text-muted mt-2">
             <span>Sharp</span>
             <span>Blurred</span>
           </div>
@@ -214,7 +220,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
             aria-valuemax={30}
             aria-valuenow={Math.round(localSettings.opacity * 100)}
           />
-          <div className="flex justify-between text-xs text-mac-text-muted mt-1">
+          <div className="flex justify-between text-xs text-mac-text-muted mt-2">
             <span>Transparent</span>
             <span>Solid</span>
           </div>
@@ -246,7 +252,11 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
 
         {/* Animation Speed */}
         <section aria-labelledby="animation-section">
-          <h4 id="animation-section" className="mac-body font-semibold text-mac-text-primary mb-3">
+          <h4
+            className="mac-title"
+            id="animation-section"
+            className="mac-title mac-body font-semibold text-mac-text-primary mb-4"
+          >
             Animation Speed
           </h4>
           <div className="flex gap-2">
@@ -255,7 +265,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
                 key={speed}
                 onClick={() => handleSettingChange("animationSpeed", speed)}
                 className={cn(
-                  "flex-1 py-2 px-3 rounded-lg border text-sm transition-all duration-200",
+                  "flex-1 py-2 px-4 rounded-lg border text-sm transition-all duration-200",
                   localSettings.animationSpeed === speed
                     ? "border-jarvis-cyan bg-jarvis-panel-active-bg-start text-jarvis-cyan"
                     : "border-jarvis-panel-border bg-jarvis-panel-bg-start text-mac-text-secondary hover:bg-jarvis-panel-bg-end"
@@ -270,12 +280,16 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
 
         {/* High Contrast Toggle */}
         <section aria-labelledby="contrast-section">
-          <div className="flex items-center justify-between p-3 rounded-lg border border-jarvis-panel-border bg-jarvis-panel-bg-start">
+          <div className="flex items-center justify-between p-4 rounded-lg border border-jarvis-panel-border bg-jarvis-panel-bg-start">
             <div>
-              <h4 id="contrast-section" className="mac-body font-semibold text-mac-text-primary">
+              <h4
+                className="mac-title"
+                id="contrast-section"
+                className="mac-title mac-body font-semibold text-mac-text-primary"
+              >
                 High Contrast Mode
               </h4>
-              <p className="text-xs text-mac-text-muted mt-1">
+              <p className="text-xs text-mac-text-muted mt-2">
                 Increase visibility for accessibility
               </p>
             </div>
@@ -306,10 +320,10 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
       </div>
 
       {/* Keyboard Shortcuts Info */}
-      <div className="px-4 py-3 border-t border-jarvis-panel-border bg-jarvis-panel-dark-bg-start/50">
+      <div className="px-4 py-4 border-t border-jarvis-panel-border bg-jarvis-panel-dark-bg-start/50">
         <p className="text-xs text-mac-text-muted text-center">
-          <kbd className="px-1 py-0.5 rounded bg-jarvis-panel-dark-bg-end">Ctrl+↑/↓</kbd> Blur •{" "}
-          <kbd className="px-1 py-0.5 rounded bg-jarvis-panel-dark-bg-end">Ctrl+←/→</kbd> Opacity
+          <kbd className="px-2 py-0.5 rounded bg-jarvis-panel-dark-bg-end">Ctrl+↑/↓</kbd> Blur •{" "}
+          <kbd className="px-2 py-0.5 rounded bg-jarvis-panel-dark-bg-end">Ctrl+←/→</kbd> Opacity
         </p>
       </div>
     </div>

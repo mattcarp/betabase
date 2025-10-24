@@ -88,9 +88,18 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
     let html = text;
 
     // Headers
-    html = html.replace(/^### (.*$)/gim, "<h3 class='text-lg font-semibold mt-4 mb-2'>$1</h3>");
-    html = html.replace(/^## (.*$)/gim, "<h2 class='text-xl font-semibold mt-4 mb-2'>$1</h2>");
-    html = html.replace(/^# (.*$)/gim, "<h1 class='text-2xl font-bold mt-4 mb-2'>$1</h1>");
+    html = html.replace(
+      /^### (.*$)/gim,
+      "<h3 class='mac-title text-lg font-semibold mt-4 mb-2'>$1</h3>"
+    );
+    html = html.replace(
+      /^## (.*$)/gim,
+      "<h2 class='mac-heading text-xl font-semibold mt-4 mb-2'>$1</h2>"
+    );
+    html = html.replace(
+      /^# (.*$)/gim,
+      "<h1 class='mac-heading text-2xl font-bold mt-4 mb-2'>$1</h1>"
+    );
 
     // Bold
     html = html.replace(/\*\*(.*?)\*\*/gim, "<strong class='font-bold'>$1</strong>");
@@ -101,7 +110,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
     // Code
     html = html.replace(
       /`(.*?)`/gim,
-      "<code class='bg-muted px-1 py-0.5 rounded text-sm font-mono'>$1</code>"
+      "<code class='bg-muted px-2 py-0.5 rounded text-sm font-mono'>$1</code>"
     );
 
     // Links
@@ -124,7 +133,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6">
-      <Card className="max-w-4xl w-full max-h-[80vh] flex flex-col">
+      <Card className="mac-card max-w-4xl w-full max-h-[80vh] flex flex-col">
         <CardHeader className="flex-shrink-0">
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
@@ -134,7 +143,12 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
                 Markdown Supported
               </Badge>
             </CardTitle>
-            <Button variant="ghost" size="icon" onClick={onClose}>
+            <Button
+              className="mac-button mac-button-outline"
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+            >
               <X className="h-4 w-4" />
             </Button>
           </div>
@@ -142,8 +156,9 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
 
         <CardContent className="flex-1 overflow-hidden flex flex-col p-6">
           {/* Toolbar */}
-          <div className="flex items-center gap-1 mb-3 pb-3 border-b flex-shrink-0">
+          <div className="flex items-center gap-2 mb-4 pb-4 border-b flex-shrink-0">
             <Button
+              className="mac-button mac-button-outline"
               variant="ghost"
               size="sm"
               onClick={() => insertMarkdown("# ", "")}
@@ -152,6 +167,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
               <Heading1 className="h-4 w-4" />
             </Button>
             <Button
+              className="mac-button mac-button-outline"
               variant="ghost"
               size="sm"
               onClick={() => insertMarkdown("## ", "")}
@@ -159,8 +175,9 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
             >
               <Heading2 className="h-4 w-4" />
             </Button>
-            <div className="w-px h-6 bg-border mx-1" />
+            <div className="w-px h-6 bg-border mx-2" />
             <Button
+              className="mac-button mac-button-outline"
               variant="ghost"
               size="sm"
               onClick={() => insertMarkdown("**", "**")}
@@ -169,6 +186,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
               <Bold className="h-4 w-4" />
             </Button>
             <Button
+              className="mac-button mac-button-outline"
               variant="ghost"
               size="sm"
               onClick={() => insertMarkdown("*", "*")}
@@ -176,14 +194,27 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
             >
               <Italic className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="sm" onClick={() => insertMarkdown("`", "`")} title="Code">
+            <Button
+              className="mac-button mac-button-outline"
+              variant="ghost"
+              size="sm"
+              onClick={() => insertMarkdown("`", "`")}
+              title="Code"
+            >
               <Code className="h-4 w-4" />
             </Button>
-            <div className="w-px h-6 bg-border mx-1" />
-            <Button variant="ghost" size="sm" onClick={() => insertMarkdown("- ", "")} title="List">
+            <div className="w-px h-6 bg-border mx-2" />
+            <Button
+              className="mac-button mac-button-outline"
+              variant="ghost"
+              size="sm"
+              onClick={() => insertMarkdown("- ", "")}
+              title="List"
+            >
               <List className="h-4 w-4" />
             </Button>
             <Button
+              className="mac-button mac-button-outline"
               variant="ghost"
               size="sm"
               onClick={() => insertMarkdown("[", "](url)")}
@@ -210,7 +241,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="edit" className="flex-1 overflow-hidden mt-3">
+            <TabsContent value="edit" className="flex-1 overflow-hidden mt-4">
               <Textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
@@ -228,7 +259,7 @@ Examples:
               />
             </TabsContent>
 
-            <TabsContent value="preview" className="flex-1 overflow-auto mt-3">
+            <TabsContent value="preview" className="flex-1 overflow-auto mt-4">
               <div className="prose prose-sm dark:prose-invert max-w-none">
                 {content ? (
                   <div
@@ -237,7 +268,7 @@ Examples:
                     }}
                   />
                 ) : (
-                  <p className="text-muted-foreground italic">
+                  <p className="mac-body text-muted-foreground italic">
                     No content to preview. Switch to Edit tab to add content.
                   </p>
                 )}
@@ -247,10 +278,14 @@ Examples:
 
           {/* Actions */}
           <div className="flex items-center justify-end gap-2 mt-4 pt-4 border-t flex-shrink-0">
-            <Button variant="outline" onClick={onClose}>
+            <Button className="mac-button mac-button-outline" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button variant="default" onClick={handleSave} className="gap-2">
+            <Button
+              variant="default"
+              onClick={handleSave}
+              className="gap-2 mac-button mac-button-primary"
+            >
               <Save className="h-4 w-4" />
               Save Note
             </Button>

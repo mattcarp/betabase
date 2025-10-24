@@ -285,13 +285,14 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                   <Card
                     key={suite.id}
                     className={cn(
+                      "mac-card",
                       "cursor-pointer transition-all hover:shadow-md",
                       selectedSuite === suite.id && "ring-2 ring-primary",
                       getStatusColor(suite.status)
                     )}
                     onClick={() => setSelectedSuite(suite.id)}
                   >
-                    <CardContent className="p-3">
+                    <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           {getStatusIcon(suite.status)}
@@ -317,7 +318,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
 
       {/* Test Details */}
       <div className="col-span-5 space-y-4">
-        <Card className="h-full">
+        <Card className="mac-card h-full">
           <CardHeader>
             <CardTitle className="text-lg">Test Execution Details</CardTitle>
           </CardHeader>
@@ -328,8 +329,11 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                   {testSuites
                     .find((s) => s.id === selectedSuite)
                     ?.tests.map((test) => (
-                      <Card key={test.id} className={cn("border", getStatusColor(test.status))}>
-                        <CardContent className="p-3">
+                      <Card
+                        key={test.id}
+                        className={cn("mac-card", "border", getStatusColor(test.status))}
+                      >
+                        <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2 flex-1">
                               {getStatusIcon(test.status)}

@@ -7,7 +7,8 @@
  * - Cross-team collaboration
  */
 
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { supabase as sharedSupabaseClient } from "../lib/supabase";
 
 // Database types
 interface TestExecution {
@@ -78,10 +79,9 @@ export class SupabaseTestIntegration {
   private supabase: SupabaseClient;
 
   constructor(supabaseUrl?: string, supabaseKey?: string) {
-    const url = supabaseUrl || process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-    const key = supabaseKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
-
-    this.supabase = createClient(url, key);
+    // Use shared Supabase client to avoid multiple GoTrueClient instances
+    // Ignore custom URL/key params - use shared singleton
+    this.supabase = sharedSupabaseClient;
   }
 
   /**
