@@ -289,7 +289,11 @@ export const CoverageReport: React.FC = () => {
                 </div>
               </div>
 
-              <Button className="w-full mac-button mac-button-outline" variant="outline">
+              <Button
+                aria-label="Download"
+                className="w-full mac-button mac-button-outline"
+                variant="outline"
+              >
                 <Download className="h-4 w-4 mr-2" />
                 Export Coverage Report
               </Button>

@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { lambdaMcpTranscriptionPipeline } from "@/services/lambdaMcpTranscriptionPipeline";
+import { lambdaMcpTranscriptionPipeline } from "../../../../src/services/lambdaMcpTranscriptionPipeline";
 
 export async function POST(request: NextRequest) {
   try {

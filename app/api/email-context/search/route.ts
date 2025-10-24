@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { getEmailContextService } from "@/services/emailContextService";
+import { getEmailContextService } from "../../../../src/services/emailContextService";
 
 /**
  * POST /api/email-context/search
