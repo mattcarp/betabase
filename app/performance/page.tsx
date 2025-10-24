@@ -1,18 +1,17 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { cn } from "../../lib/utils";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/src/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
-import { Button } from "@/src/components/ui/button";
-import { Badge } from "@/src/components/ui/badge";
-import { Alert, AlertDescription, AlertTitle } from "@/src/components/ui/alert";
+} from "../../src/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../src/components/ui/tabs";
+import { Button } from "../../src/components/ui/button";
+import { Badge } from "../../src/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "../../src/components/ui/alert";
 import {
   Activity,
   AlertCircle,
@@ -231,11 +230,14 @@ export default function PerformanceDashboard() {
               Refresh
             </Button>
             <Button
-              className="mac-button mac-button-primary"
               onClick={() => setAutoRefresh(!autoRefresh)}
               variant={autoRefresh ? "default" : "outline"}
               size="sm"
-              className={autoRefresh ? "" : "text-white border-white/20"}
+              className={
+                autoRefresh
+                  ? "mac-button mac-button-primary"
+                  : "mac-button mac-button-primary text-white border-white/20"
+              }
             >
               <Activity className={`h-4 w-4 mr-2 ${autoRefresh ? "animate-pulse" : ""}`} />
               Auto-refresh
@@ -247,12 +249,15 @@ export default function PerformanceDashboard() {
         <div className="flex gap-2">
           {(["1h", "6h", "24h", "7d"] as const).map((range) => (
             <Button
-              className="mac-button mac-button-primary"
               key={range}
               onClick={() => setTimeRange(range)}
               variant={timeRange === range ? "default" : "outline"}
               size="sm"
-              className={timeRange !== range ? "text-white border-white/20" : ""}
+              className={
+                timeRange === range
+                  ? "mac-button mac-button-primary"
+                  : "mac-button mac-button-primary text-white border-white/20"
+              }
             >
               {range.toUpperCase()}
             </Button>

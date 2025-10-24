@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { getMicrosoftGraphService } from "@/services/microsoftGraphService";
+import { getMicrosoftGraphService } from "../../../src/services/microsoftGraphService";
 
 export async function POST(request: NextRequest) {
   try {

@@ -366,7 +366,11 @@ export const FlakyTestExplorer: React.FC = () => {
                         <Shield className="h-4 w-4 mr-2" />
                         Quarantine
                       </Button>
-                      <Button className="mac-button mac-button-primary" size="sm" aria-label="Quick">
+                      <Button
+                        className="mac-button mac-button-primary"
+                        size="sm"
+                        aria-label="Quick"
+                      >
                         <Zap className="h-4 w-4 mr-2" />
                         Auto-Fix
                       </Button>

@@ -290,7 +290,7 @@ export const CoverageReport: React.FC = () => {
               </div>
 
               <Button
-          aria-label="Download"
+                aria-label="Download"
                 className="w-full mac-button mac-button-outline"
                 variant="outline"
               >
@@ -406,11 +406,7 @@ export const CoverageReport: React.FC = () => {
                     <CardTitle className="text-lg">{selectedFile.path.split("/").pop()}</CardTitle>
                     <p className="text-sm text-muted-foreground mt-2">{selectedFile.path}</p>
                   </div>
-                  <Button
-                    className="mac-button mac-button-outline"
-                    variant="outline"
-                    size="sm"
-                  >
+                  <Button className="mac-button mac-button-outline" variant="outline" size="sm">
                     <FileCode className="h-4 w-4 mr-2" />
                     View Source
                   </Button>

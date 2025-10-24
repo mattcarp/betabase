@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getMultiRepoIndexer } from "@/src/services/multiRepoIndexer";
+import { getMultiRepoIndexer } from "../../../src/services/multiRepoIndexer";
 
 function authorize(req: NextRequest) {
   const headerKey = req.headers.get("x-api-key") || "";

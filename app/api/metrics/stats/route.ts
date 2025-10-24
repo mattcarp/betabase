@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { getSystemMetricsVectorService } from "@/services/systemMetricsVectorService";
+import { getSystemMetricsVectorService } from "../../../../src/services/systemMetricsVectorService";
 
 export async function GET(_request: NextRequest) {
   try {
