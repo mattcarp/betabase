@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import sonyMusicJiraCrawler from "@/src/services/sonyMusicJiraCrawler";
+import sonyMusicJiraCrawler from "../../../../src/services/sonyMusicJiraCrawler";
 
 export const dynamic = "force-dynamic";
 
