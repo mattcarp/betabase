@@ -62,14 +62,14 @@ const DesignFrameSchema = z.object({
 });
 
 const GenerateComponentSchema = z.object({
-  frameId: z.string(),
+  _frameId: z.string(),
   componentName: z.string(),
   includeStory: z.boolean().default(true),
   includeTests: z.boolean().default(true),
 });
 
 const SyncDesignSchema = z.object({
-  frameId: z.string(),
+  _frameId: z.string(),
   forceUpdate: z.boolean().default(false),
 });
 
@@ -286,7 +286,7 @@ export class MotiffMCPBridge {
     return await generator.generateComponent(definition, { outputPath });
   }
 
-  private async syncDesignChanges(frameId: string, forceUpdate: boolean): Promise<SyncResult> {
+  private async syncDesignChanges(_frameId: string, forceUpdate: boolean): Promise<SyncResult> {
     const syncer = new DesignSyncer();
     return await syncer.syncFrame(frameId, { forceUpdate });
   }
@@ -358,7 +358,7 @@ class MotiffAPI {
     }
   }
 
-  async getFrameById(frameId: string): Promise<MotiffFrame> {
+  async getFrameById(_frameId: string): Promise<MotiffFrame> {
     try {
       const response = await fetch(`${this.baseUrl}/v1/frames/${frameId}`, {
         headers: {
@@ -764,7 +764,7 @@ class ComponentGenerator extends BaseComponentGenerator {
 }
 
 class DesignSyncer {
-  async syncFrame(frameId: string, options: SyncOptions): Promise<SyncResult> {
+  async syncFrame(_frameId: string, _options: SyncOptions): Promise<SyncResult> {
     // Implementation to sync design changes
     throw new Error("DesignSyncer.syncFrame not implemented");
   }

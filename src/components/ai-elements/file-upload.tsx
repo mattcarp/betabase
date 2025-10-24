@@ -18,7 +18,7 @@ import {
   FileSpreadsheet,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Action, Actions } from "./actions";
+import { Action } from "./actions";
 
 interface FileUploadItem {
   file: File;

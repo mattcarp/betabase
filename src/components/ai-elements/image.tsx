@@ -11,7 +11,7 @@ export const Image = ({ base64, uint8Array, mediaType, ...props }: ImageProps) =
   <img
     {...props}
     src={`data:${mediaType};base64,${base64}`}
-    alt={props.alt}
+    alt={props.alt || "AI generated image"}
     className={cn("max-w-full h-auto rounded-md overflow-hidden", props.className)}
   />
 );

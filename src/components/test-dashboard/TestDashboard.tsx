@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Badge } from "../ui/badge";
+import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
 import { ScrollArea } from "../ui/scroll-area";
@@ -20,7 +19,6 @@ import {
   FileSearch,
   LineChart,
   Bug,
-  Sparkles,
   GitBranch,
   Zap,
   Eye,
@@ -31,6 +29,7 @@ import { TestExecutionPanel } from "./TestExecutionPanel";
 import { TestResultsViewer } from "./TestResultsViewer";
 import { AITestGenerator } from "./AITestGenerator";
 import { TraceViewer } from "./TraceViewer";
+import { SessionPlaybackViewer } from "./SessionPlaybackViewer";
 import { CoverageReport } from "./CoverageReport";
 import { FlakyTestExplorer } from "./FlakyTestExplorer";
 import { TestAnalytics } from "./TestAnalytics";
@@ -537,7 +536,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
         {/* Main Content Area */}
         <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col">
-          <TabsList className="grid grid-cols-9 w-full rounded-none border-b bg-muted/30">
+          <TabsList className="grid grid-cols-10 w-full rounded-none border-b bg-muted/30">
             <TabsTrigger value="execution" className="gap-2">
               <Activity className="h-4 w-4" />
               Execution
@@ -557,6 +556,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             <TabsTrigger value="trace" className="gap-2">
               <Eye className="h-4 w-4" />
               Trace Viewer
+            </TabsTrigger>
+            <TabsTrigger value="session-playback" className="gap-2">
+              <Play className="h-4 w-4" />
+              Session Playback
             </TabsTrigger>
             <TabsTrigger value="coverage" className="gap-2">
               <GitBranch className="h-4 w-4" />
@@ -615,6 +618,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
             <TabsContent value="firecrawl" className="m-0 p-6">
               <FirecrawlPanel />
+            </TabsContent>
+
+            <TabsContent value="session-playback" className="m-0 p-6">
+              <SessionPlaybackViewer />
             </TabsContent>
           </ScrollArea>
         </Tabs>

@@ -31,9 +31,6 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  // Unused imports - commented out
-  // Area,
-  // AreaChart,
 } from "recharts";
 
 interface DashboardStats {
@@ -70,29 +67,26 @@ export const AOMAPerformanceDashboard: React.FC = () => {
   // Fetch stats periodically
   useEffect(() => {
     const fetchStats = () => {
-      const railwayStats = aomaRouter.getStatistics("railway" as any);
       const renderStats = aomaRouter.getStatistics("render");
+      // Note: Railway has been removed, only Render is used now
+      const emptyStats: ProviderMetrics = {
+        totalRequests: 0,
+        avgLatency: 0,
+        p50Latency: 0,
+        p95Latency: 0,
+        p99Latency: 0,
+        successRate: 0,
+        coldStartRate: 0,
+        avgPayloadSize: 0,
+        avgResponseSize: 0,
+      };
 
-      const improvement =
-        railwayStats.avgLatency > 0
-          ? ((railwayStats.avgLatency - renderStats.avgLatency) / railwayStats.avgLatency) * 100
-          : 0;
-
-      const winner = renderStats.avgLatency < railwayStats.avgLatency ? "render" : "railway";
-
-      let recommendation = "";
-      if (improvement > 30) {
-        recommendation = "Switch to Render immediately for significant gains";
-      } else if (improvement > 10) {
-        recommendation = "Gradually increase Render traffic percentage";
-      } else if (improvement > 0) {
-        recommendation = "Continue monitoring before full migration";
-      } else {
-        recommendation = "Railway performing better - investigate Render config";
-      }
+      const winner = "render";
+      const improvement = 0;
+      const recommendation = "Render is the primary deployment platform";
 
       setStats({
-        railway: railwayStats,
+        railway: emptyStats, // Legacy field kept for compatibility
         render: renderStats,
         comparison: { winner, improvement, recommendation },
       });
@@ -140,7 +134,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
     .filter((m) => m.success)
     .map((m, index) => ({
       index,
-      railway: (m.provider as any) === "railway" ? m.latency : null,
+      railway: null, // Railway removed, keeping field for chart compatibility
       render: m.provider === "render" ? m.latency : null,
       timestamp: new Date(m.startTime).toLocaleTimeString(),
     }));

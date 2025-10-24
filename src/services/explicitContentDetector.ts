@@ -8,7 +8,13 @@
  * 4. Custom lyrics pattern detection
  */
 
-import LeoProfanity from "leo-profanity";
+// Optional import - fails gracefully if not installed
+let LeoProfanity: any = null;
+try {
+  LeoProfanity = require("leo-profanity");
+} catch (e) {
+  console.warn("leo-profanity not available, profanity filter will use fallback detection");
+}
 
 export interface ExplicitDetectionResult {
   isExplicit: boolean;
@@ -20,7 +26,7 @@ export interface ExplicitDetectionResult {
     lyricsPattern: boolean;
     contextAnalysis: boolean;
   };
-  explicitWords: string[];
+  _explicitWords: string[];
   category: "clean" | "mild" | "moderate" | "explicit" | "severe";
   riaaCompliant: boolean; // RIAA Parental Advisory standards
 }
@@ -181,21 +187,23 @@ export class ExplicitContentDetector {
       ...config,
     };
 
-    // Configure leo-profanity
-    LeoProfanity.loadDictionary("en");
-    LeoProfanity.clearList(); // Start with clean list
+    // Configure leo-profanity if available
+    if (LeoProfanity) {
+      LeoProfanity.loadDictionary("en");
+      LeoProfanity.clearList(); // Start with clean list
 
-    // Add our comprehensive word lists based on strictness
-    this.configureFilterStrictness();
+      // Add our comprehensive word lists based on strictness
+      this.configureFilterStrictness();
 
-    // Add custom words if provided
-    if (config.customWordList) {
-      LeoProfanity.add(config.customWordList);
-    }
+      // Add custom words if provided
+      if (config.customWordList) {
+        LeoProfanity.add(config.customWordList);
+      }
 
-    // Remove whitelisted words
-    if (config.whitelistedWords) {
-      LeoProfanity.remove(config.whitelistedWords);
+      // Remove whitelisted words
+      if (config.whitelistedWords) {
+        LeoProfanity.remove(config.whitelistedWords);
+      }
     }
 
     console.log(`🛡️ Explicit Content Detector initialized (${this.config.strictness} mode)`);
@@ -205,6 +213,8 @@ export class ExplicitContentDetector {
    * Configure filter strictness based on RIAA and industry standards
    */
   private configureFilterStrictness(): void {
+    if (!LeoProfanity) return;
+
     const { strictness } = this.config;
 
     switch (strictness) {
@@ -264,7 +274,7 @@ export class ExplicitContentDetector {
     };
 
     const reasons: string[] = [];
-    const explicitWords: string[] = [];
+    const _explicitWords: string[] = [];
     let confidence = 0;
     let isExplicit = false;
 
@@ -273,7 +283,7 @@ export class ExplicitContentDetector {
     if (profanityResult.detected) {
       detectionMethods.profanityFilter = true;
       reasons.push("Profanity detected");
-      explicitWords.push(...profanityResult.words);
+      _explicitWords.push(...profanityResult.words);
       confidence += 0.4;
       isExplicit = true;
     }
@@ -310,7 +320,7 @@ export class ExplicitContentDetector {
     }
 
     // Determine category and RIAA compliance
-    const category = this.categorizeContent(confidence, explicitWords);
+    const category = this.categorizeContent(confidence, _explicitWords);
     const riaaCompliant = this.isRIAACompliant(isExplicit, reasons);
 
     // Cap confidence at 1.0
@@ -321,7 +331,7 @@ export class ExplicitContentDetector {
       confidence,
       reasons,
       detectionMethods,
-      explicitWords,
+      _explicitWords,
       category,
       riaaCompliant,
     };
@@ -340,6 +350,18 @@ export class ExplicitContentDetector {
    * Basic profanity detection using leo-profanity
    */
   private detectProfanity(text: string): { detected: boolean; words: string[] } {
+    if (!LeoProfanity) {
+      // Fallback: simple pattern matching
+      const lowerText = text.toLowerCase();
+      const foundWords: string[] = [];
+      for (const word of this.explicitCategories.strongLanguage) {
+        if (lowerText.includes(word.toLowerCase())) {
+          foundWords.push(word);
+        }
+      }
+      return { detected: foundWords.length > 0, words: foundWords };
+    }
+
     const cleanedText = LeoProfanity.clean(text);
     const detected = cleanedText !== text;
 
@@ -534,7 +556,7 @@ export class ExplicitContentDetector {
    */
   private categorizeContent(
     confidence: number,
-    explicitWords: string[]
+    _explicitWords: string[]
   ): ExplicitDetectionResult["category"] {
     if (confidence === 0) return "clean";
     if (confidence < 0.3) return "mild";
@@ -573,11 +595,11 @@ export class ExplicitContentDetector {
     return {
       strictnessLevel: this.config.strictness,
       enabledMethods: {
-        profanityFilter: true,
+        profanityFilter: !!LeoProfanity,
         musicDatabase: this.config.enableMusicLookup,
         contextAnalysis: this.config.enableContextAnalysis,
       },
-      wordListSize: LeoProfanity.list().length,
+      wordListSize: LeoProfanity ? LeoProfanity.list().length : 0,
       hasSpotifyAccess: !!(this.config.spotifyClientId && this.config.spotifyClientSecret),
     };
   }

@@ -19,9 +19,8 @@ export default function LiveTranscription({
     hasTranscription: !!transcription,
   });
   const [displayedText, setDisplayedText] = useState("");
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentWordIndex, _setCurrentWordIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const words = transcription.split(" ");
 
   // Handle transcription updates
   useEffect(() => {
