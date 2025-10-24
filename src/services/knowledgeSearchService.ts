@@ -7,7 +7,7 @@
  * - src/services/unified-test-intelligence.ts
  */
 
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../lib/supabase";
 import { embed } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { OptimizedSupabaseVectorService } from "./optimizedSupabaseVectorService";

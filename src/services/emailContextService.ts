@@ -3,8 +3,8 @@
  * Coordinates email parsing, vectorization, and storage
  */
 
-import { EmailParser, EmailData, ParsedEmailContext } from "@/utils/emailParser";
-import { getSupabaseVectorService } from "@/services/supabaseVectorService";
+import { EmailParser, EmailData, ParsedEmailContext } from "../utils/emailParser";
+import { getSupabaseVectorService } from "./supabaseVectorService";
 
 export interface EmailIngestionResult {
   success: boolean;

@@ -7,7 +7,7 @@ import {
   normalizeRepoName,
   scanRepository,
   getDefaultIndexingConfig,
-} from "@/src/utils/gitIndexingHelpers";
+} from "../utils/gitIndexingHelpers";
 import { getGitVectorService } from "./gitVectorService";
 
 export interface IndexSummary {
