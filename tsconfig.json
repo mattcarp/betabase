@@ -36,6 +36,8 @@
     "scripts/**/*",
     "src/app-backup/**/*",
     "**/* [0-9]*.ts",
-    "**/* [0-9]*.tsx"
+    "**/* [0-9]*.tsx",
+    "test-unified-intelligence.ts",
+    "tests/**/*"
   ]
 }
