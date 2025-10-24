@@ -11,7 +11,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 export type InlineCitationProps = ComponentProps<"span">;
 
 export const InlineCitation = ({ className, ...props }: InlineCitationProps) => (
-  <span className={cn("inline items-center gap-1 group", className)} {...props} />
+  <span className={cn("inline items-center gap-2 group", className)} {...props} />
 );
 
 export type InlineCitationTextProps = ComponentProps<"span">;
@@ -37,7 +37,7 @@ export const InlineCitationCardTrigger = ({
 }: InlineCitationCardTriggerProps) => (
   <HoverCardTrigger asChild>
     <button type="button" className={cn("inline-flex", className)} {...props}>
-      <Badge variant="secondary" className="ml-1 rounded-full">
+      <Badge variant="secondary" className="ml-2 rounded-full">
         {sources.length ? (
           <>
             {sources[0] ? new URL(sources[0]).hostname : "unknown"}{" "}
@@ -120,7 +120,7 @@ export const InlineCitationCarouselIndex = ({
   return (
     <div
       className={cn(
-        "flex items-center flex-1 justify-end px-3 py-1 text-xs text-muted-foreground",
+        "flex items-center flex-1 justify-end px-4 py-2 text-xs text-muted-foreground",
         className
       )}
       {...props}
@@ -199,7 +199,11 @@ export const InlineCitationSource = ({
   ...props
 }: InlineCitationSourceProps) => (
   <div className={cn("space-y-1", className)} {...props}>
-    {title && <h4 className="text-sm font-medium leading-tight truncate">{title}</h4>}
+    {title && (
+      <h4 c className="mac-title" lassName="mac-title text-sm font-medium leading-tight truncate">
+        {title}
+      </h4>
+    )}
     {url && <p className="text-xs text-muted-foreground break-all truncate">{url}</p>}
     {description && (
       <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{description}</p>
@@ -216,7 +220,7 @@ export const InlineCitationQuote = ({
   ...props
 }: InlineCitationQuoteProps) => (
   <blockquote
-    className={cn("border-l-2 border-muted pl-3 text-sm italic text-muted-foreground", className)}
+    className={cn("border-l-2 border-muted pl-4 text-sm italic text-muted-foreground", className)}
     {...props}
   >
     {children}

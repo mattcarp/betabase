@@ -182,7 +182,7 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
         >
           {isCropping && cropArea && (
             <div className="absolute border-2 border-primary bg-primary/10" style={getCropStyle()}>
-              <div className="absolute top-2 left-2 bg-primary text-primary-foreground px-2 py-1 rounded text-xs">
+              <div className="absolute top-2 left-2 bg-primary text-primary-foreground px-2 py-2 rounded text-xs">
                 {Math.abs(cropArea.endX - cropArea.startX)} x{" "}
                 {Math.abs(cropArea.endY - cropArea.startY)}
               </div>
@@ -197,7 +197,7 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
           <Button
             variant="default"
             size="lg"
-            className="gap-2 shadow-lg"
+            className="gap-2 shadow-lg mac-button mac-button-primary"
             onClick={handleQuickCapture}
           >
             <Crop className="h-4 w-4" />
@@ -209,11 +209,18 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
       {/* Preview Modal */}
       {showPreview && capturedImage && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-6">
-          <Card className="max-w-4xl w-full">
+          <Card className="mac-card max-w-4xl w-full">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold">Screenshot Preview</h3>
-                <Button variant="ghost" size="icon" onClick={handleCancel}>
+                <h3 c className="mac-title" lassName="mac-title text-lg font-semibold">
+                  Screenshot Preview
+                </h3>
+                <Button
+                  className="mac-button mac-button-outline"
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleCancel}
+                >
                   <X className="h-4 w-4" />
                 </Button>
               </div>
@@ -224,11 +231,19 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
               </div>
 
               <div className="flex items-center justify-end gap-2">
-                <Button variant="outline" onClick={handleDownload} className="gap-2">
+                <Button
+                  variant="outline"
+                  onClick={handleDownload}
+                  className="gap-2 mac-button mac-button-outline"
+                >
                   <Download className="h-4 w-4" />
                   Download
                 </Button>
-                <Button variant="default" onClick={handleSaveScreenshot} className="gap-2">
+                <Button
+                  variant="default"
+                  onClick={handleSaveScreenshot}
+                  className="gap-2 mac-button mac-button-primary"
+                >
                   <Check className="h-4 w-4" />
                   Save to Annotations
                 </Button>

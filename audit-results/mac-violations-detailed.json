@@ -1,0 +1,1685 @@
+{
+  "hardcodedColors": [
+    {
+      "file": "src/index.css",
+      "line": 88,
+      "code": "background: rgba(20, 20, 20, 0.7)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/services/errorLogger.ts",
+      "line": 156,
+      "code": "color: #fbbf24",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/services/errorLogger.ts",
+      "line": 157,
+      "code": "color: #f97316",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/services/errorLogger.ts",
+      "line": 158,
+      "code": "color: #ef4444",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/services/errorLogger.ts",
+      "line": 159,
+      "code": "color: #dc2626",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/services/errorLogger.ts",
+      "line": 159,
+      "code": "background: #fef2f2",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 263,
+      "code": "background: rgba(255, 255, 255, 0.15)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 314,
+      "code": "border-color: rgba(14, 165, 233, 0.5)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 357,
+      "code": "background: rgba(23, 23, 23, 0.8)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 370,
+      "code": "border-color: rgba(14, 165, 233, 0.4)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 506,
+      "code": "border-color: rgba(14, 165, 233, 0.5)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 531,
+      "code": "background: rgba(14, 165, 233, 0.2)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 532,
+      "code": "border-color: rgba(14, 165, 233, 0.5)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 537,
+      "code": "background: rgba(16, 185, 129, 0.2)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 538,
+      "code": "border-color: rgba(16, 185, 129, 0.5)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 539,
+      "code": "color: #34d399",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 655,
+      "code": "background: rgba(255, 255, 255, 0.05)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 660,
+      "code": "background: rgba(14, 165, 233, 0.3)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 665,
+      "code": "background: rgba(14, 165, 233, 0.5)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 14,
+      "code": "border: rgba(255, 255, 255, 0.1)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 41,
+      "code": "background: rgba(10, 16, 32, 0.93)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 48,
+      "code": "color: #b5c6e0",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 91,
+      "code": "background: rgba(255, 255, 255, 0.08)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 92,
+      "code": "border-color: rgba(255, 255, 255, 0.15)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 166,
+      "code": "color: #000",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 173,
+      "code": "color: #fff",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 239,
+      "code": "color: rgba(255, 255, 255, 0.5)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 246,
+      "code": "color: rgba(255, 255, 255, 0.8)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 332,
+      "code": "border: rgba(255, 255, 255, 0.12)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 351,
+      "code": "background: rgba(0, 0, 0, 0.8)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 356,
+      "code": "border-color: #00e5ff",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/hud-animations.css",
+      "line": 72,
+      "code": "background: rgba(0, 20, 40, 0.8)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/hud-animations.css",
+      "line": 81,
+      "code": "border-color: rgba(0, 255, 255, 0.5)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/hud-animations.css",
+      "line": 86,
+      "code": "background: rgba(0, 255, 255, 0.1)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/hud-animations.css",
+      "line": 87,
+      "code": "border-color: rgba(0, 255, 255, 0.6)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/hud-animations.css",
+      "line": 115,
+      "code": "border-color: rgba(0, 255, 255, 0.5)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 11,
+      "code": "border: rgba(0, 255, 255, 0.3)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 21,
+      "code": "border: rgba(0, 229, 255, 0.4)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 31,
+      "code": "border: rgba(199, 125, 255, 0.3)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 41,
+      "code": "border: rgba(0, 255, 127, 0.3)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 51,
+      "code": "border: rgba(255, 149, 0, 0.3)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 58,
+      "code": "border: rgba(255, 255, 255, 0.4)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 59,
+      "code": "border: rgba(255, 255, 255, 0.5)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 60,
+      "code": "border: rgba(var(--jarvis-theme-primary-rgb)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 61,
+      "code": "border: rgba(255, 255, 255, 0.4)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 164,
+      "code": "border: rgba(255, 255, 255, 0.6)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 165,
+      "code": "border: rgba(255, 255, 255, 0.7)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 257,
+      "code": "border-color: #ef4444",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 258,
+      "code": "background: rgba(239, 68, 68, 0.1)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 262,
+      "code": "color: #fca5a5",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 267,
+      "code": "border-color: #22c55e",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 268,
+      "code": "background: rgba(34, 197, 94, 0.1)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 272,
+      "code": "color: #86efac",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 277,
+      "code": "border-color: #f59e0b",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 278,
+      "code": "background: rgba(245, 158, 11, 0.1)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 282,
+      "code": "color: #fcd34d",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme.css",
+      "line": 12,
+      "code": "border: rgba(59, 130, 246, 0.3)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme.css",
+      "line": 19,
+      "code": "border: rgba(59, 130, 246, 0.4)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme.css",
+      "line": 85,
+      "code": "background: rgba(0, 60, 120, 0.3)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme.css",
+      "line": 90,
+      "code": "background: rgba(59, 130, 246, 0.1)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-theme.css",
+      "line": 101,
+      "code": "background: rgba(59, 130, 246, 0.2)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 9,
+      "code": "border: rgba(255, 255, 255, 0.1)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 12,
+      "code": "color: rgba(0, 0, 0, 0.37)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 13,
+      "code": "color: rgba(255, 255, 255, 0.1)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 19,
+      "code": "border: rgba(0, 255, 255, 0.2)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 27,
+      "code": "border: rgba(0, 255, 255, 0.4)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 36,
+      "code": "border: rgba(0, 255, 255, 0.3)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 41,
+      "code": "border: rgba(0, 255, 255, 0.5)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 52,
+      "code": "border: rgba(0, 255, 255, 0.4)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 57,
+      "code": "border: rgba(0, 255, 255, 0.2)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 58,
+      "code": "color: rgba(0, 255, 255, 0.8)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 64,
+      "code": "border: rgba(0, 255, 255, 0.3)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 69,
+      "code": "border: rgba(0, 255, 255, 0.6)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 335,
+      "code": "background-color: rgba(var(--jarvis-cyan-rgb)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 340,
+      "code": "background-color: rgba(var(--jarvis-cyan-rgb)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 14,
+      "code": "background: #0c0c0c",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 25,
+      "code": "border: rgba(255, 255, 255, 0.08)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 26,
+      "code": "border: rgba(255, 255, 255, 0.08)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 37,
+      "code": "border: rgba(34, 197, 94, 0.2)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 41,
+      "code": "border: rgba(234, 179, 8, 0.2)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 45,
+      "code": "border: rgba(251, 146, 60, 0.3)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 225,
+      "code": "background: rgba(20, 20, 20, 0.7)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 272,
+      "code": "background: rgba(17, 24, 39, 0.4)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 330,
+      "code": "color: #ef4444",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 424,
+      "code": "background-color: rgba(34, 197, 94, 0.2)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 434,
+      "code": "background-color: rgba(234, 179, 8, 0.2)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 444,
+      "code": "background-color: rgba(255, 255, 255, 0.1)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 456,
+      "code": "background-color: #22c55e",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 460,
+      "code": "background-color: #eab308",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 464,
+      "code": "background-color: #ef4444",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 18,
+      "code": "border: rgba(255, 255, 255, 0.15)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 260,
+      "code": "color: rgba(255, 255, 255, 0.5)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 269,
+      "code": "background: rgba(255, 255, 255, 0.05)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/sidebar-mac.css",
+      "line": 5,
+      "code": "background: rgba(20, 20, 20, 0.7)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/sidebar-mac.css",
+      "line": 16,
+      "code": "background: rgba(30, 30, 30, 0.95)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/sidebar-mac.css",
+      "line": 32,
+      "code": "background: rgba(74, 158, 255, 0.1)",
+      "suggestion": "Use --mac-* CSS variables"
+    },
+    {
+      "file": "src/styles/sidebar-mac.css",
+      "line": 97,
+      "code": "background: rgba(255, 255, 255, 0.05)",
+      "suggestion": "Use --mac-* CSS variables"
+    }
+  ],
+  "nonMACTypography": [
+    {
+      "file": "src/services/errorLogger.ts",
+      "line": 156,
+      "code": "font-weight: bold",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    },
+    {
+      "file": "src/services/errorLogger.ts",
+      "line": 157,
+      "code": "font-weight: bold",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    },
+    {
+      "file": "src/services/errorLogger.ts",
+      "line": 158,
+      "code": "font-weight: bold",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    },
+    {
+      "file": "src/services/errorLogger.ts",
+      "line": 159,
+      "code": "font-weight: bold",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    },
+    {
+      "file": "src/services/motiff-mcp-bridge.ts",
+      "line": 690,
+      "code": "font-weight: bold",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    },
+    {
+      "file": "src/services/motiff-mcp-bridge.ts",
+      "line": 691,
+      "code": "font-weight: 600",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 234,
+      "code": "font-weight: 600",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 420,
+      "code": "font-weight: 600",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 497,
+      "code": "font-weight: 500",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    },
+    {
+      "file": "src/styles/jarvis-theme.css",
+      "line": 116,
+      "code": "font-weight: 500",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 160,
+      "code": "font-weight: 600",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 185,
+      "code": "font-weight: 500",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 216,
+      "code": "font-weight: 500",
+      "suggestion": "Use font-weight: 100, 200, 300, or 400 only"
+    }
+  ],
+  "missingMACClasses": [
+    {
+      "file": "src/ComponentPlayground.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/TestApp.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/app-backup/page 3.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/app-backup/page 3.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/app-backup/page 4.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/app-backup/page 4.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/app-backup/page.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/app-backup/page.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/AOMAPerformanceDashboard.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/AOMAPerformanceDashboard.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ConversationalAI 3.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ConversationalAI.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/DocumentUpload 3.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/DocumentUpload 4.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/DocumentUpload 5.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/DocumentUpload 6.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/DocumentUpload.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ErrorBoundary.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ErrorTest.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/MACFusion.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/SettingsPanel.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/SettingsPanel.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ai/ai-sdk-chat-panel.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai/chat-input.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai/chat-input.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ai/chat-panel.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai/chat-wrapper.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai/chat-wrapper.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ai/enhanced-chat-panel-with-ai-elements.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai/enhanced-chat-panel.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai-elements/branch.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai-elements/code-block.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai-elements/conversation.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai-elements/file-upload.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai-elements/file-upload.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ai-elements/inline-citation.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai-elements/prompt-input.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai-elements/suggestion.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai-elements/web-preview.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ai-elements/web-preview.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/auth/ui/LoadingButton.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/auth/ui/PasswordInput.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/auth/ui/VerificationCodeInput.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/test-dashboard/AITestGenerator.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/AITestGenerator.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/test-dashboard/AnnotationPins.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/AnnotationToolbar.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/CoverageReport.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/FirecrawlPanel.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/FirecrawlPanel.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/test-dashboard/FlagIssueLayer.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/FlagIssueLayer.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/test-dashboard/FlakyTestExplorer.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/HighlighterCanvas.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/MarkdownNoteEditor.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/ScreenshotCapture.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/SessionTimeline.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/SessionTimeline.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/test-dashboard/StickyNoteLayer.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/TestAnalytics.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/TestDashboard.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/TestResultsViewer.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/test-dashboard/TestResultsViewer.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/test-dashboard/TraceViewer.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/AOMAKnowledgePanel.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/AOMAKnowledgePanel.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ui/AudioSourceSelector.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/AudioSourceSelector.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ui/AudioWaveformResponse.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/AudioWaveformResponse.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ui/CircularHUD.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/EnhancedCurateTab.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/EnhancedCurateTab.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ui/EnhancedHUDInterface.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/EnhancedKnowledgePanel.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/EnhancedKnowledgePanel.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ui/FloatingPanel.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/HUDCustomizationPanel.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/HUDCustomizationPanel.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ui/HUDHelpOverlay.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/IntrospectionDropdown.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/LiveInsights.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/ResponseRenderer.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/SearchResultsResponse.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/TopicVisualization.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/VoiceSelector.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/WisdomLibrary.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/WisdomLibrary.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ui/calendar.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/carousel.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/input-group.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/input-group.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ui/layout/LeftSidebar.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/components/ui/layout/RightSidebar.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/pages/ChatPage.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/sidebar.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/components/ui/sidebar.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/hooks/useNotifications.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/renderer/components/settings/McpSettings.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/renderer/components/settings/McpSettings.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "src/services/aomaUIAnalyzer.ts",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "src/services/aomaUIAnalyzer.ts",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "app/error.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "app/gpt5-chat/page.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "app/gpt5-chat/page.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    },
+    {
+      "file": "app/page.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "app/performance/page.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "app/test-mac-components/page.tsx",
+      "line": 0,
+      "code": "Button without mac-button class",
+      "suggestion": "Add mac-button, mac-button-primary, or mac-button-secondary class"
+    },
+    {
+      "file": "app/test-mac-components/page.tsx",
+      "line": 0,
+      "code": "Input without mac-input class",
+      "suggestion": "Add mac-input class"
+    }
+  ],
+  "hardcodedSpacing": [
+    {
+      "file": "src/App.css",
+      "line": 313,
+      "code": "height: 2px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/index.css",
+      "line": 99,
+      "code": "height: 1px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/services/errorLogger.ts",
+      "line": 159,
+      "code": "padding: 2px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 309,
+      "code": "height: 1px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 336,
+      "code": "padding: 2px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 346,
+      "code": "width: 100px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 347,
+      "code": "height: 100px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 351,
+      "code": "width: 300px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 352,
+      "code": "height: 300px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 382,
+      "code": "height: 2px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 404,
+      "code": "width: 60px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 405,
+      "code": "height: 60px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 578,
+      "code": "width: 150px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 579,
+      "code": "height: 150px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 587,
+      "code": "width: 769px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 651,
+      "code": "width: 6px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/cinematic-ui.css",
+      "line": 740,
+      "code": "width: 2px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 53,
+      "code": "width: 700px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 126,
+      "code": "height: 2px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 198,
+      "code": "gap: 2px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 203,
+      "code": "width: 3px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 283,
+      "code": "width: 6px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 284,
+      "code": "height: 6px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 324,
+      "code": "padding: 1rem",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/glassmorphism-motiff.css",
+      "line": 357,
+      "code": "width: 2px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/hud-animations.css",
+      "line": 65,
+      "code": "height: 2px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/hud-animations.css",
+      "line": 136,
+      "code": "margin: 1rem",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/hud-animations.css",
+      "line": 137,
+      "code": "padding: 1rem",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 131,
+      "code": "width: 1px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 132,
+      "code": "height: 1px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/jarvis-theme-variations.css",
+      "line": 172,
+      "code": "width: 2px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/jarvis-theme.css",
+      "line": 63,
+      "code": "width: 250px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/jarvis-theme.css",
+      "line": 64,
+      "code": "height: 150px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/jarvis-ui.css",
+      "line": 245,
+      "code": "padding: 12px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 203,
+      "code": "padding: 2rem",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 219,
+      "code": "padding: 2rem",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 237,
+      "code": "height: 1px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 373,
+      "code": "width: 3px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 502,
+      "code": "width: 850px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/mac-design-system.css",
+      "line": 504,
+      "code": "width: 14rem",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 81,
+      "code": "height: 2px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 110,
+      "code": "padding: 12px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 123,
+      "code": "padding: 12px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 182,
+      "code": "gap: 6px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 213,
+      "code": "gap: 6px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 244,
+      "code": "padding: 12px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 265,
+      "code": "width: 6px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 292,
+      "code": "padding: 12px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 297,
+      "code": "padding: 10px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 304,
+      "code": "gap: 4px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 309,
+      "code": "width: 4px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 310,
+      "code": "height: 4px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 318,
+      "code": "width: 4px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/motiff-glassmorphism.css",
+      "line": 319,
+      "code": "height: 4px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/sidebar-mac.css",
+      "line": 43,
+      "code": "width: 2px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "src/styles/sidebar-mac.css",
+      "line": 93,
+      "code": "width: 6px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "app/globals.css",
+      "line": 97,
+      "code": "padding: 12px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "app/globals.css",
+      "line": 114,
+      "code": "padding: 12px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "app/globals.css",
+      "line": 124,
+      "code": "padding: 12px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    },
+    {
+      "file": "app/globals.css",
+      "line": 167,
+      "code": "padding: 12px",
+      "suggestion": "Use spacing values that are multiples of 8px"
+    }
+  ],
+  "nonMACAnimations": []
+}

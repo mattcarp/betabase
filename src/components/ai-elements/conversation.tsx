@@ -40,7 +40,11 @@ export const ConversationScrollButton = ({
   return (
     !isAtBottom && (
       <Button
-        className={cn("absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full", className)}
+        className={cn(
+          "mac-button mac-button-outline",
+          "absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full",
+          className
+        )}
         onClick={handleScrollToBottom}
         size="icon"
         type="button"

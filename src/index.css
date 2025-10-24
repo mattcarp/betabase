@@ -58,7 +58,7 @@
     /* MAC Professional Background */
     background:
       radial-gradient(circle at 25% 25%, rgba(51, 133, 255, 0.03) 0%, transparent 50%),
-      radial-gradient(circle at 75% 75%, rgba(133, 51, 255, 0.03) 0%, transparent 50%), #0a0a0a;
+      radial-gradient(circle at 75% 75%, rgba(133, 51, 255, 0.03) 0%, transparent 50%), var(--mac-surface-bg);
     background-attachment: fixed;
     overflow-x: hidden;
   }
@@ -69,16 +69,16 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--mac-state-hover);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(133, 51, 255, 0.4);
+    background: var(--mac-accent-purple-400);
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(133, 51, 255, 0.6);
+    background: var(--mac-accent-purple-600);
   }
 }
 
@@ -116,7 +116,7 @@
 
   /* MAC Professional Buttons */
   .mac-button {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg;
+    @apply inline-flex items-center justify-center px-6 py-4 rounded-lg;
     @apply font-light text-sm transition-all duration-200;
     @apply border border-transparent;
   }
@@ -147,14 +147,14 @@
 
   /* MAC Professional Forms */
   .mac-input {
-    @apply w-full px-4 py-3 bg-mac-surface-elevated border-mac-border rounded-lg;
+    @apply w-full px-4 py-4 bg-mac-surface-elevated border-mac-border rounded-lg;
     @apply text-mac-text-primary placeholder-mac-text-muted font-light;
     @apply transition-all duration-200;
   }
 
   .mac-input:focus {
     @apply outline-none border-primary/50;
-    box-shadow: 0 0 0 3px rgba(51, 133, 255, 0.1);
+    box-shadow: 0 0 0 3px var(--mac-primary-blue-glow-subtle);
   }
 
   /* MAC Professional Typography */

@@ -177,7 +177,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
 
         {/* AI Suggestions */}
         {!searchQuery && conversations.length > 3 && (
-          <div className="px-2 pb-2 flex gap-1">
+          <div className="px-2 pb-2 flex gap-2">
             <Suggestion label="Recent" onClick={() => setSearchQuery("")} className="text-xs" />
             <Suggestion
               label="Pinned"
@@ -212,9 +212,9 @@ export function AppSidebar({ className }: AppSidebarProps) {
             <Button
               onClick={handleNewConversation}
               size="sm"
-              className="mac-button mac-button-primary mt-3"
+              className="mac-button mac-button-primary mt-4"
             >
-              <Plus className="h-3 w-3 mr-1" />
+              <Plus className="h-3 w-3 mr-2" />
               Start a conversation
             </Button>
           </div>
@@ -232,7 +232,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
                         activeConversationId === conversation.id && "active"
                       )}
                     >
-                      <div className="flex items-start gap-3 w-full">
+                      <div className="flex items-start gap-4 w-full">
                         <MessageCircle
                           className={cn(
                             "h-4 w-4 mt-0.5 shrink-0",
@@ -242,7 +242,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
                           )}
                         />
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5 mb-0.5">
+                          <div className="flex items-center gap-2.5 mb-0.5">
                             {conversation.isPinned && (
                               <Pin className="h-3 w-3 text-mac-accent-purple-400 shrink-0 mac-pin-indicator" />
                             )}
@@ -258,7 +258,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
                               ...
                             </p>
                           )}
-                          <div className="flex items-center gap-2 mt-1">
+                          <div className="flex items-center gap-2 mt-2">
                             <Clock className="h-3 w-3 text-mac-text-secondary" />
                             <span className="text-xs text-mac-text-secondary">
                               {formatTimestamp(new Date(conversation.updatedAt))}
@@ -354,14 +354,14 @@ export function AppSidebar({ className }: AppSidebarProps) {
       </SidebarContent>
 
       <SidebarFooter className="mac-surface-elevated border-t border-mac-border">
-        <div className="px-3 py-2">
+        <div className="px-4 py-2">
           <div className="flex items-center justify-between">
             <div className="text-xs text-mac-text-muted">
               {conversations.length} conversation{conversations.length !== 1 ? "s" : ""}
             </div>
             {conversations.filter((c) => c.isPinned).length > 0 && (
-              <Badge variant="outline" className="mac-badge text-xs px-1.5 py-0">
-                <Pin className="h-3 w-3 mr-1" />
+              <Badge variant="outline" className="mac-badge text-xs px-2.5 py-0">
+                <Pin className="h-3 w-3 mr-2" />
                 {conversations.filter((c) => c.isPinned).length}
               </Badge>
             )}
@@ -369,7 +369,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
 
           {/* Storage indicator */}
           <div className="mt-2">
-            <div className="text-xs text-mac-text-muted mb-1">Local Storage</div>
+            <div className="text-xs text-mac-text-muted mb-2">Local Storage</div>
             <div className="h-1 bg-mac-surface-bg rounded-full overflow-hidden mac-storage-bar">
               <div
                 className="h-full bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-purple-400"

@@ -124,7 +124,7 @@ export function ChatInput({
               className="relative"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-emerald-500/5 rounded-lg blur" />
-              <div className="relative p-3 bg-background/80 backdrop-blur-sm rounded-lg border border-border/50 shadow-sm">
+              <div className="relative p-4 bg-background/80 backdrop-blur-sm rounded-lg border border-border/50 shadow-sm">
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="h-3 w-3 text-amber-500" />
                   <span className="text-xs font-medium text-muted-foreground">
@@ -165,7 +165,7 @@ export function ChatInput({
               className="relative"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-lg blur" />
-              <div className="relative p-3 bg-background/80 backdrop-blur-sm rounded-lg border border-border/50 shadow-sm">
+              <div className="relative p-4 bg-background/80 backdrop-blur-sm rounded-lg border border-border/50 shadow-sm">
                 <div className="flex items-center gap-2 mb-2">
                   <Paperclip className="h-3 w-3 text-blue-500" />
                   <span className="text-xs font-medium text-muted-foreground">
@@ -182,7 +182,7 @@ export function ChatInput({
                     >
                       <Badge
                         variant="secondary"
-                        className="flex items-center gap-1.5 pr-1 bg-background/80 border border-border/50 shadow-sm"
+                        className="flex items-center gap-2.5 pr-2 bg-background/80 border border-border/50 shadow-sm"
                       >
                         {getFileIcon(attachment.type)}
                         <span className="max-w-[120px] truncate text-xs">{attachment.name}</span>
@@ -191,7 +191,7 @@ export function ChatInput({
                         </span>
                         <button
                           onClick={() => removeAttachment(attachment.id)}
-                          className="ml-1 p-0.5 hover:bg-destructive/20 rounded-full transition-colors"
+                          className="ml-2 p-0.5 hover:bg-destructive/20 rounded-full transition-colors"
                         >
                           <X className="h-3 w-3" />
                         </button>
@@ -263,7 +263,7 @@ export function ChatInput({
                         type="button"
                         size="icon"
                         variant="ghost"
-                        className="h-9 w-9 hover:bg-muted/50 transition-colors"
+                        className="h-9 w-9 hover:bg-muted/50 transition-colors mac-button mac-button-outline"
                         onClick={() => fileInputRef.current?.click()}
                       >
                         <Plus className="h-4 w-4" />
@@ -283,6 +283,7 @@ export function ChatInput({
                       size="icon"
                       variant={isRecording ? "destructive" : "ghost"}
                       className={cn(
+                        "mac-button mac-button-primary",
                         "h-9 w-9 transition-all duration-200",
                         isRecording ? "animate-pulse" : "hover:bg-muted/50"
                       )}
@@ -309,7 +310,7 @@ export function ChatInput({
                       type="button"
                       size="icon"
                       variant="destructive"
-                      className="h-9 w-9 shadow-md hover:shadow-lg transition-shadow"
+                      className="h-9 w-9 shadow-md hover:shadow-lg transition-shadow mac-button mac-button-primary"
                       onClick={onStop}
                     >
                       <StopCircle className="h-4 w-4" />
@@ -326,6 +327,7 @@ export function ChatInput({
                       disabled={!value?.trim() || isRecording}
                       onClick={handleSubmit}
                       className={cn(
+                        "mac-button mac-button-primary",
                         "h-9 w-9 shadow-md hover:shadow-lg transition-all duration-200",
                         "bg-gradient-to-r from-blue-500 to-emerald-500",
                         "hover:from-blue-600 hover:to-emerald-600",

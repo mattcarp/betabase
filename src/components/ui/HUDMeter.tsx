@@ -292,7 +292,7 @@ export const HUDMeter: React.FC<HUDMeterProps> = ({
             </div>
           )}
           {label && (
-            <div className="text-xs text-holographic opacity-90 mt-1 font-mono">{label}</div>
+            <div className="text-xs text-holographic opacity-90 mt-2 font-mono">{label}</div>
           )}
         </div>
       </div>

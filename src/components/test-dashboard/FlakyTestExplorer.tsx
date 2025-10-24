@@ -199,8 +199,8 @@ export const FlakyTestExplorer: React.FC = () => {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="border-border">
-          <CardHeader className="pb-3">
+        <Card className="mac-card border-border">
+          <CardHeader className="pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
               <Bug className="h-4 w-4" />
               Total Flaky Tests
@@ -208,12 +208,12 @@ export const FlakyTestExplorer: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-semibold text-foreground">{flakyTests.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">Across all suites</p>
+            <p className="text-xs text-muted-foreground mt-2">Across all suites</p>
           </CardContent>
         </Card>
 
-        <Card className="border-border">
-          <CardHeader className="pb-3">
+        <Card className="mac-card border-border">
+          <CardHeader className="pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
               <AlertTriangle className="h-4 w-4 text-rose-600" />
               Critical Issues
@@ -223,12 +223,12 @@ export const FlakyTestExplorer: React.FC = () => {
             <div className="text-2xl font-semibold text-rose-700">
               {flakyTests.filter((t) => t.severity === "critical").length}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">Require immediate attention</p>
+            <p className="text-xs text-muted-foreground mt-2">Require immediate attention</p>
           </CardContent>
         </Card>
 
-        <Card className="border-border">
-          <CardHeader className="pb-3">
+        <Card className="mac-card border-border">
+          <CardHeader className="pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
               <TrendingDown className="h-4 w-4 text-emerald-600" />
               Avg Flakiness
@@ -239,15 +239,15 @@ export const FlakyTestExplorer: React.FC = () => {
               {(flakyTests.reduce((sum, t) => sum + t.flakiness, 0) / flakyTests.length).toFixed(1)}
               %
             </div>
-            <div className="flex items-center gap-1 mt-2">
+            <div className="flex items-center gap-2 mt-2">
               <TrendingDown className="h-3 w-3 text-emerald-600" />
               <span className="text-xs text-emerald-700 font-medium">-2.3% this week</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-border">
-          <CardHeader className="pb-3">
+        <Card className="mac-card border-border">
+          <CardHeader className="pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
               <Clock className="h-4 w-4" />
               Last Failure
@@ -255,7 +255,7 @@ export const FlakyTestExplorer: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-semibold text-foreground">2h ago</div>
-            <p className="text-xs text-muted-foreground mt-1">WebSocket reconnection</p>
+            <p className="text-xs text-muted-foreground mt-2">WebSocket reconnection</p>
           </CardContent>
         </Card>
       </div>
@@ -269,6 +269,7 @@ export const FlakyTestExplorer: React.FC = () => {
                 <CardTitle>Flaky Tests</CardTitle>
                 <div className="flex gap-2">
                   <Button
+                    className="mac-button mac-button-primary"
                     variant={severityFilter === "all" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSeverityFilter("all")}
@@ -276,6 +277,7 @@ export const FlakyTestExplorer: React.FC = () => {
                     All
                   </Button>
                   <Button
+                    className="mac-button mac-button-primary"
                     variant={severityFilter === "critical" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSeverityFilter("critical")}
@@ -283,6 +285,7 @@ export const FlakyTestExplorer: React.FC = () => {
                     Critical
                   </Button>
                   <Button
+                    className="mac-button mac-button-primary"
                     variant={severityFilter === "high" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSeverityFilter("high")}
@@ -290,6 +293,7 @@ export const FlakyTestExplorer: React.FC = () => {
                     High
                   </Button>
                   <Button
+                    className="mac-button mac-button-primary"
                     variant={severityFilter === "medium" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSeverityFilter("medium")}
@@ -306,13 +310,14 @@ export const FlakyTestExplorer: React.FC = () => {
                     <Card
                       key={test.id}
                       className={cn(
+                        "mac-card",
                         "cursor-pointer transition-all hover:shadow-md",
                         selectedTest?.id === test.id && "ring-2 ring-primary",
                         getSeverityColor(test.severity)
                       )}
                       onClick={() => setSelectedTest(test)}
                     >
-                      <CardContent className="p-3">
+                      <CardContent className="p-4">
                         <div className="flex items-start justify-between mb-2">
                           <div>
                             <p className="font-medium text-sm">{test.name}</p>
@@ -349,14 +354,14 @@ export const FlakyTestExplorer: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <CardTitle className="text-lg">{selectedTest.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">{selectedTest.suite}</p>
+                      <p className="text-sm text-muted-foreground mt-2">{selectedTest.suite}</p>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
+                      <Button className="mac-button mac-button-outline" variant="outline" size="sm">
                         <Shield className="h-4 w-4 mr-2" />
                         Quarantine
                       </Button>
-                      <Button size="sm">
+                      <Button className="mac-button mac-button-primary" size="sm">
                         <Zap className="h-4 w-4 mr-2" />
                         Auto-Fix
                       </Button>
@@ -430,7 +435,7 @@ export const FlakyTestExplorer: React.FC = () => {
                   </Card>
 
                   {/* Analysis & Suggestions */}
-                  <Card className="bg-muted/30 border-border">
+                  <Card className="mac-card bg-muted/30 border-border">
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <Zap className="h-4 w-4 text-blue-600" />
@@ -446,13 +451,13 @@ export const FlakyTestExplorer: React.FC = () => {
                       </div>
                       <div>
                         <span className="text-sm font-medium">Estimated Impact:</span>
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="text-sm text-muted-foreground mt-2">
                           {selectedTest.estimatedImpact}
                         </p>
                       </div>
                       <div>
                         <span className="text-sm font-medium">Suggested Fix:</span>
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="text-sm text-muted-foreground mt-2">
                           {selectedTest.suggestedFix}
                         </p>
                       </div>
@@ -462,7 +467,7 @@ export const FlakyTestExplorer: React.FC = () => {
               </Card>
             </>
           ) : (
-            <Card className="h-full">
+            <Card className="mac-card h-full">
               <CardContent className="flex items-center justify-center h-full text-muted-foreground">
                 Select a flaky test to view analysis
               </CardContent>

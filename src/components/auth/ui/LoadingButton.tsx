@@ -13,6 +13,7 @@ export const LoadingButton = React.forwardRef<HTMLButtonElement, LoadingButtonPr
         ref={ref}
         disabled={loading || disabled}
         className={cn(
+          "mac-button mac-button-primary",
           "relative overflow-hidden",
           "transition-all duration-300",
           loading && "animate-pulse-glow",

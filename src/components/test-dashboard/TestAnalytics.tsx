@@ -136,7 +136,7 @@ export const TestAnalytics: React.FC = () => {
           </Select>
         </div>
 
-        <Button variant="outline">
+        <Button className="mac-button mac-button-outline" variant="outline">
           <Download className="h-4 w-4 mr-2" />
           Export Report
         </Button>
@@ -145,7 +145,7 @@ export const TestAnalytics: React.FC = () => {
       {/* Key Metrics Cards */}
       <div className="grid grid-cols-6 gap-4">
         <Card>
-          <CardHeader className="pb-3">
+          <CardHeader className="pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Clock className="h-4 w-4" />
               Avg Execution
@@ -153,15 +153,15 @@ export const TestAnalytics: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{keyMetrics.avgExecutionTime}</div>
-            <Badge className="bg-green-500/20 text-green-500 mt-1">
-              <TrendingDown className="h-3 w-3 mr-1" />
+            <Badge className="bg-green-500/20 text-green-500 mt-2">
+              <TrendingDown className="h-3 w-3 mr-2" />
               -15%
             </Badge>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-3">
+          <CardHeader className="pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Target className="h-4 w-4" />
               Pass Rate
@@ -169,15 +169,15 @@ export const TestAnalytics: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{keyMetrics.avgPassRate}</div>
-            <Badge className="bg-green-500/20 text-green-500 mt-1">
-              <TrendingUp className="h-3 w-3 mr-1" />
+            <Badge className="bg-green-500/20 text-green-500 mt-2">
+              <TrendingUp className="h-3 w-3 mr-2" />
               +2.3%
             </Badge>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-3">
+          <CardHeader className="pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Activity className="h-4 w-4" />
               Tests/Day
@@ -185,12 +185,12 @@ export const TestAnalytics: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{keyMetrics.testsPerDay}</div>
-            <Badge className="bg-blue-500/20 text-blue-500 mt-1">Stable</Badge>
+            <Badge className="bg-blue-500/20 text-blue-500 mt-2">Stable</Badge>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-3">
+          <CardHeader className="pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Zap className="h-4 w-4" />
               MTTR
@@ -198,15 +198,15 @@ export const TestAnalytics: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{keyMetrics.mttr}</div>
-            <Badge className="bg-green-500/20 text-green-500 mt-1">
-              <TrendingDown className="h-3 w-3 mr-1" />
+            <Badge className="bg-green-500/20 text-green-500 mt-2">
+              <TrendingDown className="h-3 w-3 mr-2" />
               -0.5h
             </Badge>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-3">
+          <CardHeader className="pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Award className="h-4 w-4" />
               Efficiency
@@ -214,12 +214,12 @@ export const TestAnalytics: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{keyMetrics.testEfficiency}</div>
-            <Badge className="bg-yellow-500/20 text-yellow-500 mt-1">Good</Badge>
+            <Badge className="bg-yellow-500/20 text-yellow-500 mt-2">Good</Badge>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-3">
+          <CardHeader className="pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Package className="h-4 w-4" />
               Automation
@@ -227,8 +227,8 @@ export const TestAnalytics: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{keyMetrics.automationRate}</div>
-            <Badge className="bg-green-500/20 text-green-500 mt-1">
-              <TrendingUp className="h-3 w-3 mr-1" />
+            <Badge className="bg-green-500/20 text-green-500 mt-2">
+              <TrendingUp className="h-3 w-3 mr-2" />
               +5%
             </Badge>
           </CardContent>
@@ -370,7 +370,7 @@ export const TestAnalytics: React.FC = () => {
                   >
                     <div className="flex items-center gap-4">
                       <div>
-                        <p className="font-medium">{suite.suite}</p>
+                        <p className="mac-body font-medium">{suite.suite}</p>
                         <p className="text-sm text-muted-foreground">{suite.tests} tests</p>
                       </div>
                     </div>
@@ -378,7 +378,7 @@ export const TestAnalytics: React.FC = () => {
                     <div className="flex items-center gap-8">
                       <div className="text-center">
                         <p className="text-sm text-muted-foreground">Avg Duration</p>
-                        <p className="font-medium">{suite.avgDuration}s</p>
+                        <p className="mac-body font-medium">{suite.avgDuration}s</p>
                       </div>
 
                       <div className="text-center">

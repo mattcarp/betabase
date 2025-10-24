@@ -1,0 +1,16 @@
+{
+  "mac-professional": 0,
+  "mac-display-text": 1,
+  "mac-heading": 1,
+  "mac-title": 0,
+  "mac-body": 2,
+  "mac-button": 1,
+  "mac-button-primary": 1,
+  "mac-button-secondary": 0,
+  "mac-button-outline": 0,
+  "mac-input": 1,
+  "mac-card": 0,
+  "mac-card-elevated": 0,
+  "mac-glass": 1,
+  "mac-background": 0
+}

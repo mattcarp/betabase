@@ -182,8 +182,14 @@ export const ManualTestingPanel: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-light text-foreground mac-title">Manual Testing Mode</h2>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h2
+            c
+            className="mac-heading"
+            lassName="mac-heading text-2xl font-light text-foreground mac-title"
+          >
+            Manual Testing Mode
+          </h2>
+          <p className="text-sm text-muted-foreground mt-2">
             Interactive testing with built-in recording and annotation tools
           </p>
         </div>
@@ -215,13 +221,13 @@ export const ManualTestingPanel: React.FC = () => {
         {/* Left Side - Browser View */}
         <div className="flex flex-col gap-4">
           {/* URL Bar */}
-          <Card className="mac-glass border-[var(--mac-utility-border)]">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-4">
               <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 transition-all duration-200 hover:scale-110"
+                  className="h-8 w-8 transition-all duration-200 hover:scale-110 mac-button mac-button-outline"
                   onClick={() => {
                     if (iframeRef.current?.contentWindow) {
                       iframeRef.current.contentWindow.history.back();
@@ -233,7 +239,7 @@ export const ManualTestingPanel: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 transition-all duration-200 hover:scale-110"
+                  className="h-8 w-8 transition-all duration-200 hover:scale-110 mac-button mac-button-outline"
                   onClick={() => {
                     if (iframeRef.current?.contentWindow) {
                       iframeRef.current.contentWindow.history.forward();
@@ -245,13 +251,14 @@ export const ManualTestingPanel: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 transition-all duration-200 hover:scale-110 hover:rotate-180"
+                  className="h-8 w-8 transition-all duration-200 hover:scale-110 hover:rotate-180 mac-button mac-button-outline"
                   onClick={handleReload}
                 >
                   <RefreshCw className="h-4 w-4" />
                 </Button>
 
                 <Input
+                  className="mac-input"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -268,12 +275,13 @@ export const ManualTestingPanel: React.FC = () => {
               </div>
 
               {/* Viewport Selector */}
-              <div className="flex items-center gap-2 mt-3">
+              <div className="flex items-center gap-2 mt-4">
                 <span className="text-xs text-muted-foreground font-medium">Viewport:</span>
                 {(Object.keys(VIEWPORT_SIZES) as ViewportMode[]).map((mode) => {
                   const Icon = VIEWPORT_SIZES[mode].icon;
                   return (
                     <Button
+                      className="mac-button mac-button-primary"
                       key={mode}
                       variant={viewport === mode ? "default" : "outline"}
                       size="sm"
@@ -293,7 +301,7 @@ export const ManualTestingPanel: React.FC = () => {
           </Card>
 
           {/* Browser Iframe */}
-          <Card className="mac-glass border-[var(--mac-utility-border)] flex-1 overflow-hidden">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border)] flex-1 overflow-hidden">
             <CardContent className="p-0 h-full">
               <div className="h-full w-full flex items-center justify-center bg-[var(--mac-surface-background)]">
                 <div
@@ -319,9 +327,13 @@ export const ManualTestingPanel: React.FC = () => {
         {/* Right Side - Control Panel */}
         <div className="flex flex-col gap-4">
           {/* Recording Controls */}
-          <Card className="mac-glass border-[var(--mac-utility-border)]">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-6">
-              <h3 className="text-sm font-medium text-foreground mb-4 flex items-center gap-2">
+              <h3
+                c
+                className="mac-title"
+                lassName="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
+              >
                 <Circle className="h-4 w-4 text-red-500" />
                 Recording Controls
               </h3>
@@ -342,7 +354,7 @@ export const ManualTestingPanel: React.FC = () => {
                     <Button
                       onClick={handlePauseRecording}
                       variant="outline"
-                      className="w-full gap-2 transition-all duration-200"
+                      className="w-full gap-2 transition-all duration-200 mac-button mac-button-outline"
                     >
                       <Pause className="h-4 w-4" />
                       Pause
@@ -350,7 +362,7 @@ export const ManualTestingPanel: React.FC = () => {
                     <Button
                       onClick={handleStopRecording}
                       variant="destructive"
-                      className="w-full gap-2 transition-all duration-200"
+                      className="w-full gap-2 transition-all duration-200 mac-button mac-button-primary"
                     >
                       <Square className="h-4 w-4" />
                       Stop & Save
@@ -370,7 +382,7 @@ export const ManualTestingPanel: React.FC = () => {
                     <Button
                       onClick={handleStopRecording}
                       variant="destructive"
-                      className="w-full gap-2 transition-all duration-200"
+                      className="w-full gap-2 transition-all duration-200 mac-button mac-button-primary"
                     >
                       <Square className="h-4 w-4" />
                       Stop & Save
@@ -382,9 +394,13 @@ export const ManualTestingPanel: React.FC = () => {
           </Card>
 
           {/* Session Info */}
-          <Card className="mac-glass border-[var(--mac-utility-border)]">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-6">
-              <h3 className="text-sm font-medium text-foreground mb-4 flex items-center gap-2">
+              <h3
+                c
+                className="mac-title"
+                lassName="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
+              >
                 <Clock className="h-4 w-4 text-blue-500" />
                 Session Information
               </h3>
@@ -441,9 +457,13 @@ export const ManualTestingPanel: React.FC = () => {
           </Card>
 
           {/* Quick Actions */}
-          <Card className="mac-glass border-[var(--mac-utility-border)]">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-6">
-              <h3 className="text-sm font-medium text-foreground mb-4 flex items-center gap-2">
+              <h3
+                c
+                className="mac-title"
+                lassName="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
+              >
                 <Maximize2 className="h-4 w-4 text-purple-500" />
                 Quick Actions
               </h3>
@@ -452,7 +472,7 @@ export const ManualTestingPanel: React.FC = () => {
                 <Button
                   onClick={handleScreenshot}
                   variant="outline"
-                  className="w-full gap-2 justify-start transition-all duration-200 hover:border-blue-400 hover:text-blue-400"
+                  className="w-full gap-2 justify-start transition-all duration-200 hover:border-blue-400 hover:text-blue-400 mac-button mac-button-outline"
                   disabled={recordingState === "idle"}
                 >
                   <Camera className="h-4 w-4" />
@@ -462,7 +482,7 @@ export const ManualTestingPanel: React.FC = () => {
                 <Button
                   onClick={handleAnnotate}
                   variant="outline"
-                  className="w-full gap-2 justify-start transition-all duration-200 hover:border-purple-400 hover:text-purple-400"
+                  className="w-full gap-2 justify-start transition-all duration-200 hover:border-purple-400 hover:text-purple-400 mac-button mac-button-outline"
                   disabled={recordingState === "idle"}
                 >
                   <Edit3 className="h-4 w-4" />
@@ -472,7 +492,7 @@ export const ManualTestingPanel: React.FC = () => {
                 <Button
                   onClick={handleFlagIssue}
                   variant="outline"
-                  className="w-full gap-2 justify-start transition-all duration-200 hover:border-red-400 hover:text-red-400"
+                  className="w-full gap-2 justify-start transition-all duration-200 hover:border-red-400 hover:text-red-400 mac-button mac-button-outline"
                   disabled={recordingState === "idle"}
                 >
                   <Flag className="h-4 w-4" />
@@ -483,9 +503,13 @@ export const ManualTestingPanel: React.FC = () => {
           </Card>
 
           {/* Testing Tips */}
-          <Card className="mac-glass border-[var(--mac-utility-border-elevated)] bg-gradient-to-br from-blue-950/20 to-purple-950/20">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border-elevated)] bg-gradient-to-br from-blue-950/20 to-purple-950/20">
             <CardContent className="p-6">
-              <h3 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
+              <h3
+                c
+                className="mac-title"
+                lassName="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
+              >
                 <MousePointerClick className="h-4 w-4 text-blue-400" />
                 Testing Tips
               </h3>

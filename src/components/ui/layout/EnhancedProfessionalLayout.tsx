@@ -92,12 +92,18 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
 
       {/* Professional Header */}
       <header className="relative z-10 border-b border-mac-border bg-mac-surface-elevated/50 backdrop-blur-xl">
-        <div className="flex items-center justify-between px-6 py-3">
+        <div className="flex items-center justify-between px-6 py-4">
           {/* Logo/Title */}
           <div className="flex items-center space-x-4">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent opacity-90" />
             <div>
-              <h1 className="text-lg font-extralight text-mac-text-primary tracking-wide">SIAM</h1>
+              <h1
+                c
+                className="mac-heading"
+                lassName="mac-heading text-lg font-extralight text-mac-text-primary tracking-wide"
+              >
+                SIAM
+              </h1>
               <p className="text-xs font-thin text-mac-text-muted tracking-wider uppercase">
                 Professional Meeting Intelligence
               </p>
@@ -112,7 +118,7 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
                   key={item.id}
                   onClick={item.onClick}
                   className={cn(
-                    "mac-button mac-button-ghost px-3 py-2 flex items-center space-x-2",
+                    "mac-button mac-button-ghost px-4 py-2 flex items-center space-x-2",
                     item.isActive && "mac-button-primary"
                   )}
                 >
@@ -179,7 +185,9 @@ export const ProfessionalCard: React.FC<{
   return (
     <div className={cn("mac-card mac-shimmer", className)}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="mac-title">{title}</h3>
+        <h3 c className="mac-title" lassName="mac-title">
+          {title}
+        </h3>
         {actions && <div className="flex items-center space-x-2">{actions}</div>}
       </div>
       <div className="mac-body">{children}</div>
