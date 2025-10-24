@@ -6,11 +6,11 @@ import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, /* AvatarImage */ } from "../ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Send, Loader2, User, Bot, AlertCircle, Sparkles, Zap, Clock } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { Separator } from "../ui/separator";
+// import { Separator } from "../ui/separator"; // Unused
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ChatWrapperProps {
@@ -39,12 +39,12 @@ export function ChatWrapper({
     error,
     reload,
     stop,
-    append,
-    setMessages,
+    append: _append, // Unused
+    setMessages: _setMessages, // Unused
   } = (useChat as any)({
     api,
     initialMessages,
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error("Chat error:", error);
       onError?.(error);
     },
@@ -115,7 +115,7 @@ export function ChatWrapper({
               </motion.div>
             ) : (
               <div className="space-y-4">
-                {messages.map((message, index) => (
+                {messages.map((message: any, index: number) => (
                   <motion.div
                     key={message.id || index}
                     initial={{ opacity: 0, y: 20 }}
