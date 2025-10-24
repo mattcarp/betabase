@@ -9,14 +9,14 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import { Separator } from "../ui/separator";
+// import { Separator } from "../ui/separator"; // Unused
 import {
   Bot,
   Sparkles,
-  RefreshCw,
+  // RefreshCw, // Unused
   Trash2,
   Download,
-  Settings,
+  // Settings, // Unused
   Loader2,
   AlertCircle,
 } from "lucide-react";
@@ -41,7 +41,7 @@ interface ChatPanelProps {
 }
 
 export function ChatPanel({
-  api = "/api/chat",
+  api: _api = "/api/chat", // Unused - v5 uses default endpoint
   initialMessages = [],
   className,
   title = "AI Assistant",
@@ -58,7 +58,7 @@ export function ChatPanel({
   maxMessages,
   allowExport = true,
   allowClear = true,
-  systemPrompt,
+  systemPrompt: _systemPrompt, // Unused - should be handled differently in v5
 }: ChatPanelProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
@@ -67,11 +67,11 @@ export function ChatPanel({
     messages,
     input,
     handleInputChange,
-    handleSubmit,
+    handleSubmit: _handleSubmit, // Unused - using custom submit handler
     isLoading,
     error,
     reload,
-    stop,
+    stop: _stop, // Unused
     append,
     setMessages,
     setInput,
@@ -79,7 +79,7 @@ export function ChatPanel({
     // Note: 'api' is not a valid option in v5, use default endpoint
     initialMessages,
     // body is also not valid in v5, system prompt should be handled differently
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error("Chat error:", error);
       onError?.(error);
     },
@@ -127,7 +127,7 @@ export function ChatPanel({
   };
 
   const handleExport = () => {
-    const content = messages.map((m) => `${m.role}: ${(m as any).content}`).join("\n\n");
+    const content = messages.map((m: any) => `${m.role}: ${(m as any).content}`).join("\n\n");
     const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -230,7 +230,7 @@ export function ChatPanel({
               </motion.div>
             ) : (
               <div className="space-y-4">
-                {messages.map((message, index) => (
+                {messages.map((message: any, index: number) => (
                   <div key={message.id || index} className="flex gap-3">
                     <div className="flex-shrink-0">
                       {message.role === "user" ? (
