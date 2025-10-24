@@ -50,8 +50,7 @@ function updatePerformanceMetrics() {
   const durations = recentRequests.map((r) => r.duration);
 
   if (durations.length > 0) {
-    metrics.performance.avgResponseTime =
-      durations.reduce((a, b) => a + b, 0) / durations.length;
+    metrics.performance.avgResponseTime = durations.reduce((a, b) => a + b, 0) / durations.length;
     metrics.performance.p95ResponseTime = calculatePercentile(durations, 95);
     metrics.performance.p99ResponseTime = calculatePercentile(durations, 99);
   }

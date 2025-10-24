@@ -44,7 +44,7 @@ jobs:
             - TypeScript type safety
             - API design patterns
             - Accessibility concerns
-            
+
             Be concise and only comment on significant issues.
             Ignore stylistic preferences covered by ESLint/Prettier.
 
@@ -72,7 +72,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            
+
             let comment = `## 🔍 Code Complexity Analysis\n\n`;
             comment += `This PR has been analyzed for code complexity.\n\n`;
             comment += `### Guidelines\n`;
@@ -80,18 +80,18 @@ jobs:
             comment += `- Cyclomatic complexity 10-20 (moderate)\n`;
             comment += `- Cyclomatic complexity > 20 (needs refactoring)\n\n`;
             comment += `Check artifacts for detailed metrics.\n`;
-            
+
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
-            
+
             const botComment = comments.find(comment => 
               comment.user.type === 'Bot' && 
               comment.body.includes('🔍 Code Complexity Analysis')
             );
-            
+
             if (botComment) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
