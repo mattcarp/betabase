@@ -14,12 +14,10 @@ export async function POST(request: NextRequest) {
     // Handle both JSON and form data
     const contentType = request.headers.get("content-type");
     let email = "";
-    let action = "send";
 
     if (contentType?.includes("application/json")) {
       const body = await request.json();
       email = body.email;
-      action = body.action || "send";
     } else {
       // Handle form data
       const formData = await request.formData();

@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
-import "./styles/cinematic-ui.css";
 
 // Theme class removed - using light theme by default
 

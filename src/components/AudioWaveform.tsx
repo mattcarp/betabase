@@ -14,9 +14,9 @@ export default function AudioWaveform({
   isRecording,
   className = "",
   height = 128,
-  waveColor = "#3B82F6",
-  progressColor = "#0080ff",
-  cursorColor = "#ffffff",
+  waveColor: _waveColor = "#3B82F6",
+  progressColor: _progressColor = "#0080ff",
+  cursorColor: _cursorColor = "#ffffff",
 }: AudioWaveformProps) {
   const [isInitialized] = useState(true);
 

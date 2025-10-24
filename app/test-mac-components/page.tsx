@@ -40,36 +40,62 @@ export default function MACComponentsTestPage() {
           <div className="space-y-6">
             {/* Button Variants */}
             <div>
-              <h3 className="text-sm text-[var(--mac-text-muted)] mb-3">Variants</h3>
+              <h3 className="text-sm text-[var(--mac-text-muted)] mb-4">Variants</h3>
               <div className="flex flex-wrap gap-4">
-                <Button variant="default">Default Button</Button>
-                <Button variant="secondary">Secondary</Button>
-                <Button variant="outline">Outline</Button>
-                <Button variant="ghost">Ghost</Button>
-                <Button variant="link">Link Button</Button>
-                <Button variant="destructive">Destructive</Button>
+                <Button className="mac-button mac-button-primary" variant="default">
+                  Default Button
+                </Button>
+                <Button className="mac-button mac-button-secondary" variant="secondary">
+                  Secondary
+                </Button>
+                <Button className="mac-button mac-button-outline" variant="outline">
+                  Outline
+                </Button>
+                <Button className="mac-button mac-button-outline" variant="ghost">
+                  Ghost
+                </Button>
+                <Button className="mac-button mac-button-primary" variant="link">
+                  Link Button
+                </Button>
+                <Button className="mac-button mac-button-primary" variant="destructive">
+                  Destructive
+                </Button>
               </div>
             </div>
 
             {/* Button Sizes */}
             <div>
-              <h3 className="text-sm text-[var(--mac-text-muted)] mb-3">Sizes</h3>
+              <h3 className="text-sm text-[var(--mac-text-muted)] mb-4">Sizes</h3>
               <div className="flex items-center gap-4">
-                <Button size="sm">Small</Button>
-                <Button size="default">Default</Button>
-                <Button size="lg">Large</Button>
-                <Button size="icon">🎨</Button>
+                <Button className="mac-button mac-button-primary" size="sm">
+                  Small
+                </Button>
+                <Button className="mac-button mac-button-primary" size="default">
+                  Default
+                </Button>
+                <Button className="mac-button mac-button-primary" size="lg">
+                  Large
+                </Button>
+                <Button className="mac-button mac-button-primary" size="icon">
+                  🎨
+                </Button>
               </div>
             </div>
 
             {/* Button States */}
             <div>
-              <h3 className="text-sm text-[var(--mac-text-muted)] mb-3">States</h3>
+              <h3 className="text-sm text-[var(--mac-text-muted)] mb-4">States</h3>
               <div className="flex gap-4">
                 <Button>Normal</Button>
-                <Button disabled>Disabled</Button>
-                <Button shimmer>With Shimmer</Button>
-                <Button glow>With Glow</Button>
+                <Button className="mac-button mac-button-primary" disabled>
+                  Disabled
+                </Button>
+                <Button className="mac-button mac-button-primary" shimmer>
+                  With Shimmer
+                </Button>
+                <Button className="mac-button mac-button-primary" glow>
+                  With Glow
+                </Button>
               </div>
             </div>
           </div>
@@ -82,25 +108,39 @@ export default function MACComponentsTestPage() {
           <div className="space-y-6">
             {/* Basic Inputs */}
             <div>
-              <h3 className="text-sm text-[var(--mac-text-muted)] mb-3">Basic Inputs</h3>
+              <h3 className="text-sm text-[var(--mac-text-muted)] mb-4">Basic Inputs</h3>
               <div className="space-y-4 max-w-md">
-                <Input placeholder="Default input" />
-                <Input placeholder="With glow on focus" glow />
-                <Input placeholder="Without glow" glow={false} />
-                <Input type="email" placeholder="Email input" />
-                <Input type="password" placeholder="Password input" />
+                <Input className="mac-input" placeholder="Default input" />
+                <Input className="mac-input" placeholder="With glow on focus" glow />
+                <Input className="mac-input" placeholder="Without glow" glow={false} />
+                <Input className="mac-input" type="email" placeholder="Email input" />
+                <Input className="mac-input" type="password" placeholder="Password input" />
               </div>
             </div>
 
             {/* Input States */}
             <div>
-              <h3 className="text-sm text-[var(--mac-text-muted)] mb-3">States</h3>
+              <h3 className="text-sm text-[var(--mac-text-muted)] mb-4">States</h3>
               <div className="space-y-4 max-w-md">
-                <Input placeholder="Normal state" />
-                <Input placeholder="Error state" error helperText="This field has an error" />
-                <Input placeholder="With helper text" helperText="This is helper text" />
-                <Input placeholder="Disabled input" disabled />
-                <Input placeholder="Required field" required aria-label="Required field" />
+                <Input className="mac-input" placeholder="Normal state" />
+                <Input
+                  className="mac-input"
+                  placeholder="Error state"
+                  error
+                  helperText="This field has an error"
+                />
+                <Input
+                  className="mac-input"
+                  placeholder="With helper text"
+                  helperText="This is helper text"
+                />
+                <Input className="mac-input" placeholder="Disabled input" disabled />
+                <Input
+                  className="mac-input"
+                  placeholder="Required field"
+                  required
+                  aria-label="Required field"
+                />
               </div>
             </div>
           </div>
@@ -119,7 +159,7 @@ export default function MACComponentsTestPage() {
                   <FormItem>
                     <FormLabel required>Username</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your username" {...field} />
+                      <Input className="mac-input" placeholder="Enter your username" {...field} />
                     </FormControl>
                     <FormDescription>This is your public display name.</FormDescription>
                   </FormItem>
@@ -133,7 +173,12 @@ export default function MACComponentsTestPage() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="email@example.com" {...field} />
+                      <Input
+                        className="mac-input"
+                        type="email"
+                        placeholder="email@example.com"
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription>
                       We'll never share your email with anyone else.
@@ -149,7 +194,12 @@ export default function MACComponentsTestPage() {
                   <FormItem>
                     <FormLabel required>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Enter password" {...field} />
+                      <Input
+                        className="mac-input"
+                        type="password"
+                        placeholder="Enter password"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage type="error">Password must be at least 8 characters</FormMessage>
                   </FormItem>
@@ -157,8 +207,10 @@ export default function MACComponentsTestPage() {
               />
 
               <div className="flex gap-4">
-                <Button type="submit">Submit Form</Button>
-                <Button type="button" variant="outline">
+                <Button className="mac-button mac-button-primary" type="submit">
+                  Submit Form
+                </Button>
+                <Button className="mac-button mac-button-outline" type="button" variant="outline">
                   Cancel
                 </Button>
               </div>

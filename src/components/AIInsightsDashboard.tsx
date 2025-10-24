@@ -175,7 +175,13 @@ export function AIInsightsDashboard({
       <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
         <div className="flex items-center gap-2 mb-4">
           <Brain className="w-5 h-5 text-blue-600" />
-          <h3 className="text-lg font-bold text-blue-600 font-mono">AI Insights</h3>
+          <h3
+            c
+            className="mac-title"
+            lassName="mac-title text-lg font-bold text-blue-600 font-mono"
+          >
+            AI Insights
+          </h3>
           {isRecording && (
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse ml-auto"></div>
           )}
@@ -189,21 +195,23 @@ export function AIInsightsDashboard({
                 <div
                   key={insight.id}
                   className={cn(
-                    "p-3 rounded-lg border transition-all duration-300",
+                    "p-4 rounded-lg border transition-all duration-300",
                     getInsightColor(insight.type)
                   )}
                 >
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-4">
                     <Icon className="w-4 h-4 mt-0.5 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-1">
-                        <h4 className="text-sm font-semibold">{insight.title}</h4>
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 c className="mac-title" lassName="mac-title text-sm font-semibold">
+                          {insight.title}
+                        </h4>
                         <span className="text-xs opacity-60">
                           {Math.floor(insight.confidence * 100)}%
                         </span>
                       </div>
                       <p className="text-xs opacity-80 leading-relaxed">{insight.content}</p>
-                      <div className="text-xs opacity-50 mt-1">
+                      <div className="text-xs opacity-50 mt-2">
                         {insight.timestamp.toLocaleTimeString()}
                       </div>
                     </div>
@@ -225,12 +233,18 @@ export function AIInsightsDashboard({
       {/* Key Topics */}
       {keyTopics.length > 0 && (
         <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
-          <h3 className="text-sm font-bold text-blue-600 font-mono mb-3">KEY TOPICS</h3>
+          <h3
+            c
+            className="mac-title"
+            lassName="mac-title text-sm font-bold text-blue-600 font-mono mb-4"
+          >
+            KEY TOPICS
+          </h3>
           <div className="flex flex-wrap gap-2">
             {keyTopics.map((topic, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-blue-600/10 border border-blue-600/30 rounded-full text-xs text-blue-600 font-mono"
+                className="px-4 py-2 bg-blue-600/10 border border-blue-600/30 rounded-full text-xs text-blue-600 font-mono"
               >
                 {topic}
               </span>
@@ -242,7 +256,13 @@ export function AIInsightsDashboard({
       {/* Action Items */}
       {actionItems.length > 0 && (
         <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
-          <h3 className="text-sm font-bold text-yellow-400 font-mono mb-3">ACTION ITEMS</h3>
+          <h3
+            c
+            className="mac-title"
+            lassName="mac-title text-sm font-bold text-yellow-400 font-mono mb-4"
+          >
+            ACTION ITEMS
+          </h3>
           <div className="space-y-2">
             {actionItems.map((action, index) => (
               <div key={index} className="flex items-start gap-2">

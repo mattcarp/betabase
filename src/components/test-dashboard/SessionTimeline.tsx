@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -21,7 +21,6 @@ import {
   CheckCircle,
   Info,
   XCircle,
-  Eye,
   Network,
   Camera,
   ScrollText,
@@ -180,17 +179,6 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
     }
   };
 
-  // Format timestamp
-  const formatTimestamp = (timestamp: number) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      fractionalSecondDigits: 3,
-    });
-  };
-
   // Format relative time
   const formatRelativeTime = (timestamp: number) => {
     if (interactions.length === 0) return "0ms";
@@ -225,7 +213,12 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
         )}
         style={{ width: "48px" }}
       >
-        <Button variant="ghost" size="icon" onClick={onToggleCollapse} className="mb-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onToggleCollapse}
+          className="mb-4 mac-button mac-button-outline"
+        >
           <ChevronRight className="h-4 w-4" />
         </Button>
         <div className="writing-mode-vertical-rl text-sm text-mac-text-secondary font-light tracking-wide">
@@ -255,19 +248,23 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
 
       {/* Header */}
       <div className="border-b border-mac-utility-border p-4">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Clock className="h-5 w-5 text-mac-primary-blue-400" />
-            <h3 className="text-base font-light text-mac-text-primary mac-title">
+            <h3
+              c
+              className="mac-title"
+              lassName="text-base font-light text-mac-text-primary mac-title"
+            >
               Session Timeline
             </h3>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
               onClick={handleCollapseAll}
-              className="h-7 w-7"
+              className="h-7 w-7 mac-button mac-button-outline"
               title={isExpanded ? "Collapse all" : "Expand all"}
             >
               {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
@@ -276,7 +273,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
               variant="ghost"
               size="icon"
               onClick={onToggleCollapse}
-              className="h-7 w-7"
+              className="h-7 w-7 mac-button mac-button-outline"
               title="Collapse timeline"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -285,9 +282,10 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
         </div>
 
         {/* Search */}
-        <div className="relative mb-3">
+        <div className="relative mb-4">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-mac-text-muted" />
           <Input
+            className="mac-input"
             type="text"
             placeholder="Search interactions..."
             value={searchQuery}
@@ -296,7 +294,9 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
           />
           {searchQuery && (
             <Button
+              className="mac-button mac-button-outline"
               variant="ghost"
+              className="mac-button mac-button-outline"
               size="icon"
               onClick={() => setSearchQuery("")}
               className="absolute right-1 top-1 h-7 w-7"
@@ -309,7 +309,9 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
         {/* Filter Toggle */}
         <div className="flex items-center justify-between">
           <Button
+            className="mac-button mac-button-outline"
             variant="ghost"
+            className="mac-button mac-button-outline"
             size="sm"
             onClick={() => setShowFilters(!showFilters)}
             className="h-8 text-xs gap-2"
@@ -323,7 +325,12 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
               {filteredInteractions.length} of {interactions.length}
             </span>
             {(searchQuery || filter.types || filter.statuses) && (
-              <Button variant="ghost" size="sm" onClick={clearFilters} className="h-6 text-xs">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearFilters}
+                className="h-6 text-xs mac-button mac-button-outline"
+              >
                 Clear
               </Button>
             )}
@@ -332,9 +339,9 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
 
         {/* Filter Panel */}
         {showFilters && (
-          <div className="mt-3 space-y-3 p-3 bg-mac-surface-card rounded-lg border border-mac-utility-border">
+          <div className="mt-4 space-y-3 p-4 bg-mac-surface-card rounded-lg border border-mac-utility-border">
             <div>
-              <label className="text-xs text-mac-text-secondary mb-1.5 block">
+              <label className="text-xs text-mac-text-secondary mb-2.5 block">
                 Interaction Type
               </label>
               <Select
@@ -362,7 +369,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
             </div>
 
             <div>
-              <label className="text-xs text-mac-text-secondary mb-1.5 block">Status</label>
+              <label className="text-xs text-mac-text-secondary mb-2.5 block">Status</label>
               <Select
                 value={filter.statuses?.[0] || "all"}
                 onValueChange={(value) => {
@@ -393,7 +400,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
 
       {/* Timeline Items */}
       <ScrollArea className="flex-1">
-        <div className="p-3 space-y-2">
+        <div className="p-4 space-y-2">
           {filteredInteractions.length === 0 ? (
             <div className="text-center py-8 text-mac-text-muted text-sm">
               {interactions.length === 0
@@ -401,7 +408,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                 : "No interactions match your filters"}
             </div>
           ) : (
-            filteredInteractions.map((interaction, index) => (
+            filteredInteractions.map((interaction, _index) => (
               <Card
                 key={interaction.id}
                 className={cn(
@@ -414,12 +421,12 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                 )}
                 onClick={() => handleInteractionClick(interaction)}
               >
-                <CardContent className={cn("p-3", !isExpanded && "py-2")}>
+                <CardContent className={cn("p-4", !isExpanded && "py-2")}>
                   <div className="flex items-start gap-2">
                     {/* Icon */}
                     <div
                       className={cn(
-                        "p-1.5 rounded-md flex-shrink-0",
+                        "p-2.5 rounded-md flex-shrink-0",
                         interaction.status === "success" && "bg-emerald-500/10 text-emerald-500",
                         interaction.status === "error" && "bg-rose-500/10 text-rose-500",
                         interaction.status === "warning" && "bg-amber-500/10 text-amber-500",
@@ -431,7 +438,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2 mb-1">
+                      <div className="flex items-start justify-between gap-2 mb-2">
                         <p className="text-sm font-medium text-mac-text-primary leading-tight">
                           {interaction.description}
                         </p>
@@ -441,7 +448,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                       {isExpanded && (
                         <>
                           {interaction.elementDescription && (
-                            <p className="text-xs text-mac-text-secondary mb-1 truncate">
+                            <p className="text-xs text-mac-text-secondary mb-2 truncate">
                               {interaction.elementDescription}
                             </p>
                           )}
@@ -455,6 +462,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                           {/* Thumbnail */}
                           {interaction.thumbnail && (
                             <div className="mt-2 rounded overflow-hidden border border-mac-utility-border">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
                                 src={interaction.thumbnail}
                                 alt="Interaction screenshot"
@@ -466,17 +474,17 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                       )}
 
                       {/* Timestamp and duration */}
-                      <div className="flex items-center gap-2 mt-1.5">
+                      <div className="flex items-center gap-2 mt-2.5">
                         <Badge
                           variant="outline"
-                          className="text-[10px] px-1.5 py-0 h-4 bg-mac-surface-card"
+                          className="text-[10px] px-2.5 py-0 h-4 bg-mac-surface-card"
                         >
                           {formatRelativeTime(interaction.timestamp)}
                         </Badge>
                         {interaction.duration && (
                           <Badge
                             variant="outline"
-                            className="text-[10px] px-1.5 py-0 h-4 bg-mac-surface-card"
+                            className="text-[10px] px-2.5 py-0 h-4 bg-mac-surface-card"
                           >
                             {interaction.duration}ms
                           </Badge>
@@ -492,7 +500,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
       </ScrollArea>
 
       {/* Footer Stats */}
-      <div className="border-t border-mac-utility-border p-3">
+      <div className="border-t border-mac-utility-border p-4">
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="flex items-center justify-between">
             <span className="text-mac-text-muted">Total:</span>

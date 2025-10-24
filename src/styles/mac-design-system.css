@@ -45,6 +45,18 @@
   --mac-status-error-border: rgba(251, 146, 60, 0.3);
   --mac-status-error-text: #fdba74;
 
+  /* MAC Chart & Visualization Colors */
+  --mac-success-green: #10b981; /* Success/Positive state - green */
+  --mac-error-red: #ef4444; /* Error/Negative state - red */
+  --mac-warning-yellow: #eab308; /* Warning state - yellow */
+
+  /* MAC Highlighter & Annotation Colors */
+  --mac-highlight-yellow: rgba(255, 255, 0, 0.5); /* Yellow highlighter */
+  --mac-highlight-green: rgba(0, 255, 0, 0.5); /* Green highlighter */
+  --mac-highlight-blue: rgba(0, 150, 255, 0.5); /* Blue highlighter */
+  --mac-highlight-red: rgba(255, 0, 0, 0.5); /* Red highlighter */
+  --mac-highlight-purple: rgba(200, 0, 255, 0.5); /* Purple highlighter */
+
   /* Sidebar Variables */
   --sidebar-width: 16rem; /* 256px */
   --sidebar-width-medium: 12.5rem; /* 200px - for medium viewports ~800px */
@@ -328,6 +340,133 @@
 
 .mac-error-text {
   color: #ef4444;
+}
+
+/* ========================
+   ACCESSIBILITY & FOCUS STYLES
+   ======================== */
+
+/**
+ * MAC Design System Focus Indicators
+ * Ensures keyboard navigation is visible and meets WCAG 2.1 AA standards
+ */
+
+/* Global focus-visible style for all interactive elements */
+*:focus-visible {
+  outline: 2px solid var(--mac-state-focus);
+  outline-offset: 2px;
+  transition: outline-offset 150ms ease-in-out;
+}
+
+/* Enhanced focus for buttons */
+button:focus-visible,
+.mac-button:focus-visible {
+  outline: 2px solid var(--mac-state-focus);
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 4px rgba(74, 158, 255, 0.1),
+    0 0 12px rgba(74, 158, 255, 0.15);
+}
+
+/* Enhanced focus for links */
+a:focus-visible {
+  outline: 2px solid var(--mac-state-focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Enhanced focus for form inputs */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+.mac-input:focus-visible {
+  outline: none; /* Remove default outline */
+  border-color: var(--mac-state-focus);
+  box-shadow:
+    0 0 0 3px rgba(74, 158, 255, 0.15),
+    0 0 12px rgba(74, 158, 255, 0.1);
+}
+
+/* Focus for checkboxes and radio buttons */
+input[type="checkbox"]:focus-visible,
+input[type="radio"]:focus-visible {
+  outline: 2px solid var(--mac-state-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(74, 158, 255, 0.1);
+}
+
+/* Focus for cards and interactive panels */
+.mac-card:focus-visible,
+[role="button"]:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: 2px solid var(--mac-state-focus);
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 4px rgba(74, 158, 255, 0.08),
+    0 0 16px rgba(74, 158, 255, 0.1);
+}
+
+/* Focus for dropdown/select elements */
+[role="combobox"]:focus-visible,
+[role="listbox"]:focus-visible,
+[role="option"]:focus-visible {
+  outline: 2px solid var(--mac-state-focus);
+  outline-offset: 1px;
+}
+
+/* Focus for dialog and modal elements */
+[role="dialog"]:focus-visible,
+[role="alertdialog"]:focus-visible {
+  outline: none; /* Dialogs manage their own focus */
+}
+
+/* Focus for navigation items */
+nav a:focus-visible,
+nav button:focus-visible {
+  outline: 2px solid var(--mac-state-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Skip to content link (accessibility) */
+.skip-to-content:focus-visible {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: var(--mac-surface-elevated);
+  border: 2px solid var(--mac-state-focus);
+  border-radius: 6px;
+  color: var(--mac-text-primary);
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(74, 158, 255, 0.3);
+}
+
+/* Remove focus outline for mouse/touch users (only show for keyboard) */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Ensure focus indicators are visible in high contrast mode */
+@media (prefers-contrast: high) {
+  *:focus-visible {
+    outline-width: 3px;
+    outline-offset: 3px;
+  }
+
+  button:focus-visible,
+  .mac-button:focus-visible {
+    outline-width: 3px;
+    box-shadow: 0 0 0 6px rgba(74, 158, 255, 0.2);
+  }
+}
+
+/* Reduced motion: Disable focus transition animations */
+@media (prefers-reduced-motion: reduce) {
+  *:focus-visible {
+    transition: none;
+  }
 }
 
 /* Login Page Specific Enhancements */

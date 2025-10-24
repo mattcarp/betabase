@@ -5,6 +5,18 @@
 
 import { createClient } from "@supabase/supabase-js";
 
+// Re-export functions from root lib/supabase for compatibility
+export {
+  upsertWikiDocument,
+  upsertJiraTicket,
+  upsertJiraTicketEmbedding,
+  upsertCrawlerDocument,
+  storeFirecrawlData,
+  getFirecrawlAnalysis,
+  searchFirecrawlData,
+  validateSonyMusicContent,
+} from "../../lib/supabase";
+
 // Get environment variables with validation
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -18,16 +30,16 @@ if (!supabaseUrl || !supabaseAnonKey || isPlaceholder) {
     url: !!supabaseUrl && !isPlaceholder,
     key: !!supabaseAnonKey && !isPlaceholder,
   });
-  // Don't throw error in dev mode - just log a warning
-  if (process.env.NODE_ENV === "production") {
-    throw new Error(
-      "Missing required Supabase environment variables. Please check your .env.local file."
-    );
-  }
+  // Don't throw error - just log a warning and use placeholder values
+  // API routes will handle missing Supabase gracefully at runtime
 }
 
 // Create a single supabase client for interacting with your database
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+// Use placeholder values during build if env vars are missing
+const url = supabaseUrl || "https://placeholder.supabase.co";
+const key = supabaseAnonKey || "placeholder-key";
+
+export const supabase = createClient(url, key, {
   auth: {
     persistSession: false, // We're not using auth for vector operations
   },

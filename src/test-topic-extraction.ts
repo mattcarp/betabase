@@ -145,7 +145,7 @@ async function testTopicExtraction() {
 // Run the test if this file is executed directly
 if (require.main === module) {
   testTopicExtraction()
-    .then((result) => {
+    .then(() => {
       console.log("\n🎉 All tests passed!");
       process.exit(0);
     })

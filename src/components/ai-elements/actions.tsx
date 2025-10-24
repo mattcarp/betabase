@@ -21,7 +21,7 @@ export type ActionsProps = ComponentProps<"div"> & {
 export const Actions = ({ className, children, actions, ...props }: ActionsProps) => {
   if (actions && actions.length > 0) {
     return (
-      <div className={cn("flex flex-col gap-1", className)} {...props}>
+      <div className={cn("flex flex-col gap-2", className)} {...props}>
         {actions.map((action, index) => (
           <Button
             key={index}
@@ -29,7 +29,7 @@ export const Actions = ({ className, children, actions, ...props }: ActionsProps
             variant={action.variant || "ghost"}
             size="sm"
             className={cn(
-              "justify-start text-xs h-8 px-3 py-1.5 font-light",
+              "justify-start text-xs h-8 px-4 py-2.5 font-light",
               "mac-button-ghost hover:bg-mac-state-hover",
               "transition-all duration-150 ease-out",
               "text-mac-text-secondary hover:text-mac-text-primary",
@@ -48,7 +48,7 @@ export const Actions = ({ className, children, actions, ...props }: ActionsProps
   }
 
   return (
-    <div className={cn("flex items-center gap-1", className)} {...props}>
+    <div className={cn("flex items-center gap-2", className)} {...props}>
       {children}
     </div>
   );
@@ -71,6 +71,7 @@ export const Action = ({
   const button = (
     <Button
       className={cn(
+        "mac-button mac-button-primary",
         "!h-8 !w-8 !p-0 text-muted-foreground hover:text-foreground shrink-0",
         className
       )}

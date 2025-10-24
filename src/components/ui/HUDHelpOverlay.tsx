@@ -164,7 +164,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
       <div className="relative w-full max-w-4xl mx-4 floating-panel animate-in zoom-in-95 slide-in-from-bottom-10">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-jarvis-panel-border">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <div className="p-2 rounded-lg bg-jarvis-cyan/20">
               <svg
                 className="w-6 h-6 text-jarvis-cyan"
@@ -181,10 +181,14 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
               </svg>
             </div>
             <div>
-              <h2 id="help-overlay-title" className="mac-heading text-mac-text-primary">
+              <h2
+                className="mac-heading"
+                id="help-overlay-title"
+                className="mac-heading text-mac-text-primary"
+              >
                 JARVIS HUD Help
               </h2>
-              <p className="mac-body text-xs text-mac-text-muted mt-1">
+              <p className="mac-body text-xs text-mac-text-muted mt-2">
                 Keyboard shortcuts and interface guide
               </p>
             </div>
@@ -211,7 +215,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
                   key={index}
                   onClick={() => setSelectedSection(index)}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 mb-1",
+                    "w-full flex items-center gap-4 px-4 py-4 rounded-lg transition-all duration-200 mb-2",
                     selectedSection === index
                       ? "bg-jarvis-panel-active-bg-start border border-jarvis-cyan text-jarvis-cyan"
                       : "text-mac-text-secondary hover:bg-jarvis-panel-bg-end hover:text-mac-text-primary"
@@ -228,7 +232,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
           {/* Content Area */}
           <div className="flex-1 p-6 overflow-y-auto">
             <div className="mb-6">
-              <h3 className="mac-title text-mac-text-primary mb-2">
+              <h3 c className="mac-title" lassName="mac-title text-mac-text-primary mb-2">
                 {helpSections[selectedSection].title}
               </h3>
               <div className="h-1 w-16 rounded-full bg-gradient-to-r from-jarvis-cyan to-jarvis-electric-blue" />
@@ -243,7 +247,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
                   <p className="mac-body text-mac-text-secondary group-hover:text-mac-text-primary flex-1">
                     {shortcut.description}
                   </p>
-                  <kbd className="ml-4 px-3 py-1.5 rounded-lg bg-jarvis-panel-dark-bg-start border border-jarvis-panel-dark-border text-jarvis-cyan font-mono text-sm whitespace-nowrap">
+                  <kbd className="ml-4 px-4 py-2.5 rounded-lg bg-jarvis-panel-dark-bg-start border border-jarvis-panel-dark-border text-jarvis-cyan font-mono text-sm whitespace-nowrap">
                     {shortcut.key}
                   </kbd>
                 </div>
@@ -252,7 +256,13 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
 
             {/* Additional Tips */}
             <div className="mt-8 p-4 rounded-lg border-l-4 border-jarvis-cyan bg-jarvis-cyan/5">
-              <h4 className="mac-body font-semibold text-jarvis-cyan mb-2">Pro Tip</h4>
+              <h4
+                c
+                className="mac-title"
+                lassName="mac-title mac-body font-semibold text-jarvis-cyan mb-2"
+              >
+                Pro Tip
+              </h4>
               <p className="mac-body text-sm text-mac-text-secondary">
                 {selectedSection === 0 &&
                   "Drag panel headers to reposition them anywhere on screen. Your layout will be saved automatically."}
@@ -275,9 +285,9 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
         <div className="px-6 py-4 border-t border-jarvis-panel-border bg-jarvis-panel-dark-bg-start/50 flex items-center justify-between">
           <p className="text-sm text-mac-text-muted">
             Press{" "}
-            <kbd className="px-2 py-1 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">F1</kbd>{" "}
+            <kbd className="px-2 py-2 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">F1</kbd>{" "}
             or{" "}
-            <kbd className="px-2 py-1 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">
+            <kbd className="px-2 py-2 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">
               Ctrl+Shift+H
             </kbd>{" "}
             anytime to open this help

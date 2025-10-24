@@ -19,9 +19,8 @@ export default function LiveTranscription({
     hasTranscription: !!transcription,
   });
   const [displayedText, setDisplayedText] = useState("");
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentWordIndex, _setCurrentWordIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const words = transcription.split(" ");
 
   // Handle transcription updates
   useEffect(() => {
@@ -94,7 +93,7 @@ export default function LiveTranscription({
                     className={cn(
                       "transition-all duration-300",
                       index === currentWordIndex - 1 && isRecording
-                        ? "bg-blue-600/20 px-1 rounded"
+                        ? "bg-blue-600/20 px-2 rounded"
                         : "",
                       getWordConfidence()
                     )}
@@ -103,14 +102,14 @@ export default function LiveTranscription({
                   </span>
                 ))}
                 {isRecording && (
-                  <span className="inline-block w-2 h-4 bg-blue-600 animate-pulse ml-1"></span>
+                  <span className="inline-block w-2 h-4 bg-blue-600 animate-pulse ml-2"></span>
                 )}
               </p>
 
               {/* Confidence Indicator */}
               <div className="mt-4 flex items-center gap-2 text-xs">
                 <span className="text-gray-400 font-mono">Confidence:</span>
-                <div className="flex gap-1">
+                <div className="flex gap-2">
                   <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                   <span className="text-green-400">High</span>
                   <div className="w-2 h-2 bg-blue-600 rounded-full ml-2"></div>
@@ -136,7 +135,7 @@ export default function LiveTranscription({
       </Suspense>
       {/* Word Count & Stats */}
       {displayedText && (
-        <div className="absolute top-2 right-2 bg-gray-800/80 backdrop-blur-sm rounded-lg px-3 py-1">
+        <div className="absolute top-2 right-2 bg-gray-800/80 backdrop-blur-sm rounded-lg px-4 py-2">
           <div className="flex items-center gap-4 text-xs font-mono">
             <span className="text-gray-400">
               Words: <span className="text-blue-600">{displayedText.split(" ").length}</span>

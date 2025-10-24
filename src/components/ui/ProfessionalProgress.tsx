@@ -102,7 +102,7 @@ export function ProfessionalProgress({
 
       {/* Sub Label */}
       {subLabel && (
-        <p className={cn(sizes.text, "text-gray-500 dark:text-gray-400 mt-1")}>{subLabel}</p>
+        <p className={cn(sizes.text, "text-gray-500 dark:text-gray-400 mt-2")}>{subLabel}</p>
       )}
     </div>
   );
@@ -264,7 +264,7 @@ export function StepProgress({
               )}
             </div>
             {labels?.[i] && (
-              <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{labels[i]}</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 mt-2">{labels[i]}</span>
             )}
           </div>
         ))}

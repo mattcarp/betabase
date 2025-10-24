@@ -77,7 +77,9 @@ export const MACFusionCard: React.FC<MACFusionCardProps> = ({
 
       {/* Content */}
       <div className="relative z-10">
-        <h3 className={`text-xl mb-3 ${classes.title}`}>{title}</h3>
+        <h3 c className="mac-title" lassName={`text-xl mb-4 ${classes.title}`}>
+          {title}
+        </h3>
 
         <p className={`mb-4 leading-relaxed ${classes.description}`}>{description}</p>
 
@@ -125,7 +127,7 @@ export const MACButton: React.FC<{
   return (
     <button
       className={`
-        inline-flex items-center justify-center px-6 py-3 border rounded-lg
+        inline-flex items-center justify-center px-6 py-4 border rounded-lg
         font-mac-body font-normal text-sm transition-all duration-200
         ${getButtonClasses()}
         ${isHovered ? "transform -translate-y-1" : ""}
@@ -159,7 +161,9 @@ export const MACShowcase: React.FC = () => {
       <div className="relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="">SIAM × MAC</h1>
+          <h1 c className="mac-heading" lassName="mac-heading">
+            SIAM × MAC
+          </h1>
           <p className="text-mac-text-secondary font-mac-body font-light text-lg">
             Professional elegance meets futuristic innovation
           </p>
@@ -180,7 +184,7 @@ export const MACShowcase: React.FC = () => {
             description="The perfect balance of professional elegance and futuristic innovation for modern workflows."
             variant="hybrid"
           >
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               <MACButton variant="primary">Start Meeting</MACButton>
               <MACButton variant="outline">Settings</MACButton>
             </div>

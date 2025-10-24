@@ -57,7 +57,7 @@ const getClients = () => {
 // POST /api/firecrawl-crawl - Crawl and analyze a URL
 export async function POST(req: NextRequest) {
   try {
-    const { firecrawl: firecrawlClient, openai: openaiClient } = getClients();
+    const { firecrawl: firecrawlClient, openai: _openaiClient } = getClients();
 
     // Require Firecrawl only; OpenAI is optional (embeddings skipped if absent)
     if (!firecrawlClient) {
