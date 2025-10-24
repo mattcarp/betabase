@@ -16,6 +16,7 @@
       "Bash(npx:*)",
       "Bash(node:*)",
       "Bash(git:*)",
+      "Bash(gh:*)",
       "Bash(pnpm:*)",
       "Bash(yarn:*)",
       "Bash(bun:*)",
