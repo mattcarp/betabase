@@ -4,8 +4,8 @@
  */
 
 // FORCE DEBUG MODE - we're actively developing
-const _isDevelopment = true; // Always true for now
-const _isDebugEnabled = true; // Always true for now
+// const isDevelopment = true; // Always true for now
+// const isDebugEnabled = true; // Always true for now
 
 export const debugLog = (...args: any[]) => {
   console.log(...args);
