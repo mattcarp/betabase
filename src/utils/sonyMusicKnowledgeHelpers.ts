@@ -67,7 +67,7 @@ export function sonyTagsFromText(text: string): string[] {
   return Array.from(tags);
 }
 
-export default {
+const sonyMusicKnowledgeHelpers = {
   buildJiraIssueUrl,
   normalizeConfluenceUrl,
   buildAomaStageUrl,
@@ -76,3 +76,5 @@ export default {
   isUsmContent,
   sonyTagsFromText,
 };
+
+export default sonyMusicKnowledgeHelpers;

@@ -30,13 +30,13 @@ export async function POST(req: NextRequest) {
     const {
       message,
       conversationId,
-      tools = ["web_search", "file_search"],
+      tools: _tools = ["web_search", "file_search"],
       temperature = 0.7,
       maxTokens = 4096,
     } = await req.json();
 
     // Get or create conversation history
-    let messages = conversationStore.get(conversationId) || [];
+    const messages = conversationStore.get(conversationId) || [];
 
     // Add the new user message
     messages.push({ role: "user", content: message });

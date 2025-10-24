@@ -3,6 +3,7 @@
 ## ✅ What We Added
 
 ### Priority 1: Security (DONE)
+
 1. **CodeQL Security Scanning** - `.github/workflows/codeql.yml`
    - Runs weekly + on every push/PR
    - Catches SQL injection, XSS, code injection, etc.
@@ -15,6 +16,7 @@
    - Auto-updates GitHub Actions monthly
 
 ### Priority 2: Performance (DONE)
+
 3. **Lighthouse CI** - `.github/workflows/performance-monitoring.yml`
    - Performance budgets enforced
    - Runs on every PR
@@ -32,6 +34,7 @@
    - Prevents bundle bloat over time
 
 ### Priority 3: Developer Experience (DONE)
+
 5. **AI Code Review** - `.github/workflows/ai-code-review.yml`
    - Uses CodeRabbit AI (requires OPENAI_API_KEY)
    - Focuses on security, performance, React best practices
@@ -48,28 +51,35 @@
 ## 🔧 Setup Required
 
 ### 1. Enable CodeQL (No setup needed)
+
 CodeQL will start running automatically on your next push. GitHub provides this for free!
 
 ### 2. Enable Dependabot (No setup needed)
+
 Dependabot is now configured. You'll start receiving PRs next Monday.
 
 ### 3. Lighthouse CI (Works out of the box)
+
 No external setup needed - runs locally in CI.
 
 ### 4. AI Code Review (Optional - Requires API Key)
 
 **Option A: Use CodeRabbit (Recommended)**
+
 - Sign up at https://coderabbit.ai
 - Connect your GitHub repo
 - No secrets needed - they handle everything
 
 **Option B: Use OpenAI directly**
+
 - Get OpenAI API key: https://platform.openai.com/api-keys
 - Add to GitHub Secrets: Settings → Secrets → Actions
 - Secret name: `OPENAI_API_KEY`
 
 ### 5. Release Automation (Works immediately)
+
 Uses conventional commits. Format your commits like:
+
 - `feat: add new feature` → minor version bump
 - `fix: resolve bug` → patch version bump
 - `feat!: breaking change` → major version bump
@@ -78,44 +88,53 @@ Uses conventional commits. Format your commits like:
 ## 📋 Testing Your Setup
 
 ### Test 1: CodeQL
+
 ```bash
 git add .
 git commit -m "feat: add SOTA CI/CD pipeline"
 git push
 ```
+
 Check: Actions tab → "CodeQL Security Analysis"
 
 ### Test 2: Dependabot
+
 Wait until next Monday, or manually trigger in Settings → Security → Dependabot
 
 ### Test 3: Lighthouse CI
+
 Create a PR and the performance checks will run automatically.
 
 ### Test 4: Bundle Size
+
 Will run on every PR. Check PR comments for bundle analysis.
 
 ### Test 5: Release Automation
+
 Push to main with a conventional commit:
+
 ```bash
 git commit -m "feat: improve dashboard performance"
 git push origin main
 ```
+
 A new release will be created automatically!
 
 ## 🎯 Workflow Triggers
 
-| Workflow | Trigger | Frequency |
-|----------|---------|-----------|
-| CodeQL | Push/PR to main | Every commit + Weekly |
-| Dependabot | Automated | Weekly (Mon 6 AM) |
-| Lighthouse | Push/PR to main | Every commit |
-| Bundle Size | Push/PR to main | Every commit |
-| AI Review | PR to main | Every PR |
-| Release | Push to main | After every merge |
+| Workflow    | Trigger         | Frequency             |
+| ----------- | --------------- | --------------------- |
+| CodeQL      | Push/PR to main | Every commit + Weekly |
+| Dependabot  | Automated       | Weekly (Mon 6 AM)     |
+| Lighthouse  | Push/PR to main | Every commit          |
+| Bundle Size | Push/PR to main | Every commit          |
+| AI Review   | PR to main      | Every PR              |
+| Release     | Push to main    | After every merge     |
 
 ## 📊 What You'll See
 
 ### On Every PR:
+
 - ✅ Security scan results (CodeQL)
 - 📦 Bundle size comparison
 - 🚦 Lighthouse scores
@@ -123,11 +142,13 @@ A new release will be created automatically!
 - 🔍 Complexity analysis
 
 ### On Every Merge to Main:
+
 - 🏷️ Automatic version bump
 - 📝 Generated changelog
 - 🎉 GitHub release created
 
 ### Weekly:
+
 - 📦 Dependabot PRs for outdated dependencies
 
 ## 🚨 Important Notes
@@ -141,6 +162,7 @@ A new release will be created automatically!
    - Or skip by adding `[skip ai-review]` to PR title
 
 4. **Releases** - Skip by adding `[skip ci]` to commit message:
+
    ```bash
    git commit -m "docs: update README [skip ci]"
    ```
@@ -157,23 +179,24 @@ A new release will be created automatically!
 
 ## 💰 Cost Breakdown
 
-| Feature | Cost |
-|---------|------|
-| CodeQL | FREE (GitHub native) |
-| Dependabot | FREE (GitHub native) |
-| Lighthouse CI | FREE (runs in CI) |
-| Bundle Size | FREE (runs in CI) |
+| Feature                | Cost                                             |
+| ---------------------- | ------------------------------------------------ |
+| CodeQL                 | FREE (GitHub native)                             |
+| Dependabot             | FREE (GitHub native)                             |
+| Lighthouse CI          | FREE (runs in CI)                                |
+| Bundle Size            | FREE (runs in CI)                                |
 | AI Review (CodeRabbit) | FREE for open source, $12/user/month for private |
-| AI Review (OpenAI) | ~$0.50-2/month based on usage |
-| Release Automation | FREE |
+| AI Review (OpenAI)     | ~$0.50-2/month based on usage                    |
+| Release Automation     | FREE                                             |
 
 **Total: $0-12/month depending on AI review choice**
 
 ## 🎉 You're All Set!
 
-Your pipeline is now 2025 state-of-the-art! 
+Your pipeline is now 2025 state-of-the-art!
 
 Push your changes to trigger the workflows:
+
 ```bash
 git add .
 git commit -m "feat: add SOTA CI/CD pipeline with security, performance, and automation"

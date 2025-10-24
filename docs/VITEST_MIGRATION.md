@@ -73,8 +73,9 @@ npm run test tests/vitest-demo.test.tsx
 ```
 
 Expected output:
+
 ```
-✓ tests/vitest-demo.test.tsx (4) 
+✓ tests/vitest-demo.test.tsx (4)
   ✓ Vitest Integration Test (4)
     ✓ should render a button
     ✓ should call onClick when clicked
@@ -90,12 +91,14 @@ Test Files  1 passed (1)
 ## Step 6: Migration Strategy
 
 **Option A: Gradual** (Recommended)
+
 1. Keep Jest for now
 2. Write NEW tests in Vitest format
 3. Migrate old tests file-by-file
 4. Remove Jest when done
 
 **Option B: Big Bang**
+
 1. Install Vitest
 2. Convert all tests at once
 3. Remove Jest immediately
@@ -103,31 +106,36 @@ Test Files  1 passed (1)
 ## Common Gotchas
 
 ### 1. Global Test Functions
+
 Vitest can use globals, but you need to enable them:
 
 ```typescript
 // vitest.config.ts
 test: {
-  globals: true  // ✅ Already set in our config
+  globals: true; // ✅ Already set in our config
 }
 ```
 
 ### 2. ESM Imports
+
 Vitest uses ESM by default. If you have issues:
+
 ```typescript
 // This works in Vitest
-import { useState } from 'react'
+import { useState } from "react";
 
-// Don't need to do: 
+// Don't need to do:
 // import * as React from 'react'
 ```
 
 ### 3. Next.js Mocks
+
 Our setup already mocks Next.js modules. If you need more:
+
 ```typescript
-vi.mock('next/navigation', () => ({
+vi.mock("next/navigation", () => ({
   // Add your custom mocks
-}))
+}));
 ```
 
 ## Performance Comparison
@@ -135,14 +143,16 @@ vi.mock('next/navigation', () => ({
 **Your SIAM app** (estimated):
 
 Jest:
+
 - Startup: ~2-3 seconds
 - Test execution: ~5-10 seconds
 - Watch mode reload: ~2 seconds
 - **Total cycle: ~7-15 seconds**
 
 Vitest:
+
 - Startup: ~300ms
-- Test execution: ~1-2 seconds  
+- Test execution: ~1-2 seconds
 - Watch mode reload: ~100ms (HMR!)
 - **Total cycle: ~1.5-2.5 seconds**
 
@@ -167,9 +177,10 @@ npm run test:ui
 ```
 
 Opens a beautiful interface showing:
+
 - Test tree
 - Code coverage
 - Failed tests with diffs
 - Watch mode with instant refresh
 
-*C'est magnifique!* 🎨
+_C'est magnifique!_ 🎨

@@ -3,11 +3,13 @@
 ## The Two Files & How They Work Together
 
 ### File 1: `sota-implementation-guide.md` (Original)
+
 **Purpose:** General SOTA pipeline for teams using Jest
 **Stack:** Jest + SonarCloud + CodeRabbit + traditional tools
 **Audience:** Teams with existing Jest setups
 
 ### File 3: `premium-sota-pipeline-guide.md` (Premium)
+
 **Purpose:** Modern premium pipeline with Vitest + elite tools
 **Stack:** Vitest + Greptile + SonarCloud + Snyk + Percy
 **Audience:** Developers willing to invest in cutting-edge tools
@@ -20,6 +22,7 @@
 2. **File 3** is the "modern premium" path using Vitest
 
 **For SIAM, we should use File 3** because:
+
 - You're willing to invest in quality tools
 - Vitest is 5X faster than Jest for Next.js
 - Your codebase is modern (TypeScript, ESM, Next.js 15)
