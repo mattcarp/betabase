@@ -134,7 +134,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6">
       <Card className="mac-card max-w-4xl w-full max-h-[80vh] flex flex-col">
-        <CardHeader className="flex-shrink-0">
+        <CardHeader className="mac-card flex-shrink-0">
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <Edit className="h-5 w-5" />
@@ -146,6 +146,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
             <Button
               className="mac-button mac-button-outline"
               variant="ghost"
+              className="mac-button mac-button-outline"
               size="icon"
               onClick={onClose}
             >
@@ -160,6 +161,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
             <Button
               className="mac-button mac-button-outline"
               variant="ghost"
+              className="mac-button mac-button-outline"
               size="sm"
               onClick={() => insertMarkdown("# ", "")}
               title="Heading 1"
@@ -169,6 +171,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
             <Button
               className="mac-button mac-button-outline"
               variant="ghost"
+              className="mac-button mac-button-outline"
               size="sm"
               onClick={() => insertMarkdown("## ", "")}
               title="Heading 2"
@@ -179,6 +182,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
             <Button
               className="mac-button mac-button-outline"
               variant="ghost"
+              className="mac-button mac-button-outline"
               size="sm"
               onClick={() => insertMarkdown("**", "**")}
               title="Bold"
@@ -188,6 +192,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
             <Button
               className="mac-button mac-button-outline"
               variant="ghost"
+              className="mac-button mac-button-outline"
               size="sm"
               onClick={() => insertMarkdown("*", "*")}
               title="Italic"
@@ -197,6 +202,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
             <Button
               className="mac-button mac-button-outline"
               variant="ghost"
+              className="mac-button mac-button-outline"
               size="sm"
               onClick={() => insertMarkdown("`", "`")}
               title="Code"
@@ -207,6 +213,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
             <Button
               className="mac-button mac-button-outline"
               variant="ghost"
+              className="mac-button mac-button-outline"
               size="sm"
               onClick={() => insertMarkdown("- ", "")}
               title="List"
@@ -216,6 +223,7 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
             <Button
               className="mac-button mac-button-outline"
               variant="ghost"
+              className="mac-button mac-button-outline"
               size="sm"
               onClick={() => insertMarkdown("[", "](url)")}
               title="Link"
@@ -278,7 +286,12 @@ Examples:
 
           {/* Actions */}
           <div className="flex items-center justify-end gap-2 mt-4 pt-4 border-t flex-shrink-0">
-            <Button className="mac-button mac-button-outline" variant="outline" onClick={onClose}>
+            <Button
+              className="mac-button mac-button-outline"
+              variant="outline"
+              className="mac-button mac-button-outline"
+              onClick={onClose}
+            >
               Cancel
             </Button>
             <Button

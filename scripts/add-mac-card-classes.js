@@ -7,8 +7,8 @@
  * components that are missing them.
  */
 
-const fs = require('fs');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const { execSync } = require("child_process");
 
 let filesModified = 0;
 let componentsUpdated = 0;
@@ -25,19 +25,19 @@ function addMACClassToCard(content) {
 
   newContent = content.replace(cardPattern, (match, props) => {
     // Skip if already has mac-card class
-    if (props.includes('mac-card')) {
+    if (props.includes("mac-card")) {
       return match;
     }
 
     modified = true;
     componentsUpdated++;
 
-    const macClass = 'mac-card';
+    const macClass = "mac-card";
 
     // Add or append to className
-    if (props.includes('className=')) {
+    if (props.includes("className=")) {
       // Use cn() if available, otherwise simple string concatenation
-      if (props.includes('className={cn(')) {
+      if (props.includes("className={cn(")) {
         const newProps = props.replace(/className=\{cn\(/, `className={cn("${macClass}", `);
         return `<Card ${newProps}>`;
       } else if (props.includes('className="')) {
@@ -45,7 +45,7 @@ function addMACClassToCard(content) {
           return `className="${macClass} ${existingClasses}"`;
         });
         return `<Card ${newProps}>`;
-      } else if (props.includes('className={')) {
+      } else if (props.includes("className={")) {
         // Dynamic className
         const newProps = props.replace(/className=\{([^}]*)\}/, (m, existingClasses) => {
           return `className={cn("${macClass}", ${existingClasses})}`;
@@ -67,17 +67,17 @@ function addMACClassToCard(content) {
  * Process a single file
  */
 async function processFile(filePath) {
-  const content = fs.readFileSync(filePath, 'utf8');
+  const content = fs.readFileSync(filePath, "utf8");
   let newContent = content;
   let fileModified = false;
 
   // Only process files that use Card component
-  if (!content.includes('<Card')) {
+  if (!content.includes("<Card")) {
     return;
   }
 
   // Make sure cn utility is imported if we'll be using it
-  const needsCn = content.includes('className={') && !content.includes('import { cn }');
+  const needsCn = content.includes("className={") && !content.includes("import { cn }");
   if (needsCn && content.includes('from "react"')) {
     newContent = newContent.replace(
       'from "react";',
@@ -92,7 +92,7 @@ async function processFile(filePath) {
   fileModified = fileModified || cardResult.modified;
 
   if (fileModified) {
-    fs.writeFileSync(filePath, newContent, 'utf8');
+    fs.writeFileSync(filePath, newContent, "utf8");
     filesModified++;
     console.log(`✅ Modified: ${filePath}`);
   }
@@ -102,12 +102,16 @@ async function processFile(filePath) {
  * Main execution
  */
 async function main() {
-  console.log('🎨 Adding MAC classes to Card components...\n');
+  console.log("🎨 Adding MAC classes to Card components...\n");
 
   // Find all TSX files using Card component
-  const findCommand = 'find src app -name "*.tsx" -type f -exec grep -l "<Card" {} \\; 2>/dev/null || true';
-  const filesOutput = execSync(findCommand, { encoding: 'utf8' });
-  const files = filesOutput.trim().split('\n').filter(f => f && !f.includes('node_modules') && !f.includes('.next'));
+  const findCommand =
+    'find src app -name "*.tsx" -type f -exec grep -l "<Card" {} \\; 2>/dev/null || true';
+  const filesOutput = execSync(findCommand, { encoding: "utf8" });
+  const files = filesOutput
+    .trim()
+    .split("\n")
+    .filter((f) => f && !f.includes("node_modules") && !f.includes(".next"));
 
   console.log(`Found ${files.length} files with Card components...\n`);
 
@@ -117,11 +121,11 @@ async function main() {
   }
 
   // Summary
-  console.log('\n📊 Summary:');
+  console.log("\n📊 Summary:");
   console.log(`   Files modified: ${filesModified}`);
   console.log(`   Card components updated: ${componentsUpdated}`);
 
-  console.log('\n✅ MAC classes added to Card components!');
+  console.log("\n✅ MAC classes added to Card components!");
 }
 
 main().catch(console.error);

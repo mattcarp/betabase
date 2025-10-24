@@ -71,7 +71,7 @@ export function ChatWrapper({
 
   return (
     <Card className={cn("mac-card", "flex flex-col h-full", className)}>
-      <CardHeader className="px-4 py-4 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
+      <CardHeader className="mac-card px-4 py-4 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="relative">
@@ -216,6 +216,7 @@ export function ChatWrapper({
                   <Button
                     className="mac-button mac-button-outline"
                     variant="ghost"
+                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => reload()}
                     className="mt-2 h-7 text-xs"
@@ -265,6 +266,7 @@ export function ChatWrapper({
               type="button"
               size="icon"
               variant="outline"
+              className="mac-button mac-button-outline"
               onClick={() => stop()}
               className="border-destructive/50 hover:bg-destructive/10"
             >

@@ -216,7 +216,9 @@ function main() {
     console.log(
       `\n⚠️  Found ${totalViolations} MAC Design System violation(s) across ${validator.violations.length} file(s)`
     );
-    console.log("💡 Fix violations before committing, or use --no-verify to bypass (not recommended)\n");
+    console.log(
+      "💡 Fix violations before committing, or use --no-verify to bypass (not recommended)\n"
+    );
     process.exit(1); // Block commit
   }
 

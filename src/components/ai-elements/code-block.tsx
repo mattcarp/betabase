@@ -102,6 +102,7 @@ export const CodeBlockCopyButton = ({
       onClick={copyToClipboard}
       size="icon"
       variant="ghost"
+      className="mac-button mac-button-outline"
       {...props}
     >
       {children ?? <Icon size={14} />}

@@ -58,7 +58,13 @@ export default function TestApp() {
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-blue-900 text-white font-mono p-8">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 c className="mac-heading"lassName="mac-heading text-4xl font-bold text-holographic mb-2">JARVIS UI COMPONENT SHOWCASE</h1>
+        <h1
+          c
+          className="mac-heading"
+          lassName="mac-heading text-4xl font-bold text-holographic mb-2"
+        >
+          JARVIS UI COMPONENT SHOWCASE
+        </h1>
         <p className="text-jarvis-secondary text-lg">
           Testing RadialProgress, HUDMeter, DataStream &amp; CircularHUD Components
         </p>
@@ -93,7 +99,11 @@ export default function TestApp() {
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
         {/* RadialProgress Components */}
         <div className="glass-panel p-6 space-y-6">
-          <h2 c className="mac-heading"lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2">
+          <h2
+            c
+            className="mac-heading"
+            lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
+          >
             RADIAL PROGRESS METERS
           </h2>
 
@@ -146,7 +156,11 @@ export default function TestApp() {
 
         {/* HUDMeter Components */}
         <div className="glass-panel p-6 space-y-6">
-          <h2 c className="mac-heading"lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2">
+          <h2
+            c
+            className="mac-heading"
+            lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
+          >
             HUD ARC METERS
           </h2>
 
@@ -189,7 +203,11 @@ export default function TestApp() {
 
         {/* DataStream Components */}
         <div className="glass-panel p-6 space-y-6">
-          <h2 c className="mac-heading"lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2">
+          <h2
+            c
+            className="mac-heading"
+            lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
+          >
             REAL-TIME DATA STREAMS
           </h2>
 
@@ -238,7 +256,11 @@ export default function TestApp() {
         {/* Central HUD Demo */}
         <div className="lg:col-span-2 xl:col-span-3">
           <div className="glass-panel p-6 space-y-6">
-            <h2 c className="mac-heading"lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2 text-center">
+            <h2
+              c
+              className="mac-heading"
+              lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2 text-center"
+            >
               CENTRAL CIRCULAR HUD INTERFACE
             </h2>
 

@@ -367,6 +367,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                 className="mac-button mac-button-outline"
                 type="button"
                 variant="ghost"
+                className="mac-button mac-button-outline"
                 onClick={() => {
                   setStep("email");
                   setDevCode("");

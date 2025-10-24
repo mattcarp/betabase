@@ -86,7 +86,7 @@ const FlagMarker: React.FC<FlagMarkerProps> = ({ annotation, onDelete }) => {
             "min-w-[300px] shadow-xl z-50"
           )}
         >
-          <CardHeader className="pb-4">
+          <CardHeader className="mac-card pb-4">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2">
                 <AlertTriangle className={cn("h-4 w-4", severityConfig.color)} />
@@ -211,7 +211,7 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
       {showForm && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6">
           <Card className="mac-card max-w-md w-full">
-            <CardHeader>
+            <CardHeader className="mac-card">
               <CardTitle className="flex items-center gap-2">
                 <Flag className="h-5 w-5" />
                 Flag Issue
@@ -273,6 +273,7 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
                 <Button
                   className="mac-button mac-button-outline"
                   variant="outline"
+                  className="mac-button mac-button-outline"
                   onClick={handleCancel}
                 >
                   Cancel
@@ -280,6 +281,7 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
                 <Button
                   className="mac-button mac-button-primary"
                   variant="default"
+                  className="mac-button mac-button-primary"
                   onClick={handleSubmit}
                   disabled={!title.trim()}
                 >

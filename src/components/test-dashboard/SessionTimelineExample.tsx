@@ -197,6 +197,7 @@ export const SessionTimelineExample: React.FC = () => {
               className="mac-button mac-button-outline"
               onClick={clearInteractions}
               variant="outline"
+              className="mac-button mac-button-outline"
               size="sm"
               disabled={interactions.length === 0}
             >
@@ -218,7 +219,7 @@ export const SessionTimelineExample: React.FC = () => {
         <div className="flex-1 overflow-auto p-6">
           {selectedInteraction ? (
             <Card className="mac-card max-w-3xl mx-auto">
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <CardTitle className="text-lg font-light flex items-center gap-4">
                   <Badge
                     variant="outline"

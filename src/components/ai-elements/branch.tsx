@@ -139,6 +139,7 @@ export const BranchPrevious = ({ className, children, ...props }: BranchPrevious
       size="icon"
       type="button"
       variant="ghost"
+      className="mac-button mac-button-outline"
       {...props}
     >
       {children ?? <ChevronLeftIcon size={14} />}
@@ -166,6 +167,7 @@ export const BranchNext = ({ className, children, ...props }: BranchNextProps) =
       size="icon"
       type="button"
       variant="ghost"
+      className="mac-button mac-button-outline"
       {...props}
     >
       {children ?? <ChevronRightIcon size={14} />}
