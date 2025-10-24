@@ -87,6 +87,7 @@ import { Reasoning, ReasoningTrigger, ReasoningContent } from "../ai-elements/re
 import { Response } from "../ai-elements/response";
 import { AOMAResponse } from "./AOMAResponse";
 import { Sources, SourcesTrigger, SourcesContent, Source } from "../ai-elements/source";
+import { Suggestions, Suggestion } from "../ai-elements/suggestion";
 import { Task, TaskTrigger, TaskContent, TaskItem } from "../ai-elements/task";
 import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from "../ai-elements/tool";
 import {
