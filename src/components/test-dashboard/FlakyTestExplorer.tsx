@@ -360,7 +360,6 @@ export const FlakyTestExplorer: React.FC = () => {
                       <Button
                         className="mac-button mac-button-outline"
                         variant="outline"
-                        className="mac-button mac-button-outline"
                         size="sm"
                       >
                         <Shield className="h-4 w-4 mr-2" />

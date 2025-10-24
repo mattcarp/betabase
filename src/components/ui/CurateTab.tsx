@@ -461,19 +461,18 @@ export function CurateTab({
                 {selectedFiles.size > 0 && (
                   <>
                     <Button
-                      className="mac-button mac-button-primary"
-                      variant="destructive"
-                      className="mac-button mac-button-primary"
-                      size="sm"
-                      onClick={() => confirmDeleteFiles(Array.from(selectedFiles))}
-                      disabled={loading}
                       className={cn(
+                        "mac-button mac-button-primary",
                         "bg-[var(--mac-status-error-bg)]",
                         "border border-[var(--mac-status-error-border)]",
                         "text-[var(--mac-status-error-text)]",
                         "hover:bg-[var(--mac-status-error-bg)]/80",
                         "transition-all duration-200"
                       )}
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => confirmDeleteFiles(Array.from(selectedFiles))}
+                      disabled={loading}
                     >
                       <Trash2 className="h-4 w-4 mr-2" />
                       Delete ({selectedFiles.size})
@@ -481,10 +480,8 @@ export function CurateTab({
                     <Button
                       className="mac-button mac-button-outline"
                       variant="ghost"
-                      className="mac-button mac-button-outline"
                       size="sm"
                       onClick={() => setSelectedFiles(new Set())}
-                      className="mac-button-outline"
                     >
                       <X className="h-4 w-4" />
                     </Button>
@@ -843,9 +840,7 @@ export function CurateTab({
             <Button
               className="mac-button mac-button-outline"
               variant="outline"
-              className="mac-button mac-button-outline"
               onClick={() => setDeleteDialogOpen(false)}
-              className="mac-button-outline"
             >
               Cancel
             </Button>
@@ -931,9 +926,7 @@ export function CurateTab({
             <Button
               className="mac-button mac-button-outline"
               variant="outline"
-              className="mac-button mac-button-outline"
               onClick={() => setPreviewDialogOpen(false)}
-              className="mac-button-outline"
             >
               Close
             </Button>
