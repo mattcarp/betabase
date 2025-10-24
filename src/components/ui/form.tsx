@@ -149,7 +149,7 @@ const FormLabel = React.forwardRef<
     >
       {children}
       {required && (
-        <span className="ml-1 text-red-500" aria-label="required">
+        <span className="ml-2 text-red-500" aria-label="required">
           *
         </span>
       )}
@@ -199,7 +199,7 @@ const FormDescription = React.forwardRef<
       className={cn(
         "mac-form-description", // MAC Design System form description
         "text-xs text-[var(--mac-text-muted)]",
-        "mt-1.5 font-light",
+        "mt-2.5 font-light",
         "transition-opacity duration-200",
         className
       )}
@@ -250,7 +250,7 @@ const FormMessage = React.forwardRef<
       id={formMessageId}
       className={cn(
         "mac-form-message", // MAC Design System form message
-        "text-xs font-light flex items-center gap-1.5 mt-1.5",
+        "text-xs font-light flex items-center gap-2.5 mt-2.5",
         typeConfig[type].className,
         "transition-all duration-200",
         className

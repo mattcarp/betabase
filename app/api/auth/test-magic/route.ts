@@ -18,7 +18,6 @@ export async function POST(request: NextRequest) {
     if (contentType?.includes("application/json")) {
       const body = await request.json();
       email = body.email;
-      // action parameter ignored for now - could be used for future functionality
     } else {
       // Handle form data
       const formData = await request.formData();

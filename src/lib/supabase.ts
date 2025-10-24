@@ -5,6 +5,18 @@
 
 import { createClient } from "@supabase/supabase-js";
 
+// Re-export functions from root lib/supabase for compatibility
+export {
+  upsertWikiDocument,
+  upsertJiraTicket,
+  upsertJiraTicketEmbedding,
+  upsertCrawlerDocument,
+  storeFirecrawlData,
+  getFirecrawlAnalysis,
+  searchFirecrawlData,
+  validateSonyMusicContent,
+} from "../../lib/supabase";
+
 // Get environment variables with validation
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -13,46 +25,37 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const isPlaceholder =
   supabaseUrl?.includes("placeholder") || supabaseAnonKey?.includes("placeholder");
 
-// Lazy initialization to avoid build-time errors
-let _supabase: ReturnType<typeof createClient> | null = null;
-let _supabaseAdmin: ReturnType<typeof createClient> | null = null;
+if (!supabaseUrl || !supabaseAnonKey || isPlaceholder) {
+  console.warn("⚠️  Supabase not configured - vector search features disabled:", {
+    url: !!supabaseUrl && !isPlaceholder,
+    key: !!supabaseAnonKey && !isPlaceholder,
+  });
+  // Don't throw error - just log a warning and use placeholder values
+  // API routes will handle missing Supabase gracefully at runtime
+}
 
-function getSupabase() {
-  if (!_supabase) {
-    if (!supabaseUrl || !supabaseAnonKey || isPlaceholder) {
-      console.warn("⚠️  Supabase not configured - vector search features disabled:", {
-        url: !!supabaseUrl && !isPlaceholder,
-        key: !!supabaseAnonKey && !isPlaceholder,
-      });
-      return null;
-    }
-    _supabase = createClient(supabaseUrl, supabaseAnonKey, {
+// Create a single supabase client for interacting with your database
+// Use placeholder values during build if env vars are missing
+const url = supabaseUrl || "https://placeholder.supabase.co";
+const key = supabaseAnonKey || "placeholder-key";
+
+export const supabase = createClient(url, key, {
+  auth: {
+    persistSession: false, // We're not using auth for vector operations
+  },
+});
+
+// Admin client with service role key (for write operations)
+// Only use this server-side!
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+export const supabaseAdmin = supabaseServiceKey
+  ? createClient(supabaseUrl, supabaseServiceKey, {
       auth: {
-        persistSession: false, // We're not using auth for vector operations
+        persistSession: false,
+        autoRefreshToken: false,
       },
-    });
-  }
-  return _supabase;
-}
-
-function getSupabaseAdmin() {
-  if (!_supabaseAdmin) {
-    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    if (supabaseServiceKey && supabaseUrl && !isPlaceholder) {
-      _supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
-        auth: {
-          persistSession: false,
-          autoRefreshToken: false,
-        },
-      });
-    }
-  }
-  return _supabaseAdmin;
-}
-
-// Export clients with lazy initialization
-export const supabase = getSupabase();
-export const supabaseAdmin = getSupabaseAdmin();
+    })
+  : null;
 
 // Type definitions for our vector store
 export interface AOMAVector {

@@ -1,65 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { trackRequest, trackError, getMetrics } from "./metrics";
-
-// Calculate percentiles
-function calculatePercentile(arr: number[], percentile: number): number {
-  if (arr.length === 0) return 0;
-  const sorted = [...arr].sort((a, b) => a - b);
-  const index = Math.ceil((percentile / 100) * sorted.length) - 1;
-  return sorted[index] || 0;
-}
-
-// Calculate performance metrics from request data
-function calculatePerformanceMetrics() {
-  const metrics = getMetrics();
-  const recentRequests = metrics.requests.slice(-100);
-  const durations = recentRequests.map((r) => r.duration);
-
-  if (durations.length === 0) {
-    return {
-      avgResponseTime: 0,
-      p95ResponseTime: 0,
-      p99ResponseTime: 0,
-      totalRequests: 0,
-      errorRate: 0,
-      lastUpdated: Date.now(),
-    };
-  }
-
-  const avgResponseTime = durations.reduce((a, b) => a + b, 0) / durations.length;
-  const p95ResponseTime = calculatePercentile(durations, 95);
-  const p99ResponseTime = calculatePercentile(durations, 99);
-
-  const recentErrors = metrics.errors.filter(
-    (e) => e.timestamp > Date.now() - 5 * 60 * 1000 // Last 5 minutes
-  ).length;
-
-  const errorRate = recentRequests.length > 0 ? (recentErrors / recentRequests.length) * 100 : 0;
-
-  return {
-    avgResponseTime,
-    p95ResponseTime,
-    p99ResponseTime,
-    totalRequests: metrics.requests.length,
-    errorRate,
-    lastUpdated: Date.now(),
-  };
-}
+import { metrics, trackRequest, trackError, updatePerformanceMetrics } from "@/lib/metrics";
 
 // Introspection API endpoint for SIAM internal monitoring
 export async function GET(_request: NextRequest) {
   try {
     // Track this introspection request
     const startTime = Date.now();
-    const metrics = getMetrics();
 
     // Update system metrics
-    const systemMetrics = {
-      memoryUsage: process.memoryUsage(),
-      uptime: process.uptime(),
-      nodeVersion: process.version,
-      platform: process.platform,
-    };
+    metrics.system.memoryUsage = process.memoryUsage();
+    metrics.system.uptime = process.uptime();
 
     // Generate some sample internal activity if we don't have real data yet
     if (metrics.requests.length === 0) {
@@ -80,16 +30,15 @@ export async function GET(_request: NextRequest) {
       ];
 
       sampleRequests.forEach((req) => {
-        trackRequest(req.path, req.method, req.duration, req.status);
+        metrics.requests.push({
+          ...req,
+        });
       });
+      updatePerformanceMetrics();
     }
 
-    // Recalculate performance metrics
-    const performanceMetrics = calculatePerformanceMetrics();
-
     // Get recent activity (last 20 requests)
-    const currentMetrics = getMetrics();
-    const recentActivity = currentMetrics.requests
+    const recentActivity = metrics.requests
       .slice(-20)
       .reverse()
       .map((req) => ({
@@ -128,18 +77,18 @@ export async function GET(_request: NextRequest) {
       },
       traces: recentActivity,
       metrics: {
-        performance: performanceMetrics,
+        performance: metrics.performance,
         system: {
-          ...systemMetrics,
+          ...metrics.system,
           memoryUsageMB: {
-            rss: Math.round(systemMetrics.memoryUsage.rss / 1024 / 1024),
-            heapTotal: Math.round(systemMetrics.memoryUsage.heapTotal / 1024 / 1024),
-            heapUsed: Math.round(systemMetrics.memoryUsage.heapUsed / 1024 / 1024),
-            external: Math.round(systemMetrics.memoryUsage.external / 1024 / 1024),
+            rss: Math.round(metrics.system.memoryUsage.rss / 1024 / 1024),
+            heapTotal: Math.round(metrics.system.memoryUsage.heapTotal / 1024 / 1024),
+            heapUsed: Math.round(metrics.system.memoryUsage.heapUsed / 1024 / 1024),
+            external: Math.round(metrics.system.memoryUsage.external / 1024 / 1024),
           },
-          uptimeHours: Math.round((systemMetrics.uptime / 3600) * 10) / 10,
+          uptimeHours: Math.round((metrics.system.uptime / 3600) * 10) / 10,
         },
-        recentErrors: currentMetrics.errors.slice(-10).reverse(),
+        recentErrors: metrics.errors.slice(-10).reverse(),
       },
       timestamp: new Date().toISOString(),
     });

@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getEmailContextService } from "../../../../src/services/emailContextService";
-import { EmailData } from "@/utils/emailParser";
+import { EmailData } from "../../../../src/utils/emailParser";
 
 /**
  * POST /api/email-context/batch

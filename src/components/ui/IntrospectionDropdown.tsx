@@ -137,7 +137,11 @@ export function IntrospectionDropdown() {
     <>
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="sm" className="relative flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="relative flex items-center gap-2 mac-button mac-button-outline"
+          >
             <Activity className="h-4 w-4" />
             <span className="hidden sm:inline">Introspection</span>
             {status?.tracingEnabled && (
@@ -160,8 +164,8 @@ export function IntrospectionDropdown() {
           {status && (
             <>
               <DropdownMenuSeparator />
-              <div className="px-2 py-1.5 text-xs">
-                <div className="flex items-center justify-between mb-1">
+              <div className="px-2 py-2.5 text-xs">
+                <div className="flex items-center justify-between mb-2">
                   <span className="text-muted-foreground">LangSmith Status:</span>
                   <Badge
                     variant={status.tracingEnabled ? "default" : "secondary"}
@@ -172,7 +176,7 @@ export function IntrospectionDropdown() {
                 </div>
                 {status.tracingEnabled && (
                   <>
-                    <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center justify-between mb-2">
                       <span className="text-muted-foreground">Project:</span>
                       <span className="font-mono text-xs">{status.project}</span>
                     </div>
@@ -199,13 +203,13 @@ export function IntrospectionDropdown() {
                   <>
                     <Layers className="h-8 w-8 mx-auto mb-2 opacity-50" />
                     <p>No recent traces</p>
-                    <p className="text-xs mt-1">Agent activity will appear here</p>
+                    <p className="text-xs mt-2">Agent activity will appear here</p>
                   </>
                 ) : (
                   <>
                     <Activity className="h-8 w-8 mx-auto mb-2 opacity-50" />
                     <p>Tracing disabled</p>
-                    <p className="text-xs mt-1">Enable LangSmith to see traces</p>
+                    <p className="text-xs mt-2">Enable LangSmith to see traces</p>
                   </>
                 )}
               </div>
@@ -213,7 +217,7 @@ export function IntrospectionDropdown() {
               traces.map((trace) => (
                 <DropdownMenuItem
                   key={trace.id}
-                  className="flex flex-col items-start gap-1 py-2 cursor-pointer"
+                  className="flex flex-col items-start gap-2 py-2 cursor-pointer"
                   onClick={() => {
                     setSelectedTrace(trace);
                     setDetailsOpen(true);
@@ -231,7 +235,7 @@ export function IntrospectionDropdown() {
                   <div className="flex items-center gap-2 text-xs">
                     <Badge
                       variant="outline"
-                      className={`text-xs px-1 py-0 ${getRunTypeColor(trace.runType)}`}
+                      className={`text-xs px-2 py-0 ${getRunTypeColor(trace.runType)}`}
                     >
                       {trace.runType}
                     </Badge>
@@ -258,7 +262,7 @@ export function IntrospectionDropdown() {
                   )
                 }
               >
-                <Eye className="h-3 w-3 mr-1" />
+                <Eye className="h-3 w-3 mr-2" />
                 View in LangSmith Dashboard
               </DropdownMenuItem>
             </>
@@ -282,8 +286,10 @@ export function IntrospectionDropdown() {
               <div className="space-y-4">
                 {/* Metadata */}
                 <div>
-                  <h4 className="text-sm font-semibold mb-2">Metadata</h4>
-                  <div className="bg-muted rounded-lg p-3 space-y-1 text-sm">
+                  <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+                    Metadata
+                  </h4>
+                  <div className="bg-muted rounded-lg p-4 space-y-1 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Type:</span>
                       <Badge variant="outline" className={getRunTypeColor(selectedTrace.runType)}>
@@ -318,8 +324,10 @@ export function IntrospectionDropdown() {
                 {/* Inputs */}
                 {selectedTrace.inputs && (
                   <div>
-                    <h4 className="text-sm font-semibold mb-2">Inputs</h4>
-                    <pre className="bg-muted rounded-lg p-3 text-xs overflow-x-auto">
+                    <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+                      Inputs
+                    </h4>
+                    <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto">
                       {JSON.stringify(selectedTrace.inputs, null, 2)}
                     </pre>
                   </div>
@@ -328,8 +336,10 @@ export function IntrospectionDropdown() {
                 {/* Outputs */}
                 {selectedTrace.outputs && (
                   <div>
-                    <h4 className="text-sm font-semibold mb-2">Outputs</h4>
-                    <pre className="bg-muted rounded-lg p-3 text-xs overflow-x-auto">
+                    <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+                      Outputs
+                    </h4>
+                    <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto">
                       {JSON.stringify(selectedTrace.outputs, null, 2)}
                     </pre>
                   </div>
@@ -338,8 +348,14 @@ export function IntrospectionDropdown() {
                 {/* Error */}
                 {selectedTrace.error && (
                   <div>
-                    <h4 className="text-sm font-semibold mb-2 text-red-500">Error</h4>
-                    <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg p-3 text-sm text-red-600 dark:text-red-400">
+                    <h4
+                      c
+                      className="mac-title"
+                      lassName="mac-title text-sm font-semibold mb-2 text-red-500"
+                    >
+                      Error
+                    </h4>
+                    <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg p-4 text-sm text-red-600 dark:text-red-400">
                       {selectedTrace.error}
                     </div>
                   </div>
@@ -348,8 +364,10 @@ export function IntrospectionDropdown() {
                 {/* Additional Metadata */}
                 {selectedTrace.metadata && Object.keys(selectedTrace.metadata).length > 0 && (
                   <div>
-                    <h4 className="text-sm font-semibold mb-2">Additional Context</h4>
-                    <pre className="bg-muted rounded-lg p-3 text-xs overflow-x-auto">
+                    <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+                      Additional Context
+                    </h4>
+                    <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto">
                       {JSON.stringify(selectedTrace.metadata, null, 2)}
                     </pre>
                   </div>

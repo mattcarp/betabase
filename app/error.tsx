@@ -21,8 +21,14 @@ export default function Error({
         <h2 className="text-2xl font-bold text-red-600">Something went wrong!</h2>
         <p className="text-gray-600">{error.message || "An unexpected error occurred"}</p>
         <div className="flex gap-4 justify-center">
-          <Button onClick={reset}>Try again</Button>
-          <Button variant="outline" onClick={() => (window.location.href = "/")}>
+          <Button className="mac-button mac-button-primary" onClick={reset}>
+            Try again
+          </Button>
+          <Button
+            className="mac-button mac-button-outline"
+            variant="outline"
+            onClick={() => (window.location.href = "/")}
+          >
             Go home
           </Button>
         </div>

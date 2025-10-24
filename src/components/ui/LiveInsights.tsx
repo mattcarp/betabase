@@ -464,7 +464,9 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
   return (
     <div className={`space-y-3 ${className}`} data-test-id="live-insights-root">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-motiff-green">Live Insights</h3>
+        <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-motiff-green">
+          Live Insights
+        </h3>
         <div className="flex items-center gap-2">
           {isLoading && <span className="text-xs text-white/60 animate-pulse">Loading...</span>}
         </div>
@@ -486,7 +488,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
         <div className="motiff-glass-panel p-4 text-center">
           <Brain className="mx-auto mb-2 text-motiff-primary" size={24} />
           <p className="text-sm text-white/60">Start a conversation to see live insights</p>
-          <p className="text-xs text-white/40 mt-1">Real-time analysis will appear here</p>
+          <p className="text-xs text-white/40 mt-2">Real-time analysis will appear here</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -501,15 +503,21 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
                 data-test-id={`insight-card-${insight.id}`}
               >
                 <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3 flex-1">
+                  <div className="flex items-start gap-4 flex-1">
                     <div
                       className={`p-2 rounded-lg ${getIconColorClass(insight.color)} bg-white/5`}
                     >
                       <Icon size={16} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-medium text-white text-sm truncate">{insight.title}</h4>
+                      <div className="flex items-center gap-2 mb-2">
+                        <h4
+                          c
+                          className="mac-title"
+                          lassName="mac-title font-medium text-white text-sm truncate"
+                        >
+                          {insight.title}
+                        </h4>
                         {insight.trend && getTrendIcon(insight.trend)}
                       </div>
                       <p className="text-xs text-white/60 mb-2">{insight.content}</p>
@@ -525,7 +533,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-col items-end gap-1">
+                  <div className="flex flex-col items-end gap-2">
                     <span className="text-xs text-white/40">
                       {insight.timestamp.toLocaleTimeString([], {
                         hour: "2-digit",
@@ -533,7 +541,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
                       })}
                     </span>
                     <div
-                      className={`text-xs px-2 py-1 rounded-full bg-white/10 ${
+                      className={`text-xs px-2 py-2 rounded-full bg-white/10 ${
                         insight.source === "aoma"
                           ? "text-motiff-secondary"
                           : insight.source === "conversation"
@@ -555,12 +563,12 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
       {insights.length > 0 && (
         <div className="mt-4 pt-4 border-t border-white/10">
           <div className="flex gap-2">
-            <button className="flex-1 motiff-glass-panel px-3 py-2 text-xs text-white/70 hover:text-white transition-colors">
-              <Lightbulb size={12} className="inline mr-1" />
+            <button className="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
+              <Lightbulb size={12} className="inline mr-2" />
               Generate Summary
             </button>
-            <button className="flex-1 motiff-glass-panel px-3 py-2 text-xs text-white/70 hover:text-white transition-colors">
-              <Target size={12} className="inline mr-1" />
+            <button className="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
+              <Target size={12} className="inline mr-2" />
               Action Items
             </button>
           </div>

@@ -79,7 +79,7 @@ export function AOMAProgress({ updates, className }: AOMAProgressProps) {
         className
       )}
     >
-      <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-3">
+      <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-4">
         AOMA Query Progress
       </div>
 
@@ -102,7 +102,7 @@ export function AOMAProgress({ updates, className }: AOMAProgressProps) {
               </div>
 
               {update.resultCount !== undefined && update.resultCount > 0 && (
-                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                   {update.resultCount} result{update.resultCount !== 1 ? "s" : ""} found
                 </div>
               )}

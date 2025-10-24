@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-// Lazy-initialize Supabase client to avoid build-time errors
-function getSupabaseClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key =
-    process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!url || !key) {
-    return null;
-  }
-
-  return createClient(url, key);
-}
+// Initialize Supabase client with placeholder values if env vars missing
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+  process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    "placeholder-key"
+);
 
 interface PerformanceMetrics {
   // Query Metrics
@@ -89,65 +84,52 @@ export async function GET(request: NextRequest) {
 
     const startTime = new Date(Date.now() - timeRangeMinutes * 60 * 1000);
 
-    // Get Supabase client
-    const supabase = getSupabaseClient();
+    // Query analytics from conversation_logs
+    const { data: queryData, error: queryError } = await supabase
+      .from("conversation_logs")
+      .select("*")
+      .gte("created_at", startTime.toISOString())
+      .order("created_at", { ascending: false });
 
-    let queryData: any[] = [];
-    let vectorCount: number | null = null;
-    let latestVectorUpdate: any = null;
-    let fileCount: number | null = null;
-    let latestFileUpdate: any = null;
-
-    if (supabase) {
-      // Query analytics from conversation_logs
-      const { data, error: queryError } = await supabase
-        .from("conversation_logs")
-        .select("*")
-        .gte("created_at", startTime.toISOString())
-        .order("created_at", { ascending: false });
-
-      if (queryError) {
-        console.error("Error fetching query data:", queryError);
-      } else {
-        queryData = data || [];
-      }
-
-      // Get vector store stats
-      const { count: vCount } = await supabase
-        .from("embedded_documents")
-        .select("*", { count: "exact", head: true });
-      vectorCount = vCount;
-
-      const { data: latestVector } = await supabase
-        .from("embedded_documents")
-        .select("created_at")
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .single();
-      latestVectorUpdate = latestVector;
-
-      // Get knowledge base stats
-      const { count: fCount } = await supabase
-        .from("curated_knowledge")
-        .select("*", { count: "exact", head: true });
-      fileCount = fCount;
-
-      const { data: latestFile } = await supabase
-        .from("curated_knowledge")
-        .select("created_at")
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .single();
-      latestFileUpdate = latestFile;
+    if (queryError) {
+      console.error("Error fetching query data:", queryError);
     }
 
     // Calculate query metrics
-    const queryMetrics = calculateQueryMetrics(queryData);
+    const queryMetrics = calculateQueryMetrics(queryData || []);
+
+    // Get vector store stats
+    const { count: vectorCount } = await supabase
+      .from("embedded_documents")
+      .select("*", { count: "exact", head: true });
+
+    const { data: latestVectorUpdate } = await supabase
+      .from("embedded_documents")
+      .select("created_at")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+
+    // Get knowledge base stats
+    const { count: fileCount } = await supabase
+      .from("curated_knowledge")
+      .select("*", { count: "exact", head: true });
+
+    const { data: latestFileUpdate } = await supabase
+      .from("curated_knowledge")
+      .select("created_at")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
 
     // Calculate staleness
     const vectorStaleness = latestVectorUpdate
       ? (Date.now() - new Date(latestVectorUpdate.created_at).getTime()) / (1000 * 60 * 60)
       : 0;
+
+    // const fileStaleness = latestFileUpdate
+    //   ? (Date.now() - new Date(latestFileUpdate.created_at).getTime()) / (1000 * 60 * 60)
+    //   : 0;
 
     // Get system metrics (simulated - in production, these would come from actual monitoring)
     const systemMetrics = {
@@ -199,13 +181,6 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { type, duration, metadata } = body;
-
-    // Get Supabase client
-    const supabase = getSupabaseClient();
-    if (!supabase) {
-      console.warn("Supabase not configured, skipping metric storage");
-      return NextResponse.json({ success: true, warning: "Database not configured" });
-    }
 
     // Store metric in database
     const { error } = await supabase.from("performance_metrics").insert({

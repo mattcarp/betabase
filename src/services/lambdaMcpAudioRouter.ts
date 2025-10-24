@@ -427,7 +427,7 @@ class LambdaMcpAudioRouter {
         };
       }
 
-      const data = await response.json();
+      const _data = await response.json();
 
       return {
         healthy: true,
