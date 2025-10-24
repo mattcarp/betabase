@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getElevenLabsApiKey } from "@/config/apiKeys";
+import { getElevenLabsApiKey } from "../../../../src/config/apiKeys";
 
 /**
  * Secure Server-Side Endpoint for ElevenLabs Conversation Token
