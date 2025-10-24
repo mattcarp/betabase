@@ -1,13 +1,13 @@
 import {
   CognitoIdentityProviderClient,
   InitiateAuthCommand,
-  RespondToAuthChallengeCommand,
+  // RespondToAuthChallengeCommand, // Unused - keeping for future use
   ForgotPasswordCommand,
   ConfirmForgotPasswordCommand,
-  AdminInitiateAuthCommand,
-  AdminSetUserPasswordCommand,
+  // AdminInitiateAuthCommand, // Unused - keeping for future use
+  // AdminSetUserPasswordCommand, // Unused - keeping for future use
 } from "@aws-sdk/client-cognito-identity-provider";
-import { fromCognitoIdentityPool } from "@aws-sdk/credential-provider-cognito-identity";
+// import { fromCognitoIdentityPool } from "@aws-sdk/credential-provider-cognito-identity"; // Unused - keeping for future use
 import { debugLog, debugError, prodError } from "../utils/logger";
 
 const REGION = "us-east-2";
@@ -57,11 +57,12 @@ export class CognitoAuthService {
    * Validate email domain - removed client-side validation for security
    * Server will handle the actual validation
    */
-  private validateEmailDomain(email: string): boolean {
-    // Always return true - let server handle validation
-    // This prevents exposing allowed emails to potential attackers
-    return true;
-  }
+  // Unused - keeping for future use
+  // private validateEmailDomain(_email: string): boolean {
+  //   // Always return true - let server handle validation
+  //   // This prevents exposing allowed emails to potential attackers
+  //   return true;
+  // }
 
   /**
    * Send magic link for passwordless authentication
