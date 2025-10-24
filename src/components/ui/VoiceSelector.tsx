@@ -200,6 +200,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                   <Button
                     className="mac-button mac-button-outline"
                     variant="ghost"
+                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={(e) => handlePreviewToggle(e, voice.voice_id)}
                     className={cn(

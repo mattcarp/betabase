@@ -194,8 +194,8 @@ test.describe('${prompt}', () => {
     <div className="grid grid-cols-12 gap-6">
       {/* Generation Panel */}
       <div className="col-span-5 space-y-4">
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <CardTitle className="flex items-center gap-2">
               <Brain className="h-5 w-5 text-primary" />
               AI Test Generator
@@ -318,8 +318,8 @@ test.describe('${prompt}', () => {
         </Card>
 
         {/* Generated Tests History */}
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <CardTitle className="text-lg">Generated Tests</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
@@ -356,18 +356,28 @@ test.describe('${prompt}', () => {
       <div className="col-span-7">
         {selectedTest ? (
           <Card className="mac-card h-full">
-            <CardHeader>
+            <CardHeader className="mac-card">
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-lg">{selectedTest.name}</CardTitle>
                   <p className="text-sm text-muted-foreground mt-2">{selectedTest.description}</p>
                 </div>
                 <div className="flex gap-2">
-                  <Button className="mac-button mac-button-outline" variant="outline" size="sm">
+                  <Button
+                    className="mac-button mac-button-outline"
+                    variant="outline"
+                    className="mac-button mac-button-outline"
+                    size="sm"
+                  >
                     <Copy className="h-4 w-4 mr-2" />
                     Copy
                   </Button>
-                  <Button className="mac-button mac-button-outline" variant="outline" size="sm">
+                  <Button
+                    className="mac-button mac-button-outline"
+                    variant="outline"
+                    className="mac-button mac-button-outline"
+                    size="sm"
+                  >
                     <Download className="h-4 w-4 mr-2" />
                     Export
                   </Button>
@@ -378,7 +388,7 @@ test.describe('${prompt}', () => {
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <Tabs defaultValue="code" className="h-full">
                 <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="code">Generated Code</TabsTrigger>
@@ -397,11 +407,11 @@ test.describe('${prompt}', () => {
                 </TabsContent>
 
                 <TabsContent value="coverage" className="space-y-4">
-                  <Card>
-                    <CardHeader>
+                  <Card className="mac-card">
+                    <CardHeader className="mac-card">
                       <CardTitle className="text-base">Test Coverage Areas</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="mac-card">
                       <div className="space-y-2">
                         {selectedTest.coverage.map((area, index) => (
                           <div key={index} className="flex items-center gap-2">
@@ -413,11 +423,11 @@ test.describe('${prompt}', () => {
                     </CardContent>
                   </Card>
 
-                  <Card>
-                    <CardHeader>
+                  <Card className="mac-card">
+                    <CardHeader className="mac-card">
                       <CardTitle className="text-base">Potential Gaps</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="mac-card">
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <AlertCircle className="h-4 w-4 text-yellow-500" />
@@ -452,11 +462,11 @@ test.describe('${prompt}', () => {
                     </CardContent>
                   </Card>
 
-                  <Card>
-                    <CardHeader>
+                  <Card className="mac-card">
+                    <CardHeader className="mac-card">
                       <CardTitle className="text-base">Related Tests to Generate</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="mac-card">
                       <div className="space-y-2">
                         <Button
                           variant="outline"

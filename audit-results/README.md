@@ -25,12 +25,14 @@
 ## File Manifest
 
 ### Reports (Human-Readable)
+
 - `EXECUTIVE-SUMMARY.txt` - Quick overview of findings
 - `FIONA-COMPREHENSIVE-DESIGN-AUDIT.md` - Full detailed report
 - `PRIORITY-ACTION-ITEMS.md` - Prioritized action list
 - `mac-violations-report.md` - Markdown report of violations
 
 ### Data Files (Machine-Readable)
+
 - `mac-violations-detailed.json` - All 309 violations catalogued
 - `mac-class-usage.json` - MAC class adoption statistics
 - `console-messages.json` - Browser console errors/warnings
@@ -38,6 +40,7 @@
 - `visual-audit-results.json` - Visual test results
 
 ### Screenshots
+
 - `responsive-mobile.png` - Mobile view (375px) screenshot
 - `dashboard-desktop.png` - Desktop view (1440px) - shows 404 error
 
@@ -45,13 +48,13 @@
 
 ### Total Violations: 309
 
-| Category | Count | Severity |
-|----------|-------|----------|
-| Hardcoded Colors | 127 | 🔴 BLOCKER |
-| Missing MAC Classes | 109 | 🟠 HIGH |
-| Hardcoded Spacing | 60 | 🟠 HIGH |
-| Typography Weights | 13 | 🟡 MEDIUM |
-| Animation Timings | 0 | ✅ GOOD |
+| Category            | Count | Severity   |
+| ------------------- | ----- | ---------- |
+| Hardcoded Colors    | 127   | 🔴 BLOCKER |
+| Missing MAC Classes | 109   | 🟠 HIGH    |
+| Hardcoded Spacing   | 60    | 🟠 HIGH    |
+| Typography Weights  | 13    | 🟡 MEDIUM  |
+| Animation Timings   | 0     | ✅ GOOD    |
 
 ### Critical Issues
 
@@ -63,16 +66,19 @@
 ## Tools & Scripts
 
 ### Run the Scanner
+
 ```bash
 node scan-mac-violations.js
 ```
 
 ### Run Playwright Tests
+
 ```bash
 npx playwright test tests/fiona-design-audit.spec.ts
 ```
 
 ### View Specific Violations
+
 ```bash
 # View hardcoded colors
 cat mac-violations-detailed.json | jq '.hardcodedColors[]'
@@ -89,11 +95,13 @@ cat mac-violations-detailed.json | jq '.hardcodedSpacing[]'
 ### Fix Hardcoded Colors (Most Common Fix)
 
 **Find them:**
+
 ```bash
 grep -rn "#[0-9a-fA-F]\{3,8\}" src/ app/ --include="*.css"
 ```
 
 **Replace with MAC variables:**
+
 ```css
 /* BEFORE */
 color: #3b82f6;
@@ -107,11 +115,13 @@ background: var(--mac-accent-purple-400);
 ### Add MAC Classes to Components
 
 **Find components without MAC classes:**
+
 ```bash
 grep -rn "<Button" src/ app/ --include="*.tsx" | grep -v "mac-button"
 ```
 
 **Add appropriate class:**
+
 ```tsx
 /* BEFORE */
 <Button>Click Me</Button>
@@ -123,16 +133,19 @@ grep -rn "<Button" src/ app/ --include="*.tsx" | grep -v "mac-button"
 ## Migration Roadmap
 
 ### Week 1: Critical Fixes
+
 - [ ] Replace all 127 hardcoded colors
 - [ ] Fix AOMA health endpoint
 - [ ] Fix dashboard 404 routing
 
 ### Week 2-3: Component Updates
+
 - [ ] Add MAC classes to all buttons/inputs
 - [ ] Standardize spacing to 8px grid
 - [ ] Update top 20 most-used components
 
 ### Week 4: Cleanup & Enforcement
+
 - [ ] Remove legacy CSS files
 - [ ] Implement pre-commit hooks
 - [ ] Set up visual regression testing
@@ -140,11 +153,13 @@ grep -rn "<Button" src/ app/ --include="*.tsx" | grep -v "mac-button"
 ## Success Metrics
 
 **Current State:**
+
 - Design System Score: 5.2/10
 - MAC Class Usage: <5% of components
 - Violations: 309 instances
 
 **Target State:**
+
 - Design System Score: 9.0/10
 - MAC Class Usage: >90% of components
 - Violations: 0 instances
@@ -154,10 +169,12 @@ grep -rn "<Button" src/ app/ --include="*.tsx" | grep -v "mac-button"
 ## Resources
 
 **Design System Reference:**
+
 - MAC CSS: `/src/styles/mac-design-system.css`
 - Documentation: `CLAUDE.md` (search for "MAC Design System")
 
 **Getting Help:**
+
 - Questions? Read `FIONA-COMPREHENSIVE-DESIGN-AUDIT.md`
 - Need examples? See "SPECIFIC REMEDIATION EXAMPLES" section
 - Stuck? Ask @fiona for guidance
@@ -173,6 +190,7 @@ grep -rn "<Button" src/ app/ --include="*.tsx" | grep -v "mac-button"
 ## Audit Methodology
 
 This audit used:
+
 - **Automated scanning** - Node.js script analyzing all source files
 - **Visual inspection** - Playwright screenshots of UI sections
 - **Console monitoring** - Browser DevTools error/warning capture
@@ -195,4 +213,4 @@ This audit used:
 
 ---
 
-*"Good design systems exist. Great ones are actually used."*
+_"Good design systems exist. Great ones are actually used."_

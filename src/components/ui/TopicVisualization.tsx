@@ -232,7 +232,7 @@ export const TopicClusters: React.FC<TopicClustersProps> = ({
           className="mac-card bg-zinc-900/50 border-zinc-800 hover:border-zinc-700 transition-colors cursor-pointer"
           onClick={() => onClusterClick?.(cluster)}
         >
-          <CardHeader className="pb-4">
+          <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center justify-between">
               <span className="flex items-center gap-2">
                 <Circle className="h-4 w-4 text-zinc-500" />
@@ -358,13 +358,13 @@ export const TopicPanel: React.FC<TopicPanelProps> = ({
 }) => {
   return (
     <Card className={cn("mac-card", "bg-zinc-950 border-zinc-800", className)}>
-      <CardHeader>
+      <CardHeader className="mac-card">
         <CardTitle className="flex items-center gap-2">
           <Brain className="h-5 w-5 text-zinc-400" />
           Topic Intelligence
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="mac-card">
         <Tabs defaultValue="cloud" className="w-full">
           <TabsList className="grid w-full grid-cols-4 bg-zinc-900">
             <TabsTrigger value="cloud">Cloud</TabsTrigger>

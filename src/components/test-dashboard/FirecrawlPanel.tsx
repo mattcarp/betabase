@@ -242,6 +242,7 @@ export const FirecrawlPanel: React.FC = () => {
               className="mac-button mac-button-outline"
               size="sm"
               variant="ghost"
+              className="mac-button mac-button-outline"
               onClick={checkApiHealth}
             >
               <RefreshCw className="h-3 w-3" />
@@ -251,12 +252,12 @@ export const FirecrawlPanel: React.FC = () => {
       )}
 
       {/* AUT Analysis Section */}
-      <Card>
-        <CardHeader>
+      <Card className="mac-card">
+        <CardHeader className="mac-card">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Globe className="h-5 w-5 text-primary" />
-              <CardTitle>Application Under Test Analysis</CardTitle>
+              <CardTitle className="mac-card">Application Under Test Analysis</CardTitle>
             </div>
             <Badge variant="outline" className="text-xs">
               {apiHealth?.firecrawl ? "Live Analysis" : "Mock Data"}
@@ -421,11 +422,11 @@ export const FirecrawlPanel: React.FC = () => {
       </Card>
 
       {/* Support Intelligence Section */}
-      <Card>
-        <CardHeader>
+      <Card className="mac-card">
+        <CardHeader className="mac-card">
           <div className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-primary" />
-            <CardTitle>Support Intelligence</CardTitle>
+            <CardTitle className="mac-card">Support Intelligence</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -516,6 +517,7 @@ export const FirecrawlPanel: React.FC = () => {
           className="mac-button mac-button-outline"
           onClick={handleGenerateTests}
           variant="outline"
+          className="mac-button mac-button-outline"
         >
           <Sparkles className="mr-2 h-4 w-4" />
           Generate Test Recommendations
@@ -524,6 +526,7 @@ export const FirecrawlPanel: React.FC = () => {
           className="mac-button mac-button-outline"
           onClick={fetchCommonIssues}
           variant="outline"
+          className="mac-button mac-button-outline"
         >
           <RefreshCw className="mr-2 h-4 w-4" />
           Refresh Common Issues

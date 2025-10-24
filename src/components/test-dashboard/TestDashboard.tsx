@@ -516,6 +516,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                 <Button
                   className="mac-button mac-button-outline"
                   variant="ghost"
+                  className="mac-button mac-button-outline"
                   size="sm"
                   onClick={() => setUseRealTimeStreaming(!useRealTimeStreaming)}
                   className="text-xs"

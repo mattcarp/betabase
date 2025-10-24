@@ -49,6 +49,7 @@ export const ConversationScrollButton = ({
         size="icon"
         type="button"
         variant="outline"
+        className="mac-button mac-button-outline"
         {...props}
       >
         <ArrowDownIcon className="size-4" />

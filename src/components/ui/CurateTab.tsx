@@ -305,7 +305,7 @@ export function CurateTab({
         className
       )}
     >
-      <CardHeader>
+      <CardHeader className="mac-card">
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2 font-light text-[var(--mac-text-primary)]">
@@ -463,6 +463,7 @@ export function CurateTab({
                     <Button
                       className="mac-button mac-button-primary"
                       variant="destructive"
+                      className="mac-button mac-button-primary"
                       size="sm"
                       onClick={() => confirmDeleteFiles(Array.from(selectedFiles))}
                       disabled={loading}
@@ -480,6 +481,7 @@ export function CurateTab({
                     <Button
                       className="mac-button mac-button-outline"
                       variant="ghost"
+                      className="mac-button mac-button-outline"
                       size="sm"
                       onClick={() => setSelectedFiles(new Set())}
                       className="mac-button-outline"
@@ -720,7 +722,7 @@ export function CurateTab({
           <TabsContent value="info" className="flex-1 overflow-hidden mt-4">
             <div className="space-y-4">
               <Card className="mac-card-elevated">
-                <CardHeader>
+                <CardHeader className="mac-card">
                   <CardTitle className="text-lg font-light text-[var(--mac-text-primary)]">
                     Vector Store Information
                   </CardTitle>
@@ -774,12 +776,12 @@ export function CurateTab({
               </Card>
 
               <Card className="mac-card-elevated">
-                <CardHeader>
+                <CardHeader className="mac-card">
                   <CardTitle className="text-lg font-light text-[var(--mac-text-primary)]">
                     Supported File Types
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="mac-card">
                   <div className="grid grid-cols-2 gap-2">
                     {["PDF", "TXT", "MD", "DOCX", "JSON", "CSV", "PNG", "JPG"].map((type) => (
                       <Badge
@@ -839,6 +841,7 @@ export function CurateTab({
             <Button
               className="mac-button mac-button-outline"
               variant="outline"
+              className="mac-button mac-button-outline"
               onClick={() => setDeleteDialogOpen(false)}
               className="mac-button-outline"
             >
@@ -926,6 +929,7 @@ export function CurateTab({
             <Button
               className="mac-button mac-button-outline"
               variant="outline"
+              className="mac-button mac-button-outline"
               onClick={() => setPreviewDialogOpen(false)}
               className="mac-button-outline"
             >

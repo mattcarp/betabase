@@ -9,20 +9,23 @@
  * AFTER:  className={cn("mac-button", ...)}
  */
 
-const fs = require('fs');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const { execSync } = require("child_process");
 
 // Find all TSX files with the problematic pattern
 const findCommand = 'find src app -name "*.tsx" -type f 2>/dev/null || true';
-const filesOutput = execSync(findCommand, { encoding: 'utf8' });
-const files = filesOutput.trim().split('\n').filter(f => f && !f.includes('node_modules') && !f.includes('.next'));
+const filesOutput = execSync(findCommand, { encoding: "utf8" });
+const files = filesOutput
+  .trim()
+  .split("\n")
+  .filter((f) => f && !f.includes("node_modules") && !f.includes(".next"));
 
 let filesFixed = 0;
 
-console.log('🔧 Fixing cn() syntax errors...\n');
+console.log("🔧 Fixing cn() syntax errors...\n");
 
-files.forEach(filePath => {
-  let content = fs.readFileSync(filePath, 'utf8');
+files.forEach((filePath) => {
+  let content = fs.readFileSync(filePath, "utf8");
   let modified = false;
 
   // Pattern 1: className={cn(...), "mac-button mac-button-primary")}
@@ -43,25 +46,22 @@ files.forEach(filePath => {
   const pattern2 = /className=\{cn\(([^)]+)\), "mac-input"\)}/g;
 
   if (pattern2.test(content)) {
-    content = content.replace(
-      /className=\{cn\(([^)]+)\), "mac-input"\)}/g,
-      (match, cnArgs) => {
-        modified = true;
-        return `className={cn("mac-input", ${cnArgs})}`;
-      }
-    );
+    content = content.replace(/className=\{cn\(([^)]+)\), "mac-input"\)}/g, (match, cnArgs) => {
+      modified = true;
+      return `className={cn("mac-input", ${cnArgs})}`;
+    });
   }
 
   if (modified) {
-    fs.writeFileSync(filePath, content, 'utf8');
+    fs.writeFileSync(filePath, content, "utf8");
     filesFixed++;
     console.log(`✅ Fixed: ${filePath}`);
   }
 });
 
 console.log(`\n📊 Summary: ${filesFixed} files fixed`);
-console.log('\n✨ Running prettier to format...');
+console.log("\n✨ Running prettier to format...");
 
-execSync('npx prettier --write "src/**/*.tsx" "app/**/*.tsx"', { stdio: 'inherit' });
+execSync('npx prettier --write "src/**/*.tsx" "app/**/*.tsx"', { stdio: "inherit" });
 
-console.log('\n✅ All syntax errors fixed!');
+console.log("\n✅ All syntax errors fixed!");

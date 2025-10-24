@@ -240,6 +240,7 @@ export function FileUpload({
                   <Button
                     className="mac-button mac-button-outline"
                     variant="ghost"
+                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => removeFile(item.id)}
                     className="h-5 w-5 p-0"
@@ -397,6 +398,7 @@ export function FileUpload({
                   <Button
                     className="mac-button mac-button-outline"
                     variant="ghost"
+                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => removeFile(item.id)}
                     className="h-8 w-8 p-0"

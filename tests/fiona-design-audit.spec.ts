@@ -6,12 +6,12 @@
  * Uses Mailinator for magic link authentication
  */
 
-import { test, expect, Page } from '@playwright/test';
-import * as fs from 'fs';
-import * as path from 'path';
+import { test, expect, Page } from "@playwright/test";
+import * as fs from "fs";
+import * as path from "path";
 
-const BASE_URL = 'https://thebetabase.com';
-const AUDIT_DIR = '/Users/matt/Documents/projects/siam/audit-results';
+const BASE_URL = "https://thebetabase.com";
+const AUDIT_DIR = "/Users/matt/Documents/projects/siam/audit-results";
 
 // Ensure audit directory exists
 if (!fs.existsSync(AUDIT_DIR)) {
@@ -26,10 +26,10 @@ interface UISection {
 }
 
 const UI_SECTIONS: UISection[] = [
-  { name: 'login', url: '/', selector: 'form', waitFor: 'input[type="email"]' },
-  { name: 'dashboard', url: '/dashboard', selector: '.mac-professional' },
-  { name: 'chat-interface', url: '/', selector: '.mac-glass' },
-  { name: 'settings', url: '/settings', selector: '.mac-card' },
+  { name: "login", url: "/", selector: "form", waitFor: 'input[type="email"]' },
+  { name: "dashboard", url: "/dashboard", selector: ".mac-professional" },
+  { name: "chat-interface", url: "/", selector: ".mac-glass" },
+  { name: "settings", url: "/settings", selector: ".mac-card" },
 ];
 
 /**
@@ -37,42 +37,41 @@ const UI_SECTIONS: UISection[] = [
  * Retrieves magic link from Mailinator inbox for authentication
  */
 async function getMagicLinkFromMailinator(page: Page, email: string): Promise<string> {
-  const username = email.split('@')[0];
+  const username = email.split("@")[0];
 
   console.log(`  📧 Checking Mailinator inbox for ${email}...`);
 
   await page.goto(`https://www.mailinator.com/v4/public/inboxes.jsp?to=${username}`, {
-    waitUntil: 'networkidle',
+    waitUntil: "networkidle",
     timeout: 30000,
   });
 
   // Wait for email to arrive (poll for up to 30 seconds)
-  await page.waitForSelector('tr.ng-scope', { timeout: 30000 });
+  await page.waitForSelector("tr.ng-scope", { timeout: 30000 });
   await page.waitForTimeout(2000); // Let inbox fully load
 
   // Click the first email in the inbox
-  const firstEmail = page.locator('tr.ng-scope').first();
-  await firstEmail.waitFor({ state: 'visible', timeout: 10000 });
+  const firstEmail = page.locator("tr.ng-scope").first();
+  await firstEmail.waitFor({ state: "visible", timeout: 10000 });
   await firstEmail.click();
   await page.waitForTimeout(3000);
 
   // Get the magic link from the email iframe
-  const frame = page.frameLocator('#html_msg_body');
+  const frame = page.frameLocator("#html_msg_body");
   const magicLink = await frame
     .locator('a:has-text("Sign In"), a:has-text("Verify"), a:has-text("Login")')
     .first()
-    .getAttribute('href');
+    .getAttribute("href");
 
   if (!magicLink) {
-    throw new Error('Magic link not found in email');
+    throw new Error("Magic link not found in email");
   }
 
   console.log(`  ✅ Magic link retrieved`);
   return magicLink;
 }
 
-test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
-
+test.describe("Fiona Design Audit - MAC Design System Compliance", () => {
   // Shared authentication - run once before all tests
   let authContext: any;
   let authenticated = false;
@@ -86,7 +85,7 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
 
     // Authenticate once for all tests (shared across workers)
     if (!authenticated) {
-      console.log('\n🔐 Authenticating with production via Mailinator...');
+      console.log("\n🔐 Authenticating with production via Mailinator...");
 
       // Create a unique test email
       const testEmail = `siam-audit-${Date.now()}@mailinator.com`;
@@ -94,7 +93,7 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
 
       try {
         // 1. Navigate to login page
-        await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await page.goto(BASE_URL, { waitUntil: "domcontentloaded", timeout: 60000 });
         await page.waitForTimeout(2000);
 
         // 2. Enter email and request magic link
@@ -110,20 +109,19 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
         await mailinatorPage.close();
 
         // 4. Navigate to magic link to authenticate
-        await page.goto(magicLink, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await page.goto(magicLink, { waitUntil: "domcontentloaded", timeout: 60000 });
         await page.waitForTimeout(3000);
 
-        console.log('  ✅ Authentication successful!\n');
+        console.log("  ✅ Authentication successful!\n");
         authenticated = true;
-
       } catch (error) {
-        console.error('  ❌ Authentication failed:', error);
+        console.error("  ❌ Authentication failed:", error);
         // Don't throw - let individual tests handle auth failure
       }
     }
   });
 
-  test('Phase 1: Visual UI/UX Scoring - Screenshot Capture', async ({ page }) => {
+  test("Phase 1: Visual UI/UX Scoring - Screenshot Capture", async ({ page }) => {
     const results: any[] = [];
 
     for (const section of UI_SECTIONS) {
@@ -131,8 +129,8 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
 
       try {
         await page.goto(`${BASE_URL}${section.url}`, {
-          waitUntil: 'networkidle',
-          timeout: 30000
+          waitUntil: "networkidle",
+          timeout: 30000,
         });
 
         // Wait for specific element if defined
@@ -147,13 +145,13 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
         const screenshotPath = path.join(AUDIT_DIR, `${section.name}-desktop.png`);
         await page.screenshot({
           path: screenshotPath,
-          fullPage: true
+          fullPage: true,
         });
 
         // Capture console errors
         const consoleErrors: string[] = [];
-        page.on('console', msg => {
-          if (msg.type() === 'error') {
+        page.on("console", (msg) => {
+          if (msg.type() === "error") {
             consoleErrors.push(msg.text());
           }
         });
@@ -178,16 +176,16 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
 
           const macVars: Record<string, string> = {};
           const relevantVars = [
-            '--mac-surface-background',
-            '--mac-surface-elevated',
-            '--mac-text-primary',
-            '--mac-text-secondary',
-            '--mac-primary-blue-400',
-            '--mac-accent-purple-400',
-            '--mac-utility-border',
+            "--mac-surface-background",
+            "--mac-surface-elevated",
+            "--mac-text-primary",
+            "--mac-text-secondary",
+            "--mac-primary-blue-400",
+            "--mac-accent-purple-400",
+            "--mac-utility-border",
           ];
 
-          relevantVars.forEach(varName => {
+          relevantVars.forEach((varName) => {
             macVars[varName] = computedStyle.getPropertyValue(varName);
           });
 
@@ -196,7 +194,7 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
 
         // Find all elements using hardcoded colors instead of MAC variables
         const hardcodedColors = await page.evaluate(() => {
-          const elements = document.querySelectorAll('*');
+          const elements = document.querySelectorAll("*");
           const violations: any[] = [];
 
           elements.forEach((el) => {
@@ -204,23 +202,24 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
             const inlineStyle = (el as HTMLElement).style;
 
             // Check for hardcoded background colors
-            if (inlineStyle.backgroundColor &&
-                !inlineStyle.backgroundColor.includes('var(--mac-')) {
+            if (
+              inlineStyle.backgroundColor &&
+              !inlineStyle.backgroundColor.includes("var(--mac-")
+            ) {
               violations.push({
                 tag: el.tagName,
                 class: el.className,
-                type: 'backgroundColor',
+                type: "backgroundColor",
                 value: inlineStyle.backgroundColor,
               });
             }
 
             // Check for hardcoded colors
-            if (inlineStyle.color &&
-                !inlineStyle.color.includes('var(--mac-')) {
+            if (inlineStyle.color && !inlineStyle.color.includes("var(--mac-")) {
               violations.push({
                 tag: el.tagName,
                 class: el.className,
-                type: 'color',
+                type: "color",
                 value: inlineStyle.color,
               });
             }
@@ -242,7 +241,6 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
         console.log(`✅ ${section.name} captured`);
         console.log(`   Console errors: ${consoleErrors.length}`);
         console.log(`   Hardcoded colors found: ${hardcodedColors.length}`);
-
       } catch (error) {
         console.error(`❌ Failed to capture ${section.name}:`, error);
         results.push({
@@ -254,49 +252,46 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
     }
 
     // Save results
-    const resultsPath = path.join(AUDIT_DIR, 'visual-audit-results.json');
+    const resultsPath = path.join(AUDIT_DIR, "visual-audit-results.json");
     fs.writeFileSync(resultsPath, JSON.stringify(results, null, 2));
     console.log(`\n📊 Results saved to: ${resultsPath}`);
   });
 
-  test('Phase 2: Responsive Testing', async ({ page }) => {
+  test("Phase 2: Responsive Testing", async ({ page }) => {
     const viewports = [
-      { name: 'mobile', width: 375, height: 667 },
-      { name: 'tablet', width: 768, height: 1024 },
-      { name: 'desktop', width: 1440, height: 900 },
+      { name: "mobile", width: 375, height: 667 },
+      { name: "tablet", width: 768, height: 1024 },
+      { name: "desktop", width: 1440, height: 900 },
     ];
 
     for (const viewport of viewports) {
       await page.setViewportSize({
         width: viewport.width,
-        height: viewport.height
+        height: viewport.height,
       });
 
       await page.goto(BASE_URL, {
-        waitUntil: 'networkidle',
-        timeout: 30000
+        waitUntil: "networkidle",
+        timeout: 30000,
       });
 
-      const screenshotPath = path.join(
-        AUDIT_DIR,
-        `responsive-${viewport.name}.png`
-      );
+      const screenshotPath = path.join(AUDIT_DIR, `responsive-${viewport.name}.png`);
       await page.screenshot({ path: screenshotPath, fullPage: true });
       console.log(`📱 ${viewport.name} screenshot captured`);
     }
   });
 
-  test('Phase 3: Typography Weight Audit', async ({ page }) => {
+  test("Phase 3: Typography Weight Audit", async ({ page }) => {
     await page.goto(BASE_URL, {
-      waitUntil: 'networkidle',
-      timeout: 30000
+      waitUntil: "networkidle",
+      timeout: 30000,
     });
 
     // Find all elements with font-weight not in [100, 200, 300, 400]
     const typographyViolations = await page.evaluate(() => {
-      const elements = document.querySelectorAll('*');
+      const elements = document.querySelectorAll("*");
       const violations: any[] = [];
-      const allowedWeights = ['100', '200', '300', '400'];
+      const allowedWeights = ["100", "200", "300", "400"];
 
       elements.forEach((el) => {
         const computed = window.getComputedStyle(el);
@@ -318,37 +313,37 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
 
     console.log(`\n🔤 Typography violations found: ${typographyViolations.length}`);
 
-    const typographyPath = path.join(AUDIT_DIR, 'typography-violations.json');
+    const typographyPath = path.join(AUDIT_DIR, "typography-violations.json");
     fs.writeFileSync(typographyPath, JSON.stringify(typographyViolations, null, 2));
   });
 
-  test('Phase 4: MAC Class Usage Audit', async ({ page }) => {
+  test("Phase 4: MAC Class Usage Audit", async ({ page }) => {
     await page.goto(BASE_URL, {
-      waitUntil: 'networkidle',
-      timeout: 30000
+      waitUntil: "networkidle",
+      timeout: 30000,
     });
 
     const macClassUsage = await page.evaluate(() => {
       const macClasses = [
-        'mac-professional',
-        'mac-display-text',
-        'mac-heading',
-        'mac-title',
-        'mac-body',
-        'mac-button',
-        'mac-button-primary',
-        'mac-button-secondary',
-        'mac-button-outline',
-        'mac-input',
-        'mac-card',
-        'mac-card-elevated',
-        'mac-glass',
-        'mac-background',
+        "mac-professional",
+        "mac-display-text",
+        "mac-heading",
+        "mac-title",
+        "mac-body",
+        "mac-button",
+        "mac-button-primary",
+        "mac-button-secondary",
+        "mac-button-outline",
+        "mac-input",
+        "mac-card",
+        "mac-card-elevated",
+        "mac-glass",
+        "mac-background",
       ];
 
       const usage: Record<string, number> = {};
 
-      macClasses.forEach(className => {
+      macClasses.forEach((className) => {
         const elements = document.querySelectorAll(`.${className}`);
         usage[className] = elements.length;
       });
@@ -356,19 +351,19 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
       return usage;
     });
 
-    console.log('\n🎨 MAC Class Usage:');
+    console.log("\n🎨 MAC Class Usage:");
     Object.entries(macClassUsage).forEach(([className, count]) => {
       console.log(`   ${className}: ${count} instances`);
     });
 
-    const macClassPath = path.join(AUDIT_DIR, 'mac-class-usage.json');
+    const macClassPath = path.join(AUDIT_DIR, "mac-class-usage.json");
     fs.writeFileSync(macClassPath, JSON.stringify(macClassUsage, null, 2));
   });
 
-  test('Phase 5: Console Error Detection', async ({ page }) => {
+  test("Phase 5: Console Error Detection", async ({ page }) => {
     const consoleMessages: any[] = [];
 
-    page.on('console', msg => {
+    page.on("console", (msg) => {
       consoleMessages.push({
         type: msg.type(),
         text: msg.text(),
@@ -377,24 +372,31 @@ test.describe('Fiona Design Audit - MAC Design System Compliance', () => {
     });
 
     await page.goto(BASE_URL, {
-      waitUntil: 'networkidle',
-      timeout: 30000
+      waitUntil: "networkidle",
+      timeout: 30000,
     });
 
     // Wait to collect console messages
     await page.waitForTimeout(5000);
 
-    const errors = consoleMessages.filter(m => m.type === 'error');
-    const warnings = consoleMessages.filter(m => m.type === 'warning');
+    const errors = consoleMessages.filter((m) => m.type === "error");
+    const warnings = consoleMessages.filter((m) => m.type === "warning");
 
     console.log(`\n⚠️  Console errors: ${errors.length}`);
     console.log(`⚠️  Console warnings: ${warnings.length}`);
 
-    const consolePath = path.join(AUDIT_DIR, 'console-messages.json');
-    fs.writeFileSync(consolePath, JSON.stringify({
-      errors,
-      warnings,
-      all: consoleMessages,
-    }, null, 2));
+    const consolePath = path.join(AUDIT_DIR, "console-messages.json");
+    fs.writeFileSync(
+      consolePath,
+      JSON.stringify(
+        {
+          errors,
+          warnings,
+          all: consoleMessages,
+        },
+        null,
+        2
+      )
+    );
   });
 });
