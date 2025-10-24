@@ -26,8 +26,8 @@ const nextConfig = {
 
   // PERFORMANCE OPTIMIZATION: Enable TypeScript checks (was: ignoreBuildErrors: true)
   typescript: {
-    // Only ignore during builds in development, enforce in production
-    ignoreBuildErrors: !isProd,
+    // Always enforce TypeScript - tsconfig.json controls strictness level
+    ignoreBuildErrors: false,
   },
 
   // In local/dev, explicitly set the tracing root to avoid monorepo lockfile confusion
