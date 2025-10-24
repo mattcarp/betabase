@@ -45,7 +45,7 @@ function calculatePercentile(arr: number[], percentile: number): number {
 }
 
 // Update performance metrics
-function updatePerformanceMetrics() {
+export function updatePerformanceMetrics() {
   const recentRequests = metrics.requests.slice(-100);
   const durations = recentRequests.map((r) => r.duration);
 

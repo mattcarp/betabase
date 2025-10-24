@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { metrics, trackRequest, trackError } from "@/lib/metrics";
+import { metrics, trackRequest, trackError, updatePerformanceMetrics } from "@/lib/metrics";
 
 // Introspection API endpoint for SIAM internal monitoring
 export async function GET(_request: NextRequest) {
