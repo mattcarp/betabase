@@ -1,7 +1,7 @@
 "use client";
 
 import { CodeBlock, CodeBlockCopyButton } from "./code-block";
-import type { ComponentProps, HTMLAttributes } from "react";
+import type { /* ComponentProps, */ HTMLAttributes } from "react";
 import { memo, isValidElement } from "react";
 import ReactMarkdown, { type Options } from "react-markdown";
 // import rehypeKatex from "rehype-katex"; // TEMPORARILY DISABLED - MISSING DEPENDENCY
@@ -107,9 +107,9 @@ function parseIncompleteMarkdown(text: string): string {
   const inlineCodeMatch = result.match(inlineCodePattern);
   if (inlineCodeMatch) {
     // Check if we're dealing with a code block (triple backticks)
-    const hasCodeBlockStart = result.includes("```");
-    const codeBlockPattern = /```[\s\S]*?```/g;
-    const completeCodeBlocks = (result.match(codeBlockPattern) || []).length;
+    // const hasCodeBlockStart = result.includes("```"); // Unused
+    // const codeBlockPattern = /```[\s\S]*?```/g;
+    // const completeCodeBlocks = (result.match(codeBlockPattern) || []).length; // Unused
     const allTripleBackticks = (result.match(/```/g) || []).length;
 
     // If we have an odd number of ``` sequences, we're inside an incomplete code block
@@ -161,13 +161,9 @@ const HardenedMarkdown = ReactMarkdown; // Using regular ReactMarkdown for now
 export type ResponseProps = HTMLAttributes<HTMLDivElement> & {
   options?: Options;
   children: Options["children"];
-  allowedImagePrefixes?: ComponentProps<
-    ReturnType<typeof hardenReactMarkdown>
-  >["allowedImagePrefixes"];
-  allowedLinkPrefixes?: ComponentProps<
-    ReturnType<typeof hardenReactMarkdown>
-  >["allowedLinkPrefixes"];
-  defaultOrigin?: ComponentProps<ReturnType<typeof hardenReactMarkdown>>["defaultOrigin"];
+  allowedImagePrefixes?: string[]; // ComponentProps<ReturnType<typeof hardenReactMarkdown>>["allowedImagePrefixes"];
+  allowedLinkPrefixes?: string[]; // ComponentProps<ReturnType<typeof hardenReactMarkdown>>["allowedLinkPrefixes"];
+  defaultOrigin?: string; // ComponentProps<ReturnType<typeof hardenReactMarkdown>>["defaultOrigin"];
   parseIncompleteMarkdown?: boolean;
 };
 
@@ -301,10 +297,10 @@ const components: Options["components"] = {
     if (
       isValidElement(children) &&
       children.props &&
-      "children" in children.props &&
-      typeof children.props.children === "string"
+      (children.props as any).children &&
+      typeof (children.props as any).children === "string"
     ) {
-      code = children.props.children;
+      code = (children.props as any).children;
     } else if (typeof children === "string") {
       code = children;
     }
