@@ -425,7 +425,7 @@ export class TopicExtractionService extends EventEmitter {
 
       if (result.tfidf < minScore) break;
 
-      const documentIds = Array.from(this.termDocumentFrequency.get(result.term) || new Set());
+      const documentIds = Array.from(this.termDocumentFrequency.get(result.term) || new Set()) as string[];
 
       topics.push({
         id: `topic_${document.id}_${i}`,
@@ -572,7 +572,7 @@ export class TopicExtractionService extends EventEmitter {
       // Find or create cluster based on term similarity
       let foundCluster = false;
 
-      for (const [clusterId, cluster] of clusters) {
+      for (const [_clusterId, cluster] of clusters) {
         // Check if topic belongs to this cluster
         const similarity = this.calculateTermSimilarity(
           topic.term,
@@ -589,7 +589,7 @@ export class TopicExtractionService extends EventEmitter {
 
       // Create new cluster if no match found
       if (!foundCluster) {
-        const _clusterId = `cluster_${clusters.size}`;
+        const clusterId = `cluster_${clusters.size}`;
         clusters.set(clusterId, {
           id: clusterId,
           name: this.generateClusterName([topic]),
