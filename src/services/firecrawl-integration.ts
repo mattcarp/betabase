@@ -81,8 +81,9 @@ export class FirecrawlIntegrationService {
       userFlows.push(...mainPageAnalysis.flows);
 
       // Analyze other important pages
-      for (const url of urls.slice(0, 10)) {
+      for (const urlObj of urls.slice(0, 10)) {
         // Limit to first 10 for performance
+        const url = (urlObj as any).url || urlObj; // Extract URL from SearchResultWeb object
         if (url.includes("/api/")) {
           apiEndpoints.push(url);
         } else if (url.includes("/docs/") || url.includes("/help/")) {
@@ -241,8 +242,8 @@ export class FirecrawlIntegrationService {
 
     const research = await this.firecrawl.search(query, {
       limit: 10,
-      lang: "en",
-      country: "us",
+      // lang: "en", // Not a valid option in SearchRequest
+      // country: "us", // Not a valid option in SearchRequest
       scrapeOptions: {
         formats: ["markdown"],
         onlyMainContent: true,
@@ -250,7 +251,7 @@ export class FirecrawlIntegrationService {
     });
 
     // Process and structure research results
-    const processedResults = research.data?.map((result) => ({
+    const processedResults = (research as any)?.map((result: any) => ({
       title: result.title,
       url: result.url,
       content: result.markdown?.substring(0, 500),
