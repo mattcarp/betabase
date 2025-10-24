@@ -47,7 +47,12 @@ import {
 import { FileUpload } from "../ai-elements/file-upload";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
-import { Empty, EmptyMedia, EmptyTitle, EmptyDescription /* EmptyContent - Unused */ } from "./empty";
+import {
+  Empty,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription /* EmptyContent - Unused */,
+} from "./empty";
 import { Spinner } from "./spinner";
 import { InputGroup, InputGroupInput, InputGroupAddon } from "./input-group";
 
