@@ -55,6 +55,7 @@ John`,
     from: "mike.chen@company.com",
     to: ["devops@company.com"],
     subject: "URGENT: Production Database Performance Issues",
+    body: "", // Plain text version - content is in htmlBody
     htmlBody: `<html>
 <body>
 <p><strong>URGENT</strong></p>
@@ -114,6 +115,7 @@ Customer Success Manager`,
     from: "security@company.com",
     to: ["all-engineers@company.com"],
     subject: "Security Update: Dependency Vulnerabilities Found",
+    body: "", // Plain text version - content is in htmlBody
     htmlBody: `<html>
 <body>
 <h3>Security Advisory</h3>
