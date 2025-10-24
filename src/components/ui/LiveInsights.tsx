@@ -6,15 +6,15 @@ import {
   Clock,
   Target,
   Lightbulb,
-  BarChart3,
-  Users,
+  // BarChart3, // Unused
+  // Users, // Unused
   CheckCircle,
   AlertCircle,
-  Zap,
+  // Zap, // Unused
   Activity,
   Database,
   Mic,
-  Volume2,
+  // Volume2, // Unused
 } from "lucide-react";
 import { useMCPClient } from "../../hooks/useMCPClient";
 
@@ -39,20 +39,20 @@ interface LiveInsightsProps {
 }
 
 export const LiveInsights: React.FC<LiveInsightsProps> = ({
-  conversationId,
+  conversationId: _conversationId, // Unused
   className,
   currentConversation = [],
 }) => {
   const [insights, setInsights] = useState<InsightMetric[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [mcpState, mcpActions] = useMCPClient();
+  const [_mcpState, _mcpActions] = useMCPClient(); // Unused
 
   // Generate real-time insights from conversation data
   const generateConversationInsights = (messages: any[]): InsightMetric[] => {
     if (!messages.length) return [];
 
     const now = new Date();
-    const recentMessages = messages.slice(-5); // Last 5 messages
+    // const recentMessages = messages.slice(-5); // Would be used for recent message analysis
     const conversationMetrics: InsightMetric[] = [];
 
     // Message frequency analysis
