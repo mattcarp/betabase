@@ -115,7 +115,9 @@ test.describe("Silly Questions Demo - Anti-Hallucination Testing", () => {
     await page.waitForSelector('textarea[placeholder*="Ask"]', { timeout: 10000 });
 
     console.log("\n🎯 THE BIG ONE: Does AOMA have a teleportation feature?");
-    console.log("Expected: 'Based on the AOMA stuff I know about, there is no teleportation feature.'");
+    console.log(
+      "Expected: 'Based on the AOMA stuff I know about, there is no teleportation feature.'"
+    );
 
     const chatInput = page.locator('textarea[placeholder*="Ask"]').first();
     await chatInput.fill("Does AOMA have a teleportation feature?");

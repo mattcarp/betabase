@@ -1,10 +1,25 @@
 import { useCallback } from "react";
 // import { toast } from "sonner";
-const toast: any = (msg: any, _options?: any) => { console.log("📢", msg); return "toast-id"; };
-toast.success = (msg: any, _options?: any) => { console.log("✅", msg); return "toast-id"; };
-toast.error = (msg: any, _options?: any) => { console.error("❌", msg); return "toast-id"; };
-toast.info = (msg: any, _options?: any) => { console.info("ℹ️", msg); return "toast-id"; };
-toast.loading = (msg: any, _options?: any) => { console.log("⏳", msg); return "toast-id"; };
+const toast: any = (msg: any, _options?: any) => {
+  console.log("📢", msg);
+  return "toast-id";
+};
+toast.success = (msg: any, _options?: any) => {
+  console.log("✅", msg);
+  return "toast-id";
+};
+toast.error = (msg: any, _options?: any) => {
+  console.error("❌", msg);
+  return "toast-id";
+};
+toast.info = (msg: any, _options?: any) => {
+  console.info("ℹ️", msg);
+  return "toast-id";
+};
+toast.loading = (msg: any, _options?: any) => {
+  console.log("⏳", msg);
+  return "toast-id";
+};
 toast.dismiss = (id?: string) => console.log("Dismissed", id);
 toast.promise = (promise: Promise<any>, _options: any) => promise;
 

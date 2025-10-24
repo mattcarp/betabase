@@ -357,11 +357,7 @@ export const FlakyTestExplorer: React.FC = () => {
                       <p className="text-sm text-muted-foreground mt-2">{selectedTest.suite}</p>
                     </div>
                     <div className="flex gap-2">
-                      <Button
-                        className="mac-button mac-button-outline"
-                        variant="outline"
-                        size="sm"
-                      >
+                      <Button className="mac-button mac-button-outline" variant="outline" size="sm">
                         <Shield className="h-4 w-4 mr-2" />
                         Quarantine
                       </Button>

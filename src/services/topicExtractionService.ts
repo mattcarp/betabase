@@ -425,7 +425,9 @@ export class TopicExtractionService extends EventEmitter {
 
       if (result.tfidf < minScore) break;
 
-      const documentIds = Array.from(this.termDocumentFrequency.get(result.term) || new Set()) as string[];
+      const documentIds = Array.from(
+        this.termDocumentFrequency.get(result.term) || new Set()
+      ) as string[];
 
       topics.push({
         id: `topic_${document.id}_${i}`,

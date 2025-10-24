@@ -16,7 +16,7 @@ import { Input } from "../ui/input";
 import { /* Loader2, */ Mail, CheckCircle } from "lucide-react";
 import { getBuildInfo, getFormattedBuildTime } from "../../utils/buildInfo";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
-import { Field, FieldLabel, /* FieldDescription */ } from "../ui/field";
+import { Field, FieldLabel /* FieldDescription */ } from "../ui/field";
 import { Spinner } from "../ui/spinner";
 
 interface MagicLinkLoginFormProps {
