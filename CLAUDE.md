@@ -335,6 +335,83 @@ cat docs/TYPESCRIPT-ERROR-STATUS.md
 
 ---
 
+## 🛡️ PRE-PR QUALITY CHECKS - AUTOMATED
+
+**AUTOMATIC ENFORCEMENT**: All code quality checks run automatically before every push!
+
+### What Runs Automatically (Pre-Push Hook)
+
+Every time you push code, the following checks run automatically:
+
+**Phase 1: Code Quality Checks** (Fast - ~30 seconds)
+
+1. **Merge Conflict Detection** - Prevents pushing code with conflict markers
+2. **Prettier Formatting** - Ensures consistent code style across the project
+3. **ESLint Linting** - Catches potential bugs and enforces best practices
+
+**Phase 2: Test Suite** (Slower - depends on branch)
+
+- **Feature branches**: Smoke tests (~2 minutes)
+- **Main/Develop branches**: Critical tests (~5 minutes)
+
+### Manual Pre-PR Check
+
+Run all checks manually before creating a PR:
+
+```bash
+npm run pre-pr-check
+```
+
+This runs:
+
+- `npm run format:check` - Prettier validation
+- `npm run lint` - ESLint validation
+- `git diff --check` - Merge conflict detection
+
+### Quick Fixes for Common Issues
+
+**Formatting Issues:**
+
+```bash
+npm run format          # Auto-fix all formatting issues
+git add .              # Stage the fixes
+git commit -m "fix: apply prettier formatting"
+```
+
+**Linting Issues:**
+
+```bash
+npm run lint:fix       # Auto-fix fixable lint issues
+npm run lint           # Check remaining issues
+```
+
+**Merge Conflicts:**
+
+```bash
+git status             # See which files have conflicts
+# Manually resolve conflicts in your editor
+git add .              # Stage resolved files
+git commit             # Complete the merge
+```
+
+### Bypassing Checks (Not Recommended)
+
+If absolutely necessary (e.g., documentation-only changes), bypass with:
+
+```bash
+git push --no-verify
+```
+
+**⚠️ WARNING**: Only use this when you're certain the code quality issues won't break production!
+
+### Configuration Files
+
+- `.husky/pre-push` - Main pre-push hook script
+- `.husky/pre-commit` - Runs prettier on staged files via lint-staged
+- `package.json` - Script definitions and lint-staged configuration
+
+---
+
 ## 🧪 TESTING FUNDAMENTALS - CRITICAL
 
 **⚠️ MANDATORY READING**: See `TESTING_FUNDAMENTALS.md` for comprehensive test documentation.
