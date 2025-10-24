@@ -45,12 +45,7 @@ test.describe("MAC Design System Visual Regression", () => {
         const computed = window.getComputedStyle(el);
 
         // Check for hardcoded colors in common properties
-        const properties = [
-          "backgroundColor",
-          "color",
-          "borderColor",
-          "outlineColor",
-        ];
+        const properties = ["backgroundColor", "color", "borderColor", "outlineColor"];
 
         properties.forEach((prop) => {
           const value = computed.getPropertyValue(prop);
@@ -175,9 +170,7 @@ test.describe("MAC Design System Visual Regression", () => {
       const buttonsMissingMac = Array.from(buttons).filter(
         (btn) => !btn.className.includes("mac-")
       );
-      const cardsMissingMac = Array.from(cards).filter(
-        (card) => !card.className.includes("mac-")
-      );
+      const cardsMissingMac = Array.from(cards).filter((card) => !card.className.includes("mac-"));
       const inputsMissingMac = Array.from(inputs).filter(
         (input) => !input.className.includes("mac-")
       );
@@ -334,7 +327,9 @@ test.describe("MAC Design System Visual Regression", () => {
     });
 
     if (inlineStyleElements.length > 0) {
-      console.log(`⚠️  Found ${inlineStyleElements.length} elements with problematic inline styles`);
+      console.log(
+        `⚠️  Found ${inlineStyleElements.length} elements with problematic inline styles`
+      );
       console.log(inlineStyleElements.slice(0, 5)); // Show first 5
     }
 

@@ -196,13 +196,14 @@ export const TraceViewer: React.FC = () => {
     <AnnotationProvider>
       <div className="space-y-6 relative">
         {/* Playback Controls */}
-        <Card>
+        <Card className="mac-card">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Button
                   className="mac-button mac-button-outline"
                   variant="outline"
+                  className="mac-button mac-button-outline"
                   size="icon"
                   onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
                 >
@@ -211,6 +212,7 @@ export const TraceViewer: React.FC = () => {
                 <Button
                   className="mac-button mac-button-primary"
                   variant="default"
+                  className="mac-button mac-button-primary"
                   size="icon"
                   onClick={handlePlayPause}
                 >
@@ -219,6 +221,7 @@ export const TraceViewer: React.FC = () => {
                 <Button
                   className="mac-button mac-button-outline"
                   variant="outline"
+                  className="mac-button mac-button-outline"
                   size="icon"
                   onClick={() => setCurrentStep(Math.min(traceSteps.length - 1, currentStep + 1))}
                 >
@@ -254,11 +257,21 @@ export const TraceViewer: React.FC = () => {
                   <Pencil className="h-4 w-4" />
                   Annotations
                 </Button>
-                <Button className="mac-button mac-button-outline" variant="outline" size="sm">
+                <Button
+                  className="mac-button mac-button-outline"
+                  variant="outline"
+                  className="mac-button mac-button-outline"
+                  size="sm"
+                >
                   <Maximize2 className="h-4 w-4 mr-2" />
                   Fullscreen
                 </Button>
-                <Button className="mac-button mac-button-outline" variant="outline" size="sm">
+                <Button
+                  className="mac-button mac-button-outline"
+                  variant="outline"
+                  className="mac-button mac-button-outline"
+                  size="sm"
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Export
                 </Button>
@@ -296,7 +309,7 @@ export const TraceViewer: React.FC = () => {
           {/* Timeline */}
           <div className="col-span-3">
             <Card className="mac-card h-[600px]">
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Clock className="h-5 w-5" />
                   Timeline
@@ -352,7 +365,7 @@ export const TraceViewer: React.FC = () => {
           {/* Viewport */}
           <div className="col-span-6">
             <Card className="mac-card h-[600px]">
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg">Viewport</CardTitle>
                   <div className="flex gap-2">
@@ -375,7 +388,7 @@ export const TraceViewer: React.FC = () => {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <div
                   className={cn(
                     "bg-muted rounded-lg flex items-center justify-center",
@@ -410,10 +423,10 @@ export const TraceViewer: React.FC = () => {
           {/* Details Panel */}
           <div className="col-span-3">
             <Card className="mac-card h-[600px]">
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <CardTitle className="text-lg">Details</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <Tabs defaultValue="console" className="h-full">
                   <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="console">Console</TabsTrigger>

@@ -35,9 +35,7 @@
     "section": "dashboard",
     "url": "/dashboard",
     "screenshot": "/Users/matt/Documents/projects/siam/audit-results/dashboard-desktop.png",
-    "consoleErrors": [
-      "Failed to load resource: the server responded with a status of 404 ()"
-    ],
+    "consoleErrors": ["Failed to load resource: the server responded with a status of 404 ()"],
     "macCompliance": {
       "backgroundColor": "rgb(255, 255, 255)",
       "color": "rgb(0, 0, 0)",
@@ -59,9 +57,7 @@
     "section": "chat-interface",
     "url": "/",
     "screenshot": "/Users/matt/Documents/projects/siam/audit-results/chat-interface-desktop.png",
-    "consoleErrors": [
-      "Failed to load resource: the server responded with a status of 404 ()"
-    ],
+    "consoleErrors": ["Failed to load resource: the server responded with a status of 404 ()"],
     "macCompliance": {
       "backgroundColor": "rgb(10, 10, 10)",
       "color": "rgb(255, 255, 255)",

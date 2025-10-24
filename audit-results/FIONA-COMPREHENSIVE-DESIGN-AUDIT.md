@@ -1,4 +1,5 @@
 # FIONA'S COMPREHENSIVE MAC DESIGN SYSTEM AUDIT
+
 ## SIAM Application - Complete UI/UX & Compliance Review
 
 **Audit Date:** October 24, 2025
@@ -15,6 +16,7 @@
 The SIAM application shows **significant divergence from the MAC Design System standards**. While the design system infrastructure exists and is well-documented, the implementation suffers from widespread violations across 309+ instances.
 
 ### Critical Findings:
+
 - ✅ **Good:** MAC Design System CSS file is comprehensive and well-structured
 - ✅ **Good:** No typography weight violations detected in runtime (all within 100-400 range)
 - ✅ **Good:** No non-compliant animation timings found
@@ -31,6 +33,7 @@ The SIAM application shows **significant divergence from the MAC Design System s
 ### 1. Mobile Interface (375px) - Score: **6.5/10**
 
 **Screenshot Analysis:**
+
 - ✅ Dark theme correctly applied (#0a0a0a background visible)
 - ✅ Sidebar with conversation list functional
 - ✅ Professional logo and branding present
@@ -40,6 +43,7 @@ The SIAM application shows **significant divergence from the MAC Design System s
 - ❌ No visible use of MAC gradient overlays or ambient lighting
 
 **Specific Issues:**
+
 1. **Visual Hierarchy (6/10):** Basic hierarchy present but lacks MAC polish
 2. **Color & Contrast (7/10):** Dark theme working, contrast adequate
 3. **Typography (7/10):** Light weights used correctly
@@ -68,6 +72,7 @@ The SIAM application shows **significant divergence from the MAC Design System s
 **Severity:** CRITICAL - Breaks MAC Design System color consistency
 
 The most prevalent violation is the use of hardcoded hex colors instead of CSS variables. This creates:
+
 - Inconsistent theming across the application
 - Inability to adapt to different color schemes
 - Maintenance nightmare when updating brand colors
@@ -117,6 +122,7 @@ app/globals.css:
 MAC Design System provides pre-built classes that should be used consistently:
 
 **MAC Class Usage Analysis:**
+
 ```
 mac-professional:     0 instances ❌ NEVER USED
 mac-display-text:     0 instances ❌ NEVER USED
@@ -189,14 +195,12 @@ width: 250px          → Should be: 256px (32 × 8)
 ```
 
 **Recommended Spacing Scale (8px grid):**
+
 ```css
---spacing-xs:  4px   (0.25rem)  /* Half unit - use sparingly */
---spacing-sm:  8px   (0.5rem)   /* Base unit */
---spacing-md:  16px  (1rem)     /* Standard spacing */
---spacing-lg:  24px  (1.5rem)   /* Large spacing */
---spacing-xl:  32px  (2rem)     /* Extra large spacing */
---spacing-2xl: 48px  (3rem)     /* Section spacing */
---spacing-3xl: 64px  (4rem)     /* Page spacing */
+--spacing-xs: 4px (0.25rem) /* Half unit - use sparingly */ --spacing-sm: 8px (0.5rem)
+  /* Base unit */ --spacing-md: 16px (1rem) /* Standard spacing */ --spacing-lg: 24px (1.5rem)
+  /* Large spacing */ --spacing-xl: 32px (2rem) /* Extra large spacing */ --spacing-2xl: 48px (3rem)
+  /* Section spacing */ --spacing-3xl: 64px (4rem) /* Page spacing */;
 ```
 
 ### 4. 🔤 TYPOGRAPHY WEIGHTS (13 violations) - **MEDIUM PRIORITY**
@@ -206,6 +210,7 @@ width: 250px          → Should be: 256px (32 × 8)
 Good news: No typography weight violations found in runtime UI components!
 
 Violations found in:
+
 - **src/services/errorLogger.ts:** Uses `font-weight: bold` (should be 400)
 - **src/services/motiff-mcp-bridge.ts:** Uses `font-weight: 600` (should be 400)
 - **src/styles/cinematic-ui.css:** Uses font-weight 500-600 (legacy file)
@@ -227,6 +232,7 @@ All animations found are using MAC-compliant timings (150-300ms range). Excellen
 ### Errors Detected: **1 Critical**
 
 **1. AOMA Health Endpoint Failure (CRITICAL)**
+
 ```
 Error: Failed to load resource: the server responded with a status of 503 (Service Unavailable)
 URL: http://localhost:3000/api/aoma/health
@@ -238,17 +244,21 @@ URL: http://localhost:3000/api/aoma/health
 ### Warnings Detected: **4 Non-Critical**
 
 **1. Betabase Logo Preload Warning (3 instances)**
+
 ```
 Warning: The resource http://localhost:3000/betabase-logo.webp was preloaded using link preload
 but not used within a few seconds from the window's load event.
 ```
+
 **Impact:** Performance - unused preload
 **Fix:** Either use the logo immediately or remove preload tag
 
 **2. Multiple GoTrueClient Instances**
+
 ```
 Warning: Multiple GoTrueClient instances detected in the same browser context.
 ```
+
 **Impact:** Potential auth inconsistency
 **Fix:** Ensure single Supabase client instance
 
@@ -269,7 +279,7 @@ Warning: Multiple GoTrueClient instances detected in the same browser context.
 9. **src/components/ui/EnhancedCurateTab.tsx** - Missing MAC classes
 10. **src/components/ui/AOMAKnowledgePanel.tsx** - Missing MAC classes
 
-*(Full list of 309 violations available in mac-violations-detailed.json)*
+_(Full list of 309 violations available in mac-violations-detailed.json)_
 
 ---
 
@@ -339,6 +349,7 @@ Warning: Multiple GoTrueClient instances detected in the same browser context.
 ### Example 1: Fixing Hardcoded Colors in App.css
 
 **Before (WRONG):**
+
 ```css
 /* src/App.css */
 .status-indicator-info {
@@ -359,6 +370,7 @@ Warning: Multiple GoTrueClient instances detected in the same browser context.
 ```
 
 **After (CORRECT):**
+
 ```css
 /* src/App.css */
 .status-indicator-info {
@@ -381,18 +393,16 @@ Warning: Multiple GoTrueClient instances detected in the same browser context.
 ### Example 2: Adding MAC Classes to Buttons
 
 **Before (WRONG):**
+
 ```tsx
 // src/components/ai/chat-input.tsx
-<Button
-  type="submit"
-  variant="default"
-  disabled={isLoading}
->
+<Button type="submit" variant="default" disabled={isLoading}>
   Send Message
 </Button>
 ```
 
 **After (CORRECT):**
+
 ```tsx
 // src/components/ai/chat-input.tsx
 <Button
@@ -408,6 +418,7 @@ Warning: Multiple GoTrueClient instances detected in the same browser context.
 ### Example 3: Fixing Spacing to 8px Grid
 
 **Before (WRONG):**
+
 ```tsx
 <div className="p-3 gap-2">
   <div className="mb-5">
@@ -417,10 +428,15 @@ Warning: Multiple GoTrueClient instances detected in the same browser context.
 ```
 
 **After (CORRECT):**
+
 ```tsx
-<div className="p-4 gap-2">  {/* 16px padding (2 × 8px) */}
-  <div className="mb-6">      {/* 24px margin (3 × 8px) */}
-    <Input className="mac-input h-[40px] w-[256px]" />  {/* 40px = 5 × 8, 256px = 32 × 8 */}
+<div className="p-4 gap-2">
+  {" "}
+  {/* 16px padding (2 × 8px) */}
+  <div className="mb-6">
+    {" "}
+    {/* 24px margin (3 × 8px) */}
+    <Input className="mac-input h-[40px] w-[256px]" /> {/* 40px = 5 × 8, 256px = 32 × 8 */}
   </div>
 </div>
 ```
@@ -428,6 +444,7 @@ Warning: Multiple GoTrueClient instances detected in the same browser context.
 ### Example 4: Using MAC Typography Classes
 
 **Before (WRONG):**
+
 ```tsx
 <div>
   <h1 className="text-3xl font-light">Welcome to SIAM</h1>
@@ -437,6 +454,7 @@ Warning: Multiple GoTrueClient instances detected in the same browser context.
 ```
 
 **After (CORRECT):**
+
 ```tsx
 <div className="mac-professional">
   <h1 className="mac-display-text">Welcome to SIAM</h1>
@@ -452,6 +470,7 @@ Warning: Multiple GoTrueClient instances detected in the same browser context.
 ### Current State:
 
 **✅ STRENGTHS:**
+
 1. **Comprehensive MAC Design System CSS** - Well-structured with clear variables
 2. **Complete color token system** - All necessary MAC variables defined
 3. **Typography scale** - Properly defined with correct weight ranges (100-400)
@@ -460,6 +479,7 @@ Warning: Multiple GoTrueClient instances detected in the same browser context.
 6. **Dark theme foundation** - Proper dark background colors defined
 
 **❌ WEAKNESSES:**
+
 1. **Low adoption rate** - MAC classes barely used in actual components
 2. **Multiple conflicting CSS files** - cinematic-ui.css, jarvis-theme.css creating conflicts
 3. **Hardcoded values everywhere** - Components not using the design system
@@ -488,15 +508,21 @@ To prevent future violations, implement these checks:
 // .eslintrc.js
 module.exports = {
   rules: {
-    'no-hardcoded-colors': ['error', {
-      'allowedProperties': [],
-      'message': 'Use MAC CSS variables instead of hardcoded colors'
-    }],
-    'mac-class-required': ['error', {
-      'components': ['Button', 'Input', 'Card'],
-      'message': 'Components must include MAC classes'
-    }]
-  }
+    "no-hardcoded-colors": [
+      "error",
+      {
+        allowedProperties: [],
+        message: "Use MAC CSS variables instead of hardcoded colors",
+      },
+    ],
+    "mac-class-required": [
+      "error",
+      {
+        components: ["Button", "Input", "Card"],
+        message: "Components must include MAC classes",
+      },
+    ],
+  },
 };
 ```
 
@@ -506,14 +532,14 @@ module.exports = {
 // .stylelintrc.js
 module.exports = {
   rules: {
-    'color-no-hex': true,
-    'declaration-property-value-disallowed-list': {
-      '/color$/': ['/^#/', '/^rgb/'],
-      '/background/': ['/^#/', '/^rgb/']
+    "color-no-hex": true,
+    "declaration-property-value-disallowed-list": {
+      "/color$/": ["/^#/", "/^rgb/"],
+      "/background/": ["/^#/", "/^rgb/"],
     },
-    'function-disallowed-list': ['rgb', 'rgba'],
-    'custom-property-pattern': '^mac-.*'
-  }
+    "function-disallowed-list": ["rgb", "rgba"],
+    "custom-property-pattern": "^mac-.*",
+  },
 };
 ```
 
@@ -546,30 +572,28 @@ Recommend implementing TestSprite or Percy for visual regression:
 
 ```typescript
 // tests/visual/mac-compliance.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('MAC Design System Visual Compliance', () => {
-  test('buttons use MAC styling', async ({ page }) => {
-    await page.goto('/');
+test.describe("MAC Design System Visual Compliance", () => {
+  test("buttons use MAC styling", async ({ page }) => {
+    await page.goto("/");
 
     // Check all buttons have MAC classes
-    const buttons = await page.locator('button').all();
+    const buttons = await page.locator("button").all();
     for (const button of buttons) {
-      const classes = await button.getAttribute('class');
+      const classes = await button.getAttribute("class");
       expect(classes).toMatch(/mac-button/);
     }
   });
 
-  test('colors match MAC palette', async ({ page }) => {
-    await page.goto('/');
+  test("colors match MAC palette", async ({ page }) => {
+    await page.goto("/");
 
-    const body = page.locator('body');
-    const bgColor = await body.evaluate(el =>
-      window.getComputedStyle(el).backgroundColor
-    );
+    const body = page.locator("body");
+    const bgColor = await body.evaluate((el) => window.getComputedStyle(el).backgroundColor);
 
     // Should match --mac-surface-bg (#0a0a0a = rgb(10, 10, 10))
-    expect(bgColor).toBe('rgb(10, 10, 10)');
+    expect(bgColor).toBe("rgb(10, 10, 10)");
   });
 });
 ```
@@ -579,6 +603,7 @@ test.describe('MAC Design System Visual Compliance', () => {
 ## MIGRATION ROADMAP
 
 ### Phase 1: Critical Fixes (Week 1)
+
 - [ ] Replace all hardcoded colors in src/App.css with MAC variables
 - [ ] Replace all hardcoded colors in src/index.css with MAC variables
 - [ ] Replace all hardcoded colors in app/globals.css with MAC variables
@@ -586,6 +611,7 @@ test.describe('MAC Design System Visual Compliance', () => {
 - [ ] Fix dashboard routing 404 error
 
 ### Phase 2: High Priority (Week 2-3)
+
 - [ ] Add MAC classes to all Button components
 - [ ] Add MAC classes to all Input components
 - [ ] Add MAC classes to all Card components
@@ -594,6 +620,7 @@ test.describe('MAC Design System Visual Compliance', () => {
 - [ ] Standardize spacing to 8px grid in AI components
 
 ### Phase 3: Cleanup (Week 4)
+
 - [ ] Deprecate or merge cinematic-ui.css into MAC system
 - [ ] Deprecate or merge jarvis-theme.css into MAC system
 - [ ] Deprecate or merge motiff-glassmorphism.css into MAC system
@@ -602,6 +629,7 @@ test.describe('MAC Design System Visual Compliance', () => {
 - [ ] Consolidate Supabase client instances
 
 ### Phase 4: Enhancement (Ongoing)
+
 - [ ] Increase adoption of mac-professional, mac-heading, mac-title classes
 - [ ] Add more glassmorphism effects (mac-glass)
 - [ ] Implement MAC floating orb animations
@@ -616,18 +644,22 @@ test.describe('MAC Design System Visual Compliance', () => {
 ### WCAG 2.1 AA Findings:
 
 **Keyboard Navigation:**
+
 - ⚠️ Not all interactive elements have visible focus indicators
 - ⚠️ Tab order not optimized in complex components
 
 **Color Contrast:**
+
 - ✅ Most text meets 4.5:1 contrast ratio
 - ⚠️ Some secondary text may fall below threshold
 
 **ARIA Labels:**
+
 - ❌ Many buttons missing aria-labels
 - ❌ Form inputs missing proper labels in some cases
 
 **Recommendations:**
+
 1. Add focus-visible styles to all interactive elements
 2. Audit all text for AAcontrast compliance
 3. Add comprehensive aria-labels to all buttons
@@ -648,6 +680,7 @@ TTFB (Time to First Byte): 1287ms - ⚠️ NEEDS IMPROVEMENT
 ```
 
 **Recommendations:**
+
 1. Optimize Next.js build configuration
 2. Implement better code splitting
 3. Reduce JavaScript bundle size
@@ -698,12 +731,14 @@ TTFB (Time to First Byte): 1287ms - ⚠️ NEEDS IMPROVEMENT
 The SIAM application has a **solid foundation** with the MAC Design System properly defined, but suffers from **poor adoption** and **widespread violations**. The good news: **most violations are mechanical fixes** that can be addressed systematically.
 
 **The Path Forward:**
+
 1. Fix critical violations (colors) in Week 1
 2. Add MAC classes to all components in Weeks 2-3
 3. Clean up legacy code in Week 4
 4. Implement enforcement to prevent regression
 
 With focused effort, SIAM can achieve **full MAC Design System compliance within 4 weeks**, resulting in:
+
 - ✨ Consistent, professional visual design
 - 🚀 Easier maintenance and updates
 - 📱 Better responsive behavior
@@ -720,16 +755,20 @@ With focused effort, SIAM can achieve **full MAC Design System compliance within
 ## APPENDICES
 
 ### Appendix A: Complete Violation List
+
 See: `mac-violations-detailed.json` (309 violations catalogued)
 
 ### Appendix B: Visual Screenshots
+
 - Desktop: `dashboard-desktop.png` (404 error - needs fixing)
 - Mobile: `responsive-mobile.png` (shows actual interface)
 
 ### Appendix C: Console Logs
+
 See: `console-messages.json` (1 error, 4 warnings documented)
 
 ### Appendix D: MAC Class Usage Statistics
+
 See: `mac-class-usage.json` (shows low adoption rates)
 
 ---
@@ -740,6 +779,6 @@ See: `mac-class-usage.json` (shows low adoption rates)
 
 ---
 
-*"Design systems are not just about pretty pixels - they're about creating a maintainable, scalable, professional application that serves real user needs. Let's get SIAM to that level."*
+_"Design systems are not just about pretty pixels - they're about creating a maintainable, scalable, professional application that serves real user needs. Let's get SIAM to that level."_
 
 — Fiona

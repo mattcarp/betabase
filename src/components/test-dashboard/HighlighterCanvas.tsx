@@ -14,11 +14,11 @@ interface HighlighterCanvasProps {
 }
 
 const COLORS = [
-  { name: "Yellow", value: "rgba(255, 255, 0, 0.5)" },
-  { name: "Green", value: "rgba(0, 255, 0, 0.5)" },
-  { name: "Blue", value: "rgba(0, 150, 255, 0.5)" },
-  { name: "Red", value: "rgba(255, 0, 0, 0.5)" },
-  { name: "Purple", value: "rgba(200, 0, 255, 0.5)" },
+  { name: "Yellow", value: "var(--mac-highlight-yellow)" },
+  { name: "Green", value: "var(--mac-highlight-green)" },
+  { name: "Blue", value: "var(--mac-highlight-blue)" },
+  { name: "Red", value: "var(--mac-highlight-red)" },
+  { name: "Purple", value: "var(--mac-highlight-purple)" },
 ];
 
 const WIDTHS = [3, 5, 8, 12];

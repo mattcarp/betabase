@@ -396,17 +396,24 @@ export const SessionPlaybackViewer: React.FC = () => {
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
+                className="mac-button mac-button-outline"
                 size="icon"
                 onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
                 disabled={currentStep === 0}
               >
                 <SkipBack className="h-4 w-4" />
               </Button>
-              <Button variant="default" size="icon" onClick={handlePlayPause}>
+              <Button
+                variant="default"
+                className="mac-button mac-button-primary"
+                size="icon"
+                onClick={handlePlayPause}
+              >
                 {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
               </Button>
               <Button
                 variant="outline"
+                className="mac-button mac-button-outline"
                 size="icon"
                 onClick={() => setCurrentStep(Math.min(sessionSteps.length - 1, currentStep + 1))}
                 disabled={currentStep >= sessionSteps.length - 1}
@@ -433,12 +440,18 @@ export const SessionPlaybackViewer: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={toggleFullscreen}>
+              <Button
+                variant="outline"
+                className="mac-button mac-button-outline"
+                size="sm"
+                onClick={toggleFullscreen}
+              >
                 <Maximize2 className="h-4 w-4 mr-2" />
                 Fullscreen
               </Button>
               <Button
                 variant="outline"
+                className="mac-button mac-button-outline"
                 size="sm"
                 onClick={handleExportVideo}
                 disabled={isExporting}
@@ -474,8 +487,8 @@ export const SessionPlaybackViewer: React.FC = () => {
       <div className="grid grid-cols-12 gap-6">
         {/* Timeline with Annotations */}
         <div className="col-span-3">
-          <Card className="h-[700px]">
-            <CardHeader>
+          <Card className="mac-card h-[700px]">
+            <CardHeader className="mac-card">
               <CardTitle className="text-lg flex items-center gap-2 mac-title">
                 <Clock className="h-5 w-5" />
                 Timeline
@@ -562,8 +575,8 @@ export const SessionPlaybackViewer: React.FC = () => {
 
         {/* Viewport with Interaction Overlays */}
         <div className="col-span-6">
-          <Card className="h-[700px]">
-            <CardHeader>
+          <Card className="mac-card h-[700px]">
+            <CardHeader className="mac-card">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg mac-title">Browser Viewport</CardTitle>
                 <div className="flex gap-2">
@@ -584,7 +597,7 @@ export const SessionPlaybackViewer: React.FC = () => {
                 </div>
               </div>
             </CardHeader>
-            <CardContent ref={viewportRef}>
+            <CardContent ref={viewportRef} className="mac-card">
               <div
                 className={cn(
                   "bg-muted rounded-lg flex items-center justify-center relative overflow-hidden",
@@ -698,11 +711,11 @@ export const SessionPlaybackViewer: React.FC = () => {
 
         {/* Details Panel */}
         <div className="col-span-3">
-          <Card className="h-[700px]">
-            <CardHeader>
+          <Card className="mac-card h-[700px]">
+            <CardHeader className="mac-card">
               <CardTitle className="text-lg mac-title">Interaction Details</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <Tabs defaultValue="interactions" className="h-full">
                 <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="interactions">Interactions</TabsTrigger>
@@ -716,7 +729,7 @@ export const SessionPlaybackViewer: React.FC = () => {
                     sessionSteps[currentStep].interactions!.length > 0 ? (
                       <div className="space-y-2">
                         {sessionSteps[currentStep].interactions!.map((interaction) => (
-                          <Card key={interaction.id}>
+                          <Card key={interaction.id} className="mac-card">
                             <CardContent className="p-3">
                               <div className="flex items-start gap-2">
                                 {interaction.type === "click" && (

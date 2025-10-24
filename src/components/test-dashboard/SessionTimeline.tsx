@@ -296,6 +296,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
             <Button
               className="mac-button mac-button-outline"
               variant="ghost"
+              className="mac-button mac-button-outline"
               size="icon"
               onClick={() => setSearchQuery("")}
               className="absolute right-1 top-1 h-7 w-7"
@@ -310,6 +311,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
           <Button
             className="mac-button mac-button-outline"
             variant="ghost"
+            className="mac-button mac-button-outline"
             size="sm"
             onClick={() => setShowFilters(!showFilters)}
             className="h-8 text-xs gap-2"

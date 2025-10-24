@@ -10,67 +10,67 @@ Generated: 10/24/2025, 11:05:58 AM
 - **Hardcoded Spacing**: 60
 - **Non-MAC Animations**: 0
 
-## 🎨 Hardcoded Colors (should use --mac-* variables)
+## 🎨 Hardcoded Colors (should use --mac-\* variables)
 
 - **src/index.css:88** - `background: rgba(20, 20, 20, 0.7)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/services/errorLogger.ts:156** - `color: #fbbf24`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/services/errorLogger.ts:157** - `color: #f97316`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/services/errorLogger.ts:158** - `color: #ef4444`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/services/errorLogger.ts:159** - `color: #dc2626`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/services/errorLogger.ts:159** - `background: #fef2f2`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:263** - `background: rgba(255, 255, 255, 0.15)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:314** - `border-color: rgba(14, 165, 233, 0.5)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:357** - `background: rgba(23, 23, 23, 0.8)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:370** - `border-color: rgba(14, 165, 233, 0.4)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:506** - `border-color: rgba(14, 165, 233, 0.5)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:531** - `background: rgba(14, 165, 233, 0.2)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:532** - `border-color: rgba(14, 165, 233, 0.5)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:537** - `background: rgba(16, 185, 129, 0.2)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:538** - `border-color: rgba(16, 185, 129, 0.5)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:539** - `color: #34d399`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:655** - `background: rgba(255, 255, 255, 0.05)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:660** - `background: rgba(14, 165, 233, 0.3)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/cinematic-ui.css:665** - `background: rgba(14, 165, 233, 0.5)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 - **src/styles/glassmorphism-motiff.css:14** - `border: rgba(255, 255, 255, 0.1)`
-  - Use --mac-* CSS variables
+  - Use --mac-\* CSS variables
 
 ... and 77 more
 
@@ -443,4 +443,3 @@ Generated: 10/24/2025, 11:05:58 AM
 
 - **app/test-mac-components/page.tsx** - Input without mac-input class
   - Add mac-input class
-
