@@ -136,7 +136,11 @@ export const TestAnalytics: React.FC = () => {
           </Select>
         </div>
 
-        <Button variant="outline">
+        <Button
+          className="mac-button mac-button-outline"
+          variant="outline"
+          className="mac-button mac-button-outline"
+        >
           <Download className="h-4 w-4 mr-2" />
           Export Report
         </Button>
@@ -144,91 +148,91 @@ export const TestAnalytics: React.FC = () => {
 
       {/* Key Metrics Cards */}
       <div className="grid grid-cols-6 gap-4">
-        <Card>
-          <CardHeader className="pb-3">
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Clock className="h-4 w-4" />
               Avg Execution
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-bold">{keyMetrics.avgExecutionTime}</div>
-            <Badge className="bg-green-500/20 text-green-500 mt-1">
-              <TrendingDown className="h-3 w-3 mr-1" />
+            <Badge className="bg-green-500/20 text-green-500 mt-2">
+              <TrendingDown className="h-3 w-3 mr-2" />
               -15%
             </Badge>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Target className="h-4 w-4" />
               Pass Rate
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-bold">{keyMetrics.avgPassRate}</div>
-            <Badge className="bg-green-500/20 text-green-500 mt-1">
-              <TrendingUp className="h-3 w-3 mr-1" />
+            <Badge className="bg-green-500/20 text-green-500 mt-2">
+              <TrendingUp className="h-3 w-3 mr-2" />
               +2.3%
             </Badge>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Activity className="h-4 w-4" />
               Tests/Day
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-bold">{keyMetrics.testsPerDay}</div>
-            <Badge className="bg-blue-500/20 text-blue-500 mt-1">Stable</Badge>
+            <Badge className="bg-blue-500/20 text-blue-500 mt-2">Stable</Badge>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Zap className="h-4 w-4" />
               MTTR
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-bold">{keyMetrics.mttr}</div>
-            <Badge className="bg-green-500/20 text-green-500 mt-1">
-              <TrendingDown className="h-3 w-3 mr-1" />
+            <Badge className="bg-green-500/20 text-green-500 mt-2">
+              <TrendingDown className="h-3 w-3 mr-2" />
               -0.5h
             </Badge>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Award className="h-4 w-4" />
               Efficiency
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-bold">{keyMetrics.testEfficiency}</div>
-            <Badge className="bg-yellow-500/20 text-yellow-500 mt-1">Good</Badge>
+            <Badge className="bg-yellow-500/20 text-yellow-500 mt-2">Good</Badge>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Package className="h-4 w-4" />
               Automation
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-bold">{keyMetrics.automationRate}</div>
-            <Badge className="bg-green-500/20 text-green-500 mt-1">
-              <TrendingUp className="h-3 w-3 mr-1" />
+            <Badge className="bg-green-500/20 text-green-500 mt-2">
+              <TrendingUp className="h-3 w-3 mr-2" />
               +5%
             </Badge>
           </CardContent>
@@ -238,11 +242,11 @@ export const TestAnalytics: React.FC = () => {
       <div className="grid grid-cols-12 gap-6">
         {/* Test Execution Trend */}
         <div className="col-span-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Test Execution Trend</CardTitle>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Test Execution Trend</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={executionTrend}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
@@ -282,11 +286,11 @@ export const TestAnalytics: React.FC = () => {
 
         {/* Test Categories */}
         <div className="col-span-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Test Distribution</CardTitle>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Test Distribution</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -311,11 +315,11 @@ export const TestAnalytics: React.FC = () => {
 
         {/* Duration Distribution */}
         <div className="col-span-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Test Duration Distribution</CardTitle>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Test Duration Distribution</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={durationDistribution}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
@@ -331,11 +335,11 @@ export const TestAnalytics: React.FC = () => {
 
         {/* Team Performance Radar */}
         <div className="col-span-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Team Performance Metrics</CardTitle>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Team Performance Metrics</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={250}>
                 <RadarChart data={teamMetrics}>
                   <PolarGrid className="stroke-muted" />
@@ -357,11 +361,11 @@ export const TestAnalytics: React.FC = () => {
 
         {/* Suite Performance Table */}
         <div className="col-span-12">
-          <Card>
-            <CardHeader>
-              <CardTitle>Test Suite Performance</CardTitle>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Test Suite Performance</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <div className="space-y-4">
                 {suitePerformance.map((suite) => (
                   <div
@@ -370,7 +374,7 @@ export const TestAnalytics: React.FC = () => {
                   >
                     <div className="flex items-center gap-4">
                       <div>
-                        <p className="font-medium">{suite.suite}</p>
+                        <p className="mac-body font-medium">{suite.suite}</p>
                         <p className="text-sm text-muted-foreground">{suite.tests} tests</p>
                       </div>
                     </div>
@@ -378,7 +382,7 @@ export const TestAnalytics: React.FC = () => {
                     <div className="flex items-center gap-8">
                       <div className="text-center">
                         <p className="text-sm text-muted-foreground">Avg Duration</p>
-                        <p className="font-medium">{suite.avgDuration}s</p>
+                        <p className="mac-body font-medium">{suite.avgDuration}s</p>
                       </div>
 
                       <div className="text-center">

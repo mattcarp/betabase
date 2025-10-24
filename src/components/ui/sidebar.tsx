@@ -254,7 +254,7 @@ const SidebarInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"in
         ref={ref}
         data-sidebar="input"
         className={cn(
-          "h-8 w-full rounded-md bg-background px-3 text-sm shadow-sm",
+          "h-8 w-full rounded-md bg-background px-4 text-sm shadow-sm",
           "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
           className
         )}
@@ -347,7 +347,7 @@ const SidebarGroupLabel = React.forwardRef<
       data-sidebar="group-label"
       className={cn(
         "text-xs font-medium text-sidebar-foreground/50",
-        "px-2 py-1.5",
+        "px-2 py-2.5",
         "group-data-[state=collapsed]:hidden",
         className
       )}
@@ -418,7 +418,7 @@ SidebarMenuItem.displayName = "SidebarMenuItem";
 
 const sidebarMenuButtonVariants = cva(
   cn(
-    "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none",
+    "flex w-full items-center gap-2 rounded-md px-2 py-2.5 text-sm outline-none",
     "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
     "focus-visible:ring-2 focus-visible:ring-sidebar-ring",
     "aria-[current=page]:bg-sidebar-accent aria-[current=page]:font-medium",
@@ -546,7 +546,7 @@ const SidebarMenuSubButton = React.forwardRef<
       data-active={isActive}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "flex items-center gap-2 rounded-md px-2 py-1 text-xs",
+        "flex items-center gap-2 rounded-md px-2 py-2 text-xs",
         "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
         "aria-[current=page]:bg-sidebar-accent aria-[current=page]:font-medium",
         className

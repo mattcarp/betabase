@@ -1,0 +1,287 @@
+name: PR Merge → Production Deploy
+
+# Triggers when a pull request is merged to main
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+env:
+  PRODUCTION_URL: "https://iamsiam.ai"
+
+jobs:
+  # ============================================================================
+  # DETECT PR MERGE AND TRIGGER DEPLOYMENT
+  # ============================================================================
+
+  pr-merge-deploy:
+    name: Deploy on PR Merge
+    runs-on: ubuntu-latest
+    # Only run if PR was actually merged (not just closed)
+    if: github.event.pull_request.merged == true
+
+    steps:
+      - name: PR Merge Detected
+        run: |
+          echo "=========================================="
+          echo "🎯 PULL REQUEST MERGED TO MAIN"
+          echo "=========================================="
+          echo ""
+          echo "PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
+          echo "Author: ${{ github.event.pull_request.user.login }}"
+          echo "Merged by: ${{ github.actor }}"
+          echo "Branch: ${{ github.event.pull_request.head.ref }} → main"
+          echo "Commit: ${{ github.sha }}"
+          echo ""
+          echo "🚀 Triggering production deployment..."
+          echo "=========================================="
+
+      - name: Trigger Render Deploy Hook
+        if: vars.RENDER_DEPLOY_HOOK_URL != ''
+        run: |
+          echo "Triggering Render deploy hook..."
+
+          response=$(curl -s -w "\n%{http_code}" -X POST "${{ vars.RENDER_DEPLOY_HOOK_URL }}")
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n-1)
+
+          if [ "$http_code" = "200" ] || [ "$http_code" = "201" ]; then
+            echo "✅ Deploy hook triggered successfully!"
+            echo "Response: $body"
+          else
+            echo "⚠️  Deploy hook returned HTTP $http_code"
+            echo "Response: $body"
+            echo "Note: Render auto-deploy will still occur from Git push"
+          fi
+        continue-on-error: true
+
+      - name: Wait for auto-deploy
+        run: |
+          echo ""
+          echo "=========================================="
+          echo "⏳ WAITING FOR RENDER DEPLOYMENT"
+          echo "=========================================="
+          echo ""
+          echo "Render will auto-deploy from the main branch."
+          echo "This typically takes 2-5 minutes..."
+          echo ""
+          echo "Monitor deployment at:"
+          echo "https://dashboard.render.com/web/srv-YOUR-SERVICE-ID"
+          echo ""
+
+      - name: Wait for deployment to start
+        run: |
+          echo "Waiting 30 seconds for deployment to initiate..."
+          sleep 30
+
+      - name: Monitor deployment progress
+        run: |
+          echo "=========================================="
+          echo "🔍 DEPLOYMENT HEALTH MONITORING"
+          echo "=========================================="
+          echo ""
+
+          MAX_ATTEMPTS=40
+          RETRY_DELAY=15
+          STABLE_CHECKS=3
+          stable_count=0
+
+          for i in $(seq 1 $MAX_ATTEMPTS); do
+            echo "Check $i of $MAX_ATTEMPTS ($(date +%H:%M:%S))..."
+
+            health_code=$(curl -s -o /dev/null -w "%{http_code}" "${{ env.PRODUCTION_URL }}/api/health" 2>/dev/null || echo "000")
+            main_code=$(curl -s -o /dev/null -w "%{http_code}" "${{ env.PRODUCTION_URL }}" 2>/dev/null || echo "000")
+
+            echo "  Health: $health_code | Main: $main_code"
+
+            if [ "$health_code" = "200" ] && [ "$main_code" = "200" ]; then
+              stable_count=$((stable_count + 1))
+              echo "  ✅ Healthy ($stable_count/$STABLE_CHECKS consecutive checks)"
+
+              if [ $stable_count -ge $STABLE_CHECKS ]; then
+                echo ""
+                echo "=========================================="
+                echo "✅ DEPLOYMENT VERIFIED STABLE"
+                echo "=========================================="
+                exit 0
+              fi
+            else
+              if [ $stable_count -gt 0 ]; then
+                echo "  ⚠️  Health check failed, resetting stability counter"
+              fi
+              stable_count=0
+            fi
+
+            if [ $i -lt $MAX_ATTEMPTS ]; then
+              echo "  ⏳ Next check in ${RETRY_DELAY}s..."
+              echo ""
+              sleep $RETRY_DELAY
+            fi
+          done
+
+          echo "=========================================="
+          echo "⚠️  DEPLOYMENT STATUS UNCLEAR"
+          echo "=========================================="
+          echo "Health checks did not stabilize after $MAX_ATTEMPTS attempts"
+          echo "This may indicate:"
+          echo "  - Deployment is still in progress"
+          echo "  - Deployment failed"
+          echo "  - Health endpoint issues"
+          echo ""
+          echo "Please verify manually at:"
+          echo "  - Production: ${{ env.PRODUCTION_URL }}"
+          echo "  - Render: https://dashboard.render.com"
+          exit 1
+
+      - name: Verify build timestamp
+        if: success()
+        run: |
+          echo ""
+          echo "=========================================="
+          echo "🕐 VERIFYING NEW BUILD"
+          echo "=========================================="
+          echo ""
+
+          # Fetch build info from the API
+          build_info=$(curl -s "${{ env.PRODUCTION_URL }}/api/build-info" || echo '{}')
+          echo "$build_info" | jq . || echo "$build_info"
+
+          # Extract timestamp
+          timestamp=$(echo "$build_info" | jq -r '.buildTime // .timestamp // "unknown"')
+          commit=$(echo "$build_info" | jq -r '.gitCommit // "unknown"')
+
+          echo ""
+          echo "Build timestamp: $timestamp"
+          echo "Git commit: $commit"
+          echo "Expected commit: ${{ github.sha }}"
+          echo ""
+
+          # Verify it's the right commit (first 7 chars)
+          short_sha="${{ github.sha }}"
+          short_sha="${short_sha:0:7}"
+
+          if echo "$commit" | grep -q "$short_sha"; then
+            echo "✅ Correct build deployed!"
+          else
+            echo "⚠️  Warning: Build commit doesn't match merge commit"
+            echo "This may indicate deployment is still propagating"
+          fi
+
+      - name: Comment on PR
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const success = '${{ job.status }}' === 'success';
+            const emoji = success ? '✅' : '⚠️';
+            const status = success ? 'DEPLOYED' : 'DEPLOYMENT STATUS UNCLEAR';
+
+            const comment = `## ${emoji} Production ${status}
+
+            ${success ?
+              '**Your changes are now live in production!** 🚀' :
+              '**Deployment status could not be verified.** Please check manually.'
+            }
+
+            ### Deployment Details
+            - **PR**: #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}
+            - **Merged by**: @${{ github.actor }}
+            - **Commit**: \`${{ github.sha }}\`
+            - **Production URL**: ${{ env.PRODUCTION_URL }}
+            - **Time**: ${new Date().toISOString()}
+
+            ${success ?
+              '### Verification\n- ✅ Health check passed\n- ✅ Application responding\n- ✅ Build timestamp updated' :
+              '### Action Required\n- ⚠️ Check [Render Dashboard](https://dashboard.render.com)\n- ⚠️ Verify [Production Site](${{ env.PRODUCTION_URL }})\n- ⚠️ Review deployment logs'
+            }
+
+            [View Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            `;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: comment
+            });
+
+      - name: Create deployment record
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              environment: 'production',
+              description: `PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}`,
+              auto_merge: false,
+              required_contexts: []
+            });
+
+      - name: Report deployment failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 Production Deployment Failed After PR Merge',
+              body: `## Deployment Failure
+
+              A production deployment was triggered by merging PR #${{ github.event.pull_request.number }}, but health checks failed.
+
+              ### Details
+              - **PR**: #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}
+              - **Merged by**: @${{ github.actor }}
+              - **Commit**: \`${{ github.sha }}\`
+              - **Workflow**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+              ### Immediate Actions Required
+              1. Check [Render Dashboard](https://dashboard.render.com) for deployment status
+              2. Review deployment logs for errors
+              3. Verify production site: ${{ env.PRODUCTION_URL }}
+              4. Consider rollback if site is down
+
+              ### Troubleshooting
+              - Check build logs in Render
+              - Verify environment variables
+              - Review recent commits for breaking changes
+              - Test health endpoint: ${{ env.PRODUCTION_URL }}/api/health
+
+              **Time**: ${new Date().toISOString()}
+              `,
+              labels: ['deployment', 'critical', 'P0', 'production'],
+              assignees: ['mattcarp']
+            });
+
+  # ============================================================================
+  # CLEANUP: Delete merged branch
+  # ============================================================================
+
+  cleanup-branch:
+    name: Cleanup Merged Branch
+    runs-on: ubuntu-latest
+    needs: pr-merge-deploy
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'claude/')
+
+    steps:
+      - name: Delete merged claude/ branch
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branchName = '${{ github.event.pull_request.head.ref }}';
+
+            try {
+              await github.rest.git.deleteRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `heads/${branchName}`
+              });
+
+              console.log(`✅ Deleted branch: ${branchName}`);
+            } catch (error) {
+              console.log(`ℹ️  Branch may already be deleted: ${error.message}`);
+            }

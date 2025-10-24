@@ -72,11 +72,12 @@ export const AnnotationToolbar: React.FC<AnnotationToolbarProps> = ({
   return (
     <Card
       className={cn(
+        "mac-card",
         "fixed top-20 right-6 z-50 shadow-lg border-border bg-background/95 backdrop-blur-sm",
         className
       )}
     >
-      <div className="p-3 space-y-3">
+      <div className="p-4 space-y-3">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -91,7 +92,7 @@ export const AnnotationToolbar: React.FC<AnnotationToolbarProps> = ({
             <Button
               variant="ghost"
               size="icon"
-              className="h-6 w-6"
+              className="h-6 w-6 mac-button mac-button-outline"
               onClick={() => setCurrentTool(null)}
             >
               <X className="h-3 w-3" />
@@ -108,6 +109,7 @@ export const AnnotationToolbar: React.FC<AnnotationToolbarProps> = ({
               key={tool.type}
               variant={currentTool === tool.type ? "default" : "outline"}
               className={cn(
+                "mac-button mac-button-primary",
                 "w-full justify-start gap-2 transition-all",
                 currentTool === tool.type && "ring-2 ring-primary"
               )}
@@ -126,21 +128,26 @@ export const AnnotationToolbar: React.FC<AnnotationToolbarProps> = ({
           <Button
             variant="outline"
             size="sm"
-            className="w-full gap-2 text-xs"
+            className="w-full gap-2 text-xs mac-button mac-button-outline"
             onClick={onExport}
             disabled={annotations.length === 0}
           >
             <Download className="h-3 w-3" />
             Export
           </Button>
-          <Button variant="outline" size="sm" className="w-full gap-2 text-xs" onClick={onImport}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full gap-2 text-xs mac-button mac-button-outline"
+            onClick={onImport}
+          >
             <Upload className="h-3 w-3" />
             Import
           </Button>
           <Button
             variant="destructive"
             size="sm"
-            className="w-full gap-2 text-xs"
+            className="w-full gap-2 text-xs mac-button mac-button-primary"
             onClick={handleClearAll}
             disabled={annotations.length === 0}
           >
@@ -151,7 +158,7 @@ export const AnnotationToolbar: React.FC<AnnotationToolbarProps> = ({
 
         {/* Current Tool Info */}
         {currentTool && (
-          <div className="mt-3 p-2 rounded-md bg-primary/10 border border-primary/20">
+          <div className="mt-4 p-2 rounded-md bg-primary/10 border border-primary/20">
             <p className="text-xs text-muted-foreground">
               {currentTool === "highlight" && "Click and drag to draw highlights on the screen"}
               {currentTool === "note" && "Click anywhere to add a sticky note"}

@@ -26,13 +26,13 @@ export async function GET(request: NextRequest) {
 
   try {
     // Create WebSocket connection (Next.js 13+ approach)
-    // const _webSocketResponse = new Response(null, {
-    //   status: 101,
-    //   headers: {
-    //     Upgrade: "websocket",
-    //     Connection: "Upgrade",
-    //   },
-    // });
+    return new Response(null, {
+      status: 101,
+      headers: {
+        Upgrade: "websocket",
+        Connection: "Upgrade",
+      },
+    });
 
     // In a real implementation, you'd handle WebSocket protocol here
     // For now, we'll simulate the WebSocket functionality with Server-Sent Events
@@ -113,9 +113,9 @@ export async function POST(request: NextRequest) {
               const lines = data
                 .toString()
                 .split("\n")
-                .filter((line: any) => line.trim());
+                .filter((line: string) => line.trim());
 
-              lines.forEach((line: any) => {
+              lines.forEach((line: string) => {
                 try {
                   // Parse JSON events from our custom reporter
                   const event = JSON.parse(line);

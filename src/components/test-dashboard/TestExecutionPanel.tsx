@@ -273,8 +273,8 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
     <div className="grid grid-cols-12 gap-6 h-full">
       {/* Test Suites List */}
       <div className="col-span-4 space-y-4">
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <CardTitle className="text-lg flex items-center gap-2">
               <Terminal className="h-5 w-5" />
               Test Suites
@@ -287,13 +287,14 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                   <Card
                     key={suite.id}
                     className={cn(
+                      "mac-card",
                       "cursor-pointer transition-all hover:shadow-md",
                       selectedSuite === suite.id && "ring-2 ring-primary",
                       getStatusColor(suite.status)
                     )}
                     onClick={() => setSelectedSuite(suite.id)}
                   >
-                    <CardContent className="p-3">
+                    <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           {getStatusIcon(suite.status)}
@@ -319,19 +320,22 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
 
       {/* Test Details */}
       <div className="col-span-5 space-y-4">
-        <Card className="h-full">
-          <CardHeader>
+        <Card className="mac-card h-full">
+          <CardHeader className="mac-card">
             <CardTitle className="text-lg">Test Execution Details</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             {selectedSuite ? (
               <ScrollArea className="h-[450px]">
                 <div className="space-y-2">
                   {testSuites
                     .find((s) => s.id === selectedSuite)
                     ?.tests.map((test) => (
-                      <Card key={test.id} className={cn("border", getStatusColor(test.status))}>
-                        <CardContent className="p-3">
+                      <Card
+                        key={test.id}
+                        className={cn("mac-card", "border", getStatusColor(test.status))}
+                      >
+                        <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2 flex-1">
                               {getStatusIcon(test.status)}
@@ -364,8 +368,8 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
 
       {/* System Resources */}
       <div className="col-span-3 space-y-4">
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <CardTitle className="text-lg">System Resources</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -410,8 +414,8 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <CardTitle className="text-lg">Execution Settings</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">

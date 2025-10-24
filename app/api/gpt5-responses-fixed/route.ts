@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     } = await req.json();
 
     // Get or create conversation history
-    let messages = conversationStore.get(conversationId) || [];
+    const messages = conversationStore.get(conversationId) || [];
 
     // Add the new user message
     messages.push({ role: "user", content: message });

@@ -80,13 +80,15 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Navigation Section */}
       <div>
-        <h3 className="">Navigation</h3>
+        <h3 c className="mac-title" lassName="mac-title">
+          Navigation
+        </h3>
         <div className="space-y-2">
           {navigationItems.map((item) => (
             <button
               key={item.id}
               className={cn(
-                "w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-200",
+                "w-full flex items-center space-x-3 p-4 rounded-lg transition-all duration-200",
                 "glass-panel border text-sm",
                 item.isActive
                   ? "bg-neon-blue/20 border-neon-blue/30 text-neon-blue"
@@ -132,12 +134,14 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Meeting Tools */}
       <div>
-        <h3 className="text-lg font-semibold text-white mb-4">Meeting Tools</h3>
+        <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-white mb-4">
+          Meeting Tools
+        </h3>
         <div className="space-y-2">
           {meetingTools.map((tool, index) => (
             <button
               key={index}
-              className="w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 glass-panel border border-white/20 bg-white/5 hover:bg-white/10 text-sm text-white"
+              className="w-full flex items-center space-x-3 p-4 rounded-lg transition-all duration-200 glass-panel border border-white/20 bg-white/5 hover:bg-white/10 text-sm text-white"
             >
               <tool.icon size={16} />
               <span>{tool.name}</span>
@@ -148,15 +152,17 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Session Metrics */}
       <div className="mt-auto">
-        <h3 className="text-lg font-semibold text-white mb-4">Meeting Metrics</h3>
+        <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-white mb-4">
+          Meeting Metrics
+        </h3>
         <div className="space-y-3">
           {sessionMetrics.length > 0 ? (
             sessionMetrics.map((metric, index) => (
               <div
                 key={index}
-                className="glass-panel p-3 rounded-lg border border-white/20 bg-white/5"
+                className="glass-panel p-4 rounded-lg border border-white/20 bg-white/5"
               >
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-white/70">{metric.label}</span>
                   <span className={cn("text-sm font-semibold", `text-${metric.color}`)}>
                     {metric.value}
@@ -171,9 +177,9 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
               </div>
             ))
           ) : (
-            <div className="glass-panel p-3 rounded-lg border border-white/20 bg-white/5 text-center">
+            <div className="glass-panel p-4 rounded-lg border border-white/20 bg-white/5 text-center">
               <p className="text-sm text-white/60">No active meeting metrics</p>
-              <p className="text-xs text-white/40 mt-1">Metrics will appear during conversations</p>
+              <p className="text-xs text-white/40 mt-2">Metrics will appear during conversations</p>
             </div>
           )}
         </div>

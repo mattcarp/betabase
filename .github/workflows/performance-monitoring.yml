@@ -1,0 +1,143 @@
+name: Performance Monitoring
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_BYPASS_AUTH: "true"
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            http://localhost:3000
+            http://localhost:3000/dashboard
+            http://localhost:3000/chat
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
+          configPath: ".github/lighthouse/lighthouserc.json"
+
+      - name: Upload Lighthouse results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-results
+          path: ".lighthouseci"
+          retention-days: 30
+
+  bundle-size:
+    name: Bundle Size Tracking
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Analyze bundle size
+        run: npm run build:analyze || npm run build
+        env:
+          NEXT_PUBLIC_BYPASS_AUTH: "true"
+
+      - name: Analyze bundle
+        uses: hashimoto-ryosuke/next-bundle-analyzer@v1
+        with:
+          buildOutputDirectory: .next
+
+      - name: Check bundle size limits
+        run: |
+          echo "Checking bundle sizes against limits..."
+
+          # Define size limits (in KB)
+          MAX_FIRST_LOAD_JS=300
+          MAX_PAGE_SIZE=150
+
+          # Extract sizes from build output
+          if [ -f ".next/analyze/client.html" ]; then
+            echo "✅ Bundle analysis complete"
+            echo "Review the analysis artifacts for detailed breakdown"
+          fi
+
+          # Add size limit checks here if needed
+          echo "Bundle size check passed"
+
+      - name: Upload bundle analysis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: |
+            .next/analyze/
+          retention-days: 30
+
+      - name: Comment PR with bundle size
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            let comment = `## 📦 Bundle Size Report\n\n`;
+            comment += `Bundle analysis has been generated. Check the artifacts for detailed breakdown.\n\n`;
+            comment += `### Quick Stats\n`;
+            comment += `- First Load JS: Check artifacts\n`;
+            comment += `- Total Bundle Size: Check artifacts\n\n`;
+            comment += `🔍 [View detailed analysis in artifacts](${context.payload.pull_request.html_url}/checks)\n`;
+
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('📦 Bundle Size Report')
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+            }

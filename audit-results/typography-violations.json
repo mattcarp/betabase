@@ -1,0 +1,9 @@
+[
+  {
+    "tag": "LABEL",
+    "class": "transition-all duration-150 group/field-label peer/field-label w-fit gap-2 group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>[data-slot=field]]:p-4 has-data-[state=checked]:bg-primary/5 has-data-[state=checked]:border-primary dark:has-data-[state=checked]:bg-primary/10 block text-white text-sm font-medium mb-2",
+    "id": "",
+    "fontWeight": "500",
+    "text": "Email Address"
+  }
+]

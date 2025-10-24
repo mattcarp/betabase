@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.5.2",
+  "version": "0.9.2",
   "private": true,
   "scripts": {
     "dev": "npx kill-port 3000 2>/dev/null || true && next dev -p 3000",
@@ -17,9 +17,13 @@
     "start:prod": "NODE_ENV=production next start -p $PORT",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
+    "lint:check": "npm run format:check && npm run lint",
+    "lint:quick": "./scripts/quick-lint-check.sh",
+    "lint:file": "./scripts/lint-file.sh",
+    "lint:fix-all": "npm run lint:fix && npm run format",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:local": "npx playwright test --project=e2e-local",
     "test:e2e:render": "playwright test --config=playwright.config.render.ts",
@@ -27,7 +31,7 @@
     "test:e2e:debug": "playwright test --debug",
     "test:smoke": "playwright test --grep @smoke",
     "test:regression": "playwright test --grep @regression",
-    "test:changed": "jest -o",
+    "test:changed": "vitest run --changed",
     "test:feature": "playwright test --grep",
     "test:analyze": "./scripts/analyze-test-suite.sh",
     "test:cleanup": "./scripts/cleanup-test-suite.sh",
@@ -48,9 +52,14 @@
     "test:aoma:chat": "npx playwright test tests/production/aoma-chat-test.spec.ts --reporter=list",
     "test:aoma:errors": "npx playwright test tests/production/aoma-error-handling.spec.ts --reporter=list",
     "test:aoma:all": "npx playwright test tests/production/aoma-*.spec.ts --reporter=list",
+    "test:visual": "npx playwright test tests/visual/ --reporter=list",
+    "test:visual:mac": "npx playwright test tests/visual/mac-design-system-regression.spec.ts --reporter=list",
+    "test:visual:dark-theme": "npx playwright test tests/visual/dark-theme-regression.spec.ts --reporter=list",
+    "test:visual:update-snapshots": "npx playwright test tests/visual/ --update-snapshots",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "pre-pr-check": "npm run format:check && npm run lint && git diff --check",
     "prepare": "husky install || true",
     "analyze": "ANALYZE=true npm run build",
     "analyze:server": "ANALYZE=true BUNDLE_ANALYZE=server npm run build",
@@ -62,10 +71,21 @@
     "deploy:status": "./scripts/deployment-status.sh",
     "deploy:monitor": "./scripts/deploy-with-monitoring.sh",
     "analyze:bundle": "./scripts/analyze-bundle.sh",
-    "analyze:deps": "depcheck"
+    "analyze:deps": "depcheck",
+    "mac:check": "node scripts/validate-mac-compliance.js",
+    "mac:check-all": "find src app -type f \\( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' -o -name '*.css' \\) -exec node scripts/validate-mac-compliance.js {} +"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,md}": [
+    "*.{js,jsx,ts,tsx}": [
+      "node scripts/validate-mac-compliance.js",
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ],
+    "*.css": [
+      "node scripts/validate-mac-compliance.js",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
       "prettier --write"
     ]
   },

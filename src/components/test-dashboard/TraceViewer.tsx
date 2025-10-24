@@ -196,22 +196,32 @@ export const TraceViewer: React.FC = () => {
     <AnnotationProvider>
       <div className="space-y-6 relative">
         {/* Playback Controls */}
-        <Card>
+        <Card className="mac-card">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Button
+                  className="mac-button mac-button-outline"
                   variant="outline"
+                  className="mac-button mac-button-outline"
                   size="icon"
                   onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
                 >
                   <SkipBack className="h-4 w-4" />
                 </Button>
-                <Button variant="default" size="icon" onClick={handlePlayPause}>
+                <Button
+                  className="mac-button mac-button-primary"
+                  variant="default"
+                  className="mac-button mac-button-primary"
+                  size="icon"
+                  onClick={handlePlayPause}
+                >
                   {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
                 </Button>
                 <Button
+                  className="mac-button mac-button-outline"
                   variant="outline"
+                  className="mac-button mac-button-outline"
                   size="icon"
                   onClick={() => setCurrentStep(Math.min(traceSteps.length - 1, currentStep + 1))}
                 >
@@ -220,9 +230,10 @@ export const TraceViewer: React.FC = () => {
 
                 <div className="ml-4 flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">Speed:</span>
-                  <div className="flex gap-1">
+                  <div className="flex gap-2">
                     {[0.5, 1, 2, 4].map((speed) => (
                       <Button
+                        className="mac-button mac-button-primary"
                         key={speed}
                         variant={playbackSpeed === speed ? "default" : "outline"}
                         size="sm"
@@ -237,6 +248,7 @@ export const TraceViewer: React.FC = () => {
 
               <div className="flex items-center gap-2">
                 <Button
+                  className="mac-button mac-button-primary"
                   variant={annotationsEnabled ? "default" : "outline"}
                   size="sm"
                   onClick={() => setAnnotationsEnabled(!annotationsEnabled)}
@@ -245,11 +257,21 @@ export const TraceViewer: React.FC = () => {
                   <Pencil className="h-4 w-4" />
                   Annotations
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button
+                  className="mac-button mac-button-outline"
+                  variant="outline"
+                  className="mac-button mac-button-outline"
+                  size="sm"
+                >
                   <Maximize2 className="h-4 w-4 mr-2" />
                   Fullscreen
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button
+                  className="mac-button mac-button-outline"
+                  variant="outline"
+                  className="mac-button mac-button-outline"
+                  size="sm"
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Export
                 </Button>
@@ -286,8 +308,8 @@ export const TraceViewer: React.FC = () => {
         <div className="grid grid-cols-12 gap-6">
           {/* Timeline */}
           <div className="col-span-3">
-            <Card className="h-[600px]">
-              <CardHeader>
+            <Card className="mac-card h-[600px]">
+              <CardHeader className="mac-card">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Clock className="h-5 w-5" />
                   Timeline
@@ -300,6 +322,7 @@ export const TraceViewer: React.FC = () => {
                       <Card
                         key={step.id}
                         className={cn(
+                          "mac-card",
                           "cursor-pointer transition-all",
                           currentStep === index && "ring-2 ring-primary bg-primary/5",
                           step.status === "failure" && "border-red-500/20",
@@ -307,8 +330,8 @@ export const TraceViewer: React.FC = () => {
                         )}
                         onClick={() => handleStepClick(index)}
                       >
-                        <CardContent className="p-3">
-                          <div className="flex items-start gap-3">
+                        <CardContent className="p-4">
+                          <div className="flex items-start gap-4">
                             <div
                               className={cn(
                                 "p-2 rounded-lg",
@@ -321,7 +344,7 @@ export const TraceViewer: React.FC = () => {
                             </div>
                             <div className="flex-1">
                               <p className="text-sm font-medium">{step.description}</p>
-                              <p className="text-xs text-muted-foreground mt-1">
+                              <p className="text-xs text-muted-foreground mt-2">
                                 {formatTime(step.timestamp)}
                                 {step.duration && ` • ${step.duration}ms`}
                               </p>
@@ -341,12 +364,13 @@ export const TraceViewer: React.FC = () => {
 
           {/* Viewport */}
           <div className="col-span-6">
-            <Card className="h-[600px]">
-              <CardHeader>
+            <Card className="mac-card h-[600px]">
+              <CardHeader className="mac-card">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg">Viewport</CardTitle>
                   <div className="flex gap-2">
                     <Button
+                      className="mac-button mac-button-primary"
                       variant={selectedDevice === "desktop" ? "default" : "outline"}
                       size="sm"
                       onClick={() => setSelectedDevice("desktop")}
@@ -354,6 +378,7 @@ export const TraceViewer: React.FC = () => {
                       <Monitor className="h-4 w-4" />
                     </Button>
                     <Button
+                      className="mac-button mac-button-primary"
                       variant={selectedDevice === "mobile" ? "default" : "outline"}
                       size="sm"
                       onClick={() => setSelectedDevice("mobile")}
@@ -363,7 +388,7 @@ export const TraceViewer: React.FC = () => {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <div
                   className={cn(
                     "bg-muted rounded-lg flex items-center justify-center",
@@ -384,7 +409,7 @@ export const TraceViewer: React.FC = () => {
                       <div className="mb-4">{getStepIcon(traceSteps[currentStep]?.type || "")}</div>
                       <p className="text-sm font-medium">{traceSteps[currentStep]?.description}</p>
                       {traceSteps[currentStep]?.selector && (
-                        <code className="text-xs bg-muted-foreground/10 px-2 py-1 rounded mt-2 inline-block">
+                        <code className="text-xs bg-muted-foreground/10 px-2 py-2 rounded mt-2 inline-block">
                           {traceSteps[currentStep].selector}
                         </code>
                       )}
@@ -397,11 +422,11 @@ export const TraceViewer: React.FC = () => {
 
           {/* Details Panel */}
           <div className="col-span-3">
-            <Card className="h-[600px]">
-              <CardHeader>
+            <Card className="mac-card h-[600px]">
+              <CardHeader className="mac-card">
                 <CardTitle className="text-lg">Details</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <Tabs defaultValue="console" className="h-full">
                   <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="console">Console</TabsTrigger>
@@ -466,7 +491,7 @@ export const TraceViewer: React.FC = () => {
                         </div>
                         <div>
                           <span className="text-sm text-muted-foreground">URL:</span>
-                          <code className="block text-xs bg-muted p-2 rounded mt-1">
+                          <code className="block text-xs bg-muted p-2 rounded mt-2">
                             {traceSteps[currentStep].networkData.url}
                           </code>
                         </div>
@@ -477,8 +502,8 @@ export const TraceViewer: React.FC = () => {
                   </TabsContent>
 
                   <TabsContent value="source">
-                    <Card className="bg-muted/50">
-                      <CardContent className="p-3">
+                    <Card className="mac-card bg-muted/50">
+                      <CardContent className="p-4">
                         <pre className="text-xs font-mono overflow-x-auto">
                           {`await page.goto('${traceSteps[currentStep]?.url || "/"}');
 ${traceSteps[currentStep]?.selector ? `await page.click('${traceSteps[currentStep].selector}');` : ""}

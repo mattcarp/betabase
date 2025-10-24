@@ -66,11 +66,11 @@ export async function POST(request: NextRequest) {
         const lines = data
           .toString()
           .split("\n")
-          .filter((line: any) => line.trim());
+          .filter((line: string) => line.trim());
         execution.output.push(...lines);
 
         // Parse JSON output from our custom reporter
-        lines.forEach((line: any) => {
+        lines.forEach((line: string) => {
           try {
             const event = JSON.parse(line);
             if (event.type === "begin" && event.totalTests) {
