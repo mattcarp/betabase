@@ -307,9 +307,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         {/* Audio waveform visualization */}
         {isConnected && (
           <div className="mt-4">
-            <AudioWaveform
-              isRecording={isUserSpeaking || isAISpeaking}
-            />
+            <AudioWaveform isRecording={isUserSpeaking || isAISpeaking} />
           </div>
         )}
 
