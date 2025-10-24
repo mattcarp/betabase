@@ -1604,6 +1604,7 @@ export function AiSdkChatPanel({
                 <Button
                   className="mac-button mac-button-outline"
                   variant="ghost"
+                  className="mac-button mac-button-outline"
                   size="icon"
                   onClick={() => setShowReasoning(!showReasoning)}
                   className={cn(
@@ -1938,6 +1939,7 @@ export function AiSdkChatPanel({
                 <Button
                   className="mac-button mac-button-outline"
                   variant="outline"
+                  className="mac-button mac-button-outline"
                   onClick={() => {
                     clearError();
                     regenerate && regenerate();
@@ -2038,6 +2040,7 @@ export function AiSdkChatPanel({
               <Button
                 className="mac-button mac-button-outline"
                 variant="ghost"
+                className="mac-button mac-button-outline"
                 size="sm"
                 onClick={() => {
                   setLastPrompt("");
@@ -2186,6 +2189,7 @@ export function AiSdkChatPanel({
                   <Button
                     className="mac-button mac-button-outline"
                     variant="ghost"
+                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => setUploadedFiles([])}
                     className="h-6 px-2 text-xs"

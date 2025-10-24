@@ -369,8 +369,8 @@ export const TestResultsViewer: React.FC = () => {
     <div className="grid grid-cols-12 gap-6">
       {/* Results List */}
       <div className="col-span-5">
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <div className="space-y-4">
               {/* Title and Action Buttons */}
               <div className="flex items-center justify-between">
@@ -379,6 +379,7 @@ export const TestResultsViewer: React.FC = () => {
                   <Button
                     className="mac-button mac-button-outline"
                     variant="outline"
+                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={handleExportResults}
                   >
@@ -387,7 +388,12 @@ export const TestResultsViewer: React.FC = () => {
                   </Button>
                   <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
                     <PopoverTrigger asChild>
-                      <Button className="mac-button mac-button-outline" variant="outline" size="sm">
+                      <Button
+                        className="mac-button mac-button-outline"
+                        variant="outline"
+                        className="mac-button mac-button-outline"
+                        size="sm"
+                      >
                         <Filter className="h-4 w-4 mr-2" />
                         Filters
                       </Button>
@@ -619,7 +625,7 @@ export const TestResultsViewer: React.FC = () => {
       <div className="col-span-7">
         {selectedResult ? (
           <Card className="mac-card h-full">
-            <CardHeader>
+            <CardHeader className="mac-card">
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-lg">{selectedResult.name}</CardTitle>
@@ -631,6 +637,7 @@ export const TestResultsViewer: React.FC = () => {
                   <Button
                     className="mac-button mac-button-outline"
                     variant="outline"
+                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => handleRerunTest(selectedResult.id)}
                   >
@@ -652,7 +659,7 @@ export const TestResultsViewer: React.FC = () => {
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <Tabs defaultValue="error" className="h-full">
                 <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="error">Error</TabsTrigger>
@@ -679,7 +686,7 @@ export const TestResultsViewer: React.FC = () => {
 
                       {(selectedResult.error.expected || selectedResult.error.actual) && (
                         <div className="grid grid-cols-2 gap-4">
-                          <Card>
+                          <Card className="mac-card">
                             <CardContent className="p-4">
                               <h3
                                 c
@@ -693,7 +700,7 @@ export const TestResultsViewer: React.FC = () => {
                               </p>
                             </CardContent>
                           </Card>
-                          <Card>
+                          <Card className="mac-card">
                             <CardContent className="p-4">
                               <h3
                                 c
@@ -710,7 +717,7 @@ export const TestResultsViewer: React.FC = () => {
                         </div>
                       )}
 
-                      <Card>
+                      <Card className="mac-card">
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between mb-2">
                             <h3 c className="mac-title" lassName="mac-title font-medium">
@@ -719,6 +726,7 @@ export const TestResultsViewer: React.FC = () => {
                             <Button
                               className="mac-button mac-button-outline"
                               variant="ghost"
+                              className="mac-button mac-button-outline"
                               size="sm"
                             >
                               <Copy className="h-4 w-4" />
@@ -739,7 +747,7 @@ export const TestResultsViewer: React.FC = () => {
 
                 <TabsContent value="logs">
                   {selectedResult.logs && selectedResult.logs.length > 0 ? (
-                    <Card>
+                    <Card className="mac-card">
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-4">
                           <h3
@@ -753,6 +761,7 @@ export const TestResultsViewer: React.FC = () => {
                           <Button
                             className="mac-button mac-button-outline"
                             variant="ghost"
+                            className="mac-button mac-button-outline"
                             size="sm"
                           >
                             <Download className="h-4 w-4" />
@@ -809,7 +818,7 @@ export const TestResultsViewer: React.FC = () => {
                 </TabsContent>
 
                 <TabsContent value="code">
-                  <Card>
+                  <Card className="mac-card">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-4">
                         <h3
@@ -820,7 +829,12 @@ export const TestResultsViewer: React.FC = () => {
                           <Code className="h-4 w-4" />
                           Test Source
                         </h3>
-                        <Button className="mac-button mac-button-outline" variant="ghost" size="sm">
+                        <Button
+                          className="mac-button mac-button-outline"
+                          variant="ghost"
+                          className="mac-button mac-button-outline"
+                          size="sm"
+                        >
                           <ExternalLink className="h-4 w-4" />
                         </Button>
                       </div>

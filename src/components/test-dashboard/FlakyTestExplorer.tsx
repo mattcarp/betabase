@@ -200,26 +200,26 @@ export const FlakyTestExplorer: React.FC = () => {
       {/* Summary Cards */}
       <div className="grid grid-cols-4 gap-4">
         <Card className="mac-card border-border">
-          <CardHeader className="pb-4">
+          <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
               <Bug className="h-4 w-4" />
               Total Flaky Tests
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-semibold text-foreground">{flakyTests.length}</div>
             <p className="text-xs text-muted-foreground mt-2">Across all suites</p>
           </CardContent>
         </Card>
 
         <Card className="mac-card border-border">
-          <CardHeader className="pb-4">
+          <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
               <AlertTriangle className="h-4 w-4 text-rose-600" />
               Critical Issues
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-semibold text-rose-700">
               {flakyTests.filter((t) => t.severity === "critical").length}
             </div>
@@ -228,13 +228,13 @@ export const FlakyTestExplorer: React.FC = () => {
         </Card>
 
         <Card className="mac-card border-border">
-          <CardHeader className="pb-4">
+          <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
               <TrendingDown className="h-4 w-4 text-emerald-600" />
               Avg Flakiness
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-semibold text-foreground">
               {(flakyTests.reduce((sum, t) => sum + t.flakiness, 0) / flakyTests.length).toFixed(1)}
               %
@@ -247,13 +247,13 @@ export const FlakyTestExplorer: React.FC = () => {
         </Card>
 
         <Card className="mac-card border-border">
-          <CardHeader className="pb-4">
+          <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
               <Clock className="h-4 w-4" />
               Last Failure
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-semibold text-foreground">2h ago</div>
             <p className="text-xs text-muted-foreground mt-2">WebSocket reconnection</p>
           </CardContent>
@@ -263,10 +263,10 @@ export const FlakyTestExplorer: React.FC = () => {
       <div className="grid grid-cols-12 gap-6">
         {/* Flaky Tests List */}
         <div className="col-span-5">
-          <Card>
-            <CardHeader>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
               <div className="flex items-center justify-between">
-                <CardTitle>Flaky Tests</CardTitle>
+                <CardTitle className="mac-card">Flaky Tests</CardTitle>
                 <div className="flex gap-2">
                   <Button
                     className="mac-button mac-button-primary"
@@ -349,15 +349,20 @@ export const FlakyTestExplorer: React.FC = () => {
         <div className="col-span-7 space-y-4">
           {selectedTest ? (
             <>
-              <Card>
-                <CardHeader>
+              <Card className="mac-card">
+                <CardHeader className="mac-card">
                   <div className="flex items-center justify-between">
                     <div>
                       <CardTitle className="text-lg">{selectedTest.name}</CardTitle>
                       <p className="text-sm text-muted-foreground mt-2">{selectedTest.suite}</p>
                     </div>
                     <div className="flex gap-2">
-                      <Button className="mac-button mac-button-outline" variant="outline" size="sm">
+                      <Button
+                        className="mac-button mac-button-outline"
+                        variant="outline"
+                        className="mac-button mac-button-outline"
+                        size="sm"
+                      >
                         <Shield className="h-4 w-4 mr-2" />
                         Quarantine
                       </Button>
@@ -371,7 +376,7 @@ export const FlakyTestExplorer: React.FC = () => {
                 <CardContent className="space-y-4">
                   {/* Metrics */}
                   <div className="grid grid-cols-3 gap-4">
-                    <Card>
+                    <Card className="mac-card">
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm text-muted-foreground">Flakiness</span>
@@ -380,7 +385,7 @@ export const FlakyTestExplorer: React.FC = () => {
                         <div className="text-2xl font-bold">{selectedTest.flakiness}%</div>
                       </CardContent>
                     </Card>
-                    <Card>
+                    <Card className="mac-card">
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm text-muted-foreground">Failure Rate</span>
@@ -391,7 +396,7 @@ export const FlakyTestExplorer: React.FC = () => {
                         </div>
                       </CardContent>
                     </Card>
-                    <Card>
+                    <Card className="mac-card">
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm text-muted-foreground">Last Failed</span>
@@ -405,11 +410,11 @@ export const FlakyTestExplorer: React.FC = () => {
                   </div>
 
                   {/* Pass/Fail History */}
-                  <Card>
-                    <CardHeader>
+                  <Card className="mac-card">
+                    <CardHeader className="mac-card">
                       <CardTitle className="text-base">Pass/Fail History</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="mac-card">
                       <div className="flex gap-2">
                         {selectedTest.history.map((run, index) => (
                           <div key={index} className="flex-1">
@@ -436,7 +441,7 @@ export const FlakyTestExplorer: React.FC = () => {
 
                   {/* Analysis & Suggestions */}
                   <Card className="mac-card bg-muted/30 border-border">
-                    <CardHeader>
+                    <CardHeader className="mac-card">
                       <CardTitle className="text-base flex items-center gap-2">
                         <Zap className="h-4 w-4 text-blue-600" />
                         AI Analysis
@@ -475,11 +480,11 @@ export const FlakyTestExplorer: React.FC = () => {
           )}
 
           {/* Flakiness Trend */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Flakiness Trend</CardTitle>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Flakiness Trend</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={flakinessOverTime}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
@@ -499,11 +504,11 @@ export const FlakyTestExplorer: React.FC = () => {
           </Card>
 
           {/* Pattern Distribution */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Failure Patterns</CardTitle>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Failure Patterns</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={patternDistribution}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />

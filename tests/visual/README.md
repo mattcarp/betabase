@@ -67,6 +67,7 @@ This test should be run:
 8. ✅ Visual snapshot comparison for MAC-compliant pages
 
 **Compliance thresholds:**
+
 - Typography: ≤5 invalid weight violations allowed
 - Spacing: ≤50 non-4px violations allowed
 - MAC class usage: ≥70% of buttons must use `.mac-*` classes
@@ -89,11 +90,13 @@ npx playwright test tests/visual/mac-design-system-regression.spec.ts --update-s
 
 **Integration with pre-commit hooks:**
 MAC compliance validation also runs on every commit via `validate-mac-compliance.js`. This catches:
-- Hardcoded colors (must use --mac-* variables)
+
+- Hardcoded colors (must use --mac-\* variables)
 - Non-8px spacing (gap-1/3/5/7, p-1/3/5/7, etc.)
 - Invalid font weights (blocks font-bold, font-semibold, etc.)
 
 **Related npm scripts:**
+
 ```bash
 npm run mac:check         # Check staged files for MAC violations
 npm run mac:check-all     # Check all source files

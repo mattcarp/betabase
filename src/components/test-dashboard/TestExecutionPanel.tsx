@@ -271,8 +271,8 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
     <div className="grid grid-cols-12 gap-6 h-full">
       {/* Test Suites List */}
       <div className="col-span-4 space-y-4">
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <CardTitle className="text-lg flex items-center gap-2">
               <Terminal className="h-5 w-5" />
               Test Suites
@@ -319,10 +319,10 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
       {/* Test Details */}
       <div className="col-span-5 space-y-4">
         <Card className="mac-card h-full">
-          <CardHeader>
+          <CardHeader className="mac-card">
             <CardTitle className="text-lg">Test Execution Details</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             {selectedSuite ? (
               <ScrollArea className="h-[450px]">
                 <div className="space-y-2">
@@ -366,8 +366,8 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
 
       {/* System Resources */}
       <div className="col-span-3 space-y-4">
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <CardTitle className="text-lg">System Resources</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -412,8 +412,8 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <CardTitle className="text-lg">Execution Settings</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">

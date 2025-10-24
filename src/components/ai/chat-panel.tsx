@@ -154,7 +154,7 @@ export function ChatPanel({
   return (
     <Card className={cn("mac-card", "flex flex-col h-full", className)}>
       {showHeader && (
-        <CardHeader className="px-4 py-4 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
+        <CardHeader className="mac-card px-4 py-4 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="relative">
@@ -285,6 +285,7 @@ export function ChatPanel({
                   <Button
                     className="mac-button mac-button-primary"
                     variant="link"
+                    className="mac-button"
                     size="sm"
                     onClick={() => reload()}
                     className="ml-2 h-auto p-0"

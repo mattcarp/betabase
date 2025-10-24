@@ -91,11 +91,11 @@ export function EnhancedKnowledgePanel({
 
   return (
     <Card className={cn("mac-card", "flex flex-col h-full", className)}>
-      <CardHeader className="pb-4">
+      <CardHeader className="mac-card pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Gauge className="h-5 w-5 text-primary" />
-            <CardTitle>Knowledge</CardTitle>
+            <CardTitle className="mac-card">Knowledge</CardTitle>
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-xs">

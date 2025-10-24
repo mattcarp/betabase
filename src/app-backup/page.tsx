@@ -62,7 +62,9 @@ export default function HomePage() {
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center">
         <div className="bg-gray-800/50 p-8 rounded-lg backdrop-blur-sm border border-gray-700">
           <div className="text-center mb-6">
-            <h1 c className="mac-heading"lassName="mac-heading text-2xl font-bold text-white mb-2">SIAM</h1>
+            <h1 c className="mac-heading" lassName="mac-heading text-2xl font-bold text-white mb-2">
+              SIAM
+            </h1>
             <p className="mac-body text-gray-300">Smart Interaction Agent Manager</p>
           </div>
 
@@ -124,7 +126,9 @@ export default function HomePage() {
     <div className="min-h-screen bg-black text-white">
       <nav className="bg-gray-900 p-4">
         <div className="flex justify-between items-center">
-          <h1 c className="mac-heading"lassName="mac-heading text-xl font-bold">SIAM Dashboard</h1>
+          <h1 c className="mac-heading" lassName="mac-heading text-xl font-bold">
+            SIAM Dashboard
+          </h1>
           <button
             onClick={() => setAuthStatus("unauthenticated")}
             className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded transition duration-200"
@@ -137,7 +141,9 @@ export default function HomePage() {
       <main className="p-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <h2 c className="mac-heading"lassName="mac-heading text-3xl font-bold mb-4">Welcome to SIAM</h2>
+            <h2 c className="mac-heading" lassName="mac-heading text-3xl font-bold mb-4">
+              Welcome to SIAM
+            </h2>
             <p className="text-gray-300 text-lg">
               Your Smart Interaction Agent Manager is ready for deployment.
             </p>
@@ -145,23 +151,35 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-gray-800/50 p-6 rounded-lg backdrop-blur-sm border border-gray-700">
-              <h3 c className="mac-title"lassName="mac-title text-xl font-semibold mb-4">🎯 System Status</h3>
+              <h3 c className="mac-title" lassName="mac-title text-xl font-semibold mb-4">
+                🎯 System Status
+              </h3>
               <p className="mac-body text-green-400">All systems operational</p>
             </div>
 
             <div className="bg-gray-800/50 p-6 rounded-lg backdrop-blur-sm border border-gray-700">
-              <h3 c className="mac-title"lassName="mac-title text-xl font-semibold mb-4">🚀 Deployment</h3>
+              <h3 c className="mac-title" lassName="mac-title text-xl font-semibold mb-4">
+                🚀 Deployment
+              </h3>
               <p className="mac-body text-blue-400">Production ready</p>
             </div>
 
             <div className="bg-gray-800/50 p-6 rounded-lg backdrop-blur-sm border border-gray-700">
-              <h3 c className="mac-title"lassName="mac-title text-xl font-semibold mb-4">⚡ Performance</h3>
+              <h3 c className="mac-title" lassName="mac-title text-xl font-semibold mb-4">
+                ⚡ Performance
+              </h3>
               <p className="mac-body text-yellow-400">Optimized for speed</p>
             </div>
           </div>
 
           <div className="mt-8 bg-green-500/20 border border-green-500/50 rounded-lg p-6">
-            <h3 c className="mac-title"lassName="mac-title text-green-400 font-semibold text-lg mb-2">🎉 Deployment Successful!</h3>
+            <h3
+              c
+              className="mac-title"
+              lassName="mac-title text-green-400 font-semibold text-lg mb-2"
+            >
+              🎉 Deployment Successful!
+            </h3>
             <p className="mac-body text-gray-300">
               SIAM has been successfully deployed to production. The authentication system is
               working, and the application is ready for users.

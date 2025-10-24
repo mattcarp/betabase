@@ -58,7 +58,8 @@
     /* MAC Professional Background */
     background:
       radial-gradient(circle at 25% 25%, rgba(51, 133, 255, 0.03) 0%, transparent 50%),
-      radial-gradient(circle at 75% 75%, rgba(133, 51, 255, 0.03) 0%, transparent 50%), var(--mac-surface-bg);
+      radial-gradient(circle at 75% 75%, rgba(133, 51, 255, 0.03) 0%, transparent 50%),
+      var(--mac-surface-bg);
     background-attachment: fixed;
     overflow-x: hidden;
   }

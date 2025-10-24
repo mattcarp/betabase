@@ -45,6 +45,18 @@
   --mac-status-error-border: rgba(251, 146, 60, 0.3);
   --mac-status-error-text: #fdba74;
 
+  /* MAC Chart & Visualization Colors */
+  --mac-success-green: #10b981; /* Success/Positive state - green */
+  --mac-error-red: #ef4444; /* Error/Negative state - red */
+  --mac-warning-yellow: #eab308; /* Warning state - yellow */
+
+  /* MAC Highlighter & Annotation Colors */
+  --mac-highlight-yellow: rgba(255, 255, 0, 0.5); /* Yellow highlighter */
+  --mac-highlight-green: rgba(0, 255, 0, 0.5); /* Green highlighter */
+  --mac-highlight-blue: rgba(0, 150, 255, 0.5); /* Blue highlighter */
+  --mac-highlight-red: rgba(255, 0, 0, 0.5); /* Red highlighter */
+  --mac-highlight-purple: rgba(200, 0, 255, 0.5); /* Purple highlighter */
+
   /* Sidebar Variables */
   --sidebar-width: 16rem; /* 256px */
   --sidebar-width-medium: 12.5rem; /* 200px - for medium viewports ~800px */

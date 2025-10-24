@@ -218,6 +218,7 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
                 <Button
                   className="mac-button mac-button-outline"
                   variant="ghost"
+                  className="mac-button mac-button-outline"
                   size="icon"
                   onClick={handleCancel}
                 >

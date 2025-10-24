@@ -267,11 +267,11 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
 
   return (
     <Card className={cn("mac-card", "flex flex-col h-full", className)}>
-      <CardHeader className="pb-4">
+      <CardHeader className="mac-card pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-primary" />
-            <CardTitle>AOMA Knowledge Base</CardTitle>
+            <CardTitle className="mac-card">AOMA Knowledge Base</CardTitle>
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-xs">
@@ -291,7 +291,7 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
             </Badge>
           </div>
         </div>
-        <CardDescription>
+        <CardDescription className="mac-card">
           Query Sony Music's AOMA knowledge system for insights and documentation
         </CardDescription>
       </CardHeader>
@@ -501,6 +501,7 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
                         className="mac-button mac-button-outline"
                         size="sm"
                         variant="ghost"
+                        className="mac-button mac-button-outline"
                         onClick={() => handleHistoryRerun(item)}
                         className="opacity-0 group-hover:opacity-100 transition-opacity"
                       >
