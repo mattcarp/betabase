@@ -75,7 +75,7 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
           {...props}
         />
         {showRequirements && password.length > 0 && (
-          <div className="mt-3 space-y-1.5 p-3 bg-black/20 rounded-lg border border-gray-700/50">
+          <div className="mt-4 space-y-1.5 p-4 bg-black/20 rounded-lg border border-gray-700/50">
             {passwordRequirements.map(({ key, label }) => {
               const met = requirements[key];
               return (

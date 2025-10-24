@@ -269,9 +269,11 @@ test.describe('${prompt}', () => {
             </div>
 
             {/* Advanced Options */}
-            <Card className="bg-muted/50">
+            <Card className="mac-card bg-muted/50">
               <CardContent className="p-4 space-y-3">
-                <h4 className="text-sm font-medium">Advanced Options</h4>
+                <h4 c className="mac-title" lassName="mac-title text-sm font-medium">
+                  Advanced Options
+                </h4>
                 <div className="space-y-2 text-sm">
                   <label className="flex items-center gap-2">
                     <input type="checkbox" className="rounded" defaultChecked />
@@ -295,7 +297,7 @@ test.describe('${prompt}', () => {
 
             {/* Generate Button */}
             <Button
-              className="w-full"
+              className="w-full mac-button mac-button-primary"
               size="lg"
               onClick={handleGenerate}
               disabled={!prompt || isGenerating}
@@ -327,13 +329,14 @@ test.describe('${prompt}', () => {
                   <Card
                     key={test.id}
                     className={cn(
+                      "mac-card",
                       "cursor-pointer transition-all hover:shadow-md",
                       selectedTest?.id === test.id && "ring-2 ring-primary"
                     )}
                     onClick={() => setSelectedTest(test)}
                   >
-                    <CardContent className="p-3">
-                      <div className="flex items-center justify-between mb-1">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between mb-2">
                         <span className="font-medium text-sm">{test.name}</span>
                         <Badge variant="outline" className="text-xs">
                           {test.type}
@@ -352,23 +355,23 @@ test.describe('${prompt}', () => {
       {/* Generated Test Preview */}
       <div className="col-span-7">
         {selectedTest ? (
-          <Card className="h-full">
+          <Card className="mac-card h-full">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-lg">{selectedTest.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-1">{selectedTest.description}</p>
+                  <p className="text-sm text-muted-foreground mt-2">{selectedTest.description}</p>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
+                  <Button className="mac-button mac-button-outline" variant="outline" size="sm">
                     <Copy className="h-4 w-4 mr-2" />
                     Copy
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button className="mac-button mac-button-outline" variant="outline" size="sm">
                     <Download className="h-4 w-4 mr-2" />
                     Export
                   </Button>
-                  <Button size="sm">
+                  <Button className="mac-button mac-button-primary" size="sm">
                     <Play className="h-4 w-4 mr-2" />
                     Run Test
                   </Button>
@@ -384,7 +387,7 @@ test.describe('${prompt}', () => {
                 </TabsList>
 
                 <TabsContent value="code" className="h-full">
-                  <Card className="bg-muted/50">
+                  <Card className="mac-card bg-muted/50">
                     <CardContent className="p-4">
                       <pre className="text-sm font-mono overflow-x-auto">
                         <code>{selectedTest.code}</code>
@@ -430,9 +433,13 @@ test.describe('${prompt}', () => {
                 </TabsContent>
 
                 <TabsContent value="suggestions" className="space-y-4">
-                  <Card className="bg-blue-500/10 border-blue-500/20">
+                  <Card className="mac-card bg-blue-500/10 border-blue-500/20">
                     <CardContent className="p-4">
-                      <h3 className="font-medium mb-2 flex items-center gap-2">
+                      <h3
+                        c
+                        className="mac-title"
+                        lassName="mac-title font-medium mb-2 flex items-center gap-2"
+                      >
                         <Sparkles className="h-4 w-4 text-blue-500" />
                         AI Recommendations
                       </h3>
@@ -451,15 +458,27 @@ test.describe('${prompt}', () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        <Button variant="outline" className="w-full justify-start" size="sm">
+                        <Button
+                          variant="outline"
+                          className="w-full justify-start mac-button mac-button-outline"
+                          size="sm"
+                        >
                           <MessageSquare className="h-4 w-4 mr-2" />
                           Test error boundary behavior
                         </Button>
-                        <Button variant="outline" className="w-full justify-start" size="sm">
+                        <Button
+                          variant="outline"
+                          className="w-full justify-start mac-button mac-button-outline"
+                          size="sm"
+                        >
                           <FileText className="h-4 w-4 mr-2" />
                           Test data persistence
                         </Button>
-                        <Button variant="outline" className="w-full justify-start" size="sm">
+                        <Button
+                          variant="outline"
+                          className="w-full justify-start mac-button mac-button-outline"
+                          size="sm"
+                        >
                           <Settings className="h-4 w-4 mr-2" />
                           Test configuration changes
                         </Button>
@@ -471,7 +490,7 @@ test.describe('${prompt}', () => {
             </CardContent>
           </Card>
         ) : (
-          <Card className="h-full">
+          <Card className="mac-card h-full">
             <CardContent className="flex items-center justify-center h-full text-muted-foreground">
               Generate a test or select from history to preview
             </CardContent>

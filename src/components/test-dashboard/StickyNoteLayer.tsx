@@ -42,6 +42,7 @@ const StickyNote: React.FC<StickyNoteProps> = ({
   return (
     <Card
       className={cn(
+        "mac-card",
         "absolute shadow-lg border-yellow-400/50 bg-yellow-100/95 dark:bg-yellow-900/95",
         "min-w-[200px] max-w-[300px]",
         "backdrop-blur-sm"
@@ -52,16 +53,21 @@ const StickyNote: React.FC<StickyNoteProps> = ({
         transform: "translate(-50%, -50%)",
       }}
     >
-      <CardContent className="p-3">
+      <CardContent className="p-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <FileText className="h-3 w-3 text-yellow-700 dark:text-yellow-300" />
             <span className="text-xs text-yellow-700 dark:text-yellow-300 font-medium">Note</span>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             {isEditing ? (
-              <Button variant="ghost" size="icon" className="h-5 w-5" onClick={handleSave}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-5 w-5 mac-button mac-button-outline"
+                onClick={handleSave}
+              >
                 <Check className="h-3 w-3" />
               </Button>
             ) : (
@@ -69,7 +75,7 @@ const StickyNote: React.FC<StickyNoteProps> = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-5 w-5"
+                  className="h-5 w-5 mac-button mac-button-outline"
                   onClick={() => onOpenEditor(annotation.id)}
                   title="Open detailed editor"
                 >
@@ -78,7 +84,7 @@ const StickyNote: React.FC<StickyNoteProps> = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-5 w-5"
+                  className="h-5 w-5 mac-button mac-button-outline"
                   onClick={() => onDelete(annotation.id)}
                 >
                   <X className="h-3 w-3" />

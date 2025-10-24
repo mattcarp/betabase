@@ -201,11 +201,11 @@ export function EnhancedChatPanel({
   const isMaxMessagesReached = maxMessages ? messages.length >= maxMessages : false;
 
   return (
-    <Card className={cn("flex flex-col h-full", className)}>
+    <Card className={cn("mac-card", "flex flex-col h-full", className)}>
       {showHeader && (
-        <CardHeader className="px-4 py-3 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
+        <CardHeader className="px-4 py-4 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <div className="relative">
                 <Bot className="h-6 w-6 text-primary" />
                 <Sparkles className="h-3 w-3 text-primary absolute -top-1 -right-1 animate-pulse" />
@@ -218,7 +218,7 @@ export function EnhancedChatPanel({
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
               {messages.length > 0 && (
                 <Badge variant="secondary" className="text-xs">
                   {messages.length} messages
@@ -229,7 +229,7 @@ export function EnhancedChatPanel({
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="h-8 w-8"
+                  className="h-8 w-8 mac-button mac-button-outline"
                   onClick={handleClear}
                   title="Clear conversation"
                 >
@@ -241,7 +241,7 @@ export function EnhancedChatPanel({
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="h-8 w-8"
+                  className="h-8 w-8 mac-button mac-button-outline"
                   onClick={handleExport}
                   title="Export conversation"
                 >
@@ -267,7 +267,9 @@ export function EnhancedChatPanel({
                   <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2" />
                 </div>
 
-                <h3 className="text-lg font-semibold mb-2">Welcome to {title}</h3>
+                <h3 c className="mac-title" lassName="mac-title text-lg font-semibold mb-2">
+                  Welcome to {title}
+                </h3>
                 <p className="text-sm text-muted-foreground mb-6 max-w-md">
                   I'm here to help you with your questions. You can ask me anything or choose from
                   the suggestions below.
@@ -307,6 +309,7 @@ export function EnhancedChatPanel({
                 <AlertDescription>
                   {error.message || "An error occurred. Please try again."}
                   <Button
+                    className="mac-button mac-button-primary"
                     variant="link"
                     size="sm"
                     onClick={() => reload()}

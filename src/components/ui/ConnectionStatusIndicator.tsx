@@ -181,7 +181,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
       <Badge
         variant={primaryStatus === "connected" ? "default" : "secondary"}
         className={cn(
-          "text-xs flex items-center gap-1 cursor-pointer transition-all duration-200",
+          "text-xs flex items-center gap-2 cursor-pointer transition-all duration-200",
           primaryStatus === "connected"
             ? "motiff-status-connected bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/20"
             : primaryStatus === "connecting"
@@ -209,7 +209,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
       {/* MAC Design System Status Popup */}
       {showDropdown && (
         <div
-          className="absolute top-full right-0 mt-3 min-w-[22rem] animate-in fade-in slide-in-from-top-2 duration-300 rounded-xl shadow-2xl border border-white/20"
+          className="absolute top-full right-0 mt-4 min-w-[22rem] animate-in fade-in slide-in-from-top-2 duration-300 rounded-xl shadow-2xl border border-white/20"
           style={{
             zIndex: 99999,
             background:
@@ -218,12 +218,18 @@ export const ConnectionStatusIndicator: React.FC = () => {
             WebkitBackdropFilter: "blur(20px)",
           }}
         >
-          <div className="p-5 space-y-4">
+          <div className="p-6 space-y-4">
             {/* Header with visual flair */}
-            <div className="flex items-center justify-between border-b border-white/20 pb-3">
+            <div className="flex items-center justify-between border-b border-white/20 pb-4">
               <div className="flex items-center gap-2">
                 <div className="mac-floating-orb h-2 w-2" />
-                <h3 className="text-base font-[400] tracking-wide text-white">System Health</h3>
+                <h3
+                  c
+                  className="mac-title"
+                  lassName="mac-title text-base font-[400] tracking-wide text-white"
+                >
+                  System Health
+                </h3>
               </div>
               <div className="text-xs font-[300] text-white/70">
                 {connectedCount}/{totalCount} Online
@@ -236,7 +242,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
                 <div
                   key={index}
                   className={cn(
-                    "group relative overflow-hidden rounded-lg p-3 transition-all duration-300",
+                    "group relative overflow-hidden rounded-lg p-4 transition-all duration-300",
                     "hover:scale-[1.02] hover:shadow-lg cursor-pointer",
                     status.type === "connected"
                       ? "bg-green-500/20 hover:bg-green-500/30 border border-green-500/40"
@@ -264,7 +270,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
 
                   <div className="relative flex items-center justify-between">
                     {/* Service Info */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <div
                         className={cn(
                           "flex items-center justify-center h-8 w-8 rounded-lg",

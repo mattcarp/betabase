@@ -57,10 +57,10 @@ export function MessageThread({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
-            className={cn("flex gap-3", message.role === "user" ? "justify-end" : "justify-start")}
+            className={cn("flex gap-4", message.role === "user" ? "justify-end" : "justify-start")}
           >
             {message.role !== "user" && (
-              <Avatar className="h-8 w-8 mt-1">
+              <Avatar className="h-8 w-8 mt-2">
                 <AvatarFallback
                   className={cn(
                     "border",
@@ -83,7 +83,7 @@ export function MessageThread({
               {(showTimestamps || showMetadata) && (
                 <div
                   className={cn(
-                    "flex items-center gap-2 mb-1",
+                    "flex items-center gap-2 mb-2",
                     message.role === "user" ? "justify-end" : "justify-start"
                   )}
                 >
@@ -93,7 +93,7 @@ export function MessageThread({
                     </span>
                   )}
                   {showTimestamps && message.createdAt && (
-                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                    <span className="text-xs text-muted-foreground flex items-center gap-2">
                       <Clock className="h-3 w-3" />
                       {formatTimestamp(message.createdAt)}
                     </span>
@@ -104,6 +104,7 @@ export function MessageThread({
               {/* Message Content */}
               <Card
                 className={cn(
+                  "mac-card",
                   "px-4 py-2.5 shadow-sm",
                   message.role === "user"
                     ? "bg-primary text-primary-foreground border-primary"
@@ -120,14 +121,14 @@ export function MessageThread({
 
                 {/* Tool Invocations */}
                 {message.toolInvocations && message.toolInvocations.length > 0 && (
-                  <div className="mt-3 pt-3 border-t border-border/50">
-                    <div className="flex flex-wrap gap-1.5">
+                  <div className="mt-4 pt-4 border-t border-border/50">
+                    <div className="flex flex-wrap gap-2.5">
                       {message.toolInvocations.map((tool, toolIndex) => (
                         <Badge key={toolIndex} variant="secondary" className="text-xs py-0.5 px-2">
                           {getToolIcon(tool.toolName)}
-                          <span className="ml-1">{tool.toolName}</span>
+                          <span className="ml-2">{tool.toolName}</span>
                           {tool.state === "result" && (
-                            <span className="ml-1 text-green-500">✓</span>
+                            <span className="ml-2 text-green-500">✓</span>
                           )}
                         </Badge>
                       ))}
@@ -138,7 +139,7 @@ export function MessageThread({
                 {/* Attachments */}
                 {message.experimental_attachments &&
                   message.experimental_attachments.length > 0 && (
-                    <div className="mt-3 pt-3 border-t border-border/50">
+                    <div className="mt-4 pt-4 border-t border-border/50">
                       <div className="space-y-2">
                         {message.experimental_attachments.map((attachment, attIndex) => (
                           <div key={attIndex} className="flex items-center gap-2 text-xs">
@@ -156,7 +157,7 @@ export function MessageThread({
                 {/* Metadata */}
                 {showMetadata && message.annotations && (
                   <div className="mt-2 pt-2 border-t border-border/50">
-                    <div className="flex flex-wrap gap-1">
+                    <div className="flex flex-wrap gap-2">
                       {message.annotations.map((annotation, annIndex) => (
                         <Badge key={annIndex} variant="outline" className="text-xs">
                           {JSON.stringify(annotation)}
@@ -169,7 +170,7 @@ export function MessageThread({
             </div>
 
             {message.role === "user" && (
-              <Avatar className="h-8 w-8 mt-1">
+              <Avatar className="h-8 w-8 mt-2">
                 <AvatarFallback className="bg-primary/10 border border-primary/20">
                   {getMessageIcon(message)}
                 </AvatarFallback>
@@ -183,17 +184,17 @@ export function MessageThread({
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex gap-3"
+            className="flex gap-4"
           >
-            <Avatar className="h-8 w-8 mt-1">
+            <Avatar className="h-8 w-8 mt-2">
               <AvatarFallback className="bg-primary/10 border border-primary/20">
                 <Bot className="h-4 w-4 text-primary animate-pulse" />
               </AvatarFallback>
             </Avatar>
-            <Card className="px-4 py-3 bg-card/50 backdrop-blur-sm">
+            <Card className="mac-card px-4 py-4 bg-card/50 backdrop-blur-sm">
               <div className="flex items-center gap-2">
                 <Loader2 className="h-3 w-3 animate-spin text-primary" />
-                <div className="flex gap-1">
+                <div className="flex gap-2">
                   <span
                     className="h-2 w-2 bg-primary/60 rounded-full animate-bounce"
                     style={{ animationDelay: "0ms" }}

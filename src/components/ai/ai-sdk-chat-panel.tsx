@@ -1162,11 +1162,11 @@ export function AiSdkChatPanel({
 
             {/* Reasoning display for AI messages */}
             {!isUser && showReasoning && message.reasoning && (
-              <div className="mb-3">
+              <div className="mb-4">
                 <Reasoning
                   defaultOpen={isLastMessage}
                   isStreaming={isLastMessage && isLoading}
-                  className="border border-border/30 rounded-lg bg-muted/30 p-3"
+                  className="border border-border/30 rounded-lg bg-muted/30 p-4"
                 >
                   <ReasoningTrigger title="AI Reasoning Process" />
                   <ReasoningContent>{message.reasoning}</ReasoningContent>
@@ -1176,8 +1176,8 @@ export function AiSdkChatPanel({
 
             {/* Sources display for AI messages with citations */}
             {!isUser && message.sources && message.sources.length > 0 && (
-              <div className="mb-3">
-                <Sources className="border border-border/30 rounded-lg bg-muted/20 p-3">
+              <div className="mb-4">
+                <Sources className="border border-border/30 rounded-lg bg-muted/20 p-4">
                   <SourcesTrigger count={message.sources.length} />
                   <SourcesContent>
                     {message.sources.map((source: any, idx: number) => (
@@ -1233,7 +1233,7 @@ export function AiSdkChatPanel({
                     const progressData = part.data;
                     return (
                       <div key={index} className="mt-4">
-                        <Task className="border border-blue-200/50 rounded-lg bg-blue-50/20 p-3">
+                        <Task className="border border-blue-200/50 rounded-lg bg-blue-50/20 p-4">
                           <TaskTrigger
                             title={progressData.title || "Processing..."}
                             status={progressData.status || "in_progress"}
@@ -1335,7 +1335,7 @@ export function AiSdkChatPanel({
                   Active Tasks
                 </div>
                 {message.tasks.map((task: any, idx: number) => (
-                  <Task key={idx} className="border border-border/30 rounded-lg bg-muted/20 p-3">
+                  <Task key={idx} className="border border-border/30 rounded-lg bg-muted/20 p-4">
                     <TaskTrigger title={task.title || `Task ${idx + 1}`} />
                     <TaskContent>
                       <TaskItem>
@@ -1376,7 +1376,7 @@ export function AiSdkChatPanel({
                     className="border border-border/50 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-muted/20"
                   >
                     <div className="p-4">
-                      <div className="flex items-start gap-3">
+                      <div className="flex items-start gap-4">
                         {preview.image && (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
@@ -1386,7 +1386,11 @@ export function AiSdkChatPanel({
                           />
                         )}
                         <div className="flex-1">
-                          <h4 className="text-sm font-medium text-foreground mb-1">
+                          <h4
+                            c
+                            className="mac-title"
+                            lassName="mac-title text-sm font-medium text-foreground mb-2"
+                          >
                             {preview.title || "Web Page"}
                           </h4>
                           {preview.description && (
@@ -1415,7 +1419,7 @@ export function AiSdkChatPanel({
               <div className="mt-4">
                 <div
                   className={cn(
-                    "grid gap-3 rounded-lg overflow-hidden",
+                    "grid gap-4 rounded-lg overflow-hidden",
                     message.images.length === 1 ? "grid-cols-1" : "grid-cols-2"
                   )}
                 >
@@ -1432,7 +1436,7 @@ export function AiSdkChatPanel({
             )}
 
             {/* Message timestamp */}
-            <div className="mt-3 flex items-center justify-between">
+            <div className="mt-4 flex items-center justify-between">
               <span
                 className={cn(
                   "text-xs opacity-60",
@@ -1494,9 +1498,9 @@ export function AiSdkChatPanel({
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="mt-3"
+                className="mt-4"
               >
-                <div className="border border-border/30 rounded-lg bg-muted/20 p-3">
+                <div className="border border-border/30 rounded-lg bg-muted/20 p-4">
                   <Branch
                     defaultBranch={0}
                     onBranchChange={(branchIndex) => console.log("Selected branch:", branchIndex)}
@@ -1524,9 +1528,9 @@ export function AiSdkChatPanel({
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="mt-3"
+                className="mt-4"
               >
-                <div className="border border-border/30 rounded-lg bg-muted/20 p-3 text-center">
+                <div className="border border-border/30 rounded-lg bg-muted/20 p-4 text-center">
                   <span
                     className="text-xs text-muted-foreground"
                     title="TBD - Branch functionality coming soon"
@@ -1556,26 +1560,32 @@ export function AiSdkChatPanel({
             <div className="flex items-center gap-4">
               <SiamLogo size="sm" />
               <div>
-                <h1 className="text-xl font-light text-white tracking-tight">{title}</h1>
+                <h1
+                  c
+                  className="mac-heading"
+                  lassName="mac-heading text-xl font-light text-white tracking-tight"
+                >
+                  {title}
+                </h1>
                 <p className="text-sm text-muted-foreground">{description}</p>
               </div>
             </div>
 
             {/* Control Panel */}
             <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="text-xs font-medium px-2 py-1">
-                <MessageCircle className="w-3 h-3 mr-1" />
+              <Badge variant="secondary" className="text-xs font-medium px-2 py-2">
+                <MessageCircle className="w-3 h-3 mr-2" />
                 {messages.length}
               </Badge>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-2">
                 {messages.length > 0 && (
                   <>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={handleExport}
-                      className="h-8 w-8 hover:bg-muted/50"
+                      className="h-8 w-8 hover:bg-muted/50 mac-button mac-button-outline"
                       title="Export conversation"
                     >
                       <Download className="h-4 w-4" />
@@ -1584,7 +1594,7 @@ export function AiSdkChatPanel({
                       variant="ghost"
                       size="icon"
                       onClick={handleClear}
-                      className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
+                      className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive mac-button mac-button-outline"
                       title="Clear conversation"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -1592,6 +1602,7 @@ export function AiSdkChatPanel({
                   </>
                 )}
                 <Button
+                  className="mac-button mac-button-outline"
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowReasoning(!showReasoning)}
@@ -1632,7 +1643,11 @@ export function AiSdkChatPanel({
                   transition={{ delay: 0.2, duration: 0.6 }}
                   className="mb-8"
                 >
-                  <h2 className="text-4xl font-thin mb-3 text-white tracking-tight">
+                  <h2
+                    c
+                    className="mac-heading"
+                    lassName="mac-heading text-4xl font-thin mb-4 text-white tracking-tight"
+                  >
                     Welcome to The Betabase
                   </h2>
                   <p className="text-lg font-light text-slate-400 max-w-2xl mx-auto leading-relaxed">
@@ -1651,12 +1666,16 @@ export function AiSdkChatPanel({
                       className="w-full max-w-4xl"
                     >
                       <div className="mb-4">
-                        <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center justify-center gap-2">
+                        <h3
+                          c
+                          className="mac-title"
+                          lassName="mac-title text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2"
+                        >
                           <Sparkles className="w-4 h-4" />
                           Try these to get started
                         </h3>
                       </div>
-                      <div className="grid grid-cols-2 gap-3 max-w-3xl mx-auto w-full">
+                      <div className="grid grid-cols-2 gap-4 max-w-3xl mx-auto w-full">
                         {(dynamicSuggestions.length > 0 ? dynamicSuggestions : suggestions).map(
                           (suggestion, index) => (
                             <motion.div
@@ -1669,7 +1688,7 @@ export function AiSdkChatPanel({
                               <Suggestion
                                 suggestion={suggestion}
                                 onClick={handleSuggestionClick}
-                                className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm h-auto whitespace-normal py-3 px-4"
+                                className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm h-auto whitespace-normal py-4 px-4"
                               />
                             </motion.div>
                           )
@@ -1700,9 +1719,9 @@ export function AiSdkChatPanel({
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="flex justify-start mb-6"
                       >
-                        <div className="bg-gradient-to-r from-gray-800 to-gray-700 text-white rounded-lg p-5 max-w-[85%] border border-blue-300/30 shadow-lg">
+                        <div className="bg-gradient-to-r from-gray-800 to-gray-700 text-white rounded-lg p-6 max-w-[85%] border border-blue-300/30 shadow-lg">
                           {/* Main Loading Header */}
-                          <div className="flex items-center gap-3 mb-4">
+                          <div className="flex items-center gap-4 mb-4">
                             <div className="flex space-x-1">
                               <div className="w-2.5 h-2.5 bg-blue-400 rounded-full animate-bounce"></div>
                               <div
@@ -1724,7 +1743,7 @@ export function AiSdkChatPanel({
                           {/* Progress Bar if available */}
                           {currentProgress && (
                             <div className="mb-4">
-                              <div className="flex justify-between text-xs mb-1">
+                              <div className="flex justify-between text-xs mb-2">
                                 <span className="capitalize">{currentProgress.phase}</span>
                                 <span>{Math.round(currentProgress.progress)}%</span>
                               </div>
@@ -1749,7 +1768,7 @@ export function AiSdkChatPanel({
                             {/* Phase 1: Connection */}
                             <div
                               className={cn(
-                                "flex items-center gap-3 transition-opacity duration-300",
+                                "flex items-center gap-4 transition-opacity duration-300",
                                 currentProgress?.phase === "connecting"
                                   ? "opacity-100"
                                   : "opacity-40"
@@ -1770,7 +1789,7 @@ export function AiSdkChatPanel({
                             {/* Phase 2: Parsing */}
                             <div
                               className={cn(
-                                "flex items-center gap-3 transition-opacity duration-300",
+                                "flex items-center gap-4 transition-opacity duration-300",
                                 currentProgress?.phase === "parsing" ? "opacity-100" : "opacity-40"
                               )}
                             >
@@ -1789,7 +1808,7 @@ export function AiSdkChatPanel({
                             {/* Phase 3: Knowledge Search */}
                             <div
                               className={cn(
-                                "flex items-center gap-3 transition-opacity duration-300",
+                                "flex items-center gap-4 transition-opacity duration-300",
                                 currentProgress?.phase === "knowledge-search"
                                   ? "opacity-100"
                                   : "opacity-40"
@@ -1810,7 +1829,7 @@ export function AiSdkChatPanel({
                             {/* Phase 4: Context Building */}
                             <div
                               className={cn(
-                                "flex items-center gap-3 transition-opacity duration-300",
+                                "flex items-center gap-4 transition-opacity duration-300",
                                 currentProgress?.phase === "context-building"
                                   ? "opacity-100"
                                   : "opacity-40"
@@ -1831,7 +1850,7 @@ export function AiSdkChatPanel({
                             {/* Phase 5: Generating */}
                             <div
                               className={cn(
-                                "flex items-center gap-3 transition-opacity duration-300",
+                                "flex items-center gap-4 transition-opacity duration-300",
                                 currentProgress?.phase === "generating"
                                   ? "opacity-100"
                                   : "opacity-40"
@@ -1852,7 +1871,7 @@ export function AiSdkChatPanel({
                             {/* Phase 6: Formatting */}
                             <div
                               className={cn(
-                                "flex items-center gap-3 transition-opacity duration-300",
+                                "flex items-center gap-4 transition-opacity duration-300",
                                 currentProgress?.phase === "formatting"
                                   ? "opacity-100"
                                   : "opacity-40"
@@ -1872,7 +1891,7 @@ export function AiSdkChatPanel({
                           </div>
 
                           {/* Time Estimate */}
-                          <div className="flex items-center gap-2 mt-4 pt-3 border-t border-gray-600">
+                          <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-600">
                             <ClockIcon className="w-4 h-4 text-amber-400" />
                             <span className="text-sm text-gray-300">
                               {currentProgress?.status === "in-progress" &&
@@ -1917,6 +1936,7 @@ export function AiSdkChatPanel({
                 className="mt-6 flex items-center justify-center"
               >
                 <Button
+                  className="mac-button mac-button-outline"
                   variant="outline"
                   onClick={() => {
                     clearError();
@@ -1951,12 +1971,12 @@ export function AiSdkChatPanel({
       <div className="flex-shrink-0 px-4 pt-4 pb-6 border-t border-zinc-800/50 bg-zinc-950 relative">
         {/* Real-Time Transcription Display */}
         {(isRecording || interimTranscript || transcript) && (
-          <div className="mb-3 p-3 bg-black/30 rounded-lg backdrop-blur-sm border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="mb-4 p-4 bg-black/30 rounded-lg backdrop-blur-sm border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-200">
             <div className="flex items-start gap-2">
               <div className="flex flex-col items-center">
                 <div className="h-2 w-2 bg-red-500 rounded-full animate-pulse" />
                 {isRecording && (
-                  <div className="mt-2 flex flex-col gap-1">
+                  <div className="mt-2 flex flex-col gap-2">
                     {[...Array(5)].map((_, i) => (
                       <div
                         key={i}
@@ -1971,13 +1991,13 @@ export function AiSdkChatPanel({
                 )}
               </div>
               <div className="flex-1">
-                <div className="text-xs text-gray-400 mb-1">
+                <div className="text-xs text-gray-400 mb-2">
                   {isRecording ? "Listening..." : "Transcription"}
                 </div>
                 <div className="text-sm text-white">
                   {transcript && <span className="text-white/90">{transcript}</span>}
                   {interimTranscript && (
-                    <span className="text-white/50 italic ml-1">{interimTranscript}</span>
+                    <span className="text-white/50 italic ml-2">{interimTranscript}</span>
                   )}
                   {!transcript && !interimTranscript && isRecording && (
                     <span className="text-white/30 italic">Start speaking...</span>
@@ -2011,11 +2031,12 @@ export function AiSdkChatPanel({
           />
           {/* Last prompt reminder - moved above toolbar */}
           {lastPrompt && (
-            <div className="flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground bg-muted/30 border border-border/30 rounded-md mb-2">
+            <div className="flex items-center gap-2 px-4 py-2 text-xs text-muted-foreground bg-muted/30 border border-border/30 rounded-md mb-2">
               <MessageCircle className="h-3 w-3 flex-shrink-0" />
               <span className="text-xs opacity-75">Last:</span>
               <span className="truncate flex-1 font-medium">{lastPrompt}</span>
               <Button
+                className="mac-button mac-button-outline"
                 variant="ghost"
                 size="sm"
                 onClick={() => {
@@ -2048,6 +2069,7 @@ export function AiSdkChatPanel({
                 type="button"
                 variant={isRecording ? "destructive" : "ghost"}
                 className={cn(
+                  "mac-button mac-button-primary",
                   "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
                   isRecording
                     ? [
@@ -2102,6 +2124,7 @@ export function AiSdkChatPanel({
                 type="button"
                 variant={isTTSEnabled ? "default" : "ghost"}
                 className={cn(
+                  "mac-button mac-button-primary",
                   "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
                   isTTSEnabled
                     ? [
@@ -2136,7 +2159,7 @@ export function AiSdkChatPanel({
                   selectedVoiceId={selectedVoiceId}
                   onVoiceSelect={setSelectedVoiceId}
                   disabled={isLoading || isSpeechLoading}
-                  className="ml-1"
+                  className="ml-2"
                 />
               )}
 
@@ -2158,9 +2181,10 @@ export function AiSdkChatPanel({
               </PromptInputModelSelect>
 
               {uploadedFiles.length > 0 && (
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <span>{uploadedFiles.length} file(s) attached</span>
                   <Button
+                    className="mac-button mac-button-outline"
                     variant="ghost"
                     size="sm"
                     onClick={() => setUploadedFiles([])}

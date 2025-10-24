@@ -207,14 +207,14 @@ export const HighlighterCanvas: React.FC<HighlighterCanvasProps> = ({
         <Button
           variant="outline"
           size="icon"
-          className="bg-background/95 backdrop-blur-sm"
+          className="bg-background/95 backdrop-blur-sm mac-button mac-button-outline"
           onClick={() => setShowColorPicker(!showColorPicker)}
         >
           <Palette className="h-4 w-4" />
         </Button>
 
         {showColorPicker && (
-          <div className="bg-background/95 backdrop-blur-sm border rounded-lg p-3 space-y-3 shadow-lg">
+          <div className="bg-background/95 backdrop-blur-sm border rounded-lg p-4 space-y-3 shadow-lg">
             {/* Color Selection */}
             <div className="space-y-2">
               <p className="text-xs font-medium">Color</p>
@@ -265,7 +265,7 @@ export const HighlighterCanvas: React.FC<HighlighterCanvasProps> = ({
         <Button
           variant="outline"
           size="icon"
-          className="bg-background/95 backdrop-blur-sm"
+          className="bg-background/95 backdrop-blur-sm mac-button mac-button-outline"
           onClick={handleClear}
           title="Clear highlights"
         >

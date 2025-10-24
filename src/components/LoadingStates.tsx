@@ -66,10 +66,12 @@ export function EmptyState({
   return (
     <div className={cn("text-center py-8", className)}>
       <div className={cn("mx-auto mb-4 opacity-50", animated && "animate-pulse")}>{icon}</div>
-      <h3 className="text-lg font-mono text-gray-300 mb-2">{title}</h3>
+      <h3 c className="mac-title" lassName="mac-title text-lg font-mono text-gray-300 mb-2">
+        {title}
+      </h3>
       <p className="text-sm text-gray-400 font-mono">{description}</p>
       {animated && (
-        <div className="flex justify-center gap-1 mt-4">
+        <div className="flex justify-center gap-2 mt-4">
           <PulsingDot delay="0s" />
           <PulsingDot delay="0.2s" />
           <PulsingDot delay="0.4s" />
@@ -87,7 +89,7 @@ export function TranscriptionSkeleton({ count = 3 }: TranscriptionSkeletonProps)
   return (
     <div className="space-y-3">
       {Array.from({ length: count }).map((_, index) => (
-        <div key={index} className="bg-gray-700/50 border border-gray-600 rounded p-3">
+        <div key={index} className="bg-gray-700/50 border border-gray-600 rounded p-4">
           <div className="flex items-center gap-2 mb-2">
             <Skeleton className="w-2 h-2 rounded-full" />
             <Skeleton className="h-4 w-32" />
@@ -133,7 +135,7 @@ export function VectorMatchesSkeleton({ count = 3 }: VectorMatchesSkeletonProps)
     <div className="space-y-2">
       {Array.from({ length: count }).map((_, index) => (
         <div key={index} className="bg-gray-700/50 border border-gray-600 rounded p-2">
-          <div className="flex justify-between items-center mb-1">
+          <div className="flex justify-between items-center mb-2">
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-4 w-8" />
           </div>
@@ -158,7 +160,7 @@ export function AnimatedWaiting({ message, icon, subMessage }: AnimatedWaitingPr
       </div>
       <div className="font-mono text-gray-300 mb-2">
         {message}
-        <span className="inline-flex ml-1">
+        <span className="inline-flex ml-2">
           <span className="animate-pulse" style={{ animationDelay: "0s" }}>
             .
           </span>
@@ -171,7 +173,7 @@ export function AnimatedWaiting({ message, icon, subMessage }: AnimatedWaitingPr
         </span>
       </div>
       {subMessage && <p className="text-sm text-gray-400 font-mono">{subMessage}</p>}
-      <div className="flex justify-center gap-1 mt-4">
+      <div className="flex justify-center gap-2 mt-4">
         <PulsingDot delay="0s" />
         <PulsingDot delay="0.3s" />
         <PulsingDot delay="0.6s" />

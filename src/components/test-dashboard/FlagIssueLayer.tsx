@@ -81,17 +81,18 @@ const FlagMarker: React.FC<FlagMarkerProps> = ({ annotation, onDelete }) => {
       {showDetails && (
         <Card
           className={cn(
+            "mac-card",
             "absolute top-full left-1/2 -translate-x-1/2 mt-2",
             "min-w-[300px] shadow-xl z-50"
           )}
         >
-          <CardHeader className="pb-3">
+          <CardHeader className="pb-4">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2">
                 <AlertTriangle className={cn("h-4 w-4", severityConfig.color)} />
                 <CardTitle className="text-sm">{flagData.title}</CardTitle>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-2">
                 <Badge
                   variant="outline"
                   className={cn(severityConfig.borderColor, severityConfig.color)}
@@ -101,7 +102,7 @@ const FlagMarker: React.FC<FlagMarkerProps> = ({ annotation, onDelete }) => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-6 w-6"
+                  className="h-6 w-6 mac-button mac-button-outline"
                   onClick={() => onDelete(annotation.id)}
                 >
                   <X className="h-3 w-3" />
@@ -209,7 +210,7 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
       {/* Flag creation form */}
       {showForm && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6">
-          <Card className="max-w-md w-full">
+          <Card className="mac-card max-w-md w-full">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Flag className="h-5 w-5" />
@@ -229,6 +230,7 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
                         variant={severity === level ? "default" : "outline"}
                         size="sm"
                         className={cn(
+                          "mac-button mac-button-primary",
                           severity === level && config.bgColor,
                           severity === level && config.borderColor
                         )}
@@ -247,6 +249,7 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
               <div className="space-y-2">
                 <label className="text-sm font-medium">Title</label>
                 <Input
+                  className="mac-input"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Brief issue description"
@@ -267,10 +270,19 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
 
               {/* Actions */}
               <div className="flex items-center justify-end gap-2">
-                <Button variant="outline" onClick={handleCancel}>
+                <Button
+                  className="mac-button mac-button-outline"
+                  variant="outline"
+                  onClick={handleCancel}
+                >
                   Cancel
                 </Button>
-                <Button variant="default" onClick={handleSubmit} disabled={!title.trim()}>
+                <Button
+                  className="mac-button mac-button-primary"
+                  variant="default"
+                  onClick={handleSubmit}
+                  disabled={!title.trim()}
+                >
                   Flag Issue
                 </Button>
               </div>
