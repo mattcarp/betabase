@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, /* CardHeader, CardTitle */ } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -21,7 +21,7 @@ import {
   CheckCircle,
   Info,
   XCircle,
-  Eye,
+  // Eye, // Unused
   Network,
   Camera,
   ScrollText,
@@ -180,16 +180,16 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
     }
   };
 
-  // Format timestamp
-  const formatTimestamp = (timestamp: number) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      fractionalSecondDigits: 3,
-    });
-  };
+  // Format timestamp - Unused, keeping for future use
+  // const formatTimestamp = (timestamp: number) => {
+  //   const date = new Date(timestamp);
+  //   return date.toLocaleTimeString("en-US", {
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //     second: "2-digit",
+  //     fractionalSecondDigits: 3,
+  //   });
+  // };
 
   // Format relative time
   const formatRelativeTime = (timestamp: number) => {
@@ -401,7 +401,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                 : "No interactions match your filters"}
             </div>
           ) : (
-            filteredInteractions.map((interaction, index) => (
+            filteredInteractions.map((interaction, _index) => (
               <Card
                 key={interaction.id}
                 className={cn(
