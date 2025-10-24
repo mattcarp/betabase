@@ -464,7 +464,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
   return (
     <div className={`space-y-3 ${className}`} data-test-id="live-insights-root">
       <div className="flex items-center justify-between mb-4">
-        <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-motiff-green">
+        <h3 className="mac-title text-lg font-semibold text-motiff-green">
           Live Insights
         </h3>
         <div className="flex items-center gap-2">
@@ -512,9 +512,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-2">
                         <h4
-                          c
-                          className="mac-title"
-                          lassName="mac-title font-medium text-white text-sm truncate"
+                          className="mac-title font-medium text-white text-sm truncate"
                         >
                           {insight.title}
                         </h4>
