@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { aomaFirecrawl } from "../../../../../src/services/aomaFirecrawlService";
+import { aomaFirecrawl } from "../../../../src/services/aomaFirecrawlService";
 
 export async function POST(request: NextRequest) {
   try {
