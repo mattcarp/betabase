@@ -51,6 +51,57 @@ This test should be run:
 - ✅ After any CSS/styling changes
 - ✅ After updating UI components
 
+### `mac-design-system-regression.spec.ts` ⚠️ **NEW - IMPORTANT**
+
+**Purpose:** Ensures compliance with MAC Design System standards across the application.
+
+**What it tests:**
+
+1. ✅ All elements use MAC CSS color variables (no hardcoded colors)
+2. ✅ Typography uses only allowed font weights (100-400, blocks 500-900)
+3. ✅ Spacing follows 8px grid system (multiples of 4px minimum)
+4. ✅ Key UI components use `.mac-*` classes (buttons, cards, inputs)
+5. ✅ Consistent border radius across components
+6. ✅ Text elements have sufficient contrast (WCAG AA compliance)
+7. ✅ Minimal inline styles (prevents design system overrides)
+8. ✅ Visual snapshot comparison for MAC-compliant pages
+
+**Compliance thresholds:**
+
+- Typography: ≤5 invalid weight violations allowed
+- Spacing: ≤50 non-4px violations allowed
+- MAC class usage: ≥70% of buttons must use `.mac-*` classes
+- Border radius: ≤5 unique values
+- Contrast issues: ≤20 violations allowed
+- Inline styles: ≤30 problematic inline styles allowed
+
+**How to run:**
+
+```bash
+# Run all MAC Design System tests
+npm run test:visual:mac
+
+# Or with Playwright directly
+npx playwright test tests/visual/mac-design-system-regression.spec.ts
+
+# Update visual baseline snapshots (after intentional UI changes)
+npx playwright test tests/visual/mac-design-system-regression.spec.ts --update-snapshots
+```
+
+**Integration with pre-commit hooks:**
+MAC compliance validation also runs on every commit via `validate-mac-compliance.js`. This catches:
+
+- Hardcoded colors (must use --mac-\* variables)
+- Non-8px spacing (gap-1/3/5/7, p-1/3/5/7, etc.)
+- Invalid font weights (blocks font-bold, font-semibold, etc.)
+
+**Related npm scripts:**
+
+```bash
+npm run mac:check         # Check staged files for MAC violations
+npm run mac:check-all     # Check all source files
+```
+
 ## Other Visual Tests
 
 ### `chat-landing.spec.ts`
@@ -71,6 +122,22 @@ Tests responsive design across different viewport sizes.
 
 ## Running Visual Tests
 
+### Quick Commands (Recommended)
+
+```bash
+# Run all visual regression tests
+npm run test:visual
+
+# Run MAC Design System compliance tests only
+npm run test:visual:mac
+
+# Run dark theme regression tests only
+npm run test:visual:dark-theme
+
+# Update all visual snapshots (after intentional UI changes)
+npm run test:visual:update-snapshots
+```
+
 ### Run all visual tests:
 
 ```bash
@@ -87,6 +154,7 @@ npx playwright test tests/visual/ --headed
 
 ```bash
 npx playwright test tests/visual/dark-theme-regression.spec.ts
+npx playwright test tests/visual/mac-design-system-regression.spec.ts
 ```
 
 ### Debug a failing test:

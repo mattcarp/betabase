@@ -79,8 +79,8 @@ export const CoverageReport: React.FC = () => {
   ];
 
   const pieData = [
-    { name: "Covered", value: 83.4, color: "#10b981" },
-    { name: "Uncovered", value: 16.6, color: "#ef4444" },
+    { name: "Covered", value: 83.4, color: "var(--mac-success-green)" },
+    { name: "Uncovered", value: 16.6, color: "var(--mac-error-red)" },
   ];
 
   const fileCoverage: FileCoverage[] = [
@@ -168,8 +168,8 @@ export const CoverageReport: React.FC = () => {
       {/* Overall Coverage Summary */}
       <div className="grid grid-cols-4 gap-4">
         {Object.entries(coverageData).map(([key, data]) => (
-          <Card key={key}>
-            <CardHeader className="pb-3">
+          <Card className="mac-card" key={key}>
+            <CardHeader className="mac-card pb-4">
               <CardTitle className="text-sm font-medium capitalize flex items-center gap-2">
                 {key === "branches" && <GitBranch className="h-4 w-4" />}
                 {key === "functions" && <FileCode className="h-4 w-4" />}
@@ -178,7 +178,7 @@ export const CoverageReport: React.FC = () => {
                 {key}
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <div className="space-y-2">
                 <div className="flex items-baseline justify-between">
                   <span className={cn("text-2xl font-bold", getCoverageColor(data.percentage))}>
@@ -198,17 +198,17 @@ export const CoverageReport: React.FC = () => {
       <div className="grid grid-cols-12 gap-6">
         {/* Coverage Trend */}
         <div className="col-span-6">
-          <Card>
-            <CardHeader>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
               <div className="flex items-center justify-between">
-                <CardTitle>Coverage Trend</CardTitle>
+                <CardTitle className="mac-card">Coverage Trend</CardTitle>
                 <Badge className="bg-green-500/20 text-green-500">
-                  <TrendingUp className="h-3 w-3 mr-1" />
+                  <TrendingUp className="h-3 w-3 mr-2" />
                   +3.4%
                 </Badge>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={250}>
                 <LineChart data={trendData}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
@@ -230,11 +230,11 @@ export const CoverageReport: React.FC = () => {
 
         {/* Coverage Distribution */}
         <div className="col-span-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Coverage Distribution</CardTitle>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Coverage Distribution</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie
@@ -269,9 +269,9 @@ export const CoverageReport: React.FC = () => {
 
         {/* Uncovered Code Summary */}
         <div className="col-span-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Uncovered Code</CardTitle>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Uncovered Code</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
@@ -289,7 +289,11 @@ export const CoverageReport: React.FC = () => {
                 </div>
               </div>
 
-              <Button className="w-full" variant="outline">
+              <Button
+          aria-label="Download"
+                className="w-full mac-button mac-button-outline"
+                variant="outline"
+              >
                 <Download className="h-4 w-4 mr-2" />
                 Export Coverage Report
               </Button>
@@ -301,12 +305,13 @@ export const CoverageReport: React.FC = () => {
       {/* File Coverage Details */}
       <div className="grid grid-cols-12 gap-6">
         <div className="col-span-5">
-          <Card>
-            <CardHeader>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
               <div className="flex items-center justify-between">
-                <CardTitle>File Coverage</CardTitle>
+                <CardTitle className="mac-card">File Coverage</CardTitle>
                 <div className="flex gap-2">
                   <Button
+                    className="mac-button mac-button-primary"
                     variant={coverageFilter === "all" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setCoverageFilter("all")}
@@ -314,6 +319,7 @@ export const CoverageReport: React.FC = () => {
                     All
                   </Button>
                   <Button
+                    className="mac-button mac-button-primary"
                     variant={coverageFilter === "low" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setCoverageFilter("low")}
@@ -321,6 +327,7 @@ export const CoverageReport: React.FC = () => {
                     Low
                   </Button>
                   <Button
+                    className="mac-button mac-button-primary"
                     variant={coverageFilter === "medium" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setCoverageFilter("medium")}
@@ -328,6 +335,7 @@ export const CoverageReport: React.FC = () => {
                     Medium
                   </Button>
                   <Button
+                    className="mac-button mac-button-primary"
                     variant={coverageFilter === "high" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setCoverageFilter("high")}
@@ -357,12 +365,13 @@ export const CoverageReport: React.FC = () => {
                         <Card
                           key={file.path}
                           className={cn(
+                            "mac-card",
                             "cursor-pointer transition-all hover:shadow-md",
                             selectedFile?.path === file.path && "ring-2 ring-primary"
                           )}
                           onClick={() => setSelectedFile(file)}
                         >
-                          <CardContent className="p-3">
+                          <CardContent className="p-4">
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2">
                                 <File className="h-4 w-4 text-muted-foreground" />
@@ -390,14 +399,18 @@ export const CoverageReport: React.FC = () => {
 
         <div className="col-span-7">
           {selectedFile ? (
-            <Card>
-              <CardHeader>
+            <Card className="mac-card">
+              <CardHeader className="mac-card">
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="text-lg">{selectedFile.path.split("/").pop()}</CardTitle>
-                    <p className="text-sm text-muted-foreground mt-1">{selectedFile.path}</p>
+                    <p className="text-sm text-muted-foreground mt-2">{selectedFile.path}</p>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button
+                    className="mac-button mac-button-outline"
+                    variant="outline"
+                    size="sm"
+                  >
                     <FileCode className="h-4 w-4 mr-2" />
                     View Source
                   </Button>
@@ -406,7 +419,7 @@ export const CoverageReport: React.FC = () => {
               <CardContent className="space-y-4">
                 {/* Coverage Metrics */}
                 <div className="grid grid-cols-2 gap-4">
-                  <Card>
+                  <Card className="mac-card">
                     <CardContent className="p-4">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -420,7 +433,7 @@ export const CoverageReport: React.FC = () => {
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="mac-card">
                     <CardContent className="p-4">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -434,7 +447,7 @@ export const CoverageReport: React.FC = () => {
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="mac-card">
                     <CardContent className="p-4">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -448,7 +461,7 @@ export const CoverageReport: React.FC = () => {
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="mac-card">
                     <CardContent className="p-4">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -464,14 +477,14 @@ export const CoverageReport: React.FC = () => {
                 </div>
 
                 {/* Uncovered Lines */}
-                <Card className="bg-red-500/10 border-red-500/20">
-                  <CardHeader>
+                <Card className="mac-card bg-red-500/10 border-red-500/20">
+                  <CardHeader className="mac-card">
                     <CardTitle className="text-base flex items-center gap-2">
                       <AlertTriangle className="h-4 w-4 text-red-500" />
                       Uncovered Lines
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="mac-card">
                     <div className="flex flex-wrap gap-2">
                       {selectedFile.uncoveredLines.map((line) => (
                         <Badge key={line} variant="destructive">
@@ -484,7 +497,7 @@ export const CoverageReport: React.FC = () => {
               </CardContent>
             </Card>
           ) : (
-            <Card className="h-full">
+            <Card className="mac-card h-full">
               <CardContent className="flex items-center justify-center h-full text-muted-foreground">
                 Select a file to view detailed coverage
               </CardContent>

@@ -57,6 +57,284 @@ git config merge.npm-merge-lockfile.driver ".git-merge-drivers/npm-merge-lockfil
 
 ---
 
+## ✨ Pre-Commit Linting - CATCH ERRORS BEFORE COMMIT
+
+**AUTOMATIC QUALITY CHECKS**: ESLint and Prettier run automatically on every commit!
+
+### How It Works
+
+When you commit code, Husky triggers `lint-staged` which:
+
+1. **Runs ESLint** on all staged `.js`, `.jsx`, `.ts`, `.tsx` files
+   - Auto-fixes issues where possible (formatting, simple errors)
+   - Uses `--max-warnings=0` (warnings block commits)
+   - Catches unused variables, type errors, code quality issues
+
+2. **Runs Prettier** on all staged files
+   - Formats code to project standards
+   - Ensures consistent style across codebase
+
+3. **Blocks the commit** if unfixable errors exist
+   - You must fix the issues before committing
+   - Prevents broken code from reaching PRs
+
+### Manual Lint Checks
+
+**Check for issues without committing:**
+
+```bash
+npm run lint:check       # Check both linting and formatting (no changes)
+npm run lint:quick       # Fast check with helpful output
+npm run format:check     # Check Prettier formatting only
+npm run lint             # Check ESLint only
+```
+
+**Check specific file or directory:**
+
+```bash
+npm run lint:file src/components/MyComponent.tsx
+npm run lint:file src/app/
+```
+
+**Auto-fix all issues:**
+
+```bash
+npm run lint:fix-all     # Fix both linting and formatting
+npm run lint:fix         # Fix ESLint issues only
+npm run format           # Fix Prettier formatting only
+```
+
+### 🤖 Claude Code Workflow (IMPORTANT FOR AI)
+
+**MANDATORY**: When Claude writes code, Claude MUST run lint checks before committing:
+
+**After writing/editing TypeScript/JavaScript files:**
+
+```bash
+# Option 1: Check specific files you just edited
+npm run lint:file src/components/NewComponent.tsx
+
+# Option 2: Run quick check on all files
+npm run lint:quick
+
+# If issues found, auto-fix:
+npm run lint:fix-all
+
+# Then commit
+git add . && git commit -m "your message"
+```
+
+**Recommended Claude workflow:**
+
+1. ✍️ Write/edit code using Edit, Write, or NotebookEdit tools
+2. 🔍 **CRITICAL**: Run `npx prettier --check .` to catch formatting issues
+3. 🔧 If Prettier issues found, run `npx prettier --write .` to fix
+4. ✅ Verify formatting with `npx prettier --check .` again
+5. 💾 Commit the code with `git add . && git commit -m "message"`
+
+**NEVER skip step 2-4!** Prettier failures block PRs and waste time.
+
+**Alternative (faster for single files):**
+
+```bash
+# After editing a specific file
+npx prettier --write src/components/NewComponent.tsx
+git add . && git commit -m "your message"
+```
+
+**This prevents hours of PR failures later!**
+
+### What Gets Caught
+
+**ESLint errors (block commit):**
+
+- `no-var` - Using `var` instead of `const`/`let`
+- `react-hooks/rules-of-hooks` - Invalid React Hook usage
+- `@next/next/no-img-element` - Using `<img>` instead of Next.js `<Image>`
+- `@next/next/no-html-link-for-pages` - Using `<a>` instead of Next.js `<Link>`
+
+**ESLint warnings (block commit with --max-warnings=0):**
+
+- `@typescript-eslint/no-unused-vars` - Unused variables/imports
+- `react-hooks/exhaustive-deps` - Missing dependencies in hooks
+- `prefer-const` - Variable that should be `const`
+- `no-debugger` - Debugger statements
+
+**Prettier formatting:**
+
+- Semicolons, quotes, line length, indentation, etc.
+- All formatting is auto-fixed
+
+**MAC Design System Compliance (NEW - blocks commit):**
+
+- Hardcoded colors (must use `--mac-*` CSS variables)
+- Non-8px spacing grid violations (gap-1/3/5/7, p-1/3/5/7, etc.)
+- Invalid font weights (only 100-400 allowed, blocks font-bold/semibold/etc.)
+
+**Manual MAC compliance checks:**
+
+```bash
+npm run mac:check         # Check staged files (used by pre-commit hook)
+npm run mac:check-all     # Check all source files
+```
+
+### Bypassing the Hook (NOT RECOMMENDED)
+
+Only in emergencies:
+
+```bash
+git commit --no-verify -m "emergency fix"
+```
+
+**IMPORTANT**: CI/CD will still catch these errors, so fix them ASAP.
+
+### Configuration Files
+
+- `.husky/pre-commit` - Git hook that runs lint-staged
+- `package.json` (lint-staged section) - Defines what runs on staged files
+- `.eslintrc.json` - ESLint rules configuration
+- `.prettierrc` - Prettier formatting configuration
+
+---
+
+## 🎯 TypeScript-First Development - MANDATORY STANDARD
+
+**CRITICAL**: All NEW code MUST pass `npm run type-check` before being proposed as PR-ready.
+
+### The Standard (Effective Immediately)
+
+**BEFORE proposing ANY PR as ready for review:**
+
+```bash
+# 1. MANDATORY: Check TypeScript errors in YOUR files
+npm run type-check 2>&1 | grep "error TS"
+
+# 2. Verify YOUR changed files are error-free
+git diff --name-only main...HEAD | while read file; do
+  errors=$(npm run type-check 2>&1 | grep "$file")
+  if [ -n "$errors" ]; then
+    echo "❌ ERRORS in $file:"
+    echo "$errors"
+  fi
+done
+
+# 3. Format check
+npm run format:check
+
+# 4. Lint check
+npm run lint
+
+# 5. Build check
+npm run build
+```
+
+### Why This Matters
+
+**Before this standard**: Virtually none of our PRs passed because they weren't tested at write-time.
+
+**After this standard**: Every PR is TypeScript-clean, preventing type errors from reaching production.
+
+### Pre-existing Errors
+
+**Status**: 541 pre-existing TypeScript errors exist in the codebase (as of 2025-10-24).
+
+**Your responsibility**: Only fix errors in files YOU modify. Pre-existing errors are NOT blockers for your PR.
+
+**See**: `docs/TYPESCRIPT-ERROR-STATUS.md` for complete breakdown of pre-existing errors and cleanup plan.
+
+### Common TypeScript Errors and Fixes
+
+**TS6133: Variable declared but never used**
+
+```typescript
+// ❌ Bad
+import { Foo, Bar } from './utils';
+const [count, setCount] = useState(0);
+
+// ✅ Good - Remove unused imports/variables
+import { Foo } from './utils';
+const [count, setCount] = useState(0);
+
+// ✅ Good - Prefix with _ if intentionally unused
+const [count, _setCount] = useState(0);
+items.map((item, _index) => ...)
+```
+
+**TS7030: Not all code paths return a value**
+
+```typescript
+// ❌ Bad
+useEffect(() => {
+  if (condition) {
+    return () => cleanup();
+  }
+}); // Missing return in else case
+
+// ✅ Good
+useEffect(() => {
+  if (condition) {
+    return () => cleanup();
+  }
+  return undefined; // Explicit return
+});
+```
+
+**TS7006: Parameter implicitly has 'any' type**
+
+```typescript
+// ❌ Bad
+const handleClick = (e) => { ... }
+
+// ✅ Good
+const handleClick = (e: React.MouseEvent) => { ... }
+```
+
+**TS18048: Expression is possibly undefined**
+
+```typescript
+// ❌ Bad
+const name = user.profile.name; // profile might be undefined
+
+// ✅ Good
+const name = user.profile?.name;
+const name = user.profile?.name ?? "Unknown";
+```
+
+### 🤖 Claude Code Workflow Integration
+
+**MANDATORY for Claude**: Before claiming PR-ready status:
+
+1. ✅ Run `npm run type-check`
+2. ✅ Check if YOUR modified files have errors
+3. ✅ Fix ALL errors in YOUR files
+4. ✅ Run format:check, lint, build
+5. ✅ ONLY THEN claim PR-ready
+
+**DO NOT**:
+
+- ❌ Suppress errors with `@ts-ignore` or `@ts-expect-error` (unless absolutely necessary)
+- ❌ Disable strict type checks in tsconfig.json
+- ❌ Claim PR-ready without running type-check
+- ❌ Leave type errors for "later"
+
+### Quick Reference
+
+```bash
+# Check total errors
+npm run type-check 2>&1 | grep "error TS" | wc -l
+
+# Check errors in specific file
+npm run type-check 2>&1 | grep "src/components/MyComponent.tsx"
+
+# Check errors by type
+npm run type-check 2>&1 | grep "error TS6133"  # Unused variables
+
+# See full status report
+cat docs/TYPESCRIPT-ERROR-STATUS.md
+```
+
+---
+
 ## 🧪 TESTING FUNDAMENTALS - CRITICAL
 
 **⚠️ MANDATORY READING**: See `TESTING_FUNDAMENTALS.md` for comprehensive test documentation.
@@ -72,10 +350,10 @@ SIAM has a complete Playwright test suite covering:
 
 ```bash
 # P0 Critical Tests (MUST PASS)
-npm run test:aoma                                                     # AOMA hallucination prevention (CRITICAL!)
-npx playwright test tests/curate-tab-test.spec.ts                    # File upload/delete
-npx playwright test tests/visual/dark-theme-regression.spec.ts       # UI consistency
-npx playwright test tests/e2e/smoke/smoke.spec.ts                    # Critical paths
+npm run test:aoma                                  # AOMA hallucination prevention (CRITICAL!)
+npm run test:visual                                # Visual regression (MAC compliance + dark theme)
+npx playwright test tests/curate-tab-test.spec.ts # File upload/delete
+npx playwright test tests/e2e/smoke/smoke.spec.ts # Critical paths
 ```
 
 **AOMA Chat Validation (Anti-Hallucination)**:
@@ -91,11 +369,29 @@ npm run test:aoma:all          # All AOMA tests (includes comprehensive chat tes
 ./scripts/test-aoma-validation.sh
 ```
 
+**Visual Regression Testing (MAC Design System & UI)**:
+
+```bash
+# Run all visual regression tests
+npm run test:visual
+
+# Test MAC Design System compliance (colors, spacing, typography)
+npm run test:visual:mac
+
+# Test dark theme consistency (prevent white background regressions)
+npm run test:visual:dark-theme
+
+# Update visual snapshots (after intentional UI changes)
+npm run test:visual:update-snapshots
+```
+
 **Full test documentation**:
 
 - `TESTING_FUNDAMENTALS.md` - Complete testing guide
 - `tests/README.md` - Test suite overview
 - `tests/production/AOMA-TESTING-README.md` - **AOMA anti-hallucination testing guide**
+- `tests/visual/mac-design-system-regression.spec.ts` - MAC Design System visual regression tests
+- `tests/visual/dark-theme-regression.spec.ts` - Dark theme regression prevention
 
 ## 📚 AOMA DOCUMENTATION - COMPREHENSIVE INDEX
 
@@ -170,6 +466,78 @@ This handles EVERYTHING:
 ./scripts/deploy.sh                  # Basic deployment
 python3 ./scripts/monitor-deployment.py  # Monitor existing deployment
 ```
+
+### 🎯 Automated PR Merge → Production Pipeline
+
+**FULLY AUTOMATED**: When you merge a PR to `main`, production deployment happens automatically!
+
+**How It Works:**
+
+1. **Merge PR to main** - GitHub detects the merge event
+2. **GitHub Actions runs** - `.github/workflows/pr-merge-deploy.yml` triggers
+3. **Render deploys** - Auto-deploy from main branch (configured in `render.yaml`)
+4. **Health monitoring** - Automated health checks verify deployment
+5. **PR comment** - Status posted back to the merged PR
+6. **Branch cleanup** - `claude/*` branches auto-deleted after merge
+
+**What Gets Monitored:**
+
+- Health endpoint (`/api/health`)
+- Main page load
+- Build timestamp verification
+- Stable response checks (3 consecutive healthy checks)
+- Console error detection
+
+**Workflow Files:**
+
+- `.github/workflows/pr-merge-deploy.yml` - PR merge detection & deployment
+- `.github/workflows/ci-cd.yml` - Full CI/CD pipeline with tests
+- `render.yaml` - Render service configuration with auto-deploy
+
+**Setting Up Deploy Hook (Optional - for faster deploys):**
+
+1. Get your Render Deploy Hook URL:
+   - Go to [Render Dashboard](https://dashboard.render.com)
+   - Select your service (siam-app)
+   - Go to Settings → Deploy Hook
+   - Copy the deploy hook URL
+
+2. Add it to GitHub as a repository variable:
+
+   ```bash
+   # Via GitHub UI:
+   # Settings → Secrets and variables → Actions → Variables
+   # Name: RENDER_DEPLOY_HOOK_URL
+   # Value: https://api.render.com/deploy/srv-xxxxx?key=xxxxx
+
+   # Or via gh CLI:
+   gh variable set RENDER_DEPLOY_HOOK_URL --body "https://api.render.com/deploy/srv-xxxxx?key=xxxxx"
+   ```
+
+3. The workflow will automatically use it if present!
+
+**Monitoring Your Deployment:**
+
+```bash
+# Watch GitHub Actions
+gh run watch
+
+# Check production health
+curl https://iamsiam.ai/api/health
+
+# View Render logs via MCP
+# Use Render MCP tools in Claude Code to check logs and status
+```
+
+**What You See After Merging PR:**
+
+- ✅ Automated comment on PR with deployment status
+- ✅ GitHub deployment record created
+- ✅ Health verification results
+- ✅ Build timestamp confirmation
+- ⚠️ Issue created if deployment fails (auto-assigned to you)
+
+**No Manual Steps Required!** Just merge the PR and the pipeline handles everything.
 
 ## 🔥 YOLO MODE - FUCK APPROVALS, SHIP CODE NOW!
 

@@ -69,7 +69,9 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
         className="px-4 py-2 border-b border-mac-border cursor-grab active:cursor-grabbing bg-mac-state-hover"
         onMouseDown={handleMouseDown}
       >
-        <h3 className="mac-title text-mac-text-primary">{title}</h3>
+        <h3 c className="mac-title" lassName="mac-title text-mac-text-primary">
+          {title}
+        </h3>
       </div>
 
       {/* Content */}
@@ -133,7 +135,9 @@ export const HUDInterface: React.FC<HUDInterfaceProps> = ({
 
       {/* HUD Title */}
       <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
-        <h1 className="mac-display text-mac-text-primary">SIAM HUD Interface</h1>
+        <h1 c className="mac-heading" lassName="mac-heading mac-display text-mac-text-primary">
+          SIAM HUD Interface
+        </h1>
         <p className="text-center mac-body mt-2">
           Smart In A Meeting • Floating Intelligence Panels
         </p>
@@ -158,7 +162,7 @@ export const HUDInterface: React.FC<HUDInterfaceProps> = ({
               {(panel.content as string[]).map((insight, index) => (
                 <div
                   key={index}
-                  className="mb-2 p-3 rounded-lg border-l-2 border-mac-accent-purple-400 bg-mac-accent-purple-400/10"
+                  className="mb-2 p-4 rounded-lg border-l-2 border-mac-accent-purple-400 bg-mac-accent-purple-400/10"
                 >
                   <p className="mac-body text-mac-text-secondary">{insight}</p>
                 </div>
@@ -187,11 +191,11 @@ export const HUDInterface: React.FC<HUDInterfaceProps> = ({
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="p-2 rounded text-center bg-mac-primary-blue-400/10">
                   <p className="mac-body text-mac-text-muted">Status</p>
-                  <p className="text-mac-text-primary">Active</p>
+                  <p className="mac-body text-mac-text-primary">Active</p>
                 </div>
                 <div className="p-2 rounded text-center bg-mac-accent-purple-400/10">
                   <p className="mac-body text-mac-text-muted">Quality</p>
-                  <p className="text-mac-text-primary">HD</p>
+                  <p className="mac-body text-mac-text-primary">HD</p>
                 </div>
               </div>
             </div>
