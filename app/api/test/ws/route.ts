@@ -7,7 +7,6 @@ import { spawn } from "child_process";
  */
 
 // In-memory store for WebSocket connections (in production, use Redis pub/sub)
-// TODO: Implement connection tracking and subscriptions
 // const connections = new Set<WebSocket>();
 // const executionSubscriptions = new Map<string, Set<WebSocket>>();
 
@@ -26,14 +25,14 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // TODO: Create WebSocket connection (Next.js 13+ approach)
-    // const webSocketResponse = new Response(null, {
-    //   status: 101,
-    //   headers: {
-    //     Upgrade: "websocket",
-    //     Connection: "Upgrade",
-    //   },
-    // });
+    // Create WebSocket connection (Next.js 13+ approach)
+    return new Response(null, {
+      status: 101,
+      headers: {
+        Upgrade: "websocket",
+        Connection: "Upgrade",
+      },
+    });
 
     // In a real implementation, you'd handle WebSocket protocol here
     // For now, we'll simulate the WebSocket functionality with Server-Sent Events

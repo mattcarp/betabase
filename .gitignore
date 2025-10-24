@@ -33,6 +33,8 @@ release/
 storybook-static/
 .next/
 out/
+target/
+siam-terminal/
 
 # Environment variables
 .env
@@ -88,6 +90,8 @@ processed/
 *.tmp
 *.temp
 *.cache
+tmp/
+.tmp/
 
 # Local Netlify folder
 .netlify

@@ -44,7 +44,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
       isConnected,
       startConversation: startConv,
       stopConversation: stopConv,
-      toggleConversation: toggleConv,
+      toggleConversation: _toggleConv,
       conversationState,
       interruptAgent,
       userTranscript,
@@ -307,12 +307,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         {/* Audio waveform visualization */}
         {isConnected && (
           <div className="mt-4">
-            <AudioWaveform
-              isRecording={isUserSpeaking || isAISpeaking}
-              frequencyData={
-                audioFeatures ? new Uint8Array([audioFeatures.energy * 255]) : undefined
-              }
-            />
+            <AudioWaveform isRecording={isUserSpeaking || isAISpeaking} />
           </div>
         )}
 

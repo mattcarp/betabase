@@ -148,23 +148,17 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
               "Data Flow",
               "Updates",
             ];
-            const icons = [
-              <RefreshCw key="icon-0" className="h-3 w-3" />,
-              <Zap key="icon-1" className="h-3 w-3" />,
-              <AlertCircle key="icon-2" className="h-3 w-3" />,
-              <BookOpen key="icon-3" className="h-3 w-3" />,
-              <TrendingUp key="icon-4" className="h-3 w-3" />,
-              <Sparkles key="icon-5" className="h-3 w-3" />,
-            ];
+            const iconComponents = [RefreshCw, Zap, AlertCircle, BookOpen, TrendingUp, Sparkles];
 
             lines.forEach((line: string, index: number) => {
               // Extract questions from numbered format
               const match = line.match(/^\d+\.\s+\*\*.*?\*\*:?\s*(.+)/);
               if (match && newSuggestions.length < 6) {
+                const IconComponent = iconComponents[newSuggestions.length] || BookOpen;
                 newSuggestions.push({
                   text: match[1].trim(),
                   category: categories[newSuggestions.length] || "General",
-                  icon: icons[newSuggestions.length] || <BookOpen className="h-3 w-3" />,
+                  icon: <IconComponent className="h-3 w-3" />,
                 });
               }
             });

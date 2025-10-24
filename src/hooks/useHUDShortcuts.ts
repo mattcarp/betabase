@@ -308,7 +308,7 @@ export const useHUDShortcuts = (config: HUDShortcutsConfig) => {
   );
 
   // Individual Panel Shortcuts (1-9)
-  // Note: Must call hooks outside of loops per Rules of Hooks
+  // Note: Must be defined separately to follow Rules of Hooks (no hooks in loops)
   useHotkeys(
     "ctrl+1",
     (e) => {
