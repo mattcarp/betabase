@@ -38,6 +38,7 @@
     "**/* [0-9]*.ts",
     "**/* [0-9]*.tsx",
     "**/test-*.ts",
-    "tests/**/*"
+    "tests/**/*",
+    "vitest.config.ts"
   ]
 }
