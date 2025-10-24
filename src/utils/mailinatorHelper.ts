@@ -17,19 +17,19 @@ interface MailinatorEmail {
 
 // Unused interface - keeping for future use
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface MailinatorMessage {
-  data: {
-    text?: string;
-    html?: string;
-    parts?: Array<{
-      body: string;
-    }>;
-  };
-}
+// interface MailinatorMessage {
+//   data: {
+//     text?: string;
+//     html?: string;
+//     parts?: Array<{
+//       body: string;
+//     }>;
+//   };
+// }
 
 export class MailinatorHelper {
   private static readonly BASE_URL = "https://www.mailinator.com";
-  private static readonly API_BASE = "https://www.mailinator.com/api/v2";
+  // private static readonly API_BASE = "https://www.mailinator.com/api/v2"; // Unused - keeping for future use
 
   /**
    * Generate a unique test email address
