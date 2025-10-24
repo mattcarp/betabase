@@ -7,7 +7,7 @@ const openai = new OpenAI({
 
 export async function POST(request: NextRequest) {
   try {
-    const { action, files, fileId, topic } = await request.json();
+    const { action, files, topic } = await request.json();
 
     switch (action) {
       case "analyze_content":

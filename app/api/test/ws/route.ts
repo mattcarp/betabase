@@ -7,8 +7,8 @@ import { spawn } from "child_process";
  */
 
 // In-memory store for WebSocket connections (in production, use Redis pub/sub)
-const connections = new Set<WebSocket>();
-const executionSubscriptions = new Map<string, Set<WebSocket>>();
+// const connections = new Set<WebSocket>();
+// const executionSubscriptions = new Map<string, Set<WebSocket>>();
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -26,13 +26,13 @@ export async function GET(request: NextRequest) {
 
   try {
     // Create WebSocket connection (Next.js 13+ approach)
-    const webSocketResponse = new Response(null, {
-      status: 101,
-      headers: {
-        Upgrade: "websocket",
-        Connection: "Upgrade",
-      },
-    });
+    // const _webSocketResponse = new Response(null, {
+    //   status: 101,
+    //   headers: {
+    //     Upgrade: "websocket",
+    //     Connection: "Upgrade",
+    //   },
+    // });
 
     // In a real implementation, you'd handle WebSocket protocol here
     // For now, we'll simulate the WebSocket functionality with Server-Sent Events
@@ -113,9 +113,9 @@ export async function POST(request: NextRequest) {
               const lines = data
                 .toString()
                 .split("\n")
-                .filter((line) => line.trim());
+                .filter((line: any) => line.trim());
 
-              lines.forEach((line) => {
+              lines.forEach((line: any) => {
                 try {
                   // Parse JSON events from our custom reporter
                   const event = JSON.parse(line);
