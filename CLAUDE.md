@@ -184,6 +184,144 @@ git commit --no-verify -m "emergency fix"
 
 ---
 
+## 🎯 TypeScript-First Development - MANDATORY STANDARD
+
+**CRITICAL**: All NEW code MUST pass `npm run type-check` before being proposed as PR-ready.
+
+### The Standard (Effective Immediately)
+
+**BEFORE proposing ANY PR as ready for review:**
+
+```bash
+# 1. MANDATORY: Check TypeScript errors in YOUR files
+npm run type-check 2>&1 | grep "error TS"
+
+# 2. Verify YOUR changed files are error-free
+git diff --name-only main...HEAD | while read file; do
+  errors=$(npm run type-check 2>&1 | grep "$file")
+  if [ -n "$errors" ]; then
+    echo "❌ ERRORS in $file:"
+    echo "$errors"
+  fi
+done
+
+# 3. Format check
+npm run format:check
+
+# 4. Lint check
+npm run lint
+
+# 5. Build check
+npm run build
+```
+
+### Why This Matters
+
+**Before this standard**: Virtually none of our PRs passed because they weren't tested at write-time.
+
+**After this standard**: Every PR is TypeScript-clean, preventing type errors from reaching production.
+
+### Pre-existing Errors
+
+**Status**: 541 pre-existing TypeScript errors exist in the codebase (as of 2025-10-24).
+
+**Your responsibility**: Only fix errors in files YOU modify. Pre-existing errors are NOT blockers for your PR.
+
+**See**: `docs/TYPESCRIPT-ERROR-STATUS.md` for complete breakdown of pre-existing errors and cleanup plan.
+
+### Common TypeScript Errors and Fixes
+
+**TS6133: Variable declared but never used**
+
+```typescript
+// ❌ Bad
+import { Foo, Bar } from './utils';
+const [count, setCount] = useState(0);
+
+// ✅ Good - Remove unused imports/variables
+import { Foo } from './utils';
+const [count, setCount] = useState(0);
+
+// ✅ Good - Prefix with _ if intentionally unused
+const [count, _setCount] = useState(0);
+items.map((item, _index) => ...)
+```
+
+**TS7030: Not all code paths return a value**
+
+```typescript
+// ❌ Bad
+useEffect(() => {
+  if (condition) {
+    return () => cleanup();
+  }
+}); // Missing return in else case
+
+// ✅ Good
+useEffect(() => {
+  if (condition) {
+    return () => cleanup();
+  }
+  return undefined; // Explicit return
+});
+```
+
+**TS7006: Parameter implicitly has 'any' type**
+
+```typescript
+// ❌ Bad
+const handleClick = (e) => { ... }
+
+// ✅ Good
+const handleClick = (e: React.MouseEvent) => { ... }
+```
+
+**TS18048: Expression is possibly undefined**
+
+```typescript
+// ❌ Bad
+const name = user.profile.name; // profile might be undefined
+
+// ✅ Good
+const name = user.profile?.name;
+const name = user.profile?.name ?? "Unknown";
+```
+
+### 🤖 Claude Code Workflow Integration
+
+**MANDATORY for Claude**: Before claiming PR-ready status:
+
+1. ✅ Run `npm run type-check`
+2. ✅ Check if YOUR modified files have errors
+3. ✅ Fix ALL errors in YOUR files
+4. ✅ Run format:check, lint, build
+5. ✅ ONLY THEN claim PR-ready
+
+**DO NOT**:
+
+- ❌ Suppress errors with `@ts-ignore` or `@ts-expect-error` (unless absolutely necessary)
+- ❌ Disable strict type checks in tsconfig.json
+- ❌ Claim PR-ready without running type-check
+- ❌ Leave type errors for "later"
+
+### Quick Reference
+
+```bash
+# Check total errors
+npm run type-check 2>&1 | grep "error TS" | wc -l
+
+# Check errors in specific file
+npm run type-check 2>&1 | grep "src/components/MyComponent.tsx"
+
+# Check errors by type
+npm run type-check 2>&1 | grep "error TS6133"  # Unused variables
+
+# See full status report
+cat docs/TYPESCRIPT-ERROR-STATUS.md
+```
+
+---
+
 ## 🧪 TESTING FUNDAMENTALS - CRITICAL
 
 **⚠️ MANDATORY READING**: See `TESTING_FUNDAMENTALS.md` for comprehensive test documentation.

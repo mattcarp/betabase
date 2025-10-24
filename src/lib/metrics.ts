@@ -45,13 +45,12 @@ function calculatePercentile(arr: number[], percentile: number): number {
 }
 
 // Update performance metrics
-function updatePerformanceMetrics() {
+export function updatePerformanceMetrics() {
   const recentRequests = metrics.requests.slice(-100);
   const durations = recentRequests.map((r) => r.duration);
 
   if (durations.length > 0) {
-    metrics.performance.avgResponseTime =
-      durations.reduce((a, b) => a + b, 0) / durations.length;
+    metrics.performance.avgResponseTime = durations.reduce((a, b) => a + b, 0) / durations.length;
     metrics.performance.p95ResponseTime = calculatePercentile(durations, 95);
     metrics.performance.p99ResponseTime = calculatePercentile(durations, 99);
   }

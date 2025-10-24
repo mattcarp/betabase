@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
     ];
 
     // Filter by file if provided
-    let coverageData = file
+    const coverageData = file
       ? mockCoverageData.filter((c) => c.file === file)
       : mockCoverageData;
 

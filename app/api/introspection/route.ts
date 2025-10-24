@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { metrics, trackRequest, trackError } from "@/lib/metrics";
+import { metrics, trackRequest, trackError, updatePerformanceMetrics } from "@/lib/metrics";
 
 // Introspection API endpoint for SIAM internal monitoring
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Track this introspection request
     const startTime = Date.now();
