@@ -290,6 +290,7 @@ export const CoverageReport: React.FC = () => {
               </div>
 
               <Button
+          aria-label="Download"
                 className="w-full mac-button mac-button-outline"
                 variant="outline"
               >

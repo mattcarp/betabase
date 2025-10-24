@@ -381,7 +381,7 @@ test.describe('${prompt}', () => {
                     <Download className="h-4 w-4 mr-2" />
                     Export
                   </Button>
-                  <Button className="mac-button mac-button-primary" size="sm">
+                  <Button className="mac-button mac-button-primary" size="sm" aria-label="Play">
                     <Play className="h-4 w-4 mr-2" />
                     Run Test
                   </Button>
