@@ -14,13 +14,13 @@ import {
   TrendingUp,
   TrendingDown,
   Minus,
-  Sparkles,
+  // Sparkles, // Unused
   Circle,
   ChevronRight,
-  Filter,
+  // Filter, // Unused
   Clock,
-  Tag,
-  Zap,
+  // Tag, // Unused
+  // Zap, // Unused
   Brain,
   FileText,
 } from "lucide-react";
@@ -259,14 +259,14 @@ export const TopicClusters: React.FC<TopicClustersProps> = ({
 
             {cluster.metadata && (
               <div className="text-xs text-zinc-500 space-y-1 pt-2 border-t border-zinc-800">
-                {cluster.metadata.jiraTickets?.length > 0 && (
-                  <div>Jira: {cluster.metadata.jiraTickets.length} tickets</div>
+                {cluster.metadata.jiraTickets?.length && cluster.metadata.jiraTickets.length > 0 && (
+                  <div>Jira: {cluster.metadata.jiraTickets?.length} tickets</div>
                 )}
-                {cluster.metadata.releaseNotes?.length > 0 && (
-                  <div>Releases: {cluster.metadata.releaseNotes.length} notes</div>
+                {cluster.metadata.releaseNotes?.length && cluster.metadata.releaseNotes.length > 0 && (
+                  <div>Releases: {cluster.metadata.releaseNotes?.length} notes</div>
                 )}
-                {cluster.metadata.supportDocs?.length > 0 && (
-                  <div>Docs: {cluster.metadata.supportDocs.length} documents</div>
+                {cluster.metadata.supportDocs?.length && cluster.metadata.supportDocs.length > 0 && (
+                  <div>Docs: {cluster.metadata.supportDocs?.length} documents</div>
                 )}
               </div>
             )}
