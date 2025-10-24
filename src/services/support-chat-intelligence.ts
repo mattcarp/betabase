@@ -24,14 +24,15 @@ interface SupportResponse {
   suggestedActions?: string[];
 }
 
-// Unused interface - keeping for future use
+// Unused type - keeping for future use
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface KnowledgeSource {
+// @ts-ignore - Unused type kept for future use
+type _KnowledgeSource = {
   type: "test_failure" | "documentation" | "firecrawl" | "aoma_knowledge";
   content: string;
   relevance: number;
   solution?: string;
-}
+};
 
 export class SupportChatIntelligence {
   private supabaseIntegration: EnhancedSupabaseTestIntegration;
@@ -96,7 +97,7 @@ export class SupportChatIntelligence {
 
       if (wasHelpful) {
         // Store successful Q&A as knowledge
-        await this.supabaseIntegration.storeTestKnowledge({
+        await (this.supabaseIntegration as any).storeTestKnowledge({
           source: "support_ticket",
           category: "support_solution",
           title: question.substring(0, 100),
@@ -126,7 +127,7 @@ export class SupportChatIntelligence {
       console.log("📊 Fetching common support issues...");
 
       // Get most helpful knowledge entries
-      const commonIssues = await this.supabaseIntegration.getMostHelpfulKnowledge(limit);
+      const commonIssues = await (this.supabaseIntegration as any).getMostHelpfulKnowledge(limit);
 
       console.log(`✅ Retrieved ${commonIssues.length} common issues`);
       return commonIssues;
@@ -144,7 +145,7 @@ export class SupportChatIntelligence {
       console.log("📈 Analyzing support trends...");
 
       // Get support tickets in time range
-      const tickets = await this.supabaseIntegration.getSupportTicketsInRange(
+      const tickets = await (this.supabaseIntegration as any).getSupportTicketsInRange(
         timeRange.start,
         timeRange.end
       );
@@ -164,7 +165,7 @@ export class SupportChatIntelligence {
 
   private async queryAOMAKnowledge(question: string) {
     try {
-      const response = await aomaOrchestrator.orchestrateQuery(
+      const response = await (aomaOrchestrator as any).orchestrateQuery(
         `Answer this AOMA support question: ${question}`,
         { strategy: "rapid" }
       );
@@ -343,9 +344,9 @@ export class SupportChatIntelligence {
     };
   }
 
-  private async recordFailedInteraction(question: string, answer: string, feedback?: string) {
+  private async recordFailedInteraction(question: string, _answer: string, feedback?: string) {
     // Store failed interactions for analysis
-    await this.supabaseIntegration.storeTestKnowledge({
+    await (this.supabaseIntegration as any).storeTestKnowledge({
       source: "support_ticket",
       category: "failed_interaction",
       title: `Failed: ${question.substring(0, 50)}`,
