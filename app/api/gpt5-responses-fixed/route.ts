@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const {
       message,
       conversationId,
-      tools = ["web_search", "file_search"],
+      tools: _tools = ["web_search", "file_search"],
       temperature = 0.7,
       maxTokens = 4096,
     } = await req.json();
