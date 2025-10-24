@@ -15,22 +15,22 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
+  // Legend, // Unused
   ResponsiveContainer,
   Cell,
 } from "recharts";
 import {
   Bug,
   AlertTriangle,
-  TrendingUp,
+  // TrendingUp, // Unused
   TrendingDown,
   Clock,
-  RefreshCw,
+  // RefreshCw, // Unused
   Shield,
   Zap,
-  Filter,
-  Calendar,
-  ChevronRight,
+  // Filter, // Unused
+  // Calendar, // Unused
+  // ChevronRight, // Unused
   CheckCircle,
   XCircle,
 } from "lucide-react";
@@ -56,7 +56,7 @@ export const FlakyTestExplorer: React.FC = () => {
   const [severityFilter, setSeverityFilter] = useState<
     "all" | "critical" | "high" | "medium" | "low"
   >("all");
-  const [timeRange, setTimeRange] = useState<"24h" | "7d" | "30d">("7d");
+  const [_timeRange, _setTimeRange] = useState<"24h" | "7d" | "30d">("7d"); // Unused
 
   const flakyTests: FlakyTest[] = [
     {
