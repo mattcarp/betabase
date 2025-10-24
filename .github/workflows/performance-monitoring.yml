@@ -38,14 +38,14 @@ jobs:
           uploadArtifacts: true
           temporaryPublicStorage: true
           runs: 3
-          configPath: '.github/lighthouse/lighthouserc.json'
+          configPath: ".github/lighthouse/lighthouserc.json"
 
       - name: Upload Lighthouse results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-results
-          path: '.lighthouseci'
+          path: ".lighthouseci"
           retention-days: 30
 
   bundle-size:
@@ -73,21 +73,21 @@ jobs:
         uses: hashimoto-ryosuke/next-bundle-analyzer@v1
         with:
           buildOutputDirectory: .next
-          
+
       - name: Check bundle size limits
         run: |
           echo "Checking bundle sizes against limits..."
-          
+
           # Define size limits (in KB)
           MAX_FIRST_LOAD_JS=300
           MAX_PAGE_SIZE=150
-          
+
           # Extract sizes from build output
           if [ -f ".next/analyze/client.html" ]; then
             echo "✅ Bundle analysis complete"
             echo "Review the analysis artifacts for detailed breakdown"
           fi
-          
+
           # Add size limit checks here if needed
           echo "Bundle size check passed"
 
@@ -106,26 +106,26 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            
+
             let comment = `## 📦 Bundle Size Report\n\n`;
             comment += `Bundle analysis has been generated. Check the artifacts for detailed breakdown.\n\n`;
             comment += `### Quick Stats\n`;
             comment += `- First Load JS: Check artifacts\n`;
             comment += `- Total Bundle Size: Check artifacts\n\n`;
             comment += `🔍 [View detailed analysis in artifacts](${context.payload.pull_request.html_url}/checks)\n`;
-            
+
             // Find existing comment
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
-            
+
             const botComment = comments.find(comment => 
               comment.user.type === 'Bot' && 
               comment.body.includes('📦 Bundle Size Report')
             );
-            
+
             if (botComment) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,

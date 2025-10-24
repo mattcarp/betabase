@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths-ignore:
-      - '**.md'
-      - 'docs/**'
+      - "**.md"
+      - "docs/**"
 
 permissions:
   contents: write
@@ -18,7 +18,7 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -46,19 +46,19 @@ jobs:
           # Get commit messages since last tag
           LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
           COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"%s")
-          
+
           echo "Analyzing commits since ${LAST_TAG}:"
           echo "${COMMITS}"
-          
+
           # Determine bump type based on conventional commits
           BUMP="patch"
-          
+
           if echo "${COMMITS}" | grep -qE "^(BREAKING CHANGE|feat!|fix!|chore!):"; then
             BUMP="major"
           elif echo "${COMMITS}" | grep -qE "^feat(\(.+\))?:"; then
             BUMP="minor"
           fi
-          
+
           echo "bump=${BUMP}" >> $GITHUB_OUTPUT
           echo "Detected bump type: ${BUMP}"
 
@@ -68,7 +68,7 @@ jobs:
           # Bump version based on type
           BUMP_TYPE="${{ steps.version.outputs.bump }}"
           NEW_VERSION=$(npm version ${BUMP_TYPE} --no-git-tag-version)
-          
+
           echo "version=${NEW_VERSION}" >> $GITHUB_OUTPUT
           echo "New version: ${NEW_VERSION}"
 
@@ -76,37 +76,37 @@ jobs:
         id: changelog
         run: |
           LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          
+
           if [ -z "$LAST_TAG" ]; then
             CHANGELOG=$(git log --pretty=format:"- %s (%h)" --no-merges)
           else
             CHANGELOG=$(git log ${LAST_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
           fi
-          
+
           # Categorize commits
           FEATURES=$(echo "$CHANGELOG" | grep "^- feat" || echo "")
           FIXES=$(echo "$CHANGELOG" | grep "^- fix" || echo "")
           CHORES=$(echo "$CHANGELOG" | grep "^- chore" || echo "")
           OTHERS=$(echo "$CHANGELOG" | grep -v "^- feat" | grep -v "^- fix" | grep -v "^- chore" || echo "")
-          
+
           FORMATTED_CHANGELOG="## What's Changed\n\n"
-          
+
           if [ -n "$FEATURES" ]; then
             FORMATTED_CHANGELOG="${FORMATTED_CHANGELOG}### ✨ Features\n${FEATURES}\n\n"
           fi
-          
+
           if [ -n "$FIXES" ]; then
             FORMATTED_CHANGELOG="${FORMATTED_CHANGELOG}### 🐛 Bug Fixes\n${FIXES}\n\n"
           fi
-          
+
           if [ -n "$CHORES" ]; then
             FORMATTED_CHANGELOG="${FORMATTED_CHANGELOG}### 🔧 Maintenance\n${CHORES}\n\n"
           fi
-          
+
           if [ -n "$OTHERS" ]; then
             FORMATTED_CHANGELOG="${FORMATTED_CHANGELOG}### 📝 Other Changes\n${OTHERS}\n\n"
           fi
-          
+
           # Save to file and output
           echo -e "$FORMATTED_CHANGELOG" > CHANGELOG_CURRENT.md
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
