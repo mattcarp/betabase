@@ -125,3 +125,4 @@ tmp/
 # Task files
 # tasks.json
 # tasks/ 
+*.tsbuildinfo
