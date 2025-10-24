@@ -78,7 +78,7 @@ export function ChatWrapper({
               <Sparkles className="h-5 w-5 text-primary animate-pulse" />
               <div className="absolute inset-0 bg-primary/20 blur-xl" />
             </div>
-            <h3 c className="mac-title" lassName="mac-title font-semibold text-lg">
+            <h3 className="mac-title font-semibold text-lg">
               AI Assistant
             </h3>
             <Badge variant="secondary" className="text-xs">
@@ -214,12 +214,10 @@ export function ChatWrapper({
                     {error.message || "An error occurred. Please try again."}
                   </p>
                   <Button
-                    className="mac-button mac-button-outline"
+                    className="mac-button mac-button-outline mt-2 h-7 text-xs"
                     variant="ghost"
-                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => reload()}
-                    className="mt-2 h-7 text-xs"
                   >
                     Retry
                   </Button>
@@ -262,13 +260,11 @@ export function ChatWrapper({
           </Button>
           {isLoading && (
             <Button
-              className="mac-button mac-button-outline"
+              className="mac-button mac-button-outline border-destructive/50 hover:bg-destructive/10"
               type="button"
               size="icon"
               variant="outline"
-              className="mac-button mac-button-outline"
               onClick={() => stop()}
-              className="border-destructive/50 hover:bg-destructive/10"
             >
               <div className="h-3 w-3 bg-destructive rounded-sm" />
             </Button>
