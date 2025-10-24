@@ -70,7 +70,7 @@ const ChatRequestSchema = z.object({
   systemPrompt: z.string().max(5000).optional(), // 5KB limit for system prompt
 });
 
-export async function GET(req: Request) {
+export async function GET(_req: Request) {
   // Handle GET requests - return API info/status
   return new Response(
     JSON.stringify({
@@ -86,7 +86,7 @@ export async function GET(req: Request) {
   );
 }
 
-export async function OPTIONS(req: Request) {
+export async function OPTIONS(_req: Request) {
   return new Response(null, {
     status: 204,
     headers: {
@@ -527,7 +527,7 @@ ${aomaContext}
     console.log("⏳ Calling AI SDK streamText...");
     const result = streamText({
       model: openai(selectedModel),
-      messages: openAIMessages, // Already in correct format after filtering/validation
+      messages: openAIMessages as any, // Type cast - OpenAI messages compatible with AI SDK
       system: enhancedSystemPrompt, // Use system parameter instead of adding to messages array
       temperature: modelSettings.temperature || temperature,
       // Note: AI SDK handles token limits via the model config, not maxTokens parameter
