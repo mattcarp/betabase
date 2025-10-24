@@ -90,10 +90,7 @@ function processFile(filePath, dryRun) {
 
       if (line.includes(">")) {
         // Single line: <Button ...>
-        lines[i] = line.replace(
-          /(<Button[^>]*?)(>)/,
-          `$1 aria-label="${ariaLabel}"$2`
-        );
+        lines[i] = line.replace(/(<Button[^>]*?)(>)/, `$1 aria-label="${ariaLabel}"$2`);
       } else {
         // Multi-line, add aria-label after Button tag
         lines[i] = line + `\n          aria-label="${ariaLabel}"`;
