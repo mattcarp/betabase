@@ -1,7 +1,7 @@
 "use client";
 
 import { CodeBlock, CodeBlockCopyButton } from "./code-block";
-import type { ComponentProps, HTMLAttributes } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 import { memo, isValidElement } from "react";
 import ReactMarkdown, { type Options } from "react-markdown";
 // import rehypeKatex from "rehype-katex"; // TEMPORARILY DISABLED - MISSING DEPENDENCY
@@ -107,9 +107,6 @@ function parseIncompleteMarkdown(text: string): string {
   const inlineCodeMatch = result.match(inlineCodePattern);
   if (inlineCodeMatch) {
     // Check if we're dealing with a code block (triple backticks)
-    const hasCodeBlockStart = result.includes("```");
-    const codeBlockPattern = /```[\s\S]*?```/g;
-    const completeCodeBlocks = (result.match(codeBlockPattern) || []).length;
     const allTripleBackticks = (result.match(/```/g) || []).length;
 
     // If we have an odd number of ``` sequences, we're inside an incomplete code block
@@ -160,14 +157,10 @@ const HardenedMarkdown = ReactMarkdown; // Using regular ReactMarkdown for now
 
 export type ResponseProps = HTMLAttributes<HTMLDivElement> & {
   options?: Options;
-  children: Options["children"];
-  allowedImagePrefixes?: ComponentProps<
-    ReturnType<typeof hardenReactMarkdown>
-  >["allowedImagePrefixes"];
-  allowedLinkPrefixes?: ComponentProps<
-    ReturnType<typeof hardenReactMarkdown>
-  >["allowedLinkPrefixes"];
-  defaultOrigin?: ComponentProps<ReturnType<typeof hardenReactMarkdown>>["defaultOrigin"];
+  children: ReactNode;
+  allowedImagePrefixes?: string[];
+  allowedLinkPrefixes?: string[];
+  defaultOrigin?: string;
   parseIncompleteMarkdown?: boolean;
 };
 
@@ -178,7 +171,7 @@ const components: Options["components"] = {
     </ol>
   ),
   li: ({ node, children, className, ...props }) => (
-    <li className={cn("py-1", className)} {...props}>
+    <li className={cn("py-2", className)} {...props}>
       {children}
     </li>
   ),
@@ -203,22 +196,42 @@ const components: Options["components"] = {
     </a>
   ),
   h1: ({ node, children, className, ...props }) => (
-    <h1 className={cn("mt-6 mb-2 font-semibold text-3xl", className)} {...props}>
+    <h1
+      c
+      className="mac-heading"
+      lassName={cn("mt-6 mb-2 font-semibold text-3xl", className)}
+      {...props}
+    >
       {children}
     </h1>
   ),
   h2: ({ node, children, className, ...props }) => (
-    <h2 className={cn("mt-6 mb-2 font-semibold text-2xl", className)} {...props}>
+    <h2
+      c
+      className="mac-heading"
+      lassName={cn("mt-6 mb-2 font-semibold text-2xl", className)}
+      {...props}
+    >
       {children}
     </h2>
   ),
   h3: ({ node, children, className, ...props }) => (
-    <h3 className={cn("mt-6 mb-2 font-semibold text-xl", className)} {...props}>
+    <h3
+      c
+      className="mac-title"
+      lassName={cn("mt-6 mb-2 font-semibold text-xl", className)}
+      {...props}
+    >
       {children}
     </h3>
   ),
   h4: ({ node, children, className, ...props }) => (
-    <h4 className={cn("mt-6 mb-2 font-semibold text-lg", className)} {...props}>
+    <h4
+      c
+      className="mac-title"
+      lassName={cn("mt-6 mb-2 font-semibold text-lg", className)}
+      {...props}
+    >
       {children}
     </h4>
   ),
@@ -284,7 +297,7 @@ const components: Options["components"] = {
 
     return (
       <code
-        className={cn("rounded bg-muted px-1.5 py-0.5 font-mono text-sm", className)}
+        className={cn("rounded bg-muted px-2.5 py-0.5 font-mono text-sm", className)}
         {...props}
       />
     );
@@ -301,6 +314,8 @@ const components: Options["components"] = {
     if (
       isValidElement(children) &&
       children.props &&
+      typeof children.props === "object" &&
+      children.props !== null &&
       "children" in children.props &&
       typeof children.props.children === "string"
     ) {
@@ -342,17 +357,21 @@ export const Response = memo(
         className={cn("size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0", className)}
         {...props}
       >
-        <HardenedMarkdown
-          components={components}
-          // rehypePlugins={[rehypeKatex]} // TEMPORARILY DISABLED - MISSING DEPENDENCY
-          remarkPlugins={[remarkGfm]} // remarkMath temporarily disabled
-          // allowedImagePrefixes={allowedImagePrefixes ?? ["*"]} // Hardened props disabled
-          // allowedLinkPrefixes={allowedLinkPrefixes ?? ["*"]} // Hardened props disabled
-          // defaultOrigin={defaultOrigin} // Hardened props disabled
-          {...options}
-        >
-          {parsedChildren}
-        </HardenedMarkdown>
+        {typeof parsedChildren === "string" ? (
+          <HardenedMarkdown
+            components={components}
+            // rehypePlugins={[rehypeKatex]} // TEMPORARILY DISABLED - MISSING DEPENDENCY
+            remarkPlugins={[remarkGfm]} // remarkMath temporarily disabled
+            // allowedImagePrefixes={allowedImagePrefixes ?? ["*"]} // Hardened props disabled
+            // allowedLinkPrefixes={allowedLinkPrefixes ?? ["*"]} // Hardened props disabled
+            // defaultOrigin={defaultOrigin} // Hardened props disabled
+            {...options}
+          >
+            {parsedChildren}
+          </HardenedMarkdown>
+        ) : (
+          parsedChildren
+        )}
       </div>
     );
   },

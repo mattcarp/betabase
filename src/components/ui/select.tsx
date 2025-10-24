@@ -49,7 +49,7 @@ const SelectScrollUpButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollUpButton
     ref={ref}
-    className={cn("flex cursor-default items-center justify-center py-1", className)}
+    className={cn("flex cursor-default items-center justify-center py-2", className)}
     {...props}
   >
     <ChevronUpIcon className="h-4 w-4" />
@@ -63,7 +63,7 @@ const SelectScrollDownButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollDownButton
     ref={ref}
-    className={cn("flex cursor-default items-center justify-center py-1", className)}
+    className={cn("flex cursor-default items-center justify-center py-2", className)}
     {...props}
   >
     <ChevronDownIcon className="h-4 w-4" />
@@ -103,7 +103,7 @@ const SelectContent = React.forwardRef<
       <SelectScrollUpButton />
       <SelectPrimitive.Viewport
         className={cn(
-          "p-1",
+          "p-2",
           position === "popper" &&
             "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
         )}
@@ -122,7 +122,7 @@ const SelectLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
-    className={cn("px-2 py-1.5 text-sm font-light text-white", className)}
+    className={cn("px-2 py-2.5 text-sm font-light text-white", className)}
     {...props}
   />
 ));
@@ -137,7 +137,7 @@ const SelectItem = React.forwardRef<
     className={cn(
       // MAC SelectItem styling
       "relative flex w-full cursor-default select-none items-center",
-      "rounded-md py-2 pl-3 pr-8 text-sm outline-none",
+      "rounded-md py-2 pl-4 pr-8 text-sm outline-none",
       "transition-all duration-150",
       // Hover & Focus states with MAC glow
       "hover:bg-[var(--mac-state-hover)] hover:border-l-2 hover:border-l-[var(--mac-primary-blue-400)]",
@@ -168,7 +168,7 @@ const SelectSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Separator
     ref={ref}
-    className={cn("-mx-1 my-1 h-px bg-muted", className)}
+    className={cn("-mx-2 my-2 h-px bg-muted", className)}
     {...props}
   />
 ));

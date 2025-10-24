@@ -31,8 +31,6 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Area,
-  AreaChart,
 } from "recharts";
 
 interface DashboardStats {
@@ -64,34 +62,31 @@ export const AOMAPerformanceDashboard: React.FC = () => {
   const [realtimeMetrics, setRealtimeMetrics] = useState<PerformanceMetrics[]>([]);
   const [isRunningBenchmark, setIsRunningBenchmark] = useState(false);
   const [abTestConfig, setAbTestConfig] = useState(aomaRouter.getConfig());
-  const [selectedTimeRange, setSelectedTimeRange] = useState<"1m" | "5m" | "15m" | "1h">("5m");
+  const [_selectedTimeRange, _setSelectedTimeRange] = useState<"1m" | "5m" | "15m" | "1h">("5m");
 
   // Fetch stats periodically
   useEffect(() => {
     const fetchStats = () => {
-      const railwayStats = aomaRouter.getStatistics("railway");
       const renderStats = aomaRouter.getStatistics("render");
+      // Note: Railway has been removed, only Render is used now
+      const emptyStats: ProviderMetrics = {
+        totalRequests: 0,
+        avgLatency: 0,
+        p50Latency: 0,
+        p95Latency: 0,
+        p99Latency: 0,
+        successRate: 0,
+        coldStartRate: 0,
+        avgPayloadSize: 0,
+        avgResponseSize: 0,
+      };
 
-      const improvement =
-        railwayStats.avgLatency > 0
-          ? ((railwayStats.avgLatency - renderStats.avgLatency) / railwayStats.avgLatency) * 100
-          : 0;
-
-      const winner = renderStats.avgLatency < railwayStats.avgLatency ? "render" : "railway";
-
-      let recommendation = "";
-      if (improvement > 30) {
-        recommendation = "Switch to Render immediately for significant gains";
-      } else if (improvement > 10) {
-        recommendation = "Gradually increase Render traffic percentage";
-      } else if (improvement > 0) {
-        recommendation = "Continue monitoring before full migration";
-      } else {
-        recommendation = "Railway performing better - investigate Render config";
-      }
+      const winner = "render";
+      const improvement = 0;
+      const recommendation = "Render is the primary deployment platform";
 
       setStats({
-        railway: railwayStats,
+        railway: emptyStats, // Legacy field kept for compatibility
         render: renderStats,
         comparison: { winner, improvement, recommendation },
       });
@@ -139,7 +134,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
     .filter((m) => m.success)
     .map((m, index) => ({
       index,
-      railway: m.provider === "railway" ? m.latency : null,
+      railway: null, // Railway removed, keeping field for chart compatibility
       render: m.provider === "render" ? m.latency : null,
       timestamp: new Date(m.startTime).toLocaleTimeString(),
     }));
@@ -173,11 +168,19 @@ export const AOMAPerformanceDashboard: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold">AOMA Performance Dashboard</h2>
-          <p className="text-muted-foreground">Real-time A/B testing: Railway vs Render</p>
+          <h2 c className="mac-heading" lassName="mac-heading text-3xl font-bold">
+            AOMA Performance Dashboard
+          </h2>
+          <p className="mac-body text-muted-foreground">Real-time A/B testing: Railway vs Render</p>
         </div>
         <div className="flex gap-2">
-          <Button onClick={runQuickBenchmark} disabled={isRunningBenchmark} variant="outline">
+          <Button
+            className="mac-button mac-button-outline"
+            onClick={runQuickBenchmark}
+            disabled={isRunningBenchmark}
+            variant="outline"
+            className="mac-button mac-button-outline"
+          >
             {isRunningBenchmark ? (
               <>
                 <Activity className="h-4 w-4 mr-2 animate-spin" />
@@ -190,25 +193,29 @@ export const AOMAPerformanceDashboard: React.FC = () => {
               </>
             )}
           </Button>
-          <Button onClick={() => aomaRouter.clearMetrics()} variant="ghost">
+          <Button
+            className="mac-button mac-button-primary"
+            onClick={() => aomaRouter.clearMetrics()}
+            variant="ghost"
+          >
             Clear Metrics
           </Button>
         </div>
       </div>
 
       {/* A/B Test Configuration */}
-      <Card>
-        <CardHeader>
+      <Card className="mac-card">
+        <CardHeader className="mac-card">
           <CardTitle className="flex items-center gap-2">
             <Gauge className="h-5 w-5" />
             A/B Test Configuration
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="mac-card">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="text-sm font-medium">Render Traffic %</label>
-              <div className="flex items-center gap-2 mt-1">
+              <div className="flex items-center gap-2 mt-2">
                 <input
                   type="range"
                   min="0"
@@ -249,11 +256,11 @@ export const AOMAPerformanceDashboard: React.FC = () => {
 
       {/* Performance Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader className="pb-2">
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-2">
             <CardTitle className="text-sm font-medium">Winner</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="flex items-center justify-between">
               <span className="text-2xl font-bold capitalize">
                 {stats.comparison.winner === "render" ? (
@@ -268,17 +275,17 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                 <TrendingDown className="h-8 w-8 text-blue-600" />
               )}
             </div>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-2">
               {Math.abs(stats.comparison.improvement).toFixed(1)}% faster
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-2">
             <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm">Railway</span>
@@ -300,15 +307,15 @@ export const AOMAPerformanceDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-2">
             <CardTitle className="text-sm font-medium">Success Rates</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm">Railway</span>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   {stats.railway.successRate > 95 ? (
                     <CheckCircle className="h-4 w-4 text-green-600" />
                   ) : (
@@ -319,7 +326,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Render</span>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   {stats.render.successRate > 95 ? (
                     <CheckCircle className="h-4 w-4 text-green-600" />
                   ) : (
@@ -349,12 +356,12 @@ export const AOMAPerformanceDashboard: React.FC = () => {
         </TabsList>
 
         <TabsContent value="latency" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Real-time Latency</CardTitle>
-              <CardDescription>Last 100 requests</CardDescription>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Real-time Latency</CardTitle>
+              <CardDescription className="mac-card">Last 100 requests</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={latencyChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -385,12 +392,12 @@ export const AOMAPerformanceDashboard: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="comparison" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Performance Metrics Comparison</CardTitle>
-              <CardDescription>Railway vs Render</CardDescription>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Performance Metrics Comparison</CardTitle>
+              <CardDescription className="mac-card">Railway vs Render</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={performanceComparison}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -407,35 +414,39 @@ export const AOMAPerformanceDashboard: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="distribution" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Latency Distribution</CardTitle>
-              <CardDescription>Response time percentiles</CardDescription>
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Latency Distribution</CardTitle>
+              <CardDescription className="mac-card">Response time percentiles</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <div className="grid grid-cols-2 gap-8">
                 <div>
-                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <h4
+                    c
+                    className="mac-title"
+                    lassName="mac-title font-semibold mb-4 flex items-center gap-2"
+                  >
                     <Server className="h-4 w-4" />
                     Railway
                   </h4>
                   <div className="space-y-3">
                     <div>
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P50</span>
                         <span>{stats.railway.p50Latency.toFixed(2)}ms</span>
                       </div>
                       <Progress value={50} className="h-2" />
                     </div>
                     <div>
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P95</span>
                         <span>{stats.railway.p95Latency.toFixed(2)}ms</span>
                       </div>
                       <Progress value={95} className="h-2" />
                     </div>
                     <div>
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P99</span>
                         <span>{stats.railway.p99Latency.toFixed(2)}ms</span>
                       </div>
@@ -445,27 +456,31 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <h4
+                    c
+                    className="mac-title"
+                    lassName="mac-title font-semibold mb-4 flex items-center gap-2"
+                  >
                     <Database className="h-4 w-4" />
                     Render
                   </h4>
                   <div className="space-y-3">
                     <div>
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P50</span>
                         <span>{stats.render.p50Latency.toFixed(2)}ms</span>
                       </div>
                       <Progress value={50} className="h-2 bg-green-100" />
                     </div>
                     <div>
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P95</span>
                         <span>{stats.render.p95Latency.toFixed(2)}ms</span>
                       </div>
                       <Progress value={95} className="h-2 bg-green-100" />
                     </div>
                     <div>
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P99</span>
                         <span>{stats.render.p99Latency.toFixed(2)}ms</span>
                       </div>
@@ -481,14 +496,14 @@ export const AOMAPerformanceDashboard: React.FC = () => {
 
       {/* Additional Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Clock className="h-4 w-4" />
               Cold Start Rate
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Railway</span>
@@ -502,14 +517,14 @@ export const AOMAPerformanceDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Database className="h-4 w-4" />
               Payload Sizes
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Avg Request</span>

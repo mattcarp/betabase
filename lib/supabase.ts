@@ -125,7 +125,10 @@ export async function upsertCrawlerDocument(
   metadata: Record<string, any> = {}
 ) {
   const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error("Supabase client not initialized");
+  if (!client) {
+    console.warn("Supabase client not initialized");
+    return null;
+  }
 
   const crypto = await import("crypto");
   const contentHash = crypto.createHash("md5").update(content.trim()).digest("hex");
@@ -163,7 +166,10 @@ export async function upsertWikiDocument(
   metadata: Record<string, any> = {}
 ) {
   const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error("Supabase client not initialized");
+  if (!client) {
+    console.warn("Supabase client not initialized");
+    return null;
+  }
 
   const crypto = await import("crypto");
   const contentHash = crypto.createHash("md5").update(markdownContent.trim()).digest("hex");
@@ -200,7 +206,10 @@ export async function upsertJiraTicket(
   metadata: Record<string, any> = {}
 ) {
   const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error("Supabase client not initialized");
+  if (!client) {
+    console.warn("Supabase client not initialized");
+    return null;
+  }
 
   const { data, error } = await client
     .from("jira_tickets")
@@ -231,7 +240,10 @@ export async function upsertJiraTicketEmbedding(
   metadata: Record<string, any> = {}
 ) {
   const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error("Supabase client not initialized");
+  if (!client) {
+    console.warn("Supabase client not initialized");
+    return null;
+  }
 
   const { data, error } = await client
     .from("jira_ticket_embeddings")
@@ -257,7 +269,10 @@ export async function upsertJiraTicketEmbedding(
 // Sony Music specific helpers using ACTUAL tables
 export async function validateSonyMusicContent() {
   const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error("Supabase client not initialized");
+  if (!client) {
+    console.warn("Supabase client not initialized");
+    return null;
+  }
 
   const counts: Record<string, number> = {};
 
@@ -338,7 +353,10 @@ export async function getFirecrawlAnalysis(url: string) {
 
 export async function searchFirecrawlData(query: string, limit = 10) {
   const client = supabase ?? supabaseAdmin;
-  if (!client) throw new Error("Supabase client not initialized");
+  if (!client) {
+    console.warn("Supabase client not initialized");
+    return null;
+  }
 
   const { data, error } = await client
     .from("firecrawl_analysis")

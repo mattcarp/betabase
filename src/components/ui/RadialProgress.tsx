@@ -190,7 +190,7 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
               </div>
             )}
             {label && (
-              <div className="text-xs text-holographic opacity-90 mt-1 font-mono">{label}</div>
+              <div className="text-xs text-holographic opacity-90 mt-2 font-mono">{label}</div>
             )}
             {subLabel && <div className="text-xs opacity-60 mt-0.5">{subLabel}</div>}
           </div>

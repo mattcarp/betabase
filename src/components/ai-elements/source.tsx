@@ -19,7 +19,7 @@ export const SourcesTrigger = ({ className, count, children, ...props }: Sources
   <CollapsibleTrigger className="flex items-center gap-2" {...props}>
     {children ?? (
       <>
-        <p className="font-medium">Used {count} sources</p>
+        <p className="mac-body font-medium">Used {count} sources</p>
         <ChevronDownIcon className="h-4 w-4" />
       </>
     )}
@@ -31,7 +31,7 @@ export type SourcesContentProps = ComponentProps<typeof CollapsibleContent>;
 export const SourcesContent = ({ className, ...props }: SourcesContentProps) => (
   <CollapsibleContent
     className={cn(
-      "mt-3 flex flex-col gap-2 w-fit",
+      "mt-4 flex flex-col gap-2 w-fit",
       "outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2",
       className
     )}

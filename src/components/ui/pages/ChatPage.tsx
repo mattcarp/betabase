@@ -206,13 +206,17 @@ Be helpful, concise, and professional in your responses.`;
       <div className="h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col w-full">
         {/* Sophisticated Header */}
         <header className="border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/60 flex-shrink-0 overflow-visible relative z-50">
-          <div className="px-6 py-3 h-16">
+          <div className="px-6 py-4 h-16">
             <div className="flex flex-row items-center justify-between gap-4 h-full">
               {/* Brand Identity */}
               <div className="flex items-center space-x-3 flex-shrink-0">
                 <SiamLogo size="lg" variant="icon" />
                 <div>
-                  <h1 className="text-xl font-extralight text-white tracking-tight whitespace-nowrap">
+                  <h1
+                    c
+                    className="mac-heading"
+                    lassName="mac-heading text-xl font-extralight text-white tracking-tight whitespace-nowrap"
+                  >
                     The Betabase
                   </h1>
                   <p className="text-xs text-slate-400 font-light whitespace-nowrap">
@@ -222,13 +226,13 @@ Be helpful, concise, and professional in your responses.`;
               </div>
 
               {/* Navigation Tabs */}
-              <div className="flex items-center space-x-1 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50 flex-shrink-0">
+              <div className="flex items-center space-x-1 bg-zinc-900/50 p-2 rounded-lg border border-zinc-800/50 flex-shrink-0">
                 {COMPONENT_MODES.map((mode) => (
                   <button
                     key={mode.mode}
                     onClick={() => setActiveMode(mode.mode)}
                     className={cn(
-                      "flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-light transition-all duration-200",
+                      "flex items-center space-x-2 px-4 py-2.5 rounded-md text-sm font-light transition-all duration-200",
                       activeMode === mode.mode
                         ? "bg-zinc-800 text-white shadow-sm"
                         : "text-slate-400 hover:text-white hover:bg-zinc-800/50"
@@ -247,7 +251,7 @@ Be helpful, concise, and professional in your responses.`;
                   <IntrospectionDropdown />
                 </div>
                 {/* Knowledge status badges */}
-                <div className="hidden lg:flex items-center gap-1">
+                <div className="hidden lg:flex items-center gap-2">
                   <Badge variant="outline" title="Knowledge status" className="whitespace-nowrap">
                     {knowledgeStatus === "ok"
                       ? "Knowledge: OK"
@@ -272,7 +276,7 @@ Be helpful, concise, and professional in your responses.`;
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50"
+                  className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 mac-button mac-button-outline"
                   onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
                   title="Knowledge Base"
                 >
@@ -283,7 +287,7 @@ Be helpful, concise, and professional in your responses.`;
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50"
+                  className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 mac-button mac-button-outline"
                   onClick={() => (window.location.href = "/performance")}
                   title="Performance Dashboard"
                 >
@@ -295,7 +299,7 @@ Be helpful, concise, and professional in your responses.`;
                     variant="ghost"
                     size="sm"
                     onClick={onLogout}
-                    className="sign-out-button text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 text-xs px-3 flex items-center gap-2"
+                    className="sign-out-button text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 text-xs px-4 flex items-center gap-2 mac-button mac-button-outline"
                   >
                     <LogOut className="h-4 w-4" />
                     <span className="sign-out-text">Sign Out</span>
@@ -346,11 +350,15 @@ Be helpful, concise, and professional in your responses.`;
                 <div className="flex-1 flex flex-col min-h-0">
                   <div className="flex-1 flex flex-col border-0 bg-transparent">
                     <div className="p-6 border-b border-zinc-800/50">
-                      <h2 className="text-lg font-semibold text-zinc-100 flex items-center gap-2">
+                      <h2
+                        c
+                        className="mac-heading"
+                        lassName="mac-heading text-lg font-semibold text-zinc-100 flex items-center gap-2"
+                      >
                         <Wrench className="h-5 w-5 text-zinc-400" />
                         Debug Assistant
                       </h2>
-                      <p className="text-sm text-zinc-400 mt-1">
+                      <p className="text-sm text-zinc-400 mt-2">
                         AI-powered debugging and issue resolution
                       </p>
                     </div>
@@ -377,11 +385,15 @@ Be helpful, concise, and professional in your responses.`;
               {activeMode === "curate" && (
                 <div className="h-full">
                   <div className="p-6 border-b border-zinc-800/50">
-                    <h2 className="text-lg font-semibold text-zinc-100 flex items-center gap-2">
+                    <h2
+                      c
+                      className="mac-heading"
+                      lassName="mac-heading text-lg font-semibold text-zinc-100 flex items-center gap-2"
+                    >
                       <Library className="h-5 w-5 text-zinc-400" />
                       Knowledge Curation
                     </h2>
-                    <p className="text-sm text-zinc-400 mt-1">
+                    <p className="text-sm text-zinc-400 mt-2">
                       Manage and organize your knowledge base
                     </p>
                   </div>
