@@ -10,7 +10,7 @@ import {
   AOMAVector,
   VectorSearchResult,
   handleSupabaseError,
-} from "@/lib/supabase";
+} from "../lib/supabase";
 import { openai } from "@ai-sdk/openai";
 import { embed } from "ai";
 
