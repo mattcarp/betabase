@@ -11,9 +11,9 @@ import {
   CheckSquare,
   TrendingUp,
   FileText,
-  ArrowUpRight,
-  ArrowDownRight,
-  ArrowRight,
+  // ArrowUpRight, // Unused
+  // ArrowDownRight, // Unused
+  // ArrowRight, // Unused
   ChevronRight,
 } from "lucide-react";
 import { LiveInsights } from "../LiveInsights";
@@ -44,7 +44,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
   ];
 
   // NO MOCK DATA - Real metrics would come from actual conversation analysis
-  const wisdomLibraryItems: any[] = [];
+  // const wisdomLibraryItems: any[] = []; // Unused - keeping for future use
 
   const meetingTools = [
     { name: "Meeting Analyzer", icon: BarChart3 },
@@ -107,7 +107,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
       {/* Wisdom Library */}
       <WisdomLibrary
         conversationContext={
-          currentConversation?.length > 0 ? JSON.stringify(currentConversation) : undefined
+          (currentConversation?.length > 0 ? JSON.stringify(currentConversation) : undefined) as any
         }
         className="mb-6"
       />
