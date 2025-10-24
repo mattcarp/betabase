@@ -11,7 +11,7 @@
  * - Real-time and batch processing modes
  */
 
-import { audioProcessor, AudioFeatures, AudioMetrics } from "./realTimeAudioProcessor";
+import { /* audioProcessor, AudioFeatures, */ AudioMetrics } from "./realTimeAudioProcessor"; // audioProcessor and AudioFeatures unused
 
 // Types for the enhanced pipeline
 export interface VoiceIsolationResult {
@@ -217,7 +217,7 @@ export class EnhancedAudioProcessor {
   /**
    * ElevenLabs Voice Isolation
    */
-  private async isolateVoice(_audioBlob: Blob): Promise<VoiceIsolationResult> {
+  private async isolateVoice(audioBlob: Blob): Promise<VoiceIsolationResult> {
     const startTime = performance.now();
 
     try {
@@ -269,7 +269,7 @@ export class EnhancedAudioProcessor {
   /**
    * OpenAI Whisper Transcription
    */
-  private async transcribeAudio(_audioBlob: Blob): Promise<TranscriptionResult> {
+  private async transcribeAudio(audioBlob: Blob): Promise<TranscriptionResult> {
     const startTime = performance.now();
 
     try {
@@ -390,7 +390,7 @@ export class EnhancedAudioProcessor {
       "inappropriate",
     ];
 
-    const _lowerText = text.toLowerCase();
+    const lowerText = text.toLowerCase();
     let explicitMatches = 0;
 
     for (const keyword of explicitKeywords) {
@@ -437,7 +437,7 @@ export class EnhancedAudioProcessor {
    * Content type classification
    */
   private classifyContentType(text: string): ContentAnalysisResult["contentType"] {
-    const _lowerText = text.toLowerCase();
+    // const lowerText = text.toLowerCase(); // Not needed - using case-insensitive regex patterns
 
     // Lyrics indicators
     const lyricsIndicators = [
@@ -550,7 +550,7 @@ export class EnhancedAudioProcessor {
       "annoyed",
     ];
 
-    const _lowerText = text.toLowerCase();
+    const lowerText = text.toLowerCase();
     let positiveCount = 0;
     let negativeCount = 0;
 
@@ -633,7 +633,7 @@ export class EnhancedAudioProcessor {
   ): string[] {
     const categories: string[] = [contentType];
 
-    const _lowerText = text.toLowerCase();
+    const lowerText = text.toLowerCase();
 
     // Add genre-based categories
     if (lowerText.includes("music") || lowerText.includes("song")) {
