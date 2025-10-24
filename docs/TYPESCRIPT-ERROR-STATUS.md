@@ -44,6 +44,7 @@ The following files are part of the Session Playback Viewer feature and have **z
 The following errors were reported by GitHub Actions CI and have been resolved:
 
 **unified-test-intelligence.ts (7 errors fixed):**
+
 - Fixed `orchestrateQuery` → `executeOrchestration` (method doesn't exist)
 - Fixed wrong argument count for `searchTestKnowledge`
 - Fixed missing `selectors` field in storeFirecrawlAnalysis
@@ -53,22 +54,28 @@ The following errors were reported by GitHub Actions CI and have been resolved:
 - Fixed wrong method call (should be `searchTestKnowledge`)
 
 **emailParser.ts (2 errors fixed):**
+
 - Prefixed unused `match` parameters with `_` in regex replace callbacks
 
 **logger.ts (2 errors fixed):**
+
 - Removed unused `_isDevelopment` and `_isDebugEnabled` constants
 
 **mailinatorHelper.ts (2 errors fixed):**
+
 - Removed unused `_MailinatorMessage` interface
 - Removed unused `_API_BASE` constant
 
 **microsoftEmailParser.ts (1 error fixed):**
+
 - Added missing `contentLength` and `extractedAt` fields to MicrosoftEmailMetadata interface
 
 **test-topic-extraction.ts (1 error fixed):**
+
 - Removed unused `result` parameter from promise callback
 
 **tsconfig.json:**
+
 - Excluded `**/test-*.ts` files (missing dotenv dependency, not part of app)
 
 **Total CI errors fixed: 16**
