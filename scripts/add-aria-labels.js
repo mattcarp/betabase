@@ -188,9 +188,8 @@ function addAriaLabels(content, filePath) {
       // Find where to insert aria-label (after <Button)
       const buttonOpenTag = lines[lineNum];
       if (buttonOpenTag.includes("<Button")) {
-        const insertPoint = buttonOpenTag.indexOf(">") === -1
-          ? buttonOpenTag.length
-          : buttonOpenTag.indexOf(">");
+        const insertPoint =
+          buttonOpenTag.indexOf(">") === -1 ? buttonOpenTag.length : buttonOpenTag.indexOf(">");
 
         let newButtonTag = buttonOpenTag;
 
@@ -239,9 +238,7 @@ function main() {
   const dryRun = process.argv.includes("--dry-run");
 
   console.log(
-    dryRun
-      ? "🔍 DRY RUN - Analyzing buttons...\n"
-      : "🏷️  Adding aria-labels to buttons...\n"
+    dryRun ? "🔍 DRY RUN - Analyzing buttons...\n" : "🏷️  Adding aria-labels to buttons...\n"
   );
 
   // Find all TSX files
