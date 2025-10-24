@@ -90,14 +90,14 @@ export async function POST(req: NextRequest) {
       max_output_tokens: maxOutputTokens,
 
       // Enable built-in tools - these work out of the box!
-      tools: tools.map((tool) => {
+      tools: tools.map((tool: string) => {
         if (tool === "file_search") {
           return {
             type: "file_search" as const,
             vector_store_ids: vectorStoreIds,
           };
         }
-        return { type: tool as "web_search" | "computer_use" };
+        return { type: "web_search" as const };
       }),
 
       // Stream the response
@@ -168,7 +168,7 @@ export async function POST(req: NextRequest) {
         } catch (error) {
           // Send error in Vercel AI format
           const errorData = JSON.stringify({
-            error: error.message || "Unknown error occurred",
+            error: (error as Error).message || "Unknown error occurred",
           });
           controller.enqueue(encoder.encode(`3:"${errorData}"\n`));
           controller.close();
