@@ -1,5 +1,5 @@
 import path from "path";
-import { chunkContent, classifyFile, readTextFileSafe } from "@/src/utils/gitIndexingHelpers";
+import { chunkContent, classifyFile, readTextFileSafe } from "../utils/gitIndexingHelpers";
 
 export interface AnalyzedChunk {
   content: string;

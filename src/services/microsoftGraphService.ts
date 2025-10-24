@@ -4,7 +4,7 @@
  */
 
 import { getEmailContextService } from "./emailContextService";
-import { MicrosoftEmailData, MicrosoftEmailParser } from "@/utils/microsoftEmailParser";
+import { MicrosoftEmailData, MicrosoftEmailParser } from "../utils/microsoftEmailParser";
 
 export interface GraphAPIConfig {
   accessToken: string;

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { testConnection } from "../../../../src/services/confluenceAuthenticator";
-import crawler from "../../../../src/services/confluenceCrawler";
+import { testConnection } from "../../../src/services/confluenceAuthenticator";
+import crawler from "../../../src/services/confluenceCrawler";
 
 // dynamic to ensure env available at runtime
 export const dynamic = "force-dynamic";
