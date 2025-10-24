@@ -119,7 +119,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
       aria-modal="true"
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-jarvis-panel-border">
+      <div className="flex items-center justify-between px-4 py-4 border-b border-jarvis-panel-border">
         <div className="flex items-center gap-2">
           <svg
             className="w-5 h-5 text-jarvis-cyan"
@@ -135,7 +135,9 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
             />
           </svg>
           <div>
-            <h3 className="mac-title text-mac-text-primary">Audio Sources</h3>
+            <h3 c className="mac-title" lassName="mac-title text-mac-text-primary">
+              Audio Sources
+            </h3>
             <p className="mac-body text-xs text-mac-text-muted mt-0.5">Select audio input device</p>
           </div>
         </div>
@@ -195,15 +197,15 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
                 key={source.id}
                 onClick={() => onSelectSource(source.id)}
                 className={cn(
-                  "w-full p-3 rounded-lg border transition-all duration-200 text-left",
+                  "w-full p-4 rounded-lg border transition-all duration-200 text-left",
                   selectedSourceId === source.id
                     ? "border-jarvis-cyan bg-jarvis-panel-active-bg-start"
                     : "border-jarvis-panel-border bg-jarvis-panel-bg-start hover:bg-jarvis-panel-bg-end hover:border-jarvis-panel-active-border"
                 )}
                 aria-pressed={selectedSourceId === source.id}
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-start gap-3 flex-1">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-start gap-4 flex-1">
                     <div
                       className={cn(
                         "p-2 rounded-lg",
@@ -248,7 +250,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
 
                       {/* Volume Control (if callback provided) */}
                       {onVolumeChange && selectedSourceId === source.id && (
-                        <div className="mt-3">
+                        <div className="mt-4">
                           <label className="flex items-center gap-2">
                             <svg
                               className="w-4 h-4 text-mac-text-muted flex-shrink-0"
@@ -284,7 +286,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
 
                   {/* Active Indicator */}
                   {source.isActive && (
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-jarvis-cyan animate-pulse" />
                       <span className="text-xs text-jarvis-cyan">Live</span>
                     </div>
@@ -297,13 +299,13 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="px-4 py-3 border-t border-jarvis-panel-border bg-jarvis-panel-dark-bg-start/50">
+      <div className="px-4 py-4 border-t border-jarvis-panel-border bg-jarvis-panel-dark-bg-start/50">
         <div className="flex items-center justify-between">
           <p className="text-xs text-mac-text-muted">
             {filteredSources.length} source{filteredSources.length !== 1 ? "s" : ""} available
           </p>
           <p className="text-xs text-mac-text-muted">
-            <kbd className="px-1 py-0.5 rounded bg-jarvis-panel-dark-bg-end">Alt+↑/↓</kbd> Navigate
+            <kbd className="px-2 py-0.5 rounded bg-jarvis-panel-dark-bg-end">Alt+↑/↓</kbd> Navigate
           </p>
         </div>
       </div>

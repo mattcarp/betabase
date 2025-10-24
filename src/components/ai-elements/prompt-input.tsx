@@ -55,7 +55,7 @@ export const PromptInputTextarea = ({
   return (
     <Textarea
       className={cn(
-        "w-full resize-none rounded-none border-none p-3 shadow-none outline-none ring-0",
+        "w-full resize-none rounded-none border-none p-4 shadow-none outline-none ring-0",
         "bg-transparent dark:bg-transparent min-h-[60px] max-h-[120px]",
         "focus-visible:ring-0",
         className
@@ -97,9 +97,10 @@ export const PromptInputButton = ({
   return (
     <Button
       className={cn(
-        "shrink-0 gap-1.5 rounded-lg",
+        "mac-button mac-button-primary",
+        "shrink-0 gap-2.5 rounded-lg",
         variant === "ghost" && "text-muted-foreground",
-        newSize === "default" && "px-3",
+        newSize === "default" && "px-4",
         className
       )}
       size={newSize}
@@ -134,7 +135,7 @@ export const PromptInputSubmit = ({
 
   return (
     <Button
-      className={cn("gap-1.5 rounded-lg", className)}
+      className={cn("mac-button mac-button-primary", "gap-2.5 rounded-lg", className)}
       size={size}
       type="submit"
       variant={variant}

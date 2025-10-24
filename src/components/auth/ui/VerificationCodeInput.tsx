@@ -34,6 +34,7 @@ export const VerificationCodeInput = forwardRef<HTMLInputElement, VerificationCo
         pattern="[0-9]*"
         maxLength={6}
         className={cn(
+          "mac-input",
           "text-center text-2xl tracking-[0.5em] font-mono",
           "bg-black/30 border-gray-600/50",
           "focus:border-neon-cyan focus:shadow-[0_0_20px_rgba(6,255,165,0.2)]",

@@ -86,7 +86,7 @@ export const AIInsightsSkeleton: React.FC = () => (
         </div>
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-3/4" />
-        <div className="flex space-x-2 mt-3">
+        <div className="flex space-x-2 mt-4">
           <Skeleton className="h-6 w-16 rounded-full" />
           <Skeleton className="h-6 w-20 rounded-full" />
         </div>
@@ -114,7 +114,7 @@ export const SystemMonitorSkeleton: React.FC = () => (
     ))}
 
     {/* Status indicators */}
-    <div className="grid grid-cols-2 gap-3 mt-4">
+    <div className="grid grid-cols-2 gap-4 mt-4">
       {Array.from({ length: 4 }).map((_, i) => (
         <div key={i} className="flex items-center space-x-2">
           <Skeleton className="h-3 w-3 rounded-full" />

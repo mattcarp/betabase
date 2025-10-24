@@ -1,5 +1,4 @@
 import { defineConfig } from "@playwright/test";
-// import path from "path"; // Unused - keeping for future use
 
 export default defineConfig({
   testDir: "./tests/electron",

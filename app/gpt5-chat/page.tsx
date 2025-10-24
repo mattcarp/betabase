@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { cn } from "../../lib/utils";
 import { useGPT5Responses } from "../../src/hooks/useGPT5Responses";
 import { Button } from "../../src/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../src/components/ui/card";
@@ -43,7 +44,7 @@ export default function GPT5Chat() {
 
   return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto p-4">
-      <Card className="flex-1 flex flex-col">
+      <Card className="mac-card flex-1 flex flex-col">
         <CardHeader className="border-b">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -57,6 +58,7 @@ export default function GPT5Chat() {
             </div>
             <div className="flex gap-2">
               <Button
+                className="mac-button mac-button-outline"
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowSettings(!showSettings)}
@@ -65,6 +67,7 @@ export default function GPT5Chat() {
                 <Settings className="h-4 w-4" />
               </Button>
               <Button
+                className="mac-button mac-button-outline"
                 variant="ghost"
                 size="icon"
                 onClick={clearConversation}
@@ -82,7 +85,7 @@ export default function GPT5Chat() {
               <div>
                 <label className="text-sm font-medium">Reasoning</label>
                 <select
-                  className="w-full mt-1 p-2 border rounded"
+                  className="w-full mt-2 p-2 border rounded"
                   value={settings.reasoningEffort}
                   onChange={(e) =>
                     setSettings({
@@ -100,7 +103,7 @@ export default function GPT5Chat() {
               <div>
                 <label className="text-sm font-medium">Verbosity</label>{" "}
                 <select
-                  className="w-full mt-1 p-2 border rounded"
+                  className="w-full mt-2 p-2 border rounded"
                   value={settings.verbosity}
                   onChange={(e) =>
                     setSettings({
@@ -118,7 +121,7 @@ export default function GPT5Chat() {
                 <label className="text-sm font-medium">Temperature</label>
                 <input
                   type="number"
-                  className="w-full mt-1 p-2 border rounded"
+                  className="w-full mt-2 p-2 border rounded"
                   value={settings.temperature}
                   min="0"
                   max="2"
@@ -135,7 +138,7 @@ export default function GPT5Chat() {
                 <label className="text-sm font-medium">Max Tokens</label>{" "}
                 <input
                   type="number"
-                  className="w-full mt-1 p-2 border rounded"
+                  className="w-full mt-2 p-2 border rounded"
                   value={settings.maxTokens}
                   min="100"
                   max="128000"
@@ -169,11 +172,11 @@ export default function GPT5Chat() {
                 className={`mb-4 ${message.role === "user" ? "text-right" : "text-left"}`}
               >
                 <div
-                  className={`inline-block p-3 rounded-lg max-w-[80%] ${
+                  className={`inline-block p-4 rounded-lg max-w-[80%] ${
                     message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
                   }`}
                 >
-                  <div className="text-xs font-medium mb-1 opacity-70">
+                  <div className="text-xs font-medium mb-2 opacity-70">
                     {message.role === "user" ? "You" : "GPT-5"}
                   </div>
                   <div className="whitespace-pre-wrap">{message.content}</div>
@@ -183,7 +186,7 @@ export default function GPT5Chat() {
 
             {isThinking && (
               <div className="mb-4 text-left">
-                <div className="inline-block p-3 rounded-lg bg-muted">
+                <div className="inline-block p-4 rounded-lg bg-muted">
                   <div className="flex items-center gap-2">
                     <Loader2 className="h-4 w-4 animate-spin" />
                     <span className="text-sm">GPT-5 is thinking deeply...</span>
@@ -194,7 +197,7 @@ export default function GPT5Chat() {
 
             {isLoading && !isThinking && (
               <div className="mb-4 text-left">
-                <div className="inline-block p-3 rounded-lg bg-muted">
+                <div className="inline-block p-4 rounded-lg bg-muted">
                   <div className="flex items-center gap-2">
                     <Loader2 className="h-4 w-4 animate-spin" />
                     <span className="text-sm">Generating response...</span>
@@ -204,7 +207,7 @@ export default function GPT5Chat() {
             )}
 
             {error && (
-              <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+              <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
                 Error: {error.message}
               </div>
             )}
@@ -226,7 +229,11 @@ export default function GPT5Chat() {
                 }
               }}
             />
-            <Button type="submit" disabled={isLoading || !input.trim()} className="self-end">
+            <Button
+              type="submit"
+              disabled={isLoading || !input.trim()}
+              className="self-end mac-button mac-button-primary"
+            >
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (

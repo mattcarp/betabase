@@ -3,28 +3,32 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { z } from "zod";
-import type OpenAI from "openai";
+// import type OpenAI from "openai"; // Not needed for Vercel AI SDK
+// import { aomaCache } from "../../../src/services/aomaCache";
 import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
+// import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
 import { modelConfig } from "../../../src/services/modelConfig";
-import { trackRequest } from "../introspection/metrics";
 import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
 
 // Initialize OpenAI provider for Vercel AI SDK (server-side only)
-// Note: API key validation happens in route handler to avoid build-time errors
 const openai = createOpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "placeholder",
+  apiKey: process.env.OPENAI_API_KEY!,
 });
+
+// Validate API key is configured
+if (!process.env.OPENAI_API_KEY) {
+  throw new Error("OPENAI_API_KEY environment variable is required");
+}
 
 // REMOVED: Client-side rate limiting
 // Let OpenAI handle rate limits naturally - we'll catch 429s and show friendly errors
 // This allows normal single-user usage while still handling rate limit errors gracefully
 
-// Enhanced query for context
-// @ts-expect-error - Unused function kept for future use
-function enhanceQueryForContext(query: string): string {
+// Enhanced query for context (currently unused)
+/* function enhanceQueryForContext(query: string): string {
   const lowerQuery = query.toLowerCase();
 
   // SIAM-specific terms
@@ -39,7 +43,7 @@ function enhanceQueryForContext(query: string): string {
 
   // Default case - no enhancement needed
   return query;
-}
+} */
 
 // Knowledge object structure for structured responses
 interface KnowledgeElement {
@@ -99,7 +103,7 @@ export async function OPTIONS(_req: Request) {
 }
 
 export async function POST(req: Request) {
-  const chatStartTime = Date.now();
+  // const chatStartTime = Date.now(); // Used for tracking (currently disabled)
 
   try {
     console.log("[API] ========== POST /api/chat REQUEST START ==========");
@@ -252,9 +256,9 @@ export async function POST(req: Request) {
       });
     }
 
-    // Convert UI messages to OpenAI format with NULL content validation
+    // Convert UI messages to Vercel AI SDK format with NULL content validation
     // AI SDK v5 sends messages with 'parts' array, v4 uses 'content' string
-    const openAIMessages: OpenAI.Chat.ChatCompletionMessageParam[] = messages
+    const openAIMessages: any[] = messages
       .filter((msg: any) => {
         // Extract content from v5 parts array or v4 content string
         const content = msg.parts?.find((p: any) => p.type === "text")?.text || msg.content;
@@ -268,6 +272,14 @@ export async function POST(req: Request) {
           });
           return false;
         }
+
+        // Filter out unsupported roles
+        const supportedRoles = ["system", "user", "assistant", "tool"];
+        if (!supportedRoles.includes(msg.role)) {
+          console.warn(`Skipping message with unsupported role: ${msg.role}`);
+          return false;
+        }
+
         return true;
       })
       .map((msg: any) => {
@@ -282,8 +294,12 @@ export async function POST(req: Request) {
           return { role: "user", content };
         } else if (msg.role === "assistant") {
           return { role: "assistant", content };
+        } else if (msg.role === "tool") {
+          // Handle tool messages - convert to proper format
+          return { role: "tool", content, tool_call_id: msg.tool_call_id || "unknown" };
         }
-        return { ...msg, content };
+        // This should never happen due to filter above, but TypeScript needs this
+        return { role: "user", content };
       });
 
     // Validate we have at least one message after filtering
@@ -527,7 +543,7 @@ ${aomaContext}
     console.log("⏳ Calling AI SDK streamText...");
     const result = streamText({
       model: openai(selectedModel),
-      messages: openAIMessages as any, // Type cast - OpenAI messages compatible with AI SDK
+      messages: openAIMessages, // Already in correct format after filtering/validation
       system: enhancedSystemPrompt, // Use system parameter instead of adding to messages array
       temperature: modelSettings.temperature || temperature,
       // Note: AI SDK handles token limits via the model config, not maxTokens parameter
@@ -535,8 +551,8 @@ ${aomaContext}
 
     console.log("✅ Stream created successfully");
 
-    // Track successful request
-    trackRequest("/api/chat", "POST", Date.now() - chatStartTime, 200);
+    // Track successful request (disabled - trackRequest no longer exported from introspection)
+    // trackRequest("/api/chat", "POST", Date.now() - chatStartTime, 200);
 
     // Return Vercel AI SDK response format (compatible with useChat hook)
     return result.toUIMessageStreamResponse();
@@ -583,14 +599,14 @@ ${aomaContext}
         "I've reached my OpenAI API quota limit. Please contact support or try again later when the quota resets.";
     }
 
-    // Track error for introspection
-    trackRequest(
-      "/api/chat",
-      "POST",
-      Date.now() - chatStartTime,
-      isQuotaError || isRateLimitError ? 429 : 500,
-      errorMessage
-    );
+    // Track error for introspection (disabled - trackRequest no longer exported from introspection)
+    // trackRequest(
+    //   "/api/chat",
+    //   "POST",
+    //   Date.now() - chatStartTime,
+    //   isQuotaError || isRateLimitError ? 429 : 500,
+    //   errorMessage
+    // );
 
     return new Response(
       JSON.stringify({

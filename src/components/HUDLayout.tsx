@@ -17,7 +17,7 @@ interface HUDLayoutProps {
 export function HUDLayout({
   isRecording,
   transcription,
-  waveform,
+  waveform: _waveform,
   onToggleSettings,
   className = "",
 }: HUDLayoutProps) {
@@ -74,7 +74,11 @@ export function HUDLayout({
         return (
           <div className="glass-panel p-6 w-80 h-80 flex flex-col items-center justify-center animate-pulse-slow">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-blue-500/10 rounded-lg animate-gradient-xy"></div>
-            <h3 className="text-holographic text-lg mb-4 font-mono tracking-wider">
+            <h3
+              c
+              className="mac-title"
+              lassName="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
+            >
               <span className="">AUDIO VISUALIZATION</span>
             </h3>
             <AudioWaveform
@@ -94,27 +98,31 @@ export function HUDLayout({
       case "insights":
         return (
           <div className="glass-panel p-6 w-80 h-80 overflow-y-auto">
-            <h3 className="text-holographic text-lg mb-4 font-mono tracking-wider">
+            <h3
+              c
+              className="mac-title"
+              lassName="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
+            >
               <span className="">AI INSIGHTS</span>
             </h3>
             <div className="space-y-4">
               <div className="hud-element p-4 border border-blue-500/30 rounded-lg hover:border-blue-600/50 transition-all duration-300">
                 <div className="text-blue-600 text-sm font-mono">SENTIMENT ANALYSIS</div>
-                <div className="text-green-400 mt-1 font-mono">● NEUTRAL ●</div>
+                <div className="text-green-400 mt-2 font-mono">● NEUTRAL ●</div>
                 <div className="w-full bg-gray-800 rounded-full h-1 mt-2">
                   <div className="bg-green-400 h-1 rounded-full" style={{ width: "65%" }}></div>
                 </div>
               </div>
               <div className="hud-element p-4 border border-blue-500/30 rounded-lg hover:border-blue-600/50 transition-all duration-300">
                 <div className="text-blue-600 text-sm font-mono">KEY TOPICS DETECTED</div>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  <span className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs font-mono">
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <span className="px-2 py-2 bg-blue-500/20 text-blue-300 rounded text-xs font-mono">
                     TECHNOLOGY
                   </span>
-                  <span className="px-2 py-1 bg-purple-500/20 text-purple-300 rounded text-xs font-mono">
+                  <span className="px-2 py-2 bg-purple-500/20 text-purple-300 rounded text-xs font-mono">
                     AUDIO
                   </span>
-                  <span className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs font-mono">
+                  <span className="px-2 py-2 bg-blue-500/20 text-blue-300 rounded text-xs font-mono">
                     AI
                   </span>
                 </div>
@@ -134,7 +142,7 @@ export function HUDLayout({
       case "elevenlabs":
         return (
           <div className="glass-panel p-0 w-80 h-80 overflow-hidden border border-blue-500/30">
-            <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-r from-blue-500/20 to-blue-500/20 flex items-center px-3">
+            <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-r from-blue-500/20 to-blue-500/20 flex items-center px-4">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2"></div>
               <span className="text-blue-300 text-xs font-mono">ELEVENLABS AI ACTIVE</span>
             </div>
@@ -153,7 +161,11 @@ export function HUDLayout({
       case "system":
         return (
           <div className="glass-panel p-6 w-80 h-80 overflow-y-auto">
-            <h3 className="text-holographic text-lg mb-4 font-mono tracking-wider">
+            <h3
+              c
+              className="mac-title"
+              lassName="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
+            >
               <span className="">SYSTEM STATUS</span>
             </h3>
             <SystemHealthMonitor className="w-full" />
@@ -176,7 +188,11 @@ export function HUDLayout({
       default:
         return (
           <div className="glass-panel p-6 w-80 h-80 overflow-y-auto">
-            <h3 className="text-holographic text-lg mb-4 font-mono tracking-wider">
+            <h3
+              c
+              className="mac-title"
+              lassName="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
+            >
               <span className="">LIVE TRANSCRIPTION</span>
             </h3>
             <div className="hud-element p-4 min-h-32 border border-blue-500/30 rounded-lg">
@@ -194,7 +210,7 @@ export function HUDLayout({
               </div>
               {isRecording && (
                 <div className="absolute bottom-2 right-2 flex items-center">
-                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse mr-1"></div>
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse mr-2"></div>
                   <span className="text-red-400 text-xs font-mono">LIVE</span>
                 </div>
               )}

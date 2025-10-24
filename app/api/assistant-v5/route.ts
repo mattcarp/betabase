@@ -19,6 +19,12 @@ if (!ASSISTANT_ID) {
   console.error("OPENAI_ASSISTANT_ID environment variable is not set!");
 }
 
+// Declare global type for assistant initialization flag
+declare global {
+  // eslint-disable-next-line no-var
+  var assistantInitialized: boolean | undefined;
+}
+
 // Ensure assistant has file_search tool (run once on startup)
 async function ensureAssistantHasFileSearch() {
   if (!ASSISTANT_ID) {
@@ -40,6 +46,12 @@ async function ensureAssistantHasFileSearch() {
   } catch (error) {
     console.error("Error checking assistant tools:", error);
   }
+}
+
+// Augment global namespace for initialization tracking
+declare global {
+  // eslint-disable-next-line no-var
+  var assistantInitialized: boolean | undefined;
 }
 
 // Initialize on first load

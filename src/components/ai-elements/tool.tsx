@@ -52,7 +52,7 @@ const getStatusBadge = (status: ToolUIPart["state"]) => {
 
 export const ToolHeader = ({ className, type, state, ...props }: ToolHeaderProps) => (
   <CollapsibleTrigger
-    className={cn("flex w-full items-center justify-between gap-4 p-3", className)}
+    className={cn("flex w-full items-center justify-between gap-4 p-4", className)}
     {...props}
   >
     <div className="flex items-center gap-2">
@@ -82,7 +82,11 @@ export type ToolInputProps = ComponentProps<"div"> & {
 
 export const ToolInput = ({ className, input, ...props }: ToolInputProps) => (
   <div className={cn("space-y-2 overflow-hidden p-4", className)} {...props}>
-    <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
+    <h4
+      c
+      className="mac-title"
+      lassName="mac-title font-medium text-muted-foreground text-xs uppercase tracking-wide"
+    >
       Parameters
     </h4>
     <div className="rounded-md bg-muted/50">
@@ -103,7 +107,11 @@ export const ToolOutput = ({ className, output, errorText, ...props }: ToolOutpu
 
   return (
     <div className={cn("space-y-2 p-4", className)} {...props}>
-      <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
+      <h4
+        c
+        className="mac-title"
+        lassName="mac-title font-medium text-muted-foreground text-xs uppercase tracking-wide"
+      >
         {errorText ? "Error" : "Result"}
       </h4>
       <div

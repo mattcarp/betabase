@@ -1,19 +1,12 @@
 import FirecrawlApp from "@mendable/firecrawl-js";
 import { aomaStageAuthenticator } from "./aomaStageAuthenticator";
-import { createClient } from "@supabase/supabase-js";
-import type { SupabaseClient } from "@supabase/supabase-js";
 import { openai } from "@ai-sdk/openai";
 import { embed } from "ai";
+import { supabase } from "../lib/supabase";
 
-// Lazy initialization of Supabase client to avoid build-time errors
-let supabaseInstance: SupabaseClient | null = null;
+// Use shared Supabase client to avoid multiple GoTrueClient instances
 function getSupabase() {
-  if (!supabaseInstance) {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
-    supabaseInstance = createClient(supabaseUrl, supabaseKey);
-  }
-  return supabaseInstance;
+  return supabase;
 }
 
 interface CrawlConfig {

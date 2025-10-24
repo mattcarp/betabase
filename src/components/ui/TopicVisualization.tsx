@@ -72,15 +72,15 @@ export const TopicBadge: React.FC<TopicBadgeProps> = ({
 
   const sizeClasses = {
     sm: "px-2 py-0.5 text-xs",
-    md: "px-3 py-1 text-sm",
-    lg: "px-4 py-1.5 text-base",
+    md: "px-4 py-2 text-sm",
+    lg: "px-4 py-2.5 text-base",
   };
 
   return (
     <button
       onClick={() => onClick?.(topic)}
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border transition-all",
+        "inline-flex items-center gap-2 rounded-full border transition-all",
         "hover:scale-105 hover:shadow-lg cursor-pointer",
         getCategoryColor(topic.category),
         sizeClasses[size],
@@ -185,7 +185,7 @@ export const TrendingTopics: React.FC<TrendingTopicsProps> = ({
           className="flex items-center justify-between p-2 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors cursor-pointer"
           onClick={() => onTopicClick?.(topic)}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <span className="text-lg font-bold text-zinc-500">#{index + 1}</span>
             <div>
               <div className="flex items-center gap-2">
@@ -225,14 +225,14 @@ export const TopicClusters: React.FC<TopicClustersProps> = ({
   }
 
   return (
-    <div className={cn("grid gap-3", className)}>
+    <div className={cn("grid gap-4", className)}>
       {clusters.map((cluster) => (
         <Card
           key={cluster.id}
-          className="bg-zinc-900/50 border-zinc-800 hover:border-zinc-700 transition-colors cursor-pointer"
+          className="mac-card bg-zinc-900/50 border-zinc-800 hover:border-zinc-700 transition-colors cursor-pointer"
           onClick={() => onClusterClick?.(cluster)}
         >
-          <CardHeader className="pb-3">
+          <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center justify-between">
               <span className="flex items-center gap-2">
                 <Circle className="h-4 w-4 text-zinc-500" />
@@ -244,7 +244,7 @@ export const TopicClusters: React.FC<TopicClustersProps> = ({
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-2">
               {cluster.topics.slice(0, 5).map((topic) => (
                 <Badge key={topic.id} variant="outline" className="text-xs border-zinc-700">
                   {topic.term}
@@ -309,12 +309,12 @@ export const TopicStats: React.FC<TopicStatsProps> = ({
   ];
 
   return (
-    <div className={cn("grid grid-cols-3 gap-3", className)}>
+    <div className={cn("grid grid-cols-3 gap-4", className)}>
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
-          <div key={stat.label} className="bg-zinc-900/50 rounded-lg p-3 border border-zinc-800">
-            <div className="flex items-center gap-2 mb-1">
+          <div key={stat.label} className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800">
+            <div className="flex items-center gap-2 mb-2">
               <Icon className={cn("h-4 w-4", stat.color)} />
               <span className="text-xs text-zinc-500">{stat.label}</span>
             </div>
@@ -324,7 +324,7 @@ export const TopicStats: React.FC<TopicStatsProps> = ({
       })}
       {lastUpdated && (
         <div className="col-span-3 text-xs text-zinc-500 text-center pt-2 border-t border-zinc-800">
-          <Clock className="inline-block h-3 w-3 mr-1" />
+          <Clock className="inline-block h-3 w-3 mr-2" />
           Last updated: {lastUpdated.toLocaleTimeString()}
         </div>
       )}
@@ -357,14 +357,14 @@ export const TopicPanel: React.FC<TopicPanelProps> = ({
   className,
 }) => {
   return (
-    <Card className={cn("bg-zinc-950 border-zinc-800", className)}>
-      <CardHeader>
+    <Card className={cn("mac-card", "bg-zinc-950 border-zinc-800", className)}>
+      <CardHeader className="mac-card">
         <CardTitle className="flex items-center gap-2">
           <Brain className="h-5 w-5 text-zinc-400" />
           Topic Intelligence
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="mac-card">
         <Tabs defaultValue="cloud" className="w-full">
           <TabsList className="grid w-full grid-cols-4 bg-zinc-900">
             <TabsTrigger value="cloud">Cloud</TabsTrigger>
