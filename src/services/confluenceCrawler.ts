@@ -1,5 +1,5 @@
 import { confluenceEnv, getAuthHeaders } from "./confluenceAuthenticator";
-import { upsertWikiDocument } from "../../lib/supabase";
+import { upsertWikiDocument } from "../lib/supabase";
 import {
   storageToMarkdown,
   extractLabels,
