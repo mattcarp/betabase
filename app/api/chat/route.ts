@@ -8,7 +8,7 @@ import { z } from "zod";
 import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
 // import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
 import { modelConfig } from "../../../src/services/modelConfig";
-// Note: trackRequest is no longer exported from introspection route
+import { trackRequest } from "@/lib/metrics";
 import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
