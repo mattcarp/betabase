@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -21,7 +21,6 @@ import {
   CheckCircle,
   Info,
   XCircle,
-  Eye,
   Network,
   Camera,
   ScrollText,
@@ -178,17 +177,6 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
       case "info":
         return <Info className="h-3 w-3 text-blue-500" />;
     }
-  };
-
-  // Format timestamp
-  const formatTimestamp = (timestamp: number) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      fractionalSecondDigits: 3,
-    });
   };
 
   // Format relative time
@@ -401,7 +389,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                 : "No interactions match your filters"}
             </div>
           ) : (
-            filteredInteractions.map((interaction, index) => (
+            filteredInteractions.map((interaction, _index) => (
               <Card
                 key={interaction.id}
                 className={cn(
