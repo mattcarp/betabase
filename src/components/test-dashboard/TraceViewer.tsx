@@ -17,7 +17,7 @@ import {
   Eye,
   Code,
   Network,
-  Terminal,
+  // Terminal, // Unused
   Clock,
   MousePointer,
   Smartphone,
@@ -56,8 +56,8 @@ export const TraceViewer: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [selectedDevice, setSelectedDevice] = useState("desktop");
-  const [showNetwork, setShowNetwork] = useState(true);
-  const [showConsole, setShowConsole] = useState(true);
+  const [_showNetwork, _setShowNetwork] = useState(true); // Unused - keeping for future network panel
+  const [_showConsole, _setShowConsole] = useState(true); // Unused - keeping for future console panel
   const [annotationsEnabled, setAnnotationsEnabled] = useState(false);
 
   const traceSteps: TraceStep[] = [

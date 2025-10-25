@@ -1,6 +1,12 @@
 import OpenAI from "openai";
 import { NextRequest } from "next/server";
 
+// Extend global type to include our custom property
+declare global {
+  // eslint-disable-next-line no-var
+  var assistantInitialized: boolean | undefined;
+}
+
 // Initialize OpenAI client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",

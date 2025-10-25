@@ -1,6 +1,6 @@
 import React, { useState, useRef, ReactNode, useCallback, useEffect } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
-import { X, Minimize2, Maximize2, Move, RotateCcw } from "lucide-react";
+import { X, Minimize2, Maximize2, /* Move, */ RotateCcw } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 export interface PanelPosition {
@@ -51,7 +51,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
   initialPosition = { x: 50, y: 50 },
   initialSize = { width: "350px", height: "250px" },
   className = "",
-  panelType = "default",
+  panelType: _panelType = "default", // Unused - keeping for future styling
   onClose,
   onMinimize,
   onMaximize,
@@ -68,9 +68,9 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
   const [position, setPosition] = useState<PanelPosition>(initialPosition);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
+  const [_isDragging, setIsDragging] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const [isResizing, setIsResizing] = useState(false);
+  const [_isResizing, setIsResizing] = useState(false);
 
   const nodeRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -173,7 +173,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
   }, [id, onFocus]);
 
   const handleDragStop = useCallback(
-    (e: DraggableEvent, data: DraggableData) => {
+    (_e: DraggableEvent, data: DraggableData) => {
       console.log(`🎯 Drag stopped for panel: ${id} at position:`, {
         x: data.x,
         y: data.y,

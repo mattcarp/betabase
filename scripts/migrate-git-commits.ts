@@ -208,18 +208,19 @@ async function main() {
     console.error("\n💥 Migration failed with error:");
     console.error(error);
 
+    const err = error as Error;
     // Check for common issues
-    if (error.message.includes("git")) {
+    if (err.message.includes("git")) {
       console.error("\n💡 This might be a git-related issue:");
       console.error("   - Make sure you're in a git repository");
       console.error("   - Check that git is installed and accessible");
       console.error("   - Verify the repository path is correct");
-    } else if (error.message.includes("Supabase") || error.message.includes("database")) {
+    } else if (err.message.includes("Supabase") || err.message.includes("database")) {
       console.error("\n💡 This might be a database issue:");
       console.error("   - Check your Supabase URL and API keys");
       console.error("   - Verify the database migration has been run");
       console.error("   - Test database connectivity");
-    } else if (error.message.includes("OpenAI") || error.message.includes("embedding")) {
+    } else if (err.message.includes("OpenAI") || err.message.includes("embedding")) {
       console.error("\n💡 This might be an OpenAI API issue:");
       console.error("   - Check your OpenAI API key");
       console.error("   - Verify you have sufficient API quota");
