@@ -110,9 +110,38 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
       setError(null);
 
       // Explicitly unmute microphone after connection
-      console.log("🎤 Unmuting microphone...");
-      setMicMuted(false);
-      console.log("✅ Microphone should now be active");
+      try {
+        console.log("🎤 Unmuting microphone...");
+
+        // CRITICAL: Call SDK's setMuted method, not just React state
+        if (conversation?.setMuted) {
+          conversation.setMuted(false);
+          console.log("✅ Called conversation.setMuted(false)");
+        }
+
+        // Also update React state
+        setMicMuted(false);
+
+        // Give SDK time to apply unmute
+        await new Promise(resolve => setTimeout(resolve, 200));
+
+        // Verify microphone is actually unmuted
+        const isMuted = conversation?.isMuted?.() ?? true;
+        console.log(`🎤 Microphone mute status: ${isMuted ? 'MUTED' : 'UNMUTED'}`);
+
+        // Test if we can get input volume
+        const inputVol = conversation?.getInputVolume?.() ?? 0;
+        console.log(`🎤 Initial input volume: ${(inputVol * 100).toFixed(1)}%`);
+
+        if (inputVol === 0) {
+          console.warn("⚠️ Input volume is 0% - microphone may not be capturing audio");
+          console.log("💡 Try speaking loudly or checking system microphone settings");
+        } else {
+          console.log("✅ Microphone is capturing audio!");
+        }
+      } catch (err) {
+        console.error("❌ Failed to unmute microphone:", err);
+      }
     },
     onDisconnect: () => {
       console.log("🔌 ElevenLabs: Disconnected from conversation");
@@ -340,6 +369,36 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
   };
 
   /**
+   * Get the correct microphone device (not BlackHole or other virtual devices)
+   */
+  const getCorrectMicrophone = async (): Promise<string | null> => {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const audioInputs = devices.filter((d) => d.kind === "audioinput");
+
+      console.log("📋 Available audio input devices:");
+      audioInputs.forEach((d, i) => console.log(`  ${i + 1}. ${d.label}`));
+
+      // Priority order: MacBook mic > Built-in mic > First non-BlackHole device
+      const preferredDevice =
+        audioInputs.find((d) => d.label.toLowerCase().includes("macbook")) ||
+        audioInputs.find((d) => d.label.toLowerCase().includes("built-in")) ||
+        audioInputs.find((d) => !d.label.toLowerCase().includes("blackhole"));
+
+      if (preferredDevice) {
+        console.log("✅ Selected microphone:", preferredDevice.label);
+        return preferredDevice.deviceId;
+      }
+
+      console.warn("⚠️ No preferred microphone found, using browser default");
+      return null;
+    } catch (err) {
+      console.error("❌ Failed to enumerate devices:", err);
+      return null;
+    }
+  };
+
+  /**
    * Start conversation
    */
   const startConversation = useCallback(
@@ -350,6 +409,26 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
         configRef.current = config;
 
         console.log("🚀 Starting ElevenLabs WebRTC conversation...", config);
+
+        // CRITICAL: Identify the correct microphone BEFORE starting
+        // This helps avoid BlackHole or other virtual audio devices
+        const microphoneDeviceId = await getCorrectMicrophone();
+
+        // Request microphone access with the correct device
+        // This ensures Chrome caches the right device for WebRTC
+        if (microphoneDeviceId) {
+          try {
+            console.log("🎤 Pre-requesting microphone access for correct device...");
+            const testStream = await navigator.mediaDevices.getUserMedia({
+              audio: { deviceId: { exact: microphoneDeviceId } },
+            });
+            console.log("✅ Microphone access granted for:", testStream.getAudioTracks()[0].label);
+            // Stop the test stream - ElevenLabs SDK will request its own
+            testStream.getTracks().forEach((track) => track.stop());
+          } catch (err) {
+            console.warn("⚠️ Could not pre-request specific device, using default:", err);
+          }
+        }
 
         // Get WebRTC conversation token from server (secure)
         // The ElevenLabs SDK will handle microphone permissions via WebRTC
