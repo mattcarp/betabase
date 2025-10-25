@@ -223,11 +223,6 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
           <p className="mac-body text-gray-300">yup. it's back.</p>
         </div>
 
-        {/* Welcome Message */}
-        <div className="mb-8">
-          <h2 className="mac-heading text-white mb-2">Welcome Back</h2>
-          <p className="mac-body">Sign in to continue to your dashboard</p>
-        </div>
       </div>
 
       {/* Glass Morphism Card */}
@@ -250,7 +245,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                   id="email"
                   type="email"
                   placeholder="Enter your email address"
-                  className="mac-input pl-12 h-12 text-base border-2 border-gray-400 bg-gray-900 text-white placeholder:text-gray-400 focus:border-blue-400 focus:bg-gray-800 transition-all duration-200"
+                  className="mac-input pl-14 h-12 text-base border-2 border-gray-400 bg-gray-900 text-white placeholder:text-gray-400 focus:border-blue-400 focus:bg-gray-800 transition-all duration-200"
                   disabled={isLoading}
                   autoComplete="email"
                   aria-invalid={!!emailForm.formState.errors.email}
