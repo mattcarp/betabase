@@ -101,47 +101,14 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
   const volumeCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize official ElevenLabs hook
-  // CRITICAL: Use controlled micMuted state to ensure microphone is active
+  // CRITICAL: Always start with mic unmuted
   const conversation = useConversation({
-    micMuted, // Controlled microphone state
-    onConnect: async () => {
+    micMuted: false, // Always unmuted - handle muting via state only
+    onConnect: () => {
       console.log("🔗 ElevenLabs: Connected to conversation");
       setStatus("connected");
       setError(null);
-
-      // Explicitly unmute microphone after connection
-      try {
-        console.log("🎤 Unmuting microphone...");
-
-        // CRITICAL: Call SDK's setMuted method, not just React state
-        if (conversation?.setMuted) {
-          conversation.setMuted(false);
-          console.log("✅ Called conversation.setMuted(false)");
-        }
-
-        // Also update React state
-        setMicMuted(false);
-
-        // Give SDK time to apply unmute
-        await new Promise(resolve => setTimeout(resolve, 200));
-
-        // Verify microphone is actually unmuted
-        const isMuted = conversation?.isMuted?.() ?? true;
-        console.log(`🎤 Microphone mute status: ${isMuted ? 'MUTED' : 'UNMUTED'}`);
-
-        // Test if we can get input volume
-        const inputVol = conversation?.getInputVolume?.() ?? 0;
-        console.log(`🎤 Initial input volume: ${(inputVol * 100).toFixed(1)}%`);
-
-        if (inputVol === 0) {
-          console.warn("⚠️ Input volume is 0% - microphone may not be capturing audio");
-          console.log("💡 Try speaking loudly or checking system microphone settings");
-        } else {
-          console.log("✅ Microphone is capturing audio!");
-        }
-      } catch (err) {
-        console.error("❌ Failed to unmute microphone:", err);
-      }
+      setMicMuted(false); // Ensure unmuted state
     },
     onDisconnect: () => {
       console.log("🔌 ElevenLabs: Disconnected from conversation");
