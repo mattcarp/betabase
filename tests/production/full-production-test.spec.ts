@@ -10,7 +10,7 @@ import { test, expect, Page, BrowserContext } from "@playwright/test";
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
-const SIAM_URL = "https://iamsiam.ai";
+const SIAM_URL = process.env.PLAYWRIGHT_BASE_URL || "https://thebetabase.com";
 
 // Helper function to login (reuse from mailinator test)
 async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
@@ -21,12 +21,14 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
   await page.fill('input[type="email"]', TEST_EMAIL);
   await page.click('button[type="submit"]');
 
-  // Wait for form to appear
+  // Wait for verification form to appear
   await page.waitForTimeout(3000);
-  const verificationVisible = await page
-    .locator('input[placeholder*="code" i], input[placeholder*="verification" i]')
-    .isVisible();
 
+  // Wait for the verification code input to be visible
+  const codeInput = page.locator('input[id="code"]');
+  await codeInput.waitFor({ state: 'visible', timeout: 10000 });
+
+  const verificationVisible = await codeInput.isVisible();
   if (!verificationVisible) {
     throw new Error("Verification form didn't appear");
   }
@@ -65,7 +67,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
 
     if (code) {
       // Enter code and login
-      await page.fill('input[type="text"], input[type="number"]', code);
+      await page.fill('input[id="code"]', code);
       await page.click('button[type="submit"]');
       await page.waitForSelector('h1:has-text("AOMA Intelligence Hub"), h1:has-text("SIAM")', {
         timeout: 15000,
@@ -78,6 +80,8 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
     throw new Error("No emails found in Mailinator");
   }
 }
+
+test.describe.configure({ mode: 'serial' });
 
 test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
   test.setTimeout(300000); // 5 minutes for the full suite

@@ -104,6 +104,126 @@
 
 ---
 
+## Recording Strategy with Descript
+
+### Why Descript is Perfect for This
+- Record screen + camera simultaneously
+- Edit by editing transcript (remove "ums", mistakes)
+- Add captions automatically
+- Overdub narration if you mess up
+- Add zoom effects, highlights, overlays in post
+- Export with camera picture-in-picture
+
+### Recording Approach: Segmented
+
+**Record in 3 separate segments** (easier to edit than one 15-min take):
+
+1. **Segment 1: Opening + Context** (2 min)
+   - Hook: "What makes SIAM different?"
+   - Quick intro to the 7 differentiators
+   - "Let's see it in action"
+
+2. **Segment 2: Live Demos** (10 min)
+   - Run through all 7 differentiation demos
+   - Use Playwright automation OR manual typing (your choice)
+   - Can do multiple takes of each query
+   - Descript will let you splice together the best takes
+
+3. **Segment 3: Closing** (1 min)
+   - Recap the 7 differentiators
+   - Testing infrastructure tease
+   - Call to action
+
+### Pre-Recording Checklist
+
+**Browser Setup:**
+- [ ] Open thebetabase.com in clean Chrome profile
+- [ ] Log in, verify it works
+- [ ] Hide bookmarks bar (Cmd+Shift+B)
+- [ ] Close all other tabs
+- [ ] Set zoom to 100%
+- [ ] Position window for good screen recording size
+
+**Descript Setup:**
+- [ ] New project: "SIAM Demo for Colleagues"
+- [ ] Screen recording: Full screen OR application window
+- [ ] Camera: Bottom right corner (or off if you prefer)
+- [ ] Microphone: Test levels, speak at normal volume
+- [ ] Recording template: 1080p, 30fps
+
+**Content Prep:**
+- [ ] Have DEMO-SCRIPT-BULLETS.md open on second screen
+- [ ] Test each demo query works
+- [ ] Close Slack, notifications, anything distracting
+- [ ] Put phone on Do Not Disturb
+
+### Recording Workflow
+
+**For Each Segment:**
+
+1. **Hit Record in Descript**
+2. **Take a breath, smile** (if camera on)
+3. **Start speaking naturally** - reference bullet script but don't read it
+4. **If you mess up**: Keep going! Fix in editing
+5. **Finish segment**
+6. **Hit Stop**
+7. **Review immediately** - if terrible, re-record that segment
+
+**Tips:**
+- Speak slightly slower than normal (easier to understand)
+- Pause after each demo for 2 seconds (easier to edit)
+- Over-emphasize key phrases: "POINT OF DIFFERENTIATION #1"
+- If you stumble: pause, restart the sentence (Descript can remove the mistake)
+
+### Post-Recording: Descript Editing
+
+**Phase 1: Cleanup (30 mins)**
+1. Let Descript transcribe
+2. Edit transcript to remove:
+   - "Um", "uh", "like"
+   - False starts
+   - Long pauses
+   - Any mistakes
+3. Transcript edits = video edits automatically
+
+**Phase 2: Enhancement (30 mins)**
+1. Add captions (auto-generate, then review)
+2. Add zoom effects on key moments:
+   - When clicking GitMerge button
+   - When diagram renders
+   - When showing source citations
+3. Add text overlays:
+   - "POINT OF DIFFERENTIATION #1" in big text
+   - Key phrases highlighted
+   - URLs at the end
+
+**Phase 3: Polish (15 mins)**
+1. Add intro/outro cards (optional)
+2. Adjust camera position/size if needed
+3. Remove filler frames
+4. Export: 1080p MP4
+
+### Alternative: Playwright Automation + Narration
+
+**If you want to be fancy:**
+
+1. Record Playwright running the demo (no talking)
+2. Record voiceover separately (reading script)
+3. Combine in Descript
+4. Advantage: Perfect demo execution, clean audio
+
+**Script:**
+```bash
+# Terminal 1: Record this with Descript (screen only)
+npx playwright test tests/demo/demo-differentiated.spec.ts --headed
+
+# Then in Descript:
+# Record voiceover while watching the video
+# Descript will sync them
+```
+
+---
+
 ## System Architecture Overview
 
 **[DIAGRAM PLACEHOLDER: High-level architecture]**
