@@ -315,10 +315,10 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
   }, []);
 
   /**
-   * Get signed URL from server (secure)
+   * Get WebRTC conversation token from server (secure)
    */
-  const getSignedUrl = async (agentId: string): Promise<string> => {
-    console.log("🔐 Requesting signed URL from server...");
+  const getConversationToken = async (agentId: string): Promise<string> => {
+    console.log("🔐 Requesting WebRTC conversation token from server...");
 
     const response = await fetch("/api/elevenlabs/conversation-token", {
       method: "POST",
@@ -334,9 +334,9 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
     }
 
     const data = await response.json();
-    console.log("✅ Signed URL received");
+    console.log("✅ WebRTC conversation token received");
 
-    return data.signedUrl;
+    return data.conversationToken;
   };
 
   /**
@@ -349,27 +349,27 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
         setError(null);
         configRef.current = config;
 
-        console.log("🚀 Starting ElevenLabs conversation...", config);
+        console.log("🚀 Starting ElevenLabs WebRTC conversation...", config);
 
-        // Get signed URL from server (secure)
+        // Get WebRTC conversation token from server (secure)
         // The ElevenLabs SDK will handle microphone permissions via WebRTC
-        const signedUrl = await getSignedUrl(config.agentId);
-        signedUrlRef.current = signedUrl;
+        const conversationToken = await getConversationToken(config.agentId);
+        conversationTokenRef.current = conversationToken;
 
         // IMPORTANT: Don't start our custom audio processor
         // The ElevenLabs SDK handles audio capture internally via WebRTC
         // Starting our own processor creates conflicts and prevents the SDK from receiving audio
         // Our custom processor is only for additional VAD analysis if needed later
 
-        // Start conversation with signed URL
-        // The SDK will automatically handle microphone access via WebRTC
+        // Start conversation with WebRTC token
+        // FIXED: Use conversationToken (WebRTC) instead of signedUrl (WebSocket)
+        // WebRTC provides better real-time audio streaming and microphone handling
         await conversation.startSession({
-          signedUrl,
-          // Don't specify connectionType - let SDK choose based on signedUrl
-          // WebRTC handles audio automatically
+          conversationToken,
+          connectionType: "webrtc", // Explicitly specify WebRTC mode
         } as any);
 
-        console.log("✅ Conversation started successfully");
+        console.log("✅ WebRTC conversation started successfully");
         setConversationState("idle");
       } catch (err) {
         console.error("❌ Failed to start conversation:", err);
