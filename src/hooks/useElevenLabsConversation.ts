@@ -91,6 +91,7 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
   const [error, setError] = useState<Error | null>(null);
   const [audioFeatures, setAudioFeatures] = useState<AudioFeatures | null>(null);
   const [audioMetrics, setAudioMetrics] = useState<AudioMetrics | null>(null);
+  const [micMuted, setMicMuted] = useState(false); // CRITICAL: Control mic mute state
 
   // Refs
   const audioProcessorRef = useRef<RealTimeAudioProcessor | null>(null);
@@ -99,11 +100,18 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
   const isInterruptingRef = useRef(false);
 
   // Initialize official ElevenLabs hook
+  // CRITICAL: Use controlled micMuted state to ensure microphone is active
   const conversation = useConversation({
-    onConnect: () => {
+    micMuted, // Controlled microphone state
+    onConnect: async () => {
       console.log("🔗 ElevenLabs: Connected to conversation");
       setStatus("connected");
       setError(null);
+
+      // Explicitly unmute microphone after connection
+      console.log("🎤 Unmuting microphone...");
+      setMicMuted(false);
+      console.log("✅ Microphone should now be active");
     },
     onDisconnect: () => {
       console.log("🔌 ElevenLabs: Disconnected from conversation");
@@ -125,6 +133,38 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
       handleWebSocketMessage(message);
     },
   });
+
+  /**
+   * Monitor input volume periodically
+   * CRITICAL: Only poll if connection is active to avoid "WebSocket already CLOSING" errors
+   */
+  useEffect(() => {
+    if (status !== "connected") return;
+
+    const volumeCheckInterval = setInterval(() => {
+      // Check if still connected before polling volume
+      if (status !== "connected") {
+        console.log("⚠️ Skipping volume check - connection not active");
+        return;
+      }
+
+      try {
+        const inputVol = conversation.getInputVolume?.() ?? 0;
+        const outputVol = conversation.getOutputVolume?.() ?? 0;
+        console.log(`🎤 Audio levels - Input: ${(inputVol * 100).toFixed(1)}%, Output: ${(outputVol * 100).toFixed(1)}%`);
+
+        // Store volumes for display
+        setUserAudioLevel(inputVol);
+        setAiAudioLevel(outputVol);
+      } catch (error) {
+        console.error("❌ Error getting volume levels:", error);
+        // Stop polling on error
+        clearInterval(volumeCheckInterval);
+      }
+    }, 500);
+
+    return () => clearInterval(volumeCheckInterval);
+  }, [status, conversation]);
 
   /**
    * Handle WebSocket messages from ElevenLabs
@@ -185,20 +225,22 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
 
   /**
    * Initialize audio processor for VAD
+   * DISABLED: ElevenLabs SDK handles audio internally via WebRTC
+   * Our custom processor conflicts with the SDK's audio capture
    */
-  useEffect(() => {
-    if (!audioProcessorRef.current) {
-      audioProcessorRef.current = new RealTimeAudioProcessor();
-      audioProcessorRef.current.initialize({
-        enableVAD: true,
-        vadSensitivity: configRef.current?.vadSensitivity || 0.5,
-      });
-    }
+  // useEffect(() => {
+  //   if (!audioProcessorRef.current) {
+  //     audioProcessorRef.current = new RealTimeAudioProcessor();
+  //     audioProcessorRef.current.initialize({
+  //       enableVAD: true,
+  //       vadSensitivity: configRef.current?.vadSensitivity || 0.5,
+  //     });
+  //   }
 
-    return () => {
-      audioProcessorRef.current?.cleanup();
-    };
-  }, []);
+  //   return () => {
+  //     audioProcessorRef.current?.cleanup();
+  //   };
+  // }, []);
 
   /**
    * Monitor audio features for interrupt detection
@@ -276,19 +318,38 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
 
         console.log("🚀 Starting ElevenLabs conversation...", config);
 
+        // CRITICAL: Request microphone permissions BEFORE starting conversation
+        // This is required by the ElevenLabs SDK
+        console.log("🎤 Requesting microphone permissions...");
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          console.log("✅ Microphone access granted");
+
+          // Stop the test stream immediately (ElevenLabs SDK will request it again)
+          stream.getTracks().forEach((track) => track.stop());
+        } catch (micError: any) {
+          console.error("❌ Microphone access denied:", micError);
+          throw new Error(
+            `Microphone access denied: ${micError.message}. Please allow microphone access in your browser settings.`
+          );
+        }
+
         // Get signed URL from server (secure)
         const signedUrl = await getSignedUrl(config.agentId);
         signedUrlRef.current = signedUrl;
 
-        // Start audio processor for VAD (if voice-activated mode)
-        if (config.mode === "voice-activated" && audioProcessorRef.current) {
-          await audioProcessorRef.current.startProcessing(handleAudioFeatures, handleAudioMetrics);
-        }
+        // IMPORTANT: Don't start our custom audio processor
+        // The ElevenLabs SDK handles audio capture internally via WebRTC
+        // Starting our own processor creates conflicts and prevents the SDK from receiving audio
+        // Our custom processor is only for additional VAD analysis if needed later
 
         // Start conversation with signed URL
+        // The SDK will automatically handle microphone access via WebRTC
         await conversation.startSession({
           signedUrl,
-        });
+          // Don't specify connectionType - let SDK choose based on signedUrl
+          // WebRTC handles audio automatically
+        } as any);
 
         console.log("✅ Conversation started successfully");
         setConversationState("idle");
@@ -310,7 +371,7 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
       console.log("🛑 Stopping conversation...");
 
       // Stop audio processor
-      audioProcessorRef.current?.stopProcessing();
+      // audioProcessorRef.current?.stopProcessing(); // DISABLED: Not using custom processor
 
       // End conversation
       await conversation.endSession();
@@ -331,21 +392,23 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
 
   /**
    * Pause conversation
+   * NOTE: Custom audio processor disabled - ElevenLabs SDK handles audio
    */
   const pauseConversation = useCallback(() => {
     console.log("⏸️ Pausing conversation...");
-    audioProcessorRef.current?.stopProcessing();
-    // Note: ElevenLabs SDK doesn't have a native pause, so we stop audio input
+    // audioProcessorRef.current?.stopProcessing();
+    // Note: ElevenLabs SDK doesn't have a native pause
   }, []);
 
   /**
    * Resume conversation
+   * NOTE: Custom audio processor disabled - ElevenLabs SDK handles audio
    */
   const resumeConversation = useCallback(async () => {
     console.log("▶️ Resuming conversation...");
-    if (configRef.current?.mode === "voice-activated" && audioProcessorRef.current) {
-      await audioProcessorRef.current.startProcessing(handleAudioFeatures, handleAudioMetrics);
-    }
+    // if (configRef.current?.mode === "voice-activated" && audioProcessorRef.current) {
+    //   await audioProcessorRef.current.startProcessing(handleAudioFeatures, handleAudioMetrics);
+    // }
   }, [handleAudioFeatures, handleAudioMetrics]);
 
   /**

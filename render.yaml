@@ -41,10 +41,10 @@ services:
       - key: PERPLEXITY_API_KEY
         sync: false
 
-      # Supabase (from dashboard)
-      - key: SUPABASE_URL
+      # Supabase (from dashboard) - IMPORTANT: Use NEXT_PUBLIC_ prefix for client-side access
+      - key: NEXT_PUBLIC_SUPABASE_URL
         sync: false
-      - key: SUPABASE_ANON_KEY
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
