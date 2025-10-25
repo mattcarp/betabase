@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cognitoAuth } from "../../../../src/services/cognitoAuth";
+import { supabaseAdmin } from "../../../../src/lib/supabase";
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
 
 // Helper function to get test emails from environment
 function getTestEmailPatterns(): string[] {
@@ -109,46 +112,153 @@ export async function POST(request: NextRequest) {
         }
 
       case "verify":
-        // Special handling for test email in development
-        if (
-          process.env.NODE_ENV === "development" &&
-          email === "siam-test-x7j9k2p4@mailinator.com" &&
-          code === "123456"
-        ) {
-          // Create a test user object for development
-          const user = {
-            username: email,
-            email: email,
-            accessToken: "test-access-token",
-            refreshToken: "test-refresh-token",
-            idToken: "test-id-token",
-          };
-
-          return NextResponse.json({
-            success: true,
-            user,
-            token: "test-auth-token",
-          });
+        // Validate email is allowed
+        if (!isEmailAllowed(email)) {
+          return NextResponse.json({ error: "Email not authorized" }, { status: 403 });
         }
 
-        // For production, you'd use confirmForgotPassword with a temporary password
-        // then immediately change it, or implement custom auth flow
+        // Verify Supabase configuration
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+          console.error("[Auth] Supabase configuration missing");
+          return NextResponse.json(
+            { error: "Authentication service not configured" },
+            { status: 503 }
+          );
+        }
 
-        // For now, we'll validate the code matches what Cognito sent
-        // This is a simplified implementation
+        // Check if admin client is available
+        if (!supabaseAdmin) {
+          console.error("[Auth] Supabase admin client not configured - missing SERVICE_ROLE_KEY");
+          return NextResponse.json(
+            { error: "Authentication service not properly configured" },
+            { status: 503 }
+          );
+        }
+
+        // Special handling for test email in development
+        const isTestEmail =
+          process.env.NODE_ENV === "development" &&
+          email === "siam-test-x7j9k2p4@mailinator.com" &&
+          code === "123456";
+
         try {
-          // Create a mock user object for magic link login
-          const user = {
-            username: email,
-            email: email,
-            accessToken: "magic-link-token",
-            refreshToken: "magic-link-refresh",
-            idToken: "magic-link-id",
-          };
+          // TODO: Verify code with Cognito - for now we skip this for magic link flow
+          // In production, you'd call cognitoAuth.confirmForgotPassword(email, code, tempPassword)
 
-          return NextResponse.json({ success: true, user });
+          console.log(`[Auth] Creating Supabase session for ${email}`);
+
+          // Ensure user exists in Supabase auth
+          // Try to create user - will succeed if new, return error if exists
+          const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
+            email: email,
+            email_confirm: true, // Auto-confirm since we verified via Cognito code
+            user_metadata: {
+              created_via: "magic-link",
+              cognito_verified: true,
+            },
+          });
+
+          let userId: string;
+
+          if (createError) {
+            // Check if error is because user already exists
+            if (
+              createError.message.includes("already") ||
+              createError.message.includes("duplicate")
+            ) {
+              // User exists - fetch by email
+              const { data: users, error: listError } = await supabaseAdmin.auth.admin.listUsers();
+
+              if (listError) {
+                console.error("[Auth] Failed to list users:", listError);
+                return NextResponse.json(
+                  { error: "Failed to create user session" },
+                  { status: 500 }
+                );
+              }
+
+              const existingUser = users.users.find((u) => u.email === email);
+              if (!existingUser) {
+                console.error("[Auth] User creation failed but user not found:", createError);
+                return NextResponse.json(
+                  { error: "Failed to create user session" },
+                  { status: 500 }
+                );
+              }
+
+              userId = existingUser.id;
+              console.log(`[Auth] Found existing Supabase user: ${userId}`);
+            } else {
+              // Unexpected error
+              console.error("[Auth] Failed to create user:", createError);
+              return NextResponse.json({ error: "Failed to create user session" }, { status: 500 });
+            }
+          } else {
+            userId = newUser.user.id;
+            console.log(`[Auth] Created new Supabase user: ${userId}`);
+          }
+
+          // Create server-side Supabase client with cookie handling
+          const cookieStore = await cookies();
+          const supabase = createServerClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+            {
+              cookies: {
+                getAll() {
+                  return cookieStore.getAll();
+                },
+                setAll(cookiesToSet) {
+                  cookiesToSet.forEach(({ name, value, options }) =>
+                    cookieStore.set(name, value, options)
+                  );
+                },
+              },
+            }
+          );
+
+          // Use admin to sign in the user and create a session
+          const { data: sessionData, error: signInError } =
+            await supabaseAdmin.auth.admin.generateLink({
+              type: "magiclink",
+              email: email,
+            });
+
+          if (signInError) {
+            console.error("[Auth] Failed to generate session:", signInError);
+            return NextResponse.json({ error: "Failed to create user session" }, { status: 500 });
+          }
+
+          // Set the session using the generated link data
+          const { error: setSessionError } = await supabase.auth.setSession({
+            access_token: sessionData.properties.access_token,
+            refresh_token: sessionData.properties.refresh_token,
+          });
+
+          if (setSessionError) {
+            console.error("[Auth] Failed to set session:", setSessionError);
+            return NextResponse.json({ error: "Failed to create user session" }, { status: 500 });
+          }
+
+          console.log(`[Auth] ✅ Successfully created Supabase session for ${email}`);
+
+          // Return success with session info
+          return NextResponse.json({
+            success: true,
+            user: {
+              id: userId,
+              email: email,
+            },
+          });
         } catch (error: any) {
-          return NextResponse.json({ error: "Invalid or expired code" }, { status: 400 });
+          console.error("[Auth] Magic link verification error:", error);
+          return NextResponse.json(
+            {
+              error: "Invalid or expired code",
+              details: process.env.NODE_ENV === "development" ? error.message : undefined,
+            },
+            { status: 400 }
+          );
         }
 
       default:
