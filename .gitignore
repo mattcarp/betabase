@@ -137,3 +137,7 @@ tsconfig.tsbuildinfo
 .kiro/steering/byterover-rules.md
 .qoder/rules/byterover-rules.md
 .augment/rules/byterover-rules.md
+# Theme screenshots (temporary)
+tmp/theme-screenshots/*.png
+tmp/theme-screenshots/*.jpg
+tmp/theme-screenshots/*.jpeg
