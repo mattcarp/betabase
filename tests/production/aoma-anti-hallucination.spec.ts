@@ -95,64 +95,80 @@ const CONNECTION_TESTS = [
   },
 ];
 
-// Reusable login function - Uses Mailinator magic link pattern for production
+// Reusable login function - Uses Mailinator verification code pattern
 async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
-  console.log("🔐 Logging into SIAM with Mailinator magic link...");
+  console.log("🔐 Logging into SIAM with Mailinator verification code...");
 
-  // Request magic link
+  // Request verification code
   await page.goto(SIAM_URL, { waitUntil: "networkidle" });
   await page.fill('input[type="email"]', TEST_EMAIL);
-  await page.click('button:has-text("Send Magic Link"), button[type="submit"]');
+  await page.click('button[type="submit"]');
 
-  // Wait for confirmation message
-  await expect(page.locator("text=/check your email|magic link sent/i")).toBeVisible({ timeout: 10000 });
-  console.log("✅ Magic link request sent");
+  // Wait for verification form
+  await page.waitForTimeout(3000);
+  const verificationVisible = await page
+    .locator('input[type="text"]')
+    .first()
+    .isVisible({ timeout: 10000 })
+    .catch(() => false);
+
+  if (!verificationVisible) {
+    throw new Error("Verification form didn't appear");
+  }
+
+  console.log("✅ Verification form displayed");
 
   // Open Mailinator inbox in new tab
   const mailPage = await context.newPage();
   await mailPage.goto(MAILINATOR_INBOX, { waitUntil: "networkidle" });
-
-  // Wait for email to arrive
   await mailPage.waitForTimeout(5000);
 
   // Click first email
-  const emailRow = mailPage.locator('tr[ng-repeat*="email in emails"]').first();
-  await emailRow.waitFor({ timeout: 15000 });
-  await emailRow.click();
-  await mailPage.waitForTimeout(2000);
+  const emails = await mailPage.locator('tr[ng-repeat*="email in emails"]').count();
+  if (emails === 0) {
+    throw new Error("No emails found in Mailinator inbox");
+  }
 
-  // Extract magic link from email
-  let magicLink = null;
+  await mailPage.locator('tr[ng-repeat*="email in emails"]').first().click();
+  await mailPage.waitForTimeout(3000);
+
+  // Extract verification code from email
+  let code = null;
   const iframe = await mailPage.$("iframe#html_msg_body");
-
   if (iframe) {
     const frame = await iframe.contentFrame();
     if (frame) {
-      // Look for magic link in iframe
-      const link = await frame.$('a:has-text("Sign In"), a:has-text("Verify"), a[href*="verify"], a[href*="auth"]');
-      if (link) {
-        magicLink = await link.getAttribute("href");
-      }
+      const frameText = await frame.$eval("body", (el) => el.textContent || "");
+      const match = frameText.match(/\b(\d{6})\b/);
+      if (match) code = match[1];
     }
   }
 
-  if (!magicLink) {
-    throw new Error("Magic link not found in email");
+  if (!code) {
+    const pageText = await mailPage.content();
+    const match = pageText.match(/\b(\d{6})\b/);
+    if (match) code = match[1];
   }
 
-  console.log("✅ Magic link extracted from email");
   await mailPage.close();
 
-  // Navigate to magic link
-  await page.goto(magicLink, { waitUntil: "networkidle" });
+  if (!code) {
+    throw new Error("Verification code not found in email");
+  }
 
-  // Wait for authenticated page
+  console.log(`✅ Verification code extracted: ${code}`);
+
+  // Enter verification code
+  await page.fill('input[type="text"]', code);
+  await page.click('button[type="submit"]');
+
+  // Wait for authenticated page with longer timeout
   await page.waitForSelector(
     'h1:has-text("Welcome to The Betabase"), textarea[placeholder*="Ask"]',
-    { timeout: 15000 }
+    { timeout: 20000 }
   );
 
-  console.log("✅ Logged in successfully via magic link!");
+  console.log("✅ Logged in successfully!");
 }
 
 // Helper to send chat message and wait for response

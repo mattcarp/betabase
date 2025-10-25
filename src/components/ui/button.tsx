@@ -18,7 +18,7 @@ const getButtonClasses = (
 
   // Variant-specific MAC classes
   const variantClasses: Record<ButtonVariant, string> = {
-    default: "mac-button-primary mac-shimmer shadow-lg hover:shadow-xl hover:scale-[1.02]",
+    default: "mac-button-primary shadow-lg hover:shadow-xl hover:scale-[1.02]",
     destructive:
       "bg-red-950/80 border border-red-500/50 text-red-100 hover:bg-red-900/90 hover:border-red-400 shadow-sm rounded-[0.5rem]",
     outline: "mac-button-outline hover:scale-[1.01]",
@@ -43,26 +43,18 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   variant?: ButtonVariant;
   size?: ButtonSize;
   asChild?: boolean;
-  shimmer?: boolean; // Add MAC shimmer effect
   glow?: boolean; // Add MAC glow effect
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    { className, variant = "default", size = "default", shimmer, glow, asChild = false, ...props },
-    ref
-  ) => {
+  ({ className, variant = "default", size = "default", glow, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
 
     // Get MAC classes for the button
     const buttonClasses = getButtonClasses(variant, size);
 
     // Add optional MAC effects
-    const effectClasses = cn(
-      shimmer && "mac-shimmer",
-      glow && "mac-glow",
-      shimmer === false && "[&.mac-shimmer]:animate-none" // Disable shimmer if explicitly set to false
-    );
+    const effectClasses = cn(glow && "mac-glow");
 
     return <Comp className={cn(buttonClasses, effectClasses, className)} ref={ref} {...props} />;
   }

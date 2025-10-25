@@ -1526,3 +1526,24 @@ Last updated: August 26, 2025
 - for fairly long instructions set for me (the human) please give me one step at a time.
 - you still can't log into jira. think harder, and let me know if you need help. it's juse username and password. you have the creadentials. be creative. ask me specific questions if you get stuck. we are losing thousands af tickets for of info if you cant do this. help me help you. once you log in, write jql queries, don't click thrugh the UI. export thos tickets and put them into the correct (already setup) tables in the betabase. when it asks for my email use, matt.carpenter.ext@sonymusic.com, when it asks for my passowrd use Dalkey1_Lisbon1, and when it asks for my username, use mcarpent. It's as easy as that. you just need to write adaptive code. think about ultrathink.
 - For the purposes of this project, the AOMA keys for AOMA2 and AOMA3 do not have a dash in them. They're just AOMA and the number 2 together, no dash.
+
+[byterover-mcp]
+
+[byterover-mcp]
+
+You are given two tools from Byterover MCP server, including
+## 1. `byterover-store-knowledge`
+You `MUST` always use this tool when:
+
++ Learning new patterns, APIs, or architectural decisions from the codebase
++ Encountering error solutions or debugging techniques
++ Finding reusable code patterns or utility functions
++ Completing any significant task or plan implementation
+
+## 2. `byterover-retrieve-knowledge`
+You `MUST` always use this tool when:
+
++ Starting any new task or implementation to gather relevant context
++ Before making architectural decisions to understand existing patterns
++ When debugging issues to check for previous solutions
++ Working with unfamiliar parts of the codebase
