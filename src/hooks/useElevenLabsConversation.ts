@@ -96,8 +96,9 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
   // Refs
   const audioProcessorRef = useRef<RealTimeAudioProcessor | null>(null);
   const configRef = useRef<ConversationConfig | null>(null);
-  const signedUrlRef = useRef<string | null>(null);
+  const conversationTokenRef = useRef<string | null>(null);
   const isInterruptingRef = useRef(false);
+  const volumeCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize official ElevenLabs hook
   // CRITICAL: Use controlled micMuted state to ensure microphone is active
@@ -115,6 +116,30 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
     },
     onDisconnect: () => {
       console.log("🔌 ElevenLabs: Disconnected from conversation");
+
+      // CRITICAL: Stop volume monitoring immediately to prevent "WebSocket CLOSING" errors
+      if (volumeCheckIntervalRef.current) {
+        clearInterval(volumeCheckIntervalRef.current);
+        volumeCheckIntervalRef.current = null;
+        console.log("⏹️ Volume monitoring stopped");
+      }
+
+      // Log disconnect details for debugging
+      try {
+        // @ts-ignore - Accessing internal WebSocket for debugging
+        if (conversation?.connection) {
+          console.log("🔍 Disconnect details:", {
+            readyState: conversation.connection.readyState,
+            // @ts-ignore
+            closeCode: conversation.connection.closeCode,
+            // @ts-ignore
+            closeReason: conversation.connection.closeReason,
+          });
+        }
+      } catch (e) {
+        console.log("⚠️ Could not access disconnect details");
+      }
+
       setStatus("disconnected");
       setConversationState("idle");
 
@@ -130,6 +155,7 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
       setStatus("error");
     },
     onMessage: (message) => {
+      console.log("📨 WebSocket message received:", JSON.stringify(message, null, 2));
       handleWebSocketMessage(message);
     },
   });
@@ -160,10 +186,17 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
         console.error("❌ Error getting volume levels:", error);
         // Stop polling on error
         clearInterval(volumeCheckInterval);
+        volumeCheckIntervalRef.current = null;
       }
     }, 500);
 
-    return () => clearInterval(volumeCheckInterval);
+    // Store interval ID in ref so onDisconnect can clear it
+    volumeCheckIntervalRef.current = volumeCheckInterval;
+
+    return () => {
+      clearInterval(volumeCheckInterval);
+      volumeCheckIntervalRef.current = null;
+    };
   }, [status, conversation]);
 
   /**
@@ -318,23 +351,8 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
 
         console.log("🚀 Starting ElevenLabs conversation...", config);
 
-        // CRITICAL: Request microphone permissions BEFORE starting conversation
-        // This is required by the ElevenLabs SDK
-        console.log("🎤 Requesting microphone permissions...");
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          console.log("✅ Microphone access granted");
-
-          // Stop the test stream immediately (ElevenLabs SDK will request it again)
-          stream.getTracks().forEach((track) => track.stop());
-        } catch (micError: any) {
-          console.error("❌ Microphone access denied:", micError);
-          throw new Error(
-            `Microphone access denied: ${micError.message}. Please allow microphone access in your browser settings.`
-          );
-        }
-
         // Get signed URL from server (secure)
+        // The ElevenLabs SDK will handle microphone permissions via WebRTC
         const signedUrl = await getSignedUrl(config.agentId);
         signedUrlRef.current = signedUrl;
 

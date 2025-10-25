@@ -217,25 +217,21 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
         {/* SIAM Logo/Brand */}
         <div className="mb-8">
           <div className="inline-flex items-center justify-center mb-6">
-            <SiamLogo size="2xl" variant="icon" className="drop-shadow-2xl" />
+            <SiamLogo size="3xl" variant="icon" className="drop-shadow-2xl" />
           </div>
-          <h1 c className="mac-heading" lassName="mac-heading mac-display-text mb-2">
-            The Betabase
-          </h1>
+          <h1 className="mac-heading mac-display-text mb-2">The Betabase</h1>
           <p className="mac-body text-gray-300">yup. it's back.</p>
         </div>
 
         {/* Welcome Message */}
         <div className="mb-8">
-          <h2 c className="mac-heading" lassName="mac-heading text-white mb-2">
-            Welcome Back
-          </h2>
+          <h2 className="mac-heading text-white mb-2">Welcome Back</h2>
           <p className="mac-body">Sign in to continue to your dashboard</p>
         </div>
       </div>
 
       {/* Glass Morphism Card */}
-      <div className="mac-glass mac-shimmer p-8 shadow-2xl relative">
+      <div className="mac-glass p-8 shadow-2xl relative">
         {step === "email" ? (
           /* Email Input Step */
           <form
@@ -292,13 +288,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
             {/* Success Message */}
             <div className="text-center p-6 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl border border-green-500/20 backdrop-blur-sm">
               <CheckCircle className="mx-auto h-12 w-12 text-green-400 mb-4" />
-              <h3
-                c
-                className="mac-title"
-                lassName="mac-title text-lg font-semibold text-white mb-2"
-              >
-                Magic Link Sent!
-              </h3>
+              <h3 className="mac-title text-lg font-semibold text-white mb-2">Magic Link Sent!</h3>
               <p className="text-sm text-gray-300">We've sent a verification code to</p>
               <p className="text-sm font-medium text-white mt-2">{currentEmail}</p>
               <p className="text-xs text-gray-400 mt-2">
@@ -364,10 +354,8 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
               </Button>
 
               <Button
-                className="mac-button mac-button-outline"
                 type="button"
                 variant="ghost"
-                className="mac-button mac-button-outline"
                 onClick={() => {
                   setStep("email");
                   setDevCode("");
