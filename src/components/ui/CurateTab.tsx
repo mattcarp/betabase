@@ -8,7 +8,7 @@ import { Alert, AlertDescription } from "./alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 import { ScrollArea } from "./scroll-area";
 import { Separator } from "./separator";
-import { Input } from "./input";
+// import { Input } from "./input"; // Unused
 import { Checkbox } from "./checkbox";
 import {
   Database,
@@ -19,14 +19,14 @@ import {
   Search,
   AlertCircle,
   CheckCircle,
-  Clock,
+  // Clock, // Unused
   FileIcon,
   FolderOpen,
   Info,
   X,
   MoreVertical,
   GitMerge,
-  Loader2,
+  // Loader2, // Unused
   Eye,
 } from "lucide-react";
 import {
@@ -47,7 +47,12 @@ import {
 import { FileUpload } from "../ai-elements/file-upload";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
-import { Empty, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "./empty";
+import {
+  Empty,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription /* EmptyContent - Unused */,
+} from "./empty";
 import { Spinner } from "./spinner";
 import { InputGroup, InputGroupInput, InputGroupAddon } from "./input-group";
 
@@ -90,7 +95,7 @@ export function CurateTab({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
   const [activeTab, setActiveTab] = useState("files");
-  const [statsLoading, setStatsLoading] = useState(false);
+  const [_statsLoading, _setStatsLoading] = useState(false); // Unused
   const [stats, setStats] = useState({
     totalFiles: 0,
     totalSize: 0,
@@ -99,11 +104,11 @@ export function CurateTab({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [filesToDelete, setFilesToDelete] = useState<string[]>([]);
   const [deduplicating, setDeduplicating] = useState(false);
-  const [dedupeResults, setDedupeResults] = useState<{
+  const [_dedupeResults, setDedupeResults] = useState<{
     totalDuplicates: number;
     duplicateGroups: number;
     removed: number;
-  } | null>(null);
+  } | null>(null); // dedupeResults unused
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
   const [previewFile, setPreviewFile] = useState<VectorStoreFile | null>(null);
   const [previewContent, setPreviewContent] = useState<string>("");
@@ -461,19 +466,18 @@ export function CurateTab({
                 {selectedFiles.size > 0 && (
                   <>
                     <Button
-                      className="mac-button mac-button-primary"
-                      variant="destructive"
-                      className="mac-button mac-button-primary"
-                      size="sm"
-                      onClick={() => confirmDeleteFiles(Array.from(selectedFiles))}
-                      disabled={loading}
                       className={cn(
+                        "mac-button mac-button-primary",
                         "bg-[var(--mac-status-error-bg)]",
                         "border border-[var(--mac-status-error-border)]",
                         "text-[var(--mac-status-error-text)]",
                         "hover:bg-[var(--mac-status-error-bg)]/80",
                         "transition-all duration-200"
                       )}
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => confirmDeleteFiles(Array.from(selectedFiles))}
+                      disabled={loading}
                     >
                       <Trash2 className="h-4 w-4 mr-2" />
                       Delete ({selectedFiles.size})
@@ -481,10 +485,8 @@ export function CurateTab({
                     <Button
                       className="mac-button mac-button-outline"
                       variant="ghost"
-                      className="mac-button mac-button-outline"
                       size="sm"
                       onClick={() => setSelectedFiles(new Set())}
-                      className="mac-button-outline"
                     >
                       <X className="h-4 w-4" />
                     </Button>
@@ -698,10 +700,12 @@ export function CurateTab({
           <TabsContent value="upload" className="flex-1 overflow-hidden mt-4">
             <div className="space-y-4">
               <FileUpload
-                assistantId={assistantId}
-                apiEndpoint="/api/vector-store/files"
-                onUploadComplete={handleUploadComplete}
-                onUploadError={(error) => toast.error(error)}
+                {...({
+                  assistantId,
+                  apiEndpoint: "/api/vector-store/files",
+                  onUploadComplete: handleUploadComplete,
+                  onUploadError: (error: string) => toast.error(error),
+                } as any)}
               />
 
               <Alert
@@ -841,9 +845,7 @@ export function CurateTab({
             <Button
               className="mac-button mac-button-outline"
               variant="outline"
-              className="mac-button mac-button-outline"
               onClick={() => setDeleteDialogOpen(false)}
-              className="mac-button-outline"
             >
               Cancel
             </Button>
@@ -929,9 +931,7 @@ export function CurateTab({
             <Button
               className="mac-button mac-button-outline"
               variant="outline"
-              className="mac-button mac-button-outline"
               onClick={() => setPreviewDialogOpen(false)}
-              className="mac-button-outline"
             >
               Close
             </Button>

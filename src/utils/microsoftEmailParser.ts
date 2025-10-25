@@ -113,6 +113,8 @@ export class MicrosoftEmailParser {
         attachmentCount: email.attachments?.length || 0,
         isReply: !!email.inReplyTo || !!email.references?.length,
         threadParticipants,
+        contentLength: content.length,
+        extractedAt: new Date().toISOString(),
 
         // Microsoft-specific
         isMicrosoft: true,
@@ -139,9 +141,6 @@ export class MicrosoftEmailParser {
         // Enhanced context
         hasActionableContent: this.detectActionableContent(email),
         urgencyScore: this.calculateUrgencyScore(email),
-
-        contentLength: content.length,
-        extractedAt: new Date().toISOString(),
       } as MicrosoftEmailMetadata,
     };
   }

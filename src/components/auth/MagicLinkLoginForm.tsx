@@ -6,17 +6,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 // import { toast } from "sonner";
 const toast = {
-  success: (msg: string) => console.log("✅", msg),
-  error: (msg: string) => console.error("❌", msg),
-  info: (msg: string) => console.info("ℹ️", msg),
+  success: (msg: string, _options?: any) => console.log("✅", msg),
+  error: (msg: string, _options?: any) => console.error("❌", msg),
+  info: (msg: string, _options?: any) => console.info("ℹ️", msg),
 };
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Loader2, Mail, CheckCircle } from "lucide-react";
+// import { Label } from "../ui/label"; // Unused - keeping for future use
+import { /* Loader2, */ Mail, CheckCircle } from "lucide-react";
 import { getBuildInfo, getFormattedBuildTime } from "../../utils/buildInfo";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
-import { Field, FieldLabel, FieldDescription } from "../ui/field";
+import { Field, FieldLabel /* FieldDescription */ } from "../ui/field";
 import { Spinner } from "../ui/spinner";
 
 interface MagicLinkLoginFormProps {
@@ -239,7 +239,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
         {step === "email" ? (
           /* Email Input Step */
           <form
-            onSubmit={emailForm.handleSubmit(sendMagicLink)}
+            onSubmit={emailForm.handleSubmit((data) => sendMagicLink(data, 0))}
             className="space-y-6"
             suppressHydrationWarning
           >
@@ -318,7 +318,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
 
             {/* Verification Form */}
             <form
-              onSubmit={codeForm.handleSubmit(verifyCode)}
+              onSubmit={codeForm.handleSubmit((data) => verifyCode(data, 0))}
               className="space-y-6"
               suppressHydrationWarning
             >

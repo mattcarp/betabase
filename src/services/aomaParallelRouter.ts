@@ -3,7 +3,7 @@
  * Routes traffic to Render deployment (Railway removed)
  */
 
-import { aomaMeshMcp } from "./aomaMeshMcp";
+// import { aomaMeshMcp } from "./aomaMeshMcp"; // Unused - keeping for future use
 
 export interface PerformanceMetrics {
   requestId: string;
@@ -30,7 +30,7 @@ export interface ABTestConfig {
 
 class AOMAParallelRouter {
   // Railway removed; only Render is used
-  private railwayUrl = "";
+  // private _railwayUrl = ""; // Unused - keeping for compatibility
 
   private renderUrl =
     process.env.NEXT_PUBLIC_RAILWAY_AOMA_URL ||
@@ -47,7 +47,7 @@ class AOMAParallelRouter {
     comparisonMode: process.env.NEXT_PUBLIC_COMPARISON_MODE === "true",
   };
 
-  private sessionRouting = new Map<string, "render">();
+  // private _sessionRouting = new Map<string, "render">(); // Unused - keeping for future use
 
   /**
    * Determines which provider to use based on A/B configuration
@@ -62,7 +62,7 @@ class AOMAParallelRouter {
   async makeRequest(
     endpoint: string,
     options: RequestInit,
-    sessionId?: string
+    _sessionId?: string
   ): Promise<{ data: any; metrics: PerformanceMetrics }> {
     const provider = this.selectProvider();
     const baseUrl = this.renderUrl;
@@ -195,21 +195,22 @@ class AOMAParallelRouter {
   /**
    * Create error metrics for failed requests
    */
-  private createErrorMetrics(provider: "render", endpoint: string, error: any): PerformanceMetrics {
-    return {
-      requestId: `${provider}-error-${Date.now()}`,
-      provider,
-      endpoint,
-      startTime: 0,
-      endTime: 0,
-      latency: Infinity,
-      success: false,
-      errorMessage: error?.message || "Request failed",
-      coldStart: false,
-      payloadSize: 0,
-      responseSize: 0,
-    };
-  }
+  // Unused - keeping for future use
+  // private createErrorMetrics(provider: "render", endpoint: string, error: any): PerformanceMetrics {
+  //   return {
+  //     requestId: `${provider}-error-${Date.now()}`,
+  //     provider,
+  //     endpoint,
+  //     startTime: 0,
+  //     endTime: 0,
+  //     latency: Infinity,
+  //     success: false,
+  //     errorMessage: error?.message || "Request failed",
+  //     coldStart: false,
+  //     payloadSize: 0,
+  //     responseSize: 0,
+  //   };
+  // }
 
   /**
    * Log metrics for monitoring

@@ -6,8 +6,8 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import {
-  LineChart,
-  Line,
+  // LineChart, // Unused
+  // Line, // Unused
   BarChart,
   Bar,
   AreaChart,
@@ -32,13 +32,13 @@ import {
   TrendingDown,
   Activity,
   Clock,
-  Users,
-  GitBranch,
+  // Users, // Unused
+  // GitBranch, // Unused
   Package,
   Zap,
   Target,
   Award,
-  Calendar,
+  // Calendar, // Unused
   Download,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
