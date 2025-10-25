@@ -29,11 +29,11 @@
       }
     },
     "aoma-mesh": {
-      "type": "http",
-      "url": "https://luminous-dedication-production.up.railway.app/mcp",
-      "headers": {
-        "Authorization": "Bearer ${AOMA_MCP_API_KEY}",
-        "Origin": "${AOMA_MCP_ORIGIN}"
+      "type": "stdio",
+      "command": "node",
+      "args": ["/Users/matt/Documents/projects/aoma-mesh-mcp/dist/aoma-mesh-server.js"],
+      "env": {
+        "NODE_ENV": "production"
       }
     },
     "ref-tools": {

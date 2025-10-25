@@ -279,7 +279,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
 
       {/* Conversations List with Groups */}
       <div className="flex-1 overflow-y-auto">
-        <div className="space-y-1">
+        <div className="space-y-3">
           {conversationGroups.length === 0 ? (
             <div className="p-6 text-center">
               <MessageCircle className="w-8 h-8 text-mac-text-muted mx-auto mb-4" />
@@ -323,7 +323,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                       transition={{ duration: 0.2, ease: "easeInOut" }}
                       className="overflow-hidden"
                     >
-                      <div className="space-y-1 pb-2">
+                      <div className="space-y-3 pb-2">
                         {group.conversations.map((conversation) => (
                           <div key={conversation.id} className="relative group/conversation">
                             <button
@@ -350,11 +350,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 mb-2">
-                                    <h4
-                                      c
-                                      className="mac-title"
-                                      lassName="mac-title text-sm font-medium text-mac-text-primary truncate flex-1"
-                                    >
+                                    <h4 className="mac-title text-sm font-medium text-mac-text-primary truncate flex-1">
                                       {conversation.title}
                                     </h4>
                                     {conversation.isPinned && (
