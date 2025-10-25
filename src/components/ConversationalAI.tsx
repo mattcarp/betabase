@@ -29,7 +29,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
       className = "",
       onTranscriptionUpdate,
       onConversationStateChange,
-      mode = "push-to-talk",
+      mode = "voice-activated", // Changed from push-to-talk to voice-activated
       vadSensitivity = 0.5,
       interruptThreshold = 0.02,
     },
@@ -78,7 +78,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
           mode,
           vadSensitivity,
           interruptThreshold,
-          autoReconnect: true,
+          autoReconnect: false, // Disabled to debug WebSocket disconnect issue
         });
       },
       stopConversation: async () => {
@@ -93,7 +93,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
             mode,
             vadSensitivity,
             interruptThreshold,
-            autoReconnect: true,
+            autoReconnect: false, // Disabled to debug WebSocket disconnect issue
           });
         }
       },
@@ -110,7 +110,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
           mode,
           vadSensitivity,
           interruptThreshold,
-          autoReconnect: true,
+          autoReconnect: false, // Disabled to debug WebSocket disconnect issue
         });
       }
     };
@@ -156,7 +156,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
       <div className={`conversational-ai-panel ${className}`}>
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-holographic">
+          <h3 className="mac-title text-lg font-semibold text-holographic">
             ElevenLabs Conversational AI
           </h3>
           <div className="flex items-center gap-2">
@@ -216,14 +216,36 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
           </div>
         )}
 
-        {/* Mode indicator */}
-        <div className="mb-4 flex items-center gap-2 text-xs text-gray-400">
-          <span>Mode:</span>
-          <span className="font-medium text-blue-400">
-            {mode === "push-to-talk" ? "Push-to-Talk" : "Voice-Activated"}
-          </span>
-          {mode === "voice-activated" && (
-            <span className="text-gray-500">(VAD: {(vadSensitivity * 100).toFixed(0)}%)</span>
+        {/* Mode indicator and volume control */}
+        <div className="mb-4 space-y-3">
+          <div className="flex items-center gap-2 text-xs text-gray-400">
+            <span>Mode:</span>
+            <span className="font-medium text-blue-400">
+              {mode === "push-to-talk" ? "Push-to-Talk" : "Voice-Activated"}
+            </span>
+            {mode === "voice-activated" && (
+              <span className="text-gray-500">(VAD: {(vadSensitivity * 100).toFixed(0)}%)</span>
+            )}
+          </div>
+
+          {/* Volume Control */}
+          {isConnected && (
+            <div className="flex items-center gap-4">
+              <label className="text-xs text-gray-400 min-w-[80px]">AI Volume:</label>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.1"
+                defaultValue="1"
+                onChange={(e) => {
+                  const volume = parseFloat(e.target.value);
+                  console.log(`🔊 Setting AI volume to ${(volume * 100).toFixed(0)}%`);
+                  (conversation as any).setVolume?.({ volume });
+                }}
+                className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+              />
+            </div>
           )}
         </div>
 
@@ -269,11 +291,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         <div className="space-y-4">
           {/* User transcription */}
           <div className="transcription-display">
-            <h4
-              c
-              className="mac-title"
-              lassName="mac-title text-sm font-medium text-blue-400 mb-2 flex items-center gap-2"
-            >
+            <h4 className="mac-title text-sm font-medium text-blue-400 mb-2 flex items-center gap-2">
               <Mic className="w-4 h-4" />
               Your Speech:
             </h4>
@@ -294,11 +312,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
 
           {/* AI transcription */}
           <div className="transcription-display">
-            <h4
-              c
-              className="mac-title"
-              lassName="mac-title text-sm font-medium text-green-400 mb-2 flex items-center gap-2"
-            >
+            <h4 className="mac-title text-sm font-medium text-green-400 mb-2 flex items-center gap-2">
               <Radio className="w-4 h-4" />
               AI Response:
             </h4>
