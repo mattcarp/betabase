@@ -4,10 +4,11 @@ import { getElevenLabsApiKey } from "../../../../src/config/apiKeys";
 /**
  * Secure Server-Side Endpoint for ElevenLabs Conversation Token
  *
- * This endpoint generates a signed URL for WebSocket connections to ElevenLabs
+ * This endpoint generates a WebRTC conversation token for ElevenLabs
  * Conversational AI. The API key is NEVER exposed to the client.
  *
  * Security: API key stays server-side only
+ * Connection: WebRTC (optimized for real-time audio streaming)
  */
 
 export async function POST(request: NextRequest) {
@@ -27,11 +28,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "ElevenLabs API key not configured" }, { status: 500 });
     }
 
-    console.log(`🔐 Requesting signed URL for agent: ${agentId}`);
+    console.log(`🔐 Requesting WebRTC conversation token for agent: ${agentId}`);
 
-    // Request signed URL from ElevenLabs API
+    // Request WebRTC conversation token from ElevenLabs API
+    // FIXED: Use /token endpoint (WebRTC) instead of /get_signed_url (WebSocket)
     const response = await fetch(
-      `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${agentId}`,
+      `https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=${agentId}`,
       {
         method: "GET",
         headers: {
@@ -43,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("❌ Failed to get signed URL:", errorText);
+      console.error("❌ Failed to get conversation token:", errorText);
       return NextResponse.json(
         {
           error: "Failed to get conversation token",
@@ -55,11 +57,11 @@ export async function POST(request: NextRequest) {
 
     const data = await response.json();
 
-    console.log("✅ Signed URL generated successfully");
+    console.log("✅ WebRTC conversation token generated successfully");
 
-    // Return signed URL to client
+    // Return WebRTC token to client
     return NextResponse.json({
-      signedUrl: data.signed_url,
+      conversationToken: data.token,
       expiresAt: data.expires_at,
     });
   } catch (error) {
