@@ -11,7 +11,67 @@
 
 - Built intelligent dialogue system for enterprise knowledge management
 - AOMA documentation assistant as proof of concept
-- Focus today: architecture, MCP integration, what's technically interesting
+- Focus today: what makes this DIFFERENT from generic chatbots
+- Teaser: AI testing infrastructure (59 tests, Playwright + Vitest) - but that's a separate video
+
+---
+
+## Points of Differentiation (WHY THIS MATTERS)
+
+### 1. AOMA Mesh MCP Server ⭐⭐⭐⭐⭐
+**The Killer Feature**
+- Not scraping docs like everyone else
+- Custom API integration with live AOMA systems
+- Real-time system state, not historical documentation
+- Persistent connection to production AOMA environment
+
+**Demo Impact:**
+- "What is the current state of AOMA production?" → LIVE data
+- "Analyze integration health" → Real-time system status
+- Most chatbots: static docs. Ours: living systems.
+
+### 2. System Diagram Generation ⭐⭐⭐⭐
+**Visual Intelligence**
+- Most chatbots: text walls
+- SIAM: actual visual diagrams (Mermaid, architecture flows)
+- Transforms system knowledge into actionable visuals
+- Technical audiences love diagrams
+
+**Demo Impact:**
+- "Generate a system architecture diagram for AOMA"
+- "Show integration points between AOMA and downstream systems"
+- See it create visual representations, not just describe them
+
+### 3. System Introspection ⭐⭐⭐⭐⭐
+**Genuinely Novel**
+- Not just "what does the doc say about AOMA?"
+- "What is AOMA's current health? Dependencies? Integration status?"
+- Knowledge extracted from RUNNING systems via MCP
+- Understands system topology, not just documentation
+
+**Demo Impact:**
+- "Analyze dependencies between AOMA and reporting systems"
+- "What's the integration health status?"
+- System intelligence, not document retrieval
+
+### 4. Multi-System Cross-Reference ⭐⭐⭐⭐
+**Enterprise Gold**
+- "How do changes in AOMA3 impact reporting pipeline?"
+- Requires MCP connections to multiple systems
+- Synthesizes cross-system dependencies and impact analysis
+- Connected knowledge, not isolated silos
+
+**Demo Impact:**
+- Shows understanding across system boundaries
+- Impact analysis: "If we change X, what breaks?"
+- Enterprise decision support, not just Q&A
+
+### 5. Anti-Hallucination + Citations
+**Table Stakes, But Critical**
+- Honest "I don't know" responses
+- Source citations on every claim
+- 95%+ citation accuracy (manual audit)
+- Trust through transparency
 
 ---
 
@@ -101,32 +161,79 @@ Prompt structure:
 - AOMA documentation loaded (~50 pages)
 - MCP servers running locally (show terminal)
 
-### Demo Sequence
+### Demo Sequence (DIFFERENTIATION FOCUSED)
 
-**1. Basic RAG Query**
+**Opening Tease (30 seconds)**
+- "This demo runs on our AI testing infrastructure..."
+- "59 automated tests, Playwright + Vitest, full CI/CD..."
+- "But testing is a different video. Today: unique capabilities..."
+
+**1. Basic Context (Quick)**
 - "What is AOMA?"
 - Show: streaming response, source citations
-- Point out: response time (<2s), citation accuracy
+- Narration: "Standard RAG response. Nothing special yet..."
+- Keep brief: establishing baseline
 
-**2. MCP Integration**
-- "Show me JIRA tickets related to AOMA migration"
-- Demonstrates: live data integration, not just static docs
-- Show: MCP server logs, API calls
+**2. DIFFERENTIATION: AOMA Mesh MCP Server**
+- Query: "What is the current state of the AOMA production environment?"
+- Narration:
+  - "Now the interesting part - LIVE data from AOMA systems"
+  - "Not scraping docs - actual API integration via custom MCP server"
+  - "The MCP maintains persistent connection to AOMA APIs"
+  - "Real-time data, not historical documentation"
+- Show: MCP server logs in terminal
+- **POINT OF DIFFERENTIATION #1: Live system integration**
 
-**3. Cross-Reference Query**
-- "Compare AOMA2 vs AOMA3 architecture"
-- Show: synthesis across multiple doc sources
-- Highlight: structured comparison, no hallucination
+**3. DIFFERENTIATION: System Diagram Generation**
+- Query: "Generate a system architecture diagram for AOMA showing all integration points"
+- Narration:
+  - "Most chatbots only return text. Watch this..."
+  - "It's actually GENERATING a visual diagram"
+  - "Mermaid diagrams, system flows, architecture visualizations"
+  - "Transforms abstract knowledge into actionable visuals"
+- Wait for diagram to render
+- **POINT OF DIFFERENTIATION #2: Visual diagram generation**
 
-**4. Anti-Hallucination Test**
-- "Does AOMA have a blockchain integration?"
-- Expected: "No information about blockchain in AOMA docs"
-- Point out: doesn't fabricate features
+**4. DIFFERENTIATION: System Introspection**
+- Query: "Analyze the dependencies and integration health between AOMA and downstream systems"
+- Narration:
+  - "Here's where it gets really interesting"
+  - "Not just answering questions about systems"
+  - "Actually ANALYZING system relationships via MCP"
+  - "It's interrogating the AOMA mesh MCP server"
+  - "Understanding system topology, not just documentation"
+  - "Knowledge from RUNNING systems, not static docs"
+- **POINT OF DIFFERENTIATION #3: System introspection**
 
-**5. Code Integration** (if time)
-- "Find the authentication implementation in our codebase"
-- Uses: GitHub MCP server
-- Show: actual code snippets, file locations
+**5. Anti-Hallucination Test**
+- Query: "Does AOMA have a quantum computing integration?"
+- Narration:
+  - "Let's test trustworthiness with a trick question"
+  - "This feature doesn't exist - will it admit that?"
+  - "Notice: honest 'no information available' response"
+  - "Doesn't fabricate features or make up capabilities"
+  - "Critical for enterprise trust"
+- Show: honest response
+
+**6. DIFFERENTIATION: Multi-System Cross-Reference**
+- Query: "How do changes in AOMA3 impact our downstream reporting systems?"
+- Narration:
+  - "Finally: cross-system intelligence"
+  - "Requires understanding multiple systems"
+  - "MCP servers for AOMA, reporting systems, integration points"
+  - "Synthesizing cross-system dependencies"
+  - "Not isolated knowledge silos - connected system intelligence"
+- **POINT OF DIFFERENTIATION #4: Multi-system reasoning**
+
+**Closing Summary (30 seconds)**
+- "Key differentiators:"
+  1. Live system data via custom AOMA mesh MCP
+  2. Visual diagram generation (not just text)
+  3. System introspection and health analysis
+  4. Multi-system cross-reference and impact analysis
+  5. Trust through anti-hallucination
+- "And all backed by comprehensive AI testing infrastructure..."
+- "(But that's the next video!)"
 
 ---
 
@@ -246,21 +353,24 @@ Prompt structure:
 - Talk: "These are the actual MCP servers - JIRA, GitHub, Supabase..."
 - Why manual: Shows it's real, not faked
 
-**Section 3: Live Web App Demo (8-10 min)**
+**Section 3: Live Web App Demo (10-12 min) - DIFFERENTIATION FOCUSED**
 - Control: **PLAYWRIGHT AUTOMATION**
 - Screen: Browser at https://thebetabase.com
-- Script: `tests/demo-recording.spec.ts`
+- Script: `tests/demo/demo-differentiated.spec.ts`
+- Opening tease: "This runs on our AI testing infrastructure (59 tests)... but that's a separate video"
 - Queries:
-  1. "What is AOMA?" → streaming response, citations
-  2. "Show me JIRA tickets related to AOMA migration" → MCP integration
-  3. "Compare AOMA2 vs AOMA3 architecture" → synthesis
-  4. "Does AOMA have a blockchain integration?" → anti-hallucination
-  5. (Optional) "Find authentication implementation" → GitHub MCP
+  1. "What is AOMA?" → quick baseline (downplay it)
+  2. "What is the current state of AOMA production?" → **DIFFERENTIATION: Live system data via AOMA mesh MCP**
+  3. "Generate a system architecture diagram for AOMA" → **DIFFERENTIATION: Visual diagram generation**
+  4. "Analyze dependencies between AOMA and downstream systems" → **DIFFERENTIATION: System introspection**
+  5. "Does AOMA have quantum computing?" → anti-hallucination
+  6. "How do changes in AOMA3 impact reporting systems?" → **DIFFERENTIATION: Multi-system reasoning**
+- Closing: "Key differentiators: live data, diagrams, introspection, multi-system intelligence, trust"
 - Why Playwright:
-  - Perfect execution, no typos
+  - Perfect execution, showcases testing sophistication
   - Pause/resume for narration control
-  - Shows testing infrastructure
-  - Re-recordable if needed
+  - Reproducible, re-recordable
+  - Part of the story (AI testing infrastructure teaser)
 
 **Section 4: Testing Infrastructure (3-4 min)**
 - Control: Manual
@@ -375,23 +485,75 @@ async function demoStep1(page) {
 
 ## Key Takeaways
 
+**Points of Differentiation (What Makes This Unique)**
+1. **AOMA Mesh MCP Server**: Live system data, not static docs - custom API integration with persistent connections
+2. **System Diagram Generation**: Visual intelligence - Mermaid diagrams, architecture flows, not just text
+3. **System Introspection**: Knowledge from RUNNING systems - understands topology, health, dependencies
+4. **Multi-System Intelligence**: Cross-system reasoning - impact analysis, connected knowledge
+5. **Trust Through Transparency**: Anti-hallucination + citations - honest responses, source attribution
+
 **What's Cool Technically**
-- MCP integration: live data + RAG in single interface
-- Anti-hallucination: actually works, not just marketing
-- Testing approach: comprehensive, automated, fast feedback
+- Custom MCP servers for enterprise systems (AOMA mesh)
+- Real-time system interrogation capabilities
+- Visual diagram generation from system knowledge
+- Comprehensive AI testing infrastructure (59 tests, Playwright + Vitest)
+- Zero console errors in production
 
 **What's Hard**
-- Authentication flows: every enterprise system different
-- Context window limits: always trade-off coverage vs precision
-- MCP reliability: you're at mercy of external servers
+- Building custom MCP servers for proprietary systems
+- Maintaining persistent connections to enterprise APIs
+- Authentication flows for locked-down systems
+- Context window management for complex queries
+- Ensuring MCP server reliability and fallback strategies
 
-**What's Valuable**
-- Knowledge accessibility: instant vs hours of searching
-- Synthesis capability: connects disparate sources
+**What's Valuable for Enterprise**
+- Live system intelligence, not static documentation
+- Visual representations that aid decision-making
+- Cross-system impact analysis for change management
+- Trustworthy responses critical for enterprise adoption
 - Extensibility: add new MCP servers, instant new capabilities
 
 ---
 
+---
+
+## Quick Reference: Narration Emphasis Points
+
+**When Showing AOMA Mesh MCP:**
+- "This isn't reading documentation..."
+- "It's querying the AOMA mesh MCP server in real-time..."
+- "Live system state, not historical docs..."
+- "Custom API integration, not generic scraping..."
+
+**When Diagrams Appear:**
+- "Most chatbots give you text walls..."
+- "This generates actual system diagrams..."
+- "Mermaid, architecture flows, visual intelligence..."
+- "Technical audiences love diagrams over descriptions..."
+
+**When Showing System Introspection:**
+- "Not just 'what does the doc say about AOMA?'..."
+- "What is AOMA's health? Dependencies? Integration status?..."
+- "Knowledge extracted from RUNNING systems..."
+- "System intelligence, not document retrieval..."
+
+**Testing Infrastructure Tease (Opening):**
+- "This entire demo runs on our AI testing infrastructure..."
+- "59 automated tests, Playwright + Vitest, full CI/CD..."
+- "But testing is a different video..."
+- "Today: what makes the chatbot unique..."
+
+**Core Message:**
+This isn't just another chatbot with RAG. It's a system intelligence platform with:
+- Live data from custom MCP servers
+- Visual diagram generation
+- Real-time system introspection
+- Multi-system cross-reference
+- Enterprise-grade trust
+
+---
+
 **Last Updated**: October 25, 2025
-**Status**: Ready for demo
+**Status**: Ready for demo with differentiation focus
 **Estimated Duration**: 20-25 minutes with Q&A
+**Differentiation Script**: `tests/demo/demo-differentiated.spec.ts`
