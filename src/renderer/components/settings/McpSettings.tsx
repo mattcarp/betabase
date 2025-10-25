@@ -264,9 +264,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
-          MCP Settings
-        </h3>
+        <h3 className="mac-title text-lg font-bold text-blue-600 font-mono">MCP Settings</h3>
         <div className="flex items-center gap-2 text-sm font-mono">
           <span className="text-gray-300">Status:</span>
           <span className={serverStatus.color}>{serverStatus.text}</span>
@@ -390,9 +388,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
         {/* Server Information */}
         {status?.data?.servers?.[0] && (
           <div className="p-4 bg-gray-800/30 rounded-lg border border-gray-700">
-            <h4 c className="mac-title" lassName="mac-title text-sm font-medium text-gray-300 mb-4">
-              Server Information
-            </h4>
+            <h4 className="mac-title text-sm font-medium text-gray-300 mb-4">Server Information</h4>
             <div className="grid grid-cols-2 gap-4 text-sm font-mono">
               <div>
                 <span className="text-gray-400">Name:</span>
@@ -432,7 +428,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
         {capabilities && formData.enabled && (
           <div className="p-4 bg-gray-800/30 rounded-lg border border-gray-700">
             <div className="flex items-center justify-between mb-4">
-              <h4 c className="mac-title" lassName="mac-title text-sm font-medium text-gray-300">
+              <h4 className="mac-title text-sm font-medium text-gray-300">
                 AOMA Mesh MCP Capabilities
               </h4>
               <button
