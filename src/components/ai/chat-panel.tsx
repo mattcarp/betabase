@@ -9,14 +9,14 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import { Separator } from "../ui/separator";
+// import { Separator } from "../ui/separator"; // Unused
 import {
   Bot,
   Sparkles,
-  RefreshCw,
+  // RefreshCw, // Unused
   Trash2,
   Download,
-  Settings,
+  // Settings, // Unused
   Loader2,
   AlertCircle,
 } from "lucide-react";
@@ -41,7 +41,7 @@ interface ChatPanelProps {
 }
 
 export function ChatPanel({
-  api = "/api/chat",
+  api: _api = "/api/chat", // Unused - v5 uses default endpoint
   initialMessages = [],
   className,
   title = "AI Assistant",
@@ -58,7 +58,7 @@ export function ChatPanel({
   maxMessages,
   allowExport = true,
   allowClear = true,
-  systemPrompt,
+  systemPrompt: _systemPrompt, // Unused - should be handled differently in v5
 }: ChatPanelProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
@@ -67,11 +67,11 @@ export function ChatPanel({
     messages,
     input,
     handleInputChange,
-    handleSubmit,
+    handleSubmit: _handleSubmit, // Unused - using custom submit handler
     isLoading,
     error,
     reload,
-    stop,
+    stop: _stop, // Unused
     append,
     setMessages,
     setInput,
@@ -79,7 +79,7 @@ export function ChatPanel({
     // Note: 'api' is not a valid option in v5, use default endpoint
     initialMessages,
     // body is also not valid in v5, system prompt should be handled differently
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error("Chat error:", error);
       onError?.(error);
     },
@@ -127,7 +127,7 @@ export function ChatPanel({
   };
 
   const handleExport = () => {
-    const content = messages.map((m) => `${m.role}: ${(m as any).content}`).join("\n\n");
+    const content = messages.map((m: any) => `${m.role}: ${(m as any).content}`).join("\n\n");
     const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -152,11 +152,11 @@ export function ChatPanel({
   const isMaxMessagesReached = maxMessages ? messages.length >= maxMessages : false;
 
   return (
-    <Card className={cn("mac-card", "flex flex-col h-full", className)}>
+    <Card className={cn("flex flex-col h-full", className)}>
       {showHeader && (
-        <CardHeader className="mac-card px-4 py-4 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
+        <CardHeader className="px-4 py-3 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <div className="relative">
                 <Bot className="h-6 w-6 text-primary" />
                 <Sparkles className="h-3 w-3 text-primary absolute -top-1 -right-1 animate-pulse" />
@@ -169,7 +169,7 @@ export function ChatPanel({
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               {messages.length > 0 && (
                 <Badge variant="secondary" className="text-xs">
                   {messages.length} messages
@@ -177,23 +177,13 @@ export function ChatPanel({
               )}
 
               {allowClear && messages.length > 0 && (
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-8 w-8 mac-button mac-button-outline"
-                  onClick={handleClear}
-                >
+                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleClear}>
                   <Trash2 className="h-4 w-4" />
                 </Button>
               )}
 
               {allowExport && messages.length > 0 && (
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-8 w-8 mac-button mac-button-outline"
-                  onClick={handleExport}
-                >
+                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleExport}>
                   <Download className="h-4 w-4" />
                 </Button>
               )}
@@ -216,9 +206,7 @@ export function ChatPanel({
                   <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2" />
                 </div>
 
-                <h3 c className="mac-title" lassName="mac-title text-lg font-semibold mb-2">
-                  Welcome to {title}
-                </h3>
+                <h3 className="text-lg font-semibold mb-2">Welcome to {title}</h3>
                 <p className="text-sm text-muted-foreground mb-6 max-w-md">
                   I'm here to help you with your questions. You can ask me anything or choose from
                   the suggestions below.
@@ -231,7 +219,7 @@ export function ChatPanel({
                         key={index}
                         variant="outline"
                         size="sm"
-                        className="text-xs mac-button mac-button-outline"
+                        className="text-xs"
                         onClick={() => handleSuggestionClick(suggestion)}
                       >
                         {suggestion}
@@ -242,8 +230,8 @@ export function ChatPanel({
               </motion.div>
             ) : (
               <div className="space-y-4">
-                {messages.map((message, index) => (
-                  <div key={message.id || index} className="flex gap-4">
+                {messages.map((message: any, index: number) => (
+                  <div key={message.id || index} className="flex gap-3">
                     <div className="flex-shrink-0">
                       {message.role === "user" ? (
                         <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
@@ -263,7 +251,7 @@ export function ChatPanel({
                   </div>
                 ))}
                 {isLoading && (
-                  <div className="flex gap-4">
+                  <div className="flex gap-3">
                     <div className="flex-shrink-0">
                       <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm">
                         <Bot className="w-4 h-4" />
@@ -283,9 +271,7 @@ export function ChatPanel({
                 <AlertDescription>
                   {error.message || "An error occurred. Please try again."}
                   <Button
-                    className="mac-button mac-button-primary"
                     variant="link"
-                    className="mac-button"
                     size="sm"
                     onClick={() => reload()}
                     className="ml-2 h-auto p-0"
@@ -329,12 +315,7 @@ export function ChatPanel({
               <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
                 <Loader2 className="h-3 w-3 animate-spin" />
                 AI is generating response...
-                <Button
-                  variant="link"
-                  size="sm"
-                  onClick={stop}
-                  className="h-auto p-0 text-xs mac-button mac-button-primary"
-                >
+                <Button variant="link" size="sm" onClick={stop} className="h-auto p-0 text-xs">
                   Stop
                 </Button>
               </div>

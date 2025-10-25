@@ -38,14 +38,17 @@ interface TestRun {
   created_at: string;
 }
 
-interface TestSpec {
+// Unused type - keeping for future use
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// @ts-ignore - Unused type kept for future use
+type _TestSpec = {
   id: string;
   path: string;
   jira_key?: string;
   ai_generated?: boolean;
   flaky?: boolean;
   created_at: string;
-}
+};
 
 interface GeneratedTest {
   id: string;
@@ -129,7 +132,7 @@ interface TestKnowledge {
 export class EnhancedSupabaseTestIntegration {
   private supabase: SupabaseClient | null = null;
 
-  constructor(supabaseUrl?: string, supabaseKey?: string) {
+  constructor(_supabaseUrl?: string, _supabaseKey?: string) {
     // Use shared Supabase client to avoid multiple GoTrueClient instances
     // Ignore custom URL/key params - use shared singleton
     this.supabase = sharedSupabaseClient;
@@ -342,7 +345,7 @@ export class EnhancedSupabaseTestIntegration {
           failures: stats.failed,
           passes: stats.passed,
           failure_rate: (failureRate * 100).toFixed(2),
-          flakiness_score: isFlaky ? (failureRate * (1 - failureRate) * 4).toFixed(2) : 0,
+          flakiness_score: isFlaky ? (failureRate * (1 - failureRate) * 4).toFixed(2) : "0",
         };
       })
       .filter((test) => parseFloat(test.flakiness_score) > 0)
@@ -609,7 +612,7 @@ export class EnhancedSupabaseTestIntegration {
 
       stats.topFailingTests = Object.entries(testFailCounts)
         .map(([name, count]) => ({ test_name: name, failure_count: count }))
-        .sort((a, b) => b.failure_count - a.failure_count)
+        .sort((a, b) => (b.failure_count as number) - (a.failure_count as number))
         .slice(0, 5);
     }
 
@@ -620,6 +623,8 @@ export class EnhancedSupabaseTestIntegration {
    * Create minimal new tables if they don't exist
    */
   async initializeNewTables(): Promise<void> {
+    // SQL for table creation - would be used with Supabase migrations
+    // @ts-ignore - Unused SQL definition kept for documentation
     const _createTablesSQL = `
       -- Test executions table (aggregates test runs)
       CREATE TABLE IF NOT EXISTS test_executions (

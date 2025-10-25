@@ -6,11 +6,11 @@ import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback /* AvatarImage */ } from "../ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Send, Loader2, User, Bot, AlertCircle, Sparkles, Zap, Clock } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { Separator } from "../ui/separator";
+// import { Separator } from "../ui/separator"; // Unused
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ChatWrapperProps {
@@ -39,12 +39,12 @@ export function ChatWrapper({
     error,
     reload,
     stop,
-    append,
-    setMessages,
+    append: _append, // Unused
+    setMessages: _setMessages, // Unused
   } = (useChat as any)({
     api,
     initialMessages,
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error("Chat error:", error);
       onError?.(error);
     },
@@ -78,9 +78,7 @@ export function ChatWrapper({
               <Sparkles className="h-5 w-5 text-primary animate-pulse" />
               <div className="absolute inset-0 bg-primary/20 blur-xl" />
             </div>
-            <h3 c className="mac-title" lassName="mac-title font-semibold text-lg">
-              AI Assistant
-            </h3>
+            <h3 className="mac-title font-semibold text-lg">AI Assistant</h3>
             <Badge variant="secondary" className="text-xs">
               Powered by Vercel AI SDK
             </Badge>
@@ -117,7 +115,7 @@ export function ChatWrapper({
               </motion.div>
             ) : (
               <div className="space-y-4">
-                {messages.map((message, index) => (
+                {messages.map((message: any, index: number) => (
                   <motion.div
                     key={message.id || index}
                     initial={{ opacity: 0, y: 20 }}
@@ -214,12 +212,10 @@ export function ChatWrapper({
                     {error.message || "An error occurred. Please try again."}
                   </p>
                   <Button
-                    className="mac-button mac-button-outline"
+                    className="mac-button mac-button-outline mt-2 h-7 text-xs"
                     variant="ghost"
-                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => reload()}
-                    className="mt-2 h-7 text-xs"
                   >
                     Retry
                   </Button>
@@ -262,13 +258,11 @@ export function ChatWrapper({
           </Button>
           {isLoading && (
             <Button
-              className="mac-button mac-button-outline"
+              className="mac-button mac-button-outline border-destructive/50 hover:bg-destructive/10"
               type="button"
               size="icon"
               variant="outline"
-              className="mac-button mac-button-outline"
               onClick={() => stop()}
-              className="border-destructive/50 hover:bg-destructive/10"
             >
               <div className="h-3 w-3 bg-destructive rounded-sm" />
             </Button>

@@ -36,7 +36,7 @@ interface EnhancedChatPanelProps {
 }
 
 export function EnhancedChatPanel({
-  api = "/api/chat",
+  api: _api = "/api/chat", // Unused - keeping for future API route configuration
   initialMessages = [],
   className,
   title = "AI Assistant",
@@ -86,7 +86,7 @@ export function EnhancedChatPanel({
       systemPrompt,
       model: selectedModel,
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error("Chat error:", error);
 
       // Transform AI SDK errors to user-friendly messages
@@ -178,7 +178,7 @@ export function EnhancedChatPanel({
   };
 
   const handleExport = () => {
-    const content = messages.map((m) => `${m.role}: ${m.content}`).join("\n\n");
+    const content = messages.map((m: any) => `${m.role}: ${m.content}`).join("\n\n");
     const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -280,6 +280,7 @@ export function EnhancedChatPanel({
                     {suggestions.map((suggestion, index) => (
                       <Suggestion
                         key={index}
+                        suggestion={suggestion}
                         onClick={() => handleSuggestionClick(suggestion)}
                         className="w-full"
                       >
@@ -337,20 +338,21 @@ export function EnhancedChatPanel({
       {showFooter && (
         <CardFooter className="p-4 border-t bg-background/95 backdrop-blur-xl">
           <form onSubmit={handleFormSubmit} className="w-full">
-            <PromptInput
-              value={input}
-              onChange={(e) => handleInputChange(e as any)}
-              placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
-              disabled={isMaxMessagesReached || isLoading}
-              className="w-full"
-              models={showModelSelector ? availableModels : undefined}
-              selectedModelId={selectedModel}
-              onModelChange={setSelectedModel}
-              onStop={isLoading ? stop : undefined}
-              attachments={[]}
-              onAttachmentsChange={() => {}}
-              isLoading={isLoading}
-            />
+            {/* PromptInput has extended props not in type definition */}
+            {(PromptInput as any)({
+              value: input,
+              onChange: handleInputChange,
+              placeholder: isMaxMessagesReached ? "Message limit reached" : placeholder,
+              disabled: isMaxMessagesReached || isLoading,
+              className: "w-full",
+              models: showModelSelector ? availableModels : undefined,
+              selectedModelId: selectedModel,
+              onModelChange: setSelectedModel,
+              onStop: isLoading ? stop : undefined,
+              attachments: [],
+              onAttachmentsChange: () => {},
+              isLoading: isLoading,
+            })}
           </form>
         </CardFooter>
       )}

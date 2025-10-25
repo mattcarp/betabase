@@ -6,15 +6,15 @@ import {
   Clock,
   Target,
   Lightbulb,
-  BarChart3,
-  Users,
+  // BarChart3, // Unused
+  // Users, // Unused
   CheckCircle,
   AlertCircle,
-  Zap,
+  // Zap, // Unused
   Activity,
   Database,
   Mic,
-  Volume2,
+  // Volume2, // Unused
 } from "lucide-react";
 import { useMCPClient } from "../../hooks/useMCPClient";
 
@@ -39,20 +39,20 @@ interface LiveInsightsProps {
 }
 
 export const LiveInsights: React.FC<LiveInsightsProps> = ({
-  conversationId,
+  conversationId: _conversationId, // Unused
   className,
   currentConversation = [],
 }) => {
   const [insights, setInsights] = useState<InsightMetric[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [mcpState, mcpActions] = useMCPClient();
+  const [_mcpState, _mcpActions] = useMCPClient(); // Unused
 
   // Generate real-time insights from conversation data
   const generateConversationInsights = (messages: any[]): InsightMetric[] => {
     if (!messages.length) return [];
 
     const now = new Date();
-    const recentMessages = messages.slice(-5); // Last 5 messages
+    // const recentMessages = messages.slice(-5); // Would be used for recent message analysis
     const conversationMetrics: InsightMetric[] = [];
 
     // Message frequency analysis
@@ -464,9 +464,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
   return (
     <div className={`space-y-3 ${className}`} data-test-id="live-insights-root">
       <div className="flex items-center justify-between mb-4">
-        <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-motiff-green">
-          Live Insights
-        </h3>
+        <h3 className="mac-title text-lg font-semibold text-motiff-green">Live Insights</h3>
         <div className="flex items-center gap-2">
           {isLoading && <span className="text-xs text-white/60 animate-pulse">Loading...</span>}
         </div>
@@ -511,11 +509,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-2">
-                        <h4
-                          c
-                          className="mac-title"
-                          lassName="mac-title font-medium text-white text-sm truncate"
-                        >
+                        <h4 className="mac-title font-medium text-white text-sm truncate">
                           {insight.title}
                         </h4>
                         {insight.trend && getTrendIcon(insight.trend)}

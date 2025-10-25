@@ -35,22 +35,22 @@ async function cleanDuplicates(options: {
   console.log("📊 CURRENT STATE:\n");
 
   try {
-    let query = supabase
-      .from("aoma_unified_vectors")
-      .select("source_type", { count: "exact", head: true });
+    // let _query = supabase // Unused
+    //   .from("aoma_unified_vectors")
+    //   .select("source_type", { count: "exact", head: true });
 
-    const { count: totalCount } = await supabase
+    const { count: totalCount } = await supabase!
       .from("aoma_unified_vectors")
       .select("*", { count: "exact", head: true });
 
     console.log(`   Total vectors: ${totalCount || 0}`);
 
     // Get count by source type
-    const { data: vectors } = await supabase.from("aoma_unified_vectors").select("source_type");
+    const { data: vectors } = await supabase!.from("aoma_unified_vectors").select("source_type");
 
     if (vectors) {
       const counts: Record<string, number> = {};
-      vectors.forEach((v) => {
+      vectors.forEach((v: any) => {
         counts[v.source_type] = (counts[v.source_type] || 0) + 1;
       });
 
@@ -108,7 +108,7 @@ async function cleanDuplicates(options: {
     // Show final counts
     console.log("\n📊 FINAL STATE:\n");
 
-    const { count: finalCount } = await supabase
+    const { count: finalCount } = await supabase!
       .from("aoma_unified_vectors")
       .select("*", { count: "exact", head: true });
 
