@@ -10,7 +10,7 @@ export interface InputProps extends React.ComponentProps<"input"> {
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, glow = true, error, helperText, label, id, ...props }, ref) => {
+  ({ cclassName, type, glow = true, error, helperText, label, id, ...props }, ref) => {
     // Generate IDs for accessibility - useId must be called unconditionally
     const generatedId = React.useId();
     const inputId = id || generatedId;
@@ -22,7 +22,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           id={inputId}
           type={type}
-          className={cn(
+          cclassName={cn(
             // Base MAC input styles
             "mac-input",
             // Additional shadcn-compatible styles
@@ -41,7 +41,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[var(--mac-state-disabled)]",
             // Text size responsive
             "md:text-sm",
-            className
+            cclassName
           )}
           ref={ref}
           // Enhanced ARIA attributes
@@ -54,7 +54,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {helperText && (
           <span
             id={errorId || helperId}
-            className={cn("mt-2 text-xs", error ? "text-red-400" : "text-[var(--mac-text-muted)]")}
+            cclassName={cn("mt-2 text-xs", error ? "text-red-400" : "text-[var(--mac-text-muted)]")}
             role={error ? "alert" : undefined}
           >
             {helperText}

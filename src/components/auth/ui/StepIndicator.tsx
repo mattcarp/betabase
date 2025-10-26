@@ -5,31 +5,31 @@ import { Progress } from "../../ui/progress";
 interface StepIndicatorProps {
   currentStep: number;
   totalSteps: number;
-  className?: string;
+  cclassName?: string;
 }
 
 export const StepIndicator: React.FC<StepIndicatorProps> = ({
   currentStep,
   totalSteps,
-  className,
+  cclassName,
 }) => {
   const progress = ((currentStep + 1) / totalSteps) * 100;
 
   return (
-    <div className={cn("mb-6", className)}>
-      <div className="flex justify-center mb-4">
+    <div cclassName={cn("mb-6", cclassName)}>
+      <div cclassName="flex justify-center mb-4">
         {Array.from({ length: totalSteps }, (_, i) => (
           <div
             key={i}
-            className={cn(
+            cclassName={cn(
               "w-2 h-2 rounded-full mx-2 transition-all duration-300",
               i <= currentStep ? "bg-neon-cyan shadow-[0_0_10px_rgba(6,255,165,0.5)]" : "bg-muted"
             )}
           />
         ))}
       </div>
-      <Progress value={progress} className="" />
-      <p className="text-xs text-muted-foreground mt-2 text-center">
+      <Progress value={progress} cclassName="" />
+      <p cclassName="text-xs text-muted-foreground mt-2 text-center">
         Step {currentStep + 1} of {totalSteps}
       </p>
     </div>
@@ -39,14 +39,14 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
 interface FormProgressProps {
   step: number;
   totalSteps: number;
-  className?: string;
+  cclassName?: string;
 }
 
-export const FormProgress: React.FC<FormProgressProps> = ({ step, totalSteps, className }) => {
+export const FormProgress: React.FC<FormProgressProps> = ({ step, totalSteps, cclassName }) => {
   return (
-    <div className={cn("mb-6", className)}>
-      <Progress value={(step / totalSteps) * 100} className="" />
-      <p className="text-xs text-muted-foreground mt-2 text-center">
+    <div cclassName={cn("mb-6", cclassName)}>
+      <Progress value={(step / totalSteps) * 100} cclassName="" />
+      <p cclassName="text-xs text-muted-foreground mt-2 text-center">
         Step {step} of {totalSteps}
       </p>
     </div>

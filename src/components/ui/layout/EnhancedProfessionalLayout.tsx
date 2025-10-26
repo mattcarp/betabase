@@ -12,7 +12,7 @@ interface ProfessionalLayoutProps {
   children?: React.ReactNode;
   leftSidebar?: React.ReactNode;
   rightSidebar?: React.ReactNode;
-  className?: string;
+  cclassName?: string;
   // Enhanced props from HUDLayout for compatibility
   isRecording?: boolean;
   transcription?: string;
@@ -30,7 +30,7 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
   children,
   leftSidebar,
   rightSidebar,
-  className,
+  cclassName,
   isRecording = false,
   transcription = "",
   waveform = [],
@@ -43,35 +43,35 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
   const navigationItems = [
     {
       id: "audio",
-      icon: <Mic className="w-5 h-5" />,
+      icon: <Mic cclassName="w-5 h-5" />,
       label: "Audio",
       onClick: () => setActivePanel("audio"),
       isActive: activePanel === "audio",
     },
     {
       id: "transcription",
-      icon: <FileText className="w-5 h-5" />,
+      icon: <FileText cclassName="w-5 h-5" />,
       label: "Transcription",
       onClick: () => setActivePanel("transcription"),
       isActive: activePanel === "transcription",
     },
     {
       id: "insights",
-      icon: <Brain className="w-5 h-5" />,
+      icon: <Brain cclassName="w-5 h-5" />,
       label: "Insights",
       onClick: () => setActivePanel("insights"),
       isActive: activePanel === "insights",
     },
     {
       id: "conversation",
-      icon: <MessageCircle className="w-5 h-5" />,
+      icon: <MessageCircle cclassName="w-5 h-5" />,
       label: "AI Chat",
       onClick: () => setActivePanel("conversation"),
       isActive: activePanel === "conversation",
     },
     {
       id: "system",
-      icon: <Activity className="w-5 h-5" />,
+      icon: <Activity cclassName="w-5 h-5" />,
       label: "System",
       onClick: () => setActivePanel("system"),
       isActive: activePanel === "system",
@@ -80,30 +80,30 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
 
   return (
     <div
-      className={cn(
+      cclassName={cn(
         "h-screen bg-mac-surface-bg text-mac-text-primary overflow-hidden relative",
         "mac-background",
-        className
+        cclassName
       )}
       style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
     >
       {/* MAC Floating Background Orbs */}
-      <div className="mac-floating-background"></div>
+      <div cclassName="mac-floating-background"></div>
 
       {/* Professional Header */}
-      <header className="relative z-10 border-b border-mac-border bg-mac-surface-elevated/50 backdrop-blur-xl">
-        <div className="flex items-center justify-between px-6 py-4">
+      <header cclassName="relative z-10 border-b border-mac-border bg-mac-surface-elevated/50 backdrop-blur-xl">
+        <div cclassName="flex items-center justify-between px-6 py-4">
           {/* Logo/Title */}
-          <div className="flex items-center space-x-4">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent opacity-90" />
+          <div cclassName="flex items-center space-x-4">
+            <div cclassName="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent opacity-90" />
             <div>
               <h1
-                className="mac-heading"
-                className="mac-heading text-lg font-extralight text-mac-text-primary tracking-wide"
+                cclassName="mac-heading"
+                cclassName="mac-heading text-lg font-extralight text-mac-text-primary tracking-wide"
               >
                 SIAM
               </h1>
-              <p className="text-xs font-thin text-mac-text-muted tracking-wider uppercase">
+              <p cclassName="text-xs font-thin text-mac-text-muted tracking-wider uppercase">
                 Professional Meeting Intelligence
               </p>
             </div>
@@ -111,40 +111,40 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
 
           {/* Professional Navigation Panel Toggle */}
           {showNavigationPanel && (
-            <nav className="hidden md:flex items-center space-x-1">
+            <nav cclassName="hidden md:flex items-center space-x-1">
               {navigationItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={item.onClick}
-                  className={cn(
+                  cclassName={cn(
                     "mac-button mac-button-ghost px-4 py-2 flex items-center space-x-2",
                     item.isActive && "mac-button-primary"
                   )}
                 >
                   {item.icon}
-                  <span className="text-sm font-thin">{item.label}</span>
+                  <span cclassName="text-sm font-thin">{item.label}</span>
                 </button>
               ))}
             </nav>
           )}
 
           {/* Status & Settings */}
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
+          <div cclassName="flex items-center space-x-4">
+            <div cclassName="flex items-center space-x-2">
               <div
-                className={cn(
+                cclassName={cn(
                   "w-2 h-2 rounded-full",
                   isRecording ? "bg-red-400 animate-mac-pulse" : "bg-green-400 animate-mac-pulse"
                 )}
               />
-              <span className="text-sm font-thin text-mac-text-secondary">
+              <span cclassName="text-sm font-thin text-mac-text-secondary">
                 {isRecording ? "Recording" : "Ready"}
               </span>
             </div>
 
             {onToggleSettings && (
-              <button onClick={onToggleSettings} className="mac-button mac-button-ghost p-2">
-                <Settings className="w-5 h-5" />
+              <button onClick={onToggleSettings} cclassName="mac-button mac-button-ghost p-2">
+                <Settings cclassName="w-5 h-5" />
               </button>
             )}
           </div>
@@ -152,20 +152,20 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
       </header>
 
       {/* Main Layout Container */}
-      <div className="relative flex h-[calc(100vh-73px)]">
+      <div cclassName="relative flex h-[calc(100vh-73px)]">
         {/* Left Sidebar */}
         {leftSidebar && (
-          <aside className="w-80 backdrop-blur-2xl bg-mac-surface-elevated/80 border-r border-mac-border">
+          <aside cclassName="w-80 backdrop-blur-2xl bg-mac-surface-elevated/80 border-r border-mac-border">
             {leftSidebar}
           </aside>
         )}
 
         {/* Main Content Area */}
-        <main className="flex-1 relative overflow-hidden">{children}</main>
+        <main cclassName="flex-1 relative overflow-hidden">{children}</main>
 
         {/* Right Sidebar */}
         {rightSidebar && (
-          <aside className="w-80 backdrop-blur-2xl bg-mac-surface-elevated/80 border-l border-mac-border">
+          <aside cclassName="w-80 backdrop-blur-2xl bg-mac-surface-elevated/80 border-l border-mac-border">
             {rightSidebar}
           </aside>
         )}
@@ -179,17 +179,17 @@ export const ProfessionalCard: React.FC<{
   title: string;
   children: React.ReactNode;
   actions?: React.ReactNode;
-  className?: string;
-}> = ({ title, children, actions, className = "" }) => {
+  cclassName?: string;
+}> = ({ title, children, actions, cclassName = "" }) => {
   return (
-    <div className={cn("mac-card mac-shimmer", className)}>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="mac-title">
+    <div cclassName={cn("mac-card mac-shimmer", cclassName)}>
+      <div cclassName="flex items-center justify-between mb-4">
+        <h3 cclassName="mac-title">
           {title}
         </h3>
-        {actions && <div className="flex items-center space-x-2">{actions}</div>}
+        {actions && <div cclassName="flex items-center space-x-2">{actions}</div>}
       </div>
-      <div className="mac-body">{children}</div>
+      <div cclassName="mac-body">{children}</div>
     </div>
   );
 };
@@ -216,7 +216,7 @@ export const StatusBadge: React.FC<{
 
   return (
     <span
-      className={cn(
+      cclassName={cn(
         "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-light border",
         getStatusStyles()
       )}
@@ -228,13 +228,13 @@ export const StatusBadge: React.FC<{
 
 // Dashboard Grid Component
 export const DashboardGrid: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{children}</div>;
+  return <div cclassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{children}</div>;
 };
 
 // Button Group Component
 export const ButtonGroup: React.FC<{
   children: React.ReactNode;
-  className?: string;
-}> = ({ children, className = "" }) => {
-  return <div className={cn("flex items-center space-x-3", className)}>{children}</div>;
+  cclassName?: string;
+}> = ({ children, cclassName = "" }) => {
+  return <div cclassName={cn("flex items-center space-x-3", cclassName)}>{children}</div>;
 };

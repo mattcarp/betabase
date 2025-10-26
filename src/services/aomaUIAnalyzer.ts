@@ -65,8 +65,8 @@ export class AomaUIAnalyzer {
     elements.buttons = buttonMatches.map((btn: string) => {
       const text = btn.replace(/<[^>]*>/g, "").trim();
       const id = btn.match(/id="([^"]+)"/)?.[1];
-      const className = btn.match(/class="([^"]+)"/)?.[1];
-      return { text, id, className };
+      const cclassName = btn.match(/class="([^"]+)"/)?.[1];
+      return { text, id, cclassName };
     });
 
     const linkMatches = htmlStr.match(/<a[^>]*href="([^"]+)"[^>]*>.*?<\/a>/gi) || [];

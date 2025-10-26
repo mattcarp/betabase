@@ -66,7 +66,7 @@ export interface SessionTimelineProps {
   currentInteractionId?: string;
   onInteractionClick?: (interaction: SessionInteraction) => void;
   onFilterChange?: (filter: SessionTimelineFilter) => void;
-  className?: string;
+  cclassName?: string;
   defaultWidth?: number;
   minWidth?: number;
   maxWidth?: number;

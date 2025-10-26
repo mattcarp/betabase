@@ -14,12 +14,12 @@ interface SystemHealth {
 
 interface SystemHealthMonitorProps {
   onHealthChange?: (health: SystemHealth) => void;
-  className?: string;
+  cclassName?: string;
 }
 
 export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
   onHealthChange,
-  className = "",
+  cclassName = "",
 }) => {
   const [health, setHealth] = useState<SystemHealth>({
     cpu: 0,
@@ -90,13 +90,13 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
   const getNetworkIcon = () => {
     switch (health.networkStatus) {
       case "online":
-        return <Wifi className="w-4 h-4 text-jarvis-accent" />;
+        return <Wifi cclassName="w-4 h-4 text-jarvis-accent" />;
       case "slow":
-        return <Wifi className="w-4 h-4 text-jarvis-warning" />;
+        return <Wifi cclassName="w-4 h-4 text-jarvis-warning" />;
       case "offline":
-        return <WifiOff className="w-4 h-4 text-jarvis-danger" />;
+        return <WifiOff cclassName="w-4 h-4 text-jarvis-danger" />;
       default:
-        return <Wifi className="w-4 h-4 text-jarvis-secondary" />;
+        return <Wifi cclassName="w-4 h-4 text-jarvis-secondary" />;
     }
   };
 
@@ -112,23 +112,23 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
 
   return (
     <div
-      className={`glass-panel p-4 font-mono text-xs space-y-4 ${className}`}
+      cclassName={`glass-panel p-4 font-mono text-xs space-y-4 ${cclassName}`}
       data-testid="system-health-monitor"
     >
       {/* Header */}
       <div
-        className="flex items-center justify-between cursor-pointer hover:bg-jarvis-primary/10 rounded p-2 transition-all"
+        cclassName="flex items-center justify-between cursor-pointer hover:bg-jarvis-primary/10 rounded p-2 transition-all"
         onClick={() => setIsExpanded(!isExpanded)}
         data-testid="health-toggle"
       >
-        <div className="flex items-center space-x-3">
-          {overallStatus === "healthy" && <CheckCircle className="w-5 h-5 text-jarvis-accent" />}
-          {overallStatus === "warning" && <AlertTriangle className="w-5 h-5 text-jarvis-warning" />}
-          {overallStatus === "critical" && <AlertTriangle className="w-5 h-5 text-jarvis-danger" />}
-          <span className="text-holographic font-display text-sm">
+        <div cclassName="flex items-center space-x-3">
+          {overallStatus === "healthy" && <CheckCircle cclassName="w-5 h-5 text-jarvis-accent" />}
+          {overallStatus === "warning" && <AlertTriangle cclassName="w-5 h-5 text-jarvis-warning" />}
+          {overallStatus === "critical" && <AlertTriangle cclassName="w-5 h-5 text-jarvis-danger" />}
+          <span cclassName="text-holographic font-display text-sm">
             SYSTEM STATUS:{" "}
             <span
-              className={
+              cclassName={
                 overallStatus === "healthy"
                   ? "text-jarvis-accent"
                   : overallStatus === "warning"
@@ -140,17 +140,17 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
             </span>
           </span>
         </div>
-        <div className="flex items-center space-x-2">
+        <div cclassName="flex items-center space-x-2">
           {getNetworkIcon()}
-          <Activity className="w-4 h-4 text-jarvis-primary animate-pulse" />
+          <Activity cclassName="w-4 h-4 text-jarvis-primary animate-pulse" />
         </div>
       </div>
 
       {isExpanded && (
-        <div className="space-y-6" data-testid="health-details">
+        <div cclassName="space-y-6" data-testid="health-details">
           {/* Circular Meters Row */}
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col items-center space-y-2">
+          <div cclassName="grid grid-cols-3 gap-4">
+            <div cclassName="flex flex-col items-center space-y-2">
               <RadialProgress
                 value={health.cpu}
                 size={80}
@@ -163,7 +163,7 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
               />
             </div>
 
-            <div className="flex flex-col items-center space-y-2">
+            <div cclassName="flex flex-col items-center space-y-2">
               <RadialProgress
                 value={health.memory}
                 size={80}
@@ -176,7 +176,7 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
               />
             </div>
 
-            <div className="flex flex-col items-center space-y-2">
+            <div cclassName="flex flex-col items-center space-y-2">
               <RadialProgress
                 value={health.diskSpace}
                 size={80}
@@ -193,8 +193,8 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
           </div>
 
           {/* HUD Meters Row */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col items-center">
+          <div cclassName="grid grid-cols-2 gap-4">
+            <div cclassName="flex flex-col items-center">
               <HUDMeter
                 value={health.cpu}
                 size={100}
@@ -211,7 +211,7 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
               />
             </div>
 
-            <div className="flex flex-col items-center">
+            <div cclassName="flex flex-col items-center">
               <HUDMeter
                 value={health.memory}
                 size={100}
@@ -230,7 +230,7 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
           </div>
 
           {/* Data Streams */}
-          <div className="space-y-4">
+          <div cclassName="space-y-4">
             <DataStream
               data={cpuHistory}
               height={60}
@@ -259,13 +259,13 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
           </div>
 
           {/* Network Status */}
-          <div className="flex items-center justify-between glass-panel p-4 border border-jarvis-primary/20">
-            <div className="flex items-center space-x-3">
+          <div cclassName="flex items-center justify-between glass-panel p-4 border border-jarvis-primary/20">
+            <div cclassName="flex items-center space-x-3">
               {getNetworkIcon()}
-              <span className="text-holographic">Network Status:</span>
+              <span cclassName="text-holographic">Network Status:</span>
             </div>
             <span
-              className={
+              cclassName={
                 health.networkStatus === "online"
                   ? "text-jarvis-accent font-bold"
                   : health.networkStatus === "slow"
@@ -278,7 +278,7 @@ export const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({
           </div>
 
           {/* Last Update */}
-          <div className="text-jarvis-secondary text-xs text-center pt-2 border-t border-jarvis-primary/20 font-mono">
+          <div cclassName="text-jarvis-secondary text-xs text-center pt-2 border-t border-jarvis-primary/20 font-mono">
             Last update: {health.lastUpdate.toLocaleTimeString()}
           </div>
         </div>

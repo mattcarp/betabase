@@ -30,7 +30,7 @@ import {
 type Strategy = "rapid" | "focused" | "comprehensive";
 
 interface EnhancedKnowledgePanelProps {
-  className?: string;
+  cclassName?: string;
   onResultSelected?: (r: any) => void;
 }
 
@@ -43,7 +43,7 @@ const SOURCE_OPTIONS: { label: string; value?: KnowledgeSourceType }[] = [
 ];
 
 export function EnhancedKnowledgePanel({
-  className,
+  cclassName,
   onResultSelected,
 }: EnhancedKnowledgePanelProps) {
   const [query, setQuery] = useState("");
@@ -90,69 +90,69 @@ export function EnhancedKnowledgePanel({
   };
 
   return (
-    <Card className={cn("mac-card", "flex flex-col h-full", className)}>
-      <CardHeader className="mac-card pb-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Gauge className="h-5 w-5 text-primary" />
-            <CardTitle className="mac-card">Knowledge</CardTitle>
+    <Card cclassName={cn("mac-card", "flex flex-col h-full", cclassName)}>
+      <CardHeader cclassName="mac-card pb-4">
+        <div cclassName="flex items-center justify-between">
+          <div cclassName="flex items-center gap-2">
+            <Gauge cclassName="h-5 w-5 text-primary" />
+            <CardTitle cclassName="mac-card">Knowledge</CardTitle>
           </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-xs">
+          <div cclassName="flex items-center gap-2">
+            <Badge variant="outline" cclassName="text-xs">
               {strategy}
             </Badge>
-            <Badge variant="outline" className="text-xs" title="Relevance threshold">
+            <Badge variant="outline" cclassName="text-xs" title="Relevance threshold">
               ≥ {threshold.toFixed(2)}
             </Badge>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden">
+      <CardContent cclassName="flex-1 flex flex-col gap-4 overflow-hidden">
         {/* Query bar */}
-        <form onSubmit={handleSubmit} className="flex items-center gap-2">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <form onSubmit={handleSubmit} cclassName="flex items-center gap-2">
+          <div cclassName="flex-1 relative">
+            <Search cclassName="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              className="mac-input"
+              cclassName="mac-input"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search code, docs, JIRA..."
-              className="pl-9"
+              cclassName="pl-9"
               disabled={isSearching}
               data-test-id="enhanced-knowledge-input"
             />
           </div>
           <Button
-            className="mac-button mac-button-primary"
+            cclassName="mac-button mac-button-primary"
             type="submit"
             disabled={isSearching || !query.trim()}
             data-test-id="enhanced-knowledge-search"
           >
             {isSearching ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 cclassName="h-4 w-4 animate-spin" />
             ) : (
-              <Search className="h-4 w-4" />
+              <Search cclassName="h-4 w-4" />
             )}
           </Button>
         </form>
 
         {/* Controls */}
-        <div className="flex items-center gap-2">
-          <div className="relative">
+        <div cclassName="flex items-center gap-2">
+          <div cclassName="relative">
             <Button
               variant="outline"
               size="sm"
-              className="text-xs mac-button mac-button-outline"
+              cclassName="text-xs mac-button mac-button-outline"
               aria-label="Source filter"
             >
-              <Filter className="h-3 w-3 mr-2" /> {sourceFilter}
+              <Filter cclassName="h-3 w-3 mr-2" /> {sourceFilter}
             </Button>
-            <div className="absolute z-20 mt-2 w-48 bg-popover border rounded-md shadow-lg overflow-hidden">
+            <div cclassName="absolute z-20 mt-2 w-48 bg-popover border rounded-md shadow-lg overflow-hidden">
               {/* Simple always-visible list to avoid adding a full dropdown dependency */}
               {SOURCE_OPTIONS.map((o) => (
                 <button
                   key={o.label}
-                  className={cn(
+                  cclassName={cn(
                     "w-full text-left px-4 py-2 text-xs hover:bg-muted",
                     sourceFilter === o.label && "bg-muted/60"
                   )}
@@ -165,75 +165,75 @@ export function EnhancedKnowledgePanel({
           </div>
 
           <Button
-            className="mac-button mac-button-primary"
+            cclassName="mac-button mac-button-primary"
             size="sm"
             variant={strategy === "rapid" ? "default" : "outline"}
             onClick={() => setStrategy("rapid")}
-            className="text-xs"
+            cclassName="text-xs"
           >
-            <Zap className="h-3 w-3 mr-2" /> Rapid
+            <Zap cclassName="h-3 w-3 mr-2" /> Rapid
           </Button>
           <Button
-            className="mac-button mac-button-primary"
+            cclassName="mac-button mac-button-primary"
             size="sm"
             variant={strategy === "focused" ? "default" : "outline"}
             onClick={() => setStrategy("focused")}
-            className="text-xs"
+            cclassName="text-xs"
           >
-            <Target className="h-3 w-3 mr-2" /> Focused
+            <Target cclassName="h-3 w-3 mr-2" /> Focused
           </Button>
           <Button
-            className="mac-button mac-button-primary"
+            cclassName="mac-button mac-button-primary"
             size="sm"
             variant={strategy === "comprehensive" ? "default" : "outline"}
             onClick={() => setStrategy("comprehensive")}
-            className="text-xs"
+            cclassName="text-xs"
           >
-            <ListChecks className="h-3 w-3 mr-2" /> Comprehensive
+            <ListChecks cclassName="h-3 w-3 mr-2" /> Comprehensive
           </Button>
 
-          <div className="ml-auto flex items-center gap-2">
+          <div cclassName="ml-auto flex items-center gap-2">
             <Input
-              className="mac-input"
+              cclassName="mac-input"
               type="number"
               min={0.5}
               max={0.95}
               step={0.01}
               value={threshold}
               onChange={(e) => setThreshold(Number(e.target.value))}
-              className="h-8 w-20 text-xs"
+              cclassName="h-8 w-20 text-xs"
               aria-label="Relevance threshold"
             />
             <Input
-              className="mac-input"
+              cclassName="mac-input"
               type="number"
               min={3}
               max={25}
               step={1}
               value={limit}
               onChange={(e) => setLimit(Number(e.target.value))}
-              className="h-8 w-16 text-xs"
+              cclassName="h-8 w-16 text-xs"
               aria-label="Result limit"
             />
           </div>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-          <TabsList className="grid w-full grid-cols-2">
+        <Tabs value={activeTab} onValueChange={setActiveTab} cclassName="flex-1 flex flex-col">
+          <TabsList cclassName="grid w-full grid-cols-2">
             <TabsTrigger value="search">Results</TabsTrigger>
             <TabsTrigger value="suggestions">Suggestions</TabsTrigger>
           </TabsList>
-          <TabsContent value="search" className="flex-1 overflow-hidden mt-4">
-            <ScrollArea className="h-full">
-              {error && <div className="text-xs text-destructive">{error}</div>}
+          <TabsContent value="search" cclassName="flex-1 overflow-hidden mt-4">
+            <ScrollArea cclassName="h-full">
+              {error && <div cclassName="text-xs text-destructive">{error}</div>}
               {!error && !resp && (
-                <div className="text-xs text-muted-foreground">
+                <div cclassName="text-xs text-muted-foreground">
                   Try a query like "How does AOMA handle file uploads?"
                 </div>
               )}
               {resp && (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div cclassName="space-y-3">
+                  <div cclassName="flex items-center gap-2 text-xs text-muted-foreground">
                     <Badge variant="outline">{resp.stats.count} results</Badge>
                     <Badge variant="outline">{resp.durationMs} ms</Badge>
                     <Badge variant="outline">{resp.usedEmbedding ? "semantic" : "keyword"}</Badge>
@@ -243,20 +243,20 @@ export function EnhancedKnowledgePanel({
                       </Badge>
                     ))}
                   </div>
-                  <div className="space-y-2">
+                  <div cclassName="space-y-2">
                     {resp.results.map((r, idx) => (
                       <div
                         key={(r.id || idx) + "-row"}
-                        className="p-4 rounded-md border hover:bg-muted/40 transition-colors"
+                        cclassName="p-4 rounded-md border hover:bg-muted/40 transition-colors"
                         data-test-id="knowledge-result"
                       >
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-xxs">
+                        <div cclassName="flex items-center justify-between mb-2">
+                          <div cclassName="flex items-center gap-2">
+                            <Badge variant="outline" cclassName="text-xxs">
                               {String(r.source_type || "unknown")}
                             </Badge>
                             {typeof r.similarity === "number" && (
-                              <span className="text-[10px] text-muted-foreground">
+                              <span cclassName="text-[10px] text-muted-foreground">
                                 sim {r.similarity.toFixed(3)}
                               </span>
                             )}
@@ -266,13 +266,13 @@ export function EnhancedKnowledgePanel({
                               href={r.url}
                               target="_blank"
                               rel="noreferrer"
-                              className="text-xs text-primary inline-flex items-center gap-2"
+                              cclassName="text-xs text-primary inline-flex items-center gap-2"
                             >
-                              Open <ExternalLink className="h-3 w-3" />
+                              Open <ExternalLink cclassName="h-3 w-3" />
                             </a>
                           )}
                         </div>
-                        <div className="text-sm whitespace-pre-wrap">
+                        <div cclassName="text-sm whitespace-pre-wrap">
                           {r.content?.slice(0, 500)}
                           {r.content && r.content.length > 500 ? "…" : ""}
                         </div>
@@ -283,21 +283,21 @@ export function EnhancedKnowledgePanel({
               )}
             </ScrollArea>
           </TabsContent>
-          <TabsContent value="suggestions" className="flex-1 overflow-hidden mt-4">
-            <div className="grid gap-2">
+          <TabsContent value="suggestions" cclassName="flex-1 overflow-hidden mt-4">
+            <div cclassName="grid gap-2">
               {suggestions.map((s, i) => (
                 <Button
                   key={i}
                   variant="outline"
-                  className="justify-start text-left h-auto p-4 mac-button mac-button-outline"
+                  cclassName="justify-start text-left h-auto p-4 mac-button mac-button-outline"
                   onClick={() => {
                     setQuery(s);
                     runSearch(s);
                   }}
                 >
-                  <div className="flex items-center gap-2">
-                    <BookOpen className="h-3 w-3" />
-                    <span className="text-sm">{s}</span>
+                  <div cclassName="flex items-center gap-2">
+                    <BookOpen cclassName="h-3 w-3" />
+                    <span cclassName="text-sm">{s}</span>
                   </div>
                 </Button>
               ))}

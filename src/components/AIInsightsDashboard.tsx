@@ -14,13 +14,13 @@ interface Insight {
 interface AIInsightsDashboardProps {
   transcription: string;
   isRecording: boolean;
-  className?: string;
+  cclassName?: string;
 }
 
 export function AIInsightsDashboard({
   transcription,
   isRecording,
-  className,
+  cclassName,
 }: AIInsightsDashboardProps) {
   const [insights, setInsights] = useState<Insight[]>([]);
   const [sentiment, setSentiment] = useState({
@@ -129,88 +129,88 @@ export function AIInsightsDashboard({
   };
 
   return (
-    <div className={cn("space-y-6", className)}>
+    <div cclassName={cn("space-y-6", cclassName)}>
       {/* Real-time Metrics */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <TrendingUp className="w-4 h-4 text-green-400" />
-            <span className="text-xs font-mono text-gray-400">SENTIMENT</span>
+      <div cclassName="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div cclassName="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+          <div cclassName="flex items-center gap-2 mb-2">
+            <TrendingUp cclassName="w-4 h-4 text-green-400" />
+            <span cclassName="text-xs font-mono text-gray-400">SENTIMENT</span>
           </div>
-          <div className="text-lg font-bold text-green-400">{sentiment.positive.toFixed(0)}%</div>
-          <div className="text-xs text-gray-500">Positive</div>
+          <div cclassName="text-lg font-bold text-green-400">{sentiment.positive.toFixed(0)}%</div>
+          <div cclassName="text-xs text-gray-500">Positive</div>
         </div>
 
-        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Target className="w-4 h-4 text-blue-600" />
-            <span className="text-xs font-mono text-gray-400">TOPICS</span>
+        <div cclassName="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+          <div cclassName="flex items-center gap-2 mb-2">
+            <Target cclassName="w-4 h-4 text-blue-600" />
+            <span cclassName="text-xs font-mono text-gray-400">TOPICS</span>
           </div>
-          <div className="text-lg font-bold text-blue-600">{keyTopics.length}</div>
-          <div className="text-xs text-gray-500">Identified</div>
+          <div cclassName="text-lg font-bold text-blue-600">{keyTopics.length}</div>
+          <div cclassName="text-xs text-gray-500">Identified</div>
         </div>
 
-        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Lightbulb className="w-4 h-4 text-yellow-400" />
-            <span className="text-xs font-mono text-gray-400">ACTIONS</span>
+        <div cclassName="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+          <div cclassName="flex items-center gap-2 mb-2">
+            <Lightbulb cclassName="w-4 h-4 text-yellow-400" />
+            <span cclassName="text-xs font-mono text-gray-400">ACTIONS</span>
           </div>
-          <div className="text-lg font-bold text-yellow-400">{actionItems.length}</div>
-          <div className="text-xs text-gray-500">Suggested</div>
+          <div cclassName="text-lg font-bold text-yellow-400">{actionItems.length}</div>
+          <div cclassName="text-xs text-gray-500">Suggested</div>
         </div>
 
-        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Clock className="w-4 h-4 text-purple-400" />
-            <span className="text-xs font-mono text-gray-400">DURATION</span>
+        <div cclassName="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+          <div cclassName="flex items-center gap-2 mb-2">
+            <Clock cclassName="w-4 h-4 text-purple-400" />
+            <span cclassName="text-xs font-mono text-gray-400">DURATION</span>
           </div>
-          <div className="text-lg font-bold text-purple-400">
+          <div cclassName="text-lg font-bold text-purple-400">
             {Math.floor(Math.random() * 45 + 5)}m
           </div>
-          <div className="text-xs text-gray-500">Active</div>
+          <div cclassName="text-xs text-gray-500">Active</div>
         </div>
       </div>
 
       {/* Live Insights Feed */}
-      <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
-        <div className="flex items-center gap-2 mb-4">
-          <Brain className="w-5 h-5 text-blue-600" />
+      <div cclassName="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+        <div cclassName="flex items-center gap-2 mb-4">
+          <Brain cclassName="w-5 h-5 text-blue-600" />
           <h3
-            className="mac-title"
-            className="mac-title text-lg font-bold text-blue-600 font-mono"
+            cclassName="mac-title"
+            cclassName="mac-title text-lg font-bold text-blue-600 font-mono"
           >
             AI Insights
           </h3>
           {isRecording && (
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse ml-auto"></div>
+            <div cclassName="w-2 h-2 bg-green-400 rounded-full animate-pulse ml-auto"></div>
           )}
         </div>
 
-        <div className="space-y-3 max-h-64 overflow-y-auto">
+        <div cclassName="space-y-3 max-h-64 overflow-y-auto">
           {insights.length > 0 ? (
             insights.map((insight) => {
               const Icon = getInsightIcon(insight.type);
               return (
                 <div
                   key={insight.id}
-                  className={cn(
+                  cclassName={cn(
                     "p-4 rounded-lg border transition-all duration-300",
                     getInsightColor(insight.type)
                   )}
                 >
-                  <div className="flex items-start gap-4">
-                    <Icon className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="mac-title">
+                  <div cclassName="flex items-start gap-4">
+                    <Icon cclassName="w-4 h-4 mt-0.5 flex-shrink-0" />
+                    <div cclassName="flex-1 min-w-0">
+                      <div cclassName="flex items-center justify-between mb-2">
+                        <h4 cclassName="mac-title">
                           {insight.title}
                         </h4>
-                        <span className="text-xs opacity-60">
+                        <span cclassName="text-xs opacity-60">
                           {Math.floor(insight.confidence * 100)}%
                         </span>
                       </div>
-                      <p className="text-xs opacity-80 leading-relaxed">{insight.content}</p>
-                      <div className="text-xs opacity-50 mt-2">
+                      <p cclassName="text-xs opacity-80 leading-relaxed">{insight.content}</p>
+                      <div cclassName="text-xs opacity-50 mt-2">
                         {insight.timestamp.toLocaleTimeString()}
                       </div>
                     </div>
@@ -219,9 +219,9 @@ export function AIInsightsDashboard({
               );
             })
           ) : (
-            <div className="text-center text-gray-500 py-8">
-              <Brain className="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p className="font-mono text-sm">
+            <div cclassName="text-center text-gray-500 py-8">
+              <Brain cclassName="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <p cclassName="font-mono text-sm">
                 {isRecording ? "Analyzing conversation..." : "Start recording to see AI insights"}
               </p>
             </div>
@@ -231,18 +231,18 @@ export function AIInsightsDashboard({
 
       {/* Key Topics */}
       {keyTopics.length > 0 && (
-        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+        <div cclassName="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
           <h3
-            className="mac-title"
-            className="mac-title text-sm font-bold text-blue-600 font-mono mb-4"
+            cclassName="mac-title"
+            cclassName="mac-title text-sm font-bold text-blue-600 font-mono mb-4"
           >
             KEY TOPICS
           </h3>
-          <div className="flex flex-wrap gap-2">
+          <div cclassName="flex flex-wrap gap-2">
             {keyTopics.map((topic, index) => (
               <span
                 key={index}
-                className="px-4 py-2 bg-blue-600/10 border border-blue-600/30 rounded-full text-xs text-blue-600 font-mono"
+                cclassName="px-4 py-2 bg-blue-600/10 border border-blue-600/30 rounded-full text-xs text-blue-600 font-mono"
               >
                 {topic}
               </span>
@@ -253,18 +253,18 @@ export function AIInsightsDashboard({
 
       {/* Action Items */}
       {actionItems.length > 0 && (
-        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+        <div cclassName="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
           <h3
-            className="mac-title"
-            className="mac-title text-sm font-bold text-yellow-400 font-mono mb-4"
+            cclassName="mac-title"
+            cclassName="mac-title text-sm font-bold text-yellow-400 font-mono mb-4"
           >
             ACTION ITEMS
           </h3>
-          <div className="space-y-2">
+          <div cclassName="space-y-2">
             {actionItems.map((action, index) => (
-              <div key={index} className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></div>
-                <span className="text-sm text-gray-300">{action}</span>
+              <div key={index} cclassName="flex items-start gap-2">
+                <div cclassName="w-1.5 h-1.5 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></div>
+                <span cclassName="text-sm text-gray-300">{action}</span>
               </div>
             ))}
           </div>

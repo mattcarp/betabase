@@ -108,7 +108,7 @@ const WaveformVisualization: React.FC<{
       ref={canvasRef}
       width={800}
       height={120}
-      className="w-full h-20 bg-gray-900/50 rounded border border-gray-700/50"
+      cclassName="w-full h-20 bg-gray-900/50 rounded border border-gray-700/50"
     />
   );
 };
@@ -136,31 +136,31 @@ export const AudioWaveformResponse: React.FC<{
   const getSourceIcon = () => {
     switch (data.source) {
       case "elevenlabs":
-        return <Zap className="w-4 h-4 text-purple-400" />;
+        return <Zap cclassName="w-4 h-4 text-purple-400" />;
       case "user_upload":
-        return <Download className="w-4 h-4 text-blue-400" />;
+        return <Download cclassName="w-4 h-4 text-blue-400" />;
       case "live_recording":
-        return <Mic className="w-4 h-4 text-red-400" />;
+        return <Mic cclassName="w-4 h-4 text-red-400" />;
       default:
-        return <Volume2 className="w-4 h-4 text-gray-400" />;
+        return <Volume2 cclassName="w-4 h-4 text-gray-400" />;
     }
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-gray-700/50 backdrop-blur-sm">
+    <div cclassName="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-gray-700/50 backdrop-blur-sm">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+      <div cclassName="flex items-start justify-between mb-6">
+        <div cclassName="flex items-center gap-4">
+          <div cclassName="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
             {getSourceIcon()}
           </div>
           <div>
-            <h3 className="mac-title">
+            <h3 cclassName="mac-title">
               {data.filename}
             </h3>
-            <div className="flex items-center gap-4 text-sm text-gray-400">
-              <span className="flex items-center gap-2">
-                <Clock className="w-3 h-3" />
+            <div cclassName="flex items-center gap-4 text-sm text-gray-400">
+              <span cclassName="flex items-center gap-2">
+                <Clock cclassName="w-3 h-3" />
                 {formatTime(data.duration)}
               </span>
               <span>{data.sampleRate / 1000}kHz</span>
@@ -170,18 +170,18 @@ export const AudioWaveformResponse: React.FC<{
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors">
-            <Share className="w-4 h-4 text-gray-400" />
+        <div cclassName="flex items-center gap-2">
+          <button cclassName="p-2 hover:bg-gray-700/50 rounded-lg transition-colors">
+            <Share cclassName="w-4 h-4 text-gray-400" />
           </button>
-          <button className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors">
-            <Download className="w-4 h-4 text-gray-400" />
+          <button cclassName="p-2 hover:bg-gray-700/50 rounded-lg transition-colors">
+            <Download cclassName="w-4 h-4 text-gray-400" />
           </button>
         </div>
       </div>
 
       {/* Waveform Visualization */}
-      <div className="mb-6">
+      <div cclassName="mb-6">
         <WaveformVisualization
           waveformData={data.waveformData}
           peaks={data.peaks}
@@ -192,33 +192,33 @@ export const AudioWaveformResponse: React.FC<{
       </div>
 
       {/* Controls */}
-      <div className="flex items-center gap-4 mb-6">
+      <div cclassName="flex items-center gap-4 mb-6">
         <button
           onClick={() => setIsPlaying(!isPlaying)}
-          className="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition-colors"
+          cclassName="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition-colors"
         >
           {isPlaying ? (
-            <Pause className="w-5 h-5 text-white" />
+            <Pause cclassName="w-5 h-5 text-white" />
           ) : (
-            <Play className="w-5 h-5 text-white ml-0.5" />
+            <Play cclassName="w-5 h-5 text-white ml-0.5" />
           )}
         </button>
 
-        <div className="flex-1">
-          <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
+        <div cclassName="flex-1">
+          <div cclassName="flex items-center justify-between text-sm text-gray-400 mb-2">
             <span>{formatTime(currentTime)}</span>
             <span>{formatTime(data.duration)}</span>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-1">
+          <div cclassName="w-full bg-gray-700 rounded-full h-1">
             <div
-              className="bg-blue-500 h-1 rounded-full transition-all duration-100"
+              cclassName="bg-blue-500 h-1 rounded-full transition-all duration-100"
               style={{ width: `${(currentTime / data.duration) * 100}%` }}
             />
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Volume2 className="w-4 h-4 text-gray-400" />
+        <div cclassName="flex items-center gap-2">
+          <Volume2 cclassName="w-4 h-4 text-gray-400" />
           <input
             type="range"
             min="0"
@@ -226,38 +226,38 @@ export const AudioWaveformResponse: React.FC<{
             step="0.1"
             value={volume}
             onChange={(e) => setVolume(parseFloat(e.target.value))}
-            className="w-20 accent-blue-500"
+            cclassName="w-20 accent-blue-500"
           />
         </div>
       </div>
 
       {/* Audio Analysis */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-gray-800/50 rounded-lg p-4">
-          <div className="text-xs text-gray-400 mb-2">RMS Energy</div>
-          <div className={`font-semibold ${getQualityColor(data.analysis.rmsEnergy)}`}>
+      <div cclassName="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div cclassName="bg-gray-800/50 rounded-lg p-4">
+          <div cclassName="text-xs text-gray-400 mb-2">RMS Energy</div>
+          <div cclassName={`font-semibold ${getQualityColor(data.analysis.rmsEnergy)}`}>
             {(data.analysis.rmsEnergy * 100).toFixed(1)}%
           </div>
         </div>
 
-        <div className="bg-gray-800/50 rounded-lg p-4">
-          <div className="text-xs text-gray-400 mb-2">SNR</div>
-          <div className={`font-semibold ${getQualityColor(data.analysis.snrDb / 40)}`}>
+        <div cclassName="bg-gray-800/50 rounded-lg p-4">
+          <div cclassName="text-xs text-gray-400 mb-2">SNR</div>
+          <div cclassName={`font-semibold ${getQualityColor(data.analysis.snrDb / 40)}`}>
             {data.analysis.snrDb.toFixed(1)} dB
           </div>
         </div>
 
-        <div className="bg-gray-800/50 rounded-lg p-4">
-          <div className="text-xs text-gray-400 mb-2">Dynamic Range</div>
-          <div className={`font-semibold ${getQualityColor(data.analysis.dynamicRange / 30)}`}>
+        <div cclassName="bg-gray-800/50 rounded-lg p-4">
+          <div cclassName="text-xs text-gray-400 mb-2">Dynamic Range</div>
+          <div cclassName={`font-semibold ${getQualityColor(data.analysis.dynamicRange / 30)}`}>
             {data.analysis.dynamicRange.toFixed(1)} dB
           </div>
         </div>
 
-        <div className="bg-gray-800/50 rounded-lg p-4">
-          <div className="text-xs text-gray-400 mb-2">Voice Activity</div>
+        <div cclassName="bg-gray-800/50 rounded-lg p-4">
+          <div cclassName="text-xs text-gray-400 mb-2">Voice Activity</div>
           <div
-            className={`font-semibold ${data.analysis.voiceActivity ? "text-green-400" : "text-red-400"}`}
+            cclassName={`font-semibold ${data.analysis.voiceActivity ? "text-green-400" : "text-red-400"}`}
           >
             {data.analysis.voiceActivity ? "Detected" : "None"}
           </div>
@@ -266,12 +266,12 @@ export const AudioWaveformResponse: React.FC<{
 
       {/* Transcription */}
       {data.transcription && (
-        <div className="bg-gray-900/50 rounded-lg p-4 mb-4">
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="mac-title">
+        <div cclassName="bg-gray-900/50 rounded-lg p-4 mb-4">
+          <div cclassName="flex items-center justify-between mb-4">
+            <h4 cclassName="mac-title">
               Transcription
             </h4>
-            <div className="flex items-center gap-2 text-xs text-gray-400">
+            <div cclassName="flex items-center gap-2 text-xs text-gray-400">
               <span>{data.transcription.language}</span>
               <span>•</span>
               <span>{(data.transcription.confidence * 100).toFixed(1)}% confidence</span>
@@ -279,27 +279,27 @@ export const AudioWaveformResponse: React.FC<{
               <span>{data.transcription.speaker}</span>
             </div>
           </div>
-          <p className="mac-body text-gray-200 leading-relaxed">{data.transcription.text}</p>
+          <p cclassName="mac-body text-gray-200 leading-relaxed">{data.transcription.text}</p>
         </div>
       )}
 
       {/* Emotion Analysis */}
       {data.analysis.emotionScore && (
-        <div className="bg-gray-900/50 rounded-lg p-4">
-          <h4 className="mac-title">
+        <div cclassName="bg-gray-900/50 rounded-lg p-4">
+          <h4 cclassName="mac-title">
             Emotion Analysis
           </h4>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div cclassName="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {Object.entries(data.analysis.emotionScore).map(([emotion, score]) => (
-              <div key={emotion} className="text-center">
-                <div className="text-xs text-gray-400 mb-2 capitalize">{emotion}</div>
-                <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
+              <div key={emotion} cclassName="text-center">
+                <div cclassName="text-xs text-gray-400 mb-2 capitalize">{emotion}</div>
+                <div cclassName="w-full bg-gray-700 rounded-full h-2 mb-2">
                   <div
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-300"
+                    cclassName="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${score * 100}%` }}
                   />
                 </div>
-                <div className="text-xs text-gray-300">{(score * 100).toFixed(0)}%</div>
+                <div cclassName="text-xs text-gray-300">{(score * 100).toFixed(0)}%</div>
               </div>
             ))}
           </div>

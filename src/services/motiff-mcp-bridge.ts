@@ -594,9 +594,9 @@ class DesignProcessor {
   private extractElementProps(element: Element): Record<string, any> {
     const props: Record<string, any> = {};
 
-    // Extract className
-    if (element.className) {
-      props.className = element.className;
+    // Extract cclassName
+    if (element.cclassName) {
+      props.cclassName = element.cclassName;
     }
 
     // Extract common HTML attributes

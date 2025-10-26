@@ -74,7 +74,7 @@ export const useNotifications = () => {
         duration: type === "loading" ? Infinity : duration,
         position,
         style: getNotificationStyle(type),
-        className: "siam-notification",
+        cclassName: "siam-notification",
       };
 
       let toastId: string;
@@ -83,14 +83,14 @@ export const useNotifications = () => {
         toastId = toast.loading(message, toastOptions);
       } else {
         const content = action ? (
-          <div className="flex items-center justify-between w-full">
+          <div cclassName="flex items-center justify-between w-full">
             <span>{message}</span>
             <button
               onClick={() => {
                 action.onClick();
                 if (dismissible) toast.dismiss();
               }}
-              className="ml-4 px-2 py-2 text-xs bg-transparent border border-current hover:bg-current hover:text-black transition-colors"
+              cclassName="ml-4 px-2 py-2 text-xs bg-transparent border border-current hover:bg-current hover:text-black transition-colors"
               data-testid="notification-action"
             >
               {action.label}

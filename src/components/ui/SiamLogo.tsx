@@ -2,13 +2,13 @@ import React from "react";
 import Image from "next/image";
 
 interface SiamLogoProps {
-  className?: string;
+  cclassName?: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
   variant?: "icon" | "full";
 }
 
 export const SiamLogo: React.FC<SiamLogoProps> = ({
-  className = "",
+  cclassName = "",
   size = "md",
   variant = "full",
 }) => {
@@ -38,7 +38,7 @@ export const SiamLogo: React.FC<SiamLogoProps> = ({
       alt="Betabase"
       width={dimensions.w}
       height={dimensions.h}
-      className={`${className} object-contain`}
+      cclassName={`${cclassName} object-contain`}
     />
   );
 };
