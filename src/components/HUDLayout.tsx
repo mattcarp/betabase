@@ -75,9 +75,8 @@ export function HUDLayout({
           <div className="glass-panel p-6 w-80 h-80 flex flex-col items-center justify-center animate-pulse-slow">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-blue-500/10 rounded-lg animate-gradient-xy"></div>
             <h3
-              c
               className="mac-title"
-              lassName="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
+              className="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
             >
               <span className="">AUDIO VISUALIZATION</span>
             </h3>
@@ -99,9 +98,8 @@ export function HUDLayout({
         return (
           <div className="glass-panel p-6 w-80 h-80 overflow-y-auto">
             <h3
-              c
               className="mac-title"
-              lassName="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
+              className="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
             >
               <span className="">AI INSIGHTS</span>
             </h3>
@@ -162,9 +160,8 @@ export function HUDLayout({
         return (
           <div className="glass-panel p-6 w-80 h-80 overflow-y-auto">
             <h3
-              c
               className="mac-title"
-              lassName="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
+              className="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
             >
               <span className="">SYSTEM STATUS</span>
             </h3>
@@ -189,9 +186,8 @@ export function HUDLayout({
         return (
           <div className="glass-panel p-6 w-80 h-80 overflow-y-auto">
             <h3
-              c
               className="mac-title"
-              lassName="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
+              className="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
             >
               <span className="">LIVE TRANSCRIPTION</span>
             </h3>

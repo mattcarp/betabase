@@ -168,7 +168,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 c className="mac-heading" lassName="mac-heading text-3xl font-bold">
+          <h2 className="mac-heading">
             AOMA Performance Dashboard
           </h2>
           <p className="mac-body text-muted-foreground">Real-time A/B testing: Railway vs Render</p>
@@ -423,9 +423,8 @@ export const AOMAPerformanceDashboard: React.FC = () => {
               <div className="grid grid-cols-2 gap-8">
                 <div>
                   <h4
-                    c
                     className="mac-title"
-                    lassName="mac-title font-semibold mb-4 flex items-center gap-2"
+                    className="mac-title font-semibold mb-4 flex items-center gap-2"
                   >
                     <Server className="h-4 w-4" />
                     Railway
@@ -457,9 +456,8 @@ export const AOMAPerformanceDashboard: React.FC = () => {
 
                 <div>
                   <h4
-                    c
                     className="mac-title"
-                    lassName="mac-title font-semibold mb-4 flex items-center gap-2"
+                    className="mac-title font-semibold mb-4 flex items-center gap-2"
                   >
                     <Database className="h-4 w-4" />
                     Render

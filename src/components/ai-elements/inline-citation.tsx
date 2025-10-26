@@ -200,7 +200,7 @@ export const InlineCitationSource = ({
 }: InlineCitationSourceProps) => (
   <div className={cn("space-y-1", className)} {...props}>
     {title && (
-      <h4 c className="mac-title" lassName="mac-title text-sm font-medium leading-tight truncate">
+      <h4 className="mac-title">
         {title}
       </h4>
     )}

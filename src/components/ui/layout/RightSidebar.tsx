@@ -80,7 +80,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Navigation Section */}
       <div>
-        <h3 c className="mac-title" lassName="mac-title">
+        <h3 className="mac-title">
           Navigation
         </h3>
         <div className="space-y-2">
@@ -96,7 +96,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
               )}
             >
               <item.icon size={16} />
-              <span className="font-medium">{item.label}</span>
+              <span className="font-normal">{item.label}</span>
               {item.isActive && <div className="" />}
             </button>
           ))}
@@ -134,7 +134,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Meeting Tools */}
       <div>
-        <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-white mb-4">
+        <h3 className="mac-title text-lg font-normal text-white mb-4">
           Meeting Tools
         </h3>
         <div className="space-y-2">
@@ -152,7 +152,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Session Metrics */}
       <div className="mt-auto">
-        <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-white mb-4">
+        <h3 className="mac-title text-lg font-normal text-white mb-4">
           Meeting Metrics
         </h3>
         <div className="space-y-3">
@@ -164,7 +164,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-white/70">{metric.label}</span>
-                  <span className={cn("text-sm font-semibold", `text-${metric.color}`)}>
+                  <span className={cn("text-sm font-normal", `text-${metric.color}`)}>
                     {metric.value}
                   </span>
                 </div>

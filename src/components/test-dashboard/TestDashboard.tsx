@@ -367,9 +367,8 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               </div>
               <div>
                 <h1
-                  c
                   className="mac-heading"
-                  lassName="mac-heading text-2xl font-semibold tracking-tight text-foreground"
+                  className="mac-heading text-2xl font-semibold tracking-tight text-foreground"
                 >
                   Test Dashboard
                 </h1>

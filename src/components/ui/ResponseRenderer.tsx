@@ -115,7 +115,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
                 {data.status}
               </span>
             </div>
-            <h3 c className="mac-title" lassName="mac-title text-gray-100 font-semibold mt-2">
+            <h3 className="mac-title">
               {data.summary}
             </h3>
           </div>
@@ -153,7 +153,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
 
       {/* Description */}
       <div className="bg-gray-900/50 rounded-lg p-4 mb-4">
-        <h4 c className="mac-title" lassName="mac-title text-gray-300 font-medium mb-2">
+        <h4 className="mac-title">
           Description
         </h4>
         <p className="text-gray-200 text-sm leading-relaxed">{data.description}</p>
@@ -162,7 +162,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
       {/* Comments */}
       {data.comments.length > 0 && (
         <div>
-          <h4 c className="mac-title" lassName="mac-title text-gray-300 font-medium mb-4">
+          <h4 className="mac-title">
             Comments ({data.comments.length})
           </h4>
           <div className="space-y-3 max-h-48 overflow-y-auto">
@@ -190,7 +190,7 @@ const ChartRenderer: React.FC<{ response: ChartResponse }> = ({ response }) => {
 
   return (
     <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-gray-700/50">
-      <h3 c className="mac-title" lassName="mac-title text-xl font-semibold text-gray-100 mb-4">
+      <h3 className="mac-title">
         {data.title}
       </h3>
 
@@ -198,7 +198,7 @@ const ChartRenderer: React.FC<{ response: ChartResponse }> = ({ response }) => {
       <div className="space-y-4">
         {data.datasets.map((dataset, datasetIndex) => (
           <div key={datasetIndex}>
-            <h4 c className="mac-title" lassName="mac-title text-gray-300 font-medium mb-2">
+            <h4 className="mac-title">
               {dataset.label}
             </h4>
             <div className="space-y-2">
@@ -293,7 +293,7 @@ const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({ response
 
   return (
     <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-gray-700/50">
-      <h3 c className="mac-title" lassName="mac-title text-xl font-semibold text-gray-100 mb-6">
+      <h3 className="mac-title">
         {data.title}
       </h3>
 
@@ -303,7 +303,7 @@ const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({ response
             key={widget.id}
             className={`${getGridCols(widget.size)} bg-gray-800/50 rounded-lg p-4`}
           >
-            <h4 c className="mac-title" lassName="mac-title text-gray-300 font-medium mb-4">
+            <h4 className="mac-title">
               {widget.title}
             </h4>
             {/* Widget content based on type */}

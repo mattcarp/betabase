@@ -279,7 +279,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
 
       {/* Conversations List with Groups */}
       <div className="flex-1 overflow-y-auto">
-        <div className="space-y-3">
+        <div className="space-y-8">
           {conversationGroups.length === 0 ? (
             <div className="p-6 text-center">
               <MessageCircle className="w-8 h-8 text-mac-text-muted mx-auto mb-4" />
@@ -294,11 +294,11 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             </div>
           ) : (
             conversationGroups.map((group) => (
-              <div key={group.label} className="py-2">
+              <div key={group.label} className="py-4">
                 {/* Group Header */}
                 <button
                   onClick={() => toggleGroup(group.label)}
-                  className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-mac-text-secondary hover:text-mac-text-primary hover:bg-mac-state-hover transition-all duration-200 group"
+                  className="flex items-center justify-between w-full px-4 py-2 text-sm font-normal text-mac-text-secondary hover:text-mac-text-primary hover:bg-mac-state-hover transition-all duration-200 group"
                 >
                   <span>{group.label}</span>
                   <div className="flex items-center gap-2">
@@ -323,14 +323,14 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                       transition={{ duration: 0.2, ease: "easeInOut" }}
                       className="overflow-hidden"
                     >
-                      <div className="space-y-3 pb-2">
+                      <div className="space-y-8 pb-2">
                         {group.conversations.map((conversation) => (
                           <div key={conversation.id} className="relative group/conversation">
                             <button
                               onClick={() => onConversationSelect?.(conversation.id)}
                               onContextMenu={(e) => handleContextMenu(e, conversation.id)}
                               className={cn(
-                                "w-full text-left p-4 mx-4 rounded-lg transition-all duration-200 relative",
+                                "w-full text-left px-4 py-6 mx-4 rounded-lg transition-all duration-200 relative",
                                 "hover:bg-mac-state-hover group-hover/conversation:bg-mac-state-hover",
                                 conversation.isActive &&
                                   "bg-mac-primary-blue-400/10 border-l-2 border-mac-primary-blue-400 shadow-sm pl-6",
@@ -350,7 +350,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 mb-2">
-                                    <h4 className="mac-title text-sm font-medium text-mac-text-primary truncate flex-1">
+                                    <h4 className="mac-title text-sm font-normal text-mac-text-primary truncate flex-1">
                                       {conversation.title}
                                     </h4>
                                     {conversation.isPinned && (

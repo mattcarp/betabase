@@ -286,7 +286,7 @@ export function IntrospectionDropdown() {
               <div className="space-y-4">
                 {/* Metadata */}
                 <div>
-                  <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+                  <h4 className="mac-title">
                     Metadata
                   </h4>
                   <div className="bg-muted rounded-lg p-4 space-y-1 text-sm">
@@ -324,7 +324,7 @@ export function IntrospectionDropdown() {
                 {/* Inputs */}
                 {selectedTrace.inputs && (
                   <div>
-                    <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+                    <h4 className="mac-title">
                       Inputs
                     </h4>
                     <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto">
@@ -336,7 +336,7 @@ export function IntrospectionDropdown() {
                 {/* Outputs */}
                 {selectedTrace.outputs && (
                   <div>
-                    <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+                    <h4 className="mac-title">
                       Outputs
                     </h4>
                     <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto">
@@ -349,9 +349,8 @@ export function IntrospectionDropdown() {
                 {selectedTrace.error && (
                   <div>
                     <h4
-                      c
                       className="mac-title"
-                      lassName="mac-title text-sm font-semibold mb-2 text-red-500"
+                      className="mac-title text-sm font-semibold mb-2 text-red-500"
                     >
                       Error
                     </h4>
@@ -364,7 +363,7 @@ export function IntrospectionDropdown() {
                 {/* Additional Metadata */}
                 {selectedTrace.metadata && Object.keys(selectedTrace.metadata).length > 0 && (
                   <div>
-                    <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+                    <h4 className="mac-title">
                       Additional Context
                     </h4>
                     <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto">

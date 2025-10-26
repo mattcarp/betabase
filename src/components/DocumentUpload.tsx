@@ -151,7 +151,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
   return (
     <div className="w-full max-w-2xl mx-auto p-6">
       <div className="mb-6">
-        <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-white mb-2">
+        <h3 className="mac-title">
           Document Upload
         </h3>
         <p className="text-sm text-gray-400">
@@ -229,7 +229,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       {/* Uploaded Files List */}
       {uploadedFiles.length > 0 && (
         <div className="mt-6">
-          <h4 c className="mac-title" lassName="mac-title text-sm font-semibold text-white mb-4">
+          <h4 className="mac-title">
             Uploaded Documents
           </h4>
           <div className="space-y-2">

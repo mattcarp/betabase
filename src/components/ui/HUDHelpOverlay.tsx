@@ -232,7 +232,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
           {/* Content Area */}
           <div className="flex-1 p-6 overflow-y-auto">
             <div className="mb-6">
-              <h3 c className="mac-title" lassName="mac-title text-mac-text-primary mb-2">
+              <h3 className="mac-title">
                 {helpSections[selectedSection].title}
               </h3>
               <div className="h-1 w-16 rounded-full bg-gradient-to-r from-jarvis-cyan to-jarvis-electric-blue" />
@@ -257,9 +257,8 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
             {/* Additional Tips */}
             <div className="mt-8 p-4 rounded-lg border-l-4 border-jarvis-cyan bg-jarvis-cyan/5">
               <h4
-                c
                 className="mac-title"
-                lassName="mac-title mac-body font-semibold text-jarvis-cyan mb-2"
+                className="mac-title mac-body font-semibold text-jarvis-cyan mb-2"
               >
                 Pro Tip
               </h4>

@@ -59,9 +59,8 @@ export default function TestApp() {
       {/* Header */}
       <div className="text-center mb-8">
         <h1
-          c
           className="mac-heading"
-          lassName="mac-heading text-4xl font-bold text-holographic mb-2"
+          className="mac-heading text-4xl font-bold text-holographic mb-2"
         >
           JARVIS UI COMPONENT SHOWCASE
         </h1>
@@ -100,9 +99,8 @@ export default function TestApp() {
         {/* RadialProgress Components */}
         <div className="glass-panel p-6 space-y-6">
           <h2
-            c
             className="mac-heading"
-            lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
+            className="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
           >
             RADIAL PROGRESS METERS
           </h2>
@@ -157,9 +155,8 @@ export default function TestApp() {
         {/* HUDMeter Components */}
         <div className="glass-panel p-6 space-y-6">
           <h2
-            c
             className="mac-heading"
-            lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
+            className="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
           >
             HUD ARC METERS
           </h2>
@@ -204,9 +201,8 @@ export default function TestApp() {
         {/* DataStream Components */}
         <div className="glass-panel p-6 space-y-6">
           <h2
-            c
             className="mac-heading"
-            lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
+            className="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
           >
             REAL-TIME DATA STREAMS
           </h2>
@@ -257,9 +253,8 @@ export default function TestApp() {
         <div className="lg:col-span-2 xl:col-span-3">
           <div className="glass-panel p-6 space-y-6">
             <h2
-              c
               className="mac-heading"
-              lassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2 text-center"
+              className="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2 text-center"
             >
               CENTRAL CIRCULAR HUD INTERFACE
             </h2>

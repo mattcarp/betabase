@@ -442,27 +442,6 @@ _(Full list of 309 violations available in mac-violations-detailed.json)_
 ```
 
 ### Example 4: Using MAC Typography Classes
-
-**Before (WRONG):**
-
-```tsx
-<div>
-  <h1 className="text-3xl font-light">Welcome to SIAM</h1>
-  <h2 className="text-xl font-light">Intelligence Platform</h2>
-  <p className="text-sm text-gray-400">Ready to assist</p>
-</div>
-```
-
-**After (CORRECT):**
-
-```tsx
-<div className="mac-professional">
-  <h1 className="mac-display-text">Welcome to SIAM</h1>
-  <h2 className="mac-heading">Intelligence Platform</h2>
-  <p className="mac-body">Ready to assist</p>
-</div>
-```
-
 ---
 
 ## DESIGN SYSTEM ARCHITECTURE ANALYSIS

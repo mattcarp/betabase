@@ -62,9 +62,8 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="text-center max-w-md mx-auto border border-green-400 p-8 bg-black/80">
               <div className="text-6xl mb-4">⚠️</div>
               <h1
-                c
                 className="mac-heading"
-                lassName="mac-heading text-2xl font-bold mb-4 text-green-400"
+                className="mac-heading text-2xl font-bold mb-4 text-green-400"
               >
                 SIAM System Error
               </h1>

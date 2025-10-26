@@ -212,11 +212,7 @@ Be helpful, concise, and professional in your responses.`;
               <div className="flex items-center space-x-3 flex-shrink-0">
                 <SiamLogo size="lg" variant="icon" />
                 <div>
-                  <h1
-                    c
-                    className="mac-heading"
-                    lassName="mac-heading text-xl font-extralight text-white tracking-tight whitespace-nowrap"
-                  >
+                  <h1 className="mac-heading text-xl font-extralight text-white tracking-tight whitespace-nowrap">
                     The Betabase
                   </h1>
                   <p className="text-xs text-slate-400 font-light whitespace-nowrap">
@@ -324,7 +320,7 @@ Be helpful, concise, and professional in your responses.`;
                     key={`${getChatAPIEndpoint()}-${activeConversationId}`} // Force remount when endpoint or conversation changes
                     api={getChatAPIEndpoint()}
                     title={activeConversation?.title || "The Betabase"}
-                    description="AI-Powered Assistant. Don't be a dick."
+                    description="Don't be a dick."
                     systemPrompt={systemPrompt}
                     suggestions={suggestions}
                     className="flex-1 border-0"
@@ -351,9 +347,8 @@ Be helpful, concise, and professional in your responses.`;
                   <div className="flex-1 flex flex-col border-0 bg-transparent">
                     <div className="p-6 border-b border-zinc-800/50">
                       <h2
-                        c
                         className="mac-heading"
-                        lassName="mac-heading text-lg font-semibold text-zinc-100 flex items-center gap-2"
+                        className="mac-heading text-lg font-semibold text-zinc-100 flex items-center gap-2"
                       >
                         <Wrench className="h-5 w-5 text-zinc-400" />
                         Debug Assistant
@@ -386,9 +381,8 @@ Be helpful, concise, and professional in your responses.`;
                 <div className="h-full">
                   <div className="p-6 border-b border-zinc-800/50">
                     <h2
-                      c
                       className="mac-heading"
-                      lassName="mac-heading text-lg font-semibold text-zinc-100 flex items-center gap-2"
+                      className="mac-heading text-lg font-semibold text-zinc-100 flex items-center gap-2"
                     >
                       <Library className="h-5 w-5 text-zinc-400" />
                       Knowledge Curation

@@ -141,9 +141,8 @@ const ResultCard: React.FC<{
           <div className={`${getTypeColor()}`}>{getTypeIcon()}</div>
           <div className="flex-1 min-w-0">
             <h3
-              c
               className="mac-title"
-              lassName="mac-title font-semibold text-gray-100 hover:text-blue-400 cursor-pointer transition-colors truncate"
+              className="mac-title font-semibold text-gray-100 hover:text-blue-400 cursor-pointer transition-colors truncate"
               onClick={() => onOpen(result)}
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(result.highlighted.title) }}
             />
@@ -290,7 +289,7 @@ export const SearchResultsResponse: React.FC<{
             <Search className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-gray-100">
+            <h3 className="mac-title">
               Search Results
             </h3>
             <div className="text-sm text-gray-400">

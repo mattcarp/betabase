@@ -102,7 +102,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-jarvis-panel-border">
         <div>
-          <h3 c className="mac-title" lassName="mac-title text-mac-text-primary">
+          <h3 className="mac-title">
             HUD Customization
           </h3>
           <p className="mac-body text-xs text-mac-text-muted mt-2">

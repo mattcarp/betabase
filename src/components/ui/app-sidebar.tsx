@@ -221,7 +221,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
         ) : (
           <SidebarGroup>
             <SidebarGroupContent>
-              <SidebarMenu>
+              <SidebarMenu className="space-y-6">
                 {sortedConversations.map((conversation) => (
                   <SidebarMenuItem key={conversation.id}>
                     <SidebarMenuButton

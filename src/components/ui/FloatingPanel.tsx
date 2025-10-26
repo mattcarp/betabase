@@ -233,9 +233,8 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
           <div className="flex items-center gap-2">
             {icon && <div className="text-blue-600">{icon}</div>}
             <h3
-              c
               className="mac-title"
-              lassName="mac-title text-blue-600 text-sm font-medium select-none truncate"
+              className="mac-title text-blue-600 text-sm font-medium select-none truncate"
             >
               {title}
             </h3>
