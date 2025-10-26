@@ -728,9 +728,7 @@ export const TestResultsViewer: React.FC = () => {
                       <Card className="mac-card">
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between mb-2">
-                            <h3 className="mac-title">
-                              Stack Trace
-                            </h3>
+                            <h3 className="mac-title">Stack Trace</h3>
                             <Button
                               className="mac-button mac-button-outline"
                               variant="ghost"
@@ -801,9 +799,7 @@ export const TestResultsViewer: React.FC = () => {
                 <TabsContent value="media">
                   {selectedResult.screenshots && selectedResult.screenshots.length > 0 ? (
                     <div className="space-y-4">
-                      <h3 className="mac-title">
-                        Screenshots
-                      </h3>
+                      <h3 className="mac-title">Screenshots</h3>
                       <div className="grid grid-cols-2 gap-4">
                         {selectedResult.screenshots.map((screenshot, index) => (
                           <Card className="mac-card" key={index}>

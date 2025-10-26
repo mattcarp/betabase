@@ -115,9 +115,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
                 {data.status}
               </span>
             </div>
-            <h3 className="mac-title">
-              {data.summary}
-            </h3>
+            <h3 className="mac-title">{data.summary}</h3>
           </div>
         </div>
         <div className={`text-sm font-medium ${priorityColors[data.priority] || "text-gray-400"}`}>
@@ -153,18 +151,14 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
 
       {/* Description */}
       <div className="bg-gray-900/50 rounded-lg p-4 mb-4">
-        <h4 className="mac-title">
-          Description
-        </h4>
+        <h4 className="mac-title">Description</h4>
         <p className="text-gray-200 text-sm leading-relaxed">{data.description}</p>
       </div>
 
       {/* Comments */}
       {data.comments.length > 0 && (
         <div>
-          <h4 className="mac-title">
-            Comments ({data.comments.length})
-          </h4>
+          <h4 className="mac-title">Comments ({data.comments.length})</h4>
           <div className="space-y-3 max-h-48 overflow-y-auto">
             {data.comments.map((comment, index) => (
               <div key={index} className="bg-gray-800/50 rounded-lg p-4">
@@ -190,17 +184,13 @@ const ChartRenderer: React.FC<{ response: ChartResponse }> = ({ response }) => {
 
   return (
     <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-gray-700/50">
-      <h3 className="mac-title">
-        {data.title}
-      </h3>
+      <h3 className="mac-title">{data.title}</h3>
 
       {/* Simple bar chart visualization */}
       <div className="space-y-4">
         {data.datasets.map((dataset, datasetIndex) => (
           <div key={datasetIndex}>
-            <h4 className="mac-title">
-              {dataset.label}
-            </h4>
+            <h4 className="mac-title">{dataset.label}</h4>
             <div className="space-y-2">
               {data.labels.map((label, index) => {
                 const value = dataset.data[index] || 0;
@@ -293,9 +283,7 @@ const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({ response
 
   return (
     <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-gray-700/50">
-      <h3 className="mac-title">
-        {data.title}
-      </h3>
+      <h3 className="mac-title">{data.title}</h3>
 
       <div className="grid grid-cols-4 gap-4">
         {data.widgets.map((widget) => (
@@ -303,9 +291,7 @@ const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({ response
             key={widget.id}
             className={`${getGridCols(widget.size)} bg-gray-800/50 rounded-lg p-4`}
           >
-            <h4 className="mac-title">
-              {widget.title}
-            </h4>
+            <h4 className="mac-title">{widget.title}</h4>
             {/* Widget content based on type */}
             {widget.type === "metric" && (
               <div className="text-2xl font-bold text-blue-400">

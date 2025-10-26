@@ -367,12 +367,9 @@ const [user, setUser] = useState<User | null>(null);
 const inputRef = useRef<HTMLInputElement>(null);
 
 // ✅ Type useCallback
-const handleClick = useCallback(
-  (id: string) => {
-    console.log(id);
-  },
-  []
-);
+const handleClick = useCallback((id: string) => {
+  console.log(id);
+}, []);
 ```
 
 ## Quick Reference
@@ -399,4 +396,4 @@ cat docs/TYPESCRIPT-ERROR-STATUS.md
 
 ---
 
-*For quick reference, see [QUICK-START.md](../QUICK-START.md)*
+_For quick reference, see [QUICK-START.md](../QUICK-START.md)_

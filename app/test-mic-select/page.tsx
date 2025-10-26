@@ -19,9 +19,7 @@ export default function TestMicSelectPage() {
         console.log("📋 Available microphones:", audioInputs);
 
         // Auto-select MacBook mic if available
-        const macbookMic = audioInputs.find((d) =>
-          d.label.toLowerCase().includes("macbook")
-        );
+        const macbookMic = audioInputs.find((d) => d.label.toLowerCase().includes("macbook"));
         if (macbookMic) {
           setSelectedDevice(macbookMic.deviceId);
           console.log("✅ Auto-selected:", macbookMic.label);
@@ -99,9 +97,7 @@ export default function TestMicSelectPage() {
 
         <div className="mac-card p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Select Microphone Device:
-            </label>
+            <label className="block text-sm font-medium mb-2">Select Microphone Device:</label>
             <select
               value={selectedDevice}
               onChange={(e) => setSelectedDevice(e.target.value)}
@@ -124,8 +120,8 @@ export default function TestMicSelectPage() {
                 status === "active"
                   ? "text-green-500"
                   : status === "error"
-                  ? "text-red-500"
-                  : "text-[--mac-text-secondary]"
+                    ? "text-red-500"
+                    : "text-[--mac-text-secondary]"
               }
             >
               {status}
@@ -141,9 +137,7 @@ export default function TestMicSelectPage() {
           {status === "active" && (
             <div>
               <strong>Volume:</strong>{" "}
-              <span
-                className={volume > 1 ? "text-green-500" : "text-yellow-500"}
-              >
+              <span className={volume > 1 ? "text-green-500" : "text-yellow-500"}>
                 {volume.toFixed(1)}%
               </span>
               <div className="mt-2 h-4 bg-[--mac-bg-secondary] rounded-full overflow-hidden">
@@ -161,11 +155,7 @@ export default function TestMicSelectPage() {
           )}
 
           <div className="flex gap-3">
-            <button
-              onClick={testMicrophone}
-              disabled={status === "active"}
-              className="mac-button"
-            >
+            <button onClick={testMicrophone} disabled={status === "active"} className="mac-button">
               Test Selected Device
             </button>
 
@@ -182,8 +172,7 @@ export default function TestMicSelectPage() {
             </p>
             <ul className="list-disc list-inside space-y-1">
               <li>
-                <strong>Select "MacBook Air Microphone"</strong> (NOT
-                BlackHole!)
+                <strong>Select "MacBook Air Microphone"</strong> (NOT BlackHole!)
               </li>
               <li>BlackHole is a virtual loopback - it won't capture your voice</li>
               <li>If volume is still 0%, check System Settings → Sound → Input</li>

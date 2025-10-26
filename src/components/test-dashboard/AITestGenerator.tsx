@@ -271,9 +271,7 @@ test.describe('${prompt}', () => {
             {/* Advanced Options */}
             <Card className="mac-card bg-muted/50">
               <CardContent className="p-4 space-y-3">
-                <h4 className="mac-title">
-                  Advanced Options
-                </h4>
+                <h4 className="mac-title">Advanced Options</h4>
                 <div className="space-y-2 text-sm">
                   <label className="flex items-center gap-2">
                     <input type="checkbox" className="rounded" defaultChecked />

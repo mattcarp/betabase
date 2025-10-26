@@ -47,6 +47,7 @@ Through live browser testing with Playwright, I identified **two critical bugs**
 ```
 
 **Interpretation**:
+
 - Connection succeeds and works for ~2-3 seconds
 - AI agent produces audio output (3-12% levels)
 - Something closes the WebSocket unexpectedly
@@ -61,6 +62,7 @@ Through live browser testing with Playwright, I identified **two critical bugs**
 ### Root Cause
 
 `src/components/ConversationalAI.tsx` hardcoded `autoReconnect: true` in **three locations**:
+
 - Line 81: `startConversation()` ref method
 - Line 96: `toggleConversation()` ref method
 - Line 113: `handleToggle()` button handler
@@ -68,6 +70,7 @@ Through live browser testing with Playwright, I identified **two critical bugs**
 ### Impact
 
 When the WebSocket disconnected (for any reason), the `onDisconnect` handler in the hook automatically retried after 2 seconds, creating an infinite loop that:
+
 - Generated ~2 signed URL requests per second
 - Consumed ElevenLabs API quota
 - Masked the actual disconnect error with reconnection noise
@@ -94,9 +97,11 @@ useEffect(() => {
   if (status !== "connected") return;
 
   const volumeCheckInterval = setInterval(() => {
-    const inputVol = conversation.getInputVolume?.() ?? 0;  // ❌ Crashes if socket closed
+    const inputVol = conversation.getInputVolume?.() ?? 0; // ❌ Crashes if socket closed
     const outputVol = conversation.getOutputVolume?.() ?? 0; // ❌ Crashes if socket closed
-    console.log(`🎤 Audio levels - Input: ${(inputVol * 100).toFixed(1)}%, Output: ${(outputVol * 100).toFixed(1)}%`);
+    console.log(
+      `🎤 Audio levels - Input: ${(inputVol * 100).toFixed(1)}%, Output: ${(outputVol * 100).toFixed(1)}%`
+    );
 
     setUserAudioLevel(inputVol);
     setAiAudioLevel(outputVol);
@@ -135,7 +140,9 @@ useEffect(() => {
     try {
       const inputVol = conversation.getInputVolume?.() ?? 0;
       const outputVol = conversation.getOutputVolume?.() ?? 0;
-      console.log(`🎤 Audio levels - Input: ${(inputVol * 100).toFixed(1)}%, Output: ${(outputVol * 100).toFixed(1)}%`);
+      console.log(
+        `🎤 Audio levels - Input: ${(inputVol * 100).toFixed(1)}%, Output: ${(outputVol * 100).toFixed(1)}%`
+      );
 
       setUserAudioLevel(inputVol);
       setAiAudioLevel(outputVol);
@@ -174,12 +181,14 @@ useEffect(() => {
 **Theory**: The `@elevenlabs/react` SDK might have a bug or aggressive timeout.
 
 **Evidence**:
+
 - Connection works initially (rules out basic config issues)
 - Consistent 2-3 second disconnect (suggests timeout)
 - No browser errors before disconnect (rules out permission issues)
 - Audio output proves bidirectional communication works
 
 **Next Steps**:
+
 - Check SDK version: `npm list @elevenlabs/react`
 - Update to latest: `npm update @elevenlabs/react`
 - Review SDK changelog for WebSocket fixes
@@ -190,6 +199,7 @@ useEffect(() => {
 **Theory**: Bluetooth headphones (Matties XM5) incompatible with WebRTC.
 
 **Evidence from status docs**:
+
 - User using Bluetooth headphones
 - WebRTC notoriously finicky with Bluetooth
 - Input level stuck at 0.0% (microphone not capturing)
@@ -201,6 +211,7 @@ useEffect(() => {
 **Theory**: ElevenLabs agent VAD settings causing premature disconnect.
 
 **Evidence from agent config**:
+
 ```json
 {
   "turn": {
@@ -222,6 +233,7 @@ useEffect(() => {
 **Theory**: Corporate firewall or VPN dropping WebSocket connections.
 
 **Counter-evidence**:
+
 - Connection succeeds initially (firewall would block immediately)
 - Audio flows for 2-3 seconds (data is passing through)
 - Local dev server (not going through complex network)
@@ -231,6 +243,7 @@ useEffect(() => {
 **Theory**: Next.js Hot Module Replacement closing WebSocket during rebuild.
 
 **Counter-evidence**:
+
 - Happens on first load (no HMR yet)
 - Consistent behavior (not random like HMR)
 
@@ -239,11 +252,13 @@ useEffect(() => {
 ## Files Modified
 
 ### 1. `src/components/ConversationalAI.tsx`
+
 **Changes**: Disabled auto-reconnect in 3 locations
 **Lines**: 81, 96, 113
 **Reason**: Prevent infinite reconnection loop masking real errors
 
 ### 2. `src/hooks/useElevenLabsConversation.ts`
+
 **Changes**: Added defensive state checking and error handling to volume monitoring
 **Lines**: 137-167
 **Reason**: Prevent "WebSocket already CLOSING" errors from crashing volume polling
@@ -263,6 +278,7 @@ useEffect(() => {
    - Console errors should be minimal or absent
 
 **Success Criteria**:
+
 - No infinite "Auto-reconnecting..." messages
 - No flood of "WebSocket already CLOSING" errors
 - Single clean disconnect
@@ -276,6 +292,7 @@ useEffect(() => {
 5. **Speak into microphone**
 
 **Success Criteria**:
+
 - Input level shows > 0% when speaking
 - Connection stays open longer than 3 seconds
 - Agent responds with voice
@@ -347,12 +364,14 @@ I verified the ElevenLabs agent via API - configuration is **correct**:
 ### Technical Investigation (If Issue Persists)
 
 1. **Update ElevenLabs SDK**:
+
    ```bash
    npm update @elevenlabs/react
    npm list @elevenlabs/react  # Check version
    ```
 
 2. **Add WebSocket debugging**:
+
    ```typescript
    // In useElevenLabsConversation.ts, add to useConversation config:
    onConnect: async () => {
@@ -390,6 +409,7 @@ I verified the ElevenLabs agent via API - configuration is **correct**:
 ## Conclusion
 
 **Two critical bugs fixed**:
+
 1. ✅ Infinite reconnection loop eliminated
 2. ✅ Volume monitoring race condition resolved
 
@@ -397,10 +417,12 @@ I verified the ElevenLabs agent via API - configuration is **correct**:
 ❓ WebSocket closes after 2-3 seconds (cause unknown)
 
 **Most likely culprit**:
+
 - ElevenLabs SDK bug/timeout
 - Bluetooth audio device incompatibility
 
 **Good news**:
+
 - Connection DOES work initially
 - Audio DOES flow (6-12% output proves agent responding)
 - Configuration is correct

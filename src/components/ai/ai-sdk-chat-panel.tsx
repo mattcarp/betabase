@@ -2024,32 +2024,6 @@ export function AiSdkChatPanel({
             disabled={isMaxMessagesReached || isLoading}
             className="resize-none border-0 bg-transparent focus:ring-0 placeholder:text-muted-foreground/60"
           />
-          {/* Last prompt reminder - moved above toolbar */}
-          {lastPrompt && (
-            <div className="flex items-center gap-2 px-4 py-2 text-xs text-muted-foreground bg-muted/30 border border-border/30 rounded-md mb-2">
-              <MessageCircle className="h-3 w-3 flex-shrink-0" />
-              <span className="text-xs opacity-75">Last:</span>
-              <span className="truncate flex-1 font-medium">{lastPrompt}</span>
-              <Button
-                className="mac-button mac-button-outline"
-                variant="ghost"
-                className="mac-button mac-button-outline"
-                size="sm"
-                onClick={() => {
-                  setLastPrompt("");
-                  try {
-                    if (typeof window !== "undefined") {
-                      window.localStorage.removeItem(`siam.lastPrompt.${chatId}`);
-                    }
-                  } catch {}
-                }}
-                className="h-4 w-4 p-0 hover:bg-destructive/20 opacity-60 hover:opacity-100 flex-shrink-0"
-                title="Clear last prompt reminder"
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            </div>
-          )}
 
           <PromptInputToolbar className="border-t border-zinc-800/50 bg-zinc-900/30">
             <PromptInputTools className="gap-2">

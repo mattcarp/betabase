@@ -3,31 +3,40 @@
 ## Issues Identified
 
 ### 1. **Missing Supabase Vector Function** ❌ FIXED
+
 **Problem**: The `match_aoma_vectors` function doesn't exist in Supabase
+
 - Vector search fails immediately with "function not found" error
 - Falls back to Railway MCP without local vector cache
 
 **Fix**: Deploy SQL function manually
+
 - **File**: `sql/create-match-aoma-vectors-function.sql`
 - **Guide**: See `SUPABASE-DEPLOYMENT-GUIDE.md` for step-by-step instructions
 - **Impact**: Enables fast local vector search, reduces Railway API calls
 
 ### 2. **Railway MCP Server Timeout** ❌ FIXED
+
 **Problem**: 30-second timeout was too aggressive for Railway responses (12-15s typical)
+
 - When timeout occurred, NO context was provided to AI
 - AI hallucinated without any AOMA knowledge
 
 **Fix**: Increased timeout from 30s to 45s
+
 - **File**: `app/api/chat/route.ts:357-362`
 - **Change**: Timeout now 45000ms instead of 30000ms
 - **Impact**: Railway has enough time to respond, context is provided to AI
 
 ### 3. **Weak Anti-Hallucination Prompts** ❌ FIXED
+
 **Problem**: GPT-4o-mini was ignoring AOMA context and making up answers
+
 - Even with 1688 chars of correct context, AI fabricated workflows
 - Said "Asset and Operations Management" instead of correct "Asset and Offering Management"
 
 **Fix**: Strengthened system prompt with explicit rules
+
 - **File**: `app/api/chat/route.ts:494-517`
 - **Changes**:
   - Added `**CRITICAL: AOMA KNOWLEDGE CONTEXT PROVIDED BELOW**` header
@@ -37,13 +46,17 @@
   - Force AI to acknowledge when context is insufficient
 
 ### 4. **Model Selection for AOMA Queries** ✅ ALREADY OPTIMAL
+
 **Status**: Already using GPT-5 for AOMA queries
+
 - **File**: `src/services/modelConfig.ts:81-87`
 - GPT-5 with temp=1, maxTokens=6000
 - Much better instruction following than gpt-4o-mini
 
 ### 5. **Context Logging for Debugging** ✅ ADDED
+
 **Added**: Development-mode context preview logging
+
 - **File**: `app/api/chat/route.ts:548-553`
 - Logs first 500 chars of AOMA context in dev mode
 - Helps debug what context is actually being sent to AI
@@ -51,6 +64,7 @@
 ## Testing Results
 
 ### Railway MCP Server Performance
+
 - ✅ Status: Healthy
 - ✅ Response time: ~12 seconds (well under 45s timeout)
 - ✅ Correct definition: "Asset and Offering Management Application"
@@ -58,6 +72,7 @@
 - ✅ Supabase integration: Working
 
 ### Before Fixes
+
 ```
 User: "What is AOMA?"
 AI: "AOMA stands for Asset and Operations Management Application..."
@@ -67,6 +82,7 @@ AI: "AOMA stands for Asset and Operations Management Application..."
 ```
 
 ### After Fixes (Expected)
+
 ```
 User: "What is AOMA?"
 AI: "AOMA, or Asset and Offering Management Application, is a digital library..."
@@ -78,18 +94,21 @@ AI: "AOMA, or Asset and Offering Management Application, is a digital library...
 ## Deployment Checklist
 
 ### Critical (Must Do)
+
 - [ ] **Deploy Supabase Function** - Follow `SUPABASE-DEPLOYMENT-GUIDE.md`
   - Open Supabase SQL Editor
   - Run `sql/create-match-aoma-vectors-function.sql`
   - Verify with `SELECT routine_name FROM information_schema.routines WHERE routine_name = 'match_aoma_vectors'`
 
 ### Already Applied (In Code)
+
 - [x] Increased Railway timeout to 45s
 - [x] Strengthened anti-hallucination prompts
 - [x] Added context logging for debugging
 - [x] Using GPT-5 for AOMA queries
 
 ### Testing Steps
+
 1. Deploy Supabase function
 2. Restart dev server: `npm run dev`
 3. Test chat with: `curl -X POST http://localhost:3000/api/chat -H "Content-Type: application/json" -d '{"messages":[{"role":"user","content":"What is AOMA?"}]}'`
@@ -102,7 +121,9 @@ AI: "AOMA, or Asset and Offering Management Application, is a digital library...
 ## Production Deployment
 
 ### Environment Variables (Render)
+
 Ensure these are set in Render dashboard:
+
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://kfxetwuuzljhybfgmpuc.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon_key>
@@ -112,6 +133,7 @@ OPENAI_API_KEY=<openai_key>
 ```
 
 ### Deployment Steps
+
 1. Deploy Supabase function (same SQL as local)
 2. Commit and push code changes:
    ```bash
@@ -129,12 +151,14 @@ OPENAI_API_KEY=<openai_key>
 ## Monitoring
 
 ### Key Metrics to Watch
+
 - **AOMA Connection Status**: Should be "success" not "failed" or "timeout"
 - **Context Length**: Should be >1000 chars for most queries
 - **Response Time**: Railway ~12s + AI streaming ~10-20s = ~30s total
 - **Error Rate**: Watch for Supabase "function not found" errors (should be 0%)
 
 ### Debug Commands
+
 ```bash
 # Check Railway health
 curl https://luminous-dedication-production.up.railway.app/health

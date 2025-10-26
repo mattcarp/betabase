@@ -18,6 +18,7 @@ After installing BlackHole 2ch (virtual audio loopback), Chrome began using it a
 ## Diagnostic Steps
 
 ### 1. System Audio Check
+
 ```bash
 system_profiler SPAudioDataType
 # Showed BlackHole 2ch + MacBook Air Microphone
@@ -27,21 +28,24 @@ osascript -e 'get volume settings'
 ```
 
 ### 2. Browser Permission Check
+
 ```javascript
-navigator.permissions.query({name: 'microphone'})
+navigator.permissions.query({ name: "microphone" });
 // Result: "granted" ✅
 
-navigator.mediaDevices.getUserMedia({ audio: true })
+navigator.mediaDevices.getUserMedia({ audio: true });
 // Got stream, but 0% volume - wrong device!
 ```
 
 ### 3. Manual Device Selection Test
+
 Created `/app/test-mic-select/page.tsx` to manually select devices.
 **Result**: MacBook Air Microphone worked perfectly at 75% input volume!
 
 ## Solution
 
 ### Fix 1: Increase System Input Volume
+
 ```bash
 osascript -e 'set volume input volume 75'
 # Increased from 23% → 75%
@@ -90,11 +94,13 @@ if (microphoneDeviceId) {
 ## Verification
 
 **Before Fix**:
+
 - Input levels: **0.0%** (stuck)
 - Device used: **BlackHole 2ch** (wrong)
 - System volume: **23%** (too low)
 
 **After Fix**:
+
 - Input levels: **0.5-5%** when speaking ✅
 - Device used: **MacBook Air Microphone** ✅
 - System volume: **75%** ✅
@@ -109,16 +115,19 @@ if (microphoneDeviceId) {
 ## Alternative Solutions
 
 ### Option A: Uninstall BlackHole
+
 ```bash
 brew uninstall blackhole-2ch
 ```
 
 ### Option B: Set Chrome Default Device
+
 1. Go to `chrome://settings/content/microphone`
 2. Select "MacBook Air Microphone" as default
 3. Restart browser
 
 ### Option C: macOS System Default (Already Done)
+
 ```bash
 # MacBook Air Microphone is already the system default
 system_profiler SPAudioDataType | grep "Default Input"
@@ -136,6 +145,7 @@ system_profiler SPAudioDataType | grep "Default Input"
 ## Prevention
 
 **Before installing virtual audio devices:**
+
 1. Note current default microphone in System Settings
 2. After installation, verify browser is still using correct device
 3. Test microphone in browser with `navigator.mediaDevices.getUserMedia()`

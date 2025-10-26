@@ -5,6 +5,7 @@ Automated continuous integration and deployment pipeline for SIAM.
 ## Pipeline Overview
 
 **Automated workflows:**
+
 1. Pre-commit hooks (local)
 2. Pre-push hooks (local)
 3. PR checks (GitHub Actions)
@@ -17,6 +18,7 @@ Automated continuous integration and deployment pipeline for SIAM.
 **Runs on**: Every `git commit`
 
 **What runs**:
+
 1. ESLint on staged `.js`, `.jsx`, `.ts`, `.tsx` files
 2. Prettier on all staged files
 3. MAC Design System compliance check
@@ -24,6 +26,7 @@ Automated continuous integration and deployment pipeline for SIAM.
 **Configuration**: `.husky/pre-commit`
 
 **Bypass** (not recommended):
+
 ```bash
 git commit --no-verify -m "emergency fix"
 ```
@@ -35,17 +38,20 @@ See [CODE-QUALITY.md](../development/CODE-QUALITY.md) for details.
 **Runs on**: Every `git push`
 
 **Phase 1: Code Quality** (~30 seconds)
+
 - Merge conflict detection
 - Prettier formatting validation
 - ESLint linting
 
 **Phase 2: Tests** (depends on branch)
+
 - Feature branches: Smoke tests (~2 minutes)
 - Main/develop: Critical tests (~5 minutes)
 
 **Configuration**: `.husky/pre-push`
 
 **Bypass** (not recommended):
+
 ```bash
 git push --no-verify
 ```
@@ -57,9 +63,11 @@ git push --no-verify
 **File**: `.github/workflows/pr-merge-deploy.yml`
 
 **Triggers on**:
+
 - Pull request merged to `main`
 
 **Steps**:
+
 1. Detect PR merge event
 2. Trigger Render deployment (via deploy hook or auto-deploy)
 3. Wait for deployment to complete
@@ -71,6 +79,7 @@ git push --no-verify
 9. Clean up merged branch (if `claude/*`)
 
 **Example PR comment**:
+
 ```markdown
 ## Deployment Status: ✅ Success
 
@@ -80,6 +89,7 @@ git push --no-verify
 - Deployment URL: https://thebetabase.com
 
 Tests passed:
+
 - Health endpoint responding
 - Build timestamp current
 - No console errors detected
@@ -90,12 +100,14 @@ Tests passed:
 **File**: `.github/workflows/ci-cd.yml`
 
 **Triggers on**:
+
 - Push to any branch
 - Pull request opened/updated
 
 **Jobs**:
 
 **1. Lint & Type Check**
+
 ```yaml
 - Install dependencies
 - Run ESLint
@@ -105,6 +117,7 @@ Tests passed:
 ```
 
 **2. Test**
+
 ```yaml
 - Install dependencies
 - Install Playwright browsers
@@ -115,6 +128,7 @@ Tests passed:
 ```
 
 **3. Build**
+
 ```yaml
 - Install dependencies
 - Generate build info
@@ -124,6 +138,7 @@ Tests passed:
 ```
 
 **4. Deploy (main branch only)**
+
 ```yaml
 - Trigger Render deployment
 - Wait for deployment
@@ -136,22 +151,24 @@ Tests passed:
 **Configuration**: `render.yaml`
 
 **Auto-deploy settings**:
+
 ```yaml
 services:
   - type: web
     name: siam-app
     env: node
     plan: starter
-    branch: main          # Auto-deploy from this branch
+    branch: main # Auto-deploy from this branch
     buildCommand: npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
-    autoDeploy: true      # Enable auto-deploy
+    autoDeploy: true # Enable auto-deploy
 ```
 
 **How it works**:
+
 1. GitHub webhook notifies Render of push to `main`
 2. Render clones repository
 3. Runs `buildCommand`
@@ -166,6 +183,7 @@ services:
 **Optional but recommended for faster deployments**
 
 **Setup**:
+
 1. Get deploy hook URL from Render dashboard
 2. Add as GitHub repository variable:
    ```bash
@@ -174,6 +192,7 @@ services:
 3. GitHub Actions will use it automatically
 
 **Benefits**:
+
 - Faster deployment trigger
 - More reliable than push-based auto-deploy
 - Can manually trigger from GitHub Actions
@@ -183,6 +202,7 @@ services:
 ### Test Suites
 
 **Smoke Tests** (runs on all PRs):
+
 ```yaml
 - Authentication flow
 - Basic navigation
@@ -191,6 +211,7 @@ services:
 ```
 
 **Full E2E Tests** (runs on main):
+
 ```yaml
 - AOMA chat validation
 - Visual regression tests
@@ -199,6 +220,7 @@ services:
 ```
 
 **Production Tests** (runs post-deploy):
+
 ```yaml
 - Production health checks
 - Mailinator magic link flow
@@ -209,18 +231,19 @@ services:
 ### Test Configuration
 
 **Playwright config for CI**:
+
 ```typescript
 // playwright.config.ts
 export default defineConfig({
-  testDir: './tests',
+  testDir: "./tests",
   timeout: 30000,
-  retries: process.env.CI ? 2 : 0,  // Retry flaky tests in CI
-  workers: process.env.CI ? 1 : undefined,  // Run serially in CI
-  reporter: process.env.CI ? 'github' : 'html',  // GitHub annotations in CI
+  retries: process.env.CI ? 2 : 0, // Retry flaky tests in CI
+  workers: process.env.CI ? 1 : undefined, // Run serially in CI
+  reporter: process.env.CI ? "github" : "html", // GitHub annotations in CI
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
-    trace: 'retain-on-failure',  // Capture trace on failure
-    screenshot: 'only-on-failure',  // Screenshot on failure
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3000",
+    trace: "retain-on-failure", // Capture trace on failure
+    screenshot: "only-on-failure", // Screenshot on failure
   },
 });
 ```
@@ -230,6 +253,7 @@ export default defineConfig({
 ### GitHub Secrets
 
 **Required secrets**:
+
 - `RENDER_API_KEY` - For Render MCP operations
 - `RENDER_SERVICE_ID` - SIAM service ID
 - `NEXT_PUBLIC_SUPABASE_URL` - Supabase URL
@@ -237,18 +261,21 @@ export default defineConfig({
 - `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key
 
 **Optional secrets**:
+
 - `RENDER_DEPLOY_HOOK_URL` - Deploy hook for faster deployments
 - `SLACK_WEBHOOK_URL` - Slack notifications
 
 ### GitHub Variables
 
 **Configuration variables**:
+
 - `PRODUCTION_URL` - Production URL (https://thebetabase.com)
 - `STAGING_URL` - Staging URL (if applicable)
 
 ## Branch Protection Rules
 
 **Main branch protections**:
+
 - Require pull request before merging
 - Require status checks to pass:
   - Lint & Type Check
@@ -259,6 +286,7 @@ export default defineConfig({
 - Do not allow deletions
 
 **Feature branch cleanup**:
+
 - `claude/*` branches auto-deleted after PR merge
 - Stale branches deleted after 90 days
 
@@ -301,12 +329,14 @@ render logs siam-app --type build --tail 100
 ### Build Failures
 
 **Automatic actions**:
+
 1. GitHub Actions annotations on code
 2. Comment on PR with error details
 3. Prevent merge until fixed
 4. Notify PR author
 
 **Manual resolution**:
+
 1. Check GitHub Actions logs
 2. Fix errors locally
 3. Push fix to branch
@@ -315,12 +345,14 @@ render logs siam-app --type build --tail 100
 ### Deployment Failures
 
 **Automatic actions**:
+
 1. Render keeps previous version running
 2. GitHub Actions detects failure
 3. Issue created and assigned to PR author
 4. PR comment updated with failure status
 
 **Manual resolution**:
+
 1. Check Render logs: `render logs siam-app --type build`
 2. Check deployment status: `render deploys list siam-app`
 3. Fix issue and push to main
@@ -329,12 +361,14 @@ render logs siam-app --type build --tail 100
 ### Test Failures
 
 **Automatic actions**:
+
 1. Test results uploaded to GitHub
 2. Playwright report generated (if E2E failed)
 3. PR blocked from merging
 4. Annotations on failing test files
 
 **Manual resolution**:
+
 1. Review test failure logs
 2. Download Playwright report artifacts
 3. Fix failing tests
@@ -345,6 +379,7 @@ render logs siam-app --type build --tail 100
 ### Caching
 
 **npm dependencies**:
+
 ```yaml
 - uses: actions/cache@v3
   with:
@@ -353,6 +388,7 @@ render logs siam-app --type build --tail 100
 ```
 
 **Playwright browsers**:
+
 ```yaml
 - uses: actions/cache@v3
   with:
@@ -371,7 +407,7 @@ jobs:
   build:
     # Runs in parallel with lint and test
   deploy:
-    needs: [lint, test, build]  # Waits for all to complete
+    needs: [lint, test, build] # Waits for all to complete
 ```
 
 ## CI/CD Best Practices
@@ -407,4 +443,4 @@ render.yaml               # Render service configuration
 
 ---
 
-*For quick reference, see [QUICK-START.md](../QUICK-START.md)*
+_For quick reference, see [QUICK-START.md](../QUICK-START.md)_

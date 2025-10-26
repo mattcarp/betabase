@@ -26,7 +26,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
 
   // Wait for the verification code input to be visible
   const codeInput = page.locator('input[id="code"]');
-  await codeInput.waitFor({ state: 'visible', timeout: 10000 });
+  await codeInput.waitFor({ state: "visible", timeout: 10000 });
 
   const verificationVisible = await codeInput.isVisible();
   if (!verificationVisible) {
@@ -81,7 +81,7 @@ async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
   }
 }
 
-test.describe.configure({ mode: 'serial' });
+test.describe.configure({ mode: "serial" });
 
 test.describe("🔥 PRODUCTION DESTRUCTION TEST SUITE 🔥", () => {
   test.setTimeout(300000); // 5 minutes for the full suite

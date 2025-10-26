@@ -51,9 +51,7 @@ export default function TestElevenLabsPage() {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-blue-400">2.</span>
-              <span>
-                Speak your question - try asking about AOMA or the knowledge base content
-              </span>
+              <span>Speak your question - try asking about AOMA or the knowledge base content</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-blue-400">3.</span>

@@ -84,9 +84,7 @@ export default function TestMicPage() {
   return (
     <div className="min-h-screen bg-[--mac-bg-primary] p-8">
       <div className="max-w-2xl mx-auto space-y-6">
-        <h1 className="text-3xl font-light text-[--mac-text-primary]">
-          Microphone Test
-        </h1>
+        <h1 className="text-3xl font-light text-[--mac-text-primary]">Microphone Test</h1>
 
         <div className="mac-card p-6 space-y-4">
           <div>
@@ -96,8 +94,8 @@ export default function TestMicPage() {
                 status === "active"
                   ? "text-green-500"
                   : status === "error"
-                  ? "text-red-500"
-                  : "text-[--mac-text-secondary]"
+                    ? "text-red-500"
+                    : "text-[--mac-text-secondary]"
               }
             >
               {status}
@@ -119,8 +117,7 @@ export default function TestMicPage() {
 
           {status === "active" && (
             <div>
-              <strong>Volume:</strong>{" "}
-              <span className="text-green-500">{volume.toFixed(1)}%</span>
+              <strong>Volume:</strong> <span className="text-green-500">{volume.toFixed(1)}%</span>
               <div className="mt-2 h-4 bg-[--mac-bg-secondary] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-green-500 transition-all duration-100"
@@ -134,11 +131,7 @@ export default function TestMicPage() {
           )}
 
           <div className="flex gap-3">
-            <button
-              onClick={testMicrophone}
-              disabled={status === "active"}
-              className="mac-button"
-            >
+            <button onClick={testMicrophone} disabled={status === "active"} className="mac-button">
               Start Microphone Test
             </button>
 

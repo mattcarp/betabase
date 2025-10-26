@@ -349,9 +349,7 @@ export const FirecrawlPanel: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="flows" className="space-y-2">
-                <h4 className="mac-title">
-                  User Flows ({autAnalysis.userFlows.length})
-                </h4>
+                <h4 className="mac-title">User Flows ({autAnalysis.userFlows.length})</h4>
                 <ScrollArea className="h-[300px]">
                   {autAnalysis.userFlows.map((flow, idx) => (
                     <Card key={idx} className="mac-card mb-2">
@@ -376,9 +374,7 @@ export const FirecrawlPanel: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="apis" className="space-y-2">
-                <h4 className="mac-title">
-                  API Endpoints ({autAnalysis.apiEndpoints.length})
-                </h4>
+                <h4 className="mac-title">API Endpoints ({autAnalysis.apiEndpoints.length})</h4>
                 <ScrollArea className="h-[300px]">
                   <div className="space-y-1">
                     {autAnalysis.apiEndpoints.map((endpoint, idx) => (
@@ -488,9 +484,7 @@ export const FirecrawlPanel: React.FC = () => {
           {/* Common Issues */}
           {commonIssues.length > 0 && (
             <div className="pt-4 border-t">
-              <h4 className="mac-title">
-                Common Issues
-              </h4>
+              <h4 className="mac-title">Common Issues</h4>
               <div className="space-y-2">
                 {commonIssues.map((issue, idx) => (
                   <div key={idx} className="text-sm">
