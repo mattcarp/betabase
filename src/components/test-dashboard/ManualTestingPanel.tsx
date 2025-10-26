@@ -178,36 +178,36 @@ export const ManualTestingPanel: React.FC = () => {
   };
 
   return (
-    <div cclassName="flex flex-col h-full gap-6">
+    <div className="flex flex-col h-full gap-6">
       {/* Header */}
-      <div cclassName="flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <div>
           <h2
-            cclassName="mac-heading"
-            cclassName="mac-heading text-2xl font-light text-foreground mac-title"
+            className="mac-heading"
+            className="mac-heading text-2xl font-light text-foreground mac-title"
           >
             Manual Testing Mode
           </h2>
-          <p cclassName="text-sm text-muted-foreground mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             Interactive testing with built-in recording and annotation tools
           </p>
         </div>
 
         {/* Recording Status Badge */}
         <Badge
-          cclassName={cn(
+          className={cn(
             "mac-glass px-4 py-2 transition-all duration-300",
             recordingState === "recording" && "animate-pulse",
             recordingState === "idle" && "opacity-50"
           )}
         >
           <Circle
-            cclassName={cn(
+            className={cn(
               "h-3 w-3 mr-2 fill-current transition-colors duration-300",
               getRecordingColor()
             )}
           />
-          <span cclassName="text-sm font-medium">
+          <span className="text-sm font-medium">
             {recordingState === "recording" && "Recording"}
             {recordingState === "paused" && "Paused"}
             {recordingState === "idle" && "Not Recording"}
@@ -216,81 +216,81 @@ export const ManualTestingPanel: React.FC = () => {
       </div>
 
       {/* Main Split Layout */}
-      <div cclassName="grid grid-cols-[1fr,400px] gap-6 flex-1 min-h-0">
+      <div className="grid grid-cols-[1fr,400px] gap-6 flex-1 min-h-0">
         {/* Left Side - Browser View */}
-        <div cclassName="flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           {/* URL Bar */}
-          <Card cclassName="mac-card mac-glass border-[var(--mac-utility-border)]">
-            <CardContent cclassName="p-4">
-              <div cclassName="flex items-center gap-2">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
                   size="icon"
-                  cclassName="h-8 w-8 transition-all duration-200 hover:scale-110 mac-button mac-button-outline"
+                  className="h-8 w-8 transition-all duration-200 hover:scale-110 mac-button mac-button-outline"
                   onClick={() => {
                     if (iframeRef.current?.contentWindow) {
                       iframeRef.current.contentWindow.history.back();
                     }
                   }}
                 >
-                  <ChevronLeft cclassName="h-4 w-4" />
+                  <ChevronLeft className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  cclassName="h-8 w-8 transition-all duration-200 hover:scale-110 mac-button mac-button-outline"
+                  className="h-8 w-8 transition-all duration-200 hover:scale-110 mac-button mac-button-outline"
                   onClick={() => {
                     if (iframeRef.current?.contentWindow) {
                       iframeRef.current.contentWindow.history.forward();
                     }
                   }}
                 >
-                  <ChevronRight cclassName="h-4 w-4" />
+                  <ChevronRight className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  cclassName="h-8 w-8 transition-all duration-200 hover:scale-110 hover:rotate-180 mac-button mac-button-outline"
+                  className="h-8 w-8 transition-all duration-200 hover:scale-110 hover:rotate-180 mac-button mac-button-outline"
                   onClick={handleReload}
                 >
-                  <RefreshCw cclassName="h-4 w-4" />
+                  <RefreshCw className="h-4 w-4" />
                 </Button>
 
                 <Input
-                  cclassName="mac-input"
+                  className="mac-input"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Enter URL to test..."
-                  cclassName="flex-1 mac-input border-[var(--mac-utility-border)] focus:border-[var(--mac-primary-blue-400)] transition-all duration-200"
+                  className="flex-1 mac-input border-[var(--mac-utility-border)] focus:border-[var(--mac-primary-blue-400)] transition-all duration-200"
                 />
 
                 <Button
                   onClick={handleNavigate}
-                  cclassName="mac-button-primary shadow-lg hover:shadow-xl transition-all duration-200"
+                  className="mac-button-primary shadow-lg hover:shadow-xl transition-all duration-200"
                 >
                   Go
                 </Button>
               </div>
 
               {/* Viewport Selector */}
-              <div cclassName="flex items-center gap-2 mt-4">
-                <span cclassName="text-xs text-muted-foreground font-medium">Viewport:</span>
+              <div className="flex items-center gap-2 mt-4">
+                <span className="text-xs text-muted-foreground font-medium">Viewport:</span>
                 {(Object.keys(VIEWPORT_SIZES) as ViewportMode[]).map((mode) => {
                   const Icon = VIEWPORT_SIZES[mode].icon;
                   return (
                     <Button
-                      cclassName="mac-button mac-button-primary"
+                      className="mac-button mac-button-primary"
                       key={mode}
                       variant={viewport === mode ? "default" : "outline"}
                       size="sm"
                       onClick={() => setViewport(mode)}
-                      cclassName={cn(
+                      className={cn(
                         "gap-2 transition-all duration-300",
                         viewport === mode && "shadow-lg shadow-blue-500/20"
                       )}
                     >
-                      <Icon cclassName="h-3 w-3" />
+                      <Icon className="h-3 w-3" />
                       {VIEWPORT_SIZES[mode].label}
                     </Button>
                   );
@@ -300,11 +300,11 @@ export const ManualTestingPanel: React.FC = () => {
           </Card>
 
           {/* Browser Iframe */}
-          <Card cclassName="mac-card mac-glass border-[var(--mac-utility-border)] flex-1 overflow-hidden">
-            <CardContent cclassName="p-0 h-full">
-              <div cclassName="h-full w-full flex items-center justify-center bg-[var(--mac-surface-background)]">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border)] flex-1 overflow-hidden">
+            <CardContent className="p-0 h-full">
+              <div className="h-full w-full flex items-center justify-center bg-[var(--mac-surface-background)]">
                 <div
-                  cclassName="transition-all duration-500 ease-out h-full"
+                  className="transition-all duration-500 ease-out h-full"
                   style={{
                     width: VIEWPORT_SIZES[viewport].width,
                     maxWidth: "100%",
@@ -313,7 +313,7 @@ export const ManualTestingPanel: React.FC = () => {
                   <iframe
                     ref={iframeRef}
                     src={currentUrl}
-                    cclassName="w-full h-full border-0 rounded-lg shadow-2xl"
+                    className="w-full h-full border-0 rounded-lg shadow-2xl"
                     title="Application Under Test"
                     sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
                   />
@@ -324,25 +324,25 @@ export const ManualTestingPanel: React.FC = () => {
         </div>
 
         {/* Right Side - Control Panel */}
-        <div cclassName="flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           {/* Recording Controls */}
-          <Card cclassName="mac-card mac-glass border-[var(--mac-utility-border)]">
-            <CardContent cclassName="p-6">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
+            <CardContent className="p-6">
               <h3
-                cclassName="mac-title"
-                cclassName="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
+                className="mac-title"
+                className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
               >
-                <Circle cclassName="h-4 w-4 text-red-500" />
+                <Circle className="h-4 w-4 text-red-500" />
                 Recording Controls
               </h3>
 
-              <div cclassName="flex flex-col gap-2">
+              <div className="flex flex-col gap-2">
                 {recordingState === "idle" && (
                   <Button
                     onClick={handleStartRecording}
-                    cclassName="mac-button-primary w-full gap-2 shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="mac-button-primary w-full gap-2 shadow-lg hover:shadow-xl transition-all duration-300"
                   >
-                    <Circle cclassName="h-4 w-4 fill-red-500 text-red-500" />
+                    <Circle className="h-4 w-4 fill-red-500 text-red-500" />
                     Start Recording
                   </Button>
                 )}
@@ -352,17 +352,17 @@ export const ManualTestingPanel: React.FC = () => {
                     <Button
                       onClick={handlePauseRecording}
                       variant="outline"
-                      cclassName="w-full gap-2 transition-all duration-200 mac-button mac-button-outline"
+                      className="w-full gap-2 transition-all duration-200 mac-button mac-button-outline"
                     >
-                      <Pause cclassName="h-4 w-4" />
+                      <Pause className="h-4 w-4" />
                       Pause
                     </Button>
                     <Button
                       onClick={handleStopRecording}
                       variant="destructive"
-                      cclassName="w-full gap-2 transition-all duration-200 mac-button mac-button-primary"
+                      className="w-full gap-2 transition-all duration-200 mac-button mac-button-primary"
                     >
-                      <Square cclassName="h-4 w-4" />
+                      <Square className="h-4 w-4" />
                       Stop & Save
                     </Button>
                   </>
@@ -372,17 +372,17 @@ export const ManualTestingPanel: React.FC = () => {
                   <>
                     <Button
                       onClick={handleResumeRecording}
-                      cclassName="mac-button-primary w-full gap-2 shadow-lg transition-all duration-200"
+                      className="mac-button-primary w-full gap-2 shadow-lg transition-all duration-200"
                     >
-                      <Circle cclassName="h-4 w-4 fill-red-500 text-red-500" />
+                      <Circle className="h-4 w-4 fill-red-500 text-red-500" />
                       Resume
                     </Button>
                     <Button
                       onClick={handleStopRecording}
                       variant="destructive"
-                      cclassName="w-full gap-2 transition-all duration-200 mac-button mac-button-primary"
+                      className="w-full gap-2 transition-all duration-200 mac-button mac-button-primary"
                     >
-                      <Square cclassName="h-4 w-4" />
+                      <Square className="h-4 w-4" />
                       Stop & Save
                     </Button>
                   </>
@@ -392,22 +392,22 @@ export const ManualTestingPanel: React.FC = () => {
           </Card>
 
           {/* Session Info */}
-          <Card cclassName="mac-card mac-glass border-[var(--mac-utility-border)]">
-            <CardContent cclassName="p-6">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
+            <CardContent className="p-6">
               <h3
-                cclassName="mac-title"
-                cclassName="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
+                className="mac-title"
+                className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
               >
-                <Clock cclassName="h-4 w-4 text-blue-500" />
+                <Clock className="h-4 w-4 text-blue-500" />
                 Session Information
               </h3>
 
-              <div cclassName="space-y-3">
-                <div cclassName="flex items-center justify-between">
-                  <span cclassName="text-xs text-muted-foreground">Session Time</span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">Session Time</span>
                   <Badge
                     variant="outline"
-                    cclassName={cn(
+                    className={cn(
                       "font-mono transition-all duration-300",
                       recordingState === "recording" && "text-blue-400 border-blue-400/30"
                     )}
@@ -416,25 +416,25 @@ export const ManualTestingPanel: React.FC = () => {
                   </Badge>
                 </div>
 
-                <div cclassName="flex items-center justify-between">
-                  <span cclassName="text-xs text-muted-foreground">Interactions</span>
-                  <Badge variant="outline" cclassName="font-mono">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">Interactions</span>
+                  <Badge variant="outline" className="font-mono">
                     {sessionInfo.interactionCount}
                   </Badge>
                 </div>
 
-                <div cclassName="flex items-center justify-between">
-                  <span cclassName="text-xs text-muted-foreground">Screenshots</span>
-                  <Badge variant="outline" cclassName="font-mono">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">Screenshots</span>
+                  <Badge variant="outline" className="font-mono">
                     {sessionInfo.screenshots}
                   </Badge>
                 </div>
 
-                <div cclassName="flex items-center justify-between">
-                  <span cclassName="text-xs text-muted-foreground">Issues Flagged</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">Issues Flagged</span>
                   <Badge
                     variant="outline"
-                    cclassName={cn(
+                    className={cn(
                       "font-mono",
                       sessionInfo.issues > 0 && "text-red-400 border-red-400/30"
                     )}
@@ -443,9 +443,9 @@ export const ManualTestingPanel: React.FC = () => {
                   </Badge>
                 </div>
 
-                <div cclassName="flex items-center justify-between">
-                  <span cclassName="text-xs text-muted-foreground">Annotations</span>
-                  <Badge variant="outline" cclassName="font-mono">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">Annotations</span>
+                  <Badge variant="outline" className="font-mono">
                     {sessionInfo.annotations}
                   </Badge>
                 </div>
@@ -454,44 +454,44 @@ export const ManualTestingPanel: React.FC = () => {
           </Card>
 
           {/* Quick Actions */}
-          <Card cclassName="mac-card mac-glass border-[var(--mac-utility-border)]">
-            <CardContent cclassName="p-6">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
+            <CardContent className="p-6">
               <h3
-                cclassName="mac-title"
-                cclassName="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
+                className="mac-title"
+                className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
               >
-                <Maximize2 cclassName="h-4 w-4 text-purple-500" />
+                <Maximize2 className="h-4 w-4 text-purple-500" />
                 Quick Actions
               </h3>
 
-              <div cclassName="flex flex-col gap-2">
+              <div className="flex flex-col gap-2">
                 <Button
                   onClick={handleScreenshot}
                   variant="outline"
-                  cclassName="w-full gap-2 justify-start transition-all duration-200 hover:border-blue-400 hover:text-blue-400 mac-button mac-button-outline"
+                  className="w-full gap-2 justify-start transition-all duration-200 hover:border-blue-400 hover:text-blue-400 mac-button mac-button-outline"
                   disabled={recordingState === "idle"}
                 >
-                  <Camera cclassName="h-4 w-4" />
+                  <Camera className="h-4 w-4" />
                   Take Screenshot
                 </Button>
 
                 <Button
                   onClick={handleAnnotate}
                   variant="outline"
-                  cclassName="w-full gap-2 justify-start transition-all duration-200 hover:border-purple-400 hover:text-purple-400 mac-button mac-button-outline"
+                  className="w-full gap-2 justify-start transition-all duration-200 hover:border-purple-400 hover:text-purple-400 mac-button mac-button-outline"
                   disabled={recordingState === "idle"}
                 >
-                  <Edit3 cclassName="h-4 w-4" />
+                  <Edit3 className="h-4 w-4" />
                   Add Annotation
                 </Button>
 
                 <Button
                   onClick={handleFlagIssue}
                   variant="outline"
-                  cclassName="w-full gap-2 justify-start transition-all duration-200 hover:border-red-400 hover:text-red-400 mac-button mac-button-outline"
+                  className="w-full gap-2 justify-start transition-all duration-200 hover:border-red-400 hover:text-red-400 mac-button mac-button-outline"
                   disabled={recordingState === "idle"}
                 >
-                  <Flag cclassName="h-4 w-4" />
+                  <Flag className="h-4 w-4" />
                   Flag Issue
                 </Button>
               </div>
@@ -499,30 +499,30 @@ export const ManualTestingPanel: React.FC = () => {
           </Card>
 
           {/* Testing Tips */}
-          <Card cclassName="mac-card mac-glass border-[var(--mac-utility-border-elevated)] bg-gradient-to-br from-blue-950/20 to-purple-950/20">
-            <CardContent cclassName="p-6">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border-elevated)] bg-gradient-to-br from-blue-950/20 to-purple-950/20">
+            <CardContent className="p-6">
               <h3
-                cclassName="mac-title"
-                cclassName="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
+                className="mac-title"
+                className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
               >
-                <MousePointerClick cclassName="h-4 w-4 text-blue-400" />
+                <MousePointerClick className="h-4 w-4 text-blue-400" />
                 Testing Tips
               </h3>
-              <ul cclassName="space-y-2 text-xs text-muted-foreground">
-                <li cclassName="flex items-start gap-2">
-                  <span cclassName="text-blue-400 mt-0.5">•</span>
+              <ul className="space-y-2 text-xs text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-400 mt-0.5">•</span>
                   <span>Start recording before testing to capture all interactions</span>
                 </li>
-                <li cclassName="flex items-start gap-2">
-                  <span cclassName="text-blue-400 mt-0.5">•</span>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-400 mt-0.5">•</span>
                   <span>Use annotations to mark areas of interest</span>
                 </li>
-                <li cclassName="flex items-start gap-2">
-                  <span cclassName="text-blue-400 mt-0.5">•</span>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-400 mt-0.5">•</span>
                   <span>Flag issues immediately when discovered</span>
                 </li>
-                <li cclassName="flex items-start gap-2">
-                  <span cclassName="text-blue-400 mt-0.5">•</span>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-400 mt-0.5">•</span>
                   <span>Test across different viewport sizes</span>
                 </li>
               </ul>

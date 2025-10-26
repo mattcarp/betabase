@@ -7,7 +7,7 @@ interface VerificationCodeInputProps extends React.ComponentProps<"input"> {
 }
 
 export const VerificationCodeInput = forwardRef<HTMLInputElement, VerificationCodeInputProps>(
-  ({ onAutoSubmit, cclassName, ...props }, ref) => {
+  ({ onAutoSubmit, className, ...props }, ref) => {
     const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
       const target = e.target as HTMLInputElement;
       const value = target.value.replace(/\D/g, ""); // Only allow digits
@@ -33,13 +33,13 @@ export const VerificationCodeInput = forwardRef<HTMLInputElement, VerificationCo
         inputMode="numeric"
         pattern="[0-9]*"
         maxLength={6}
-        cclassName={cn(
+        className={cn(
           "mac-input",
           "text-center text-2xl tracking-[0.5em] font-mono",
           "bg-black/30 border-gray-600/50",
           "focus:border-neon-cyan focus:shadow-[0_0_20px_rgba(6,255,165,0.2)]",
           "transition-all duration-200",
-          cclassName
+          className
         )}
         onInput={handleInput}
         {...props}

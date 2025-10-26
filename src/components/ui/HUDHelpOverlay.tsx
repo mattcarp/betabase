@@ -22,7 +22,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
     {
       title: "Panel Management",
       icon: (
-        <svg cclassName="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -41,7 +41,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
     {
       title: "Navigation",
       icon: (
-        <svg cclassName="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -60,7 +60,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
     {
       title: "Customization",
       icon: (
-        <svg cclassName="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -80,7 +80,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
     {
       title: "Audio Control",
       icon: (
-        <svg cclassName="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -99,7 +99,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
     {
       title: "Accessibility",
       icon: (
-        <svg cclassName="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -118,7 +118,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
     {
       title: "General",
       icon: (
-        <svg cclassName="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -148,26 +148,26 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
 
   return (
     <div
-      cclassName="fixed inset-0 z-[100] flex items-center justify-center animate-in fade-in"
+      className="fixed inset-0 z-[100] flex items-center justify-center animate-in fade-in"
       role="dialog"
       aria-labelledby="help-overlay-title"
       aria-modal="true"
     >
       {/* Backdrop */}
       <div
-        cclassName="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Help Panel */}
-      <div cclassName="relative w-full max-w-4xl mx-4 floating-panel animate-in zoom-in-95 slide-in-from-bottom-10">
+      <div className="relative w-full max-w-4xl mx-4 floating-panel animate-in zoom-in-95 slide-in-from-bottom-10">
         {/* Header */}
-        <div cclassName="flex items-center justify-between px-6 py-4 border-b border-jarvis-panel-border">
-          <div cclassName="flex items-center gap-4">
-            <div cclassName="p-2 rounded-lg bg-jarvis-cyan/20">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-jarvis-panel-border">
+          <div className="flex items-center gap-4">
+            <div className="p-2 rounded-lg bg-jarvis-cyan/20">
               <svg
-                cclassName="w-6 h-6 text-jarvis-cyan"
+                className="w-6 h-6 text-jarvis-cyan"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -182,19 +182,19 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
             </div>
             <div>
               <h2
-                cclassName="mac-heading"
+                className="mac-heading"
                 id="help-overlay-title"
-                cclassName="mac-heading text-mac-text-primary"
+                className="mac-heading text-mac-text-primary"
               >
                 JARVIS HUD Help
               </h2>
-              <p cclassName="mac-body text-xs text-mac-text-muted mt-2">
+              <p className="mac-body text-xs text-mac-text-muted mt-2">
                 Keyboard shortcuts and interface guide
               </p>
             </div>
           </div>
-          <button onClick={onClose} cclassName="hud-icon-button" aria-label="Close help overlay">
-            <svg cclassName="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button onClick={onClose} className="hud-icon-button" aria-label="Close help overlay">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -206,15 +206,15 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
         </div>
 
         {/* Content */}
-        <div cclassName="flex h-[500px]">
+        <div className="flex h-[500px]">
           {/* Sidebar Navigation */}
-          <div cclassName="w-64 border-r border-jarvis-panel-border p-2 overflow-y-auto">
+          <div className="w-64 border-r border-jarvis-panel-border p-2 overflow-y-auto">
             <nav aria-label="Help sections">
               {helpSections.map((section, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedSection(index)}
-                  cclassName={cn(
+                  className={cn(
                     "w-full flex items-center gap-4 px-4 py-4 rounded-lg transition-all duration-200 mb-2",
                     selectedSection === index
                       ? "bg-jarvis-panel-active-bg-start border border-jarvis-cyan text-jarvis-cyan"
@@ -223,31 +223,31 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
                   aria-current={selectedSection === index ? "page" : undefined}
                 >
                   {section.icon}
-                  <span cclassName="mac-body font-medium">{section.title}</span>
+                  <span className="mac-body font-medium">{section.title}</span>
                 </button>
               ))}
             </nav>
           </div>
 
           {/* Content Area */}
-          <div cclassName="flex-1 p-6 overflow-y-auto">
-            <div cclassName="mb-6">
-              <h3 cclassName="mac-title">
+          <div className="flex-1 p-6 overflow-y-auto">
+            <div className="mb-6">
+              <h3 className="mac-title">
                 {helpSections[selectedSection].title}
               </h3>
-              <div cclassName="h-1 w-16 rounded-full bg-gradient-to-r from-jarvis-cyan to-jarvis-electric-blue" />
+              <div className="h-1 w-16 rounded-full bg-gradient-to-r from-jarvis-cyan to-jarvis-electric-blue" />
             </div>
 
-            <div cclassName="space-y-2">
+            <div className="space-y-2">
               {helpSections[selectedSection].shortcuts.map((shortcut, index) => (
                 <div
                   key={index}
-                  cclassName="group flex items-start justify-between p-4 rounded-lg border border-jarvis-panel-border bg-jarvis-panel-bg-start hover:bg-jarvis-panel-bg-end hover:border-jarvis-panel-active-border transition-all duration-200"
+                  className="group flex items-start justify-between p-4 rounded-lg border border-jarvis-panel-border bg-jarvis-panel-bg-start hover:bg-jarvis-panel-bg-end hover:border-jarvis-panel-active-border transition-all duration-200"
                 >
-                  <p cclassName="mac-body text-mac-text-secondary group-hover:text-mac-text-primary flex-1">
+                  <p className="mac-body text-mac-text-secondary group-hover:text-mac-text-primary flex-1">
                     {shortcut.description}
                   </p>
-                  <kbd cclassName="ml-4 px-4 py-2.5 rounded-lg bg-jarvis-panel-dark-bg-start border border-jarvis-panel-dark-border text-jarvis-cyan font-mono text-sm whitespace-nowrap">
+                  <kbd className="ml-4 px-4 py-2.5 rounded-lg bg-jarvis-panel-dark-bg-start border border-jarvis-panel-dark-border text-jarvis-cyan font-mono text-sm whitespace-nowrap">
                     {shortcut.key}
                   </kbd>
                 </div>
@@ -255,14 +255,14 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
             </div>
 
             {/* Additional Tips */}
-            <div cclassName="mt-8 p-4 rounded-lg border-l-4 border-jarvis-cyan bg-jarvis-cyan/5">
+            <div className="mt-8 p-4 rounded-lg border-l-4 border-jarvis-cyan bg-jarvis-cyan/5">
               <h4
-                cclassName="mac-title"
-                cclassName="mac-title mac-body font-semibold text-jarvis-cyan mb-2"
+                className="mac-title"
+                className="mac-title mac-body font-semibold text-jarvis-cyan mb-2"
               >
                 Pro Tip
               </h4>
-              <p cclassName="mac-body text-sm text-mac-text-secondary">
+              <p className="mac-body text-sm text-mac-text-secondary">
                 {selectedSection === 0 &&
                   "Drag panel headers to reposition them anywhere on screen. Your layout will be saved automatically."}
                 {selectedSection === 1 &&
@@ -281,17 +281,17 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
         </div>
 
         {/* Footer */}
-        <div cclassName="px-6 py-4 border-t border-jarvis-panel-border bg-jarvis-panel-dark-bg-start/50 flex items-center justify-between">
-          <p cclassName="text-sm text-mac-text-muted">
+        <div className="px-6 py-4 border-t border-jarvis-panel-border bg-jarvis-panel-dark-bg-start/50 flex items-center justify-between">
+          <p className="text-sm text-mac-text-muted">
             Press{" "}
-            <kbd cclassName="px-2 py-2 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">F1</kbd>{" "}
+            <kbd className="px-2 py-2 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">F1</kbd>{" "}
             or{" "}
-            <kbd cclassName="px-2 py-2 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">
+            <kbd className="px-2 py-2 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">
               Ctrl+Shift+H
             </kbd>{" "}
             anytime to open this help
           </p>
-          <p cclassName="text-xs text-mac-text-muted">
+          <p className="text-xs text-mac-text-muted">
             SIAM v{process.env.NEXT_PUBLIC_VERSION || "1.0.0"} • JARVIS Interface
           </p>
         </div>

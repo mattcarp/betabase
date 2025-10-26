@@ -18,17 +18,17 @@ export type ActionsProps = ComponentProps<"div"> & {
   actions?: ActionItem[];
 };
 
-export const Actions = ({ cclassName, children, actions, ...props }: ActionsProps) => {
+export const Actions = ({ className, children, actions, ...props }: ActionsProps) => {
   if (actions && actions.length > 0) {
     return (
-      <div cclassName={cn("flex flex-col gap-2", cclassName)} {...props}>
+      <div className={cn("flex flex-col gap-2", className)} {...props}>
         {actions.map((action, index) => (
           <Button
             key={index}
             onClick={action.onClick}
             variant={action.variant || "ghost"}
             size="sm"
-            cclassName={cn(
+            className={cn(
               "justify-start text-xs h-8 px-4 py-2.5 font-light",
               "mac-button-ghost hover:bg-mac-state-hover",
               "transition-all duration-150 ease-out",
@@ -39,7 +39,7 @@ export const Actions = ({ cclassName, children, actions, ...props }: ActionsProp
                 "text-red-400/80 hover:text-red-400 hover:bg-red-950/20 hover:border-red-900/20"
             )}
           >
-            {action.icon && <span cclassName="mr-2 opacity-70">{action.icon}</span>}
+            {action.icon && <span className="mr-2 opacity-70">{action.icon}</span>}
             <span>{action.label}</span>
           </Button>
         ))}
@@ -48,7 +48,7 @@ export const Actions = ({ cclassName, children, actions, ...props }: ActionsProp
   }
 
   return (
-    <div cclassName={cn("flex items-center gap-2", cclassName)} {...props}>
+    <div className={cn("flex items-center gap-2", className)} {...props}>
       {children}
     </div>
   );
@@ -63,17 +63,17 @@ export const Action = ({
   tooltip,
   children,
   label,
-  cclassName,
+  className,
   variant = "ghost",
   size = "icon",
   ...props
 }: ActionProps) => {
   const button = (
     <Button
-      cclassName={cn(
+      className={cn(
         "mac-button mac-button-primary",
         "!h-8 !w-8 !p-0 text-muted-foreground hover:text-foreground shrink-0",
-        cclassName
+        className
       )}
       size={size}
       type="button"
@@ -81,7 +81,7 @@ export const Action = ({
       {...props}
     >
       {children}
-      <span cclassName="sr-only">{label || tooltip}</span>
+      <span className="sr-only">{label || tooltip}</span>
     </Button>
   );
 

@@ -149,19 +149,19 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
   };
 
   return (
-    <div cclassName="w-full max-w-2xl mx-auto p-6">
-      <div cclassName="mb-6">
-        <h3 cclassName="mac-title">
+    <div className="w-full max-w-2xl mx-auto p-6">
+      <div className="mb-6">
+        <h3 className="mac-title">
           Document Upload
         </h3>
-        <p cclassName="text-sm text-gray-400">
+        <p className="text-sm text-gray-400">
           Upload documents to the AOMA knowledge base for enhanced assistance
         </p>
       </div>
 
       {/* Upload Area */}
       <div
-        cclassName={`relative border-2 border-dashed rounded-lg p-8 text-center transition-all ${
+        className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-all ${
           isDragging
             ? "border-blue-500 bg-blue-500/10"
             : "border-gray-600 hover:border-gray-500 bg-gray-800/50"
@@ -173,19 +173,19 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
         <input
           type="file"
           id="file-upload"
-          cclassName="hidden"
+          className="hidden"
           onChange={handleFileSelect}
           accept=".pdf,.txt,.md,.doc,.docx,.png,.jpg,.jpeg,.csv,.json"
           disabled={isUploading}
         />
 
-        <label htmlFor="file-upload" cclassName="cursor-pointer">
-          <div cclassName="flex flex-col items-center">
+        <label htmlFor="file-upload" className="cursor-pointer">
+          <div className="flex flex-col items-center">
             {uploadStatus === "idle" && (
               <>
-                <Upload cclassName="w-12 h-12 text-blue-500 mb-4" />
-                <p cclassName="mac-body text-white mb-2">Drop files here or click to browse</p>
-                <p cclassName="text-sm text-gray-400">
+                <Upload className="w-12 h-12 text-blue-500 mb-4" />
+                <p className="mac-body text-white mb-2">Drop files here or click to browse</p>
+                <p className="text-sm text-gray-400">
                   Supports PDF, TXT, MD, DOC, DOCX, Images, CSV, JSON (max 50MB)
                 </p>
               </>
@@ -193,33 +193,33 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
 
             {uploadStatus === "uploading" && (
               <>
-                <Loader2 cclassName="w-12 h-12 text-blue-500 mb-4 animate-spin" />
-                <p cclassName="mac-body text-white mb-2">Uploading...</p>
-                <Progress value={uploadProgress} cclassName="w-full max-w-xs mt-2" />
+                <Loader2 className="w-12 h-12 text-blue-500 mb-4 animate-spin" />
+                <p className="mac-body text-white mb-2">Uploading...</p>
+                <Progress value={uploadProgress} className="w-full max-w-xs mt-2" />
               </>
             )}
 
             {uploadStatus === "processing" && (
               <>
-                <Loader2 cclassName="w-12 h-12 text-blue-500 mb-4 animate-spin" />
-                <p cclassName="mac-body text-white mb-2">Processing document...</p>
-                <p cclassName="text-sm text-gray-400">Adding to knowledge base</p>
+                <Loader2 className="w-12 h-12 text-blue-500 mb-4 animate-spin" />
+                <p className="mac-body text-white mb-2">Processing document...</p>
+                <p className="text-sm text-gray-400">Adding to knowledge base</p>
               </>
             )}
 
             {uploadStatus === "complete" && (
               <>
-                <CheckCircle cclassName="w-12 h-12 text-green-500 mb-4" />
-                <p cclassName="mac-body text-white mb-2">Upload complete!</p>
-                <p cclassName="text-sm text-gray-400">Document added to knowledge base</p>
+                <CheckCircle className="w-12 h-12 text-green-500 mb-4" />
+                <p className="mac-body text-white mb-2">Upload complete!</p>
+                <p className="text-sm text-gray-400">Document added to knowledge base</p>
               </>
             )}
 
             {uploadStatus === "error" && (
               <>
-                <AlertCircle cclassName="w-12 h-12 text-red-500 mb-4" />
-                <p cclassName="mac-body text-white mb-2">Upload failed</p>
-                <p cclassName="text-sm text-red-400">{errorMessage}</p>
+                <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
+                <p className="mac-body text-white mb-2">Upload failed</p>
+                <p className="text-sm text-red-400">{errorMessage}</p>
               </>
             )}
           </div>
@@ -228,24 +228,24 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
 
       {/* Uploaded Files List */}
       {uploadedFiles.length > 0 && (
-        <div cclassName="mt-6">
-          <h4 cclassName="mac-title">
+        <div className="mt-6">
+          <h4 className="mac-title">
             Uploaded Documents
           </h4>
-          <div cclassName="space-y-2">
+          <div className="space-y-2">
             {uploadedFiles.map((file) => (
               <div
                 key={file.id}
-                cclassName="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg border border-gray-700"
+                className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg border border-gray-700"
               >
-                <div cclassName="flex items-center gap-4">
-                  <File cclassName="w-5 h-5 text-blue-500" />
+                <div className="flex items-center gap-4">
+                  <File className="w-5 h-5 text-blue-500" />
                   <div>
-                    <p cclassName="text-sm text-white">{file.name}</p>
-                    <p cclassName="text-xs text-gray-400">{formatFileSize(file.size)}</p>
+                    <p className="text-sm text-white">{file.name}</p>
+                    <p className="text-xs text-gray-400">{formatFileSize(file.size)}</p>
                   </div>
                 </div>
-                <CheckCircle cclassName="w-5 h-5 text-green-500" />
+                <CheckCircle className="w-5 h-5 text-green-500" />
               </div>
             ))}
           </div>
@@ -253,9 +253,9 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       )}
 
       {/* Info Alert */}
-      <Alert cclassName="mt-6 border-blue-500/20 bg-blue-500/5">
-        <AlertCircle cclassName="h-4 w-4 text-blue-500" />
-        <AlertDescription cclassName="text-gray-300">
+      <Alert className="mt-6 border-blue-500/20 bg-blue-500/5">
+        <AlertCircle className="h-4 w-4 text-blue-500" />
+        <AlertDescription className="text-gray-300">
           Documents are indexed and searchable immediately after upload. The AI will use this
           knowledge to provide more accurate AOMA-specific answers.
         </AlertDescription>

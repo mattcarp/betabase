@@ -154,9 +154,9 @@ export const AOMAPerformanceDashboard: React.FC = () => {
 
   if (!stats) {
     return (
-      <div cclassName="flex items-center justify-center h-64">
-        <div cclassName="text-center">
-          <Activity cclassName="h-8 w-8 animate-spin mx-auto mb-4" />
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <Activity className="h-8 w-8 animate-spin mx-auto mb-4" />
           <p>Loading performance metrics...</p>
         </div>
       </div>
@@ -164,37 +164,37 @@ export const AOMAPerformanceDashboard: React.FC = () => {
   }
 
   return (
-    <div cclassName="space-y-6">
+    <div className="space-y-6">
       {/* Header */}
-      <div cclassName="flex justify-between items-center">
+      <div className="flex justify-between items-center">
         <div>
-          <h2 cclassName="mac-heading">
+          <h2 className="mac-heading">
             AOMA Performance Dashboard
           </h2>
-          <p cclassName="mac-body text-muted-foreground">Real-time A/B testing: Railway vs Render</p>
+          <p className="mac-body text-muted-foreground">Real-time A/B testing: Railway vs Render</p>
         </div>
-        <div cclassName="flex gap-2">
+        <div className="flex gap-2">
           <Button
-            cclassName="mac-button mac-button-outline"
+            className="mac-button mac-button-outline"
             onClick={runQuickBenchmark}
             disabled={isRunningBenchmark}
             variant="outline"
-            cclassName="mac-button mac-button-outline"
+            className="mac-button mac-button-outline"
           >
             {isRunningBenchmark ? (
               <>
-                <Activity cclassName="h-4 w-4 mr-2 animate-spin" />
+                <Activity className="h-4 w-4 mr-2 animate-spin" />
                 Running...
               </>
             ) : (
               <>
-                <Zap cclassName="h-4 w-4 mr-2" />
+                <Zap className="h-4 w-4 mr-2" />
                 Quick Benchmark
               </>
             )}
           </Button>
           <Button
-            cclassName="mac-button mac-button-primary"
+            className="mac-button mac-button-primary"
             onClick={() => aomaRouter.clearMetrics()}
             variant="ghost"
           >
@@ -204,48 +204,48 @@ export const AOMAPerformanceDashboard: React.FC = () => {
       </div>
 
       {/* A/B Test Configuration */}
-      <Card cclassName="mac-card">
-        <CardHeader cclassName="mac-card">
-          <CardTitle cclassName="flex items-center gap-2">
-            <Gauge cclassName="h-5 w-5" />
+      <Card className="mac-card">
+        <CardHeader className="mac-card">
+          <CardTitle className="flex items-center gap-2">
+            <Gauge className="h-5 w-5" />
             A/B Test Configuration
           </CardTitle>
         </CardHeader>
-        <CardContent cclassName="mac-card">
-          <div cclassName="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <CardContent className="mac-card">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label cclassName="text-sm font-medium">Render Traffic %</label>
-              <div cclassName="flex items-center gap-2 mt-2">
+              <label className="text-sm font-medium">Render Traffic %</label>
+              <div className="flex items-center gap-2 mt-2">
                 <input
                   type="range"
                   min="0"
                   max="100"
                   value={abTestConfig.renderPercentage}
                   onChange={(e) => updateAbConfig({ renderPercentage: parseInt(e.target.value) })}
-                  cclassName="flex-1"
+                  className="flex-1"
                 />
-                <span cclassName="w-12 text-right">{abTestConfig.renderPercentage}%</span>
+                <span className="w-12 text-right">{abTestConfig.renderPercentage}%</span>
               </div>
             </div>
-            <div cclassName="flex items-center gap-4">
-              <label cclassName="flex items-center gap-2">
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
                   checked={abTestConfig.stickySession}
                   onChange={(e) => updateAbConfig({ stickySession: e.target.checked })}
                 />
-                <span cclassName="text-sm">Sticky Sessions</span>
+                <span className="text-sm">Sticky Sessions</span>
               </label>
-              <label cclassName="flex items-center gap-2">
+              <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
                   checked={abTestConfig.comparisonMode}
                   onChange={(e) => updateAbConfig({ comparisonMode: e.target.checked })}
                 />
-                <span cclassName="text-sm">Comparison Mode</span>
+                <span className="text-sm">Comparison Mode</span>
               </label>
             </div>
-            <div cclassName="flex items-center justify-end">
+            <div className="flex items-center justify-end">
               <Badge variant={abTestConfig.enabled ? "default" : "secondary"}>
                 {abTestConfig.enabled ? "A/B Test Active" : "A/B Test Disabled"}
               </Badge>
@@ -255,45 +255,45 @@ export const AOMAPerformanceDashboard: React.FC = () => {
       </Card>
 
       {/* Performance Summary */}
-      <div cclassName="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card cclassName="mac-card">
-          <CardHeader cclassName="mac-card pb-2">
-            <CardTitle cclassName="text-sm font-medium">Winner</CardTitle>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-2">
+            <CardTitle className="text-sm font-medium">Winner</CardTitle>
           </CardHeader>
-          <CardContent cclassName="mac-card">
-            <div cclassName="flex items-center justify-between">
-              <span cclassName="text-2xl font-bold capitalize">
+          <CardContent className="mac-card">
+            <div className="flex items-center justify-between">
+              <span className="text-2xl font-bold capitalize">
                 {stats.comparison.winner === "render" ? (
-                  <span cclassName="text-green-600">Render</span>
+                  <span className="text-green-600">Render</span>
                 ) : (
-                  <span cclassName="text-blue-600">Railway</span>
+                  <span className="text-blue-600">Railway</span>
                 )}
               </span>
               {stats.comparison.winner === "render" ? (
-                <TrendingUp cclassName="h-8 w-8 text-green-600" />
+                <TrendingUp className="h-8 w-8 text-green-600" />
               ) : (
-                <TrendingDown cclassName="h-8 w-8 text-blue-600" />
+                <TrendingDown className="h-8 w-8 text-blue-600" />
               )}
             </div>
-            <p cclassName="text-sm text-muted-foreground mt-2">
+            <p className="text-sm text-muted-foreground mt-2">
               {Math.abs(stats.comparison.improvement).toFixed(1)}% faster
             </p>
           </CardContent>
         </Card>
 
-        <Card cclassName="mac-card">
-          <CardHeader cclassName="mac-card pb-2">
-            <CardTitle cclassName="text-sm font-medium">Total Requests</CardTitle>
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-2">
+            <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
           </CardHeader>
-          <CardContent cclassName="mac-card">
-            <div cclassName="space-y-2">
-              <div cclassName="flex justify-between">
-                <span cclassName="text-sm">Railway</span>
-                <span cclassName="font-semibold">{stats.railway.totalRequests}</span>
+          <CardContent className="mac-card">
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-sm">Railway</span>
+                <span className="font-semibold">{stats.railway.totalRequests}</span>
               </div>
-              <div cclassName="flex justify-between">
-                <span cclassName="text-sm">Render</span>
-                <span cclassName="font-semibold">{stats.render.totalRequests}</span>
+              <div className="flex justify-between">
+                <span className="text-sm">Render</span>
+                <span className="font-semibold">{stats.render.totalRequests}</span>
               </div>
               <Progress
                 value={
@@ -301,38 +301,38 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                     (stats.railway.totalRequests + stats.render.totalRequests)) *
                   100
                 }
-                cclassName="h-2"
+                className="h-2"
               />
             </div>
           </CardContent>
         </Card>
 
-        <Card cclassName="mac-card">
-          <CardHeader cclassName="mac-card pb-2">
-            <CardTitle cclassName="text-sm font-medium">Success Rates</CardTitle>
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-2">
+            <CardTitle className="text-sm font-medium">Success Rates</CardTitle>
           </CardHeader>
-          <CardContent cclassName="mac-card">
-            <div cclassName="space-y-2">
-              <div cclassName="flex items-center justify-between">
-                <span cclassName="text-sm">Railway</span>
-                <div cclassName="flex items-center gap-2">
+          <CardContent className="mac-card">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Railway</span>
+                <div className="flex items-center gap-2">
                   {stats.railway.successRate > 95 ? (
-                    <CheckCircle cclassName="h-4 w-4 text-green-600" />
+                    <CheckCircle className="h-4 w-4 text-green-600" />
                   ) : (
-                    <AlertCircle cclassName="h-4 w-4 text-yellow-600" />
+                    <AlertCircle className="h-4 w-4 text-yellow-600" />
                   )}
-                  <span cclassName="font-semibold">{stats.railway.successRate.toFixed(1)}%</span>
+                  <span className="font-semibold">{stats.railway.successRate.toFixed(1)}%</span>
                 </div>
               </div>
-              <div cclassName="flex items-center justify-between">
-                <span cclassName="text-sm">Render</span>
-                <div cclassName="flex items-center gap-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Render</span>
+                <div className="flex items-center gap-2">
                   {stats.render.successRate > 95 ? (
-                    <CheckCircle cclassName="h-4 w-4 text-green-600" />
+                    <CheckCircle className="h-4 w-4 text-green-600" />
                   ) : (
-                    <AlertCircle cclassName="h-4 w-4 text-yellow-600" />
+                    <AlertCircle className="h-4 w-4 text-yellow-600" />
                   )}
-                  <span cclassName="font-semibold">{stats.render.successRate.toFixed(1)}%</span>
+                  <span className="font-semibold">{stats.render.successRate.toFixed(1)}%</span>
                 </div>
               </div>
             </div>
@@ -342,26 +342,26 @@ export const AOMAPerformanceDashboard: React.FC = () => {
 
       {/* Recommendation Alert */}
       <Alert>
-        <AlertCircle cclassName="h-4 w-4" />
+        <AlertCircle className="h-4 w-4" />
         <AlertTitle>Recommendation</AlertTitle>
         <AlertDescription>{stats.comparison.recommendation}</AlertDescription>
       </Alert>
 
       {/* Performance Charts */}
-      <Tabs defaultValue="latency" cclassName="space-y-4">
+      <Tabs defaultValue="latency" className="space-y-4">
         <TabsList>
           <TabsTrigger value="latency">Latency Trends</TabsTrigger>
           <TabsTrigger value="comparison">Performance Comparison</TabsTrigger>
           <TabsTrigger value="distribution">Latency Distribution</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="latency" cclassName="space-y-4">
-          <Card cclassName="mac-card">
-            <CardHeader cclassName="mac-card">
-              <CardTitle cclassName="mac-card">Real-time Latency</CardTitle>
-              <CardDescription cclassName="mac-card">Last 100 requests</CardDescription>
+        <TabsContent value="latency" className="space-y-4">
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Real-time Latency</CardTitle>
+              <CardDescription className="mac-card">Last 100 requests</CardDescription>
             </CardHeader>
-            <CardContent cclassName="mac-card">
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={latencyChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -391,13 +391,13 @@ export const AOMAPerformanceDashboard: React.FC = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="comparison" cclassName="space-y-4">
-          <Card cclassName="mac-card">
-            <CardHeader cclassName="mac-card">
-              <CardTitle cclassName="mac-card">Performance Metrics Comparison</CardTitle>
-              <CardDescription cclassName="mac-card">Railway vs Render</CardDescription>
+        <TabsContent value="comparison" className="space-y-4">
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Performance Metrics Comparison</CardTitle>
+              <CardDescription className="mac-card">Railway vs Render</CardDescription>
             </CardHeader>
-            <CardContent cclassName="mac-card">
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={performanceComparison}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -413,76 +413,76 @@ export const AOMAPerformanceDashboard: React.FC = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="distribution" cclassName="space-y-4">
-          <Card cclassName="mac-card">
-            <CardHeader cclassName="mac-card">
-              <CardTitle cclassName="mac-card">Latency Distribution</CardTitle>
-              <CardDescription cclassName="mac-card">Response time percentiles</CardDescription>
+        <TabsContent value="distribution" className="space-y-4">
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Latency Distribution</CardTitle>
+              <CardDescription className="mac-card">Response time percentiles</CardDescription>
             </CardHeader>
-            <CardContent cclassName="mac-card">
-              <div cclassName="grid grid-cols-2 gap-8">
+            <CardContent className="mac-card">
+              <div className="grid grid-cols-2 gap-8">
                 <div>
                   <h4
-                    cclassName="mac-title"
-                    cclassName="mac-title font-semibold mb-4 flex items-center gap-2"
+                    className="mac-title"
+                    className="mac-title font-semibold mb-4 flex items-center gap-2"
                   >
-                    <Server cclassName="h-4 w-4" />
+                    <Server className="h-4 w-4" />
                     Railway
                   </h4>
-                  <div cclassName="space-y-3">
+                  <div className="space-y-3">
                     <div>
-                      <div cclassName="flex justify-between text-sm mb-2">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P50</span>
                         <span>{stats.railway.p50Latency.toFixed(2)}ms</span>
                       </div>
-                      <Progress value={50} cclassName="h-2" />
+                      <Progress value={50} className="h-2" />
                     </div>
                     <div>
-                      <div cclassName="flex justify-between text-sm mb-2">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P95</span>
                         <span>{stats.railway.p95Latency.toFixed(2)}ms</span>
                       </div>
-                      <Progress value={95} cclassName="h-2" />
+                      <Progress value={95} className="h-2" />
                     </div>
                     <div>
-                      <div cclassName="flex justify-between text-sm mb-2">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P99</span>
                         <span>{stats.railway.p99Latency.toFixed(2)}ms</span>
                       </div>
-                      <Progress value={99} cclassName="h-2" />
+                      <Progress value={99} className="h-2" />
                     </div>
                   </div>
                 </div>
 
                 <div>
                   <h4
-                    cclassName="mac-title"
-                    cclassName="mac-title font-semibold mb-4 flex items-center gap-2"
+                    className="mac-title"
+                    className="mac-title font-semibold mb-4 flex items-center gap-2"
                   >
-                    <Database cclassName="h-4 w-4" />
+                    <Database className="h-4 w-4" />
                     Render
                   </h4>
-                  <div cclassName="space-y-3">
+                  <div className="space-y-3">
                     <div>
-                      <div cclassName="flex justify-between text-sm mb-2">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P50</span>
                         <span>{stats.render.p50Latency.toFixed(2)}ms</span>
                       </div>
-                      <Progress value={50} cclassName="h-2 bg-green-100" />
+                      <Progress value={50} className="h-2 bg-green-100" />
                     </div>
                     <div>
-                      <div cclassName="flex justify-between text-sm mb-2">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P95</span>
                         <span>{stats.render.p95Latency.toFixed(2)}ms</span>
                       </div>
-                      <Progress value={95} cclassName="h-2 bg-green-100" />
+                      <Progress value={95} className="h-2 bg-green-100" />
                     </div>
                     <div>
-                      <div cclassName="flex justify-between text-sm mb-2">
+                      <div className="flex justify-between text-sm mb-2">
                         <span>P99</span>
                         <span>{stats.render.p99Latency.toFixed(2)}ms</span>
                       </div>
-                      <Progress value={99} cclassName="h-2 bg-green-100" />
+                      <Progress value={99} className="h-2 bg-green-100" />
                     </div>
                   </div>
                 </div>
@@ -493,40 +493,40 @@ export const AOMAPerformanceDashboard: React.FC = () => {
       </Tabs>
 
       {/* Additional Metrics */}
-      <div cclassName="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card cclassName="mac-card">
-          <CardHeader cclassName="mac-card">
-            <CardTitle cclassName="text-sm font-medium flex items-center gap-2">
-              <Clock cclassName="h-4 w-4" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Clock className="h-4 w-4" />
               Cold Start Rate
             </CardTitle>
           </CardHeader>
-          <CardContent cclassName="mac-card">
-            <div cclassName="space-y-2">
-              <div cclassName="flex justify-between">
+          <CardContent className="mac-card">
+            <div className="space-y-2">
+              <div className="flex justify-between">
                 <span>Railway</span>
-                <span cclassName="font-semibold">{stats.railway.coldStartRate.toFixed(1)}%</span>
+                <span className="font-semibold">{stats.railway.coldStartRate.toFixed(1)}%</span>
               </div>
-              <div cclassName="flex justify-between">
+              <div className="flex justify-between">
                 <span>Render</span>
-                <span cclassName="font-semibold">{stats.render.coldStartRate.toFixed(1)}%</span>
+                <span className="font-semibold">{stats.render.coldStartRate.toFixed(1)}%</span>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card cclassName="mac-card">
-          <CardHeader cclassName="mac-card">
-            <CardTitle cclassName="text-sm font-medium flex items-center gap-2">
-              <Database cclassName="h-4 w-4" />
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Database className="h-4 w-4" />
               Payload Sizes
             </CardTitle>
           </CardHeader>
-          <CardContent cclassName="mac-card">
-            <div cclassName="space-y-2">
-              <div cclassName="flex justify-between">
+          <CardContent className="mac-card">
+            <div className="space-y-2">
+              <div className="flex justify-between">
                 <span>Avg Request</span>
-                <span cclassName="font-semibold">
+                <span className="font-semibold">
                   {(
                     (stats.railway.avgPayloadSize + stats.render.avgPayloadSize) /
                     2 /
@@ -535,9 +535,9 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                   KB
                 </span>
               </div>
-              <div cclassName="flex justify-between">
+              <div className="flex justify-between">
                 <span>Avg Response</span>
-                <span cclassName="font-semibold">
+                <span className="font-semibold">
                   {(
                     (stats.railway.avgResponseSize + stats.render.avgResponseSize) /
                     2 /

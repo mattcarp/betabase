@@ -35,7 +35,7 @@ export type ReasoningProps = ComponentProps<typeof Collapsible> & {
 
 export const Reasoning = memo(
   ({
-    cclassName,
+    className,
     isStreaming = false,
     open,
     defaultOpen = false,
@@ -91,7 +91,7 @@ export const Reasoning = memo(
     return (
       <ReasoningContext.Provider value={{ isStreaming, isOpen, setIsOpen, duration }}>
         <Collapsible
-          cclassName={cn("not-prose mb-4", cclassName)}
+          className={cn("not-prose mb-4", className)}
           onOpenChange={handleOpenChange}
           open={isOpen}
           {...props}
@@ -108,24 +108,24 @@ export type ReasoningTriggerProps = ComponentProps<typeof CollapsibleTrigger> & 
 };
 
 export const ReasoningTrigger = memo(
-  ({ cclassName, title = "Reasoning", children, ...props }: ReasoningTriggerProps) => {
+  ({ className, title = "Reasoning", children, ...props }: ReasoningTriggerProps) => {
     const { isStreaming, isOpen, duration } = useReasoning();
 
     return (
       <CollapsibleTrigger
-        cclassName={cn("flex items-center gap-2 text-muted-foreground text-sm", cclassName)}
+        className={cn("flex items-center gap-2 text-muted-foreground text-sm", className)}
         {...props}
       >
         {children ?? (
           <>
-            <Sparkles cclassName="size-4" />
+            <Sparkles className="size-4" />
             {isStreaming || duration === 0 ? (
               <p>Thinking...</p>
             ) : (
               <p>Thought for {duration} seconds</p>
             )}
             <ChevronDownIcon
-              cclassName={cn(
+              className={cn(
                 "size-4 text-muted-foreground transition-transform",
                 isOpen ? "rotate-180" : "rotate-0"
               )}
@@ -141,16 +141,16 @@ export type ReasoningContentProps = ComponentProps<typeof CollapsibleContent> & 
   children: string;
 };
 
-export const ReasoningContent = memo(({ cclassName, children, ...props }: ReasoningContentProps) => (
+export const ReasoningContent = memo(({ className, children, ...props }: ReasoningContentProps) => (
   <CollapsibleContent
-    cclassName={cn(
+    className={cn(
       "mt-4 text-sm",
       "text-popover-foreground outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2",
-      cclassName
+      className
     )}
     {...props}
   >
-    <Response cclassName="grid gap-2">{children}</Response>
+    <Response className="grid gap-2">{children}</Response>
   </CollapsibleContent>
 ));
 

@@ -2,22 +2,22 @@ import { cn } from "../lib/utils";
 import { Loader2 } from "lucide-react";
 
 interface SkeletonProps {
-  cclassName?: string;
+  className?: string;
 }
 
-export function Skeleton({ cclassName }: SkeletonProps) {
-  return <div cclassName={cn("animate-pulse rounded-md bg-gray-700/50", cclassName)} />;
+export function Skeleton({ className }: SkeletonProps) {
+  return <div className={cn("animate-pulse rounded-md bg-gray-700/50", className)} />;
 }
 
 interface PulsingDotProps {
-  cclassName?: string;
+  className?: string;
   delay?: string;
 }
 
-export function PulsingDot({ cclassName, delay = "0s" }: PulsingDotProps) {
+export function PulsingDot({ className, delay = "0s" }: PulsingDotProps) {
   return (
     <div
-      cclassName={cn("w-2 h-2 bg-blue-600 rounded-full animate-pulse", cclassName)}
+      className={cn("w-2 h-2 bg-blue-600 rounded-full animate-pulse", className)}
       style={{ animationDelay: delay }}
     />
   );
@@ -26,10 +26,10 @@ export function PulsingDot({ cclassName, delay = "0s" }: PulsingDotProps) {
 interface LoadingSpinnerProps {
   size?: "sm" | "md" | "lg";
   color?: "cyan" | "green" | "purple" | "yellow";
-  cclassName?: string;
+  className?: string;
 }
 
-export function LoadingSpinner({ size = "md", color = "cyan", cclassName }: LoadingSpinnerProps) {
+export function LoadingSpinner({ size = "md", color = "cyan", className }: LoadingSpinnerProps) {
   const sizeClasses = {
     sm: "w-4 h-4",
     md: "w-6 h-6",
@@ -44,7 +44,7 @@ export function LoadingSpinner({ size = "md", color = "cyan", cclassName }: Load
   };
 
   return (
-    <Loader2 cclassName={cn("animate-spin", sizeClasses[size], colorClasses[color], cclassName)} />
+    <Loader2 className={cn("animate-spin", sizeClasses[size], colorClasses[color], className)} />
   );
 }
 
@@ -53,7 +53,7 @@ interface EmptyStateProps {
   title: string;
   description: string;
   animated?: boolean;
-  cclassName?: string;
+  className?: string;
 }
 
 export function EmptyState({
@@ -61,17 +61,17 @@ export function EmptyState({
   title,
   description,
   animated = true,
-  cclassName,
+  className,
 }: EmptyStateProps) {
   return (
-    <div cclassName={cn("text-center py-8", cclassName)}>
-      <div cclassName={cn("mx-auto mb-4 opacity-50", animated && "animate-pulse")}>{icon}</div>
-      <h3 cclassName="mac-title">
+    <div className={cn("text-center py-8", className)}>
+      <div className={cn("mx-auto mb-4 opacity-50", animated && "animate-pulse")}>{icon}</div>
+      <h3 className="mac-title">
         {title}
       </h3>
-      <p cclassName="text-sm text-gray-400 font-mono">{description}</p>
+      <p className="text-sm text-gray-400 font-mono">{description}</p>
       {animated && (
-        <div cclassName="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-2 mt-4">
           <PulsingDot delay="0s" />
           <PulsingDot delay="0.2s" />
           <PulsingDot delay="0.4s" />
@@ -87,19 +87,19 @@ interface TranscriptionSkeletonProps {
 
 export function TranscriptionSkeleton({ count = 3 }: TranscriptionSkeletonProps) {
   return (
-    <div cclassName="space-y-3">
+    <div className="space-y-3">
       {Array.from({ length: count }).map((_, index) => (
-        <div key={index} cclassName="bg-gray-700/50 border border-gray-600 rounded p-4">
-          <div cclassName="flex items-center gap-2 mb-2">
-            <Skeleton cclassName="w-2 h-2 rounded-full" />
-            <Skeleton cclassName="h-4 w-32" />
-            <div cclassName="flex-1" />
-            <Skeleton cclassName="h-4 w-16" />
+        <div key={index} className="bg-gray-700/50 border border-gray-600 rounded p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Skeleton className="w-2 h-2 rounded-full" />
+            <Skeleton className="h-4 w-32" />
+            <div className="flex-1" />
+            <Skeleton className="h-4 w-16" />
           </div>
-          <div cclassName="space-y-2">
-            <Skeleton cclassName="h-4 w-full" />
-            <Skeleton cclassName="h-4 w-4/5" />
-            <Skeleton cclassName="h-4 w-3/5" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-4/5" />
+            <Skeleton className="h-4 w-3/5" />
           </div>
         </div>
       ))}
@@ -116,7 +116,7 @@ export function SearchLoading({ isSearching, query }: SearchLoadingProps) {
   if (!isSearching) return null;
 
   return (
-    <div cclassName="flex items-center gap-2 text-sm text-blue-600 font-mono">
+    <div className="flex items-center gap-2 text-sm text-blue-600 font-mono">
       <LoadingSpinner size="sm" color="cyan" />
       <span>
         Searching for "{query.slice(0, 20)}
@@ -132,14 +132,14 @@ interface VectorMatchesSkeletonProps {
 
 export function VectorMatchesSkeleton({ count = 3 }: VectorMatchesSkeletonProps) {
   return (
-    <div cclassName="space-y-2">
+    <div className="space-y-2">
       {Array.from({ length: count }).map((_, index) => (
-        <div key={index} cclassName="bg-gray-700/50 border border-gray-600 rounded p-2">
-          <div cclassName="flex justify-between items-center mb-2">
-            <Skeleton cclassName="h-4 w-3/4" />
-            <Skeleton cclassName="h-4 w-8" />
+        <div key={index} className="bg-gray-700/50 border border-gray-600 rounded p-2">
+          <div className="flex justify-between items-center mb-2">
+            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-8" />
           </div>
-          <Skeleton cclassName="h-3 w-12" />
+          <Skeleton className="h-3 w-12" />
         </div>
       ))}
     </div>
@@ -154,26 +154,26 @@ interface AnimatedWaitingProps {
 
 export function AnimatedWaiting({ message, icon, subMessage }: AnimatedWaitingProps) {
   return (
-    <div cclassName="text-center py-8">
-      <div cclassName="flex justify-center mb-4">
-        {icon && <div cclassName="animate-pulse opacity-50">{icon}</div>}
+    <div className="text-center py-8">
+      <div className="flex justify-center mb-4">
+        {icon && <div className="animate-pulse opacity-50">{icon}</div>}
       </div>
-      <div cclassName="font-mono text-gray-300 mb-2">
+      <div className="font-mono text-gray-300 mb-2">
         {message}
-        <span cclassName="inline-flex ml-2">
-          <span cclassName="animate-pulse" style={{ animationDelay: "0s" }}>
+        <span className="inline-flex ml-2">
+          <span className="animate-pulse" style={{ animationDelay: "0s" }}>
             .
           </span>
-          <span cclassName="animate-pulse" style={{ animationDelay: "0.2s" }}>
+          <span className="animate-pulse" style={{ animationDelay: "0.2s" }}>
             .
           </span>
-          <span cclassName="animate-pulse" style={{ animationDelay: "0.4s" }}>
+          <span className="animate-pulse" style={{ animationDelay: "0.4s" }}>
             .
           </span>
         </span>
       </div>
-      {subMessage && <p cclassName="text-sm text-gray-400 font-mono">{subMessage}</p>}
-      <div cclassName="flex justify-center gap-2 mt-4">
+      {subMessage && <p className="text-sm text-gray-400 font-mono">{subMessage}</p>}
+      <div className="flex justify-center gap-2 mt-4">
         <PulsingDot delay="0s" />
         <PulsingDot delay="0.3s" />
         <PulsingDot delay="0.6s" />
@@ -199,17 +199,17 @@ export function StatusIndicator({ status, message, size = "md" }: StatusIndicato
       case "success":
         return {
           color: "text-green-400",
-          icon: <div cclassName="w-4 h-4 bg-green-400 rounded-full" />,
+          icon: <div className="w-4 h-4 bg-green-400 rounded-full" />,
         };
       case "error":
         return {
           color: "text-red-400",
-          icon: <div cclassName="w-4 h-4 bg-red-400 rounded-full" />,
+          icon: <div className="w-4 h-4 bg-red-400 rounded-full" />,
         };
       default:
         return {
           color: "text-gray-400",
-          icon: <div cclassName="w-4 h-4 bg-gray-400 rounded-full opacity-50" />,
+          icon: <div className="w-4 h-4 bg-gray-400 rounded-full opacity-50" />,
         };
     }
   };
@@ -217,9 +217,9 @@ export function StatusIndicator({ status, message, size = "md" }: StatusIndicato
   const config = getStatusConfig();
 
   return (
-    <div cclassName={cn("flex items-center gap-2", config.color)}>
+    <div className={cn("flex items-center gap-2", config.color)}>
       {config.icon}
-      {message && <span cclassName="text-sm font-mono">{message}</span>}
+      {message && <span className="text-sm font-mono">{message}</span>}
     </div>
   );
 }

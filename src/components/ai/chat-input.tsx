@@ -37,7 +37,7 @@ interface ChatInputProps {
   onStop?: () => void;
   isLoading?: boolean;
   placeholder?: string;
-  cclassName?: string;
+  className?: string;
   maxLength?: number;
   allowAttachments?: boolean;
   allowVoice?: boolean;
@@ -55,7 +55,7 @@ export function ChatInput({
   onStop,
   isLoading = false,
   placeholder = "Type your message...",
-  cclassName,
+  className,
   maxLength = 4000,
   allowAttachments = false,
   allowVoice = false,
@@ -101,8 +101,8 @@ export function ChatInput({
   };
 
   const getFileIcon = (type: string) => {
-    if (type.startsWith("image/")) return <Image cclassName="h-3 w-3" />;
-    return <FileText cclassName="h-3 w-3" />;
+    if (type.startsWith("image/")) return <Image className="h-3 w-3" />;
+    return <FileText className="h-3 w-3" />;
   };
 
   const formatFileSize = (bytes: number) => {
@@ -113,7 +113,7 @@ export function ChatInput({
 
   return (
     <TooltipProvider>
-      <div cclassName={cn("space-y-3", cclassName)}>
+      <div className={cn("space-y-3", className)}>
         {/* Enhanced Suggestions */}
         <AnimatePresence>
           {suggestions.length > 0 && isFocused && (
@@ -121,13 +121,13 @@ export function ChatInput({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              cclassName="relative"
+              className="relative"
             >
-              <div cclassName="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-emerald-500/5 rounded-lg blur" />
-              <div cclassName="relative p-4 bg-background/80 backdrop-blur-sm rounded-lg border border-border/50 shadow-sm">
-                <div cclassName="flex items-center gap-2 mb-2">
-                  <Sparkles cclassName="h-3 w-3 text-amber-500" />
-                  <span cclassName="text-xs font-medium text-muted-foreground">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-emerald-500/5 rounded-lg blur" />
+              <div className="relative p-4 bg-background/80 backdrop-blur-sm rounded-lg border border-border/50 shadow-sm">
+                <div className="flex items-center gap-2 mb-2">
+                  <Sparkles className="h-3 w-3 text-amber-500" />
+                  <span className="text-xs font-medium text-muted-foreground">
                     Quick suggestions
                   </span>
                 </div>
@@ -145,7 +145,7 @@ export function ChatInput({
                           onChange(s);
                           onSuggestionClick?.(s);
                         }}
-                        cclassName="hover:scale-105 transition-transform duration-200 bg-gradient-to-r from-background to-muted/30"
+                        className="hover:scale-105 transition-transform duration-200 bg-gradient-to-r from-background to-muted/30"
                       />
                     </motion.div>
                   ))}
@@ -162,17 +162,17 @@ export function ChatInput({
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              cclassName="relative"
+              className="relative"
             >
-              <div cclassName="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-lg blur" />
-              <div cclassName="relative p-4 bg-background/80 backdrop-blur-sm rounded-lg border border-border/50 shadow-sm">
-                <div cclassName="flex items-center gap-2 mb-2">
-                  <Paperclip cclassName="h-3 w-3 text-blue-500" />
-                  <span cclassName="text-xs font-medium text-muted-foreground">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-lg blur" />
+              <div className="relative p-4 bg-background/80 backdrop-blur-sm rounded-lg border border-border/50 shadow-sm">
+                <div className="flex items-center gap-2 mb-2">
+                  <Paperclip className="h-3 w-3 text-blue-500" />
+                  <span className="text-xs font-medium text-muted-foreground">
                     Attachments ({attachments.length})
                   </span>
                 </div>
-                <div cclassName="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2">
                   {attachments.map((attachment) => (
                     <motion.div
                       key={attachment.id}
@@ -182,18 +182,18 @@ export function ChatInput({
                     >
                       <Badge
                         variant="secondary"
-                        cclassName="flex items-center gap-2.5 pr-2 bg-background/80 border border-border/50 shadow-sm"
+                        className="flex items-center gap-2.5 pr-2 bg-background/80 border border-border/50 shadow-sm"
                       >
                         {getFileIcon(attachment.type)}
-                        <span cclassName="max-w-[120px] truncate text-xs">{attachment.name}</span>
-                        <span cclassName="text-xs text-muted-foreground/70">
+                        <span className="max-w-[120px] truncate text-xs">{attachment.name}</span>
+                        <span className="text-xs text-muted-foreground/70">
                           {formatFileSize(attachment.size)}
                         </span>
                         <button
                           onClick={() => removeAttachment(attachment.id)}
-                          cclassName="ml-2 p-0.5 hover:bg-destructive/20 rounded-full transition-colors"
+                          className="ml-2 p-0.5 hover:bg-destructive/20 rounded-full transition-colors"
                         >
-                          <X cclassName="h-3 w-3" />
+                          <X className="h-3 w-3" />
                         </button>
                       </Badge>
                     </motion.div>
@@ -205,11 +205,11 @@ export function ChatInput({
         </AnimatePresence>
 
         {/* Modern Input Area */}
-        <div cclassName="relative group">
+        <div className="relative group">
           {/* Background glow effect */}
-          <div cclassName="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
 
-          <div cclassName="relative bg-background/80 backdrop-blur-sm border border-border/50 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-200 group-focus-within:border-primary/50">
+          <div className="relative bg-background/80 backdrop-blur-sm border border-border/50 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-200 group-focus-within:border-primary/50">
             <Textarea
               ref={textareaRef}
               value={value || ""}
@@ -221,7 +221,7 @@ export function ChatInput({
               disabled={isLoading || isRecording}
               maxLength={maxLength}
               rows={1}
-              cclassName={cn(
+              className={cn(
                 "min-h-[60px] max-h-[200px] resize-none pr-20 border-0 bg-transparent",
                 "focus:ring-0 focus:outline-none placeholder:text-muted-foreground/60",
                 "text-sm leading-relaxed p-4",
@@ -234,11 +234,11 @@ export function ChatInput({
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                cclassName="absolute bottom-3 left-4"
+                className="absolute bottom-3 left-4"
               >
                 <Badge
                   variant={value.length >= maxLength ? "destructive" : "secondary"}
-                  cclassName="text-xs px-2 py-0.5"
+                  className="text-xs px-2 py-0.5"
                 >
                   {value.length} / {maxLength}
                 </Badge>
@@ -246,7 +246,7 @@ export function ChatInput({
             )}
 
             {/* Enhanced Action Buttons */}
-            <div cclassName="absolute bottom-3 right-3 flex items-center gap-2">
+            <div className="absolute bottom-3 right-3 flex items-center gap-2">
               {/* Attachment Button */}
               {allowAttachments && !isLoading && !isRecording && (
                 <>
@@ -254,7 +254,7 @@ export function ChatInput({
                     ref={fileInputRef}
                     type="file"
                     multiple
-                    cclassName="hidden"
+                    className="hidden"
                     onChange={handleFileSelect}
                   />
                   <Tooltip>
@@ -263,10 +263,10 @@ export function ChatInput({
                         type="button"
                         size="icon"
                         variant="ghost"
-                        cclassName="h-9 w-9 hover:bg-muted/50 transition-colors mac-button mac-button-outline"
+                        className="h-9 w-9 hover:bg-muted/50 transition-colors mac-button mac-button-outline"
                         onClick={() => fileInputRef.current?.click()}
                       >
-                        <Plus cclassName="h-4 w-4" />
+                        <Plus className="h-4 w-4" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>Attach files</TooltipContent>
@@ -282,7 +282,7 @@ export function ChatInput({
                       type="button"
                       size="icon"
                       variant={isRecording ? "destructive" : "ghost"}
-                      cclassName={cn(
+                      className={cn(
                         "mac-button mac-button-primary",
                         "h-9 w-9 transition-all duration-200",
                         isRecording ? "animate-pulse" : "hover:bg-muted/50"
@@ -290,9 +290,9 @@ export function ChatInput({
                       onClick={isRecording ? onVoiceEnd : onVoiceStart}
                     >
                       {isRecording ? (
-                        <StopCircle cclassName="h-4 w-4" />
+                        <StopCircle className="h-4 w-4" />
                       ) : (
-                        <Mic cclassName="h-4 w-4" />
+                        <Mic className="h-4 w-4" />
                       )}
                     </Button>
                   </TooltipTrigger>
@@ -310,10 +310,10 @@ export function ChatInput({
                       type="button"
                       size="icon"
                       variant="destructive"
-                      cclassName="h-9 w-9 shadow-md hover:shadow-lg transition-shadow mac-button mac-button-primary"
+                      className="h-9 w-9 shadow-md hover:shadow-lg transition-shadow mac-button mac-button-primary"
                       onClick={onStop}
                     >
-                      <StopCircle cclassName="h-4 w-4" />
+                      <StopCircle className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>Stop generating</TooltipContent>
@@ -326,7 +326,7 @@ export function ChatInput({
                       size="icon"
                       disabled={!value?.trim() || isRecording}
                       onClick={handleSubmit}
-                      cclassName={cn(
+                      className={cn(
                         "mac-button mac-button-primary",
                         "h-9 w-9 shadow-md hover:shadow-lg transition-all duration-200",
                         "bg-gradient-to-r from-blue-500 to-emerald-500",
@@ -336,9 +336,9 @@ export function ChatInput({
                       )}
                     >
                       {isLoading ? (
-                        <Loader2 cclassName="h-4 w-4 animate-spin" />
+                        <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
-                        <Send cclassName="h-4 w-4 text-white" />
+                        <Send className="h-4 w-4 text-white" />
                       )}
                     </Button>
                   </TooltipTrigger>

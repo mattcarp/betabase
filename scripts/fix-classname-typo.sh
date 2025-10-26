@@ -1,22 +1,22 @@
 #!/bin/bash
 
-# Fix lassName typo across all TypeScript/TSX files
-# This script replaces "lassName" with "className" everywhere
+# Fix className typo across all TypeScript/TSX files
+# This script replaces "cclassName" with "className" everywhere
 
-echo "🔧 Fixing lassName typo in all source files..."
+echo "🔧 Fixing cclassName typo in all source files..."
 
 # Count occurrences before
 echo "📊 Counting occurrences before fix..."
-BEFORE=$(grep -r "lassName" src --include="*.tsx" --include="*.ts" | wc -l | tr -d ' ')
-echo "Found $BEFORE occurrences of 'lassName'"
+BEFORE=$(grep -r "cclassName" src --include="*.tsx" --include="*.ts" | wc -l | tr -d ' ')
+echo "Found $BEFORE occurrences of 'cclassName'"
 
 # Fix the typo using sed
 # macOS requires '' after -i for in-place editing
-find src -type f \( -name "*.tsx" -o -name "*.ts" \) -exec sed -i '' 's/lassName/className/g' {} +
+find src -type f \( -name "*.tsx" -o -name "*.ts" \) -exec sed -i '' 's/cclassName/className/g' {} +
 
 # Count occurrences after
 echo "📊 Counting occurrences after fix..."
-AFTER=$(grep -r "lassName" src --include="*.tsx" --include="*.ts" | wc -l | tr -d ' ')
+AFTER=$(grep -r "cclassName" src --include="*.tsx" --include="*.ts" | wc -l | tr -d ' ')
 echo "Remaining occurrences: $AFTER"
 
 echo "✅ Fixed $((BEFORE - AFTER)) occurrences!"
