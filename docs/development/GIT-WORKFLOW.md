@@ -13,6 +13,7 @@ Complete git workflow for SIAM development including merge strategies, commit gu
 ```
 
 The script will:
+
 - Remove the conflicted file
 - Regenerate it from `package.json`
 - Stage the changes
@@ -21,11 +22,13 @@ The script will:
 ### How It Works
 
 Custom git merge driver automatically:
+
 1. Detects `package-lock.json` conflicts
 2. Regenerates the lockfile from `package.json`
 3. Resolves the conflict automatically
 
 **Configuration files:**
+
 - `.gitattributes` - Tells git to use custom merge strategy
 - `.git-merge-drivers/npm-merge-lockfile.sh` - Auto-regeneration script
 - Git config (set automatically in repo)
@@ -81,6 +84,7 @@ git acm "Your commit message"
 ```
 
 **IMPORTANT**: When user runs `git acm` without a message, Claude should:
+
 1. Analyze recent changes with `git status` and `git diff`
 2. Create an appropriate commit message based on the changes
 3. Execute `git acm "generated message"`
@@ -180,11 +184,13 @@ git commit
 ### Common Conflict Patterns
 
 **package-lock.json**: Use auto-resolve script
+
 ```bash
 ./scripts/fix-package-lock-conflict.sh
 ```
 
 **Code conflicts**: Manually resolve in editor
+
 1. Find conflict markers
 2. Choose correct version or merge both
 3. Remove conflict markers
@@ -323,4 +329,4 @@ git config --global user.email "your.email@example.com"
 
 ---
 
-*For quick reference, see [QUICK-START.md](../QUICK-START.md)*
+_For quick reference, see [QUICK-START.md](../QUICK-START.md)_

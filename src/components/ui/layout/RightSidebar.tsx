@@ -80,9 +80,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Navigation Section */}
       <div>
-        <h3 className="mac-title">
-          Navigation
-        </h3>
+        <h3 className="mac-title">Navigation</h3>
         <div className="space-y-2">
           {navigationItems.map((item) => (
             <button
@@ -134,9 +132,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Meeting Tools */}
       <div>
-        <h3 className="mac-title text-lg font-normal text-white mb-4">
-          Meeting Tools
-        </h3>
+        <h3 className="mac-title text-lg font-normal text-white mb-4">Meeting Tools</h3>
         <div className="space-y-2">
           {meetingTools.map((tool, index) => (
             <button
@@ -152,9 +148,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Session Metrics */}
       <div className="mt-auto">
-        <h3 className="mac-title text-lg font-normal text-white mb-4">
-          Meeting Metrics
-        </h3>
+        <h3 className="mac-title text-lg font-normal text-white mb-4">Meeting Metrics</h3>
         <div className="space-y-3">
           {sessionMetrics.length > 0 ? (
             sessionMetrics.map((metric, index) => (

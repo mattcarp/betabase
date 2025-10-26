@@ -62,9 +62,7 @@ export default function HomePage() {
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center">
         <div className="bg-gray-800/50 p-8 rounded-lg backdrop-blur-sm border border-gray-700">
           <div className="text-center mb-6">
-            <h1 className="mac-heading">
-              SIAM
-            </h1>
+            <h1 className="mac-heading">SIAM</h1>
             <p className="mac-body text-gray-300">Smart Interaction Agent Manager</p>
           </div>
 
@@ -126,9 +124,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-black text-white">
       <nav className="bg-gray-900 p-4">
         <div className="flex justify-between items-center">
-          <h1 className="mac-heading">
-            SIAM Dashboard
-          </h1>
+          <h1 className="mac-heading">SIAM Dashboard</h1>
           <button
             onClick={() => setAuthStatus("unauthenticated")}
             className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded transition duration-200"
@@ -141,9 +137,7 @@ export default function HomePage() {
       <main className="p-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <h2 className="mac-heading">
-              Welcome to SIAM
-            </h2>
+            <h2 className="mac-heading">Welcome to SIAM</h2>
             <p className="text-gray-300 text-lg">
               Your Smart Interaction Agent Manager is ready for deployment.
             </p>
@@ -151,23 +145,17 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-gray-800/50 p-6 rounded-lg backdrop-blur-sm border border-gray-700">
-              <h3 className="mac-title">
-                🎯 System Status
-              </h3>
+              <h3 className="mac-title">🎯 System Status</h3>
               <p className="mac-body text-green-400">All systems operational</p>
             </div>
 
             <div className="bg-gray-800/50 p-6 rounded-lg backdrop-blur-sm border border-gray-700">
-              <h3 className="mac-title">
-                🚀 Deployment
-              </h3>
+              <h3 className="mac-title">🚀 Deployment</h3>
               <p className="mac-body text-blue-400">Production ready</p>
             </div>
 
             <div className="bg-gray-800/50 p-6 rounded-lg backdrop-blur-sm border border-gray-700">
-              <h3 className="mac-title">
-                ⚡ Performance
-              </h3>
+              <h3 className="mac-title">⚡ Performance</h3>
               <p className="mac-body text-yellow-400">Optimized for speed</p>
             </div>
           </div>

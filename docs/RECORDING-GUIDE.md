@@ -5,6 +5,7 @@
 ### Phase 1: Prepare (Do This First)
 
 **1. Create Diagrams (30 min)**
+
 - Open Excalidraw (https://excalidraw.com)
 - Create 3 diagrams:
   - System architecture
@@ -13,12 +14,14 @@
 - Export as PNG, save to `docs/diagrams/`
 
 **2. Customize Playwright Script (30 min)**
+
 - Open `tests/demo/demo-recording.spec.ts`
 - Update `data-testid` selectors to match your actual app
 - Adjust pause durations (start with 3-5s, tune after first run)
 - Test run each sequence separately to verify it works
 
 **3. Test Playwright Script**
+
 ```bash
 cd /Users/matt/Documents/projects/siam
 
@@ -32,13 +35,14 @@ npx playwright test tests/demo/demo-recording.spec.ts --headed --slow-mo=50
 ```
 
 **4. Prepare Your Environment**
+
 - Close all unnecessary apps
 - Turn off notifications (Do Not Disturb mode)
 - Open in separate windows/spaces:
   - Terminal 1: MCP servers running
   - Terminal 2: MCP logs
   - VS Code: SIAM project
-  - Chrome: Vitest UI (http://localhost:51204/__vitest__/)
+  - Chrome: Vitest UI (http://localhost:51204/**vitest**/)
   - Chrome: Playwright Report
   - Chrome: https://thebetabase.com (for Playwright to control)
   - Keynote/Excalidraw: Your diagrams
@@ -50,6 +54,7 @@ npx playwright test tests/demo/demo-recording.spec.ts --headed --slow-mo=50
 **Recording Order: Record Separately, Edit Together**
 
 #### Recording 1: Opening + Diagrams (3-4 min)
+
 1. Open Descript → New Recording → Screen + Camera
 2. Select screen with your diagrams
 3. Position camera in bottom-right corner (resize in Descript later)
@@ -58,6 +63,7 @@ npx playwright test tests/demo/demo-recording.spec.ts --headed --slow-mo=50
 6. Stop recording
 
 #### Recording 2: MCP Servers Setup (2-3 min)
+
 1. New Descript recording
 2. Screen: Terminal windows side-by-side
 3. Show MCP servers running, logs streaming
@@ -66,6 +72,7 @@ npx playwright test tests/demo/demo-recording.spec.ts --headed --slow-mo=50
 6. Stop recording
 
 #### Recording 3: Playwright Web Demo (8-10 min)
+
 **This is the key section**
 
 1. Start MCP servers in terminals (if not running)
@@ -88,6 +95,7 @@ npx playwright test tests/demo/demo-recording.spec.ts --headed --slow-mo=50
 **Pro tip:** Console logs from Playwright script tell you when to narrate
 
 #### Recording 4: Testing Infrastructure (3-4 min)
+
 1. New Descript recording
 2. Screen: Vitest UI
 3. Show 59 passing tests
@@ -98,6 +106,7 @@ npx playwright test tests/demo/demo-recording.spec.ts --headed --slow-mo=50
 8. Stop recording
 
 #### Recording 5: Code Deep Dive (3-4 min)
+
 1. New Descript recording
 2. Screen: VS Code
 3. Show key files:
@@ -112,29 +121,34 @@ npx playwright test tests/demo/demo-recording.spec.ts --headed --slow-mo=50
 ### Phase 3: Edit in Descript
 
 **Import All Recordings**
+
 1. Create new Descript project: "SIAM Technical Demo"
 2. Import all 5 recordings
 3. They'll appear as separate scenes
 
 **Edit Each Scene**
+
 1. **Remove filler words**: Click "Remove filler words" button (automatic)
 2. **Edit transcript**: Delete "um", "uh", long pauses, mistakes
 3. **Adjust camera**: Resize picture-in-picture if needed
 4. **Trim dead time**: Cut beginning/ending silence
 
 **Combine Scenes**
+
 1. Arrange recordings in order
 2. Add fade transitions between sections (optional)
 3. Play through once to check flow
 4. Speed up boring parts if needed (select → Change speed)
 
 **Polish**
+
 1. Add title slide at beginning (Descript has templates)
 2. Add ending slide with contact info
 3. Background music? (Optional - probably not needed for technical audience)
 4. Check audio levels are consistent
 
 **Export**
+
 1. File → Publish
 2. Choose: 1080p, H.264
 3. Export to Desktop
@@ -145,11 +159,13 @@ npx playwright test tests/demo/demo-recording.spec.ts --headed --slow-mo=50
 ### Timing Your Narration
 
 **During Recording:**
+
 - Don't rush - Playwright pauses are there for you
 - Pause for emphasis - edit out extra silence later
 - If you mess up, just keep going - fix in transcript editing
 
 **During Editing:**
+
 - Use Descript's transcript editing to remove mistakes
 - Speed up sections where you talked too slowly
 - Slow down sections where you rushed
@@ -160,19 +176,23 @@ npx playwright test tests/demo/demo-recording.spec.ts --headed --slow-mo=50
 ### Troubleshooting
 
 **Playwright doesn't find selectors?**
+
 - Check your app's actual data-testid attributes
 - Update selectors in demo-recording.spec.ts
 - Run in headed mode to see what's happening
 
 **Typing too fast/slow?**
+
 - Adjust `delay` parameter in typeNaturally function
 - Or add `slowMo` to playwright config
 
 **Need more/less pause time?**
+
 - Edit narratorPause durations
 - Start longer, can always speed up in Descript
 
 **MCP servers not responding?**
+
 - Verify they're running before recording
 - Check logs for errors
 - Have fallback: skip MCP demo if broken
@@ -182,15 +202,18 @@ npx playwright test tests/demo/demo-recording.spec.ts --headed --slow-mo=50
 ### Timeline
 
 **Day 1 (Today/Tomorrow):**
+
 - Create diagrams
 - Customize Playwright script
 - Test run everything
 
 **Day 2 (Monday?):**
+
 - Record all segments
 - 30 minutes of recording = 2-3 hours with retakes
 
 **Day 3:**
+
 - Edit in Descript
 - 1-2 hours of editing
 - Export final video

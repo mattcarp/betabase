@@ -255,9 +255,7 @@ export function EnhancedChatPanelWithAIElements({
                   <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2" />
                 </div>
 
-                <h3 className="mac-title">
-                  Welcome to {title}
-                </h3>
+                <h3 className="mac-title">Welcome to {title}</h3>
                 <p className="text-sm text-muted-foreground mb-6 max-w-md">
                   I have access to the AOMA knowledge base and can answer questions about Sony Music
                   systems, USM, and enterprise tools.

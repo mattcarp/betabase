@@ -8,28 +8,34 @@
 ## Issue 1: Microphone Input Stopped Working ❌
 
 ### Symptoms
+
 - Input level showing 0% (was working at 5-22% earlier)
 - WebSocket connection errors: "WebSocket is already in CLOSING or CLOSED state"
 - Auto-reconnection loop occurring
 - Connected on Bluetooth headphones (Matties XM5 Over-Ear) but not capturing audio
 
 ### What Changed
+
 The microphone was working perfectly after we disabled the custom audio processor. Something has caused the WebSocket connection to become unstable.
 
 ### Possible Causes
+
 1. **Bluetooth device switching** - The system may have switched audio input devices
 2. **WebSocket connection timeout** - Long-running connection may have timed out
 3. **Browser audio context suspended** - Chrome/Safari may have suspended the audio context
 4. **ElevenLabs session expired** - The conversation session may have a time limit
 
 ### Immediate Fix Needed
+
 1. Stop the current conversation completely
 2. Hard refresh the browser (Cmd+Shift+R)
 3. Start a new conversation with fresh WebSocket connection
 4. Verify Bluetooth headphones are selected as default input in System Preferences
 
 ### Long-term Solution
+
 Add better error handling and automatic recovery:
+
 ```typescript
 // In useElevenLabsConversation.ts
 onError: (err) => {
@@ -42,7 +48,7 @@ onError: (err) => {
     console.log("🔄 WebSocket error detected, attempting reconnection...");
     setTimeout(() => reconnect(), 3000);
   }
-}
+};
 ```
 
 ---
@@ -50,9 +56,11 @@ onError: (err) => {
 ## Issue 2: Agent Has No Access to AOMA Knowledge ❌
 
 ### Root Cause Discovered
+
 The ElevenLabs knowledge base is **completely empty**.
 
 **API Response**:
+
 ```json
 {
   "documents": [],
@@ -62,10 +70,13 @@ The ElevenLabs knowledge base is **completely empty**.
 ```
 
 ### Why RAG Isn't Working
+
 Even though we enabled RAG (`"rag": { "enabled": true }`), there are **no documents** for the agent to retrieve from.
 
 ### The MCP Server Misconception
+
 The MCP server (`uR5cKaU7GOZQyS04RVXP`) is connected, but:
+
 - MCP servers provide **tools** for the agent to call
 - They don't automatically populate the RAG knowledge base
 - The knowledge base needs documents uploaded via ElevenLabs API
@@ -73,6 +84,7 @@ The MCP server (`uR5cKaU7GOZQyS04RVXP`) is connected, but:
 ### Architecture Clarification
 
 **What We Thought**:
+
 ```
 User Question
     ↓
@@ -84,6 +96,7 @@ Returns AOMA knowledge
 ```
 
 **What Actually Happens**:
+
 ```
 User Question
     ↓
@@ -168,12 +181,14 @@ Instead of RAG (which requires uploading documents), we can make the agent **cal
 5. **Agent Responds**: Agent uses tool results to answer user
 
 ### Advantages of MCP Tools
+
 - ✅ No document upload needed
 - ✅ Always up-to-date (queries live database)
 - ✅ More flexible querying
 - ✅ Can return structured data
 
 ### Disadvantages
+
 - ⚠️ Requires approval for each tool call (unless we fix the approval policy)
 - ⚠️ Slower than RAG (network round-trip to Lambda)
 - ⚠️ More complex error handling
@@ -181,6 +196,7 @@ Instead of RAG (which requires uploading documents), we can make the agent **cal
 ### Enable MCP Tools
 
 1. **Check what tools the MCP server provides**:
+
 ```bash
 curl "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws/rpc" \
   -H "Content-Type: application/json" \
@@ -192,6 +208,7 @@ curl "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws/rpc" 
    - Or pre-approve specific tool hashes
 
 3. **Update agent prompt to use tools**:
+
 ```
 You are an expert on AOMA. When asked about AOMA, use the query_aoma_knowledge tool to retrieve accurate information from the knowledge base.
 ```
@@ -201,10 +218,12 @@ You are an expert on AOMA. When asked about AOMA, use the query_aoma_knowledge t
 ## Recommended Approach
 
 ### Short-term (Quick Fix)
+
 1. **Fix microphone** - Hard refresh and reconnect
 2. **Use MCP tools** - Configure tools for direct Supabase querying
 
 ### Long-term (Production Ready)
+
 1. **Upload AOMA documents to ElevenLabs** - Full RAG with fast retrieval
 2. **Keep MCP tools as fallback** - For complex queries RAG can't handle
 3. **Add connection monitoring** - Better error handling and recovery
@@ -214,6 +233,7 @@ You are an expert on AOMA. When asked about AOMA, use the query_aoma_knowledge t
 ## Current Agent Configuration
 
 **What's Configured**:
+
 - ✅ Agent ID: `agent_01jz1ar6k2e8tvst14g6cbgc7m`
 - ✅ MCP Server Connected: `uR5cKaU7GOZQyS04RVXP`
 - ✅ RAG Enabled: `true`
@@ -222,6 +242,7 @@ You are an expert on AOMA. When asked about AOMA, use the query_aoma_knowledge t
 - ❌ MCP Tools: Approval required
 
 **What Needs Fixing**:
+
 1. Upload AOMA documents to knowledge base, OR
 2. Configure MCP tools with automatic approval
 3. Fix WebSocket connection stability
@@ -231,18 +252,21 @@ You are an expert on AOMA. When asked about AOMA, use the query_aoma_knowledge t
 ## Next Steps
 
 ### Option A: Upload Documents (Better for Production)
+
 1. Export AOMA docs from Supabase
 2. Upload to ElevenLabs via API
 3. Link documents to agent
 4. Test RAG retrieval
 
 ### Option B: Enable MCP Tools (Faster to Test)
+
 1. List MCP server tools
 2. Set approval policy to `no_approval`
 3. Update agent prompt to use tools
 4. Test tool calling
 
 ### Option C: Both (Best of Both Worlds)
+
 1. Implement Option B first (quick test)
 2. Implement Option A in background (better UX)
 3. Use tools for complex queries, RAG for simple ones

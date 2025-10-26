@@ -8,6 +8,7 @@
 ## Summary
 
 The ElevenLabs Conversational AI integration is now fully functional with:
+
 - ✅ Working microphone input (single audio source)
 - ✅ Working audio output (AI speaking)
 - ✅ RAG (Retrieval Augmented Generation) enabled
@@ -19,19 +20,23 @@ The ElevenLabs Conversational AI integration is now fully functional with:
 ## Configuration Changes Made
 
 ### 1. Fixed Audio Input Conflict
+
 **Problem**: Two audio processors competing for microphone
 **Solution**: Disabled custom `RealTimeAudioProcessor`, let ElevenLabs SDK handle all audio via WebRTC
 
 **Files Modified**:
+
 - `src/hooks/useElevenLabsConversation.ts`
   - Commented out `useEffect` that initializes custom audio processor
   - Disabled processor in `stopConversation()`, `pauseConversation()`, `resumeConversation()`
 
 ### 2. Enabled RAG for Knowledge Base Access
+
 **Problem**: RAG was disabled (`"enabled": false`)
 **Solution**: Enabled RAG with optimal settings
 
 **Configuration**:
+
 ```json
 {
   "rag": {
@@ -45,6 +50,7 @@ The ElevenLabs Conversational AI integration is now fully functional with:
 ```
 
 ### 3. Updated Agent Prompt for AOMA Expertise
+
 **Previous Prompt**: "You are a helpful assistant."
 **New Prompt**: "You are an expert AI assistant with access to comprehensive knowledge about AOMA (Asset and Offering Management Application), a Sony Music enterprise system. When users ask about AOMA, use your connected knowledge base to provide accurate, detailed information. Always cite sources when referencing AOMA documentation."
 
@@ -87,6 +93,7 @@ Response with Citations
 ## Testing Evidence
 
 **Audio Levels (from console logs)**:
+
 ```
 Input: 5-22% - Microphone capturing user speech ✅
 Output: 0-29% - AI responding with audio ✅
@@ -122,12 +129,14 @@ To verify the knowledge base integration, ask:
 ## What Changed from Previous Status
 
 ### Before:
+
 - ❌ RAG disabled - agent couldn't access knowledge base
 - ❌ Generic prompt - agent didn't know to use AOMA knowledge
 - ❌ Multiple audio inputs - custom processor conflicting with SDK
 - ✅ MCP server connected but not being used
 
 ### After:
+
 - ✅ RAG enabled - agent actively retrieves from knowledge base
 - ✅ AOMA-aware prompt - agent knows its expertise domain
 - ✅ Single audio input - ElevenLabs SDK exclusive microphone access
@@ -178,6 +187,7 @@ curl -X PATCH "https://api.elevenlabs.io/v1/convai/agents/agent_01jz1ar6k2e8tvst
 ## Environment Variables
 
 Required in `.env.local`:
+
 ```
 ELEVENLABS_API_KEY=sk_b495cffb8979229634b620c1bddbf5583f5c9fd69e5785fb
 ELEVENLABS_AGENT_ID=agent_01jz1ar6k2e8tvst14g6cbgc7m
@@ -211,17 +221,21 @@ MCP_LAMBDA_URL=https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.
 ### If agent doesn't know about AOMA:
 
 1. **Verify RAG is enabled**:
+
    ```bash
    curl "https://api.elevenlabs.io/v1/convai/agents/agent_01jz1ar6k2e8tvst14g6cbgc7m" \
      -H "xi-api-key: $ELEVENLABS_API_KEY" | jq '.conversation_config.agent.prompt.rag.enabled'
    ```
+
    Should return: `true`
 
 2. **Verify MCP server is connected**:
+
    ```bash
    curl "https://api.elevenlabs.io/v1/convai/agents/agent_01jz1ar6k2e8tvst14g6cbgc7m" \
      -H "xi-api-key: $ELEVENLABS_API_KEY" | jq '.conversation_config.agent.prompt.mcp_server_ids'
    ```
+
    Should return: `["uR5cKaU7GOZQyS04RVXP"]`
 
 3. **Restart conversation** - Stop and start new session to pick up config changes

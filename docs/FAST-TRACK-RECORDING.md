@@ -1,6 +1,7 @@
 # FAST TRACK: Get Recording Done Today
 
 ## Current Time Check
+
 You're in Gozo, Malta. Sundown is ~6-7 PM. Let's GO!
 
 ---
@@ -15,6 +16,7 @@ npx playwright test tests/demo/demo-fast.spec.ts --headed --project=chromium
 ```
 
 **What you'll see:**
+
 - Browser opens
 - Goes to thebetabase.com
 - Tries to log in (you might need to handle magic link)
@@ -22,6 +24,7 @@ npx playwright test tests/demo/demo-fast.spec.ts --headed --project=chromium
 - Pauses for your narration (watch console logs)
 
 **If it breaks:**
+
 - Authentication: Manually log in first, then comment out auth code
 - Wrong selectors: We'll fix them (but try first!)
 - Too fast/slow: Edit `DEMO_CONFIG` pause durations in the file
@@ -33,6 +36,7 @@ npx playwright test tests/demo/demo-fast.spec.ts --headed --project=chromium
 **Skip diagrams for now** - Just record the demo!
 
 ### Step 1: Prepare (5 min)
+
 ```bash
 # Terminal 1: Start any MCP servers you have
 # (if you don't have them running, skip this - demo works without)
@@ -41,6 +45,7 @@ npx playwright test tests/demo/demo-fast.spec.ts --headed --project=chromium
 ```
 
 ### Step 2: Test Playwright (5 min)
+
 ```bash
 # Run once to verify it works
 npx playwright test tests/demo/demo-fast.spec.ts --headed
@@ -52,6 +57,7 @@ npx playwright test tests/demo/demo-fast.spec.ts --headed
 ```
 
 ### Step 3: Record (20 min)
+
 1. **Open Descript**
    - New Recording
    - Screen + Camera
@@ -60,6 +66,7 @@ npx playwright test tests/demo/demo-fast.spec.ts --headed
 2. **Start Recording in Descript**
 
 3. **Run Playwright:**
+
    ```bash
    npx playwright test tests/demo/demo-fast.spec.ts --headed
    ```
@@ -73,6 +80,7 @@ npx playwright test tests/demo/demo-fast.spec.ts --headed
 5. **Stop when done** (~15 minutes of recording)
 
 ### Step 4: Quick Edit in Descript (10 min)
+
 1. Remove filler words (automatic button)
 2. Delete big mistakes from transcript
 3. Resize camera if needed
@@ -105,6 +113,7 @@ npx playwright test tests/demo/demo-fast.spec.ts --headed
 ## RECOMMENDATION
 
 **Go with PLAN A using Playwright:**
+
 - It's cooler (shows testing sophistication)
 - More reproducible
 - No typos
@@ -128,6 +137,7 @@ npx playwright test tests/demo/demo-fast.spec.ts --headed
 ## Emergency Fallback
 
 If Playwright breaks and you can't fix it in 10 minutes:
+
 - Switch to manual typing (PLAN B)
 - Still record with Descript
 - Edit out mistakes afterward

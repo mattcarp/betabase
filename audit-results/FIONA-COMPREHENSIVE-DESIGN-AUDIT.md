@@ -442,6 +442,7 @@ _(Full list of 309 violations available in mac-violations-detailed.json)_
 ```
 
 ### Example 4: Using MAC Typography Classes
+
 ---
 
 ## DESIGN SYSTEM ARCHITECTURE ANALYSIS

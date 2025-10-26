@@ -8,12 +8,12 @@ sequenceDiagram
     participant GitHub as GitHub MCP Server
     participant Vector as Vector Search
     participant GPT5 as GPT-5 API
-    
+
     User->>Frontend: "Show me JIRA tickets for AOMA"
     Frontend->>API: POST /api/chat
-    
+
     Note over API: Parse query intent
-    
+
     par Parallel Data Retrieval
         API->>Vector: Semantic search: "AOMA"
         Vector-->>API: Relevant doc chunks
@@ -28,19 +28,19 @@ sequenceDiagram
         GitHub-->>MCP: Code references
         MCP-->>API: Code snippets
     end
-    
+
     Note over API: Aggregate all context
-    
+
     API->>GPT5: Prompt + Docs + Live Data
-    
+
     loop Streaming Response
         GPT5-->>API: Response tokens
         API-->>Frontend: Server-Sent Events
         Frontend-->>User: Real-time display
     end
-    
+
     Note over Frontend: Show citations from<br/>both docs and live data
-    
+
     style User fill:#1e293b,stroke:#334155,stroke-width:2px,color:#fff
     style Frontend fill:#1e293b,stroke:#334155,stroke-width:2px,color:#fff
     style API fill:#0ea5e9,stroke:#0284c7,stroke-width:2px,color:#fff
@@ -56,6 +56,7 @@ sequenceDiagram
 **Purpose:** Shows how MCP servers work in the request/response cycle
 
 **Key Points to Highlight:**
+
 - Parallel data retrieval (docs + live data simultaneously)
 - MCP Proxy orchestrates multiple MCP servers
 - All context aggregated before GPT-5 call

@@ -9,6 +9,7 @@ Health checks, logs, metrics, and performance monitoring for SIAM deployments.
 **Endpoint**: `https://thebetabase.com/api/health`
 
 **Response format:**
+
 ```json
 {
   "status": "healthy",
@@ -34,6 +35,7 @@ curl https://thebetabase.com/api/health | jq '.status'
 ### Automated Health Monitoring
 
 **Deployment script** (`./scripts/deploy-with-monitoring.sh`) automatically:
+
 - Polls health endpoint every 10 seconds
 - Requires 3 consecutive healthy responses
 - Verifies build timestamp is current
@@ -45,6 +47,7 @@ curl https://thebetabase.com/api/health | jq '.status'
 ### Using Render MCP (Recommended)
 
 Natural language commands in Claude Code:
+
 ```bash
 "Show recent logs for siam-app"
 "Check error logs from the last hour"
@@ -77,6 +80,7 @@ render logs siam-app --start-time="2025-10-26T12:00:00Z"
 ### Log Levels
 
 **Production logs include:**
+
 - **INFO**: Normal operations, health checks, successful requests
 - **WARN**: Non-critical issues, deprecation warnings
 - **ERROR**: Application errors, failed requests, exceptions
@@ -85,18 +89,21 @@ render logs siam-app --start-time="2025-10-26T12:00:00Z"
 ### Important Log Patterns
 
 **Successful deployment:**
+
 ```
 ✓ Compiled successfully
 Ready on http://0.0.0.0:3000
 ```
 
 **Build errors:**
+
 ```
 ✗ TypeScript error in src/components/...
 ✗ Module not found: Can't resolve '...'
 ```
 
 **Runtime errors:**
+
 ```
 Error: EACCES: permission denied
 UnhandledPromiseRejectionWarning
@@ -117,17 +124,20 @@ TypeError: Cannot read property '...'
 ### Metrics Available
 
 **Resource Metrics:**
+
 - CPU usage (average, max, limits)
 - Memory usage (average, max, limits)
 - Instance count
 - CPU/Memory targets (for autoscaling)
 
 **HTTP Metrics:**
+
 - Request counts (total, by host, by status code)
 - Response times (p50, p95, p99)
 - Bandwidth usage
 
 **Database Metrics:**
+
 - Active connections
 - Query performance
 - Storage usage
@@ -157,18 +167,21 @@ httpPath: "/api/chat"
 ### Performance Thresholds
 
 **Healthy:**
+
 - CPU usage < 70%
 - Memory usage < 80%
 - Response time p95 < 500ms
 - Error rate < 1%
 
 **Warning:**
+
 - CPU usage 70-85%
 - Memory usage 80-90%
 - Response time p95 500-1000ms
 - Error rate 1-5%
 
 **Critical:**
+
 - CPU usage > 85%
 - Memory usage > 90%
 - Response time p95 > 1000ms
@@ -190,18 +203,21 @@ playwright_console_logs type="error" limit=50
 ### Common Console Errors
 
 **Network errors:**
+
 ```
 Failed to load resource: net::ERR_CONNECTION_REFUSED
 404 (Not Found)
 ```
 
 **JavaScript errors:**
+
 ```
 Uncaught TypeError: Cannot read property 'x' of undefined
 Uncaught ReferenceError: x is not defined
 ```
 
 **React errors:**
+
 ```
 Warning: Each child in a list should have a unique "key" prop
 Warning: Can't perform a React state update on an unmounted component
@@ -248,12 +264,14 @@ render deploys get <deploy-id>
 ### GitHub Actions Notifications
 
 **Automated PR comments:**
+
 - Deployment status posted to merged PR
 - Health verification results
 - Build timestamp confirmation
 - Console error detection results
 
 **Issue creation:**
+
 - Auto-created if deployment fails
 - Assigned to PR author
 - Includes error logs and diagnostics
@@ -276,6 +294,7 @@ node check-site-console.js
 ### Health Endpoint Not Responding
 
 **Check:**
+
 1. Service is running: `render services list`
 2. No recent deployments failed: `render deploys list siam-app`
 3. Logs for errors: `render logs siam-app --tail 100`
@@ -284,6 +303,7 @@ node check-site-console.js
 ### Logs Not Showing Recent Events
 
 **Check:**
+
 1. Time zone settings (logs use UTC)
 2. Log level filters (might be filtering out INFO)
 3. Service restart recently (logs cleared)
@@ -292,6 +312,7 @@ node check-site-console.js
 ### Metrics Not Available
 
 **Check:**
+
 1. Time range within last 30 days
 2. Resource ID is correct
 3. Metric type is valid for resource
@@ -310,12 +331,14 @@ node check-site-console.js
 ## Monitoring Tools Reference
 
 **Render MCP Tools:**
+
 - `get_metrics` - Retrieve performance metrics
 - `list_logs` - Get application logs
 - `list_deploys` - View deployment history
 - `get_service` - Check service status
 
 **CLI Tools:**
+
 - `render` - Render CLI for logs and services
 - `gh` - GitHub CLI for Actions monitoring
 - `curl` - Health endpoint checking
@@ -329,4 +352,4 @@ node check-site-console.js
 
 ---
 
-*For quick reference, see [QUICK-START.md](../QUICK-START.md)*
+_For quick reference, see [QUICK-START.md](../QUICK-START.md)_

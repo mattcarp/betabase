@@ -6,7 +6,7 @@
 
 1. Go to https://mermaid.live
 2. Open each `.md` file in this directory
-3. Copy the mermaid code block (everything between ```mermaid and ```)
+3. Copy the mermaid code block (everything between `mermaid and `)
 4. Paste into Mermaid Live
 5. Click "Export" → "PNG" or "SVG"
 6. Save to this directory
@@ -64,6 +64,7 @@ mmdc -i 03-rag-pipeline-antihallucination.md -o 03-rag-pipeline-antihallucinatio
 ## For Presentation
 
 **Recommended approach:**
+
 1. Render as PNG with transparent background
 2. Import into Keynote or PowerPoint
 3. Add on dark background (matches your UI aesthetic)
@@ -71,6 +72,7 @@ mmdc -i 03-rag-pipeline-antihallucination.md -o 03-rag-pipeline-antihallucinatio
 5. Talk through the flow
 
 **Style notes:**
+
 - Diagrams use your color scheme (dark blues, purples, pinks)
 - Text is white for visibility on dark backgrounds
 - Key components highlighted with colors matching your branding

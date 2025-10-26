@@ -138,6 +138,7 @@ npx playwright test tests/curate-tab-test.spec.ts
 ```
 
 Tests:
+
 - Upload documents to knowledge base
 - Delete documents from knowledge base
 - Verify knowledge base state changes
@@ -326,15 +327,15 @@ tests/
 ### Test Structure
 
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Feature Name', () => {
+test.describe("Feature Name", () => {
   test.beforeEach(async ({ page }) => {
     // Setup before each test
-    await page.goto('/');
+    await page.goto("/");
   });
 
-  test('should do something', async ({ page }) => {
+  test("should do something", async ({ page }) => {
     // Arrange
     const button = page.locator('button:has-text("Submit")');
 
@@ -342,10 +343,10 @@ test.describe('Feature Name', () => {
     await button.click();
 
     // Assert
-    await expect(page.locator('.success-message')).toBeVisible();
+    await expect(page.locator(".success-message")).toBeVisible();
   });
 
-  test('should handle errors', async ({ page }) => {
+  test("should handle errors", async ({ page }) => {
     // Test error cases
   });
 });
@@ -400,4 +401,4 @@ NEXT_PUBLIC_BYPASS_AUTH=true npx playwright test
 
 ---
 
-*For quick reference, see [QUICK-START.md](../QUICK-START.md)*
+_For quick reference, see [QUICK-START.md](../QUICK-START.md)_

@@ -168,9 +168,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="mac-heading">
-            AOMA Performance Dashboard
-          </h2>
+          <h2 className="mac-heading">AOMA Performance Dashboard</h2>
           <p className="mac-body text-muted-foreground">Real-time A/B testing: Railway vs Render</p>
         </div>
         <div className="flex gap-2">

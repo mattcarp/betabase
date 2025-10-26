@@ -21,6 +21,7 @@ Complete deployment guide for SIAM including automated workflows, monitoring, an
 ```
 
 This handles EVERYTHING:
+
 - Git branch management (merges to main)
 - Version bumping (triggers Render deploy)
 - Render MCP monitoring
@@ -213,6 +214,7 @@ For faster manual deployments:
    - Copy the deploy hook URL
 
 2. Add to GitHub as repository variable:
+
    ```bash
    gh variable set RENDER_DEPLOY_HOOK_URL --body "https://api.render.com/deploy/srv-xxxxx?key=xxxxx"
    ```
@@ -294,11 +296,13 @@ git push origin main
 ### Build Failures
 
 **Check build logs:**
+
 ```bash
 render logs siam-app --type build --tail 100
 ```
 
 **Common causes:**
+
 - TypeScript errors (run `npm run type-check` locally)
 - Missing dependencies (check package.json)
 - Environment variables not set
@@ -309,6 +313,7 @@ render logs siam-app --type build --tail 100
 **Issue**: Render health check timing out
 
 **Solution:**
+
 1. Check health endpoint locally: `curl http://localhost:3000/api/health`
 2. Verify Next.js dev mode compilation time
 3. Increase health check timeout in Render dashboard settings
@@ -318,6 +323,7 @@ render logs siam-app --type build --tail 100
 **Issue**: `Error: EACCES: permission denied, mkdir '/app/.next'`
 
 **Solution**: In Dockerfile, create directories BEFORE switching to nextjs user:
+
 ```dockerfile
 RUN mkdir -p .next && chown -R nextjs:nodejs .next
 RUN touch next-env.d.ts && chown nextjs:nodejs next-env.d.ts
@@ -329,6 +335,7 @@ USER nextjs  # Switch user AFTER creating directories
 **Issue**: Build time shows old timestamp
 
 **Solution:**
+
 1. Verify `scripts/generate-build-info.js` runs in Dockerfile
 2. Check `.env.production.local` for NEXT_PUBLIC_BUILD_TIME
 3. Ensure script runs BEFORE build, not at import time
@@ -352,4 +359,4 @@ USER nextjs  # Switch user AFTER creating directories
 
 ---
 
-*For quick reference, see [QUICK-START.md](../QUICK-START.md)*
+_For quick reference, see [QUICK-START.md](../QUICK-START.md)_

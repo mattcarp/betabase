@@ -28,6 +28,7 @@ cd project-docs-worktree && claude
 ### Task Orchestration
 
 Use task-orchestrator for complex, multi-task projects:
+
 ```bash
 # Analyze task queue and parallelize work
 # Deploy task-executor agents as needed
@@ -49,4 +50,4 @@ Use task-orchestrator for complex, multi-task projects:
 
 ---
 
-*For quick reference, see [QUICK-START.md](../QUICK-START.md)*
+_For quick reference, see [QUICK-START.md](../QUICK-START.md)_

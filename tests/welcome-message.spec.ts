@@ -24,6 +24,7 @@ test.describe("Welcome Message", () => {
       .filter({ hasText: /Welcome to/ })
       .textContent();
     expect(welcomeHeading).toBe("Welcome to The Betabase");
+  });
 
   test("should maintain correct welcome message after conversation interactions", async ({
     page,

@@ -334,13 +334,13 @@ export async function POST(req: Request) {
     const latestUserMessage = messages.filter((m: any) => m.role === "user").pop();
 
     // Extract content from AI SDK v5 parts format or v4 content format
-    const messageContent = latestUserMessage?.parts?.find((p: any) => p.type === "text")?.text || latestUserMessage?.content;
+    const messageContent =
+      latestUserMessage?.parts?.find((p: any) => p.type === "text")?.text ||
+      latestUserMessage?.content;
 
     if (!bypassAOMA && latestUserMessage && messageContent) {
       const queryString =
-        typeof messageContent === "string"
-          ? messageContent
-          : JSON.stringify(messageContent);
+        typeof messageContent === "string" ? messageContent : JSON.stringify(messageContent);
 
       console.log("🎯 Using LangChain orchestrator for AOMA:", queryString.substring(0, 100));
 
@@ -365,12 +365,12 @@ export async function POST(req: Request) {
         // Railway typically responds in 10-15s, so 45s timeout is reasonable
         console.log("🚂 Starting Railway MCP query...");
         railwayStartTime = Date.now();
-        const orchestratorResult = await Promise.race([
+        const orchestratorResult = (await Promise.race([
           aomaOrchestrator.executeOrchestration(queryString),
           new Promise((_, reject) =>
             setTimeout(() => reject(new Error("AOMA orchestrator timeout after 45s")), 45000)
           ),
-        ]) as any;
+        ])) as any;
         railwayEndTime = Date.now();
         const railwayDuration = railwayEndTime - railwayStartTime;
         console.log(`⚡ Railway MCP responded in ${railwayDuration}ms`);

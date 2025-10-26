@@ -7,6 +7,7 @@ Frequent problems and solutions for SIAM development.
 **Problem**: `Error: EACCES: permission denied, mkdir '/app/.next'`
 
 **Solution**: In Dockerfile, create directories BEFORE switching to nextjs user:
+
 ```dockerfile
 RUN mkdir -p .next && chown -R nextjs:nodejs .next
 RUN touch next-env.d.ts && chown nextjs:nodejs next-env.d.ts
@@ -18,6 +19,7 @@ USER nextjs  # Switch user AFTER creating directories
 **Problem**: Git merge conflict in package-lock.json
 
 **Solution**:
+
 ```bash
 ./scripts/fix-package-lock-conflict.sh
 ```
@@ -27,6 +29,7 @@ USER nextjs  # Switch user AFTER creating directories
 **Problem**: `Error: listen EADDRINUSE: address already in use :::3000`
 
 **Solution**:
+
 ```bash
 npx kill-port 3000
 npm run dev
@@ -37,6 +40,7 @@ npm run dev
 **Problem**: Type errors preventing build
 
 **Solution**:
+
 ```bash
 # Check errors in YOUR changed files only
 git diff --name-only main...HEAD | xargs npm run type-check
@@ -50,6 +54,7 @@ npm run type-check
 **Problem**: JavaScript errors in production
 
 **Solution**:
+
 ```bash
 # Test with Playwright
 node check-site-console.js
@@ -64,6 +69,7 @@ playwright_console_logs type="error"
 **Problem**: Build time shows old timestamp
 
 **Solution**:
+
 ```bash
 # Force regenerate build info
 node scripts/generate-build-info.js
@@ -75,6 +81,7 @@ cat .env.production.local  # Should show NEXT_PUBLIC_BUILD_TIME
 **Problem**: Render health check timing out
 
 **Solution**:
+
 1. Check health endpoint locally: `curl http://localhost:3000/api/health`
 2. Verify Next.js dev mode compilation time
 3. Increase health check timeout in Render dashboard settings
@@ -86,4 +93,4 @@ cat .env.production.local  # Should show NEXT_PUBLIC_BUILD_TIME
 
 ---
 
-*For quick reference, see [QUICK-START.md](../QUICK-START.md)*
+_For quick reference, see [QUICK-START.md](../QUICK-START.md)_

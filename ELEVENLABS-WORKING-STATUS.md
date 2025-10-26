@@ -10,22 +10,27 @@ The ElevenLabs Conversational AI integration is now successfully capturing audio
 ## Key Fixes Applied
 
 ### 1. Disabled Custom Audio Processor
+
 **Problem**: Two audio processors were competing for microphone access:
+
 - Custom `RealTimeAudioProcessor` (for VAD analysis)
 - ElevenLabs SDK's internal WebRTC audio handler
 
 **Solution**: Completely disabled the custom audio processor to let the ElevenLabs SDK handle all audio capture internally via WebRTC.
 
 **Files Modified**:
+
 - `src/hooks/useElevenLabsConversation.ts`
   - Commented out `useEffect` that initializes `RealTimeAudioProcessor`
   - Disabled audio processor in `stopConversation()`
   - Disabled audio processor in `pauseConversation()` and `resumeConversation()`
 
 ### 2. Single Audio Input
+
 **Result**: The SDK now has exclusive access to the microphone, eliminating conflicts.
 
 **Evidence from logs**:
+
 ```
 🎤 Audio levels - Input: 16.5%, Output: 0.1%
 🎤 Audio levels - Input: 14.6%, Output: 0.0%
@@ -58,6 +63,7 @@ The input levels are responding to user audio, confirming successful capture.
 ## Testing Commands
 
 To test AOMA knowledge integration, try asking:
+
 - "What is AOMA?"
 - "What does AOMA stand for?"
 - "Tell me about the Asset and Offering Management Application"
@@ -74,6 +80,7 @@ The ElevenLabs SDK uses WebRTC for real-time bidirectional audio communication. 
 Both were trying to read from the same audio input, causing the SDK to receive 0% input volume.
 
 **Solution**: Only the ElevenLabs SDK captures audio. If we need VAD analysis later, we can:
+
 - Use the SDK's built-in VAD (voice-activated mode)
 - Process audio from SDK's output stream (not input)
 - Use server-side audio analysis
@@ -81,6 +88,7 @@ Both were trying to read from the same audio input, causing the SDK to receive 0
 ### Environment Variables
 
 Required in `.env.local`:
+
 ```
 ELEVENLABS_API_KEY=sk_b495cffb8979229634b620c1bddbf5583f5c9fd69e5785fb
 ELEVENLABS_AGENT_ID=agent_01jz1ar6k2e8tvst14g6cbgc7m

@@ -18,6 +18,7 @@ MCP servers, tools, and configuration for SIAM.
 ## Render MCP
 
 **Natural language deployment management:**
+
 ```bash
 "List my Render services"
 "Show deployment status for siam-app"
@@ -28,6 +29,7 @@ MCP servers, tools, and configuration for SIAM.
 ## Playwright MCP
 
 **Browser automation:**
+
 ```bash
 playwright_navigate url="http://localhost:3000"
 playwright_console_logs type="error"
@@ -39,6 +41,7 @@ playwright_fill selector="input[type='email']" value="test@example.com"
 ## Firecrawl MCP
 
 **Web scraping and testing:**
+
 ```bash
 # Crawl sites, test, record LLM-friendly markdown
 ```
@@ -50,4 +53,4 @@ playwright_fill selector="input[type='email']" value="test@example.com"
 
 ---
 
-*For quick reference, see [QUICK-START.md](../QUICK-START.md)*
+_For quick reference, see [QUICK-START.md](../QUICK-START.md)_

@@ -12,12 +12,14 @@ The **2-3 second disconnect issue has been RESOLVED** by switching from WebSocke
 The integration was using the **wrong ElevenLabs API endpoint**:
 
 ### BEFORE (BROKEN)
+
 - Endpoint: `/v1/convai/conversation/get_signed_url`
 - Returns: `signed_url` for **WebSocket** connection
 - Issue: WebSocket not optimized for real-time audio streaming
 - Result: Connection dropped after 2-3 seconds, AI cut off mid-sentence
 
 ### AFTER (FIXED)
+
 - Endpoint: `/v1/convai/conversation/token`
 - Returns: `token` for **WebRTC** connection
 - Benefit: WebRTC designed for real-time audio streaming
@@ -26,6 +28,7 @@ The integration was using the **wrong ElevenLabs API endpoint**:
 ## Files Changed
 
 ### 1. Backend API
+
 **File**: `/app/api/elevenlabs/conversation-token/route.ts`
 
 ```typescript
@@ -37,12 +40,13 @@ const response = await fetch(
 
 // CHANGED: Response field from signedUrl to conversationToken
 return NextResponse.json({
-  conversationToken: data.token,  // was: signedUrl: data.signed_url
+  conversationToken: data.token, // was: signedUrl: data.signed_url
   expiresAt: data.expires_at,
 });
 ```
 
 ### 2. Frontend Hook
+
 **File**: `/src/hooks/useElevenLabsConversation.ts`
 
 ```typescript
@@ -52,19 +56,20 @@ const conversationTokenRef = useRef<string | null>(null);
 // CHANGED: Function from getSignedUrl to getConversationToken
 const getConversationToken = async (agentId: string): Promise<string> => {
   const data = await response.json();
-  return data.conversationToken;  // was: data.signedUrl
+  return data.conversationToken; // was: data.signedUrl
 };
 
 // CHANGED: startSession to use WebRTC
 await conversation.startSession({
-  conversationToken,           // was: signedUrl
-  connectionType: "webrtc",    // ADDED: Explicit WebRTC mode
+  conversationToken, // was: signedUrl
+  connectionType: "webrtc", // ADDED: Explicit WebRTC mode
 } as any);
 ```
 
 ## Verification (Production Test - October 25, 2025)
 
 ### Backend Logs
+
 ```
 🔐 Requesting WebRTC conversation token for agent: agent_01jz1ar6k2e8tvst14g6cbgc7m
 ✅ WebRTC conversation token generated successfully
@@ -72,6 +77,7 @@ POST /api/elevenlabs/conversation-token 200 in 1603ms
 ```
 
 ### Frontend Logs
+
 ```
 🚀 Starting ElevenLabs WebRTC conversation...
 🔐 Requesting WebRTC conversation token from server...
@@ -80,6 +86,7 @@ POST /api/elevenlabs/conversation-token 200 in 1603ms
 ```
 
 ### UI Status
+
 - Status: **Connected** ✅
 - Button: **Stop Conversation** (indicates active session)
 - Microphone: **Active** (Input: 0.2-1.0%)
@@ -98,12 +105,14 @@ POST /api/elevenlabs/conversation-token 200 in 1603ms
 **Audio Output Not Playing** (AI intro not audible)
 
 ### Symptoms:
+
 - Microphone IS capturing audio (Input: 0.2-1.0%)
 - Connection IS stable and connected
 - BUT no AI voice output (Output: 0.0%)
 - No "user_transcript" or "agent_response" WebSocket messages
 
 ### Possible Causes:
+
 1. **Browser Autoplay Policy** - Chrome/browsers block audio until user interaction
 2. **Audio Context Not Started** - WebRTC may need explicit audio context initialization
 3. **ElevenLabs Agent Configuration** - Agent may need TTS/STT reconfiguration
@@ -112,23 +121,26 @@ POST /api/elevenlabs/conversation-token 200 in 1603ms
 ### Next Steps to Try:
 
 **Option 1: Check Browser Autoplay Policy**
+
 ```javascript
 // In startConversation, after connection:
 const audioContext = new AudioContext();
-if (audioContext.state === 'suspended') {
+if (audioContext.state === "suspended") {
   await audioContext.resume();
 }
 ```
 
 **Option 2: Lower VAD Sensitivity**
+
 ```typescript
 // In ConversationalAI.tsx, change:
-vadSensitivity: 0.5  // Current: 50%
+vadSensitivity: 0.5; // Current: 50%
 // To:
-vadSensitivity: 0.3  // Lower = more sensitive to quiet speech
+vadSensitivity: 0.3; // Lower = more sensitive to quiet speech
 ```
 
 **Option 3: Add WebRTC Audio Configuration**
+
 ```typescript
 // In startSession call:
 await conversation.startSession({
@@ -144,6 +156,7 @@ await conversation.startSession({
 ## Troubleshooting Notes
 
 ### React Hooks Cache Issue
+
 During testing, encountered persistent "React Hooks order violation" error due to webpack/Fast Refresh caching. **Solution**:
 
 ```bash
@@ -154,6 +167,7 @@ npm run dev
 ```
 
 ### Volume Monitoring Cleanup
+
 Added `volumeCheckIntervalRef` to prevent polling after disconnect:
 
 ```typescript
