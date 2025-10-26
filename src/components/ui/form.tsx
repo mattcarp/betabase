@@ -97,7 +97,7 @@ const FormItem = React.forwardRef<
     /** Variant for different form item styles */
     variant?: "default" | "floating" | "inline";
   }
->(({ cclassName, variant = "default", ...props }, ref) => {
+>(({ className, variant = "default", ...props }, ref) => {
   const id = React.useId();
 
   const variantClasses = {
@@ -110,11 +110,11 @@ const FormItem = React.forwardRef<
     <FormItemContext.Provider value={{ id }}>
       <div
         ref={ref}
-        cclassName={cn(
+        className={cn(
           "mac-form-field", // MAC Design System form field
           variantClasses[variant],
           "transition-all duration-200", // MAC standard transition
-          cclassName
+          className
         )}
         {...props}
       />
@@ -131,25 +131,25 @@ const FormLabel = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & {
     required?: boolean;
   }
->(({ cclassName, required, children, ...props }, ref) => {
+>(({ className, required, children, ...props }, ref) => {
   const { error, formItemId } = useFormField();
 
   return (
     <Label
       ref={ref}
-      cclassName={cn(
+      className={cn(
         "mac-label", // MAC Design System label
         "text-sm font-light text-[var(--mac-text-primary)]",
         "transition-colors duration-200",
         error && "text-red-500",
-        cclassName
+        className
       )}
       htmlFor={formItemId}
       {...props}
     >
       {children}
       {required && (
-        <span cclassName="ml-2 text-red-500" aria-label="required">
+        <span className="ml-2 text-red-500" aria-label="required">
           *
         </span>
       )}
@@ -189,19 +189,19 @@ FormControl.displayName = "FormControl";
 const FormDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
->(({ cclassName, ...props }, ref) => {
+>(({ className, ...props }, ref) => {
   const { formDescriptionId } = useFormField();
 
   return (
     <p
       ref={ref}
       id={formDescriptionId}
-      cclassName={cn(
+      className={cn(
         "mac-form-description", // MAC Design System form description
         "text-xs text-[var(--mac-text-muted)]",
         "mt-2.5 font-light",
         "transition-opacity duration-200",
-        cclassName
+        className
       )}
       {...props}
     />
@@ -219,7 +219,7 @@ const FormMessage = React.forwardRef<
     /** Type of message */
     type?: "error" | "success" | "warning";
   }
->(({ cclassName, children, type = "error", ...props }, ref) => {
+>(({ className, children, type = "error", ...props }, ref) => {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error?.message ?? "") : children;
 
@@ -230,15 +230,15 @@ const FormMessage = React.forwardRef<
   const typeConfig = {
     error: {
       icon: AlertCircle,
-      cclassName: "text-red-500",
+      className: "text-red-500",
     },
     success: {
       icon: CheckCircle,
-      cclassName: "text-green-500",
+      className: "text-green-500",
     },
     warning: {
       icon: AlertCircle,
-      cclassName: "text-yellow-500",
+      className: "text-yellow-500",
     },
   };
 
@@ -248,18 +248,18 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      cclassName={cn(
+      className={cn(
         "mac-form-message", // MAC Design System form message
         "text-xs font-light flex items-center gap-2.5 mt-2.5",
-        typeConfig[type].cclassName,
+        typeConfig[type].className,
         "transition-all duration-200",
-        cclassName
+        className
       )}
       role={type === "error" ? "alert" : "status"}
       aria-live="polite"
       {...props}
     >
-      <Icon cclassName="h-3 w-3" aria-hidden="true" />
+      <Icon className="h-3 w-3" aria-hidden="true" />
       <span>{body}</span>
     </p>
   );
@@ -276,14 +276,14 @@ FormMessage.displayName = "FormMessage";
 const FormFieldset = React.forwardRef<
   HTMLFieldSetElement,
   React.FieldsetHTMLAttributes<HTMLFieldSetElement>
->(({ cclassName, ...props }, ref) => {
+>(({ className, ...props }, ref) => {
   return (
     <fieldset
       ref={ref}
-      cclassName={cn(
+      className={cn(
         "mac-glass p-6 rounded-lg border border-mac-utility-border",
         "space-y-4",
-        cclassName
+        className
       )}
       {...props}
     />
@@ -295,11 +295,11 @@ FormFieldset.displayName = "FormFieldset";
  * FormLegend Component - fieldset legend
  */
 const FormLegend = React.forwardRef<HTMLLegendElement, React.HTMLAttributes<HTMLLegendElement>>(
-  ({ cclassName, ...props }, ref) => {
+  ({ className, ...props }, ref) => {
     return (
       <legend
         ref={ref}
-        cclassName={cn("text-lg font-light text-mac-text-primary", "px-2 -ml-2", cclassName)}
+        className={cn("text-lg font-light text-mac-text-primary", "px-2 -ml-2", className)}
         {...props}
       />
     );

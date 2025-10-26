@@ -28,7 +28,7 @@ interface FloatingPanelProps {
   children: ReactNode;
   initialPosition?: PanelPosition;
   initialSize?: PanelSize;
-  cclassName?: string;
+  className?: string;
   panelType?: "transcription" | "ai-insights" | "system-monitor" | "audio" | "default";
   onClose?: () => void;
   onMinimize?: () => void;
@@ -50,7 +50,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
   children,
   initialPosition = { x: 50, y: 50 },
   initialSize = { width: "350px", height: "250px" },
-  cclassName = "",
+  className = "",
   panelType: _panelType = "default", // Unused - keeping for future styling
   onClose,
   onMinimize,
@@ -209,13 +209,13 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
     >
       <div
         ref={nodeRef}
-        cclassName={cn(
+        className={cn(
           "fixed bg-gray-900/95 border border-gray-700 rounded-lg shadow-2xl backdrop-blur-md",
           "min-w-[200px] min-h-[100px] max-w-[90vw] max-h-[90vh]",
           "transition-all duration-200 ease-out",
           isFocused && "ring-2 ring-blue-600/50",
           isMinimized && "h-auto",
-          cclassName
+          className
         )}
         style={{
           width: isMinimized ? "auto" : isMaximized ? "90vw" : size.width,
@@ -228,23 +228,23 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
       >
         {/* Header */}
         <div
-          cclassName={`panel-header flex items-center justify-between px-4 py-2 border-b border-gray-600 cursor-${isDraggable && !isMaximized ? "move" : "default"} bg-gray-800/50`}
+          className={`panel-header flex items-center justify-between px-4 py-2 border-b border-gray-600 cursor-${isDraggable && !isMaximized ? "move" : "default"} bg-gray-800/50`}
         >
-          <div cclassName="flex items-center gap-2">
-            {icon && <div cclassName="text-blue-600">{icon}</div>}
+          <div className="flex items-center gap-2">
+            {icon && <div className="text-blue-600">{icon}</div>}
             <h3
-              cclassName="mac-title"
-              cclassName="mac-title text-blue-600 text-sm font-medium select-none truncate"
+              className="mac-title"
+              className="mac-title text-blue-600 text-sm font-medium select-none truncate"
             >
               {title}
             </h3>
           </div>
 
-          <div cclassName="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             {/* Reset button */}
             <button
               onClick={handleReset}
-              cclassName="p-2 text-gray-400 hover:text-blue-300 transition-colors"
+              className="p-2 text-gray-400 hover:text-blue-300 transition-colors"
               title="Reset panel"
               data-testid={`panel-reset-${id}`}
             >
@@ -255,7 +255,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
             {onMinimize && (
               <button
                 onClick={handleMinimize}
-                cclassName="p-2 text-gray-400 hover:text-blue-300 transition-colors"
+                className="p-2 text-gray-400 hover:text-blue-300 transition-colors"
                 title={isMinimized ? "Restore" : "Minimize"}
                 data-testid={`panel-minimize-${id}`}
               >
@@ -267,7 +267,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
             {onMaximize && (
               <button
                 onClick={handleMaximize}
-                cclassName="p-2 text-gray-400 hover:text-blue-300 transition-colors"
+                className="p-2 text-gray-400 hover:text-blue-300 transition-colors"
                 title={isMaximized ? "Restore" : "Maximize"}
                 data-testid={`panel-maximize-${id}`}
               >
@@ -279,7 +279,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
             {onClose && (
               <button
                 onClick={handleClose}
-                cclassName="p-2 text-gray-400 hover:text-red-400 transition-colors"
+                className="p-2 text-gray-400 hover:text-red-400 transition-colors"
                 title="Close panel"
                 data-testid={`panel-close-${id}`}
               >
@@ -291,8 +291,8 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
 
         {/* Content Area */}
         {!isMinimized && (
-          <div cclassName="flex-1 p-4 overflow-auto">
-            <div cclassName="panel-content">{children}</div>
+          <div className="flex-1 p-4 overflow-auto">
+            <div className="panel-content">{children}</div>
           </div>
         )}
 
@@ -300,7 +300,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
         {isResizable && !isMaximized && !isMinimized && (
           <div
             ref={resizeRef}
-            cclassName="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize opacity-50 hover:opacity-100 transition-opacity"
+            className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize opacity-50 hover:opacity-100 transition-opacity"
             style={{
               background:
                 "linear-gradient(-45deg, transparent 30%, #3B82F6 30%, #3B82F6 70%, transparent 70%)",

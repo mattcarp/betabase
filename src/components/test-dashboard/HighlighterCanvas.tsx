@@ -10,7 +10,7 @@ import { cn } from "../../lib/utils";
 interface HighlighterCanvasProps {
   enabled: boolean;
   timestamp: number;
-  cclassName?: string;
+  className?: string;
 }
 
 const COLORS = [
@@ -26,7 +26,7 @@ const WIDTHS = [3, 5, 8, 12];
 export const HighlighterCanvas: React.FC<HighlighterCanvasProps> = ({
   enabled,
   timestamp,
-  cclassName,
+  className,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -191,10 +191,10 @@ export const HighlighterCanvas: React.FC<HighlighterCanvasProps> = ({
     <>
       <canvas
         ref={canvasRef}
-        cclassName={cn(
+        className={cn(
           "fixed inset-0 z-40 pointer-events-auto",
           isDrawing && "cursor-crosshair",
-          cclassName
+          className
         )}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -203,26 +203,26 @@ export const HighlighterCanvas: React.FC<HighlighterCanvasProps> = ({
       />
 
       {/* Tool Options */}
-      <div cclassName="fixed top-32 right-6 z-50 space-y-2">
+      <div className="fixed top-32 right-6 z-50 space-y-2">
         <Button
           variant="outline"
           size="icon"
-          cclassName="bg-background/95 backdrop-blur-sm mac-button mac-button-outline"
+          className="bg-background/95 backdrop-blur-sm mac-button mac-button-outline"
           onClick={() => setShowColorPicker(!showColorPicker)}
         >
-          <Palette cclassName="h-4 w-4" />
+          <Palette className="h-4 w-4" />
         </Button>
 
         {showColorPicker && (
-          <div cclassName="bg-background/95 backdrop-blur-sm border rounded-lg p-4 space-y-3 shadow-lg">
+          <div className="bg-background/95 backdrop-blur-sm border rounded-lg p-4 space-y-3 shadow-lg">
             {/* Color Selection */}
-            <div cclassName="space-y-2">
-              <p cclassName="text-xs font-medium">Color</p>
-              <div cclassName="grid grid-cols-5 gap-2">
+            <div className="space-y-2">
+              <p className="text-xs font-medium">Color</p>
+              <div className="grid grid-cols-5 gap-2">
                 {COLORS.map((color) => (
                   <button
                     key={color.name}
-                    cclassName={cn(
+                    className={cn(
                       "w-8 h-8 rounded-md border-2 transition-all",
                       selectedColor === color.value
                         ? "border-primary scale-110"
@@ -237,13 +237,13 @@ export const HighlighterCanvas: React.FC<HighlighterCanvasProps> = ({
             </div>
 
             {/* Width Selection */}
-            <div cclassName="space-y-2">
-              <p cclassName="text-xs font-medium">Width</p>
-              <div cclassName="grid grid-cols-4 gap-2">
+            <div className="space-y-2">
+              <p className="text-xs font-medium">Width</p>
+              <div className="grid grid-cols-4 gap-2">
                 {WIDTHS.map((width) => (
                   <button
                     key={width}
-                    cclassName={cn(
+                    className={cn(
                       "h-8 rounded-md border transition-all flex items-center justify-center",
                       selectedWidth === width
                         ? "border-primary bg-primary/10"
@@ -252,7 +252,7 @@ export const HighlighterCanvas: React.FC<HighlighterCanvasProps> = ({
                     onClick={() => setSelectedWidth(width)}
                   >
                     <div
-                      cclassName="rounded-full bg-foreground"
+                      className="rounded-full bg-foreground"
                       style={{ width: width, height: width }}
                     />
                   </button>
@@ -265,11 +265,11 @@ export const HighlighterCanvas: React.FC<HighlighterCanvasProps> = ({
         <Button
           variant="outline"
           size="icon"
-          cclassName="bg-background/95 backdrop-blur-sm mac-button mac-button-outline"
+          className="bg-background/95 backdrop-blur-sm mac-button mac-button-outline"
           onClick={handleClear}
           title="Clear highlights"
         >
-          <Eraser cclassName="h-4 w-4" />
+          <Eraser className="h-4 w-4" />
         </Button>
       </div>
     </>

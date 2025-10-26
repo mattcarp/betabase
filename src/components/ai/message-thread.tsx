@@ -12,7 +12,7 @@ import { ReactNode } from "react";
 interface MessageThreadProps {
   messages: Message[];
   isLoading?: boolean;
-  cclassName?: string;
+  className?: string;
   renderMessage?: (message: Message) => ReactNode;
   showTimestamps?: boolean;
   showMetadata?: boolean;
@@ -21,7 +21,7 @@ interface MessageThreadProps {
 export function MessageThread({
   messages,
   isLoading = false,
-  cclassName,
+  className,
   renderMessage,
   showTimestamps = false,
   showMetadata = false,
@@ -35,20 +35,20 @@ export function MessageThread({
   };
 
   const getMessageIcon = (message: Message) => {
-    if (message.role === "user") return <User cclassName="h-4 w-4" />;
-    if (message.role === "assistant") return <Bot cclassName="h-4 w-4 text-primary" />;
-    if (message.role === "system") return <Zap cclassName="h-4 w-4 text-yellow-500" />;
-    return <FileText cclassName="h-4 w-4" />;
+    if (message.role === "user") return <User className="h-4 w-4" />;
+    if (message.role === "assistant") return <Bot className="h-4 w-4 text-primary" />;
+    if (message.role === "system") return <Zap className="h-4 w-4 text-yellow-500" />;
+    return <FileText className="h-4 w-4" />;
   };
 
   const getToolIcon = (toolName: string) => {
-    if (toolName.includes("code")) return <Code cclassName="h-3 w-3" />;
-    if (toolName.includes("image")) return <ImageIcon cclassName="h-3 w-3" />;
-    return <Zap cclassName="h-3 w-3" />;
+    if (toolName.includes("code")) return <Code className="h-3 w-3" />;
+    if (toolName.includes("image")) return <ImageIcon className="h-3 w-3" />;
+    return <Zap className="h-3 w-3" />;
   };
 
   return (
-    <div cclassName={cn("space-y-4 py-4", cclassName)}>
+    <div className={cn("space-y-4 py-4", className)}>
       <AnimatePresence mode="popLayout">
         {messages.map((message, index) => (
           <motion.div
@@ -57,12 +57,12 @@ export function MessageThread({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
-            cclassName={cn("flex gap-4", message.role === "user" ? "justify-end" : "justify-start")}
+            className={cn("flex gap-4", message.role === "user" ? "justify-end" : "justify-start")}
           >
             {message.role !== "user" && (
-              <Avatar cclassName="h-8 w-8 mt-2">
+              <Avatar className="h-8 w-8 mt-2">
                 <AvatarFallback
-                  cclassName={cn(
+                  className={cn(
                     "border",
                     message.role === "assistant" && "bg-primary/10 border-primary/20",
                     message.role === "system" && "bg-yellow-500/10 border-yellow-500/20"
@@ -74,7 +74,7 @@ export function MessageThread({
             )}
 
             <div
-              cclassName={cn(
+              className={cn(
                 "flex-1 max-w-[70%]",
                 message.role === "user" && "flex flex-col items-end"
               )}
@@ -82,19 +82,19 @@ export function MessageThread({
               {/* Message Header */}
               {(showTimestamps || showMetadata) && (
                 <div
-                  cclassName={cn(
+                  className={cn(
                     "flex items-center gap-2 mb-2",
                     message.role === "user" ? "justify-end" : "justify-start"
                   )}
                 >
                   {message.role !== "user" && (
-                    <span cclassName="text-xs font-medium text-muted-foreground capitalize">
+                    <span className="text-xs font-medium text-muted-foreground capitalize">
                       {message.role}
                     </span>
                   )}
                   {showTimestamps && message.createdAt && (
-                    <span cclassName="text-xs text-muted-foreground flex items-center gap-2">
-                      <Clock cclassName="h-3 w-3" />
+                    <span className="text-xs text-muted-foreground flex items-center gap-2">
+                      <Clock className="h-3 w-3" />
                       {formatTimestamp(message.createdAt)}
                     </span>
                   )}
@@ -103,7 +103,7 @@ export function MessageThread({
 
               {/* Message Content */}
               <Card
-                cclassName={cn(
+                className={cn(
                   "mac-card",
                   "px-4 py-2.5 shadow-sm",
                   message.role === "user"
@@ -114,21 +114,21 @@ export function MessageThread({
                 {renderMessage ? (
                   renderMessage(message)
                 ) : (
-                  <div cclassName="prose prose-sm dark:prose-invert max-w-none">
+                  <div className="prose prose-sm dark:prose-invert max-w-none">
                     {message.content}
                   </div>
                 )}
 
                 {/* Tool Invocations */}
                 {message.toolInvocations && message.toolInvocations.length > 0 && (
-                  <div cclassName="mt-4 pt-4 border-t border-border/50">
-                    <div cclassName="flex flex-wrap gap-2.5">
+                  <div className="mt-4 pt-4 border-t border-border/50">
+                    <div className="flex flex-wrap gap-2.5">
                       {message.toolInvocations.map((tool, toolIndex) => (
-                        <Badge key={toolIndex} variant="secondary" cclassName="text-xs py-0.5 px-2">
+                        <Badge key={toolIndex} variant="secondary" className="text-xs py-0.5 px-2">
                           {getToolIcon(tool.toolName)}
-                          <span cclassName="ml-2">{tool.toolName}</span>
+                          <span className="ml-2">{tool.toolName}</span>
                           {tool.state === "result" && (
-                            <span cclassName="ml-2 text-green-500">✓</span>
+                            <span className="ml-2 text-green-500">✓</span>
                           )}
                         </Badge>
                       ))}
@@ -139,13 +139,13 @@ export function MessageThread({
                 {/* Attachments */}
                 {message.experimental_attachments &&
                   message.experimental_attachments.length > 0 && (
-                    <div cclassName="mt-4 pt-4 border-t border-border/50">
-                      <div cclassName="space-y-2">
+                    <div className="mt-4 pt-4 border-t border-border/50">
+                      <div className="space-y-2">
                         {message.experimental_attachments.map((attachment, attIndex) => (
-                          <div key={attIndex} cclassName="flex items-center gap-2 text-xs">
-                            <FileText cclassName="h-3 w-3" />
-                            <span cclassName="truncate">{attachment.name}</span>
-                            <Badge variant="outline" cclassName="text-xs">
+                          <div key={attIndex} className="flex items-center gap-2 text-xs">
+                            <FileText className="h-3 w-3" />
+                            <span className="truncate">{attachment.name}</span>
+                            <Badge variant="outline" className="text-xs">
                               {attachment.contentType}
                             </Badge>
                           </div>
@@ -156,10 +156,10 @@ export function MessageThread({
 
                 {/* Metadata */}
                 {showMetadata && message.annotations && (
-                  <div cclassName="mt-2 pt-2 border-t border-border/50">
-                    <div cclassName="flex flex-wrap gap-2">
+                  <div className="mt-2 pt-2 border-t border-border/50">
+                    <div className="flex flex-wrap gap-2">
                       {message.annotations.map((annotation, annIndex) => (
-                        <Badge key={annIndex} variant="outline" cclassName="text-xs">
+                        <Badge key={annIndex} variant="outline" className="text-xs">
                           {JSON.stringify(annotation)}
                         </Badge>
                       ))}
@@ -170,8 +170,8 @@ export function MessageThread({
             </div>
 
             {message.role === "user" && (
-              <Avatar cclassName="h-8 w-8 mt-2">
-                <AvatarFallback cclassName="bg-primary/10 border border-primary/20">
+              <Avatar className="h-8 w-8 mt-2">
+                <AvatarFallback className="bg-primary/10 border border-primary/20">
                   {getMessageIcon(message)}
                 </AvatarFallback>
               </Avatar>
@@ -184,27 +184,27 @@ export function MessageThread({
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            cclassName="flex gap-4"
+            className="flex gap-4"
           >
-            <Avatar cclassName="h-8 w-8 mt-2">
-              <AvatarFallback cclassName="bg-primary/10 border border-primary/20">
-                <Bot cclassName="h-4 w-4 text-primary animate-pulse" />
+            <Avatar className="h-8 w-8 mt-2">
+              <AvatarFallback className="bg-primary/10 border border-primary/20">
+                <Bot className="h-4 w-4 text-primary animate-pulse" />
               </AvatarFallback>
             </Avatar>
-            <Card cclassName="mac-card px-4 py-4 bg-card/50 backdrop-blur-sm">
-              <div cclassName="flex items-center gap-2">
-                <Loader2 cclassName="h-3 w-3 animate-spin text-primary" />
-                <div cclassName="flex gap-2">
+            <Card className="mac-card px-4 py-4 bg-card/50 backdrop-blur-sm">
+              <div className="flex items-center gap-2">
+                <Loader2 className="h-3 w-3 animate-spin text-primary" />
+                <div className="flex gap-2">
                   <span
-                    cclassName="h-2 w-2 bg-primary/60 rounded-full animate-bounce"
+                    className="h-2 w-2 bg-primary/60 rounded-full animate-bounce"
                     style={{ animationDelay: "0ms" }}
                   />
                   <span
-                    cclassName="h-2 w-2 bg-primary/60 rounded-full animate-bounce"
+                    className="h-2 w-2 bg-primary/60 rounded-full animate-bounce"
                     style={{ animationDelay: "150ms" }}
                   />
                   <span
-                    cclassName="h-2 w-2 bg-primary/60 rounded-full animate-bounce"
+                    className="h-2 w-2 bg-primary/60 rounded-full animate-bounce"
                     style={{ animationDelay: "300ms" }}
                   />
                 </div>

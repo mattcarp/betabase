@@ -14,7 +14,7 @@ import { cn } from "../../lib/utils";
 interface FlagIssueLayerProps {
   enabled: boolean;
   timestamp: number;
-  cclassName?: string;
+  className?: string;
 }
 
 interface FlagMarkerProps {
@@ -56,7 +56,7 @@ const FlagMarker: React.FC<FlagMarkerProps> = ({ annotation, onDelete }) => {
 
   return (
     <div
-      cclassName="absolute z-50"
+      className="absolute z-50"
       style={{
         left: `${flagData.position.x}px`,
         top: `${flagData.position.y}px`,
@@ -65,7 +65,7 @@ const FlagMarker: React.FC<FlagMarkerProps> = ({ annotation, onDelete }) => {
     >
       {/* Flag Icon */}
       <button
-        cclassName={cn(
+        className={cn(
           "relative flex items-center justify-center w-8 h-8 rounded-full",
           "border-2 transition-all hover:scale-110",
           severityConfig.bgColor,
@@ -74,47 +74,47 @@ const FlagMarker: React.FC<FlagMarkerProps> = ({ annotation, onDelete }) => {
         )}
         onClick={() => setShowDetails(!showDetails)}
       >
-        <Flag cclassName={cn("h-4 w-4", severityConfig.color)} />
+        <Flag className={cn("h-4 w-4", severityConfig.color)} />
       </button>
 
       {/* Details Popup */}
       {showDetails && (
         <Card
-          cclassName={cn(
+          className={cn(
             "mac-card",
             "absolute top-full left-1/2 -translate-x-1/2 mt-2",
             "min-w-[300px] shadow-xl z-50"
           )}
         >
-          <CardHeader cclassName="mac-card pb-4">
-            <div cclassName="flex items-start justify-between">
-              <div cclassName="flex items-center gap-2">
-                <AlertTriangle cclassName={cn("h-4 w-4", severityConfig.color)} />
-                <CardTitle cclassName="text-sm">{flagData.title}</CardTitle>
+          <CardHeader className="mac-card pb-4">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className={cn("h-4 w-4", severityConfig.color)} />
+                <CardTitle className="text-sm">{flagData.title}</CardTitle>
               </div>
-              <div cclassName="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <Badge
                   variant="outline"
-                  cclassName={cn(severityConfig.borderColor, severityConfig.color)}
+                  className={cn(severityConfig.borderColor, severityConfig.color)}
                 >
                   {severityConfig.label}
                 </Badge>
                 <Button
                   variant="ghost"
                   size="icon"
-                  cclassName="h-6 w-6 mac-button mac-button-outline"
+                  className="h-6 w-6 mac-button mac-button-outline"
                   onClick={() => onDelete(annotation.id)}
                 >
-                  <X cclassName="h-3 w-3" />
+                  <X className="h-3 w-3" />
                 </Button>
               </div>
             </div>
           </CardHeader>
-          <CardContent cclassName="pt-0">
-            <p cclassName="text-sm text-muted-foreground whitespace-pre-wrap">
+          <CardContent className="pt-0">
+            <p className="text-sm text-muted-foreground whitespace-pre-wrap">
               {flagData.description}
             </p>
-            <div cclassName="mt-2 text-xs text-muted-foreground">
+            <div className="mt-2 text-xs text-muted-foreground">
               {new Date(annotation.createdAt).toLocaleString()}
             </div>
           </CardContent>
@@ -127,7 +127,7 @@ const FlagMarker: React.FC<FlagMarkerProps> = ({ annotation, onDelete }) => {
 export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
   enabled,
   timestamp,
-  cclassName,
+  className,
 }) => {
   const [showForm, setShowForm] = useState(false);
   const [formPosition, setFormPosition] = useState({ x: 0, y: 0 });
@@ -191,16 +191,16 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
       {/* Click layer for placing flags */}
       {enabled && !showForm && (
         <div
-          cclassName={cn("fixed inset-0 z-40 cursor-crosshair", cclassName)}
+          className={cn("fixed inset-0 z-40 cursor-crosshair", className)}
           onClick={handleClick}
         />
       )}
 
       {/* Flag markers */}
-      <div cclassName="fixed inset-0 z-50 pointer-events-none">
-        <div cclassName="relative w-full h-full">
+      <div className="fixed inset-0 z-50 pointer-events-none">
+        <div className="relative w-full h-full">
           {flagAnnotations.map((annotation) => (
-            <div key={annotation.id} cclassName="pointer-events-auto">
+            <div key={annotation.id} className="pointer-events-auto">
               <FlagMarker annotation={annotation} onDelete={deleteAnnotation} />
             </div>
           ))}
@@ -209,19 +209,19 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
 
       {/* Flag creation form */}
       {showForm && (
-        <div cclassName="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6">
-          <Card cclassName="mac-card max-w-md w-full">
-            <CardHeader cclassName="mac-card">
-              <CardTitle cclassName="flex items-center gap-2">
-                <Flag cclassName="h-5 w-5" />
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6">
+          <Card className="mac-card max-w-md w-full">
+            <CardHeader className="mac-card">
+              <CardTitle className="flex items-center gap-2">
+                <Flag className="h-5 w-5" />
                 Flag Issue
               </CardTitle>
             </CardHeader>
-            <CardContent cclassName="space-y-4">
+            <CardContent className="space-y-4">
               {/* Severity Selection */}
-              <div cclassName="space-y-2">
-                <label cclassName="text-sm font-medium">Severity Level</label>
-                <div cclassName="grid grid-cols-4 gap-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Severity Level</label>
+                <div className="grid grid-cols-4 gap-2">
                   {(Object.keys(SEVERITY_CONFIG) as SeverityLevel[]).map((level) => {
                     const config = SEVERITY_CONFIG[level];
                     return (
@@ -229,14 +229,14 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
                         key={level}
                         variant={severity === level ? "default" : "outline"}
                         size="sm"
-                        cclassName={cn(
+                        className={cn(
                           "mac-button mac-button-primary",
                           severity === level && config.bgColor,
                           severity === level && config.borderColor
                         )}
                         onClick={() => setSeverity(level)}
                       >
-                        <span cclassName={severity === level ? config.color : ""}>
+                        <span className={severity === level ? config.color : ""}>
                           {config.label}
                         </span>
                       </Button>
@@ -246,10 +246,10 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
               </div>
 
               {/* Title */}
-              <div cclassName="space-y-2">
-                <label cclassName="text-sm font-medium">Title</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Title</label>
                 <Input
-                  cclassName="mac-input"
+                  className="mac-input"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Brief issue description"
@@ -258,8 +258,8 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
               </div>
 
               {/* Description */}
-              <div cclassName="space-y-2">
-                <label cclassName="text-sm font-medium">Description</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Description</label>
                 <Textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -269,19 +269,19 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
               </div>
 
               {/* Actions */}
-              <div cclassName="flex items-center justify-end gap-2">
+              <div className="flex items-center justify-end gap-2">
                 <Button
-                  cclassName="mac-button mac-button-outline"
+                  className="mac-button mac-button-outline"
                   variant="outline"
-                  cclassName="mac-button mac-button-outline"
+                  className="mac-button mac-button-outline"
                   onClick={handleCancel}
                 >
                   Cancel
                 </Button>
                 <Button
-                  cclassName="mac-button mac-button-primary"
+                  className="mac-button mac-button-primary"
                   variant="default"
-                  cclassName="mac-button mac-button-primary"
+                  className="mac-button mac-button-primary"
                   onClick={handleSubmit}
                   disabled={!title.trim()}
                 >

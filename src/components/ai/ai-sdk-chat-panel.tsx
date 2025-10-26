@@ -101,7 +101,7 @@ import { FileUpload } from "../ai-elements/file-upload";
 interface AiSdkChatPanelProps {
   api?: string;
   initialMessages?: any[];
-  cclassName?: string;
+  className?: string;
   title?: string;
   description?: string;
   placeholder?: string;
@@ -124,7 +124,7 @@ interface AiSdkChatPanelProps {
 export function AiSdkChatPanel({
   api = "/api/chat",
   initialMessages = [],
-  cclassName,
+  className,
   title = "The Betabase",
   description = "Your AI-powered assistant, ready to help with anything",
   placeholder = "Message The Betabase...",
@@ -1132,12 +1132,12 @@ export function AiSdkChatPanel({
         exit={enableAnimations ? "exit" : undefined}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <Message from={message.role} cclassName="group px-0 py-4">
+        <Message from={message.role} className="group px-0 py-4">
           {/* Avatar */}
           <MessageAvatar
             src={isUser ? userAvatar || "" : botAvatar || ""}
             name={isUser ? userName : botName}
-            cclassName={cn(
+            className={cn(
               "ring-2 transition-all duration-200",
               isUser ? "ring-blue-200 dark:ring-blue-800" : "ring-emerald-200 dark:ring-emerald-800"
             )}
@@ -1145,7 +1145,7 @@ export function AiSdkChatPanel({
 
           {/* Message Content */}
           <MessageContent
-            cclassName={cn(
+            className={cn(
               "relative backdrop-blur-sm border border-border/50 shadow-sm",
               "transition-all duration-200 hover:shadow-md",
               isUser
@@ -1155,19 +1155,19 @@ export function AiSdkChatPanel({
           >
             {/* Typing indicator for streaming */}
             {isLastMessage && isLoading && !isUser && (
-              <div cclassName="flex items-center gap-2 text-muted-foreground mb-2">
-                <Loader cclassName="w-4 h-4" />
-                <span cclassName="text-xs">{botName} is thinking...</span>
+              <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                <Loader className="w-4 h-4" />
+                <span className="text-xs">{botName} is thinking...</span>
               </div>
             )}
 
             {/* Reasoning display for AI messages */}
             {!isUser && showReasoning && message.reasoning && (
-              <div cclassName="mb-4">
+              <div className="mb-4">
                 <Reasoning
                   defaultOpen={isLastMessage}
                   isStreaming={isLastMessage && isLoading}
-                  cclassName="border border-border/30 rounded-lg bg-muted/30 p-4"
+                  className="border border-border/30 rounded-lg bg-muted/30 p-4"
                 >
                   <ReasoningTrigger title="AI Reasoning Process" />
                   <ReasoningContent>{message.reasoning}</ReasoningContent>
@@ -1177,8 +1177,8 @@ export function AiSdkChatPanel({
 
             {/* Sources display for AI messages with citations */}
             {!isUser && message.sources && message.sources.length > 0 && (
-              <div cclassName="mb-4">
-                <Sources cclassName="border border-border/30 rounded-lg bg-muted/20 p-4">
+              <div className="mb-4">
+                <Sources className="border border-border/30 rounded-lg bg-muted/20 p-4">
                   <SourcesTrigger count={message.sources.length} />
                   <SourcesContent>
                     {message.sources.map((source: any, idx: number) => (
@@ -1186,7 +1186,7 @@ export function AiSdkChatPanel({
                         key={idx}
                         href={source.url}
                         title={source.title || source.name || `Source ${idx + 1}`}
-                        cclassName="text-muted-foreground hover:text-foreground transition-colors"
+                        className="text-muted-foreground hover:text-foreground transition-colors"
                       />
                     ))}
                   </SourcesContent>
@@ -1196,7 +1196,7 @@ export function AiSdkChatPanel({
 
             {/* Main message content with enhanced styling using Response component */}
             <div
-              cclassName={cn(
+              className={cn(
                 "prose prose-sm max-w-none",
                 isUser
                   ? "prose-invert [&>*]:text-white"
@@ -1223,7 +1223,7 @@ export function AiSdkChatPanel({
                     }
 
                     return (
-                      <Response key={index} cclassName={isUser ? "[&>*]:text-white" : ""}>
+                      <Response key={index} className={isUser ? "[&>*]:text-white" : ""}>
                         {part.text}
                       </Response>
                     );
@@ -1233,29 +1233,29 @@ export function AiSdkChatPanel({
                   if (part.type === "data" && part.data?.type === "progress") {
                     const progressData = part.data;
                     return (
-                      <div key={index} cclassName="mt-4">
-                        <Task cclassName="border border-blue-200/50 rounded-lg bg-blue-50/20 p-4">
+                      <div key={index} className="mt-4">
+                        <Task className="border border-blue-200/50 rounded-lg bg-blue-50/20 p-4">
                           <TaskTrigger
                             title={progressData.title || "Processing..."}
                             status={progressData.status || "in_progress"}
                           />
                           <TaskContent>
                             <TaskItem>
-                              <div cclassName="space-y-2">
-                                <div cclassName="flex items-center justify-between">
-                                  <span cclassName="text-sm capitalize">
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm capitalize">
                                     {progressData.phase || "Processing"}
                                   </span>
                                   {progressData.progress !== undefined && (
-                                    <span cclassName="text-xs text-muted-foreground">
+                                    <span className="text-xs text-muted-foreground">
                                       {progressData.progress}%
                                     </span>
                                   )}
                                 </div>
                                 {progressData.progress !== undefined && (
-                                  <div cclassName="w-full bg-muted rounded-full h-2">
+                                  <div className="w-full bg-muted rounded-full h-2">
                                     <div
-                                      cclassName="bg-primary h-2 rounded-full transition-all duration-300"
+                                      className="bg-primary h-2 rounded-full transition-all duration-300"
                                       style={{
                                         width: `${Math.min(progressData.progress, 100)}%`,
                                       }}
@@ -1273,7 +1273,7 @@ export function AiSdkChatPanel({
                   return null;
                 })
               ) : (
-                <Response cclassName={isUser ? "[&>*]:text-white" : ""}>
+                <Response className={isUser ? "[&>*]:text-white" : ""}>
                   {(message as any).content || "No content available"}
                 </Response>
               )}
@@ -1283,24 +1283,24 @@ export function AiSdkChatPanel({
 
             {/* Enhanced Code blocks */}
             {message.code && (
-              <div cclassName="mt-4">
+              <div className="mt-4">
                 <CodeBlock
                   language={message.codeLanguage || "javascript"}
                   code={message.code}
-                  cclassName="rounded-lg border border-border/50 shadow-sm"
+                  className="rounded-lg border border-border/50 shadow-sm"
                 />
               </div>
             )}
 
             {/* Enhanced Tool calls */}
             {message.toolCalls && message.toolCalls.length > 0 && (
-              <div cclassName="mt-4 space-y-3">
-                <div cclassName="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                  <Zap cclassName="w-4 h-4" />
+              <div className="mt-4 space-y-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                  <Zap className="w-4 h-4" />
                   Tool Executions
                 </div>
                 {message.toolCalls.map((tool: any, idx: number) => (
-                  <Tool key={idx} cclassName="border border-border/30 rounded-lg bg-muted/20">
+                  <Tool key={idx} className="border border-border/30 rounded-lg bg-muted/20">
                     <ToolHeader
                       type={tool.name || `Tool ${idx + 1}`}
                       state={
@@ -1330,26 +1330,26 @@ export function AiSdkChatPanel({
 
             {/* Enhanced Task progress */}
             {message.tasks && message.tasks.length > 0 && (
-              <div cclassName="mt-4 space-y-3">
-                <div cclassName="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                  <CheckCircle cclassName="w-4 h-4" />
+              <div className="mt-4 space-y-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                  <CheckCircle className="w-4 h-4" />
                   Active Tasks
                 </div>
                 {message.tasks.map((task: any, idx: number) => (
-                  <Task key={idx} cclassName="border border-border/30 rounded-lg bg-muted/20 p-4">
+                  <Task key={idx} className="border border-border/30 rounded-lg bg-muted/20 p-4">
                     <TaskTrigger title={task.title || `Task ${idx + 1}`} />
                     <TaskContent>
                       <TaskItem>
-                        <div cclassName="flex items-center justify-between mb-2">
-                          <span cclassName="text-sm">Status: {task.status || "pending"}</span>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm">Status: {task.status || "pending"}</span>
                           {task.progress !== undefined && (
-                            <span cclassName="text-xs text-muted-foreground">{task.progress}%</span>
+                            <span className="text-xs text-muted-foreground">{task.progress}%</span>
                           )}
                         </div>
                         {task.progress !== undefined && (
-                          <div cclassName="w-full bg-muted rounded-full h-2">
+                          <div className="w-full bg-muted rounded-full h-2">
                             <div
-                              cclassName="bg-primary h-2 rounded-full transition-all duration-300"
+                              className="bg-primary h-2 rounded-full transition-all duration-300"
                               style={{
                                 width: `${Math.min(task.progress, 100)}%`,
                               }}
@@ -1357,7 +1357,7 @@ export function AiSdkChatPanel({
                           </div>
                         )}
                         {task.description && (
-                          <p cclassName="text-xs text-muted-foreground mt-2">{task.description}</p>
+                          <p className="text-xs text-muted-foreground mt-2">{task.description}</p>
                         )}
                       </TaskItem>
                     </TaskContent>
@@ -1370,31 +1370,31 @@ export function AiSdkChatPanel({
 
             {/* Enhanced Web previews */}
             {message.webPreviews && message.webPreviews.length > 0 && (
-              <div cclassName="mt-4 space-y-3">
+              <div className="mt-4 space-y-3">
                 {message.webPreviews.map((preview: any, idx: number) => (
                   <div
                     key={idx}
-                    cclassName="border border-border/50 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-muted/20"
+                    className="border border-border/50 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-muted/20"
                   >
-                    <div cclassName="p-4">
-                      <div cclassName="flex items-start gap-4">
+                    <div className="p-4">
+                      <div className="flex items-start gap-4">
                         {preview.image && (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={preview.image}
                             alt={preview.title || "Preview"}
-                            cclassName="w-16 h-16 object-cover rounded-md flex-shrink-0"
+                            className="w-16 h-16 object-cover rounded-md flex-shrink-0"
                           />
                         )}
-                        <div cclassName="flex-1">
+                        <div className="flex-1">
                           <h4
-                            cclassName="mac-title"
-                            cclassName="mac-title text-sm font-medium text-foreground mb-2"
+                            className="mac-title"
+                            className="mac-title text-sm font-medium text-foreground mb-2"
                           >
                             {preview.title || "Web Page"}
                           </h4>
                           {preview.description && (
-                            <p cclassName="text-xs text-muted-foreground mb-2">
+                            <p className="text-xs text-muted-foreground mb-2">
                               {preview.description}
                             </p>
                           )}
@@ -1402,7 +1402,7 @@ export function AiSdkChatPanel({
                             href={preview.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            cclassName="text-xs text-primary hover:underline"
+                            className="text-xs text-primary hover:underline"
                           >
                             {preview.url}
                           </a>
@@ -1416,9 +1416,9 @@ export function AiSdkChatPanel({
 
             {/* Enhanced Images gallery */}
             {message.images && message.images.length > 0 && (
-              <div cclassName="mt-4">
+              <div className="mt-4">
                 <div
-                  cclassName={cn(
+                  className={cn(
                     "grid gap-4 rounded-lg overflow-hidden",
                     message.images.length === 1 ? "grid-cols-1" : "grid-cols-2"
                   )}
@@ -1428,7 +1428,7 @@ export function AiSdkChatPanel({
                       key={idx}
                       src={img}
                       alt={`Generated image ${idx + 1}`}
-                      cclassName="rounded-lg border border-border/50 shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
+                      className="rounded-lg border border-border/50 shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
                     />
                   ))}
                 </div>
@@ -1436,9 +1436,9 @@ export function AiSdkChatPanel({
             )}
 
             {/* Message timestamp */}
-            <div cclassName="mt-4 flex items-center justify-between">
+            <div className="mt-4 flex items-center justify-between">
               <span
-                cclassName={cn(
+                className={cn(
                   "text-xs opacity-60",
                   isUser ? "text-white/70" : "text-muted-foreground"
                 )}
@@ -1451,42 +1451,42 @@ export function AiSdkChatPanel({
 
               {/* Message actions for assistant messages */}
               {!isUser && (
-                <Actions cclassName="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <Actions className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <Action
                     tooltip="Copy message"
                     onClick={() => handleMessageAction("copy", message.id)}
                   >
-                    <Copy cclassName="h-4 w-4" />
+                    <Copy className="h-4 w-4" />
                   </Action>
                   <Action
                     tooltip="Regenerate response"
                     onClick={() => handleMessageAction("retry", message.id)}
                   >
-                    <RefreshCw cclassName="h-4 w-4" />
+                    <RefreshCw className="h-4 w-4" />
                   </Action>
                   <Action
                     tooltip="TBD - Like response (coming soon)"
                     onClick={() => handleMessageAction("like", message.id)}
                   >
-                    <ThumbsUp cclassName="h-4 w-4" />
+                    <ThumbsUp className="h-4 w-4" />
                   </Action>
                   <Action
                     tooltip="TBD - Dislike response (coming soon)"
                     onClick={() => handleMessageAction("dislike", message.id)}
                   >
-                    <ThumbsDown cclassName="h-4 w-4" />
+                    <ThumbsDown className="h-4 w-4" />
                   </Action>
                   <Action
                     tooltip="TBD - Share message (coming soon)"
                     onClick={() => handleMessageAction("share", message.id)}
                   >
-                    <Share cclassName="h-4 w-4" />
+                    <Share className="h-4 w-4" />
                   </Action>
                   <Action
                     tooltip="TBD - More actions coming soon"
                     onClick={() => handleMessageAction("more", message.id)}
                   >
-                    <MoreHorizontal cclassName="h-4 w-4" />
+                    <MoreHorizontal className="h-4 w-4" />
                   </Action>
                 </Actions>
               )}
@@ -1498,21 +1498,21 @@ export function AiSdkChatPanel({
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                cclassName="mt-4"
+                className="mt-4"
               >
-                <div cclassName="border border-border/30 rounded-lg bg-muted/20 p-4">
+                <div className="border border-border/30 rounded-lg bg-muted/20 p-4">
                   <Branch
                     defaultBranch={0}
                     onBranchChange={(branchIndex) => console.log("Selected branch:", branchIndex)}
                   >
-                    <BranchSelector from="assistant" cclassName="mb-2">
+                    <BranchSelector from="assistant" className="mb-2">
                       <BranchPrevious />
                       <BranchPage />
                       <BranchNext />
                     </BranchSelector>
                     <BranchMessages>
                       {message.branches.map((branch: any, idx: number) => (
-                        <div key={idx} cclassName="text-sm text-muted-foreground">
+                        <div key={idx} className="text-sm text-muted-foreground">
                           {branch.content || `Alternative response ${idx + 1}`}
                         </div>
                       ))}
@@ -1528,11 +1528,11 @@ export function AiSdkChatPanel({
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                cclassName="mt-4"
+                className="mt-4"
               >
-                <div cclassName="border border-border/30 rounded-lg bg-muted/20 p-4 text-center">
+                <div className="border border-border/30 rounded-lg bg-muted/20 p-4 text-center">
                   <span
-                    cclassName="text-xs text-muted-foreground"
+                    className="text-xs text-muted-foreground"
                     title="TBD - Branch functionality coming soon"
                   >
                     🔀 Branch alternatives (TBD)
@@ -1550,69 +1550,69 @@ export function AiSdkChatPanel({
 
   return (
     <div
-      cclassName={cn("flex flex-col flex-1 min-h-0", "bg-zinc-950", "overflow-hidden", cclassName)}
+      className={cn("flex flex-col flex-1 min-h-0", "bg-zinc-950", "overflow-hidden", className)}
     >
       {/* Modern Header - Only show if showHeader is true */}
       {showHeader && (
-        <div cclassName="flex-shrink-0 px-6 py-4 border-b border-border/50 bg-background/60 backdrop-blur-xl">
-          <div cclassName="flex items-center justify-between">
+        <div className="flex-shrink-0 px-6 py-4 border-b border-border/50 bg-background/60 backdrop-blur-xl">
+          <div className="flex items-center justify-between">
             {/* Brand Section */}
-            <div cclassName="flex items-center gap-4">
+            <div className="flex items-center gap-4">
               <SiamLogo size="sm" />
               <div>
                 <h1
-                  cclassName="mac-heading"
-                  cclassName="mac-heading text-xl font-light text-white tracking-tight"
+                  className="mac-heading"
+                  className="mac-heading text-xl font-light text-white tracking-tight"
                 >
                   {title}
                 </h1>
-                <p cclassName="text-sm text-muted-foreground">{description}</p>
+                <p className="text-sm text-muted-foreground">{description}</p>
               </div>
             </div>
 
             {/* Control Panel */}
-            <div cclassName="flex items-center gap-2">
-              <Badge variant="secondary" cclassName="text-xs font-medium px-2 py-2">
-                <MessageCircle cclassName="w-3 h-3 mr-2" />
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="text-xs font-medium px-2 py-2">
+                <MessageCircle className="w-3 h-3 mr-2" />
                 {messages.length}
               </Badge>
 
-              <div cclassName="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 {messages.length > 0 && (
                   <>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={handleExport}
-                      cclassName="h-8 w-8 hover:bg-muted/50 mac-button mac-button-outline"
+                      className="h-8 w-8 hover:bg-muted/50 mac-button mac-button-outline"
                       title="Export conversation"
                     >
-                      <Download cclassName="h-4 w-4" />
+                      <Download className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={handleClear}
-                      cclassName="h-8 w-8 hover:bg-destructive/10 hover:text-destructive mac-button mac-button-outline"
+                      className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive mac-button mac-button-outline"
                       title="Clear conversation"
                     >
-                      <Trash2 cclassName="h-4 w-4" />
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </>
                 )}
                 <Button
-                  cclassName="mac-button mac-button-outline"
+                  className="mac-button mac-button-outline"
                   variant="ghost"
-                  cclassName="mac-button mac-button-outline"
+                  className="mac-button mac-button-outline"
                   size="icon"
                   onClick={() => setShowReasoning(!showReasoning)}
-                  cclassName={cn(
+                  className={cn(
                     "h-8 w-8 transition-colors",
                     showReasoning ? "bg-muted text-primary" : "hover:bg-muted/50"
                   )}
                   title={showReasoning ? "Hide reasoning" : "Show reasoning"}
                 >
-                  <Settings cclassName="h-4 w-4" />
+                  <Settings className="h-4 w-4" />
                 </Button>
               </div>
             </div>
@@ -1621,32 +1621,32 @@ export function AiSdkChatPanel({
       )}
 
       {/* Main Chat Area */}
-      <div cclassName="flex-1 min-h-0 overflow-y-auto bg-zinc-950">
-        <Conversation cclassName="bg-zinc-950">
-          <ConversationContent cclassName="px-6 py-4 pb-8 bg-zinc-950">
+      <div className="flex-1 min-h-0 overflow-y-auto bg-zinc-950">
+        <Conversation className="bg-zinc-950">
+          <ConversationContent className="px-6 py-4 pb-8 bg-zinc-950">
             {messages.length === 0 && enableWelcomeScreen ? (
               /* Beautiful Welcome Screen */
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                cclassName="flex flex-col items-center justify-center min-h-[60vh] text-center"
+                className="flex flex-col items-center justify-center min-h-[60vh] text-center"
               >
                 {/* Hero Section */}
-                <div cclassName="relative mb-8">
-                  <SiamLogo size="xl" cclassName="mx-auto" />
+                <div className="relative mb-8">
+                  <SiamLogo size="xl" className="mx-auto" />
                 </div>
 
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.6 }}
-                  cclassName="mb-8"
+                  className="mb-8"
                 >
-                  <h2 cclassName="mac-heading text-4xl font-thin mb-4 text-white tracking-tight">
+                  <h2 className="mac-heading text-4xl font-thin mb-4 text-white tracking-tight">
                     Welcome to The Betabase
                   </h2>
-                  <p cclassName="text-lg font-light text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                  <p className="text-lg font-light text-slate-400 max-w-2xl mx-auto leading-relaxed">
                     Don't be a dick.
                   </p>
                 </motion.div>
@@ -1658,18 +1658,18 @@ export function AiSdkChatPanel({
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4, duration: 0.6 }}
-                      cclassName="w-full max-w-4xl"
+                      className="w-full max-w-4xl"
                     >
-                      <div cclassName="mb-4">
+                      <div className="mb-4">
                         <h3
-                          cclassName="mac-title"
-                          cclassName="mac-title text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2"
+                          className="mac-title"
+                          className="mac-title text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2"
                         >
-                          <Sparkles cclassName="w-4 h-4" />
+                          <Sparkles className="w-4 h-4" />
                           Try these to get started
                         </h3>
                       </div>
-                      <div cclassName="grid grid-cols-2 gap-4 max-w-3xl mx-auto w-full">
+                      <div className="grid grid-cols-2 gap-4 max-w-3xl mx-auto w-full">
                         {(dynamicSuggestions.length > 0 ? dynamicSuggestions : suggestions).map(
                           (suggestion, index) => (
                             <motion.div
@@ -1677,12 +1677,12 @@ export function AiSdkChatPanel({
                               initial={{ opacity: 0, y: 20 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: 0.1 * index, duration: 0.4 }}
-                              cclassName="w-full"
+                              className="w-full"
                             >
                               <Suggestion
                                 suggestion={suggestion}
                                 onClick={handleSuggestionClick}
-                                cclassName="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm h-auto whitespace-normal py-4 px-4"
+                                className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm h-auto whitespace-normal py-4 px-4"
                               />
                             </motion.div>
                           )
@@ -1694,7 +1694,7 @@ export function AiSdkChatPanel({
             ) : (
               /* Messages Area */
               <AnimatePresence>
-                <div cclassName="space-y-6">
+                <div className="space-y-6">
                   {/* Enhanced Loading Indicator with Progress Bar - MOVED TO TOP */}
                   {(isLoading || manualLoading || isProcessing || currentProgress) &&
                     !hasStartedStreaming &&
@@ -1711,23 +1711,23 @@ export function AiSdkChatPanel({
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
-                        cclassName="flex justify-start mb-6"
+                        className="flex justify-start mb-6"
                       >
-                        <div cclassName="bg-gradient-to-r from-gray-800 to-gray-700 text-white rounded-lg p-6 max-w-[85%] border border-blue-300/30 shadow-lg">
+                        <div className="bg-gradient-to-r from-gray-800 to-gray-700 text-white rounded-lg p-6 max-w-[85%] border border-blue-300/30 shadow-lg">
                           {/* Main Loading Header */}
-                          <div cclassName="flex items-center gap-4 mb-4">
-                            <div cclassName="flex space-x-1">
-                              <div cclassName="w-2.5 h-2.5 bg-blue-400 rounded-full animate-bounce"></div>
+                          <div className="flex items-center gap-4 mb-4">
+                            <div className="flex space-x-1">
+                              <div className="w-2.5 h-2.5 bg-blue-400 rounded-full animate-bounce"></div>
                               <div
-                                cclassName="w-2.5 h-2.5 bg-green-400 rounded-full animate-bounce"
+                                className="w-2.5 h-2.5 bg-green-400 rounded-full animate-bounce"
                                 style={{ animationDelay: "0.1s" }}
                               ></div>
                               <div
-                                cclassName="w-2.5 h-2.5 bg-purple-400 rounded-full animate-bounce"
+                                className="w-2.5 h-2.5 bg-purple-400 rounded-full animate-bounce"
                                 style={{ animationDelay: "0.2s" }}
                               ></div>
                             </div>
-                            <span cclassName="text-base font-medium">
+                            <span className="text-base font-medium">
                               🤖{" "}
                               {currentProgress?.title ||
                                 "The Betabase is processing your request..."}
@@ -1736,14 +1736,14 @@ export function AiSdkChatPanel({
 
                           {/* Progress Bar if available */}
                           {currentProgress && (
-                            <div cclassName="mb-4">
-                              <div cclassName="flex justify-between text-xs mb-2">
-                                <span cclassName="capitalize">{currentProgress.phase}</span>
+                            <div className="mb-4">
+                              <div className="flex justify-between text-xs mb-2">
+                                <span className="capitalize">{currentProgress.phase}</span>
                                 <span>{Math.round(currentProgress.progress)}%</span>
                               </div>
-                              <div cclassName="w-full bg-gray-600 rounded-full h-2">
+                              <div className="w-full bg-gray-600 rounded-full h-2">
                                 <div
-                                  cclassName={cn(
+                                  className={cn(
                                     "h-2 rounded-full transition-all duration-500",
                                     currentProgress.status === "failed"
                                       ? "bg-red-500"
@@ -1758,10 +1758,10 @@ export function AiSdkChatPanel({
                           )}
 
                           {/* Progress Steps - Show all phases with current one highlighted */}
-                          <div cclassName="space-y-2.5">
+                          <div className="space-y-2.5">
                             {/* Phase 1: Connection */}
                             <div
-                              cclassName={cn(
+                              className={cn(
                                 "flex items-center gap-4 transition-opacity duration-300",
                                 currentProgress?.phase === "connecting"
                                   ? "opacity-100"
@@ -1769,39 +1769,39 @@ export function AiSdkChatPanel({
                               )}
                             >
                               {currentProgress?.phase === "connecting" ? (
-                                <LoaderIcon cclassName="w-4 h-4 animate-spin text-blue-400" />
+                                <LoaderIcon className="w-4 h-4 animate-spin text-blue-400" />
                               ) : currentProgress?.progress && currentProgress.progress > 20 ? (
-                                <CheckCircle cclassName="w-4 h-4 text-green-400" />
+                                <CheckCircle className="w-4 h-4 text-green-400" />
                               ) : (
-                                <ClockIcon cclassName="w-4 h-4 text-gray-500" />
+                                <ClockIcon className="w-4 h-4 text-gray-500" />
                               )}
-                              <span cclassName="text-sm">
+                              <span className="text-sm">
                                 Establishing secure connection to AI service
                               </span>
                             </div>
 
                             {/* Phase 2: Parsing */}
                             <div
-                              cclassName={cn(
+                              className={cn(
                                 "flex items-center gap-4 transition-opacity duration-300",
                                 currentProgress?.phase === "parsing" ? "opacity-100" : "opacity-40"
                               )}
                             >
                               {currentProgress?.phase === "parsing" ? (
-                                <LoaderIcon cclassName="w-4 h-4 animate-spin text-yellow-400" />
+                                <LoaderIcon className="w-4 h-4 animate-spin text-yellow-400" />
                               ) : currentProgress?.progress && currentProgress.progress > 35 ? (
-                                <CheckCircle cclassName="w-4 h-4 text-green-400" />
+                                <CheckCircle className="w-4 h-4 text-green-400" />
                               ) : (
-                                <ClockIcon cclassName="w-4 h-4 text-gray-500" />
+                                <ClockIcon className="w-4 h-4 text-gray-500" />
                               )}
-                              <span cclassName="text-sm">
+                              <span className="text-sm">
                                 Parsing request and extracting requirements
                               </span>
                             </div>
 
                             {/* Phase 3: Knowledge Search */}
                             <div
-                              cclassName={cn(
+                              className={cn(
                                 "flex items-center gap-4 transition-opacity duration-300",
                                 currentProgress?.phase === "knowledge-search"
                                   ? "opacity-100"
@@ -1809,20 +1809,20 @@ export function AiSdkChatPanel({
                               )}
                             >
                               {currentProgress?.phase === "knowledge-search" ? (
-                                <LoaderIcon cclassName="w-4 h-4 animate-spin text-green-400" />
+                                <LoaderIcon className="w-4 h-4 animate-spin text-green-400" />
                               ) : currentProgress?.progress && currentProgress.progress > 50 ? (
-                                <CheckCircle cclassName="w-4 h-4 text-green-400" />
+                                <CheckCircle className="w-4 h-4 text-green-400" />
                               ) : (
-                                <ClockIcon cclassName="w-4 h-4 text-gray-500" />
+                                <ClockIcon className="w-4 h-4 text-gray-500" />
                               )}
-                              <span cclassName="text-sm">
+                              <span className="text-sm">
                                 Searching AOMA knowledge base for context
                               </span>
                             </div>
 
                             {/* Phase 4: Context Building */}
                             <div
-                              cclassName={cn(
+                              className={cn(
                                 "flex items-center gap-4 transition-opacity duration-300",
                                 currentProgress?.phase === "context-building"
                                   ? "opacity-100"
@@ -1830,20 +1830,20 @@ export function AiSdkChatPanel({
                               )}
                             >
                               {currentProgress?.phase === "context-building" ? (
-                                <LoaderIcon cclassName="w-4 h-4 animate-spin text-purple-400" />
+                                <LoaderIcon className="w-4 h-4 animate-spin text-purple-400" />
                               ) : currentProgress?.progress && currentProgress.progress > 65 ? (
-                                <CheckCircle cclassName="w-4 h-4 text-green-400" />
+                                <CheckCircle className="w-4 h-4 text-green-400" />
                               ) : (
-                                <ClockIcon cclassName="w-4 h-4 text-gray-500" />
+                                <ClockIcon className="w-4 h-4 text-gray-500" />
                               )}
-                              <span cclassName="text-sm">
+                              <span className="text-sm">
                                 Building context from previous interactions
                               </span>
                             </div>
 
                             {/* Phase 5: Generating */}
                             <div
-                              cclassName={cn(
+                              className={cn(
                                 "flex items-center gap-4 transition-opacity duration-300",
                                 currentProgress?.phase === "generating"
                                   ? "opacity-100"
@@ -1851,20 +1851,20 @@ export function AiSdkChatPanel({
                               )}
                             >
                               {currentProgress?.phase === "generating" ? (
-                                <LoaderIcon cclassName="w-4 h-4 animate-spin text-indigo-400" />
+                                <LoaderIcon className="w-4 h-4 animate-spin text-indigo-400" />
                               ) : currentProgress?.progress && currentProgress.progress > 80 ? (
-                                <CheckCircle cclassName="w-4 h-4 text-green-400" />
+                                <CheckCircle className="w-4 h-4 text-green-400" />
                               ) : (
-                                <ClockIcon cclassName="w-4 h-4 text-gray-500" />
+                                <ClockIcon className="w-4 h-4 text-gray-500" />
                               )}
-                              <span cclassName="text-sm">
+                              <span className="text-sm">
                                 Generating AI response with selected model
                               </span>
                             </div>
 
                             {/* Phase 6: Formatting */}
                             <div
-                              cclassName={cn(
+                              className={cn(
                                 "flex items-center gap-4 transition-opacity duration-300",
                                 currentProgress?.phase === "formatting"
                                   ? "opacity-100"
@@ -1872,22 +1872,22 @@ export function AiSdkChatPanel({
                               )}
                             >
                               {currentProgress?.phase === "formatting" ? (
-                                <LoaderIcon cclassName="w-4 h-4 animate-spin text-cyan-400" />
+                                <LoaderIcon className="w-4 h-4 animate-spin text-cyan-400" />
                               ) : currentProgress?.status === "completed" ? (
-                                <CheckCircle cclassName="w-4 h-4 text-green-400" />
+                                <CheckCircle className="w-4 h-4 text-green-400" />
                               ) : (
-                                <ClockIcon cclassName="w-4 h-4 text-gray-500" />
+                                <ClockIcon className="w-4 h-4 text-gray-500" />
                               )}
-                              <span cclassName="text-sm">
+                              <span className="text-sm">
                                 Formatting response with proper structure
                               </span>
                             </div>
                           </div>
 
                           {/* Time Estimate */}
-                          <div cclassName="flex items-center gap-2 mt-4 pt-4 border-t border-gray-600">
-                            <ClockIcon cclassName="w-4 h-4 text-amber-400" />
-                            <span cclassName="text-sm text-gray-300">
+                          <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-600">
+                            <ClockIcon className="w-4 h-4 text-amber-400" />
+                            <span className="text-sm text-gray-300">
                               {currentProgress?.status === "in-progress" &&
                               currentProgress?.progress
                                 ? `Estimated time remaining: ${Math.max(5, Math.round((100 - currentProgress.progress) / 3))} seconds`
@@ -1896,10 +1896,10 @@ export function AiSdkChatPanel({
                           </div>
 
                           {/* Skeleton Loading Animation */}
-                          <div cclassName="mt-4 space-y-2">
-                            <Skeleton cclassName="h-4 w-full" />
-                            <Skeleton cclassName="h-4 w-4/5" />
-                            <Skeleton cclassName="h-4 w-3/5" />
+                          <div className="mt-4 space-y-2">
+                            <Skeleton className="h-4 w-full" />
+                            <Skeleton className="h-4 w-4/5" />
+                            <Skeleton className="h-4 w-3/5" />
                           </div>
                         </div>
                       </motion.div>
@@ -1927,19 +1927,19 @@ export function AiSdkChatPanel({
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                cclassName="mt-6 flex items-center justify-center"
+                className="mt-6 flex items-center justify-center"
               >
                 <Button
-                  cclassName="mac-button mac-button-outline"
+                  className="mac-button mac-button-outline"
                   variant="outline"
-                  cclassName="mac-button mac-button-outline"
+                  className="mac-button mac-button-outline"
                   onClick={() => {
                     clearError();
                     regenerate && regenerate();
                   }}
-                  cclassName="flex items-center gap-2 border-destructive/50 text-destructive hover:bg-destructive/10"
+                  className="flex items-center gap-2 border-destructive/50 text-destructive hover:bg-destructive/10"
                 >
-                  <AlertCircle cclassName="h-4 w-4" />
+                  <AlertCircle className="h-4 w-4" />
                   Retry last message
                 </Button>
               </motion.div>
@@ -1947,9 +1947,9 @@ export function AiSdkChatPanel({
 
             {/* Max Messages Alert */}
             {isMaxMessagesReached && (
-              <Alert cclassName="mt-6 border-amber-500/50 bg-amber-500/10">
-                <AlertCircle cclassName="h-4 w-4 text-amber-500" />
-                <AlertDescription cclassName="text-amber-700 dark:text-amber-400">
+              <Alert className="mt-6 border-amber-500/50 bg-amber-500/10">
+                <AlertCircle className="h-4 w-4 text-amber-500" />
+                <AlertDescription className="text-amber-700 dark:text-amber-400">
                   Maximum message limit ({maxMessages}) reached. Start a new conversation to
                   continue.
                 </AlertDescription>
@@ -1963,19 +1963,19 @@ export function AiSdkChatPanel({
       </div>
 
       {/* Modern Input Area */}
-      <div cclassName="flex-shrink-0 px-4 pt-4 pb-6 border-t border-zinc-800/50 bg-zinc-950 relative">
+      <div className="flex-shrink-0 px-4 pt-4 pb-6 border-t border-zinc-800/50 bg-zinc-950 relative">
         {/* Real-Time Transcription Display */}
         {(isRecording || interimTranscript || transcript) && (
-          <div cclassName="mb-4 p-4 bg-black/30 rounded-lg backdrop-blur-sm border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-200">
-            <div cclassName="flex items-start gap-2">
-              <div cclassName="flex flex-col items-center">
-                <div cclassName="h-2 w-2 bg-red-500 rounded-full animate-pulse" />
+          <div className="mb-4 p-4 bg-black/30 rounded-lg backdrop-blur-sm border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-200">
+            <div className="flex items-start gap-2">
+              <div className="flex flex-col items-center">
+                <div className="h-2 w-2 bg-red-500 rounded-full animate-pulse" />
                 {isRecording && (
-                  <div cclassName="mt-2 flex flex-col gap-2">
+                  <div className="mt-2 flex flex-col gap-2">
                     {[...Array(5)].map((_, i) => (
                       <div
                         key={i}
-                        cclassName="w-1 bg-red-400 rounded-full mac-audio-bar"
+                        className="w-1 bg-red-400 rounded-full mac-audio-bar"
                         style={{
                           height: `${Math.random() * 20 + 10}px`,
                           animationDelay: `${i * 0.1}s`,
@@ -1985,17 +1985,17 @@ export function AiSdkChatPanel({
                   </div>
                 )}
               </div>
-              <div cclassName="flex-1">
-                <div cclassName="text-xs text-gray-400 mb-2">
+              <div className="flex-1">
+                <div className="text-xs text-gray-400 mb-2">
                   {isRecording ? "Listening..." : "Transcription"}
                 </div>
-                <div cclassName="text-sm text-white">
-                  {transcript && <span cclassName="text-white/90">{transcript}</span>}
+                <div className="text-sm text-white">
+                  {transcript && <span className="text-white/90">{transcript}</span>}
                   {interimTranscript && (
-                    <span cclassName="text-white/50 italic ml-2">{interimTranscript}</span>
+                    <span className="text-white/50 italic ml-2">{interimTranscript}</span>
                   )}
                   {!transcript && !interimTranscript && isRecording && (
-                    <span cclassName="text-white/30 italic">Start speaking...</span>
+                    <span className="text-white/30 italic">Start speaking...</span>
                   )}
                 </div>
               </div>
@@ -2008,7 +2008,7 @@ export function AiSdkChatPanel({
 
         <PromptInput
           onSubmit={handleFormSubmit}
-          cclassName="relative shadow-lg"
+          className="relative shadow-lg"
           data-chat-form="true"
         >
           <PromptInputTextarea
@@ -2022,18 +2022,18 @@ export function AiSdkChatPanel({
             }}
             placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
             disabled={isMaxMessagesReached || isLoading}
-            cclassName="resize-none border-0 bg-transparent focus:ring-0 placeholder:text-muted-foreground/60"
+            className="resize-none border-0 bg-transparent focus:ring-0 placeholder:text-muted-foreground/60"
           />
           {/* Last prompt reminder - moved above toolbar */}
           {lastPrompt && (
-            <div cclassName="flex items-center gap-2 px-4 py-2 text-xs text-muted-foreground bg-muted/30 border border-border/30 rounded-md mb-2">
-              <MessageCircle cclassName="h-3 w-3 flex-shrink-0" />
-              <span cclassName="text-xs opacity-75">Last:</span>
-              <span cclassName="truncate flex-1 font-medium">{lastPrompt}</span>
+            <div className="flex items-center gap-2 px-4 py-2 text-xs text-muted-foreground bg-muted/30 border border-border/30 rounded-md mb-2">
+              <MessageCircle className="h-3 w-3 flex-shrink-0" />
+              <span className="text-xs opacity-75">Last:</span>
+              <span className="truncate flex-1 font-medium">{lastPrompt}</span>
               <Button
-                cclassName="mac-button mac-button-outline"
+                className="mac-button mac-button-outline"
                 variant="ghost"
-                cclassName="mac-button mac-button-outline"
+                className="mac-button mac-button-outline"
                 size="sm"
                 onClick={() => {
                   setLastPrompt("");
@@ -2043,16 +2043,16 @@ export function AiSdkChatPanel({
                     }
                   } catch {}
                 }}
-                cclassName="h-4 w-4 p-0 hover:bg-destructive/20 opacity-60 hover:opacity-100 flex-shrink-0"
+                className="h-4 w-4 p-0 hover:bg-destructive/20 opacity-60 hover:opacity-100 flex-shrink-0"
                 title="Clear last prompt reminder"
               >
-                <X cclassName="h-3 w-3" />
+                <X className="h-3 w-3" />
               </Button>
             </div>
           )}
 
-          <PromptInputToolbar cclassName="border-t border-zinc-800/50 bg-zinc-900/30">
-            <PromptInputTools cclassName="gap-2">
+          <PromptInputToolbar className="border-t border-zinc-800/50 bg-zinc-900/30">
+            <PromptInputTools className="gap-2">
               <FileUpload
                 compact={true}
                 assistantId="asst_VvOHL1c4S6YapYKun4mY29fM"
@@ -2064,7 +2064,7 @@ export function AiSdkChatPanel({
               <Button
                 type="button"
                 variant={isRecording ? "destructive" : "ghost"}
-                cclassName={cn(
+                className={cn(
                   "mac-button mac-button-primary",
                   "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
                   isRecording
@@ -2106,12 +2106,12 @@ export function AiSdkChatPanel({
                 title={isRecording ? "Release to stop recording" : "Hold to record"}
               >
                 {isRecording ? (
-                  <MicOff cclassName="h-4 w-4 text-white" />
+                  <MicOff className="h-4 w-4 text-white" />
                 ) : (
-                  <Mic cclassName="h-4 w-4" />
+                  <Mic className="h-4 w-4" />
                 )}
                 {isRecording && (
-                  <span cclassName="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full animate-pulse border border-white" />
+                  <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full animate-pulse border border-white" />
                 )}
               </Button>
 
@@ -2119,7 +2119,7 @@ export function AiSdkChatPanel({
               <Button
                 type="button"
                 variant={isTTSEnabled ? "default" : "ghost"}
-                cclassName={cn(
+                className={cn(
                   "mac-button mac-button-primary",
                   "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
                   isTTSEnabled
@@ -2140,12 +2140,12 @@ export function AiSdkChatPanel({
                 title={isTTSEnabled ? "Disable voice responses" : "Enable voice responses"}
               >
                 {isTTSEnabled ? (
-                  <Volume2 cclassName="h-4 w-4 text-white" />
+                  <Volume2 className="h-4 w-4 text-white" />
                 ) : (
-                  <VolumeX cclassName="h-4 w-4" />
+                  <VolumeX className="h-4 w-4" />
                 )}
                 {isPlaying && (
-                  <span cclassName="absolute -top-1 -right-1 h-2 w-2 bg-emerald-500 rounded-full animate-pulse border border-white" />
+                  <span className="absolute -top-1 -right-1 h-2 w-2 bg-emerald-500 rounded-full animate-pulse border border-white" />
                 )}
               </Button>
 
@@ -2155,7 +2155,7 @@ export function AiSdkChatPanel({
                   selectedVoiceId={selectedVoiceId}
                   onVoiceSelect={setSelectedVoiceId}
                   disabled={isLoading || isSpeechLoading}
-                  cclassName="ml-2"
+                  className="ml-2"
                 />
               )}
 
@@ -2164,7 +2164,7 @@ export function AiSdkChatPanel({
                 onValueChange={setSelectedModel}
                 disabled={isMaxMessagesReached || isLoading}
               >
-                <PromptInputModelSelectTrigger cclassName="!h-8 !w-[100px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
+                <PromptInputModelSelectTrigger className="!h-8 !w-[100px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
                   <PromptInputModelSelectValue />
                 </PromptInputModelSelectTrigger>
                 <PromptInputModelSelectContent>
@@ -2177,15 +2177,15 @@ export function AiSdkChatPanel({
               </PromptInputModelSelect>
 
               {uploadedFiles.length > 0 && (
-                <div cclassName="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <span>{uploadedFiles.length} file(s) attached</span>
                   <Button
-                    cclassName="mac-button mac-button-outline"
+                    className="mac-button mac-button-outline"
                     variant="ghost"
-                    cclassName="mac-button mac-button-outline"
+                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => setUploadedFiles([])}
-                    cclassName="h-6 px-2 text-xs"
+                    className="h-6 px-2 text-xs"
                   >
                     Clear
                   </Button>
@@ -2196,7 +2196,7 @@ export function AiSdkChatPanel({
             <PromptInputSubmit
               disabled={isMaxMessagesReached || !localInput?.trim()}
               status={isLoading ? "streaming" : undefined}
-              cclassName="!h-8 !w-8 !p-0 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 shrink-0"
+              className="!h-8 !w-8 !p-0 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 shrink-0"
             />
           </PromptInputToolbar>
         </PromptInput>

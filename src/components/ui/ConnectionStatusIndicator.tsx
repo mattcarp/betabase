@@ -129,15 +129,15 @@ export const ConnectionStatusIndicator: React.FC = () => {
   const getStatusIcon = (status: ConnectionStatus["type"]) => {
     switch (status) {
       case "connected":
-        return <Wifi cclassName="h-3 w-3" />;
+        return <Wifi className="h-3 w-3" />;
       case "disconnected":
-        return <WifiOff cclassName="h-3 w-3" />;
+        return <WifiOff className="h-3 w-3" />;
       case "connecting":
-        return <Cloud cclassName="h-3 w-3 animate-pulse" />;
+        return <Cloud className="h-3 w-3 animate-pulse" />;
       case "error":
-        return <AlertTriangle cclassName="h-3 w-3" />;
+        return <AlertTriangle className="h-3 w-3" />;
       default:
-        return <CloudOff cclassName="h-3 w-3" />;
+        return <CloudOff className="h-3 w-3" />;
     }
   };
 
@@ -174,13 +174,13 @@ export const ConnectionStatusIndicator: React.FC = () => {
 
   return (
     <div
-      cclassName="relative flex items-center gap-2"
+      className="relative flex items-center gap-2"
       onMouseEnter={() => setShowDropdown(true)}
       onMouseLeave={() => setShowDropdown(false)}
     >
       <Badge
         variant={primaryStatus === "connected" ? "default" : "secondary"}
-        cclassName={cn(
+        className={cn(
           "text-xs flex items-center gap-2 cursor-pointer transition-all duration-200",
           primaryStatus === "connected"
             ? "motiff-status-connected bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/20"
@@ -190,7 +190,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
         )}
       >
         <div
-          cclassName={cn(
+          className={cn(
             "h-2 w-2 rounded-full animate-pulse",
             getStatusColor(primaryStatus),
             primaryStatus === "connected"
@@ -203,13 +203,13 @@ export const ConnectionStatusIndicator: React.FC = () => {
         <span>
           {connectedCount}/{totalCount}
         </span>
-        <span cclassName="hidden lg:inline">{getPrimaryStatusText()}</span>
+        <span className="hidden lg:inline">{getPrimaryStatusText()}</span>
       </Badge>
 
       {/* MAC Design System Status Popup */}
       {showDropdown && (
         <div
-          cclassName="absolute top-full right-0 mt-4 min-w-[22rem] animate-in fade-in slide-in-from-top-2 duration-300 rounded-xl shadow-2xl border border-white/20"
+          className="absolute top-full right-0 mt-4 min-w-[22rem] animate-in fade-in slide-in-from-top-2 duration-300 rounded-xl shadow-2xl border border-white/20"
           style={{
             zIndex: 99999,
             background:
@@ -218,29 +218,29 @@ export const ConnectionStatusIndicator: React.FC = () => {
             WebkitBackdropFilter: "blur(20px)",
           }}
         >
-          <div cclassName="p-6 space-y-4">
+          <div className="p-6 space-y-4">
             {/* Header with visual flair */}
-            <div cclassName="flex items-center justify-between border-b border-white/20 pb-4">
-              <div cclassName="flex items-center gap-2">
-                <div cclassName="mac-floating-orb h-2 w-2" />
+            <div className="flex items-center justify-between border-b border-white/20 pb-4">
+              <div className="flex items-center gap-2">
+                <div className="mac-floating-orb h-2 w-2" />
                 <h3
-                  cclassName="mac-title"
-                  cclassName="mac-title text-base font-[400] tracking-wide text-white"
+                  className="mac-title"
+                  className="mac-title text-base font-[400] tracking-wide text-white"
                 >
                   System Health
                 </h3>
               </div>
-              <div cclassName="text-xs font-[300] text-white/70">
+              <div className="text-xs font-[300] text-white/70">
                 {connectedCount}/{totalCount} Online
               </div>
             </div>
 
             {/* Service Status Cards */}
-            <div cclassName="space-y-2">
+            <div className="space-y-2">
               {statuses.map((status, index) => (
                 <div
                   key={index}
-                  cclassName={cn(
+                  className={cn(
                     "group relative overflow-hidden rounded-lg p-4 transition-all duration-300",
                     "hover:scale-[1.02] hover:shadow-lg cursor-pointer",
                     status.type === "connected"
@@ -254,7 +254,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
                 >
                   {/* Status gradient overlay */}
                   <div
-                    cclassName={cn(
+                    className={cn(
                       "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300",
                       "bg-gradient-to-r",
                       status.type === "connected"
@@ -267,11 +267,11 @@ export const ConnectionStatusIndicator: React.FC = () => {
                     )}
                   />
 
-                  <div cclassName="relative flex items-center justify-between">
+                  <div className="relative flex items-center justify-between">
                     {/* Service Info */}
-                    <div cclassName="flex items-center gap-4">
+                    <div className="flex items-center gap-4">
                       <div
-                        cclassName={cn(
+                        className={cn(
                           "flex items-center justify-center h-8 w-8 rounded-lg",
                           status.type === "connected"
                             ? "bg-green-500/20"
@@ -283,7 +283,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
                         )}
                       >
                         {React.cloneElement(getStatusIcon(status.type) as React.ReactElement, {
-                          cclassName: cn(
+                          className: cn(
                             "h-4 w-4",
                             status.type === "connected"
                               ? "text-green-400"
@@ -296,8 +296,8 @@ export const ConnectionStatusIndicator: React.FC = () => {
                         })}
                       </div>
                       <div>
-                        <div cclassName="text-sm font-[400] text-white">{status.service}</div>
-                        <div cclassName="text-xs font-[200] text-white/60">
+                        <div className="text-sm font-[400] text-white">{status.service}</div>
+                        <div className="text-xs font-[200] text-white/60">
                           {status.type === "connected"
                             ? "All systems operational"
                             : status.type === "disconnected"
@@ -310,9 +310,9 @@ export const ConnectionStatusIndicator: React.FC = () => {
                     </div>
 
                     {/* Status Badge */}
-                    <div cclassName="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                       <div
-                        cclassName={cn(
+                        className={cn(
                           "relative h-2 w-2 rounded-full",
                           status.type === "connected" || status.type === "connecting"
                             ? "animate-pulse"
@@ -320,7 +320,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
                         )}
                       >
                         <div
-                          cclassName={cn(
+                          className={cn(
                             "absolute inset-0 rounded-full blur-sm",
                             status.type === "connected"
                               ? "bg-green-400"
@@ -332,7 +332,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
                           )}
                         />
                         <div
-                          cclassName={cn(
+                          className={cn(
                             "relative h-full w-full rounded-full",
                             status.type === "connected"
                               ? "bg-green-500"
@@ -345,7 +345,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
                         />
                       </div>
                       <span
-                        cclassName={cn(
+                        className={cn(
                           "text-xs font-[300] uppercase tracking-wider",
                           status.type === "connected"
                             ? "text-green-400"
@@ -372,9 +372,9 @@ export const ConnectionStatusIndicator: React.FC = () => {
 
             {/* Footer with timestamp */}
             {statuses[0]?.lastChecked && (
-              <div cclassName="flex items-center justify-center gap-2 pt-2 border-t border-white/10">
-                <div cclassName="h-1 w-1 rounded-full bg-white/50 animate-pulse" />
-                <span cclassName="text-xs font-[200] text-white/50 tracking-wide">
+              <div className="flex items-center justify-center gap-2 pt-2 border-t border-white/10">
+                <div className="h-1 w-1 rounded-full bg-white/50 animate-pulse" />
+                <span className="text-xs font-[200] text-white/50 tracking-wide">
                   Last checked {statuses[0].lastChecked.toLocaleTimeString()}
                 </span>
               </div>

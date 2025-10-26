@@ -11,7 +11,7 @@ interface AnnotationPinsProps {
   currentStep: number;
   totalSteps: number;
   onPinClick?: (annotation: Annotation) => void;
-  cclassName?: string;
+  className?: string;
 }
 
 interface PinInfo {
@@ -22,13 +22,13 @@ interface PinInfo {
 const getIconForType = (type: AnnotationType) => {
   switch (type) {
     case "highlight":
-      return <Highlighter cclassName="h-3 w-3" />;
+      return <Highlighter className="h-3 w-3" />;
     case "note":
-      return <StickyNote cclassName="h-3 w-3" />;
+      return <StickyNote className="h-3 w-3" />;
     case "screenshot":
-      return <Camera cclassName="h-3 w-3" />;
+      return <Camera className="h-3 w-3" />;
     case "flag":
-      return <Flag cclassName="h-3 w-3" />;
+      return <Flag className="h-3 w-3" />;
   }
 };
 
@@ -49,7 +49,7 @@ export const AnnotationPins: React.FC<AnnotationPinsProps> = ({
   currentStep,
   totalSteps,
   onPinClick,
-  cclassName,
+  className,
 }) => {
   const { annotations } = useAnnotations();
 
@@ -80,20 +80,20 @@ export const AnnotationPins: React.FC<AnnotationPinsProps> = ({
   if (pins.length === 0) return null;
 
   return (
-    <div cclassName={cn("relative w-full h-8", cclassName)}>
+    <div className={cn("relative w-full h-8", className)}>
       {/* Timeline bar */}
-      <div cclassName="absolute inset-x-0 top-1/2 h-1 bg-muted/30 rounded-full" />
+      <div className="absolute inset-x-0 top-1/2 h-1 bg-muted/30 rounded-full" />
 
       {/* Pins */}
       {pins.map(({ annotation, position }) => (
         <div
           key={annotation.id}
-          cclassName="absolute top-0 -translate-x-1/2 group"
+          className="absolute top-0 -translate-x-1/2 group"
           style={{ left: `${Math.min(Math.max(position, 0), 100)}%` }}
         >
           {/* Pin marker */}
           <button
-            cclassName={cn(
+            className={cn(
               "relative flex items-center justify-center w-6 h-6 rounded-full",
               "border-2 border-background shadow-md transition-all",
               "hover:scale-125 hover:z-10",
@@ -102,30 +102,30 @@ export const AnnotationPins: React.FC<AnnotationPinsProps> = ({
             onClick={() => onPinClick?.(annotation)}
             title={getPreviewText(annotation)}
           >
-            <span cclassName="text-white">{getIconForType(annotation.data.type)}</span>
+            <span className="text-white">{getIconForType(annotation.data.type)}</span>
           </button>
 
           {/* Tooltip on hover */}
           <div
-            cclassName={cn(
+            className={cn(
               "absolute top-full left-1/2 -translate-x-1/2 mt-2",
               "opacity-0 group-hover:opacity-100 transition-opacity",
               "pointer-events-none z-50"
             )}
           >
-            <div cclassName="bg-background border rounded-lg shadow-lg p-2 min-w-[150px]">
-              <div cclassName="flex items-center gap-2 mb-2">
+            <div className="bg-background border rounded-lg shadow-lg p-2 min-w-[150px]">
+              <div className="flex items-center gap-2 mb-2">
                 <Badge
                   variant="outline"
-                  cclassName={cn("text-xs", getColorForType(annotation.data.type))}
+                  className={cn("text-xs", getColorForType(annotation.data.type))}
                 >
                   {annotation.data.type}
                 </Badge>
               </div>
-              <p cclassName="text-xs text-muted-foreground line-clamp-2">
+              <p className="text-xs text-muted-foreground line-clamp-2">
                 {getPreviewText(annotation)}
               </p>
-              <p cclassName="text-xs text-muted-foreground mt-2">
+              <p className="text-xs text-muted-foreground mt-2">
                 {new Date(annotation.createdAt).toLocaleTimeString()}
               </p>
             </div>
@@ -135,8 +135,8 @@ export const AnnotationPins: React.FC<AnnotationPinsProps> = ({
 
       {/* Count badge */}
       {annotations.length > 0 && (
-        <div cclassName="absolute -top-1 right-0">
-          <Badge variant="secondary" cclassName="text-xs">
+        <div className="absolute -top-1 right-0">
+          <Badge variant="secondary" className="text-xs">
             {annotations.length} annotation{annotations.length !== 1 ? "s" : ""}
           </Badge>
         </div>

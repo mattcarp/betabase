@@ -42,11 +42,11 @@ interface QuerySuggestion {
 }
 
 interface AOMAKnowledgePanelProps {
-  cclassName?: string;
+  className?: string;
   onQueryResult?: (result: any) => void;
 }
 
-export function AOMAKnowledgePanel({ cclassName, onQueryResult }: AOMAKnowledgePanelProps) {
+export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePanelProps) {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [strategy, setStrategy] = useState<"comprehensive" | "focused" | "rapid">("focused");
@@ -84,32 +84,32 @@ export function AOMAKnowledgePanel({ cclassName, onQueryResult }: AOMAKnowledgeP
     {
       text: "What are the latest enhancements to AOMA's asset ingestion workflow?",
       category: "Ingestion",
-      icon: <RefreshCw cclassName="h-3 w-3" />,
+      icon: <RefreshCw className="h-3 w-3" />,
     },
     {
       text: "How has AOMA improved its search and retrieval functionality recently?",
       category: "Search",
-      icon: <Search cclassName="h-3 w-3" />,
+      icon: <Search className="h-3 w-3" />,
     },
     {
       text: "What new integrations with third-party systems have been introduced in AOMA?",
       category: "Integrations",
-      icon: <Zap cclassName="h-3 w-3" />,
+      icon: <Zap className="h-3 w-3" />,
     },
     {
       text: "How does AOMA's updated permissions and access control model work?",
       category: "Security",
-      icon: <AlertCircle cclassName="h-3 w-3" />,
+      icon: <AlertCircle className="h-3 w-3" />,
     },
     {
       text: "What features support compliance and legal requirements in AOMA?",
       category: "Compliance",
-      icon: <Database cclassName="h-3 w-3" />,
+      icon: <Database className="h-3 w-3" />,
     },
     {
       text: "How does AOMA support collaboration and workflow management for teams?",
       category: "Collaboration",
-      icon: <Sparkles cclassName="h-3 w-3" />,
+      icon: <Sparkles className="h-3 w-3" />,
     },
   ]);
 
@@ -158,7 +158,7 @@ export function AOMAKnowledgePanel({ cclassName, onQueryResult }: AOMAKnowledgeP
                 newSuggestions.push({
                   text: match[1].trim(),
                   category: categories[newSuggestions.length] || "General",
-                  icon: <IconComponent cclassName="h-3 w-3" />,
+                  icon: <IconComponent className="h-3 w-3" />,
                 });
               }
             });
@@ -266,15 +266,15 @@ export function AOMAKnowledgePanel({ cclassName, onQueryResult }: AOMAKnowledgeP
   };
 
   return (
-    <Card cclassName={cn("mac-card", "flex flex-col h-full", cclassName)}>
-      <CardHeader cclassName="mac-card pb-4">
-        <div cclassName="flex items-center justify-between">
-          <div cclassName="flex items-center gap-2">
-            <Brain cclassName="h-5 w-5 text-primary" />
-            <CardTitle cclassName="mac-card">AOMA Knowledge Base</CardTitle>
+    <Card className={cn("mac-card", "flex flex-col h-full", className)}>
+      <CardHeader className="mac-card pb-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Brain className="h-5 w-5 text-primary" />
+            <CardTitle className="mac-card">AOMA Knowledge Base</CardTitle>
           </div>
-          <div cclassName="flex items-center gap-2">
-            <Badge variant="outline" cclassName="text-xs">
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="text-xs">
               {queryHistory.length} queries
             </Badge>
             <Badge
@@ -285,108 +285,108 @@ export function AOMAKnowledgePanel({ cclassName, onQueryResult }: AOMAKnowledgeP
                     ? "secondary"
                     : "outline"
               }
-              cclassName="text-xs"
+              className="text-xs"
             >
               {strategy}
             </Badge>
           </div>
         </div>
-        <CardDescription cclassName="mac-card">
+        <CardDescription className="mac-card">
           Query Sony Music's AOMA knowledge system for insights and documentation
         </CardDescription>
       </CardHeader>
 
-      <CardContent cclassName="flex-1 flex flex-col gap-4 overflow-hidden">
+      <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden">
         {/* Search Form */}
-        <form onSubmit={handleSubmit} cclassName="flex gap-2">
-          <div cclassName="flex-1 relative">
-            <Search cclassName="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              cclassName="mac-input"
+              className="mac-input"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ask about AOMA, SIAM, or Sony Music systems..."
-              cclassName="pl-9"
+              className="pl-9"
               disabled={isLoading}
             />
           </div>
           <Button
-            cclassName="mac-button mac-button-primary"
+            className="mac-button mac-button-primary"
             type="submit"
             disabled={isLoading || !query.trim()}
           >
             {isLoading ? (
-              <Loader2 cclassName="h-4 w-4 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <ChevronRight cclassName="h-4 w-4" />
+              <ChevronRight className="h-4 w-4" />
             )}
           </Button>
         </form>
 
         {/* Strategy Selector */}
-        <div cclassName="flex gap-2">
+        <div className="flex gap-2">
           <Button
-            cclassName="mac-button mac-button-primary"
+            className="mac-button mac-button-primary"
             size="sm"
             variant={strategy === "rapid" ? "default" : "outline"}
             onClick={() => setStrategy("rapid")}
-            cclassName="text-xs"
+            className="text-xs"
           >
-            <Zap cclassName="h-3 w-3 mr-2" />
+            <Zap className="h-3 w-3 mr-2" />
             Rapid
           </Button>
           <Button
-            cclassName="mac-button mac-button-primary"
+            className="mac-button mac-button-primary"
             size="sm"
             variant={strategy === "focused" ? "default" : "outline"}
             onClick={() => setStrategy("focused")}
-            cclassName="text-xs"
+            className="text-xs"
           >
-            <Search cclassName="h-3 w-3 mr-2" />
+            <Search className="h-3 w-3 mr-2" />
             Focused
           </Button>
           <Button
-            cclassName="mac-button mac-button-primary"
+            className="mac-button mac-button-primary"
             size="sm"
             variant={strategy === "comprehensive" ? "default" : "outline"}
             onClick={() => setStrategy("comprehensive")}
-            cclassName="text-xs"
+            className="text-xs"
           >
-            <BookOpen cclassName="h-3 w-3 mr-2" />
+            <BookOpen className="h-3 w-3 mr-2" />
             Comprehensive
           </Button>
         </div>
 
         {/* Main Content Area */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} cclassName="flex-1 flex flex-col">
-          <TabsList cclassName="grid w-full grid-cols-3">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="search">Search</TabsTrigger>
             <TabsTrigger value="suggestions">Suggestions</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="search" cclassName="flex-1 overflow-hidden mt-4">
-            <ScrollArea cclassName="h-full">
+          <TabsContent value="search" className="flex-1 overflow-hidden mt-4">
+            <ScrollArea className="h-full">
               {isLoading && (
-                <div cclassName="flex flex-col items-center justify-center h-full">
+                <div className="flex flex-col items-center justify-center h-full">
                   <Loader />
-                  <p cclassName="text-sm text-muted-foreground mt-4">
+                  <p className="text-sm text-muted-foreground mt-4">
                     Querying AOMA knowledge base...
                   </p>
-                  <p cclassName="text-xs text-muted-foreground mt-2">Strategy: {strategy}</p>
+                  <p className="text-xs text-muted-foreground mt-2">Strategy: {strategy}</p>
                 </div>
               )}
 
               {error && !isLoading && (
                 <Alert variant="destructive">
-                  <AlertCircle cclassName="h-4 w-4" />
+                  <AlertCircle className="h-4 w-4" />
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
 
               {currentResponse && !isLoading && (
-                <div cclassName="space-y-4">
-                  <div cclassName="prose prose-sm dark:prose-invert max-w-none">
+                <div className="space-y-4">
+                  <div className="prose prose-sm dark:prose-invert max-w-none">
                     <div
                       dangerouslySetInnerHTML={{
                         __html: formatResponse(currentResponse.response || currentResponse),
@@ -395,18 +395,18 @@ export function AOMAKnowledgePanel({ cclassName, onQueryResult }: AOMAKnowledgeP
                   </div>
 
                   {currentResponse.metadata && (
-                    <div cclassName="flex flex-wrap gap-2 pt-4 border-t">
-                      <Badge variant="outline" cclassName="text-xs">
-                        <Clock cclassName="h-3 w-3 mr-2" />
+                    <div className="flex flex-wrap gap-2 pt-4 border-t">
+                      <Badge variant="outline" className="text-xs">
+                        <Clock className="h-3 w-3 mr-2" />
                         {new Date(currentResponse.metadata.timestamp).toLocaleTimeString()}
                       </Badge>
                       {currentResponse.metadata.version && (
-                        <Badge variant="outline" cclassName="text-xs">
+                        <Badge variant="outline" className="text-xs">
                           v{currentResponse.metadata.version}
                         </Badge>
                       )}
                       {currentResponse.metadata.threadId && (
-                        <Badge variant="outline" cclassName="text-xs">
+                        <Badge variant="outline" className="text-xs">
                           Thread: {currentResponse.metadata.threadId.slice(-8)}
                         </Badge>
                       )}
@@ -416,10 +416,10 @@ export function AOMAKnowledgePanel({ cclassName, onQueryResult }: AOMAKnowledgeP
               )}
 
               {!isLoading && !error && !currentResponse && (
-                <div cclassName="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
-                  <Brain cclassName="h-12 w-12 mb-4 opacity-50" />
-                  <p cclassName="text-sm">Query the AOMA knowledge base to get started</p>
-                  <p cclassName="text-xs mt-2">
+                <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
+                  <Brain className="h-12 w-12 mb-4 opacity-50" />
+                  <p className="text-sm">Query the AOMA knowledge base to get started</p>
+                  <p className="text-xs mt-2">
                     Try searching for architecture, workflows, or features
                   </p>
                 </div>
@@ -427,25 +427,25 @@ export function AOMAKnowledgePanel({ cclassName, onQueryResult }: AOMAKnowledgeP
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="suggestions" cclassName="flex-1 overflow-hidden mt-4">
-            <ScrollArea cclassName="h-full">
-              <div cclassName="grid gap-2">
+          <TabsContent value="suggestions" className="flex-1 overflow-hidden mt-4">
+            <ScrollArea className="h-full">
+              <div className="grid gap-2">
                 {querySuggestions.map((suggestion, index) => (
                   <Button
                     key={index}
                     variant="outline"
-                    cclassName="justify-start text-left h-auto p-4 mac-button mac-button-outline"
+                    className="justify-start text-left h-auto p-4 mac-button mac-button-outline"
                     onClick={() => handleSuggestionClick(suggestion.text)}
                   >
-                    <div cclassName="flex items-start gap-4 w-full">
-                      <div cclassName="mt-2">{suggestion.icon}</div>
-                      <div cclassName="flex-1">
-                        <div cclassName="font-medium text-sm">{suggestion.text}</div>
-                        <div cclassName="text-xs text-muted-foreground mt-2">
+                    <div className="flex items-start gap-4 w-full">
+                      <div className="mt-2">{suggestion.icon}</div>
+                      <div className="flex-1">
+                        <div className="font-medium text-sm">{suggestion.text}</div>
+                        <div className="text-xs text-muted-foreground mt-2">
                           {suggestion.category}
                         </div>
                       </div>
-                      <ChevronRight cclassName="h-4 w-4 mt-2 opacity-50" />
+                      <ChevronRight className="h-4 w-4 mt-2 opacity-50" />
                     </div>
                   </Button>
                 ))}
@@ -453,17 +453,17 @@ export function AOMAKnowledgePanel({ cclassName, onQueryResult }: AOMAKnowledgeP
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="history" cclassName="flex-1 overflow-hidden mt-4">
-            <ScrollArea cclassName="h-full">
+          <TabsContent value="history" className="flex-1 overflow-hidden mt-4">
+            <ScrollArea className="h-full">
               {queryHistory.length > 0 ? (
-                <div cclassName="space-y-2">
-                  <div cclassName="flex justify-between items-center mb-2">
-                    <span cclassName="text-xs text-muted-foreground">Recent queries</span>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs text-muted-foreground">Recent queries</span>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={clearHistory}
-                      cclassName="text-xs mac-button mac-button-outline"
+                      className="text-xs mac-button mac-button-outline"
                     >
                       Clear all
                     </Button>
@@ -472,49 +472,49 @@ export function AOMAKnowledgePanel({ cclassName, onQueryResult }: AOMAKnowledgeP
                   {queryHistory.map((item) => (
                     <div
                       key={item.id}
-                      cclassName="group flex items-start gap-2 p-2 rounded-lg hover:bg-muted/50 transition-colors"
+                      className="group flex items-start gap-2 p-2 rounded-lg hover:bg-muted/50 transition-colors"
                     >
-                      <div cclassName="flex-1">
-                        <div cclassName="flex items-center gap-2">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
                           <span
-                            cclassName={cn(
+                            className={cn(
                               "text-sm font-medium",
                               !item.success && "text-destructive"
                             )}
                           >
                             {item.query}
                           </span>
-                          <Badge variant="outline" cclassName="text-xs">
+                          <Badge variant="outline" className="text-xs">
                             {item.strategy}
                           </Badge>
                         </div>
                         {item.responsePreview && (
-                          <p cclassName="text-xs text-muted-foreground mt-2 line-clamp-2">
+                          <p className="text-xs text-muted-foreground mt-2 line-clamp-2">
                             {item.responsePreview}...
                           </p>
                         )}
-                        <p cclassName="text-xs text-muted-foreground mt-2">
+                        <p className="text-xs text-muted-foreground mt-2">
                           {item.timestamp.toLocaleString()}
                         </p>
                       </div>
                       <Button
-                        cclassName="mac-button mac-button-outline"
+                        className="mac-button mac-button-outline"
                         size="sm"
                         variant="ghost"
-                        cclassName="mac-button mac-button-outline"
+                        className="mac-button mac-button-outline"
                         onClick={() => handleHistoryRerun(item)}
-                        cclassName="opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity"
                       >
-                        <RefreshCw cclassName="h-3 w-3" />
+                        <RefreshCw className="h-3 w-3" />
                       </Button>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div cclassName="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
-                  <History cclassName="h-12 w-12 mb-4 opacity-50" />
-                  <p cclassName="text-sm">No query history yet</p>
-                  <p cclassName="text-xs mt-2">Your recent queries will appear here</p>
+                <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
+                  <History className="h-12 w-12 mb-4 opacity-50" />
+                  <p className="text-sm">No query history yet</p>
+                  <p className="text-xs mt-2">Your recent queries will appear here</p>
                 </div>
               )}
             </ScrollArea>
@@ -539,15 +539,15 @@ function formatResponse(text: any): string {
     // Headers
     .replace(
       /^### (.*?)$/gm,
-      '<h3  cclassName="mac-title"class="font-semibold text-base mt-4 mb-2">$1</h3>'
+      '<h3  className="mac-title"class="font-semibold text-base mt-4 mb-2">$1</h3>'
     )
     .replace(
       /^## (.*?)$/gm,
-      '<h2  cclassName="mac-heading"class="font-bold text-lg mt-4 mb-2">$1</h2>'
+      '<h2  className="mac-heading"class="font-bold text-lg mt-4 mb-2">$1</h2>'
     )
     .replace(
       /^# (.*?)$/gm,
-      '<h1  cclassName="mac-heading"class="font-bold text-xl mt-4 mb-2">$1</h1>'
+      '<h1  className="mac-heading"class="font-bold text-xl mt-4 mb-2">$1</h1>'
     )
     // Bold
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")

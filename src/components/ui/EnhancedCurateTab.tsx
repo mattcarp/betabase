@@ -337,10 +337,10 @@ const formatCurrency = (value: number): string => {
 };
 
 export function EnhancedCurateTab({
-  cclassName,
+  className,
   assistantId = "asst_VvOHL1c4S6YapYKun4mY29fM",
 }: {
-  cclassName?: string;
+  className?: string;
   assistantId?: string;
 }) {
   // State management
@@ -589,150 +589,150 @@ export function EnhancedCurateTab({
   // Prevent SSR rendering of Recharts - render loading state until mounted
   if (!mounted) {
     return (
-      <div cclassName={cn("h-full flex items-center justify-center", cclassName)}>
-        <p cclassName="mac-body text-muted-foreground">Loading curate interface...</p>
+      <div className={cn("h-full flex items-center justify-center", className)}>
+        <p className="mac-body text-muted-foreground">Loading curate interface...</p>
       </div>
     );
   }
 
   return (
-    <Card cclassName={cn("mac-card", "h-full flex flex-col", cclassName)}>
-      <CardHeader cclassName="mac-card">
-        <div cclassName="flex items-center justify-between">
+    <Card className={cn("mac-card", "h-full flex flex-col", className)}>
+      <CardHeader className="mac-card">
+        <div className="flex items-center justify-between">
           <div>
-            <CardTitle cclassName="flex items-center gap-2">
-              <Brain cclassName="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2">
+              <Brain className="h-5 w-5" />
               Knowledge Curation Center
             </CardTitle>
-            <CardDescription cclassName="mac-card">
+            <CardDescription className="mac-card">
               Executive dashboard for knowledge management & curator performance
             </CardDescription>
           </div>
-          <div cclassName="flex items-center gap-2">
-            <Badge variant="secondary" cclassName="flex items-center gap-2">
-              <FileText cclassName="h-3 w-3" />
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="flex items-center gap-2">
+              <FileText className="h-3 w-3" />
               {stats.totalFiles} files
             </Badge>
-            <Badge variant="outline" cclassName="flex items-center gap-2">
-              <Database cclassName="h-3 w-3" />
+            <Badge variant="outline" className="flex items-center gap-2">
+              <Database className="h-3 w-3" />
               {formatFileSize(stats.totalSize)}
             </Badge>
-            <Badge cclassName="flex items-center gap-2 bg-green-600">
-              <TrendingUp cclassName="h-3 w-3" />
+            <Badge className="flex items-center gap-2 bg-green-600">
+              <TrendingUp className="h-3 w-3" />
               {stats.avgQuality.toFixed(0)}% Quality
             </Badge>
-            <Badge cclassName="flex items-center gap-2 bg-blue-600">
-              <DollarSign cclassName="h-3 w-3" />
+            <Badge className="flex items-center gap-2 bg-blue-600">
+              <DollarSign className="h-3 w-3" />
               {stats.monthlyROI}x ROI
             </Badge>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent cclassName="flex-1 overflow-hidden">
-        <Tabs value={activeTab} onValueChange={setActiveTab} cclassName="h-full flex flex-col">
-          <TabsList cclassName="grid w-full grid-cols-6">
+      <CardContent className="flex-1 overflow-hidden">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="dashboard">
-              <BarChart3 cclassName="h-4 w-4 mr-2" />
+              <BarChart3 className="h-4 w-4 mr-2" />
               Dashboard
             </TabsTrigger>
             <TabsTrigger value="files">
-              <FolderOpen cclassName="h-4 w-4 mr-2" />
+              <FolderOpen className="h-4 w-4 mr-2" />
               Files
             </TabsTrigger>
             <TabsTrigger value="insights">
-              <Lightbulb cclassName="h-4 w-4 mr-2" />
+              <Lightbulb className="h-4 w-4 mr-2" />
               Insights
             </TabsTrigger>
             <TabsTrigger value="curators">
-              <Users cclassName="h-4 w-4 mr-2" />
+              <Users className="h-4 w-4 mr-2" />
               Curators
             </TabsTrigger>
             <TabsTrigger value="analytics">
-              <LineChartIcon cclassName="h-4 w-4 mr-2" />
+              <LineChartIcon className="h-4 w-4 mr-2" />
               Analytics
             </TabsTrigger>
             <TabsTrigger value="upload">
-              <Upload cclassName="h-4 w-4 mr-2" />
+              <Upload className="h-4 w-4 mr-2" />
               Upload
             </TabsTrigger>
           </TabsList>
 
           {/* Executive Dashboard - "Evil Charts" */}
-          <TabsContent value="dashboard" cclassName="flex-1 overflow-auto mt-4">
-            <div cclassName="space-y-4">
+          <TabsContent value="dashboard" className="flex-1 overflow-auto mt-4">
+            <div className="space-y-4">
               {/* Executive KPIs */}
-              <div cclassName="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Card cclassName="mac-card">
-                  <CardHeader cclassName="mac-card pb-2">
-                    <CardTitle cclassName="text-sm">Knowledge ROI</CardTitle>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Card className="mac-card">
+                  <CardHeader className="mac-card pb-2">
+                    <CardTitle className="text-sm">Knowledge ROI</CardTitle>
                   </CardHeader>
-                  <CardContent cclassName="mac-card">
-                    <div cclassName="flex items-center justify-between">
-                      <span cclassName="text-2xl font-bold">3.5x</span>
-                      <DollarSign cclassName="h-8 w-8 text-green-600" />
+                  <CardContent className="mac-card">
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold">3.5x</span>
+                      <DollarSign className="h-8 w-8 text-green-600" />
                     </div>
-                    <p cclassName="text-xs text-muted-foreground mt-2">
+                    <p className="text-xs text-muted-foreground mt-2">
                       {formatCurrency(executiveMetrics.totalValue)} generated
                     </p>
                   </CardContent>
                 </Card>
 
-                <Card cclassName="mac-card">
-                  <CardHeader cclassName="mac-card pb-2">
-                    <CardTitle cclassName="text-sm">Monthly Savings</CardTitle>
+                <Card className="mac-card">
+                  <CardHeader className="mac-card pb-2">
+                    <CardTitle className="text-sm">Monthly Savings</CardTitle>
                   </CardHeader>
-                  <CardContent cclassName="mac-card">
-                    <div cclassName="flex items-center justify-between">
-                      <span cclassName="text-2xl font-bold">
+                  <CardContent className="mac-card">
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold">
                         {formatCurrency(executiveMetrics.monthlySavings)}
                       </span>
-                      <TrendingUp cclassName="h-8 w-8 text-blue-600" />
+                      <TrendingUp className="h-8 w-8 text-blue-600" />
                     </div>
-                    <p cclassName="text-xs text-muted-foreground mt-2">
+                    <p className="text-xs text-muted-foreground mt-2">
                       From deduplication & optimization
                     </p>
                   </CardContent>
                 </Card>
 
-                <Card cclassName="mac-card">
-                  <CardHeader cclassName="mac-card pb-2">
-                    <CardTitle cclassName="text-sm">Compliance Score</CardTitle>
+                <Card className="mac-card">
+                  <CardHeader className="mac-card pb-2">
+                    <CardTitle className="text-sm">Compliance Score</CardTitle>
                   </CardHeader>
-                  <CardContent cclassName="mac-card">
-                    <div cclassName="flex items-center justify-between">
-                      <span cclassName="text-2xl font-bold">
+                  <CardContent className="mac-card">
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold">
                         {executiveMetrics.complianceScore}%
                       </span>
-                      <Shield cclassName="h-8 w-8 text-purple-600" />
+                      <Shield className="h-8 w-8 text-purple-600" />
                     </div>
-                    <Progress value={executiveMetrics.complianceScore} cclassName="mt-2 h-1" />
-                    <p cclassName="text-xs text-muted-foreground mt-2">3 issues need review</p>
+                    <Progress value={executiveMetrics.complianceScore} className="mt-2 h-1" />
+                    <p className="text-xs text-muted-foreground mt-2">3 issues need review</p>
                   </CardContent>
                 </Card>
 
-                <Card cclassName="mac-card">
-                  <CardHeader cclassName="mac-card pb-2">
-                    <CardTitle cclassName="text-sm">Curation Velocity</CardTitle>
+                <Card className="mac-card">
+                  <CardHeader className="mac-card pb-2">
+                    <CardTitle className="text-sm">Curation Velocity</CardTitle>
                   </CardHeader>
-                  <CardContent cclassName="mac-card">
-                    <div cclassName="flex items-center justify-between">
-                      <span cclassName="text-2xl font-bold">
+                  <CardContent className="mac-card">
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold">
                         {executiveMetrics.curationVelocity}
                       </span>
-                      <Activity cclassName="h-8 w-8 text-orange-600" />
+                      <Activity className="h-8 w-8 text-orange-600" />
                     </div>
-                    <p cclassName="text-xs text-muted-foreground mt-2">Files/week processed</p>
+                    <p className="text-xs text-muted-foreground mt-2">Files/week processed</p>
                   </CardContent>
                 </Card>
               </div>
 
               {/* Value Generation Chart */}
-              <Card cclassName="mac-card">
-                <CardHeader cclassName="mac-card">
-                  <CardTitle cclassName="text-lg">Value Generation & Cost Savings</CardTitle>
+              <Card className="mac-card">
+                <CardHeader className="mac-card">
+                  <CardTitle className="text-lg">Value Generation & Cost Savings</CardTitle>
                 </CardHeader>
-                <CardContent cclassName="mac-card">
+                <CardContent className="mac-card">
                   <ResponsiveContainer width="100%" height={250}>
                     <ComposedChart data={stubCurationTrends}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -763,13 +763,13 @@ export function EnhancedCurateTab({
                 </CardContent>
               </Card>
 
-              <div cclassName="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Knowledge Health Heatmap */}
-                <Card cclassName="mac-card">
-                  <CardHeader cclassName="mac-card">
-                    <CardTitle cclassName="text-lg">Knowledge Health by Category</CardTitle>
+                <Card className="mac-card">
+                  <CardHeader className="mac-card">
+                    <CardTitle className="text-lg">Knowledge Health by Category</CardTitle>
                   </CardHeader>
-                  <CardContent cclassName="mac-card">
+                  <CardContent className="mac-card">
                     <ResponsiveContainer width="100%" height={250}>
                       <RechartsBarChart data={stubKnowledgeHealth}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -796,11 +796,11 @@ export function EnhancedCurateTab({
                 </Card>
 
                 {/* Curation Activity */}
-                <Card cclassName="mac-card">
-                  <CardHeader cclassName="mac-card">
-                    <CardTitle cclassName="text-lg">Curation Activity Trends</CardTitle>
+                <Card className="mac-card">
+                  <CardHeader className="mac-card">
+                    <CardTitle className="text-lg">Curation Activity Trends</CardTitle>
                   </CardHeader>
-                  <CardContent cclassName="mac-card">
+                  <CardContent className="mac-card">
                     <ResponsiveContainer width="100%" height={250}>
                       <RechartsLineChart data={stubCurationTrends}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -818,40 +818,40 @@ export function EnhancedCurateTab({
               </div>
 
               {/* Quick Actions for Management */}
-              <Card cclassName="mac-card">
-                <CardHeader cclassName="mac-card">
-                  <CardTitle cclassName="text-lg">Executive Actions</CardTitle>
+              <Card className="mac-card">
+                <CardHeader className="mac-card">
+                  <CardTitle className="text-lg">Executive Actions</CardTitle>
                 </CardHeader>
-                <CardContent cclassName="mac-card">
-                  <div cclassName="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <CardContent className="mac-card">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                     <Button
                       variant="outline"
-                      cclassName="justify-start mac-button mac-button-outline"
+                      className="justify-start mac-button mac-button-outline"
                       onClick={runSmartDeduplication}
                     >
-                      <Sparkles cclassName="h-4 w-4 mr-2" />
+                      <Sparkles className="h-4 w-4 mr-2" />
                       Smart Dedup
                     </Button>
                     <Button
                       variant="outline"
-                      cclassName="justify-start mac-button mac-button-outline"
+                      className="justify-start mac-button mac-button-outline"
                       onClick={autoEnrichContent}
                     >
-                      <Zap cclassName="h-4 w-4 mr-2" />
+                      <Zap className="h-4 w-4 mr-2" />
                       Auto-Enrich
                     </Button>
                     <Button
                       variant="outline"
-                      cclassName="justify-start mac-button mac-button-outline"
+                      className="justify-start mac-button mac-button-outline"
                     >
-                      <GitBranch cclassName="h-4 w-4 mr-2" />
+                      <GitBranch className="h-4 w-4 mr-2" />
                       Map Relations
                     </Button>
                     <Button
                       variant="outline"
-                      cclassName="justify-start mac-button mac-button-outline"
+                      className="justify-start mac-button mac-button-outline"
                     >
-                      <Shield cclassName="h-4 w-4 mr-2" />
+                      <Shield className="h-4 w-4 mr-2" />
                       Compliance Scan
                     </Button>
                   </div>
@@ -861,10 +861,10 @@ export function EnhancedCurateTab({
           </TabsContent>
 
           {/* Files Tab - Preserved with Enhancements */}
-          <TabsContent value="files" cclassName="flex-1 overflow-hidden mt-4">
-            <div cclassName="space-y-4 h-full flex flex-col">
+          <TabsContent value="files" className="flex-1 overflow-hidden mt-4">
+            <div className="space-y-4 h-full flex flex-col">
               {/* Upload Section */}
-              <div cclassName="border rounded-lg p-4 bg-muted/10">
+              <div className="border rounded-lg p-4 bg-muted/10">
                 <FileUpload
                   assistantId={assistantId}
                   onUploadComplete={async () => {
@@ -876,19 +876,19 @@ export function EnhancedCurateTab({
               </div>
 
               {/* Search and Actions Bar */}
-              <div cclassName="flex items-center gap-2">
-                <div cclassName="relative flex-1">
-                  <Search cclassName="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    cclassName="mac-input"
+                    className="mac-input"
                     placeholder="Search files..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    cclassName="pl-9"
+                    className="pl-9"
                   />
                 </div>
                 <Select value={filterTopic} onValueChange={setFilterTopic}>
-                  <SelectTrigger cclassName="w-32">
+                  <SelectTrigger className="w-32">
                     <SelectValue placeholder="All Topics" />
                   </SelectTrigger>
                   <SelectContent>
@@ -901,65 +901,65 @@ export function EnhancedCurateTab({
                   </SelectContent>
                 </Select>
                 <Button
-                  cclassName="mac-button mac-button-outline"
+                  className="mac-button mac-button-outline"
                   variant="outline"
-                  cclassName="mac-button mac-button-outline"
+                  className="mac-button mac-button-outline"
                   size="sm"
                   onClick={loadFiles}
                   disabled={loading}
                 >
-                  <RefreshCw cclassName={cn("h-4 w-4", loading && "animate-spin")} />
+                  <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
                 </Button>
                 {selectedFiles.size > 0 && (
                   <>
                     <Button
-                      cclassName="mac-button mac-button-primary"
+                      className="mac-button mac-button-primary"
                       variant="destructive"
-                      cclassName="mac-button mac-button-primary"
+                      className="mac-button mac-button-primary"
                       size="sm"
                       onClick={() => confirmDeleteFiles(Array.from(selectedFiles))}
                       disabled={loading}
                     >
-                      <Trash2 cclassName="h-4 w-4 mr-2" />
+                      <Trash2 className="h-4 w-4 mr-2" />
                       Delete ({selectedFiles.size})
                     </Button>
                     <Button
-                      cclassName="mac-button mac-button-outline"
+                      className="mac-button mac-button-outline"
                       variant="ghost"
-                      cclassName="mac-button mac-button-outline"
+                      className="mac-button mac-button-outline"
                       size="sm"
                       onClick={() => setSelectedFiles(new Set())}
                     >
-                      <X cclassName="h-4 w-4" />
+                      <X className="h-4 w-4" />
                     </Button>
                   </>
                 )}
               </div>
 
               {/* Files List */}
-              <ScrollArea cclassName="flex-1 border rounded-lg">
+              <ScrollArea className="flex-1 border rounded-lg">
                 {loading && filteredFiles.length === 0 ? (
-                  <div cclassName="flex items-center justify-center h-32">
-                    <RefreshCw cclassName="h-6 w-6 animate-spin text-muted-foreground" />
+                  <div className="flex items-center justify-center h-32">
+                    <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
                   </div>
                 ) : filteredFiles.length === 0 ? (
-                  <div cclassName="flex flex-col items-center justify-center h-32 text-muted-foreground">
-                    <FileText cclassName="h-8 w-8 mb-2" />
+                  <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
+                    <FileText className="h-8 w-8 mb-2" />
                     <p>No files found</p>
                   </div>
                 ) : (
-                  <div cclassName="p-4 space-y-2">
+                  <div className="p-4 space-y-2">
                     {/* Select All */}
-                    <div cclassName="flex items-center gap-2 pb-2 border-b">
+                    <div className="flex items-center gap-2 pb-2 border-b">
                       <input
                         type="checkbox"
                         checked={
                           selectedFiles.size === filteredFiles.length && filteredFiles.length > 0
                         }
                         onChange={selectAllFiles}
-                        cclassName="rounded border-gray-300"
+                        className="rounded border-gray-300"
                       />
-                      <span cclassName="text-sm text-muted-foreground">
+                      <span className="text-sm text-muted-foreground">
                         Select all ({filteredFiles.length})
                       </span>
                     </div>
@@ -968,7 +968,7 @@ export function EnhancedCurateTab({
                     {filteredFiles.map((file) => (
                       <div
                         key={file.id}
-                        cclassName={cn(
+                        className={cn(
                           "flex items-center gap-4 p-4 rounded-lg border transition-colors hover:bg-muted/50",
                           selectedFiles.has(file.id) && "bg-muted/50 border-primary/50"
                         )}
@@ -977,28 +977,28 @@ export function EnhancedCurateTab({
                           type="checkbox"
                           checked={selectedFiles.has(file.id)}
                           onChange={() => toggleFileSelection(file.id)}
-                          cclassName="rounded border-gray-300"
+                          className="rounded border-gray-300"
                         />
 
-                        <FileIcon cclassName="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                        <FileIcon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
 
-                        <div cclassName="flex-1 min-w-0">
-                          <div cclassName="flex items-center gap-2">
-                            <p cclassName="font-medium text-sm truncate">{file.filename}</p>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium text-sm truncate">{file.filename}</p>
                             {file.compliance_status === "review_needed" && (
-                              <Badge variant="destructive" cclassName="text-xs">
-                                <AlertCircle cclassName="h-3 w-3 mr-2" />
+                              <Badge variant="destructive" className="text-xs">
+                                <AlertCircle className="h-3 w-3 mr-2" />
                                 Review
                               </Badge>
                             )}
                             {file.business_value && file.business_value > 10000 && (
-                              <Badge cclassName="text-xs bg-green-600">
-                                <DollarSign cclassName="h-3 w-3 mr-2" />
+                              <Badge className="text-xs bg-green-600">
+                                <DollarSign className="h-3 w-3 mr-2" />
                                 High Value
                               </Badge>
                             )}
                           </div>
-                          <div cclassName="flex items-center gap-4 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-4 text-xs text-muted-foreground">
                             <span>{formatFileSize(file.bytes)}</span>
                             <span>•</span>
                             <span>{formatDate(file.created_at)}</span>
@@ -1012,9 +1012,9 @@ export function EnhancedCurateTab({
                             )}
                           </div>
                           {file.topics && file.topics.length > 0 && (
-                            <div cclassName="flex gap-2 mt-2">
+                            <div className="flex gap-2 mt-2">
                               {file.topics.map((topic) => (
-                                <Badge key={topic} variant="secondary" cclassName="text-xs">
+                                <Badge key={topic} variant="secondary" className="text-xs">
                                   {topic}
                                 </Badge>
                               ))}
@@ -1027,30 +1027,30 @@ export function EnhancedCurateTab({
                             <Button
                               variant="ghost"
                               size="sm"
-                              cclassName="h-8 w-8 p-0 mac-button mac-button-outline"
+                              className="h-8 w-8 p-0 mac-button mac-button-outline"
                             >
-                              <MoreVertical cclassName="h-4 w-4" />
+                              <MoreVertical className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem>
-                              <Eye cclassName="h-4 w-4 mr-2" />
+                              <Eye className="h-4 w-4 mr-2" />
                               View Details
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                              <Brain cclassName="h-4 w-4 mr-2" />
+                              <Brain className="h-4 w-4 mr-2" />
                               AI Analysis
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                              <Download cclassName="h-4 w-4 mr-2" />
+                              <Download className="h-4 w-4 mr-2" />
                               Download
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
-                              cclassName="text-destructive"
+                              className="text-destructive"
                               onClick={() => confirmDeleteFiles([file.id])}
                             >
-                              <Trash2 cclassName="h-4 w-4 mr-2" />
+                              <Trash2 className="h-4 w-4 mr-2" />
                               Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -1064,19 +1064,19 @@ export function EnhancedCurateTab({
           </TabsContent>
 
           {/* Insights Tab */}
-          <TabsContent value="insights" cclassName="flex-1 overflow-auto mt-4">
-            <div cclassName="space-y-4">
-              <div cclassName="flex items-center justify-between">
-                <h3 cclassName="mac-title">
+          <TabsContent value="insights" className="flex-1 overflow-auto mt-4">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="mac-title">
                   AI-Powered Curation Insights
                 </h3>
                 <Button
-                  cclassName="mac-button mac-button-outline"
+                  className="mac-button mac-button-outline"
                   variant="outline"
-                  cclassName="mac-button mac-button-outline"
+                  className="mac-button mac-button-outline"
                   size="sm"
                 >
-                  <RefreshCw cclassName="h-4 w-4 mr-2" />
+                  <RefreshCw className="h-4 w-4 mr-2" />
                   Re-analyze
                 </Button>
               </div>
@@ -1084,7 +1084,7 @@ export function EnhancedCurateTab({
               {insights.map((insight, index) => (
                 <Card
                   key={index}
-                  cclassName={cn(
+                  className={cn(
                     "mac-card",
                     "cursor-pointer transition-all hover:shadow-lg",
                     insight.severity === "critical" && "border-red-500",
@@ -1092,24 +1092,24 @@ export function EnhancedCurateTab({
                   )}
                   onClick={() => setSelectedInsight(insight)}
                 >
-                  <CardHeader cclassName="mac-card">
-                    <div cclassName="flex items-start justify-between">
-                      <div cclassName="flex items-start gap-4">
+                  <CardHeader className="mac-card">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-4">
                         {insight.type === "duplicate" && (
-                          <Copy cclassName="h-5 w-5 mt-0.5 text-orange-600" />
+                          <Copy className="h-5 w-5 mt-0.5 text-orange-600" />
                         )}
                         {insight.type === "compliance" && (
-                          <Shield cclassName="h-5 w-5 mt-0.5 text-red-600" />
+                          <Shield className="h-5 w-5 mt-0.5 text-red-600" />
                         )}
                         {insight.type === "high-value" && (
-                          <Award cclassName="h-5 w-5 mt-0.5 text-green-600" />
+                          <Award className="h-5 w-5 mt-0.5 text-green-600" />
                         )}
                         {insight.type === "gap" && (
-                          <AlertTriangle cclassName="h-5 w-5 mt-0.5 text-yellow-600" />
+                          <AlertTriangle className="h-5 w-5 mt-0.5 text-yellow-600" />
                         )}
-                        <div cclassName="flex-1">
-                          <CardTitle cclassName="text-base">{insight.title}</CardTitle>
-                          <CardDescription cclassName="mt-2">{insight.description}</CardDescription>
+                        <div className="flex-1">
+                          <CardTitle className="text-base">{insight.title}</CardTitle>
+                          <CardDescription className="mt-2">{insight.description}</CardDescription>
                         </div>
                       </div>
                       <Badge
@@ -1125,12 +1125,12 @@ export function EnhancedCurateTab({
                       </Badge>
                     </div>
                   </CardHeader>
-                  <CardContent cclassName="mac-card">
-                    <div cclassName="flex items-center justify-between">
-                      <div cclassName="flex gap-4 text-sm">
+                  <CardContent className="mac-card">
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-4 text-sm">
                         {insight.potentialSavings && (
                           <span
-                            cclassName={cn(
+                            className={cn(
                               "font-medium",
                               insight.potentialSavings > 0 ? "text-green-600" : "text-blue-600"
                             )}
@@ -1140,17 +1140,17 @@ export function EnhancedCurateTab({
                           </span>
                         )}
                         {insight.riskScore && (
-                          <span cclassName="text-muted-foreground">Risk: {insight.riskScore}%</span>
+                          <span className="text-muted-foreground">Risk: {insight.riskScore}%</span>
                         )}
                       </div>
                       <Button
-                        cclassName="mac-button mac-button-outline"
+                        className="mac-button mac-button-outline"
                         variant="ghost"
-                        cclassName="mac-button mac-button-outline"
+                        className="mac-button mac-button-outline"
                         size="sm"
                       >
                         Take Action
-                        <ChevronRight cclassName="h-4 w-4 ml-2" />
+                        <ChevronRight className="h-4 w-4 ml-2" />
                       </Button>
                     </div>
                   </CardContent>
@@ -1160,99 +1160,99 @@ export function EnhancedCurateTab({
           </TabsContent>
 
           {/* Knowledge Curators Tab */}
-          <TabsContent value="curators" cclassName="flex-1 overflow-auto mt-4">
-            <div cclassName="space-y-4">
-              <div cclassName="flex items-center justify-between">
-                <h3 cclassName="mac-title">
+          <TabsContent value="curators" className="flex-1 overflow-auto mt-4">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="mac-title">
                   Knowledge Curator Leaderboard
                 </h3>
-                <div cclassName="flex gap-2">
+                <div className="flex gap-2">
                   <Badge variant="outline">May 2024</Badge>
                   <Button
-                    cclassName="mac-button mac-button-outline"
+                    className="mac-button mac-button-outline"
                     variant="outline"
-                    cclassName="mac-button mac-button-outline"
+                    className="mac-button mac-button-outline"
                     size="sm"
                   >
-                    <Award cclassName="h-4 w-4 mr-2" />
+                    <Award className="h-4 w-4 mr-2" />
                     Award Monthly Badges
                   </Button>
                 </div>
               </div>
 
               {/* Curator Performance Cards */}
-              <div cclassName="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {stubCuratorPerformance.map((curator, index) => (
-                  <Card key={index} cclassName="mac-card hover:shadow-lg transition-shadow">
-                    <CardHeader cclassName="mac-card">
-                      <div cclassName="flex items-center justify-between">
-                        <div cclassName="flex items-center gap-4">
-                          <div cclassName="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                  <Card key={index} className="mac-card hover:shadow-lg transition-shadow">
+                    <CardHeader className="mac-card">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
                             {curator.name
                               .split(" ")
                               .map((n) => n[0])
                               .join("")}
                           </div>
                           <div>
-                            <CardTitle cclassName="text-base">{curator.name}</CardTitle>
-                            <p cclassName="text-xs text-muted-foreground">{curator.department}</p>
-                            <div cclassName="flex items-center gap-2 mt-2">
+                            <CardTitle className="text-base">{curator.name}</CardTitle>
+                            <p className="text-xs text-muted-foreground">{curator.department}</p>
+                            <div className="flex items-center gap-2 mt-2">
                               {curator.badge === "master" && (
-                                <Badge cclassName="bg-gradient-to-r from-purple-500 to-pink-500">
-                                  <Award cclassName="h-3 w-3 mr-2" />
+                                <Badge className="bg-gradient-to-r from-purple-500 to-pink-500">
+                                  <Award className="h-3 w-3 mr-2" />
                                   Master Curator
                                 </Badge>
                               )}
                               {curator.badge === "champion" && (
-                                <Badge cclassName="bg-gradient-to-r from-yellow-500 to-orange-500">
-                                  <Trophy cclassName="h-3 w-3 mr-2" />
+                                <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500">
+                                  <Trophy className="h-3 w-3 mr-2" />
                                   Champion
                                 </Badge>
                               )}
                               {curator.badge === "expert" && (
-                                <Badge cclassName="bg-gradient-to-r from-blue-500 to-cyan-500">
-                                  <Target cclassName="h-3 w-3 mr-2" />
+                                <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500">
+                                  <Target className="h-3 w-3 mr-2" />
                                   Expert
                                 </Badge>
                               )}
                               {curator.badge === "rookie" && (
-                                <Badge cclassName="bg-gradient-to-r from-green-500 to-teal-500">
-                                  <Sparkles cclassName="h-3 w-3 mr-2" />
+                                <Badge className="bg-gradient-to-r from-green-500 to-teal-500">
+                                  <Sparkles className="h-3 w-3 mr-2" />
                                   Rising Star
                                 </Badge>
                               )}
                             </div>
                           </div>
                         </div>
-                        <div cclassName="text-right">
-                          <p cclassName="mac-body text-2xl font-bold text-green-600">
+                        <div className="text-right">
+                          <p className="mac-body text-2xl font-bold text-green-600">
                             {formatCurrency(curator.valueGenerated)}
                           </p>
-                          <p cclassName="text-xs text-muted-foreground">Value Generated</p>
+                          <p className="text-xs text-muted-foreground">Value Generated</p>
                         </div>
                       </div>
                     </CardHeader>
-                    <CardContent cclassName="mac-card">
-                      <div cclassName="grid grid-cols-4 gap-2 text-center">
+                    <CardContent className="mac-card">
+                      <div className="grid grid-cols-4 gap-2 text-center">
                         <div>
-                          <p cclassName="text-lg font-semibold">{curator.filesProcessed}</p>
-                          <p cclassName="text-xs text-muted-foreground">Files</p>
+                          <p className="text-lg font-semibold">{curator.filesProcessed}</p>
+                          <p className="text-xs text-muted-foreground">Files</p>
                         </div>
                         <div>
-                          <p cclassName="text-lg font-semibold">{curator.qualityScore}%</p>
-                          <p cclassName="text-xs text-muted-foreground">Quality</p>
+                          <p className="text-lg font-semibold">{curator.qualityScore}%</p>
+                          <p className="text-xs text-muted-foreground">Quality</p>
                         </div>
                         <div>
-                          <p cclassName="text-lg font-semibold">{curator.duplicatesFound}</p>
-                          <p cclassName="text-xs text-muted-foreground">Deduped</p>
+                          <p className="text-lg font-semibold">{curator.duplicatesFound}</p>
+                          <p className="text-xs text-muted-foreground">Deduped</p>
                         </div>
                         <div>
-                          <p cclassName="text-lg font-semibold">{curator.metadataEnriched}</p>
-                          <p cclassName="text-xs text-muted-foreground">Enriched</p>
+                          <p className="text-lg font-semibold">{curator.metadataEnriched}</p>
+                          <p className="text-xs text-muted-foreground">Enriched</p>
                         </div>
                       </div>
-                      <Progress value={curator.qualityScore} cclassName="mt-4 h-2" />
-                      <p cclassName="text-xs text-muted-foreground mt-2">
+                      <Progress value={curator.qualityScore} className="mt-4 h-2" />
+                      <p className="text-xs text-muted-foreground mt-2">
                         Active today at {curator.lastActive?.toLocaleTimeString()}
                       </p>
                     </CardContent>
@@ -1261,11 +1261,11 @@ export function EnhancedCurateTab({
               </div>
 
               {/* Team Performance Radar */}
-              <Card cclassName="mac-card">
-                <CardHeader cclassName="mac-card">
-                  <CardTitle cclassName="text-lg">Team Performance Metrics</CardTitle>
+              <Card className="mac-card">
+                <CardHeader className="mac-card">
+                  <CardTitle className="text-lg">Team Performance Metrics</CardTitle>
                 </CardHeader>
-                <CardContent cclassName="mac-card">
+                <CardContent className="mac-card">
                   <ResponsiveContainer width="100%" height={300}>
                     <RadarChart
                       data={[
@@ -1295,19 +1295,19 @@ export function EnhancedCurateTab({
           </TabsContent>
 
           {/* Analytics Tab */}
-          <TabsContent value="analytics" cclassName="flex-1 overflow-auto mt-4">
-            <div cclassName="space-y-4">
-              <h3 cclassName="mac-title">
+          <TabsContent value="analytics" className="flex-1 overflow-auto mt-4">
+            <div className="space-y-4">
+              <h3 className="mac-title">
                 Knowledge Base Analytics
               </h3>
 
               {/* Content Distribution */}
-              <div cclassName="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card cclassName="mac-card">
-                  <CardHeader cclassName="mac-card">
-                    <CardTitle cclassName="text-lg">Content Distribution</CardTitle>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card className="mac-card">
+                  <CardHeader className="mac-card">
+                    <CardTitle className="text-lg">Content Distribution</CardTitle>
                   </CardHeader>
-                  <CardContent cclassName="mac-card">
+                  <CardContent className="mac-card">
                     <ResponsiveContainer width="100%" height={250}>
                       <RechartsPieChart>
                         <Pie
@@ -1330,19 +1330,19 @@ export function EnhancedCurateTab({
                   </CardContent>
                 </Card>
 
-                <Card cclassName="mac-card">
-                  <CardHeader cclassName="mac-card">
-                    <CardTitle cclassName="text-lg">Knowledge Coverage</CardTitle>
+                <Card className="mac-card">
+                  <CardHeader className="mac-card">
+                    <CardTitle className="text-lg">Knowledge Coverage</CardTitle>
                   </CardHeader>
-                  <CardContent cclassName="mac-card">
-                    <div cclassName="space-y-3">
+                  <CardContent className="mac-card">
+                    <div className="space-y-3">
                       {stubKnowledgeHealth.map((category) => (
                         <div key={category.category}>
-                          <div cclassName="flex justify-between text-sm mb-2">
+                          <div className="flex justify-between text-sm mb-2">
                             <span>{category.category}</span>
-                            <span cclassName="text-muted-foreground">{category.coverage}%</span>
+                            <span className="text-muted-foreground">{category.coverage}%</span>
                           </div>
-                          <Progress value={category.coverage} cclassName="h-2" />
+                          <Progress value={category.coverage} className="h-2" />
                         </div>
                       ))}
                     </div>
@@ -1351,11 +1351,11 @@ export function EnhancedCurateTab({
               </div>
 
               {/* Utilization Metrics */}
-              <Card cclassName="mac-card">
-                <CardHeader cclassName="mac-card">
-                  <CardTitle cclassName="text-lg">Knowledge Utilization Over Time</CardTitle>
+              <Card className="mac-card">
+                <CardHeader className="mac-card">
+                  <CardTitle className="text-lg">Knowledge Utilization Over Time</CardTitle>
                 </CardHeader>
-                <CardContent cclassName="mac-card">
+                <CardContent className="mac-card">
                   <ResponsiveContainer width="100%" height={250}>
                     <RechartsAreaChart data={stubCurationTrends}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -1392,8 +1392,8 @@ export function EnhancedCurateTab({
           </TabsContent>
 
           {/* Upload Tab */}
-          <TabsContent value="upload" cclassName="flex-1 overflow-hidden mt-4">
-            <div cclassName="space-y-4">
+          <TabsContent value="upload" className="flex-1 overflow-hidden mt-4">
+            <div className="space-y-4">
               <FileUpload
                 assistantId={assistantId}
                 onUploadComplete={async () => {
@@ -1404,51 +1404,51 @@ export function EnhancedCurateTab({
               />
 
               <Alert>
-                <Sparkles cclassName="h-4 w-4" />
+                <Sparkles className="h-4 w-4" />
                 <AlertTitle>AI-Powered Processing</AlertTitle>
                 <AlertDescription>
                   Uploaded files undergo comprehensive AI analysis:
                 </AlertDescription>
               </Alert>
 
-              <Card cclassName="mac-card">
-                <CardHeader cclassName="mac-card">
-                  <CardTitle cclassName="text-lg">Smart Upload Features</CardTitle>
+              <Card className="mac-card">
+                <CardHeader className="mac-card">
+                  <CardTitle className="text-lg">Smart Upload Features</CardTitle>
                 </CardHeader>
-                <CardContent cclassName="mac-card">
-                  <div cclassName="space-y-2">
-                    <div cclassName="flex items-center gap-2">
-                      <CheckCircle cclassName="h-4 w-4 text-green-600" />
-                      <span cclassName="text-sm">
+                <CardContent className="mac-card">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span className="text-sm">
                         Semantic duplicate detection (save ~$45K/year)
                       </span>
                     </div>
-                    <div cclassName="flex items-center gap-2">
-                      <CheckCircle cclassName="h-4 w-4 text-green-600" />
-                      <span cclassName="text-sm">Automatic entity extraction & tagging</span>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span className="text-sm">Automatic entity extraction & tagging</span>
                     </div>
-                    <div cclassName="flex items-center gap-2">
-                      <CheckCircle cclassName="h-4 w-4 text-green-600" />
-                      <span cclassName="text-sm">Compliance & rights verification</span>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span className="text-sm">Compliance & rights verification</span>
                     </div>
-                    <div cclassName="flex items-center gap-2">
-                      <CheckCircle cclassName="h-4 w-4 text-green-600" />
-                      <span cclassName="text-sm">Business value assessment</span>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span className="text-sm">Business value assessment</span>
                     </div>
-                    <div cclassName="flex items-center gap-2">
-                      <CheckCircle cclassName="h-4 w-4 text-green-600" />
-                      <span cclassName="text-sm">Knowledge graph integration</span>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span className="text-sm">Knowledge graph integration</span>
                     </div>
-                    <div cclassName="flex items-center gap-2">
-                      <CheckCircle cclassName="h-4 w-4 text-green-600" />
-                      <span cclassName="text-sm">Quality scoring & gap analysis</span>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span className="text-sm">Quality scoring & gap analysis</span>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
               <Alert>
-                <Info cclassName="h-4 w-4" />
+                <Info className="h-4 w-4" />
                 <AlertDescription>
                   Your Knowledge Curators process an average of 120 files per week, generating{" "}
                   {formatCurrency(45000)} in monthly savings through intelligent curation and
@@ -1474,7 +1474,7 @@ export function EnhancedCurateTab({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={deleteFiles}
-              cclassName="bg-destructive text-destructive-foreground"
+              className="bg-destructive text-destructive-foreground"
             >
               Delete {filesToDelete.length} file{filesToDelete.length !== 1 ? "s" : ""}
             </AlertDialogAction>

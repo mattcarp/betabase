@@ -29,7 +29,7 @@ interface VisualRegressionGalleryProps {
   onSelectComparison: (comparison: VisualRegressionComparison) => void;
   onRefresh?: () => Promise<void>;
   onExport?: () => void;
-  cclassName?: string;
+  className?: string;
   viewMode?: "grid" | "list";
 }
 
@@ -50,7 +50,7 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
   onSelectComparison,
   onRefresh,
   onExport,
-  cclassName,
+  className,
   viewMode: initialViewMode = "grid",
 }) => {
   const [viewMode, setViewMode] = useState<"grid" | "list">(initialViewMode);
@@ -130,44 +130,44 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
       return (
         <Card
           key={comparison.id}
-          cclassName={cn(
+          className={cn(
             "cursor-pointer transition-all hover:shadow-lg",
             statusDisplay.borderColor,
             statusDisplay.bgColor
           )}
           onClick={() => onSelectComparison(comparison)}
         >
-          <CardContent cclassName="p-4 space-y-3">
+          <CardContent className="p-4 space-y-3">
             {/* Thumbnail */}
-            <div cclassName="relative aspect-video bg-muted rounded overflow-hidden">
+            <div className="relative aspect-video bg-muted rounded overflow-hidden">
               <img
                 src={comparison.current.url}
                 alt={comparison.testName}
-                cclassName="w-full h-full object-cover"
+                className="w-full h-full object-cover"
               />
               {comparison.diff && pixelDiff > 0 && (
-                <div cclassName="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-2">
-                  <Badge variant="destructive" cclassName="text-xs">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-2">
+                  <Badge variant="destructive" className="text-xs">
                     {pixelDiff.toFixed(1)}% diff
                   </Badge>
                 </div>
               )}
-              <div cclassName={cn("absolute top-2 right-2", statusDisplay.color)}>
-                <StatusIcon cclassName="h-5 w-5" />
+              <div className={cn("absolute top-2 right-2", statusDisplay.color)}>
+                <StatusIcon className="h-5 w-5" />
               </div>
             </div>
 
             {/* Info */}
             <div>
-              <h4 cclassName="text-sm font-medium truncate">{comparison.testName}</h4>
-              <div cclassName="flex items-center justify-between mt-1">
-                <span cclassName="text-xs text-muted-foreground">
+              <h4 className="text-sm font-medium truncate">{comparison.testName}</h4>
+              <div className="flex items-center justify-between mt-1">
+                <span className="text-xs text-muted-foreground">
                   {comparison.metadata?.timestamp
                     ? new Date(comparison.metadata.timestamp).toLocaleDateString()
                     : "No date"}
                 </span>
                 {comparison.comments.length > 0 && (
-                  <Badge variant="outline" cclassName="text-xs">
+                  <Badge variant="outline" className="text-xs">
                     {comparison.comments.length} comments
                   </Badge>
                 )}
@@ -181,40 +181,40 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
       return (
         <Card
           key={comparison.id}
-          cclassName={cn("cursor-pointer transition-all hover:shadow-md", statusDisplay.borderColor)}
+          className={cn("cursor-pointer transition-all hover:shadow-md", statusDisplay.borderColor)}
           onClick={() => onSelectComparison(comparison)}
         >
-          <CardContent cclassName="p-4">
-            <div cclassName="flex items-center gap-4">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-4">
               {/* Thumbnail */}
-              <div cclassName="relative w-32 h-20 bg-muted rounded overflow-hidden flex-shrink-0">
+              <div className="relative w-32 h-20 bg-muted rounded overflow-hidden flex-shrink-0">
                 <img
                   src={comparison.current.url}
                   alt={comparison.testName}
-                  cclassName="w-full h-full object-cover"
+                  className="w-full h-full object-cover"
                 />
               </div>
 
               {/* Info */}
-              <div cclassName="flex-1 min-w-0">
-                <h4 cclassName="text-sm font-medium truncate">{comparison.testName}</h4>
-                <div cclassName="flex items-center gap-2 mt-1">
-                  <StatusIcon cclassName={cn("h-3 w-3", statusDisplay.color)} />
-                  <span cclassName="text-xs text-muted-foreground capitalize">
+              <div className="flex-1 min-w-0">
+                <h4 className="text-sm font-medium truncate">{comparison.testName}</h4>
+                <div className="flex items-center gap-2 mt-1">
+                  <StatusIcon className={cn("h-3 w-3", statusDisplay.color)} />
+                  <span className="text-xs text-muted-foreground capitalize">
                     {comparison.status.replace("-", " ")}
                   </span>
                   {pixelDiff > 0 && (
                     <>
-                      <span cclassName="text-muted-foreground">•</span>
-                      <span cclassName="text-xs text-muted-foreground">
+                      <span className="text-muted-foreground">•</span>
+                      <span className="text-xs text-muted-foreground">
                         {pixelDiff.toFixed(2)}% difference
                       </span>
                     </>
                   )}
                   {comparison.comments.length > 0 && (
                     <>
-                      <span cclassName="text-muted-foreground">•</span>
-                      <span cclassName="text-xs text-muted-foreground">
+                      <span className="text-muted-foreground">•</span>
+                      <span className="text-xs text-muted-foreground">
                         {comparison.comments.length} comments
                       </span>
                     </>
@@ -223,7 +223,7 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
               </div>
 
               {/* Date */}
-              <div cclassName="text-xs text-muted-foreground flex-shrink-0">
+              <div className="text-xs text-muted-foreground flex-shrink-0">
                 {comparison.metadata?.timestamp
                   ? new Date(comparison.metadata.timestamp).toLocaleString()
                   : "Unknown"}
@@ -236,61 +236,61 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
   };
 
   return (
-    <div cclassName={cn("space-y-4", cclassName)}>
+    <div className={cn("space-y-4", className)}>
       {/* Header */}
       <Card>
         <CardHeader>
-          <div cclassName="space-y-4">
-            <div cclassName="flex items-center justify-between">
-              <CardTitle cclassName="text-lg">{testResult.testName}</CardTitle>
-              <div cclassName="flex items-center gap-2">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg">{testResult.testName}</CardTitle>
+              <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefreshing}>
-                  <RefreshCw cclassName={cn("h-4 w-4", isRefreshing && "animate-spin")} />
+                  <RefreshCw className={cn("h-4 w-4", isRefreshing && "animate-spin")} />
                 </Button>
                 {onExport && (
                   <Button variant="outline" size="sm" onClick={onExport}>
-                    <Download cclassName="h-4 w-4" />
+                    <Download className="h-4 w-4" />
                   </Button>
                 )}
               </div>
             </div>
 
             {/* Statistics */}
-            <div cclassName="grid grid-cols-4 gap-4">
-              <div cclassName="text-center">
-                <div cclassName="text-2xl font-bold">{stats.total}</div>
-                <div cclassName="text-xs text-muted-foreground">Total</div>
+            <div className="grid grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold">{stats.total}</div>
+                <div className="text-xs text-muted-foreground">Total</div>
               </div>
-              <div cclassName="text-center">
-                <div cclassName="text-2xl font-bold text-yellow-500">{stats.pending}</div>
-                <div cclassName="text-xs text-muted-foreground">Pending</div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-yellow-500">{stats.pending}</div>
+                <div className="text-xs text-muted-foreground">Pending</div>
               </div>
-              <div cclassName="text-center">
-                <div cclassName="text-2xl font-bold text-green-500">{stats.approved}</div>
-                <div cclassName="text-xs text-muted-foreground">Approved</div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-500">{stats.approved}</div>
+                <div className="text-xs text-muted-foreground">Approved</div>
               </div>
-              <div cclassName="text-center">
-                <div cclassName="text-2xl font-bold text-red-500">{stats.rejected}</div>
-                <div cclassName="text-xs text-muted-foreground">Rejected</div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-500">{stats.rejected}</div>
+                <div className="text-xs text-muted-foreground">Rejected</div>
               </div>
             </div>
 
             {/* Filters */}
-            <div cclassName="flex items-center gap-2">
-              <div cclassName="relative flex-1">
-                <Search cclassName="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search tests..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  cclassName="pl-9"
+                  className="pl-9"
                 />
               </div>
               <Select
                 value={filterStatus}
                 onValueChange={(v) => setFilterStatus(v as ComparisonStatus | "all")}
               >
-                <SelectTrigger cclassName="w-[180px]">
+                <SelectTrigger className="w-[180px]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -303,22 +303,22 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
                   </SelectItem>
                 </SelectContent>
               </Select>
-              <div cclassName="flex gap-1 border rounded-md">
+              <div className="flex gap-1 border rounded-md">
                 <Button
                   variant={viewMode === "grid" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("grid")}
-                  cclassName="rounded-r-none"
+                  className="rounded-r-none"
                 >
-                  <Grid3x3 cclassName="h-4 w-4" />
+                  <Grid3x3 className="h-4 w-4" />
                 </Button>
                 <Button
                   variant={viewMode === "list" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("list")}
-                  cclassName="rounded-l-none"
+                  className="rounded-l-none"
                 >
-                  <List cclassName="h-4 w-4" />
+                  <List className="h-4 w-4" />
                 </Button>
               </div>
             </div>
@@ -327,16 +327,16 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
       </Card>
 
       {/* Gallery */}
-      <ScrollArea cclassName="h-[600px]">
+      <ScrollArea className="h-[600px]">
         {filteredComparisons.length === 0 ? (
           <Card>
-            <CardContent cclassName="flex items-center justify-center h-[400px] text-muted-foreground">
+            <CardContent className="flex items-center justify-center h-[400px] text-muted-foreground">
               No comparisons found matching your filters
             </CardContent>
           </Card>
         ) : (
           <div
-            cclassName={cn(
+            className={cn(
               viewMode === "grid"
                 ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
                 : "space-y-2"

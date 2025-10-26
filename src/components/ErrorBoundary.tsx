@@ -56,33 +56,33 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         this.props.fallback || (
           <div
-            cclassName="min-h-screen bg-black text-green-400 flex items-center justify-center p-4"
+            className="min-h-screen bg-black text-green-400 flex items-center justify-center p-4"
             data-testid="error-boundary"
           >
-            <div cclassName="text-center max-w-md mx-auto border border-green-400 p-8 bg-black/80">
-              <div cclassName="text-6xl mb-4">⚠️</div>
+            <div className="text-center max-w-md mx-auto border border-green-400 p-8 bg-black/80">
+              <div className="text-6xl mb-4">⚠️</div>
               <h1
-                cclassName="mac-heading"
-                cclassName="mac-heading text-2xl font-bold mb-4 text-green-400"
+                className="mac-heading"
+                className="mac-heading text-2xl font-bold mb-4 text-green-400"
               >
                 SIAM System Error
               </h1>
-              <p cclassName="mac-body text-green-300 mb-6">
+              <p className="mac-body text-green-300 mb-6">
                 An unexpected error occurred. The error has been logged and reported.
               </p>
-              <div cclassName="space-y-4">
+              <div className="space-y-4">
                 <button
                   onClick={() => window.location.reload()}
-                  cclassName="w-full px-4 py-2 bg-green-900/50 border border-green-400 text-green-400 hover:bg-green-900/70 transition-colors"
+                  className="w-full px-4 py-2 bg-green-900/50 border border-green-400 text-green-400 hover:bg-green-900/70 transition-colors"
                   data-testid="reload-button"
                 >
                   Reload Application
                 </button>
-                <details cclassName="text-left">
-                  <summary cclassName="cursor-pointer text-green-300 hover:text-green-400">
+                <details className="text-left">
+                  <summary className="cursor-pointer text-green-300 hover:text-green-400">
                     Technical Details
                   </summary>
-                  <pre cclassName="mt-2 p-2 bg-black/50 border border-green-700 text-xs text-green-500 overflow-auto max-h-32">
+                  <pre className="mt-2 p-2 bg-black/50 border border-green-700 text-xs text-green-500 overflow-auto max-h-32">
                     {this.state.error?.message}
                   </pre>
                 </details>

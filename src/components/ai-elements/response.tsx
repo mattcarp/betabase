@@ -168,29 +168,29 @@ export type ResponseProps = HTMLAttributes<HTMLDivElement> & {
 };
 
 const components: Options["components"] = {
-  ol: ({ node, children, cclassName, ...props }) => (
-    <ol cclassName={cn("ml-4 list-outside list-decimal", cclassName)} {...props}>
+  ol: ({ node, children, className, ...props }) => (
+    <ol className={cn("ml-4 list-outside list-decimal", className)} {...props}>
       {children}
     </ol>
   ),
-  li: ({ node, children, cclassName, ...props }) => (
-    <li cclassName={cn("py-1", cclassName)} {...props}>
+  li: ({ node, children, className, ...props }) => (
+    <li className={cn("py-1", className)} {...props}>
       {children}
     </li>
   ),
-  ul: ({ node, children, cclassName, ...props }) => (
-    <ul cclassName={cn("ml-4 list-outside list-decimal", cclassName)} {...props}>
+  ul: ({ node, children, className, ...props }) => (
+    <ul className={cn("ml-4 list-outside list-decimal", className)} {...props}>
       {children}
     </ul>
   ),
-  strong: ({ node, children, cclassName, ...props }) => (
-    <span cclassName={cn("font-semibold", cclassName)} {...props}>
+  strong: ({ node, children, className, ...props }) => (
+    <span className={cn("font-semibold", className)} {...props}>
       {children}
     </span>
   ),
-  a: ({ node, children, cclassName, ...props }) => (
+  a: ({ node, children, className, ...props }) => (
     <a
-      cclassName={cn("font-medium text-primary underline", cclassName)}
+      className={cn("font-medium text-primary underline", className)}
       rel="noreferrer"
       target="_blank"
       {...props}
@@ -198,98 +198,98 @@ const components: Options["components"] = {
       {children}
     </a>
   ),
-  h1: ({ node, children, cclassName, ...props }) => (
-    <h1 cclassName={cn("mt-6 mb-2 font-semibold text-3xl", cclassName)} {...props}>
+  h1: ({ node, children, className, ...props }) => (
+    <h1 className={cn("mt-6 mb-2 font-semibold text-3xl", className)} {...props}>
       {children}
     </h1>
   ),
-  h2: ({ node, children, cclassName, ...props }) => (
-    <h2 cclassName={cn("mt-6 mb-2 font-semibold text-2xl", cclassName)} {...props}>
+  h2: ({ node, children, className, ...props }) => (
+    <h2 className={cn("mt-6 mb-2 font-semibold text-2xl", className)} {...props}>
       {children}
     </h2>
   ),
-  h3: ({ node, children, cclassName, ...props }) => (
-    <h3 cclassName={cn("mt-6 mb-2 font-semibold text-xl", cclassName)} {...props}>
+  h3: ({ node, children, className, ...props }) => (
+    <h3 className={cn("mt-6 mb-2 font-semibold text-xl", className)} {...props}>
       {children}
     </h3>
   ),
-  h4: ({ node, children, cclassName, ...props }) => (
-    <h4 cclassName={cn("mt-6 mb-2 font-semibold text-lg", cclassName)} {...props}>
+  h4: ({ node, children, className, ...props }) => (
+    <h4 className={cn("mt-6 mb-2 font-semibold text-lg", className)} {...props}>
       {children}
     </h4>
   ),
-  h5: ({ node, children, cclassName, ...props }) => (
-    <h5 cclassName={cn("mt-6 mb-2 font-semibold text-base", cclassName)} {...props}>
+  h5: ({ node, children, className, ...props }) => (
+    <h5 className={cn("mt-6 mb-2 font-semibold text-base", className)} {...props}>
       {children}
     </h5>
   ),
-  h6: ({ node, children, cclassName, ...props }) => (
-    <h6 cclassName={cn("mt-6 mb-2 font-semibold text-sm", cclassName)} {...props}>
+  h6: ({ node, children, className, ...props }) => (
+    <h6 className={cn("mt-6 mb-2 font-semibold text-sm", className)} {...props}>
       {children}
     </h6>
   ),
-  table: ({ node, children, cclassName, ...props }) => (
-    <div cclassName="my-4 overflow-x-auto">
-      <table cclassName={cn("w-full border-collapse border border-border", cclassName)} {...props}>
+  table: ({ node, children, className, ...props }) => (
+    <div className="my-4 overflow-x-auto">
+      <table className={cn("w-full border-collapse border border-border", className)} {...props}>
         {children}
       </table>
     </div>
   ),
-  thead: ({ node, children, cclassName, ...props }) => (
-    <thead cclassName={cn("bg-muted/50", cclassName)} {...props}>
+  thead: ({ node, children, className, ...props }) => (
+    <thead className={cn("bg-muted/50", className)} {...props}>
       {children}
     </thead>
   ),
-  tbody: ({ node, children, cclassName, ...props }) => (
-    <tbody cclassName={cn("divide-y divide-border", cclassName)} {...props}>
+  tbody: ({ node, children, className, ...props }) => (
+    <tbody className={cn("divide-y divide-border", className)} {...props}>
       {children}
     </tbody>
   ),
-  tr: ({ node, children, cclassName, ...props }) => (
-    <tr cclassName={cn("border-b border-border", cclassName)} {...props}>
+  tr: ({ node, children, className, ...props }) => (
+    <tr className={cn("border-b border-border", className)} {...props}>
       {children}
     </tr>
   ),
-  th: ({ node, children, cclassName, ...props }) => (
-    <th cclassName={cn("px-4 py-2 text-left font-semibold text-sm", cclassName)} {...props}>
+  th: ({ node, children, className, ...props }) => (
+    <th className={cn("px-4 py-2 text-left font-semibold text-sm", className)} {...props}>
       {children}
     </th>
   ),
-  td: ({ node, children, cclassName, ...props }) => (
-    <td cclassName={cn("px-4 py-2 text-sm", cclassName)} {...props}>
+  td: ({ node, children, className, ...props }) => (
+    <td className={cn("px-4 py-2 text-sm", className)} {...props}>
       {children}
     </td>
   ),
-  blockquote: ({ node, children, cclassName, ...props }) => (
+  blockquote: ({ node, children, className, ...props }) => (
     <blockquote
-      cclassName={cn(
+      className={cn(
         "my-4 border-l-4 border-muted-foreground/30 pl-4 italic text-muted-foreground",
-        cclassName
+        className
       )}
       {...props}
     >
       {children}
     </blockquote>
   ),
-  code: ({ node, cclassName, ...props }) => {
+  code: ({ node, className, ...props }) => {
     const inline = node?.position?.start.line === node?.position?.end.line;
 
     if (!inline) {
-      return <code cclassName={cclassName} {...props} />;
+      return <code className={className} {...props} />;
     }
 
     return (
       <code
-        cclassName={cn("rounded bg-muted px-1.5 py-0.5 font-mono text-sm", cclassName)}
+        className={cn("rounded bg-muted px-1.5 py-0.5 font-mono text-sm", className)}
         {...props}
       />
     );
   },
-  pre: ({ node, cclassName, children }) => {
+  pre: ({ node, className, children }) => {
     let language = "javascript";
 
-    if (typeof node?.properties?.cclassName === "string") {
-      language = node.properties.cclassName.replace("language-", "");
+    if (typeof node?.properties?.className === "string") {
+      language = node.properties.className.replace("language-", "");
     }
 
     // Extract code content from children safely
@@ -306,7 +306,7 @@ const components: Options["components"] = {
     }
 
     return (
-      <CodeBlock cclassName={cn("my-4 h-auto", cclassName)} code={code} language={language}>
+      <CodeBlock className={cn("my-4 h-auto", className)} code={code} language={language}>
         <CodeBlockCopyButton
           onCopy={() => console.log("Copied code to clipboard")}
           onError={() => console.error("Failed to copy code to clipboard")}
@@ -318,7 +318,7 @@ const components: Options["components"] = {
 
 export const Response = memo(
   ({
-    cclassName,
+    className,
     options,
     children,
     allowedImagePrefixes,
@@ -335,7 +335,7 @@ export const Response = memo(
 
     return (
       <div
-        cclassName={cn("size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0", cclassName)}
+        className={cn("size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0", className)}
         {...props}
       >
         <HardenedMarkdown

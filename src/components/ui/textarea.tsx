@@ -8,10 +8,10 @@ export interface TextareaProps extends React.ComponentProps<"textarea"> {
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ cclassName, shimmer = true, glow = true, ...props }, ref) => {
+  ({ className, shimmer = true, glow = true, ...props }, ref) => {
     return (
       <textarea
-        cclassName={cn(
+        className={cn(
           // Base MAC textarea styles
           "mac-input",
           shimmer && "mac-shimmer",
@@ -34,7 +34,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           "scrollbar-track-transparent",
           // Text size responsive
           "md:text-sm",
-          cclassName
+          className
         )}
         ref={ref}
         {...props}

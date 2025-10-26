@@ -202,58 +202,58 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
   // Prevent hydration issues
   if (!mounted) {
     return (
-      <div cclassName="w-full max-w-md space-y-8">
-        <div cclassName="text-center">
-          <Spinner cclassName="mx-auto h-8 w-8 text-motiff-primary" />
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <Spinner className="mx-auto h-8 w-8 text-motiff-primary" />
         </div>
       </div>
     );
   }
 
   return (
-    <div cclassName="w-full max-w-md mx-auto space-y-8" suppressHydrationWarning>
+    <div className="w-full max-w-md mx-auto space-y-8" suppressHydrationWarning>
       {/* Header Section */}
-      <div cclassName="text-center">
+      <div className="text-center">
         {/* SIAM Logo/Brand */}
-        <div cclassName="mb-8">
-          <div cclassName="inline-flex items-center justify-center mb-6">
-            <SiamLogo size="3xl" variant="icon" cclassName="drop-shadow-2xl" />
+        <div className="mb-8">
+          <div className="inline-flex items-center justify-center mb-6">
+            <SiamLogo size="3xl" variant="icon" className="drop-shadow-2xl" />
           </div>
-          <h1 cclassName="mac-heading mac-display-text mb-2">The Betabase</h1>
-          <p cclassName="mac-body text-gray-300">yup. it's back.</p>
+          <h1 className="mac-heading mac-display-text mb-2">The Betabase</h1>
+          <p className="mac-body text-gray-300">yup. it's back.</p>
         </div>
 
       </div>
 
       {/* Glass Morphism Card */}
-      <div cclassName="mac-glass p-8 shadow-2xl relative">
+      <div className="mac-glass p-8 shadow-2xl relative">
         {step === "email" ? (
           /* Email Input Step */
           <form
             onSubmit={emailForm.handleSubmit((data) => sendMagicLink(data, 0))}
-            cclassName="space-y-6"
+            className="space-y-6"
             suppressHydrationWarning
           >
             <Field>
-              <FieldLabel htmlFor="email" cclassName="block text-white text-sm font-medium mb-2">
+              <FieldLabel htmlFor="email" className="block text-white text-sm font-medium mb-2">
                 Email Address
               </FieldLabel>
-              <div cclassName="relative group">
-                <Mail cclassName="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-blue-400 transition-colors" />
+              <div className="relative group">
+                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-blue-400 transition-colors" />
                 <Input
                   {...emailForm.register("email")}
                   id="email"
                   type="email"
                   placeholder="Enter your email address"
-                  cclassName="mac-input pl-14 h-12 text-base border-2 border-gray-400 bg-gray-900 text-white placeholder:text-gray-400 focus:border-blue-400 focus:bg-gray-800 transition-all duration-200"
+                  className="mac-input pl-14 h-12 text-base border-2 border-gray-400 bg-gray-900 text-white placeholder:text-gray-400 focus:border-blue-400 focus:bg-gray-800 transition-all duration-200"
                   disabled={isLoading}
                   autoComplete="email"
                   aria-invalid={!!emailForm.formState.errors.email}
                 />
               </div>
               {emailForm.formState.errors.email && (
-                <p cclassName="text-red-400 text-sm mt-2 flex items-center">
-                  <span cclassName="w-1 h-1 bg-red-400 rounded-full mr-2"></span>
+                <p className="text-red-400 text-sm mt-2 flex items-center">
+                  <span className="w-1 h-1 bg-red-400 rounded-full mr-2"></span>
                   {emailForm.formState.errors.email.message}
                 </p>
               )}
@@ -262,16 +262,16 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
             <Button
               type="submit"
               disabled={isLoading}
-              cclassName="mac-button mac-button-primary w-full h-12 text-base font-semibold shadow-xl transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="mac-button mac-button-primary w-full h-12 text-base font-semibold shadow-xl transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isLoading ? (
                 <>
-                  <Spinner cclassName="mr-4 h-5 w-5" />
+                  <Spinner className="mr-4 h-5 w-5" />
                   Sending Magic Link...
                 </>
               ) : (
                 <>
-                  <Mail cclassName="mr-4 h-5 w-5" />
+                  <Mail className="mr-4 h-5 w-5" />
                   Send Magic Link
                 </>
               )}
@@ -279,24 +279,24 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
           </form>
         ) : (
           /* Code Verification Step */
-          <div cclassName="space-y-6">
+          <div className="space-y-6">
             {/* Success Message */}
-            <div cclassName="text-center p-6 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl border border-green-500/20 backdrop-blur-sm">
-              <CheckCircle cclassName="mx-auto h-12 w-12 text-green-400 mb-4" />
-              <h3 cclassName="mac-title text-lg font-semibold text-white mb-2">Magic Link Sent!</h3>
-              <p cclassName="text-sm text-gray-300">We've sent a verification code to</p>
-              <p cclassName="text-sm font-medium text-white mt-2">{currentEmail}</p>
-              <p cclassName="text-xs text-gray-400 mt-2">
+            <div className="text-center p-6 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl border border-green-500/20 backdrop-blur-sm">
+              <CheckCircle className="mx-auto h-12 w-12 text-green-400 mb-4" />
+              <h3 className="mac-title text-lg font-semibold text-white mb-2">Magic Link Sent!</h3>
+              <p className="text-sm text-gray-300">We've sent a verification code to</p>
+              <p className="text-sm font-medium text-white mt-2">{currentEmail}</p>
+              <p className="text-xs text-gray-400 mt-2">
                 Check your email for the 6-digit verification code
               </p>
             </div>
 
             {/* Dev Code Display */}
             {devCode && (
-              <div cclassName="text-center p-4 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 rounded-xl border border-orange-500/20 backdrop-blur-sm">
-                <p cclassName="text-sm text-orange-300 font-medium">
+              <div className="text-center p-4 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 rounded-xl border border-orange-500/20 backdrop-blur-sm">
+                <p className="text-sm text-orange-300 font-medium">
                   Development Code:{" "}
-                  <span cclassName="font-mono text-lg text-orange-200">{devCode}</span>
+                  <span className="font-mono text-lg text-orange-200">{devCode}</span>
                 </p>
               </div>
             )}
@@ -304,11 +304,11 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
             {/* Verification Form */}
             <form
               onSubmit={codeForm.handleSubmit((data) => verifyCode(data, 0))}
-              cclassName="space-y-6"
+              className="space-y-6"
               suppressHydrationWarning
             >
               <Field>
-                <FieldLabel htmlFor="code" cclassName="block text-white text-sm font-medium mb-2">
+                <FieldLabel htmlFor="code" className="block text-white text-sm font-medium mb-2">
                   Verification Code
                 </FieldLabel>
                 <Input
@@ -316,15 +316,15 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                   id="code"
                   type="text"
                   placeholder="000000"
-                  cclassName="mac-input h-12 text-center text-2xl tracking-[0.5em] font-mono border-2 border-gray-400 bg-gray-900 text-white placeholder:text-gray-500 focus:border-green-400 focus:bg-gray-800 transition-all duration-200"
+                  className="mac-input h-12 text-center text-2xl tracking-[0.5em] font-mono border-2 border-gray-400 bg-gray-900 text-white placeholder:text-gray-500 focus:border-green-400 focus:bg-gray-800 transition-all duration-200"
                   disabled={isLoading}
                   maxLength={6}
                   autoComplete="one-time-code"
                   aria-invalid={!!codeForm.formState.errors.code}
                 />
                 {codeForm.formState.errors.code && (
-                  <p cclassName="text-red-400 text-sm mt-2 flex items-center">
-                    <span cclassName="w-1 h-1 bg-red-400 rounded-full mr-2"></span>
+                  <p className="text-red-400 text-sm mt-2 flex items-center">
+                    <span className="w-1 h-1 bg-red-400 rounded-full mr-2"></span>
                     {codeForm.formState.errors.code.message}
                   </p>
                 )}
@@ -333,16 +333,16 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
               <Button
                 type="submit"
                 disabled={isLoading}
-                cclassName="mac-button mac-button-primary w-full h-12 text-base font-semibold shadow-xl transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="mac-button mac-button-primary w-full h-12 text-base font-semibold shadow-xl transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {isLoading ? (
                   <>
-                    <Spinner cclassName="mr-4 h-5 w-5" />
+                    <Spinner className="mr-4 h-5 w-5" />
                     Verifying Code...
                   </>
                 ) : (
                   <>
-                    <CheckCircle cclassName="mr-4 h-5 w-5" />
+                    <CheckCircle className="mr-4 h-5 w-5" />
                     Verify & Sign In
                   </>
                 )}
@@ -356,7 +356,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                   setDevCode("");
                   codeForm.reset();
                 }}
-                cclassName="mac-button mac-button-outline w-full h-10 text-sm font-medium"
+                className="mac-button mac-button-outline w-full h-10 text-sm font-medium"
               >
                 Use a different email
               </Button>
@@ -365,12 +365,12 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
         )}
 
         {/* Footer */}
-        <div cclassName="mt-8 pt-6 border-t border-gray-600/30">
-          <div cclassName="text-center space-y-2">
-            <p cclassName="text-xs text-gray-400 font-mono">
+        <div className="mt-8 pt-6 border-t border-gray-600/30">
+          <div className="text-center space-y-2">
+            <p className="text-xs text-gray-400 font-mono">
               v{buildInfo.appVersion} • Built {getFormattedBuildTime(buildInfo.buildTime)}
             </p>
-            <p cclassName="text-xs text-gray-500">Eat • Me</p>
+            <p className="text-xs text-gray-500">Eat • Me</p>
           </div>
         </div>
       </div>

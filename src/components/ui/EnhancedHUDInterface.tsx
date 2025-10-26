@@ -15,7 +15,7 @@ interface FloatingPanelProps {
   isFocused?: boolean;
   isMinimized?: boolean;
   onToggleMinimize?: () => void;
-  cclassName?: string;
+  className?: string;
   settings: GlassmorphismSettings;
 }
 
@@ -29,7 +29,7 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
   isFocused,
   isMinimized,
   onToggleMinimize,
-  cclassName,
+  className,
   settings,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -93,14 +93,14 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
     <div
       ref={panelRef}
       id={id}
-      cclassName={cn(
+      className={cn(
         "absolute z-10 select-none mac-card-elevated",
         isDragging && "cursor-grabbing scale-105 dragging-panel",
         !isDragging && "cursor-grab hover:scale-[1.02]",
         isFocused && "ring-2 ring-jarvis-cyan ring-offset-2 ring-offset-transparent",
         isMinimized && "h-auto",
         settings.highContrast && "border-2 border-white",
-        cclassName
+        className
       )}
       style={panelStyle}
       role="region"
@@ -111,10 +111,10 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
     >
       {/* Drag Handle */}
       <div
-        cclassName="px-4 py-2 border-b border-mac-border cursor-grab active:cursor-grabbing bg-mac-state-hover flex items-center justify-between"
+        className="px-4 py-2 border-b border-mac-border cursor-grab active:cursor-grabbing bg-mac-state-hover flex items-center justify-between"
         onMouseDown={handleMouseDown}
       >
-        <h3 cclassName="mac-title">
+        <h3 className="mac-title">
           {title}
         </h3>
         <button
@@ -122,11 +122,11 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
             e.stopPropagation();
             onToggleMinimize?.();
           }}
-          cclassName="hud-icon-button"
+          className="hud-icon-button"
           aria-label={isMinimized ? "Maximize panel" : "Minimize panel"}
           aria-expanded={!isMinimized}
         >
-          <svg cclassName="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {isMinimized ? (
               <path
                 strokeLinecap="round"
@@ -147,7 +147,7 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
       </div>
 
       {/* Content */}
-      {!isMinimized && <div cclassName="p-4">{children}</div>}
+      {!isMinimized && <div className="p-4">{children}</div>}
     </div>
   );
 };
@@ -397,16 +397,16 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
 
   return (
     <div
-      cclassName="relative w-full h-screen overflow-hidden mac-background"
+      className="relative w-full h-screen overflow-hidden mac-background"
       role="application"
       aria-label="JARVIS HUD Interface"
     >
       {/* MAC Floating Background Orbs */}
-      <div cclassName="mac-floating-background" aria-hidden="true" />
+      <div className="mac-floating-background" aria-hidden="true" />
 
       {/* Background Grid */}
       <div
-        cclassName="absolute inset-0 opacity-5"
+        className="absolute inset-0 opacity-5"
         style={{
           backgroundImage: `
             linear-gradient(rgba(51, 133, 255, 0.1) 1px, transparent 1px),
@@ -418,11 +418,11 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
       />
 
       {/* HUD Title */}
-      <header cclassName="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
-        <h1 cclassName="mac-heading">
+      <header className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
+        <h1 className="mac-heading">
           SIAM HUD Interface
         </h1>
-        <p cclassName="text-center mac-body mt-2">
+        <p className="text-center mac-body mt-2">
           Smart In A Meeting • Floating Intelligence Panels
         </p>
       </header>
@@ -442,32 +442,32 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
           settings={settings}
         >
           {panel.id === "panel-1" && (
-            <div cclassName="w-80 max-h-40 overflow-y-auto">
-              <p cclassName="mac-body leading-relaxed">{panel.content}</p>
+            <div className="w-80 max-h-40 overflow-y-auto">
+              <p className="mac-body leading-relaxed">{panel.content}</p>
             </div>
           )}
 
           {panel.id === "panel-2" && (
-            <div cclassName="w-72">
+            <div className="w-72">
               {(panel.content as string[]).map((insight, idx) => (
                 <div
                   key={idx}
-                  cclassName="mb-2 p-4 rounded-lg border-l-2 border-mac-accent-purple-400 bg-mac-accent-purple-400/10"
+                  className="mb-2 p-4 rounded-lg border-l-2 border-mac-accent-purple-400 bg-mac-accent-purple-400/10"
                 >
-                  <p cclassName="mac-body text-mac-text-secondary">{insight}</p>
+                  <p className="mac-body text-mac-text-secondary">{insight}</p>
                 </div>
               ))}
             </div>
           )}
 
           {panel.id === "panel-3" && (
-            <div cclassName="w-64">
-              <div cclassName="mb-4">
-                <p cclassName="mac-body mb-2">
+            <div className="w-64">
+              <div className="mb-4">
+                <p className="mac-body mb-2">
                   Audio Level: {Math.round((panel.content as number) * 100)}%
                 </p>
                 <div
-                  cclassName="h-2 rounded-full overflow-hidden bg-mac-border"
+                  className="h-2 rounded-full overflow-hidden bg-mac-border"
                   role="progressbar"
                   aria-valuenow={Math.round((panel.content as number) * 100)}
                   aria-valuemin={0}
@@ -475,7 +475,7 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
                   aria-label="Audio level"
                 >
                   <div
-                    cclassName="h-full transition-all duration-150 rounded-full"
+                    className="h-full transition-all duration-150 rounded-full"
                     style={{
                       width: `${(panel.content as number) * 100}%`,
                       background:
@@ -485,14 +485,14 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
                 </div>
               </div>
 
-              <div cclassName="grid grid-cols-2 gap-2 text-xs">
-                <div cclassName="p-2 rounded text-center bg-mac-primary-blue-400/10">
-                  <p cclassName="mac-body text-mac-text-muted">Status</p>
-                  <p cclassName="mac-body text-mac-text-primary">Active</p>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="p-2 rounded text-center bg-mac-primary-blue-400/10">
+                  <p className="mac-body text-mac-text-muted">Status</p>
+                  <p className="mac-body text-mac-text-primary">Active</p>
                 </div>
-                <div cclassName="p-2 rounded text-center bg-mac-accent-purple-400/10">
-                  <p cclassName="mac-body text-mac-text-muted">Quality</p>
-                  <p cclassName="mac-body text-mac-text-primary">HD</p>
+                <div className="p-2 rounded text-center bg-mac-accent-purple-400/10">
+                  <p className="mac-body text-mac-text-muted">Quality</p>
+                  <p className="mac-body text-mac-text-primary">HD</p>
                 </div>
               </div>
             </div>
@@ -526,31 +526,31 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
       <HUDHelpOverlay isOpen={showHelp} onClose={() => setShowHelp(false)} />
 
       {/* Instructions Footer */}
-      <footer cclassName="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-        <div cclassName="text-center space-y-2">
-          <p cclassName="mac-body text-mac-text-muted">
+      <footer className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+        <div className="text-center space-y-2">
+          <p className="mac-body text-mac-text-muted">
             Drag panels to reposition • Press{" "}
-            <kbd cclassName="px-2 py-2 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">F1</kbd>{" "}
+            <kbd className="px-2 py-2 rounded bg-jarvis-panel-dark-bg-end text-jarvis-cyan">F1</kbd>{" "}
             for help
           </p>
-          <div cclassName="flex items-center justify-center gap-4 text-xs text-mac-text-muted">
+          <div className="flex items-center justify-center gap-4 text-xs text-mac-text-muted">
             <button
               onClick={() => setShowCustomization(true)}
-              cclassName="hover:text-jarvis-cyan transition-colors"
+              className="hover:text-jarvis-cyan transition-colors"
             >
               Customize (Ctrl+Shift+C)
             </button>
             <span>•</span>
             <button
               onClick={() => setShowAudioSelector(true)}
-              cclassName="hover:text-jarvis-cyan transition-colors"
+              className="hover:text-jarvis-cyan transition-colors"
             >
               Audio (Ctrl+Shift+A)
             </button>
             <span>•</span>
             <button
               onClick={() => setShowHelp(true)}
-              cclassName="hover:text-jarvis-cyan transition-colors"
+              className="hover:text-jarvis-cyan transition-colors"
             >
               Help (F1)
             </button>
@@ -559,7 +559,7 @@ export const EnhancedHUDInterface: React.FC<EnhancedHUDInterfaceProps> = ({
       </footer>
 
       {/* Accessibility Announcements */}
-      <div role="status" aria-live="polite" aria-atomic="true" cclassName="sr-only">
+      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
         {showCustomization && "Customization panel opened"}
         {showAudioSelector && "Audio source selector opened"}
         {showHelp && "Help overlay opened"}
