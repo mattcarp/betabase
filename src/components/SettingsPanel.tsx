@@ -119,9 +119,8 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
           <div className="flex items-center gap-2">
             <Settings className="w-5 h-5 text-blue-600" />
             <h2
-              c
               className="mac-heading"
-              lassName="mac-heading text-xl font-bold text-blue-600 font-mono"
+              className="mac-heading text-xl font-bold text-blue-600 font-mono"
             >
               Settings
             </h2>
@@ -265,7 +264,7 @@ function AppearanceSettings({
 
   return (
     <div className="space-y-6">
-      <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
+      <h3 className="mac-title">
         Appearance Settings
       </h3>
 
@@ -379,7 +378,7 @@ function AudioSettings({
 }) {
   return (
     <div className="space-y-6">
-      <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
+      <h3 className="mac-title">
         Audio Settings
       </h3>
 
@@ -442,7 +441,7 @@ function RecordingSettings({
 }) {
   return (
     <div className="space-y-6">
-      <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
+      <h3 className="mac-title">
         Recording Settings
       </h3>
 
@@ -531,7 +530,7 @@ function LayoutSettings({
 }) {
   return (
     <div className="space-y-6">
-      <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
+      <h3 className="mac-title">
         Layout Settings
       </h3>
 
@@ -654,7 +653,7 @@ function ShortcutsSettings({
 
   return (
     <div className="space-y-6">
-      <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
+      <h3 className="mac-title">
         Keyboard Shortcuts
       </h3>
 
@@ -685,7 +684,7 @@ function DataPrivacySettings({
 }) {
   return (
     <div className="space-y-6">
-      <h3 c className="mac-title" lassName="mac-title text-lg font-bold text-blue-600 font-mono">
+      <h3 className="mac-title">
         Data & Privacy Settings
       </h3>
 

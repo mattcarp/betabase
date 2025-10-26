@@ -224,9 +224,8 @@ export const ConnectionStatusIndicator: React.FC = () => {
               <div className="flex items-center gap-2">
                 <div className="mac-floating-orb h-2 w-2" />
                 <h3
-                  c
                   className="mac-title"
-                  lassName="mac-title text-base font-[400] tracking-wide text-white"
+                  className="mac-title text-base font-[400] tracking-wide text-white"
                 >
                   System Health
                 </h3>

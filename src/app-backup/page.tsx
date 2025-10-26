@@ -62,7 +62,7 @@ export default function HomePage() {
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center">
         <div className="bg-gray-800/50 p-8 rounded-lg backdrop-blur-sm border border-gray-700">
           <div className="text-center mb-6">
-            <h1 c className="mac-heading" lassName="mac-heading text-2xl font-bold text-white mb-2">
+            <h1 className="mac-heading">
               SIAM
             </h1>
             <p className="mac-body text-gray-300">Smart Interaction Agent Manager</p>
@@ -126,7 +126,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-black text-white">
       <nav className="bg-gray-900 p-4">
         <div className="flex justify-between items-center">
-          <h1 c className="mac-heading" lassName="mac-heading text-xl font-bold">
+          <h1 className="mac-heading">
             SIAM Dashboard
           </h1>
           <button
@@ -141,7 +141,7 @@ export default function HomePage() {
       <main className="p-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <h2 c className="mac-heading" lassName="mac-heading text-3xl font-bold mb-4">
+            <h2 className="mac-heading">
               Welcome to SIAM
             </h2>
             <p className="text-gray-300 text-lg">
@@ -151,21 +151,21 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-gray-800/50 p-6 rounded-lg backdrop-blur-sm border border-gray-700">
-              <h3 c className="mac-title" lassName="mac-title text-xl font-semibold mb-4">
+              <h3 className="mac-title">
                 🎯 System Status
               </h3>
               <p className="mac-body text-green-400">All systems operational</p>
             </div>
 
             <div className="bg-gray-800/50 p-6 rounded-lg backdrop-blur-sm border border-gray-700">
-              <h3 c className="mac-title" lassName="mac-title text-xl font-semibold mb-4">
+              <h3 className="mac-title">
                 🚀 Deployment
               </h3>
               <p className="mac-body text-blue-400">Production ready</p>
             </div>
 
             <div className="bg-gray-800/50 p-6 rounded-lg backdrop-blur-sm border border-gray-700">
-              <h3 c className="mac-title" lassName="mac-title text-xl font-semibold mb-4">
+              <h3 className="mac-title">
                 ⚡ Performance
               </h3>
               <p className="mac-body text-yellow-400">Optimized for speed</p>
@@ -174,9 +174,8 @@ export default function HomePage() {
 
           <div className="mt-8 bg-green-500/20 border border-green-500/50 rounded-lg p-6">
             <h3
-              c
               className="mac-title"
-              lassName="mac-title text-green-400 font-semibold text-lg mb-2"
+              className="mac-title text-green-400 font-semibold text-lg mb-2"
             >
               🎉 Deployment Successful!
             </h3>

@@ -6,7 +6,7 @@ export default function AuthDemoPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
       <div className="text-white text-center">
-        <h1 c className="mac-heading" lassName="mac-heading text-4xl font-bold mb-4">
+        <h1 className="mac-heading">
           Auth Demo Page
         </h1>
         <p className="text-lg">Enhanced LoginForm-Production component will be loaded here</p>

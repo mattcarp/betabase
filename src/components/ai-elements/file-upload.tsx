@@ -291,9 +291,8 @@ export function FileUpload({
 
           <div>
             <h3
-              c
               className="mac-title"
-              lassName="mac-title text-lg font-light mb-2 text-[var(--mac-text-primary)]"
+              className="mac-title text-lg font-light mb-2 text-[var(--mac-text-primary)]"
             >
               Upload to Knowledge Base
             </h3>
@@ -330,7 +329,7 @@ export function FileUpload({
       {uploadQueue.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h4 c className="mac-title" lassName="mac-title text-sm font-medium">
+            <h4 className="mac-title">
               Upload Queue
             </h4>
             {uploadQueue.some((f) => f.status === "completed") && (

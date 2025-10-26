@@ -252,9 +252,8 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
           <div className="flex items-center gap-2">
             <Clock className="h-5 w-5 text-mac-primary-blue-400" />
             <h3
-              c
               className="mac-title"
-              lassName="text-base font-light text-mac-text-primary mac-title"
+              className="text-base font-light text-mac-text-primary mac-title"
             >
               Session Timeline
             </h3>

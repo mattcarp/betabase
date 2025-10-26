@@ -1388,9 +1388,8 @@ export function AiSdkChatPanel({
                         )}
                         <div className="flex-1">
                           <h4
-                            c
                             className="mac-title"
-                            lassName="mac-title text-sm font-medium text-foreground mb-2"
+                            className="mac-title text-sm font-medium text-foreground mb-2"
                           >
                             {preview.title || "Web Page"}
                           </h4>
@@ -1562,9 +1561,8 @@ export function AiSdkChatPanel({
               <SiamLogo size="sm" />
               <div>
                 <h1
-                  c
                   className="mac-heading"
-                  lassName="mac-heading text-xl font-light text-white tracking-tight"
+                  className="mac-heading text-xl font-light text-white tracking-tight"
                 >
                   {title}
                 </h1>
@@ -1645,16 +1643,11 @@ export function AiSdkChatPanel({
                   transition={{ delay: 0.2, duration: 0.6 }}
                   className="mb-8"
                 >
-                  <h2
-                    c
-                    className="mac-heading"
-                    lassName="mac-heading text-4xl font-thin mb-4 text-white tracking-tight"
-                  >
+                  <h2 className="mac-heading text-4xl font-thin mb-4 text-white tracking-tight">
                     Welcome to The Betabase
                   </h2>
                   <p className="text-lg font-light text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                    Ready to assist you with advanced AI capabilities, code analysis, creative
-                    tasks, and intelligent problem-solving. Again, don't be a dick.
+                    Don't be a dick.
                   </p>
                 </motion.div>
 
@@ -1669,9 +1662,8 @@ export function AiSdkChatPanel({
                     >
                       <div className="mb-4">
                         <h3
-                          c
                           className="mac-title"
-                          lassName="mac-title text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2"
+                          className="mac-title text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2"
                         >
                           <Sparkles className="w-4 h-4" />
                           Try these to get started
@@ -2204,7 +2196,6 @@ export function AiSdkChatPanel({
             <PromptInputSubmit
               disabled={isMaxMessagesReached || !localInput?.trim()}
               status={isLoading ? "streaming" : undefined}
-              shimmer={false}
               className="!h-8 !w-8 !p-0 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 shrink-0"
             />
           </PromptInputToolbar>

@@ -135,7 +135,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
             />
           </svg>
           <div>
-            <h3 c className="mac-title" lassName="mac-title text-mac-text-primary">
+            <h3 className="mac-title">
               Audio Sources
             </h3>
             <p className="mac-body text-xs text-mac-text-muted mt-0.5">Select audio input device</p>

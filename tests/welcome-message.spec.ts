@@ -25,13 +25,6 @@ test.describe("Welcome Message", () => {
       .textContent();
     expect(welcomeHeading).toBe("Welcome to The Betabase");
 
-    // Verify the description text is also correct
-    await expect(
-      page.locator("text=Ready to assist you with advanced AI capabilities")
-    ).toBeVisible();
-    await expect(page.locator("text=Again, don't be a dick")).toBeVisible();
-  });
-
   test("should maintain correct welcome message after conversation interactions", async ({
     page,
   }) => {

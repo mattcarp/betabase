@@ -685,9 +685,8 @@ export const TestResultsViewer: React.FC = () => {
                       <Card className="mac-card bg-red-500/10 border-red-500/20">
                         <CardContent className="p-4">
                           <h3
-                            c
                             className="mac-title"
-                            lassName="mac-title font-medium text-red-500 mb-2"
+                            className="mac-title font-medium text-red-500 mb-2"
                           >
                             Error Message
                           </h3>
@@ -700,9 +699,8 @@ export const TestResultsViewer: React.FC = () => {
                           <Card className="mac-card">
                             <CardContent className="p-4">
                               <h3
-                                c
                                 className="mac-title"
-                                lassName="mac-title font-medium text-green-500 mb-2"
+                                className="mac-title font-medium text-green-500 mb-2"
                               >
                                 Expected
                               </h3>
@@ -714,9 +712,8 @@ export const TestResultsViewer: React.FC = () => {
                           <Card className="mac-card">
                             <CardContent className="p-4">
                               <h3
-                                c
                                 className="mac-title"
-                                lassName="mac-title font-medium text-red-500 mb-2"
+                                className="mac-title font-medium text-red-500 mb-2"
                               >
                                 Actual
                               </h3>
@@ -731,7 +728,7 @@ export const TestResultsViewer: React.FC = () => {
                       <Card className="mac-card">
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between mb-2">
-                            <h3 c className="mac-title" lassName="mac-title font-medium">
+                            <h3 className="mac-title">
                               Stack Trace
                             </h3>
                             <Button
@@ -762,9 +759,8 @@ export const TestResultsViewer: React.FC = () => {
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-4">
                           <h3
-                            c
                             className="mac-title"
-                            lassName="mac-title font-medium flex items-center gap-2"
+                            className="mac-title font-medium flex items-center gap-2"
                           >
                             <Terminal className="h-4 w-4" />
                             Console Output
@@ -805,7 +801,7 @@ export const TestResultsViewer: React.FC = () => {
                 <TabsContent value="media">
                   {selectedResult.screenshots && selectedResult.screenshots.length > 0 ? (
                     <div className="space-y-4">
-                      <h3 c className="mac-title" lassName="mac-title font-medium">
+                      <h3 className="mac-title">
                         Screenshots
                       </h3>
                       <div className="grid grid-cols-2 gap-4">
@@ -833,9 +829,8 @@ export const TestResultsViewer: React.FC = () => {
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-4">
                         <h3
-                          c
                           className="mac-title"
-                          lassName="mac-title font-medium flex items-center gap-2"
+                          className="mac-title font-medium flex items-center gap-2"
                         >
                           <Code className="h-4 w-4" />
                           Test Source

@@ -1067,7 +1067,7 @@ export function EnhancedCurateTab({
           <TabsContent value="insights" className="flex-1 overflow-auto mt-4">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 c className="mac-title" lassName="mac-title text-lg font-semibold">
+                <h3 className="mac-title">
                   AI-Powered Curation Insights
                 </h3>
                 <Button
@@ -1163,7 +1163,7 @@ export function EnhancedCurateTab({
           <TabsContent value="curators" className="flex-1 overflow-auto mt-4">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 c className="mac-title" lassName="mac-title text-lg font-semibold">
+                <h3 className="mac-title">
                   Knowledge Curator Leaderboard
                 </h3>
                 <div className="flex gap-2">
@@ -1297,7 +1297,7 @@ export function EnhancedCurateTab({
           {/* Analytics Tab */}
           <TabsContent value="analytics" className="flex-1 overflow-auto mt-4">
             <div className="space-y-4">
-              <h3 c className="mac-title" lassName="mac-title text-lg font-semibold">
+              <h3 className="mac-title">
                 Knowledge Base Analytics
               </h3>
 

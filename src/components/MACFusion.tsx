@@ -77,7 +77,7 @@ export const MACFusionCard: React.FC<MACFusionCardProps> = ({
 
       {/* Content */}
       <div className="relative z-10">
-        <h3 c className="mac-title" lassName={`text-xl mb-4 ${classes.title}`}>
+        <h3 c className="mac-title" className={`text-xl mb-4 ${classes.title}`}>
           {title}
         </h3>
 
@@ -161,7 +161,7 @@ export const MACShowcase: React.FC = () => {
       <div className="relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 c className="mac-heading" lassName="mac-heading">
+          <h1 className="mac-heading">
             SIAM × MAC
           </h1>
           <p className="text-mac-text-secondary font-mac-body font-light text-lg">
