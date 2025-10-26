@@ -384,17 +384,17 @@ test.describe('${testResult.suite}', () => {
   };
 
   const getConfidenceIcon = (confidence: number) => {
-    if (confidence >= 85) return <TrendingUp className="h-4 w-4" />;
-    if (confidence >= 70) return <Minus className="h-4 w-4" />;
-    return <TrendingDown className="h-4 w-4" />;
+    if (confidence >= 85) return <TrendingUp cclassName="h-4 w-4" />;
+    if (confidence >= 70) return <Minus cclassName="h-4 w-4" />;
+    return <TrendingDown cclassName="h-4 w-4" />;
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
+      <DialogContent cclassName="max-w-6xl max-h-[90vh] overflow-hidden">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-primary" />
+          <DialogTitle cclassName="flex items-center gap-2">
+            <Brain cclassName="h-5 w-5 text-primary" />
             AI Test Generator
           </DialogTitle>
           <DialogDescription>
@@ -404,34 +404,34 @@ test.describe('${testResult.suite}', () => {
 
         {/* Loading/Analyzing Phase */}
         {phase.status !== "complete" && (
-          <div className="space-y-6 py-8">
-            <div className="flex flex-col items-center justify-center gap-4">
+          <div cclassName="space-y-6 py-8">
+            <div cclassName="flex flex-col items-center justify-center gap-4">
               {phase.status === "error" ? (
-                <AlertCircle className="h-16 w-16 text-yellow-500 animate-pulse" />
+                <AlertCircle cclassName="h-16 w-16 text-yellow-500 animate-pulse" />
               ) : (
-                <Sparkles className="h-16 w-16 text-primary animate-pulse" />
+                <Sparkles cclassName="h-16 w-16 text-primary animate-pulse" />
               )}
-              <div className="text-center space-y-2">
-                <h3 className="text-lg font-medium">{phase.message}</h3>
-                <Progress value={phase.progress} className="w-64" />
-                <p className="text-sm text-muted-foreground">{phase.progress}% complete</p>
+              <div cclassName="text-center space-y-2">
+                <h3 cclassName="text-lg font-medium">{phase.message}</h3>
+                <Progress value={phase.progress} cclassName="w-64" />
+                <p cclassName="text-sm text-muted-foreground">{phase.progress}% complete</p>
               </div>
             </div>
 
             {phase.status === "analyzing" && (
-              <Card className="bg-muted/50">
-                <CardContent className="p-6">
-                  <div className="space-y-3 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
+              <Card cclassName="bg-muted/50">
+                <CardContent cclassName="p-6">
+                  <div cclassName="space-y-3 text-sm">
+                    <div cclassName="flex items-center gap-2">
+                      <Loader2 cclassName="h-4 w-4 animate-spin" />
                       <span>Extracting test actions and steps...</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                    <div cclassName="flex items-center gap-2">
+                      <Loader2 cclassName="h-4 w-4 animate-spin" />
                       <span>Analyzing console logs and errors...</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                    <div cclassName="flex items-center gap-2">
+                      <Loader2 cclassName="h-4 w-4 animate-spin" />
                       <span>Identifying selectors and elements...</span>
                     </div>
                   </div>
@@ -440,23 +440,23 @@ test.describe('${testResult.suite}', () => {
             )}
 
             {phase.status === "generating" && (
-              <Card className="bg-muted/50">
-                <CardContent className="p-6">
-                  <div className="space-y-3 text-sm">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
+              <Card cclassName="bg-muted/50">
+                <CardContent cclassName="p-6">
+                  <div cclassName="space-y-3 text-sm">
+                    <div cclassName="flex items-center gap-2">
+                      <CheckCircle cclassName="h-4 w-4 text-green-500" />
                       <span>Session analysis complete</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                    <div cclassName="flex items-center gap-2">
+                      <Loader2 cclassName="h-4 w-4 animate-spin" />
                       <span>Generating Playwright test code...</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                    <div cclassName="flex items-center gap-2">
+                      <Loader2 cclassName="h-4 w-4 animate-spin" />
                       <span>Creating action-to-assertion mappings...</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                    <div cclassName="flex items-center gap-2">
+                      <Loader2 cclassName="h-4 w-4 animate-spin" />
                       <span>Calculating confidence scores...</span>
                     </div>
                   </div>
@@ -468,36 +468,36 @@ test.describe('${testResult.suite}', () => {
 
         {/* Complete Phase - Main Content */}
         {phase.status === "complete" && (
-          <Tabs defaultValue="code" className="h-full">
-            <div className="flex items-center justify-between mb-4">
+          <Tabs defaultValue="code" cclassName="h-full">
+            <div cclassName="flex items-center justify-between mb-4">
               <TabsList>
                 <TabsTrigger value="code">
-                  <Code className="h-4 w-4 mr-2" />
+                  <Code cclassName="h-4 w-4 mr-2" />
                   Generated Code
                 </TabsTrigger>
                 <TabsTrigger value="mapping">
-                  <ArrowRight className="h-4 w-4 mr-2" />
+                  <ArrowRight cclassName="h-4 w-4 mr-2" />
                   Action Mapping
                 </TabsTrigger>
                 <TabsTrigger value="preview">
-                  <Play className="h-4 w-4 mr-2" />
+                  <Play cclassName="h-4 w-4 mr-2" />
                   Preview
                 </TabsTrigger>
                 {existingTest && (
                   <TabsTrigger value="diff">
-                    <GitCompare className="h-4 w-4 mr-2" />
+                    <GitCompare cclassName="h-4 w-4 mr-2" />
                     Diff
                   </TabsTrigger>
                 )}
               </TabsList>
 
-              <div className="flex gap-2">
+              <div cclassName="flex gap-2">
                 <Button variant="outline" size="sm" onClick={handleCopy}>
-                  <Copy className="h-4 w-4 mr-2" />
+                  <Copy cclassName="h-4 w-4 mr-2" />
                   Copy
                 </Button>
                 <Button variant="outline" size="sm" onClick={handleDownload}>
-                  <Download className="h-4 w-4 mr-2" />
+                  <Download cclassName="h-4 w-4 mr-2" />
                   Download
                 </Button>
                 <Button
@@ -508,12 +508,12 @@ test.describe('${testResult.suite}', () => {
                 >
                   {isPreviewRunning ? (
                     <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      <Loader2 cclassName="h-4 w-4 mr-2 animate-spin" />
                       Running...
                     </>
                   ) : (
                     <>
-                      <Play className="h-4 w-4 mr-2" />
+                      <Play cclassName="h-4 w-4 mr-2" />
                       Preview
                     </>
                   )}
@@ -521,12 +521,12 @@ test.describe('${testResult.suite}', () => {
                 <Button size="sm" onClick={handleSave} disabled={isSaving}>
                   {isSaving ? (
                     <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      <Loader2 cclassName="h-4 w-4 mr-2 animate-spin" />
                       Saving...
                     </>
                   ) : (
                     <>
-                      <Save className="h-4 w-4 mr-2" />
+                      <Save cclassName="h-4 w-4 mr-2" />
                       Save Test
                     </>
                   )}
@@ -534,9 +534,9 @@ test.describe('${testResult.suite}', () => {
               </div>
             </div>
 
-            <TabsContent value="code" className="h-[500px] mt-0">
-              <Card className="h-full">
-                <CardContent className="p-0 h-full">
+            <TabsContent value="code" cclassName="h-[500px] mt-0">
+              <Card cclassName="h-full">
+                <CardContent cclassName="p-0 h-full">
                   <Editor
                     height="100%"
                     defaultLanguage="typescript"
@@ -559,57 +559,57 @@ test.describe('${testResult.suite}', () => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="mapping" className="h-[500px] mt-0">
-              <ScrollArea className="h-full">
-                <div className="space-y-4 pr-4">
+            <TabsContent value="mapping" cclassName="h-[500px] mt-0">
+              <ScrollArea cclassName="h-full">
+                <div cclassName="space-y-4 pr-4">
                   {assertions.map((mapping) => (
                     <Card key={mapping.id}>
-                      <CardContent className="p-4">
-                        <div className="flex items-start gap-4">
+                      <CardContent cclassName="p-4">
+                        <div cclassName="flex items-start gap-4">
                           {/* Action */}
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
+                          <div cclassName="flex-1">
+                            <div cclassName="flex items-center gap-2 mb-2">
                               <Badge variant="outline">{mapping.action.type}</Badge>
-                              <span className="text-sm font-medium">
+                              <span cclassName="text-sm font-medium">
                                 {mapping.action.description}
                               </span>
                             </div>
                             {mapping.action.selector && (
-                              <code className="text-xs bg-muted px-2 py-1 rounded">
+                              <code cclassName="text-xs bg-muted px-2 py-1 rounded">
                                 {mapping.action.selector}
                               </code>
                             )}
                           </div>
 
                           {/* Arrow */}
-                          <ArrowRight className="h-8 w-8 text-muted-foreground flex-shrink-0 mt-2" />
+                          <ArrowRight cclassName="h-8 w-8 text-muted-foreground flex-shrink-0 mt-2" />
 
                           {/* Assertion */}
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
+                          <div cclassName="flex-1">
+                            <div cclassName="flex items-center gap-2 mb-2">
                               <Badge>{mapping.assertion.type}</Badge>
-                              <span className="text-sm font-medium">
+                              <span cclassName="text-sm font-medium">
                                 {mapping.assertion.description}
                               </span>
                             </div>
-                            <pre className="text-xs bg-muted p-2 rounded overflow-x-auto">
+                            <pre cclassName="text-xs bg-muted p-2 rounded overflow-x-auto">
                               <code>{mapping.assertion.code}</code>
                             </pre>
                           </div>
 
                           {/* Confidence Score */}
-                          <div className="flex flex-col items-center gap-1 flex-shrink-0">
+                          <div cclassName="flex flex-col items-center gap-1 flex-shrink-0">
                             <div
-                              className={cn(
+                              cclassName={cn(
                                 "flex items-center gap-1",
                                 getConfidenceColor(mapping.confidence)
                               )}
                             >
                               {getConfidenceIcon(mapping.confidence)}
-                              <span className="text-lg font-bold">{mapping.confidence}%</span>
+                              <span cclassName="text-lg font-bold">{mapping.confidence}%</span>
                             </div>
-                            <span className="text-xs text-muted-foreground">confidence</span>
-                            <Badge variant="secondary" className="text-xs mt-1">
+                            <span cclassName="text-xs text-muted-foreground">confidence</span>
+                            <Badge variant="secondary" cclassName="text-xs mt-1">
                               L{mapping.lineNumber}
                             </Badge>
                           </div>
@@ -621,39 +621,39 @@ test.describe('${testResult.suite}', () => {
               </ScrollArea>
             </TabsContent>
 
-            <TabsContent value="preview" className="h-[500px] mt-0">
-              <Card className="h-full">
+            <TabsContent value="preview" cclassName="h-[500px] mt-0">
+              <Card cclassName="h-full">
                 <CardHeader>
-                  <CardTitle className="text-base">Test Preview Results</CardTitle>
+                  <CardTitle cclassName="text-base">Test Preview Results</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {!previewResults ? (
-                    <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground">
-                      <Play className="h-12 w-12 mb-4" />
+                    <div cclassName="flex flex-col items-center justify-center h-[400px] text-muted-foreground">
+                      <Play cclassName="h-12 w-12 mb-4" />
                       <p>Click "Preview" to run the generated test</p>
                     </div>
                   ) : (
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-4">
+                    <div cclassName="space-y-4">
+                      <div cclassName="flex items-center gap-4">
                         {previewResults.status === "passed" ? (
-                          <CheckCircle className="h-8 w-8 text-green-500" />
+                          <CheckCircle cclassName="h-8 w-8 text-green-500" />
                         ) : (
-                          <AlertCircle className="h-8 w-8 text-red-500" />
+                          <AlertCircle cclassName="h-8 w-8 text-red-500" />
                         )}
                         <div>
-                          <h3 className="font-medium text-lg">
+                          <h3 cclassName="font-medium text-lg">
                             Test {previewResults.status === "passed" ? "Passed" : "Failed"}
                           </h3>
-                          <p className="text-sm text-muted-foreground">
+                          <p cclassName="text-sm text-muted-foreground">
                             Duration: {previewResults.duration}ms
                           </p>
                         </div>
                       </div>
 
-                      <Card className="bg-muted/50">
-                        <CardContent className="p-4">
-                          <h4 className="font-medium mb-2">Output</h4>
-                          <pre className="text-sm">{previewResults.output}</pre>
+                      <Card cclassName="bg-muted/50">
+                        <CardContent cclassName="p-4">
+                          <h4 cclassName="font-medium mb-2">Output</h4>
+                          <pre cclassName="text-sm">{previewResults.output}</pre>
                         </CardContent>
                       </Card>
                     </div>
@@ -663,23 +663,23 @@ test.describe('${testResult.suite}', () => {
             </TabsContent>
 
             {existingTest && (
-              <TabsContent value="diff" className="h-[500px] mt-0">
-                <Card className="h-full">
+              <TabsContent value="diff" cclassName="h-[500px] mt-0">
+                <Card cclassName="h-full">
                   <CardHeader>
-                    <CardTitle className="text-base">Code Diff</CardTitle>
+                    <CardTitle cclassName="text-base">Code Diff</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-2 gap-4 h-[400px]">
+                    <div cclassName="grid grid-cols-2 gap-4 h-[400px]">
                       <div>
-                        <h4 className="text-sm font-medium mb-2 text-red-500">Previous Version</h4>
-                        <ScrollArea className="h-full">
-                          <pre className="text-xs bg-muted p-3 rounded">{existingTest}</pre>
+                        <h4 cclassName="text-sm font-medium mb-2 text-red-500">Previous Version</h4>
+                        <ScrollArea cclassName="h-full">
+                          <pre cclassName="text-xs bg-muted p-3 rounded">{existingTest}</pre>
                         </ScrollArea>
                       </div>
                       <div>
-                        <h4 className="text-sm font-medium mb-2 text-green-500">New Version</h4>
-                        <ScrollArea className="h-full">
-                          <pre className="text-xs bg-muted p-3 rounded">{editedCode}</pre>
+                        <h4 cclassName="text-sm font-medium mb-2 text-green-500">New Version</h4>
+                        <ScrollArea cclassName="h-full">
+                          <pre cclassName="text-xs bg-muted p-3 rounded">{editedCode}</pre>
                         </ScrollArea>
                       </div>
                     </div>

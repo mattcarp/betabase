@@ -333,13 +333,21 @@ export async function POST(req: Request) {
     // Check if we need AOMA context
     const latestUserMessage = messages.filter((m: any) => m.role === "user").pop();
 
-    if (!bypassAOMA && latestUserMessage && latestUserMessage.content) {
+    // Extract content from AI SDK v5 parts format or v4 content format
+    const messageContent = latestUserMessage?.parts?.find((p: any) => p.type === "text")?.text || latestUserMessage?.content;
+
+    if (!bypassAOMA && latestUserMessage && messageContent) {
       const queryString =
-        typeof latestUserMessage.content === "string"
-          ? latestUserMessage.content
-          : JSON.stringify(latestUserMessage.content);
+        typeof messageContent === "string"
+          ? messageContent
+          : JSON.stringify(messageContent);
 
       console.log("🎯 Using LangChain orchestrator for AOMA:", queryString.substring(0, 100));
+
+      // Performance tracking
+      const perfStart = Date.now();
+      let railwayStartTime: number, railwayEndTime: number;
+      let supabaseStartTime: number, supabaseEndTime: number;
 
       try {
         // PARALLEL HYBRID APPROACH: Query both Railway MCP AND Supabase vector store
@@ -347,18 +355,25 @@ export async function POST(req: Request) {
         console.log("⏳ Starting parallel queries: AOMA orchestrator + Supabase vectors...");
 
         // Start Supabase knowledge search in parallel
+        supabaseStartTime = Date.now();
         const ragPromise = searchKnowledge(queryString, {
           matchThreshold: 0.78,
           matchCount: 6,
         });
 
         // Wrap orchestrator call with timeout to prevent hanging
+        // Railway typically responds in 10-15s, so 45s timeout is reasonable
+        console.log("🚂 Starting Railway MCP query...");
+        railwayStartTime = Date.now();
         const orchestratorResult = await Promise.race([
           aomaOrchestrator.executeOrchestration(queryString),
           new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("AOMA orchestrator timeout after 30s")), 30000)
+            setTimeout(() => reject(new Error("AOMA orchestrator timeout after 45s")), 45000)
           ),
-        ]);
+        ]) as any;
+        railwayEndTime = Date.now();
+        const railwayDuration = railwayEndTime - railwayStartTime;
+        console.log(`⚡ Railway MCP responded in ${railwayDuration}ms`);
 
         if (orchestratorResult && (orchestratorResult.response || orchestratorResult.content)) {
           const contextContent = orchestratorResult.response || orchestratorResult.content;
@@ -393,10 +408,12 @@ export async function POST(req: Request) {
         try {
           console.log("⏳ Waiting for Supabase vector search...");
           const rag = await ragPromise;
+          supabaseEndTime = Date.now();
+          const supabaseDuration = supabaseEndTime - supabaseStartTime;
 
           if (rag.results?.length) {
             console.log(
-              `✅ Supabase returned ${rag.results.length} results in ${rag.durationMs}ms`
+              `✅ Supabase returned ${rag.results.length} results in ${rag.durationMs}ms (total: ${supabaseDuration}ms)`
             );
 
             // Add top snippets to context with screenshot paths
@@ -446,14 +463,40 @@ export async function POST(req: Request) {
           console.warn("⚠️  Supabase RAG search failed:", ragError);
           // Don't fail the whole request if Supabase fails - we still have Railway MCP
         }
+
+        // Performance summary
+        const totalDuration = Date.now() - perfStart;
+        console.log("📊 AOMA Query Performance Summary:", {
+          totalMs: totalDuration,
+          railwayMs: railwayEndTime ? railwayEndTime - railwayStartTime : "N/A",
+          supabaseMs: supabaseEndTime ? supabaseEndTime - supabaseStartTime : "N/A",
+          contextLength: aomaContext.length,
+          status: aomaConnectionStatus,
+        });
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorDuration = Date.now() - perfStart;
 
-        // Log detailed error server-side
+        // Determine error source and type
+        const errorType = errorMessage.includes("timeout")
+          ? "TIMEOUT"
+          : errorMessage.includes("ECONNREFUSED") || errorMessage.includes("unreachable")
+            ? "CONNECTION_REFUSED"
+            : errorMessage.includes("401") || errorMessage.includes("API key")
+              ? "AUTH_ERROR"
+              : errorMessage.includes("match_aoma_vectors")
+                ? "SUPABASE_FUNCTION_MISSING"
+                : "UNKNOWN";
+
+        // Log comprehensive error details server-side
         console.error("❌ AOMA query error:", {
+          errorType,
           error: errorMessage,
           stack: error instanceof Error ? error.stack : undefined,
           query: queryString.substring(0, 100),
+          durationMs: errorDuration,
+          railwayDuration: railwayEndTime ? railwayEndTime - railwayStartTime : "N/A",
+          supabaseDuration: supabaseEndTime ? supabaseEndTime - supabaseStartTime : "N/A",
           timestamp: new Date().toISOString(),
         });
 
@@ -494,22 +537,27 @@ export async function POST(req: Request) {
     const enhancedSystemPrompt = aomaContext.trim()
       ? `${systemPrompt || "You are SIAM, an AI assistant for Sony Music with access to AOMA knowledge."}
 
-**AOMA KNOWLEDGE CONTEXT:**
+**CRITICAL: AOMA KNOWLEDGE CONTEXT PROVIDED BELOW**
 ${aomaContext}
 
-**RESPONSE GUIDELINES:**
-1. **Primary source**: Use the AOMA context above for specific, detailed answers about AOMA features and workflows
-2. **Cite sources**: When using context, indicate it's from AOMA documentation
-3. **Visual context**: When screenshots are available (indicated by 📸 Screenshot: paths), mention that visual references are available and reference specific UI elements shown in them
-4. **Fallback knowledge**: If context doesn't cover the question, you can provide general helpful information about AOMA based on common enterprise asset management practices
-5. **Be honest**: If you're unsure about specific Sony Music/AOMA details, acknowledge it
-6. **No fabrication**: Don't make up specific dates, numbers, UI details, or features that aren't in the context
+**MANDATORY RESPONSE PROTOCOL:**
+1. ⚠️ **STOP AND READ THE CONTEXT ABOVE FIRST** - The AOMA knowledge context contains the authoritative information you MUST use
+2. **ONLY answer from the context** - If the answer is in the context above, use ONLY that information
+3. **If context is insufficient** - Explicitly state: "The AOMA documentation doesn't cover this specific question. I can only answer based on the provided knowledge base."
+4. **NEVER fabricate** - Do not make up workflow steps, feature lists, UI details, or any other specifics not in the context
+5. **No general knowledge fallback** - Do not use your training data about asset management systems - ONLY use the provided context
 
-**ANTI-HALLUCINATION RULES:**
-- DON'T fabricate specific Sony Music policies or AOMA features
-- DON'T make up URLs, email addresses, or contact information
-- DO provide helpful general guidance when specific context is unavailable
-- DO suggest contacting matt@mattcarpenter.com if the question requires internal Sony Music knowledge`
+**FORBIDDEN BEHAVIORS:**
+❌ Creating detailed workflow steps not in the context
+❌ Making up AOMA feature names or UI elements
+❌ Providing general "best practices" instead of context-based answers
+❌ Claiming knowledge about AOMA features without citing the context
+
+**REQUIRED BEHAVIOR:**
+✅ Base your ENTIRE answer on the context above
+✅ If the context is incomplete, say so explicitly
+✅ Reference specific parts of the context in your answer
+✅ If you're unsure, say: "The provided documentation doesn't cover this"`
       : `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
 
 **CURRENT STATUS:** AOMA knowledge base connection is unavailable.
@@ -538,6 +586,13 @@ ${aomaContext}
     console.log(`💬 Messages: ${openAIMessages.length} messages`);
     console.log(`📚 AOMA Context: ${hasAomaContent ? `${aomaContext.length} chars` : "NONE"}`);
     console.log(`🎯 Connection Status: ${aomaConnectionStatus}`);
+
+    // Log context preview for debugging hallucination issues
+    if (hasAomaContent && process.env.NODE_ENV === "development") {
+      console.log("📄 AOMA Context Preview (first 500 chars):");
+      console.log(aomaContext.substring(0, 500));
+      console.log("...");
+    }
 
     // Use Vercel AI SDK streamText for proper useChat hook compatibility
     console.log("⏳ Calling AI SDK streamText...");

@@ -190,17 +190,17 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case "knowledge":
-        return <Database className="w-4 h-4" />;
+        return <Database cclassName="w-4 h-4" />;
       case "analytics":
-        return <Activity className="w-4 h-4" />;
+        return <Activity cclassName="w-4 h-4" />;
       case "integration":
-        return <Search className="w-4 h-4" />;
+        return <Search cclassName="w-4 h-4" />;
       case "observability":
-        return <Eye className="w-4 h-4" />;
+        return <Eye cclassName="w-4 h-4" />;
       case "system":
-        return <Cpu className="w-4 h-4" />;
+        return <Cpu cclassName="w-4 h-4" />;
       default:
-        return <Zap className="w-4 h-4" />;
+        return <Zap cclassName="w-4 h-4" />;
     }
   };
 
@@ -219,34 +219,34 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
       if (features.length === 0) return null;
 
       return (
-        <div key={category} className="mb-6">
-          <h5 className="text-sm font-medium text-gray-300 mb-4 flex items-center gap-2">
+        <div key={category} cclassName="mb-6">
+          <h5 cclassName="text-sm font-medium text-gray-300 mb-4 flex items-center gap-2">
             {getCategoryIcon(category)}
             {category.charAt(0).toUpperCase() + category.slice(1)} ({features.length})
           </h5>
-          <div className="grid grid-cols-1 gap-2">
+          <div cclassName="grid grid-cols-1 gap-2">
             {features.map((feature) => (
               <div
                 key={feature.toolName}
-                className={`p-4 rounded border ${
+                cclassName={`p-4 rounded border ${
                   feature.isAdvanced
                     ? "bg-yellow-900/20 border-yellow-500/30"
                     : "bg-gray-800/30 border-gray-700"
                 }`}
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <code className="text-xs font-mono text-blue-300 bg-gray-800 px-2 py-2 rounded">
+                <div cclassName="flex items-start justify-between">
+                  <div cclassName="flex-1 min-w-0">
+                    <div cclassName="flex items-center gap-2">
+                      <code cclassName="text-xs font-mono text-blue-300 bg-gray-800 px-2 py-2 rounded">
                         {feature.toolName}
                       </code>
                       {feature.isAdvanced && (
-                        <span className="text-xs bg-yellow-600/20 text-yellow-300 px-2 py-2 rounded border border-yellow-500/30">
+                        <span cclassName="text-xs bg-yellow-600/20 text-yellow-300 px-2 py-2 rounded border border-yellow-500/30">
                           Advanced
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-gray-400 mt-2 line-clamp-2">{feature.description}</p>
+                    <p cclassName="text-xs text-gray-400 mt-2 line-clamp-2">{feature.description}</p>
                   </div>
                 </div>
               </div>
@@ -262,27 +262,27 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
   const serverStatus = getServerStatus();
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="mac-title text-lg font-bold text-blue-600 font-mono">MCP Settings</h3>
-        <div className="flex items-center gap-2 text-sm font-mono">
-          <span className="text-gray-300">Status:</span>
-          <span className={serverStatus.color}>{serverStatus.text}</span>
+    <div cclassName="space-y-6">
+      <div cclassName="flex items-center justify-between">
+        <h3 cclassName="mac-title text-lg font-bold text-blue-600 font-mono">MCP Settings</h3>
+        <div cclassName="flex items-center gap-2 text-sm font-mono">
+          <span cclassName="text-gray-300">Status:</span>
+          <span cclassName={serverStatus.color}>{serverStatus.text}</span>
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div cclassName="space-y-6">
         {/* Enable Toggle */}
-        <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+        <div cclassName="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg border border-gray-700">
           <div>
-            <label className="text-sm font-medium text-gray-300">Enable MCP</label>
-            <p className="text-xs text-gray-400 mt-2">
+            <label cclassName="text-sm font-medium text-gray-300">Enable MCP</label>
+            <p cclassName="text-xs text-gray-400 mt-2">
               Enable Model Context Protocol integration for enhanced AI capabilities
             </p>
           </div>
           <button
             onClick={() => handleFieldChange("enabled", !formData.enabled)}
-            className={`flex items-center gap-2 px-4 py-2 rounded font-mono text-sm transition-colors ${
+            cclassName={`flex items-center gap-2 px-4 py-2 rounded font-mono text-sm transition-colors ${
               formData.enabled
                 ? "bg-blue-400/20 border border-blue-500 text-blue-300"
                 : "bg-gray-600/20 border border-gray-500 text-gray-300"
@@ -291,12 +291,12 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
           >
             {formData.enabled ? (
               <>
-                <ToggleRight className="w-4 h-4" />
+                <ToggleRight cclassName="w-4 h-4" />
                 Enabled
               </>
             ) : (
               <>
-                <ToggleLeft className="w-4 h-4" />
+                <ToggleLeft cclassName="w-4 h-4" />
                 Disabled
               </>
             )}
@@ -304,11 +304,11 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
         </div>
 
         {/* Form Fields */}
-        <div className="grid grid-cols-1 gap-6">
+        <div cclassName="grid grid-cols-1 gap-6">
           {/* Server URL */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              <Server className="w-4 h-4 inline mr-2" />
+            <label cclassName="block text-sm font-medium text-gray-300 mb-2">
+              <Server cclassName="w-4 h-4 inline mr-2" />
               Server URL
             </label>
             <input
@@ -317,7 +317,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
               onChange={(e) => handleFieldChange("serverUrl", e.target.value)}
               placeholder="https://your-mcp-server.com"
               disabled={!formData.enabled}
-              className={`w-full bg-gray-700 border rounded px-4 py-2 text-white focus:outline-none font-mono text-sm ${
+              cclassName={`w-full bg-gray-700 border rounded px-4 py-2 text-white focus:outline-none font-mono text-sm ${
                 validationErrors.serverUrl
                   ? "border-red-500 focus:border-red-400"
                   : "border-gray-600 focus:border-blue-600"
@@ -325,8 +325,8 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
               data-testid="mcp-server-url"
             />
             {validationErrors.serverUrl && (
-              <p className="text-red-400 text-xs mt-2 flex items-center gap-2">
-                <AlertCircle className="w-3 h-3" />
+              <p cclassName="text-red-400 text-xs mt-2 flex items-center gap-2">
+                <AlertCircle cclassName="w-3 h-3" />
                 {validationErrors.serverUrl}
               </p>
             )}
@@ -334,10 +334,10 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
           {/* API Key */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              <Key className="w-4 h-4 inline mr-2" />
+            <label cclassName="block text-sm font-medium text-gray-300 mb-2">
+              <Key cclassName="w-4 h-4 inline mr-2" />
               API Key
-              <span className="text-gray-400 font-normal ml-2">(optional)</span>
+              <span cclassName="text-gray-400 font-normal ml-2">(optional)</span>
             </label>
             <input
               type="password"
@@ -345,7 +345,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
               onChange={(e) => handleFieldChange("apiKey", e.target.value)}
               placeholder="Enter API key if required"
               disabled={!formData.enabled}
-              className={`w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none font-mono text-sm ${
+              cclassName={`w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none font-mono text-sm ${
                 !formData.enabled ? "opacity-50 cursor-not-allowed" : ""
               }`}
               data-testid="mcp-api-key"
@@ -354,8 +354,8 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
           {/* Timeout */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              <Clock className="w-4 h-4 inline mr-2" />
+            <label cclassName="block text-sm font-medium text-gray-300 mb-2">
+              <Clock cclassName="w-4 h-4 inline mr-2" />
               Timeout (ms)
             </label>
             <input
@@ -366,7 +366,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
               value={formData.timeout}
               onChange={(e) => handleFieldChange("timeout", parseInt(e.target.value) || 5000)}
               disabled={!formData.enabled}
-              className={`w-full bg-gray-700 border rounded px-4 py-2 text-white focus:outline-none font-mono text-sm ${
+              cclassName={`w-full bg-gray-700 border rounded px-4 py-2 text-white focus:outline-none font-mono text-sm ${
                 validationErrors.timeout
                   ? "border-red-500 focus:border-red-400"
                   : "border-gray-600 focus:border-blue-600"
@@ -374,12 +374,12 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
               data-testid="mcp-timeout"
             />
             {validationErrors.timeout && (
-              <p className="text-red-400 text-xs mt-2 flex items-center gap-2">
-                <AlertCircle className="w-3 h-3" />
+              <p cclassName="text-red-400 text-xs mt-2 flex items-center gap-2">
+                <AlertCircle cclassName="w-3 h-3" />
                 {validationErrors.timeout}
               </p>
             )}
-            <p className="text-xs text-gray-400 mt-2">
+            <p cclassName="text-xs text-gray-400 mt-2">
               Connection timeout in milliseconds (1000-60000)
             </p>
           </div>
@@ -387,18 +387,18 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
         {/* Server Information */}
         {status?.data?.servers?.[0] && (
-          <div className="p-4 bg-gray-800/30 rounded-lg border border-gray-700">
-            <h4 className="mac-title text-sm font-medium text-gray-300 mb-4">Server Information</h4>
-            <div className="grid grid-cols-2 gap-4 text-sm font-mono">
+          <div cclassName="p-4 bg-gray-800/30 rounded-lg border border-gray-700">
+            <h4 cclassName="mac-title text-sm font-medium text-gray-300 mb-4">Server Information</h4>
+            <div cclassName="grid grid-cols-2 gap-4 text-sm font-mono">
               <div>
-                <span className="text-gray-400">Name:</span>
-                <span className="text-blue-300 ml-2">
+                <span cclassName="text-gray-400">Name:</span>
+                <span cclassName="text-blue-300 ml-2">
                   {status.data.servers[0].name || "Unknown"}
                 </span>
               </div>
               <div>
-                <span className="text-gray-400">Uptime:</span>
-                <span className="text-blue-300 ml-2">
+                <span cclassName="text-gray-400">Uptime:</span>
+                <span cclassName="text-blue-300 ml-2">
                   {status.data.servers[0].uptime
                     ? `${Math.floor(status.data.servers[0].uptime / 1000)}s`
                     : "N/A"}
@@ -407,14 +407,14 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
               {status.data.servers[0].statistics && (
                 <>
                   <div>
-                    <span className="text-gray-400">Requests:</span>
-                    <span className="text-blue-300 ml-2">
+                    <span cclassName="text-gray-400">Requests:</span>
+                    <span cclassName="text-blue-300 ml-2">
                       {status.data.servers[0].statistics.requestCount}
                     </span>
                   </div>
                   <div>
-                    <span className="text-gray-400">Errors:</span>
-                    <span className="text-blue-300 ml-2">
+                    <span cclassName="text-gray-400">Errors:</span>
+                    <span cclassName="text-blue-300 ml-2">
                       {status.data.servers[0].statistics.errorCount}
                     </span>
                   </div>
@@ -426,39 +426,39 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
         {/* MCP Capabilities & Features */}
         {capabilities && formData.enabled && (
-          <div className="p-4 bg-gray-800/30 rounded-lg border border-gray-700">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="mac-title text-sm font-medium text-gray-300">
+          <div cclassName="p-4 bg-gray-800/30 rounded-lg border border-gray-700">
+            <div cclassName="flex items-center justify-between mb-4">
+              <h4 cclassName="mac-title text-sm font-medium text-gray-300">
                 AOMA Mesh MCP Capabilities
               </h4>
               <button
                 onClick={() => setShowFeatures(!showFeatures)}
-                className="text-xs text-blue-600 hover:text-blue-300 font-mono"
+                cclassName="text-xs text-blue-600 hover:text-blue-300 font-mono"
               >
                 {showFeatures ? "Hide Features" : `Show ${capabilities.totalTools} Features`}
               </button>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 text-sm font-mono mb-4">
+            <div cclassName="grid grid-cols-3 gap-4 text-sm font-mono mb-4">
               <div>
-                <span className="text-gray-400">Version:</span>
-                <span className="text-blue-300 ml-2">{capabilities.serverVersion}</span>
+                <span cclassName="text-gray-400">Version:</span>
+                <span cclassName="text-blue-300 ml-2">{capabilities.serverVersion}</span>
               </div>
               <div>
-                <span className="text-gray-400">Tools:</span>
-                <span className="text-blue-300 ml-2">{capabilities.totalTools}</span>
+                <span cclassName="text-gray-400">Tools:</span>
+                <span cclassName="text-blue-300 ml-2">{capabilities.totalTools}</span>
               </div>
               <div>
-                <span className="text-gray-400">Advanced:</span>
-                <span className="text-yellow-300 ml-2">
+                <span cclassName="text-gray-400">Advanced:</span>
+                <span cclassName="text-yellow-300 ml-2">
                   {capabilities.features.filter((f) => f.isAdvanced).length}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-xs">
+            <div cclassName="flex items-center gap-2 text-xs">
               <div
-                className={`w-2 h-2 rounded-full ${
+                cclassName={`w-2 h-2 rounded-full ${
                   capabilities.connectionStatus === "connected"
                     ? "bg-green-400"
                     : capabilities.connectionStatus === "error"
@@ -466,42 +466,42 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
                       : "bg-yellow-400"
                 }`}
               />
-              <span className="text-gray-400">
+              <span cclassName="text-gray-400">
                 {capabilities.connectionStatus === "connected"
                   ? "All features available"
                   : capabilities.connectionStatus === "error"
                     ? "Connection error"
                     : "Connecting..."}
               </span>
-              <span className="text-gray-500 ml-auto">
+              <span cclassName="text-gray-500 ml-auto">
                 Updated: {new Date(capabilities.lastUpdated).toLocaleTimeString()}
               </span>
             </div>
 
             {showFeatures && (
-              <div className="mt-6 border-t border-gray-700 pt-4">
-                <div className="max-h-96 overflow-y-auto">{renderFeaturesByCategory()}</div>
+              <div cclassName="mt-6 border-t border-gray-700 pt-4">
+                <div cclassName="max-h-96 overflow-y-auto">{renderFeaturesByCategory()}</div>
               </div>
             )}
           </div>
         )}
 
         {/* Save Button */}
-        <div className="flex justify-end pt-4 border-t border-gray-700">
+        <div cclassName="flex justify-end pt-4 border-t border-gray-700">
           <button
             onClick={handleSave}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-400/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-400/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            cclassName="flex items-center gap-2 px-4 py-2 bg-blue-400/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-400/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             data-testid="mcp-save-button"
           >
             {isLoading ? (
               <>
-                <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                <div cclassName="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
                 Saving...
               </>
             ) : (
               <>
-                <Save className="w-4 h-4" />
+                <Save cclassName="w-4 h-4" />
                 Save Settings
               </>
             )}

@@ -7,11 +7,11 @@ import { ChevronDownIcon, CheckIcon, LoaderIcon, XCircleIcon, ClockIcon } from "
 
 export type TaskItemFileProps = ComponentProps<"div">;
 
-export const TaskItemFile = ({ children, className, ...props }: TaskItemFileProps) => (
+export const TaskItemFile = ({ children, cclassName, ...props }: TaskItemFileProps) => (
   <div
-    className={cn(
+    cclassName={cn(
       "text-xs inline-flex items-center gap-2 px-2.5 py-0.5 text-foreground border bg-secondary rounded-md",
-      className
+      cclassName
     )}
     {...props}
   >
@@ -21,20 +21,20 @@ export const TaskItemFile = ({ children, className, ...props }: TaskItemFileProp
 
 export type TaskItemProps = ComponentProps<"div">;
 
-export const TaskItem = ({ children, className, ...props }: TaskItemProps) => (
-  <div className={cn("text-sm text-muted-foreground", className)} {...props}>
+export const TaskItem = ({ children, cclassName, ...props }: TaskItemProps) => (
+  <div cclassName={cn("text-sm text-muted-foreground", cclassName)} {...props}>
     {children}
   </div>
 );
 
 export type TaskProps = ComponentProps<typeof Collapsible>;
 
-export const Task = ({ defaultOpen = true, className, ...props }: TaskProps) => (
+export const Task = ({ defaultOpen = true, cclassName, ...props }: TaskProps) => (
   <Collapsible
     defaultOpen={defaultOpen}
-    className={cn(
+    cclassName={cn(
       "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2",
-      className
+      cclassName
     )}
     {...props}
   />
@@ -47,7 +47,7 @@ export type TaskTriggerProps = ComponentProps<typeof CollapsibleTrigger> & {
 
 export const TaskTrigger = ({
   children,
-  className,
+  cclassName,
   title,
   status = "pending",
   ...props
@@ -55,13 +55,13 @@ export const TaskTrigger = ({
   const getStatusIcon = () => {
     switch (status) {
       case "completed":
-        return <CheckIcon className="size-4 text-green-500" />;
+        return <CheckIcon cclassName="size-4 text-green-500" />;
       case "in_progress":
-        return <LoaderIcon className="size-4 text-blue-500 animate-spin" />;
+        return <LoaderIcon cclassName="size-4 text-blue-500 animate-spin" />;
       case "error":
-        return <XCircleIcon className="size-4 text-red-500" />;
+        return <XCircleIcon cclassName="size-4 text-red-500" />;
       default:
-        return <ClockIcon className="size-4 text-muted-foreground" />;
+        return <ClockIcon cclassName="size-4 text-muted-foreground" />;
     }
   };
 
@@ -79,17 +79,17 @@ export const TaskTrigger = ({
   };
 
   return (
-    <CollapsibleTrigger asChild className={cn("group", className)} {...props}>
+    <CollapsibleTrigger asChild cclassName={cn("group", cclassName)} {...props}>
       {children ?? (
         <div
-          className={cn(
+          cclassName={cn(
             "flex items-center gap-2 cursor-pointer hover:text-foreground transition-colors",
             getStatusColor()
           )}
         >
           {getStatusIcon()}
-          <p className="text-sm font-medium">{title}</p>
-          <ChevronDownIcon className="size-4 ml-auto transition-transform group-data-[state=open]:rotate-180" />
+          <p cclassName="text-sm font-medium">{title}</p>
+          <ChevronDownIcon cclassName="size-4 ml-auto transition-transform group-data-[state=open]:rotate-180" />
         </div>
       )}
     </CollapsibleTrigger>
@@ -98,14 +98,14 @@ export const TaskTrigger = ({
 
 export type TaskContentProps = ComponentProps<typeof CollapsibleContent>;
 
-export const TaskContent = ({ children, className, ...props }: TaskContentProps) => (
+export const TaskContent = ({ children, cclassName, ...props }: TaskContentProps) => (
   <CollapsibleContent
-    className={cn(
+    cclassName={cn(
       "text-popover-foreground outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2",
-      className
+      cclassName
     )}
     {...props}
   >
-    <div className="border-l-2 border-muted pl-4 mt-4 space-y-2">{children}</div>
+    <div cclassName="border-l-2 border-muted pl-4 mt-4 space-y-2">{children}</div>
   </CollapsibleContent>
 );

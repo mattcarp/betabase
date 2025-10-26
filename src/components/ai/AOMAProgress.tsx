@@ -25,36 +25,36 @@ import type { AOMAProgressUpdate } from "@/services/aomaProgressStream";
 
 interface AOMAProgressProps {
   updates: AOMAProgressUpdate[];
-  className?: string;
+  cclassName?: string;
 }
 
-export function AOMAProgress({ updates, className }: AOMAProgressProps) {
+export function AOMAProgress({ updates, cclassName }: AOMAProgressProps) {
   const getIcon = (service?: string) => {
-    if (!service) return <Loader2 className="h-4 w-4 animate-spin" />;
+    if (!service) return <Loader2 cclassName="h-4 w-4 animate-spin" />;
 
     const iconMap: Record<string, React.ReactNode> = {
-      query_aoma_knowledge: <Database className="h-4 w-4" />,
-      search_jira_tickets: <Ticket className="h-4 w-4" />,
-      search_git_commits: <GitBranch className="h-4 w-4" />,
-      search_outlook_emails: <Mail className="h-4 w-4" />,
-      get_system_health: <Heart className="h-4 w-4" />,
-      orchestrated: <Zap className="h-4 w-4" />,
+      query_aoma_knowledge: <Database cclassName="h-4 w-4" />,
+      search_jira_tickets: <Ticket cclassName="h-4 w-4" />,
+      search_git_commits: <GitBranch cclassName="h-4 w-4" />,
+      search_outlook_emails: <Mail cclassName="h-4 w-4" />,
+      get_system_health: <Heart cclassName="h-4 w-4" />,
+      orchestrated: <Zap cclassName="h-4 w-4" />,
     };
 
-    return iconMap[service] || <Loader2 className="h-4 w-4 animate-spin" />;
+    return iconMap[service] || <Loader2 cclassName="h-4 w-4 animate-spin" />;
   };
 
   const getStatusIcon = (type: string) => {
     switch (type) {
       case "service_complete":
       case "complete":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
+        return <CheckCircle cclassName="h-4 w-4 text-green-500" />;
       case "service_error":
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
+        return <AlertCircle cclassName="h-4 w-4 text-red-500" />;
       case "cache_hit":
-        return <Zap className="h-4 w-4 text-yellow-500" />;
+        return <Zap cclassName="h-4 w-4 text-yellow-500" />;
       default:
-        return <Clock className="h-4 w-4 text-blue-500 animate-pulse" />;
+        return <Clock cclassName="h-4 w-4 text-blue-500 animate-pulse" />;
     }
   };
 
@@ -74,12 +74,12 @@ export function AOMAProgress({ updates, className }: AOMAProgressProps) {
 
   return (
     <div
-      className={cn(
+      cclassName={cn(
         "space-y-2 p-4 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800",
-        className
+        cclassName
       )}
     >
-      <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-4">
+      <div cclassName="text-xs font-medium text-gray-600 dark:text-gray-400 mb-4">
         AOMA Query Progress
       </div>
 
@@ -91,25 +91,25 @@ export function AOMAProgress({ updates, className }: AOMAProgressProps) {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
             transition={{ duration: 0.2 }}
-            className={cn("flex items-start gap-2 text-sm", getStatusColor(update.type))}
+            cclassName={cn("flex items-start gap-2 text-sm", getStatusColor(update.type))}
           >
-            <span className="mt-0.5 flex-shrink-0">{getStatusIcon(update.type)}</span>
+            <span cclassName="mt-0.5 flex-shrink-0">{getStatusIcon(update.type)}</span>
 
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                {update.service && <span className="flex-shrink-0">{getIcon(update.service)}</span>}
-                <span className="truncate">{update.message}</span>
+            <div cclassName="flex-1 min-w-0">
+              <div cclassName="flex items-center gap-2">
+                {update.service && <span cclassName="flex-shrink-0">{getIcon(update.service)}</span>}
+                <span cclassName="truncate">{update.message}</span>
               </div>
 
               {update.resultCount !== undefined && update.resultCount > 0 && (
-                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                <div cclassName="text-xs text-gray-500 dark:text-gray-400 mt-2">
                   {update.resultCount} result{update.resultCount !== 1 ? "s" : ""} found
                 </div>
               )}
             </div>
 
             {update.duration && (
-              <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+              <span cclassName="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
                 {formatDuration(update.duration)}
               </span>
             )}
@@ -118,7 +118,7 @@ export function AOMAProgress({ updates, className }: AOMAProgressProps) {
       </AnimatePresence>
 
       {updates.length === 0 && (
-        <div className="text-sm text-gray-500 dark:text-gray-400 italic">Waiting for query...</div>
+        <div cclassName="text-sm text-gray-500 dark:text-gray-400 italic">Waiting for query...</div>
       )}
     </div>
   );

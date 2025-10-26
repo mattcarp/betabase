@@ -10,7 +10,7 @@ const ErrorTest: React.FC = () => {
   return (
     <button
       onClick={() => setThrowError(true)}
-      className="m-4 p-2 bg-red-500 text-white rounded"
+      cclassName="m-4 p-2 bg-red-500 text-white rounded"
       data-testid="error-test-button"
     >
       Throw Test Error

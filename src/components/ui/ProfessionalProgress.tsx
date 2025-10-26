@@ -17,7 +17,7 @@ interface ProfessionalProgressProps {
   variant?: "default" | "success" | "warning" | "error";
   size?: "sm" | "md" | "lg";
   showValue?: boolean;
-  className?: string;
+  cclassName?: string;
 }
 
 const variantStyles = {
@@ -68,24 +68,24 @@ export function ProfessionalProgress({
   variant = "default",
   size = "md",
   showValue = true,
-  className,
+  cclassName,
 }: ProfessionalProgressProps) {
   const clampedValue = Math.min(100, Math.max(0, value));
   const styles = variantStyles[variant];
   const sizes = sizeStyles[size];
 
   return (
-    <div className={cn("w-full", sizes.spacing, className)}>
+    <div cclassName={cn("w-full", sizes.spacing, cclassName)}>
       {/* Header */}
       {(label || showValue) && (
-        <div className="flex items-center justify-between">
+        <div cclassName="flex items-center justify-between">
           {label && (
-            <span className={cn(sizes.text, "font-medium text-gray-700 dark:text-gray-300")}>
+            <span cclassName={cn(sizes.text, "font-medium text-gray-700 dark:text-gray-300")}>
               {label}
             </span>
           )}
           {showValue && (
-            <span className={cn(sizes.text, "font-mono", styles.text)}>
+            <span cclassName={cn(sizes.text, "font-mono", styles.text)}>
               {Math.round(clampedValue)}%
             </span>
           )}
@@ -93,16 +93,16 @@ export function ProfessionalProgress({
       )}
 
       {/* Progress Bar */}
-      <div className={cn("w-full rounded-full overflow-hidden", styles.track, sizes.height)}>
+      <div cclassName={cn("w-full rounded-full overflow-hidden", styles.track, sizes.height)}>
         <div
-          className={cn("h-full transition-all duration-500 ease-out rounded-full", styles.bar)}
+          cclassName={cn("h-full transition-all duration-500 ease-out rounded-full", styles.bar)}
           style={{ width: `${clampedValue}%` }}
         />
       </div>
 
       {/* Sub Label */}
       {subLabel && (
-        <p className={cn(sizes.text, "text-gray-500 dark:text-gray-400 mt-2")}>{subLabel}</p>
+        <p cclassName={cn(sizes.text, "text-gray-500 dark:text-gray-400 mt-2")}>{subLabel}</p>
       )}
     </div>
   );
@@ -118,7 +118,7 @@ export function CircularProfessionalProgress({
   size = 80,
   strokeWidth = 6,
   variant = "default",
-  className,
+  cclassName,
   animated = true,
   showValue = true,
   glowEffect = false, // Keep for compatibility but ignore
@@ -129,7 +129,7 @@ export function CircularProfessionalProgress({
   size?: number;
   strokeWidth?: number;
   variant?: "default" | "success" | "warning" | "error";
-  className?: string;
+  cclassName?: string;
   animated?: boolean;
   showValue?: boolean;
   glowEffect?: boolean;
@@ -165,8 +165,8 @@ export function CircularProfessionalProgress({
   };
 
   return (
-    <div className={cn("relative inline-flex", className)} style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="transform -rotate-90">
+    <div cclassName={cn("relative inline-flex", cclassName)} style={{ width: size, height: size }}>
+      <svg width={size} height={size} cclassName="transform -rotate-90">
         {/* Background circle */}
         <circle
           cx={size / 2}
@@ -175,7 +175,7 @@ export function CircularProfessionalProgress({
           stroke="currentColor"
           strokeWidth={strokeWidth}
           fill="transparent"
-          className="text-gray-200 dark:text-gray-700"
+          cclassName="text-gray-200 dark:text-gray-700"
         />
 
         {/* Progress circle */}
@@ -189,18 +189,18 @@ export function CircularProfessionalProgress({
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
-          className={cn(animated ? "transition-all duration-500 ease-out" : "")}
+          cclassName={cn(animated ? "transition-all duration-500 ease-out" : "")}
         />
       </svg>
 
       {/* Center content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
+      <div cclassName="absolute inset-0 flex flex-col items-center justify-center">
         {showValue && (
-          <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <span cclassName="text-lg font-semibold text-gray-900 dark:text-gray-100">
             {Math.round(clampedValue)}%
           </span>
         )}
-        {label && <span className="text-xs text-gray-500 dark:text-gray-400">{label}</span>}
+        {label && <span cclassName="text-xs text-gray-500 dark:text-gray-400">{label}</span>}
       </div>
     </div>
   );
@@ -217,22 +217,22 @@ export function StepProgress({
   currentStep,
   totalSteps,
   labels,
-  className,
+  cclassName,
 }: {
   currentStep: number;
   totalSteps: number;
   labels?: string[];
-  className?: string;
+  cclassName?: string;
 }) {
   return (
-    <div className={cn("w-full", className)}>
-      <div className="flex items-center justify-between mb-2">
+    <div cclassName={cn("w-full", cclassName)}>
+      <div cclassName="flex items-center justify-between mb-2">
         {Array.from({ length: totalSteps }, (_, i) => (
-          <div key={i} className="flex flex-col items-center flex-1">
-            <div className="flex items-center w-full">
+          <div key={i} cclassName="flex flex-col items-center flex-1">
+            <div cclassName="flex items-center w-full">
               {i > 0 && (
                 <div
-                  className={cn(
+                  cclassName={cn(
                     "flex-1 h-0.5",
                     i <= currentStep - 1
                       ? "bg-blue-600 dark:bg-blue-500"
@@ -241,7 +241,7 @@ export function StepProgress({
                 />
               )}
               <div
-                className={cn(
+                cclassName={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold",
                   i < currentStep
                     ? "bg-blue-600 dark:bg-blue-500 text-white"
@@ -250,11 +250,11 @@ export function StepProgress({
                       : "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
                 )}
               >
-                {i < currentStep ? <Check className="w-4 h-4" /> : i + 1}
+                {i < currentStep ? <Check cclassName="w-4 h-4" /> : i + 1}
               </div>
               {i < totalSteps - 1 && (
                 <div
-                  className={cn(
+                  cclassName={cn(
                     "flex-1 h-0.5",
                     i < currentStep - 1
                       ? "bg-blue-600 dark:bg-blue-500"
@@ -264,7 +264,7 @@ export function StepProgress({
               )}
             </div>
             {labels?.[i] && (
-              <span className="text-xs text-gray-500 dark:text-gray-400 mt-2">{labels[i]}</span>
+              <span cclassName="text-xs text-gray-500 dark:text-gray-400 mt-2">{labels[i]}</span>
             )}
           </div>
         ))}

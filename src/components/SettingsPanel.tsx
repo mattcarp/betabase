@@ -28,7 +28,7 @@ interface SettingsPanelProps {
 interface TabDefinition {
   id: string;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ cclassName?: string }>;
 }
 
 const tabs: TabDefinition[] = [
@@ -110,42 +110,42 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      cclassName="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
       data-testid="settings-panel"
     >
-      <div className="bg-gray-800 border border-blue-600 rounded-lg w-full max-w-4xl h-[80vh] flex flex-col">
+      <div cclassName="bg-gray-800 border border-blue-600 rounded-lg w-full max-w-4xl h-[80vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <div className="flex items-center gap-2">
-            <Settings className="w-5 h-5 text-blue-600" />
+        <div cclassName="flex items-center justify-between p-4 border-b border-gray-700">
+          <div cclassName="flex items-center gap-2">
+            <Settings cclassName="w-5 h-5 text-blue-600" />
             <h2
-              className="mac-heading"
-              className="mac-heading text-xl font-bold text-blue-600 font-mono"
+              cclassName="mac-heading"
+              cclassName="mac-heading text-xl font-bold text-blue-600 font-mono"
             >
               Settings
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            cclassName="text-gray-400 hover:text-white transition-colors"
             data-testid="settings-close"
           >
-            <X className="w-5 h-5" />
+            <X cclassName="w-5 h-5" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 flex min-h-0">
+        <div cclassName="flex-1 flex min-h-0">
           {/* Sidebar */}
-          <div className="w-48 border-r border-gray-700 p-4">
-            <nav className="space-y-1">
+          <div cclassName="w-48 border-r border-gray-700 p-4">
+            <nav cclassName="space-y-1">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={cn(
+                    cclassName={cn(
                       "w-full flex items-center gap-4 px-4 py-2 rounded font-mono text-sm transition-colors",
                       activeTab === tab.id
                         ? "bg-blue-600/20 text-blue-300 border border-blue-600/30"
@@ -153,7 +153,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     )}
                     data-testid={`settings-tab-${tab.id}`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon cclassName="w-4 h-4" />
                     {tab.label}
                   </button>
                 );
@@ -162,7 +162,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
           </div>
 
           {/* Settings Content */}
-          <div className="flex-1 p-6 overflow-y-auto">
+          <div cclassName="flex-1 p-6 overflow-y-auto">
             {activeTab === "appearance" && (
               <AppearanceSettings settings={localSettings} updateSetting={updateSetting} />
             )}
@@ -195,43 +195,43 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-700 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div cclassName="p-4 border-t border-gray-700 flex items-center justify-between">
+          <div cclassName="flex items-center gap-2">
             <button
               onClick={exportSettings}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-600/30 transition-colors"
+              cclassName="flex items-center gap-2 px-4 py-2 bg-blue-600/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-600/30 transition-colors"
               data-testid="settings-export"
             >
-              <Download className="w-4 h-4" />
+              <Download cclassName="w-4 h-4" />
               Export
             </button>
-            <label className="flex items-center gap-2 px-4 py-2 bg-green-600/20 border border-green-500 text-green-300 rounded font-mono text-sm hover:bg-green-600/30 transition-colors cursor-pointer">
-              <Upload className="w-4 h-4" />
+            <label cclassName="flex items-center gap-2 px-4 py-2 bg-green-600/20 border border-green-500 text-green-300 rounded font-mono text-sm hover:bg-green-600/30 transition-colors cursor-pointer">
+              <Upload cclassName="w-4 h-4" />
               Import
               <input
                 type="file"
                 accept=".json"
                 onChange={handleImport}
-                className="hidden"
+                cclassName="hidden"
                 data-testid="settings-import-input"
               />
             </label>
           </div>
-          <div className="flex items-center gap-2">
+          <div cclassName="flex items-center gap-2">
             <button
               onClick={handleReset}
-              className="flex items-center gap-2 px-4 py-2 bg-yellow-600/20 border border-yellow-500 text-yellow-300 rounded font-mono text-sm hover:bg-yellow-600/30 transition-colors"
+              cclassName="flex items-center gap-2 px-4 py-2 bg-yellow-600/20 border border-yellow-500 text-yellow-300 rounded font-mono text-sm hover:bg-yellow-600/30 transition-colors"
               data-testid="settings-reset"
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw cclassName="w-4 h-4" />
               Reset to Defaults
             </button>
             <button
               onClick={handleSave}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-400/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-400/30 transition-colors"
+              cclassName="flex items-center gap-2 px-4 py-2 bg-blue-400/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-400/30 transition-colors"
               data-testid="settings-save"
             >
-              <Save className="w-4 h-4" />
+              <Save cclassName="w-4 h-4" />
               Save Changes
             </button>
           </div>
@@ -263,20 +263,20 @@ function AppearanceSettings({
   };
 
   return (
-    <div className="space-y-6">
-      <h3 className="mac-title">
+    <div cclassName="space-y-6">
+      <h3 cclassName="mac-title">
         Appearance Settings
       </h3>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div cclassName="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Theme</label>
+          <label cclassName="block text-sm font-medium text-gray-300 mb-2">Theme</label>
           <select
             value={settings.theme}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
               updateSetting("theme", e.target.value as SiamSettings["theme"])
             }
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            cclassName="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="theme-select"
           >
             <option value="matrix">Matrix</option>
@@ -287,13 +287,13 @@ function AppearanceSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Color Scheme</label>
+          <label cclassName="block text-sm font-medium text-gray-300 mb-2">Color Scheme</label>
           <select
             value={settings.colorScheme}
             onChange={(e) =>
               updateSetting("colorScheme", e.target.value as SiamSettings["colorScheme"])
             }
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            cclassName="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="colorscheme-select"
           >
             <option value="default">Default</option>
@@ -303,11 +303,11 @@ function AppearanceSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Font Size</label>
+          <label cclassName="block text-sm font-medium text-gray-300 mb-2">Font Size</label>
           <select
             value={settings.fontSize}
             onChange={(e) => updateSetting("fontSize", e.target.value as SiamSettings["fontSize"])}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            cclassName="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="fontsize-select"
           >
             <option value="small">Small</option>
@@ -317,26 +317,26 @@ function AppearanceSettings({
         </div>
       </div>
 
-      <div className="flex items-center">
+      <div cclassName="flex items-center">
         <input
           type="checkbox"
           id="animations"
           checked={settings.animationsEnabled}
           onChange={(e) => updateSetting("animationsEnabled", e.target.checked)}
-          className="mr-2"
+          cclassName="mr-2"
           data-testid="animations-checkbox"
         />
-        <label htmlFor="animations" className="text-gray-300">
+        <label htmlFor="animations" cclassName="text-gray-300">
           Enable animations and transitions
         </label>
       </div>
 
       {/* MAIN TRANSPARENCY SLIDER - This is the primary one */}
-      <div className="flex flex-col gap-2">
-        <label htmlFor="window-opacity" className="font-mono text-sm text-gray-300">
+      <div cclassName="flex flex-col gap-2">
+        <label htmlFor="window-opacity" cclassName="font-mono text-sm text-gray-300">
           🔄 Window Transparency: {settings.windowOpacity}%
         </label>
-        <div className="flex items-center gap-4">
+        <div cclassName="flex items-center gap-4">
           <input
             id="window-opacity"
             type="range"
@@ -345,22 +345,22 @@ function AppearanceSettings({
             step="5"
             value={settings.windowOpacity}
             onChange={(e) => handleOpacityChange(parseInt(e.target.value, 10))}
-            className="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500 slider"
+            cclassName="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500 slider"
             data-testid="transparency-slider"
             style={{
               background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${settings.windowOpacity}%, #374151 ${settings.windowOpacity}%, #374151 100%)`,
             }}
           />
-          <span className="font-mono text-sm text-blue-300 w-12 text-center">
+          <span cclassName="font-mono text-sm text-blue-300 w-12 text-center">
             {settings.windowOpacity}%
           </span>
         </div>
         {isElectron ? (
-          <div className="text-xs text-green-400 font-mono">
+          <div cclassName="text-xs text-green-400 font-mono">
             ✅ Electron detected - Live transparency control enabled
           </div>
         ) : (
-          <div className="text-xs text-yellow-400 font-mono">
+          <div cclassName="text-xs text-yellow-400 font-mono">
             ⚠️ Web mode - Transparency saved for Electron build
           </div>
         )}
@@ -377,14 +377,14 @@ function AudioSettings({
   updateSetting: <K extends keyof SiamSettings>(key: K, value: SiamSettings[K]) => void;
 }) {
   return (
-    <div className="space-y-6">
-      <h3 className="mac-title">
+    <div cclassName="space-y-6">
+      <h3 cclassName="mac-title">
         Audio Settings
       </h3>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div cclassName="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label cclassName="block text-sm font-medium text-gray-300 mb-2">
             Audio Gain: {settings.audioGain}%
           </label>
           <input
@@ -393,37 +393,37 @@ function AudioSettings({
             max="100"
             value={settings.audioGain}
             onChange={(e) => updateSetting("audioGain", parseInt(e.target.value))}
-            className="w-full"
+            cclassName="w-full"
             data-testid="audio-gain-slider"
           />
         </div>
       </div>
 
-      <div className="space-y-3">
-        <div className="flex items-center">
+      <div cclassName="space-y-3">
+        <div cclassName="flex items-center">
           <input
             type="checkbox"
             id="noiseReduction"
             checked={settings.noiseReduction}
             onChange={(e) => updateSetting("noiseReduction", e.target.checked)}
-            className="mr-2"
+            cclassName="mr-2"
             data-testid="noise-reduction-checkbox"
           />
-          <label htmlFor="noiseReduction" className="text-gray-300">
+          <label htmlFor="noiseReduction" cclassName="text-gray-300">
             Enable noise reduction
           </label>
         </div>
 
-        <div className="flex items-center">
+        <div cclassName="flex items-center">
           <input
             type="checkbox"
             id="audioVisualization"
             checked={settings.audioVisualizationEnabled}
             onChange={(e) => updateSetting("audioVisualizationEnabled", e.target.checked)}
-            className="mr-2"
+            cclassName="mr-2"
             data-testid="audio-visualization-checkbox"
           />
-          <label htmlFor="audioVisualization" className="text-gray-300">
+          <label htmlFor="audioVisualization" cclassName="text-gray-300">
             Enable audio visualization
           </label>
         </div>
@@ -440,20 +440,20 @@ function RecordingSettings({
   updateSetting: <K extends keyof SiamSettings>(key: K, value: SiamSettings[K]) => void;
 }) {
   return (
-    <div className="space-y-6">
-      <h3 className="mac-title">
+    <div cclassName="space-y-6">
+      <h3 cclassName="mac-title">
         Recording Settings
       </h3>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div cclassName="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label cclassName="block text-sm font-medium text-gray-300 mb-2">
             Transcription Language
           </label>
           <select
             value={settings.transcriptionLanguage}
             onChange={(e) => updateSetting("transcriptionLanguage", e.target.value)}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            cclassName="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="language-select"
           >
             <option value="en-US">English (US)</option>
@@ -467,7 +467,7 @@ function RecordingSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label cclassName="block text-sm font-medium text-gray-300 mb-2">
             Max Recording Duration (minutes, 0 = unlimited)
           </label>
           <input
@@ -476,37 +476,37 @@ function RecordingSettings({
             max="480"
             value={settings.maxRecordingDuration}
             onChange={(e) => updateSetting("maxRecordingDuration", parseInt(e.target.value))}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            cclassName="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="max-duration-input"
           />
         </div>
       </div>
 
-      <div className="space-y-3">
-        <div className="flex items-center">
+      <div cclassName="space-y-3">
+        <div cclassName="flex items-center">
           <input
             type="checkbox"
             id="autoStart"
             checked={settings.autoStartRecording}
             onChange={(e) => updateSetting("autoStartRecording", e.target.checked)}
-            className="mr-2"
+            cclassName="mr-2"
             data-testid="auto-start-checkbox"
           />
-          <label htmlFor="autoStart" className="text-gray-300">
+          <label htmlFor="autoStart" cclassName="text-gray-300">
             Auto-start recording on app launch
           </label>
         </div>
 
-        <div className="flex items-center">
+        <div cclassName="flex items-center">
           <input
             type="checkbox"
             id="autoSave"
             checked={settings.autoSaveTranscriptions}
             onChange={(e) => updateSetting("autoSaveTranscriptions", e.target.checked)}
-            className="mr-2"
+            cclassName="mr-2"
             data-testid="auto-save-checkbox"
           />
-          <label htmlFor="autoSave" className="text-gray-300">
+          <label htmlFor="autoSave" cclassName="text-gray-300">
             Auto-save transcriptions
           </label>
         </div>
@@ -529,14 +529,14 @@ function LayoutSettings({
   ) => void;
 }) {
   return (
-    <div className="space-y-6">
-      <h3 className="mac-title">
+    <div cclassName="space-y-6">
+      <h3 cclassName="mac-title">
         Layout Settings
       </h3>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div cclassName="grid grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label cclassName="block text-sm font-medium text-gray-300 mb-2">
             Left Panel: {settings.panelSizes.left}%
           </label>
           <input
@@ -545,13 +545,13 @@ function LayoutSettings({
             max="40"
             value={settings.panelSizes.left}
             onChange={(e) => updateNestedSetting("panelSizes", "left", parseInt(e.target.value))}
-            className="w-full"
+            cclassName="w-full"
             data-testid="left-panel-slider"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label cclassName="block text-sm font-medium text-gray-300 mb-2">
             Middle Panel: {settings.panelSizes.middle}%
           </label>
           <input
@@ -560,13 +560,13 @@ function LayoutSettings({
             max="60"
             value={settings.panelSizes.middle}
             onChange={(e) => updateNestedSetting("panelSizes", "middle", parseInt(e.target.value))}
-            className="w-full"
+            cclassName="w-full"
             data-testid="middle-panel-slider"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label cclassName="block text-sm font-medium text-gray-300 mb-2">
             Right Panel: {settings.panelSizes.right}%
           </label>
           <input
@@ -575,51 +575,51 @@ function LayoutSettings({
             max="40"
             value={settings.panelSizes.right}
             onChange={(e) => updateNestedSetting("panelSizes", "right", parseInt(e.target.value))}
-            className="w-full"
+            cclassName="w-full"
             data-testid="right-panel-slider"
           />
         </div>
       </div>
 
-      <div className="space-y-3">
-        <div className="flex items-center">
+      <div cclassName="space-y-3">
+        <div cclassName="flex items-center">
           <input
             type="checkbox"
             id="performanceStats"
             checked={settings.showPerformanceStats}
             onChange={(e) => updateSetting("showPerformanceStats", e.target.checked)}
-            className="mr-2"
+            cclassName="mr-2"
             data-testid="performance-stats-checkbox"
           />
-          <label htmlFor="performanceStats" className="text-gray-300">
+          <label htmlFor="performanceStats" cclassName="text-gray-300">
             Show performance statistics
           </label>
         </div>
 
-        <div className="flex items-center">
+        <div cclassName="flex items-center">
           <input
             type="checkbox"
             id="statusBar"
             checked={settings.showStatusBar}
             onChange={(e) => updateSetting("showStatusBar", e.target.checked)}
-            className="mr-2"
+            cclassName="mr-2"
             data-testid="status-bar-checkbox"
           />
-          <label htmlFor="statusBar" className="text-gray-300">
+          <label htmlFor="statusBar" cclassName="text-gray-300">
             Show status bar
           </label>
         </div>
 
-        <div className="flex items-center">
+        <div cclassName="flex items-center">
           <input
             type="checkbox"
             id="compactMode"
             checked={settings.compactMode}
             onChange={(e) => updateSetting("compactMode", e.target.checked)}
-            className="mr-2"
+            cclassName="mr-2"
             data-testid="compact-mode-checkbox"
           />
-          <label htmlFor="compactMode" className="text-gray-300">
+          <label htmlFor="compactMode" cclassName="text-gray-300">
             Enable compact mode
           </label>
         </div>
@@ -652,20 +652,20 @@ function ShortcutsSettings({
   ] as const;
 
   return (
-    <div className="space-y-6">
-      <h3 className="mac-title">
+    <div cclassName="space-y-6">
+      <h3 cclassName="mac-title">
         Keyboard Shortcuts
       </h3>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div cclassName="grid grid-cols-1 md:grid-cols-2 gap-4">
         {shortcuts.map(({ key, label }) => (
-          <div key={key} className="flex items-center justify-between">
-            <label className="text-gray-300 text-sm">{label}</label>
+          <div key={key} cclassName="flex items-center justify-between">
+            <label cclassName="text-gray-300 text-sm">{label}</label>
             <input
               type="text"
               value={settings.shortcuts[key]}
               onChange={(e) => updateNestedSetting("shortcuts", key, e.target.value)}
-              className="w-24 bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white text-center font-mono text-sm focus:border-blue-600 focus:outline-none"
+              cclassName="w-24 bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white text-center font-mono text-sm focus:border-blue-600 focus:outline-none"
               data-testid={`shortcut-${key}`}
             />
           </div>
@@ -683,14 +683,14 @@ function DataPrivacySettings({
   updateSetting: <K extends keyof SiamSettings>(key: K, value: SiamSettings[K]) => void;
 }) {
   return (
-    <div className="space-y-6">
-      <h3 className="mac-title">
+    <div cclassName="space-y-6">
+      <h3 cclassName="mac-title">
         Data & Privacy Settings
       </h3>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div cclassName="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label cclassName="block text-sm font-medium text-gray-300 mb-2">
             Max Session History
           </label>
           <input
@@ -699,13 +699,13 @@ function DataPrivacySettings({
             max="1000"
             value={settings.maxSessionHistory}
             onChange={(e) => updateSetting("maxSessionHistory", parseInt(e.target.value))}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            cclassName="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="max-sessions-input"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label cclassName="block text-sm font-medium text-gray-300 mb-2">
             Session Retention (days)
           </label>
           <input
@@ -714,37 +714,37 @@ function DataPrivacySettings({
             max="365"
             value={settings.sessionRetentionDays}
             onChange={(e) => updateSetting("sessionRetentionDays", parseInt(e.target.value))}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            cclassName="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="retention-days-input"
           />
         </div>
       </div>
 
-      <div className="space-y-3">
-        <div className="flex items-center">
+      <div cclassName="space-y-3">
+        <div cclassName="flex items-center">
           <input
             type="checkbox"
             id="localOnly"
             checked={settings.localStorageOnly}
             onChange={(e) => updateSetting("localStorageOnly", e.target.checked)}
-            className="mr-2"
+            cclassName="mr-2"
             data-testid="local-only-checkbox"
           />
-          <label htmlFor="localOnly" className="text-gray-300">
+          <label htmlFor="localOnly" cclassName="text-gray-300">
             Use local storage only (no cloud sync)
           </label>
         </div>
 
-        <div className="flex items-center">
+        <div cclassName="flex items-center">
           <input
             type="checkbox"
             id="autoDelete"
             checked={settings.autoDeleteOldSessions}
             onChange={(e) => updateSetting("autoDeleteOldSessions", e.target.checked)}
-            className="mr-2"
+            cclassName="mr-2"
             data-testid="auto-delete-checkbox"
           />
-          <label htmlFor="autoDelete" className="text-gray-300">
+          <label htmlFor="autoDelete" cclassName="text-gray-300">
             Auto-delete old sessions
           </label>
         </div>

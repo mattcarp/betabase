@@ -34,13 +34,13 @@ interface InsightMetric {
 
 interface LiveInsightsProps {
   conversationId?: string;
-  className?: string;
+  cclassName?: string;
   currentConversation?: any[];
 }
 
 export const LiveInsights: React.FC<LiveInsightsProps> = ({
   conversationId: _conversationId, // Unused
-  className,
+  cclassName,
   currentConversation = [],
 }) => {
   const [insights, setInsights] = useState<InsightMetric[]>([]);
@@ -444,11 +444,11 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
   const getTrendIcon = (trend?: string) => {
     switch (trend) {
       case "up":
-        return <TrendingUp size={12} className="text-motiff-green" />;
+        return <TrendingUp size={12} cclassName="text-motiff-green" />;
       case "down":
-        return <TrendingUp size={12} className="text-motiff-secondary rotate-180" />;
+        return <TrendingUp size={12} cclassName="text-motiff-secondary rotate-180" />;
       case "stable":
-        return <div className="w-3 h-0.5 bg-motiff-primary rounded" />;
+        return <div cclassName="w-3 h-0.5 bg-motiff-primary rounded" />;
       default:
         return null;
     }
@@ -462,16 +462,16 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
     process.env.NEXT_PUBLIC_AOMA_MESH_RPC_URL ||
     "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws";
   return (
-    <div className={`space-y-3 ${className}`} data-test-id="live-insights-root">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="mac-title text-lg font-semibold text-motiff-green">Live Insights</h3>
-        <div className="flex items-center gap-2">
-          {isLoading && <span className="text-xs text-white/60 animate-pulse">Loading...</span>}
+    <div cclassName={`space-y-3 ${cclassName}`} data-test-id="live-insights-root">
+      <div cclassName="flex items-center justify-between mb-4">
+        <h3 cclassName="mac-title text-lg font-semibold text-motiff-green">Live Insights</h3>
+        <div cclassName="flex items-center gap-2">
+          {isLoading && <span cclassName="text-xs text-white/60 animate-pulse">Loading...</span>}
         </div>
       </div>
       {/* Debug Config Info */}
       <div
-        className="bg-black/40 rounded-lg p-2 mb-2 text-xs text-white/50 border border-orange-400/20"
+        cclassName="bg-black/40 rounded-lg p-2 mb-2 text-xs text-white/50 border border-orange-400/20"
         data-test-id="aoma-debug-config"
       >
         <div>
@@ -483,13 +483,13 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
       </div>
 
       {insights.length === 0 ? (
-        <div className="motiff-glass-panel p-4 text-center">
-          <Brain className="mx-auto mb-2 text-motiff-primary" size={24} />
-          <p className="text-sm text-white/60">Start a conversation to see live insights</p>
-          <p className="text-xs text-white/40 mt-2">Real-time analysis will appear here</p>
+        <div cclassName="motiff-glass-panel p-4 text-center">
+          <Brain cclassName="mx-auto mb-2 text-motiff-primary" size={24} />
+          <p cclassName="text-sm text-white/60">Start a conversation to see live insights</p>
+          <p cclassName="text-xs text-white/40 mt-2">Real-time analysis will appear here</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div cclassName="space-y-3">
           {insights.map((insight) => {
             const Icon = insight.icon;
             const trendClass = insight.trend ? `trend-${insight.trend}` : "";
@@ -497,29 +497,29 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
             return (
               <div
                 key={insight.id}
-                className={`motiff-insight-card ${trendClass} cursor-pointer`}
+                cclassName={`motiff-insight-card ${trendClass} cursor-pointer`}
                 data-test-id={`insight-card-${insight.id}`}
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-4 flex-1">
+                <div cclassName="flex items-start justify-between">
+                  <div cclassName="flex items-start gap-4 flex-1">
                     <div
-                      className={`p-2 rounded-lg ${getIconColorClass(insight.color)} bg-white/5`}
+                      cclassName={`p-2 rounded-lg ${getIconColorClass(insight.color)} bg-white/5`}
                     >
                       <Icon size={16} />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h4 className="mac-title font-medium text-white text-sm truncate">
+                    <div cclassName="flex-1 min-w-0">
+                      <div cclassName="flex items-center gap-2 mb-2">
+                        <h4 cclassName="mac-title font-medium text-white text-sm truncate">
                           {insight.title}
                         </h4>
                         {insight.trend && getTrendIcon(insight.trend)}
                       </div>
-                      <p className="text-xs text-white/60 mb-2">{insight.content}</p>
+                      <p cclassName="text-xs text-white/60 mb-2">{insight.content}</p>
                       {insight.value && (
-                        <div className="flex items-center gap-2">
-                          <span className="motiff-metric-value text-sm">{insight.value}</span>
+                        <div cclassName="flex items-center gap-2">
+                          <span cclassName="motiff-metric-value text-sm">{insight.value}</span>
                           {insight.confidence && (
-                            <span className="text-xs text-white/40">
+                            <span cclassName="text-xs text-white/40">
                               {insight.confidence}% confidence
                             </span>
                           )}
@@ -527,15 +527,15 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <span className="text-xs text-white/40">
+                  <div cclassName="flex flex-col items-end gap-2">
+                    <span cclassName="text-xs text-white/40">
                       {insight.timestamp.toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
                     </span>
                     <div
-                      className={`text-xs px-2 py-2 rounded-full bg-white/10 ${
+                      cclassName={`text-xs px-2 py-2 rounded-full bg-white/10 ${
                         insight.source === "aoma"
                           ? "text-motiff-secondary"
                           : insight.source === "conversation"
@@ -555,14 +555,14 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
 
       {/* Quick Actions */}
       {insights.length > 0 && (
-        <div className="mt-4 pt-4 border-t border-white/10">
-          <div className="flex gap-2">
-            <button className="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
-              <Lightbulb size={12} className="inline mr-2" />
+        <div cclassName="mt-4 pt-4 border-t border-white/10">
+          <div cclassName="flex gap-2">
+            <button cclassName="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
+              <Lightbulb size={12} cclassName="inline mr-2" />
               Generate Summary
             </button>
-            <button className="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
-              <Target size={12} className="inline mr-2" />
+            <button cclassName="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
+              <Target size={12} cclassName="inline mr-2" />
               Action Items
             </button>
           </div>

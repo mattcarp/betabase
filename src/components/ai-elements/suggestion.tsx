@@ -7,10 +7,10 @@ import { cn } from "../../lib/utils";
 
 export type SuggestionsProps = ComponentProps<typeof ScrollArea>;
 
-export const Suggestions = ({ className, children, ...props }: SuggestionsProps) => (
-  <ScrollArea className="w-full overflow-x-auto whitespace-nowrap" {...props}>
-    <div className={cn("flex w-max flex-nowrap items-center gap-2", className)}>{children}</div>
-    <ScrollBar className="hidden" orientation="horizontal" />
+export const Suggestions = ({ cclassName, children, ...props }: SuggestionsProps) => (
+  <ScrollArea cclassName="w-full overflow-x-auto whitespace-nowrap" {...props}>
+    <div cclassName={cn("flex w-max flex-nowrap items-center gap-2", cclassName)}>{children}</div>
+    <ScrollBar cclassName="hidden" orientation="horizontal" />
   </ScrollArea>
 );
 
@@ -22,7 +22,7 @@ export type SuggestionProps = Omit<ComponentProps<typeof Button>, "onClick"> & {
 export const Suggestion = ({
   suggestion,
   onClick,
-  className,
+  cclassName,
   variant = "outline",
   size = "sm",
   children,
@@ -34,10 +34,10 @@ export const Suggestion = ({
 
   return (
     <Button
-      className={cn(
+      cclassName={cn(
         "mac-button mac-button-primary",
         "cursor-pointer rounded-lg px-4 w-full !text-left !justify-start items-start",
-        className
+        cclassName
       )}
       onClick={handleClick}
       size={size}
@@ -45,7 +45,7 @@ export const Suggestion = ({
       variant={variant}
       {...props}
     >
-      <span className="text-left w-full">{children || suggestion}</span>
+      <span cclassName="text-left w-full">{children || suggestion}</span>
     </Button>
   );
 };

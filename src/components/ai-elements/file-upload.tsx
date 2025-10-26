@@ -30,7 +30,7 @@ interface FileUploadItem {
 }
 
 interface FileUploadProps {
-  className?: string;
+  cclassName?: string;
   onUploadComplete?: (fileId: string, filename: string) => void;
   onUploadError?: (error: string) => void;
   maxFileSize?: number; // in bytes
@@ -55,7 +55,7 @@ const formatFileSize = (bytes: number): string => {
 };
 
 export function FileUpload({
-  className,
+  cclassName,
   onUploadComplete,
   onUploadError,
   maxFileSize = 20 * 1024 * 1024, // 20MB default
@@ -200,7 +200,7 @@ export function FileUpload({
           multiple
           accept={acceptedFileTypes.join(",")}
           onChange={(e) => handleFileSelect(e.target.files)}
-          className="hidden"
+          cclassName="hidden"
         />
         <Action
           onClick={() => fileInputRef.current?.click()}
@@ -208,48 +208,48 @@ export function FileUpload({
           disabled={isUploading}
         >
           {isUploading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 cclassName="h-4 w-4 animate-spin" />
           ) : (
-            <Paperclip className="h-4 w-4" />
+            <Paperclip cclassName="h-4 w-4" />
           )}
         </Action>
         {uploadQueue.length > 0 && (
-          <div className="absolute bottom-full mb-2 right-0 w-80 bg-background border rounded-lg shadow-lg p-4 space-y-2 max-h-60 overflow-y-auto">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Uploads</span>
+          <div cclassName="absolute bottom-full mb-2 right-0 w-80 bg-background border rounded-lg shadow-lg p-4 space-y-2 max-h-60 overflow-y-auto">
+            <div cclassName="flex items-center justify-between mb-2">
+              <span cclassName="text-sm font-medium">Uploads</span>
               {uploadQueue.some((f) => f.status === "completed") && (
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={clearCompleted}
-                  className="h-6 text-xs mac-button mac-button-outline"
+                  cclassName="h-6 text-xs mac-button mac-button-outline"
                 >
                   Clear completed
                 </Button>
               )}
             </div>
             {uploadQueue.map((item) => (
-              <div key={item.id} className="space-y-1">
-                <div className="flex items-center gap-2">
+              <div key={item.id} cclassName="space-y-1">
+                <div cclassName="flex items-center gap-2">
                   {item.status === "uploading" && (
-                    <Loader2 className="h-3 w-3 animate-spin text-blue-500" />
+                    <Loader2 cclassName="h-3 w-3 animate-spin text-blue-500" />
                   )}
-                  {item.status === "completed" && <Check className="h-3 w-3 text-green-500" />}
-                  {item.status === "error" && <AlertCircle className="h-3 w-3 text-red-500" />}
-                  <span className="text-xs flex-1 truncate">{item.file.name}</span>
+                  {item.status === "completed" && <Check cclassName="h-3 w-3 text-green-500" />}
+                  {item.status === "error" && <AlertCircle cclassName="h-3 w-3 text-red-500" />}
+                  <span cclassName="text-xs flex-1 truncate">{item.file.name}</span>
                   <Button
-                    className="mac-button mac-button-outline"
+                    cclassName="mac-button mac-button-outline"
                     variant="ghost"
-                    className="mac-button mac-button-outline"
+                    cclassName="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => removeFile(item.id)}
-                    className="h-5 w-5 p-0"
+                    cclassName="h-5 w-5 p-0"
                   >
-                    <X className="h-3 w-3" />
+                    <X cclassName="h-3 w-3" />
                   </Button>
                 </div>
-                {item.status === "uploading" && <Progress value={item.progress} className="h-1" />}
-                {item.status === "error" && <p className="text-xs text-red-500">{item.error}</p>}
+                {item.status === "uploading" && <Progress value={item.progress} cclassName="h-1" />}
+                {item.status === "error" && <p cclassName="text-xs text-red-500">{item.error}</p>}
               </div>
             ))}
           </div>
@@ -259,11 +259,11 @@ export function FileUpload({
   }
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div cclassName={cn("space-y-4", cclassName)}>
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        className={cn(
+        cclassName={cn(
           "relative border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200",
           "mac-glass",
           "border-[var(--mac-utility-border)]",
@@ -281,45 +281,45 @@ export function FileUpload({
           multiple
           accept={acceptedFileTypes.join(",")}
           onChange={(e) => handleFileSelect(e.target.files)}
-          className="hidden"
+          cclassName="hidden"
         />
 
-        <div className="space-y-4">
-          <div className="mx-auto w-12 h-12 rounded-full bg-[var(--mac-primary-blue-400)]/10 flex items-center justify-center">
-            <Upload className="h-6 w-6 text-[var(--mac-primary-blue-400)]" />
+        <div cclassName="space-y-4">
+          <div cclassName="mx-auto w-12 h-12 rounded-full bg-[var(--mac-primary-blue-400)]/10 flex items-center justify-center">
+            <Upload cclassName="h-6 w-6 text-[var(--mac-primary-blue-400)]" />
           </div>
 
           <div>
             <h3
-              className="mac-title"
-              className="mac-title text-lg font-light mb-2 text-[var(--mac-text-primary)]"
+              cclassName="mac-title"
+              cclassName="mac-title text-lg font-light mb-2 text-[var(--mac-text-primary)]"
             >
               Upload to Knowledge Base
             </h3>
-            <p className="text-sm text-[var(--mac-text-secondary)] mb-4 font-light">
+            <p cclassName="text-sm text-[var(--mac-text-secondary)] mb-4 font-light">
               Drag and drop files or click to browse
             </p>
             <Button
-              className="mac-button mac-button-primary"
+              cclassName="mac-button mac-button-primary"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
               variant="outline"
             >
               {isUploading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 cclassName="mr-2 h-4 w-4 animate-spin" />
                   Uploading...
                 </>
               ) : (
                 <>
-                  <Upload className="mr-2 h-4 w-4" />
+                  <Upload cclassName="mr-2 h-4 w-4" />
                   Select Files
                 </>
               )}
             </Button>
           </div>
 
-          <p className="text-xs text-[var(--mac-text-muted)] font-light">
+          <p cclassName="text-xs text-[var(--mac-text-muted)] font-light">
             Max file size: {formatFileSize(maxFileSize)} • Supported: PDF, TXT, MD, DOC, DOCX, JSON,
             CSV, Images
           </p>
@@ -327,9 +327,9 @@ export function FileUpload({
       </div>
 
       {uploadQueue.length > 0 && (
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h4 className="mac-title">
+        <div cclassName="space-y-3">
+          <div cclassName="flex items-center justify-between">
+            <h4 cclassName="mac-title">
               Upload Queue
             </h4>
             {uploadQueue.some((f) => f.status === "completed") && (
@@ -337,72 +337,72 @@ export function FileUpload({
                 variant="ghost"
                 size="sm"
                 onClick={clearCompleted}
-                className="h-7 text-xs mac-button mac-button-outline"
+                cclassName="h-7 text-xs mac-button mac-button-outline"
               >
                 Clear completed
               </Button>
             )}
           </div>
 
-          <div className="space-y-2">
+          <div cclassName="space-y-2">
             {uploadQueue.map((item) => {
               const FileIconComponent = getFileIcon(item.file.type);
               return (
                 <div
                   key={item.id}
-                  className="flex items-center gap-4 p-4 rounded-lg border bg-card"
+                  cclassName="flex items-center gap-4 p-4 rounded-lg border bg-card"
                 >
-                  <FileIconComponent className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                  <FileIconComponent cclassName="h-5 w-5 text-muted-foreground flex-shrink-0" />
 
-                  <div className="flex-1 min-w-0 space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium truncate">{item.file.name}</span>
-                      <span className="text-xs text-muted-foreground">
+                  <div cclassName="flex-1 min-w-0 space-y-1">
+                    <div cclassName="flex items-center gap-2">
+                      <span cclassName="text-sm font-medium truncate">{item.file.name}</span>
+                      <span cclassName="text-xs text-muted-foreground">
                         {formatFileSize(item.file.size)}
                       </span>
                     </div>
 
                     {item.status === "uploading" && (
-                      <Progress value={item.progress} className="h-1.5" />
+                      <Progress value={item.progress} cclassName="h-1.5" />
                     )}
 
                     {item.status === "error" && (
-                      <p className="text-xs text-[var(--mac-status-error-text)] font-light">
+                      <p cclassName="text-xs text-[var(--mac-status-error-text)] font-light">
                         {item.error}
                       </p>
                     )}
 
                     {item.status === "completed" && (
-                      <p className="text-xs text-[var(--mac-status-success-text)] font-light">
+                      <p cclassName="text-xs text-[var(--mac-status-success-text)] font-light">
                         Successfully uploaded
                       </p>
                     )}
                   </div>
 
-                  <div className="flex-shrink-0">
+                  <div cclassName="flex-shrink-0">
                     {item.status === "pending" && (
-                      <div className="h-5 w-5 rounded-full bg-[var(--mac-utility-border)]" />
+                      <div cclassName="h-5 w-5 rounded-full bg-[var(--mac-utility-border)]" />
                     )}
                     {item.status === "uploading" && (
-                      <Loader2 className="h-5 w-5 animate-spin text-[var(--mac-primary-blue-400)]" />
+                      <Loader2 cclassName="h-5 w-5 animate-spin text-[var(--mac-primary-blue-400)]" />
                     )}
                     {item.status === "completed" && (
-                      <Check className="h-5 w-5 text-[var(--mac-status-success-text)]" />
+                      <Check cclassName="h-5 w-5 text-[var(--mac-status-success-text)]" />
                     )}
                     {item.status === "error" && (
-                      <AlertCircle className="h-5 w-5 text-[var(--mac-status-error-text)]" />
+                      <AlertCircle cclassName="h-5 w-5 text-[var(--mac-status-error-text)]" />
                     )}
                   </div>
 
                   <Button
-                    className="mac-button mac-button-outline"
+                    cclassName="mac-button mac-button-outline"
                     variant="ghost"
-                    className="mac-button mac-button-outline"
+                    cclassName="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => removeFile(item.id)}
-                    className="h-8 w-8 p-0"
+                    cclassName="h-8 w-8 p-0"
                   >
-                    <X className="h-4 w-4" />
+                    <X cclassName="h-4 w-4" />
                   </Button>
                 </div>
               );

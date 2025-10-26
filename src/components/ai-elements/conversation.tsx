@@ -9,9 +9,9 @@ import { cn } from "../../lib/utils";
 
 export type ConversationProps = ComponentProps<typeof StickToBottom>;
 
-export const Conversation = ({ className, ...props }: ConversationProps) => (
+export const Conversation = ({ cclassName, ...props }: ConversationProps) => (
   <StickToBottom
-    className={cn("relative flex-1 overflow-y-auto", className)}
+    cclassName={cn("relative flex-1 overflow-y-auto", cclassName)}
     initial="smooth"
     resize="smooth"
     role="log"
@@ -21,14 +21,14 @@ export const Conversation = ({ className, ...props }: ConversationProps) => (
 
 export type ConversationContentProps = ComponentProps<typeof StickToBottom.Content>;
 
-export const ConversationContent = ({ className, ...props }: ConversationContentProps) => (
-  <StickToBottom.Content className={cn("p-4", className)} {...props} />
+export const ConversationContent = ({ cclassName, ...props }: ConversationContentProps) => (
+  <StickToBottom.Content cclassName={cn("p-4", cclassName)} {...props} />
 );
 
 export type ConversationScrollButtonProps = ComponentProps<typeof Button>;
 
 export const ConversationScrollButton = ({
-  className,
+  cclassName,
   ...props
 }: ConversationScrollButtonProps) => {
   const { isAtBottom, scrollToBottom } = useStickToBottomContext();
@@ -40,19 +40,19 @@ export const ConversationScrollButton = ({
   return (
     !isAtBottom && (
       <Button
-        className={cn(
+        cclassName={cn(
           "mac-button mac-button-outline",
           "absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full",
-          className
+          cclassName
         )}
         onClick={handleScrollToBottom}
         size="icon"
         type="button"
         variant="outline"
-        className="mac-button mac-button-outline"
+        cclassName="mac-button mac-button-outline"
         {...props}
       >
-        <ArrowDownIcon className="size-4" />
+        <ArrowDownIcon cclassName="size-4" />
       </Button>
     )
   );

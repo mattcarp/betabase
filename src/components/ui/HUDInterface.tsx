@@ -6,7 +6,7 @@ interface FloatingPanelProps {
   title: string;
   position: { x: number; y: number };
   onDrag?: (position: { x: number; y: number }) => void;
-  className?: string;
+  cclassName?: string;
 }
 
 const FloatingPanel: React.FC<FloatingPanelProps> = ({
@@ -14,7 +14,7 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
   title,
   position,
   onDrag,
-  className,
+  cclassName,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -53,11 +53,11 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
 
   return (
     <div
-      className={cn(
+      cclassName={cn(
         "absolute z-10 select-none transition-all duration-300 mac-card-elevated",
         isDragging && "cursor-grabbing scale-105",
         !isDragging && "cursor-grab hover:scale-[1.02]",
-        className
+        cclassName
       )}
       style={{
         left: position.x,
@@ -66,16 +66,16 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
     >
       {/* Drag Handle */}
       <div
-        className="px-4 py-2 border-b border-mac-border cursor-grab active:cursor-grabbing bg-mac-state-hover"
+        cclassName="px-4 py-2 border-b border-mac-border cursor-grab active:cursor-grabbing bg-mac-state-hover"
         onMouseDown={handleMouseDown}
       >
-        <h3 className="mac-title">
+        <h3 cclassName="mac-title">
           {title}
         </h3>
       </div>
 
       {/* Content */}
-      <div className="p-4">{children}</div>
+      <div cclassName="p-4">{children}</div>
     </div>
   );
 };
@@ -117,13 +117,13 @@ export const HUDInterface: React.FC<HUDInterfaceProps> = ({
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden mac-background">
+    <div cclassName="relative w-full h-screen overflow-hidden mac-background">
       {/* MAC Floating Background Orbs */}
-      <div className="mac-floating-background"></div>
+      <div cclassName="mac-floating-background"></div>
 
       {/* Background Grid */}
       <div
-        className="absolute inset-0 opacity-5"
+        cclassName="absolute inset-0 opacity-5"
         style={{
           backgroundImage: `
             linear-gradient(rgba(51, 133, 255, 0.1) 1px, transparent 1px),
@@ -134,11 +134,11 @@ export const HUDInterface: React.FC<HUDInterfaceProps> = ({
       />
 
       {/* HUD Title */}
-      <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
-        <h1 className="mac-heading">
+      <div cclassName="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
+        <h1 cclassName="mac-heading">
           SIAM HUD Interface
         </h1>
-        <p className="text-center mac-body mt-2">
+        <p cclassName="text-center mac-body mt-2">
           Smart In A Meeting • Floating Intelligence Panels
         </p>
       </div>
@@ -152,33 +152,33 @@ export const HUDInterface: React.FC<HUDInterfaceProps> = ({
           onDrag={(position) => updatePanelPosition(panel.id, position)}
         >
           {panel.id === "transcription" && (
-            <div className="w-80 max-h-40 overflow-y-auto">
-              <p className="mac-body leading-relaxed">{panel.content}</p>
+            <div cclassName="w-80 max-h-40 overflow-y-auto">
+              <p cclassName="mac-body leading-relaxed">{panel.content}</p>
             </div>
           )}
 
           {panel.id === "insights" && (
-            <div className="w-72">
+            <div cclassName="w-72">
               {(panel.content as string[]).map((insight, index) => (
                 <div
                   key={index}
-                  className="mb-2 p-4 rounded-lg border-l-2 border-mac-accent-purple-400 bg-mac-accent-purple-400/10"
+                  cclassName="mb-2 p-4 rounded-lg border-l-2 border-mac-accent-purple-400 bg-mac-accent-purple-400/10"
                 >
-                  <p className="mac-body text-mac-text-secondary">{insight}</p>
+                  <p cclassName="mac-body text-mac-text-secondary">{insight}</p>
                 </div>
               ))}
             </div>
           )}
 
           {panel.id === "audio" && (
-            <div className="w-64">
-              <div className="mb-4">
-                <p className="mac-body mb-2">
+            <div cclassName="w-64">
+              <div cclassName="mb-4">
+                <p cclassName="mac-body mb-2">
                   Audio Level: {Math.round((panel.content as number) * 100)}%
                 </p>
-                <div className="h-2 rounded-full overflow-hidden bg-mac-border">
+                <div cclassName="h-2 rounded-full overflow-hidden bg-mac-border">
                   <div
-                    className="h-full transition-all duration-150 rounded-full"
+                    cclassName="h-full transition-all duration-150 rounded-full"
                     style={{
                       width: `${(panel.content as number) * 100}%`,
                       background:
@@ -188,14 +188,14 @@ export const HUDInterface: React.FC<HUDInterfaceProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="p-2 rounded text-center bg-mac-primary-blue-400/10">
-                  <p className="mac-body text-mac-text-muted">Status</p>
-                  <p className="mac-body text-mac-text-primary">Active</p>
+              <div cclassName="grid grid-cols-2 gap-2 text-xs">
+                <div cclassName="p-2 rounded text-center bg-mac-primary-blue-400/10">
+                  <p cclassName="mac-body text-mac-text-muted">Status</p>
+                  <p cclassName="mac-body text-mac-text-primary">Active</p>
                 </div>
-                <div className="p-2 rounded text-center bg-mac-accent-purple-400/10">
-                  <p className="mac-body text-mac-text-muted">Quality</p>
-                  <p className="mac-body text-mac-text-primary">HD</p>
+                <div cclassName="p-2 rounded text-center bg-mac-accent-purple-400/10">
+                  <p cclassName="mac-body text-mac-text-muted">Quality</p>
+                  <p cclassName="mac-body text-mac-text-primary">HD</p>
                 </div>
               </div>
             </div>
@@ -204,8 +204,8 @@ export const HUDInterface: React.FC<HUDInterfaceProps> = ({
       ))}
 
       {/* Instructions */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-        <p className="mac-body text-mac-text-muted text-center">
+      <div cclassName="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+        <p cclassName="mac-body text-mac-text-muted text-center">
           Drag panels to reposition • Hover for interaction • Real-time meeting intelligence
         </p>
       </div>

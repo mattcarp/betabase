@@ -39,7 +39,7 @@ interface LeftSidebarProps {
   conversations?: ConversationItem[];
   onConversationSelect?: (id: string) => void;
   onNewConversation?: () => void;
-  className?: string;
+  cclassName?: string;
   onToggle?: () => void;
   onConversationAction?: (id: string, action: "rename" | "pin" | "archive" | "delete") => void;
 }
@@ -48,7 +48,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   conversations = [],
   onConversationSelect,
   onNewConversation,
-  className,
+  cclassName,
   onToggle,
   onConversationAction,
 }) => {
@@ -230,63 +230,63 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
 
   return (
     <div
-      className={cn(
+      cclassName={cn(
         "h-full bg-mac-surface-elevated/50 backdrop-blur-xl border-r border-mac-border",
         "flex flex-col relative",
-        className
+        cclassName
       )}
     >
       {/* Collapse Toggle */}
       <button
         onClick={onToggle}
-        className="absolute -right-4 top-8 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 border border-zinc-800/50 hover:bg-zinc-800 transition-colors group"
+        cclassName="absolute -right-4 top-8 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 border border-zinc-800/50 hover:bg-zinc-800 transition-colors group"
         aria-label="Toggle sidebar"
       >
-        <ChevronLeft className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors" />
+        <ChevronLeft cclassName="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors" />
       </button>
 
       {/* Header with New Conversation Button */}
-      <div className="p-4 border-b border-mac-border">
+      <div cclassName="p-4 border-b border-mac-border">
         <button
           onClick={onNewConversation}
-          className="w-full mac-button mac-button-primary flex items-center justify-center gap-2 hover:bg-mac-primary-blue-500/20 transition-all duration-200"
+          cclassName="w-full mac-button mac-button-primary flex items-center justify-center gap-2 hover:bg-mac-primary-blue-500/20 transition-all duration-200"
         >
-          <Plus className="w-4 h-4" />
+          <Plus cclassName="w-4 h-4" />
           <span>New Conversation</span>
         </button>
 
         {/* Enhanced Search Bar */}
-        <div className="mt-4 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-mac-text-muted pointer-events-none" />
+        <div cclassName="mt-4 relative">
+          <Search cclassName="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-mac-text-muted pointer-events-none" />
           <input
             ref={searchInputRef}
             type="text"
             placeholder="Search conversations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-11 pr-10 py-2.5 bg-mac-surface-bg border border-mac-border rounded-lg text-sm text-mac-text-primary placeholder-mac-text-muted focus:outline-none focus:ring-2 focus:ring-mac-accent-purple-400/50 focus:border-mac-accent-purple-400/50 transition-all duration-200"
+            cclassName="w-full pl-11 pr-10 py-2.5 bg-mac-surface-bg border border-mac-border rounded-lg text-sm text-mac-text-primary placeholder-mac-text-muted focus:outline-none focus:ring-2 focus:ring-mac-accent-purple-400/50 focus:border-mac-accent-purple-400/50 transition-all duration-200"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-mac-text-muted hover:text-mac-text-primary transition-colors"
+              cclassName="absolute right-3 top-1/2 transform -translate-y-1/2 text-mac-text-muted hover:text-mac-text-primary transition-colors"
             >
-              <X className="w-4 h-4" />
+              <X cclassName="w-4 h-4" />
             </button>
           )}
         </div>
       </div>
 
       {/* Conversations List with Groups */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="space-y-8">
+      <div cclassName="flex-1 overflow-y-auto">
+        <div cclassName="space-y-8">
           {conversationGroups.length === 0 ? (
-            <div className="p-6 text-center">
-              <MessageCircle className="w-8 h-8 text-mac-text-muted mx-auto mb-4" />
-              <p className="text-sm text-mac-text-muted mb-2">
+            <div cclassName="p-6 text-center">
+              <MessageCircle cclassName="w-8 h-8 text-mac-text-muted mx-auto mb-4" />
+              <p cclassName="text-sm text-mac-text-muted mb-2">
                 {searchQuery ? "No conversations found" : "No conversations yet"}
               </p>
-              <p className="text-xs text-mac-text-muted">
+              <p cclassName="text-xs text-mac-text-muted">
                 {searchQuery
                   ? "Try a different search term"
                   : "Start a new conversation to get started"}
@@ -294,21 +294,21 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             </div>
           ) : (
             conversationGroups.map((group) => (
-              <div key={group.label} className="py-4">
+              <div key={group.label} cclassName="py-4">
                 {/* Group Header */}
                 <button
                   onClick={() => toggleGroup(group.label)}
-                  className="flex items-center justify-between w-full px-4 py-2 text-sm font-normal text-mac-text-secondary hover:text-mac-text-primary hover:bg-mac-state-hover transition-all duration-200 group"
+                  cclassName="flex items-center justify-between w-full px-4 py-2 text-sm font-normal text-mac-text-secondary hover:text-mac-text-primary hover:bg-mac-state-hover transition-all duration-200 group"
                 >
                   <span>{group.label}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-mac-text-muted">
+                  <div cclassName="flex items-center gap-2">
+                    <span cclassName="text-xs text-mac-text-muted">
                       {group.conversations.length}
                     </span>
                     {expandedGroups.has(group.label) ? (
-                      <ChevronDown className="w-4 h-4 transition-transform duration-200" />
+                      <ChevronDown cclassName="w-4 h-4 transition-transform duration-200" />
                     ) : (
-                      <ChevronRight className="w-4 h-4 transition-transform duration-200" />
+                      <ChevronRight cclassName="w-4 h-4 transition-transform duration-200" />
                     )}
                   </div>
                 </button>
@@ -321,15 +321,15 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2, ease: "easeInOut" }}
-                      className="overflow-hidden"
+                      cclassName="overflow-hidden"
                     >
-                      <div className="space-y-8 pb-2">
+                      <div cclassName="space-y-8 pb-2">
                         {group.conversations.map((conversation) => (
-                          <div key={conversation.id} className="relative group/conversation">
+                          <div key={conversation.id} cclassName="relative group/conversation">
                             <button
                               onClick={() => onConversationSelect?.(conversation.id)}
                               onContextMenu={(e) => handleContextMenu(e, conversation.id)}
-                              className={cn(
+                              cclassName={cn(
                                 "w-full text-left px-4 py-6 mx-4 rounded-lg transition-all duration-200 relative",
                                 "hover:bg-mac-state-hover group-hover/conversation:bg-mac-state-hover",
                                 conversation.isActive &&
@@ -337,10 +337,10 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                                 !conversation.isActive && "hover:bg-mac-surface-bg"
                               )}
                             >
-                              <div className="flex items-start gap-4">
-                                <div className="mt-2 flex-shrink-0">
+                              <div cclassName="flex items-start gap-4">
+                                <div cclassName="mt-2 flex-shrink-0">
                                   <MessageCircle
-                                    className={cn(
+                                    cclassName={cn(
                                       "w-4 h-4",
                                       conversation.isActive
                                         ? "text-mac-primary-blue-400"
@@ -348,27 +348,27 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                                     )}
                                   />
                                 </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2 mb-2">
-                                    <h4 className="mac-title text-sm font-normal text-mac-text-primary truncate flex-1">
+                                <div cclassName="flex-1 min-w-0">
+                                  <div cclassName="flex items-center gap-2 mb-2">
+                                    <h4 cclassName="mac-title text-sm font-normal text-mac-text-primary truncate flex-1">
                                       {conversation.title}
                                     </h4>
                                     {conversation.isPinned && (
-                                      <Star className="w-3 h-3 text-mac-accent-purple-400 fill-current flex-shrink-0" />
+                                      <Star cclassName="w-3 h-3 text-mac-accent-purple-400 fill-current flex-shrink-0" />
                                     )}
                                   </div>
-                                  <p className="text-xs text-mac-text-muted truncate mb-2">
+                                  <p cclassName="text-xs text-mac-text-muted truncate mb-2">
                                     {conversation.lastMessage}
                                   </p>
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                      <Clock className="w-3 h-3 text-mac-text-muted" />
-                                      <span className="text-xs text-mac-text-muted">
+                                  <div cclassName="flex items-center justify-between">
+                                    <div cclassName="flex items-center gap-2">
+                                      <Clock cclassName="w-3 h-3 text-mac-text-muted" />
+                                      <span cclassName="text-xs text-mac-text-muted">
                                         {formatTimestamp(conversation.timestamp)}
                                       </span>
                                     </div>
                                     {conversation.messageCount && (
-                                      <span className="text-xs text-mac-text-muted bg-mac-surface-bg px-2.5 py-0.5 rounded">
+                                      <span cclassName="text-xs text-mac-text-muted bg-mac-surface-bg px-2.5 py-0.5 rounded">
                                         {conversation.messageCount}
                                       </span>
                                     )}
@@ -383,9 +383,9 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                                 e.stopPropagation();
                                 handleContextMenu(e, conversation.id);
                               }}
-                              className="absolute right-4 top-3 opacity-0 group-hover/conversation:opacity-100 transition-opacity duration-200 p-2 hover:bg-mac-state-hover rounded"
+                              cclassName="absolute right-4 top-3 opacity-0 group-hover/conversation:opacity-100 transition-opacity duration-200 p-2 hover:bg-mac-state-hover rounded"
                             >
-                              <MoreVertical className="w-3 h-3 text-mac-text-muted" />
+                              <MoreVertical cclassName="w-3 h-3 text-mac-text-muted" />
                             </button>
                           </div>
                         ))}
@@ -404,7 +404,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
         {contextMenu && (
           <>
             {/* Backdrop */}
-            <div className="fixed inset-0 z-40" onClick={() => setContextMenu(null)} />
+            <div cclassName="fixed inset-0 z-40" onClick={() => setContextMenu(null)} />
 
             {/* Menu */}
             <motion.div
@@ -412,7 +412,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.1 }}
-              className="fixed z-50 bg-mac-surface-elevated border border-mac-border rounded-lg shadow-xl py-2 min-w-[180px]"
+              cclassName="fixed z-50 bg-mac-surface-elevated border border-mac-border rounded-lg shadow-xl py-2 min-w-[180px]"
               style={{
                 left: contextMenu.x,
                 top: contextMenu.y,
@@ -421,31 +421,31 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             >
               <button
                 onClick={() => handleContextAction("rename")}
-                className="w-full flex items-center gap-4 px-4 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
+                cclassName="w-full flex items-center gap-4 px-4 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
               >
-                <Edit className="w-4 h-4" />
+                <Edit cclassName="w-4 h-4" />
                 Rename
               </button>
               <button
                 onClick={() => handleContextAction("pin")}
-                className="w-full flex items-center gap-4 px-4 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
+                cclassName="w-full flex items-center gap-4 px-4 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
               >
-                <Pin className="w-4 h-4" />
+                <Pin cclassName="w-4 h-4" />
                 Pin conversation
               </button>
               <button
                 onClick={() => handleContextAction("archive")}
-                className="w-full flex items-center gap-4 px-4 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
+                cclassName="w-full flex items-center gap-4 px-4 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
               >
-                <Archive className="w-4 h-4" />
+                <Archive cclassName="w-4 h-4" />
                 Archive
               </button>
-              <div className="border-t border-mac-border my-2" />
+              <div cclassName="border-t border-mac-border my-2" />
               <button
                 onClick={() => handleContextAction("delete")}
-                className="w-full flex items-center gap-4 px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
+                cclassName="w-full flex items-center gap-4 px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 cclassName="w-4 h-4" />
                 Delete
               </button>
             </motion.div>
@@ -454,8 +454,8 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
       </AnimatePresence>
 
       {/* Footer */}
-      <div className="p-4 border-t border-mac-border">
-        <div className="text-xs text-mac-text-muted text-center">
+      <div cclassName="p-4 border-t border-mac-border">
+        <div cclassName="text-xs text-mac-text-muted text-center">
           {sampleConversations.length} conversations
           {searchQuery &&
             ` • ${conversationGroups.reduce((acc, group) => acc + group.conversations.length, 0)} results`}

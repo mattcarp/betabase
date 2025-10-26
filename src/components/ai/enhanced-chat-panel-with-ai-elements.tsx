@@ -36,7 +36,7 @@ import { CodeBlock } from "../ai-elements/code-block";
 interface ChatPanelProps {
   api?: string;
   initialMessages?: any[];
-  className?: string;
+  cclassName?: string;
   title?: string;
   description?: string;
   placeholder?: string;
@@ -86,7 +86,7 @@ function parseAOMAResponse(content: string): {
 export function EnhancedChatPanelWithAIElements({
   api = "/api/chat",
   initialMessages = [],
-  className,
+  cclassName,
   title = "SIAM AI Assistant",
   description = "Powered by AOMA Knowledge Base",
   placeholder = "Ask me anything about AOMA, USM, Sony Music...",
@@ -191,26 +191,26 @@ export function EnhancedChatPanelWithAIElements({
   const isMaxMessagesReached = maxMessages ? messages.length >= maxMessages : false;
 
   return (
-    <Card className={cn("mac-card", "flex flex-col h-full", className)}>
+    <Card cclassName={cn("mac-card", "flex flex-col h-full", cclassName)}>
       {showHeader && (
-        <CardHeader className="mac-card px-4 py-4 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <Bot className="h-6 w-6 text-primary" />
-                <Sparkles className="h-3 w-3 text-primary absolute -top-1 -right-1 animate-pulse" />
+        <CardHeader cclassName="mac-card px-4 py-4 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
+          <div cclassName="flex items-center justify-between">
+            <div cclassName="flex items-center gap-4">
+              <div cclassName="relative">
+                <Bot cclassName="h-6 w-6 text-primary" />
+                <Sparkles cclassName="h-3 w-3 text-primary absolute -top-1 -right-1 animate-pulse" />
               </div>
               <div>
-                <CardTitle className="text-lg">{title}</CardTitle>
+                <CardTitle cclassName="text-lg">{title}</CardTitle>
                 {description && (
-                  <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
+                  <p cclassName="text-xs text-muted-foreground mt-0.5">{description}</p>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div cclassName="flex items-center gap-2">
               {messages.length > 0 && (
-                <Badge variant="secondary" className="text-xs">
+                <Badge variant="secondary" cclassName="text-xs">
                   {messages.length} messages
                 </Badge>
               )}
@@ -219,10 +219,10 @@ export function EnhancedChatPanelWithAIElements({
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="h-8 w-8 mac-button mac-button-outline"
+                  cclassName="h-8 w-8 mac-button mac-button-outline"
                   onClick={handleClear}
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 cclassName="h-4 w-4" />
                 </Button>
               )}
 
@@ -230,10 +230,10 @@ export function EnhancedChatPanelWithAIElements({
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="h-8 w-8 mac-button mac-button-outline"
+                  cclassName="h-8 w-8 mac-button mac-button-outline"
                   onClick={handleExport}
                 >
-                  <Download className="h-4 w-4" />
+                  <Download cclassName="h-4 w-4" />
                 </Button>
               )}
             </div>
@@ -241,36 +241,36 @@ export function EnhancedChatPanelWithAIElements({
         </CardHeader>
       )}
 
-      <CardContent className="flex-1 p-0 overflow-hidden">
-        <ScrollArea ref={scrollAreaRef} className="h-full">
-          <div className="px-4 py-4">
+      <CardContent cclassName="flex-1 p-0 overflow-hidden">
+        <ScrollArea ref={scrollAreaRef} cclassName="h-full">
+          <div cclassName="px-4 py-4">
             {messages.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col items-center justify-center min-h-[400px] text-center"
+                cclassName="flex flex-col items-center justify-center min-h-[400px] text-center"
               >
-                <div className="relative mb-6">
-                  <Bot className="h-16 w-16 text-muted-foreground/30" />
-                  <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2" />
+                <div cclassName="relative mb-6">
+                  <Bot cclassName="h-16 w-16 text-muted-foreground/30" />
+                  <Sparkles cclassName="h-5 w-5 text-primary absolute -top-2 -right-2" />
                 </div>
 
-                <h3 className="mac-title">
+                <h3 cclassName="mac-title">
                   Welcome to {title}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-6 max-w-md">
+                <p cclassName="text-sm text-muted-foreground mb-6 max-w-md">
                   I have access to the AOMA knowledge base and can answer questions about Sony Music
                   systems, USM, and enterprise tools.
                 </p>
 
                 {showSuggestions && suggestions.length > 0 && (
-                  <div className="flex flex-wrap gap-2 justify-center max-w-lg">
+                  <div cclassName="flex flex-wrap gap-2 justify-center max-w-lg">
                     {suggestions.map((suggestion, index) => (
                       <Button
                         key={index}
                         variant="outline"
                         size="sm"
-                        className="text-xs mac-button mac-button-outline"
+                        cclassName="text-xs mac-button mac-button-outline"
                         onClick={() => handleSuggestionClick(suggestion)}
                       >
                         {suggestion}
@@ -280,7 +280,7 @@ export function EnhancedChatPanelWithAIElements({
                 )}
               </motion.div>
             ) : (
-              <div className="space-y-6">
+              <div cclassName="space-y-6">
                 {messages.map((message, index) => {
                   const isUser = message.role === "user";
                   const content = (message as any).content || "";
@@ -291,7 +291,7 @@ export function EnhancedChatPanelWithAIElements({
                     : parseAOMAResponse(content);
 
                   return (
-                    <Message key={message.id || index} from={message.role} className="py-2">
+                    <Message key={message.id || index} from={message.role} cclassName="py-2">
                       <MessageAvatar
                         src={isUser ? "/user-avatar.png" : "/aoma-avatar.png"}
                         name={isUser ? "You" : "AOMA"}
@@ -299,19 +299,19 @@ export function EnhancedChatPanelWithAIElements({
                       <MessageContent>
                         {isUser ? (
                           // User messages - plain text
-                          <div className="text-sm">{content}</div>
+                          <div cclassName="text-sm">{content}</div>
                         ) : (
                           // AI responses - use Response component with markdown
                           <>
-                            <Response className="text-sm">{text}</Response>
+                            <Response cclassName="text-sm">{text}</Response>
 
                             {/* Display sources if available */}
                             {sources.length > 0 && (
-                              <div className="mt-4 pt-4 border-t border-border/50">
-                                <p className="text-xs text-muted-foreground mb-2">
+                              <div cclassName="mt-4 pt-4 border-t border-border/50">
+                                <p cclassName="text-xs text-muted-foreground mb-2">
                                   📚 Sources ({sources.length}):
                                 </p>
-                                <div className="flex flex-wrap gap-2">
+                                <div cclassName="flex flex-wrap gap-2">
                                   {sources.map((source, idx) => (
                                     <InlineCitation key={source.id}>
                                       <InlineCitationCard>
@@ -349,13 +349,13 @@ export function EnhancedChatPanelWithAIElements({
 
                 {/* Loading state with AI Elements Loader */}
                 {isLoading && (
-                  <Message from="assistant" className="py-2">
+                  <Message from="assistant" cclassName="py-2">
                     <MessageAvatar src="/aoma-avatar.png" name="AOMA" />
                     <MessageContent>
-                      <Loader className="text-muted-foreground">
-                        <div className="flex items-center gap-2">
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          <span className="text-sm">Searching AOMA knowledge base...</span>
+                      <Loader cclassName="text-muted-foreground">
+                        <div cclassName="flex items-center gap-2">
+                          <Loader2 cclassName="h-4 w-4 animate-spin" />
+                          <span cclassName="text-sm">Searching AOMA knowledge base...</span>
                         </div>
                       </Loader>
                     </MessageContent>
@@ -365,17 +365,17 @@ export function EnhancedChatPanelWithAIElements({
             )}
 
             {error && (
-              <Alert variant="destructive" className="mt-4">
-                <AlertCircle className="h-4 w-4" />
+              <Alert variant="destructive" cclassName="mt-4">
+                <AlertCircle cclassName="h-4 w-4" />
                 <AlertDescription>
                   {error.message || "An error occurred. Please try again."}
                   <Button
-                    className="mac-button mac-button-primary"
+                    cclassName="mac-button mac-button-primary"
                     variant="link"
-                    className="mac-button"
+                    cclassName="mac-button"
                     size="sm"
                     onClick={() => reload()}
-                    className="ml-2 h-auto p-0"
+                    cclassName="ml-2 h-auto p-0"
                   >
                     Retry
                   </Button>
@@ -384,8 +384,8 @@ export function EnhancedChatPanelWithAIElements({
             )}
 
             {isMaxMessagesReached && (
-              <Alert className="mt-4">
-                <AlertCircle className="h-4 w-4" />
+              <Alert cclassName="mt-4">
+                <AlertCircle cclassName="h-4 w-4" />
                 <AlertDescription>
                   Maximum message limit ({maxMessages}) reached. Please start a new conversation.
                 </AlertDescription>
@@ -396,8 +396,8 @@ export function EnhancedChatPanelWithAIElements({
       </CardContent>
 
       {showFooter && (
-        <CardFooter className="p-4 border-t bg-background/95 backdrop-blur-xl">
-          <div className="w-full">
+        <CardFooter cclassName="p-4 border-t bg-background/95 backdrop-blur-xl">
+          <div cclassName="w-full">
             <ChatInput
               value={input}
               onChange={handleInputChange}
@@ -405,7 +405,7 @@ export function EnhancedChatPanelWithAIElements({
               onStop={stop}
               isLoading={isLoading}
               placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
-              className="w-full"
+              cclassName="w-full"
               allowAttachments={false}
               allowVoice={false}
               suggestions={showSuggestions ? suggestions : []}
@@ -413,14 +413,14 @@ export function EnhancedChatPanelWithAIElements({
             />
 
             {isLoading && (
-              <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                <Loader2 className="h-3 w-3 animate-spin" />
+              <div cclassName="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                <Loader2 cclassName="h-3 w-3 animate-spin" />
                 AI is querying AOMA knowledge base...
                 <Button
                   variant="link"
                   size="sm"
                   onClick={stop}
-                  className="h-auto p-0 text-xs mac-button mac-button-primary"
+                  cclassName="h-auto p-0 text-xs mac-button mac-button-primary"
                 >
                   Stop
                 </Button>
