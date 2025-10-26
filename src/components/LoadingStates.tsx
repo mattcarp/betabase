@@ -66,9 +66,7 @@ export function EmptyState({
   return (
     <div className={cn("text-center py-8", className)}>
       <div className={cn("mx-auto mb-4 opacity-50", animated && "animate-pulse")}>{icon}</div>
-      <h3 className="mac-title">
-        {title}
-      </h3>
+      <h3 className="mac-title">{title}</h3>
       <p className="text-sm text-gray-400 font-mono">{description}</p>
       {animated && (
         <div className="flex justify-center gap-2 mt-4">

@@ -5,37 +5,44 @@
 ## Quick Navigation
 
 ### For New Developers
+
 - **[Quick Start Guide](QUICK-START.md)** - Zero to productive in 5 minutes
 
 ### By Category
 
 #### Development
+
 - **[Git Workflow](development/GIT-WORKFLOW.md)** - Git strategies, commit guidelines, merge conflict resolution
 - **[Testing Strategy](development/TESTING-STRATEGY.md)** - Complete testing guide (AOMA, visual, E2E, production)
 - **[TypeScript Guidelines](development/TYPESCRIPT-GUIDELINES.md)** - Type-checking, common errors, standards
 - **[Code Quality](development/CODE-QUALITY.md)** - Linting, formatting, pre-commit hooks, quality gates
 
 #### Deployment
+
 - **[Deployment Guide](deployment/DEPLOYMENT-GUIDE.md)** - Full deployment process (Render, CI/CD, automation)
 - **[Monitoring](deployment/MONITORING.md)** - Health checks, logs, metrics, performance
 - **[CI/CD Pipeline](deployment/CI-CD-PIPELINE.md)** - GitHub Actions, automated testing, PR workflow
 
 #### Design
+
 - **[MAC Design System](design/MAC-DESIGN-SYSTEM.md)** - Design tokens, components, compliance validation
 - **[UI Components](design/UI-COMPONENTS.md)** - shadcn/ui, AI Elements, component usage
 - **[Design Review](design/DESIGN-REVIEW.md)** - 8-phase review process, visual scoring, Fiona workflow
 
 #### Agents
+
 - **[Fiona Usage](agents/FIONA-USAGE.md)** - Enhanced Fiona agent capabilities, workflows, HITL
 - **[Agent Workflows](agents/AGENT-WORKFLOWS.md)** - Multi-agent patterns, orchestration, best practices
 - **[MCP Integration](agents/MCP-INTEGRATION.md)** - MCP servers, tools, configuration
 
 #### Troubleshooting
+
 - **[Common Issues](troubleshooting/COMMON-ISSUES.md)** - Frequent problems and solutions
 - **[Debug Commands](troubleshooting/DEBUG-COMMANDS.md)** - Essential debugging commands and tools
 - **[Known Issues](troubleshooting/KNOWN-ISSUES.md)** - Current limitations, workarounds, future fixes
 
 #### Reference
+
 - **[API Reference](reference/API-REFERENCE.md)** - API endpoints, authentication, usage
 - **[Environment Variables](reference/ENVIRONMENT-VARS.md)** - Complete env var reference
 - **[Project Structure](reference/PROJECT-STRUCTURE.md)** - Directory layout, file organization
@@ -44,6 +51,7 @@
 ## Existing Documentation
 
 ### Already Created
+
 - **[AOMA Documentation Index](AOMA-DOCUMENTATION-INDEX.md)** - AOMA integration, authentication, crawling
 - **[Testing Fundamentals](TESTING_FUNDAMENTALS.md)** - Comprehensive testing overview
 - **[Production Testing](PRODUCTION_TESTING.md)** - Production deployment verification
@@ -52,18 +60,18 @@
 
 ## Search by Task
 
-| What I Need To Do | Where To Look |
-|-------------------|---------------|
-| Fix merge conflict | [Git Workflow](development/GIT-WORKFLOW.md) |
-| Run tests before PR | [Testing Strategy](development/TESTING-STRATEGY.md) |
-| Deploy to production | [Deployment Guide](deployment/DEPLOYMENT-GUIDE.md) |
-| Check design compliance | [Design Review](design/DESIGN-REVIEW.md) |
-| Debug build failure | [Debug Commands](troubleshooting/DEBUG-COMMANDS.md) |
-| Set up environment | [Quick Start](QUICK-START.md) |
-| Use Fiona agent | [Fiona Usage](agents/FIONA-USAGE.md) |
-| Fix TypeScript errors | [TypeScript Guidelines](development/TYPESCRIPT-GUIDELINES.md) |
-| Monitor deployment | [Monitoring](deployment/MONITORING.md) |
-| Understand project layout | [Project Structure](reference/PROJECT-STRUCTURE.md) |
+| What I Need To Do         | Where To Look                                                 |
+| ------------------------- | ------------------------------------------------------------- |
+| Fix merge conflict        | [Git Workflow](development/GIT-WORKFLOW.md)                   |
+| Run tests before PR       | [Testing Strategy](development/TESTING-STRATEGY.md)           |
+| Deploy to production      | [Deployment Guide](deployment/DEPLOYMENT-GUIDE.md)            |
+| Check design compliance   | [Design Review](design/DESIGN-REVIEW.md)                      |
+| Debug build failure       | [Debug Commands](troubleshooting/DEBUG-COMMANDS.md)           |
+| Set up environment        | [Quick Start](QUICK-START.md)                                 |
+| Use Fiona agent           | [Fiona Usage](agents/FIONA-USAGE.md)                          |
+| Fix TypeScript errors     | [TypeScript Guidelines](development/TYPESCRIPT-GUIDELINES.md) |
+| Monitor deployment        | [Monitoring](deployment/MONITORING.md)                        |
+| Understand project layout | [Project Structure](reference/PROJECT-STRUCTURE.md)           |
 
 ## Documentation Principles
 
@@ -77,6 +85,7 @@
 ## Contributing to Docs
 
 When adding documentation:
+
 1. Determine the correct category (development/deployment/design/agents/troubleshooting/reference)
 2. Add to existing file if topic fits, create new file if needed
 3. Update this INDEX.md with link
@@ -85,4 +94,4 @@ When adding documentation:
 
 ---
 
-*Last updated: 2025-10-26*
+_Last updated: 2025-10-26_

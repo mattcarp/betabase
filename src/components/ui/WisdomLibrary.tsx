@@ -476,9 +476,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
   return (
     <div className={`space-y-4 ${className}`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="mac-title">
-          Wisdom Library
-        </h3>
+        <h3 className="mac-title">Wisdom Library</h3>
         <div className="flex items-center gap-2">
           {mcpState.isConnected && <span className="motiff-status-connected text-xs">AOMA</span>}
           <button className="text-motiff-accent/70 hover:text-motiff-accent text-sm transition-colors">

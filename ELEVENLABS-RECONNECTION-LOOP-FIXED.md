@@ -12,11 +12,13 @@
 **Problem**: The application was stuck in an infinite reconnection loop, generating ~2 signed URL requests per second.
 
 **Root Cause**: `ConversationalAI.tsx` component hardcoded `autoReconnect: true` in THREE places:
+
 - Line 81: `startConversation()` ref function
 - Line 96: `toggleConversation()` ref function
 - Line 113: `handleToggle()` button handler
 
 **How It Worked (Bad)**:
+
 1. WebSocket connection established
 2. Something caused WebSocket to close (within 2-3 seconds)
 3. `onDisconnect` handler detected disconnection
@@ -25,6 +27,7 @@
 6. Cycle repeated infinitely
 
 **Server Logs Evidence**:
+
 ```
 🔐 Requesting signed URL for agent: agent_01jz1ar6k2e8tvst14g6cbgc7m
 ✅ Signed URL generated successfully
@@ -37,9 +40,11 @@
 **Changed**: All three instances of `autoReconnect: true` → `autoReconnect: false`
 
 **Files Modified**:
+
 - `src/components/ConversationalAI.tsx` (lines 81, 96, 113)
 
 **Result**:
+
 - Reconnection loop stopped
 - Connection will now fail once without retry
 - This allows us to see the actual disconnect error clearly
@@ -53,6 +58,7 @@ Now that auto-reconnect is disabled, we can debug the actual WebSocket disconnec
 ### What We Know
 
 **From Agent Configuration** (verified via ElevenLabs API):
+
 - ✅ Agent ID correct: `agent_01jz1ar6k2e8tvst14g6cbgc7m`
 - ✅ RAG enabled: `true`
 - ✅ Knowledge base document connected: `mnkvIiWiCUxKK5RnQNnF` (AOMA Comprehensive Overview)
@@ -102,6 +108,7 @@ From ELEVENLABS-TESTING-STATUS.md, the most likely causes are:
 5. **Observe the connection behavior**
 
 **Expected Result**:
+
 - Connection should establish once
 - If it disconnects, it will NOT auto-reconnect
 - Check browser console for the actual error message
@@ -141,7 +148,7 @@ await startConv({
   mode,
   vadSensitivity,
   interruptThreshold,
-  autoReconnect: true,  // ❌ Causes infinite reconnection loop
+  autoReconnect: true, // ❌ Causes infinite reconnection loop
 });
 ```
 
@@ -153,7 +160,7 @@ await startConv({
   mode,
   vadSensitivity,
   interruptThreshold,
-  autoReconnect: false,  // ✅ Disabled to debug WebSocket disconnect issue
+  autoReconnect: false, // ✅ Disabled to debug WebSocket disconnect issue
 });
 ```
 
@@ -164,11 +171,13 @@ await startConv({
 Once we have test results with autoReconnect disabled:
 
 ### If connection stays open longer than 3 seconds:
+
 - **Progress!** The Bluetooth device was likely the issue
 - Test with Bluetooth again to confirm
 - If stable with built-in mic, document Bluetooth incompatibility
 
 ### If connection still disconnects immediately:
+
 - **Next steps**:
   1. Disable volume monitoring temporarily (comment out lines 140-154 in hook)
   2. Check browser console Network tab for WebSocket upgrade failure
@@ -176,6 +185,7 @@ Once we have test results with autoReconnect disabled:
   4. Check network firewall settings
 
 ### If connection succeeds and stays open:
+
 - **Test AOMA knowledge**:
   1. Ask: "What is AOMA?"
   2. Ask: "What does AOMA stand for?"
@@ -213,11 +223,12 @@ Once the root cause is fixed, we can make auto-reconnect **configurable** via pr
 ```typescript
 interface ConversationalAIProps {
   // ... existing props
-  enableAutoReconnect?: boolean;  // Optional, defaults to false
+  enableAutoReconnect?: boolean; // Optional, defaults to false
 }
 ```
 
 This allows:
+
 - Development: `enableAutoReconnect={false}` for easier debugging
 - Production: `enableAutoReconnect={true}` for better UX
 
@@ -239,6 +250,7 @@ But we should NOT re-enable it until we understand why the connection drops.
 **The reconnection loop has been eliminated**. This was a symptom, not the root cause.
 
 **Next critical step**: User must test with:
+
 1. Built-in microphone (not Bluetooth)
 2. Auto-reconnect disabled
 3. Report actual error messages from browser console

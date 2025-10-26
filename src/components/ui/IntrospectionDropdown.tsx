@@ -286,9 +286,7 @@ export function IntrospectionDropdown() {
               <div className="space-y-4">
                 {/* Metadata */}
                 <div>
-                  <h4 className="mac-title">
-                    Metadata
-                  </h4>
+                  <h4 className="mac-title">Metadata</h4>
                   <div className="bg-muted rounded-lg p-4 space-y-1 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Type:</span>
@@ -324,9 +322,7 @@ export function IntrospectionDropdown() {
                 {/* Inputs */}
                 {selectedTrace.inputs && (
                   <div>
-                    <h4 className="mac-title">
-                      Inputs
-                    </h4>
+                    <h4 className="mac-title">Inputs</h4>
                     <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto">
                       {JSON.stringify(selectedTrace.inputs, null, 2)}
                     </pre>
@@ -336,9 +332,7 @@ export function IntrospectionDropdown() {
                 {/* Outputs */}
                 {selectedTrace.outputs && (
                   <div>
-                    <h4 className="mac-title">
-                      Outputs
-                    </h4>
+                    <h4 className="mac-title">Outputs</h4>
                     <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto">
                       {JSON.stringify(selectedTrace.outputs, null, 2)}
                     </pre>
@@ -363,9 +357,7 @@ export function IntrospectionDropdown() {
                 {/* Additional Metadata */}
                 {selectedTrace.metadata && Object.keys(selectedTrace.metadata).length > 0 && (
                   <div>
-                    <h4 className="mac-title">
-                      Additional Context
-                    </h4>
+                    <h4 className="mac-title">Additional Context</h4>
                     <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto">
                       {JSON.stringify(selectedTrace.metadata, null, 2)}
                     </pre>

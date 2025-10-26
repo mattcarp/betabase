@@ -222,7 +222,6 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
           <h1 className="mac-heading mac-display-text mb-2">The Betabase</h1>
           <p className="mac-body text-gray-300">yup. it's back.</p>
         </div>
-
       </div>
 
       {/* Glass Morphism Card */}

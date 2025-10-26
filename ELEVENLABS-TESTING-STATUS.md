@@ -14,11 +14,13 @@ The ElevenLabs integration has been fully configured with AOMA knowledge base, b
 ## What's Working ✅
 
 ### Backend
+
 - ✅ Signed URL generation working perfectly (~500ms per request)
 - ✅ API endpoint responding correctly
 - ✅ No server-side errors
 
 ### Configuration
+
 - ✅ Agent ID configured: `agent_01jz1ar6k2e8tvst14g6cbgc7m`
 - ✅ RAG enabled with proper settings
 - ✅ AOMA knowledge base document uploaded (ID: `mnkvIiWiCUxKK5RnQNnF`)
@@ -26,6 +28,7 @@ The ElevenLabs integration has been fully configured with AOMA knowledge base, b
 - ✅ Agent prompt updated for AOMA expertise
 
 ### Browser/Permissions
+
 - ✅ Microphone permissions granted
 - ✅ Audio context initialized
 - ✅ User agent supports WebRTC
@@ -36,9 +39,11 @@ The ElevenLabs integration has been fully configured with AOMA knowledge base, b
 ## What's NOT Working ❌
 
 ### WebSocket Connection
+
 **Problem**: Connection establishes then immediately closes
 
 **Error Pattern**:
+
 ```
 🔗 ElevenLabs: Connected to conversation
 🎤 Unmuting microphone...
@@ -53,6 +58,7 @@ The ElevenLabs integration has been fully configured with AOMA knowledge base, b
 ```
 
 **Symptoms**:
+
 - Connection succeeds initially
 - Brief audio activity (Input: 0-5%, Output: 0-20%)
 - Multiple "WebSocket is already in CLOSING or CLOSED state" errors
@@ -60,6 +66,7 @@ The ElevenLabs integration has been fully configured with AOMA knowledge base, b
 - Auto-reconnect loop consuming signed URLs
 
 **Impact**:
+
 - Cannot test AOMA knowledge access
 - Cannot have any conversation with the agent
 - System stuck in reconnection loop
@@ -69,26 +76,31 @@ The ElevenLabs integration has been fully configured with AOMA knowledge base, b
 ## Possible Causes
 
 ### 1. Bluetooth Audio Device Issue
+
 - **Device**: Matties XM5 Over-Ear (Bluetooth)
 - **Theory**: ElevenLabs WebRTC may not be compatible with Bluetooth audio input
 - **Test**: Try with built-in microphone or wired headset
 
 ### 2. ElevenLabs Service Issue
+
 - **Theory**: Agent configuration may have an invalid setting
 - **Test**: Check agent configuration via API
 - **Test**: Try creating a new agent from scratch
 
 ### 3. Browser Security Restrictions
+
 - **Theory**: Safari/Chrome may be blocking WebRTC for security reasons
 - **Test**: Try in different browser
 - **Test**: Check browser console for security warnings
 
 ### 4. Network/Firewall Issue
+
 - **Theory**: Corporate firewall or VPN blocking WebSocket connections
 - **Test**: Check network console for blocked requests
 - **Test**: Try on different network
 
 ### 5. Agent Configuration Issue
+
 - **Theory**: RAG or MCP configuration causing connection rejection
 - **Test**: Disable RAG temporarily
 - **Test**: Remove MCP server connection
@@ -98,6 +110,7 @@ The ElevenLabs integration has been fully configured with AOMA knowledge base, b
 ## Backend Evidence (from dev server logs)
 
 **Signed URL Generation (Working)**:
+
 ```
 🔐 Requesting signed URL for agent: agent_01jz1ar6k2e8tvst14g6cbgc7m
 ✅ Signed URL generated successfully
@@ -114,6 +127,7 @@ This confirms the backend is functioning correctly. The issue is with the WebSoc
 ## Frontend Evidence (from browser console)
 
 **Connection Lifecycle**:
+
 1. ✅ Microphone permissions granted
 2. ✅ Signed URL received from server
 3. ✅ Connected to ElevenLabs conversation
@@ -153,6 +167,7 @@ This confirms the backend is functioning correctly. The issue is with the WebSoc
    - Capture WebSocket frame data
 
 3. **Verify Agent Configuration**
+
    ```bash
    curl "https://api.elevenlabs.io/v1/convai/agents/agent_01jz1ar6k2e8tvst14g6cbgc7m" \
      -H "xi-api-key: $ELEVENLABS_API_KEY" | jq '.'
@@ -190,6 +205,7 @@ This confirms the backend is functioning correctly. The issue is with the WebSoc
 ## User Action Required
 
 **PLEASE TRY**:
+
 1. Disconnect your Bluetooth headphones (Matties XM5)
 2. Use your MacBook's built-in microphone
 3. Reload the page: http://localhost:3000/test-elevenlabs
@@ -197,6 +213,7 @@ This confirms the backend is functioning correctly. The issue is with the WebSoc
 5. Report if the connection stays stable longer
 
 **If connection still fails**, we'll need to:
+
 - Check the agent configuration via API
 - Try disabling RAG temporarily
 - Test with a freshly created agent
@@ -206,6 +223,7 @@ This confirms the backend is functioning correctly. The issue is with the WebSoc
 ## Technical Details
 
 **Agent Configuration**:
+
 - Agent ID: `agent_01jz1ar6k2e8tvst14g6cbgc7m`
 - Agent Name: "30-June-2015"
 - MCP Server: `uR5cKaU7GOZQyS04RVXP` (AOMA Mesh MCP Server)
@@ -215,12 +233,14 @@ This confirms the backend is functioning correctly. The issue is with the WebSoc
 - Voice Model: Default (LLM: Gemini 2.0 Flash)
 
 **Environment**:
+
 - Browser: Safari/Chrome on macOS
 - Audio Device: Bluetooth (Matties XM5 Over-Ear)
 - Network: Unknown (possibly corporate or VPN)
 - Next.js Dev Server: Running on localhost:3000
 
 **API Endpoint**: `/api/elevenlabs/conversation-token`
+
 - Status: ✅ Working (200 responses)
 - Rate: ~2 requests/sec during loop
 
@@ -238,6 +258,7 @@ This confirms the backend is functioning correctly. The issue is with the WebSoc
 ## Conclusion
 
 The integration is **fully configured and ready**, but **blocked by WebSocket connection failures**. The most likely culprit is either:
+
 1. Bluetooth audio device incompatibility
 2. Browser security restrictions
 3. Network/firewall blocking WebSocket

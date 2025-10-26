@@ -161,9 +161,7 @@ export const MACShowcase: React.FC = () => {
       <div className="relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="mac-heading">
-            SIAM × MAC
-          </h1>
+          <h1 className="mac-heading">SIAM × MAC</h1>
           <p className="text-mac-text-secondary font-mac-body font-light text-lg">
             Professional elegance meets futuristic innovation
           </p>

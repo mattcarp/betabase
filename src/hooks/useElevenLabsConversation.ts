@@ -173,7 +173,9 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
       try {
         const inputVol = conversation.getInputVolume?.() ?? 0;
         const outputVol = conversation.getOutputVolume?.() ?? 0;
-        console.log(`🎤 Audio levels - Input: ${(inputVol * 100).toFixed(1)}%, Output: ${(outputVol * 100).toFixed(1)}%`);
+        console.log(
+          `🎤 Audio levels - Input: ${(inputVol * 100).toFixed(1)}%, Output: ${(outputVol * 100).toFixed(1)}%`
+        );
 
         // Store volumes for display
         setUserAudioLevel(inputVol);

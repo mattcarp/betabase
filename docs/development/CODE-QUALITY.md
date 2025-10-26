@@ -130,11 +130,13 @@ npm run mac:check-all     # Check all source files
 Every time you push code, the following checks run automatically:
 
 **Phase 1: Code Quality Checks** (Fast - ~30 seconds)
+
 1. **Merge Conflict Detection** - Prevents pushing code with conflict markers
 2. **Prettier Formatting** - Ensures consistent code style across the project
 3. **ESLint Linting** - Catches potential bugs and enforces best practices
 
 **Phase 2: Test Suite** (Slower - depends on branch)
+
 - **Feature branches**: Smoke tests (~2 minutes)
 - **Main/Develop branches**: Critical tests (~5 minutes)
 
@@ -145,6 +147,7 @@ npm run pre-pr-check
 ```
 
 This runs:
+
 - `npm run format:check` - Prettier validation
 - `npm run lint` - ESLint validation
 - `git diff --check` - Merge conflict detection
@@ -152,6 +155,7 @@ This runs:
 ### Quick Fixes for Common Issues
 
 **Formatting Issues:**
+
 ```bash
 npm run format          # Auto-fix all formatting issues
 git add .              # Stage the fixes
@@ -159,12 +163,14 @@ git commit -m "fix: apply prettier formatting"
 ```
 
 **Linting Issues:**
+
 ```bash
 npm run lint:fix       # Auto-fix fixable lint issues
 npm run lint           # Check remaining issues
 ```
 
 **Merge Conflicts:**
+
 ```bash
 git status             # See which files have conflicts
 # Manually resolve conflicts in your editor
@@ -207,16 +213,19 @@ git push --no-verify
 ### Rules Overview
 
 **React Rules:**
+
 - `react-hooks/rules-of-hooks: error` - Enforce Hook rules
 - `react-hooks/exhaustive-deps: warn` - Verify Hook dependencies
 - `@next/next/no-img-element: error` - Use Next.js Image component
 - `@next/next/no-html-link-for-pages: error` - Use Next.js Link component
 
 **TypeScript Rules:**
+
 - `@typescript-eslint/no-unused-vars: warn` - No unused variables
 - `@typescript-eslint/no-explicit-any: warn` - Avoid any type
 
 **General Rules:**
+
 - `no-var: error` - No var keyword
 - `prefer-const: warn` - Use const when possible
 - `no-debugger: warn` - No debugger statements
@@ -274,4 +283,4 @@ git diff --name-only main...HEAD | xargs npm run type-check
 
 ---
 
-*For quick reference, see [QUICK-START.md](../QUICK-START.md)*
+_For quick reference, see [QUICK-START.md](../QUICK-START.md)_

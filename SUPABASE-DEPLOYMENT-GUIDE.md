@@ -1,19 +1,23 @@
 # Supabase Function Deployment Guide
 
 ## Problem
+
 The `match_aoma_vectors` function is missing from your Supabase database, causing vector search to fail.
 
 ## Solution
+
 Deploy the function manually using the Supabase SQL Editor.
 
 ## Steps
 
 ### 1. Open Supabase SQL Editor
+
 1. Go to https://supabase.com/dashboard
 2. Select your project: `kfxetwuuzljhybfgmpuc`
 3. Navigate to **SQL Editor** in the left sidebar
 
 ### 2. Run the SQL Script
+
 Copy and paste the contents of `sql/create-match-aoma-vectors-function.sql`:
 
 ```sql
@@ -97,6 +101,7 @@ CREATE POLICY "Allow service role full access to aoma_vectors" ON aoma_vectors
 ### 3. Click "Run" to execute the SQL
 
 ### 4. Verify Deployment
+
 Run this query to check if the function was created:
 
 ```sql
@@ -107,6 +112,7 @@ WHERE routine_schema = 'public'
 ```
 
 You should see one row returned with:
+
 - `routine_name`: match_aoma_vectors
 - `routine_type`: FUNCTION
 
@@ -120,6 +126,7 @@ You should see one row returned with:
 ## After Deployment
 
 Once deployed, the AOMA chat will:
+
 - ✅ Successfully query Supabase vector store
 - ✅ Find relevant knowledge using vector embeddings
 - ✅ Provide accurate answers based on stored knowledge

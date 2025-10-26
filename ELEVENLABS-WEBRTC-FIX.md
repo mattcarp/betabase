@@ -9,12 +9,14 @@
 The integration was using the **wrong ElevenLabs API endpoint**:
 
 **BEFORE (BROKEN)**:
+
 - Endpoint: `/v1/convai/conversation/get_signed_url`
 - Returns: `signed_url` for **WebSocket** connection
 - Issue: WebSocket is not optimized for real-time audio streaming
 - Result: Connection dropped after 2-3 seconds, AI cut off mid-sentence
 
 **AFTER (FIXED)**:
+
 - Endpoint: `/v1/convai/conversation/token`
 - Returns: `token` for **WebRTC** connection
 - Benefit: WebRTC is designed for real-time audio streaming
@@ -25,10 +27,11 @@ The integration was using the **wrong ElevenLabs API endpoint**:
 ### 1. Backend API - `/app/api/elevenlabs/conversation-token/route.ts`
 
 **Changed**:
+
 ```typescript
 // OLD: WebSocket endpoint
 const response = await fetch(
-  `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${agentId}`,
+  `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${agentId}`
   // ...
 );
 return NextResponse.json({
@@ -38,7 +41,7 @@ return NextResponse.json({
 
 // NEW: WebRTC endpoint
 const response = await fetch(
-  `https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=${agentId}`,
+  `https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=${agentId}`
   // ...
 );
 return NextResponse.json({
@@ -50,6 +53,7 @@ return NextResponse.json({
 ### 2. Frontend Hook - `/src/hooks/useElevenLabsConversation.ts`
 
 **Changed**:
+
 ```typescript
 // OLD: signedUrl reference
 const signedUrlRef = useRef<string | null>(null);
@@ -59,6 +63,7 @@ const conversationTokenRef = useRef<string | null>(null);
 ```
 
 **Changed**:
+
 ```typescript
 // OLD: getSignedUrl function
 const getSignedUrl = async (agentId: string): Promise<string> => {
@@ -76,6 +81,7 @@ const getConversationToken = async (agentId: string): Promise<string> => {
 ```
 
 **Changed**:
+
 ```typescript
 // OLD: WebSocket connection
 const signedUrl = await getSignedUrl(config.agentId);
@@ -94,6 +100,7 @@ await conversation.startSession({
 ## Verification (Console Logs)
 
 ### Backend Logs:
+
 ```
 🔐 Requesting WebRTC conversation token for agent: agent_01jz1ar6k2e8tvst14g6cbgc7m
 ✅ WebRTC conversation token generated successfully
@@ -101,6 +108,7 @@ POST /api/elevenlabs/conversation-token 200 in 1324ms
 ```
 
 ### Frontend Logs:
+
 ```
 ✅ WebRTC conversation token received
 WebRTC room connected
@@ -116,12 +124,14 @@ publishing track {room: room_agent_...}
 ## Status
 
 ### ✅ Fixed Issues:
+
 1. **2-3 second disconnect** - Connection now stable
 2. **AI cut off mid-sentence** - AI completes full intro sentence
 3. **"WebSocket CLOSING" errors** - Gone (previously fixed with volume monitoring cleanup)
 4. **Microphone input at 0%** - Now showing 3-14% (previously fixed by removing pre-check)
 
 ### ✅ Working Features:
+
 - WebRTC connection establishes successfully
 - Microphone captures audio (Input: 3-14%)
 - AI speaks intro sentence (Output: 5-6%)
@@ -133,12 +143,14 @@ publishing track {room: room_agent_...}
 **User speech not triggering AI response**
 
 **Symptoms**:
+
 - Microphone IS capturing audio (Input: 3-14%)
 - AI IS connected and spoke intro
 - But when user speaks, no transcription appears
 - No "user_transcript" or "agent_response" WebSocket messages logged
 
 **Possible Causes**:
+
 1. **Voice Activity Detection (VAD) sensitivity too high** (currently 50%)
    - Input levels of 3-14% might be below VAD threshold
    - User might need to speak louder or closer to microphone
@@ -154,20 +166,25 @@ publishing track {room: room_agent_...}
 ## Next Steps
 
 ### Option 1: Test with Higher Audio Input (Quick Test)
+
 - Speak LOUDER directly into the microphone
 - Check if Input levels go above 15-20%
 - See if that triggers transcription
 
 ### Option 2: Lower VAD Sensitivity
+
 In `ConversationalAI.tsx`, change:
+
 ```typescript
-vadSensitivity: 0.5  // Current: 50%
+vadSensitivity: 0.5; // Current: 50%
 // Try:
-vadSensitivity: 0.3  // Lower = more sensitive to quiet speech
+vadSensitivity: 0.3; // Lower = more sensitive to quiet speech
 ```
 
 ### Option 3: Configure WebRTC Audio Input
+
 In `useElevenLabsConversation.ts`, add explicit input configuration:
+
 ```typescript
 await conversation.startSession({
   conversationToken,
@@ -181,6 +198,7 @@ await conversation.startSession({
 ```
 
 ### Option 4: Check ElevenLabs Agent Configuration
+
 - Verify agent has proper STT (Speech-to-Text) enabled
 - Check if agent requires specific audio format
 - Verify agent timeout settings aren't too aggressive

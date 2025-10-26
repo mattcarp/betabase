@@ -289,9 +289,7 @@ export const SearchResultsResponse: React.FC<{
             <Search className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="mac-title">
-              Search Results
-            </h3>
+            <h3 className="mac-title">Search Results</h3>
             <div className="text-sm text-gray-400">
               <span className="font-medium">"{data.query}"</span> •{" "}
               {data.totalResults.toLocaleString()} results in {data.searchTime}

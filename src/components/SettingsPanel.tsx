@@ -264,9 +264,7 @@ function AppearanceSettings({
 
   return (
     <div className="space-y-6">
-      <h3 className="mac-title">
-        Appearance Settings
-      </h3>
+      <h3 className="mac-title">Appearance Settings</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -378,9 +376,7 @@ function AudioSettings({
 }) {
   return (
     <div className="space-y-6">
-      <h3 className="mac-title">
-        Audio Settings
-      </h3>
+      <h3 className="mac-title">Audio Settings</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -441,9 +437,7 @@ function RecordingSettings({
 }) {
   return (
     <div className="space-y-6">
-      <h3 className="mac-title">
-        Recording Settings
-      </h3>
+      <h3 className="mac-title">Recording Settings</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -530,9 +524,7 @@ function LayoutSettings({
 }) {
   return (
     <div className="space-y-6">
-      <h3 className="mac-title">
-        Layout Settings
-      </h3>
+      <h3 className="mac-title">Layout Settings</h3>
 
       <div className="grid grid-cols-3 gap-4">
         <div>
@@ -653,9 +645,7 @@ function ShortcutsSettings({
 
   return (
     <div className="space-y-6">
-      <h3 className="mac-title">
-        Keyboard Shortcuts
-      </h3>
+      <h3 className="mac-title">Keyboard Shortcuts</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {shortcuts.map(({ key, label }) => (
@@ -684,9 +674,7 @@ function DataPrivacySettings({
 }) {
   return (
     <div className="space-y-6">
-      <h3 className="mac-title">
-        Data & Privacy Settings
-      </h3>
+      <h3 className="mac-title">Data & Privacy Settings</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
