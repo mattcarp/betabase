@@ -3,7 +3,7 @@ import { cn } from "../lib/utils";
 
 interface AudioWaveformProps {
   isRecording: boolean;
-  className?: string;
+  cclassName?: string;
   height?: number;
   waveColor?: string;
   progressColor?: string;
@@ -12,7 +12,7 @@ interface AudioWaveformProps {
 
 export default function AudioWaveform({
   isRecording,
-  className = "",
+  cclassName = "",
   height = 128,
   waveColor: _waveColor = "#3B82F6",
   progressColor: _progressColor = "#0080ff",
@@ -21,21 +21,21 @@ export default function AudioWaveform({
   const [isInitialized] = useState(true);
 
   return (
-    <div className={cn("wavesurfer-container", className)}>
+    <div cclassName={cn("wavesurfer-container", cclassName)}>
       <div
-        className="w-full bg-black/20 border border-blue-500/30 rounded-lg flex items-center justify-center"
+        cclassName="w-full bg-black/20 border border-blue-500/30 rounded-lg flex items-center justify-center"
         style={{ height: `${height}px` }}
         data-testid="audio-waveform-container"
       >
-        <div className="text-center">
-          <div className="text-blue-600 text-sm mb-2">
+        <div cclassName="text-center">
+          <div cclassName="text-blue-600 text-sm mb-2">
             {isRecording ? "🎤 Recording..." : "🌊 Audio Waveform"}
           </div>
-          <div className="text-xs text-blue-600/60">WaveSurfer.js integration coming soon</div>
+          <div cclassName="text-xs text-blue-600/60">WaveSurfer.js integration coming soon</div>
         </div>
       </div>
 
-      <div className="mt-2 flex items-center justify-between text-xs text-blue-600">
+      <div cclassName="mt-2 flex items-center justify-between text-xs text-blue-600">
         <span>Status: {isRecording ? "Recording" : "Ready"}</span>
         <span>{isInitialized ? "Placeholder Ready" : "Initializing..."}</span>
       </div>

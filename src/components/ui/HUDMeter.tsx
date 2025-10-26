@@ -16,7 +16,7 @@ export interface HUDMeterProps {
   showValue?: boolean;
   showTicks?: boolean;
   glowEffect?: boolean;
-  className?: string;
+  cclassName?: string;
   criticalThreshold?: number; // Show warning color above this
   warningThreshold?: number; // Show warning color above this
 }
@@ -69,7 +69,7 @@ export const HUDMeter: React.FC<HUDMeterProps> = ({
   showValue = true,
   showTicks = true,
   glowEffect = true,
-  className,
+  cclassName,
   criticalThreshold = 90,
   warningThreshold = 75,
 }) => {
@@ -198,14 +198,14 @@ export const HUDMeter: React.FC<HUDMeterProps> = ({
 
   return (
     <div
-      className={cn("relative inline-flex items-center justify-center", className)}
+      cclassName={cn("relative inline-flex items-center justify-center", cclassName)}
       style={{ width: size + 40, height: size + 40 }}
       data-testid="hud-meter"
     >
       <svg
         width={size + 40}
         height={size + 40}
-        className="absolute inset-0"
+        cclassName="absolute inset-0"
         data-testid="hud-meter-svg"
       >
         {/* Background arc */}
@@ -283,33 +283,33 @@ export const HUDMeter: React.FC<HUDMeterProps> = ({
       </svg>
 
       {/* Center content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="text-center mt-4">
+      <div cclassName="absolute inset-0 flex flex-col items-center justify-center">
+        <div cclassName="text-center mt-4">
           {showValue && (
-            <div className={cn("font-mono font-bold", colors.text)}>
-              <span className="text-lg">{Math.round(normalizedValue)}</span>
-              <span className="text-sm opacity-80">{unit}</span>
+            <div cclassName={cn("font-mono font-bold", colors.text)}>
+              <span cclassName="text-lg">{Math.round(normalizedValue)}</span>
+              <span cclassName="text-sm opacity-80">{unit}</span>
             </div>
           )}
           {label && (
-            <div className="text-xs text-holographic opacity-90 mt-2 font-mono">{label}</div>
+            <div cclassName="text-xs text-holographic opacity-90 mt-2 font-mono">{label}</div>
           )}
         </div>
       </div>
 
       {/* Critical/Warning indicators */}
       {value >= criticalThreshold && (
-        <div className="absolute top-2 right-2">
-          <div className="w-2 h-2 bg-jarvis-danger rounded-full animate-pulse">
-            <div className="w-2 h-2 bg-jarvis-danger rounded-full animate-ping absolute"></div>
+        <div cclassName="absolute top-2 right-2">
+          <div cclassName="w-2 h-2 bg-jarvis-danger rounded-full animate-pulse">
+            <div cclassName="w-2 h-2 bg-jarvis-danger rounded-full animate-ping absolute"></div>
           </div>
         </div>
       )}
 
       {value >= warningThreshold && value < criticalThreshold && (
-        <div className="absolute top-2 right-2">
-          <div className="w-2 h-2 bg-jarvis-warning rounded-full animate-pulse">
-            <div className="w-2 h-2 bg-jarvis-warning rounded-full animate-ping absolute"></div>
+        <div cclassName="absolute top-2 right-2">
+          <div cclassName="w-2 h-2 bg-jarvis-warning rounded-full animate-pulse">
+            <div cclassName="w-2 h-2 bg-jarvis-warning rounded-full animate-ping absolute"></div>
           </div>
         </div>
       )}

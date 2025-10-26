@@ -163,21 +163,21 @@ test.describe('${prompt}', () => {
   };
 
   const testTypeOptions = [
-    { value: "unit", label: "Unit Test", icon: <Code className="h-4 w-4" /> },
+    { value: "unit", label: "Unit Test", icon: <Code cclassName="h-4 w-4" /> },
     {
       value: "integration",
       label: "Integration Test",
-      icon: <Zap className="h-4 w-4" />,
+      icon: <Zap cclassName="h-4 w-4" />,
     },
     {
       value: "e2e",
       label: "End-to-End Test",
-      icon: <FileCode className="h-4 w-4" />,
+      icon: <FileCode cclassName="h-4 w-4" />,
     },
     {
       value: "performance",
       label: "Performance Test",
-      icon: <Settings className="h-4 w-4" />,
+      icon: <Settings cclassName="h-4 w-4" />,
     },
   ];
 
@@ -191,38 +191,38 @@ test.describe('${prompt}', () => {
   ];
 
   return (
-    <div className="grid grid-cols-12 gap-6">
+    <div cclassName="grid grid-cols-12 gap-6">
       {/* Generation Panel */}
-      <div className="col-span-5 space-y-4">
-        <Card className="mac-card">
-          <CardHeader className="mac-card">
-            <CardTitle className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-primary" />
+      <div cclassName="col-span-5 space-y-4">
+        <Card cclassName="mac-card">
+          <CardHeader cclassName="mac-card">
+            <CardTitle cclassName="flex items-center gap-2">
+              <Brain cclassName="h-5 w-5 text-primary" />
               AI Test Generator
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent cclassName="space-y-4">
             {/* Natural Language Input */}
-            <div className="space-y-2">
+            <div cclassName="space-y-2">
               <Label htmlFor="prompt">Describe what you want to test</Label>
               <Textarea
                 id="prompt"
                 placeholder="E.g., Test that users can successfully upload and process PDF documents..."
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="min-h-[100px]"
+                cclassName="min-h-[100px]"
               />
             </div>
 
             {/* Quick Suggestions */}
-            <div className="space-y-2">
+            <div cclassName="space-y-2">
               <Label>Quick Suggestions</Label>
-              <div className="flex flex-wrap gap-2">
+              <div cclassName="flex flex-wrap gap-2">
                 {promptSuggestions.map((suggestion, index) => (
                   <Badge
                     key={index}
                     variant="outline"
-                    className="cursor-pointer hover:bg-primary/10"
+                    cclassName="cursor-pointer hover:bg-primary/10"
                     onClick={() => setPrompt(suggestion)}
                   >
                     {suggestion}
@@ -232,8 +232,8 @@ test.describe('${prompt}', () => {
             </div>
 
             {/* Test Type Selection */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+            <div cclassName="grid grid-cols-2 gap-4">
+              <div cclassName="space-y-2">
                 <Label htmlFor="test-type">Test Type</Label>
                 <Select value={testType} onValueChange={setTestType}>
                   <SelectTrigger id="test-type">
@@ -242,7 +242,7 @@ test.describe('${prompt}', () => {
                   <SelectContent>
                     {testTypeOptions.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
-                        <div className="flex items-center gap-2">
+                        <div cclassName="flex items-center gap-2">
                           {option.icon}
                           <span>{option.label}</span>
                         </div>
@@ -252,7 +252,7 @@ test.describe('${prompt}', () => {
                 </Select>
               </div>
 
-              <div className="space-y-2">
+              <div cclassName="space-y-2">
                 <Label htmlFor="language">Language</Label>
                 <Select value={language} onValueChange={setLanguage}>
                   <SelectTrigger id="language">
@@ -269,26 +269,26 @@ test.describe('${prompt}', () => {
             </div>
 
             {/* Advanced Options */}
-            <Card className="mac-card bg-muted/50">
-              <CardContent className="p-4 space-y-3">
-                <h4 className="mac-title">
+            <Card cclassName="mac-card bg-muted/50">
+              <CardContent cclassName="p-4 space-y-3">
+                <h4 cclassName="mac-title">
                   Advanced Options
                 </h4>
-                <div className="space-y-2 text-sm">
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" defaultChecked />
+                <div cclassName="space-y-2 text-sm">
+                  <label cclassName="flex items-center gap-2">
+                    <input type="checkbox" cclassName="rounded" defaultChecked />
                     Include assertions
                   </label>
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" defaultChecked />
+                  <label cclassName="flex items-center gap-2">
+                    <input type="checkbox" cclassName="rounded" defaultChecked />
                     Add error handling
                   </label>
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" />
+                  <label cclassName="flex items-center gap-2">
+                    <input type="checkbox" cclassName="rounded" />
                     Generate test data
                   </label>
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" />
+                  <label cclassName="flex items-center gap-2">
+                    <input type="checkbox" cclassName="rounded" />
                     Include performance metrics
                   </label>
                 </div>
@@ -297,19 +297,19 @@ test.describe('${prompt}', () => {
 
             {/* Generate Button */}
             <Button
-              className="w-full mac-button mac-button-primary"
+              cclassName="w-full mac-button mac-button-primary"
               size="lg"
               onClick={handleGenerate}
               disabled={!prompt || isGenerating}
             >
               {isGenerating ? (
                 <>
-                  <Sparkles className="h-4 w-4 mr-2 animate-spin" />
+                  <Sparkles cclassName="h-4 w-4 mr-2 animate-spin" />
                   Generating...
                 </>
               ) : (
                 <>
-                  <Wand2 className="h-4 w-4 mr-2" />
+                  <Wand2 cclassName="h-4 w-4 mr-2" />
                   Generate Test
                 </>
               )}
@@ -318,31 +318,31 @@ test.describe('${prompt}', () => {
         </Card>
 
         {/* Generated Tests History */}
-        <Card className="mac-card">
-          <CardHeader className="mac-card">
-            <CardTitle className="text-lg">Generated Tests</CardTitle>
+        <Card cclassName="mac-card">
+          <CardHeader cclassName="mac-card">
+            <CardTitle cclassName="text-lg">Generated Tests</CardTitle>
           </CardHeader>
-          <CardContent className="p-0">
-            <ScrollArea className="h-[200px]">
-              <div className="p-4 space-y-2">
+          <CardContent cclassName="p-0">
+            <ScrollArea cclassName="h-[200px]">
+              <div cclassName="p-4 space-y-2">
                 {generatedTests.map((test) => (
                   <Card
                     key={test.id}
-                    className={cn(
+                    cclassName={cn(
                       "mac-card",
                       "cursor-pointer transition-all hover:shadow-md",
                       selectedTest?.id === test.id && "ring-2 ring-primary"
                     )}
                     onClick={() => setSelectedTest(test)}
                   >
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-sm">{test.name}</span>
-                        <Badge variant="outline" className="text-xs">
+                    <CardContent cclassName="p-4">
+                      <div cclassName="flex items-center justify-between mb-2">
+                        <span cclassName="font-medium text-sm">{test.name}</span>
+                        <Badge variant="outline" cclassName="text-xs">
                           {test.type}
                         </Badge>
                       </div>
-                      <p className="text-xs text-muted-foreground truncate">{test.description}</p>
+                      <p cclassName="text-xs text-muted-foreground truncate">{test.description}</p>
                     </CardContent>
                   </Card>
                 ))}
@@ -353,106 +353,106 @@ test.describe('${prompt}', () => {
       </div>
 
       {/* Generated Test Preview */}
-      <div className="col-span-7">
+      <div cclassName="col-span-7">
         {selectedTest ? (
-          <Card className="mac-card h-full">
-            <CardHeader className="mac-card">
-              <div className="flex items-center justify-between">
+          <Card cclassName="mac-card h-full">
+            <CardHeader cclassName="mac-card">
+              <div cclassName="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-lg">{selectedTest.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-2">{selectedTest.description}</p>
+                  <CardTitle cclassName="text-lg">{selectedTest.name}</CardTitle>
+                  <p cclassName="text-sm text-muted-foreground mt-2">{selectedTest.description}</p>
                 </div>
-                <div className="flex gap-2">
+                <div cclassName="flex gap-2">
                   <Button
-                    className="mac-button mac-button-outline"
+                    cclassName="mac-button mac-button-outline"
                     variant="outline"
-                    className="mac-button mac-button-outline"
+                    cclassName="mac-button mac-button-outline"
                     size="sm"
                   >
-                    <Copy className="h-4 w-4 mr-2" />
+                    <Copy cclassName="h-4 w-4 mr-2" />
                     Copy
                   </Button>
                   <Button
-                    className="mac-button mac-button-outline"
+                    cclassName="mac-button mac-button-outline"
                     variant="outline"
-                    className="mac-button mac-button-outline"
+                    cclassName="mac-button mac-button-outline"
                     size="sm"
                   >
-                    <Download className="h-4 w-4 mr-2" />
+                    <Download cclassName="h-4 w-4 mr-2" />
                     Export
                   </Button>
-                  <Button className="mac-button mac-button-primary" size="sm" aria-label="Play">
-                    <Play className="h-4 w-4 mr-2" />
+                  <Button cclassName="mac-button mac-button-primary" size="sm" aria-label="Play">
+                    <Play cclassName="h-4 w-4 mr-2" />
                     Run Test
                   </Button>
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="mac-card">
-              <Tabs defaultValue="code" className="h-full">
-                <TabsList className="grid w-full grid-cols-3">
+            <CardContent cclassName="mac-card">
+              <Tabs defaultValue="code" cclassName="h-full">
+                <TabsList cclassName="grid w-full grid-cols-3">
                   <TabsTrigger value="code">Generated Code</TabsTrigger>
                   <TabsTrigger value="coverage">Coverage Analysis</TabsTrigger>
                   <TabsTrigger value="suggestions">AI Suggestions</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="code" className="h-full">
-                  <Card className="mac-card bg-muted/50">
-                    <CardContent className="p-4">
-                      <pre className="text-sm font-mono overflow-x-auto">
+                <TabsContent value="code" cclassName="h-full">
+                  <Card cclassName="mac-card bg-muted/50">
+                    <CardContent cclassName="p-4">
+                      <pre cclassName="text-sm font-mono overflow-x-auto">
                         <code>{selectedTest.code}</code>
                       </pre>
                     </CardContent>
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="coverage" className="space-y-4">
-                  <Card className="mac-card">
-                    <CardHeader className="mac-card">
-                      <CardTitle className="text-base">Test Coverage Areas</CardTitle>
+                <TabsContent value="coverage" cclassName="space-y-4">
+                  <Card cclassName="mac-card">
+                    <CardHeader cclassName="mac-card">
+                      <CardTitle cclassName="text-base">Test Coverage Areas</CardTitle>
                     </CardHeader>
-                    <CardContent className="mac-card">
-                      <div className="space-y-2">
+                    <CardContent cclassName="mac-card">
+                      <div cclassName="space-y-2">
                         {selectedTest.coverage.map((area, index) => (
-                          <div key={index} className="flex items-center gap-2">
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                            <span className="text-sm">{area}</span>
+                          <div key={index} cclassName="flex items-center gap-2">
+                            <CheckCircle cclassName="h-4 w-4 text-green-500" />
+                            <span cclassName="text-sm">{area}</span>
                           </div>
                         ))}
                       </div>
                     </CardContent>
                   </Card>
 
-                  <Card className="mac-card">
-                    <CardHeader className="mac-card">
-                      <CardTitle className="text-base">Potential Gaps</CardTitle>
+                  <Card cclassName="mac-card">
+                    <CardHeader cclassName="mac-card">
+                      <CardTitle cclassName="text-base">Potential Gaps</CardTitle>
                     </CardHeader>
-                    <CardContent className="mac-card">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <AlertCircle className="h-4 w-4 text-yellow-500" />
-                          <span className="text-sm">Edge case: Empty input handling</span>
+                    <CardContent cclassName="mac-card">
+                      <div cclassName="space-y-2">
+                        <div cclassName="flex items-center gap-2">
+                          <AlertCircle cclassName="h-4 w-4 text-yellow-500" />
+                          <span cclassName="text-sm">Edge case: Empty input handling</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <AlertCircle className="h-4 w-4 text-yellow-500" />
-                          <span className="text-sm">Network timeout scenarios</span>
+                        <div cclassName="flex items-center gap-2">
+                          <AlertCircle cclassName="h-4 w-4 text-yellow-500" />
+                          <span cclassName="text-sm">Network timeout scenarios</span>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="suggestions" className="space-y-4">
-                  <Card className="mac-card bg-blue-500/10 border-blue-500/20">
-                    <CardContent className="p-4">
+                <TabsContent value="suggestions" cclassName="space-y-4">
+                  <Card cclassName="mac-card bg-blue-500/10 border-blue-500/20">
+                    <CardContent cclassName="p-4">
                       <h3
-                        className="mac-title"
-                        className="mac-title font-medium mb-2 flex items-center gap-2"
+                        cclassName="mac-title"
+                        cclassName="mac-title font-medium mb-2 flex items-center gap-2"
                       >
-                        <Sparkles className="h-4 w-4 text-blue-500" />
+                        <Sparkles cclassName="h-4 w-4 text-blue-500" />
                         AI Recommendations
                       </h3>
-                      <ul className="space-y-2 text-sm">
+                      <ul cclassName="space-y-2 text-sm">
                         <li>• Consider adding retry logic for flaky network requests</li>
                         <li>• Add data-testid attributes to improve test stability</li>
                         <li>• Include accessibility checks using axe-core</li>
@@ -461,34 +461,34 @@ test.describe('${prompt}', () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="mac-card">
-                    <CardHeader className="mac-card">
-                      <CardTitle className="text-base">Related Tests to Generate</CardTitle>
+                  <Card cclassName="mac-card">
+                    <CardHeader cclassName="mac-card">
+                      <CardTitle cclassName="text-base">Related Tests to Generate</CardTitle>
                     </CardHeader>
-                    <CardContent className="mac-card">
-                      <div className="space-y-2">
+                    <CardContent cclassName="mac-card">
+                      <div cclassName="space-y-2">
                         <Button
                           variant="outline"
-                          className="w-full justify-start mac-button mac-button-outline"
+                          cclassName="w-full justify-start mac-button mac-button-outline"
                           size="sm"
                         >
-                          <MessageSquare className="h-4 w-4 mr-2" />
+                          <MessageSquare cclassName="h-4 w-4 mr-2" />
                           Test error boundary behavior
                         </Button>
                         <Button
                           variant="outline"
-                          className="w-full justify-start mac-button mac-button-outline"
+                          cclassName="w-full justify-start mac-button mac-button-outline"
                           size="sm"
                         >
-                          <FileText className="h-4 w-4 mr-2" />
+                          <FileText cclassName="h-4 w-4 mr-2" />
                           Test data persistence
                         </Button>
                         <Button
                           variant="outline"
-                          className="w-full justify-start mac-button mac-button-outline"
+                          cclassName="w-full justify-start mac-button mac-button-outline"
                           size="sm"
                         >
-                          <Settings className="h-4 w-4 mr-2" />
+                          <Settings cclassName="h-4 w-4 mr-2" />
                           Test configuration changes
                         </Button>
                       </div>
@@ -499,8 +499,8 @@ test.describe('${prompt}', () => {
             </CardContent>
           </Card>
         ) : (
-          <Card className="mac-card h-full">
-            <CardContent className="flex items-center justify-center h-full text-muted-foreground">
+          <Card cclassName="mac-card h-full">
+            <CardContent cclassName="flex items-center justify-center h-full text-muted-foreground">
               Generate a test or select from history to preview
             </CardContent>
           </Card>

@@ -11,27 +11,27 @@ interface EmptyStateProps {
 
 export function EmptyState({ onGetStarted }: EmptyStateProps) {
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <Card className="mac-card max-w-2xl w-full">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-purple-500/10 flex items-center justify-center">
-            <FileVideo className="h-8 w-8 text-purple-400" />
+    <div cclassName="flex items-center justify-center min-h-[60vh]">
+      <Card cclassName="mac-card max-w-2xl w-full">
+        <CardHeader cclassName="text-center">
+          <div cclassName="mx-auto mb-4 h-16 w-16 rounded-full bg-purple-500/10 flex items-center justify-center">
+            <FileVideo cclassName="h-8 w-8 text-purple-400" />
           </div>
-          <CardTitle className="mac-heading text-2xl">No Sessions Yet</CardTitle>
-          <CardDescription className="mac-body text-base mt-2">
+          <CardTitle cclassName="mac-heading text-2xl">No Sessions Yet</CardTitle>
+          <CardDescription cclassName="mac-body text-base mt-2">
             Start recording test sessions to see them here
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-6">
+        <CardContent cclassName="space-y-6">
           {/* Getting Started Guide */}
-          <div className="space-y-4">
-            <h3 className="mac-title text-lg font-light flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-purple-400" />
+          <div cclassName="space-y-4">
+            <h3 cclassName="mac-title text-lg font-light flex items-center gap-2">
+              <BookOpen cclassName="h-5 w-5 text-purple-400" />
               Getting Started
             </h3>
 
-            <div className="space-y-3">
+            <div cclassName="space-y-3">
               <Step
                 number={1}
                 title="Install TestSprite Browser Extension"
@@ -61,16 +61,16 @@ export function EmptyState({ onGetStarted }: EmptyStateProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 justify-center pt-4">
+          <div cclassName="flex gap-3 justify-center pt-4">
             {onGetStarted && (
-              <Button onClick={onGetStarted} className="mac-button-primary gap-2">
-                <Play className="h-4 w-4" />
+              <Button onClick={onGetStarted} cclassName="mac-button-primary gap-2">
+                <Play cclassName="h-4 w-4" />
                 Get Started
               </Button>
             )}
-            <Button variant="outline" className="mac-button-outline gap-2" asChild>
+            <Button variant="outline" cclassName="mac-button-outline gap-2" asChild>
               <a href="https://docs.testsprite.com" target="_blank" rel="noopener noreferrer">
-                <BookOpen className="h-4 w-4" />
+                <BookOpen cclassName="h-4 w-4" />
                 View Documentation
               </a>
             </Button>
@@ -89,13 +89,13 @@ interface StepProps {
 
 function Step({ number, title, description }: StepProps) {
   return (
-    <div className="flex gap-4 items-start">
-      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-sm font-light text-purple-300">
+    <div cclassName="flex gap-4 items-start">
+      <div cclassName="flex-shrink-0 w-8 h-8 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-sm font-light text-purple-300">
         {number}
       </div>
-      <div className="flex-1 pt-0.5">
-        <h4 className="text-sm font-light text-white">{title}</h4>
-        <p className="text-xs text-zinc-400 mt-0.5">{description}</p>
+      <div cclassName="flex-1 pt-0.5">
+        <h4 cclassName="text-sm font-light text-white">{title}</h4>
+        <p cclassName="text-xs text-zinc-400 mt-0.5">{description}</p>
       </div>
     </div>
   );

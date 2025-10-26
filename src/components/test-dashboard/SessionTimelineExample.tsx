@@ -144,7 +144,7 @@ export const SessionTimelineExample: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-mac-surface-background">
+    <div cclassName="flex h-screen bg-mac-surface-background">
       {/* Timeline Sidebar */}
       <SessionTimeline
         interactions={interactions}
@@ -159,44 +159,44 @@ export const SessionTimelineExample: React.FC = () => {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div cclassName="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="border-b border-mac-utility-border p-6 bg-mac-surface-elevated">
+        <div cclassName="border-b border-mac-utility-border p-6 bg-mac-surface-elevated">
           <h1
-            className="mac-heading"
-            className="text-2xl font-light text-mac-text-primary mac-heading mb-2"
+            cclassName="mac-heading"
+            cclassName="text-2xl font-light text-mac-text-primary mac-heading mb-2"
           >
             Session Timeline Demo
           </h1>
-          <p className="text-sm text-mac-text-secondary mb-4">
+          <p cclassName="text-sm text-mac-text-secondary mb-4">
             Demonstrates real-time interaction capture and timeline visualization
           </p>
 
-          <div className="flex items-center gap-4">
+          <div cclassName="flex items-center gap-4">
             <Button
               onClick={toggleRecording}
               variant={isRecording ? "destructive" : "default"}
               size="sm"
-              className="gap-2 mac-button mac-button-primary"
+              cclassName="gap-2 mac-button mac-button-primary"
             >
               {isRecording ? (
                 <>
-                  <Pause className="h-4 w-4" />
+                  <Pause cclassName="h-4 w-4" />
                   Stop Recording
                 </>
               ) : (
                 <>
-                  <Play className="h-4 w-4" />
+                  <Play cclassName="h-4 w-4" />
                   Start Recording
                 </>
               )}
             </Button>
 
             <Button
-              className="mac-button mac-button-outline"
+              cclassName="mac-button mac-button-outline"
               onClick={clearInteractions}
               variant="outline"
-              className="mac-button mac-button-outline"
+              cclassName="mac-button mac-button-outline"
               size="sm"
               disabled={interactions.length === 0}
             >
@@ -206,7 +206,7 @@ export const SessionTimelineExample: React.FC = () => {
             {isRecording && (
               <Badge
                 variant="outline"
-                className="animate-pulse bg-rose-500/10 text-rose-500 border-rose-500/30"
+                cclassName="animate-pulse bg-rose-500/10 text-rose-500 border-rose-500/30"
               >
                 Recording...
               </Badge>
@@ -215,14 +215,14 @@ export const SessionTimelineExample: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-auto p-6">
+        <div cclassName="flex-1 overflow-auto p-6">
           {selectedInteraction ? (
-            <Card className="mac-card max-w-3xl mx-auto">
-              <CardHeader className="mac-card">
-                <CardTitle className="text-lg font-light flex items-center gap-4">
+            <Card cclassName="mac-card max-w-3xl mx-auto">
+              <CardHeader cclassName="mac-card">
+                <CardTitle cclassName="text-lg font-light flex items-center gap-4">
                   <Badge
                     variant="outline"
-                    className={
+                    cclassName={
                       selectedInteraction.status === "success"
                         ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/30"
                         : selectedInteraction.status === "error"
@@ -237,16 +237,16 @@ export const SessionTimelineExample: React.FC = () => {
                   {selectedInteraction.description}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent cclassName="space-y-4">
                 {/* Timestamp */}
                 <div>
                   <h4
-                    className="mac-title"
-                    className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                    cclassName="mac-title"
+                    cclassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                   >
                     Timestamp
                   </h4>
-                  <p className="text-sm text-mac-text-primary">
+                  <p cclassName="text-sm text-mac-text-primary">
                     {new Date(selectedInteraction.timestamp).toLocaleString()}
                   </p>
                 </div>
@@ -255,12 +255,12 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.elementDescription && (
                   <div>
                     <h4
-                      className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      cclassName="mac-title"
+                      cclassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Element
                     </h4>
-                    <code className="text-sm text-mac-text-primary bg-mac-surface-card px-2 py-2 rounded">
+                    <code cclassName="text-sm text-mac-text-primary bg-mac-surface-card px-2 py-2 rounded">
                       {selectedInteraction.elementDescription}
                     </code>
                   </div>
@@ -270,12 +270,12 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.selector && (
                   <div>
                     <h4
-                      className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      cclassName="mac-title"
+                      cclassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Selector
                     </h4>
-                    <code className="text-sm text-mac-text-primary bg-mac-surface-card px-2 py-2 rounded">
+                    <code cclassName="text-sm text-mac-text-primary bg-mac-surface-card px-2 py-2 rounded">
                       {selectedInteraction.selector}
                     </code>
                   </div>
@@ -285,12 +285,12 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.value && (
                   <div>
                     <h4
-                      className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      cclassName="mac-title"
+                      cclassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Value
                     </h4>
-                    <p className="text-sm text-mac-text-primary italic">
+                    <p cclassName="text-sm text-mac-text-primary italic">
                       "{selectedInteraction.value}"
                     </p>
                   </div>
@@ -300,12 +300,12 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.url && (
                   <div>
                     <h4
-                      className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      cclassName="mac-title"
+                      cclassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       URL
                     </h4>
-                    <p className="text-sm text-mac-text-primary break-all">
+                    <p cclassName="text-sm text-mac-text-primary break-all">
                       {selectedInteraction.url}
                     </p>
                   </div>
@@ -315,12 +315,12 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.duration && (
                   <div>
                     <h4
-                      className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      cclassName="mac-title"
+                      cclassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Duration
                     </h4>
-                    <p className="text-sm text-mac-text-primary">
+                    <p cclassName="text-sm text-mac-text-primary">
                       {selectedInteraction.duration}ms
                     </p>
                   </div>
@@ -330,39 +330,39 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.networkData && (
                   <div>
                     <h4
-                      className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      cclassName="mac-title"
+                      cclassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Network Details
                     </h4>
-                    <div className="bg-mac-surface-card p-4 rounded space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-mac-text-muted">Method:</span>
-                        <span className="text-mac-text-primary font-medium">
+                    <div cclassName="bg-mac-surface-card p-4 rounded space-y-2 text-sm">
+                      <div cclassName="flex justify-between">
+                        <span cclassName="text-mac-text-muted">Method:</span>
+                        <span cclassName="text-mac-text-primary font-medium">
                           {selectedInteraction.networkData.method}
                         </span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-mac-text-muted">Status:</span>
-                        <span className="text-emerald-500 font-medium">
+                      <div cclassName="flex justify-between">
+                        <span cclassName="text-mac-text-muted">Status:</span>
+                        <span cclassName="text-emerald-500 font-medium">
                           {selectedInteraction.networkData.statusCode}
                         </span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-mac-text-muted">Duration:</span>
-                        <span className="text-mac-text-primary font-medium">
+                      <div cclassName="flex justify-between">
+                        <span cclassName="text-mac-text-muted">Duration:</span>
+                        <span cclassName="text-mac-text-primary font-medium">
                           {selectedInteraction.networkData.duration}ms
                         </span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-mac-text-muted">Size:</span>
-                        <span className="text-mac-text-primary font-medium">
+                      <div cclassName="flex justify-between">
+                        <span cclassName="text-mac-text-muted">Size:</span>
+                        <span cclassName="text-mac-text-primary font-medium">
                           {selectedInteraction.networkData.size}
                         </span>
                       </div>
-                      <div className="pt-2 border-t border-mac-utility-border">
-                        <span className="text-mac-text-muted">URL:</span>
-                        <p className="mac-body text-mac-text-primary break-all mt-2">
+                      <div cclassName="pt-2 border-t border-mac-utility-border">
+                        <span cclassName="text-mac-text-muted">URL:</span>
+                        <p cclassName="mac-body text-mac-text-primary break-all mt-2">
                           {selectedInteraction.networkData.url}
                         </p>
                       </div>
@@ -374,17 +374,17 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.error && (
                   <div>
                     <h4
-                      className="mac-title"
-                      className="mac-title text-sm font-medium text-rose-500 mb-2"
+                      cclassName="mac-title"
+                      cclassName="mac-title text-sm font-medium text-rose-500 mb-2"
                     >
                       Error Details
                     </h4>
-                    <div className="bg-rose-500/5 border border-rose-500/20 p-4 rounded space-y-2">
-                      <p className="text-sm text-rose-400 font-medium">
+                    <div cclassName="bg-rose-500/5 border border-rose-500/20 p-4 rounded space-y-2">
+                      <p cclassName="text-sm text-rose-400 font-medium">
                         {selectedInteraction.error.message}
                       </p>
                       {selectedInteraction.error.stack && (
-                        <pre className="text-xs text-rose-300/80 overflow-auto max-h-32">
+                        <pre cclassName="text-xs text-rose-300/80 overflow-auto max-h-32">
                           {selectedInteraction.error.stack}
                         </pre>
                       )}
@@ -396,8 +396,8 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.thumbnail && (
                   <div>
                     <h4
-                      className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      cclassName="mac-title"
+                      cclassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Screenshot
                     </h4>
@@ -405,7 +405,7 @@ export const SessionTimelineExample: React.FC = () => {
                     <img
                       src={selectedInteraction.thumbnail}
                       alt="Interaction screenshot"
-                      className="rounded border border-mac-utility-border max-w-full"
+                      cclassName="rounded border border-mac-utility-border max-w-full"
                     />
                   </div>
                 )}
@@ -414,12 +414,12 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.metadata && (
                   <div>
                     <h4
-                      className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      cclassName="mac-title"
+                      cclassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Metadata
                     </h4>
-                    <pre className="text-xs text-mac-text-primary bg-mac-surface-card p-4 rounded overflow-auto max-h-48">
+                    <pre cclassName="text-xs text-mac-text-primary bg-mac-surface-card p-4 rounded overflow-auto max-h-48">
                       {JSON.stringify(selectedInteraction.metadata, null, 2)}
                     </pre>
                   </div>
@@ -427,15 +427,15 @@ export const SessionTimelineExample: React.FC = () => {
               </CardContent>
             </Card>
           ) : (
-            <div className="flex items-center justify-center h-full">
-              <div className="text-center max-w-md">
+            <div cclassName="flex items-center justify-center h-full">
+              <div cclassName="text-center max-w-md">
                 <h3
-                  className="mac-title"
-                  className="mac-title text-lg font-light text-mac-text-primary mb-2"
+                  cclassName="mac-title"
+                  cclassName="mac-title text-lg font-light text-mac-text-primary mb-2"
                 >
                   No Interaction Selected
                 </h3>
-                <p className="text-sm text-mac-text-secondary">
+                <p cclassName="text-sm text-mac-text-secondary">
                   {interactions.length === 0
                     ? "Click 'Start Recording' to begin capturing interactions"
                     : "Select an interaction from the timeline to view details"}

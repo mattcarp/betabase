@@ -12,7 +12,7 @@ import { cn } from "../../lib/utils";
 interface StickyNoteLayerProps {
   enabled: boolean;
   timestamp: number;
-  className?: string;
+  cclassName?: string;
   onOpenDetailedEditor?: (noteId: string) => void;
 }
 
@@ -41,7 +41,7 @@ const StickyNote: React.FC<StickyNoteProps> = ({
 
   return (
     <Card
-      className={cn(
+      cclassName={cn(
         "mac-card",
         "absolute shadow-lg border-yellow-400/50 bg-yellow-100/95 dark:bg-yellow-900/95",
         "min-w-[200px] max-w-[300px]",
@@ -53,41 +53,41 @@ const StickyNote: React.FC<StickyNoteProps> = ({
         transform: "translate(-50%, -50%)",
       }}
     >
-      <CardContent className="p-4">
+      <CardContent cclassName="p-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <FileText className="h-3 w-3 text-yellow-700 dark:text-yellow-300" />
-            <span className="text-xs text-yellow-700 dark:text-yellow-300 font-medium">Note</span>
+        <div cclassName="flex items-center justify-between mb-2">
+          <div cclassName="flex items-center gap-2">
+            <FileText cclassName="h-3 w-3 text-yellow-700 dark:text-yellow-300" />
+            <span cclassName="text-xs text-yellow-700 dark:text-yellow-300 font-medium">Note</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div cclassName="flex items-center gap-2">
             {isEditing ? (
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-5 w-5 mac-button mac-button-outline"
+                cclassName="h-5 w-5 mac-button mac-button-outline"
                 onClick={handleSave}
               >
-                <Check className="h-3 w-3" />
+                <Check cclassName="h-3 w-3" />
               </Button>
             ) : (
               <>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-5 w-5 mac-button mac-button-outline"
+                  cclassName="h-5 w-5 mac-button mac-button-outline"
                   onClick={() => onOpenEditor(annotation.id)}
                   title="Open detailed editor"
                 >
-                  <Edit2 className="h-3 w-3" />
+                  <Edit2 cclassName="h-3 w-3" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-5 w-5 mac-button mac-button-outline"
+                  cclassName="h-5 w-5 mac-button mac-button-outline"
                   onClick={() => onDelete(annotation.id)}
                 >
-                  <X className="h-3 w-3" />
+                  <X cclassName="h-3 w-3" />
                 </Button>
               </>
             )}
@@ -99,12 +99,12 @@ const StickyNote: React.FC<StickyNoteProps> = ({
           <Textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="min-h-[80px] text-sm bg-yellow-50 dark:bg-yellow-950 border-yellow-300"
+            cclassName="min-h-[80px] text-sm bg-yellow-50 dark:bg-yellow-950 border-yellow-300"
             autoFocus
           />
         ) : (
           <p
-            className="text-sm text-yellow-900 dark:text-yellow-100 whitespace-pre-wrap cursor-pointer"
+            cclassName="text-sm text-yellow-900 dark:text-yellow-100 whitespace-pre-wrap cursor-pointer"
             onClick={() => setIsEditing(true)}
           >
             {text || "Click to add note..."}
@@ -112,7 +112,7 @@ const StickyNote: React.FC<StickyNoteProps> = ({
         )}
 
         {/* Timestamp */}
-        <div className="mt-2 text-xs text-yellow-700 dark:text-yellow-400">
+        <div cclassName="mt-2 text-xs text-yellow-700 dark:text-yellow-400">
           {new Date(annotation.createdAt).toLocaleTimeString()}
         </div>
       </CardContent>
@@ -123,7 +123,7 @@ const StickyNote: React.FC<StickyNoteProps> = ({
 export const StickyNoteLayer: React.FC<StickyNoteLayerProps> = ({
   enabled,
   timestamp,
-  className,
+  cclassName,
   onOpenDetailedEditor,
 }) => {
   const { annotations, addAnnotation, updateAnnotation, deleteAnnotation } = useAnnotations();
@@ -178,16 +178,16 @@ export const StickyNoteLayer: React.FC<StickyNoteLayerProps> = ({
       {/* Click layer for adding notes */}
       {enabled && (
         <div
-          className={cn("fixed inset-0 z-40 cursor-crosshair", className)}
+          cclassName={cn("fixed inset-0 z-40 cursor-crosshair", cclassName)}
           onClick={handleClick}
         />
       )}
 
       {/* Sticky notes display */}
       {noteAnnotations.map((annotation) => (
-        <div key={annotation.id} className="fixed inset-0 z-50 pointer-events-none">
-          <div className="relative w-full h-full">
-            <div className="pointer-events-auto">
+        <div key={annotation.id} cclassName="fixed inset-0 z-50 pointer-events-none">
+          <div cclassName="relative w-full h-full">
+            <div cclassName="pointer-events-auto">
               <StickyNote
                 annotation={annotation}
                 onUpdate={handleUpdateNote}

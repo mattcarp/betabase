@@ -5,13 +5,13 @@ import { LoadingSpinner } from "./LoadingStates";
 interface LiveTranscriptionProps {
   transcription: string;
   isRecording: boolean;
-  className?: string;
+  cclassName?: string;
 }
 
 export default function LiveTranscription({
   transcription,
   isRecording,
-  className,
+  cclassName,
 }: LiveTranscriptionProps) {
   console.log("🔴 LiveTranscription: Component rendered with:", {
     transcription: transcription?.substring(0, 50) + "...",
@@ -65,32 +65,32 @@ export default function LiveTranscription({
   };
 
   return (
-    <div className={cn("relative", className)}>
+    <div cclassName={cn("relative", cclassName)}>
       <Suspense
         fallback={
-          <div className="flex items-center justify-center h-full">
+          <div cclassName="flex items-center justify-center h-full">
             <LoadingSpinner size="md" color="cyan" />
           </div>
         }
       >
         <div
           ref={scrollRef}
-          className="h-full overflow-y-auto p-4 bg-gray-900/50 rounded-lg border border-gray-700"
+          cclassName="h-full overflow-y-auto p-4 bg-gray-900/50 rounded-lg border border-gray-700"
           data-test-id="transcription-display"
         >
           {displayedText ? (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                <span className="text-red-400 font-mono text-xs">LIVE</span>
-                <div className="flex-1 h-px bg-gradient-to-r from-red-500/50 to-transparent"></div>
+            <div cclassName="space-y-2">
+              <div cclassName="flex items-center gap-2 mb-4">
+                <div cclassName="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                <span cclassName="text-red-400 font-mono text-xs">LIVE</span>
+                <div cclassName="flex-1 h-px bg-gradient-to-r from-red-500/50 to-transparent"></div>
               </div>
 
-              <p className="text-white font-mono text-sm leading-relaxed">
+              <p cclassName="text-white font-mono text-sm leading-relaxed">
                 {displayedText.split(" ").map((word, index) => (
                   <span
                     key={index}
-                    className={cn(
+                    cclassName={cn(
                       "transition-all duration-300",
                       index === currentWordIndex - 1 && isRecording
                         ? "bg-blue-600/20 px-2 rounded"
@@ -102,30 +102,30 @@ export default function LiveTranscription({
                   </span>
                 ))}
                 {isRecording && (
-                  <span className="inline-block w-2 h-4 bg-blue-600 animate-pulse ml-2"></span>
+                  <span cclassName="inline-block w-2 h-4 bg-blue-600 animate-pulse ml-2"></span>
                 )}
               </p>
 
               {/* Confidence Indicator */}
-              <div className="mt-4 flex items-center gap-2 text-xs">
-                <span className="text-gray-400 font-mono">Confidence:</span>
-                <div className="flex gap-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span className="text-green-400">High</span>
-                  <div className="w-2 h-2 bg-blue-600 rounded-full ml-2"></div>
-                  <span className="text-blue-600">Good</span>
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full ml-2"></div>
-                  <span className="text-yellow-400">Fair</span>
-                  <div className="w-2 h-2 bg-red-400 rounded-full ml-2"></div>
-                  <span className="text-red-400">Low</span>
+              <div cclassName="mt-4 flex items-center gap-2 text-xs">
+                <span cclassName="text-gray-400 font-mono">Confidence:</span>
+                <div cclassName="flex gap-2">
+                  <div cclassName="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span cclassName="text-green-400">High</span>
+                  <div cclassName="w-2 h-2 bg-blue-600 rounded-full ml-2"></div>
+                  <span cclassName="text-blue-600">Good</span>
+                  <div cclassName="w-2 h-2 bg-yellow-400 rounded-full ml-2"></div>
+                  <span cclassName="text-yellow-400">Fair</span>
+                  <div cclassName="w-2 h-2 bg-red-400 rounded-full ml-2"></div>
+                  <span cclassName="text-red-400">Low</span>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-500">
-              <div className="text-center">
-                <div className="w-12 h-12 border-2 border-gray-600 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
-                <p className="font-mono text-sm">
+            <div cclassName="flex items-center justify-center h-full text-gray-500">
+              <div cclassName="text-center">
+                <div cclassName="w-12 h-12 border-2 border-gray-600 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+                <p cclassName="font-mono text-sm">
                   {isRecording ? "Listening for speech..." : "Ready to transcribe..."}
                 </p>
               </div>
@@ -135,13 +135,13 @@ export default function LiveTranscription({
       </Suspense>
       {/* Word Count & Stats */}
       {displayedText && (
-        <div className="absolute top-2 right-2 bg-gray-800/80 backdrop-blur-sm rounded-lg px-4 py-2">
-          <div className="flex items-center gap-4 text-xs font-mono">
-            <span className="text-gray-400">
-              Words: <span className="text-blue-600">{displayedText.split(" ").length}</span>
+        <div cclassName="absolute top-2 right-2 bg-gray-800/80 backdrop-blur-sm rounded-lg px-4 py-2">
+          <div cclassName="flex items-center gap-4 text-xs font-mono">
+            <span cclassName="text-gray-400">
+              Words: <span cclassName="text-blue-600">{displayedText.split(" ").length}</span>
             </span>
-            <span className="text-gray-400">
-              WPM: <span className="text-green-400">{Math.floor(Math.random() * 50 + 120)}</span>
+            <span cclassName="text-gray-400">
+              WPM: <span cclassName="text-green-400">{Math.floor(Math.random() * 50 + 120)}</span>
             </span>
           </div>
         </div>

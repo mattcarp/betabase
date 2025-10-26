@@ -5,7 +5,7 @@ export interface RadialProgressProps {
   value: number; // 0-100
   size?: number;
   strokeWidth?: number;
-  className?: string;
+  cclassName?: string;
   label?: string;
   subLabel?: string;
   color?: "primary" | "secondary" | "accent" | "warning" | "danger" | "success";
@@ -53,7 +53,7 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
   value,
   size = 120,
   strokeWidth = 8,
-  className = "",
+  cclassName = "",
   label,
   subLabel,
   color = "primary",
@@ -121,14 +121,14 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
 
   return (
     <div
-      className={cn("relative inline-flex items-center justify-center", className)}
+      cclassName={cn("relative inline-flex items-center justify-center", cclassName)}
       style={{ width: size, height: size }}
       data-testid="radial-progress"
     >
       <svg
         width={size}
         height={size}
-        className="transform -rotate-90"
+        cclassName="transform -rotate-90"
         data-testid="radial-progress-svg"
       >
         {/* Background circle */}
@@ -139,7 +139,7 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
           stroke="rgba(255, 255, 255, 0.1)"
           strokeWidth={strokeWidth}
           fill="transparent"
-          className="opacity-30"
+          cclassName="opacity-30"
         />
 
         {/* Progress circle */}
@@ -153,7 +153,7 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
           strokeDasharray={strokeDasharray}
           strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
-          className={cn("transition-all duration-300 ease-out", glowEffect && "drop-shadow-md")}
+          cclassName={cn("transition-all duration-300 ease-out", glowEffect && "drop-shadow-md")}
           style={{
             filter: glowEffect ? `drop-shadow(0 0 8px ${colors.glow})` : undefined,
             transition: animated ? "stroke-dashoffset 0.3s ease-out" : "none",
@@ -172,27 +172,27 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
             opacity={0.3}
             strokeDasharray={strokeDasharray}
             strokeDashoffset={strokeDashoffset}
-            className="transition-all duration-300 ease-out"
+            cclassName="transition-all duration-300 ease-out"
           />
         )}
       </svg>
 
       {/* Center content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
+      <div cclassName="absolute inset-0 flex flex-col items-center justify-center">
         {children ? (
           children
         ) : (
-          <div className="text-center">
+          <div cclassName="text-center">
             {showValue && (
-              <div className={cn("font-mono font-bold", colors.text)}>
-                <span className="text-lg">{Math.round(animatedValue)}</span>
-                <span className="text-sm opacity-80">%</span>
+              <div cclassName={cn("font-mono font-bold", colors.text)}>
+                <span cclassName="text-lg">{Math.round(animatedValue)}</span>
+                <span cclassName="text-sm opacity-80">%</span>
               </div>
             )}
             {label && (
-              <div className="text-xs text-holographic opacity-90 mt-2 font-mono">{label}</div>
+              <div cclassName="text-xs text-holographic opacity-90 mt-2 font-mono">{label}</div>
             )}
-            {subLabel && <div className="text-xs opacity-60 mt-0.5">{subLabel}</div>}
+            {subLabel && <div cclassName="text-xs opacity-60 mt-0.5">{subLabel}</div>}
           </div>
         )}
       </div>
@@ -200,7 +200,7 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
       {/* Pulsing center dot for active states */}
       {animatedValue > 0 && (
         <div
-          className={cn("absolute rounded-full animate-pulse", colors.text.replace("text-", "bg-"))}
+          cclassName={cn("absolute rounded-full animate-pulse", colors.text.replace("text-", "bg-"))}
           style={{
             width: 4,
             height: 4,

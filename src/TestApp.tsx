@@ -55,24 +55,24 @@ export default function TestApp() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-blue-900 text-white font-mono p-8">
+    <div cclassName="min-h-screen bg-gradient-to-br from-black via-gray-900 to-blue-900 text-white font-mono p-8">
       {/* Header */}
-      <div className="text-center mb-8">
+      <div cclassName="text-center mb-8">
         <h1
-          className="mac-heading"
-          className="mac-heading text-4xl font-bold text-holographic mb-2"
+          cclassName="mac-heading"
+          cclassName="mac-heading text-4xl font-bold text-holographic mb-2"
         >
           JARVIS UI COMPONENT SHOWCASE
         </h1>
-        <p className="text-jarvis-secondary text-lg">
+        <p cclassName="text-jarvis-secondary text-lg">
           Testing RadialProgress, HUDMeter, DataStream &amp; CircularHUD Components
         </p>
 
         {/* Control Panel */}
-        <div className="flex items-center justify-center gap-4 mt-6">
+        <div cclassName="flex items-center justify-center gap-4 mt-6">
           <button
             onClick={() => setIsRunning(!isRunning)}
-            className={`flex items-center gap-2 px-6 py-4 rounded-lg font-bold transition-all ${
+            cclassName={`flex items-center gap-2 px-6 py-4 rounded-lg font-bold transition-all ${
               isRunning
                 ? "bg-jarvis-danger/20 border-2 border-jarvis-danger text-jarvis-danger hover:bg-jarvis-danger/30"
                 : "bg-jarvis-primary/20 border-2 border-jarvis-primary text-jarvis-primary hover:bg-jarvis-primary/30"
@@ -85,7 +85,7 @@ export default function TestApp() {
 
           <button
             onClick={resetValues}
-            className="flex items-center gap-2 px-6 py-4 rounded-lg font-bold bg-jarvis-secondary/20 border-2 border-jarvis-secondary text-jarvis-secondary hover:bg-jarvis-secondary/30 transition-all"
+            cclassName="flex items-center gap-2 px-6 py-4 rounded-lg font-bold bg-jarvis-secondary/20 border-2 border-jarvis-secondary text-jarvis-secondary hover:bg-jarvis-secondary/30 transition-all"
             data-testid="reset-values"
           >
             <RotateCcw size={20} />
@@ -95,18 +95,18 @@ export default function TestApp() {
       </div>
 
       {/* Component Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      <div cclassName="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
         {/* RadialProgress Components */}
-        <div className="glass-panel p-6 space-y-6">
+        <div cclassName="glass-panel p-6 space-y-6">
           <h2
-            className="mac-heading"
-            className="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
+            cclassName="mac-heading"
+            cclassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
           >
             RADIAL PROGRESS METERS
           </h2>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col items-center space-y-2">
+          <div cclassName="grid grid-cols-2 gap-4">
+            <div cclassName="flex flex-col items-center space-y-2">
               <RadialProgress
                 value={cpuValue}
                 size={100}
@@ -117,10 +117,10 @@ export default function TestApp() {
                 animated={true}
                 glowEffect={true}
               />
-              <span className="text-xs text-jarvis-secondary">CPU Usage</span>
+              <span cclassName="text-xs text-jarvis-secondary">CPU Usage</span>
             </div>
 
-            <div className="flex flex-col items-center space-y-2">
+            <div cclassName="flex flex-col items-center space-y-2">
               <RadialProgress
                 value={memoryValue}
                 size={100}
@@ -131,12 +131,12 @@ export default function TestApp() {
                 animated={true}
                 glowEffect={true}
               />
-              <span className="text-xs text-jarvis-secondary">Memory Usage</span>
+              <span cclassName="text-xs text-jarvis-secondary">Memory Usage</span>
             </div>
           </div>
 
-          <div className="flex justify-center">
-            <div className="flex flex-col items-center space-y-2">
+          <div cclassName="flex justify-center">
+            <div cclassName="flex flex-col items-center space-y-2">
               <RadialProgress
                 value={networkSpeed}
                 size={120}
@@ -147,22 +147,22 @@ export default function TestApp() {
                 animated={true}
                 glowEffect={true}
               />
-              <span className="text-xs text-jarvis-secondary">Network Speed</span>
+              <span cclassName="text-xs text-jarvis-secondary">Network Speed</span>
             </div>
           </div>
         </div>
 
         {/* HUDMeter Components */}
-        <div className="glass-panel p-6 space-y-6">
+        <div cclassName="glass-panel p-6 space-y-6">
           <h2
-            className="mac-heading"
-            className="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
+            cclassName="mac-heading"
+            cclassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
           >
             HUD ARC METERS
           </h2>
 
-          <div className="space-y-6">
-            <div className="flex flex-col items-center">
+          <div cclassName="space-y-6">
+            <div cclassName="flex flex-col items-center">
               <HUDMeter
                 value={cpuValue}
                 size={140}
@@ -179,7 +179,7 @@ export default function TestApp() {
               />
             </div>
 
-            <div className="flex flex-col items-center">
+            <div cclassName="flex flex-col items-center">
               <HUDMeter
                 value={memoryValue}
                 size={140}
@@ -199,15 +199,15 @@ export default function TestApp() {
         </div>
 
         {/* DataStream Components */}
-        <div className="glass-panel p-6 space-y-6">
+        <div cclassName="glass-panel p-6 space-y-6">
           <h2
-            className="mac-heading"
-            className="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
+            cclassName="mac-heading"
+            cclassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2"
           >
             REAL-TIME DATA STREAMS
           </h2>
 
-          <div className="space-y-4">
+          <div cclassName="space-y-4">
             <DataStream
               data={dataHistory}
               height={80}
@@ -250,31 +250,31 @@ export default function TestApp() {
         </div>
 
         {/* Central HUD Demo */}
-        <div className="lg:col-span-2 xl:col-span-3">
-          <div className="glass-panel p-6 space-y-6">
+        <div cclassName="lg:col-span-2 xl:col-span-3">
+          <div cclassName="glass-panel p-6 space-y-6">
             <h2
-              className="mac-heading"
-              className="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2 text-center"
+              cclassName="mac-heading"
+              cclassName="mac-heading text-xl font-bold text-jarvis-accent border-b border-jarvis-primary/30 pb-2 text-center"
             >
               CENTRAL CIRCULAR HUD INTERFACE
             </h2>
 
-            <div className="flex justify-center py-8">
+            <div cclassName="flex justify-center py-8">
               <CircularHUD size={350} isActive={isRunning}>
-                <div className="text-center space-y-3">
-                  <div className="text-2xl font-bold text-holographic">
+                <div cclassName="text-center space-y-3">
+                  <div cclassName="text-2xl font-bold text-holographic">
                     {isRunning ? "SYSTEM ACTIVE" : "SYSTEM IDLE"}
                   </div>
-                  <div className="text-jarvis-secondary">
-                    CPU: <span className="text-jarvis-primary">{cpuValue.toFixed(1)}%</span>
+                  <div cclassName="text-jarvis-secondary">
+                    CPU: <span cclassName="text-jarvis-primary">{cpuValue.toFixed(1)}%</span>
                   </div>
-                  <div className="text-jarvis-secondary">
-                    Memory: <span className="text-jarvis-accent">{memoryValue.toFixed(1)}%</span>
+                  <div cclassName="text-jarvis-secondary">
+                    Memory: <span cclassName="text-jarvis-accent">{memoryValue.toFixed(1)}%</span>
                   </div>
-                  <div className="text-jarvis-secondary">
-                    Network: <span className="text-jarvis-warning">{networkSpeed.toFixed(1)}%</span>
+                  <div cclassName="text-jarvis-secondary">
+                    Network: <span cclassName="text-jarvis-warning">{networkSpeed.toFixed(1)}%</span>
                   </div>
-                  <div className="text-xs text-jarvis-secondary/70 mt-4">
+                  <div cclassName="text-xs text-jarvis-secondary/70 mt-4">
                     {new Date().toLocaleTimeString()}
                   </div>
                 </div>
@@ -285,14 +285,14 @@ export default function TestApp() {
       </div>
 
       {/* Status Footer */}
-      <div className="text-center mt-8 text-jarvis-secondary text-sm">
+      <div cclassName="text-center mt-8 text-jarvis-secondary text-sm">
         <p>
           All components feature: Jarvis theming • Smooth animations • Glow effects • Real-time
           updates
         </p>
-        <p className="mac-body mt-2">
+        <p cclassName="mac-body mt-2">
           Status:{" "}
-          <span className={isRunning ? "text-jarvis-accent" : "text-jarvis-warning"}>
+          <span cclassName={isRunning ? "text-jarvis-accent" : "text-jarvis-warning"}>
             {isRunning ? "SIMULATION RUNNING" : "SIMULATION STOPPED"}
           </span>
         </p>

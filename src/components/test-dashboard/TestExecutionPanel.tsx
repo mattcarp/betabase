@@ -239,15 +239,15 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "running":
-        return <Loader2 className="h-4 w-4 animate-spin text-blue-600" />;
+        return <Loader2 cclassName="h-4 w-4 animate-spin text-blue-600" />;
       case "passed":
-        return <CheckCircle className="h-4 w-4 text-emerald-600" />;
+        return <CheckCircle cclassName="h-4 w-4 text-emerald-600" />;
       case "failed":
-        return <XCircle className="h-4 w-4 text-rose-600" />;
+        return <XCircle cclassName="h-4 w-4 text-rose-600" />;
       case "skipped":
-        return <AlertTriangle className="h-4 w-4 text-amber-600" />;
+        return <AlertTriangle cclassName="h-4 w-4 text-amber-600" />;
       default:
-        return <Clock className="h-4 w-4 text-slate-500" />;
+        return <Clock cclassName="h-4 w-4 text-slate-500" />;
     }
   };
 
@@ -267,23 +267,23 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-12 gap-6 h-full">
+    <div cclassName="grid grid-cols-12 gap-6 h-full">
       {/* Test Suites List */}
-      <div className="col-span-4 space-y-4">
-        <Card className="mac-card">
-          <CardHeader className="mac-card">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Terminal className="h-5 w-5" />
+      <div cclassName="col-span-4 space-y-4">
+        <Card cclassName="mac-card">
+          <CardHeader cclassName="mac-card">
+            <CardTitle cclassName="text-lg flex items-center gap-2">
+              <Terminal cclassName="h-5 w-5" />
               Test Suites
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-0">
-            <ScrollArea className="h-[500px]">
-              <div className="p-4 space-y-2">
+          <CardContent cclassName="p-0">
+            <ScrollArea cclassName="h-[500px]">
+              <div cclassName="p-4 space-y-2">
                 {testSuites.map((suite) => (
                   <Card
                     key={suite.id}
-                    className={cn(
+                    cclassName={cn(
                       "mac-card",
                       "cursor-pointer transition-all hover:shadow-md",
                       selectedSuite === suite.id && "ring-2 ring-primary",
@@ -291,20 +291,20 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                     )}
                     onClick={() => setSelectedSuite(suite.id)}
                   >
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
+                    <CardContent cclassName="p-4">
+                      <div cclassName="flex items-center justify-between mb-2">
+                        <div cclassName="flex items-center gap-2">
                           {getStatusIcon(suite.status)}
-                          <span className="font-medium">{suite.name}</span>
+                          <span cclassName="font-medium">{suite.name}</span>
                         </div>
-                        <ChevronRight className="h-4 w-4" />
+                        <ChevronRight cclassName="h-4 w-4" />
                       </div>
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <div cclassName="flex items-center justify-between text-xs text-muted-foreground">
                         <span>{suite.tests.length} tests</span>
                         {suite.duration && <span>{suite.duration}ms</span>}
                       </div>
                       {suite.status === "running" && suite.progress !== undefined && (
-                        <Progress value={suite.progress} className="h-1 mt-2" />
+                        <Progress value={suite.progress} cclassName="h-1 mt-2" />
                       )}
                     </CardContent>
                   </Card>
@@ -316,36 +316,36 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
       </div>
 
       {/* Test Details */}
-      <div className="col-span-5 space-y-4">
-        <Card className="mac-card h-full">
-          <CardHeader className="mac-card">
-            <CardTitle className="text-lg">Test Execution Details</CardTitle>
+      <div cclassName="col-span-5 space-y-4">
+        <Card cclassName="mac-card h-full">
+          <CardHeader cclassName="mac-card">
+            <CardTitle cclassName="text-lg">Test Execution Details</CardTitle>
           </CardHeader>
-          <CardContent className="mac-card">
+          <CardContent cclassName="mac-card">
             {selectedSuite ? (
-              <ScrollArea className="h-[450px]">
-                <div className="space-y-2">
+              <ScrollArea cclassName="h-[450px]">
+                <div cclassName="space-y-2">
                   {testSuites
                     .find((s) => s.id === selectedSuite)
                     ?.tests.map((test) => (
                       <Card
                         key={test.id}
-                        className={cn("mac-card", "border", getStatusColor(test.status))}
+                        cclassName={cn("mac-card", "border", getStatusColor(test.status))}
                       >
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 flex-1">
+                        <CardContent cclassName="p-4">
+                          <div cclassName="flex items-center justify-between">
+                            <div cclassName="flex items-center gap-2 flex-1">
                               {getStatusIcon(test.status)}
-                              <span className="text-sm">{test.name}</span>
+                              <span cclassName="text-sm">{test.name}</span>
                             </div>
                             {test.duration && (
-                              <Badge variant="secondary" className="text-xs">
+                              <Badge variant="secondary" cclassName="text-xs">
                                 {test.duration}ms
                               </Badge>
                             )}
                           </div>
                           {test.error && (
-                            <div className="mt-2 p-2 bg-red-500/10 rounded text-xs text-red-400 font-mono">
+                            <div cclassName="mt-2 p-2 bg-red-500/10 rounded text-xs text-red-400 font-mono">
                               {test.error}
                             </div>
                           )}
@@ -355,7 +355,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                 </div>
               </ScrollArea>
             ) : (
-              <div className="flex items-center justify-center h-[450px] text-muted-foreground">
+              <div cclassName="flex items-center justify-center h-[450px] text-muted-foreground">
                 Select a test suite to view details
               </div>
             )}
@@ -364,72 +364,72 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
       </div>
 
       {/* System Resources */}
-      <div className="col-span-3 space-y-4">
-        <Card className="mac-card">
-          <CardHeader className="mac-card">
-            <CardTitle className="text-lg">System Resources</CardTitle>
+      <div cclassName="col-span-3 space-y-4">
+        <Card cclassName="mac-card">
+          <CardHeader cclassName="mac-card">
+            <CardTitle cclassName="text-lg">System Resources</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent cclassName="space-y-4">
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <Cpu className="h-4 w-4 text-blue-600" />
-                  <span className="text-sm font-medium text-foreground">CPU Usage</span>
+              <div cclassName="flex items-center justify-between mb-2">
+                <div cclassName="flex items-center gap-2">
+                  <Cpu cclassName="h-4 w-4 text-blue-600" />
+                  <span cclassName="text-sm font-medium text-foreground">CPU Usage</span>
                 </div>
-                <span className="text-sm font-semibold text-foreground">
+                <span cclassName="text-sm font-semibold text-foreground">
                   {systemResources.cpu}%
                 </span>
               </div>
-              <Progress value={systemResources.cpu} className="h-2" />
+              <Progress value={systemResources.cpu} cclassName="h-2" />
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <HardDrive className="h-4 w-4 text-emerald-600" />
-                  <span className="text-sm font-medium text-foreground">Memory</span>
+              <div cclassName="flex items-center justify-between mb-2">
+                <div cclassName="flex items-center gap-2">
+                  <HardDrive cclassName="h-4 w-4 text-emerald-600" />
+                  <span cclassName="text-sm font-medium text-foreground">Memory</span>
                 </div>
-                <span className="text-sm font-semibold text-foreground">
+                <span cclassName="text-sm font-semibold text-foreground">
                   {systemResources.memory}%
                 </span>
               </div>
-              <Progress value={systemResources.memory} className="h-2" />
+              <Progress value={systemResources.memory} cclassName="h-2" />
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <Wifi className="h-4 w-4 text-purple-600" />
-                  <span className="text-sm font-medium text-foreground">Network I/O</span>
+              <div cclassName="flex items-center justify-between mb-2">
+                <div cclassName="flex items-center gap-2">
+                  <Wifi cclassName="h-4 w-4 text-purple-600" />
+                  <span cclassName="text-sm font-medium text-foreground">Network I/O</span>
                 </div>
-                <span className="text-sm font-semibold text-foreground">
+                <span cclassName="text-sm font-semibold text-foreground">
                   {systemResources.network}%
                 </span>
               </div>
-              <Progress value={systemResources.network} className="h-2" />
+              <Progress value={systemResources.network} cclassName="h-2" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="mac-card">
-          <CardHeader className="mac-card">
-            <CardTitle className="text-lg">Execution Settings</CardTitle>
+        <Card cclassName="mac-card">
+          <CardHeader cclassName="mac-card">
+            <CardTitle cclassName="text-lg">Execution Settings</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Parallel Workers</span>
+          <CardContent cclassName="space-y-3">
+            <div cclassName="flex items-center justify-between">
+              <span cclassName="text-sm">Parallel Workers</span>
               <Badge>4</Badge>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Retry Failed</span>
+            <div cclassName="flex items-center justify-between">
+              <span cclassName="text-sm">Retry Failed</span>
               <Badge>2x</Badge>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Timeout</span>
+            <div cclassName="flex items-center justify-between">
+              <span cclassName="text-sm">Timeout</span>
               <Badge>30s</Badge>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Environment</span>
+            <div cclassName="flex items-center justify-between">
+              <span cclassName="text-sm">Environment</span>
               <Badge variant="outline">Development</Badge>
             </div>
           </CardContent>

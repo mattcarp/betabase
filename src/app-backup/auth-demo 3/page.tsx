@@ -4,17 +4,17 @@ import React from "react";
 
 export default function AuthDemoPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
-      <div className="text-white text-center">
-        <h1 className="mac-heading">
+    <div cclassName="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
+      <div cclassName="text-white text-center">
+        <h1 cclassName="mac-heading">
           Auth Demo Page
         </h1>
-        <p className="text-lg">Enhanced LoginForm-Production component will be loaded here</p>
-        <div className="mt-8 p-4 border border-gray-600 rounded-lg">
-          <p className="text-sm text-gray-400">
+        <p cclassName="text-lg">Enhanced LoginForm-Production component will be loaded here</p>
+        <div cclassName="mt-8 p-4 border border-gray-600 rounded-lg">
+          <p cclassName="text-sm text-gray-400">
             The enhanced login form has been successfully implemented with:
           </p>
-          <ul className="mt-4 text-left space-y-2 text-sm">
+          <ul cclassName="mt-4 text-left space-y-2 text-sm">
             <li>✅ Enhanced cyberpunk styling with neon effects</li>
             <li>✅ Real-time password validation</li>
             <li>✅ Auto-submitting verification codes</li>

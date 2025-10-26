@@ -2,14 +2,14 @@ import React from "react";
 import Image from "next/image";
 
 interface BetabaseLogoProps {
-  className?: string;
+  cclassName?: string;
   size?: "sm" | "md" | "lg" | "xl" | "2xl";
   variant?: "icon" | "full";
   priority?: boolean;
 }
 
 export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
-  className = "",
+  cclassName = "",
   size = "md",
   variant = "full",
   priority = true,
@@ -35,14 +35,14 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
   // Using Next.js Image component for optimized loading
   // Image is 400x266 = 1.5037:1 aspect ratio
   return (
-    <div className={`betabase-logo-wrapper ${sizeClass} ${className}`}>
+    <div cclassName={`betabase-logo-wrapper ${sizeClass} ${cclassName}`}>
       <Image
         src="/betabase-logo.webp"
         alt="Betabase"
         width={400}
         height={266}
         priority={priority}
-        className="w-full h-full object-contain"
+        cclassName="w-full h-full object-contain"
       />
     </div>
   );

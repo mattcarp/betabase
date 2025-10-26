@@ -52,7 +52,7 @@ export const MACFusionCard: React.FC<MACFusionCardProps> = ({
 
   return (
     <div
-      className={`
+      cclassName={`
         relative p-6 rounded-xl border transition-all duration-300 cursor-pointer
         ${classes.container}
         ${classes.glow}
@@ -62,13 +62,13 @@ export const MACFusionCard: React.FC<MACFusionCardProps> = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* MAC shimmer effect */}
-      <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-xl">
-        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent animate-mac-shimmer" />
+      <div cclassName="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-xl">
+        <div cclassName="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent animate-mac-shimmer" />
       </div>
 
       {/* Professional gradient top bar (MAC style) */}
       <div
-        className={`
+        cclassName={`
           absolute top-0 left-0 right-0 h-1 rounded-t-xl transform origin-left transition-transform duration-300
           bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-purple-400
           ${isHovered ? "scale-x-100" : "scale-x-0"}
@@ -76,18 +76,18 @@ export const MACFusionCard: React.FC<MACFusionCardProps> = ({
       />
 
       {/* Content */}
-      <div className="relative z-10">
-        <h3 c className="mac-title" className={`text-xl mb-4 ${classes.title}`}>
+      <div cclassName="relative z-10">
+        <h3 c cclassName="mac-title" cclassName={`text-xl mb-4 ${classes.title}`}>
           {title}
         </h3>
 
-        <p className={`mb-4 leading-relaxed ${classes.description}`}>{description}</p>
+        <p cclassName={`mb-4 leading-relaxed ${classes.description}`}>{description}</p>
 
-        {children && <div className="mt-6">{children}</div>}
+        {children && <div cclassName="mt-6">{children}</div>}
 
         {/* Floating orb indicator (MAC style) */}
         {variant === "hybrid" && (
-          <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-mac-accent-purple-400/20 animate-mac-float opacity-60" />
+          <div cclassName="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-mac-accent-purple-400/20 animate-mac-float opacity-60" />
         )}
       </div>
     </div>
@@ -126,7 +126,7 @@ export const MACButton: React.FC<{
 
   return (
     <button
-      className={`
+      cclassName={`
         inline-flex items-center justify-center px-6 py-4 border rounded-lg
         font-mac-body font-normal text-sm transition-all duration-200
         ${getButtonClasses()}
@@ -144,33 +144,33 @@ export const MACButton: React.FC<{
 // Usage example component
 export const MACShowcase: React.FC = () => {
   return (
-    <div className="p-8 space-y-8 bg-mac-surface-bg min-h-screen">
+    <div cclassName="p-8 space-y-8 bg-mac-surface-bg min-h-screen">
       {/* Floating orbs background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-3/4 w-24 h-24 bg-mac-primary-blue-400/10 rounded-full animate-mac-float" />
+      <div cclassName="fixed inset-0 pointer-events-none overflow-hidden">
+        <div cclassName="absolute top-1/4 left-3/4 w-24 h-24 bg-mac-primary-blue-400/10 rounded-full animate-mac-float" />
         <div
-          className="absolute top-3/4 left-1/4 w-16 h-16 bg-mac-accent-purple-400/10 rounded-full animate-mac-float"
+          cclassName="absolute top-3/4 left-1/4 w-16 h-16 bg-mac-accent-purple-400/10 rounded-full animate-mac-float"
           style={{ animationDelay: "2s" }}
         />
         <div
-          className="absolute top-1/2 right-1/4 w-20 h-20 bg-mac-primary-blue-600/10 rounded-full animate-mac-float"
+          cclassName="absolute top-1/2 right-1/4 w-20 h-20 bg-mac-primary-blue-600/10 rounded-full animate-mac-float"
           style={{ animationDelay: "4s" }}
         />
       </div>
 
-      <div className="relative z-10">
+      <div cclassName="relative z-10">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="mac-heading">
+        <div cclassName="text-center mb-12">
+          <h1 cclassName="mac-heading">
             SIAM × MAC
           </h1>
-          <p className="text-mac-text-secondary font-mac-body font-light text-lg">
+          <p cclassName="text-mac-text-secondary font-mac-body font-light text-lg">
             Professional elegance meets futuristic innovation
           </p>
         </div>
 
         {/* Cards showcase */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div cclassName="grid grid-cols-1 md:grid-cols-3 gap-8">
           <MACFusionCard
             title="Professional Mode"
             description="Clean, elegant interface perfect for business meetings and professional presentations."
@@ -184,7 +184,7 @@ export const MACShowcase: React.FC = () => {
             description="The perfect balance of professional elegance and futuristic innovation for modern workflows."
             variant="hybrid"
           >
-            <div className="flex gap-4">
+            <div cclassName="flex gap-4">
               <MACButton variant="primary">Start Meeting</MACButton>
               <MACButton variant="outline">Settings</MACButton>
             </div>

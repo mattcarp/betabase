@@ -47,7 +47,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "default", size = "default", glow, asChild = false, ...props }, ref) => {
+  ({ cclassName, variant = "default", size = "default", glow, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
 
     // Get MAC classes for the button
@@ -56,7 +56,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     // Add optional MAC effects
     const effectClasses = cn(glow && "mac-glow");
 
-    return <Comp className={cn(buttonClasses, effectClasses, className)} ref={ref} {...props} />;
+    return <Comp cclassName={cn(buttonClasses, effectClasses, cclassName)} ref={ref} {...props} />;
   }
 );
 Button.displayName = "Button";
@@ -65,7 +65,7 @@ Button.displayName = "Button";
 const buttonVariants = (props?: {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  className?: string;
+  cclassName?: string;
 }) => {
   if (!props) return getButtonClasses();
   return getButtonClasses(props.variant, props.size);

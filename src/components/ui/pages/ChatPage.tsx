@@ -49,7 +49,7 @@ const TestDashboard = dynamic(
     import("../../test-dashboard/TestDashboard").then((mod) => ({ default: mod.TestDashboard })),
   {
     loading: () => (
-      <div className="flex items-center justify-center h-full">
+      <div cclassName="flex items-center justify-center h-full">
         <div>Loading Test Dashboard...</div>
       </div>
     ),
@@ -61,7 +61,7 @@ const HUDInterface = dynamic(
   () => import("../HUDInterface").then((mod) => ({ default: mod.HUDInterface })),
   {
     loading: () => (
-      <div className="flex items-center justify-center h-full">
+      <div cclassName="flex items-center justify-center h-full">
         <div>Loading HUD Interface...</div>
       </div>
     ),
@@ -73,7 +73,7 @@ const CurateTab = dynamic(
   () => import("../CurateTab").then((mod) => ({ default: mod.CurateTab })),
   {
     loading: () => (
-      <div className="flex items-center justify-center h-full">
+      <div cclassName="flex items-center justify-center h-full">
         <div>Loading Curate...</div>
       </div>
     ),
@@ -93,31 +93,31 @@ const COMPONENT_MODES: ComponentMode[] = [
     mode: "chat",
     label: "Chat",
     description: "AI-powered conversation",
-    icon: <MessageSquare className="h-4 w-4" />,
+    icon: <MessageSquare cclassName="h-4 w-4" />,
   },
   {
     mode: "hud",
     label: "HUD",
     description: "Heads-up display interface",
-    icon: <Zap className="h-4 w-4" />,
+    icon: <Zap cclassName="h-4 w-4" />,
   },
   {
     mode: "test",
     label: "Test",
     description: "Test and validate",
-    icon: <TestTube className="h-4 w-4" />,
+    icon: <TestTube cclassName="h-4 w-4" />,
   },
   {
     mode: "fix",
     label: "Fix",
     description: "Debug and resolve issues",
-    icon: <Wrench className="h-4 w-4" />,
+    icon: <Wrench cclassName="h-4 w-4" />,
   },
   {
     mode: "curate",
     label: "Curate",
     description: "Manage knowledge base",
-    icon: <Library className="h-4 w-4" />,
+    icon: <Library cclassName="h-4 w-4" />,
   },
 ];
 
@@ -203,31 +203,31 @@ Be helpful, concise, and professional in your responses.`;
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col w-full">
+      <div cclassName="h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col w-full">
         {/* Sophisticated Header */}
-        <header className="border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/60 flex-shrink-0 overflow-visible relative z-50">
-          <div className="px-6 py-4 h-16">
-            <div className="flex flex-row items-center justify-between gap-4 h-full">
+        <header cclassName="border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/60 flex-shrink-0 overflow-visible relative z-50">
+          <div cclassName="px-6 py-4 h-16">
+            <div cclassName="flex flex-row items-center justify-between gap-4 h-full">
               {/* Brand Identity */}
-              <div className="flex items-center space-x-3 flex-shrink-0">
+              <div cclassName="flex items-center space-x-3 flex-shrink-0">
                 <SiamLogo size="lg" variant="icon" />
                 <div>
-                  <h1 className="mac-heading text-xl font-extralight text-white tracking-tight whitespace-nowrap">
+                  <h1 cclassName="mac-heading text-xl font-extralight text-white tracking-tight whitespace-nowrap">
                     The Betabase
                   </h1>
-                  <p className="text-xs text-slate-400 font-light whitespace-nowrap">
+                  <p cclassName="text-xs text-slate-400 font-light whitespace-nowrap">
                     Intelligence Platform
                   </p>
                 </div>
               </div>
 
               {/* Navigation Tabs */}
-              <div className="flex items-center space-x-1 bg-zinc-900/50 p-2 rounded-lg border border-zinc-800/50 flex-shrink-0">
+              <div cclassName="flex items-center space-x-1 bg-zinc-900/50 p-2 rounded-lg border border-zinc-800/50 flex-shrink-0">
                 {COMPONENT_MODES.map((mode) => (
                   <button
                     key={mode.mode}
                     onClick={() => setActiveMode(mode.mode)}
-                    className={cn(
+                    cclassName={cn(
                       "flex items-center space-x-2 px-4 py-2.5 rounded-md text-sm font-light transition-all duration-200",
                       activeMode === mode.mode
                         ? "bg-zinc-800 text-white shadow-sm"
@@ -241,14 +241,14 @@ Be helpful, concise, and professional in your responses.`;
               </div>
 
               {/* Controls */}
-              <div className="flex items-center space-x-2 flex-shrink-0">
+              <div cclassName="flex items-center space-x-2 flex-shrink-0">
                 <ConnectionStatusIndicator />
-                <div className="introspection-dropdown-container">
+                <div cclassName="introspection-dropdown-container">
                   <IntrospectionDropdown />
                 </div>
                 {/* Knowledge status badges */}
-                <div className="hidden lg:flex items-center gap-2">
-                  <Badge variant="outline" title="Knowledge status" className="whitespace-nowrap">
+                <div cclassName="hidden lg:flex items-center gap-2">
+                  <Badge variant="outline" title="Knowledge status" cclassName="whitespace-nowrap">
                     {knowledgeStatus === "ok"
                       ? "Knowledge: OK"
                       : knowledgeStatus === "degraded"
@@ -258,7 +258,7 @@ Be helpful, concise, and professional in your responses.`;
                   {lastKnowledgeRefresh && (
                     <Badge
                       variant="outline"
-                      className="text-xs whitespace-nowrap"
+                      cclassName="text-xs whitespace-nowrap"
                       title="Last refresh"
                     >
                       updated {lastKnowledgeRefresh}
@@ -267,27 +267,27 @@ Be helpful, concise, and professional in your responses.`;
                 </div>
 
                 {/* Sidebar trigger with MAC styling */}
-                <SidebarTrigger className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 rounded-md transition-colors" />
+                <SidebarTrigger cclassName="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 rounded-md transition-colors" />
 
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 mac-button mac-button-outline"
+                  cclassName="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 mac-button mac-button-outline"
                   onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
                   title="Knowledge Base"
                 >
-                  <Database className="h-4 w-4" />
+                  <Database cclassName="h-4 w-4" />
                 </Button>
 
                 {/* Performance Dashboard Link */}
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 mac-button mac-button-outline"
+                  cclassName="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 mac-button mac-button-outline"
                   onClick={() => (window.location.href = "/performance")}
                   title="Performance Dashboard"
                 >
-                  <Activity className="h-4 w-4" />
+                  <Activity cclassName="h-4 w-4" />
                 </Button>
 
                 {onLogout && (
@@ -295,10 +295,10 @@ Be helpful, concise, and professional in your responses.`;
                     variant="ghost"
                     size="sm"
                     onClick={onLogout}
-                    className="sign-out-button text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 text-xs px-4 flex items-center gap-2 mac-button mac-button-outline"
+                    cclassName="sign-out-button text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 text-xs px-4 flex items-center gap-2 mac-button mac-button-outline"
                   >
-                    <LogOut className="h-4 w-4" />
-                    <span className="sign-out-text">Sign Out</span>
+                    <LogOut cclassName="h-4 w-4" />
+                    <span cclassName="sign-out-text">Sign Out</span>
                   </Button>
                 )}
               </div>
@@ -307,15 +307,15 @@ Be helpful, concise, and professional in your responses.`;
         </header>
 
         {/* Main Layout with proper sidebar */}
-        <div className="flex flex-1 min-h-0 relative w-full">
+        <div cclassName="flex flex-1 min-h-0 relative w-full">
           {/* Enhanced Sidebar with persistence */}
-          <AppSidebar className="border-r border-zinc-800/50" />
+          <AppSidebar cclassName="border-r border-zinc-800/50" />
 
           {/* Main Content with SidebarInset */}
-          <SidebarInset className="flex-1 min-h-0 bg-transparent flex flex-col">
-            <div className="flex-1 flex flex-col min-h-0">
+          <SidebarInset cclassName="flex-1 min-h-0 bg-transparent flex flex-col">
+            <div cclassName="flex-1 flex flex-col min-h-0">
               {activeMode === "chat" && (
-                <div className="flex-1 flex flex-col min-h-0">
+                <div cclassName="flex-1 flex flex-col min-h-0">
                   <AiSdkChatPanel
                     key={`${getChatAPIEndpoint()}-${activeConversationId}`} // Force remount when endpoint or conversation changes
                     api={getChatAPIEndpoint()}
@@ -323,7 +323,7 @@ Be helpful, concise, and professional in your responses.`;
                     description="Don't be a dick."
                     systemPrompt={systemPrompt}
                     suggestions={suggestions}
-                    className="flex-1 border-0"
+                    cclassName="flex-1 border-0"
                     placeholder="Ask me anything..."
                     enableWelcomeScreen={
                       !activeConversation || activeConversation.messages.length === 0
@@ -335,29 +335,29 @@ Be helpful, concise, and professional in your responses.`;
               )}
 
               {activeMode === "hud" && (
-                <div className="h-full p-6">
+                <div cclassName="h-full p-6">
                   <HUDInterface />
                 </div>
               )}
 
-              {activeMode === "test" && <TestDashboard className="h-full" />}
+              {activeMode === "test" && <TestDashboard cclassName="h-full" />}
 
               {activeMode === "fix" && (
-                <div className="flex-1 flex flex-col min-h-0">
-                  <div className="flex-1 flex flex-col border-0 bg-transparent">
-                    <div className="p-6 border-b border-zinc-800/50">
+                <div cclassName="flex-1 flex flex-col min-h-0">
+                  <div cclassName="flex-1 flex flex-col border-0 bg-transparent">
+                    <div cclassName="p-6 border-b border-zinc-800/50">
                       <h2
-                        className="mac-heading"
-                        className="mac-heading text-lg font-semibold text-zinc-100 flex items-center gap-2"
+                        cclassName="mac-heading"
+                        cclassName="mac-heading text-lg font-semibold text-zinc-100 flex items-center gap-2"
                       >
-                        <Wrench className="h-5 w-5 text-zinc-400" />
+                        <Wrench cclassName="h-5 w-5 text-zinc-400" />
                         Debug Assistant
                       </h2>
-                      <p className="text-sm text-zinc-400 mt-2">
+                      <p cclassName="text-sm text-zinc-400 mt-2">
                         AI-powered debugging and issue resolution
                       </p>
                     </div>
-                    <div className="flex-1 flex flex-col min-h-0">
+                    <div cclassName="flex-1 flex flex-col min-h-0">
                       <ChatPanel
                         api="/api/chat"
                         title="Debug Assistant"
@@ -370,7 +370,7 @@ Be helpful, concise, and professional in your responses.`;
                           "Fix memory leaks",
                         ]}
                         showHeader={false}
-                        className="flex-1 border-0"
+                        cclassName="flex-1 border-0"
                       />
                     </div>
                   </div>
@@ -378,21 +378,21 @@ Be helpful, concise, and professional in your responses.`;
               )}
 
               {activeMode === "curate" && (
-                <div className="h-full">
-                  <div className="p-6 border-b border-zinc-800/50">
+                <div cclassName="h-full">
+                  <div cclassName="p-6 border-b border-zinc-800/50">
                     <h2
-                      className="mac-heading"
-                      className="mac-heading text-lg font-semibold text-zinc-100 flex items-center gap-2"
+                      cclassName="mac-heading"
+                      cclassName="mac-heading text-lg font-semibold text-zinc-100 flex items-center gap-2"
                     >
-                      <Library className="h-5 w-5 text-zinc-400" />
+                      <Library cclassName="h-5 w-5 text-zinc-400" />
                       Knowledge Curation
                     </h2>
-                    <p className="text-sm text-zinc-400 mt-2">
+                    <p cclassName="text-sm text-zinc-400 mt-2">
                       Manage and organize your knowledge base
                     </p>
                   </div>
-                  <div className="h-[calc(100%-81px)] p-6">
-                    <CurateTab className="h-full" />
+                  <div cclassName="h-[calc(100%-81px)] p-6">
+                    <CurateTab cclassName="h-full" />
                   </div>
                 </div>
               )}
@@ -401,9 +401,9 @@ Be helpful, concise, and professional in your responses.`;
 
           {/* Right Sidebar */}
           {isRightSidebarOpen && (
-            <aside className="w-96 border-l border-zinc-800/50 bg-zinc-950/50 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/30">
+            <aside cclassName="w-96 border-l border-zinc-800/50 bg-zinc-950/50 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/30">
               <RightSidebar onToggle={() => setIsRightSidebarOpen(false)}>
-                <EnhancedKnowledgePanel className="h-full" />
+                <EnhancedKnowledgePanel cclassName="h-full" />
               </RightSidebar>
             </aside>
           )}
@@ -411,13 +411,13 @@ Be helpful, concise, and professional in your responses.`;
           {/* Right Sidebar Toggle Button (Always Visible When Collapsed) */}
           <button
             onClick={() => setIsRightSidebarOpen(true)}
-            className={cn(
+            cclassName={cn(
               "absolute right-4 top-8 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 border border-zinc-800/50 hover:bg-zinc-800 transition-colors group",
               isRightSidebarOpen && "hidden"
             )}
             aria-label="Open knowledge panel"
           >
-            <Database className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors" />
+            <Database cclassName="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors" />
           </button>
         </div>
       </div>

@@ -35,7 +35,7 @@ interface PasswordInputProps extends React.ComponentProps<"input"> {
 }
 
 export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
-  ({ showRequirements = true, onRequirementsChange, className, ...props }, ref) => {
+  ({ showRequirements = true, onRequirementsChange, cclassName, ...props }, ref) => {
     const [requirements, setRequirements] = useState<Record<string, boolean>>({
       length: false,
       uppercase: false,
@@ -61,42 +61,42 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
     }, [password, onRequirementsChange]);
 
     return (
-      <div className="space-y-2">
+      <div cclassName="space-y-2">
         <Input
           ref={ref}
           type="password"
-          className={cn(
+          cclassName={cn(
             "transition-all duration-200",
             Object.values(requirements).every((r) => r) &&
               password.length > 0 &&
               "border-green-400/50 focus:border-green-400",
-            className
+            cclassName
           )}
           {...props}
         />
         {showRequirements && password.length > 0 && (
-          <div className="mt-4 space-y-1.5 p-4 bg-black/20 rounded-lg border border-gray-700/50">
+          <div cclassName="mt-4 space-y-1.5 p-4 bg-black/20 rounded-lg border border-gray-700/50">
             {passwordRequirements.map(({ key, label }) => {
               const met = requirements[key];
               return (
                 <div
                   key={key}
-                  className={cn(
+                  cclassName={cn(
                     "flex items-center text-xs transition-all duration-200",
                     met ? "text-green-400" : "text-muted-foreground"
                   )}
                 >
                   <div
-                    className={cn(
+                    cclassName={cn(
                       "w-4 h-4 rounded-full mr-2 flex items-center justify-center transition-all duration-200",
                       met
                         ? "bg-green-400/20 border border-green-400/50"
                         : "bg-muted/20 border border-muted/50"
                     )}
                   >
-                    {met ? <Check className="w-2.5 h-2.5" /> : <X className="w-2.5 h-2.5" />}
+                    {met ? <Check cclassName="w-2.5 h-2.5" /> : <X cclassName="w-2.5 h-2.5" />}
                   </div>
-                  <span className={cn("transition-all duration-200", met && "font-medium")}>
+                  <span cclassName={cn("transition-all duration-200", met && "font-medium")}>
                     {label}
                   </span>
                 </div>

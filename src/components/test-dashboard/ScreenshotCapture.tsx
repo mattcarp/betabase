@@ -11,7 +11,7 @@ import { cn } from "../../lib/utils";
 interface ScreenshotCaptureProps {
   enabled: boolean;
   timestamp: number;
-  className?: string;
+  cclassName?: string;
 }
 
 interface CropArea {
@@ -24,7 +24,7 @@ interface CropArea {
 export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
   enabled,
   timestamp,
-  className,
+  cclassName,
 }) => {
   const [isCropping, setIsCropping] = useState(false);
   const [cropArea, setCropArea] = useState<CropArea | null>(null);
@@ -175,14 +175,14 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
       {/* Crop overlay */}
       {enabled && !showPreview && (
         <div
-          className={cn("fixed inset-0 z-40 cursor-crosshair", className)}
+          cclassName={cn("fixed inset-0 z-40 cursor-crosshair", cclassName)}
           onMouseDown={handleStartCrop}
           onMouseMove={handleMoveCrop}
           onMouseUp={handleEndCrop}
         >
           {isCropping && cropArea && (
-            <div className="absolute border-2 border-primary bg-primary/10" style={getCropStyle()}>
-              <div className="absolute top-2 left-2 bg-primary text-primary-foreground px-2 py-2 rounded text-xs">
+            <div cclassName="absolute border-2 border-primary bg-primary/10" style={getCropStyle()}>
+              <div cclassName="absolute top-2 left-2 bg-primary text-primary-foreground px-2 py-2 rounded text-xs">
                 {Math.abs(cropArea.endX - cropArea.startX)} x{" "}
                 {Math.abs(cropArea.endY - cropArea.startY)}
               </div>
@@ -193,14 +193,14 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
 
       {/* Quick capture button */}
       {enabled && !showPreview && (
-        <div className="fixed bottom-6 right-6 z-50">
+        <div cclassName="fixed bottom-6 right-6 z-50">
           <Button
             variant="default"
             size="lg"
-            className="gap-2 shadow-lg mac-button mac-button-primary"
+            cclassName="gap-2 shadow-lg mac-button mac-button-primary"
             onClick={handleQuickCapture}
           >
-            <Crop className="h-4 w-4" />
+            <Crop cclassName="h-4 w-4" />
             Quick Capture
           </Button>
         </div>
@@ -208,44 +208,44 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
 
       {/* Preview Modal */}
       {showPreview && capturedImage && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-6">
-          <Card className="mac-card max-w-4xl w-full">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="mac-title">
+        <div cclassName="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-6">
+          <Card cclassName="mac-card max-w-4xl w-full">
+            <CardContent cclassName="p-6">
+              <div cclassName="flex items-center justify-between mb-4">
+                <h3 cclassName="mac-title">
                   Screenshot Preview
                 </h3>
                 <Button
-                  className="mac-button mac-button-outline"
+                  cclassName="mac-button mac-button-outline"
                   variant="ghost"
-                  className="mac-button mac-button-outline"
+                  cclassName="mac-button mac-button-outline"
                   size="icon"
                   onClick={handleCancel}
                 >
-                  <X className="h-4 w-4" />
+                  <X cclassName="h-4 w-4" />
                 </Button>
               </div>
 
-              <div className="bg-muted rounded-lg p-4 mb-4 max-h-[60vh] overflow-auto">
+              <div cclassName="bg-muted rounded-lg p-4 mb-4 max-h-[60vh] overflow-auto">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={capturedImage} alt="Screenshot preview" className="w-full h-auto" />
+                <img src={capturedImage} alt="Screenshot preview" cclassName="w-full h-auto" />
               </div>
 
-              <div className="flex items-center justify-end gap-2">
+              <div cclassName="flex items-center justify-end gap-2">
                 <Button
                   variant="outline"
                   onClick={handleDownload}
-                  className="gap-2 mac-button mac-button-outline"
+                  cclassName="gap-2 mac-button mac-button-outline"
                 >
-                  <Download className="h-4 w-4" />
+                  <Download cclassName="h-4 w-4" />
                   Download
                 </Button>
                 <Button
                   variant="default"
                   onClick={handleSaveScreenshot}
-                  className="gap-2 mac-button mac-button-primary"
+                  cclassName="gap-2 mac-button mac-button-primary"
                 >
-                  <Check className="h-4 w-4" />
+                  <Check cclassName="h-4 w-4" />
                   Save to Annotations
                 </Button>
               </div>

@@ -8,12 +8,12 @@ import { Button } from "./button";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
 
-function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
+function InputGroup({ cclassName, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="input-group"
       role="group"
-      className={cn(
+      cclassName={cn(
         "group/input-group border-input dark:bg-input/30 shadow-xs relative flex w-full items-center rounded-md border outline-none transition-[color,box-shadow]",
         "h-9 has-[>textarea]:h-auto",
 
@@ -29,7 +29,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
         // Error state.
         "has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40",
 
-        className
+        cclassName
       )}
       {...props}
     />
@@ -56,7 +56,7 @@ const inputGroupAddonVariants = cva(
 );
 
 function InputGroupAddon({
-  className,
+  cclassName,
   align = "inline-start",
   ...props
 }: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
@@ -65,7 +65,7 @@ function InputGroupAddon({
       role="group"
       data-slot="input-group-addon"
       data-align={align}
-      className={cn(inputGroupAddonVariants({ align }), className)}
+      cclassName={cn(inputGroupAddonVariants({ align }), cclassName)}
       onClick={(e) => {
         if ((e.target as HTMLElement).closest("button")) {
           return;
@@ -92,7 +92,7 @@ const inputGroupButtonVariants = cva("flex items-center gap-2 text-sm shadow-non
 });
 
 function InputGroupButton({
-  className,
+  cclassName,
   type = "button",
   variant = "ghost",
   size = "xs",
@@ -104,45 +104,45 @@ function InputGroupButton({
       type={type}
       data-size={size}
       variant={variant}
-      className={cn("mac-button mac-button-primary", inputGroupButtonVariants({ size }), className)}
+      cclassName={cn("mac-button mac-button-primary", inputGroupButtonVariants({ size }), cclassName)}
       {...props}
     />
   );
 }
 
-function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
+function InputGroupText({ cclassName, ...props }: React.ComponentProps<"span">) {
   return (
     <span
-      className={cn(
+      cclassName={cn(
         "text-muted-foreground flex items-center gap-2 text-sm [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none",
-        className
+        cclassName
       )}
       {...props}
     />
   );
 }
 
-function InputGroupInput({ className, ...props }: React.ComponentProps<"input">) {
+function InputGroupInput({ cclassName, ...props }: React.ComponentProps<"input">) {
   return (
     <Input
       data-slot="input-group-control"
-      className={cn(
+      cclassName={cn(
         "mac-input",
         "flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent",
-        className
+        cclassName
       )}
       {...props}
     />
   );
 }
 
-function InputGroupTextarea({ className, ...props }: React.ComponentProps<"textarea">) {
+function InputGroupTextarea({ cclassName, ...props }: React.ComponentProps<"textarea">) {
   return (
     <Textarea
       data-slot="input-group-control"
-      className={cn(
+      cclassName={cn(
         "flex-1 resize-none rounded-none border-0 bg-transparent py-4 shadow-none focus-visible:ring-0 dark:bg-transparent",
-        className
+        cclassName
       )}
       {...props}
     />
