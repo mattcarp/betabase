@@ -239,13 +239,13 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                 Email Address
               </FieldLabel>
               <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-blue-400 transition-colors" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500 group-focus-within:text-blue-400 transition-colors pointer-events-none" />
                 <Input
                   {...emailForm.register("email")}
                   id="email"
                   type="email"
                   placeholder="Enter your email address"
-                  className="mac-input pl-14 h-12 text-base border-2 border-gray-400 bg-gray-900 text-white placeholder:text-gray-400 focus:border-blue-400 focus:bg-gray-800 transition-all duration-200"
+                  className="mac-input pl-11 h-12 text-base border-2 border-gray-600 bg-gray-900/50 text-white placeholder:text-gray-500 focus:border-blue-500 focus:bg-gray-800 transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
                   disabled={isLoading}
                   autoComplete="email"
                   aria-invalid={!!emailForm.formState.errors.email}
