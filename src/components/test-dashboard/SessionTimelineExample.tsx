@@ -163,9 +163,8 @@ export const SessionTimelineExample: React.FC = () => {
         {/* Header */}
         <div className="border-b border-mac-utility-border p-6 bg-mac-surface-elevated">
           <h1
-            c
             className="mac-heading"
-            lassName="text-2xl font-light text-mac-text-primary mac-heading mb-2"
+            className="text-2xl font-light text-mac-text-primary mac-heading mb-2"
           >
             Session Timeline Demo
           </h1>
@@ -242,9 +241,8 @@ export const SessionTimelineExample: React.FC = () => {
                 {/* Timestamp */}
                 <div>
                   <h4
-                    c
                     className="mac-title"
-                    lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                    className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                   >
                     Timestamp
                   </h4>
@@ -257,9 +255,8 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.elementDescription && (
                   <div>
                     <h4
-                      c
                       className="mac-title"
-                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Element
                     </h4>
@@ -273,9 +270,8 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.selector && (
                   <div>
                     <h4
-                      c
                       className="mac-title"
-                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Selector
                     </h4>
@@ -289,9 +285,8 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.value && (
                   <div>
                     <h4
-                      c
                       className="mac-title"
-                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Value
                     </h4>
@@ -305,9 +300,8 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.url && (
                   <div>
                     <h4
-                      c
                       className="mac-title"
-                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       URL
                     </h4>
@@ -321,9 +315,8 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.duration && (
                   <div>
                     <h4
-                      c
                       className="mac-title"
-                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Duration
                     </h4>
@@ -337,9 +330,8 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.networkData && (
                   <div>
                     <h4
-                      c
                       className="mac-title"
-                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Network Details
                     </h4>
@@ -382,9 +374,8 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.error && (
                   <div>
                     <h4
-                      c
                       className="mac-title"
-                      lassName="mac-title text-sm font-medium text-rose-500 mb-2"
+                      className="mac-title text-sm font-medium text-rose-500 mb-2"
                     >
                       Error Details
                     </h4>
@@ -405,9 +396,8 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.thumbnail && (
                   <div>
                     <h4
-                      c
                       className="mac-title"
-                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Screenshot
                     </h4>
@@ -424,9 +414,8 @@ export const SessionTimelineExample: React.FC = () => {
                 {selectedInteraction.metadata && (
                   <div>
                     <h4
-                      c
                       className="mac-title"
-                      lassName="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
                     >
                       Metadata
                     </h4>
@@ -441,9 +430,8 @@ export const SessionTimelineExample: React.FC = () => {
             <div className="flex items-center justify-center h-full">
               <div className="text-center max-w-md">
                 <h3
-                  c
                   className="mac-title"
-                  lassName="mac-title text-lg font-light text-mac-text-primary mb-2"
+                  className="mac-title text-lg font-light text-mac-text-primary mb-2"
                 >
                   No Interaction Selected
                 </h3>

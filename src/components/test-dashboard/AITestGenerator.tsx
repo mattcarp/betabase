@@ -271,7 +271,7 @@ test.describe('${prompt}', () => {
             {/* Advanced Options */}
             <Card className="mac-card bg-muted/50">
               <CardContent className="p-4 space-y-3">
-                <h4 c className="mac-title" lassName="mac-title text-sm font-medium">
+                <h4 className="mac-title">
                   Advanced Options
                 </h4>
                 <div className="space-y-2 text-sm">
@@ -446,9 +446,8 @@ test.describe('${prompt}', () => {
                   <Card className="mac-card bg-blue-500/10 border-blue-500/20">
                     <CardContent className="p-4">
                       <h3
-                        c
                         className="mac-title"
-                        lassName="mac-title font-medium mb-2 flex items-center gap-2"
+                        className="mac-title font-medium mb-2 flex items-center gap-2"
                       >
                         <Sparkles className="h-4 w-4 text-blue-500" />
                         AI Recommendations

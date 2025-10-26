@@ -35,9 +35,8 @@ export async function GET() {
     console.log("[Health] 🔄 Performing fresh health check (cache expired or missing)");
 
     const mcpEndpoint =
-      process.env.NODE_ENV === "production"
-        ? "https://luminous-dedication-production.up.railway.app/rpc"
-        : "http://localhost:3333/rpc";
+      process.env.NEXT_PUBLIC_AOMA_MESH_RPC_URL ||
+      "https://luminous-dedication-production.up.railway.app/rpc";
 
     console.log(`[Health] Testing AOMA MCP at: ${mcpEndpoint}`);
 

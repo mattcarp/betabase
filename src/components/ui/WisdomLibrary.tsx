@@ -476,7 +476,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
   return (
     <div className={`space-y-4 ${className}`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 c className="mac-title" lassName="mac-title text-lg font-semibold text-motiff-accent">
+        <h3 className="mac-title">
           Wisdom Library
         </h3>
         <div className="flex items-center gap-2">
@@ -563,9 +563,8 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2">
                       <h4
-                        c
                         className="mac-title"
-                        lassName="mac-title font-medium text-white text-sm truncate"
+                        className="mac-title font-medium text-white text-sm truncate"
                       >
                         {entry.title}
                       </h4>

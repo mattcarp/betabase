@@ -31,9 +31,8 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent opacity-90"></div>
               <div>
                 <h1
-                  c
                   className="mac-heading"
-                  lassName="mac-heading text-xl font-light text-mac-text-primary"
+                  className="mac-heading text-xl font-light text-mac-text-primary"
                 >
                   {title}
                 </h1>
@@ -100,7 +99,7 @@ export const ProfessionalCard: React.FC<{
     <div className={`mac-card mac-shimmer ${className}`}>
       {/* Professional card header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 c className="mac-title" lassName="mac-title">
+        <h3 className="mac-title">
           {title}
         </h3>
         {actions && <div className="flex items-center space-x-2">{actions}</div>}

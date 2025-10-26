@@ -212,7 +212,7 @@ export const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
           <Card className="mac-card max-w-4xl w-full">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 c className="mac-title" lassName="mac-title text-lg font-semibold">
+                <h3 className="mac-title">
                   Screenshot Preview
                 </h3>
                 <Button

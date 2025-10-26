@@ -312,7 +312,7 @@ export const FirecrawlPanel: React.FC = () => {
               </TabsList>
 
               <TabsContent value="features" className="space-y-2">
-                <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+                <h4 className="mac-title">
                   Testable Features ({autAnalysis.testableFeatures.length})
                 </h4>
                 <ScrollArea className="h-[300px]">
@@ -349,7 +349,7 @@ export const FirecrawlPanel: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="flows" className="space-y-2">
-                <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+                <h4 className="mac-title">
                   User Flows ({autAnalysis.userFlows.length})
                 </h4>
                 <ScrollArea className="h-[300px]">
@@ -376,7 +376,7 @@ export const FirecrawlPanel: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="apis" className="space-y-2">
-                <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+                <h4 className="mac-title">
                   API Endpoints ({autAnalysis.apiEndpoints.length})
                 </h4>
                 <ScrollArea className="h-[300px]">
@@ -395,7 +395,7 @@ export const FirecrawlPanel: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="knowledge" className="space-y-2">
-                <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+                <h4 className="mac-title">
                   Extracted Knowledge ({autAnalysis.knowledgeExtracted.length})
                 </h4>
                 <ScrollArea className="h-[300px]">
@@ -488,7 +488,7 @@ export const FirecrawlPanel: React.FC = () => {
           {/* Common Issues */}
           {commonIssues.length > 0 && (
             <div className="pt-4 border-t">
-              <h4 c className="mac-title" lassName="mac-title text-sm font-semibold mb-2">
+              <h4 className="mac-title">
                 Common Issues
               </h4>
               <div className="space-y-2">

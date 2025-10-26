@@ -13,9 +13,8 @@ const ComponentPlayground = () => {
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-12">
           <h1
-            c
             className="mac-heading"
-            lassName="mac-heading text-4xl font-bold text-blue-600 mb-4"
+            className="mac-heading text-4xl font-bold text-blue-600 mb-4"
           >
             SIAM UI Component Playground
           </h1>
@@ -25,9 +24,8 @@ const ComponentPlayground = () => {
         {/* RadialProgress Section */}
         <section className="mb-16">
           <h2
-            c
             className="mac-heading"
-            lassName="mac-heading text-2xl font-bold text-blue-600 mb-8"
+            className="mac-heading text-2xl font-bold text-blue-600 mb-8"
           >
             RadialProgress Component
           </h2>
@@ -52,9 +50,8 @@ const ComponentPlayground = () => {
             {/* Controls */}
             <div className="bg-gray-800/50 rounded-lg p-8 border border-gray-700">
               <h3
-                c
                 className="mac-title"
-                lassName="mac-title text-lg font-semibold text-blue-600 mb-6"
+                className="mac-title text-lg font-semibold text-blue-600 mb-6"
               >
                 Component Controls
               </h3>
@@ -112,9 +109,8 @@ const ComponentPlayground = () => {
           {/* Multiple Variants */}
           <div className="mt-12">
             <h3
-              c
               className="mac-title"
-              lassName="mac-title text-lg font-semibold text-blue-600 mb-6"
+              className="mac-title text-lg font-semibold text-blue-600 mb-6"
             >
               Component Variants
             </h3>
@@ -146,9 +142,8 @@ const ComponentPlayground = () => {
         {/* System Status Dashboard */}
         <section className="mb-16">
           <h2
-            c
             className="mac-heading"
-            lassName="mac-heading text-2xl font-bold text-blue-600 mb-8"
+            className="mac-heading text-2xl font-bold text-blue-600 mb-8"
           >
             System Dashboard Example
           </h2>

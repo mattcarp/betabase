@@ -69,7 +69,7 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
         className="px-4 py-2 border-b border-mac-border cursor-grab active:cursor-grabbing bg-mac-state-hover"
         onMouseDown={handleMouseDown}
       >
-        <h3 c className="mac-title" lassName="mac-title text-mac-text-primary">
+        <h3 className="mac-title">
           {title}
         </h3>
       </div>
@@ -135,7 +135,7 @@ export const HUDInterface: React.FC<HUDInterfaceProps> = ({
 
       {/* HUD Title */}
       <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
-        <h1 c className="mac-heading" lassName="mac-heading mac-display text-mac-text-primary">
+        <h1 className="mac-heading">
           SIAM HUD Interface
         </h1>
         <p className="text-center mac-body mt-2">

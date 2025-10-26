@@ -183,9 +183,8 @@ export const ManualTestingPanel: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2
-            c
             className="mac-heading"
-            lassName="mac-heading text-2xl font-light text-foreground mac-title"
+            className="mac-heading text-2xl font-light text-foreground mac-title"
           >
             Manual Testing Mode
           </h2>
@@ -330,9 +329,8 @@ export const ManualTestingPanel: React.FC = () => {
           <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-6">
               <h3
-                c
                 className="mac-title"
-                lassName="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
+                className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
               >
                 <Circle className="h-4 w-4 text-red-500" />
                 Recording Controls
@@ -397,9 +395,8 @@ export const ManualTestingPanel: React.FC = () => {
           <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-6">
               <h3
-                c
                 className="mac-title"
-                lassName="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
+                className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
               >
                 <Clock className="h-4 w-4 text-blue-500" />
                 Session Information
@@ -460,9 +457,8 @@ export const ManualTestingPanel: React.FC = () => {
           <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-6">
               <h3
-                c
                 className="mac-title"
-                lassName="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
+                className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
               >
                 <Maximize2 className="h-4 w-4 text-purple-500" />
                 Quick Actions
@@ -506,9 +502,8 @@ export const ManualTestingPanel: React.FC = () => {
           <Card className="mac-card mac-glass border-[var(--mac-utility-border-elevated)] bg-gradient-to-br from-blue-950/20 to-purple-950/20">
             <CardContent className="p-6">
               <h3
-                c
                 className="mac-title"
-                lassName="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
+                className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
               >
                 <MousePointerClick className="h-4 w-4 text-blue-400" />
                 Testing Tips
