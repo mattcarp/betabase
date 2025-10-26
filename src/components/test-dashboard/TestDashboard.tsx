@@ -41,10 +41,10 @@ import { SessionInteraction } from "../../types/session-timeline";
 import { ManualTestingPanel } from "./ManualTestingPanel";
 
 interface TestDashboardProps {
-  cclassName?: string;
+  className?: string;
 }
 
-export const TestDashboard: React.FC<TestDashboardProps> = ({ cclassName }) => {
+export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
   const [activeView, setActiveView] = useState("unified");
   const [isRunning, setIsRunning] = useState(false);
   const [useRealTimeStreaming, setUseRealTimeStreaming] = useState(true);
@@ -343,7 +343,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ cclassName }) => {
   };
 
   return (
-    <div cclassName={cn("flex h-full bg-background", cclassName)}>
+    <div className={cn("flex h-full bg-background", className)}>
       {/* Session Timeline Sidebar */}
       <SessionTimeline
         interactions={sessionInteractions}
@@ -357,44 +357,44 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ cclassName }) => {
       />
 
       {/* Main Dashboard Content */}
-      <div cclassName="flex flex-col flex-1 overflow-hidden">
+      <div className="flex flex-col flex-1 overflow-hidden">
         {/* Header with Stats */}
-        <div cclassName="border-b bg-background/50 p-6">
-          <div cclassName="flex items-center justify-between mb-6">
-            <div cclassName="flex items-center gap-4">
-              <div cclassName="p-2 rounded-md bg-muted/50">
-                <Activity cclassName="h-5 w-5 text-foreground" />
+        <div className="border-b bg-background/50 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <div className="p-2 rounded-md bg-muted/50">
+                <Activity className="h-5 w-5 text-foreground" />
               </div>
               <div>
                 <h1
-                  cclassName="mac-heading"
-                  cclassName="mac-heading text-2xl font-semibold tracking-tight text-foreground"
+                  className="mac-heading"
+                  className="mac-heading text-2xl font-semibold tracking-tight text-foreground"
                 >
                   Test Dashboard
                 </h1>
-                <p cclassName="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Unified testing and quality assurance platform
                 </p>
               </div>
             </div>
 
             {/* Control Buttons */}
-            <div cclassName="flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <Button
-                cclassName="mac-button mac-button-primary"
+                className="mac-button mac-button-primary"
                 variant={isRunning ? "destructive" : "default"}
                 size="sm"
                 onClick={isRunning ? () => setIsRunning(false) : handleRunTests}
-                cclassName="gap-2"
+                className="gap-2"
               >
                 {isRunning ? (
                   <>
-                    <Pause cclassName="h-4 w-4" />
+                    <Pause className="h-4 w-4" />
                     Stop
                   </>
                 ) : (
                   <>
-                    <Play cclassName="h-4 w-4" />
+                    <Play className="h-4 w-4" />
                     Run Tests
                   </>
                 )}
@@ -402,85 +402,85 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ cclassName }) => {
               <Button
                 variant="outline"
                 size="sm"
-                cclassName="gap-2 mac-button mac-button-outline"
+                className="gap-2 mac-button mac-button-outline"
                 onClick={handleRerunFailed}
                 disabled={isRunning || testStats.failed === 0}
               >
-                <RefreshCw cclassName="h-4 w-4" />
+                <RefreshCw className="h-4 w-4" />
                 Re-run Failed
               </Button>
             </div>
           </div>
 
           {/* Test Statistics Bar */}
-          <div cclassName="grid grid-cols-6 gap-4">
-            <Card cclassName="mac-card border-border">
-              <CardContent cclassName="p-4">
-                <div cclassName="flex items-center justify-between">
-                  <span cclassName="text-sm font-medium text-muted-foreground">Total</span>
-                  <span cclassName="text-lg font-semibold text-foreground">{testStats.total}</span>
+          <div className="grid grid-cols-6 gap-4">
+            <Card className="mac-card border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-muted-foreground">Total</span>
+                  <span className="text-lg font-semibold text-foreground">{testStats.total}</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card cclassName="mac-card border-border">
-              <CardContent cclassName="p-4">
-                <div cclassName="flex items-center justify-between">
-                  <div cclassName="flex items-center gap-2">
-                    <CheckCircle cclassName="h-4 w-4 text-emerald-600" />
-                    <span cclassName="text-sm font-medium text-muted-foreground">Passed</span>
+            <Card className="mac-card border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-emerald-600" />
+                    <span className="text-sm font-medium text-muted-foreground">Passed</span>
                   </div>
-                  <span cclassName="text-lg font-semibold text-emerald-700">{testStats.passed}</span>
+                  <span className="text-lg font-semibold text-emerald-700">{testStats.passed}</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card cclassName="mac-card border-border">
-              <CardContent cclassName="p-4">
-                <div cclassName="flex items-center justify-between">
-                  <div cclassName="flex items-center gap-2">
-                    <XCircle cclassName="h-4 w-4 text-rose-600" />
-                    <span cclassName="text-sm font-medium text-muted-foreground">Failed</span>
+            <Card className="mac-card border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <XCircle className="h-4 w-4 text-rose-600" />
+                    <span className="text-sm font-medium text-muted-foreground">Failed</span>
                   </div>
-                  <span cclassName="text-lg font-semibold text-rose-700">{testStats.failed}</span>
+                  <span className="text-lg font-semibold text-rose-700">{testStats.failed}</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card cclassName="mac-card border-border">
-              <CardContent cclassName="p-4">
-                <div cclassName="flex items-center justify-between">
-                  <div cclassName="flex items-center gap-2">
-                    <AlertCircle cclassName="h-4 w-4 text-amber-600" />
-                    <span cclassName="text-sm font-medium text-muted-foreground">Skipped</span>
+            <Card className="mac-card border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 text-amber-600" />
+                    <span className="text-sm font-medium text-muted-foreground">Skipped</span>
                   </div>
-                  <span cclassName="text-lg font-semibold text-amber-700">{testStats.skipped}</span>
+                  <span className="text-lg font-semibold text-amber-700">{testStats.skipped}</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card cclassName="mac-card border-border">
-              <CardContent cclassName="p-4">
-                <div cclassName="flex items-center justify-between">
-                  <div cclassName="flex items-center gap-2">
-                    <Clock cclassName="h-4 w-4 text-slate-600" />
-                    <span cclassName="text-sm font-medium text-muted-foreground">Duration</span>
+            <Card className="mac-card border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-slate-600" />
+                    <span className="text-sm font-medium text-muted-foreground">Duration</span>
                   </div>
-                  <span cclassName="text-lg font-semibold text-slate-700">
+                  <span className="text-lg font-semibold text-slate-700">
                     {formatDuration(testStats.duration)}
                   </span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card cclassName="mac-card border-border">
-              <CardContent cclassName="p-4">
-                <div cclassName="flex items-center justify-between">
-                  <div cclassName="flex items-center gap-2">
-                    <Zap cclassName="h-4 w-4 text-blue-600" />
-                    <span cclassName="text-sm font-medium text-muted-foreground">Success</span>
+            <Card className="mac-card border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Zap className="h-4 w-4 text-blue-600" />
+                    <span className="text-sm font-medium text-muted-foreground">Success</span>
                   </div>
-                  <span cclassName="text-lg font-semibold text-blue-700">{getSuccessRate()}%</span>
+                  <span className="text-lg font-semibold text-blue-700">{getSuccessRate()}%</span>
                 </div>
               </CardContent>
             </Card>
@@ -488,7 +488,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ cclassName }) => {
 
           {/* Progress Bar */}
           {isRunning && (
-            <div cclassName="mt-4">
+            <div className="mt-4">
               <Progress
                 value={
                   testStats.total > 0
@@ -497,9 +497,9 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ cclassName }) => {
                       100
                     : 0
                 }
-                cclassName="h-2"
+                className="h-2"
               />
-              <div cclassName="mt-2 flex items-center justify-between text-sm text-muted-foreground">
+              <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
                 <span>
                   {testStats.passed + testStats.failed + testStats.skipped} of {testStats.total}{" "}
                   tests completed
@@ -511,29 +511,29 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ cclassName }) => {
 
           {/* Real-time Logs Display */}
           {(isRunning || recentLogs.length > 0) && (
-            <div cclassName="mt-4">
-              <div cclassName="flex items-center justify-between mb-2">
-                <span cclassName="text-sm font-medium text-foreground">Live Test Output</span>
+            <div className="mt-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-foreground">Live Test Output</span>
                 <Button
-                  cclassName="mac-button mac-button-outline"
+                  className="mac-button mac-button-outline"
                   variant="ghost"
-                  cclassName="mac-button mac-button-outline"
+                  className="mac-button mac-button-outline"
                   size="sm"
                   onClick={() => setUseRealTimeStreaming(!useRealTimeStreaming)}
-                  cclassName="text-xs"
+                  className="text-xs"
                 >
                   {useRealTimeStreaming ? "📡 Streaming" : "🔄 Polling"}
                 </Button>
               </div>
-              <div cclassName="bg-muted/50 rounded-lg p-4 max-h-24 overflow-y-auto">
+              <div className="bg-muted/50 rounded-lg p-4 max-h-24 overflow-y-auto">
                 {recentLogs.length > 0 ? (
                   recentLogs.map((log, index) => (
-                    <div key={index} cclassName="text-xs text-muted-foreground font-mono">
+                    <div key={index} className="text-xs text-muted-foreground font-mono">
                       {log}
                     </div>
                   ))
                 ) : (
-                  <div cclassName="text-xs text-muted-foreground italic">
+                  <div className="text-xs text-muted-foreground italic">
                     {isRunning ? "Waiting for test output..." : "No recent logs"}
                   </div>
                 )}
@@ -543,60 +543,60 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ cclassName }) => {
         </div>
 
         {/* Main Content Area */}
-        <Tabs value={activeView} onValueChange={setActiveView} cclassName="flex-1 flex flex-col">
-          <TabsList cclassName="grid grid-cols-10 w-full rounded-none border-b bg-muted/30">
-            <TabsTrigger value="unified" cclassName="gap-2">
-              <Sparkles cclassName="h-4 w-4" />
+        <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col">
+          <TabsList className="grid grid-cols-10 w-full rounded-none border-b bg-muted/30">
+            <TabsTrigger value="unified" className="gap-2">
+              <Sparkles className="h-4 w-4" />
               Unified Results
             </TabsTrigger>
-            <TabsTrigger value="execution" cclassName="gap-2">
-              <Activity cclassName="h-4 w-4" />
+            <TabsTrigger value="execution" className="gap-2">
+              <Activity className="h-4 w-4" />
               Execution
             </TabsTrigger>
-            <TabsTrigger value="results" cclassName="gap-2">
-              <CheckCircle cclassName="h-4 w-4" />
+            <TabsTrigger value="results" className="gap-2">
+              <CheckCircle className="h-4 w-4" />
               Results
             </TabsTrigger>
-            <TabsTrigger value="manual" cclassName="gap-2">
-              <MousePointerClick cclassName="h-4 w-4" />
+            <TabsTrigger value="manual" className="gap-2">
+              <MousePointerClick className="h-4 w-4" />
               Manual Testing
             </TabsTrigger>
-            <TabsTrigger value="ai-generate" cclassName="gap-2">
-              <Brain cclassName="h-4 w-4" />
+            <TabsTrigger value="ai-generate" className="gap-2">
+              <Brain className="h-4 w-4" />
               AI Generate
             </TabsTrigger>
-            <TabsTrigger value="trace" cclassName="gap-2">
-              <Eye cclassName="h-4 w-4" />
+            <TabsTrigger value="trace" className="gap-2">
+              <Eye className="h-4 w-4" />
               Trace Viewer
             </TabsTrigger>
-            <TabsTrigger value="session-playback" cclassName="gap-2">
-              <Play cclassName="h-4 w-4" />
+            <TabsTrigger value="session-playback" className="gap-2">
+              <Play className="h-4 w-4" />
               Session Playback
             </TabsTrigger>
-            <TabsTrigger value="coverage" cclassName="gap-2">
-              <GitBranch cclassName="h-4 w-4" />
+            <TabsTrigger value="coverage" className="gap-2">
+              <GitBranch className="h-4 w-4" />
               Coverage
             </TabsTrigger>
-            <TabsTrigger value="flaky" cclassName="gap-2">
-              <Bug cclassName="h-4 w-4" />
+            <TabsTrigger value="flaky" className="gap-2">
+              <Bug className="h-4 w-4" />
               Flaky Tests
             </TabsTrigger>
-            <TabsTrigger value="analytics" cclassName="gap-2">
-              <LineChart cclassName="h-4 w-4" />
+            <TabsTrigger value="analytics" className="gap-2">
+              <LineChart className="h-4 w-4" />
               Analytics
             </TabsTrigger>
-            <TabsTrigger value="firecrawl" cclassName="gap-2">
-              <FileSearch cclassName="h-4 w-4" />
+            <TabsTrigger value="firecrawl" className="gap-2">
+              <FileSearch className="h-4 w-4" />
               Firecrawl
             </TabsTrigger>
           </TabsList>
 
-          <ScrollArea cclassName="flex-1">
-            <TabsContent value="unified" cclassName="m-0 p-6">
+          <ScrollArea className="flex-1">
+            <TabsContent value="unified" className="m-0 p-6">
               <UnifiedResultsDashboard />
             </TabsContent>
 
-            <TabsContent value="execution" cclassName="m-0 p-6">
+            <TabsContent value="execution" className="m-0 p-6">
               <TestExecutionPanel
                 isRunning={isRunning}
                 onRunTests={handleRunTests}
@@ -604,39 +604,39 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ cclassName }) => {
               />
             </TabsContent>
 
-            <TabsContent value="results" cclassName="m-0 p-6">
+            <TabsContent value="results" className="m-0 p-6">
               <TestResultsViewer />
             </TabsContent>
 
-            <TabsContent value="manual" cclassName="m-0 p-6 h-full">
+            <TabsContent value="manual" className="m-0 p-6 h-full">
               <ManualTestingPanel />
             </TabsContent>
 
-            <TabsContent value="ai-generate" cclassName="m-0 p-6">
+            <TabsContent value="ai-generate" className="m-0 p-6">
               <AITestGenerator />
             </TabsContent>
 
-            <TabsContent value="trace" cclassName="m-0 p-6">
+            <TabsContent value="trace" className="m-0 p-6">
               <TraceViewer />
             </TabsContent>
 
-            <TabsContent value="coverage" cclassName="m-0 p-6">
+            <TabsContent value="coverage" className="m-0 p-6">
               <CoverageReport />
             </TabsContent>
 
-            <TabsContent value="flaky" cclassName="m-0 p-6">
+            <TabsContent value="flaky" className="m-0 p-6">
               <FlakyTestExplorer />
             </TabsContent>
 
-            <TabsContent value="analytics" cclassName="m-0 p-6">
+            <TabsContent value="analytics" className="m-0 p-6">
               <TestAnalytics />
             </TabsContent>
 
-            <TabsContent value="firecrawl" cclassName="m-0 p-6">
+            <TabsContent value="firecrawl" className="m-0 p-6">
               <FirecrawlPanel />
             </TabsContent>
 
-            <TabsContent value="session-playback" cclassName="m-0 p-6">
+            <TabsContent value="session-playback" className="m-0 p-6">
               <SessionPlaybackViewer />
             </TabsContent>
           </ScrollArea>

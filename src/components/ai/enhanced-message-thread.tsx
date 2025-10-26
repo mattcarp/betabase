@@ -15,7 +15,7 @@ import { ReactNode } from "react";
 interface EnhancedMessageThreadProps {
   messages: AIMessage[];
   isLoading?: boolean;
-  cclassName?: string;
+  className?: string;
   onReload?: () => void;
   onStop?: () => void;
   showTimestamps?: boolean;
@@ -26,7 +26,7 @@ interface EnhancedMessageThreadProps {
 export function EnhancedMessageThread({
   messages,
   isLoading = false,
-  cclassName,
+  className,
   onReload,
   onStop,
   showTimestamps = true,
@@ -34,7 +34,7 @@ export function EnhancedMessageThread({
   enableReasoning = true,
 }: EnhancedMessageThreadProps) {
   return (
-    <div cclassName={cn("space-y-4 py-4", cclassName)}>
+    <div className={cn("space-y-4 py-4", className)}>
       <AnimatePresence mode="popLayout">
         {messages.map((message, index) => {
           // Extract parts from message if available (for AI SDK v3.5+)
@@ -53,19 +53,19 @@ export function EnhancedMessageThread({
             >
               <Message
                 role={message.role}
-                cclassName={cn(message.role === "user" && "flex-row-reverse", "relative")}
+                className={cn(message.role === "user" && "flex-row-reverse", "relative")}
               >
                 <MessageContent>
                   {/* Show reasoning if available and enabled */}
                   {enableReasoning && reasoningPart && (
-                    <Reasoning reasoning={reasoningPart.content} cclassName="mb-4" />
+                    <Reasoning reasoning={reasoningPart.content} className="mb-4" />
                   )}
 
                   {/* Main message content with enhanced markdown rendering */}
                   {message.role === "assistant" ? (
                     <Response>{(message as any).content}</Response>
                   ) : (
-                    <div cclassName="prose prose-sm dark:prose-invert max-w-none">
+                    <div className="prose prose-sm dark:prose-invert max-w-none">
                       {(message as any).content}
                     </div>
                   )}
@@ -73,7 +73,7 @@ export function EnhancedMessageThread({
                   {/* Show tool invocations */}
                   {(message as any).toolInvocations &&
                     (message as any).toolInvocations.length > 0 && (
-                      <div cclassName="mt-4 space-y-2">
+                      <div className="mt-4 space-y-2">
                         {(message as any).toolInvocations.map((invocation, idx) => (
                           <Tool
                             key={idx}
@@ -88,7 +88,7 @@ export function EnhancedMessageThread({
 
                   {/* Show tool parts from message parts */}
                   {toolParts.length > 0 && (
-                    <div cclassName="mt-4 space-y-2">
+                    <div className="mt-4 space-y-2">
                       {toolParts.map((part: any, idx: number) => (
                         <Tool
                           key={idx}
@@ -103,8 +103,8 @@ export function EnhancedMessageThread({
 
                   {/* Show sources if available */}
                   {sourceParts.length > 0 && (
-                    <div cclassName="mt-4 space-y-2">
-                      <div cclassName="text-sm font-medium text-muted-foreground">Sources:</div>
+                    <div className="mt-4 space-y-2">
+                      <div className="text-sm font-medium text-muted-foreground">Sources:</div>
                       {sourceParts.map((source: any, idx: number) => (
                         <Source
                           key={idx}
@@ -119,14 +119,14 @@ export function EnhancedMessageThread({
                   {/* Show attachments if present */}
                   {(message as any).experimental_attachments &&
                     (message as any).experimental_attachments.length > 0 && (
-                      <div cclassName="mt-4 space-y-2">
-                        <div cclassName="text-sm font-medium text-muted-foreground">
+                      <div className="mt-4 space-y-2">
+                        <div className="text-sm font-medium text-muted-foreground">
                           Attachments:
                         </div>
                         {(message as any).experimental_attachments.map((attachment, idx) => (
-                          <div key={idx} cclassName="flex items-center gap-2 text-sm">
-                            <span cclassName="font-medium">{attachment.name}</span>
-                            <span cclassName="text-muted-foreground">
+                          <div key={idx} className="flex items-center gap-2 text-sm">
+                            <span className="font-medium">{attachment.name}</span>
+                            <span className="text-muted-foreground">
                               ({attachment.contentType})
                             </span>
                           </div>
@@ -140,7 +140,7 @@ export function EnhancedMessageThread({
                   <Actions
                     reload={onReload}
                     copy={() => navigator.clipboard.writeText((message as any).content)}
-                    cclassName="mt-2"
+                    className="mt-2"
                   />
                 )}
               </Message>

@@ -15,7 +15,7 @@ export interface WaveformData {
 }
 
 export interface DataVisualizationProps {
-  cclassName?: string;
+  className?: string;
   data?: DataPoint[];
   waveformData?: WaveformData;
   type?: "waveform" | "spectrum" | "realtime" | "hybrid";
@@ -58,7 +58,7 @@ const colorMap = {
 };
 
 export const DataVisualization: React.FC<DataVisualizationProps> = ({
-  cclassName = "",
+  className = "",
   data = [],
   waveformData,
   type = "realtime",
@@ -332,13 +332,13 @@ export const DataVisualization: React.FC<DataVisualizationProps> = ({
   }, [data, updateMetrics, onDataUpdate]);
 
   return (
-    <div cclassName={cn("relative", cclassName)} data-testid="data-visualization">
+    <div className={cn("relative", className)} data-testid="data-visualization">
       {/* Canvas for visualization */}
       <canvas
         ref={canvasRef}
         width={width}
         height={height}
-        cclassName="block bg-transparent"
+        className="block bg-transparent"
         style={{
           filter: glowEffect ? `drop-shadow(0 0 5px ${colors.glow})` : undefined,
         }}
@@ -346,8 +346,8 @@ export const DataVisualization: React.FC<DataVisualizationProps> = ({
 
       {/* Metrics overlay */}
       {showMetrics && (
-        <div cclassName="absolute top-2 right-2 space-y-2">
-          <div cclassName="grid grid-cols-2 gap-2">
+        <div className="absolute top-2 right-2 space-y-2">
+          <div className="grid grid-cols-2 gap-2">
             <RadialProgress
               value={metrics.peak}
               size={40}
@@ -368,22 +368,22 @@ export const DataVisualization: React.FC<DataVisualizationProps> = ({
             />
           </div>
 
-          <div cclassName="text-xs text-holographic font-mono space-y-1">
-            <div cclassName="flex justify-between">
-              <span cclassName="opacity-70">FREQ:</span>
-              <span cclassName="text-[var(--jarvis-primary)]">{metrics.frequency}Hz</span>
+          <div className="text-xs text-holographic font-mono space-y-1">
+            <div className="flex justify-between">
+              <span className="opacity-70">FREQ:</span>
+              <span className="text-[var(--jarvis-primary)]">{metrics.frequency}Hz</span>
             </div>
-            <div cclassName="flex justify-between">
-              <span cclassName="opacity-70">QUAL:</span>
-              <span cclassName="text-[var(--jarvis-accent)]">{metrics.quality}%</span>
+            <div className="flex justify-between">
+              <span className="opacity-70">QUAL:</span>
+              <span className="text-[var(--jarvis-accent)]">{metrics.quality}%</span>
             </div>
           </div>
         </div>
       )}
 
       {/* Type indicator */}
-      <div cclassName="absolute bottom-2 left-2">
-        <div cclassName="text-xs text-holographic font-mono opacity-60 uppercase">{type}</div>
+      <div className="absolute bottom-2 left-2">
+        <div className="text-xs text-holographic font-mono opacity-60 uppercase">{type}</div>
       </div>
     </div>
   );

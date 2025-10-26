@@ -285,23 +285,23 @@ export const UnifiedResultsDashboard: React.FC = () => {
 
     switch (status) {
       case "passed":
-        return <CheckCircle cclassName={cn(baseClass, color)} />;
+        return <CheckCircle className={cn(baseClass, color)} />;
       case "failed":
-        return <XCircle cclassName={cn(baseClass, "text-red-500")} />;
+        return <XCircle className={cn(baseClass, "text-red-500")} />;
       case "skipped":
-        return <AlertTriangle cclassName={cn(baseClass, "text-yellow-500")} />;
+        return <AlertTriangle className={cn(baseClass, "text-yellow-500")} />;
       case "in-progress":
-        return <Activity cclassName={cn(baseClass, "text-orange-500 animate-pulse")} />;
+        return <Activity className={cn(baseClass, "text-orange-500 animate-pulse")} />;
       default:
-        return <Clock cclassName={cn(baseClass, "text-gray-500")} />;
+        return <Clock className={cn(baseClass, "text-gray-500")} />;
     }
   };
 
   const getTypeIcon = (type: TestType) => {
     return type === "manual" ? (
-      <Users cclassName="h-4 w-4 text-blue-500" />
+      <Users className="h-4 w-4 text-blue-500" />
     ) : (
-      <Bot cclassName="h-4 w-4 text-green-500" />
+      <Bot className="h-4 w-4 text-green-500" />
     );
   };
 
@@ -315,26 +315,26 @@ export const UnifiedResultsDashboard: React.FC = () => {
   };
 
   return (
-    <div cclassName="flex flex-col h-full space-y-6">
+    <div className="flex flex-col h-full space-y-6">
       {/* Header with View Toggle */}
-      <div cclassName="flex items-center justify-between">
-        <div cclassName="flex items-center gap-3">
-          <Layers cclassName="h-5 w-5 text-primary" />
-          <h2 cclassName="text-xl font-semibold">Unified Test Results</h2>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Layers className="h-5 w-5 text-primary" />
+          <h2 className="text-xl font-semibold">Unified Test Results</h2>
         </div>
 
         <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
           <TabsList>
-            <TabsTrigger value="manual" cclassName="gap-2">
-              <Users cclassName="h-4 w-4" />
+            <TabsTrigger value="manual" className="gap-2">
+              <Users className="h-4 w-4" />
               Manual Sessions
             </TabsTrigger>
-            <TabsTrigger value="automated" cclassName="gap-2">
-              <Bot cclassName="h-4 w-4" />
+            <TabsTrigger value="automated" className="gap-2">
+              <Bot className="h-4 w-4" />
               Automated Tests
             </TabsTrigger>
-            <TabsTrigger value="combined" cclassName="gap-2">
-              <Layers cclassName="h-4 w-4" />
+            <TabsTrigger value="combined" className="gap-2">
+              <Layers className="h-4 w-4" />
               Combined View
             </TabsTrigger>
           </TabsList>
@@ -342,99 +342,99 @@ export const UnifiedResultsDashboard: React.FC = () => {
       </div>
 
       {/* Metrics Panel */}
-      <div cclassName="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <Card>
-          <CardContent cclassName="p-4">
-            <div cclassName="flex items-center justify-between">
-              <div cclassName="flex items-center gap-2">
-                <Layers cclassName="h-4 w-4 text-primary" />
-                <span cclassName="text-sm font-medium text-muted-foreground">Total Tests</span>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Layers className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium text-muted-foreground">Total Tests</span>
               </div>
-              <span cclassName="text-2xl font-bold">{metrics.combined.total}</span>
+              <span className="text-2xl font-bold">{metrics.combined.total}</span>
             </div>
-            <div cclassName="mt-2 flex gap-2 text-xs text-muted-foreground">
-              <span cclassName="text-blue-500">{metrics.manual.total} manual</span>
-              <span cclassName="text-green-500">{metrics.automated.total} auto</span>
+            <div className="mt-2 flex gap-2 text-xs text-muted-foreground">
+              <span className="text-blue-500">{metrics.manual.total} manual</span>
+              <span className="text-green-500">{metrics.automated.total} auto</span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent cclassName="p-4">
-            <div cclassName="flex items-center justify-between">
-              <div cclassName="flex items-center gap-2">
-                <CheckCircle cclassName="h-4 w-4 text-green-500" />
-                <span cclassName="text-sm font-medium text-muted-foreground">Passed</span>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500" />
+                <span className="text-sm font-medium text-muted-foreground">Passed</span>
               </div>
-              <span cclassName="text-2xl font-bold text-green-600">{metrics.combined.passed}</span>
+              <span className="text-2xl font-bold text-green-600">{metrics.combined.passed}</span>
             </div>
-            <div cclassName="mt-2 text-xs text-muted-foreground">
+            <div className="mt-2 text-xs text-muted-foreground">
               {metrics.combined.coverage}% success rate
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent cclassName="p-4">
-            <div cclassName="flex items-center justify-between">
-              <div cclassName="flex items-center gap-2">
-                <XCircle cclassName="h-4 w-4 text-red-500" />
-                <span cclassName="text-sm font-medium text-muted-foreground">Failed</span>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <XCircle className="h-4 w-4 text-red-500" />
+                <span className="text-sm font-medium text-muted-foreground">Failed</span>
               </div>
-              <span cclassName="text-2xl font-bold text-red-600">{metrics.combined.failed}</span>
+              <span className="text-2xl font-bold text-red-600">{metrics.combined.failed}</span>
             </div>
-            <div cclassName="mt-2 flex gap-2 text-xs text-muted-foreground">
-              <span cclassName="text-blue-500">{metrics.manual.failed} manual</span>
-              <span cclassName="text-green-500">{metrics.automated.failed} auto</span>
+            <div className="mt-2 flex gap-2 text-xs text-muted-foreground">
+              <span className="text-blue-500">{metrics.manual.failed} manual</span>
+              <span className="text-green-500">{metrics.automated.failed} auto</span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent cclassName="p-4">
-            <div cclassName="flex items-center justify-between">
-              <div cclassName="flex items-center gap-2">
-                <Grid3x3 cclassName="h-4 w-4 text-purple-500" />
-                <span cclassName="text-sm font-medium text-muted-foreground">Areas Tested</span>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Grid3x3 className="h-4 w-4 text-purple-500" />
+                <span className="text-sm font-medium text-muted-foreground">Areas Tested</span>
               </div>
-              <span cclassName="text-2xl font-bold text-purple-600">
+              <span className="text-2xl font-bold text-purple-600">
                 {metrics.combined.uniqueAreas}
               </span>
             </div>
-            <div cclassName="mt-2 text-xs text-muted-foreground">UI/feature coverage</div>
+            <div className="mt-2 text-xs text-muted-foreground">UI/feature coverage</div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent cclassName="p-4">
-            <div cclassName="flex items-center justify-between">
-              <div cclassName="flex items-center gap-2">
-                <Clock cclassName="h-4 w-4 text-slate-500" />
-                <span cclassName="text-sm font-medium text-muted-foreground">Avg Duration</span>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-slate-500" />
+                <span className="text-sm font-medium text-muted-foreground">Avg Duration</span>
               </div>
-              <span cclassName="text-2xl font-bold text-slate-600">
+              <span className="text-2xl font-bold text-slate-600">
                 {formatDuration((metrics.manual.avgDuration + metrics.automated.avgDuration) / 2)}
               </span>
             </div>
-            <div cclassName="mt-2 text-xs text-muted-foreground">Per test execution</div>
+            <div className="mt-2 text-xs text-muted-foreground">Per test execution</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Filters and Search */}
-      <div cclassName="flex items-center gap-4">
-        <div cclassName="flex-1 relative">
-          <Search cclassName="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <div className="flex items-center gap-4">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search tests by name, area, suite, or tester..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            cclassName="pl-9"
+            className="pl-9"
           />
         </div>
 
         <Select value={statusFilter} onValueChange={(v: any) => setStatusFilter(v)}>
-          <SelectTrigger cclassName="w-[160px]">
+          <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -447,7 +447,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
         </Select>
 
         <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
-          <SelectTrigger cclassName="w-[140px]">
+          <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>
@@ -461,48 +461,48 @@ export const UnifiedResultsDashboard: React.FC = () => {
           variant={showHeatmap ? "default" : "outline"}
           size="sm"
           onClick={() => setShowHeatmap(!showHeatmap)}
-          cclassName="gap-2"
+          className="gap-2"
         >
-          <Grid3x3 cclassName="h-4 w-4" />
+          <Grid3x3 className="h-4 w-4" />
           Heatmap
         </Button>
 
-        <Button variant="outline" size="sm" cclassName="gap-2">
-          <Download cclassName="h-4 w-4" />
+        <Button variant="outline" size="sm" className="gap-2">
+          <Download className="h-4 w-4" />
           Export
         </Button>
       </div>
 
       {/* Main Content Area */}
-      <div cclassName="grid grid-cols-12 gap-6 flex-1">
+      <div className="grid grid-cols-12 gap-6 flex-1">
         {/* Timeline / Results List */}
-        <div cclassName={cn("col-span-12", showHeatmap ? "lg:col-span-7" : "lg:col-span-5")}>
-          <Card cclassName="h-full">
+        <div className={cn("col-span-12", showHeatmap ? "lg:col-span-7" : "lg:col-span-5")}>
+          <Card className="h-full">
             <CardHeader>
-              <CardTitle cclassName="text-base flex items-center justify-between">
+              <CardTitle className="text-base flex items-center justify-between">
                 <span>Test Timeline ({filteredResults.length} results)</span>
                 <Badge variant="outline">{viewMode === "combined" ? "Mixed View" : viewMode}</Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent cclassName="p-0">
-              <ScrollArea cclassName="h-[500px]">
+            <CardContent className="p-0">
+              <ScrollArea className="h-[500px]">
                 {isLoading ? (
-                  <div cclassName="flex items-center justify-center h-full p-8">
-                    <div cclassName="text-center">
-                      <div cclassName="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                      <p cclassName="text-muted-foreground">Loading test results...</p>
+                  <div className="flex items-center justify-center h-full p-8">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                      <p className="text-muted-foreground">Loading test results...</p>
                     </div>
                   </div>
                 ) : filteredResults.length === 0 ? (
-                  <div cclassName="flex items-center justify-center h-full p-8 text-muted-foreground">
+                  <div className="flex items-center justify-center h-full p-8 text-muted-foreground">
                     No test results found
                   </div>
                 ) : (
-                  <div cclassName="p-4 space-y-2">
+                  <div className="p-4 space-y-2">
                     {filteredResults.map((result) => (
                       <Card
                         key={result.id}
-                        cclassName={cn(
+                        className={cn(
                           "cursor-pointer transition-all hover:shadow-md border-l-4",
                           result.type === "manual"
                             ? "border-l-blue-500 hover:border-l-blue-600"
@@ -512,16 +512,16 @@ export const UnifiedResultsDashboard: React.FC = () => {
                         )}
                         onClick={() => setSelectedResult(result)}
                       >
-                        <CardContent cclassName="p-4">
-                          <div cclassName="flex items-start justify-between gap-4">
-                            <div cclassName="flex items-start gap-3 flex-1">
+                        <CardContent className="p-4">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex items-start gap-3 flex-1">
                               {getTypeIcon(result.type)}
-                              <div cclassName="flex-1 min-w-0">
-                                <div cclassName="flex items-center gap-2 mb-1">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-1">
                                   {getStatusIcon(result.status, result.type)}
-                                  <h4 cclassName="font-medium text-sm truncate">{result.name}</h4>
+                                  <h4 className="font-medium text-sm truncate">{result.name}</h4>
                                 </div>
-                                <div cclassName="flex items-center gap-3 text-xs text-muted-foreground">
+                                <div className="flex items-center gap-3 text-xs text-muted-foreground">
                                   <span>{result.area || "General"}</span>
                                   <span>•</span>
                                   <span>
@@ -546,13 +546,13 @@ export const UnifiedResultsDashboard: React.FC = () => {
                                 </div>
                               </div>
                             </div>
-                            <div cclassName="flex items-center gap-2">
-                              <Badge variant="secondary" cclassName="text-xs">
+                            <div className="flex items-center gap-2">
+                              <Badge variant="secondary" className="text-xs">
                                 {formatDuration(result.duration)}
                               </Badge>
                               <Badge
                                 variant="outline"
-                                cclassName={cn(
+                                className={cn(
                                   "text-xs",
                                   result.type === "manual" ? "text-blue-500" : "text-green-500"
                                 )}
@@ -573,43 +573,43 @@ export const UnifiedResultsDashboard: React.FC = () => {
 
         {/* Coverage Heatmap (conditional) */}
         {showHeatmap && (
-          <div cclassName="col-span-12 lg:col-span-5">
-            <Card cclassName="h-full">
+          <div className="col-span-12 lg:col-span-5">
+            <Card className="h-full">
               <CardHeader>
-                <CardTitle cclassName="text-base flex items-center gap-2">
-                  <Grid3x3 cclassName="h-4 w-4" />
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Grid3x3 className="h-4 w-4" />
                   Coverage Heatmap
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ScrollArea cclassName="h-[500px]">
-                  <div cclassName="space-y-3">
+                <ScrollArea className="h-[500px]">
+                  <div className="space-y-3">
                     {coverageData.map((area) => {
                       const intensity = Math.min(area.totalCoverage / 10, 1);
                       return (
                         <div
                           key={area.area}
-                          cclassName="p-3 rounded-lg border transition-all hover:shadow-md"
+                          className="p-3 rounded-lg border transition-all hover:shadow-md"
                           style={{
                             backgroundColor: `rgba(139, 92, 246, ${intensity * 0.2})`,
                             borderColor: `rgba(139, 92, 246, ${intensity * 0.5})`,
                           }}
                         >
-                          <div cclassName="flex items-center justify-between mb-2">
-                            <h4 cclassName="font-medium text-sm">{area.area}</h4>
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="font-medium text-sm">{area.area}</h4>
                             <Badge variant="secondary">{area.totalCoverage} tests</Badge>
                           </div>
-                          <div cclassName="flex items-center gap-4 text-xs text-muted-foreground">
-                            <div cclassName="flex items-center gap-1">
-                              <Users cclassName="h-3 w-3 text-blue-500" />
+                          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Users className="h-3 w-3 text-blue-500" />
                               <span>{area.manualTests} manual</span>
                             </div>
-                            <div cclassName="flex items-center gap-1">
-                              <Bot cclassName="h-3 w-3 text-green-500" />
+                            <div className="flex items-center gap-1">
+                              <Bot className="h-3 w-3 text-green-500" />
                               <span>{area.automatedTests} auto</span>
                             </div>
-                            <div cclassName="flex items-center gap-1">
-                              <Clock cclassName="h-3 w-3" />
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
                               <span>{area.lastTested.toLocaleDateString()}</span>
                             </div>
                           </div>
@@ -624,22 +624,22 @@ export const UnifiedResultsDashboard: React.FC = () => {
         )}
 
         {/* Result Details */}
-        <div cclassName={cn("col-span-12", showHeatmap ? "hidden" : "lg:col-span-7")}>
+        <div className={cn("col-span-12", showHeatmap ? "hidden" : "lg:col-span-7")}>
           {selectedResult ? (
-            <Card cclassName="h-full">
+            <Card className="h-full">
               <CardHeader>
-                <div cclassName="flex items-center justify-between">
+                <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle cclassName="text-lg flex items-center gap-2">
+                    <CardTitle className="text-lg flex items-center gap-2">
                       {getTypeIcon(selectedResult.type)}
                       {selectedResult.name}
                     </CardTitle>
-                    <p cclassName="text-sm text-muted-foreground mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       {selectedResult.area} • {selectedResult.timestamp.toLocaleString()}
                       {selectedResult.tester && ` • by ${selectedResult.tester}`}
                     </p>
                   </div>
-                  <div cclassName="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
                     {getStatusIcon(selectedResult.status, selectedResult.type)}
                     <Badge
                       variant={
@@ -657,32 +657,32 @@ export const UnifiedResultsDashboard: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <Tabs defaultValue="details">
-                  <TabsList cclassName="grid w-full grid-cols-3">
+                  <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="details">Details</TabsTrigger>
                     <TabsTrigger value="coverage">Coverage</TabsTrigger>
                     <TabsTrigger value="media">Media</TabsTrigger>
                   </TabsList>
 
-                  <TabsContent value="details" cclassName="space-y-4">
-                    <div cclassName="grid grid-cols-2 gap-4">
+                  <TabsContent value="details" className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
                       <Card>
-                        <CardContent cclassName="p-4">
-                          <h4 cclassName="text-sm font-medium text-muted-foreground mb-2">Type</h4>
-                          <div cclassName="flex items-center gap-2">
+                        <CardContent className="p-4">
+                          <h4 className="text-sm font-medium text-muted-foreground mb-2">Type</h4>
+                          <div className="flex items-center gap-2">
                             {getTypeIcon(selectedResult.type)}
-                            <span cclassName="font-medium capitalize">{selectedResult.type}</span>
+                            <span className="font-medium capitalize">{selectedResult.type}</span>
                           </div>
                         </CardContent>
                       </Card>
 
                       <Card>
-                        <CardContent cclassName="p-4">
-                          <h4 cclassName="text-sm font-medium text-muted-foreground mb-2">
+                        <CardContent className="p-4">
+                          <h4 className="text-sm font-medium text-muted-foreground mb-2">
                             Duration
                           </h4>
-                          <div cclassName="flex items-center gap-2">
-                            <Clock cclassName="h-4 w-4" />
-                            <span cclassName="font-medium">
+                          <div className="flex items-center gap-2">
+                            <Clock className="h-4 w-4" />
+                            <span className="font-medium">
                               {formatDuration(selectedResult.duration)}
                             </span>
                           </div>
@@ -691,14 +691,14 @@ export const UnifiedResultsDashboard: React.FC = () => {
                     </div>
 
                     {selectedResult.error && (
-                      <Card cclassName="bg-red-500/10 border-red-500/20">
-                        <CardContent cclassName="p-4">
-                          <h4 cclassName="font-medium text-red-500 mb-2">Error Message</h4>
-                          <p cclassName="text-sm font-mono">{selectedResult.error.message}</p>
+                      <Card className="bg-red-500/10 border-red-500/20">
+                        <CardContent className="p-4">
+                          <h4 className="font-medium text-red-500 mb-2">Error Message</h4>
+                          <p className="text-sm font-mono">{selectedResult.error.message}</p>
                           {selectedResult.error.stack && (
                             <>
-                              <h4 cclassName="font-medium text-red-500 mt-4 mb-2">Stack Trace</h4>
-                              <pre cclassName="text-xs font-mono bg-muted p-3 rounded overflow-x-auto">
+                              <h4 className="font-medium text-red-500 mt-4 mb-2">Stack Trace</h4>
+                              <pre className="text-xs font-mono bg-muted p-3 rounded overflow-x-auto">
                                 {selectedResult.error.stack}
                               </pre>
                             </>
@@ -709,12 +709,12 @@ export const UnifiedResultsDashboard: React.FC = () => {
 
                     {selectedResult.findings && selectedResult.findings.length > 0 && (
                       <Card>
-                        <CardContent cclassName="p-4">
-                          <h4 cclassName="font-medium mb-3">Manual Test Findings</h4>
-                          <ul cclassName="space-y-2">
+                        <CardContent className="p-4">
+                          <h4 className="font-medium mb-3">Manual Test Findings</h4>
+                          <ul className="space-y-2">
                             {selectedResult.findings.map((finding, index) => (
-                              <li key={index} cclassName="flex items-start gap-2 text-sm">
-                                <Eye cclassName="h-4 w-4 mt-0.5 text-blue-500 flex-shrink-0" />
+                              <li key={index} className="flex items-start gap-2 text-sm">
+                                <Eye className="h-4 w-4 mt-0.5 text-blue-500 flex-shrink-0" />
                                 <span>{finding}</span>
                               </li>
                             ))}
@@ -724,12 +724,12 @@ export const UnifiedResultsDashboard: React.FC = () => {
                     )}
                   </TabsContent>
 
-                  <TabsContent value="coverage" cclassName="space-y-4">
+                  <TabsContent value="coverage" className="space-y-4">
                     <Card>
-                      <CardContent cclassName="p-4">
-                        <h4 cclassName="font-medium mb-3">Areas Covered</h4>
+                      <CardContent className="p-4">
+                        <h4 className="font-medium mb-3">Areas Covered</h4>
                         {selectedResult.coverage && selectedResult.coverage.length > 0 ? (
-                          <div cclassName="flex flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-2">
                             {selectedResult.coverage.map((area, index) => (
                               <Badge key={index} variant="secondary">
                                 {area}
@@ -737,7 +737,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                             ))}
                           </div>
                         ) : (
-                          <p cclassName="text-sm text-muted-foreground">
+                          <p className="text-sm text-muted-foreground">
                             No specific coverage areas recorded
                           </p>
                         )}
@@ -747,20 +747,20 @@ export const UnifiedResultsDashboard: React.FC = () => {
 
                   <TabsContent value="media">
                     {selectedResult.screenshots && selectedResult.screenshots.length > 0 ? (
-                      <div cclassName="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-2 gap-4">
                         {selectedResult.screenshots.map((screenshot, index) => (
                           <Card key={index}>
-                            <CardContent cclassName="p-4">
-                              <div cclassName="aspect-video bg-muted rounded flex items-center justify-center">
-                                <Eye cclassName="h-8 w-8 text-muted-foreground" />
+                            <CardContent className="p-4">
+                              <div className="aspect-video bg-muted rounded flex items-center justify-center">
+                                <Eye className="h-8 w-8 text-muted-foreground" />
                               </div>
-                              <p cclassName="text-sm mt-2 truncate">{screenshot}</p>
+                              <p className="text-sm mt-2 truncate">{screenshot}</p>
                             </CardContent>
                           </Card>
                         ))}
                       </div>
                     ) : (
-                      <div cclassName="flex items-center justify-center h-[300px] text-muted-foreground">
+                      <div className="flex items-center justify-center h-[300px] text-muted-foreground">
                         No media attachments
                       </div>
                     )}
@@ -769,8 +769,8 @@ export const UnifiedResultsDashboard: React.FC = () => {
               </CardContent>
             </Card>
           ) : (
-            <Card cclassName="h-full">
-              <CardContent cclassName="flex items-center justify-center h-full text-muted-foreground">
+            <Card className="h-full">
+              <CardContent className="flex items-center justify-center h-full text-muted-foreground">
                 Select a test result to view details
               </CardContent>
             </Card>

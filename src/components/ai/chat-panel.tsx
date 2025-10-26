@@ -26,7 +26,7 @@ import { motion } from "framer-motion";
 interface ChatPanelProps {
   api?: string;
   initialMessages?: any[];
-  cclassName?: string;
+  className?: string;
   title?: string;
   description?: string;
   placeholder?: string;
@@ -43,7 +43,7 @@ interface ChatPanelProps {
 export function ChatPanel({
   api: _api = "/api/chat", // Unused - v5 uses default endpoint
   initialMessages = [],
-  cclassName,
+  className,
   title = "AI Assistant",
   description = "Powered by Vercel AI SDK",
   placeholder = "Ask me anything...",
@@ -152,39 +152,39 @@ export function ChatPanel({
   const isMaxMessagesReached = maxMessages ? messages.length >= maxMessages : false;
 
   return (
-    <Card cclassName={cn("flex flex-col h-full", cclassName)}>
+    <Card className={cn("flex flex-col h-full", className)}>
       {showHeader && (
-        <CardHeader cclassName="px-4 py-3 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
-          <div cclassName="flex items-center justify-between">
-            <div cclassName="flex items-center gap-3">
-              <div cclassName="relative">
-                <Bot cclassName="h-6 w-6 text-primary" />
-                <Sparkles cclassName="h-3 w-3 text-primary absolute -top-1 -right-1 animate-pulse" />
+        <CardHeader className="px-4 py-3 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <Bot className="h-6 w-6 text-primary" />
+                <Sparkles className="h-3 w-3 text-primary absolute -top-1 -right-1 animate-pulse" />
               </div>
               <div>
-                <CardTitle cclassName="text-lg">{title}</CardTitle>
+                <CardTitle className="text-lg">{title}</CardTitle>
                 {description && (
-                  <p cclassName="text-xs text-muted-foreground mt-0.5">{description}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
                 )}
               </div>
             </div>
 
-            <div cclassName="flex items-center gap-1">
+            <div className="flex items-center gap-1">
               {messages.length > 0 && (
-                <Badge variant="secondary" cclassName="text-xs">
+                <Badge variant="secondary" className="text-xs">
                   {messages.length} messages
                 </Badge>
               )}
 
               {allowClear && messages.length > 0 && (
-                <Button size="icon" variant="ghost" cclassName="h-8 w-8" onClick={handleClear}>
-                  <Trash2 cclassName="h-4 w-4" />
+                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleClear}>
+                  <Trash2 className="h-4 w-4" />
                 </Button>
               )}
 
               {allowExport && messages.length > 0 && (
-                <Button size="icon" variant="ghost" cclassName="h-8 w-8" onClick={handleExport}>
-                  <Download cclassName="h-4 w-4" />
+                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleExport}>
+                  <Download className="h-4 w-4" />
                 </Button>
               )}
             </div>
@@ -192,34 +192,34 @@ export function ChatPanel({
         </CardHeader>
       )}
 
-      <CardContent cclassName="flex-1 p-0 overflow-hidden">
-        <ScrollArea ref={scrollAreaRef} cclassName="h-full">
-          <div cclassName="px-4">
+      <CardContent className="flex-1 p-0 overflow-hidden">
+        <ScrollArea ref={scrollAreaRef} className="h-full">
+          <div className="px-4">
             {messages.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                cclassName="flex flex-col items-center justify-center min-h-[400px] text-center"
+                className="flex flex-col items-center justify-center min-h-[400px] text-center"
               >
-                <div cclassName="relative mb-6">
-                  <Bot cclassName="h-16 w-16 text-muted-foreground/30" />
-                  <Sparkles cclassName="h-5 w-5 text-primary absolute -top-2 -right-2" />
+                <div className="relative mb-6">
+                  <Bot className="h-16 w-16 text-muted-foreground/30" />
+                  <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2" />
                 </div>
 
-                <h3 cclassName="text-lg font-semibold mb-2">Welcome to {title}</h3>
-                <p cclassName="text-sm text-muted-foreground mb-6 max-w-md">
+                <h3 className="text-lg font-semibold mb-2">Welcome to {title}</h3>
+                <p className="text-sm text-muted-foreground mb-6 max-w-md">
                   I'm here to help you with your questions. You can ask me anything or choose from
                   the suggestions below.
                 </p>
 
                 {showSuggestions && suggestions.length > 0 && (
-                  <div cclassName="flex flex-wrap gap-2 justify-center max-w-lg">
+                  <div className="flex flex-wrap gap-2 justify-center max-w-lg">
                     {suggestions.map((suggestion, index) => (
                       <Button
                         key={index}
                         variant="outline"
                         size="sm"
-                        cclassName="text-xs"
+                        className="text-xs"
                         onClick={() => handleSuggestionClick(suggestion)}
                       >
                         {suggestion}
@@ -229,36 +229,36 @@ export function ChatPanel({
                 )}
               </motion.div>
             ) : (
-              <div cclassName="space-y-4">
+              <div className="space-y-4">
                 {messages.map((message: any, index: number) => (
-                  <div key={message.id || index} cclassName="flex gap-3">
-                    <div cclassName="flex-shrink-0">
+                  <div key={message.id || index} className="flex gap-3">
+                    <div className="flex-shrink-0">
                       {message.role === "user" ? (
-                        <div cclassName="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
+                        <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
                           U
                         </div>
                       ) : (
-                        <div cclassName="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm">
-                          <Bot cclassName="w-4 h-4" />
+                        <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm">
+                          <Bot className="w-4 h-4" />
                         </div>
                       )}
                     </div>
-                    <div cclassName="flex-1 min-w-0">
-                      <div cclassName="text-sm text-gray-900 dark:text-gray-100">
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-gray-900 dark:text-gray-100">
                         {(message as any).content}
                       </div>
                     </div>
                   </div>
                 ))}
                 {isLoading && (
-                  <div cclassName="flex gap-3">
-                    <div cclassName="flex-shrink-0">
-                      <div cclassName="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm">
-                        <Bot cclassName="w-4 h-4" />
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm">
+                        <Bot className="w-4 h-4" />
                       </div>
                     </div>
-                    <div cclassName="flex-1 min-w-0">
-                      <div cclassName="text-sm text-gray-500">Thinking...</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-gray-500">Thinking...</div>
                     </div>
                   </div>
                 )}
@@ -266,15 +266,15 @@ export function ChatPanel({
             )}
 
             {error && (
-              <Alert variant="destructive" cclassName="mt-4">
-                <AlertCircle cclassName="h-4 w-4" />
+              <Alert variant="destructive" className="mt-4">
+                <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
                   {error.message || "An error occurred. Please try again."}
                   <Button
                     variant="link"
                     size="sm"
                     onClick={() => reload()}
-                    cclassName="ml-2 h-auto p-0"
+                    className="ml-2 h-auto p-0"
                   >
                     Retry
                   </Button>
@@ -283,8 +283,8 @@ export function ChatPanel({
             )}
 
             {isMaxMessagesReached && (
-              <Alert cclassName="mt-4">
-                <AlertCircle cclassName="h-4 w-4" />
+              <Alert className="mt-4">
+                <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
                   Maximum message limit ({maxMessages}) reached. Please start a new conversation.
                 </AlertDescription>
@@ -295,8 +295,8 @@ export function ChatPanel({
       </CardContent>
 
       {showFooter && (
-        <CardFooter cclassName="p-4 border-t bg-background/95 backdrop-blur-xl">
-          <div cclassName="w-full">
+        <CardFooter className="p-4 border-t bg-background/95 backdrop-blur-xl">
+          <div className="w-full">
             <ChatInput
               value={input}
               onChange={handleInputChange}
@@ -304,7 +304,7 @@ export function ChatPanel({
               onStop={stop}
               isLoading={isLoading}
               placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
-              cclassName="w-full"
+              className="w-full"
               allowAttachments={false}
               allowVoice={false}
               suggestions={showSuggestions ? suggestions : []}
@@ -312,10 +312,10 @@ export function ChatPanel({
             />
 
             {isLoading && (
-              <div cclassName="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                <Loader2 cclassName="h-3 w-3 animate-spin" />
+              <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                <Loader2 className="h-3 w-3 animate-spin" />
                 AI is generating response...
-                <Button variant="link" size="sm" onClick={stop} cclassName="h-auto p-0 text-xs">
+                <Button variant="link" size="sm" onClick={stop} className="h-auto p-0 text-xs">
                   Stop
                 </Button>
               </div>

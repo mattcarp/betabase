@@ -18,7 +18,7 @@ import { motion } from "framer-motion";
 interface EnhancedChatPanelProps {
   api?: string;
   initialMessages?: any[];
-  cclassName?: string;
+  className?: string;
   title?: string;
   description?: string;
   placeholder?: string;
@@ -38,7 +38,7 @@ interface EnhancedChatPanelProps {
 export function EnhancedChatPanel({
   api: _api = "/api/chat", // Unused - keeping for future API route configuration
   initialMessages = [],
-  cclassName,
+  className,
   title = "AI Assistant",
   description = "Powered by Vercel AI SDK with AI Elements",
   placeholder = "Ask me anything...",
@@ -201,26 +201,26 @@ export function EnhancedChatPanel({
   const isMaxMessagesReached = maxMessages ? messages.length >= maxMessages : false;
 
   return (
-    <Card cclassName={cn("mac-card", "flex flex-col h-full", cclassName)}>
+    <Card className={cn("mac-card", "flex flex-col h-full", className)}>
       {showHeader && (
-        <CardHeader cclassName="mac-card px-4 py-4 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
-          <div cclassName="flex items-center justify-between">
-            <div cclassName="flex items-center gap-4">
-              <div cclassName="relative">
-                <Bot cclassName="h-6 w-6 text-primary" />
-                <Sparkles cclassName="h-3 w-3 text-primary absolute -top-1 -right-1 animate-pulse" />
+        <CardHeader className="mac-card px-4 py-4 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <Bot className="h-6 w-6 text-primary" />
+                <Sparkles className="h-3 w-3 text-primary absolute -top-1 -right-1 animate-pulse" />
               </div>
               <div>
-                <CardTitle cclassName="text-lg">{title}</CardTitle>
+                <CardTitle className="text-lg">{title}</CardTitle>
                 {description && (
-                  <p cclassName="text-xs text-muted-foreground mt-0.5">{description}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
                 )}
               </div>
             </div>
 
-            <div cclassName="flex items-center gap-2">
+            <div className="flex items-center gap-2">
               {messages.length > 0 && (
-                <Badge variant="secondary" cclassName="text-xs">
+                <Badge variant="secondary" className="text-xs">
                   {messages.length} messages
                 </Badge>
               )}
@@ -229,11 +229,11 @@ export function EnhancedChatPanel({
                 <Button
                   size="icon"
                   variant="ghost"
-                  cclassName="h-8 w-8 mac-button mac-button-outline"
+                  className="h-8 w-8 mac-button mac-button-outline"
                   onClick={handleClear}
                   title="Clear conversation"
                 >
-                  <Trash2 cclassName="h-4 w-4" />
+                  <Trash2 className="h-4 w-4" />
                 </Button>
               )}
 
@@ -241,11 +241,11 @@ export function EnhancedChatPanel({
                 <Button
                   size="icon"
                   variant="ghost"
-                  cclassName="h-8 w-8 mac-button mac-button-outline"
+                  className="h-8 w-8 mac-button mac-button-outline"
                   onClick={handleExport}
                   title="Export conversation"
                 >
-                  <Download cclassName="h-4 w-4" />
+                  <Download className="h-4 w-4" />
                 </Button>
               )}
             </div>
@@ -253,36 +253,36 @@ export function EnhancedChatPanel({
         </CardHeader>
       )}
 
-      <CardContent cclassName="flex-1 p-0 overflow-hidden">
-        <ScrollArea ref={scrollAreaRef} cclassName="h-full">
-          <div cclassName="px-4">
+      <CardContent className="flex-1 p-0 overflow-hidden">
+        <ScrollArea ref={scrollAreaRef} className="h-full">
+          <div className="px-4">
             {messages.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                cclassName="flex flex-col items-center justify-center min-h-[400px] text-center"
+                className="flex flex-col items-center justify-center min-h-[400px] text-center"
               >
-                <div cclassName="relative mb-6">
-                  <Bot cclassName="h-16 w-16 text-muted-foreground/30" />
-                  <Sparkles cclassName="h-5 w-5 text-primary absolute -top-2 -right-2" />
+                <div className="relative mb-6">
+                  <Bot className="h-16 w-16 text-muted-foreground/30" />
+                  <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2" />
                 </div>
 
-                <h3 cclassName="mac-title">
+                <h3 className="mac-title">
                   Welcome to {title}
                 </h3>
-                <p cclassName="text-sm text-muted-foreground mb-6 max-w-md">
+                <p className="text-sm text-muted-foreground mb-6 max-w-md">
                   I'm here to help you with your questions. You can ask me anything or choose from
                   the suggestions below.
                 </p>
 
                 {showSuggestions && suggestions.length > 0 && (
-                  <div cclassName="w-full max-w-2xl space-y-2">
+                  <div className="w-full max-w-2xl space-y-2">
                     {suggestions.map((suggestion, index) => (
                       <Suggestion
                         key={index}
                         suggestion={suggestion}
                         onClick={() => handleSuggestionClick(suggestion)}
-                        cclassName="w-full"
+                        className="w-full"
                       >
                         {suggestion}
                       </Suggestion>
@@ -305,17 +305,17 @@ export function EnhancedChatPanel({
             )}
 
             {error && (
-              <Alert variant="destructive" cclassName="mt-4">
-                <AlertCircle cclassName="h-4 w-4" />
+              <Alert variant="destructive" className="mt-4">
+                <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
                   {error.message || "An error occurred. Please try again."}
                   <Button
-                    cclassName="mac-button mac-button-primary"
+                    className="mac-button mac-button-primary"
                     variant="link"
-                    cclassName="mac-button"
+                    className="mac-button"
                     size="sm"
                     onClick={() => reload()}
-                    cclassName="ml-2 h-auto p-0"
+                    className="ml-2 h-auto p-0"
                   >
                     Retry
                   </Button>
@@ -324,8 +324,8 @@ export function EnhancedChatPanel({
             )}
 
             {isMaxMessagesReached && (
-              <Alert cclassName="mt-4">
-                <AlertCircle cclassName="h-4 w-4" />
+              <Alert className="mt-4">
+                <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
                   Maximum message limit ({maxMessages}) reached. Please start a new conversation.
                 </AlertDescription>
@@ -336,15 +336,15 @@ export function EnhancedChatPanel({
       </CardContent>
 
       {showFooter && (
-        <CardFooter cclassName="p-4 border-t bg-background/95 backdrop-blur-xl">
-          <form onSubmit={handleFormSubmit} cclassName="w-full">
+        <CardFooter className="p-4 border-t bg-background/95 backdrop-blur-xl">
+          <form onSubmit={handleFormSubmit} className="w-full">
             {/* PromptInput has extended props not in type definition */}
             {(PromptInput as any)({
               value: input,
               onChange: handleInputChange,
               placeholder: isMaxMessagesReached ? "Message limit reached" : placeholder,
               disabled: isMaxMessagesReached || isLoading,
-              cclassName: "w-full",
+              className: "w-full",
               models: showModelSelector ? availableModels : undefined,
               selectedModelId: selectedModel,
               onModelChange: setSelectedModel,

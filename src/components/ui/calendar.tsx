@@ -8,8 +8,8 @@ import { cn } from "../../lib/utils";
 import { Button, buttonVariants } from "./button";
 
 function Calendar({
-  cclassName,
-  cclassNames,
+  className,
+  classNames,
   showOutsideDays = true,
   captionLayout = "label",
   buttonVariant = "ghost",
@@ -24,18 +24,18 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      cclassName={cn(
+      className={cn(
         "bg-background group/calendar p-4 [--cell-size:2rem] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
-        cclassName
+        className
       )}
       captionLayout={captionLayout}
       formatters={{
         formatMonthDropdown: (date) => date.toLocaleString("default", { month: "short" }),
         ...formatters,
       }}
-      cclassNames={{
+      classNames={{
         root: cn("w-fit", defaultCclassNames.root),
         months: cn("relative flex flex-col gap-4 md:flex-row", defaultCclassNames.months),
         month: cn("flex w-full flex-col gap-4", defaultCclassNames.month),
@@ -102,28 +102,28 @@ function Calendar({
         ),
         disabled: cn("text-muted-foreground opacity-50", defaultCclassNames.disabled),
         hidden: cn("invisible", defaultCclassNames.hidden),
-        ...cclassNames,
+        ...classNames,
       }}
       components={{
-        Root: ({ cclassName, rootRef, ...props }) => {
-          return <div data-slot="calendar" ref={rootRef} cclassName={cn(cclassName)} {...props} />;
+        Root: ({ className, rootRef, ...props }) => {
+          return <div data-slot="calendar" ref={rootRef} className={cn(className)} {...props} />;
         },
-        Chevron: ({ cclassName, orientation, ...props }) => {
+        Chevron: ({ className, orientation, ...props }) => {
           if (orientation === "left") {
-            return <ChevronLeftIcon cclassName={cn("size-4", cclassName)} {...props} />;
+            return <ChevronLeftIcon className={cn("size-4", className)} {...props} />;
           }
 
           if (orientation === "right") {
-            return <ChevronRightIcon cclassName={cn("size-4", cclassName)} {...props} />;
+            return <ChevronRightIcon className={cn("size-4", className)} {...props} />;
           }
 
-          return <ChevronDownIcon cclassName={cn("size-4", cclassName)} {...props} />;
+          return <ChevronDownIcon className={cn("size-4", className)} {...props} />;
         },
         DayButton: CalendarDayButton,
         WeekNumber: ({ children, ...props }) => {
           return (
             <td {...props}>
-              <div cclassName="flex size-[--cell-size] items-center justify-center text-center">
+              <div className="flex size-[--cell-size] items-center justify-center text-center">
                 {children}
               </div>
             </td>
@@ -137,7 +137,7 @@ function Calendar({
 }
 
 function CalendarDayButton({
-  cclassName,
+  className,
   day,
   modifiers,
   ...props
@@ -164,10 +164,10 @@ function CalendarDayButton({
       data-range-start={modifiers.range_start}
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
-      cclassName={cn(
+      className={cn(
         "data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 flex aspect-square h-auto w-full min-w-[--cell-size] flex-col gap-2 font-normal leading-none data-[range-end=true]:rounded-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] [&>span]:text-xs [&>span]:opacity-70",
         defaultCclassNames.day,
-        cclassName
+        className
       )}
       {...props}
     />

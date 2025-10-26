@@ -44,7 +44,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
   currentInteractionId,
   onInteractionClick,
   onFilterChange,
-  cclassName,
+  className,
   defaultWidth = 320,
   minWidth = 240,
   maxWidth = 600,
@@ -141,27 +141,27 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
   const getInteractionIcon = (type: InteractionType) => {
     switch (type) {
       case "click":
-        return <MousePointer cclassName="h-4 w-4" />;
+        return <MousePointer className="h-4 w-4" />;
       case "type":
-        return <Type cclassName="h-4 w-4" />;
+        return <Type className="h-4 w-4" />;
       case "navigate":
-        return <Navigation cclassName="h-4 w-4" />;
+        return <Navigation className="h-4 w-4" />;
       case "scroll":
-        return <ScrollText cclassName="h-4 w-4" />;
+        return <ScrollText className="h-4 w-4" />;
       case "hover":
-        return <Hand cclassName="h-4 w-4" />;
+        return <Hand className="h-4 w-4" />;
       case "select":
-        return <ChevronDown cclassName="h-4 w-4" />;
+        return <ChevronDown className="h-4 w-4" />;
       case "screenshot":
-        return <Camera cclassName="h-4 w-4" />;
+        return <Camera className="h-4 w-4" />;
       case "network":
-        return <Network cclassName="h-4 w-4" />;
+        return <Network className="h-4 w-4" />;
       case "error":
-        return <XCircle cclassName="h-4 w-4" />;
+        return <XCircle className="h-4 w-4" />;
       case "assertion":
-        return <CheckCircle cclassName="h-4 w-4" />;
+        return <CheckCircle className="h-4 w-4" />;
       default:
-        return <Info cclassName="h-4 w-4" />;
+        return <Info className="h-4 w-4" />;
     }
   };
 
@@ -169,13 +169,13 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
   const getStatusIcon = (status: InteractionStatus) => {
     switch (status) {
       case "success":
-        return <CheckCircle cclassName="h-3 w-3 text-emerald-500" />;
+        return <CheckCircle className="h-3 w-3 text-emerald-500" />;
       case "error":
-        return <XCircle cclassName="h-3 w-3 text-rose-500" />;
+        return <XCircle className="h-3 w-3 text-rose-500" />;
       case "warning":
-        return <AlertCircle cclassName="h-3 w-3 text-amber-500" />;
+        return <AlertCircle className="h-3 w-3 text-amber-500" />;
       case "info":
-        return <Info cclassName="h-3 w-3 text-blue-500" />;
+        return <Info className="h-3 w-3 text-blue-500" />;
     }
   };
 
@@ -207,9 +207,9 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
   if (isCollapsed) {
     return (
       <div
-        cclassName={cn(
+        className={cn(
           "mac-surface-elevated border-r border-mac-utility-border flex flex-col items-center py-4",
-          cclassName
+          className
         )}
         style={{ width: "48px" }}
       >
@@ -217,11 +217,11 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
           variant="ghost"
           size="icon"
           onClick={onToggleCollapse}
-          cclassName="mb-4 mac-button mac-button-outline"
+          className="mb-4 mac-button mac-button-outline"
         >
-          <ChevronRight cclassName="h-4 w-4" />
+          <ChevronRight className="h-4 w-4" />
         </Button>
-        <div cclassName="writing-mode-vertical-rl text-sm text-mac-text-secondary font-light tracking-wide">
+        <div className="writing-mode-vertical-rl text-sm text-mac-text-secondary font-light tracking-wide">
           Timeline
         </div>
       </div>
@@ -231,15 +231,15 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
   return (
     <div
       ref={timelineRef}
-      cclassName={cn(
+      className={cn(
         "mac-surface-elevated border-r border-mac-utility-border flex flex-col relative",
-        cclassName
+        className
       )}
       style={{ width: `${width}px` }}
     >
       {/* Resize handle */}
       <div
-        cclassName={cn(
+        className={cn(
           "absolute right-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-mac-primary-blue-400/50 transition-colors",
           isDragging && "bg-mac-primary-blue-400"
         )}
@@ -247,79 +247,79 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
       />
 
       {/* Header */}
-      <div cclassName="border-b border-mac-utility-border p-4">
-        <div cclassName="flex items-center justify-between mb-4">
-          <div cclassName="flex items-center gap-2">
-            <Clock cclassName="h-5 w-5 text-mac-primary-blue-400" />
+      <div className="border-b border-mac-utility-border p-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Clock className="h-5 w-5 text-mac-primary-blue-400" />
             <h3
-              cclassName="mac-title"
-              cclassName="text-base font-light text-mac-text-primary mac-title"
+              className="mac-title"
+              className="text-base font-light text-mac-text-primary mac-title"
             >
               Session Timeline
             </h3>
           </div>
-          <div cclassName="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
               onClick={handleCollapseAll}
-              cclassName="h-7 w-7 mac-button mac-button-outline"
+              className="h-7 w-7 mac-button mac-button-outline"
               title={isExpanded ? "Collapse all" : "Expand all"}
             >
-              {isExpanded ? <Minimize2 cclassName="h-4 w-4" /> : <Maximize2 cclassName="h-4 w-4" />}
+              {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
             </Button>
             <Button
               variant="ghost"
               size="icon"
               onClick={onToggleCollapse}
-              cclassName="h-7 w-7 mac-button mac-button-outline"
+              className="h-7 w-7 mac-button mac-button-outline"
               title="Collapse timeline"
             >
-              <ChevronLeft cclassName="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4" />
             </Button>
           </div>
         </div>
 
         {/* Search */}
-        <div cclassName="relative mb-4">
-          <Search cclassName="absolute left-2.5 top-2.5 h-4 w-4 text-mac-text-muted" />
+        <div className="relative mb-4">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-mac-text-muted" />
           <Input
-            cclassName="mac-input"
+            className="mac-input"
             type="text"
             placeholder="Search interactions..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            cclassName="pl-9 pr-9 h-9 bg-mac-surface-card border-mac-utility-border text-sm"
+            className="pl-9 pr-9 h-9 bg-mac-surface-card border-mac-utility-border text-sm"
           />
           {searchQuery && (
             <Button
-              cclassName="mac-button mac-button-outline"
+              className="mac-button mac-button-outline"
               variant="ghost"
-              cclassName="mac-button mac-button-outline"
+              className="mac-button mac-button-outline"
               size="icon"
               onClick={() => setSearchQuery("")}
-              cclassName="absolute right-1 top-1 h-7 w-7"
+              className="absolute right-1 top-1 h-7 w-7"
             >
-              <X cclassName="h-3 w-3" />
+              <X className="h-3 w-3" />
             </Button>
           )}
         </div>
 
         {/* Filter Toggle */}
-        <div cclassName="flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <Button
-            cclassName="mac-button mac-button-outline"
+            className="mac-button mac-button-outline"
             variant="ghost"
-            cclassName="mac-button mac-button-outline"
+            className="mac-button mac-button-outline"
             size="sm"
             onClick={() => setShowFilters(!showFilters)}
-            cclassName="h-8 text-xs gap-2"
+            className="h-8 text-xs gap-2"
           >
-            <Filter cclassName="h-3 w-3" />
+            <Filter className="h-3 w-3" />
             Filters
-            {showFilters ? <ChevronUp cclassName="h-3 w-3" /> : <ChevronDown cclassName="h-3 w-3" />}
+            {showFilters ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
           </Button>
-          <div cclassName="flex items-center gap-2 text-xs text-mac-text-muted">
+          <div className="flex items-center gap-2 text-xs text-mac-text-muted">
             <span>
               {filteredInteractions.length} of {interactions.length}
             </span>
@@ -328,7 +328,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={clearFilters}
-                cclassName="h-6 text-xs mac-button mac-button-outline"
+                className="h-6 text-xs mac-button mac-button-outline"
               >
                 Clear
               </Button>
@@ -338,9 +338,9 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
 
         {/* Filter Panel */}
         {showFilters && (
-          <div cclassName="mt-4 space-y-3 p-4 bg-mac-surface-card rounded-lg border border-mac-utility-border">
+          <div className="mt-4 space-y-3 p-4 bg-mac-surface-card rounded-lg border border-mac-utility-border">
             <div>
-              <label cclassName="text-xs text-mac-text-secondary mb-2.5 block">
+              <label className="text-xs text-mac-text-secondary mb-2.5 block">
                 Interaction Type
               </label>
               <Select
@@ -353,7 +353,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                   }
                 }}
               >
-                <SelectTrigger cclassName="h-8 text-xs">
+                <SelectTrigger className="h-8 text-xs">
                   <SelectValue placeholder="All types" />
                 </SelectTrigger>
                 <SelectContent>
@@ -368,7 +368,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
             </div>
 
             <div>
-              <label cclassName="text-xs text-mac-text-secondary mb-2.5 block">Status</label>
+              <label className="text-xs text-mac-text-secondary mb-2.5 block">Status</label>
               <Select
                 value={filter.statuses?.[0] || "all"}
                 onValueChange={(value) => {
@@ -382,7 +382,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                   }
                 }}
               >
-                <SelectTrigger cclassName="h-8 text-xs">
+                <SelectTrigger className="h-8 text-xs">
                   <SelectValue placeholder="All statuses" />
                 </SelectTrigger>
                 <SelectContent>
@@ -398,10 +398,10 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
       </div>
 
       {/* Timeline Items */}
-      <ScrollArea cclassName="flex-1">
-        <div cclassName="p-4 space-y-2">
+      <ScrollArea className="flex-1">
+        <div className="p-4 space-y-2">
           {filteredInteractions.length === 0 ? (
-            <div cclassName="text-center py-8 text-mac-text-muted text-sm">
+            <div className="text-center py-8 text-mac-text-muted text-sm">
               {interactions.length === 0
                 ? "No interactions captured yet"
                 : "No interactions match your filters"}
@@ -410,7 +410,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
             filteredInteractions.map((interaction, _index) => (
               <Card
                 key={interaction.id}
-                cclassName={cn(
+                className={cn(
                   "cursor-pointer transition-all hover:border-mac-primary-blue-400/50 mac-card",
                   currentInteractionId === interaction.id &&
                     "ring-2 ring-mac-primary-blue-400 bg-mac-primary-blue-400/5 border-mac-primary-blue-400",
@@ -420,11 +420,11 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                 )}
                 onClick={() => handleInteractionClick(interaction)}
               >
-                <CardContent cclassName={cn("p-4", !isExpanded && "py-2")}>
-                  <div cclassName="flex items-start gap-2">
+                <CardContent className={cn("p-4", !isExpanded && "py-2")}>
+                  <div className="flex items-start gap-2">
                     {/* Icon */}
                     <div
-                      cclassName={cn(
+                      className={cn(
                         "p-2.5 rounded-md flex-shrink-0",
                         interaction.status === "success" && "bg-emerald-500/10 text-emerald-500",
                         interaction.status === "error" && "bg-rose-500/10 text-rose-500",
@@ -436,9 +436,9 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                     </div>
 
                     {/* Content */}
-                    <div cclassName="flex-1 min-w-0">
-                      <div cclassName="flex items-start justify-between gap-2 mb-2">
-                        <p cclassName="text-sm font-medium text-mac-text-primary leading-tight">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <p className="text-sm font-medium text-mac-text-primary leading-tight">
                           {interaction.description}
                         </p>
                         {getStatusIcon(interaction.status)}
@@ -447,25 +447,25 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                       {isExpanded && (
                         <>
                           {interaction.elementDescription && (
-                            <p cclassName="text-xs text-mac-text-secondary mb-2 truncate">
+                            <p className="text-xs text-mac-text-secondary mb-2 truncate">
                               {interaction.elementDescription}
                             </p>
                           )}
 
                           {interaction.value && (
-                            <p cclassName="text-xs text-mac-text-muted italic truncate">
+                            <p className="text-xs text-mac-text-muted italic truncate">
                               "{interaction.value}"
                             </p>
                           )}
 
                           {/* Thumbnail */}
                           {interaction.thumbnail && (
-                            <div cclassName="mt-2 rounded overflow-hidden border border-mac-utility-border">
+                            <div className="mt-2 rounded overflow-hidden border border-mac-utility-border">
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
                                 src={interaction.thumbnail}
                                 alt="Interaction screenshot"
-                                cclassName="w-full h-auto"
+                                className="w-full h-auto"
                               />
                             </div>
                           )}
@@ -473,17 +473,17 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                       )}
 
                       {/* Timestamp and duration */}
-                      <div cclassName="flex items-center gap-2 mt-2.5">
+                      <div className="flex items-center gap-2 mt-2.5">
                         <Badge
                           variant="outline"
-                          cclassName="text-[10px] px-2.5 py-0 h-4 bg-mac-surface-card"
+                          className="text-[10px] px-2.5 py-0 h-4 bg-mac-surface-card"
                         >
                           {formatRelativeTime(interaction.timestamp)}
                         </Badge>
                         {interaction.duration && (
                           <Badge
                             variant="outline"
-                            cclassName="text-[10px] px-2.5 py-0 h-4 bg-mac-surface-card"
+                            className="text-[10px] px-2.5 py-0 h-4 bg-mac-surface-card"
                           >
                             {interaction.duration}ms
                           </Badge>
@@ -499,25 +499,25 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
       </ScrollArea>
 
       {/* Footer Stats */}
-      <div cclassName="border-t border-mac-utility-border p-4">
-        <div cclassName="grid grid-cols-2 gap-2 text-xs">
-          <div cclassName="flex items-center justify-between">
-            <span cclassName="text-mac-text-muted">Total:</span>
-            <span cclassName="text-mac-text-primary font-medium">{interactions.length}</span>
+      <div className="border-t border-mac-utility-border p-4">
+        <div className="grid grid-cols-2 gap-2 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-mac-text-muted">Total:</span>
+            <span className="text-mac-text-primary font-medium">{interactions.length}</span>
           </div>
-          <div cclassName="flex items-center justify-between">
-            <span cclassName="text-mac-text-muted">Filtered:</span>
-            <span cclassName="text-mac-text-primary font-medium">{filteredInteractions.length}</span>
+          <div className="flex items-center justify-between">
+            <span className="text-mac-text-muted">Filtered:</span>
+            <span className="text-mac-text-primary font-medium">{filteredInteractions.length}</span>
           </div>
-          <div cclassName="flex items-center justify-between">
-            <span cclassName="text-mac-text-muted">Errors:</span>
-            <span cclassName="text-rose-500 font-medium">
+          <div className="flex items-center justify-between">
+            <span className="text-mac-text-muted">Errors:</span>
+            <span className="text-rose-500 font-medium">
               {interactions.filter((i) => i.status === "error").length}
             </span>
           </div>
-          <div cclassName="flex items-center justify-between">
-            <span cclassName="text-mac-text-muted">Duration:</span>
-            <span cclassName="text-mac-text-primary font-medium">
+          <div className="flex items-center justify-between">
+            <span className="text-mac-text-muted">Duration:</span>
+            <span className="text-mac-text-primary font-medium">
               {interactions.length > 0
                 ? formatRelativeTime(interactions[interactions.length - 1].timestamp)
                 : "0ms"}

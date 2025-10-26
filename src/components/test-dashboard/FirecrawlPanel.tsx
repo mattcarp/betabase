@@ -226,12 +226,12 @@ export const FirecrawlPanel: React.FC = () => {
   };
 
   return (
-    <div cclassName="space-y-6">
+    <div className="space-y-6">
       {/* API Status Banner */}
       {apiHealth && (
-        <Alert cclassName={apiHealth.firecrawl ? "border-green-500/20" : "border-yellow-500/20"}>
-          <AlertCircle cclassName="h-4 w-4" />
-          <AlertDescription cclassName="flex items-center justify-between">
+        <Alert className={apiHealth.firecrawl ? "border-green-500/20" : "border-yellow-500/20"}>
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription className="flex items-center justify-between">
             <span>
               Test Intelligence Status:
               {apiHealth.firecrawl ? " ✅ Firecrawl" : " ⚠️ Mock Mode"} |
@@ -239,53 +239,53 @@ export const FirecrawlPanel: React.FC = () => {
               {apiHealth.aoma ? " ✅ AOMA" : " ❌ AOMA"}
             </span>
             <Button
-              cclassName="mac-button mac-button-outline"
+              className="mac-button mac-button-outline"
               size="sm"
               variant="ghost"
-              cclassName="mac-button mac-button-outline"
+              className="mac-button mac-button-outline"
               onClick={checkApiHealth}
             >
-              <RefreshCw cclassName="h-3 w-3" />
+              <RefreshCw className="h-3 w-3" />
             </Button>
           </AlertDescription>
         </Alert>
       )}
 
       {/* AUT Analysis Section */}
-      <Card cclassName="mac-card">
-        <CardHeader cclassName="mac-card">
-          <div cclassName="flex items-center justify-between">
-            <div cclassName="flex items-center gap-2">
-              <Globe cclassName="h-5 w-5 text-primary" />
-              <CardTitle cclassName="mac-card">Application Under Test Analysis</CardTitle>
+      <Card className="mac-card">
+        <CardHeader className="mac-card">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Globe className="h-5 w-5 text-primary" />
+              <CardTitle className="mac-card">Application Under Test Analysis</CardTitle>
             </div>
-            <Badge variant="outline" cclassName="text-xs">
+            <Badge variant="outline" className="text-xs">
               {apiHealth?.firecrawl ? "Live Analysis" : "Mock Data"}
             </Badge>
           </div>
         </CardHeader>
-        <CardContent cclassName="space-y-4">
-          <div cclassName="flex gap-2">
+        <CardContent className="space-y-4">
+          <div className="flex gap-2">
             <Input
-              cclassName="mac-input"
+              className="mac-input"
               placeholder="Enter AUT URL (default: AOMA staging)"
               value={newSourceUrl}
               onChange={(e) => setNewSourceUrl(e.target.value)}
-              cclassName="flex-1"
+              className="flex-1"
             />
             <Button
               onClick={handleAnalyzeAUT}
               disabled={isScanning}
-              cclassName="min-w-[120px] mac-button mac-button-primary"
+              className="min-w-[120px] mac-button mac-button-primary"
             >
               {isScanning ? (
                 <>
-                  <Loader2 cclassName="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Analyzing...
                 </>
               ) : (
                 <>
-                  <FileSearch cclassName="mr-2 h-4 w-4" />
+                  <FileSearch className="mr-2 h-4 w-4" />
                   Analyze AUT
                 </>
               )}
@@ -293,8 +293,8 @@ export const FirecrawlPanel: React.FC = () => {
           </div>
 
           {isScanning && (
-            <div cclassName="space-y-2">
-              <div cclassName="flex items-center justify-between text-sm">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-sm">
                 <span>Analyzing application...</span>
                 <span>{crawlProgress}%</span>
               </div>
@@ -303,39 +303,39 @@ export const FirecrawlPanel: React.FC = () => {
           )}
 
           {autAnalysis && (
-            <Tabs defaultValue="features" cclassName="mt-4">
-              <TabsList cclassName="grid w-full grid-cols-4">
+            <Tabs defaultValue="features" className="mt-4">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="features">Features</TabsTrigger>
                 <TabsTrigger value="flows">User Flows</TabsTrigger>
                 <TabsTrigger value="apis">APIs</TabsTrigger>
                 <TabsTrigger value="knowledge">Knowledge</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="features" cclassName="space-y-2">
-                <h4 cclassName="mac-title">
+              <TabsContent value="features" className="space-y-2">
+                <h4 className="mac-title">
                   Testable Features ({autAnalysis.testableFeatures.length})
                 </h4>
-                <ScrollArea cclassName="h-[300px]">
+                <ScrollArea className="h-[300px]">
                   {autAnalysis.testableFeatures.map((feature, idx) => (
-                    <Card key={idx} cclassName="mac-card mb-2">
-                      <CardContent cclassName="p-4">
-                        <div cclassName="flex items-start justify-between">
-                          <div cclassName="flex-1">
-                            <div cclassName="flex items-center gap-2">
-                              <h5 cclassName="font-medium">{feature.name}</h5>
+                    <Card key={idx} className="mac-card mb-2">
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <h5 className="font-medium">{feature.name}</h5>
                               <Badge
                                 variant="outline"
-                                cclassName={getPriorityColor(feature.testPriority)}
+                                className={getPriorityColor(feature.testPriority)}
                               >
                                 {feature.testPriority}
                               </Badge>
                             </div>
-                            <p cclassName="text-sm text-muted-foreground mt-2">
+                            <p className="text-sm text-muted-foreground mt-2">
                               {feature.description}
                             </p>
-                            <div cclassName="flex flex-wrap gap-2 mt-2">
+                            <div className="flex flex-wrap gap-2 mt-2">
                               {feature.testTypes.map((type, i) => (
-                                <Badge key={i} variant="secondary" cclassName="text-xs">
+                                <Badge key={i} variant="secondary" className="text-xs">
                                   {type}
                                 </Badge>
                               ))}
@@ -348,23 +348,23 @@ export const FirecrawlPanel: React.FC = () => {
                 </ScrollArea>
               </TabsContent>
 
-              <TabsContent value="flows" cclassName="space-y-2">
-                <h4 cclassName="mac-title">
+              <TabsContent value="flows" className="space-y-2">
+                <h4 className="mac-title">
                   User Flows ({autAnalysis.userFlows.length})
                 </h4>
-                <ScrollArea cclassName="h-[300px]">
+                <ScrollArea className="h-[300px]">
                   {autAnalysis.userFlows.map((flow, idx) => (
-                    <Card key={idx} cclassName="mac-card mb-2">
-                      <CardContent cclassName="p-4">
-                        <div cclassName="flex items-center gap-2 mb-2">
-                          <h5 cclassName="font-medium">{flow.name}</h5>
+                    <Card key={idx} className="mac-card mb-2">
+                      <CardContent className="p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h5 className="font-medium">{flow.name}</h5>
                           {flow.criticalPath && (
-                            <Badge variant="destructive" cclassName="text-xs">
+                            <Badge variant="destructive" className="text-xs">
                               Critical Path
                             </Badge>
                           )}
                         </div>
-                        <ol cclassName="list-decimal list-inside text-sm text-muted-foreground">
+                        <ol className="list-decimal list-inside text-sm text-muted-foreground">
                           {flow.steps.map((step, i) => (
                             <li key={i}>{step}</li>
                           ))}
@@ -375,41 +375,41 @@ export const FirecrawlPanel: React.FC = () => {
                 </ScrollArea>
               </TabsContent>
 
-              <TabsContent value="apis" cclassName="space-y-2">
-                <h4 cclassName="mac-title">
+              <TabsContent value="apis" className="space-y-2">
+                <h4 className="mac-title">
                   API Endpoints ({autAnalysis.apiEndpoints.length})
                 </h4>
-                <ScrollArea cclassName="h-[300px]">
-                  <div cclassName="space-y-1">
+                <ScrollArea className="h-[300px]">
+                  <div className="space-y-1">
                     {autAnalysis.apiEndpoints.map((endpoint, idx) => (
                       <div
                         key={idx}
-                        cclassName="flex items-center gap-2 p-2 rounded hover:bg-muted/50"
+                        className="flex items-center gap-2 p-2 rounded hover:bg-muted/50"
                       >
-                        <Code cclassName="h-4 w-4 text-muted-foreground" />
-                        <code cclassName="text-sm flex-1">{endpoint}</code>
+                        <Code className="h-4 w-4 text-muted-foreground" />
+                        <code className="text-sm flex-1">{endpoint}</code>
                       </div>
                     ))}
                   </div>
                 </ScrollArea>
               </TabsContent>
 
-              <TabsContent value="knowledge" cclassName="space-y-2">
-                <h4 cclassName="mac-title">
+              <TabsContent value="knowledge" className="space-y-2">
+                <h4 className="mac-title">
                   Extracted Knowledge ({autAnalysis.knowledgeExtracted.length})
                 </h4>
-                <ScrollArea cclassName="h-[300px]">
+                <ScrollArea className="h-[300px]">
                   {autAnalysis.knowledgeExtracted.map((item, idx) => (
-                    <Card key={idx} cclassName="mac-card mb-2">
-                      <CardContent cclassName="p-4">
-                        <div cclassName="flex items-start justify-between">
-                          <div cclassName="flex-1">
-                            <Badge variant="outline" cclassName="mb-2">
+                    <Card key={idx} className="mac-card mb-2">
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <Badge variant="outline" className="mb-2">
                               {item.category}
                             </Badge>
-                            <p cclassName="text-sm">{item.content}</p>
+                            <p className="text-sm">{item.content}</p>
                           </div>
-                          <div cclassName="text-sm text-muted-foreground">{item.relevance}%</div>
+                          <div className="text-sm text-muted-foreground">{item.relevance}%</div>
                         </div>
                       </CardContent>
                     </Card>
@@ -422,58 +422,58 @@ export const FirecrawlPanel: React.FC = () => {
       </Card>
 
       {/* Support Intelligence Section */}
-      <Card cclassName="mac-card">
-        <CardHeader cclassName="mac-card">
-          <div cclassName="flex items-center gap-2">
-            <Brain cclassName="h-5 w-5 text-primary" />
-            <CardTitle cclassName="mac-card">Support Intelligence</CardTitle>
+      <Card className="mac-card">
+        <CardHeader className="mac-card">
+          <div className="flex items-center gap-2">
+            <Brain className="h-5 w-5 text-primary" />
+            <CardTitle className="mac-card">Support Intelligence</CardTitle>
           </div>
         </CardHeader>
-        <CardContent cclassName="space-y-4">
-          <div cclassName="flex gap-2">
+        <CardContent className="space-y-4">
+          <div className="flex gap-2">
             <Input
-              cclassName="mac-input"
+              className="mac-input"
               placeholder="Ask a support question about AOMA..."
               value={supportQuery}
               onChange={(e) => setSupportQuery(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && handleSupportQuery()}
-              cclassName="flex-1"
+              className="flex-1"
             />
             <Button
-              cclassName="mac-button mac-button-primary"
+              className="mac-button mac-button-primary"
               onClick={handleSupportQuery}
               disabled={isLoadingSupport}
             >
               {isLoadingSupport ? (
-                <Loader2 cclassName="h-4 w-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <HelpCircle cclassName="h-4 w-4" />
+                <HelpCircle className="h-4 w-4" />
               )}
             </Button>
           </div>
 
           {supportResponse && (
-            <Card cclassName="mac-card border-primary/20">
-              <CardContent cclassName="p-4">
-                <div cclassName="space-y-3">
-                  <div cclassName="flex items-center justify-between">
-                    <Badge variant="outline" cclassName="text-xs">
+            <Card className="mac-card border-primary/20">
+              <CardContent className="p-4">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Badge variant="outline" className="text-xs">
                       {supportResponse.confidence}% confidence
                     </Badge>
-                    <div cclassName="flex gap-2">
+                    <div className="flex gap-2">
                       {supportResponse.sources.map((source, i) => (
-                        <Badge key={i} variant="secondary" cclassName="text-xs">
+                        <Badge key={i} variant="secondary" className="text-xs">
                           {source}
                         </Badge>
                       ))}
                     </div>
                   </div>
-                  <p cclassName="text-sm">{supportResponse.answer}</p>
+                  <p className="text-sm">{supportResponse.answer}</p>
                   {supportResponse.suggestedActions &&
                     supportResponse.suggestedActions.length > 0 && (
-                      <div cclassName="pt-2 border-t">
-                        <p cclassName="text-xs font-medium mb-2">Suggested Actions:</p>
-                        <ul cclassName="list-disc list-inside text-xs text-muted-foreground">
+                      <div className="pt-2 border-t">
+                        <p className="text-xs font-medium mb-2">Suggested Actions:</p>
+                        <ul className="list-disc list-inside text-xs text-muted-foreground">
                           {supportResponse.suggestedActions.map((action, i) => (
                             <li key={i}>{action}</li>
                           ))}
@@ -487,19 +487,19 @@ export const FirecrawlPanel: React.FC = () => {
 
           {/* Common Issues */}
           {commonIssues.length > 0 && (
-            <div cclassName="pt-4 border-t">
-              <h4 cclassName="mac-title">
+            <div className="pt-4 border-t">
+              <h4 className="mac-title">
                 Common Issues
               </h4>
-              <div cclassName="space-y-2">
+              <div className="space-y-2">
                 {commonIssues.map((issue, idx) => (
-                  <div key={idx} cclassName="text-sm">
-                    <div cclassName="flex items-center gap-2">
-                      <Bug cclassName="h-3 w-3 text-muted-foreground" />
-                      <span cclassName="font-medium">{issue.title}</span>
+                  <div key={idx} className="text-sm">
+                    <div className="flex items-center gap-2">
+                      <Bug className="h-3 w-3 text-muted-foreground" />
+                      <span className="font-medium">{issue.title}</span>
                     </div>
                     {issue.solution && (
-                      <p cclassName="text-xs text-muted-foreground ml-6 mt-2">
+                      <p className="text-xs text-muted-foreground ml-6 mt-2">
                         {issue.solution.substring(0, 100)}...
                       </p>
                     )}
@@ -512,23 +512,23 @@ export const FirecrawlPanel: React.FC = () => {
       </Card>
 
       {/* Actions */}
-      <div cclassName="flex gap-2">
+      <div className="flex gap-2">
         <Button
-          cclassName="mac-button mac-button-outline"
+          className="mac-button mac-button-outline"
           onClick={handleGenerateTests}
           variant="outline"
-          cclassName="mac-button mac-button-outline"
+          className="mac-button mac-button-outline"
         >
-          <Sparkles cclassName="mr-2 h-4 w-4" />
+          <Sparkles className="mr-2 h-4 w-4" />
           Generate Test Recommendations
         </Button>
         <Button
-          cclassName="mac-button mac-button-outline"
+          className="mac-button mac-button-outline"
           onClick={fetchCommonIssues}
           variant="outline"
-          cclassName="mac-button mac-button-outline"
+          className="mac-button mac-button-outline"
         >
-          <RefreshCw cclassName="mr-2 h-4 w-4" />
+          <RefreshCw className="mr-2 h-4 w-4" />
           Refresh Common Issues
         </Button>
       </div>

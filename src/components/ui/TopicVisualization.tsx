@@ -36,7 +36,7 @@ interface TopicBadgeProps {
   onClick?: (topic: ExtractedTopic) => void;
   size?: "sm" | "md" | "lg";
   showScore?: boolean;
-  cclassName?: string;
+  className?: string;
 }
 
 export const TopicBadge: React.FC<TopicBadgeProps> = ({
@@ -44,16 +44,16 @@ export const TopicBadge: React.FC<TopicBadgeProps> = ({
   onClick,
   size = "sm",
   showScore = false,
-  cclassName,
+  className,
 }) => {
   const getTrendIcon = () => {
     switch (topic.trend) {
       case "rising":
-        return <TrendingUp cclassName="h-3 w-3" />;
+        return <TrendingUp className="h-3 w-3" />;
       case "declining":
-        return <TrendingDown cclassName="h-3 w-3" />;
+        return <TrendingDown className="h-3 w-3" />;
       default:
-        return <Minus cclassName="h-3 w-3" />;
+        return <Minus className="h-3 w-3" />;
     }
   };
 
@@ -79,19 +79,19 @@ export const TopicBadge: React.FC<TopicBadgeProps> = ({
   return (
     <button
       onClick={() => onClick?.(topic)}
-      cclassName={cn(
+      className={cn(
         "inline-flex items-center gap-2 rounded-full border transition-all",
         "hover:scale-105 hover:shadow-lg cursor-pointer",
         getCategoryColor(topic.category),
         sizeClasses[size],
-        cclassName
+        className
       )}
       title={`Score: ${topic.score.toFixed(2)} | Documents: ${topic.documentIds.length}`}
     >
-      <Hash cclassName="h-3 w-3 opacity-60" />
-      <span cclassName="font-medium">{topic.term}</span>
+      <Hash className="h-3 w-3 opacity-60" />
+      <span className="font-medium">{topic.term}</span>
       {showScore && (
-        <span cclassName="opacity-60 text-[0.7em]">{(topic.score * 100).toFixed(0)}</span>
+        <span className="opacity-60 text-[0.7em]">{(topic.score * 100).toFixed(0)}</span>
       )}
       {topic.trend && size !== "sm" && getTrendIcon()}
     </button>
@@ -102,14 +102,14 @@ interface TopicCloudProps {
   topics: ExtractedTopic[];
   maxTopics?: number;
   onTopicClick?: (topic: ExtractedTopic) => void;
-  cclassName?: string;
+  className?: string;
 }
 
 export const TopicCloud: React.FC<TopicCloudProps> = ({
   topics,
   maxTopics = 30,
   onTopicClick,
-  cclassName,
+  className,
 }) => {
   const sortedTopics = useMemo(() => {
     return [...topics].sort((a, b) => b.score - a.score).slice(0, maxTopics);
@@ -124,9 +124,9 @@ export const TopicCloud: React.FC<TopicCloudProps> = ({
 
   if (sortedTopics.length === 0) {
     return (
-      <div cclassName={cn("text-center text-zinc-400 py-8", cclassName)}>
-        <Brain cclassName="mx-auto mb-2 h-8 w-8 opacity-50" />
-        <p cclassName="text-sm">No topics extracted yet</p>
+      <div className={cn("text-center text-zinc-400 py-8", className)}>
+        <Brain className="mx-auto mb-2 h-8 w-8 opacity-50" />
+        <p className="text-sm">No topics extracted yet</p>
       </div>
     );
   }
@@ -134,7 +134,7 @@ export const TopicCloud: React.FC<TopicCloudProps> = ({
   const maxScore = Math.max(...sortedTopics.map((t) => t.score));
 
   return (
-    <div cclassName={cn("flex flex-wrap gap-2", cclassName)}>
+    <div className={cn("flex flex-wrap gap-2", className)}>
       {sortedTopics.map((topic) => (
         <TopicBadge
           key={topic.id}
@@ -152,14 +152,14 @@ interface TrendingTopicsProps {
   topics: ExtractedTopic[];
   limit?: number;
   onTopicClick?: (topic: ExtractedTopic) => void;
-  cclassName?: string;
+  className?: string;
 }
 
 export const TrendingTopics: React.FC<TrendingTopicsProps> = ({
   topics,
   limit = 5,
   onTopicClick,
-  cclassName,
+  className,
 }) => {
   const trendingTopics = useMemo(() => {
     return topics
@@ -170,34 +170,34 @@ export const TrendingTopics: React.FC<TrendingTopicsProps> = ({
 
   if (trendingTopics.length === 0) {
     return (
-      <div cclassName={cn("text-center text-zinc-400 py-4", cclassName)}>
-        <TrendingUp cclassName="mx-auto mb-2 h-6 w-6 opacity-50" />
-        <p cclassName="text-sm">No trending topics</p>
+      <div className={cn("text-center text-zinc-400 py-4", className)}>
+        <TrendingUp className="mx-auto mb-2 h-6 w-6 opacity-50" />
+        <p className="text-sm">No trending topics</p>
       </div>
     );
   }
 
   return (
-    <div cclassName={cn("space-y-2", cclassName)}>
+    <div className={cn("space-y-2", className)}>
       {trendingTopics.map((topic, index) => (
         <div
           key={topic.id}
-          cclassName="flex items-center justify-between p-2 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors cursor-pointer"
+          className="flex items-center justify-between p-2 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors cursor-pointer"
           onClick={() => onTopicClick?.(topic)}
         >
-          <div cclassName="flex items-center gap-4">
-            <span cclassName="text-lg font-bold text-zinc-500">#{index + 1}</span>
+          <div className="flex items-center gap-4">
+            <span className="text-lg font-bold text-zinc-500">#{index + 1}</span>
             <div>
-              <div cclassName="flex items-center gap-2">
-                <span cclassName="font-medium text-zinc-200">{topic.term}</span>
-                <TrendingUp cclassName="h-3 w-3 text-green-400" />
+              <div className="flex items-center gap-2">
+                <span className="font-medium text-zinc-200">{topic.term}</span>
+                <TrendingUp className="h-3 w-3 text-green-400" />
               </div>
-              <div cclassName="text-xs text-zinc-500">
+              <div className="text-xs text-zinc-500">
                 {topic.documentIds.length} documents • Score: {(topic.score * 100).toFixed(0)}
               </div>
             </div>
           </div>
-          <ChevronRight cclassName="h-4 w-4 text-zinc-500" />
+          <ChevronRight className="h-4 w-4 text-zinc-500" />
         </div>
       ))}
     </div>
@@ -207,58 +207,58 @@ export const TrendingTopics: React.FC<TrendingTopicsProps> = ({
 interface TopicClustersProps {
   clusters: TopicCluster[];
   onClusterClick?: (cluster: TopicCluster) => void;
-  cclassName?: string;
+  className?: string;
 }
 
 export const TopicClusters: React.FC<TopicClustersProps> = ({
   clusters,
   onClusterClick,
-  cclassName,
+  className,
 }) => {
   if (clusters.length === 0) {
     return (
-      <div cclassName={cn("text-center text-zinc-400 py-8", cclassName)}>
-        <Circle cclassName="mx-auto mb-2 h-8 w-8 opacity-50" />
-        <p cclassName="text-sm">No topic clusters found</p>
+      <div className={cn("text-center text-zinc-400 py-8", className)}>
+        <Circle className="mx-auto mb-2 h-8 w-8 opacity-50" />
+        <p className="text-sm">No topic clusters found</p>
       </div>
     );
   }
 
   return (
-    <div cclassName={cn("grid gap-4", cclassName)}>
+    <div className={cn("grid gap-4", className)}>
       {clusters.map((cluster) => (
         <Card
           key={cluster.id}
-          cclassName="mac-card bg-zinc-900/50 border-zinc-800 hover:border-zinc-700 transition-colors cursor-pointer"
+          className="mac-card bg-zinc-900/50 border-zinc-800 hover:border-zinc-700 transition-colors cursor-pointer"
           onClick={() => onClusterClick?.(cluster)}
         >
-          <CardHeader cclassName="mac-card pb-4">
-            <CardTitle cclassName="text-sm font-medium flex items-center justify-between">
-              <span cclassName="flex items-center gap-2">
-                <Circle cclassName="h-4 w-4 text-zinc-500" />
+          <CardHeader className="mac-card pb-4">
+            <CardTitle className="text-sm font-medium flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <Circle className="h-4 w-4 text-zinc-500" />
                 {cluster.name}
               </span>
-              <Badge variant="secondary" cclassName="text-xs">
+              <Badge variant="secondary" className="text-xs">
                 {cluster.topics.length} topics
               </Badge>
             </CardTitle>
           </CardHeader>
-          <CardContent cclassName="space-y-2">
-            <div cclassName="flex flex-wrap gap-2">
+          <CardContent className="space-y-2">
+            <div className="flex flex-wrap gap-2">
               {cluster.topics.slice(0, 5).map((topic) => (
-                <Badge key={topic.id} variant="outline" cclassName="text-xs border-zinc-700">
+                <Badge key={topic.id} variant="outline" className="text-xs border-zinc-700">
                   {topic.term}
                 </Badge>
               ))}
               {cluster.topics.length > 5 && (
-                <Badge variant="outline" cclassName="text-xs border-zinc-700">
+                <Badge variant="outline" className="text-xs border-zinc-700">
                   +{cluster.topics.length - 5} more
                 </Badge>
               )}
             </div>
 
             {cluster.metadata && (
-              <div cclassName="text-xs text-zinc-500 space-y-1 pt-2 border-t border-zinc-800">
+              <div className="text-xs text-zinc-500 space-y-1 pt-2 border-t border-zinc-800">
                 {cluster.metadata.jiraTickets?.length &&
                   cluster.metadata.jiraTickets.length > 0 && (
                     <div>Jira: {cluster.metadata.jiraTickets?.length} tickets</div>
@@ -285,7 +285,7 @@ interface TopicStatsProps {
   totalClusters: number;
   totalDocuments: number;
   lastUpdated: Date | null;
-  cclassName?: string;
+  className?: string;
 }
 
 export const TopicStats: React.FC<TopicStatsProps> = ({
@@ -293,7 +293,7 @@ export const TopicStats: React.FC<TopicStatsProps> = ({
   totalClusters,
   totalDocuments,
   lastUpdated,
-  cclassName,
+  className,
 }) => {
   const stats = [
     { label: "Topics", value: totalTopics, icon: Hash, color: "text-blue-400" },
@@ -312,22 +312,22 @@ export const TopicStats: React.FC<TopicStatsProps> = ({
   ];
 
   return (
-    <div cclassName={cn("grid grid-cols-3 gap-4", cclassName)}>
+    <div className={cn("grid grid-cols-3 gap-4", className)}>
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
-          <div key={stat.label} cclassName="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800">
-            <div cclassName="flex items-center gap-2 mb-2">
-              <Icon cclassName={cn("h-4 w-4", stat.color)} />
-              <span cclassName="text-xs text-zinc-500">{stat.label}</span>
+          <div key={stat.label} className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800">
+            <div className="flex items-center gap-2 mb-2">
+              <Icon className={cn("h-4 w-4", stat.color)} />
+              <span className="text-xs text-zinc-500">{stat.label}</span>
             </div>
-            <div cclassName="text-2xl font-bold text-zinc-200">{stat.value.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-zinc-200">{stat.value.toLocaleString()}</div>
           </div>
         );
       })}
       {lastUpdated && (
-        <div cclassName="col-span-3 text-xs text-zinc-500 text-center pt-2 border-t border-zinc-800">
-          <Clock cclassName="inline-block h-3 w-3 mr-2" />
+        <div className="col-span-3 text-xs text-zinc-500 text-center pt-2 border-t border-zinc-800">
+          <Clock className="inline-block h-3 w-3 mr-2" />
           Last updated: {lastUpdated.toLocaleTimeString()}
         </div>
       )}
@@ -347,7 +347,7 @@ interface TopicPanelProps {
   };
   onTopicClick?: (topic: ExtractedTopic) => void;
   onClusterClick?: (cluster: TopicCluster) => void;
-  cclassName?: string;
+  className?: string;
 }
 
 export const TopicPanel: React.FC<TopicPanelProps> = ({
@@ -357,44 +357,44 @@ export const TopicPanel: React.FC<TopicPanelProps> = ({
   stats,
   onTopicClick,
   onClusterClick,
-  cclassName,
+  className,
 }) => {
   return (
-    <Card cclassName={cn("mac-card", "bg-zinc-950 border-zinc-800", cclassName)}>
-      <CardHeader cclassName="mac-card">
-        <CardTitle cclassName="flex items-center gap-2">
-          <Brain cclassName="h-5 w-5 text-zinc-400" />
+    <Card className={cn("mac-card", "bg-zinc-950 border-zinc-800", className)}>
+      <CardHeader className="mac-card">
+        <CardTitle className="flex items-center gap-2">
+          <Brain className="h-5 w-5 text-zinc-400" />
           Topic Intelligence
         </CardTitle>
       </CardHeader>
-      <CardContent cclassName="mac-card">
-        <Tabs defaultValue="cloud" cclassName="w-full">
-          <TabsList cclassName="grid w-full grid-cols-4 bg-zinc-900">
+      <CardContent className="mac-card">
+        <Tabs defaultValue="cloud" className="w-full">
+          <TabsList className="grid w-full grid-cols-4 bg-zinc-900">
             <TabsTrigger value="cloud">Cloud</TabsTrigger>
             <TabsTrigger value="trending">Trending</TabsTrigger>
             <TabsTrigger value="clusters">Clusters</TabsTrigger>
             <TabsTrigger value="stats">Stats</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="cloud" cclassName="mt-4">
-            <ScrollArea cclassName="h-[300px]">
+          <TabsContent value="cloud" className="mt-4">
+            <ScrollArea className="h-[300px]">
               <TopicCloud topics={topics} onTopicClick={onTopicClick} />
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="trending" cclassName="mt-4">
-            <ScrollArea cclassName="h-[300px]">
+          <TabsContent value="trending" className="mt-4">
+            <ScrollArea className="h-[300px]">
               <TrendingTopics topics={trendingTopics} onTopicClick={onTopicClick} />
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="clusters" cclassName="mt-4">
-            <ScrollArea cclassName="h-[300px]">
+          <TabsContent value="clusters" className="mt-4">
+            <ScrollArea className="h-[300px]">
               <TopicClusters clusters={clusters} onClusterClick={onClusterClick} />
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="stats" cclassName="mt-4">
+          <TabsContent value="stats" className="mt-4">
             <TopicStats {...stats} />
           </TabsContent>
         </Tabs>

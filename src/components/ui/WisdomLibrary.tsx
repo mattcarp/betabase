@@ -47,13 +47,13 @@ interface WisdomLibraryProps {
     topics: string[];
   };
   currentConversation?: any[];
-  cclassName?: string;
+  className?: string;
 }
 
 export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
   conversationContext,
   currentConversation = [],
-  cclassName,
+  className,
 }) => {
   const [wisdomEntries, setWisdomEntries] = useState<WisdomEntry[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -474,37 +474,37 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
   };
 
   return (
-    <div cclassName={`space-y-4 ${cclassName}`}>
-      <div cclassName="flex items-center justify-between mb-4">
-        <h3 cclassName="mac-title">
+    <div className={`space-y-4 ${className}`}>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="mac-title">
           Wisdom Library
         </h3>
-        <div cclassName="flex items-center gap-2">
-          {mcpState.isConnected && <span cclassName="motiff-status-connected text-xs">AOMA</span>}
-          <button cclassName="text-motiff-accent/70 hover:text-motiff-accent text-sm transition-colors">
+        <div className="flex items-center gap-2">
+          {mcpState.isConnected && <span className="motiff-status-connected text-xs">AOMA</span>}
+          <button className="text-motiff-accent/70 hover:text-motiff-accent text-sm transition-colors">
             Browse All
           </button>
         </div>
       </div>
 
       {/* Search and Filter */}
-      <div cclassName="space-y-3">
-        <div cclassName="relative">
+      <div className="space-y-3">
+        <div className="relative">
           <Search
             size={16}
-            cclassName="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/40"
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/40"
           />
           <input
             type="text"
             placeholder="Search wisdom..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            cclassName="motiff-chat-input w-full pl-10 pr-4 py-2 text-sm"
+            className="motiff-chat-input w-full pl-10 pr-4 py-2 text-sm"
           />
         </div>
 
         {/* Category Filter */}
-        <div cclassName="flex gap-2 overflow-x-auto motiff-scrollbar">
+        <div className="flex gap-2 overflow-x-auto motiff-scrollbar">
           {categories.map((category) => {
             const Icon = category.icon;
             const isSelected = selectedCategory === category.value;
@@ -512,7 +512,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
               <button
                 key={category.value}
                 onClick={() => setSelectedCategory(category.value)}
-                cclassName={`flex items-center gap-2 px-2 py-2 rounded-lg text-xs whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-2 py-2 rounded-lg text-xs whitespace-nowrap transition-all ${
                   isSelected
                     ? "bg-motiff-accent/20 text-motiff-accent border border-motiff-accent/30"
                     : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
@@ -528,64 +528,64 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
 
       {/* Wisdom Entries */}
       {isLoading ? (
-        <div cclassName="space-y-3">
+        <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} cclassName="motiff-glass-panel p-4 animate-pulse">
-              <div cclassName="h-4 bg-white/10 rounded mb-2"></div>
-              <div cclassName="h-3 bg-white/5 rounded w-3/4"></div>
+            <div key={i} className="motiff-glass-panel p-4 animate-pulse">
+              <div className="h-4 bg-white/10 rounded mb-2"></div>
+              <div className="h-3 bg-white/5 rounded w-3/4"></div>
             </div>
           ))}
         </div>
       ) : filteredEntries.length === 0 ? (
-        <div cclassName="motiff-glass-panel p-4 text-center">
-          <BookOpen cclassName="mx-auto mb-2 text-motiff-accent" size={24} />
-          <p cclassName="text-sm text-white/60">
+        <div className="motiff-glass-panel p-4 text-center">
+          <BookOpen className="mx-auto mb-2 text-motiff-accent" size={24} />
+          <p className="text-sm text-white/60">
             {searchQuery || selectedCategory !== "all"
               ? "No matching wisdom found"
               : "Wisdom entries will appear here"}
           </p>
-          <p cclassName="text-xs text-white/40 mt-2">
+          <p className="text-xs text-white/40 mt-2">
             Start a conversation to get contextual recommendations
           </p>
         </div>
       ) : (
-        <div cclassName="space-y-3">
+        <div className="space-y-3">
           {filteredEntries.map((entry) => (
             <div
               key={entry.id}
-              cclassName={`motiff-insight-card cursor-pointer ${entry.featured ? "ring-1 ring-motiff-accent/30" : ""}`}
+              className={`motiff-insight-card cursor-pointer ${entry.featured ? "ring-1 ring-motiff-accent/30" : ""}`}
             >
-              <div cclassName="flex items-start justify-between">
-                <div cclassName="flex items-start gap-4 flex-1">
-                  <div cclassName="p-2 rounded-lg bg-motiff-accent/10 text-motiff-accent">
+              <div className="flex items-start justify-between">
+                <div className="flex items-start gap-4 flex-1">
+                  <div className="p-2 rounded-lg bg-motiff-accent/10 text-motiff-accent">
                     {getCategoryIcon(entry.category)}
                   </div>
-                  <div cclassName="flex-1 min-w-0">
-                    <div cclassName="flex items-center gap-2 mb-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2">
                       <h4
-                        cclassName="mac-title"
-                        cclassName="mac-title font-medium text-white text-sm truncate"
+                        className="mac-title"
+                        className="mac-title font-medium text-white text-sm truncate"
                       >
                         {entry.title}
                       </h4>
                       {entry.featured && (
-                        <Star size={12} cclassName="text-motiff-orange flex-shrink-0" />
+                        <Star size={12} className="text-motiff-orange flex-shrink-0" />
                       )}
                     </div>
-                    <p cclassName="text-xs text-white/60 mb-2 line-clamp-2">
+                    <p className="text-xs text-white/60 mb-2 line-clamp-2">
                       {entry.summary || entry.content}
                     </p>
-                    <div cclassName="flex items-center gap-2 mb-2">
-                      <span cclassName="motiff-metric-value text-xs">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="motiff-metric-value text-xs">
                         {Math.round(entry.confidence)}% relevant
                       </span>
-                      <span cclassName="text-xs text-white/40">{entry.interactionCount} views</span>
+                      <span className="text-xs text-white/40">{entry.interactionCount} views</span>
                     </div>
-                    <div cclassName="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2">
                       {entry.tags.slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          cclassName="text-xs px-2 py-0.5 rounded-full bg-white/10 text-white/60"
+                          className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-white/60"
                         >
                           {tag}
                         </span>
@@ -593,21 +593,21 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
                     </div>
                   </div>
                 </div>
-                <div cclassName="flex flex-col items-end gap-2">
-                  <span cclassName="text-xs text-white/40">
+                <div className="flex flex-col items-end gap-2">
+                  <span className="text-xs text-white/40">
                     {entry.lastAccessed.toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
                   </span>
                   <div
-                    cclassName={`text-xs px-2 py-2 rounded-full bg-white/10 ${getSourceColor(entry.source)}`}
+                    className={`text-xs px-2 py-2 rounded-full bg-white/10 ${getSourceColor(entry.source)}`}
                   >
                     {entry.source.toUpperCase()}
                   </div>
                   <ArrowRight
                     size={12}
-                    cclassName="text-white/40 hover:text-white transition-colors"
+                    className="text-white/40 hover:text-white transition-colors"
                   />
                 </div>
               </div>
@@ -618,14 +618,14 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
 
       {/* Quick Actions */}
       {filteredEntries.length > 0 && (
-        <div cclassName="mt-4 pt-4 border-t border-white/10">
-          <div cclassName="flex gap-2">
-            <button cclassName="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
-              <Brain size={12} cclassName="inline mr-2" />
+        <div className="mt-4 pt-4 border-t border-white/10">
+          <div className="flex gap-2">
+            <button className="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
+              <Brain size={12} className="inline mr-2" />
               AI Summary
             </button>
-            <button cclassName="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
-              <MessageCircle size={12} cclassName="inline mr-2" />
+            <button className="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
+              <MessageCircle size={12} className="inline mr-2" />
               Ask About
             </button>
           </div>

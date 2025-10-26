@@ -54,10 +54,10 @@ import {
 } from "./dropdown-menu";
 
 interface AppSidebarProps {
-  cclassName?: string;
+  className?: string;
 }
 
-export function AppSidebar({ cclassName }: AppSidebarProps) {
+export function AppSidebar({ className }: AppSidebarProps) {
   const {
     conversations,
     activeConversationId,
@@ -145,44 +145,44 @@ export function AppSidebar({ cclassName }: AppSidebarProps) {
   };
 
   return (
-    <Sidebar variant="sidebar" cclassName={cn("mac-sidebar mac-glass", cclassName)}>
-      <SidebarHeader cclassName="mac-surface-elevated border-b border-mac-border">
-        <div cclassName="flex items-center justify-between px-2 py-2">
-          <div cclassName="flex items-center gap-2">
-            <Sparkles cclassName="h-4 w-4 text-mac-accent-purple-400" />
-            <span cclassName="text-sm font-light text-mac-text-primary">Conversations</span>
+    <Sidebar variant="sidebar" className={cn("mac-sidebar mac-glass", className)}>
+      <SidebarHeader className="mac-surface-elevated border-b border-mac-border">
+        <div className="flex items-center justify-between px-2 py-2">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-mac-accent-purple-400" />
+            <span className="text-sm font-light text-mac-text-primary">Conversations</span>
           </div>
           <Button
             onClick={handleNewConversation}
             size="icon"
             variant="ghost"
-            cclassName="mac-button-ghost h-7 w-7 hover:bg-mac-state-hover"
+            className="mac-button-ghost h-7 w-7 hover:bg-mac-state-hover"
           >
-            <Plus cclassName="h-4 w-4" />
+            <Plus className="h-4 w-4" />
           </Button>
         </div>
 
         {/* Search Bar with MAC styling */}
-        <div cclassName="px-2 pb-2">
-          <div cclassName="relative">
-            <Search cclassName="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mac-text-secondary" />
+        <div className="px-2 pb-2">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mac-text-secondary" />
             <SidebarInput
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              cclassName="mac-input mac-sidebar-search pl-9 h-8 text-sm bg-mac-surface-elevated border border-mac-border/30 text-mac-text-primary placeholder:text-mac-text-muted"
+              className="mac-input mac-sidebar-search pl-9 h-8 text-sm bg-mac-surface-elevated border border-mac-border/30 text-mac-text-primary placeholder:text-mac-text-muted"
             />
           </div>
         </div>
 
         {/* AI Suggestions */}
         {!searchQuery && conversations.length > 3 && (
-          <div cclassName="px-2 pb-2 flex gap-2">
-            <Suggestion label="Recent" onClick={() => setSearchQuery("")} cclassName="text-xs" />
+          <div className="px-2 pb-2 flex gap-2">
+            <Suggestion label="Recent" onClick={() => setSearchQuery("")} className="text-xs" />
             <Suggestion
               label="Pinned"
               onClick={() => setSearchQuery("pinned")}
-              cclassName="text-xs"
+              className="text-xs"
             />
             <Suggestion
               label="Today"
@@ -192,81 +192,81 @@ export function AppSidebar({ cclassName }: AppSidebarProps) {
                   conversations.filter((c) => new Date(c.updatedAt).toDateString() === today)
                 );
               }}
-              cclassName="text-xs"
+              className="text-xs"
             />
           </div>
         )}
       </SidebarHeader>
 
-      <SidebarContent cclassName="mac-sidebar-scrollbar">
+      <SidebarContent className="mac-sidebar-scrollbar">
         {isLoading ? (
-          <div cclassName="p-2 space-y-2">
+          <div className="p-2 space-y-2">
             <SidebarMenuSkeleton />
             <SidebarMenuSkeleton />
             <SidebarMenuSkeleton />
           </div>
         ) : sortedConversations.length === 0 ? (
-          <div cclassName="p-4 text-center">
-            <MessageCircle cclassName="h-8 w-8 mx-auto mb-2 text-mac-text-muted/50" />
-            <p cclassName="text-sm text-mac-text-muted">No conversations yet</p>
+          <div className="p-4 text-center">
+            <MessageCircle className="h-8 w-8 mx-auto mb-2 text-mac-text-muted/50" />
+            <p className="text-sm text-mac-text-muted">No conversations yet</p>
             <Button
               onClick={handleNewConversation}
               size="sm"
-              cclassName="mac-button mac-button-primary mt-4"
+              className="mac-button mac-button-primary mt-4"
             >
-              <Plus cclassName="h-3 w-3 mr-2" />
+              <Plus className="h-3 w-3 mr-2" />
               Start a conversation
             </Button>
           </div>
         ) : (
           <SidebarGroup>
             <SidebarGroupContent>
-              <SidebarMenu cclassName="space-y-6">
+              <SidebarMenu className="space-y-6">
                 {sortedConversations.map((conversation) => (
                   <SidebarMenuItem key={conversation.id}>
                     <SidebarMenuButton
                       onClick={() => setActiveConversation(conversation.id)}
                       isActive={activeConversationId === conversation.id}
-                      cclassName={cn(
+                      className={cn(
                         "group relative mac-conversation-item",
                         activeConversationId === conversation.id && "active"
                       )}
                     >
-                      <div cclassName="flex items-start gap-4 w-full">
+                      <div className="flex items-start gap-4 w-full">
                         <MessageCircle
-                          cclassName={cn(
+                          className={cn(
                             "h-4 w-4 mt-0.5 shrink-0",
                             activeConversationId === conversation.id
                               ? "text-mac-primary-blue-400"
                               : "text-mac-text-muted"
                           )}
                         />
-                        <div cclassName="flex-1 min-w-0">
-                          <div cclassName="flex items-center gap-2.5 mb-0.5">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2.5 mb-0.5">
                             {conversation.isPinned && (
-                              <Pin cclassName="h-3 w-3 text-mac-accent-purple-400 shrink-0 mac-pin-indicator" />
+                              <Pin className="h-3 w-3 text-mac-accent-purple-400 shrink-0 mac-pin-indicator" />
                             )}
-                            <span cclassName="text-sm font-light text-mac-text-primary truncate">
+                            <span className="text-sm font-light text-mac-text-primary truncate">
                               {conversation.title}
                             </span>
                           </div>
                           {conversation.messages.length > 0 && (
-                            <p cclassName="text-xs text-mac-text-secondary truncate">
+                            <p className="text-xs text-mac-text-secondary truncate">
                               {conversation.messages[
                                 conversation.messages.length - 1
                               ].content.slice(0, 50)}
                               ...
                             </p>
                           )}
-                          <div cclassName="flex items-center gap-2 mt-2">
-                            <Clock cclassName="h-3 w-3 text-mac-text-secondary" />
-                            <span cclassName="text-xs text-mac-text-secondary">
+                          <div className="flex items-center gap-2 mt-2">
+                            <Clock className="h-3 w-3 text-mac-text-secondary" />
+                            <span className="text-xs text-mac-text-secondary">
                               {formatTimestamp(new Date(conversation.updatedAt))}
                             </span>
                             {conversation.tags && conversation.tags.length > 0 && (
                               <>
-                                <Hash cclassName="h-3 w-3 text-mac-text-secondary" />
-                                <span cclassName="text-xs text-mac-text-secondary">
+                                <Hash className="h-3 w-3 text-mac-text-secondary" />
+                                <span className="text-xs text-mac-text-secondary">
                                   {conversation.tags.length}
                                 </span>
                               </>
@@ -281,33 +281,33 @@ export function AppSidebar({ cclassName }: AppSidebarProps) {
                       <DropdownMenuTrigger asChild>
                         <SidebarMenuAction
                           showOnHover
-                          cclassName="opacity-0 group-hover:opacity-100"
+                          className="opacity-0 group-hover:opacity-100"
                         >
-                          <ChevronDown cclassName="h-4 w-4" />
+                          <ChevronDown className="h-4 w-4" />
                         </SidebarMenuAction>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" cclassName="mac-glass mac-dropdown w-48">
+                      <DropdownMenuContent align="end" className="mac-glass mac-dropdown w-48">
                         <DropdownMenuItem
                           onClick={() => pinConversation(conversation.id, !conversation.isPinned)}
-                          cclassName="mac-dropdown-item"
+                          className="mac-dropdown-item"
                         >
-                          <Pin cclassName="h-4 w-4 mr-2" />
+                          <Pin className="h-4 w-4 mr-2" />
                           {conversation.isPinned ? "Unpin" : "Pin"}
                         </DropdownMenuItem>
-                        <DropdownMenuItem cclassName="mac-dropdown-item">
-                          <Archive cclassName="h-4 w-4 mr-2" />
+                        <DropdownMenuItem className="mac-dropdown-item">
+                          <Archive className="h-4 w-4 mr-2" />
                           Archive
                         </DropdownMenuItem>
-                        <DropdownMenuItem cclassName="mac-dropdown-item">
-                          <Download cclassName="h-4 w-4 mr-2" />
+                        <DropdownMenuItem className="mac-dropdown-item">
+                          <Download className="h-4 w-4 mr-2" />
                           Export
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator cclassName="bg-mac-border" />
+                        <DropdownMenuSeparator className="bg-mac-border" />
                         <DropdownMenuItem
                           onClick={() => deleteConversation(conversation.id)}
-                          cclassName="mac-dropdown-item text-red-400 hover:text-red-300"
+                          className="mac-dropdown-item text-red-400 hover:text-red-300"
                         >
-                          <Trash2 cclassName="h-4 w-4 mr-2" />
+                          <Trash2 className="h-4 w-4 mr-2" />
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -322,19 +322,19 @@ export function AppSidebar({ cclassName }: AppSidebarProps) {
         {/* AI-Powered Actions Section */}
         {conversations.length > 0 && (
           <SidebarGroup>
-            <SidebarGroupLabel cclassName="text-mac-text-muted">Quick Actions</SidebarGroupLabel>
-            <SidebarGroupContent cclassName="px-2">
+            <SidebarGroupLabel className="text-mac-text-muted">Quick Actions</SidebarGroupLabel>
+            <SidebarGroupContent className="px-2">
               <Actions
                 actions={[
                   {
                     label: "Export All",
                     onClick: handleExportConversations,
-                    icon: <Download cclassName="h-3 w-3" />,
+                    icon: <Download className="h-3 w-3" />,
                   },
                   {
                     label: "Import",
                     onClick: handleImportConversations,
-                    icon: <Upload cclassName="h-3 w-3" />,
+                    icon: <Upload className="h-3 w-3" />,
                   },
                   {
                     label: "Clear All",
@@ -343,7 +343,7 @@ export function AppSidebar({ cclassName }: AppSidebarProps) {
                         clearAllConversations();
                       }
                     },
-                    icon: <Trash2 cclassName="h-3 w-3" />,
+                    icon: <Trash2 className="h-3 w-3" />,
                     variant: "destructive",
                   },
                 ]}
@@ -353,26 +353,26 @@ export function AppSidebar({ cclassName }: AppSidebarProps) {
         )}
       </SidebarContent>
 
-      <SidebarFooter cclassName="mac-surface-elevated border-t border-mac-border">
-        <div cclassName="px-4 py-2">
-          <div cclassName="flex items-center justify-between">
-            <div cclassName="text-xs text-mac-text-muted">
+      <SidebarFooter className="mac-surface-elevated border-t border-mac-border">
+        <div className="px-4 py-2">
+          <div className="flex items-center justify-between">
+            <div className="text-xs text-mac-text-muted">
               {conversations.length} conversation{conversations.length !== 1 ? "s" : ""}
             </div>
             {conversations.filter((c) => c.isPinned).length > 0 && (
-              <Badge variant="outline" cclassName="mac-badge text-xs px-2.5 py-0">
-                <Pin cclassName="h-3 w-3 mr-2" />
+              <Badge variant="outline" className="mac-badge text-xs px-2.5 py-0">
+                <Pin className="h-3 w-3 mr-2" />
                 {conversations.filter((c) => c.isPinned).length}
               </Badge>
             )}
           </div>
 
           {/* Storage indicator */}
-          <div cclassName="mt-2">
-            <div cclassName="text-xs text-mac-text-muted mb-2">Local Storage</div>
-            <div cclassName="h-1 bg-mac-surface-bg rounded-full overflow-hidden mac-storage-bar">
+          <div className="mt-2">
+            <div className="text-xs text-mac-text-muted mb-2">Local Storage</div>
+            <div className="h-1 bg-mac-surface-bg rounded-full overflow-hidden mac-storage-bar">
               <div
-                cclassName="h-full bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-purple-400"
+                className="h-full bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-purple-400"
                 style={{ width: `${Math.min((conversations.length / 100) * 100, 100)}%` }}
               />
             </div>
@@ -380,7 +380,7 @@ export function AppSidebar({ cclassName }: AppSidebarProps) {
         </div>
       </SidebarFooter>
 
-      <SidebarRail cclassName="mac-sidebar-rail" />
+      <SidebarRail className="mac-sidebar-rail" />
     </Sidebar>
   );
 }

@@ -6,11 +6,11 @@ interface TopicCloudProps {
 
 const TopicCloud: React.FC<TopicCloudProps> = ({ topics }) => {
   return (
-    <div cclassName="flex flex-wrap gap-2 p-4">
+    <div className="flex flex-wrap gap-2 p-4">
       {topics.map((topic, index) => (
         <div
           key={index}
-          cclassName="bg-blue-600/10 text-blue-600 text-sm font-mono px-4 py-2 rounded-full border border-blue-600/20"
+          className="bg-blue-600/10 text-blue-600 text-sm font-mono px-4 py-2 rounded-full border border-blue-600/20"
         >
           {topic}
         </div>

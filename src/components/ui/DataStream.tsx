@@ -10,7 +10,7 @@ export interface DataStreamProps {
   showGrid?: boolean;
   showLabels?: boolean;
   label?: string;
-  cclassName?: string;
+  className?: string;
   streamSpeed?: number; // ms between updates
   maxDataPoints?: number;
   glowEffect?: boolean;
@@ -53,7 +53,7 @@ export const DataStream: React.FC<DataStreamProps> = ({
   showGrid = true,
   showLabels = false,
   label,
-  cclassName,
+  className,
   streamSpeed = 50,
   maxDataPoints = 50,
   glowEffect = true,
@@ -229,18 +229,18 @@ export const DataStream: React.FC<DataStreamProps> = ({
   }, [internalData]);
 
   return (
-    <div cclassName={cn("relative", cclassName)} data-testid="data-stream">
-      {label && <div cclassName="text-xs text-holographic opacity-90 mb-2 font-mono">{label}</div>}
+    <div className={cn("relative", className)} data-testid="data-stream">
+      {label && <div className="text-xs text-holographic opacity-90 mb-2 font-mono">{label}</div>}
       <div
-        cclassName="relative border border-jarvis-primary/20 rounded bg-black/20 backdrop-blur-sm"
+        className="relative border border-jarvis-primary/20 rounded bg-black/20 backdrop-blur-sm"
         style={{ width, height }}
       >
-        <canvas ref={canvasRef} cclassName="absolute inset-0" style={{ width, height }} />
+        <canvas ref={canvasRef} className="absolute inset-0" style={{ width, height }} />
 
         {/* Scanning line effect */}
         {animated && (
           <div
-            cclassName="absolute top-0 bottom-0 w-0.5 bg-jarvis-primary/60 animate-pulse"
+            className="absolute top-0 bottom-0 w-0.5 bg-jarvis-primary/60 animate-pulse"
             style={{
               right: 0,
               background: `linear-gradient(to bottom, transparent, ${colors.stroke}, transparent)`,

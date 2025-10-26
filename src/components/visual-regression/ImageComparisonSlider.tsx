@@ -13,7 +13,7 @@ interface ImageComparisonSliderProps {
   width?: number;
   height?: number;
   pixelDifference?: number;
-  cclassName?: string;
+  className?: string;
   onPositionChange?: (position: number) => void;
 }
 
@@ -34,7 +34,7 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
   width = 800,
   height = 600,
   pixelDifference = 0,
-  cclassName,
+  className,
   onPositionChange,
 }) => {
   const [sliderPosition, setSliderPosition] = useState(50); // 0-100 percentage
@@ -91,13 +91,13 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
   };
 
   return (
-    <div cclassName={cn("space-y-4", cclassName)}>
+    <div className={cn("space-y-4", className)}>
       {/* Controls */}
-      <div cclassName="flex items-center justify-between">
-        <div cclassName="flex gap-2">
+      <div className="flex items-center justify-between">
+        <div className="flex gap-2">
           <Badge
             variant={showDiff ? "outline" : "default"}
-            cclassName="cursor-pointer"
+            className="cursor-pointer"
             onClick={() => setShowDiff(false)}
           >
             Side-by-Side
@@ -105,7 +105,7 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
           {diffUrl && (
             <Badge
               variant={showDiff ? "default" : "outline"}
-              cclassName="cursor-pointer"
+              className="cursor-pointer"
               onClick={() => setShowDiff(true)}
             >
               Diff Overlay
@@ -118,7 +118,7 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
             variant={
               pixelDifference < 1 ? "default" : pixelDifference < 5 ? "secondary" : "destructive"
             }
-            cclassName="text-xs"
+            className="text-xs"
           >
             {pixelDifference.toFixed(2)}% difference
           </Badge>
@@ -128,7 +128,7 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
       {/* Comparison Container */}
       <Card
         ref={containerRef}
-        cclassName={cn("relative overflow-hidden select-none", isDragging && "cursor-grabbing")}
+        className={cn("relative overflow-hidden select-none", isDragging && "cursor-grabbing")}
         style={{ width, height }}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -141,7 +141,7 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
           <>
             {/* Baseline Image (Left/Bottom) */}
             <div
-              cclassName="absolute inset-0"
+              className="absolute inset-0"
               style={{
                 clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
               }}
@@ -149,17 +149,17 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
               <img
                 src={baselineUrl}
                 alt="Baseline screenshot"
-                cclassName="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                className="absolute inset-0 w-full h-full object-contain pointer-events-none"
                 draggable={false}
               />
-              <div cclassName="absolute top-2 left-2 bg-green-500/90 text-white px-2 py-1 rounded text-xs font-medium">
+              <div className="absolute top-2 left-2 bg-green-500/90 text-white px-2 py-1 rounded text-xs font-medium">
                 Baseline
               </div>
             </div>
 
             {/* Current Image (Right/Top) */}
             <div
-              cclassName="absolute inset-0"
+              className="absolute inset-0"
               style={{
                 clipPath: `inset(0 0 0 ${sliderPosition}%)`,
               }}
@@ -167,35 +167,35 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
               <img
                 src={currentUrl}
                 alt="Current screenshot"
-                cclassName="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                className="absolute inset-0 w-full h-full object-contain pointer-events-none"
                 draggable={false}
               />
-              <div cclassName="absolute top-2 right-2 bg-blue-500/90 text-white px-2 py-1 rounded text-xs font-medium">
+              <div className="absolute top-2 right-2 bg-blue-500/90 text-white px-2 py-1 rounded text-xs font-medium">
                 Current
               </div>
             </div>
 
             {/* Slider Handle */}
             <div
-              cclassName="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize z-10"
+              className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize z-10"
               style={{ left: `${sliderPosition}%` }}
               onMouseDown={handleMouseDown}
               onTouchStart={handleTouchStart}
             >
               {/* Handle Grip */}
-              <div cclassName="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center cursor-grab active:cursor-grabbing">
-                <MoveHorizontal cclassName="h-4 w-4 text-gray-700" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center cursor-grab active:cursor-grabbing">
+                <MoveHorizontal className="h-4 w-4 text-gray-700" />
               </div>
             </div>
           </>
         ) : (
           /* Diff Overlay Mode */
-          <div cclassName="relative w-full h-full">
+          <div className="relative w-full h-full">
             {/* Base current image */}
             <img
               src={currentUrl}
               alt="Current screenshot"
-              cclassName="absolute inset-0 w-full h-full object-contain opacity-50"
+              className="absolute inset-0 w-full h-full object-contain opacity-50"
               draggable={false}
             />
 
@@ -204,12 +204,12 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
               <img
                 src={diffUrl}
                 alt="Difference overlay"
-                cclassName="absolute inset-0 w-full h-full object-contain mix-blend-multiply"
+                className="absolute inset-0 w-full h-full object-contain mix-blend-multiply"
                 draggable={false}
               />
             )}
 
-            <div cclassName="absolute top-2 left-2 bg-yellow-500/90 text-white px-2 py-1 rounded text-xs font-medium">
+            <div className="absolute top-2 left-2 bg-yellow-500/90 text-white px-2 py-1 rounded text-xs font-medium">
               Diff Overlay
             </div>
           </div>
@@ -217,27 +217,27 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
       </Card>
 
       {/* Legend */}
-      <div cclassName="flex gap-4 text-xs text-muted-foreground">
-        <div cclassName="flex items-center gap-2">
-          <div cclassName="w-3 h-3 bg-green-500 rounded"></div>
+      <div className="flex gap-4 text-xs text-muted-foreground">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-green-500 rounded"></div>
           <span>Baseline (Expected)</span>
         </div>
-        <div cclassName="flex items-center gap-2">
-          <div cclassName="w-3 h-3 bg-blue-500 rounded"></div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-blue-500 rounded"></div>
           <span>Current (Actual)</span>
         </div>
         {showDiff && diffUrl && (
           <>
-            <div cclassName="flex items-center gap-2">
-              <div cclassName="w-3 h-3 bg-red-500 rounded"></div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-red-500 rounded"></div>
               <span>Removed</span>
             </div>
-            <div cclassName="flex items-center gap-2">
-              <div cclassName="w-3 h-3 bg-green-400 rounded"></div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-400 rounded"></div>
               <span>Added</span>
             </div>
-            <div cclassName="flex items-center gap-2">
-              <div cclassName="w-3 h-3 bg-yellow-500 rounded"></div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-yellow-500 rounded"></div>
               <span>Changed</span>
             </div>
           </>
@@ -245,7 +245,7 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
       </div>
 
       {/* Instructions */}
-      <p cclassName="text-xs text-muted-foreground text-center">
+      <p className="text-xs text-muted-foreground text-center">
         {!showDiff
           ? "Drag the slider or use arrow keys to compare images"
           : "Viewing difference overlay - Red: removed, Green: added, Yellow: changed"}

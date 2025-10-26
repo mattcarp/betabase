@@ -119,7 +119,7 @@ export function AOMAResponse({ content, sources = [], metadata }: AOMAResponsePr
         })}
 
         {metadata && (
-          <div cclassName="mt-4 text-xs text-muted-foreground">
+          <div className="mt-4 text-xs text-muted-foreground">
             {metadata.model && <span>Model: {metadata.model} • </span>}
             {metadata.orchestration && <span>Strategy: {metadata.orchestration} • </span>}
             {metadata.duration && <span>Duration: {metadata.duration}ms</span>}
@@ -130,7 +130,7 @@ export function AOMAResponse({ content, sources = [], metadata }: AOMAResponsePr
   };
 
   return (
-    <div cclassName="aoma-response space-y-4">
+    <div className="aoma-response space-y-4">
       {renderContentWithCitations()}
 
       {/* Add Sources list at the bottom using AI Elements */}
@@ -149,7 +149,7 @@ export function AOMAResponse({ content, sources = [], metadata }: AOMAResponsePr
                   title={normalizedSource.title || `Source ${index + 1}`}
                 >
                   {normalizedSource.description && (
-                    <span cclassName="text-xs text-muted-foreground ml-6">
+                    <span className="text-xs text-muted-foreground ml-6">
                       {normalizedSource.description}
                     </span>
                   )}

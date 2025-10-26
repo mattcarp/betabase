@@ -25,36 +25,36 @@ export const CodeBlock = ({
   code,
   language,
   showLineNumbers = false,
-  cclassName,
+  className,
   children,
   ...props
 }: CodeBlockProps) => (
   <CodeBlockContext.Provider value={{ code }}>
     <div
-      cclassName={cn(
+      className={cn(
         "relative w-full overflow-hidden rounded-md border bg-background text-foreground",
-        cclassName
+        className
       )}
       {...props}
     >
-      <div cclassName="relative">
+      <div className="relative">
         {/* Simple code display without syntax highlighting */}
-        <pre cclassName="overflow-x-auto p-4 text-sm">
-          <code cclassName="font-mono" data-language={language}>
+        <pre className="overflow-x-auto p-4 text-sm">
+          <code className="font-mono" data-language={language}>
             {showLineNumbers
               ? code.split("\n").map((line, i) => (
-                  <div key={i} cclassName="table-row">
-                    <span cclassName="table-cell pr-4 text-muted-foreground select-none">
+                  <div key={i} className="table-row">
+                    <span className="table-cell pr-4 text-muted-foreground select-none">
                       {i + 1}
                     </span>
-                    <span cclassName="table-cell">{line}</span>
+                    <span className="table-cell">{line}</span>
                   </div>
                 ))
               : code}
           </code>
         </pre>
         {children && (
-          <div cclassName="absolute right-2 top-2 flex items-center gap-2">{children}</div>
+          <div className="absolute right-2 top-2 flex items-center gap-2">{children}</div>
         )}
       </div>
     </div>
@@ -72,7 +72,7 @@ export const CodeBlockCopyButton = ({
   onError,
   timeout = 2000,
   children,
-  cclassName,
+  className,
   ...props
 }: CodeBlockCopyButtonProps) => {
   const [isCopied, setIsCopied] = useState(false);
@@ -98,11 +98,11 @@ export const CodeBlockCopyButton = ({
 
   return (
     <Button
-      cclassName={cn("mac-button mac-button-outline", "shrink-0", cclassName)}
+      className={cn("mac-button mac-button-outline", "shrink-0", className)}
       onClick={copyToClipboard}
       size="icon"
       variant="ghost"
-      cclassName="mac-button mac-button-outline"
+      className="mac-button mac-button-outline"
       {...props}
     >
       {children ?? <Icon size={14} />}

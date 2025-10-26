@@ -7,7 +7,7 @@ import { getElevenLabsAgentId } from "@/config/apiKeys";
 
 interface ConversationalAIProps {
   agentId?: string;
-  cclassName?: string;
+  className?: string;
   onTranscriptionUpdate?: (transcription: string) => void;
   onConversationStateChange?: (state: ConversationState) => void;
   mode?: "push-to-talk" | "voice-activated";
@@ -26,7 +26,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
   (
     {
       agentId,
-      cclassName = "",
+      className = "",
       onTranscriptionUpdate,
       onConversationStateChange,
       mode = "voice-activated", // Changed from push-to-talk to voice-activated
@@ -124,25 +124,25 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
           return {
             text: "You're speaking",
             color: "text-blue-400",
-            icon: <Mic cclassName="w-4 h-4 animate-pulse" />,
+            icon: <Mic className="w-4 h-4 animate-pulse" />,
           };
         case "ai-speaking":
           return {
             text: "AI speaking",
             color: "text-green-400",
-            icon: <Radio cclassName="w-4 h-4 animate-pulse" />,
+            icon: <Radio className="w-4 h-4 animate-pulse" />,
           };
         case "transitioning":
           return {
             text: "Transitioning",
             color: "text-yellow-400",
-            icon: <Activity cclassName="w-4 h-4" />,
+            icon: <Activity className="w-4 h-4" />,
           };
         case "interrupted":
           return {
             text: "Interrupted",
             color: "text-orange-400",
-            icon: <AlertCircle cclassName="w-4 h-4" />,
+            icon: <AlertCircle className="w-4 h-4" />,
           };
         default:
           return { text: "Unknown", color: "text-gray-400", icon: null };
@@ -153,18 +153,18 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
     const displayError = conversationError?.message || null;
 
     return (
-      <div cclassName={`conversational-ai-panel ${cclassName}`}>
+      <div className={`conversational-ai-panel ${className}`}>
         {/* Header */}
-        <div cclassName="flex items-center justify-between mb-4">
-          <h3 cclassName="mac-title text-lg font-semibold text-holographic">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="mac-title text-lg font-semibold text-holographic">
             ElevenLabs Conversational AI
           </h3>
-          <div cclassName="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             {/* Connection status */}
-            {isConnected && <div cclassName="w-2 h-2 bg-green-400 rounded-full animate-pulse" />}
-            {status === "connecting" && <Loader2 cclassName="w-4 h-4 animate-spin text-blue-400" />}
-            {status === "error" && <AlertCircle cclassName="w-4 h-4 text-red-400" />}
-            <span cclassName={`text-sm ${isConnected ? "text-green-400" : "text-gray-400"}`}>
+            {isConnected && <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />}
+            {status === "connecting" && <Loader2 className="w-4 h-4 animate-spin text-blue-400" />}
+            {status === "error" && <AlertCircle className="w-4 h-4 text-red-400" />}
+            <span className={`text-sm ${isConnected ? "text-green-400" : "text-gray-400"}`}>
               {status === "connecting"
                 ? "Connecting..."
                 : isConnected
@@ -178,7 +178,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
 
         {/* Agent ID warning */}
         {!effectiveAgentId && (
-          <div cclassName="mb-4 p-4 bg-yellow-900/20 border border-yellow-500 rounded text-yellow-400 text-sm">
+          <div className="mb-4 p-4 bg-yellow-900/20 border border-yellow-500 rounded text-yellow-400 text-sm">
             Set NEXT_PUBLIC_ELEVENLABS_AGENT_ID environment variable to enable ElevenLabs
             integration
           </div>
@@ -186,9 +186,9 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
 
         {/* Error display */}
         {displayError && (
-          <div cclassName="mb-4 p-4 bg-red-900/20 border border-red-500 rounded text-red-400 text-sm">
-            <div cclassName="flex items-center gap-2">
-              <AlertCircle cclassName="w-4 h-4" />
+          <div className="mb-4 p-4 bg-red-900/20 border border-red-500 rounded text-red-400 text-sm">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4" />
               <span>{displayError}</span>
             </div>
           </div>
@@ -196,19 +196,19 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
 
         {/* Conversation state indicator */}
         {isConnected && (
-          <div cclassName="mb-4 p-4 bg-blue-900/10 border border-blue-500/30 rounded">
-            <div cclassName="flex items-center justify-between">
-              <div cclassName="flex items-center gap-2">
+          <div className="mb-4 p-4 bg-blue-900/10 border border-blue-500/30 rounded">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
                 {stateInfo.icon}
-                <span cclassName={`text-sm font-medium ${stateInfo.color}`}>{stateInfo.text}</span>
+                <span className={`text-sm font-medium ${stateInfo.color}`}>{stateInfo.text}</span>
               </div>
-              <div cclassName="flex items-center gap-4 text-xs text-gray-400">
-                <div cclassName="flex items-center gap-2">
-                  <div cclassName="w-2 h-2 bg-blue-400 rounded-full" />
+              <div className="flex items-center gap-4 text-xs text-gray-400">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full" />
                   <span>User: {(userAudioLevel * 100).toFixed(0)}%</span>
                 </div>
-                <div cclassName="flex items-center gap-2">
-                  <div cclassName="w-2 h-2 bg-green-400 rounded-full" />
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full" />
                   <span>AI: {(aiAudioLevel * 100).toFixed(0)}%</span>
                 </div>
               </div>
@@ -217,21 +217,21 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         )}
 
         {/* Mode indicator and volume control */}
-        <div cclassName="mb-4 space-y-3">
-          <div cclassName="flex items-center gap-2 text-xs text-gray-400">
+        <div className="mb-4 space-y-3">
+          <div className="flex items-center gap-2 text-xs text-gray-400">
             <span>Mode:</span>
-            <span cclassName="font-medium text-blue-400">
+            <span className="font-medium text-blue-400">
               {mode === "push-to-talk" ? "Push-to-Talk" : "Voice-Activated"}
             </span>
             {mode === "voice-activated" && (
-              <span cclassName="text-gray-500">(VAD: {(vadSensitivity * 100).toFixed(0)}%)</span>
+              <span className="text-gray-500">(VAD: {(vadSensitivity * 100).toFixed(0)}%)</span>
             )}
           </div>
 
           {/* Volume Control */}
           {isConnected && (
-            <div cclassName="flex items-center gap-4">
-              <label cclassName="text-xs text-gray-400 min-w-[80px]">AI Volume:</label>
+            <div className="flex items-center gap-4">
+              <label className="text-xs text-gray-400 min-w-[80px]">AI Volume:</label>
               <input
                 type="range"
                 min="0"
@@ -243,18 +243,18 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
                   console.log(`🔊 Setting AI volume to ${(volume * 100).toFixed(0)}%`);
                   (conversation as any).setVolume?.({ volume });
                 }}
-                cclassName="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
               />
             </div>
           )}
         </div>
 
         {/* Control buttons */}
-        <div cclassName="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-4 mb-4">
           <button
             onClick={handleToggle}
             disabled={status === "connecting" || !effectiveAgentId}
-            cclassName={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
               isConnected
                 ? "bg-red-600 hover:bg-red-700 text-white"
                 : "bg-blue-600 hover:bg-blue-700 text-white"
@@ -262,7 +262,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
             data-testid="toggle-conversation"
           >
             {status === "connecting" ? (
-              <Loader2 cclassName="w-5 h-5 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin" />
             ) : isConnected ? (
               <MicOff size={20} />
             ) : (
@@ -279,7 +279,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
           {isAISpeaking && (
             <button
               onClick={interruptAgent}
-              cclassName="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition-all"
+              className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition-all"
               data-testid="interrupt-button"
             >
               Interrupt
@@ -288,18 +288,18 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         </div>
 
         {/* Transcription displays */}
-        <div cclassName="space-y-4">
+        <div className="space-y-4">
           {/* User transcription */}
-          <div cclassName="transcription-display">
-            <h4 cclassName="mac-title text-sm font-medium text-blue-400 mb-2 flex items-center gap-2">
-              <Mic cclassName="w-4 h-4" />
+          <div className="transcription-display">
+            <h4 className="mac-title text-sm font-medium text-blue-400 mb-2 flex items-center gap-2">
+              <Mic className="w-4 h-4" />
               Your Speech:
             </h4>
-            <div cclassName="p-4 bg-blue-900/10 border border-blue-500/30 rounded-lg min-h-[60px]">
+            <div className="p-4 bg-blue-900/10 border border-blue-500/30 rounded-lg min-h-[60px]">
               {userTranscript ? (
-                <p cclassName="text-white text-sm">{userTranscript}</p>
+                <p className="text-white text-sm">{userTranscript}</p>
               ) : (
-                <p cclassName="text-gray-400 text-sm italic">
+                <p className="text-gray-400 text-sm italic">
                   {isConnected && isUserSpeaking
                     ? "Listening..."
                     : isConnected
@@ -311,16 +311,16 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
           </div>
 
           {/* AI transcription */}
-          <div cclassName="transcription-display">
-            <h4 cclassName="mac-title text-sm font-medium text-green-400 mb-2 flex items-center gap-2">
-              <Radio cclassName="w-4 h-4" />
+          <div className="transcription-display">
+            <h4 className="mac-title text-sm font-medium text-green-400 mb-2 flex items-center gap-2">
+              <Radio className="w-4 h-4" />
               AI Response:
             </h4>
-            <div cclassName="p-4 bg-green-900/10 border border-green-500/30 rounded-lg min-h-[60px]">
+            <div className="p-4 bg-green-900/10 border border-green-500/30 rounded-lg min-h-[60px]">
               {aiTranscript ? (
-                <p cclassName="text-white text-sm">{aiTranscript}</p>
+                <p className="text-white text-sm">{aiTranscript}</p>
               ) : (
-                <p cclassName="text-gray-400 text-sm italic">
+                <p className="text-gray-400 text-sm italic">
                   {isConnected ? "AI will respond here..." : "No response yet"}
                 </p>
               )}
@@ -330,14 +330,14 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
 
         {/* Audio waveform visualization */}
         {isConnected && (
-          <div cclassName="mt-4">
+          <div className="mt-4">
             <AudioWaveform isRecording={isUserSpeaking || isAISpeaking} />
           </div>
         )}
 
         {/* Debug info (optional, can be hidden in production) */}
         {process.env.NODE_ENV === "development" && isConnected && (
-          <div cclassName="mt-4 text-xs text-gray-500 space-y-1">
+          <div className="mt-4 text-xs text-gray-500 space-y-1">
             <p>Agent ID: {effectiveAgentId}</p>
             <p>State: {conversationState}</p>
             {audioFeatures && (

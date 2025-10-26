@@ -32,7 +32,7 @@ export type WebPreviewProps = ComponentProps<"div"> & {
 };
 
 export const WebPreview = ({
-  cclassName,
+  className,
   children,
   defaultUrl = "",
   onUrlChange,
@@ -56,7 +56,7 @@ export const WebPreview = ({
   return (
     <WebPreviewContext.Provider value={contextValue}>
       <div
-        cclassName={cn("flex size-full flex-col rounded-lg border bg-card", cclassName)}
+        className={cn("flex size-full flex-col rounded-lg border bg-card", className)}
         {...props}
       >
         {children}
@@ -68,11 +68,11 @@ export const WebPreview = ({
 export type WebPreviewNavigationProps = ComponentProps<"div">;
 
 export const WebPreviewNavigation = ({
-  cclassName,
+  className,
   children,
   ...props
 }: WebPreviewNavigationProps) => (
-  <div cclassName={cn("flex items-center gap-2 border-b p-2", cclassName)} {...props}>
+  <div className={cn("flex items-center gap-2 border-b p-2", className)} {...props}>
     {children}
   </div>
 );
@@ -94,7 +94,7 @@ export const WebPreviewNavigationButton = ({
         <Button
           variant="ghost"
           size="sm"
-          cclassName="h-8 w-8 p-0 hover:text-foreground mac-button mac-button-outline"
+          className="h-8 w-8 p-0 hover:text-foreground mac-button mac-button-outline"
           onClick={onClick}
           disabled={disabled}
           {...props}
@@ -124,7 +124,7 @@ export const WebPreviewUrl = ({ value, onChange, onKeyDown, ...props }: WebPrevi
 
   return (
     <Input
-      cclassName="flex-1 h-8 text-sm mac-input"
+      className="flex-1 h-8 text-sm mac-input"
       placeholder="Enter URL..."
       value={value ?? url}
       onChange={onChange}
@@ -138,13 +138,13 @@ export type WebPreviewBodyProps = ComponentProps<"iframe"> & {
   loading?: ReactNode;
 };
 
-export const WebPreviewBody = ({ cclassName, loading, src, ...props }: WebPreviewBodyProps) => {
+export const WebPreviewBody = ({ className, loading, src, ...props }: WebPreviewBodyProps) => {
   const { url } = useWebPreview();
 
   return (
-    <div cclassName="flex-1">
+    <div className="flex-1">
       <iframe
-        cclassName={cn("size-full", cclassName)}
+        className={cn("size-full", className)}
         src={(src ?? url) || undefined}
         title="Preview"
         sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation"
@@ -164,7 +164,7 @@ export type WebPreviewConsoleProps = ComponentProps<"div"> & {
 };
 
 export const WebPreviewConsole = ({
-  cclassName,
+  className,
   logs = [],
   children,
   ...props
@@ -175,41 +175,41 @@ export const WebPreviewConsole = ({
     <Collapsible
       open={consoleOpen}
       onOpenChange={setConsoleOpen}
-      cclassName={cn("border-t bg-muted/50 font-mono text-sm", cclassName)}
+      className={cn("border-t bg-muted/50 font-mono text-sm", className)}
       {...props}
     >
       <CollapsibleTrigger asChild>
         <Button
           variant="ghost"
-          cclassName="flex w-full items-center justify-between p-4 text-left font-medium hover:bg-muted/50 mac-button mac-button-outline"
+          className="flex w-full items-center justify-between p-4 text-left font-medium hover:bg-muted/50 mac-button mac-button-outline"
         >
           Console
           <ChevronDownIcon
-            cclassName={cn("h-4 w-4 transition-transform duration-200", consoleOpen && "rotate-180")}
+            className={cn("h-4 w-4 transition-transform duration-200", consoleOpen && "rotate-180")}
           />
         </Button>
       </CollapsibleTrigger>
       <CollapsibleContent
-        cclassName={cn(
+        className={cn(
           "px-4 pb-4",
           "outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
         )}
       >
-        <div cclassName="space-y-1 max-h-48 overflow-y-auto">
+        <div className="space-y-1 max-h-48 overflow-y-auto">
           {logs.length === 0 ? (
-            <p cclassName="mac-body text-muted-foreground">No console output</p>
+            <p className="mac-body text-muted-foreground">No console output</p>
           ) : (
             logs.map((log, index) => (
               <div
                 key={`${log.timestamp.getTime()}-${index}`}
-                cclassName={cn(
+                className={cn(
                   "text-xs",
                   log.level === "error" && "text-destructive",
                   log.level === "warn" && "text-yellow-600",
                   log.level === "log" && "text-foreground"
                 )}
               >
-                <span cclassName="text-muted-foreground">{log.timestamp.toLocaleTimeString()}</span>{" "}
+                <span className="text-muted-foreground">{log.timestamp.toLocaleTimeString()}</span>{" "}
                 {log.message}
               </div>
             ))

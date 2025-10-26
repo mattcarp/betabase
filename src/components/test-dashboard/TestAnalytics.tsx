@@ -107,12 +107,12 @@ export const TestAnalytics: React.FC = () => {
   };
 
   return (
-    <div cclassName="space-y-6">
+    <div className="space-y-6">
       {/* Header Controls */}
-      <div cclassName="flex items-center justify-between">
-        <div cclassName="flex items-center gap-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
           <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger cclassName="w-32">
+            <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -124,7 +124,7 @@ export const TestAnalytics: React.FC = () => {
           </Select>
 
           <Select value={metricView} onValueChange={setMetricView}>
-            <SelectTrigger cclassName="w-40">
+            <SelectTrigger className="w-40">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -137,121 +137,121 @@ export const TestAnalytics: React.FC = () => {
         </div>
 
         <Button
-          cclassName="mac-button mac-button-outline"
+          className="mac-button mac-button-outline"
           variant="outline"
-          cclassName="mac-button mac-button-outline"
+          className="mac-button mac-button-outline"
         >
-          <Download cclassName="h-4 w-4 mr-2" />
+          <Download className="h-4 w-4 mr-2" />
           Export Report
         </Button>
       </div>
 
       {/* Key Metrics Cards */}
-      <div cclassName="grid grid-cols-6 gap-4">
-        <Card cclassName="mac-card">
-          <CardHeader cclassName="mac-card pb-4">
-            <CardTitle cclassName="text-sm font-medium flex items-center gap-2">
-              <Clock cclassName="h-4 w-4" />
+      <div className="grid grid-cols-6 gap-4">
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-4">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Clock className="h-4 w-4" />
               Avg Execution
             </CardTitle>
           </CardHeader>
-          <CardContent cclassName="mac-card">
-            <div cclassName="text-2xl font-bold">{keyMetrics.avgExecutionTime}</div>
-            <Badge cclassName="bg-green-500/20 text-green-500 mt-2">
-              <TrendingDown cclassName="h-3 w-3 mr-2" />
+          <CardContent className="mac-card">
+            <div className="text-2xl font-bold">{keyMetrics.avgExecutionTime}</div>
+            <Badge className="bg-green-500/20 text-green-500 mt-2">
+              <TrendingDown className="h-3 w-3 mr-2" />
               -15%
             </Badge>
           </CardContent>
         </Card>
 
-        <Card cclassName="mac-card">
-          <CardHeader cclassName="mac-card pb-4">
-            <CardTitle cclassName="text-sm font-medium flex items-center gap-2">
-              <Target cclassName="h-4 w-4" />
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-4">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Target className="h-4 w-4" />
               Pass Rate
             </CardTitle>
           </CardHeader>
-          <CardContent cclassName="mac-card">
-            <div cclassName="text-2xl font-bold">{keyMetrics.avgPassRate}</div>
-            <Badge cclassName="bg-green-500/20 text-green-500 mt-2">
-              <TrendingUp cclassName="h-3 w-3 mr-2" />
+          <CardContent className="mac-card">
+            <div className="text-2xl font-bold">{keyMetrics.avgPassRate}</div>
+            <Badge className="bg-green-500/20 text-green-500 mt-2">
+              <TrendingUp className="h-3 w-3 mr-2" />
               +2.3%
             </Badge>
           </CardContent>
         </Card>
 
-        <Card cclassName="mac-card">
-          <CardHeader cclassName="mac-card pb-4">
-            <CardTitle cclassName="text-sm font-medium flex items-center gap-2">
-              <Activity cclassName="h-4 w-4" />
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-4">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Activity className="h-4 w-4" />
               Tests/Day
             </CardTitle>
           </CardHeader>
-          <CardContent cclassName="mac-card">
-            <div cclassName="text-2xl font-bold">{keyMetrics.testsPerDay}</div>
-            <Badge cclassName="bg-blue-500/20 text-blue-500 mt-2">Stable</Badge>
+          <CardContent className="mac-card">
+            <div className="text-2xl font-bold">{keyMetrics.testsPerDay}</div>
+            <Badge className="bg-blue-500/20 text-blue-500 mt-2">Stable</Badge>
           </CardContent>
         </Card>
 
-        <Card cclassName="mac-card">
-          <CardHeader cclassName="mac-card pb-4">
-            <CardTitle cclassName="text-sm font-medium flex items-center gap-2">
-              <Zap cclassName="h-4 w-4" />
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-4">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Zap className="h-4 w-4" />
               MTTR
             </CardTitle>
           </CardHeader>
-          <CardContent cclassName="mac-card">
-            <div cclassName="text-2xl font-bold">{keyMetrics.mttr}</div>
-            <Badge cclassName="bg-green-500/20 text-green-500 mt-2">
-              <TrendingDown cclassName="h-3 w-3 mr-2" />
+          <CardContent className="mac-card">
+            <div className="text-2xl font-bold">{keyMetrics.mttr}</div>
+            <Badge className="bg-green-500/20 text-green-500 mt-2">
+              <TrendingDown className="h-3 w-3 mr-2" />
               -0.5h
             </Badge>
           </CardContent>
         </Card>
 
-        <Card cclassName="mac-card">
-          <CardHeader cclassName="mac-card pb-4">
-            <CardTitle cclassName="text-sm font-medium flex items-center gap-2">
-              <Award cclassName="h-4 w-4" />
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-4">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Award className="h-4 w-4" />
               Efficiency
             </CardTitle>
           </CardHeader>
-          <CardContent cclassName="mac-card">
-            <div cclassName="text-2xl font-bold">{keyMetrics.testEfficiency}</div>
-            <Badge cclassName="bg-yellow-500/20 text-yellow-500 mt-2">Good</Badge>
+          <CardContent className="mac-card">
+            <div className="text-2xl font-bold">{keyMetrics.testEfficiency}</div>
+            <Badge className="bg-yellow-500/20 text-yellow-500 mt-2">Good</Badge>
           </CardContent>
         </Card>
 
-        <Card cclassName="mac-card">
-          <CardHeader cclassName="mac-card pb-4">
-            <CardTitle cclassName="text-sm font-medium flex items-center gap-2">
-              <Package cclassName="h-4 w-4" />
+        <Card className="mac-card">
+          <CardHeader className="mac-card pb-4">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Package className="h-4 w-4" />
               Automation
             </CardTitle>
           </CardHeader>
-          <CardContent cclassName="mac-card">
-            <div cclassName="text-2xl font-bold">{keyMetrics.automationRate}</div>
-            <Badge cclassName="bg-green-500/20 text-green-500 mt-2">
-              <TrendingUp cclassName="h-3 w-3 mr-2" />
+          <CardContent className="mac-card">
+            <div className="text-2xl font-bold">{keyMetrics.automationRate}</div>
+            <Badge className="bg-green-500/20 text-green-500 mt-2">
+              <TrendingUp className="h-3 w-3 mr-2" />
               +5%
             </Badge>
           </CardContent>
         </Card>
       </div>
 
-      <div cclassName="grid grid-cols-12 gap-6">
+      <div className="grid grid-cols-12 gap-6">
         {/* Test Execution Trend */}
-        <div cclassName="col-span-8">
-          <Card cclassName="mac-card">
-            <CardHeader cclassName="mac-card">
-              <CardTitle cclassName="mac-card">Test Execution Trend</CardTitle>
+        <div className="col-span-8">
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Test Execution Trend</CardTitle>
             </CardHeader>
-            <CardContent cclassName="mac-card">
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={executionTrend}>
-                  <CartesianGrid strokeDasharray="3 3" cclassName="stroke-muted" />
-                  <XAxis dataKey="date" cclassName="text-xs" />
-                  <YAxis cclassName="text-xs" />
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                  <XAxis dataKey="date" className="text-xs" />
+                  <YAxis className="text-xs" />
                   <Tooltip />
                   <Legend />
                   <Area
@@ -285,12 +285,12 @@ export const TestAnalytics: React.FC = () => {
         </div>
 
         {/* Test Categories */}
-        <div cclassName="col-span-4">
-          <Card cclassName="mac-card">
-            <CardHeader cclassName="mac-card">
-              <CardTitle cclassName="mac-card">Test Distribution</CardTitle>
+        <div className="col-span-4">
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Test Distribution</CardTitle>
             </CardHeader>
-            <CardContent cclassName="mac-card">
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -314,17 +314,17 @@ export const TestAnalytics: React.FC = () => {
         </div>
 
         {/* Duration Distribution */}
-        <div cclassName="col-span-6">
-          <Card cclassName="mac-card">
-            <CardHeader cclassName="mac-card">
-              <CardTitle cclassName="mac-card">Test Duration Distribution</CardTitle>
+        <div className="col-span-6">
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Test Duration Distribution</CardTitle>
             </CardHeader>
-            <CardContent cclassName="mac-card">
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={durationDistribution}>
-                  <CartesianGrid strokeDasharray="3 3" cclassName="stroke-muted" />
-                  <XAxis dataKey="range" cclassName="text-xs" />
-                  <YAxis cclassName="text-xs" />
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                  <XAxis dataKey="range" className="text-xs" />
+                  <YAxis className="text-xs" />
                   <Tooltip />
                   <Bar dataKey="count" fill="#3b82f6" radius={[8, 8, 0, 0]} />
                 </BarChart>
@@ -334,17 +334,17 @@ export const TestAnalytics: React.FC = () => {
         </div>
 
         {/* Team Performance Radar */}
-        <div cclassName="col-span-6">
-          <Card cclassName="mac-card">
-            <CardHeader cclassName="mac-card">
-              <CardTitle cclassName="mac-card">Team Performance Metrics</CardTitle>
+        <div className="col-span-6">
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Team Performance Metrics</CardTitle>
             </CardHeader>
-            <CardContent cclassName="mac-card">
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={250}>
                 <RadarChart data={teamMetrics}>
-                  <PolarGrid cclassName="stroke-muted" />
-                  <PolarAngleAxis dataKey="name" cclassName="text-xs" />
-                  <PolarRadiusAxis angle={90} domain={[0, 100]} cclassName="text-xs" />
+                  <PolarGrid className="stroke-muted" />
+                  <PolarAngleAxis dataKey="name" className="text-xs" />
+                  <PolarRadiusAxis angle={90} domain={[0, 100]} className="text-xs" />
                   <Radar
                     name="Performance"
                     dataKey="value"
@@ -360,35 +360,35 @@ export const TestAnalytics: React.FC = () => {
         </div>
 
         {/* Suite Performance Table */}
-        <div cclassName="col-span-12">
-          <Card cclassName="mac-card">
-            <CardHeader cclassName="mac-card">
-              <CardTitle cclassName="mac-card">Test Suite Performance</CardTitle>
+        <div className="col-span-12">
+          <Card className="mac-card">
+            <CardHeader className="mac-card">
+              <CardTitle className="mac-card">Test Suite Performance</CardTitle>
             </CardHeader>
-            <CardContent cclassName="mac-card">
-              <div cclassName="space-y-4">
+            <CardContent className="mac-card">
+              <div className="space-y-4">
                 {suitePerformance.map((suite) => (
                   <div
                     key={suite.suite}
-                    cclassName="flex items-center justify-between p-4 bg-muted/50 rounded-lg"
+                    className="flex items-center justify-between p-4 bg-muted/50 rounded-lg"
                   >
-                    <div cclassName="flex items-center gap-4">
+                    <div className="flex items-center gap-4">
                       <div>
-                        <p cclassName="mac-body font-medium">{suite.suite}</p>
-                        <p cclassName="text-sm text-muted-foreground">{suite.tests} tests</p>
+                        <p className="mac-body font-medium">{suite.suite}</p>
+                        <p className="text-sm text-muted-foreground">{suite.tests} tests</p>
                       </div>
                     </div>
 
-                    <div cclassName="flex items-center gap-8">
-                      <div cclassName="text-center">
-                        <p cclassName="text-sm text-muted-foreground">Avg Duration</p>
-                        <p cclassName="mac-body font-medium">{suite.avgDuration}s</p>
+                    <div className="flex items-center gap-8">
+                      <div className="text-center">
+                        <p className="text-sm text-muted-foreground">Avg Duration</p>
+                        <p className="mac-body font-medium">{suite.avgDuration}s</p>
                       </div>
 
-                      <div cclassName="text-center">
-                        <p cclassName="text-sm text-muted-foreground">Success Rate</p>
+                      <div className="text-center">
+                        <p className="text-sm text-muted-foreground">Success Rate</p>
                         <Badge
-                          cclassName={cn(
+                          className={cn(
                             suite.successRate >= 90 && "bg-green-500/20 text-green-500",
                             suite.successRate >= 80 &&
                               suite.successRate < 90 &&
@@ -400,10 +400,10 @@ export const TestAnalytics: React.FC = () => {
                         </Badge>
                       </div>
 
-                      <div cclassName="w-32">
-                        <div cclassName="h-2 bg-muted rounded-full overflow-hidden">
+                      <div className="w-32">
+                        <div className="h-2 bg-muted rounded-full overflow-hidden">
                           <div
-                            cclassName={cn(
+                            className={cn(
                               "h-full transition-all",
                               suite.successRate >= 90 && "bg-green-500",
                               suite.successRate >= 80 && suite.successRate < 90 && "bg-yellow-500",
