@@ -1153,14 +1153,6 @@ export function AiSdkChatPanel({
                 : "bg-background/80 hover:bg-background/90"
             )}
           >
-            {/* Typing indicator for streaming */}
-            {isLastMessage && isLoading && !isUser && (
-              <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                <Loader className="w-4 h-4" />
-                <span className="text-xs">{botName} is thinking...</span>
-              </div>
-            )}
-
             {/* Reasoning display for AI messages */}
             {!isUser && showReasoning && message.reasoning && (
               <div className="mb-4">
@@ -1698,6 +1690,7 @@ export function AiSdkChatPanel({
                   {/* Enhanced Loading Indicator with Progress Bar - MOVED TO TOP */}
                   {(isLoading || manualLoading || isProcessing || currentProgress) &&
                     !hasStartedStreaming &&
+                    messages[messages.length - 1]?.role !== "assistant" &&
                     (console.log("🔄 Rendering progress indicator:", {
                       isLoading,
                       manualLoading,
@@ -1705,6 +1698,7 @@ export function AiSdkChatPanel({
                       hasCurrentProgress: !!currentProgress,
                       currentProgress,
                       hasStartedStreaming,
+                      lastMessageRole: messages[messages.length - 1]?.role,
                     }) || (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
