@@ -16,16 +16,18 @@
 ## SEGMENT 2: CORE DEMOS (2.5 minutes)
 
 ### DEMO 1: Baseline + Multi-Source (45 sec)
-**Query**: "What is AOMA?"
+**Query 1**: "What is AOMA?"
 - Basic RAG from proprietary Sony Music docs
 - ~50 pages internal AOMA documentation
-- **Then switch**: "Show me JIRA tickets related to AOMA migration"
-- Multiple sources simultaneously: JIRA + Git + Docs + Email
+- **Then switch**
+**Query 2**: "Show me JIRA tickets related to AOMA migration and the related code commits"
+- Multiple sources simultaneously: JIRA + Git + Docs
 - Custom AOMA Mesh MCP server
+- Cross-referenced automatically
 - **Differentiator #1**: Unified knowledge, not isolated silos
 
 ### DEMO 2: Visual Intelligence (45 sec)
-**Query**: "Generate a system architecture diagram for AOMA"
+**Query**: "Generate a system architecture diagram for AOMA showing all integration points"
 - Most chatbots: text walls
 - SIAM: actual Mermaid diagrams
 - System flows, architecture visualizations
@@ -39,7 +41,7 @@
 - **Differentiator #3**: Development intelligence
 
 ### DEMO 4: Anti-Hallucination (30 sec)
-**Query**: "Does AOMA have quantum computing integration?"
+**Query**: "Does AOMA have a blockchain integration?"
 - Trick question - doesn't exist
 - Honest "no information available"
 - No fabrication, no confidence when uncertain
