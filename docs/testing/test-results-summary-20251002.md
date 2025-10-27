@@ -167,7 +167,7 @@
 ### P0 Critical (Must Pass)
 
 ```bash
-# Against https://iamsiam.ai after deployment
+# Against https://thebetabase.com after deployment
 npx playwright test tests/production/aoma-chat-test.spec.ts
 npx playwright test tests/visual/dark-theme-regression.spec.ts
 npx playwright test tests/e2e/smoke/smoke.spec.ts
@@ -213,7 +213,7 @@ npx playwright test tests/production/full-production-test.spec.ts
 
 **Local testing successfully validated core functionality**. The application is stable and ready for production deployment. AOMA chat tests require production environment with authentication, which is expected behavior.
 
-**Recommendation**: Proceed with deployment and run full production test suite against https://iamsiam.ai.
+**Recommendation**: Proceed with deployment and run full production test suite against https://thebetabase.com.
 
 ---
 

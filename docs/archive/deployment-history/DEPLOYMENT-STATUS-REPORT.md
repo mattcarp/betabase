@@ -4,7 +4,7 @@
 
 ### ✅ What's Working
 
-1. **Production site is LIVE** at https://iamsiam.ai (200 OK)
+1. **Production site is LIVE** at https://thebetabase.com (200 OK)
 2. **Railway environment variables** are correctly configured
 3. **Password authentication code** is implemented in LoginForm.tsx
 4. **Test account configured**: claude@test.siam.ai / 4@9XMPfE9B$
@@ -58,7 +58,7 @@
 
 1. **Railway GitHub integration** may not be triggering builds properly
 2. **Build process** may be failing silently without logs
-3. **Old deployment cached** at custom domain (iamsiam.ai)
+3. **Old deployment cached** at custom domain (thebetabase.com)
 4. **Railway service** may need reconfiguration
 
 ## Immediate Solutions
@@ -107,4 +107,4 @@ railway up --detach
 
 ---
 
-**Bottom Line**: The code is ready, password auth is implemented, but Railway isn't deploying the new version. The site at https://iamsiam.ai is stuck on an old version with magic link auth only.
+**Bottom Line**: The code is ready, password auth is implemented, but Railway isn't deploying the new version. The site at https://thebetabase.com is stuck on an old version with magic link auth only.

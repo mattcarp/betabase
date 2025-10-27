@@ -77,7 +77,7 @@ ELEVENLABS_API_KEY=<your-key>
 
 ### Custom Domain
 
-- **Domain**: `iamsiam.ai`
+- **Domain**: `thebetabase.com`
 - **SSL**: Automatic via Railway
 - **DNS**: CNAME to Railway domain
 
@@ -146,17 +146,17 @@ railway logs --follow
 
 ### Endpoints
 
-- **Health Check**: https://iamsiam.ai/api/health
-- **Main Site**: https://iamsiam.ai
+- **Health Check**: https://thebetabase.com/api/health
+- **Main Site**: https://thebetabase.com
 
 ### Manual Health Check
 
 ```bash
 # Check health endpoint
-curl -I https://iamsiam.ai/api/health
+curl -I https://thebetabase.com/api/health
 
 # Check response time
-curl -o /dev/null -s -w "Response time: %{time_total}s\n" https://iamsiam.ai
+curl -o /dev/null -s -w "Response time: %{time_total}s\n" https://thebetabase.com
 
 # Full diagnostic
 node scripts/deploy-monitor.js
@@ -244,7 +244,7 @@ npm run build && npm start
 ```bash
 # Basic performance test
 for i in {1..10}; do
-  curl -o /dev/null -s -w "%{time_total}\n" https://iamsiam.ai
+  curl -o /dev/null -s -w "%{time_total}\n" https://thebetabase.com
 done | awk '{sum+=$1} END {print "Average:", sum/NR "s"}'
 ```
 

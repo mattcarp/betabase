@@ -32,7 +32,7 @@ response=$(curl -s -w "\n%{http_code}" -X POST \
   -F "file=@test-document.txt" \
   -F "assistantId=asst_VvOHL1c4S6YapYKun4mY29fM" \
   -F "purpose=assistants" \
-  https://iamsiam.ai/api/upload)
+  https://thebetabase.com/api/upload)
 
 http_code=$(echo "$response" | tail -n1)
 body=$(echo "$response" | head -n-1)

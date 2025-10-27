@@ -14,7 +14,7 @@ NEXT_PUBLIC_COGNITO_USER_POOL_ID=us-east-1_VQTt5mEJa
 NEXT_PUBLIC_COGNITO_CLIENT_ID=7gi90jqoc8pv63gkdlpqtgqfg9
 
 # API Configuration  
-NEXT_PUBLIC_API_URL=https://iamsiam.ai
+NEXT_PUBLIC_API_URL=https://thebetabase.com
 NEXT_PUBLIC_AOMA_API_URL=https://luminous-dedication-production.up.railway.app
 
 # Application
@@ -53,7 +53,7 @@ if [ $? -eq 0 ]; then
   
   echo -e "\n✅ Deployment triggered!"
   echo "📊 Check deployment at: https://railway.app/project/12573897-7569-4887-89fa-55843ac7fab2"
-  echo "🌐 Site URL: https://iamsiam.ai"
+  echo "🌐 Site URL: https://thebetabase.com"
   
 else
   echo "❌ Build failed - check errors above"

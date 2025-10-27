@@ -3,7 +3,7 @@
 ## 📊 CURRENT STATUS
 
 - **Authentication**: ⏳ Waiting for Railway deployment (code ready)
-- **Test URL**: https://iamsiam.ai
+- **Test URL**: https://thebetabase.com
 - **Test Account**: claude@test.siam.ai / 4@9XMPfE9B$
 
 ---

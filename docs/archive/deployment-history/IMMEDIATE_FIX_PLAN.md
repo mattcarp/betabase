@@ -6,7 +6,7 @@ After comprehensive analysis, here's the EXACT problem:
 
 1. ✅ **SIAM Next.js App IS WORKING** - All recent Vercel deployments succeed
 2. ❌ **Vercel Project is PRIVATE** - Protected by Vercel Authentication
-3. ❌ **Custom Domains Point to OLD Sites** - `iamsiam.ai` and `thebetabase.com` show old static HTML
+3. ❌ **Custom Domains Point to OLD Sites** - `thebetabase.com` and `thebetabase.com` show old static HTML
 4. ❌ **Domain Control Issue** - Domains are managed by different Vercel account
 
 ## IMMEDIATE ACTION PLAN
@@ -22,7 +22,7 @@ After comprehensive analysis, here's the EXACT problem:
 curl -I https://siam-85spc5an3-mattcarp1s-projects.vercel.app
 
 # 3. Add domains to project
-vercel domains add iamsiam.ai --scope mattcarp1s-projects
+vercel domains add thebetabase.com --scope mattcarp1s-projects
 vercel domains add thebetabase.com --scope mattcarp1s-projects
 ```
 

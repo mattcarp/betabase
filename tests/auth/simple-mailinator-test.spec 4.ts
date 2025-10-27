@@ -49,7 +49,7 @@ test("simple production login with Mailinator", async ({ page }) => {
   );
 
   // 1. Go to production
-  await page.goto("https://iamsiam.ai");
+  await page.goto("https://thebetabase.com");
 
   // 2. Request magic link
   await page.fill('input[type="email"]', TEST_EMAIL);

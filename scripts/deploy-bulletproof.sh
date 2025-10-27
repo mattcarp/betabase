@@ -205,7 +205,7 @@ if [ "$SKIP_TESTS" = false ]; then
     else
         # Fallback to basic health check
         echo "Running basic health check..."
-        if curl -s -o /dev/null -w "%{http_code}" https://iamsiam.ai | grep -q "200\|301\|302"; then
+        if curl -s -o /dev/null -w "%{http_code}" https://thebetabase.com | grep -q "200\|301\|302"; then
             echo -e "${GREEN}✓ Site is responding${NC}"
         else
             echo -e "${RED}✗ Site is not responding properly${NC}"
@@ -215,7 +215,7 @@ if [ "$SKIP_TESTS" = false ]; then
     # Run Mailinator test
     echo ""
     echo "Running Mailinator authentication test..."
-    PLAYWRIGHT_BASE_URL=https://iamsiam.ai npm run test:e2e tests/auth/magic-link-auth.spec.ts -- --reporter=dot || true
+    PLAYWRIGHT_BASE_URL=https://thebetabase.com npm run test:e2e tests/auth/magic-link-auth.spec.ts -- --reporter=dot || true
 else
     echo -e "${YELLOW}⚠ Skipping production tests${NC}"
 fi
@@ -227,12 +227,12 @@ echo -e "${GREEN}╔════════════════════
 echo -e "${GREEN}║              🎉 DEPLOYMENT COMPLETE! 🎉                  ║${NC}"
 echo -e "${GREEN}╚══════════════════════════════════════════════════════════╝${NC}"
 echo ""
-echo "📍 Production URL: https://iamsiam.ai"
+echo "📍 Production URL: https://thebetabase.com"
 echo "📍 Render Dashboard: https://dashboard.render.com"
 echo "📍 GitHub Repo: https://github.com/mattjcarpenter/siam"
 echo ""
 echo "Next steps:"
-echo "  1. Visit https://iamsiam.ai to verify the deployment"
+echo "  1. Visit https://thebetabase.com to verify the deployment"
 echo "  2. Check Render logs: ./scripts/deployment-status.sh"
 echo "  3. Monitor for any errors in production"
 echo ""
@@ -242,7 +242,7 @@ if command -v open &> /dev/null; then
     read -p "Open production site in browser? (y/n): " -n 1 -r
     echo ""
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        open https://iamsiam.ai
+        open https://thebetabase.com
     fi
 fi
 

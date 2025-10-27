@@ -72,7 +72,7 @@ const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
 
 // Target site
-const SIAM_URL = "https://iamsiam.ai";
+const SIAM_URL = "https://thebetabase.com";
 ```
 
 ## Troubleshooting

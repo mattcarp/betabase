@@ -3,7 +3,7 @@
 ## Executive Summary
 
 **Date:** August 7, 2025  
-**Remote URL:** https://iamsiam.ai  
+**Remote URL:** https://thebetabase.com  
 **Status:** ✅ DEPLOYED AND OPERATIONAL  
 **MCP Integration:** ✅ FULLY FUNCTIONAL
 
@@ -11,7 +11,7 @@
 
 ### Production Server
 
-- **URL:** https://iamsiam.ai
+- **URL:** https://thebetabase.com
 - **Status:** Live and accessible
 - **SSL:** Valid HTTPS certificate
 - **Response:** HTTP/2 200 OK
@@ -73,7 +73,7 @@
 ### Health Check Endpoint
 
 ```bash
-POST https://iamsiam.ai/api/aoma-mcp
+POST https://thebetabase.com/api/aoma-mcp
 Body: {"action":"health"}
 ```
 
@@ -96,7 +96,7 @@ Body: {"action":"health"}
 ### Tools List Endpoint
 
 ```bash
-POST https://iamsiam.ai/api/aoma-mcp
+POST https://thebetabase.com/api/aoma-mcp
 Body: {"action":"tools/list"}
 ```
 
@@ -109,7 +109,7 @@ Body: {"action":"tools/list"}
 ### System Health Query
 
 ```bash
-POST https://iamsiam.ai/api/aoma-mcp
+POST https://thebetabase.com/api/aoma-mcp
 Body: {"action":"tools/call","tool":"get_system_health","args":{}}
 ```
 
@@ -177,7 +177,7 @@ Body: {"action":"tools/call","tool":"get_system_health","args":{}}
 ```
 ┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
 │   SIAM Frontend │────▶│  AOMA MCP Proxy  │────▶│  Railway Server │
-│  (iamsiam.ai)   │     │  (/api/aoma-mcp) │     │  (MCP Backend)  │
+│  (thebetabase.com)   │     │  (/api/aoma-mcp) │     │  (MCP Backend)  │
 └─────────────────┘     └──────────────────┘     └─────────────────┘
                               │
                               ▼
@@ -229,7 +229,7 @@ Body: {"action":"tools/call","tool":"get_system_health","args":{}}
 
 ## 10. Conclusion
 
-**The remote SIAM server at https://iamsiam.ai is fully deployed and operational with all MCP integrations functioning correctly.** The timeout fix has successfully resolved the Railway proxy issues, and all API endpoints are responding as expected. The system is production-ready for MCP-based operations.
+**The remote SIAM server at https://thebetabase.com is fully deployed and operational with all MCP integrations functioning correctly.** The timeout fix has successfully resolved the Railway proxy issues, and all API endpoints are responding as expected. The system is production-ready for MCP-based operations.
 
 ### Overall Status: ✅ PRODUCTION READY
 

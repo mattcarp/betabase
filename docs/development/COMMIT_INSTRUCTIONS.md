@@ -81,7 +81,7 @@ cd testsprite_tests && node run_hidden_field_tests.js
 
 ## Deployment Verification
 
-Check deployment at: https://iamsiam.ai
+Check deployment at: https://thebetabase.com
 
 - Hidden field should be present in HTML (invisible)
 - Test account should trigger password mode

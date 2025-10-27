@@ -152,8 +152,6 @@ export function AiSdkChatPanel({
 }: AiSdkChatPanelProps) {
   console.log("🎯 AiSdkChatPanel: Component mounted with api:", api);
   console.log("🎤 Voice buttons should be rendering in PromptInputTools");
-  console.log("🎤 STT Hook available:", { isRecording, startRecording: !!startRecording, stopRecording: !!stopRecording });
-  console.log("🔊 TTS Hook available:", { isPlaying, speak: !!speak, stop: !!stopSpeaking, isTTSEnabled });
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [selectedModel, setSelectedModel] = useState("gpt-5");
@@ -219,6 +217,10 @@ export function AiSdkChatPanel({
     },
     continuous: false, // Push-to-talk mode
   });
+
+  // Debug logs after hooks are initialized
+  console.log("🎤 STT Hook available:", { isRecording, startRecording: !!startRecording, stopRecording: !!stopRecording });
+  console.log("🔊 TTS Hook available:", { isPlaying, speak: !!speak, stop: !!stopSpeaking, isTTSEnabled });
 
   // Use conversationId prop or create fallback
   const chatId =

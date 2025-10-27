@@ -1,0 +1,86 @@
+# SIAM DEMO - RECORDING CHEAT SHEET
+# Keep this visible on second monitor while recording
+
+========================================
+SEGMENT 1: HOOK (30s - TALK ONLY)
+========================================
+- Not another chatbot
+- Enterprise intelligence for Sony Music
+- 7 key differentiators
+- Strategic SLM/fine-tuning approach
+
+========================================
+SEGMENT 2: DEMO 1 (45s)
+========================================
+QUERY 1:
+What is AOMA?
+
+SAY: "Standard RAG from proprietary Sony Music docs... ~50 pages... now watch this..."
+
+QUERY 2:
+Show me JIRA tickets related to AOMA migration and the related code commits
+
+SAY: "Multiple sources simultaneously - JIRA, Git, Docs, Email"
+DIFFERENTIATOR #1: Unified enterprise knowledge
+
+========================================
+SEGMENT 3: DEMO 2 (45s)
+========================================
+QUERY 3:
+Generate a system architecture diagram for AOMA showing all integration points
+
+SAY: "Most chatbots: text walls. SIAM: actual Mermaid diagrams"
+DIFFERENTIATOR #2: Visual diagram generation
+
+========================================
+SEGMENT 4: DEMO 3 (45s)
+========================================
+QUERY 4:
+What's the current development status of AOMA3 migration?
+
+SAY: "Not just 'what does doc say' - JIRA + Git + Email synthesis"
+DIFFERENTIATOR #3: Development intelligence
+
+========================================
+SEGMENT 5: DEMO 4 (30s)
+========================================
+QUERY 5:
+Does AOMA have a blockchain integration?
+
+SAY: "Trick question - doesn't exist. Honest 'no info available'"
+DIFFERENTIATOR #4: Enterprise trust, no hallucination
+
+========================================
+SEGMENT 6: SLM STRATEGY (45s - TALK ONLY)
+========================================
+- GPT-4/5 knows protein folding, quantum physics
+- Sony Music users don't need that
+- Small Language Model + fine-tuning
+- Domain-specific: AOMA, DDEX, Sony workflows
+- FASTER, CHEAPER, MORE ACCURATE
+- Current: GPT-4o/5 with RAG
+- Next: Fine-tuned GPT-4o-mini
+- Future: Fully custom SLM
+DIFFERENTIATOR #5: Strategic AI approach
+
+========================================
+SEGMENT 7: CURATE TAB TEASER (30s)
+========================================
+CLICK: Curate tab
+
+SAY: "Document management - Upload, Delete, Dedupe coming soon"
+SAY: "All backed by 59 automated tests - but that's another demo"
+
+========================================
+SEGMENT 8: CLOSE (15s)
+========================================
+- Multi-source unified knowledge
+- Visual intelligence
+- Development context
+- Anti-hallucination trust
+- Strategic SLM roadmap
+- Questions?
+
+========================================
+TOTAL: 4:15 (perfect timing!)
+========================================

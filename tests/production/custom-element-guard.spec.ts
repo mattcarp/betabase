@@ -26,7 +26,7 @@ test.describe("CustomElementGuard Protection", () => {
     });
 
     // Navigate to production
-    await page.goto("https://iamsiam.ai", {
+    await page.goto("https://thebetabase.com", {
       waitUntil: "networkidle",
     });
 
@@ -58,7 +58,7 @@ test.describe("CustomElementGuard Protection", () => {
     });
 
     // Navigate to login
-    await page.goto("https://iamsiam.ai");
+    await page.goto("https://thebetabase.com");
 
     // Check login form is present
     await expect(page.locator('input[type="email"]')).toBeVisible({ timeout: 10000 });
@@ -89,7 +89,7 @@ test.describe("CustomElementGuard Protection", () => {
   });
 
   test("CustomElementGuard prevents duplicate registrations", async ({ page }) => {
-    await page.goto("https://iamsiam.ai");
+    await page.goto("https://thebetabase.com");
 
     // Try to register a custom element that might conflict
     const registrationResult = await page.evaluate(() => {
@@ -125,7 +125,7 @@ test.describe("CustomElementGuard Protection", () => {
       }
     });
 
-    await page.goto("https://iamsiam.ai");
+    await page.goto("https://thebetabase.com");
     await page.waitForLoadState("networkidle");
 
     // Check for Supabase-related errors that were in the original bug
@@ -140,7 +140,7 @@ test.describe("CustomElementGuard Protection", () => {
   });
 
   test("Health endpoint confirms application is running", async ({ request }) => {
-    const response = await request.get("https://iamsiam.ai/api/health");
+    const response = await request.get("https://thebetabase.com/api/health");
 
     expect(response.status()).toBe(200);
 
@@ -152,7 +152,7 @@ test.describe("CustomElementGuard Protection", () => {
 test.describe("Production Smoke Tests", () => {
   test("Critical user journey works end-to-end", async ({ page }) => {
     // Navigate to home
-    await page.goto("https://iamsiam.ai");
+    await page.goto("https://thebetabase.com");
 
     // Verify page loaded
     await expect(page).toHaveTitle(/Betabase/i);
@@ -178,7 +178,7 @@ test.describe("Production Smoke Tests", () => {
   test("Application responds quickly", async ({ page }) => {
     const startTime = Date.now();
 
-    const response = await page.goto("https://iamsiam.ai", {
+    const response = await page.goto("https://thebetabase.com", {
       waitUntil: "domcontentloaded",
     });
 

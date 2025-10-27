@@ -6,7 +6,7 @@ I've conducted comprehensive visual testing using Playwright MCP on both product
 
 ## 🔍 Test Results
 
-### Production (https://iamsiam.ai)
+### Production (https://thebetabase.com)
 
 - **Status**: ✅ Site is LIVE and accessible
 - **Authentication**: ❌ Password auth NOT deployed
@@ -23,7 +23,7 @@ I've conducted comprehensive visual testing using Playwright MCP on both product
 
 ### What's Working:
 
-1. **Production site is live** at https://iamsiam.ai
+1. **Production site is live** at https://thebetabase.com
 2. **Login page loads** successfully
 3. **Email input field** is present and functional
 4. **Magic link authentication** is available
@@ -43,7 +43,7 @@ I've conducted comprehensive visual testing using Playwright MCP on both product
 
 ### Test Flow:
 
-1. ✅ Navigate to https://iamsiam.ai
+1. ✅ Navigate to https://thebetabase.com
 2. ✅ Find email input field
 3. ✅ Enter claude@test.siam.ai
 4. ❌ No password field appears

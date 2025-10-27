@@ -12,7 +12,7 @@ while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
     echo "=== Check $ATTEMPT/$MAX_ATTEMPTS at $(date '+%H:%M:%S') ==="
     
     # Check if site shows new build
-    BUILD_TIME=$(curl -s https://iamsiam.ai | grep -o "Built: [^<]*" | sed 's/Built: //')
+    BUILD_TIME=$(curl -s https://thebetabase.com | grep -o "Built: [^<]*" | sed 's/Built: //')
     
     if [[ "$BUILD_TIME" == *"2025-08-14"* ]]; then
         echo "✅ SUCCESS! New build is live: $BUILD_TIME"

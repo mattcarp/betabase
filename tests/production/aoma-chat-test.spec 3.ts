@@ -12,7 +12,7 @@ import { test, expect, Page, BrowserContext } from "@playwright/test";
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
-const SIAM_URL = "https://iamsiam.ai";
+const SIAM_URL = "https://thebetabase.com";
 
 // Reusable login function
 async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
