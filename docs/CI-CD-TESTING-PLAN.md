@@ -531,9 +531,9 @@ Stage 6: Post-Deployment Validation
 
    ```
    🔥 PRODUCTION SMOKE TESTS
-   ✅ Passed: https://iamsiam.ai (HTTP 200)
-   ✅ Passed: https://iamsiam.ai/api/health (HTTP 200)
-   ✅ Passed: https://iamsiam.ai/chat (HTTP 200)
+   ✅ Passed: https://thebetabase.com (HTTP 200)
+   ✅ Passed: https://thebetabase.com/api/health (HTTP 200)
+   ✅ Passed: https://thebetabase.com/chat (HTTP 200)
 
    ⚡ PERFORMANCE CHECK
    Response time: 1234ms (1.234s)
@@ -619,17 +619,17 @@ Stage 6: Post-Deployment Validation
 
 ```bash
 # Check health endpoint
-curl https://iamsiam.ai/api/health
+curl https://thebetabase.com/api/health
 
 # Expected: {"status":"ok",...}
 
 # Check main page
-curl -I https://iamsiam.ai
+curl -I https://thebetabase.com
 
 # Expected: HTTP/2 200
 
 # Check response time
-time curl -s https://iamsiam.ai > /dev/null
+time curl -s https://thebetabase.com > /dev/null
 
 # Expected: <3 seconds
 ```
@@ -640,7 +640,7 @@ time curl -s https://iamsiam.ai > /dev/null
 
 **Verify AOMA functionality:**
 
-1. Visit https://iamsiam.ai/chat
+1. Visit https://thebetabase.com/chat
 2. Ask AOMA a question from knowledge base
 3. Verify accurate response (no hallucination)
 4. Check console for errors

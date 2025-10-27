@@ -14,7 +14,7 @@ import { test, expect } from "@playwright/test";
 import axios from "axios";
 
 // Configuration
-const BASE_URL = process.env.TEST_URL || "https://iamsiam.ai";
+const BASE_URL = process.env.TEST_URL || "https://thebetabase.com";
 const WEBHOOK_URL = process.env.MAILGUN_WEBHOOK_URL || `${BASE_URL}/api/mailgun-webhook`;
 const TEST_EMAIL = process.env.TEST_EMAIL || "test@mattcarpenter.com";
 

@@ -59,7 +59,7 @@ railway up --detach
 Once you have a PUBLIC deployment URL, update DNS:
 
 ```bash
-# For iamsiam.ai - Update DNS A record to:
+# For thebetabase.com - Update DNS A record to:
 # Current: Points to old static site
 # New: Point to working deployment via CNAME
 
@@ -75,7 +75,7 @@ Once you have a PUBLIC deployment URL, update DNS:
 | **API Endpoints**   | ✅ WORKING | `/api/health`, `/api/rpc`, `/api/aoma-mcp` | Behind auth    |
 | **Authentication**  | ✅ WORKING | Password auth for claude@test.siam.ai      | Behind auth    |
 | **MCP Integration** | ✅ WORKING | AOMA backend connected                     | Behind auth    |
-| **Custom Domains**  | ❌ BROKEN  | `iamsiam.ai`, `thebetabase.com`            | Wrong projects |
+| **Custom Domains**  | ❌ BROKEN  | `thebetabase.com`, `thebetabase.com`            | Wrong projects |
 
 ## THE 100% WORKING DEPLOYMENT
 

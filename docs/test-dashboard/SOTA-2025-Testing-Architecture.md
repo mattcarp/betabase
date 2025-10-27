@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS applications_registry (
 
 -- Insert existing apps
 INSERT INTO applications_registry (app_name, display_name, base_url) VALUES
-    ('SIAM', 'SIAM Test Dashboard', 'https://iamsiam.ai'),
+    ('SIAM', 'SIAM Test Dashboard', 'https://thebetabase.com'),
     ('AOMA', 'AOMA Enterprise', 'https://aoma-stage.smcdp-de.net')
 ON CONFLICT DO NOTHING;
 

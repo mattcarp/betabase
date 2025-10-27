@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 RENDER_SERVICE_ID="srv-d2f8f0emcj7s73eh647g"  # SIAM production service
-PRODUCTION_URL="https://iamsiam.ai"
+PRODUCTION_URL="https://thebetabase.com"
 MAX_DEPLOY_WAIT=600  # 10 minutes max wait
 HEALTH_CHECK_RETRIES=30
 HEALTH_CHECK_DELAY=10

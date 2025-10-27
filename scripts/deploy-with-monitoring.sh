@@ -18,7 +18,7 @@ BOLD='\033[1m'
 
 # Configuration
 RENDER_SERVICE_ID="srv-d2f8f0emcj7s73eh647g"
-PRODUCTION_URL="https://iamsiam.ai"
+PRODUCTION_URL="https://thebetabase.com"
 MAX_DEPLOY_WAIT=600
 HEALTH_CHECK_RETRIES=30
 HEALTH_CHECK_DELAY=10

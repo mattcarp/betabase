@@ -258,7 +258,7 @@ npx playwright test --ui
 npx playwright test --headed
 ```
 
-### Production Testing (against iamsiam.ai)
+### Production Testing (against thebetabase.com)
 
 ```bash
 # Run production tests

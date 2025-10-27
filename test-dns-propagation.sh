@@ -32,8 +32,8 @@ check_dns() {
 }
 
 # Check both domains
-check_dns "iamsiam.ai"
-check_dns "www.iamsiam.ai"
+check_dns "thebetabase.com"
+check_dns "www.thebetabase.com"
 check_dns "thebetabase.com"
 check_dns "www.thebetabase.com"
 
@@ -47,5 +47,5 @@ echo "If domains show Render IPs (216.24.57.x):"
 echo "  → DNS has propagated! Your sites should work."
 echo ""
 echo "You can also check propagation at:"
-echo "  → https://dnschecker.org/#A/iamsiam.ai"
+echo "  → https://dnschecker.org/#A/thebetabase.com"
 echo "  → https://dnschecker.org/#A/thebetabase.com"

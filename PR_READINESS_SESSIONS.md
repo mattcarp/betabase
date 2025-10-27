@@ -168,7 +168,7 @@ This causes the build to fail on warnings in production mode, even though these 
 2. Request review
 3. Merge to main
 4. Monitor CI/CD pipeline
-5. Verify deployment at https://iamsiam.ai/sessions
+5. Verify deployment at https://thebetabase.com/sessions
 
 ## 📝 Commits on This Branch
 

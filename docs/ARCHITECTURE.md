@@ -83,7 +83,7 @@ This is a **single Next.js project** (not a monorepo):
 
 - **Hosting**: Render.com
 - **Domains**:
-  - Primary: iamsiam.ai
+  - Primary: thebetabase.com
   - Secondary: thebetabase.com
 - **CDN**: Cloudflare
 - **SSL**: Automatic via Render

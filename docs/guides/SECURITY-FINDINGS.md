@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
 ```bash
 # Attacker can make unlimited requests:
-curl -X POST https://iamsiam.ai/api/chat \
+curl -X POST https://thebetabase.com/api/chat \
   -H "Content-Type: application/json" \
   -d '{
     "messages": [{"role": "user", "content": "Expensive query"}]
@@ -147,7 +147,7 @@ const openai = createOpenAI({
 # 3. Extract key value
 # 4. Use key directly with OpenAI API
 
-curl https://iamsiam.ai/_next/static/chunks/*.js | grep -o "sk-proj-[^\"]*"
+curl https://thebetabase.com/_next/static/chunks/*.js | grep -o "sk-proj-[^\"]*"
 ```
 
 **Impact**:
@@ -613,7 +613,7 @@ export async function OPTIONS(req: Request) {
 
 ```typescript
 const ALLOWED_ORIGINS = [
-  "https://iamsiam.ai",
+  "https://thebetabase.com",
   "https://siam.onrender.com",
   process.env.NODE_ENV === "development" ? "http://localhost:3000" : null,
 ].filter(Boolean);
@@ -797,7 +797,7 @@ logger.debug(`Creating stream with model: ${selectedModel}`);
 
 ```bash
 # Should fail with 401
-curl -X POST https://iamsiam.ai/api/chat \
+curl -X POST https://thebetabase.com/api/chat \
   -H "Content-Type: application/json" \
   -d '{"messages":[{"role":"user","content":"test"}]}'
 ```
@@ -806,7 +806,7 @@ curl -X POST https://iamsiam.ai/api/chat \
 
 ```bash
 # Should fail with 400
-curl -X POST https://iamsiam.ai/api/chat \
+curl -X POST https://thebetabase.com/api/chat \
   -H "Content-Type: application/json" \
   -d '{"messages":[{"role":"hacker","content":"A".repeat(1000000)}]}'
 ```
@@ -816,7 +816,7 @@ curl -X POST https://iamsiam.ai/api/chat \
 ```bash
 # Send 101 requests in 1 minute - should get 429 on request 101
 for i in {1..101}; do
-  curl -X POST https://iamsiam.ai/api/chat \
+  curl -X POST https://thebetabase.com/api/chat \
     -H "Content-Type: application/json" \
     -d '{"messages":[{"role":"user","content":"test"}]}'
   echo "Request $i"
