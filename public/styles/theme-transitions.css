@@ -1,0 +1,169 @@
+/**
+ * Theme Transition Animations
+ * Smooth fade transitions between themes (max 2 seconds as per requirements)
+ */
+
+/* Theme transition state */
+:root.theme-transitioning,
+:root.theme-transitioning * {
+  transition:
+    background-color 1.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 1.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 1.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 1.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Fade-out-in animation for theme content */
+@keyframes theme-fade-out {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Apply fade animation to main content during theme transition */
+:root.theme-transitioning body {
+  animation: theme-fade-out 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth theme attribute changes */
+:root {
+  transition: background-color 0.3s ease;
+}
+
+/* Prevent jarring transitions on interactive elements */
+:root.theme-transitioning button,
+:root.theme-transitioning a,
+:root.theme-transitioning input,
+:root.theme-transitioning select,
+:root.theme-transitioning textarea {
+  pointer-events: none; /* Disable clicks during transition */
+}
+
+/* Re-enable after transition */
+:root:not(.theme-transitioning) button,
+:root:not(.theme-transitioning) a,
+:root:not(.theme-transitioning) input,
+:root:not(.theme-transitioning) select,
+:root:not(.theme-transitioning) textarea {
+  pointer-events: auto;
+}
+
+/* Theme switch indicator overlay (optional visual feedback) */
+.theme-switch-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.theme-switch-overlay.active {
+  opacity: 1;
+}
+
+/* Theme switch message */
+.theme-switch-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--mac-surface-elevated);
+  color: var(--mac-text-primary);
+  padding: 2rem 3rem;
+  border-radius: 1rem;
+  border: 1px solid var(--mac-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-switch-message.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.theme-switch-message h3 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin: 0 0 0.5rem 0;
+}
+
+.theme-switch-message p {
+  font-size: 0.875rem;
+  color: var(--mac-text-secondary);
+  margin: 0;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  :root.theme-transitioning,
+  :root.theme-transitioning * {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .theme-switch-overlay,
+  .theme-switch-message {
+    transition: none !important;
+  }
+}
+
+/* Theme-specific transition overrides */
+
+/* MAC theme transitions */
+:root[data-theme="mac"].theme-transitioning {
+  --transition-bg: linear-gradient(135deg, rgba(51, 133, 255, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+}
+
+/* JARVIS theme transitions */
+:root[data-theme="jarvis"].theme-transitioning {
+  --transition-bg: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+}
+
+/* AOMA theme transitions */
+:root[data-theme="aoma"].theme-transitioning {
+  --transition-bg: linear-gradient(135deg, rgba(0, 51, 102, 0.4) 0%, rgba(84, 110, 122, 0.3) 100%);
+}
+
+/* Shimmer effect during theme switch (optional enhancement) */
+@keyframes theme-shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+:root.theme-transitioning::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.03),
+    transparent
+  );
+  animation: theme-shimmer 1.5s ease-in-out;
+  pointer-events: none;
+  z-index: 9998;
+}

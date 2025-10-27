@@ -3,6 +3,7 @@ import React from "react";
 import { CustomElementGuard } from "../src/components/CustomElementGuard";
 import { ClientErrorBoundary } from "../src/components/ClientErrorBoundary";
 import { ClientWebVitals } from "../src/components/ClientWebVitals";
+import { ThemeProvider } from "../src/contexts/ThemeContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,11 +16,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preload" as="image" href="/betabase-logo.webp" fetchPriority="high" />
+        <link rel="stylesheet" href="/styles/motiff-glassmorphism.css" />
+        <link rel="stylesheet" href="/styles/mac-design-system.css" />
+        <link rel="stylesheet" href="/styles/theme-transitions.css" />
       </head>
       <body suppressHydrationWarning>
         <CustomElementGuard />
         <ClientWebVitals />
-        <ClientErrorBoundary>{children}</ClientErrorBoundary>
+        <ThemeProvider defaultTheme="mac">
+          <ClientErrorBoundary>{children}</ClientErrorBoundary>
+        </ThemeProvider>
       </body>
     </html>
   );
