@@ -313,7 +313,7 @@ const SidebarContent = React.forwardRef<HTMLDivElement, React.ComponentProps<"di
       <div
         ref={ref}
         data-sidebar="content"
-        className={cn("flex flex-1 flex-col gap-2 overflow-auto p-2", className)}
+        className={cn("flex flex-1 flex-col gap-2 overflow-auto p-2 text-left", className)}
         {...props}
       />
     );
@@ -327,7 +327,7 @@ const SidebarGroup = React.forwardRef<HTMLDivElement, React.ComponentProps<"div"
       <div
         ref={ref}
         data-sidebar="group"
-        className={cn("relative flex flex-col gap-2", className)}
+        className={cn("relative flex flex-col gap-2 text-left", className)}
         {...props}
       />
     );
@@ -385,7 +385,7 @@ const SidebarGroupContent = React.forwardRef<HTMLDivElement, React.ComponentProp
     <div
       ref={ref}
       data-sidebar="group-content"
-      className={cn("flex flex-col gap-0.5", className)}
+      className={cn("flex flex-col gap-0.5 text-left", className)}
       {...props}
     />
   )
