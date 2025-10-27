@@ -1,0 +1,31 @@
+version: 2
+updates:
+  # npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"  # Check weekly instead of daily
+      day: "monday"       # Only on Mondays
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 5  # Max 5 PRs at once (instead of unlimited)
+    groups:
+      # Group all patch/minor updates into one PR
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+      # Keep major updates separate for review
+      major:
+        update-types:
+          - "major"
+    # Remove non-existent labels to prevent warnings
+    labels: []
+
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"  # Less frequent for Actions
+    open-pull-requests-limit: 2
+    labels: []
