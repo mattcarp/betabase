@@ -2,7 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 // import { DefaultChatTransport } from "ai"; // Removed - not available in current ai version
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../../lib/utils";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
 import { Button } from "../ui/button";
@@ -152,6 +152,8 @@ export function AiSdkChatPanel({
 }: AiSdkChatPanelProps) {
   console.log("🎯 AiSdkChatPanel: Component mounted with api:", api);
   console.log("🎤 Voice buttons should be rendering in PromptInputTools");
+  console.log("🎤 STT Hook available:", { isRecording, startRecording: !!startRecording, stopRecording: !!stopRecording });
+  console.log("🔊 TTS Hook available:", { isPlaying, speak: !!speak, stop: !!stopSpeaking, isTTSEnabled });
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [selectedModel, setSelectedModel] = useState("gpt-5");
@@ -2017,9 +2019,16 @@ export function AiSdkChatPanel({
                 )}
                 onMouseDown={(e) => {
                   e.preventDefault();
-                  console.log("🎤 VOICE: Starting recording");
-                  clearTranscript();
-                  startRecording();
+                  console.log("🎤 VOICE: Mouse down on mic button");
+                  console.log("🎤 VOICE: startRecording function:", startRecording);
+                  console.log("🎤 VOICE: clearTranscript function:", clearTranscript);
+                  if (clearTranscript) clearTranscript();
+                  if (startRecording) {
+                    console.log("🎤 VOICE: Calling startRecording()");
+                    startRecording();
+                  } else {
+                    console.error("🎤 VOICE ERROR: startRecording is not defined!");
+                  }
                 }}
                 onMouseUp={(e) => {
                   e.preventDefault();
@@ -2069,11 +2078,16 @@ export function AiSdkChatPanel({
                     : ["hover:bg-zinc-800/50 hover:border-zinc-700"]
                 )}
                 onClick={() => {
+                  console.log("🔊 SPEAKER: Button clicked");
+                  console.log("🔊 SPEAKER: Current TTS state:", isTTSEnabled);
+                  console.log("🔊 SPEAKER: speak function:", speak);
+                  console.log("🔊 SPEAKER: stopSpeaking function:", stopSpeaking);
                   setIsTTSEnabled(!isTTSEnabled);
                   if (isPlaying) {
                     stopSpeaking();
                   }
                   toast.info(isTTSEnabled ? "Voice responses disabled" : "Voice responses enabled");
+                  console.log("🔊 SPEAKER: New TTS state will be:", !isTTSEnabled);
                 }}
                 disabled={isLoading || isSpeechLoading}
                 title={isTTSEnabled ? "Disable voice responses" : "Enable voice responses"}

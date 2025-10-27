@@ -59,7 +59,8 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
     }
   };
 
-  const getVoiceIcon = (voice: ElevenLabsVoice) => {
+  const getVoiceIcon = (voice?: ElevenLabsVoice) => {
+    if (!voice) return <Volume2 className="h-3 w-3" />;
     const gender = voice.labels?.gender?.toLowerCase();
     if (voice.category === "cloned") return <Wand2 className="h-3 w-3" />;
     if (gender === "female") return <User className="h-3 w-3 text-pink-400" />;
@@ -67,7 +68,8 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
     return <Volume2 className="h-3 w-3" />;
   };
 
-  const getVoiceDescription = (voice: ElevenLabsVoice) => {
+  const getVoiceDescription = (voice?: ElevenLabsVoice) => {
+    if (!voice) return "AI voice";
     const parts = [];
     if (voice.labels?.gender) parts.push(voice.labels.gender);
     if (voice.labels?.accent) parts.push(voice.labels.accent);
@@ -75,7 +77,8 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
     return parts.join(" • ") || voice.description || "AI voice";
   };
 
-  const getCategoryBadge = (voice: ElevenLabsVoice) => {
+  const getCategoryBadge = (voice?: ElevenLabsVoice) => {
+    if (!voice) return null;
     switch (voice.category) {
       case "premade":
         return (

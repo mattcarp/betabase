@@ -154,11 +154,13 @@ Keep these in a text file on your second screen:
 ```
 What is AOMA?
 
-Show me JIRA tickets related to AOMA migration
+Show me JIRA tickets related to AOMA migration and the related code commits
 
-Generate a system architecture diagram for AOMA
+Generate a system architecture diagram for AOMA showing all integration points
 
-Does AOMA have quantum computing integration?
+What's the current development status of AOMA3 migration?
+
+Does AOMA have a blockchain integration?
 ```
 
 ---
