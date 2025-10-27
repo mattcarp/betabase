@@ -233,7 +233,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
                         activeConversationId === conversation.id && "active"
                       )}
                     >
-                      <div className="flex items-start gap-4 w-full">
+                      <div className="flex items-start gap-3 w-full">
                         <MessageCircle
                           className={cn(
                             "h-4 w-4 mt-0.5 shrink-0",
@@ -323,8 +323,8 @@ export function AppSidebar({ className }: AppSidebarProps) {
         {/* AI-Powered Actions Section */}
         {conversations.length > 0 && (
           <SidebarGroup>
-            <SidebarGroupLabel className="text-mac-text-muted">Quick Actions</SidebarGroupLabel>
-            <SidebarGroupContent className="px-2">
+            <SidebarGroupLabel className="text-mac-text-muted pl-0">Quick Actions</SidebarGroupLabel>
+            <SidebarGroupContent className="px-0">
               <Actions
                 actions={[
                   {
