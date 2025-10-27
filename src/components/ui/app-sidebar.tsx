@@ -44,6 +44,7 @@ import { Actions } from "../ai-elements/actions";
 import { InlineCitation } from "../ai-elements/inline-citation";
 import { Source } from "../ai-elements/source";
 import { Suggestion } from "../ai-elements/suggestion";
+import { ThemeSwitcher } from "./theme-switcher";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -354,7 +355,12 @@ export function AppSidebar({ className }: AppSidebarProps) {
       </SidebarContent>
 
       <SidebarFooter className="mac-surface-elevated border-t border-mac-border">
-        <div className="px-4 py-2">
+        <div className="px-3 py-2 space-y-2">
+          {/* Theme Switcher */}
+          <div className="pb-2 border-b border-mac-border">
+            <ThemeSwitcher />
+          </div>
+
           <div className="flex items-center justify-between">
             <div className="text-xs text-mac-text-muted">
               {conversations.length} conversation{conversations.length !== 1 ? "s" : ""}

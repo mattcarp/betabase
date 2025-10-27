@@ -1,0 +1,332 @@
+/**
+ * AOMA Theme - Inspired by Sony Music's AOMA3 Interface
+ * Professional corporate theme with deep navy, slate blue, and orange accents
+ */
+
+:root[data-theme="aoma"] {
+  /* AOMA Core Colors - Based on AOMA3 Interface */
+  --aoma-navy-deep: #001F3F;           /* Deep navy background */
+  --aoma-navy-dark: #003366;            /* Darker navy variant */
+  --aoma-slate: #546E7A;                /* Slate blue/gray */
+  --aoma-slate-light: #607D8B;          /* Lighter slate */
+  --aoma-orange-primary: #FF9800;       /* Primary orange CTA */
+  --aoma-orange-hover: #FB8C00;         /* Orange hover state */
+  --aoma-orange-dark: #F57C00;          /* Darker orange */
+
+  /* AOMA Surface Colors */
+  --aoma-surface-background: #001F3F;   /* Main background */
+  --aoma-surface-elevated: #003366;     /* Cards/panels */
+  --aoma-surface-card: rgba(0, 51, 102, 0.9);
+  --aoma-surface-slate: #546E7A;        /* Slate surfaces */
+
+  /* AOMA Text Colors - Professional Hierarchy */
+  --aoma-text-primary: #ffffff;
+  --aoma-text-secondary: #B0BEC5;       /* Lighter gray text */
+  --aoma-text-muted: #78909C;           /* Muted gray */
+  --aoma-text-orange: #FF9800;          /* Orange accent text */
+
+  /* AOMA Utility Colors */
+  --aoma-border: rgba(176, 190, 197, 0.2);
+  --aoma-border-elevated: rgba(176, 190, 197, 0.3);
+  --aoma-utility-shadow: rgba(0, 0, 0, 0.5);
+
+  /* AOMA State Colors */
+  --aoma-state-hover: rgba(255, 152, 0, 0.1);
+  --aoma-state-focus: #FF9800;
+  --aoma-state-active: #003366;
+  --aoma-state-disabled: #37474F;
+
+  /* AOMA Status Colors - Corporate Professional */
+  --aoma-status-success-bg: rgba(76, 175, 80, 0.15);
+  --aoma-status-success-border: rgba(76, 175, 80, 0.3);
+  --aoma-status-success-text: #81C784;
+
+  --aoma-status-warning-bg: rgba(255, 152, 0, 0.15);
+  --aoma-status-warning-border: rgba(255, 152, 0, 0.3);
+  --aoma-status-warning-text: #FFB74D;
+
+  --aoma-status-error-bg: rgba(244, 67, 54, 0.15);
+  --aoma-status-error-border: rgba(244, 67, 54, 0.3);
+  --aoma-status-error-text: #E57373;
+
+  /* AOMA Link Colors */
+  --aoma-link-primary: #42A5F5;         /* Blue links */
+  --aoma-link-hover: #64B5F6;
+
+  /* Override MAC Design System variables when AOMA theme is active */
+  --mac-surface-background: var(--aoma-surface-background);
+  --mac-surface-elevated: var(--aoma-surface-elevated);
+  --mac-surface-card: var(--aoma-surface-card);
+  --mac-text-primary: var(--aoma-text-primary);
+  --mac-text-secondary: var(--aoma-text-secondary);
+  --mac-text-muted: var(--aoma-text-muted);
+  --mac-border: var(--aoma-border);
+  --mac-utility-border: var(--aoma-border);
+  --mac-utility-border-elevated: var(--aoma-border-elevated);
+  --mac-state-hover: var(--aoma-state-hover);
+  --mac-state-focus: var(--aoma-state-focus);
+
+  /* Override primary/accent colors for AOMA orange theme */
+  --mac-primary-blue-400: var(--aoma-orange-primary);
+  --mac-primary-blue-600: var(--aoma-orange-dark);
+  --mac-accent-purple-400: var(--aoma-slate-light);
+  --mac-accent-purple-600: var(--aoma-slate);
+
+  /* Sidebar Theme Colors for AOMA */
+  --sidebar-background: var(--aoma-navy-dark);
+  --sidebar-foreground: var(--aoma-text-primary);
+  --sidebar-primary: var(--aoma-orange-primary);
+  --sidebar-primary-foreground: var(--aoma-text-primary);
+  --sidebar-accent: var(--aoma-slate-light);
+  --sidebar-accent-foreground: var(--aoma-text-primary);
+  --sidebar-border: var(--aoma-border);
+  --sidebar-ring: var(--aoma-state-focus);
+}
+
+/* AOMA Button Styles - Orange Primary CTA */
+:root[data-theme="aoma"] .mac-button-primary,
+:root[data-theme="aoma"] .aoma-button-primary {
+  background: linear-gradient(135deg, var(--aoma-orange-primary), var(--aoma-orange-dark));
+  color: var(--aoma-text-primary);
+  border: 1px solid var(--aoma-orange-dark);
+  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+:root[data-theme="aoma"] .mac-button-primary:hover,
+:root[data-theme="aoma"] .aoma-button-primary:hover {
+  background: linear-gradient(135deg, var(--aoma-orange-hover), var(--aoma-orange-primary));
+  box-shadow: 0 4px 16px rgba(255, 152, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+/* AOMA Secondary Button - Slate Blue */
+:root[data-theme="aoma"] .mac-button-secondary,
+:root[data-theme="aoma"] .aoma-button-secondary {
+  background-color: var(--aoma-slate);
+  color: var(--aoma-text-primary);
+  border: 1px solid var(--aoma-slate-light);
+}
+
+:root[data-theme="aoma"] .mac-button-secondary:hover,
+:root[data-theme="aoma"] .aoma-button-secondary:hover {
+  background-color: var(--aoma-slate-light);
+  border-color: var(--aoma-orange-primary);
+}
+
+/* AOMA Card Styles - Deep Navy with Slate Accents */
+:root[data-theme="aoma"] .mac-card,
+:root[data-theme="aoma"] .aoma-card {
+  background-color: var(--aoma-surface-elevated);
+  border: 1px solid var(--aoma-border);
+  box-shadow: 0 4px 12px var(--aoma-utility-shadow);
+}
+
+:root[data-theme="aoma"] .mac-card:hover,
+:root[data-theme="aoma"] .aoma-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 8px 24px rgba(255, 152, 0, 0.2);
+  border-color: var(--aoma-orange-primary);
+}
+
+/* AOMA Input Styles */
+:root[data-theme="aoma"] .mac-input,
+:root[data-theme="aoma"] .aoma-input {
+  background-color: var(--aoma-navy-dark);
+  border: 1px solid var(--aoma-border);
+  color: var(--aoma-text-primary);
+}
+
+:root[data-theme="aoma"] .mac-input:focus,
+:root[data-theme="aoma"] .aoma-input:focus {
+  outline: none;
+  border-color: var(--aoma-orange-primary);
+  box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.15);
+}
+
+/* AOMA Background - Deep Navy with Subtle Gradients */
+:root[data-theme="aoma"] .mac-background,
+:root[data-theme="aoma"] .aoma-background {
+  background-color: var(--aoma-surface-background);
+  background-image:
+    radial-gradient(circle at 25% 25%, rgba(0, 51, 102, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(84, 110, 122, 0.3) 0%, transparent 50%);
+  background-size: 100% 100%;
+  background-attachment: fixed;
+}
+
+/* AOMA Logo Grid Pattern (4-quadrant A-O-M-A) */
+.aoma-logo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  width: 200px;
+  height: 200px;
+}
+
+.aoma-logo-quad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  font-weight: 700;
+  color: white;
+  font-family: Georgia, serif;
+}
+
+.aoma-logo-quad:nth-child(1) { background: var(--aoma-navy-deep); }
+.aoma-logo-quad:nth-child(2) { background: var(--aoma-slate); }
+.aoma-logo-quad:nth-child(3) { background: var(--aoma-slate); }
+.aoma-logo-quad:nth-child(4) { background: var(--aoma-navy-deep); }
+
+/* AOMA Circular Refresh Icon */
+.aoma-refresh-icon {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border: 8px solid white;
+  border-radius: 50%;
+  background: var(--aoma-slate);
+}
+
+.aoma-refresh-icon::before,
+.aoma-refresh-icon::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.aoma-refresh-icon::before {
+  top: -15px;
+  right: 15px;
+  border-width: 0 15px 20px 15px;
+  border-color: transparent transparent white transparent;
+  transform: rotate(-45deg);
+}
+
+.aoma-refresh-icon::after {
+  bottom: -15px;
+  left: 15px;
+  border-width: 20px 15px 0 15px;
+  border-color: white transparent transparent transparent;
+  transform: rotate(-45deg);
+}
+
+/* AOMA Table Styles - Corporate Data Grids */
+:root[data-theme="aoma"] table {
+  background: var(--aoma-surface-elevated);
+  border-collapse: collapse;
+}
+
+:root[data-theme="aoma"] table thead {
+  background: var(--aoma-navy-dark);
+  color: var(--aoma-text-primary);
+  font-weight: 600;
+}
+
+:root[data-theme="aoma"] table tbody tr:nth-child(even) {
+  background: rgba(84, 110, 122, 0.1);
+}
+
+:root[data-theme="aoma"] table tbody tr:hover {
+  background: var(--aoma-state-hover);
+}
+
+:root[data-theme="aoma"] table td,
+:root[data-theme="aoma"] table th {
+  border: 1px solid var(--aoma-border);
+  padding: 0.75rem;
+}
+
+/* AOMA Link Styles */
+:root[data-theme="aoma"] a {
+  color: var(--aoma-link-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+:root[data-theme="aoma"] a:hover {
+  color: var(--aoma-link-hover);
+  text-decoration: underline;
+}
+
+/* AOMA Navigation Sidebar - Blue Highlight */
+:root[data-theme="aoma"] .nav-item-active {
+  background: var(--aoma-link-primary);
+  border-left: 4px solid var(--aoma-orange-primary);
+  color: var(--aoma-text-primary);
+  font-weight: 600;
+}
+
+/* AOMA Status Badges */
+:root[data-theme="aoma"] .mac-status-badge {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+
+/* AOMA Professional Typography */
+:root[data-theme="aoma"] .aoma-heading {
+  color: var(--aoma-text-primary);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+:root[data-theme="aoma"] .aoma-body {
+  color: var(--aoma-text-secondary);
+  line-height: 1.6;
+}
+
+/* AOMA Icon Buttons - Compact Corporate Style */
+:root[data-theme="aoma"] .aoma-icon-button {
+  background: transparent;
+  border: 1px solid var(--aoma-border);
+  border-radius: 4px;
+  padding: 0.5rem;
+  color: var(--aoma-text-secondary);
+  transition: all 0.2s ease;
+}
+
+:root[data-theme="aoma"] .aoma-icon-button:hover {
+  background: var(--aoma-slate);
+  border-color: var(--aoma-orange-primary);
+  color: var(--aoma-text-primary);
+}
+
+/* AOMA Search Bar */
+:root[data-theme="aoma"] .aoma-search-bar {
+  display: flex;
+  align-items: center;
+  background: var(--aoma-navy-dark);
+  border: 1px solid var(--aoma-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+:root[data-theme="aoma"] .aoma-search-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 0.75rem;
+  color: var(--aoma-text-primary);
+}
+
+:root[data-theme="aoma"] .aoma-search-bar button {
+  background: var(--aoma-link-primary);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+:root[data-theme="aoma"] .aoma-search-bar button:hover {
+  background: var(--aoma-link-hover);
+}
+
+/* AOMA Theme Transition Animation */
+:root[data-theme="aoma"] * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
