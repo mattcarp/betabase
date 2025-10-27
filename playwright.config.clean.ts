@@ -36,7 +36,7 @@ export default defineConfig({
     {
       name: "e2e-production",
       testDir: "./tests/e2e",
-      use: { baseURL: "https://iamsiam.ai", ...devices["Desktop Chrome"] },
+      use: { baseURL: "https://thebetabase.com", ...devices["Desktop Chrome"] },
       timeout: 90_000,
     },
   ],

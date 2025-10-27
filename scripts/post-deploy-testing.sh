@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 BOLD='\033[1m'
 
 # Configuration
-PRODUCTION_URL="${PRODUCTION_URL:-https://iamsiam.ai}"
+PRODUCTION_URL="${PRODUCTION_URL:-https://thebetabase.com}"
 TEST_EMAIL="siam-test-x7j9k2p4@mailinator.com"
 MAILINATOR_INBOX_URL="https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4"
 TEST_LOG="/tmp/siam-post-deploy-test-$(date +%Y%m%d-%H%M%S).log"
@@ -132,7 +132,7 @@ const { chromium } = require('playwright');
   
   try {
     // Navigate to login page
-    await page.goto(process.env.PRODUCTION_URL || 'https://iamsiam.ai', { waitUntil: 'networkidle' });
+    await page.goto(process.env.PRODUCTION_URL || 'https://thebetabase.com', { waitUntil: 'networkidle' });
     
     // Check if login form exists
     const emailInput = await page.locator('input[type="email"]').first();
@@ -182,11 +182,11 @@ const { chromium } = require('playwright');
   const page = await browser.newPage();
   
   try {
-    await page.goto(process.env.PRODUCTION_URL || 'https://iamsiam.ai');
+    await page.goto(process.env.PRODUCTION_URL || 'https://thebetabase.com');
     
     // Skip authentication for testing by looking for chat interface directly
     // or checking if we can access it via bypass
-    const bypassUrl = (process.env.PRODUCTION_URL || 'https://iamsiam.ai') + '?bypass=true';
+    const bypassUrl = (process.env.PRODUCTION_URL || 'https://thebetabase.com') + '?bypass=true';
     await page.goto(bypassUrl, { waitUntil: 'networkidle' });
     
     // Look for chat input or interface elements
@@ -293,7 +293,7 @@ const { chromium } = require('playwright');
   });
   
   try {
-    await page.goto(process.env.PRODUCTION_URL || 'https://iamsiam.ai', { waitUntil: 'networkidle' });
+    await page.goto(process.env.PRODUCTION_URL || 'https://thebetabase.com', { waitUntil: 'networkidle' });
     
     // Wait a bit for any async errors
     await page.waitForTimeout(5000);
@@ -347,7 +347,7 @@ const { chromium } = require('playwright');
   
   try {
     // Navigate and measure performance metrics
-    await page.goto(process.env.PRODUCTION_URL || 'https://iamsiam.ai', { 
+    await page.goto(process.env.PRODUCTION_URL || 'https://thebetabase.com', { 
       waitUntil: 'networkidle' 
     });
     
@@ -472,7 +472,7 @@ const fs = require('fs');
   const page = await context.newPage();
   
   try {
-    const baseUrl = process.env.PRODUCTION_URL || 'https://iamsiam.ai';
+    const baseUrl = process.env.PRODUCTION_URL || 'https://thebetabase.com';
     
     // Navigate to the app
     await page.goto(baseUrl, { waitUntil: 'networkidle' });
@@ -577,7 +577,7 @@ const { chromium } = require('playwright');
   const page = await context.newPage();
   
   try {
-    const baseUrl = process.env.PRODUCTION_URL || 'https://iamsiam.ai';
+    const baseUrl = process.env.PRODUCTION_URL || 'https://thebetabase.com';
     
     // Try bypass URL for testing
     await page.goto(`${baseUrl}?bypass=true`, { waitUntil: 'networkidle' });
@@ -789,7 +789,7 @@ case "${1:-}" in
         echo "  --help, -h    Show this help message"
         echo ""
         echo "Environment Variables:"
-        echo "  PRODUCTION_URL  Production URL to test (default: https://iamsiam.ai)"
+        echo "  PRODUCTION_URL  Production URL to test (default: https://thebetabase.com)"
         echo ""
         exit 0
         ;;

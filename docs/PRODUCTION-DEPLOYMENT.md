@@ -7,7 +7,7 @@
 
 Both domains are live and accessible:
 
-- **Primary**: https://iamsiam.ai
+- **Primary**: https://thebetabase.com
 - **Secondary**: https://thebetabase.com
 
 ## Infrastructure Overview
@@ -24,7 +24,7 @@ Both domains are live and accessible:
 Both domains point to Render's IP address:
 
 ```
-iamsiam.ai       → 216.24.57.1 (Render)
+thebetabase.com       → 216.24.57.1 (Render)
 thebetabase.com  → 216.24.57.1 (Render)
 ```
 
@@ -130,7 +130,7 @@ Via Render Dashboard:
 
 ### Production Sites
 
-- https://iamsiam.ai - Primary domain
+- https://thebetabase.com - Primary domain
 - https://thebetabase.com - Secondary domain
 
 ### Admin/Monitoring

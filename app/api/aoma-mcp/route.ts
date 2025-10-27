@@ -176,7 +176,7 @@ export async function OPTIONS(request: NextRequest) {
   // YOLO SECURITY FIX: Lock down CORS to specific origins only
   const allowedOrigins =
     process.env.NODE_ENV === "production"
-      ? ["https://iamsiam.ai"]
+      ? ["https://thebetabase.com"]
       : ["http://localhost:3000", "http://127.0.0.1:3000"];
 
   const origin = request.headers.get("origin");

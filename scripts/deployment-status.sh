@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 SERVICE_ID="srv-d2f8f0emcj7s73eh647g"
-PRODUCTION_URL="https://iamsiam.ai"
+PRODUCTION_URL="https://thebetabase.com"
 RENDER_URL="https://siam.onrender.com"
 
 echo -e "${CYAN}╔══════════════════════════════════════════════════════════╗${NC}"
@@ -92,7 +92,7 @@ echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━�
 echo -e "${BLUE}  SITE HEALTH CHECK${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
-check_url "$PRODUCTION_URL" "Production (iamsiam.ai)"
+check_url "$PRODUCTION_URL" "Production (thebetabase.com)"
 check_url "$RENDER_URL" "Render URL"
 check_url "$PRODUCTION_URL/api/health" "Health API"
 

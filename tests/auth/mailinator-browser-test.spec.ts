@@ -19,7 +19,7 @@ import { test, expect, Page, BrowserContext } from "@playwright/test";
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
-const SIAM_URL = process.env.TEST_URL || "https://iamsiam.ai";
+const SIAM_URL = process.env.TEST_URL || "https://thebetabase.com";
 
 // Helper to wait with retries
 async function waitForElement(page: Page, selector: string, options = {}) {

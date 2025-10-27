@@ -24,7 +24,7 @@ Fixed `.mcp.json` configuration to properly support both local development and p
 The AOMA MCP functionality is accessed through:
 
 1. **Web API Proxy** (Currently Working):
-   - Endpoint: `https://iamsiam.ai/api/aoma-mcp`
+   - Endpoint: `https://thebetabase.com/api/aoma-mcp`
    - Proxies to: `https://luminous-dedication-production.up.railway.app`
    - Status: ✅ Healthy
 
@@ -46,10 +46,10 @@ To test if AOMA MCP is working:
 
 ```bash
 # Check health
-curl https://iamsiam.ai/api/aoma-mcp
+curl https://thebetabase.com/api/aoma-mcp
 
 # Test query (will timeout but confirms connection attempt)
-curl -X POST https://iamsiam.ai/api/aoma-mcp \
+curl -X POST https://thebetabase.com/api/aoma-mcp \
   -H "Content-Type: application/json" \
   -d '{"action": "tools/call", "tool": "query_aoma_knowledge", "args": {"query": "test"}}'
 ```

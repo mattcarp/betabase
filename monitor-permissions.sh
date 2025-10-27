@@ -16,7 +16,7 @@ for i in {1..30}; do
   railway status 2>/dev/null || echo "Status check failed"
   
   # Check if site is responding
-  curl -s -o /dev/null -w "Health check: %{http_code}\n" https://iamsiam.ai/api/health
+  curl -s -o /dev/null -w "Health check: %{http_code}\n" https://thebetabase.com/api/health
   
   sleep 10
 done

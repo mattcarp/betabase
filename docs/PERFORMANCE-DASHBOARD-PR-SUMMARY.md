@@ -36,7 +36,7 @@ http://localhost:3000/performance
 Or in production:
 
 ```
-https://iamsiam.ai/performance
+https://thebetabase.com/performance
 ```
 
 ## 🎨 Dashboard Features

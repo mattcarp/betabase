@@ -102,12 +102,12 @@
       "mcpRequestDetails": [
         {
           "method": "POST",
-          "url": "https://iamsiam.ai/api/aoma-mcp",
+          "url": "https://thebetabase.com/api/aoma-mcp",
           "timestamp": "2025-08-06T15:36:30.213Z"
         },
         {
           "status": 200,
-          "url": "https://iamsiam.ai/api/aoma-mcp",
+          "url": "https://thebetabase.com/api/aoma-mcp",
           "timestamp": "2025-08-06T15:36:30.378Z"
         }
       ],

@@ -69,7 +69,7 @@ import { test, expect } from "@playwright/test";
 
 test("Magic link authentication flow", async ({ page }) => {
   // Navigate to production
-  await page.goto("https://iamsiam.ai");
+  await page.goto("https://thebetabase.com");
 
   // Enter email
   await page.fill('input[type="email"]', "siam-test-x7j9k2p4@mailinator.com");
@@ -135,7 +135,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Production Deployment Verification", () => {
   test("Health check endpoint", async ({ request }) => {
-    const response = await request.get("https://iamsiam.ai/api/health");
+    const response = await request.get("https://thebetabase.com/api/health");
     expect(response.status()).toBe(200);
     const body = await response.json();
     expect(body.status).toBe("healthy");
@@ -147,7 +147,7 @@ test.describe("Production Deployment Verification", () => {
       if (msg.type() === "error") errors.push(msg.text());
     });
 
-    await page.goto("https://iamsiam.ai");
+    await page.goto("https://thebetabase.com");
     await page.waitForLoadState("networkidle");
 
     // Filter out known benign errors
@@ -161,7 +161,7 @@ test.describe("Production Deployment Verification", () => {
   });
 
   test("Authentication flow works", async ({ page }) => {
-    await page.goto("https://iamsiam.ai");
+    await page.goto("https://thebetabase.com");
 
     // Check login form is present
     await expect(page.locator('input[type="email"]')).toBeVisible();
@@ -177,7 +177,7 @@ test.describe("Production Deployment Verification", () => {
     const routes = ["/login", "/debug", "/gpt5-chat"];
 
     for (const route of routes) {
-      const response = await page.goto(`https://iamsiam.ai${route}`);
+      const response = await page.goto(`https://thebetabase.com${route}`);
       expect(response?.status()).toBeLessThan(400);
     }
   });
@@ -365,7 +365,7 @@ test.beforeEach(async () => {
 
 ```typescript
 test("Login page visual consistency", async ({ page }) => {
-  await page.goto("https://iamsiam.ai");
+  await page.goto("https://thebetabase.com");
   await expect(page).toHaveScreenshot("login-page.png", {
     maxDiffPixels: 100,
     threshold: 0.2,
@@ -381,7 +381,7 @@ test.use({
 });
 
 test("Mobile responsive design", async ({ page }) => {
-  await page.goto("https://iamsiam.ai");
+  await page.goto("https://thebetabase.com");
   // Test mobile-specific interactions
 });
 ```
@@ -394,7 +394,7 @@ test("Mobile responsive design", async ({ page }) => {
 #!/bin/bash
 # scripts/health-check.sh
 
-URL="https://iamsiam.ai/api/health"
+URL="https://thebetabase.com/api/health"
 
 while true; do
   response=$(curl -s -o /dev/null -w "%{http_code}" $URL)

@@ -12,7 +12,7 @@ RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-BASE_URL="https://iamsiam.ai"
+BASE_URL="https://thebetabase.com"
 
 # Function to test endpoint
 test_endpoint() {

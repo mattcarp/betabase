@@ -1209,11 +1209,11 @@ Conduct rapid usability testing to ensure all interfaces are intuitive and meet 
 
 #### Description
 
-Deploy the SIAM application to the production domains iamsiam.ai and thebetabase.com, ensuring proper configuration and accessibility.
+Deploy the SIAM application to the production domains thebetabase.com and thebetabase.com, ensuring proper configuration and accessibility.
 
 #### Details
 
-1. Verify that both domains (iamsiam.ai and thebetabase.com) are correctly pointing to Vercel's IP address (76.76.21.21).
+1. Verify that both domains (thebetabase.com and thebetabase.com) are correctly pointing to Vercel's IP address (76.76.21.21).
 2. Investigate and resolve the issue causing the authentication requirement on these domains. This may involve checking Vercel's deployment settings and authentication configurations.
 3. Ensure that the Railway deployment is correctly configured to avoid 404 errors. This may involve checking the deployment logs and settings on Railway.
 4. Update the Vercel deployment configuration to remove any unnecessary authentication requirements, ensuring the application is publicly accessible.
@@ -1223,7 +1223,7 @@ Deploy the SIAM application to the production domains iamsiam.ai and thebetabase
 
 #### Test Strategy
 
-1. Access both iamsiam.ai and thebetabase.com to verify that the SIAM application loads without requiring authentication.
+1. Access both thebetabase.com and thebetabase.com to verify that the SIAM application loads without requiring authentication.
 2. Confirm that no 404 errors are encountered when accessing the application on these domains.
 3. Test the application's functionality on both domains to ensure all features are working as expected.
 4. Use browser developer tools to check for any console errors or network issues during the loading of the application.
