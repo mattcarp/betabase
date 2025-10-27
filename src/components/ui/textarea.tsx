@@ -34,6 +34,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           "scrollbar-track-transparent",
           // Text size responsive
           "md:text-sm",
+          // Ensure text is left-aligned by default
+          "text-left",
           className
         )}
         ref={ref}
