@@ -536,6 +536,46 @@ export function AiSdkChatPanel({
     }
   }, [messages, onMessagesChange]);
 
+  // Smart TTS: Filter out code blocks and very long responses
+  const prepareTextForSpeech = useCallback((content: string): string => {
+    let textToSpeak = content;
+
+    // Remove code blocks and replace with descriptive text
+    const codeBlockRegex = /```[\s\S]*?```/g;
+    const codeBlockMatches = content.match(codeBlockRegex);
+    if (codeBlockMatches && codeBlockMatches.length > 0) {
+      textToSpeak = textToSpeak.replace(codeBlockRegex, "[Code block available in the response]");
+    }
+
+    // Remove inline code spans
+    textToSpeak = textToSpeak.replace(/`[^`]+`/g, "");
+
+    // Remove markdown links but keep the text
+    textToSpeak = textToSpeak.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+
+    // Remove markdown formatting
+    textToSpeak = textToSpeak.replace(/[*_~]/g, "");
+
+    // Remove AOMA citations [1], [2], etc.
+    textToSpeak = textToSpeak.replace(/\[\d+\]/g, "");
+
+    // Check if response is very long (>500 characters after cleaning)
+    if (textToSpeak.length > 500) {
+      // Extract first sentence or up to 200 chars
+      const firstSentence = textToSpeak.match(/^.{1,200}[.!?]/);
+      if (firstSentence) {
+        return firstSentence[0] + " This is a detailed response. Please read the full text on screen.";
+      } else {
+        return (
+          textToSpeak.substring(0, 200) +
+          "... This is a very long response. Please read the full text on screen."
+        );
+      }
+    }
+
+    return textToSpeak.trim();
+  }, []);
+
   // Auto-speak AI responses when TTS is enabled
   useEffect(() => {
     if (isTTSEnabled && messages.length > 0) {
@@ -543,11 +583,15 @@ export function AiSdkChatPanel({
       if (lastMessage.role === "assistant" && lastMessage.content) {
         // Only speak if this is a new message (not during streaming)
         if (!isLoading) {
-          speak(lastMessage.content);
+          const textToSpeak = prepareTextForSpeech(lastMessage.content);
+          if (textToSpeak.length > 10) {
+            // Only speak if there's meaningful content after filtering
+            speak(textToSpeak);
+          }
         }
       }
     }
-  }, [messages, isTTSEnabled, isLoading, speak]);
+  }, [messages, isTTSEnabled, isLoading, speak, prepareTextForSpeech]);
 
   // Update chatId when conversationId changes
   useEffect(() => {
@@ -961,101 +1005,23 @@ export function AiSdkChatPanel({
         }
       } catch {}
 
-      // Manually add the message to the messages array and let useChat handle the API call
-      // This works around AI SDK v5's complex message submission patterns
-      const newUserMessage = {
-        id: `user-${Date.now()}`,
-        role: "user" as const,
-        content,
-        createdAt: new Date(),
-      };
+      // Clear local input immediately
+      setLocalInput("");
 
-      // Update messages array immediately for instant UI feedback
-      setMessages([...messages, newUserMessage]);
-      setLocalInput(""); // Clear the local input immediately
-
-      // Now trigger the API call manually with the full messages array
+      // Use the AI SDK's append function instead of manual fetch
+      // This properly handles the streaming response format
       try {
-        const response = await fetch(currentApiEndpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            messages: [...messages, newUserMessage],
-            model: selectedModel,
-          }),
-        });
-
-        if (!response.ok) {
-          // Handle rate limiting gracefully
-          if (response.status === 429) {
-            const rateLimitMessage =
-              "⚠️ Rate limit reached. Please wait a moment before sending another message.";
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: `error-${Date.now()}`,
-                role: "assistant",
-                content: rateLimitMessage,
-                createdAt: new Date(),
-              },
-            ]);
-            setManualLoading(false);
-            setIsProcessing(false);
-            return; // Don't throw error, just show message
-          }
-          throw new Error(`API error: ${response.status}`);
-        }
-
-        // Handle streaming response
-        const reader = response.body?.getReader();
-        if (!reader) throw new Error("No response body");
-
-        const decoder = new TextDecoder();
-        let assistantContent = "";
-        const assistantMessageId = `assistant-${Date.now()}`;
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split("\n").filter((line) => line.trim());
-
-          for (const line of lines) {
-            // Handle SSE format: "data: {json}"
-            if (line.startsWith("data: ")) {
-              try {
-                const jsonStr = line.slice(6); // Remove "data: " prefix
-                if (jsonStr === "[DONE]") break; // End of stream marker
-
-                const json = JSON.parse(jsonStr);
-
-                // Handle text-delta events (streaming response chunks)
-                if (json.type === "text-delta" && json.delta) {
-                  assistantContent += json.delta;
-                  // Update assistant message in real-time
-                  setMessages((prev) => {
-                    const withoutLastAssistant = prev.filter((m) => m.id !== assistantMessageId);
-                    return [
-                      ...withoutLastAssistant,
-                      {
-                        id: assistantMessageId,
-                        role: "assistant" as const,
-                        content: assistantContent,
-                        createdAt: new Date(),
-                      },
-                    ];
-                  });
-                }
-              } catch (parseError) {
-                // Ignore JSON parse errors in streaming
-              }
-            }
-          }
+        if (typeof append === "function") {
+          await append({
+            role: "user",
+            content,
+          });
+        } else {
+          throw new Error("append function not available from useChat");
         }
 
         // Streaming complete - manually trigger completion logic
-        // (onFinish callback doesn't fire for manual fetch streams)
+        // (onFinish callback should handle this, but we add fallback)
         if ((window as any).currentProgressInterval) {
           clearInterval((window as any).currentProgressInterval);
           (window as any).currentProgressInterval = null;
@@ -1083,8 +1049,13 @@ export function AiSdkChatPanel({
         toast.error(`Failed to send message: ${error.message || "Unknown error"}`);
         setManualLoading(false);
         setIsProcessing(false);
-        // Remove the optimistically added user message on error
-        setMessages(messages);
+
+        // Clear progress on error
+        if ((window as any).currentProgressInterval) {
+          clearInterval((window as any).currentProgressInterval);
+          (window as any).currentProgressInterval = null;
+        }
+        setCurrentProgress(null);
       }
     }
   };
