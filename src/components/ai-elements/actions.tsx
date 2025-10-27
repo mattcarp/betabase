@@ -29,7 +29,7 @@ export const Actions = ({ className, children, actions, ...props }: ActionsProps
             variant={action.variant || "ghost"}
             size="sm"
             className={cn(
-              "justify-start text-xs h-8 px-4 py-2.5 font-light",
+              "justify-start text-xs h-8 px-2 py-2.5 font-light gap-3",
               "mac-button-ghost hover:bg-mac-state-hover",
               "transition-all duration-150 ease-out",
               "text-mac-text-secondary hover:text-mac-text-primary",
@@ -39,7 +39,7 @@ export const Actions = ({ className, children, actions, ...props }: ActionsProps
                 "text-red-400/80 hover:text-red-400 hover:bg-red-950/20 hover:border-red-900/20"
             )}
           >
-            {action.icon && <span className="mr-2 opacity-70">{action.icon}</span>}
+            {action.icon && <span className="opacity-70 shrink-0">{action.icon}</span>}
             <span>{action.label}</span>
           </Button>
         ))}
