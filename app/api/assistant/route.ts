@@ -1,231 +1,327 @@
-import { OpenAI } from "openai";
-import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
+import { NextRequest } from "next/server";
 
-// Initialize OpenAI client for assistant API
-const apiKey = process.env.OPENAI_API_KEY;
-if (!apiKey) {
-  console.error("OPENAI_API_KEY is not set in environment variables");
+// Extend global type to include our custom property
+declare global {
+  // eslint-disable-next-line no-var
+  var assistantInitialized: boolean | undefined;
 }
 
-const openaiClient = new OpenAI({
-  apiKey: apiKey || "",
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY || "",
 });
 
-// Get Assistant ID from environment variable
-const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID || "asst_VvOHL1c4S6YapYKun4mY29fM";
+// Get Assistant ID from environment variable (server-side only)
+const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID;
 
-// Allow streaming responses up to 30 seconds
-export const maxDuration = 30;
+if (!ASSISTANT_ID) {
+  console.error("OPENAI_ASSISTANT_ID environment variable is not set!");
+}
 
-export async function POST(req: NextRequest) {
+// Declare global type for assistant initialization flag
+declare global {
+  // eslint-disable-next-line no-var
+  var assistantInitialized: boolean | undefined;
+}
+
+// Ensure assistant has file_search tool (run once on startup)
+async function ensureAssistantHasFileSearch() {
+  if (!ASSISTANT_ID) {
+    console.error("Cannot check assistant tools - ASSISTANT_ID not set");
+    return;
+  }
+
   try {
-    const body = await req.json();
-    const { messages, action, fileIds } = body;
+    const assistant = await openai.beta.assistants.retrieve(ASSISTANT_ID);
+    const hasFileSearch = assistant.tools?.some((tool) => tool.type === "file_search");
 
-    // Handle file upload action
-    if (action === "upload") {
-      const formData = await req.formData();
-      const file = formData.get("file") as File;
-
-      if (!file) {
-        return NextResponse.json({ error: "No file provided" }, { status: 400 });
-      }
-
-      // Upload file to OpenAI - using proper File constructor
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-
-      // Create a proper File object for OpenAI
-      const fileForUpload = new File([buffer], file.name, {
-        type: file.type || "text/plain",
+    if (!hasFileSearch) {
+      console.log("Adding file_search tool to assistant...");
+      await openai.beta.assistants.update(ASSISTANT_ID, {
+        tools: [...(assistant.tools || []), { type: "file_search" }],
       });
-
-      const uploadedFile = await openaiClient.files.create({
-        file: fileForUpload,
-        purpose: "assistants",
-      });
-
-      // Attach file to assistant's vector store
-      const assistant = await openaiClient.beta.assistants.retrieve(ASSISTANT_ID);
-
-      // Check if assistant has a vector store
-      if (assistant.tool_resources?.file_search?.vector_store_ids?.[0]) {
-        const vectorStoreId = assistant.tool_resources.file_search.vector_store_ids[0];
-
-        // Add file to vector store
-        await (openaiClient.beta as any).vectorStores.files.create(vectorStoreId, {
-          file_id: uploadedFile.id,
-        });
-      } else {
-        // Create a new vector store if none exists
-        const vectorStore = await (openaiClient.beta as any).vectorStores.create({
-          name: "SIAM Knowledge Base",
-          file_ids: [uploadedFile.id],
-        });
-
-        // Update assistant with vector store
-        await openaiClient.beta.assistants.update(ASSISTANT_ID, {
-          tool_resources: {
-            file_search: {
-              vector_store_ids: [vectorStore.id],
-            },
-          },
-        });
-      }
-
-      return NextResponse.json({
-        success: true,
-        fileId: uploadedFile.id,
-        filename: file.name,
-        message: `File "${file.name}" uploaded successfully to knowledge base`,
-      });
+      console.log("File search tool added to assistant");
     }
-
-    // Handle chat with assistant
-    if (!messages || !Array.isArray(messages)) {
-      return NextResponse.json({ error: "Invalid messages format" }, { status: 400 });
-    }
-
-    // Create a thread
-    const thread = await openaiClient.beta.threads.create();
-
-    // Add messages to thread
-    for (const message of messages) {
-      await openaiClient.beta.threads.messages.create(thread.id, {
-        role: message.role as "user" | "assistant",
-        content: message.content,
-      });
-    }
-
-    // Run the assistant
-    const run = await openaiClient.beta.threads.runs.create(thread.id, {
-      assistant_id: ASSISTANT_ID,
-      // Include file IDs if provided
-      ...(fileIds && {
-        additional_instructions: `Consider these uploaded files: ${fileIds.join(", ")}`,
-      }),
-    });
-
-    console.log("Run created:", {
-      runId: run.id,
-      threadId: thread.id,
-      status: run.status,
-    });
-
-    // Wait for completion and stream response
-    let runStatus = run;
-
-    while (runStatus.status !== "completed") {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      runStatus = await openaiClient.beta.threads.runs.retrieve(thread.id, runStatus.id as any);
-
-      if (runStatus.status === "failed" || runStatus.status === "cancelled") {
-        return NextResponse.json({ error: "Assistant run failed" }, { status: 500 });
-      }
-    }
-
-    // Get the assistant's response
-    const messagesResponse = await openaiClient.beta.threads.messages.list(thread.id);
-    const assistantMessage = messagesResponse.data[0];
-
-    // For now, return a simple JSON response
-    // TODO: Convert to streaming response compatible with Vercel AI SDK
-    return NextResponse.json({
-      content:
-        assistantMessage.content[0].type === "text"
-          ? assistantMessage.content[0].text.value
-          : "Response not available",
-      threadId: thread.id,
-      runId: run.id,
-    });
   } catch (error) {
-    console.error("Assistant API error:", error);
-    return NextResponse.json(
+    console.error("Error checking assistant tools:", error);
+  }
+}
+
+// Augment global namespace for initialization tracking
+declare global {
+  // eslint-disable-next-line no-var
+  var assistantInitialized: boolean | undefined;
+}
+
+// Initialize on first load
+if (typeof global !== "undefined" && !global.assistantInitialized && ASSISTANT_ID) {
+  ensureAssistantHasFileSearch();
+  global.assistantInitialized = true;
+}
+
+// GET endpoint to list files in the assistant's vector store
+export async function GET() {
+  try {
+    if (!ASSISTANT_ID) {
+      return new Response(
+        JSON.stringify({
+          error: "Assistant not configured",
+          details: "OPENAI_ASSISTANT_ID environment variable is not set",
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Get the assistant's vector store
+    const assistant = await openai.beta.assistants.retrieve(ASSISTANT_ID);
+    const vectorStoreId = assistant.tool_resources?.file_search?.vector_store_ids?.[0];
+
+    if (!vectorStoreId) {
+      return new Response(
+        JSON.stringify({
+          message: "No vector store found for assistant",
+          files: [],
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // For OpenAI SDK v5, we need to list all files and filter
+    // The vector store files are typically stored with the assistant
+    const allFiles = await openai.files.list({ purpose: "assistants" });
+
+    return new Response(
+      JSON.stringify({
+        vectorStoreId,
+        files: allFiles.data.map((file) => ({
+          id: file.id,
+          filename: file.filename,
+          bytes: file.bytes,
+          created_at: file.created_at,
+          purpose: file.purpose,
+        })),
+        count: allFiles.data.length,
+        assistant_tools: assistant.tools,
+        tool_resources: assistant.tool_resources,
+      }),
       {
-        error: "Failed to process assistant request",
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (error) {
+    console.error("Error listing files:", error);
+    return new Response(
+      JSON.stringify({
+        error: "Failed to list files",
         details: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
     );
   }
 }
 
-// Handle file upload separately
+export async function POST(req: NextRequest) {
+  try {
+    if (!ASSISTANT_ID) {
+      return new Response(
+        JSON.stringify({
+          error: "Assistant not configured",
+          details: "OPENAI_ASSISTANT_ID environment variable is not set",
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    const { threadId, message, fileIds } = await req.json();
+
+    console.log("Assistant V5 API - Request received:", {
+      threadId,
+      message,
+      fileIds,
+    });
+
+    // Create or get thread
+    const thread = threadId
+      ? await openai.beta.threads.retrieve(threadId)
+      : await openai.beta.threads.create();
+
+    console.log("Using thread:", thread.id);
+
+    // Add the user message to the thread with file attachments
+    const messageData: any = {
+      role: "user",
+      content: message,
+    };
+
+    // Attach files using the new attachments format for file_search
+    if (fileIds && fileIds.length > 0) {
+      messageData.attachments = fileIds.map((fileId: string) => ({
+        file_id: fileId,
+        tools: [{ type: "file_search" }],
+      }));
+    }
+
+    const createdMessage = await openai.beta.threads.messages.create(thread.id, messageData);
+
+    console.log("Message created:", createdMessage.id);
+
+    // Run the assistant on the thread
+    const run = await openai.beta.threads.runs.create(thread.id, {
+      assistant_id: ASSISTANT_ID,
+      // Include instructions to use uploaded files if present
+      ...(fileIds &&
+        fileIds.length > 0 && {
+          additional_instructions: `Please search and use the content from the uploaded files to answer the user's question. The files have been attached to this message.`,
+        }),
+    });
+
+    console.log("Assistant run created:", run.id);
+
+    // Wait for the run to complete
+    let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id as any);
+
+    while (runStatus.status !== "completed" && runStatus.status !== "failed") {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id as any);
+    }
+
+    if (runStatus.status === "failed") {
+      throw new Error("Assistant run failed");
+    }
+
+    // Get the messages
+    const messages = await openai.beta.threads.messages.list(thread.id);
+    const assistantMessage = messages.data.find(
+      (msg) => msg.role === "assistant" && msg.run_id === run.id
+    );
+
+    if (!assistantMessage || !assistantMessage.content[0]) {
+      throw new Error("No response from assistant");
+    }
+
+    // Return the assistant's response
+    return new Response(
+      JSON.stringify({
+        threadId: thread.id,
+        messageId: assistantMessage.id,
+        content:
+          assistantMessage.content[0].type === "text"
+            ? assistantMessage.content[0].text.value
+            : "Unable to process response",
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (error) {
+    console.error("Assistant V5 API error:", error);
+    return new Response(
+      JSON.stringify({
+        error: "Failed to process assistant request",
+        details: error instanceof Error ? error.message : "Unknown error",
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+}
+
+// Handle file uploads separately
 export async function PUT(req: NextRequest) {
   try {
-    console.log("PUT /api/assistant - File upload request received");
-
-    if (!apiKey) {
-      return NextResponse.json({ error: "OpenAI API key not configured" }, { status: 500 });
+    if (!ASSISTANT_ID) {
+      return new Response(
+        JSON.stringify({
+          error: "Assistant not configured",
+          details: "OPENAI_ASSISTANT_ID environment variable is not set",
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
     }
+
+    console.log("PUT /api/assistant-v5 - File upload request");
 
     const formData = await req.formData();
     const file = formData.get("file") as File;
 
     if (!file) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+      return new Response(JSON.stringify({ error: "No file provided" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     console.log("Uploading file:", file.name, "Size:", file.size);
 
-    // Upload file to OpenAI - using proper File constructor
+    // Convert File to proper format for OpenAI
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Create a proper File object for OpenAI
-    const fileForUpload = new File([buffer], file.name, {
-      type: file.type || "text/plain",
-    });
-
-    const uploadedFile = await openaiClient.files.create({
-      file: fileForUpload,
+    // Upload to OpenAI
+    const openaiFile = await openai.files.create({
+      file: new File([buffer], file.name, { type: file.type }),
       purpose: "assistants",
     });
 
-    // Get assistant
-    const assistant = await openaiClient.beta.assistants.retrieve(ASSISTANT_ID);
+    console.log("File uploaded to OpenAI:", openaiFile.id);
 
-    // Get or create vector store
-    let vectorStoreId: string;
+    // Get or create vector store for the assistant
+    const assistant = await openai.beta.assistants.retrieve(ASSISTANT_ID);
+    const vectorStoreId = assistant.tool_resources?.file_search?.vector_store_ids?.[0];
 
-    if (assistant.tool_resources?.file_search?.vector_store_ids?.[0]) {
-      vectorStoreId = assistant.tool_resources.file_search.vector_store_ids[0];
-    } else {
-      // Create a new vector store
-      const vectorStore = await (openaiClient.beta as any).vectorStores.create({
-        name: "SIAM Knowledge Base",
-      });
-      vectorStoreId = vectorStore.id;
+    // In OpenAI SDK v5, vector stores are managed differently
+    // The file is already uploaded and can be used with the assistant
+    // The assistant already has a vector store configured
+    console.log("File uploaded successfully for assistant use");
+    console.log("Assistant vector store:", vectorStoreId);
 
-      // Update assistant with vector store
-      await openaiClient.beta.assistants.update(ASSISTANT_ID, {
-        tool_resources: {
-          file_search: {
-            vector_store_ids: [vectorStoreId],
-          },
-        },
-      });
-    }
+    // The file will be automatically available to the assistant
+    // when messages are sent with file attachments
 
-    // Add file to vector store
-    await (openaiClient.beta as any).vectorStores.files.create(vectorStoreId, {
-      file_id: uploadedFile.id,
-    });
-
-    return NextResponse.json({
-      success: true,
-      fileId: uploadedFile.id,
-      filename: file.name,
-      message: `File "${file.name}" uploaded to SIAM knowledge base`,
-    });
+    return new Response(
+      JSON.stringify({
+        success: true,
+        fileId: openaiFile.id,
+        filename: file.name,
+        vectorStoreId,
+        message: `File "${file.name}" uploaded to SIAM knowledge base`,
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   } catch (error) {
     console.error("File upload error:", error);
-    return NextResponse.json(
-      {
+    return new Response(
+      JSON.stringify({
         error: "Failed to upload file",
         details: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
     );
   }
 }

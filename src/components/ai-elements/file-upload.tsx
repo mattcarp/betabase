@@ -72,7 +72,7 @@ export function FileUpload({
     ".jpeg",
   ],
   compact = false,
-  apiEndpoint = "/api/assistant-v5", // Use assistant API
+  apiEndpoint = "/api/assistant", // Use assistant API
 }: FileUploadProps) {
   const [uploadQueue, setUploadQueue] = useState<FileUploadItem[]>([]);
   const [isUploading, setIsUploading] = useState(false);
