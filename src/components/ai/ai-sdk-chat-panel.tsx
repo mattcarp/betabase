@@ -1379,7 +1379,7 @@ export function AiSdkChatPanel({
             )}
 
             {/* Message timestamp */}
-            <div className="mt-4 flex items-center justify-between">
+            <div className="mt-4 flex items-center justify-between relative">
               <span
                 className={cn(
                   "text-xs opacity-60",
@@ -1394,7 +1394,7 @@ export function AiSdkChatPanel({
 
               {/* Message actions for assistant messages */}
               {!isUser && (
-                <Actions className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <Actions className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0">
                   <Action
                     tooltip="Copy message"
                     onClick={() => handleMessageAction("copy", message.id)}

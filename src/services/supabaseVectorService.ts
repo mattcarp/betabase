@@ -74,10 +74,23 @@ export class SupabaseVectorService {
       console.log(`⏱️  Vector search (DB query): ${vectorSearchTime.toFixed(0)}ms`);
 
       if (error) {
+        console.error('❌ Vector search error:', error);
         throw error;
       }
 
-      return data || [];
+      // Log detailed results for debugging
+      const results = data || [];
+      console.log(`📊 Vector search results: ${results.length} matches`);
+      if (results.length > 0) {
+        const topResult = results[0];
+        console.log(`   Best match: ${(topResult.similarity * 100).toFixed(1)}% similarity`);
+        console.log(`   Content preview: "${topResult.content?.substring(0, 100)}..."`);
+        console.log(`   All similarities: [${results.map((r: any) => (r.similarity * 100).toFixed(1) + '%').join(', ')}]`);
+      } else {
+        console.log(`   ⚠️  No results above threshold (${matchThreshold * 100}%)`);
+      }
+
+      return results;
     } catch (error) {
       console.error("Vector search failed:", error);
       throw new Error(`Search failed: ${handleSupabaseError(error)}`);
