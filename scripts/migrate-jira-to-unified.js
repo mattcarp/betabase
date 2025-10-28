@@ -145,10 +145,10 @@ async function migrateJiraToUnified() {
             return { status: "skipped", ticket_key: ticket.ticket_key };
           }
 
-          // Insert into unified vectors (convert array to PostgreSQL vector format)
+          // Insert into unified vectors (pass array directly, PostgreSQL will cast to vector)
           const { error: insertError } = await supabase.rpc("upsert_aoma_vector", {
             p_content: content,
-            p_embedding: `[${embedding.join(",")}]`,
+            p_embedding: embedding,  // Pass array directly, not as string
             p_source_type: "jira",
             p_source_id: ticket.ticket_key,
             p_metadata: {

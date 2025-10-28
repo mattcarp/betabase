@@ -548,7 +548,7 @@ export class AOMAOrchestrator {
       const sourceTypes = this.determineSourceTypes(query);
 
       const vectorResult = await this.queryVectorStore(query, {
-        matchThreshold: 0.75, // Slightly lower threshold for better recall
+        matchThreshold: 0.40, // Lower threshold for Jira tickets (typical similarity 0.3-0.6)
         matchCount: 10,
         sourceTypes,
         useCache: true,
