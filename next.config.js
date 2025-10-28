@@ -60,6 +60,7 @@ const nextConfig = {
 
   async headers() {
     return [
+      // Security headers for all routes
       {
         source: "/:path*",
         headers: [
@@ -74,6 +75,27 @@ const nextConfig = {
           {
             key: "X-XSS-Protection",
             value: "1; mode=block",
+          },
+        ],
+      },
+      // CRITICAL: HTML pages must not be cached long-term
+      // This prevents 404 errors when chunks change after deployment
+      {
+        source: "/:path((?!_next|api|betabase-logo).*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
+          },
+        ],
+      },
+      // Static assets can be cached indefinitely (already handled by Next.js)
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },
