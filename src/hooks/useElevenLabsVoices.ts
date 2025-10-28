@@ -139,7 +139,8 @@ export function useElevenLabsVoices(options: UseElevenLabsVoicesOptions = {}) {
     } finally {
       setIsLoading(false);
     }
-  }, [options]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [options.apiKey]);
 
   // Fetch voices on mount
   useEffect(() => {
@@ -209,7 +210,8 @@ export function useElevenLabsVoices(options: UseElevenLabsVoicesOptions = {}) {
         options.onError?.(error as Error);
       }
     },
-    [previewAudio, options]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [previewAudio, options.apiKey]
   );
 
   const stopPreview = useCallback(() => {
