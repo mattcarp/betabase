@@ -58,7 +58,7 @@ export class OptimizedSupabaseVectorService extends SupabaseVectorService {
       mode?: "fast" | "accurate" | "auto";
     } = {}
   ): Promise<VectorSearchResult[]> {
-    const { matchThreshold = 0.78, matchCount = 10, sourceTypes = null, mode = "auto" } = options;
+    const { matchThreshold = 0.50, matchCount = 10, sourceTypes = null, mode = "auto" } = options;
 
     // Decision logic for search strategy
     const useFastSearch =
