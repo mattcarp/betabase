@@ -161,27 +161,29 @@ export async function POST(request: NextRequest) {
           let userId: string;
 
           if (createError) {
+            console.error("[Auth] Create user error:", createError);
             // Check if error is because user already exists
             if (
               createError.message.includes("already") ||
               createError.message.includes("duplicate")
             ) {
               // User exists - fetch by email
+              console.log("[Auth] User already exists, fetching existing user...");
               const { data: users, error: listError } = await supabaseAdmin.auth.admin.listUsers();
 
               if (listError) {
-                console.error("[Auth] Failed to list users:", listError);
+                console.error("[Auth] ERROR: Failed to list users:", listError);
                 return NextResponse.json(
-                  { error: "Failed to create user session" },
+                  { error: "Failed to list users from Supabase" },
                   { status: 500 }
                 );
               }
 
               const existingUser = users.users.find((u) => u.email === email);
               if (!existingUser) {
-                console.error("[Auth] User creation failed but user not found:", createError);
+                console.error("[Auth] ERROR: User creation failed but user not found in list:", createError);
                 return NextResponse.json(
-                  { error: "Failed to create user session" },
+                  { error: "User not found after creation failure" },
                   { status: 500 }
                 );
               }
@@ -190,8 +192,13 @@ export async function POST(request: NextRequest) {
               console.log(`[Auth] Found existing Supabase user: ${userId}`);
             } else {
               // Unexpected error
-              console.error("[Auth] Failed to create user:", createError);
-              return NextResponse.json({ error: "Failed to create user session" }, { status: 500 });
+              console.error("[Auth] ERROR: Unexpected error creating user:", createError);
+              console.error("[Auth] Error name:", createError.name);
+              console.error("[Auth] Error message:", createError.message);
+              return NextResponse.json({
+                error: "Failed to create user in Supabase",
+                details: process.env.NODE_ENV === "development" ? createError.message : undefined
+              }, { status: 500 });
             }
           } else {
             userId = newUser.user.id;
@@ -232,6 +239,7 @@ export async function POST(request: NextRequest) {
           );
 
           // Use admin to sign in the user and create a session
+          console.log("[Auth] Generating magic link session...");
           const { data: sessionData, error: signInError } =
             await supabaseAdmin.auth.admin.generateLink({
               type: "magiclink",
@@ -239,10 +247,16 @@ export async function POST(request: NextRequest) {
             });
 
           if (signInError) {
-            console.error("[Auth] Failed to generate session:", signInError);
-            return NextResponse.json({ error: "Failed to create user session" }, { status: 500 });
+            console.error("[Auth] ERROR: Failed to generate session link:", signInError);
+            console.error("[Auth] Error name:", signInError.name);
+            console.error("[Auth] Error message:", signInError.message);
+            return NextResponse.json({
+              error: "Failed to generate session link",
+              details: process.env.NODE_ENV === "development" ? signInError.message : undefined
+            }, { status: 500 });
           }
 
+          console.log("[Auth] Session link generated, setting session...");
           // Set the session using the generated link data
           const { error: setSessionError } = await supabase.auth.setSession({
             access_token: sessionData.properties.access_token,
@@ -250,8 +264,13 @@ export async function POST(request: NextRequest) {
           });
 
           if (setSessionError) {
-            console.error("[Auth] Failed to set session:", setSessionError);
-            return NextResponse.json({ error: "Failed to create user session" }, { status: 500 });
+            console.error("[Auth] ERROR: Failed to set session:", setSessionError);
+            console.error("[Auth] Error name:", setSessionError.name);
+            console.error("[Auth] Error message:", setSessionError.message);
+            return NextResponse.json({
+              error: "Failed to set session cookies",
+              details: process.env.NODE_ENV === "development" ? setSessionError.message : undefined
+            }, { status: 500 });
           }
 
           console.log(`[Auth] ✅ Successfully created Supabase session for ${email}`);
@@ -266,6 +285,11 @@ export async function POST(request: NextRequest) {
           });
         } catch (error: any) {
           console.error("[Auth] Magic link verification error:", error);
+          console.error("[Auth] Error details:", {
+            name: error.name,
+            message: error.message,
+            stack: error.stack?.substring(0, 500),
+          });
           return NextResponse.json(
             {
               error: "Invalid or expired code",
