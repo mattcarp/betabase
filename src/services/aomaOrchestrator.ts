@@ -105,9 +105,12 @@ export class AOMAOrchestrator {
   }> {
     const { matchThreshold = 0.78, matchCount = 10, sourceTypes, useCache = true } = options;
 
-    // Check cache first
+    // Normalize query for consistent caching
+    const normalizedQuery = this.normalizeQuery(query);
+
+    // Check cache first using normalized query
     if (useCache) {
-      const cacheKey = `vector:${query}:${sourceTypes?.join(",")}`;
+      const cacheKey = `vector:${normalizedQuery}:${sourceTypes?.join(",")}`;
       const cached = aomaCache.get(cacheKey, "rapid");
       if (cached) {
         console.log("⚡ Returning cached vector response");
@@ -156,9 +159,9 @@ export class AOMAOrchestrator {
         },
       };
 
-      // Cache the result
+      // Cache the result using normalized query
       if (useCache) {
-        const cacheKey = `vector:${query}:${sourceTypes?.join(",")}`;
+        const cacheKey = `vector:${normalizedQuery}:${sourceTypes?.join(",")}`;
         aomaCache.set(cacheKey, result, "rapid");
       }
 
@@ -494,6 +497,18 @@ export class AOMAOrchestrator {
   }
 
   /**
+   * Normalize query for consistent caching
+   * Removes trailing punctuation, extra whitespace, and lowercases
+   */
+  private normalizeQuery(query: string): string {
+    return query
+      .trim()
+      .toLowerCase()
+      .replace(/[?!.]+$/, "") // Remove trailing punctuation
+      .replace(/\s+/g, " "); // Normalize whitespace
+  }
+
+  /**
    * Execute orchestrated tool calls with progress tracking
    * PRIMARY PATH: Vector store query (fast, local, sub-second)
    * FALLBACK PATH: External API calls (slow, but comprehensive)
@@ -505,8 +520,11 @@ export class AOMAOrchestrator {
     // Start progress tracking
     aomaProgressStream.startQuery(query);
 
-    // Check cache first
-    const cacheKey = `orchestrated:${query}`;
+    // Normalize query for consistent caching
+    const normalizedQuery = this.normalizeQuery(query);
+
+    // Check cache first using normalized query
+    const cacheKey = `orchestrated:${normalizedQuery}`;
     const cached = aomaCache.get(cacheKey, "rapid");
     if (cached) {
       console.log("⚡ Returning cached orchestrated response");

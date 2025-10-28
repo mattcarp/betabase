@@ -270,45 +270,14 @@ export function AiSdkChatPanel({
   // CRITICAL: Use the actual endpoint dynamically
   const currentApiEndpoint = getApiEndpoint();
 
-  // Debug logging
-  console.log("🎯 Chat configuration:", {
-    selectedModel,
-    currentApiEndpoint,
-    shouldUseGPT5: selectedModel.toLowerCase().includes("gpt-5"),
-    apiProp: api,
-  });
-
-  // Override fetch to ensure AOMA orchestration
+  // Debug log for endpoint configuration (only on mount or when endpoint changes)
   useEffect(() => {
-    console.log("🎯 Ensuring AOMA orchestration for endpoint:", currentApiEndpoint);
-
-    // CRITICAL: Override fetch to intercept wrong endpoints
-    if (typeof window !== "undefined") {
-      const originalFetch = window.fetch;
-      window.fetch = async function (...args) {
-        let url = args[0];
-        const options = args[1];
-
-        // Intercept and redirect wrong endpoints to ensure AOMA orchestration
-        if (typeof url === "string") {
-          // CRITICAL: ALL requests must go through AOMA-MESH-MCP (/api/chat)
-          if (url === "/api/chat-vercel" || url === "/api/gpt5-responses") {
-            console.log(`🚫 Intercepting endpoint that bypasses AOMA: ${url}`);
-            console.log(`✅ Redirecting to AOMA-orchestrated endpoint: /api/chat`);
-            url = "/api/chat";
-            args[0] = url;
-          }
-        }
-
-        return originalFetch.apply(this, args);
-      };
-
-      // Cleanup on unmount
-      return () => {
-        window.fetch = originalFetch;
-      };
-    }
-  }, [currentApiEndpoint, selectedModel]);
+    console.log("🎯 Chat initialized:", {
+      selectedModel,
+      endpoint: currentApiEndpoint,
+      isGPT5: selectedModel.toLowerCase().includes("gpt-5"),
+    });
+  }, [currentApiEndpoint]); // Only log when endpoint actually changes
 
   const chatResult = useChat({
     api: currentApiEndpoint, // Use the calculated endpoint directly (v5 still supports this)
@@ -1012,7 +981,7 @@ export function AiSdkChatPanel({
       // Clear local input immediately
       setLocalInput("");
 
-      // Use the AI SDK's append function instead of manual fetch
+      // Use the AI SDK's append or sendMessage function
       // This properly handles the streaming response format
       try {
         if (typeof append === "function") {
@@ -1020,8 +989,15 @@ export function AiSdkChatPanel({
             role: "user",
             content,
           });
+        } else if (typeof sendMessage === "function") {
+          // Fallback to sendMessage if append not available
+          await sendMessage({
+            role: "user",
+            content,
+          });
         } else {
-          throw new Error("append function not available from useChat");
+          console.error("Neither append nor sendMessage available from useChat");
+          throw new Error("Chat API not properly initialized");
         }
 
         // Streaming complete - manually trigger completion logic
