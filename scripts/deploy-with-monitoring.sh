@@ -503,7 +503,13 @@ main() {
         print_info "Skipping post-deployment tests (--skip-tests flag)"
     fi
     
-    print_info "Total deployment time: $(($(date +%s) - $(date +%s --date="$(head -1 $LOG_FILE | cut -d' ' -f3-)")))s"
+    # Calculate deployment time (macOS compatible)
+    local end_time=$(date +%s)
+    local start_time=$(stat -f %B "$LOG_FILE" 2>/dev/null || echo "$end_time")
+    local duration=$((end_time - start_time))
+    if [ "$duration" -gt 0 ]; then
+        print_info "Total deployment time: ${duration}s"
+    fi
 }
 
 # Handle arguments
