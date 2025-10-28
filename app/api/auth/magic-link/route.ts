@@ -199,7 +199,17 @@ export async function POST(request: NextRequest) {
           }
 
           // Create server-side Supabase client with cookie handling
-          const cookieStore = await cookies();
+          let cookieStore;
+          try {
+            cookieStore = await cookies();
+          } catch (cookieError) {
+            console.error("[Auth] Failed to get cookies:", cookieError);
+            return NextResponse.json(
+              { error: "Failed to initialize session" },
+              { status: 500 }
+            );
+          }
+
           const supabase = createServerClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL,
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -209,9 +219,13 @@ export async function POST(request: NextRequest) {
                   return cookieStore.getAll();
                 },
                 setAll(cookiesToSet) {
-                  cookiesToSet.forEach(({ name, value, options }) =>
-                    cookieStore.set(name, value, options)
-                  );
+                  try {
+                    cookiesToSet.forEach(({ name, value, options }) =>
+                      cookieStore.set(name, value, options)
+                    );
+                  } catch (error) {
+                    console.error("[Auth] Failed to set cookies:", error);
+                  }
                 },
               },
             }
