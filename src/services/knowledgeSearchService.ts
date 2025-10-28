@@ -76,8 +76,9 @@ async function getQueryEmbedding(query: string): Promise<number[] | null> {
   try {
     // Use the OpenAI embedding model with 1536 dims to match DB
     const model = openai.embedding("text-embedding-3-small");
-    const { embeddings } = await embed({ model, value: query });
-    return embeddings[0].embedding;
+    // AI SDK v5 format: { embedding: number[] } not { embeddings: Array<{embedding: number[]}> }
+    const { embedding } = await embed({ model, value: query });
+    return embedding;
   } catch (err) {
     console.warn("Embedding generation failed, falling back to keyword search:", err);
     return null;

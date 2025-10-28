@@ -28,7 +28,7 @@ BEGIN
     k.metadata,
     1 - (k.embedding <=> query_embedding) as similarity,
     k.created_at
-  FROM aoma_vectors k
+  FROM aoma_unified_vectors k
   WHERE
     (filter_source_types IS NULL OR k.source_type = ANY(filter_source_types))
     AND k.embedding IS NOT NULL
@@ -41,8 +41,8 @@ $$;
 -- Grant execute permission
 GRANT EXECUTE ON FUNCTION match_aoma_vectors TO anon, authenticated, service_role;
 
--- Create the aoma_vectors table if it doesn't exist
-CREATE TABLE IF NOT EXISTS aoma_vectors (
+-- Create the aoma_unified_vectors table if it doesn't exist
+CREATE TABLE IF NOT EXISTS aoma_unified_vectors (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   content TEXT NOT NULL,
   source_type TEXT NOT NULL, -- 'knowledge', 'jira', 'git', 'email', 'confluence', etc.
@@ -54,21 +54,21 @@ CREATE TABLE IF NOT EXISTS aoma_vectors (
 );
 
 -- Create indexes for better performance
-CREATE INDEX IF NOT EXISTS idx_aoma_vectors_source_type ON aoma_vectors(source_type);
-CREATE INDEX IF NOT EXISTS idx_aoma_vectors_embedding ON aoma_vectors
+CREATE INDEX IF NOT EXISTS idx_aoma_unified_vectors_source_type ON aoma_unified_vectors(source_type);
+CREATE INDEX IF NOT EXISTS idx_aoma_unified_vectors_embedding ON aoma_unified_vectors
   USING ivfflat (embedding vector_cosine_ops)
   WITH (lists = 100);
-CREATE INDEX IF NOT EXISTS idx_aoma_vectors_created_at ON aoma_vectors(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_aoma_unified_vectors_created_at ON aoma_unified_vectors(created_at DESC);
 
 -- Add RLS policies
-ALTER TABLE aoma_vectors ENABLE ROW LEVEL SECURITY;
+ALTER TABLE aoma_unified_vectors ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Allow read access to aoma_vectors" ON aoma_vectors
+CREATE POLICY "Allow read access to aoma_unified_vectors" ON aoma_unified_vectors
   FOR SELECT
   TO anon, authenticated, service_role
   USING (true);
 
-CREATE POLICY "Allow service role full access to aoma_vectors" ON aoma_vectors
+CREATE POLICY "Allow service role full access to aoma_unified_vectors" ON aoma_unified_vectors
   FOR ALL
   TO service_role
   USING (true)
