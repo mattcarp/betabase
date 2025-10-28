@@ -46,13 +46,8 @@
       }
     },
     "supabase": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-supabase"],
-      "env": {
-        "SUPABASE_URL": "${NEXT_PUBLIC_SUPABASE_URL}",
-        "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_ROLE_KEY}"
-      }
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=kfxetwuuzljhybfgmpuc"
     },
     "render": {
       "type": "http",
