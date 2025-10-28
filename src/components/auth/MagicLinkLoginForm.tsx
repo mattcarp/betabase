@@ -180,9 +180,25 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
         throw new Error(result.error || "Invalid verification code");
       }
 
-      // Store the auth token
-      if (result.token) {
-        localStorage.setItem("authToken", result.token);
+      // Set the Supabase session with the tokens returned from the server
+      if (result.session) {
+        const { createBrowserClient } = await import("@supabase/ssr");
+        const supabase = createBrowserClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        );
+
+        const { error: sessionError } = await supabase.auth.setSession({
+          access_token: result.session.access_token,
+          refresh_token: result.session.refresh_token,
+        });
+
+        if (sessionError) {
+          console.error("Failed to set Supabase session:", sessionError);
+          throw new Error("Failed to establish session. Please try again.");
+        }
+
+        console.log("✅ Supabase session established successfully");
       }
 
       toast.success("Login successful!");
