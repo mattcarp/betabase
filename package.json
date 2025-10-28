@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.17.0",
+  "version": "0.17.1",
   "private": true,
   "scripts": {
     "dev": "npx kill-port 3000 2>/dev/null || true && next dev -p 3000",
