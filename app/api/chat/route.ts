@@ -357,7 +357,7 @@ export async function POST(req: Request) {
         // Start Supabase knowledge search in parallel
         supabaseStartTime = Date.now();
         const ragPromise = searchKnowledge(queryString, {
-          matchThreshold: 0.78,
+          matchThreshold: 0.50,
           matchCount: 6,
         });
 

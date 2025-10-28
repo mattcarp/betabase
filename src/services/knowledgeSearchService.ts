@@ -112,7 +112,7 @@ export async function searchKnowledge(
     return cached.data;
   }
 
-  const matchThreshold = options?.matchThreshold ?? 0.78;
+  const matchThreshold = options?.matchThreshold ?? 0.50;
   const matchCount = options?.matchCount ?? 10;
   const timeoutMs = options?.timeoutMs ?? 3000;
   const filterSources = options?.sourceTypes;
