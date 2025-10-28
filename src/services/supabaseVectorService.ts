@@ -52,7 +52,10 @@ export class SupabaseVectorService {
 
     try {
       // Generate embedding for the query
+      const embeddingStart = performance.now();
       const queryEmbedding = await this.generateEmbedding(query);
+      const embeddingTime = performance.now() - embeddingStart;
+      console.log(`⏱️  Embedding generation: ${embeddingTime.toFixed(0)}ms`);
 
       // Use admin client for RPC (grants require authenticated/service role)
       const rpcClient = supabaseAdmin ?? publicSupabase;
@@ -60,12 +63,15 @@ export class SupabaseVectorService {
         throw new Error("Supabase client is not initialized");
       }
 
+      const vectorSearchStart = performance.now();
       const { data, error } = await rpcClient.rpc("match_aoma_vectors", {
         query_embedding: queryEmbedding,
         match_threshold: matchThreshold,
         match_count: matchCount,
         filter_source_types: sourceTypes,
       });
+      const vectorSearchTime = performance.now() - vectorSearchStart;
+      console.log(`⏱️  Vector search (DB query): ${vectorSearchTime.toFixed(0)}ms`);
 
       if (error) {
         throw error;

@@ -592,11 +592,16 @@ ${aomaContext}
 
     // Use Vercel AI SDK streamText for proper useChat hook compatibility
     console.log("⏳ Calling AI SDK streamText...");
+
+    // O-series models (o1, o3, o4) don't support temperature - they use fixed reasoning
+    const supportsTemperature = !selectedModel.startsWith('o');
+
     const result = streamText({
       model: openai(selectedModel),
       messages: openAIMessages, // Already in correct format after filtering/validation
       system: enhancedSystemPrompt, // Use system parameter instead of adding to messages array
-      temperature: modelSettings.temperature || temperature,
+      // Only include temperature for models that support it (not o-series)
+      ...(supportsTemperature && { temperature: modelSettings.temperature || temperature }),
       // Note: AI SDK handles token limits via the model config, not maxTokens parameter
     });
 
