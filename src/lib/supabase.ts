@@ -49,7 +49,7 @@ export const supabase = createClient(url, key, {
 // Only use this server-side!
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 export const supabaseAdmin = supabaseServiceKey
-  ? createClient(supabaseUrl, supabaseServiceKey, {
+  ? createClient(url, supabaseServiceKey, {
       auth: {
         persistSession: false,
         autoRefreshToken: false,
