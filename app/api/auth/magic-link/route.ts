@@ -256,31 +256,20 @@ export async function POST(request: NextRequest) {
             }, { status: 500 });
           }
 
-          console.log("[Auth] Session link generated, setting session...");
-          // Set the session using the generated link data
-          const { error: setSessionError } = await supabase.auth.setSession({
-            access_token: sessionData.properties.access_token,
-            refresh_token: sessionData.properties.refresh_token,
-          });
+          console.log("[Auth] Session link generated successfully");
+          console.log(`[Auth] ✅ Returning session tokens to client for ${email}`);
 
-          if (setSessionError) {
-            console.error("[Auth] ERROR: Failed to set session:", setSessionError);
-            console.error("[Auth] Error name:", setSessionError.name);
-            console.error("[Auth] Error message:", setSessionError.message);
-            return NextResponse.json({
-              error: "Failed to set session cookies",
-              details: process.env.NODE_ENV === "development" ? setSessionError.message : undefined
-            }, { status: 500 });
-          }
-
-          console.log(`[Auth] ✅ Successfully created Supabase session for ${email}`);
-
-          // Return success with session info
+          // Return the tokens to the client so they can set the session client-side
+          // This is the correct approach for Next.js 15 + Supabase SSR
           return NextResponse.json({
             success: true,
             user: {
               id: userId,
               email: email,
+            },
+            session: {
+              access_token: sessionData.properties.access_token,
+              refresh_token: sessionData.properties.refresh_token,
             },
           });
         } catch (error: any) {
