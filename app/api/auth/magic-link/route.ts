@@ -3,6 +3,7 @@ import { cognitoAuth } from "../../../../src/services/cognitoAuth";
 import { supabaseAdmin } from "../../../../src/lib/supabase";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import crypto from "crypto";
 
 // Helper function to get test emails from environment
 function getTestEmailPatterns(): string[] {
@@ -238,29 +239,43 @@ export async function POST(request: NextRequest) {
             }
           );
 
-          // Use admin to sign in the user and create a session
-          console.log("[Auth] Generating magic link session...");
-          const { data: sessionData, error: signInError } =
-            await supabaseAdmin.auth.admin.generateLink({
-              type: "magiclink",
-              email: email,
-            });
+          // Create a temporary password and sign in to get real session tokens
+          // This is the proper way to create an authenticated session programmatically
+          const temporaryPassword = crypto.randomBytes(32).toString('hex');
 
-          if (signInError) {
-            console.error("[Auth] ERROR: Failed to generate session link:", signInError);
-            console.error("[Auth] Error name:", signInError.name);
-            console.error("[Auth] Error message:", signInError.message);
+          console.log("[Auth] Setting temporary password for user...");
+          const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
+            userId,
+            { password: temporaryPassword }
+          );
+
+          if (updateError) {
+            console.error("[Auth] ERROR: Failed to set temporary password:", updateError);
             return NextResponse.json({
-              error: "Failed to generate session link",
-              details: process.env.NODE_ENV === "development" ? signInError.message : undefined
+              error: "Failed to prepare session",
+              details: process.env.NODE_ENV === "development" ? updateError.message : undefined
             }, { status: 500 });
           }
 
-          console.log("[Auth] Session link generated successfully");
-          console.log(`[Auth] ✅ Returning session tokens to client for ${email}`);
+          // Now sign in with the temporary password to get real session tokens
+          console.log("[Auth] Signing in with temporary password...");
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: temporaryPassword,
+          });
 
-          // Return the tokens to the client so they can set the session client-side
-          // This is the correct approach for Next.js 15 + Supabase SSR
+          if (signInError || !signInData.session) {
+            console.error("[Auth] ERROR: Failed to sign in:", signInError);
+            return NextResponse.json({
+              error: "Failed to create session",
+              details: process.env.NODE_ENV === "development" ? signInError?.message : undefined
+            }, { status: 500 });
+          }
+
+          console.log("[Auth] Session created successfully");
+          console.log(`[Auth] ✅ Returning valid session tokens to client for ${email}`);
+
+          // Return the real session tokens to the client
           return NextResponse.json({
             success: true,
             user: {
@@ -268,8 +283,8 @@ export async function POST(request: NextRequest) {
               email: email,
             },
             session: {
-              access_token: sessionData.properties.access_token,
-              refresh_token: sessionData.properties.refresh_token,
+              access_token: signInData.session.access_token,
+              refresh_token: signInData.session.refresh_token,
             },
           });
         } catch (error: any) {
