@@ -116,11 +116,14 @@ export async function POST(req: Request) {
     // AUTHENTICATION CHECK (P0 CRITICAL FIX)
     // ========================================
     // Check if auth is bypassed for development
-    // Note: NEXT_PUBLIC_ vars don't work reliably in API routes, so check both
+    // IMPORTANT: Use BYPASS_AUTH (server-side) not NEXT_PUBLIC_BYPASS_AUTH (client-side only)
     const bypassAuth =
-      process.env.NEXT_PUBLIC_BYPASS_AUTH === "true" || process.env.NODE_ENV === "development";
+      process.env.BYPASS_AUTH === "true" ||
+      process.env.NEXT_PUBLIC_BYPASS_AUTH === "true" ||
+      process.env.NODE_ENV === "development";
 
     console.log("[API] Bypass auth:", bypassAuth);
+    console.log("[API] BYPASS_AUTH:", process.env.BYPASS_AUTH);
 
     if (!bypassAuth) {
       console.log("[API] Checking authentication...");
