@@ -59,7 +59,7 @@ export default function Home() {
   // Startup console log with version info
   useEffect(() => {
     setIsMounted(true);
-    if (buildInfo?.buildTime && buildInfo?.versionString) {
+    if (process.env.NODE_ENV === "development" && buildInfo?.buildTime && buildInfo?.versionString) {
       const formattedBuildTime = getFormattedBuildTime(buildInfo.buildTime);
       console.log(
         `🚀 SIAM version ${buildInfo.versionString} - Built ${formattedBuildTime}\nBut seriously, `

@@ -86,7 +86,9 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
       // Handle server errors (502, 503, etc) with retry
       if (response.status >= 500) {
         if (retryCount < 2) {
-          console.log(`Server error ${response.status}, retrying... (attempt ${retryCount + 2}/3)`);
+          if (process.env.NODE_ENV === "development") {
+            console.log(`Server error ${response.status}, retrying... (attempt ${retryCount + 2}/3)`);
+          }
           toast.info("Server temporarily unavailable, retrying...");
           await new Promise((resolve) => setTimeout(resolve, 1500));
           return sendMagicLink(data, retryCount + 1);
@@ -157,7 +159,9 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
       // Handle server errors (502, 503, etc) with retry
       if (response.status >= 500) {
         if (retryCount < 2) {
-          console.log(`Server error ${response.status}, retrying... (attempt ${retryCount + 2}/3)`);
+          if (process.env.NODE_ENV === "development") {
+            console.log(`Server error ${response.status}, retrying... (attempt ${retryCount + 2}/3)`);
+          }
           toast.info("Server temporarily unavailable, retrying...");
           await new Promise((resolve) => setTimeout(resolve, 1500));
           return verifyCode(data, retryCount + 1);
@@ -198,7 +202,9 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
           throw new Error("Failed to establish session. Please try again.");
         }
 
-        console.log("✅ Supabase session established successfully");
+        if (process.env.NODE_ENV === "development") {
+          console.log("✅ Supabase session established successfully");
+        }
       }
 
       toast.success("Login successful!");
