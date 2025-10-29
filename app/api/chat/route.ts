@@ -343,6 +343,7 @@ export async function POST(req: Request) {
         typeof messageContent === "string" ? messageContent : JSON.stringify(messageContent);
 
       console.log("🎯 Using LangChain orchestrator for AOMA:", queryString.substring(0, 100));
+      console.log("⏱️  PERFORMANCE: AOMA query starting (this blocks streaming response)...");
 
       // Performance tracking
       const perfStart = Date.now();
@@ -362,13 +363,14 @@ export async function POST(req: Request) {
         });
 
         // Wrap orchestrator call with timeout to prevent hanging
-        // Railway typically responds in 2-3s with vector store, 30s max for external APIs
-        console.log("🚂 Starting Railway MCP query...");
+        // PERFORMANCE: Reduced from 30s to 5s for faster user experience
+        // Railway typically responds in 2-3s with vector store
+        console.log("🚂 Starting Railway MCP query (5s timeout)...");
         railwayStartTime = Date.now();
         const orchestratorResult = (await Promise.race([
           aomaOrchestrator.executeOrchestration(queryString),
           new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("AOMA orchestrator timeout after 30s")), 30000)
+            setTimeout(() => reject(new Error("AOMA orchestrator timeout after 5s")), 5000)
           ),
         ])) as any;
         railwayEndTime = Date.now();
@@ -473,6 +475,7 @@ export async function POST(req: Request) {
           contextLength: aomaContext.length,
           status: aomaConnectionStatus,
         });
+        console.log(`⏱️  PERFORMANCE: AOMA query completed in ${totalDuration}ms - streaming will now start`);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         const errorDuration = Date.now() - perfStart;
