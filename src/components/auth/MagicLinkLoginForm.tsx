@@ -180,26 +180,9 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
         throw new Error(result.error || "Invalid verification code");
       }
 
-      // Set the Supabase session with the tokens returned from the server
-      if (result.session) {
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://kfxetwuuzljhybfgmpuc.supabase.co";
-        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtmeGV0d3V1emxqaHliZmdtcHVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYyOTYzMzMsImV4cCI6MjA1MTg3MjMzM30.2doKvph3M-JltbRy-RpqmglECqqivqbakwzdTloQBxg";
-
-        const { createBrowserClient } = await import("@supabase/ssr");
-        const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
-
-        const { error: sessionError } = await supabase.auth.setSession({
-          access_token: result.session.access_token,
-          refresh_token: result.session.refresh_token,
-        });
-
-        if (sessionError) {
-          console.error("Failed to set Supabase session:", sessionError);
-          throw new Error("Failed to establish session. Please try again.");
-        }
-
-        console.log("✅ Supabase session established successfully");
-      }
+      // Server has already set the session cookies
+      // No need to do anything client-side
+      console.log("✅ Authentication successful - session cookies set by server");
 
       toast.success("Login successful!");
       onLoginSuccess();
