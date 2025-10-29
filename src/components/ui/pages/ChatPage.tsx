@@ -190,15 +190,18 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
     // Chat panel will reset automatically with new conversation
   };
 
-  const systemPrompt = `You are SIAM (Sentient Intelligence and Augmented Memory), an advanced AI assistant powered by the Vercel AI SDK. 
+  const systemPrompt = `You are SIAM (Sentient Intelligence and Augmented Memory), an advanced AI assistant powered by the Vercel AI SDK.
 You have access to a knowledge base and can help with various tasks including analysis, problem-solving, and creative work.
 Be helpful, concise, and professional in your responses.`;
 
+  // DEMO-OPTIMIZED: Use AOMA-specific suggestions with pre-cached instant responses
   const suggestions = [
-    "How can I analyze complex data sets and extract meaningful insights?",
-    "What are the best practices for implementing AI-powered workflows?",
-    "Can you help me optimize my code for better performance?",
-    "How do I create effective documentation for technical projects?",
+    "How do I use the Media Batch Converter to export audio in different formats?",
+    "What's the difference between Unified Submission Tool and Asset Submission Tool (LFV)?",
+    "How do I check if my masters passed GRPS QC and are ready for release?",
+    "Why is my Registration Job Status showing 'failed' and how do I retry delivery to partners?",
+    "How do I unlink Immersive/AMB masters from published products in GRPS?",
+    "What's the process for using Mobile Audio Manager to create ringtones and previews?",
   ];
 
   return (

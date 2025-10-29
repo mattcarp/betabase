@@ -1,0 +1,52 @@
+[
+  {
+    "page": "home-page",
+    "timestamp": "2025-10-29T16:51:17.743Z",
+    "navigationTiming": {
+      "domContentLoaded": 0.09999999403953552,
+      "loadComplete": 0,
+      "domInteractive": 884.5,
+      "totalLoadTime": 1625.5999999940395
+    },
+    "FCP": 912,
+    "TTFB": 655,
+    "resources": {
+      "total": 38,
+      "js": 6,
+      "css": 4,
+      "images": 1,
+      "totalSize": 7181609
+    },
+    "memory": {
+      "usedJSHeapSize": 168079975,
+      "totalJSHeapSize": 187485803,
+      "jsHeapSizeLimit": 4294705152
+    },
+    "CLS": 0
+  },
+  {
+    "page": "chat-initial",
+    "timestamp": "2025-10-29T16:51:18.924Z",
+    "navigationTiming": {
+      "domContentLoaded": 0.09999999403953552,
+      "loadComplete": 0,
+      "domInteractive": 884.5,
+      "totalLoadTime": 1165
+    },
+    "FCP": 912,
+    "TTFB": 655,
+    "resources": {
+      "total": 39,
+      "js": 6,
+      "css": 4,
+      "images": 1,
+      "totalSize": 7181956
+    },
+    "memory": {
+      "usedJSHeapSize": 169380132,
+      "totalJSHeapSize": 187798644,
+      "jsHeapSizeLimit": 4294705152
+    },
+    "CLS": 0
+  }
+]
