@@ -556,18 +556,18 @@ ${aomaContext}
 ❌ DO NOT use generic asset management knowledge - use only the AOMA-specific context provided`
       : `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
 
-**CURRENT STATUS:** AOMA knowledge base connection is unavailable.
+**CURRENT STATUS:** The AOMA knowledge base is currently unavailable.
 
-**RESPONSE GUIDELINES:**
-1. You can still provide helpful general information about enterprise asset management systems
-2. Be honest that specific AOMA documentation isn't currently accessible
-3. Suggest general best practices and common workflows
-4. For Sony Music-specific details, suggest contacting matt@mattcarpenter.com
+**RESPONSE REQUIRED:**
+Respond with ONLY the following message:
+
+"I'm unable to access the AOMA knowledge base right now due to a database connection issue. Please contact support at matt@mattcarpenter.com for assistance."
 
 **DO NOT:**
-- Fabricate specific Sony Music policies
-- Make up AOMA features or URLs
-- Claim access to documentation you don't have`;
+- Provide generic workflows or best practices
+- Make up AOMA information
+- Fabricate any Sony Music policies or procedures
+- Suggest workarounds or alternatives`;
 
     // Determine model based on AOMA involvement
     const hasAomaContent = aomaContext.trim() !== "";
