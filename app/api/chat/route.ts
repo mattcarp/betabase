@@ -363,14 +363,14 @@ export async function POST(req: Request) {
         });
 
         // Wrap orchestrator call with timeout to prevent hanging
-        // PERFORMANCE: 10s timeout balances speed vs reliability
-        // Testing showed Railway needs 6-10s for queries, 5s was too aggressive
-        console.log("🚂 Starting Railway MCP query (10s timeout)...");
+        // PERFORMANCE: 20s timeout - Railway queries typically take 15-20s
+        // Direct testing confirmed: Railway responds in 17.6s with valid results
+        console.log("🚂 Starting Railway MCP query (20s timeout)...");
         railwayStartTime = Date.now();
         const orchestratorResult = (await Promise.race([
           aomaOrchestrator.executeOrchestration(queryString),
           new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("AOMA orchestrator timeout after 10s")), 10000)
+            setTimeout(() => reject(new Error("AOMA orchestrator timeout after 20s")), 20000)
           ),
         ])) as any;
         railwayEndTime = Date.now();
