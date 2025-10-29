@@ -206,7 +206,7 @@ Be helpful, concise, and professional in your responses.`;
       <div className="h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col w-full">
         {/* Sophisticated Header */}
         <header className="border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/60 flex-shrink-0 overflow-visible relative z-50">
-          <div className="px-4 md:px-6 py-4 h-16">
+          <div className="px-6 py-4 h-16">
             <div className="flex flex-row items-center justify-between gap-4 h-full">
               {/* Brand Identity */}
               <div className="flex items-center space-x-3 flex-shrink-0">
