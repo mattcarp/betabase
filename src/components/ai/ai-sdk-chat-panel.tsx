@@ -378,6 +378,16 @@ export function AiSdkChatPanel({
         setManualLoading(false);
         setIsProcessing(false);
         setHasStartedStreaming(false); // Reset streaming state for next message
+
+        // CRITICAL FIX: Clear input field after response completes
+        setLocalInput("");
+        if (typeof setInput === "function") {
+          try {
+            setInput("");
+          } catch (err) {
+            console.warn("[SIAM] setInput clear failed", err);
+          }
+        }
       }, 1500);
     },
   });
@@ -817,6 +827,18 @@ export function AiSdkChatPanel({
             console.error("[SIAM] No message sending method available");
           }
         }
+
+        // CRITICAL FIX: Clear input immediately after sending
+        setTimeout(() => {
+          setLocalInput("");
+          if (typeof setInput === "function") {
+            try {
+              setInput("");
+            } catch (err) {
+              console.warn("[SIAM] setInput clear after send failed", err);
+            }
+          }
+        }, 100); // Small delay to ensure message is sent first
       }, 50);
     }
   };
