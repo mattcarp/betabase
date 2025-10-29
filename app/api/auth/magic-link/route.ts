@@ -143,8 +143,25 @@ export async function POST(request: NextRequest) {
           code === "123456";
 
         try {
-          // TODO: Verify code with Cognito - for now we skip this for magic link flow
-          // In production, you'd call cognitoAuth.confirmForgotPassword(email, code, tempPassword)
+          // Verify the code with Cognito first (unless it's the dev test email)
+          if (!isTestEmail) {
+            console.log(`[Auth] Verifying code with Cognito for ${email}`);
+            try {
+              // Generate temp password for Cognito verification
+              const cognitoTempPassword = crypto.randomBytes(16).toString('hex') + 'Aa1!';
+              await cognitoAuth.confirmForgotPassword(email, code, cognitoTempPassword);
+              console.log(`[Auth] Code verified successfully with Cognito`);
+            } catch (cognitoError: any) {
+              console.error("[Auth] ERROR: Cognito code verification failed:", cognitoError);
+              return NextResponse.json(
+                {
+                  error: "Invalid or expired code",
+                  details: process.env.NODE_ENV === "development" ? cognitoError.message : undefined
+                },
+                { status: 400 }
+              );
+            }
+          }
 
           console.log(`[Auth] Creating Supabase session for ${email}`);
 
@@ -251,9 +268,15 @@ export async function POST(request: NextRequest) {
 
           if (updateError) {
             console.error("[Auth] ERROR: Failed to set temporary password:", updateError);
+            console.error("[Auth] ERROR details:", {
+              message: updateError.message,
+              name: updateError.name,
+              status: (updateError as any).status,
+              code: (updateError as any).code
+            });
             return NextResponse.json({
               error: "Failed to prepare session",
-              details: process.env.NODE_ENV === "development" ? updateError.message : undefined
+              details: process.env.NODE_ENV === "development" ? `${updateError.message} (${updateError.name})` : undefined
             }, { status: 500 });
           }
 
