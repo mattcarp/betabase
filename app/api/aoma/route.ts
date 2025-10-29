@@ -13,45 +13,60 @@ export async function POST(req: Request) {
 
     console.log("🎯 Direct AOMA Railway query:", query);
 
-    // Call Railway AOMA server via RPC endpoint
-    const response = await fetch(`${RAILWAY_URL}/rpc`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "User-Agent": "SIAM-AOMA-Client/1.0",
-      },
-      body: JSON.stringify({
-        jsonrpc: "2.0",
-        id: 1,
-        method: "tools/call",
-        params: {
-          name: "query_aoma_knowledge",
-          arguments: {
-            query: query,
-            strategy: strategy,
-          },
+    // Call Railway AOMA server via RPC endpoint with 25s timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000);
+
+    try {
+      const response = await fetch(`${RAILWAY_URL}/rpc`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "User-Agent": "SIAM-AOMA-Client/1.0",
         },
-      }),
-    });
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: "tools/call",
+          params: {
+            name: "query_aoma_knowledge",
+            arguments: {
+              query: query,
+              strategy: strategy,
+            },
+          },
+        }),
+        signal: controller.signal,
+      });
 
-    if (!response.ok) {
-      throw new Error(
-        `Railway AOMA server responded with ${response.status}: ${response.statusText}`
-      );
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(
+          `Railway AOMA server responded with ${response.status}: ${response.statusText}`
+        );
+      }
+
+      const rpcResponse = await response.json();
+
+      console.log("✅ AOMA Railway query successful");
+
+      // Extract the actual result from JSON-RPC wrapper
+      const result = rpcResponse.result || rpcResponse;
+
+      return NextResponse.json({
+        success: true,
+        result,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      if (fetchError instanceof Error && fetchError.name === "AbortError") {
+        console.error("❌ AOMA Railway query timeout after 25s");
+        throw new Error("Railway AOMA query timeout after 25s");
+      }
+      throw fetchError;
     }
-
-    const rpcResponse = await response.json();
-
-    console.log("✅ AOMA Railway query successful");
-
-    // Extract the actual result from JSON-RPC wrapper
-    const result = rpcResponse.result || rpcResponse;
-
-    return NextResponse.json({
-      success: true,
-      result,
-      timestamp: new Date().toISOString(),
-    });
   } catch (error) {
     // BE HONEST about failures
     console.error("❌ AOMA Railway API error:", error);
