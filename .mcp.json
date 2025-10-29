@@ -46,8 +46,13 @@
       }
     },
     "supabase": {
-      "type": "http",
-      "url": "https://mcp.supabase.com/mcp?project_ref=kfxetwuuzljhybfgmpuc"
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "supabase-mcp"],
+      "env": {
+        "SUPABASE_URL": "https://kfxetwuuzljhybfgmpuc.supabase.co",
+        "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_ROLE_KEY}"
+      }
     },
     "render": {
       "type": "http",
