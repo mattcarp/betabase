@@ -232,23 +232,7 @@
   box-shadow: 0 8px 24px var(--mac-utility-shadow);
 }
 
-/* MAC Glass Morphism */
-.mac-glass {
-  background: rgba(20, 20, 20, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-}
-
-.mac-glass::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-}
+/* MAC Glass Morphism - removed duplicate, see line 281 for main definition */
 
 /* MAC Animations */
 
@@ -279,7 +263,8 @@
 
 /* Enhanced Glass Morphism with Better Blur */
 .mac-glass {
-  background: rgba(17, 24, 39, 0.4);
+  background: rgba(17, 24, 39, 0.85); /* Fallback: more opaque for browsers without backdrop-filter */
+  -webkit-backdrop-filter: blur(24px); /* Safari support */
   backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -288,9 +273,16 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+/* Browsers with backdrop-filter support get better transparency */
+@supports (backdrop-filter: blur(24px)) or (-webkit-backdrop-filter: blur(24px)) {
+  .mac-glass {
+    background: rgba(17, 24, 39, 0.4);
+  }
+}
+
 /* Enhanced Button Hover Effects */
 .mac-button-primary:hover {
-  background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, var(--mac-accent-purple-400) 0%, var(--mac-primary-blue-600) 100%);
   transform: translateY(-2px);
   box-shadow:
     0 8px 25px rgba(139, 92, 246, 0.4),
