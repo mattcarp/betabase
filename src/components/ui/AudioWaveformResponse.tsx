@@ -233,21 +233,21 @@ export const AudioWaveformResponse: React.FC<{
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-gray-800/50 rounded-lg p-4">
           <div className="text-xs text-gray-400 mb-2">RMS Energy</div>
-          <div className={`font-semibold ${getQualityColor(data.analysis.rmsEnergy)}`}>
+          <div className={`font-normal ${getQualityColor(data.analysis.rmsEnergy)}`}>
             {(data.analysis.rmsEnergy * 100).toFixed(1)}%
           </div>
         </div>
 
         <div className="bg-gray-800/50 rounded-lg p-4">
           <div className="text-xs text-gray-400 mb-2">SNR</div>
-          <div className={`font-semibold ${getQualityColor(data.analysis.snrDb / 40)}`}>
+          <div className={`font-normal ${getQualityColor(data.analysis.snrDb / 40)}`}>
             {data.analysis.snrDb.toFixed(1)} dB
           </div>
         </div>
 
         <div className="bg-gray-800/50 rounded-lg p-4">
           <div className="text-xs text-gray-400 mb-2">Dynamic Range</div>
-          <div className={`font-semibold ${getQualityColor(data.analysis.dynamicRange / 30)}`}>
+          <div className={`font-normal ${getQualityColor(data.analysis.dynamicRange / 30)}`}>
             {data.analysis.dynamicRange.toFixed(1)} dB
           </div>
         </div>
@@ -255,7 +255,7 @@ export const AudioWaveformResponse: React.FC<{
         <div className="bg-gray-800/50 rounded-lg p-4">
           <div className="text-xs text-gray-400 mb-2">Voice Activity</div>
           <div
-            className={`font-semibold ${data.analysis.voiceActivity ? "text-green-400" : "text-red-400"}`}
+            className={`font-normal ${data.analysis.voiceActivity ? "text-green-400" : "text-red-400"}`}
           >
             {data.analysis.voiceActivity ? "Detected" : "None"}
           </div>

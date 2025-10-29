@@ -1231,19 +1231,19 @@ export function EnhancedCurateTab({
                     <CardContent className="mac-card">
                       <div className="grid grid-cols-4 gap-2 text-center">
                         <div>
-                          <p className="text-lg font-semibold">{curator.filesProcessed}</p>
+                          <p className="text-lg font-normal">{curator.filesProcessed}</p>
                           <p className="text-xs text-muted-foreground">Files</p>
                         </div>
                         <div>
-                          <p className="text-lg font-semibold">{curator.qualityScore}%</p>
+                          <p className="text-lg font-normal">{curator.qualityScore}%</p>
                           <p className="text-xs text-muted-foreground">Quality</p>
                         </div>
                         <div>
-                          <p className="text-lg font-semibold">{curator.duplicatesFound}</p>
+                          <p className="text-lg font-normal">{curator.duplicatesFound}</p>
                           <p className="text-xs text-muted-foreground">Deduped</p>
                         </div>
                         <div>
-                          <p className="text-lg font-semibold">{curator.metadataEnriched}</p>
+                          <p className="text-lg font-normal">{curator.metadataEnriched}</p>
                           <p className="text-xs text-muted-foreground">Enriched</p>
                         </div>
                       </div>

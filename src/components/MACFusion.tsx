@@ -33,7 +33,7 @@ export const MACFusionCard: React.FC<MACFusionCardProps> = ({
       case "futuristic":
         return {
           container: "bg-matrix-dark/70 border-neon-cyan/30 backdrop-blur-lg",
-          title: "font-futuristic font-semibold text-neon-cyan",
+          title: "font-futuristic font-normal text-neon-cyan",
           description: "font-mono font-normal text-neon-blue/80",
           glow: "shadow-lg-glow animate-pulse-glow",
         };

@@ -287,11 +287,11 @@ export const AOMAPerformanceDashboard: React.FC = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm">Railway</span>
-                <span className="font-semibold">{stats.railway.totalRequests}</span>
+                <span className="font-normal">{stats.railway.totalRequests}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm">Render</span>
-                <span className="font-semibold">{stats.render.totalRequests}</span>
+                <span className="font-normal">{stats.render.totalRequests}</span>
               </div>
               <Progress
                 value={
@@ -319,7 +319,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                   ) : (
                     <AlertCircle className="h-4 w-4 text-yellow-600" />
                   )}
-                  <span className="font-semibold">{stats.railway.successRate.toFixed(1)}%</span>
+                  <span className="font-normal">{stats.railway.successRate.toFixed(1)}%</span>
                 </div>
               </div>
               <div className="flex items-center justify-between">
@@ -330,7 +330,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                   ) : (
                     <AlertCircle className="h-4 w-4 text-yellow-600" />
                   )}
-                  <span className="font-semibold">{stats.render.successRate.toFixed(1)}%</span>
+                  <span className="font-normal">{stats.render.successRate.toFixed(1)}%</span>
                 </div>
               </div>
             </div>
@@ -422,7 +422,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                 <div>
                   <h4
                     className="mac-title"
-                    className="mac-title font-semibold mb-4 flex items-center gap-2"
+                    className="mac-title font-normal mb-4 flex items-center gap-2"
                   >
                     <Server className="h-4 w-4" />
                     Railway
@@ -455,7 +455,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
                 <div>
                   <h4
                     className="mac-title"
-                    className="mac-title font-semibold mb-4 flex items-center gap-2"
+                    className="mac-title font-normal mb-4 flex items-center gap-2"
                   >
                     <Database className="h-4 w-4" />
                     Render
@@ -503,11 +503,11 @@ export const AOMAPerformanceDashboard: React.FC = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Railway</span>
-                <span className="font-semibold">{stats.railway.coldStartRate.toFixed(1)}%</span>
+                <span className="font-normal">{stats.railway.coldStartRate.toFixed(1)}%</span>
               </div>
               <div className="flex justify-between">
                 <span>Render</span>
-                <span className="font-semibold">{stats.render.coldStartRate.toFixed(1)}%</span>
+                <span className="font-normal">{stats.render.coldStartRate.toFixed(1)}%</span>
               </div>
             </div>
           </CardContent>
@@ -524,7 +524,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Avg Request</span>
-                <span className="font-semibold">
+                <span className="font-normal">
                   {(
                     (stats.railway.avgPayloadSize + stats.render.avgPayloadSize) /
                     2 /
@@ -535,7 +535,7 @@ export const AOMAPerformanceDashboard: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span>Avg Response</span>
-                <span className="font-semibold">
+                <span className="font-normal">
                   {(
                     (stats.railway.avgResponseSize + stats.render.avgResponseSize) /
                     2 /

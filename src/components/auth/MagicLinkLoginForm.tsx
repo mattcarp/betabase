@@ -277,7 +277,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
             <Button
               type="submit"
               disabled={isLoading}
-              className="mac-button mac-button-primary w-full h-12 text-base font-semibold shadow-xl transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="mac-button mac-button-primary w-full h-12 text-base font-normal shadow-xl transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isLoading ? (
                 <>
@@ -298,7 +298,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
             {/* Success Message */}
             <div className="text-center p-6 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl border border-green-500/20 backdrop-blur-sm">
               <CheckCircle className="mx-auto h-12 w-12 text-green-400 mb-4" />
-              <h3 className="mac-title text-lg font-semibold text-white mb-2">Magic Link Sent!</h3>
+              <h3 className="mac-title text-lg font-normal text-white mb-2">Magic Link Sent!</h3>
               <p className="text-sm text-gray-300">We've sent a verification code to</p>
               <p className="text-sm font-medium text-white mt-2">{currentEmail}</p>
               <p className="text-xs text-gray-400 mt-2">
@@ -348,7 +348,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="mac-button mac-button-primary w-full h-12 text-base font-semibold shadow-xl transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="mac-button mac-button-primary w-full h-12 text-base font-normal shadow-xl transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {isLoading ? (
                   <>

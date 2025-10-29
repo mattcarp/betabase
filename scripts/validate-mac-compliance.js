@@ -39,7 +39,7 @@ const SPACING_VIOLATIONS = [
 // Typography weight violations (only 100-400 allowed)
 const TYPOGRAPHY_VIOLATIONS = [
   /\bfont-medium\b/g, // 500
-  /\bfont-semibold\b/g, // 600
+  /\bfont-normal\b/g, // 600
   /\bfont-bold\b/g, // 700
   /\bfont-extrabold\b/g, // 800
   /\bfont-black\b/g, // 900
@@ -180,7 +180,7 @@ class MACComplianceValidator {
 
   Typography:
   ❌ font-bold (700)            ✅ font-normal (400)
-  ❌ font-semibold (600)        ✅ font-light (300)
+  ❌ font-normal (600)        ✅ font-light (300)
 
   🔧 Auto-fix spacing: npm run fix:spacing
   📖 Full design system: src/styles/mac-design-system.css

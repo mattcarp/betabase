@@ -344,7 +344,7 @@ export function IntrospectionDropdown() {
                   <div>
                     <h4
                       className="mac-title"
-                      className="mac-title text-sm font-semibold mb-2 text-red-500"
+                      className="mac-title text-sm font-normal mb-2 text-red-500"
                     >
                       Error
                     </h4>

@@ -201,7 +201,7 @@ export function ThemePreviewCard({ theme, isActive, onSelect }: ThemePreviewCard
       {/* Theme Info */}
       <div className="text-left">
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold">{theme.name}</h3>
+          <h3 className="font-normal">{theme.name}</h3>
           {isActive && <Check className="h-5 w-5 text-green-500" />}
         </div>
         <p className="text-sm text-muted-foreground mt-1">{theme.description}</p>

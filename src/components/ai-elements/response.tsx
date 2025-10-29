@@ -184,7 +184,7 @@ const components: Options["components"] = {
     </ul>
   ),
   strong: ({ node, children, className, ...props }) => (
-    <span className={cn("font-semibold", className)} {...props}>
+    <span className={cn("font-normal", className)} {...props}>
       {children}
     </span>
   ),
@@ -199,32 +199,32 @@ const components: Options["components"] = {
     </a>
   ),
   h1: ({ node, children, className, ...props }) => (
-    <h1 className={cn("mt-6 mb-2 font-semibold text-3xl", className)} {...props}>
+    <h1 className={cn("mt-6 mb-2 font-normal text-3xl", className)} {...props}>
       {children}
     </h1>
   ),
   h2: ({ node, children, className, ...props }) => (
-    <h2 className={cn("mt-6 mb-2 font-semibold text-2xl", className)} {...props}>
+    <h2 className={cn("mt-6 mb-2 font-normal text-2xl", className)} {...props}>
       {children}
     </h2>
   ),
   h3: ({ node, children, className, ...props }) => (
-    <h3 className={cn("mt-6 mb-2 font-semibold text-xl", className)} {...props}>
+    <h3 className={cn("mt-6 mb-2 font-normal text-xl", className)} {...props}>
       {children}
     </h3>
   ),
   h4: ({ node, children, className, ...props }) => (
-    <h4 className={cn("mt-6 mb-2 font-semibold text-lg", className)} {...props}>
+    <h4 className={cn("mt-6 mb-2 font-normal text-lg", className)} {...props}>
       {children}
     </h4>
   ),
   h5: ({ node, children, className, ...props }) => (
-    <h5 className={cn("mt-6 mb-2 font-semibold text-base", className)} {...props}>
+    <h5 className={cn("mt-6 mb-2 font-normal text-base", className)} {...props}>
       {children}
     </h5>
   ),
   h6: ({ node, children, className, ...props }) => (
-    <h6 className={cn("mt-6 mb-2 font-semibold text-sm", className)} {...props}>
+    <h6 className={cn("mt-6 mb-2 font-normal text-sm", className)} {...props}>
       {children}
     </h6>
   ),
@@ -251,7 +251,7 @@ const components: Options["components"] = {
     </tr>
   ),
   th: ({ node, children, className, ...props }) => (
-    <th className={cn("px-4 py-2 text-left font-semibold text-sm", className)} {...props}>
+    <th className={cn("px-4 py-2 text-left font-normal text-sm", className)} {...props}>
       {children}
     </th>
   ),

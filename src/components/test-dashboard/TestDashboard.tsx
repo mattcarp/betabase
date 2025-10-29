@@ -368,7 +368,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <div>
                 <h1
                   className="mac-heading"
-                  className="mac-heading text-2xl font-semibold tracking-tight text-foreground"
+                  className="mac-heading text-2xl font-normal tracking-tight text-foreground"
                 >
                   Test Dashboard
                 </h1>
@@ -418,7 +418,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-muted-foreground">Total</span>
-                  <span className="text-lg font-semibold text-foreground">{testStats.total}</span>
+                  <span className="text-lg font-normal text-foreground">{testStats.total}</span>
                 </div>
               </CardContent>
             </Card>
@@ -430,7 +430,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                     <CheckCircle className="h-4 w-4 text-emerald-600" />
                     <span className="text-sm font-medium text-muted-foreground">Passed</span>
                   </div>
-                  <span className="text-lg font-semibold text-emerald-700">{testStats.passed}</span>
+                  <span className="text-lg font-normal text-emerald-700">{testStats.passed}</span>
                 </div>
               </CardContent>
             </Card>
@@ -442,7 +442,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                     <XCircle className="h-4 w-4 text-rose-600" />
                     <span className="text-sm font-medium text-muted-foreground">Failed</span>
                   </div>
-                  <span className="text-lg font-semibold text-rose-700">{testStats.failed}</span>
+                  <span className="text-lg font-normal text-rose-700">{testStats.failed}</span>
                 </div>
               </CardContent>
             </Card>
@@ -454,7 +454,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                     <AlertCircle className="h-4 w-4 text-amber-600" />
                     <span className="text-sm font-medium text-muted-foreground">Skipped</span>
                   </div>
-                  <span className="text-lg font-semibold text-amber-700">{testStats.skipped}</span>
+                  <span className="text-lg font-normal text-amber-700">{testStats.skipped}</span>
                 </div>
               </CardContent>
             </Card>
@@ -466,7 +466,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                     <Clock className="h-4 w-4 text-slate-600" />
                     <span className="text-sm font-medium text-muted-foreground">Duration</span>
                   </div>
-                  <span className="text-lg font-semibold text-slate-700">
+                  <span className="text-lg font-normal text-slate-700">
                     {formatDuration(testStats.duration)}
                   </span>
                 </div>
@@ -480,7 +480,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                     <Zap className="h-4 w-4 text-blue-600" />
                     <span className="text-sm font-medium text-muted-foreground">Success</span>
                   </div>
-                  <span className="text-lg font-semibold text-blue-700">{getSuccessRate()}%</span>
+                  <span className="text-lg font-normal text-blue-700">{getSuccessRate()}%</span>
                 </div>
               </CardContent>
             </Card>

@@ -109,7 +109,7 @@ export default function HomePage() {
           {/* Test credentials hint for development */}
           {process.env.NODE_ENV === "development" && (
             <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded text-blue-200 text-xs">
-              <p className="mac-body font-semibold mb-2">Test Credentials:</p>
+              <p className="mac-body font-normal mb-2">Test Credentials:</p>
               <p>Email: claude@test.siam.ai</p>
               <p>Password: 4@9XMPfE9B$</p>
             </div>
@@ -163,7 +163,7 @@ export default function HomePage() {
           <div className="mt-8 bg-green-500/20 border border-green-500/50 rounded-lg p-6">
             <h3
               className="mac-title"
-              className="mac-title text-green-400 font-semibold text-lg mb-2"
+              className="mac-title text-green-400 font-normal text-lg mb-2"
             >
               🎉 Deployment Successful!
             </h3>

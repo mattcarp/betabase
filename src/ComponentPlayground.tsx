@@ -45,7 +45,7 @@ const ComponentPlayground = () => {
             <div className="bg-gray-800/50 rounded-lg p-8 border border-gray-700">
               <h3
                 className="mac-title"
-                className="mac-title text-lg font-semibold text-blue-600 mb-6"
+                className="mac-title text-lg font-normal text-blue-600 mb-6"
               >
                 Component Controls
               </h3>
@@ -104,7 +104,7 @@ const ComponentPlayground = () => {
           <div className="mt-12">
             <h3
               className="mac-title"
-              className="mac-title text-lg font-semibold text-blue-600 mb-6"
+              className="mac-title text-lg font-normal text-blue-600 mb-6"
             >
               Component Variants
             </h3>
