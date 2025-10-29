@@ -81,7 +81,7 @@ export const AnnotationToolbar: React.FC<AnnotationToolbarProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold">Annotation Tools</span>
+            <span className="text-sm font-normal">Annotation Tools</span>
             {annotations.length > 0 && (
               <Badge variant="secondary" className="text-xs">
                 {annotations.length}

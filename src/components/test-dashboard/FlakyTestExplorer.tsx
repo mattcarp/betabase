@@ -207,7 +207,7 @@ export const FlakyTestExplorer: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="mac-card">
-            <div className="text-2xl font-semibold text-foreground">{flakyTests.length}</div>
+            <div className="text-2xl font-normal text-foreground">{flakyTests.length}</div>
             <p className="text-xs text-muted-foreground mt-2">Across all suites</p>
           </CardContent>
         </Card>
@@ -220,7 +220,7 @@ export const FlakyTestExplorer: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="mac-card">
-            <div className="text-2xl font-semibold text-rose-700">
+            <div className="text-2xl font-normal text-rose-700">
               {flakyTests.filter((t) => t.severity === "critical").length}
             </div>
             <p className="text-xs text-muted-foreground mt-2">Require immediate attention</p>
@@ -235,7 +235,7 @@ export const FlakyTestExplorer: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="mac-card">
-            <div className="text-2xl font-semibold text-foreground">
+            <div className="text-2xl font-normal text-foreground">
               {(flakyTests.reduce((sum, t) => sum + t.flakiness, 0) / flakyTests.length).toFixed(1)}
               %
             </div>
@@ -254,7 +254,7 @@ export const FlakyTestExplorer: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="mac-card">
-            <div className="text-2xl font-semibold text-foreground">2h ago</div>
+            <div className="text-2xl font-normal text-foreground">2h ago</div>
             <p className="text-xs text-muted-foreground mt-2">WebSocket reconnection</p>
           </CardContent>
         </Card>

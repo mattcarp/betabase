@@ -78,7 +78,7 @@ export function ChatWrapper({
               <Sparkles className="h-5 w-5 text-primary animate-pulse" />
               <div className="absolute inset-0 bg-primary/20 blur-xl" />
             </div>
-            <h3 className="mac-title font-semibold text-lg">AI Assistant</h3>
+            <h3 className="mac-title font-normal text-lg">AI Assistant</h3>
             <Badge variant="secondary" className="text-xs">
               Powered by Vercel AI SDK
             </Badge>

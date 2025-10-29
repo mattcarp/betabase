@@ -443,19 +443,19 @@ export default function PerformanceDashboard() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400">P50 Latency</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-normal">
                       {formatDuration(metrics.queryMetrics.p50ResponseTime)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400">P95 Latency</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-normal">
                       {formatDuration(metrics.queryMetrics.p95ResponseTime)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400">P99 Latency</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-normal">
                       {formatDuration(metrics.queryMetrics.p99ResponseTime)}
                     </span>
                   </div>
@@ -624,13 +624,13 @@ export default function PerformanceDashboard() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-gray-400">Total Documents</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-normal">
                       {metrics.dataFreshness.vectorStore.totalDocuments}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Last Update</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-normal">
                       {new Date(metrics.dataFreshness.vectorStore.lastUpdate).toLocaleDateString()}
                     </span>
                   </div>
@@ -663,19 +663,19 @@ export default function PerformanceDashboard() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-gray-400">Cache Hit Rate</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-normal">
                       {(metrics.dataFreshness.aomaCache.cacheHitRate * 100).toFixed(1)}%
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Cache Miss Rate</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-normal">
                       {(metrics.dataFreshness.aomaCache.cacheMissRate * 100).toFixed(1)}%
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Last Update</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-normal">
                       {formatTime(metrics.dataFreshness.aomaCache.lastUpdate)}
                     </span>
                   </div>
@@ -694,13 +694,13 @@ export default function PerformanceDashboard() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-gray-400">Total Files</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-normal">
                       {metrics.dataFreshness.knowledgeBase.fileCount}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Last Update</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-normal">
                       {new Date(
                         metrics.dataFreshness.knowledgeBase.lastUpdate
                       ).toLocaleDateString()}
@@ -729,7 +729,7 @@ export default function PerformanceDashboard() {
                     className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10"
                   >
                     <div className="flex-1">
-                      <div className="font-semibold text-white mb-2">{api.endpoint}</div>
+                      <div className="font-normal text-white mb-2">{api.endpoint}</div>
                       <div className="flex gap-4 text-sm">
                         <span className="text-gray-400">
                           Latency:{" "}

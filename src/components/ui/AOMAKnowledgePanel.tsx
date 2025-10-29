@@ -539,7 +539,7 @@ function formatResponse(text: any): string {
     // Headers
     .replace(
       /^### (.*?)$/gm,
-      '<h3  className="mac-title"class="font-semibold text-base mt-4 mb-2">$1</h3>'
+      '<h3  className="mac-title"class="font-normal text-base mt-4 mb-2">$1</h3>'
     )
     .replace(
       /^## (.*?)$/gm,

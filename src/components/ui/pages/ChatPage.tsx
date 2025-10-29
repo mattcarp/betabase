@@ -275,6 +275,7 @@ Be helpful, concise, and professional in your responses.`;
                   className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 mac-button mac-button-outline"
                   onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
                   title="Knowledge Base"
+                  aria-label="Toggle knowledge base panel"
                 >
                   <Database className="h-4 w-4" />
                 </Button>
@@ -286,6 +287,7 @@ Be helpful, concise, and professional in your responses.`;
                   className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 mac-button mac-button-outline"
                   onClick={() => (window.location.href = "/performance")}
                   title="Performance Dashboard"
+                  aria-label="Open performance dashboard"
                 >
                   <Activity className="h-4 w-4" />
                 </Button>
@@ -296,6 +298,7 @@ Be helpful, concise, and professional in your responses.`;
                     size="sm"
                     onClick={onLogout}
                     className="sign-out-button text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 text-xs px-4 flex items-center gap-2 mac-button mac-button-outline"
+                    aria-label="Sign out of your account"
                   >
                     <LogOut className="h-4 w-4" />
                     <span className="sign-out-text">Sign Out</span>
@@ -347,8 +350,7 @@ Be helpful, concise, and professional in your responses.`;
                   <div className="flex-1 flex flex-col border-0 bg-transparent">
                     <div className="p-6 border-b border-zinc-800/50">
                       <h2
-                        className="mac-heading"
-                        className="mac-heading text-lg font-semibold text-zinc-100 flex items-center gap-2"
+                        className="mac-heading text-lg font-normal text-zinc-100 flex items-center gap-2"
                       >
                         <Wrench className="h-5 w-5 text-zinc-400" />
                         Debug Assistant
@@ -381,8 +383,7 @@ Be helpful, concise, and professional in your responses.`;
                 <div className="h-full">
                   <div className="p-6 border-b border-zinc-800/50">
                     <h2
-                      className="mac-heading"
-                      className="mac-heading text-lg font-semibold text-zinc-100 flex items-center gap-2"
+                      className="mac-heading text-lg font-normal text-zinc-100 flex items-center gap-2"
                     >
                       <Library className="h-5 w-5 text-zinc-400" />
                       Knowledge Curation

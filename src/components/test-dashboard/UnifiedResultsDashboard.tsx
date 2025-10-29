@@ -320,7 +320,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Layers className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-semibold">Unified Test Results</h2>
+          <h2 className="text-xl font-normal">Unified Test Results</h2>
         </div>
 
         <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>

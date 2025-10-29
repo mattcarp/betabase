@@ -130,7 +130,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
           <h4
             className="mac-title"
             id="theme-section"
-            className="mac-title mac-body font-semibold text-mac-text-primary mb-4"
+            className="mac-title mac-body font-normal text-mac-text-primary mb-4"
           >
             Theme Preset
           </h4>
@@ -173,7 +173,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
           <label
             id="blur-section"
             htmlFor="blur-slider"
-            className="mac-body font-semibold text-mac-text-primary mb-2 block"
+            className="mac-body font-normal text-mac-text-primary mb-2 block"
           >
             Blur Intensity: {localSettings.blur}px
           </label>
@@ -201,7 +201,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
           <label
             id="opacity-section"
             htmlFor="opacity-slider"
-            className="mac-body font-semibold text-mac-text-primary mb-2 block"
+            className="mac-body font-normal text-mac-text-primary mb-2 block"
           >
             Panel Opacity: {Math.round(localSettings.opacity * 100)}%
           </label>
@@ -229,7 +229,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
           <label
             id="border-opacity-section"
             htmlFor="border-opacity-slider"
-            className="mac-body font-semibold text-mac-text-primary mb-2 block"
+            className="mac-body font-normal text-mac-text-primary mb-2 block"
           >
             Border Opacity: {Math.round(localSettings.borderOpacity * 100)}%
           </label>
@@ -253,7 +253,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
           <h4
             className="mac-title"
             id="animation-section"
-            className="mac-title mac-body font-semibold text-mac-text-primary mb-4"
+            className="mac-title mac-body font-normal text-mac-text-primary mb-4"
           >
             Animation Speed
           </h4>
@@ -283,7 +283,7 @@ export const HUDCustomizationPanel: React.FC<HUDCustomizationPanelProps> = ({
               <h4
                 className="mac-title"
                 id="contrast-section"
-                className="mac-title mac-body font-semibold text-mac-text-primary"
+                className="mac-title mac-body font-normal text-mac-text-primary"
               >
                 High Contrast Mode
               </h4>

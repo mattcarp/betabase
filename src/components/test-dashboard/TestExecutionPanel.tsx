@@ -376,7 +376,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                   <Cpu className="h-4 w-4 text-blue-600" />
                   <span className="text-sm font-medium text-foreground">CPU Usage</span>
                 </div>
-                <span className="text-sm font-semibold text-foreground">
+                <span className="text-sm font-normal text-foreground">
                   {systemResources.cpu}%
                 </span>
               </div>
@@ -389,7 +389,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                   <HardDrive className="h-4 w-4 text-emerald-600" />
                   <span className="text-sm font-medium text-foreground">Memory</span>
                 </div>
-                <span className="text-sm font-semibold text-foreground">
+                <span className="text-sm font-normal text-foreground">
                   {systemResources.memory}%
                 </span>
               </div>
@@ -402,7 +402,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                   <Wifi className="h-4 w-4 text-purple-600" />
                   <span className="text-sm font-medium text-foreground">Network I/O</span>
                 </div>
-                <span className="text-sm font-semibold text-foreground">
+                <span className="text-sm font-normal text-foreground">
                   {systemResources.network}%
                 </span>
               </div>

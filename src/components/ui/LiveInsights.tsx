@@ -464,7 +464,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
   return (
     <div className={`space-y-3 ${className}`} data-test-id="live-insights-root">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="mac-title text-lg font-semibold text-motiff-green">Live Insights</h3>
+        <h3 className="mac-title text-lg font-normal text-motiff-green">Live Insights</h3>
         <div className="flex items-center gap-2">
           {isLoading && <span className="text-xs text-white/60 animate-pulse">Loading...</span>}
         </div>

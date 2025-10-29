@@ -196,7 +196,7 @@ export function CircularProfessionalProgress({
       {/* Center content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         {showValue && (
-          <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <span className="text-lg font-normal text-gray-900 dark:text-gray-100">
             {Math.round(clampedValue)}%
           </span>
         )}
@@ -242,7 +242,7 @@ export function StepProgress({
               )}
               <div
                 className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold",
+                  "w-8 h-8 rounded-full flex items-center justify-center text-xs font-normal",
                   i < currentStep
                     ? "bg-blue-600 dark:bg-blue-500 text-white"
                     : i === currentStep

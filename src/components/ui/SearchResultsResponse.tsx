@@ -142,7 +142,7 @@ const ResultCard: React.FC<{
           <div className="flex-1 min-w-0">
             <h3
               className="mac-title"
-              className="mac-title font-semibold text-gray-100 hover:text-blue-400 cursor-pointer transition-colors truncate"
+              className="mac-title font-normal text-gray-100 hover:text-blue-400 cursor-pointer transition-colors truncate"
               onClick={() => onOpen(result)}
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(result.highlighted.title) }}
             />
@@ -321,14 +321,14 @@ export const SearchResultsResponse: React.FC<{
 
         <div className="bg-gray-800/50 rounded-lg p-4">
           <div className="text-xs text-gray-400 mb-2">Confidence</div>
-          <div className="text-lg font-semibold text-green-400">
+          <div className="text-lg font-normal text-green-400">
             {(data.searchStrategy.confidence * 100).toFixed(0)}%
           </div>
         </div>
 
         <div className="bg-gray-800/50 rounded-lg p-4">
           <div className="text-xs text-gray-400 mb-2">Results Shown</div>
-          <div className="text-lg font-semibold text-blue-400">
+          <div className="text-lg font-normal text-blue-400">
             {data.resultsShown} of {data.totalResults}
           </div>
         </div>

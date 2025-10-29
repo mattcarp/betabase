@@ -156,7 +156,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
       <div className={`conversational-ai-panel ${className}`}>
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h3 className="mac-title text-lg font-semibold text-holographic">
+          <h3 className="mac-title text-lg font-normal text-holographic">
             ElevenLabs Conversational AI
           </h3>
           <div className="flex items-center gap-2">

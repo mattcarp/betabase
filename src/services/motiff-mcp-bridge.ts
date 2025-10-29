@@ -688,7 +688,7 @@ class DesignProcessor {
       "align-items: center": "items-center",
       "text-align: center": "text-center",
       "font-weight: bold": "font-bold",
-      "font-weight: 600": "font-semibold",
+      "font-weight: 600": "font-normal",
       "margin: 0": "m-0",
       "padding: 0": "p-0",
     };

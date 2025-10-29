@@ -90,11 +90,11 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
     // Headers
     html = html.replace(
       /^### (.*$)/gim,
-      "<h3 class='mac-title text-lg font-semibold mt-4 mb-2'>$1</h3>"
+      "<h3 class='mac-title text-lg font-normal mt-4 mb-2'>$1</h3>"
     );
     html = html.replace(
       /^## (.*$)/gim,
-      "<h2 class='mac-heading text-xl font-semibold mt-4 mb-2'>$1</h2>"
+      "<h2 class='mac-heading text-xl font-normal mt-4 mb-2'>$1</h2>"
     );
     html = html.replace(
       /^# (.*$)/gim,

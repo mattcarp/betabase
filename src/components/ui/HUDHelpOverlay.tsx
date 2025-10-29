@@ -256,7 +256,7 @@ export const HUDHelpOverlay: React.FC<HUDHelpOverlayProps> = ({ isOpen, onClose 
             <div className="mt-8 p-4 rounded-lg border-l-4 border-jarvis-cyan bg-jarvis-cyan/5">
               <h4
                 className="mac-title"
-                className="mac-title mac-body font-semibold text-jarvis-cyan mb-2"
+                className="mac-title mac-body font-normal text-jarvis-cyan mb-2"
               >
                 Pro Tip
               </h4>
