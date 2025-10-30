@@ -7,19 +7,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-interface RouteContext {
-  params: {
-    id: string;
-  };
-}
+type RouteParams = { id: string };
 
 /**
  * POST /api/visual-regression/comparison/:id/update-baseline
  * Update the baseline screenshot to the current screenshot
  */
-export async function POST(request: NextRequest, { params }: RouteContext) {
+export async function POST(request: NextRequest, context: { params: Promise<RouteParams> }) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
     const body = await request.json();
     const { updatedBy, updatedAt } = body;
 

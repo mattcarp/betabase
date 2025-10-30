@@ -412,17 +412,6 @@ Be helpful, concise, and professional in your responses.`;
             </aside>
           )}
 
-          {/* Right Sidebar Toggle Button (Always Visible When Collapsed) */}
-          <button
-            onClick={() => setIsRightSidebarOpen(true)}
-            className={cn(
-              "absolute right-4 top-8 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 border border-zinc-800/50 hover:bg-zinc-800 transition-colors group",
-              isRightSidebarOpen && "hidden"
-            )}
-            aria-label="Open knowledge panel"
-          >
-            <Database className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors" />
-          </button>
         </div>
       </div>
     </SidebarProvider>
