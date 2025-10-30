@@ -373,6 +373,8 @@ export async function POST(req: Request) {
       const perfStart = Date.now();
       let railwayStartTime: number | null = null;
       let railwayEndTime: number | null = null;
+      let supabaseStartTime: number | null = null;
+      let supabaseEndTime: number | null = null;
 
       try {
         // Use orchestrator which now handles BOTH Supabase and OpenAI sources internally
