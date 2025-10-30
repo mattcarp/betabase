@@ -68,7 +68,19 @@ const MessageSchema = z.object({
 const ChatRequestSchema = z.object({
   messages: z.array(MessageSchema).min(1).max(50), // Max 50 messages in history
   model: z
-    .enum(["gpt-5", "gpt-5-pro", "gpt-4o", "gpt-4o-mini", "o3", "o3-pro", "o4-mini"])
+    .enum([
+      "gpt-5",
+      "gpt-5-pro",
+      "gpt-4o",
+      "gpt-4o-mini",
+      "o3",
+      "o3-pro",
+      "o4-mini",
+      "claude-3-opus",
+      "claude-3-sonnet",
+      "claude-3-5-sonnet-20241022",
+      "claude-3-haiku",
+    ])
     .optional(),
   temperature: z.number().min(0).max(2).optional(),
   systemPrompt: z.string().max(5000).optional(), // 5KB limit for system prompt
