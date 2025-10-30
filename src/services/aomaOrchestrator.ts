@@ -8,6 +8,7 @@ import { aomaCache } from "./aomaCache";
 import { aomaProgressStream, type AOMASource } from "./aomaProgressStream";
 import { getSupabaseVectorService } from "./supabaseVectorService";
 import type { VectorSearchResult } from "@/lib/supabase";
+import { getResultMerger } from "./resultMerger";
 
 // Available AOMA-mesh-mcp tools and their capabilities
 const AOMA_TOOLS = {
@@ -539,51 +540,123 @@ export class AOMAOrchestrator {
       return cached;
     }
 
-    // FAST PATH: Try vector store first
+    // PARALLEL HYBRID PATH: Query BOTH Supabase and OpenAI sources simultaneously
+    // This ensures we get comprehensive results from all knowledge sources
+    console.log("🚀 Starting parallel queries: Supabase vector store + OpenAI Assistant...");
+    
+    const resultMerger = getResultMerger();
+    let supabaseResults: VectorSearchResult[] = [];
+    let openaiResults: any[] = [];
+
     try {
-      console.log("🚀 Attempting vector store query (fast path)...");
+      // Start both queries in parallel
       aomaProgressStream.startService("vector_store");
+      aomaProgressStream.startService("query_aoma_knowledge");
 
       // Determine relevant source types from query
       const sourceTypes = this.determineSourceTypes(query);
 
-      const vectorResult = await this.queryVectorStore(query, {
+      // Query 1: Supabase vector store (fast - <100ms)
+      const supabasePromise = this.queryVectorStore(query, {
         matchThreshold: 0.40, // Lower threshold for Jira tickets (typical similarity 0.3-0.6)
         matchCount: 10,
         sourceTypes,
         useCache: true,
+      }).catch((error) => {
+        console.error("❌ Supabase query failed:", error);
+        aomaProgressStream.errorService(
+          "vector_store",
+          error instanceof Error ? error.message : String(error)
+        );
+        return { sources: [] }; // Return empty on failure
       });
 
-      // If we got good results from vector store, use them
-      if (vectorResult.sources.length > 0) {
-        console.log(`✅ Vector store returned ${vectorResult.sources.length} results`);
-        aomaProgressStream.completeService(
-          "vector_store",
-          vectorResult.sources.length,
-          vectorResult.sources
+      // Query 2: OpenAI Assistant via MCP (slower - 2-5s)
+      const openaiPromise = this.callAOMATool("query_aoma_knowledge", {
+        query,
+        strategy: "rapid",
+      }).catch((error) => {
+        console.error("❌ OpenAI Assistant query failed:", error);
+        aomaProgressStream.errorService(
+          "query_aoma_knowledge",
+          error instanceof Error ? error.message : String(error)
         );
-        aomaProgressStream.completeQuery();
+        return { sources: [] }; // Return empty on failure
+      });
 
-        // Send progress updates
-        if (progressCallback) {
-          aomaProgressStream.getUpdates().forEach((update) => progressCallback(update));
-        }
+      // Wait for both queries to complete
+      const [supabaseResult, openaiResult] = await Promise.all([
+        supabasePromise,
+        openaiPromise,
+      ]);
 
-        // Cache the result
-        aomaCache.set(cacheKey, vectorResult, "rapid");
+      // Extract results
+      supabaseResults = supabaseResult.sources || [];
+      openaiResults = this.extractSources("query_aoma_knowledge", openaiResult) || [];
 
-        return vectorResult;
+      console.log(`✅ Supabase returned ${supabaseResults.length} results`);
+      console.log(`✅ OpenAI Assistant returned ${openaiResults.length} results`);
+
+      // Update progress streams
+      aomaProgressStream.completeService(
+        "vector_store",
+        supabaseResults.length,
+        supabaseResults
+      );
+      aomaProgressStream.completeService(
+        "query_aoma_knowledge",
+        openaiResults.length,
+        openaiResults
+      );
+
+      // Merge results intelligently
+      const mergedResults = resultMerger.mergeResults(supabaseResults, openaiResults, {
+        maxResults: 10,
+        dedupeThreshold: 0.85,
+        balanceSources: true,
+        minSupabaseResults: 2,
+        minOpenAIResults: 2,
+      });
+
+      console.log(`🔀 Merged to ${mergedResults.length} unified results`);
+
+      // Convert back to vector result format
+      const vectorResult = {
+        sources: mergedResults as any[],
+        response: mergedResults
+          .map((r, i) => `[${i + 1}] (${r.source_type}) ${r.content}`)
+          .join("\n\n"),
+      };
+
+      aomaProgressStream.completeQuery();
+
+      // Send progress updates
+      if (progressCallback) {
+        aomaProgressStream.getUpdates().forEach((update) => progressCallback(update));
       }
 
-      console.log("⚠️ Vector store returned no results, falling back to external APIs...");
-      aomaProgressStream.completeService("vector_store", 0, []);
+      // Cache the merged result
+      aomaCache.set(cacheKey, vectorResult, "rapid");
+
+      return vectorResult;
     } catch (error) {
-      console.error("❌ Vector store query failed:", error);
+      console.error("❌ Hybrid query failed:", error);
       aomaProgressStream.errorService(
-        "vector_store",
+        "hybrid_query",
         error instanceof Error ? error.message : String(error)
       );
-      console.log("🔄 Falling back to external API orchestration...");
+      // Return whatever results we managed to get
+      if (supabaseResults.length > 0 || openaiResults.length > 0) {
+        const mergedResults = resultMerger.mergeResults(supabaseResults, openaiResults);
+        return {
+          sources: mergedResults,
+          response: mergedResults
+            .map((r, i) => `[${i + 1}] (${r.source_type}) ${r.content}`)
+            .join("\n\n"),
+        };
+      }
+      // If both failed completely, fall through to original orchestration logic
+      console.log("⚠️ Both queries failed, falling back to external API orchestration...");
     }
 
     // Analyze query to determine tool strategy

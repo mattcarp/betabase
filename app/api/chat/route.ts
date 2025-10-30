@@ -72,6 +72,11 @@ const ChatRequestSchema = z.object({
     .optional(),
   temperature: z.number().min(0).max(2).optional(),
   systemPrompt: z.string().max(5000).optional(), // 5KB limit for system prompt
+  // Performance preference:
+  // - mode: 'full' waits longer for AOMA (better quality, slower)
+  // - mode: 'fast' prioritizes speed with shorter AOMA wait
+  mode: z.enum(["fast", "full"]).optional(),
+  waitForAOMA: z.boolean().optional(),
 });
 
 export async function GET(_req: Request) {
@@ -244,7 +249,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const { messages, model, temperature = 0.7, systemPrompt } = validation.data;
+    const { messages, model, temperature = 0.7, systemPrompt, mode, waitForAOMA } =
+      validation.data;
     // ========================================
     // END INPUT VALIDATION
     // ========================================
@@ -321,6 +327,22 @@ export async function POST(req: Request) {
     let aomaConnectionStatus = "not-queried";
     const knowledgeElements: KnowledgeElement[] = [];
 
+    // Lightweight intent detection to decide if we need AOMA at all
+    function needsAOMAIntent(text: string): boolean {
+      const q = (text || "").toLowerCase();
+      // Heuristic: only hit AOMA for clearly domain-specific queries
+      const keywords = [
+        "aoma",
+        "asset and offering",
+        "sony",
+        "usm",
+        "unified session manager",
+        "dam",
+        "metadata",
+      ];
+      return keywords.some((k) => q.includes(k));
+    }
+
     // AOMA Integration Control (P0 CRITICAL FIX)
     // Only bypass AOMA in development if explicitly requested
     const bypassAOMA =
@@ -338,7 +360,9 @@ export async function POST(req: Request) {
       latestUserMessage?.parts?.find((p: any) => p.type === "text")?.text ||
       latestUserMessage?.content;
 
-    if (!bypassAOMA && latestUserMessage && messageContent) {
+    const aomaRequired = !!(messageContent && needsAOMAIntent(String(messageContent)));
+
+    if (!bypassAOMA && aomaRequired && latestUserMessage && messageContent) {
       const queryString =
         typeof messageContent === "string" ? messageContent : JSON.stringify(messageContent);
 
@@ -347,39 +371,63 @@ export async function POST(req: Request) {
 
       // Performance tracking
       const perfStart = Date.now();
-      let railwayStartTime: number, railwayEndTime: number;
-      let supabaseStartTime: number, supabaseEndTime: number;
+      let railwayStartTime: number | null = null;
+      let railwayEndTime: number | null = null;
 
       try {
-        // PARALLEL HYBRID APPROACH: Query both Railway MCP AND Supabase vector store
-        // This gives us comprehensive coverage from all knowledge sources
-        console.log("⏳ Starting parallel queries: AOMA orchestrator + Supabase vectors...");
-
-        // Start Supabase knowledge search in parallel
-        supabaseStartTime = Date.now();
-        const ragPromise = searchKnowledge(queryString, {
-          matchThreshold: 0.50,
-          matchCount: 6,
-        });
+        // Use orchestrator which now handles BOTH Supabase and OpenAI sources internally
+        // with intelligent merging and deduplication
+        console.log("🚀 Querying AOMA orchestrator (handles Supabase + OpenAI internally)...");
 
         // Wrap orchestrator call with timeout to prevent hanging
-        // PERFORMANCE: 20s timeout - Railway queries typically take 15-20s
-        // Direct testing confirmed: Railway responds in 17.6s with valid results
-        console.log("🚂 Starting Railway MCP query (20s timeout)...");
+        // PERFORMANCE: use short, env-configurable timeout to avoid blocking streaming
+        const preferFast = mode === "fast" || waitForAOMA === false;
+        const defaultTimeout = preferFast ? 5000 : 20000; // default to full-quality wait unless fast mode
+        const orchestratorTimeoutMs = Number(
+          process.env.AOMA_ORCHESTRATOR_TIMEOUT_MS || String(defaultTimeout)
+        );
+        console.log(
+          `🔀 Starting unified orchestrator query (${orchestratorTimeoutMs}ms timeout)...`
+        );
         railwayStartTime = Date.now();
         const orchestratorResult = (await Promise.race([
           aomaOrchestrator.executeOrchestration(queryString),
           new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("AOMA orchestrator timeout after 20s")), 20000)
+            setTimeout(
+              () => reject(new Error(`AOMA orchestrator timeout after ${orchestratorTimeoutMs}ms`)),
+              orchestratorTimeoutMs
+            )
           ),
         ])) as any;
         railwayEndTime = Date.now();
         const railwayDuration = railwayEndTime - railwayStartTime;
-        console.log(`⚡ Railway MCP responded in ${railwayDuration}ms`);
+        console.log(`⚡ Orchestrator responded in ${railwayDuration}ms`);
 
-        if (orchestratorResult && (orchestratorResult.response || orchestratorResult.content)) {
-          const contextContent = orchestratorResult.response || orchestratorResult.content;
+        // Handle different response formats from the orchestrator
+        let contextContent = null;
+        
+        if (orchestratorResult) {
+          // Try direct response/content fields first
+          contextContent = orchestratorResult.response || orchestratorResult.content;
+          
+          // If not found, check for nested result structure (from /api/aoma endpoint)
+          if (!contextContent && orchestratorResult.result?.content) {
+            const contentArray = orchestratorResult.result.content;
+            if (Array.isArray(contentArray) && contentArray.length > 0) {
+              const textItem = contentArray.find((item: any) => item.type === "text");
+              if (textItem?.text) {
+                try {
+                  const parsed = JSON.parse(textItem.text);
+                  contextContent = parsed.response;
+                } catch (e) {
+                  contextContent = textItem.text;
+                }
+              }
+            }
+          }
+        }
 
+        if (contextContent) {
           knowledgeElements.push({
             type: "context",
             content: contextContent,
@@ -406,76 +454,56 @@ export async function POST(req: Request) {
           });
         }
 
-        // Await Supabase RAG results and merge with AOMA context
-        try {
-          console.log("⏳ Waiting for Supabase vector search...");
-          const rag = await ragPromise;
-          supabaseEndTime = Date.now();
-          const supabaseDuration = supabaseEndTime - supabaseStartTime;
+        // Orchestrator now handles both Supabase and OpenAI internally with intelligent merging
+        // Extract sources from merged results for knowledge elements
+        if (orchestratorResult.sources && Array.isArray(orchestratorResult.sources)) {
+          console.log(`✅ Orchestrator returned ${orchestratorResult.sources.length} merged results`);
+          
+          // Add source information to knowledge elements
+          orchestratorResult.sources.slice(0, 6).forEach((source: any) => {
+            if (source.metadata?.screenshot_path) {
+              knowledgeElements.push({
+                type: "reference",
+                content: source.content || "",
+                metadata: {
+                  source: source.source || "merged",
+                  source_type: source.source_type,
+                  screenshot_path: source.metadata.screenshot_path,
+                  timestamp: new Date().toISOString(),
+                },
+              });
+            }
+          });
 
-          if (rag.results?.length) {
-            console.log(
-              `✅ Supabase returned ${rag.results.length} results in ${rag.durationMs}ms (total: ${supabaseDuration}ms)`
-            );
-
-            // Add top snippets to context with screenshot paths
-            const snippets = rag.results
-              .slice(0, 4)
-              .map((r, i) => {
-                const screenshotInfo = r.metadata?.screenshot_path
-                  ? `\n📸 Screenshot: ${r.metadata.screenshot_path}`
-                  : "";
-                return `(${i + 1}) [${r.source_type}] ${r.content?.slice(0, 400)}${screenshotInfo}`;
-              })
-              .join("\n---\n");
-
-            aomaContext += `\n\n[SUPABASE KNOWLEDGE]\n${snippets}`;
-            aomaContext += `\n[CONTEXT_META]{"count":${rag.stats.count},"ms":${rag.durationMs},"sources":${JSON.stringify(
-              rag.stats.sourcesCovered
-            )}}`;
-
-            // Add knowledge elements with screenshots
-            rag.results.slice(0, 4).forEach((r) => {
-              if (r.metadata?.screenshot_path) {
-                knowledgeElements.push({
-                  type: "reference",
-                  content: r.content || "",
-                  metadata: {
-                    source: "supabase-vectors",
-                    screenshot_path: r.metadata.screenshot_path,
-                    timestamp: new Date().toISOString(),
-                  },
-                });
-              }
-            });
-
-            knowledgeElements.push({
-              type: "context",
-              content: `Found ${rag.stats.count} relevant documents from ${rag.stats.sourcesCovered.join(", ")}`,
-              metadata: {
-                source: "supabase-vectors",
-                duration: rag.durationMs,
-                timestamp: new Date().toISOString(),
-              },
-            });
-          } else {
-            console.log("⚠️  Supabase vector search returned 0 results");
-          }
-        } catch (ragError) {
-          console.warn("⚠️  Supabase RAG search failed:", ragError);
-          // Don't fail the whole request if Supabase fails - we still have Railway MCP
+          // Add summary of sources
+          const supabaseCount = orchestratorResult.sources.filter((s: any) => s.source === 'supabase').length;
+          const openaiCount = orchestratorResult.sources.filter((s: any) => s.source === 'openai').length;
+          knowledgeElements.push({
+            type: "context",
+            content: `Found ${orchestratorResult.sources.length} results (${supabaseCount} from Supabase, ${openaiCount} from OpenAI)`,
+            metadata: {
+              source: "merged-results",
+              supabaseCount,
+              openaiCount,
+              timestamp: new Date().toISOString(),
+            },
+          });
         }
 
         // Performance summary
         const totalDuration = Date.now() - perfStart;
+        const orchestratorMs =
+          railwayEndTime != null && railwayStartTime != null
+            ? railwayEndTime - railwayStartTime
+            : "N/A";
         console.log("📊 AOMA Query Performance Summary:", {
           totalMs: totalDuration,
-          railwayMs: railwayEndTime ? railwayEndTime - railwayStartTime : "N/A",
-          supabaseMs: supabaseEndTime ? supabaseEndTime - supabaseStartTime : "N/A",
+          orchestratorMs,
           contextLength: aomaContext.length,
           status: aomaConnectionStatus,
+          sources: orchestratorResult.sources?.length || 0,
         });
-        console.log(`⏱️  PERFORMANCE: AOMA query completed in ${totalDuration}ms - streaming will now start`);
+        console.log(`⏱️  PERFORMANCE: Unified orchestrator query completed in ${totalDuration}ms - streaming will now start`);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         const errorDuration = Date.now() - perfStart;
@@ -492,14 +520,23 @@ export async function POST(req: Request) {
                 : "UNKNOWN";
 
         // Log comprehensive error details server-side
+        const railwayDuration =
+          railwayEndTime != null && railwayStartTime != null
+            ? railwayEndTime - railwayStartTime
+            : "N/A";
+        const supabaseDuration =
+          supabaseEndTime != null && supabaseStartTime != null
+            ? supabaseEndTime - supabaseStartTime
+            : "N/A";
+
         console.error("❌ AOMA query error:", {
           errorType,
           error: errorMessage,
           stack: error instanceof Error ? error.stack : undefined,
           query: queryString.substring(0, 100),
           durationMs: errorDuration,
-          railwayDuration: railwayEndTime ? railwayEndTime - railwayStartTime : "N/A",
-          supabaseDuration: supabaseEndTime ? supabaseEndTime - supabaseStartTime : "N/A",
+          railwayDuration,
+          supabaseDuration,
           timestamp: new Date().toISOString(),
         });
 
@@ -557,7 +594,8 @@ ${aomaContext}
 ❌ DO NOT claim you don't have access to AOMA documentation (you DO have access via the context above)
 ❌ DO NOT make up workflow steps, features, or UI details not in the context
 ❌ DO NOT use generic asset management knowledge - use only the AOMA-specific context provided`
-      : `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
+      : aomaRequired
+        ? `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
 
 **CURRENT STATUS:** The AOMA knowledge base is currently unavailable.
 
@@ -570,7 +608,8 @@ Respond with ONLY the following message:
 - Provide generic workflows or best practices
 - Make up AOMA information
 - Fabricate any Sony Music policies or procedures
-- Suggest workarounds or alternatives`;
+- Suggest workarounds or alternatives`
+        : `${systemPrompt || "You are SIAM, an AI assistant."}`;
 
     // Determine model based on AOMA involvement
     const hasAomaContent = aomaContext.trim() !== "";
@@ -614,7 +653,17 @@ Respond with ONLY the following message:
     // trackRequest("/api/chat", "POST", Date.now() - chatStartTime, 200);
 
     // Return Vercel AI SDK response format (compatible with useChat hook)
-    return result.toUIMessageStreamResponse();
+    const response = result.toUIMessageStreamResponse();
+    try {
+      // Attach basic Server-Timing if we captured AOMA timings
+      const timings: string[] = [];
+      // Note: variables may be undefined if AOMA was skipped
+      // We rely on logs for full detail; this header is best-effort
+      // Add simple milestone for visibility
+      timings.push("app;desc=api-chat");
+      response.headers.set("Server-Timing", timings.join(", "));
+    } catch {}
+    return response;
   } catch (error) {
     console.error("❌ Chat API error:", error);
     console.error("❌ Error type:", typeof error);
