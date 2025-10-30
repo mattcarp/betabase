@@ -7,7 +7,6 @@ import { cn } from "../../lib/utils";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import { Skeleton } from "../ui/skeleton";
 import { useElevenLabsSTT } from "../../hooks/useElevenLabsSTT";
 import { useElevenLabsVoice } from "../../hooks/useElevenLabsVoice";
 import { VoiceSelector } from "../ui/VoiceSelector";
@@ -25,9 +24,6 @@ import {
   ThumbsDown,
   Share,
   MoreHorizontal,
-  LoaderIcon,
-  ClockIcon,
-  X,
   CheckCircle,
   Mic,
   MicOff,
@@ -173,6 +169,7 @@ export function AiSdkChatPanel({
   const [manualLoading, setManualLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false); // Simpler loading state
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
+  const [loadingSeconds, setLoadingSeconds] = useState(0); // Track seconds elapsed during loading
 
   // Voice feature states - define before using in hooks
   const [isTTSEnabled, setIsTTSEnabled] = useState(false);
@@ -505,6 +502,30 @@ export function AiSdkChatPanel({
       }
     }
   }, [messages, isProcessing, manualLoading]);
+
+  // Track loading time with seconds counter
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    
+    if ((isLoading || manualLoading || isProcessing) && !hasStartedStreaming) {
+      // Reset counter when loading starts
+      setLoadingSeconds(0);
+      
+      // Start counting every second
+      interval = setInterval(() => {
+        setLoadingSeconds(prev => prev + 1);
+      }, 1000);
+    } else {
+      // Reset counter when loading stops
+      setLoadingSeconds(0);
+    }
+    
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isLoading, manualLoading, isProcessing, hasStartedStreaming]);
 
   // Create a local state for input since setInput might not exist in v5
   const [localInput, setLocalInput] = useState("");
@@ -1660,217 +1681,23 @@ export function AiSdkChatPanel({
               /* Messages Area */
               <AnimatePresence>
                 <div className="space-y-6">
-                  {/* Enhanced Loading Indicator with Progress Bar - MOVED TO TOP */}
-                  {(isLoading || manualLoading || isProcessing || currentProgress) &&
+                  {/* Clean Loading Spinner with Timer (Shadcn AI Pattern) */}
+                  {(isLoading || manualLoading || isProcessing) &&
                     !hasStartedStreaming &&
-                    messages[messages.length - 1]?.role !== "assistant" &&
-                    (console.log("🔄 Rendering progress indicator:", {
-                      isLoading,
-                      manualLoading,
-                      isProcessing,
-                      hasCurrentProgress: !!currentProgress,
-                      currentProgress,
-                      hasStartedStreaming,
-                      lastMessageRole: messages[messages.length - 1]?.role,
-                    }) || (
+                    messages[messages.length - 1]?.role !== "assistant" && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="flex justify-start mb-6"
+                        transition={{ duration: 0.2 }}
+                        className="flex items-center gap-3 p-4"
                       >
-                        <div className="bg-gradient-to-r from-gray-800 to-gray-700 text-white rounded-lg p-6 max-w-[85%] border border-blue-300/30 shadow-lg">
-                          {/* Main Loading Header */}
-                          <div className="flex items-center gap-4 mb-4">
-                            <div className="flex space-x-1">
-                              <div className="w-2.5 h-2.5 bg-blue-400 rounded-full animate-bounce"></div>
-                              <div
-                                className="w-2.5 h-2.5 bg-green-400 rounded-full animate-bounce"
-                                style={{ animationDelay: "0.1s" }}
-                              ></div>
-                              <div
-                                className="w-2.5 h-2.5 bg-purple-400 rounded-full animate-bounce"
-                                style={{ animationDelay: "0.2s" }}
-                              ></div>
-                            </div>
-                            <span className="text-base font-medium">
-                              🤖{" "}
-                              {currentProgress?.title ||
-                                "The Betabase is processing your request..."}
-                            </span>
-                          </div>
-
-                          {/* Progress Bar if available */}
-                          {currentProgress && (
-                            <div className="mb-4">
-                              <div className="flex justify-between text-xs mb-2">
-                                <span className="capitalize">{currentProgress.phase}</span>
-                                <span>{Math.round(currentProgress.progress)}%</span>
-                              </div>
-                              <div className="w-full bg-gray-600 rounded-full h-2">
-                                <div
-                                  className={cn(
-                                    "h-2 rounded-full transition-all duration-500",
-                                    currentProgress.status === "failed"
-                                      ? "bg-red-500"
-                                      : currentProgress.status === "completed"
-                                        ? "bg-green-500"
-                                        : "bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse"
-                                  )}
-                                  style={{ width: `${currentProgress.progress}%` }}
-                                />
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Progress Steps - Show all phases with current one highlighted */}
-                          <div className="space-y-2.5">
-                            {/* Phase 1: Connection */}
-                            <div
-                              className={cn(
-                                "flex items-center gap-4 transition-opacity duration-300",
-                                currentProgress?.phase === "connecting"
-                                  ? "opacity-100"
-                                  : "opacity-40"
-                              )}
-                            >
-                              {currentProgress?.phase === "connecting" ? (
-                                <LoaderIcon className="w-4 h-4 animate-spin text-blue-400" />
-                              ) : currentProgress?.progress && currentProgress.progress > 20 ? (
-                                <CheckCircle className="w-4 h-4 text-green-400" />
-                              ) : (
-                                <ClockIcon className="w-4 h-4 text-gray-500" />
-                              )}
-                              <span className="text-sm">
-                                Establishing secure connection to AI service
-                              </span>
-                            </div>
-
-                            {/* Phase 2: Parsing */}
-                            <div
-                              className={cn(
-                                "flex items-center gap-4 transition-opacity duration-300",
-                                currentProgress?.phase === "parsing" ? "opacity-100" : "opacity-40"
-                              )}
-                            >
-                              {currentProgress?.phase === "parsing" ? (
-                                <LoaderIcon className="w-4 h-4 animate-spin text-yellow-400" />
-                              ) : currentProgress?.progress && currentProgress.progress > 35 ? (
-                                <CheckCircle className="w-4 h-4 text-green-400" />
-                              ) : (
-                                <ClockIcon className="w-4 h-4 text-gray-500" />
-                              )}
-                              <span className="text-sm">
-                                Parsing request and extracting requirements
-                              </span>
-                            </div>
-
-                            {/* Phase 3: Knowledge Search */}
-                            <div
-                              className={cn(
-                                "flex items-center gap-4 transition-opacity duration-300",
-                                currentProgress?.phase === "knowledge-search"
-                                  ? "opacity-100"
-                                  : "opacity-40"
-                              )}
-                            >
-                              {currentProgress?.phase === "knowledge-search" ? (
-                                <LoaderIcon className="w-4 h-4 animate-spin text-green-400" />
-                              ) : currentProgress?.progress && currentProgress.progress > 50 ? (
-                                <CheckCircle className="w-4 h-4 text-green-400" />
-                              ) : (
-                                <ClockIcon className="w-4 h-4 text-gray-500" />
-                              )}
-                              <span className="text-sm">
-                                Searching AOMA knowledge base for context
-                              </span>
-                            </div>
-
-                            {/* Phase 4: Context Building */}
-                            <div
-                              className={cn(
-                                "flex items-center gap-4 transition-opacity duration-300",
-                                currentProgress?.phase === "context-building"
-                                  ? "opacity-100"
-                                  : "opacity-40"
-                              )}
-                            >
-                              {currentProgress?.phase === "context-building" ? (
-                                <LoaderIcon className="w-4 h-4 animate-spin text-purple-400" />
-                              ) : currentProgress?.progress && currentProgress.progress > 65 ? (
-                                <CheckCircle className="w-4 h-4 text-green-400" />
-                              ) : (
-                                <ClockIcon className="w-4 h-4 text-gray-500" />
-                              )}
-                              <span className="text-sm">
-                                Building context from previous interactions
-                              </span>
-                            </div>
-
-                            {/* Phase 5: Generating */}
-                            <div
-                              className={cn(
-                                "flex items-center gap-4 transition-opacity duration-300",
-                                currentProgress?.phase === "generating"
-                                  ? "opacity-100"
-                                  : "opacity-40"
-                              )}
-                            >
-                              {currentProgress?.phase === "generating" ? (
-                                <LoaderIcon className="w-4 h-4 animate-spin text-indigo-400" />
-                              ) : currentProgress?.progress && currentProgress.progress > 80 ? (
-                                <CheckCircle className="w-4 h-4 text-green-400" />
-                              ) : (
-                                <ClockIcon className="w-4 h-4 text-gray-500" />
-                              )}
-                              <span className="text-sm">
-                                Generating AI response with selected model
-                              </span>
-                            </div>
-
-                            {/* Phase 6: Formatting */}
-                            <div
-                              className={cn(
-                                "flex items-center gap-4 transition-opacity duration-300",
-                                currentProgress?.phase === "formatting"
-                                  ? "opacity-100"
-                                  : "opacity-40"
-                              )}
-                            >
-                              {currentProgress?.phase === "formatting" ? (
-                                <LoaderIcon className="w-4 h-4 animate-spin text-cyan-400" />
-                              ) : currentProgress?.status === "completed" ? (
-                                <CheckCircle className="w-4 h-4 text-green-400" />
-                              ) : (
-                                <ClockIcon className="w-4 h-4 text-gray-500" />
-                              )}
-                              <span className="text-sm">
-                                Formatting response with proper structure
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* Time Estimate */}
-                          <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-600">
-                            <ClockIcon className="w-4 h-4 text-amber-400" />
-                            <span className="text-sm text-gray-300">
-                              {currentProgress?.status === "in-progress" &&
-                              currentProgress?.progress
-                                ? `Estimated time remaining: ${Math.max(5, Math.round((100 - currentProgress.progress) / 3))} seconds`
-                                : "This typically takes 30-45 seconds"}
-                            </span>
-                          </div>
-
-                          {/* Skeleton Loading Animation */}
-                          <div className="mt-4 space-y-2">
-                            <Skeleton className="h-4 w-full" />
-                            <Skeleton className="h-4 w-4/5" />
-                            <Skeleton className="h-4 w-3/5" />
-                          </div>
-                        </div>
+                        <Loader size={20} className="text-blue-400" />
+                        <span className="text-sm text-muted-foreground">
+                          Thinking... {loadingSeconds > 0 && `(${loadingSeconds}s)`}
+                        </span>
                       </motion.div>
-                    ))}
+                    )}
 
                   {/* Messages rendered AFTER progress indicator */}
                   {messages.map((message, index) => (
