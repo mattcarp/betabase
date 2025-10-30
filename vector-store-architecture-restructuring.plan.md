@@ -2,7 +2,7 @@
 
 **Created**: October 30, 2025  
 **Last Updated**: October 30, 2025  
-**Status**: Phase 1 Complete ✅ | Tier 1 Complete ✅ | Tier 2 Planned 📋
+**Status**: Phase 1 Complete ✅ | Tier 1 Complete ✅ | Tier 2 Planned 📋 | Tier 3 Inventory Complete 📊
 
 ---
 
@@ -636,7 +636,7 @@ Once the Next.js build bug is resolved:
     │  aoma_unified_     │   │  vs_3dqHL3Wcmt1WrUof0q   │
     │  vectors           │   │  Via Railway Server      │
     │                    │   │                          │
-    │  • 15,085 Jira     │   │  • ~150 AOMA docs        │
+    │  • 15,085 Jira     │   │  • 73 AOMA docs (78MB)   │
     │  • 28 AOMA docs    │   │  • Complete knowledge    │
     │  • <100ms queries  │   │  • 2-5s queries          │
     └───────────────────┘   └──────────────────────────┘
@@ -737,11 +737,387 @@ Once the Next.js build bug is resolved:
    - Fine-tune cache TTLs and routing logic
 
 ### Long-Term (Optional, Tier 3+)
-5. **Consider Advanced Optimizations** (If needed)
-   - Manual AOMA migration to Supabase (if source docs available)
+5. **Manual AOMA Migration to Supabase** (Detailed plan below)
+   - Source documents re-acquisition
+   - Deduplication strategy
+   - Batch embedding and upload
+   - Verification and validation
+
+6. **Consider Advanced Optimizations** (If needed)
    - Custom embedding fine-tuning (trained on AOMA/Jira data)
    - LLM-powered query rewriting (better query understanding)
    - Multi-model routing (different LLMs for different query types)
+
+---
+
+## 📦 Tier 3: Manual AOMA Migration (Complete Inventory & Strategy)
+
+**Date**: October 30, 2025  
+**Status**: 📊 **INVENTORY COMPLETE** | 📋 **STRATEGY DOCUMENTED** | ⏸️ **AWAITING USER DECISION**
+
+### Actual OpenAI Vector Store Inventory
+
+**Complete Analysis** (via `scripts/list-vector-store-files.ts` with pagination):
+
+```
+Vector Store ID: vs_3dqHL3Wcmt1WrUof0qS4UQqo
+Total Files: 73 (not ~150 as initially estimated)
+Total Size: 78.24 MB
+```
+
+**File Type Distribution**:
+| Type | Count | Percentage |
+|------|-------|------------|
+| PDF | 59 | 81% |
+| Markdown | 5 | 7% |
+| DOCX | 4 | 5% |
+| PPTX | 3 | 4% |
+| TXT | 2 | 3% |
+
+**Extraction Complexity**:
+- **Low-effort** (already text): 7 files (5 MD + 2 TXT)
+- **Medium-effort** (needs extraction): 7 files (4 DOCX + 3 PPTX)
+- **Higher-effort** (PDF parsing): 59 files
+
+---
+
+### Identified Duplicates (Require Deduplication)
+
+**1. Dolby Atmos Guidelines** (3 duplicates)
+```
+Files: 9, 10, 11
+Name: "Dolby_Atmos_-_General_Information___Guidelines_-_ALEXANDRIA_-_Sony_Music_Wiki.pdf"
+Size: 417.93 KB (identical)
+Created: March 19, 2025 (1:08pm, 1:10pm, 1:43pm)
+Action: Keep newest (file-WSFX41F3jJk4v1C9Vx9wpA), discard 2
+```
+
+**2. AOMA Release Notes** (3+ duplicates)
+```
+Files: 15, 28, 69
+Name: "AOMA Release Notes - AOMA - Sony Music Wiki.pdf"
+Sizes: 1991.15 KB, 1783.04 KB, 1349.84 KB (different versions)
+Created: Dec 11, 2024; Aug 29, 2024; May 2, 2024
+Action: Keep all 3 (different versions/content), but mark as related
+```
+
+**3. AOMA-DirectUpload-Video** (2 duplicates)
+```
+Files: 53, 60
+Names: "AOMA-DirectUpload-Video.docx.pdf", "Microsoft Word - AOMA-DirectUpload-Video.docx.pdf"
+Size: 694.84 KB (identical)
+Created: May 2, 2024
+Action: Keep one (file-JBU7b2rEIFkVrmwim8h0Jgg8), discard duplicate
+```
+
+**4. Asset Prep Resources** (2 duplicates)
+```
+Files: 58, 62
+Name: "Asset Prep Resources.pdf" / "Asset Prep Resources _.pdf"
+Size: 102.12 KB (identical)
+Created: May 2, 2024
+Action: Keep one, discard duplicate
+```
+
+**Estimated Unique Files After Deduplication**: ~65-68 files
+
+---
+
+### Comprehensive Deduplication Strategy
+
+#### Phase 1: Pre-Migration Analysis (Automated)
+
+**Script**: `scripts/analyze-duplicates.ts`
+
+```typescript
+import crypto from 'crypto';
+import OpenAI from 'openai';
+import fs from 'fs';
+
+interface FileInfo {
+  id: string;
+  filename: string;
+  size: number;
+  created_at: number;
+  contentHash?: string;
+}
+
+interface DuplicateGroup {
+  type: 'exact' | 'version' | 'content' | 'suspicious';
+  kept: FileInfo;
+  discarded: FileInfo[];
+  reason: string;
+}
+
+async function analyzeDuplicates(): Promise<DuplicateGroup[]> {
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const VECTOR_STORE_ID = 'vs_3dqHL3Wcmt1WrUof0qS4UQqo';
+  
+  // Step 1: Get all files with metadata
+  const allFiles: FileInfo[] = [];
+  let hasMore = true;
+  let after: string | undefined;
+  
+  while (hasMore) {
+    const response = await openai.vectorStores.files.list(VECTOR_STORE_ID, {
+      limit: 100,
+      after
+    });
+    
+    for (const file of response.data) {
+      const details = await openai.files.retrieve(file.id);
+      allFiles.push({
+        id: file.id,
+        filename: details.filename,
+        size: details.bytes,
+        created_at: details.created_at
+      });
+    }
+    
+    hasMore = response.hasMore || false;
+    if (response.data.length > 0) {
+      after = response.data[response.data.length - 1].id;
+    }
+  }
+  
+  // Step 2: Group by filename
+  const filenameGroups = new Map<string, FileInfo[]>();
+  for (const file of allFiles) {
+    const normalized = file.filename.toLowerCase().replace(/\s+/g, ' ').trim();
+    if (!filenameGroups.has(normalized)) {
+      filenameGroups.set(normalized, []);
+    }
+    filenameGroups.get(normalized)!.push(file);
+  }
+  
+  // Step 3: Identify duplicates
+  const duplicateGroups: DuplicateGroup[] = [];
+  
+  for (const [filename, files] of filenameGroups) {
+    if (files.length === 1) continue;
+    
+    // Sort by creation date (newest first)
+    files.sort((a, b) => b.created_at - a.created_at);
+    
+    // Check if sizes are identical (exact duplicates)
+    const uniqueSizes = new Set(files.map(f => f.size));
+    
+    if (uniqueSizes.size === 1) {
+      // All same size = exact duplicates
+      duplicateGroups.push({
+        type: 'exact',
+        kept: files[0], // Keep newest
+        discarded: files.slice(1),
+        reason: 'Identical filename and size - keep newest by date'
+      });
+    } else {
+      // Different sizes = likely different versions
+      duplicateGroups.push({
+        type: 'version',
+        kept: files[0], // Keep newest
+        discarded: [], // Don't discard - mark for review
+        reason: 'Same filename, different sizes - likely different versions'
+      });
+    }
+  }
+  
+  // Step 4: Check for similar filenames (edit distance)
+  const similarNames = findSimilarNames(allFiles);
+  for (const group of similarNames) {
+    duplicateGroups.push({
+      type: 'suspicious',
+      kept: group[0],
+      discarded: [],
+      reason: 'Similar filenames detected - manual review required'
+    });
+  }
+  
+  // Step 5: Save report
+  const report = {
+    totalFiles: allFiles.length,
+    uniqueFiles: allFiles.length - duplicateGroups.filter(g => g.discarded.length > 0).reduce((sum, g) => sum + g.discarded.length, 0),
+    duplicatesFound: duplicateGroups.length,
+    groups: duplicateGroups,
+    timestamp: new Date().toISOString()
+  };
+  
+  fs.writeFileSync('scripts/duplicate-analysis-report.json', JSON.stringify(report, null, 2));
+  
+  return duplicateGroups;
+}
+
+function findSimilarNames(files: FileInfo[]): FileInfo[][] {
+  // Simple Levenshtein distance check for similar names
+  const similar: FileInfo[][] = [];
+  
+  for (let i = 0; i < files.length; i++) {
+    for (let j = i + 1; j < files.length; j++) {
+      const distance = levenshteinDistance(files[i].filename, files[j].filename);
+      if (distance > 0 && distance < 5) {
+        similar.push([files[i], files[j]]);
+      }
+    }
+  }
+  
+  return similar;
+}
+
+function levenshteinDistance(a: string, b: string): number {
+  const matrix: number[][] = [];
+  
+  for (let i = 0; i <= b.length; i++) {
+    matrix[i] = [i];
+  }
+  
+  for (let j = 0; j <= a.length; j++) {
+    matrix[0][j] = j;
+  }
+  
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1, // substitution
+          matrix[i][j - 1] + 1,     // insertion
+          matrix[i - 1][j] + 1      // deletion
+        );
+      }
+    }
+  }
+  
+  return matrix[b.length][a.length];
+}
+```
+
+#### Phase 2: Manual Document Re-acquisition
+
+**User Action Required**:
+1. Create directory: `aoma-source-docs/`
+2. Place original documents (73 files) from source systems
+3. Organize by category (optional):
+   - `aoma-source-docs/release-notes/`
+   - `aoma-source-docs/user-guides/`
+   - `aoma-source-docs/technical-specs/`
+   - `aoma-source-docs/training/`
+
+**Verification Script**: `scripts/verify-source-docs.ts`
+```typescript
+// Compare filename list from OpenAI vs. local directory
+// Flag missing files
+// Suggest mapping for renamed files
+```
+
+#### Phase 3: Migration with Content-Based Deduplication
+
+**Enhanced Migration Script**: `scripts/manual-aoma-migration.ts`
+
+```typescript
+// Add content hashing for deduplication
+interface DedupeIndex {
+  contentHash: string;
+  filename: string;
+  size: number;
+  filepath: string;
+}
+
+const seenContent = new Map<string, DedupeIndex>();
+
+// Before uploading each document:
+const contentHash = crypto
+  .createHash('sha256')
+  .update(extractedText)
+  .digest('hex');
+
+if (seenContent.has(contentHash)) {
+  console.log(`⚠️  Duplicate content detected: ${filename}`);
+  console.log(`   Original: ${seenContent.get(contentHash)!.filename}`);
+  
+  // Log to dedupe-report.json
+  dedupeReport.duplicates.push({
+    kept: seenContent.get(contentHash)!.filename,
+    discarded: filename,
+    reason: 'exact_content_match',
+    contentHash: contentHash.slice(0, 16)
+  });
+  
+  continue; // Skip upload
+}
+
+seenContent.set(contentHash, { contentHash, filename, size, filepath });
+```
+
+#### Phase 4: Supabase Schema Enhancement
+
+**Add uniqueness constraints** to prevent duplicate uploads:
+
+```sql
+-- Migration: Add content_hash column to documents table
+ALTER TABLE documents 
+ADD COLUMN IF NOT EXISTS content_hash VARCHAR(64);
+
+-- Create unique index (but allow NULL for legacy data)
+CREATE UNIQUE INDEX idx_document_content_hash 
+ON documents(content_hash) 
+WHERE content_hash IS NOT NULL;
+
+-- Add metadata column for tracking duplicates
+ALTER TABLE documents
+ADD COLUMN IF NOT EXISTS duplicate_of VARCHAR(64);
+
+-- Add index for duplicate tracking
+CREATE INDEX idx_duplicate_of 
+ON documents(duplicate_of) 
+WHERE duplicate_of IS NOT NULL;
+```
+
+---
+
+### Migration Execution Plan
+
+#### Pre-Migration Checklist
+- [ ] Run `scripts/analyze-duplicates.ts` to generate analysis report
+- [ ] Review `scripts/duplicate-analysis-report.json`
+- [ ] Obtain all 73 source documents from original systems
+- [ ] Place in `aoma-source-docs/` directory
+- [ ] Run `scripts/verify-source-docs.ts` to confirm all files present
+- [ ] Apply Supabase schema enhancements
+
+#### Migration Steps
+1. **Dry run** (no uploads): `npm run migrate:aoma -- --dry-run`
+2. **Review** dry run output and deduplication report
+3. **Small batch test** (5 files): `npm run migrate:aoma -- --limit=5`
+4. **Verify** Supabase data quality
+5. **Full migration**: `npm run migrate:aoma`
+6. **Validation**: Compare document counts and spot-check content
+
+#### Post-Migration Verification
+```typescript
+// scripts/verify-migration.ts
+// 1. Count documents in Supabase
+// 2. Compare with expected unique count (~65-68)
+// 3. Test search queries on migrated data
+// 4. Validate embedding quality
+// 5. Generate migration success report
+```
+
+---
+
+### Estimated Effort
+
+| Task | Time | Priority |
+|------|------|----------|
+| Pre-migration analysis script | 2 hours | High |
+| Source document re-acquisition | 4-8 hours | High |
+| Schema enhancements | 1 hour | High |
+| Migration script updates | 2 hours | High |
+| Dry run + review | 1 hour | High |
+| Full migration execution | 2-3 hours | Medium |
+| Verification + validation | 2 hours | Medium |
+| **Total** | **14-19 hours** | - |
+
+**Decision Required**: User must confirm availability of source documents before proceeding.
 
 ---
 

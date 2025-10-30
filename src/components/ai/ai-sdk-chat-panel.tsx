@@ -430,7 +430,22 @@ export function AiSdkChatPanel({
     };
 
     console.log("[SIAM] Sending validated message:", validatedMessage);
-    return originalSendMessage(validatedMessage);
+    const result = originalSendMessage(validatedMessage);
+
+    // CRITICAL FIX: Clear input immediately after sending
+    // The AI SDK sets input internally before sending, so we need to clear it right after
+    setTimeout(() => {
+      setLocalInput("");
+      if (typeof setInput === "function") {
+        try {
+          setInput("");
+        } catch (err) {
+          console.warn("[SIAM] Failed to clear input after send", err);
+        }
+      }
+    }, 50);
+
+    return result;
   };
 
   // AI SDK v5 doesn't have handleSubmit - create wrapper using sendMessage
@@ -547,6 +562,14 @@ export function AiSdkChatPanel({
 
   // State for storing and displaying the last prompt
   const [lastPrompt, setLastPrompt] = useState<string>("");
+
+  // CRITICAL FIX: Sync AI SDK input state back to localInput
+  // This ensures when AI SDK clears input after sending, our local state updates too
+  useEffect(() => {
+    if (input !== undefined && input !== localInput) {
+      setLocalInput(input);
+    }
+  }, [input]);
 
   // Sync messages with conversation manager
   useEffect(() => {
@@ -830,52 +853,39 @@ export function AiSdkChatPanel({
         }
       } catch {}
 
-      // Set input and trigger submit using AI SDK's built-in flow
-      // Always set local input first
-      setLocalInput(suggestion);
-
-      // Try to use setInput if available (AI SDK v5 compatibility)
-      if (typeof setInput === "function") {
-        try {
-          setInput(suggestion);
-        } catch (err) {
-          console.warn("[SIAM] setInput call failed, using fallback", err);
-        }
-      }
+      // CRITICAL FIX: Don't set input value before sending - send directly
+      // This prevents the textarea from showing the question text after response
 
       // Use sendMessage as primary method (AI SDK v5)
-      // This directly sends the message using AI SDK's sendMessage function
-      setTimeout(() => {
-        if (typeof sendMessage === "function") {
-          sendMessage({ text: suggestion }); // v5 format
-        } else if (typeof append === "function") {
-          // Fallback to v4 append if sendMessage not available
-          append({
-            role: "user",
-            content: suggestion,
-          });
-        } else {
-          // Final fallback: trigger form submit
+      // Send the message directly without populating the input field first
+      if (typeof sendMessage === "function") {
+        sendMessage({ text: suggestion }); // v5 format - sends without setting input
+      } else if (typeof append === "function") {
+        // Fallback to v4 append if sendMessage not available
+        append({
+          role: "user",
+          content: suggestion,
+        });
+      } else {
+        // Final fallback: set input and trigger form submit
+        setLocalInput(suggestion);
+        if (typeof setInput === "function") {
+          setInput(suggestion);
+        }
+        setTimeout(() => {
           const form = document.querySelector('form[data-chat-form="true"]') as HTMLFormElement;
           if (form) {
             form.requestSubmit();
-          } else {
-            console.error("[SIAM] No message sending method available");
+            // Clear after submit
+            setTimeout(() => {
+              setLocalInput("");
+              if (typeof setInput === "function") {
+                setInput("");
+              }
+            }, 100);
           }
-        }
-
-        // CRITICAL FIX: Clear input immediately after sending
-        setTimeout(() => {
-          setLocalInput("");
-          if (typeof setInput === "function") {
-            try {
-              setInput("");
-            } catch (err) {
-              console.warn("[SIAM] setInput clear after send failed", err);
-            }
-          }
-        }, 100); // Small delay to ensure message is sent first
-      }, 50);
+        }, 50);
+      }
     }
   };
 
