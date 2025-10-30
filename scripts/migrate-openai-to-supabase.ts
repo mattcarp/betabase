@@ -81,12 +81,15 @@ function validateEnvironment(): void {
 
 /**
  * Export documents from OpenAI Vector Store
+ * Using the exact approach provided by OpenAI support
  */
 async function exportOpenAIVectorStore(): Promise<ExportedDocument[]> {
   console.log(`\n📥 Exporting documents from OpenAI Vector Store: ${VECTOR_STORE_ID}`);
   
   try {
-    // List all files in the vector store
+    // Step 1: List all files linked to the vector store
+    // Using vectorStores.files API (OpenAI SDK v6.1.0)
+    console.log('Listing files from vector store...');
     const vectorStoreFiles = await openai.vectorStores.files.list(VECTOR_STORE_ID);
     const files = vectorStoreFiles.data;
     
@@ -99,38 +102,47 @@ async function exportOpenAIVectorStore(): Promise<ExportedDocument[]> {
     const exportedDocs: ExportedDocument[] = [];
     const filesToProcess = limit ? files.slice(0, limit) : files;
     
+    // Step 2: Download each file
     for (let i = 0; i < filesToProcess.length; i++) {
       const fileEntry = filesToProcess[i];
       const progress = `[${i + 1}/${filesToProcess.length}]`;
       
       try {
-        console.log(`${progress} Processing file: ${fileEntry.id}`);
+        const fileId = fileEntry.id;
         
-        // Get file content
-        const fileContent = await openai.files.content(fileEntry.id);
-        const buffer = await fileContent.arrayBuffer();
+        // Get filename from vector store entry (more reliable)
+        const fileName = fileEntry.id; // We'll get the real name from file metadata
+        
+        console.log(`${progress} Downloading file: ${fileId}...`);
+        
+        // Download file content (OpenAI-recommended approach)
+        const response = await openai.files.content(fileId);
+        const arrayBuffer = await response.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
         const text = new TextDecoder().decode(buffer);
         
-        // Get file metadata
-        const fileDetails = await openai.files.retrieve(fileEntry.id);
+        // Get file metadata for additional details
+        const fileDetails = await openai.files.retrieve(fileId);
         
         exportedDocs.push({
-          id: fileEntry.id,
-          filename: fileDetails.filename,
+          id: fileId,
+          filename: fileDetails.filename || `${fileId}.txt`,
           created_at: fileDetails.created_at,
           content: text,
           metadata: {
-            openai_file_id: fileEntry.id,
+            openai_file_id: fileId,
             filename: fileDetails.filename,
             purpose: fileDetails.purpose,
             bytes: fileDetails.bytes,
             created_at: fileDetails.created_at,
+            vector_store_id: VECTOR_STORE_ID,
           }
         });
         
         console.log(`${progress} ✅ Exported: ${fileDetails.filename} (${text.length} chars)`);
       } catch (error) {
         console.error(`${progress} ❌ Failed to export ${fileEntry.id}:`, error);
+        // Continue with next file instead of failing completely
       }
     }
     
