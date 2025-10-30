@@ -6,22 +6,25 @@ import { cn } from "../../lib/utils";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import {
-  Bot,
-  Sparkles,
-  Trash2,
-  Download,
-  Loader2,
-  AlertCircle,
-} from "lucide-react";
+import { Bot, Sparkles, Trash2, Download, Loader2, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "../ui/alert";
 import { motion } from "framer-motion";
 
 // Import shadcn/ui AI Elements components
 import { Message, MessageContent, MessageAvatar } from "../ai-elements/message";
 import { Response } from "../ai-elements/response";
-import { Conversation, ConversationContent, ConversationScrollButton } from "../ai-elements/conversation";
-import { PromptInput, PromptInputTextarea, PromptInputToolbar, PromptInputTools, PromptInputSubmit } from "../ai-elements/prompt-input";
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from "../ai-elements/conversation";
+import {
+  PromptInput,
+  PromptInputTextarea,
+  PromptInputToolbar,
+  PromptInputTools,
+  PromptInputSubmit,
+} from "../ai-elements/prompt-input";
 import { Suggestions, Suggestion } from "../ai-elements/suggestion";
 import { Loader } from "../ai-elements/loader";
 
@@ -43,7 +46,7 @@ interface ChatPanelProps {
 }
 
 export function ChatPanel({
-  api: _api = "/api/chat", // Unused - v5 uses default endpoint
+  api = "/api/chat",
   initialMessages = [],
   className,
   title = "AI Assistant",
@@ -64,30 +67,21 @@ export function ChatPanel({
 }: ChatPanelProps) {
   const [showSuggestions, setShowSuggestions] = useState(true);
 
-  const {
-    messages,
-    input,
-    isLoading,
-    error,
-    reload,
-    stop,
-    append,
-    setMessages,
-    setInput,
-  } = useChat({
-    api: api || "/api/chat",
-    initialMessages,
-    onError: (error: Error) => {
-      console.error("Chat error:", error);
-      onError?.(error);
-    },
-    onFinish: () => {
-      // Check if we've reached max messages
-      if (maxMessages && messages.length >= maxMessages) {
-        console.warn(`Maximum messages (${maxMessages}) reached`);
-      }
-    },
-  });
+  const { messages, input, isLoading, error, reload, stop, append, setMessages, setInput } =
+    useChat({
+      api,
+      initialMessages,
+      onError: (error: Error) => {
+        console.error("Chat error:", error);
+        onError?.(error);
+      },
+      onFinish: () => {
+        // Check if we've reached max messages
+        if (maxMessages && messages.length >= maxMessages) {
+          console.warn(`Maximum messages (${maxMessages}) reached`);
+        }
+      },
+    });
 
   // Hide suggestions after first message
   useEffect(() => {
@@ -220,8 +214,8 @@ export function ChatPanel({
                     <MessageAvatar
                       name={message.role === "user" ? "U" : "AI"}
                       className={cn(
-                        message.role === "user" 
-                          ? "bg-blue-500 text-white" 
+                        message.role === "user"
+                          ? "bg-blue-500 text-white"
                           : "bg-gray-500 text-white"
                       )}
                     />
