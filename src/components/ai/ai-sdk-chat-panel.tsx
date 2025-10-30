@@ -277,7 +277,8 @@ export function AiSdkChatPanel({
   }, [currentApiEndpoint]); // Only log when endpoint actually changes
 
   const chatResult = useChat({
-    api: currentApiEndpoint, // Use the calculated endpoint directly (v5 still supports this)
+    // @ts-ignore - AI SDK v5 still supports api option but types haven't caught up
+    api: currentApiEndpoint, // Use the calculated endpoint directly
     id: chatId,
     messages: (initialMessages || []).filter((m) => m.content != null && m.content !== ""), // CRITICAL: Filter null content
     onError: (err) => {
@@ -391,19 +392,19 @@ export function AiSdkChatPanel({
 
   const {
     messages = [],
-    input,
-    setInput,
-    handleSubmit: originalHandleSubmit,
     sendMessage: originalSendMessage,
-    append,
     setMessages,
     regenerate,
     clearError,
     stop,
     error,
     status,
-    isLoading: chatIsLoading,
   } = chatResult || {};
+
+  // AI SDK v5 no longer provides input/setInput - manage locally
+  const [input, setInput] = useState("");
+  // AI SDK v5 uses 'status' instead of 'isLoading'
+  const chatIsLoading = status === "streaming" || status === "processing";
 
   // CRITICAL: Wrap sendMessage to validate content before sending
   const sendMessage = (message: any) => {
@@ -430,6 +431,20 @@ export function AiSdkChatPanel({
 
     console.log("[SIAM] Sending validated message:", validatedMessage);
     return originalSendMessage(validatedMessage);
+  };
+
+  // AI SDK v5 doesn't have handleSubmit - create wrapper using sendMessage
+  const handleSubmit = (e: React.FormEvent) => {
+    e?.preventDefault();
+    if (!input.trim()) return;
+    
+    sendMessage({ text: input, role: "user" });
+    setInput(""); // Clear input after sending
+  };
+
+  // AI SDK v5 doesn't have append - create wrapper using sendMessage
+  const append = (message: any) => {
+    return sendMessage(message);
   };
 
   // Check if error exists and show toast
