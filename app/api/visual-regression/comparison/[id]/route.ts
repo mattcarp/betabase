@@ -7,19 +7,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-interface RouteContext {
-  params: {
-    id: string;
-  };
-}
+type RouteParams = { id: string };
 
 /**
  * GET /api/visual-regression/comparison/:id
  * Get a specific comparison by ID
  */
-export async function GET(request: NextRequest, { params }: RouteContext) {
+export async function GET(request: NextRequest, context: { params: Promise<RouteParams> }) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
 
     // TODO: Fetch comparison from database
     // For now, return mock data
@@ -69,9 +65,9 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
  * DELETE /api/visual-regression/comparison/:id
  * Delete a comparison
  */
-export async function DELETE(request: NextRequest, { params }: RouteContext) {
+export async function DELETE(request: NextRequest, context: { params: Promise<RouteParams> }) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
 
     // TODO: Delete comparison from database
     console.log("Deleting comparison:", id);
