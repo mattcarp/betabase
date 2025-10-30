@@ -1,27 +1,32 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "../../lib/utils";
-// MessageThread component removed - using inline message display
-import { ChatInput } from "./chat-input";
-import { ScrollArea } from "../ui/scroll-area";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-// import { Separator } from "../ui/separator"; // Unused
-import {
-  Bot,
-  Sparkles,
-  // RefreshCw, // Unused
-  Trash2,
-  Download,
-  // Settings, // Unused
-  Loader2,
-  AlertCircle,
-} from "lucide-react";
+import { Bot, Sparkles, Trash2, Download, Loader2, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "../ui/alert";
 import { motion } from "framer-motion";
+
+// Import shadcn/ui AI Elements components
+import { Message, MessageContent, MessageAvatar } from "../ai-elements/message";
+import { Response } from "../ai-elements/response";
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from "../ai-elements/conversation";
+import {
+  PromptInput,
+  PromptInputTextarea,
+  PromptInputToolbar,
+  PromptInputTools,
+  PromptInputSubmit,
+} from "../ai-elements/prompt-input";
+import { Suggestions, Suggestion } from "../ai-elements/suggestion";
+import { Loader } from "../ai-elements/loader";
 
 interface ChatPanelProps {
   api?: string;
@@ -41,7 +46,7 @@ interface ChatPanelProps {
 }
 
 export function ChatPanel({
-  api: _api = "/api/chat", // Unused - v5 uses default endpoint
+  api = "/api/chat",
   initialMessages = [],
   className,
   title = "AI Assistant",
@@ -60,48 +65,23 @@ export function ChatPanel({
   allowClear = true,
   systemPrompt: _systemPrompt, // Unused - should be handled differently in v5
 }: ChatPanelProps) {
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
 
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit: _handleSubmit, // Unused - using custom submit handler
-    isLoading,
-    error,
-    reload,
-    stop: _stop, // Unused
-    append,
-    setMessages,
-    setInput,
-  } = (useChat as any)({
-    // Note: 'api' is not a valid option in v5, use default endpoint
-    initialMessages,
-    // body is also not valid in v5, system prompt should be handled differently
-    onError: (error: Error) => {
-      console.error("Chat error:", error);
-      onError?.(error);
-    },
-    onFinish: () => {
-      // Check if we've reached max messages
-      if (maxMessages && messages.length >= maxMessages) {
-        console.warn(`Maximum messages (${maxMessages}) reached`);
-      }
-    },
-  });
-
-  // Auto-scroll to bottom when new messages arrive
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-      const scrollContainer = scrollAreaRef.current.querySelector(
-        "[data-radix-scroll-area-viewport]"
-      );
-      if (scrollContainer) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      }
-    }
-  }, [messages]);
+  const { messages, input, isLoading, error, reload, stop, append, setMessages, setInput } =
+    useChat({
+      api,
+      initialMessages,
+      onError: (error: Error) => {
+        console.error("Chat error:", error);
+        onError?.(error);
+      },
+      onFinish: () => {
+        // Check if we've reached max messages
+        if (maxMessages && messages.length >= maxMessages) {
+          console.warn(`Maximum messages (${maxMessages}) reached`);
+        }
+      },
+    });
 
   // Hide suggestions after first message
   useEffect(() => {
@@ -139,11 +119,12 @@ export function ChatPanel({
     URL.revokeObjectURL(url);
   };
 
-  const handleFormSubmit = (value: string) => {
-    if (value.trim()) {
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (input?.trim()) {
       append({
         role: "user",
-        content: value,
+        content: input,
       });
       setInput("");
     }
@@ -193,8 +174,8 @@ export function ChatPanel({
       )}
 
       <CardContent className="flex-1 p-0 overflow-hidden">
-        <ScrollArea ref={scrollAreaRef} className="h-full">
-          <div className="px-4">
+        <Conversation className="h-full">
+          <ConversationContent className="px-4 py-4">
             {messages.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -214,53 +195,42 @@ export function ChatPanel({
 
                 {showSuggestions && suggestions.length > 0 && (
                   <div className="flex flex-wrap gap-2 justify-center max-w-lg">
-                    {suggestions.map((suggestion, index) => (
-                      <Button
-                        key={index}
-                        variant="outline"
-                        size="sm"
-                        className="text-xs"
-                        onClick={() => handleSuggestionClick(suggestion)}
-                      >
-                        {suggestion}
-                      </Button>
-                    ))}
+                    <Suggestions>
+                      {suggestions.map((suggestion, index) => (
+                        <Suggestion
+                          key={index}
+                          suggestion={suggestion}
+                          onClick={handleSuggestionClick}
+                        />
+                      ))}
+                    </Suggestions>
                   </div>
                 )}
               </motion.div>
             ) : (
               <div className="space-y-4">
                 {messages.map((message: any, index: number) => (
-                  <div key={message.id || index} className="flex gap-3">
-                    <div className="flex-shrink-0">
-                      {message.role === "user" ? (
-                        <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
-                          U
-                        </div>
-                      ) : (
-                        <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm">
-                          <Bot className="w-4 h-4" />
-                        </div>
+                  <Message key={message.id || index} from={message.role}>
+                    <MessageAvatar
+                      name={message.role === "user" ? "U" : "AI"}
+                      className={cn(
+                        message.role === "user"
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-500 text-white"
                       )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm text-gray-900 dark:text-gray-100">
-                        {(message as any).content}
-                      </div>
-                    </div>
-                  </div>
+                    />
+                    <MessageContent>
+                      <Response>{(message as any).content}</Response>
+                    </MessageContent>
+                  </Message>
                 ))}
                 {isLoading && (
-                  <div className="flex gap-3">
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm">
-                        <Bot className="w-4 h-4" />
-                      </div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm text-gray-500">Thinking...</div>
-                    </div>
-                  </div>
+                  <Message from="assistant">
+                    <MessageAvatar name="AI" className="bg-gray-500 text-white" />
+                    <MessageContent>
+                      <Loader />
+                    </MessageContent>
+                  </Message>
                 )}
               </div>
             )}
@@ -290,26 +260,41 @@ export function ChatPanel({
                 </AlertDescription>
               </Alert>
             )}
-          </div>
-        </ScrollArea>
+          </ConversationContent>
+          <ConversationScrollButton />
+        </Conversation>
       </CardContent>
 
       {showFooter && (
         <CardFooter className="p-4 border-t bg-background/95 backdrop-blur-xl">
           <div className="w-full">
-            <ChatInput
-              value={input}
-              onChange={handleInputChange}
-              onSubmit={handleFormSubmit}
-              onStop={stop}
-              isLoading={isLoading}
-              placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
-              className="w-full"
-              allowAttachments={false}
-              allowVoice={false}
-              suggestions={showSuggestions ? suggestions : []}
-              onSuggestionClick={handleSuggestionClick}
-            />
+            <PromptInput onSubmit={handleFormSubmit}>
+              <PromptInputTextarea
+                value={input || ""}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
+                disabled={isMaxMessagesReached || isLoading}
+              />
+              <PromptInputToolbar>
+                <PromptInputTools>
+                  {showSuggestions && suggestions.length > 0 && (
+                    <Suggestions>
+                      {suggestions.map((suggestion, index) => (
+                        <Suggestion
+                          key={index}
+                          suggestion={suggestion}
+                          onClick={handleSuggestionClick}
+                        />
+                      ))}
+                    </Suggestions>
+                  )}
+                </PromptInputTools>
+                <PromptInputSubmit
+                  disabled={isMaxMessagesReached || !input?.trim()}
+                  status={isLoading ? "streaming" : undefined}
+                />
+              </PromptInputToolbar>
+            </PromptInput>
 
             {isLoading && (
               <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
