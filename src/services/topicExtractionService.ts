@@ -11,7 +11,44 @@
  * for identifying important topics and clustering related content.
  */
 
-import { EventEmitter } from "events";
+// Conditional import for Node.js EventEmitter (server-side only)
+let EventEmitter: any;
+if (typeof window === "undefined") {
+  // Server-side: Import from Node.js events
+  EventEmitter = require("events").EventEmitter;
+} else {
+  // Client-side: Use a minimal EventEmitter shim
+  EventEmitter = class EventEmitterShim {
+    private events: Map<string, Function[]> = new Map();
+    
+    on(event: string, listener: Function) {
+      if (!this.events.has(event)) {
+        this.events.set(event, []);
+      }
+      this.events.get(event)!.push(listener);
+      return this;
+    }
+    
+    emit(event: string, ...args: any[]) {
+      const listeners = this.events.get(event);
+      if (listeners) {
+        listeners.forEach(listener => listener(...args));
+      }
+      return true;
+    }
+    
+    removeListener(event: string, listener: Function) {
+      const listeners = this.events.get(event);
+      if (listeners) {
+        const index = listeners.indexOf(listener);
+        if (index > -1) {
+          listeners.splice(index, 1);
+        }
+      }
+      return this;
+    }
+  };
+}
 
 // Types for topic extraction
 export interface ExtractedTopic {
