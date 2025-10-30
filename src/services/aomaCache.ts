@@ -32,12 +32,12 @@ class AOMACache {
     this.cache = new Map();
     this.maxSize = maxSize;
 
-    // Different TTLs for different strategies - increased for better performance
+    // Different TTLs for different strategies - TIER 1 OPTIMIZATION: Aggressive caching
     this.ttlMs = {
-      rapid: 18000000, // 5 hours for rapid queries (was 1 hour)
-      focused: 7200000, // 2 hours for focused (was 30 minutes)
-      comprehensive: 3600000, // 1 hour for comprehensive (was 30 minutes)
-      default: 7200000, // 2 hours default (was 30 minutes)
+      rapid: 43200000, // 12 hours for rapid queries (common queries)
+      focused: 21600000, // 6 hours for focused (moderate caching)
+      comprehensive: 10800000, // 3 hours for comprehensive (still aggressive)
+      default: 21600000, // 6 hours default
     };
 
     this.stats = {

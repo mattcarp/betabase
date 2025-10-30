@@ -9,6 +9,7 @@ import { aomaProgressStream, type AOMASource } from "./aomaProgressStream";
 import { getSupabaseVectorService } from "./supabaseVectorService";
 import type { VectorSearchResult } from "@/lib/supabase";
 import { getResultMerger } from "./resultMerger";
+import { getQueryDeduplicator } from "./queryDeduplicator";
 
 // Available AOMA-mesh-mcp tools and their capabilities
 const AOMA_TOOLS = {
@@ -539,6 +540,26 @@ export class AOMAOrchestrator {
 
       return cached;
     }
+
+    // TIER 1 OPTIMIZATION: Deduplicate concurrent identical queries
+    // If the same query is already in-flight from another request, reuse that promise
+    const deduplicator = getQueryDeduplicator();
+    const dedupeKey = `${normalizedQuery}:${progressCallback ? 'with-callback' : 'no-callback'}`;
+    
+    return deduplicator.dedupe(dedupeKey, async () => {
+      return this.executeOrchestrationInternal(query, normalizedQuery, cacheKey, progressCallback);
+    });
+  }
+
+  /**
+   * Internal orchestration execution (wrapped by deduplication)
+   */
+  private async executeOrchestrationInternal(
+    query: string,
+    normalizedQuery: string,
+    cacheKey: string,
+    progressCallback?: (update: any) => void
+  ): Promise<any> {
 
     // PARALLEL HYBRID PATH: Query BOTH Supabase and OpenAI sources simultaneously
     // This ensures we get comprehensive results from all knowledge sources
