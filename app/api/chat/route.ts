@@ -377,9 +377,31 @@ export async function POST(req: Request) {
         const railwayDuration = railwayEndTime - railwayStartTime;
         console.log(`⚡ Railway MCP responded in ${railwayDuration}ms`);
 
-        if (orchestratorResult && (orchestratorResult.response || orchestratorResult.content)) {
-          const contextContent = orchestratorResult.response || orchestratorResult.content;
+        // Handle different response formats from the orchestrator
+        let contextContent = null;
+        
+        if (orchestratorResult) {
+          // Try direct response/content fields first
+          contextContent = orchestratorResult.response || orchestratorResult.content;
+          
+          // If not found, check for nested result structure (from /api/aoma endpoint)
+          if (!contextContent && orchestratorResult.result?.content) {
+            const contentArray = orchestratorResult.result.content;
+            if (Array.isArray(contentArray) && contentArray.length > 0) {
+              const textItem = contentArray.find((item: any) => item.type === "text");
+              if (textItem?.text) {
+                try {
+                  const parsed = JSON.parse(textItem.text);
+                  contextContent = parsed.response;
+                } catch (e) {
+                  contextContent = textItem.text;
+                }
+              }
+            }
+          }
+        }
 
+        if (contextContent) {
           knowledgeElements.push({
             type: "context",
             content: contextContent,
