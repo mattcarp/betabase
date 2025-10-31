@@ -161,13 +161,37 @@ async function upsertToSupabase(item, embedding) {
   return data;
 }
 
+function cleanMarkdownContent(md) {
+  // Nuclear approach: Remove all {…} blocks recursively
+  let cleaned = md;
+  let prevLength;
+  do {
+    prevLength = cleaned.length;
+    cleaned = cleaned.replace(/\{[^{}]*\}/g, '');
+  } while (cleaned.length < prevLength && cleaned.includes('{'));
+  
+  // Remove CSS property lines
+  cleaned = cleaned.replace(/^[a-z-]+\s*:\s*[^;\n]+;?\s*$/gim, '');
+  
+  // Remove attribute spam
+  cleaned = cleaned.replace(/(style|class|id|data-[\w-]+)="[^"]*"/gi, '');
+  
+  // Clean up whitespace
+  cleaned = cleaned.replace(/\s{3,}/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+  
+  return cleaned;
+}
+
 async function processPage(file, checkpoint) {
   if (checkpoint.processedUrls.has(file.url)) {
     return { skipped: true, url: file.url };
   }
   
-  const content = fs.readFileSync(file.mdPath, 'utf8');
+  const rawContent = fs.readFileSync(file.mdPath, 'utf8');
   const hasScreenshot = fs.existsSync(path.join(file.parentDir, 'screenshot.png'));
+  
+  // Clean content for LLM (remove CSS bloat)
+  const content = cleanMarkdownContent(rawContent);
   
   // Extract title from first heading or use URL
   const titleMatch = content.match(/^#\s+(.+)$/m);
@@ -181,7 +205,7 @@ async function processPage(file, checkpoint) {
     mdPath: file.mdPath
   };
   
-  // Generate embedding
+  // Generate embedding on CLEANED content
   const embedding = await generateEmbedding(content);
   
   // Upsert to Supabase
