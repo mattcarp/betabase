@@ -2,7 +2,7 @@
   "master": {
     "tasks": [
       {
-        "id": "36",
+        "id": 36,
         "title": "Setup Project Repository",
         "description": "Initialize the project repository with version control and basic structure.",
         "details": "Create a new Git repository for the SIAM project. Set up the initial directory structure to include folders for audio processing, transcription, topic analysis, UI, and tests. Add a README file with an overview of the project and initial setup instructions.",
@@ -13,7 +13,7 @@
         "subtasks": []
       },
       {
-        "id": "37",
+        "id": 37,
         "title": "Complete Audio Capture System Integration",
         "description": "Finalize the audio capture system integration with the Electron-based SIAM application.",
         "status": "done",
@@ -85,7 +85,7 @@
         ]
       },
       {
-        "id": "38",
+        "id": 38,
         "title": "Integrate OpenAI Whisper for Transcription",
         "description": "Modern audio processing pipeline using ElevenLabs Voice Isolation and OpenAI Whisper API for high-accuracy real-time transcription with professional-grade audio cleaning has been successfully implemented. The system now includes content analysis and safety features for explicit lyrics detection and categorization.",
         "status": "done",
@@ -169,7 +169,7 @@
         ]
       },
       {
-        "id": "39",
+        "id": 39,
         "title": "Enhance Topic Extraction & Analysis Module",
         "description": "Enhance the existing topic extraction and analysis capabilities within the Electron-based SIAM application.",
         "status": "done",
@@ -182,7 +182,7 @@
         "subtasks": []
       },
       {
-        "id": "40",
+        "id": 40,
         "title": "Implement MCP Server Integration & Vector Database",
         "description": "Complete the MCP (Model Context Protocol) server integration and set up vector database for RAG functionality using the deployed Railway MCP server.",
         "status": "done",
@@ -262,7 +262,7 @@
         ]
       },
       {
-        "id": "41",
+        "id": 41,
         "title": "Refine JARVIS-Style HUD Interface",
         "description": "Polish and enhance the existing JARVIS-style HUD interface with glassmorphism effects.",
         "status": "done",
@@ -275,7 +275,7 @@
         "subtasks": []
       },
       {
-        "id": "42",
+        "id": 42,
         "title": "Complete Integrated Meeting Assistant Features",
         "description": "Finalize the end-to-end meeting assistance features within the Electron-based SIAM application.",
         "status": "cancelled",
@@ -290,7 +290,7 @@
         "subtasks": []
       },
       {
-        "id": "43",
+        "id": 43,
         "title": "Finalize Electron Deployment Infrastructure",
         "description": "Complete the deployment infrastructure for the Electron-based SIAM application.",
         "status": "done",
@@ -366,7 +366,7 @@
         "expansionPrompt": "Break down the task into subtasks such as setting up Electron-specific build processes, configuring auto-updater functionality, updating the CI/CD pipeline for Electron, creating cross-platform installation packages, and testing the deployment on all target platforms."
       },
       {
-        "id": "44",
+        "id": 44,
         "title": "Optimize Electron App Performance",
         "description": "Optimize the Electron-based SIAM application for low resource usage and high responsiveness.",
         "status": "cancelled",
@@ -380,7 +380,7 @@
         "subtasks": []
       },
       {
-        "id": "45",
+        "id": 45,
         "title": "Enhance JARVIS Interface User Experience",
         "description": "Add advanced user experience features to the existing JARVIS-style interface.",
         "status": "pending",
@@ -393,7 +393,7 @@
         "subtasks": []
       },
       {
-        "id": "46",
+        "id": 46,
         "title": "Complete Migration from Tauri to Electron",
         "description": "Finalize the complete migration from Tauri to Electron + React + TypeScript + Vite architecture.",
         "status": "cancelled",
@@ -407,7 +407,7 @@
         "subtasks": []
       },
       {
-        "id": "47",
+        "id": 47,
         "title": "Register TAK-AOMA MCP Server with ElevenLabs",
         "description": "Register the AWS Lambda-deployed AOMA Mesh MCP Server with ElevenLabs' MCP service to enable direct integration with conversational AI agents.",
         "status": "cancelled",
@@ -479,7 +479,7 @@
         ]
       },
       {
-        "id": "48",
+        "id": 48,
         "title": "Associate MCP Server with ElevenLabs Agent",
         "description": "Configure the ElevenLabs conversational AI agent to use the registered aoma-mesh-mcp Lambda server for enhanced capabilities including tool access permissions and error handling with AWS Lambda-specific configurations.",
         "status": "done",
@@ -574,7 +574,7 @@
         ]
       },
       {
-        "id": "1",
+        "id": 1,
         "title": "Implement SIAM Chat Interface as Landing Page",
         "description": "Develop a comprehensive chat interface with navigation tabs and a 3-panel layout, integrating with existing JARVIS theme and Shadcn components.",
         "status": "done",
@@ -659,7 +659,7 @@
         ]
       },
       {
-        "id": "49",
+        "id": 49,
         "title": "Restore Document Upload to OpenAI Vector Store in Chat Interface",
         "description": "Re-implement the document upload feature in the chat interface, allowing users to upload files directly to the AOMA knowledge base via the OpenAI-attached vector store, with full integration and user feedback.",
         "details": "Add a file upload button to the chat input area using the existing UI framework (React + Shadcn components). Support PDF, TXT, DOCX, and MD formats with client-side validation. On file selection, initiate an upload to the OpenAI vector store (aoma_vectors) using the OpenAI API: create or select the vector store, then upload files via the file batch endpoint, polling for completion as per OpenAI's best practices. Integrate progress indicators and display success/error feedback to the user. After upload, trigger document processing and indexing in the vector store, ensuring the assistant is updated to use the new vector store ID. Implement robust error handling for file size, format, and API failures. Ensure the workflow is compatible with Electron and the current MCP server integration, and that the uploaded documents become queryable in subsequent chat sessions. Follow security best practices for file handling and user feedback. Reference OpenAI's official SDKs and API documentation for implementation patterns, and ensure the UI/UX matches the JARVIS theme.\n<info added on 2025-07-16T22:59:38.098Z>\nDocument Upload Implementation - COMPLETED! 🎉\n\n**MAJOR ACHIEVEMENT - REGRESSION FIXED:**\n\n✅ **Core Functionality Restored:**\n- Document upload button added to chat interface with beautiful Motiff styling\n- Full OpenAI vector store integration (aoma_vectors) \n- Support for PDF, TXT, DOCX, MD files with 25MB limit\n- Real-time progress tracking with status indicators\n- File validation and comprehensive error handling\n\n✅ **Technical Implementation:**\n- VectorStoreService class with direct OpenAI API integration\n- Two-step upload process: file upload → vector store indexing\n- Status polling with 30-second timeout for completion\n- Environment variable configuration for secure API key storage\n- Beautiful glassmorphism progress indicators\n\n✅ **User Experience:**\n- Upload button seamlessly integrated next to chat input\n- Progress popover with file names, status icons, and progress bars\n- Success messages automatically added to chat upon completion\n- Error feedback for unsupported formats, oversized files, API failures\n- 10-second progress display with automatic cleanup\n\n✅ **Quality Assurance:**\n- Comprehensive Playwright tests for upload button, file selection, progress\n- All existing tests still passing (navigation, interface, version footer)\n- Production-ready error handling and user feedback\n\n**RESULT:** Users can now upload documents to AOMA knowledge base and immediately query them in chat - critical functionality fully restored!\n</info added on 2025-07-16T22:59:38.098Z>",
@@ -673,7 +673,7 @@
         "subtasks": []
       },
       {
-        "id": "50",
+        "id": 50,
         "title": "Implement Multi-Tenant Performance Monitoring Database for AOMA and Jira UAT",
         "description": "Develop a comprehensive performance monitoring database for multi-tenant environments, integrating Web Vitals, Lighthouse scores, and resource metrics.",
         "details": "Enhance the existing database schema to support multi-tenant performance monitoring. Include fields for Web Vitals such as Largest Contentful Paint (LCP), First Input Delay (FID), Cumulative Layout Shift (CLS), Time to First Byte (TTFB), First Contentful Paint (FCP), and Time to Interactive (TTI). Integrate Lighthouse scores and resource performance metrics. Implement error tracking and an application registry to support multi-tenant environments. Develop a performance alerts system to notify stakeholders of significant performance issues. Create analytics views to provide insights into performance trends and issues. Ensure the database is optimized for large-scale data ingestion and retrieval, leveraging indexing and partitioning strategies where appropriate. Collaborate with the team responsible for the performance crawler to ensure seamless data integration.",
@@ -686,7 +686,7 @@
         "subtasks": []
       },
       {
-        "id": "51",
+        "id": 51,
         "title": "Fix MCP Server Connection Issues and Validate TestSprite Integration",
         "description": "Diagnose and resolve MCP server connection failures affecting AI features, implement robust connection health monitoring and error handling, and re-validate with TestSprite.",
         "details": "1. Begin by verifying the local AOMA MCP server (localhost:3333) is running and accessible. Use diagnostic scripts and connection checklists as outlined in MCP server troubleshooting guides to identify issues such as port conflicts, environment variable misconfigurations, or process failures. Analyze server logs for error patterns and ensure all dependencies are installed and up to date. 2. If the local server cannot be restored, configure the application to use the AWS Lambda MCP server fallback (https://sa64ce3rvpb7a3tztugdwrhxgu0xlgpu.lambda-url.us-east-2.on.aws/), ensuring HTTP-based transport is used (not SSE) to comply with Lambda constraints. 3. Implement connection health monitoring: add periodic health checks (e.g., ping endpoints or status routes) and surface connection status in the UI. Integrate robust error handling to gracefully degrade features and provide actionable error messages when the MCP server is unreachable. 4. After fixes, re-run the full TestSprite validation suite to confirm all MCP-dependent features (chat, voice, AI insights) are functional. 5. Upon passing tests, coordinate with deployment infrastructure to release the updated, validated application. Follow best practices for observability by logging connection failures and recovery events for future diagnostics.",
@@ -759,7 +759,7 @@
         ]
       },
       {
-        "id": "52",
+        "id": 52,
         "title": "Implement Dual Email Magic Link Authentication System",
         "description": "CRITICAL P0 BLOCKER: Replace the current Cognito password authentication with a dual email magic link system for Fiona's accounts (fiona.burgess.ext@sonymusic.com and fiona@fionaburgess.com). This is a high-priority blocker that must be completed TODAY as it blocks all P0 functionality. The system must provide passwordless authentication with seamless account switching and session persistence.",
         "status": "done",
@@ -844,7 +844,7 @@
         ]
       },
       {
-        "id": "53",
+        "id": 53,
         "title": "Implement Tab Navigation UI for ChatPage",
         "description": "CRITICAL P0 BLOCKER: Add a tab navigation bar to ChatPage to enable switching between Chat, HUD, Test, Fix, and Curate modes. Without this navigation UI, users cannot access Test, Fix, and Curate modes, blocking essential functionality.",
         "status": "done",
@@ -918,7 +918,7 @@
         ]
       },
       {
-        "id": "54",
+        "id": 54,
         "title": "Implement Functional Interfaces for Test, Fix, and Curate Modes",
         "description": "CRITICAL P0 BLOCKER: Develop fully functional interfaces for Test, Fix, and Curate modes on the ChatPage, replacing placeholder console logs with interactive tools and management systems. This is a high-priority blocker that must be completed TODAY as Fiona needs working knowledge curation tools immediately.",
         "status": "done",
@@ -992,7 +992,7 @@
         ]
       },
       {
-        "id": "55",
+        "id": 55,
         "title": "Deploy SIAM to Production Domains",
         "description": "Deploy the SIAM application to the production domains thebetabase.com and thebetabase.com, ensuring proper configuration and accessibility.",
         "details": "1. Verify that both domains (thebetabase.com and thebetabase.com) are correctly pointing to Vercel's IP address (76.76.21.21).\n2. Investigate and resolve the issue causing the authentication requirement on these domains. This may involve checking Vercel's deployment settings and authentication configurations.\n3. Ensure that the Railway deployment is correctly configured to avoid 404 errors. This may involve checking the deployment logs and settings on Railway.\n4. Update the Vercel deployment configuration to remove any unnecessary authentication requirements, ensuring the application is publicly accessible.\n5. Test the deployment on both domains to confirm that the SIAM application is fully accessible and functional without requiring authentication.\n6. Coordinate with the domain registrar if DNS changes are necessary to ensure proper domain resolution.\n7. Document the deployment process and any changes made for future reference.",
@@ -1005,7 +1005,7 @@
         "subtasks": []
       },
       {
-        "id": "56",
+        "id": 56,
         "title": "Integrate Vercel AI Elements into Chat Landing Page",
         "description": "Replace the custom chat UI with Vercel AI Elements for improved user experience and faster iteration on the Chat landing page.",
         "details": "To integrate Vercel AI Elements into the Chat landing page, begin by installing the Vercel AI SDK and importing the necessary components into `src/components/ui/pages/ChatPage.tsx`. Replace the existing custom chat UI with AI Elements components, ensuring that all current features such as model selector, reasoning display, suggestions, export/clear, streaming, and error states are preserved. Implement a feature flag to allow users to switch back to the current UI if needed. Ensure that all components are accessible and include `data-test-id` attributes for Playwright testing. Pay special attention to maintaining the existing API connections to `app/api/chat/route.ts`.\n<info added on 2025-08-14T02:06:07.427Z>\nManually integrate the Vercel AI Elements UI components, such as the message thread, prompt input, and conversation wrapper, as pure React UI components without introducing new @ai-sdk/* packages. Avoid using the AI Elements CLI auto-install to prevent pulling in @ai-sdk/react. Ensure these components are wired to the existing chat route and state, maintaining the current streaming and message schema. Map the existing schema to the AI Elements props without relying on AI SDK hooks. Preserve the feature flag to allow fallback to the current EnhancedChatPanel.\n</info added on 2025-08-14T02:06:07.427Z>",
@@ -1116,7 +1116,7 @@
         ]
       },
       {
-        "id": "57",
+        "id": 57,
         "title": "Fix file upload API endpoint errors in assistant-v5 route",
         "description": "The /api/assistant-v5 route is returning 500 errors when handling file uploads. Error: 'Cannot read properties of undefined (reading files)'",
         "details": "1. Check OpenAI client initialization in the route\n2. Verify vector store ID is properly configured\n3. Fix the file upload handling logic\n4. Ensure proper error handling for vector store operations\n5. Test with actual file uploads",
@@ -1127,7 +1127,7 @@
         "subtasks": []
       },
       {
-        "id": "58",
+        "id": 58,
         "title": "Fix AssistantResponse import error in assistant-v5 route",
         "description": "The assistant-v5 route is trying to import 'AssistantResponse' from 'ai' package but it doesn't exist",
         "details": "1. Remove or replace the AssistantResponse import\n2. Use the correct response format from Vercel AI SDK v5\n3. Check documentation for proper streaming response format\n4. Update to use toDataStreamResponse() or appropriate method",
@@ -1138,7 +1138,7 @@
         "subtasks": []
       },
       {
-        "id": "59",
+        "id": 59,
         "title": "Configure and verify OpenAI vector store integration",
         "description": "Ensure the OpenAI assistant has a properly configured vector store and the API can access it",
         "details": "1. Verify OPENAI_ASSISTANT_ID environment variable is correct\n2. Check if assistant has a vector store attached in OpenAI dashboard\n3. Get and configure the vector store ID if needed\n4. Update environment variables with vector store ID\n5. Test file upload to vector store functionality",
@@ -1152,7 +1152,7 @@
         "subtasks": []
       },
       {
-        "id": "60",
+        "id": 60,
         "title": "Test complete file upload flow end-to-end",
         "description": "Once API fixes are complete, test uploading files through UI and verify they appear in OpenAI vector store",
         "details": "1. Upload various file types (.txt, .pdf, .md)\n2. Verify files are uploaded to OpenAI vector store\n3. Test querying uploaded content through chat\n4. Verify assistant can reference uploaded files\n5. Check file persistence across sessions",
@@ -1165,7 +1165,7 @@
         "subtasks": []
       },
       {
-        "id": "61",
+        "id": 61,
         "title": "Integrate Playwright Test Runners with Test Dashboard",
         "description": "Connect real Playwright test runners to the Test Dashboard to display live test results and execution status.",
         "details": "To integrate Playwright test runners with the Test Dashboard, begin by setting up a communication channel between the test runners and the dashboard. This can be achieved by using a WebSocket or REST API to send test execution data from the Playwright tests to the dashboard. Implement a middleware or service that listens for test events from Playwright, formats the data appropriately, and updates the dashboard in real-time. Ensure that the dashboard can handle concurrent test executions and display results accurately. Consider implementing features such as filtering, sorting, and searching test results on the dashboard. Additionally, ensure that the integration supports various test environments and configurations used in the project.",
@@ -1179,7 +1179,7 @@
         "subtasks": []
       },
       {
-        "id": "62",
+        "id": 62,
         "title": "Add FIRECRAWL_API_KEY to environment variables for Test Dashboard",
         "description": "Include the FIRECRAWL_API_KEY in the environment variables to enable real Application Under Test (AUT) analysis in the Test Dashboard.",
         "details": "To add the FIRECRAWL_API_KEY to the environment variables, first ensure that the key is securely stored and accessible only to authorized personnel. Update the environment configuration files (e.g., .env or system environment variables) to include the FIRECRAWL_API_KEY. Ensure that the key is correctly referenced in the application code where the Test Dashboard interacts with the AUT analysis features. Additionally, update any deployment scripts or CI/CD pipelines to include this environment variable, ensuring it is available in all environments where the Test Dashboard is deployed. Consider using a secrets management tool to handle the API key securely.",
@@ -1192,7 +1192,7 @@
         "subtasks": []
       },
       {
-        "id": "63",
+        "id": 63,
         "title": "Set up WebSocket server for real-time test execution updates in Test Dashboard",
         "description": "Implement a WebSocket server to provide real-time updates on test execution status in the Test Dashboard.",
         "details": "To set up the WebSocket server, first choose a suitable WebSocket library for the server-side implementation, such as 'ws' for Node.js. Implement the server to listen for connections from the Test Dashboard. Define a protocol for sending test execution updates, including test start, progress, and completion events. Ensure the server can handle multiple concurrent connections and broadcasts updates to all connected clients. Integrate the WebSocket server with the existing test execution framework to emit updates in real-time. Consider security aspects, such as authentication and authorization, to ensure only authorized clients can connect to the WebSocket server.",
@@ -1264,7 +1264,7 @@
         ]
       },
       {
-        "id": "64",
+        "id": 64,
         "title": "Optimize AOMA Query Response Time",
         "description": "Reduce the AOMA query response time from 30-45 seconds to under 5 seconds by implementing caching, strategy changes, and retry logic removal.",
         "details": "1. Implement Redis caching for common queries to reduce repeated API calls. Set up a Redis instance and configure the application to cache query results. Use a suitable TTL (Time To Live) for cache entries to ensure data freshness.\n2. Change the default query strategy to 'rapid' to prioritize speed over other factors. Update the configuration files and ensure the application logic supports this strategy.\n3. Remove the sequential retry logic currently in place for handling API failures. Instead, implement a more efficient error handling mechanism that logs errors and retries only when necessary.\n4. Plan for eventual migration to the Vercel AI SDK to allow for vendor flexibility. This step involves researching the SDK's capabilities and preparing the codebase for a future transition.",
@@ -1278,7 +1278,7 @@
         "subtasks": []
       },
       {
-        "id": "65",
+        "id": 65,
         "title": "Setup Supabase with pgvector",
         "description": "Initialize Supabase instance with pgvector extension for vector storage.",
         "details": "Provision a Supabase instance and enable the pgvector extension to support 1536-dimensional embeddings. Ensure the database is configured for high availability and scalability to handle 1000+ concurrent queries.",
@@ -1289,7 +1289,7 @@
         "subtasks": []
       },
       {
-        "id": "66",
+        "id": 66,
         "title": "Implement Data Ingestion Framework",
         "description": "Develop a framework for ingesting data from multiple sources into the unified vector store.",
         "details": "Create a data ingestion pipeline using a combination of ETL tools and custom scripts. Use Python with libraries like Pandas and SQLAlchemy to extract, transform, and load data into the Supabase vector store. Ensure real-time synchronization with a maximum staleness of 5 minutes.",
@@ -1302,7 +1302,7 @@
         "subtasks": []
       },
       {
-        "id": "67",
+        "id": 67,
         "title": "Vectorize AOMA Knowledge Base",
         "description": "Convert AOMA Knowledge Base content into vector embeddings and store them in the vector store.",
         "details": "Utilize the OpenAI text-embedding-ada-002 model to generate embeddings for the AOMA Knowledge Base. Implement a script to process the content and store the resulting vectors in the Supabase database.",
@@ -1315,7 +1315,7 @@
         "subtasks": []
       },
       {
-        "id": "68",
+        "id": 68,
         "title": "Integrate Jira Ticket Ingestion",
         "description": "Add a pipeline to ingest and vectorize Jira ticket content into the vector store.",
         "details": "Develop a connector to Jira's API to fetch ticket data. Use the OpenAI embedding model to convert ticket content into vectors and store them in the Supabase vector store. Ensure the pipeline handles updates and deletions efficiently.",
@@ -1329,7 +1329,7 @@
         "updatedAt": "2025-10-28T21:17:59.165Z"
       },
       {
-        "id": "69",
+        "id": 69,
         "title": "Implement Git Commit Vectorization",
         "description": "Create a process to vectorize Git commit history and store it in the vector store.",
         "details": "Use Git's API to extract commit messages and metadata. Apply the OpenAI embedding model to generate vectors and store them in the Supabase vector store. Ensure the process captures new commits in real-time.",
@@ -1342,7 +1342,7 @@
         "subtasks": []
       },
       {
-        "id": "70",
+        "id": 70,
         "title": "Develop Email Context Extraction",
         "description": "Build a system to extract and vectorize context from emails for storage in the vector store.",
         "details": "Implement an email parser to extract relevant context from email bodies and headers. Use the OpenAI embedding model to convert this context into vectors and store them in the Supabase vector store.",
@@ -1355,7 +1355,7 @@
         "subtasks": []
       },
       {
-        "id": "71",
+        "id": 71,
         "title": "Integrate System Metrics Ingestion",
         "description": "Add a pipeline to ingest and vectorize system metrics and telemetry data into the vector store.",
         "details": "Develop a system to collect and process system metrics using tools like Prometheus or Grafana. Convert the metrics into vectors using the OpenAI embedding model and store them in the Supabase vector store.",
@@ -1368,7 +1368,7 @@
         "subtasks": []
       },
       {
-        "id": "72",
+        "id": 72,
         "title": "Update Orchestrator for Vector Store Queries",
         "description": "Modify the AOMA orchestrator to query the unified vector store for responses.",
         "details": "Refactor the orchestrator to replace multiple API calls with a single query to the Supabase vector store. Implement intelligent source selection and vector similarity search to optimize response accuracy and speed.",
@@ -1385,7 +1385,7 @@
         "subtasks": []
       },
       {
-        "id": "73",
+        "id": 73,
         "title": "Implement Intelligent Source Selection",
         "description": "Develop algorithms for smart source selection based on query analysis.",
         "details": "Create algorithms that analyze incoming queries to determine the most relevant data sources. Use machine learning techniques to improve source selection over time, ensuring high response accuracy and speed.",
@@ -1398,7 +1398,7 @@
         "subtasks": []
       },
       {
-        "id": "74",
+        "id": 74,
         "title": "Add Progressive Response Streaming",
         "description": "Enable the system to progressively enhance responses for complex queries.",
         "details": "Implement a mechanism to stream partial responses to users as more data becomes available. Use WebSockets or similar technologies to provide real-time updates for complex queries.",
@@ -1411,7 +1411,7 @@
         "subtasks": []
       },
       {
-        "id": "75",
+        "id": 75,
         "title": "Implement Performance Monitoring and Analytics",
         "description": "Set up a dashboard to monitor system performance and query analytics.",
         "details": "Use tools like Grafana or Kibana to create a performance monitoring dashboard. Track metrics such as query response times, system load, and data freshness to ensure the system meets performance targets.",
@@ -1424,7 +1424,7 @@
         "subtasks": []
       },
       {
-        "id": "76",
+        "id": 76,
         "title": "Conduct A/B Testing and Full Deployment",
         "description": "Perform A/B testing against the current system and deploy the new architecture.",
         "details": "Set up A/B testing to compare the new vector store architecture with the existing system. Analyze performance and accuracy metrics to ensure the new system meets business goals. Plan and execute a full deployment once testing is successful.",
@@ -1439,7 +1439,7 @@
         "subtasks": []
       },
       {
-        "id": "77",
+        "id": 77,
         "title": "Comprehensive Security Audit and Hardening Implementation",
         "description": "Perform a full security audit and implement critical hardening measures based on Fiona's analysis, including AWS Secrets Manager/Vault integration, removal of exposed credentials, authentication bypass fixes, and migration of sensitive environment variables to server-side only.",
         "details": "1. Integrate AWS Secrets Manager and/or HashiCorp Vault for API key and secret management. Use vault-based retrieval mechanisms and runtime secret injection to eliminate static credentials in code and configuration files. Configure IAM roles and policies for least-privilege access, and enable secret rotation and monitoring. For hybrid or multi-cloud environments, consider multi-vault integrations for centralized visibility and lifecycle management.\n\n2. Scan the codebase for exposed credentials in .env.local files and hard-coded authentication fallbacks using automated tools (e.g., Amazon CodeGuru Reviewer, GitGuardian). Remove all such credentials, replacing them with secure vault references. Enforce policy checks in version control to prevent future exposures.\n\n3. Audit authentication flows for bypass vulnerabilities and client-side weaknesses. Refactor authentication logic to ensure all sensitive checks occur server-side, and remove any fallback mechanisms that could be exploited. Implement robust session management and input validation.\n\n4. Move all sensitive environment variables (API keys, secrets, tokens) to server-side only. Refactor frontend code to ensure no sensitive data is exposed to the client. Use secure server-side retrieval and injection patterns, and encrypt secrets at rest using AWS KMS or Vault's encryption features.\n\n5. Document all changes and update developer protocols to enforce shift-left security and ongoing secret hygiene. Provide training and guidance on secure credential handling throughout the SDLC.",
@@ -1453,7 +1453,7 @@
         "subtasks": []
       },
       {
-        "id": "78",
+        "id": 78,
         "title": "Comprehensive Application Performance Optimization and Monitoring",
         "description": "Optimize application performance by analyzing bundle size, removing unused dependencies, enforcing TypeScript/ESLint checks, implementing code splitting, and integrating Web Vitals and performance monitoring.",
         "details": "1. **Run Webpack Bundle Analyzer**: Install and configure `webpack-bundle-analyzer` to visualize the current bundle composition. Generate a report to identify large, redundant, or unused modules. For Next.js, use `@next/bundle-analyzer`. Document findings and prioritize modules for removal or replacement[2][3][5].\n\n2. **Remove Unused Dependencies**: Use tools like `depcheck`, `npm ls --depth=0`, and manual code review to identify and remove unused or outdated packages from `package.json` and `node_modules`. After removal, rebuild and rerun the analyzer to confirm reductions[1][3].\n\n3. **Enforce TypeScript/ESLint Checks**: Update build scripts to fail on TypeScript and ESLint errors. Integrate strict linting and type-checking into CI/CD pipelines to prevent ignored errors from reaching production. Use `tsc --noEmit` and `eslint . --max-warnings=0` in pre-build steps.\n\n4. **Implement Code Splitting**: Refactor the application to leverage dynamic imports and Webpack's `optimization.splitChunks` configuration for effective code splitting. Ensure that only necessary code is loaded per route or feature, reducing initial load time[4].\n\n5. **Integrate Web Vitals and Performance Monitoring**: Add Web Vitals tracking (e.g., using `web-vitals` npm package) and connect metrics to the performance monitoring dashboard. Ensure metrics like LCP, FID, and CLS are captured and visualized. Integrate with the dashboard set up in Task 75 for ongoing monitoring.\n\n6. **Documentation and Automation**: Document all changes, update onboarding guides, and automate bundle analysis and lint/type checks in CI workflows for continuous enforcement.\n\n**Best Practices:**\n- Use visual tools (Webpack Bundle Analyzer, Statoscope) for ongoing bundle inspection.\n- Automate dependency checks and bundle size alerts in CI.\n- Regularly audit and update dependencies for security and performance.\n- Monitor Web Vitals in production and set up alerts for regressions.",
@@ -1466,7 +1466,7 @@
         "subtasks": []
       },
       {
-        "id": "79",
+        "id": 79,
         "title": "Establish Comprehensive Testing Framework and CI/CD Integration",
         "description": "Design and implement a robust testing framework including unit, integration, E2E, and API tests, and integrate automated testing into the CI/CD pipeline to ensure production reliability and maintainability.",
         "details": "1. **Unit and Component Testing**: Choose between Jest and Vitest for unit and component testing. For projects using Vite, Vitest is recommended due to its superior speed, modern JavaScript support, and seamless integration with Vite's configuration and plugins[1][3][4][5]. Both frameworks offer Jest-compatible APIs, built-in mocking, and TypeScript support. Set up test coverage reporting and enforce minimum thresholds in the pipeline.\n\n2. **Service and Integration Testing**: Expand test coverage to include service logic and integration points. Use the same framework (Vitest or Jest) for consistency. Mock external dependencies and use test doubles for database or network calls.\n\n3. **End-to-End (E2E) Testing**: Implement Playwright for E2E testing of critical user flows. Structure tests to cover authentication, navigation, and all high-priority business scenarios. Use Playwright Test Runner for parallel execution and integrate with browser containers for cross-browser coverage.\n\n4. **API Endpoint Testing**: Create a comprehensive API testing suite using tools like Supertest (for Node.js APIs) or Playwright's API testing capabilities. Cover all endpoints, including authentication, error handling, and edge cases. Validate contract adherence and response schemas.\n\n5. **CI/CD Pipeline Integration**: Integrate all test suites into the CI/CD pipeline (e.g., GitHub Actions, GitLab CI, or CircleCI). Configure the pipeline to run unit, integration, E2E, and API tests on every pull request and before production deployments. Fail builds on test failures or coverage regressions. Enable test result reporting and notifications.\n\n6. **Documentation and Best Practices**: Document the testing strategy, directory structure, and conventions. Provide onboarding guides for writing and running tests. Enforce code review policies requiring tests for new features and bug fixes.\n\n7. **Continuous Improvement**: Regularly review test coverage and flakiness. Refactor and expand tests as the application evolves. Monitor test execution times and optimize as needed.",
@@ -1480,7 +1480,7 @@
         "subtasks": []
       },
       {
-        "id": "80",
+        "id": 80,
         "title": "Codebase Cleanup and Maintainability Improvements",
         "description": "Refactor the codebase to improve quality and maintainability by removing backup files, standardizing naming conventions, enforcing consistent coding patterns, consolidating documentation, and implementing error boundaries as per Fiona's analysis.",
         "details": "1. **Remove Numbered Backup Files & Fix Naming Conventions:** Audit the repository for obsolete numbered backup files (e.g., file_v1.js, file_backup2.js) and remove them. Standardize file, variable, and function names using a clear, agreed-upon convention (e.g., camelCase for JS/TS, PascalCase for components) to improve readability and maintainability[2][3][5]. Use automated tools (e.g., ESLint, Prettier, or language-specific linters) to enforce naming and formatting rules across the codebase.\n\n2. **Establish Consistent Coding Patterns:** Define and document coding standards (e.g., function length, single responsibility, DRY, KISS principles) and enforce them using static analysis tools (e.g., ESLint, SonarQube, Codacy)[1][3][4]. Refactor code to adhere to these standards, breaking up large functions and modules as needed. Integrate linting and formatting checks into the CI pipeline.\n\n3. **Consolidate Documentation:** Identify all scattered documentation (README files, inline comments, wikis, etc.) and merge them into a single, well-structured developer guide (e.g., in a /docs directory or a centralized README). Ensure the documentation covers architecture, setup, coding standards, and troubleshooting. Use tools like Docusaurus or MkDocs for maintainability.\n\n4. **Implement Error Boundaries:** Audit all React components and wrap critical UI sections with error boundaries to prevent UI crashes from unhandled exceptions. Create a reusable ErrorBoundary component if not already present, and ensure it logs errors for debugging and provides user-friendly fallback UI.\n\n5. **Continuous Refactoring:** Encourage regular code reviews and refactoring sessions to maintain code quality over time[1][4]. Document and communicate all changes to the team.\n\nBest practices include using version control for all changes, automating code quality checks, and involving the team in defining and evolving standards.",
@@ -1493,7 +1493,7 @@
         "subtasks": []
       },
       {
-        "id": "81",
+        "id": 81,
         "title": "Update Button Component to Use MAC Design System Classes",
         "description": "Refactor the Button component to replace CVA variants with classes from the MAC design system for consistency and standardization.",
         "details": "Begin by reviewing the current implementation of the Button component, specifically focusing on how CVA variants are applied. Identify the equivalent classes in the MAC design system that match the intended styles and behaviors of the existing variants. Update the component to use these MAC classes, ensuring that all existing functionality and styling are preserved. Pay attention to edge cases where CVA variants might have been used for specific overrides or customizations, and ensure these are addressed with the MAC classes. Update any documentation or usage examples to reflect the changes. Consider the impact on other components or systems that rely on the Button component and plan for any necessary updates or communication with other teams.",
@@ -1506,7 +1506,7 @@
         "subtasks": []
       },
       {
-        "id": "82",
+        "id": 82,
         "title": "Standardize Input Component with MAC Design System",
         "description": "Refactor the Input component to incorporate MAC design system styles and enhance accessibility with ARIA attributes.",
         "details": "Begin by reviewing the current implementation of the Input component, focusing on its styling and accessibility features. Identify the equivalent styles in the MAC design system that align with the current design and functionality of the Input component. Replace existing styles with MAC classes to ensure consistency across the application. Additionally, audit the component for accessibility compliance, specifically focusing on ARIA attributes. Ensure that all interactive elements have appropriate ARIA roles, states, and properties to enhance accessibility for users with disabilities. Collaborate with the design team to confirm that the visual and functional changes align with the MAC design system guidelines.",
@@ -1519,7 +1519,7 @@
         "subtasks": []
       },
       {
-        "id": "83",
+        "id": 83,
         "title": "Standardize Form Components with MAC Design System",
         "description": "Refactor all form components to consistently use MAC design system classes for styling and accessibility.",
         "details": "Begin by auditing all form components in the application to identify current styling and accessibility practices. For each component, map existing styles to equivalent MAC design system classes. Update the components to replace existing styles with MAC classes, ensuring that the visual appearance and functionality remain consistent with the design specifications. Pay special attention to accessibility features, ensuring that ARIA attributes are correctly implemented and that the components meet WCAG standards. Collaborate with the design team to resolve any discrepancies between current designs and MAC standards. Document the changes and update any relevant style guides or component documentation to reflect the new standardization.",
@@ -1533,7 +1533,7 @@
         "subtasks": []
       },
       {
-        "id": "84",
+        "id": 84,
         "title": "Integrate ElevenLabs Voice Features into SIAM Chat Interface (Phase 1)",
         "description": "Add basic ElevenLabs voice features to the SIAM chat interface, including push-to-talk voice input with real-time transcription, text-to-speech for AI responses with playback controls, and voice input/output hooks using AI SDK Elements.",
         "details": "1. **Push-to-Talk Voice Input with Real-Time Transcription:**\n   - Integrate ElevenLabs' real-time transcription API using the official SDK or direct REST calls, leveraging the existing Whisper integration for fallback or multi-language support.\n   - Implement a push-to-talk button in the chat UI using Vercel AI Elements or custom React components, ensuring microphone permissions are handled gracefully.\n   - Stream audio from the user's microphone to the ElevenLabs API and display live transcription in the chat input area.\n   - Optimize for low latency and handle edge cases such as interrupted streams or permission denials.\n\n2. **Text-to-Speech for AI Responses with Playback Controls:**\n   - Use the ElevenLabs TTS API to synthesize AI responses, selecting appropriate voices and language models based on user preferences or context[1][3][5].\n   - Integrate playback controls (play, pause, stop, seek) into the chat UI, ensuring smooth audio playback and responsive controls.\n   - Cache or prefetch audio for rapid playback and minimize API calls for repeated responses.\n   - Ensure accessibility by providing fallback text and ARIA labels for all controls.\n\n3. **Voice Input/Output Hooks Using AI SDK Elements:**\n   - Leverage Vercel AI Elements or ElevenLabs React SDK hooks to manage voice input/output state and events[3].\n   - Expose hooks for future extensibility (e.g., voice command triggers, custom voice selection, or analytics).\n   - Ensure all API keys and sensitive data are securely managed via environment variables and never exposed to the client.\n\n4. **General Considerations:**\n   - Follow best practices for audio streaming, error handling, and user privacy (e.g., explicit consent for microphone use, clear indication when recording is active).\n   - Modularize code for easy extension in future phases (e.g., speaker identification, advanced voice controls).\n   - Document all new components and hooks, and provide usage examples for developers.\n\n**References:**\n- ElevenLabs API and SDK documentation[1][3][5]\n- Example integrations in React/Next.js[3]\n- Accessibility and privacy guidelines for voice-enabled web apps.",
@@ -1608,7 +1608,7 @@
         ]
       },
       {
-        "id": "85",
+        "id": 85,
         "title": "Integrate Enhanced ElevenLabs Audio Experience in SIAM Chat (Phase 2)",
         "description": "Implement advanced ElevenLabs voice features in SIAM, including real-time transcription display with Tool elements, voice selection and audio controls, audio waveform visualization, and improved push-to-talk UX.",
         "details": "1. **Real-Time Transcription Display**: Use ElevenLabs Scribe v1 for accurate, low-latency transcription with word-level timestamps and speaker diarization. Render live transcription in the chat UI using Tool elements, ensuring clear differentiation between speakers and real-time updates. \n\n2. **Voice Selection and Audio Controls**: Integrate ElevenLabs voice library and voice design APIs to allow users to select from curated, cloned, or custom-designed voices. Provide UI controls for playback (play, pause, stop, seek), volume, and voice switching. Ensure compatibility with ElevenLabs Flash v2.5 for ultra-low latency TTS and support for multilingual voices[1][2][3][5].\n\n3. **Audio Waveform Visualization**: Implement real-time audio waveform visualization using a performant JavaScript library (e.g., wavesurfer.js or custom Web Audio API integration). Sync waveform display with both live input (push-to-talk) and playback of synthesized responses.\n\n4. **Push-to-Talk Improvements**: Enhance push-to-talk UX with clear microphone state indicators, error handling, and accessibility features. Optimize streaming to ElevenLabs API for minimal latency and robust permission management. \n\n5. **Best Practices**: Ensure all audio features are responsive, accessible, and performant across browsers. Use feature flags for gradual rollout and fallback to Whisper for transcription if ElevenLabs is unavailable. Document API usage and error handling patterns for maintainability.",
@@ -1623,7 +1623,7 @@
         "subtasks": []
       },
       {
-        "id": "86",
+        "id": 86,
         "title": "Integrate ElevenLabs Conversational AI WebSocket for Real-Time Duplex Voice in SIAM",
         "description": "Implement full-duplex, real-time conversational AI in SIAM using ElevenLabs WebSocket APIs, supporting push-to-talk, interrupt handling, turn-taking logic, and a dedicated conversation UI mode.",
         "details": "1. Establish a persistent WebSocket connection to the ElevenLabs Conversational AI endpoint (wss://api.elevenlabs.io/v1/convai/conversation) to enable low-latency, full-duplex audio streaming between the client and the AI agent. Use secure authentication and session management as per ElevenLabs documentation.\n\n2. Implement real-time audio streaming from the user's microphone to the WebSocket, and receive synthesized speech responses from the agent in parallel. Ensure the architecture supports simultaneous send/receive for natural conversation flow (full duplex).\n\n3. Integrate advanced push-to-talk controls: allow users to start/stop voice input, with clear UI feedback. Support both manual (button-based) and voice-activated (VAD) modes if feasible.\n\n4. Develop robust interrupt handling: detect when the user begins speaking while the agent is responding, pause or stop agent playback, and prioritize user input. Use audio activity detection and WebSocket message management to coordinate turn-taking.\n\n5. Implement turn-taking logic: maintain conversation state to manage who has the floor (user or agent), handle overlapping speech, and queue or discard responses as appropriate. Follow best practices for conversational UX to minimize latency and confusion.\n\n6. Design and build a dedicated conversation UI mode: display live transcription (leveraging prior Whisper/ElevenLabs integration), show current speaker, visualize audio activity (waveforms or indicators), and provide controls for push-to-talk, mute, and conversation history. Ensure accessibility and responsiveness across devices.\n\n7. Ensure compatibility and integration with prior SIAM audio and chat features, including voice selection, playback controls, and transcription display from previous phases.\n\n8. Follow security best practices for WebSocket connections, including token management, error handling, and reconnection logic.\n\nReference ElevenLabs official WebSocket and Conversational AI documentation for protocol details and recommended message formats. Consider using established libraries for WebSocket management and audio streaming (e.g., Web Audio API, socket.io, or native browser APIs).",
@@ -1639,7 +1639,7 @@
         "subtasks": []
       },
       {
-        "id": "87",
+        "id": 87,
         "title": "Automate AOMA Screenshot Capture",
         "description": "Design and implement automated AOMA screenshot capture solution using Safari's authenticated session. Create script to navigate all AOMA pages and capture screenshots automatically.",
         "details": "",
@@ -1650,7 +1650,7 @@
         "subtasks": []
       },
       {
-        "id": "88",
+        "id": 88,
         "title": "Research: Migrate OpenAI Vector Store to Supabase",
         "description": "Research feasibility of migrating OpenAI Assistant vector store (vs_68a...dd6a with ~150 AOMA docs) to Supabase pgvector. Evaluate if this would eliminate need for LangChain orchestrator.",
         "details": "DO NOT CODE - Research only. Questions: 1) Can we export from OpenAI? 2) Performance impact? 3) Cost impact? 4) LangChain still needed? 5) GPT-5 compatibility?",
@@ -1659,6 +1659,111 @@
         "dependencies": [],
         "priority": "high",
         "subtasks": []
+      },
+      {
+        "id": 89,
+        "title": "Run read-only schema inventory via Supabase MCP and map to existing tables",
+        "description": "Use Supabase MCP tools to perform a comprehensive read-only inventory of the current database schema and create mappings to existing tables for migration planning.",
+        "details": "Execute a thorough schema discovery process using mcp__supabase__list_tables and mcp__supabase__execute_sql to collect comprehensive database metadata including:\n\n1. **Table Inventory**: Use mcp__supabase__list_tables to enumerate all existing tables, views, and materialized views\n2. **Column Analysis**: For each table, execute SQL queries to gather column definitions, data types, constraints, and nullable status\n3. **Index Mapping**: Query system catalogs to document all indexes, including B-tree, GIN, and vector indexes (pgvector)\n4. **Vector Column Detection**: Specifically identify vector columns and their dimensions for pgvector compatibility\n5. **RLS Policy Documentation**: Extract Row Level Security policies and their conditions using pg_policies system view\n6. **Foreign Key Relationships**: Map all foreign key constraints and table relationships\n7. **Schema Documentation**: Generate comprehensive documentation of current schema state\n8. **Migration Mapping**: Create detailed mappings between current schema and proposed target schema\n9. **Zero-Change Analysis**: Identify tables/columns that can remain unchanged during migration\n10. **Minimal-Change Recommendations**: Propose specific changes needed for tables that require modifications\n\n**Important**: This is a READ-ONLY operation. No DDL statements should be executed. All findings must be documented and reviewed before any schema changes are implemented. Focus on creating a detailed migration roadmap that minimizes disruption to existing functionality.",
+        "testStrategy": "1. Verify successful connection to Supabase instance using MCP tools\n2. Confirm mcp__supabase__list_tables returns complete table inventory without errors\n3. Validate that all SQL queries execute successfully in read-only mode\n4. Check that vector column detection correctly identifies pgvector columns and dimensions\n5. Ensure RLS policy extraction captures all security rules accurately\n6. Verify foreign key relationship mapping is complete and accurate\n7. Confirm generated documentation includes all required schema elements\n8. Review migration mappings for completeness and feasibility\n9. Validate that no DDL operations were attempted during inventory process\n10. Test that schema inventory can be regenerated consistently with same results",
+        "status": "pending",
+        "dependencies": [
+          65,
+          88
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "List tables via mcp__supabase__list_tables",
+            "description": "Run the tool; capture output JSON/rows.",
+            "details": "",
+            "status": "pending",
+            "dependencies": [],
+            "parentTaskId": 89
+          },
+          {
+            "id": 2,
+            "title": "Columns inventory",
+            "description": "execute_sql: information_schema.columns for public; include data_type, defaults, nullability",
+            "details": "",
+            "status": "pending",
+            "dependencies": [],
+            "parentTaskId": 89
+          },
+          {
+            "id": 3,
+            "title": "Check pgvector",
+            "description": "execute_sql: select extname, extversion from pg_extension where extname in ('vector','pgvector')",
+            "details": "",
+            "status": "pending",
+            "dependencies": [],
+            "parentTaskId": 89
+          },
+          {
+            "id": 4,
+            "title": "Vector columns inventory",
+            "description": "execute_sql: information_schema.columns where data_type like '%vector%'",
+            "details": "",
+            "status": "pending",
+            "dependencies": [],
+            "parentTaskId": 89
+          },
+          {
+            "id": 5,
+            "title": "Index inventory",
+            "description": "execute_sql: join pg_class/pg_index/pg_am; include pg_get_indexdef",
+            "details": "",
+            "status": "pending",
+            "dependencies": [],
+            "parentTaskId": 89
+          },
+          {
+            "id": 6,
+            "title": "Constraints inventory",
+            "description": "execute_sql: information_schema.table_constraints for public",
+            "details": "",
+            "status": "pending",
+            "dependencies": [],
+            "parentTaskId": 89
+          },
+          {
+            "id": 7,
+            "title": "RLS policies inventory",
+            "description": "execute_sql: select from pg_policies for schemaname='public'",
+            "details": "",
+            "status": "pending",
+            "dependencies": [],
+            "parentTaskId": 89
+          },
+          {
+            "id": 8,
+            "title": "Approx row counts",
+            "description": "execute_sql: pg_class reltuples for relkind='r'",
+            "details": "",
+            "status": "pending",
+            "dependencies": [],
+            "parentTaskId": 89
+          },
+          {
+            "id": 9,
+            "title": "Find likely combined targets",
+            "description": "execute_sql: LIKE filters for '%document%','%chunk%','aoma_%','%unified%'",
+            "details": "",
+            "status": "pending",
+            "dependencies": [],
+            "parentTaskId": 89
+          },
+          {
+            "id": 10,
+            "title": "Produce mapping + minimal DDL proposal",
+            "description": "Map required fields to existing tables; draft minimal DDL only if gaps remain; no apply yet",
+            "details": "",
+            "status": "pending",
+            "dependencies": [],
+            "parentTaskId": 89
+          }
+        ]
       }
     ],
     "metadata": {
@@ -1668,7 +1773,10 @@
       "completedCount": 33,
       "tags": [
         "master"
-      ]
+      ],
+      "created": "2025-10-30T17:18:33.148Z",
+      "description": "Tasks for master context",
+      "updated": "2025-10-30T17:18:47.504Z"
     }
   }
 }

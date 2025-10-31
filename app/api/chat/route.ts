@@ -351,6 +351,11 @@ export async function POST(req: Request) {
         "unified session manager",
         "dam",
         "metadata",
+        // Additional variants to reduce false negatives
+        "aoma mesh",
+        "aoma portal",
+        "offering management",
+        "asset management (aoma)",
       ];
       return keywords.some((k) => q.includes(k));
     }
@@ -364,7 +369,7 @@ export async function POST(req: Request) {
       `🔧 AOMA bypass: ${bypassAOMA} (dev=${process.env.NODE_ENV === "development"}, flag=${process.env.NEXT_PUBLIC_BYPASS_AOMA})`
     );
 
-    // Check if we need AOMA context
+    // Always attempt to retrieve AOMA context for any user query (no keyword gating)
     const latestUserMessage = messages.filter((m: any) => m.role === "user").pop();
 
     // Extract content from AI SDK v5 parts format or v4 content format
@@ -372,9 +377,7 @@ export async function POST(req: Request) {
       latestUserMessage?.parts?.find((p: any) => p.type === "text")?.text ||
       latestUserMessage?.content;
 
-    const aomaRequired = !!(messageContent && needsAOMAIntent(String(messageContent)));
-
-    if (!bypassAOMA && aomaRequired && latestUserMessage && messageContent) {
+    if (!bypassAOMA && latestUserMessage && messageContent) {
       const queryString =
         typeof messageContent === "string" ? messageContent : JSON.stringify(messageContent);
 
@@ -595,35 +598,15 @@ export async function POST(req: Request) {
 ${aomaContext}
 
 **INSTRUCTIONS:**
-1. **YOU HAVE THE AOMA DOCUMENTATION** - The context above contains authoritative AOMA knowledge from Sony Music's knowledge base
-2. **Answer confidently using this context** - Provide clear, helpful answers based on the information above
-3. **AOMA stands for "Asset and Offering Management Application"** - Always use this exact definition
-4. **If a specific detail isn't in the context** - Answer what you can from the context, then note what additional information might be available by contacting support
-5. **NEVER make up information** - Only use details actually present in the context above
-
-**CRITICAL RULES:**
-✅ Answer questions about AOMA using the context provided
-✅ Use the exact terminology from the context (e.g., "Asset and Offering Management Application")
-✅ Be helpful and informative based on what's in the context
-❌ DO NOT claim you don't have access to AOMA documentation (you DO have access via the context above)
-❌ DO NOT make up workflow steps, features, or UI details not in the context
-❌ DO NOT use generic asset management knowledge - use only the AOMA-specific context provided`
-      : aomaRequired
-        ? `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
-
-**CURRENT STATUS:** The AOMA knowledge base is currently unavailable.
+1. Answer ONLY using the AOMA context above.
+2. If a detail is missing from the context, explicitly say it is not in your knowledge base.
+3. NEVER invent or infer facts beyond the provided context.`
+      : `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
 
 **RESPONSE REQUIRED:**
-Respond with ONLY the following message:
+Respond with ONLY this message:
 
-"I'm unable to access the AOMA knowledge base right now due to a database connection issue. Please contact support at matt@mattcarpenter.com for assistance."
-
-**DO NOT:**
-- Provide generic workflows or best practices
-- Make up AOMA information
-- Fabricate any Sony Music policies or procedures
-- Suggest workarounds or alternatives`
-        : `${systemPrompt || "You are SIAM, an AI assistant."}`;
+"That's not in my knowledge base. I won't guess."`;
 
     // Determine model based on AOMA involvement
     const hasAomaContent = aomaContext.trim() !== "";

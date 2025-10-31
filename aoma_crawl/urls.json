@@ -1,0 +1,32 @@
+{
+  "seed": "https://aoma-stage.smcdp-de.net",
+  "count": 26,
+  "urls": [
+    "https://aoma-stage.smcdp-de.net/",
+    "https://aoma-stage.smcdp-de.net/aoma-ui/my-aoma-files",
+    "https://aoma-stage.smcdp-de.net/aoma-ui/simple-upload",
+    "https://aoma-stage.smcdp-de.net/aoma-ui/direct-upload",
+    "https://aoma-stage.smcdp-de.net/aoma-ui/product-metadata-viewer",
+    "https://aoma-stage.smcdp-de.net/aoma-ui/unified-submission-tool",
+    "https://aoma-stage.smcdp-de.net/aoma-ui/registration-job-status",
+    "https://aoma-stage.smcdp-de.net/aoma-ui/qc-notes",
+    "https://aoma-stage.smcdp-de.net/aoma-ui/video-metadata",
+    "https://aoma-stage.smcdp-de.net/aoma-ui/unregister-assets",
+    "https://aoma-stage.smcdp-de.net/aoma-ui/asset-submission",
+    "https://aoma-stage.smcdp-de.net/aoma-ui/bulk-operations",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=CustomHomePageViewAction",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=MyHomeGetInitialPageDataAction",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=ProductSearchDisplayChain",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=AdminHomeAction",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=MyFilesDisplayCrit",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=MyPendingProducts",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=GlobalAssetSearch",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=AssetSubmissionWizard",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=BulkMetadataUpdate",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=ReportGeneratorAction",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=WorkflowStatusDisplay",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=AssetHistoryViewAction",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=QualityControlDashboard",
+    "https://aoma-stage.smcdp-de.net/servlet/com.sonymusic.aoma.AOMADispatcherServlet?chain=DeliveryStatusTracking"
+  ]
+}

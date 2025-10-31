@@ -1,0 +1,45 @@
+{
+  "runAt": "2025-10-30T20:38:41.054Z",
+  "totals": {
+    "urlsQueued": 26,
+    "pagesCaptured": 46,
+    "pagesFailed": 0,
+    "binariesDownloaded": 0,
+    "totalHtmlBytes": 355120
+  },
+  "outputs": {
+    "urlsJson": "aoma_crawl/urls.json",
+    "pagesJsonl": "aoma_crawl/pages.jsonl",
+    "manifest": "aoma_crawl/manifest.json",
+    "htmlDir": "aoma_crawl/html",
+    "mdDir": "aoma_crawl/md",
+    "filesDir": "aoma_crawl/files"
+  },
+  "sample": [
+    {
+      "url": "https://aoma-stage.smcdp-de.net/",
+      "title": "AOMA Login",
+      "status": 200
+    },
+    {
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/my-aoma-files",
+      "title": "AOMA Login",
+      "status": 200
+    },
+    {
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/simple-upload",
+      "title": "AOMA Login",
+      "status": 200
+    },
+    {
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/direct-upload",
+      "title": "AOMA Login",
+      "status": 200
+    },
+    {
+      "url": "https://aoma-stage.smcdp-de.net/aoma-ui/product-metadata-viewer",
+      "title": "AOMA Login",
+      "status": 200
+    }
+  ]
+}

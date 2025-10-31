@@ -6,14 +6,22 @@
  */
 
 import dotenv from "dotenv";
+import path from "path";
+import { existsSync } from "fs";
+
+// Load env from .env.local first (Next.js pattern), then fallback to .env
+const envLocalPath = path.resolve(process.cwd(), ".env.local");
+if (existsSync(envLocalPath)) {
+  dotenv.config({ path: envLocalPath });
+}
 dotenv.config();
 
 async function testElevenLabsCapabilities() {
   console.log("🔍 Testing ElevenLabs API Capabilities...");
   console.log("=".repeat(60));
 
-  const apiKey = process.env.ELEVENLABS_API_KEY;
-  const agentId = process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID;
+  const apiKey = process.env.ELEVENLABS_API_KEY || process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY;
+  const agentId = process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID || process.env.ELEVENLABS_AGENT_ID;
 
   if (!apiKey) {
     console.error("❌ ELEVENLABS_API_KEY not found in environment");

@@ -1,0 +1,91 @@
+<html><head><title>AOMA Login</title><meta content="no-cache" http-equiv="Pragma"><meta content="no-cache" http-equiv="Cache-Control"><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>AOMA: Asset Offering &amp; Management Application</title><script language="Javascript" src="/teams/web/js/util.js" type="text/javascript"></script><script id="embedParentRedirectScript" language="javascript" type="text/javascript">
+if (window != window.top) {
+   window.top.postMessage( { messageType: 'Logout', redirectUrl: window.location.href }, '*' );
+}
+</script><link href="/teams/web/css/aoma3-login.css" id="aomaEmbedLoginCss" rel="stylesheet" title="style" type="text/css"></head><body id="loginBody" leftmargin="0" marginheight="0" marginwidth="0" onload="MM_preloadImages('/teams/web/images/aoma/login/login_f2.gif'); focuspasswd();" topmargin="0"><script language="javascript" type="text/javascript"> // <![CDATA[
+function setUserDataCookie(){
+  var nextyear = new Date();  
+  nextyear.setFullYear(nextyear.getFullYear() + 1);
+  setCookie("user", document.loginForm.user.value, nextyear);
+}
+
+function focuspasswd(){
+    if (document.loginForm.user.value == "")
+        document.loginForm.user.focus();
+  else
+    document.loginForm.pass.focus();
+}
+
+function submitChain(chain) {
+    document.loginForm.chain.value = chain;
+    document.loginForm.submit();
+}
+
+if (/*@cc_on!@*/false) {
+    document.documentElement.className += ' ie10';
+}
+function getUrlParam(paramname) {
+    var results = new RegExp('[\?&]' + paramname + '=([^&#]*)').exec(window.location.search);
+    return (results !== null) ? results[1] || 0 : false;
+}
+
+document.addEventListener("DOMContentLoaded", function(){    
+    var ssoVsAadElement = document.getElementById("ssoVsAad");
+    var legacyLoginElement = document.getElementById("legacyLogin");
+
+    if (ssoVsAadElement === undefined || ssoVsAadElement === null) {
+        legacyLoginElement.style.display = "block";
+    } else {
+        if (ssoVsAadElement.length === 0) {
+            ssoVsAadElement.style.display = "none";
+            legacyLoginElement.style.display = "block";
+        } else {
+            ssoVsAadElement.style.display = "block";
+            legacyLoginElement.style.display = "none";
+        }
+    }
+
+    if (document.getElementById("aomaLoginBtn")) {
+        document.getElementById("aomaLoginBtn").addEventListener("click", function () {
+            if (document.getElementById("loginMessage"))
+                document.getElementById("loginMessage").remove();
+
+            if (document.getElementById("embedLoginMessageRow"))
+                document.getElementById("embedLoginMessageRow").remove();
+
+            if (document.getElementById("ssoLoginMessageRow"))
+                document.getElementById("ssoLoginMessageRow").remove();
+
+            if (document.getElementById("ssoVsAad")) {
+                document.getElementById("ssoVsAad").style.display = "none";
+            }
+            document.getElementById("legacyLogin").style.display = "block";
+        });
+    }
+});
+
+// ]]>
+</script><div id="aomaEmbedLogin"><div class="center-panel"><div class="login-panel"><form action="/servlet/com.sonymusic.aoma.AOMADispatcherServlet" method="post" name="loginForm" onsubmit="setUserDataCookie();"><input name="chain" type="hidden" value="LoginDoLoginAction"> <table align="center" border="0" cellpadding="0" cellspacing="0" height="250" style="margin-top:15px" width="495"><tbody><tr><td colspan="2"><img height="26" src="/teams/web/images/aoma/login/aoma-title.png" width="495"></td></tr><tr><td align="left" valign="middle" width="177"><img align="left" height="177" src="/teams/web/images/aoma/login/aoma-login-logo.gif" width="177"></td><td align="left" valign="middle"><table align="center" cellpadding="3" height="200" id="legacyLogin" width="285" style="display: none;"><tbody><tr><td>&nbsp;</td><td height="25" valign="bottom"><span class="loginMessage" id="loginMessageSpan" style="color: #F00;display: none;">Warning! Caps Lock is on.</span></td></tr><tr><td align="right" height="30" valign="middle" width="65"><p>Username:</p></td><td align="left" height="25" valign="middle"><input id="embedUserNameInputText" name="user" type="text"></td></tr><tr><td align="right" height="30" valign="middle"><p>Password:</p></td><td align="left" height="25" valign="middle"><input id="pass" name="pass" type="password"></td></tr><tr id="embedAdditionalPasswordRow"><td align="right" height="30" valign="middle"><p>Additional Password:</p></td><td align="left" height="25" valign="middle"><input autocomplete="off" id="passcode" name="passcode"></td></tr><tr><td>&nbsp;</td><td height="15" valign="top"><input class="login-btn" id="loginBtn" name="Login" type="submit" value="Login"></td></tr><tr><td>&nbsp;</td><td height="40" valign="bottom"><p><a href="javascript:submitChain('LoginResetPasswordDisplayChain')" id="embedForgotPasswordLink">Forget password?</a></p><p><a href="#" id="embedCreateAccountLink" onclick="javascript:alert('Please contact AOMA Support at aoma.support@sonymusic.com if you need an AOMA account.');return false;">New Account</a></p></td></tr><tr><td><script language="JavaScript" type="text/javascript">                            var passwordField = document.getElementById("pass");
+                            var loginMessageElement = document.getElementById("loginMessageSpan");                          
+                            
+                            var usernameField = document.getElementById("embedUserNameInputText");
+                            usernameField.addEventListener("focusout", function(event) {
+                                usernameField.value = usernameField.value.trim();
+                            });
+                            
+                            usernameField.addEventListener('keypress', function (e) {
+                                if (e.key === 'Enter') {
+                                    usernameField.value = usernameField.value.trim();
+                                }
+                            });
+                            
+                            passwordField.addEventListener("keyup", function(event) {
+                            if (event.getModifierState("CapsLock")) {
+                                loginMessageElement.textContent="Warning! Caps Lock is on.";
+                                loginMessageElement.style.display = "block";
+                              } else {
+                                loginMessageElement.textContent="";
+                                loginMessageElement.style.display = "none"
+                              }
+                            });
+                        </script> </td></tr></tbody></table><table align="center" cellpadding="3" height="auto" id="ssoVsAad" width="285" style="display: block;"><tbody><tr><td><a class="login-btn" href="https://login.microsoftonline.com/f0aff3b7-91a5-4aae-af71-c63e1dda2049/oauth2/authorize?response_type=code&amp;response_mode=form_post&amp;redirect_uri=https%3A%2F%2Faoma-stage.smcdp-de.net%2Fservlet%2Fcom.sonymusic.aoma.AOMADispatcherServlet&amp;client_id=72e97d60-6868-4706-9caa-6781093d61ca&amp;scope=openid user.read&amp;state=bfc680b8-1693-4b30-947f-d906637b535b&amp;nonce=d8c475a5-0d95-4511-8063-f2630116bd5b&amp;resource=https://graph.microsoft.com" id="aadLoginBtn" name="aadLoginBtn" style="margin-left: 80px; width: 130px; margin-top: 5%; height: 15px;">Employee Login</a> </td></tr><tr><td><a class="login-btn" id="aomaLoginBtn" name="aomaLoginBtn" style="margin-left: 80px;width: 130px;margin-bottom: 15%; height: 15px;">Non-Employee Login</a> </td></tr></tbody></table></td></tr></tbody></table></form></div></div></div></body></html>

@@ -118,18 +118,20 @@ export async function POST(req: Request) {
       }));
     }
 
+    // Build strict system prompt that avoids hallucinating AOMA
+    const systemStrict = (() => {
+      const base = "You are SIAM, an AI assistant for Sony Music.";
+      if (aomaContext.trim()) {
+        return `${base}\n\n✅ YOU HAVE ACCESS TO AOMA KNOWLEDGE - USE IT CONFIDENTLY\n${aomaContext}\n\nINSTRUCTIONS:\n1. Answer only using the AOMA context above.\n2. If a detail is missing, state that it isn’t in the provided context.\n3. Never invent facts.`;
+      }
+      // Enforce abstention if no AOMA context is present
+      return `${base}\n\nRESPONSE REQUIRED:\nRespond with ONLY this message:\n\n"That's not in my knowledge base. I won't guess."`;
+    })();
+
     // Stream response using Vercel AI SDK
     const result = streamText({
       model: openai(model),
-      system: `You are SIAM, an AI assistant${aomaError ? " (AOMA knowledge base is currently unavailable)" : " with access to Sony Music's AOMA knowledge base"}.
-      
-${
-  aomaContext
-    ? `Use this AOMA context as your primary source: ${aomaContext}`
-    : aomaError
-      ? `⚠️ AOMA CONNECTION ERROR: ${aomaError}\n\nIMPORTANT: The AOMA knowledge base is currently unavailable. Please inform the user that you cannot access Sony Music's knowledge base at this time and can only provide general assistance. DO NOT make up information about Sony Music or pretend to have access to AOMA data.`
-      : ""
-}`,
+      system: systemStrict,
       messages: modelMessages,
       temperature: 0.7,
       // maxSteps: 5, // Not valid in current version
