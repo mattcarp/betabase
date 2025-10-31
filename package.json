@@ -73,7 +73,14 @@
     "analyze:bundle": "./scripts/analyze-bundle.sh",
     "analyze:deps": "depcheck",
     "mac:check": "node scripts/validate-mac-compliance.js",
-    "mac:check-all": "find src app -type f \\( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' -o -name '*.css' \\) -exec node scripts/validate-mac-compliance.js {} +"
+    "mac:check-all": "find src app -type f \\( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' -o -name '*.css' \\) -exec node scripts/validate-mac-compliance.js {} +",
+    "aoma:download-docs": "node scripts/aoma/download-bottom-docs.js",
+    "aoma:download-docs:manual": "AOMA_MANUAL_CAPTURE=1 node scripts/aoma/download-bottom-docs.js",
+    "aoma:crawl:auth": "node scripts/aoma/firecrawl-auth-crawl.mjs",
+    "crawl:v25": "node scripts/aoma/firecrawl-v2.5-crawl.mjs",
+    "crawl:pw": "node scripts/aoma/playwright-full-crawl.mjs",
+    "ingest:aoma": "node scripts/aoma/ingest-crawled-to-supabase.mjs",
+    "ingest:aoma:dry-run": "node scripts/aoma/ingest-crawled-to-supabase.mjs --dry-run"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -134,7 +141,7 @@
     "next": "15.5.6",
     "openai": "^6.1.0",
     "p-limit": "^6.1.0",
-    "playwright": "^1.54.1",
+    "playwright": "^1.56.1",
     "postcss": "^8.4.39",
     "react": "^19.2.0",
     "react-day-picker": "^9.5.2",
@@ -161,7 +168,7 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^16.0.0",
-    "@playwright/test": "^1.54.1",
+    "@playwright/test": "^1.56.1",
     "@types/glob": "^9.0.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.14",

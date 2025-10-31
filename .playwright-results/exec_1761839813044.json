@@ -1,0 +1,18 @@
+{
+  "type": "end",
+  "executionId": "exec_1761839813044",
+  "timestamp": "2025-10-30T15:57:11.292Z",
+  "status": "failed",
+  "startTime": "2025-10-30T15:57:11.267Z",
+  "endTime": "2025-10-30T15:57:11.292Z",
+  "duration": 0,
+  "stats": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0,
+    "running": 0,
+    "duration": 0
+  },
+  "results": []
+}

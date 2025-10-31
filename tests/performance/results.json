@@ -1,50 +1,50 @@
 [
   {
     "page": "home-page",
-    "timestamp": "2025-10-29T16:51:17.743Z",
+    "timestamp": "2025-10-30T15:52:27.927Z",
     "navigationTiming": {
-      "domContentLoaded": 0.09999999403953552,
+      "domContentLoaded": 0,
       "loadComplete": 0,
-      "domInteractive": 884.5,
-      "totalLoadTime": 1625.5999999940395
+      "domInteractive": 238.09999999962747,
+      "totalLoadTime": 414.19999999925494
     },
-    "FCP": 912,
-    "TTFB": 655,
+    "FCP": 272,
+    "TTFB": 197.09999999962747,
     "resources": {
-      "total": 38,
-      "js": 6,
-      "css": 4,
+      "total": 60,
+      "js": 39,
+      "css": 5,
       "images": 1,
-      "totalSize": 7181609
+      "totalSize": 2992261
     },
     "memory": {
-      "usedJSHeapSize": 168079975,
-      "totalJSHeapSize": 187485803,
+      "usedJSHeapSize": 45955087,
+      "totalJSHeapSize": 64562923,
       "jsHeapSizeLimit": 4294705152
     },
     "CLS": 0
   },
   {
     "page": "chat-initial",
-    "timestamp": "2025-10-29T16:51:18.924Z",
+    "timestamp": "2025-10-30T15:52:28.975Z",
     "navigationTiming": {
-      "domContentLoaded": 0.09999999403953552,
+      "domContentLoaded": 0,
       "loadComplete": 0,
-      "domInteractive": 884.5,
-      "totalLoadTime": 1165
+      "domInteractive": 238.09999999962747,
+      "totalLoadTime": 1040
     },
-    "FCP": 912,
-    "TTFB": 655,
+    "FCP": 272,
+    "TTFB": 197.09999999962747,
     "resources": {
-      "total": 39,
-      "js": 6,
-      "css": 4,
+      "total": 61,
+      "js": 39,
+      "css": 5,
       "images": 1,
-      "totalSize": 7181956
+      "totalSize": 2992608
     },
     "memory": {
-      "usedJSHeapSize": 169380132,
-      "totalJSHeapSize": 187798644,
+      "usedJSHeapSize": 47501244,
+      "totalJSHeapSize": 64859600,
       "jsHeapSizeLimit": 4294705152
     },
     "CLS": 0

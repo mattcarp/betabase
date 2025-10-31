@@ -229,6 +229,7 @@ export class AOMAOrchestrator {
       sourceTypes.length === 0
     ) {
       sourceTypes.push("knowledge");
+      sourceTypes.push("firecrawl"); // Include Playwright-crawled AOMA pages
     }
 
     // If no specific types matched, search all sources

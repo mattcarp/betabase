@@ -82,6 +82,18 @@ const orchestratorResult = await aomaOrchestrator.executeOrchestration(queryStri
 
 ---
 
+## 🚫 Non‑Negotiable Response Policy (AOMA-First)
+
+1. All answers must be grounded in AOMA context. No generic or guessed content.
+2. Always attempt AOMA retrieval via the orchestrator; do not gate on keywords.
+3. If AOMA context is unavailable/empty, respond verbatim: "That's not in my knowledge base. I won't guess."
+4. Never invent Sony/AOMA workflows, policies, or UI details not present in retrieved context.
+5. When AOMA context exists, cite only that context in the final response construction.
+
+This policy supersedes any prior routing heuristics that skip sources or speculate.
+
+---
+
 ### ❌ **Phase 2: OpenAI Vector Store Migration** (BLOCKED)
 
 **Commits**: 
@@ -217,7 +229,7 @@ Error: ENOENT '.next/dev/server/pages/_app/build-manifest.json'
 
 ---
 
-### 📋 **Tier 2: Intelligence Improvements** (PLANNED)
+### 📋 **Tier 2: Intelligence Improvements** (PLANNED, updated)
 
 **Commit**: `13e81668` - "docs: Add comprehensive testing blockers and Tier 2 optimization plan"  
 **Date**: October 30, 2025  
@@ -230,80 +242,30 @@ Error: ENOENT '.next/dev/server/pages/_app/build-manifest.json'
 
 ---
 
-#### 1. 🎯 Semantic Query Routing (2-3 hours)
+#### 1. 🎯 Universal AOMA‑First + Strict Abstention (2-3 hours)
 
-**Problem**: Right now, we query BOTH Supabase and OpenAI for EVERY query, even when we know one source will have better results.
-
-**Solution**: Use lightweight query classification to route intelligently.
-
-**Examples**:
-```typescript
-// Jira-specific queries → ONLY Supabase (save 2-5s OpenAI call)
-"Show me tickets assigned to me"
-"What's the status of SIAM-1234?"
-"List all open bugs"
-
-// Documentation queries → ONLY OpenAI (save 100ms Supabase call)
-"How do I submit an asset?"
-"What are the asset categories?"
-"Explain the AOMA workflow"
-
-// Hybrid queries → BOTH (current behavior)
-"What issues are there with asset submission?"
-"Show me recent tickets about workflow problems"
-```
+**Policy**: Every response must be constructed from AOMA context. No keyword gating, no source-skipping. If AOMA retrieval yields no usable context, abstain with: "That's not in my knowledge base. I won't guess."
 
 **Implementation Steps**:
 
-**Step 1**: Create Query Classifier (`src/services/queryClassifier.ts`)
+**Step 1**: Orchestrator (no-op for routing; ensure both sources always queried)
 ```typescript
-type QueryIntent = 'jira-only' | 'docs-only' | 'hybrid';
-
-class QueryClassifier {
-  classify(query: string): QueryIntent {
-    const lowerQuery = query.toLowerCase();
-    
-    // Jira-only indicators
-    const jiraKeywords = ['ticket', 'jira', 'assigned', 'bug', 'issue', 'sprint', 'epic'];
-    const hasJiraKey = /[A-Z]+-\d+/.test(query); // e.g., SIAM-1234
-    
-    if (jiraKeywords.some(k => lowerQuery.includes(k)) || hasJiraKey) {
-      return 'jira-only';
-    }
-    
-    // Docs-only indicators
-    const docsKeywords = ['how to', 'what is', 'explain', 'documentation', 'guide', 'tutorial'];
-    if (docsKeywords.some(k => lowerQuery.includes(k))) {
-      return 'docs-only';
-    }
-    
-    // Default to hybrid for safety
-    return 'hybrid';
-  }
-}
+// Keep parallel hybrid path; do not short-circuit either source
+const supabasePromise = this.queryVectorStore(query, { ... });
+const openaiPromise = this.callAOMATool("query_aoma_knowledge", { query, strategy: "rapid" });
+const merged = resultMerger.mergeResults(await supabasePromise, await openaiPromise);
 ```
 
-**Step 2**: Update Orchestrator (`src/services/aomaOrchestrator.ts`)
+**Step 2**: Chat API system prompt enforcement
 ```typescript
-// In executeOrchestrationInternal method:
-const intent = queryClassifier.classify(query);
-
-if (intent === 'jira-only') {
-  // Skip OpenAI, only query Supabase
-  const supabaseResult = await this.queryVectorStore(query, { sourceTypes: ['jira'] });
-  return { sources: supabaseResult.sources, response: supabaseResult.response };
-}
-
-if (intent === 'docs-only') {
-  // Skip Supabase, only query OpenAI
-  const openaiResult = await this.callAOMATool("query_aoma_knowledge", { query });
-  return openaiResult;
-}
-
-// Otherwise, use existing parallel hybrid logic
+// If merged AOMA context is empty → return fixed abstention message
+const hasContext = Boolean(aomaContext?.trim());
+const system = hasContext
+  ? `✅ YOU HAVE ACCESS TO AOMA KNOWLEDGE. Use ONLY this context. If a detail is missing, say so.`
+  : `Respond ONLY with: "That's not in my knowledge base. I won't guess."`;
 ```
 
-**Expected Impact**: 20-30% faster for specialized queries
+**Expected Impact**: Zero hallucinations; consistent AOMA-grounded answers.
 
 ---
 
@@ -575,18 +537,16 @@ const result = await this.callAOMATool("query_aoma_knowledge", {
 
 Once the Next.js build bug is resolved:
 
-**1. Semantic Routing Tests**
+**1. AOMA‑First Abstention Tests**
 ```typescript
-// Test Jira-only routing
-"Show me SIAM-1234" → Should only query Supabase
-"List open bugs" → Should only query Supabase
+// When AOMA context missing/unavailable
+"What is the AOMA workflow?" → Must respond exactly: "That's not in my knowledge base. I won't guess."
 
-// Test docs-only routing
-"What is AOMA?" → Should only query OpenAI
-"How do I submit?" → Should only query OpenAI
+// When AOMA context exists
+"What is AOMA?" → Answer strictly from provided context; no extra facts.
 
-// Test hybrid fallback
-"Recent issues with workflow" → Should query BOTH
+// Never produce generic best practices when context is absent
+"How do I submit an asset?" (no context) → Abstention message only.
 ```
 
 **2. Streaming Tests**
