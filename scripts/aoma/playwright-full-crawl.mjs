@@ -285,12 +285,14 @@ async function crawl() {
     
     const title = await page.title().catch(() => '');
     
-    // Remove <style> and <script> tags before turndown to avoid CSS/JS bloat
-    const cleanHtml = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
-                          .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
-                          .replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi, '');
+    // Extract ONLY semantic elements to avoid CSS/JS bloat
+    const semanticHtml = await page.evaluate(() => {
+      const semanticTags = 'h1, h2, h3, h4, h5, h6, p, ul, ol, li, table, thead, tbody, tr, th, td, a, strong, em, blockquote, pre, code';
+      const elements = Array.from(document.querySelectorAll(semanticTags));
+      return elements.map(el => el.outerHTML).join('\n');
+    });
     
-    const md = turndown.turndown(cleanHtml);
+    const md = semanticHtml ? turndown.turndown(semanticHtml) : turndown.turndown(html);
     const links = extractLinksFromHTML(html, item.url);
 
     const baseName = sanitizeFilename(new URL(canonical).hostname + new URL(canonical).pathname.replace(/\/+/, '_')) || 'page';
