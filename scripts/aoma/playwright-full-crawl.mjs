@@ -286,21 +286,18 @@ async function crawl() {
     // Wait extra time for Angular to fully render content
     await page.waitForTimeout(3000);
     
-    // Extract clean content from rendered page (strip CSS, scripts, navigation)
-    const cleanContent = await page.evaluate(() => {
-      // Remove unwanted elements
-      const toRemove = document.querySelectorAll('script, style, nav, header, footer, .sidebar, [class*="nav"]');
+    // Get clean HTML (remove scripts/styles but keep semantic content)
+    const cleanHtml = await page.evaluate(() => {
+      const clone = document.cloneNode(true);
+      const toRemove = clone.querySelectorAll('script, style, noscript, iframe');
       toRemove.forEach(el => el.remove());
-      
-      // Get main content area or body
-      const main = document.querySelector('main, [role="main"], .content, .main-content, body');
-      return main ? main.innerText : document.body.innerText;
+      return clone.documentElement.outerHTML;
     });
     
     const title = await page.title().catch(() => '');
     
-    // Use cleaned content for markdown instead of full HTML turndown
-    const md = cleanContent || turndown.turndown(html);
+    // Convert cleaned HTML to markdown (no CSS/JS bloat)
+    const md = turndown.turndown(cleanHtml);
     const links = extractLinksFromHTML(html, item.url);
 
     const baseName = sanitizeFilename(new URL(canonical).hostname + new URL(canonical).pathname.replace(/\/+/, '_')) || 'page';
