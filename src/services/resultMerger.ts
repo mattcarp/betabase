@@ -54,6 +54,11 @@ export class ResultMerger {
 
     // Combine all results
     const allResults = [...supabaseUnified, ...openaiUnified];
+    
+    if (supabaseUnified.length > 0) {
+      console.log(`🔍 After spread: supabaseUnified[0] content length: ${supabaseUnified[0]?.content?.length || 0}`);
+      console.log(`🔍 After spread: allResults[0] content length: ${allResults[0]?.content?.length || 0}`);
+    }
 
     if (allResults.length === 0) {
       console.log('⚠️ ResultMerger: No results to merge');
@@ -62,10 +67,17 @@ export class ResultMerger {
 
     // Sort by similarity score (highest first)
     allResults.sort((a, b) => (b.similarity || 0) - (a.similarity || 0));
+    
+    if (allResults.length > 0) {
+      console.log(`🔍 After sort: allResults[0] content length: ${allResults[0]?.content?.length || 0}`);
+    }
 
     // Deduplicate based on content similarity
     const deduped = this.deduplicateResults(allResults, dedupeThreshold);
     console.log(`🔄 ResultMerger: Deduplicated ${allResults.length} → ${deduped.length} results`);
+    if (deduped.length > 0) {
+      console.log(`🔍 After dedupe: First result content length: ${deduped[0]?.content?.length || 0}`);
+    }
 
     // Balance source representation if requested
     let balanced = deduped;
@@ -77,6 +89,9 @@ export class ResultMerger {
         minOpenAIResults
       );
       console.log(`⚖️ ResultMerger: Balanced to ${balanced.length} results`);
+      if (balanced.length > 0) {
+        console.log(`🔍 After balance: First result content length: ${balanced[0]?.content?.length || 0}`);
+      }
     }
 
     // Return top N results
@@ -84,6 +99,9 @@ export class ResultMerger {
     
     console.log(`✅ ResultMerger: Returning ${final.length} merged results`);
     console.log(`   Sources: ${final.filter(r => r.source === 'supabase').length} Supabase, ${final.filter(r => r.source === 'openai').length} OpenAI`);
+    if (final.length > 0) {
+      console.log(`🔍 Final[0] content length: ${final[0]?.content?.length || 0}`);
+    }
     
     return final;
   }
@@ -92,7 +110,7 @@ export class ResultMerger {
    * Convert Supabase vector search results to unified format
    */
   private convertSupabaseResults(results: VectorSearchResult[]): UnifiedResult[] {
-    return results.map(r => ({
+    const converted = results.map(r => ({
       content: r.content || '',
       source_type: r.source_type || 'unknown',
       source_id: r.source_id || '',
@@ -102,6 +120,12 @@ export class ResultMerger {
       created_at: r.created_at,
       url: r.url
     }));
+    
+    if (converted.length > 0) {
+      console.log(`🔍 convertSupabaseResults: First result has ${converted[0].content?.length || 0} chars`);
+    }
+    
+    return converted;
   }
 
   /**
@@ -113,7 +137,7 @@ export class ResultMerger {
       return [];
     }
 
-    return results
+    const converted = results
       .filter(r => r && typeof r === 'object')
       .map(r => ({
         content: r.content || r.text || r.response || '',
@@ -128,7 +152,14 @@ export class ResultMerger {
         },
         created_at: r.created_at || r.timestamp,
         url: r.url || r.metadata?.url
-      }));
+      }))
+      .filter(r => r.content && r.content.trim().length > 0); // Remove results with no content
+    
+    if (converted.length > 0) {
+      console.log(`🔍 convertOpenAIResults: First result has ${converted[0].content?.length || 0} chars, similarity ${converted[0].similarity}`);
+    }
+    
+    return converted;
   }
 
   /**
@@ -141,7 +172,13 @@ export class ResultMerger {
   ): UnifiedResult[] {
     const deduplicated: UnifiedResult[] = [];
     
-    for (const result of results) {
+    for (let i = 0; i < results.length; i++) {
+      const result = results[i];
+      
+      if (i === 0) {
+        console.log(`🔍 Dedupe input[0] content length: ${result?.content?.length || 0}`);
+      }
+      
       // Check if this result is too similar to any already-selected result
       const isDuplicate = deduplicated.some(existing => {
         const similarity = this.calculateContentSimilarity(
@@ -153,6 +190,9 @@ export class ResultMerger {
 
       if (!isDuplicate) {
         deduplicated.push(result);
+        if (deduplicated.length === 1) {
+          console.log(`🔍 Dedupe: Pushed first result, content length: ${result?.content?.length || 0}`);
+        }
       } else {
         console.log(`🔄 Skipping duplicate result (${result.similarity?.toFixed(2)} similarity)`);
       }

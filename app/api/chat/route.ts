@@ -457,6 +457,8 @@ export async function POST(req: Request) {
           aomaContext = `\n\n[AOMA Context:\n${contextContent}\n]`;
           aomaConnectionStatus = "success";
           console.log("✅ AOMA orchestration successful");
+          console.log(`📝 Context content length: ${contextContent?.length || 0} chars`);
+          console.log(`📝 aomaContext length: ${aomaContext?.length || 0} chars`);
         } else {
           console.error("❌ AOMA orchestrator returned no content", orchestratorResult);
           aomaConnectionStatus = "failed";
