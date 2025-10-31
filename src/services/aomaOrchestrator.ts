@@ -101,7 +101,7 @@ export class AOMAOrchestrator {
     } = {}
   ): Promise<{
     response: string;
-    sources: AOMASource[];
+    sources: VectorSearchResult[];
     metadata: any;
     fromCache?: boolean;
   }> {
@@ -136,22 +136,13 @@ export class AOMAOrchestrator {
         };
       }
 
-      // Extract sources for citation
-      const sources: AOMASource[] = vectorResults.map((result, idx) => ({
-        type: result.source_type as any,
-        title: result.metadata?.title || result.metadata?.filename || `Source ${idx + 1}`,
-        description: result.content.substring(0, 150) + "...",
-        relevance: result.similarity,
-        url: result.metadata?.url,
-        timestamp: result.metadata?.created_at || result.metadata?.updated_at,
-      }));
-
-      // Format response with citations
+      // Return full VectorSearchResult objects (not just citations)
+      // This ensures content field is preserved for result merging
       const formattedResponse = this.synthesizeVectorResponse(query, vectorResults);
 
       const result = {
         response: formattedResponse,
-        sources,
+        sources: vectorResults, // Return full objects with content field
         metadata: {
           vectorSearch: true,
           resultsCount: vectorResults.length,
@@ -580,7 +571,7 @@ export class AOMAOrchestrator {
 
       // Query 1: Supabase vector store (fast - <100ms)
       const supabasePromise = this.queryVectorStore(query, {
-        matchThreshold: 0.40, // Lower threshold for Jira tickets (typical similarity 0.3-0.6)
+        matchThreshold: 0.25, // Lowered for AOMA pages with CSS noise (0.25-0.45 typical)
         matchCount: 10,
         sourceTypes,
         useCache: true,
@@ -617,6 +608,9 @@ export class AOMAOrchestrator {
       openaiResults = this.extractSources("query_aoma_knowledge", openaiResult) || [];
 
       console.log(`✅ Supabase returned ${supabaseResults.length} results`);
+      if (supabaseResults.length > 0) {
+        console.log(`🔍 RAW Supabase result[0] has content: ${!!supabaseResults[0]?.content}, length: ${supabaseResults[0]?.content?.length || 0}`);
+      }
       console.log(`✅ OpenAI Assistant returned ${openaiResults.length} results`);
 
       // Update progress streams
@@ -641,6 +635,8 @@ export class AOMAOrchestrator {
       });
 
       console.log(`🔀 Merged to ${mergedResults.length} unified results`);
+      console.log(`📋 First result content length: ${mergedResults[0]?.content?.length || 0} chars`);
+      console.log(`📋 First result preview: ${mergedResults[0]?.content?.slice(0, 100) || 'EMPTY'}`);
 
       // Convert back to vector result format
       const vectorResult = {
