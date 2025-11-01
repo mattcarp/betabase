@@ -44,46 +44,38 @@ async function runAutomatedExport() {
     console.log("");
 
     // Step 3: Define all queries
+    // Updated November 2025: Using 60d to stay under JIRA's 5,000 result limit
+    // Excludes automated reminder and offboarding tickets
     const queries = [
       {
         project: "DPSA",
-        filename: "dpsa-tickets-since-2025-07-04.csv",
-        jql: 'project = DPSA AND (created >= "2025-07-04" OR updated >= "2025-07-04") ORDER BY updated DESC',
+        filename: "dpsa-tickets-60d.csv",
+        jql: 'project = DPSA AND (created >= -60d OR updated >= -60d) AND summary !~ "REMINDER Notice to DL" AND summary !~ "Offboarding" ORDER BY updated DESC',
       },
       {
         project: "AOMA",
-        filename: "aoma-tickets-since-2025-07-04.csv",
-        jql: 'project = AOMA AND (created >= "2025-07-04" OR updated >= "2025-07-04") ORDER BY updated DESC',
+        filename: "aoma-tickets-60d.csv",
+        jql: 'project = AOMA AND (created >= -60d OR updated >= -60d) AND summary !~ "REMINDER Notice to DL" AND summary !~ "Offboarding" ORDER BY updated DESC',
       },
       {
         project: "AOMA2",
-        filename: "aoma2-tickets-since-2025-07-04.csv",
-        jql: 'project = AOMA2 AND (created >= "2025-07-04" OR updated >= "2025-07-04") ORDER BY updated DESC',
+        filename: "aoma2-tickets-60d.csv",
+        jql: 'project = AOMA2 AND (created >= -60d OR updated >= -60d) AND summary !~ "REMINDER Notice to DL" AND summary !~ "Offboarding" ORDER BY updated DESC',
       },
       {
         project: "AOMA3",
-        filename: "aoma3-tickets-since-2025-07-04.csv",
-        jql: 'project = AOMA3 AND (created >= "2025-07-04" OR updated >= "2025-07-04") ORDER BY updated DESC',
+        filename: "aoma3-tickets-60d.csv",
+        jql: 'project = AOMA3 AND (created >= -60d OR updated >= -60d) AND summary !~ "REMINDER Notice to DL" AND summary !~ "Offboarding" ORDER BY updated DESC',
       },
       {
-        project: "ITSM-1",
-        filename: "itsm-tickets-2025-07-04-to-2025-08-15.csv",
-        jql: 'project = ITSM AND (created >= "2025-07-04" OR updated >= "2025-07-04") AND (created <= "2025-08-15" AND updated <= "2025-08-15") ORDER BY updated DESC',
-      },
-      {
-        project: "ITSM-2",
-        filename: "itsm-tickets-2025-08-16-to-2025-09-20.csv",
-        jql: 'project = ITSM AND (created >= "2025-07-04" OR updated >= "2025-07-04") AND ((created > "2025-08-15" AND created <= "2025-09-20") OR (updated > "2025-08-15" AND updated <= "2025-09-20")) ORDER BY updated DESC',
-      },
-      {
-        project: "ITSM-3",
-        filename: "itsm-tickets-2025-09-21-to-2025-10-12.csv",
-        jql: 'project = ITSM AND (created >= "2025-07-04" OR updated >= "2025-07-04") AND (created > "2025-09-20" OR updated > "2025-09-20") ORDER BY updated DESC',
+        project: "ITSM",
+        filename: "itsm-tickets-60d.csv",
+        jql: 'project = ITSM AND (created >= -60d OR updated >= -60d) AND summary !~ "REMINDER Notice to DL" AND summary !~ "Offboarding" ORDER BY updated DESC',
       },
       {
         project: "UST",
-        filename: "ust-tickets-since-2025-07-04.csv",
-        jql: 'project = UST AND (created >= "2025-07-04" OR updated >= "2025-07-04") ORDER BY updated DESC',
+        filename: "ust-tickets-60d.csv",
+        jql: 'project = UST AND (created >= -60d OR updated >= -60d) AND summary !~ "REMINDER Notice to DL" AND summary !~ "Offboarding" ORDER BY updated DESC',
       },
     ];
 

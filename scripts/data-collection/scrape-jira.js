@@ -50,20 +50,20 @@ const AUTH_STORAGE_PATH = path.join(__dirname, "../../tmp/jira-auth.json");
 const LOG_FILE = path.join(__dirname, "../../logs/jira-scrape.log");
 
 // JQL queries to run
-// Last update was July 3, 2025 (99 days ago)
-// Using 110d to cover gap + buffer
+// Updated November 1, 2025 - Using 60d to stay under JIRA's 5,000 result limit
+// Excludes automated reminder and offboarding tickets
 const JQL_QUERIES = [
   {
-    name: "All updates since last run (110 days)",
-    jql: "updated >= -110d ORDER BY updated DESC",
+    name: "All Sony Music projects (last 60 days, filtered)",
+    jql: 'project in (DPSA, AOMA, AOMA2, AOMA3, ITSM, UST) AND (created >= -60d OR updated >= -60d) AND summary !~ "REMINDER Notice to DL" AND summary !~ "Offboarding" ORDER BY updated DESC',
   },
   {
-    name: "Open tickets",
-    jql: 'status in ("To Do", "In Progress", "In Review") AND updated >= -110d ORDER BY priority DESC, created DESC',
+    name: "Open tickets (last 60 days)",
+    jql: 'project in (DPSA, AOMA, AOMA2, AOMA3, ITSM, UST) AND status in ("To Do", "In Progress", "In Review") AND updated >= -60d AND summary !~ "REMINDER Notice to DL" AND summary !~ "Offboarding" ORDER BY priority DESC, created DESC',
   },
   {
-    name: "Recent bugs",
-    jql: "type = Bug AND updated >= -110d ORDER BY priority DESC",
+    name: "Recent bugs (last 60 days)",
+    jql: 'project in (DPSA, AOMA, AOMA2, AOMA3, ITSM, UST) AND type = Bug AND updated >= -60d AND summary !~ "REMINDER Notice to DL" ORDER BY priority DESC',
   },
 ];
 
