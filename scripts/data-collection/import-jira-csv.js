@@ -44,6 +44,21 @@ async function parseJiraCSV(filePath) {
 }
 
 /**
+ * Parse JIRA date string to ISO timestamp
+ */
+function parseJiraDate(dateStr) {
+  if (!dateStr || dateStr === 'N/A' || dateStr.trim() === '') {
+    return null;
+  }
+  try {
+    const date = new Date(dateStr);
+    return isNaN(date.getTime()) ? null : date.toISOString();
+  } catch (error) {
+    return null;
+  }
+}
+
+/**
  * Transform CSV record to ticket object
  */
 function transformRecord(record) {
@@ -56,6 +71,8 @@ function transformRecord(record) {
     description: record["Description"] || "",
     status: record["Status"] || "",
     priority: record["Priority"] || "",
+    created_at: parseJiraDate(record["Created"]),
+    updated_at: parseJiraDate(record["Updated"]),
     metadata: {
       assignee: record["Assignee"] || "",
       reporter: record["Reporter"] || "",
