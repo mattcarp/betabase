@@ -42,6 +42,7 @@ const {
   updateJiraTickets,
   upsertJiraEmbeddings,
 } = require("../../utils/supabase/deduplication");
+const { deduplicateAll } = require("../../utils/supabase/deduplicate-jira");
 
 // Configuration
 const JIRA_BASE_URL = process.env.JIRA_BASE_URL || "https://jira.smedigitalapps.com/jira";
@@ -398,6 +399,24 @@ async function scrapeJira() {
       }));
 
       await upsertJiraEmbeddings(embeddingsWithKeys);
+    }
+
+    // Auto-deduplication
+    const skipDedupe = args.includes('--skip-dedupe');
+    if (!skipDedupe) {
+      await log('\n🔍 Running automatic deduplication...');
+      try {
+        const dedupeResult = await deduplicateAll({ dryRun: false, logger: log });
+        await log('\n   Deduplication complete:');
+        await log(`     - Tickets table: ${dedupeResult.tickets.recordsDeleted} duplicates removed`);
+        await log(`     - Embeddings table: ${dedupeResult.embeddings.recordsDeleted} duplicates removed`);
+      } catch (error) {
+        await log(`\n⚠️  Deduplication failed: ${error.message}`);
+        await log('   You can run deduplication manually: node scripts/deduplicate-jira-all.js');
+      }
+    } else {
+      await log('\n⏭️  Deduplication skipped (--skip-dedupe flag)');
+      await log('   Run manually if needed: node scripts/deduplicate-jira-all.js');
     }
 
     await log("\n✅ JIRA scraping completed successfully!");

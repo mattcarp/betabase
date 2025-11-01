@@ -18,6 +18,7 @@ const XLSX = require("xlsx");
 // Import utilities
 const { generateEmbeddingsBatch } = require("../../utils/embeddings/openai");
 const { createClient } = require("@supabase/supabase-js");
+const { deduplicateAll } = require("../../utils/supabase/deduplicate-jira");
 
 // Supabase client
 const supabase = createClient(
@@ -252,6 +253,24 @@ async function importJiraExcel() {
 
     // Generate and upsert embeddings
     const embeddingCount = await upsertEmbeddings(validTickets);
+
+    // Auto-deduplication
+    const skipDedupe = process.argv.includes('--skip-dedupe');
+    if (!skipDedupe) {
+      console.log('\n🔍 Running automatic deduplication...');
+      try {
+        const dedupeResult = await deduplicateAll({ dryRun: false, logger: console.log });
+        console.log('\n   Deduplication complete:');
+        console.log(`     - Tickets table: ${dedupeResult.tickets.recordsDeleted} duplicates removed`);
+        console.log(`     - Embeddings table: ${dedupeResult.embeddings.recordsDeleted} duplicates removed`);
+      } catch (error) {
+        console.log(`\n⚠️  Deduplication failed: ${error.message}`);
+        console.log('   You can run deduplication manually: node scripts/deduplicate-jira-all.js');
+      }
+    } else {
+      console.log('\n⏭️  Deduplication skipped (--skip-dedupe flag)');
+      console.log('   Run manually if needed: node scripts/deduplicate-jira-all.js');
+    }
 
     console.log("\n✅ JIRA Excel import completed successfully!");
     console.log(`\n📊 Summary:`);
