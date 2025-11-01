@@ -230,18 +230,24 @@ async function upsertEmbeddings(tickets) {
  * Main import function
  */
 async function importJiraExcel() {
-  const excelPath = process.argv[2];
+  const args = process.argv.slice(2);
+  const dryRun = args.includes('--dry-run');
+  const excelPath = args.find(arg => !arg.startsWith('--'));
 
   if (!excelPath) {
-    console.error("❌ Usage: node import-jira-excel.js <path-to-xls-or-xlsx>");
+    console.error("❌ Usage: node import-jira-excel.js <path-to-xls-or-xlsx> [--dry-run]");
     console.error(
       "   Example: node import-jira-excel.js tmp/jira-exports/all-projects-tickets.xls"
+    );
+    console.error(
+      "   Dry run: node import-jira-excel.js ~/Downloads/export.xls --dry-run"
     );
     process.exit(1);
   }
 
   console.log("🚀 Starting JIRA Excel import");
   console.log(`   Excel file: ${excelPath}`);
+  console.log(`   Mode: ${dryRun ? 'DRY RUN' : 'LIVE IMPORT'}`);
 
   try {
     // Parse Excel
@@ -264,6 +270,18 @@ async function importJiraExcel() {
     // Show sample ticket
     console.log("\n📋 Sample ticket:");
     console.log(JSON.stringify(validTickets[0], null, 2));
+
+    if (dryRun) {
+      console.log('\n✅ DRY RUN COMPLETE\n');
+      console.log('📊 Summary:');
+      console.log(`   Total records in Excel: ${records.length}`);
+      console.log(`   Valid tickets: ${validTickets.length}`);
+      console.log(`   Would be upserted to database`);
+      console.log(`   Would generate ${validTickets.length} embeddings`);
+      console.log(`   Would auto-deduplicate after import`);
+      console.log('\n💡 Run without --dry-run to actually import');
+      return;
+    }
 
     // Upsert tickets
     const insertedCount = await upsertTickets(validTickets);
