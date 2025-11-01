@@ -6,16 +6,22 @@
 
 ## 🔗 Direct Export Link
 
-**All Sony Music Projects (since July 4, 2025)**:
+**All Sony Music Projects (Last 60 Days, Filtered)**:
 
 ```
-https://jira.smedigitalapps.com/jira/issues/?jql=project%20in%20(DPSA%2C%20AOMA%2C%20AOMA2%2C%20AOMA3%2C%20ITSM%2C%20UST)%20AND%20(created%20%3E%3D%20%222025-07-04%22%20OR%20updated%20%3E%3D%20%222025-07-04%22)%20ORDER%20BY%20updated%20DESC
+https://jira.smedigitalapps.com/jira/issues/?jql=project%20in%20(DPSA%2C%20AOMA%2C%20AOMA2%2C%20AOMA3%2C%20ITSM%2C%20UST)%20AND%20(created%20%3E%3D%20-60d%20OR%20updated%20%3E%3D%20-60d)%20AND%20summary%20!~%20%22REMINDER%20Notice%20to%20DL%22%20AND%20summary%20!~%20%22Offboarding%22%20ORDER%20BY%20updated%20DESC
 ```
 
 **JQL Query** (decoded):
 ```jql
-project in (DPSA, AOMA, AOMA2, AOMA3, ITSM, UST) AND (created >= "2025-07-04" OR updated >= "2025-07-04") ORDER BY updated DESC
+project in (DPSA, AOMA, AOMA2, AOMA3, ITSM, UST) AND (created >= -60d OR updated >= -60d) AND summary !~ "REMINDER Notice to DL" AND summary !~ "Offboarding" ORDER BY updated DESC
 ```
+
+**Exclusions**:
+- ❌ Tickets with "REMINDER Notice to DL" in summary (automated reminders, not useful)
+- ❌ Tickets with "Offboarding" in summary (HR tickets, not useful)
+
+**Typical result count**: ~4,000-4,500 tickets (well under JIRA's 5,000 limit)
 
 ---
 
@@ -36,11 +42,15 @@ project in (DPSA, AOMA, AOMA2, AOMA3, ITSM, UST) AND (created >= "2025-07-04" OR
 
 ### Step 1: Navigate to Issue Search
 
-**Use the link above** OR manually:
+**IMPORTANT**: You must use the **Issue Navigator**, NOT a Structure Board!
+
+**Use the direct link above** (recommended) OR manually:
 1. Go to https://jira.smedigitalapps.com/jira
 2. Click **"Issues"** → **"Search for issues"**
 3. Switch to **"Advanced"** search mode
 4. Paste the JQL query
+
+**⚠️ Common Mistake**: If you land on a "Structure Board" view, the export options will be limited. The link above should take you directly to the correct Issue Navigator view.
 
 ### Step 2: Export with All Fields
 
@@ -104,12 +114,13 @@ node scripts/data-collection/import-jira-excel.js \
 
 **Recommended**: Update monthly or when you need current data
 
-**Update the JQL date** each time:
-```jql
-created >= "2025-11-01" OR updated >= "2025-11-01"
-```
+**The 60-day rolling window** ensures:
+- ✅ Always stays under JIRA's 5,000 result limit
+- ✅ Captures recent activity (last 2 months)
+- ✅ Filters out noise (reminders, offboarding tickets)
+- ✅ ~4,000-4,500 tickets per export (optimal size)
 
-Replace `2025-11-01` with the date of your last successful import.
+**No need to update the date** - the `-60d` automatically rolls forward!
 
 ---
 
