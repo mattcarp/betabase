@@ -1,13 +1,17 @@
 /**
- * Knowledge Search Service
+ * SIAM Knowledge Search Service
  * Centralized interface for vector and keyword search across knowledge sources.
+ * 
+ * CRITICAL DISTINCTION:
+ * - SIAM = Our app (this testing/knowledge platform)
+ * - AOMA = App Under Test (Sony Music's Digital Operations app)
  *
  * References:
  * - lib/supabase.ts
  * - src/services/unified-test-intelligence.ts
  */
 
-import { supabase } from "../lib/supabase";
+import { supabase, DEFAULT_APP_CONTEXT } from "../lib/supabase";
 import { embed } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { OptimizedSupabaseVectorService } from "./optimizedSupabaseVectorService";
@@ -148,8 +152,11 @@ export async function searchKnowledge(
       if (!supabase) throw new Error("Supabase client not initialized");
       const { data, error } = await withinTimeout(
         supabase
-          .from("aoma_unified_vectors")
+          .from("siam_vectors")
           .select("id, content, source_type, source_id, metadata, created_at")
+          .eq("organization", DEFAULT_APP_CONTEXT.organization)
+          .eq("division", DEFAULT_APP_CONTEXT.division)
+          .eq("app_under_test", DEFAULT_APP_CONTEXT.app_under_test)
           .ilike("content", `%${normalized}%`)
           .limit(matchCount),
         timeoutMs
@@ -241,8 +248,11 @@ export async function getKnowledgeSourceCounts(): Promise<KnowledgeCounts> {
   // First time or cache expired - check if table exists
   try {
     const { error: tableCheckError } = await supabase
-      .from("aoma_unified_vectors")
+      .from("siam_vectors")
       .select("id", { count: "exact", head: true })
+      .eq("organization", DEFAULT_APP_CONTEXT.organization)
+      .eq("division", DEFAULT_APP_CONTEXT.division)
+      .eq("app_under_test", DEFAULT_APP_CONTEXT.app_under_test)
       .limit(0);
 
     if (tableCheckError) {
@@ -253,7 +263,7 @@ export async function getKnowledgeSourceCounts(): Promise<KnowledgeCounts> {
         tableCheckError.code === "PGRST116"
       ) {
         console.info(
-          "[Knowledge] aoma_unified_vectors table not yet available, caching unavailable status"
+          "[Knowledge] siam_vectors table not yet available, caching unavailable status"
         );
         tableAvailabilityCache = { available: false, checkedAt: Date.now() };
         return ZERO_COUNTS;
@@ -265,7 +275,7 @@ export async function getKnowledgeSourceCounts(): Promise<KnowledgeCounts> {
   } catch (err) {
     // Table check failed - cache unavailable status
     console.info(
-      "[Knowledge] Unable to access aoma_unified_vectors table, caching unavailable status"
+      "[Knowledge] Unable to access siam_vectors table, caching unavailable status"
     );
     tableAvailabilityCache = { available: false, checkedAt: Date.now() };
     return ZERO_COUNTS;
@@ -277,8 +287,11 @@ export async function getKnowledgeSourceCounts(): Promise<KnowledgeCounts> {
   for (const t of types) {
     try {
       const { count, error } = await supabase
-        .from("aoma_unified_vectors")
+        .from("siam_vectors")
         .select("id", { count: "exact", head: true })
+        .eq("organization", DEFAULT_APP_CONTEXT.organization)
+        .eq("division", DEFAULT_APP_CONTEXT.division)
+        .eq("app_under_test", DEFAULT_APP_CONTEXT.app_under_test)
         .eq("source_type", t);
 
       if (error) {

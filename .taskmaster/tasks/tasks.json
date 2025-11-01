@@ -1764,6 +1764,108 @@
             "parentTaskId": 89
           }
         ]
+      },
+      {
+        "id": 90,
+        "title": "Restructure Vector Store for Multi-Tenancy",
+        "description": "Refactor the vector store architecture to support multi-tenancy by renaming tables, adding partitioning, and updating queries and documentation.",
+        "details": "1. **Rename Tables**: Update all database tables prefixed with 'aoma_' to 'siam_'. Ensure that all references in the codebase are updated accordingly.\n2. **Add Column**: Introduce a new column 'app_under_test' to all vector tables to distinguish between different applications being tested.\n3. **Update Indexes**: Modify existing indexes to be partitioned by the 'app_under_test' column to improve query performance and isolation between different applications.\n4. **Refactor TypeScript Types**: Change TypeScript types from 'AOMAVector' to 'SIAMVector' and ensure all related code is updated.\n5. **Query Updates**: Revise all database queries to include filtering by 'app_under_test' to ensure correct data retrieval.\n6. **Rename Test Files**: Change test file names from 'aoma-performance' to 'siam-aoma-validation' for clarity.\n7. **Documentation Update**: Revise all documentation to clearly differentiate between SIAM (our app) and AOMA (app under test).\n8. **Data Migration Script**: Develop a script to migrate existing records to the new schema, ensuring data integrity and consistency.",
+        "testStrategy": "1. Verify that all tables have been renamed correctly and that no references to 'aoma_' remain in the codebase.\n2. Check that the 'app_under_test' column is present in all vector tables and correctly populated.\n3. Ensure that indexes are correctly partitioned by 'app_under_test' and that query performance is optimized.\n4. Confirm that TypeScript types have been refactored and that the application compiles without errors.\n5. Test all queries to ensure they correctly filter by 'app_under_test' and return expected results.\n6. Validate that test files have been renamed and that tests run successfully.\n7. Review documentation to ensure it accurately reflects the new architecture and distinctions between SIAM and AOMA.\n8. Execute the data migration script on a test dataset and verify that data is correctly migrated without loss or corruption.",
+        "status": "in-progress",
+        "dependencies": [
+          65,
+          89
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Rename Database Tables",
+            "description": "Update all database tables prefixed with 'aoma_' to 'siam_' and ensure all references in the codebase are updated.",
+            "dependencies": [],
+            "details": "Identify all tables with the 'aoma_' prefix and rename them to 'siam_'. Update all code references to these tables.",
+            "status": "in-progress",
+            "testStrategy": "Verify that all tables have been renamed correctly and that no references to 'aoma_' remain in the codebase."
+          },
+          {
+            "id": 2,
+            "title": "Add 'app_under_test' Column",
+            "description": "Introduce a new column 'app_under_test' to all vector tables to distinguish between different applications being tested.",
+            "dependencies": [
+              1
+            ],
+            "details": "Modify the schema of all vector tables to include the 'app_under_test' column.",
+            "status": "pending",
+            "testStrategy": "Check that the 'app_under_test' column is present in all vector tables and correctly populated."
+          },
+          {
+            "id": 3,
+            "title": "Update Indexes for Partitioning",
+            "description": "Modify existing indexes to be partitioned by the 'app_under_test' column to improve query performance and isolation.",
+            "dependencies": [
+              2
+            ],
+            "details": "Refactor indexes to include partitioning by 'app_under_test'.",
+            "status": "pending",
+            "testStrategy": "Ensure that indexes are correctly partitioned by 'app_under_test' and that query performance is optimized."
+          },
+          {
+            "id": 4,
+            "title": "Refactor TypeScript Types",
+            "description": "Change TypeScript types from 'AOMAVector' to 'SIAMVector' and ensure all related code is updated.",
+            "dependencies": [
+              1
+            ],
+            "details": "Update TypeScript types and all related code references from 'AOMAVector' to 'SIAMVector'.",
+            "status": "pending",
+            "testStrategy": "Verify that all TypeScript types have been updated and that the application compiles without errors."
+          },
+          {
+            "id": 5,
+            "title": "Revise Database Queries",
+            "description": "Revise all database queries to include filtering by 'app_under_test' to ensure correct data retrieval.",
+            "dependencies": [
+              3
+            ],
+            "details": "Update all queries to include the 'app_under_test' filter.\n<info added on 2025-11-01T14:16:02.752Z>\nCore services successfully updated to 3-level multi-tenant structure (organization/division/app_under_test):\n\nCOMPLETED:\n- supabaseVectorService.ts: All 7 methods updated (searchVectors, upsertVector, batchUpsertVectors, getVectorStats, deleteVectorsBySource, getMigrationStatus, updateMigrationStatus)\n- aomaOrchestrator.ts: Updated to pass DEFAULT_APP_CONTEXT to vector searches\n- Comprehensive unit test suite created with 35+ test cases covering multi-org support\n- DEFAULT_APP_CONTEXT established: { organization: 'sony-music', division: 'digital-operations', app_under_test: 'aoma' }\n\nPENDING SERVICES TO UPDATE:\n- knowledgeSearchService\n- optimizedSupabaseVectorService\n- aomaFirecrawlService\n- enhancedAomaFirecrawlService\n- deduplicationService\n</info added on 2025-11-01T14:16:02.752Z>",
+            "status": "pending",
+            "testStrategy": "Run queries to ensure they return correct results based on 'app_under_test' filtering."
+          },
+          {
+            "id": 6,
+            "title": "Rename Test Files",
+            "description": "Change test file names from 'aoma-performance' to 'siam-aoma-validation' for clarity.",
+            "dependencies": [],
+            "details": "Identify and rename all relevant test files.",
+            "status": "pending",
+            "testStrategy": "Ensure all test files are renamed and tests run successfully."
+          },
+          {
+            "id": 7,
+            "title": "Update Documentation",
+            "description": "Revise all documentation to clearly differentiate between SIAM (our app) and AOMA (app under test).",
+            "dependencies": [
+              1,
+              4
+            ],
+            "details": "Update documentation to reflect changes in table names, types, and application distinctions.",
+            "status": "pending",
+            "testStrategy": "Review documentation to ensure clarity and accuracy."
+          },
+          {
+            "id": 8,
+            "title": "Develop Data Migration Script",
+            "description": "Develop a script to migrate existing records to the new schema, ensuring data integrity and consistency.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Create a migration script to update existing data to the new schema.",
+            "status": "pending",
+            "testStrategy": "Run the migration script and verify data integrity and consistency in the new schema."
+          }
+        ]
       }
     ],
     "metadata": {
@@ -1776,7 +1878,7 @@
       ],
       "created": "2025-10-30T17:18:33.148Z",
       "description": "Tasks for master context",
-      "updated": "2025-10-30T17:18:47.504Z"
+      "updated": "2025-11-01T13:45:54.873Z"
     }
   }
 }

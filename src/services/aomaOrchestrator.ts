@@ -1,5 +1,10 @@
 /**
- * AOMA Orchestrator Service
+ * SIAM AOMA Orchestrator Service
+ * 
+ * CRITICAL DISTINCTION:
+ * - SIAM = Our app (this testing/knowledge platform)
+ * - AOMA = App Under Test (Sony Music's Digital Operations app)
+ * 
  * Intelligently routes queries to appropriate AOMA-mesh-mcp LangChain agents
  * Enables full utilization of all orchestrated resources
  */
@@ -8,6 +13,7 @@ import { aomaCache } from "./aomaCache";
 import { aomaProgressStream, type AOMASource } from "./aomaProgressStream";
 import { getSupabaseVectorService } from "./supabaseVectorService";
 import type { VectorSearchResult } from "@/lib/supabase";
+import { DEFAULT_APP_CONTEXT } from "@/lib/supabase";
 import { getQueryDeduplicator } from "./queryDeduplicator";
 
 // Available AOMA-mesh-mcp tools and their capabilities
@@ -120,8 +126,9 @@ export class AOMAOrchestrator {
     }
 
     try {
-      // Perform vector similarity search
+      // Perform vector similarity search (multi-tenant: Sony Music / Digital Operations / AOMA)
       const vectorResults: VectorSearchResult[] = await this.vectorService.searchVectors(query, {
+        ...DEFAULT_APP_CONTEXT, // organization, division, app_under_test
         matchThreshold,
         matchCount,
         sourceTypes,
