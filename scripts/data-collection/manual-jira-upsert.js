@@ -51,6 +51,7 @@ const fs = require("fs").promises;
 const path = require("path");
 const csv = require("csv-parser");
 const { createReadStream } = require("fs");
+const { deduplicateAll } = require("../../utils/supabase/deduplicate-jira");
 
 require("dotenv").config({ path: ".env.local" });
 
@@ -65,6 +66,8 @@ const fileIndex = args.indexOf("--file");
 const dryRun = args.includes("--dry-run");
 const batchSizeIndex = args.indexOf("--batch-size");
 const resumeFlag = args.includes("--resume");
+const skipDedupe = args.includes("--skip-dedupe");
+const autoDedupe = !skipDedupe; // Auto-dedupe by default
 
 const inputFile = fileIndex !== -1 ? args[fileIndex + 1] : null;
 const customBatchSize = batchSizeIndex !== -1 ? parseInt(args[batchSizeIndex + 1]) : BATCH_SIZE;
@@ -376,6 +379,23 @@ async function main() {
       remaining: ticketsToProcess.slice(i + customBatchSize),
       timestamp: new Date().toISOString(),
     });
+  }
+
+  // Auto-deduplication
+  if (autoDedupe && !dryRun) {
+    await log(`\n🔍 Running automatic deduplication...`);
+    try {
+      const dedupeResult = await deduplicateAll({ dryRun: false, logger: log });
+      await log(`\n   Deduplication complete:`);
+      await log(`     - Tickets table: ${dedupeResult.tickets.recordsDeleted} duplicates removed`);
+      await log(`     - Embeddings table: ${dedupeResult.embeddings.recordsDeleted} duplicates removed`);
+    } catch (error) {
+      await log(`\n⚠️  Deduplication failed: ${error.message}`);
+      await log(`   You can run deduplication manually: node scripts/deduplicate-jira-all.js`);
+    }
+  } else if (skipDedupe) {
+    await log(`\n⏭️  Deduplication skipped (--skip-dedupe flag)`);
+    await log(`   Run manually if needed: node scripts/deduplicate-jira-all.js`);
   }
 
   // Final stats

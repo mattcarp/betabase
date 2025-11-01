@@ -95,7 +95,7 @@ node scripts/data-collection/manual-jira-upsert.js \
 ### Step 4: Run the Upsert
 
 ```bash
-# Actually execute the upsert
+# Actually execute the upsert (with automatic deduplication)
 node scripts/data-collection/manual-jira-upsert.js \
   --file ~/Downloads/jira-export-oct-2025.csv
 ```
@@ -103,10 +103,20 @@ node scripts/data-collection/manual-jira-upsert.js \
 **What happens**:
 
 1. ✅ Loads tickets from CSV/JSON
-2. ✅ Checks against existing 6,040 tickets
+2. ✅ Checks against existing tickets
 3. ✅ Generates embeddings for new/changed tickets
 4. ✅ **UPSERTS** (inserts new, updates existing)
-5. ✅ Saves checkpoint (can resume if interrupted)
+5. ✅ **AUTOMATIC DEDUPLICATION** (removes any duplicate entries)
+6. ✅ Saves checkpoint (can resume if interrupted)
+
+**Skip deduplication if needed**:
+
+```bash
+# Upsert without automatic deduplication
+node scripts/data-collection/manual-jira-upsert.js \
+  --file ~/Downloads/jira-export-oct-2025.csv \
+  --skip-dedupe
+```
 
 ### Step 5: Verify Results
 
@@ -140,6 +150,68 @@ const supabase = createClient(
   });
 })();
 "
+```
+
+---
+
+## 🤖 Automatic Deduplication
+
+### NEW: Built-in Deduplication (November 2025)
+
+**All import scripts now automatically deduplicate after successful import!**
+
+The deduplication strategy:
+- Groups tickets by their unique identifier (`external_id` or `ticket_key`)
+- Sorts by `updated_at` timestamp (descending)
+- **Keeps the most recently updated version**
+- Deletes all older duplicate entries
+
+**Tables deduplicated:**
+- `jira_tickets` (by `external_id`)
+- `jira_ticket_embeddings` (by `ticket_key`)
+
+**When it runs:**
+- Automatically after each import completes successfully
+- Can be skipped with `--skip-dedupe` flag
+- Can be run manually anytime (see below)
+
+### Manual Deduplication
+
+If you need to deduplicate without running an import:
+
+```bash
+# Dry run (see what would be deleted)
+node scripts/deduplicate-jira-all.js --dry-run
+
+# Actually deduplicate both tables
+node scripts/deduplicate-jira-all.js
+
+# Deduplicate only embeddings table
+node scripts/deduplicate-jira-all.js --table=embeddings
+
+# Deduplicate only tickets table
+node scripts/deduplicate-jira-all.js --table=tickets
+```
+
+**Output example:**
+```
+🔍 Scanning jira_ticket_embeddings for duplicates...
+📥 Fetching records from jira_ticket_embeddings...
+   Fetched 15085 records...
+
+📊 Total records in jira_ticket_embeddings: 15085
+
+⚠️  Found 12 ticket_keys with duplicates
+
+📋 ITSM-12345: 2 copies found
+   ✅ Keeping: ID 45678 (updated: 2025-11-01T10:30:00)
+   ❌ Deleting 1 older copies...
+      🗑️  Will delete ID 45677 (updated: 2025-10-15T08:20:00)
+
+🗑️  Deleting 12 duplicates from jira_ticket_embeddings...
+   ✓ Deleted batch 1-12/12
+
+✅ DEDUPLICATION COMPLETE
 ```
 
 ---
@@ -189,19 +261,21 @@ node scripts/data-collection/manual-jira-upsert.js --file all-recent-tickets.csv
 
 ## 🎯 Improvements from July 2025
 
-### 1. **Automatic Deduplication**
+### 1. **Automatic Deduplication (November 2025 Update)**
 
 ```
 OLD (July): Manual checking of ticket_key, potential duplicates
-NEW (October): Built-in UPSERT using ticket_key as unique constraint
+OCT (October): Built-in UPSERT using ticket_key as unique constraint
+NEW (November): Automatic post-import deduplication of BOTH tables
 ```
 
 **How it works**:
 
-- Script checks existing tickets by `ticket_key`
-- New tickets: INSERT
-- Existing tickets: UPDATE (refreshes embedding & metadata)
-- **Zero duplicates guaranteed**
+- UPSERT handles most duplicates during import
+- **NEW:** Post-import deduplication catches any edge cases
+- **NEW:** Deduplicates BOTH `jira_tickets` AND `jira_ticket_embeddings`
+- **NEW:** Keeps most recently updated record, deletes older ones
+- **Zero duplicates guaranteed** across both tables
 
 ### 2. **Resume Capability**
 
@@ -268,21 +342,30 @@ NEW (October): Test first with --dry-run
 
 ## 🚨 Important Notes
 
-### Deduplication Strategy
+### Deduplication Strategy (Updated November 2025)
 
-The script uses `ticket_key` as the unique identifier:
+The system uses a **two-layer deduplication approach**:
 
+**Layer 1: UPSERT (during import)**
 ```sql
--- Database constraint (prevents duplicates)
+-- Database constraint (prevents most duplicates)
 CREATE UNIQUE INDEX IF NOT EXISTS jira_ticket_embeddings_ticket_key_unique
   ON jira_ticket_embeddings (ticket_key);
 ```
+
+**Layer 2: Post-Import Cleanup (automatic)**
+- Scans both tables for any remaining duplicates
+- Groups by identifier (`external_id` or `ticket_key`)
+- Keeps the most recently updated record
+- Deletes older duplicates in batches
 
 **What this means**:
 
 - ✅ **Safe to run multiple times** - won't create duplicates
 - ✅ **Updates overwrite** - latest data wins
 - ✅ **Idempotent** - same result every time
+- ✅ **NEW: Catches edge cases** - post-import cleanup ensures zero duplicates
+- ✅ **NEW: Works on both tables** - comprehensive deduplication
 
 ### Rate Limits
 
@@ -357,12 +440,17 @@ awk -F',' 'NR>1 {print $1}' jira-export.csv | sort | uniq -d
 
 ## 📝 Quick Reference
 
+### Import Commands
+
 ```bash
 # Dry run
 node scripts/data-collection/manual-jira-upsert.js --file FILE.csv --dry-run
 
-# Execute
+# Execute (with auto-dedupe)
 node scripts/data-collection/manual-jira-upsert.js --file FILE.csv
+
+# Execute without auto-dedupe
+node scripts/data-collection/manual-jira-upsert.js --file FILE.csv --skip-dedupe
 
 # Resume
 node scripts/data-collection/manual-jira-upsert.js --resume
@@ -371,8 +459,25 @@ node scripts/data-collection/manual-jira-upsert.js --resume
 node scripts/data-collection/manual-jira-upsert.js --file FILE.csv --batch-size 50
 ```
 
+### Deduplication Commands
+
+```bash
+# Dry run (see what would be deleted)
+node scripts/deduplicate-jira-all.js --dry-run
+
+# Deduplicate both tables
+node scripts/deduplicate-jira-all.js
+
+# Deduplicate specific table
+node scripts/deduplicate-jira-all.js --table=embeddings
+node scripts/deduplicate-jira-all.js --table=tickets
+```
+
 ---
 
-**Last Updated**: October 11, 2025
-**Script**: `/scripts/data-collection/manual-jira-upsert.js`
-**Database**: 6,040 tickets (as of July 3, 2025)
+**Last Updated**: November 1, 2025
+**Scripts**: 
+- `/scripts/data-collection/manual-jira-upsert.js` (import)
+- `/scripts/deduplicate-jira-all.js` (deduplication)
+**Database**: 15,085 tickets (as of October 28, 2025)
+**Major Update**: Automatic post-import deduplication now active
