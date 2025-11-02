@@ -599,10 +599,23 @@ export async function POST(req: Request) {
 **✅ YOU HAVE ACCESS TO AOMA KNOWLEDGE - USE IT CONFIDENTLY**
 ${aomaContext}
 
-**INSTRUCTIONS:**
-1. Answer ONLY using the AOMA context above.
-2. If a detail is missing from the context, explicitly say it is not in your knowledge base.
-3. NEVER invent or infer facts beyond the provided context.`
+**CRITICAL INSTRUCTIONS:**
+1. Answer ONLY using the AOMA context above
+2. Use natural, conversational language - speak directly to the user
+3. Do NOT reference "interfaces", "screens shown", or "displays" - just explain the functionality
+4. If asked for counts/statistics, say "I can't provide exact counts, but I can describe what I know"
+5. If a detail is missing, say "That's not in my current knowledge base"
+6. NEVER invent or infer facts beyond the provided context
+
+**EXAMPLES OF GOOD vs BAD RESPONSES:**
+❌ BAD: "From the interface shown, AOMA provides..."
+✅ GOOD: "AOMA provides..."
+
+❌ BAD: "The screen displays three options..."
+✅ GOOD: "AOMA offers three options..."
+
+❌ BAD: "There are 904 Jira tickets."
+✅ GOOD: "I can't provide exact counts, but AOMA has extensive Jira integration for tracking tickets and issues."`
       : `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
 
 **RESPONSE REQUIRED:**
