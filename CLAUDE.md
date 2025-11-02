@@ -40,7 +40,11 @@
 - **Write Playwright tests** for every change, bypassing auth where possible
 - **Test with MCP servers**: playwright-mcp, browserbase, browser-tools, firecrawl-mcp
 - **Production tests MUST pass**: E2E with Mailinator, full regression suite
-- **Don't use mocks** - Fail gracefully until it works
+- **DON'T USE MOCKS** - Fail gracefully until it works
+  - **Enforced**: `tests/setup/no-mocks-allowed.ts` throws errors if `vi.mock`, `vi.fn`, `vi.spyOn`, or `vi.hoisted` are used
+  - **Why**: Mocks break TDD - tests pass when code is broken
+  - **Instead**: Use real services (local Supabase, real APIs) or let tests fail honestly
+  - **Rule**: If a test can't run because a service isn't available, the test FAILS and describes what's missing
 
 ### Code Quality
 

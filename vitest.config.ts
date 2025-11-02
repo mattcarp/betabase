@@ -5,14 +5,17 @@ import path from "path";
 export default defineConfig({
   plugins: [react()],
   test: {
-    // Environment - use jsdom for React component testing
-    environment: "jsdom",
+    // Environment - use 'node' for service/API tests, 'jsdom' for React component tests
+    environment: "node",
 
     // Make describe, test, expect available globally
     globals: true,
 
-    // Setup file
-    setupFiles: ["./tests/setup.vitest.tsx"],
+    // Setup files
+    setupFiles: [
+      "./tests/setup/no-mocks-allowed.ts", // Enforce no-mock policy (CRITICAL)
+      // "./tests/setup.vitest.tsx", // React setup (disabled for now)
+    ],
 
     // Coverage configuration
     coverage: {
