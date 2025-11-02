@@ -195,9 +195,11 @@ export function AiSdkChatPanel({
     isRecording,
     transcript,
     interimTranscript,
+    permissionState,
     startRecording,
     stopRecording,
     clearTranscript,
+    checkPermission,
   } = useElevenLabsSTT({
     onTranscript: (text, isFinal) => {
       if (isFinal && text.trim()) {
@@ -210,13 +212,37 @@ export function AiSdkChatPanel({
     },
     onError: (error) => {
       console.error("STT Error:", error);
-      toast.error(`Recording error: ${error.message}`);
+      
+      // Provide helpful instructions based on error type
+      let toastMessage = error.message;
+      let toastDescription = "";
+      
+      if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
+        toastDescription = "Click the 🔒 icon in your browser's address bar to grant microphone access.";
+      } else if (error.name === "NotFoundError") {
+        toastDescription = "Make sure your microphone is connected and not being used by another app.";
+      } else if (error.name === "SecurityError") {
+        toastDescription = "Microphone access requires HTTPS or localhost.";
+      }
+      
+      if (toastDescription) {
+        toast.error(toastMessage, { description: toastDescription, duration: 8000 });
+      } else {
+        toast.error(toastMessage);
+      }
     },
     continuous: false, // Push-to-talk mode
   });
 
+  // Check microphone permission on mount
+  useEffect(() => {
+    if (checkPermission) {
+      checkPermission();
+    }
+  }, [checkPermission]);
+
   // Debug logs after hooks are initialized
-  console.log("🎤 STT Hook available:", { isRecording, startRecording: !!startRecording, stopRecording: !!stopRecording });
+  console.log("🎤 STT Hook available:", { isRecording, startRecording: !!startRecording, stopRecording: !!stopRecording, permissionState });
   console.log("🔊 TTS Hook available:", { isPlaying, speak: !!speak, stop: !!stopSpeaking, isTTSEnabled });
 
   // Use conversationId prop or create fallback
@@ -1867,6 +1893,11 @@ export function AiSdkChatPanel({
                         "text-white",
                         "animate-pulse",
                       ]
+                    : permissionState === "denied"
+                    ? [
+                        "border-orange-500/30 hover:bg-orange-500/10",
+                        "hover:border-orange-500/50 text-orange-400",
+                      ]
                     : ["hover:bg-zinc-800/50 hover:border-zinc-700"]
                 )}
                 onMouseDown={(e) => {
@@ -1903,15 +1934,26 @@ export function AiSdkChatPanel({
                   stopRecording();
                 }}
                 disabled={isLoading}
-                title={isRecording ? "Release to stop recording" : "Hold to record"}
+                title={
+                  isRecording
+                    ? "Release to stop recording"
+                    : permissionState === "denied"
+                    ? "Microphone access denied - Click to grant permission"
+                    : permissionState === "prompt"
+                    ? "Hold to record (will request microphone access)"
+                    : "Hold to record"
+                }
               >
                 {isRecording ? (
                   <MicOff className="h-4 w-4 text-white" />
                 ) : (
-                  <Mic className="h-4 w-4" />
+                  <Mic className={cn("h-4 w-4", permissionState === "denied" && "text-orange-400")} />
                 )}
                 {isRecording && (
                   <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full animate-pulse border border-white" />
+                )}
+                {permissionState === "denied" && !isRecording && (
+                  <span className="absolute -top-1 -right-1 h-2 w-2 bg-orange-500 rounded-full border border-white" />
                 )}
               </Button>
 

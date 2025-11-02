@@ -65,30 +65,18 @@ export const ConnectionStatusIndicator: React.FC = () => {
         });
       }
 
-      // Check ElevenLabs TTS service
+      // Check ElevenLabs TTS service via health API
       try {
-        const elevenLabsApiKey = process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY;
-        if (!elevenLabsApiKey) {
-          newStatuses.push({
-            type: "disconnected",
-            service: "ElevenLabs",
-            lastChecked: new Date(),
-          });
-        } else {
-          // Test ElevenLabs API with a quick user info request
-          const elevenLabsTest = await fetch("https://api.elevenlabs.io/v1/user", {
-            method: "GET",
-            headers: {
-              "xi-api-key": elevenLabsApiKey,
-            },
-          });
-          newStatuses.push({
-            type: elevenLabsTest.ok ? "connected" : "error",
-            service: "ElevenLabs",
-            lastChecked: new Date(),
-          });
-        }
-      } catch {
+        const elevenLabsTest = await fetch("/api/elevenlabs/health", {
+          method: "GET",
+        });
+        newStatuses.push({
+          type: elevenLabsTest.ok ? "connected" : "disconnected",
+          service: "ElevenLabs",
+          lastChecked: new Date(),
+        });
+      } catch (error) {
+        console.error("ElevenLabs health check error:", error);
         newStatuses.push({
           type: "disconnected",
           service: "ElevenLabs",

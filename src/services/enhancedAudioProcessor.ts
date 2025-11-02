@@ -12,6 +12,7 @@
  */
 
 import { /* audioProcessor, AudioFeatures, */ AudioMetrics } from "./realTimeAudioProcessor"; // audioProcessor and AudioFeatures unused
+import { getElevenLabsApiKey, getOpenAIApiKey } from "@/config/apiKeys";
 
 // Types for the enhanced pipeline
 export interface VoiceIsolationResult {
@@ -72,11 +73,9 @@ export class EnhancedAudioProcessor {
   private isProcessing = false;
   private processingStartTime = 0;
 
-  // API keys from environment
-  private readonly elevenLabsApiKey =
-    process.env.ELEVENLABS_API_KEY || process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY;
-  private readonly openAiApiKey =
-    process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+  // API keys from centralized config
+  private readonly elevenLabsApiKey = getElevenLabsApiKey();
+  private readonly openAiApiKey = getOpenAIApiKey();
 
   // Processing statistics
   private stats = {
