@@ -4,6 +4,9 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
+  // Load environment variables from .env.local for tests
+  envDir: ".",
+  envPrefix: ["NEXT_PUBLIC_", "SUPABASE_", "OPENAI_"],
   test: {
     // Environment - use 'node' for service/API tests, 'jsdom' for React component tests
     environment: "node",
