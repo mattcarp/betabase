@@ -1,10 +1,16 @@
 /**
- * Optimized Supabase Vector Service
- * Uses HNSW indexes and optimized search strategies for faster responses
+ * SIAM Optimized Supabase Vector Service
+ * 
+ * Multi-tenant optimized vector operations for SIAM testing platform.
+ * Uses HNSW indexes and optimized search strategies for faster responses.
  * Performance: 5-10x faster than IVFFlat implementation
+ * 
+ * CRITICAL DISTINCTION:
+ * - SIAM = Our app (this testing/knowledge platform)
+ * - AOMA/Alexandria/etc = Apps under test
  */
 
-import { supabase, VectorSearchResult, handleSupabaseError } from "@/lib/supabase";
+import { supabase, VectorSearchResult, handleSupabaseError, DEFAULT_APP_CONTEXT } from "@/lib/supabase";
 // import OpenAI from "openai";
 import SupabaseVectorService from "./supabaseVectorService";
 
@@ -17,18 +23,32 @@ export class OptimizedSupabaseVectorService extends SupabaseVectorService {
   async searchVectorsFast(
     query: string,
     options: {
+      organization: string;
+      division: string;
+      app_under_test: string;
       matchCount?: number;
       sourceTypes?: string[];
-    } = {}
+    }
   ): Promise<VectorSearchResult[]> {
-    const { matchCount = 10, sourceTypes = null } = options;
+    const {
+      organization,
+      division,
+      app_under_test,
+      matchCount = 10,
+      sourceTypes = null
+    } = options;
 
     try {
       // Generate embedding for the query
       const queryEmbedding = await this.generateEmbedding(query);
 
-      // Use the optimized fast search function
-      const { data, error } = await supabase.rpc("match_aoma_vectors_fast", {
+      console.log(`🚀 Fast vector search: ${organization}/${division}/${app_under_test}`);
+
+      // Use the optimized fast search function with multi-tenant parameters
+      const { data, error } = await supabase.rpc("match_siam_vectors_fast", {
+        p_organization: organization,
+        p_division: division,
+        p_app_under_test: app_under_test,
         query_embedding: queryEmbedding,
         match_count: matchCount,
         filter_source_types: sourceTypes,
@@ -52,13 +72,24 @@ export class OptimizedSupabaseVectorService extends SupabaseVectorService {
   async smartSearch(
     query: string,
     options: {
+      organization: string;
+      division: string;
+      app_under_test: string;
       matchThreshold?: number;
       matchCount?: number;
       sourceTypes?: string[];
       mode?: "fast" | "accurate" | "auto";
-    } = {}
+    }
   ): Promise<VectorSearchResult[]> {
-    const { matchThreshold = 0.50, matchCount = 10, sourceTypes = null, mode = "auto" } = options;
+    const {
+      organization,
+      division,
+      app_under_test,
+      matchThreshold = 0.50,
+      matchCount = 10,
+      sourceTypes = null,
+      mode = "auto"
+    } = options;
 
     // Decision logic for search strategy
     const useFastSearch =
@@ -67,12 +98,18 @@ export class OptimizedSupabaseVectorService extends SupabaseVectorService {
     if (useFastSearch) {
       // Use fast HNSW search without threshold
       return this.searchVectorsFast(query, {
+        organization,
+        division,
+        app_under_test,
         matchCount,
         sourceTypes,
       });
     } else {
       // Use standard search with threshold filtering
       return this.searchVectors(query, {
+        organization,
+        division,
+        app_under_test,
         matchThreshold,
         matchCount,
         sourceTypes,
@@ -87,22 +124,37 @@ export class OptimizedSupabaseVectorService extends SupabaseVectorService {
   async batchSearch(
     queries: string[],
     options: {
+      organization: string;
+      division: string;
+      app_under_test: string;
       matchCount?: number;
       sourceTypes?: string[];
       mode?: "fast" | "accurate";
-    } = {}
+    }
   ): Promise<VectorSearchResult[][]> {
-    const { matchCount = 10, sourceTypes = null, mode = "fast" } = options;
+    const {
+      organization,
+      division,
+      app_under_test,
+      matchCount = 10,
+      sourceTypes = null,
+      mode = "fast"
+    } = options;
 
     try {
+      console.log(`📦 Batch search (${queries.length} queries): ${organization}/${division}/${app_under_test}`);
+
       // Generate embeddings in parallel
       const embeddings = await Promise.all(queries.map((q) => this.generateEmbedding(q)));
 
-      // Execute searches in parallel
+      // Execute searches in parallel with multi-tenant parameters
       const searchPromises = embeddings.map((embedding) => {
-        const rpcFunction = mode === "fast" ? "match_aoma_vectors_fast" : "match_aoma_vectors";
+        const rpcFunction = mode === "fast" ? "match_siam_vectors_fast" : "match_siam_vectors";
 
         return supabase.rpc(rpcFunction, {
+          p_organization: organization,
+          p_division: division,
+          p_app_under_test: app_under_test,
           query_embedding: embedding,
           match_count: matchCount,
           filter_source_types: sourceTypes,

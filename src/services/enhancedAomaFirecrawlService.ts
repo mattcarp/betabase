@@ -1,7 +1,13 @@
 /**
- * Enhanced AOMA Firecrawl Service with LLM Summaries
+ * SIAM Enhanced AOMA Firecrawl Service with LLM Summaries
  * 
- * Extends base aomaFirecrawlService with:
+ * Crawls AOMA (app under test) and stores enhanced content in SIAM's multi-tenant vector store.
+ * 
+ * CRITICAL DISTINCTION:
+ * - SIAM = Our app (this testing/knowledge platform)
+ * - AOMA = App Under Test (Sony Music's Digital Operations app)
+ * 
+ * Enhancements over base service:
  * - AI-generated page summaries (GPT-4o-mini)
  * - Header structure extraction
  * - Embedding optimization (summary + structure + content)
@@ -14,7 +20,7 @@ import FirecrawlApp from "@mendable/firecrawl-js";
 import { aomaStageAuthenticator } from "./aomaStageAuthenticator";
 import { openai } from "@ai-sdk/openai";
 import { embed } from "ai";
-import { supabase } from "../lib/supabase";
+import { supabase, DEFAULT_APP_CONTEXT } from "../lib/supabase";
 import OpenAI from "openai";
 
 // Use shared Supabase client
@@ -298,16 +304,24 @@ ${markdown.substring(0, 6000)}
       const embeddingDuration = Date.now() - embeddingStart;
       console.log(`   ✅ Embedding generated in ${embeddingDuration}ms`);
 
-      // Store in Supabase with rich metadata
+      // Store in SIAM's multi-tenant vector store with rich metadata
+      console.log(`   💾 Storing to: ${DEFAULT_APP_CONTEXT.organization}/${DEFAULT_APP_CONTEXT.division}/${DEFAULT_APP_CONTEXT.app_under_test}`);
+      
       const { error: dbError } = await getSupabase()
-        .from("aoma_unified_vectors")
+        .from("siam_vectors")
         .upsert(
           {
+            organization: DEFAULT_APP_CONTEXT.organization,
+            division: DEFAULT_APP_CONTEXT.division,
+            app_under_test: DEFAULT_APP_CONTEXT.app_under_test,
             source_type: "firecrawl",
             source_id: fullUrl,
             content: markdown,
             embedding: embedding,
             metadata: {
+              // Multi-tenant context
+              crawl_source: "aoma", // Preserve AOMA context in metadata
+
               // Core
               url: fullUrl,
               title: result.metadata?.title || this.extractTitleFromUrl(fullUrl),
@@ -340,7 +354,7 @@ ${markdown.substring(0, 6000)}
             updated_at: new Date().toISOString(),
           },
           {
-            onConflict: "source_type,source_id",
+            onConflict: "organization,division,app_under_test,source_type,source_id", // Multi-tenant unique constraint
           }
         );
 
