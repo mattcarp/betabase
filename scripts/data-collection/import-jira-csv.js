@@ -116,7 +116,7 @@ function createEmbeddingText(ticket) {
 }
 
 /**
- * Upsert tickets to database
+ * Upsert tickets to database (manual check-then-insert/update approach)
  */
 async function upsertTickets(tickets) {
   console.log(`\n💾 Upserting ${tickets.length} tickets to database...`);
@@ -128,27 +128,61 @@ async function upsertTickets(tickets) {
   for (let i = 0; i < tickets.length; i += batchSize) {
     const batch = tickets.slice(i, i + batchSize);
 
-    const { data, error } = await supabase
+    // Check which tickets already exist
+    const externalIds = batch.map((t) => t.external_id);
+    const { data: existing } = await supabase
       .from("jira_tickets")
-      .upsert(batch, {
-        onConflict: "external_id",
-        ignoreDuplicates: false,
-      })
-      .select();
+      .select("id, external_id")
+      .in("external_id", externalIds);
 
-    if (error) {
-      console.error(`❌ Error upserting batch ${i}-${i + batch.length}:`, error);
-      continue;
+    const existingMap = new Map((existing || []).map((t) => [t.external_id, t.id]));
+    
+    // Split into new and existing tickets
+    const newTickets = batch.filter((t) => !existingMap.has(t.external_id));
+    const existingTickets = batch.filter((t) => existingMap.has(t.external_id));
+
+    // Insert new tickets
+    if (newTickets.length > 0) {
+      const { data, error } = await supabase
+        .from("jira_tickets")
+        .insert(newTickets)
+        .select();
+
+      if (error) {
+        console.error(`❌ Error inserting new tickets:`, error);
+      } else {
+        inserted += data?.length || 0;
+      }
     }
 
-    const batchInserted = data?.length || 0;
-    inserted += batchInserted;
+    // Update existing tickets
+    for (const ticket of existingTickets) {
+      const ticketId = existingMap.get(ticket.external_id);
+      const { error } = await supabase
+        .from("jira_tickets")
+        .update({
+          title: ticket.title,
+          description: ticket.description,
+          status: ticket.status,
+          priority: ticket.priority,
+          created_at: ticket.created_at,
+          updated_at: ticket.updated_at,
+          metadata: ticket.metadata,
+        })
+        .eq("id", ticketId);
 
-    console.log(`   ✓ Processed ${i + batch.length}/${tickets.length} tickets`);
+      if (error) {
+        console.error(`❌ Error updating ${ticket.external_id}:`, error.message);
+      } else {
+        updated++;
+      }
+    }
+
+    console.log(`   ✓ Processed ${i + batch.length}/${tickets.length} tickets (${newTickets.length} new, ${existingTickets.length} updated)`);
   }
 
-  console.log(`✅ Upserted ${inserted} tickets`);
-  return inserted;
+  console.log(`✅ Inserted ${inserted} new tickets, updated ${updated} existing tickets`);
+  return inserted + updated;
 }
 
 /**
