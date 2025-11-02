@@ -1,8 +1,18 @@
+/**
+ * SIAM AOMA Firecrawl Service
+ * 
+ * Crawls and stores content from AOMA (the app under test) into SIAM's multi-tenant vector store.
+ * 
+ * CRITICAL DISTINCTION:
+ * - SIAM = Our app (this testing/knowledge platform)
+ * - AOMA = App Under Test (Sony Music's Digital Operations app)
+ */
+
 import FirecrawlApp from "@mendable/firecrawl-js";
 import { aomaStageAuthenticator } from "./aomaStageAuthenticator";
 import { openai } from "@ai-sdk/openai";
 import { embed } from "ai";
-import { supabase } from "../lib/supabase";
+import { supabase, DEFAULT_APP_CONTEXT } from "../lib/supabase";
 
 // Use shared Supabase client to avoid multiple GoTrueClient instances
 function getSupabase() {
@@ -263,20 +273,29 @@ export class AomaFirecrawlService {
   }
 
   /**
-   * Store processed content in Supabase vector store
+   * Store processed content in SIAM's multi-tenant vector store
+   * Content from AOMA (app under test) is tagged with Sony Music / Digital Operations / AOMA hierarchy
    */
   private async storeInVectorDatabase(content: ProcessedContent): Promise<void> {
-    const { error } = await getSupabase().from("aoma_unified_vectors").upsert(
+    console.log(`💾 Storing AOMA content: ${DEFAULT_APP_CONTEXT.organization}/${DEFAULT_APP_CONTEXT.division}/${DEFAULT_APP_CONTEXT.app_under_test}`);
+
+    const { error } = await getSupabase().from("siam_vectors").upsert(
       {
+        organization: DEFAULT_APP_CONTEXT.organization,
+        division: DEFAULT_APP_CONTEXT.division,
+        app_under_test: DEFAULT_APP_CONTEXT.app_under_test,
         content: content.content,
         embedding: content.embedding,
-        source_type: "aoma_docs",
+        source_type: "firecrawl", // Changed from "aoma_docs" to match standard source types
         source_id: content.url,
-        metadata: content.metadata,
+        metadata: {
+          ...content.metadata,
+          crawl_source: "aoma", // Preserve AOMA context in metadata
+        },
         updated_at: new Date().toISOString(),
       },
       {
-        onConflict: "source_id",
+        onConflict: "organization,division,app_under_test,source_type,source_id", // Multi-tenant unique constraint
       }
     );
 

@@ -1,15 +1,22 @@
 /**
- * Deduplication Service for Vector Store
+ * SIAM Deduplication Service for Multi-Tenant Vector Store
+ *
+ * CRITICAL DISTINCTION:
+ * - SIAM = Our app (this testing/knowledge platform)
+ * - AOMA/Alexandria/etc = Apps under test
+ *
+ * Deduplication operates WITHIN each tenant context (organization/division/app_under_test).
+ * Duplicates are checked per tenant, not globally.
  *
  * Handles:
  * - Content hash deduplication
  * - Semantic similarity deduplication
  * - URL normalization
- * - Cross-source deduplication
+ * - Cross-source deduplication (within tenant)
  */
 
 import crypto from "crypto";
-import { supabase } from "@/lib/supabase";
+import { supabase, DEFAULT_APP_CONTEXT } from "@/lib/supabase";
 // import { openai } from "@ai-sdk/openai";
 // import { embed } from "ai";
 
@@ -39,16 +46,24 @@ export interface DedupResult {
 
 export class DeduplicationService {
   /**
-   * Check if content is a duplicate before inserting
+   * Check if content is a duplicate before inserting (within tenant context)
+   * Deduplication is scoped to organization/division/app_under_test
    */
   async checkDuplicate(
     content: string,
     sourceType: string,
     sourceId: string,
-    url?: string,
-    embedding?: number[],
-    config: DedupConfig = {}
+    options: {
+      organization: string;
+      division: string;
+      app_under_test: string;
+      url?: string;
+      embedding?: number[];
+      config?: DedupConfig;
+    }
   ): Promise<DedupResult> {
+    const { organization, division, app_under_test, url, embedding, config = {} } = options;
+    
     const {
       contentHashMatch = true,
       semanticThreshold = 0.95,
@@ -56,8 +71,16 @@ export class DeduplicationService {
       normalizeUrls = true,
     } = config;
 
+    console.log(`🔍 Checking duplicates in: ${organization}/${division}/${app_under_test}`);
+
     // 1. Check source_id first (fastest check)
-    const sourceIdCheck = await this.checkBySourceId(sourceType, sourceId);
+    const sourceIdCheck = await this.checkBySourceId(
+      sourceType,
+      sourceId,
+      organization,
+      division,
+      app_under_test
+    );
     if (sourceIdCheck.isDuplicate) {
       return {
         ...sourceIdCheck,
@@ -70,6 +93,9 @@ export class DeduplicationService {
       const contentHash = this.generateContentHash(content);
       const hashCheck = await this.checkByContentHash(
         contentHash,
+        organization,
+        division,
+        app_under_test,
         crossSource ? undefined : sourceType
       );
       if (hashCheck.isDuplicate) {
@@ -80,7 +106,13 @@ export class DeduplicationService {
     // 3. Check URL if provided (fast)
     if (url && normalizeUrls) {
       const normalizedUrl = this.normalizeUrl(url);
-      const urlCheck = await this.checkByUrl(normalizedUrl, crossSource ? undefined : sourceType);
+      const urlCheck = await this.checkByUrl(
+        normalizedUrl,
+        organization,
+        division,
+        app_under_test,
+        crossSource ? undefined : sourceType
+      );
       if (urlCheck.isDuplicate) {
         return urlCheck;
       }
@@ -91,6 +123,9 @@ export class DeduplicationService {
       const semanticCheck = await this.checkBySemantic(
         embedding,
         semanticThreshold,
+        organization,
+        division,
+        app_under_test,
         crossSource ? undefined : sourceType
       );
       if (semanticCheck.isDuplicate) {
@@ -103,13 +138,22 @@ export class DeduplicationService {
   }
 
   /**
-   * Check by source_type + source_id (UNIQUE constraint check)
+   * Check by source_type + source_id (UNIQUE constraint check within tenant)
    */
-  private async checkBySourceId(sourceType: string, sourceId: string): Promise<DedupResult> {
+  private async checkBySourceId(
+    sourceType: string,
+    sourceId: string,
+    organization: string,
+    division: string,
+    app_under_test: string
+  ): Promise<DedupResult> {
     try {
       const { data, error } = await supabase
-        .from("aoma_unified_vectors")
+        .from("siam_vectors")
         .select("id, source_type, source_id, created_at")
+        .eq("organization", organization)
+        .eq("division", division)
+        .eq("app_under_test", app_under_test)
         .eq("source_type", sourceType)
         .eq("source_id", sourceId)
         .single();
@@ -131,13 +175,22 @@ export class DeduplicationService {
   }
 
   /**
-   * Check by content hash
+   * Check by content hash (within tenant)
    */
-  private async checkByContentHash(contentHash: string, sourceType?: string): Promise<DedupResult> {
+  private async checkByContentHash(
+    contentHash: string,
+    organization: string,
+    division: string,
+    app_under_test: string,
+    sourceType?: string
+  ): Promise<DedupResult> {
     try {
       let query = supabase
-        .from("aoma_unified_vectors")
+        .from("siam_vectors")
         .select("id, source_type, source_id, metadata")
+        .eq("organization", organization)
+        .eq("division", division)
+        .eq("app_under_test", app_under_test)
         .eq("metadata->>content_hash", contentHash);
 
       if (sourceType) {
@@ -163,13 +216,22 @@ export class DeduplicationService {
   }
 
   /**
-   * Check by normalized URL
+   * Check by normalized URL (within tenant)
    */
-  private async checkByUrl(normalizedUrl: string, sourceType?: string): Promise<DedupResult> {
+  private async checkByUrl(
+    normalizedUrl: string,
+    organization: string,
+    division: string,
+    app_under_test: string,
+    sourceType?: string
+  ): Promise<DedupResult> {
     try {
       let query = supabase
-        .from("aoma_unified_vectors")
+        .from("siam_vectors")
         .select("id, source_type, source_id, metadata")
+        .eq("organization", organization)
+        .eq("division", division)
+        .eq("app_under_test", app_under_test)
         .eq("metadata->>url", normalizedUrl);
 
       if (sourceType) {
@@ -195,15 +257,21 @@ export class DeduplicationService {
   }
 
   /**
-   * Check by semantic similarity using vector search
+   * Check by semantic similarity using vector search (within tenant)
    */
   private async checkBySemantic(
     embedding: number[],
     threshold: number,
+    organization: string,
+    division: string,
+    app_under_test: string,
     sourceType?: string
   ): Promise<DedupResult> {
     try {
-      const { data, error } = await supabase.rpc("match_aoma_vectors", {
+      const { data, error } = await supabase.rpc("match_siam_vectors", {
+        p_organization: organization,
+        p_division: division,
+        p_app_under_test: app_under_test,
         query_embedding: embedding,
         match_threshold: threshold,
         match_count: 1,
@@ -262,15 +330,18 @@ export class DeduplicationService {
   }
 
   /**
-   * Batch deduplication check for existing vectors
+   * Batch deduplication check for existing vectors (within tenant)
    * Returns IDs of duplicates to remove
    */
   async findDuplicatesInDatabase(
     options: {
+      organization: string;
+      division: string;
+      app_under_test: string;
       sourceType?: string;
       semanticThreshold?: number;
       keepNewest?: boolean;
-    } = {}
+    }
   ): Promise<{
     duplicates: Array<{
       keepId: string;
@@ -279,7 +350,9 @@ export class DeduplicationService {
     }>;
     totalDuplicates: number;
   }> {
-    const { sourceType, semanticThreshold = 0.95, keepNewest = true } = options;
+    const { organization, division, app_under_test, sourceType, semanticThreshold = 0.95, keepNewest = true } = options;
+
+    console.log(`🔍 Finding duplicates in: ${organization}/${division}/${app_under_test}`);
 
     const duplicates: Array<{
       keepId: string;
@@ -287,10 +360,13 @@ export class DeduplicationService {
       reason: string;
     }> = [];
 
-    // Get all vectors
+    // Get all vectors within tenant
     let query = supabase
-      .from("aoma_unified_vectors")
-      .select("id, content, source_type, source_id, metadata, created_at, embedding");
+      .from("siam_vectors")
+      .select("id, content, source_type, source_id, metadata, created_at, embedding")
+      .eq("organization", organization)
+      .eq("division", division)
+      .eq("app_under_test", app_under_test);
 
     if (sourceType) {
       query = query.eq("source_type", sourceType);
@@ -342,11 +418,13 @@ export class DeduplicationService {
     let removed = 0;
     let errors = 0;
 
+    console.log(`🗑️  Removing ${duplicateIds.length} duplicates...`);
+
     // Delete in batches of 100
     for (let i = 0; i < duplicateIds.length; i += 100) {
       const batch = duplicateIds.slice(i, i + 100);
 
-      const { error } = await supabase.from("aoma_unified_vectors").delete().in("id", batch);
+      const { error } = await supabase.from("siam_vectors").delete().in("id", batch);
 
       if (error) {
         errors += batch.length;
