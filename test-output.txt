@@ -1,0 +1,40 @@
+
+ RUN  v4.0.6 /Users/matt/Documents/projects/siam
+      UI started at http://localhost:51204/__vitest__/
+
+stdout | tests/integration/multi-tenant-vector-store.test.ts
+✅ NO-MOCKS enforcement active. All mock functions will throw errors.
+
+stderr | tests/integration/multi-tenant-vector-store.test.ts
+⚠️  Supabase not configured - vector search features disabled: { url: true, key: false }
+
+ ↓ tests/integration/multi-tenant-vector-store.test.ts:31:5 > Multi-Tenant Vector Store - REAL Integration Tests > Database Schema Verification > should verify siam_vectors table exists with multi-tenant columns
+ ↓ tests/integration/multi-tenant-vector-store.test.ts:50:5 > Multi-Tenant Vector Store - REAL Integration Tests > Database Schema Verification > should verify RPC functions exist
+ ↓ tests/integration/multi-tenant-vector-store.test.ts:82:5 > Multi-Tenant Vector Store - REAL Integration Tests > Multi-Tenant Data Operations > should upsert a vector with full 3-level hierarchy
+ ↓ tests/integration/multi-tenant-vector-store.test.ts:97:5 > Multi-Tenant Vector Store - REAL Integration Tests > Multi-Tenant Data Operations > should search vectors within the correct tenant
+ ↓ tests/integration/multi-tenant-vector-store.test.ts:117:5 > Multi-Tenant Vector Store - REAL Integration Tests > Multi-Tenant Data Operations > should NOT find vectors from different tenants
+ ↓ tests/integration/multi-tenant-vector-store.test.ts:132:5 > Multi-Tenant Vector Store - REAL Integration Tests > Multi-Tenant Data Operations > should delete vectors by source within correct tenant
+ ↓ tests/integration/multi-tenant-vector-store.test.ts:146:5 > Multi-Tenant Vector Store - REAL Integration Tests > Default Context Constants > should use DEFAULT_APP_CONTEXT correctly
+ ↓ tests/integration/multi-tenant-vector-store.test.ts:152:5 > Multi-Tenant Vector Store - REAL Integration Tests > Default Context Constants > should have SONY_MUSIC constant structure
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/multi-tenant-vector-store.test.ts:12:1 > Multi-Tenant Vector Store - REAL Integration Tests
+Error: ❌ Supabase not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env
+Cannot run integration tests without real database connection.
+ ❯ tests/integration/multi-tenant-vector-store.test.ts:21:13
+     19| 
+     20|     if (!url || !key || url.includes('placeholder') || key.includes('p…
+     21|       throw new Error(
+       |             ^
+     22|         '❌ Supabase not configured. Set NEXT_PUBLIC_SUPABASE_URL and N…
+     23|         'Cannot run integration tests without real database connection…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 skipped (8)
+   Start at  14:19:06
+   Duration  411ms (transform 35ms, setup 16ms, collect 131ms, tests 1ms, environment 0ms, prepare 4ms)
+
