@@ -1,6 +1,6 @@
 -- Multi-Tenant Vector Store Restructuring (3-Level Hierarchy)
 -- Transforms AOMA-specific schema into SIAM enterprise multi-tenant architecture
--- Date: November 1, 2025
+-- Date: November 2, 2025
 -- 
 -- CRITICAL DISTINCTION:
 -- - SIAM = Our app (the testing/knowledge management platform)
