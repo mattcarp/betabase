@@ -1,8 +1,119 @@
 # Vector Store Architecture Restructuring - Master Plan
 
 **Created**: October 30, 2025  
-**Last Updated**: October 30, 2025  
-**Status**: Phase 1 Complete ✅ | Tier 1 Complete ✅ | Tier 2 Planned 📋 | Tier 3 Inventory Complete 📊
+**Last Updated**: November 2, 2025  
+**Status**: Multi-Tenant Complete ✅ | Phase 1 Complete ✅ | Tier 1 Complete ✅ | Tier 2 Planned 📋 | Tier 3 Inventory Complete 📊
+
+---
+
+## 🏢 **Multi-Tenant Architecture** (COMPLETE) ✅
+
+**Date**: November 2, 2025  
+**Status**: ✅ **FULLY IMPLEMENTED & TESTED**
+
+### Problem Statement
+
+**Original Issue**: The vector store was named and structured as if it belonged to AOMA (the app under test), not SIAM (our testing platform). This created confusion and prevented multi-tenant use cases.
+
+**Critical Distinction**:
+- **SIAM** = Our app (the testing/knowledge management platform)
+- **AOMA** = App Under Test (Sony Music's Digital Operations app - one of potentially many apps we test)
+
+### What Was Implemented
+
+**1. Database Schema Restructuring** (`supabase/migrations/005_multi_tenant_restructure_fixed.sql`)
+- Renamed `aoma_unified_vectors` → `siam_vectors` (clarifies ownership)
+- Added 3-level hierarchy: `organization` → `division` → `app_under_test`
+- Updated all constraints to multi-tenant unique keys
+- Migrated all functions: `match_aoma_vectors` → `match_siam_vectors`
+- Added HNSW indexes partitioned by tenant
+- Pre-populated existing data as: `sony-music` / `digital-operations` / `aoma`
+
+**2. TypeScript Type System** (`src/lib/supabase.ts`)
+```typescript
+export interface SIAMVector {
+  id: string;
+  organization: string;    // 'sony-music', etc.
+  division: string;        // 'digital-operations', 'legal', etc.
+  app_under_test: string;  // 'aoma', 'alexandria', 'confluence', etc.
+  content: string;
+  embedding?: number[];
+  source_type: string;
+  source_id: string;
+  metadata: Record<string, any>;
+  created_at: string;
+  updated_at: string;
+}
+
+// Convenience constants
+export const DEFAULT_APP_CONTEXT = {
+  organization: 'sony-music',
+  division: 'digital-operations',
+  app_under_test: 'aoma',
+} as const;
+```
+
+**3. Service Layer Updates** (7 files)
+- ✅ `supabaseVectorService.ts` - All methods require org/div/app params
+- ✅ `aomaOrchestrator.ts` - Uses `DEFAULT_APP_CONTEXT`
+- ✅ `knowledgeSearchService.ts` - Multi-tenant filtered queries
+- ✅ `optimizedSupabaseVectorService.ts` - Fast search with tenant context
+- ✅ `aomaFirecrawlService.ts` - Stores with multi-tenant fields
+- ✅ `enhancedAomaFirecrawlService.ts` - LLM-enhanced crawler with tenant context
+- ✅ `deduplicationService.ts` - Deduplication scoped to tenant
+
+**4. Real Integration Tests** (`tests/integration/multi-tenant-vector-store.test.ts`)
+- ✅ 8/8 tests passing
+- ✅ **NO MOCKS** - Uses actual production Supabase
+- ✅ Verified tenant isolation (different org = 0 results)
+- ✅ Confirmed vector search, upsert, delete work correctly
+
+**5. Test File Renames** (9 files)
+- `aoma-performance-validation.spec.ts` → `siam-aoma-performance-validation.spec.ts`
+- `aoma-response-quality.spec.ts` → `siam-aoma-response-quality.spec.ts`
+- All production/performance tests renamed for clarity
+
+### Results
+
+**Tenant Isolation**: ✅ Verified  
+**Data Migration**: ✅ Applied to production  
+**Backward Compatibility**: ✅ `DEFAULT_APP_CONTEXT` ensures zero breaking changes  
+**Test Coverage**: ✅ 8/8 real integration tests passing  
+
+### Multi-Tenant Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   SIAM (Our Platform)                        │
+└────────────────────────┬────────────────────────────────────┘
+                         ↓
+         ┌───────────────┴────────────────┐
+         │     siam_vectors table          │
+         │  (Multi-tenant vector store)    │
+         └────────────┬───────────────────┘
+                      ↓
+        ┌─────────────┴──────────────┐
+        │      organization           │ (e.g., 'sony-music')
+        └─────────────┬──────────────┘
+                      ↓
+           ┌──────────┴───────────┐
+           │       division        │ (e.g., 'digital-operations')
+           └──────────┬───────────┘
+                      ↓
+              ┌───────┴───────────┐
+              │  app_under_test    │ (e.g., 'aoma', 'alexandria')
+              └───────────────────┘
+```
+
+**Current Data**: All existing vectors tagged as:
+- Organization: `sony-music`
+- Division: `digital-operations`
+- App Under Test: `aoma`
+
+**Future Use Cases**:
+- Test Alexandria: `sony-music` / `digital-operations` / `alexandria`
+- Test Confluence: `sony-music` / `it` / `confluence`
+- Other enterprises: `{org}` / `{div}` / `{app}`
 
 ---
 
@@ -593,12 +704,14 @@ Once the Next.js build bug is resolved:
             PARALLEL ↓         ↓ PARALLEL
     ┌───────────────────┐   ┌──────────────────────────┐
     │  SUPABASE VECTOR  │   │  OPENAI ASSISTANT (MCP)  │
-    │  aoma_unified_     │   │  vs_3dqHL3Wcmt1WrUof0q   │
-    │  vectors           │   │  Via Railway Server      │
+    │  siam_vectors      │   │  vs_3dqHL3Wcmt1WrUof0q   │
+    │  (Multi-Tenant)    │   │  Via Railway Server      │
     │                    │   │                          │
     │  • 15,085 Jira     │   │  • 73 AOMA docs (78MB)   │
     │  • 28 AOMA docs    │   │  • Complete knowledge    │
     │  • <100ms queries  │   │  • 2-5s queries          │
+    │                    │   │                          │
+    │  SIAM = Our app    │   │  AOMA = App under test   │
     └───────────────────┘   └──────────────────────────┘
                     ↓         ↓
                     └────┬────┘
