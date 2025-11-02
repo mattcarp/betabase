@@ -15,6 +15,7 @@ export function useElevenLabsSTT(options: UseElevenLabsSTTOptions = {}) {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [interimTranscript, setInterimTranscript] = useState("");
+  const [permissionState, setPermissionState] = useState<"prompt" | "granted" | "denied">("prompt");
   const recognitionRef = useRef<any>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -95,8 +96,39 @@ export function useElevenLabsSTT(options: UseElevenLabsSTTOptions = {}) {
 
   const startRecording = useCallback(async () => {
     try {
-      // Request microphone permission
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Check if microphone is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        const error = new Error(
+          "Microphone not available. Please ensure you're using a secure connection (HTTPS) and your browser supports audio recording."
+        );
+        options.onError?.(error);
+        return;
+      }
+
+      // Request microphone permission with helpful error messages
+      let stream: MediaStream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch (permissionError: any) {
+        let errorMessage = "Failed to access microphone. ";
+        
+        if (permissionError.name === "NotAllowedError" || permissionError.name === "PermissionDeniedError") {
+          errorMessage += "Please grant microphone permission in your browser settings and try again.";
+        } else if (permissionError.name === "NotFoundError") {
+          errorMessage += "No microphone found. Please connect a microphone and try again.";
+        } else if (permissionError.name === "NotReadableError") {
+          errorMessage += "Microphone is already in use by another application.";
+        } else if (permissionError.name === "SecurityError") {
+          errorMessage += "Please ensure you're using HTTPS or localhost.";
+        } else {
+          errorMessage += permissionError.message || "Unknown error occurred.";
+        }
+
+        const error = new Error(errorMessage);
+        error.name = permissionError.name;
+        options.onError?.(error);
+        return;
+      }
 
       // Start Web Speech API recognition
       if (recognitionRef.current) {
@@ -134,7 +166,10 @@ export function useElevenLabsSTT(options: UseElevenLabsSTTOptions = {}) {
       options.onStart?.();
     } catch (error) {
       console.error("Failed to start recording:", error);
-      options.onError?.(error as Error);
+      const friendlyError = new Error(
+        error instanceof Error ? error.message : "An unexpected error occurred while starting recording."
+      );
+      options.onError?.(friendlyError);
     }
   }, [options]);
 
@@ -168,14 +203,42 @@ export function useElevenLabsSTT(options: UseElevenLabsSTTOptions = {}) {
     setInterimTranscript("");
   }, []);
 
+  const checkPermission = useCallback(async (): Promise<boolean> => {
+    try {
+      // Check if permissions API is available
+      if (navigator.permissions && navigator.permissions.query) {
+        const result = await navigator.permissions.query({ name: "microphone" as PermissionName });
+        setPermissionState(result.state);
+        return result.state === "granted";
+      }
+      
+      // Fallback: try to get a stream (will prompt if needed)
+      // This is only for checking, so we immediately release it
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach(track => track.stop());
+        setPermissionState("granted");
+        return true;
+      } catch {
+        setPermissionState("denied");
+        return false;
+      }
+    } catch (error) {
+      console.error("Failed to check microphone permission:", error);
+      return false;
+    }
+  }, []);
+
   return {
     isRecording,
     transcript,
     interimTranscript,
+    permissionState,
     startRecording,
     stopRecording,
     toggleRecording,
     clearTranscript,
+    checkPermission,
     fullTranscript: transcript + interimTranscript,
   };
 }

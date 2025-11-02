@@ -1,0 +1,261 @@
+
+Running 1 test using 1 worker
+
+[1A[2K(node:65751) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:65751) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K[1/1] [chromium] › tests/manual/aoma-sophisticated-questions.spec.ts:103:7 › SIAM Chat - Sophisticated AOMA Questions › should answer sophisticated AOMA knowledge questions with natural language
+[1A[2K[chromium] › tests/manual/aoma-sophisticated-questions.spec.ts:103:7 › SIAM Chat - Sophisticated AOMA Questions › should answer sophisticated AOMA knowledge questions with natural language
+
+🎯 Starting Sophisticated AOMA Chat Test...
+
+
+[1A[2K
+======================================================================
+
+[1A[2K📚 Category: Asset Administration
+
+[1A[2K❓ Question: What is the EOM Message Sender used for in AOMA?
+
+[1A[2K======================================================================
+
+[1A[2K
+📝 Response Preview: ...
+
+
+[1A[2K❌ FAIL - Missing expected keywords
+
+[1A[2K
+======================================================================
+
+[1A[2K📚 Category: Export Management
+
+[1A[2K❓ Question: How do I track export status and delivery in AOMA?
+
+[1A[2K======================================================================
+
+[1A[2K
+📝 Response Preview: ...
+
+
+[1A[2K❌ FAIL - Missing expected keywords
+
+[1A[2K
+======================================================================
+
+[1A[2K📚 Category: Product Linking
+
+[1A[2K❓ Question: What is the Link Attempts feature in AOMA?
+
+[1A[2K======================================================================
+
+[1A[2K
+📝 Response Preview: ...
+
+
+[1A[2K❌ FAIL - Missing expected keywords
+
+[1A[2K
+======================================================================
+
+[1A[2K📚 Category: Event Tracking
+
+[1A[2K❓ Question: How can I view master event history in AOMA?
+
+[1A[2K======================================================================
+
+[1A[2K
+📝 Response Preview: ...
+
+
+[1A[2K❌ FAIL - Missing expected keywords
+
+[1A[2K
+======================================================================
+
+[1A[2K📚 Category: Quality Control
+
+[1A[2K❓ Question: What tools does AOMA provide for managing QC providers?
+
+[1A[2K======================================================================
+
+[1A[2K
+📝 Response Preview: ...
+
+
+[1A[2K❌ FAIL - Missing expected keywords
+
+[1A[2K
+======================================================================
+
+[1A[2K📚 Category: Media Tools
+
+[1A[2K❓ Question: How do I use the Media Batch Converter in AOMA?
+
+[1A[2K======================================================================
+
+[1A[2K
+📝 Response Preview: ...
+
+
+[1A[2K❌ FAIL - Missing expected keywords
+
+[1A[2K
+======================================================================
+
+[1A[2K📚 Category: Archive Management
+
+[1A[2K❓ Question: What is the Digital Archive Batch Export feature?
+
+[1A[2K======================================================================
+
+[1A[2K
+📝 Response Preview: ...
+
+
+[1A[2K❌ FAIL - Missing expected keywords
+
+[1A[2K
+======================================================================
+
+[1A[2K📚 Category: Search Tools
+
+[1A[2K❓ Question: How do I search for artists in AOMA?
+
+[1A[2K======================================================================
+
+[1A[2K
+📝 Response Preview: ...
+
+
+[1A[2K❌ FAIL - Missing expected keywords
+
+[1A[2K
+======================================================================
+
+[1A[2K📚 Category: Workflow Management
+
+[1A[2K❓ Question: What workflows does AOMA support for digital assets?
+
+[1A[2K======================================================================
+
+[1A[2K
+📝 Response Preview: ...
+
+
+[1A[2K❌ FAIL - Missing expected keywords
+
+[1A[2K
+======================================================================
+
+[1A[2K📚 Category: Integrations
+
+[1A[2K❓ Question: Tell me about AOMA's integration with Sony Ci
+
+[1A[2K======================================================================
+
+[1A[2K
+📝 Response Preview: ...
+
+
+[1A[2K❌ FAIL - Missing expected keywords
+
+[1A[2K
+======================================================================
+
+[1A[2K📊 Testing Statistics Questions (should admit limitations gracefully)
+
+[1A[2K======================================================================
+
+[1A[2K
+❓ How many Jira tickets are related to AOMA?
+
+[1A[2K
+📝 Response: ...
+
+
+[1A[2K⚠️  UNCLEAR - Response unclear
+
+[1A[2K
+❓ What percentage of AOMA tickets are closed?
+
+[1A[2K
+📝 Response: ...
+
+
+[1A[2K⚠️  UNCLEAR - Response unclear
+
+[1A[2K
+======================================================================
+
+[1A[2K📊 TEST RESULTS
+
+[1A[2K======================================================================
+
+[1A[2K✅ Passed: 0
+
+[1A[2K❌ Failed: 10
+
+[1A[2K📈 Success Rate: 0.0%
+
+[1A[2K
+❌ FAILURES:
+
+[1A[2K  1. What is the EOM Message Sender used for in AOMA? - Missing keywords: eom, message, sender, asset
+
+[1A[2K  2. How do I track export status and delivery in AOMA? - Missing keywords: export, status, delivery
+
+[1A[2K  3. What is the Link Attempts feature in AOMA? - Missing keywords: link, attempt, product
+
+[1A[2K  4. How can I view master event history in AOMA? - Missing keywords: master, event, history
+
+[1A[2K  5. What tools does AOMA provide for managing QC providers? - Missing keywords: qc, provider, quality
+
+[1A[2K  6. How do I use the Media Batch Converter in AOMA? - Missing keywords: media, batch, convert
+
+[1A[2K  7. What is the Digital Archive Batch Export feature? - Missing keywords: digital, archive, batch, export
+
+[1A[2K  8. How do I search for artists in AOMA? - Missing keywords: artist, search
+
+[1A[2K  9. What workflows does AOMA support for digital assets? - Missing keywords: workflow, digital, asset
+
+[1A[2K  10. Tell me about AOMA's integration with Sony Ci - Missing keywords: sony, ci, integration
+
+[1A[2K
+📸 Screenshots saved to tests/manual/screenshots/
+
+[1A[2K======================================================================
+
+
+[1A[2K  1) [chromium] › tests/manual/aoma-sophisticated-questions.spec.ts:103:7 › SIAM Chat - Sophisticated AOMA Questions › should answer sophisticated AOMA knowledge questions with natural language 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m0.8[39m
+    Received:    [31m0[39m
+
+      245 |
+      246 |     // Test should pass if > 80% success rate
+    > 247 |     expect(passCount / (passCount + failCount)).toBeGreaterThanOrEqual(0.8);
+          |                                                 ^
+      248 |   });
+      249 | });
+      250 |
+        at /Users/matt/Documents/projects/siam/tests/manual/aoma-sophisticated-questions.spec.ts:247:49
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/manual-aoma-sophisticated--162db-tions-with-natural-language-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/manual-aoma-sophisticated--162db-tions-with-natural-language-chromium/error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests/manual/aoma-sophisticated-questions.spec.ts:103:7 › SIAM Chat - Sophisticated AOMA Questions › should answer sophisticated AOMA knowledge questions with natural language 
+
+  Serving HTML report at http://localhost:64676. Press Ctrl+C to quit.
