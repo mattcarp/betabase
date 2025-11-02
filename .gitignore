@@ -141,3 +141,4 @@ tsconfig.tsbuildinfo
 tmp/theme-screenshots/*.png
 tmp/theme-screenshots/*.jpg
 tmp/theme-screenshots/*.jpeg
+node_modules 2/
