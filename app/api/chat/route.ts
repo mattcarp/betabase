@@ -1,5 +1,6 @@
 import { streamText } from "ai";
 import { createOpenAI } from "@ai-sdk/openai";
+import { createGoogle } from "@ai-sdk/google";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { z } from "zod";
@@ -13,14 +14,22 @@ import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
 
-// Initialize OpenAI provider for Vercel AI SDK (server-side only)
+// Initialize Google AI provider for Gemini (primary chat model)
+const google = createGoogle({
+  apiKey: process.env.GOOGLE_API_KEY!,
+});
+
+// Initialize OpenAI provider for embeddings only
 const openai = createOpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
 });
 
-// Validate API key is configured
+// Validate API keys are configured
+if (!process.env.GOOGLE_API_KEY) {
+  throw new Error("GOOGLE_API_KEY environment variable is required");
+}
 if (!process.env.OPENAI_API_KEY) {
-  throw new Error("OPENAI_API_KEY environment variable is required");
+  throw new Error("OPENAI_API_KEY environment variable is required for embeddings");
 }
 
 // REMOVED: Client-side rate limiting
@@ -69,6 +78,11 @@ const ChatRequestSchema = z.object({
   messages: z.array(MessageSchema).min(1).max(50), // Max 50 messages in history
   model: z
     .enum([
+      // Gemini models (primary for RAG)
+      "gemini-2.5-pro",
+      "gemini-2.5-flash",
+      "gemini-2.5-ultra",
+      // OpenAI models (fallback)
       "gpt-5",
       "gpt-5-pro",
       "gpt-4o",
@@ -76,6 +90,7 @@ const ChatRequestSchema = z.object({
       "o3",
       "o3-pro",
       "o4-mini",
+      // Claude models
       "claude-3-opus",
       "claude-3-sonnet",
       "claude-3-5-sonnet-20241022",
@@ -97,8 +112,8 @@ export async function GET(_req: Request) {
     JSON.stringify({
       status: "ready",
       version: "1.0.0",
-      models: ["gpt-4o", "gpt-4o-mini", "gpt-5"],
-      features: ["streaming", "aoma-context", "knowledge-base"],
+      models: ["gemini-2.5-pro", "gemini-2.5-flash", "gpt-5", "gpt-4o", "gpt-4o-mini"],
+      features: ["streaming", "aoma-context", "knowledge-base", "gemini-2m-context"],
     }),
     {
       status: 200,
@@ -127,6 +142,7 @@ export async function POST(req: Request) {
     console.log("[API] Timestamp:", new Date().toISOString());
     console.log("[API] NODE_ENV:", process.env.NODE_ENV);
     console.log("[API] NEXT_PUBLIC_BYPASS_AUTH:", process.env.NEXT_PUBLIC_BYPASS_AUTH);
+    console.log("[API] GOOGLE_API_KEY present:", !!process.env.GOOGLE_API_KEY);
     console.log("[API] OPENAI_API_KEY present:", !!process.env.OPENAI_API_KEY);
 
     // ========================================
@@ -650,8 +666,14 @@ Respond with ONLY this message:
     // O-series models (o1, o3, o4) don't support temperature - they use fixed reasoning
     const supportsTemperature = !selectedModel.startsWith('o');
 
+    // Determine which provider to use based on model
+    const isGeminiModel = selectedModel.startsWith('gemini-');
+    const modelProvider = isGeminiModel ? google(selectedModel) : openai(selectedModel);
+    
+    console.log(`🤖 Using ${isGeminiModel ? 'Google Gemini' : 'OpenAI'} provider for model: ${selectedModel}`);
+
     const result = streamText({
-      model: openai(selectedModel),
+      model: modelProvider,
       messages: openAIMessages, // Already in correct format after filtering/validation
       system: enhancedSystemPrompt, // Use system parameter instead of adding to messages array
       // Only include temperature for models that support it (not o-series)
@@ -686,7 +708,7 @@ Respond with ONLY this message:
     // Log full error details for debugging
     if (error && typeof error === "object" && "response" in error) {
       const apiError = error as any;
-      console.error("OpenAI API Error Details:", {
+      console.error("AI API Error Details:", {
         status: apiError.status,
         type: apiError.type,
         message: apiError.message,
@@ -697,7 +719,7 @@ Respond with ONLY this message:
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     const errorStr = String(error);
 
-    // Check for specific OpenAI error types
+    // Check for specific AI API error types
     const is429RateLimit =
       errorMessage.includes("429") ||
       errorStr.includes("429") ||
@@ -713,10 +735,10 @@ Respond with ONLY this message:
 
     if (isRateLimitError) {
       userFriendlyMessage =
-        "⚠️ Rate limit reached. GPT-5 has strict rate limits. Please wait 10-20 seconds before trying again.";
+        "⚠️ Rate limit reached. Please wait 10-20 seconds before trying again.";
     } else if (isQuotaError) {
       userFriendlyMessage =
-        "I've reached my OpenAI API quota limit. Please contact support or try again later when the quota resets.";
+        "I've reached my AI API quota limit. Please contact support or try again later when the quota resets.";
     }
 
     // Track error for introspection (disabled - trackRequest no longer exported from introspection)
