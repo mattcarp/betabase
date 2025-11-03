@@ -45,7 +45,9 @@ SIAM uses magic link authentication:
 - **Frontend**: Next.js 14 (App Router), React 18, TypeScript
 - **Styling**: Tailwind CSS, shadcn/ui components
 - **Authentication**: AWS Cognito + Magic Links
+- **AI Models**: Google Gemini 2.5 Pro (primary), OpenAI (embeddings & fallback)
 - **Backend**: Railway (aoma-mesh-mcp server)
+- **Database**: Supabase (vector store for RAG)
 - **Deployment**: Render.com
 
 ### Project Structure
@@ -70,10 +72,21 @@ siam/
 Create `.env.local`:
 
 ```env
+# AI Models
+GOOGLE_API_KEY=your_google_ai_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Authentication
 NEXT_PUBLIC_COGNITO_USER_POOL_ID=your-pool-id
 NEXT_PUBLIC_COGNITO_CLIENT_ID=your-client-id
 NEXT_PUBLIC_AWS_REGION=us-east-2
+
+# Backend
 NEXT_PUBLIC_AOMA_ENDPOINT=https://luminous-dedication-production.up.railway.app
+
+# Database
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
 ```
 
 ### Common Commands
