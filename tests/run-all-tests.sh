@@ -17,6 +17,7 @@ NC='\033[0m' # No Color
 # Test categories
 declare -a test_categories=(
   "Architecture"
+  "Performance"
   "Unit Tests"
   "UI Tests"
   "E2E Tests"
@@ -47,7 +48,21 @@ fi
 ((total_tests++))
 echo ""
 
-# 2. Unit Tests
+# 2. Performance Tests (IMPORTANT - validates chat response times)
+echo -e "${YELLOW}⚡ Running Performance Tests...${NC}"
+if ./tests/performance/run-all-performance-tests.sh; then
+  echo -e "${GREEN}✅ Performance tests passed${NC}"
+  ((passed_tests++))
+else
+  echo -e "${RED}❌ Performance tests FAILED${NC}"
+  echo "   ⚠️  WARNING: Chat response times may be slow!"
+  echo "   Review: docs/PERFORMANCE-BOTTLENECK-ANALYSIS.md"
+  ((failed_tests++))
+fi
+((total_tests++))
+echo ""
+
+# 3. Unit Tests
 echo -e "${YELLOW}🔬 Running Unit Tests...${NC}"
 if pnpm vitest run tests/unit/; then
   echo -e "${GREEN}✅ Unit tests passed${NC}"
@@ -59,7 +74,7 @@ fi
 ((total_tests++))
 echo ""
 
-# 3. UI Tests (Critical chat functionality)
+# 4. UI Tests (Critical chat functionality)
 echo -e "${YELLOW}🖥️  Running UI Tests...${NC}"
 if pnpm playwright test tests/critical/; then
   echo -e "${GREEN}✅ UI tests passed${NC}"
@@ -71,7 +86,7 @@ fi
 ((total_tests++))
 echo ""
 
-# 4. Chat Functionality
+# 5. Chat Functionality
 echo -e "${YELLOW}💬 Running Chat Tests...${NC}"
 if pnpm playwright test tests/ai-chat.spec.ts; then
   echo -e "${GREEN}✅ Chat tests passed${NC}"
@@ -83,7 +98,7 @@ fi
 ((total_tests++))
 echo ""
 
-# 5. Voice Features
+# 6. Voice Features
 echo -e "${YELLOW}🎤 Running Voice Feature Tests...${NC}"
 if pnpm playwright test tests/voice-features.spec.ts; then
   echo -e "${GREEN}✅ Voice tests passed${NC}"

@@ -150,7 +150,7 @@ export function AiSdkChatPanel({
   console.log("🎤 Voice buttons should be rendering in PromptInputTools");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
-  const [selectedModel, setSelectedModel] = useState("gpt-5");
+  const [selectedModel, setSelectedModel] = useState("gemini-2.5-pro");
   const [showReasoning, setShowReasoning] = useState(true);
   const [currentBranch, setCurrentBranch] = useState<string | null>(null);
   const [activeTasks, setActiveTasks] = useState<any[]>([]);
@@ -264,11 +264,15 @@ export function AiSdkChatPanel({
     })();
 
   const availableModels = [
-    { id: "gpt-5", name: "GPT-5" },
-    { id: "gpt-5-mini", name: "GPT-5 Mini" },
-    { id: "gpt-5-nano", name: "GPT-5 Nano" },
+    // Gemini models (primary for RAG)
+    { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro (2M context) ⭐" },
+    { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash (Fast & Cheap)" },
+    { id: "gemini-2.5-ultra", name: "Gemini 2.5 Ultra (Premium)" },
+    // OpenAI models (fallback)
+    { id: "gpt-5", name: "GPT-5 (Fallback)" },
     { id: "gpt-4o", name: "GPT-4o" },
     { id: "gpt-4o-mini", name: "GPT-4o Mini" },
+    // Claude models
     { id: "claude-3-opus", name: "Claude 3 Opus" },
     { id: "claude-3-sonnet", name: "Claude 3 Sonnet" },
   ];
@@ -298,9 +302,9 @@ export function AiSdkChatPanel({
     console.log("🎯 Chat initialized:", {
       selectedModel,
       endpoint: currentApiEndpoint,
-      isGPT5: selectedModel.toLowerCase().includes("gpt-5"),
+      modelProvider: selectedModel.startsWith("gemini-") ? "Google Gemini" : "OpenAI/Claude",
     });
-  }, [currentApiEndpoint]); // Only log when endpoint actually changes
+  }, [currentApiEndpoint, selectedModel]); // Only log when endpoint or model changes
 
   const chatResult = useChat({
     // @ts-ignore - AI SDK v5 still supports api option but types haven't caught up
