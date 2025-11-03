@@ -1,6 +1,6 @@
 import { streamText } from "ai";
 import { createOpenAI } from "@ai-sdk/openai";
-import { createGoogle } from "@ai-sdk/google";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { z } from "zod";
@@ -15,7 +15,7 @@ import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 export const maxDuration = 60;
 
 // Initialize Google AI provider for Gemini (primary chat model)
-const google = createGoogle({
+const google = createGoogleGenerativeAI({
   apiKey: process.env.GOOGLE_API_KEY!,
 });
 
