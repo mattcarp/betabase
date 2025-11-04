@@ -3,7 +3,7 @@
  * Tests for Teams and Outlook specific parsing
  */
 
-import { describe, test, expect } from "@jest/globals";
+import { describe, test, expect } from "vitest";
 import { MicrosoftEmailParser, MicrosoftEmailData } from "@/utils/microsoftEmailParser";
 
 describe("MicrosoftEmailParser", () => {

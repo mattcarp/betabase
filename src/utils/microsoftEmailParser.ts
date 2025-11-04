@@ -243,9 +243,29 @@ export class MicrosoftEmailParser {
     // Remove Microsoft tracking pixels
     text = text.replace(/<img[^>]*src="[^"]*safelink[^"]*"[^>]*>/gi, "");
 
-    // Remove Microsoft Safe Links wrapping
+    // Extract actual URLs from Outlook Safe Links in <a> tags and replace the entire tag with the URL
+    // This needs to happen BEFORE stripHtml so the URL is preserved in the text
     text = text.replace(
-      /https:\/\/[\w-]+\.safelinks\.protection\.outlook\.com\/[^"'\s]+/g,
+      /<a[^>]*href="(https:\/\/[^\/]*\.safelinks\.protection\.outlook\.com\/[^"]*)"[^>]*>([^<]*)<\/a>/gi,
+      (match, safeUrl, linkText) => {
+        // Try to extract original URL from Safe Link
+        const urlMatch = safeUrl.match(/url=([^&"'\s]+)/);
+        if (urlMatch) {
+          try {
+            const decodedUrl = decodeURIComponent(urlMatch[1]);
+            // Replace the entire <a> tag with: "linkText (decodedUrl)"
+            return `${linkText} (${decodedUrl})`;
+          } catch {
+            return match;
+          }
+        }
+        return match;
+      }
+    );
+
+    // Also handle Safe Links in plain text (not in href attributes)
+    text = text.replace(
+      /https:\/\/[\w-]+\.safelinks\.protection\.outlook\.com\/[^"'\s<>]+/g,
       (match) => {
         // Try to extract original URL from Safe Link
         const urlMatch = match.match(/url=([^&"'\s]+)/);
