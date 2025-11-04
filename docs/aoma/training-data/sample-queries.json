@@ -1,0 +1,102 @@
+[
+  {
+    "query": "Promo Portal Usage Report (07-Nov-2024)",
+    "expectedTicket": "ITSM-48937",
+    "category": "PROMO"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Orders requested by Carrie Boyd",
+    "expectedTicket": "ITSM-48933",
+    "category": "AOMA"
+  },
+  {
+    "query": "Metadata Refresh - Farruko CVRBON VRMOR (Dolby)",
+    "expectedTicket": "ITSM-48932",
+    "category": "AOMA"
+  },
+  {
+    "query": "New user set-up request",
+    "expectedTicket": "ITSM-48931",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'SME UK Limited'",
+    "expectedTicket": "ITSM-48930",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'Columbia Label Group'",
+    "expectedTicket": "ITSM-48929",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'Epic Records Group'",
+    "expectedTicket": "ITSM-48928",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'Sony Masterworks'",
+    "expectedTicket": "ITSM-48927",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'RCA Records'",
+    "expectedTicket": "ITSM-48926",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'SME US LATIN LLC'",
+    "expectedTicket": "ITSM-48925",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'RCA Label Group/RLG'",
+    "expectedTicket": "ITSM-48924",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'Provident Music Group'",
+    "expectedTicket": "ITSM-48923",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'Orchard Enterprises'",
+    "expectedTicket": "ITSM-48922",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'Legacy Recordings'",
+    "expectedTicket": "ITSM-48921",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'RCA/JIVE Label Group'",
+    "expectedTicket": "ITSM-48920",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'SME US'",
+    "expectedTicket": "ITSM-48919",
+    "category": "AOMA"
+  },
+  {
+    "query": "Product Linking",
+    "expectedTicket": "ITSM-48915",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Issue",
+    "expectedTicket": "ITSM-48902",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Orders requested by Carrie Boyd",
+    "expectedTicket": "ITSM-48888",
+    "category": "AOMA"
+  },
+  {
+    "query": "AOMA Digital and Physical Part Order Report for 'Legacy Recordings'",
+    "expectedTicket": "ITSM-48887",
+    "category": "AOMA"
+  }
+]
