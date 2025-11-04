@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`🎨 Vitest Advanced Features Showcase > Snapshot Testing > should match AOMA response structure 1`] = `
+{
+  "answer": "AOMA handles asset registration and metadata management",
+  "metadata": {
+    "model": "gpt-4",
+    "processingTime": 145,
+    "timestamp": Any<Number>,
+  },
+  "sources": [
+    {
+      "id": "doc-1",
+      "relevance": 0.95,
+      "title": "AOMA User Guide",
+    },
+  ],
+}
+`;

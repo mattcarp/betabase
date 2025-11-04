@@ -3,7 +3,7 @@
  * Tests the API endpoints for email ingestion and search
  */
 
-import { describe, test, expect, beforeAll, afterAll } from "@jest/globals";
+import { describe, test, expect, beforeAll, afterAll } from "vitest";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 const testMessageIds: string[] = [];

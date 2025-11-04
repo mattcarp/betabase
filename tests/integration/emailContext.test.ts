@@ -3,7 +3,7 @@
  * Tests the full email ingestion and vectorization pipeline
  */
 
-import { describe, test, expect, beforeAll, afterAll } from "@jest/globals";
+import { describe, test, expect, beforeAll, afterAll } from "vitest";
 import { getEmailContextService } from "@/services/emailContextService";
 import { EmailData } from "@/utils/emailParser";
 

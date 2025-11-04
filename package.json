@@ -182,6 +182,7 @@
     "@types/react-dom": "^19.1.9",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
+    "@vitejs/plugin-react": "^5.1.0",
     "@vitest/ui": "^4.0.6",
     "cli-table3": "^0.6.5",
     "dotenv": "^17.2.3",
