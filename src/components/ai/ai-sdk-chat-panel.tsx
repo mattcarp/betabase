@@ -388,35 +388,21 @@ export function AiSdkChatPanel({
         (window as any).currentProgressInterval = null;
       }
 
-      // Show completion state briefly
-      setCurrentProgress((prev) =>
-        prev
-          ? {
-              ...prev,
-              status: "completed",
-              progress: 100,
-              title: "Response complete!",
-            }
-          : null
-      );
+      // Immediately clear loading states
+      setCurrentProgress(null);
+      setManualLoading(false);
+      setIsProcessing(false);
+      setHasStartedStreaming(false); // Reset streaming state for next message
 
-      // Clear progress indicator after a delay
-      setTimeout(() => {
-        setCurrentProgress(null);
-        setManualLoading(false);
-        setIsProcessing(false);
-        setHasStartedStreaming(false); // Reset streaming state for next message
-
-        // CRITICAL FIX: Clear input field after response completes
-        setLocalInput("");
-        if (typeof setInput === "function") {
-          try {
-            setInput("");
-          } catch (err) {
-            console.warn("[SIAM] setInput clear failed", err);
-          }
+      // CRITICAL FIX: Clear input field after response completes
+      setLocalInput("");
+      if (typeof setInput === "function") {
+        try {
+          setInput("");
+        } catch (err) {
+          console.warn("[SIAM] setInput clear failed", err);
         }
-      }, 1500);
+      }
     },
   });
 
@@ -433,8 +419,9 @@ export function AiSdkChatPanel({
 
   // AI SDK v5 no longer provides input/setInput - manage locally
   const [input, setInput] = useState("");
-  // AI SDK v5 uses 'status' instead of 'isLoading'
-  const chatIsLoading = status === "streaming" || status === "processing";
+  // AI SDK v5 uses 'status' - valid values: "error" | "ready" | "submitted"
+  // We consider "submitted" as loading (waiting for response)
+  const chatIsLoading = status === "submitted";
 
   // CRITICAL: Wrap sendMessage to validate content before sending
   const sendMessage = (message: any) => {
@@ -539,16 +526,6 @@ export function AiSdkChatPanel({
 
   // Derive isLoading from useChat isLoading, status, or manual loading state
   const isLoading = chatIsLoading || (status as any) === "loading" || manualLoading;
-
-  // Clear progress when loading completes
-  useEffect(() => {
-    if (!isLoading && currentProgress) {
-      // Small delay to show completion before clearing
-      setTimeout(() => {
-        setCurrentProgress(null);
-      }, 1000);
-    }
-  }, [isLoading, currentProgress]);
 
   // Detect when assistant starts streaming (to prevent jitter)
   useEffect(() => {
@@ -1734,32 +1711,33 @@ export function AiSdkChatPanel({
               </motion.div>
             ) : (
               /* Messages Area */
-              <AnimatePresence>
-                <div className="space-y-6">
+              <div className="space-y-6">
+                <AnimatePresence mode="wait">
                   {/* Clean Loading Spinner with Timer (Shadcn AI Pattern) */}
-                  {/* CRITICAL: Show loading indicator during AOMA orchestration AND streaming */}
-                  {(isLoading || manualLoading || isProcessing) && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2 }}
-                        className="flex items-center gap-3 p-4"
-                      >
-                        <Loader size={20} className="text-blue-400 animate-spin" />
-                        <span className="text-sm text-muted-foreground">
-                          {!hasStartedStreaming && loadingSeconds > 5 
-                            ? `Searching AOMA knowledge base... (${loadingSeconds}s)` 
-                            : hasStartedStreaming 
-                            ? "Generating response..."
-                            : loadingSeconds > 0 
-                            ? `Thinking... (${loadingSeconds}s)`
-                            : "Thinking..."}
-                        </span>
-                      </motion.div>
-                    )}
+                  {/* CRITICAL: Only show loading indicator BEFORE streaming starts */}
+                  {(isLoading || manualLoading || isProcessing) && !hasStartedStreaming && (
+                    <motion.div
+                      key="loading-indicator"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex items-center gap-3 p-4"
+                    >
+                      <Loader size={20} className="text-blue-400 animate-spin" />
+                      <span className="text-sm text-muted-foreground">
+                        {loadingSeconds > 5
+                          ? `Searching AOMA knowledge base... (${loadingSeconds}s)`
+                          : loadingSeconds > 0
+                          ? `Thinking... (${loadingSeconds}s)`
+                          : "Thinking..."}
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-                  {/* Messages rendered AFTER progress indicator */}
+                {/* Messages rendered AFTER progress indicator */}
+                <AnimatePresence>
                   {messages.map((message, index) => (
                     <motion.div
                       key={message.id || index}
@@ -1772,8 +1750,8 @@ export function AiSdkChatPanel({
                       {renderMessage(message, index)}
                     </motion.div>
                   ))}
-                </div>
-              </AnimatePresence>
+                </AnimatePresence>
+              </div>
             )}
 
             {/* Error State */}
