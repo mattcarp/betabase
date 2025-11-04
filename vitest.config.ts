@@ -8,6 +8,10 @@ export default defineConfig({
   envDir: ".",
   envPrefix: ["NEXT_PUBLIC_", "SUPABASE_", "OPENAI_"],
   test: {
+    // Only run .test.ts(x) files, not .spec.ts(x) files (those are for Playwright)
+    include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
+    exclude: ['tests/**/*.spec.ts', 'tests/**/*.spec.tsx', 'node_modules/**'],
+
     // Environment - use 'node' for service/API tests, 'jsdom' for React component tests
     environment: "node",
 

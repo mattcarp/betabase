@@ -1,4 +1,125 @@
-# 🎭 SIAM Playwright Testing Architecture
+# SIAM Testing Architecture
+
+This project uses two test frameworks:
+- **Vitest** for unit and integration tests (.test.ts files)
+- **Playwright** for end-to-end browser tests (.spec.ts files)
+
+---
+
+# 🧪 Vitest Unit & Integration Tests
+
+## Quick Start
+
+```bash
+# Run unit tests (fast, no dependencies)
+npm run test:unit
+
+# Run integration tests (requires services)
+INTEGRATION_TESTS=1 npm run test:integration
+
+# Run all Vitest tests
+npm run test
+```
+
+## Test Organization
+
+```
+tests/
+├── unit/                       # Pure unit tests (.test.ts)
+│   ├── emailParser.test.ts     # 27 tests
+│   └── microsoftEmailParser.test.ts  # 16 tests
+├── integration/                # Integration tests (.test.ts)
+│   ├── emailContext.test.ts
+│   ├── emailContextApi.test.ts
+│   └── multi-tenant-vector-store.test.ts
+├── helpers/                    # Test utilities
+│   └── integration-test.ts
+└── setup/                      # Test configuration
+    └── no-mocks-allowed.ts     # Enforces no-mock policy
+```
+
+## No-Mock Policy ❌
+
+This project enforces a **strict NO-MOCK policy**:
+
+- ❌ `vi.fn()`, `vi.mock()`, `vi.spyOn()` are **forbidden**
+- ✅ Use real service instances
+- ✅ Let tests fail honestly when services fail
+- ✅ Tests validate actual behavior, not mock behavior
+
+See "Vitest Writing Tests" section below for examples.
+
+## Integration Test Pattern
+
+Integration tests are skipped unless `INTEGRATION_TESTS=1`:
+
+```typescript
+const isIntegrationTest = !!process.env.INTEGRATION_TESTS;
+
+describe.skipIf(!isIntegrationTest)('My Integration Tests', () => {
+  // Tests that require real services
+});
+```
+
+## Vitest Writing Tests
+
+### Unit Test Example
+```typescript
+import { describe, test, expect } from 'vitest';
+import { EmailParser } from '@/utils/emailParser';
+
+describe('Email Parser', () => {
+  test('should parse email subject', () => {
+    const email = {
+      messageId: 'test-1',
+      from: 'sender@example.com',
+      to: ['recipient@example.com'],
+      subject: 'Test',
+      body: 'Hello'
+    };
+
+    const result = EmailParser.parseEmail(email);
+    expect(result.content).toContain('Subject: Test');
+  });
+});
+```
+
+### Integration Test Example
+```typescript
+import { describe, test, expect } from 'vitest';
+
+const isIntegrationTest = !!process.env.INTEGRATION_TESTS;
+
+describe.skipIf(!isIntegrationTest)('Email API', () => {
+  test('should create email', async () => {
+    const response = await fetch('http://localhost:3000/api/email', {
+      method: 'POST',
+      body: JSON.stringify({ messageId: 'test-1', /* ... */ })
+    });
+    expect(response.ok).toBe(true);
+  });
+});
+```
+
+## Vitest Debugging
+
+```bash
+# Run specific file
+npm run test tests/unit/emailParser.test.ts
+
+# Watch mode
+npm run test:watch
+
+# With UI
+npm run test:ui
+
+# With coverage
+npm run test:coverage
+```
+
+---
+
+# 🎭 Playwright E2E Tests
 
 ## Directory Structure
 
