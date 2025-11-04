@@ -35,11 +35,14 @@ test.describe('Chat Response Time Performance', () => {
 
   test('Measure chat response times - Cold Start', async ({ page }) => {
     console.log('\n🔵 COLD START TEST - First query (no cache)');
-    
+
     // Navigate to chat
     await page.goto('http://localhost:3000');
     await page.click('text=Chat');
-    await page.waitForLoadState('networkidle');
+
+    // Wait for chat interface to be ready (not networkidle - too many background requests)
+    await page.waitForSelector('textarea, input[type="text"]', { timeout: 10000 });
+    await page.waitForTimeout(1000); // Give UI time to settle
 
     const query = TEST_QUERIES[0]; // "What is AOMA?"
     const metrics = await measureChatQuery(page, query, true);
@@ -59,10 +62,11 @@ test.describe('Chat Response Time Performance', () => {
 
   test('Measure chat response times - Warm Cache', async ({ page }) => {
     console.log('\n🟢 WARM CACHE TEST - Repeated query');
-    
+
     await page.goto('http://localhost:3000');
     await page.click('text=Chat');
-    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('textarea, input[type="text"]', { timeout: 10000 });
+    await page.waitForTimeout(1000);
 
     // First query to warm cache
     await measureChatQuery(page, TEST_QUERIES[0], false);
@@ -86,10 +90,11 @@ test.describe('Chat Response Time Performance', () => {
 
   test('Measure multiple different queries', async ({ page }) => {
     console.log('\n🔷 MULTIPLE QUERIES TEST');
-    
+
     await page.goto('http://localhost:3000');
     await page.click('text=Chat');
-    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('textarea, input[type="text"]', { timeout: 10000 });
+    await page.waitForTimeout(1000);
 
     for (let i = 1; i < TEST_QUERIES.length; i++) {
       const query = TEST_QUERIES[i];
@@ -107,7 +112,7 @@ test.describe('Chat Response Time Performance', () => {
 
   test('Analyze AOMA orchestration bottleneck', async ({ page, context }) => {
     console.log('\n🔍 AOMA ORCHESTRATION ANALYSIS');
-    
+
     // Listen for server-timing headers
     const serverTimings: any[] = [];
     page.on('response', async response => {
@@ -123,7 +128,8 @@ test.describe('Chat Response Time Performance', () => {
 
     await page.goto('http://localhost:3000');
     await page.click('text=Chat');
-    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('textarea, input[type="text"]', { timeout: 10000 });
+    await page.waitForTimeout(1000);
 
     const metrics = await measureChatQuery(page, "What is AOMA?", false);
     
@@ -334,6 +340,8 @@ ${stats.avgTTFB > 1500 ? `
    Worst Case (cold start):                2698ms
 `;
 }
+
+
 
 
 

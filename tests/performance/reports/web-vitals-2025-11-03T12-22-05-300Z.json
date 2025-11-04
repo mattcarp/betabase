@@ -1,0 +1,56 @@
+{
+  "timestamp": "2025-11-03T12:22:05.300Z",
+  "summary": {
+    "FCP": 552,
+    "CLS": 0,
+    "TTFB": 213.19999998807907,
+    "resources": {
+      "total": 60,
+      "js": 39,
+      "css": 5,
+      "images": 1,
+      "totalSize": 2995104
+    },
+    "memory": {
+      "usedMB": 47.033281326293945,
+      "totalMB": 125.53662300109863,
+      "usedJSHeapSize": 0,
+      "totalJSHeapSize": 0,
+      "jsHeapSizeLimit": 0
+    }
+  },
+  "results": [
+    {
+      "timestamp": "2025-11-03T12:22:05.073Z",
+      "page": "home-page",
+      "navigationTiming": {
+        "domContentLoaded": 0.09999996423721313,
+        "loadComplete": 0,
+        "domInteractive": 635.4000000357628,
+        "totalLoadTime": 2626
+      },
+      "FCP": 552,
+      "TTFB": 213.19999998807907,
+      "resources": {
+        "total": 60,
+        "js": 39,
+        "css": 5,
+        "images": 1,
+        "totalSize": 2995104,
+        "largestResource": {
+          "name": "favicon.ico?favicon.b683929f.ico",
+          "size": 1093910,
+          "duration": 1706.699999988079
+        }
+      },
+      "memory": {
+        "usedJSHeapSize": 49317970,
+        "totalJSHeapSize": 131634690,
+        "jsHeapSizeLimit": 4294705152,
+        "usedMB": 47.033281326293945,
+        "totalMB": 125.53662300109863
+      },
+      "CLS": 0
+    }
+  ]
+}

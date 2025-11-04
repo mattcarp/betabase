@@ -1,0 +1,56 @@
+{
+  "timestamp": "2025-11-03T12:15:24.987Z",
+  "summary": {
+    "FCP": 264,
+    "CLS": 0,
+    "TTFB": 141.5,
+    "resources": {
+      "total": 61,
+      "js": 39,
+      "css": 5,
+      "images": 1,
+      "totalSize": 2995481
+    },
+    "memory": {
+      "usedMB": 48.69773006439209,
+      "totalMB": 62.60507106781006,
+      "usedJSHeapSize": 0,
+      "totalJSHeapSize": 0,
+      "jsHeapSizeLimit": 0
+    }
+  },
+  "results": [
+    {
+      "timestamp": "2025-11-03T12:15:24.827Z",
+      "page": "chat-tab-switch",
+      "navigationTiming": {
+        "domContentLoaded": 0,
+        "loadComplete": 0,
+        "domInteractive": 180.89999997615814,
+        "totalLoadTime": 2052.648833
+      },
+      "FCP": 264,
+      "TTFB": 141.5,
+      "resources": {
+        "total": 61,
+        "js": 39,
+        "css": 5,
+        "images": 1,
+        "totalSize": 2995481,
+        "largestResource": {
+          "name": "favicon.ico?favicon.b683929f.ico",
+          "size": 1093910,
+          "duration": 306.89999997615814
+        }
+      },
+      "memory": {
+        "usedJSHeapSize": 51063271,
+        "totalJSHeapSize": 65646175,
+        "jsHeapSizeLimit": 4294705152,
+        "usedMB": 48.69773006439209,
+        "totalMB": 62.60507106781006
+      },
+      "CLS": 0
+    }
+  ]
+}

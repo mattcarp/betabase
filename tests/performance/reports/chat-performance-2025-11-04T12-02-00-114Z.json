@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-11-04T12:02:00.114Z",
+  "summary": {
+    "totalTests": 1,
+    "successCount": 0,
+    "failureCount": 1,
+    "avgTTFB": 0,
+    "avgTTFR": 0,
+    "avgTotal": 0
+  },
+  "results": [
+    {
+      "timestamp": "2025-11-04T12:02:00.077Z",
+      "query": "What is AOMA?",
+      "ttfb": 0,
+      "ttfr": 0,
+      "totalTime": 23549.887625000003,
+      "streamingStartDelay": 0,
+      "aomaOrchestrationTime": null,
+      "embeddingTime": null,
+      "vectorSearchTime": null,
+      "success": false,
+      "errorMessage": "page.waitForSelector: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-role=\"assistant\"], .assistant-message, [role=\"article\"]') to be visible\u001b[22m\n"
+    }
+  ]
+}

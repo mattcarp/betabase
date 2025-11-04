@@ -1737,9 +1737,8 @@ export function AiSdkChatPanel({
               <AnimatePresence>
                 <div className="space-y-6">
                   {/* Clean Loading Spinner with Timer (Shadcn AI Pattern) */}
-                  {(isLoading || manualLoading || isProcessing) &&
-                    !hasStartedStreaming &&
-                    messages[messages.length - 1]?.role !== "assistant" && (
+                  {/* CRITICAL: Show loading indicator during AOMA orchestration AND streaming */}
+                  {(isLoading || manualLoading || isProcessing) && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -1747,9 +1746,15 @@ export function AiSdkChatPanel({
                         transition={{ duration: 0.2 }}
                         className="flex items-center gap-3 p-4"
                       >
-                        <Loader size={20} className="text-blue-400" />
+                        <Loader size={20} className="text-blue-400 animate-spin" />
                         <span className="text-sm text-muted-foreground">
-                          Thinking... {loadingSeconds > 0 && `(${loadingSeconds}s)`}
+                          {!hasStartedStreaming && loadingSeconds > 5 
+                            ? `Searching AOMA knowledge base... (${loadingSeconds}s)` 
+                            : hasStartedStreaming 
+                            ? "Generating response..."
+                            : loadingSeconds > 0 
+                            ? `Thinking... (${loadingSeconds}s)`
+                            : "Thinking..."}
                         </span>
                       </motion.div>
                     )}
