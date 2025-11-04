@@ -21,10 +21,9 @@ const defaultConfig: ApiConfig = {
   elevenLabsApiKey: "sk_b495cffb8979229634b620c1bddbf5583f5c9fd69e5785fb",
   elevenLabsAgentId: "agent_01jz1ar6k2e8tvst14g6cbgc7m",
   vectorStoreId: "vs_68a6c6337b10819194ce40498ca7dd6a", // SIAM Knowledge Base (active)
-  // MCP configuration - use environment variable or fallback to Railway
-  mcpUrl:
-    process.env.NEXT_PUBLIC_AOMA_MESH_SERVER_URL ||
-    "https://luminous-dedication-production.up.railway.app",
+  // REMOVED: Railway aoma-mesh-mcp URL - no longer used
+  // MCP configuration (Lambda MCP only now)
+  mcpUrl: process.env.NEXT_PUBLIC_MCP_URL || undefined,
   mcpLambdaUrl: "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws",
   mcpAuthEnabled: false,
 };
