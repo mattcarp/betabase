@@ -19,7 +19,7 @@ import {
   Hash,
   Sparkles,
 } from "lucide-react";
-import { useMCPClient } from "../../hooks/useMCPClient";
+// REMOVED: useMCPClient hook - aoma-mesh-mcp integration removed
 import { useTopicExtraction, useTopicVisualization } from "../../hooks/useTopicExtraction";
 import { aomaTopicIntegration } from "../../services/aomaTopicIntegration";
 
@@ -59,7 +59,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [mcpState, mcpActions] = useMCPClient();
+  // REMOVED: useMCPClient hook - aoma-mesh-mcp integration removed
 
   // Topic extraction hooks
   const [topicState, topicActions] = useTopicExtraction();
@@ -478,7 +478,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
       <div className="flex items-center justify-between mb-4">
         <h3 className="mac-title">Wisdom Library</h3>
         <div className="flex items-center gap-2">
-          {mcpState.isConnected && <span className="motiff-status-connected text-xs">AOMA</span>}
+          {/* REMOVED: MCP connection status - now using direct Supabase */}
           <button className="text-motiff-accent/70 hover:text-motiff-accent text-sm transition-colors">
             Browse All
           </button>
