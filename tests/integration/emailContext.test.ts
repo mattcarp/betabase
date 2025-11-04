@@ -1,13 +1,18 @@
 /**
  * Email Context Service Integration Tests
  * Tests the full email ingestion and vectorization pipeline
+ *
+ * NOTE: These tests require real Supabase connection and embedding service.
+ * Run with: INTEGRATION_TESTS=1 npm run test:integration
  */
 
 import { describe, test, expect, beforeAll, afterAll } from "vitest";
 import { getEmailContextService } from "@/services/emailContextService";
 import { EmailData } from "@/utils/emailParser";
 
-describe("EmailContextService Integration", () => {
+const isIntegrationTest = !!process.env.INTEGRATION_TESTS;
+
+describe.skipIf(!isIntegrationTest)("EmailContextService Integration", () => {
   const service = getEmailContextService();
   const testMessageIds: string[] = [];
 

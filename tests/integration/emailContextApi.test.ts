@@ -1,14 +1,19 @@
 /**
  * Email Context API Integration Tests
  * Tests the API endpoints for email ingestion and search
+ *
+ * NOTE: These tests require a running dev server on localhost:3000.
+ * Run with: npm run test:integration:with-server
+ * Or manually: npm run dev (terminal 1), then INTEGRATION_TESTS=1 npm run test:integration (terminal 2)
  */
 
 import { describe, test, expect, beforeAll, afterAll } from "vitest";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 const testMessageIds: string[] = [];
+const isIntegrationTest = !!process.env.INTEGRATION_TESTS;
 
-describe("Email Context API Integration", () => {
+describe.skipIf(!isIntegrationTest)("Email Context API Integration", () => {
   const sampleEmail = {
     messageId: "api-test-email-1",
     from: "api-test@example.com",

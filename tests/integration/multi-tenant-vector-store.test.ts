@@ -9,7 +9,9 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { supabase, supabaseAdmin, DEFAULT_APP_CONTEXT, SONY_MUSIC } from '../../src/lib/supabase';
 import { SupabaseVectorService } from '../../src/services/supabaseVectorService';
 
-describe('Multi-Tenant Vector Store - REAL Integration Tests', () => {
+const isIntegrationTest = !!process.env.INTEGRATION_TESTS;
+
+describe.skipIf(!isIntegrationTest)('Multi-Tenant Vector Store - REAL Integration Tests', () => {
   let service: SupabaseVectorService;
 
   beforeAll(() => {
