@@ -95,14 +95,15 @@ export function CurateTab({
   assistantId = "asst_VvOHL1c4S6YapYKun4mY29fM",
 }: CurateTabProps) {
   // Permission check for RLHF features
-  // TEMPORARY: Force enable for testing (database migrations pending)
-  // TODO: Uncomment production code after running PASTE-INTO-SUPABASE.sql
-  const canAccessRLHF = true;
+  // Allow bypass on localhost for development, but enforce on production
+  const isLocalhost = typeof window !== 'undefined' && 
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
   
-  /* PRODUCTION CODE (uncomment after SQL migration):
   const [userEmail, setUserEmail] = useState<string>("");
   const { hasPermission } = usePermissions(userEmail);
-  const canAccessRLHF = hasPermission("rlhf_feedback");
+  
+  // SECURITY: Only bypass permissions on localhost, never on production
+  const canAccessRLHF = isLocalhost || hasPermission("rlhf_feedback");
   
   useEffect(() => {
     async function loadUser() {
@@ -117,7 +118,6 @@ export function CurateTab({
     }
     loadUser();
   }, []);
-  */
   
   const [files, setFiles] = useState<VectorStoreFile[]>([]);
   const [loading, setLoading] = useState(false);
