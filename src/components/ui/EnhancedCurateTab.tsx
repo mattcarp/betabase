@@ -21,6 +21,7 @@ import { Separator } from "./separator";
 import { Input } from "./input";
 import { Progress } from "./progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
+import { Textarea } from "./textarea";
 import {
   Database,
   Upload,
@@ -68,6 +69,13 @@ import {
   LineChart as LineChartIcon,
   PieChart as PieChartIcon,
   AreaChart as AreaChartIcon,
+  ThumbsUp,
+  ThumbsDown,
+  Star,
+  Edit3,
+  Check,
+  Bot,
+  Settings,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -80,6 +88,8 @@ import {
 import { FileUpload } from "../ai-elements/file-upload";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
+import { usePermissions } from "../../hooks/usePermissions";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   LineChart as RechartsLineChart,
   Line,
@@ -167,6 +177,48 @@ interface CurationTrend {
   quality: number;
   roi: number;
   savings: number;
+}
+
+// RLHF Feedback Interfaces
+interface RLHFFeedbackItem {
+  id: string;
+  sessionId: string;
+  query: string;
+  response: string;
+  retrievedDocs: Array<{
+    id: string;
+    content: string;
+    source_type: string;
+    similarity: number;
+    rerankScore?: number;
+  }>;
+  timestamp: string;
+  feedbackSubmitted?: boolean;
+  confidence?: number;
+}
+
+interface AgentDecisionLog {
+  id: string;
+  sessionId: string;
+  query: string;
+  decisions: Array<{
+    step: number;
+    action: string;
+    tool: string;
+    confidence: number;
+    reasoning: string;
+  }>;
+  finalConfidence: number;
+  totalIterations: number;
+  executionTime: number;
+  timestamp: string;
+}
+
+interface ReinforcementMetric {
+  sourceType: string;
+  weight: number;
+  feedbackCount: number;
+  avgImprovement: number;
 }
 
 // Stub data for executive dashboard
@@ -311,6 +363,118 @@ const stubCurationTrends: CurationTrend[] = [
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8", "#82CA9D"];
 
+// RLHF Stub Data
+const stubRLHFFeedback: RLHFFeedbackItem[] = [
+  {
+    id: "fb1",
+    sessionId: "session-abc-123",
+    query: "What are the royalty terms for streaming contracts?",
+    response:
+      "Streaming royalties are calculated at 15% of gross streaming revenue, with a minimum guarantee of $10,000 per quarter. Payment terms are net 30 days...",
+    retrievedDocs: [
+      {
+        id: "doc-1",
+        content: "Streaming Contract Template Q4 2024 - Royalty provisions...",
+        source_type: "wiki_documents",
+        similarity: 0.92,
+        rerankScore: 94,
+      },
+      {
+        id: "doc-2",
+        content: "Revenue Share Guidelines for Digital Distribution...",
+        source_type: "jira_tickets",
+        similarity: 0.85,
+        rerankScore: 88,
+      },
+      {
+        id: "doc-3",
+        content: "Updated streaming payment schedules 2024...",
+        source_type: "wiki_documents",
+        similarity: 0.78,
+        rerankScore: 76,
+      },
+    ],
+    timestamp: new Date().toISOString(),
+    feedbackSubmitted: false,
+    confidence: 0.87,
+  },
+  {
+    id: "fb2",
+    sessionId: "session-def-456",
+    query: "How do we handle GDPR requests for artist data?",
+    response:
+      "GDPR requests must be processed within 30 days. Start by verifying identity, then compile all stored data including contracts, communications, and analytics...",
+    retrievedDocs: [
+      {
+        id: "doc-4",
+        content: "GDPR Compliance Policy 2024 - Data subject rights...",
+        source_type: "wiki_documents",
+        similarity: 0.95,
+        rerankScore: 97,
+      },
+      {
+        id: "doc-5",
+        content: "Artist data retention policies and procedures...",
+        source_type: "jira_tickets",
+        similarity: 0.81,
+        rerankScore: 79,
+      },
+    ],
+    timestamp: new Date(Date.now() - 3600000).toISOString(),
+    feedbackSubmitted: true,
+    confidence: 0.91,
+  },
+];
+
+const stubAgentLogs: AgentDecisionLog[] = [
+  {
+    id: "agent-1",
+    sessionId: "session-abc-123",
+    query: "What are the royalty terms for streaming contracts?",
+    decisions: [
+      {
+        step: 1,
+        action: "initial_search",
+        tool: "vector_search",
+        confidence: 0.65,
+        reasoning: "Initial vector search returned 50 candidates but confidence is low",
+      },
+      {
+        step: 2,
+        action: "rerank_results",
+        tool: "gemini_reranker",
+        confidence: 0.82,
+        reasoning: "Re-ranking improved relevance, top 10 documents now highly relevant",
+      },
+      {
+        step: 3,
+        action: "validate_context",
+        tool: "confidence_check",
+        confidence: 0.87,
+        reasoning: "Context validation passed, proceeding to generation",
+      },
+    ],
+    finalConfidence: 0.87,
+    totalIterations: 3,
+    executionTime: 2340,
+    timestamp: new Date().toISOString(),
+  },
+];
+
+const stubReinforcementMetrics: ReinforcementMetric[] = [
+  { sourceType: "wiki_documents", weight: 1.3, feedbackCount: 45, avgImprovement: 0.18 },
+  { sourceType: "jira_tickets", weight: 0.9, feedbackCount: 23, avgImprovement: -0.05 },
+  { sourceType: "git_commits", weight: 0.7, feedbackCount: 12, avgImprovement: -0.12 },
+  { sourceType: "cache", weight: 1.1, feedbackCount: 34, avgImprovement: 0.08 },
+];
+
+const stubLearningTrends = [
+  { period: "Week 1", feedback: 12, improvement: 0.05, quality: 72 },
+  { period: "Week 2", feedback: 18, improvement: 0.12, quality: 78 },
+  { period: "Week 3", feedback: 24, improvement: 0.18, quality: 84 },
+  { period: "Week 4", feedback: 31, improvement: 0.23, quality: 89 },
+];
+
 const formatFileSize = (bytes: number): string => {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
@@ -343,6 +507,10 @@ export function EnhancedCurateTab({
   className?: string;
   assistantId?: string;
 }) {
+  // Permissions check
+  const { hasPermission, userRole, loading: permissionsLoading } = usePermissions();
+  const canAccessRLHF = hasPermission("rlhf_feedback");
+
   // State management
   const [mounted, setMounted] = useState(false);
   const [files, setFiles] = useState<VectorStoreFile[]>([]);
@@ -356,6 +524,12 @@ export function EnhancedCurateTab({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [filesToDelete, setFilesToDelete] = useState<string[]>([]);
   const [selectedInsight, setSelectedInsight] = useState<CurationInsight | null>(null);
+
+  // RLHF State
+  const [rlhfFeedback, setRlhfFeedback] = useState<RLHFFeedbackItem[]>(stubRLHFFeedback);
+  const [selectedFeedback, setSelectedFeedback] = useState<RLHFFeedbackItem | null>(null);
+  const [agentLogs, setAgentLogs] = useState<AgentDecisionLog[]>(stubAgentLogs);
+  const [selectedAgentLog, setSelectedAgentLog] = useState<AgentDecisionLog | null>(null);
 
   // Ensure client-side rendering for Recharts
   useEffect(() => {
@@ -631,32 +805,52 @@ export function EnhancedCurateTab({
 
       <CardContent className="flex-1 overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="dashboard">
-              <BarChart3 className="h-4 w-4 mr-2" />
-              Dashboard
-            </TabsTrigger>
-            <TabsTrigger value="files">
-              <FolderOpen className="h-4 w-4 mr-2" />
-              Files
-            </TabsTrigger>
-            <TabsTrigger value="insights">
-              <Lightbulb className="h-4 w-4 mr-2" />
-              Insights
-            </TabsTrigger>
-            <TabsTrigger value="curators">
-              <Users className="h-4 w-4 mr-2" />
-              Curators
-            </TabsTrigger>
-            <TabsTrigger value="analytics">
-              <LineChartIcon className="h-4 w-4 mr-2" />
-              Analytics
-            </TabsTrigger>
-            <TabsTrigger value="upload">
-              <Upload className="h-4 w-4 mr-2" />
-              Upload
-            </TabsTrigger>
-          </TabsList>
+          <ScrollArea className="w-full">
+            <TabsList className={cn("grid w-full", canAccessRLHF ? "grid-cols-9" : "grid-cols-6")}>
+              <TabsTrigger value="dashboard">
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Dashboard
+              </TabsTrigger>
+              <TabsTrigger value="files">
+                <FolderOpen className="h-4 w-4 mr-2" />
+                Files
+              </TabsTrigger>
+              <TabsTrigger value="insights">
+                <Lightbulb className="h-4 w-4 mr-2" />
+                Insights
+              </TabsTrigger>
+              <TabsTrigger value="curators">
+                <Users className="h-4 w-4 mr-2" />
+                Curators
+              </TabsTrigger>
+              <TabsTrigger value="analytics">
+                <LineChartIcon className="h-4 w-4 mr-2" />
+                Analytics
+              </TabsTrigger>
+              <TabsTrigger value="upload">
+                <Upload className="h-4 w-4 mr-2" />
+                Upload
+              </TabsTrigger>
+
+              {/* RLHF Tabs - Permission Gated */}
+              {canAccessRLHF && (
+                <>
+                  <TabsTrigger value="rlhf-feedback">
+                    <ThumbsUp className="h-4 w-4 mr-2" />
+                    RLHF Feedback
+                  </TabsTrigger>
+                  <TabsTrigger value="agent-insights">
+                    <Bot className="h-4 w-4 mr-2" />
+                    Agent Insights
+                  </TabsTrigger>
+                  <TabsTrigger value="reinforcement">
+                    <TrendingUp className="h-4 w-4 mr-2" />
+                    Reinforcement
+                  </TabsTrigger>
+                </>
+              )}
+            </TabsList>
+          </ScrollArea>
 
           {/* Executive Dashboard - "Evil Charts" */}
           <TabsContent value="dashboard" className="flex-1 overflow-auto mt-4">
