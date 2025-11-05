@@ -14,24 +14,6 @@ import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
 
-// Initialize Google AI provider for Gemini (primary chat model)
-const google = createGoogleGenerativeAI({
-  apiKey: process.env.GOOGLE_API_KEY!,
-});
-
-// Initialize OpenAI provider for embeddings only
-const openai = createOpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-});
-
-// Validate API keys are configured
-if (!process.env.GOOGLE_API_KEY) {
-  throw new Error("GOOGLE_API_KEY environment variable is required");
-}
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("OPENAI_API_KEY environment variable is required for embeddings");
-}
-
 // REMOVED: Client-side rate limiting
 // Let OpenAI handle rate limits naturally - we'll catch 429s and show friendly errors
 // This allows normal single-user usage while still handling rate limit errors gracefully
@@ -239,13 +221,17 @@ export async function POST(req: Request) {
     // END AUTHENTICATION CHECK
     // ========================================
 
+    // ========================================
+    // API KEY VALIDATION
+    // ========================================
     // Check for API key configuration
-    if (!process.env.OPENAI_API_KEY) {
-      console.error("[API] OPENAI_API_KEY is not set in environment variables");
+    if (!process.env.GOOGLE_API_KEY) {
+      console.error("[API] GOOGLE_API_KEY is not set in environment variables");
       return new Response(
         JSON.stringify({
           error: "Service temporarily unavailable",
           code: "CONFIG_ERROR",
+          message: "Google AI API key is not configured. Please contact support.",
         }),
         {
           status: 503,
@@ -253,6 +239,35 @@ export async function POST(req: Request) {
         }
       );
     }
+
+    if (!process.env.OPENAI_API_KEY) {
+      console.error("[API] OPENAI_API_KEY is not set in environment variables");
+      return new Response(
+        JSON.stringify({
+          error: "Service temporarily unavailable",
+          code: "CONFIG_ERROR",
+          message: "OpenAI API key is not configured. Please contact support.",
+        }),
+        {
+          status: 503,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Initialize providers after validation
+    const google = createGoogleGenerativeAI({
+      apiKey: process.env.GOOGLE_API_KEY,
+    });
+
+    const openai = createOpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    console.log("[API] ✅ AI providers initialized");
+    // ========================================
+    // END API KEY VALIDATION
+    // ========================================
 
     console.log("[API] Parsing request body...");
     const body = await req.json();
