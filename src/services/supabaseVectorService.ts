@@ -19,32 +19,47 @@ import {
 } from "../lib/supabase";
 import { openai } from "@ai-sdk/openai";
 import { embed } from "ai";
+import { getGeminiEmbeddingService } from "./geminiEmbeddingService";
+
+export type EmbeddingProvider = "openai" | "gemini";
 
 export class SupabaseVectorService {
-  constructor() {
-    // No longer need to store OpenAI client
+  private embeddingProvider: EmbeddingProvider;
+  
+  constructor(embeddingProvider: EmbeddingProvider = "gemini") {
+    this.embeddingProvider = embeddingProvider;
   }
 
   /**
-   * Generate embeddings using OpenAI's text-embedding-3-small (via Vercel AI SDK)
+   * Generate embeddings using configured provider (Gemini by default)
+   * - OpenAI: text-embedding-3-small (1536 dimensions)
+   * - Gemini: text-embedding-004 (768 dimensions)
    */
   async generateEmbedding(text: string): Promise<number[]> {
-    try {
-      const { embedding } = await embed({
-        model: openai.embedding("text-embedding-3-small"),
-        value: text,
-      });
+    if (this.embeddingProvider === "gemini") {
+      const geminiService = getGeminiEmbeddingService();
+      return await geminiService.generateEmbedding(text);
+    } else {
+      // Fallback to OpenAI
+      try {
+        const { embedding } = await embed({
+          model: openai.embedding("text-embedding-3-small"),
+          value: text,
+        });
 
-      return embedding;
-    } catch (error) {
-      console.error("Failed to generate embedding:", error);
-      throw new Error("Embedding generation failed");
+        return embedding;
+      } catch (error) {
+        console.error("Failed to generate OpenAI embedding:", error);
+        throw new Error("OpenAI embedding generation failed");
+      }
     }
   }
 
   /**
    * Search vectors using similarity search (Multi-tenant: requires org/division/app)
    * THIS IS THE FAST PART! Sub-second queries! 🚀
+   * 
+   * Now supports both OpenAI and Gemini embeddings!
    */
   async searchVectors(
     query: string,
@@ -55,6 +70,7 @@ export class SupabaseVectorService {
       matchThreshold?: number;
       matchCount?: number;
       sourceTypes?: string[];
+      useGemini?: boolean; // If true, use Gemini embeddings
     }
   ): Promise<VectorSearchResult[]> {
     const { 
@@ -63,15 +79,19 @@ export class SupabaseVectorService {
       app_under_test,
       matchThreshold = 0.50, 
       matchCount = 10, 
-      sourceTypes = null 
+      sourceTypes = null,
+      useGemini = true // Default to Gemini
     } = options;
 
     try {
-      // Generate embedding for the query
+      // Generate embedding for the query using configured provider
       const embeddingStart = performance.now();
+      const originalProvider = this.embeddingProvider;
+      this.embeddingProvider = useGemini ? "gemini" : "openai";
       const queryEmbedding = await this.generateEmbedding(query);
+      this.embeddingProvider = originalProvider;
       const embeddingTime = performance.now() - embeddingStart;
-      console.log(`⏱️  Embedding generation: ${embeddingTime.toFixed(0)}ms`);
+      console.log(`⏱️  Embedding generation (${useGemini ? 'Gemini' : 'OpenAI'}): ${embeddingTime.toFixed(0)}ms`);
 
       // Use admin client for RPC (grants require authenticated/service role)
       const rpcClient = supabaseAdmin ?? publicSupabase;
@@ -79,8 +99,11 @@ export class SupabaseVectorService {
         throw new Error("Supabase client is not initialized");
       }
 
+      // Choose appropriate RPC function based on embedding type
+      const rpcFunction = useGemini ? "match_siam_vectors_gemini" : "match_siam_vectors";
+
       const vectorSearchStart = performance.now();
-      const { data, error } = await rpcClient.rpc("match_siam_vectors", {
+      const { data, error } = await rpcClient.rpc(rpcFunction, {
         p_organization: organization,
         p_division: division,
         p_app_under_test: app_under_test,
