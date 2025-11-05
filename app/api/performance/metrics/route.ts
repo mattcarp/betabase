@@ -268,8 +268,8 @@ function calculateQueryMetrics(logs: any[]) {
 function calculateApiMetrics(logs: any[]) {
   // Group by endpoint (simulated)
   const endpoints = [
-    { endpoint: "/api/chat", count: logs.length * 0.4 },
-    { endpoint: "/api/aoma-mcp", count: logs.length * 0.3 },
+    { endpoint: "/api/chat", count: logs.length * 0.5 },
+    { endpoint: "/api/aoma-stream", count: logs.length * 0.2 }, // UPDATED: was /api/aoma-mcp
     { endpoint: "/api/vector-store", count: logs.length * 0.2 },
     { endpoint: "/api/upload", count: logs.length * 0.1 },
   ];
