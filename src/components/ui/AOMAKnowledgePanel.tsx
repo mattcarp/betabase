@@ -117,27 +117,23 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
-        const response = await fetch("/api/aoma-mcp", {
+        // UPDATED: Use /api/aoma-stream instead of deleted /api/aoma-mcp
+        const response = await fetch("/api/aoma-stream", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            action: "tools/call",
-            tool: "query_aoma_knowledge",
-            args: {
-              query:
-                "What are good questions about AOMA technical features, USM (Universal Service Model), cover hot swap functionality, asset ingestion, metadata management, and AOMA workflows? Provide 6 concise technical questions.",
-              strategy: "rapid",
-            },
+            query:
+              "What are good questions about AOMA technical features, USM (Universal Service Model), cover hot swap functionality, asset ingestion, metadata management, and AOMA workflows? Provide 6 concise technical questions.",
           }),
         });
 
         if (response.ok) {
           const data = await response.json();
-          if (data.success && data.data?.response) {
+          if (data.success && data.result?.response) {
             // Parse the response to extract questions
-            const lines = data.data.response.split("\n").filter((line: string) => line.trim());
+            const lines = data.result.response.split("\n").filter((line: string) => line.trim());
             const newSuggestions: QuerySuggestion[] = [];
 
             const categories = [
@@ -186,18 +182,14 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
       setActiveTab("search");
 
       try {
-        const response = await fetch("/api/aoma-mcp", {
+        // UPDATED: Use /api/aoma-stream instead of deleted /api/aoma-mcp
+        const response = await fetch("/api/aoma-stream", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            action: "tools/call",
-            tool: "query_aoma_knowledge",
-            args: {
-              query: queryText,
-              strategy: queryStrategy,
-            },
+            query: queryText,
           }),
         });
 
@@ -207,7 +199,7 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
           throw new Error(data.message || "Failed to query AOMA knowledge base");
         }
 
-        setCurrentResponse(data.data);
+        setCurrentResponse(data.result);
 
         // Add to history
         const historyItem: QueryHistoryItem = {
@@ -215,14 +207,14 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
           query: queryText,
           timestamp: new Date(),
           strategy: queryStrategy as any,
-          responsePreview: data.data?.response?.substring(0, 100),
+          responsePreview: data.result?.response?.substring(0, 100),
           success: true,
         };
 
         setQueryHistory((prev) => [historyItem, ...prev.slice(0, 19)]); // Keep last 20
 
         if (onQueryResult) {
-          onQueryResult(data.data);
+          onQueryResult(data.result);
         }
       } catch (err) {
         console.error("AOMA query failed:", err);

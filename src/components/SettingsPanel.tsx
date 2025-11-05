@@ -17,7 +17,7 @@ import {
 import { cn } from "../lib/utils";
 import { useSettings, SiamSettings } from "../hooks/useSettings";
 import useNotifications from "../hooks/useNotifications";
-import { McpSettings } from "../renderer/components/settings/McpSettings";
+// MCP Settings removed - using direct Supabase vector search instead
 
 interface SettingsPanelProps {
   isOpen: boolean;
@@ -37,7 +37,6 @@ const tabs: TabDefinition[] = [
   { id: "recording", label: "Recording", icon: Mic },
   { id: "layout", label: "Layout", icon: Layout },
   { id: "shortcuts", label: "Shortcuts", icon: Keyboard },
-  { id: "mcp", label: "MCP Settings", icon: Network },
   { id: "data", label: "Data & Privacy", icon: Shield },
 ];
 
@@ -184,9 +183,6 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 settings={localSettings}
                 updateNestedSetting={updateNestedSetting}
               />
-            )}
-            {activeTab === "mcp" && (
-              <McpSettings isOpen={true} onSave={() => success("MCP settings updated")} />
             )}
             {activeTab === "data" && (
               <DataPrivacySettings settings={localSettings} updateSetting={updateSetting} />

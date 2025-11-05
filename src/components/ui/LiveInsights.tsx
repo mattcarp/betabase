@@ -16,7 +16,7 @@ import {
   Mic,
   // Volume2, // Unused
 } from "lucide-react";
-import { useMCPClient } from "../../hooks/useMCPClient";
+// REMOVED: useMCPClient hook - aoma-mesh-mcp integration removed
 
 interface InsightMetric {
   id: string;
@@ -45,7 +45,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
 }) => {
   const [insights, setInsights] = useState<InsightMetric[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [_mcpState, _mcpActions] = useMCPClient(); // Unused
+  // REMOVED: useMCPClient hook - was unused
 
   // Generate real-time insights from conversation data
   const generateConversationInsights = (messages: any[]): InsightMetric[] => {
