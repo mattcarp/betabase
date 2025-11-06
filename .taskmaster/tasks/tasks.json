@@ -1795,7 +1795,7 @@
               1
             ],
             "details": "Modify the schema of all vector tables to include the 'app_under_test' column.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Check that the 'app_under_test' column is present in all vector tables and correctly populated."
           },
           {
@@ -1878,7 +1878,7 @@
       ],
       "created": "2025-10-30T17:18:33.148Z",
       "description": "Tasks for master context",
-      "updated": "2025-11-06T11:52:52.670Z"
+      "updated": "2025-11-06T11:54:46.338Z"
     }
   }
 }
