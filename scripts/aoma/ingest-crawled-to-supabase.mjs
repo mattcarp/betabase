@@ -4,14 +4,14 @@
   
   - Reads all page.md files from crawl output directory
   - Generates embeddings via OpenAI text-embedding-3-small
-  - Upserts into aoma_unified_vectors with deduplication
+  - Upserts into siam_vectors with deduplication
   - Supports dry-run, checkpoint resume, and progress logging
   
   Environment variables (from .env.local):
   - AOMA_CRAWL_DIR: Source directory with crawled pages (default: tmp/pw-crawl/aoma-full)
   - SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY: Supabase credentials
   - OPENAI_API_KEY: For embedding generation
-  - SUPABASE_SOURCE_TYPE: Source type for aoma_unified_vectors (default: 'firecrawl')
+  - SUPABASE_SOURCE_TYPE: Source type for siam_vectors (default: 'firecrawl')
 */
 
 import fs from 'node:fs';
@@ -135,7 +135,7 @@ async function upsertToSupabase(item, embedding) {
   const contentHash = computeContentHash(item.content);
   
   const { data, error } = await supabase
-    .from('aoma_unified_vectors')
+    .from('siam_vectors')
     .upsert({
       content: item.content,
       embedding,
@@ -220,7 +220,7 @@ async function processPage(file, checkpoint) {
 async function ingest() {
   console.log(`\n=== AOMA Playwright Crawl → Supabase Ingestion ===`);
   console.log(`Source: ${CRAWL_DIR}`);
-  console.log(`Target: aoma_unified_vectors (source_type: ${SOURCE_TYPE})`);
+  console.log(`Target: siam_vectors (source_type: ${SOURCE_TYPE})`);
   console.log(`Mode: ${DRY_RUN ? 'DRY RUN' : 'FULL INGESTION'}`);
   console.log(`Resume: ${RESUME ? 'Yes' : 'No'}\n`);
   

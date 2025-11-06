@@ -36,7 +36,7 @@ async function deduplicateLegacyEmbeds(dryRun = true) {
 
     while (hasMore) {
       const { data: page, error: fetchError } = await supabase
-        .from("aoma_unified_vectors")
+        .from("siam_vectors")
         .select("id, source_id, created_at, metadata")
         .eq("source_type", "firecrawl")
         .order("created_at", { ascending: false })
@@ -154,7 +154,7 @@ async function deduplicateLegacyEmbeds(dryRun = true) {
         const batch = deleteIds.slice(i, i + batchSize);
 
         const { error: deleteError } = await supabase
-          .from("aoma_unified_vectors")
+          .from("siam_vectors")
           .delete()
           .in("id", batch);
 

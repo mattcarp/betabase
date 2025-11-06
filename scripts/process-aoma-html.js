@@ -59,7 +59,7 @@ async function processHtmlFile(htmlPath) {
   console.log(`  ✅ Generated embedding (${embedding.length}D)`);
 
   // Store in Supabase using the existing optimized table
-  const { data, error } = await supabase.from("aoma_unified_vectors").upsert(
+  const { data, error } = await supabase.from("siam_vectors").upsert(
     {
       content: cleanedMarkdown,
       embedding: `[${embedding.join(",")}]`, // Convert array to PostgreSQL vector format

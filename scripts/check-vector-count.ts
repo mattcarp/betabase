@@ -28,7 +28,7 @@ async function checkVectorStats() {
   try {
     // Get total count
     const { count: totalCount, error: countError } = await supabase
-      .from("aoma_unified_vectors")
+      .from("siam_vectors")
       .select("*", { count: "exact", head: true });
 
     if (countError) {
@@ -76,7 +76,7 @@ async function checkVectorStats() {
     // Check table size
     const { data: sizeData, error: sizeError } = await supabase
       .rpc("pg_size_pretty", {
-        size: await supabase.rpc("pg_total_relation_size", { relation: "aoma_unified_vectors" }),
+        size: await supabase.rpc("pg_total_relation_size", { relation: "siam_vectors" }),
       })
       .single();
 

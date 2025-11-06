@@ -4,10 +4,10 @@
  * Re-process embeddings from TEXT format to proper vector(1536) format
  *
  * This script:
- * 1. Deploys the aoma_unified_vectors migration
+ * 1. Deploys the siam_vectors migration
  * 2. Reads existing wiki_documents and jira_ticket_embeddings
  * 3. Generates proper vector(1536) embeddings via OpenAI
- * 4. Inserts into aoma_unified_vectors table using upsert function
+ * 4. Inserts into siam_vectors table using upsert function
  * 5. Tracks progress with resumability
  *
  * Estimated time:
@@ -138,7 +138,7 @@ async function migrateWikiDocuments(supabase) {
           continue;
         }
 
-        // Insert into aoma_unified_vectors using upsert function
+        // Insert into siam_vectors using upsert function
         const { data: result, error: insertError } = await supabase.rpc("upsert_aoma_vector", {
           p_content: content,
           p_embedding: `[${embedding.join(",")}]`, // Convert array to PostgreSQL vector format
@@ -273,7 +273,7 @@ async function migrateJiraTickets(supabase) {
           continue;
         }
 
-        // Insert into aoma_unified_vectors
+        // Insert into siam_vectors
         const { data: result, error: insertError } = await supabase.rpc("upsert_aoma_vector", {
           p_content: content,
           p_embedding: `[${embedding.join(",")}]`,
@@ -337,7 +337,7 @@ async function verifyMigration(supabase) {
 
   // Check table exists
   const { count: totalCount, error: countError } = await supabase
-    .from("aoma_unified_vectors")
+    .from("siam_vectors")
     .select("*", { count: "exact", head: true });
 
   if (countError) {
@@ -345,11 +345,11 @@ async function verifyMigration(supabase) {
     return;
   }
 
-  console.log(`\n✅ Total vectors in aoma_unified_vectors: ${totalCount}`);
+  console.log(`\n✅ Total vectors in siam_vectors: ${totalCount}`);
 
   // Count by source type
   const { data: stats, error: statsError } = await supabase
-    .from("aoma_unified_vectors")
+    .from("siam_vectors")
     .select("source_type");
 
   if (!statsError && stats) {
@@ -401,7 +401,7 @@ async function main() {
   console.log("\nThis script will:");
   console.log("  1. Read wiki_documents and jira_ticket_embeddings");
   console.log("  2. Generate proper vector(1536) embeddings via OpenAI");
-  console.log("  3. Insert into aoma_unified_vectors table");
+  console.log("  3. Insert into siam_vectors table");
   console.log("  4. Track progress with resumability");
   console.log("\nEstimated time: ~1 hour for all documents");
   console.log("=".repeat(70));

@@ -14,7 +14,7 @@ AS $$
 DECLARE
   v_id uuid;
 BEGIN
-  INSERT INTO aoma_unified_vectors (
+  INSERT INTO siam_vectors (
     content,
     embedding,
     source_type,

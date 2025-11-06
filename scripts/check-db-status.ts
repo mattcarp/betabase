@@ -17,15 +17,15 @@ const supabase = createClient(
 async function checkStatus() {
   console.log("🔍 Checking database status...\n");
 
-  // Check aoma_unified_vectors
+  // Check siam_vectors
   const { data: vectors, error: vectorsError } = await supabase
-    .from("aoma_unified_vectors")
+    .from("siam_vectors")
     .select("source_type, count");
 
   if (vectorsError) {
     console.error("❌ Error checking vectors:", vectorsError.message);
   } else {
-    console.log("📦 aoma_unified_vectors:");
+    console.log("📦 siam_vectors:");
     if (vectors && vectors.length > 0) {
       vectors.forEach((v) => console.log(`   ${v.source_type}: ${v.count} records`));
     } else {
@@ -35,7 +35,7 @@ async function checkStatus() {
 
   // Get total count
   const { count, error: countError } = await supabase
-    .from("aoma_unified_vectors")
+    .from("siam_vectors")
     .select("*", { count: "exact", head: true });
 
   if (!countError) {
