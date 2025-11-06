@@ -1837,7 +1837,7 @@
             "description": "Change test file names from 'aoma-performance' to 'siam-aoma-validation' for clarity.",
             "dependencies": [],
             "details": "Identify and rename all relevant test files.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Ensure all test files are renamed and tests run successfully."
           },
           {
@@ -1878,7 +1878,7 @@
       ],
       "created": "2025-10-30T17:18:33.148Z",
       "description": "Tasks for master context",
-      "updated": "2025-11-06T11:46:14.241Z"
+      "updated": "2025-11-06T11:52:52.670Z"
     }
   }
 }
