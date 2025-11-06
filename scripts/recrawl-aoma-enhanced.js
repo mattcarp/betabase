@@ -191,7 +191,7 @@ ${markdown.substring(0, 6000)}
     console.log(`   ✅ Embedding in ${embeddingDuration}ms`);
 
     // Store in Supabase
-    const { error: dbError } = await supabase.from("aoma_unified_vectors").upsert(
+    const { error: dbError } = await supabase.from("siam_vectors").upsert(
       {
         source_type: "firecrawl",
         source_id: fullUrl,

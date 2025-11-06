@@ -2,7 +2,7 @@
 
 # Deploy migration and fix embeddings
 # This script:
-# 1. Deploys the aoma_unified_vectors migration to Supabase
+# 1. Deploys the siam_vectors migration to Supabase
 # 2. Runs the embedding migration script
 # 3. Verifies the migration
 # 4. Tests the hybrid integration
@@ -14,7 +14,7 @@ echo "=============================================================="
 echo ""
 
 # Step 1: Deploy migration
-echo "📦 Step 1: Deploying aoma_unified_vectors migration..."
+echo "📦 Step 1: Deploying siam_vectors migration..."
 echo "--------------------------------------------------------------"
 
 if command -v supabase &> /dev/null; then
@@ -59,7 +59,7 @@ echo "This will:"
 echo "  - Read 393 wiki documents"
 echo "  - Read 6,040 JIRA tickets"
 echo "  - Generate OpenAI embeddings (vector(1536))"
-echo "  - Insert into aoma_unified_vectors"
+echo "  - Insert into siam_vectors"
 echo ""
 echo "Estimated time: ~1 hour"
 echo "Progress is saved - you can resume if interrupted"

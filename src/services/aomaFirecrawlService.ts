@@ -362,7 +362,7 @@ export class AomaFirecrawlService {
    */
   private async updateSyncStatus(recordsCount: number, errors: string[]): Promise<void> {
     await getSupabase()
-      .from("aoma_source_sync")
+      .from("siam_source_sync")
       .upsert({
         source_type: "aoma_docs",
         last_sync: new Date().toISOString(),

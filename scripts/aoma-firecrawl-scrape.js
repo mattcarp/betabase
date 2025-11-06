@@ -76,7 +76,7 @@ async function scrapeAOMAPages() {
       const embedding = embeddingResponse.data[0].embedding;
 
       // Store in Supabase
-      const { error } = await supabase.from("aoma_unified_vectors").upsert(
+      const { error } = await supabase.from("siam_vectors").upsert(
         {
           content: markdown,
           embedding: embedding,

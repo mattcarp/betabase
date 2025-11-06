@@ -27,7 +27,7 @@ const sql = `
 CREATE EXTENSION IF NOT EXISTS vector;
 
 -- Create the main unified vectors table
-CREATE TABLE IF NOT EXISTS aoma_unified_vectors (
+CREATE TABLE IF NOT EXISTS siam_vectors (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
   content TEXT NOT NULL,
   embedding vector(1536), -- OpenAI text-embedding dimensions
@@ -42,20 +42,20 @@ CREATE TABLE IF NOT EXISTS aoma_unified_vectors (
 );
 
 -- Create indexes for blazing fast queries
-CREATE INDEX IF NOT EXISTS aoma_unified_vectors_embedding_idx 
-  ON aoma_unified_vectors 
+CREATE INDEX IF NOT EXISTS siam_vectors_embedding_idx 
+  ON siam_vectors 
   USING ivfflat (embedding vector_cosine_ops)
   WITH (lists = 100);
 
-CREATE INDEX IF NOT EXISTS aoma_unified_vectors_source_type_idx 
-  ON aoma_unified_vectors(source_type);
+CREATE INDEX IF NOT EXISTS siam_vectors_source_type_idx 
+  ON siam_vectors(source_type);
 
-CREATE INDEX IF NOT EXISTS aoma_unified_vectors_metadata_idx 
-  ON aoma_unified_vectors 
+CREATE INDEX IF NOT EXISTS siam_vectors_metadata_idx 
+  ON siam_vectors 
   USING gin(metadata);
 
-CREATE INDEX IF NOT EXISTS aoma_unified_vectors_created_at_idx 
-  ON aoma_unified_vectors(created_at DESC);
+CREATE INDEX IF NOT EXISTS siam_vectors_created_at_idx 
+  ON siam_vectors(created_at DESC);
 
 -- Function to search vectors with similarity
 CREATE OR REPLACE FUNCTION match_aoma_vectors(
@@ -83,7 +83,7 @@ BEGIN
     v.source_id,
     v.metadata,
     1 - (v.embedding <=> query_embedding) as similarity
-  FROM aoma_unified_vectors v
+  FROM siam_vectors v
   WHERE 
     (filter_source_types IS NULL OR v.source_type = ANY(filter_source_types))
     AND (query_embedding IS NULL OR (1 - (v.embedding <=> query_embedding)) > match_threshold)
@@ -94,8 +94,8 @@ END;
 $$;
 
 -- Grant appropriate permissions
-GRANT ALL ON aoma_unified_vectors TO authenticated;
-GRANT ALL ON aoma_unified_vectors TO anon;
+GRANT ALL ON siam_vectors TO authenticated;
+GRANT ALL ON siam_vectors TO anon;
 GRANT EXECUTE ON FUNCTION match_aoma_vectors TO authenticated;
 GRANT EXECUTE ON FUNCTION match_aoma_vectors TO anon;
 

@@ -67,7 +67,7 @@ async function testMetricsIngestion() {
         value: 45.3,
         metricType: "performance",
         unit: "milliseconds",
-        tags: { query: "vector_search", table: "aoma_unified_vectors" },
+        tags: { query: "vector_search", table: "siam_vectors" },
       },
     ];
 

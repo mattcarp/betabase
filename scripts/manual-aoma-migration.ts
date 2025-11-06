@@ -382,7 +382,7 @@ async function migrate(): Promise<void> {
       console.log('\n✅ Migration completed successfully!');
       console.log('\n🎯 Next Steps:');
       console.log('1. Verify results in Supabase:');
-      console.log(`   SELECT COUNT(*) FROM aoma_unified_vectors WHERE source_type = 'aoma_manual_import';`);
+      console.log(`   SELECT COUNT(*) FROM siam_vectors WHERE source_type = 'aoma_manual_import';`);
       console.log('2. Test a query:');
       console.log(`   Run a chat query that should return AOMA docs`);
       console.log('3. Update orchestrator to use Supabase for AOMA docs (see COMPLETE_ARCHITECTURE_REVIEW.md)');
