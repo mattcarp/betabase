@@ -27,6 +27,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 interface RetrievedDoc {
   id: string;
@@ -327,58 +328,122 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
 export function RLHFFeedbackTab() {
   const [feedbackQueue, setFeedbackQueue] = useState<FeedbackItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({ pending: 0, submitted: 0, avgRating: 0 });
+  const supabase = createClientComponentClient();
 
   useEffect(() => {
     loadFeedbackQueue();
   }, []);
 
   const loadFeedbackQueue = async () => {
-    // In production, this would fetch from Supabase
-    // For now, using mock data
-    setLoading(false);
+    setLoading(true);
     
-    // Mock data
-    setFeedbackQueue([
-      {
-        id: "1",
-        sessionId: "session-1",
-        query: "How do I configure the AOMA data pipeline for real-time processing?",
-        response: "To configure the AOMA data pipeline for real-time processing, you'll need to adjust several key settings...",
-        retrievedDocs: [
-          {
-            id: "doc-1",
-            content: "The AOMA data pipeline supports real-time processing through streaming ingestion...",
-            source_type: "knowledge",
-            similarity: 0.92,
-            rerankScore: 0.95,
-          },
-          {
-            id: "doc-2",
-            content: "Configuration guide for AOMA pipeline settings and parameters...",
-            source_type: "knowledge",
-            similarity: 0.88,
-            rerankScore: 0.89,
-          },
-        ],
-        timestamp: new Date(Date.now() - 3600000).toISOString(),
-      },
-    ]);
+    try {
+      // Load pending feedback (rating < 3 or thumbs_up is false/null)
+      const { data, error } = await supabase
+        .from('rlhf_feedback')
+        .select('*')
+        .or('rating.lt.3,rating.is.null,thumbs_up.is.false,thumbs_up.is.null')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      
+      if (error) {
+        console.error('Failed to load feedback:', error);
+        toast.error('Failed to load feedback queue');
+        setLoading(false);
+        return;
+      }
+      
+      // Transform to FeedbackItem format
+      const items: FeedbackItem[] = (data || []).map(row => ({
+        id: row.id,
+        sessionId: row.conversation_id,
+        query: row.user_query || 'N/A',
+        response: row.ai_response || 'N/A',
+        retrievedDocs: row.documents_marked || [],
+        timestamp: row.created_at,
+        feedbackSubmitted: row.rating !== null && row.rating >= 3
+      }));
+      
+      setFeedbackQueue(items);
+      
+      // Update stats
+      const { count: totalCount } = await supabase
+        .from('rlhf_feedback')
+        .select('*', { count: 'exact', head: true });
+      
+      const { count: submittedCount } = await supabase
+        .from('rlhf_feedback')
+        .select('*', { count: 'exact', head: true })
+        .not('rating', 'is', null);
+      
+      // Calculate average rating
+      const { data: ratingData } = await supabase
+        .from('rlhf_feedback')
+        .select('rating')
+        .not('rating', 'is', null);
+      
+      const avgRating = ratingData && ratingData.length > 0
+        ? ratingData.reduce((sum, row) => sum + (row.rating || 0), 0) / ratingData.length
+        : 0;
+      
+      setStats({
+        pending: (totalCount || 0) - (submittedCount || 0),
+        submitted: submittedCount || 0,
+        avgRating: avgRating
+      });
+      
+    } catch (error) {
+      console.error('Failed to load feedback:', error);
+      toast.error('Failed to load feedback queue');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmitFeedback = async (feedback: any) => {
     console.log("Submitting feedback:", feedback);
     
-    // Update local state
-    setFeedbackQueue(prev =>
-      prev.map(item =>
-        item.id === feedback.itemId
-          ? { ...item, feedbackSubmitted: true }
-          : item
-      )
-    );
-    
-    // In production, save to Supabase
-    // await supabase.from('rlhf_feedback').insert(...)
+    try {
+      // Update feedback with curator corrections
+      const { error } = await supabase
+        .from('rlhf_feedback')
+        .update({
+          rating: feedback.value?.score || (feedback.type === 'thumbs_up' ? 5 : 1),
+          thumbs_up: feedback.type === 'thumbs_up',
+          feedback_text: feedback.correction || null,
+          documents_marked: feedback.docRelevance ? 
+            Object.keys(feedback.docRelevance)
+              .filter(docId => feedback.docRelevance[docId])
+              .map(docId => ({ id: docId, relevant: true })) : 
+            null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', feedback.itemId);
+      
+      if (error) {
+        console.error('Failed to save feedback:', error);
+        throw error;
+      }
+      
+      // Update local state
+      setFeedbackQueue(prev =>
+        prev.map(item =>
+          item.id === feedback.itemId
+            ? { ...item, feedbackSubmitted: true }
+            : item
+        )
+      );
+      
+      // Reload queue to update stats
+      await loadFeedbackQueue();
+      
+      toast.success('Feedback saved successfully! 💜');
+    } catch (error) {
+      console.error('Error saving feedback:', error);
+      toast.error('Failed to save feedback');
+      throw error;
+    }
   };
 
   if (loading) {
@@ -402,9 +467,17 @@ export function RLHFFeedbackTab() {
               Help improve AI responses by providing feedback
             </p>
           </div>
-          <Badge variant="outline" className="text-lg">
-            {feedbackQueue.filter(i => !i.feedbackSubmitted).length} pending
-          </Badge>
+          <div className="flex gap-2">
+            <Badge variant="outline" className="text-sm bg-purple-500/10 border-purple-500/30">
+              {stats.pending} pending
+            </Badge>
+            <Badge variant="outline" className="text-sm bg-green-500/10 border-green-500/30">
+              {stats.submitted} reviewed
+            </Badge>
+            <Badge variant="outline" className="text-sm bg-blue-500/10 border-blue-500/30">
+              ⭐ {stats.avgRating.toFixed(1)} avg
+            </Badge>
+          </div>
         </div>
       </div>
 
