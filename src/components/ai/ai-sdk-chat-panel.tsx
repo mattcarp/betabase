@@ -1297,6 +1297,54 @@ export function AiSdkChatPanel({
               )}
             </div>
 
+            {/* RAG Metadata Badges - Show which advanced RAG strategy was used */}
+            {!isUser && message.ragMetadata && (
+              <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border/30">
+                {message.ragMetadata.strategy && (
+                  <Badge 
+                    variant="outline" 
+                    className="bg-purple-500/10 border-purple-500/30 text-purple-300 hover:bg-purple-500/20"
+                  >
+                    📊 {message.ragMetadata.strategy === 'agentic' ? '🤖 Agentic' : 
+                        message.ragMetadata.strategy === 'context-aware' ? '🧠 Context-Aware' : 
+                        '📚 Standard'} RAG
+                  </Badge>
+                )}
+                {message.ragMetadata.documentsReranked && (
+                  <Badge 
+                    variant="outline" 
+                    className="bg-blue-500/10 border-blue-500/30 text-blue-300 hover:bg-blue-500/20"
+                  >
+                    🔄 Re-ranked {message.ragMetadata.initialDocs}→{message.ragMetadata.finalDocs} docs
+                  </Badge>
+                )}
+                {message.ragMetadata.agentSteps > 0 && (
+                  <Badge 
+                    variant="outline" 
+                    className="bg-cyan-500/10 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20"
+                  >
+                    🔧 {message.ragMetadata.agentSteps} agent steps
+                  </Badge>
+                )}
+                {message.ragMetadata.confidence && (
+                  <Badge 
+                    variant="outline" 
+                    className="bg-green-500/10 border-green-500/30 text-green-300 hover:bg-green-500/20"
+                  >
+                    ✓ {Math.round(message.ragMetadata.confidence * 100)}% confident
+                  </Badge>
+                )}
+                {message.ragMetadata.timeMs && (
+                  <Badge 
+                    variant="outline" 
+                    className="bg-gray-500/10 border-gray-500/30 text-gray-300"
+                  >
+                    ⚡ {message.ragMetadata.timeMs}ms
+                  </Badge>
+                )}
+              </div>
+            )}
+
             {/* PERFORMANCE FIX: REMOVED DUPLICATE PROGRESS INDICATOR - Now only rendered once at line 1538 */}
 
             {/* Enhanced Code blocks */}

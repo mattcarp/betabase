@@ -1647,7 +1647,61 @@
         "status": "pending",
         "dependencies": [],
         "priority": "high",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Research Safari Automation Tools",
+            "description": "Identify and evaluate tools and libraries that can automate Safari browser tasks, focusing on authenticated session handling.",
+            "dependencies": [],
+            "details": "Explore tools like Selenium, Puppeteer, or AppleScript for automating Safari.\n<info added on 2025-11-06T13:19:18.092Z>\nRESEARCH COMPLETE\n\n**Finding:** Playwright is already fully configured and superior to Safari-specific tools.\n\n**Existing Infrastructure:**\n1. ✅ **Playwright Fully Configured**\n   - 5+ playwright.config.ts variants (local, render, dashboard, etc.)\n   - Already in package.json and working\n\n2. ✅ **AOMA Session Storage Exists**\n   - tmp/aoma-stage-storage.json (51KB, Nov 3 2024)\n   - Authenticated session already captured\n\n3. ✅ **Extensive AOMA HTML/Screenshots**\n   - tmp/aoma-html/ contains ~20 AOMA pages (HTML + Markdown)\n   - tmp/aoma-console-logs/, tmp/aoma-webvitals/, etc.\n   - Screenshots from Oct 22 capture run\n\n4. ✅ **AOMA Base URL Configured**\n   - https://aoma-stage.smcdp-de.net\n   - Already used in aomaFirecrawlService.ts\n\n5. ✅ **Test Files Organized**\n   - siam-aoma-chat.spec.ts\n   - siam-aoma-honest-responses.spec.ts\n   - siam-aoma-sophisticated-questions.spec.ts\n   - siam-aoma-chat-comprehensive.spec.ts\n\n**Recommendation:**\nUse Playwright (not Safari-specific tools) because:\n- ✅ Cross-browser (Chromium, Firefox, Webkit/Safari)\n- ✅ Better API and developer experience\n- ✅ Already configured and working\n- ✅ Can use Webkit engine for Safari-like behavior\n- ✅ Session persistence built-in\n- ✅ Screenshot capabilities excellent\n\n**Why NOT Selenium/Puppeteer/AppleScript:**\n- ❌ Selenium: Heavier, slower, more brittle\n- ❌ Puppeteer: Chrome-only (no Safari)\n- ❌ AppleScript: macOS-only, limited capabilities\n\n**Next Step:** Use existing Playwright setup with stored session\n</info added on 2025-11-06T13:19:18.092Z>",
+            "status": "done",
+            "testStrategy": "Verify the selected tool can successfully automate a login and navigation task in Safari."
+          },
+          {
+            "id": 2,
+            "title": "Establish Authenticated Session",
+            "description": "Create a script to establish an authenticated session in Safari for AOMA.",
+            "dependencies": [
+              1
+            ],
+            "details": "Develop a script to log into AOMA using Safari, ensuring session persistence.",
+            "status": "in-progress",
+            "testStrategy": "Test the script to confirm it maintains an authenticated session across multiple page loads."
+          },
+          {
+            "id": 3,
+            "title": "Develop Page Navigation Script",
+            "description": "Implement a script to navigate through all AOMA pages using the authenticated session.",
+            "dependencies": [
+              2
+            ],
+            "details": "Script should systematically visit each page in AOMA, ensuring all are accessible.",
+            "status": "pending",
+            "testStrategy": "Run the script and verify it successfully navigates to each page without errors."
+          },
+          {
+            "id": 4,
+            "title": "Implement Screenshot Capture",
+            "description": "Add functionality to capture screenshots of each AOMA page during navigation.",
+            "dependencies": [
+              3
+            ],
+            "details": "Enhance the navigation script to take screenshots of each page and save them locally.",
+            "status": "pending",
+            "testStrategy": "Check that screenshots are captured and saved correctly for each page visited."
+          },
+          {
+            "id": 5,
+            "title": "Optimize and Document Script",
+            "description": "Optimize the script for performance and document its usage and setup.",
+            "dependencies": [
+              4
+            ],
+            "details": "Refactor the script for efficiency and create comprehensive documentation for future use.",
+            "status": "pending",
+            "testStrategy": "Review the script's performance and ensure documentation is clear and complete."
+          }
+        ]
       },
       {
         "id": 88,
@@ -1878,7 +1932,7 @@
       ],
       "created": "2025-10-30T17:18:33.148Z",
       "description": "Tasks for master context",
-      "updated": "2025-11-06T12:03:20.987Z"
+      "updated": "2025-11-06T13:19:45.151Z"
     }
   }
 }
