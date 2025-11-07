@@ -4,6 +4,7 @@ import { useChat } from "@ai-sdk/react";
 // import { DefaultChatTransport } from "ai"; // Removed - not available in current ai version
 import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../../lib/utils";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
@@ -170,6 +171,10 @@ export function AiSdkChatPanel({
   const [isProcessing, setIsProcessing] = useState(false); // Simpler loading state
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
   const [loadingSeconds, setLoadingSeconds] = useState(0); // Track seconds elapsed during loading
+
+  // RLHF Feedback tracking
+  const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down' | null>>({});
+  const supabase = createClientComponentClient();
 
   // Voice feature states - define before using in hooks
   const [isTTSEnabled, setIsTTSEnabled] = useState(false);
@@ -1140,6 +1145,65 @@ export function AiSdkChatPanel({
     }
   };
 
+  // RLHF Feedback Handler
+  const handleFeedback = async (messageId: string, type: 'up' | 'down') => {
+    if (feedbackGiven[messageId]) {
+      toast.info('Feedback already recorded for this message');
+      return;
+    }
+
+    try {
+      // Find the message to get content and metadata
+      const message = messages.find((m) => m.id === messageId);
+      if (!message) {
+        console.error('Message not found:', messageId);
+        return;
+      }
+
+      // Extract message content
+      const messageContent = message.parts?.[0]?.text || (message as any).content || '';
+      
+      // Find the user query (previous message)
+      const messageIndex = messages.findIndex((m) => m.id === messageId);
+      const userQuery = messageIndex > 0 ? 
+        (messages[messageIndex - 1].parts?.[0]?.text || (messages[messageIndex - 1] as any).content || '') : 
+        '';
+
+      // Store feedback in database
+      const { error } = await supabase.from('rlhf_feedback').insert({
+        conversation_id: conversationId || `session_${Date.now()}`,
+        user_query: userQuery,
+        ai_response: messageContent,
+        rating: type === 'up' ? 5 : 1,
+        thumbs_up: type === 'up',
+        feedback_text: null,
+        documents_marked: message.ragMetadata || null,
+        user_email: null, // Will be set by RLS policy from auth user
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      });
+
+      if (error) {
+        console.error('Failed to save feedback:', error);
+        toast.error('Failed to save feedback. Please try again.');
+        return;
+      }
+
+      // Update local state
+      setFeedbackGiven(prev => ({ ...prev, [messageId]: type }));
+
+      // Show success message
+      if (type === 'up') {
+        toast.success('Feedback recorded! Thank you! 💜');
+      } else {
+        toast.info('Feedback recorded. A curator will review this response.');
+      }
+    } catch (err) {
+      console.error('Error saving feedback:', err);
+      toast.error('Failed to save feedback');
+    }
+  };
+
   const renderMessage = (message: any, index: number) => {
     const isUser = message.role === "user";
     const isLastMessage = index === messages.length - 1;
@@ -1342,6 +1406,42 @@ export function AiSdkChatPanel({
                     ⚡ {message.ragMetadata.timeMs}ms
                   </Badge>
                 )}
+              </div>
+            )}
+
+            {/* HITL Feedback Buttons - Thumbs Up/Down */}
+            {!isUser && (
+              <div className="flex gap-2 mt-3">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleFeedback(message.id, 'up')}
+                  disabled={feedbackGiven[message.id] !== undefined}
+                  className={cn(
+                    "h-7 px-2 transition-colors",
+                    feedbackGiven[message.id] === 'up' 
+                      ? "text-green-400 bg-green-500/20" 
+                      : "hover:bg-green-500/10 hover:text-green-400"
+                  )}
+                  title="This response was helpful"
+                >
+                  <ThumbsUp className="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleFeedback(message.id, 'down')}
+                  disabled={feedbackGiven[message.id] !== undefined}
+                  className={cn(
+                    "h-7 px-2 transition-colors",
+                    feedbackGiven[message.id] === 'down' 
+                      ? "text-red-400 bg-red-500/20" 
+                      : "hover:bg-red-500/10 hover:text-red-400"
+                  )}
+                  title="This response needs improvement"
+                >
+                  <ThumbsDown className="h-3.5 w-3.5" />
+                </Button>
               </div>
             )}
 
