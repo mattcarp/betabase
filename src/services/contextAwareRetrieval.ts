@@ -9,6 +9,7 @@ import { getSessionStateManager, type ConversationSession } from "../lib/session
 import { getTwoStageRetrieval } from "./twoStageRetrieval";
 import { getGeminiEmbeddingService } from "./geminiEmbeddingService";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { createClient } from '@supabase/supabase-js';
 
 export interface ContextAwareQueryOptions {
   sessionId: string;
@@ -38,6 +39,7 @@ export class ContextAwareRetrieval {
   private sessionManager = getSessionStateManager();
   private twoStageRetrieval = getTwoStageRetrieval();
   private geminiModel: any;
+  private supabase: any;
 
   constructor() {
     const apiKey = process.env.GOOGLE_API_KEY;
@@ -54,6 +56,13 @@ export class ContextAwareRetrieval {
         topK: 40,
       }
     });
+
+    // Initialize Supabase client for RLHF feedback
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (supabaseUrl && supabaseAnonKey) {
+      this.supabase = createClient(supabaseUrl, supabaseAnonKey);
+    }
   }
 
   /**
@@ -121,20 +130,78 @@ export class ContextAwareRetrieval {
   }
 
   /**
+   * Load RLHF feedback signals from database
+   */
+  private async loadRLHFFeedback(sessionId: string) {
+    if (!this.supabase) {
+      console.warn('Supabase not initialized - skipping RLHF feedback load');
+      return {
+        successfulQueries: [],
+        relevantDocuments: [],
+        userPreferences: {}
+      };
+    }
+
+    try {
+      // Load positive feedback (rating >= 4 or thumbs_up = true)
+      const { data, error } = await this.supabase
+        .from('rlhf_feedback')
+        .select('user_query, ai_response, documents_marked, rating')
+        .or('rating.gte.4,thumbs_up.eq.true')
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error('Failed to load RLHF feedback:', error);
+        return { successfulQueries: [], relevantDocuments: [], userPreferences: {} };
+      }
+
+      // Extract successful query patterns
+      const successfulQueries = (data || [])
+        .map(row => row.user_query)
+        .filter(Boolean);
+
+      // Extract documents marked as relevant by curators
+      const relevantDocuments = (data || [])
+        .flatMap(row => row.documents_marked || [])
+        .filter((doc: any) => doc.relevant);
+
+      console.log(`📚 Loaded ${successfulQueries.length} successful queries from RLHF feedback`);
+      console.log(`📄 Found ${relevantDocuments.length} curator-approved documents`);
+
+      return {
+        successfulQueries,
+        relevantDocuments,
+        userPreferences: {}
+      };
+    } catch (error) {
+      console.error('Error loading RLHF feedback:', error);
+      return { successfulQueries: [], relevantDocuments: [], userPreferences: {} };
+    }
+  }
+
+  /**
    * Transform query based on conversation context and RLHF signals
    */
   private async transformQuery(
     originalQuery: string,
-    session: ConversationSession
+    session: ConversationSession,
+    useRLHF: boolean = true
   ): Promise<QueryTransformationResult> {
     const { history, reinforcementContext } = session;
 
-    // If no history, return original query
-    if (history.length === 0) {
+    // Load RLHF feedback signals
+    let rlhfSignals = { successfulQueries: [], relevantDocuments: [], userPreferences: {} };
+    if (useRLHF) {
+      rlhfSignals = await this.loadRLHFFeedback(session.sessionId);
+    }
+
+    // If no history and no RLHF signals, return original query
+    if (history.length === 0 && rlhfSignals.successfulQueries.length === 0) {
       return {
         originalQuery,
         enhancedQuery: originalQuery,
-        reasoning: "No conversation history - using original query",
+        reasoning: "No conversation history or RLHF signals - using original query",
         contextUsed: {
           historyTurns: 0,
           topicWeights: {},
@@ -143,11 +210,12 @@ export class ContextAwareRetrieval {
       };
     }
 
-    // Build context prompt
+    // Build context prompt with RLHF signals
     const prompt = this.buildTransformationPrompt(
       originalQuery,
       history,
-      reinforcementContext
+      reinforcementContext,
+      rlhfSignals
     );
 
     try {
@@ -162,11 +230,11 @@ export class ContextAwareRetrieval {
       return {
         originalQuery,
         enhancedQuery: parsed.enhancedQuery || originalQuery,
-        reasoning: parsed.reasoning || "Query transformation applied",
+        reasoning: parsed.reasoning || "Query transformation applied with RLHF signals",
         contextUsed: {
           historyTurns: history.length,
           topicWeights: reinforcementContext.topicWeights,
-          successfulDocs: reinforcementContext.successfulDocIds.length,
+          successfulDocs: reinforcementContext.successfulDocIds.length + rlhfSignals.relevantDocuments.length,
         },
       };
     } catch (error) {
@@ -190,7 +258,8 @@ export class ContextAwareRetrieval {
   private buildTransformationPrompt(
     query: string,
     history: any[],
-    reinforcementContext: any
+    reinforcementContext: any,
+    rlhfSignals?: any
   ): string {
     // Get recent history (last 5 turns)
     const recentHistory = history.slice(-5);
@@ -212,7 +281,16 @@ export class ContextAwareRetrieval {
       .map(([topic, weight]) => `${topic} (${(weight as number).toFixed(2)})`)
       .join(", ");
 
-    return `You are a query enhancement system for a knowledge base retrieval system. Your job is to rewrite the user's query to be more effective for vector search, considering the conversation history and learned preferences.
+    // Build RLHF feedback text
+    const rlhfText = rlhfSignals?.successfulQueries?.length > 0
+      ? `\n\nSuccessful Query Patterns (from human feedback):\n${rlhfSignals.successfulQueries.slice(0, 5).map((q: string, i: number) => `${i + 1}. "${q}"`).join('\n')}`
+      : "";
+
+    const curatorDocsText = rlhfSignals?.relevantDocuments?.length > 0
+      ? `\n\nCurator-Approved Documents: ${rlhfSignals.relevantDocuments.length} documents marked as highly relevant`
+      : "";
+
+    return `You are a query enhancement system for a knowledge base retrieval system. Your job is to rewrite the user's query to be more effective for vector search, considering the conversation history, learned preferences, and HUMAN FEEDBACK from curators.
 
 Current Query: "${query}"
 
@@ -222,20 +300,22 @@ ${historyText || "No previous conversation"}
 User's Topic Preferences (higher = more interested):
 ${topTopics || "No topic preferences yet"}
 
-Successful Document Sources: ${reinforcementContext.successfulDocIds.length > 0 ? `${reinforcementContext.successfulDocIds.length} documents` : "None yet"}
+Successful Document Sources: ${reinforcementContext.successfulDocIds.length > 0 ? `${reinforcementContext.successfulDocIds.length} documents` : "None yet"}${rlhfText}${curatorDocsText}
 
 Instructions:
 1. Analyze the current query in context of the conversation
 2. If the query refers to previous topics, incorporate that context
 3. If the query is vague, make it more specific based on history
-4. If topic preferences exist, subtly bias toward those topics
-5. Keep the enhanced query concise and focused
-6. Maintain the user's original intent
+4. **CRITICALLY**: Learn from successful query patterns - if similar queries received positive feedback, adapt this query similarly
+5. If topic preferences exist, subtly bias toward those topics
+6. If curators marked certain documents as relevant, consider what made them relevant
+7. Keep the enhanced query concise and focused
+8. Maintain the user's original intent
 
 Respond with ONLY valid JSON in this exact format:
 {
   "enhancedQuery": "The enhanced query text here",
-  "reasoning": "Brief explanation of what was enhanced and why"
+  "reasoning": "Brief explanation of what was enhanced and why, especially any RLHF-based improvements"
 }`;
   }
 
