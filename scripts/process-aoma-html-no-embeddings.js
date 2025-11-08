@@ -92,7 +92,7 @@ async function processHtmlFiles() {
       }
 
       // Store in Supabase (without embedding for now)
-      const { error } = await supabase.from("aoma_unified_vectors").upsert(
+      const { error } = await supabase.from("siam_vectors").upsert(
         {
           content: cleanedMarkdown,
           embedding: null, // No embedding for now
@@ -156,7 +156,7 @@ async function checkDatabase() {
   try {
     // Get count of records
     const { count, error: countError } = await supabase
-      .from("aoma_unified_vectors")
+      .from("siam_vectors")
       .select("*", { count: "exact", head: true })
       .eq("source_type", "knowledge");
 
@@ -166,7 +166,7 @@ async function checkDatabase() {
 
     // Get sample records
     const { data, error } = await supabase
-      .from("aoma_unified_vectors")
+      .from("siam_vectors")
       .select("source_id, metadata")
       .eq("source_type", "knowledge")
       .limit(5);

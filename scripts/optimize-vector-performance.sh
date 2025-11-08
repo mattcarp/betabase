@@ -50,9 +50,9 @@ async function main() {
 
   // Hints for DB-side optimization (manual actions in Supabase SQL editor)
   report.notes.push(
-    'Verify HNSW index on aoma_unified_vectors.embedding (pgvector): CREATE INDEX IF NOT EXISTS ON aoma_unified_vectors USING hnsw (embedding vector_cosine_ops);'
+    'Verify HNSW index on siam_vectors.embedding (pgvector): CREATE INDEX IF NOT EXISTS ON siam_vectors USING hnsw (embedding vector_cosine_ops);'
   );
-  report.notes.push('Ensure ANALYZE has been run recently: ANALYZE aoma_unified_vectors;');
+  report.notes.push('Ensure ANALYZE has been run recently: ANALYZE siam_vectors;');
   report.notes.push('Consider partial indexes on source_type if frequently filtered.');
 
   report.completedAt = new Date().toISOString();

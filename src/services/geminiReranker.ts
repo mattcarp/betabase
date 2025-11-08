@@ -244,7 +244,7 @@ Respond with ONLY valid JSON in this exact format:
   }
 
   /**
-   * Apply RLHF boosts based on historical feedback
+   * Apply RLHF boosts based on historical feedback (from curator-approved documents)
    */
   private async applyRLHFBoosts(
     query: string,
@@ -254,31 +254,67 @@ Respond with ONLY valid JSON in this exact format:
     app_under_test: string
   ): Promise<RankedDocument[]> {
     try {
-      // Generate embedding for query (using Gemini)
-      const { getGeminiEmbeddingService } = await import("./geminiEmbeddingService");
-      const embeddingService = getGeminiEmbeddingService();
-      const queryEmbedding = await embeddingService.generateEmbedding(query);
+      console.log('📊 Loading RLHF feedback for document boosts...');
+      
+      // Load positive feedback (rating >= 4 or thumbs_up = true) with curator-marked documents
+      const { data: positiveFeedback, error } = await supabase
+        .from('rlhf_feedback')
+        .select('documents_marked, rating, thumbs_up')
+        .or('rating.gte.4,thumbs_up.eq.true')
+        .not('documents_marked', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(50);
 
-      // Find similar past feedback
-      const { data: similarFeedback, error } = await supabase.rpc(
-        "find_similar_feedback",
-        {
-          query_embedding: queryEmbedding,
-          p_organization: organization,
-          p_division: division,
-          p_app_under_test: app_under_test,
-          match_threshold: 0.85,
-          match_count: 5,
-        }
-      );
-
-      if (error || !similarFeedback || similarFeedback.length === 0) {
-        return documents; // No feedback found, return unchanged
+      if (error) {
+        console.error('Error loading RLHF feedback:', error);
+        return documents;
       }
 
-      // Calculate boosts for each document
+      if (!positiveFeedback || positiveFeedback.length === 0) {
+        console.log('No positive feedback found with document marks');
+        return documents;
+      }
+
+      // Build a map of document IDs to boost scores
+      const docBoostMap = new Map<string, { count: number, avgRating: number, totalRating: number }>();
+      
+      for (const feedback of positiveFeedback) {
+        const markedDocs = feedback.documents_marked || [];
+        const rating = feedback.rating || (feedback.thumbs_up ? 5 : 3);
+        
+        for (const markedDoc of markedDocs) {
+          if (markedDoc.relevant) {
+            const docId = markedDoc.id;
+            const existing = docBoostMap.get(docId) || { count: 0, avgRating: 0, totalRating: 0 };
+            existing.count++;
+            existing.totalRating += rating;
+            existing.avgRating = existing.totalRating / existing.count;
+            docBoostMap.set(docId, existing);
+          }
+        }
+      }
+
+      console.log(`✅ Found ${docBoostMap.size} curator-approved documents`);
+
+      // Apply boosts to documents
       return documents.map(doc => {
-        const boost = this.calculateDocBoost(doc, similarFeedback);
+        const boostData = docBoostMap.get(doc.id);
+        if (!boostData) {
+          return { ...doc, rlhfBoost: 0 };
+        }
+
+        // Calculate boost: base 10% + 2% per approval + 5% if highly rated
+        let boost = 0.1; // Base boost for any curator approval
+        boost += boostData.count * 0.02; // +2% per approval
+        if (boostData.avgRating >= 4.5) {
+          boost += 0.05; // +5% for highly rated
+        }
+
+        // Cap boost at 30%
+        boost = Math.min(boost, 0.3);
+
+        console.log(`📈 Document ${doc.id.substring(0, 8)}... boost: ${(boost * 100).toFixed(1)}% (${boostData.count} approvals, ${boostData.avgRating.toFixed(1)} avg rating)`);
+
         return {
           ...doc,
           rlhfBoost: boost,

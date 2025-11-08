@@ -233,7 +233,7 @@ async function crawlAOMAPages(page, context) {
         .trim();
 
       // Save to database
-      const { error } = await supabase.from("aoma_unified_vectors").upsert(
+      const { error } = await supabase.from("siam_vectors").upsert(
         {
           content: cleanedMarkdown,
           embedding: null,

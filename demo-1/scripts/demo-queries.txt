@@ -1,0 +1,23 @@
+# COMPELLING DEMO QUERIES - 4 MINUTE VERSION
+# Copy/paste these during your Descript recording
+
+# DEMO 1: Baseline
+What is AOMA?
+
+# DEMO 1: Multi-Source Intelligence
+Show me JIRA tickets related to AOMA migration and the related code commits
+
+# DEMO 2: Visual Intelligence
+Generate a system architecture diagram for AOMA showing all integration points
+
+# DEMO 3: Development Context
+What's the current development status of AOMA3 migration?
+
+# DEMO 4: Anti-Hallucination Test
+Does AOMA have a blockchain integration?
+
+# OPTIONAL: Proprietary Knowledge (if time)
+How does AOMA integrate with Sony's downstream reporting systems?
+
+# OPTIONAL: Code Intelligence (if time)
+Find the authentication implementation in our codebase
