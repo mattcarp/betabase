@@ -56,7 +56,7 @@ async function main() {
     const sourceTypes = ['git','confluence','jira','firecrawl'];
     report.supabase.counts = {};
     for (const t of sourceTypes) {
-      const { count, error } = await sb.from('aoma_unified_vectors').select('id', { count: 'exact', head: true }).eq('source_type', t);
+      const { count, error } = await sb.from('siam_vectors').select('id', { count: 'exact', head: true }).eq('source_type', t);
       if (error) throw error;
       report.supabase.counts[t] = count || 0;
     }

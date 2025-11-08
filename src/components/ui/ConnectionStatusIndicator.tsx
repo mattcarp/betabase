@@ -14,7 +14,6 @@ interface ConnectionStatus {
 export const ConnectionStatusIndicator: React.FC = () => {
   // Force component update with timestamp
   const [statuses, setStatuses] = useState<ConnectionStatus[]>([
-    { type: "connecting", service: "AOMA-MESH" },
     { type: "connecting", service: "OpenAI" },
     { type: "connecting", service: "ElevenLabs" },
   ]);
@@ -28,24 +27,8 @@ export const ConnectionStatusIndicator: React.FC = () => {
     const checkConnections = async () => {
       const newStatuses: ConnectionStatus[] = [];
 
-      // Check AOMA-MESH MCP Server (Render deployment)
-      try {
-        // Check if we can reach the AOMA knowledge API
-        const aomaHealthy = await fetch("/api/aoma/health", {
-          method: "GET",
-        });
-        newStatuses.push({
-          type: aomaHealthy.ok ? "connected" : "error",
-          service: "AOMA-MESH",
-          lastChecked: new Date(),
-        });
-      } catch {
-        newStatuses.push({
-          type: "disconnected",
-          service: "AOMA-MESH",
-          lastChecked: new Date(),
-        });
-      }
+      // REMOVED: AOMA-MESH health check - now using direct Supabase vector search
+      // No external MCP server to check - all queries are local/Supabase
 
       // Check OpenAI - try a simple API test
       try {

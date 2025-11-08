@@ -108,7 +108,7 @@ SELECT
 FROM information_schema.columns
 WHERE table_schema = 'public'
   AND table_name IN (
-    'aoma_unified_vectors',
+    'siam_vectors',
     'aoma_knowledge',
     'confluence_knowledge',
     'alexandria_knowledge',

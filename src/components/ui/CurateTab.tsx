@@ -28,6 +28,7 @@ import {
   GitMerge,
   // Loader2, // Unused
   Eye,
+  Brain,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -55,6 +56,9 @@ import {
 } from "./empty";
 import { Spinner } from "./spinner";
 import { InputGroup, InputGroupInput, InputGroupAddon } from "./input-group";
+import { usePermissions } from "../../hooks/usePermissions";
+import { RLHFFeedbackTab } from "./rlhf-tabs/RLHFFeedbackTab";
+import { cognitoAuth } from "../../services/cognitoAuth";
 
 interface VectorStoreFile {
   id: string;
@@ -90,6 +94,31 @@ export function CurateTab({
   className,
   assistantId = "asst_VvOHL1c4S6YapYKun4mY29fM",
 }: CurateTabProps) {
+  // Permission check for RLHF features
+  // Allow bypass on localhost for development, but enforce on production
+  const isLocalhost = typeof window !== 'undefined' && 
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  
+  const [userEmail, setUserEmail] = useState<string>("");
+  const { hasPermission } = usePermissions(userEmail);
+  
+  // SECURITY: Only bypass permissions on localhost, never on production
+  const canAccessRLHF = isLocalhost || hasPermission("rlhf_feedback");
+  
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const user = await cognitoAuth.getCurrentUser();
+        if (user?.email) {
+          setUserEmail(user.email);
+        }
+      } catch (error) {
+        console.error("Failed to load user:", error);
+      }
+    }
+    loadUser();
+  }, []);
+  
   const [files, setFiles] = useState<VectorStoreFile[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -354,7 +383,7 @@ export function CurateTab({
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
           <TabsList
             className={cn(
-              "grid w-full grid-cols-3",
+              `grid w-full grid-cols-${canAccessRLHF ? "4" : "3"}`,
               "mac-glass",
               "border-[var(--mac-utility-border)]",
               "bg-[var(--mac-surface-card)]"
@@ -405,6 +434,25 @@ export function CurateTab({
               <Info className="h-4 w-4 mr-2" />
               Info
             </TabsTrigger>
+            
+            {/* RLHF Feedback Tab (permission-gated) */}
+            {canAccessRLHF && (
+              <TabsTrigger
+                value="rlhf-feedback"
+                className={cn(
+                  "font-light",
+                  "data-[state=active]:bg-[var(--mac-accent-purple-400)]/10",
+                  "data-[state=active]:text-[var(--mac-accent-purple-400)]",
+                  "data-[state=active]:border-b-[3px]",
+                  "data-[state=active]:border-[var(--mac-accent-purple-400)]",
+                  "data-[state=active]:shadow-[0_2px_8px_rgba(168,85,247,0.3)]",
+                  "transition-all duration-200"
+                )}
+              >
+                <Brain className="h-4 w-4 mr-2" />
+                RLHF
+              </TabsTrigger>
+            )}
           </TabsList>
 
           <TabsContent value="files" className="flex-1 overflow-hidden mt-4">
@@ -819,6 +867,13 @@ export function CurateTab({
               </Alert>
             </div>
           </TabsContent>
+          
+          {/* RLHF Feedback Tab Content */}
+          {canAccessRLHF && (
+            <TabsContent value="rlhf-feedback" className="flex-1 overflow-hidden mt-4">
+              <RLHFFeedbackTab />
+            </TabsContent>
+          )}
         </Tabs>
       </CardContent>
 

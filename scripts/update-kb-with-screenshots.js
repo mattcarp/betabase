@@ -61,7 +61,7 @@ async function updateKnowledgeBaseWithScreenshots() {
 
     // Try to find the entry in the knowledge base
     const { data: entries, error: searchError } = await supabase
-      .from("aoma_unified_vectors")
+      .from("siam_vectors")
       .select("id, content, metadata")
       .eq("source_type", "knowledge")
       .ilike("content", `%${urlPattern}%`)
@@ -88,7 +88,7 @@ async function updateKnowledgeBaseWithScreenshots() {
     };
 
     const { error: updateError } = await supabase
-      .from("aoma_unified_vectors")
+      .from("siam_vectors")
       .update({
         metadata: updatedMetadata,
         updated_at: new Date().toISOString(),

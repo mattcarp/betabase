@@ -6,7 +6,7 @@
  * 1. Exports all documents from OpenAI Vector Store
  * 2. Chunks documents optimally (1000 chars, 200 overlap)
  * 3. Generates embeddings using OpenAI's embedding API
- * 4. Batch inserts into Supabase aoma_unified_vectors table
+ * 4. Batch inserts into Supabase siam_vectors table
  * 
  * Usage:
  *   tsx scripts/migrate-openai-to-supabase.ts [--dry-run] [--limit=10]

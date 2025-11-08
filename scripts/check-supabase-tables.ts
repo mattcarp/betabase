@@ -26,7 +26,7 @@ async function checkTables() {
 
   // List of tables to check
   const tables = [
-    "aoma_unified_vectors",
+    "siam_vectors",
     "firecrawl_analysis",
     "test_results",
     "test_runs",
@@ -57,7 +57,7 @@ async function checkTables() {
 
   try {
     const { data: vectors, error } = await supabase
-      .from("aoma_unified_vectors")
+      .from("siam_vectors")
       .select("id, source_type, created_at")
       .limit(5);
 
@@ -69,7 +69,7 @@ async function checkTables() {
         console.log(`   - ${v.source_type} (${new Date(v.created_at).toLocaleDateString()})`);
       });
     } else {
-      console.log("📝 No vectors found in aoma_unified_vectors table");
+      console.log("📝 No vectors found in siam_vectors table");
       console.log("   This is expected if you haven't run the migration yet");
     }
   } catch (e) {

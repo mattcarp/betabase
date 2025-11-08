@@ -14,12 +14,12 @@ if [ -z "$JQ_BIN" ]; then
 fi
 
 echo "[validate] Counting confluence vectors via REST..."
-URL="${NEXT_PUBLIC_SUPABASE_URL%/}/rest/v1/aoma_unified_vectors?source_type=eq.confluence&select=count"
+URL="${NEXT_PUBLIC_SUPABASE_URL%/}/rest/v1/siam_vectors?source_type=eq.confluence&select=count"
 COUNT=$(curl -s "$URL" -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" | jq -r '.[0].count // 0')
 echo "Confluence vectors count: $COUNT"
 
 echo "[validate] Sampling top 3 recent vectors..."
-SAMPLE_URL="${NEXT_PUBLIC_SUPABASE_URL%/}/rest/v1/aoma_unified_vectors?source_type=eq.confluence&select=id,source_id,metadata,updated_at&order=updated_at.desc&limit=3"
+SAMPLE_URL="${NEXT_PUBLIC_SUPABASE_URL%/}/rest/v1/siam_vectors?source_type=eq.confluence&select=id,source_id,metadata,updated_at&order=updated_at.desc&limit=3"
 curl -s "$SAMPLE_URL" -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" | jq '.'
 
 echo "[validate] Semantic search smoke tests via local API (if available)..."

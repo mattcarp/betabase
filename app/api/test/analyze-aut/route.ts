@@ -191,7 +191,7 @@ export async function GET(_request: NextRequest) {
       "/api/test/coverage",
       "/api/test/firecrawl",
       "/api/vector-store/files",
-      "/api/aoma/health",
+      "/api/aoma-stream", // UPDATED: was /api/aoma/health (deleted)
       "/api/health",
     ],
     documentationUrls: [

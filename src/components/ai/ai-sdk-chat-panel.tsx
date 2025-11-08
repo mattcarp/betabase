@@ -4,6 +4,7 @@ import { useChat } from "@ai-sdk/react";
 // import { DefaultChatTransport } from "ai"; // Removed - not available in current ai version
 import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../../lib/utils";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
@@ -170,6 +171,10 @@ export function AiSdkChatPanel({
   const [isProcessing, setIsProcessing] = useState(false); // Simpler loading state
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
   const [loadingSeconds, setLoadingSeconds] = useState(0); // Track seconds elapsed during loading
+
+  // RLHF Feedback tracking
+  const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down' | null>>({});
+  const supabase = createClientComponentClient();
 
   // Voice feature states - define before using in hooks
   const [isTTSEnabled, setIsTTSEnabled] = useState(false);
@@ -388,35 +393,21 @@ export function AiSdkChatPanel({
         (window as any).currentProgressInterval = null;
       }
 
-      // Show completion state briefly
-      setCurrentProgress((prev) =>
-        prev
-          ? {
-              ...prev,
-              status: "completed",
-              progress: 100,
-              title: "Response complete!",
-            }
-          : null
-      );
+      // Immediately clear loading states
+      setCurrentProgress(null);
+      setManualLoading(false);
+      setIsProcessing(false);
+      setHasStartedStreaming(false); // Reset streaming state for next message
 
-      // Clear progress indicator after a delay
-      setTimeout(() => {
-        setCurrentProgress(null);
-        setManualLoading(false);
-        setIsProcessing(false);
-        setHasStartedStreaming(false); // Reset streaming state for next message
-
-        // CRITICAL FIX: Clear input field after response completes
-        setLocalInput("");
-        if (typeof setInput === "function") {
-          try {
-            setInput("");
-          } catch (err) {
-            console.warn("[SIAM] setInput clear failed", err);
-          }
+      // CRITICAL FIX: Clear input field after response completes
+      setLocalInput("");
+      if (typeof setInput === "function") {
+        try {
+          setInput("");
+        } catch (err) {
+          console.warn("[SIAM] setInput clear failed", err);
         }
-      }, 1500);
+      }
     },
   });
 
@@ -433,8 +424,9 @@ export function AiSdkChatPanel({
 
   // AI SDK v5 no longer provides input/setInput - manage locally
   const [input, setInput] = useState("");
-  // AI SDK v5 uses 'status' instead of 'isLoading'
-  const chatIsLoading = status === "streaming" || status === "processing";
+  // AI SDK v5 uses 'status' - valid values: "error" | "ready" | "submitted"
+  // We consider "submitted" as loading (waiting for response)
+  const chatIsLoading = status === "submitted";
 
   // CRITICAL: Wrap sendMessage to validate content before sending
   const sendMessage = (message: any) => {
@@ -539,16 +531,6 @@ export function AiSdkChatPanel({
 
   // Derive isLoading from useChat isLoading, status, or manual loading state
   const isLoading = chatIsLoading || (status as any) === "loading" || manualLoading;
-
-  // Clear progress when loading completes
-  useEffect(() => {
-    if (!isLoading && currentProgress) {
-      // Small delay to show completion before clearing
-      setTimeout(() => {
-        setCurrentProgress(null);
-      }, 1000);
-    }
-  }, [isLoading, currentProgress]);
 
   // Detect when assistant starts streaming (to prevent jitter)
   useEffect(() => {
@@ -1163,6 +1145,65 @@ export function AiSdkChatPanel({
     }
   };
 
+  // RLHF Feedback Handler
+  const handleFeedback = async (messageId: string, type: 'up' | 'down') => {
+    if (feedbackGiven[messageId]) {
+      toast.info('Feedback already recorded for this message');
+      return;
+    }
+
+    try {
+      // Find the message to get content and metadata
+      const message = messages.find((m) => m.id === messageId);
+      if (!message) {
+        console.error('Message not found:', messageId);
+        return;
+      }
+
+      // Extract message content
+      const messageContent = message.parts?.[0]?.text || (message as any).content || '';
+      
+      // Find the user query (previous message)
+      const messageIndex = messages.findIndex((m) => m.id === messageId);
+      const userQuery = messageIndex > 0 ? 
+        (messages[messageIndex - 1].parts?.[0]?.text || (messages[messageIndex - 1] as any).content || '') : 
+        '';
+
+      // Store feedback in database
+      const { error } = await supabase.from('rlhf_feedback').insert({
+        conversation_id: conversationId || `session_${Date.now()}`,
+        user_query: userQuery,
+        ai_response: messageContent,
+        rating: type === 'up' ? 5 : 1,
+        thumbs_up: type === 'up',
+        feedback_text: null,
+        documents_marked: message.ragMetadata || null,
+        user_email: null, // Will be set by RLS policy from auth user
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      });
+
+      if (error) {
+        console.error('Failed to save feedback:', error);
+        toast.error('Failed to save feedback. Please try again.');
+        return;
+      }
+
+      // Update local state
+      setFeedbackGiven(prev => ({ ...prev, [messageId]: type }));
+
+      // Show success message
+      if (type === 'up') {
+        toast.success('Feedback recorded! Thank you! 💜');
+      } else {
+        toast.info('Feedback recorded. A curator will review this response.');
+      }
+    } catch (err) {
+      console.error('Error saving feedback:', err);
+      toast.error('Failed to save feedback');
+    }
+  };
+
   const renderMessage = (message: any, index: number) => {
     const isUser = message.role === "user";
     const isLastMessage = index === messages.length - 1;
@@ -1319,6 +1360,90 @@ export function AiSdkChatPanel({
                 </Response>
               )}
             </div>
+
+            {/* RAG Metadata Badges - Show which advanced RAG strategy was used */}
+            {!isUser && message.ragMetadata && (
+              <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border/30">
+                {message.ragMetadata.strategy && (
+                  <Badge 
+                    variant="outline" 
+                    className="bg-purple-500/10 border-purple-500/30 text-purple-300 hover:bg-purple-500/20"
+                  >
+                    📊 {message.ragMetadata.strategy === 'agentic' ? '🤖 Agentic' : 
+                        message.ragMetadata.strategy === 'context-aware' ? '🧠 Context-Aware' : 
+                        '📚 Standard'} RAG
+                  </Badge>
+                )}
+                {message.ragMetadata.documentsReranked && (
+                  <Badge 
+                    variant="outline" 
+                    className="bg-blue-500/10 border-blue-500/30 text-blue-300 hover:bg-blue-500/20"
+                  >
+                    🔄 Re-ranked {message.ragMetadata.initialDocs}→{message.ragMetadata.finalDocs} docs
+                  </Badge>
+                )}
+                {message.ragMetadata.agentSteps > 0 && (
+                  <Badge 
+                    variant="outline" 
+                    className="bg-cyan-500/10 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20"
+                  >
+                    🔧 {message.ragMetadata.agentSteps} agent steps
+                  </Badge>
+                )}
+                {message.ragMetadata.confidence && (
+                  <Badge 
+                    variant="outline" 
+                    className="bg-green-500/10 border-green-500/30 text-green-300 hover:bg-green-500/20"
+                  >
+                    ✓ {Math.round(message.ragMetadata.confidence * 100)}% confident
+                  </Badge>
+                )}
+                {message.ragMetadata.timeMs && (
+                  <Badge 
+                    variant="outline" 
+                    className="bg-gray-500/10 border-gray-500/30 text-gray-300"
+                  >
+                    ⚡ {message.ragMetadata.timeMs}ms
+                  </Badge>
+                )}
+              </div>
+            )}
+
+            {/* HITL Feedback Buttons - Thumbs Up/Down */}
+            {!isUser && (
+              <div className="flex gap-2 mt-3">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleFeedback(message.id, 'up')}
+                  disabled={feedbackGiven[message.id] !== undefined}
+                  className={cn(
+                    "h-7 px-2 transition-colors",
+                    feedbackGiven[message.id] === 'up' 
+                      ? "text-green-400 bg-green-500/20" 
+                      : "hover:bg-green-500/10 hover:text-green-400"
+                  )}
+                  title="This response was helpful"
+                >
+                  <ThumbsUp className="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleFeedback(message.id, 'down')}
+                  disabled={feedbackGiven[message.id] !== undefined}
+                  className={cn(
+                    "h-7 px-2 transition-colors",
+                    feedbackGiven[message.id] === 'down' 
+                      ? "text-red-400 bg-red-500/20" 
+                      : "hover:bg-red-500/10 hover:text-red-400"
+                  )}
+                  title="This response needs improvement"
+                >
+                  <ThumbsDown className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            )}
 
             {/* PERFORMANCE FIX: REMOVED DUPLICATE PROGRESS INDICATOR - Now only rendered once at line 1538 */}
 
@@ -1734,32 +1859,33 @@ export function AiSdkChatPanel({
               </motion.div>
             ) : (
               /* Messages Area */
-              <AnimatePresence>
-                <div className="space-y-6">
+              <div className="space-y-6">
+                <AnimatePresence mode="wait">
                   {/* Clean Loading Spinner with Timer (Shadcn AI Pattern) */}
-                  {/* CRITICAL: Show loading indicator during AOMA orchestration AND streaming */}
-                  {(isLoading || manualLoading || isProcessing) && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2 }}
-                        className="flex items-center gap-3 p-4"
-                      >
-                        <Loader size={20} className="text-blue-400 animate-spin" />
-                        <span className="text-sm text-muted-foreground">
-                          {!hasStartedStreaming && loadingSeconds > 5 
-                            ? `Searching AOMA knowledge base... (${loadingSeconds}s)` 
-                            : hasStartedStreaming 
-                            ? "Generating response..."
-                            : loadingSeconds > 0 
-                            ? `Thinking... (${loadingSeconds}s)`
-                            : "Thinking..."}
-                        </span>
-                      </motion.div>
-                    )}
+                  {/* CRITICAL: Only show loading indicator BEFORE streaming starts */}
+                  {(isLoading || manualLoading || isProcessing) && !hasStartedStreaming && (
+                    <motion.div
+                      key="loading-indicator"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex items-center gap-3 p-4"
+                    >
+                      <Loader size={20} className="text-blue-400 animate-spin" />
+                      <span className="text-sm text-muted-foreground">
+                        {loadingSeconds > 5
+                          ? `Searching AOMA knowledge base... (${loadingSeconds}s)`
+                          : loadingSeconds > 0
+                          ? `Thinking... (${loadingSeconds}s)`
+                          : "Thinking..."}
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-                  {/* Messages rendered AFTER progress indicator */}
+                {/* Messages rendered AFTER progress indicator */}
+                <AnimatePresence>
                   {messages.map((message, index) => (
                     <motion.div
                       key={message.id || index}
@@ -1772,8 +1898,8 @@ export function AiSdkChatPanel({
                       {renderMessage(message, index)}
                     </motion.div>
                   ))}
-                </div>
-              </AnimatePresence>
+                </AnimatePresence>
+              </div>
             )}
 
             {/* Error State */}
