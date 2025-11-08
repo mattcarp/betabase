@@ -1,0 +1,400 @@
+/**
+ * RLHF Impact Dashboard Component
+ * 
+ * Visualizes improvement trends and metrics from human feedback
+ * Part of Test tab integration - Phase 6
+ */
+
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
+import { Badge } from "../ui/badge";
+import { 
+  TrendingUp, 
+  TrendingDown,
+  Activity,
+  Target,
+  Users,
+  Award
+} from "lucide-react";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+
+interface ImpactMetrics {
+  avgRating: number;
+  ratingTrend: number; // % change from previous period
+  totalFeedback: number;
+  feedbackTrend: number;
+  curatorApprovals: number;
+  approvalRate: number;
+  avgConfidence: number;
+  confidenceTrend: number;
+}
+
+interface TimeSeriesData {
+  date: string;
+  avgRating: number;
+  feedbackCount: number;
+  confidence: number;
+}
+
+export function RLHFImpactDashboard() {
+  const [metrics, setMetrics] = useState<ImpactMetrics>({
+    avgRating: 0,
+    ratingTrend: 0,
+    totalFeedback: 0,
+    feedbackTrend: 0,
+    curatorApprovals: 0,
+    approvalRate: 0,
+    avgConfidence: 0,
+    confidenceTrend: 0
+  });
+  const [timeSeries, setTimeSeries] = useState<TimeSeriesData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClientComponentClient();
+
+  useEffect(() => {
+    loadImpactMetrics();
+  }, []);
+
+  const loadImpactMetrics = async () => {
+    setLoading(true);
+    
+    try {
+      // Load overall metrics from rlhf_feedback
+      const { data: allFeedback, error } = await supabase
+        .from('rlhf_feedback')
+        .select('rating, thumbs_up, documents_marked, created_at')
+        .not('rating', 'is', null);
+
+      if (error) {
+        console.error('Failed to load metrics:', error);
+        return;
+      }
+
+      if (!allFeedback || allFeedback.length === 0) {
+        setLoading(false);
+        return;
+      }
+
+      // Calculate current period metrics (last 30 days)
+      const now = new Date();
+      const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
+
+      const currentPeriod = allFeedback.filter(f => 
+        new Date(f.created_at) > thirtyDaysAgo
+      );
+      const previousPeriod = allFeedback.filter(f => 
+        new Date(f.created_at) > sixtyDaysAgo && new Date(f.created_at) <= thirtyDaysAgo
+      );
+
+      // Average rating
+      const avgRating = currentPeriod.reduce((sum, f) => sum + (f.rating || 0), 0) / currentPeriod.length;
+      const prevAvgRating = previousPeriod.length > 0 
+        ? previousPeriod.reduce((sum, f) => sum + (f.rating || 0), 0) / previousPeriod.length 
+        : avgRating;
+      const ratingTrend = prevAvgRating > 0 
+        ? ((avgRating - prevAvgRating) / prevAvgRating) * 100 
+        : 0;
+
+      // Feedback count
+      const totalFeedback = currentPeriod.length;
+      const prevFeedback = previousPeriod.length;
+      const feedbackTrend = prevFeedback > 0 
+        ? ((totalFeedback - prevFeedback) / prevFeedback) * 100 
+        : 0;
+
+      // Curator approvals (rating >= 4 or thumbs_up = true)
+      const curatorApprovals = currentPeriod.filter(f => 
+        f.rating >= 4 || f.thumbs_up === true
+      ).length;
+      const approvalRate = totalFeedback > 0 
+        ? (curatorApprovals / totalFeedback) * 100 
+        : 0;
+
+      // Confidence (based on document marks and ratings)
+      const avgConfidence = currentPeriod
+        .filter(f => f.documents_marked && f.documents_marked.length > 0)
+        .reduce((sum, f) => {
+          const relevantDocs = f.documents_marked.filter((d: any) => d.relevant).length;
+          const confidence = relevantDocs / f.documents_marked.length;
+          return sum + confidence;
+        }, 0) / currentPeriod.filter(f => f.documents_marked && f.documents_marked.length > 0).length || 0;
+
+      const prevConfidence = previousPeriod
+        .filter(f => f.documents_marked && f.documents_marked.length > 0)
+        .reduce((sum, f) => {
+          const relevantDocs = f.documents_marked.filter((d: any) => d.relevant).length;
+          const confidence = relevantDocs / f.documents_marked.length;
+          return sum + confidence;
+        }, 0) / previousPeriod.filter(f => f.documents_marked && f.documents_marked.length > 0).length || avgConfidence;
+
+      const confidenceTrend = prevConfidence > 0 
+        ? ((avgConfidence - prevConfidence) / prevConfidence) * 100 
+        : 0;
+
+      setMetrics({
+        avgRating,
+        ratingTrend,
+        totalFeedback,
+        feedbackTrend,
+        curatorApprovals,
+        approvalRate,
+        avgConfidence: avgConfidence * 100, // Convert to percentage
+        confidenceTrend
+      });
+
+      // Generate time series data (last 30 days)
+      const timeSeriesData: TimeSeriesData[] = [];
+      for (let i = 29; i >= 0; i--) {
+        const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+        const dayStart = new Date(date.setHours(0, 0, 0, 0));
+        const dayEnd = new Date(date.setHours(23, 59, 59, 999));
+        
+        const dayFeedback = allFeedback.filter(f => {
+          const fDate = new Date(f.created_at);
+          return fDate >= dayStart && fDate <= dayEnd;
+        });
+
+        const dayAvgRating = dayFeedback.length > 0
+          ? dayFeedback.reduce((sum, f) => sum + (f.rating || 0), 0) / dayFeedback.length
+          : 0;
+
+        const dayConfidence = dayFeedback
+          .filter(f => f.documents_marked && f.documents_marked.length > 0)
+          .reduce((sum, f) => {
+            const relevantDocs = f.documents_marked.filter((d: any) => d.relevant).length;
+            return sum + (relevantDocs / f.documents_marked.length);
+          }, 0) / dayFeedback.filter(f => f.documents_marked && f.documents_marked.length > 0).length || 0;
+
+        timeSeriesData.push({
+          date: dayStart.toISOString().split('T')[0],
+          avgRating: dayAvgRating,
+          feedbackCount: dayFeedback.length,
+          confidence: dayConfidence * 100
+        });
+      }
+
+      setTimeSeries(timeSeriesData);
+
+    } catch (error) {
+      console.error('Error loading impact metrics:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const MetricCard = ({ 
+    title, 
+    value, 
+    trend, 
+    icon: Icon, 
+    color 
+  }: { 
+    title: string; 
+    value: string | number; 
+    trend?: number; 
+    icon: any; 
+    color: string;
+  }) => (
+    <Card className="bg-zinc-900/30 border-zinc-800">
+      <CardContent className="p-6">
+        <div className="flex items-start justify-between mb-4">
+          <div className={`p-2 rounded-lg ${color}`}>
+            <Icon className="h-5 w-5" />
+          </div>
+          {trend !== undefined && (
+            <Badge 
+              variant="outline" 
+              className={trend >= 0 ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"}
+            >
+              {trend >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
+              {Math.abs(trend).toFixed(1)}%
+            </Badge>
+          )}
+        </div>
+        <div className="text-3xl font-bold text-zinc-100 mb-1">{value}</div>
+        <div className="text-sm text-zinc-500">{title}</div>
+      </CardContent>
+    </Card>
+  );
+
+  if (loading) {
+    return (
+      <Card className="h-full flex items-center justify-center bg-zinc-900/50 border-zinc-800">
+        <div className="text-zinc-400">Loading impact metrics...</div>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="h-full space-y-6">
+      {/* Header */}
+      <Card className="bg-zinc-900/50 border-zinc-800">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-zinc-100">
+            <Activity className="h-5 w-5 text-purple-400" />
+            RLHF Impact Dashboard
+          </CardTitle>
+          <CardDescription className="text-zinc-400">
+            Track how human feedback improves AI performance over time
+          </CardDescription>
+        </CardHeader>
+      </Card>
+
+      {/* Key Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <MetricCard
+          title="Average Rating"
+          value={metrics.avgRating.toFixed(2)}
+          trend={metrics.ratingTrend}
+          icon={Award}
+          color="bg-purple-500/20 text-purple-400"
+        />
+        <MetricCard
+          title="Total Feedback"
+          value={metrics.totalFeedback}
+          trend={metrics.feedbackTrend}
+          icon={Users}
+          color="bg-blue-500/20 text-blue-400"
+        />
+        <MetricCard
+          title="Approval Rate"
+          value={`${metrics.approvalRate.toFixed(1)}%`}
+          icon={Target}
+          color="bg-green-500/20 text-green-400"
+        />
+        <MetricCard
+          title="Avg Confidence"
+          value={`${metrics.avgConfidence.toFixed(1)}%`}
+          trend={metrics.confidenceTrend}
+          icon={TrendingUp}
+          color="bg-amber-500/20 text-amber-400"
+        />
+      </div>
+
+      {/* Time Series Chart (Simplified ASCII representation) */}
+      <Card className="bg-zinc-900/50 border-zinc-800">
+        <CardHeader>
+          <CardTitle className="text-zinc-100 text-lg">30-Day Trends</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {/* Rating Trend */}
+            <div>
+              <div className="text-sm text-zinc-400 mb-2">Average Rating Trend</div>
+              <div className="h-24 bg-zinc-900/30 rounded-lg p-4 flex items-end gap-0.5">
+                {timeSeries.map((data, idx) => {
+                  const height = (data.avgRating / 5) * 100; // Scale to 100%
+                  return (
+                    <div
+                      key={idx}
+                      className="flex-1 bg-purple-500/30 rounded-t hover:bg-purple-500/50 transition-colors"
+                      style={{ height: `${height}%` }}
+                      title={`${data.date}: ${data.avgRating.toFixed(2)}`}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Confidence Trend */}
+            <div>
+              <div className="text-sm text-zinc-400 mb-2">Confidence Trend</div>
+              <div className="h-24 bg-zinc-900/30 rounded-lg p-4 flex items-end gap-0.5">
+                {timeSeries.map((data, idx) => {
+                  const height = data.confidence; // Already percentage
+                  return (
+                    <div
+                      key={idx}
+                      className="flex-1 bg-amber-500/30 rounded-t hover:bg-amber-500/50 transition-colors"
+                      style={{ height: `${height}%` }}
+                      title={`${data.date}: ${data.confidence.toFixed(1)}%`}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Feedback Volume */}
+            <div>
+              <div className="text-sm text-zinc-400 mb-2">Daily Feedback Volume</div>
+              <div className="h-24 bg-zinc-900/30 rounded-lg p-4 flex items-end gap-0.5">
+                {timeSeries.map((data, idx) => {
+                  const maxFeedback = Math.max(...timeSeries.map(d => d.feedbackCount));
+                  const height = maxFeedback > 0 ? (data.feedbackCount / maxFeedback) * 100 : 0;
+                  return (
+                    <div
+                      key={idx}
+                      className="flex-1 bg-blue-500/30 rounded-t hover:bg-blue-500/50 transition-colors"
+                      style={{ height: `${height}%` }}
+                      title={`${data.date}: ${data.feedbackCount} feedback`}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Insights */}
+      <Card className="bg-zinc-900/50 border-zinc-800">
+        <CardHeader>
+          <CardTitle className="text-zinc-100 text-lg">Key Insights</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {metrics.ratingTrend > 5 && (
+            <div className="flex items-start gap-3 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
+              <TrendingUp className="h-5 w-5 text-green-400 mt-0.5" />
+              <div>
+                <div className="text-sm font-medium text-green-400">Positive Rating Trend</div>
+                <div className="text-xs text-zinc-400">
+                  Average rating improved by {metrics.ratingTrend.toFixed(1)}% - feedback loop is working!
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {metrics.approvalRate > 70 && (
+            <div className="flex items-start gap-3 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+              <Award className="h-5 w-5 text-purple-400 mt-0.5" />
+              <div>
+                <div className="text-sm font-medium text-purple-400">High Approval Rate</div>
+                <div className="text-xs text-zinc-400">
+                  {metrics.approvalRate.toFixed(1)}% of responses are curator-approved - excellent quality!
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {metrics.confidenceTrend > 10 && (
+            <div className="flex items-start gap-3 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+              <Target className="h-5 w-5 text-amber-400 mt-0.5" />
+              <div>
+                <div className="text-sm font-medium text-amber-400">Confidence Increasing</div>
+                <div className="text-xs text-zinc-400">
+                  Document relevance confidence up {metrics.confidenceTrend.toFixed(1)}% - retrieval improving!
+                </div>
+              </div>
+            </div>
+          )}
+
+          {metrics.totalFeedback === 0 && (
+            <div className="flex items-start gap-3 p-3 bg-zinc-800/50 border border-zinc-700 rounded-lg">
+              <Users className="h-5 w-5 text-zinc-400 mt-0.5" />
+              <div>
+                <div className="text-sm font-medium text-zinc-400">No Data Yet</div>
+                <div className="text-xs text-zinc-500">
+                  Start curating feedback to see impact metrics and trends!
+                </div>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
