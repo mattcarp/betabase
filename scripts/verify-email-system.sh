@@ -80,7 +80,7 @@ fi
 # Check if Supabase vector table exists
 echo ""
 echo "🗄️  Vector store status:"
-echo "  To verify the aoma_unified_vectors table exists, check your Supabase dashboard:"
+echo "  To verify the siam_vectors table exists, check your Supabase dashboard:"
 echo "  https://app.supabase.com"
 
 # Summary

@@ -21,7 +21,7 @@ async function inspectSchema() {
   console.log("\n📊 CHECKING ALL TABLES:\n");
 
   const tables = [
-    "aoma_unified_vectors",
+    "siam_vectors",
     "aoma_knowledge",
     "confluence_knowledge",
     "alexandria_knowledge",
@@ -96,8 +96,8 @@ async function inspectSchema() {
     });
   }
 
-  if (tableInfo.aoma_unified_vectors?.exists) {
-    const cols = tableInfo.aoma_unified_vectors.columns;
+  if (tableInfo.siam_vectors?.exists) {
+    const cols = tableInfo.siam_vectors.columns;
     const requiredFields = [
       "id",
       "content",
@@ -109,7 +109,7 @@ async function inspectSchema() {
       "updated_at",
     ];
 
-    console.log("\n   Checking aoma_unified_vectors table...");
+    console.log("\n   Checking siam_vectors table...");
     requiredFields.forEach((field) => {
       const has = cols.includes(field);
       console.log(`   ${has ? "✅" : "❌"} ${field}`);
@@ -150,7 +150,7 @@ async function inspectSchema() {
 
   try {
     // Try to query a table with vector column
-    const { error } = await supabase.from("aoma_unified_vectors").select("embedding").limit(1);
+    const { error } = await supabase.from("siam_vectors").select("embedding").limit(1);
 
     if (!error) {
       console.log("   ✅ pgvector extension: ENABLED");
@@ -186,7 +186,7 @@ async function inspectSchema() {
   console.log("\n" + "═".repeat(80));
   console.log("\n💡 RECOMMENDATIONS:\n");
 
-  if (!tableInfo.aoma_unified_vectors?.exists) {
+  if (!tableInfo.siam_vectors?.exists) {
     console.log("   ⚠️  Run migration: supabase/migrations/001_aoma_vector_store_optimized.sql");
   }
 
@@ -194,7 +194,7 @@ async function inspectSchema() {
     console.log("   ⚠️  Create firecrawl_analysis table for Firecrawl v2 integration");
   }
 
-  if (tableInfo.aoma_unified_vectors?.count === 0) {
+  if (tableInfo.siam_vectors?.count === 0) {
     console.log("   📝 Database is empty - ready for first crawl!");
   }
 

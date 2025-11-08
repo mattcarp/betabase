@@ -10,27 +10,11 @@ import { aomaOrchestrator } from "../../../src/services/aomaOrchestrator";
 // import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
 import { modelConfig } from "../../../src/services/modelConfig";
 import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
+import { UnifiedRAGOrchestrator } from "../../../src/services/unifiedRAGOrchestrator";
+import { getSessionStateManager } from "../../../src/lib/sessionStateManager";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
-
-// Initialize Google AI provider for Gemini (primary chat model)
-const google = createGoogleGenerativeAI({
-  apiKey: process.env.GOOGLE_API_KEY!,
-});
-
-// Initialize OpenAI provider for embeddings only
-const openai = createOpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-});
-
-// Validate API keys are configured
-if (!process.env.GOOGLE_API_KEY) {
-  throw new Error("GOOGLE_API_KEY environment variable is required");
-}
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("OPENAI_API_KEY environment variable is required for embeddings");
-}
 
 // REMOVED: Client-side rate limiting
 // Let OpenAI handle rate limits naturally - we'll catch 429s and show friendly errors
@@ -239,13 +223,17 @@ export async function POST(req: Request) {
     // END AUTHENTICATION CHECK
     // ========================================
 
+    // ========================================
+    // API KEY VALIDATION
+    // ========================================
     // Check for API key configuration
-    if (!process.env.OPENAI_API_KEY) {
-      console.error("[API] OPENAI_API_KEY is not set in environment variables");
+    if (!process.env.GOOGLE_API_KEY) {
+      console.error("[API] GOOGLE_API_KEY is not set in environment variables");
       return new Response(
         JSON.stringify({
           error: "Service temporarily unavailable",
           code: "CONFIG_ERROR",
+          message: "Google AI API key is not configured. Please contact support.",
         }),
         {
           status: 503,
@@ -253,6 +241,35 @@ export async function POST(req: Request) {
         }
       );
     }
+
+    if (!process.env.OPENAI_API_KEY) {
+      console.error("[API] OPENAI_API_KEY is not set in environment variables");
+      return new Response(
+        JSON.stringify({
+          error: "Service temporarily unavailable",
+          code: "CONFIG_ERROR",
+          message: "OpenAI API key is not configured. Please contact support.",
+        }),
+        {
+          status: 503,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Initialize providers after validation
+    const google = createGoogleGenerativeAI({
+      apiKey: process.env.GOOGLE_API_KEY,
+    });
+
+    const openai = createOpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    console.log("[API] ✅ AI providers initialized");
+    // ========================================
+    // END API KEY VALIDATION
+    // ========================================
 
     console.log("[API] Parsing request body...");
     const body = await req.json();
@@ -354,6 +371,14 @@ export async function POST(req: Request) {
     let aomaContext = "";
     let aomaConnectionStatus = "not-queried";
     const knowledgeElements: KnowledgeElement[] = [];
+    
+    // Initialize Advanced RAG Orchestrator and Session Manager
+    const unifiedRAG = new UnifiedRAGOrchestrator();
+    const sessionManager = getSessionStateManager();
+    let ragMetadata: any = null;
+    
+    // Generate session ID (use conversation ID if available)
+    const sessionId = `session_${Date.now()}`;
 
     // Lightweight intent detection to decide if we need AOMA at all
     function needsAOMAIntent(text: string): boolean {
@@ -401,13 +426,91 @@ export async function POST(req: Request) {
       console.log("⏱️  PERFORMANCE: AOMA query starting (this blocks streaming response)...");
 
       // Performance tracking
-      const perfStart = Date.now();
+        const perfStart = Date.now();
       let railwayStartTime: number | null = null;
       let railwayEndTime: number | null = null;
       let supabaseStartTime: number | null = null;
       let supabaseEndTime: number | null = null;
 
       try {
+        // ========================================
+        // PHASE 1: ADVANCED RAG with UnifiedRAGOrchestrator
+        // ========================================
+        console.log("🌟 Executing Advanced RAG (re-ranking, agentic, context-aware)...");
+        const ragStartTime = Date.now();
+        
+        // Add query to session history
+        await sessionManager.addToHistory(sessionId, {
+          query: queryString,
+          timestamp: new Date().toISOString(),
+          userId: 'current-user' // TODO: Get from session
+        });
+        
+        // Determine query complexity to decide on agentic RAG
+        const queryComplexity = queryString.split(' ').length > 15 ? 8 : 5; // Simple heuristic
+        
+        try {
+          const ragResult = await unifiedRAG.query(queryString, {
+            sessionId,
+            organization: 'sony-music',
+            division: 'mso',
+            app_under_test: 'siam',
+            useContextAware: true,
+            useAgenticRAG: queryComplexity > 7,
+            useRLHFSignals: true,
+            topK: 5,
+            targetConfidence: 0.7
+          });
+          
+          const ragDuration = Date.now() - ragStartTime;
+          console.log(`✅ Advanced RAG completed in ${ragDuration}ms`);
+          console.log(`📊 Strategy used: ${ragResult.metadata.strategy}`);
+          console.log(`🎯 Confidence: ${(ragResult.metadata.confidence * 100).toFixed(1)}%`);
+          
+          // Store RAG metadata for response
+          ragMetadata = {
+            strategy: ragResult.metadata.strategy,
+            documentsReranked: ragResult.metadata.usedContextAware,
+            agentSteps: ragResult.metadata.agentIterations || 0,
+            confidence: ragResult.metadata.confidence,
+            timeMs: ragResult.metadata.totalTimeMs,
+            initialDocs: ragResult.documents.length,
+            finalDocs: ragResult.documents.length
+          };
+          
+          // Add RAG-enhanced documents to knowledge elements
+          if (ragResult.documents && ragResult.documents.length > 0) {
+            ragResult.documents.slice(0, 3).forEach((doc: any) => {
+              knowledgeElements.push({
+                type: "reference",
+                content: doc.content || doc.text || "",
+                metadata: {
+                  source: "advanced-rag",
+                  strategy: ragResult.metadata.strategy,
+                  confidence: ragResult.metadata.confidence,
+                  timestamp: new Date().toISOString(),
+                },
+              });
+            });
+          }
+          
+          // Record successful retrieval in session
+          if (ragResult.metadata.confidence > 0.7) {
+            await sessionManager.recordSuccessfulRetrieval(sessionId, {
+              query: queryString,
+              documents: ragResult.documents,
+              confidence: ragResult.metadata.confidence
+            });
+          }
+          
+        } catch (ragError) {
+          console.error("❌ Advanced RAG failed:", ragError);
+          // Continue with standard AOMA retrieval
+        }
+        
+        // ========================================
+        // PHASE 2: AOMA Orchestrator (existing system)
+        // ========================================
         // Use orchestrator which now handles BOTH Supabase and OpenAI sources internally
         // with intelligent merging and deduplication
         console.log("🚀 Querying AOMA orchestrator (handles Supabase + OpenAI internally)...");
@@ -679,6 +782,11 @@ Respond with ONLY this message:
       // Only include temperature for models that support it (not o-series)
       ...(supportsTemperature && { temperature: modelSettings.temperature || temperature }),
       // Note: AI SDK handles token limits via the model config, not maxTokens parameter
+      // Attach RAG metadata to the stream for client-side display
+      onFinish: async ({ text, finishReason }) => {
+        // RAG metadata will be available in response headers
+        console.log('✅ Stream finished. RAG metadata:', ragMetadata);
+      },
     });
 
     console.log("✅ Stream created successfully");
@@ -689,6 +797,12 @@ Respond with ONLY this message:
     // Return Vercel AI SDK response format (compatible with useChat hook)
     const response = result.toUIMessageStreamResponse();
     try {
+      // Attach RAG metadata as custom header for client-side badge display
+      if (ragMetadata) {
+        response.headers.set('X-RAG-Metadata', JSON.stringify(ragMetadata));
+        console.log('📊 RAG Metadata attached to response:', ragMetadata);
+      }
+      
       // Attach basic Server-Timing if we captured AOMA timings
       const timings: string[] = [];
       // Note: variables may be undefined if AOMA was skipped

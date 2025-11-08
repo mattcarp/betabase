@@ -238,7 +238,7 @@ ${markdown.substring(0, 6000)}
     const embedding = embeddingResponse.data[0].embedding;
 
     // Store in Supabase with rich metadata
-    const { error } = await supabase.from("aoma_unified_vectors").upsert(
+    const { error } = await supabase.from("siam_vectors").upsert(
       {
         source_type: "aoma_page",
         source_id: url,

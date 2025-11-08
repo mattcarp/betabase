@@ -17,7 +17,7 @@ async function listAllTables() {
 
   // Try to query common table names
   const tablesToCheck = [
-    "aoma_unified_vectors",
+    "siam_vectors",
     "aoma_knowledge",
     "confluence_knowledge",
     "alexandria_knowledge",
@@ -64,7 +64,7 @@ async function listAllTables() {
   console.log("To see column definitions for empty tables, you need to:");
   console.log("1. Use SQL Editor in Supabase Dashboard");
   console.log(
-    "2. Run: SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'aoma_unified_vectors';"
+    "2. Run: SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'siam_vectors';"
   );
   console.log("\nOr check the table structure directly in Supabase Dashboard > Table Editor\n");
 }

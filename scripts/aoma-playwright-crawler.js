@@ -234,7 +234,7 @@ class AomaPlaywrightCrawler {
       const embedding = await this.generateEmbedding(content.markdown);
 
       // Store in Supabase
-      const { data, error } = await supabase.from("aoma_unified_vectors").upsert(
+      const { data, error } = await supabase.from("siam_vectors").upsert(
         {
           content: content.markdown,
           embedding: embedding,
