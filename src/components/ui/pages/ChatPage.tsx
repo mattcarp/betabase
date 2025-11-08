@@ -9,6 +9,13 @@ import { useConversationStore } from "../../../lib/conversation-store";
 import { WisdomLibrary } from "../WisdomLibrary";
 import { DocumentUpload as DocumentUploadComponent } from "../../DocumentUpload";
 import { getChatAPIEndpoint } from "../../../config/featureFlags";
+import { ResponseDebugger } from "../ResponseDebugger";
+import { QuickFixPanel } from "../QuickFixPanel";
+import { TestCaseGenerator } from "../TestCaseGenerator";
+import { HistoricalTestExplorer } from "../../test-dashboard/HistoricalTestExplorer";
+import { RLHFTestSuite } from "../../test-dashboard/RLHFTestSuite";
+import { RLHFImpactDashboard } from "../../test-dashboard/RLHFImpactDashboard";
+import { LiveRAGMonitor } from "../../test-dashboard/LiveRAGMonitor";
 import {
   Upload,
   Settings,
@@ -346,39 +353,95 @@ Be helpful, concise, and professional in your responses.`;
                 </div>
               )}
 
-              {activeMode === "test" && <TestDashboard className="h-full" />}
+              {activeMode === "test" && (
+                <div className="h-full p-6 space-y-6">
+                  <div>
+                    <h2 className="text-lg font-normal text-zinc-100 flex items-center gap-2">
+                      <TestTube className="h-5 w-5 text-zinc-400" />
+                      Advanced Testing & Quality Assurance
+                    </h2>
+                    <p className="text-sm text-zinc-400 mt-1">
+                      Comprehensive testing suite with historical data, RLHF-generated tests, and live monitoring
+                    </p>
+                  </div>
+                  
+                  <Tabs defaultValue="dashboard" className="h-[calc(100%-80px)]">
+                    <TabsList className="grid w-full grid-cols-5">
+                      <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+                      <TabsTrigger value="historical">Historical Tests</TabsTrigger>
+                      <TabsTrigger value="rlhf-tests">RLHF Tests</TabsTrigger>
+                      <TabsTrigger value="impact">Impact Metrics</TabsTrigger>
+                      <TabsTrigger value="monitor">Live Monitor</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="dashboard" className="h-full">
+                      <TestDashboard className="h-full" />
+                    </TabsContent>
+                    
+                    <TabsContent value="historical" className="h-full">
+                      <HistoricalTestExplorer />
+                    </TabsContent>
+                    
+                    <TabsContent value="rlhf-tests" className="h-full">
+                      <RLHFTestSuite />
+                    </TabsContent>
+                    
+                    <TabsContent value="impact" className="h-full">
+                      <RLHFImpactDashboard />
+                    </TabsContent>
+                    
+                    <TabsContent value="monitor" className="h-full">
+                      <LiveRAGMonitor />
+                    </TabsContent>
+                  </Tabs>
+                </div>
+              )}
 
               {activeMode === "fix" && (
-                <div className="flex-1 flex flex-col min-h-0">
-                  <div className="flex-1 flex flex-col border-0 bg-transparent">
-                    <div className="p-6 border-b border-zinc-800/50">
-                      <h2
-                        className="mac-heading text-lg font-normal text-zinc-100 flex items-center gap-2"
-                      >
-                        <Wrench className="h-5 w-5 text-zinc-400" />
-                        Debug Assistant
-                      </h2>
-                      <p className="text-sm text-zinc-400 mt-2">
-                        AI-powered debugging and issue resolution
-                      </p>
-                    </div>
-                    <div className="flex-1 flex flex-col min-h-0">
-                      <ChatPanel
-                        api="/api/chat"
-                        title="Debug Assistant"
-                        description="AI-powered debugging and issue resolution"
-                        systemPrompt="You are a debugging expert. Help users identify and fix issues in their code."
-                        suggestions={[
-                          "Debug this error message",
-                          "Why is my code not working?",
-                          "Optimize performance issues",
-                          "Fix memory leaks",
-                        ]}
-                        showHeader={false}
-                        className="flex-1 border-0"
-                      />
-                    </div>
+                <div className="h-full p-6 space-y-6">
+                  <div>
+                    <h2 className="text-lg font-normal text-zinc-100 flex items-center gap-2">
+                      <Wrench className="h-5 w-5 text-zinc-400" />
+                      Debug & Fix Assistant
+                    </h2>
+                    <p className="text-sm text-zinc-400 mt-1">
+                      Analyze responses, make corrections, and generate tests
+                    </p>
                   </div>
+                  
+                  <Tabs defaultValue="debugger" className="h-[calc(100%-80px)]">
+                    <TabsList className="grid w-full grid-cols-4">
+                      <TabsTrigger value="debugger">Response Debugger</TabsTrigger>
+                      <TabsTrigger value="quickfix">Quick Fix</TabsTrigger>
+                      <TabsTrigger value="generator">Test Generator</TabsTrigger>
+                      <TabsTrigger value="timeline">Feedback Timeline</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="debugger" className="h-full">
+                      <ResponseDebugger />
+                    </TabsContent>
+                    
+                    <TabsContent value="quickfix" className="h-full">
+                      <QuickFixPanel />
+                    </TabsContent>
+                    
+                    <TabsContent value="generator" className="h-full">
+                      <TestCaseGenerator />
+                    </TabsContent>
+                    
+                    <TabsContent value="timeline" className="h-full">
+                      <Card className="h-full bg-zinc-900/50 border-zinc-800">
+                        <CardHeader>
+                          <CardTitle className="text-zinc-100">Feedback Timeline</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-zinc-400 text-center py-8">
+                            Timeline view coming soon - shows feedback history for specific queries
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </TabsContent>
+                  </Tabs>
                 </div>
               )}
 

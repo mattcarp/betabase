@@ -49,7 +49,7 @@ async function processExistingContent() {
 
 async function checkDatabase() {
   try {
-    const { error } = await supabase.from("aoma_unified_vectors").select("count").limit(1);
+    const { error } = await supabase.from("siam_vectors").select("count").limit(1);
 
     if (error) {
       if (error.code === "42P01") {
@@ -151,7 +151,7 @@ async function processHtmlFiles() {
       };
 
       // Store in Supabase
-      const { error } = await supabase.from("aoma_unified_vectors").upsert(record, {
+      const { error } = await supabase.from("siam_vectors").upsert(record, {
         onConflict: "source_type,source_id",
       });
 
@@ -188,7 +188,7 @@ async function showSummary() {
   try {
     // Get total count
     const { count } = await supabase
-      .from("aoma_unified_vectors")
+      .from("siam_vectors")
       .select("*", { count: "exact", head: true })
       .eq("source_type", "knowledge");
 
@@ -196,7 +196,7 @@ async function showSummary() {
 
     // Get sample records
     const { data } = await supabase
-      .from("aoma_unified_vectors")
+      .from("siam_vectors")
       .select("source_id, metadata")
       .eq("source_type", "knowledge")
       .order("created_at", { ascending: false })

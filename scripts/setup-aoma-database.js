@@ -82,14 +82,14 @@ async function setupDatabase() {
     console.log("🧪 Testing database setup...");
 
     const { data: vectors, error: vectorError } = await supabase
-      .from("aoma_unified_vectors")
+      .from("siam_vectors")
       .select("count")
       .limit(1);
 
     if (!vectorError) {
-      console.log("   ✅ aoma_unified_vectors table exists");
+      console.log("   ✅ siam_vectors table exists");
     } else {
-      console.log("   ❌ aoma_unified_vectors table not found:", vectorError.message);
+      console.log("   ❌ siam_vectors table not found:", vectorError.message);
     }
 
     const { data: sync, error: syncError } = await supabase

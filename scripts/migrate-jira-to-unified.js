@@ -3,7 +3,7 @@
 /**
  * Migrate Jira embeddings to unified vector store (OPTIMIZED - NO REGENERATION)
  *
- * This script copies existing embeddings from jira_ticket_embeddings to aoma_unified_vectors
+ * This script copies existing embeddings from jira_ticket_embeddings to siam_vectors
  * WITHOUT regenerating them (they're already in the correct 1536-dimension format).
  *
  * Estimated time: 5-10 minutes for 15,000 tickets
@@ -230,7 +230,7 @@ async function migrateJiraToUnified() {
   // Verify in database
   console.log("\n🔍 Verifying migration...");
   const { count } = await supabase
-    .from("aoma_unified_vectors")
+    .from("siam_vectors")
     .select("*", { count: "exact", head: true })
     .eq("source_type", "jira");
 

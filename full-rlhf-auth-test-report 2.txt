@@ -1,0 +1,103 @@
+
+Running 12 tests using 4 workers
+
+(node:4574) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4576) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4577) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4578) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4574) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4578) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4577) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4576) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Found 0 tabs in Curate panel
+RLHF tab not visible - skipping content test
+  ✓   1 [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:94:7 › RLHF Curate Integration › should render RLHF Feedback Tab content when clicked (10.3s)
+RLHF tab not visible - permissions check working correctly
+  ✓   4 [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:62:7 › RLHF Curate Integration › should show RLHF tab WITH curator permissions (10.6s)
+  ✓   3 [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:30:7 › RLHF Curate Integration › should render Curate panel with Files, Upload, and Info tabs (12.4s)
+  ✘   2 [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:40:7 › RLHF Curate Integration › should check if RLHF tab is present (depends on permissions) (10.2s)
+(node:5093) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:5093) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   5 [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:127:7 › RLHF Curate Integration › should display interactive feedback elements (4.3s)
+  ✓   6 [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:171:7 › RLHF Curate Integration › should render with Mac-inspired design system (4.3s)
+Console errors: []
+  ✓   7 [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:202:7 › RLHF Curate Integration › should handle permission check without errors (4.9s)
+Runtime errors: []
+  ✓   9 [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:264:7 › RLHF Curate Integration › should not cause TypeScript or runtime errors (5.3s)
+
+🎯 Starting Comprehensive RLHF Feature Test...
+
+  ✓  10 [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:300:7 › RLHF Integration - Component Tests › usePermissions hook should work without crashing (5.6s)
+  ✓  11 [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:317:7 › RLHF Integration - Component Tests › RLHFFeedbackTab component should render mock data (4.5s)
+  ✘   8 [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:229:7 › RLHF Curate Integration › should load without blocking other Curate tabs (10.1s)
+⏭️  SKIPPING: RLHF tab not visible (curator permissions not set)
+   To enable: Run database migrations and assign curator role
+  -  12 [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:348:7 › 🚀 COMPREHENSIVE RLHF FEATURE TEST - State of the Art Curation › COMPLETE TEST: All RLHF features working end-to-end
+
+
+  1) [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:40:7 › RLHF Curate Integration › should check if RLHF tab is present (depends on permissions) 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m3[39m
+    Received:    [31m0[39m
+
+      45 |     
+      46 |     // Verify we have at least the 3 base tabs
+    > 47 |     expect(tabs).toBeGreaterThanOrEqual(3);
+         |                  ^
+      48 |     
+      49 |     // Check if RLHF tab exists
+      50 |     const rlhfTab = page.locator('button[role="tab"]:has-text("RLHF")');
+        at /Users/matt/Documents/projects/siam/tests/e2e/rlhf-curate-integration.spec.ts:47:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-rlhf-curate-integratio-07b29-ent-depends-on-permissions--chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-rlhf-curate-integratio-07b29-ent-depends-on-permissions--chromium/error-context.md
+
+  2) [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:229:7 › RLHF Curate Integration › should load without blocking other Curate tabs 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText(/search files/i).or(getByText(/no files/i))
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByText(/search files/i).or(getByText(/no files/i))[22m
+
+
+      241 |     
+      242 |     // Should see file-related content
+    > 243 |     await expect(page.getByText(/search files/i).or(page.getByText(/no files/i))).toBeVisible();
+          |                                                                                   ^
+      244 |     
+      245 |     // Test Upload tab
+      246 |     const uploadTab = page.getByRole('tab', { name: /upload/i });
+        at /Users/matt/Documents/projects/siam/tests/e2e/rlhf-curate-integration.spec.ts:243:83
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-rlhf-curate-integratio-31845--blocking-other-Curate-tabs-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-rlhf-curate-integratio-31845--blocking-other-Curate-tabs-chromium/error-context.md
+
+  2 failed
+    [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:40:7 › RLHF Curate Integration › should check if RLHF tab is present (depends on permissions) 
+    [chromium] › tests/e2e/rlhf-curate-integration.spec.ts:229:7 › RLHF Curate Integration › should load without blocking other Curate tabs 
+  1 skipped
+  9 passed (52.4s)

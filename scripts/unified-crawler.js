@@ -168,7 +168,7 @@ async function storeInSupabase(data) {
 
   // Check if content already exists
   const { data: existing } = await supabase
-    .from("aoma_unified_vectors")
+    .from("siam_vectors")
     .select("id, content_hash")
     .eq("url", data.url)
     .single();
@@ -179,7 +179,7 @@ async function storeInSupabase(data) {
   }
 
   // Upsert new content
-  const { error } = await supabase.from("aoma_unified_vectors").upsert(
+  const { error } = await supabase.from("siam_vectors").upsert(
     {
       url: data.url,
       content: data.content,
@@ -212,7 +212,7 @@ async function storeInSupabase(data) {
  */
 async function main() {
   console.log("🚀 Unified Hybrid Crawler Starting...\n");
-  console.log("📊 Database: aoma_unified_vectors");
+  console.log("📊 Database: siam_vectors");
   console.log("🔄 Strategy: Try Firecrawl → Fall back to Playwright\n");
 
   const stats = {
@@ -291,7 +291,7 @@ async function main() {
 
   // Check database
   const { count } = await supabase
-    .from("aoma_unified_vectors")
+    .from("siam_vectors")
     .select("*", { count: "exact", head: true });
 
   console.log(`\n📦 Total documents in database: ${count}`);

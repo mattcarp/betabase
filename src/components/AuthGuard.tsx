@@ -37,14 +37,14 @@ export function AuthGuard({ children }: AuthGuardProps) {
         if (!isAuth) {
           // Not authenticated - redirect to login
           console.warn("[AuthGuard] Unauthorized access attempt, redirecting to login");
-          window.location.href = "/emergency-login.html";
+          router.push("/login");
           return;
         }
         
         setIsAuthenticated(true);
       } catch (error) {
         console.error("[AuthGuard] Authentication check failed:", error);
-        window.location.href = "/emergency-login.html";
+        router.push("/login");
       } finally {
         setIsLoading(false);
       }
@@ -55,10 +55,10 @@ export function AuthGuard({ children }: AuthGuardProps) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white">
+      <div className="min-h-screen bg-[var(--mac-surface-bg)] flex items-center justify-center">
+        <div className="text-[var(--mac-text-primary)]">
           <div className="text-2xl mb-2">🔒 Verifying authentication...</div>
-          <div className="text-gray-400">Please wait</div>
+          <div className="text-[var(--mac-text-secondary)]">Please wait</div>
         </div>
       </div>
     );
@@ -66,10 +66,10 @@ export function AuthGuard({ children }: AuthGuardProps) {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white">
+      <div className="min-h-screen bg-[var(--mac-surface-bg)] flex items-center justify-center">
+        <div className="text-[var(--mac-text-primary)]">
           <div className="text-2xl mb-2">🚫 Unauthorized</div>
-          <div className="text-gray-400">Redirecting to login...</div>
+          <div className="text-[var(--mac-text-secondary)]">Redirecting to login...</div>
         </div>
       </div>
     );
