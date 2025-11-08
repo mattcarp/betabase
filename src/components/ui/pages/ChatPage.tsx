@@ -12,6 +12,10 @@ import { getChatAPIEndpoint } from "../../../config/featureFlags";
 import { ResponseDebugger } from "../ResponseDebugger";
 import { QuickFixPanel } from "../QuickFixPanel";
 import { TestCaseGenerator } from "../TestCaseGenerator";
+import { HistoricalTestExplorer } from "../../test-dashboard/HistoricalTestExplorer";
+import { RLHFTestSuite } from "../../test-dashboard/RLHFTestSuite";
+import { RLHFImpactDashboard } from "../../test-dashboard/RLHFImpactDashboard";
+import { LiveRAGMonitor } from "../../test-dashboard/LiveRAGMonitor";
 import {
   Upload,
   Settings,
@@ -349,7 +353,49 @@ Be helpful, concise, and professional in your responses.`;
                 </div>
               )}
 
-              {activeMode === "test" && <TestDashboard className="h-full" />}
+              {activeMode === "test" && (
+                <div className="h-full p-6 space-y-6">
+                  <div>
+                    <h2 className="text-lg font-normal text-zinc-100 flex items-center gap-2">
+                      <TestTube className="h-5 w-5 text-zinc-400" />
+                      Advanced Testing & Quality Assurance
+                    </h2>
+                    <p className="text-sm text-zinc-400 mt-1">
+                      Comprehensive testing suite with historical data, RLHF-generated tests, and live monitoring
+                    </p>
+                  </div>
+                  
+                  <Tabs defaultValue="dashboard" className="h-[calc(100%-80px)]">
+                    <TabsList className="grid w-full grid-cols-5">
+                      <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+                      <TabsTrigger value="historical">Historical Tests</TabsTrigger>
+                      <TabsTrigger value="rlhf-tests">RLHF Tests</TabsTrigger>
+                      <TabsTrigger value="impact">Impact Metrics</TabsTrigger>
+                      <TabsTrigger value="monitor">Live Monitor</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="dashboard" className="h-full">
+                      <TestDashboard className="h-full" />
+                    </TabsContent>
+                    
+                    <TabsContent value="historical" className="h-full">
+                      <HistoricalTestExplorer />
+                    </TabsContent>
+                    
+                    <TabsContent value="rlhf-tests" className="h-full">
+                      <RLHFTestSuite />
+                    </TabsContent>
+                    
+                    <TabsContent value="impact" className="h-full">
+                      <RLHFImpactDashboard />
+                    </TabsContent>
+                    
+                    <TabsContent value="monitor" className="h-full">
+                      <LiveRAGMonitor />
+                    </TabsContent>
+                  </Tabs>
+                </div>
+              )}
 
               {activeMode === "fix" && (
                 <div className="h-full p-6 space-y-6">

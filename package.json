@@ -28,6 +28,8 @@
     "test:coverage": "vitest run --coverage",
     "test:unit": "vitest run --exclude tests/integration/**",
     "test:integration": "INTEGRATION_TESTS=1 vitest run tests/integration/**",
+    "deduplicate": "./scripts/doc-analysis/deduplicate.sh",
+    "deduplicate:dry-run": "./scripts/doc-analysis/deduplicate.sh --dry-run",
     "test:integration:with-server": "./scripts/test-with-server.sh",
     "test:all": "./tests/run-all-tests.sh",
     "test:ui-all": "./tests/run-ui-tests.sh",
