@@ -1920,6 +1920,75 @@
             "testStrategy": "Run the migration script and verify data integrity and consistency in the new schema."
           }
         ]
+      },
+      {
+        "id": 91,
+        "title": "Implement Beta Base Historical Test Integration",
+        "description": "Import 6,250 AOMA scenarios from Beta Base into SIAM with vector embeddings, build Beta Base Explorer UI, integrate with RLHF tab, and create execution history visualizations.",
+        "details": "1. **Schema Design**: Design a database schema in Supabase to store AOMA scenarios, ensuring it supports vector embeddings for similarity search. Use JSONB fields for flexible data storage and indexing.\n\n2. **Import Script**: Develop a Python script to import 6,250 AOMA scenarios from the local Supabase instance into SIAM. Utilize SQLAlchemy for database interactions and OpenAI's API for generating vector embeddings.\n\n3. **Service Layer**: Implement a service layer in Node.js to handle requests related to AOMA scenarios, including CRUD operations and similarity searches. Use Express.js for API endpoints and integrate with the existing SIAM backend.\n\n4. **Beta Base Explorer UI**: Build a React-based UI component for exploring AOMA scenarios. Use Shadcn components for consistent styling and integrate with the existing SIAM UI. Ensure the UI supports filtering and searching scenarios based on vector similarity.\n\n5. **Integration with RLHF Tab**: Modify the RLHF tab to include a section for AOMA scenario exploration. Ensure seamless navigation and data flow between the RLHF tab and the Beta Base Explorer.\n\n6. **Execution History Visualizations**: Use D3.js or Chart.js to create visualizations of execution histories. Ensure these visualizations are interactive and provide insights into scenario outcomes.\n\n7. **Comprehensive Testing**: Implement unit and integration tests using Jest and Cypress to ensure all components function correctly. Focus on data integrity, UI responsiveness, and API reliability.",
+        "testStrategy": "1. **Schema Verification**: Ensure the database schema supports all required fields and vector embeddings are correctly indexed.\n\n2. **Import Script Testing**: Run the import script and verify that all 6,250 scenarios are imported correctly with accurate vector embeddings.\n\n3. **Service Layer Testing**: Use Postman to test all API endpoints for CRUD operations and similarity searches. Verify response times and data accuracy.\n\n4. **UI Testing**: Conduct UI tests using Cypress to ensure the Beta Base Explorer UI is responsive and functional. Test filtering and searching capabilities.\n\n5. **Integration Testing**: Verify that the RLHF tab integrates seamlessly with the Beta Base Explorer, ensuring data consistency and navigation flow.\n\n6. **Visualization Testing**: Check that execution history visualizations are accurate and interactive, providing meaningful insights.\n\n7. **End-to-End Testing**: Perform end-to-end tests to ensure the entire workflow from data import to UI interaction works as expected.",
+        "status": "pending",
+        "dependencies": [
+          40,
+          66,
+          53
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Database Schema",
+            "description": "Design a database schema in Supabase to store AOMA scenarios with support for vector embeddings.",
+            "dependencies": [],
+            "details": "Ensure the schema supports vector embeddings for similarity search and uses JSONB fields for flexible data storage and indexing.",
+            "status": "done",
+            "testStrategy": "Verify that the database schema supports all required fields and vector embeddings are correctly indexed."
+          },
+          {
+            "id": 2,
+            "title": "Develop Import Script",
+            "description": "Create a Python script to import 6,250 AOMA scenarios into SIAM.",
+            "dependencies": [
+              1
+            ],
+            "details": "Utilize SQLAlchemy for database interactions and OpenAI's API for generating vector embeddings.",
+            "status": "in-progress",
+            "testStrategy": "Run the import script and verify that all scenarios are imported correctly with accurate vector embeddings."
+          },
+          {
+            "id": 3,
+            "title": "Implement Service Layer",
+            "description": "Develop a Node.js service layer to handle AOMA scenario requests.",
+            "dependencies": [
+              2
+            ],
+            "details": "Use Express.js for API endpoints and integrate with the existing SIAM backend for CRUD operations and similarity searches.",
+            "status": "pending",
+            "testStrategy": "Ensure API endpoints function correctly and support CRUD operations and similarity searches."
+          },
+          {
+            "id": 4,
+            "title": "Build Beta Base Explorer UI",
+            "description": "Create a React-based UI component for exploring AOMA scenarios.",
+            "dependencies": [
+              3
+            ],
+            "details": "Use Shadcn components for styling and integrate with the existing SIAM UI. Ensure support for filtering and searching based on vector similarity.",
+            "status": "pending",
+            "testStrategy": "Test UI responsiveness and functionality, ensuring it supports filtering and searching scenarios."
+          },
+          {
+            "id": 5,
+            "title": "Create Execution History Visualizations",
+            "description": "Develop visualizations for execution histories using D3.js or Chart.js.",
+            "dependencies": [
+              4
+            ],
+            "details": "Ensure visualizations are interactive and provide insights into scenario outcomes.",
+            "status": "pending",
+            "testStrategy": "Verify that visualizations are interactive and accurately represent execution history data."
+          }
+        ]
       }
     ],
     "metadata": {
@@ -1932,7 +2001,7 @@
       ],
       "created": "2025-10-30T17:18:33.148Z",
       "description": "Tasks for master context",
-      "updated": "2025-11-06T13:19:45.151Z"
+      "updated": "2025-11-09T19:16:35.029Z"
     }
   }
 }
