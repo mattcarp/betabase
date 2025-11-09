@@ -145,3 +145,13 @@ tmp/theme-screenshots/*.png
 tmp/theme-screenshots/*.jpg
 tmp/theme-screenshots/*.jpeg
 node_modules 2/
+node_modules 2/
+
+# Infisical configuration
+.infisical.json
+.venv/
+docs/supabase-aoma-analysis.json
+*.backup
+*.dump
+db_cluster-*.backup
+docs/supabase-aoma-analysis.json
