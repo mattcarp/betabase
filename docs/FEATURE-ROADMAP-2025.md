@@ -13,7 +13,8 @@ This roadmap outlines 6 strategic features to enhance SIAM's AI-powered meeting 
 **Current State**:
 - ✅ RLHF learning loop complete (3 RAG strategies)
 - ✅ Multi-tenant vector store (15,197 vectors)
-- ✅ 10,000+ historical tests documented
+- ✅ **8,449 Beta Base scenarios discovered** (6,250 AOMA-specific)
+- ✅ **34,631 test executions analyzed** (2008-2022 data)
 - ✅ Security hardened, performance baseline established
 - ✅ Production deployed (https://thebetabase.com)
 
@@ -30,14 +31,18 @@ This roadmap outlines 6 strategic features to enhance SIAM's AI-powered meeting 
 ### **Option 1: Beta Base Historical Test Integration Engine** ⭐ HIGHEST PRIORITY
 
 #### **Strategic Value**
-Unlock 10,000+ Beta Base scenarios (test cases) + execution history representing years of accumulated domain knowledge and regression prevention.
+Unlock **8,449 Beta Base scenarios** (6,250 AOMA-specific) + **34,631 test executions** representing 14 years (2008-2022) of accumulated domain knowledge and regression prevention.
 
-**Source**: Beta Base (legacy test management system) - See `docs/BETA-BASE-ERD.md`
+**Source**: Beta Base (legacy test management system) - Local Supabase Docker
+**Connection**: postgresql://127.0.0.1:54322/postgres
+**Documentation**: See `docs/BETA-BASE-ERD.md` and `docs/BETA-BASE-DISCOVERY-RESULTS.md`
 
-**Key Distinction**:
-- **Scenarios**: 10,000+ test case templates with query patterns and expected behaviors
-- **Test Executions**: Historical runs showing pass/fail trends over time
-- **Both** provide valuable data for RLHF integration
+**Actual Data Discovered**:
+- **8,449 scenarios** (6,250 AOMA = 74%)
+- **34,631 test executions** (20,961 AOMA = 61%)
+- **78% pass rate** (27,027 passes)
+- **Date range**: 2008-01-01 to 2022-07-18
+- **Avg executions/scenario**: 3.4 for AOMA scenarios
 
 #### **Business Impact**
 - **ROI**: Massive - Leverages existing $100k+ investment in test creation

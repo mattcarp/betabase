@@ -1,8 +1,9 @@
 # Beta Base Database ERD
 
 **Last Updated**: November 9, 2025
-**Status**: Documented from user description - Awaiting MCP connection for validation
+**Status**: ✅ **VALIDATED** - Actual schema from local Supabase
 **Source System**: Beta Base (legacy test management system)
+**Connection**: Local Supabase Docker - postgresql://127.0.0.1:54322/postgres
 
 ---
 
@@ -15,25 +16,36 @@ Beta Base uses a **two-tier testing architecture**:
 
 ---
 
-## 📊 **Entity Relationship Diagram**
+## 📊 **Entity Relationship Diagram** (Actual Schema)
 
 ```
-┌─────────────────────────────────────┐
-│          SCENARIOS                  │
-│  (Test Cases / Templates)           │
-├─────────────────────────────────────┤
-│ • id (PK)                           │
-│ • test_script                       │
-│ • test_description                  │
-│ • input_query                       │
-│ • expected_output                   │
-│ • category                          │
-│ • priority                          │
-│ • created_date                      │
-│ • created_by                        │
-│ • tags                              │
-│ • metadata                          │
-└─────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│          SCENARIO                           │
+│  (Test Cases / Templates)                   │
+│  8,449 rows (6,250 AOMA)                   │
+├─────────────────────────────────────────────┤
+│ • id (INTEGER PK)                           │
+│ • name (VARCHAR 255)                        │
+│ • script (TEXT - HTML formatted)            │
+│ • expected_result (TEXT - HTML formatted)   │
+│ • created_by (VARCHAR 127)                  │
+│ • updated_by (VARCHAR 127)                  │
+│ • preconditions (TEXT)                      │
+│ • created_at (VARCHAR 255)                  │
+│ • updated_at (VARCHAR 255)                  │
+│ • review_flag (SMALLINT)                    │
+│ • flag_reason (TEXT)                        │
+│ • app_under_test (VARCHAR 255) [AOMA/...]  │
+│ • tags (VARCHAR 255 - comma-separated)     │
+│ • coverage (VARCHAR 128)                    │
+│ • client_priority (SMALLINT)                │
+│ • mode (VARCHAR 255)                        │
+│ • is_security (SMALLINT)                    │
+│ • priority_sort_order (INTEGER)             │
+│ • enhancement_sort_order (INTEGER)          │
+│ • current_regression_sort_order (INTEGER)   │
+│ • reviewed_flag (VARCHAR 1)                 │
+└─────────────────────────────────────────────┘
               │
               │ 1
               │
@@ -41,22 +53,33 @@ Beta Base uses a **two-tier testing architecture**:
               │
               │ N
               ▼
-┌─────────────────────────────────────┐
-│           TESTS                     │
-│  (Test Executions / Runs)           │
-├─────────────────────────────────────┤
-│ • id (PK)                           │
-│ • scenario_id (FK)                  │
-│ • actual_output                     │
-│ • pass_fail (boolean)               │
-│ • execution_date                    │
-│ • execution_time_ms                 │
-│ • error_message                     │
-│ • environment                       │
-│ • executed_by                       │
-│ • system_version                    │
-│ • metadata                          │
-└─────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│           TEST                              │
+│  (Test Executions / Runs)                   │
+│  34,631 rows (20,961 AOMA)                 │
+├─────────────────────────────────────────────┤
+│ • id (INTEGER PK)                           │
+│ • scenario_id (INTEGER FK)                  │
+│ • created_at (VARCHAR 255)                  │
+│ • comments (TEXT)                           │
+│ • ticket (VARCHAR 255)                      │
+│ • created_by (VARCHAR 127)                  │
+│ • input (TEXT)                              │
+│ • result (TEXT)                             │
+│ • pass_fail (VARCHAR 32) [Pass/Fail/Pend]  │
+│ • build (VARCHAR 127)                       │
+│ • updated_at (VARCHAR 255)                  │
+│ • updated_by (VARCHAR 127)                  │
+│ • path (VARCHAR 255)                        │
+│ • browser_name (VARCHAR 255)                │
+│ • browser_major (VARCHAR 255)               │
+│ • browser_minor (VARCHAR 255)               │
+│ • os_name (VARCHAR 255)                     │
+│ • os_major (VARCHAR 255)                    │
+│ • os_minor (VARCHAR 255)                    │
+│ • deployment_stamp (VARCHAR 255)            │
+│ • in_prod (VARCHAR 255)                     │
+└─────────────────────────────────────────────┘
 ```
 
 ---
@@ -73,7 +96,7 @@ Beta Base uses a **two-tier testing architecture**:
 - Can be executed multiple times (generates many Tests)
 - Represents the "source of truth" for what behavior is expected
 
-**Estimated Count**: ~10,000+ scenarios (TBD - requires MCP query)
+**Actual Count**: **8,449 scenarios** (6,250 AOMA-specific = 74%)
 
 **Example**:
 ```typescript
@@ -109,7 +132,7 @@ interface Scenario {
 - Tracks pass/fail history over time
 - Shows how behavior has changed
 
-**Estimated Count**: Unknown (could be 100k+ executions across all scenarios)
+**Actual Count**: **34,631 test executions** (20,961 AOMA-specific = 61%)
 
 **Example**:
 ```typescript
@@ -138,10 +161,12 @@ interface TestExecution {
 
 ### **What the "10,000+ tests" Actually Means**
 
-Based on Matt's description, the "10,000+ tests" refers to:
-- **10,000+ SCENARIOS** (unique test cases)
-- Each scenario may have been executed multiple times
-- Total TEST EXECUTIONS could be much higher (50k-500k+?)
+Based on actual discovery, the data contains:
+- **8,449 SCENARIOS** (unique test cases) - 6,250 AOMA-specific
+- Each scenario executed ~3.4 times on average
+- **34,631 TEST EXECUTIONS** (actual runs) - 20,961 AOMA-specific
+- **Data spans 2008-2022** (14+ years of history)
+- **78% pass rate** overall (27,027 passes / 34,631 total)
 
 ### **Value Proposition**
 
@@ -265,12 +290,12 @@ For each scenario, score:
 
 ## 🔧 **Next Steps**
 
-### **Immediate (Requires MCP Connection)**
-- [ ] Connect to Beta Base Supabase MCP
-- [ ] Run discovery queries to validate schema
-- [ ] Count actual scenarios and test executions
-- [ ] Analyze category distribution
-- [ ] Identify date ranges (oldest/newest)
+### **Immediate** ✅ **COMPLETED**
+- [x] Connected to local Supabase Docker instance
+- [x] Ran discovery queries to validate schema
+- [x] Counted actual scenarios (8,449) and test executions (34,631)
+- [x] Analyzed app distribution (AOMA: 6,250 scenarios)
+- [x] Identified date ranges (2008-2022)
 
 ### **Short-Term**
 - [ ] Build scenario relevance scoring algorithm
@@ -286,19 +311,22 @@ For each scenario, score:
 
 ---
 
-## 🎯 **Expected Data Volumes (Estimates)**
+## 🎯 **Actual Data Volumes** ✅
 
-Based on typical test management systems:
+Discovered from local Supabase (November 9, 2025):
 
-| Metric | Conservative | Likely | Optimistic |
-|--------|-------------|--------|------------|
-| **Scenarios** | 8,000 | 10,000 | 15,000 |
-| **Test Executions** | 50,000 | 150,000 | 500,000 |
-| **Avg Executions/Scenario** | 6 | 15 | 33 |
-| **Active Categories** | 10 | 20 | 30 |
-| **Date Range** | 2020-2023 | 2018-2024 | 2015-2024 |
+| Metric | Actual Value |
+|--------|--------------|
+| **Total Scenarios** | 8,449 |
+| **AOMA Scenarios** | 6,250 (74%) |
+| **Total Test Executions** | 34,631 |
+| **AOMA Executions** | 20,961 (61%) |
+| **Avg Executions/Scenario** | 4.1 overall, 3.4 for AOMA |
+| **Active Apps** | 5 (AOMA, Promo, GRAS Lite, DX, Partner Previewer) |
+| **Date Range** | 2008-01-01 to 2022-07-18 |
+| **Pass Rate** | 78% (27,027 passes / 34,631 total) |
 
-**Note**: These are estimates. Actual numbers will be determined once MCP connection is established.
+**Source**: See `docs/BETA-BASE-DISCOVERY-RESULTS.md` for complete analysis
 
 ---
 
@@ -320,8 +348,9 @@ Based on typical test management systems:
 
 ---
 
-**Status**: Documented based on user description
-**Next Action**: Establish MCP connection to validate and discover actual data
+**Status**: ✅ Validated - Actual schema documented
+**Next Action**: Build import script to extract AOMA scenarios
 **Owner**: Matt Carpenter
-**Source System**: Beta Base (legacy)
+**Source System**: Beta Base (legacy) - Local Supabase Docker
 **Target System**: SIAM (modern)
+**Connection**: postgresql://postgres:postgres@127.0.0.1:54322/postgres

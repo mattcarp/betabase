@@ -84,6 +84,9 @@ audio/
 processed/
 # config.json
 
+# Beta Base exported data
+data/beta-base-scenarios-*.json
+
 # Task files (commented out to keep tasks)
 
 # Temporary files
