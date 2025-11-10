@@ -57,7 +57,7 @@ thebetabase.com  → 216.24.57.1 (Render)
 
 3. **Environment**:
    - Production build with optimizations
-   - Next.js 15.4.6
+   - Next.js 16.0.1
    - React 19.1.1
 
 ## Environment Variables (Render)

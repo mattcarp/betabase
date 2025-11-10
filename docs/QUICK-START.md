@@ -6,7 +6,7 @@
 
 ```bash
 # Required
-Node.js 18+, npm or pnpm
+Node.js 20.9+, npm or pnpm
 Git configured with user.name and user.email
 
 # Optional but recommended

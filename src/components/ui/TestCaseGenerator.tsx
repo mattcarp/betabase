@@ -20,7 +20,7 @@ import {
   CheckCircle,
   Play
 } from "lucide-react";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -34,7 +34,10 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
   const [generating, setGenerating] = useState(false);
   const [testCode, setTestCode] = useState("");
   const [feedbackData, setFeedbackData] = useState<any>(null);
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   const loadFeedbackItem = async () => {
     if (!searchId.trim()) {

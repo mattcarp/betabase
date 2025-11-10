@@ -13,7 +13,7 @@ SIAM (Secure Intelligence Authentication Manager) is a **pure web application** 
 
 ### Technology Stack
 
-- **Framework**: Next.js 15.4.6 (App Router)
+- **Framework**: Next.js 16.0.1 (App Router, Turbopack stable)
 - **Language**: TypeScript
 - **UI Library**: React 19.1.1
 - **Styling**: Tailwind CSS + shadcn/ui components

@@ -15,7 +15,7 @@ graph TB
     end
 
     subgraph "Application Server - Render.com"
-        NextJS[⚡ Next.js 15.5.6<br/>thebetabase.com]
+        NextJS[⚡ Next.js 16.0.1<br/>thebetabase.com]
         ChatAPI[📡 /api/chat/route.ts]
         Auth[🔐 Auth Middleware<br/>Magic Link]
         Cache[💾 Query Cache<br/>In-Memory]
@@ -484,7 +484,7 @@ graph LR
 
 ```mermaid
 graph TB
-    subgraph "Frontend - Next.js 15"
+    subgraph "Frontend - Next.js 16"
         Pages[📄 Pages<br/>app/]
         Components[🧩 Components<br/>src/components/]
         AIElements[✨ Vercel AI Elements<br/><Response>, <Message>]

@@ -30,7 +30,7 @@ All documentation is located in `/docs/test-dashboard/`:
 
 ### Existing Setup
 
-- **Framework:** Next.js 15.4.6, React 19.1.1, TypeScript 5.5.3
+- **Framework:** Next.js 16.0.1, React 19.2.0, TypeScript 5.9.3
 - **UI Library:** Shadcn/ui with Tailwind CSS
 - **State Management:** Zustand 4.5.4
 - **Testing:** Playwright 1.54.2 already installed
