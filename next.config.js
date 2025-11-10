@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+// Next.js 16.0.1 - Turbopack stable, React 19.2, optimized bundling
 const path = require("path");
 const isProd = process.env.NODE_ENV === "production";
 

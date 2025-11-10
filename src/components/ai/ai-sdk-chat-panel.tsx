@@ -4,7 +4,7 @@ import { useChat } from "@ai-sdk/react";
 // import { DefaultChatTransport } from "ai"; // Removed - not available in current ai version
 import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../../lib/utils";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
@@ -174,7 +174,10 @@ export function AiSdkChatPanel({
 
   // RLHF Feedback tracking
   const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down' | null>>({});
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   // Voice feature states - define before using in hooks
   const [isTTSEnabled, setIsTTSEnabled] = useState(false);

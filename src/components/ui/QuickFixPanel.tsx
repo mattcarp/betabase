@@ -20,7 +20,7 @@ import {
   CheckCircle,
   AlertCircle
 } from "lucide-react";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -35,7 +35,10 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   const loadMessage = async () => {
     if (!searchId.trim()) {

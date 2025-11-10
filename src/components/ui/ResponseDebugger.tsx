@@ -22,7 +22,7 @@ import {
   FileText, 
   Brain 
 } from "lucide-react";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -46,7 +46,10 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
   const [debugData, setDebugData] = useState<DebugData | null>(null);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   const loadDebugInfo = async (msgId: string) => {
     if (!msgId) {

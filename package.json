@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && TURBOPACK=0 next dev -p 3000",
+    "dev:turbo": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && next dev -p 3000",
     "diagnose:aoma": "tsx scripts/diagnose-aoma-performance.ts",
     "scrape:jira": "node scripts/data-collection/scrape-jira.js",
     "scrape:jira:headless": "node scripts/data-collection/scrape-jira.js --headless",
@@ -135,6 +136,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.53.0",
     "@tailwindcss/typography": "^0.5.16",
@@ -151,7 +153,7 @@
     "leo-profanity": "^1.8.0",
     "lucide-react": "^0.545.0",
     "mermaid": "^11.12.1",
-    "next": "15.5.6",
+    "next": "^16.0.1",
     "openai": "^6.8.1",
     "p-limit": "^6.1.0",
     "postcss": "^8.4.39",
@@ -193,7 +195,7 @@
     "cli-table3": "^0.6.5",
     "dotenv": "^17.2.3",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^15.5.6",
+    "eslint-config-next": "^16.0.1",
     "glob": "^11.0.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
@@ -209,7 +211,7 @@
     "vitest": "^4.0.6"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=20.9.0",
     "npm": ">=10.0.0"
   },
   "pnpm": {
