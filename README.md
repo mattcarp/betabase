@@ -42,7 +42,7 @@ SIAM uses magic link authentication:
 
 ### Tech Stack
 
-- **Frontend**: Next.js 14 (App Router), React 18, TypeScript
+- **Frontend**: Next.js 16 (App Router, Turbopack), React 19, TypeScript
 - **Styling**: Tailwind CSS, shadcn/ui components
 - **Authentication**: AWS Cognito + Magic Links
 - **AI Models**: Google Gemini 2.5 Pro (primary), OpenAI (embeddings & fallback)

@@ -1,7 +1,7 @@
 ```mermaid
 graph TB
     subgraph "Client Layer"
-        A[Next.js 15 Frontend<br/>React Server Components]
+        A[Next.js 16 Frontend<br/>React Server Components]
         A1[User Interface]
         A2[Streaming Response Handler]
     end
@@ -69,7 +69,7 @@ graph TB
 
 **Key Points to Highlight:**
 
-- Next.js 15 with React Server Components for efficient rendering
+- Next.js 16 with React Server Components and Turbopack for efficient rendering
 - MCP Proxy Layer orchestrates multiple data sources
 - GPT-5 receives context from both vector search AND MCP servers
 - Streaming responses for real-time UX

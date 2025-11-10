@@ -146,7 +146,7 @@ npm run dev
 
 ### Key Technologies
 
-- **Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS
+- **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS
 - **State Management:** Zustand
 - **UI Components:** Shadcn/ui, Lucide Icons
 - **Data Visualization:** Recharts, D3.js

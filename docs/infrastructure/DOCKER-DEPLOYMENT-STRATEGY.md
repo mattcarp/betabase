@@ -205,4 +205,4 @@ That's the fucking beauty of containerization!
 
 Last updated: 2025-08-22
 Docker version: 28.3.2
-Next.js version: 15.4.6
+Next.js version: 16.0.1
