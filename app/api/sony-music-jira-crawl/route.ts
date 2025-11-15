@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import sonyMusicJiraCrawler from "../../../src/services/sonyMusicJiraCrawler";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 type Payload = {
   projects?: string[];
@@ -13,7 +13,25 @@ let lastSummary: { issuesCrawled: number; vectorsUpserted: number; at: string } 
 // POST /api/sony-music-jira-crawl
 // Uses Playwright to login to Jira UI, execute JQL queries, and scrape ticket data
 // Note: Requires HITL (Human-in-the-Loop) for 2FA/MFA if enabled
+const CRAWLER_ENABLED = process.env.ENABLE_SONY_JIRA_CRAWLER === "true";
+
+async function loadCrawler() {
+  const module = await import("../../../src/services/sonyMusicJiraCrawler");
+  return module.default || module;
+}
+
 export async function POST(req: NextRequest) {
+  if (!CRAWLER_ENABLED) {
+    return NextResponse.json(
+      {
+        error: "Sony Music JIRA crawler is disabled in this environment.",
+        instructions:
+          "Set ENABLE_SONY_JIRA_CRAWLER=true and ensure Playwright dependencies are installed before calling this endpoint.",
+      },
+      { status: 503 }
+    );
+  }
+
   let payload: Payload = {};
   try {
     payload = await req.json();
@@ -39,7 +57,9 @@ export async function POST(req: NextRequest) {
               )
             );
 
-            const result = await sonyMusicJiraCrawler.crawlProjects({
+            const crawler = await loadCrawler();
+
+            const result = await crawler.crawlProjects({
               projects: payload.projects,
               sinceDays: payload.sinceDays,
               onProgress: (evt: any) => {
@@ -91,6 +111,18 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
+  if (!CRAWLER_ENABLED) {
+    return NextResponse.json(
+      {
+        issuesCrawled: 0,
+        vectorsUpserted: 0,
+        at: null,
+        disabled: true,
+      },
+      { status: 200 }
+    );
+  }
+
   if (!lastSummary) return NextResponse.json({ issuesCrawled: 0, vectorsUpserted: 0, at: null });
   return NextResponse.json(lastSummary);
 }

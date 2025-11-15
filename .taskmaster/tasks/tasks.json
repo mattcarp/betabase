@@ -1420,8 +1420,59 @@
         "dependencies": [
           "72"
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "in-progress",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set up monitoring infrastructure and data collection",
+            "description": "Configure the foundational monitoring infrastructure to collect performance metrics from the system",
+            "dependencies": [],
+            "details": "Install and configure monitoring agents to collect system metrics including CPU usage, memory consumption, disk I/O, and network traffic. Set up data collection endpoints for application-specific metrics like query response times and data freshness indicators. Configure metric storage with appropriate retention policies.\n<info added on 2025-11-15T08:21:07.755Z>\nImplementation plan for persistent metrics collection and storage:\n\nCreate a Supabase table (system_metrics_snapshot) to store historical performance data including OS metrics, query statistics, and data freshness indicators. Develop src/services/systemMetricsCollector.ts service that leverages the existing SystemMetricsVectorService to capture real telemetry data every minute via automated collection triggered through /api/performance/collect endpoint integrated with existing cron jobs.\n\nUpdate the current API handler (app/api/performance/metrics/route.ts) to read from stored snapshots instead of generating fake data, add Prometheus-compatible JSON output format, maintain POST endpoint for custom events, and integrate Web Vitals collection through the existing WebVitalsReporter component.\n\nExpose Grafana-ready JSON endpoint with documentation to enable external dashboard integration while ensuring the built-in /performance page consumes the same stored snapshot data for consistency across monitoring interfaces.\n</info added on 2025-11-15T08:21:07.755Z>",
+            "status": "done",
+            "testStrategy": "Verify that all monitoring agents are collecting metrics correctly and data is being stored in the monitoring backend",
+            "updatedAt": "2025-11-15T08:25:38.078Z",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Configure Grafana/Kibana dashboard platform",
+            "description": "Set up and configure the dashboard platform (Grafana or Kibana) for visualizing performance metrics",
+            "dependencies": [
+              1
+            ],
+            "details": "Install and configure Grafana or Kibana as the primary dashboard platform. Set up data source connections to the monitoring infrastructure. Configure authentication, user roles, and access permissions. Establish dashboard templates and organizational structure for different metric categories.",
+            "status": "done",
+            "testStrategy": "Confirm dashboard platform is accessible, data sources are connected, and basic visualizations can be created",
+            "parentId": "undefined",
+            "updatedAt": "2025-11-15T08:40:51.893Z"
+          },
+          {
+            "id": 3,
+            "title": "Create performance monitoring dashboards",
+            "description": "Build comprehensive dashboards to visualize system performance and query analytics metrics",
+            "dependencies": [
+              2
+            ],
+            "details": "Create dashboards displaying query response times, system load metrics, data freshness indicators, and throughput statistics. Include visualizations for trend analysis, real-time monitoring, and historical performance comparisons. Set up panels for vector store performance, API response times, and resource utilization patterns.\n<info added on 2025-11-15T16:21:39.325Z>\nImplementation plan for dashboard panels:\n- Extend app/performance/page.tsx to add multi-series charts sourced from : stacked bars for API request volume/error counts, area chart for Supabase vector store freshness, and tabular view for snapshots (pulling from /api/performance/snapshots?limit=200).\n- Add a component showing timestamp, CPU, memory, avg response time, error rate plus 'View JSON' actions for drilling into the stored payload.\n- Wire a light toast/notification when /api/performance/collect is invoked so operators can capture a snapshot directly from the UI (call the endpoint, show status).\n- All visualizations remain in Supabase UI; document how to embed them inside Supabase dashboards for internally shared views.\n</info added on 2025-11-15T16:21:39.325Z>",
+            "status": "in-progress",
+            "testStrategy": "Validate that dashboards accurately display real-time and historical performance data with proper formatting and scaling",
+            "parentId": "undefined",
+            "updatedAt": "2025-11-15T16:20:46.408Z"
+          },
+          {
+            "id": 4,
+            "title": "Implement alerting and performance thresholds",
+            "description": "Configure automated alerts and performance threshold monitoring to proactively identify issues",
+            "dependencies": [
+              3
+            ],
+            "details": "Set up alerting rules for critical performance thresholds including query response time limits, system resource usage warnings, and data freshness violations. Configure notification channels (email, Slack, etc.) and escalation procedures. Implement automated health checks and system status indicators with appropriate severity levels.",
+            "status": "pending",
+            "testStrategy": "Test alert triggers by simulating performance threshold breaches and verify notifications are sent through configured channels",
+            "parentId": "undefined"
+          }
+        ],
+        "updatedAt": "2025-11-15T16:20:46.408Z"
       },
       {
         "id": 76,
@@ -1444,13 +1495,75 @@
         "description": "Perform a full security audit and implement critical hardening measures based on Fiona's analysis, including AWS Secrets Manager/Vault integration, removal of exposed credentials, authentication bypass fixes, and migration of sensitive environment variables to server-side only.",
         "details": "1. Integrate AWS Secrets Manager and/or HashiCorp Vault for API key and secret management. Use vault-based retrieval mechanisms and runtime secret injection to eliminate static credentials in code and configuration files. Configure IAM roles and policies for least-privilege access, and enable secret rotation and monitoring. For hybrid or multi-cloud environments, consider multi-vault integrations for centralized visibility and lifecycle management.\n\n2. Scan the codebase for exposed credentials in .env.local files and hard-coded authentication fallbacks using automated tools (e.g., Amazon CodeGuru Reviewer, GitGuardian). Remove all such credentials, replacing them with secure vault references. Enforce policy checks in version control to prevent future exposures.\n\n3. Audit authentication flows for bypass vulnerabilities and client-side weaknesses. Refactor authentication logic to ensure all sensitive checks occur server-side, and remove any fallback mechanisms that could be exploited. Implement robust session management and input validation.\n\n4. Move all sensitive environment variables (API keys, secrets, tokens) to server-side only. Refactor frontend code to ensure no sensitive data is exposed to the client. Use secure server-side retrieval and injection patterns, and encrypt secrets at rest using AWS KMS or Vault's encryption features.\n\n5. Document all changes and update developer protocols to enforce shift-left security and ongoing secret hygiene. Provide training and guidance on secure credential handling throughout the SDLC.",
         "testStrategy": "- Verify that all API keys and secrets are retrieved securely from AWS Secrets Manager or Vault at runtime, and are no longer present in code or config files.\n- Scan the codebase using automated tools to confirm removal of exposed credentials and hard-coded fallbacks.\n- Test authentication flows for bypass vulnerabilities using both manual and automated penetration testing; confirm all sensitive checks are server-side.\n- Inspect client-side bundles to ensure no sensitive environment variables are exposed.\n- Review IAM policies and secret rotation schedules for compliance with least-privilege and audit requirements.\n- Validate documentation updates and developer adherence to new security protocols.",
-        "status": "pending",
+        "status": "in-progress",
         "dependencies": [
           "1",
           "52"
         ],
         "priority": "high",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Integrate AWS Secrets Manager and HashiCorp Vault for Secret Management",
+            "description": "Set up AWS Secrets Manager and/or HashiCorp Vault integration for secure API key and secret management with runtime retrieval mechanisms.",
+            "dependencies": [],
+            "details": "Install and configure AWS Secrets Manager SDK and/or HashiCorp Vault client libraries. Implement vault-based retrieval mechanisms and runtime secret injection to eliminate static credentials in code and configuration files. Configure IAM roles and policies for least-privilege access, enable secret rotation and monitoring. For hybrid or multi-cloud environments, implement multi-vault integrations for centralized visibility and lifecycle management.\n<info added on 2025-11-14T04:31:09.271Z>\nPlanning secret-management integration before any edits:\n- Discovered hard-coded defaults inside src/config/apiKeys.ts (lines 17-49) plus numerous process.env usages documented in docs/infisical-secrets-needed.txt. We already have Infisical for dev, but production still relies on static env injection.\n- Proposal: add src/services/secrets/secretManager.ts exporting a typed SecretManager that (a) pulls credentials from AWS Secrets Manager via @aws-sdk/client-secrets-manager when NODE_ENV==='production', (b) falls back to Infisical/standard env for local dev, and (c) caches decrypted payloads in-memory with TTL + structured logging via src/lib/logger.ts.\n- Will introduce config options (e.g., AWS_SECRET_ID, AWS_REGION, SECRETS_CACHE_TTL_MS) surfaced through existing docs and .env.example.\n- Update apiKeysService to depend on the SecretManager instead of embedding defaults. Remove literal API keys and use await secretManager.get('OPENAI_API_KEY') with batch prefetch so client/server paths both respect async loading via an init promise triggered in app/initSecrets.ts.\n- Extend scripts/deploy-* and README to instruct running sync plus Infisical for staging. Document IAM policy expectations in SECURITY-FIX-COMPLETE.md so auditors know every secret is vault-backed.\n- After wiring, add vitest coverage for secret manager mocking AWS client (only for verification) inside tests/services/secrets/secretManager.spec.ts, ensuring we never hit real AWS but do validate caching + fallback code paths.\n</info added on 2025-11-14T04:31:09.271Z>\n<info added on 2025-11-14T04:49:54.293Z>\nCompleted server-side secret orchestration implementation:\n- Created src/services/secrets/secretManager.ts with AWS Secrets Manager integration, implementing cache invalidation and safe environment variable fallbacks for development environments.\n- Refactored legacy src/config/apiKeys.ts into secure server-only exports (src/config/serverSecrets.ts) and client-safe helpers (src/config/publicEnv.ts) to prevent secrets from being included in browser bundles.\n- Updated README documentation with AWS environment variables and added comprehensive vitest test coverage for secret manager fallback scenarios.\n- Eliminated hard-coded OpenAI and ElevenLabs API key defaults throughout the codebase and implemented secure proxy APIs for ElevenLabs voice synthesis and text-to-speech functionality.\n</info added on 2025-11-14T04:49:54.293Z>\n<info added on 2025-11-14T05:45:28.652Z>\nReverted to Infisical-only architecture per product direction. Updated src/services/secrets/secretManager.ts to remove AWS SDK dependencies and simplified implementation to read Infisical-injected environment variables directly. Maintained existing serverSecrets.ts and publicEnv.ts separation for server/client access control. Updated all documentation, deployment scripts, and test suites to reference Infisical workflows exclusively, removing AWS Secrets Manager configuration requirements and IAM policy documentation.\n</info added on 2025-11-14T05:45:28.652Z>",
+            "status": "done",
+            "testStrategy": "Verify that all API keys and secrets are retrieved securely from AWS Secrets Manager or Vault at runtime, and are no longer present in code or config files. Test secret rotation functionality and IAM role permissions.",
+            "updatedAt": "2025-11-14T04:49:35.747Z",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Scan and Remove Exposed Credentials from Codebase",
+            "description": "Perform comprehensive scanning to identify and remove all exposed credentials, hard-coded secrets, and authentication fallbacks from the codebase.",
+            "dependencies": [
+              1
+            ],
+            "details": "Use automated tools like Amazon CodeGuru Reviewer, GitGuardian, or similar to scan the entire codebase for exposed credentials in .env.local files, hard-coded authentication fallbacks, and any static secrets. Remove all identified credentials and replace them with secure vault references. Implement pre-commit hooks and CI/CD pipeline checks to prevent future credential exposures.\n<info added on 2025-11-14T04:50:18.824Z>\nCOMPLETED: Successfully removed exposed credentials across the repository. Deleted legacy src/config/apiKeys.ts file containing hard-coded OpenAI and ElevenLabs API keys and updated all imports to use serverSecrets/publicEnv helper functions. Scrubbed historical documentation and task guides to replace real tokens with placeholder values. Added comprehensive README documentation and environment variable guidance for AWS Secrets Manager integration to ensure sensitive values remain in vault/Infisical rather than local environment files. Implemented vitest test coverage to verify secret manager fallback behavior when AWS is disabled, preventing future credential exposure regressions.\n</info added on 2025-11-14T04:50:18.824Z>",
+            "status": "done",
+            "testStrategy": "Run automated credential scanning tools to confirm complete removal of exposed credentials and hard-coded fallbacks. Verify that pre-commit hooks and CI/CD checks are functioning properly to prevent future exposures.",
+            "parentId": "undefined",
+            "updatedAt": "2025-11-14T04:50:02.806Z"
+          },
+          {
+            "id": 3,
+            "title": "Audit and Fix Authentication Flow Vulnerabilities",
+            "description": "Conduct thorough audit of authentication flows to identify and fix bypass vulnerabilities and client-side security weaknesses.",
+            "dependencies": [
+              2
+            ],
+            "details": "Perform comprehensive security audit of all authentication flows to identify bypass vulnerabilities and client-side weaknesses. Refactor authentication logic to ensure all sensitive checks occur server-side only. Remove any fallback mechanisms that could be exploited. Implement robust session management, proper input validation, and secure token handling. Ensure all authentication decisions are made server-side with proper authorization checks.",
+            "status": "pending",
+            "testStrategy": "Test authentication flows with various attack vectors including bypass attempts, session manipulation, and client-side tampering. Verify that all sensitive authentication logic is server-side only and cannot be bypassed.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 4,
+            "title": "Migrate Sensitive Environment Variables to Server-Side Only",
+            "description": "Move all sensitive environment variables, API keys, secrets, and tokens to server-side only access, removing any client-side exposure.",
+            "dependencies": [
+              3
+            ],
+            "details": "Identify all sensitive environment variables currently accessible to the client-side code. Refactor frontend code to remove any sensitive data exposure to the client. Implement secure server-side retrieval and injection patterns for all sensitive configuration. Use AWS KMS or Vault's encryption features to encrypt secrets at rest. Ensure proper separation between client-side and server-side environment configurations.",
+            "status": "pending",
+            "testStrategy": "Inspect client-side bundles and network traffic to verify no sensitive data is exposed to the client. Test server-side secret retrieval mechanisms and verify encryption at rest functionality.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 5,
+            "title": "Document Changes and Update Security Protocols",
+            "description": "Create comprehensive documentation of all security changes and update developer protocols to enforce ongoing security best practices.",
+            "dependencies": [
+              4
+            ],
+            "details": "Document all implemented security changes, including new secret management workflows, authentication improvements, and environment variable handling. Update developer protocols and guidelines to enforce shift-left security practices and ongoing secret hygiene. Create training materials and guidance on secure credential handling throughout the SDLC. Establish security review processes for code changes and implement automated security checks in the development pipeline.",
+            "status": "pending",
+            "testStrategy": "Review documentation completeness and accuracy. Conduct developer training sessions and verify understanding of new security protocols. Test automated security checks in the development pipeline.",
+            "parentId": "undefined"
+          }
+        ],
+        "updatedAt": "2025-11-14T04:50:02.806Z"
       },
       {
         "id": 78,
@@ -1655,7 +1768,8 @@
             "dependencies": [],
             "details": "Explore tools like Selenium, Puppeteer, or AppleScript for automating Safari.\n<info added on 2025-11-06T13:19:18.092Z>\nRESEARCH COMPLETE\n\n**Finding:** Playwright is already fully configured and superior to Safari-specific tools.\n\n**Existing Infrastructure:**\n1. ✅ **Playwright Fully Configured**\n   - 5+ playwright.config.ts variants (local, render, dashboard, etc.)\n   - Already in package.json and working\n\n2. ✅ **AOMA Session Storage Exists**\n   - tmp/aoma-stage-storage.json (51KB, Nov 3 2024)\n   - Authenticated session already captured\n\n3. ✅ **Extensive AOMA HTML/Screenshots**\n   - tmp/aoma-html/ contains ~20 AOMA pages (HTML + Markdown)\n   - tmp/aoma-console-logs/, tmp/aoma-webvitals/, etc.\n   - Screenshots from Oct 22 capture run\n\n4. ✅ **AOMA Base URL Configured**\n   - https://aoma-stage.smcdp-de.net\n   - Already used in aomaFirecrawlService.ts\n\n5. ✅ **Test Files Organized**\n   - siam-aoma-chat.spec.ts\n   - siam-aoma-honest-responses.spec.ts\n   - siam-aoma-sophisticated-questions.spec.ts\n   - siam-aoma-chat-comprehensive.spec.ts\n\n**Recommendation:**\nUse Playwright (not Safari-specific tools) because:\n- ✅ Cross-browser (Chromium, Firefox, Webkit/Safari)\n- ✅ Better API and developer experience\n- ✅ Already configured and working\n- ✅ Can use Webkit engine for Safari-like behavior\n- ✅ Session persistence built-in\n- ✅ Screenshot capabilities excellent\n\n**Why NOT Selenium/Puppeteer/AppleScript:**\n- ❌ Selenium: Heavier, slower, more brittle\n- ❌ Puppeteer: Chrome-only (no Safari)\n- ❌ AppleScript: macOS-only, limited capabilities\n\n**Next Step:** Use existing Playwright setup with stored session\n</info added on 2025-11-06T13:19:18.092Z>",
             "status": "done",
-            "testStrategy": "Verify the selected tool can successfully automate a login and navigation task in Safari."
+            "testStrategy": "Verify the selected tool can successfully automate a login and navigation task in Safari.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -1666,7 +1780,8 @@
             ],
             "details": "Develop a script to log into AOMA using Safari, ensuring session persistence.",
             "status": "in-progress",
-            "testStrategy": "Test the script to confirm it maintains an authenticated session across multiple page loads."
+            "testStrategy": "Test the script to confirm it maintains an authenticated session across multiple page loads.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -1677,7 +1792,8 @@
             ],
             "details": "Script should systematically visit each page in AOMA, ensuring all are accessible.",
             "status": "pending",
-            "testStrategy": "Run the script and verify it successfully navigates to each page without errors."
+            "testStrategy": "Run the script and verify it successfully navigates to each page without errors.",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -1688,7 +1804,8 @@
             ],
             "details": "Enhance the navigation script to take screenshots of each page and save them locally.",
             "status": "pending",
-            "testStrategy": "Check that screenshots are captured and saved correctly for each page visited."
+            "testStrategy": "Check that screenshots are captured and saved correctly for each page visited.",
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -1699,7 +1816,8 @@
             ],
             "details": "Refactor the script for efficiency and create comprehensive documentation for future use.",
             "status": "pending",
-            "testStrategy": "Review the script's performance and ensure documentation is clear and complete."
+            "testStrategy": "Review the script's performance and ensure documentation is clear and complete.",
+            "parentId": "undefined"
           }
         ]
       },
@@ -1722,8 +1840,8 @@
         "testStrategy": "1. Verify successful connection to Supabase instance using MCP tools\n2. Confirm mcp__supabase__list_tables returns complete table inventory without errors\n3. Validate that all SQL queries execute successfully in read-only mode\n4. Check that vector column detection correctly identifies pgvector columns and dimensions\n5. Ensure RLS policy extraction captures all security rules accurately\n6. Verify foreign key relationship mapping is complete and accurate\n7. Confirm generated documentation includes all required schema elements\n8. Review migration mappings for completeness and feasibility\n9. Validate that no DDL operations were attempted during inventory process\n10. Test that schema inventory can be regenerated consistently with same results",
         "status": "pending",
         "dependencies": [
-          65,
-          88
+          "65",
+          "88"
         ],
         "priority": "medium",
         "subtasks": [
@@ -1734,7 +1852,8 @@
             "details": "",
             "status": "pending",
             "dependencies": [],
-            "parentTaskId": 89
+            "parentTaskId": 89,
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -1743,7 +1862,8 @@
             "details": "",
             "status": "pending",
             "dependencies": [],
-            "parentTaskId": 89
+            "parentTaskId": 89,
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -1752,7 +1872,8 @@
             "details": "",
             "status": "pending",
             "dependencies": [],
-            "parentTaskId": 89
+            "parentTaskId": 89,
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -1761,7 +1882,8 @@
             "details": "",
             "status": "pending",
             "dependencies": [],
-            "parentTaskId": 89
+            "parentTaskId": 89,
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -1770,7 +1892,8 @@
             "details": "",
             "status": "pending",
             "dependencies": [],
-            "parentTaskId": 89
+            "parentTaskId": 89,
+            "parentId": "undefined"
           },
           {
             "id": 6,
@@ -1779,7 +1902,8 @@
             "details": "",
             "status": "pending",
             "dependencies": [],
-            "parentTaskId": 89
+            "parentTaskId": 89,
+            "parentId": "undefined"
           },
           {
             "id": 7,
@@ -1788,7 +1912,8 @@
             "details": "",
             "status": "pending",
             "dependencies": [],
-            "parentTaskId": 89
+            "parentTaskId": 89,
+            "parentId": "undefined"
           },
           {
             "id": 8,
@@ -1797,7 +1922,8 @@
             "details": "",
             "status": "pending",
             "dependencies": [],
-            "parentTaskId": 89
+            "parentTaskId": 89,
+            "parentId": "undefined"
           },
           {
             "id": 9,
@@ -1806,7 +1932,8 @@
             "details": "",
             "status": "pending",
             "dependencies": [],
-            "parentTaskId": 89
+            "parentTaskId": 89,
+            "parentId": "undefined"
           },
           {
             "id": 10,
@@ -1815,7 +1942,8 @@
             "details": "",
             "status": "pending",
             "dependencies": [],
-            "parentTaskId": 89
+            "parentTaskId": 89,
+            "parentId": "undefined"
           }
         ]
       },
@@ -1827,8 +1955,8 @@
         "testStrategy": "1. Verify that all tables have been renamed correctly and that no references to 'aoma_' remain in the codebase.\n2. Check that the 'app_under_test' column is present in all vector tables and correctly populated.\n3. Ensure that indexes are correctly partitioned by 'app_under_test' and that query performance is optimized.\n4. Confirm that TypeScript types have been refactored and that the application compiles without errors.\n5. Test all queries to ensure they correctly filter by 'app_under_test' and return expected results.\n6. Validate that test files have been renamed and that tests run successfully.\n7. Review documentation to ensure it accurately reflects the new architecture and distinctions between SIAM and AOMA.\n8. Execute the data migration script on a test dataset and verify that data is correctly migrated without loss or corruption.",
         "status": "done",
         "dependencies": [
-          65,
-          89
+          "65",
+          "89"
         ],
         "priority": "high",
         "subtasks": [
@@ -1839,7 +1967,8 @@
             "dependencies": [],
             "details": "Identify all tables with the 'aoma_' prefix and rename them to 'siam_'. Update all code references to these tables.\n<info added on 2025-11-06T11:45:50.013Z>\nDatabase tables successfully renamed in migration 005_multi_tenant_restructure_fixed.sql. All core table renames completed:\n- aoma_unified_vectors → siam_vectors\n- aoma_migration_status → siam_migration_status\n- Functions: match_aoma_vectors → match_siam_vectors\n- Views: aoma_vector_stats → siam_vector_stats\n\nCode investigation shows main application already uses correct table names via migration system. 396 remaining references across 121 files are primarily in documentation, legacy migration files, and non-critical scripts.\n\nOutstanding items:\n1. Update active documentation references to use new naming\n2. Archive/document legacy migration files for historical reference\n3. Update script comments and logs for consistency\n</info added on 2025-11-06T11:45:50.013Z>",
             "status": "done",
-            "testStrategy": "Verify that all tables have been renamed correctly and that no references to 'aoma_' remain in the codebase."
+            "testStrategy": "Verify that all tables have been renamed correctly and that no references to 'aoma_' remain in the codebase.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -1850,7 +1979,8 @@
             ],
             "details": "Modify the schema of all vector tables to include the 'app_under_test' column.",
             "status": "done",
-            "testStrategy": "Check that the 'app_under_test' column is present in all vector tables and correctly populated."
+            "testStrategy": "Check that the 'app_under_test' column is present in all vector tables and correctly populated.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -1861,7 +1991,8 @@
             ],
             "details": "Refactor indexes to include partitioning by 'app_under_test'.\n<info added on 2025-11-06T12:00:40.999Z>\nVERIFICATION COMPLETE: All indexes already properly partitioned by app_under_test in migration 005.\n\nCONFIRMED INDEX STRUCTURE:\n- siam_vectors_hierarchy_idx: (organization, division, app_under_test)\n- siam_vectors_source_type_idx: (organization, division, app_under_test, source_type)  \n- siam_vectors_created_at_idx: (organization, division, app_under_test, created_at DESC)\n- siam_vectors_embedding_hnsw_idx: Vector index (no partitioning required)\n- siam_vectors_metadata_idx: GIN index for JSONB metadata\n\nAll supporting indexes properly scope queries to tenant hierarchy ensuring optimal performance and data isolation between applications.\n</info added on 2025-11-06T12:00:40.999Z>",
             "status": "done",
-            "testStrategy": "Ensure that indexes are correctly partitioned by 'app_under_test' and that query performance is optimized."
+            "testStrategy": "Ensure that indexes are correctly partitioned by 'app_under_test' and that query performance is optimized.",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -1872,7 +2003,8 @@
             ],
             "details": "Update TypeScript types and all related code references from 'AOMAVector' to 'SIAMVector'.\n<info added on 2025-11-06T12:01:18.729Z>\nVERIFICATION COMPLETE: TypeScript refactoring successfully implemented. All code now uses SIAMVector interface with proper multi-tenant structure (organization, division, app_under_test fields). AOMAVector maintained as deprecated alias only for backward compatibility. No active references to AOMAVector found in codebase. Related types (VectorSearchResult, MigrationStatus) also updated to support multi-tenancy.\n</info added on 2025-11-06T12:01:18.729Z>",
             "status": "done",
-            "testStrategy": "Verify that all TypeScript types have been updated and that the application compiles without errors."
+            "testStrategy": "Verify that all TypeScript types have been updated and that the application compiles without errors.",
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -1883,7 +2015,8 @@
             ],
             "details": "Update all queries to include the 'app_under_test' filter.\n<info added on 2025-11-01T14:16:02.752Z>\nCore services successfully updated to 3-level multi-tenant structure (organization/division/app_under_test):\n\nCOMPLETED:\n- supabaseVectorService.ts: All 7 methods updated (searchVectors, upsertVector, batchUpsertVectors, getVectorStats, deleteVectorsBySource, getMigrationStatus, updateMigrationStatus)\n- aomaOrchestrator.ts: Updated to pass DEFAULT_APP_CONTEXT to vector searches\n- Comprehensive unit test suite created with 35+ test cases covering multi-org support\n- DEFAULT_APP_CONTEXT established: { organization: 'sony-music', division: 'digital-operations', app_under_test: 'aoma' }\n\nPENDING SERVICES TO UPDATE:\n- knowledgeSearchService\n- optimizedSupabaseVectorService\n- aomaFirecrawlService\n- enhancedAomaFirecrawlService\n- deduplicationService\n</info added on 2025-11-01T14:16:02.752Z>\n<info added on 2025-11-06T12:01:54.163Z>\nVERIFICATION COMPLETE - ALL DATABASE QUERIES CONFIRMED MULTI-TENANT COMPLIANT:\n\nADDITIONAL SERVICES VERIFIED:\n- optimizedSupabaseVectorService.ts: Uses match_siam_vectors_fast RPC with proper tenant parameters (p_organization, p_division, p_app_under_test)\n- deduplicationService.ts: All siam_vectors table queries include tenant hierarchy filtering (.eq clauses for organization/division/app_under_test)\n- geminiReranker.ts: Properly uses DEFAULT_APP_CONTEXT for tenant scoping\n- RLHFFeedbackTab.tsx: Uses separate rlhf_feedback table (no tenant filtering needed)\n- Test integration files: Appropriately scoped for testing environment\n\nSTATUS: All production database queries now properly implement 3-level tenant hierarchy filtering. Multi-tenancy database query updates are complete and verified across all services.\n</info added on 2025-11-06T12:01:54.163Z>",
             "status": "done",
-            "testStrategy": "Run queries to ensure they return correct results based on 'app_under_test' filtering."
+            "testStrategy": "Run queries to ensure they return correct results based on 'app_under_test' filtering.",
+            "parentId": "undefined"
           },
           {
             "id": 6,
@@ -1892,7 +2025,8 @@
             "dependencies": [],
             "details": "Identify and rename all relevant test files.",
             "status": "done",
-            "testStrategy": "Ensure all test files are renamed and tests run successfully."
+            "testStrategy": "Ensure all test files are renamed and tests run successfully.",
+            "parentId": "undefined"
           },
           {
             "id": 7,
@@ -1904,7 +2038,8 @@
             ],
             "details": "Update documentation to reflect changes in table names, types, and application distinctions.\n<info added on 2025-11-06T12:02:46.836Z>\n✅ COMPLETE: Documentation updated for multi-tenant architecture\n\nNEW DOCUMENTATION CREATED:\n- docs/MULTI-TENANT-ERD.md (374 lines, comprehensive)\n  * Mermaid ERD diagrams\n  * 3-level hierarchy explanation\n  * Complete table schemas  \n  * Index details (HNSW + supporting)\n  * Function signatures (match_siam_vectors, etc.)\n  * Analytics view (siam_vector_stats)\n  * Performance characteristics\n  * Example queries\n  * Security considerations\n  \nEXISTING DOCS VERIFIED:\n- README.md: Focus is end-user, no multi-tenant details needed ✅\n- src/lib/supabase.ts: Comprehensive inline docs ✅\n- Comments in migration 005: Clear explanation of changes ✅\n\nDOCUMENTATION STATUS: Complete and production-ready\n</info added on 2025-11-06T12:02:46.836Z>",
             "status": "done",
-            "testStrategy": "Review documentation to ensure clarity and accuracy."
+            "testStrategy": "Review documentation to ensure clarity and accuracy.",
+            "parentId": "undefined"
           },
           {
             "id": 8,
@@ -1917,7 +2052,8 @@
             ],
             "details": "Create a migration script to update existing data to the new schema.\n<info added on 2025-11-06T12:03:09.846Z>\nCOMPLETE: Data migration already handled in migration 005\n\nMIGRATION STRATEGY (Lines 36-61):\n1. ADD COLUMNS WITH DEFAULTS (automatic seeding)\n   - organization VARCHAR(50) DEFAULT 'sony-music'\n   - division VARCHAR(50) DEFAULT 'digital-operations'  \n   - app_under_test VARCHAR(50) DEFAULT 'aoma'\n\n2. REMOVE DEFAULTS (enforce explicit specification)\n   - ALTER COLUMN organization DROP DEFAULT\n   - ALTER COLUMN division DROP DEFAULT\n   - ALTER COLUMN app_under_test DROP DEFAULT\n\nRESULT:\n- ALL existing vectors automatically tagged with defaults\n- New inserts MUST specify organization/division/app\n- No data loss or manual migration needed\n- Migration ran on November 2, 2025\n\nDATA MIGRATION STATUS: Complete - handled by declarative DDL\n</info added on 2025-11-06T12:03:09.846Z>",
             "status": "done",
-            "testStrategy": "Run the migration script and verify data integrity and consistency in the new schema."
+            "testStrategy": "Run the migration script and verify data integrity and consistency in the new schema.",
+            "parentId": "undefined"
           }
         ]
       },
@@ -1929,9 +2065,9 @@
         "testStrategy": "1. **Schema Verification**: Ensure the database schema supports all required fields and vector embeddings are correctly indexed.\n\n2. **Import Script Testing**: Run the import script and verify that all 6,250 scenarios are imported correctly with accurate vector embeddings.\n\n3. **Service Layer Testing**: Use Postman to test all API endpoints for CRUD operations and similarity searches. Verify response times and data accuracy.\n\n4. **UI Testing**: Conduct UI tests using Cypress to ensure the Beta Base Explorer UI is responsive and functional. Test filtering and searching capabilities.\n\n5. **Integration Testing**: Verify that the RLHF tab integrates seamlessly with the Beta Base Explorer, ensuring data consistency and navigation flow.\n\n6. **Visualization Testing**: Check that execution history visualizations are accurate and interactive, providing meaningful insights.\n\n7. **End-to-End Testing**: Perform end-to-end tests to ensure the entire workflow from data import to UI interaction works as expected.",
         "status": "pending",
         "dependencies": [
-          40,
-          66,
-          53
+          "40",
+          "66",
+          "53"
         ],
         "priority": "medium",
         "subtasks": [
@@ -1942,7 +2078,8 @@
             "dependencies": [],
             "details": "Ensure the schema supports vector embeddings for similarity search and uses JSONB fields for flexible data storage and indexing.",
             "status": "done",
-            "testStrategy": "Verify that the database schema supports all required fields and vector embeddings are correctly indexed."
+            "testStrategy": "Verify that the database schema supports all required fields and vector embeddings are correctly indexed.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -1953,7 +2090,8 @@
             ],
             "details": "Utilize SQLAlchemy for database interactions and OpenAI's API for generating vector embeddings.",
             "status": "in-progress",
-            "testStrategy": "Run the import script and verify that all scenarios are imported correctly with accurate vector embeddings."
+            "testStrategy": "Run the import script and verify that all scenarios are imported correctly with accurate vector embeddings.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -1964,7 +2102,8 @@
             ],
             "details": "Use Express.js for API endpoints and integrate with the existing SIAM backend for CRUD operations and similarity searches.",
             "status": "pending",
-            "testStrategy": "Ensure API endpoints function correctly and support CRUD operations and similarity searches."
+            "testStrategy": "Ensure API endpoints function correctly and support CRUD operations and similarity searches.",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -1975,7 +2114,8 @@
             ],
             "details": "Use Shadcn components for styling and integrate with the existing SIAM UI. Ensure support for filtering and searching based on vector similarity.",
             "status": "pending",
-            "testStrategy": "Test UI responsiveness and functionality, ensuring it supports filtering and searching scenarios."
+            "testStrategy": "Test UI responsiveness and functionality, ensuring it supports filtering and searching scenarios.",
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -1986,22 +2126,22 @@
             ],
             "details": "Ensure visualizations are interactive and provide insights into scenario outcomes.",
             "status": "pending",
-            "testStrategy": "Verify that visualizations are interactive and accurately represent execution history data."
+            "testStrategy": "Verify that visualizations are interactive and accurately represent execution history data.",
+            "parentId": "undefined"
           }
         ]
       }
     ],
     "metadata": {
       "version": "1.0.0",
-      "lastModified": "2025-10-28T21:17:59.166Z",
-      "taskCount": 54,
-      "completedCount": 33,
+      "lastModified": "2025-11-15T16:20:46.412Z",
+      "taskCount": 57,
+      "completedCount": 34,
       "tags": [
         "master"
       ],
-      "created": "2025-10-30T17:18:33.148Z",
-      "description": "Tasks for master context",
-      "updated": "2025-11-09T19:16:35.029Z"
+      "created": "2025-11-15T16:21:33.085Z",
+      "description": "Tasks for master context"
     }
   }
 }

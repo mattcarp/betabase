@@ -48,6 +48,8 @@ services:
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
+      - key: ENABLE_SONY_JIRA_CRAWLER
+        value: "false"
 
       # AWS Lambda (from dashboard)
       - key: AWS_LAMBDA_FUNCTION_URL

@@ -1,12 +1,36 @@
 import { openai } from "@ai-sdk/openai";
 import { embed } from "ai";
-import type { Browser, Page } from "playwright";
 import { upsertJiraTicket, upsertJiraTicketEmbedding } from "../lib/supabase";
+type PlaywrightBrowser = import("playwright").Browser;
+type PlaywrightPage = import("playwright").Page;
 
-// Dynamic import of playwright to avoid bundling in production
+let cachedPlaywrightModule: typeof import("playwright") | null = null;
+
+// Dynamic import of playwright to avoid bundling in production builds
 async function getPlaywright() {
-  const { chromium } = await import("playwright");
-  return chromium;
+  if (cachedPlaywrightModule) {
+    return cachedPlaywrightModule.chromium;
+  }
+
+  const moduleSpecifier = process.env.PLAYWRIGHT_MODULE ?? "playwright";
+
+  try {
+    const dynamicImport = new Function(
+      "specifier",
+      "return import(specifier);"
+    ) as (specifier: string) => Promise<typeof import("playwright")>;
+
+    cachedPlaywrightModule = await dynamicImport(moduleSpecifier);
+    return cachedPlaywrightModule.chromium;
+  } catch (error) {
+    console.error(
+      `Playwright module "${moduleSpecifier}" is not available. Set ENABLE_SONY_JIRA_CRAWLER=true and install dev dependencies to run the crawler.`,
+      error
+    );
+    throw new Error(
+      "Playwright runtime not available. Install dev dependencies or disable the Sony Music JIRA crawler."
+    );
+  }
 }
 
 const DEFAULT_PROJECTS = ["AOMA", "USM", "TECH", "API"];
@@ -35,7 +59,7 @@ async function generateEmbedding(text: string): Promise<number[]> {
   }
 }
 
-async function loginViaUI(page: Page) {
+async function loginViaUI(page: PlaywrightPage) {
   if (!JIRA_USER || !JIRA_PASSWORD) throw new Error("Missing JIRA_USERNAME or JIRA_PASSWORD");
   await page.goto(`${JIRA_BASE}/login.jsp`, { waitUntil: "domcontentloaded" });
   // Try DC login selectors first
@@ -59,7 +83,7 @@ async function loginViaUI(page: Page) {
   await page.waitForLoadState("domcontentloaded");
 }
 
-async function collectIssueLinks(page: Page): Promise<string[]> {
+async function collectIssueLinks(page: PlaywrightPage): Promise<string[]> {
   const anchors = await page.$$(`a[href*="/browse/"]`);
   const hrefs: string[] = [];
   for (const a of anchors) {
@@ -71,7 +95,7 @@ async function collectIssueLinks(page: Page): Promise<string[]> {
   return Array.from(new Set(full));
 }
 
-async function scrapeIssue(page: Page, url: string) {
+async function scrapeIssue(page: PlaywrightPage, url: string) {
   await page.goto(url, { waitUntil: "domcontentloaded" });
   await page.waitForTimeout(500);
   const keyMatch = url.match(/\/browse\/([^?#/]+)/);
@@ -170,7 +194,7 @@ export async function crawlProjects(options: CrawlOptions = {}) {
   jqlParts.push("ORDER BY updated DESC");
   const jql = jqlParts.join(" AND ");
 
-  let browser: Browser | null = null;
+  let browser: PlaywrightBrowser | null = null;
   let issuesCrawled = 0;
   let vectorsUpserted = 0;
 

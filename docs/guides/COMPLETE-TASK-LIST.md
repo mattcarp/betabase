@@ -51,7 +51,7 @@ All code has been implemented and tested:
 
 Configuration:
 
-- API Key: sk_3bdf311f445bb15d57306a7171b31c7257faf5acd69322df
+- API Key: sk_your_elevenlabs_api_key
 - Agent ID: agent_01jz1ar6k2e8tvst14g6cbgc7m
 - Lambda URL: https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws
 
@@ -150,23 +150,23 @@ Conduct A/B tests and analyze results to confirm the new system's superiority. E
 
 #### Description
 
-Perform a full security audit and implement critical hardening measures based on Fiona's analysis, including AWS Secrets Manager/Vault integration, removal of exposed credentials, authentication bypass fixes, and migration of sensitive environment variables to server-side only.
+Perform a full security audit and implement critical hardening measures based on Fiona's analysis, including Infisical (open-source vault) integration, removal of exposed credentials, authentication bypass fixes, and migration of sensitive environment variables to server-side only.
 
 #### Details
 
-1. Integrate AWS Secrets Manager and/or HashiCorp Vault for API key and secret management. Use vault-based retrieval mechanisms and runtime secret injection to eliminate static credentials in code and configuration files. Configure IAM roles and policies for least-privilege access, and enable secret rotation and monitoring. For hybrid or multi-cloud environments, consider multi-vault integrations for centralized visibility and lifecycle management.
+1. Integrate Infisical for API key and secret management. Use Infisical's runtime secret injection to eliminate static credentials in code and configuration files. Enforce least-privilege access via Infisical workspace permissions and enable audit logging/rotation policies.
 
 2. Scan the codebase for exposed credentials in .env.local files and hard-coded authentication fallbacks using automated tools (e.g., Amazon CodeGuru Reviewer, GitGuardian). Remove all such credentials, replacing them with secure vault references. Enforce policy checks in version control to prevent future exposures.
 
 3. Audit authentication flows for bypass vulnerabilities and client-side weaknesses. Refactor authentication logic to ensure all sensitive checks occur server-side, and remove any fallback mechanisms that could be exploited. Implement robust session management and input validation.
 
-4. Move all sensitive environment variables (API keys, secrets, tokens) to server-side only. Refactor frontend code to ensure no sensitive data is exposed to the client. Use secure server-side retrieval and injection patterns, and encrypt secrets at rest using AWS KMS or Vault's encryption features.
+4. Move all sensitive environment variables (API keys, secrets, tokens) to server-side only. Refactor frontend code to ensure no sensitive data is exposed to the client. Use secure server-side retrieval and injection patterns, and encrypt secrets at rest using Infisical-managed storage (or supplemental KMS if required).
 
 5. Document all changes and update developer protocols to enforce shift-left security and ongoing secret hygiene. Provide training and guidance on secure credential handling throughout the SDLC.
 
 #### Test Strategy
 
-- Verify that all API keys and secrets are retrieved securely from AWS Secrets Manager or Vault at runtime, and are no longer present in code or config files.
+- Verify that all API keys and secrets are retrieved securely from Infisical at runtime, and are no longer present in code or config files.
 - Scan the codebase using automated tools to confirm removal of exposed credentials and hard-coded fallbacks.
 - Test authentication flows for bypass vulnerabilities using both manual and automated penetration testing; confirm all sensitive checks are server-side.
 - Inspect client-side bundles to ensure no sensitive environment variables are exposed.
@@ -1682,7 +1682,7 @@ Verify successful registration by confirming receipt of server ID from ElevenLab
      **🚨 Current Status: API Key Invalid**
    - Authentication format is now correct
    - Getting clear error: "Invalid API key" (401 Unauthorized)
-   - API key format appears correct: sk_052f205bbc50b225ea4c7b50a999df210d2013e82b81d419
+   - API key format appears correct: sk_your_elevenlabs_api_key
      **🛠️ ElevenLabsMCPService Created:**
    - Complete registration and association workflow
    - Credential validation functionality
@@ -1814,7 +1814,7 @@ Add a pipeline to ingest and vectorize system metrics and telemetry data into th
 
 #### Details
 
-Develop a system to collect and process system metrics using tools like Prometheus or Grafana. Convert the metrics into vectors using the OpenAI embedding model and store them in the Supabase vector store.
+Develop a system to collect and process system metrics using Supabase-native collectors (or Prometheus/Grafana if required later). Convert the metrics into vectors using the OpenAI embedding model and store them in the Supabase vector store.
 
 #### Test Strategy
 
@@ -1874,7 +1874,7 @@ Set up a dashboard to monitor system performance and query analytics.
 
 #### Details
 
-Use tools like Grafana or Kibana to create a performance monitoring dashboard. Track metrics such as query response times, system load, and data freshness to ensure the system meets performance targets.
+Use Supabase dashboards (SQL + Charts) or lightweight internal views to create a performance monitoring dashboard. Track metrics such as query response times, system load, and data freshness to ensure the system meets performance targets. External tools like Grafana/Kibana remain optional.
 
 #### Test Strategy
 

@@ -123,6 +123,7 @@ OPENAI_API_KEY=your_openai_api_key_here
 NEXT_PUBLIC_COGNITO_USER_POOL_ID=your-pool-id
 NEXT_PUBLIC_COGNITO_CLIENT_ID=your-client-id
 NEXT_PUBLIC_AWS_REGION=us-east-2
+NEXT_PUBLIC_ELEVENLABS_AGENT_ID=your_agent_id
 
 # Backend
 NEXT_PUBLIC_AOMA_ENDPOINT=https://luminous-dedication-production.up.railway.app
@@ -130,7 +131,12 @@ NEXT_PUBLIC_AOMA_ENDPOINT=https://luminous-dedication-production.up.railway.app
 # Database
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
+
+# Server-side secrets (Infisical)
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 ```
+
+> 💡 All sensitive values are managed through Infisical. Use `infisical run --env=development -- <command>` (see `INFISICAL_SETUP_REPORT.md`) to inject secrets when running local scripts or servers.
 
 ### Common Commands
 

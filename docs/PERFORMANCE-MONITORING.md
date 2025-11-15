@@ -119,7 +119,7 @@ http://localhost:3000/performance
 ### Dashboard Controls
 
 - **Refresh Button**: Manually refresh metrics
-- **Auto-refresh Toggle**: Enable/disable automatic updates (10s interval)
+- **Auto-refresh Toggle**: Enable/disable automatic updates (5s/10s/30s/60s intervals)
 - **Time Range Selector**: Choose data window (1H, 6H, 24H, 7D)
 - **Tab Navigation**: Switch between metric categories
 
@@ -230,6 +230,47 @@ Records a new performance metric.
   success: boolean;
 }
 ```
+
+### GET /api/performance/snapshots
+
+Returns historical metrics snapshots stored in Supabase.
+
+**Query Parameters**
+
+- `limit` (default 50, max 500)
+- `offset` (default 0)
+- `order`: `asc` or `desc`
+- `summary`: `true` to return only `{ id, created_at }`
+
+**Example**
+
+```
+GET /api/performance/snapshots?limit=100&order=desc
+```
+
+### Grafana-style JSON
+
+```
+GET /api/performance/metrics?format=grafana
+```
+
+Returns series data in the Grafana SimpleJSON format so you can plug SIAM telemetry into any tooling that speaks that dialect, while still sourcing data from Supabase.
+
+### Supabase Studio Integration
+
+Because everything lives in Supabase, you can build dashboards directly inside Studio:
+
+```sql
+select
+  created_at,
+  (metrics->'systemMetrics'->>'cpuUsage')::float as cpu_usage,
+  (metrics->'queryMetrics'->>'avgResponseTime')::float as avg_response_ms
+from system_metrics_snapshots
+order by created_at desc
+limit 200;
+```
+
+Use the REST endpoints above when you need authenticated access from Supabase notebooks, automations, or other internal tooling—no need for Grafana/Kibana unless a future task specifically calls for it.
 
 ## Performance Tracker Service
 
