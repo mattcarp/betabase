@@ -4,7 +4,11 @@
  */
 
 import { SupabaseClient } from "@supabase/supabase-js";
-import { supabase as sharedSupabaseClient } from "../lib/supabase";
+import {
+  supabase as sharedSupabaseClient,
+  handleSupabaseError,
+  isSupabaseConfigured,
+} from "../lib/supabase";
 
 // Existing table interfaces based on actual schema
 interface TestResult {
@@ -135,7 +139,14 @@ export class EnhancedSupabaseTestIntegration {
   constructor(_supabaseUrl?: string, _supabaseKey?: string) {
     // Use shared Supabase client to avoid multiple GoTrueClient instances
     // Ignore custom URL/key params - use shared singleton
-    this.supabase = sharedSupabaseClient;
+    if (!isSupabaseConfigured) {
+      console.warn(
+        "Supabase not configured - EnhancedSupabaseTestIntegration will serve mock data. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY via Infisical or .env.local."
+      );
+      this.supabase = null;
+    } else {
+      this.supabase = sharedSupabaseClient;
+    }
   }
 
   // ============= Working with Existing Tables =============
@@ -222,7 +233,11 @@ export class EnhancedSupabaseTestIntegration {
     });
 
     if (error) {
-      console.error("Error fetching test results:", error);
+      const errorMessage = handleSupabaseError(error);
+      console.error("Error fetching test results:", {
+        message: errorMessage,
+        raw: error,
+      });
       return [];
     }
 

@@ -31,10 +31,15 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const isPlaceholder =
   supabaseUrl?.includes("placeholder") || supabaseAnonKey?.includes("placeholder");
 
-if (!supabaseUrl || !supabaseAnonKey || isPlaceholder) {
+export const isSupabaseConfigured =
+  Boolean(supabaseUrl) && Boolean(supabaseAnonKey) && !isPlaceholder;
+
+if (!isSupabaseConfigured) {
   console.warn("⚠️  Supabase not configured - vector search features disabled:", {
     url: !!supabaseUrl && !isPlaceholder,
     key: !!supabaseAnonKey && !isPlaceholder,
+    hint:
+      "Load secrets via Infisical (e.g., `infisical run --env=dev -- pnpm dev`) or export them to .env.local.",
   });
   // Don't throw error - just log a warning and use placeholder values
   // API routes will handle missing Supabase gracefully at runtime
