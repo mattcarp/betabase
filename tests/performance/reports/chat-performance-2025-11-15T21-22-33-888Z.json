@@ -1,0 +1,12 @@
+{
+  "timestamp": "2025-11-15T21:22:33.890Z",
+  "summary": {
+    "totalTests": 0,
+    "successCount": 0,
+    "failureCount": 0,
+    "avgTTFB": 0,
+    "avgTTFR": 0,
+    "avgTotal": 0
+  },
+  "results": []
+}

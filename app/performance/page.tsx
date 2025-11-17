@@ -13,9 +13,18 @@ import { Button } from "../../src/components/ui/button";
 import { Badge } from "../../src/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "../../src/components/ui/alert";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../../src/components/ui/dialog";
+import { useToast } from "../../src/hooks/use-toast";
+import {
   Activity,
   AlertCircle,
   CheckCircle,
+  Copy,
   Database,
   HardDrive,
   RefreshCw,
@@ -36,6 +45,28 @@ import {
   AreaChart,
   Area,
 } from "recharts";
+
+type AlertSeverity = "warning" | "critical";
+const SEVERITY_PRIORITY: Record<AlertSeverity, number> = {
+  critical: 2,
+  warning: 1,
+};
+
+interface PerformanceAlert {
+  id: string;
+  ruleId: string;
+  category: string;
+  metricLabel: string;
+  severity: AlertSeverity;
+  message: string;
+  triggeredAt: string;
+  value: number;
+  valueDisplay: string;
+  threshold: number;
+  thresholdDisplay: string;
+  comparator: "above" | "below";
+  context?: Record<string, string>;
+}
 
 interface PerformanceMetrics {
   queryMetrics: {
@@ -82,6 +113,13 @@ interface PerformanceMetrics {
     errorCount: number;
   }[];
   timestamp: string;
+  alerts?: PerformanceAlert[];
+}
+
+interface SnapshotRow {
+  id: string;
+  metrics: PerformanceMetrics;
+  created_at: string;
 }
 
 export default function PerformanceDashboard() {
@@ -90,6 +128,13 @@ export default function PerformanceDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<"1h" | "6h" | "24h" | "7d">("1h");
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const [autoRefreshInterval, setAutoRefreshInterval] = useState(10000);
+  const [snapshots, setSnapshots] = useState<SnapshotRow[]>([]);
+  const [snapshotsLoading, setSnapshotsLoading] = useState(true);
+  const [selectedSnapshot, setSelectedSnapshot] = useState<SnapshotRow | null>(null);
+  const [snapshotDialogOpen, setSnapshotDialogOpen] = useState(false);
+  const [isCollectingSnapshot, setIsCollectingSnapshot] = useState(false);
+  const { toast } = useToast();
 
   // Fetch metrics
   const fetchMetrics = useCallback(async () => {
@@ -99,10 +144,14 @@ export default function PerformanceDashboard() {
         throw new Error("Failed to fetch metrics");
       }
       const data = await response.json();
-      setMetrics(data);
+      const latestMetrics: PerformanceMetrics = data.metrics ?? data;
+      setMetrics(latestMetrics);
 
-      // Add to history for charts (keep last 50 data points)
-      setMetricsHistory((prev) => [...prev, data].slice(-50));
+      if (Array.isArray(data.history) && data.history.length > 0) {
+        setMetricsHistory(data.history.slice(-50));
+      } else {
+        setMetricsHistory((prev) => [...prev, latestMetrics].slice(-50));
+      }
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching metrics:", error);
@@ -115,11 +164,11 @@ export default function PerformanceDashboard() {
     fetchMetrics();
 
     if (autoRefresh) {
-      const interval = setInterval(fetchMetrics, 10000); // Refresh every 10 seconds
+      const interval = setInterval(fetchMetrics, autoRefreshInterval);
       return () => clearInterval(interval);
     }
     return undefined;
-  }, [fetchMetrics, autoRefresh]);
+  }, [fetchMetrics, autoRefresh, autoRefreshInterval]);
 
   // Format time
   const formatTime = (timestamp: string) => {
@@ -138,6 +187,67 @@ export default function PerformanceDashboard() {
     const minutes = Math.floor((seconds % 3600) / 60);
     return `${days}d ${hours}h ${minutes}m`;
   };
+
+  const dataSourceUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/api/performance/snapshots`
+      : "/api/performance/snapshots";
+  const grafanaUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/api/performance/metrics?format=grafana`
+      : "/api/performance/metrics?format=grafana";
+
+  const copyToClipboard = async (value: string) => {
+    try {
+      await navigator.clipboard.writeText(value);
+    } catch (error) {
+      console.error("Failed to copy value", error);
+    }
+  };
+
+  const fetchSnapshots = useCallback(async () => {
+    try {
+      setSnapshotsLoading(true);
+      const response = await fetch("/api/performance/snapshots?limit=200&order=desc");
+      if (!response.ok) {
+        throw new Error("Failed to fetch snapshots");
+      }
+      const data = await response.json();
+      setSnapshots(data.snapshots || []);
+    } catch (error) {
+      console.error("Error fetching snapshots:", error);
+    } finally {
+      setSnapshotsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSnapshots();
+  }, [fetchSnapshots]);
+
+  const handleCollectSnapshot = useCallback(async () => {
+    try {
+      setIsCollectingSnapshot(true);
+      const response = await fetch("/api/performance/collect", { method: "POST" });
+      if (!response.ok) {
+        throw new Error("Snapshot collection failed");
+      }
+      toast({
+        title: "Snapshot collected",
+        description: "Latest metrics have been stored.",
+      });
+      await Promise.all([fetchMetrics(), fetchSnapshots()]);
+    } catch (error) {
+      console.error("Snapshot collection failed:", error);
+      toast({
+        title: "Collection failed",
+        description: "Unable to collect a new metrics snapshot.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsCollectingSnapshot(false);
+    }
+  }, [fetchMetrics, fetchSnapshots, toast]);
 
   // Calculate health status
   const getHealthStatus = () => {
@@ -170,6 +280,23 @@ export default function PerformanceDashboard() {
 
   const healthStatus = getHealthStatus();
 
+  const vectorFreshnessHistory = metricsHistory.map((snapshot) => ({
+    time: formatTime(snapshot.timestamp),
+    staleness: snapshot.dataFreshness.vectorStore.staleness,
+  }));
+
+  const trackedEndpoints = ["/api/chat", "/api/aoma-stream", "/api/vector-store", "/api/upload"];
+  const apiTrends = metricsHistory.map((snapshot) => {
+    const point: Record<string, number | string> = {
+      time: formatTime(snapshot.timestamp),
+    };
+    trackedEndpoints.forEach((endpoint) => {
+      const metric = snapshot.apiMetrics.find((apiMetric) => apiMetric.endpoint === endpoint);
+      point[endpoint] = metric?.requestCount ?? 0;
+    });
+    return point;
+  });
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white p-8">
@@ -194,6 +321,25 @@ export default function PerformanceDashboard() {
       </div>
     );
   }
+
+  const sortedAlerts = [...(metrics.alerts ?? [])].sort((a, b) => {
+    const severityDiff = SEVERITY_PRIORITY[b.severity] - SEVERITY_PRIORITY[a.severity];
+    if (severityDiff !== 0) {
+      return severityDiff;
+    }
+    return new Date(b.triggeredAt).getTime() - new Date(a.triggeredAt).getTime();
+  });
+
+  const recentAlertHistory = metricsHistory
+    .filter((snapshot) => (snapshot.alerts?.length ?? 0) > 0)
+    .map((snapshot) => ({
+      timestamp: snapshot.timestamp,
+      alerts: [...(snapshot.alerts ?? [])].sort(
+        (a, b) => SEVERITY_PRIORITY[b.severity] - SEVERITY_PRIORITY[a.severity]
+      ),
+    }))
+    .slice(-8)
+    .reverse();
 
   // Prepare chart data
   const systemMetricsHistory = metricsHistory.map((m, _index) => ({
@@ -295,6 +441,100 @@ export default function PerformanceDashboard() {
           </div>
         </CardHeader>
       </Card>
+
+      {/* Alerts Overview */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+        <Card className="mac-card bg-white/5 border-white/10">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white">
+              <AlertCircle className="h-5 w-5 text-red-400" />
+              Active Alerts
+            </CardTitle>
+            <CardDescription className="text-gray-400">
+              Threshold breaches detected in the latest snapshot
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {sortedAlerts.length === 0 && (
+              <div className="flex items-center gap-2 text-sm text-green-400">
+                <CheckCircle className="h-4 w-4" />
+                All systems are within defined thresholds.
+              </div>
+            )}
+            {sortedAlerts.map((alert) => (
+              <div
+                key={alert.id}
+                className="border border-white/10 rounded-lg p-3 bg-black/30 space-y-2"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-white font-medium">{alert.metricLabel}</p>
+                    <p className="text-xs text-gray-400">{alert.category}</p>
+                  </div>
+                  <Badge
+                    variant={alert.severity === "critical" ? "destructive" : "secondary"}
+                    className="uppercase"
+                  >
+                    {alert.severity}
+                  </Badge>
+                </div>
+                <p className="text-sm text-gray-300">{alert.message}</p>
+                <div className="flex flex-wrap gap-4 text-xs text-gray-400">
+                  <span>Value: {alert.valueDisplay}</span>
+                  <span>Threshold: {alert.thresholdDisplay}</span>
+                  <span>Triggered: {new Date(alert.triggeredAt).toLocaleTimeString()}</span>
+                  {alert.context?.endpoint && <span>Endpoint: {alert.context.endpoint}</span>}
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card className="mac-card bg-white/5 border-white/10">
+          <CardHeader>
+            <CardTitle className="text-white">Recent Alert History</CardTitle>
+            <CardDescription className="text-gray-400">
+              Snapshot-level alert counts for the selected window
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {recentAlertHistory.length === 0 && (
+              <p className="text-sm text-gray-400">No alerts recorded in this time range.</p>
+            )}
+            {recentAlertHistory.length > 0 && (
+              <div className="space-y-3 text-sm">
+                {recentAlertHistory.map((entry) => {
+                  const criticalCount = entry.alerts.filter(
+                    (alert) => alert.severity === "critical"
+                  ).length;
+                  const warningCount = entry.alerts.filter(
+                    (alert) => alert.severity === "warning"
+                  ).length;
+                  return (
+                    <div
+                      key={`${entry.timestamp}-${criticalCount}-${warningCount}`}
+                      className="p-3 rounded-lg border border-white/10 bg-black/30"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-white font-medium">
+                          {new Date(entry.timestamp).toLocaleString()}
+                        </span>
+                        <div className="flex gap-2">
+                          <Badge variant="destructive">{criticalCount} critical</Badge>
+                          <Badge variant="secondary">{warningCount} warning</Badge>
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-400 line-clamp-2">
+                        {entry.alerts.map((alert) => alert.metricLabel).join(", ")}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -759,8 +999,157 @@ export default function PerformanceDashboard() {
               </div>
             </CardContent>
           </Card>
+
+          <Card className="mac-card bg-white/5 border-white/10">
+            <CardHeader>
+              <CardTitle className="text-white">API Throughput Trends</CardTitle>
+              <CardDescription className="text-gray-400">
+                Stacked request counts for the four primary API endpoints.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={apiTrends}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
+                  <XAxis dataKey="time" stroke="#ffffff60" />
+                  <YAxis stroke="#ffffff60" />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "#1a1a1a", border: "1px solid #ffffff20" }}
+                    labelStyle={{ color: "#ffffff" }}
+                  />
+                  <Legend />
+                  {trackedEndpoints.map((endpoint, index) => (
+                    <Bar
+                      key={endpoint}
+                      dataKey={endpoint}
+                      stackId="requests"
+                      fill={["#22d3ee", "#a855f7", "#10b981", "#f97316"][index]}
+                      name={endpoint}
+                    />
+                  ))}
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Vector Store Freshness */}
+      <Card className="mac-card bg-white/5 border-white/10 mb-8">
+        <CardHeader>
+          <CardTitle className="text-white">Vector Store Freshness (Hours)</CardTitle>
+          <CardDescription className="text-gray-400">
+            Tracks staleness for vector documents over the selected window.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <AreaChart data={vectorFreshnessHistory}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
+              <XAxis dataKey="time" stroke="#ffffff60" />
+              <YAxis stroke="#ffffff60" label={{ value: "Hours", angle: -90, position: "insideLeft" }} />
+              <Tooltip
+                contentStyle={{ backgroundColor: "#1a1a1a", border: "1px solid #ffffff20" }}
+                labelStyle={{ color: "#ffffff" }}
+              />
+              <Area
+                type="monotone"
+                dataKey="staleness"
+                stroke="#fbbf24"
+                fill="#fbbf2450"
+                strokeWidth={2}
+                name="Staleness"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      {/* Snapshot History */}
+      <Card className="mac-card bg-white/5 border-white/10">
+        <CardHeader>
+          <CardTitle className="text-white">Snapshot History</CardTitle>
+          <CardDescription className="text-gray-400">
+            Snapshots captured via /api/performance/collect or scheduled jobs.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="text-gray-400">
+                <th className="py-2 pr-4">Timestamp</th>
+                <th className="py-2 pr-4">CPU</th>
+                <th className="py-2 pr-4">Memory</th>
+                <th className="py-2 pr-4">Avg Response</th>
+                <th className="py-2 pr-4">Error Rate</th>
+                <th className="py-2 pr-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {snapshotsLoading && (
+                <tr>
+                  <td colSpan={6} className="py-4 text-center text-gray-400">
+                    Loading snapshots…
+                  </td>
+                </tr>
+              )}
+              {!snapshotsLoading && snapshots.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="py-4 text-center text-gray-400">
+                    No snapshots recorded yet.
+                  </td>
+                </tr>
+              )}
+              {snapshots.map((snapshot) => (
+                <tr key={snapshot.id} className="border-t border-white/10">
+                  <td className="py-2 pr-4 text-white">
+                    {new Date(snapshot.created_at).toLocaleString()}
+                  </td>
+                  <td className="py-2 pr-4 text-white">
+                    {snapshot.metrics.systemMetrics.cpuUsage.toFixed(1)}%
+                  </td>
+                  <td className="py-2 pr-4 text-white">
+                    {snapshot.metrics.systemMetrics.memoryUsage.toFixed(1)}%
+                  </td>
+                  <td className="py-2 pr-4 text-white">
+                    {formatDuration(snapshot.metrics.queryMetrics.avgResponseTime)}
+                  </td>
+                  <td className="py-2 pr-4 text-white">
+                    {snapshot.metrics.queryMetrics.errorRate.toFixed(2)}%
+                  </td>
+                  <td className="py-2 pr-4 text-right">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-white border-white/20"
+                      onClick={() => {
+                        setSelectedSnapshot(snapshot);
+                        setSnapshotDialogOpen(true);
+                      }}
+                    >
+                      View JSON
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </CardContent>
+      </Card>
+
+      <Dialog open={snapshotDialogOpen} onOpenChange={setSnapshotDialogOpen}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>Snapshot Details</DialogTitle>
+            <DialogDescription>
+              {selectedSnapshot ? new Date(selectedSnapshot.created_at).toLocaleString() : "No snapshot selected"}
+            </DialogDescription>
+          </DialogHeader>
+          <pre className="bg-black/60 border border-white/10 rounded p-4 text-xs max-h-[60vh] overflow-auto text-white">
+            {selectedSnapshot ? JSON.stringify(selectedSnapshot.metrics, null, 2) : "Select a snapshot to inspect"}
+          </pre>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

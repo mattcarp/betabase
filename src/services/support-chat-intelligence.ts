@@ -38,10 +38,16 @@ export class SupportChatIntelligence {
   private supabaseIntegration: EnhancedSupabaseTestIntegration;
 
   constructor() {
-    this.supabaseIntegration = new EnhancedSupabaseTestIntegration(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || "https://kfxetwuuzljhybfgmpuc.supabase.co",
-      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !serviceRoleKey) {
+      throw new Error(
+        "[SupportChatIntelligence] Supabase credentials are missing. Populate NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY."
+      );
+    }
+
+    this.supabaseIntegration = new EnhancedSupabaseTestIntegration(supabaseUrl, serviceRoleKey);
   }
 
   /**

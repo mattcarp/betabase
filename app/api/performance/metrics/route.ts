@@ -3,64 +3,11 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import {
   buildGrafanaSeries,
   collectPerformanceSnapshot,
+  ensureSnapshotAlerts,
   getSnapshotsSince,
   persistPerformanceSnapshot,
+  type PerformanceMetricsSnapshot,
 } from "@/services/systemMetricsCollector";
-
-interface PerformanceMetrics {
-  // Query Metrics
-  queryMetrics: {
-    avgResponseTime: number;
-    p50ResponseTime: number;
-    p95ResponseTime: number;
-    p99ResponseTime: number;
-    totalQueries: number;
-    successRate: number;
-    errorRate: number;
-    queryTypes: {
-      type: string;
-      count: number;
-      avgTime: number;
-    }[];
-  };
-
-  // System Metrics
-  systemMetrics: {
-    cpuUsage: number;
-    memoryUsage: number;
-    diskUsage: number;
-    networkLatency: number;
-    uptime: number;
-  };
-
-  // Data Freshness
-  dataFreshness: {
-    vectorStore: {
-      lastUpdate: string;
-      totalDocuments: number;
-      staleness: number; // in hours
-    };
-    aomaCache: {
-      lastUpdate: string;
-      cacheHitRate: number;
-      cacheMissRate: number;
-    };
-    knowledgeBase: {
-      lastUpdate: string;
-      fileCount: number;
-    };
-  };
-
-  // API Performance
-  apiMetrics: {
-    endpoint: string;
-    avgLatency: number;
-    requestCount: number;
-    errorCount: number;
-  }[];
-
-  timestamp: string;
-}
 
 /**
  * GET /api/performance/metrics
@@ -101,11 +48,18 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(buildGrafanaSeries(snapshots));
     }
 
-    const latest = snapshots[snapshots.length - 1].metrics;
+    const normalizedSnapshots = snapshots.map((row) => ({
+      ...row,
+      metrics: ensureSnapshotAlerts(row.metrics),
+    }));
+
+    const latest: PerformanceMetricsSnapshot =
+      normalizedSnapshots[normalizedSnapshots.length - 1].metrics;
 
     return NextResponse.json({
       ...latest,
-      history: snapshots.map((row) => row.metrics),
+      alerts: latest.alerts ?? [],
+      history: normalizedSnapshots.map((row) => row.metrics),
     });
   } catch (error) {
     console.error("Error fetching performance metrics:", error);

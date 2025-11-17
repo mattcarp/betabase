@@ -12,25 +12,36 @@ import { debugLog, debugError, prodError } from "../utils/logger";
 
 const REGION = "us-east-2";
 
-// CRITICAL FIX: Use hardcoded fallbacks since Next.js env vars aren't loading properly
-// These are your actual Cognito values from AWS Console
 const USER_POOL_ID =
-  (typeof process !== "undefined" ? process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID : undefined) ||
-  "us-east-2_A0veaJRLo";
+  typeof process !== "undefined" ? process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID : undefined;
 const CLIENT_ID =
-  (typeof process !== "undefined" ? process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID : undefined) ||
-  "5c6ll37299p351to549lkg3o0d";
+  typeof process !== "undefined" ? process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID : undefined;
 
-// Security: Remove Cognito configuration logging to prevent information disclosure
-// Configuration validation happens silently
+const COGNITO_CONFIG_ERROR =
+  "[COGNITO ERROR] Missing NEXT_PUBLIC_COGNITO_USER_POOL_ID or NEXT_PUBLIC_COGNITO_CLIENT_ID.";
 
-// Validate required environment variables
-if (!USER_POOL_ID || !CLIENT_ID) {
-  prodError("[COGNITO ERROR] Missing configuration!");
+const isCognitoConfigured = Boolean(USER_POOL_ID && CLIENT_ID);
+
+if (!isCognitoConfigured) {
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(COGNITO_CONFIG_ERROR);
+  } else {
+    // eslint-disable-next-line no-console
+    console.warn(`${COGNITO_CONFIG_ERROR} Authentication flows are disabled in this environment.`);
+  }
 }
 
 // Initialize Cognito client
-const cognitoClient = new CognitoIdentityProviderClient({ region: REGION });
+const cognitoClient = isCognitoConfigured
+  ? new CognitoIdentityProviderClient({ region: REGION })
+  : null;
+
+function requireCognitoConfig() {
+  if (!USER_POOL_ID || !CLIENT_ID || !cognitoClient) {
+    throw new Error(COGNITO_CONFIG_ERROR);
+  }
+  return { userPoolId: USER_POOL_ID, clientId: CLIENT_ID, client: cognitoClient };
+}
 
 export interface CognitoUser {
   username: string;
@@ -77,9 +88,6 @@ export class CognitoAuthService {
       // This sends a verification code using Cognito's email service
       await this.forgotPassword(email);
 
-      // Store that we're waiting for verification
-      await this.setSecureCookie("pending_magic_link", email);
-
       debugLog(`[AUTH] Verification code sent via Cognito to ${email}`);
       return true;
     } catch (error) {
@@ -120,17 +128,18 @@ export class CognitoAuthService {
   async signIn(email: string, password: string): Promise<CognitoUser> {
     try {
       debugLog("[AUTH] Attempting sign in for:", email);
+      const { clientId, client } = requireCognitoConfig();
 
       const command = new InitiateAuthCommand({
         AuthFlow: "USER_PASSWORD_AUTH",
-        ClientId: CLIENT_ID,
+        ClientId: clientId,
         AuthParameters: {
           USERNAME: email,
           PASSWORD: password,
         },
       });
 
-      const response = await cognitoClient.send(command);
+      const response = await client.send(command);
 
       if (response.AuthenticationResult) {
         const user: CognitoUser = {
@@ -161,14 +170,15 @@ export class CognitoAuthService {
   async forgotPassword(email: string): Promise<void> {
     try {
       debugLog("[AUTH] Sending password reset code to:", email);
-      debugLog("[AUTH] Using ClientId:", CLIENT_ID);
+      const { clientId, client } = requireCognitoConfig();
+      debugLog("[AUTH] Using ClientId:", clientId);
 
       const command = new ForgotPasswordCommand({
-        ClientId: CLIENT_ID,
+        ClientId: clientId,
         Username: email,
       });
 
-      await cognitoClient.send(command);
+      await client.send(command);
       debugLog("[AUTH] Password reset code sent successfully");
     } catch (error) {
       prodError("Forgot password error:", error);
@@ -181,14 +191,15 @@ export class CognitoAuthService {
    */
   async confirmForgotPassword(email: string, code: string, newPassword: string): Promise<void> {
     try {
+      const { clientId, client } = requireCognitoConfig();
       const command = new ConfirmForgotPasswordCommand({
-        ClientId: CLIENT_ID,
+        ClientId: clientId,
         Username: email,
         ConfirmationCode: code,
         Password: newPassword,
       });
 
-      await cognitoClient.send(command);
+      await client.send(command);
       debugLog("[AUTH] Password reset confirmed successfully");
     } catch (error) {
       prodError("Confirm forgot password error:", error);
@@ -258,42 +269,23 @@ export class CognitoAuthService {
    */
   private async storeTokens(user: CognitoUser): Promise<void> {
     try {
-      // Store tokens in secure httpOnly cookies
-      await Promise.all([
-        this.setSecureCookie(
-          "cognito_user",
-          JSON.stringify({ username: user.username, email: user.email })
-        ),
-        this.setSecureCookie("cognito_access_token", user.accessToken),
-        this.setSecureCookie("cognito_refresh_token", user.refreshToken),
-        this.setSecureCookie("cognito_id_token", user.idToken),
-      ]);
+      const response = await fetch("/api/auth/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          accessToken: user.accessToken,
+          refreshToken: user.refreshToken,
+          idToken: user.idToken,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => null);
+        throw new Error(errorBody?.error ?? "Failed to persist authentication session");
+      }
     } catch (e) {
       debugError("Failed to store tokens:", e);
       throw new Error("Failed to store authentication tokens securely");
-    }
-  }
-
-  /**
-   * Set a secure httpOnly cookie
-   */
-  private async setSecureCookie(name: string, value: string): Promise<void> {
-    const response = await fetch("/api/auth/set-cookie", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        value,
-        maxAge: 86400, // 24 hours
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        path: "/",
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to set secure cookie: ${name}`);
     }
   }
 
@@ -302,30 +294,9 @@ export class CognitoAuthService {
    */
   private async clearTokens(): Promise<void> {
     try {
-      await Promise.all([
-        this.clearSecureCookie("cognito_user"),
-        this.clearSecureCookie("cognito_access_token"),
-        this.clearSecureCookie("cognito_refresh_token"),
-        this.clearSecureCookie("cognito_id_token"),
-        this.clearSecureCookie("pending_magic_link"),
-      ]);
+      await fetch("/api/auth/session", { method: "DELETE" });
     } catch (e) {
       debugError("Failed to clear tokens:", e);
-    }
-  }
-
-  /**
-   * Clear a secure httpOnly cookie
-   */
-  private async clearSecureCookie(name: string): Promise<void> {
-    const response = await fetch("/api/auth/clear-cookie", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name }),
-    });
-
-    if (!response.ok) {
-      debugError(`Failed to clear secure cookie: ${name}`);
     }
   }
 
