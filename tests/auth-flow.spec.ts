@@ -1,4 +1,10 @@
-import { test, expect } from "@playwright/test";
+/**
+ * Authentication Flow Tests
+ *
+ * Tests magic link login and session handling.
+ * Uses base-test fixture for automatic console error detection.
+ */
+import { test, expect } from "./fixtures/base-test";
 
 test.describe("SIAM Authentication Flow", () => {
   test("Emergency login page loads", async ({ page }) => {

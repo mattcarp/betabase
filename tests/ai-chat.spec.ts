@@ -1,4 +1,14 @@
-import { test, expect } from "@playwright/test";
+/**
+ * AI Chat Interface Tests
+ *
+ * Tests the core chat functionality including:
+ * - UI loading and display
+ * - Tab navigation
+ * - Chat input and messaging
+ *
+ * Uses base-test fixture for automatic console error detection.
+ */
+import { test, expect } from "./fixtures/base-test";
 
 const DEPLOYMENT_URL = "https://siam-app-production.up.railway.app";
 
