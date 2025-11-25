@@ -10,12 +10,13 @@
  */
 import { test, expect } from "./fixtures/base-test";
 
-const DEPLOYMENT_URL = "https://siam-app-production.up.railway.app";
+// Use baseURL from playwright.config.ts (https://thebetabase.com)
+// No hardcoded URLs - use page.goto("/") for root
 
 test.describe("SIAM AI Chat Interface", () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to the deployment
-    await page.goto(DEPLOYMENT_URL);
+    // Navigate to the app (uses baseURL from config)
+    await page.goto("/");
 
     // Wait for the page to load
     await page.waitForLoadState("networkidle");
@@ -166,8 +167,8 @@ test.describe("SIAM AI Chat Interface", () => {
 
 test.describe("SIAM AI Chat Functionality", () => {
   test("should send a message and receive response", async ({ page }) => {
-    // Navigate to the deployment
-    await page.goto(DEPLOYMENT_URL);
+    // Navigate to the app (uses baseURL from config)
+    await page.goto("/");
     await page.waitForLoadState("networkidle");
 
     // Make sure we're on the Chat tab
