@@ -1,76 +1,72 @@
 import { NextResponse } from "next/server";
-import { getElevenLabsApiKey } from "@/config/apiKeys";
+import { supabase } from "@/lib/supabase";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { generateText } from "ai";
 
 /**
- * ElevenLabs Health Check API
- * Checks if the ElevenLabs service is available and the API key is valid
+ * System Health Check Endpoint
+ * Checks: Supabase connection, Gemini LLM availability
  */
 export async function GET() {
+  const health: {
+    status: "ok" | "degraded" | "error";
+    timestamp: string;
+    services: {
+      supabase: { status: string; latency?: number; error?: string };
+      gemini: { status: string; latency?: number; error?: string };
+    };
+  } = {
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    services: {
+      supabase: { status: "unknown" },
+      gemini: { status: "unknown" },
+    },
+  };
+
+  // Check Supabase
   try {
-    const apiKey = getElevenLabsApiKey();
-    
-    if (!apiKey) {
-      return NextResponse.json(
-        {
-          status: "error",
-          message: "ElevenLabs API key not configured",
-          service: "ElevenLabs",
-        },
-        { status: 503 }
-      );
+    const start = Date.now();
+    const { error } = await supabase.from("siam_vectors").select("id").limit(1);
+    const latency = Date.now() - start;
+
+    if (error) {
+      health.services.supabase = { status: "error", error: error.message, latency };
+      health.status = "degraded";
+    } else {
+      health.services.supabase = { status: "ok", latency };
     }
-
-    // Test ElevenLabs API with a quick user info request
-    const response = await fetch("https://api.elevenlabs.io/v1/user", {
-      method: "GET",
-      headers: {
-        "xi-api-key": apiKey,
-      },
-      // Add timeout
-      signal: AbortSignal.timeout(5000),
-    });
-
-    if (!response.ok) {
-      return NextResponse.json(
-        {
-          status: "error",
-          message: `ElevenLabs API returned ${response.status}`,
-          service: "ElevenLabs",
-        },
-        { status: 503 }
-      );
-    }
-
-    const userData = await response.json();
-
-    return NextResponse.json({
-      status: "ok",
-      message: "ElevenLabs service is operational",
-      service: "ElevenLabs",
-      details: {
-        characterCount: userData.subscription?.character_count,
-        characterLimit: userData.subscription?.character_limit,
-        canExtendCharacterLimit: userData.subscription?.can_extend_character_limit,
-      },
-    });
-  } catch (error: any) {
-    console.error("ElevenLabs health check failed:", error);
-    
-    let message = "Service unavailable";
-    if (error.name === "TimeoutError" || error.name === "AbortError") {
-      message = "Service timeout";
-    } else if (error.message) {
-      message = error.message;
-    }
-
-    return NextResponse.json(
-      {
-        status: "error",
-        message,
-        service: "ElevenLabs",
-      },
-      { status: 503 }
-    );
+  } catch (e) {
+    health.services.supabase = { status: "error", error: String(e) };
+    health.status = "degraded";
   }
-}
 
+  // Check Gemini LLM
+  try {
+    const apiKey = process.env.GOOGLE_API_KEY;
+    if (!apiKey) {
+      health.services.gemini = { status: "error", error: "GOOGLE_API_KEY not configured" };
+      health.status = "degraded";
+    } else {
+      const google = createGoogleGenerativeAI({ apiKey });
+      const start = Date.now();
+      await generateText({
+        model: google("gemini-2.0-flash"),
+        prompt: "Reply with only: ok",
+        maxTokens: 5,
+      });
+      const latency = Date.now() - start;
+      health.services.gemini = { status: "ok", latency };
+    }
+  } catch (e) {
+    health.services.gemini = { status: "error", error: String(e) };
+    health.status = "degraded";
+  }
+
+  // Overall status
+  if (health.services.supabase.status === "error" && health.services.gemini.status === "error") {
+    health.status = "error";
+  }
+
+  return NextResponse.json(health);
+}
