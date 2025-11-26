@@ -26,7 +26,7 @@ export type EmbeddingProvider = "openai" | "gemini";
 export class SupabaseVectorService {
   private embeddingProvider: EmbeddingProvider;
   
-  constructor(embeddingProvider: EmbeddingProvider = "gemini") {
+  constructor(embeddingProvider: EmbeddingProvider = "openai") {
     this.embeddingProvider = embeddingProvider;
   }
 
@@ -80,7 +80,7 @@ export class SupabaseVectorService {
       matchThreshold = 0.50, 
       matchCount = 10, 
       sourceTypes = null,
-      useGemini = true // Default to Gemini
+      useGemini = false // Default to OpenAI (data is 1536d OpenAI embeddings)
     } = options;
 
     try {

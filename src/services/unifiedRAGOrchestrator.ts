@@ -163,7 +163,7 @@ export class UnifiedRAGOrchestrator {
           initialCandidates,
           topK,
           useRLHFSignals,
-          useGemini: true,
+          useGemini: false, // Data is OpenAI 1536d embeddings
         });
 
         result = {
