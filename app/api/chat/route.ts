@@ -63,7 +63,9 @@ const ChatRequestSchema = z.object({
   messages: z.array(MessageSchema).min(1).max(50), // Max 50 messages in history
   model: z
     .enum([
-      // Gemini models (primary for RAG)
+      // Gemini 3 models (latest - November 2025)
+      "gemini-3-pro-preview",
+      // Gemini 2.5 models (fallback)
       "gemini-2.5-pro",
       "gemini-2.5-flash",
       "gemini-2.5-ultra",
@@ -97,8 +99,8 @@ export async function GET(_req: Request) {
     JSON.stringify({
       status: "ready",
       version: "1.0.0",
-      models: ["gemini-2.5-pro", "gemini-2.5-flash", "gpt-5", "gpt-4o", "gpt-4o-mini"],
-      features: ["streaming", "aoma-context", "knowledge-base", "gemini-2m-context"],
+      models: ["gemini-3-pro-preview", "gemini-2.5-pro", "gemini-2.5-flash", "gpt-5", "gpt-4o"],
+      features: ["streaming", "aoma-context", "knowledge-base", "gemini-3-reasoning", "thinking-level"],
     }),
     {
       status: 200,
