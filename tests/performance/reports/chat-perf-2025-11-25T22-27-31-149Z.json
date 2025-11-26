@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-11-25T22:27:31.150Z",
+  "metrics": [
+    {
+      "query": "What is AOMA?",
+      "timestamp": "2025-11-25T22:27:31.110Z",
+      "timeToFirstToken": 0,
+      "timeToComplete": 0,
+      "success": false,
+      "error": "locator.count: Target page, context or browser has been closed"
+    }
+  ],
+  "summary": {
+    "totalTests": 1,
+    "successCount": 0,
+    "failureCount": 1,
+    "avgTimeToFirstToken": 0,
+    "avgTimeToComplete": 0
+  }
+}

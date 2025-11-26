@@ -1,0 +1,31 @@
+{
+  "capturedAt": "2025-11-18T14:34:53.294Z",
+  "supabaseUrl": "https://kfxetwuuzljhybfgmpuc.supabase.co",
+  "metrics": {
+    "test_results": {
+      "label": "Automated test results",
+      "field": "app_name",
+      "error": "Query failed for test_results: 400 Bad Request -> {\"code\":\"PGRST100\",\"details\":\"unexpected '=' expecting letter, digit, \\\"-\\\", \\\"->>\\\", \\\"->\\\", \\\"::\\\", \\\".\\\", \\\")\\\", \\\",\\\" or end of input\",\"hint\":null,\"message\":\"\\\"failed to parse select parameter (app_name,count=app_name)\\\" (line 1, column 15)\"}"
+    },
+    "test_runs": {
+      "label": "Test runs",
+      "field": "app_name",
+      "error": "Query failed for test_runs: 400 Bad Request -> {\"code\":\"PGRST100\",\"details\":\"unexpected '=' expecting letter, digit, \\\"-\\\", \\\"->>\\\", \\\"->\\\", \\\"::\\\", \\\".\\\", \\\")\\\", \\\",\\\" or end of input\",\"hint\":null,\"message\":\"\\\"failed to parse select parameter (app_name,count=app_name)\\\" (line 1, column 15)\"}"
+    },
+    "firecrawl_analysis": {
+      "label": "Firecrawl AUT analyses",
+      "field": "app_name",
+      "error": "Query failed for firecrawl_analysis: 400 Bad Request -> {\"code\":\"PGRST100\",\"details\":\"unexpected '=' expecting letter, digit, \\\"-\\\", \\\"->>\\\", \\\"->\\\", \\\"::\\\", \\\".\\\", \\\")\\\", \\\",\\\" or end of input\",\"hint\":null,\"message\":\"\\\"failed to parse select parameter (app_name,count=app_name)\\\" (line 1, column 15)\"}"
+    },
+    "rlhf_feedback": {
+      "label": "RLHF feedback entries",
+      "field": "app_under_test",
+      "error": "Query failed for rlhf_feedback: 400 Bad Request -> {\"code\":\"PGRST100\",\"details\":\"unexpected '=' expecting letter, digit, \\\"-\\\", \\\"->>\\\", \\\"->\\\", \\\"::\\\", \\\".\\\", \\\")\\\", \\\",\\\" or end of input\",\"hint\":null,\"message\":\"\\\"failed to parse select parameter (app_under_test,count=app_under_test)\\\" (line 1, column 21)\"}"
+    },
+    "testsprite_tests": {
+      "label": "Testsprite scenarios",
+      "field": "app_name",
+      "error": "Query failed for testsprite_tests: 400 Bad Request -> {\"code\":\"PGRST100\",\"details\":\"unexpected '=' expecting letter, digit, \\\"-\\\", \\\"->>\\\", \\\"->\\\", \\\"::\\\", \\\".\\\", \\\")\\\", \\\",\\\" or end of input\",\"hint\":null,\"message\":\"\\\"failed to parse select parameter (app_name,count=app_name)\\\" (line 1, column 15)\"}"
+    }
+  }
+}

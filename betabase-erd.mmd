@@ -1,0 +1,134 @@
+erDiagram
+    APPLICATION {
+        integer id PK
+        varchar name
+        varchar primary_color
+    }
+
+    CASES {
+        integer id
+        varchar app_under_test
+        varchar name
+        varchar script
+        varchar expected_result
+        varchar tags
+        varchar created_by
+        varchar created_at
+        varchar updated_by
+        varchar updated_at
+        varchar preconditions
+    }
+
+    DEPLOYMENT {
+        integer id PK
+        varchar build
+        varchar branch
+        varchar app_under_test
+        varchar deployed_at
+        varchar record_inserted_at
+    }
+
+    ROUND {
+        integer id PK
+        varchar name
+        varchar starts_at
+        varchar ends_at
+        varchar updated_at
+        varchar release_num
+        varchar app
+        text notes
+        varchar created_at
+        text client_notes
+        smallint current_flag
+        varchar release_date
+    }
+
+    SCENARIO {
+        integer id PK
+        varchar name
+        text script
+        text expected_result
+        varchar created_by
+        varchar updated_by
+        text preconditions
+        varchar created_at
+        varchar updated_at
+        smallint review_flag
+        text flag_reason
+        varchar app_under_test
+        varchar tags
+        varchar coverage
+        smallint client_priority
+        varchar mode
+        smallint is_security
+        integer priority_sort_order
+        integer enhancement_sort_order
+        integer current_regression_sort_order
+        varchar reviewed_flag
+    }
+
+    TEST {
+        integer id PK
+        integer scenario_id FK
+        varchar created_at
+        text comments
+        varchar ticket
+        varchar created_by
+        text input
+        text result
+        varchar pass_fail
+        varchar build
+        varchar updated_at
+        varchar updated_by
+        varchar path
+        varchar browser_name
+        varchar browser_major
+        varchar browser_minor
+        varchar os_name
+        varchar os_major
+        varchar os_minor
+        varchar deployment_stamp
+        varchar in_prod
+    }
+
+    USER {
+        integer id PK
+        varchar username
+        varchar username_canonical
+        varchar email
+        varchar email_canonical
+        smallint enabled
+        varchar salt
+        varchar password
+        varchar last_login
+        smallint locked
+        smallint expired
+        varchar expires_at
+        varchar confirmation_token
+        varchar password_requested_at
+        text roles
+        smallint credentials_expired
+        varchar credentials_expire_at
+        varchar created_at
+        varchar updated_at
+        varchar f_name
+        varchar l_name
+        varchar jira_username
+        smallint is_notified
+        varchar mobile_phone
+        varchar org
+    }
+
+    VARIATION {
+        integer id PK
+        text scenario_id FK
+        text variation_text
+        varchar created_by
+        varchar updated_by
+        varchar created_at
+        varchar updated_at
+    }
+
+    %% Relationships (inferred from column names)
+    SCENARIO ||--o{ TEST : "has"
+    SCENARIO ||--o{ VARIATION : "has"

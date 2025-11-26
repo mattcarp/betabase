@@ -39,13 +39,16 @@ import { UnifiedResultsDashboard } from "./UnifiedResultsDashboard";
 import SessionTimeline from "./SessionTimeline";
 import { SessionInteraction } from "../../types/session-timeline";
 import { ManualTestingPanel } from "./ManualTestingPanel";
+import { TestHomeDashboard } from "./TestHomeDashboard";
+import { SelfHealingTestViewer } from "./SelfHealingTestViewer";
+import { Wrench, Home } from "lucide-react";
 
 interface TestDashboardProps {
   className?: string;
 }
 
 export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
-  const [activeView, setActiveView] = useState("unified");
+  const [activeView, setActiveView] = useState("home");
   const [isRunning, setIsRunning] = useState(false);
   const [useRealTimeStreaming, setUseRealTimeStreaming] = useState(true);
   const [currentExecutionId, setCurrentExecutionId] = useState<string | null>(null);
@@ -544,10 +547,18 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
         {/* Main Content Area */}
         <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col">
-          <TabsList className="grid grid-cols-10 w-full rounded-none border-b bg-muted/30">
+          <TabsList className="flex w-full rounded-none border-b bg-muted/30 overflow-x-auto">
+            <TabsTrigger value="home" className="gap-2">
+              <Home className="h-4 w-4" />
+              Home
+            </TabsTrigger>
+            <TabsTrigger value="self-healing" className="gap-2">
+              <Wrench className="h-4 w-4" />
+              Self-Healing
+            </TabsTrigger>
             <TabsTrigger value="unified" className="gap-2">
               <Sparkles className="h-4 w-4" />
-              Unified Results
+              Unified
             </TabsTrigger>
             <TabsTrigger value="execution" className="gap-2">
               <Activity className="h-4 w-4" />
@@ -559,7 +570,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             </TabsTrigger>
             <TabsTrigger value="manual" className="gap-2">
               <MousePointerClick className="h-4 w-4" />
-              Manual Testing
+              Manual
             </TabsTrigger>
             <TabsTrigger value="ai-generate" className="gap-2">
               <Brain className="h-4 w-4" />
@@ -567,11 +578,11 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             </TabsTrigger>
             <TabsTrigger value="trace" className="gap-2">
               <Eye className="h-4 w-4" />
-              Trace Viewer
+              Trace
             </TabsTrigger>
             <TabsTrigger value="session-playback" className="gap-2">
               <Play className="h-4 w-4" />
-              Session Playback
+              Playback
             </TabsTrigger>
             <TabsTrigger value="coverage" className="gap-2">
               <GitBranch className="h-4 w-4" />
@@ -579,19 +590,32 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             </TabsTrigger>
             <TabsTrigger value="flaky" className="gap-2">
               <Bug className="h-4 w-4" />
-              Flaky Tests
+              Flaky
             </TabsTrigger>
             <TabsTrigger value="analytics" className="gap-2">
               <LineChart className="h-4 w-4" />
               Analytics
             </TabsTrigger>
-            <TabsTrigger value="firecrawl" className="gap-2">
-              <FileSearch className="h-4 w-4" />
-              Firecrawl
-            </TabsTrigger>
           </TabsList>
 
           <ScrollArea className="flex-1">
+            <TabsContent value="home" className="m-0 p-6">
+              <TestHomeDashboard
+                onNavigate={setActiveView}
+                testStats={{
+                  total: testStats.total,
+                  passed: testStats.passed,
+                  failed: testStats.failed,
+                  skipped: testStats.skipped,
+                  duration: testStats.duration,
+                }}
+              />
+            </TabsContent>
+
+            <TabsContent value="self-healing" className="m-0 p-0">
+              <SelfHealingTestViewer />
+            </TabsContent>
+
             <TabsContent value="unified" className="m-0 p-6">
               <UnifiedResultsDashboard />
             </TabsContent>
