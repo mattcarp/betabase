@@ -2,7 +2,7 @@
  * Quick diagnostic test to see what tabs are actually present
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 
 test('Diagnostic: Count tabs in Curate panel', async ({ page }) => {
   // Navigate

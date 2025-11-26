@@ -5,8 +5,8 @@
  * Run with: npx playwright test tests/performance/web-vitals-chat.spec.ts
  */
 
-import { test, expect } from '@playwright/test';
-import type { CDPSession } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
+import type { CDPSession } from '../fixtures/base-test';
 import fs from 'fs';
 import path from 'path';
 

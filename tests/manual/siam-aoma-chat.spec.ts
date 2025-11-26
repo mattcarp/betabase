@@ -3,7 +3,7 @@
  * Tests multi-tenant vector store integration
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 
 test.describe('SIAM Chat - AOMA Questions', () => {
   test.setTimeout(120000); // 2 minutes for AI responses

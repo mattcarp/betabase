@@ -5,7 +5,7 @@
  * Run with: npx playwright test tests/performance/chat-response-time.spec.ts
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 import fs from 'fs';
 import path from 'path';
 

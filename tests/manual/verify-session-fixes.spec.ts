@@ -9,7 +9,7 @@
  * 5. Chat page accessibility
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 
 const BASE_URL = 'http://localhost:3000';
 

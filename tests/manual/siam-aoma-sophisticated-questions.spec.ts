@@ -5,7 +5,7 @@
  * Tests multi-tenant vector store with realistic Sony Music use cases
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 
 // Sophisticated AOMA questions from our actual test suites
 const SOPHISTICATED_QUESTIONS = [

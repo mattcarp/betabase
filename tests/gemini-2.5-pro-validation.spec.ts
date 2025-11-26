@@ -5,7 +5,7 @@
  * Run with: npx playwright test tests/gemini-2.5-pro-validation.spec.ts
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures/base-test';
 
 test.describe('Gemini 2.5 Pro Chat Validation', () => {
   test.beforeEach(async ({ page }) => {

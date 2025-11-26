@@ -5,7 +5,7 @@
  * and return proper results with timestamps and metadata.
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures/base-test';
 
 // Test queries based on actual tickets we just imported
 const JIRA_TEST_QUERIES = [

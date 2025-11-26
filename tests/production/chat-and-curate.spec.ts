@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 
 const BASE_URL = process.env.BASE_URL || 'https://thebetabase.com';
 

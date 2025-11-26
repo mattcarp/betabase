@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import type { CDPSession } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
+import type { CDPSession } from '../fixtures/base-test';
 
 interface WebVitalsMetrics {
   page: string;

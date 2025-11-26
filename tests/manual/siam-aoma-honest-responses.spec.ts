@@ -8,7 +8,7 @@
  * ✅ Accurate answers on what IS in the knowledge base
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 
 const TEST_QUESTIONS = [
   {

@@ -2,7 +2,7 @@
  * Comprehensive SIAM Chat Test - AOMA Questions with Full Response Capture
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 
 test.describe('SIAM Chat - AOMA Q&A (Multi-Tenant Vector Store)', () => {
   test.setTimeout(180000); // 3 minutes

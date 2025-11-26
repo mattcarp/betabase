@@ -3,7 +3,7 @@
  * Measures real chat response times in the browser
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 import fs from 'fs';
 import path from 'path';
 
