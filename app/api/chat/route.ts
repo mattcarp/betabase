@@ -1,6 +1,6 @@
 import { streamText } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
+// OpenAI removed - using Gemini-only setup
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { z } from "zod";
@@ -245,28 +245,9 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!process.env.OPENAI_API_KEY) {
-      console.error("[API] OPENAI_API_KEY is not set in environment variables");
-      return new Response(
-        JSON.stringify({
-          error: "Service temporarily unavailable",
-          code: "CONFIG_ERROR",
-          message: "OpenAI API key is not configured. Please contact support.",
-        }),
-        {
-          status: 503,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-
-    // Initialize providers after validation
+    // Initialize Gemini provider (Gemini-only setup - no OpenAI)
     const google = createGoogleGenerativeAI({
       apiKey: process.env.GOOGLE_API_KEY,
-    });
-
-    const openai = createOpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
     });
 
     console.log("[API] ✅ AI providers initialized");
@@ -783,11 +764,10 @@ Respond with ONLY this message:
     // O-series models (o1, o3, o4) don't support temperature - they use fixed reasoning
     const supportsTemperature = !selectedModel.startsWith('o');
 
-    // Determine which provider to use based on model
-    const isGeminiModel = selectedModel.startsWith('gemini-');
-    const modelProvider = isGeminiModel ? google(selectedModel) : openai(selectedModel);
-    
-    console.log(`🤖 Using ${isGeminiModel ? 'Google Gemini' : 'OpenAI'} provider for model: ${selectedModel}`);
+    // Gemini-only setup - all models use Google provider
+    const modelProvider = google(selectedModel);
+
+    console.log(`🤖 Using Google Gemini provider for model: ${selectedModel}`);
 
     const result = streamText({
       model: modelProvider,

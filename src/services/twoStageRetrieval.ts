@@ -63,7 +63,7 @@ export class TwoStageRetrieval {
       initialCandidates = 50,
       vectorThreshold = 0.50,
       sourceTypes,
-      useGemini = false, // Data is OpenAI 1536d embeddings
+      useGemini = true, // Use Gemini embeddings (768d)
       topK = 10,
       rerankBatchSize = 10,
       useRLHFSignals = true,
@@ -199,7 +199,7 @@ export class TwoStageRetrieval {
       vectorThreshold = 0.50,
       topK = 10,
       sourceTypes,
-      useGemini = false, // Data is OpenAI 1536d embeddings
+      useGemini = true, // Use Gemini embeddings (768d)
     } = options;
 
     // Get baseline (vector search only)

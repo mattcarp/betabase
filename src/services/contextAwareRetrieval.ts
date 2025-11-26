@@ -112,7 +112,7 @@ export class ContextAwareRetrieval {
         initialCandidates,
         topK,
         useRLHFSignals,
-        useGemini: false, // Data is OpenAI 1536d embeddings
+        useGemini: true, // Use Gemini embeddings (768d)
       }
     );
 

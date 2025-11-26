@@ -80,7 +80,7 @@ export class SupabaseVectorService {
       matchThreshold = 0.50, 
       matchCount = 10, 
       sourceTypes = null,
-      useGemini = false // Default to OpenAI (data is 1536d OpenAI embeddings)
+      useGemini = true // Use Gemini embeddings (768d)
     } = options;
 
     try {
