@@ -171,6 +171,7 @@ export function AiSdkChatPanel({
   const [isProcessing, setIsProcessing] = useState(false); // Simpler loading state
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
   const [loadingSeconds, setLoadingSeconds] = useState(0); // Track seconds elapsed during loading
+  const [pendingRagMetadata, setPendingRagMetadata] = useState<any>(null); // RAG metadata from response headers
 
   // RLHF Feedback tracking
   const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down' | null>>({});
@@ -318,6 +319,19 @@ export function AiSdkChatPanel({
     api: currentApiEndpoint, // Use the calculated endpoint directly
     id: chatId,
     messages: (initialMessages || []).filter((m) => m.content != null && m.content !== ""), // CRITICAL: Filter null content
+    onResponse: (response) => {
+      // Capture RAG metadata from response headers before streaming starts
+      const ragMetadataHeader = response.headers.get('X-RAG-Metadata');
+      if (ragMetadataHeader) {
+        try {
+          const metadata = JSON.parse(ragMetadataHeader);
+          console.log('📊 Captured RAG metadata from headers:', metadata);
+          setPendingRagMetadata(metadata);
+        } catch (e) {
+          console.warn('Failed to parse RAG metadata header:', e);
+        }
+      }
+    },
     onError: (err) => {
       console.error("Chat error:", err);
       console.log("Error type:", typeof err);
@@ -400,6 +414,9 @@ export function AiSdkChatPanel({
       setManualLoading(false);
       setIsProcessing(false);
       setHasStartedStreaming(false); // Reset streaming state for next message
+
+      // Note: Don't clear pendingRagMetadata here - it's needed for display
+      // It will be cleared when a new response starts via onResponse
 
       // CRITICAL FIX: Clear input field after response completes
       setLocalInput("");
@@ -1364,52 +1381,65 @@ export function AiSdkChatPanel({
             </div>
 
             {/* RAG Metadata Badges - Show which advanced RAG strategy was used */}
-            {!isUser && message.ragMetadata && (
-              <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border/30">
-                {message.ragMetadata.strategy && (
-                  <Badge 
-                    variant="outline" 
-                    className="bg-purple-500/10 border-purple-500/30 text-purple-300 hover:bg-purple-500/20"
-                  >
-                    📊 {message.ragMetadata.strategy === 'agentic' ? '🤖 Agentic' : 
-                        message.ragMetadata.strategy === 'context-aware' ? '🧠 Context-Aware' : 
-                        '📚 Standard'} RAG
-                  </Badge>
-                )}
-                {message.ragMetadata.documentsReranked && (
-                  <Badge 
-                    variant="outline" 
-                    className="bg-blue-500/10 border-blue-500/30 text-blue-300 hover:bg-blue-500/20"
-                  >
-                    🔄 Re-ranked {message.ragMetadata.initialDocs}→{message.ragMetadata.finalDocs} docs
-                  </Badge>
-                )}
-                {message.ragMetadata.agentSteps > 0 && (
-                  <Badge 
-                    variant="outline" 
-                    className="bg-cyan-500/10 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20"
-                  >
-                    🔧 {message.ragMetadata.agentSteps} agent steps
-                  </Badge>
-                )}
-                {message.ragMetadata.confidence && (
-                  <Badge 
-                    variant="outline" 
-                    className="bg-green-500/10 border-green-500/30 text-green-300 hover:bg-green-500/20"
-                  >
-                    ✓ {Math.round(message.ragMetadata.confidence * 100)}% confident
-                  </Badge>
-                )}
-                {message.ragMetadata.timeMs && (
-                  <Badge 
-                    variant="outline" 
-                    className="bg-gray-500/10 border-gray-500/30 text-gray-300"
-                  >
-                    ⚡ {message.ragMetadata.timeMs}ms
-                  </Badge>
-                )}
-              </div>
-            )}
+            {(() => {
+              // Use message's ragMetadata or pendingRagMetadata for last assistant message
+              const ragMeta = message.ragMetadata || (isLastMessage && !isUser ? pendingRagMetadata : null);
+              if (!ragMeta || isUser) return null;
+
+              return (
+                <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border/30">
+                  {ragMeta.strategy && (
+                    <Badge
+                      variant="outline"
+                      className="bg-purple-500/10 border-purple-500/30 text-purple-300 hover:bg-purple-500/20"
+                    >
+                      {ragMeta.strategy === 'agentic' ? 'Agentic' :
+                          ragMeta.strategy === 'context-aware' ? 'Context-Aware' :
+                          'Standard'} RAG
+                    </Badge>
+                  )}
+                  {ragMeta.documentsReranked && (
+                    <Badge
+                      variant="outline"
+                      className="bg-blue-500/10 border-blue-500/30 text-blue-300 hover:bg-blue-500/20"
+                    >
+                      Re-ranked {ragMeta.initialDocs} to {ragMeta.finalDocs} docs
+                    </Badge>
+                  )}
+                  {ragMeta.agentSteps > 0 && (
+                    <Badge
+                      variant="outline"
+                      className="bg-cyan-500/10 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20"
+                    >
+                      {ragMeta.agentSteps} agent steps
+                    </Badge>
+                  )}
+                  {ragMeta.confidence && (
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "font-medium",
+                        ragMeta.confidence >= 0.8
+                          ? "bg-green-500/10 border-green-500/30 text-green-300"
+                          : ragMeta.confidence >= 0.6
+                            ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-300"
+                            : "bg-red-500/10 border-red-500/30 text-red-300"
+                      )}
+                    >
+                      {Math.round(ragMeta.confidence * 100)}% confident
+                    </Badge>
+                  )}
+                  {ragMeta.timeMs && (
+                    <Badge
+                      variant="outline"
+                      className="bg-gray-500/10 border-gray-500/30 text-gray-300"
+                    >
+                      {ragMeta.timeMs}ms
+                    </Badge>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* HITL Feedback Buttons - Thumbs Up/Down */}
             {!isUser && (
