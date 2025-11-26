@@ -10,9 +10,10 @@ export type ModelUseCase =
 
 export type AIModel =
   // Gemini models (primary for RAG)
+  | "gemini-3.0-pro"
+  | "gemini-3.0-flash"
   | "gemini-2.5-pro"
   | "gemini-2.5-flash"
-  | "gemini-2.5-ultra"
   // OpenAI models (fallback)
   | "gpt-5"
   | "gpt-5-pro"
@@ -35,64 +36,64 @@ class ModelConfigService {
 
   private modelConfigs: Record<ModelUseCase, ModelConfig> = {
     chat: {
-      model: (process.env.NEXT_PUBLIC_DEFAULT_CHAT_MODEL as AIModel) || "gemini-2.5-pro",
+      model: (process.env.NEXT_PUBLIC_DEFAULT_CHAT_MODEL as AIModel) || "gemini-3.0-pro",
       temperature: 0.9,
       maxTokens: 8000,
-      description: "Conversational RAG with Gemini 2.5 Pro (2M context)",
+      description: "Conversational RAG with Gemini 3.0 Pro",
       costTier: "standard",
     },
     "premium-chat": {
-      model: "gemini-2.5-pro",
+      model: "gemini-3.0-pro",
       temperature: 0.8,
       maxTokens: 12000,
-      description: "Premium RAG synthesis with massive 2M context window",
+      description: "Premium RAG synthesis with Gemini 3.0 Pro",
       costTier: "standard",
     },
     reasoning: {
-      model: "gemini-2.5-pro",
+      model: "gemini-3.0-pro",
       temperature: 0.7,
       maxTokens: 10000,
-      description: "Deep reasoning and analysis with Gemini 2.5 Pro",
+      description: "Deep reasoning and analysis with Gemini 3.0 Pro",
       costTier: "standard",
     },
     "code-generation": {
-      model: "gemini-2.5-pro",
+      model: "gemini-3.0-pro",
       temperature: 0.8,
       maxTokens: 8000,
-      description: "Code generation optimized with Gemini 2.5 Pro",
+      description: "Code generation optimized with Gemini 3.0 Pro",
       costTier: "standard",
     },
     "test-generation": {
-      model: "gemini-2.5-flash",
+      model: "gemini-3.0-flash",
       temperature: 0.5,
       maxTokens: 4000,
-      description: "Cost-efficient test generation with Gemini 2.5 Flash",
+      description: "Cost-efficient test generation with Gemini 3.0 Flash",
       costTier: "economy",
     },
     "quick-response": {
-      model: "gemini-2.5-flash",
+      model: "gemini-3.0-flash",
       temperature: 0.7,
       maxTokens: 2000,
-      description: "Fast RAG responses with Gemini 2.5 Flash",
+      description: "Fast RAG responses with Gemini 3.0 Flash",
       costTier: "economy",
     },
     vision: {
-      model: "gemini-2.5-pro",
+      model: "gemini-3.0-pro",
       temperature: 0.7,
       maxTokens: 4000,
-      description: "Multimodal visual analysis with Gemini 2.5 Pro",
+      description: "Multimodal visual analysis with Gemini 3.0 Pro",
       costTier: "standard",
     },
     "aoma-query": {
-      model: "gemini-2.5-pro",
+      model: "gemini-3.0-pro",
       temperature: 0.7, // Lower temp for factual accuracy in RAG
       maxTokens: 8000,
-      description: "AOMA knowledge synthesis with Gemini 2.5 Pro (2M context)",
+      description: "AOMA knowledge synthesis with Gemini 3.0 Pro",
       costTier: "standard",
     },
   };
 
-  private fallbackModel: AIModel = "gemini-2.5-flash";
+  private fallbackModel: AIModel = "gemini-3.0-flash";
 
   private constructor() {}
 
@@ -148,9 +149,10 @@ class ModelConfigService {
 
   getAvailableModels(): AIModel[] {
     return [
+      "gemini-3.0-pro",
+      "gemini-3.0-flash",
       "gemini-2.5-pro",
       "gemini-2.5-flash",
-      "gemini-2.5-ultra",
       "gpt-5",
       "gpt-5-pro",
       "o3",
@@ -163,11 +165,13 @@ class ModelConfigService {
 
   getModelDescription(model: AIModel): string {
     const descriptions: Record<AIModel, string> = {
-      // Gemini models
-      "gemini-2.5-pro": "Optimal for RAG: 2M context, excellent synthesis (recommended)",
-      "gemini-2.5-flash": "Fast & cost-efficient RAG with 1M context",
-      "gemini-2.5-ultra": "Maximum capability (usually unnecessary for RAG)",
-      // OpenAI models
+      // Gemini 3.0 models (primary)
+      "gemini-3.0-pro": "Optimal for RAG: latest Gemini with excellent synthesis (recommended)",
+      "gemini-3.0-flash": "Fast & cost-efficient RAG with Gemini 3.0",
+      // Gemini 2.5 models (legacy)
+      "gemini-2.5-pro": "Previous generation Gemini Pro (2M context)",
+      "gemini-2.5-flash": "Previous generation Gemini Flash",
+      // OpenAI models (fallback)
       "gpt-5": "OpenAI GPT-5 (fallback)",
       "gpt-5-pro": "Premium GPT-5 Pro (fallback)",
       o3: "Advanced reasoning model with tool integration",

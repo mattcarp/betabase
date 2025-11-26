@@ -151,7 +151,7 @@ export function AiSdkChatPanel({
   console.log("🎤 Voice buttons should be rendering in PromptInputTools");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
-  const [selectedModel, setSelectedModel] = useState("gemini-2.5-pro");
+  const [selectedModel, setSelectedModel] = useState("gemini-3.0-pro");
   const [showReasoning, setShowReasoning] = useState(true);
   const [currentBranch, setCurrentBranch] = useState<string | null>(null);
   const [activeTasks, setActiveTasks] = useState<any[]>([]);
@@ -269,10 +269,12 @@ export function AiSdkChatPanel({
     })();
 
   const availableModels = [
-    // Gemini models (primary for RAG)
-    { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro (2M context) ⭐" },
-    { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash (Fast & Cheap)" },
-    { id: "gemini-2.5-ultra", name: "Gemini 2.5 Ultra (Premium)" },
+    // Gemini 3.0 models (primary for RAG)
+    { id: "gemini-3.0-pro", name: "Gemini 3.0 Pro" },
+    { id: "gemini-3.0-flash", name: "Gemini 3.0 Flash (Fast)" },
+    // Gemini 2.5 models (legacy)
+    { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro (Legacy)" },
+    { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash (Legacy)" },
     // OpenAI models (fallback)
     { id: "gpt-5", name: "GPT-5 (Fallback)" },
     { id: "gpt-4o", name: "GPT-4o" },
@@ -2146,7 +2148,7 @@ export function AiSdkChatPanel({
                 onValueChange={setSelectedModel}
                 disabled={isMaxMessagesReached || isLoading}
               >
-                <PromptInputModelSelectTrigger className="!h-8 !w-[100px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
+                <PromptInputModelSelectTrigger className="!h-8 !w-[160px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
                   <PromptInputModelSelectValue />
                 </PromptInputModelSelectTrigger>
                 <PromptInputModelSelectContent>

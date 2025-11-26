@@ -62,10 +62,12 @@ const ChatRequestSchema = z.object({
   messages: z.array(MessageSchema).min(1).max(50), // Max 50 messages in history
   model: z
     .enum([
-      // Gemini models (primary for RAG)
+      // Gemini 3.0 models (primary for RAG)
+      "gemini-3.0-pro",
+      "gemini-3.0-flash",
+      // Gemini 2.5 models (legacy)
       "gemini-2.5-pro",
       "gemini-2.5-flash",
-      "gemini-2.5-ultra",
       // OpenAI models (fallback)
       "gpt-5",
       "gpt-5-pro",
