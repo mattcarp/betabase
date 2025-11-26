@@ -12,6 +12,7 @@ import { modelConfig } from "../../../src/services/modelConfig";
 import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 import { UnifiedRAGOrchestrator } from "../../../src/services/unifiedRAGOrchestrator";
 import { getSessionStateManager } from "../../../src/lib/sessionStateManager";
+import { DEFAULT_APP_CONTEXT } from "../../../src/lib/supabase";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
@@ -452,9 +453,7 @@ export async function POST(req: Request) {
         try {
           const ragResult = await unifiedRAG.query(queryString, {
             sessionId,
-            organization: 'sony-music',
-            division: 'mso',
-            app_under_test: 'siam',
+            ...DEFAULT_APP_CONTEXT, // organization: 'sony-music', division: 'digital-operations', app_under_test: 'aoma'
             useContextAware: true,
             useAgenticRAG: queryComplexity > 7,
             useRLHFSignals: true,
