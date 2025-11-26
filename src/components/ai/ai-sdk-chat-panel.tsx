@@ -1860,31 +1860,6 @@ export function AiSdkChatPanel({
             ) : (
               /* Messages Area */
               <div className="space-y-6">
-                <AnimatePresence mode="wait">
-                  {/* Clean Loading Spinner with Timer (Shadcn AI Pattern) */}
-                  {/* CRITICAL: Only show loading indicator BEFORE streaming starts */}
-                  {(isLoading || manualLoading || isProcessing) && !hasStartedStreaming && (
-                    <motion.div
-                      key="loading-indicator"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2 }}
-                      className="flex items-center gap-3 p-4"
-                    >
-                      <Loader size={20} className="text-blue-400 animate-spin" />
-                      <span className="text-sm text-muted-foreground">
-                        {loadingSeconds > 5
-                          ? `Searching AOMA knowledge base... (${loadingSeconds}s)`
-                          : loadingSeconds > 0
-                          ? `Thinking... (${loadingSeconds}s)`
-                          : "Thinking..."}
-                      </span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Messages rendered AFTER progress indicator */}
                 <AnimatePresence>
                   {messages.map((message, index) => (
                     <motion.div
@@ -1898,6 +1873,28 @@ export function AiSdkChatPanel({
                       {renderMessage(message, index)}
                     </motion.div>
                   ))}
+
+                  {/* Loading indicator - appears AFTER messages (below user question, above AI response) */}
+                  {/* CRITICAL: Only show when waiting for response, hide once streaming starts */}
+                  {(isLoading || manualLoading > 0 || isProcessing) && !hasStartedStreaming && (
+                    <motion.div
+                      key="loading-indicator"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex items-center gap-3 p-4 ml-12"
+                    >
+                      <Loader size={20} className="text-blue-400 animate-spin" />
+                      <span className="text-sm text-muted-foreground">
+                        {loadingSeconds > 5
+                          ? `Searching AOMA knowledge base... (${loadingSeconds}s)`
+                          : loadingSeconds > 0
+                          ? `Thinking... (${loadingSeconds}s)`
+                          : "Thinking..."}
+                      </span>
+                    </motion.div>
+                  )}
                 </AnimatePresence>
               </div>
             )}
