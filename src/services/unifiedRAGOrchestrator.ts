@@ -163,7 +163,7 @@ export class UnifiedRAGOrchestrator {
           initialCandidates,
           topK,
           useRLHFSignals,
-          useGemini: true,
+          useGemini: true, // Use Gemini embeddings (768d)
         });
 
         result = {

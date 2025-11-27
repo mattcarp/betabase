@@ -19,7 +19,7 @@ export interface TwoStageRetrievalOptions {
   initialCandidates?: number; // N - how many to retrieve (default: 50)
   vectorThreshold?: number; // Similarity threshold for stage 1
   sourceTypes?: string[];
-  useGemini?: boolean; // Use Gemini embeddings (default: true)
+  useGemini?: boolean; // Use Gemini embeddings (default: false - data is OpenAI 1536d)
   
   // Stage 2: Re-ranking
   topK?: number; // K - how many to return after re-ranking (default: 10)
@@ -63,7 +63,7 @@ export class TwoStageRetrieval {
       initialCandidates = 50,
       vectorThreshold = 0.50,
       sourceTypes,
-      useGemini = true,
+      useGemini = true, // Use Gemini embeddings (768d)
       topK = 10,
       rerankBatchSize = 10,
       useRLHFSignals = true,
@@ -199,7 +199,7 @@ export class TwoStageRetrieval {
       vectorThreshold = 0.50,
       topK = 10,
       sourceTypes,
-      useGemini = true,
+      useGemini = true, // Use Gemini embeddings (768d)
     } = options;
 
     // Get baseline (vector search only)

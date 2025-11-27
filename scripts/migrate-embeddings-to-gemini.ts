@@ -50,7 +50,7 @@ async function migrateEmbeddings(options: MigrationOptions) {
   
   // Build filter query
   let query = supabaseAdmin
-    .from("siam_unified_vectors")
+    .from("siam_vectors")
     .select("*")
     .is("embedding_gemini", null) // Only migrate docs without Gemini embeddings
     .not("embedding", "is", null); // Must have OpenAI embedding
@@ -62,7 +62,7 @@ async function migrateEmbeddings(options: MigrationOptions) {
   
   // Get total count
   const { count, error: countError } = await supabaseAdmin
-    .from("siam_unified_vectors")
+    .from("siam_vectors")
     .select("*", { count: "exact", head: true })
     .is("embedding_gemini", null)
     .not("embedding", "is", null);
@@ -134,7 +134,7 @@ async function migrateEmbeddings(options: MigrationOptions) {
         if (!dryRun) {
           // Update document with Gemini embedding
           const { error: updateError } = await supabaseAdmin
-            .from("siam_unified_vectors")
+            .from("siam_vectors")
             .update({
               embedding_gemini: geminiEmbedding,
               embedding_source: "gemini",
