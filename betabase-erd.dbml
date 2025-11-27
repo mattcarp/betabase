@@ -1,0 +1,140 @@
+// DBML file for betabase database
+// Use at: https://dbdiagram.io/
+
+Table application {
+  id integer [pk]
+  name varchar
+  primary_color varchar
+}
+
+Table cases {
+  id integer
+  app_under_test varchar
+  name varchar
+  script varchar
+  expected_result varchar
+  tags varchar
+  created_by varchar
+  created_at varchar
+  updated_by varchar
+  updated_at varchar
+  preconditions varchar
+}
+
+Table deployment {
+  id integer [pk]
+  build varchar
+  branch varchar
+  app_under_test varchar
+  deployed_at varchar
+  record_inserted_at varchar
+}
+
+Table round {
+  id integer [pk]
+  name varchar
+  starts_at varchar
+  ends_at varchar
+  updated_at varchar
+  release_num varchar
+  app varchar
+  notes text
+  created_at varchar
+  client_notes text
+  current_flag smallint
+  release_date varchar
+}
+
+Table scenario {
+  id integer [pk]
+  name varchar
+  script text
+  expected_result text
+  created_by varchar
+  updated_by varchar
+  preconditions text
+  created_at varchar
+  updated_at varchar
+  review_flag smallint
+  flag_reason text
+  app_under_test varchar
+  tags varchar
+  coverage varchar
+  client_priority smallint
+  mode varchar
+  is_security smallint
+  priority_sort_order integer
+  enhancement_sort_order integer
+  current_regression_sort_order integer
+  reviewed_flag varchar
+
+  Note: 'Test scenarios - 8,449 rows'
+}
+
+Table test {
+  id integer [pk]
+  scenario_id integer
+  created_at varchar
+  comments text
+  ticket varchar
+  created_by varchar
+  input text
+  result text
+  pass_fail varchar
+  build varchar
+  updated_at varchar
+  updated_by varchar
+  path varchar
+  browser_name varchar
+  browser_major varchar
+  browser_minor varchar
+  os_name varchar
+  os_major varchar
+  os_minor varchar
+  deployment_stamp varchar
+  in_prod varchar
+
+  Note: 'Test execution results - 34,631 rows'
+}
+
+Table user {
+  id integer [pk]
+  username varchar
+  username_canonical varchar
+  email varchar
+  email_canonical varchar
+  enabled smallint
+  salt varchar
+  password varchar
+  last_login varchar
+  locked smallint
+  expired smallint
+  expires_at varchar
+  confirmation_token varchar
+  password_requested_at varchar
+  roles text
+  credentials_expired smallint
+  credentials_expire_at varchar
+  created_at varchar
+  updated_at varchar
+  f_name varchar
+  l_name varchar
+  jira_username varchar
+  is_notified smallint
+  mobile_phone varchar
+  org varchar
+}
+
+Table variation {
+  id integer [pk]
+  scenario_id text
+  variation_text text
+  created_by varchar
+  updated_by varchar
+  created_at varchar
+  updated_at varchar
+}
+
+// Relationships
+Ref: test.scenario_id > scenario.id
+Ref: variation.scenario_id > scenario.id

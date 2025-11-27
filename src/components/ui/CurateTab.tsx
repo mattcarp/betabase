@@ -58,7 +58,10 @@ import { Spinner } from "./spinner";
 import { InputGroup, InputGroupInput, InputGroupAddon } from "./input-group";
 import { usePermissions } from "../../hooks/usePermissions";
 import { RLHFFeedbackTab } from "./rlhf-tabs/RLHFFeedbackTab";
+import { CuratorQueue } from "./CuratorQueue";
+import { FeedbackImpactCard } from "./FeedbackImpactCard";
 import { cognitoAuth } from "../../services/cognitoAuth";
+import { ListTodo } from "lucide-react";
 
 interface VectorStoreFile {
   id: string;
@@ -123,7 +126,7 @@ export function CurateTab({
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
-  const [activeTab, setActiveTab] = useState("files");
+  const [activeTab, setActiveTab] = useState("queue");
   const [_statsLoading, _setStatsLoading] = useState(false); // Unused
   const [stats, setStats] = useState({
     totalFiles: 0,
@@ -383,16 +386,32 @@ export function CurateTab({
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
           <TabsList
             className={cn(
-              `grid w-full grid-cols-${canAccessRLHF ? "4" : "3"}`,
+              "flex w-full overflow-x-auto",
               "mac-glass",
               "border-[var(--mac-utility-border)]",
               "bg-[var(--mac-surface-card)]"
             )}
           >
+            {/* Queue Tab - Curator Review Queue */}
+            <TabsTrigger
+              value="queue"
+              className={cn(
+                "font-light flex-1",
+                "data-[state=active]:bg-[var(--mac-accent-orange-400)]/10",
+                "data-[state=active]:text-[var(--mac-accent-orange-400)]",
+                "data-[state=active]:border-b-[3px]",
+                "data-[state=active]:border-[var(--mac-accent-orange-400)]",
+                "data-[state=active]:shadow-[0_2px_8px_rgba(251,146,60,0.3)]",
+                "transition-all duration-200"
+              )}
+            >
+              <ListTodo className="h-4 w-4 mr-2" />
+              Queue
+            </TabsTrigger>
             <TabsTrigger
               value="files"
               className={cn(
-                "font-light",
+                "font-light flex-1",
                 "data-[state=active]:bg-[var(--mac-primary-blue-400)]/10",
                 "data-[state=active]:text-[var(--mac-primary-blue-400)]",
                 "data-[state=active]:border-b-[3px]",
@@ -407,7 +426,7 @@ export function CurateTab({
             <TabsTrigger
               value="upload"
               className={cn(
-                "font-light",
+                "font-light flex-1",
                 "data-[state=active]:bg-[var(--mac-primary-blue-400)]/10",
                 "data-[state=active]:text-[var(--mac-primary-blue-400)]",
                 "data-[state=active]:border-b-[3px]",
@@ -422,7 +441,7 @@ export function CurateTab({
             <TabsTrigger
               value="info"
               className={cn(
-                "font-light",
+                "font-light flex-1",
                 "data-[state=active]:bg-[var(--mac-primary-blue-400)]/10",
                 "data-[state=active]:text-[var(--mac-primary-blue-400)]",
                 "data-[state=active]:border-b-[3px]",
@@ -434,13 +453,13 @@ export function CurateTab({
               <Info className="h-4 w-4 mr-2" />
               Info
             </TabsTrigger>
-            
+
             {/* RLHF Feedback Tab (permission-gated) */}
             {canAccessRLHF && (
               <TabsTrigger
                 value="rlhf-feedback"
                 className={cn(
-                  "font-light",
+                  "font-light flex-1",
                   "data-[state=active]:bg-[var(--mac-accent-purple-400)]/10",
                   "data-[state=active]:text-[var(--mac-accent-purple-400)]",
                   "data-[state=active]:border-b-[3px]",
@@ -454,6 +473,20 @@ export function CurateTab({
               </TabsTrigger>
             )}
           </TabsList>
+
+          {/* Queue Tab Content - Curator Review Queue */}
+          <TabsContent value="queue" className="flex-1 overflow-hidden mt-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
+              {/* Curator Queue takes 2/3 width on large screens */}
+              <div className="lg:col-span-2 overflow-hidden">
+                <CuratorQueue className="h-full" />
+              </div>
+              {/* Feedback Impact Card takes 1/3 width on large screens */}
+              <div className="overflow-auto">
+                <FeedbackImpactCard />
+              </div>
+            </div>
+          </TabsContent>
 
           <TabsContent value="files" className="flex-1 overflow-hidden mt-4">
             <div className="space-y-4 h-full flex flex-col">

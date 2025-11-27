@@ -1,0 +1,28 @@
+{
+  "capturedAt": "2025-11-18T14:35:25.783Z",
+  "supabaseUrl": "https://kfxetwuuzljhybfgmpuc.supabase.co",
+  "metrics": {
+    "test_results.app_name": {
+      "label": "Automated test results",
+      "error": "Query failed for test_results.app_name: 400 Bad Request -> {\"code\":\"42703\",\"details\":null,\"hint\":null,\"message\":\"column test_results.app_name does not exist\"}"
+    },
+    "test_runs.app_name": {
+      "label": "Test runs",
+      "error": "Query failed for test_runs.app_name: 400 Bad Request -> {\"code\":\"42703\",\"details\":null,\"hint\":null,\"message\":\"column test_runs.app_name does not exist\"}"
+    },
+    "firecrawl_analysis.app_name": {
+      "label": "Firecrawl AUT analyses",
+      "total": 0,
+      "breakdown": []
+    },
+    "rlhf_feedback.app_under_test": {
+      "label": "RLHF feedback entries",
+      "error": "Query failed for rlhf_feedback.app_under_test: 404 Not Found -> {\"code\":\"42P01\",\"details\":null,\"hint\":null,\"message\":\"relation \\\"public.rlhf_feedback\\\" does not exist\"}"
+    },
+    "firecrawl_analysis.analysis_type": {
+      "label": "Firecrawl coverage by type",
+      "total": 0,
+      "breakdown": []
+    }
+  }
+}
