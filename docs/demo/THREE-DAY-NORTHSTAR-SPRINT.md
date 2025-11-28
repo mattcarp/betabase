@@ -10,6 +10,8 @@
 **IMPORTANT: Dev testing only. No production deployment or testing this sprint.**
 (Production testing takes forever, breaks constantly, and isn't the point of this demo anyway.)
 
+**Demo Format**: ~5 minute recorded video for colleagues. Technical but casual. Edited in CapCut with a vignette of Matt talking and text overlays for key points. No music, no fancy effects.
+
 ---
 
 ## Sprint Schedule

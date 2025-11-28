@@ -47,36 +47,48 @@ A walkthrough for colleagues showing how we've built an integrated AI platform. 
 
 ## The Demo Structure
 
-### Format: ~30 Minutes (Conversational)
+### Format: ~5 Minute Recorded Video
 
-This isn't a formal presentation. It's more like: "Here's what we built, here's why it matters, let me show you."
+A quick screen recording for colleagues. Technical but casual - this is for friends who've been doing this work as long as I have. Shot with a vignette of myself talking, text overlays when things become important, edited in CapCut. No music, no fancy effects, no production deployment.
+
+**Recording setup:**
+- Screen capture of the app
+- Small picture-in-picture of me talking (optional)
+- Text overlays for key points
+- Keep it tight - under 5 minutes
 
 ```
-Part 1: The Problem We're Solving (5 mins)
-  "You know how tests break every time someone changes a button?"
-  "You know how chatbots give garbage answers about internal systems?"
+0:00-0:30 - Quick intro
+  "Here's what we built - three things that solve each other"
 
-Part 2: The Three Pillars (20 mins)
-  Chat: Show it actually knowing our domain
-  Curate: Show how one correction improves many queries
-  Test: Show a test healing itself
+0:30-2:00 - Chat pillar
+  Ask a domain question, show it knows our systems
+  Show where the answer came from
 
-Part 3: Discussion (open-ended)
-  "What would this look like for your team?"
+2:00-3:30 - Curate pillar
+  Show feedback collection
+  "When it's wrong, we fix it - and it learns"
+
+3:30-4:30 - Test pillar
+  Show a selector mismatch
+  Show the self-healing proposal
+
+4:30-5:00 - Wrap up
+  "The interesting part is how they connect"
 ```
 
-### The Story Arc
+### The Story Arc (for video)
 
-**Opening (relatable problem):**
-> "We've all dealt with this: tests that break when CSS changes, AI tools that don't know our systems, and knowledge that's stuck in people's heads. What if these three problems could solve each other?"
+**Opening (30 seconds):**
+"We built three things that solve each other - AI chat that knows our systems, feedback that makes it smarter, and tests that fix themselves. Let me show you."
 
-**The Pillars:**
-1. **Chat**: "Ask it about AOMA" - it knows because we've fed it our docs
-2. **Curate**: "When it's wrong, we correct it" - and that correction propagates
-3. **Test**: "Watch what happens when I change this selector" - it proposes a fix
+**Each pillar (1-1.5 min each):**
+- Chat: Ask a real question, show domain knowledge, show sources
+- Curate: Show feedback UI, explain how corrections propagate
+- Test: Show a broken selector, show the healing proposal
 
-**Closing:**
-> "The interesting part isn't any one of these - it's how they connect. Feedback from chat improves retrieval. Better retrieval means fewer wrong answers. Test failures can trigger human review. It's a loop."
+**Closing (30 seconds):**
+"The interesting part is how they connect - feedback improves retrieval, better retrieval means fewer wrong answers, test failures trigger human review. It's a loop."
 
 ---
 
