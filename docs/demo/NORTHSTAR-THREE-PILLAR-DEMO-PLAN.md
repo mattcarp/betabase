@@ -6,7 +6,7 @@
 
 A 5-minute recorded video for colleagues showing how we've built an integrated AI platform. Technical but casual - this is for friends who've been doing this work as long as I have. Edited in CapCut with a vignette of me talking and text overlays for key points. No music, no fancy effects.
 
-**Dev testing only.** We're not touching production for this demo - that's a whole separate nightmare.
+**LOCAL DEV ONLY.** No production. No production testing. Just localhost demo.
 
 **The Three Pillars:**
 - **Chat**: Domain-aware AI that actually knows our systems
@@ -21,7 +21,7 @@ A 5-minute recorded video for colleagues showing how we've built an integrated A
 
 | Area | What It Does | Actual Status |
 |------|--------------|---------------|
-| Chat | RAG against Supabase vectors | Working in production |
+| Chat | RAG against Supabase vectors | Working |
 | Chat | Gemini embeddings + search | Primary retrieval method |
 | Chat | Internal metrics/introspection | Replaced LangSmith with custom |
 | Curate | RLHF feedback collection | Functional |
@@ -49,7 +49,7 @@ A 5-minute recorded video for colleagues showing how we've built an integrated A
 
 ### Format: ~5 Minute Recorded Video
 
-A quick screen recording for colleagues. Technical but casual - this is for friends who've been doing this work as long as I have. Shot with a vignette of myself talking, text overlays when things become important, edited in CapCut. No music, no fancy effects, no production deployment.
+A quick screen recording for colleagues. Technical but casual - this is for friends who've been doing this work as long as I have. Shot with a vignette of myself talking, text overlays when things become important, edited in CapCut. No music, no fancy effects. Recording localhost only.
 
 **Recording setup:**
 - Screen capture of the app
@@ -281,20 +281,22 @@ If people want to dig deeper after watching:
 - Total video: under 5 minutes
 
 ### NOT Doing
-- Production deployment or testing
-- Render monitoring
-- Mailinator magic link testing
-- Any of the usual prod verification stuff
+- NO production deployment
+- NO production testing
+- NO Render monitoring
+- NO Mailinator magic link testing
+- Localhost dev demo ONLY
 
 ---
 
 ## What This ISN'T
 
 - **Not a product pitch**: We're not selling anything
-- **Not production-hardened**: This is an internal tool, R&D quality
+- **Not production**: Localhost dev demo only
 - **Not a polished marketing video**: Technical, casual, for friends
+- **Not long**: 5 minutes max
 
 ---
 
 *Last Updated: November 2025*
-*Format: 5-minute recorded video, CapCut, for technical colleagues*
+*Format: 5-minute recorded video, CapCut, localhost dev demo for technical colleagues*
