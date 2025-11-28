@@ -1,167 +1,109 @@
-# SIAM (The Beta Base) Demo Queries - Copy/Paste Ready
+# Demo Queries - Pre-Cache Ready
 
-## Overview
-These natural language queries are designed to showcase **SIAM (aka "The Beta Base")**—our enterprise AI testing platform—as it tests and analyzes **AOMA** (the Application Under Test).
-
-**Key Branding**:
-- **Platform**: SIAM / The Beta Base
-- **AUT**: AOMA (Asset & Offering Management App)
-- **Visual Style**: Nano Banana 2 (Neon/Dark)
+These queries warm the cache before recording. Run each one, let it complete, then they'll be instant on camera.
 
 ---
 
-## Demo Flow (Total: ~5 minutes)
+## Pre-Recording Warm-Up Sequence
 
-### 1. Warm-Up Query (30 seconds)
-**Purpose**: Establish SIAM/Beta Base identity
+Run these in order before hitting record:
 
+### 1. AOMA Authentication Flow
 ```
-What is the Beta Base and how does it help with testing AOMA?
+What's the AOMA 2 API authentication flow?
 ```
-
-**Expected Response**: Should explain that The Beta Base (SIAM) is the intelligent testing platform currently configured to test the AOMA multi-tenant system.
+**Why**: Core domain question, shows RAG works with technical content.
 
 ---
 
-### 2. Architecture Diagram Query (60 seconds)
-**Purpose**: Showcase Mermaid diagram generation for the AUT (AOMA)
-
+### 2. Offering Lifecycle
 ```
-Generate a system architecture diagram for AOMA showing all integration points including the Unified Session Manager, data sources, and external APIs
+How does the Offering lifecycle work in AOMA?
 ```
-
-**Expected Response**: Should generate a colorful "Nano Banana 2" styled Mermaid flowchart of **AOMA's** architecture:
-- API Gateway
-- Unified Session Manager (USM)
-- Vector Database
-- External integrations (JIRA, GitHub)
-
-**Demo Actions**:
-- Wait for diagram to render
-- Zoom/Pan
-- **Voiceover**: "Here, The Beta Base is visualizing AOMA's architecture dynamically."
+**Why**: Business logic question, shows domain understanding.
 
 ---
 
-### 3. RLHF Feedback Loop Query (45 seconds)
-**Purpose**: Explain the platform's learning capability
-
+### 3. Asset Management Endpoints
 ```
-How does the Beta Base's RLHF feedback loop improve retrieval quality for AOMA documentation?
+What are the main API endpoints for Asset management?
 ```
-
-**Expected Response**: Should explain how curator feedback on AOMA-related answers updates the embeddings to make the platform smarter about the AUT.
+**Why**: API reference question, shows we index technical docs.
 
 ---
 
-### 4. Curate Tab Demonstration (90 seconds)
-**Purpose**: Show the RLHF UI where we curate knowledge about AOMA
-
-**Actions**:
-1. Click "Curate" tab
-2. Show feedback queue (questions about AOMA)
-3. Submit feedback
-4. **Voiceover**: "Curators review how well The Beta Base answers questions about AOMA. This feedback loop is essential for maintaining accurate knowledge about the system under test."
+### 4. Diagram Generation (for background render)
+```
+Show me the authentication flow as a diagram
+```
+**Why**: This warms the Mermaid generation. On camera, offer it as optional.
 
 ---
 
-### 5. TestSprite Self-Healing Query (60 seconds)
-**Purpose**: Showcase automated testing of the AUT
+## Demo Flow Queries
 
+Use these during the actual recording:
+
+### Chat Pillar (~90 sec)
+
+**Primary question:**
 ```
-Explain how TestSprite automatically fixed the broken login test in AOMA last night
+What's the AOMA 2 authentication flow?
 ```
 
-**Expected Response**: Sequence diagram showing:
-- AOMA CI/CD pipeline failure
-- TestSprite agent analyzing AOMA's DOM
-- Selector drift detection
-- Automated fix generation
+**Follow-up (if diagram offer appears):**
+- Click "Would you like to see a diagram?"
+- Zoom/pan to show interactivity
 
 ---
 
-### 6. Complex Multi-Source Query (45 seconds)
-**Purpose**: Demonstrate hybrid RAG across AOMA's data sources
+### Curate Pillar (~90 sec)
 
-```
-Show me the latest JIRA tickets related to the AOMA3 migration and the corresponding GitHub commits
-```
-
-**Expected Response**: Multi-source retrieval combining JIRA tickets and GitHub commits specific to the AOMA project.
+No chat queries needed - navigate to Curate tab and show:
+- Feedback submission (thumbs up/down)
+- Curator queue
+- "One correction helps thousands of queries"
 
 ---
 
-### 7. Anti-Hallucination Demo (30 seconds)
-**Purpose**: Show honest boundaries regarding the AUT
+### Test Pillar (~60 sec)
 
-```
-Does AOMA have a blockchain integration for NFT minting?
-```
-
-**Expected Response**: Honest "I don't know" - The Beta Base knows AOMA's documentation and correctly identifies this feature doesn't exist.
+No chat queries needed - navigate to Test tab and show:
+- Home dashboard metrics
+- Self-Healing queue
+- Approve/reject workflow
 
 ---
 
-## Backup Queries (If Time Permits)
+## Anti-Hallucination Test
 
-### Database Schema Diagram
+If you want to show honest boundaries:
 ```
-Generate an ERD showing the SIAM multi-tenant database schema with tables for organizations, users, knowledge_elements, and rlhf_feedback
+Does AOMA have a blockchain integration?
 ```
+**Expected**: "I don't have information about that" or similar honest response.
 
-### Testing Dashboard
-```
-Show me the test results dashboard with pass/fail statistics
-```
+---
 
-### Voice Feature
+## Pre-Recording Checklist
+
 ```
-[Click microphone icon and speak]: "What is the Unified Session Manager?"
+[ ] Dev server running on localhost:3000
+[ ] Ran all 4 warm-up queries above
+[ ] Navigated to Test tab (loads data)
+[ ] Navigated to Curate tab (loads data)
+[ ] No console errors
+[ ] Screen recording ready
 ```
 
 ---
 
-## Pre-Demo Checklist
+## Cache Timing
 
-- [ ] Server running on `localhost:3000`
-- [ ] AOMA MCP backend healthy
-- [ ] Supabase connected
-- [ ] At least 2-3 chat interactions logged (for Curate tab demo)
-- [ ] Queries copied to clipboard or second monitor
-- [ ] Screen recording software ready (CapCut/Descript)
-- [ ] Microphone tested
+- Query results cache for 5 minutes
+- Run warm-up queries within 5 minutes of recording
+- Mermaid diagrams render in background
 
 ---
 
-## Troubleshooting
-
-**If diagram doesn't render**:
-- Check browser console for errors
-- Refresh page
-- Try a simpler query: "Show me a simple flowchart of the chat API"
-
-**If Curate tab is empty**:
-- Send 2-3 test queries first
-- Check server logs for RLHF logging errors
-- Verify Supabase connection
-
-**If response is slow (>10s)**:
-- Check AOMA MCP health: `GET /api/aoma/health`
-- Verify Railway backend is running
-- Consider bypassing AOMA for demo: set `NEXT_PUBLIC_BYPASS_AOMA=true`
-
----
-
-## Timing Guide
-
-| Query | Expected Time | Total Elapsed |
-|-------|---------------|---------------|
-| 1. What is SIAM | 5-8s | 0:30 |
-| 2. Architecture diagram | 8-12s | 1:30 |
-| 3. RLHF explanation | 6-10s | 2:15 |
-| 4. Curate tab demo | N/A | 3:45 |
-| 5. TestSprite workflow | 8-12s | 4:45 |
-| 6. Multi-source query | 10-15s | 5:30 |
-| 7. Anti-hallucination | 5-8s | 6:00 |
-
-**Target Total**: 5-6 minutes (allows for voiceover and transitions)
+*Last updated: November 28, 2025*

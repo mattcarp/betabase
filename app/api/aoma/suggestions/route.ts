@@ -2,7 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const { query } = await request.json();
+    let query;
+    try {
+      const body = await request.json();
+      query = body.query;
+    } catch (e) {
+      // Empty body or invalid JSON
+      query = null;
+    }
 
     if (!query) {
       return NextResponse.json({ error: "Query parameter is required" }, { status: 400 });

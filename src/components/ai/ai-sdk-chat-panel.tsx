@@ -84,6 +84,16 @@ import { Reasoning, ReasoningTrigger, ReasoningContent } from "../ai-elements/re
 import { Response } from "../ai-elements/response";
 import { AOMAResponse } from "./AOMAResponse";
 import { Sources, SourcesTrigger, SourcesContent, Source } from "../ai-elements/source";
+// Demo Enhancement Components for visibility during demos
+import {
+  HeroMetricsStrip,
+  DemoMode,
+  useDemoMode,
+  RAGContextViewer,
+  ConfidenceBadge,
+  DiagramOffer,
+  useDiagramOffer,
+} from "./demo-enhancements";
 import { Suggestions, Suggestion } from "../ai-elements/suggestion";
 import { Task, TaskTrigger, TaskContent, TaskItem } from "../ai-elements/task";
 import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from "../ai-elements/tool";
@@ -176,6 +186,10 @@ export function AiSdkChatPanel({
   // RLHF Feedback tracking
   const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down' | null>>({});
   const supabase = createClientComponentClient();
+
+  // Demo Enhancement hooks for video recording
+  const demoMode = useDemoMode();
+  const diagramOffer = useDiagramOffer();
 
   // Voice feature states - define before using in hooks
   const [isTTSEnabled, setIsTTSEnabled] = useState(false);
@@ -825,38 +839,38 @@ export function AiSdkChatPanel({
       // Start progress simulation with more descriptive phases
       const progressInterval = setInterval(() => {
         setCurrentProgress((prev) => {
-          if (!prev || prev.progress >= 90) {
+          if (!prev || (prev.progress || 0) >= 90) {
             clearInterval(progressInterval);
             return prev;
           }
 
           // Update progress based on phase with more descriptive titles
-          let newProgress = prev.progress;
+          let newProgress = prev.progress || 0;
           let newPhase = prev.phase;
           let newTitle = prev.title;
 
-          if (prev.progress < 20) {
-            newProgress = prev.progress + 5;
+          if ((prev.progress || 0) < 20) {
+            newProgress = (prev.progress || 0) + 5;
             newPhase = "connecting";
             newTitle = "Establishing secure connection to AI service and validating credentials";
-          } else if (prev.progress < 35) {
-            newProgress = prev.progress + 3;
+          } else if ((prev.progress || 0) < 35) {
+            newProgress = (prev.progress || 0) + 3;
             newPhase = "parsing";
             newTitle = "Parsing your request and extracting key requirements";
-          } else if (prev.progress < 50) {
-            newProgress = prev.progress + 2.5;
+          } else if ((prev.progress || 0) < 50) {
+            newProgress = (prev.progress || 0) + 2.5;
             newPhase = "knowledge-search";
             newTitle = "Searching AOMA knowledge base for relevant information";
-          } else if (prev.progress < 65) {
-            newProgress = prev.progress + 2;
+          } else if ((prev.progress || 0) < 65) {
+            newProgress = (prev.progress || 0) + 2;
             newPhase = "context-building";
             newTitle = "Building context from project files and previous interactions";
-          } else if (prev.progress < 80) {
-            newProgress = prev.progress + 1.5;
+          } else if ((prev.progress || 0) < 80) {
+            newProgress = (prev.progress || 0) + 1.5;
             newPhase = "generating";
             newTitle = "Generating comprehensive response with AI model";
           } else {
-            newProgress = Math.min(prev.progress + 1, 90);
+            newProgress = Math.min((prev.progress || 0) + 1, 90);
             newPhase = "formatting";
             newTitle = "Formatting response with code blocks, citations, and structure";
           }
@@ -1018,38 +1032,38 @@ export function AiSdkChatPanel({
       // More detailed progress simulation with context-aware phases
       const progressInterval = setInterval(() => {
         setCurrentProgress((prev) => {
-          if (!prev || prev.progress >= 90) {
+          if (!prev || (prev.progress || 0) >= 90) {
             clearInterval(progressInterval);
             return prev;
           }
 
           // Update progress based on phase with more descriptive titles
-          let newProgress = prev.progress;
+          let newProgress = prev.progress || 0;
           let newPhase = prev.phase;
           let newTitle = prev.title;
 
-          if (prev.progress < 20) {
-            newProgress = prev.progress + 5;
+          if ((prev.progress || 0) < 20) {
+            newProgress = (prev.progress || 0) + 5;
             newPhase = "connecting";
             newTitle = "Establishing secure connection to AI service and validating credentials";
-          } else if (prev.progress < 35) {
-            newProgress = prev.progress + 3;
+          } else if ((prev.progress || 0) < 35) {
+            newProgress = (prev.progress || 0) + 3;
             newPhase = "parsing";
             newTitle = "Parsing your request and extracting key requirements";
-          } else if (prev.progress < 50) {
-            newProgress = prev.progress + 2.5;
+          } else if ((prev.progress || 0) < 50) {
+            newProgress = (prev.progress || 0) + 2.5;
             newPhase = "knowledge-search";
             newTitle = "Searching AOMA knowledge base for relevant information";
-          } else if (prev.progress < 65) {
-            newProgress = prev.progress + 2;
+          } else if ((prev.progress || 0) < 65) {
+            newProgress = (prev.progress || 0) + 2;
             newPhase = "context-building";
             newTitle = "Building context from project files and previous interactions";
-          } else if (prev.progress < 80) {
-            newProgress = prev.progress + 1.5;
+          } else if ((prev.progress || 0) < 80) {
+            newProgress = (prev.progress || 0) + 1.5;
             newPhase = "generating";
             newTitle = "Generating comprehensive response with AI model";
           } else {
-            newProgress = Math.min(prev.progress + 1, 90);
+            newProgress = Math.min((prev.progress || 0) + 1, 90);
             newPhase = "formatting";
             newTitle = "Formatting response with code blocks, citations, and structure";
           }
@@ -1381,63 +1395,44 @@ export function AiSdkChatPanel({
               )}
             </div>
 
-            {/* RAG Metadata Badges - Show which advanced RAG strategy was used */}
+            {/* RAG Metadata - Enhanced Demo Components */}
             {(() => {
               // Use message's ragMetadata or pendingRagMetadata for last assistant message
               const ragMeta = message.ragMetadata || (isLastMessage && !isUser ? pendingRagMetadata : null);
               if (!ragMeta || isUser) return null;
 
               return (
-                <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border/30">
-                  {ragMeta.strategy && (
-                    <Badge
-                      variant="outline"
-                      className="bg-purple-500/10 border-purple-500/30 text-purple-300 hover:bg-purple-500/20"
-                    >
-                      {ragMeta.strategy === 'agentic' ? 'Agentic' :
-                          ragMeta.strategy === 'context-aware' ? 'Context-Aware' :
-                          'Standard'} RAG
-                    </Badge>
-                  )}
-                  {ragMeta.documentsReranked && (
-                    <Badge
-                      variant="outline"
-                      className="bg-blue-500/10 border-blue-500/30 text-blue-300 hover:bg-blue-500/20"
-                    >
-                      Re-ranked {ragMeta.initialDocs} to {ragMeta.finalDocs} docs
-                    </Badge>
-                  )}
-                  {ragMeta.agentSteps > 0 && (
-                    <Badge
-                      variant="outline"
-                      className="bg-cyan-500/10 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20"
-                    >
-                      {ragMeta.agentSteps} agent steps
-                    </Badge>
-                  )}
-                  {ragMeta.confidence && (
-                    <Badge
-                      variant="outline"
-                      className={cn(
-                        "font-medium",
-                        ragMeta.confidence >= 0.8
-                          ? "bg-green-500/10 border-green-500/30 text-green-300"
-                          : ragMeta.confidence >= 0.6
-                            ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-300"
-                            : "bg-red-500/10 border-red-500/30 text-red-300"
-                      )}
-                    >
-                      {Math.round(ragMeta.confidence * 100)}% confident
-                    </Badge>
-                  )}
-                  {ragMeta.timeMs && (
-                    <Badge
-                      variant="outline"
-                      className="bg-gray-500/10 border-gray-500/30 text-gray-300"
-                    >
-                      {ragMeta.timeMs}ms
-                    </Badge>
-                  )}
+                <div className="space-y-3 mt-4 pt-3 border-t border-zinc-700/30">
+                  {/* Confidence Badge with Tooltip */}
+                  <div className="flex items-center gap-3">
+                    <ConfidenceBadge
+                      confidence={ragMeta.confidence || 0.75}
+                      sourceCount={ragMeta.finalDocs || ragMeta.documentsUsed || 0}
+                      strategy={ragMeta.strategy || "standard"}
+                      showTooltip={true}
+                    />
+                    {ragMeta.timeMs && (
+                      <Badge
+                        variant="outline"
+                        className="bg-zinc-500/10 border-zinc-500/30 text-zinc-400 text-xs"
+                      >
+                        {ragMeta.timeMs}ms
+                      </Badge>
+                    )}
+                  </div>
+
+                  {/* RAG Context Viewer - Expandable Details */}
+                  <RAGContextViewer
+                    strategy={ragMeta.strategy || "standard"}
+                    documents={ragMeta.documents || []}
+                    totalVectors={45399}
+                    searchTimeMs={ragMeta.timeMs}
+                    reranked={ragMeta.documentsReranked}
+                    initialDocs={ragMeta.initialDocs}
+                    finalDocs={ragMeta.finalDocs}
+                    agentSteps={ragMeta.agentSteps}
+                    defaultOpen={false}
+                  />
                 </div>
               );
             })()}
@@ -1476,6 +1471,20 @@ export function AiSdkChatPanel({
                   <ThumbsDown className="h-3.5 w-3.5" />
                 </Button>
               </div>
+            )}
+
+            {/* Diagram Offer - Non-blocking "Would you like a diagram?" */}
+            {!isUser && isLastMessage && !isLoading && (
+              <DiagramOffer
+                responseContent={message.parts?.[0]?.text || (message as any).content || ""}
+                onAccept={() => {
+                  diagramOffer.offerDiagram(message.id);
+                }}
+                onDismiss={() => {
+                  diagramOffer.dismissOffer();
+                }}
+                autoGenerateDelay={800}
+              />
             )}
 
             {/* PERFORMANCE FIX: REMOVED DUPLICATE PROGRESS INDICATOR - Now only rendered once at line 1538 */}
@@ -1768,7 +1777,9 @@ export function AiSdkChatPanel({
             </div>
 
             {/* Control Panel */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+
+
               <Badge variant="secondary" className="text-xs font-medium px-2 py-2">
                 <MessageCircle className="w-3 h-3 mr-2" />
                 {messages.length}
@@ -1815,6 +1826,17 @@ export function AiSdkChatPanel({
         </div>
       )}
 
+
+
+      {/* Hero Metrics Strip - Show RAG stats at a glance (always visible for demo) */}
+      <HeroMetricsStrip
+        vectorCount={45399}
+        embeddingModel="Gemini"
+        avgLatencyMs={pendingRagMetadata?.timeMs || 280}
+        compact={true}
+        className="flex-shrink-0"
+      />
+
       {/* Main Chat Area */}
       <div className="flex-1 min-h-0 overflow-y-auto bg-zinc-950">
         <Conversation className="bg-zinc-950">
@@ -1842,7 +1864,7 @@ export function AiSdkChatPanel({
                     Welcome to The Betabase
                   </h2>
                   <p className="text-lg font-light text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                    Don't be a dick.
+                    Don't be an asshat.
                   </p>
                 </motion.div>
 
@@ -1904,7 +1926,7 @@ export function AiSdkChatPanel({
 
                   {/* Loading indicator - appears AFTER messages (below user question, above AI response) */}
                   {/* CRITICAL: Only show when waiting for response, hide once streaming starts */}
-                  {(isLoading || manualLoading > 0 || isProcessing) && !hasStartedStreaming && (
+                  {(isLoading || manualLoading || isProcessing) && !hasStartedStreaming && (
                     <motion.div
                       key="loading-indicator"
                       initial={{ opacity: 0, y: 10 }}

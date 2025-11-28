@@ -18,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="stylesheet" href="/styles/motiff-glassmorphism.css" />
         <link rel="stylesheet" href="/styles/mac-design-system.css" />
         <link rel="stylesheet" href="/styles/theme-transitions.css" />
+        <script src="/custom-element-guard.js"></script>
       </head>
       <body suppressHydrationWarning>
         <CustomElementGuard />

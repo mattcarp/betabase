@@ -333,7 +333,7 @@ Be helpful, concise, and professional in your responses.`;
                     key={`${getChatAPIEndpoint()}-${activeConversationId}`} // Force remount when endpoint or conversation changes
                     api={getChatAPIEndpoint()}
                     title={activeConversation?.title || "The Betabase"}
-                    description="Don't be a dick."
+                    description="Don't be an asshat."
                     systemPrompt={systemPrompt}
                     suggestions={suggestions}
                     className="flex-1 border-0"
@@ -342,7 +342,22 @@ Be helpful, concise, and professional in your responses.`;
                       !activeConversation || activeConversation.messages.length === 0
                     }
                     showHeader={false}
-                    conversationId={activeConversationId}
+                    conversationId={activeConversationId || undefined}
+                    initialMessages={activeConversation?.messages}
+                    onMessagesChange={(messages) => {
+                      if (activeConversationId) {
+                        // We need to sync the messages back to the store
+                        // The store expects a single message to add, but here we get the full list
+                        // So we should probably update the conversation directly or handle the diff
+                        // For now, let's just update the conversation in the store if we can
+                        // But the store only has addMessage. 
+                        // Let's check the store definition again.
+                        // It has updateConversation but that takes Partial<Conversation>.
+                        // So we can update messages directly.
+                        const { updateConversation } = useConversationStore.getState();
+                        updateConversation(activeConversationId, { messages: messages as any[] });
+                      }
+                    }}
                   />
                 </div>
               )}

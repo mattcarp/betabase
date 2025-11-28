@@ -1,162 +1,288 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Response, type ResponseProps } from "./response";
-import { MermaidDiagram } from "./mermaid-diagram";
 import { cn } from "../../lib/utils";
-import { ChevronDown, ChevronUp, Sparkles, GitBranch, Presentation } from "lucide-react";
+import { ChevronDown, ChevronUp, Sparkles, GitBranch, Presentation, Loader2, Download, ZoomIn, ZoomOut } from "lucide-react";
 import { Button } from "../ui/button";
 
-interface DiagramInfo {
-  code: string;
-  type: "explainer" | "workflow";
+type DiagramType = "explainer" | "workflow";
+
+interface DiagramState {
+  status: "idle" | "generating" | "ready" | "error";
+  imageBase64?: string;
+  imageMimeType?: string;
+  error?: string;
 }
 
 /**
- * ResponseWithDiagram - Implements buffered diagram pattern
+ * ResponseWithDiagram - Nano Banana Pro diagram generation
  *
  * 1. Text streams/renders immediately (non-blocking)
- * 2. Mermaid diagrams are extracted and pre-rendered in background
- * 3. User sees "Diagram available" button when ready
- * 4. Click to reveal already-rendered diagram (instant)
- * 5. Navigate away = diagram discarded (no waste)
+ * 2. Offers diagram generation after response
+ * 3. User clicks to request Nano Banana Pro diagram
+ * 4. Diagram generates in background, shown when ready
+ * 5. Supports zoom, pan, download
  */
 export function ResponseWithDiagram({
   children,
   className,
   ...props
 }: ResponseProps) {
+  const [showDiagramOffer, setShowDiagramOffer] = useState(false);
   const [showDiagram, setShowDiagram] = useState(false);
-  const [diagramReady, setDiagramReady] = useState(false);
+  const [diagramType, setDiagramType] = useState<DiagramType>("explainer");
+  const [diagramState, setDiagramState] = useState<DiagramState>({ status: "idle" });
+  const [zoom, setZoom] = useState(1);
 
-  // Extract mermaid code blocks from the response
-  const { textContent, diagrams } = useMemo(() => {
-    if (typeof children !== "string") {
-      return { textContent: children, diagrams: [] as DiagramInfo[] };
-    }
+  // Extract the text content for context
+  const textContent = typeof children === "string" ? children : "";
 
-    const mermaidRegex = /```mermaid\n([\s\S]*?)```/g;
-    const diagrams: DiagramInfo[] = [];
-    let match;
-
-    while ((match = mermaidRegex.exec(children)) !== null) {
-      const code = match[1].trim();
-      // Detect diagram type based on content
-      const isWorkflow =
-        code.includes("flowchart") ||
-        code.includes("graph") ||
-        code.includes("sequenceDiagram") ||
-        code.includes("-->") ||
-        code.includes("->>");
-
-      diagrams.push({
-        code,
-        type: isWorkflow ? "workflow" : "explainer",
-      });
-    }
-
-    // Remove mermaid blocks from text content
-    const textContent = children.replace(mermaidRegex, "").trim();
-
-    return { textContent, diagrams };
-  }, [children]);
-
-  // Mark diagram as ready after a short delay (simulates background render)
+  // Show diagram offer after a short delay (simulates reading time)
   useEffect(() => {
-    if (diagrams.length > 0) {
+    if (textContent.length > 100) {
       const timer = setTimeout(() => {
-        setDiagramReady(true);
-      }, 500); // Small delay to ensure text is visible first
+        setShowDiagramOffer(true);
+      }, 1500); // Give user time to start reading
       return () => clearTimeout(timer);
     }
-  }, [diagrams.length]);
+  }, [textContent.length]);
 
-  const toggleDiagram = useCallback(() => {
-    setShowDiagram(prev => !prev);
-  }, []);
+  // Generate diagram using Nano Banana Pro API
+  const generateDiagram = useCallback(async (type: DiagramType) => {
+    setDiagramType(type);
+    setDiagramState({ status: "generating" });
+    setShowDiagram(true);
 
-  const hasDiagrams = diagrams.length > 0;
-  const diagramType = diagrams[0]?.type || "explainer";
+    try {
+      const response = await fetch("/api/diagram", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: `Create a ${type} diagram based on this content`,
+          context: textContent.substring(0, 2000), // Limit context size
+          type,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to generate diagram");
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.image) {
+        setDiagramState({
+          status: "ready",
+          imageBase64: result.image.base64,
+          imageMimeType: result.image.mimeType,
+        });
+      } else {
+        throw new Error("No image in response");
+      }
+    } catch (error) {
+      console.error("Diagram generation failed:", error);
+      setDiagramState({
+        status: "error",
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  }, [textContent]);
+
+  // Download the diagram
+  const downloadDiagram = useCallback(() => {
+    if (diagramState.imageBase64 && diagramState.imageMimeType) {
+      const link = document.createElement("a");
+      link.href = `data:${diagramState.imageMimeType};base64,${diagramState.imageBase64}`;
+      link.download = `diagram-${diagramType}-${Date.now()}.png`;
+      link.click();
+    }
+  }, [diagramState, diagramType]);
+
+  // Zoom controls
+  const zoomIn = () => setZoom((z) => Math.min(z + 0.25, 3));
+  const zoomOut = () => setZoom((z) => Math.max(z - 0.25, 0.5));
 
   return (
     <div className={cn("flex flex-col gap-4", className)}>
       {/* Text content - always visible immediately */}
-      <Response {...props}>{textContent}</Response>
+      <Response {...props}>{children}</Response>
 
-      {/* Diagram offer button - appears when diagram is ready */}
-      {hasDiagrams && diagramReady && (
-        <div className="flex flex-col gap-3">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={toggleDiagram}
-            className={cn(
-              "group flex items-center gap-2 self-start transition-all duration-300",
-              "border-purple-500/30 hover:border-purple-500/60",
-              "bg-gradient-to-r from-purple-500/5 to-pink-500/5",
-              "hover:from-purple-500/10 hover:to-pink-500/10",
-              showDiagram && "border-purple-500/60 from-purple-500/10 to-pink-500/10"
-            )}
-          >
-            <Sparkles className="h-4 w-4 text-purple-400 group-hover:animate-pulse" />
-            <span className="text-sm">
-              {showDiagram ? "Hide diagram" : "View diagram"}
-            </span>
-            <span className={cn(
-              "flex items-center gap-1 text-xs px-2 py-0.5 rounded-full",
-              diagramType === "workflow"
-                ? "bg-blue-500/20 text-blue-400"
-                : "bg-amber-500/20 text-amber-400"
-            )}>
-              {diagramType === "workflow" ? (
+      {/* Diagram offer - appears after reading delay */}
+      {showDiagramOffer && diagramState.status === "idle" && (
+        <div className="flex flex-col gap-3 animate-in fade-in duration-500">
+          <p className="text-sm text-muted-foreground">
+            Would you like me to generate a diagram?
+          </p>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => generateDiagram("explainer")}
+              className={cn(
+                "group flex items-center gap-2 transition-all duration-300",
+                "border-amber-500/30 hover:border-amber-500/60",
+                "bg-gradient-to-r from-amber-500/5 to-orange-500/5",
+                "hover:from-amber-500/10 hover:to-orange-500/10"
+              )}
+            >
+              <Presentation className="h-4 w-4 text-amber-400" />
+              <span className="text-sm">Explainer</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => generateDiagram("workflow")}
+              className={cn(
+                "group flex items-center gap-2 transition-all duration-300",
+                "border-blue-500/30 hover:border-blue-500/60",
+                "bg-gradient-to-r from-blue-500/5 to-cyan-500/5",
+                "hover:from-blue-500/10 hover:to-cyan-500/10"
+              )}
+            >
+              <GitBranch className="h-4 w-4 text-blue-400" />
+              <span className="text-sm">Workflow</span>
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Diagram container */}
+      {showDiagram && (
+        <div
+          className={cn(
+            "overflow-hidden transition-all duration-500 ease-out rounded-lg border",
+            "border-purple-500/30 bg-[#1e1e2e]"
+          )}
+        >
+          {/* Diagram header with controls */}
+          <div className="flex items-center justify-between p-3 border-b border-purple-500/20">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-purple-400" />
+              <span className="text-sm font-medium text-purple-300">
+                Nano Banana Pro Diagram
+              </span>
+              <span
+                className={cn(
+                  "flex items-center gap-1 text-xs px-2 py-0.5 rounded-full",
+                  diagramType === "workflow"
+                    ? "bg-blue-500/20 text-blue-400"
+                    : "bg-amber-500/20 text-amber-400"
+                )}
+              >
+                {diagramType === "workflow" ? (
+                  <>
+                    <GitBranch className="h-3 w-3" />
+                    Workflow
+                  </>
+                ) : (
+                  <>
+                    <Presentation className="h-3 w-3" />
+                    Explainer
+                  </>
+                )}
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              {diagramState.status === "ready" && (
                 <>
-                  <GitBranch className="h-3 w-3" />
-                  Workflow
-                </>
-              ) : (
-                <>
-                  <Presentation className="h-3 w-3" />
-                  Explainer
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={zoomOut}
+                    className="h-7 w-7"
+                  >
+                    <ZoomOut className="h-4 w-4" />
+                  </Button>
+                  <span className="text-xs text-muted-foreground min-w-[3rem] text-center">
+                    {Math.round(zoom * 100)}%
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={zoomIn}
+                    className="h-7 w-7"
+                  >
+                    <ZoomIn className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={downloadDiagram}
+                    className="h-7 w-7"
+                  >
+                    <Download className="h-4 w-4" />
+                  </Button>
                 </>
               )}
-            </span>
-            {showDiagram ? (
-              <ChevronUp className="h-4 w-4 text-muted-foreground" />
-            ) : (
-              <ChevronDown className="h-4 w-4 text-muted-foreground" />
-            )}
-          </Button>
-
-          {/* Diagram container - pre-rendered, shown on demand */}
-          <div
-            className={cn(
-              "overflow-hidden transition-all duration-500 ease-out",
-              showDiagram
-                ? "max-h-[800px] opacity-100"
-                : "max-h-0 opacity-0"
-            )}
-          >
-            {diagrams.map((diagram, index) => (
-              <MermaidDiagram
-                key={index}
-                code={diagram.code}
-                className={cn(
-                  "transform transition-transform duration-300",
-                  showDiagram ? "translate-y-0" : "-translate-y-4"
-                )}
-              />
-            ))}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowDiagram(false)}
+                className="h-7 w-7"
+              >
+                <ChevronUp className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
 
-          {/* Hidden pre-render container - renders diagram immediately but invisibly */}
-          {!showDiagram && (
-            <div className="hidden" aria-hidden="true">
-              {diagrams.map((diagram, index) => (
-                <MermaidDiagram key={`prerender-${index}`} code={diagram.code} />
-              ))}
-            </div>
-          )}
+          {/* Diagram content */}
+          <div className="p-4 min-h-[300px] flex items-center justify-center">
+            {diagramState.status === "generating" && (
+              <div className="flex flex-col items-center gap-3 text-muted-foreground">
+                <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
+                <p className="text-sm">Generating diagram with Nano Banana Pro...</p>
+              </div>
+            )}
+
+            {diagramState.status === "error" && (
+              <div className="flex flex-col items-center gap-3 text-red-400">
+                <p className="text-sm">Failed to generate diagram</p>
+                <p className="text-xs text-muted-foreground">{diagramState.error}</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => generateDiagram(diagramType)}
+                >
+                  Try Again
+                </Button>
+              </div>
+            )}
+
+            {diagramState.status === "ready" && diagramState.imageBase64 && (
+              <div
+                className="overflow-auto max-w-full max-h-[600px] cursor-grab active:cursor-grabbing"
+                style={{ transform: `scale(${zoom})`, transformOrigin: "center" }}
+              >
+                <img
+                  src={`data:${diagramState.imageMimeType};base64,${diagramState.imageBase64}`}
+                  alt={`${diagramType} diagram`}
+                  className="max-w-full h-auto rounded"
+                />
+              </div>
+            )}
+          </div>
         </div>
+      )}
+
+      {/* Collapsed diagram indicator */}
+      {!showDiagram && diagramState.status === "ready" && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowDiagram(true)}
+          className={cn(
+            "group flex items-center gap-2 self-start transition-all duration-300",
+            "border-purple-500/30 hover:border-purple-500/60",
+            "bg-gradient-to-r from-purple-500/5 to-pink-500/5",
+            "hover:from-purple-500/10 hover:to-pink-500/10"
+          )}
+        >
+          <Sparkles className="h-4 w-4 text-purple-400 group-hover:animate-pulse" />
+          <span className="text-sm">Show diagram</span>
+          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+        </Button>
       )}
     </div>
   );
@@ -164,6 +290,12 @@ export function ResponseWithDiagram({
 
 /**
  * DiagramStyleGuide - Aesthetic standards for SIAM diagrams
+ *
+ * Using Nano Banana Pro (Gemini 3 Pro Image):
+ * - Studio-quality image generation
+ * - Accurate text rendering
+ * - Web search grounding for factual accuracy
+ * - High-resolution output (1K, 2K, 4K)
  *
  * EXPLAINER DIAGRAMS:
  * - Purpose: Visualize concepts, architectures, relationships
@@ -179,21 +311,20 @@ export function ResponseWithDiagram({
  *
  * COMMON ELEMENTS:
  * - Background: Dark (#1e1e2e) for reduced eye strain
- * - Primary: Yellow (#FACC15) - attention, highlights
+ * - Primary: Yellow (#FACC15) - Nano Banana Yellow, attention, highlights
  * - Secondary: Purple (#A855F7) - connections, relationships
  * - Tertiary: Cyan (#22D3EE) - accents, secondary paths
  * - Text: White (#FFFFFF) for maximum contrast
- * - Animations: Subtle flow animation on edges
- * - Interactivity: Zoom, pan, download, copy code
  */
 export const DIAGRAM_STYLE_GUIDE = {
+  model: "gemini-3-pro-image-preview", // Nano Banana Pro
   colors: {
-    primary: "#FACC15",      // Nano Banana Yellow
-    secondary: "#A855F7",    // Purple
-    tertiary: "#22D3EE",     // Cyan
-    background: "#1e1e2e",   // Dark Surface
-    text: "#FFFFFF",         // White
-    muted: "#E2E8F0",        // Slate
+    primary: "#FACC15", // Nano Banana Yellow
+    secondary: "#A855F7", // Purple
+    tertiary: "#22D3EE", // Cyan
+    background: "#1e1e2e", // Dark Surface
+    text: "#FFFFFF", // White
+    muted: "#E2E8F0", // Slate
   },
   types: {
     explainer: {
@@ -207,9 +338,10 @@ export const DIAGRAM_STYLE_GUIDE = {
       accent: "blue",
     },
   },
-  animations: {
-    edgeFlow: true,          // Animated dashed lines
-    nodeGlow: true,          // Hover glow effect
-    revealTransition: 500,   // ms for diagram reveal
+  features: {
+    zoomPan: true, // Interactive zoom and pan
+    download: true, // Export as image
+    highRes: true, // 1K, 2K, 4K output
+    textAccuracy: true, // Nano Banana Pro accurate text rendering
   },
 } as const;

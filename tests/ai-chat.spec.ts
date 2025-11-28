@@ -176,12 +176,15 @@ test.describe("SIAM AI Chat Interface", () => {
 
 test.describe("SIAM AI Chat Functionality", () => {
   test("should send a message and receive response", async ({ page }) => {
-    // Navigate to the app (uses baseURL from config)
+    // Navigate to the app
     await page.goto("/");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
+    await page.waitForSelector('h1:has-text("The Betabase")', { timeout: 30000 });
 
     // Make sure we're on the Chat tab
-    await page.locator('button:has-text("Chat")').click();
+    const chatTab = page.locator('button:has-text("Chat")');
+    await chatTab.waitFor({ state: "visible" });
+    await chatTab.click();
 
     // Find the chat input
     const chatInput = page.locator('textarea[placeholder*="Ask me anything"]');

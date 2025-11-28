@@ -1,371 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>North Star Three-Pillar Demo Plan</title>
+  <style>
+    /* MAC Design System - Dark Mode */
+    :root {
+      --mac-bg-primary: #0a0a0a;
+      --mac-bg-secondary: #141414;
+      --mac-bg-tertiary: #1a1a1a;
+      --mac-bg-elevated: #1f1f1f;
+      --mac-text-primary: #fafafa;
+      --mac-text-secondary: #a1a1aa;
+      --mac-text-muted: #71717a;
+      --mac-border: #27272a;
+      --mac-border-subtle: #1f1f1f;
+      --mac-accent: #3b82f6;
+      --mac-accent-hover: #2563eb;
+      --mac-success: #22c55e;
+      --mac-warning: #f59e0b;
+      --mac-error: #ef4444;
+      --mac-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --mac-font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--mac-bg-primary);
+      color: var(--mac-text-primary);
+      font-family: var(--mac-font-sans);
+      font-weight: 300;
+      line-height: 1.8;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 15px;
+    }
+
+    h1 {
+      font-weight: 500;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+      color: var(--mac-text-primary);
+    }
+
+    h2 {
+      font-weight: 400;
+      font-size: 1.4rem;
+      margin-top: 3rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--mac-border);
+      color: var(--mac-text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    h3 {
+      font-weight: 400;
+      font-size: 1.1rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: var(--mac-text-primary);
+    }
+
+    p {
+      margin-bottom: 1.25rem;
+      color: var(--mac-text-secondary);
+    }
+
+    .subtitle {
+      color: var(--mac-text-muted);
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+
+    strong {
+      font-weight: 500;
+      color: var(--mac-text-primary);
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--mac-border);
+      margin: 2.5rem 0;
+    }
+
+    /* Lists - widely spaced */
+    ul {
+      margin: 1rem 0 1.5rem 1.25rem;
+      color: var(--mac-text-secondary);
+      list-style: none;
+    }
+
+    ul li {
+      margin: 0.75rem 0;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.6em;
+      width: 4px;
+      height: 4px;
+      background: var(--mac-accent);
+      border-radius: 50%;
+    }
+
+    ol {
+      margin: 1rem 0 1.5rem 1.5rem;
+      color: var(--mac-text-secondary);
+    }
+
+    ol li {
+      margin: 0.75rem 0;
+      padding-left: 0.5rem;
+    }
+
+    /* Code blocks */
+    pre {
+      background: var(--mac-bg-secondary);
+      border: 1px solid var(--mac-border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+    }
+
+    code {
+      font-family: var(--mac-font-mono);
+      font-size: 0.85rem;
+      color: var(--mac-accent);
+    }
+
+    pre code {
+      color: var(--mac-text-secondary);
+    }
+
+    /* Inline code */
+    :not(pre) > code {
+      background: var(--mac-bg-tertiary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+
+    /* Section cards */
+    .section-card {
+      background: var(--mac-bg-secondary);
+      border: 1px solid var(--mac-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .section-card h4 {
+      font-weight: 400;
+      font-size: 1rem;
+      color: var(--mac-text-primary);
+      margin-bottom: 1rem;
+    }
+
+    /* Timing badges */
+    .timing {
+      display: inline-block;
+      background: var(--mac-bg-tertiary);
+      color: var(--mac-text-muted);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+    }
+
+    /* Checklist */
+    .checklist {
+      background: var(--mac-bg-secondary);
+      border: 1px solid var(--mac-border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+      font-family: var(--mac-font-mono);
+      font-size: 0.9rem;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      margin: 0.5rem 0;
+      color: var(--mac-text-secondary);
+    }
+
+    .checkbox {
+      width: 16px;
+      height: 16px;
+      border: 1px solid var(--mac-border);
+      border-radius: 4px;
+      margin-right: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    /* Query blocks */
+    .query-block {
+      background: var(--mac-bg-tertiary);
+      border-left: 3px solid var(--mac-accent);
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+      font-family: var(--mac-font-mono);
+      font-size: 0.9rem;
+      color: var(--mac-text-secondary);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--mac-bg-secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--mac-border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--mac-text-muted);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--mac-border);
+      color: var(--mac-text-muted);
+      font-size: 0.85rem;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
 <h1>North Star Three-Pillar Demo Plan</h1>
-<p>(Yes, &quot;North Star&quot; is a dramatically pretentious name. We&#39;re keeping it because it&#39;s funny.)</p>
+<p class="subtitle">(Yes, "North Star" is a dramatically pretentious name. We're keeping it because it's funny.)</p>
+
+<hr>
+
 <h2>What This Is</h2>
-<p>A 5-minute recorded video for colleagues showing how we&#39;ve built an integrated AI platform. Technical but casual - this is for friends who&#39;ve been doing this work as long as I have. Edited in CapCut with a vignette of me talking and text overlays for key points. No music, no fancy effects.</p>
-<p><strong>LOCAL DEV ONLY.</strong> No production. No production testing. Just localhost demo.</p>
-<p><strong>The Three Pillars:</strong></p>
+
+<p>5-minute screen recording. You using the actual app. Real data, pre-cached for speed.</p>
+
 <ul>
-<li><strong>Chat</strong>: Domain-aware AI that actually knows our systems</li>
-<li><strong>Curate</strong>: Human feedback that makes the AI smarter over time</li>
-<li><strong>Test</strong>: Self-healing tests that reduce the &quot;blast radius&quot; of UI changes (thanks IBM for that term)</li>
+  <li>Localhost dev only</li>
+  <li>No talking head - you're demonstrating, not presenting</li>
+  <li>CapCut for text overlays on key moments</li>
+  <li>Technical audience who've done this work</li>
 </ul>
+
 <hr>
-<h2>Current State (What Actually Works)</h2>
-<h3>What We Have</h3>
-<table>
-<thead>
-<tr>
-<th>Area</th>
-<th>What It Does</th>
-<th>Actual Status</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Chat</td>
-<td>RAG against Supabase vectors</td>
-<td>Working</td>
-</tr>
-<tr>
-<td>Chat</td>
-<td>Gemini embeddings + search</td>
-<td>Primary retrieval method</td>
-</tr>
-<tr>
-<td>Chat</td>
-<td>Internal metrics/introspection</td>
-<td>Replaced LangSmith with custom</td>
-</tr>
-<tr>
-<td>Curate</td>
-<td>RLHF feedback collection</td>
-<td>Functional</td>
-</tr>
-<tr>
-<td>Curate</td>
-<td>Document relevance marking</td>
-<td>Implemented</td>
-</tr>
-<tr>
-<td>Curate</td>
-<td>Permission-gated access</td>
-<td>Working</td>
-</tr>
-<tr>
-<td>Test</td>
-<td>28+ dashboard components</td>
-<td>Built</td>
-</tr>
-<tr>
-<td>Test</td>
-<td>Self-healing test proposals</td>
-<td>Working (94.2% success on heals)</td>
-</tr>
-<tr>
-<td>Test</td>
-<td>Real-time SSE updates</td>
-<td>Working</td>
-</tr>
-<tr>
-<td>Infrastructure</td>
-<td>45,399 bb_* test records</td>
-<td>Imported from Beta Base</td>
-</tr>
-</tbody></table>
-<h3>What&#39;s Still In Progress</h3>
-<table>
-<thead>
-<tr>
-<th>Gap</th>
-<th>Impact</th>
-<th>Effort</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Components not wired into main tabs</td>
-<td>Features are hidden</td>
-<td>2h</td>
-</tr>
-<tr>
-<td>No &quot;Home&quot; tab in Test Dashboard</td>
-<td>No at-a-glance view</td>
-<td>1h</td>
-</tr>
-<tr>
-<td>Self-Healing UI buried</td>
-<td>Key differentiator hidden</td>
-<td>1h</td>
-</tr>
-<tr>
-<td>Curator Queue not in Curate tab</td>
-<td>Workflow invisible</td>
-<td>1h</td>
-</tr>
-<tr>
-<td>No feedback impact visualization</td>
-<td>Can&#39;t show the virtuous cycle</td>
-<td>3h</td>
-</tr>
-<tr>
-<td>Chat confidence display</td>
-<td>Useful for showing uncertainty</td>
-<td>2h</td>
-</tr>
-</tbody></table>
+
+<h2>Pre-Caching Strategy</h2>
+
+<p>The trick: real data, but pre-warmed so it feels instant.</p>
+
+<h3>Before You Hit Record</h3>
+
+<pre><code>npx kill-port 3000 && npm run dev</code></pre>
+
+<p><strong>Chat pre-warming:</strong></p>
+
+<ul>
+  <li>Send 2-3 AOMA queries before recording</li>
+  <li>This warms the embedding cache and Gemini connection</li>
+  <li>The exact queries you'll ask on camera should already be cached</li>
+</ul>
+
+<p><strong>Mermaid pre-generation:</strong></p>
+
+<ul>
+  <li>Ask a question that generates a diagram</li>
+  <li>Let it render fully</li>
+  <li>When you ask again on camera, it's instant</li>
+</ul>
+
+<p><strong>Test dashboard:</strong></p>
+
+<ul>
+  <li>Navigate to Test tab, let it load</li>
+  <li>Click through Self-Healing, let data populate</li>
+  <li>Everything's in memory now</li>
+</ul>
+
 <hr>
-<h2>The Demo Structure</h2>
-<h3>Format: ~5 Minute Recorded Video</h3>
-<p>A quick screen recording for colleagues. Technical but casual - this is for friends who&#39;ve been doing this work as long as I have. Shot with a vignette of myself talking, text overlays when things become important, edited in CapCut. No music, no fancy effects. Recording localhost only.</p>
-<p><strong>Recording setup:</strong></p>
-<ul>
-<li>Screen capture of the app</li>
-<li>Small picture-in-picture of me talking (optional)</li>
-<li>Text overlays for key points</li>
-<li>Keep it tight - under 5 minutes</li>
-</ul>
-<pre><code>0:00-0:30 - Quick intro
-  &quot;Here&#39;s what we built - three things that solve each other&quot;
 
-0:30-2:00 - Chat pillar
-  Ask a domain question, show it knows our systems
-  Show where the answer came from
+<h2>Background Mermaid Magic</h2>
 
-2:00-3:30 - Curate pillar
-  Show feedback collection
-  &quot;When it&#39;s wrong, we fix it - and it learns&quot;
+<p>The UX trick: offer the diagram while it's already rendering.</p>
 
-3:30-4:30 - Test pillar
-  Show a selector mismatch
-  Show the self-healing proposal
+<p>When chat responds:</p>
 
-4:30-5:00 - Wrap up
-  &quot;The interesting part is how they connect&quot;
-</code></pre>
-<h3>The Story Arc (for video)</h3>
-<p><strong>Opening (30 seconds):</strong>
-&quot;We built three things that solve each other - AI chat that knows our systems, feedback that makes it smarter, and tests that fix themselves. Let me show you.&quot;</p>
-<p><strong>Each pillar (1-1.5 min each):</strong></p>
-<ul>
-<li>Chat: Ask a real question, show domain knowledge, show sources</li>
-<li>Curate: Show feedback UI, explain how corrections propagate</li>
-<li>Test: Show a broken selector, show the healing proposal</li>
-</ul>
-<p><strong>Closing (30 seconds):</strong>
-&quot;The interesting part is how they connect - feedback improves retrieval, better retrieval means fewer wrong answers, test failures trigger human review. It&#39;s a loop.&quot;</p>
-<hr>
-<h2>PILLAR 1: CHAT - Domain Intelligence</h2>
-<h3>What It Actually Does</h3>
-<ul>
-<li>Single-source RAG against Supabase pgvector</li>
-<li>Gemini embeddings (moved away from OpenAI embeddings)</li>
-<li><code>UnifiedRAGOrchestrator</code> handles retrieval</li>
-<li><code>knowledgeSearchService</code> for semantic search</li>
-<li>Custom introspection (we built our own, not using LangSmith anymore)</li>
-</ul>
-<h3>Demo Points</h3>
 <ol>
-<li><p><strong>Show domain knowledge</strong>: Ask &quot;What&#39;s the AOMA 2 API authentication flow?&quot;</p>
-<ul>
-<li>Generic AI would hallucinate or give generic OAuth info</li>
-<li>Ours pulls from actual AOMA documentation</li>
-</ul>
-</li>
-<li><p><strong>Show source attribution</strong>: Where did that answer come from?</p>
-<ul>
-<li>InlineCitation component shows sources</li>
-<li>Click to see the actual retrieved chunks</li>
-</ul>
-</li>
-<li><p><strong>Show the retrieval</strong>: (optional, technical audience)</p>
-<ul>
-<li>Can show the introspection dropdown</li>
-<li>See what vectors were retrieved, similarity scores</li>
-</ul>
-</li>
+  <li>Answer appears immediately (text first)</li>
+  <li>Below the answer: "Would you like to see a diagram of this flow?"</li>
+  <li>User clicks - diagram appears instantly (was rendering in background)</li>
 </ol>
-<h3>What We&#39;re NOT Claiming</h3>
-<ul>
-<li>It&#39;s not multi-model or multi-source anymore (simplified to Supabase)</li>
-<li>It&#39;s not perfect - confidence varies</li>
-<li>The &quot;three RAG strategies&quot; mentioned in old docs are legacy</li>
-</ul>
-<hr>
-<h2>PILLAR 2: CURATE - Human-AI Collaboration</h2>
-<h3>What It Actually Does</h3>
-<ul>
-<li><code>RLHFFeedbackTab</code> collects thumbs up/down, star ratings, text corrections</li>
-<li>Document relevance toggles (green check/red X on retrieved docs)</li>
-<li>Feedback stored in Supabase for analysis</li>
-<li>Eventually feeds back into embedding quality</li>
-</ul>
-<h3>Demo Points</h3>
-<ol>
-<li><p><strong>Show the feedback mechanism</strong>:</p>
-<ul>
-<li>Submit a correction: &quot;Actually, AOMA 2 uses Cognito, not generic OAuth&quot;</li>
-<li>Show it being captured</li>
-</ul>
-</li>
-<li><p><strong>Show the curator queue</strong> (if wired up):</p>
-<ul>
-<li>Items needing review</li>
-<li>Approve/reject workflow</li>
-</ul>
-</li>
-<li><p><strong>Explain the impact</strong> (even if we can&#39;t visualize it yet):</p>
-<ul>
-<li>&quot;One expert correction can improve answers for thousands of similar queries&quot;</li>
-<li>This is the RLHF principle - human feedback at scale</li>
-</ul>
-</li>
-</ol>
-<h3>The Honest Pitch</h3>
-<blockquote>
-<p>&quot;This is where we&#39;re early. The feedback loop isn&#39;t fully closed yet - corrections are captured but not automatically retraining. That&#39;s the vision: every correction makes the system smarter.&quot;</p>
-</blockquote>
-<hr>
-<h2>PILLAR 3: TEST - Reducing the Blast Radius</h2>
-<h3>What It Actually Does</h3>
-<ul>
-<li><code>SelfHealingTestViewer</code> shows proposed fixes</li>
-<li>When a selector breaks, AI proposes alternatives</li>
-<li>94.2% success rate on healing attempts (1,175/1,247)</li>
-<li>Tiered approach: auto-heal obvious fixes, escalate uncertain ones</li>
-</ul>
-<h3>Demo Points</h3>
-<ol>
-<li><p><strong>Show the dashboard</strong>: Key metrics at a glance</p>
-<ul>
-<li>Pass rate, failing tests, healed tests, tests needing human review</li>
-</ul>
-</li>
-<li><p><strong>Show a self-heal in action</strong> (if possible live):</p>
-<ul>
-<li>Change a button ID in the app</li>
-<li>Show the test detecting the break</li>
-<li>Show the proposed fix: &quot;Use <code>[data-testid=&#39;login&#39;]</code> instead of <code>#login-btn</code>&quot;</li>
-</ul>
-</li>
-<li><p><strong>Explain the tiers</strong>:</p>
-<ul>
-<li><strong>Tier 1 (Auto)</strong>: High confidence, auto-apply</li>
-<li><strong>Tier 2 (Review)</strong>: Medium confidence, human approves</li>
-<li><strong>Tier 3 (Architect)</strong>: Low confidence or structural change, needs expert</li>
-</ul>
-</li>
-</ol>
-<h3>The &quot;Blast Radius&quot; Concept</h3>
-<p>From IBM&#39;s testing research: when something changes in the UI, how many tests break? That&#39;s your blast radius.</p>
-<ul>
-<li>Traditional: Change one button, 47 tests fail</li>
-<li>Self-healing: Change one button, AI fixes 44, flags 3 for review</li>
-</ul>
-<blockquote>
-<p>&quot;We&#39;re not eliminating test maintenance. We&#39;re reducing the blast radius of UI changes.&quot;</p>
-</blockquote>
-<hr>
-<h2>Technical Architecture (For the Curious)</h2>
-<pre><code>┌─────────────────────────────────────────────────────────────┐
-│                         SIAM                                │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐     │
-│  │   Chat      │    │   Curate    │    │    Test     │     │
-│  │             │    │             │    │             │     │
-│  │ Gemini LLM  │←──→│ RLHF Store  │←──→│ Self-Heal   │     │
-│  │ RAG Search  │    │ Feedback UI │    │ Proposals   │     │
-│  │ Citations   │    │ Curator Q   │    │ Tier System │     │
-│  └──────┬──────┘    └──────┬──────┘    └──────┬──────┘     │
-│         │                  │                  │             │
-│         └──────────────────┼──────────────────┘             │
-│                            │                                │
-│                    ┌───────┴───────┐                        │
-│                    │   Supabase    │                        │
-│                    │   pgvector    │                        │
-│                    │   + tables    │                        │
-│                    └───────────────┘                        │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-</code></pre>
-<h3>Key Files</h3>
-<pre><code>src/services/
-├─ knowledgeSearchService.ts    # Vector search
-├─ unifiedRAGOrchestrator.ts    # RAG coordination
-├─ aomaOrchestrator.ts          # AOMA-specific logic
-└─ modelConfig.ts               # LLM configuration
 
-src/components/
-├─ ai-elements/                 # Chat UI components
-├─ test-dashboard/              # Test pillar UI
-└─ ui/rlhf-tabs/                # Curate pillar UI
-</code></pre>
-<hr>
-<h2>Metrics Worth Mentioning</h2>
-<h3>Self-Healing Stats</h3>
+<p><strong>Why this works:</strong></p>
+
 <ul>
-<li>Success rate: 94.2% (1,175 successful heals out of 1,247 attempts)</li>
-<li>Average time to propose fix: ~2 seconds</li>
-<li>Human review queue: typically 5-10% of changes</li>
+  <li>User reads the answer (5-10 seconds)</li>
+  <li>Mermaid renders in background (3-5 seconds)</li>
+  <li>By the time they click, it's ready</li>
 </ul>
-<h3>RAG Performance</h3>
-<ul>
-<li>Retrieval latency: ~200-400ms</li>
-<li>Context window: Using Gemini&#39;s 1M token context</li>
-<li>Vector count: 45,399 embeddings from Beta Base import</li>
-</ul>
-<h3>What We Don&#39;t Have Yet</h3>
-<ul>
-<li>Full RLHF loop closure (feedback captured, not yet retraining)</li>
-<li>Automated confidence calibration</li>
-<li>Cross-pillar analytics dashboard</li>
-</ul>
+
+<p><strong>Implementation note:</strong> We may need to add this "offer" UI - check if it exists.</p>
+
 <hr>
-<h2>Follow-Up Questions (for after the video)</h2>
-<p>If people want to dig deeper after watching:</p>
-<ol>
-<li><strong>On AI Testing</strong>: &quot;How do you handle the 6% of heals that fail?&quot;</li>
-<li><strong>On Domain RAG</strong>: &quot;What&#39;s the embedding refresh cadence?&quot;</li>
-<li><strong>On RLHF</strong>: &quot;When do you actually retrain vs. just adjusting retrieval weights?&quot;</li>
-<li><strong>On Integration</strong>: &quot;Could this work with our existing test framework?&quot;</li>
-</ol>
+
+<h2>The Flow (Bullet Points for Talking)</h2>
+
+<h3>Opening <span class="timing">~30 sec</span></h3>
+
+<ul>
+  <li>Three things that solve each other</li>
+  <li>AI that knows our domain</li>
+  <li>Feedback that makes it smarter</li>
+  <li>Tests that fix themselves</li>
+  <li>Let me show you</li>
+</ul>
+
+<h3>Chat Pillar <span class="timing">~90 sec</span></h3>
+
+<div class="section-card">
+  <h4>Ask the question:</h4>
+  <ul>
+    <li>"What's the AOMA 2 authentication flow?"</li>
+    <li>Point: generic AI would hallucinate this</li>
+    <li>We have 45,000 vectors from our actual docs</li>
+  </ul>
+</div>
+
+<div class="section-card">
+  <h4>Show the answer:</h4>
+  <ul>
+    <li>Real answer from our documentation</li>
+    <li>Inline citations - click to see the source</li>
+    <li>"Based on 3 verified sources"</li>
+  </ul>
+</div>
+
+<div class="section-card">
+  <h4>Optional - show introspection:</h4>
+  <ul>
+    <li>What vectors were retrieved</li>
+    <li>Similarity scores</li>
+    <li>Only if audience cares about the technical bits</li>
+  </ul>
+</div>
+
+<div class="section-card">
+  <h4>Offer the diagram:</h4>
+  <ul>
+    <li>"Would you like to see this as a workflow?"</li>
+    <li>Click - instant Mermaid (pre-rendered)</li>
+    <li>Zoom/pan to show it's interactive</li>
+  </ul>
+</div>
+
+<h3>Curate Pillar <span class="timing">~90 sec</span></h3>
+
+<div class="section-card">
+  <h4>The feedback loop:</h4>
+  <ul>
+    <li>Point: when AI is wrong, humans correct it</li>
+    <li>Those corrections improve future answers</li>
+  </ul>
+</div>
+
+<div class="section-card">
+  <h4>Show the mechanism:</h4>
+  <ul>
+    <li>Thumbs up/down on a response</li>
+    <li>Star rating</li>
+    <li>Text correction: "Actually, it uses Cognito, not generic OAuth"</li>
+  </ul>
+</div>
+
+<div class="section-card">
+  <h4>Show the queue (if wired):</h4>
+  <ul>
+    <li>Items awaiting curator review</li>
+    <li>Approve/reject workflow</li>
+    <li>"One expert correction helps thousands of queries"</li>
+  </ul>
+</div>
+
+<div class="section-card">
+  <h4>Honest moment:</h4>
+  <ul>
+    <li>We capture corrections, not yet retraining</li>
+    <li>That's the vision - every fix makes it smarter</li>
+  </ul>
+</div>
+
+<h3>Test Pillar <span class="timing">~60 sec</span></h3>
+
+<div class="section-card">
+  <h4>The problem:</h4>
+  <ul>
+    <li>Change one button ID, 47 tests break</li>
+    <li>That's your "blast radius"</li>
+  </ul>
+</div>
+
+<div class="section-card">
+  <h4>Our approach:</h4>
+  <ul>
+    <li>AI proposes selector fixes</li>
+    <li>94.2% success rate</li>
+    <li>Tiered: auto-fix obvious ones, flag uncertain ones</li>
+  </ul>
+</div>
+
+<div class="section-card">
+  <h4>Show it:</h4>
+  <ul>
+    <li>Test dashboard with metrics</li>
+    <li>Self-healing queue</li>
+    <li>Click a proposed fix - see before/after</li>
+    <li>Approve or reject</li>
+  </ul>
+</div>
+
+<div class="section-card">
+  <h4>The tiers:</h4>
+  <ul>
+    <li>Tier 1: Auto-apply (high confidence)</li>
+    <li>Tier 2: Human review (medium)</li>
+    <li>Tier 3: Architect decision (low/structural)</li>
+  </ul>
+</div>
+
+<h3>Closing <span class="timing">~30 sec</span></h3>
+
+<ul>
+  <li>The interesting part: how they connect</li>
+  <li>Better chat means fewer corrections needed</li>
+  <li>Corrections improve retrieval</li>
+  <li>Test failures can trigger human review</li>
+  <li>It's a loop</li>
+</ul>
+
 <hr>
+
+<h2>Queries to Pre-Cache</h2>
+
+<p>Run these before recording to warm the cache:</p>
+
+<div class="query-block">What's the AOMA 2 API authentication flow?</div>
+
+<div class="query-block">How does the Offering lifecycle work in AOMA?</div>
+
+<div class="query-block">What are the main API endpoints for Asset management?</div>
+
+<p>For diagrams, ask one that definitely generates Mermaid:</p>
+
+<div class="query-block">Show me the authentication flow as a diagram</div>
+
+<hr>
+
+<h2>Text Overlays for CapCut</h2>
+
+<p>Moments to highlight with text on screen:</p>
+
+<p><strong>Chat section:</strong></p>
+<ul>
+  <li>"45,399 domain-specific vectors"</li>
+  <li>"Sources shown inline"</li>
+  <li>"Diagram generated on demand"</li>
+</ul>
+
+<p><strong>Curate section:</strong></p>
+<ul>
+  <li>"Corrections improve future answers"</li>
+  <li>"Curator queue for review"</li>
+</ul>
+
+<p><strong>Test section:</strong></p>
+<ul>
+  <li>"94.2% auto-heal success rate"</li>
+  <li>"Blast radius: reduced"</li>
+  <li>"Tier 1 / Tier 2 / Tier 3"</li>
+</ul>
+
+<hr>
+
+<h2>If Something Goes Wrong</h2>
+
+<p><strong>Chat hangs:</strong></p>
+<ul>
+  <li>Cut, re-record that segment</li>
+  <li>Or: "Let me refresh that" - shows it's real</li>
+</ul>
+
+<p><strong>Diagram slow:</strong></p>
+<ul>
+  <li>Skip it - mention "diagrams available on demand"</li>
+  <li>Or use pre-cached version</li>
+</ul>
+
+<p><strong>Test data missing:</strong></p>
+<ul>
+  <li>Use the mock data that's already there</li>
+  <li>It's realistic anyway</li>
+</ul>
+
+<p><strong>Console error:</strong></p>
+<ul>
+  <li>If it doesn't affect the UI, ignore it</li>
+  <li>If visible, cut and fix</li>
+</ul>
+
+<hr>
+
+<h2>What We're NOT Claiming</h2>
+
+<p>Be honest about these:</p>
+
+<ul>
+  <li>Not multi-model (simplified to Gemini + Supabase)</li>
+  <li>Not fully closed loop (corrections captured, not retraining)</li>
+  <li>Not perfect (confidence varies)</li>
+  <li>Not instant (but pre-caching helps)</li>
+</ul>
+
+<hr>
+
+<h2>Technical Details (If Asked)</h2>
+
+<p><strong>Stack:</strong></p>
+<ul>
+  <li>Next.js + Supabase</li>
+  <li>Gemini for embeddings + chat</li>
+  <li>pgvector for semantic search</li>
+  <li>Custom introspection (replaced LangSmith)</li>
+</ul>
+
+<p><strong>Numbers:</strong></p>
+<ul>
+  <li>45,399 vectors imported from Beta Base</li>
+  <li>RAG latency: 200-400ms</li>
+  <li>Self-healing: 94.2% (1,175/1,247)</li>
+</ul>
+
+<p><strong>Key files:</strong></p>
+<ul>
+  <li><code>knowledgeSearchService.ts</code> - vector search</li>
+  <li><code>aomaOrchestrator.ts</code> - domain logic</li>
+  <li><code>SelfHealingTestViewer.tsx</code> - test pillar UI</li>
+</ul>
+
+<hr>
+
 <h2>Pre-Recording Checklist</h2>
-<h3>Environment Setup (localhost only)</h3>
-<ul>
-<li><input disabled="" type="checkbox"> Dev server running: <code>npx kill-port 3000 &amp;&amp; npm run dev</code></li>
-<li><input disabled="" type="checkbox"> Test data seeded</li>
-<li><input disabled="" type="checkbox"> No console errors visible</li>
-<li><input disabled="" type="checkbox"> Screen recording software ready</li>
-</ul>
-<h3>Components to Capture</h3>
-<ul>
-<li><input disabled="" type="checkbox"> Chat responds to AOMA queries (record this interaction)</li>
-<li><input disabled="" type="checkbox"> Curate tab - show feedback UI</li>
-<li><input disabled="" type="checkbox"> Test Dashboard - show self-healing viewer</li>
-</ul>
-<h3>Recording Notes</h3>
-<ul>
-<li>Keep each pillar to ~1-1.5 minutes</li>
-<li>Add text overlays in CapCut for key points</li>
-<li>If something fails during recording, just re-record that segment</li>
-<li>Total video: under 5 minutes</li>
-</ul>
-<h3>NOT Doing</h3>
-<ul>
-<li>NO production deployment</li>
-<li>NO production testing</li>
-<li>NO Render monitoring</li>
-<li>NO Mailinator magic link testing</li>
-<li>Localhost dev demo ONLY</li>
-</ul>
-<hr>
-<h2>What This ISN&#39;T</h2>
-<ul>
-<li><strong>Not a product pitch</strong>: We&#39;re not selling anything</li>
-<li><strong>Not production</strong>: Localhost dev demo only</li>
-<li><strong>Not a polished marketing video</strong>: Technical, casual, for friends</li>
-<li><strong>Not long</strong>: 5 minutes max</li>
-</ul>
-<hr>
-<p><em>Last Updated: November 2025</em>
-<em>Format: 5-minute recorded video, CapCut, localhost dev demo for technical colleagues</em></p>
 
+<div class="checklist">
+  <div class="checklist-item"><div class="checkbox"></div> Dev server running on 3000</div>
+  <div class="checklist-item"><div class="checkbox"></div> Warmed cache with 3 queries</div>
+  <div class="checklist-item"><div class="checkbox"></div> Test dashboard loaded once</div>
+  <div class="checklist-item"><div class="checkbox"></div> Screen recording ready</div>
+  <div class="checklist-item"><div class="checkbox"></div> No console errors (check DevTools)</div>
+  <div class="checklist-item"><div class="checkbox"></div> CapCut ready for edit</div>
+</div>
+
+<footer>
+  <p>Format: 5-minute screen recording, real app, pre-cached for speed</p>
+  <p>Localhost only - no production</p>
+</footer>
+
+</body>
+</html>

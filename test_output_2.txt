@@ -1,0 +1,250 @@
+
+Running 9 tests using 4 workers
+
+  ✘  3 [chromium] › tests/ai-chat.spec.ts:50:7 › SIAM AI Chat Interface › should display all navigation tabs (8.1s)
+  ✘  2 [chromium] › tests/ai-chat.spec.ts:35:7 › SIAM AI Chat Interface › should load the chat interface (8.1s)
+  ✘  1 [chromium] › tests/ai-chat.spec.ts:92:7 › SIAM AI Chat Interface › should switch between tabs (30.2s)
+  ✘  5 [chromium] › tests/ai-chat.spec.ts:114:7 › SIAM AI Chat Interface › should allow typing in chat input (30.1s)
+  ✘  6 [chromium] › tests/ai-chat.spec.ts:127:7 › SIAM AI Chat Interface › should display suggestions in chat (30.1s)
+  ✘  9 [chromium] › tests/ai-chat.spec.ts:165:7 › SIAM AI Chat Interface › should display proper UI styling and animations (2.6s)
+  ✘  4 [chromium] › tests/ai-chat.spec.ts:59:7 › SIAM AI Chat Interface › should show AI chat panel in Chat tab (30.1s)
+  ✘  7 [chromium] › tests/ai-chat.spec.ts:152:7 › SIAM AI Chat Interface › should have responsive sidebar toggle (30.1s)
+  ✘  8 [chromium] › tests/ai-chat.spec.ts:181:7 › SIAM AI Chat Functionality › should send a message and receive response (30.1s)
+
+
+  1) [chromium] › tests/ai-chat.spec.ts:35:7 › SIAM AI Chat Interface › should load the chat interface 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('main').or(locator('[data-testid="chat-interface"]'))
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('main').or(locator('[data-testid="chat-interface"]'))[22m
+
+
+      42 |     // Let's check for the presence of the chat interface instead if title is elusive
+      43 |     const chatInterface = page.locator('main').or(page.locator('[data-testid="chat-interface"]'));
+    > 44 |     await expect(chatInterface).toBeVisible();
+         |                                 ^
+      45 |
+      46 |     // Check if system status is visible
+      47 |     await expect(page.locator('text=All Systems Online')).toBeVisible();
+        at /Users/matt/Documents/projects/siam/tests/ai-chat.spec.ts:44:33
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/ai-chat-SIAM-AI-Chat-Inter-7e3c5-uld-load-the-chat-interface-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/ai-chat-SIAM-AI-Chat-Inter-7e3c5-uld-load-the-chat-interface-chromium/error-context.md
+
+  2) [chromium] › tests/ai-chat.spec.ts:50:7 › SIAM AI Chat Interface › should display all navigation tabs 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('button:has-text("Chat")')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('button:has-text("Chat")')[22m
+
+
+      50 |   test("should display all navigation tabs", async ({ page }) => {
+      51 |     // Check for all tab buttons
+    > 52 |     await expect(page.locator('button:has-text("Chat")')).toBeVisible();
+         |                                                           ^
+      53 |     await expect(page.locator('button:has-text("HUD")')).toBeVisible();
+      54 |     await expect(page.locator('button:has-text("Test")')).toBeVisible();
+      55 |     await expect(page.locator('button:has-text("Fix")')).toBeVisible();
+        at /Users/matt/Documents/projects/siam/tests/ai-chat.spec.ts:52:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/ai-chat-SIAM-AI-Chat-Inter-64928-display-all-navigation-tabs-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/ai-chat-SIAM-AI-Chat-Inter-64928-display-all-navigation-tabs-chromium/error-context.md
+
+  3) [chromium] › tests/ai-chat.spec.ts:59:7 › SIAM AI Chat Interface › should show AI chat panel in Chat tab 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('button:has-text("Chat")')[22m
+
+
+      59 |   test("should show AI chat panel in Chat tab", async ({ page }) => {
+      60 |     // Make sure we're on the Chat tab
+    > 61 |     await page.locator('button:has-text("Chat")').click();
+         |                                                   ^
+      62 |
+      63 |     // Check for chat interface elements
+      64 |     await expect(page.locator("text=SIAM Assistant")).toBeVisible();
+        at /Users/matt/Documents/projects/siam/tests/ai-chat.spec.ts:61:51
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/ai-chat-SIAM-AI-Chat-Inter-40c71-w-AI-chat-panel-in-Chat-tab-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/ai-chat-SIAM-AI-Chat-Inter-40c71-w-AI-chat-panel-in-Chat-tab-chromium/error-context.md
+
+  4) [chromium] › tests/ai-chat.spec.ts:92:7 › SIAM AI Chat Interface › should switch between tabs ─
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('button:has-text("HUD")')[22m
+
+
+      92 |   test("should switch between tabs", async ({ page }) => {
+      93 |     // Test switching to HUD tab
+    > 94 |     await page.locator('button:has-text("HUD")').click();
+         |                                                  ^
+      95 |     await page.waitForTimeout(500);
+      96 |
+      97 |     // Test switching to Test tab
+        at /Users/matt/Documents/projects/siam/tests/ai-chat.spec.ts:94:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/ai-chat-SIAM-AI-Chat-Interface-should-switch-between-tabs-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/ai-chat-SIAM-AI-Chat-Interface-should-switch-between-tabs-chromium/error-context.md
+
+  5) [chromium] › tests/ai-chat.spec.ts:114:7 › SIAM AI Chat Interface › should allow typing in chat input 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('button:has-text("Chat")')[22m
+
+
+      114 |   test("should allow typing in chat input", async ({ page }) => {
+      115 |     // Make sure we're on the Chat tab
+    > 116 |     await page.locator('button:has-text("Chat")').click();
+          |                                                   ^
+      117 |
+      118 |     // Find and interact with the chat input
+      119 |     const chatInput = page.locator('textarea[placeholder*="Ask me anything"]');
+        at /Users/matt/Documents/projects/siam/tests/ai-chat.spec.ts:116:51
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/ai-chat-SIAM-AI-Chat-Inter-5f39f--allow-typing-in-chat-input-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/ai-chat-SIAM-AI-Chat-Inter-5f39f--allow-typing-in-chat-input-chromium/error-context.md
+
+  6) [chromium] › tests/ai-chat.spec.ts:127:7 › SIAM AI Chat Interface › should display suggestions in chat 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('button:has-text("Chat")')[22m
+
+
+      127 |   test("should display suggestions in chat", async ({ page }) => {
+      128 |     // Make sure we're on the Chat tab
+    > 129 |     await page.locator('button:has-text("Chat")').click();
+          |                                                   ^
+      130 |
+      131 |     // Look for suggestion buttons
+      132 |     const suggestions = [
+        at /Users/matt/Documents/projects/siam/tests/ai-chat.spec.ts:129:51
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/ai-chat-SIAM-AI-Chat-Inter-de46a-display-suggestions-in-chat-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/ai-chat-SIAM-AI-Chat-Inter-de46a-display-suggestions-in-chat-chromium/error-context.md
+
+  7) [chromium] › tests/ai-chat.spec.ts:152:7 › SIAM AI Chat Interface › should have responsive sidebar toggle 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('button:has(svg[class*="h-4 w-4"])').last()[22m
+
+
+      155 |
+      156 |     // Click to open sidebar
+    > 157 |     await sidebarToggle.click();
+          |                         ^
+      158 |     await page.waitForTimeout(500);
+      159 |
+      160 |     // Click again to close
+        at /Users/matt/Documents/projects/siam/tests/ai-chat.spec.ts:157:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/ai-chat-SIAM-AI-Chat-Inter-38c1f-e-responsive-sidebar-toggle-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/ai-chat-SIAM-AI-Chat-Inter-38c1f-e-responsive-sidebar-toggle-chromium/error-context.md
+
+  8) [chromium] › tests/ai-chat.spec.ts:165:7 › SIAM AI Chat Interface › should display proper UI styling and animations 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: > [32m0[39m
+    Received:   [31m0[39m
+
+      166 |     // Check for glassmorphism effects
+      167 |     const glassElements = await page.locator('[class*="backdrop-blur"]').count();
+    > 168 |     expect(glassElements).toBeGreaterThan(0);
+          |                           ^
+      169 |
+      170 |     // Check for gradient backgrounds
+      171 |     const gradientElements = await page.locator('[class*="bg-gradient"]').count();
+        at /Users/matt/Documents/projects/siam/tests/ai-chat.spec.ts:168:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/ai-chat-SIAM-AI-Chat-Inter-c1f1c-r-UI-styling-and-animations-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/ai-chat-SIAM-AI-Chat-Inter-c1f1c-r-UI-styling-and-animations-chromium/error-context.md
+
+  9) [chromium] › tests/ai-chat.spec.ts:181:7 › SIAM AI Chat Functionality › should send a message and receive response 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('button:has-text("Chat")')[22m
+
+
+      185 |
+      186 |     // Make sure we're on the Chat tab
+    > 187 |     await page.locator('button:has-text("Chat")').click();
+          |                                                   ^
+      188 |
+      189 |     // Find the chat input
+      190 |     const chatInput = page.locator('textarea[placeholder*="Ask me anything"]');
+        at /Users/matt/Documents/projects/siam/tests/ai-chat.spec.ts:187:51
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/ai-chat-SIAM-AI-Chat-Funct-4049d-essage-and-receive-response-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/ai-chat-SIAM-AI-Chat-Funct-4049d-essage-and-receive-response-chromium/error-context.md
+
+  9 failed
+    [chromium] › tests/ai-chat.spec.ts:35:7 › SIAM AI Chat Interface › should load the chat interface 
+    [chromium] › tests/ai-chat.spec.ts:50:7 › SIAM AI Chat Interface › should display all navigation tabs 
+    [chromium] › tests/ai-chat.spec.ts:59:7 › SIAM AI Chat Interface › should show AI chat panel in Chat tab 
+    [chromium] › tests/ai-chat.spec.ts:92:7 › SIAM AI Chat Interface › should switch between tabs ──
+    [chromium] › tests/ai-chat.spec.ts:114:7 › SIAM AI Chat Interface › should allow typing in chat input 
+    [chromium] › tests/ai-chat.spec.ts:127:7 › SIAM AI Chat Interface › should display suggestions in chat 
+    [chromium] › tests/ai-chat.spec.ts:152:7 › SIAM AI Chat Interface › should have responsive sidebar toggle 
+    [chromium] › tests/ai-chat.spec.ts:165:7 › SIAM AI Chat Interface › should display proper UI styling and animations 
+    [chromium] › tests/ai-chat.spec.ts:181:7 › SIAM AI Chat Functionality › should send a message and receive response 
+
+[36m  Serving HTML report at http://localhost:9323. Press Ctrl+C to quit.[39m

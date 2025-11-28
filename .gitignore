@@ -145,3 +145,4 @@ node_modules 2/
 docs/supabase-aoma-analysis.json
 tmp/
 data/aoma-export.csv
+backups/

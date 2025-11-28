@@ -72,7 +72,7 @@ export const test = base.extend<{
   // Default: fail on console errors
   failOnConsoleError: [true, { option: true }],
 
-  consoleErrors: async ({ page }, use) => {
+  consoleErrors: [async ({ page }, use) => {
     const errors: ConsoleMessage[] = [];
 
     // Capture all console errors
@@ -86,7 +86,7 @@ export const test = base.extend<{
           url: page.url(),
         });
         // Always log to test output for visibility
-        console.log(`[CONSOLE ERROR] ${text}`);
+        console.log(`[CONSOLE ERROR CAPTURED] ${text}`);
       }
     });
 
@@ -105,9 +105,9 @@ export const test = base.extend<{
     });
 
     await use(errors);
-  },
+  }, { auto: true }],
 
-  networkErrors: async ({ page }, use) => {
+  networkErrors: [async ({ page }, use) => {
     const errors: NetworkError[] = [];
 
     page.on('response', response => {
@@ -124,7 +124,7 @@ export const test = base.extend<{
     });
 
     await use(errors);
-  },
+  }, { auto: true }],
 });
 
 /**

@@ -9,27 +9,27 @@ interface AuthGuardProps {
 }
 
 export function AuthGuard({ children }: AuthGuardProps) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isDevelopment, setIsDevelopment] = useState(false);
+  // Aggressively bypass in development
+  const isDev = process.env.NODE_ENV === "development";
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(isDev);
+  const [isLoading, setIsLoading] = useState(!isDev);
+  const [isDevelopment, setIsDevelopment] = useState(isDev);
   const router = useRouter();
 
   useEffect(() => {
     const checkAuth = async () => {
+      // If already authenticated (e.g. via NODE_ENV check), skip
+      if (isAuthenticated) return;
+
+      // IMMEDIATE BYPASS for localhost
+      if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+        console.log("[AuthGuard] Localhost detected - bypassing auth immediately");
+        setIsAuthenticated(true);
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        // SECURITY: Allow bypass on localhost for development only
-        const isLocalhost = typeof window !== 'undefined' && 
-          (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-        
-        setIsDevelopment(isLocalhost);
-        
-        if (isLocalhost) {
-          console.log("[AuthGuard] Development mode - bypassing auth check");
-          setIsAuthenticated(true);
-          setIsLoading(false);
-          return;
-        }
-        
         // PRODUCTION: Strict authentication required
         console.log("[AuthGuard] Production mode - enforcing authentication");
         const isAuth = await cognitoAuth.isAuthenticated();
