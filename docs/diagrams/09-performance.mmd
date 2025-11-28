@@ -1,0 +1,26 @@
+graph LR
+    subgraph "Before Fix - Threshold 0.78"
+        Q1[Query] --> E1[Embedding<br/>200ms]
+        E1 --> V1[Vector Search<br/>1.5s]
+        V1 --> R1{0 results ❌}
+        R1 --> F1[Fallback to Railway<br/>15-25s]
+        F1 --> A1[AI Response<br/>10s]
+        A1 --> T1[TOTAL: 30+ seconds 🐌]
+    end
+
+    subgraph "After Fix - Threshold 0.50"
+        Q2[Query] --> E2[Embedding<br/>200ms]
+        E2 --> V2[Vector Search<br/>1.5-2.5s]
+        V2 --> R2{5 results ✅}
+        R2 --> U2[Use Vector Context]
+        U2 --> A2[AI Response<br/>10-12s]
+        A2 --> T2[TOTAL: 14 seconds ⚡]
+        T2 --> C2[Cached: < 500ms 🚀]
+    end
+
+    style R1 fill:#ffcdd2
+    style F1 fill:#ffcdd2
+    style T1 fill:#ffcdd2
+    style R2 fill:#c8e6c9
+    style T2 fill:#c8e6c9
+    style C2 fill:#81c784

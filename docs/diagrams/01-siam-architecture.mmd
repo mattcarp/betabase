@@ -1,0 +1,54 @@
+graph TB
+    subgraph "User Layer"
+        Browser[🌐 User Browser]
+        ChatUI[💬 Chat Interface<br/>Vercel AI SDK v5]
+        Voice[🎤 Voice I/O<br/>ElevenLabs]
+    end
+
+    subgraph "Application Server - Render.com"
+        NextJS[⚡ Next.js 15.5.6<br/>thebetabase.com]
+        ChatAPI[📡 /api/chat/route.ts]
+        Auth[🔐 Auth Middleware<br/>Magic Link]
+        Cache[💾 Query Cache<br/>In-Memory]
+        Orchestrator[🎯 AOMA Orchestrator<br/>15s timeout]
+    end
+
+    subgraph "AI Services"
+        OpenAI[🤖 OpenAI GPT-4o<br/>+ o1-reasoning]
+        Embeddings[📊 text-embedding-3-small<br/>1536 dimensions]
+        ElevenLabs[🔊 ElevenLabs API<br/>Voice Synthesis]
+    end
+
+    subgraph "Data Layer"
+        Supabase[(🗄️ Supabase Postgres<br/>kfxetwuuzljhybfgmpuc)]
+        VectorTable[(📦 aoma_unified_vectors<br/>28 rows, pgvector)]
+        VectorFunc[⚙️ match_aoma_vectors()<br/>threshold: 0.50]
+        Railway[🚂 Railway MCP Server<br/>aoma-mesh-mcp]
+    end
+
+    Browser --> ChatUI
+    ChatUI --> Voice
+    ChatUI -->|POST /api/chat| NextJS
+    NextJS --> Auth
+    Auth --> ChatAPI
+    ChatAPI --> Cache
+    Cache -->|Cache Miss| Orchestrator
+
+    Orchestrator -->|Parallel Query| VectorSearch[🔍 Vector Search Service]
+    Orchestrator -->|Parallel Query| Railway
+
+    VectorSearch -->|Generate Embedding| Embeddings
+    VectorSearch -->|Query| Supabase
+    Supabase --> VectorTable
+    VectorTable --> VectorFunc
+
+    Orchestrator -->|AI Response| OpenAI
+    ChatAPI -->|Stream Response| ChatUI
+    ChatUI -->|Voice Output| ElevenLabs
+
+    style Browser fill:#e1f5ff
+    style NextJS fill:#fff3e0
+    style Supabase fill:#c8e6c9
+    style Railway fill:#ffccbc
+    style Orchestrator fill:#fff9c4
+    style OpenAI fill:#f3e5f5

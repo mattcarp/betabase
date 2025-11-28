@@ -1,160 +1,124 @@
 /**
- * usePermissions Hook
+ * Permission Management Hook
  * 
- * React hook for checking user permissions and roles
- * Part of the Advanced RLHF RAG Implementation - RBAC System
+ * Provides Role-Based Access Control (RBAC) for RLHF and curation features.
+ * Integrates with Supabase user_roles and role_permissions tables.
  */
 
-"use client";
-
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  hasPermission as checkPermission,
-  getUserRole as fetchUserRole,
-  getUserRoleRecord,
-  hasAnyPermission as checkAnyPermission,
-  hasAllPermissions as checkAllPermissions,
-  type UserRole,
-  type Permission,
-  type UserRoleRecord,
-} from "../lib/permissions";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export interface UsePermissionsResult {
-  userRole: UserRole | null;
-  userRoleRecord: UserRoleRecord | null;
+export type Permission = 
+  | "rlhf_feedback"
+  | "rlhf_view_insights"
+  | "rlhf_view_dashboard"
+  | "curate_documents"
+  | "manage_users"
+  | "admin";
+
+export interface PermissionCheckResult {
   hasPermission: (permission: Permission) => boolean;
   hasAnyPermission: (permissions: Permission[]) => boolean;
   hasAllPermissions: (permissions: Permission[]) => boolean;
-  isAdmin: boolean;
-  isCurator: boolean;
-  isViewer: boolean;
+  userRole: string | null;
   loading: boolean;
-  error: string | null;
-  refresh: () => Promise<void>;
+  error: Error | null;
 }
 
 /**
- * Hook to check user permissions
- * @param userEmail - Email of the user to check permissions for
+ * Hook to check user permissions based on their role
  */
-export function usePermissions(userEmail?: string): UsePermissionsResult {
-  const [userRole, setUserRole] = useState<UserRole | null>(null);
-  const [userRoleRecord, setUserRoleRecord] = useState<UserRoleRecord | null>(null);
+export function usePermissions(userEmail?: string): PermissionCheckResult {
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [permissions, setPermissions] = useState<Set<Permission>>(new Set());
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
-  // Fetch user role and permissions
-  const fetchPermissions = useCallback(async (email: string) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      // Fetch role
-      const role = await fetchUserRole(email);
-      setUserRole(role);
-
-      // Fetch full role record
-      const record = await getUserRoleRecord(email);
-      setUserRoleRecord(record);
-
-      // Fetch all possible permissions and check each one
-      if (role) {
-        const allPermissions: Permission[] = [
-          "rlhf_feedback",
-          "view_analytics",
-          "manage_vectors",
-          "manage_users",
-        ];
-
-        const permissionResults = await Promise.all(
-          allPermissions.map(async (permission) => ({
-            permission,
-            hasAccess: await checkPermission(email, permission),
-          }))
-        );
-
-        const userPermissions = new Set<Permission>(
-          permissionResults
-            .filter((result) => result.hasAccess)
-            .map((result) => result.permission)
-        );
-
-        setPermissions(userPermissions);
-      } else {
-        setPermissions(new Set());
-      }
-    } catch (err) {
-      console.error("Error fetching permissions:", err);
-      setError(err instanceof Error ? err.message : "Failed to fetch permissions");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Initial fetch
   useEffect(() => {
-    if (userEmail) {
-      fetchPermissions(userEmail);
-    } else {
-      setLoading(false);
-    }
-  }, [userEmail, fetchPermissions]);
+    async function loadPermissions() {
+      if (!userEmail) {
+        setLoading(false);
+        return;
+      }
 
-  // Permission check functions
+      try {
+        const supabase = createClientComponentClient();
+
+        // Get user role
+        const { data: roleData, error: roleError } = await supabase
+          .from("user_roles")
+          .select("role_name")
+          .eq("user_email", userEmail)
+          .single();
+
+        if (roleError) {
+          console.warn("No role found for user:", userEmail);
+          setLoading(false);
+          return;
+        }
+
+        setUserRole(roleData.role_name);
+
+        // Get permissions for this role
+        const { data: permData, error: permError } = await supabase
+          .from("role_permissions")
+          .select("permission_name")
+          .eq("role_name", roleData.role_name);
+
+        if (permError) {
+          throw permError;
+        }
+
+        const permSet = new Set<Permission>(
+          permData.map((p) => p.permission_name as Permission)
+        );
+        setPermissions(permSet);
+      } catch (err) {
+        console.error("Error loading permissions:", err);
+        setError(err instanceof Error ? err : new Error("Unknown error"));
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadPermissions();
+  }, [userEmail]);
+
   const hasPermission = useCallback(
     (permission: Permission): boolean => {
-      return permissions.has(permission);
+      return permissions.has(permission) || permissions.has("admin");
     },
     [permissions]
   );
 
   const hasAnyPermission = useCallback(
-    (permissionsToCheck: Permission[]): boolean => {
-      return permissionsToCheck.some((permission) => permissions.has(permission));
+    (perms: Permission[]): boolean => {
+      return perms.some((p) => hasPermission(p));
     },
-    [permissions]
+    [hasPermission]
   );
 
   const hasAllPermissions = useCallback(
-    (permissionsToCheck: Permission[]): boolean => {
-      return permissionsToCheck.every((permission) => permissions.has(permission));
+    (perms: Permission[]): boolean => {
+      return perms.every((p) => hasPermission(p));
     },
-    [permissions]
+    [hasPermission]
   );
 
-  // Role shortcuts
-  const isAdmin = userRole === "admin";
-  const isCurator = userRole === "curator";
-  const isViewer = userRole === "viewer";
-
-  // Refresh function
-  const refresh = useCallback(async () => {
-    if (userEmail) {
-      await fetchPermissions(userEmail);
-    }
-  }, [userEmail, fetchPermissions]);
-
   return {
-    userRole,
-    userRoleRecord,
     hasPermission,
     hasAnyPermission,
     hasAllPermissions,
-    isAdmin,
-    isCurator,
-    isViewer,
+    userRole,
     loading,
     error,
-    refresh,
   };
 }
 
 /**
- * Permission Guard Component
- * Wraps children and only renders if user has required permission
+ * Component wrapper for permission-based rendering
  */
-export interface PermissionGuardProps {
+interface PermissionGuardProps {
   children: React.ReactNode;
   permission?: Permission;
   anyOf?: Permission[];
@@ -194,4 +158,3 @@ export function PermissionGuard({
 
   return <>{children}</>;
 }
-

@@ -287,6 +287,30 @@ export class SessionStateManager {
   }
 
   /**
+   * Add a query to history (start of turn)
+   */
+  async addToHistory(sessionId: string, data: { query: string; timestamp: string; userId?: string }): Promise<void> {
+    this.getOrCreateSession(sessionId, {
+      organization: 'sony-music',
+      division: 'mso',
+      app_under_test: 'siam',
+      userEmail: data.userId,
+      startedAt: data.timestamp,
+      lastActivityAt: data.timestamp
+    });
+  }
+
+  /**
+   * Record a successful retrieval
+   */
+  async recordSuccessfulRetrieval(sessionId: string, data: { query: string; documents: any[]; confidence: number }): Promise<void> {
+    const session = this.sessions.get(sessionId);
+    if (session) {
+      console.log(`[SessionStateManager] Recorded retrieval for ${sessionId}: ${data.documents.length} docs, confidence ${data.confidence}`);
+    }
+  }
+
+  /**
    * Get session count
    */
   getSessionCount(): number {

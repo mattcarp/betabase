@@ -1,0 +1,73 @@
+graph TB
+    subgraph "MCP Clients"
+        Claude[🤖 Claude Desktop]
+        VSCode[💻 VS Code]
+        SIAM[🌐 SIAM/Betabase]
+    end
+
+    subgraph "Railway Deployment"
+        Health[🏥 /health endpoint]
+        MCPServer[⚙️ AOMA Mesh MCP Server<br/>v2.7.0]
+        HTTPBridge[🌉 HTTP Bridge<br/>REST → MCP]
+    end
+
+    subgraph "MCP Tools"
+        AomaKnowledge[📚 aoma-knowledge.tool.ts<br/>OpenAI Assistant API]
+        JiraSearch[🎫 jira-search.tool.ts<br/>Vector + Text Search]
+        GitSearch[🔍 git-search.tool.ts<br/>Semantic Search]
+        CodeSearch[💻 code-search.tool.ts<br/>Vector Search]
+        DevContext[🛠️ development-context.tool.ts<br/>Analysis]
+        SwarmAnalysis[🐝 swarm-analysis.tool.ts<br/>Cross-Vector Intelligence]
+    end
+
+    subgraph "Services"
+        Langchain[🔗 LangChain Orchestrator]
+        OpenAIService[🤖 OpenAI Service]
+        SupabaseService[🗄️ Supabase Service]
+    end
+
+    subgraph "Data Sources"
+        Supabase[(🗄️ Supabase Postgres)]
+        JiraTickets[(🎫 jira_tickets<br/>6,554+ tickets)]
+        JiraEmbed[(📊 jira_ticket_embeddings<br/>Vector Embeddings)]
+        GitCommits[(📝 git_commits)]
+        CodeFiles[(📄 code_files)]
+        GitFileEmbed[(📊 git_file_embeddings)]
+        OpenAIAssist[🤖 OpenAI Assistant<br/>AOMA Knowledge Base]
+    end
+
+    Claude -->|stdio| MCPServer
+    VSCode -->|stdio| MCPServer
+    SIAM -->|HTTP REST| HTTPBridge
+    HTTPBridge --> MCPServer
+
+    MCPServer --> Health
+
+    MCPServer --> AomaKnowledge
+    MCPServer --> JiraSearch
+    MCPServer --> GitSearch
+    MCPServer --> CodeSearch
+    MCPServer --> DevContext
+    MCPServer --> SwarmAnalysis
+
+    AomaKnowledge --> OpenAIService
+    JiraSearch --> Langchain
+    GitSearch --> SupabaseService
+    CodeSearch --> SupabaseService
+    DevContext --> Langchain
+    SwarmAnalysis --> Langchain
+
+    Langchain --> SupabaseService
+    OpenAIService --> OpenAIAssist
+    SupabaseService --> Supabase
+
+    Supabase --> JiraTickets
+    Supabase --> JiraEmbed
+    Supabase --> GitCommits
+    Supabase --> CodeFiles
+    Supabase --> GitFileEmbed
+
+    style MCPServer fill:#ffccbc
+    style Supabase fill:#c8e6c9
+    style Langchain fill:#fff9c4
+    style OpenAIAssist fill:#f3e5f5

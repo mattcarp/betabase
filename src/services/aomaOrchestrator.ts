@@ -580,11 +580,25 @@ export class AOMAOrchestrator {
 
       console.log(`✅ Supabase returned ${vectorResult.sources.length} results`);
 
+      // Map VectorSearchResult to AOMASource
+      const aomaSources: AOMASource[] = vectorResult.sources.map(s => ({
+        type: (s.source_type === 'email' ? 'outlook' : 
+               s.source_type === 'metrics' ? 'system' : 
+               s.source_type === 'knowledge' ? 'knowledge_base' : 
+               s.source_type === 'firecrawl' ? 'knowledge_base' :
+               s.source_type) as any,
+        title: s.metadata?.title || s.source_id || 'Unknown Source',
+        url: s.metadata?.url,
+        description: s.content.substring(0, 100) + '...',
+        relevance: s.similarity,
+        timestamp: s.created_at
+      }));
+
       // Update progress stream
       aomaProgressStream.completeService(
         "vector_store",
         vectorResult.sources.length,
-        vectorResult.sources
+        aomaSources
       );
 
       aomaProgressStream.completeQuery();
@@ -646,7 +660,12 @@ export class AOMAOrchestrator {
     }
 
     // For multi-tool responses, combine intelligently
-    const combined = {
+    const combined: {
+      response: string;
+      sources: any[];
+      formattedSources: any[];
+      metadata: any;
+    } = {
       response: "",
       sources: [],
       formattedSources: [],
@@ -659,7 +678,8 @@ export class AOMAOrchestrator {
 
     // Combine responses from different tools
     let sourceIndex = 0;
-    for (const [tool, result] of Object.entries(results)) {
+    for (const [tool, res] of Object.entries(results)) {
+      const result = res as any;
       if (result && typeof result === "object") {
         if (result.error) {
           continue; // Skip failed tools
