@@ -1,0 +1,526 @@
+<h1>Three-Day Northstar Demo Sprint</h1>
+<h2>Making All Three Pillars Demo-Ready</h2>
+<p><strong>Start</strong>: Friday, November 28, 2025 at 09:00 CET (Rome)
+<strong>End</strong>: Monday, December 1, 2025 at 09:00 CET (Rome)
+<strong>Duration</strong>: 72 hours
+<strong>Team</strong>: Matt + Claude
+<strong>Goal</strong>: Working demo for all three pillars</p>
+<p><strong>IMPORTANT: Dev testing only. No production deployment or testing this sprint.</strong>
+(Production testing takes forever, breaks constantly, and isn&#39;t the point of this demo anyway.)</p>
+<hr>
+<h2>Sprint Schedule</h2>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>Date</th>
+<th>Focus</th>
+<th>Hours</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Day 1</td>
+<td>Fri Nov 28</td>
+<td>Pillar 3 (Testing) + Integration</td>
+<td>09:00-21:00 CET</td>
+</tr>
+<tr>
+<td>Day 2</td>
+<td>Sat Nov 29</td>
+<td>Pillar 2 (Curate) + Pillar 1 (Chat)</td>
+<td>09:00-21:00 CET</td>
+</tr>
+<tr>
+<td>Day 3</td>
+<td>Sun Nov 30</td>
+<td>Polish, Testing, Production Deploy</td>
+<td>09:00-21:00 CET</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Current State Assessment (What We Actually Have)</h2>
+<h3>Already Built (Good News!)</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Status</th>
+<th>File</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SelfHealingTestViewer</td>
+<td>Complete with mock data</td>
+<td><code>src/components/test-dashboard/SelfHealingTestViewer.tsx</code></td>
+</tr>
+<tr>
+<td>CuratorQueue</td>
+<td>Complete with mock data</td>
+<td><code>src/components/ui/CuratorQueue.tsx</code></td>
+</tr>
+<tr>
+<td>TestHomeDashboard</td>
+<td>Complete with mock data</td>
+<td><code>src/components/test-dashboard/TestHomeDashboard.tsx</code></td>
+</tr>
+<tr>
+<td>RLHFFeedbackTab</td>
+<td>Complete with feedback forms</td>
+<td><code>src/components/ui/rlhf-tabs/RLHFFeedbackTab.tsx</code></td>
+</tr>
+<tr>
+<td>TestDashboard</td>
+<td>Working with 11+ tabs</td>
+<td><code>src/components/test-dashboard/TestDashboard.tsx</code></td>
+</tr>
+<tr>
+<td>InlineCitation</td>
+<td>Built</td>
+<td><code>src/components/ai-elements/inline-citation.tsx</code></td>
+</tr>
+<tr>
+<td>Mermaid diagrams</td>
+<td>Working</td>
+<td>Already integrated</td>
+</tr>
+<tr>
+<td>LangSmith traces</td>
+<td>Working</td>
+<td>Already integrated</td>
+</tr>
+</tbody></table>
+<h3>Critical Gaps (What We Need)</h3>
+<table>
+<thead>
+<tr>
+<th>Gap</th>
+<th>Pillar</th>
+<th>Effort</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Components not wired into main tabs</td>
+<td>All</td>
+<td>2h</td>
+<td>Demo-breaking</td>
+</tr>
+<tr>
+<td>No &quot;Home&quot; tab in Test Dashboard</td>
+<td>Test</td>
+<td>1h</td>
+<td>Navigation flow</td>
+</tr>
+<tr>
+<td>Self-Healing not in Test tabs</td>
+<td>Test</td>
+<td>1h</td>
+<td>Feature hidden</td>
+</tr>
+<tr>
+<td>Curator Queue not in Curate tab</td>
+<td>Curate</td>
+<td>1h</td>
+<td>Feature hidden</td>
+</tr>
+<tr>
+<td>No feedback impact visualization</td>
+<td>Curate</td>
+<td>3h</td>
+<td>&quot;Wow&quot; moment</td>
+</tr>
+<tr>
+<td>Chat confidence display</td>
+<td>Chat</td>
+<td>2h</td>
+<td>Demo polish</td>
+</tr>
+<tr>
+<td>Before/After comparison</td>
+<td>Chat</td>
+<td>2h</td>
+<td>Demo polish</td>
+</tr>
+<tr>
+<td>Real data connection (optional)</td>
+<td>All</td>
+<td>4h</td>
+<td>Nice to have</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Day 1: Friday, November 28 - Integration &amp; Pillar 3 (Testing)</h2>
+<h3>Morning Session (09:00-13:00 CET)</h3>
+<h4>09:00-11:00: Wire Up Test Dashboard Tabs</h4>
+<p><strong>Priority</strong>: Get all built components visible in the UI</p>
+<ul>
+<li><input disabled="" type="checkbox"> Add &quot;Home&quot; tab to TestDashboard.tsx using TestHomeDashboard</li>
+<li><input disabled="" type="checkbox"> Add &quot;Self-Healing&quot; tab to TestDashboard.tsx using SelfHealingTestViewer</li>
+<li><input disabled="" type="checkbox"> Verify navigation between tabs works</li>
+<li><input disabled="" type="checkbox"> Test that TestFilters component works</li>
+<li><input disabled="" type="checkbox"> Screenshot: Test Dashboard with all tabs visible</li>
+</ul>
+<pre><code class="language-typescript">// In TestDashboard.tsx, add these imports:
+import { TestHomeDashboard } from &quot;./TestHomeDashboard&quot;;
+import { SelfHealingTestViewer } from &quot;./SelfHealingTestViewer&quot;;
+
+// Add to TabsList:
+&lt;TabsTrigger value=&quot;home&quot;&gt;Home&lt;/TabsTrigger&gt;
+&lt;TabsTrigger value=&quot;self-healing&quot;&gt;Self-Healing&lt;/TabsTrigger&gt;
+
+// Add TabsContent:
+&lt;TabsContent value=&quot;home&quot;&gt;
+  &lt;TestHomeDashboard onNavigate={setActiveView} testStats={testStats} /&gt;
+&lt;/TabsContent&gt;
+&lt;TabsContent value=&quot;self-healing&quot;&gt;
+  &lt;SelfHealingTestViewer /&gt;
+&lt;/TabsContent&gt;
+</code></pre>
+<h4>11:00-13:00: Enhance Self-Healing UI</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Add &quot;Tier&quot; badges (Tier 1: Auto, Tier 2: Review, Tier 3: Architect)</li>
+<li><input disabled="" type="checkbox"> Add &quot;Impact&quot; callout: &quot;This fix will repair 4 similar tests&quot;</li>
+<li><input disabled="" type="checkbox"> Improve the workflow visualization with better animations</li>
+<li><input disabled="" type="checkbox"> Add history tab content (even if mock)</li>
+<li><input disabled="" type="checkbox"> Screenshot: Self-healing workflow detail view</li>
+</ul>
+<h3>Lunch Break (13:00-14:00 CET)</h3>
+<h3>Afternoon Session (14:00-18:00 CET)</h3>
+<h4>14:00-16:00: Test Pillar Playwright Tests</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Write <code>tests/e2e/demo/test-pillar.spec.ts</code></li>
+<li><input disabled="" type="checkbox"> Test navigation to Test tab</li>
+<li><input disabled="" type="checkbox"> Test Home dashboard renders</li>
+<li><input disabled="" type="checkbox"> Test Self-Healing tab renders</li>
+<li><input disabled="" type="checkbox"> Test clicking a healing item shows details</li>
+<li><input disabled="" type="checkbox"> Test approve/reject buttons work</li>
+</ul>
+<h4>16:00-18:00: Test Dashboard Polish</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Ensure all test dashboard tabs work smoothly</li>
+<li><input disabled="" type="checkbox"> Fix any console errors</li>
+<li><input disabled="" type="checkbox"> Add loading states where missing</li>
+<li><input disabled="" type="checkbox"> Verify dark mode compatibility</li>
+<li><input disabled="" type="checkbox"> Run Playwright tests and fix failures</li>
+</ul>
+<h3>Evening Session (18:00-21:00 CET)</h3>
+<h4>18:00-21:00: Testing &amp; Documentation</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Run full Playwright suite for Test pillar</li>
+<li><input disabled="" type="checkbox"> Fix any remaining console errors</li>
+<li><input disabled="" type="checkbox"> Take screenshots of Test pillar</li>
+<li><input disabled="" type="checkbox"> Document any remaining issues</li>
+<li><input disabled="" type="checkbox"> Prepare for Day 2 Curate work</li>
+</ul>
+<hr>
+<h2>Day 2: Saturday, November 29 - Pillar 2 (Curate) &amp; Pillar 1 (Chat)</h2>
+<h3>Morning Session (09:00-13:00 CET)</h3>
+<h4>09:00-11:00: Pillar 2 - Curate Tab Integration</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Add CuratorQueue to main Curate tab (or create dedicated tab)</li>
+<li><input disabled="" type="checkbox"> Wire RLHFFeedbackTab into the Curate experience</li>
+<li><input disabled="" type="checkbox"> Ensure both components are accessible from main nav</li>
+<li><input disabled="" type="checkbox"> Test the approval workflow works</li>
+</ul>
+<h4>11:00-13:00: Feedback Impact Visualization (NEW)</h4>
+<p>Create <code>src/components/ui/FeedbackImpactCard.tsx</code>:</p>
+<pre><code class="language-typescript">// Shows: &quot;Your 23 corrections created 89 test cases&quot;
+// Shows: &quot;Accuracy improved 11% this month&quot;
+// Shows: individual correction -&gt; test case mapping
+</code></pre>
+<ul>
+<li><input disabled="" type="checkbox"> Build FeedbackImpactCard component</li>
+<li><input disabled="" type="checkbox"> Add to Curate tab</li>
+<li><input disabled="" type="checkbox"> Wire in mock data showing virtuous cycle</li>
+<li><input disabled="" type="checkbox"> Screenshot: Impact visualization</li>
+</ul>
+<h3>Lunch Break (13:00-14:00 CET)</h3>
+<h3>Afternoon Session (14:00-18:00 CET)</h3>
+<h4>14:00-16:00: Curate Pillar Playwright Tests</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Write <code>tests/e2e/demo/curate-pillar.spec.ts</code></li>
+<li><input disabled="" type="checkbox"> Test navigation to Curate tab</li>
+<li><input disabled="" type="checkbox"> Test CuratorQueue renders</li>
+<li><input disabled="" type="checkbox"> Test clicking queue item shows details</li>
+<li><input disabled="" type="checkbox"> Test approve/reject buttons work</li>
+<li><input disabled="" type="checkbox"> Test feedback submission works</li>
+</ul>
+<h4>16:00-18:00: Pillar 1 - Chat Confidence Display</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Add confidence score badge to AI responses</li>
+<li><input disabled="" type="checkbox"> Show &quot;High Confidence: 94%&quot; or &quot;Needs Review: 68%&quot;</li>
+<li><input disabled="" type="checkbox"> Color code: Green (&gt;85%), Amber (70-85%), Red (&lt;70%)</li>
+<li><input disabled="" type="checkbox"> Add to the Response component</li>
+</ul>
+<h3>Evening Session (18:00-21:00 CET)</h3>
+<h4>18:00-20:00: Source Attribution Enhancement</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Ensure InlineCitation is working in chat responses</li>
+<li><input disabled="" type="checkbox"> Add source count badge: &quot;Based on 3 verified sources&quot;</li>
+<li><input disabled="" type="checkbox"> Ensure citations expand on click</li>
+<li><input disabled="" type="checkbox"> Test with real AOMA queries</li>
+</ul>
+<h4>20:00-21:00: Chat Pillar Playwright Test</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Write <code>tests/e2e/demo/chat-pillar.spec.ts</code></li>
+<li><input disabled="" type="checkbox"> Test sending an AOMA query</li>
+<li><input disabled="" type="checkbox"> Test response shows citations</li>
+<li><input disabled="" type="checkbox"> Test Mermaid diagram renders</li>
+<li><input disabled="" type="checkbox"> Test reasoning bubbles expand</li>
+</ul>
+<hr>
+<h2>Day 3: Sunday, November 30 - Polish &amp; Production Deploy</h2>
+<h3>Morning Session (09:00-13:00 CET)</h3>
+<h4>09:00-11:00: Before/After Demo Setup</h4>
+<p>Create a simple comparison component:</p>
+<pre><code class="language-typescript">// src/components/ai/BeforeAfterDemo.tsx
+// Left panel: &quot;Generic AI&quot; response (hardcoded)
+// Right panel: SIAM response with sources
+</code></pre>
+<ul>
+<li><input disabled="" type="checkbox"> Build comparison component</li>
+<li><input disabled="" type="checkbox"> Add toggle to enable/disable in demo</li>
+<li><input disabled="" type="checkbox"> Screenshot: Side-by-side comparison</li>
+</ul>
+<h4>11:00-13:00: Full Demo Flow Test</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Run through entire 3-pillar demo manually</li>
+<li><input disabled="" type="checkbox"> Time each section:<ul>
+<li>Chat: ~2 minutes</li>
+<li>Curate: ~2 minutes</li>
+<li>Test: ~2 minutes</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> Note any awkward transitions</li>
+<li><input disabled="" type="checkbox"> Fix blocking issues</li>
+</ul>
+<h3>Lunch Break (13:00-14:00 CET)</h3>
+<h3>Afternoon Session (14:00-18:00 CET)</h3>
+<h4>14:00-16:00: Polish &amp; Error Handling</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Fix any console errors</li>
+<li><input disabled="" type="checkbox"> Add loading states where missing</li>
+<li><input disabled="" type="checkbox"> Add empty states where needed</li>
+<li><input disabled="" type="checkbox"> Ensure dark mode works throughout</li>
+<li><input disabled="" type="checkbox"> Test on different viewport sizes</li>
+<li><input disabled="" type="checkbox"> Fix progress indicator positioning</li>
+</ul>
+<h4>16:00-18:00: Final Smoke Test &amp; Documentation</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Run all Playwright tests</li>
+<li><input disabled="" type="checkbox"> Update NORTHSTAR-STATUS.md with accurate status</li>
+<li><input disabled="" type="checkbox"> Take final screenshots</li>
+<li><input disabled="" type="checkbox"> Record 30-second video of each pillar</li>
+<li><input disabled="" type="checkbox"> Create DEMO-READY-CHECKLIST.md</li>
+</ul>
+<h3>Evening Session (18:00-21:00 CET)</h3>
+<h4>18:00-21:00: Final Dev Testing &amp; Wrap-Up</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Run full Playwright suite on localhost</li>
+<li><input disabled="" type="checkbox"> Manual walkthrough of all three pillars</li>
+<li><input disabled="" type="checkbox"> Fix any remaining console errors</li>
+<li><input disabled="" type="checkbox"> Commit all changes to feature branch</li>
+<li><input disabled="" type="checkbox"> Document what works, what doesn&#39;t</li>
+<li><input disabled="" type="checkbox"> Prep notes for demo day</li>
+</ul>
+<p><strong>NOT doing</strong>: Production deployment, Render monitoring, Mailinator magic link testing.
+This is a dev demo. We&#39;ll worry about prod later.</p>
+<hr>
+<h2>Success Criteria Checklist</h2>
+<h3>Pillar 1: Chat</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Chat sends queries and receives responses</li>
+<li><input disabled="" type="checkbox"> Mermaid diagrams render with zoom/pan</li>
+<li><input disabled="" type="checkbox"> Inline citations appear and expand</li>
+<li><input disabled="" type="checkbox"> Confidence score visible on responses</li>
+<li><input disabled="" type="checkbox"> LangSmith trace link works</li>
+<li><input disabled="" type="checkbox"> No console errors</li>
+</ul>
+<h3>Pillar 2: Curate</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Curator Queue visible and populated</li>
+<li><input disabled="" type="checkbox"> Can select queue items</li>
+<li><input disabled="" type="checkbox"> Approve/Reject buttons work</li>
+<li><input disabled="" type="checkbox"> Feedback impact visualization shows</li>
+<li><input disabled="" type="checkbox"> RLHFFeedbackTab accessible</li>
+<li><input disabled="" type="checkbox"> No console errors</li>
+</ul>
+<h3>Pillar 3: Test</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Home Dashboard shows key metrics</li>
+<li><input disabled="" type="checkbox"> Self-Healing tab shows healing queue</li>
+<li><input disabled="" type="checkbox"> Can select healing items</li>
+<li><input disabled="" type="checkbox"> Workflow visualization renders</li>
+<li><input disabled="" type="checkbox"> Approve/Reject healing works</li>
+<li><input disabled="" type="checkbox"> No console errors</li>
+</ul>
+<h3>Overall</h3>
+<ul>
+<li><input disabled="" type="checkbox"> All three tabs accessible from main nav</li>
+<li><input disabled="" type="checkbox"> Navigation between pillars smooth</li>
+<li><input disabled="" type="checkbox"> Dark mode works throughout</li>
+<li><input disabled="" type="checkbox"> No console errors anywhere</li>
+<li><input disabled="" type="checkbox"> Playwright tests pass on localhost</li>
+<li><input disabled="" type="checkbox"> Demo runs smoothly on dev server</li>
+</ul>
+<hr>
+<h2>Mock Data Strategy</h2>
+<p>We will use the existing mock data in components for the demo. This is intentional:</p>
+<ol>
+<li><strong>Mock data is predictable</strong> - Demo won&#39;t fail due to API issues</li>
+<li><strong>Mock data is realistic</strong> - Already crafted to show good demo scenarios</li>
+<li><strong>Components are structured for real data</strong> - Easy to swap in later</li>
+</ol>
+<p>Future work (post-demo):</p>
+<ul>
+<li>Connect to Supabase <code>healing_attempts</code> table</li>
+<li>Connect to Supabase <code>rlhf_feedback</code> table</li>
+<li>Add real-time subscriptions</li>
+</ul>
+<hr>
+<h2>File Changes Tracker</h2>
+<h3>Day 1 Changes</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Change Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>src/components/test-dashboard/TestDashboard.tsx</code></td>
+<td>Modify</td>
+<td>Add Home and Self-Healing tabs</td>
+</tr>
+<tr>
+<td><code>src/components/test-dashboard/SelfHealingTestViewer.tsx</code></td>
+<td>Modify</td>
+<td>Add tier badges, impact callouts</td>
+</tr>
+<tr>
+<td><code>tests/e2e/demo/test-pillar.spec.ts</code></td>
+<td>New</td>
+<td>Test pillar E2E tests</td>
+</tr>
+</tbody></table>
+<h3>Day 2 Changes</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Change Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>src/components/ui/pages/CurateTab.tsx</code></td>
+<td>Modify</td>
+<td>Integrate CuratorQueue</td>
+</tr>
+<tr>
+<td><code>src/components/ui/FeedbackImpactCard.tsx</code></td>
+<td>New</td>
+<td>Feedback impact visualization</td>
+</tr>
+<tr>
+<td><code>src/components/ai-elements/Response.tsx</code></td>
+<td>Modify</td>
+<td>Add confidence badge</td>
+</tr>
+<tr>
+<td><code>tests/e2e/demo/curate-pillar.spec.ts</code></td>
+<td>New</td>
+<td>Curate pillar E2E tests</td>
+</tr>
+<tr>
+<td><code>tests/e2e/demo/chat-pillar.spec.ts</code></td>
+<td>New</td>
+<td>Chat pillar E2E tests</td>
+</tr>
+</tbody></table>
+<h3>Day 3 Changes</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Change Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>src/components/ai/BeforeAfterDemo.tsx</code></td>
+<td>New</td>
+<td>Comparison component</td>
+</tr>
+<tr>
+<td><code>docs/demo/NORTHSTAR-STATUS.md</code></td>
+<td>Modify</td>
+<td>Update with accurate status</td>
+</tr>
+<tr>
+<td><code>docs/demo/DEMO-READY-CHECKLIST.md</code></td>
+<td>New</td>
+<td>Final checklist</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Risk Mitigation</h2>
+<h3>If We Run Out of Time</h3>
+<p><strong>Priority 1</strong> (Must have):</p>
+<ul>
+<li>Test Dashboard with Home + Self-Healing tabs working</li>
+<li>CuratorQueue visible somewhere</li>
+<li>Chat working with basic citations</li>
+</ul>
+<p><strong>Priority 2</strong> (Should have):</p>
+<ul>
+<li>Feedback Impact visualization</li>
+<li>Confidence scores on chat</li>
+<li>Tier badges on self-healing</li>
+</ul>
+<p><strong>Priority 3</strong> (Nice to have):</p>
+<ul>
+<li>Before/After comparison</li>
+<li>Real data connection</li>
+<li>Full Playwright test coverage</li>
+</ul>
+<h3>If Components Don&#39;t Work</h3>
+<ol>
+<li>Check for missing imports</li>
+<li>Check for TypeScript errors</li>
+<li>Check browser console</li>
+<li>Fall back to mock data</li>
+<li>Document issue and move on</li>
+</ol>
+<hr>
+<h2>Quick Commands Reference</h2>
+<pre><code class="language-bash"># Start dev server
+npx kill-port 3000 &amp;&amp; npm run dev
+
+# Run specific tests
+PLAYWRIGHT_BASE_URL=http://localhost:3000 npx playwright test tests/e2e/demo/
+
+# Run all tests
+npm run test:aoma
+
+# Check for errors
+npm run lint:quick &amp;&amp; npm run type-check
+
+# Commit to feature branch (no prod deploy)
+git acm &quot;Northstar demo: [description]&quot;
+</code></pre>
+<hr>
+<h2>Let&#39;s Go!</h2>
+<p><strong>Sprint Start</strong>: Friday, November 28, 2025 at 09:00 CET (Rome)</p>
+<p><strong>First Task</strong>: Verify dev server works and components render</p>
+<pre><code class="language-bash">npx kill-port 3000 &amp;&amp; npm run dev
+# Open http://localhost:3000
+# Navigate to Test tab
+# Verify TestDashboard renders
+</code></pre>
+<p><strong>Day 1 Goal</strong>: Test pillar fully functional with Home + Self-Healing tabs</p>
+<hr>
+<p><em>Created: November 28, 2025</em>
+<em>Sprint Duration: 72 hours</em>
+<em>Goal: Three pillars demo-ready</em></p>

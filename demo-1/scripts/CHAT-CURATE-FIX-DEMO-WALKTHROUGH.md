@@ -1,7 +1,7 @@
 # 🎯 SIAM Demo: Chat → Curate → Fix Walkthrough
-**Focus:** Technical demo for knowledgeable colleagues  
-**Duration:** ~10 minutes  
-**Features:** Chat UI, RLHF Curation, HITL with LangGraph 1.0, Multi-Tenant AOMA Knowledge
+**Focus:** Technical demo for knowledgeable colleagues
+**Duration:** ~10 minutes
+**Features:** Chat UI, RLHF Curation, Human-in-the-Loop Review, Multi-Tenant AOMA Knowledge
 
 ---
 
@@ -13,7 +13,7 @@ A Sony Music engineer needs to understand how to create a new offering in AOMA. 
 **What We Show:**
 1. **Chat Tab** - Natural language Q&A with vector search
 2. **Curate Tab** - RLHF feedback to improve responses
-3. **Fix Tab** - HITL workflow when AI needs help (LangGraph 1.0)
+3. **Fix Tab** - HITL workflow when AI needs human guidance
 
 ---
 
@@ -27,7 +27,7 @@ A Sony Music engineer needs to understand how to create a new offering in AOMA. 
 ### Application State
 - [ ] Clean browser session (no cached auth)
 - [ ] All three tabs working (Chat, Curate, Fix)
-- [ ] LangGraph breakpoints configured
+- [ ] HITL breakpoints configured (low confidence threshold)
 - [ ] Sample "fix" task in pending state
 
 ### Demo Data
@@ -141,7 +141,7 @@ What's the USM session timeout default?
 ### **Part 3: The Fix Tab (4 minutes)**
 
 #### Transition (20 seconds)
-> "Sometimes the AI gets stuck. Maybe it needs clarification, maybe it found conflicting sources, maybe the question is ambiguous. That's where Human-in-the-Loop comes in—powered by LangGraph 1.0."
+> "Sometimes the AI gets stuck. Maybe it needs clarification, maybe it found conflicting sources, maybe the question is ambiguous. That's where Human-in-the-Loop comes in—the AI pauses and asks for human guidance."
 
 **Click Fix tab**
 
@@ -159,9 +159,9 @@ What's the USM session timeout default?
 **Click on a task:**
 > "Let me open one. This user asked: 'How do I update an offering status?'"
 
-#### Show LangGraph State (1.5 minutes)
+#### Show Workflow State (1.5 minutes)
 **Open the task detail view:**
-> "Here's where LangGraph shines. We can see the entire agent state:"
+> "Here's where it gets interesting. We can see the entire workflow state:"
 
 **Point to state visualization:**
 ```json
@@ -182,8 +182,8 @@ What's the USM session timeout default?
 > "The agent found two sources with conflicting info:
 > - JIRA ticket says use the API endpoint
 > - Confluence page describes the UI workflow
-> 
-> LangGraph paused at a breakpoint and asked: 'Which one should I prioritize?'"
+>
+> The workflow paused at a breakpoint and asked: 'Which one should I prioritize?'"
 
 #### Resolve the Task (1 minute)
 **Show resolution UI:**
@@ -205,9 +205,9 @@ Recommend showing both in the response.
 
 **Click "Resolve & Continue"**
 
-#### Show Agent Continues (30 seconds)
-**Watch LangGraph resume:**
-> "Now watch—LangGraph takes our feedback and continues from the breakpoint."
+#### Show Workflow Resumes (30 seconds)
+**Watch the workflow resume:**
+> "Now watch - the system takes our feedback and continues from the breakpoint."
 
 **Show updated state:**
 ```json
@@ -220,7 +220,7 @@ Recommend showing both in the response.
 ```
 
 **Final response appears:**
-> "And here's the updated response—now it includes both methods with clear use cases. This response will be saved and used for future similar queries."
+> "And here's the updated response - now it includes both methods with clear use cases. This response will be saved and used for future similar queries."
 
 #### Show HITL Analytics (30 seconds)
 **Scroll to Fix analytics:**
@@ -238,13 +238,13 @@ Recommend showing both in the response.
 
 ### Key Takeaways
 > "So that's SIAM in action:
-> 
+>
 > **Chat:** Natural language Q&A with multi-tenant vector search. Sub-200ms responses with real citations.
-> 
+>
 > **Curate:** RLHF feedback loop. Every conversation makes the system smarter.
-> 
-> **Fix:** Human-in-the-Loop with LangGraph 1.0. AI knows when to ask for help, humans guide it, system learns.
-> 
+>
+> **Fix:** Human-in-the-Loop review. AI knows when to ask for help, humans guide it, system learns.
+>
 > **Multi-Tenant:** AOMA knowledge stays in AOMA. USM knowledge stays in USM. Complete isolation, same codebase."
 
 ### The Architecture Behind It
@@ -272,20 +272,26 @@ const results = await supabase
   });
 ```
 
-### LangGraph Breakpoint
+### HITL Breakpoint Logic
 ```typescript
 // Example: How we define HITL breakpoints
-const agent = new StateGraph({
-  // ... state definition
-})
-  .addNode('retrieve', retrieveNode)
-  .addNode('evaluate', evaluateNode)
-  .addNode('hitl', humanInTheLoopNode)  // <-- breakpoint here
-  .addNode('synthesize', synthesizeNode)
-  .addConditionalEdges('evaluate', (state) => {
-    if (state.conflictDetected) return 'hitl';  // Pause for human
-    return 'synthesize';  // Continue automatically
-  });
+async function evaluateForHITL(state: WorkflowState): Promise<WorkflowState> {
+  // Check for conditions that require human review
+  const needsHumanReview =
+    state.confidence < 0.6 ||           // Low confidence
+    state.conflictDetected ||            // Conflicting sources
+    state.retrievedDocs.length === 0;    // No relevant docs
+
+  if (needsHumanReview) {
+    return {
+      ...state,
+      step: 'awaiting_human',
+      issue: state.conflictDetected ? 'conflicting_information' : 'low_confidence'
+    };
+  }
+
+  return { ...state, step: 'synthesis' };
+}
 ```
 
 ### RLHF Feedback Storage
@@ -309,14 +315,14 @@ await supabase
 ## 📊 Demo Success Checklist
 
 After the demo, you should have shown:
-- ✅ Natural language query returning relevant AOMA results
-- ✅ Multi-tenant isolation (AOMA ≠ USM)
-- ✅ Source citations working
-- ✅ RLHF feedback workflow
-- ✅ LangGraph HITL breakpoint
-- ✅ Human resolution of ambiguous query
-- ✅ Agent resuming after human input
-- ✅ Architecture overview (ERD)
+- Natural language query returning relevant AOMA results
+- Multi-tenant isolation (AOMA != USM)
+- Source citations working
+- RLHF feedback workflow
+- HITL breakpoint triggering on low confidence/conflicts
+- Human resolution of ambiguous query
+- Workflow resuming after human input
+- Architecture overview (ERD)
 
 ---
 
@@ -338,11 +344,11 @@ After the demo, you should have shown:
 - You can manually create a test task
 - Or trigger a low-confidence query
 
-### LangGraph Won't Resume
-- Check agent state in debugger
+### Workflow Won't Resume
+- Check workflow state in debugger
 - Verify breakpoint conditions
 - Look for errors in console
-- Restart agent if needed
+- Restart the workflow if needed
 
 ---
 
@@ -351,7 +357,7 @@ After the demo, you should have shown:
 - **Typing the query** in slow motion
 - **Vector search visualization** (animated dots connecting)
 - **Feedback stars** being clicked
-- **LangGraph state** transitioning
+- **Workflow state** transitioning
 - **ERD pulsating** connection lines
 - **Code snippets** with syntax highlighting
 - **Terminal output** showing vector scores
@@ -365,7 +371,7 @@ Share with attendees after:
 - ERD diagram (static + animated)
 - Sample queries they can try
 - Architecture documentation
-- LangGraph breakpoint guide
+- HITL breakpoint configuration guide
 - Multi-tenant setup instructions
 
 ---

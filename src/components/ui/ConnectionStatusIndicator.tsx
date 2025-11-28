@@ -14,7 +14,7 @@ interface ConnectionStatus {
 export const ConnectionStatusIndicator: React.FC = () => {
   // Force component update with timestamp
   const [statuses, setStatuses] = useState<ConnectionStatus[]>([
-    { type: "connecting", service: "OpenAI" },
+    { type: "connecting", service: "Google Gemini" },
     { type: "connecting", service: "ElevenLabs" },
   ]);
 
@@ -30,20 +30,20 @@ export const ConnectionStatusIndicator: React.FC = () => {
       // REMOVED: AOMA-MESH health check - now using direct Supabase vector search
       // No external MCP server to check - all queries are local/Supabase
 
-      // Check OpenAI - try a simple API test
+      // Check Google Gemini - try a simple API test
       try {
-        const openaiCheck = await fetch("/api/chat-vercel", {
+        const geminiCheck = await fetch("/api/chat", {
           method: "GET",
         });
         newStatuses.push({
-          type: openaiCheck.ok ? "connected" : "error",
-          service: "OpenAI",
+          type: geminiCheck.ok ? "connected" : "error",
+          service: "Google Gemini",
           lastChecked: new Date(),
         });
       } catch {
         newStatuses.push({
           type: "disconnected",
-          service: "OpenAI",
+          service: "Google Gemini",
           lastChecked: new Date(),
         });
       }

@@ -9,12 +9,11 @@ export type ModelUseCase =
   | "aoma-query";
 
 export type AIModel =
-  // Gemini 3.0 models (latest - November 2025)
+  // Gemini models (primary for RAG)
   | "gemini-3-pro-preview"
-  // Gemini 2.5 models (fallback)
   | "gemini-2.5-pro"
   | "gemini-2.5-flash"
-  | "gemini-2.5-ultra"
+  | "gemini-2.0-flash"
   // OpenAI models (fallback)
   | "gpt-5"
   | "gpt-5-pro"
@@ -38,30 +37,30 @@ class ModelConfigService {
   private modelConfigs: Record<ModelUseCase, ModelConfig> = {
     chat: {
       model: (process.env.NEXT_PUBLIC_DEFAULT_CHAT_MODEL as AIModel) || "gemini-3-pro-preview",
-      temperature: 1.0, // Gemini 3 requires temp=1.0 for optimal reasoning
+      temperature: 0.9,
       maxTokens: 8000,
-      description: "Conversational RAG with Gemini 3 Pro (1M context, advanced reasoning)",
+      description: "Conversational RAG with Gemini 3 Pro",
       costTier: "standard",
     },
     "premium-chat": {
       model: "gemini-3-pro-preview",
-      temperature: 1.0, // Gemini 3 requires temp=1.0 for optimal reasoning
+      temperature: 0.8,
       maxTokens: 12000,
-      description: "Premium RAG synthesis with Gemini 3 Pro advanced reasoning",
+      description: "Premium RAG synthesis with Gemini 3 Pro",
       costTier: "standard",
     },
     reasoning: {
       model: "gemini-3-pro-preview",
-      temperature: 1.0, // Gemini 3 requires temp=1.0 for optimal reasoning
+      temperature: 0.7,
       maxTokens: 10000,
-      description: "Deep reasoning with Gemini 3 Pro (thinking_level: high)",
+      description: "Deep reasoning and analysis with Gemini 3 Pro",
       costTier: "standard",
     },
     "code-generation": {
       model: "gemini-3-pro-preview",
-      temperature: 1.0, // Gemini 3 requires temp=1.0 for optimal reasoning
+      temperature: 0.8,
       maxTokens: 8000,
-      description: "Code generation with Gemini 3 Pro advanced reasoning",
+      description: "Code generation optimized with Gemini 3 Pro",
       costTier: "standard",
     },
     "test-generation": {
@@ -80,16 +79,16 @@ class ModelConfigService {
     },
     vision: {
       model: "gemini-3-pro-preview",
-      temperature: 1.0, // Gemini 3 requires temp=1.0 for optimal reasoning
+      temperature: 0.7,
       maxTokens: 4000,
       description: "Multimodal visual analysis with Gemini 3 Pro",
       costTier: "standard",
     },
     "aoma-query": {
       model: "gemini-3-pro-preview",
-      temperature: 1.0, // Gemini 3 requires temp=1.0 - lower temps cause looping/degradation
+      temperature: 0.7, // Lower temp for factual accuracy in RAG
       maxTokens: 8000,
-      description: "AOMA knowledge synthesis with Gemini 3 Pro (1M context, advanced reasoning)",
+      description: "AOMA knowledge synthesis with Gemini 3 Pro",
       costTier: "standard",
     },
   };
@@ -153,7 +152,7 @@ class ModelConfigService {
       "gemini-3-pro-preview",
       "gemini-2.5-pro",
       "gemini-2.5-flash",
-      "gemini-2.5-ultra",
+      "gemini-2.0-flash",
       "gpt-5",
       "gpt-5-pro",
       "o3",
@@ -166,13 +165,12 @@ class ModelConfigService {
 
   getModelDescription(model: AIModel): string {
     const descriptions: Record<AIModel, string> = {
-      // Gemini 3 models (latest - November 2025)
-      "gemini-3-pro-preview": "Most advanced reasoning: 1M context, thinking_level support (RECOMMENDED)",
-      // Gemini 2.5 models (fallback)
-      "gemini-2.5-pro": "Previous gen: 2M context, good synthesis",
-      "gemini-2.5-flash": "Fast & cost-efficient with 1M context",
-      "gemini-2.5-ultra": "Maximum capability (usually unnecessary for RAG)",
-      // OpenAI models
+      // Gemini models (primary)
+      "gemini-3-pro-preview": "Optimal for RAG: latest Gemini 3 Pro with excellent synthesis",
+      "gemini-2.5-pro": "Gemini 2.5 Pro: 2M context, good for complex tasks",
+      "gemini-2.5-flash": "Gemini 2.5 Flash: Fast & cost-efficient",
+      "gemini-2.0-flash": "Gemini 2.0 Flash: Previous generation fast model",
+      // OpenAI models (fallback)
       "gpt-5": "OpenAI GPT-5 (fallback)",
       "gpt-5-pro": "Premium GPT-5 Pro (fallback)",
       o3: "Advanced reasoning model with tool integration",

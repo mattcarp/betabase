@@ -140,35 +140,34 @@
 
 ---
 
-## SLIDE 4: LangGraph HITL Concept
+## SLIDE 4: HITL Workflow Concept
 
 ### Visual Layout:
 ```
-┌─────────────────────────────────────────────┐
-│                                             │
-│   Query → Agent → ⏸️ BREAKPOINT → Human    │
-│                          ↓                  │
-│                    Human Reviews            │
-│                          ↓                  │
-│              Approve / Modify / Reject      │
-│                          ↓                  │
-│                   Agent Resumes             │
-│                                             │
-│   LangGraph 1.0: Human-in-the-Loop          │
-│              at Runtime                     │
-│                                             │
-└─────────────────────────────────────────────┘
++---------------------------------------------+
+|                                             |
+|   Query -> Agent -> BREAKPOINT -> Human     |
+|                          |                  |
+|                    Human Reviews            |
+|                          |                  |
+|              Approve / Modify / Reject      |
+|                          |                  |
+|                   Workflow Resumes          |
+|                                             |
+|   Human-in-the-Loop: Runtime Oversight      |
+|                                             |
++---------------------------------------------+
 ```
 
 ### Elements:
 - **Flow diagram**: Vertical, top to bottom
 - **Query icon**: Speech bubble
 - **Agent icon**: Robot or brain
-- **Breakpoint icon**: ⏸️ (pause symbol, red/orange)
+- **Breakpoint icon**: Pause symbol (red/orange)
 - **Human icon**: Person silhouette
 - **Decision diamond**: Approve/Modify/Reject paths
 - **Resume arrow**: Green, bold
-- **Title**: "LangGraph 1.0: HITL at Runtime" (48pt)
+- **Title**: "Human-in-the-Loop: Runtime Oversight" (48pt)
 
 ### Animation:
 - Flow animates like a progress bar
@@ -238,7 +237,7 @@
 │     Human-in-the-loop for complex queries   │
 │     Runtime oversight, not post-hoc         │
 │                                             │
-│  🏢 Multi-Tenant | 🤖 LangGraph | 🔄 RLHF   │
+|  Multi-Tenant | HITL Review | RLHF          |
 │                                             │
 └─────────────────────────────────────────────┘
 ```

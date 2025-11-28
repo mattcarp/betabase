@@ -1,0 +1,369 @@
+<h1>North Star Three-Pillar Demo Plan</h1>
+<p>(Yes, &quot;North Star&quot; is a dramatically pretentious name. We&#39;re keeping it because it&#39;s funny.)</p>
+<h2>What This Is</h2>
+<p>A walkthrough for colleagues showing how we&#39;ve built an integrated AI platform. This isn&#39;t a sales pitch - it&#39;s a technical deep-dive for people who&#39;ve been doing this work as long as I have. The goal is to show how these three capabilities reinforce each other in ways that off-the-shelf tools can&#39;t match.</p>
+<p><strong>Dev testing only.</strong> We&#39;re not touching production for this demo - that&#39;s a whole separate nightmare.</p>
+<p><strong>The Three Pillars:</strong></p>
+<ul>
+<li><strong>Chat</strong>: Domain-aware AI that actually knows our systems</li>
+<li><strong>Curate</strong>: Human feedback that makes the AI smarter over time</li>
+<li><strong>Test</strong>: Self-healing tests that reduce the &quot;blast radius&quot; of UI changes (thanks IBM for that term)</li>
+</ul>
+<hr>
+<h2>Current State (What Actually Works)</h2>
+<h3>What We Have</h3>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>What It Does</th>
+<th>Actual Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Chat</td>
+<td>RAG against Supabase vectors</td>
+<td>Working in production</td>
+</tr>
+<tr>
+<td>Chat</td>
+<td>Gemini embeddings + search</td>
+<td>Primary retrieval method</td>
+</tr>
+<tr>
+<td>Chat</td>
+<td>Internal metrics/introspection</td>
+<td>Replaced LangSmith with custom</td>
+</tr>
+<tr>
+<td>Curate</td>
+<td>RLHF feedback collection</td>
+<td>Functional</td>
+</tr>
+<tr>
+<td>Curate</td>
+<td>Document relevance marking</td>
+<td>Implemented</td>
+</tr>
+<tr>
+<td>Curate</td>
+<td>Permission-gated access</td>
+<td>Working</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>28+ dashboard components</td>
+<td>Built</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>Self-healing test proposals</td>
+<td>Working (94.2% success on heals)</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>Real-time SSE updates</td>
+<td>Working</td>
+</tr>
+<tr>
+<td>Infrastructure</td>
+<td>45,399 bb_* test records</td>
+<td>Imported from Beta Base</td>
+</tr>
+</tbody></table>
+<h3>What&#39;s Still In Progress</h3>
+<table>
+<thead>
+<tr>
+<th>Gap</th>
+<th>Impact</th>
+<th>Effort</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Components not wired into main tabs</td>
+<td>Features are hidden</td>
+<td>2h</td>
+</tr>
+<tr>
+<td>No &quot;Home&quot; tab in Test Dashboard</td>
+<td>No at-a-glance view</td>
+<td>1h</td>
+</tr>
+<tr>
+<td>Self-Healing UI buried</td>
+<td>Key differentiator hidden</td>
+<td>1h</td>
+</tr>
+<tr>
+<td>Curator Queue not in Curate tab</td>
+<td>Workflow invisible</td>
+<td>1h</td>
+</tr>
+<tr>
+<td>No feedback impact visualization</td>
+<td>Can&#39;t show the virtuous cycle</td>
+<td>3h</td>
+</tr>
+<tr>
+<td>Chat confidence display</td>
+<td>Useful for showing uncertainty</td>
+<td>2h</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>The Demo Structure</h2>
+<h3>Format: ~30 Minutes (Conversational)</h3>
+<p>This isn&#39;t a formal presentation. It&#39;s more like: &quot;Here&#39;s what we built, here&#39;s why it matters, let me show you.&quot;</p>
+<pre><code>Part 1: The Problem We&#39;re Solving (5 mins)
+  &quot;You know how tests break every time someone changes a button?&quot;
+  &quot;You know how chatbots give garbage answers about internal systems?&quot;
+
+Part 2: The Three Pillars (20 mins)
+  Chat: Show it actually knowing our domain
+  Curate: Show how one correction improves many queries
+  Test: Show a test healing itself
+
+Part 3: Discussion (open-ended)
+  &quot;What would this look like for your team?&quot;
+</code></pre>
+<h3>The Story Arc</h3>
+<p><strong>Opening (relatable problem):</strong></p>
+<blockquote>
+<p>&quot;We&#39;ve all dealt with this: tests that break when CSS changes, AI tools that don&#39;t know our systems, and knowledge that&#39;s stuck in people&#39;s heads. What if these three problems could solve each other?&quot;</p>
+</blockquote>
+<p><strong>The Pillars:</strong></p>
+<ol>
+<li><strong>Chat</strong>: &quot;Ask it about AOMA&quot; - it knows because we&#39;ve fed it our docs</li>
+<li><strong>Curate</strong>: &quot;When it&#39;s wrong, we correct it&quot; - and that correction propagates</li>
+<li><strong>Test</strong>: &quot;Watch what happens when I change this selector&quot; - it proposes a fix</li>
+</ol>
+<p><strong>Closing:</strong></p>
+<blockquote>
+<p>&quot;The interesting part isn&#39;t any one of these - it&#39;s how they connect. Feedback from chat improves retrieval. Better retrieval means fewer wrong answers. Test failures can trigger human review. It&#39;s a loop.&quot;</p>
+</blockquote>
+<hr>
+<h2>PILLAR 1: CHAT - Domain Intelligence</h2>
+<h3>What It Actually Does</h3>
+<ul>
+<li>Single-source RAG against Supabase pgvector</li>
+<li>Gemini embeddings (moved away from OpenAI embeddings)</li>
+<li><code>UnifiedRAGOrchestrator</code> handles retrieval</li>
+<li><code>knowledgeSearchService</code> for semantic search</li>
+<li>Custom introspection (we built our own, not using LangSmith anymore)</li>
+</ul>
+<h3>Demo Points</h3>
+<ol>
+<li><p><strong>Show domain knowledge</strong>: Ask &quot;What&#39;s the AOMA 2 API authentication flow?&quot;</p>
+<ul>
+<li>Generic AI would hallucinate or give generic OAuth info</li>
+<li>Ours pulls from actual AOMA documentation</li>
+</ul>
+</li>
+<li><p><strong>Show source attribution</strong>: Where did that answer come from?</p>
+<ul>
+<li>InlineCitation component shows sources</li>
+<li>Click to see the actual retrieved chunks</li>
+</ul>
+</li>
+<li><p><strong>Show the retrieval</strong>: (optional, technical audience)</p>
+<ul>
+<li>Can show the introspection dropdown</li>
+<li>See what vectors were retrieved, similarity scores</li>
+</ul>
+</li>
+</ol>
+<h3>What We&#39;re NOT Claiming</h3>
+<ul>
+<li>It&#39;s not multi-model or multi-source anymore (simplified to Supabase)</li>
+<li>It&#39;s not perfect - confidence varies</li>
+<li>The &quot;three RAG strategies&quot; mentioned in old docs are legacy</li>
+</ul>
+<hr>
+<h2>PILLAR 2: CURATE - Human-AI Collaboration</h2>
+<h3>What It Actually Does</h3>
+<ul>
+<li><code>RLHFFeedbackTab</code> collects thumbs up/down, star ratings, text corrections</li>
+<li>Document relevance toggles (green check/red X on retrieved docs)</li>
+<li>Feedback stored in Supabase for analysis</li>
+<li>Eventually feeds back into embedding quality</li>
+</ul>
+<h3>Demo Points</h3>
+<ol>
+<li><p><strong>Show the feedback mechanism</strong>:</p>
+<ul>
+<li>Submit a correction: &quot;Actually, AOMA 2 uses Cognito, not generic OAuth&quot;</li>
+<li>Show it being captured</li>
+</ul>
+</li>
+<li><p><strong>Show the curator queue</strong> (if wired up):</p>
+<ul>
+<li>Items needing review</li>
+<li>Approve/reject workflow</li>
+</ul>
+</li>
+<li><p><strong>Explain the impact</strong> (even if we can&#39;t visualize it yet):</p>
+<ul>
+<li>&quot;One expert correction can improve answers for thousands of similar queries&quot;</li>
+<li>This is the RLHF principle - human feedback at scale</li>
+</ul>
+</li>
+</ol>
+<h3>The Honest Pitch</h3>
+<blockquote>
+<p>&quot;This is where we&#39;re early. The feedback loop isn&#39;t fully closed yet - corrections are captured but not automatically retraining. That&#39;s the vision: every correction makes the system smarter.&quot;</p>
+</blockquote>
+<hr>
+<h2>PILLAR 3: TEST - Reducing the Blast Radius</h2>
+<h3>What It Actually Does</h3>
+<ul>
+<li><code>SelfHealingTestViewer</code> shows proposed fixes</li>
+<li>When a selector breaks, AI proposes alternatives</li>
+<li>94.2% success rate on healing attempts (1,175/1,247)</li>
+<li>Tiered approach: auto-heal obvious fixes, escalate uncertain ones</li>
+</ul>
+<h3>Demo Points</h3>
+<ol>
+<li><p><strong>Show the dashboard</strong>: Key metrics at a glance</p>
+<ul>
+<li>Pass rate, failing tests, healed tests, tests needing human review</li>
+</ul>
+</li>
+<li><p><strong>Show a self-heal in action</strong> (if possible live):</p>
+<ul>
+<li>Change a button ID in the app</li>
+<li>Show the test detecting the break</li>
+<li>Show the proposed fix: &quot;Use <code>[data-testid=&#39;login&#39;]</code> instead of <code>#login-btn</code>&quot;</li>
+</ul>
+</li>
+<li><p><strong>Explain the tiers</strong>:</p>
+<ul>
+<li><strong>Tier 1 (Auto)</strong>: High confidence, auto-apply</li>
+<li><strong>Tier 2 (Review)</strong>: Medium confidence, human approves</li>
+<li><strong>Tier 3 (Architect)</strong>: Low confidence or structural change, needs expert</li>
+</ul>
+</li>
+</ol>
+<h3>The &quot;Blast Radius&quot; Concept</h3>
+<p>From IBM&#39;s testing research: when something changes in the UI, how many tests break? That&#39;s your blast radius.</p>
+<ul>
+<li>Traditional: Change one button, 47 tests fail</li>
+<li>Self-healing: Change one button, AI fixes 44, flags 3 for review</li>
+</ul>
+<blockquote>
+<p>&quot;We&#39;re not eliminating test maintenance. We&#39;re reducing the blast radius of UI changes.&quot;</p>
+</blockquote>
+<hr>
+<h2>Technical Architecture (For the Curious)</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                         SIAM                                │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐     │
+│  │   Chat      │    │   Curate    │    │    Test     │     │
+│  │             │    │             │    │             │     │
+│  │ Gemini LLM  │←──→│ RLHF Store  │←──→│ Self-Heal   │     │
+│  │ RAG Search  │    │ Feedback UI │    │ Proposals   │     │
+│  │ Citations   │    │ Curator Q   │    │ Tier System │     │
+│  └──────┬──────┘    └──────┬──────┘    └──────┬──────┘     │
+│         │                  │                  │             │
+│         └──────────────────┼──────────────────┘             │
+│                            │                                │
+│                    ┌───────┴───────┐                        │
+│                    │   Supabase    │                        │
+│                    │   pgvector    │                        │
+│                    │   + tables    │                        │
+│                    └───────────────┘                        │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3>Key Files</h3>
+<pre><code>src/services/
+├─ knowledgeSearchService.ts    # Vector search
+├─ unifiedRAGOrchestrator.ts    # RAG coordination
+├─ aomaOrchestrator.ts          # AOMA-specific logic
+└─ modelConfig.ts               # LLM configuration
+
+src/components/
+├─ ai-elements/                 # Chat UI components
+├─ test-dashboard/              # Test pillar UI
+└─ ui/rlhf-tabs/                # Curate pillar UI
+</code></pre>
+<hr>
+<h2>Metrics Worth Mentioning</h2>
+<h3>Self-Healing Stats</h3>
+<ul>
+<li>Success rate: 94.2% (1,175 successful heals out of 1,247 attempts)</li>
+<li>Average time to propose fix: ~2 seconds</li>
+<li>Human review queue: typically 5-10% of changes</li>
+</ul>
+<h3>RAG Performance</h3>
+<ul>
+<li>Retrieval latency: ~200-400ms</li>
+<li>Context window: Using Gemini&#39;s 1M token context</li>
+<li>Vector count: 45,399 embeddings from Beta Base import</li>
+</ul>
+<h3>What We Don&#39;t Have Yet</h3>
+<ul>
+<li>Full RLHF loop closure (feedback captured, not yet retraining)</li>
+<li>Automated confidence calibration</li>
+<li>Cross-pillar analytics dashboard</li>
+</ul>
+<hr>
+<h2>Discussion Topics</h2>
+<p>These are the interesting conversations, not sales questions:</p>
+<ol>
+<li><p><strong>On AI Testing</strong>: &quot;How do you handle the 6% of heals that fail? Is human review scalable?&quot;</p>
+</li>
+<li><p><strong>On Domain RAG</strong>: &quot;What&#39;s the embedding refresh cadence? How do you handle stale knowledge?&quot;</p>
+</li>
+<li><p><strong>On RLHF</strong>: &quot;When do you actually retrain vs. just adjusting retrieval weights?&quot;</p>
+</li>
+<li><p><strong>On Integration</strong>: &quot;Could this work with our existing test framework, or does it require buy-in?&quot;</p>
+</li>
+<li><p><strong>On Trust</strong>: &quot;How do you convince QA to trust an AI-proposed fix?&quot;</p>
+</li>
+</ol>
+<hr>
+<h2>Pre-Demo Checklist</h2>
+<h3>Environment Setup (localhost only)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Dev server running: <code>npx kill-port 3000 &amp;&amp; npm run dev</code></li>
+<li><input disabled="" type="checkbox"> Test data seeded</li>
+<li><input disabled="" type="checkbox"> No console errors visible</li>
+<li><input disabled="" type="checkbox"> Playwright tests pass on localhost</li>
+</ul>
+<h3>Components Ready</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Chat responds to AOMA queries</li>
+<li><input disabled="" type="checkbox"> Curate tab accessible</li>
+<li><input disabled="" type="checkbox"> Test Dashboard loads</li>
+<li><input disabled="" type="checkbox"> Self-Healing viewer has data</li>
+</ul>
+<h3>Backup Plans</h3>
+<ul>
+<li><strong>If live demo fails</strong>: Walk through screenshots</li>
+<li><strong>If self-healing doesn&#39;t trigger</strong>: Use pre-recorded example</li>
+<li><strong>If RAG is slow</strong>: Explain while waiting, have cached response ready</li>
+</ul>
+<h3>NOT Doing</h3>
+<ul>
+<li>Production deployment</li>
+<li>Render monitoring</li>
+<li>Mailinator magic link testing</li>
+<li>Any of the usual prod verification stuff</li>
+</ul>
+<p>This is a dev demo for colleagues, not a customer presentation.</p>
+<hr>
+<h2>What This ISN&#39;T</h2>
+<p>Let&#39;s be clear about scope:</p>
+<ul>
+<li><strong>Not a product pitch</strong>: We&#39;re not selling anything</li>
+<li><strong>Not production-hardened</strong>: This is an internal tool, R&amp;D quality</li>
+<li><strong>Not replacing humans</strong>: It&#39;s augmentation, not automation</li>
+<li><strong>Not magic</strong>: 94% isn&#39;t 100%, confidence scores matter</li>
+</ul>
+<p>The interesting question isn&#39;t &quot;should you buy this&quot; - it&#39;s &quot;how would you approach this problem differently?&quot;</p>
+<hr>
+<p><em>Last Updated: November 2025</em>
+<em>For: Technical colleagues, internal demo</em></p>

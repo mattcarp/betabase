@@ -131,9 +131,10 @@ export async function searchKnowledge(
       const vectorService = new OptimizedSupabaseVectorService();
       const data = await withinTimeout(
         vectorService.smartSearch(normalized, {
+          ...DEFAULT_APP_CONTEXT,
           matchThreshold,
           matchCount,
-          sourceTypes: filterSources,
+          sourceTypes: filterSources as any,
         }),
         timeoutMs
       );
@@ -150,7 +151,7 @@ export async function searchKnowledge(
     } else {
       // Fallback keyword search by content/title if embeddings are unavailable
       if (!supabase) throw new Error("Supabase client not initialized");
-      const { data, error } = await withinTimeout(
+      const { data, error } = (await withinTimeout(
         supabase
           .from("siam_vectors")
           .select("id, content, source_type, source_id, metadata, created_at")
@@ -158,9 +159,9 @@ export async function searchKnowledge(
           .eq("division", DEFAULT_APP_CONTEXT.division)
           .eq("app_under_test", DEFAULT_APP_CONTEXT.app_under_test)
           .ilike("content", `%${normalized}%`)
-          .limit(matchCount),
+          .limit(matchCount) as unknown as Promise<any>,
         timeoutMs
-      );
+      )) as any;
       if (error) throw error;
       results = (data || []).map((row: any) => ({
         id: row.id,

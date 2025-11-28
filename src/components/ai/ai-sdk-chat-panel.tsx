@@ -171,6 +171,7 @@ export function AiSdkChatPanel({
   const [isProcessing, setIsProcessing] = useState(false); // Simpler loading state
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
   const [loadingSeconds, setLoadingSeconds] = useState(0); // Track seconds elapsed during loading
+  const [pendingRagMetadata, setPendingRagMetadata] = useState<any>(null); // RAG metadata from response headers
 
   // RLHF Feedback tracking
   const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down' | null>>({});
@@ -269,11 +270,11 @@ export function AiSdkChatPanel({
     })();
 
   const availableModels = [
-    // Gemini 3 models (latest - November 2025)
-    { id: "gemini-3-pro-preview", name: "Gemini 3 Pro (1M context, Advanced Reasoning) ⭐" },
-    // Gemini 2.5 models (fallback)
+    // Gemini models (primary for RAG)
+    { id: "gemini-3-pro-preview", name: "Gemini 3 Pro (1M context)" },
     { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro (2M context)" },
-    { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash (Fast & Cheap)" },
+    { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash (Fast)" },
+    { id: "gemini-2.0-flash", name: "Gemini 2.0 Flash" },
     // OpenAI models (fallback)
     { id: "gpt-5", name: "GPT-5 (Fallback)" },
     { id: "gpt-4o", name: "GPT-4o" },
@@ -317,6 +318,19 @@ export function AiSdkChatPanel({
     api: currentApiEndpoint, // Use the calculated endpoint directly
     id: chatId,
     messages: (initialMessages || []).filter((m) => m.content != null && m.content !== ""), // CRITICAL: Filter null content
+    onResponse: (response: Response) => {
+      // Capture RAG metadata from response headers before streaming starts
+      const ragMetadataHeader = response.headers.get('X-RAG-Metadata');
+      if (ragMetadataHeader) {
+        try {
+          const metadata = JSON.parse(ragMetadataHeader);
+          console.log('📊 Captured RAG metadata from headers:', metadata);
+          setPendingRagMetadata(metadata);
+        } catch (e) {
+          console.warn('Failed to parse RAG metadata header:', e);
+        }
+      }
+    },
     onError: (err) => {
       console.error("Chat error:", err);
       console.log("Error type:", typeof err);
@@ -352,11 +366,13 @@ export function AiSdkChatPanel({
       // Check for specific error types and show user-friendly messages
       if (
         errorMessage.includes("insufficient_quota") ||
-        errorMessage.includes("exceeded your current quota")
+        errorMessage.includes("exceeded your current quota") ||
+        errorMessage.includes("429")
       ) {
-        toast.error("OpenAI API Quota Exceeded", {
+        const providerName = selectedModel.includes("gemini") ? "Google Gemini" : "OpenAI";
+        toast.error(`${providerName} Quota Exceeded`, {
           description:
-            "The API key has reached its usage limit. Please check your OpenAI account billing or try again later.",
+            `The ${providerName} API key has reached its usage limit or does not have access to this model.`,
           duration: 6000,
         });
       } else if (errorMessage.includes("api_key")) {
@@ -399,6 +415,9 @@ export function AiSdkChatPanel({
       setManualLoading(false);
       setIsProcessing(false);
       setHasStartedStreaming(false); // Reset streaming state for next message
+
+      // Note: Don't clear pendingRagMetadata here - it's needed for display
+      // It will be cleared when a new response starts via onResponse
 
       // CRITICAL FIX: Clear input field after response completes
       setLocalInput("");
@@ -1363,52 +1382,65 @@ export function AiSdkChatPanel({
             </div>
 
             {/* RAG Metadata Badges - Show which advanced RAG strategy was used */}
-            {!isUser && message.ragMetadata && (
-              <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border/30">
-                {message.ragMetadata.strategy && (
-                  <Badge 
-                    variant="outline" 
-                    className="bg-purple-500/10 border-purple-500/30 text-purple-300 hover:bg-purple-500/20"
-                  >
-                    📊 {message.ragMetadata.strategy === 'agentic' ? '🤖 Agentic' : 
-                        message.ragMetadata.strategy === 'context-aware' ? '🧠 Context-Aware' : 
-                        '📚 Standard'} RAG
-                  </Badge>
-                )}
-                {message.ragMetadata.documentsReranked && (
-                  <Badge 
-                    variant="outline" 
-                    className="bg-blue-500/10 border-blue-500/30 text-blue-300 hover:bg-blue-500/20"
-                  >
-                    🔄 Re-ranked {message.ragMetadata.initialDocs}→{message.ragMetadata.finalDocs} docs
-                  </Badge>
-                )}
-                {message.ragMetadata.agentSteps > 0 && (
-                  <Badge 
-                    variant="outline" 
-                    className="bg-cyan-500/10 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20"
-                  >
-                    🔧 {message.ragMetadata.agentSteps} agent steps
-                  </Badge>
-                )}
-                {message.ragMetadata.confidence && (
-                  <Badge 
-                    variant="outline" 
-                    className="bg-green-500/10 border-green-500/30 text-green-300 hover:bg-green-500/20"
-                  >
-                    ✓ {Math.round(message.ragMetadata.confidence * 100)}% confident
-                  </Badge>
-                )}
-                {message.ragMetadata.timeMs && (
-                  <Badge 
-                    variant="outline" 
-                    className="bg-gray-500/10 border-gray-500/30 text-gray-300"
-                  >
-                    ⚡ {message.ragMetadata.timeMs}ms
-                  </Badge>
-                )}
-              </div>
-            )}
+            {(() => {
+              // Use message's ragMetadata or pendingRagMetadata for last assistant message
+              const ragMeta = message.ragMetadata || (isLastMessage && !isUser ? pendingRagMetadata : null);
+              if (!ragMeta || isUser) return null;
+
+              return (
+                <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border/30">
+                  {ragMeta.strategy && (
+                    <Badge
+                      variant="outline"
+                      className="bg-purple-500/10 border-purple-500/30 text-purple-300 hover:bg-purple-500/20"
+                    >
+                      {ragMeta.strategy === 'agentic' ? 'Agentic' :
+                          ragMeta.strategy === 'context-aware' ? 'Context-Aware' :
+                          'Standard'} RAG
+                    </Badge>
+                  )}
+                  {ragMeta.documentsReranked && (
+                    <Badge
+                      variant="outline"
+                      className="bg-blue-500/10 border-blue-500/30 text-blue-300 hover:bg-blue-500/20"
+                    >
+                      Re-ranked {ragMeta.initialDocs} to {ragMeta.finalDocs} docs
+                    </Badge>
+                  )}
+                  {ragMeta.agentSteps > 0 && (
+                    <Badge
+                      variant="outline"
+                      className="bg-cyan-500/10 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20"
+                    >
+                      {ragMeta.agentSteps} agent steps
+                    </Badge>
+                  )}
+                  {ragMeta.confidence && (
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "font-medium",
+                        ragMeta.confidence >= 0.8
+                          ? "bg-green-500/10 border-green-500/30 text-green-300"
+                          : ragMeta.confidence >= 0.6
+                            ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-300"
+                            : "bg-red-500/10 border-red-500/30 text-red-300"
+                      )}
+                    >
+                      {Math.round(ragMeta.confidence * 100)}% confident
+                    </Badge>
+                  )}
+                  {ragMeta.timeMs && (
+                    <Badge
+                      variant="outline"
+                      className="bg-gray-500/10 border-gray-500/30 text-gray-300"
+                    >
+                      {ragMeta.timeMs}ms
+                    </Badge>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* HITL Feedback Buttons - Thumbs Up/Down */}
             {!isUser && (
@@ -1555,7 +1587,6 @@ export function AiSdkChatPanel({
                         )}
                         <div className="flex-1">
                           <h4
-                            className="mac-title"
                             className="mac-title text-sm font-medium text-foreground mb-2"
                           >
                             {preview.title || "Web Page"}
@@ -1728,7 +1759,6 @@ export function AiSdkChatPanel({
               <SiamLogo size="sm" />
               <div>
                 <h1
-                  className="mac-heading"
                   className="mac-heading text-xl font-light text-white tracking-tight"
                 >
                   {title}
@@ -1768,9 +1798,7 @@ export function AiSdkChatPanel({
                   </>
                 )}
                 <Button
-                  className="mac-button mac-button-outline"
                   variant="ghost"
-                  className="mac-button mac-button-outline"
                   size="icon"
                   onClick={() => setShowReasoning(!showReasoning)}
                   className={cn(
@@ -1829,7 +1857,6 @@ export function AiSdkChatPanel({
                     >
                       <div className="mb-4">
                         <h3
-                          className="mac-title"
                           className="mac-title text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2"
                         >
                           <Sparkles className="w-4 h-4" />
@@ -1866,9 +1893,9 @@ export function AiSdkChatPanel({
                     <motion.div
                       key={message.id || index}
                       layout={enableAnimations}
-                      initial={enableAnimations ? { opacity: 0, y: 20 } : false}
+                      initial={enableAnimations ? { opacity: 0, y: 20 } : undefined}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={enableAnimations ? { opacity: 0, y: -20 } : false}
+                      exit={enableAnimations ? { opacity: 0, y: -20 } : undefined}
                       transition={{ duration: 0.3, ease: "easeOut" }}
                     >
                       {renderMessage(message, index)}
@@ -1908,14 +1935,8 @@ export function AiSdkChatPanel({
                 className="mt-6 flex items-center justify-center"
               >
                 <Button
-                  className="mac-button mac-button-outline"
                   variant="outline"
-                  className="mac-button mac-button-outline"
-                  onClick={() => {
-                    clearError();
-                    regenerate && regenerate();
-                  }}
-                  className="flex items-center gap-2 border-destructive/50 text-destructive hover:bg-destructive/10"
+                  className="mac-button mac-button-outline flex items-center gap-2 border-destructive/50 text-destructive hover:bg-destructive/10"
                 >
                   <AlertCircle className="h-4 w-4" />
                   Retry last message
@@ -2007,7 +2028,6 @@ export function AiSdkChatPanel({
             <PromptInputTools className="gap-2">
               <FileUpload
                 compact={true}
-                assistantId="asst_VvOHL1c4S6YapYKun4mY29fM"
                 onUploadComplete={handleFileUploadComplete}
                 onUploadError={(error) => toast.error(`Upload failed: ${error}`)}
               />
@@ -2144,7 +2164,7 @@ export function AiSdkChatPanel({
                 onValueChange={setSelectedModel}
                 disabled={isMaxMessagesReached || isLoading}
               >
-                <PromptInputModelSelectTrigger className="!h-8 !w-[100px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
+                <PromptInputModelSelectTrigger className="!h-8 !w-[160px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
                   <PromptInputModelSelectValue />
                 </PromptInputModelSelectTrigger>
                 <PromptInputModelSelectContent>
@@ -2160,12 +2180,10 @@ export function AiSdkChatPanel({
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <span>{uploadedFiles.length} file(s) attached</span>
                   <Button
-                    className="mac-button mac-button-outline"
                     variant="ghost"
-                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => setUploadedFiles([])}
-                    className="h-6 px-2 text-xs"
+                    className="mac-button mac-button-outline h-6 px-2 text-xs"
                   >
                     Clear
                   </Button>

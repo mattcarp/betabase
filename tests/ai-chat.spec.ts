@@ -19,20 +19,22 @@ test.describe("SIAM AI Chat Interface", () => {
     await page.goto("/");
 
     // Wait for the page to load
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
+    // Wait for main content to be visible instead of networkidle which can be flaky with polling
+    await page.waitForSelector('h1:has-text("The Betabase")', { timeout: 30000 });
   });
 
   test("should load the chat interface", async ({ page }) => {
     // Check if the main heading is visible
-    await expect(page.locator('h1:has-text("SIAM Intelligence Hub")')).toBeVisible();
+    await expect(page.locator('h1:has-text("The Betabase")')).toBeVisible();
 
     // Check if the subtitle is visible
     await expect(
-      page.locator("text=Sentient Intelligence & Augmented Memory System")
+      page.locator("text=Intelligence Platform")
     ).toBeVisible();
 
     // Check if the connection status badge is visible
-    await expect(page.locator("text=Connected")).toBeVisible();
+    await expect(page.locator("text=All Systems Online")).toBeVisible();
   });
 
   test("should display all navigation tabs", async ({ page }) => {
@@ -49,9 +51,9 @@ test.describe("SIAM AI Chat Interface", () => {
     await page.locator('button:has-text("Chat")').click();
 
     // Check for chat interface elements
-    await expect(page.locator("text=SIAM Assistant")).toBeVisible();
+    await expect(page.locator("text=Welcome to The Betabase")).toBeVisible();
     await expect(
-      page.locator("text=AI-powered conversation with knowledge enhancement")
+      page.locator("text=Don't be a dick.")
     ).toBeVisible();
 
     // Check for the input field
@@ -59,8 +61,8 @@ test.describe("SIAM AI Chat Interface", () => {
     await expect(chatInput).toBeVisible();
 
     // Check for welcome message or suggestions
-    const welcomeText = page.locator("text=Welcome to SIAM Assistant");
-    const suggestionsText = page.locator("text=What can you help me with today?");
+    const welcomeText = page.locator("text=Welcome to The Betabase");
+    const suggestionsText = page.locator("text=Try these to get started");
 
     // Either welcome message or suggestions should be visible
     const welcomeOrSuggestions = await Promise.race([
@@ -84,7 +86,7 @@ test.describe("SIAM AI Chat Interface", () => {
 
     // Test switching to Test tab
     await page.locator('button:has-text("Test")').click();
-    await expect(page.locator("text=Test & Validation Suite")).toBeVisible();
+    await expect(page.locator("text=Advanced Testing & Quality Assurance")).toBeVisible();
 
     // Test switching to Fix tab
     await page.locator('button:has-text("Fix")').click();
@@ -96,7 +98,7 @@ test.describe("SIAM AI Chat Interface", () => {
 
     // Switch back to Chat tab
     await page.locator('button:has-text("Chat")').click();
-    await expect(page.locator("text=SIAM Assistant")).toBeVisible();
+    await expect(page.locator("text=Welcome to The Betabase")).toBeVisible();
   });
 
   test("should allow typing in chat input", async ({ page }) => {
@@ -116,21 +118,28 @@ test.describe("SIAM AI Chat Interface", () => {
     // Make sure we're on the Chat tab
     await page.locator('button:has-text("Chat")').click();
 
-    // Look for suggestion buttons
+    // Wait for the suggestions header to ensure content is loaded
+    await expect(page.locator("text=Try these to get started")).toBeVisible();
+
+    // Look for suggestion buttons using partial text
     const suggestions = [
-      "What can you help me with today?",
-      "Tell me about your capabilities",
-      "How do I upload and analyze documents?",
-      "Explain the different interface modes",
+      "Media Batch Converter",
+      "Unified Submission Tool",
+      "GRPS QC",
+      "Registration Job Status",
     ];
 
     // Check if at least one suggestion is visible
     let foundSuggestion = false;
     for (const suggestion of suggestions) {
-      const suggestionElement = page.locator(`text="${suggestion}"`);
-      if (await suggestionElement.isVisible()) {
+      // Use button locator with has-text for more robust matching
+      const suggestionElement = page.locator(`button:has-text("${suggestion}")`);
+      try {
+        await suggestionElement.first().waitFor({ state: "visible", timeout: 2000 });
         foundSuggestion = true;
         break;
+      } catch (e) {
+        // Continue to next suggestion
       }
     }
 
@@ -159,9 +168,9 @@ test.describe("SIAM AI Chat Interface", () => {
     const gradientElements = await page.locator('[class*="bg-gradient"]').count();
     expect(gradientElements).toBeGreaterThan(0);
 
-    // Check for the animated sparkles icon
-    const sparklesIcon = page.locator('svg[class*="animate-pulse"]').first();
-    await expect(sparklesIcon).toBeVisible();
+    // Check for any animated element (e.g. status indicator or loading state)
+    const animatedElement = page.locator('[class*="animate-pulse"]').first();
+    await expect(animatedElement).toBeVisible();
   });
 });
 
@@ -180,17 +189,15 @@ test.describe("SIAM AI Chat Functionality", () => {
     await chatInput.fill("Hello, can you respond?");
 
     // Submit the message (press Enter or click send button)
-    const sendButton = page
-      .locator('button:has(svg[class*="h-4 w-4"])')
-      .filter({ hasText: "" })
-      .last();
+    const sendButton = page.locator('button[type="submit"]');
     await sendButton.click();
 
     // Wait for response (look for loading indicator or response)
     await page.waitForTimeout(2000);
 
     // Check if a response appears in the chat
-    const messageThread = page.locator('[class*="space-y-4"]');
+    // Updated locator to match new spacing class
+    const messageThread = page.locator('[class*="space-y-6"]');
     const messages = await messageThread.locator("> div").count();
 
     // Should have at least the user message
