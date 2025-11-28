@@ -9,7 +9,9 @@ export type ModelUseCase =
   | "aoma-query";
 
 export type AIModel =
-  // Gemini models (primary for RAG)
+  // Gemini 3.0 models (latest - November 2025)
+  | "gemini-3-pro-preview"
+  // Gemini 2.5 models (fallback)
   | "gemini-2.5-pro"
   | "gemini-2.5-flash"
   | "gemini-2.5-ultra"
@@ -35,31 +37,31 @@ class ModelConfigService {
 
   private modelConfigs: Record<ModelUseCase, ModelConfig> = {
     chat: {
-      model: (process.env.NEXT_PUBLIC_DEFAULT_CHAT_MODEL as AIModel) || "gemini-2.5-pro",
-      temperature: 0.9,
+      model: (process.env.NEXT_PUBLIC_DEFAULT_CHAT_MODEL as AIModel) || "gemini-3-pro-preview",
+      temperature: 1.0, // Gemini 3 requires temp=1.0 for optimal reasoning
       maxTokens: 8000,
-      description: "Conversational RAG with Gemini 2.5 Pro (2M context)",
+      description: "Conversational RAG with Gemini 3 Pro (1M context, advanced reasoning)",
       costTier: "standard",
     },
     "premium-chat": {
-      model: "gemini-2.5-pro",
-      temperature: 0.8,
+      model: "gemini-3-pro-preview",
+      temperature: 1.0, // Gemini 3 requires temp=1.0 for optimal reasoning
       maxTokens: 12000,
-      description: "Premium RAG synthesis with massive 2M context window",
+      description: "Premium RAG synthesis with Gemini 3 Pro advanced reasoning",
       costTier: "standard",
     },
     reasoning: {
-      model: "gemini-2.5-pro",
-      temperature: 0.7,
+      model: "gemini-3-pro-preview",
+      temperature: 1.0, // Gemini 3 requires temp=1.0 for optimal reasoning
       maxTokens: 10000,
-      description: "Deep reasoning and analysis with Gemini 2.5 Pro",
+      description: "Deep reasoning with Gemini 3 Pro (thinking_level: high)",
       costTier: "standard",
     },
     "code-generation": {
-      model: "gemini-2.5-pro",
-      temperature: 0.8,
+      model: "gemini-3-pro-preview",
+      temperature: 1.0, // Gemini 3 requires temp=1.0 for optimal reasoning
       maxTokens: 8000,
-      description: "Code generation optimized with Gemini 2.5 Pro",
+      description: "Code generation with Gemini 3 Pro advanced reasoning",
       costTier: "standard",
     },
     "test-generation": {
@@ -77,17 +79,17 @@ class ModelConfigService {
       costTier: "economy",
     },
     vision: {
-      model: "gemini-2.5-pro",
-      temperature: 0.7,
+      model: "gemini-3-pro-preview",
+      temperature: 1.0, // Gemini 3 requires temp=1.0 for optimal reasoning
       maxTokens: 4000,
-      description: "Multimodal visual analysis with Gemini 2.5 Pro",
+      description: "Multimodal visual analysis with Gemini 3 Pro",
       costTier: "standard",
     },
     "aoma-query": {
-      model: "gemini-2.5-pro",
-      temperature: 0.7, // Lower temp for factual accuracy in RAG
+      model: "gemini-3-pro-preview",
+      temperature: 1.0, // Gemini 3 requires temp=1.0 - lower temps cause looping/degradation
       maxTokens: 8000,
-      description: "AOMA knowledge synthesis with Gemini 2.5 Pro (2M context)",
+      description: "AOMA knowledge synthesis with Gemini 3 Pro (1M context, advanced reasoning)",
       costTier: "standard",
     },
   };
@@ -148,6 +150,7 @@ class ModelConfigService {
 
   getAvailableModels(): AIModel[] {
     return [
+      "gemini-3-pro-preview",
       "gemini-2.5-pro",
       "gemini-2.5-flash",
       "gemini-2.5-ultra",
@@ -163,9 +166,11 @@ class ModelConfigService {
 
   getModelDescription(model: AIModel): string {
     const descriptions: Record<AIModel, string> = {
-      // Gemini models
-      "gemini-2.5-pro": "Optimal for RAG: 2M context, excellent synthesis (recommended)",
-      "gemini-2.5-flash": "Fast & cost-efficient RAG with 1M context",
+      // Gemini 3 models (latest - November 2025)
+      "gemini-3-pro-preview": "Most advanced reasoning: 1M context, thinking_level support (RECOMMENDED)",
+      // Gemini 2.5 models (fallback)
+      "gemini-2.5-pro": "Previous gen: 2M context, good synthesis",
+      "gemini-2.5-flash": "Fast & cost-efficient with 1M context",
       "gemini-2.5-ultra": "Maximum capability (usually unnecessary for RAG)",
       // OpenAI models
       "gpt-5": "OpenAI GPT-5 (fallback)",

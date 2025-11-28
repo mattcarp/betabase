@@ -1,6 +1,6 @@
 import { streamText } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
+// OpenAI removed - using Gemini-only setup
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { z } from "zod";
@@ -12,6 +12,7 @@ import { modelConfig } from "../../../src/services/modelConfig";
 import { searchKnowledge } from "../../../src/services/knowledgeSearchService";
 import { UnifiedRAGOrchestrator } from "../../../src/services/unifiedRAGOrchestrator";
 import { getSessionStateManager } from "../../../src/lib/sessionStateManager";
+import { DEFAULT_APP_CONTEXT } from "../../../src/lib/supabase";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
@@ -62,7 +63,9 @@ const ChatRequestSchema = z.object({
   messages: z.array(MessageSchema).min(1).max(50), // Max 50 messages in history
   model: z
     .enum([
-      // Gemini models (primary for RAG)
+      // Gemini 3 models (latest - November 2025)
+      "gemini-3-pro-preview",
+      // Gemini 2.5 models (fallback)
       "gemini-2.5-pro",
       "gemini-2.5-flash",
       "gemini-2.5-ultra",
@@ -96,8 +99,8 @@ export async function GET(_req: Request) {
     JSON.stringify({
       status: "ready",
       version: "1.0.0",
-      models: ["gemini-2.5-pro", "gemini-2.5-flash", "gpt-5", "gpt-4o", "gpt-4o-mini"],
-      features: ["streaming", "aoma-context", "knowledge-base", "gemini-2m-context"],
+      models: ["gemini-3-pro-preview", "gemini-2.5-pro", "gemini-2.5-flash", "gpt-5", "gpt-4o"],
+      features: ["streaming", "aoma-context", "knowledge-base", "gemini-3-reasoning", "thinking-level"],
     }),
     {
       status: 200,
@@ -242,28 +245,9 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!process.env.OPENAI_API_KEY) {
-      console.error("[API] OPENAI_API_KEY is not set in environment variables");
-      return new Response(
-        JSON.stringify({
-          error: "Service temporarily unavailable",
-          code: "CONFIG_ERROR",
-          message: "OpenAI API key is not configured. Please contact support.",
-        }),
-        {
-          status: 503,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-
-    // Initialize providers after validation
+    // Initialize Gemini provider (Gemini-only setup - no OpenAI)
     const google = createGoogleGenerativeAI({
       apiKey: process.env.GOOGLE_API_KEY,
-    });
-
-    const openai = createOpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
     });
 
     console.log("[API] ✅ AI providers initialized");
@@ -452,9 +436,7 @@ export async function POST(req: Request) {
         try {
           const ragResult = await unifiedRAG.query(queryString, {
             sessionId,
-            organization: 'sony-music',
-            division: 'mso',
-            app_under_test: 'siam',
+            ...DEFAULT_APP_CONTEXT, // organization: 'sony-music', division: 'digital-operations', app_under_test: 'aoma'
             useContextAware: true,
             useAgenticRAG: queryComplexity > 7,
             useRLHFSignals: true,
@@ -715,7 +697,7 @@ export async function POST(req: Request) {
     const enhancedSystemPrompt = aomaContext.trim()
       ? `${systemPrompt || "You are SIAM, an AI assistant for Sony Music with access to AOMA knowledge."}
 
-**✅ YOU HAVE ACCESS TO AOMA KNOWLEDGE - USE IT CONFIDENTLY**
+**YOU HAVE ACCESS TO AOMA KNOWLEDGE - USE IT CONFIDENTLY**
 ${aomaContext}
 
 **CRITICAL INSTRUCTIONS:**
@@ -725,36 +707,29 @@ ${aomaContext}
 4. If asked for counts/statistics, say "I can't provide exact counts, but I can describe what I know"
 5. If a detail is missing, say "That's not in my current knowledge base"
 6. NEVER invent or infer facts beyond the provided context, UNLESS the user explicitly asks for a hypothetical example, generic diagram, or general explanation.
-7. When explaining complex processes, architectures, or flows, OR when explicitly asked, generate a Mermaid diagram using \`mermaid\` code blocks.
-8. **DIAGRAM SYNTAX RULES** (CRITICAL - follow exactly):
-   - Use \`flowchart TD\` or \`flowchart LR\` instead of \`graph\`.
-   - ALWAYS use complete 6-character hex colors (e.g., \`#2ecc71\`, NOT \`#2ec\` or truncated values).
-   - ALWAYS close all shapes properly: \`((text))\` for circles, \`[text]\` for rectangles, \`{text}\` for diamonds.
-   - ALWAYS end classDef lines with semicolons.
-   - NEVER truncate or abbreviate syntax - write complete valid Mermaid.
-   - Example:
-   \`\`\`mermaid
-   flowchart LR
-     classDef start fill:#2ecc71,stroke:#27ae60,stroke-width:2px,color:#ffffff;
-     classDef process fill:#3498db,stroke:#2980b9,stroke-width:2px,color:#ffffff;
-     classDef decision fill:#f39c12,stroke:#d35400,stroke-width:2px,color:#ffffff;
 
-     A((Start)):::start --> B[Process]:::process;
-     B --> C{Valid?}:::decision;
-     C -- Yes --> D[Done]:::process;
-     C -- No --> E[Retry]:::process;
-   \`\`\`
-9. **JIRA VISUALIZATION**: If the context contains Jira tickets, ALWAYS generate a Mermaid diagram showing the ticket's workflow state, dependencies, or a timeline.
+**DIAGRAM POLICY - OPTIONAL, NOT BLOCKING:**
+- Do NOT auto-generate diagrams. Answer with TEXT FIRST.
+- After answering, if a diagram would help, offer it by saying:
+  "Would you like me to generate a diagram? I can create:
+  - **Explainer diagram**: A visual to help understand this concept
+  - **Workflow diagram**: A step-by-step process flow"
+- Only generate a Mermaid diagram if the user explicitly asks for one.
+- When generating diagrams, follow these syntax rules:
+  - Use \`flowchart TD\` or \`flowchart LR\` instead of \`graph\`.
+  - ALWAYS use complete 6-character hex colors (e.g., \`#2ecc71\`, NOT \`#2ec\`).
+  - ALWAYS close all shapes properly: \`((text))\` for circles, \`[text]\` for rectangles, \`{text}\` for diamonds.
+  - ALWAYS end classDef lines with semicolons.
 
 **EXAMPLES OF GOOD vs BAD RESPONSES:**
-❌ BAD: "From the interface shown, AOMA provides..."
-✅ GOOD: "AOMA provides..."
+BAD: "From the interface shown, AOMA provides..."
+GOOD: "AOMA provides..."
 
-❌ BAD: "The screen displays three options..."
-✅ GOOD: "AOMA offers three options..."
+BAD: "The screen displays three options..."
+GOOD: "AOMA offers three options..."
 
-❌ BAD: "There are 904 Jira tickets."
-✅ GOOD: "I can't provide exact counts, but AOMA has extensive Jira integration for tracking tickets and issues."`
+BAD: [Auto-generating a diagram without asking]
+GOOD: "Would you like me to generate a diagram to visualize this?"`
       : `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
 
 **RESPONSE REQUIRED:**
@@ -789,11 +764,10 @@ Respond with ONLY this message:
     // O-series models (o1, o3, o4) don't support temperature - they use fixed reasoning
     const supportsTemperature = !selectedModel.startsWith('o');
 
-    // Determine which provider to use based on model
-    const isGeminiModel = selectedModel.startsWith('gemini-');
-    const modelProvider = isGeminiModel ? google(selectedModel) : openai(selectedModel);
-    
-    console.log(`🤖 Using ${isGeminiModel ? 'Google Gemini' : 'OpenAI'} provider for model: ${selectedModel}`);
+    // Gemini-only setup - all models use Google provider
+    const modelProvider = google(selectedModel);
+
+    console.log(`🤖 Using Google Gemini provider for model: ${selectedModel}`);
 
     const result = streamText({
       model: modelProvider,

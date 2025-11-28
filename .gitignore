@@ -142,3 +142,6 @@ tmp/theme-screenshots/*.png
 tmp/theme-screenshots/*.jpg
 tmp/theme-screenshots/*.jpeg
 node_modules 2/
+docs/supabase-aoma-analysis.json
+tmp/
+data/aoma-export.csv

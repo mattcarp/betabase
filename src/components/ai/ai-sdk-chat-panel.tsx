@@ -151,7 +151,7 @@ export function AiSdkChatPanel({
   console.log("🎤 Voice buttons should be rendering in PromptInputTools");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
-  const [selectedModel, setSelectedModel] = useState("gemini-2.5-pro");
+  const [selectedModel, setSelectedModel] = useState("gemini-3-pro-preview");
   const [showReasoning, setShowReasoning] = useState(true);
   const [currentBranch, setCurrentBranch] = useState<string | null>(null);
   const [activeTasks, setActiveTasks] = useState<any[]>([]);
@@ -269,10 +269,11 @@ export function AiSdkChatPanel({
     })();
 
   const availableModels = [
-    // Gemini models (primary for RAG)
-    { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro (2M context) ⭐" },
+    // Gemini 3 models (latest - November 2025)
+    { id: "gemini-3-pro-preview", name: "Gemini 3 Pro (1M context, Advanced Reasoning) ⭐" },
+    // Gemini 2.5 models (fallback)
+    { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro (2M context)" },
     { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash (Fast & Cheap)" },
-    { id: "gemini-2.5-ultra", name: "Gemini 2.5 Ultra (Premium)" },
     // OpenAI models (fallback)
     { id: "gpt-5", name: "GPT-5 (Fallback)" },
     { id: "gpt-4o", name: "GPT-4o" },
