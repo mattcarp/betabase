@@ -1,7 +1,7 @@
 <h1>North Star Three-Pillar Demo Plan</h1>
 <p>(Yes, &quot;North Star&quot; is a dramatically pretentious name. We&#39;re keeping it because it&#39;s funny.)</p>
 <h2>What This Is</h2>
-<p>A walkthrough for colleagues showing how we&#39;ve built an integrated AI platform. This isn&#39;t a sales pitch - it&#39;s a technical deep-dive for people who&#39;ve been doing this work as long as I have. The goal is to show how these three capabilities reinforce each other in ways that off-the-shelf tools can&#39;t match.</p>
+<p>A 5-minute recorded video for colleagues showing how we&#39;ve built an integrated AI platform. Technical but casual - this is for friends who&#39;ve been doing this work as long as I have. Edited in CapCut with a vignette of me talking and text overlays for key points. No music, no fancy effects.</p>
 <p><strong>Dev testing only.</strong> We&#39;re not touching production for this demo - that&#39;s a whole separate nightmare.</p>
 <p><strong>The Three Pillars:</strong></p>
 <ul>
@@ -113,35 +113,44 @@
 </tbody></table>
 <hr>
 <h2>The Demo Structure</h2>
-<h3>Format: ~30 Minutes (Conversational)</h3>
-<p>This isn&#39;t a formal presentation. It&#39;s more like: &quot;Here&#39;s what we built, here&#39;s why it matters, let me show you.&quot;</p>
-<pre><code>Part 1: The Problem We&#39;re Solving (5 mins)
-  &quot;You know how tests break every time someone changes a button?&quot;
-  &quot;You know how chatbots give garbage answers about internal systems?&quot;
+<h3>Format: ~5 Minute Recorded Video</h3>
+<p>A quick screen recording for colleagues. Technical but casual - this is for friends who&#39;ve been doing this work as long as I have. Shot with a vignette of myself talking, text overlays when things become important, edited in CapCut. No music, no fancy effects, no production deployment.</p>
+<p><strong>Recording setup:</strong></p>
+<ul>
+<li>Screen capture of the app</li>
+<li>Small picture-in-picture of me talking (optional)</li>
+<li>Text overlays for key points</li>
+<li>Keep it tight - under 5 minutes</li>
+</ul>
+<pre><code>0:00-0:30 - Quick intro
+  &quot;Here&#39;s what we built - three things that solve each other&quot;
 
-Part 2: The Three Pillars (20 mins)
-  Chat: Show it actually knowing our domain
-  Curate: Show how one correction improves many queries
-  Test: Show a test healing itself
+0:30-2:00 - Chat pillar
+  Ask a domain question, show it knows our systems
+  Show where the answer came from
 
-Part 3: Discussion (open-ended)
-  &quot;What would this look like for your team?&quot;
+2:00-3:30 - Curate pillar
+  Show feedback collection
+  &quot;When it&#39;s wrong, we fix it - and it learns&quot;
+
+3:30-4:30 - Test pillar
+  Show a selector mismatch
+  Show the self-healing proposal
+
+4:30-5:00 - Wrap up
+  &quot;The interesting part is how they connect&quot;
 </code></pre>
-<h3>The Story Arc</h3>
-<p><strong>Opening (relatable problem):</strong></p>
-<blockquote>
-<p>&quot;We&#39;ve all dealt with this: tests that break when CSS changes, AI tools that don&#39;t know our systems, and knowledge that&#39;s stuck in people&#39;s heads. What if these three problems could solve each other?&quot;</p>
-</blockquote>
-<p><strong>The Pillars:</strong></p>
-<ol>
-<li><strong>Chat</strong>: &quot;Ask it about AOMA&quot; - it knows because we&#39;ve fed it our docs</li>
-<li><strong>Curate</strong>: &quot;When it&#39;s wrong, we correct it&quot; - and that correction propagates</li>
-<li><strong>Test</strong>: &quot;Watch what happens when I change this selector&quot; - it proposes a fix</li>
-</ol>
-<p><strong>Closing:</strong></p>
-<blockquote>
-<p>&quot;The interesting part isn&#39;t any one of these - it&#39;s how they connect. Feedback from chat improves retrieval. Better retrieval means fewer wrong answers. Test failures can trigger human review. It&#39;s a loop.&quot;</p>
-</blockquote>
+<h3>The Story Arc (for video)</h3>
+<p><strong>Opening (30 seconds):</strong>
+&quot;We built three things that solve each other - AI chat that knows our systems, feedback that makes it smarter, and tests that fix themselves. Let me show you.&quot;</p>
+<p><strong>Each pillar (1-1.5 min each):</strong></p>
+<ul>
+<li>Chat: Ask a real question, show domain knowledge, show sources</li>
+<li>Curate: Show feedback UI, explain how corrections propagate</li>
+<li>Test: Show a broken selector, show the healing proposal</li>
+</ul>
+<p><strong>Closing (30 seconds):</strong>
+&quot;The interesting part is how they connect - feedback improves retrieval, better retrieval means fewer wrong answers, test failures trigger human review. It&#39;s a loop.&quot;</p>
 <hr>
 <h2>PILLAR 1: CHAT - Domain Intelligence</h2>
 <h3>What It Actually Does</h3>
@@ -310,60 +319,51 @@ src/components/
 <li>Cross-pillar analytics dashboard</li>
 </ul>
 <hr>
-<h2>Discussion Topics</h2>
-<p>These are the interesting conversations, not sales questions:</p>
+<h2>Follow-Up Questions (for after the video)</h2>
+<p>If people want to dig deeper after watching:</p>
 <ol>
-<li><p><strong>On AI Testing</strong>: &quot;How do you handle the 6% of heals that fail? Is human review scalable?&quot;</p>
-</li>
-<li><p><strong>On Domain RAG</strong>: &quot;What&#39;s the embedding refresh cadence? How do you handle stale knowledge?&quot;</p>
-</li>
-<li><p><strong>On RLHF</strong>: &quot;When do you actually retrain vs. just adjusting retrieval weights?&quot;</p>
-</li>
-<li><p><strong>On Integration</strong>: &quot;Could this work with our existing test framework, or does it require buy-in?&quot;</p>
-</li>
-<li><p><strong>On Trust</strong>: &quot;How do you convince QA to trust an AI-proposed fix?&quot;</p>
-</li>
+<li><strong>On AI Testing</strong>: &quot;How do you handle the 6% of heals that fail?&quot;</li>
+<li><strong>On Domain RAG</strong>: &quot;What&#39;s the embedding refresh cadence?&quot;</li>
+<li><strong>On RLHF</strong>: &quot;When do you actually retrain vs. just adjusting retrieval weights?&quot;</li>
+<li><strong>On Integration</strong>: &quot;Could this work with our existing test framework?&quot;</li>
 </ol>
 <hr>
-<h2>Pre-Demo Checklist</h2>
+<h2>Pre-Recording Checklist</h2>
 <h3>Environment Setup (localhost only)</h3>
 <ul>
 <li><input disabled="" type="checkbox"> Dev server running: <code>npx kill-port 3000 &amp;&amp; npm run dev</code></li>
 <li><input disabled="" type="checkbox"> Test data seeded</li>
 <li><input disabled="" type="checkbox"> No console errors visible</li>
-<li><input disabled="" type="checkbox"> Playwright tests pass on localhost</li>
+<li><input disabled="" type="checkbox"> Screen recording software ready</li>
 </ul>
-<h3>Components Ready</h3>
+<h3>Components to Capture</h3>
 <ul>
-<li><input disabled="" type="checkbox"> Chat responds to AOMA queries</li>
-<li><input disabled="" type="checkbox"> Curate tab accessible</li>
-<li><input disabled="" type="checkbox"> Test Dashboard loads</li>
-<li><input disabled="" type="checkbox"> Self-Healing viewer has data</li>
+<li><input disabled="" type="checkbox"> Chat responds to AOMA queries (record this interaction)</li>
+<li><input disabled="" type="checkbox"> Curate tab - show feedback UI</li>
+<li><input disabled="" type="checkbox"> Test Dashboard - show self-healing viewer</li>
 </ul>
-<h3>Backup Plans</h3>
+<h3>Recording Notes</h3>
 <ul>
-<li><strong>If live demo fails</strong>: Walk through screenshots</li>
-<li><strong>If self-healing doesn&#39;t trigger</strong>: Use pre-recorded example</li>
-<li><strong>If RAG is slow</strong>: Explain while waiting, have cached response ready</li>
+<li>Keep each pillar to ~1-1.5 minutes</li>
+<li>Add text overlays in CapCut for key points</li>
+<li>If something fails during recording, just re-record that segment</li>
+<li>Total video: under 5 minutes</li>
 </ul>
 <h3>NOT Doing</h3>
 <ul>
-<li>Production deployment</li>
+<li>Production deployment or testing</li>
 <li>Render monitoring</li>
 <li>Mailinator magic link testing</li>
 <li>Any of the usual prod verification stuff</li>
 </ul>
-<p>This is a dev demo for colleagues, not a customer presentation.</p>
 <hr>
 <h2>What This ISN&#39;T</h2>
-<p>Let&#39;s be clear about scope:</p>
 <ul>
 <li><strong>Not a product pitch</strong>: We&#39;re not selling anything</li>
 <li><strong>Not production-hardened</strong>: This is an internal tool, R&amp;D quality</li>
-<li><strong>Not replacing humans</strong>: It&#39;s augmentation, not automation</li>
-<li><strong>Not magic</strong>: 94% isn&#39;t 100%, confidence scores matter</li>
+<li><strong>Not a polished marketing video</strong>: Technical, casual, for friends</li>
 </ul>
-<p>The interesting question isn&#39;t &quot;should you buy this&quot; - it&#39;s &quot;how would you approach this problem differently?&quot;</p>
 <hr>
 <p><em>Last Updated: November 2025</em>
-<em>For: Technical colleagues, internal demo</em></p>
+<em>Format: 5-minute recorded video, CapCut, for technical colleagues</em></p>
+

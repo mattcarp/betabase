@@ -4,7 +4,7 @@
 
 ## What This Is
 
-A walkthrough for colleagues showing how we've built an integrated AI platform. This isn't a sales pitch - it's a technical deep-dive for people who've been doing this work as long as I have. The goal is to show how these three capabilities reinforce each other in ways that off-the-shelf tools can't match.
+A 5-minute recorded video for colleagues showing how we've built an integrated AI platform. Technical but casual - this is for friends who've been doing this work as long as I have. Edited in CapCut with a vignette of me talking and text overlays for key points. No music, no fancy effects.
 
 **Dev testing only.** We're not touching production for this demo - that's a whole separate nightmare.
 
@@ -250,63 +250,51 @@ src/components/
 
 ---
 
-## Discussion Topics
+## Follow-Up Questions (for after the video)
 
-These are the interesting conversations, not sales questions:
+If people want to dig deeper after watching:
 
-1. **On AI Testing**: "How do you handle the 6% of heals that fail? Is human review scalable?"
-
-2. **On Domain RAG**: "What's the embedding refresh cadence? How do you handle stale knowledge?"
-
+1. **On AI Testing**: "How do you handle the 6% of heals that fail?"
+2. **On Domain RAG**: "What's the embedding refresh cadence?"
 3. **On RLHF**: "When do you actually retrain vs. just adjusting retrieval weights?"
-
-4. **On Integration**: "Could this work with our existing test framework, or does it require buy-in?"
-
-5. **On Trust**: "How do you convince QA to trust an AI-proposed fix?"
+4. **On Integration**: "Could this work with our existing test framework?"
 
 ---
 
-## Pre-Demo Checklist
+## Pre-Recording Checklist
 
 ### Environment Setup (localhost only)
 - [ ] Dev server running: `npx kill-port 3000 && npm run dev`
 - [ ] Test data seeded
 - [ ] No console errors visible
-- [ ] Playwright tests pass on localhost
+- [ ] Screen recording software ready
 
-### Components Ready
-- [ ] Chat responds to AOMA queries
-- [ ] Curate tab accessible
-- [ ] Test Dashboard loads
-- [ ] Self-Healing viewer has data
+### Components to Capture
+- [ ] Chat responds to AOMA queries (record this interaction)
+- [ ] Curate tab - show feedback UI
+- [ ] Test Dashboard - show self-healing viewer
 
-### Backup Plans
-- **If live demo fails**: Walk through screenshots
-- **If self-healing doesn't trigger**: Use pre-recorded example
-- **If RAG is slow**: Explain while waiting, have cached response ready
+### Recording Notes
+- Keep each pillar to ~1-1.5 minutes
+- Add text overlays in CapCut for key points
+- If something fails during recording, just re-record that segment
+- Total video: under 5 minutes
 
 ### NOT Doing
-- Production deployment
+- Production deployment or testing
 - Render monitoring
 - Mailinator magic link testing
 - Any of the usual prod verification stuff
-
-This is a dev demo for colleagues, not a customer presentation.
 
 ---
 
 ## What This ISN'T
 
-Let's be clear about scope:
-
 - **Not a product pitch**: We're not selling anything
 - **Not production-hardened**: This is an internal tool, R&D quality
-- **Not replacing humans**: It's augmentation, not automation
-- **Not magic**: 94% isn't 100%, confidence scores matter
-
-The interesting question isn't "should you buy this" - it's "how would you approach this problem differently?"
+- **Not a polished marketing video**: Technical, casual, for friends
 
 ---
 
 *Last Updated: November 2025*
-*For: Technical colleagues, internal demo*
+*Format: 5-minute recorded video, CapCut, for technical colleagues*
