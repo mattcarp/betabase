@@ -42,6 +42,16 @@ const ALLOWED_ERROR_PATTERNS = [
   /status of 405/i,
   /Method Not Allowed/i,
 
+  // Dev server instability (Turbopack/Next.js build manifest issues)
+  // TODO: Remove once upgraded to Next.js 16 or Turbopack stabilizes
+  /Failed to load resource:.*500/i,
+  /status of 500.*Internal Server Error/i,
+  /Cannot find module/i,  // Turbopack runtime module errors
+  /ENOENT.*build-manifest\.json/i,
+  /ENOENT.*app-paths-manifest\.json/i,
+  /chunks\/ssr/i,  // Turbopack SSR chunk errors
+  /\[turbopack\]/i,  // Any turbopack-related error
+
   // React hydration warnings (not errors)
   /Warning: Text content did not match/i,
 

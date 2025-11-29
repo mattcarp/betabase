@@ -5,6 +5,135 @@ import { test, expect } from '../fixtures/base-test';
  * This test specifically checks for the issue that broke production in September 2024
  */
 
+test.describe("Custom Element Guard - Localhost Multi-Tab", () => {
+  test("should not throw duplicate custom element errors with multiple pages", async ({
+    browser,
+  }) => {
+    // Track console errors across all pages
+    const consoleErrors: { page: string; message: string }[] = [];
+
+    // Create first page/tab
+    const page1 = await browser.newPage();
+    page1.on("console", (msg) => {
+      if (msg.type() === "error") {
+        consoleErrors.push({ page: "page1", message: msg.text() });
+      }
+    });
+    page1.on("pageerror", (error) => {
+      consoleErrors.push({ page: "page1", message: error.message });
+    });
+
+    // Create second page/tab
+    const page2 = await browser.newPage();
+    page2.on("console", (msg) => {
+      if (msg.type() === "error") {
+        consoleErrors.push({ page: "page2", message: msg.text() });
+      }
+    });
+    page2.on("pageerror", (error) => {
+      consoleErrors.push({ page: "page2", message: error.message });
+    });
+
+    // Navigate both pages to the app
+    await Promise.all([
+      page1.goto("http://localhost:3000"),
+      page2.goto("http://localhost:3000"),
+    ]);
+
+    // Wait for pages to fully load
+    await Promise.all([
+      page1.waitForLoadState("networkidle"),
+      page2.waitForLoadState("networkidle"),
+    ]);
+
+    // Give some time for any delayed scripts to run
+    await page1.waitForTimeout(2000);
+    await page2.waitForTimeout(2000);
+
+    // Check for custom element errors
+    const customElementErrors = consoleErrors.filter(
+      (e) =>
+        e.message.includes("already been defined") ||
+        e.message.includes("already defined") ||
+        e.message.includes("custom element") ||
+        e.message.includes("mce-autosize")
+    );
+
+    console.log("All console errors:", consoleErrors);
+    console.log("Custom element errors:", customElementErrors);
+
+    // The guard should prevent these errors
+    expect(
+      customElementErrors.length,
+      `Found custom element errors: ${JSON.stringify(customElementErrors)}`
+    ).toBe(0);
+
+    // Cleanup
+    await page1.close();
+    await page2.close();
+  });
+
+  test("should have inline custom element guard in HTML head", async ({
+    page,
+  }) => {
+    await page.goto("http://localhost:3000");
+
+    // Check that the inline script is present in the head
+    const guardScript = await page.evaluate(() => {
+      const scripts = document.querySelectorAll("head script");
+      for (const script of scripts) {
+        if (
+          script.textContent &&
+          script.textContent.includes("customElements.define")
+        ) {
+          return script.textContent;
+        }
+      }
+      return null;
+    });
+
+    expect(guardScript).not.toBeNull();
+    expect(guardScript).toContain("window.customElements.get(name)");
+    console.log("Guard script found in head");
+  });
+
+  test("should gracefully handle duplicate custom element registration", async ({
+    page,
+  }) => {
+    const consoleMessages: string[] = [];
+    page.on("console", (msg) => {
+      consoleMessages.push(msg.text());
+    });
+
+    await page.goto("http://localhost:3000");
+    await page.waitForLoadState("networkidle");
+
+    // Try to register a custom element that may already exist
+    const result = await page.evaluate(() => {
+      try {
+        // Try to define a test custom element twice
+        class TestElement extends HTMLElement {}
+        window.customElements.define("test-guard-element", TestElement);
+        window.customElements.define("test-guard-element", TestElement);
+        return { success: true, error: null };
+      } catch (e: unknown) {
+        const error = e as Error;
+        return { success: false, error: error.message };
+      }
+    });
+
+    // The guard should prevent the error
+    expect(result.success).toBe(true);
+    expect(result.error).toBeNull();
+
+    // Should see the info message about skipping re-registration
+    const skipMessage = consoleMessages.find((m) =>
+      m.includes("already defined, skipping")
+    );
+    expect(skipMessage).toBeDefined();
+  });
+});
+
 test.describe("CustomElementGuard Protection", () => {
   test.beforeEach(async ({ page }) => {
     // Monitor console for errors
@@ -97,23 +226,23 @@ test.describe("CustomElementGuard Protection", () => {
         // Attempt to define a test custom element
         class TestElement extends HTMLElement {}
 
-        // Try to define it twice (should be handled gracefully)
+        // Try to define it twice (guard should silently skip the second registration)
         customElements.define("test-element-guard", TestElement);
 
-        // Try again - CustomElementGuard should prevent error
+        // Try again - CustomElementGuard should silently skip (no error thrown)
         try {
           customElements.define("test-element-guard", TestElement);
-          return "duplicate-allowed"; // Should not happen
+          return "duplicate-silently-skipped"; // Expected with guard
         } catch (e) {
-          return "duplicate-prevented"; // Expected with guard
+          return "duplicate-threw-error"; // Would happen without guard
         }
       } catch (e) {
         return "initial-registration-failed";
       }
     });
 
-    // The guard should prevent the duplicate registration error
-    expect(registrationResult).not.toBe("duplicate-allowed");
+    // The guard should silently skip duplicate registrations (not throw errors)
+    expect(registrationResult).toBe("duplicate-silently-skipped");
   });
 
   test("Page loads without Supabase reference errors", async ({ page }) => {
