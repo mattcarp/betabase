@@ -108,6 +108,7 @@ const DEMO_QUEUE: AnnotationQueueItem[] = [
         "The response is missing the new streaming royalty rates introduced in the Q3 update.",
       suggestedCorrection:
         "The royalty calculation in AOMA 9.1 has been updated as of Q3 2025. For digital sales, the base rate is 15% of net receipts. **NEW: Streaming royalties are now calculated at 0.004 per stream with a minimum threshold of 1000 streams.** Territory-specific adjustments apply.",
+      preferredResponse: null,
       documentsMarked: null,
       userEmail: "user@example.com",
       sessionId: "sess-789",
@@ -168,6 +169,7 @@ const DEMO_QUEUE: AnnotationQueueItem[] = [
       reviewedAt: null,
       createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
       updatedAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+      preferredResponse: null,
     },
     priority: 8,
     assignedTo: null,

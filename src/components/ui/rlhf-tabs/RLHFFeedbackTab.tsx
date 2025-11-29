@@ -365,75 +365,145 @@ export function RLHFFeedbackTab() {
 
   const loadFeedbackQueue = async () => {
     setLoading(true);
-    
+
     try {
-      // In production, fetch from Supabase rlhf_feedback table
-      // For now, mock data
-      const mockData: FeedbackItem[] = [
-        {
-          id: "1",
-          sessionId: "session-1",
-          query: "How do I configure the AOMA data pipeline for real-time processing?",
-          response: "To configure the AOMA data pipeline for real-time processing, you'll need to adjust several key settings in the configuration file. First, enable the streaming mode by setting 'streaming.enabled' to true. Then configure the batch size and processing interval according to your throughput requirements...",
-          retrievedDocs: [
-            {
-              id: "doc-1",
-              content: "The AOMA data pipeline supports real-time processing through streaming ingestion. Configure it in config.yaml under the streaming section...",
-              source_type: "knowledge",
-              similarity: 0.92,
-              rerankScore: 0.95,
-            },
-            {
-              id: "doc-2",
-              content: "Configuration guide for AOMA pipeline settings and parameters. See the streaming configuration section for real-time options...",
-              source_type: "knowledge",
-              similarity: 0.88,
-              rerankScore: 0.89,
-            },
-          ],
-          timestamp: new Date(Date.now() - 3600000).toISOString(),
-        },
-      ];
-      
-      setFeedbackQueue(mockData);
-      
-      // Calculate stats
-      const pending = mockData.filter(i => !i.feedbackSubmitted).length;
-      const submitted = mockData.filter(i => i.feedbackSubmitted).length;
-      
+      // Fetch real feedback from API with stats
+      const response = await fetch("/api/rlhf/feedback?limit=50&stats=true");
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch feedback queue");
+      }
+
+      const data = await response.json();
+      const feedback = data.feedback || [];
+      const apiStats = data.stats || {};
+
+      // Map database records to FeedbackItem format
+      const feedbackItems: FeedbackItem[] = feedback.map((f: {
+        id: string;
+        session_id?: string;
+        query?: string;
+        user_query?: string;
+        response?: string;
+        ai_response?: string;
+        retrieved_contexts?: Array<{
+          content: string;
+          source?: string;
+          score?: number;
+        }>;
+        created_at: string;
+        status?: string;
+        feedback_type?: string;
+      }) => ({
+        id: f.id,
+        sessionId: f.session_id || "unknown",
+        query: f.query || f.user_query || "No query recorded",
+        response: f.response || f.ai_response || "No response recorded",
+        retrievedDocs: (f.retrieved_contexts || []).map((ctx, idx) => ({
+          id: `doc-${f.id}-${idx}`,
+          content: ctx.content || "",
+          source_type: ctx.source || "knowledge",
+          similarity: ctx.score || 0.8,
+          rerankScore: ctx.score ? ctx.score * 1.05 : undefined,
+        })),
+        timestamp: f.created_at,
+        feedbackSubmitted: f.status === "approved" || f.status === "rejected",
+      }));
+
+      setFeedbackQueue(feedbackItems);
+
+      // Calculate stats from API response
+      const pending = feedbackItems.filter(i => !i.feedbackSubmitted).length;
+      const submitted = feedbackItems.filter(i => i.feedbackSubmitted).length;
+
       setStats({
         pending,
         submitted,
-        avgRating: 0,
+        avgRating: parseFloat(apiStats.avgRating) || 0,
       });
     } catch (error) {
       console.error("Failed to load feedback queue:", error);
       toast.error("Failed to load feedback queue");
+      // Set empty state on error
+      setFeedbackQueue([]);
+      setStats({ pending: 0, submitted: 0, avgRating: 0 });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSubmitFeedback = async (feedback: any) => {
+  const handleSubmitFeedback = async (feedback: {
+    type: string;
+    itemId: string;
+    value?: { score?: number; correction?: string };
+    docRelevance?: Record<string, boolean>;
+  }) => {
     console.log("Submitting feedback:", feedback);
-    
-    // Update local state
-    setFeedbackQueue(prev =>
-      prev.map(item =>
-        item.id === feedback.itemId
-          ? { ...item, feedbackSubmitted: true }
-          : item
-      )
-    );
-    
-    // Update stats
-    setStats(prev => ({
-      ...prev,
-      pending: prev.pending - 1,
-      submitted: prev.submitted + 1,
-    }));
-    
-    // In production, save to Supabase rlhf_feedback table
+
+    try {
+      // Update feedback record via API
+      const updatePayload: Record<string, unknown> = {
+        status: feedback.type === "thumbs_up" ? "approved" : "reviewing",
+        feedback_type: feedback.type,
+      };
+
+      // Add thumbs_up based on feedback type
+      if (feedback.type === "thumbs_up") {
+        updatePayload.thumbs_up = true;
+      } else if (feedback.type === "thumbs_down") {
+        updatePayload.thumbs_up = false;
+      }
+
+      // Add rating if provided
+      if (feedback.value?.score) {
+        updatePayload.rating = feedback.value.score;
+      }
+
+      // Add correction if provided
+      if (feedback.value?.correction) {
+        updatePayload.suggested_correction = feedback.value.correction;
+        updatePayload.feedback_text = feedback.value.correction;
+      }
+
+      // Add document relevance if provided
+      if (feedback.docRelevance && Object.keys(feedback.docRelevance).length > 0) {
+        updatePayload.documents_marked = Object.entries(feedback.docRelevance).map(
+          ([docId, relevant]) => ({
+            documentId: docId,
+            relevant,
+          })
+        );
+      }
+
+      const response = await fetch(`/api/rlhf/feedback/${feedback.itemId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatePayload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update feedback");
+      }
+
+      // Update local state on success
+      setFeedbackQueue(prev =>
+        prev.map(item =>
+          item.id === feedback.itemId
+            ? { ...item, feedbackSubmitted: true }
+            : item
+        )
+      );
+
+      // Update stats
+      setStats(prev => ({
+        ...prev,
+        pending: prev.pending - 1,
+        submitted: prev.submitted + 1,
+      }));
+    } catch (error) {
+      console.error("Failed to submit feedback:", error);
+      throw error; // Re-throw to let caller handle toast
+    }
   };
 
   if (loading) {

@@ -23,12 +23,25 @@ export { ComparisonPanel, type ComparisonData } from "./ComparisonPanel";
 export { FeedbackImpactLive } from "./FeedbackImpactLive";
 export { CuratorWorkspace } from "./CuratorWorkspace";
 export { FeedbackAnalytics } from "./FeedbackAnalytics";
-export { FeedbackBadge } from "./FeedbackBadge";
-export { useFeedback, FeedbackProvider } from "./FeedbackContext";
+export { FeedbackBadge, type FeedbackBadgeData } from "./FeedbackBadge";
+export {
+  useFeedback,
+  useQuickFeedback,
+  useDetailedFeedback,
+  useFeedbackEvents,
+  FeedbackProvider,
+} from "./FeedbackContext";
 export type {
   FeedbackCategory,
   FeedbackSeverity,
   FeedbackStatus,
+  FeedbackRecord,
+  FeedbackMetrics,
+  FeedbackEvent,
   AnnotationQueueItem,
   CuratorAction,
+  ComparisonPair,
+  DPOTrainingExample,
+  DocumentRelevance,
+  RagMetadata,
 } from "./types";
