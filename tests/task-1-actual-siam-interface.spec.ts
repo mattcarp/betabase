@@ -3,7 +3,7 @@
  * Tests for what ACTUALLY exists, not the fantasy requirements
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from './fixtures/base-test';
 
 test.describe("Task 1: ACTUAL SIAM Chat Interface", () => {
   test.beforeEach(async ({ page }) => {

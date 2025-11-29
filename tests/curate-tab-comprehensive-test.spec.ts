@@ -5,7 +5,8 @@
  * Testing approach: FUNCTIONAL > VISUAL > BEHAVIORAL
  */
 
-import { test, expect, Page } from "@playwright/test";
+import { Page } from '@playwright/test';
+import { test, expect } from './fixtures/base-test';
 import path from "path";
 
 // Test configuration

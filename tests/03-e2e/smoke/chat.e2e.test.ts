@@ -4,7 +4,7 @@
  * @tags regression, chat, e2e
  * NOTE: These require authentication - not true smoke tests
  */
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../../fixtures/base-test';
 import { ChatPage } from "../../__pages__/ChatPage";
 import { TestFactory } from "../../__fixtures__/TestFactory";
 

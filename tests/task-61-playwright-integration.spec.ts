@@ -3,7 +3,7 @@
  * Tests for Playwright integration with the Test Dashboard
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from './fixtures/base-test';
 
 test.describe("Task 61: Playwright Test Dashboard Integration", () => {
   test.beforeEach(async ({ page }) => {

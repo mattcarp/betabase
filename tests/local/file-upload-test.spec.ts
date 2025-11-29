@@ -9,7 +9,8 @@
  * - Progress indicators
  */
 
-import { test, expect, Page } from "@playwright/test";
+import { Page } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 import path from "path";
 import fs from "fs";
 

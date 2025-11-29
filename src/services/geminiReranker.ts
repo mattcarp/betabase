@@ -256,12 +256,13 @@ Respond with ONLY valid JSON in this exact format:
     try {
       console.log('📊 Loading RLHF feedback for document boosts...');
       
-      // Load positive feedback (rating >= 4 or thumbs_up = true) with curator-marked documents
+      // Load positive feedback with retrieved contexts
+      // Using correct column names: retrieved_contexts, feedback_type, feedback_value
       const { data: positiveFeedback, error } = await supabase
         .from('rlhf_feedback')
-        .select('documents_marked, rating, thumbs_up')
-        .or('rating.gte.4,thumbs_up.eq.true')
-        .not('documents_marked', 'is', null)
+        .select('retrieved_contexts, feedback_type, feedback_value')
+        .or('feedback_type.eq.thumbs_up,feedback_value->>score.gte.4')
+        .not('retrieved_contexts', 'is', null)
         .order('created_at', { ascending: false })
         .limit(50);
 
@@ -277,14 +278,16 @@ Respond with ONLY valid JSON in this exact format:
 
       // Build a map of document IDs to boost scores
       const docBoostMap = new Map<string, { count: number, avgRating: number, totalRating: number }>();
-      
+
       for (const feedback of positiveFeedback) {
-        const markedDocs = feedback.documents_marked || [];
-        const rating = feedback.rating || (feedback.thumbs_up ? 5 : 3);
+        const markedDocs = feedback.retrieved_contexts || [];
+        const rating = feedback.feedback_value?.score || (feedback.feedback_type === 'thumbs_up' ? 5 : 3);
         
         for (const markedDoc of markedDocs) {
-          if (markedDoc.relevant) {
-            const docId = markedDoc.id;
+          // retrieved_contexts has {doc_id, similarity, rank, content_preview}
+          // Consider all retrieved docs as "relevant" since they were in a positive feedback response
+          const docId = markedDoc.doc_id || markedDoc.id;
+          if (docId) {
             const existing = docBoostMap.get(docId) || { count: 0, avgRating: 0, totalRating: 0 };
             existing.count++;
             existing.totalRating += rating;

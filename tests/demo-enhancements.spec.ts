@@ -1,4 +1,5 @@
-import { test, expect, Page } from "@playwright/test";
+import { Page } from '@playwright/test';
+import { test, expect } from './fixtures/base-test';
 
 // Collect console messages
 const consoleMessages: { type: string; text: string }[] = [];

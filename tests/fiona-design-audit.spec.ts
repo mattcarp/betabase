@@ -6,7 +6,8 @@
  * Uses Mailinator for magic link authentication
  */
 
-import { test, expect, Page } from "@playwright/test";
+import { Page } from '@playwright/test';
+import { test, expect } from './fixtures/base-test';
 import * as fs from "fs";
 import * as path from "path";
 

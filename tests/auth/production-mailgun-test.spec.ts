@@ -5,7 +5,7 @@
  * and uses Mailgun to catch the magic link emails from Cognito
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 import axios from "axios";
 
 // Test email at Mailgun sandbox domain

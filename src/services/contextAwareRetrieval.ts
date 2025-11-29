@@ -143,11 +143,12 @@ export class ContextAwareRetrieval {
     }
 
     try {
-      // Load positive feedback (rating >= 4 or thumbs_up = true)
+      // Load positive feedback (rating >= 4 or thumbs_up feedback)
+      // Using correct column names from schema: query, response, retrieved_contexts
       const { data, error } = await this.supabase
         .from('rlhf_feedback')
-        .select('user_query, ai_response, documents_marked, rating')
-        .or('rating.gte.4,thumbs_up.eq.true')
+        .select('query, response, retrieved_contexts, feedback_type, feedback_value')
+        .or('feedback_type.eq.thumbs_up,feedback_value->>score.gte.4')
         .order('created_at', { ascending: false })
         .limit(10);
 
@@ -158,13 +159,13 @@ export class ContextAwareRetrieval {
 
       // Extract successful query patterns
       const successfulQueries = (data || [])
-        .map(row => row.user_query)
+        .map(row => row.query)
         .filter(Boolean);
 
-      // Extract documents marked as relevant by curators
+      // Extract documents from retrieved contexts
       const relevantDocuments = (data || [])
-        .flatMap(row => row.documents_marked || [])
-        .filter((doc: any) => doc.relevant);
+        .flatMap(row => row.retrieved_contexts || [])
+        .filter((doc: any) => doc && doc.doc_id);
 
       console.log(`📚 Loaded ${successfulQueries.length} successful queries from RLHF feedback`);
       console.log(`📄 Found ${relevantDocuments.length} curator-approved documents`);

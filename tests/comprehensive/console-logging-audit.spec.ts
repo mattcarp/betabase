@@ -11,7 +11,7 @@
  * Tracks patterns, frequency, and sources
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 
 interface ConsoleEntry {
   type: string;

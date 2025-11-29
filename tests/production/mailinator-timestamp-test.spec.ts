@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 
 test.describe("Production Mailinator Test with Timestamp Check", () => {
   const PROD_URL = "https://thebetabase.com";

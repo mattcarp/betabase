@@ -5,7 +5,7 @@
  * or a similar service to catch the magic link emails
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';;
 import axios from "axios";
 
 // ========================================

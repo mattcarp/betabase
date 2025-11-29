@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 
 /**
  * Production test to verify CustomElementGuard prevents web component conflicts

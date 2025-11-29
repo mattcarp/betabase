@@ -13,7 +13,7 @@
  * - Network activity
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 import { setupConsoleMonitoring, getConsoleMonitor } from "../helpers/console-monitor";
 
 test.describe("Exhaustive UI Element Tests @comprehensive", () => {

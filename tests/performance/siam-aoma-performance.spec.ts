@@ -11,7 +11,7 @@
  * - Health check: < 1s
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 
 // Performance thresholds (in milliseconds)
 const PERFORMANCE_THRESHOLDS = {

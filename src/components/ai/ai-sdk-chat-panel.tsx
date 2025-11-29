@@ -618,11 +618,13 @@ export function AiSdkChatPanel({
   }, [input]);
 
   // Sync messages with conversation manager
+  // NOTE: onMessagesChange is excluded from deps to prevent loops if parent updates state
   useEffect(() => {
     if (onMessagesChange && messages.length > 0) {
       onMessagesChange(messages);
     }
-  }, [messages, onMessagesChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages]);
 
   // Smart TTS: Filter out code blocks and very long responses
   const prepareTextForSpeech = useCallback((content: string): string => {
@@ -682,12 +684,14 @@ export function AiSdkChatPanel({
   }, [messages, isTTSEnabled, isLoading, speak, prepareTextForSpeech]);
 
   // Update chatId when conversationId changes
+  // NOTE: setMessages is intentionally excluded from deps - it's stable and including it causes infinite loops
   useEffect(() => {
     if (conversationId && chatId !== conversationId) {
       // Clear current messages when switching conversations
       setMessages([]);
     }
-  }, [conversationId, chatId, setMessages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conversationId, chatId]);
 
   // Load dynamic suggestions from AOMA
   const loadDynamicSuggestions = async () => {
@@ -1830,7 +1834,7 @@ export function AiSdkChatPanel({
 
       {/* Hero Metrics Strip - Show RAG stats at a glance (always visible for demo) */}
       <HeroMetricsStrip
-        vectorCount={45399}
+        vectorCount={26568}
         embeddingModel="Gemini"
         avgLatencyMs={pendingRagMetadata?.timeMs || 280}
         compact={true}

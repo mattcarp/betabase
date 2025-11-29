@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from './fixtures/base-test';
 
 test.describe("Welcome Message", () => {
   test("should display 'Welcome to The Betabase' not 'Welcome to the New Conversation'", async ({

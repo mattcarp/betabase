@@ -8,7 +8,7 @@
  * Expected: Query responses in <2 seconds (vs 3.5+ seconds before)
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 
 test.describe("AOMA Query Performance Validation", () => {
   test.beforeEach(async ({ page }) => {

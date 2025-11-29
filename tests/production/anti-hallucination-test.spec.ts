@@ -12,7 +12,8 @@
  * - Confident assertions about things not in knowledge base
  */
 
-import { test, expect, Page, BrowserContext } from "@playwright/test";
+import { Page, BrowserContext } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 
 const PRODUCTION_URL = "https://thebetabase.com";
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";

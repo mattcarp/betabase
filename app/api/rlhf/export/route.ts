@@ -70,6 +70,15 @@ export async function GET(request: NextRequest) {
     const minRating = parseFloat(searchParams.get("minRating") || "0");
     const onlyCorrections = searchParams.get("onlyCorrections") === "true";
 
+    // Validate format FIRST before any database operations
+    const validFormats = ["dpo", "jsonl", "json", "csv"];
+    if (!validFormats.includes(format)) {
+      return NextResponse.json(
+        { error: `Unsupported format: ${format}. Valid formats: ${validFormats.join(", ")}` },
+        { status: 400 }
+      );
+    }
+
     // Check if supabaseAdmin is available
     if (!supabaseAdmin) {
       return generateEmptyResponse(format, "Database not configured");

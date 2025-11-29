@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import {  test  } from './fixtures/base-test';
 
 test('capture all console errors', async ({ page }) => {
   const consoleErrors: string[] = [];

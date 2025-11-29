@@ -8,7 +8,7 @@
  * The key is that emails must be retrievable via Mailgun API
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 import axios from "axios";
 import * as dotenv from "dotenv";
 

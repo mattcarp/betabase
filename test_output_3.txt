@@ -1,0 +1,44 @@
+
+Running 1 test using 1 worker
+
+BROWSER LOG: Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+BROWSER LOG: Failed to get auth status: TypeError: Failed to fetch
+BROWSER LOG: [AuthGuard] Unauthorized access attempt, redirecting to login
+BROWSER LOG: Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+BROWSER LOG: [AuthGuard] Unauthorized access attempt, redirecting to login
+  ✘  1 [chromium] › tests/verify-welcome-screen.spec.ts:14:7 › Welcome Screen Verification › should display logo, welcome text, and suggestions on initial load (12.1s)
+
+
+  1) [chromium] › tests/verify-welcome-screen.spec.ts:14:7 › Welcome Screen Verification › should display logo, welcome text, and suggestions on initial load 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByRole('heading', { name: 'Welcome to The Betabase' })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByRole('heading', { name: 'Welcome to The Betabase' })[22m
+
+
+      15 |     // 1. Verify "Welcome to The Betabase" heading
+      16 |     const welcomeHeading = page.getByRole('heading', { name: 'Welcome to The Betabase' });
+    > 17 |     await expect(welcomeHeading).toBeVisible({ timeout: 10000 });
+         |                                  ^
+      18 |
+      19 |     // 2. Verify "Don't be an asshat." text
+      20 |     // Note: This might be in a paragraph, so we search by text
+        at /Users/matt/Documents/projects/siam/tests/verify-welcome-screen.spec.ts:17:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/verify-welcome-screen-Welc-83dd2-suggestions-on-initial-load-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/verify-welcome-screen-Welc-83dd2-suggestions-on-initial-load-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/verify-welcome-screen.spec.ts:14:7 › Welcome Screen Verification › should display logo, welcome text, and suggestions on initial load 
+
+[36m  Serving HTML report at http://localhost:64275. Press Ctrl+C to quit.[39m

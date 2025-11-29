@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from './fixtures/base-test';
 
 test.describe("SIAM Application Validation", () => {
   test("Login and validate P0 features", async ({ page }) => {

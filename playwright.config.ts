@@ -25,7 +25,7 @@ export default defineConfig({
     ["list"], // Also show test names in console
   ],
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || "https://thebetabase.com",
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3000",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "on-first-retry",

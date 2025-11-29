@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from './fixtures/base-test';
 
 test.describe("Enhanced Curate Tab - Comprehensive Tests", () => {
   test.beforeEach(async ({ page }) => {

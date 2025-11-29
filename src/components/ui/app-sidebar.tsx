@@ -253,9 +253,9 @@ export function AppSidebar({ className }: AppSidebarProps) {
                           </div>
                           {conversation.messages.length > 0 && (
                             <p className="text-xs text-mac-text-secondary truncate">
-                              {conversation.messages[
+                              {(conversation.messages[
                                 conversation.messages.length - 1
-                              ].content.slice(0, 50)}
+                              ]?.content || "").slice(0, 50)}
                               ...
                             </p>
                           )}

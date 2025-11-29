@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from './fixtures/base-test';
 
 test.describe("Comprehensive UI/UX Analysis", () => {
   test.setTimeout(120000); // 2 minutes per test

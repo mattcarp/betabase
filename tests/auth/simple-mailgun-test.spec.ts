@@ -11,7 +11,7 @@ const TEST_EMAIL = "test@sandbox49c351db5fa3448da004612643bf99d3.mailgun.org";
 // (You'll need to verify it via email)
 
 // Step 3: Configure your test to use this email
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 import axios from "axios";
 
 const MAILGUN_API_KEY = process.env.MAILGUN_API_KEY;

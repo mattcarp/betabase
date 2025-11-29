@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 import { expectMacClassPresence } from "../helpers/design-system";
 import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 

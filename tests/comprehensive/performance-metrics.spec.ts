@@ -9,7 +9,7 @@
  * - Network activity
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 
 test.describe("Performance Metrics @comprehensive", () => {
   test("Measure complete page load performance", async ({ page }) => {

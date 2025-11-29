@@ -7,7 +7,7 @@
  * User Report: "clicking on a suggested query button should NEVER throw an error"
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 import {
   setupConsoleMonitoring,
   assertNoConsoleErrors,

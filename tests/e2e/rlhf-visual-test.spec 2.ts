@@ -3,7 +3,7 @@
  * Captures screenshots at every step to provide visual proof
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';;
 
 // Helper to navigate to Curate panel
 async function navigateToCurate(page: any) {

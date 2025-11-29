@@ -90,10 +90,11 @@ export async function POST(request: NextRequest) {
       else if (body.categories?.length || body.feedbackText) feedbackType = "detailed";
     }
 
-    // Validate we have at least some content
-    if (!query && !response && !body.thumbsUp && !body.rating) {
+    // Validate required fields STRICTLY - must have query AND response
+    // thumbsUp alone is not enough - we need the actual content
+    if (!query || !response) {
       return NextResponse.json(
-        { error: "Missing required fields: provide at least query/userQuery and response/aiResponse" },
+        { error: "Missing required fields: query/userQuery and response/aiResponse are required" },
         { status: 400 }
       );
     }
@@ -119,6 +120,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Prepare feedback record matching actual table schema
+    // Only include columns that actually exist in the rlhf_feedback table
     const feedbackRecord = {
       session_id: sessionId,
       query: query,
@@ -131,28 +133,21 @@ export async function POST(request: NextRequest) {
         feedbackText: body.feedbackText,
         suggestedCorrection: body.suggestedCorrection,
         documentsMarked: body.documentsMarked,
+        thumbs_up: body.thumbsUp,
+        conversation_id: body.conversationId,
+        message_id: body.messageId,
       },
       feedback_metadata: {
         langsmith_run_id: body.langsmithRunId,
         message_id: body.messageId,
         rag_metadata: body.ragMetadata,
       },
-      thumbs_up: body.thumbsUp,
-      rating: body.rating,
-      categories: body.categories,
-      severity: body.severity,
-      feedback_text: body.feedbackText,
-      suggested_correction: body.suggestedCorrection,
-      documents_marked: body.documentsMarked,
       retrieved_contexts: body.retrievedContexts || null,
       model_used: body.modelUsed || null,
       curator_email: body.curatorEmail || null,
       organization: body.organization || "sony-music",
       division: body.division || "digital-operations",
       app_under_test: body.appUnderTest || "aoma",
-      user_query: query, // Also populate user_query field
-      conversation_id: body.conversationId,
-      message_id: body.messageId,
     };
 
     // Check if supabaseAdmin is available
@@ -239,9 +234,11 @@ export async function GET(request: NextRequest) {
       query = query.eq("organization", organization);
     }
 
-    if (status) {
-      query = query.eq("status", status);
-    }
+    // Note: 'status' column doesn't exist in current schema
+    // Skip filtering by status until schema is updated
+    // if (status) {
+    //   query = query.eq("status", status);
+    // }
 
     const { data, error } = await query;
 
@@ -260,30 +257,36 @@ export async function GET(request: NextRequest) {
     // If stats requested, calculate analytics
     let stats = null;
     if (includeStats) {
+      // Query only columns that exist: feedback_type and feedback_value (contains thumbs_up, rating)
       const { data: allFeedback } = await supabaseAdmin
         .from("rlhf_feedback")
-        .select("status, thumbs_up, rating, created_at");
+        .select("feedback_type, feedback_value, created_at");
 
       if (allFeedback) {
         const total = allFeedback.length;
-        const approved = allFeedback.filter(f => f.status === "approved").length;
-        const pending = allFeedback.filter(f => f.status === "pending" || !f.status).length;
-        const positiveCount = allFeedback.filter(f => f.thumbs_up === true).length;
-        const negativeCount = allFeedback.filter(f => f.thumbs_up === false).length;
-        const ratingsWithValue = allFeedback.filter(f => f.rating);
+        // Extract values from feedback_value JSONB column
+        const positiveCount = allFeedback.filter(f =>
+          f.feedback_type === "thumbs_up" ||
+          (f.feedback_value as any)?.thumbs_up === true
+        ).length;
+        const negativeCount = allFeedback.filter(f =>
+          f.feedback_type === "thumbs_down" ||
+          (f.feedback_value as any)?.thumbs_up === false
+        ).length;
+        const ratingsWithValue = allFeedback.filter(f => (f.feedback_value as any)?.rating);
         const avgRating = ratingsWithValue.length > 0
-          ? ratingsWithValue.reduce((sum, f) => sum + (f.rating || 0), 0) / ratingsWithValue.length
+          ? ratingsWithValue.reduce((sum, f) => sum + ((f.feedback_value as any)?.rating || 0), 0) / ratingsWithValue.length
           : 0;
 
         stats = {
           total,
-          approved,
-          pending,
+          approved: 0, // Not tracked in current schema
+          pending: total, // All are pending until schema updated
           positiveCount,
           negativeCount,
           positiveRate: total > 0 ? (positiveCount / total) * 100 : 0,
           avgRating: avgRating.toFixed(1),
-          approvalRate: total > 0 ? (approved / total) * 100 : 0,
+          approvalRate: 0, // Not tracked in current schema
         };
       }
     }

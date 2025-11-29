@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./card";
 import { Badge } from "./badge";
 import { Button } from "./button";
@@ -21,6 +21,8 @@ import {
   Sparkles,
   Filter,
   MoreVertical,
+  RefreshCw,
+  Loader2,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -29,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 import { cn } from "../../lib/utils";
+import { toast } from "sonner";
 
 interface QueueItem {
   id: string;
@@ -39,10 +42,16 @@ interface QueueItem {
   timestamp: Date;
   priority: "high" | "medium" | "low";
   confidence?: number;
+  status?: string;
   metadata?: {
     query?: string;
     response?: string;
     documentName?: string;
+    feedbackType?: string;
+    thumbsUp?: boolean;
+    rating?: number;
+    categories?: string[];
+    severity?: string;
   };
 }
 
@@ -51,85 +60,91 @@ interface CuratorQueueProps {
   onItemSelect?: (item: QueueItem) => void;
 }
 
+// Map database feedback to queue items
+function mapFeedbackToQueueItem(feedback: any): QueueItem {
+  // Determine type based on feedback characteristics
+  let type: QueueItem["type"] = "response-review";
+  if (feedback.thumbs_up === false || feedback.rating && feedback.rating <= 2) {
+    type = "correction";
+  } else if (feedback.severity === "critical" || feedback.severity === "major") {
+    type = "low-confidence";
+  }
+
+  // Determine priority based on severity or thumbs down
+  let priority: QueueItem["priority"] = "medium";
+  if (feedback.severity === "critical" || feedback.thumbs_up === false) {
+    priority = "high";
+  } else if (feedback.severity === "minor" || feedback.severity === "suggestion") {
+    priority = "low";
+  }
+
+  // Create a descriptive title
+  const query = feedback.user_query || feedback.query || "No query provided";
+  const title = query.length > 50 ? query.substring(0, 47) + "..." : query;
+
+  // Create description
+  let description = feedback.feedback_text || "User feedback requires review";
+  if (feedback.thumbs_up === false) {
+    description = "User marked response as not helpful";
+  } else if (feedback.suggested_correction) {
+    description = `Correction: ${feedback.suggested_correction.substring(0, 100)}...`;
+  }
+
+  return {
+    id: feedback.id,
+    type,
+    title,
+    description,
+    source: `Session ${feedback.session_id?.substring(0, 8) || "unknown"}`,
+    timestamp: new Date(feedback.created_at),
+    priority,
+    confidence: feedback.rating ? feedback.rating * 20 : undefined,
+    status: feedback.status,
+    metadata: {
+      query: feedback.user_query || feedback.query,
+      response: feedback.ai_response || feedback.response,
+      feedbackType: feedback.feedback_type,
+      thumbsUp: feedback.thumbs_up,
+      rating: feedback.rating,
+      categories: feedback.categories,
+      severity: feedback.severity,
+    },
+  };
+}
+
 export const CuratorQueue: React.FC<CuratorQueueProps> = ({
   className,
   onItemSelect,
 }) => {
   const [filter, setFilter] = useState<"all" | "high" | "pending">("all");
   const [selectedItem, setSelectedItem] = useState<QueueItem | null>(null);
+  const [items, setItems] = useState<QueueItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
 
-  // Mock data for demonstration
-  const queueItems: QueueItem[] = [
-    {
-      id: "1",
-      type: "response-review",
-      title: "Auth question needs review",
-      description: "Response about JWT authentication may be outdated",
-      source: "Chat Session #1234",
-      timestamp: new Date(Date.now() - 1000 * 60 * 120),
-      priority: "high",
-      confidence: 68,
-      metadata: {
-        query: "How do we authenticate API requests?",
-        response: "AOMA uses JWT tokens for API authentication...",
-      },
-    },
-    {
-      id: "2",
-      type: "low-confidence",
-      title: "API endpoint response",
-      description: "Low confidence score on rate limiting explanation",
-      source: "Chat Session #1235",
-      timestamp: new Date(Date.now() - 1000 * 60 * 240),
-      priority: "high",
-      confidence: 58,
-      metadata: {
-        query: "What are the rate limits for the AOMA API?",
-        response: "The rate limits depend on your subscription tier...",
-      },
-    },
-    {
-      id: "3",
-      type: "correction",
-      title: "Rate limits correction",
-      description: "User submitted correction for rate limit values",
-      source: "User Feedback",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24),
-      priority: "medium",
-      metadata: {
-        query: "What are the rate limits?",
-        response: "Original: 100 req/min. Correction: 1000 req/min for enterprise",
-      },
-    },
-    {
-      id: "4",
-      type: "document-relevance",
-      title: "Document relevance review",
-      description: "AOMA-Integration-Guide.pdf marked as potentially outdated",
-      source: "Knowledge Base",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 48),
-      priority: "low",
-      metadata: {
-        documentName: "AOMA-Integration-Guide.pdf",
-      },
-    },
-    {
-      id: "5",
-      type: "response-review",
-      title: "Deployment question",
-      description: "Response about deployment process needs verification",
-      source: "Chat Session #1240",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 72),
-      priority: "medium",
-      confidence: 72,
-      metadata: {
-        query: "How do I deploy to production?",
-        response: "To deploy to production, use the CI/CD pipeline...",
-      },
-    },
-  ];
+  // Fetch feedback from the API
+  const loadQueue = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/rlhf/feedback?status=pending&limit=50");
+      if (!response.ok) {
+        throw new Error("Failed to fetch feedback queue");
+      }
+      const data = await response.json();
+      const mappedItems = (data.feedback || []).map(mapFeedbackToQueueItem);
+      setItems(mappedItems);
+    } catch (error) {
+      console.error("Error loading curator queue:", error);
+      // If API fails, try to show some data from the existing chat feedback
+      toast.error("Failed to load queue - using cached data");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const [items, setItems] = useState<QueueItem[]>(queueItems);
+  useEffect(() => {
+    loadQueue();
+  }, [loadQueue]);
 
   const filteredItems = items.filter((item) => {
     if (filter === "all") return true;
@@ -137,19 +152,81 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({
     return true;
   });
 
-  const handleApprove = (itemId: string) => {
-    setItems(items.filter((item) => item.id !== itemId));
-    if (selectedItem?.id === itemId) setSelectedItem(null);
+  const handleApprove = async (itemId: string) => {
+    setActionLoading(itemId);
+    try {
+      const response = await fetch(`/api/rlhf/feedback/${itemId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: "approved",
+          curator_notes: "Approved by curator",
+          reviewed_at: new Date().toISOString(),
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to approve");
+
+      setItems(items.filter((item) => item.id !== itemId));
+      if (selectedItem?.id === itemId) setSelectedItem(null);
+      toast.success("Feedback approved and added to training data");
+    } catch (error) {
+      console.error("Error approving feedback:", error);
+      toast.error("Failed to approve feedback");
+    } finally {
+      setActionLoading(null);
+    }
   };
 
-  const handleReject = (itemId: string) => {
-    setItems(items.filter((item) => item.id !== itemId));
-    if (selectedItem?.id === itemId) setSelectedItem(null);
+  const handleReject = async (itemId: string) => {
+    setActionLoading(itemId);
+    try {
+      const response = await fetch(`/api/rlhf/feedback/${itemId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: "rejected",
+          curator_notes: "Rejected by curator",
+          reviewed_at: new Date().toISOString(),
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to reject");
+
+      setItems(items.filter((item) => item.id !== itemId));
+      if (selectedItem?.id === itemId) setSelectedItem(null);
+      toast.success("Feedback rejected");
+    } catch (error) {
+      console.error("Error rejecting feedback:", error);
+      toast.error("Failed to reject feedback");
+    } finally {
+      setActionLoading(null);
+    }
   };
 
-  const handleFlag = (itemId: string) => {
-    // Would escalate to senior curator
-    console.log("Flagging item:", itemId);
+  const handleFlag = async (itemId: string) => {
+    setActionLoading(itemId);
+    try {
+      const response = await fetch(`/api/rlhf/feedback/${itemId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: "needs_revision",
+          severity: "critical",
+          curator_notes: "Escalated for senior review",
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to escalate");
+
+      toast.success("Escalated for senior review");
+      await loadQueue(); // Refresh to show updated status
+    } catch (error) {
+      console.error("Error escalating feedback:", error);
+      toast.error("Failed to escalate feedback");
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   const getTypeIcon = (type: QueueItem["type"]) => {
@@ -207,10 +284,23 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({
               <Sparkles className="h-4 w-4 text-purple-600" />
               Curator Queue
               <Badge variant="secondary" className="ml-2">
-                {filteredItems.length}
+                {loading ? "..." : filteredItems.length}
               </Badge>
             </CardTitle>
             <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs h-7"
+                onClick={() => loadQueue()}
+                disabled={loading}
+              >
+                {loading ? (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                ) : (
+                  <RefreshCw className="h-3 w-3" />
+                )}
+              </Button>
               <Button
                 variant={filter === "all" ? "secondary" : "ghost"}
                 size="sm"
@@ -378,24 +468,39 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({
                   className="flex-1 gap-2"
                   variant="default"
                   onClick={() => handleApprove(selectedItem.id)}
+                  disabled={actionLoading === selectedItem.id}
                 >
-                  <ThumbsUp className="h-4 w-4" />
+                  {actionLoading === selectedItem.id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <ThumbsUp className="h-4 w-4" />
+                  )}
                   Approve
                 </Button>
                 <Button
                   className="flex-1 gap-2"
                   variant="outline"
                   onClick={() => handleReject(selectedItem.id)}
+                  disabled={actionLoading === selectedItem.id}
                 >
-                  <ThumbsDown className="h-4 w-4" />
+                  {actionLoading === selectedItem.id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <ThumbsDown className="h-4 w-4" />
+                  )}
                   Reject
                 </Button>
                 <Button
                   variant="outline"
                   className="gap-2"
                   onClick={() => handleFlag(selectedItem.id)}
+                  disabled={actionLoading === selectedItem.id}
                 >
-                  <Flag className="h-4 w-4" />
+                  {actionLoading === selectedItem.id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Flag className="h-4 w-4" />
+                  )}
                   Escalate
                 </Button>
                 <DropdownMenu>

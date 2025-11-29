@@ -12,7 +12,8 @@
  * CRITICAL: These tests prevent the regression where AOMA gives confident wrong answers
  */
 
-import { test, expect, Page, BrowserContext } from "@playwright/test";
+import { Page, BrowserContext } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";

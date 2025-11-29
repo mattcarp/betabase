@@ -7,7 +7,7 @@
  * - Save responses for manual review
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 import * as fs from "fs";
 import * as path from "path";
 

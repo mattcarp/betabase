@@ -3,7 +3,7 @@
  * Let's ask silly questions and see how the AI handles them!
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 
 test.describe("Silly Questions Demo - Anti-Hallucination Testing", () => {
   test.setTimeout(120000);

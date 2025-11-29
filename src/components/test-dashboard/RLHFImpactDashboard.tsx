@@ -62,10 +62,11 @@ export function RLHFImpactDashboard() {
     
     try {
       // Load overall metrics from rlhf_feedback
+      // Using correct column names: feedback_type, feedback_value, retrieved_contexts
       const { data: allFeedback, error } = await supabase
         .from('rlhf_feedback')
-        .select('rating, thumbs_up, documents_marked, created_at')
-        .not('rating', 'is', null);
+        .select('feedback_type, feedback_value, retrieved_contexts, created_at')
+        .not('feedback_value', 'is', null);
 
       if (error) {
         console.error('Failed to load metrics:', error);
@@ -89,49 +90,49 @@ export function RLHFImpactDashboard() {
         new Date(f.created_at) > sixtyDaysAgo && new Date(f.created_at) <= thirtyDaysAgo
       );
 
-      // Average rating
-      const avgRating = currentPeriod.reduce((sum, f) => sum + (f.rating || 0), 0) / currentPeriod.length;
-      const prevAvgRating = previousPeriod.length > 0 
-        ? previousPeriod.reduce((sum, f) => sum + (f.rating || 0), 0) / previousPeriod.length 
+      // Average rating - using feedback_value.score
+      const getRating = (f: any) => f.feedback_value?.score || (f.feedback_type === 'thumbs_up' ? 5 : f.feedback_type === 'thumbs_down' ? 1 : 3);
+      const avgRating = currentPeriod.reduce((sum, f) => sum + getRating(f), 0) / currentPeriod.length;
+      const prevAvgRating = previousPeriod.length > 0
+        ? previousPeriod.reduce((sum, f) => sum + getRating(f), 0) / previousPeriod.length
         : avgRating;
-      const ratingTrend = prevAvgRating > 0 
-        ? ((avgRating - prevAvgRating) / prevAvgRating) * 100 
+      const ratingTrend = prevAvgRating > 0
+        ? ((avgRating - prevAvgRating) / prevAvgRating) * 100
         : 0;
 
       // Feedback count
       const totalFeedback = currentPeriod.length;
       const prevFeedback = previousPeriod.length;
-      const feedbackTrend = prevFeedback > 0 
-        ? ((totalFeedback - prevFeedback) / prevFeedback) * 100 
+      const feedbackTrend = prevFeedback > 0
+        ? ((totalFeedback - prevFeedback) / prevFeedback) * 100
         : 0;
 
-      // Curator approvals (rating >= 4 or thumbs_up = true)
-      const curatorApprovals = currentPeriod.filter(f => 
-        f.rating >= 4 || f.thumbs_up === true
+      // Curator approvals (rating >= 4 or thumbs_up)
+      const curatorApprovals = currentPeriod.filter(f =>
+        getRating(f) >= 4 || f.feedback_type === 'thumbs_up'
       ).length;
-      const approvalRate = totalFeedback > 0 
-        ? (curatorApprovals / totalFeedback) * 100 
+      const approvalRate = totalFeedback > 0
+        ? (curatorApprovals / totalFeedback) * 100
         : 0;
 
-      // Confidence (based on document marks and ratings)
+      // Confidence (based on retrieved contexts - all are considered relevant if in positive feedback)
       const avgConfidence = currentPeriod
-        .filter(f => f.documents_marked && f.documents_marked.length > 0)
+        .filter(f => f.retrieved_contexts && f.retrieved_contexts.length > 0)
         .reduce((sum, f) => {
-          const relevantDocs = f.documents_marked.filter((d: any) => d.relevant).length;
-          const confidence = relevantDocs / f.documents_marked.length;
-          return sum + confidence;
-        }, 0) / currentPeriod.filter(f => f.documents_marked && f.documents_marked.length > 0).length || 0;
+          // Use similarity scores from retrieved_contexts
+          const avgSimilarity = f.retrieved_contexts.reduce((s: number, d: any) => s + (d.similarity || 0), 0) / f.retrieved_contexts.length;
+          return sum + avgSimilarity;
+        }, 0) / currentPeriod.filter(f => f.retrieved_contexts && f.retrieved_contexts.length > 0).length || 0;
 
       const prevConfidence = previousPeriod
-        .filter(f => f.documents_marked && f.documents_marked.length > 0)
+        .filter(f => f.retrieved_contexts && f.retrieved_contexts.length > 0)
         .reduce((sum, f) => {
-          const relevantDocs = f.documents_marked.filter((d: any) => d.relevant).length;
-          const confidence = relevantDocs / f.documents_marked.length;
-          return sum + confidence;
-        }, 0) / previousPeriod.filter(f => f.documents_marked && f.documents_marked.length > 0).length || avgConfidence;
+          const avgSimilarity = f.retrieved_contexts.reduce((s: number, d: any) => s + (d.similarity || 0), 0) / f.retrieved_contexts.length;
+          return sum + avgSimilarity;
+        }, 0) / previousPeriod.filter(f => f.retrieved_contexts && f.retrieved_contexts.length > 0).length || avgConfidence;
 
-      const confidenceTrend = prevConfidence > 0 
-        ? ((avgConfidence - prevConfidence) / prevConfidence) * 100 
+      const confidenceTrend = prevConfidence > 0
+        ? ((avgConfidence - prevConfidence) / prevConfidence) * 100
         : 0;
 
       setMetrics({
@@ -158,15 +159,15 @@ export function RLHFImpactDashboard() {
         });
 
         const dayAvgRating = dayFeedback.length > 0
-          ? dayFeedback.reduce((sum, f) => sum + (f.rating || 0), 0) / dayFeedback.length
+          ? dayFeedback.reduce((sum, f) => sum + getRating(f), 0) / dayFeedback.length
           : 0;
 
         const dayConfidence = dayFeedback
-          .filter(f => f.documents_marked && f.documents_marked.length > 0)
+          .filter(f => f.retrieved_contexts && f.retrieved_contexts.length > 0)
           .reduce((sum, f) => {
-            const relevantDocs = f.documents_marked.filter((d: any) => d.relevant).length;
-            return sum + (relevantDocs / f.documents_marked.length);
-          }, 0) / dayFeedback.filter(f => f.documents_marked && f.documents_marked.length > 0).length || 0;
+            const avgSimilarity = f.retrieved_contexts.reduce((s: number, d: any) => s + (d.similarity || 0), 0) / f.retrieved_contexts.length;
+            return sum + avgSimilarity;
+          }, 0) / dayFeedback.filter(f => f.retrieved_contexts && f.retrieved_contexts.length > 0).length || 0;
 
         timeSeriesData.push({
           date: dayStart.toISOString().split('T')[0],

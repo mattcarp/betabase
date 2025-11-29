@@ -5,7 +5,7 @@
  * This test was created because automated UI tests weren't actually clicking the buttons.
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 import { setupConsoleMonitoring, getConsoleMonitor } from "../helpers/console-monitor";
 
 test.describe("Curate Tab Navigation - CRITICAL @smoke", () => {

@@ -1,7 +1,8 @@
-import { test, expect } from '@playwright/test';
+import {  test, expect  } from './fixtures/base-test';
 
 test.describe('Welcome Screen Verification', () => {
   test.beforeEach(async ({ page }) => {
+    page.on('console', msg => console.log(`BROWSER LOG: ${msg.text()}`));
     // Clear localStorage to ensure we are in a "fresh" state with no active conversation
     await page.goto('/');
     await page.evaluate(() => {

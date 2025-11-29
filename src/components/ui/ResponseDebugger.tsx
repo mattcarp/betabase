@@ -72,13 +72,14 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
       }
 
       // Extract debug information from metadata
-      const metadata = feedback.documents_marked || {};
-      
+      // Using correct column names: query, retrieved_contexts, feedback_metadata
+      const metadata = feedback.feedback_metadata || {};
+
       setDebugData({
-        query: feedback.user_query || 'N/A',
+        query: feedback.query || 'N/A',
         strategy: metadata.strategy || 'unknown',
-        retrievedDocs: metadata.initialDocs || [],
-        rerankedDocs: metadata.finalDocs || [],
+        retrievedDocs: feedback.retrieved_contexts || [],
+        rerankedDocs: metadata.finalDocs || feedback.retrieved_contexts || [],
         agentSteps: metadata.agentTrace?.steps || [],
         confidence: metadata.confidence || 0,
         sessionHistory: metadata.sessionHistory || [],

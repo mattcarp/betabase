@@ -10,7 +10,7 @@
  * 3. Add test email to Cognito allowed list
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 import axios from "axios";
 
 // Configuration

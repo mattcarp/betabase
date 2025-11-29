@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import {  test, expect  } from './fixtures/base-test';
 
 test('test chat returns meaningful AI response', async ({ page }) => {
   console.log('\n=== Testing Chat with Real Question ===\n');

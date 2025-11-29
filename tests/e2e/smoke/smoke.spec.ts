@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../../fixtures/base-test';
 import { setupConsoleMonitoring, assertNoConsoleErrors } from "../../helpers/console-monitor";
 
 /**
@@ -49,10 +49,14 @@ test.describe("Smoke Tests @smoke", () => {
   test("Main page loads with expected elements", async ({ page }) => {
     await page.goto("/");
 
-    // Check that EITHER login form OR app container loads
+    // Check that EITHER login form OR chat interface loads
     // This smoke test validates the app loads, not that it's authenticated
     const hasLoginForm = await page
       .locator('input[type="email"]')
+      .isVisible({ timeout: 5000 })
+      .catch(() => false);
+    const hasChatInterface = await page
+      .locator('textarea[placeholder*="Ask"]')
       .isVisible({ timeout: 5000 })
       .catch(() => false);
     const hasAppContainer = await page
@@ -61,7 +65,7 @@ test.describe("Smoke Tests @smoke", () => {
       .catch(() => false);
 
     // At least one should be visible
-    expect(hasLoginForm || hasAppContainer).toBeTruthy();
+    expect(hasLoginForm || hasChatInterface || hasAppContainer).toBeTruthy();
 
     // Ensure body has content
     const bodyText = (await page.locator("body").innerText()).trim();

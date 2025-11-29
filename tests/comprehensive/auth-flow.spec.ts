@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 import { TestHelpers, TEST_USERS } from "../helpers/test-utils";
 
 test.describe("Authentication Flow - Comprehensive", () => {

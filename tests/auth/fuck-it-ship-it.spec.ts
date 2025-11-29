@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 
 /**
  * FUCK IT, WE'LL DO IT LIVE!

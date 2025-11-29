@@ -44,19 +44,276 @@
 
 ---
 
-## Pillar 2: Curate (RLHF)
+## Pillar 2: Curate (RLHF) - COMPREHENSIVE STATE-OF-THE-ART IMPLEMENTATION
+
+### Status Summary
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| RLHFFeedbackTab | Built | Thumbs up/down, star ratings, text corrections |
-| CuratorQueue | Built | Approval workflow UI |
-| Thumbs feedback in chat | Ready | Per-response feedback collection |
-| Feedback Impact Card | Pending | "Your corrections improved X queries" |
-| Supabase integration | Ready | Real data, not mocks |
+| FeedbackModal | Ready | Rich feedback collection with categories, severity, corrections |
+| ComparisonPanel | Ready | A/B testing for DPO preference data collection |
+| CuratorWorkspace | Ready | Queue-based annotation with approve/reject/revise workflow |
+| FeedbackAnalytics | Ready | Comprehensive dashboard with trends and metrics |
+| FeedbackBadge | Ready | Inline feedback status indicators |
+| FeedbackContext | Ready | React context for centralized state management |
+| DPO Export API | Ready | Export training data in JSONL/CSV/JSON formats |
+| LangSmith Integration | Ready | Automatic trace annotation |
+| Database Schema | Ready | Full migration with RLS policies |
+| Playwright Tests | Ready | Comprehensive API and component tests |
 
-**Key files:**
-- `src/components/ui/rlhf-tabs/RLHFFeedbackTab.tsx`
-- `src/components/ui/CuratorQueue.tsx`
+### Architecture Overview
+
+```
+User Feedback Flow:
+
+  [Chat Response] --> [Quick Thumbs] --> [Detailed Modal]
+         |                  |                   |
+         v                  v                   v
+  [FeedbackBadge]    [API Endpoint]      [Supabase DB]
+         |                  |                   |
+         v                  v                   v
+  [Impact Live]     [LangSmith Trace]   [Curator Queue]
+                                               |
+                                               v
+                                      [DPO Export API]
+                                               |
+                                               v
+                                     [Training Dataset]
+```
+
+### Component Details
+
+#### 1. FeedbackModal (`src/components/rlhf/FeedbackModal.tsx`)
+- **Quick feedback first**: Thumbs up/down with minimal friction
+- **Expandable detailed form**: Categories, severity, star ratings
+- **Suggested corrections**: DPO-compatible chosen/rejected pairs
+- **Document relevance**: RAG source quality marking
+- **Keyboard shortcuts**: Power user efficiency
+
+**Categories supported:**
+- accuracy, relevance, completeness, clarity
+- helpfulness, safety, formatting, citations
+
+**Severity levels:**
+- critical, major, minor, suggestion
+
+#### 2. ComparisonPanel (`src/components/rlhf/ComparisonPanel.tsx`)
+- **Side-by-side A/B comparison**: Two responses for preference selection
+- **Keyboard navigation**: A/Left, B/Right, T for tie, Enter to submit, S to skip
+- **Queue position indicator**: Progress through annotation queue
+- **Preference reasoning**: Optional explanation capture
+- **Model metadata display**: Shows which models generated responses
+
+#### 3. CuratorWorkspace (`src/components/rlhf/CuratorWorkspace.tsx`)
+- **Queue-based interface**: Filter by status, category, search
+- **Side-by-side view**: Original response vs suggested correction
+- **Action buttons**: Approve, Reject, Request Revision
+- **Curator notes**: Required for reject/revision actions
+- **Keyboard shortcuts**: J/K navigation, A/R/V actions
+
+#### 4. FeedbackAnalytics (`src/components/rlhf/FeedbackAnalytics.tsx`)
+- **Time-series trends**: 14-day feedback volume chart
+- **Category breakdown**: Bar chart of feedback categories
+- **Severity distribution**: Critical/Major/Minor/Suggestion counts
+- **Curator metrics**: Approval rate, avg review time
+- **DPO quality indicators**: Training data readiness metrics
+
+#### 5. FeedbackImpactLive (`src/components/rlhf/FeedbackImpactLive.tsx`)
+- **Real-time animations**: Animated counters and flow visualization
+- **Virtuous cycle**: Feedback -> Review -> Tests -> Training -> Better AI
+- **Key metrics**: Total feedback, corrections, tests generated, batches
+- **Accuracy tracking**: Progress bar showing improvement over time
+
+#### 6. FeedbackBadge (`src/components/rlhf/FeedbackBadge.tsx`)
+- **Three variants**: minimal (icon), compact (icon + indicators), detailed (full info)
+- **Thumbs indicator**: Green/red for positive/negative
+- **Rating display**: Star rating visualization
+- **Status badges**: Pending, Reviewing, Approved, Rejected, Exported
+
+#### 7. FeedbackContext (`src/components/rlhf/FeedbackContext.tsx`)
+- **Centralized state**: React context for all feedback operations
+- **Hooks provided**:
+  - `useFeedback()` - Full context access
+  - `useQuickFeedback(messageId, conversationId)` - Thumbs up/down
+  - `useDetailedFeedback(messageId, conversationId)` - Full feedback form
+  - `useFeedbackEvents(callback)` - Event subscription
+- **Optimistic updates**: Immediate UI feedback with rollback on error
+
+### API Endpoints
+
+#### POST `/api/rlhf/feedback`
+Submit new feedback with all metadata.
+
+```typescript
+{
+  conversationId: string;
+  messageId: string;
+  userQuery: string;
+  aiResponse: string;
+  thumbsUp?: boolean;
+  rating?: number; // 1-5
+  categories?: FeedbackCategory[];
+  severity?: FeedbackSeverity;
+  feedbackText?: string;
+  suggestedCorrection?: string;
+  documentsMarked?: DocumentRelevance[];
+  ragMetadata?: RagMetadata;
+  langsmithRunId?: string;
+}
+```
+
+#### GET `/api/rlhf/feedback`
+Retrieve feedback with filters.
+
+```
+?conversationId=xxx
+?messageId=xxx
+?status=pending|approved|rejected
+?limit=50
+```
+
+#### PATCH `/api/rlhf/feedback/[id]`
+Update feedback status (curator workflow).
+
+#### POST `/api/rlhf/comparison`
+Submit A/B preference.
+
+```typescript
+{
+  query: string;
+  responseA: string;
+  responseB: string;
+  preferredResponse: "A" | "B" | "tie";
+  reason?: string;
+}
+```
+
+#### GET `/api/rlhf/export`
+Export DPO training data.
+
+```
+?format=dpo|csv|json
+?status=approved|all
+?minRating=3
+?onlyCorrections=true
+?metadata=true|false
+```
+
+### Database Schema
+
+**Tables:**
+- `rlhf_feedback` - Main feedback storage
+- `rlhf_comparisons` - A/B preference pairs
+- `preference_pairs` - DPO training data (auto-generated from corrections)
+- `training_datasets` - Curated dataset management
+- `fine_tuning_jobs` - Training job tracking
+- `model_registry` - Fine-tuned model versions
+- `ab_test_experiments` - A/B test management
+
+**Key Functions:**
+- `get_pending_comparisons(limit)` - Pending annotation queue
+- `get_curator_queue(status, limit)` - Curator review queue
+- `get_rlhf_analytics(days)` - Aggregated metrics
+- `find_similar_feedback(embedding, org, threshold)` - Similar feedback lookup
+
+### LangSmith Integration
+
+Automatic trace annotation when `langsmithRunId` is provided:
+- Score: 0 (negative) to 1 (positive)
+- Value: "positive" | "negative"
+- Comment: User feedback text
+- Metadata: feedback_id, categories
+
+### Key Files
+
+**Components:**
+- `src/components/rlhf/index.ts` - Barrel exports
+- `src/components/rlhf/types.ts` - Type definitions
+- `src/components/rlhf/FeedbackModal.tsx`
+- `src/components/rlhf/ComparisonPanel.tsx`
+- `src/components/rlhf/CuratorWorkspace.tsx`
+- `src/components/rlhf/FeedbackAnalytics.tsx`
+- `src/components/rlhf/FeedbackImpactLive.tsx`
+- `src/components/rlhf/FeedbackBadge.tsx`
+- `src/components/rlhf/FeedbackContext.tsx`
+
+**API Routes:**
+- `app/api/rlhf/feedback/route.ts`
+- `app/api/rlhf/feedback/[id]/route.ts`
+- `app/api/rlhf/comparison/route.ts`
+- `app/api/rlhf/export/route.ts`
+
+**Database:**
+- `supabase/migrations/007_rlhf_feedback_schema.sql`
+- `supabase/migrations/20251125_rlhf_fine_tuning.sql`
+- `supabase/migrations/20251125_add_preference_pairs.sql`
+- `supabase/migrations/20251128_rlhf_comparisons_extended.sql`
+
+**Tests:**
+- `tests/rlhf/rlhf-feedback-system.spec.ts`
+
+### Usage Example
+
+```tsx
+import {
+  FeedbackModal,
+  FeedbackBadge,
+  useFeedback,
+  FeedbackProvider,
+} from "@/components/rlhf";
+
+// Wrap app in provider
+<FeedbackProvider>
+  <ChatPanel />
+</FeedbackProvider>
+
+// In chat message component
+function ChatMessage({ message }) {
+  const { submitFeedback, getFeedbackForMessage } = useFeedback();
+  const existing = getFeedbackForMessage(message.id);
+
+  return (
+    <div>
+      <Response>{message.content}</Response>
+      <FeedbackBadge feedback={existing} variant="compact" />
+      <FeedbackModal
+        messageId={message.id}
+        conversationId={conversationId}
+        userQuery={userQuery}
+        aiResponse={message.content}
+        onSubmit={submitFeedback}
+      />
+    </div>
+  );
+}
+```
+
+### Best Practices Implemented
+
+1. **DPO-Compatible Data Collection**
+   - Chosen/rejected pairs from corrections
+   - Preference pairs from A/B comparisons
+   - Confidence scores for quality filtering
+
+2. **Low-Friction Feedback**
+   - Quick thumbs first, detailed optional
+   - Keyboard shortcuts for power users
+   - Minimal required fields
+
+3. **Curator Workflow**
+   - Queue-based review
+   - Severity prioritization
+   - Approval/rejection with notes
+
+4. **Real-Time Visualization**
+   - Live impact metrics
+   - Animated feedback flow
+   - Training readiness indicators
+
+5. **LangSmith Integration**
+   - Automatic trace annotation
+   - Feedback-to-run linking
+   - Quality monitoring
 
 ---
 

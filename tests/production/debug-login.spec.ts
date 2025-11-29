@@ -2,7 +2,7 @@
  * DEBUG TEST - Isolate login timeout issue
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 
 const PRODUCTION_URL = "https://thebetabase.com";
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";

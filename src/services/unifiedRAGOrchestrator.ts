@@ -112,7 +112,7 @@ export class UnifiedRAGOrchestrator {
             totalTimeMs: performance.now() - startTime,
             usedContextAware: false,
             usedAgenticRAG: true,
-            usedRLHFSignals,
+            usedRLHFSignals: useRLHFSignals,
             agentIterations: agentResult.iterations,
           },
         };
@@ -142,7 +142,7 @@ export class UnifiedRAGOrchestrator {
             totalTimeMs: performance.now() - startTime,
             usedContextAware: true,
             usedAgenticRAG: false,
-            usedRLHFSignals,
+            usedRLHFSignals: useRLHFSignals,
             queryTransformation: contextAwareResult.transformation,
           },
         };

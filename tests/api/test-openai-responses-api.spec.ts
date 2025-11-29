@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 
 test.describe("OpenAI Responses API Migration", () => {
   test("chat API should use native OpenAI streaming", async ({ request }) => {

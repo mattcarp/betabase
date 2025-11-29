@@ -5,7 +5,7 @@
  * It checks for actual upload functionality, not just tab existence.
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from './fixtures/base-test';
 
 test.describe("CRITICAL: Curate Tab Functionality", () => {
   test("MUST have file upload capability - FAIL if missing", async ({ page }) => {

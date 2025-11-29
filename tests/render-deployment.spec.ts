@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from './fixtures/base-test';
 
 test.describe("Render Deployment Test Suite", () => {
   test("should load the SIAM application @smoke", async ({ page }) => {

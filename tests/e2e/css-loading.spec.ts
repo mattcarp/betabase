@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 
 test.describe("CSS Loading and MAC Design System", () => {
   test("should load all critical CSS and apply MAC design system classes", async ({ page }) => {

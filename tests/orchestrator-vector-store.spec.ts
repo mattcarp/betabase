@@ -5,7 +5,7 @@
  * Expected performance: <1s for vector queries (vs 20-25s for external APIs)
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from './fixtures/base-test';
 
 const TEST_API_URL = "http://localhost:3000";
 const PERFORMANCE_THRESHOLDS = {

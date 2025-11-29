@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import {  test, expect  } from './fixtures/base-test';
 
 test('Functional UI test - tabs and chat', async ({ page }) => {
   test.setTimeout(90000);

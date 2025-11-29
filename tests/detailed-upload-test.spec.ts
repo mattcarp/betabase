@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from './fixtures/base-test';
 
 test.describe("SIAM Detailed File Upload Testing", () => {
   test("examine Files tab and test upload functionality", async ({ page }) => {

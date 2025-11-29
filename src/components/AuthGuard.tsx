@@ -9,10 +9,10 @@ interface AuthGuardProps {
 }
 
 export function AuthGuard({ children }: AuthGuardProps) {
-  // Aggressively bypass in development
   const isDev = process.env.NODE_ENV === "development";
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(isDev);
-  const [isLoading, setIsLoading] = useState(!isDev);
+  const isBypass = process.env.NEXT_PUBLIC_BYPASS_AUTH === "true";
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(isDev || isBypass);
+  const [isLoading, setIsLoading] = useState(!isDev && !isBypass);
   const [isDevelopment, setIsDevelopment] = useState(isDev);
   const router = useRouter();
 
@@ -21,9 +21,16 @@ export function AuthGuard({ children }: AuthGuardProps) {
       // If already authenticated (e.g. via NODE_ENV check), skip
       if (isAuthenticated) return;
 
-      // IMMEDIATE BYPASS for localhost
-      if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
-        console.log("[AuthGuard] Localhost detected - bypassing auth immediately");
+      // IMMEDIATE BYPASS for localhost or explicit bypass
+      const hostname = typeof window !== 'undefined' ? window.location.hostname : 'undefined';
+      const bypassEnv = process.env.NEXT_PUBLIC_BYPASS_AUTH;
+      console.log(`[AuthGuard] Checking bypass. Hostname: ${hostname}, Env: ${bypassEnv}`);
+
+      if (
+        (typeof window !== 'undefined' && (hostname === 'localhost' || hostname === '127.0.0.1')) ||
+        bypassEnv === 'true'
+      ) {
+        console.log("[AuthGuard] Auth bypass detected (Localhost or Env Var) - bypassing auth immediately");
         setIsAuthenticated(true);
         setIsLoading(false);
         return;

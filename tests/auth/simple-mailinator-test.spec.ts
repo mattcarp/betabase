@@ -5,7 +5,7 @@
  * No setup. No DNS. No webhooks. No complications.
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 import axios from "axios";
 
 // Use a unique email to avoid conflicts

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';;
 
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3000";
 const IS_LOCAL_RUN = BASE_URL.includes("localhost") || BASE_URL.includes("127.0.0.1");

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from './fixtures/base-test';
 
 /**
  * Quick Integration Test for Dashboard-Connected Playwright

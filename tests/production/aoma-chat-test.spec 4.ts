@@ -8,7 +8,8 @@
  * - Multi-turn conversations
  */
 
-import { test, expect, Page, BrowserContext } from "@playwright/test";
+import { Page, BrowserContext } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';;
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";

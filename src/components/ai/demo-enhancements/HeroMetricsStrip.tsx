@@ -15,10 +15,10 @@ interface HeroMetricsStripProps {
 
 /**
  * Hero Metrics Strip - displays key RAG stats at a glance
- * Shows "45,399 vectors" prominently for demo impact
+ * Real count: siam_vectors (15,245) + jira_tickets (10,927) + wiki_documents (396) = 26,568
  */
 export function HeroMetricsStrip({
-  vectorCount = 45399,
+  vectorCount = 26568,
   embeddingModel = "Gemini",
   avgLatencyMs = 280,
   cacheHitRate,

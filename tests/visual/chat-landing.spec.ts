@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from '../fixtures/base-test';
 import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 test.describe("Chat Landing Page - AI Elements + MAC Theme", () => {

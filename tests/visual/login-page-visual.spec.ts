@@ -13,7 +13,8 @@
  * @see /tmp/visual-regression-strategy.md for complete testing strategy
  */
 
-import { test, expect, Page } from "@playwright/test";
+import { Page } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 
 // Test configuration
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";

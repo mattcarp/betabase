@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from './fixtures/base-test';
 
 test.describe("Voice Features Integration", () => {
   test.beforeEach(async ({ page }) => {

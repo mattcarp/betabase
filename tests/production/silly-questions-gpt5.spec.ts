@@ -6,7 +6,8 @@
  * Expected: AI admits it doesn't know instead of making up features
  */
 
-import { test, expect, Page, BrowserContext } from "@playwright/test";
+import { Page, BrowserContext } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 
 const PRODUCTION_URL = "https://thebetabase.com";
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
