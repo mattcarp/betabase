@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.24.2",
+  "version": "0.24.3",
   "private": true,
   "scripts": {
     "dev": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && TURBOPACK=0 next dev -p 3000",
