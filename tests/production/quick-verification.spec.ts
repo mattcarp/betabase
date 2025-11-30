@@ -1,7 +1,7 @@
 import { test, expect } from '../fixtures/base-test';
 
 test.describe("Quick Production Verification", () => {
-  const PROD_URL = "https://thebetabase.com";
+  const PROD_URL = "http://localhost:3000";
 
   test("Production site is accessible and functional", async ({ page }) => {
     console.log("🔍 Testing production deployment...");

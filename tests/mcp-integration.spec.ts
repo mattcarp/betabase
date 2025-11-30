@@ -8,7 +8,7 @@ import { test, expect } from './fixtures/base-test';
 test.describe("MCP Server Integration (Task 40)", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to localhost with auth bypass
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
   });
 
   test("MCP health endpoint returns healthy status", async ({ request }) => {
@@ -129,7 +129,7 @@ test.describe("Vector Database Integration (Task 40.4)", () => {
 
 test.describe("AI Insights UI (Task 40.5)", () => {
   test("Chat interface loads successfully", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Check for chat interface elements
     await expect(
@@ -140,7 +140,7 @@ test.describe("AI Insights UI (Task 40.5)", () => {
   });
 
   test("AOMA Response component renders", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Check if the page has the necessary components loaded
     const hasAOMAElements = await page.evaluate(() => {
@@ -156,7 +156,7 @@ test.describe("AI Insights UI (Task 40.5)", () => {
   });
 
   test("Connection status indicator shows MCP status", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Look for connection status indicators
     const connectionIndicator = page
@@ -173,7 +173,7 @@ test.describe("AI Insights UI (Task 40.5)", () => {
   });
 
   test("Chat input accepts and sends messages", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Find the chat input
     const chatInput = page
@@ -217,7 +217,7 @@ test.describe("AI Insights UI (Task 40.5)", () => {
       }
     });
 
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(2000);
 
     // Filter out expected/acceptable errors
@@ -275,7 +275,7 @@ test.describe("Task Verification", () => {
   });
 
   test("Task 40.5: AI Insights UI is implemented", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Check for essential UI elements
     const hasChat =

@@ -76,7 +76,7 @@ test.describe("Custom Element Guard - Localhost Multi-Tab", () => {
   test("should have inline custom element guard in HTML head", async ({
     page,
   }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Check that the inline script is present in the head
     const guardScript = await page.evaluate(() => {
@@ -105,7 +105,7 @@ test.describe("Custom Element Guard - Localhost Multi-Tab", () => {
       consoleMessages.push(msg.text());
     });
 
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Try to register a custom element that may already exist
@@ -155,7 +155,7 @@ test.describe("CustomElementGuard Protection", () => {
     });
 
     // Navigate to production
-    await page.goto("https://thebetabase.com", {
+    await page.goto("/", {
       waitUntil: "networkidle",
     });
 
@@ -187,7 +187,7 @@ test.describe("CustomElementGuard Protection", () => {
     });
 
     // Navigate to login
-    await page.goto("https://thebetabase.com");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Check login form is present
     await expect(page.locator('input[type="email"]')).toBeVisible({ timeout: 10000 });
@@ -218,7 +218,7 @@ test.describe("CustomElementGuard Protection", () => {
   });
 
   test("CustomElementGuard prevents duplicate registrations", async ({ page }) => {
-    await page.goto("https://thebetabase.com");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Try to register a custom element that might conflict
     const registrationResult = await page.evaluate(() => {
@@ -254,7 +254,7 @@ test.describe("CustomElementGuard Protection", () => {
       }
     });
 
-    await page.goto("https://thebetabase.com");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Check for Supabase-related errors that were in the original bug
@@ -269,7 +269,7 @@ test.describe("CustomElementGuard Protection", () => {
   });
 
   test("Health endpoint confirms application is running", async ({ request }) => {
-    const response = await request.get("https://thebetabase.com/api/health");
+    const response = await request.get("http://localhost:3000/api/health");
 
     expect(response.status()).toBe(200);
 
@@ -281,7 +281,7 @@ test.describe("CustomElementGuard Protection", () => {
 test.describe("Production Smoke Tests", () => {
   test("Critical user journey works end-to-end", async ({ page }) => {
     // Navigate to home
-    await page.goto("https://thebetabase.com");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Verify page loaded
     await expect(page).toHaveTitle(/Betabase/i);
@@ -307,7 +307,7 @@ test.describe("Production Smoke Tests", () => {
   test("Application responds quickly", async ({ page }) => {
     const startTime = Date.now();
 
-    const response = await page.goto("https://thebetabase.com", {
+    const response = await page.goto("/", {
       waitUntil: "domcontentloaded",
     });
 

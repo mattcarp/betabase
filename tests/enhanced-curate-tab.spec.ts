@@ -3,7 +3,7 @@ import { test, expect } from './fixtures/base-test';
 test.describe("Enhanced Curate Tab - Comprehensive Tests", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to SIAM with auth bypass
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Click on Curate tab
@@ -334,7 +334,7 @@ test.describe("Enhanced Curate Tab - Comprehensive Tests", () => {
 
 test.describe("Integration with SIAM Core Features", () => {
   test("should integrate with existing SIAM navigation", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Check all main tabs are present
     await expect(page.locator('text="Chat"')).toBeVisible();
@@ -344,7 +344,7 @@ test.describe("Integration with SIAM Core Features", () => {
   });
 
   test("should maintain consistent styling with MAC design system", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.click('text="Curate"');
 
     // Check for MAC design system classes

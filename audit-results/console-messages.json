@@ -1,5 +1,43 @@
 {
   "errors": [],
-  "warnings": [],
-  "all": []
+  "warnings": [
+    {
+      "type": "warning",
+      "text": "Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.",
+      "location": {
+        "url": "https://thebetabase.com/_next/static/chunks/5553-718a373aadbbd876.js",
+        "lineNumber": 20,
+        "columnNumber": 62288
+      }
+    },
+    {
+      "type": "warning",
+      "text": "[AuthGuard] Unauthorized access attempt, redirecting to login",
+      "location": {
+        "url": "https://thebetabase.com/_next/static/chunks/app/page-9aa3380996f2c39a.js",
+        "lineNumber": 0,
+        "columnNumber": 249646
+      }
+    }
+  ],
+  "all": [
+    {
+      "type": "warning",
+      "text": "Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.",
+      "location": {
+        "url": "https://thebetabase.com/_next/static/chunks/5553-718a373aadbbd876.js",
+        "lineNumber": 20,
+        "columnNumber": 62288
+      }
+    },
+    {
+      "type": "warning",
+      "text": "[AuthGuard] Unauthorized access attempt, redirecting to login",
+      "location": {
+        "url": "https://thebetabase.com/_next/static/chunks/app/page-9aa3380996f2c39a.js",
+        "lineNumber": 0,
+        "columnNumber": 249646
+      }
+    }
+  ]
 }

@@ -9,7 +9,7 @@ test.describe("Test User Authentication", () => {
   const TEST_PASSWORD = process.env.TEST_USER_PASSWORD || "";
 
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
   });
 
   test("should authenticate test user using hidden password field", async ({ page }) => {
@@ -121,7 +121,7 @@ test.describe("Automated Test Login Helper", () => {
   test("example: login helper for other tests", async ({ page }) => {
     // This is a helper pattern other tests can use
     async function loginAsTestUser(page: any) {
-      await page.goto("http://localhost:3000");
+      await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
       await page.fill('input[type="email"]', process.env.TEST_USER_EMAIL!);
       await page.fill('[data-test-id="login-password-hidden"]', process.env.TEST_USER_PASSWORD!);
       await page.click('button[type="submit"]');

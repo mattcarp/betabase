@@ -36,7 +36,7 @@ test.describe("Console Logging Audit @comprehensive", () => {
       });
     });
 
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
   });
 

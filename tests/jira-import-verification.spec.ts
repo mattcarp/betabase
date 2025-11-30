@@ -39,7 +39,7 @@ const JIRA_TEST_QUERIES = [
 test.describe('JIRA Import Verification - Nov 2, 2025', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to chat
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     
     // Wait for page to be ready
     await page.waitForLoadState('networkidle');

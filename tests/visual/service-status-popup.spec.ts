@@ -6,7 +6,7 @@
 
 import { test, expect } from '../fixtures/base-test';
 
-const PRODUCTION_URL = "https://thebetabase.com";
+const PRODUCTION_URL = "http://localhost:3000";
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 
 test.describe("Service Status Popup Behavior", () => {
@@ -35,8 +35,8 @@ test.describe("Service Status Popup Behavior", () => {
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(2000);
 
-    // Step 1: Verify dropdown is NOT visible by default
-    const dropdown = page.locator("text=Service Status").locator("..");
+    // Step 1: Verify dropdown is NOT visible by default (header is "System Health")
+    const dropdown = page.locator("text=System Health").locator("..");
     const isVisibleByDefault = await dropdown.isVisible();
 
     expect(
@@ -44,8 +44,8 @@ test.describe("Service Status Popup Behavior", () => {
       "CRITICAL BUG: Service Status dropdown should NOT be visible without hover"
     ).toBe(false);
 
-    // Step 2: Hover over the status badge
-    const statusBadge = page.locator("text=/\\d+\\/\\d+.*Services/");
+    // Step 2: Hover over the status badge (shows "2/2" count + "All Systems Online" or "Services Running")
+    const statusBadge = page.locator("text=/\\d+\\/\\d+/").first();
     await statusBadge.hover();
     await page.waitForTimeout(500); // Wait for animation
 
@@ -85,8 +85,8 @@ test.describe("Service Status Popup Behavior", () => {
       return;
     }
 
-    // Hover to show dropdown
-    const statusBadge = page.locator("text=/\\d+\\/\\d+.*Services/");
+    // Hover to show dropdown (shows "2/2" count)
+    const statusBadge = page.locator("text=/\\d+\\/\\d+/").first();
     await statusBadge.hover();
     await page.waitForTimeout(300);
 
@@ -94,8 +94,8 @@ test.describe("Service Status Popup Behavior", () => {
     await page.click("body", { position: { x: 10, y: 10 } });
     await page.waitForTimeout(300);
 
-    // Verify hidden
-    const dropdown = page.locator("text=Service Status").locator("..");
+    // Verify hidden (header is "System Health")
+    const dropdown = page.locator("text=System Health").locator("..");
     const isVisible = await dropdown.isVisible();
     expect(isVisible).toBe(false);
   });

@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-11-29T13:40:30.145Z",
+  "summary": {
+    "totalTests": 2,
+    "successCount": 0,
+    "failureCount": 2,
+    "avgTTFB": 0,
+    "avgTTFR": 0,
+    "avgTotal": 0
+  },
+  "results": [
+    {
+      "timestamp": "2025-11-29T13:40:04.917Z",
+      "query": "How do I upload assets to AOMA?",
+      "ttfb": 0,
+      "ttfr": 0,
+      "totalTime": 40650.390875000005,
+      "streamingStartDelay": 0,
+      "aomaOrchestrationTime": null,
+      "embeddingTime": null,
+      "vectorSearchTime": null,
+      "success": false,
+      "errorMessage": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-role=\"assistant\"], .assistant-message, [role=\"article\"]') to be visible\u001b[22m\n"
+    },
+    {
+      "timestamp": "2025-11-29T13:40:29.962Z",
+      "query": "What metadata fields are required?",
+      "ttfb": 0,
+      "ttfr": 0,
+      "totalTime": 22801.58425,
+      "streamingStartDelay": 0,
+      "aomaOrchestrationTime": null,
+      "embeddingTime": null,
+      "vectorSearchTime": null,
+      "success": false,
+      "errorMessage": "page.waitForResponse: Test timeout of 60000ms exceeded."
+    }
+  ]
+}

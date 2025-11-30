@@ -7,7 +7,7 @@ import { test, expect } from '../fixtures/base-test';
 
 // Helper to navigate to Curate panel
 async function navigateToCurate(page: any) {
-  await page.goto('http://localhost:3000');
+  await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
   await page.waitForLoadState('networkidle');
   
   const curateTab = page.locator('button:has-text("Curate")').first();
@@ -21,7 +21,7 @@ async function navigateToCurate(page: any) {
 test.describe('📸 RLHF Visual Verification Suite', () => {
   
   test('1. Screenshot: Landing Page', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
     

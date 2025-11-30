@@ -201,6 +201,7 @@ export function FileUpload({
           accept={acceptedFileTypes.join(",")}
           onChange={(e) => handleFileSelect(e.target.files)}
           className="hidden"
+          suppressHydrationWarning
         />
         <Action
           onClick={() => fileInputRef.current?.click()}
@@ -282,6 +283,7 @@ export function FileUpload({
           accept={acceptedFileTypes.join(",")}
           onChange={(e) => handleFileSelect(e.target.files)}
           className="hidden"
+          suppressHydrationWarning
         />
 
         <div className="space-y-4">

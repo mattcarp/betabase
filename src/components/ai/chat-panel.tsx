@@ -72,7 +72,12 @@ export function ChatPanel({
       api,
       initialMessages,
       onError: (error: Error) => {
-        console.error("Chat error:", error);
+        // Network failures are expected during rapid navigation/tests - fail silently
+        if (error instanceof TypeError && error.message === "Failed to fetch") {
+          onError?.(error);
+          return;
+        }
+        console.warn("Chat error:", error);
         onError?.(error);
       },
       onFinish: () => {
@@ -296,15 +301,6 @@ export function ChatPanel({
               </PromptInputToolbar>
             </PromptInput>
 
-            {isLoading && (
-              <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                <Loader2 className="h-3 w-3 animate-spin" />
-                AI is generating response...
-                <Button variant="link" size="sm" onClick={stop} className="h-auto p-0 text-xs">
-                  Stop
-                </Button>
-              </div>
-            )}
           </div>
         </CardFooter>
       )}

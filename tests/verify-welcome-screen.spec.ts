@@ -4,7 +4,7 @@ test.describe('Welcome Screen Verification', () => {
   test.beforeEach(async ({ page }) => {
     page.on('console', msg => console.log(`BROWSER LOG: ${msg.text()}`));
     // Clear localStorage to ensure we are in a "fresh" state with no active conversation
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => {
       localStorage.clear();
     });

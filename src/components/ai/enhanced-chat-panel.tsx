@@ -87,7 +87,11 @@ export function EnhancedChatPanel({
       model: selectedModel,
     },
     onError: (error: Error) => {
-      console.error("Chat error:", error);
+      // Network failures are expected during rapid navigation/tests - fail silently
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        return;
+      }
+      console.warn("Chat error:", error);
 
       // Transform AI SDK errors to user-friendly messages
       let userFriendlyError = error;

@@ -23,8 +23,7 @@ test.describe("Demo Verification - Three Pillars", () => {
 
   test("Step 1: Verify TestDashboard tabs wiring", async ({ page }) => {
     // Navigate to home
-    await page.goto("/");
-    await page.waitForLoadState("networkidle");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Click on Test mode button in header
     const testButton = page.locator('button:has-text("Test")');
@@ -68,8 +67,7 @@ test.describe("Demo Verification - Three Pillars", () => {
   test("Step 2: E2E Smoke Test - All Three Pillars", async ({ page }) => {
     // PILLAR 1: Chat (RAG)
     console.log("Testing Pillar 1: Chat (RAG)...");
-    await page.goto("/");
-    await page.waitForLoadState("networkidle");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Verify Chat mode is active by default
     const chatButton = page.locator('button:has-text("Chat")');
@@ -132,8 +130,7 @@ test.describe("Demo Verification - Three Pillars", () => {
     });
 
     // Navigate through all modes
-    await page.goto("/");
-    await page.waitForLoadState("networkidle");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(1000);
 
     // Click through each mode
@@ -169,8 +166,7 @@ test.describe("Demo Verification - Three Pillars", () => {
 
   test("Verify /curator route", async ({ page }) => {
     // Test dedicated curator page
-    await page.goto("/curator");
-    await page.waitForLoadState("networkidle");
+    await page.goto("/curator", { waitUntil: 'domcontentloaded' });
 
     // Should load the RLHF Curator Dashboard
     await page.waitForTimeout(2000);

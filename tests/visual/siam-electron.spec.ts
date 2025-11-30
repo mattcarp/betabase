@@ -12,7 +12,7 @@ test.describe("SIAM Electron - Feature Reference", () => {
       ignoreWarnings: true,
       ignoreNetworkErrors: true,
     });
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     // Wait for app to load
     await page.waitForLoadState("networkidle");
   });
@@ -157,7 +157,7 @@ test.describe("SIAM Electron - Feature Reference", () => {
 
 test.describe("SIAM Electron - Feature Catalog", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
   });
 

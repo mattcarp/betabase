@@ -4,7 +4,7 @@
 
 import { test, expect } from '../fixtures/base-test';
 
-const PRODUCTION_URL = "https://thebetabase.com";
+const PRODUCTION_URL = "http://localhost:3000";
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 
 test.describe("Debug Login Flow", () => {

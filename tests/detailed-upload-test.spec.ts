@@ -5,7 +5,7 @@ test.describe("SIAM Detailed File Upload Testing", () => {
     console.log("🚀 Testing SIAM file upload functionality in detail...");
 
     // Navigate to SIAM
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(3000);
 
     // Click Curate tab

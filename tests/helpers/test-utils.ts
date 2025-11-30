@@ -7,7 +7,7 @@ import TEST_CONFIG from "../test.config";
 
 // Authentication helpers
 export async function login(page: Page, email: string, password: string) {
-  await page.goto("/");
+  await page.goto("/", { waitUntil: 'domcontentloaded' });
   await page.fill(TEST_CONFIG.selectors.emailInput, email);
   await page.fill(TEST_CONFIG.selectors.passwordInput, password);
   await page.click(TEST_CONFIG.selectors.submitButton);

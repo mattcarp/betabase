@@ -4,7 +4,7 @@ test.describe("Local Development Tests", () => {
   // Skip in CI - requires local dev server
   test.skip("should load SIAM application locally @smoke", async ({ page }) => {
     // Test against local development server
-    await page.goto("http://localhost:3001");
+    await page.goto("http://localhost:3001", { waitUntil: 'domcontentloaded' });
 
     // Wait for page to fully load
     await page.waitForLoadState("networkidle");
@@ -30,7 +30,7 @@ test.describe("Local Development Tests", () => {
 
   // Skip in CI - requires local dev server
   test.skip("should check authentication state @smoke", async ({ page }) => {
-    await page.goto("http://localhost:3001");
+    await page.goto("http://localhost:3001", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Check if we see login form or main app

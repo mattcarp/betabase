@@ -45,7 +45,12 @@ export function ChatWrapper({
     api,
     initialMessages,
     onError: (error: Error) => {
-      console.error("Chat error:", error);
+      // Network failures are expected during rapid navigation/tests - fail silently
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        onError?.(error);
+        return;
+      }
+      console.warn("Chat error:", error);
       onError?.(error);
     },
   });

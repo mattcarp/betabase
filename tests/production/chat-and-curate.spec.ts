@@ -1,6 +1,6 @@
 import { test, expect } from '../fixtures/base-test';
 
-const BASE_URL = process.env.BASE_URL || 'https://thebetabase.com';
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 
 test.describe('Production Chat and Curate Tests', () => {
   test('Chat: Send message and verify response', async ({ page }) => {

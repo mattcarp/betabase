@@ -3,7 +3,7 @@ import { test, expect } from './fixtures/base-test';
 test.describe("Test Dashboard - Quick Validation", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to SIAM with auth bypassed
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Navigate to Test tab
     await page.click("text=Test");

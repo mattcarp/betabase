@@ -27,7 +27,7 @@ test.describe('Chat Performance Study', () => {
 
   test('Measure chat response performance', async ({ page }) => {
     // Navigate to chat
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.click('text=Chat');
 
     // Wait for chat to be ready

@@ -11,7 +11,7 @@ import { test, expect } from '../fixtures/base-test';
  */
 
 const DEMO_CONFIG = {
-  url: "https://thebetabase.com",
+  url: "http://localhost:3000",
   email: "siam-test-x7j9k2p4@mailinator.com",
   // Adjust these pause durations to match your narration pace
   shortPause: 2, // 2 seconds

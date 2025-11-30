@@ -121,7 +121,12 @@ export function EnhancedChatPanelWithAIElements({
   } = (useChat as any)({
     initialMessages,
     onError: (error) => {
-      console.error("Chat error:", error);
+      // Network failures are expected during rapid navigation/tests - fail silently
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        onError?.(error);
+        return;
+      }
+      console.warn("Chat error:", error);
       onError?.(error);
     },
     onFinish: () => {
@@ -410,20 +415,6 @@ export function EnhancedChatPanelWithAIElements({
               onSuggestionClick={handleSuggestionClick}
             />
 
-            {isLoading && (
-              <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                <Loader2 className="h-3 w-3 animate-spin" />
-                AI is querying AOMA knowledge base...
-                <Button
-                  variant="link"
-                  size="sm"
-                  onClick={stop}
-                  className="h-auto p-0 text-xs mac-button mac-button-primary"
-                >
-                  Stop
-                </Button>
-              </div>
-            )}
           </div>
         </CardFooter>
       )}

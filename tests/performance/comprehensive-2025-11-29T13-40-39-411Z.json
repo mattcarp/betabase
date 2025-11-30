@@ -1,0 +1,60 @@
+[
+  {
+    "page": "curation-loaded",
+    "timestamp": "2025-11-29T13:40:39.195Z",
+    "webVitals": {
+      "FCP": 300,
+      "TTFB": 147.09999999403954,
+      "CLS": 0
+    },
+    "timing": {
+      "loadTime": 162,
+      "domContentLoaded": 0.10000000149011612,
+      "domInteractive": 283.70000000298023
+    },
+    "resources": {
+      "total": 76,
+      "js": 49,
+      "css": 5,
+      "images": 2,
+      "totalSize": 2296002,
+      "breakdown": [
+        {
+          "type": "js",
+          "count": 49,
+          "size": 2019708
+        },
+        {
+          "type": "api",
+          "count": 17,
+          "size": 236843
+        },
+        {
+          "type": "css",
+          "count": 5,
+          "size": 34998
+        },
+        {
+          "type": "image",
+          "count": 2,
+          "size": 3412
+        },
+        {
+          "type": "other",
+          "count": 3,
+          "size": 1041
+        }
+      ]
+    },
+    "memory": {
+      "usedMB": 54.168701171875,
+      "totalMB": 98.22845458984375
+    },
+    "layoutShifts": [],
+    "consoleErrors": [],
+    "warnings": [
+      "Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.",
+      "Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key."
+    ]
+  }
+]

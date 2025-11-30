@@ -32,7 +32,7 @@ test.describe("Curate Tab Navigation - CRITICAL @smoke", () => {
     }
 
     await page.goto(testUrl);
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
 
     // Wait for app to be ready (sidebar should be visible)
     await page

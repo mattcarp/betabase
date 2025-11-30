@@ -36,7 +36,7 @@ export class CuratePage extends BasePage {
     super(page);
   }
   async navigate(): Promise<void> {
-    await this.page.goto("/");
+    await this.navigateTo("/");
     await this.selectCurateTab();
   }
 

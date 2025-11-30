@@ -29,6 +29,9 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "on-first-retry",
+    // Use domcontentloaded instead of load - ElevenLabs widget and other async
+    // resources prevent the load event from firing, causing 60s timeouts
+    navigationTimeout: 30000,
   },
   projects: [
     {

@@ -62,7 +62,7 @@ test("magic link flow with Mailgun", async ({ page }) => {
   const startTime = Math.floor(Date.now() / 1000);
 
   // Request magic link
-  await page.goto("http://localhost:3000");
+  await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
   await page.fill('input[type="email"]', testEmail);
   await page.click('button[type="submit"]');
 

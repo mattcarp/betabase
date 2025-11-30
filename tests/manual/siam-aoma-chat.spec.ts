@@ -10,7 +10,7 @@ test.describe('SIAM Chat - AOMA Questions', () => {
 
   test('should answer AOMA-related questions', async ({ page }) => {
     // Navigate to chat
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle');
 
     // Wait for chat interface

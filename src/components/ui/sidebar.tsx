@@ -253,6 +253,7 @@ const SidebarInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"in
       <input
         ref={ref}
         data-sidebar="input"
+        suppressHydrationWarning
         className={cn(
           "h-8 w-full rounded-md bg-background px-4 text-sm shadow-sm",
           "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",

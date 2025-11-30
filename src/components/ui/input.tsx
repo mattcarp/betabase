@@ -22,6 +22,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           id={inputId}
           type={type}
+          suppressHydrationWarning
           className={cn(
             // Base MAC input styles
             "mac-input",

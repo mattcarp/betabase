@@ -3,7 +3,7 @@ import { test, expect } from './fixtures/base-test';
 test.describe("Performance Dashboard", () => {
   test.beforeEach(async ({ page }) => {
     // Set auth bypass for testing
-    await page.goto("http://localhost:3000/performance");
+    await page.goto("http://localhost:3000/performance", { waitUntil: 'domcontentloaded' });
   });
 
   test("should load performance dashboard", async ({ page }) => {
@@ -232,7 +232,7 @@ test.describe("Performance Dashboard", () => {
       });
     });
 
-    await page.goto("http://localhost:3000/performance");
+    await page.goto("http://localhost:3000/performance", { waitUntil: 'domcontentloaded' });
 
     // Should show error message
     await expect(page.getByText(/Failed to load performance metrics/i)).toBeVisible();
@@ -241,7 +241,7 @@ test.describe("Performance Dashboard", () => {
   test("should measure page load performance", async ({ page }) => {
     const startTime = Date.now();
 
-    await page.goto("http://localhost:3000/performance");
+    await page.goto("http://localhost:3000/performance", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     const loadTime = Date.now() - startTime;
@@ -290,7 +290,7 @@ test.describe("Performance Dashboard", () => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
 
-    await page.goto("http://localhost:3000/performance");
+    await page.goto("http://localhost:3000/performance", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Dashboard should still be visible and usable on mobile

@@ -13,7 +13,7 @@ test("dead simple login test", async ({ page, context }) => {
   console.log("🚀 Starting simple test with:", TEST_EMAIL);
 
   // 1. Request magic link
-  await page.goto("https://thebetabase.com");
+  await page.goto("/", { waitUntil: 'domcontentloaded' });
   await page.fill('input[type="email"]', TEST_EMAIL);
   await page.click('button[type="submit"]');
 

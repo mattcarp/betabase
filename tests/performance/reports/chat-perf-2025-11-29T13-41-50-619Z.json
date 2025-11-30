@@ -1,0 +1,28 @@
+{
+  "timestamp": "2025-11-29T13:41:50.619Z",
+  "metrics": [
+    {
+      "query": "What is AOMA?",
+      "timestamp": "2025-11-29T13:41:32.717Z",
+      "timeToFirstToken": 0,
+      "timeToComplete": 0,
+      "success": false,
+      "error": "No assistant response appeared"
+    },
+    {
+      "query": "How do I upload files?",
+      "timestamp": "2025-11-29T13:41:50.596Z",
+      "timeToFirstToken": 0,
+      "timeToComplete": 0,
+      "success": false,
+      "error": "locator.count: Target page, context or browser has been closed"
+    }
+  ],
+  "summary": {
+    "totalTests": 2,
+    "successCount": 0,
+    "failureCount": 2,
+    "avgTimeToFirstToken": 0,
+    "avgTimeToComplete": 0
+  }
+}

@@ -25,8 +25,7 @@ test.describe("Suggestion Button Click Tests @critical", () => {
       useDefaultFilters: true, // Filter known acceptable errors
     });
 
-    await page.goto("/");
-    await page.waitForLoadState("networkidle");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Wait for suggestions to appear
     await page.waitForSelector(
@@ -142,8 +141,8 @@ test.describe("Suggestion Button Click Tests @critical", () => {
 
       // Reload page for next button test (clean slate)
       if (i < count - 1) {
-        await page.goto("/");
-        await page.waitForLoadState("networkidle");
+        await page.goto("/", { waitUntil: 'domcontentloaded' });
+        await page.waitForLoadState("domcontentloaded");
         await page.waitForSelector(
           'button:has-text("How can I"), button:has-text("What are"), button:has-text("Can you help")',
           {
@@ -236,8 +235,7 @@ test.describe("Suggestion Button Click Tests @critical", () => {
     console.log("🎯 Testing suggestion button after navigation...");
 
     // Navigate away and back
-    await page.goto("/");
-    await page.waitForLoadState("networkidle");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Wait for suggestions
     await page.waitForSelector(

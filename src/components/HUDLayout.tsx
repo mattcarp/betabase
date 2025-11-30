@@ -3,7 +3,7 @@ import { CircularHUD, CircularNavigation } from "./ui/CircularHUD";
 import AudioWaveform from "./AudioWaveform";
 import { SystemHealthMonitor } from "./SystemHealthMonitor";
 import ConversationalAI from "./ConversationalAI";
-import { Mic, FileText, Brain, Activity, Settings, MessageCircle } from "lucide-react";
+import { Mic, FileText, Lightbulb, Activity, Settings, MessageCircle } from "lucide-react";
 
 interface HUDLayoutProps {
   children?: React.ReactNode;
@@ -40,7 +40,7 @@ export function HUDLayout({
     },
     {
       id: "insights",
-      icon: <Brain className="w-6 h-6" />,
+      icon: <Lightbulb className="w-6 h-6" />,
       label: "AI Insights",
       onClick: () => setActivePanel("insights"),
       isActive: activePanel === "insights",

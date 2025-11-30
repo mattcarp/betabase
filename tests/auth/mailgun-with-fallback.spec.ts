@@ -70,7 +70,7 @@ test.describe("Magic Link Testing (Fuck Mailgun Edition)", () => {
       });
 
       // Run test with mock
-      await page.goto("http://localhost:3000");
+      await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
       await page.fill('input[type="email"]', "test@sonymusic.com");
       await page.click('button[type="submit"]');
       await page.fill('input[type="text"]', MOCK_CODE);
@@ -83,7 +83,7 @@ test.describe("Magic Link Testing (Fuck Mailgun Edition)", () => {
       const testEmail = MAILGUN_CONFIG.testEmail;
       const startTime = Math.floor(Date.now() / 1000);
 
-      await page.goto("http://localhost:3000");
+      await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
       await page.fill('input[type="email"]', testEmail);
       await page.click('button[type="submit"]');
 

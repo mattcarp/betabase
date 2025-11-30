@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.24.5",
+  "version": "0.24.6",
   "private": true,
   "scripts": {
     "dev": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && next dev --turbo -p 3000",
@@ -56,12 +56,12 @@
     "test:report": "npx playwright show-report",
     "test:debug": "npx playwright test --debug",
     "test:ui": "npx playwright test --ui",
-    "test:aoma": "npx playwright test tests/production/aoma-knowledge-validation.spec.ts tests/production/aoma-anti-hallucination.spec.ts --reporter=list",
-    "test:aoma:knowledge": "npx playwright test tests/production/aoma-knowledge-validation.spec.ts --reporter=list",
-    "test:aoma:hallucination": "npx playwright test tests/production/aoma-anti-hallucination.spec.ts --reporter=list",
-    "test:aoma:chat": "npx playwright test tests/production/aoma-chat-test.spec.ts --reporter=list",
-    "test:aoma:errors": "npx playwright test tests/production/aoma-error-handling.spec.ts --reporter=list",
-    "test:aoma:all": "npx playwright test tests/production/aoma-*.spec.ts --reporter=list",
+    "test:aoma": "npx playwright test tests/production/siam-aoma-knowledge-validation.spec.ts tests/production/siam-aoma-anti-hallucination.spec.ts --reporter=list",
+    "test:aoma:knowledge": "npx playwright test tests/production/siam-aoma-knowledge-validation.spec.ts --reporter=list",
+    "test:aoma:hallucination": "npx playwright test tests/production/siam-aoma-anti-hallucination.spec.ts --reporter=list",
+    "test:aoma:chat": "npx playwright test tests/production/siam-aoma-chat-test.spec.ts --reporter=list",
+    "test:aoma:errors": "npx playwright test tests/production/siam-aoma-error-handling.spec.ts --reporter=list",
+    "test:aoma:all": "npx playwright test tests/production/siam-aoma-*.spec.ts --reporter=list",
     "test:visual": "npx playwright test tests/visual/ --reporter=list",
     "test:visual:mac": "npx playwright test tests/visual/mac-design-system-regression.spec.ts --reporter=list",
     "test:visual:dark-theme": "npx playwright test tests/visual/dark-theme-regression.spec.ts --reporter=list",
@@ -180,8 +180,9 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
+    "@alloc/quick-lru": "^5.2.0",
     "@next/bundle-analyzer": "^16.0.0",
-    "@playwright/test": "^1.56.1",
+    "@playwright/test": "^1.57.0",
     "@types/glob": "^9.0.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.14",

@@ -468,6 +468,7 @@ function RecordingSettings({
             onChange={(e) => updateSetting("maxRecordingDuration", parseInt(e.target.value))}
             className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="max-duration-input"
+            suppressHydrationWarning
           />
         </div>
       </div>
@@ -653,6 +654,7 @@ function ShortcutsSettings({
               onChange={(e) => updateNestedSetting("shortcuts", key, e.target.value)}
               className="w-24 bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white text-center font-mono text-sm focus:border-blue-600 focus:outline-none"
               data-testid={`shortcut-${key}`}
+              suppressHydrationWarning
             />
           </div>
         ))}
@@ -685,6 +687,7 @@ function DataPrivacySettings({
             onChange={(e) => updateSetting("maxSessionHistory", parseInt(e.target.value))}
             className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="max-sessions-input"
+            suppressHydrationWarning
           />
         </div>
 
@@ -700,6 +703,7 @@ function DataPrivacySettings({
             onChange={(e) => updateSetting("sessionRetentionDays", parseInt(e.target.value))}
             className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="retention-days-input"
+            suppressHydrationWarning
           />
         </div>
       </div>

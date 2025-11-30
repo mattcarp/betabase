@@ -9,7 +9,7 @@ import { test, expect } from '../fixtures/base-test';
 
 // Helper to navigate to Curate panel
 async function navigateToCurate(page: any) {
-  await page.goto('http://localhost:3000');
+  await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
   await page.waitForLoadState('networkidle');
   
   // Click Curate TAB in navigation (it's one of the mode tabs: Chat, HUD, Test, Fix, Curate)
@@ -299,7 +299,7 @@ test.describe('RLHF Integration - Component Tests', () => {
   
   test('usePermissions hook should work without crashing', async ({ page }) => {
     // Navigate and trigger permission check
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle');
     
     const curateButton = page.getByRole('button', { name: /curate/i });
@@ -315,7 +315,7 @@ test.describe('RLHF Integration - Component Tests', () => {
   });
   
   test('RLHFFeedbackTab component should render mock data', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle');
     
     const curateButton = page.getByRole('button', { name: /curate/i });

@@ -56,7 +56,7 @@ test.describe("Magic Link with Mailgun Sandbox", () => {
     const testEmail = authorizedEmail;
 
     await test.step("Navigate to login page", async () => {
-      await page.goto("http://localhost:3000");
+      await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
       await expect(page.locator("h2")).toContainText("Welcome to SIAM");
     });
 
@@ -122,7 +122,7 @@ test.describe("Magic Link with Mailgun Sandbox", () => {
     // Simple test to verify Mailgun integration is working
     const testEmail = authorizedEmail;
 
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.fill('input[type="email"]', testEmail);
     await page.click('button[type="submit"]');
 

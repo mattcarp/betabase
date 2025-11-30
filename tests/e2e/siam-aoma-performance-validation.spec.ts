@@ -13,7 +13,7 @@ import { test, expect } from '../fixtures/base-test';
 test.describe("AOMA Query Performance Validation", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to chat interface (root route)
-    await page.goto("http://localhost:3000/");
+    await page.goto("http://localhost:3000/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
   });
 
@@ -136,7 +136,7 @@ test.describe("AOMA Orchestrator Integration", () => {
       consoleLogs.push(msg.text());
     });
 
-    await page.goto("http://localhost:3000/chat");
+    await page.goto("http://localhost:3000/chat", { waitUntil: 'domcontentloaded' });
     const chatInput = page.locator('textarea[placeholder*="Ask"], input[type="text"]').first();
 
     await chatInput.fill("AOMA test query");

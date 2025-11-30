@@ -20,9 +20,19 @@ export abstract class BasePage {
 
   /**
    * Wait for page to be ready
+   * Uses domcontentloaded instead of load/networkidle - ElevenLabs widget
+   * and other async resources prevent those events from firing reliably
    */
   async waitForLoad(): Promise<void> {
-    await this.page.waitForLoadState("networkidle");
+    await this.page.waitForLoadState("domcontentloaded");
+  }
+
+  /**
+   * Navigate to a URL with domcontentloaded wait strategy
+   * This is the preferred way to navigate in all tests
+   */
+  async navigateTo(url: string): Promise<void> {
+    await this.page.goto(url, { waitUntil: 'domcontentloaded' });
   }
 
   /**

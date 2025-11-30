@@ -73,7 +73,7 @@ test.describe('KB Chat Diagnosis', () => {
     });
 
     // Navigate to chat
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle');
     console.log('\n[PAGE] Loaded successfully');
 

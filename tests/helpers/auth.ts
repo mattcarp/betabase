@@ -19,7 +19,7 @@ export async function loginAsTestUser(page: Page): Promise<void> {
   }
 
   // Navigate to login page
-  await page.goto("http://localhost:3000");
+  await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
   // Fill in test credentials
   await page.fill('input[type="email"]', testEmail);

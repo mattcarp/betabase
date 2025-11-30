@@ -7,7 +7,7 @@ import { test, expect } from './fixtures/base-test';
 
 test.describe("Task 1: ACTUAL SIAM Chat Interface", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
   });
 
   test("SIAM app loads without crashing", async ({ page }) => {
@@ -103,7 +103,7 @@ test.describe("Task 1: ACTUAL SIAM Chat Interface", () => {
       }
     });
 
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(2000);
 
     // We can tolerate SOME errors, but not a cascade

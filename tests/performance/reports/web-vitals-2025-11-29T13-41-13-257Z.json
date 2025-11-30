@@ -1,0 +1,56 @@
+{
+  "timestamp": "2025-11-29T13:41:13.257Z",
+  "summary": {
+    "FCP": 204,
+    "CLS": 0,
+    "TTFB": 68.20000000298023,
+    "resources": {
+      "total": 66,
+      "js": 46,
+      "css": 5,
+      "images": 1,
+      "totalSize": 2022711
+    },
+    "memory": {
+      "usedMB": 45.20416259765625,
+      "totalMB": 61.03515625,
+      "usedJSHeapSize": 0,
+      "totalJSHeapSize": 0,
+      "jsHeapSizeLimit": 0
+    }
+  },
+  "results": [
+    {
+      "timestamp": "2025-11-29T13:41:12.908Z",
+      "page": "chat-tab-switch",
+      "navigationTiming": {
+        "domContentLoaded": 0,
+        "loadComplete": 0,
+        "domInteractive": 166.59999999403954,
+        "totalLoadTime": 2332.7567090000002
+      },
+      "FCP": 204,
+      "TTFB": 68.20000000298023,
+      "resources": {
+        "total": 66,
+        "js": 46,
+        "css": 5,
+        "images": 1,
+        "totalSize": 2022711,
+        "largestResource": {
+          "name": "node_modules_0e38ddd9._.js",
+          "size": 263179,
+          "duration": 559
+        }
+      },
+      "memory": {
+        "usedJSHeapSize": 47400000,
+        "totalJSHeapSize": 64000000,
+        "jsHeapSizeLimit": 3760000000,
+        "usedMB": 45.20416259765625,
+        "totalMB": 61.03515625
+      },
+      "CLS": 0
+    }
+  ]
+}

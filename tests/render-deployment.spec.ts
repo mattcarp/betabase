@@ -3,7 +3,7 @@ import { test, expect } from './fixtures/base-test';
 test.describe("Render Deployment Test Suite", () => {
   test("should load the SIAM application @smoke", async ({ page }) => {
     // Navigate to the app (uses baseURL from config)
-    const response = await page.goto("/");
+    const response = await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Check that we got a successful response
     expect(response?.status()).toBeLessThan(400);
@@ -26,7 +26,7 @@ test.describe("Render Deployment Test Suite", () => {
   });
 
   test("should display authentication elements @smoke", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Check for authentication UI - could be login form or main app
@@ -45,7 +45,7 @@ test.describe("Render Deployment Test Suite", () => {
   });
 
   test("should have responsive design @visual", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Test desktop viewport
     await page.setViewportSize({ width: 1920, height: 1080 });
@@ -65,7 +65,7 @@ test.describe("Render Deployment Test Suite", () => {
   });
 
   test("should have proper meta tags and SEO", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Check title
     const title = await page.title();

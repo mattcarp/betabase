@@ -72,7 +72,7 @@ const EXPANDED_KNOWLEDGE_QUESTIONS = [
 
 test.describe("Expanded AOMA Knowledge Base Validation", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("https://thebetabase.com", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await page.waitForTimeout(3000);
   });
 

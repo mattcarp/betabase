@@ -9,8 +9,8 @@ import { test, expect } from '@playwright/test';
 test.describe('Nano Banana Pro Diagram Generation', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the chat interface
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState("domcontentloaded");
   });
 
   test('should show diagram offer buttons after AI response', async ({ page }) => {

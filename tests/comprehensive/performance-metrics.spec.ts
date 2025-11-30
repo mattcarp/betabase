@@ -92,7 +92,7 @@ test.describe("Performance Metrics @comprehensive", () => {
       }
     });
 
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Trigger some API calls
@@ -134,7 +134,7 @@ test.describe("Performance Metrics @comprehensive", () => {
   test("Measure UI interaction responsiveness", async ({ page }) => {
     console.log("⏱️  Measuring UI interaction responsiveness...\n");
 
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     const interactions: Array<{ element: string; duration: number }> = [];
@@ -178,7 +178,7 @@ test.describe("Performance Metrics @comprehensive", () => {
   test("Measure memory usage", async ({ page }) => {
     console.log("⏱️  Measuring memory usage...\n");
 
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Get initial memory
@@ -235,7 +235,7 @@ test.describe("Performance Metrics @comprehensive", () => {
       }
     });
 
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Group by type

@@ -7,10 +7,10 @@ test.describe("SIAM Application Validation", () => {
     const testPassword = "4@9XMPfE9B$";
 
     // Navigate to production URL
-    await page.goto("https://siam-two.vercel.app");
+    await page.goto("https://siam-two.vercel.app", { waitUntil: 'domcontentloaded' });
 
     // Wait for page to load
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
 
     // Check if login form is present
     const emailInput = page.locator('input[type="email"]');

@@ -24,7 +24,7 @@ test.describe("SIAM Demo Recording", () => {
 
   test.beforeEach(async ({ page }) => {
     // Navigate to production site
-    await page.goto("https://thebetabase.com");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Handle authentication if needed
     // TODO: Add your auth flow here if not already logged in

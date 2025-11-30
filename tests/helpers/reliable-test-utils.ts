@@ -3,7 +3,7 @@ import { expect, Page, APIRequestContext } from "@playwright/test";
 export async function navigateTo(
   page: Page,
   url: string,
-  waitFor: "load" | "domcontentloaded" | "networkidle" = "networkidle"
+  waitFor: "load" | "domcontentloaded" | "networkidle" = "domcontentloaded"
 ) {
   const res = await page.goto(url, { waitUntil: waitFor });
   expect(res?.ok(), `Failed to navigate to ${url}`).toBeTruthy();

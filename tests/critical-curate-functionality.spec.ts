@@ -11,7 +11,7 @@ test.describe("CRITICAL: Curate Tab Functionality", () => {
   test("MUST have file upload capability - FAIL if missing", async ({ page }) => {
     console.log("🚨 CRITICAL TEST: Checking Curate tab upload functionality");
 
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(3000);
 
     // Navigate to Curate tab
@@ -78,7 +78,7 @@ test.describe("CRITICAL: Curate Tab Functionality", () => {
   });
 
   test("MUST show AOMA knowledge base context", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(2000);
 
     const curateTab = page.locator("text=Curate");
@@ -107,7 +107,7 @@ test.describe("CRITICAL: Curate Tab Functionality", () => {
       }
     });
 
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     const curateTab = page.locator("text=Curate");
     await curateTab.click();
     await page.waitForTimeout(3000);

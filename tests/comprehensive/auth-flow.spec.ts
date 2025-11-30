@@ -11,7 +11,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
 
   test.describe("Magic Link Flow", () => {
     test("should display login form with all elements", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
 
       await expect(page.locator("h1")).toContainText("Welcome to SIAM");
       await expect(page.locator('input[type="email"]')).toBeVisible();
@@ -22,7 +22,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
     });
 
     test("should validate email format", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
 
       await page.fill('input[type="email"]', "invalid-email");
       await page.click('button:has-text("Send Magic Link")');
@@ -32,7 +32,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
     });
 
     test("should successfully request magic link for allowed email", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
 
       const responsePromise = helpers.waitForAPIResponse("/api/auth/magic-link", { status: 200 });
 
@@ -47,7 +47,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
     });
 
     test("should reject non-allowed email domains", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
 
       await page.fill('input[type="email"]', "unauthorized@example.com");
       await page.click('button:has-text("Send Magic Link")');
@@ -57,7 +57,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
     });
 
     test("should handle rate limiting gracefully", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
 
       const email = TEST_USERS.admin.email;
 
@@ -78,7 +78,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
 
   test.describe("Bypassed Auth (Dev Mode)", () => {
     test("should allow access with bypassed auth", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await helpers.bypassAuth();
       await page.reload();
 
@@ -92,7 +92,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
     });
 
     test("should maintain auth state across navigation", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await helpers.bypassAuth(TEST_USERS.fiona.email);
       await page.reload();
 
@@ -116,7 +116,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
     });
 
     test("should handle logout correctly", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await helpers.bypassAuth();
       await page.reload();
 
@@ -139,7 +139,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
 
   test.describe("Session Management", () => {
     test("should expire session after timeout", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
 
       // Set expired session
       await page.evaluate(() => {
@@ -163,7 +163,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
     });
 
     test("should refresh session on activity", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await helpers.bypassAuth();
       await page.reload();
 
@@ -193,7 +193,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
         route.abort("failed");
       });
 
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await page.fill('input[type="email"]', TEST_USERS.admin.email);
       await page.click('button:has-text("Send Magic Link")');
 
@@ -210,7 +210,7 @@ test.describe("Authentication Flow - Comprehensive", () => {
         });
       });
 
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await page.fill('input[type="email"]', TEST_USERS.admin.email);
       await page.click('button:has-text("Send Magic Link")');
 

@@ -2,7 +2,7 @@ import { test, expect } from '../fixtures/base-test';
 
 test.describe("Production Comprehensive Tests", () => {
   test.use({
-    baseURL: "https://thebetabase.com",
+    baseURL: "http://localhost:3000",
     viewport: { width: 1920, height: 1080 },
   });
 
@@ -10,7 +10,7 @@ test.describe("Production Comprehensive Tests", () => {
     console.log("🧪 Testing AOMA chat for meaningful responses...");
 
     // Navigate to chat page
-    await page.goto("/chat");
+    await page.goto("/chat", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Find chat input
@@ -49,7 +49,7 @@ test.describe("Production Comprehensive Tests", () => {
     console.log("🧪 Testing file upload on Curate tab...");
 
     // Navigate to main page
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Click on Curate tab
@@ -83,7 +83,7 @@ test.describe("Production Comprehensive Tests", () => {
     console.log("🧪 Testing file deletion on Curate tab...");
 
     // Navigate to curate tab
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     const curateTab = page.locator('button:has-text("Curate"), a:has-text("Curate")').first();
@@ -122,11 +122,11 @@ test.describe("Production Comprehensive Tests", () => {
     });
 
     // Visit main pages
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(2000);
 
-    await page.goto("/chat");
+    await page.goto("/chat", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(2000);
 

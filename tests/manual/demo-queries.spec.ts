@@ -95,7 +95,7 @@ test.describe('Demo Queries Test Suite', () => {
       });
 
       // Navigate to chat
-      await page.goto('/');
+      await page.goto('/', { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState('networkidle');
       console.log('[PAGE] Loaded');
 

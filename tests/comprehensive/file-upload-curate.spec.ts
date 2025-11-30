@@ -11,7 +11,7 @@ test.describe("File Upload and Curation - Comprehensive", () => {
     await helpers.monitorConsoleErrors();
 
     // Set up auth
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await helpers.bypassAuth();
     await page.reload();
     await helpers.waitForPageReady();

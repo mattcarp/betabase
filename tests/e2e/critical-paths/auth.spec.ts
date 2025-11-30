@@ -10,7 +10,7 @@ test.describe("Critical Auth Paths @critical", () => {
   test.describe.configure({ mode: "serial" });
 
   test("Magic link login flow", async ({ page, authHelper }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Enter email
     const emailInput = page.locator('input[type="email"]');
@@ -48,7 +48,7 @@ test.describe("Critical Auth Paths @critical", () => {
     ];
 
     for (const email of validEmails) {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
 
       // Try to send magic link
       await page.fill('input[type="email"]', email);
@@ -70,7 +70,7 @@ test.describe("Critical Auth Paths @critical", () => {
   });
 
   test("Invalid email shows error", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     const invalidEmails = ["notanemail", "test@", "@test.com", "test@invalid-domain-xyz123.com"];
 
@@ -103,7 +103,7 @@ test.describe("Critical Auth Paths @critical", () => {
       return;
     }
 
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await authHelper.bypassAuth();
 
     // Should redirect to authenticated area

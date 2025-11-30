@@ -16,7 +16,7 @@ test.describe("RLHF DPO Training Workflow", () => {
   // These should be enabled once the chat panel has proper test IDs
   test.describe.skip("Feedback Collection", () => {
     test("should show thumbs up/down buttons on AI responses", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       // Wait for chat panel
@@ -40,7 +40,7 @@ test.describe("RLHF DPO Training Workflow", () => {
     });
 
     test("should record positive feedback without dialog", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       // Send a message and wait for response
@@ -62,7 +62,7 @@ test.describe("RLHF DPO Training Workflow", () => {
     });
 
     test("should open correction dialog on negative feedback", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       // Send a message and wait for response
@@ -87,7 +87,7 @@ test.describe("RLHF DPO Training Workflow", () => {
     });
 
     test("should submit correction and create preference pair", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       // Send a message
@@ -121,7 +121,7 @@ test.describe("RLHF DPO Training Workflow", () => {
     });
 
     test("should allow skipping correction", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       // Send a message
@@ -148,7 +148,7 @@ test.describe("RLHF DPO Training Workflow", () => {
 
   test.describe("Curator Dashboard", () => {
     test("should load curator dashboard", async ({ page }) => {
-      await page.goto("/curator");
+      await page.goto("/curator", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       // Should see main dashboard elements
@@ -157,7 +157,7 @@ test.describe("RLHF DPO Training Workflow", () => {
     });
 
     test("should display stats cards", async ({ page }) => {
-      await page.goto("/curator");
+      await page.goto("/curator", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       // Stats should be visible (use .first() for stats cards vs tabs)
@@ -169,7 +169,7 @@ test.describe("RLHF DPO Training Workflow", () => {
     });
 
     test("should have Review Queue tab", async ({ page }) => {
-      await page.goto("/curator");
+      await page.goto("/curator", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       // Review Queue should be default tab
@@ -179,7 +179,7 @@ test.describe("RLHF DPO Training Workflow", () => {
     });
 
     test("should have Preference Pairs tab", async ({ page }) => {
-      await page.goto("/curator");
+      await page.goto("/curator", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       const pairsTab = page.getByRole("tab", { name: /Preference Pairs/i });
@@ -194,7 +194,7 @@ test.describe("RLHF DPO Training Workflow", () => {
     });
 
     test("should have Export tab with DPO export functionality", async ({ page }) => {
-      await page.goto("/curator");
+      await page.goto("/curator", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       const exportTab = page.getByRole("tab", { name: /Export/i });
@@ -210,7 +210,7 @@ test.describe("RLHF DPO Training Workflow", () => {
     });
 
     test("should show export format information", async ({ page }) => {
-      await page.goto("/curator");
+      await page.goto("/curator", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       const exportTab = page.getByRole("tab", { name: /Export/i });
@@ -226,7 +226,7 @@ test.describe("RLHF DPO Training Workflow", () => {
 
   test.describe("Review Queue Functionality", () => {
     test("should display filter buttons", async ({ page }) => {
-      await page.goto("/curator");
+      await page.goto("/curator", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       // Filter buttons should be visible
@@ -236,7 +236,7 @@ test.describe("RLHF DPO Training Workflow", () => {
     });
 
     test("should show correction input panel", async ({ page }) => {
-      await page.goto("/curator");
+      await page.goto("/curator", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       // Should see the correction panel
@@ -251,7 +251,7 @@ test.describe("RLHF DPO Training Workflow", () => {
 // Skip data quality tests - requires full chat flow
 test.describe.skip("RLHF Data Quality", () => {
   test("correction dialog should prevent empty submissions", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Send a message

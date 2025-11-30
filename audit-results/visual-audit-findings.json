@@ -1,0 +1,448 @@
+{
+  "auditMetadata": {
+    "date": "2025-11-30",
+    "auditor": "Visual Design Analysis Specialist (Claude Code)",
+    "application": "SIAM (The Betabase)",
+    "version": "0.24.5",
+    "methodology": "Static code analysis + WCAG 2.1 AA compliance + MAC Design System validation",
+    "pagesAudited": ["Chat", "HUD", "Test", "Fix", "Curate"],
+    "totalIssues": 23
+  },
+  "summary": {
+    "critical": 6,
+    "high": 8,
+    "medium": 7,
+    "low": 2
+  },
+  "criticalIssues": [
+    {
+      "id": "CRIT-001",
+      "severity": "critical",
+      "category": "UX",
+      "title": "Introspection Dropdown Visual Pollution",
+      "location": "Header - All pages",
+      "component": "IntrospectionDropdown",
+      "userFeedback": "I hate the brain icon, it just looks gross",
+      "impact": "High - User explicitly dislikes this element",
+      "recommendation": "Remove brain icon, use Settings gear icon or move to dev-only menu",
+      "estimatedEffort": "2 hours",
+      "wcagViolation": false
+    },
+    {
+      "id": "CRIT-002",
+      "severity": "critical",
+      "category": "UX",
+      "title": "Progress Indicator Placement Issues",
+      "location": "Chat page - Message responses",
+      "component": "AiSdkChatPanel",
+      "description": "Progress indicator appears BELOW chat response instead of ABOVE, duplicates, and persists after completion",
+      "impact": "High - Confuses users about loading state",
+      "recommendation": "Render progress indicator before message content, clear on completion, prevent duplication",
+      "estimatedEffort": "3 hours",
+      "wcagViolation": false
+    },
+    {
+      "id": "CRIT-003",
+      "severity": "critical",
+      "category": "Accessibility",
+      "title": "Missing Alt Text on Images",
+      "location": "All pages",
+      "component": "Image elements",
+      "wcagViolation": true,
+      "wcagCriteria": "1.1.1 Non-text Content (Level A)",
+      "impact": "Critical - Screen readers cannot describe images",
+      "recommendation": "Add descriptive alt text to all images, use alt='' for decorative images",
+      "estimatedEffort": "4 hours"
+    },
+    {
+      "id": "CRIT-004",
+      "severity": "critical",
+      "category": "Accessibility",
+      "title": "Color Contrast Violations",
+      "location": "Multiple text elements across all pages",
+      "wcagViolation": true,
+      "wcagCriteria": "1.4.3 Contrast (Minimum) - Level AA",
+      "minimumRatio": "4.5:1 for normal text, 3:1 for large text",
+      "violations": [
+        "text-slate-400 (#94a3b8) on bg-zinc-900/50",
+        "--mac-text-muted (#737373) may not meet contrast requirements"
+      ],
+      "impact": "Critical - Affects readability for users with visual impairments",
+      "recommendation": "Test all text colors against backgrounds, ensure 4.5:1 minimum ratio",
+      "estimatedEffort": "6 hours"
+    },
+    {
+      "id": "CRIT-005",
+      "severity": "critical",
+      "category": "Accessibility",
+      "title": "Empty Buttons Without Accessible Name",
+      "location": "Various interactive elements",
+      "wcagViolation": true,
+      "wcagCriteria": "4.1.2 Name, Role, Value (Level A)",
+      "description": "Icon-only buttons without text, icons, or aria-label",
+      "impact": "Critical - Screen readers announce 'Button' with no context",
+      "recommendation": "Add aria-label to all icon-only buttons",
+      "estimatedEffort": "3 hours"
+    },
+    {
+      "id": "CRIT-006",
+      "severity": "critical",
+      "category": "UX",
+      "title": "Navigation Deep Link Limitation",
+      "location": "All pages",
+      "description": "Cannot navigate via explicit deep links (e.g., /hud, /test) - SPA limitation",
+      "impact": "Critical - Breaks bookmarking, sharing, back/forward buttons",
+      "recommendation": "Implement proper SPA routing with browser history using Next.js App Router",
+      "estimatedEffort": "8 hours",
+      "wcagViolation": false
+    }
+  ],
+  "highPriorityIssues": [
+    {
+      "id": "HIGH-001",
+      "severity": "high",
+      "category": "UX",
+      "title": "Header Information Density Overload",
+      "location": "Header across all pages",
+      "elementCount": 11,
+      "elements": [
+        "Logo + title",
+        "5 navigation tabs",
+        "Connection status",
+        "Introspection dropdown",
+        "2 knowledge badges",
+        "Sidebar trigger",
+        "Knowledge base toggle",
+        "Performance link",
+        "Sign out button"
+      ],
+      "impact": "High - Visual overwhelm, difficult tap targets on mobile",
+      "recommendation": "Consolidate secondary actions into dropdown menu, simplify badges",
+      "estimatedEffort": "6 hours"
+    },
+    {
+      "id": "HIGH-002",
+      "severity": "high",
+      "category": "Design System",
+      "title": "Spacing Grid Violations (8px System)",
+      "location": "All pages",
+      "violations": [
+        "px-6 py-4 (24px, 16px) - header",
+        "space-x-3 (12px) - various components"
+      ],
+      "macDesignSystem": "Requires 8px grid system",
+      "impact": "High - Violates design system consistency",
+      "recommendation": "Audit and fix all spacing to use 8px multiples",
+      "estimatedEffort": "4 hours"
+    },
+    {
+      "id": "HIGH-003",
+      "severity": "high",
+      "category": "Design System",
+      "title": "Typography Weight Violations",
+      "location": "Multiple components",
+      "macDesignSystem": "Font weights 100-400 only",
+      "violations": [
+        "Need to audit for font-medium (500)",
+        "Need to audit for font-semibold (600)",
+        "Need to audit for font-bold (700)"
+      ],
+      "impact": "High - Violates design system",
+      "recommendation": "Search and replace all weights > 400",
+      "estimatedEffort": "3 hours"
+    },
+    {
+      "id": "HIGH-004",
+      "severity": "high",
+      "category": "Accessibility",
+      "title": "Navigation Tab States Need Enhancement",
+      "location": "Header navigation tabs",
+      "missingFeatures": [
+        "No focus state styling",
+        "Subtle active state",
+        "No aria-current attribute"
+      ],
+      "impact": "High - Reduces keyboard navigation accessibility",
+      "recommendation": "Add focus rings, enhance active state, add aria-current",
+      "estimatedEffort": "3 hours"
+    },
+    {
+      "id": "HIGH-005",
+      "severity": "high",
+      "category": "UX",
+      "title": "Empty State Design Missing",
+      "location": "HUD, Test, Fix, Curate pages",
+      "description": "Pages likely have poor/missing empty states",
+      "impact": "High - Users may think features are broken",
+      "recommendation": "Create reusable EmptyState component with icon, title, description, action",
+      "estimatedEffort": "4 hours"
+    },
+    {
+      "id": "HIGH-006",
+      "severity": "high",
+      "category": "UX",
+      "title": "Loading State Consistency",
+      "location": "All dynamic imports",
+      "currentImplementation": "Plain text 'Loading...' without spinner",
+      "impact": "High - Users uncertain if app is working",
+      "recommendation": "Create consistent LoadingState component with spinner",
+      "estimatedEffort": "2 hours"
+    },
+    {
+      "id": "HIGH-007",
+      "severity": "high",
+      "category": "UX",
+      "title": "Knowledge Status Badge Verbosity",
+      "location": "Header, right side",
+      "currentBadges": 2,
+      "impact": "Medium-High - Clutters header on desktop, hidden on mobile",
+      "recommendation": "Consolidate into single badge with tooltip",
+      "estimatedEffort": "2 hours"
+    },
+    {
+      "id": "HIGH-008",
+      "severity": "high",
+      "category": "Responsive",
+      "title": "Mobile Responsiveness Concerns",
+      "location": "All pages",
+      "description": "Header with 11+ elements won't fit on mobile",
+      "impact": "High - Poor mobile UX",
+      "recommendation": "Implement hamburger menu with drawer for mobile",
+      "estimatedEffort": "8 hours"
+    }
+  ],
+  "mediumPriorityIssues": [
+    {
+      "id": "MED-001",
+      "severity": "medium",
+      "category": "Visual Polish",
+      "title": "Inconsistent Border Styling",
+      "violations": [
+        "border-zinc-800",
+        "border-zinc-800/50",
+        "border-zinc-800/80"
+      ],
+      "recommendation": "Standardize on 2-3 border values",
+      "estimatedEffort": "2 hours"
+    },
+    {
+      "id": "MED-002",
+      "severity": "medium",
+      "category": "Visual Polish",
+      "title": "Button Size Inconsistency",
+      "location": "Header",
+      "recommendation": "Standardize all header buttons to same size (h-8 w-8 or h-9 w-9)",
+      "estimatedEffort": "1 hour"
+    },
+    {
+      "id": "MED-003",
+      "severity": "medium",
+      "category": "Visual Polish",
+      "title": "Shadow Hierarchy Unclear",
+      "current": "shadow-sm is too subtle",
+      "recommendation": "Use shadow-lg for active states",
+      "estimatedEffort": "1 hour"
+    },
+    {
+      "id": "MED-004",
+      "severity": "medium",
+      "category": "Visual Polish",
+      "title": "Icon Size Consistency",
+      "violations": ["h-3 w-3", "h-4 w-4", "h-5 w-5"],
+      "recommendation": "Standardize icon sizes with clear hierarchy",
+      "estimatedEffort": "2 hours"
+    },
+    {
+      "id": "MED-005",
+      "severity": "medium",
+      "category": "Visual Polish",
+      "title": "Transition Inconsistency",
+      "recommendation": "Standardize transitions across all interactive elements",
+      "estimatedEffort": "2 hours"
+    },
+    {
+      "id": "MED-006",
+      "severity": "medium",
+      "category": "Accessibility",
+      "title": "Focus States Need Visual Enhancement",
+      "recommendation": "Add visible focus rings to all interactive elements",
+      "estimatedEffort": "3 hours"
+    },
+    {
+      "id": "MED-007",
+      "severity": "medium",
+      "category": "Visual Polish",
+      "title": "Placeholder Text Color Variance",
+      "recommendation": "Standardize placeholder styling with CSS variables",
+      "estimatedEffort": "1 hour"
+    }
+  ],
+  "lowPriorityIssues": [
+    {
+      "id": "LOW-001",
+      "severity": "low",
+      "category": "Enhancement",
+      "title": "Micro-interactions",
+      "examples": [
+        "Scale on button press",
+        "Pulse on connection status",
+        "Slide-in for notifications"
+      ],
+      "estimatedEffort": "4 hours"
+    },
+    {
+      "id": "LOW-002",
+      "severity": "low",
+      "category": "Enhancement",
+      "title": "Visual Feedback on Mode Change",
+      "recommendation": "Add brief transition effect when switching modes",
+      "estimatedEffort": "2 hours"
+    }
+  ],
+  "accessibilityCompliance": {
+    "wcagLevel": "AA",
+    "violations": [
+      {
+        "criteria": "1.1.1 Non-text Content (Level A)",
+        "issueId": "CRIT-003"
+      },
+      {
+        "criteria": "1.4.3 Contrast (Minimum) - Level AA",
+        "issueId": "CRIT-004"
+      },
+      {
+        "criteria": "4.1.2 Name, Role, Value (Level A)",
+        "issueId": "CRIT-005"
+      },
+      {
+        "criteria": "2.4.7 Focus Visible (Level AA)",
+        "issueId": "HIGH-004"
+      }
+    ],
+    "complianceScore": "45%",
+    "mustFix": 4,
+    "recommended": 8
+  },
+  "designSystemCompliance": {
+    "name": "MAC Design System",
+    "violations": [
+      {
+        "rule": "8px spacing grid",
+        "issueId": "HIGH-002"
+      },
+      {
+        "rule": "Font weights 100-400 only",
+        "issueId": "HIGH-003"
+      },
+      {
+        "rule": "Consistent borders",
+        "issueId": "MED-001"
+      }
+    ],
+    "complianceScore": "75%",
+    "strengths": [
+      "Good use of CSS custom properties",
+      "Consistent dark theme implementation",
+      "Professional color palette",
+      "MAC class naming conventions"
+    ]
+  },
+  "implementationPlan": {
+    "phase1": {
+      "name": "Critical Fixes",
+      "duration": "Week 1",
+      "estimatedHours": 26,
+      "issues": ["CRIT-001", "CRIT-002", "CRIT-003", "CRIT-004", "CRIT-005", "CRIT-006"]
+    },
+    "phase2": {
+      "name": "High Priority",
+      "duration": "Week 2-3",
+      "estimatedHours": 32,
+      "issues": ["HIGH-001", "HIGH-002", "HIGH-003", "HIGH-004", "HIGH-005", "HIGH-006", "HIGH-007", "HIGH-008"]
+    },
+    "phase3": {
+      "name": "Medium Priority",
+      "duration": "Week 4",
+      "estimatedHours": 12,
+      "issues": ["MED-001", "MED-002", "MED-003", "MED-004", "MED-005", "MED-006", "MED-007"]
+    },
+    "phase4": {
+      "name": "Enhancements",
+      "duration": "Ongoing",
+      "estimatedHours": 6,
+      "issues": ["LOW-001", "LOW-002"]
+    },
+    "totalEstimatedHours": 76
+  },
+  "testingRequirements": {
+    "visualRegression": [
+      "Navigation tabs render correctly",
+      "Active state is visually distinct",
+      "Focus states are visible",
+      "Empty states display properly",
+      "Loading states are consistent"
+    ],
+    "accessibility": [
+      "Keyboard navigation through all elements",
+      "Screen reader compatibility (VoiceOver/NVDA)",
+      "Color contrast validation",
+      "Heading hierarchy validation",
+      "Form label association",
+      "Text zoom to 200%"
+    ],
+    "responsive": [
+      "Mobile (375px)",
+      "Tablet (768px)",
+      "Desktop (1440px)"
+    ],
+    "browsers": [
+      "Chrome/Edge",
+      "Firefox",
+      "Safari",
+      "Mobile Safari",
+      "Mobile Chrome"
+    ]
+  },
+  "toolsAndResources": {
+    "accessibilityTools": [
+      "axe DevTools",
+      "WAVE",
+      "Lighthouse",
+      "VoiceOver (macOS)",
+      "NVDA (Windows)"
+    ],
+    "designTools": [
+      "Browser DevTools (Contrast checker)",
+      "Figma (Design system reference)",
+      "Playwright (Visual regression)"
+    ],
+    "searchCommands": {
+      "spacingViolations": "grep -r 'space-x-3\\|space-y-3\\|px-5\\|py-5' src/",
+      "typographyViolations": "grep -r 'font-medium\\|font-semibold\\|font-bold' src/",
+      "missingAlt": "grep -r '<img[^>]*>' src/ | grep -v 'alt='",
+      "iconButtonsNoLabel": "grep -r 'size=\"icon\"' src/ | grep -v 'aria-label'"
+    }
+  },
+  "recommendations": {
+    "immediate": [
+      "Remove/replace introspection brain icon",
+      "Fix progress indicator placement",
+      "Add missing aria-labels to icon buttons"
+    ],
+    "thisWeek": [
+      "Implement proper routing for deep links",
+      "Fix critical color contrast issues",
+      "Simplify header layout"
+    ],
+    "thisSprint": [
+      "Complete accessibility audit",
+      "Add visual regression tests",
+      "Implement mobile-responsive header"
+    ],
+    "nextSprint": [
+      "Polish micro-interactions",
+      "Add keyboard shortcuts",
+      "Complete empty/loading state library"
+    ]
+  }
+}

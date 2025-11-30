@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-11-29T15:39:15.244Z",
+  "metrics": [],
+  "summary": {
+    "totalTests": 0,
+    "successCount": 0,
+    "failureCount": 0,
+    "avgTimeToFirstToken": 0,
+    "avgTimeToComplete": 0
+  }
+}

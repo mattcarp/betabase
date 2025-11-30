@@ -3,7 +3,7 @@ import { test, expect } from '../fixtures/base-test';
 test.describe("Magic Link Authentication", () => {
   test.beforeEach(async ({ page }) => {
     // Use baseURL from config or environment variable
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
   });
 
   test("should display login form with magic link as default", async ({ page }) => {
@@ -195,7 +195,7 @@ test.describe("Magic Link Authentication", () => {
 test.describe("Authentication Error Handling", () => {
   test.beforeEach(async ({ page }) => {
     // Use baseURL from config or environment variable
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
   });
 
   test("should handle authentication errors gracefully", async ({ page }) => {

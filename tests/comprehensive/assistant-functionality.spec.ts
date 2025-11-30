@@ -9,7 +9,7 @@ test.describe("Assistant Functionality - Comprehensive", () => {
     await helpers.monitorConsoleErrors();
 
     // Set up auth and navigate to assistant
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await helpers.bypassAuth();
     await page.reload();
     await helpers.waitForPageReady();

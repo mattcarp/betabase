@@ -1,0 +1,57 @@
+{
+  "timestamp": "2025-11-29T13:41:55.467Z",
+  "summary": {
+    "FCP": 396,
+    "CLS": 0,
+    "TTFB": 183.40000000596046,
+    "resources": {
+      "total": 67,
+      "js": 46,
+      "css": 5,
+      "images": 1,
+      "totalSize": 2051368
+    },
+    "memory": {
+      "usedMB": 54.168701171875,
+      "totalMB": 124.93133544921875,
+      "usedJSHeapSize": 0,
+      "totalJSHeapSize": 0,
+      "jsHeapSizeLimit": 0
+    }
+  },
+  "results": [
+    {
+      "timestamp": "2025-11-29T13:41:55.337Z",
+      "page": "long-task-analysis",
+      "navigationTiming": {
+        "domContentLoaded": 0.10000000149011612,
+        "loadComplete": 0.10000000149011612,
+        "domInteractive": 350.6000000014901,
+        "totalLoadTime": 4133.89999999851
+      },
+      "FCP": 396,
+      "TTFB": 183.40000000596046,
+      "resources": {
+        "total": 67,
+        "js": 46,
+        "css": 5,
+        "images": 1,
+        "totalSize": 2051368,
+        "largestResource": {
+          "name": "node_modules_0e38ddd9._.js",
+          "size": 263179,
+          "duration": 3809.39999999851
+        }
+      },
+      "memory": {
+        "usedJSHeapSize": 56800000,
+        "totalJSHeapSize": 131000000,
+        "jsHeapSizeLimit": 3760000000,
+        "usedMB": 54.168701171875,
+        "totalMB": 124.93133544921875
+      },
+      "CLS": 0,
+      "longTasks": []
+    }
+  ]
+}

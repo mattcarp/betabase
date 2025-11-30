@@ -19,7 +19,7 @@ test('capture all console errors', async ({ page }) => {
     }
   });
 
-  await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+  await page.goto('http://localhost:3000', { waitUntil: "domcontentloaded" });
   await page.waitForTimeout(5000);
 
   console.log('\n=== CONSOLE ERRORS ===');

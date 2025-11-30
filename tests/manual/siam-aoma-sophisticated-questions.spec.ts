@@ -104,7 +104,7 @@ test.describe('SIAM Chat - Sophisticated AOMA Questions', () => {
     console.log('\n🎯 Starting Sophisticated AOMA Chat Test...\n');
 
     // Navigate to chat
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle');
 
     // Wait for chat input

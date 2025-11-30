@@ -49,7 +49,7 @@ test.describe("SIAM Chat Feature", () => {
   // Setup before each test
   test.beforeEach(async ({ page }) => {
     chatPage = new SiamChatPage(page);
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Handle authentication if needed
     const needsAuth = await page.locator(TEST_CONFIG.selectors.emailInput).isVisible();

@@ -11,7 +11,7 @@ import { test, expect } from '../fixtures/base-test';
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
-const SIAM_URL = process.env.PLAYWRIGHT_BASE_URL || "https://thebetabase.com";
+const SIAM_URL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3000";
 
 // Helper function to login (reuse from mailinator test)
 async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {

@@ -6,7 +6,7 @@ import { test, expect } from '../fixtures/base-test';
 
 test('Diagnostic: Count tabs in Curate panel', async ({ page }) => {
   // Navigate
-  await page.goto('http://localhost:3000');
+  await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
   await page.waitForLoadState('networkidle');
   
   // Click Curate tab

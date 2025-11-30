@@ -11,12 +11,12 @@
 import { test, expect } from "./fixtures/base-test";
 
 // Use baseURL from playwright.config.ts (https://thebetabase.com)
-// No hardcoded URLs - use page.goto("/") for root
+// No hardcoded URLs - use page.goto("/", { waitUntil: 'domcontentloaded' }) for root
 
 test.describe("SIAM AI Chat Interface", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the app (uses baseURL from config)
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Wait for the page to load
     await page.waitForLoadState("domcontentloaded");
@@ -177,7 +177,7 @@ test.describe("SIAM AI Chat Interface", () => {
 test.describe("SIAM AI Chat Functionality", () => {
   test("should send a message and receive response", async ({ page }) => {
     // Navigate to the app
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("domcontentloaded");
     await page.waitForSelector('h1:has-text("The Betabase")', { timeout: 30000 });
 

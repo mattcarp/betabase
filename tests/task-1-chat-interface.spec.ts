@@ -7,7 +7,7 @@ import { test, expect } from './fixtures/base-test';
 
 test.describe("Task 1: SIAM Chat Interface", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
   });
 
   test("Landing page loads successfully", async ({ page }) => {

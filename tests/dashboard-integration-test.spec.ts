@@ -8,7 +8,7 @@ import { test, expect } from './fixtures/base-test';
 test.describe("Dashboard Integration Tests", () => {
   test("should demonstrate dashboard connectivity", async ({ page }) => {
     // Navigate to the application
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Check that the page loads successfully
     await expect(page).toHaveTitle(/SIAM/);
@@ -32,7 +32,7 @@ test.describe("Dashboard Integration Tests", () => {
   });
 
   test("should validate navigation functionality", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Test tab navigation if available
     const testTab = page.locator("text=Test");
@@ -53,12 +53,12 @@ test.describe("Dashboard Integration Tests", () => {
 
   test("should handle API connectivity", async ({ page }) => {
     // Test health endpoint
-    const healthResponse = await page.goto("/api/health");
+    const healthResponse = await page.goto("/api/health", { waitUntil: 'domcontentloaded' });
     expect(healthResponse?.status()).toBeLessThan(500);
     console.log("🏥 Health check passed");
 
     // Test basic page functionality
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
     console.log("🌐 Network requests completed");
   });

@@ -128,7 +128,7 @@ test.describe('Production Performance - thebetabase.com', () => {
     console.log('\n🚀 Testing Production Chat Performance...\n');
 
     // Navigate to production
-    await page.goto('https://thebetabase.com', { waitUntil: 'networkidle' });
+    await page.goto("/", { waitUntil: 'networkidle' });
 
     // Check if we're on login page
     const isLoginPage = await page.locator('text=Magic Link').isVisible().catch(() => false);
@@ -170,7 +170,7 @@ test.describe('Production Performance - thebetabase.com', () => {
   test('Production - Curation Performance', async ({ page }) => {
     console.log('\n🚀 Testing Production Curation Performance...\n');
 
-    await page.goto('https://thebetabase.com', { waitUntil: 'networkidle' });
+    await page.goto("/", { waitUntil: 'networkidle' });
 
     // Check if we're on login page
     const isLoginPage = await page.locator('text=Magic Link').isVisible().catch(() => false);

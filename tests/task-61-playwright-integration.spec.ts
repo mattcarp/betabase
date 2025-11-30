@@ -7,7 +7,7 @@ import { test, expect } from './fixtures/base-test';
 
 test.describe("Task 61: Playwright Test Dashboard Integration", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
   });
 
   test("Test Dashboard component exists", async ({ page }) => {

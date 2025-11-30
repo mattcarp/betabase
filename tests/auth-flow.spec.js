@@ -2,7 +2,7 @@ const { test, expect } = require("@playwright/test");
 
 test.describe("SIAM Authentication Flow - Fiona's Critical P0 Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
   });
 

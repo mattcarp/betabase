@@ -42,7 +42,7 @@ test.describe("Production Tests with Mailinator @production", () => {
 
   test("should authenticate via Mailinator magic link", async ({ page, context }) => {
     // Step 1: Request magic link
-    await page.goto("/"); // Uses baseURL from config (https://siam.onrender.com)
+    await page.goto("/", { waitUntil: 'domcontentloaded' }); // Uses baseURL from config (https://siam.onrender.com)
     await page.fill('[data-testid="email-input"], input[type="email"]', testEmail);
     await page.click('[data-testid="magic-link-button"], button:has-text("Send Magic Link")');
 
@@ -66,7 +66,7 @@ test.describe("Production Tests with Mailinator @production", () => {
 
   test("should access protected routes after Mailinator auth", async ({ page, context }) => {
     // Reuse the auth flow
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.fill('[data-testid="email-input"], input[type="email"]', testEmail);
     await page.click('[data-testid="magic-link-button"], button:has-text("Send Magic Link")');
     await expect(page.locator("text=/check your email/i")).toBeVisible();
@@ -79,10 +79,10 @@ test.describe("Production Tests with Mailinator @production", () => {
     await expect(page).toHaveURL(/\/dashboard|\/chat|\/app/);
 
     // Now test protected routes
-    await page.goto("/chat");
+    await page.goto("/chat", { waitUntil: 'domcontentloaded' });
     await expect(page.locator('[data-testid="chat-interface"]')).toBeVisible();
 
-    await page.goto("/curate");
+    await page.goto("/curate", { waitUntil: 'domcontentloaded' });
     await expect(page.locator('[data-testid="upload-area"]')).toBeVisible();
   });
 });

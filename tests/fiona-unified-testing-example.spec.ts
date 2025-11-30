@@ -36,7 +36,7 @@ test.describe("SIAM Authentication - Triple Validation", () => {
 
     // Direct Playwright commands for precise testing
     const page = await browser.newPage();
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Test with first email
     await page.fill('[data-testid="email-input"]', "fiona.burgess.ext@sonymusic.com");
@@ -135,7 +135,7 @@ test.describe("SIAM Authentication - Triple Validation", () => {
       (async () => {
         console.log("🖥️  Starting Playwright local testing...");
         const page = await browser.newPage();
-        await page.goto("http://localhost:3000");
+        await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
         // ... functional testing
         return "Playwright: Complete";
       })(),

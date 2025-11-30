@@ -58,7 +58,7 @@ test.describe('AOMA Chat - Honest Response Validation', () => {
     console.log('❌ FAILING = Making up fake answers\n');
 
     // Navigate to chat
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle');
 
     const chatInput = page.locator('textarea, input[placeholder*="Ask"]').first();

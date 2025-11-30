@@ -13,7 +13,7 @@ const TEST_EMAIL = "test@sandbox49c351db5fa3448da004612643bf99d3.mailgun.org";
 const MAILGUN_API_KEY =
   process.env.MAILGUN_API_KEY || "49b4045e0b9738de459452c1f45c88ee-97129d72-5def87c6";
 const MAILGUN_DOMAIN = "sandbox49c351db5fa3448da004612643bf99d3.mailgun.org";
-const PRODUCTION_URL = "https://thebetabase.com";
+const PRODUCTION_URL = "http://localhost:3000";
 
 async function getLatestEmail(toEmail: string, sinceTimestamp?: number) {
   const timestamp = sinceTimestamp || Math.floor(Date.now() / 1000) - 300; // Last 5 minutes

@@ -37,7 +37,7 @@ test.describe('Chat Response Time Performance', () => {
     console.log('\n🔵 COLD START TEST - First query (no cache)');
 
     // Navigate to chat
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.click('text=Chat');
 
     // Wait for chat interface to be ready (not networkidle - too many background requests)
@@ -63,7 +63,7 @@ test.describe('Chat Response Time Performance', () => {
   test('Measure chat response times - Warm Cache', async ({ page }) => {
     console.log('\n🟢 WARM CACHE TEST - Repeated query');
 
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.click('text=Chat');
     await page.waitForSelector('textarea, input[type="text"]', { timeout: 10000 });
     await page.waitForTimeout(1000);
@@ -91,7 +91,7 @@ test.describe('Chat Response Time Performance', () => {
   test('Measure multiple different queries', async ({ page }) => {
     console.log('\n🔷 MULTIPLE QUERIES TEST');
 
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.click('text=Chat');
     await page.waitForSelector('textarea, input[type="text"]', { timeout: 10000 });
     await page.waitForTimeout(1000);
@@ -126,7 +126,7 @@ test.describe('Chat Response Time Performance', () => {
       }
     });
 
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.click('text=Chat');
     await page.waitForSelector('textarea, input[type="text"]', { timeout: 10000 });
     await page.waitForTimeout(1000);

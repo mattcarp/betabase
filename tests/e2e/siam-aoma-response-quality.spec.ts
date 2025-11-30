@@ -58,7 +58,7 @@ test.describe("AOMA Response Quality Validation", () => {
       console.log(`${"=".repeat(70)}\n`);
 
       // Navigate to chat
-      await page.goto("http://localhost:3000/");
+      await page.goto("http://localhost:3000/", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       // Find chat input

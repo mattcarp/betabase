@@ -62,7 +62,7 @@ test.describe("Console Error Detection - CRITICAL P0", () => {
 
     // Navigate to localhost
     await page.goto("http://localhost:3000", {
-      waitUntil: "networkidle",
+      waitUntil: "domcontentloaded",
       timeout: 30000,
     });
 
@@ -94,7 +94,7 @@ test.describe("Console Error Detection - CRITICAL P0", () => {
 
   test("should click suggestion button without console errors", async ({ page }) => {
     // Wait for page to fully load
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
     await page.waitForTimeout(3000); // Give dynamic suggestions time to load
 
     // Check if suggestions are visible - they may only show on empty chat

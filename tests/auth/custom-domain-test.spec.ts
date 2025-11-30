@@ -23,7 +23,7 @@ const MAILGUN_DOMAIN =
   process.env.MAILGUN_TEST_DOMAIN ||
   "sandbox49c351db5fa3448da004612643bf99d3.mailgun.org";
 const TEST_EMAIL = process.env.MAILGUN_CUSTOM_TEST_EMAIL || `test@${MAILGUN_DOMAIN}`;
-const BASE_URL = process.env.TEST_URL || "https://thebetabase.com";
+const BASE_URL = process.env.TEST_URL || "http://localhost:3000";
 
 console.log("📧 Test Configuration:");
 console.log(`   Domain: ${MAILGUN_DOMAIN}`);
@@ -163,7 +163,7 @@ test.describe("Mailgun Integration Tests", () => {
 
     // Step 1: Navigate to login page
     await test.step("Navigate to login", async () => {
-      await page.goto(BASE_URL, { waitUntil: "networkidle" });
+      await page.goto(BASE_URL, { waitUntil: "domcontentloaded" });
       console.log("✅ Loaded login page");
 
       // Check for email input

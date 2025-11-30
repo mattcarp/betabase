@@ -11,6 +11,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, shimmer = true, glow = true, ...props }, ref) => {
     return (
       <textarea
+        suppressHydrationWarning
         className={cn(
           // Base MAC textarea styles
           "mac-input",

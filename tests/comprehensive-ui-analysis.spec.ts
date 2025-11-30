@@ -5,7 +5,7 @@ test.describe("Comprehensive UI/UX Analysis", () => {
 
   test("Phase 0: Preparation - Initial Screenshots", async ({ page }) => {
     // Navigate to login page
-    await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
+    await page.goto("http://localhost:3000", { waitUntil: "domcontentloaded" });
 
     // Take initial screenshot
     await page.screenshot({
@@ -38,7 +38,7 @@ test.describe("Comprehensive UI/UX Analysis", () => {
   });
 
   test("Phase 1: Interaction Testing - Login Form", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Test email input interaction
     const emailInput = page.locator('input[type="email"]');
@@ -86,8 +86,8 @@ test.describe("Comprehensive UI/UX Analysis", () => {
   test("Phase 2: Responsiveness - Mobile View", async ({ page, browser }) => {
     // Test mobile viewport (375px)
     await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto("http://localhost:3000");
-    await page.waitForLoadState("networkidle");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState("domcontentloaded");
 
     await page.screenshot({
       path: "/tmp/screenshots/07-mobile-375px.png",
@@ -98,8 +98,8 @@ test.describe("Comprehensive UI/UX Analysis", () => {
   test("Phase 2: Responsiveness - Tablet View", async ({ page }) => {
     // Test tablet viewport (768px)
     await page.setViewportSize({ width: 768, height: 1024 });
-    await page.goto("http://localhost:3000");
-    await page.waitForLoadState("networkidle");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState("domcontentloaded");
 
     await page.screenshot({
       path: "/tmp/screenshots/08-tablet-768px.png",
@@ -110,8 +110,8 @@ test.describe("Comprehensive UI/UX Analysis", () => {
   test("Phase 2: Responsiveness - Desktop View", async ({ page }) => {
     // Test desktop viewport (1440px)
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("http://localhost:3000");
-    await page.waitForLoadState("networkidle");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState("domcontentloaded");
 
     await page.screenshot({
       path: "/tmp/screenshots/09-desktop-1440px.png",
@@ -120,7 +120,7 @@ test.describe("Comprehensive UI/UX Analysis", () => {
   });
 
   test("Phase 3: Visual Polish - MAC Design System Compliance", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Check for MAC Design System CSS variables
     const macVariables = await page.evaluate(() => {
@@ -169,7 +169,7 @@ test.describe("Comprehensive UI/UX Analysis", () => {
   });
 
   test("Phase 4: Accessibility - WCAG Compliance", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Check for focus indicators
     const focusableElements = await page.evaluate(() => {
@@ -205,7 +205,7 @@ test.describe("Comprehensive UI/UX Analysis", () => {
   });
 
   test("Phase 5: Robustness - Error States", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Test empty email submission
     const submitButton = page.locator('button:has-text("Send Magic Link")');
@@ -244,8 +244,8 @@ test.describe("Comprehensive UI/UX Analysis", () => {
       });
     });
 
-    await page.goto("http://localhost:3000");
-    await page.waitForLoadState("networkidle");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState("domcontentloaded");
     await page.waitForTimeout(2000); // Wait for any async operations
 
     console.log("All Console Messages:", JSON.stringify(consoleMessages, null, 2));
@@ -261,7 +261,7 @@ test.describe("Comprehensive UI/UX Analysis", () => {
   });
 
   test("Phase 8: Performance - CLS Check", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Measure CLS (Cumulative Layout Shift)
     const clsValue = await page.evaluate(() => {

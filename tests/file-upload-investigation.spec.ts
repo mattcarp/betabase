@@ -5,7 +5,7 @@ test.describe("SIAM File Upload Functionality Investigation", () => {
     console.log("🚀 Starting SIAM file upload investigation...");
 
     // Navigate to SIAM homepage
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     console.log("✅ Navigated to SIAM homepage");
 
     // Wait for page to load

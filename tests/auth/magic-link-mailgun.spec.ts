@@ -30,7 +30,7 @@ test.describe("Magic Link Authentication with Mailgun", () => {
     testEmail = mailgun.generateTestEmail();
     console.log(`🧪 Test email: ${testEmail}`);
 
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
   });
 
   test("complete magic link flow - send and verify code", async ({ page }) => {
@@ -174,7 +174,7 @@ test.describe("Magic Link Authentication with Mailgun", () => {
     const firstCode = mailgun.extractMagicLinkCode(firstEmail.bodyHtml || firstEmail.bodyPlain);
 
     // Go back and request another code
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.fill('input[type="email"]', testEmail);
     await page.click('button[type="submit"]');
 
@@ -213,7 +213,7 @@ test.describe("Mailgun Integration Health Check", () => {
     const testEmail = mailgun.generateTestEmail();
 
     // Send a test magic link
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.fill('input[type="email"]', testEmail);
     await page.click('button[type="submit"]');
 

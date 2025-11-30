@@ -11,7 +11,7 @@ import { test, expect } from './fixtures/base-test';
 import * as fs from "fs";
 import * as path from "path";
 
-const BASE_URL = "https://thebetabase.com";
+const BASE_URL = "http://localhost:3000";
 const AUDIT_DIR = "/Users/matt/Documents/projects/siam/audit-results";
 
 // Ensure audit directory exists

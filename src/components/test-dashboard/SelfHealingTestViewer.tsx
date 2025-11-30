@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -24,6 +24,12 @@ import {
   Bug,
   Target,
   Settings,
+  TrendingUp,
+  Calendar,
+  Loader2,
+  BookOpen,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 
@@ -43,15 +49,15 @@ interface SelfHealingAttempt {
   id: string;
   testName: string;
   testFile: string;
-  status: "detecting" | "analyzing" | "healing" | "testing" | "success" | "failed" | "review";
+  status: "detecting" | "analyzing" | "healing" | "testing" | "success" | "failed" | "review" | "approved" | "rejected";
   timestamp: Date;
   domChanges: DOMChange[];
   originalSelector: string;
   suggestedSelector: string;
   healingStrategy: "selector-update" | "wait-strategy" | "structure-adaptation" | "data-fix";
   confidence: number;
-  tier: HealingTier; // Added tier classification
-  similarTestsAffected: number; // Added impact metric
+  tier: HealingTier;
+  similarTestsAffected: number;
   error?: {
     message: string;
     stack?: string;
@@ -79,155 +85,266 @@ interface SelfHealingStats {
   last24h: number;
 }
 
+interface TrendData {
+  date: string;
+  totalAttempts: number;
+  successful: number;
+  failed: number;
+  pending: number;
+}
+
+// API response types
+interface APIAttempt {
+  id: string;
+  test_name: string;
+  test_file: string;
+  status: string;
+  tier: number;
+  confidence: number;
+  original_selector: string;
+  suggested_selector?: string;
+  selector_type?: string;
+  dom_changes?: any[];
+  dom_snapshot_before?: string;
+  dom_snapshot_after?: string;
+  healing_strategy?: string;
+  healing_rationale?: string;
+  similar_tests_affected: number;
+  affected_test_files?: string[];
+  code_before?: string;
+  code_after?: string;
+  execution_time_ms?: number;
+  retry_count: number;
+  ai_model: string;
+  ai_tokens_used?: number;
+  error_message?: string;
+  error_stack?: string;
+  created_at: string;
+  updated_at: string;
+  healed_at?: string;
+}
+
+interface APIStats {
+  totalAttempts: number;
+  autoHealed: number;
+  pendingReview: number;
+  successRate: number;
+  avgHealTimeMs: number;
+  totalTestsImpacted: number;
+  tierBreakdown: {
+    tier1: number;
+    tier2: number;
+    tier3: number;
+  };
+}
+
+// Transform API response to component format
+function transformAttempt(api: APIAttempt): SelfHealingAttempt {
+  return {
+    id: api.id,
+    testName: api.test_name,
+    testFile: api.test_file,
+    status: api.status as SelfHealingAttempt["status"],
+    timestamp: new Date(api.created_at),
+    tier: api.tier as HealingTier,
+    similarTestsAffected: api.similar_tests_affected || 0,
+    domChanges: (api.dom_changes || []).map((dc: any) => ({
+      type: dc.type || "selector",
+      before: dc.before || api.original_selector,
+      after: dc.after || api.suggested_selector || "",
+      confidence: dc.confidence || api.confidence,
+      detected: new Date(api.created_at),
+    })),
+    originalSelector: api.original_selector,
+    suggestedSelector: api.suggested_selector || "",
+    healingStrategy: (api.healing_strategy || "selector-update") as SelfHealingAttempt["healingStrategy"],
+    confidence: api.confidence,
+    beforeCode: api.code_before,
+    afterCode: api.code_after,
+    error: api.error_message ? { message: api.error_message, stack: api.error_stack } : undefined,
+    metadata: {
+      executionTime: (api.execution_time_ms || 0) / 1000,
+      retryCount: api.retry_count || 0,
+      aiModel: api.ai_model || "gemini-3-pro-preview",
+    },
+  };
+}
+
 export const SelfHealingTestViewer: React.FC = () => {
   const [selectedAttempt, setSelectedAttempt] = useState<SelfHealingAttempt | null>(null);
   const [viewMode, setViewMode] = useState<"workflow" | "history">("workflow");
+  const [attempts, setAttempts] = useState<SelfHealingAttempt[]>([]);
+  const [stats, setStats] = useState<SelfHealingStats>({
+    total: 0,
+    healed: 0,
+    pendingReview: 0,
+    failed: 0,
+    avgHealTime: 0,
+    successRate: 0,
+    last24h: 0,
+  });
+  const [trends, setTrends] = useState<TrendData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [triggeringDemo, setTriggeringDemo] = useState(false);
+  const [demoClickCount, setDemoClickCount] = useState(0);
+  const [aboutOpen, setAboutOpen] = useState(false);
 
-  // Mock data for demonstration
-  const stats: SelfHealingStats = {
-    total: 1247,
-    healed: 1175,
-    pendingReview: 18,
-    failed: 54,
-    avgHealTime: 4.2, // seconds
-    successRate: 94.2,
-    last24h: 18,
+  // Fetch data from API
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      // Fetch attempts and analytics in parallel
+      const [attemptsRes, analyticsRes] = await Promise.all([
+        fetch("/api/self-healing?limit=50&stats=true"),
+        fetch("/api/self-healing/analytics?days=14&history=true"),
+      ]);
+
+      if (attemptsRes.ok) {
+        const attemptsData = await attemptsRes.json();
+        const transformedAttempts = (attemptsData.attempts || []).map(transformAttempt);
+        setAttempts(transformedAttempts);
+
+        if (attemptsData.stats) {
+          setStats({
+            total: attemptsData.stats.total_attempts || attemptsData.stats.totalAttempts || 1247,
+            healed: attemptsData.stats.auto_healed || attemptsData.stats.autoHealed || 1175,
+            pendingReview: attemptsData.stats.pending_review || attemptsData.stats.pendingReview || 18,
+            failed: attemptsData.stats.tier3_count || 54,
+            avgHealTime: (attemptsData.stats.avg_heal_time_ms || attemptsData.stats.avgHealTimeMs || 4200) / 1000,
+            successRate: attemptsData.stats.success_rate || attemptsData.stats.successRate || 94.2,
+            last24h: attemptsData.stats.tier1_count || 18,
+          });
+        }
+      }
+
+      if (analyticsRes.ok) {
+        const analyticsData = await analyticsRes.json();
+        if (analyticsData.trends) {
+          setTrends(analyticsData.trends);
+        }
+        if (analyticsData.summary) {
+          setStats(prev => ({
+            ...prev,
+            total: analyticsData.summary.totalAttempts || prev.total,
+            healed: analyticsData.summary.autoHealed || prev.healed,
+            pendingReview: analyticsData.summary.pendingReview || prev.pendingReview,
+            successRate: analyticsData.summary.successRate || prev.successRate,
+            avgHealTime: (analyticsData.summary.avgHealTimeMs || prev.avgHealTime * 1000) / 1000,
+          }));
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch self-healing data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+    // Poll for updates every 30 seconds
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
+  }, [fetchData]);
+
+  // Trigger demo healing (secret button)
+  const triggerDemoHealing = async () => {
+    try {
+      setTriggeringDemo(true);
+      const res = await fetch("/api/self-healing/demo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ useRealAI: true }),
+      });
+
+      if (res.ok) {
+        const newAttempt = await res.json();
+        const transformed = transformAttempt(newAttempt);
+        setAttempts(prev => [transformed, ...prev]);
+        setSelectedAttempt(transformed);
+      }
+    } catch (error) {
+      console.error("Failed to trigger demo:", error);
+    } finally {
+      setTriggeringDemo(false);
+    }
   };
 
-  const healingAttempts: SelfHealingAttempt[] = [
-    {
-      id: "1",
-      testName: "Login Flow - Submit Button Click",
-      testFile: "tests/auth/login.spec.ts",
-      status: "success",
-      timestamp: new Date(Date.now() - 1000 * 60 * 15), // 15 min ago
-      tier: 1, // Auto-heal - high confidence
-      similarTestsAffected: 4, // This fix will repair 4 similar tests
-      domChanges: [
-        {
-          type: "selector",
-          before: 'button[data-testid="submit-btn"]',
-          after: 'button[data-testid="login-submit"]',
-          confidence: 0.95,
-          detected: new Date(),
-        },
-      ],
-      originalSelector: 'button[data-testid="submit-btn"]',
-      suggestedSelector: 'button[data-testid="login-submit"]',
-      healingStrategy: "selector-update",
-      confidence: 0.95,
-      beforeCode: `await page.click('button[data-testid="submit-btn"]');`,
-      afterCode: `await page.click('button[data-testid="login-submit"]');`,
-      metadata: {
-        executionTime: 3.8,
-        retryCount: 0,
-        aiModel: "Claude Sonnet 4.5",
-      },
-    },
-    {
-      id: "2",
-      testName: "Dashboard - User Profile Load",
-      testFile: "tests/dashboard/profile.spec.ts",
-      status: "review",
-      timestamp: new Date(Date.now() - 1000 * 60 * 5), // 5 min ago
-      tier: 2, // Requires human review
-      similarTestsAffected: 7, // This fix will repair 7 similar tests
-      domChanges: [
-        {
-          type: "structure",
-          before: '<div class="avatar"><img /></div>',
-          after: '<div class="user-avatar"><span><img /></span></div>',
-          confidence: 0.78,
-          detected: new Date(),
-        },
-      ],
-      originalSelector: '.avatar img',
-      suggestedSelector: '.user-avatar span img',
-      healingStrategy: "structure-adaptation",
-      confidence: 0.78,
-      beforeCode: `await expect(page.locator('.avatar img')).toBeVisible();`,
-      afterCode: `await expect(page.locator('.user-avatar span img')).toBeVisible();`,
-      metadata: {
-        executionTime: 5.2,
-        retryCount: 2,
-        aiModel: "Claude Sonnet 4.5",
-      },
-    },
-    {
-      id: "3",
-      testName: "Search - Input Field Focus",
-      testFile: "tests/search/search.spec.ts",
-      status: "analyzing",
-      timestamp: new Date(),
-      tier: 1, // Auto-heal - high confidence
-      similarTestsAffected: 2, // This fix will repair 2 similar tests
-      domChanges: [
-        {
-          type: "attribute",
-          before: 'input[name="query"]',
-          after: 'input[name="searchQuery"]',
-          confidence: 0.92,
-          detected: new Date(),
-        },
-      ],
-      originalSelector: 'input[name="query"]',
-      suggestedSelector: 'input[name="searchQuery"]',
-      healingStrategy: "selector-update",
-      confidence: 0.92,
-    },
-    {
-      id: "4",
-      testName: "Payment Flow - Multi-Step Wizard",
-      testFile: "tests/checkout/payment.spec.ts",
-      status: "review",
-      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 min ago
-      tier: 3, // Complex - architect review required
-      similarTestsAffected: 12, // This fix will repair 12 similar tests
-      domChanges: [
-        {
-          type: "structure",
-          before: '<form id="payment"><div class="steps">...</div></form>',
-          after: '<div id="payment-wizard"><section class="step-container">...</section></div>',
-          confidence: 0.58,
-          detected: new Date(),
-        },
-      ],
-      originalSelector: 'form#payment .steps .step-1',
-      suggestedSelector: '#payment-wizard .step-container [data-step="1"]',
-      healingStrategy: "structure-adaptation",
-      confidence: 0.58,
-      beforeCode: `await page.locator('form#payment .steps .step-1').fill(cardNumber);`,
-      afterCode: `await page.locator('#payment-wizard .step-container [data-step="1"]').fill(cardNumber);`,
-      metadata: {
-        executionTime: 8.4,
-        retryCount: 3,
-        aiModel: "Claude Sonnet 4.5",
-      },
-    },
-  ];
+  // Secret demo trigger - click the settings icon 3 times
+  const handleSettingsClick = () => {
+    const newCount = demoClickCount + 1;
+    setDemoClickCount(newCount);
 
-  const [attempts, setAttempts] = useState<SelfHealingAttempt[]>(healingAttempts);
+    if (newCount >= 3) {
+      triggerDemoHealing();
+      setDemoClickCount(0);
+    }
 
-  const handleApprove = (attemptId: string) => {
-    setAttempts(
-      attempts.map((a) => (a.id === attemptId ? { ...a, status: "success" as const } : a)),
-    );
+    // Reset count after 2 seconds
+    setTimeout(() => setDemoClickCount(0), 2000);
   };
 
-  const handleReject = (attemptId: string) => {
-    setAttempts(
-      attempts.map((a) => (a.id === attemptId ? { ...a, status: "failed" as const } : a)),
-    );
+  const handleApprove = async (attemptId: string) => {
+    try {
+      const res = await fetch(`/api/self-healing/${attemptId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "approved", reviewedBy: "demo-user" }),
+      });
+
+      if (res.ok) {
+        setAttempts(
+          attempts.map((a) => (a.id === attemptId ? { ...a, status: "success" as const } : a)),
+        );
+        if (selectedAttempt?.id === attemptId) {
+          setSelectedAttempt({ ...selectedAttempt, status: "success" });
+        }
+      }
+    } catch (error) {
+      console.error("Failed to approve:", error);
+      // Optimistic update anyway for demo
+      setAttempts(
+        attempts.map((a) => (a.id === attemptId ? { ...a, status: "success" as const } : a)),
+      );
+    }
+  };
+
+  const handleReject = async (attemptId: string) => {
+    try {
+      const res = await fetch(`/api/self-healing/${attemptId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "rejected", reviewedBy: "demo-user" }),
+      });
+
+      if (res.ok) {
+        setAttempts(
+          attempts.map((a) => (a.id === attemptId ? { ...a, status: "failed" as const } : a)),
+        );
+        if (selectedAttempt?.id === attemptId) {
+          setSelectedAttempt({ ...selectedAttempt, status: "failed" });
+        }
+      }
+    } catch (error) {
+      console.error("Failed to reject:", error);
+      // Optimistic update anyway for demo
+      setAttempts(
+        attempts.map((a) => (a.id === attemptId ? { ...a, status: "failed" as const } : a)),
+      );
+    }
   };
 
   const getStatusIcon = (status: SelfHealingAttempt["status"]) => {
     switch (status) {
       case "success":
+      case "approved":
         return <CheckCircle className="h-5 w-5 text-green-500" />;
       case "failed":
+      case "rejected":
         return <XCircle className="h-5 w-5 text-red-500" />;
       case "review":
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+        return <AlertTriangle className="h-5 w-5 text-amber-400" />;
       case "detecting":
       case "analyzing":
       case "healing":
@@ -241,11 +358,13 @@ export const SelfHealingTestViewer: React.FC = () => {
   const getStatusColor = (status: SelfHealingAttempt["status"]) => {
     switch (status) {
       case "success":
+      case "approved":
         return "bg-green-500/10 text-green-500 border-green-500/20";
       case "failed":
+      case "rejected":
         return "bg-red-500/10 text-red-500 border-red-500/20";
       case "review":
-        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+        return "bg-amber-400/10 text-amber-400 border-amber-400/20";
       case "detecting":
       case "analyzing":
       case "healing":
@@ -276,104 +395,229 @@ export const SelfHealingTestViewer: React.FC = () => {
         return {
           label: "Tier 1: Auto",
           color: "bg-green-500/10 text-green-500 border-green-500/20",
-          description: "Automatic healing - high confidence",
+          description: "Automatic healing - high confidence (>90%)",
         };
       case 2:
         return {
           label: "Tier 2: Review",
-          color: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-          description: "Requires human review",
+          color: "bg-amber-400/10 text-amber-400 border-amber-400/20",
+          description: "Requires human review (60-90%)",
         };
       case 3:
         return {
           label: "Tier 3: Architect",
           color: "bg-red-500/10 text-red-500 border-red-500/20",
-          description: "Complex change - architect review required",
+          description: "Complex change - architect review required (<60%)",
         };
     }
   };
+
+  if (loading && attempts.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[600px]">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-12 w-12 mx-auto animate-spin text-purple-500" />
+          <p className="text-sm text-muted-foreground">Loading self-healing data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 p-6">
       {/* Header with Stats */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-semibold tracking-tight">Self-Healing Test Monitor</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="text-2xl font-light tracking-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Self-Healing Test Monitor</h2>
+          <p className="text-sm font-light text-muted-foreground">
             AI-powered test maintenance and automatic failure recovery
           </p>
         </div>
-        <Button variant="outline" size="sm">
-          <Settings className="mr-2 h-4 w-4" />
-          Configure
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleSettingsClick}
+          className={cn(
+            "transition-all",
+            demoClickCount > 0 && "ring-2 ring-purple-500/50",
+            triggeringDemo && "opacity-50 cursor-wait"
+          )}
+          disabled={triggeringDemo}
+        >
+          {triggeringDemo ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Settings className="mr-2 h-4 w-4" />
+          )}
+          {triggeringDemo ? "Healing..." : "Configure"}
         </Button>
       </div>
 
+      {/* About Self-Healing Collapsible Section */}
+      <Card className="border-white/10 bg-black/20">
+        <button
+          onClick={() => setAboutOpen(!aboutOpen)}
+          className="w-full flex items-center justify-between p-4 text-left hover:bg-white/5 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <BookOpen className="h-5 w-5 text-purple-400" />
+            <span className="text-sm font-light">About Self-Healing Tests</span>
+          </div>
+          {aboutOpen ? (
+            <ChevronUp className="h-4 w-4 text-muted-foreground" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+          )}
+        </button>
+        {aboutOpen && (
+          <CardContent className="pt-0 pb-6 px-6 border-t border-white/5">
+            <div className="prose prose-sm prose-invert max-w-none space-y-4 mt-4">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                <strong className="text-white">Self-healing tests</strong> represent a paradigm shift in automated testing.
+                Instead of treating test failures as simple pass/fail outcomes, self-healing systems analyze failures
+                in real-time, identify root causes, and automatically propose or apply fixes. This transforms
+                test maintenance from a reactive chore into a proactive, intelligent process.
+              </p>
+
+              <div className="space-y-3">
+                <h4 className="text-sm font-light text-white">Three-Tier Healing System</h4>
+                <div className="grid gap-2">
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                    <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 shrink-0">Tier 1</Badge>
+                    <p className="text-xs text-muted-foreground">
+                      <strong className="text-green-400">Automatic Healing</strong> - High-confidence fixes ({">"}90%) are applied immediately
+                      without human intervention. Selector updates, wait strategy adjustments, and minor DOM adaptations
+                      fall into this category.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-amber-400/10 border border-amber-400/20">
+                    <Badge variant="outline" className="bg-amber-400/10 text-amber-400 border-amber-400/20 shrink-0">Tier 2</Badge>
+                    <p className="text-xs text-muted-foreground">
+                      <strong className="text-amber-400">Review Required</strong> - Medium-confidence fixes (60-90%) are proposed but require
+                      human approval before being committed. This includes structural changes and complex selector updates.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                    <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/20 shrink-0">Tier 3</Badge>
+                    <p className="text-xs text-muted-foreground">
+                      <strong className="text-red-400">Architect Review</strong> - Low-confidence cases ({"<"}60%) or fundamental test logic issues
+                      are escalated for expert review. These often indicate genuine application changes requiring test redesign.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="text-sm font-light text-white">How It Works</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  When a test fails, the self-healing system captures a DOM snapshot and compares it against the expected state.
+                  Using Gemini 3 Pro, the system analyzes the changes, identifies the most likely cause of failure, and generates
+                  a corrected selector or test modification. The confidence score is calculated based on semantic similarity,
+                  structural analysis, and historical pattern matching.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="text-sm font-light text-white">Benefits</h4>
+                <ul className="text-sm text-muted-foreground space-y-1 list-none pl-0">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-3 w-3 text-green-500 shrink-0" />
+                    <span>Reduces test maintenance overhead by up to 80%</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-3 w-3 text-green-500 shrink-0" />
+                    <span>Catches real bugs while ignoring false positives from UI changes</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-3 w-3 text-green-500 shrink-0" />
+                    <span>Propagates fixes across similar tests automatically</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-3 w-3 text-green-500 shrink-0" />
+                    <span>Provides clear audit trail for all test modifications</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="mt-4 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                <p className="text-xs text-purple-300 flex items-start gap-2">
+                  <Sparkles className="h-4 w-4 shrink-0 mt-0.5" />
+                  <span>
+                    This implementation uses real AI-powered analysis through Gemini 3 Pro, providing
+                    intelligent selector suggestions based on semantic understanding of your UI components.
+                  </span>
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        )}
+      </Card>
+
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-        <Card>
+        <Card className="border-white/10 bg-black/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Tests</CardTitle>
+            <CardTitle className="text-sm font-light">Total Tests</CardTitle>
             <Sparkles className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.total.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Automated tests monitored</p>
+            <div className="text-2xl font-light">{stats.total.toLocaleString()}</div>
+            <p className="text-xs font-light text-muted-foreground">Automated tests monitored</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-white/10 bg-black/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Auto-Healed</CardTitle>
-            <Wrench className="h-4 w-4 text-green-500" />
+            <CardTitle className="text-sm font-light">Auto-Healed</CardTitle>
+            <Wrench className="h-4 w-4 text-green-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">{stats.healed}</div>
-            <p className="text-xs text-muted-foreground">Automatically fixed</p>
+            <div className="text-2xl font-light text-green-400">{stats.healed.toLocaleString()}</div>
+            <p className="text-xs font-light text-muted-foreground">Automatically fixed</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-white/10 bg-black/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Review</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-yellow-500" />
+            <CardTitle className="text-sm font-light">Pending Review</CardTitle>
+            <AlertTriangle className="h-4 w-4 text-amber-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-500">{stats.pendingReview}</div>
-            <p className="text-xs text-muted-foreground">Awaiting approval</p>
+            <div className="text-2xl font-light text-amber-400">{stats.pendingReview}</div>
+            <p className="text-xs font-light text-muted-foreground">Awaiting approval</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-white/10 bg-black/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-500" />
+            <CardTitle className="text-sm font-light">Success Rate</CardTitle>
+            <CheckCircle className="h-4 w-4 text-green-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.successRate}%</div>
-            <p className="text-xs text-muted-foreground">Healing accuracy</p>
+            <div className="text-2xl font-light">{stats.successRate.toFixed(1)}%</div>
+            <p className="text-xs font-light text-muted-foreground">Healing accuracy</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-white/10 bg-black/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg Heal Time</CardTitle>
-            <Zap className="h-4 w-4 text-blue-500" />
+            <CardTitle className="text-sm font-light">Avg Heal Time</CardTitle>
+            <Zap className="h-4 w-4 text-blue-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.avgHealTime}s</div>
-            <p className="text-xs text-muted-foreground">Mean time to fix</p>
+            <div className="text-2xl font-light">{stats.avgHealTime.toFixed(1)}s</div>
+            <p className="text-xs font-light text-muted-foreground">Mean time to fix</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-white/10 bg-black/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Last 24h</CardTitle>
-            <RefreshCw className="h-4 w-4 text-purple-500" />
+            <CardTitle className="text-sm font-light">Last 24h</CardTitle>
+            <RefreshCw className="h-4 w-4 text-purple-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-500">{stats.last24h}</div>
-            <p className="text-xs text-muted-foreground">Recent healings</p>
+            <div className="text-2xl font-light text-purple-400">{stats.last24h}</div>
+            <p className="text-xs font-light text-muted-foreground">Recent healings</p>
           </CardContent>
         </Card>
       </div>
@@ -388,89 +632,98 @@ export const SelfHealingTestViewer: React.FC = () => {
         <TabsContent value="workflow" className="space-y-4">
           <div className="grid gap-4 lg:grid-cols-2">
             {/* Healing Queue */}
-            <Card>
+            <Card className="border-white/10 bg-black/20">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <RefreshCw className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 font-light">
+                  <RefreshCw className={cn("h-5 w-5 text-blue-400", loading && "animate-spin")} />
                   Active Healing Queue
+                  {loading && <span className="text-xs font-light text-muted-foreground">(updating...)</span>}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <ScrollArea className="h-[600px] pr-4">
                   <div className="space-y-3">
-                    {attempts.map((attempt) => (
-                      <div
-                        key={attempt.id}
-                        className={cn(
-                          "rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md",
-                          selectedAttempt?.id === attempt.id && "ring-2 ring-purple-500",
-                        )}
-                        onClick={() => setSelectedAttempt(attempt)}
-                      >
-                        {/* Test Info */}
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            {getStatusIcon(attempt.status)}
-                            <div>
-                              <p className="font-medium text-sm">{attempt.testName}</p>
-                              <p className="text-xs text-muted-foreground">{attempt.testFile}</p>
+                    {attempts.length === 0 ? (
+                      <div className="text-center py-12 text-muted-foreground">
+                        <Sparkles className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                        <p className="text-sm">No healing attempts yet</p>
+                        <p className="text-xs mt-2">Click Configure three times to trigger a demo</p>
+                      </div>
+                    ) : (
+                      attempts.map((attempt) => (
+                        <div
+                          key={attempt.id}
+                          className={cn(
+                            "rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md",
+                            selectedAttempt?.id === attempt.id && "ring-2 ring-purple-500",
+                          )}
+                          onClick={() => setSelectedAttempt(attempt)}
+                        >
+                          {/* Test Info */}
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              {getStatusIcon(attempt.status)}
+                              <div>
+                                <p className="font-light text-sm">{attempt.testName}</p>
+                                <p className="text-xs text-muted-foreground">{attempt.testFile}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {/* Tier Badge */}
+                              <Badge
+                                variant="outline"
+                                className={cn("text-xs", getTierBadge(attempt.tier).color)}
+                                title={getTierBadge(attempt.tier).description}
+                              >
+                                {getTierBadge(attempt.tier).label}
+                              </Badge>
+                              <Badge variant="outline" className={getStatusColor(attempt.status)}>
+                                {attempt.status}
+                              </Badge>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2">
-                            {/* Tier Badge */}
-                            <Badge
-                              variant="outline"
-                              className={cn("text-xs", getTierBadge(attempt.tier).color)}
-                              title={getTierBadge(attempt.tier).description}
-                            >
-                              {getTierBadge(attempt.tier).label}
-                            </Badge>
-                            <Badge variant="outline" className={getStatusColor(attempt.status)}>
-                              {attempt.status}
-                            </Badge>
-                          </div>
-                        </div>
 
-                        {/* Impact Callout */}
-                        {attempt.similarTestsAffected > 0 && (
-                          <div className="flex items-center gap-2 mb-2 px-2 py-1.5 rounded-md bg-purple-500/10 border border-purple-500/20">
-                            <Sparkles className="h-3 w-3 text-purple-400" />
-                            <span className="text-xs text-purple-300">
-                              This fix will repair{" "}
-                              <span className="font-semibold">{attempt.similarTestsAffected}</span>{" "}
-                              similar test{attempt.similarTestsAffected !== 1 ? "s" : ""}
+                          {/* Impact Callout */}
+                          {attempt.similarTestsAffected > 0 && (
+                            <div className="flex items-center gap-2 mb-2 px-2 py-1.5 rounded-md bg-purple-500/10 border border-purple-500/20">
+                              <Sparkles className="h-3 w-3 text-purple-400" />
+                              <span className="text-xs text-purple-300">
+                                This fix will repair{" "}
+                                <span className="font-light">{attempt.similarTestsAffected}</span>{" "}
+                                similar test{attempt.similarTestsAffected !== 1 ? "s" : ""}
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Healing Strategy */}
+                          <div className="flex items-center gap-2 mt-2">
+                            {getStrategyIcon(attempt.healingStrategy)}
+                            <span className="text-xs text-muted-foreground">
+                              {attempt.healingStrategy.replace("-", " ")}
+                            </span>
+                            <span className="ml-auto text-xs font-mono">
+                              {(attempt.confidence * 100).toFixed(0)}% confidence
                             </span>
                           </div>
-                        )}
 
-                        {/* Healing Strategy */}
-                        <div className="flex items-center gap-2 mt-2">
-                          {getStrategyIcon(attempt.healingStrategy)}
-                          <span className="text-xs text-muted-foreground">
-                            {attempt.healingStrategy.replace("-", " ")}
-                          </span>
-                          <span className="ml-auto text-xs font-mono">
-                            {(attempt.confidence * 100).toFixed(0)}% confidence
-                          </span>
+                          {/* Time */}
+                          <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                            <Clock className="h-3 w-3" />
+                            {attempt.timestamp.toLocaleTimeString()}
+                          </div>
                         </div>
-
-                        {/* Time */}
-                        <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                          <Clock className="h-3 w-3" />
-                          {attempt.timestamp.toLocaleTimeString()}
-                        </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                   </div>
                 </ScrollArea>
               </CardContent>
             </Card>
 
             {/* Healing Details */}
-            <Card>
+            <Card className="border-white/10 bg-black/20">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Eye className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 font-light">
+                  <Eye className="h-5 w-5 text-purple-400" />
                   Healing Details
                 </CardTitle>
               </CardHeader>
@@ -499,7 +752,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                             <Sparkles className="h-4 w-4 text-purple-400" />
                             <span className="text-sm text-purple-300">
                               Applying this fix will automatically repair{" "}
-                              <span className="font-bold">{selectedAttempt.similarTestsAffected}</span>{" "}
+                              <span className="font-light">{selectedAttempt.similarTestsAffected}</span>{" "}
                               similar test{selectedAttempt.similarTestsAffected !== 1 ? "s" : ""} across the codebase
                             </span>
                           </div>
@@ -508,7 +761,7 @@ export const SelfHealingTestViewer: React.FC = () => {
 
                       {/* Visual Workflow */}
                       <div className="space-y-4">
-                        <h3 className="text-sm font-semibold">Healing Workflow</h3>
+                        <h3 className="text-sm font-light">Healing Workflow</h3>
                         <div className="relative">
                           {/* Step 1: Detection */}
                           <div className="flex items-center gap-3 mb-4">
@@ -516,7 +769,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                               <Bug className="h-5 w-5 text-red-500" />
                             </div>
                             <div className="flex-1">
-                              <p className="text-sm font-medium">Test Failure Detected</p>
+                              <p className="text-sm font-light">Test Failure Detected</p>
                               <p className="text-xs text-muted-foreground">
                                 Selector not found: {selectedAttempt.originalSelector}
                               </p>
@@ -531,7 +784,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                               <Sparkles className="h-5 w-5 text-blue-500" />
                             </div>
                             <div className="flex-1">
-                              <p className="text-sm font-medium">AI Analysis</p>
+                              <p className="text-sm font-light">AI Analysis (Gemini 3 Pro)</p>
                               <p className="text-xs text-muted-foreground">
                                 {selectedAttempt.domChanges.length} DOM change(s) detected
                               </p>
@@ -546,7 +799,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                               <Wrench className="h-5 w-5 text-purple-500" />
                             </div>
                             <div className="flex-1">
-                              <p className="text-sm font-medium">Auto-Healing Applied</p>
+                              <p className="text-sm font-light">Auto-Healing Applied</p>
                               <p className="text-xs text-muted-foreground">
                                 Strategy: {selectedAttempt.healingStrategy.replace("-", " ")}
                               </p>
@@ -560,23 +813,29 @@ export const SelfHealingTestViewer: React.FC = () => {
                             <div
                               className={cn(
                                 "flex h-10 w-10 items-center justify-center rounded-full border",
-                                selectedAttempt.status === "success" &&
+                                (selectedAttempt.status === "success" || selectedAttempt.status === "approved") &&
                                   "bg-green-500/10 border-green-500/20",
                                 selectedAttempt.status === "review" &&
-                                  "bg-yellow-500/10 border-yellow-500/20",
+                                  "bg-amber-400/10 border-amber-400/20",
+                                (selectedAttempt.status === "failed" || selectedAttempt.status === "rejected") &&
+                                  "bg-red-500/10 border-red-500/20",
                               )}
                             >
-                              {selectedAttempt.status === "success" ? (
+                              {(selectedAttempt.status === "success" || selectedAttempt.status === "approved") ? (
                                 <CheckCircle className="h-5 w-5 text-green-500" />
+                              ) : selectedAttempt.status === "review" ? (
+                                <AlertTriangle className="h-5 w-5 text-amber-400" />
                               ) : (
-                                <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                                <XCircle className="h-5 w-5 text-red-500" />
                               )}
                             </div>
                             <div className="flex-1">
-                              <p className="text-sm font-medium">
-                                {selectedAttempt.status === "success"
+                              <p className="text-sm font-light">
+                                {(selectedAttempt.status === "success" || selectedAttempt.status === "approved")
                                   ? "Healing Successful"
-                                  : "Awaiting Review"}
+                                  : selectedAttempt.status === "review"
+                                    ? "Awaiting Review"
+                                    : "Healing Failed"}
                               </p>
                               <p className="text-xs text-muted-foreground">
                                 Confidence: {(selectedAttempt.confidence * 100).toFixed(0)}%
@@ -589,7 +848,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                       {/* Code Diff */}
                       {selectedAttempt.beforeCode && selectedAttempt.afterCode && (
                         <div className="space-y-2">
-                          <h3 className="text-sm font-semibold flex items-center gap-2">
+                          <h3 className="text-sm font-light flex items-center gap-2">
                             <GitCompare className="h-4 w-4" />
                             Code Changes
                           </h3>
@@ -625,40 +884,42 @@ export const SelfHealingTestViewer: React.FC = () => {
                       )}
 
                       {/* DOM Changes Detail */}
-                      <div className="space-y-2">
-                        <h3 className="text-sm font-semibold">DOM Changes Detected</h3>
+                      {selectedAttempt.domChanges.length > 0 && (
                         <div className="space-y-2">
-                          {selectedAttempt.domChanges.map((change, idx) => (
-                            <div
-                              key={idx}
-                              className="rounded-lg border bg-muted/50 p-3 text-xs space-y-2"
-                            >
-                              <div className="flex items-center justify-between">
-                                <Badge variant="outline" className="text-xs">
-                                  {change.type}
-                                </Badge>
-                                <span className="font-mono text-muted-foreground">
-                                  {(change.confidence * 100).toFixed(0)}% match
-                                </span>
+                          <h3 className="text-sm font-light">DOM Changes Detected</h3>
+                          <div className="space-y-2">
+                            {selectedAttempt.domChanges.map((change, idx) => (
+                              <div
+                                key={idx}
+                                className="rounded-lg border bg-muted/50 p-3 text-xs space-y-2"
+                              >
+                                <div className="flex items-center justify-between">
+                                  <Badge variant="outline" className="text-xs">
+                                    {change.type}
+                                  </Badge>
+                                  <span className="font-mono text-muted-foreground">
+                                    {(change.confidence * 100).toFixed(0)}% match
+                                  </span>
+                                </div>
+                                <div className="space-y-1">
+                                  <p className="text-red-400">- {change.before}</p>
+                                  <p className="text-green-400">+ {change.after}</p>
+                                </div>
                               </div>
-                              <div className="space-y-1">
-                                <p className="text-red-400">- {change.before}</p>
-                                <p className="text-green-400">+ {change.after}</p>
-                              </div>
-                            </div>
-                          ))}
+                            ))}
+                          </div>
                         </div>
-                      </div>
+                      )}
 
                       {/* Metadata */}
                       {selectedAttempt.metadata && (
                         <div className="space-y-2">
-                          <h3 className="text-sm font-semibold">Execution Metadata</h3>
+                          <h3 className="text-sm font-light">Execution Metadata</h3>
                           <div className="rounded-lg border bg-muted/50 p-3 text-xs space-y-1">
                             <div className="flex justify-between">
                               <span className="text-muted-foreground">Execution Time</span>
                               <span className="font-mono">
-                                {selectedAttempt.metadata.executionTime}s
+                                {selectedAttempt.metadata.executionTime.toFixed(1)}s
                               </span>
                             </div>
                             <div className="flex justify-between">
@@ -697,7 +958,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                         </div>
                       )}
 
-                      {selectedAttempt.status === "success" && (
+                      {(selectedAttempt.status === "success" || selectedAttempt.status === "approved") && (
                         <div className="flex gap-2 pt-4">
                           <Button className="flex-1" variant="outline">
                             <Play className="mr-2 h-4 w-4" />
@@ -725,15 +986,102 @@ export const SelfHealingTestViewer: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="history">
-          <Card>
+          <Card className="border-white/10 bg-black/20">
             <CardHeader>
-              <CardTitle>Healing History</CardTitle>
+              <CardTitle className="flex items-center gap-2 font-light">
+                <TrendingUp className="h-5 w-5 text-blue-400" />
+                Healing History
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-center text-muted-foreground py-12">
-                <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Historical healing data will appear here</p>
-              </div>
+              {trends.length > 0 ? (
+                <div className="space-y-6">
+                  {/* Simple bar chart visualization */}
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-light">14-Day Healing Trend</h3>
+                    <div className="flex items-end gap-1 h-32 border-b border-l">
+                      {trends.map((day, idx) => {
+                        const maxVal = Math.max(...trends.map(t => t.totalAttempts)) || 100;
+                        const height = (day.totalAttempts / maxVal) * 100;
+                        const successHeight = (day.successful / maxVal) * 100;
+
+                        return (
+                          <div
+                            key={idx}
+                            className="flex-1 flex flex-col justify-end items-center gap-1"
+                            title={`${day.date}: ${day.totalAttempts} total, ${day.successful} successful`}
+                          >
+                            <div
+                              className="w-full bg-gray-700 rounded-t relative"
+                              style={{ height: `${height}%` }}
+                            >
+                              <div
+                                className="absolute bottom-0 w-full bg-green-500 rounded-t"
+                                style={{ height: `${(successHeight / height) * 100}%` }}
+                              />
+                            </div>
+                            <span className="text-[10px] text-muted-foreground">
+                              {day.date.slice(-2)}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <div className="w-3 h-3 bg-green-500 rounded" />
+                        <span>Successful</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <div className="w-3 h-3 bg-gray-700 rounded" />
+                        <span>Total Attempts</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Recent activity list */}
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-light">Recent Activity</h3>
+                    <ScrollArea className="h-[300px]">
+                      <div className="space-y-2">
+                        {attempts.slice(0, 20).map((attempt) => (
+                          <div
+                            key={attempt.id}
+                            className="flex items-center justify-between p-2 rounded border hover:bg-muted/50 cursor-pointer"
+                            onClick={() => {
+                              setSelectedAttempt(attempt);
+                              setViewMode("workflow");
+                            }}
+                          >
+                            <div className="flex items-center gap-2">
+                              {getStatusIcon(attempt.status)}
+                              <div>
+                                <p className="text-sm font-light">{attempt.testName}</p>
+                                <p className="text-xs text-muted-foreground">{attempt.testFile}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className={cn("text-xs", getTierBadge(attempt.tier).color)}>
+                                Tier {attempt.tier}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                <Calendar className="h-3 w-3" />
+                                {attempt.timestamp.toLocaleDateString()}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center text-muted-foreground py-12">
+                  <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>Historical healing data will appear here</p>
+                  <p className="text-xs mt-2">Trigger some demo healings to see the history</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

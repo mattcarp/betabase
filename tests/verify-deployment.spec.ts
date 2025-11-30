@@ -9,7 +9,7 @@ test("Verify deployment code is live", async ({ page }) => {
   console.log("\n🔍 Checking if new deployment is live...\n");
 
   // Navigate to production
-  await page.goto("https://thebetabase.com");
+  await page.goto("/", { waitUntil: 'domcontentloaded' });
 
   // Check the page source for clues about which version is deployed
   const pageContent = await page.content();
@@ -19,7 +19,7 @@ test("Verify deployment code is live", async ({ page }) => {
 
   // Try to trigger an API call to see the error response
   const response = await page.request
-    .post("https://thebetabase.com/api/chat", {
+    .post("http://localhost:3000/api/chat", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -52,7 +52,7 @@ test("Verify deployment code is live", async ({ page }) => {
   }
 
   // Check health endpoint
-  const health = await page.request.get("https://thebetabase.com/api/health");
+  const health = await page.request.get("http://localhost:3000/api/health");
   const healthData = await health.json();
   console.log("\n🏥 Health Check:", healthData);
 

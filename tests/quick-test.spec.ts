@@ -3,7 +3,7 @@ import { test, expect } from './fixtures/base-test';
 test.describe("Quick Validation Test", () => {
   test("should load the main app", async ({ page }) => {
     // Navigate to the app
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Wait for the page to load
     await page.waitForLoadState("networkidle");
@@ -22,7 +22,7 @@ test.describe("Quick Validation Test", () => {
   });
 
   test("should navigate between tabs", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Click on Curate tab

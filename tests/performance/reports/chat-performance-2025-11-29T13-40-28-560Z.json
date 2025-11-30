@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-11-29T13:40:28.560Z",
+  "summary": {
+    "totalTests": 1,
+    "successCount": 0,
+    "failureCount": 1,
+    "avgTTFB": 0,
+    "avgTTFR": 0,
+    "avgTotal": 0
+  },
+  "results": [
+    {
+      "timestamp": "2025-11-29T13:40:26.750Z",
+      "query": "What is AOMA?",
+      "ttfb": 0,
+      "ttfr": 0,
+      "totalTime": 26970.156707999995,
+      "streamingStartDelay": 0,
+      "aomaOrchestrationTime": null,
+      "embeddingTime": null,
+      "vectorSearchTime": null,
+      "success": false,
+      "errorMessage": "page.waitForResponse: Test timeout of 60000ms exceeded."
+    }
+  ]
+}

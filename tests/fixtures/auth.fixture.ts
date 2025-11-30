@@ -36,7 +36,7 @@ export class AuthHelper {
    * Login with magic link
    */
   async loginWithMagicLink(email: string) {
-    await this.page.goto("/");
+    await this.page.goto("/", { waitUntil: 'domcontentloaded' });
     await this.page.fill('input[type="email"]', email);
     await this.page.click('button:has-text("Send Magic Link")');
 
@@ -115,7 +115,7 @@ export const test = base.extend<{
 
     // Bypass auth for testing
     if (process.env.NEXT_PUBLIC_BYPASS_AUTH === "true") {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await authHelper.bypassAuth();
     } else {
       // Use real auth

@@ -10,7 +10,7 @@ import { test, expect } from '../../fixtures/base-test';
 test.describe('Test Pillar @demo', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the app - this is a SPA so we click to navigate
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     // Wait for app to load (either login or app content)
     await page.waitForLoadState('networkidle');

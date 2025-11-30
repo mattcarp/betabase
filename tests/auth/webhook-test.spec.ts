@@ -14,7 +14,7 @@ import { test, expect } from '../fixtures/base-test';
 import axios from "axios";
 
 // Configuration
-const BASE_URL = process.env.TEST_URL || "https://thebetabase.com";
+const BASE_URL = process.env.TEST_URL || "http://localhost:3000";
 const WEBHOOK_URL = process.env.MAILGUN_WEBHOOK_URL || `${BASE_URL}/api/mailgun-webhook`;
 const TEST_EMAIL = process.env.TEST_EMAIL || "test@mattcarpenter.com";
 
@@ -92,7 +92,7 @@ test.describe("Webhook Magic Link Tests", () => {
 
     // Step 1: Navigate to login
     await test.step("Navigate to login page", async () => {
-      await page.goto(BASE_URL, { waitUntil: "networkidle" });
+      await page.goto(BASE_URL, { waitUntil: "domcontentloaded" });
       console.log("✅ Loaded login page");
 
       // Wait for email input

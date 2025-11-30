@@ -8,7 +8,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
     page = testPage;
 
     // Navigate to SIAM with auth bypassed
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Verify page loads correctly
     await expect(page).toHaveTitle(/SIAM/);
@@ -351,7 +351,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
 
       // Navigate to Test Dashboard
-      await page.goto("http://localhost:3000");
+      await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
       await page.click("text=Test");
 
       // Verify Test Dashboard is responsive
@@ -373,7 +373,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
       await page.setViewportSize({ width: 768, height: 1024 });
 
       // Navigate to Test Dashboard
-      await page.goto("http://localhost:3000");
+      await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
       await page.click("text=Test");
 
       // Verify Test Dashboard is responsive
@@ -390,7 +390,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
   test.describe("Error Handling", () => {
     test("should handle network errors gracefully", async () => {
       // Navigate to Test Dashboard
-      await page.goto("http://localhost:3000");
+      await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
       await page.click("text=Test");
 
       // Simulate network issues by going offline
@@ -417,7 +417,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
       });
 
       // Navigate to Test Dashboard
-      await page.goto("http://localhost:3000");
+      await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
       await page.click("text=Test");
 
       // Wait for page to fully load
@@ -500,7 +500,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
     test("should load Test Dashboard within acceptable time", async () => {
       const startTime = Date.now();
 
-      await page.goto("http://localhost:3000");
+      await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
       await page.click("text=Test");
       await expect(page.locator("text=Test Dashboard")).toBeVisible();
 

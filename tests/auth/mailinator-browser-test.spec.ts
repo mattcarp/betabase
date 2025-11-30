@@ -20,7 +20,7 @@ import { test, expect } from '../fixtures/base-test';
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
-const SIAM_URL = process.env.TEST_URL || "https://thebetabase.com";
+const SIAM_URL = process.env.TEST_URL || "http://localhost:3000";
 
 // Helper to wait with retries
 async function waitForElement(page: Page, selector: string, options = {}) {
@@ -84,7 +84,7 @@ test.describe("SIAM Authentication - Mailinator Integration", () => {
     // Step 1: Navigate to SIAM and request magic link
     await test.step("Request magic link from SIAM", async () => {
       console.log("1️⃣ Navigating to SIAM login page...");
-      await page.goto(SIAM_URL, { waitUntil: "networkidle" });
+      await page.goto(SIAM_URL, { waitUntil: "domcontentloaded" });
 
       // Take screenshot of login page
       await page.screenshot({ path: "test-results/01-login-page.png" });
@@ -142,7 +142,7 @@ test.describe("SIAM Authentication - Mailinator Integration", () => {
 
       // Open Mailinator in new tab
       const mailPage = await context.newPage();
-      await mailPage.goto(MAILINATOR_INBOX, { waitUntil: "networkidle" });
+      await mailPage.goto(MAILINATOR_INBOX, { waitUntil: "domcontentloaded" });
       console.log(`   ✅ Opened inbox: ${MAILINATOR_INBOX}`);
 
       // Wait for emails to load (Mailinator uses Angular)
@@ -166,7 +166,7 @@ test.describe("SIAM Authentication - Mailinator Integration", () => {
 
         // Refresh the page to check for new emails
         if (attempts % 5 === 0) {
-          await mailPage.reload({ waitUntil: "networkidle" });
+          await mailPage.reload({ waitUntil: "domcontentloaded" });
         } else {
           await mailPage.waitForTimeout(3000);
         }

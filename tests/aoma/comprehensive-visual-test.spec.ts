@@ -72,7 +72,7 @@ test.describe("AOMA Comprehensive Visual & Performance Tests", () => {
     });
 
     // Navigate to localhost
-    await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
+    await page.goto("http://localhost:3000", { waitUntil: "domcontentloaded" });
     await page.waitForTimeout(2000); // Let animations settle
   });
 

@@ -19,7 +19,7 @@ test.describe("Magic Link with Real Email", () => {
     const testEmail = "matt@mattcarpenter.com"; // This is already in ALLOWED_EMAILS
 
     // Navigate to login page
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Request magic link
     await page.fill('input[type="email"]', testEmail);

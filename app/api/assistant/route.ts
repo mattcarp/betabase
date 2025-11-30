@@ -154,10 +154,13 @@ export async function POST(req: NextRequest) {
       fileIds,
     });
 
-    // Create or get thread
-    const thread = threadId
-      ? await openai.beta.threads.retrieve(threadId)
-      : await openai.beta.threads.create();
+    // Create or get thread - handle null/undefined threadId explicitly
+    let thread;
+    if (threadId && typeof threadId === "string" && threadId.trim() !== "") {
+      thread = await openai.beta.threads.retrieve(threadId);
+    } else {
+      thread = await openai.beta.threads.create();
+    }
 
     console.log("Using thread:", thread.id);
 
@@ -192,11 +195,14 @@ export async function POST(req: NextRequest) {
     console.log("Assistant run created:", run.id);
 
     // Wait for the run to complete
-    let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id as any);
+    // Note: OpenAI SDK v6+ uses retrieve(runId, { thread_id }) signature
+    const runId = run.id;
+    const threadIdStr = thread.id;
+    let runStatus = await openai.beta.threads.runs.retrieve(runId, { thread_id: threadIdStr });
 
     while (runStatus.status !== "completed" && runStatus.status !== "failed") {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id as any);
+      runStatus = await openai.beta.threads.runs.retrieve(runId, { thread_id: threadIdStr });
     }
 
     if (runStatus.status === "failed") {

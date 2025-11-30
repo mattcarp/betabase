@@ -16,7 +16,7 @@ test.describe("RLHF Feedback System", () => {
   test.describe("Feedback Modal", () => {
     test("should display thumbs up/down buttons in chat", async ({ page }) => {
       // The app is a SPA where "/" IS the chat interface
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState("networkidle");
 
       // Verify we're on the chat interface (it's the main page)
@@ -38,7 +38,7 @@ test.describe("RLHF Feedback System", () => {
     });
 
     test("should open detailed feedback modal on thumbs click", async ({ page }) => {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
 
       // Check if FeedbackModal component renders correctly by looking for its structure
       // We're checking the component exists in the codebase by navigating to a test route

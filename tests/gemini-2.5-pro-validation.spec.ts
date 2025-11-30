@@ -10,7 +10,7 @@ import { test, expect } from './fixtures/base-test';
 test.describe('Gemini 2.5 Pro Chat Validation', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to chat interface - don't wait for networkidle (Next.js HMR keeps it busy)
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('domcontentloaded');
     
     // Wait for the chat textarea to be visible (confirms page loaded)

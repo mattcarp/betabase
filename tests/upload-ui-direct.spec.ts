@@ -5,7 +5,7 @@ test.describe("SIAM File Upload UI Direct Access", () => {
     console.log("🚀 Accessing SIAM with auth bypass...");
 
     // Navigate to SIAM with auth bypass
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Take initial screenshot

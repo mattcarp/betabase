@@ -5,7 +5,7 @@ test.describe("Welcome Message", () => {
     page,
   }) => {
     // Navigate to the application
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Wait for the welcome message to appear (more specific than networkidle)
     await page.waitForSelector("h2", { timeout: 10000 });
@@ -29,7 +29,7 @@ test.describe("Welcome Message", () => {
   test("should maintain correct welcome message after conversation interactions", async ({
     page,
   }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.waitForSelector("h2", { timeout: 10000 });
 
     // Initial check
@@ -69,7 +69,7 @@ test.describe("Welcome Message", () => {
   });
 
   test("should never show 'Welcome to the New Conversation' text", async ({ page }) => {
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.waitForSelector("h2", { timeout: 10000 });
 
     // Search the entire page content for the incorrect text

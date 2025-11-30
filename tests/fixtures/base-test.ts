@@ -43,15 +43,8 @@ const ALLOWED_ERROR_PATTERNS = [
   /Method Not Allowed/i,
 
   // Dev server instability (Turbopack/Next.js build manifest issues)
-  // TODO: Remove once upgraded to Next.js 16 or Turbopack stabilizes
-  /Failed to load resource:.*500/i,
-  /status of 500.*Internal Server Error/i,
-  /Cannot find module/i,  // Turbopack runtime module errors
-  /ENOENT.*build-manifest\.json/i,
-  /ENOENT.*app-paths-manifest\.json/i,
-  /chunks\/ssr/i,  // Turbopack SSR chunk errors
-  /\[turbopack\]/i,  // Any turbopack-related error
-
+  // Removed as Next.js 16.0.5 fixes these issues
+  
   // React hydration warnings (not errors)
   /Warning: Text content did not match/i,
 
@@ -120,16 +113,33 @@ export const test = base.extend<{
   networkErrors: [async ({ page }, use) => {
     const errors: NetworkError[] = [];
 
-    page.on('response', response => {
+    page.on('response', async response => {
       const status = response.status();
       // Capture 4xx and 5xx errors, but not 404s (often expected)
       if (status >= 400 && status !== 404) {
+        let errorBody = '';
+        // Try to read response body for 500 errors to get more context
+        if (status >= 500) {
+          try {
+            // Clone response or just text() might fail if body is already consumed or stream closed
+            // But in Playwright response event, we can usually read it.
+            errorBody = await response.text().catch(() => '');
+            if (errorBody.length > 500) errorBody = errorBody.substring(0, 500) + '...';
+          } catch (e) {
+            // ignore
+          }
+        }
+
         errors.push({
           url: response.url(),
           status,
           statusText: response.statusText(),
         });
+        
         console.log(`[NETWORK ERROR] ${status} ${response.url()}`);
+        if (errorBody) {
+           console.log(`[NETWORK ERROR BODY] ${errorBody}`);
+        }
       }
     });
 
@@ -199,6 +209,26 @@ test.afterEach(async ({ consoleErrors, networkErrors, failOnConsoleError }, test
  * });
  * ```
  */
+
+/**
+ * Navigate helper that uses domcontentloaded instead of load.
+ * The load event never fires due to ElevenLabs widget or other async resources.
+ *
+ * Usage:
+ * ```typescript
+ * import { navigateTo } from '../fixtures/base-test';
+ * await navigateTo(page, '/');
+ * ```
+ */
+export async function navigateTo(page: import('@playwright/test').Page, url: string, options?: {
+  timeout?: number;
+  waitUntil?: 'load' | 'domcontentloaded' | 'networkidle' | 'commit';
+}) {
+  return page.goto(url, {
+    waitUntil: 'domcontentloaded',
+    ...options,
+  });
+}
 
 // Re-export expect for convenience
 export { expect };

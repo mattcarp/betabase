@@ -32,8 +32,8 @@ test.describe("Exhaustive UI Element Tests @comprehensive", () => {
       useDefaultFilters: true,
     });
 
-    await page.goto("/");
-    await page.waitForLoadState("networkidle");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState("domcontentloaded");
   });
 
   test.afterEach(async () => {
@@ -94,8 +94,8 @@ test.describe("Exhaustive UI Element Tests @comprehensive", () => {
       expect(errors).toHaveLength(0);
 
       // Go back to home for next test
-      await page.goto("/");
-      await page.waitForLoadState("networkidle");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
+      await page.waitForLoadState("domcontentloaded");
     }
 
     console.log("\n✅ All navigation buttons tested");
@@ -155,8 +155,8 @@ test.describe("Exhaustive UI Element Tests @comprehensive", () => {
 
       // If this was Sign Out, we need to log back in
       if (btn.name === "Sign Out") {
-        await page.goto("/");
-        await page.waitForLoadState("networkidle");
+        await page.goto("/", { waitUntil: 'domcontentloaded' });
+        await page.waitForLoadState("domcontentloaded");
       }
     }
 
@@ -290,8 +290,8 @@ test.describe("Exhaustive UI Element Tests @comprehensive", () => {
     const testCount = Math.min(count, 3);
 
     for (let i = 0; i < testCount; i++) {
-      await page.goto("/");
-      await page.waitForLoadState("networkidle");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
+      await page.waitForLoadState("domcontentloaded");
 
       const button = page
         .locator("button")

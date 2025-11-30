@@ -53,7 +53,7 @@ test.describe("Magic Link Auth - Pragmatic Edition", () => {
     });
 
     // Now run the actual test
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Enter email (any email works since we're mocking)
     await page.fill('input[type="email"]', "test@sonymusic.com");
@@ -98,7 +98,7 @@ test.describe("Magic Link Auth - Pragmatic Edition", () => {
       }
     });
 
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
     await page.fill('input[type="email"]', "test@sonymusic.com");
     await page.click('button:has-text("Send Magic Link")');
 

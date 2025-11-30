@@ -9,7 +9,7 @@ test.describe("Chat Functionality - Comprehensive", () => {
     await helpers.monitorConsoleErrors();
 
     // Set up auth and navigate to chat
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await helpers.bypassAuth();
     await page.reload();
     await helpers.waitForPageReady();

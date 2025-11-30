@@ -180,7 +180,12 @@ export function RLHFImpactDashboard() {
       setTimeSeries(timeSeriesData);
 
     } catch (error) {
-      console.error('Error loading impact metrics:', error);
+      // Network failures are expected during rapid navigation/tests - fail silently
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        // Silently ignore aborted requests
+      } else {
+        console.warn('Error loading impact metrics:', error);
+      }
     } finally {
       setLoading(false);
     }

@@ -346,7 +346,11 @@ export function AiSdkChatPanel({
       }
     },
     onError: (err) => {
-      console.error("Chat error:", err);
+      // Network failures are expected during rapid navigation/tests - fail silently
+      if (err instanceof TypeError && err.message === "Failed to fetch") {
+        return;
+      }
+      console.warn("Chat error:", err);
       console.log("Error type:", typeof err);
       console.log("Error keys:", Object.keys(err));
 

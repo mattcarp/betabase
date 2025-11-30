@@ -11,7 +11,7 @@ test.describe('SIAM Chat - AOMA Q&A (Multi-Tenant Vector Store)', () => {
     console.log('\n🎯 Starting SIAM Chat Test with AOMA Questions...\n');
 
     // Navigate to chat
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle');
 
     // Take initial screenshot

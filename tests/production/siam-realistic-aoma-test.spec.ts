@@ -12,7 +12,7 @@ import { test, expect } from '../fixtures/base-test';
 
 const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 const MAILINATOR_INBOX = "https://www.mailinator.com/v4/public/inboxes.jsp?to=siam-test-x7j9k2p4";
-const SIAM_URL = "https://thebetabase.com";
+const SIAM_URL = "http://localhost:3000";
 
 async function loginToSIAM(page: Page, context: BrowserContext): Promise<void> {
   console.log("🔐 Logging into SIAM...");

@@ -20,7 +20,7 @@ test.describe("Login Page Screenshot", () => {
 
   test("capture login page with MAC Design System", async ({ page }) => {
     // Navigate to the login page
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
 
     // Wait for any animations or loading states to complete

@@ -14,8 +14,8 @@ interface ConnectionStatus {
 export const ConnectionStatusIndicator: React.FC = () => {
   // Force component update with timestamp
   const [statuses, setStatuses] = useState<ConnectionStatus[]>([
-    { type: "connecting", service: "Google Gemini" },
-    { type: "connecting", service: "ElevenLabs" },
+    { type: "connecting", service: "Gemini" },
+    { type: "connecting", service: "Database" },
   ]);
 
   const [primaryStatus, setPrimaryStatus] = useState<ConnectionStatus["type"]>("connected");
@@ -30,39 +30,39 @@ export const ConnectionStatusIndicator: React.FC = () => {
       // REMOVED: AOMA-MESH health check - now using direct Supabase vector search
       // No external MCP server to check - all queries are local/Supabase
 
-      // Check Google Gemini - try a simple API test
+      // Check Gemini - try a simple API test
       try {
         const geminiCheck = await fetch("/api/chat", {
           method: "GET",
         });
         newStatuses.push({
           type: geminiCheck.ok ? "connected" : "error",
-          service: "Google Gemini",
+          service: "Gemini",
           lastChecked: new Date(),
         });
       } catch {
         newStatuses.push({
           type: "disconnected",
-          service: "Google Gemini",
+          service: "Gemini",
           lastChecked: new Date(),
         });
       }
 
-      // Check ElevenLabs TTS service via health API
+      // Check Database (Supabase) connection via health API
       try {
-        const elevenLabsTest = await fetch("/api/elevenlabs/health", {
+        const dbCheck = await fetch("/api/health", {
           method: "GET",
         });
         newStatuses.push({
-          type: elevenLabsTest.ok ? "connected" : "disconnected",
-          service: "ElevenLabs",
+          type: dbCheck.ok ? "connected" : "disconnected",
+          service: "Database",
           lastChecked: new Date(),
         });
       } catch (error) {
-        console.error("ElevenLabs health check error:", error);
+        console.error("Database health check error:", error);
         newStatuses.push({
           type: "disconnected",
-          service: "ElevenLabs",
+          service: "Database",
           lastChecked: new Date(),
         });
       }
@@ -194,10 +194,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
             <div className="flex items-center justify-between border-b border-white/20 pb-4">
               <div className="flex items-center gap-2">
                 <div className="mac-floating-orb h-2 w-2" />
-                <h3
-                  className="mac-title"
-                  className="mac-title text-base font-[400] tracking-wide text-white"
-                >
+                <h3 className="mac-title text-base font-[400] tracking-wide text-white">
                   System Health
                 </h3>
               </div>

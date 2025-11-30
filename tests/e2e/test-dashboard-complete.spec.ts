@@ -19,7 +19,7 @@ const TEST_TIMEOUT = 60000; // 60 seconds for complex operations
 const TEST_APPS = {
   SIAM: {
     name: "SIAM",
-    url: "https://thebetabase.com",
+    url: "http://localhost:3000",
     testFeatures: ["chat", "upload", "settings"],
   },
   AOMA: {

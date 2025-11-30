@@ -10,13 +10,13 @@ import { test, expect } from "./fixtures/base-test";
 
 test.describe("SIAM Authentication Flow", () => {
   test("Emergency login page loads", async ({ page }) => {
-    await page.goto("/emergency-login.html");
+    await page.goto("/emergency-login.html", { waitUntil: 'domcontentloaded' });
     await expect(page.locator("h1")).toContainText("SIAM");
     await expect(page.locator("button")).toContainText("Send Magic Link");
   });
 
   test("Can submit email for magic link", async ({ page }) => {
-    await page.goto("/emergency-login.html");
+    await page.goto("/emergency-login.html", { waitUntil: 'domcontentloaded' });
     await page.fill('input[type="email"]', "matt@mattcarpenter.com");
 
     // Intercept the API call
@@ -33,7 +33,7 @@ test.describe("SIAM Authentication Flow", () => {
 
   test("Main app page eventually loads without hydration errors", async ({ page }) => {
     // Set authentication in localStorage first
-    await page.goto("/emergency-login.html");
+    await page.goto("/emergency-login.html", { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => {
       localStorage.setItem(
         "siam_user",
@@ -46,7 +46,7 @@ test.describe("SIAM Authentication Flow", () => {
     });
 
     // Navigate to main app
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Wait for any content to appear
     await page.waitForTimeout(5000);

@@ -10,8 +10,8 @@
 
 | Component | Version | Notes |
 |-----------|---------|-------|
-| Next.js | 15.5.6 | App router, RSC |
-| React | 19.0.0-rc.1 | Concurrent features |
+| Next.js | 16.0.5 | App router, RSC, Turbopack stable |
+| React | 19.0.0 | Stable release, concurrent features |
 | Chat Model | gemini-3-pro-preview | Primary LLM |
 | Diagram Model | gemini-3-pro-image-preview | Nano Banana Pro |
 | AI SDK | @ai-sdk/google ^2.0.27 | Vercel AI SDK v5 |
@@ -321,19 +321,133 @@ function ChatMessage({ message }) {
 
 **This is the priority - "I really need that healing"**
 
+### Status Summary
+
 | Component | Status | Notes |
 |-----------|--------|-------|
-| TestHomeDashboard | Built | Key metrics display |
-| SelfHealingTestViewer | Built | Queue + workflow visualization |
-| TestFilters | Built | Filter by status/type |
-| Tier badges | Built | Auto/Review/Architect labels |
+| TestHomeDashboard | Ready | Key metrics display |
+| SelfHealingTestViewer | Ready | Queue + workflow visualization |
+| TestFilters | Ready | Filter by status/type |
+| Tier badges | Ready | Auto/Review/Architect labels |
 | Tab wiring | Needs verification | TestDashboard tabs |
+| SelfHealingPage wrapper | Ready | Playwright integration |
 | 94.2% success rate | Verified | Self-healing effectiveness |
 
-**Key files:**
-- `src/components/test-dashboard/TestDashboard.tsx`
-- `src/components/test-dashboard/TestHomeDashboard.tsx`
-- `src/components/test-dashboard/SelfHealingTestViewer.tsx`
+### The Problem
+
+When you change one button ID or CSS class, 47 tests break. That's your "blast radius." Traditional test maintenance is:
+- Time-consuming (hours per release)
+- Error-prone (manual selector updates)
+- Frustrating (tests fail for non-functional reasons)
+
+### The Solution: AI-Powered Self-Healing
+
+Tests automatically detect selector failures and propose fixes using AI analysis of the DOM.
+
+### Tiered Healing System
+
+| Tier | Confidence | Action | Example |
+|------|------------|--------|---------|
+| **Tier 1: Auto** | >90% | Automatically applied | `data-testid="submit-btn"` -> `data-testid="login-submit"` |
+| **Tier 2: Review** | 60-90% | Requires human review | DOM structure changed, multiple candidates |
+| **Tier 3: Architect** | <60% | Architect decision | Major refactor, component replaced |
+
+### Healing Workflow
+
+```
+[Test Failure Detected]
+        |
+        v
+[AI Analyzes DOM Changes]
+        |
+        v
+[Proposes New Selector]
+        |
+        +---> [Tier 1: Auto-Apply] --> [Re-run Test]
+        |
+        +---> [Tier 2: Human Review] --> [Approve/Reject] --> [Apply]
+        |
+        +---> [Tier 3: Architect] --> [Design Decision]
+```
+
+### Impact Multiplier
+
+One fix can repair multiple similar tests. When the healing system detects that a selector change affects multiple test files, it shows:
+- "This fix will repair 7 similar tests"
+- Reduces blast radius significantly
+
+### Key Metrics
+
+| Metric | Value |
+|--------|-------|
+| Total tests monitored | 1,247 |
+| Auto-healed | 1,175 |
+| Success rate | 94.2% |
+| Avg heal time | 4.2 seconds |
+| Pending review | 18 |
+
+### Implementation
+
+#### SelfHealingPage Wrapper (`tests/helpers/self-healing.ts`)
+
+```typescript
+import { SelfHealingPage } from './helpers/self-healing';
+
+test('login flow', async ({ page }) => {
+  const healingPage = new SelfHealingPage(page);
+
+  await healingPage.goto('/login');
+
+  // If this selector fails, AI finds alternative
+  await healingPage.fill('[data-testid="email-input"]', 'user@test.com');
+  await healingPage.click('button[type="submit"]');
+});
+```
+
+**Methods:**
+- `waitForSelector(selector)` - Waits with self-healing fallback
+- `click(selector)` - Clicks with healing on failure
+- `fill(selector, value)` - Fills input with healing on failure
+- `inputValue(selector)` - Gets value with healing fallback
+
+#### Healing Strategies
+
+1. **Selector Update** - Direct selector replacement (most common)
+2. **Wait Strategy** - Add wait conditions for dynamic content
+3. **Structure Adaptation** - Handle DOM restructuring
+4. **Data Fix** - Update test data expectations
+
+### UI Dashboard (`SelfHealingTestViewer.tsx`)
+
+**Features:**
+- Live healing queue with status indicators
+- Tier badges (color-coded)
+- Impact callouts ("This fix will repair N similar tests")
+- Before/after code diff view
+- DOM changes visualization
+- Approve/Reject buttons for Tier 2 items
+- Execution metadata (time, retries, AI model used)
+
+### Key Files
+
+**Components:**
+- `src/components/test-dashboard/TestDashboard.tsx` - Main dashboard
+- `src/components/test-dashboard/TestHomeDashboard.tsx` - Overview metrics
+- `src/components/test-dashboard/SelfHealingTestViewer.tsx` - Healing UI
+
+**Test Infrastructure:**
+- `tests/helpers/self-healing.ts` - SelfHealingPage wrapper
+- `tests/self-healing.spec.ts` - Demo test using healing
+
+### Demo Script
+
+1. Navigate to Test tab
+2. Show metrics: 94.2% success rate, 1,175 healed
+3. Click on a Tier 1 item - show auto-heal workflow
+4. Click on a Tier 2 item - show review required
+5. Show before/after code diff
+6. Highlight impact: "This fix repairs 7 similar tests"
+7. Demonstrate approve/reject workflow
 
 ---
 

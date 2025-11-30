@@ -21,7 +21,7 @@ const TEST_QUERIES = [
 
 test.describe("Chat Architecture Validation", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState("networkidle");
   });
 

@@ -15,7 +15,7 @@ import { test, expect } from './fixtures/base-test';
 test.describe("ElevenLabs Conversational AI Integration", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the page with ConversationalAI component
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Wait for the page to load
     await page.waitForLoadState("networkidle");
@@ -277,7 +277,7 @@ test.describe("Performance", () => {
   test("should load ConversationalAI component quickly", async ({ page }) => {
     const startTime = Date.now();
 
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForSelector(".conversational-ai-panel");
 
     const loadTime = Date.now() - startTime;
@@ -289,7 +289,7 @@ test.describe("Performance", () => {
   test("should not have memory leaks on mount/unmount", async ({ page }) => {
     // Navigate multiple times to check for memory leaks
     for (let i = 0; i < 5; i++) {
-      await page.goto("/");
+      await page.goto("/", { waitUntil: 'domcontentloaded' });
       await page.waitForSelector(".conversational-ai-panel");
       await page.waitForTimeout(500);
     }

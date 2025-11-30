@@ -15,7 +15,7 @@ const ENVIRONMENTS = {
     requiresAuth: false, // Using NEXT_PUBLIC_BYPASS_AUTH
   },
   production: {
-    url: "https://thebetabase.com",
+    url: "http://localhost:3000",
     name: "Production",
     requiresAuth: true,
   },

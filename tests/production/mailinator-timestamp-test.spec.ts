@@ -1,7 +1,7 @@
 import { test, expect } from '../fixtures/base-test';
 
 test.describe("Production Mailinator Test with Timestamp Check", () => {
-  const PROD_URL = "https://thebetabase.com";
+  const PROD_URL = "http://localhost:3000";
   const TEST_EMAIL = "siam-test-x7j9k2p4@mailinator.com";
 
   test("Check build timestamp and test Mailinator auth", async ({ page, context }) => {

@@ -24,7 +24,8 @@ test.describe("Smoke Tests @smoke", () => {
   });
 
   test("Application is accessible", async ({ page }) => {
-    const response = await page.goto("/");
+    // Use domcontentloaded - 'load' hangs due to ElevenLabs widget or other async resources
+    const response = await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Check response status
     expect(response?.status()).toBeLessThan(400);
@@ -47,7 +48,7 @@ test.describe("Smoke Tests @smoke", () => {
   });
 
   test("Main page loads with expected elements", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Check that EITHER login form OR chat interface loads
     // This smoke test validates the app loads, not that it's authenticated
@@ -73,7 +74,7 @@ test.describe("Smoke Tests @smoke", () => {
   });
 
   test("No JavaScript errors on load", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(3000);
 
     // Page errors are captured by console monitor
@@ -81,7 +82,7 @@ test.describe("Smoke Tests @smoke", () => {
   });
 
   test("Static assets load correctly", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Check CSS loads
     const styles = await page.evaluate(() => {
@@ -101,7 +102,7 @@ test.describe("Smoke Tests @smoke", () => {
     });
 
     const page = await context.newPage();
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     // Check viewport meta tag
     const viewportMeta = await page.evaluate(() => {
