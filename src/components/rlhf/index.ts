@@ -22,6 +22,7 @@ export { FeedbackModal, type FeedbackData } from "./FeedbackModal";
 export { ComparisonPanel, type ComparisonData } from "./ComparisonPanel";
 export { FeedbackImpactLive } from "./FeedbackImpactLive";
 export { CuratorWorkspace } from "./CuratorWorkspace";
+export { CuratorWorkspaceContainer } from "./CuratorWorkspaceContainer";
 export { FeedbackAnalytics } from "./FeedbackAnalytics";
 export { FeedbackBadge, type FeedbackBadgeData } from "./FeedbackBadge";
 export {
