@@ -132,13 +132,44 @@ interface ChatPageProps {
   onLogout?: () => void;
 }
 
+// Valid mode values for URL hash routing
+const VALID_MODES: ComponentMode["mode"][] = ["chat", "hud", "test", "fix", "curate"];
+
 export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
-  const [activeMode, setActiveMode] = useState<ComponentMode["mode"]>("chat");
+  // Initialize from URL hash if present, otherwise default to "chat"
+  const getInitialMode = (): ComponentMode["mode"] => {
+    if (typeof window === "undefined") return "chat";
+    const hash = window.location.hash.slice(1);
+    return VALID_MODES.includes(hash as ComponentMode["mode"]) ? (hash as ComponentMode["mode"]) : "chat";
+  };
+
+  const [activeMode, setActiveMode] = useState<ComponentMode["mode"]>(getInitialMode);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
   const [knowledgeCounts, setKnowledgeCounts] = useState<Record<string, number>>({});
   const [knowledgeStatus, setKnowledgeStatus] = useState<"ok" | "degraded" | "unknown">("unknown");
   const [lastKnowledgeRefresh, setLastKnowledgeRefresh] = useState<string>("");
+
+  // URL hash-based routing for deep linking
+  useEffect(() => {
+    // Update URL hash when activeMode changes
+    if (typeof window !== "undefined") {
+      window.location.hash = activeMode;
+    }
+  }, [activeMode]);
+
+  // Listen for hash changes (browser back/forward)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1);
+      if (VALID_MODES.includes(hash as ComponentMode["mode"])) {
+        setActiveMode(hash as ComponentMode["mode"]);
+      }
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   const {
     activeConversationId,
@@ -214,14 +245,15 @@ Be helpful, concise, and professional in your responses.`;
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col w-full">
-        {/* Sophisticated Header */}
+        {/* Sophisticated Header - Mobile Optimized */}
         <header className="border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/60 flex-shrink-0 overflow-visible relative z-50">
-          <div className="px-6 py-4 h-16">
-            <div className="flex flex-row items-center justify-between gap-4 h-full">
-              {/* Brand Identity */}
-              <div className="flex items-center space-x-3 flex-shrink-0">
-                <SiamLogo size="lg" variant="icon" />
-                <div>
+          <div className="px-3 sm:px-6 py-2 sm:py-4 h-14 sm:h-16">
+            <div className="flex flex-row items-center justify-between gap-2 sm:gap-4 h-full">
+              {/* Brand Identity - Compact on mobile */}
+              <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+                <SiamLogo size="md" variant="icon" className="sm:hidden" />
+                <SiamLogo size="lg" variant="icon" className="hidden sm:block" />
+                <div className="hidden sm:block">
                   <h1 className="mac-heading text-xl font-extralight text-white tracking-tight whitespace-nowrap">
                     The Betabase
                   </h1>
@@ -231,27 +263,57 @@ Be helpful, concise, and professional in your responses.`;
                 </div>
               </div>
 
-              {/* Navigation Tabs */}
-              <div className="flex items-center space-x-1 bg-zinc-900/50 p-2 rounded-lg border border-zinc-800/50 flex-shrink-0">
+              {/* Navigation Tabs - Hidden on mobile, shown on tablet+ */}
+              <div className="hidden md:flex items-center space-x-1 bg-zinc-900/50 p-1.5 rounded-lg border border-zinc-800/50 flex-shrink-0">
                 {COMPONENT_MODES.map((mode) => (
                   <button
                     key={mode.mode}
                     onClick={() => setActiveMode(mode.mode)}
                     className={cn(
-                      "flex items-center space-x-2 px-4 py-2.5 rounded-md text-sm font-light transition-all duration-200",
+                      "relative flex items-center space-x-2 px-4 py-2.5 rounded-md text-sm font-light transition-all duration-200",
                       activeMode === mode.mode
-                        ? "bg-zinc-800 text-white shadow-sm"
-                        : "text-zinc-200 hover:text-white hover:bg-zinc-800/50"
+                        ? "bg-gradient-to-r from-zinc-700 to-zinc-800 text-white shadow-md ring-1 ring-zinc-600/50"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
                     )}
                   >
-                    {mode.icon}
-                    <span>{mode.label}</span>
+                    {activeMode === mode.mode && (
+                      <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[var(--mac-primary-blue-400)] rounded-full" />
+                    )}
+                    <span className={cn(activeMode === mode.mode && "text-[var(--mac-primary-blue-400)]")}>
+                      {mode.icon}
+                    </span>
+                    <span className="hidden lg:inline">{mode.label}</span>
                   </button>
                 ))}
               </div>
 
-              {/* Controls */}
-              <div className="flex items-center space-x-2 flex-shrink-0">
+              {/* Mobile Navigation - Compact tabs for small screens */}
+              <div className="flex md:hidden items-center space-x-0.5 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50">
+                {COMPONENT_MODES.map((mode) => (
+                  <button
+                    key={mode.mode}
+                    onClick={() => setActiveMode(mode.mode)}
+                    className={cn(
+                      "relative flex items-center justify-center p-2 rounded-md transition-all duration-200",
+                      activeMode === mode.mode
+                        ? "bg-gradient-to-r from-zinc-700 to-zinc-800 shadow-md ring-1 ring-zinc-600/50"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                    )}
+                    title={mode.label}
+                    aria-label={mode.label}
+                  >
+                    {activeMode === mode.mode && (
+                      <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-[var(--mac-primary-blue-400)] rounded-full" />
+                    )}
+                    <span className={cn(activeMode === mode.mode && "text-[var(--mac-primary-blue-400)]")}>
+                      {mode.icon}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Controls - Responsive spacing */}
+              <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
                 <ConnectionStatusIndicator />
                 <div className="introspection-dropdown-container">
                   <IntrospectionDropdown />
@@ -290,11 +352,11 @@ Be helpful, concise, and professional in your responses.`;
                   <Database className="h-4 w-4" />
                 </Button>
 
-                {/* Performance Dashboard Link */}
+                {/* Performance Dashboard Link - Hidden on small mobile */}
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 mac-button mac-button-outline"
+                  className="hidden sm:flex h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 mac-button mac-button-outline"
                   onClick={() => (window.location.href = "/performance")}
                   title="Performance Dashboard"
                   aria-label="Open performance dashboard"
@@ -307,11 +369,11 @@ Be helpful, concise, and professional in your responses.`;
                     variant="ghost"
                     size="sm"
                     onClick={onLogout}
-                    className="sign-out-button text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 text-xs px-4 flex items-center gap-2 mac-button mac-button-outline"
+                    className="sign-out-button text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 text-xs px-2 sm:px-4 flex items-center gap-1 sm:gap-2 mac-button mac-button-outline"
                     aria-label="Sign out of your account"
                   >
                     <LogOut className="h-4 w-4" />
-                    <span className="sign-out-text">Sign Out</span>
+                    <span className="sign-out-text hidden sm:inline">Sign Out</span>
                   </Button>
                 )}
               </div>

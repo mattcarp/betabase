@@ -784,28 +784,107 @@ export function CurateTab({
           </TabsContent>
 
           <TabsContent value="upload" className="flex-1 overflow-hidden mt-4">
-            <div className="space-y-4">
-              <FileUpload
-                {...({
-                  assistantId,
-                  apiEndpoint: "/api/vector-store/files",
-                  onUploadComplete: handleUploadComplete,
-                  onUploadError: (error: string) => toast.error(error),
-                } as any)}
-              />
-
-              <Alert
+            <div className="space-y-6">
+              {/* Prominent Upload Hero Section */}
+              <div
                 className={cn(
+                  "relative overflow-hidden rounded-xl p-8",
+                  "bg-gradient-to-br from-[var(--mac-primary-blue-400)]/10 via-[var(--mac-accent-purple-400)]/5 to-[var(--mac-surface-elevated)]",
+                  "border-2 border-dashed border-[var(--mac-primary-blue-400)]/40",
+                  "hover:border-[var(--mac-primary-blue-400)]/60",
+                  "transition-all duration-300"
+                )}
+              >
+                {/* Background decorative elements */}
+                <div className="absolute top-4 right-4 opacity-10">
+                  <Upload className="h-24 w-24 text-[var(--mac-primary-blue-400)]" />
+                </div>
+
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div
+                      className={cn(
+                        "p-3 rounded-xl",
+                        "bg-[var(--mac-primary-blue-400)]/20",
+                        "border border-[var(--mac-primary-blue-400)]/30"
+                      )}
+                    >
+                      <Upload className="h-6 w-6 text-[var(--mac-primary-blue-400)]" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-normal text-[var(--mac-text-primary)]">
+                        Upload Knowledge Documents
+                      </h3>
+                      <p className="text-sm font-light text-[var(--mac-text-secondary)]">
+                        Drag and drop files or click to browse
+                      </p>
+                    </div>
+                  </div>
+
+                  <FileUpload
+                    {...({
+                      assistantId,
+                      apiEndpoint: "/api/vector-store/files",
+                      onUploadComplete: handleUploadComplete,
+                      onUploadError: (error: string) => toast.error(error),
+                    } as any)}
+                  />
+                </div>
+              </div>
+
+              {/* Info Card */}
+              <Card
+                className={cn(
+                  "mac-card-elevated",
                   "border-[var(--mac-utility-border)]",
                   "bg-[var(--mac-surface-elevated)]/50"
                 )}
               >
-                <Info className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
-                <AlertDescription className="font-light text-[var(--mac-text-secondary)]">
-                  Uploaded files are automatically processed and indexed in the AOMA vector store.
-                  They become immediately available for semantic search and AI-powered analysis.
-                </AlertDescription>
-              </Alert>
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <div
+                      className={cn(
+                        "p-2 rounded-lg flex-shrink-0",
+                        "bg-[var(--mac-primary-blue-400)]/10"
+                      )}
+                    >
+                      <Info className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm font-light text-[var(--mac-text-secondary)]">
+                        Uploaded files are automatically processed and indexed in the AOMA vector store.
+                        They become immediately available for semantic search and AI-powered analysis.
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "text-xs font-light",
+                            "bg-[var(--mac-status-success-bg)]/30",
+                            "border-[var(--mac-status-success-border)]/50",
+                            "text-[var(--mac-status-success-text)]"
+                          )}
+                        >
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          Auto-indexed
+                        </Badge>
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "text-xs font-light",
+                            "bg-[var(--mac-primary-blue-400)]/10",
+                            "border-[var(--mac-primary-blue-400)]/30",
+                            "text-[var(--mac-primary-blue-400)]"
+                          )}
+                        >
+                          <Search className="h-3 w-3 mr-1" />
+                          Semantic search
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
 

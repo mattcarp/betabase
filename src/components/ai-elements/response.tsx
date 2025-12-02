@@ -308,8 +308,12 @@ const components: Options["components"] = {
     return (
       <CodeBlock className={cn("my-4 h-auto", className)} code={code} language={language}>
         <CodeBlockCopyButton
-          onCopy={() => console.log("Copied code to clipboard")}
-          onError={() => console.error("Failed to copy code to clipboard")}
+          onCopy={() => {
+            // Silent copy success
+          }}
+          onError={() => {
+            // Silent copy error - UI feedback handles this
+          }}
         />
       </CodeBlock>
     );

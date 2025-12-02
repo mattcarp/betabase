@@ -74,11 +74,8 @@ export function HUDLayout({
         return (
           <div className="glass-panel p-6 w-80 h-80 flex flex-col items-center justify-center animate-pulse-slow">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-blue-500/10 rounded-lg animate-gradient-xy"></div>
-            <h3
-              className="mac-title"
-              className="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
-            >
-              <span className="">AUDIO VISUALIZATION</span>
+            <h3 className="mac-title text-holographic text-lg mb-4 font-mono tracking-wider">
+              <span>AUDIO VISUALIZATION</span>
             </h3>
             <AudioWaveform
               isRecording={isRecording}
@@ -97,11 +94,8 @@ export function HUDLayout({
       case "insights":
         return (
           <div className="glass-panel p-6 w-80 h-80 overflow-y-auto">
-            <h3
-              className="mac-title"
-              className="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
-            >
-              <span className="">AI INSIGHTS</span>
+            <h3 className="mac-title text-holographic text-lg mb-4 font-mono tracking-wider">
+              <span>AI INSIGHTS</span>
             </h3>
             <div className="space-y-4">
               <div className="hud-element p-4 border border-blue-500/30 rounded-lg hover:border-blue-600/50 transition-all duration-300">
@@ -147,11 +141,11 @@ export function HUDLayout({
             <ConversationalAI
               agentId={process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID || "demo-agent-siam-dev"}
               className="w-full h-full pt-8"
-              onTranscriptionUpdate={(text) => {
-                console.log("ElevenLabs transcription:", text);
+              onTranscriptionUpdate={() => {
+                // Voice transcription update (silent in production)
               }}
-              onConversationStateChange={(state) => {
-                console.log("ElevenLabs state:", state);
+              onConversationStateChange={() => {
+                // Voice conversation state change (silent in production)
               }}
             />
           </div>
@@ -159,11 +153,8 @@ export function HUDLayout({
       case "system":
         return (
           <div className="glass-panel p-6 w-80 h-80 overflow-y-auto">
-            <h3
-              className="mac-title"
-              className="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
-            >
-              <span className="">SYSTEM STATUS</span>
+            <h3 className="mac-title text-holographic text-lg mb-4 font-mono tracking-wider">
+              <span>SYSTEM STATUS</span>
             </h3>
             <SystemHealthMonitor className="w-full" />
             <div className="mt-4 space-y-2">
@@ -185,11 +176,8 @@ export function HUDLayout({
       default:
         return (
           <div className="glass-panel p-6 w-80 h-80 overflow-y-auto">
-            <h3
-              className="mac-title"
-              className="mac-title text-holographic text-lg mb-4 font-mono tracking-wider"
-            >
-              <span className="">LIVE TRANSCRIPTION</span>
+            <h3 className="mac-title text-holographic text-lg mb-4 font-mono tracking-wider">
+              <span>LIVE TRANSCRIPTION</span>
             </h3>
             <div className="hud-element p-4 min-h-32 border border-blue-500/30 rounded-lg">
               <div
