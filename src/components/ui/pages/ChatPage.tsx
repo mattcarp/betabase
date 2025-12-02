@@ -225,7 +225,7 @@ Be helpful, concise, and professional in your responses.`;
                   <h1 className="mac-heading text-xl font-extralight text-white tracking-tight whitespace-nowrap">
                     The Betabase
                   </h1>
-                  <p className="text-xs text-zinc-300 font-light whitespace-nowrap">
+                  <p className="text-xs text-zinc-200 font-light whitespace-nowrap">
                     Intelligence Platform
                   </p>
                 </div>
@@ -241,7 +241,7 @@ Be helpful, concise, and professional in your responses.`;
                       "flex items-center space-x-2 px-4 py-2.5 rounded-md text-sm font-light transition-all duration-200",
                       activeMode === mode.mode
                         ? "bg-zinc-800 text-white shadow-sm"
-                        : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"
+                        : "text-zinc-200 hover:text-white hover:bg-zinc-800/50"
                     )}
                   >
                     {mode.icon}
@@ -372,10 +372,10 @@ Be helpful, concise, and professional in your responses.`;
                 <div className="h-full p-6 space-y-6">
                   <div>
                     <h2 className="text-lg font-normal text-zinc-100 flex items-center gap-2">
-                      <TestTube className="h-5 w-5 text-zinc-400" />
+                      <TestTube className="h-5 w-5 text-zinc-300" />
                       Advanced Testing & Quality Assurance
                     </h2>
-                    <p className="text-sm text-zinc-400 mt-1">
+                    <p className="text-sm text-zinc-300 mt-1">
                       Comprehensive testing suite with historical data, RLHF-generated tests, and live monitoring
                     </p>
                   </div>
@@ -416,10 +416,10 @@ Be helpful, concise, and professional in your responses.`;
                 <div className="h-full p-6 space-y-6">
                   <div>
                     <h2 className="text-lg font-normal text-zinc-100 flex items-center gap-2">
-                      <Wrench className="h-5 w-5 text-zinc-400" />
+                      <Wrench className="h-5 w-5 text-zinc-300" />
                       Debug & Fix Assistant
                     </h2>
-                    <p className="text-sm text-zinc-400 mt-1">
+                    <p className="text-sm text-zinc-300 mt-1">
                       Analyze responses, make corrections, and generate tests
                     </p>
                   </div>
@@ -450,7 +450,7 @@ Be helpful, concise, and professional in your responses.`;
                           <CardTitle className="text-zinc-100">Feedback Timeline</CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-zinc-400 text-center py-8">
+                          <p className="text-zinc-300 text-center py-8">
                             Timeline view coming soon - shows feedback history for specific queries
                           </p>
                         </CardContent>
@@ -466,10 +466,10 @@ Be helpful, concise, and professional in your responses.`;
                     <h2
                       className="mac-heading text-lg font-normal text-zinc-100 flex items-center gap-2"
                     >
-                      <Library className="h-5 w-5 text-zinc-400" />
+                      <Library className="h-5 w-5 text-zinc-300" />
                       Knowledge Curation
                     </h2>
-                    <p className="text-sm text-zinc-400 mt-2">
+                    <p className="text-sm text-zinc-300 mt-2">
                       Manage and organize your knowledge base
                     </p>
                   </div>
