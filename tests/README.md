@@ -119,27 +119,29 @@ npm run test:coverage
 
 ---
 
-# 🎭 Playwright E2E Tests
+# Playwright E2E Tests
 
 ## Directory Structure
 
 ```
 tests/
-├── README.md                    # This documentation
-├── playwright.config.ts         # Main config (Render production)
-├── playwright.config.local.ts   # Local development config
-├── playwright.config.render.ts  # Render-specific config
+├── e2e/                         # End-to-end browser tests
+│   ├── smoke/                   # Quick validation tests (< 30s total)
+│   ├── features/                # Feature-specific tests (RLHF, chat, dashboard)
+│   ├── visual/                  # Visual regression tests (screenshots)
+│   ├── production/              # Production-only tests (Mailinator auth, AOMA)
+│   ├── demo/                    # Demo/showcase tests
+│   └── critical-paths/          # Critical user journey tests
 │
-├── api/                        # API endpoint tests
-├── auth/                       # Authentication flow tests
-├── comprehensive/              # Full integration test suites
-├── e2e/                       # End-to-end user journey tests
-├── fixtures/                  # Test fixtures and data
-├── helpers/                   # Shared utilities and helpers
-├── local/                     # Local-only development tests
-├── production/                # Production-only tests
-├── screenshots/               # Test screenshots output
-└── visual/                    # Visual regression tests
+├── unit/                        # Unit tests (Vitest)
+├── integration/                 # Integration tests (Vitest)
+├── auth/                        # Auth flow tests and helpers
+├── performance/                 # Performance benchmarks
+├── helpers/                     # Shared test utilities
+├── fixtures/                    # Test fixtures and data
+├── setup/                       # Test configuration
+├── _archive/                    # Archived/experimental tests
+└── screenshots/                 # Test screenshot output
 ```
 
 ## Test Naming Conventions
@@ -191,36 +193,60 @@ Use tags for test categorization and selective execution:
 
 ## Running Tests
 
+### Quick Reference
+
+```bash
+# LOCAL DEVELOPMENT (localhost:3000)
+npm run test:smoke:local       # Quick smoke tests
+npm run test:features:local    # Feature tests
+npm run test:visual:local      # Visual regression
+
+# PRODUCTION (thebetabase.com)
+npm run test:smoke             # Smoke tests on prod
+npm run test:features          # Feature tests on prod
+npm run test:visual            # Visual regression on prod
+npm run test:aoma              # AOMA knowledge validation
+npm run test:prod              # All production tests
+
+# UTILITIES
+npm run test:demo              # Demo/showcase tests
+npm run test:critical          # Critical path tests
+npm run test:report            # View HTML report
+```
+
 ### Local Development
 
 ```bash
-# Run all tests locally
-npm run test:e2e:local
+# Run smoke tests against localhost
+npm run test:smoke:local
+
+# Run feature tests against localhost
+npm run test:features:local
 
 # Run specific test file
-npx playwright test tests/auth/login.spec.ts
+npx playwright test tests/e2e/features/ai-chat.spec.ts
 
-# Run tests with specific tag
-npx playwright test --grep @smoke
-
-# Run tests in UI mode for debugging
+# Run in UI mode for debugging
 npx playwright test --ui
 
-# Run tests in headed mode
+# Run in headed mode
 npx playwright test --headed
 ```
 
-### Against Render Deployment
+### Against Production (Render)
 
 ```bash
-# Run all tests against Render
+# Run all tests against thebetabase.com
 npm run test:e2e
 
-# Run smoke tests only
-./run-render-tests.sh smoke
+# Run AOMA validation tests
+npm run test:aoma
 
-# Run with specific config
-npx playwright test --config=playwright.config.render.ts
+# Run all production tests
+npm run test:prod
+
+# Run visual tests
+npm run test:visual
 ```
 
 ## Writing New Tests
