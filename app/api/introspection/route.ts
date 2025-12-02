@@ -62,18 +62,21 @@ export async function GET(_request: NextRequest) {
     const endTime = Date.now();
     trackRequest("/api/introspection", "GET", endTime - startTime, 200);
 
-    // Check if LangSmith environment variables are set
-    const langsmithEnabled = !!(process.env.LANGCHAIN_TRACING_V2 || process.env.LANGSMITH_API_KEY);
+    // App health status based on service availability
+    const hasSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const hasGemini = !!process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+    const hasOpenAI = !!process.env.OPENAI_API_KEY;
+    const isHealthy = hasSupabase && (hasGemini || hasOpenAI);
 
-    // Format response for IntrospectionDropdown
+    // Format response for IntrospectionDropdown - App Health focused
     return NextResponse.json({
       status: {
-        enabled: langsmithEnabled,
-        project: process.env.LANGCHAIN_PROJECT || "siam-internal-monitoring",
-        endpoint: process.env.LANGCHAIN_ENDPOINT || "https://api.smith.langchain.com",
-        tracingEnabled: process.env.LANGCHAIN_TRACING_V2 === "true",
-        hasApiKey: !!process.env.LANGSMITH_API_KEY,
-        clientInitialized: langsmithEnabled,
+        enabled: true,
+        project: "SIAM Application Health",
+        environment: process.env.NODE_ENV || "development",
+        tracingEnabled: isHealthy,
+        hasSupabase,
+        hasAIProvider: hasGemini || hasOpenAI,
       },
       traces: recentActivity,
       metrics: {

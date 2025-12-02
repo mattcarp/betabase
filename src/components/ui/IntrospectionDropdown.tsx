@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
 
-interface LangSmithTrace {
+interface ActivityTrace {
   id: string;
   name: string;
   runType: string;
@@ -33,33 +33,33 @@ interface LangSmithTrace {
   duration?: number;
   status: "success" | "error" | "pending";
   error?: string;
-  inputs?: any;
-  outputs?: any;
-  metadata?: any;
+  inputs?: Record<string, unknown>;
+  outputs?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
 }
 
-interface LangSmithStatus {
+interface AppHealthStatus {
   enabled: boolean;
   project: string;
-  endpoint: string;
+  environment: string;
   tracingEnabled: boolean;
-  hasApiKey: boolean;
-  clientInitialized: boolean;
+  hasSupabase: boolean;
+  hasAIProvider: boolean;
 }
 
 export function IntrospectionDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const [traces, setTraces] = useState<LangSmithTrace[]>([]);
-  const [status, setStatus] = useState<LangSmithStatus | null>(null);
+  const [traces, setTraces] = useState<ActivityTrace[]>([]);
+  const [status, setStatus] = useState<AppHealthStatus | null>(null);
   const [loading, setLoading] = useState(false);
-  const [selectedTrace, setSelectedTrace] = useState<LangSmithTrace | null>(null);
+  const [selectedTrace, setSelectedTrace] = useState<ActivityTrace | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
 
-  // Fetch LangSmith status and recent traces
+  // Fetch app health status and recent activity traces
   const fetchIntrospectionData = async () => {
     setLoading(true);
     try {
-      // Call the AOMA API endpoint to get LangSmith data
+      // Call the introspection API to get app health data
       const response = await fetch("/api/introspection", {
         method: "GET",
         headers: {
@@ -155,7 +155,7 @@ export function IntrospectionDropdown() {
           <DropdownMenuLabel className="flex items-center justify-between">
             <span className="flex items-center gap-2">
               <Activity className="h-4 w-4" />
-              AI Agent Introspection
+              App Health Monitor
             </span>
             {loading && <Loader2 className="h-3 w-3 animate-spin" />}
           </DropdownMenuLabel>
@@ -165,26 +165,30 @@ export function IntrospectionDropdown() {
               <DropdownMenuSeparator />
               <div className="px-2 py-2.5 text-xs">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-muted-foreground">LangSmith Status:</span>
+                  <span className="text-muted-foreground">System Status:</span>
                   <Badge
                     variant={status.tracingEnabled ? "default" : "secondary"}
                     className="text-xs"
                   >
-                    {status.tracingEnabled ? "Active" : "Inactive"}
+                    {status.tracingEnabled ? "Healthy" : "Degraded"}
                   </Badge>
                 </div>
-                {status.tracingEnabled && (
-                  <>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-muted-foreground">Project:</span>
-                      <span className="font-mono text-xs">{status.project}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Traces (5s):</span>
-                      <span className="font-mono text-xs">{traces.length}</span>
-                    </div>
-                  </>
-                )}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-muted-foreground">Environment:</span>
+                  <span className="font-mono text-xs">{status.environment}</span>
+                </div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-muted-foreground">Database:</span>
+                  <Badge variant={status.hasSupabase ? "default" : "destructive"} className="text-xs">
+                    {status.hasSupabase ? "Connected" : "Unavailable"}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">AI Provider:</span>
+                  <Badge variant={status.hasAIProvider ? "default" : "destructive"} className="text-xs">
+                    {status.hasAIProvider ? "Connected" : "Unavailable"}
+                  </Badge>
+                </div>
               </div>
             </>
           )}
@@ -192,7 +196,7 @@ export function IntrospectionDropdown() {
           <DropdownMenuSeparator />
 
           <DropdownMenuLabel className="text-xs text-muted-foreground">
-            Recent Agent Activity
+            Recent API Activity
           </DropdownMenuLabel>
 
           <ScrollArea className="h-[300px]">
@@ -201,14 +205,14 @@ export function IntrospectionDropdown() {
                 {status?.tracingEnabled ? (
                   <>
                     <Layers className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                    <p>No recent traces</p>
-                    <p className="text-xs mt-2">Agent activity will appear here</p>
+                    <p>No recent activity</p>
+                    <p className="text-xs mt-2">API requests will appear here</p>
                   </>
                 ) : (
                   <>
                     <Activity className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                    <p>Tracing disabled</p>
-                    <p className="text-xs mt-2">Enable LangSmith to see traces</p>
+                    <p>System starting up</p>
+                    <p className="text-xs mt-2">Waiting for services to initialize</p>
                   </>
                 )}
               </div>
@@ -254,15 +258,13 @@ export function IntrospectionDropdown() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="text-xs text-center justify-center cursor-pointer"
-                onClick={() =>
-                  window.open(
-                    `https://smith.langchain.com/o/aoma-mesh/projects/p/${status.project}`,
-                    "_blank"
-                  )
-                }
+                onClick={() => {
+                  // Refresh the introspection data
+                  fetchIntrospectionData();
+                }}
               >
                 <Eye className="h-3 w-3 mr-2" />
-                View in LangSmith Dashboard
+                Refresh Health Status
               </DropdownMenuItem>
             </>
           )}
@@ -341,10 +343,7 @@ export function IntrospectionDropdown() {
                 {/* Error */}
                 {selectedTrace.error && (
                   <div>
-                    <h4
-                      className="mac-title"
-                      className="mac-title text-sm font-normal mb-2 text-red-500"
-                    >
+                    <h4 className="mac-title text-sm font-normal mb-2 text-red-500">
                       Error
                     </h4>
                     <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg p-4 text-sm text-red-600 dark:text-red-400">
