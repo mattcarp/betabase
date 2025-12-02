@@ -21,7 +21,7 @@ import {
   Clock,
   // Tag, // Unused
   // Zap, // Unused
-  Brain,
+  Lightbulb,
   FileText,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
@@ -125,7 +125,7 @@ export const TopicCloud: React.FC<TopicCloudProps> = ({
   if (sortedTopics.length === 0) {
     return (
       <div className={cn("text-center text-zinc-400 py-8", className)}>
-        <Brain className="mx-auto mb-2 h-8 w-8 opacity-50" />
+        <Lightbulb className="mx-auto mb-2 h-8 w-8 opacity-50" />
         <p className="text-sm">No topics extracted yet</p>
       </div>
     );
@@ -363,7 +363,7 @@ export const TopicPanel: React.FC<TopicPanelProps> = ({
     <Card className={cn("mac-card", "bg-zinc-950 border-zinc-800", className)}>
       <CardHeader className="mac-card">
         <CardTitle className="flex items-center gap-2">
-          <Brain className="h-5 w-5 text-zinc-400" />
+          <Lightbulb className="h-5 w-5 text-zinc-400" />
           Topic Intelligence
         </CardTitle>
       </CardHeader>

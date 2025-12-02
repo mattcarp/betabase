@@ -38,7 +38,7 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
     <div className={`betabase-logo-wrapper ${sizeClass} ${className}`}>
       <Image
         src="/betabase-logo.webp"
-        alt="Betabase"
+        alt="The Betabase Intelligence Platform logo"
         width={400}
         height={266}
         priority={priority}

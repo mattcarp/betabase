@@ -15,7 +15,7 @@ import {
   AlertCircle,
   Clock,
   Activity,
-  Brain,
+  Lightbulb,
   FileSearch,
   LineChart,
   Bug,
@@ -573,7 +573,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               Manual
             </TabsTrigger>
             <TabsTrigger value="ai-generate" className="gap-2">
-              <Brain className="h-4 w-4" />
+              <Lightbulb className="h-4 w-4" />
               AI Generate
             </TabsTrigger>
             <TabsTrigger value="trace" className="gap-2">

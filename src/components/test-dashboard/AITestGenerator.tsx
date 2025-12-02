@@ -10,7 +10,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import {
-  Brain,
+  Lightbulb,
   Sparkles,
   FileText,
   Code,
@@ -197,7 +197,7 @@ test.describe('${prompt}', () => {
         <Card className="mac-card">
           <CardHeader className="mac-card">
             <CardTitle className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-primary" />
+              <Lightbulb className="h-5 w-5 text-primary" />
               AI Test Generator
             </CardTitle>
           </CardHeader>

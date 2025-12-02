@@ -41,7 +41,6 @@ import {
   Filter,
   MoreVertical,
   GitMerge,
-  Brain,
   Sparkles,
   TrendingUp,
   AlertTriangle,
@@ -780,7 +779,7 @@ export function EnhancedCurateTab({
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <Brain className="h-5 w-5" />
+              <Lightbulb className="h-5 w-5" />
               Knowledge Curation Center
             </CardTitle>
             <CardDescription className="mac-card">
@@ -1237,7 +1236,7 @@ export function EnhancedCurateTab({
                               View Details
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                              <Brain className="h-4 w-4 mr-2" />
+                              <Lightbulb className="h-4 w-4 mr-2" />
                               AI Analysis
                             </DropdownMenuItem>
                             <DropdownMenuItem>

@@ -4,7 +4,7 @@
  * By Matthew Adam Carpenter - Enhanced with AI Agent System
  */
 
-import { Activity, Brain, FileText, MessageCircle, Mic, Settings } from "lucide-react";
+import { Activity, Lightbulb, FileText, MessageCircle, Mic, Settings } from "lucide-react";
 import React, { useState } from "react";
 import { cn } from "../../../lib/utils";
 
@@ -57,7 +57,7 @@ export const ProfessionalLayout: React.FC<ProfessionalLayoutProps> = ({
     },
     {
       id: "insights",
-      icon: <Brain className="w-5 h-5" />,
+      icon: <Lightbulb className="w-5 h-5" />,
       label: "Insights",
       onClick: () => setActivePanel("insights"),
       isActive: activePanel === "insights",

@@ -9,7 +9,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Progress } from "../ui/progress";
 import {
-  Brain,
+  Lightbulb,
   Sparkles,
   Code,
   Play,
@@ -394,7 +394,7 @@ test.describe('${testResult.suite}', () => {
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-primary" />
+            <Lightbulb className="h-5 w-5 text-primary" />
             AI Test Generator
           </DialogTitle>
           <DialogDescription>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Brain,
   TrendingUp,
   MessageSquare,
   Clock,
@@ -229,7 +228,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
                 value: `${insightsList.length} updates`,
                 trend: "up",
                 confidence: 92,
-                icon: Brain,
+                icon: Lightbulb,
                 color: "primary",
                 timestamp: new Date(aomaResponse.metadata?.timestamp || Date.now()),
                 source: "aoma",
@@ -278,7 +277,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
                 value: "Active",
                 trend: "up",
                 confidence: 88,
-                icon: Brain,
+                icon: Lightbulb,
                 color: "primary",
                 timestamp: new Date(),
                 source: "aoma",
@@ -484,7 +483,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
 
       {insights.length === 0 ? (
         <div className="motiff-glass-panel p-4 text-center">
-          <Brain className="mx-auto mb-2 text-motiff-primary" size={24} />
+          <Lightbulb className="mx-auto mb-2 text-motiff-primary" size={24} />
           <p className="text-sm text-white/60">Start a conversation to see live insights</p>
           <p className="text-xs text-white/40 mt-2">Real-time analysis will appear here</p>
         </div>

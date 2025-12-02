@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Brain, TrendingUp, Clock, Target, Lightbulb } from "lucide-react";
+import { TrendingUp, Clock, Target, Lightbulb } from "lucide-react";
 import { cn } from "../lib/utils";
 
 interface Insight {
@@ -113,7 +113,7 @@ export function AIInsightsDashboard({
       sentiment: TrendingUp,
       topic: Target,
       action: Lightbulb,
-      summary: Brain,
+      summary: Lightbulb,
     };
     return icons[type];
   };
@@ -174,7 +174,7 @@ export function AIInsightsDashboard({
       {/* Live Insights Feed */}
       <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
         <div className="flex items-center gap-2 mb-4">
-          <Brain className="w-5 h-5 text-blue-600" />
+          <Lightbulb className="w-5 h-5 text-blue-600" />
           <h3 className="mac-title" className="mac-title text-lg font-bold text-blue-600 font-mono">
             AI Insights
           </h3>
@@ -215,7 +215,7 @@ export function AIInsightsDashboard({
             })
           ) : (
             <div className="text-center text-gray-500 py-8">
-              <Brain className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <Lightbulb className="w-12 h-12 mx-auto mb-4 opacity-50" />
               <p className="font-mono text-sm">
                 {isRecording ? "Analyzing conversation..." : "Start recording to see AI insights"}
               </p>

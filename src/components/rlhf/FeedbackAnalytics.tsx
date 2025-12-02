@@ -43,7 +43,7 @@ import {
   Activity,
   Target,
   Zap,
-  Brain,
+  Lightbulb,
   RefreshCw,
   Download,
   Calendar,
@@ -680,7 +680,7 @@ export function FeedbackAnalytics({
         {renderMetricCard(
           "DPO Examples",
           Math.round(metrics.totalFeedback * metrics.curatorApprovalRate).toLocaleString(),
-          <Brain className="h-5 w-5 text-blue-400" />,
+          <Lightbulb className="h-5 w-5 text-blue-400" />,
           12.4,
           "Training ready",
           "bg-blue-500/20"
@@ -703,7 +703,7 @@ export function FeedbackAnalytics({
             Curators
           </TabsTrigger>
           <TabsTrigger value="dpo" className="data-[state=active]:bg-zinc-800">
-            <Brain className="h-4 w-4 mr-2" />
+            <Lightbulb className="h-4 w-4 mr-2" />
             DPO Quality
           </TabsTrigger>
         </TabsList>
@@ -770,7 +770,7 @@ export function FeedbackAnalytics({
           <Card className="bg-zinc-900/50 border-zinc-800">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Brain className="h-5 w-5 text-purple-400" />
+                <Lightbulb className="h-5 w-5 text-purple-400" />
                 DPO Training Data Quality
               </CardTitle>
             </CardHeader>

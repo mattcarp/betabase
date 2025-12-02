@@ -11,9 +11,9 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
-import { 
-  Activity, 
-  Brain,
+import {
+  Activity,
+  Lightbulb,
   Search,
   RefreshCw,
   CheckCircle,
@@ -99,7 +99,7 @@ export function LiveRAGMonitor() {
   const getStrategyIcon = (strategy: string) => {
     switch (strategy) {
       case 'basic': return <Search className="h-3 w-3" />;
-      case 'context-aware': return <Brain className="h-3 w-3" />;
+      case 'context-aware': return <Lightbulb className="h-3 w-3" />;
       case 'agentic': return <Activity className="h-3 w-3" />;
       default: return <Search className="h-3 w-3" />;
     }

@@ -20,7 +20,7 @@ import {
   TrendingUp,
   Clock,
   FileText,
-  Brain
+  Lightbulb
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
@@ -137,7 +137,7 @@ export function RAGComparisonCard() {
               <Card className="bg-zinc-900/30 border-purple-500/30 ring-1 ring-purple-500/20">
                 <CardHeader>
                   <CardTitle className="text-sm text-zinc-100 flex items-center gap-2">
-                    <Brain className="h-4 w-4 text-purple-400" />
+                    <Lightbulb className="h-4 w-4 text-purple-400" />
                     Advanced RAG
                   </CardTitle>
                 </CardHeader>

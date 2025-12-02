@@ -24,7 +24,7 @@ import {
   ArrowRight,
   TrendingUp,
   FileCheck,
-  BrainCircuit,
+  Cpu,
   MessageSquareQuote,
   Sparkles,
   RefreshCw,
@@ -223,7 +223,7 @@ export function FeedbackImpactCard({ className }: FeedbackImpactCardProps) {
             loading={loading}
           />
           <MetricBox
-            icon={<BrainCircuit className="h-5 w-5" />}
+            icon={<Cpu className="h-5 w-5" />}
             value={impactData.finetuningBatches}
             label="Training Batches"
             color="purple"
@@ -257,7 +257,7 @@ export function FeedbackImpactCard({ className }: FeedbackImpactCardProps) {
           <ArrowRight className="h-4 w-4 text-[var(--mac-text-tertiary)]" />
           <CycleStep icon={<FileCheck />} label="Test Case" />
           <ArrowRight className="h-4 w-4 text-[var(--mac-text-tertiary)]" />
-          <CycleStep icon={<BrainCircuit />} label="Training" />
+          <CycleStep icon={<Cpu />} label="Training" />
           <ArrowRight className="h-4 w-4 text-[var(--mac-text-tertiary)]" />
           <CycleStep icon={<Sparkles />} label="Better AI" />
         </div>

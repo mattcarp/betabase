@@ -17,7 +17,7 @@ import {
   ArrowRight,
   Eye,
   FileText,
-  Brain,
+  Lightbulb,
   Sparkles,
   Filter,
   MoreVertical,
@@ -242,7 +242,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({
       case "correction":
         return <FileText className="h-4 w-4 text-purple-600" />;
       case "document-relevance":
-        return <Brain className="h-4 w-4 text-emerald-600" />;
+        return <Lightbulb className="h-4 w-4 text-emerald-600" />;
     }
   };
 

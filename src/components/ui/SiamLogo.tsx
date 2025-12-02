@@ -35,7 +35,7 @@ export const SiamLogo: React.FC<SiamLogoProps> = ({
   return (
     <Image
       src="/betabase-logo.webp"
-      alt="Betabase"
+      alt="Betabase logo"
       width={dimensions.w}
       height={dimensions.h}
       className={`${className} object-contain`}

@@ -14,13 +14,13 @@ import { Badge } from "./badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs";
 import { ScrollArea } from "./scroll-area";
 import { Input } from "./input";
-import { 
-  Search, 
-  RefreshCw, 
-  Activity, 
-  GitBranch, 
-  FileText, 
-  Brain 
+import {
+  Search,
+  RefreshCw,
+  Activity,
+  GitBranch,
+  FileText,
+  Lightbulb
 } from "lucide-react";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { toast } from "sonner";
@@ -303,7 +303,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                     ))
                   ) : (
                     <div className="text-center py-8">
-                      <Brain className="h-12 w-12 mx-auto text-zinc-600 mb-2" />
+                      <Lightbulb className="h-12 w-12 mx-auto text-zinc-600 mb-2" />
                       <p className="text-zinc-500">No agent steps (standard retrieval used)</p>
                     </div>
                   )}

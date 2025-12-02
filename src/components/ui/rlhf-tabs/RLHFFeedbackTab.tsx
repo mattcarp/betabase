@@ -14,13 +14,13 @@ import { Badge } from "../badge";
 import { ScrollArea } from "../scroll-area";
 import { Textarea } from "../textarea";
 import { 
-  ThumbsUp, 
-  ThumbsDown, 
-  Star, 
-  Edit3, 
-  Check, 
-  X, 
-  Brain,
+  ThumbsUp,
+  ThumbsDown,
+  Star,
+  Edit3,
+  Check,
+  X,
+  Lightbulb,
   Sparkles,
   AlertCircle,
   TrendingUp,
@@ -145,7 +145,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <Brain className="h-4 w-4 text-purple-400" />
+                <Lightbulb className="h-4 w-4 text-purple-400" />
                 <span className="text-xs text-[var(--mac-text-muted)] font-light">
                   {new Date(item.timestamp).toLocaleString()}
                 </span>

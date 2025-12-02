@@ -25,7 +25,7 @@ import {
   TrendingDown,
   MessageSquareQuote,
   FileCheck,
-  BrainCircuit,
+  Cpu,
   Sparkles,
   Activity,
   Users,
@@ -314,7 +314,7 @@ export function FeedbackImpactLive({
             color="green"
           />
           <MetricCard
-            icon={<BrainCircuit className="h-5 w-5" />}
+            icon={<Cpu className="h-5 w-5" />}
             value={stats.trainingBatches}
             label="Training Batches"
             color="purple"
@@ -369,7 +369,7 @@ export function FeedbackImpactLive({
             />
             <AnimatedArrow isActive={activeFlowStep >= 2} />
             <FlowStep
-              icon={<BrainCircuit className="h-5 w-5" />}
+              icon={<Cpu className="h-5 w-5" />}
               label="Model Training"
               isActive={activeFlowStep === 3}
               pulse={activeFlowStep === 3}

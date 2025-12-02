@@ -14,7 +14,6 @@ import {
   Database,
   Zap,
   FileText,
-  Brain,
   Target,
   Hash,
   Sparkles,
@@ -72,7 +71,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
     { value: "leadership", label: "Leadership", icon: Users },
     { value: "process", label: "Process", icon: TrendingUp },
     { value: "technical", label: "Technical", icon: Zap },
-    { value: "insight", label: "Insights", icon: Brain },
+    { value: "insight", label: "Insights", icon: Lightbulb },
   ];
 
   // Generate wisdom entries from AOMA knowledge base and conversation context
@@ -619,7 +618,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
         <div className="mt-4 pt-4 border-t border-white/10">
           <div className="flex gap-2">
             <button className="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
-              <Brain size={12} className="inline mr-2" />
+              <Lightbulb size={12} className="inline mr-2" />
               AI Summary
             </button>
             <button className="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">

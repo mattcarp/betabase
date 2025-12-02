@@ -29,7 +29,7 @@ import {
   ExternalLink,
   Loader2,
   Sparkles,
-  Brain,
+  Lightbulb,
   Bug,
   HelpCircle,
 } from "lucide-react";
@@ -421,7 +421,7 @@ export const FirecrawlPanel: React.FC = () => {
       <Card className="mac-card">
         <CardHeader className="mac-card">
           <div className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-primary" />
+            <Lightbulb className="h-5 w-5 text-primary" />
             <CardTitle className="mac-card">Support Intelligence</CardTitle>
           </div>
         </CardHeader>

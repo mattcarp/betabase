@@ -22,7 +22,7 @@ import {
   Bot,
   Sparkles,
   Zap,
-  Brain,
+  Lightbulb,
   Database,
   FileText,
   MessageSquare,
@@ -225,7 +225,7 @@ Be helpful, concise, and professional in your responses.`;
                   <h1 className="mac-heading text-xl font-extralight text-white tracking-tight whitespace-nowrap">
                     The Betabase
                   </h1>
-                  <p className="text-xs text-slate-400 font-light whitespace-nowrap">
+                  <p className="text-xs text-zinc-300 font-light whitespace-nowrap">
                     Intelligence Platform
                   </p>
                 </div>
@@ -241,7 +241,7 @@ Be helpful, concise, and professional in your responses.`;
                       "flex items-center space-x-2 px-4 py-2.5 rounded-md text-sm font-light transition-all duration-200",
                       activeMode === mode.mode
                         ? "bg-zinc-800 text-white shadow-sm"
-                        : "text-slate-400 hover:text-white hover:bg-zinc-800/50"
+                        : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"
                     )}
                   >
                     {mode.icon}

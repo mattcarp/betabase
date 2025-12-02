@@ -15,7 +15,7 @@ import {
   Loader2,
   RefreshCw,
   BookOpen,
-  Brain,
+  Lightbulb,
   Zap,
   ChevronRight,
   Clock,
@@ -262,7 +262,7 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
       <CardHeader className="mac-card pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-primary" />
+            <Lightbulb className="h-5 w-5 text-primary" />
             <CardTitle className="mac-card">AOMA Knowledge Base</CardTitle>
           </div>
           <div className="flex items-center gap-2">
@@ -409,7 +409,7 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
 
               {!isLoading && !error && !currentResponse && (
                 <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
-                  <Brain className="h-12 w-12 mb-4 opacity-50" />
+                  <Lightbulb className="h-12 w-12 mb-4 opacity-50" />
                   <p className="text-sm">Query the AOMA knowledge base to get started</p>
                   <p className="text-xs mt-2">
                     Try searching for architecture, workflows, or features

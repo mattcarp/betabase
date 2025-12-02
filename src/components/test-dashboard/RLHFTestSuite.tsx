@@ -12,8 +12,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
-import { 
-  Brain, 
+import {
+  Lightbulb,
   CheckCircle,
   XCircle,
   RefreshCw,
@@ -142,7 +142,7 @@ export function RLHFTestSuite() {
     <Card className="h-full flex flex-col bg-zinc-900/50 border-zinc-800">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-zinc-100">
-          <Brain className="h-5 w-5 text-purple-400" />
+          <Lightbulb className="h-5 w-5 text-purple-400" />
           RLHF-Generated Test Suite
         </CardTitle>
         <CardDescription className="text-zinc-400">
@@ -291,7 +291,7 @@ export function RLHFTestSuite() {
                 </>
               ) : (
                 <>
-                  <Brain className="h-16 w-16 mb-4 text-zinc-700" />
+                  <Lightbulb className="h-16 w-16 mb-4 text-zinc-700" />
                   <p className="text-lg mb-2">No RLHF-generated tests yet</p>
                   <p className="text-sm text-zinc-600 max-w-md">
                     Tests will be automatically generated from curator feedback and corrections.

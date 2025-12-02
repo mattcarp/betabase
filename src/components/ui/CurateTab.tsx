@@ -28,7 +28,7 @@ import {
   GitMerge,
   // Loader2, // Unused
   Eye,
-  Brain,
+  Lightbulb,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -473,7 +473,7 @@ export function CurateTab({
                   "transition-all duration-200"
                 )}
               >
-                <Brain className="h-4 w-4 mr-2" />
+                <Lightbulb className="h-4 w-4 mr-2" />
                 RLHF
               </TabsTrigger>
             )}

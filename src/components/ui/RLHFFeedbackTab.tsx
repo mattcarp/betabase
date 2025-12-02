@@ -13,14 +13,14 @@ import { Button } from "./button";
 import { Badge } from "./badge";
 import { ScrollArea } from "./scroll-area";
 import { Textarea } from "./textarea";
-import { 
-  ThumbsUp, 
-  ThumbsDown, 
-  Star, 
-  Edit3, 
-  Check, 
-  X, 
-  Brain,
+import {
+  ThumbsUp,
+  ThumbsDown,
+  Star,
+  Edit3,
+  Check,
+  X,
+  Lightbulb,
   Sparkles,
   AlertCircle,
 } from "lucide-react";
@@ -141,7 +141,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <Brain className="h-4 w-4 text-purple-400" />
+                <Lightbulb className="h-4 w-4 text-purple-400" />
                 <span className="text-xs text-zinc-500">
                   {new Date(item.timestamp).toLocaleString()}
                 </span>
@@ -460,7 +460,7 @@ export function RLHFFeedbackTab() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-semibold text-zinc-100 flex items-center gap-2">
-              <Brain className="h-6 w-6 text-purple-400" />
+              <Lightbulb className="h-6 w-6 text-purple-400" />
               RLHF Feedback Queue
             </h2>
             <p className="text-sm text-zinc-400 mt-1">

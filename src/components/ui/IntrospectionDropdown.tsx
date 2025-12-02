@@ -13,7 +13,6 @@ import { Button } from "./button";
 import { Badge } from "./badge";
 import { ScrollArea } from "./scroll-area";
 import {
-  Brain,
   Activity,
   ChevronRight,
   Loader2,
