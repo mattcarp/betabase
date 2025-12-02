@@ -179,14 +179,6 @@ npx playwright test tests/e2e/smoke/smoke.spec.ts
 npm version patch && git push origin main
 ```
 
-## 📋 Task Master Integration
-
-```bash
-# Import Task Master config
-```
-
-@./.taskmaster/CLAUDE.md
-
 ## 🔌 Byterover MCP
 
 You are given two tools from Byterover MCP server:

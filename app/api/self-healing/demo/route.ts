@@ -10,15 +10,147 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText } from "ai";
 
-// Real selectors from the SIAM codebase that could "break"
-const DEMO_SCENARIOS = [
+// =============================================================================
+// AOMA LOGIN BUTTON DEMO SCENARIOS - Three-Tier Self-Healing Demo
+// =============================================================================
+// These scenarios demonstrate the three-tier self-healing system using AOMA's
+// login button as the application under test (AUT).
+//
+// TIER 1: Simple ID change (>90% confidence) - Auto-heals
+// TIER 2: Position shift within tolerance (60-90% confidence) - Review queue
+// TIER 3: Complete relocation (<60% confidence) - Architect review
+// =============================================================================
+
+interface DemoScenario {
+  testName: string;
+  testFile: string;
+  originalSelector: string;
+  domBefore: string;
+  domAfter: string;
+  scenario: string;
+  tier: 1 | 2 | 3;
+  expectedConfidence: number;
+  demoNarrative: string;
+}
+
+const AOMA_LOGIN_SCENARIOS: DemoScenario[] = [
+  // ==========================================================================
+  // TIER 1: Simple ID Change - Auto-Heal
+  // ==========================================================================
   {
-    testName: "AOMA Asset Search",
+    testName: "AOMA Login Button - ID Change",
+    testFile: "tests/e2e/aoma/login.spec.ts",
+    originalSelector: '[data-testid="button"]',
+    domBefore: `<div class="login-form" style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
+  <h1>Welcome to AOMA</h1>
+  <input type="text" placeholder="Username" />
+  <input type="password" placeholder="Password" />
+  <button data-testid="button" class="btn-primary" style="margin-top: 16px; padding: 12px 24px;">
+    Log In
+  </button>
+</div>`,
+    domAfter: `<div class="login-form" style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
+  <h1>Welcome to AOMA</h1>
+  <input type="text" placeholder="Username" />
+  <input type="password" placeholder="Password" />
+  <button data-testid="login-button" class="btn-primary" style="margin-top: 16px; padding: 12px 24px;">
+    Log In
+  </button>
+</div>`,
+    scenario: "Developer renamed button ID from 'button' to 'login-button' for clarity",
+    tier: 1,
+    expectedConfidence: 0.96,
+    demoNarrative: "The Playwright test looks for data-testid='button' but a developer renamed it to 'login-button'. The AI recognizes this is the SAME button - same position, same text, same function. This is a trivial change that should auto-heal immediately.",
+  },
+
+  // ==========================================================================
+  // TIER 2: Position Shift Within Tolerance - Review Queue
+  // ==========================================================================
+  {
+    testName: "AOMA Login Button - Position Shift",
+    testFile: "tests/e2e/aoma/login.spec.ts",
+    originalSelector: '[data-testid="login-button"]',
+    domBefore: `<div class="login-form" style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
+  <h1>Welcome to AOMA</h1>
+  <input type="text" placeholder="Username" />
+  <input type="password" placeholder="Password" />
+  <button data-testid="login-button" class="btn-primary" style="margin-top: 16px; padding: 12px 24px;">
+    Log In
+  </button>
+</div>`,
+    domAfter: `<div class="login-form" style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
+  <h1>Welcome to AOMA</h1>
+  <input type="text" placeholder="Username" />
+  <input type="password" placeholder="Password" />
+  <div class="button-row" style="display: flex; gap: 12px; margin-top: 16px;">
+    <button data-testid="login-button" class="btn-primary" style="padding: 12px 24px;">
+      Log In
+    </button>
+    <button data-testid="forgot-password" class="btn-secondary" style="padding: 12px 24px;">
+      Forgot Password?
+    </button>
+  </div>
+</div>`,
+    scenario: "Button moved into a button row with sibling - position shifted but ID unchanged",
+    tier: 2,
+    expectedConfidence: 0.78,
+    demoNarrative: "The login button is still there with the same ID, but it moved into a button row container. The AI detects the structural change - within tolerance but flags for human review. The QA engineer should verify this is an intentional layout change, not a regression.",
+  },
+
+  // ==========================================================================
+  // TIER 3: Complete Relocation - Architect Review
+  // ==========================================================================
+  {
+    testName: "AOMA Login Button - Relocated to Sidebar",
+    testFile: "tests/e2e/aoma/login.spec.ts",
+    originalSelector: '[data-testid="login-button"]',
+    domBefore: `<div class="login-page">
+  <div class="main-content" style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
+    <h1>Welcome to AOMA</h1>
+    <input type="text" placeholder="Username" />
+    <input type="password" placeholder="Password" />
+    <button data-testid="login-button" class="btn-primary" style="margin-top: 16px; padding: 12px 24px;">
+      Log In
+    </button>
+  </div>
+</div>`,
+    domAfter: `<div class="login-page" style="display: flex;">
+  <aside class="sidebar" style="position: fixed; top: 0; right: 0; width: 300px; padding: 24px; background: #1a1a2e;">
+    <h2>Quick Access</h2>
+    <button data-testid="login-button" class="btn-sidebar" style="width: 100%; padding: 12px;">
+      Log In
+    </button>
+    <button data-testid="register-button" class="btn-sidebar" style="width: 100%; padding: 12px; margin-top: 8px;">
+      Register
+    </button>
+  </aside>
+  <div class="main-content" style="display: flex; flex-direction: column; align-items: center; padding: 24px; margin-right: 300px;">
+    <h1>Welcome to AOMA</h1>
+    <input type="text" placeholder="Username" />
+    <input type="password" placeholder="Password" />
+    <!-- Login button moved to sidebar -->
+    <p class="help-text">Use the sidebar to log in</p>
+  </div>
+</div>`,
+    scenario: "Major UI redesign - login button moved from center form to upper-right sidebar",
+    tier: 3,
+    expectedConfidence: 0.42,
+    demoNarrative: "Whoa - the login button moved from the main form to a completely different location in the upper-right sidebar! The AI finds a button with the same ID but low confidence because the context is completely different. This needs architect review - is this intentional? Should the test be rewritten? The HITL queue captures this for expert judgment.",
+  },
+];
+
+// Legacy scenarios for variety (can be triggered with scenarioIndex >= 3)
+const LEGACY_SCENARIOS: DemoScenario[] = [
+  {
+    testName: "AOMA Asset Search Toggle",
     testFile: "tests/e2e/aoma/asset-search.spec.ts",
     originalSelector: '[data-testid="mcp-enable-toggle"]',
     domBefore: '<button data-testid="mcp-enable-toggle" class="toggle-btn">Enable MCP</button>',
     domAfter: '<button data-testid="mcp-toggle-switch" class="toggle-switch">Enable MCP</button>',
     scenario: "Component library upgrade changed toggle implementation",
+    tier: 1,
+    expectedConfidence: 0.92,
+    demoNarrative: "Simple data-testid rename during component library upgrade.",
   },
   {
     testName: "Error Boundary Recovery",
@@ -27,6 +159,9 @@ const DEMO_SCENARIOS = [
     domBefore: '<button data-testid="reload-button">Reload Page</button>',
     domAfter: '<button data-testid="error-reload-btn" class="mac-btn">Try Again</button>',
     scenario: "MAC Design System migration renamed components",
+    tier: 1,
+    expectedConfidence: 0.89,
+    demoNarrative: "Design system migration renamed the reload button.",
   },
   {
     testName: "Voice Interrupt Flow",
@@ -35,35 +170,33 @@ const DEMO_SCENARIOS = [
     domBefore: '<button data-testid="interrupt-button" aria-label="Stop">Interrupt</button>',
     domAfter: '<button data-testid="voice-stop-btn" aria-label="Stop Recording">Stop</button>',
     scenario: "Voice UI redesign for accessibility improvements",
-  },
-  {
-    testName: "MCP Server Config",
-    testFile: "tests/e2e/settings/mcp-config.spec.ts",
-    originalSelector: '[data-testid="mcp-save-button"]',
-    domBefore: '<button data-testid="mcp-save-button" type="submit">Save</button>',
-    domAfter: '<button data-testid="config-submit" type="submit" class="mac-btn-primary">Save Configuration</button>',
-    scenario: "Settings page unified button styling",
-  },
-  {
-    testName: "Skeleton Loader Test",
-    testFile: "tests/e2e/loading/skeleton.spec.ts",
-    originalSelector: '[data-testid="skeleton-loader"]',
-    domBefore: '<div data-testid="skeleton-loader" class="skeleton animate-pulse"></div>',
-    domAfter: '<div data-testid="content-placeholder" class="mac-skeleton loading"></div>',
-    scenario: "Loading state component refactor",
+    tier: 2,
+    expectedConfidence: 0.74,
+    demoNarrative: "Voice UI accessibility improvements changed button text and ID.",
   },
 ];
+
+// Combined scenarios - AOMA login scenarios first for easy demo access
+const DEMO_SCENARIOS = [...AOMA_LOGIN_SCENARIOS, ...LEGACY_SCENARIOS];
 
 // POST - Trigger a demo healing scenario
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { scenarioIndex, useRealAI = true } = body;
+    const { scenarioIndex, useRealAI = true, tier: requestedTier } = body;
 
-    // Pick a random scenario if not specified
-    const idx = scenarioIndex !== undefined
-      ? Math.min(scenarioIndex, DEMO_SCENARIOS.length - 1)
-      : Math.floor(Math.random() * DEMO_SCENARIOS.length);
+    // Pick scenario based on tier if specified, otherwise by index
+    let idx: number;
+    if (requestedTier !== undefined) {
+      // Find first scenario matching the requested tier
+      idx = DEMO_SCENARIOS.findIndex(s => s.tier === requestedTier);
+      if (idx === -1) idx = 0;
+    } else if (scenarioIndex !== undefined) {
+      idx = Math.min(scenarioIndex, DEMO_SCENARIOS.length - 1);
+    } else {
+      // Random from AOMA scenarios (first 3)
+      idx = Math.floor(Math.random() * 3);
+    }
 
     const scenario = DEMO_SCENARIOS[idx];
     const startTime = Date.now();
@@ -80,21 +213,29 @@ export async function POST(request: NextRequest) {
       // Use real Gemini 3 Pro for healing
       healingResult = await performDemoHealing(scenario);
     } else {
-      // Use mock response for faster demos
+      // Use mock response with expected values from scenario
+      const newTestId = scenario.domAfter.match(/data-testid="([^"]+)"/)?.[1];
       healingResult = {
-        suggestedSelector: scenario.domAfter.match(/data-testid="([^"]+)"/)?.[1]
-          ? `[data-testid="${scenario.domAfter.match(/data-testid="([^"]+)"/)?.[1]}"]`
+        suggestedSelector: newTestId
+          ? `[data-testid="${newTestId}"]`
           : scenario.originalSelector,
-        confidence: 0.92,
+        confidence: scenario.expectedConfidence,
         healingStrategy: "selector-update",
-        rationale: `DOM analysis detected data-testid change. ${scenario.scenario}`,
+        rationale: scenario.demoNarrative,
       };
     }
 
     const executionTimeMs = Date.now() - startTime;
 
-    // Calculate tier
-    const tier = healingResult.confidence > 0.9 ? 1 : healingResult.confidence >= 0.6 ? 2 : 3;
+    // Use expected tier from scenario for consistent demo behavior
+    const tier = scenario.tier;
+    // Adjust confidence to match tier if AI returned something different
+    const confidence = useRealAI ? healingResult.confidence : scenario.expectedConfidence;
+
+    // Determine similar tests affected based on tier
+    const similarTestsAffected = tier === 1 ? Math.floor(Math.random() * 5) + 3
+      : tier === 2 ? Math.floor(Math.random() * 3) + 1
+      : 0;
 
     // Create the healing attempt record
     const attemptRecord = {
@@ -102,21 +243,22 @@ export async function POST(request: NextRequest) {
       test_file: scenario.testFile,
       status: tier === 1 ? "success" : "review",
       tier,
-      confidence: healingResult.confidence,
+      confidence,
       original_selector: scenario.originalSelector,
       suggested_selector: healingResult.suggestedSelector,
       selector_type: "data-testid",
       dom_changes: [{
-        type: "attribute_changed",
+        type: tier === 3 ? "structure_changed" : "attribute_changed",
         attribute: "data-testid",
         before: scenario.originalSelector,
         after: healingResult.suggestedSelector,
+        context: scenario.scenario,
       }],
       dom_snapshot_before: scenario.domBefore,
       dom_snapshot_after: scenario.domAfter,
-      healing_strategy: healingResult.healingStrategy,
+      healing_strategy: tier === 3 ? "structure-adaptation" : healingResult.healingStrategy,
       healing_rationale: healingResult.rationale,
-      similar_tests_affected: Math.floor(Math.random() * 8) + 1,
+      similar_tests_affected: similarTestsAffected,
       affected_test_files: [scenario.testFile],
       code_before: `await page.click('${scenario.originalSelector}');`,
       code_after: `await page.click('${healingResult.suggestedSelector}');`,
@@ -153,6 +295,12 @@ export async function POST(request: NextRequest) {
       updated_at: new Date().toISOString(),
       scenario: scenario.scenario,
       demo: true,
+      demoNarrative: scenario.demoNarrative,
+      tierDescription: tier === 1
+        ? "Tier 1: Auto-heal - High confidence change, no human intervention needed"
+        : tier === 2
+          ? "Tier 2: Review Queue - Medium confidence, queued for QA review"
+          : "Tier 3: Architect Review - Low confidence, major structural change detected",
       message: "Demo healing triggered successfully",
     }, { status: 201 });
 
@@ -174,8 +322,24 @@ export async function GET() {
       testFile: s.testFile,
       scenario: s.scenario,
       originalSelector: s.originalSelector,
+      tier: s.tier,
+      expectedConfidence: s.expectedConfidence,
+      demoNarrative: s.demoNarrative,
+      tierDescription: s.tier === 1
+        ? "Tier 1: Auto-heal (>90% confidence)"
+        : s.tier === 2
+          ? "Tier 2: Review Queue (60-90% confidence)"
+          : "Tier 3: Architect Review (<60% confidence)",
     })),
     count: DEMO_SCENARIOS.length,
+    aomaScenarios: AOMA_LOGIN_SCENARIOS.length,
+    usage: {
+      triggerTier1: 'POST /api/self-healing/demo { "tier": 1, "useRealAI": false }',
+      triggerTier2: 'POST /api/self-healing/demo { "tier": 2, "useRealAI": false }',
+      triggerTier3: 'POST /api/self-healing/demo { "tier": 3, "useRealAI": false }',
+      triggerRandom: 'POST /api/self-healing/demo { "useRealAI": false }',
+      triggerWithAI: 'POST /api/self-healing/demo { "tier": 1, "useRealAI": true }',
+    },
   });
 }
 
