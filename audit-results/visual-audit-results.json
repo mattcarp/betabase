@@ -2,21 +2,116 @@
   {
     "section": "login",
     "url": "/",
-    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"networkidle\"\u001b[22m\n"
+    "screenshot": "/Users/matt/Documents/projects/siam/audit-results/login-desktop.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "macCompliance": {
+      "backgroundColor": "rgb(10, 10, 10)",
+      "color": "rgb(255, 255, 255)",
+      "fontFamily": "system-ui, -apple-system, sans-serif",
+      "fontWeight": "400"
+    },
+    "macVariables": {
+      "--mac-surface-background": "#0c0c0c",
+      "--mac-surface-elevated": "#141414",
+      "--mac-text-primary": "#ffffff",
+      "--mac-text-secondary": "#a3a3a3",
+      "--mac-primary-blue-400": "#4a9eff",
+      "--mac-accent-purple-400": "#a855f7",
+      "--mac-utility-border": "rgba(255, 255, 255, 0.08)"
+    },
+    "hardcodedColors": [
+      {
+        "tag": "IMG",
+        "class": "w-full h-full object-contain",
+        "type": "color",
+        "value": "transparent"
+      }
+    ]
   },
   {
     "section": "dashboard",
     "url": "/dashboard",
-    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/dashboard\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/dashboard\", waiting until \"networkidle\"\u001b[22m\n"
+    "screenshot": "/Users/matt/Documents/projects/siam/audit-results/dashboard-desktop.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "macCompliance": {
+      "backgroundColor": "rgb(10, 10, 10)",
+      "color": "rgb(255, 255, 255)",
+      "fontFamily": "system-ui, -apple-system, sans-serif",
+      "fontWeight": "400"
+    },
+    "macVariables": {
+      "--mac-surface-background": "#0c0c0c",
+      "--mac-surface-elevated": "#141414",
+      "--mac-text-primary": "#ffffff",
+      "--mac-text-secondary": "#a3a3a3",
+      "--mac-primary-blue-400": "#4a9eff",
+      "--mac-accent-purple-400": "#a855f7",
+      "--mac-utility-border": "rgba(255, 255, 255, 0.08)"
+    },
+    "hardcodedColors": [
+      {
+        "tag": "IMG",
+        "class": "w-full h-full object-contain",
+        "type": "color",
+        "value": "transparent"
+      }
+    ]
   },
   {
     "section": "chat-interface",
     "url": "/",
-    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"networkidle\"\u001b[22m\n"
+    "screenshot": "/Users/matt/Documents/projects/siam/audit-results/chat-interface-desktop.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "macCompliance": {
+      "backgroundColor": "rgb(10, 10, 10)",
+      "color": "rgb(255, 255, 255)",
+      "fontFamily": "system-ui, -apple-system, sans-serif",
+      "fontWeight": "400"
+    },
+    "macVariables": {
+      "--mac-surface-background": "#0c0c0c",
+      "--mac-surface-elevated": "#141414",
+      "--mac-text-primary": "#ffffff",
+      "--mac-text-secondary": "#a3a3a3",
+      "--mac-primary-blue-400": "#4a9eff",
+      "--mac-accent-purple-400": "#a855f7",
+      "--mac-utility-border": "rgba(255, 255, 255, 0.08)"
+    },
+    "hardcodedColors": [
+      {
+        "tag": "IMG",
+        "class": "w-full h-full object-contain",
+        "type": "color",
+        "value": "transparent"
+      }
+    ]
   },
   {
     "section": "settings",
     "url": "/settings",
-    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/settings\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/settings\", waiting until \"networkidle\"\u001b[22m\n"
+    "screenshot": "/Users/matt/Documents/projects/siam/audit-results/settings-desktop.png",
+    "consoleErrors": [],
+    "macCompliance": {
+      "backgroundColor": "rgb(255, 255, 255)",
+      "color": "rgb(0, 0, 0)",
+      "fontFamily": "system-ui, -apple-system, sans-serif",
+      "fontWeight": "400"
+    },
+    "macVariables": {
+      "--mac-surface-background": "#0c0c0c",
+      "--mac-surface-elevated": "#141414",
+      "--mac-text-primary": "#ffffff",
+      "--mac-text-secondary": "#a3a3a3",
+      "--mac-primary-blue-400": "#4a9eff",
+      "--mac-accent-purple-400": "#a855f7",
+      "--mac-utility-border": "rgba(255, 255, 255, 0.08)"
+    },
+    "hardcodedColors": []
   }
 ]
