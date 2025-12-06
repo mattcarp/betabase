@@ -1071,9 +1071,7 @@ export function EnhancedCurateTab({
                   </SelectContent>
                 </Select>
                 <Button
-                  className="mac-button mac-button-outline"
                   variant="outline"
-                  className="mac-button mac-button-outline"
                   size="sm"
                   onClick={loadFiles}
                   disabled={loading}
@@ -1083,9 +1081,7 @@ export function EnhancedCurateTab({
                 {selectedFiles.size > 0 && (
                   <>
                     <Button
-                      className="mac-button mac-button-primary"
                       variant="destructive"
-                      className="mac-button mac-button-primary"
                       size="sm"
                       onClick={() => confirmDeleteFiles(Array.from(selectedFiles))}
                       disabled={loading}
@@ -1094,9 +1090,7 @@ export function EnhancedCurateTab({
                       Delete ({selectedFiles.size})
                     </Button>
                     <Button
-                      className="mac-button mac-button-outline"
                       variant="ghost"
-                      className="mac-button mac-button-outline"
                       size="sm"
                       onClick={() => setSelectedFiles(new Set())}
                     >
@@ -1239,9 +1233,7 @@ export function EnhancedCurateTab({
               <div className="flex items-center justify-between">
                 <h3 className="mac-title">AI-Powered Curation Insights</h3>
                 <Button
-                  className="mac-button mac-button-outline"
                   variant="outline"
-                  className="mac-button mac-button-outline"
                   size="sm"
                 >
                   <RefreshCw className="h-4 w-4 mr-2" />
@@ -1312,9 +1304,7 @@ export function EnhancedCurateTab({
                         )}
                       </div>
                       <Button
-                        className="mac-button mac-button-outline"
                         variant="ghost"
-                        className="mac-button mac-button-outline"
                         size="sm"
                       >
                         Take Action
@@ -1335,9 +1325,7 @@ export function EnhancedCurateTab({
                 <div className="flex gap-2">
                   <Badge variant="outline">May 2024</Badge>
                   <Button
-                    className="mac-button mac-button-outline"
                     variant="outline"
-                    className="mac-button mac-button-outline"
                     size="sm"
                   >
                     <Award className="h-4 w-4 mr-2" />

@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-12-06T22:51:14.812Z",
+  "metrics": [],
+  "summary": {
+    "totalTests": 0,
+    "successCount": 0,
+    "failureCount": 0,
+    "avgTimeToFirstToken": 0,
+    "avgTimeToComplete": 0
+  }
+}

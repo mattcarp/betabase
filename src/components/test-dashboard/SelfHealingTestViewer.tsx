@@ -30,6 +30,11 @@ import {
   BookOpen,
   ChevronDown,
   ChevronUp,
+  Image,
+  Layers,
+  Keyboard,
+  Copy,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 
@@ -172,6 +177,198 @@ function transformAttempt(api: APIAttempt): SelfHealingAttempt {
   };
 }
 
+// Confidence Meter Component with tier markers
+const ConfidenceMeter: React.FC<{ confidence: number; tier: HealingTier }> = ({ confidence, tier }) => {
+  const percentage = confidence * 100;
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between text-xs">
+        <span className="text-muted-foreground">AI Confidence</span>
+        <span className={cn(
+          "font-mono",
+          tier === 1 && "text-green-400",
+          tier === 2 && "text-amber-400",
+          tier === 3 && "text-red-400"
+        )}>
+          {percentage.toFixed(1)}%
+        </span>
+      </div>
+      <div className="relative h-2 bg-black/40 rounded-full overflow-hidden">
+        {/* Tier markers */}
+        <div className="absolute inset-0 flex">
+          <div className="w-[60%] border-r border-red-500/50" title="Tier 3 threshold (60%)" />
+          <div className="w-[30%] border-r border-amber-400/50" title="Tier 2 threshold (90%)" />
+          <div className="w-[10%]" />
+        </div>
+        {/* Progress bar */}
+        <div
+          className={cn(
+            "h-full transition-all duration-500 rounded-full",
+            tier === 1 && "bg-gradient-to-r from-green-500 to-green-400",
+            tier === 2 && "bg-gradient-to-r from-amber-500 to-amber-400",
+            tier === 3 && "bg-gradient-to-r from-red-500 to-red-400"
+          )}
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+      <div className="flex justify-between text-[10px] text-muted-foreground">
+        <span>0%</span>
+        <span className="text-red-400">Tier 3</span>
+        <span className="text-amber-400">Tier 2</span>
+        <span className="text-green-400">Tier 1</span>
+        <span>100%</span>
+      </div>
+    </div>
+  );
+};
+
+// Screenshot Comparison Component
+const ScreenshotComparison: React.FC<{
+  before?: string;
+  after?: string;
+  className?: string;
+}> = ({ before, after, className }) => {
+  const [viewMode, setViewMode] = useState<"side-by-side" | "overlay" | "diff">("side-by-side");
+  const [overlayPosition, setOverlayPosition] = useState(50);
+
+  if (!before && !after) return null;
+
+  return (
+    <div className={cn("space-y-3", className)}>
+      <div className="flex items-center justify-between">
+        <h4 className="text-sm font-light flex items-center gap-2">
+          <Image className="h-4 w-4" />
+          Visual Comparison
+        </h4>
+        <div className="flex gap-1">
+          <Button
+            variant={viewMode === "side-by-side" ? "default" : "ghost"}
+            size="sm"
+            className="h-7 text-xs"
+            onClick={() => setViewMode("side-by-side")}
+          >
+            Side by Side
+          </Button>
+          <Button
+            variant={viewMode === "overlay" ? "default" : "ghost"}
+            size="sm"
+            className="h-7 text-xs"
+            onClick={() => setViewMode("overlay")}
+          >
+            Overlay
+          </Button>
+        </div>
+      </div>
+
+      {viewMode === "side-by-side" && (
+        <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-1">
+            <span className="text-[10px] text-red-400 uppercase tracking-wide">Before (Working)</span>
+            <div className="rounded-lg border border-red-500/20 bg-black/40 p-1 overflow-hidden">
+              {before ? (
+                <img
+                  src={before.startsWith("data:") ? before : `data:image/png;base64,${before}`}
+                  alt="Before screenshot"
+                  className="w-full h-auto rounded"
+                />
+              ) : (
+                <div className="aspect-video flex items-center justify-center text-muted-foreground text-xs">
+                  No screenshot available
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="space-y-1">
+            <span className="text-[10px] text-green-400 uppercase tracking-wide">After (Current)</span>
+            <div className="rounded-lg border border-green-500/20 bg-black/40 p-1 overflow-hidden">
+              {after ? (
+                <img
+                  src={after.startsWith("data:") ? after : `data:image/png;base64,${after}`}
+                  alt="After screenshot"
+                  className="w-full h-auto rounded"
+                />
+              ) : (
+                <div className="aspect-video flex items-center justify-center text-muted-foreground text-xs">
+                  No screenshot available
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {viewMode === "overlay" && (
+        <div className="relative rounded-lg border border-white/10 bg-black/40 overflow-hidden">
+          <div className="relative aspect-video">
+            {before && (
+              <img
+                src={before.startsWith("data:") ? before : `data:image/png;base64,${before}`}
+                alt="Before screenshot"
+                className="absolute inset-0 w-full h-full object-contain"
+              />
+            )}
+            {after && (
+              <div
+                className="absolute inset-0 overflow-hidden"
+                style={{ width: `${overlayPosition}%` }}
+              >
+                <img
+                  src={after.startsWith("data:") ? after : `data:image/png;base64,${after}`}
+                  alt="After screenshot"
+                  className="w-full h-full object-contain"
+                  style={{ width: `${100 / (overlayPosition / 100)}%` }}
+                />
+              </div>
+            )}
+            {/* Slider line */}
+            <div
+              className="absolute top-0 bottom-0 w-0.5 bg-purple-500 cursor-ew-resize"
+              style={{ left: `${overlayPosition}%` }}
+            />
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={overlayPosition}
+            onChange={(e) => setOverlayPosition(Number(e.target.value))}
+            className="w-full mt-2"
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Keyboard shortcut handler hook
+const useKeyboardShortcuts = (
+  selectedAttempt: SelfHealingAttempt | null,
+  onApprove: (id: string) => void,
+  onReject: (id: string) => void
+) => {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!selectedAttempt || selectedAttempt.status !== "review") return;
+
+      // Meta/Ctrl + Enter to approve
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        e.preventDefault();
+        onApprove(selectedAttempt.id);
+      }
+
+      // Meta/Ctrl + Backspace to reject
+      if ((e.metaKey || e.ctrlKey) && e.key === "Backspace") {
+        e.preventDefault();
+        onReject(selectedAttempt.id);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedAttempt, onApprove, onReject]);
+};
+
 // Self-Healing Status Viewer Component
 export const SelfHealingTestViewer: React.FC = () => {
   const [selectedAttempt, setSelectedAttempt] = useState<SelfHealingAttempt | null>(null);
@@ -191,6 +388,15 @@ export const SelfHealingTestViewer: React.FC = () => {
   const [triggeringDemo, setTriggeringDemo] = useState(false);
   const [demoClickCount, setDemoClickCount] = useState(0);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [applyingFix, setApplyingFix] = useState<string | null>(null);
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  // Copy to clipboard helper
+  const copyToClipboard = async (text: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopySuccess(true);
+    setTimeout(() => setCopySuccess(false), 2000);
+  };
 
   // Fetch data from API
   const fetchData = useCallback(async () => {
@@ -337,6 +543,37 @@ export const SelfHealingTestViewer: React.FC = () => {
       );
     }
   };
+
+  // Apply fix to codebase via API
+  const handleApplyFix = async (attemptId: string) => {
+    const attempt = attempts.find(a => a.id === attemptId);
+    if (!attempt) return;
+
+    setApplyingFix(attemptId);
+    try {
+      const res = await fetch("/api/self-healing/apply-fix", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          attemptId,
+          testFile: attempt.testFile,
+          originalCode: attempt.beforeCode || attempt.codeBefore,
+          fixedCode: attempt.afterCode || attempt.codeAfter,
+        }),
+      });
+
+      if (res.ok) {
+        await handleApprove(attemptId);
+      }
+    } catch (error) {
+      console.error("Failed to apply fix:", error);
+    } finally {
+      setApplyingFix(null);
+    }
+  };
+
+  // Keyboard shortcuts for review workflow
+  useKeyboardShortcuts(selectedAttempt, handleApprove, handleReject);
 
   const getStatusIcon = (status: SelfHealingAttempt["status"]) => {
     switch (status) {
@@ -734,8 +971,8 @@ export const SelfHealingTestViewer: React.FC = () => {
                 {selectedAttempt ? (
                   <ScrollArea className="h-[600px] pr-4">
                     <div className="space-y-6">
-                      {/* Tier Classification & Impact */}
-                      <div className="space-y-3">
+                      {/* Tier Classification & Confidence */}
+                      <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <Badge
                             variant="outline"
@@ -747,12 +984,30 @@ export const SelfHealingTestViewer: React.FC = () => {
                             {selectedAttempt.status}
                           </Badge>
                         </div>
+
+                        {/* Enhanced Confidence Meter */}
+                        <ConfidenceMeter
+                          confidence={selectedAttempt.confidence}
+                          tier={selectedAttempt.tier}
+                        />
+
                         <p className="text-xs text-muted-foreground">
                           {getTierBadge(selectedAttempt.tier).description}
                         </p>
+
+                        {/* Keyboard shortcut hint */}
+                        {selectedAttempt.status === "review" && (
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                            <Keyboard className="h-3 w-3 text-blue-400" />
+                            <span className="text-[10px] text-blue-300">
+                              Press <kbd className="px-1 py-0.5 bg-black/40 rounded text-[9px]">Cmd+Enter</kbd> to approve or <kbd className="px-1 py-0.5 bg-black/40 rounded text-[9px]">Cmd+Backspace</kbd> to reject
+                            </span>
+                          </div>
+                        )}
+
                         {selectedAttempt.similarTestsAffected > 0 && (
                           <div className="flex items-center gap-2 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
-                            <Sparkles className="h-4 w-4 text-purple-400" />
+                            <Layers className="h-4 w-4 text-purple-400" />
                             <span className="text-sm text-purple-300">
                               Applying this fix will automatically repair{" "}
                               <span className="font-light">{selectedAttempt.similarTestsAffected}</span>{" "}
@@ -761,6 +1016,14 @@ export const SelfHealingTestViewer: React.FC = () => {
                           </div>
                         )}
                       </div>
+
+                      {/* Screenshot Comparison */}
+                      {selectedAttempt.screenshot && (
+                        <ScreenshotComparison
+                          before={selectedAttempt.screenshot.before}
+                          after={selectedAttempt.screenshot.after}
+                        />
+                      )}
 
                       {/* Visual Workflow */}
                       <div className="space-y-4">
@@ -812,23 +1075,44 @@ export const SelfHealingTestViewer: React.FC = () => {
                                 </div>
                               </div>
                               {selectedAttempt.status === "review" && (
-                                <div className="mt-3 flex gap-2">
-                                  <Button 
-                                    size="sm" 
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                  <Button
+                                    size="sm"
                                     className="bg-green-600 hover:bg-green-700 text-white"
-                                    onClick={() => handleApprove(selectedAttempt.id)}
+                                    onClick={() => handleApplyFix(selectedAttempt.id)}
+                                    disabled={applyingFix === selectedAttempt.id}
                                   >
-                                    <CheckCircle className="mr-2 h-3.5 w-3.5" />
+                                    {applyingFix === selectedAttempt.id ? (
+                                      <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                                    ) : (
+                                      <CheckCircle className="mr-2 h-3.5 w-3.5" />
+                                    )}
                                     Apply Fix to Codebase
                                   </Button>
-                                  <Button 
-                                    size="sm" 
+                                  <Button
+                                    size="sm"
                                     variant="outline"
                                     className="border-red-500/30 text-red-400 hover:bg-red-500/10"
                                     onClick={() => handleReject(selectedAttempt.id)}
                                   >
                                     <XCircle className="mr-2 h-3.5 w-3.5" />
                                     Reject
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => copyToClipboard(
+                                      selectedAttempt.codeAfter ||
+                                      selectedAttempt.afterCode ||
+                                      `await page.locator('${selectedAttempt.suggestedSelector}').click();`
+                                    )}
+                                  >
+                                    {copySuccess ? (
+                                      <CheckCircle className="mr-2 h-3.5 w-3.5 text-green-400" />
+                                    ) : (
+                                      <Copy className="mr-2 h-3.5 w-3.5" />
+                                    )}
+                                    {copySuccess ? "Copied" : "Copy Fix"}
                                   </Button>
                                 </div>
                               )}
