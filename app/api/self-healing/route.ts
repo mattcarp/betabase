@@ -148,6 +148,7 @@ export async function POST(request: NextRequest) {
       errorMessage,
       errorStack,
       codeContext,
+      screenshot, // Base64 encoded screenshot
     } = body;
 
     // Validate required fields
@@ -168,6 +169,7 @@ export async function POST(request: NextRequest) {
       domSnapshotAfter,
       testFile,
       codeContext,
+      screenshot,
     });
 
     const executionTimeMs = Date.now() - startTime;
@@ -272,6 +274,7 @@ async function performAIHealing(params: {
   domSnapshotAfter?: string;
   testFile: string;
   codeContext?: string;
+  screenshot?: string; // Base64 encoded screenshot
 }): Promise<{
   suggestedSelector: string;
   confidence: number;
@@ -284,41 +287,64 @@ async function performAIHealing(params: {
   tokensUsed?: number;
 }> {
   const google = createGoogleGenerativeAI({
-    apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+    apiKey: process.env.GOOGLE_API_KEY,
   });
 
-  const prompt = `You are an expert test automation engineer specializing in Playwright test maintenance.
+  // Construct the multi-modal prompt
+  const textPrompt = `You are a world-class test automation engineer specializing in Playwright.
+A test has failed. Your goal is to analyze the failure and provide a ROBUST, SELF-HEALING fix.
 
-A test selector has failed. Analyze the context and suggest a fix.
+CONTEXT:
+- Test File: ${params.testFile}
+- Broken Selector: ${params.originalSelector}
+- Selector Concept: ${params.selectorType || "unknown"}
 
-ORIGINAL SELECTOR: ${params.originalSelector}
-SELECTOR TYPE: ${params.selectorType || "unknown"}
-TEST FILE: ${params.testFile}
+DATA PROVIDED:
+${params.domSnapshotBefore ? `- DOM (Working State available)` : ""}
+${params.domSnapshotAfter ? `- DOM (Broken State available)` : ""}
+${params.screenshot ? `- Screenshot (Visual State available)` : ""}
+${params.codeContext ? `- Code Context:\n${params.codeContext}` : ""}
 
-${params.domSnapshotBefore ? `DOM BEFORE (working state):\n${params.domSnapshotBefore.slice(0, 2000)}` : ""}
+TASK:
+1. Analyze the visual and DOM changes to understand WHY the selector failed.
+2. Determine if the element was renamed, moved, replaced, or visual-only change.
+3. Generate a NEW, ROBUST Playwright selector or code snippet to fix the test.
+4. Provide a JSON response with your analysis and fix.
 
-${params.domSnapshotAfter ? `DOM AFTER (broken state):\n${params.domSnapshotAfter.slice(0, 2000)}` : ""}
-
-${params.codeContext ? `CODE CONTEXT:\n${params.codeContext}` : ""}
-
-Analyze the changes and provide a JSON response with:
-1. suggestedSelector: The new selector that should work
-2. confidence: A number 0-1 indicating your confidence in this fix
-3. healingStrategy: One of "selector-update", "wait-strategy", "structure-adaptation", "data-fix"
-4. rationale: Brief explanation of what changed and why your fix works
-5. domChanges: Array of objects describing what changed in the DOM
-6. similarTestsAffected: Estimated number of similar tests this fix would help
-
-Respond ONLY with valid JSON, no markdown or explanation.`;
+RESPONSE FORMAT (JSON ONLY):
+{
+  "suggestedSelector": "The new robust selector",
+  "confidence": 0.0 to 1.0,
+  "healingStrategy": "selector-update" | "wait-strategy" | "structure-adaptation" | "data-fix",
+  "rationale": "Clear explanation of the fix",
+  "domChanges": [{"type": "attribute_change", "details": "..."}],
+  "similarTestsAffected": estimated_count,
+  "codeAfter": "The complete replacement code line(s)"
+}
+`;
 
   try {
-    const result = await generateText({
-      model: google("gemini-3-pro-preview"),
-      prompt,
+    const promptParts: any[] = [{ text: textPrompt }];
+    
+    // Add image if available
+    if (params.screenshot) {
+      // Remove data URL prefix if present
+      const base64Image = params.screenshot.replace(/^data:image\/(png|jpeg|webp);base64,/, "");
+      promptParts.push({ image: base64Image });
+    }
+
+    const { text, usage } = await generateText({
+    model: google("gemini-3-pro-preview"), // Leveraging multimodal capabilities
+      messages: [
+        {
+          role: 'user',
+          content: promptParts,
+        },
+      ],
     });
 
     // Parse the JSON response
-    const responseText = result.text.trim();
+    const responseText = text.trim();
     // Remove any markdown code blocks if present
     const cleanJson = responseText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
 
@@ -332,7 +358,8 @@ Respond ONLY with valid JSON, no markdown or explanation.`;
       domChanges: parsed.domChanges || [],
       similarTestsAffected: parsed.similarTestsAffected || 1,
       affectedTestFiles: parsed.affectedTestFiles || [params.testFile],
-      tokensUsed: result.usage?.totalTokens,
+      codeAfter: parsed.codeAfter || "",
+      tokensUsed: usage.totalTokens,
     };
   } catch (error) {
     console.error("AI healing error:", error);

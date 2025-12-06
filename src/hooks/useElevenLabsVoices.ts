@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { getElevenLabsApiKey } from "@/config/apiKeys";
 
 export interface ElevenLabsVoice {
   voice_id: string;
@@ -33,7 +32,8 @@ export function useElevenLabsVoices(options: UseElevenLabsVoicesOptions = {}) {
   const [isPreviewPlaying, setIsPreviewPlaying] = useState<string | null>(null);
 
   const fetchVoices = useCallback(async () => {
-    const apiKey = options.apiKey || getElevenLabsApiKey();
+    // Use env var directly to avoid importing config/apiKeys.ts in client
+    const apiKey = options.apiKey || process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY;
 
     if (!apiKey) {
       console.warn("ElevenLabs API key not found - using default voice selection");
@@ -150,7 +150,8 @@ export function useElevenLabsVoices(options: UseElevenLabsVoicesOptions = {}) {
 
   const playPreview = useCallback(
     async (voiceId: string) => {
-      const apiKey = options.apiKey || getElevenLabsApiKey();
+      // Use env var directly
+      const apiKey = options.apiKey || process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY;
 
       if (!apiKey) {
         console.warn("Cannot preview voice without API key");

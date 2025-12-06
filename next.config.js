@@ -56,7 +56,7 @@ const nextConfig = {
 
   // PERFORMANCE OPTIMIZATION: Optimize package imports
   experimental: {
-    optimizePackageImports: ["@radix-ui/react-icons", "lucide-react", "recharts", "framer-motion"],
+    optimizePackageImports: ["@radix-ui/react-icons", "recharts", "framer-motion"],
   },
 
   async headers() {

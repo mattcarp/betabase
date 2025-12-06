@@ -5,7 +5,7 @@
  */
 
 import { type Page } from '@playwright/test';
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../e2e/fixtures/base-test';
 
 // Test configuration for different environments
 const ENVIRONMENTS = {

@@ -1,5 +1,5 @@
-import { test, expect } from './fixtures/base-test';
-import { setupConsoleMonitoring, getConsoleMonitor } from "./helpers/console-monitor";
+import { test, expect } from '../e2e/fixtures/base-test';
+import { setupConsoleMonitoring, getConsoleMonitor } from "../e2e/helpers/console-monitor";
 
 /**
  * DEMO READINESS TEST

@@ -3,7 +3,7 @@
  * Tests for AOMA MCP server integration, vector database, and AI insights UI
  */
 
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../e2e/fixtures/base-test';
 
 test.describe("MCP Server Integration (Task 40)", () => {
   test.beforeEach(async ({ page }) => {

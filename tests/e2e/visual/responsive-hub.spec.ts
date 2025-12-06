@@ -1,5 +1,5 @@
 import { test, expect } from '../fixtures/base-test';
-import { expectMacClassPresence } from "../helpers/design-system";
+import { expectMacClassPresence } from "../../helpers/design-system";
 import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 type ViewportConfig = {

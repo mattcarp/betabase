@@ -8,7 +8,7 @@
  *
  * Uses base-test fixture for automatic console error detection.
  */
-import { test, expect } from "./fixtures/base-test";
+import { test, expect } from "../fixtures/base-test";
 
 // Use baseURL from playwright.config.ts (https://thebetabase.com)
 // No hardcoded URLs - use page.goto("/", { waitUntil: 'domcontentloaded' }) for root

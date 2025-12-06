@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../fixtures/base-test';
 
 test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
   let page: Page;
@@ -11,7 +11,7 @@ test.describe("Test Dashboard - Comprehensive E2E Tests", () => {
     await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
 
     // Verify page loads correctly
-    await expect(page).toHaveTitle(/SIAM/);
+    await expect(page).toHaveTitle(/The Betabase/);
 
     // Navigate to Test tab
     await page.click("text=Test");

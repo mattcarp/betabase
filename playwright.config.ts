@@ -41,5 +41,10 @@ export default defineConfig({
   ],
   // Output directory for test artifacts
   outputDir: "test-results",
-  // No webServer config - testing against deployed URL
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
+  },
 });

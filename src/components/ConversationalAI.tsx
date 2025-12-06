@@ -3,7 +3,6 @@ import { Mic, MicOff, Loader2, AlertCircle, Radio, Activity } from "lucide-react
 import AudioWaveform from "./AudioWaveform";
 import { useElevenLabsConversation } from "../hooks/useElevenLabsConversation";
 import type { ConversationState } from "../hooks/useElevenLabsConversation";
-import { getElevenLabsAgentId } from "@/config/apiKeys";
 
 interface ConversationalAIProps {
   agentId?: string;
@@ -35,8 +34,8 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
     },
     ref
   ) => {
-    // Get agent ID from props or config
-    const effectiveAgentId = agentId || getElevenLabsAgentId();
+    // Get agent ID from props or environment
+    const effectiveAgentId = agentId || process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID || "";
 
     // Use the real ElevenLabs conversation hook
     const {
@@ -241,7 +240,8 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
                 onChange={(e) => {
                   const volume = parseFloat(e.target.value);
                   console.log(`🔊 Setting AI volume to ${(volume * 100).toFixed(0)}%`);
-                  (conversation as any).setVolume?.({ volume });
+                  // Volume control temporarily disabled due to missing reference
+                  // (conversation as any).setVolume?.({ volume });
                 }}
                 className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
               />

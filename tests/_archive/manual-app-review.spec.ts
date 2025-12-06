@@ -1,4 +1,4 @@
-import {  test, expect  } from './fixtures/base-test';
+import {  test, expect  } from '../e2e/fixtures/base-test';
 
 test('Manual app review - test all tabs and UI', async ({ page }) => {
   const observations: string[] = [];

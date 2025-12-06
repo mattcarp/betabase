@@ -3,7 +3,7 @@
  * Tests for the metrics ingestion pipeline and vector storage
  */
 
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../e2e/fixtures/base-test';
 
 test.describe("System Metrics Ingestion Pipeline", () => {
   const baseUrl = process.env.PLAYWRIGHT_TEST_BASE_URL || "http://localhost:3000";

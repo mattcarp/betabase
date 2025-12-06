@@ -9,7 +9,7 @@
  * - Testing History tab with trend data
  */
 
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../fixtures/base-test';
 
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000';
 

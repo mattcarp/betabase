@@ -1,4 +1,4 @@
-import {  test  } from './fixtures/base-test';
+import { test } from '../e2e/fixtures/base-test';
 
 test('capture all console errors', async ({ page }) => {
   const consoleErrors: string[] = [];

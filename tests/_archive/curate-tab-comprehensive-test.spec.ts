@@ -6,7 +6,7 @@
  */
 
 import { Page } from '@playwright/test';
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../e2e/fixtures/base-test';
 import path from "path";
 
 // Test configuration

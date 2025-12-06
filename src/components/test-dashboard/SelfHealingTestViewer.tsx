@@ -64,6 +64,8 @@ interface SelfHealingAttempt {
   };
   beforeCode?: string;
   afterCode?: string;
+  codeBefore?: string; // Alias for backward compatibility if needed, or stick to one. The component uses both in my snippets.
+  codeAfter?: string;
   screenshot?: {
     before: string;
     after: string;
@@ -170,6 +172,7 @@ function transformAttempt(api: APIAttempt): SelfHealingAttempt {
   };
 }
 
+// Self-Healing Status Viewer Component
 export const SelfHealingTestViewer: React.FC = () => {
   const [selectedAttempt, setSelectedAttempt] = useState<SelfHealingAttempt | null>(null);
   const [viewMode, setViewMode] = useState<"workflow" | "history">("workflow");
@@ -799,10 +802,36 @@ export const SelfHealingTestViewer: React.FC = () => {
                               <Wrench className="h-5 w-5 text-purple-500" />
                             </div>
                             <div className="flex-1">
-                              <p className="text-sm font-light">Auto-Healing Applied</p>
-                              <p className="text-xs text-muted-foreground">
-                                Strategy: {selectedAttempt.healingStrategy.replace("-", " ")}
-                              </p>
+                              <p className="text-sm font-light">Proposed Fix Generated</p>
+                              <div className="mt-2 rounded-md bg-black/40 p-3 font-mono text-xs">
+                                <div className="text-red-400 opacity-70 line-through mb-1">
+                                  {selectedAttempt.codeBefore || `await page.locator('${selectedAttempt.originalSelector}').click();`}
+                                </div>
+                                <div className="text-green-400">
+                                  {selectedAttempt.codeAfter || `await page.locator('${selectedAttempt.suggestedSelector}').click();`}
+                                </div>
+                              </div>
+                              {selectedAttempt.status === "review" && (
+                                <div className="mt-3 flex gap-2">
+                                  <Button 
+                                    size="sm" 
+                                    className="bg-green-600 hover:bg-green-700 text-white"
+                                    onClick={() => handleApprove(selectedAttempt.id)}
+                                  >
+                                    <CheckCircle className="mr-2 h-3.5 w-3.5" />
+                                    Apply Fix to Codebase
+                                  </Button>
+                                  <Button 
+                                    size="sm" 
+                                    variant="outline"
+                                    className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+                                    onClick={() => handleReject(selectedAttempt.id)}
+                                  >
+                                    <XCircle className="mr-2 h-3.5 w-3.5" />
+                                    Reject
+                                  </Button>
+                                </div>
+                              )}
                             </div>
                           </div>
 
@@ -845,40 +874,32 @@ export const SelfHealingTestViewer: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Code Diff */}
-                      {selectedAttempt.beforeCode && selectedAttempt.afterCode && (
-                        <div className="space-y-2">
-                          <h3 className="text-sm font-light flex items-center gap-2">
-                            <GitCompare className="h-4 w-4" />
-                            Code Changes
-                          </h3>
-                          <div className="rounded-lg border bg-muted/50 p-3 space-y-3">
-                            {/* Before */}
-                            <div>
-                              <div className="flex items-center gap-2 mb-1">
-                                <XCircle className="h-3 w-3 text-red-500" />
-                                <span className="text-xs font-mono text-red-500">Before</span>
-                              </div>
-                              <pre className="text-xs bg-red-500/5 p-2 rounded border border-red-500/20 overflow-x-auto">
-                                <code className="text-red-400">{selectedAttempt.beforeCode}</code>
-                              </pre>
+                      {/* Code Change Preview */}
+                      {(selectedAttempt.beforeCode || selectedAttempt.afterCode || selectedAttempt.codeBefore || selectedAttempt.codeAfter) && (
+                        <div className="space-y-3 pt-4 border-t border-white/5">
+                          <h4 className="text-sm font-light flex items-center gap-2">
+                             <FileCode className="h-4 w-4" />
+                             Code Change Preview
+                          </h4>
+                          <div className="rounded-lg border border-white/10 bg-black/40 p-4">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-xs text-muted-foreground">{selectedAttempt.testFile}</span>
+                              <Badge variant="outline" className="text-[10px] border-blue-500/30 text-blue-400">
+                                TypeScript
+                              </Badge>
                             </div>
-
-                            {/* Arrow */}
-                            <div className="flex justify-center">
-                              <ArrowRight className="h-4 w-4 text-muted-foreground" />
-                            </div>
-
-                            {/* After */}
-                            <div>
-                              <div className="flex items-center gap-2 mb-1">
-                                <CheckCircle className="h-3 w-3 text-green-500" />
-                                <span className="text-xs font-mono text-green-500">After</span>
-                              </div>
-                              <pre className="text-xs bg-green-500/5 p-2 rounded border border-green-500/20 overflow-x-auto">
-                                <code className="text-green-400">{selectedAttempt.afterCode}</code>
-                              </pre>
-                            </div>
+                            <pre className="font-mono text-xs overflow-x-auto">
+                              <code>
+                                <div className="flex gap-4 opacity-50">
+                                  <span className="select-none w-6 text-right text-muted-foreground">42</span>
+                                  <span className="text-red-400">- {selectedAttempt.beforeCode || selectedAttempt.codeBefore || `await page.locator('${selectedAttempt.originalSelector}').click();`}</span>
+                                </div>
+                                <div className="flex gap-4">
+                                  <span className="select-none w-6 text-right text-muted-foreground">42</span>
+                                  <span className="text-green-400">+ {selectedAttempt.afterCode || selectedAttempt.codeAfter || `await page.locator('${selectedAttempt.suggestedSelector}').click();`}</span>
+                                </div>
+                              </code>
+                            </pre>
                           </div>
                         </div>
                       )}
@@ -936,28 +957,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                         </div>
                       )}
 
-                      {/* Actions */}
-                      {selectedAttempt.status === "review" && (
-                        <div className="flex gap-2 pt-4">
-                          <Button
-                            className="flex-1"
-                            variant="default"
-                            onClick={() => handleApprove(selectedAttempt.id)}
-                          >
-                            <CheckCircle className="mr-2 h-4 w-4" />
-                            Approve Healing
-                          </Button>
-                          <Button
-                            className="flex-1"
-                            variant="destructive"
-                            onClick={() => handleReject(selectedAttempt.id)}
-                          >
-                            <XCircle className="mr-2 h-4 w-4" />
-                            Reject
-                          </Button>
-                        </div>
-                      )}
-
+                      {/* Actions Footer */}
                       {(selectedAttempt.status === "success" || selectedAttempt.status === "approved") && (
                         <div className="flex gap-2 pt-4">
                           <Button className="flex-1" variant="outline">

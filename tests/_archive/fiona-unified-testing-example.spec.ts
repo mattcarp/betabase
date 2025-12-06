@@ -1,7 +1,7 @@
 // Example: Fiona's Unified Testing Orchestration
 // This demonstrates how all three MCP servers work together for comprehensive testing
 
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../e2e/fixtures/base-test';
 
 /**
  * FIONA'S PARALLEL TESTING PATTERN

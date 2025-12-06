@@ -3,7 +3,7 @@
  * Tests for comprehensive chat interface with navigation tabs and 3-panel layout
  */
 
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../e2e/fixtures/base-test';
 
 test.describe("Task 1: SIAM Chat Interface", () => {
   test.beforeEach(async ({ page }) => {

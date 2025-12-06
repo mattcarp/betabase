@@ -1,4 +1,4 @@
-import {  test, expect  } from './fixtures/base-test';
+import {  test, expect  } from '../fixtures/base-test';
 
 test('test chat endpoint being called', async ({ page }) => {
   const networkRequests: Array<{url: string, method: string, status: number}> = [];

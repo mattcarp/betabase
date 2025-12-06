@@ -11,7 +11,7 @@
  * - Performance metrics
  */
 
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../e2e/fixtures/base-test';
 import fs from "fs";
 import path from "path";
 

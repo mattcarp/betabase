@@ -775,14 +775,14 @@ export function EnhancedCurateTab({
 
   return (
     <Card className={cn("mac-card", "h-full flex flex-col", className)}>
-      <CardHeader className="mac-card">
+      <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2">
-              <Lightbulb className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-2xl font-light tracking-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              <Lightbulb className="h-5 w-5 text-purple-400" />
               Knowledge Curation Center
             </CardTitle>
-            <CardDescription className="mac-card">
+            <CardDescription className="font-light text-muted-foreground">
               Executive dashboard for knowledge management & curator performance
             </CardDescription>
           </div>
@@ -809,11 +809,10 @@ export function EnhancedCurateTab({
 
       <CardContent className="flex-1 overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <ScrollArea className="w-full">
-            <TabsList className={cn("grid w-full", canAccessRLHF ? "grid-cols-9" : "grid-cols-6")}>
+          <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="dashboard">
                 <BarChart3 className="h-4 w-4 mr-2" />
-                Dashboard
+                Overview
               </TabsTrigger>
               <TabsTrigger value="files">
                 <FolderOpen className="h-4 w-4 mr-2" />
@@ -823,114 +822,87 @@ export function EnhancedCurateTab({
                 <Lightbulb className="h-4 w-4 mr-2" />
                 Insights
               </TabsTrigger>
-              <TabsTrigger value="curators">
-                <Users className="h-4 w-4 mr-2" />
-                Curators
-              </TabsTrigger>
-              <TabsTrigger value="analytics">
-                <LineChartIcon className="h-4 w-4 mr-2" />
-                Analytics
-              </TabsTrigger>
               <TabsTrigger value="upload">
                 <Upload className="h-4 w-4 mr-2" />
                 Upload
               </TabsTrigger>
-
-              {/* RLHF Tabs - Permission Gated */}
-              {canAccessRLHF && (
-                <>
-                  <TabsTrigger value="rlhf-feedback">
-                    <ThumbsUp className="h-4 w-4 mr-2" />
-                    RLHF Feedback
-                  </TabsTrigger>
-                  <TabsTrigger value="agent-insights">
-                    <Bot className="h-4 w-4 mr-2" />
-                    Agent Insights
-                  </TabsTrigger>
-                  <TabsTrigger value="reinforcement">
-                    <TrendingUp className="h-4 w-4 mr-2" />
-                    Reinforcement
-                  </TabsTrigger>
-                </>
-              )}
             </TabsList>
-          </ScrollArea>
 
           {/* Executive Dashboard - "Evil Charts" */}
           <TabsContent value="dashboard" className="flex-1 overflow-auto mt-4">
             <div className="space-y-4">
               {/* Executive KPIs */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Card className="mac-card">
-                  <CardHeader className="mac-card pb-2">
-                    <CardTitle className="text-sm">Knowledge ROI</CardTitle>
+                <Card className="border-white/10 bg-black/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-light">Knowledge ROI</CardTitle>
                   </CardHeader>
-                  <CardContent className="mac-card">
+                  <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold">3.5x</span>
-                      <DollarSign className="h-8 w-8 text-green-600" />
+                      <span className="text-2xl font-light">3.5x</span>
+                      <DollarSign className="h-8 w-8 text-green-400" />
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2">
+                    <p className="text-xs font-light text-muted-foreground mt-2">
                       {formatCurrency(executiveMetrics.totalValue)} generated
                     </p>
                   </CardContent>
                 </Card>
 
-                <Card className="mac-card">
-                  <CardHeader className="mac-card pb-2">
-                    <CardTitle className="text-sm">Monthly Savings</CardTitle>
+                <Card className="border-white/10 bg-black/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-light">Monthly Savings</CardTitle>
                   </CardHeader>
-                  <CardContent className="mac-card">
+                  <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold">
+                      <span className="text-2xl font-light">
                         {formatCurrency(executiveMetrics.monthlySavings)}
                       </span>
-                      <TrendingUp className="h-8 w-8 text-blue-600" />
+                      <TrendingUp className="h-8 w-8 text-blue-400" />
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2">
+                    <p className="text-xs font-light text-muted-foreground mt-2">
                       From deduplication & optimization
                     </p>
                   </CardContent>
                 </Card>
 
-                <Card className="mac-card">
-                  <CardHeader className="mac-card pb-2">
-                    <CardTitle className="text-sm">Compliance Score</CardTitle>
+                <Card className="border-white/10 bg-black/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-light">Compliance Score</CardTitle>
                   </CardHeader>
-                  <CardContent className="mac-card">
+                  <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold">
+                      <span className="text-2xl font-light">
                         {executiveMetrics.complianceScore}%
                       </span>
-                      <Shield className="h-8 w-8 text-purple-600" />
+                      <Shield className="h-8 w-8 text-purple-400" />
                     </div>
                     <Progress value={executiveMetrics.complianceScore} className="mt-2 h-1" />
-                    <p className="text-xs text-muted-foreground mt-2">3 issues need review</p>
+                    <p className="text-xs font-light text-muted-foreground mt-2">3 issues need review</p>
                   </CardContent>
                 </Card>
 
-                <Card className="mac-card">
-                  <CardHeader className="mac-card pb-2">
-                    <CardTitle className="text-sm">Curation Velocity</CardTitle>
+                <Card className="border-white/10 bg-black/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-light">Curation Velocity</CardTitle>
                   </CardHeader>
-                  <CardContent className="mac-card">
+                  <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold">
+                      <span className="text-2xl font-light">
                         {executiveMetrics.curationVelocity}
                       </span>
-                      <Activity className="h-8 w-8 text-orange-600" />
+                      <Activity className="h-8 w-8 text-orange-400" />
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2">Files/week processed</p>
+                    <p className="text-xs font-light text-muted-foreground mt-2">Files/week processed</p>
                   </CardContent>
                 </Card>
               </div>
 
               {/* Value Generation Chart */}
-              <Card className="mac-card">
-                <CardHeader className="mac-card">
-                  <CardTitle className="text-lg">Value Generation & Cost Savings</CardTitle>
+              <Card className="border-white/10 bg-black/20">
+                <CardHeader>
+                  <CardTitle className="text-lg font-light">Value Generation & Cost Savings</CardTitle>
                 </CardHeader>
-                <CardContent className="mac-card">
+                <CardContent>
                   <ResponsiveContainer width="100%" height={250}>
                     <ComposedChart data={stubCurationTrends}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -963,11 +935,11 @@ export function EnhancedCurateTab({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Knowledge Health Heatmap */}
-                <Card className="mac-card">
-                  <CardHeader className="mac-card">
-                    <CardTitle className="text-lg">Knowledge Health by Category</CardTitle>
+                <Card className="border-white/10 bg-black/20">
+                  <CardHeader>
+                    <CardTitle className="text-lg font-light">Knowledge Health by Category</CardTitle>
                   </CardHeader>
-                  <CardContent className="mac-card">
+                  <CardContent>
                     <ResponsiveContainer width="100%" height={250}>
                       <RechartsBarChart data={stubKnowledgeHealth}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -994,11 +966,11 @@ export function EnhancedCurateTab({
                 </Card>
 
                 {/* Curation Activity */}
-                <Card className="mac-card">
-                  <CardHeader className="mac-card">
-                    <CardTitle className="text-lg">Curation Activity Trends</CardTitle>
+                <Card className="border-white/10 bg-black/20">
+                  <CardHeader>
+                    <CardTitle className="text-lg font-light">Curation Activity Trends</CardTitle>
                   </CardHeader>
-                  <CardContent className="mac-card">
+                  <CardContent>
                     <ResponsiveContainer width="100%" height={250}>
                       <RechartsLineChart data={stubCurationTrends}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -1016,11 +988,11 @@ export function EnhancedCurateTab({
               </div>
 
               {/* Quick Actions for Management */}
-              <Card className="mac-card">
-                <CardHeader className="mac-card">
-                  <CardTitle className="text-lg">Executive Actions</CardTitle>
+              <Card className="border-white/10 bg-black/20">
+                <CardHeader>
+                  <CardTitle className="text-lg font-light">Executive Actions</CardTitle>
                 </CardHeader>
-                <CardContent className="mac-card">
+                <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                     <Button
                       variant="outline"
@@ -1182,7 +1154,7 @@ export function EnhancedCurateTab({
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <p className="font-medium text-sm truncate">{file.filename}</p>
+                            <p className="font-light text-sm truncate">{file.filename}</p>
                             {file.compliance_status === "review_needed" && (
                               <Badge variant="destructive" className="text-xs">
                                 <AlertCircle className="h-3 w-3 mr-2" />
@@ -1288,7 +1260,7 @@ export function EnhancedCurateTab({
                   )}
                   onClick={() => setSelectedInsight(insight)}
                 >
-                  <CardHeader className="mac-card">
+                  <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-4">
                         {insight.type === "duplicate" && (
@@ -1304,7 +1276,7 @@ export function EnhancedCurateTab({
                           <AlertTriangle className="h-5 w-5 mt-0.5 text-yellow-600" />
                         )}
                         <div className="flex-1">
-                          <CardTitle className="text-base">{insight.title}</CardTitle>
+                          <CardTitle className="text-base font-light">{insight.title}</CardTitle>
                           <CardDescription className="mt-2">{insight.description}</CardDescription>
                         </div>
                       </div>
@@ -1321,13 +1293,13 @@ export function EnhancedCurateTab({
                       </Badge>
                     </div>
                   </CardHeader>
-                  <CardContent className="mac-card">
+                  <CardContent>
                     <div className="flex items-center justify-between">
                       <div className="flex gap-4 text-sm">
                         {insight.potentialSavings && (
                           <span
                             className={cn(
-                              "font-medium",
+                              "font-light",
                               insight.potentialSavings > 0 ? "text-green-600" : "text-blue-600"
                             )}
                           >
@@ -1378,17 +1350,17 @@ export function EnhancedCurateTab({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {stubCuratorPerformance.map((curator, index) => (
                   <Card key={index} className="mac-card hover:shadow-lg transition-shadow">
-                    <CardHeader className="mac-card">
+                    <CardHeader>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                          <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-light text-lg">
                             {curator.name
                               .split(" ")
                               .map((n) => n[0])
                               .join("")}
                           </div>
                           <div>
-                            <CardTitle className="text-base">{curator.name}</CardTitle>
+                            <CardTitle className="text-base font-light">{curator.name}</CardTitle>
                             <p className="text-xs text-muted-foreground">{curator.department}</p>
                             <div className="flex items-center gap-2 mt-2">
                               {curator.badge === "master" && (
@@ -1419,29 +1391,29 @@ export function EnhancedCurateTab({
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="mac-body text-2xl font-bold text-green-600">
+                          <p className="mac-body text-2xl font-light text-green-600">
                             {formatCurrency(curator.valueGenerated)}
                           </p>
                           <p className="text-xs text-muted-foreground">Value Generated</p>
                         </div>
                       </div>
                     </CardHeader>
-                    <CardContent className="mac-card">
+                    <CardContent>
                       <div className="grid grid-cols-4 gap-2 text-center">
                         <div>
-                          <p className="text-lg font-normal">{curator.filesProcessed}</p>
+                          <p className="text-lg font-light">{curator.filesProcessed}</p>
                           <p className="text-xs text-muted-foreground">Files</p>
                         </div>
                         <div>
-                          <p className="text-lg font-normal">{curator.qualityScore}%</p>
+                          <p className="text-lg font-light">{curator.qualityScore}%</p>
                           <p className="text-xs text-muted-foreground">Quality</p>
                         </div>
                         <div>
-                          <p className="text-lg font-normal">{curator.duplicatesFound}</p>
+                          <p className="text-lg font-light">{curator.duplicatesFound}</p>
                           <p className="text-xs text-muted-foreground">Deduped</p>
                         </div>
                         <div>
-                          <p className="text-lg font-normal">{curator.metadataEnriched}</p>
+                          <p className="text-lg font-light">{curator.metadataEnriched}</p>
                           <p className="text-xs text-muted-foreground">Enriched</p>
                         </div>
                       </div>
@@ -1455,11 +1427,11 @@ export function EnhancedCurateTab({
               </div>
 
               {/* Team Performance Radar */}
-              <Card className="mac-card">
-                <CardHeader className="mac-card">
-                  <CardTitle className="text-lg">Team Performance Metrics</CardTitle>
+              <Card className="border-white/10 bg-black/20">
+                <CardHeader>
+                  <CardTitle className="text-lg font-light">Team Performance Metrics</CardTitle>
                 </CardHeader>
-                <CardContent className="mac-card">
+                <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <RadarChart
                       data={[
@@ -1495,11 +1467,11 @@ export function EnhancedCurateTab({
 
               {/* Content Distribution */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card className="mac-card">
-                  <CardHeader className="mac-card">
-                    <CardTitle className="text-lg">Content Distribution</CardTitle>
+                <Card className="border-white/10 bg-black/20">
+                  <CardHeader>
+                    <CardTitle className="text-lg font-light">Content Distribution</CardTitle>
                   </CardHeader>
-                  <CardContent className="mac-card">
+                  <CardContent>
                     <ResponsiveContainer width="100%" height={250}>
                       <RechartsPieChart>
                         <Pie
@@ -1522,11 +1494,11 @@ export function EnhancedCurateTab({
                   </CardContent>
                 </Card>
 
-                <Card className="mac-card">
-                  <CardHeader className="mac-card">
-                    <CardTitle className="text-lg">Knowledge Coverage</CardTitle>
+                <Card className="border-white/10 bg-black/20">
+                  <CardHeader>
+                    <CardTitle className="text-lg font-light">Knowledge Coverage</CardTitle>
                   </CardHeader>
-                  <CardContent className="mac-card">
+                  <CardContent>
                     <div className="space-y-3">
                       {stubKnowledgeHealth.map((category) => (
                         <div key={category.category}>
@@ -1543,11 +1515,11 @@ export function EnhancedCurateTab({
               </div>
 
               {/* Utilization Metrics */}
-              <Card className="mac-card">
-                <CardHeader className="mac-card">
-                  <CardTitle className="text-lg">Knowledge Utilization Over Time</CardTitle>
+              <Card className="border-white/10 bg-black/20">
+                <CardHeader>
+                  <CardTitle className="text-lg font-light">Knowledge Utilization Over Time</CardTitle>
                 </CardHeader>
-                <CardContent className="mac-card">
+                <CardContent>
                   <ResponsiveContainer width="100%" height={250}>
                     <RechartsAreaChart data={stubCurationTrends}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -1603,11 +1575,11 @@ export function EnhancedCurateTab({
                 </AlertDescription>
               </Alert>
 
-              <Card className="mac-card">
-                <CardHeader className="mac-card">
-                  <CardTitle className="text-lg">Smart Upload Features</CardTitle>
+              <Card className="border-white/10 bg-black/20">
+                <CardHeader>
+                  <CardTitle className="text-lg font-light">Smart Upload Features</CardTitle>
                 </CardHeader>
-                <CardContent className="mac-card">
+                <CardContent>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600" />

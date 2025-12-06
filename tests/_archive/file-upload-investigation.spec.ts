@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../e2e/fixtures/base-test';
 
 test.describe("SIAM File Upload Functionality Investigation", () => {
   test("comprehensive file upload UI examination", async ({ page }) => {

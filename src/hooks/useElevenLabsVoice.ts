@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { getElevenLabsApiKey } from "@/config/apiKeys";
 
 interface VoiceConfig {
   voiceId?: string;
@@ -27,7 +26,8 @@ export function useElevenLabsVoice(options: UseElevenLabsVoiceOptions = {}) {
 
   const speak = useCallback(
     async (text: string) => {
-      const apiKey = options.apiKey || getElevenLabsApiKey();
+      // Use env var directly to avoid importing config/apiKeys.ts in client
+      const apiKey = options.apiKey || process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY;
 
       if (!apiKey) {
         options.onError?.(new Error("ElevenLabs API key not found"));

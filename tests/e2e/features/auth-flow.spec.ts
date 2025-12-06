@@ -4,7 +4,7 @@
  * Tests magic link login and session handling.
  * Uses base-test fixture for automatic console error detection.
  */
-import { test, expect } from "./fixtures/base-test";
+import { test, expect } from "../fixtures/base-test";
 
 // Use baseURL from playwright.config.ts (https://thebetabase.com)
 

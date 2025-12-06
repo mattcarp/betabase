@@ -353,7 +353,7 @@ async function performDemoHealing(scenario: typeof DEMO_SCENARIOS[0]): Promise<{
 }> {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+      apiKey: process.env.GOOGLE_API_KEY,
     });
 
     const prompt = `You are an expert Playwright test engineer. A test selector has broken.

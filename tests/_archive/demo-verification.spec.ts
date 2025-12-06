@@ -6,7 +6,7 @@
  * 2. All three pillars accessible
  * 3. Console errors check
  */
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../e2e/fixtures/base-test';
 
 test.describe("Demo Verification - Three Pillars", () => {
   // Collect console errors

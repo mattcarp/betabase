@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../fixtures/base-test';
 
 test.describe("Sessions Management Page", () => {
   test.beforeEach(async ({ page }) => {

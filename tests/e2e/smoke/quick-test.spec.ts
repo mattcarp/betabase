@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../fixtures/base-test';
 
 test.describe("Quick Validation Test", () => {
   test("should load the main app", async ({ page }) => {

@@ -3,7 +3,7 @@
  * Checks if the latest code is actually deployed
  */
 
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../e2e/fixtures/base-test';
 
 test("Verify deployment code is live", async ({ page }) => {
   console.log("\n🔍 Checking if new deployment is live...\n");

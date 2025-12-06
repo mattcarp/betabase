@@ -28,90 +28,51 @@ const defaultConfig: ApiConfig = {
   mcpAuthEnabled: false,
 };
 
-class ApiKeysService {
-  private config: ApiConfig;
+const config: ApiConfig = {
+  openaiApiKey: getEnvVar("OPENAI_API_KEY") || defaultConfig.openaiApiKey,
+  elevenLabsApiKey: getEnvVar("ELEVENLABS_API_KEY") || defaultConfig.elevenLabsApiKey,
+  elevenLabsAgentId: getEnvVar("ELEVENLABS_AGENT_ID") || defaultConfig.elevenLabsAgentId,
+  vectorStoreId: getEnvVar("VECTOR_STORE_ID") || defaultConfig.vectorStoreId,
+  mcpUrl: getEnvVar("MCP_URL") || defaultConfig.mcpUrl,
+  mcpLambdaUrl: getEnvVar("MCP_LAMBDA_URL") || defaultConfig.mcpLambdaUrl,
+  mcpAuthEnabled: getEnvVar("MCP_AUTH_ENABLED") === "false" 
+      ? false 
+      : (defaultConfig.mcpAuthEnabled ?? false),
+};
 
-  constructor() {
-    // Try to get from environment first, fallback to defaults
-    this.config = {
-      openaiApiKey: this.getEnvVar("OPENAI_API_KEY") || defaultConfig.openaiApiKey,
-      elevenLabsApiKey: this.getEnvVar("ELEVENLABS_API_KEY") || defaultConfig.elevenLabsApiKey,
-      elevenLabsAgentId: this.getEnvVar("ELEVENLABS_AGENT_ID") || defaultConfig.elevenLabsAgentId,
-      vectorStoreId: this.getEnvVar("VECTOR_STORE_ID") || defaultConfig.vectorStoreId,
-      // MCP configuration
-      mcpUrl: this.getEnvVar("MCP_URL") || defaultConfig.mcpUrl,
-      mcpLambdaUrl: this.getEnvVar("MCP_LAMBDA_URL") || defaultConfig.mcpLambdaUrl,
-      mcpAuthEnabled:
-        this.getEnvVar("MCP_AUTH_ENABLED") === "false"
-          ? false
-          : (defaultConfig.mcpAuthEnabled ?? false),
-    };
+function getEnvVar(key: string): string | undefined {
+  if (typeof process !== 'undefined' && process.env) {
+      if (process.env[`NEXT_PUBLIC_${key}`]) return process.env[`NEXT_PUBLIC_${key}`];
+      if (process.env[key]) return process.env[key];
   }
-
-  private getEnvVar(key: string): string | undefined {
-    // Check multiple possible environment variable formats
-    // Handle Next.js and Node.js environment variables
-    return (
-      process.env[`NEXT_PUBLIC_${key}`] ||
-      process.env[key] ||
-      (typeof window !== "undefined" && (window as any).__env?.[key])
-    );
+  if (typeof window !== "undefined" && (window as any).__env?.[key]) {
+      return (window as any).__env[key];
   }
+  return undefined;
+}
 
-  getOpenAIApiKey(): string {
-    return this.config.openaiApiKey;
-  }
-
-  getElevenLabsApiKey(): string {
-    return this.config.elevenLabsApiKey;
-  }
-
-  getElevenLabsAgentId(): string {
-    return this.config.elevenLabsAgentId;
-  }
-
-  getVectorStoreId(): string {
-    return this.config.vectorStoreId;
-  }
-
-  getMcpUrl(): string {
-    return this.config.mcpUrl || defaultConfig.mcpUrl || "http://localhost:3333";
-  }
-
-  getMcpLambdaUrl(): string {
-    return (
-      this.config.mcpLambdaUrl ||
-      defaultConfig.mcpLambdaUrl ||
-      "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws"
-    );
-  }
-
-  isMcpAuthEnabled(): boolean {
-    return this.config.mcpAuthEnabled ?? false;
-  }
-
-  // Update configuration at runtime if needed
-  updateConfig(updates: Partial<ApiConfig>): void {
-    this.config = { ...this.config, ...updates };
-  }
-
-  // Validate that all required keys are present
-  validateConfig(): { isValid: boolean; missingKeys: string[] } {
+export const apiKeysService = {
+  getOpenAIApiKey: () => config.openaiApiKey,
+  getElevenLabsApiKey: () => config.elevenLabsApiKey,
+  getElevenLabsAgentId: () => config.elevenLabsAgentId,
+  getVectorStoreId: () => config.vectorStoreId,
+  getMcpUrl: () => config.mcpUrl || defaultConfig.mcpUrl || "http://localhost:3333",
+  getMcpLambdaUrl: () => config.mcpLambdaUrl || defaultConfig.mcpLambdaUrl || "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws",
+  isMcpAuthEnabled: () => config.mcpAuthEnabled ?? false,
+  updateConfig: (updates: Partial<ApiConfig>) => {
+    Object.assign(config, updates);
+  },
+  validateConfig: () => {
     const missingKeys: string[] = [];
-
-    if (!this.config.openaiApiKey) missingKeys.push("OPENAI_API_KEY");
-    if (!this.config.elevenLabsApiKey) missingKeys.push("ELEVENLABS_API_KEY");
-    if (!this.config.elevenLabsAgentId) missingKeys.push("ELEVENLABS_AGENT_ID");
-
+    if (!config.openaiApiKey) missingKeys.push("OPENAI_API_KEY");
+    if (!config.elevenLabsApiKey) missingKeys.push("ELEVENLABS_API_KEY");
+    if (!config.elevenLabsAgentId) missingKeys.push("ELEVENLABS_AGENT_ID");
     return {
       isValid: missingKeys.length === 0,
       missingKeys,
     };
   }
-}
-
-// Singleton instance
-export const apiKeysService = new ApiKeysService();
+};
 
 // Export individual getters for convenience
 export const getOpenAIApiKey = () => apiKeysService.getOpenAIApiKey();

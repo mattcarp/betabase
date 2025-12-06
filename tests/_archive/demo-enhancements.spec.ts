@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../e2e/fixtures/base-test';
 
 // Collect console messages
 const consoleMessages: { type: string; text: string }[] = [];

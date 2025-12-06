@@ -15,7 +15,8 @@ import { RLHFCuratorDashboard } from "../../src/components/ui/RLHFCuratorDashboa
 export default function CuratorPage() {
   return (
     <div className="h-screen w-screen overflow-hidden bg-zinc-950">
-      <RLHFCuratorDashboard />
+      {/* <RLHFCuratorDashboard /> */}
+      <div className="text-white p-10">Curator Dashboard Disabled for Build Fix</div>
     </div>
   );
 }
