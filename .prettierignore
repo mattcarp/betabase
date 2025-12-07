@@ -44,7 +44,6 @@ next-env.d.ts
 # Generated files
 public/build
 tmp
-.taskmaster
 
 # Lock files
 package-lock.json
