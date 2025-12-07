@@ -343,80 +343,80 @@ export const UnifiedResultsDashboard: React.FC = () => {
 
       {/* Metrics Panel */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Card>
+        <Card className="bg-[#0a0a0a] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Layers className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium text-muted-foreground">Total Tests</span>
+                <Layers className="h-4 w-4 text-blue-400" />
+                <span className="text-sm font-light text-neutral-400">Total Tests</span>
               </div>
-              <span className="text-2xl font-bold">{metrics.combined.total}</span>
+              <span className="text-2xl font-light text-white">{metrics.combined.total}</span>
             </div>
-            <div className="mt-2 flex gap-2 text-xs text-muted-foreground">
-              <span className="text-blue-500">{metrics.manual.total} manual</span>
-              <span className="text-green-500">{metrics.automated.total} auto</span>
+            <div className="mt-2 flex gap-2 text-xs text-neutral-400">
+              <span className="text-blue-400">{metrics.manual.total} manual</span>
+              <span className="text-emerald-400">{metrics.automated.total} auto</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-[#0a0a0a] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <span className="text-sm font-medium text-muted-foreground">Passed</span>
+                <CheckCircle className="h-4 w-4 text-emerald-500" />
+                <span className="text-sm font-light text-neutral-400">Passed</span>
               </div>
-              <span className="text-2xl font-bold text-green-600">{metrics.combined.passed}</span>
+              <span className="text-2xl font-light text-emerald-500">{metrics.combined.passed}</span>
             </div>
-            <div className="mt-2 text-xs text-muted-foreground">
+            <div className="mt-2 text-xs text-neutral-400">
               {metrics.combined.coverage}% success rate
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-[#0a0a0a] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <XCircle className="h-4 w-4 text-red-500" />
-                <span className="text-sm font-medium text-muted-foreground">Failed</span>
+                <XCircle className="h-4 w-4 text-rose-500" />
+                <span className="text-sm font-light text-neutral-400">Failed</span>
               </div>
-              <span className="text-2xl font-bold text-red-600">{metrics.combined.failed}</span>
+              <span className="text-2xl font-light text-rose-500">{metrics.combined.failed}</span>
             </div>
-            <div className="mt-2 flex gap-2 text-xs text-muted-foreground">
-              <span className="text-blue-500">{metrics.manual.failed} manual</span>
-              <span className="text-green-500">{metrics.automated.failed} auto</span>
+            <div className="mt-2 flex gap-2 text-xs text-neutral-400">
+              <span className="text-blue-400">{metrics.manual.failed} manual</span>
+              <span className="text-emerald-400">{metrics.automated.failed} auto</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-[#0a0a0a] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Grid3x3 className="h-4 w-4 text-purple-500" />
-                <span className="text-sm font-medium text-muted-foreground">Areas Tested</span>
+                <Grid3x3 className="h-4 w-4 text-purple-400" />
+                <span className="text-sm font-light text-neutral-400">Areas Tested</span>
               </div>
-              <span className="text-2xl font-bold text-purple-600">
+              <span className="text-2xl font-light text-purple-400">
                 {metrics.combined.uniqueAreas}
               </span>
             </div>
-            <div className="mt-2 text-xs text-muted-foreground">UI/feature coverage</div>
+            <div className="mt-2 text-xs text-neutral-400">UI/feature coverage</div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-[#0a0a0a] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-slate-500" />
-                <span className="text-sm font-medium text-muted-foreground">Avg Duration</span>
+                <Clock className="h-4 w-4 text-neutral-400" />
+                <span className="text-sm font-light text-neutral-400">Avg Duration</span>
               </div>
-              <span className="text-2xl font-bold text-slate-600">
+              <span className="text-2xl font-light text-white">
                 {formatDuration((metrics.manual.avgDuration + metrics.automated.avgDuration) / 2)}
               </span>
             </div>
-            <div className="mt-2 text-xs text-muted-foreground">Per test execution</div>
+            <div className="mt-2 text-xs text-neutral-400">Per test execution</div>
           </CardContent>
         </Card>
       </div>
@@ -477,9 +477,9 @@ export const UnifiedResultsDashboard: React.FC = () => {
       <div className="grid grid-cols-12 gap-6 flex-1">
         {/* Timeline / Results List */}
         <div className={cn("col-span-12", showHeatmap ? "lg:col-span-7" : "lg:col-span-5")}>
-          <Card className="h-full">
+          <Card className="h-full bg-[#0a0a0a] border-white/10">
             <CardHeader>
-              <CardTitle className="text-base flex items-center justify-between">
+              <CardTitle className="text-base font-light flex items-center justify-between text-white">
                 <span>Test Timeline ({filteredResults.length} results)</span>
                 <Badge variant="outline">{viewMode === "combined" ? "Mixed View" : viewMode}</Badge>
               </CardTitle>
@@ -503,12 +503,12 @@ export const UnifiedResultsDashboard: React.FC = () => {
                       <Card
                         key={result.id}
                         className={cn(
-                          "cursor-pointer transition-all hover:shadow-md border-l-4",
+                          "cursor-pointer transition-all hover:shadow-md border-l-4 bg-[#141414] border-white/10",
                           result.type === "manual"
-                            ? "border-l-blue-500 hover:border-l-blue-600"
-                            : "border-l-green-500 hover:border-l-green-600",
-                          selectedResult?.id === result.id && "ring-2 ring-primary",
-                          result.status === "failed" && "bg-red-500/5"
+                            ? "border-l-blue-400 hover:border-l-blue-500"
+                            : "border-l-emerald-400 hover:border-l-emerald-500",
+                          selectedResult?.id === result.id && "ring-2 ring-blue-500",
+                          result.status === "failed" && "bg-rose-500/5"
                         )}
                         onClick={() => setSelectedResult(result)}
                       >
@@ -574,9 +574,9 @@ export const UnifiedResultsDashboard: React.FC = () => {
         {/* Coverage Heatmap (conditional) */}
         {showHeatmap && (
           <div className="col-span-12 lg:col-span-5">
-            <Card className="h-full">
+            <Card className="h-full bg-[#0a0a0a] border-white/10">
               <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
+                <CardTitle className="text-base font-light flex items-center gap-2 text-white">
                   <Grid3x3 className="h-4 w-4" />
                   Coverage Heatmap
                 </CardTitle>
@@ -626,15 +626,15 @@ export const UnifiedResultsDashboard: React.FC = () => {
         {/* Result Details */}
         <div className={cn("col-span-12", showHeatmap ? "hidden" : "lg:col-span-7")}>
           {selectedResult ? (
-            <Card className="h-full">
+            <Card className="h-full bg-[#0a0a0a] border-white/10">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg flex items-center gap-2">
+                    <CardTitle className="text-lg font-light flex items-center gap-2 text-white">
                       {getTypeIcon(selectedResult.type)}
                       {selectedResult.name}
                     </CardTitle>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-sm text-neutral-400 mt-1">
                       {selectedResult.area} • {selectedResult.timestamp.toLocaleString()}
                       {selectedResult.tester && ` • by ${selectedResult.tester}`}
                     </p>
@@ -665,24 +665,24 @@ export const UnifiedResultsDashboard: React.FC = () => {
 
                   <TabsContent value="details" className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
-                      <Card>
+                      <Card className="bg-[#141414] border-white/10">
                         <CardContent className="p-4">
-                          <h4 className="text-sm font-medium text-muted-foreground mb-2">Type</h4>
+                          <h4 className="text-sm font-light text-neutral-400 mb-2">Type</h4>
                           <div className="flex items-center gap-2">
                             {getTypeIcon(selectedResult.type)}
-                            <span className="font-medium capitalize">{selectedResult.type}</span>
+                            <span className="font-light capitalize text-white">{selectedResult.type}</span>
                           </div>
                         </CardContent>
                       </Card>
 
-                      <Card>
+                      <Card className="bg-[#141414] border-white/10">
                         <CardContent className="p-4">
-                          <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                          <h4 className="text-sm font-light text-neutral-400 mb-2">
                             Duration
                           </h4>
                           <div className="flex items-center gap-2">
-                            <Clock className="h-4 w-4" />
-                            <span className="font-medium">
+                            <Clock className="h-4 w-4 text-neutral-400" />
+                            <span className="font-light text-white">
                               {formatDuration(selectedResult.duration)}
                             </span>
                           </div>
@@ -691,14 +691,14 @@ export const UnifiedResultsDashboard: React.FC = () => {
                     </div>
 
                     {selectedResult.error && (
-                      <Card className="bg-red-500/10 border-red-500/20">
+                      <Card className="bg-rose-500/10 border-rose-500/20">
                         <CardContent className="p-4">
-                          <h4 className="font-medium text-red-500 mb-2">Error Message</h4>
-                          <p className="text-sm font-mono">{selectedResult.error.message}</p>
+                          <h4 className="font-light text-rose-400 mb-2">Error Message</h4>
+                          <p className="text-sm font-mono text-white">{selectedResult.error.message}</p>
                           {selectedResult.error.stack && (
                             <>
-                              <h4 className="font-medium text-red-500 mt-4 mb-2">Stack Trace</h4>
-                              <pre className="text-xs font-mono bg-muted p-3 rounded overflow-x-auto">
+                              <h4 className="font-light text-rose-400 mt-4 mb-2">Stack Trace</h4>
+                              <pre className="text-xs font-mono bg-[#141414] p-3 rounded overflow-x-auto text-neutral-300">
                                 {selectedResult.error.stack}
                               </pre>
                             </>
@@ -708,13 +708,13 @@ export const UnifiedResultsDashboard: React.FC = () => {
                     )}
 
                     {selectedResult.findings && selectedResult.findings.length > 0 && (
-                      <Card>
+                      <Card className="bg-[#141414] border-white/10">
                         <CardContent className="p-4">
-                          <h4 className="font-medium mb-3">Manual Test Findings</h4>
+                          <h4 className="font-light mb-3 text-white">Manual Test Findings</h4>
                           <ul className="space-y-2">
                             {selectedResult.findings.map((finding, index) => (
-                              <li key={index} className="flex items-start gap-2 text-sm">
-                                <Eye className="h-4 w-4 mt-0.5 text-blue-500 flex-shrink-0" />
+                              <li key={index} className="flex items-start gap-2 text-sm text-neutral-300">
+                                <Eye className="h-4 w-4 mt-0.5 text-blue-400 flex-shrink-0" />
                                 <span>{finding}</span>
                               </li>
                             ))}
@@ -725,19 +725,19 @@ export const UnifiedResultsDashboard: React.FC = () => {
                   </TabsContent>
 
                   <TabsContent value="coverage" className="space-y-4">
-                    <Card>
+                    <Card className="bg-[#141414] border-white/10">
                       <CardContent className="p-4">
-                        <h4 className="font-medium mb-3">Areas Covered</h4>
+                        <h4 className="font-light mb-3 text-white">Areas Covered</h4>
                         {selectedResult.coverage && selectedResult.coverage.length > 0 ? (
                           <div className="flex flex-wrap gap-2">
                             {selectedResult.coverage.map((area, index) => (
-                              <Badge key={index} variant="secondary">
+                              <Badge key={index} variant="secondary" className="bg-blue-500/10 text-blue-400 border-blue-500/20">
                                 {area}
                               </Badge>
                             ))}
                           </div>
                         ) : (
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-sm text-neutral-400">
                             No specific coverage areas recorded
                           </p>
                         )}
@@ -749,18 +749,18 @@ export const UnifiedResultsDashboard: React.FC = () => {
                     {selectedResult.screenshots && selectedResult.screenshots.length > 0 ? (
                       <div className="grid grid-cols-2 gap-4">
                         {selectedResult.screenshots.map((screenshot, index) => (
-                          <Card key={index}>
+                          <Card key={index} className="bg-[#141414] border-white/10">
                             <CardContent className="p-4">
-                              <div className="aspect-video bg-muted rounded flex items-center justify-center">
-                                <Eye className="h-8 w-8 text-muted-foreground" />
+                              <div className="aspect-video bg-[#0a0a0a] rounded flex items-center justify-center">
+                                <Eye className="h-8 w-8 text-neutral-500" />
                               </div>
-                              <p className="text-sm mt-2 truncate">{screenshot}</p>
+                              <p className="text-sm mt-2 truncate text-neutral-300">{screenshot}</p>
                             </CardContent>
                           </Card>
                         ))}
                       </div>
                     ) : (
-                      <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+                      <div className="flex items-center justify-center h-[300px] text-neutral-400">
                         No media attachments
                       </div>
                     )}
@@ -769,8 +769,8 @@ export const UnifiedResultsDashboard: React.FC = () => {
               </CardContent>
             </Card>
           ) : (
-            <Card className="h-full">
-              <CardContent className="flex items-center justify-center h-full text-muted-foreground">
+            <Card className="h-full bg-[#0a0a0a] border-white/10">
+              <CardContent className="flex items-center justify-center h-full text-neutral-400">
                 Select a test result to view details
               </CardContent>
             </Card>

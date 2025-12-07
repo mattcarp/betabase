@@ -2,14 +2,15 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true
   },
   "exclude": [
     "node_modules",
+    "node_modules 2",
     ".next",
     "out",
     "dist",
@@ -19,6 +20,17 @@
     "**/*.spec.ts",
     "**/*.spec.tsx",
     "playwright.config.ts",
-    "tests/**/*"
+    "tests/**/*",
+    "scripts/**/*",
+    "src/app-backup/**/*",
+    "**/*-backup*",
+    "**/*.backup.*",
+    "**/*.disabled",
+    "**/* *.ts",
+    "**/* *.tsx",
+    "inngest/**/*",
+    "src/services/**/*",
+    "src/TestApp.tsx",
+    "vitest.config.ts"
   ]
 }

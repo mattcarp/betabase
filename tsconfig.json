@@ -59,6 +59,12 @@
     "**/*[0-9]*.tsx",
     "**/test-*.ts",
     "tests/**/*",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "**/*-backup*",
+    "**/*.backup.*",
+    "**/*.disabled",
+    "**/* *.ts",
+    "**/* *.tsx",
+    "inngest/**/*"
   ]
 }

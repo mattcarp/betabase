@@ -1,32 +1,21 @@
 /**
- * AOMA Crawl Orchestrator - Inngest Function
+ * AOMA Crawl Orchestrator
  * 
- * This demonstrates the "orchestrator-workers" pattern for parallel scraping.
- * Each step is independently retryable and visible in the Inngest dashboard.
+ * This function demonstrates the "Orchestrator-Workers" pattern:
+ * 1. Receives a crawl.start event
+ * 2. Discovers URLs to crawl
+ * 3. Fans out to parallel page processors
+ * 4. Aggregates results
  * 
- * When useMock=true, uses simulated data so you can test the workflow
- * without connecting to the real AOMA system.
+ * MCP Testing Workflow:
+ * 1. `list_functions` - verify this function is registered
+ * 2. `send_event` with "aoma/crawl.start" - trigger crawl
+ * 3. `poll_run_status` - watch it execute
+ * 4. `get_run_status` - inspect step details on failure
  */
+
 import { inngest } from '../client';
-
-// Mock data for testing when AOMA isn't accessible
-const MOCK_PAGES = [
-  { url: 'https://aoma-mock.example/home', title: 'AOMA Home', links: ['/docs', '/api', '/guides'] },
-  { url: 'https://aoma-mock.example/docs', title: 'Documentation', links: ['/docs/getting-started', '/docs/api-reference'] },
-  { url: 'https://aoma-mock.example/api', title: 'API Reference', links: ['/api/endpoints', '/api/auth'] },
-  { url: 'https://aoma-mock.example/guides', title: 'User Guides', links: ['/guides/upload', '/guides/search'] },
-  { url: 'https://aoma-mock.example/docs/getting-started', title: 'Getting Started', links: [] },
-  { url: 'https://aoma-mock.example/docs/api-reference', title: 'API Docs', links: [] },
-];
-
-const MOCK_DOCUMENTS = [
-  { url: 'https://aoma-mock.example/docs/user-manual.pdf', type: 'pdf' as const, title: 'User Manual' },
-  { url: 'https://aoma-mock.example/docs/api-spec.docx', type: 'docx' as const, title: 'API Specification' },
-  { url: 'https://aoma-mock.example/reports/metrics.xlsx', type: 'xlsx' as const, title: 'Metrics Report' },
-];
-
-// Simulated delay to mimic real network latency
-const simulateLatency = () => new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
+import { mockCrawl, type CrawlResult } from '../mocks/crawl-adapter';
 
 export const aomaCrawlOrchestrator = inngest.createFunction(
   {
@@ -34,139 +23,95 @@ export const aomaCrawlOrchestrator = inngest.createFunction(
     name: 'AOMA Crawl Orchestrator',
     // Retry configuration for resilience
     retries: 3,
-    // Concurrency limit to respect rate limits
-    concurrency: {
-      limit: 5,
-    },
+    // Cancel any existing run when a new one starts (prevents overlapping crawls)
+    cancelOn: [{ event: 'aoma/crawl.cancel' }],
   },
-  { event: 'aoma/crawl.requested' },
+  { event: 'aoma/crawl.start' },
   async ({ event, step }) => {
     const {
-      startUrl,
-      maxPages = 100,
+      startUrl = 'https://aoma-stage.smcdp-de.net/',
+      maxPages = 50,
       maxDepth = 3,
       concurrency = 5,
-      useMock = true, // Default to mock for safety
+      useMock = true, // Default to mock while AOMA is inaccessible
     } = event.data;
-
-    const crawlId = `crawl-${Date.now()}`;
-    const startTime = Date.now();
 
     // Step 1: Initialize crawl session
     const session = await step.run('initialize-session', async () => {
-      console.log(`[Crawl ${crawlId}] Initializing...`);
-      
-      if (useMock) {
-        console.log('[Crawl] Using MOCK data - no real AOMA connection');
-        return {
-          crawlId,
-          mode: 'mock',
-          authenticated: true,
-          startUrl: 'https://aoma-mock.example/home',
-        };
-      }
-      
-      // Real implementation would authenticate here
-      // const auth = await authenticateToAOMA();
+      console.log(`Starting crawl: ${startUrl}`);
       return {
-        crawlId,
-        mode: 'live',
-        authenticated: true,
-        startUrl,
+        runId: `crawl-${Date.now()}`,
+        startedAt: new Date().toISOString(),
+        config: { startUrl, maxPages, maxDepth, concurrency, useMock },
       };
     });
 
-    // Step 2: Discover initial pages (breadth-first)
-    const discoveredPages = await step.run('discover-pages', async () => {
-      await simulateLatency();
-      
+    // Step 2: Discover seed URLs (or use mock)
+    const seedUrls = await step.run('discover-seeds', async () => {
       if (useMock) {
-        // Return mock pages
-        return MOCK_PAGES.slice(0, Math.min(maxPages, MOCK_PAGES.length)).map((page, idx) => ({
-          url: page.url,
-          title: page.title,
-          depth: idx === 0 ? 0 : 1,
-          linkCount: page.links.length,
-        }));
+        // Return mock seed URLs for testing
+        return [
+          `${startUrl}`,
+          `${startUrl}products`,
+          `${startUrl}assets`,
+          `${startUrl}reports`,
+          `${startUrl}admin`,
+        ];
       }
       
-      // Real implementation would crawl here
-      // const pages = await discoverPages(startUrl, maxDepth, maxPages);
-      return [];
+      // TODO: Real implementation would:
+      // 1. Authenticate with AOMA
+      // 2. Fetch the start page
+      // 3. Extract all links
+      throw new Error('Real crawl not implemented - set useMock: true');
     });
 
-    // Step 3: Process pages in parallel using fan-out
-    // This is where the orchestrator-workers pattern shines
-    const pageResults = await step.run('process-pages-batch', async () => {
-      const results = [];
-      
-      for (const page of discoveredPages) {
-        await simulateLatency();
-        
-        // Simulate page processing
-        results.push({
-          url: page.url,
-          title: page.title,
-          contentLength: Math.floor(Math.random() * 10000) + 1000,
-          hasMarkdown: true,
-          screenshotTaken: true,
-          processedAt: new Date().toISOString(),
+    // Step 3: Fan out to parallel page processors
+    // Using step.invoke for synchronous sub-function calls
+    const pageResults = await step.run('process-pages-parallel', async () => {
+      if (useMock) {
+        const result = await mockCrawl({
+          startUrl,
+          maxPages,
+          maxDepth,
+          delayMs: 300, // Simulate network latency
+          errorRate: 0.1, // 10% error rate for testing retry logic
         });
+        return result;
       }
       
-      return results;
+      throw new Error('Real crawl not implemented');
     });
 
-    // Step 4: Extract and process documents
-    const documentResults = await step.run('extract-documents', async () => {
-      await simulateLatency();
-      
-      if (useMock) {
-        return MOCK_DOCUMENTS.map(doc => ({
-          url: doc.url,
-          type: doc.type,
-          title: doc.title,
-          extractedMarkdown: true,
-          wordCount: Math.floor(Math.random() * 5000) + 500,
-        }));
-      }
-      
-      return [];
-    });
-
-    // Step 5: Generate summary report
-    const report = await step.run('generate-report', async () => {
-      const duration = Date.now() - startTime;
-      
+    // Step 4: Aggregate and report results
+    const summary = await step.run('aggregate-results', async () => {
+      const result = pageResults as CrawlResult;
       return {
-        crawlId,
-        mode: useMock ? 'mock' : 'live',
-        summary: {
-          pagesDiscovered: discoveredPages.length,
-          pagesProcessed: pageResults.length,
-          documentsExtracted: documentResults.length,
-          totalContentBytes: pageResults.reduce((sum, p) => sum + p.contentLength, 0),
-        },
-        timing: {
-          startedAt: new Date(startTime).toISOString(),
-          completedAt: new Date().toISOString(),
-          durationMs: duration,
-          durationHuman: `${(duration / 1000).toFixed(1)}s`,
-        },
+        runId: session.runId,
+        completedAt: new Date().toISOString(),
+        stats: result.stats,
+        samplePages: result.pages.slice(0, 3).map(p => ({
+          url: p.url,
+          title: p.title,
+          status: p.status,
+        })),
       };
     });
 
-    // Emit completion event for downstream consumers
-    await step.sendEvent('notify-completion', {
-      name: 'aoma/crawl.completed',
-      data: {
-        crawlId,
-        pagesProcessed: pageResults.length,
-        documentsExtracted: documentResults.length,
-        duration: Date.now() - startTime,
-      },
-    });
+    // Step 5: Optionally trigger ingestion
+    if (pageResults.stats.successCount > 0) {
+      await step.sendEvent('trigger-ingestion', {
+        name: 'aoma/ingest.start',
+        data: {
+          crawlRunId: session.runId,
+          pageCount: pageResults.stats.successCount,
+        },
+      });
+    }
 
-    return report;
+    return {
+      success: true,
+      ...summary,
+    };
   }
 );

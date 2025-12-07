@@ -346,7 +346,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
   };
 
   return (
-    <div className={cn("flex h-full bg-background", className)}>
+    <div className={cn("flex h-full bg-[#0a0a0a]", className)}>
       {/* Session Timeline Sidebar */}
       <SessionTimeline
         interactions={sessionInteractions}
@@ -362,20 +362,17 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
       {/* Main Dashboard Content */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Header with Stats */}
-        <div className="border-b bg-background/50 p-6">
+        <div className="border-b border-white/10 bg-[#0a0a0a] p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
-              <div className="p-2 rounded-md bg-muted/50">
-                <Activity className="h-5 w-5 text-foreground" />
+              <div className="p-2 rounded-md bg-white/5">
+                <Activity className="h-5 w-5 text-blue-400" />
               </div>
               <div>
-                <h1
-                  className="mac-heading"
-                  className="mac-heading text-2xl font-normal tracking-tight text-foreground"
-                >
+                <h1 className="text-2xl font-light tracking-tight text-white">
                   Test Dashboard
                 </h1>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-neutral-400">
                   Unified testing and quality assurance platform
                 </p>
               </div>
