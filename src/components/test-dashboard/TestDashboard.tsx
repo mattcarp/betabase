@@ -525,15 +525,15 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                   {useRealTimeStreaming ? "📡 Streaming" : "🔄 Polling"}
                 </Button>
               </div>
-              <div className="bg-muted/50 rounded-lg p-4 max-h-24 overflow-y-auto">
+              <div className="bg-[#141414] rounded-lg p-4 max-h-24 overflow-y-auto border border-white/10">
                 {recentLogs.length > 0 ? (
                   recentLogs.map((log, index) => (
-                    <div key={index} className="text-xs text-muted-foreground font-mono">
+                    <div key={index} className="text-xs text-neutral-300 font-mono">
                       {log}
                     </div>
                   ))
                 ) : (
-                  <div className="text-xs text-muted-foreground italic">
+                  <div className="text-xs text-neutral-400 italic">
                     {isRunning ? "Waiting for test output..." : "No recent logs"}
                   </div>
                 )}
@@ -544,7 +544,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
         {/* Main Content Area */}
         <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col">
-          <TabsList className="flex w-full rounded-none border-b bg-muted/30 overflow-x-auto">
+          <TabsList className="flex w-full rounded-none border-b border-white/10 bg-[#0a0a0a] overflow-x-auto">
             <TabsTrigger value="home" className="gap-2">
               <Home className="h-4 w-4" />
               Home
