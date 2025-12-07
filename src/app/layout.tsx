@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
 import React from "react";
-import { CustomElementGuard } from "@/components/CustomElementGuard";
-import { ClientErrorBoundary } from "@/components/ClientErrorBoundary";
-import { ClientWebVitals } from "@/components/ClientWebVitals";
-import { ThemeProvider } from "@/contexts/ThemeContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,9 +9,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-theme="mac" suppressHydrationWarning>
       <head>
-        {/* Critical: Inline script to guard custom elements BEFORE any other scripts load */}
+        {/* Theme initialization - runs before React hydration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+(function() {
+  try {
+    var theme = localStorage.getItem('siam-theme-preference') || 'mac';
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (e) {}
+})();
+`,
+          }}
+        />
+        {/* Custom elements guard */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -24,15 +33,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     var originalDefine = window.customElements.define;
     window.customElements.define = function(name, constructor, options) {
       if (window.customElements.get(name)) {
-        console.info("Custom element '" + name + "' already defined, skipping re-registration");
         return;
       }
       try {
         originalDefine.call(window.customElements, name, constructor, options);
       } catch (e) {
-        if (e.name === 'NotSupportedError' || (e.message && e.message.includes('already been defined'))) {
-          console.info("Prevented duplicate registration of custom element '" + name + "'");
-        } else {
+        if (e.name !== 'NotSupportedError' && !(e.message && e.message.includes('already been defined'))) {
           throw e;
         }
       }
@@ -47,11 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="stylesheet" href="/styles/theme-transitions.css" />
       </head>
       <body suppressHydrationWarning>
-        {/* <CustomElementGuard /> */}
-        {/* <ClientWebVitals /> */}
-        <ThemeProvider defaultTheme="mac">
-          <ClientErrorBoundary>{children}</ClientErrorBoundary>
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );

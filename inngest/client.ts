@@ -1,18 +1,16 @@
 /**
  * Inngest Client Configuration
  *
- * This is the single source of truth for the Inngest client.
- * All functions import from here to ensure consistent configuration.
+ * DISABLED: Inngest integration is currently disabled.
+ * This stub prevents build errors while Inngest is not in use.
  */
 
-import { Inngest } from "inngest";
-
-// Create the Inngest client
-export const inngest = new Inngest({
+// Stub client that does nothing - Inngest is disabled
+export const inngest = {
   id: "mc-thebetabase",
-  // In dev mode, events are sent to the local dev server
-  // In production, set INNGEST_EVENT_KEY and INNGEST_SIGNING_KEY
-});
+  createFunction: () => ({ handler: () => {} }),
+  send: async () => ({ ids: [] }),
+} as unknown as { id: string; createFunction: () => unknown; send: () => Promise<{ ids: string[] }> };
 
 // Event type definitions for type safety
 export type AomaCrawlEvent = {

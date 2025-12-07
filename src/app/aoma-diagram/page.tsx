@@ -1,6 +1,15 @@
 "use client";
 
-import { AomaArchitectureDiagram } from "@/components/ai-elements/AomaArchitectureDiagram";
+import dynamic from "next/dynamic";
+
+// Dynamically import the diagram component to prevent SSR issues
+const AomaArchitectureDiagram = dynamic(
+  () =>
+    import("@/components/ai-elements/AomaArchitectureDiagram").then(
+      (mod) => mod.AomaArchitectureDiagram
+    ),
+  { ssr: false }
+);
 
 export default function AomaDiagramPreviewPage() {
   return (

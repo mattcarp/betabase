@@ -1,23 +1,19 @@
 /**
  * Inngest API Route
  *
- * This route serves your Inngest functions to the dev server.
- * The dev server will automatically discover this endpoint.
- *
- * Make sure your Next.js dev server is running on port 3000
- * and the Inngest dev server can reach it.
+ * DISABLED: Inngest integration is currently disabled.
+ * This stub route prevents build errors.
  */
-import { serve } from "inngest/next";
-import {
-  inngest,
-  echoFunction,
-  aomaCrawlOrchestrator,
-  pageScraperWorker,
-  documentProcessorWorker,
-} from "../../../../inngest";
+import { NextResponse } from "next/server";
 
-// Create and export the serve handler
-export const { GET, POST, PUT } = serve({
-  client: inngest,
-  functions: [echoFunction, aomaCrawlOrchestrator, pageScraperWorker, documentProcessorWorker],
-});
+export async function GET() {
+  return NextResponse.json({ status: "disabled", message: "Inngest integration is currently disabled" });
+}
+
+export async function POST() {
+  return NextResponse.json({ status: "disabled", message: "Inngest integration is currently disabled" });
+}
+
+export async function PUT() {
+  return NextResponse.json({ status: "disabled", message: "Inngest integration is currently disabled" });
+}

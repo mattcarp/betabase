@@ -15,7 +15,8 @@ try {
 }
 
 const nextConfig = {
-  // output: 'standalone', // Only needed for Docker deployments
+  // Use standalone output mode - changes how static pages are generated
+  output: 'standalone',
 
   // PERFORMANCE OPTIMIZATION: TypeScript type-check is run separately in CI/CD
   // Ignore during builds to speed up deployment
@@ -55,8 +56,10 @@ const nextConfig = {
   }),
 
   // PERFORMANCE OPTIMIZATION: Optimize package imports
+  // Enable dynamicIO to force dynamic rendering (fixes React 19 prerender issues)
   experimental: {
     optimizePackageImports: ["@radix-ui/react-icons", "recharts", "framer-motion"],
+    dynamicIO: true,
   },
 
   async headers() {
