@@ -300,7 +300,6 @@ export function ChatPanel({
                 />
               </PromptInputToolbar>
             </PromptInput>
-
           </div>
         </CardFooter>
       )}

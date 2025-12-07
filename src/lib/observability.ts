@@ -68,11 +68,3 @@ export async function logChatEvent(event: ChatLogEvent) {
     console.warn("[MAC Chat][Telemetry] Failed to send logtail event", error);
   }
 }
-
-
-
-
-
-
-
-

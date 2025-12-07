@@ -24,7 +24,7 @@ import {
   ChevronDown,
   ChevronRight,
   Sparkles,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -39,7 +39,7 @@ interface Model {
   provider: string;
   base_model: string;
   version: string;
-  status: 'testing' | 'staged' | 'deployed' | 'deprecated' | 'archived';
+  status: "testing" | "staged" | "deployed" | "deprecated" | "archived";
   performance_metrics: {
     accuracy?: number;
     latency_ms?: number;
@@ -98,7 +98,7 @@ export function ModelRegistryPanel() {
               accuracy: 94.2,
               latency_ms: 1150,
               quality_score: 4.3,
-              cost_per_1k: 0.15
+              cost_per_1k: 0.15,
             },
             created_at: new Date(Date.now() - 86400000 * 7).toISOString(),
             deployed_at: new Date(Date.now() - 86400000 * 5).toISOString(),
@@ -117,7 +117,7 @@ export function ModelRegistryPanel() {
               accuracy: 91.5,
               latency_ms: 1180,
               quality_score: 4.1,
-              cost_per_1k: 0.15
+              cost_per_1k: 0.15,
             },
             created_at: new Date(Date.now() - 86400000 * 30).toISOString(),
             deployed_at: new Date(Date.now() - 86400000 * 25).toISOString(),
@@ -136,7 +136,7 @@ export function ModelRegistryPanel() {
               accuracy: 87.3,
               latency_ms: 890,
               quality_score: 3.9,
-              cost_per_1k: 0.08
+              cost_per_1k: 0.08,
             },
             created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
             deployed_at: null,
@@ -155,7 +155,7 @@ export function ModelRegistryPanel() {
               accuracy: 96.1,
               latency_ms: 2100,
               quality_score: 4.7,
-              cost_per_1k: 2.50
+              cost_per_1k: 2.5,
             },
             created_at: new Date(Date.now() - 86400000).toISOString(),
             deployed_at: null,
@@ -174,16 +174,18 @@ export function ModelRegistryPanel() {
   const handleDeploy = async (model: Model) => {
     toast.loading(`Deploying ${model.display_name || model.name}...`);
     setTimeout(() => {
-      setModels(prev => prev.map(m => {
-        if (m.id === model.id) {
-          return { ...m, status: 'deployed' as const, deployed_at: new Date().toISOString() };
-        }
-        // Deprecate previous versions
-        if (m.name === model.name && m.id !== model.id && m.status === 'deployed') {
-          return { ...m, status: 'deprecated' as const };
-        }
-        return m;
-      }));
+      setModels((prev) =>
+        prev.map((m) => {
+          if (m.id === model.id) {
+            return { ...m, status: "deployed" as const, deployed_at: new Date().toISOString() };
+          }
+          // Deprecate previous versions
+          if (m.name === model.name && m.id !== model.id && m.status === "deployed") {
+            return { ...m, status: "deprecated" as const };
+          }
+          return m;
+        })
+      );
       toast.dismiss();
       toast.success(`${model.display_name || model.name} deployed successfully!`);
     }, 2000);
@@ -194,18 +196,20 @@ export function ModelRegistryPanel() {
     setTimeout(() => {
       // Find the previous version and deploy it
       const previousVersion = models.find(
-        m => m.name === model.name && m.version < model.version && m.status === 'deprecated'
+        (m) => m.name === model.name && m.version < model.version && m.status === "deprecated"
       );
       if (previousVersion) {
-        setModels(prev => prev.map(m => {
-          if (m.id === previousVersion.id) {
-            return { ...m, status: 'deployed' as const };
-          }
-          if (m.id === model.id) {
-            return { ...m, status: 'deprecated' as const };
-          }
-          return m;
-        }));
+        setModels((prev) =>
+          prev.map((m) => {
+            if (m.id === previousVersion.id) {
+              return { ...m, status: "deployed" as const };
+            }
+            if (m.id === model.id) {
+              return { ...m, status: "deprecated" as const };
+            }
+            return m;
+          })
+        );
         toast.dismiss();
         toast.success(`Rolled back to ${previousVersion.version}`);
       } else {
@@ -220,13 +224,16 @@ export function ModelRegistryPanel() {
   };
 
   // Group models by name
-  const groupedModels = models.reduce((acc, model) => {
-    if (!acc[model.name]) {
-      acc[model.name] = [];
-    }
-    acc[model.name].push(model);
-    return acc;
-  }, {} as Record<string, Model[]>);
+  const groupedModels = models.reduce(
+    (acc, model) => {
+      if (!acc[model.name]) {
+        acc[model.name] = [];
+      }
+      acc[model.name].push(model);
+      return acc;
+    },
+    {} as Record<string, Model[]>
+  );
 
   if (loading) {
     return (
@@ -278,7 +285,7 @@ export function ModelRegistryPanel() {
               <Rocket className="h-8 w-8 text-green-400" />
               <div>
                 <p className="text-2xl font-bold">
-                  {models.filter(m => m.status === 'deployed').length}
+                  {models.filter((m) => m.status === "deployed").length}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Deployed</p>
               </div>
@@ -291,7 +298,7 @@ export function ModelRegistryPanel() {
               <Beaker className="h-8 w-8 text-yellow-400" />
               <div>
                 <p className="text-2xl font-bold">
-                  {models.filter(m => m.status === 'testing' || m.status === 'staged').length}
+                  {models.filter((m) => m.status === "testing" || m.status === "staged").length}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">In Testing</p>
               </div>
@@ -304,21 +311,19 @@ export function ModelRegistryPanel() {
       <ScrollArea className="flex-1">
         <div className="space-y-4">
           {Object.entries(groupedModels).map(([name, versions]) => {
-            const latestDeployed = versions.find(v => v.status === 'deployed');
+            const latestDeployed = versions.find((v) => v.status === "deployed");
             const latest = versions[0];
             const isExpanded = expandedModel === name;
 
             return (
-              <motion.div
-                key={name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <Card className={cn(
-                  "mac-card-elevated",
-                  "border-[var(--mac-utility-border)]",
-                  latestDeployed && "border-green-500/30"
-                )}>
+              <motion.div key={name} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <Card
+                  className={cn(
+                    "mac-card-elevated",
+                    "border-[var(--mac-utility-border)]",
+                    latestDeployed && "border-green-500/30"
+                  )}
+                >
                   {/* Main Model Row */}
                   <CardContent className="py-4">
                     <div
@@ -326,14 +331,18 @@ export function ModelRegistryPanel() {
                       onClick={() => setExpandedModel(isExpanded ? null : name)}
                     >
                       <div className="flex items-center gap-4">
-                        <div className={cn(
-                          "h-12 w-12 rounded-lg flex items-center justify-center",
-                          latestDeployed ? "bg-green-500/10" : "bg-purple-500/10"
-                        )}>
-                          <Box className={cn(
-                            "h-6 w-6",
-                            latestDeployed ? "text-green-400" : "text-purple-400"
-                          )} />
+                        <div
+                          className={cn(
+                            "h-12 w-12 rounded-lg flex items-center justify-center",
+                            latestDeployed ? "bg-green-500/10" : "bg-purple-500/10"
+                          )}
+                        >
+                          <Box
+                            className={cn(
+                              "h-6 w-6",
+                              latestDeployed ? "text-green-400" : "text-purple-400"
+                            )}
+                          />
                         </div>
                         <div>
                           <h3 className="font-medium text-[var(--mac-text-primary)] flex items-center gap-2">
@@ -384,7 +393,7 @@ export function ModelRegistryPanel() {
 
                         {/* Version count */}
                         <Badge variant="outline" className="text-xs">
-                          {versions.length} version{versions.length > 1 ? 's' : ''}
+                          {versions.length} version{versions.length > 1 ? "s" : ""}
                         </Badge>
 
                         {/* Expand icon */}
@@ -416,7 +425,8 @@ export function ModelRegistryPanel() {
                                   "flex items-center justify-between p-3 rounded-lg",
                                   "bg-[var(--mac-surface-background)]/50",
                                   "border border-[var(--mac-utility-border)]",
-                                  version.status === 'deployed' && "border-green-500/30 bg-green-500/5"
+                                  version.status === "deployed" &&
+                                    "border-green-500/30 bg-green-500/5"
                                 )}
                               >
                                 <div className="flex items-center gap-4">
@@ -426,17 +436,19 @@ export function ModelRegistryPanel() {
                                   <span className="text-sm text-[var(--mac-text-muted)] font-mono">
                                     {version.model_id}
                                   </span>
-                                  <Badge className={cn(
-                                    "text-xs text-white",
-                                    STATUS_CONFIG[version.status].color
-                                  )}>
+                                  <Badge
+                                    className={cn(
+                                      "text-xs text-white",
+                                      STATUS_CONFIG[version.status].color
+                                    )}
+                                  >
                                     <StatusIcon className="h-3 w-3 mr-1" />
                                     {STATUS_CONFIG[version.status].label}
                                   </Badge>
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                  {version.status === 'testing' && (
+                                  {version.status === "testing" && (
                                     <Button
                                       size="sm"
                                       variant="outline"
@@ -446,16 +458,14 @@ export function ModelRegistryPanel() {
                                       A/B Test
                                     </Button>
                                   )}
-                                  {(version.status === 'testing' || version.status === 'staged') && (
-                                    <Button
-                                      size="sm"
-                                      onClick={() => handleDeploy(version)}
-                                    >
+                                  {(version.status === "testing" ||
+                                    version.status === "staged") && (
+                                    <Button size="sm" onClick={() => handleDeploy(version)}>
                                       <Rocket className="h-4 w-4 mr-1" />
                                       Deploy
                                     </Button>
                                   )}
-                                  {version.status === 'deployed' && (
+                                  {version.status === "deployed" && (
                                     <Button
                                       size="sm"
                                       variant="outline"
@@ -465,7 +475,7 @@ export function ModelRegistryPanel() {
                                       Rollback
                                     </Button>
                                   )}
-                                  {version.status === 'deprecated' && (
+                                  {version.status === "deprecated" && (
                                     <Button
                                       size="sm"
                                       variant="ghost"

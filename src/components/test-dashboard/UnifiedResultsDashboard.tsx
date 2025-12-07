@@ -315,12 +315,12 @@ export const UnifiedResultsDashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full space-y-6">
+    <div className="flex flex-col h-full space-y-6 bg-[#0a0a0a]">
       {/* Header with View Toggle */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Layers className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-normal">Unified Test Results</h2>
+          <Layers className="h-5 w-5 text-blue-400" />
+          <h2 className="text-xl font-light text-white">Unified Test Results</h2>
         </div>
 
         <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
@@ -366,7 +366,9 @@ export const UnifiedResultsDashboard: React.FC = () => {
                 <CheckCircle className="h-4 w-4 text-emerald-500" />
                 <span className="text-sm font-light text-neutral-400">Passed</span>
               </div>
-              <span className="text-2xl font-light text-emerald-500">{metrics.combined.passed}</span>
+              <span className="text-2xl font-light text-emerald-500">
+                {metrics.combined.passed}
+              </span>
             </div>
             <div className="mt-2 text-xs text-neutral-400">
               {metrics.combined.coverage}% success rate
@@ -670,16 +672,16 @@ export const UnifiedResultsDashboard: React.FC = () => {
                           <h4 className="text-sm font-light text-neutral-400 mb-2">Type</h4>
                           <div className="flex items-center gap-2">
                             {getTypeIcon(selectedResult.type)}
-                            <span className="font-light capitalize text-white">{selectedResult.type}</span>
+                            <span className="font-light capitalize text-white">
+                              {selectedResult.type}
+                            </span>
                           </div>
                         </CardContent>
                       </Card>
 
                       <Card className="bg-[#141414] border-white/10">
                         <CardContent className="p-4">
-                          <h4 className="text-sm font-light text-neutral-400 mb-2">
-                            Duration
-                          </h4>
+                          <h4 className="text-sm font-light text-neutral-400 mb-2">Duration</h4>
                           <div className="flex items-center gap-2">
                             <Clock className="h-4 w-4 text-neutral-400" />
                             <span className="font-light text-white">
@@ -694,7 +696,9 @@ export const UnifiedResultsDashboard: React.FC = () => {
                       <Card className="bg-rose-500/10 border-rose-500/20">
                         <CardContent className="p-4">
                           <h4 className="font-light text-rose-400 mb-2">Error Message</h4>
-                          <p className="text-sm font-mono text-white">{selectedResult.error.message}</p>
+                          <p className="text-sm font-mono text-white">
+                            {selectedResult.error.message}
+                          </p>
                           {selectedResult.error.stack && (
                             <>
                               <h4 className="font-light text-rose-400 mt-4 mb-2">Stack Trace</h4>
@@ -713,7 +717,10 @@ export const UnifiedResultsDashboard: React.FC = () => {
                           <h4 className="font-light mb-3 text-white">Manual Test Findings</h4>
                           <ul className="space-y-2">
                             {selectedResult.findings.map((finding, index) => (
-                              <li key={index} className="flex items-start gap-2 text-sm text-neutral-300">
+                              <li
+                                key={index}
+                                className="flex items-start gap-2 text-sm text-neutral-300"
+                              >
                                 <Eye className="h-4 w-4 mt-0.5 text-blue-400 flex-shrink-0" />
                                 <span>{finding}</span>
                               </li>
@@ -731,7 +738,11 @@ export const UnifiedResultsDashboard: React.FC = () => {
                         {selectedResult.coverage && selectedResult.coverage.length > 0 ? (
                           <div className="flex flex-wrap gap-2">
                             {selectedResult.coverage.map((area, index) => (
-                              <Badge key={index} variant="secondary" className="bg-blue-500/10 text-blue-400 border-blue-500/20">
+                              <Badge
+                                key={index}
+                                variant="secondary"
+                                className="bg-blue-500/10 text-blue-400 border-blue-500/20"
+                              >
                                 {area}
                               </Badge>
                             ))}

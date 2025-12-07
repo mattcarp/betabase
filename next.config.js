@@ -34,12 +34,12 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'localhost',
+        protocol: "http",
+        hostname: "localhost",
       },
       {
-        protocol: 'https',
-        hostname: 'siam.onrender.com',
+        protocol: "https",
+        hostname: "siam.onrender.com",
       },
     ],
     formats: ["image/avif", "image/webp"],

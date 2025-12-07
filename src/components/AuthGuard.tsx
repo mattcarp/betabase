@@ -22,15 +22,17 @@ export function AuthGuard({ children }: AuthGuardProps) {
       if (isAuthenticated) return;
 
       // IMMEDIATE BYPASS for localhost or explicit bypass
-      const hostname = typeof window !== 'undefined' ? window.location.hostname : 'undefined';
+      const hostname = typeof window !== "undefined" ? window.location.hostname : "undefined";
       const bypassEnv = process.env.NEXT_PUBLIC_BYPASS_AUTH;
       console.log(`[AuthGuard] Checking bypass. Hostname: ${hostname}, Env: ${bypassEnv}`);
 
       if (
-        (typeof window !== 'undefined' && (hostname === 'localhost' || hostname === '127.0.0.1')) ||
-        bypassEnv === 'true'
+        (typeof window !== "undefined" && (hostname === "localhost" || hostname === "127.0.0.1")) ||
+        bypassEnv === "true"
       ) {
-        console.log("[AuthGuard] Auth bypass detected (Localhost or Env Var) - bypassing auth immediately");
+        console.log(
+          "[AuthGuard] Auth bypass detected (Localhost or Env Var) - bypassing auth immediately"
+        );
         setIsAuthenticated(true);
         setIsLoading(false);
         return;
@@ -40,14 +42,14 @@ export function AuthGuard({ children }: AuthGuardProps) {
         // PRODUCTION: Strict authentication required
         console.log("[AuthGuard] Production mode - enforcing authentication");
         const isAuth = await cognitoAuth.isAuthenticated();
-        
+
         if (!isAuth) {
           // Not authenticated - redirect to login
           console.warn("[AuthGuard] Unauthorized access attempt, redirecting to login");
           router.push("/login");
           return;
         }
-        
+
         setIsAuthenticated(true);
       } catch (error) {
         console.error("[AuthGuard] Authentication check failed:", error);
@@ -84,4 +86,3 @@ export function AuthGuard({ children }: AuthGuardProps) {
 
   return <>{children}</>;
 }
-

@@ -4,7 +4,11 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import mermaid from "mermaid";
 import { cn } from "../../lib/utils";
 import { Loader2, ZoomIn, ZoomOut, Maximize, Download, Copy, Check, Wand2 } from "lucide-react";
-import { TransformWrapper, TransformComponent, ReactZoomPanPinchContentRef } from "react-zoom-pan-pinch";
+import {
+  TransformWrapper,
+  TransformComponent,
+  ReactZoomPanPinchContentRef,
+} from "react-zoom-pan-pinch";
 import { toPng } from "html-to-image";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
@@ -80,7 +84,7 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
 
     // Fix truncated hex colors (e.g., #005* -> #005588)
     // Common pattern: AI cuts off hex values mid-stream
-    sanitized = sanitized.replace(/#([0-9a-fA-F]{3})(\*|[\s;,\)])/g, '#$1$1$2');
+    sanitized = sanitized.replace(/#([0-9a-fA-F]{3})(\*|[\s;,\)])/g, "#$1$1$2");
     sanitized = sanitized.replace(/#([0-9a-fA-F]{1,5})\*/g, (match, hex) => {
       // Pad truncated hex to 6 characters
       const padded = hex.padEnd(6, hex.charAt(hex.length - 1));
@@ -89,21 +93,21 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
 
     // Fix unclosed double-circle parentheses (e.g., ((Success -> ((Success)))
     // The AI often forgets to close double-parens for circle nodes
-    sanitized = sanitized.replace(/\(\(([^)]+)\s*$/gm, '(($1))');
-    sanitized = sanitized.replace(/\(\(([^)]+)\*/g, '(($1))');
+    sanitized = sanitized.replace(/\(\(([^)]+)\s*$/gm, "(($1))");
+    sanitized = sanitized.replace(/\(\(([^)]+)\*/g, "(($1))");
     // Fix single-paren closures on double-paren opens
-    sanitized = sanitized.replace(/\(\(([^)]+)\)(?!\))/g, '(($1))');
+    sanitized = sanitized.replace(/\(\(([^)]+)\)(?!\))/g, "(($1))");
 
     // Fix incomplete node shapes
-    sanitized = sanitized.replace(/\[([^\]]+)\*/g, '[$1]');
-    sanitized = sanitized.replace(/\{([^}]+)\*/g, '{$1}');
+    sanitized = sanitized.replace(/\[([^\]]+)\*/g, "[$1]");
+    sanitized = sanitized.replace(/\{([^}]+)\*/g, "{$1}");
 
     // Remove trailing asterisks that shouldn't be there
-    sanitized = sanitized.replace(/\*\s*$/gm, '');
-    sanitized = sanitized.replace(/\*\s*;/g, ';');
+    sanitized = sanitized.replace(/\*\s*$/gm, "");
+    sanitized = sanitized.replace(/\*\s*;/g, ";");
 
     // Fix missing semicolons at end of style definitions
-    sanitized = sanitized.replace(/(stroke-width:\d+px)\s*\n/g, '$1;\n');
+    sanitized = sanitized.replace(/(stroke-width:\d+px)\s*\n/g, "$1;\n");
 
     // Quote node labels that contain special characters
     // Mermaid needs quotes around labels with spaces/special chars in certain contexts
@@ -169,7 +173,7 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
         document.body.appendChild(exportContainer);
 
         const dataUrl = await toPng(exportContainer, { quality: 1.0, pixelRatio: 2 });
-        
+
         document.body.removeChild(exportContainer);
 
         const link = document.createElement("a");
@@ -198,10 +202,13 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
 
   if (error) {
     return (
-      <div className={cn("my-4 p-4 border border-red-500/30 rounded-lg bg-red-500/10 text-red-400 text-sm font-mono", className)}>
-        <div className="mb-2 font-semibold flex items-center gap-2">
-          ⚠️ Diagram Error
-        </div>
+      <div
+        className={cn(
+          "my-4 p-4 border border-red-500/30 rounded-lg bg-red-500/10 text-red-400 text-sm font-mono",
+          className
+        )}
+      >
+        <div className="mb-2 font-semibold flex items-center gap-2">⚠️ Diagram Error</div>
         <div className="opacity-90">{error}</div>
         <pre className="mt-3 p-2 bg-black/20 rounded text-xs overflow-x-auto text-muted-foreground">
           {code}
@@ -272,14 +279,11 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
           size="icon"
           className="h-8 w-8 text-muted-foreground hover:text-white hover:bg-white/10"
           onClick={() => {
-            toast.promise(
-              new Promise((resolve) => setTimeout(resolve, 1500)),
-              {
-                loading: 'Refining diagram with AI...',
-                success: 'Diagram refined! (Demo)',
-                error: 'Failed to refine',
-              }
-            );
+            toast.promise(new Promise((resolve) => setTimeout(resolve, 1500)), {
+              loading: "Refining diagram with AI...",
+              success: "Diagram refined! (Demo)",
+              error: "Failed to refine",
+            });
           }}
           title="Refine with AI"
         >
@@ -295,7 +299,10 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
           </span>
         </div>
       ) : (
-        <div ref={containerRef} className="w-full h-full min-h-[300px] flex items-center justify-center bg-[#1e1e2e]/50">
+        <div
+          ref={containerRef}
+          className="w-full h-full min-h-[300px] flex items-center justify-center bg-[#1e1e2e]/50"
+        >
           <style jsx global>{`
             .mermaid-svg-container svg {
               max-width: 100% !important;
@@ -312,14 +319,14 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
               }
             }
             /* Glow effect for nodes */
-            .mermaid-svg-container .nodes rect, 
-            .mermaid-svg-container .nodes circle, 
+            .mermaid-svg-container .nodes rect,
+            .mermaid-svg-container .nodes circle,
             .mermaid-svg-container .nodes polygon {
               filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3));
               transition: all 0.3s ease;
             }
-            .mermaid-svg-container .nodes g:hover rect, 
-            .mermaid-svg-container .nodes g:hover circle, 
+            .mermaid-svg-container .nodes g:hover rect,
+            .mermaid-svg-container .nodes g:hover circle,
             .mermaid-svg-container .nodes g:hover polygon {
               filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.6));
               stroke-width: 3px !important;
@@ -338,9 +345,9 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
               wrapperClass="!w-full !h-full min-h-[300px] cursor-grab active:cursor-grabbing"
               contentClass="!w-full !h-full flex items-center justify-center"
             >
-              <div 
+              <div
                 className="mermaid-svg-container p-8"
-                dangerouslySetInnerHTML={{ __html: svg }} 
+                dangerouslySetInnerHTML={{ __html: svg }}
               />
             </TransformComponent>
           </TransformWrapper>

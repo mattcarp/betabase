@@ -263,7 +263,12 @@
 
 /* Enhanced Glass Morphism with Better Blur */
 .mac-glass {
-  background: rgba(17, 24, 39, 0.85); /* Fallback: more opaque for browsers without backdrop-filter */
+  background: rgba(
+    17,
+    24,
+    39,
+    0.85
+  ); /* Fallback: more opaque for browsers without backdrop-filter */
   -webkit-backdrop-filter: blur(24px); /* Safari support */
   backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -282,7 +287,11 @@
 
 /* Enhanced Button Hover Effects */
 .mac-button-primary:hover {
-  background: linear-gradient(135deg, var(--mac-accent-purple-400) 0%, var(--mac-primary-blue-600) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--mac-accent-purple-400) 0%,
+    var(--mac-primary-blue-600) 100%
+  );
   transform: translateY(-2px);
   box-shadow:
     0 8px 25px rgba(139, 92, 246, 0.4),

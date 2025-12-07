@@ -1,6 +1,6 @@
 /**
  * RLHF Feedback Tab Component
- * 
+ *
  * Beautiful, state-of-the-art feedback collection interface
  * Part of the Advanced RLHF RAG Implementation - Phase 5
  */
@@ -27,7 +27,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 interface RetrievedDoc {
   id: string;
@@ -64,7 +64,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
   const handleQuickFeedback = async (type: "thumbs_up" | "thumbs_down") => {
     setFeedbackType(type);
     setSubmitting(true);
-    
+
     try {
       await onSubmitFeedback({
         type,
@@ -81,10 +81,10 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
 
   const handleRatingFeedback = async () => {
     if (rating === 0) return;
-    
+
     setFeedbackType("rating");
     setSubmitting(true);
-    
+
     try {
       await onSubmitFeedback({
         type: "rating",
@@ -102,10 +102,10 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
 
   const handleDetailedFeedback = async () => {
     if (!correction.trim()) return;
-    
+
     setFeedbackType("detailed");
     setSubmitting(true);
-    
+
     try {
       await onSubmitFeedback({
         type: "correction",
@@ -123,7 +123,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
   };
 
   const toggleDocRelevance = (docId: string, relevant: boolean) => {
-    setDocRelevance(prev => ({
+    setDocRelevance((prev) => ({
       ...prev,
       [docId]: prev[docId] === relevant ? null : relevant,
     }));
@@ -152,20 +152,17 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                   </Badge>
                 )}
               </div>
-              <CardTitle className="text-base font-medium text-zinc-100">
-                {item.query}
-              </CardTitle>
+              <CardTitle className="text-base font-medium text-zinc-100">{item.query}</CardTitle>
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           {/* Response Preview */}
           <div className="relative">
-            <div className={cn(
-              "text-sm text-zinc-300 transition-all",
-              !expanded && "line-clamp-3"
-            )}>
+            <div
+              className={cn("text-sm text-zinc-300 transition-all", !expanded && "line-clamp-3")}
+            >
               {item.response}
             </div>
             <Button
@@ -202,7 +199,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                 <ThumbsDown className="h-3.5 w-3.5 mr-1" />
                 Not Helpful
               </Button>
-              
+
               {/* Star Rating */}
               <div className="flex items-center gap-1 ml-2">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -267,9 +264,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-zinc-400 line-clamp-2">
-                        {doc.content}
-                      </p>
+                      <p className="text-xs text-zinc-400 line-clamp-2">{doc.content}</p>
                     </div>
                     {!item.feedbackSubmitted && (
                       <div className="flex gap-1">
@@ -337,65 +332,65 @@ export function RLHFFeedbackTab() {
 
   const loadFeedbackQueue = async () => {
     setLoading(true);
-    
+
     try {
       // Load pending feedback (rating < 3 or thumbs_up is false/null)
       const { data, error } = await supabase
-        .from('rlhf_feedback')
-        .select('*')
-        .or('rating.lt.3,rating.is.null,thumbs_up.is.false,thumbs_up.is.null')
-        .order('created_at', { ascending: false })
+        .from("rlhf_feedback")
+        .select("*")
+        .or("rating.lt.3,rating.is.null,thumbs_up.is.false,thumbs_up.is.null")
+        .order("created_at", { ascending: false })
         .limit(50);
-      
+
       if (error) {
-        console.error('Failed to load feedback:', error);
-        toast.error('Failed to load feedback queue');
+        console.error("Failed to load feedback:", error);
+        toast.error("Failed to load feedback queue");
         setLoading(false);
         return;
       }
-      
+
       // Transform to FeedbackItem format
-      const items: FeedbackItem[] = (data || []).map(row => ({
+      const items: FeedbackItem[] = (data || []).map((row) => ({
         id: row.id,
         sessionId: row.conversation_id,
-        query: row.user_query || 'N/A',
-        response: row.ai_response || 'N/A',
+        query: row.user_query || "N/A",
+        response: row.ai_response || "N/A",
         retrievedDocs: row.documents_marked || [],
         timestamp: row.created_at,
-        feedbackSubmitted: row.rating !== null && row.rating >= 3
+        feedbackSubmitted: row.rating !== null && row.rating >= 3,
       }));
-      
+
       setFeedbackQueue(items);
-      
+
       // Update stats
       const { count: totalCount } = await supabase
-        .from('rlhf_feedback')
-        .select('*', { count: 'exact', head: true });
-      
+        .from("rlhf_feedback")
+        .select("*", { count: "exact", head: true });
+
       const { count: submittedCount } = await supabase
-        .from('rlhf_feedback')
-        .select('*', { count: 'exact', head: true })
-        .not('rating', 'is', null);
-      
+        .from("rlhf_feedback")
+        .select("*", { count: "exact", head: true })
+        .not("rating", "is", null);
+
       // Calculate average rating
       const { data: ratingData } = await supabase
-        .from('rlhf_feedback')
-        .select('rating')
-        .not('rating', 'is', null);
-      
-      const avgRating = ratingData && ratingData.length > 0
-        ? ratingData.reduce((sum, row) => sum + (row.rating || 0), 0) / ratingData.length
-        : 0;
-      
+        .from("rlhf_feedback")
+        .select("rating")
+        .not("rating", "is", null);
+
+      const avgRating =
+        ratingData && ratingData.length > 0
+          ? ratingData.reduce((sum, row) => sum + (row.rating || 0), 0) / ratingData.length
+          : 0;
+
       setStats({
         pending: (totalCount || 0) - (submittedCount || 0),
         submitted: submittedCount || 0,
-        avgRating: avgRating
+        avgRating: avgRating,
       });
-      
     } catch (error) {
-      console.error('Failed to load feedback:', error);
-      toast.error('Failed to load feedback queue');
+      console.error("Failed to load feedback:", error);
+      toast.error("Failed to load feedback queue");
     } finally {
       setLoading(false);
     }
@@ -403,45 +398,43 @@ export function RLHFFeedbackTab() {
 
   const handleSubmitFeedback = async (feedback: any) => {
     console.log("Submitting feedback:", feedback);
-    
+
     try {
       // Update feedback with curator corrections
       const { error } = await supabase
-        .from('rlhf_feedback')
+        .from("rlhf_feedback")
         .update({
-          rating: feedback.value?.score || (feedback.type === 'thumbs_up' ? 5 : 1),
-          thumbs_up: feedback.type === 'thumbs_up',
+          rating: feedback.value?.score || (feedback.type === "thumbs_up" ? 5 : 1),
+          thumbs_up: feedback.type === "thumbs_up",
           feedback_text: feedback.correction || null,
-          documents_marked: feedback.docRelevance ? 
-            Object.keys(feedback.docRelevance)
-              .filter(docId => feedback.docRelevance[docId])
-              .map(docId => ({ id: docId, relevant: true })) : 
-            null,
-          updated_at: new Date().toISOString()
+          documents_marked: feedback.docRelevance
+            ? Object.keys(feedback.docRelevance)
+                .filter((docId) => feedback.docRelevance[docId])
+                .map((docId) => ({ id: docId, relevant: true }))
+            : null,
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', feedback.itemId);
-      
+        .eq("id", feedback.itemId);
+
       if (error) {
-        console.error('Failed to save feedback:', error);
+        console.error("Failed to save feedback:", error);
         throw error;
       }
-      
+
       // Update local state
-      setFeedbackQueue(prev =>
-        prev.map(item =>
-          item.id === feedback.itemId
-            ? { ...item, feedbackSubmitted: true }
-            : item
+      setFeedbackQueue((prev) =>
+        prev.map((item) =>
+          item.id === feedback.itemId ? { ...item, feedbackSubmitted: true } : item
         )
       );
-      
+
       // Reload queue to update stats
       await loadFeedbackQueue();
-      
-      toast.success('Feedback saved successfully! 💜');
+
+      toast.success("Feedback saved successfully! 💜");
     } catch (error) {
-      console.error('Error saving feedback:', error);
-      toast.error('Failed to save feedback');
+      console.error("Error saving feedback:", error);
+      toast.error("Failed to save feedback");
       throw error;
     }
   };
@@ -489,12 +482,8 @@ export function RLHFFeedbackTab() {
               <p>No feedback items in queue</p>
             </div>
           ) : (
-            feedbackQueue.map(item => (
-              <FeedbackCard
-                key={item.id}
-                item={item}
-                onSubmitFeedback={handleSubmitFeedback}
-              />
+            feedbackQueue.map((item) => (
+              <FeedbackCard key={item.id} item={item} onSubmitFeedback={handleSubmitFeedback} />
             ))
           )}
         </AnimatePresence>
@@ -502,4 +491,3 @@ export function RLHFFeedbackTab() {
     </div>
   );
 }
-

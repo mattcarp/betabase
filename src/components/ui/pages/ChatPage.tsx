@@ -140,7 +140,9 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
   const getInitialMode = (): ComponentMode["mode"] => {
     if (typeof window === "undefined") return "chat";
     const hash = window.location.hash.slice(1);
-    return VALID_MODES.includes(hash as ComponentMode["mode"]) ? (hash as ComponentMode["mode"]) : "chat";
+    return VALID_MODES.includes(hash as ComponentMode["mode"])
+      ? (hash as ComponentMode["mode"])
+      : "chat";
   };
 
   const [activeMode, setActiveMode] = useState<ComponentMode["mode"]>(getInitialMode);
@@ -279,7 +281,11 @@ Be helpful, concise, and professional in your responses.`;
                     {activeMode === mode.mode && (
                       <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[var(--mac-primary-blue-400)] rounded-full" />
                     )}
-                    <span className={cn(activeMode === mode.mode && "text-[var(--mac-primary-blue-400)]")}>
+                    <span
+                      className={cn(
+                        activeMode === mode.mode && "text-[var(--mac-primary-blue-400)]"
+                      )}
+                    >
                       {mode.icon}
                     </span>
                     <span className="hidden lg:inline">{mode.label}</span>
@@ -305,7 +311,11 @@ Be helpful, concise, and professional in your responses.`;
                     {activeMode === mode.mode && (
                       <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-[var(--mac-primary-blue-400)] rounded-full" />
                     )}
-                    <span className={cn(activeMode === mode.mode && "text-[var(--mac-primary-blue-400)]")}>
+                    <span
+                      className={cn(
+                        activeMode === mode.mode && "text-[var(--mac-primary-blue-400)]"
+                      )}
+                    >
                       {mode.icon}
                     </span>
                   </button>
@@ -412,7 +422,7 @@ Be helpful, concise, and professional in your responses.`;
                         // The store expects a single message to add, but here we get the full list
                         // So we should probably update the conversation directly or handle the diff
                         // For now, let's just update the conversation in the store if we can
-                        // But the store only has addMessage. 
+                        // But the store only has addMessage.
                         // Let's check the store definition again.
                         // It has updateConversation but that takes Partial<Conversation>.
                         // So we can update messages directly.
@@ -438,10 +448,11 @@ Be helpful, concise, and professional in your responses.`;
                       Advanced Testing & Quality Assurance
                     </h2>
                     <p className="text-sm text-zinc-300 mt-1">
-                      Comprehensive testing suite with historical data, RLHF-generated tests, and live monitoring
+                      Comprehensive testing suite with historical data, RLHF-generated tests, and
+                      live monitoring
                     </p>
                   </div>
-                  
+
                   <Tabs defaultValue="dashboard" className="h-[calc(100%-80px)]">
                     <TabsList className="grid w-full grid-cols-5">
                       <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
@@ -450,23 +461,23 @@ Be helpful, concise, and professional in your responses.`;
                       <TabsTrigger value="impact">Impact Metrics</TabsTrigger>
                       <TabsTrigger value="monitor">Live Monitor</TabsTrigger>
                     </TabsList>
-                    
+
                     <TabsContent value="dashboard" className="h-full">
                       <TestDashboard className="h-full" />
                     </TabsContent>
-                    
+
                     {/* <TabsContent value="historical" className="h-full">
                       <HistoricalTestExplorer />
                     </TabsContent> */}
-                    
+
                     <TabsContent value="rlhf-tests" className="h-full">
                       <RLHFTestSuite />
                     </TabsContent>
-                    
+
                     <TabsContent value="impact" className="h-full">
                       <RLHFImpactDashboard />
                     </TabsContent>
-                    
+
                     <TabsContent value="monitor" className="h-full">
                       <LiveRAGMonitor />
                     </TabsContent>
@@ -485,7 +496,7 @@ Be helpful, concise, and professional in your responses.`;
                       Analyze responses, make corrections, and generate tests
                     </p>
                   </div>
-                  
+
                   <Tabs defaultValue="debugger" className="h-[calc(100%-80px)]">
                     <TabsList className="grid w-full grid-cols-4">
                       <TabsTrigger value="debugger">Response Debugger</TabsTrigger>
@@ -493,19 +504,19 @@ Be helpful, concise, and professional in your responses.`;
                       <TabsTrigger value="generator">Test Generator</TabsTrigger>
                       <TabsTrigger value="timeline">Feedback Timeline</TabsTrigger>
                     </TabsList>
-                    
+
                     <TabsContent value="debugger" className="h-full">
                       <ResponseDebugger />
                     </TabsContent>
-                    
+
                     <TabsContent value="quickfix" className="h-full">
                       <QuickFixPanel />
                     </TabsContent>
-                    
+
                     <TabsContent value="generator" className="h-full">
                       <TestCaseGenerator />
                     </TabsContent>
-                    
+
                     <TabsContent value="timeline" className="h-full">
                       <Card className="h-full bg-zinc-900/50 border-zinc-800">
                         <CardHeader>
@@ -525,9 +536,7 @@ Be helpful, concise, and professional in your responses.`;
               {activeMode === "curate" && (
                 <div className="h-full">
                   <div className="p-6 border-b border-zinc-800/50">
-                    <h2
-                      className="mac-heading text-lg font-normal text-zinc-100 flex items-center gap-2"
-                    >
+                    <h2 className="mac-heading text-lg font-normal text-zinc-100 flex items-center gap-2">
                       <Library className="h-5 w-5 text-zinc-300" />
                       Knowledge Curation
                     </h2>
@@ -551,7 +560,6 @@ Be helpful, concise, and professional in your responses.`;
               </RightSidebar>
             </aside>
           )}
-
         </div>
       </div>
     </SidebarProvider>

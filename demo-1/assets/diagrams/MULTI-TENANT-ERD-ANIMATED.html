@@ -1,394 +1,401 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SIAM Multi-Tenant Vector Store - Animated ERD</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            background: #0a0a0a;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #ffffff;
-            padding: 40px;
-            overflow-x: hidden;
-        }
+      body {
+        background: #0a0a0a;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #ffffff;
+        padding: 40px;
+        overflow-x: hidden;
+      }
 
-        .container {
-            max-width: 1800px;
-            margin: 0 auto;
-        }
+      .container {
+        max-width: 1800px;
+        margin: 0 auto;
+      }
 
-        h1 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+      h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
 
-        .subtitle {
-            text-align: center;
-            color: #888;
-            margin-bottom: 3rem;
-            font-size: 1.1rem;
-        }
+      .subtitle {
+        text-align: center;
+        color: #888;
+        margin-bottom: 3rem;
+        font-size: 1.1rem;
+      }
 
-        .diagram-container {
-            position: relative;
-            min-height: 500px;
-            padding: 100px 40px;
-        }
+      .diagram-container {
+        position: relative;
+        min-height: 500px;
+        padding: 100px 40px;
+      }
 
-        .tables-wrapper {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            position: relative;
-            z-index: 10;
-        }
+      .tables-wrapper {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: relative;
+        z-index: 10;
+      }
 
-        .table {
-            background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            min-width: 280px;
-            max-width: 320px;
-        }
+      .table {
+        background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+        min-width: 280px;
+        max-width: 320px;
+      }
 
-        .table:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 12px 48px rgba(102, 126, 234, 0.6);
-        }
+      .table:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 12px 48px rgba(102, 126, 234, 0.6);
+      }
 
-        .table-header {
-            font-size: 1.1rem;
-            font-weight: bold;
-            padding: 14px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
+      .table-header {
+        font-size: 1.1rem;
+        font-weight: bold;
+        padding: 14px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        text-align: center;
+      }
 
-        .org-header { background: #1a1a2e; }
-        .div-header { background: #16213e; }
-        .app-header { background: #0f3460; }
-        .vec-header { background: #e94560; }
+      .org-header {
+        background: #1a1a2e;
+      }
+      .div-header {
+        background: #16213e;
+      }
+      .app-header {
+        background: #0f3460;
+      }
+      .vec-header {
+        background: #e94560;
+      }
 
-        .field {
-            padding: 10px 14px;
-            background: rgba(255, 255, 255, 0.05);
-            margin: 8px 0;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            border-left: 3px solid rgba(102, 126, 234, 0.5);
-        }
+      .field {
+        padding: 10px 14px;
+        background: rgba(255, 255, 255, 0.05);
+        margin: 8px 0;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        border-left: 3px solid rgba(102, 126, 234, 0.5);
+      }
 
-        .field strong {
-            color: #667eea;
-            margin-right: 8px;
-        }
+      .field strong {
+        color: #667eea;
+        margin-right: 8px;
+      }
 
-        .pk {
-            color: #ffd700;
-            font-size: 0.8rem;
-            margin-left: 6px;
-            font-weight: bold;
-        }
+      .pk {
+        color: #ffd700;
+        font-size: 0.8rem;
+        margin-left: 6px;
+        font-weight: bold;
+      }
 
-        .fk {
-            color: #e94560;
-            font-size: 0.8rem;
-            margin-left: 6px;
-            font-weight: bold;
-        }
+      .fk {
+        color: #e94560;
+        font-size: 0.8rem;
+        margin-left: 6px;
+        font-weight: bold;
+      }
 
-        .emoji {
-            font-size: 1.4rem;
-            margin-right: 8px;
-        }
+      .emoji {
+        font-size: 1.4rem;
+        margin-right: 8px;
+      }
 
-        /* SVG Canvas */
-        #svg-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 5;
-        }
+      /* SVG Canvas */
+      #svg-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 5;
+      }
 
-        /* Subtle Animated Lines */
-        .erd-line {
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-        }
+      /* Subtle Animated Lines */
+      .erd-line {
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+      }
 
-        .primary-flow {
-            stroke: #667eea;
-            opacity: 0.6;
-            animation: subtlePulse 3s ease-in-out infinite;
-        }
+      .primary-flow {
+        stroke: #667eea;
+        opacity: 0.6;
+        animation: subtlePulse 3s ease-in-out infinite;
+      }
 
-        .secondary-flow {
-            stroke: #764ba2;
-            opacity: 0.6;
-            animation: subtlePulse 3s ease-in-out 1s infinite;
-        }
+      .secondary-flow {
+        stroke: #764ba2;
+        opacity: 0.6;
+        animation: subtlePulse 3s ease-in-out 1s infinite;
+      }
 
-        .tertiary-flow {
-            stroke: #e94560;
-            opacity: 0.6;
-            animation: subtlePulse 3s ease-in-out 2s infinite;
-        }
+      .tertiary-flow {
+        stroke: #e94560;
+        opacity: 0.6;
+        animation: subtlePulse 3s ease-in-out 2s infinite;
+      }
 
-        .reference-line {
-            stroke: #4facfe;
-            stroke-width: 1.5;
-            opacity: 0.25;
-            animation: subtleReference 4s ease-in-out infinite;
-        }
+      .reference-line {
+        stroke: #4facfe;
+        stroke-width: 1.5;
+        opacity: 0.25;
+        animation: subtleReference 4s ease-in-out infinite;
+      }
 
-        /* Subtle crow's foot animation */
-        .crows-foot {
-            opacity: 0.7;
-            animation: subtleCrowsFoot 3s ease-in-out infinite;
-        }
+      /* Subtle crow's foot animation */
+      .crows-foot {
+        opacity: 0.7;
+        animation: subtleCrowsFoot 3s ease-in-out infinite;
+      }
 
-        @keyframes subtlePulse {
-            0%, 100% {
-                stroke-width: 2;
-                opacity: 0.5;
-            }
-            50% {
-                stroke-width: 2.5;
-                opacity: 0.8;
-            }
+      @keyframes subtlePulse {
+        0%,
+        100% {
+          stroke-width: 2;
+          opacity: 0.5;
         }
+        50% {
+          stroke-width: 2.5;
+          opacity: 0.8;
+        }
+      }
 
-        @keyframes subtleReference {
-            0%, 100% {
-                stroke-width: 1.5;
-                opacity: 0.2;
-            }
-            50% {
-                stroke-width: 2;
-                opacity: 0.4;
-            }
+      @keyframes subtleReference {
+        0%,
+        100% {
+          stroke-width: 1.5;
+          opacity: 0.2;
         }
+        50% {
+          stroke-width: 2;
+          opacity: 0.4;
+        }
+      }
 
-        @keyframes subtleCrowsFoot {
-            0%, 100% {
-                opacity: 0.6;
-            }
-            50% {
-                opacity: 0.9;
-            }
+      @keyframes subtleCrowsFoot {
+        0%,
+        100% {
+          opacity: 0.6;
         }
+        50% {
+          opacity: 0.9;
+        }
+      }
 
-        .note {
-            text-align: center;
-            margin-top: 3rem;
-            padding: 20px;
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: 12px;
-            border: 1px solid rgba(102, 126, 234, 0.3);
-        }
+      .note {
+        text-align: center;
+        margin-top: 3rem;
+        padding: 20px;
+        background: rgba(102, 126, 234, 0.1);
+        border-radius: 12px;
+        border: 1px solid rgba(102, 126, 234, 0.3);
+      }
 
-        .note h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
+      .note h3 {
+        color: #667eea;
+        margin-bottom: 10px;
+      }
 
-        .features {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 15px;
-        }
+      .features {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: 15px;
+      }
 
-        .feature {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-        }
+      .feature {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 0.95rem;
+      }
 
-        .legend {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
-            font-size: 0.9rem;
-        }
+      .legend {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 20px;
+        font-size: 0.9rem;
+      }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-        .legend-line {
-            width: 40px;
-            height: 2px;
-            border-radius: 2px;
-        }
+      .legend-line {
+        width: 40px;
+        height: 2px;
+        border-radius: 2px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>🚀 SIAM Multi-Tenant Vector Store</h1>
-        <p class="subtitle">3-Tier Architecture • One-to-Many Relationships • Complete Tenant Isolation</p>
+      <h1>🚀 SIAM Multi-Tenant Vector Store</h1>
+      <p class="subtitle">
+        3-Tier Architecture • One-to-Many Relationships • Complete Tenant Isolation
+      </p>
 
-        <div class="diagram-container">
-            <svg id="svg-canvas"></svg>
-            
-            <div class="tables-wrapper">
-                <div class="table" id="table-org">
-                    <div class="table-header org-header">
-                        <span class="emoji">🏢</span>organization
-                    </div>
-                    <div class="field">
-                        <strong>name</strong><span class="pk">PK</span>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">"sony-music"</div>
-                    </div>
-                    <div class="field">
-                        <strong>description</strong>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">text</div>
-                    </div>
-                </div>
+      <div class="diagram-container">
+        <svg id="svg-canvas"></svg>
 
-                <div class="table" id="table-div">
-                    <div class="table-header div-header">
-                        <span class="emoji">📂</span>division
-                    </div>
-                    <div class="field">
-                        <strong>name</strong><span class="pk">PK</span>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">"pde"</div>
-                    </div>
-                    <div class="field">
-                        <strong>organization</strong><span class="fk">FK</span>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">→ organization</div>
-                    </div>
-                    <div class="field">
-                        <strong>description</strong>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">text</div>
-                    </div>
-                </div>
-
-                <div class="table" id="table-app">
-                    <div class="table-header app-header">
-                        <span class="emoji">🎯</span>app_under_test
-                    </div>
-                    <div class="field">
-                        <strong>name</strong><span class="pk">PK</span>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">"aoma"</div>
-                    </div>
-                    <div class="field">
-                        <strong>organization</strong><span class="fk">FK</span>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">→ organization</div>
-                    </div>
-                    <div class="field">
-                        <strong>division</strong><span class="fk">FK</span>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">→ division</div>
-                    </div>
-                    <div class="field">
-                        <strong>description</strong>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">text</div>
-                    </div>
-                </div>
-
-                <div class="table" id="table-vec">
-                    <div class="table-header vec-header">
-                        <span class="emoji">🧠</span>siam_vectors
-                    </div>
-                    <div class="field">
-                        <strong>id</strong><span class="pk">PK</span>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">uuid</div>
-                    </div>
-                    <div class="field">
-                        <strong>organization</strong><span class="fk">FK</span>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">→ organization</div>
-                    </div>
-                    <div class="field">
-                        <strong>division</strong><span class="fk">FK</span>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">→ division</div>
-                    </div>
-                    <div class="field">
-                        <strong>app_under_test</strong><span class="fk">FK</span>
-                        <div style="color: #888; font-size: 0.85rem; margin-top: 4px;">→ app_under_test</div>
-                    </div>
-                    <div class="field">
-                        <strong>content • embedding • metadata</strong>
-                    </div>
-                </div>
+        <div class="tables-wrapper">
+          <div class="table" id="table-org">
+            <div class="table-header org-header"><span class="emoji">🏢</span>organization</div>
+            <div class="field">
+              <strong>name</strong><span class="pk">PK</span>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">"sony-music"</div>
             </div>
+            <div class="field">
+              <strong>description</strong>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">text</div>
+            </div>
+          </div>
+
+          <div class="table" id="table-div">
+            <div class="table-header div-header"><span class="emoji">📂</span>division</div>
+            <div class="field">
+              <strong>name</strong><span class="pk">PK</span>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">"pde"</div>
+            </div>
+            <div class="field">
+              <strong>organization</strong><span class="fk">FK</span>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">→ organization</div>
+            </div>
+            <div class="field">
+              <strong>description</strong>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">text</div>
+            </div>
+          </div>
+
+          <div class="table" id="table-app">
+            <div class="table-header app-header"><span class="emoji">🎯</span>app_under_test</div>
+            <div class="field">
+              <strong>name</strong><span class="pk">PK</span>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">"aoma"</div>
+            </div>
+            <div class="field">
+              <strong>organization</strong><span class="fk">FK</span>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">→ organization</div>
+            </div>
+            <div class="field">
+              <strong>division</strong><span class="fk">FK</span>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">→ division</div>
+            </div>
+            <div class="field">
+              <strong>description</strong>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">text</div>
+            </div>
+          </div>
+
+          <div class="table" id="table-vec">
+            <div class="table-header vec-header"><span class="emoji">🧠</span>siam_vectors</div>
+            <div class="field">
+              <strong>id</strong><span class="pk">PK</span>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">uuid</div>
+            </div>
+            <div class="field">
+              <strong>organization</strong><span class="fk">FK</span>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">→ organization</div>
+            </div>
+            <div class="field">
+              <strong>division</strong><span class="fk">FK</span>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">→ division</div>
+            </div>
+            <div class="field">
+              <strong>app_under_test</strong><span class="fk">FK</span>
+              <div style="color: #888; font-size: 0.85rem; margin-top: 4px">→ app_under_test</div>
+            </div>
+            <div class="field">
+              <strong>content • embedding • metadata</strong>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-line" style="background: #667eea;"></div>
-                <span>One-to-Many (Primary Flow)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-line" style="background: #4facfe; opacity: 0.6;"></div>
-                <span>Foreign Key References</span>
-            </div>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-line" style="background: #667eea"></div>
+          <span>One-to-Many (Primary Flow)</span>
         </div>
+        <div class="legend-item">
+          <div class="legend-line" style="background: #4facfe; opacity: 0.6"></div>
+          <span>Foreign Key References</span>
+        </div>
+      </div>
 
-        <div class="note">
-            <h3>✨ Multi-Tenant Isolation Benefits</h3>
-            <div class="features">
-                <div class="feature">🚀 Sub-200ms semantic search with HNSW</div>
-                <div class="feature">🔒 Zero cross-contamination between apps</div>
-                <div class="feature">🤖 Dual embeddings (OpenAI + Gemini)</div>
-                <div class="feature">📊 Independent scaling per tenant</div>
-            </div>
+      <div class="note">
+        <h3>✨ Multi-Tenant Isolation Benefits</h3>
+        <div class="features">
+          <div class="feature">🚀 Sub-200ms semantic search with HNSW</div>
+          <div class="feature">🔒 Zero cross-contamination between apps</div>
+          <div class="feature">🤖 Dual embeddings (OpenAI + Gemini)</div>
+          <div class="feature">📊 Independent scaling per tenant</div>
         </div>
+      </div>
     </div>
 
     <script>
-        function drawERD() {
-            const svg = document.getElementById('svg-canvas');
-            const container = svg.parentElement;
-            
-            // Set SVG dimensions
-            const rect = container.getBoundingClientRect();
-            svg.setAttribute('width', rect.width);
-            svg.setAttribute('height', rect.height);
-            svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+      function drawERD() {
+        const svg = document.getElementById("svg-canvas");
+        const container = svg.parentElement;
 
-            // Get table positions
-            const tables = {
-                org: document.getElementById('table-org').getBoundingClientRect(),
-                div: document.getElementById('table-div').getBoundingClientRect(),
-                app: document.getElementById('table-app').getBoundingClientRect(),
-                vec: document.getElementById('table-vec').getBoundingClientRect()
-            };
+        // Set SVG dimensions
+        const rect = container.getBoundingClientRect();
+        svg.setAttribute("width", rect.width);
+        svg.setAttribute("height", rect.height);
+        svg.setAttribute("viewBox", `0 0 ${rect.width} ${rect.height}`);
 
-            const containerRect = container.getBoundingClientRect();
+        // Get table positions
+        const tables = {
+          org: document.getElementById("table-org").getBoundingClientRect(),
+          div: document.getElementById("table-div").getBoundingClientRect(),
+          app: document.getElementById("table-app").getBoundingClientRect(),
+          vec: document.getElementById("table-vec").getBoundingClientRect(),
+        };
 
-            // Helper to get connection points
-            function getPoints(from, to, offset = 0) {
-                const x1 = from.right - containerRect.left;
-                const y1 = from.top + from.height/2 - containerRect.top + offset;
-                const x2 = to.left - containerRect.left;
-                const y2 = to.top + to.height/2 - containerRect.top + offset;
-                return { x1, y1, x2, y2 };
-            }
+        const containerRect = container.getBoundingClientRect();
 
-            // Clear SVG
-            svg.innerHTML = `
+        // Helper to get connection points
+        function getPoints(from, to, offset = 0) {
+          const x1 = from.right - containerRect.left;
+          const y1 = from.top + from.height / 2 - containerRect.top + offset;
+          const x2 = to.left - containerRect.left;
+          const y2 = to.top + to.height / 2 - containerRect.top + offset;
+          return { x1, y1, x2, y2 };
+        }
+
+        // Clear SVG
+        svg.innerHTML = `
                 <defs>
                     <!-- Subtle crow's foot for "many" side -->
                     <marker id="crowsfoot-blue" markerWidth="16" markerHeight="16" refX="15" refY="8" orient="auto">
@@ -421,9 +428,9 @@
                 </defs>
             `;
 
-            // Draw main hierarchy: org → div → app → vec
-            const conn1 = getPoints(tables.org, tables.div);
-            svg.innerHTML += `
+        // Draw main hierarchy: org → div → app → vec
+        const conn1 = getPoints(tables.org, tables.div);
+        svg.innerHTML += `
                 <path d="M ${conn1.x1} ${conn1.y1} C ${conn1.x1 + 80} ${conn1.y1}, ${conn1.x2 - 80} ${conn1.y2}, ${conn1.x2} ${conn1.y2}"
                       class="erd-line primary-flow"
                       marker-start="url(#one-blue)"
@@ -431,8 +438,8 @@
                       stroke="#667eea"/>
             `;
 
-            const conn2 = getPoints(tables.div, tables.app);
-            svg.innerHTML += `
+        const conn2 = getPoints(tables.div, tables.app);
+        svg.innerHTML += `
                 <path d="M ${conn2.x1} ${conn2.y1} C ${conn2.x1 + 80} ${conn2.y1}, ${conn2.x2 - 80} ${conn2.y2}, ${conn2.x2} ${conn2.y2}"
                       class="erd-line secondary-flow"
                       marker-start="url(#one-purple)"
@@ -440,8 +447,8 @@
                       stroke="#764ba2"/>
             `;
 
-            const conn3 = getPoints(tables.app, tables.vec);
-            svg.innerHTML += `
+        const conn3 = getPoints(tables.app, tables.vec);
+        svg.innerHTML += `
                 <path d="M ${conn3.x1} ${conn3.y1} C ${conn3.x1 + 80} ${conn3.y1}, ${conn3.x2 - 80} ${conn3.y2}, ${conn3.x2} ${conn3.y2}"
                       class="erd-line tertiary-flow"
                       marker-start="url(#one-pink)"
@@ -449,40 +456,40 @@
                       stroke="#e94560"/>
             `;
 
-            // Additional FK references (curved, very subtle)
-            const conn4 = getPoints(tables.org, tables.app, -30);
-            svg.innerHTML += `
+        // Additional FK references (curved, very subtle)
+        const conn4 = getPoints(tables.org, tables.app, -30);
+        svg.innerHTML += `
                 <path d="M ${conn4.x1} ${conn4.y1} C ${conn4.x1 + 120} ${conn4.y1 - 50}, ${conn4.x2 - 120} ${conn4.y2 - 50}, ${conn4.x2} ${conn4.y2}"
                       class="erd-line reference-line"
                       marker-end="url(#crowsfoot-cyan)"
                       stroke="#4facfe"/>
             `;
 
-            const conn5 = getPoints(tables.org, tables.vec, -40);
-            svg.innerHTML += `
+        const conn5 = getPoints(tables.org, tables.vec, -40);
+        svg.innerHTML += `
                 <path d="M ${conn5.x1} ${conn5.y1} C ${conn5.x1 + 180} ${conn5.y1 - 80}, ${conn5.x2 - 180} ${conn5.y2 - 80}, ${conn5.x2} ${conn5.y2}"
                       class="erd-line reference-line"
                       marker-end="url(#crowsfoot-cyan)"
                       stroke="#4facfe"/>
             `;
 
-            const conn6 = getPoints(tables.div, tables.vec, 30);
-            svg.innerHTML += `
+        const conn6 = getPoints(tables.div, tables.vec, 30);
+        svg.innerHTML += `
                 <path d="M ${conn6.x1} ${conn6.y1} C ${conn6.x1 + 120} ${conn6.y1 + 50}, ${conn6.x2 - 120} ${conn6.y2 + 50}, ${conn6.x2} ${conn6.y2}"
                       class="erd-line reference-line"
                       marker-end="url(#crowsfoot-cyan)"
                       stroke="#4facfe"/>
             `;
-        }
+      }
 
-        // Draw on load and resize
-        window.addEventListener('load', () => {
-            setTimeout(drawERD, 100);
-        });
-        window.addEventListener('resize', drawERD);
-        
-        // Redraw periodically
-        setInterval(drawERD, 2000);
+      // Draw on load and resize
+      window.addEventListener("load", () => {
+        setTimeout(drawERD, 100);
+      });
+      window.addEventListener("resize", drawERD);
+
+      // Redraw periodically
+      setInterval(drawERD, 2000);
     </script>
-</body>
+  </body>
 </html>

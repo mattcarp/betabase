@@ -1,6 +1,6 @@
 /**
  * Permission Management Hook
- * 
+ *
  * Provides Role-Based Access Control (RBAC) for RLHF and curation features.
  * Integrates with Supabase user_roles and role_permissions tables.
  */
@@ -8,7 +8,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 
-export type Permission = 
+export type Permission =
   | "rlhf_feedback"
   | "rlhf_view_insights"
   | "rlhf_view_dashboard"
@@ -67,9 +67,7 @@ export function usePermissions(userEmail?: string): PermissionCheckResult {
           throw permError;
         }
 
-        const permSet = new Set<Permission>(
-          permData.map((p) => p.permission_name as Permission)
-        );
+        const permSet = new Set<Permission>(permData.map((p) => p.permission_name as Permission));
         setPermissions(permSet);
       } catch (err) {
         console.error("Error loading permissions:", err);

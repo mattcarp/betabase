@@ -1,6 +1,6 @@
 /**
  * RAG Strategy Comparison Card
- * 
+ *
  * Side-by-side comparison of basic vs advanced RAG
  * Proves the value of RLHF-enhanced retrieval
  */
@@ -13,15 +13,7 @@ import { Button } from "./button";
 import { Input } from "./input";
 import { Badge } from "./badge";
 import { ScrollArea } from "./scroll-area";
-import { 
-  GitCompare, 
-  Play, 
-  RefreshCw,
-  TrendingUp,
-  Clock,
-  FileText,
-  Lightbulb
-} from "lucide-react";
+import { GitCompare, Play, RefreshCw, TrendingUp, Clock, FileText, Lightbulb } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -32,29 +24,29 @@ export function RAGComparisonCard() {
 
   const runComparison = async () => {
     if (!testQuery.trim()) {
-      toast.error('Please enter a test query');
+      toast.error("Please enter a test query");
       return;
     }
 
     setLoading(true);
-    
+
     try {
-      const response = await fetch('/api/rag-compare', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: testQuery })
+      const response = await fetch("/api/rag-compare", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: testQuery }),
       });
 
       if (!response.ok) {
-        throw new Error('Comparison failed');
+        throw new Error("Comparison failed");
       }
 
       const data = await response.json();
       setComparison(data);
-      toast.success('Comparison complete! Check the results below.');
+      toast.success("Comparison complete! Check the results below.");
     } catch (error) {
-      console.error('Comparison error:', error);
-      toast.error('Failed to run comparison');
+      console.error("Comparison error:", error);
+      toast.error("Failed to run comparison");
     } finally {
       setLoading(false);
     }
@@ -127,9 +119,7 @@ export function RAGComparisonCard() {
                       {comparison.basic.documentCount}
                     </Badge>
                   </div>
-                  <div className="text-xs text-zinc-500 pt-2">
-                    Standard vector search only
-                  </div>
+                  <div className="text-xs text-zinc-500 pt-2">Standard vector search only</div>
                 </CardContent>
               </Card>
 
@@ -144,17 +134,19 @@ export function RAGComparisonCard() {
                 <CardContent className="space-y-3">
                   <div>
                     <span className="text-xs text-zinc-500">Time:</span>
-                    <Badge className={cn(
-                      "ml-2",
-                      comparison.advanced.timeMs < comparison.basic.timeMs 
-                        ? "bg-green-500/20 text-green-300" 
-                        : "bg-orange-500/20 text-orange-300"
-                    )}>
+                    <Badge
+                      className={cn(
+                        "ml-2",
+                        comparison.advanced.timeMs < comparison.basic.timeMs
+                          ? "bg-green-500/20 text-green-300"
+                          : "bg-orange-500/20 text-orange-300"
+                      )}
+                    >
                       <Clock className="h-3 w-3 mr-1" />
                       {comparison.advanced.timeMs}ms
                       {comparison.comparison.timeDifference !== 0 && (
                         <span className="ml-1">
-                          ({comparison.comparison.timeDifference > 0 ? '+' : ''}
+                          ({comparison.comparison.timeDifference > 0 ? "+" : ""}
                           {comparison.comparison.timeDifferencePercent.toFixed(0)}%)
                         </span>
                       )}
@@ -202,12 +194,14 @@ export function RAGComparisonCard() {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {comparison.comparison.advancedAdvantages.map((advantage: string, idx: number) => (
-                      <li key={idx} className="text-xs text-zinc-300 flex items-start gap-2">
-                        <span className="text-purple-400 mt-0.5">✓</span>
-                        <span>{advantage}</span>
-                      </li>
-                    ))}
+                    {comparison.comparison.advancedAdvantages.map(
+                      (advantage: string, idx: number) => (
+                        <li key={idx} className="text-xs text-zinc-300 flex items-start gap-2">
+                          <span className="text-purple-400 mt-0.5">✓</span>
+                          <span>{advantage}</span>
+                        </li>
+                      )
+                    )}
                   </ul>
                 </CardContent>
               </Card>
@@ -239,12 +233,11 @@ export function RAGComparisonCard() {
                     />
                   </div>
                   <p className="text-xs text-zinc-500 mt-2">
-                    {comparison.comparison.documentOverlapPercent < 50 
+                    {comparison.comparison.documentOverlapPercent < 50
                       ? "Advanced RAG discovered significantly different (potentially better) documents!"
                       : comparison.comparison.documentOverlapPercent < 80
-                      ? "Moderate overlap - advanced RAG refined the results"
-                      : "High overlap - both strategies found similar documents"
-                    }
+                        ? "Moderate overlap - advanced RAG refined the results"
+                        : "High overlap - both strategies found similar documents"}
                   </p>
                 </div>
               </CardContent>
@@ -263,4 +256,3 @@ export function RAGComparisonCard() {
     </Card>
   );
 }
-

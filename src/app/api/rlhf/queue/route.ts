@@ -71,8 +71,7 @@ const DEMO_QUEUE: AnnotationQueueItem[] = [
       rating: 1,
       categories: ["completeness", "helpfulness"],
       severity: "critical",
-      feedbackText:
-        "This is way too brief. Users need step-by-step guidance with screenshots.",
+      feedbackText: "This is way too brief. Users need step-by-step guidance with screenshots.",
       suggestedCorrection: null,
       preferredResponse: null,
       documentsMarked: null,
@@ -173,28 +172,30 @@ export async function GET(request: NextRequest) {
     // Transform database records to AnnotationQueueItem format
     const queue: AnnotationQueueItem[] = (data || []).map((record, index) => {
       // Extract values from feedback_value JSONB if needed
-      const feedbackValue = record.feedback_value as Record<string, unknown> || {};
+      const feedbackValue = (record.feedback_value as Record<string, unknown>) || {};
 
       return {
         id: `q${index + 1}`,
         feedback: {
           id: record.id,
-          conversationId: record.session_id || feedbackValue.conversation_id as string || "",
-          messageId: feedbackValue.message_id as string || "",
+          conversationId: record.session_id || (feedbackValue.conversation_id as string) || "",
+          messageId: (feedbackValue.message_id as string) || "",
           userQuery: record.user_query || record.query || "",
           aiResponse: record.ai_response || record.response || "",
-          thumbsUp: record.thumbs_up ?? feedbackValue.thumbs_up as boolean ?? null,
-          rating: record.rating ?? feedbackValue.rating as number ?? null,
-          categories: record.categories || feedbackValue.categories as string[] || [],
-          severity: record.severity || feedbackValue.severity as string || null,
-          feedbackText: feedbackValue.feedbackText as string || null,
-          suggestedCorrection: record.suggested_correction || feedbackValue.suggestedCorrection as string || null,
+          thumbsUp: record.thumbs_up ?? (feedbackValue.thumbs_up as boolean) ?? null,
+          rating: record.rating ?? (feedbackValue.rating as number) ?? null,
+          categories: record.categories || (feedbackValue.categories as string[]) || [],
+          severity: record.severity || (feedbackValue.severity as string) || null,
+          feedbackText: (feedbackValue.feedbackText as string) || null,
+          suggestedCorrection:
+            record.suggested_correction || (feedbackValue.suggestedCorrection as string) || null,
           preferredResponse: null,
-          documentsMarked: feedbackValue.documentsMarked as FeedbackRecord["documentsMarked"] || null,
+          documentsMarked:
+            (feedbackValue.documentsMarked as FeedbackRecord["documentsMarked"]) || null,
           userEmail: record.curator_email || "",
           sessionId: record.session_id || "",
           modelUsed: record.model_used || null,
-          ragMetadata: record.rag_metadata as FeedbackRecord["ragMetadata"] || null,
+          ragMetadata: (record.rag_metadata as FeedbackRecord["ragMetadata"]) || null,
           status: record.status || "pending",
           curatorId: record.curator_id || null,
           curatorNotes: record.curator_notes || null,
@@ -316,9 +317,6 @@ export async function PATCH(request: NextRequest) {
     });
   } catch (error) {
     console.error("Queue update error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

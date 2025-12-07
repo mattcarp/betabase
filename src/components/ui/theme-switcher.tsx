@@ -53,12 +53,7 @@ export function ThemeSwitcher() {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        align="start"
-        side="right"
-        className="w-64"
-        sideOffset={8}
-      >
+      <DropdownMenuContent align="start" side="right" className="w-64" sideOffset={8}>
         <DropdownMenuLabel className="flex items-center gap-2">
           <Palette className="h-4 w-4" />
           Choose Theme
@@ -86,9 +81,7 @@ export function ThemeSwitcher() {
                 </div>
                 {isActive && <Check className="h-4 w-4 text-green-500" />}
               </div>
-              <span className="text-xs text-muted-foreground">
-                {theme.description}
-              </span>
+              <span className="text-xs text-muted-foreground">{theme.description}</span>
             </DropdownMenuItem>
           );
         })}
@@ -142,10 +135,7 @@ export function CompactThemeSwitcher() {
       size="icon"
       onClick={cycleTheme}
       disabled={isTransitioning}
-      className={cn(
-        "h-8 w-8",
-        isTransitioning && "opacity-50 cursor-wait"
-      )}
+      className={cn("h-8 w-8", isTransitioning && "opacity-50 cursor-wait")}
       title={`Current: ${currentThemeInfo?.name}. Click to switch.`}
     >
       {isTransitioning ? (
@@ -178,9 +168,7 @@ export function ThemePreviewCard({ theme, isActive, onSelect }: ThemePreviewCard
       className={cn(
         "relative flex flex-col gap-3 p-4 rounded-lg border-2 transition-all",
         "hover:scale-105 hover:shadow-lg",
-        isActive
-          ? "border-primary bg-primary/10"
-          : "border-border bg-card hover:border-primary/50"
+        isActive ? "border-primary bg-primary/10" : "border-border bg-card hover:border-primary/50"
       )}
     >
       {/* Preview Image */}

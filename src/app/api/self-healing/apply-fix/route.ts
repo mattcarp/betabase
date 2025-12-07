@@ -69,10 +69,7 @@ export async function POST(request: NextRequest) {
     try {
       await fs.access(resolvedPath);
     } catch {
-      return NextResponse.json(
-        { error: `File not found: ${targetFile}` },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: `File not found: ${targetFile}` }, { status: 404 });
     }
 
     // Read current file content
@@ -92,8 +89,10 @@ export async function POST(request: NextRequest) {
         for (let i = 0; i < lines.length; i++) {
           const lineTrimmed = lines[i].trim();
           // Check if line contains the selector being replaced
-          if (lineTrimmed.includes(searchTrimmed) ||
-              (searchCode.includes("locator") && lineTrimmed.includes("locator"))) {
+          if (
+            lineTrimmed.includes(searchTrimmed) ||
+            (searchCode.includes("locator") && lineTrimmed.includes("locator"))
+          ) {
             lines[i] = lines[i].replace(lineTrimmed, replaceCode.trim());
             modified = true;
             break;
@@ -119,12 +118,15 @@ export async function POST(request: NextRequest) {
     }
 
     if (!modified) {
-      return NextResponse.json({
-        success: false,
-        error: "Could not find code to replace in file",
-        searchedFor: searchCode?.substring(0, 100),
-        file: targetFile
-      }, { status: 422 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Could not find code to replace in file",
+          searchedFor: searchCode?.substring(0, 100),
+          file: targetFile,
+        },
+        { status: 422 }
+      );
     }
 
     // Write the modified content
@@ -148,7 +150,6 @@ export async function POST(request: NextRequest) {
       file: targetFile,
       attemptId,
     });
-
   } catch (error) {
     console.error("Apply fix error:", error);
     return NextResponse.json(

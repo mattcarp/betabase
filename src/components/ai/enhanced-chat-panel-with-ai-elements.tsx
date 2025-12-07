@@ -414,7 +414,6 @@ export function EnhancedChatPanelWithAIElements({
               suggestions={showSuggestions ? suggestions : []}
               onSuggestionClick={handleSuggestionClick}
             />
-
           </div>
         </CardFooter>
       )}

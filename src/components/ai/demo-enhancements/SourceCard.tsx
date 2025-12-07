@@ -54,9 +54,7 @@ export function SourceCard({ sources, isStreaming, className }: SourceCardProps)
         >
           {sources.length} source{sources.length !== 1 ? "s" : ""}
         </Badge>
-        {isStreaming && (
-          <span className="text-xs text-zinc-400">Retrieving context...</span>
-        )}
+        {isStreaming && <span className="text-xs text-zinc-400">Retrieving context...</span>}
       </div>
 
       {/* Source List */}
@@ -70,9 +68,7 @@ export function SourceCard({ sources, isStreaming, className }: SourceCardProps)
               "transition-all duration-200 hover:bg-zinc-800/70"
             )}
           >
-            <div className="text-zinc-400 mt-0.5">
-              {getSourceIcon(source.type)}
-            </div>
+            <div className="text-zinc-400 mt-0.5">{getSourceIcon(source.type)}</div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-sm text-zinc-200 truncate">
@@ -95,9 +91,7 @@ export function SourceCard({ sources, isStreaming, className }: SourceCardProps)
                 )}
               </div>
               {source.snippet && (
-                <p className="text-xs text-zinc-400 mt-1 line-clamp-2">
-                  {source.snippet}
-                </p>
+                <p className="text-xs text-zinc-400 mt-1 line-clamp-2">{source.snippet}</p>
               )}
               {source.url && (
                 <a

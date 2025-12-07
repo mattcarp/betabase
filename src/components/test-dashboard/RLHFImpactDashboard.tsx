@@ -1,6 +1,6 @@
 /**
  * RLHF Impact Dashboard Component
- * 
+ *
  * Visualizes improvement trends and metrics from human feedback
  * Part of Test tab integration - Phase 6
  */
@@ -10,15 +10,8 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { 
-  TrendingUp, 
-  TrendingDown,
-  Activity,
-  Target,
-  Users,
-  Award
-} from "lucide-react";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { TrendingUp, TrendingDown, Activity, Target, Users, Award } from "lucide-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 interface ImpactMetrics {
   avgRating: number;
@@ -47,7 +40,7 @@ export function RLHFImpactDashboard() {
     curatorApprovals: 0,
     approvalRate: 0,
     avgConfidence: 0,
-    confidenceTrend: 0
+    confidenceTrend: 0,
   });
   const [timeSeries, setTimeSeries] = useState<TimeSeriesData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,17 +52,17 @@ export function RLHFImpactDashboard() {
 
   const loadImpactMetrics = async () => {
     setLoading(true);
-    
+
     try {
       // Load overall metrics from rlhf_feedback
       // Using correct column names: feedback_type, feedback_value, retrieved_contexts
       const { data: allFeedback, error } = await supabase
-        .from('rlhf_feedback')
-        .select('feedback_type, feedback_value, retrieved_contexts, created_at')
-        .not('feedback_value', 'is', null);
+        .from("rlhf_feedback")
+        .select("feedback_type, feedback_value, retrieved_contexts, created_at")
+        .not("feedback_value", "is", null);
 
       if (error) {
-        console.error('Failed to load metrics:', error);
+        console.error("Failed to load metrics:", error);
         return;
       }
 
@@ -83,57 +76,64 @@ export function RLHFImpactDashboard() {
       const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
       const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
 
-      const currentPeriod = allFeedback.filter(f => 
-        new Date(f.created_at) > thirtyDaysAgo
-      );
-      const previousPeriod = allFeedback.filter(f => 
-        new Date(f.created_at) > sixtyDaysAgo && new Date(f.created_at) <= thirtyDaysAgo
+      const currentPeriod = allFeedback.filter((f) => new Date(f.created_at) > thirtyDaysAgo);
+      const previousPeriod = allFeedback.filter(
+        (f) => new Date(f.created_at) > sixtyDaysAgo && new Date(f.created_at) <= thirtyDaysAgo
       );
 
       // Average rating - using feedback_value.score
-      const getRating = (f: any) => f.feedback_value?.score || (f.feedback_type === 'thumbs_up' ? 5 : f.feedback_type === 'thumbs_down' ? 1 : 3);
-      const avgRating = currentPeriod.reduce((sum, f) => sum + getRating(f), 0) / currentPeriod.length;
-      const prevAvgRating = previousPeriod.length > 0
-        ? previousPeriod.reduce((sum, f) => sum + getRating(f), 0) / previousPeriod.length
-        : avgRating;
-      const ratingTrend = prevAvgRating > 0
-        ? ((avgRating - prevAvgRating) / prevAvgRating) * 100
-        : 0;
+      const getRating = (f: any) =>
+        f.feedback_value?.score ||
+        (f.feedback_type === "thumbs_up" ? 5 : f.feedback_type === "thumbs_down" ? 1 : 3);
+      const avgRating =
+        currentPeriod.reduce((sum, f) => sum + getRating(f), 0) / currentPeriod.length;
+      const prevAvgRating =
+        previousPeriod.length > 0
+          ? previousPeriod.reduce((sum, f) => sum + getRating(f), 0) / previousPeriod.length
+          : avgRating;
+      const ratingTrend =
+        prevAvgRating > 0 ? ((avgRating - prevAvgRating) / prevAvgRating) * 100 : 0;
 
       // Feedback count
       const totalFeedback = currentPeriod.length;
       const prevFeedback = previousPeriod.length;
-      const feedbackTrend = prevFeedback > 0
-        ? ((totalFeedback - prevFeedback) / prevFeedback) * 100
-        : 0;
+      const feedbackTrend =
+        prevFeedback > 0 ? ((totalFeedback - prevFeedback) / prevFeedback) * 100 : 0;
 
       // Curator approvals (rating >= 4 or thumbs_up)
-      const curatorApprovals = currentPeriod.filter(f =>
-        getRating(f) >= 4 || f.feedback_type === 'thumbs_up'
+      const curatorApprovals = currentPeriod.filter(
+        (f) => getRating(f) >= 4 || f.feedback_type === "thumbs_up"
       ).length;
-      const approvalRate = totalFeedback > 0
-        ? (curatorApprovals / totalFeedback) * 100
-        : 0;
+      const approvalRate = totalFeedback > 0 ? (curatorApprovals / totalFeedback) * 100 : 0;
 
       // Confidence (based on retrieved contexts - all are considered relevant if in positive feedback)
-      const avgConfidence = currentPeriod
-        .filter(f => f.retrieved_contexts && f.retrieved_contexts.length > 0)
-        .reduce((sum, f) => {
-          // Use similarity scores from retrieved_contexts
-          const avgSimilarity = f.retrieved_contexts.reduce((s: number, d: any) => s + (d.similarity || 0), 0) / f.retrieved_contexts.length;
-          return sum + avgSimilarity;
-        }, 0) / currentPeriod.filter(f => f.retrieved_contexts && f.retrieved_contexts.length > 0).length || 0;
+      const avgConfidence =
+        currentPeriod
+          .filter((f) => f.retrieved_contexts && f.retrieved_contexts.length > 0)
+          .reduce((sum, f) => {
+            // Use similarity scores from retrieved_contexts
+            const avgSimilarity =
+              f.retrieved_contexts.reduce((s: number, d: any) => s + (d.similarity || 0), 0) /
+              f.retrieved_contexts.length;
+            return sum + avgSimilarity;
+          }, 0) /
+          currentPeriod.filter((f) => f.retrieved_contexts && f.retrieved_contexts.length > 0)
+            .length || 0;
 
-      const prevConfidence = previousPeriod
-        .filter(f => f.retrieved_contexts && f.retrieved_contexts.length > 0)
-        .reduce((sum, f) => {
-          const avgSimilarity = f.retrieved_contexts.reduce((s: number, d: any) => s + (d.similarity || 0), 0) / f.retrieved_contexts.length;
-          return sum + avgSimilarity;
-        }, 0) / previousPeriod.filter(f => f.retrieved_contexts && f.retrieved_contexts.length > 0).length || avgConfidence;
+      const prevConfidence =
+        previousPeriod
+          .filter((f) => f.retrieved_contexts && f.retrieved_contexts.length > 0)
+          .reduce((sum, f) => {
+            const avgSimilarity =
+              f.retrieved_contexts.reduce((s: number, d: any) => s + (d.similarity || 0), 0) /
+              f.retrieved_contexts.length;
+            return sum + avgSimilarity;
+          }, 0) /
+          previousPeriod.filter((f) => f.retrieved_contexts && f.retrieved_contexts.length > 0)
+            .length || avgConfidence;
 
-      const confidenceTrend = prevConfidence > 0
-        ? ((avgConfidence - prevConfidence) / prevConfidence) * 100
-        : 0;
+      const confidenceTrend =
+        prevConfidence > 0 ? ((avgConfidence - prevConfidence) / prevConfidence) * 100 : 0;
 
       setMetrics({
         avgRating,
@@ -143,7 +143,7 @@ export function RLHFImpactDashboard() {
         curatorApprovals,
         approvalRate,
         avgConfidence: avgConfidence * 100, // Convert to percentage
-        confidenceTrend
+        confidenceTrend,
       });
 
       // Generate time series data (last 30 days)
@@ -152,56 +152,61 @@ export function RLHFImpactDashboard() {
         const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
         const dayStart = new Date(date.setHours(0, 0, 0, 0));
         const dayEnd = new Date(date.setHours(23, 59, 59, 999));
-        
-        const dayFeedback = allFeedback.filter(f => {
+
+        const dayFeedback = allFeedback.filter((f) => {
           const fDate = new Date(f.created_at);
           return fDate >= dayStart && fDate <= dayEnd;
         });
 
-        const dayAvgRating = dayFeedback.length > 0
-          ? dayFeedback.reduce((sum, f) => sum + getRating(f), 0) / dayFeedback.length
-          : 0;
+        const dayAvgRating =
+          dayFeedback.length > 0
+            ? dayFeedback.reduce((sum, f) => sum + getRating(f), 0) / dayFeedback.length
+            : 0;
 
-        const dayConfidence = dayFeedback
-          .filter(f => f.retrieved_contexts && f.retrieved_contexts.length > 0)
-          .reduce((sum, f) => {
-            const avgSimilarity = f.retrieved_contexts.reduce((s: number, d: any) => s + (d.similarity || 0), 0) / f.retrieved_contexts.length;
-            return sum + avgSimilarity;
-          }, 0) / dayFeedback.filter(f => f.retrieved_contexts && f.retrieved_contexts.length > 0).length || 0;
+        const dayConfidence =
+          dayFeedback
+            .filter((f) => f.retrieved_contexts && f.retrieved_contexts.length > 0)
+            .reduce((sum, f) => {
+              const avgSimilarity =
+                f.retrieved_contexts.reduce((s: number, d: any) => s + (d.similarity || 0), 0) /
+                f.retrieved_contexts.length;
+              return sum + avgSimilarity;
+            }, 0) /
+            dayFeedback.filter((f) => f.retrieved_contexts && f.retrieved_contexts.length > 0)
+              .length || 0;
 
         timeSeriesData.push({
-          date: dayStart.toISOString().split('T')[0],
+          date: dayStart.toISOString().split("T")[0],
           avgRating: dayAvgRating,
           feedbackCount: dayFeedback.length,
-          confidence: dayConfidence * 100
+          confidence: dayConfidence * 100,
         });
       }
 
       setTimeSeries(timeSeriesData);
-
     } catch (error) {
       // Network failures are expected during rapid navigation/tests - fail silently
       if (error instanceof TypeError && error.message === "Failed to fetch") {
         // Silently ignore aborted requests
       } else {
-        console.warn('Error loading impact metrics:', error);
+        console.warn("Error loading impact metrics:", error);
       }
     } finally {
       setLoading(false);
     }
   };
 
-  const MetricCard = ({ 
-    title, 
-    value, 
-    trend, 
-    icon: Icon, 
-    color 
-  }: { 
-    title: string; 
-    value: string | number; 
-    trend?: number; 
-    icon: any; 
+  const MetricCard = ({
+    title,
+    value,
+    trend,
+    icon: Icon,
+    color,
+  }: {
+    title: string;
+    value: string | number;
+    trend?: number;
+    icon: any;
     color: string;
   }) => (
     <Card className="bg-zinc-900/30 border-zinc-800">
@@ -211,11 +216,17 @@ export function RLHFImpactDashboard() {
             <Icon className="h-5 w-5" />
           </div>
           {trend !== undefined && (
-            <Badge 
-              variant="outline" 
-              className={trend >= 0 ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"}
+            <Badge
+              variant="outline"
+              className={
+                trend >= 0 ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"
+              }
             >
-              {trend >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
+              {trend >= 0 ? (
+                <TrendingUp className="h-3 w-3 mr-1" />
+              ) : (
+                <TrendingDown className="h-3 w-3 mr-1" />
+              )}
               {Math.abs(trend).toFixed(1)}%
             </Badge>
           )}
@@ -328,7 +339,7 @@ export function RLHFImpactDashboard() {
               <div className="text-sm text-zinc-400 mb-2">Daily Feedback Volume</div>
               <div className="h-24 bg-zinc-900/30 rounded-lg p-4 flex items-end gap-0.5">
                 {timeSeries.map((data, idx) => {
-                  const maxFeedback = Math.max(...timeSeries.map(d => d.feedbackCount));
+                  const maxFeedback = Math.max(...timeSeries.map((d) => d.feedbackCount));
                   const height = maxFeedback > 0 ? (data.feedbackCount / maxFeedback) * 100 : 0;
                   return (
                     <div
@@ -357,31 +368,34 @@ export function RLHFImpactDashboard() {
               <div>
                 <div className="text-sm font-medium text-green-400">Positive Rating Trend</div>
                 <div className="text-xs text-zinc-400">
-                  Average rating improved by {metrics.ratingTrend.toFixed(1)}% - feedback loop is working!
+                  Average rating improved by {metrics.ratingTrend.toFixed(1)}% - feedback loop is
+                  working!
                 </div>
               </div>
             </div>
           )}
-          
+
           {metrics.approvalRate > 70 && (
             <div className="flex items-start gap-3 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
               <Award className="h-5 w-5 text-purple-400 mt-0.5" />
               <div>
                 <div className="text-sm font-medium text-purple-400">High Approval Rate</div>
                 <div className="text-xs text-zinc-400">
-                  {metrics.approvalRate.toFixed(1)}% of responses are curator-approved - excellent quality!
+                  {metrics.approvalRate.toFixed(1)}% of responses are curator-approved - excellent
+                  quality!
                 </div>
               </div>
             </div>
           )}
-          
+
           {metrics.confidenceTrend > 10 && (
             <div className="flex items-start gap-3 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg">
               <Target className="h-5 w-5 text-amber-400 mt-0.5" />
               <div>
                 <div className="text-sm font-medium text-amber-400">Confidence Increasing</div>
                 <div className="text-xs text-zinc-400">
-                  Document relevance confidence up {metrics.confidenceTrend.toFixed(1)}% - retrieval improving!
+                  Document relevance confidence up {metrics.confidenceTrend.toFixed(1)}% - retrieval
+                  improving!
                 </div>
               </div>
             </div>
@@ -403,4 +417,3 @@ export function RLHFImpactDashboard() {
     </div>
   );
 }
-

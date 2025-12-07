@@ -4,11 +4,7 @@ import { useState } from "react";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../../ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../ui/collapsible";
 import {
   ChevronDown,
   ChevronRight,
@@ -147,9 +143,7 @@ export function RAGContextViewer({
                 <Clock className="h-4 w-4 text-yellow-400" />
                 <div>
                   <div className="text-xs text-zinc-500">Search Time</div>
-                  <div className="text-sm font-medium text-zinc-200">
-                    {searchTimeMs}ms
-                  </div>
+                  <div className="text-sm font-medium text-zinc-200">{searchTimeMs}ms</div>
                 </div>
               </div>
             )}
@@ -198,9 +192,7 @@ export function RAGContextViewer({
                     )}
                     onClick={() =>
                       setExpandedDoc(
-                        expandedDoc === (doc.id || String(idx))
-                          ? null
-                          : doc.id || String(idx)
+                        expandedDoc === (doc.id || String(idx)) ? null : doc.id || String(idx)
                       )
                     }
                   >
@@ -228,9 +220,7 @@ export function RAGContextViewer({
                           )}
                         </div>
                         {expandedDoc === (doc.id || String(idx)) && doc.content && (
-                          <p className="text-xs text-zinc-400 mt-2 line-clamp-4">
-                            {doc.content}
-                          </p>
+                          <p className="text-xs text-zinc-400 mt-2 line-clamp-4">{doc.content}</p>
                         )}
                       </div>
                     </div>

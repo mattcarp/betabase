@@ -76,11 +76,3 @@ export function getSupabaseServiceRoleKeySync(): string {
 export function getSupabaseUrlSync(): string {
   return requireSecretSync("SUPABASE_URL");
 }
-
-
-
-
-
-
-
-

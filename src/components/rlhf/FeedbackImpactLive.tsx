@@ -175,9 +175,7 @@ function FlowStep({
       >
         {icon}
       </div>
-      <span className="text-xs text-zinc-400 text-center max-w-[80px]">
-        {label}
-      </span>
+      <span className="text-xs text-zinc-400 text-center max-w-[80px]">{label}</span>
     </motion.div>
   );
 }
@@ -191,10 +189,7 @@ function AnimatedArrow({ isActive }: { isActive?: boolean }) {
       transition={{ duration: 1, repeat: Infinity }}
     >
       <ArrowRight
-        className={cn(
-          "h-5 w-5 transition-colors",
-          isActive ? "text-purple-400" : "text-zinc-600"
-        )}
+        className={cn("h-5 w-5 transition-colors", isActive ? "text-purple-400" : "text-zinc-600")}
       />
     </motion.div>
   );
@@ -259,8 +254,7 @@ export function FeedbackImpactLive({
               variant="outline"
               className="bg-purple-500/10 text-purple-400 border-purple-500/30"
             >
-              <TrendingUp className="h-3 w-3 mr-1" />+{accuracyImprovement.toFixed(1)}
-              % accuracy
+              <TrendingUp className="h-3 w-3 mr-1" />+{accuracyImprovement.toFixed(1)}% accuracy
             </Badge>
             {onRefresh && (
               <button
@@ -285,9 +279,7 @@ export function FeedbackImpactLive({
               className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 flex items-center gap-3"
             >
               <Zap className="h-5 w-5 text-purple-400" />
-              <span className="text-sm text-purple-300">
-                New feedback received! Processing...
-              </span>
+              <span className="text-sm text-purple-300">New feedback received! Processing...</span>
             </motion.div>
           )}
         </AnimatePresence>
@@ -390,18 +382,14 @@ export function FeedbackImpactLive({
               <Clock className="h-4 w-4" />
               <span className="text-sm">Pending Review</span>
             </div>
-            <div className="text-2xl font-light text-zinc-100">
-              {stats.pendingReview}
-            </div>
+            <div className="text-2xl font-light text-zinc-100">{stats.pendingReview}</div>
           </div>
           <div className="bg-zinc-800/30 rounded-lg p-4 border border-zinc-700/50">
             <div className="flex items-center gap-2 text-zinc-400 mb-2">
               <CheckCircle className="h-4 w-4 text-green-400" />
               <span className="text-sm">Approved Today</span>
             </div>
-            <div className="text-2xl font-light text-zinc-100">
-              {stats.approvedToday}
-            </div>
+            <div className="text-2xl font-light text-zinc-100">{stats.approvedToday}</div>
           </div>
         </div>
 
@@ -423,9 +411,7 @@ export function FeedbackImpactLive({
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-zinc-200 truncate">{item.preview}</p>
                   <div className="flex items-center gap-3 mt-1">
-                    <span className="text-xs text-zinc-500">
-                      {formatTimestamp(item.timestamp)}
-                    </span>
+                    <span className="text-xs text-zinc-500">{formatTimestamp(item.timestamp)}</span>
                     <Badge
                       variant="outline"
                       className={cn(
@@ -442,10 +428,7 @@ export function FeedbackImpactLive({
                   </div>
                 </div>
                 {item.testsGenerated && (
-                  <Badge
-                    variant="secondary"
-                    className="ml-3 bg-blue-500/10 text-blue-400"
-                  >
+                  <Badge variant="secondary" className="ml-3 bg-blue-500/10 text-blue-400">
                     +{item.testsGenerated} tests
                   </Badge>
                 )}

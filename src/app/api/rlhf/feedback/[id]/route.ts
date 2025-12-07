@@ -20,10 +20,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     const { id } = await params;
 
     if (!supabaseAdmin) {
-      return NextResponse.json(
-        { error: "Database not configured" },
-        { status: 503 }
-      );
+      return NextResponse.json({ error: "Database not configured" }, { status: 503 });
     }
 
     const { data, error } = await supabaseAdmin
@@ -34,31 +31,19 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     if (error) {
       if (error.code === "PGRST116") {
-        return NextResponse.json(
-          { error: "Feedback not found" },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: "Feedback not found" }, { status: 404 });
       }
       if (error.code === "42P01") {
-        return NextResponse.json(
-          { error: "Table not yet created" },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: "Table not yet created" }, { status: 404 });
       }
       console.error("Feedback fetch error:", error);
-      return NextResponse.json(
-        { error: "Failed to fetch feedback" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to fetch feedback" }, { status: 500 });
     }
 
     return NextResponse.json(data);
   } catch (error) {
     console.error("Feedback fetch error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -68,10 +53,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const { id } = await params;
 
     if (!supabaseAdmin) {
-      return NextResponse.json(
-        { error: "Database not configured" },
-        { status: 503 }
-      );
+      return NextResponse.json({ error: "Database not configured" }, { status: 503 });
     }
 
     const body = await request.json();
@@ -140,31 +122,19 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     if (error) {
       if (error.code === "PGRST116") {
-        return NextResponse.json(
-          { error: "Feedback not found" },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: "Feedback not found" }, { status: 404 });
       }
       if (error.code === "42P01") {
-        return NextResponse.json(
-          { error: "Table not yet created" },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: "Table not yet created" }, { status: 404 });
       }
       console.error("Feedback update error:", error);
-      return NextResponse.json(
-        { error: "Failed to update feedback" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to update feedback" }, { status: 500 });
     }
 
     return NextResponse.json(data);
   } catch (error) {
     console.error("Feedback update error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -174,37 +144,22 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     const { id } = await params;
 
     if (!supabaseAdmin) {
-      return NextResponse.json(
-        { error: "Database not configured" },
-        { status: 503 }
-      );
+      return NextResponse.json({ error: "Database not configured" }, { status: 503 });
     }
 
-    const { error } = await supabaseAdmin
-      .from("rlhf_feedback")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabaseAdmin.from("rlhf_feedback").delete().eq("id", id);
 
     if (error) {
       if (error.code === "42P01") {
-        return NextResponse.json(
-          { error: "Table not yet created" },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: "Table not yet created" }, { status: 404 });
       }
       console.error("Feedback delete error:", error);
-      return NextResponse.json(
-        { error: "Failed to delete feedback" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to delete feedback" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Feedback delete error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

@@ -161,10 +161,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-8 bg-green-500/20 border border-green-500/50 rounded-lg p-6">
-            <h3
-              className="mac-title"
-              className="mac-title text-green-400 font-normal text-lg mb-2"
-            >
+            <h3 className="mac-title" className="mac-title text-green-400 font-normal text-lg mb-2">
               🎉 Deployment Successful!
             </h3>
             <p className="mac-body text-gray-300">

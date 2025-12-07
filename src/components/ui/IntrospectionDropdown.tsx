@@ -179,13 +179,19 @@ export function IntrospectionDropdown() {
                 </div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-muted-foreground">Database:</span>
-                  <Badge variant={status.hasSupabase ? "default" : "destructive"} className="text-xs">
+                  <Badge
+                    variant={status.hasSupabase ? "default" : "destructive"}
+                    className="text-xs"
+                  >
                     {status.hasSupabase ? "Connected" : "Unavailable"}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">AI Provider:</span>
-                  <Badge variant={status.hasAIProvider ? "default" : "destructive"} className="text-xs">
+                  <Badge
+                    variant={status.hasAIProvider ? "default" : "destructive"}
+                    className="text-xs"
+                  >
                     {status.hasAIProvider ? "Connected" : "Unavailable"}
                   </Badge>
                 </div>
@@ -343,9 +349,7 @@ export function IntrospectionDropdown() {
                 {/* Error */}
                 {selectedTrace.error && (
                   <div>
-                    <h4 className="mac-title text-sm font-normal mb-2 text-red-500">
-                      Error
-                    </h4>
+                    <h4 className="mac-title text-sm font-normal mb-2 text-red-500">Error</h4>
                     <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg p-4 text-sm text-red-600 dark:text-red-400">
                       {selectedTrace.error}
                     </div>

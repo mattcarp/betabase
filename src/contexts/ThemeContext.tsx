@@ -126,7 +126,7 @@ export function ThemeProvider({ children, defaultTheme = "mac" }: ThemeProviderP
    */
   const loadThemeStylesheet = useCallback((theme: ThemeName) => {
     // Remove existing theme stylesheets
-    const existingStylesheets = document.querySelectorAll('link[data-theme-stylesheet]');
+    const existingStylesheets = document.querySelectorAll("link[data-theme-stylesheet]");
     existingStylesheets.forEach((sheet) => sheet.remove());
 
     // Only load additional stylesheet for non-default themes
@@ -199,9 +199,7 @@ export function useTheme(): ThemeContextValue {
  * Hook to listen for voice-controlled theme changes
  * Usage: useVoiceThemeControl((theme) => setTheme(theme))
  */
-export function useVoiceThemeControl(
-  onThemeChange: (theme: ThemeName) => void
-): void {
+export function useVoiceThemeControl(onThemeChange: (theme: ThemeName) => void): void {
   useEffect(() => {
     const handleVoiceThemeChange = (event: Event) => {
       const customEvent = event as CustomEvent<{ theme: ThemeName }>;

@@ -116,12 +116,11 @@ export function RLHFCuratorDashboard() {
         .select("thumbs_up, rating")
         .not("thumbs_up", "is", null);
 
-      const positiveCount = positiveData?.filter(
-        (r) => r.thumbs_up === true || (r.rating && r.rating >= 4)
-      ).length || 0;
-      const positiveRate = positiveData && positiveData.length > 0
-        ? (positiveCount / positiveData.length) * 100
-        : 0;
+      const positiveCount =
+        positiveData?.filter((r) => r.thumbs_up === true || (r.rating && r.rating >= 4)).length ||
+        0;
+      const positiveRate =
+        positiveData && positiveData.length > 0 ? (positiveCount / positiveData.length) * 100 : 0;
 
       // Get correction rate (negative feedback with corrections)
       const { count: negativeWithCorrection } = await supabase
@@ -135,9 +134,10 @@ export function RLHFCuratorDashboard() {
         .select("*", { count: "exact", head: true })
         .or("thumbs_up.eq.false,rating.lt.3");
 
-      const correctionRate = totalNegative && totalNegative > 0
-        ? ((negativeWithCorrection || 0) / totalNegative) * 100
-        : 0;
+      const correctionRate =
+        totalNegative && totalNegative > 0
+          ? ((negativeWithCorrection || 0) / totalNegative) * 100
+          : 0;
 
       // Get preference pairs stats
       const { count: preferencePairs } = await supabase
@@ -309,11 +309,7 @@ function StatCard({
   };
 
   return (
-    <Card className={cn(
-      "border",
-      colorClasses[color],
-      highlight && "ring-2 ring-rose-500/50"
-    )}>
+    <Card className={cn("border", colorClasses[color], highlight && "ring-2 ring-rose-500/50")}>
       <CardContent className="p-4">
         <div className="flex items-center gap-2 mb-2">
           <span className={colorClasses[color].split(" ")[0]}>{icon}</span>
@@ -326,13 +322,7 @@ function StatCard({
 }
 
 // Review Queue Component
-function ReviewQueue({
-  supabase,
-  onUpdate,
-}: {
-  supabase: any;
-  onUpdate: () => void;
-}) {
+function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => void }) {
   const [items, setItems] = useState<FeedbackRecord[]>([]);
   const [selectedItem, setSelectedItem] = useState<FeedbackRecord | null>(null);
   const [correction, setCorrection] = useState("");
@@ -507,20 +497,24 @@ function ReviewQueue({
                       </div>
                       <div className="flex gap-1">
                         {item.correction && (
-                          <Badge variant="outline" className="text-xs bg-green-500/10 text-green-400 border-green-500/30">
+                          <Badge
+                            variant="outline"
+                            className="text-xs bg-green-500/10 text-green-400 border-green-500/30"
+                          >
                             Has Correction
                           </Badge>
                         )}
                         {item.curator_approved && (
-                          <Badge variant="outline" className="text-xs bg-blue-500/10 text-blue-400 border-blue-500/30">
+                          <Badge
+                            variant="outline"
+                            className="text-xs bg-blue-500/10 text-blue-400 border-blue-500/30"
+                          >
                             Approved
                           </Badge>
                         )}
                       </div>
                     </div>
-                    <p className="text-sm text-zinc-300 line-clamp-2 mb-1">
-                      Q: {item.query}
-                    </p>
+                    <p className="text-sm text-zinc-300 line-clamp-2 mb-1">Q: {item.query}</p>
                     <p className="text-xs text-zinc-500 line-clamp-1">
                       A: {item.response?.substring(0, 100)}...
                     </p>
@@ -540,7 +534,8 @@ function ReviewQueue({
             Provide Correction
           </CardTitle>
           <CardDescription>
-            Enter what the response SHOULD have been. This creates a preference pair for DPO training.
+            Enter what the response SHOULD have been. This creates a preference pair for DPO
+            training.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -548,9 +543,7 @@ function ReviewQueue({
             <div className="space-y-4">
               {/* Original Query */}
               <div>
-                <label className="text-xs font-medium text-zinc-400 mb-1 block">
-                  User Query
-                </label>
+                <label className="text-xs font-medium text-zinc-400 mb-1 block">User Query</label>
                 <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
                   <p className="text-sm text-zinc-200">{selectedItem.query}</p>
                 </div>
@@ -603,11 +596,7 @@ function ReviewQueue({
                   <Save className="h-4 w-4 mr-2" />
                   Save Correction & Create Pair
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={handleApproveAsIs}
-                  disabled={saving}
-                >
+                <Button variant="outline" onClick={handleApproveAsIs} disabled={saving}>
                   <Check className="h-4 w-4 mr-2" />
                   Approve As-Is
                 </Button>
@@ -636,13 +625,7 @@ function ReviewQueue({
 }
 
 // Preference Pairs View
-function PreferencePairsView({
-  supabase,
-  onUpdate,
-}: {
-  supabase: any;
-  onUpdate: () => void;
-}) {
+function PreferencePairsView({ supabase, onUpdate }: { supabase: any; onUpdate: () => void }) {
   const [pairs, setPairs] = useState<PreferencePair[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "verified" | "unverified">("all");
@@ -698,10 +681,7 @@ function PreferencePairsView({
 
   const handleDelete = async (pairId: string) => {
     try {
-      const { error } = await supabase
-        .from("preference_pairs")
-        .delete()
-        .eq("id", pairId);
+      const { error } = await supabase.from("preference_pairs").delete().eq("id", pairId);
 
       if (error) throw error;
 
@@ -795,7 +775,9 @@ function PreferencePairsView({
                   {/* Prompt */}
                   <div className="mb-3">
                     <label className="text-xs font-medium text-zinc-500 mb-1 block">Prompt</label>
-                    <p className="text-sm text-zinc-200 bg-zinc-800/50 p-2 rounded">{pair.prompt}</p>
+                    <p className="text-sm text-zinc-200 bg-zinc-800/50 p-2 rounded">
+                      {pair.prompt}
+                    </p>
                   </div>
 
                   {/* Chosen vs Rejected */}
@@ -854,13 +836,7 @@ function PreferencePairsView({
 }
 
 // Export Panel
-function ExportPanel({
-  supabase,
-  stats,
-}: {
-  supabase: any;
-  stats: DashboardStats | null;
-}) {
+function ExportPanel({ supabase, stats }: { supabase: any; stats: DashboardStats | null }) {
   const [exporting, setExporting] = useState(false);
   const [exportedData, setExportedData] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -950,7 +926,8 @@ function ExportPanel({
             Export DPO Training Data
           </CardTitle>
           <CardDescription>
-            Export verified preference pairs in JSONL format for fine-tuning Llama, Mistral, or other open models.
+            Export verified preference pairs in JSONL format for fine-tuning Llama, Mistral, or
+            other open models.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -986,7 +963,7 @@ function ExportPanel({
           <div className="p-4 rounded-lg bg-zinc-800/30 border border-zinc-700/30">
             <h4 className="text-sm font-medium text-zinc-300 mb-2">JSONL Format</h4>
             <pre className="text-xs text-zinc-400 overflow-x-auto">
-{`{"prompt": "...", "chosen": "...", "rejected": "..."}
+              {`{"prompt": "...", "chosen": "...", "rejected": "..."}
 {"prompt": "...", "chosen": "...", "rejected": "..."}`}
             </pre>
             <p className="text-xs text-zinc-500 mt-2">
@@ -1007,11 +984,7 @@ function ExportPanel({
             {exportedData && (
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={handleCopy}>
-                  {copied ? (
-                    <Check className="h-4 w-4 mr-1" />
-                  ) : (
-                    <Copy className="h-4 w-4 mr-1" />
-                  )}
+                  {copied ? <Check className="h-4 w-4 mr-1" /> : <Copy className="h-4 w-4 mr-1" />}
                   {copied ? "Copied!" : "Copy"}
                 </Button>
                 <Button variant="outline" size="sm" onClick={handleDownload}>

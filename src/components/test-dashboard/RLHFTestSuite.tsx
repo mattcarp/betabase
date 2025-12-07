@@ -1,6 +1,6 @@
 /**
  * RLHF Test Suite Component
- * 
+ *
  * Auto-generated tests from human feedback and curator corrections
  * Part of Test tab integration - Phase 6
  */
@@ -19,9 +19,9 @@ import {
   RefreshCw,
   Play,
   FileText,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -37,18 +37,18 @@ interface RLHFGeneratedTest {
   pass_count: number;
   fail_count: number;
   last_run_at?: string;
-  status: 'pending' | 'passing' | 'failing' | 'flaky';
+  status: "pending" | "passing" | "failing" | "flaky";
 }
 
 export function RLHFTestSuite() {
   const [tests, setTests] = useState<RLHFGeneratedTest[]>([]);
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState({ 
-    total: 0, 
-    passing: 0, 
-    failing: 0, 
+  const [stats, setStats] = useState({
+    total: 0,
+    passing: 0,
+    failing: 0,
     pending: 0,
-    generationRate: 0
+    generationRate: 0,
   });
   const supabase = createClientComponentClient();
 
@@ -58,42 +58,42 @@ export function RLHFTestSuite() {
 
   const loadRLHFTests = async () => {
     setLoading(true);
-    
+
     try {
       // Note: This table will be created as tests are generated from feedback
       // For now, showing placeholder structure
-      
+
       const { data: tableCheck, error: tableError } = await supabase
-        .from('rlhf_generated_tests')
-        .select('count')
+        .from("rlhf_generated_tests")
+        .select("count")
         .limit(1);
 
-      if (tableError && tableError.code === '42P01') {
+      if (tableError && tableError.code === "42P01") {
         // Table doesn't exist yet - show placeholder
-        console.warn('RLHF test table not created yet');
+        console.warn("RLHF test table not created yet");
         setTests([]);
-        setStats({ 
-          total: 0, 
-          passing: 0, 
-          failing: 0, 
+        setStats({
+          total: 0,
+          passing: 0,
+          failing: 0,
           pending: 0,
-          generationRate: 0 
+          generationRate: 0,
         });
-        toast.info('No RLHF-generated tests yet - start by curating feedback!');
+        toast.info("No RLHF-generated tests yet - start by curating feedback!");
         setLoading(false);
         return;
       }
 
       // Load tests
       const { data, error } = await supabase
-        .from('rlhf_generated_tests')
-        .select('*')
-        .order('generated_at', { ascending: false })
+        .from("rlhf_generated_tests")
+        .select("*")
+        .order("generated_at", { ascending: false })
         .limit(50);
 
       if (error) {
-        console.error('Failed to load RLHF tests:', error);
-        toast.error('Failed to load RLHF tests');
+        console.error("Failed to load RLHF tests:", error);
+        toast.error("Failed to load RLHF tests");
         return;
       }
 
@@ -101,41 +101,38 @@ export function RLHFTestSuite() {
 
       // Calculate stats
       const total = (data || []).length;
-      const passing = (data || []).filter(t => t.status === 'passing').length;
-      const failing = (data || []).filter(t => t.status === 'failing').length;
-      const pending = (data || []).filter(t => t.status === 'pending').length;
+      const passing = (data || []).filter((t) => t.status === "passing").length;
+      const failing = (data || []).filter((t) => t.status === "failing").length;
+      const pending = (data || []).filter((t) => t.status === "pending").length;
 
       // Calculate generation rate (tests per week)
       const oneWeekAgo = new Date();
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-      const recentTests = (data || []).filter(t => 
-        new Date(t.generated_at) > oneWeekAgo
-      ).length;
+      const recentTests = (data || []).filter((t) => new Date(t.generated_at) > oneWeekAgo).length;
 
       setStats({
         total,
         passing,
         failing,
         pending,
-        generationRate: recentTests
+        generationRate: recentTests,
       });
-
     } catch (error) {
-      console.error('Error loading RLHF tests:', error);
+      console.error("Error loading RLHF tests:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const runTest = async (test: RLHFGeneratedTest) => {
-    toast.info('Running RLHF test...');
+    toast.info("Running RLHF test...");
     // TODO: Implement test execution
-    console.log('Run test:', test);
+    console.log("Run test:", test);
   };
 
   const viewTestCode = async (test: RLHFGeneratedTest) => {
     // TODO: Implement code viewer
-    console.log('View test code:', test);
+    console.log("View test code:", test);
   };
 
   return (
@@ -186,12 +183,7 @@ export function RLHFTestSuite() {
 
         {/* Action buttons */}
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={loadRLHFTests}
-            disabled={loading}
-            className="gap-2"
-          >
+          <Button variant="outline" onClick={loadRLHFTests} disabled={loading} className="gap-2">
             {loading ? (
               <>
                 <RefreshCw className="h-4 w-4 animate-spin" />
@@ -204,9 +196,7 @@ export function RLHFTestSuite() {
               </>
             )}
           </Button>
-          <Button
-            className="gap-2 bg-purple-600 hover:bg-purple-700"
-          >
+          <Button className="gap-2 bg-purple-600 hover:bg-purple-700">
             <TrendingUp className="h-4 w-4" />
             Generate New Tests
           </Button>
@@ -216,21 +206,23 @@ export function RLHFTestSuite() {
         <ScrollArea className="flex-1">
           {tests.length > 0 ? (
             <div className="space-y-3">
-              {tests.map(test => (
+              {tests.map((test) => (
                 <Card key={test.id} className="bg-zinc-900/30 border-zinc-800">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <Badge className={cn(
-                            "text-xs",
-                            test.status === 'passing' && "bg-green-500/20 text-green-300",
-                            test.status === 'failing' && "bg-red-500/20 text-red-300",
-                            test.status === 'pending' && "bg-amber-500/20 text-amber-300",
-                            test.status === 'flaky' && "bg-yellow-500/20 text-yellow-300"
-                          )}>
-                            {test.status === 'passing' && <CheckCircle className="h-3 w-3 mr-1" />}
-                            {test.status === 'failing' && <XCircle className="h-3 w-3 mr-1" />}
+                          <Badge
+                            className={cn(
+                              "text-xs",
+                              test.status === "passing" && "bg-green-500/20 text-green-300",
+                              test.status === "failing" && "bg-red-500/20 text-red-300",
+                              test.status === "pending" && "bg-amber-500/20 text-amber-300",
+                              test.status === "flaky" && "bg-yellow-500/20 text-yellow-300"
+                            )}
+                          >
+                            {test.status === "passing" && <CheckCircle className="h-3 w-3 mr-1" />}
+                            {test.status === "failing" && <XCircle className="h-3 w-3 mr-1" />}
                             {test.status}
                           </Badge>
                           {test.run_count > 0 && (
@@ -239,7 +231,9 @@ export function RLHFTestSuite() {
                             </span>
                           )}
                         </div>
-                        <CardTitle className="text-sm text-zinc-200">{test.test_description}</CardTitle>
+                        <CardTitle className="text-sm text-zinc-200">
+                          {test.test_description}
+                        </CardTitle>
                       </div>
                     </div>
                   </CardHeader>
@@ -306,4 +300,3 @@ export function RLHFTestSuite() {
     </Card>
   );
 }
-

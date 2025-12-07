@@ -99,15 +99,16 @@ export function CurateTab({
 }: CurateTabProps) {
   // Permission check for RLHF features
   // Allow bypass on localhost for development, but enforce on production
-  const isLocalhost = typeof window !== 'undefined' && 
-    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  
+  const isLocalhost =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+
   const [userEmail, setUserEmail] = useState<string>("");
   const { hasPermission } = usePermissions(userEmail);
-  
+
   // SECURITY: Only bypass permissions on localhost, never on production
   const canAccessRLHF = isLocalhost || hasPermission("rlhf_feedback");
-  
+
   useEffect(() => {
     async function loadUser() {
       try {
@@ -121,7 +122,7 @@ export function CurateTab({
     }
     loadUser();
   }, []);
-  
+
   const [files, setFiles] = useState<VectorStoreFile[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -852,8 +853,9 @@ export function CurateTab({
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm font-light text-[var(--mac-text-secondary)]">
-                        Uploaded files are automatically processed and indexed in the AOMA vector store.
-                        They become immediately available for semantic search and AI-powered analysis.
+                        Uploaded files are automatically processed and indexed in the AOMA vector
+                        store. They become immediately available for semantic search and AI-powered
+                        analysis.
                       </p>
                       <div className="flex flex-wrap gap-2">
                         <Badge
@@ -984,7 +986,7 @@ export function CurateTab({
               </Alert>
             </div>
           </TabsContent>
-          
+
           {/* RLHF Feedback Tab Content */}
           {canAccessRLHF && (
             <TabsContent value="rlhf-feedback" className="flex-1 overflow-hidden mt-4">

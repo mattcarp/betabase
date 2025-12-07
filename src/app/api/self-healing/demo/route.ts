@@ -60,7 +60,8 @@ const AOMA_LOGIN_SCENARIOS: DemoScenario[] = [
     scenario: "Developer renamed button ID from 'button' to 'login-button' for clarity",
     tier: 1,
     expectedConfidence: 0.96,
-    demoNarrative: "The Playwright test looks for data-testid='button' but a developer renamed it to 'login-button'. The AI recognizes this is the SAME button - same position, same text, same function. This is a trivial change that should auto-heal immediately.",
+    demoNarrative:
+      "The Playwright test looks for data-testid='button' but a developer renamed it to 'login-button'. The AI recognizes this is the SAME button - same position, same text, same function. This is a trivial change that should auto-heal immediately.",
   },
 
   // ==========================================================================
@@ -94,7 +95,8 @@ const AOMA_LOGIN_SCENARIOS: DemoScenario[] = [
     scenario: "Button moved into a button row with sibling - position shifted but ID unchanged",
     tier: 2,
     expectedConfidence: 0.78,
-    demoNarrative: "The login button is still there with the same ID, but it moved into a button row container. The AI detects the structural change - within tolerance but flags for human review. The QA engineer should verify this is an intentional layout change, not a regression.",
+    demoNarrative:
+      "The login button is still there with the same ID, but it moved into a button row container. The AI detects the structural change - within tolerance but flags for human review. The QA engineer should verify this is an intentional layout change, not a regression.",
   },
 
   // ==========================================================================
@@ -135,7 +137,8 @@ const AOMA_LOGIN_SCENARIOS: DemoScenario[] = [
     scenario: "Major UI redesign - login button moved from center form to upper-right sidebar",
     tier: 3,
     expectedConfidence: 0.42,
-    demoNarrative: "Whoa - the login button moved from the main form to a completely different location in the upper-right sidebar! The AI finds a button with the same ID but low confidence because the context is completely different. This needs architect review - is this intentional? Should the test be rewritten? The HITL queue captures this for expert judgment.",
+    demoNarrative:
+      "Whoa - the login button moved from the main form to a completely different location in the upper-right sidebar! The AI finds a button with the same ID but low confidence because the context is completely different. This needs architect review - is this intentional? Should the test be rewritten? The HITL queue captures this for expert judgment.",
   },
 ];
 
@@ -189,7 +192,7 @@ export async function POST(request: NextRequest) {
     let idx: number;
     if (requestedTier !== undefined) {
       // Find first scenario matching the requested tier
-      idx = DEMO_SCENARIOS.findIndex(s => s.tier === requestedTier);
+      idx = DEMO_SCENARIOS.findIndex((s) => s.tier === requestedTier);
       if (idx === -1) idx = 0;
     } else if (scenarioIndex !== undefined) {
       idx = Math.min(scenarioIndex, DEMO_SCENARIOS.length - 1);
@@ -216,9 +219,7 @@ export async function POST(request: NextRequest) {
       // Use mock response with expected values from scenario
       const newTestId = scenario.domAfter.match(/data-testid="([^"]+)"/)?.[1];
       healingResult = {
-        suggestedSelector: newTestId
-          ? `[data-testid="${newTestId}"]`
-          : scenario.originalSelector,
+        suggestedSelector: newTestId ? `[data-testid="${newTestId}"]` : scenario.originalSelector,
         confidence: scenario.expectedConfidence,
         healingStrategy: "selector-update",
         rationale: scenario.demoNarrative,
@@ -233,9 +234,12 @@ export async function POST(request: NextRequest) {
     const confidence = useRealAI ? healingResult.confidence : scenario.expectedConfidence;
 
     // Determine similar tests affected based on tier
-    const similarTestsAffected = tier === 1 ? Math.floor(Math.random() * 5) + 3
-      : tier === 2 ? Math.floor(Math.random() * 3) + 1
-      : 0;
+    const similarTestsAffected =
+      tier === 1
+        ? Math.floor(Math.random() * 5) + 3
+        : tier === 2
+          ? Math.floor(Math.random() * 3) + 1
+          : 0;
 
     // Create the healing attempt record
     const attemptRecord = {
@@ -247,13 +251,15 @@ export async function POST(request: NextRequest) {
       original_selector: scenario.originalSelector,
       suggested_selector: healingResult.suggestedSelector,
       selector_type: "data-testid",
-      dom_changes: [{
-        type: tier === 3 ? "structure_changed" : "attribute_changed",
-        attribute: "data-testid",
-        before: scenario.originalSelector,
-        after: healingResult.suggestedSelector,
-        context: scenario.scenario,
-      }],
+      dom_changes: [
+        {
+          type: tier === 3 ? "structure_changed" : "attribute_changed",
+          attribute: "data-testid",
+          before: scenario.originalSelector,
+          after: healingResult.suggestedSelector,
+          context: scenario.scenario,
+        },
+      ],
       dom_snapshot_before: scenario.domBefore,
       dom_snapshot_after: scenario.domAfter,
       healing_strategy: tier === 3 ? "structure-adaptation" : healingResult.healingStrategy,
@@ -279,37 +285,40 @@ export async function POST(request: NextRequest) {
         .single();
 
       if (!error && data) {
-        return NextResponse.json({
-          ...data,
-          scenario: scenario.scenario,
-          demo: true,
-        }, { status: 201 });
+        return NextResponse.json(
+          {
+            ...data,
+            scenario: scenario.scenario,
+            demo: true,
+          },
+          { status: 201 }
+        );
       }
     }
 
     // Return demo response if database unavailable
-    return NextResponse.json({
-      id: `demo_${Date.now()}`,
-      ...attemptRecord,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      scenario: scenario.scenario,
-      demo: true,
-      demoNarrative: scenario.demoNarrative,
-      tierDescription: tier === 1
-        ? "Tier 1: Auto-heal - High confidence change, no human intervention needed"
-        : tier === 2
-          ? "Tier 2: Review Queue - Medium confidence, queued for QA review"
-          : "Tier 3: Architect Review - Low confidence, major structural change detected",
-      message: "Demo healing triggered successfully",
-    }, { status: 201 });
-
+    return NextResponse.json(
+      {
+        id: `demo_${Date.now()}`,
+        ...attemptRecord,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        scenario: scenario.scenario,
+        demo: true,
+        demoNarrative: scenario.demoNarrative,
+        tierDescription:
+          tier === 1
+            ? "Tier 1: Auto-heal - High confidence change, no human intervention needed"
+            : tier === 2
+              ? "Tier 2: Review Queue - Medium confidence, queued for QA review"
+              : "Tier 3: Architect Review - Low confidence, major structural change detected",
+        message: "Demo healing triggered successfully",
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Demo trigger error:", error);
-    return NextResponse.json(
-      { error: "Failed to trigger demo healing" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to trigger demo healing" }, { status: 500 });
   }
 }
 
@@ -325,11 +334,12 @@ export async function GET() {
       tier: s.tier,
       expectedConfidence: s.expectedConfidence,
       demoNarrative: s.demoNarrative,
-      tierDescription: s.tier === 1
-        ? "Tier 1: Auto-heal (>90% confidence)"
-        : s.tier === 2
-          ? "Tier 2: Review Queue (60-90% confidence)"
-          : "Tier 3: Architect Review (<60% confidence)",
+      tierDescription:
+        s.tier === 1
+          ? "Tier 1: Auto-heal (>90% confidence)"
+          : s.tier === 2
+            ? "Tier 2: Review Queue (60-90% confidence)"
+            : "Tier 3: Architect Review (<60% confidence)",
     })),
     count: DEMO_SCENARIOS.length,
     aomaScenarios: AOMA_LOGIN_SCENARIOS.length,
@@ -344,7 +354,7 @@ export async function GET() {
 }
 
 // Perform real AI healing for demo
-async function performDemoHealing(scenario: typeof DEMO_SCENARIOS[0]): Promise<{
+async function performDemoHealing(scenario: (typeof DEMO_SCENARIOS)[0]): Promise<{
   suggestedSelector: string;
   confidence: number;
   healingStrategy: string;
@@ -383,7 +393,10 @@ Respond ONLY with valid JSON.`;
     });
 
     const responseText = result.text.trim();
-    const cleanJson = responseText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+    const cleanJson = responseText
+      .replace(/```json\n?/g, "")
+      .replace(/```\n?/g, "")
+      .trim();
     const parsed = JSON.parse(cleanJson);
 
     return {

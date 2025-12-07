@@ -17,27 +17,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "voiceId and text are required" }, { status: 400 });
     }
 
-    const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${body.voiceId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "xi-api-key": apiKey,
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${body.voiceId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "xi-api-key": apiKey,
+      },
+      body: JSON.stringify({
+        text: body.text,
+        model_id: body.modelId ?? "eleven_multilingual_v2",
+        voice_settings: body.voiceSettings ?? {
+          stability: 0.5,
+          similarity_boost: 0.75,
+          style: 0,
+          use_speaker_boost: true,
         },
-        body: JSON.stringify({
-          text: body.text,
-          model_id: body.modelId ?? "eleven_multilingual_v2",
-          voice_settings: body.voiceSettings ?? {
-            stability: 0.5,
-            similarity_boost: 0.75,
-            style: 0,
-            use_speaker_boost: true,
-          },
-        }),
-        signal: AbortSignal.timeout(10000),
-      }
-    );
+      }),
+      signal: AbortSignal.timeout(10000),
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -66,10 +63,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-
-
-
-
-
-

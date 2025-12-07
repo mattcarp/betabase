@@ -99,9 +99,7 @@ const ComponentPlayground = () => {
 
           {/* Multiple Variants */}
           <div className="mt-12">
-            <h3 className="mac-title text-lg font-normal text-blue-600 mb-6">
-              Component Variants
-            </h3>
+            <h3 className="mac-title text-lg font-normal text-blue-600 mb-6">Component Variants</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
               {[
                 { value: 25, color: "danger" as const, label: "Low" },

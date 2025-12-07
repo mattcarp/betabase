@@ -21,13 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -36,12 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   CheckCircle,
   XCircle,
@@ -81,10 +70,7 @@ interface CuratorWorkspaceProps {
   onReject: (feedbackId: string, notes: string) => Promise<void>;
   onRequestRevision: (feedbackId: string, notes: string) => Promise<void>;
   onSkip: (feedbackId: string) => void;
-  onBulkAction?: (
-    feedbackIds: string[],
-    action: "approve" | "reject"
-  ) => Promise<void>;
+  onBulkAction?: (feedbackIds: string[], action: "approve" | "reject") => Promise<void>;
   currentCuratorId?: string;
   className?: string;
 }
@@ -148,8 +134,7 @@ const DEMO_QUEUE: AnnotationQueueItem[] = [
       rating: 1,
       categories: ["completeness", "helpfulness"],
       severity: "critical",
-      feedbackText:
-        "This is way too brief. Users need step-by-step guidance with screenshots.",
+      feedbackText: "This is way too brief. Users need step-by-step guidance with screenshots.",
       suggestedCorrection: null,
       documentsMarked: null,
       userEmail: "user2@example.com",
@@ -193,12 +178,8 @@ export function CuratorWorkspace({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [curatorNotes, setCuratorNotes] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [filterStatus, setFilterStatus] = useState<FeedbackStatus | "all">(
-    "pending"
-  );
-  const [filterCategory, setFilterCategory] = useState<
-    FeedbackCategory | "all"
-  >("all");
+  const [filterStatus, setFilterStatus] = useState<FeedbackStatus | "all">("pending");
+  const [filterCategory, setFilterCategory] = useState<FeedbackCategory | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [showSuccess, setShowSuccess] = useState<string | null>(null);
@@ -209,10 +190,7 @@ export function CuratorWorkspace({
       if (filterStatus !== "all" && item.feedback.status !== filterStatus) {
         return false;
       }
-      if (
-        filterCategory !== "all" &&
-        !item.feedback.categories.includes(filterCategory)
-      ) {
+      if (filterCategory !== "all" && !item.feedback.categories.includes(filterCategory)) {
         return false;
       }
       if (searchQuery) {
@@ -339,9 +317,7 @@ export function CuratorWorkspace({
         <CardContent className="flex flex-col items-center justify-center py-16">
           <CheckCircle className="h-16 w-16 text-green-400 mb-4" />
           <h3 className="text-xl font-medium text-zinc-100">Queue Empty!</h3>
-          <p className="text-zinc-400 mt-2">
-            All feedback has been reviewed. Great work!
-          </p>
+          <p className="text-zinc-400 mt-2">All feedback has been reviewed. Great work!</p>
         </CardContent>
       </Card>
     );
@@ -365,10 +341,7 @@ export function CuratorWorkspace({
 
             <div className="flex items-center gap-3">
               {/* Queue Position */}
-              <Badge
-                variant="outline"
-                className="bg-zinc-800 text-zinc-300 border-zinc-700"
-              >
+              <Badge variant="outline" className="bg-zinc-800 text-zinc-300 border-zinc-700">
                 {currentIndex + 1} of {filteredItems.length}
               </Badge>
 
@@ -376,11 +349,7 @@ export function CuratorWorkspace({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-zinc-500"
-                    >
+                    <Button variant="ghost" size="sm" className="text-zinc-500">
                       <Keyboard className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
@@ -388,27 +357,19 @@ export function CuratorWorkspace({
                     <div className="space-y-1 text-sm">
                       <div className="flex justify-between">
                         <span>Approve</span>
-                        <kbd className="px-1.5 bg-zinc-700 rounded text-xs">
-                          Cmd+A
-                        </kbd>
+                        <kbd className="px-1.5 bg-zinc-700 rounded text-xs">Cmd+A</kbd>
                       </div>
                       <div className="flex justify-between">
                         <span>Reject</span>
-                        <kbd className="px-1.5 bg-zinc-700 rounded text-xs">
-                          Cmd+R
-                        </kbd>
+                        <kbd className="px-1.5 bg-zinc-700 rounded text-xs">Cmd+R</kbd>
                       </div>
                       <div className="flex justify-between">
                         <span>Skip</span>
-                        <kbd className="px-1.5 bg-zinc-700 rounded text-xs">
-                          Cmd+S
-                        </kbd>
+                        <kbd className="px-1.5 bg-zinc-700 rounded text-xs">Cmd+S</kbd>
                       </div>
                       <div className="flex justify-between">
                         <span>Navigate</span>
-                        <kbd className="px-1.5 bg-zinc-700 rounded text-xs">
-                          Arrow Left/Right
-                        </kbd>
+                        <kbd className="px-1.5 bg-zinc-700 rounded text-xs">Arrow Left/Right</kbd>
                       </div>
                     </div>
                   </TooltipContent>
@@ -447,9 +408,7 @@ export function CuratorWorkspace({
 
             <Select
               value={filterCategory}
-              onValueChange={(v) =>
-                setFilterCategory(v as FeedbackCategory | "all")
-              }
+              onValueChange={(v) => setFilterCategory(v as FeedbackCategory | "all")}
             >
               <SelectTrigger className="w-[140px] bg-zinc-800/50 border-zinc-700">
                 <SelectValue placeholder="Category" />
@@ -508,13 +467,12 @@ export function CuratorWorkspace({
                     Original AI Response
                   </CardTitle>
                   <div className="flex items-center gap-2">
-                    {currentItem.feedback.thumbsUp !== null && (
-                      currentItem.feedback.thumbsUp ? (
+                    {currentItem.feedback.thumbsUp !== null &&
+                      (currentItem.feedback.thumbsUp ? (
                         <ThumbsUp className="h-4 w-4 text-green-400" />
                       ) : (
                         <ThumbsDown className="h-4 w-4 text-red-400" />
-                      )
-                    )}
+                      ))}
                     {currentItem.feedback.rating && (
                       <div className="flex items-center gap-1">
                         {[...Array(5)].map((_, i) => (
@@ -540,9 +498,7 @@ export function CuratorWorkspace({
                     <MessageSquare className="h-3 w-3" />
                     User Query
                   </div>
-                  <p className="text-sm text-zinc-300">
-                    {currentItem.feedback.userQuery}
-                  </p>
+                  <p className="text-sm text-zinc-300">{currentItem.feedback.userQuery}</p>
                 </div>
 
                 {/* AI Response */}
@@ -592,9 +548,7 @@ export function CuratorWorkspace({
                         <AlertTriangle className="h-3 w-3" />
                         User Feedback
                       </div>
-                      <p className="text-sm text-yellow-200">
-                        {currentItem.feedback.feedbackText}
-                      </p>
+                      <p className="text-sm text-yellow-200">{currentItem.feedback.feedbackText}</p>
                     </div>
                   )}
                 </div>
@@ -617,17 +571,13 @@ export function CuratorWorkspace({
                       User&apos;s Suggested Response
                     </div>
                     <div className="prose prose-sm prose-invert max-w-none text-green-200">
-                      <Response>
-                        {currentItem.feedback.suggestedCorrection}
-                      </Response>
+                      <Response>{currentItem.feedback.suggestedCorrection}</Response>
                     </div>
                   </div>
                 ) : (
                   <div className="bg-zinc-800/30 rounded-lg p-6 text-center">
                     <FileText className="h-8 w-8 text-zinc-600 mx-auto mb-2" />
-                    <p className="text-sm text-zinc-500">
-                      No correction suggested by user
-                    </p>
+                    <p className="text-sm text-zinc-500">No correction suggested by user</p>
                   </div>
                 )}
 

@@ -111,9 +111,13 @@ export function useElevenLabsSTT(options: UseElevenLabsSTTOptions = {}) {
         stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       } catch (permissionError: any) {
         let errorMessage = "Failed to access microphone. ";
-        
-        if (permissionError.name === "NotAllowedError" || permissionError.name === "PermissionDeniedError") {
-          errorMessage += "Please grant microphone permission in your browser settings and try again.";
+
+        if (
+          permissionError.name === "NotAllowedError" ||
+          permissionError.name === "PermissionDeniedError"
+        ) {
+          errorMessage +=
+            "Please grant microphone permission in your browser settings and try again.";
         } else if (permissionError.name === "NotFoundError") {
           errorMessage += "No microphone found. Please connect a microphone and try again.";
         } else if (permissionError.name === "NotReadableError") {
@@ -167,7 +171,9 @@ export function useElevenLabsSTT(options: UseElevenLabsSTTOptions = {}) {
     } catch (error) {
       console.error("Failed to start recording:", error);
       const friendlyError = new Error(
-        error instanceof Error ? error.message : "An unexpected error occurred while starting recording."
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred while starting recording."
       );
       options.onError?.(friendlyError);
     }
@@ -211,12 +217,12 @@ export function useElevenLabsSTT(options: UseElevenLabsSTTOptions = {}) {
         setPermissionState(result.state);
         return result.state === "granted";
       }
-      
+
       // Fallback: try to get a stream (will prompt if needed)
       // This is only for checking, so we immediately release it
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach((track) => track.stop());
         setPermissionState("granted");
         return true;
       } catch {

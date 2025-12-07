@@ -40,7 +40,7 @@ export function DiagramOffer({
       >
         <Card className="mac-card overflow-hidden border-blue-500/20 shadow-2xl shadow-blue-500/10">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 pointer-events-none" />
-          
+
           <div className="p-5 relative">
             <button
               onClick={dismissOffer}
@@ -61,7 +61,8 @@ export function DiagramOffer({
                     <Sparkles className="h-3 w-3 text-yellow-500 animate-pulse" />
                   </h4>
                   <p className="text-xs text-muted-foreground leading-relaxed mt-1">
-                    I can visualize this complex workflow for you using an interactive Mermaid diagram.
+                    I can visualize this complex workflow for you using an interactive Mermaid
+                    diagram.
                   </p>
                 </div>
 

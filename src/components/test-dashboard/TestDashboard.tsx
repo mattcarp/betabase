@@ -369,9 +369,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                 <Activity className="h-5 w-5 text-blue-400" />
               </div>
               <div>
-                <h1 className="text-2xl font-light tracking-tight text-white">
-                  Test Dashboard
-                </h1>
+                <h1 className="text-2xl font-light tracking-tight text-white">Test Dashboard</h1>
                 <p className="text-sm text-neutral-400">
                   Unified testing and quality assurance platform
                 </p>
@@ -381,11 +379,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             {/* Control Buttons */}
             <div className="flex items-center gap-2">
               <Button
-                className="mac-button mac-button-primary"
+                className="mac-button mac-button-primary gap-2"
                 variant={isRunning ? "destructive" : "default"}
                 size="sm"
                 onClick={isRunning ? () => setIsRunning(false) : handleRunTests}
-                className="gap-2"
               >
                 {isRunning ? (
                   <>
@@ -515,12 +512,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-foreground">Live Test Output</span>
                 <Button
-                  className="mac-button mac-button-outline"
                   variant="ghost"
-                  className="mac-button mac-button-outline"
                   size="sm"
                   onClick={() => setUseRealTimeStreaming(!useRealTimeStreaming)}
-                  className="text-xs"
+                  className="mac-button mac-button-outline text-xs"
                 >
                   {useRealTimeStreaming ? "📡 Streaming" : "🔄 Polling"}
                 </Button>

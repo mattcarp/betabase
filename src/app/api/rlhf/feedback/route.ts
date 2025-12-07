@@ -13,9 +13,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 
 interface FeedbackSubmission {
-  sessionId: string;  // Maps to session_id (required)
-  query: string;      // Maps to query (required)
-  response: string;   // Maps to response (required)
+  sessionId: string; // Maps to session_id (required)
+  query: string; // Maps to query (required)
+  response: string; // Maps to response (required)
   feedbackType: "thumbs_up" | "thumbs_down" | "rating" | "correction" | "detailed";
   feedbackValue?: {
     rating?: number;
@@ -112,10 +112,7 @@ export async function POST(request: NextRequest) {
     const ratingValue = body.feedbackValue?.rating || body.rating;
     if (ratingValue !== undefined) {
       if (ratingValue < 1 || ratingValue > 5) {
-        return NextResponse.json(
-          { error: "Rating must be between 1 and 5" },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: "Rating must be between 1 and 5" }, { status: 400 });
       }
     }
 
@@ -172,12 +169,15 @@ export async function POST(request: NextRequest) {
       console.error("Feedback insert error:", error);
       // Return demo response for any database error (table doesn't exist, column missing, etc.)
       // This allows the demo to work without a fully configured database
-      return NextResponse.json({
-        id: `fb_demo_${Date.now()}`,
-        ...feedbackRecord,
-        created_at: new Date().toISOString(),
-        message: `Feedback recorded (demo mode - ${error.message || error.code || 'database unavailable'})`,
-      }, { status: 201 }); // Return 201 to indicate success in demo mode
+      return NextResponse.json(
+        {
+          id: `fb_demo_${Date.now()}`,
+          ...feedbackRecord,
+          created_at: new Date().toISOString(),
+          message: `Feedback recorded (demo mode - ${error.message || error.code || "database unavailable"})`,
+        },
+        { status: 201 }
+      ); // Return 201 to indicate success in demo mode
     }
 
     // Annotate LangSmith trace if run ID provided
@@ -192,10 +192,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
     console.error("Feedback submission error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -248,10 +245,7 @@ export async function GET(request: NextRequest) {
       if (error.code === "42P01") {
         return NextResponse.json({ feedback: [], message: "Table not yet created" });
       }
-      return NextResponse.json(
-        { error: "Failed to fetch feedback" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to fetch feedback" }, { status: 500 });
     }
 
     // If stats requested, calculate analytics
@@ -265,18 +259,20 @@ export async function GET(request: NextRequest) {
       if (allFeedback) {
         const total = allFeedback.length;
         // Extract values from feedback_value JSONB column
-        const positiveCount = allFeedback.filter(f =>
-          f.feedback_type === "thumbs_up" ||
-          (f.feedback_value as any)?.thumbs_up === true
+        const positiveCount = allFeedback.filter(
+          (f) => f.feedback_type === "thumbs_up" || (f.feedback_value as any)?.thumbs_up === true
         ).length;
-        const negativeCount = allFeedback.filter(f =>
-          f.feedback_type === "thumbs_down" ||
-          (f.feedback_value as any)?.thumbs_up === false
+        const negativeCount = allFeedback.filter(
+          (f) => f.feedback_type === "thumbs_down" || (f.feedback_value as any)?.thumbs_up === false
         ).length;
-        const ratingsWithValue = allFeedback.filter(f => (f.feedback_value as any)?.rating);
-        const avgRating = ratingsWithValue.length > 0
-          ? ratingsWithValue.reduce((sum, f) => sum + ((f.feedback_value as any)?.rating || 0), 0) / ratingsWithValue.length
-          : 0;
+        const ratingsWithValue = allFeedback.filter((f) => (f.feedback_value as any)?.rating);
+        const avgRating =
+          ratingsWithValue.length > 0
+            ? ratingsWithValue.reduce(
+                (sum, f) => sum + ((f.feedback_value as any)?.rating || 0),
+                0
+              ) / ratingsWithValue.length
+            : 0;
 
         stats = {
           total,
@@ -294,10 +290,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ feedback: data, stats });
   } catch (error) {
     console.error("Feedback fetch error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -328,35 +321,31 @@ async function annotateLangSmithRun(
     }
 
     // Create feedback in LangSmith
-    const response = await fetch(
-      `https://api.smith.langchain.com/runs/${runId}/feedback`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": langsmithApiKey,
+    const response = await fetch(`https://api.smith.langchain.com/runs/${runId}/feedback`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": langsmithApiKey,
+      },
+      body: JSON.stringify({
+        score,
+        value:
+          feedback.feedbackType === "thumbs_up"
+            ? "positive"
+            : feedback.feedbackType === "thumbs_down"
+              ? "negative"
+              : feedback.feedbackType,
+        comment: feedback.feedbackValue?.feedbackText || undefined,
+        key: "user_feedback",
+        source_info: {
+          feedback_id: feedback.feedbackId,
+          categories: feedback.feedbackValue?.categories,
         },
-        body: JSON.stringify({
-          score,
-          value: feedback.feedbackType === "thumbs_up" ? "positive" :
-                 feedback.feedbackType === "thumbs_down" ? "negative" :
-                 feedback.feedbackType,
-          comment: feedback.feedbackValue?.feedbackText || undefined,
-          key: "user_feedback",
-          source_info: {
-            feedback_id: feedback.feedbackId,
-            categories: feedback.feedbackValue?.categories,
-          },
-        }),
-      }
-    );
+      }),
+    });
 
     if (!response.ok) {
-      console.error(
-        "LangSmith annotation failed:",
-        response.status,
-        await response.text()
-      );
+      console.error("LangSmith annotation failed:", response.status, await response.text());
     }
   } catch (error) {
     console.error("LangSmith annotation error:", error);

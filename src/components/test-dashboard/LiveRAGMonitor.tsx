@@ -1,6 +1,6 @@
 /**
  * Live RAG Monitor Component
- * 
+ *
  * Real-time visualization of RAG pipeline decisions
  * Part of Test tab integration - Phase 6
  */
@@ -19,18 +19,18 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  Zap
+  Zap,
 } from "lucide-react";
 
 interface RAGPipelineEvent {
   id: string;
   timestamp: string;
   query: string;
-  strategy: 'basic' | 'context-aware' | 'agentic';
+  strategy: "basic" | "context-aware" | "agentic";
   stages: {
     name: string;
     duration: number;
-    status: 'success' | 'failed' | 'skipped';
+    status: "success" | "failed" | "skipped";
     details?: any;
   }[];
   totalDuration: number;
@@ -45,14 +45,14 @@ export function LiveRAGMonitor() {
   const [stats, setStats] = useState({
     avgDuration: 0,
     avgConfidence: 0,
-    strategyDistribution: { basic: 0, 'context-aware': 0, agentic: 0 }
+    strategyDistribution: { basic: 0, "context-aware": 0, agentic: 0 },
   });
 
   useEffect(() => {
     // In production, this would connect to a WebSocket or polling endpoint
     // For now, we'll simulate with local storage or mock data
     loadRecentEvents();
-    
+
     // Simulate real-time updates (in production, use WebSocket)
     const interval = setInterval(() => {
       loadRecentEvents();
@@ -64,44 +64,52 @@ export function LiveRAGMonitor() {
   const loadRecentEvents = () => {
     // Try to load from localStorage (events are stored by chat API)
     try {
-      const stored = localStorage.getItem('rag-pipeline-events');
+      const stored = localStorage.getItem("rag-pipeline-events");
       if (stored) {
         const parsed: RAGPipelineEvent[] = JSON.parse(stored);
         setEvents(parsed.slice(-20)); // Keep last 20 events
-        
+
         // Calculate stats
         if (parsed.length > 0) {
           const avgDuration = parsed.reduce((sum, e) => sum + e.totalDuration, 0) / parsed.length;
           const avgConfidence = parsed.reduce((sum, e) => sum + e.confidence, 0) / parsed.length;
           const strategyDistribution = {
-            basic: parsed.filter(e => e.strategy === 'basic').length,
-            'context-aware': parsed.filter(e => e.strategy === 'context-aware').length,
-            agentic: parsed.filter(e => e.strategy === 'agentic').length
+            basic: parsed.filter((e) => e.strategy === "basic").length,
+            "context-aware": parsed.filter((e) => e.strategy === "context-aware").length,
+            agentic: parsed.filter((e) => e.strategy === "agentic").length,
           };
-          
+
           setStats({ avgDuration, avgConfidence, strategyDistribution });
         }
       }
     } catch (error) {
-      console.error('Failed to load RAG events:', error);
+      console.error("Failed to load RAG events:", error);
     }
   };
 
   const getStrategyColor = (strategy: string) => {
     switch (strategy) {
-      case 'basic': return 'bg-gray-500/20 text-gray-300';
-      case 'context-aware': return 'bg-blue-500/20 text-blue-300';
-      case 'agentic': return 'bg-purple-500/20 text-purple-300';
-      default: return 'bg-zinc-500/20 text-zinc-300';
+      case "basic":
+        return "bg-gray-500/20 text-gray-300";
+      case "context-aware":
+        return "bg-blue-500/20 text-blue-300";
+      case "agentic":
+        return "bg-purple-500/20 text-purple-300";
+      default:
+        return "bg-zinc-500/20 text-zinc-300";
     }
   };
 
   const getStrategyIcon = (strategy: string) => {
     switch (strategy) {
-      case 'basic': return <Search className="h-3 w-3" />;
-      case 'context-aware': return <Lightbulb className="h-3 w-3" />;
-      case 'agentic': return <Activity className="h-3 w-3" />;
-      default: return <Search className="h-3 w-3" />;
+      case "basic":
+        return <Search className="h-3 w-3" />;
+      case "context-aware":
+        return <Lightbulb className="h-3 w-3" />;
+      case "agentic":
+        return <Activity className="h-3 w-3" />;
+      default:
+        return <Search className="h-3 w-3" />;
     }
   };
 
@@ -130,9 +138,7 @@ export function LiveRAGMonitor() {
               <div className="text-xs text-zinc-500">Avg Confidence</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-zinc-100">
-                {events.length}
-              </div>
+              <div className="text-2xl font-bold text-zinc-100">{events.length}</div>
               <div className="text-xs text-zinc-500">Recent Events</div>
             </div>
           </div>
@@ -155,7 +161,7 @@ export function LiveRAGMonitor() {
             <div className="flex items-center justify-between">
               <span className="text-xs text-zinc-400">Context-Aware</span>
               <Badge className="bg-blue-500/20 text-blue-300">
-                {stats.strategyDistribution['context-aware']}
+                {stats.strategyDistribution["context-aware"]}
               </Badge>
             </div>
             <div className="flex items-center justify-between">
@@ -177,7 +183,7 @@ export function LiveRAGMonitor() {
           <ScrollArea className="h-[400px]">
             {events.length > 0 ? (
               <div className="space-y-3">
-                {events.map(event => (
+                {events.map((event) => (
                   <Card key={event.id} className="bg-zinc-900/30 border-zinc-800">
                     <CardContent className="p-4 space-y-2">
                       {/* Event header */}
@@ -187,9 +193,7 @@ export function LiveRAGMonitor() {
                             {getStrategyIcon(event.strategy)}
                             <span className="ml-1">{event.strategy}</span>
                           </Badge>
-                          <p className="text-xs text-zinc-300 mt-2 line-clamp-1">
-                            {event.query}
-                          </p>
+                          <p className="text-xs text-zinc-300 mt-2 line-clamp-1">{event.query}</p>
                         </div>
                         <div className="text-xs text-zinc-500">
                           {new Date(event.timestamp).toLocaleTimeString()}
@@ -203,10 +207,12 @@ export function LiveRAGMonitor() {
                             key={idx}
                             className="flex-1 h-2 rounded"
                             style={{
-                              backgroundColor: 
-                                stage.status === 'success' ? 'rgba(34, 197, 94, 0.3)' :
-                                stage.status === 'failed' ? 'rgba(239, 68, 68, 0.3)' :
-                                'rgba(161, 161, 170, 0.3)'
+                              backgroundColor:
+                                stage.status === "success"
+                                  ? "rgba(34, 197, 94, 0.3)"
+                                  : stage.status === "failed"
+                                    ? "rgba(239, 68, 68, 0.3)"
+                                    : "rgba(161, 161, 170, 0.3)",
                             }}
                             title={`${stage.name} (${stage.duration}ms) - ${stage.status}`}
                           />
@@ -253,4 +259,3 @@ export function LiveRAGMonitor() {
     </div>
   );
 }
-

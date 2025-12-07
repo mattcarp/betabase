@@ -72,20 +72,20 @@ export async function POST(request: NextRequest) {
       console.error("Comparison insert error:", error);
       // Return demo response for any database error (table doesn't exist, connection issues, etc.)
       // This allows the demo to work without a fully configured database
-      return NextResponse.json({
-        id: `cmp_demo_${Date.now()}`,
-        ...comparisonRecord,
-        message: `Comparison recorded (demo mode - ${error.message || error.code || 'database unavailable'})`,
-      }, { status: 201 }); // Return 201 to indicate success in demo mode
+      return NextResponse.json(
+        {
+          id: `cmp_demo_${Date.now()}`,
+          ...comparisonRecord,
+          message: `Comparison recorded (demo mode - ${error.message || error.code || "database unavailable"})`,
+        },
+        { status: 201 }
+      ); // Return 201 to indicate success in demo mode
     }
 
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
     console.error("Comparison submission error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -122,18 +122,12 @@ export async function GET(request: NextRequest) {
       if (error.code === "42P01") {
         return NextResponse.json({ comparisons: [], message: "Table not yet created" });
       }
-      return NextResponse.json(
-        { error: "Failed to fetch comparisons" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to fetch comparisons" }, { status: 500 });
     }
 
     return NextResponse.json({ comparisons: data });
   } catch (error) {
     console.error("Comparison fetch error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

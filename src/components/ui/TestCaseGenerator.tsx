@@ -1,6 +1,6 @@
 /**
  * Test Case Generator Component
- * 
+ *
  * Generates Playwright test cases from RLHF feedback
  * Part of Fix tab in Phase 5.3
  */
@@ -13,14 +13,8 @@ import { Button } from "./button";
 import { Input } from "./input";
 import { Badge } from "./badge";
 import { ScrollArea } from "./scroll-area";
-import { 
-  FileCode, 
-  Download, 
-  RefreshCw,
-  CheckCircle,
-  Play
-} from "lucide-react";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { FileCode, Download, RefreshCw, CheckCircle, Play } from "lucide-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -38,30 +32,30 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
 
   const loadFeedbackItem = async () => {
     if (!searchId.trim()) {
-      toast.error('Please enter a feedback ID');
+      toast.error("Please enter a feedback ID");
       return;
     }
 
     setLoading(true);
-    
+
     try {
       const { data, error } = await supabase
-        .from('rlhf_feedback')
-        .select('*')
-        .eq('id', searchId)
+        .from("rlhf_feedback")
+        .select("*")
+        .eq("id", searchId)
         .single();
 
       if (error) {
-        console.error('Failed to load feedback:', error);
-        toast.error('Feedback item not found');
+        console.error("Failed to load feedback:", error);
+        toast.error("Feedback item not found");
         return;
       }
 
       setFeedbackData(data);
-      toast.success('Feedback loaded - ready to generate test');
+      toast.success("Feedback loaded - ready to generate test");
     } catch (error) {
-      console.error('Error loading feedback:', error);
-      toast.error('Failed to load feedback item');
+      console.error("Error loading feedback:", error);
+      toast.error("Failed to load feedback item");
     } finally {
       setLoading(false);
     }
@@ -69,18 +63,18 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
 
   const generateTestCase = async () => {
     if (!feedbackData) {
-      toast.error('Please load a feedback item first');
+      toast.error("Please load a feedback item first");
       return;
     }
 
     setGenerating(true);
-    
+
     try {
       // Generate Playwright test code from feedback
-      const query = feedbackData.user_query || '';
-      const expectedResponse = feedbackData.feedback_text || feedbackData.ai_response || '';
+      const query = feedbackData.user_query || "";
+      const expectedResponse = feedbackData.feedback_text || feedbackData.ai_response || "";
       const relevantDocs = feedbackData.documents_marked || [];
-      
+
       const testCodeGenerated = `/**
  * Auto-generated from RLHF feedback
  * Feedback ID: ${feedbackData.id}
@@ -96,7 +90,7 @@ test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async
   
   // Send query
   const chatInput = page.locator('[data-testid="chat-input"], textarea[placeholder*="Message"]').first();
-  await chatInput.fill(\`${query.replace(/`/g, '\\`')}\`);
+  await chatInput.fill(\`${query.replace(/`/g, "\\`")}\`);
   
   const sendButton = page.locator('button:has-text("Send"), [data-testid="send-button"]').first();
   await sendButton.click();
@@ -107,19 +101,28 @@ test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async
   
   // Verify response quality (based on curator feedback)
   expect(response).toBeTruthy();
-  ${feedbackData.rating >= 4 ? `
+  ${
+    feedbackData.rating >= 4
+      ? `
   // This response received positive feedback (${feedbackData.rating}/5 stars)
-  // Expected to contain key information:` : `
+  // Expected to contain key information:`
+      : `
   // This response received negative feedback - should be improved
-  // Curator correction:`}
-  ${expectedResponse ? `expect(response?.toLowerCase()).toContain('${expectedResponse.substring(0, 50).toLowerCase().replace(/'/g, "\\'")}');` : '// No specific assertions - manual verification required'}
+  // Curator correction:`
+  }
+  ${expectedResponse ? `expect(response?.toLowerCase()).toContain('${expectedResponse.substring(0, 50).toLowerCase().replace(/'/g, "\\'")}');` : "// No specific assertions - manual verification required"}
   
-  ${relevantDocs.length > 0 ? `
+  ${
+    relevantDocs.length > 0
+      ? `
   // Verify correct documents were retrieved (based on curator marks)
-  // ${relevantDocs.length} documents marked as relevant` : ''}
-  ${relevantDocs.slice(0, 3).map((doc: any) => 
-    `// - ${doc.content?.substring(0, 60) || 'Document ' + doc.id}...`
-  ).join('\n  ')}
+  // ${relevantDocs.length} documents marked as relevant`
+      : ""
+  }
+  ${relevantDocs
+    .slice(0, 3)
+    .map((doc: any) => `// - ${doc.content?.substring(0, 60) || "Document " + doc.id}...`)
+    .join("\n  ")}
   
   // Verify RAG metadata present (proof of advanced RAG)
   const ragBadges = page.locator('[class*="bg-purple-500"], [class*="bg-blue-500"]');
@@ -131,10 +134,10 @@ test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async
 `;
 
       setTestCode(testCodeGenerated);
-      toast.success('Test case generated! Review and save to file.');
+      toast.success("Test case generated! Review and save to file.");
     } catch (error) {
-      console.error('Error generating test:', error);
-      toast.error('Failed to generate test case');
+      console.error("Error generating test:", error);
+      toast.error("Failed to generate test case");
     } finally {
       setGenerating(false);
     }
@@ -142,21 +145,21 @@ test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async
 
   const downloadTestFile = () => {
     if (!testCode) {
-      toast.error('No test code to download');
+      toast.error("No test code to download");
       return;
     }
 
-    const blob = new Blob([testCode], { type: 'text/typescript' });
+    const blob = new Blob([testCode], { type: "text/typescript" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `rlhf-${feedbackData?.id || 'test'}.spec.ts`;
+    a.download = `rlhf-${feedbackData?.id || "test"}.spec.ts`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
-    toast.success(`Test saved to rlhf-${feedbackData?.id || 'test'}.spec.ts`);
+
+    toast.success(`Test saved to rlhf-${feedbackData?.id || "test"}.spec.ts`);
   };
 
   return (
@@ -212,11 +215,16 @@ test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async
                 <p className="text-sm text-zinc-200 mt-1">{feedbackData.user_query}</p>
               </div>
               <div className="flex gap-2">
-                <Badge className={cn(
-                  "text-xs",
-                  feedbackData.rating >= 4 ? "bg-green-500/20 text-green-300" : "bg-red-500/20 text-red-300"
-                )}>
-                  {feedbackData.thumbs_up ? '👍' : '👎'} {feedbackData.rating ? `${feedbackData.rating}/5` : 'No rating'}
+                <Badge
+                  className={cn(
+                    "text-xs",
+                    feedbackData.rating >= 4
+                      ? "bg-green-500/20 text-green-300"
+                      : "bg-red-500/20 text-red-300"
+                  )}
+                >
+                  {feedbackData.thumbs_up ? "👍" : "👎"}{" "}
+                  {feedbackData.rating ? `${feedbackData.rating}/5` : "No rating"}
                 </Badge>
                 {feedbackData.documents_marked && (
                   <Badge className="text-xs bg-purple-500/20 text-purple-300">
@@ -253,12 +261,7 @@ test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async
                 <CheckCircle className="h-3 w-3 mr-1" />
                 Test generated successfully
               </Badge>
-              <Button
-                onClick={downloadTestFile}
-                variant="outline"
-                size="sm"
-                className="gap-2"
-              >
+              <Button onClick={downloadTestFile} variant="outline" size="sm" className="gap-2">
                 <Download className="h-4 w-4" />
                 Download
               </Button>
@@ -297,4 +300,3 @@ test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async
     </Card>
   );
 }
-

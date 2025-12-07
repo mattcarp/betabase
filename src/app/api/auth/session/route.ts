@@ -110,10 +110,3 @@ export async function DELETE() {
   clearAuthCookies(response);
   return response;
 }
-
-
-
-
-
-
-

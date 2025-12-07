@@ -114,10 +114,7 @@ const initialState: FeedbackState = {
   lastEvent: null,
 };
 
-function feedbackReducer(
-  state: FeedbackState,
-  action: FeedbackAction
-): FeedbackState {
+function feedbackReducer(state: FeedbackState, action: FeedbackAction): FeedbackState {
   switch (action.type) {
     case "SUBMIT_START": {
       const newPending = new Set(state.pendingSubmissions);
@@ -252,9 +249,7 @@ export function FeedbackProvider({
   onFeedbackError,
 }: FeedbackProviderProps) {
   const [state, dispatch] = useReducer(feedbackReducer, initialState);
-  const eventSubscribers = React.useRef<Set<(event: FeedbackEvent) => void>>(
-    new Set()
-  );
+  const eventSubscribers = React.useRef<Set<(event: FeedbackEvent) => void>>(new Set());
 
   // Emit events to subscribers
   useEffect(() => {
@@ -320,8 +315,7 @@ export function FeedbackProvider({
 
         return savedFeedback;
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "Unknown error";
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
         dispatch({
           type: "SUBMIT_ERROR",
           messageId: submission.messageId,
@@ -360,8 +354,7 @@ export function FeedbackProvider({
 
         return updatedFeedback;
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "Unknown error";
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
         dispatch({
           type: "UPDATE_ERROR",
           feedbackId,
@@ -451,11 +444,7 @@ export function FeedbackProvider({
     ]
   );
 
-  return (
-    <FeedbackContext.Provider value={contextValue}>
-      {children}
-    </FeedbackContext.Provider>
-  );
+  return <FeedbackContext.Provider value={contextValue}>{children}</FeedbackContext.Provider>;
 }
 
 // ============================================================================
@@ -521,8 +510,7 @@ export function useQuickFeedback(messageId: string, conversationId: string) {
  * Hook for detailed feedback with categories and corrections
  */
 export function useDetailedFeedback(messageId: string, conversationId: string) {
-  const { submitFeedback, updateFeedback, getFeedbackForMessage, isPending } =
-    useFeedback();
+  const { submitFeedback, updateFeedback, getFeedbackForMessage, isPending } = useFeedback();
   const existing = getFeedbackForMessage(messageId);
 
   const submitDetailed = useCallback(

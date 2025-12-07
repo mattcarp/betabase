@@ -61,11 +61,7 @@ function extractTitle(content: string): string {
 function extractSummary(content: string): string {
   if (!content) return "";
   // Remove markdown formatting
-  const clean = content
-    .replace(/#+\s*/g, "")
-    .replace(/\*\*/g, "")
-    .replace(/\n+/g, " ")
-    .trim();
+  const clean = content.replace(/#+\s*/g, "").replace(/\*\*/g, "").replace(/\n+/g, " ").trim();
 
   // Get first 2-3 sentences
   const sentences = clean.match(/[^.!?]+[.!?]+/g) || [clean];
@@ -132,9 +128,7 @@ export async function POST(req: NextRequest) {
     const maxResults = options?.max_results ?? 3;
 
     // Build search query - combine trigger with context for better semantic search
-    const searchQuery = context
-      ? `${trigger} ${context}`
-      : trigger;
+    const searchQuery = context ? `${trigger} ${context}` : trigger;
 
     console.log(`[HUD] Querying for: "${trigger}" (${trigger_type})`);
 
@@ -146,30 +140,28 @@ export async function POST(req: NextRequest) {
     });
 
     // Transform results to HUD hints format
-    const hints: ContextHint[] = searchResults.results
-      .slice(0, maxResults)
-      .map((result) => {
-        const hint: ContextHint = {
-          type: result.source_type || "knowledge",
-          title: extractTitle(result.content),
-          summary: extractSummary(result.content),
-          relevance: result.similarity || 0.5,
-        };
+    const hints: ContextHint[] = searchResults.results.slice(0, maxResults).map((result) => {
+      const hint: ContextHint = {
+        type: result.source_type || "knowledge",
+        title: extractTitle(result.content),
+        summary: extractSummary(result.content),
+        relevance: result.similarity || 0.5,
+      };
 
-        // Add metadata if available
-        if (result.metadata) {
-          if (result.metadata.status) hint.status = result.metadata.status;
-          if (result.metadata.priority) hint.priority = result.metadata.priority;
-          if (result.metadata.assignee) hint.assignee = result.metadata.assignee;
-          if (result.metadata.url) hint.url = result.metadata.url;
-          if (result.metadata.source_id) hint.source_id = result.metadata.source_id;
-        }
+      // Add metadata if available
+      if (result.metadata) {
+        if (result.metadata.status) hint.status = result.metadata.status;
+        if (result.metadata.priority) hint.priority = result.metadata.priority;
+        if (result.metadata.assignee) hint.assignee = result.metadata.assignee;
+        if (result.metadata.url) hint.url = result.metadata.url;
+        if (result.metadata.source_id) hint.source_id = result.metadata.source_id;
+      }
 
-        if (result.source_id) hint.source_id = result.source_id;
-        if (result.updated_at) hint.updated_at = result.updated_at;
+      if (result.source_id) hint.source_id = result.source_id;
+      if (result.updated_at) hint.updated_at = result.updated_at;
 
-        return hint;
-      });
+      return hint;
+    });
 
     const response: HudResponse = {
       trigger,
@@ -188,7 +180,6 @@ export async function POST(req: NextRequest) {
     console.log(`[HUD] Returned ${hints.length} hints in ${response.query_time_ms}ms`);
 
     return NextResponse.json(response);
-
   } catch (error) {
     console.error("[HUD] Query error:", error);
 

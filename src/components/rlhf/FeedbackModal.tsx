@@ -28,12 +28,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   ThumbsUp,
   ThumbsDown,
@@ -52,12 +47,7 @@ import {
   Star,
   Send,
 } from "lucide-react";
-import type {
-  FeedbackCategory,
-  FeedbackSeverity,
-  DocumentRelevance,
-  RagMetadata,
-} from "./types";
+import type { FeedbackCategory, FeedbackSeverity, DocumentRelevance, RagMetadata } from "./types";
 
 export interface FeedbackData {
   thumbsUp: boolean | null;
@@ -188,21 +178,15 @@ export function FeedbackModal({
   const [showSuccess, setShowSuccess] = useState(false);
 
   // Form state
-  const [thumbsUp, setThumbsUp] = useState<boolean | null>(
-    initialFeedback?.thumbsUp ?? null
-  );
-  const [rating, setRating] = useState<number | null>(
-    initialFeedback?.rating ?? null
-  );
+  const [thumbsUp, setThumbsUp] = useState<boolean | null>(initialFeedback?.thumbsUp ?? null);
+  const [rating, setRating] = useState<number | null>(initialFeedback?.rating ?? null);
   const [categories, setCategories] = useState<FeedbackCategory[]>(
     initialFeedback?.categories ?? []
   );
   const [severity, setSeverity] = useState<FeedbackSeverity | null>(
     initialFeedback?.severity ?? null
   );
-  const [feedbackText, setFeedbackText] = useState(
-    initialFeedback?.feedbackText ?? ""
-  );
+  const [feedbackText, setFeedbackText] = useState(initialFeedback?.feedbackText ?? "");
   const [suggestedCorrection, setSuggestedCorrection] = useState(
     initialFeedback?.suggestedCorrection ?? ""
   );
@@ -220,9 +204,7 @@ export function FeedbackModal({
   );
 
   const toggleCategory = useCallback((cat: FeedbackCategory) => {
-    setCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
-    );
+    setCategories((prev) => (prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]));
   }, []);
 
   const handleQuickFeedback = useCallback(
@@ -404,9 +386,7 @@ export function FeedbackModal({
     <div className="space-y-6 p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
       {/* Star Rating */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-300">
-          Rate this response
-        </label>
+        <label className="text-sm font-medium text-zinc-300">Rate this response</label>
         <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -429,9 +409,7 @@ export function FeedbackModal({
 
       {/* Issue Categories */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-300">
-          What aspects need improvement?
-        </label>
+        <label className="text-sm font-medium text-zinc-300">What aspects need improvement?</label>
         <div className="flex flex-wrap gap-2">
           {CATEGORY_CONFIG.map((cat) => (
             <TooltipProvider key={cat.id}>
@@ -461,9 +439,7 @@ export function FeedbackModal({
       {/* Severity */}
       {categories.length > 0 && (
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-300">
-            Issue severity
-          </label>
+          <label className="text-sm font-medium text-zinc-300">Issue severity</label>
           <div className="flex gap-2">
             {SEVERITY_CONFIG.map((sev) => (
               <TooltipProvider key={sev.id}>
@@ -471,9 +447,7 @@ export function FeedbackModal({
                   <TooltipTrigger asChild>
                     <Badge
                       variant="outline"
-                      onClick={() =>
-                        setSeverity(severity === sev.id ? null : sev.id)
-                      }
+                      onClick={() => setSeverity(severity === sev.id ? null : sev.id)}
                       className={cn(
                         "cursor-pointer transition-all",
                         severity === sev.id ? sev.color : "bg-zinc-800/50"
@@ -492,9 +466,7 @@ export function FeedbackModal({
 
       {/* Free-text Feedback */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-300">
-          Additional comments (optional)
-        </label>
+        <label className="text-sm font-medium text-zinc-300">Additional comments (optional)</label>
         <Textarea
           value={feedbackText}
           onChange={(e) => setFeedbackText(e.target.value)}
@@ -516,17 +488,15 @@ export function FeedbackModal({
           className="bg-zinc-800/50 border-zinc-700 text-zinc-200 placeholder:text-zinc-500 min-h-[100px]"
         />
         <p className="text-xs text-zinc-500">
-          Your suggested corrections are used to train better AI models through
-          Direct Preference Optimization (DPO).
+          Your suggested corrections are used to train better AI models through Direct Preference
+          Optimization (DPO).
         </p>
       </div>
 
       {/* Document Relevance Marking */}
       {documentsMarked.length > 0 && (
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-300">
-            Were these sources relevant?
-          </label>
+          <label className="text-sm font-medium text-zinc-300">Were these sources relevant?</label>
           <div className="space-y-2">
             {documentsMarked.map((doc, idx) => (
               <div
@@ -544,19 +514,11 @@ export function FeedbackModal({
                     doc.relevant ? "text-green-400" : "text-red-400"
                   )}
                 >
-                  {doc.relevant ? (
-                    <CheckCircle className="h-5 w-5" />
-                  ) : (
-                    <X className="h-5 w-5" />
-                  )}
+                  {doc.relevant ? <CheckCircle className="h-5 w-5" /> : <X className="h-5 w-5" />}
                 </button>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-zinc-300 truncate">
-                    {doc.title}
-                  </div>
-                  <div className="text-xs text-zinc-500 line-clamp-2">
-                    {doc.snippet}
-                  </div>
+                  <div className="text-sm font-medium text-zinc-300 truncate">{doc.title}</div>
+                  <div className="text-xs text-zinc-500 line-clamp-2">{doc.snippet}</div>
                 </div>
               </div>
             ))}
@@ -607,8 +569,7 @@ export function FeedbackModal({
             Provide Feedback
           </DialogTitle>
           <DialogDescription className="text-zinc-400">
-            Your feedback helps improve our AI. All feedback is reviewed by
-            curators.
+            Your feedback helps improve our AI. All feedback is reviewed by curators.
           </DialogDescription>
         </DialogHeader>
 
@@ -620,26 +581,18 @@ export function FeedbackModal({
           >
             <CheckCircle className="h-12 w-12 text-green-400 mb-4" />
             <h3 className="text-lg font-medium text-zinc-100">Thank You!</h3>
-            <p className="text-sm text-zinc-400">
-              Your feedback has been recorded.
-            </p>
+            <p className="text-sm text-zinc-400">Your feedback has been recorded.</p>
           </motion.div>
         ) : (
           <>
             {/* Context Preview */}
             <div className="space-y-3 p-4 bg-zinc-800/30 rounded-lg border border-zinc-700/50">
               <div>
-                <span className="text-xs font-medium text-zinc-500">
-                  Your question:
-                </span>
-                <p className="text-sm text-zinc-300 line-clamp-2">
-                  {userQuery}
-                </p>
+                <span className="text-xs font-medium text-zinc-500">Your question:</span>
+                <p className="text-sm text-zinc-300 line-clamp-2">{userQuery}</p>
               </div>
               <div>
-                <span className="text-xs font-medium text-zinc-500">
-                  AI response:
-                </span>
+                <span className="text-xs font-medium text-zinc-500">AI response:</span>
                 <p className="text-sm text-zinc-400 line-clamp-3">
                   {aiResponse.substring(0, 200)}...
                 </p>

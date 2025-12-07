@@ -14,11 +14,7 @@ export function CountProvider({ children }: { children: React.ReactNode }) {
 
   const increment = () => setCount((prev) => prev + 1);
 
-  return (
-    <CountContext.Provider value={{ count, increment }}>
-      {children}
-    </CountContext.Provider>
-  );
+  return <CountContext.Provider value={{ count, increment }}>{children}</CountContext.Provider>;
 }
 
 export function useCount() {

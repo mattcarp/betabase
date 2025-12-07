@@ -1,6 +1,6 @@
 /**
  * Session State Manager
- * 
+ *
  * Manages conversation history and reinforcement context for context-aware retrieval
  * Part of the Advanced RLHF RAG Implementation - Phase 3
  */
@@ -50,10 +50,7 @@ export class SessionStateManager {
   /**
    * Create a new session
    */
-  createSession(
-    sessionId: string,
-    metadata: SessionMetadata
-  ): ConversationSession {
+  createSession(sessionId: string, metadata: SessionMetadata): ConversationSession {
     const session: ConversationSession = {
       sessionId,
       history: [],
@@ -77,10 +74,7 @@ export class SessionStateManager {
   /**
    * Get session by ID, create if doesn't exist
    */
-  getOrCreateSession(
-    sessionId: string,
-    metadata: SessionMetadata
-  ): ConversationSession {
+  getOrCreateSession(sessionId: string, metadata: SessionMetadata): ConversationSession {
     if (this.sessions.has(sessionId)) {
       return this.sessions.get(sessionId)!;
     }
@@ -90,10 +84,7 @@ export class SessionStateManager {
   /**
    * Add a conversation turn to the session
    */
-  addTurn(
-    sessionId: string,
-    turn: ConversationTurn
-  ): void {
+  addTurn(sessionId: string, turn: ConversationTurn): void {
     const session = this.sessions.get(sessionId);
     if (!session) {
       throw new Error(`Session ${sessionId} not found`);
@@ -119,10 +110,7 @@ export class SessionStateManager {
   /**
    * Update reinforcement context based on feedback
    */
-  private updateReinforcementContext(
-    sessionId: string,
-    turn: ConversationTurn
-  ): void {
+  private updateReinforcementContext(sessionId: string, turn: ConversationTurn): void {
     const session = this.sessions.get(sessionId);
     if (!session || !turn.feedback) return;
 
@@ -134,31 +122,31 @@ export class SessionStateManager {
 
     if (isPositive) {
       // Add to successful docs (avoid duplicates)
-      retrievedDocs.forEach(docId => {
+      retrievedDocs.forEach((docId) => {
         if (!reinforcementContext.successfulDocIds.includes(docId)) {
           reinforcementContext.successfulDocIds.push(docId);
         }
         // Remove from failed if it was there
         reinforcementContext.failedDocIds = reinforcementContext.failedDocIds.filter(
-          id => id !== docId
+          (id) => id !== docId
         );
       });
     } else {
       // Add to failed docs
-      retrievedDocs.forEach(docId => {
+      retrievedDocs.forEach((docId) => {
         if (!reinforcementContext.failedDocIds.includes(docId)) {
           reinforcementContext.failedDocIds.push(docId);
         }
         // Remove from successful if it was there
         reinforcementContext.successfulDocIds = reinforcementContext.successfulDocIds.filter(
-          id => id !== docId
+          (id) => id !== docId
         );
       });
     }
 
     // Extract topics from query and update weights
     const topics = this.extractTopics(turn.query);
-    topics.forEach(topic => {
+    topics.forEach((topic) => {
       const currentWeight = reinforcementContext.topicWeights[topic] || 0;
       // Increase weight for topics with positive feedback
       reinforcementContext.topicWeights[topic] = isPositive
@@ -197,9 +185,9 @@ export class SessionStateManager {
     const keywords = query
       .toLowerCase()
       .split(/\s+/)
-      .filter(word => word.length > 4) // Only words > 4 chars
-      .filter(word => !this.isStopWord(word));
-    
+      .filter((word) => word.length > 4) // Only words > 4 chars
+      .filter((word) => !this.isStopWord(word));
+
     return [...new Set(keywords)]; // Remove duplicates
   }
 
@@ -208,17 +196,106 @@ export class SessionStateManager {
    */
   private isStopWord(word: string): boolean {
     const stopWords = new Set([
-      "about", "above", "after", "again", "against", "all", "also", "among",
-      "another", "any", "are", "as", "at", "be", "because", "been", "before",
-      "being", "below", "between", "both", "but", "by", "can", "could", "did",
-      "do", "does", "doing", "down", "during", "each", "few", "for", "from",
-      "further", "had", "has", "have", "having", "here", "how", "if", "in",
-      "into", "is", "it", "its", "more", "most", "no", "nor", "not", "now",
-      "of", "on", "once", "only", "or", "other", "our", "out", "over", "own",
-      "same", "should", "so", "some", "such", "than", "that", "the", "their",
-      "them", "then", "there", "these", "they", "this", "those", "through",
-      "to", "too", "under", "until", "up", "very", "was", "we", "were", "what",
-      "when", "where", "which", "while", "who", "why", "will", "with", "would",
+      "about",
+      "above",
+      "after",
+      "again",
+      "against",
+      "all",
+      "also",
+      "among",
+      "another",
+      "any",
+      "are",
+      "as",
+      "at",
+      "be",
+      "because",
+      "been",
+      "before",
+      "being",
+      "below",
+      "between",
+      "both",
+      "but",
+      "by",
+      "can",
+      "could",
+      "did",
+      "do",
+      "does",
+      "doing",
+      "down",
+      "during",
+      "each",
+      "few",
+      "for",
+      "from",
+      "further",
+      "had",
+      "has",
+      "have",
+      "having",
+      "here",
+      "how",
+      "if",
+      "in",
+      "into",
+      "is",
+      "it",
+      "its",
+      "more",
+      "most",
+      "no",
+      "nor",
+      "not",
+      "now",
+      "of",
+      "on",
+      "once",
+      "only",
+      "or",
+      "other",
+      "our",
+      "out",
+      "over",
+      "own",
+      "same",
+      "should",
+      "so",
+      "some",
+      "such",
+      "than",
+      "that",
+      "the",
+      "their",
+      "them",
+      "then",
+      "there",
+      "these",
+      "they",
+      "this",
+      "those",
+      "through",
+      "to",
+      "too",
+      "under",
+      "until",
+      "up",
+      "very",
+      "was",
+      "we",
+      "were",
+      "what",
+      "when",
+      "where",
+      "which",
+      "while",
+      "who",
+      "why",
+      "will",
+      "with",
+      "would",
     ]);
     return stopWords.has(word);
   }
@@ -236,7 +313,7 @@ export class SessionStateManager {
   getRecentHistory(sessionId: string, count: number = 5): ConversationTurn[] {
     const session = this.sessions.get(sessionId);
     if (!session) return [];
-    
+
     return session.history.slice(-count);
   }
 
@@ -262,7 +339,7 @@ export class SessionStateManager {
       }
     });
 
-    expiredSessions.forEach(sessionId => {
+    expiredSessions.forEach((sessionId) => {
       this.sessions.delete(sessionId);
       console.log(`🧹 Cleaned up expired session: ${sessionId}`);
     });
@@ -289,24 +366,32 @@ export class SessionStateManager {
   /**
    * Add a query to history (start of turn)
    */
-  async addToHistory(sessionId: string, data: { query: string; timestamp: string; userId?: string }): Promise<void> {
+  async addToHistory(
+    sessionId: string,
+    data: { query: string; timestamp: string; userId?: string }
+  ): Promise<void> {
     this.getOrCreateSession(sessionId, {
-      organization: 'sony-music',
-      division: 'mso',
-      app_under_test: 'siam',
+      organization: "sony-music",
+      division: "mso",
+      app_under_test: "siam",
       userEmail: data.userId,
       startedAt: data.timestamp,
-      lastActivityAt: data.timestamp
+      lastActivityAt: data.timestamp,
     });
   }
 
   /**
    * Record a successful retrieval
    */
-  async recordSuccessfulRetrieval(sessionId: string, data: { query: string; documents: any[]; confidence: number }): Promise<void> {
+  async recordSuccessfulRetrieval(
+    sessionId: string,
+    data: { query: string; documents: any[]; confidence: number }
+  ): Promise<void> {
     const session = this.sessions.get(sessionId);
     if (session) {
-      console.log(`[SessionStateManager] Recorded retrieval for ${sessionId}: ${data.documents.length} docs, confidence ${data.confidence}`);
+      console.log(
+        `[SessionStateManager] Recorded retrieval for ${sessionId}: ${data.documents.length} docs, confidence ${data.confidence}`
+      );
     }
   }
 
@@ -324,12 +409,14 @@ let sessionStateManager: SessionStateManager | null = null;
 export function getSessionStateManager(): SessionStateManager {
   if (!sessionStateManager) {
     sessionStateManager = new SessionStateManager();
-    
+
     // Set up periodic cleanup (every 30 minutes)
-    setInterval(() => {
-      sessionStateManager?.cleanupExpiredSessions();
-    }, 1000 * 60 * 30);
+    setInterval(
+      () => {
+        sessionStateManager?.cleanupExpiredSessions();
+      },
+      1000 * 60 * 30
+    );
   }
   return sessionStateManager;
 }
-

@@ -1,1 +1,41 @@
-{"id":"demo_1765054236043","test_name":"AOMA Login Button - ID Change","test_file":"tests/e2e/aoma/login.spec.ts","status":"success","tier":1,"confidence":1,"original_selector":"[data-testid=\"button\"]","suggested_selector":"[data-testid=\"login-button\"]","selector_type":"data-testid","dom_changes":[{"type":"attribute_changed","attribute":"data-testid","before":"[data-testid=\"button\"]","after":"[data-testid=\"login-button\"]","context":"Developer renamed button ID from 'button' to 'login-button' for clarity"}],"dom_snapshot_before":"<div class=\"login-form\" style=\"display: flex; flex-direction: column; align-items: center; padding: 24px;\">\n  <h1>Welcome to AOMA</h1>\n  <input type=\"text\" placeholder=\"Username\" />\n  <input type=\"password\" placeholder=\"Password\" />\n  <button data-testid=\"button\" class=\"btn-primary\" style=\"margin-top: 16px; padding: 12px 24px;\">\n    Log In\n  </button>\n</div>","dom_snapshot_after":"<div class=\"login-form\" style=\"display: flex; flex-direction: column; align-items: center; padding: 24px;\">\n  <h1>Welcome to AOMA</h1>\n  <input type=\"text\" placeholder=\"Username\" />\n  <input type=\"password\" placeholder=\"Password\" />\n  <button data-testid=\"login-button\" class=\"btn-primary\" style=\"margin-top: 16px; padding: 12px 24px;\">\n    Log In\n  </button>\n</div>","healing_strategy":"selector-update","healing_rationale":"The 'data-testid' attribute was renamed from 'button' to 'login-button' as noted in the change context. The selector has been updated to match the new attribute value.","similar_tests_affected":6,"affected_test_files":["tests/e2e/aoma/login.spec.ts"],"code_before":"await page.click('[data-testid=\"button\"]');","code_after":"await page.click('[data-testid=\"login-button\"]');","execution_time_ms":8400,"retry_count":0,"ai_model":"gemini-3-pro-preview","ai_tokens_used":1167,"organization":"sony-music","healed_at":"2025-12-06T20:50:35.750Z","created_at":"2025-12-06T20:50:36.043Z","updated_at":"2025-12-06T20:50:36.043Z","scenario":"Developer renamed button ID from 'button' to 'login-button' for clarity","demo":true,"demoNarrative":"The Playwright test looks for data-testid='button' but a developer renamed it to 'login-button'. The AI recognizes this is the SAME button - same position, same text, same function. This is a trivial change that should auto-heal immediately.","tierDescription":"Tier 1: Auto-heal - High confidence change, no human intervention needed","message":"Demo healing triggered successfully"}
+{
+  "id": "demo_1765054236043",
+  "test_name": "AOMA Login Button - ID Change",
+  "test_file": "tests/e2e/aoma/login.spec.ts",
+  "status": "success",
+  "tier": 1,
+  "confidence": 1,
+  "original_selector": "[data-testid=\"button\"]",
+  "suggested_selector": "[data-testid=\"login-button\"]",
+  "selector_type": "data-testid",
+  "dom_changes": [
+    {
+      "type": "attribute_changed",
+      "attribute": "data-testid",
+      "before": "[data-testid=\"button\"]",
+      "after": "[data-testid=\"login-button\"]",
+      "context": "Developer renamed button ID from 'button' to 'login-button' for clarity"
+    }
+  ],
+  "dom_snapshot_before": "<div class=\"login-form\" style=\"display: flex; flex-direction: column; align-items: center; padding: 24px;\">\n  <h1>Welcome to AOMA</h1>\n  <input type=\"text\" placeholder=\"Username\" />\n  <input type=\"password\" placeholder=\"Password\" />\n  <button data-testid=\"button\" class=\"btn-primary\" style=\"margin-top: 16px; padding: 12px 24px;\">\n    Log In\n  </button>\n</div>",
+  "dom_snapshot_after": "<div class=\"login-form\" style=\"display: flex; flex-direction: column; align-items: center; padding: 24px;\">\n  <h1>Welcome to AOMA</h1>\n  <input type=\"text\" placeholder=\"Username\" />\n  <input type=\"password\" placeholder=\"Password\" />\n  <button data-testid=\"login-button\" class=\"btn-primary\" style=\"margin-top: 16px; padding: 12px 24px;\">\n    Log In\n  </button>\n</div>",
+  "healing_strategy": "selector-update",
+  "healing_rationale": "The 'data-testid' attribute was renamed from 'button' to 'login-button' as noted in the change context. The selector has been updated to match the new attribute value.",
+  "similar_tests_affected": 6,
+  "affected_test_files": ["tests/e2e/aoma/login.spec.ts"],
+  "code_before": "await page.click('[data-testid=\"button\"]');",
+  "code_after": "await page.click('[data-testid=\"login-button\"]');",
+  "execution_time_ms": 8400,
+  "retry_count": 0,
+  "ai_model": "gemini-3-pro-preview",
+  "ai_tokens_used": 1167,
+  "organization": "sony-music",
+  "healed_at": "2025-12-06T20:50:35.750Z",
+  "created_at": "2025-12-06T20:50:36.043Z",
+  "updated_at": "2025-12-06T20:50:36.043Z",
+  "scenario": "Developer renamed button ID from 'button' to 'login-button' for clarity",
+  "demo": true,
+  "demoNarrative": "The Playwright test looks for data-testid='button' but a developer renamed it to 'login-button'. The AI recognizes this is the SAME button - same position, same text, same function. This is a trivial change that should auto-heal immediately.",
+  "tierDescription": "Tier 1: Auto-heal - High confidence change, no human intervention needed",
+  "message": "Demo healing triggered successfully"
+}

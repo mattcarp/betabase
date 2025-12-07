@@ -99,7 +99,13 @@ export async function GET(_req: Request) {
       status: "ready",
       version: "1.0.0",
       models: ["gemini-3-pro-preview", "gemini-2.5-pro", "gemini-2.5-flash", "gpt-5", "gpt-4o"],
-      features: ["streaming", "aoma-context", "knowledge-base", "gemini-3-reasoning", "thinking-level"],
+      features: [
+        "streaming",
+        "aoma-context",
+        "knowledge-base",
+        "gemini-3-reasoning",
+        "thinking-level",
+      ],
     }),
     {
       status: 200,
@@ -277,8 +283,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const { messages, model, temperature = 0.7, systemPrompt, mode, waitForAOMA } =
-      validation.data;
+    const { messages, model, temperature = 0.7, systemPrompt, mode, waitForAOMA } = validation.data;
     // ========================================
     // END INPUT VALIDATION
     // ========================================
@@ -354,12 +359,12 @@ export async function POST(req: Request) {
     let aomaContext = "";
     let aomaConnectionStatus = "not-queried";
     const knowledgeElements: KnowledgeElement[] = [];
-    
+
     // Initialize Advanced RAG Orchestrator and Session Manager
     const unifiedRAG = new UnifiedRAGOrchestrator();
     const sessionManager = getSessionStateManager();
     let ragMetadata: any = null;
-    
+
     // Generate session ID (use conversation ID if available)
     const sessionId = `session_${Date.now()}`;
 
@@ -409,7 +414,7 @@ export async function POST(req: Request) {
       console.log("⏱️  PERFORMANCE: AOMA query starting (this blocks streaming response)...");
 
       // Performance tracking
-        const perfStart = Date.now();
+      const perfStart = Date.now();
       let railwayStartTime: number | null = null;
       let railwayEndTime: number | null = null;
       let supabaseStartTime: number | null = null;
@@ -421,17 +426,17 @@ export async function POST(req: Request) {
         // ========================================
         console.log("🌟 Executing Advanced RAG (re-ranking, agentic, context-aware)...");
         const ragStartTime = Date.now();
-        
+
         // Add query to session history
         await sessionManager.addToHistory(sessionId, {
           query: queryString,
           timestamp: new Date().toISOString(),
-          userId: 'current-user' // TODO: Get from session
+          userId: "current-user", // TODO: Get from session
         });
-        
+
         // Determine query complexity to decide on agentic RAG
-        const queryComplexity = queryString.split(' ').length > 15 ? 8 : 5; // Simple heuristic
-        
+        const queryComplexity = queryString.split(" ").length > 15 ? 8 : 5; // Simple heuristic
+
         try {
           const ragResult = await unifiedRAG.query(queryString, {
             sessionId,
@@ -440,14 +445,14 @@ export async function POST(req: Request) {
             useAgenticRAG: queryComplexity > 7,
             useRLHFSignals: true,
             topK: 5,
-            targetConfidence: 0.7
+            targetConfidence: 0.7,
           });
-          
+
           const ragDuration = Date.now() - ragStartTime;
           console.log(`✅ Advanced RAG completed in ${ragDuration}ms`);
           console.log(`📊 Strategy used: ${ragResult.metadata.strategy}`);
           console.log(`🎯 Confidence: ${(ragResult.metadata.confidence * 100).toFixed(1)}%`);
-          
+
           // Store RAG metadata for response
           ragMetadata = {
             strategy: ragResult.metadata.strategy,
@@ -456,9 +461,9 @@ export async function POST(req: Request) {
             confidence: ragResult.metadata.confidence,
             timeMs: ragResult.metadata.totalTimeMs,
             initialDocs: ragResult.documents.length,
-            finalDocs: ragResult.documents.length
+            finalDocs: ragResult.documents.length,
           };
-          
+
           // Add RAG-enhanced documents to knowledge elements
           if (ragResult.documents && ragResult.documents.length > 0) {
             ragResult.documents.slice(0, 3).forEach((doc: any) => {
@@ -474,21 +479,20 @@ export async function POST(req: Request) {
               });
             });
           }
-          
+
           // Record successful retrieval in session
           if (ragResult.metadata.confidence > 0.7) {
             await sessionManager.recordSuccessfulRetrieval(sessionId, {
               query: queryString,
               documents: ragResult.documents,
-              confidence: ragResult.metadata.confidence
+              confidence: ragResult.metadata.confidence,
             });
           }
-          
         } catch (ragError) {
           console.error("❌ Advanced RAG failed:", ragError);
           // Continue with standard AOMA retrieval
         }
-        
+
         // ========================================
         // PHASE 2: AOMA Orchestrator (existing system)
         // ========================================
@@ -522,11 +526,11 @@ export async function POST(req: Request) {
 
         // Handle different response formats from the orchestrator
         let contextContent = null;
-        
+
         if (orchestratorResult) {
           // Try direct response/content fields first
           contextContent = orchestratorResult.response || orchestratorResult.content;
-          
+
           // If not found, check for nested result structure (from /api/aoma endpoint)
           if (!contextContent && orchestratorResult.result?.content) {
             const contentArray = orchestratorResult.result.content;
@@ -576,8 +580,10 @@ export async function POST(req: Request) {
         // Orchestrator now handles both Supabase and OpenAI internally with intelligent merging
         // Extract sources from merged results for knowledge elements
         if (orchestratorResult.sources && Array.isArray(orchestratorResult.sources)) {
-          console.log(`✅ Orchestrator returned ${orchestratorResult.sources.length} merged results`);
-          
+          console.log(
+            `✅ Orchestrator returned ${orchestratorResult.sources.length} merged results`
+          );
+
           // Add source information to knowledge elements
           orchestratorResult.sources.slice(0, 6).forEach((source: any) => {
             if (source.metadata?.screenshot_path) {
@@ -595,8 +601,12 @@ export async function POST(req: Request) {
           });
 
           // Add summary of sources
-          const supabaseCount = orchestratorResult.sources.filter((s: any) => s.source === 'supabase').length;
-          const openaiCount = orchestratorResult.sources.filter((s: any) => s.source === 'openai').length;
+          const supabaseCount = orchestratorResult.sources.filter(
+            (s: any) => s.source === "supabase"
+          ).length;
+          const openaiCount = orchestratorResult.sources.filter(
+            (s: any) => s.source === "openai"
+          ).length;
           knowledgeElements.push({
             type: "context",
             content: `Found ${orchestratorResult.sources.length} results (${supabaseCount} from Supabase, ${openaiCount} from OpenAI)`,
@@ -622,7 +632,9 @@ export async function POST(req: Request) {
           status: aomaConnectionStatus,
           sources: orchestratorResult.sources?.length || 0,
         });
-        console.log(`⏱️  PERFORMANCE: Unified orchestrator query completed in ${totalDuration}ms - streaming will now start`);
+        console.log(
+          `⏱️  PERFORMANCE: Unified orchestrator query completed in ${totalDuration}ms - streaming will now start`
+        );
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         const errorDuration = Date.now() - perfStart;
@@ -761,7 +773,7 @@ Respond with ONLY this message:
     console.log("⏳ Calling AI SDK streamText...");
 
     // O-series models (o1, o3, o4) don't support temperature - they use fixed reasoning
-    const supportsTemperature = !selectedModel.startsWith('o');
+    const supportsTemperature = !selectedModel.startsWith("o");
 
     // Gemini-only setup - all models use Google provider
     const modelProvider = google(selectedModel);
@@ -778,7 +790,7 @@ Respond with ONLY this message:
       // Attach RAG metadata to the stream for client-side display
       onFinish: async ({ text, finishReason }) => {
         // RAG metadata will be available in response headers
-        console.log('✅ Stream finished. RAG metadata:', ragMetadata);
+        console.log("✅ Stream finished. RAG metadata:", ragMetadata);
       },
     });
 
@@ -792,10 +804,10 @@ Respond with ONLY this message:
     try {
       // Attach RAG metadata as custom header for client-side badge display
       if (ragMetadata) {
-        response.headers.set('X-RAG-Metadata', JSON.stringify(ragMetadata));
-        console.log('📊 RAG Metadata attached to response:', ragMetadata);
+        response.headers.set("X-RAG-Metadata", JSON.stringify(ragMetadata));
+        console.log("📊 RAG Metadata attached to response:", ragMetadata);
       }
-      
+
       // Attach basic Server-Timing if we captured AOMA timings
       const timings: string[] = [];
       // Note: variables may be undefined if AOMA was skipped
@@ -841,8 +853,7 @@ Respond with ONLY this message:
       "I'm experiencing technical difficulties. Please try again in a moment.";
 
     if (isRateLimitError) {
-      userFriendlyMessage =
-        "⚠️ Rate limit reached. Please wait 10-20 seconds before trying again.";
+      userFriendlyMessage = "⚠️ Rate limit reached. Please wait 10-20 seconds before trying again.";
     } else if (isQuotaError) {
       userFriendlyMessage =
         "I've reached my AI API quota limit. Please contact support or try again later when the quota resets.";

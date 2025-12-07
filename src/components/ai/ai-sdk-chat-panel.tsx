@@ -4,7 +4,7 @@ import { useChat } from "@ai-sdk/react";
 // import { DefaultChatTransport } from "ai"; // Removed - not available in current ai version
 import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../../lib/utils";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
@@ -195,7 +195,7 @@ export function AiSdkChatPanel({
   const [pendingRagMetadata, setPendingRagMetadata] = useState<any>(null); // RAG metadata from response headers
 
   // RLHF Feedback tracking
-  const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down' | null>>({});
+  const [feedbackGiven, setFeedbackGiven] = useState<Record<string, "up" | "down" | null>>({});
   const supabase = createClientComponentClient();
 
   // Demo Enhancement hooks for video recording
@@ -243,19 +243,21 @@ export function AiSdkChatPanel({
     },
     onError: (error) => {
       console.error("STT Error:", error);
-      
+
       // Provide helpful instructions based on error type
       let toastMessage = error.message;
       let toastDescription = "";
-      
+
       if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
-        toastDescription = "Click the 🔒 icon in your browser's address bar to grant microphone access.";
+        toastDescription =
+          "Click the 🔒 icon in your browser's address bar to grant microphone access.";
       } else if (error.name === "NotFoundError") {
-        toastDescription = "Make sure your microphone is connected and not being used by another app.";
+        toastDescription =
+          "Make sure your microphone is connected and not being used by another app.";
       } else if (error.name === "SecurityError") {
         toastDescription = "Microphone access requires HTTPS or localhost.";
       }
-      
+
       if (toastDescription) {
         toast.error(toastMessage, { description: toastDescription, duration: 8000 });
       } else {
@@ -273,8 +275,18 @@ export function AiSdkChatPanel({
   }, [checkPermission]);
 
   // Debug logs after hooks are initialized
-  console.log("🎤 STT Hook available:", { isRecording, startRecording: !!startRecording, stopRecording: !!stopRecording, permissionState });
-  console.log("🔊 TTS Hook available:", { isPlaying, speak: !!speak, stop: !!stopSpeaking, isTTSEnabled });
+  console.log("🎤 STT Hook available:", {
+    isRecording,
+    startRecording: !!startRecording,
+    stopRecording: !!stopRecording,
+    permissionState,
+  });
+  console.log("🔊 TTS Hook available:", {
+    isPlaying,
+    speak: !!speak,
+    stop: !!stopSpeaking,
+    isTTSEnabled,
+  });
 
   // Use conversationId prop or create fallback
   const chatId =
@@ -345,14 +357,14 @@ export function AiSdkChatPanel({
     messages: (initialMessages || []).filter((m) => m.content != null && m.content !== ""), // CRITICAL: Filter null content
     onResponse: (response: Response) => {
       // Capture RAG metadata from response headers before streaming starts
-      const ragMetadataHeader = response.headers.get('X-RAG-Metadata');
+      const ragMetadataHeader = response.headers.get("X-RAG-Metadata");
       if (ragMetadataHeader) {
         try {
           const metadata = JSON.parse(ragMetadataHeader);
-          console.log('📊 Captured RAG metadata from headers:', metadata);
+          console.log("📊 Captured RAG metadata from headers:", metadata);
           setPendingRagMetadata(metadata);
         } catch (e) {
-          console.warn('Failed to parse RAG metadata header:', e);
+          console.warn("Failed to parse RAG metadata header:", e);
         }
       }
     },
@@ -400,8 +412,7 @@ export function AiSdkChatPanel({
       ) {
         const providerName = selectedModel.includes("gemini") ? "Google Gemini" : "OpenAI";
         toast.error(`${providerName} Quota Exceeded`, {
-          description:
-            `The ${providerName} API key has reached its usage limit or does not have access to this model.`,
+          description: `The ${providerName} API key has reached its usage limit or does not have access to this model.`,
           duration: 6000,
         });
       } else if (errorMessage.includes("api_key")) {
@@ -523,7 +534,7 @@ export function AiSdkChatPanel({
   const handleSubmit = (e: React.FormEvent) => {
     e?.preventDefault();
     if (!input.trim()) return;
-    
+
     sendMessage({ text: input, role: "user" });
     setInput(""); // Clear input after sending
   };
@@ -597,20 +608,20 @@ export function AiSdkChatPanel({
   // Track loading time with seconds counter
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
-    
+
     if ((isLoading || manualLoading || isProcessing) && !hasStartedStreaming) {
       // Reset counter when loading starts
       setLoadingSeconds(0);
-      
+
       // Start counting every second
       interval = setInterval(() => {
-        setLoadingSeconds(prev => prev + 1);
+        setLoadingSeconds((prev) => prev + 1);
       }, 1000);
     } else {
       // Reset counter when loading stops
       setLoadingSeconds(0);
     }
-    
+
     return () => {
       if (interval) {
         clearInterval(interval);
@@ -669,7 +680,9 @@ export function AiSdkChatPanel({
       // Extract first sentence or up to 200 chars
       const firstSentence = textToSpeak.match(/^.{1,200}[.!?]/);
       if (firstSentence) {
-        return firstSentence[0] + " This is a detailed response. Please read the full text on screen.";
+        return (
+          firstSentence[0] + " This is a detailed response. Please read the full text on screen."
+        );
       } else {
         return (
           textToSpeak.substring(0, 200) +
@@ -1199,9 +1212,9 @@ export function AiSdkChatPanel({
   };
 
   // RLHF Feedback Handler
-  const handleFeedback = async (messageId: string, type: 'up' | 'down') => {
+  const handleFeedback = async (messageId: string, type: "up" | "down") => {
     if (feedbackGiven[messageId]) {
-      toast.info('Feedback already recorded for this message');
+      toast.info("Feedback already recorded for this message");
       return;
     }
 
@@ -1209,51 +1222,54 @@ export function AiSdkChatPanel({
       // Find the message to get content and metadata
       const message = messages.find((m) => m.id === messageId);
       if (!message) {
-        console.error('Message not found:', messageId);
+        console.error("Message not found:", messageId);
         return;
       }
 
       // Extract message content
-      const messageContent = message.parts?.[0]?.text || (message as any).content || '';
-      
+      const messageContent = message.parts?.[0]?.text || (message as any).content || "";
+
       // Find the user query (previous message)
       const messageIndex = messages.findIndex((m) => m.id === messageId);
-      const userQuery = messageIndex > 0 ? 
-        (messages[messageIndex - 1].parts?.[0]?.text || (messages[messageIndex - 1] as any).content || '') : 
-        '';
+      const userQuery =
+        messageIndex > 0
+          ? messages[messageIndex - 1].parts?.[0]?.text ||
+            (messages[messageIndex - 1] as any).content ||
+            ""
+          : "";
 
       // Store feedback in database
-      const { error } = await supabase.from('rlhf_feedback').insert({
+      const { error } = await supabase.from("rlhf_feedback").insert({
         conversation_id: conversationId || `session_${Date.now()}`,
         user_query: userQuery,
         ai_response: messageContent,
-        rating: type === 'up' ? 5 : 1,
-        thumbs_up: type === 'up',
+        rating: type === "up" ? 5 : 1,
+        thumbs_up: type === "up",
         feedback_text: null,
         documents_marked: message.ragMetadata || null,
         user_email: null, // Will be set by RLS policy from auth user
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       });
 
       if (error) {
-        console.error('Failed to save feedback:', error);
-        toast.error('Failed to save feedback. Please try again.');
+        console.error("Failed to save feedback:", error);
+        toast.error("Failed to save feedback. Please try again.");
         return;
       }
 
       // Update local state
-      setFeedbackGiven(prev => ({ ...prev, [messageId]: type }));
+      setFeedbackGiven((prev) => ({ ...prev, [messageId]: type }));
 
       // Show success message
-      if (type === 'up') {
-        toast.success('Feedback recorded! Thank you! 💜');
+      if (type === "up") {
+        toast.success("Feedback recorded! Thank you! 💜");
       } else {
-        toast.info('Feedback recorded. A curator will review this response.');
+        toast.info("Feedback recorded. A curator will review this response.");
       }
     } catch (err) {
-      console.error('Error saving feedback:', err);
-      toast.error('Failed to save feedback');
+      console.error("Error saving feedback:", err);
+      toast.error("Failed to save feedback");
     }
   };
 
@@ -1417,7 +1433,8 @@ export function AiSdkChatPanel({
             {/* RAG Metadata - Enhanced Demo Components */}
             {(() => {
               // Use message's ragMetadata or pendingRagMetadata for last assistant message
-              const ragMeta = message.ragMetadata || (isLastMessage && !isUser ? pendingRagMetadata : null);
+              const ragMeta =
+                message.ragMetadata || (isLastMessage && !isUser ? pendingRagMetadata : null);
               if (!ragMeta || isUser) return null;
 
               return (
@@ -1462,12 +1479,12 @@ export function AiSdkChatPanel({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handleFeedback(message.id, 'up')}
+                  onClick={() => handleFeedback(message.id, "up")}
                   disabled={feedbackGiven[message.id] !== undefined}
                   className={cn(
                     "h-7 px-2 transition-colors",
-                    feedbackGiven[message.id] === 'up' 
-                      ? "text-green-400 bg-green-500/20" 
+                    feedbackGiven[message.id] === "up"
+                      ? "text-green-400 bg-green-500/20"
                       : "hover:bg-green-500/10 hover:text-green-400"
                   )}
                   title="This response was helpful"
@@ -1477,12 +1494,12 @@ export function AiSdkChatPanel({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handleFeedback(message.id, 'down')}
+                  onClick={() => handleFeedback(message.id, "down")}
                   disabled={feedbackGiven[message.id] !== undefined}
                   className={cn(
                     "h-7 px-2 transition-colors",
-                    feedbackGiven[message.id] === 'down' 
-                      ? "text-red-400 bg-red-500/20" 
+                    feedbackGiven[message.id] === "down"
+                      ? "text-red-400 bg-red-500/20"
                       : "hover:bg-red-500/10 hover:text-red-400"
                   )}
                   title="This response needs improvement"
@@ -1614,9 +1631,7 @@ export function AiSdkChatPanel({
                           />
                         )}
                         <div className="flex-1">
-                          <h4
-                            className="mac-title text-sm font-medium text-foreground mb-2"
-                          >
+                          <h4 className="mac-title text-sm font-medium text-foreground mb-2">
                             {preview.title || "Web Page"}
                           </h4>
                           {preview.description && (
@@ -1786,9 +1801,7 @@ export function AiSdkChatPanel({
             <div className="flex items-center gap-4">
               <SiamLogo size="sm" />
               <div>
-                <h1
-                  className="mac-heading text-xl font-light text-white tracking-tight"
-                >
+                <h1 className="mac-heading text-xl font-light text-white tracking-tight">
                   {title}
                 </h1>
                 <p className="text-sm text-muted-foreground">{description}</p>
@@ -1797,8 +1810,6 @@ export function AiSdkChatPanel({
 
             {/* Control Panel */}
             <div className="flex items-center gap-3">
-
-
               <Badge variant="secondary" className="text-xs font-medium px-2 py-2">
                 <MessageCircle className="w-3 h-3 mr-2" />
                 {messages.length}
@@ -1844,8 +1855,6 @@ export function AiSdkChatPanel({
           </div>
         </div>
       )}
-
-
 
       {/* Hero Metrics Strip - Show RAG stats at a glance (always visible for demo) */}
       <HeroMetricsStrip
@@ -1897,9 +1906,7 @@ export function AiSdkChatPanel({
                       className="w-full max-w-4xl"
                     >
                       <div className="mb-4">
-                        <h3
-                          className="mac-title text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2"
-                        >
+                        <h3 className="mac-title text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2">
                           <Sparkles className="w-4 h-4" />
                           Try these to get started
                         </h3>
@@ -1959,8 +1966,8 @@ export function AiSdkChatPanel({
                         {loadingSeconds > 5
                           ? `Searching AOMA knowledge base... (${loadingSeconds}s)`
                           : loadingSeconds > 0
-                          ? `Thinking... (${loadingSeconds}s)`
-                          : "Thinking..."}
+                            ? `Thinking... (${loadingSeconds}s)`
+                            : "Thinking..."}
                       </span>
                     </motion.div>
                   )}
@@ -2088,11 +2095,11 @@ export function AiSdkChatPanel({
                         "animate-pulse",
                       ]
                     : permissionState === "denied"
-                    ? [
-                        "border-orange-500/30 hover:bg-orange-500/10",
-                        "hover:border-orange-500/50 text-orange-400",
-                      ]
-                    : ["hover:bg-zinc-800/50 hover:border-zinc-700"]
+                      ? [
+                          "border-orange-500/30 hover:bg-orange-500/10",
+                          "hover:border-orange-500/50 text-orange-400",
+                        ]
+                      : ["hover:bg-zinc-800/50 hover:border-zinc-700"]
                 )}
                 onMouseDown={(e) => {
                   e.preventDefault();
@@ -2132,16 +2139,18 @@ export function AiSdkChatPanel({
                   isRecording
                     ? "Release to stop recording"
                     : permissionState === "denied"
-                    ? "Microphone access denied - Click to grant permission"
-                    : permissionState === "prompt"
-                    ? "Hold to record (will request microphone access)"
-                    : "Hold to record"
+                      ? "Microphone access denied - Click to grant permission"
+                      : permissionState === "prompt"
+                        ? "Hold to record (will request microphone access)"
+                        : "Hold to record"
                 }
               >
                 {isRecording ? (
                   <MicOff className="h-4 w-4 text-white" />
                 ) : (
-                  <Mic className={cn("h-4 w-4", permissionState === "denied" && "text-orange-400")} />
+                  <Mic
+                    className={cn("h-4 w-4", permissionState === "denied" && "text-orange-400")}
+                  />
                 )}
                 {isRecording && (
                   <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full animate-pulse border border-white" />

@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
   DialogDescription,
-  DialogFooter
+  DialogFooter,
 } from "../dialog";
 import { Button } from "../button";
 import { Input } from "../input";
@@ -40,10 +40,10 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
     if (!file) return;
 
     setUploading(true);
-    
+
     // Mock upload progress
     const interval = setInterval(() => {
-      setProgress(prev => {
+      setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           return 100;
@@ -59,7 +59,7 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
       setUploading(false);
       setSuccess(true);
       toast.success("Document uploaded successfully!");
-      
+
       // Reset after delay
       setTimeout(() => {
         onOpenChange(false);
@@ -92,7 +92,9 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
                     className="flex flex-col items-center text-center"
                   >
                     <FileText className="h-10 w-10 text-purple-400 mb-2" />
-                    <p className="text-sm font-medium text-[var(--mac-text-primary)]">{file.name}</p>
+                    <p className="text-sm font-medium text-[var(--mac-text-primary)]">
+                      {file.name}
+                    </p>
                     <p className="text-xs text-[var(--mac-text-muted)] font-light">
                       {(file.size / 1024).toFixed(1)} KB
                     </p>

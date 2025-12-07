@@ -810,23 +810,23 @@ export function EnhancedCurateTab({
       <CardContent className="flex-1 overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
           <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="dashboard">
-                <BarChart3 className="h-4 w-4 mr-2" />
-                Overview
-              </TabsTrigger>
-              <TabsTrigger value="files">
-                <FolderOpen className="h-4 w-4 mr-2" />
-                Files
-              </TabsTrigger>
-              <TabsTrigger value="insights">
-                <Lightbulb className="h-4 w-4 mr-2" />
-                Insights
-              </TabsTrigger>
-              <TabsTrigger value="upload">
-                <Upload className="h-4 w-4 mr-2" />
-                Upload
-              </TabsTrigger>
-            </TabsList>
+            <TabsTrigger value="dashboard">
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="files">
+              <FolderOpen className="h-4 w-4 mr-2" />
+              Files
+            </TabsTrigger>
+            <TabsTrigger value="insights">
+              <Lightbulb className="h-4 w-4 mr-2" />
+              Insights
+            </TabsTrigger>
+            <TabsTrigger value="upload">
+              <Upload className="h-4 w-4 mr-2" />
+              Upload
+            </TabsTrigger>
+          </TabsList>
 
           {/* Executive Dashboard - "Evil Charts" */}
           <TabsContent value="dashboard" className="flex-1 overflow-auto mt-4">
@@ -877,7 +877,9 @@ export function EnhancedCurateTab({
                       <Shield className="h-8 w-8 text-purple-400" />
                     </div>
                     <Progress value={executiveMetrics.complianceScore} className="mt-2 h-1" />
-                    <p className="text-xs font-light text-muted-foreground mt-2">3 issues need review</p>
+                    <p className="text-xs font-light text-muted-foreground mt-2">
+                      3 issues need review
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -888,12 +890,12 @@ export function EnhancedCurateTab({
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="text-2xl font-light">
-                        --
-                      </span>
+                      <span className="text-2xl font-light">--</span>
                       <Activity className="h-8 w-8 text-orange-400" />
                     </div>
-                    <p className="text-xs font-light text-muted-foreground mt-2">Files/week processed</p>
+                    <p className="text-xs font-light text-muted-foreground mt-2">
+                      Files/week processed
+                    </p>
                   </CardContent>
                 </Card>
               </div>
@@ -901,7 +903,9 @@ export function EnhancedCurateTab({
               {/* Value Generation Chart */}
               <Card className="border-white/10 bg-black/20">
                 <CardHeader>
-                  <CardTitle className="text-lg font-light">Value Generation & Cost Savings</CardTitle>
+                  <CardTitle className="text-lg font-light">
+                    Value Generation & Cost Savings
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={250}>
@@ -938,7 +942,9 @@ export function EnhancedCurateTab({
                 {/* Knowledge Health Heatmap */}
                 <Card className="border-white/10 bg-black/20">
                   <CardHeader>
-                    <CardTitle className="text-lg font-light">Knowledge Health by Category</CardTitle>
+                    <CardTitle className="text-lg font-light">
+                      Knowledge Health by Category
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ResponsiveContainer width="100%" height={250}>
@@ -1070,12 +1076,7 @@ export function EnhancedCurateTab({
                     ))}
                   </SelectContent>
                 </Select>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={loadFiles}
-                  disabled={loading}
-                >
+                <Button variant="outline" size="sm" onClick={loadFiles} disabled={loading}>
                   <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
                 </Button>
                 {selectedFiles.size > 0 && (
@@ -1089,11 +1090,7 @@ export function EnhancedCurateTab({
                       <Trash2 className="h-4 w-4 mr-2" />
                       Delete ({selectedFiles.size})
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setSelectedFiles(new Set())}
-                    >
+                    <Button variant="ghost" size="sm" onClick={() => setSelectedFiles(new Set())}>
                       <X className="h-4 w-4" />
                     </Button>
                   </>
@@ -1232,10 +1229,7 @@ export function EnhancedCurateTab({
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="mac-title">AI-Powered Curation Insights</h3>
-                <Button
-                  variant="outline"
-                  size="sm"
-                >
+                <Button variant="outline" size="sm">
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Re-analyze
                 </Button>
@@ -1303,10 +1297,7 @@ export function EnhancedCurateTab({
                           <span className="text-muted-foreground">Risk: {insight.riskScore}%</span>
                         )}
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                      >
+                      <Button variant="ghost" size="sm">
                         Take Action
                         <ChevronRight className="h-4 w-4 ml-2" />
                       </Button>
@@ -1324,10 +1315,7 @@ export function EnhancedCurateTab({
                 <h3 className="mac-title">Knowledge Curator Leaderboard</h3>
                 <div className="flex gap-2">
                   <Badge variant="outline">May 2024</Badge>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                  >
+                  <Button variant="outline" size="sm">
                     <Award className="h-4 w-4 mr-2" />
                     Award Monthly Badges
                   </Button>
@@ -1505,7 +1493,9 @@ export function EnhancedCurateTab({
               {/* Utilization Metrics */}
               <Card className="border-white/10 bg-black/20">
                 <CardHeader>
-                  <CardTitle className="text-lg font-light">Knowledge Utilization Over Time</CardTitle>
+                  <CardTitle className="text-lg font-light">
+                    Knowledge Utilization Over Time
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={250}>
@@ -1571,9 +1561,7 @@ export function EnhancedCurateTab({
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600" />
-                      <span className="text-sm">
-                        Semantic duplicate detection
-                      </span>
+                      <span className="text-sm">Semantic duplicate detection</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600" />

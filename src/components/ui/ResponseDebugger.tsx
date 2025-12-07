@@ -1,6 +1,6 @@
 /**
  * Response Debugger Component
- * 
+ *
  * Shows full RAG pipeline trace for debugging responses
  * Part of Fix tab in Phase 5
  */
@@ -14,15 +14,8 @@ import { Badge } from "./badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs";
 import { ScrollArea } from "./scroll-area";
 import { Input } from "./input";
-import {
-  Search,
-  RefreshCw,
-  Activity,
-  GitBranch,
-  FileText,
-  Lightbulb
-} from "lucide-react";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Search, RefreshCw, Activity, GitBranch, FileText, Lightbulb } from "lucide-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -50,23 +43,23 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
 
   const loadDebugInfo = async (msgId: string) => {
     if (!msgId) {
-      toast.error('Please provide a message ID');
+      toast.error("Please provide a message ID");
       return;
     }
 
     setLoading(true);
-    
+
     try {
       // Load feedback/metadata for this message
       const { data: feedback, error } = await supabase
-        .from('rlhf_feedback')
-        .select('*')
-        .eq('id', msgId)
+        .from("rlhf_feedback")
+        .select("*")
+        .eq("id", msgId)
         .single();
 
       if (error) {
-        console.error('Failed to load debug info:', error);
-        toast.error('Message not found in feedback database');
+        console.error("Failed to load debug info:", error);
+        toast.error("Message not found in feedback database");
         setLoading(false);
         return;
       }
@@ -76,20 +69,20 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
       const metadata = feedback.feedback_metadata || {};
 
       setDebugData({
-        query: feedback.query || 'N/A',
-        strategy: metadata.strategy || 'unknown',
+        query: feedback.query || "N/A",
+        strategy: metadata.strategy || "unknown",
         retrievedDocs: feedback.retrieved_contexts || [],
         rerankedDocs: metadata.finalDocs || feedback.retrieved_contexts || [],
         agentSteps: metadata.agentTrace?.steps || [],
         confidence: metadata.confidence || 0,
         sessionHistory: metadata.sessionHistory || [],
-        rlhfSignalsUsed: metadata.rlhfSignalsUsed || false
+        rlhfSignalsUsed: metadata.rlhfSignalsUsed || false,
       });
 
-      toast.success('Debug information loaded');
+      toast.success("Debug information loaded");
     } catch (error) {
-      console.error('Error loading debug info:', error);
-      toast.error('Failed to load debug information');
+      console.error("Error loading debug info:", error);
+      toast.error("Failed to load debug information");
     } finally {
       setLoading(false);
     }
@@ -158,12 +151,16 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                         <p className="text-sm text-zinc-200 mt-1">{debugData.query}</p>
                       </div>
                       <div className="flex gap-2 mt-2">
-                        <Badge className={cn(
-                          "text-xs",
-                          debugData.strategy === 'agentic' ? "bg-purple-500/20 text-purple-300" :
-                          debugData.strategy === 'context-aware' ? "bg-blue-500/20 text-blue-300" :
-                          "bg-gray-500/20 text-gray-300"
-                        )}>
+                        <Badge
+                          className={cn(
+                            "text-xs",
+                            debugData.strategy === "agentic"
+                              ? "bg-purple-500/20 text-purple-300"
+                              : debugData.strategy === "context-aware"
+                                ? "bg-blue-500/20 text-blue-300"
+                                : "bg-gray-500/20 text-gray-300"
+                          )}
+                        >
                           {debugData.strategy} RAG
                         </Badge>
                         <Badge className="text-xs bg-green-500/20 text-green-300">
@@ -185,19 +182,27 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                     <CardContent className="grid grid-cols-2 gap-4">
                       <div>
                         <span className="text-xs text-zinc-500">Initial Documents:</span>
-                        <p className="text-lg font-bold text-purple-400">{debugData.retrievedDocs.length}</p>
+                        <p className="text-lg font-bold text-purple-400">
+                          {debugData.retrievedDocs.length}
+                        </p>
                       </div>
                       <div>
                         <span className="text-xs text-zinc-500">After Re-ranking:</span>
-                        <p className="text-lg font-bold text-blue-400">{debugData.rerankedDocs.length}</p>
+                        <p className="text-lg font-bold text-blue-400">
+                          {debugData.rerankedDocs.length}
+                        </p>
                       </div>
                       <div>
                         <span className="text-xs text-zinc-500">Agent Steps:</span>
-                        <p className="text-lg font-bold text-cyan-400">{debugData.agentSteps.length}</p>
+                        <p className="text-lg font-bold text-cyan-400">
+                          {debugData.agentSteps.length}
+                        </p>
                       </div>
                       <div>
                         <span className="text-xs text-zinc-500">History Turns:</span>
-                        <p className="text-lg font-bold text-green-400">{debugData.sessionHistory.length}</p>
+                        <p className="text-lg font-bold text-green-400">
+                          {debugData.sessionHistory.length}
+                        </p>
                       </div>
                     </CardContent>
                   </Card>
@@ -340,4 +345,3 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
     </Card>
   );
 }
-

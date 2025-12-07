@@ -43,25 +43,16 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     if (error) {
       if (error.code === "PGRST116") {
-        return NextResponse.json(
-          { error: "Healing attempt not found" },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: "Healing attempt not found" }, { status: 404 });
       }
       console.error("Self-healing fetch error:", error);
-      return NextResponse.json(
-        { error: "Failed to fetch healing attempt" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to fetch healing attempt" }, { status: 500 });
     }
 
     return NextResponse.json(data);
   } catch (error) {
     console.error("Self-healing fetch error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -71,14 +62,20 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const { id } = await params;
     const body = await request.json();
 
-    const {
-      status,
-      reviewerNotes,
-      reviewedBy,
-    } = body;
+    const { status, reviewerNotes, reviewedBy } = body;
 
     // Validate status if provided
-    const validStatuses = ["detecting", "analyzing", "healing", "testing", "success", "failed", "review", "approved", "rejected"];
+    const validStatuses = [
+      "detecting",
+      "analyzing",
+      "healing",
+      "testing",
+      "success",
+      "failed",
+      "review",
+      "approved",
+      "rejected",
+    ];
     if (status && !validStatuses.includes(status)) {
       return NextResponse.json(
         { error: `Invalid status. Must be one of: ${validStatuses.join(", ")}` },
@@ -108,10 +105,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     if (Object.keys(updateData).length === 0) {
-      return NextResponse.json(
-        { error: "No valid fields to update" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "No valid fields to update" }, { status: 400 });
     }
 
     if (!supabaseAdmin) {
@@ -132,25 +126,16 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     if (error) {
       if (error.code === "PGRST116") {
-        return NextResponse.json(
-          { error: "Healing attempt not found" },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: "Healing attempt not found" }, { status: 404 });
       }
       console.error("Self-healing update error:", error);
-      return NextResponse.json(
-        { error: "Failed to update healing attempt" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to update healing attempt" }, { status: 500 });
     }
 
     return NextResponse.json(data);
   } catch (error) {
     console.error("Self-healing update error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -166,25 +151,16 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       });
     }
 
-    const { error } = await supabaseAdmin
-      .from("self_healing_attempts")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabaseAdmin.from("self_healing_attempts").delete().eq("id", id);
 
     if (error) {
       console.error("Self-healing delete error:", error);
-      return NextResponse.json(
-        { error: "Failed to delete healing attempt" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to delete healing attempt" }, { status: 500 });
     }
 
     return NextResponse.json({ message: "Healing attempt deleted", id });
   } catch (error) {
     console.error("Self-healing delete error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

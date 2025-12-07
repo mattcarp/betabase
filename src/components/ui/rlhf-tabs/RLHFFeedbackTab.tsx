@@ -1,6 +1,6 @@
 /**
  * RLHF Feedback Tab - For Curate Panel
- * 
+ *
  * Beautiful feedback collection interface with document relevance marking
  * Permission-gated for curators only
  */
@@ -13,7 +13,7 @@ import { Button } from "../button";
 import { Badge } from "../badge";
 import { ScrollArea } from "../scroll-area";
 import { Textarea } from "../textarea";
-import { 
+import {
   ThumbsUp,
   ThumbsDown,
   Star,
@@ -64,7 +64,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
   const handleQuickFeedback = async (type: "thumbs_up" | "thumbs_down") => {
     setFeedbackType(type);
     setSubmitting(true);
-    
+
     try {
       await onSubmitFeedback({
         type,
@@ -81,10 +81,10 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
 
   const handleRatingFeedback = async () => {
     if (rating === 0) return;
-    
+
     setFeedbackType("rating");
     setSubmitting(true);
-    
+
     try {
       await onSubmitFeedback({
         type: "rating",
@@ -102,10 +102,10 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
 
   const handleDetailedFeedback = async () => {
     if (!correction.trim()) return;
-    
+
     setFeedbackType("detailed");
     setSubmitting(true);
-    
+
     try {
       await onSubmitFeedback({
         type: "correction",
@@ -123,7 +123,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
   };
 
   const toggleDocRelevance = (docId: string, relevant: boolean) => {
-    setDocRelevance(prev => ({
+    setDocRelevance((prev) => ({
       ...prev,
       [docId]: prev[docId] === relevant ? null : relevant,
     }));
@@ -136,11 +136,13 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
       exit={{ opacity: 0, y: -20 }}
       className="mb-4"
     >
-      <Card className={cn(
-        "mac-card-elevated",
-        "border-[var(--mac-utility-border)]",
-        "bg-[var(--mac-surface-elevated)]"
-      )}>
+      <Card
+        className={cn(
+          "mac-card-elevated",
+          "border-[var(--mac-utility-border)]",
+          "bg-[var(--mac-surface-elevated)]"
+        )}
+      >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex-1">
@@ -150,10 +152,13 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                   {new Date(item.timestamp).toLocaleString()}
                 </span>
                 {item.feedbackSubmitted && (
-                  <Badge variant="outline" className={cn(
-                    "text-green-400 border-green-400/30 font-light",
-                    "bg-green-400/10"
-                  )}>
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      "text-green-400 border-green-400/30 font-light",
+                      "bg-green-400/10"
+                    )}
+                  >
                     <Check className="h-3 w-3 mr-1" />
                     Submitted
                   </Badge>
@@ -165,14 +170,16 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           {/* Response Preview */}
           <div className="relative">
-            <div className={cn(
-              "text-sm text-[var(--mac-text-secondary)] transition-all font-light",
-              !expanded && "line-clamp-3"
-            )}>
+            <div
+              className={cn(
+                "text-sm text-[var(--mac-text-secondary)] transition-all font-light",
+                !expanded && "line-clamp-3"
+              )}
+            >
               {item.response}
             </div>
             <Button
@@ -188,7 +195,9 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
           {/* Quick Actions */}
           {!item.feedbackSubmitted && (
             <div className="flex items-center gap-2 pt-2 border-t border-[var(--mac-utility-border)]">
-              <span className="text-xs text-[var(--mac-text-muted)] mr-2 font-light">Quick feedback:</span>
+              <span className="text-xs text-[var(--mac-text-muted)] mr-2 font-light">
+                Quick feedback:
+              </span>
               <Button
                 size="sm"
                 variant={feedbackType === "thumbs_up" ? "default" : "outline"}
@@ -212,7 +221,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                 <ThumbsDown className="h-3.5 w-3.5 mr-1" />
                 Not Helpful
               </Button>
-              
+
               {/* Star Rating */}
               <div className="flex items-center gap-1 ml-2">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -379,42 +388,44 @@ export function RLHFFeedbackTab() {
       const apiStats = data.stats || {};
 
       // Map database records to FeedbackItem format
-      const feedbackItems: FeedbackItem[] = feedback.map((f: {
-        id: string;
-        session_id?: string;
-        query?: string;
-        user_query?: string;
-        response?: string;
-        ai_response?: string;
-        retrieved_contexts?: Array<{
-          content: string;
-          source?: string;
-          score?: number;
-        }>;
-        created_at: string;
-        status?: string;
-        feedback_type?: string;
-      }) => ({
-        id: f.id,
-        sessionId: f.session_id || "unknown",
-        query: f.query || f.user_query || "No query recorded",
-        response: f.response || f.ai_response || "No response recorded",
-        retrievedDocs: (f.retrieved_contexts || []).map((ctx, idx) => ({
-          id: `doc-${f.id}-${idx}`,
-          content: ctx.content || "",
-          source_type: ctx.source || "knowledge",
-          similarity: ctx.score || 0.8,
-          rerankScore: ctx.score ? ctx.score * 1.05 : undefined,
-        })),
-        timestamp: f.created_at,
-        feedbackSubmitted: f.status === "approved" || f.status === "rejected",
-      }));
+      const feedbackItems: FeedbackItem[] = feedback.map(
+        (f: {
+          id: string;
+          session_id?: string;
+          query?: string;
+          user_query?: string;
+          response?: string;
+          ai_response?: string;
+          retrieved_contexts?: Array<{
+            content: string;
+            source?: string;
+            score?: number;
+          }>;
+          created_at: string;
+          status?: string;
+          feedback_type?: string;
+        }) => ({
+          id: f.id,
+          sessionId: f.session_id || "unknown",
+          query: f.query || f.user_query || "No query recorded",
+          response: f.response || f.ai_response || "No response recorded",
+          retrievedDocs: (f.retrieved_contexts || []).map((ctx, idx) => ({
+            id: `doc-${f.id}-${idx}`,
+            content: ctx.content || "",
+            source_type: ctx.source || "knowledge",
+            similarity: ctx.score || 0.8,
+            rerankScore: ctx.score ? ctx.score * 1.05 : undefined,
+          })),
+          timestamp: f.created_at,
+          feedbackSubmitted: f.status === "approved" || f.status === "rejected",
+        })
+      );
 
       setFeedbackQueue(feedbackItems);
 
       // Calculate stats from API response
-      const pending = feedbackItems.filter(i => !i.feedbackSubmitted).length;
-      const submitted = feedbackItems.filter(i => i.feedbackSubmitted).length;
+      const pending = feedbackItems.filter((i) => !i.feedbackSubmitted).length;
+      const submitted = feedbackItems.filter((i) => i.feedbackSubmitted).length;
 
       setStats({
         pending,
@@ -486,16 +497,14 @@ export function RLHFFeedbackTab() {
       }
 
       // Update local state on success
-      setFeedbackQueue(prev =>
-        prev.map(item =>
-          item.id === feedback.itemId
-            ? { ...item, feedbackSubmitted: true }
-            : item
+      setFeedbackQueue((prev) =>
+        prev.map((item) =>
+          item.id === feedback.itemId ? { ...item, feedbackSubmitted: true } : item
         )
       );
 
       // Update stats
-      setStats(prev => ({
+      setStats((prev) => ({
         ...prev,
         pending: prev.pending - 1,
         submitted: prev.submitted + 1,
@@ -518,10 +527,7 @@ export function RLHFFeedbackTab() {
     <div className="h-full flex flex-col space-y-4">
       {/* Stats Bar */}
       <div className="grid grid-cols-3 gap-4">
-        <Card className={cn(
-          "mac-card-elevated",
-          "border-[var(--mac-utility-border)]"
-        )}>
+        <Card className={cn("mac-card-elevated", "border-[var(--mac-utility-border)]")}>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -532,26 +538,22 @@ export function RLHFFeedbackTab() {
             </div>
           </CardContent>
         </Card>
-        
-        <Card className={cn(
-          "mac-card-elevated",
-          "border-[var(--mac-utility-border)]"
-        )}>
+
+        <Card className={cn("mac-card-elevated", "border-[var(--mac-utility-border)]")}>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[var(--mac-text-muted)] font-light">Submitted</p>
-                <p className="text-2xl font-bold text-[var(--mac-text-primary)]">{stats.submitted}</p>
+                <p className="text-2xl font-bold text-[var(--mac-text-primary)]">
+                  {stats.submitted}
+                </p>
               </div>
               <Check className="h-8 w-8 text-green-400" />
             </div>
           </CardContent>
         </Card>
-        
-        <Card className={cn(
-          "mac-card-elevated",
-          "border-[var(--mac-utility-border)]"
-        )}>
+
+        <Card className={cn("mac-card-elevated", "border-[var(--mac-utility-border)]")}>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -575,12 +577,8 @@ export function RLHFFeedbackTab() {
               <p className="font-light">No feedback items in queue</p>
             </div>
           ) : (
-            feedbackQueue.map(item => (
-              <FeedbackCard
-                key={item.id}
-                item={item}
-                onSubmitFeedback={handleSubmitFeedback}
-              />
+            feedbackQueue.map((item) => (
+              <FeedbackCard key={item.id} item={item} onSubmitFeedback={handleSubmitFeedback} />
             ))
           )}
         </AnimatePresence>
@@ -588,4 +586,3 @@ export function RLHFFeedbackTab() {
     </div>
   );
 }
-

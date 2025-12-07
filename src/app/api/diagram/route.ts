@@ -24,10 +24,10 @@ export async function POST(req: Request) {
 
     if (!bypassAuth) {
       if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-        return new Response(
-          JSON.stringify({ error: "Service configuration error" }),
-          { status: 503, headers: { "Content-Type": "application/json" } }
-        );
+        return new Response(JSON.stringify({ error: "Service configuration error" }), {
+          status: 503,
+          headers: { "Content-Type": "application/json" },
+        });
       }
 
       const cookieStore = await cookies();
@@ -52,7 +52,9 @@ export async function POST(req: Request) {
         }
       );
 
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
         return new Response(JSON.stringify({ error: "Authentication required" }), {
           status: 401,
@@ -63,10 +65,10 @@ export async function POST(req: Request) {
 
     // Validate API key
     if (!process.env.GOOGLE_API_KEY) {
-      return new Response(
-        JSON.stringify({ error: "Google AI API key not configured" }),
-        { status: 503, headers: { "Content-Type": "application/json" } }
-      );
+      return new Response(JSON.stringify({ error: "Google AI API key not configured" }), {
+        status: 503,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     // Parse and validate request
@@ -106,8 +108,9 @@ Style: Clean, modern explanatory infographic
 - Goal: maximum clarity and comprehension, minimal cognitive load
 - NOT corporate clip-art, NOT hand-drawn sketchy, just CLEAR and HELPFUL`;
 
-    const diagramPrompt = type === "workflow"
-      ? `Create a clean, professional workflow diagram showing the step-by-step process for: ${prompt}
+    const diagramPrompt =
+      type === "workflow"
+        ? `Create a clean, professional workflow diagram showing the step-by-step process for: ${prompt}
 
          ${context ? `Context: ${context}` : ""}
 
@@ -119,7 +122,7 @@ Style: Clean, modern explanatory infographic
          - Decision points clearly marked
          - Success path highlighted in yellow, alternate paths in secondary colors
          - Easy to follow at a glance`
-      : `Create a clean, professional explainer diagram visualizing: ${prompt}
+        : `Create a clean, professional explainer diagram visualizing: ${prompt}
 
          ${context ? `Context: ${context}` : ""}
 
@@ -183,7 +186,6 @@ Style: Clean, modern explanatory infographic
         headers: { "Content-Type": "application/json" },
       }
     );
-
   } catch (error) {
     console.error("[API] Diagram generation error:", error);
 

@@ -54,7 +54,16 @@ interface SelfHealingAttempt {
   id: string;
   testName: string;
   testFile: string;
-  status: "detecting" | "analyzing" | "healing" | "testing" | "success" | "failed" | "review" | "approved" | "rejected";
+  status:
+    | "detecting"
+    | "analyzing"
+    | "healing"
+    | "testing"
+    | "success"
+    | "failed"
+    | "review"
+    | "approved"
+    | "rejected";
   timestamp: Date;
   domChanges: DOMChange[];
   originalSelector: string;
@@ -164,7 +173,8 @@ function transformAttempt(api: APIAttempt): SelfHealingAttempt {
     })),
     originalSelector: api.original_selector,
     suggestedSelector: api.suggested_selector || "",
-    healingStrategy: (api.healing_strategy || "selector-update") as SelfHealingAttempt["healingStrategy"],
+    healingStrategy: (api.healing_strategy ||
+      "selector-update") as SelfHealingAttempt["healingStrategy"],
     confidence: api.confidence,
     beforeCode: api.code_before,
     afterCode: api.code_after,
@@ -178,19 +188,24 @@ function transformAttempt(api: APIAttempt): SelfHealingAttempt {
 }
 
 // Confidence Meter Component with tier markers
-const ConfidenceMeter: React.FC<{ confidence: number; tier: HealingTier }> = ({ confidence, tier }) => {
+const ConfidenceMeter: React.FC<{ confidence: number; tier: HealingTier }> = ({
+  confidence,
+  tier,
+}) => {
   const percentage = confidence * 100;
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between text-xs">
         <span className="text-muted-foreground">AI Confidence</span>
-        <span className={cn(
-          "font-mono",
-          tier === 1 && "text-green-400",
-          tier === 2 && "text-amber-400",
-          tier === 3 && "text-red-400"
-        )}>
+        <span
+          className={cn(
+            "font-mono",
+            tier === 1 && "text-green-400",
+            tier === 2 && "text-amber-400",
+            tier === 3 && "text-red-400"
+          )}
+        >
           {percentage.toFixed(1)}%
         </span>
       </div>
@@ -264,7 +279,9 @@ const ScreenshotComparison: React.FC<{
       {viewMode === "side-by-side" && (
         <div className="grid grid-cols-2 gap-2">
           <div className="space-y-1">
-            <span className="text-[10px] text-red-400 uppercase tracking-wide">Before (Working)</span>
+            <span className="text-[10px] text-red-400 uppercase tracking-wide">
+              Before (Working)
+            </span>
             <div className="rounded-lg border border-red-500/20 bg-black/40 p-1 overflow-hidden">
               {before ? (
                 <img
@@ -280,7 +297,9 @@ const ScreenshotComparison: React.FC<{
             </div>
           </div>
           <div className="space-y-1">
-            <span className="text-[10px] text-green-400 uppercase tracking-wide">After (Current)</span>
+            <span className="text-[10px] text-green-400 uppercase tracking-wide">
+              After (Current)
+            </span>
             <div className="rounded-lg border border-green-500/20 bg-black/40 p-1 overflow-hidden">
               {after ? (
                 <img
@@ -418,9 +437,11 @@ export const SelfHealingTestViewer: React.FC = () => {
           setStats({
             total: attemptsData.stats.total_attempts || attemptsData.stats.totalAttempts || 0,
             healed: attemptsData.stats.auto_healed || attemptsData.stats.autoHealed || 0,
-            pendingReview: attemptsData.stats.pending_review || attemptsData.stats.pendingReview || 0,
+            pendingReview:
+              attemptsData.stats.pending_review || attemptsData.stats.pendingReview || 0,
             failed: attemptsData.stats.tier3_count || 0,
-            avgHealTime: (attemptsData.stats.avg_heal_time_ms || attemptsData.stats.avgHealTimeMs || 0) / 1000,
+            avgHealTime:
+              (attemptsData.stats.avg_heal_time_ms || attemptsData.stats.avgHealTimeMs || 0) / 1000,
             successRate: attemptsData.stats.success_rate || attemptsData.stats.successRate || 0,
             last24h: attemptsData.stats.tier1_count || 0,
           });
@@ -433,7 +454,7 @@ export const SelfHealingTestViewer: React.FC = () => {
           setTrends(analyticsData.trends);
         }
         if (analyticsData.summary) {
-          setStats(prev => ({
+          setStats((prev) => ({
             ...prev,
             total: analyticsData.summary.totalAttempts || prev.total,
             healed: analyticsData.summary.autoHealed || prev.healed,
@@ -470,7 +491,7 @@ export const SelfHealingTestViewer: React.FC = () => {
       if (res.ok) {
         const newAttempt = await res.json();
         const transformed = transformAttempt(newAttempt);
-        setAttempts(prev => [transformed, ...prev]);
+        setAttempts((prev) => [transformed, ...prev]);
         setSelectedAttempt(transformed);
       }
     } catch (error) {
@@ -504,7 +525,7 @@ export const SelfHealingTestViewer: React.FC = () => {
 
       if (res.ok) {
         setAttempts(
-          attempts.map((a) => (a.id === attemptId ? { ...a, status: "success" as const } : a)),
+          attempts.map((a) => (a.id === attemptId ? { ...a, status: "success" as const } : a))
         );
         if (selectedAttempt?.id === attemptId) {
           setSelectedAttempt({ ...selectedAttempt, status: "success" });
@@ -514,7 +535,7 @@ export const SelfHealingTestViewer: React.FC = () => {
       console.error("Failed to approve:", error);
       // Optimistic update anyway for demo
       setAttempts(
-        attempts.map((a) => (a.id === attemptId ? { ...a, status: "success" as const } : a)),
+        attempts.map((a) => (a.id === attemptId ? { ...a, status: "success" as const } : a))
       );
     }
   };
@@ -529,7 +550,7 @@ export const SelfHealingTestViewer: React.FC = () => {
 
       if (res.ok) {
         setAttempts(
-          attempts.map((a) => (a.id === attemptId ? { ...a, status: "failed" as const } : a)),
+          attempts.map((a) => (a.id === attemptId ? { ...a, status: "failed" as const } : a))
         );
         if (selectedAttempt?.id === attemptId) {
           setSelectedAttempt({ ...selectedAttempt, status: "failed" });
@@ -539,14 +560,14 @@ export const SelfHealingTestViewer: React.FC = () => {
       console.error("Failed to reject:", error);
       // Optimistic update anyway for demo
       setAttempts(
-        attempts.map((a) => (a.id === attemptId ? { ...a, status: "failed" as const } : a)),
+        attempts.map((a) => (a.id === attemptId ? { ...a, status: "failed" as const } : a))
       );
     }
   };
 
   // Apply fix to codebase via API
   const handleApplyFix = async (attemptId: string) => {
-    const attempt = attempts.find(a => a.id === attemptId);
+    const attempt = attempts.find((a) => a.id === attemptId);
     if (!attempt) return;
 
     setApplyingFix(attemptId);
@@ -668,7 +689,9 @@ export const SelfHealingTestViewer: React.FC = () => {
       {/* Header with Stats */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-light tracking-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Self-Healing Test Monitor</h2>
+          <h2 className="text-2xl font-light tracking-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            Self-Healing Test Monitor
+          </h2>
           <p className="text-sm font-light text-muted-foreground">
             AI-powered test maintenance and automatic failure recovery
           </p>
@@ -713,35 +736,56 @@ export const SelfHealingTestViewer: React.FC = () => {
           <CardContent className="pt-0 pb-6 px-6 border-t border-white/5">
             <div className="prose prose-sm prose-invert max-w-none space-y-4 mt-4">
               <p className="text-sm text-muted-foreground leading-relaxed">
-                <strong className="text-white">Self-healing tests</strong> represent a paradigm shift in automated testing.
-                Instead of treating test failures as simple pass/fail outcomes, self-healing systems analyze failures
-                in real-time, identify root causes, and automatically propose or apply fixes. This transforms
-                test maintenance from a reactive chore into a proactive, intelligent process.
+                <strong className="text-white">Self-healing tests</strong> represent a paradigm
+                shift in automated testing. Instead of treating test failures as simple pass/fail
+                outcomes, self-healing systems analyze failures in real-time, identify root causes,
+                and automatically propose or apply fixes. This transforms test maintenance from a
+                reactive chore into a proactive, intelligent process.
               </p>
 
               <div className="space-y-3">
                 <h4 className="text-sm font-light text-white">Three-Tier Healing System</h4>
                 <div className="grid gap-2">
                   <div className="flex items-start gap-3 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-                    <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 shrink-0">Tier 1</Badge>
+                    <Badge
+                      variant="outline"
+                      className="bg-green-500/10 text-green-500 border-green-500/20 shrink-0"
+                    >
+                      Tier 1
+                    </Badge>
                     <p className="text-xs text-muted-foreground">
-                      <strong className="text-green-400">Automatic Healing</strong> - High-confidence fixes ({">"}90%) are applied immediately
-                      without human intervention. Selector updates, wait strategy adjustments, and minor DOM adaptations
-                      fall into this category.
+                      <strong className="text-green-400">Automatic Healing</strong> -
+                      High-confidence fixes ({">"}90%) are applied immediately without human
+                      intervention. Selector updates, wait strategy adjustments, and minor DOM
+                      adaptations fall into this category.
                     </p>
                   </div>
                   <div className="flex items-start gap-3 p-3 rounded-lg bg-amber-400/10 border border-amber-400/20">
-                    <Badge variant="outline" className="bg-amber-400/10 text-amber-400 border-amber-400/20 shrink-0">Tier 2</Badge>
+                    <Badge
+                      variant="outline"
+                      className="bg-amber-400/10 text-amber-400 border-amber-400/20 shrink-0"
+                    >
+                      Tier 2
+                    </Badge>
                     <p className="text-xs text-muted-foreground">
-                      <strong className="text-amber-400">Review Required</strong> - Medium-confidence fixes (60-90%) are proposed but require
-                      human approval before being committed. This includes structural changes and complex selector updates.
+                      <strong className="text-amber-400">Review Required</strong> -
+                      Medium-confidence fixes (60-90%) are proposed but require human approval
+                      before being committed. This includes structural changes and complex selector
+                      updates.
                     </p>
                   </div>
                   <div className="flex items-start gap-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-                    <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/20 shrink-0">Tier 3</Badge>
+                    <Badge
+                      variant="outline"
+                      className="bg-red-500/10 text-red-500 border-red-500/20 shrink-0"
+                    >
+                      Tier 3
+                    </Badge>
                     <p className="text-xs text-muted-foreground">
-                      <strong className="text-red-400">Architect Review</strong> - Low-confidence cases ({"<"}60%) or fundamental test logic issues
-                      are escalated for expert review. These often indicate genuine application changes requiring test redesign.
+                      <strong className="text-red-400">Architect Review</strong> - Low-confidence
+                      cases ({"<"}60%) or fundamental test logic issues are escalated for expert
+                      review. These often indicate genuine application changes requiring test
+                      redesign.
                     </p>
                   </div>
                 </div>
@@ -750,10 +794,11 @@ export const SelfHealingTestViewer: React.FC = () => {
               <div className="space-y-3">
                 <h4 className="text-sm font-light text-white">How It Works</h4>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  When a test fails, the self-healing system captures a DOM snapshot and compares it against the expected state.
-                  Using Gemini 3 Pro, the system analyzes the changes, identifies the most likely cause of failure, and generates
-                  a corrected selector or test modification. The confidence score is calculated based on semantic similarity,
-                  structural analysis, and historical pattern matching.
+                  When a test fails, the self-healing system captures a DOM snapshot and compares it
+                  against the expected state. Using Gemini 3 Pro, the system analyzes the changes,
+                  identifies the most likely cause of failure, and generates a corrected selector or
+                  test modification. The confidence score is calculated based on semantic
+                  similarity, structural analysis, and historical pattern matching.
                 </p>
               </div>
 
@@ -783,8 +828,9 @@ export const SelfHealingTestViewer: React.FC = () => {
                 <p className="text-xs text-purple-300 flex items-start gap-2">
                   <Sparkles className="h-4 w-4 shrink-0 mt-0.5" />
                   <span>
-                    This implementation uses real AI-powered analysis through Gemini 3 Pro, providing
-                    intelligent selector suggestions based on semantic understanding of your UI components.
+                    This implementation uses real AI-powered analysis through Gemini 3 Pro,
+                    providing intelligent selector suggestions based on semantic understanding of
+                    your UI components.
                   </span>
                 </p>
               </div>
@@ -812,7 +858,9 @@ export const SelfHealingTestViewer: React.FC = () => {
             <Wrench className="h-4 w-4 text-green-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-light text-green-400">{stats.healed.toLocaleString()}</div>
+            <div className="text-2xl font-light text-green-400">
+              {stats.healed.toLocaleString()}
+            </div>
             <p className="text-xs font-light text-muted-foreground">Automatically fixed</p>
           </CardContent>
         </Card>
@@ -877,7 +925,9 @@ export const SelfHealingTestViewer: React.FC = () => {
                 <CardTitle className="flex items-center gap-2 font-light">
                   <RefreshCw className={cn("h-5 w-5 text-blue-400", loading && "animate-spin")} />
                   Active Healing Queue
-                  {loading && <span className="text-xs font-light text-muted-foreground">(updating...)</span>}
+                  {loading && (
+                    <span className="text-xs font-light text-muted-foreground">(updating...)</span>
+                  )}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -887,7 +937,9 @@ export const SelfHealingTestViewer: React.FC = () => {
                       <div className="text-center py-12 text-muted-foreground">
                         <Sparkles className="h-12 w-12 mx-auto mb-4 opacity-50" />
                         <p className="text-sm">No healing attempts yet</p>
-                        <p className="text-xs mt-2">Click Configure three times to trigger a demo</p>
+                        <p className="text-xs mt-2">
+                          Click Configure three times to trigger a demo
+                        </p>
                       </div>
                     ) : (
                       attempts.map((attempt) => (
@@ -895,7 +947,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                           key={attempt.id}
                           className={cn(
                             "rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md",
-                            selectedAttempt?.id === attempt.id && "ring-2 ring-purple-500",
+                            selectedAttempt?.id === attempt.id && "ring-2 ring-purple-500"
                           )}
                           onClick={() => setSelectedAttempt(attempt)}
                         >
@@ -976,11 +1028,17 @@ export const SelfHealingTestViewer: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <Badge
                             variant="outline"
-                            className={cn("text-sm px-3 py-1", getTierBadge(selectedAttempt.tier).color)}
+                            className={cn(
+                              "text-sm px-3 py-1",
+                              getTierBadge(selectedAttempt.tier).color
+                            )}
                           >
                             {getTierBadge(selectedAttempt.tier).label}
                           </Badge>
-                          <Badge variant="outline" className={getStatusColor(selectedAttempt.status)}>
+                          <Badge
+                            variant="outline"
+                            className={getStatusColor(selectedAttempt.status)}
+                          >
                             {selectedAttempt.status}
                           </Badge>
                         </div>
@@ -1000,7 +1058,15 @@ export const SelfHealingTestViewer: React.FC = () => {
                           <div className="flex items-center gap-2 p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
                             <Keyboard className="h-3 w-3 text-blue-400" />
                             <span className="text-[10px] text-blue-300">
-                              Press <kbd className="px-1 py-0.5 bg-black/40 rounded text-[9px]">Cmd+Enter</kbd> to approve or <kbd className="px-1 py-0.5 bg-black/40 rounded text-[9px]">Cmd+Backspace</kbd> to reject
+                              Press{" "}
+                              <kbd className="px-1 py-0.5 bg-black/40 rounded text-[9px]">
+                                Cmd+Enter
+                              </kbd>{" "}
+                              to approve or{" "}
+                              <kbd className="px-1 py-0.5 bg-black/40 rounded text-[9px]">
+                                Cmd+Backspace
+                              </kbd>{" "}
+                              to reject
                             </span>
                           </div>
                         )}
@@ -1010,8 +1076,11 @@ export const SelfHealingTestViewer: React.FC = () => {
                             <Layers className="h-4 w-4 text-purple-400" />
                             <span className="text-sm text-purple-300">
                               Applying this fix will automatically repair{" "}
-                              <span className="font-light">{selectedAttempt.similarTestsAffected}</span>{" "}
-                              similar test{selectedAttempt.similarTestsAffected !== 1 ? "s" : ""} across the codebase
+                              <span className="font-light">
+                                {selectedAttempt.similarTestsAffected}
+                              </span>{" "}
+                              similar test{selectedAttempt.similarTestsAffected !== 1 ? "s" : ""}{" "}
+                              across the codebase
                             </span>
                           </div>
                         )}
@@ -1068,10 +1137,12 @@ export const SelfHealingTestViewer: React.FC = () => {
                               <p className="text-sm font-light">Proposed Fix Generated</p>
                               <div className="mt-2 rounded-md bg-black/40 p-3 font-mono text-xs">
                                 <div className="text-red-400 opacity-70 line-through mb-1">
-                                  {selectedAttempt.codeBefore || `await page.locator('${selectedAttempt.originalSelector}').click();`}
+                                  {selectedAttempt.codeBefore ||
+                                    `await page.locator('${selectedAttempt.originalSelector}').click();`}
                                 </div>
                                 <div className="text-green-400">
-                                  {selectedAttempt.codeAfter || `await page.locator('${selectedAttempt.suggestedSelector}').click();`}
+                                  {selectedAttempt.codeAfter ||
+                                    `await page.locator('${selectedAttempt.suggestedSelector}').click();`}
                                 </div>
                               </div>
                               {selectedAttempt.status === "review" && (
@@ -1101,11 +1172,13 @@ export const SelfHealingTestViewer: React.FC = () => {
                                   <Button
                                     size="sm"
                                     variant="ghost"
-                                    onClick={() => copyToClipboard(
-                                      selectedAttempt.codeAfter ||
-                                      selectedAttempt.afterCode ||
-                                      `await page.locator('${selectedAttempt.suggestedSelector}').click();`
-                                    )}
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        selectedAttempt.codeAfter ||
+                                          selectedAttempt.afterCode ||
+                                          `await page.locator('${selectedAttempt.suggestedSelector}').click();`
+                                      )
+                                    }
                                   >
                                     {copySuccess ? (
                                       <CheckCircle className="mr-2 h-3.5 w-3.5 text-green-400" />
@@ -1126,15 +1199,18 @@ export const SelfHealingTestViewer: React.FC = () => {
                             <div
                               className={cn(
                                 "flex h-10 w-10 items-center justify-center rounded-full border",
-                                (selectedAttempt.status === "success" || selectedAttempt.status === "approved") &&
+                                (selectedAttempt.status === "success" ||
+                                  selectedAttempt.status === "approved") &&
                                   "bg-green-500/10 border-green-500/20",
                                 selectedAttempt.status === "review" &&
                                   "bg-amber-400/10 border-amber-400/20",
-                                (selectedAttempt.status === "failed" || selectedAttempt.status === "rejected") &&
-                                  "bg-red-500/10 border-red-500/20",
+                                (selectedAttempt.status === "failed" ||
+                                  selectedAttempt.status === "rejected") &&
+                                  "bg-red-500/10 border-red-500/20"
                               )}
                             >
-                              {(selectedAttempt.status === "success" || selectedAttempt.status === "approved") ? (
+                              {selectedAttempt.status === "success" ||
+                              selectedAttempt.status === "approved" ? (
                                 <CheckCircle className="h-5 w-5 text-green-500" />
                               ) : selectedAttempt.status === "review" ? (
                                 <AlertTriangle className="h-5 w-5 text-amber-400" />
@@ -1144,7 +1220,8 @@ export const SelfHealingTestViewer: React.FC = () => {
                             </div>
                             <div className="flex-1">
                               <p className="text-sm font-light">
-                                {(selectedAttempt.status === "success" || selectedAttempt.status === "approved")
+                                {selectedAttempt.status === "success" ||
+                                selectedAttempt.status === "approved"
                                   ? "Healing Successful"
                                   : selectedAttempt.status === "review"
                                     ? "Awaiting Review"
@@ -1159,28 +1236,50 @@ export const SelfHealingTestViewer: React.FC = () => {
                       </div>
 
                       {/* Code Change Preview */}
-                      {(selectedAttempt.beforeCode || selectedAttempt.afterCode || selectedAttempt.codeBefore || selectedAttempt.codeAfter) && (
+                      {(selectedAttempt.beforeCode ||
+                        selectedAttempt.afterCode ||
+                        selectedAttempt.codeBefore ||
+                        selectedAttempt.codeAfter) && (
                         <div className="space-y-3 pt-4 border-t border-white/5">
                           <h4 className="text-sm font-light flex items-center gap-2">
-                             <FileCode className="h-4 w-4" />
-                             Code Change Preview
+                            <FileCode className="h-4 w-4" />
+                            Code Change Preview
                           </h4>
                           <div className="rounded-lg border border-white/10 bg-black/40 p-4">
                             <div className="flex items-center justify-between mb-2">
-                              <span className="text-xs text-muted-foreground">{selectedAttempt.testFile}</span>
-                              <Badge variant="outline" className="text-[10px] border-blue-500/30 text-blue-400">
+                              <span className="text-xs text-muted-foreground">
+                                {selectedAttempt.testFile}
+                              </span>
+                              <Badge
+                                variant="outline"
+                                className="text-[10px] border-blue-500/30 text-blue-400"
+                              >
                                 TypeScript
                               </Badge>
                             </div>
                             <pre className="font-mono text-xs overflow-x-auto">
                               <code>
                                 <div className="flex gap-4 opacity-50">
-                                  <span className="select-none w-6 text-right text-muted-foreground">42</span>
-                                  <span className="text-red-400">- {selectedAttempt.beforeCode || selectedAttempt.codeBefore || `await page.locator('${selectedAttempt.originalSelector}').click();`}</span>
+                                  <span className="select-none w-6 text-right text-muted-foreground">
+                                    42
+                                  </span>
+                                  <span className="text-red-400">
+                                    -{" "}
+                                    {selectedAttempt.beforeCode ||
+                                      selectedAttempt.codeBefore ||
+                                      `await page.locator('${selectedAttempt.originalSelector}').click();`}
+                                  </span>
                                 </div>
                                 <div className="flex gap-4">
-                                  <span className="select-none w-6 text-right text-muted-foreground">42</span>
-                                  <span className="text-green-400">+ {selectedAttempt.afterCode || selectedAttempt.codeAfter || `await page.locator('${selectedAttempt.suggestedSelector}').click();`}</span>
+                                  <span className="select-none w-6 text-right text-muted-foreground">
+                                    42
+                                  </span>
+                                  <span className="text-green-400">
+                                    +{" "}
+                                    {selectedAttempt.afterCode ||
+                                      selectedAttempt.codeAfter ||
+                                      `await page.locator('${selectedAttempt.suggestedSelector}').click();`}
+                                  </span>
                                 </div>
                               </code>
                             </pre>
@@ -1229,12 +1328,16 @@ export const SelfHealingTestViewer: React.FC = () => {
                             </div>
                             <div className="flex justify-between">
                               <span className="text-muted-foreground">Retry Count</span>
-                              <span className="font-mono">{selectedAttempt.metadata.retryCount}</span>
+                              <span className="font-mono">
+                                {selectedAttempt.metadata.retryCount}
+                              </span>
                             </div>
                             {selectedAttempt.metadata.aiModel && (
                               <div className="flex justify-between">
                                 <span className="text-muted-foreground">AI Model</span>
-                                <span className="font-mono">{selectedAttempt.metadata.aiModel}</span>
+                                <span className="font-mono">
+                                  {selectedAttempt.metadata.aiModel}
+                                </span>
                               </div>
                             )}
                           </div>
@@ -1242,7 +1345,8 @@ export const SelfHealingTestViewer: React.FC = () => {
                       )}
 
                       {/* Actions Footer */}
-                      {(selectedAttempt.status === "success" || selectedAttempt.status === "approved") && (
+                      {(selectedAttempt.status === "success" ||
+                        selectedAttempt.status === "approved") && (
                         <div className="flex gap-2 pt-4">
                           <Button className="flex-1" variant="outline">
                             <Play className="mr-2 h-4 w-4" />
@@ -1285,7 +1389,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                     <h3 className="text-sm font-light">14-Day Healing Trend</h3>
                     <div className="flex items-end gap-1 h-32 border-b border-l">
                       {trends.map((day, idx) => {
-                        const maxVal = Math.max(...trends.map(t => t.totalAttempts)) || 100;
+                        const maxVal = Math.max(...trends.map((t) => t.totalAttempts)) || 100;
                         const height = (day.totalAttempts / maxVal) * 100;
                         const successHeight = (day.successful / maxVal) * 100;
 
@@ -1345,7 +1449,10 @@ export const SelfHealingTestViewer: React.FC = () => {
                               </div>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Badge variant="outline" className={cn("text-xs", getTierBadge(attempt.tier).color)}>
+                              <Badge
+                                variant="outline"
+                                className={cn("text-xs", getTierBadge(attempt.tier).color)}
+                              >
                                 Tier {attempt.tier}
                               </Badge>
                               <span className="text-xs text-muted-foreground flex items-center gap-1">

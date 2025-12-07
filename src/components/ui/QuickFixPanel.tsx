@@ -1,6 +1,6 @@
 /**
  * Quick Fix Panel Component
- * 
+ *
  * Allows curators to edit and save response corrections as training examples
  * Part of Fix tab in Phase 5.2
  */
@@ -13,14 +13,8 @@ import { Button } from "./button";
 import { Textarea } from "./textarea";
 import { Input } from "./input";
 import { Badge } from "./badge";
-import { 
-  Edit3, 
-  Save, 
-  RefreshCw,
-  CheckCircle,
-  AlertCircle
-} from "lucide-react";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Edit3, Save, RefreshCw, CheckCircle, AlertCircle } from "lucide-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -39,32 +33,32 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
 
   const loadMessage = async () => {
     if (!searchId.trim()) {
-      toast.error('Please enter a message ID');
+      toast.error("Please enter a message ID");
       return;
     }
 
     setLoading(true);
-    
+
     try {
       const { data, error } = await supabase
-        .from('rlhf_feedback')
-        .select('ai_response, feedback_text')
-        .eq('id', searchId)
+        .from("rlhf_feedback")
+        .select("ai_response, feedback_text")
+        .eq("id", searchId)
         .single();
 
       if (error) {
-        console.error('Failed to load message:', error);
-        toast.error('Message not found');
+        console.error("Failed to load message:", error);
+        toast.error("Message not found");
         return;
       }
 
-      setOriginal(data.ai_response || '');
-      setCorrected(data.feedback_text || data.ai_response || '');
+      setOriginal(data.ai_response || "");
+      setCorrected(data.feedback_text || data.ai_response || "");
       setLoaded(true);
-      toast.success('Message loaded for editing');
+      toast.success("Message loaded for editing");
     } catch (error) {
-      console.error('Error loading message:', error);
-      toast.error('Failed to load message');
+      console.error("Error loading message:", error);
+      toast.error("Failed to load message");
     } finally {
       setLoading(false);
     }
@@ -72,38 +66,38 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
 
   const handleSaveCorrection = async () => {
     if (!corrected.trim() || corrected === original) {
-      toast.error('Please make changes before saving');
+      toast.error("Please make changes before saving");
       return;
     }
 
     setSaving(true);
-    
+
     try {
       // Save as training example with high rating
       const { error } = await supabase
-        .from('rlhf_feedback')
+        .from("rlhf_feedback")
         .update({
           feedback_text: corrected,
           rating: 5, // Mark as high-quality training example
           thumbs_up: true,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', searchId);
+        .eq("id", searchId);
 
       if (error) {
-        console.error('Failed to save correction:', error);
+        console.error("Failed to save correction:", error);
         throw error;
       }
 
-      toast.success('Correction saved as training example! 💜', {
-        description: 'This correction will influence future responses'
+      toast.success("Correction saved as training example! 💜", {
+        description: "This correction will influence future responses",
       });
-      
+
       // Reset for next edit
       setOriginal(corrected);
     } catch (error) {
-      console.error('Error saving correction:', error);
-      toast.error('Failed to save correction');
+      console.error("Error saving correction:", error);
+      toast.error("Failed to save correction");
     } finally {
       setSaving(false);
     }
@@ -111,7 +105,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
 
   const handleReset = () => {
     setCorrected(original);
-    toast.info('Reverted to original response');
+    toast.info("Reverted to original response");
   };
 
   return (
@@ -135,11 +129,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
               onChange={(e) => setSearchId(e.target.value)}
               className="flex-1 bg-zinc-900/50 border-zinc-800"
             />
-            <Button
-              onClick={loadMessage}
-              disabled={loading || !searchId.trim()}
-              className="gap-2"
-            >
+            <Button onClick={loadMessage} disabled={loading || !searchId.trim()} className="gap-2">
               {loading ? (
                 <>
                   <RefreshCw className="h-4 w-4 animate-spin" />
@@ -253,4 +243,3 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
     </Card>
   );
 }
-

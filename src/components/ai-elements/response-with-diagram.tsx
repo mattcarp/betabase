@@ -3,7 +3,17 @@
 import { useState, useEffect, useCallback } from "react";
 import { Response, type ResponseProps } from "./response";
 import { cn } from "../../lib/utils";
-import { ChevronDown, ChevronUp, Sparkles, GitBranch, Presentation, Loader2, Download, ZoomIn, ZoomOut } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+  GitBranch,
+  Presentation,
+  Loader2,
+  Download,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 import { Button } from "../ui/button";
 
 type DiagramType = "explainer" | "workflow";
@@ -24,11 +34,7 @@ interface DiagramState {
  * 4. Diagram generates in background, shown when ready
  * 5. Supports zoom, pan, download
  */
-export function ResponseWithDiagram({
-  children,
-  className,
-  ...props
-}: ResponseProps) {
+export function ResponseWithDiagram({ children, className, ...props }: ResponseProps) {
   const [showDiagramOffer, setShowDiagramOffer] = useState(false);
   const [showDiagram, setShowDiagram] = useState(false);
   const [diagramType, setDiagramType] = useState<DiagramType>("explainer");
@@ -49,46 +55,49 @@ export function ResponseWithDiagram({
   }, [textContent.length]);
 
   // Generate diagram using Nano Banana Pro API
-  const generateDiagram = useCallback(async (type: DiagramType) => {
-    setDiagramType(type);
-    setDiagramState({ status: "generating" });
-    setShowDiagram(true);
+  const generateDiagram = useCallback(
+    async (type: DiagramType) => {
+      setDiagramType(type);
+      setDiagramState({ status: "generating" });
+      setShowDiagram(true);
 
-    try {
-      const response = await fetch("/api/diagram", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: `Create a ${type} diagram based on this content`,
-          context: textContent.substring(0, 2000), // Limit context size
-          type,
-        }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to generate diagram");
-      }
-
-      const result = await response.json();
-
-      if (result.success && result.image) {
-        setDiagramState({
-          status: "ready",
-          imageBase64: result.image.base64,
-          imageMimeType: result.image.mimeType,
+      try {
+        const response = await fetch("/api/diagram", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            prompt: `Create a ${type} diagram based on this content`,
+            context: textContent.substring(0, 2000), // Limit context size
+            type,
+          }),
         });
-      } else {
-        throw new Error("No image in response");
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || "Failed to generate diagram");
+        }
+
+        const result = await response.json();
+
+        if (result.success && result.image) {
+          setDiagramState({
+            status: "ready",
+            imageBase64: result.image.base64,
+            imageMimeType: result.image.mimeType,
+          });
+        } else {
+          throw new Error("No image in response");
+        }
+      } catch (error) {
+        console.error("Diagram generation failed:", error);
+        setDiagramState({
+          status: "error",
+          error: error instanceof Error ? error.message : "Unknown error",
+        });
       }
-    } catch (error) {
-      console.error("Diagram generation failed:", error);
-      setDiagramState({
-        status: "error",
-        error: error instanceof Error ? error.message : "Unknown error",
-      });
-    }
-  }, [textContent]);
+    },
+    [textContent]
+  );
 
   // Download the diagram
   const downloadDiagram = useCallback(() => {
@@ -112,9 +121,7 @@ export function ResponseWithDiagram({
       {/* Diagram offer - appears after reading delay */}
       {showDiagramOffer && diagramState.status === "idle" && (
         <div className="flex flex-col gap-3 animate-in fade-in duration-500">
-          <p className="text-sm text-muted-foreground">
-            Would you like me to generate a diagram?
-          </p>
+          <p className="text-sm text-muted-foreground">Would you like me to generate a diagram?</p>
           <div className="flex gap-2">
             <Button
               variant="outline"
@@ -160,9 +167,7 @@ export function ResponseWithDiagram({
           <div className="flex items-center justify-between p-3 border-b border-purple-500/20">
             <div className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-purple-400" />
-              <span className="text-sm font-medium text-purple-300">
-                Nano Banana Pro Diagram
-              </span>
+              <span className="text-sm font-medium text-purple-300">Nano Banana Pro Diagram</span>
               <span
                 className={cn(
                   "flex items-center gap-1 text-xs px-2 py-0.5 rounded-full",
@@ -187,31 +192,16 @@ export function ResponseWithDiagram({
             <div className="flex items-center gap-1">
               {diagramState.status === "ready" && (
                 <>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={zoomOut}
-                    className="h-7 w-7"
-                  >
+                  <Button variant="ghost" size="icon" onClick={zoomOut} className="h-7 w-7">
                     <ZoomOut className="h-4 w-4" />
                   </Button>
                   <span className="text-xs text-muted-foreground min-w-[3rem] text-center">
                     {Math.round(zoom * 100)}%
                   </span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={zoomIn}
-                    className="h-7 w-7"
-                  >
+                  <Button variant="ghost" size="icon" onClick={zoomIn} className="h-7 w-7">
                     <ZoomIn className="h-4 w-4" />
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={downloadDiagram}
-                    className="h-7 w-7"
-                  >
+                  <Button variant="ghost" size="icon" onClick={downloadDiagram} className="h-7 w-7">
                     <Download className="h-4 w-4" />
                   </Button>
                 </>
@@ -240,11 +230,7 @@ export function ResponseWithDiagram({
               <div className="flex flex-col items-center gap-3 text-red-400">
                 <p className="text-sm">Failed to generate diagram</p>
                 <p className="text-xs text-muted-foreground">{diagramState.error}</p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => generateDiagram(diagramType)}
-                >
+                <Button variant="outline" size="sm" onClick={() => generateDiagram(diagramType)}>
                   Try Again
                 </Button>
               </div>

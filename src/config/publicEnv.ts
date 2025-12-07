@@ -24,11 +24,3 @@ export function getPublicAppVersion(): string | undefined {
 export function getPublicBuildTimestamp(): string | undefined {
   return readPublicEnv("NEXT_PUBLIC_BUILD_TIMESTAMP");
 }
-
-
-
-
-
-
-
-

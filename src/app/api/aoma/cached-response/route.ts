@@ -264,11 +264,7 @@ Ensure:
     style A fill:#9C27B0,color:#fff`,
     metadata: {
       confidence: "high",
-      sources: [
-        "AOMA Release Notes 2.113.0",
-        "GRPS Integration Guide",
-        "QC Notes Documentation",
-      ],
+      sources: ["AOMA Release Notes 2.113.0", "GRPS Integration Guide", "QC Notes Documentation"],
       lastUpdated: "2025-10-27",
     },
   },
@@ -743,11 +739,7 @@ Preview clips are shorter (7-15 seconds) for streaming platforms.
     style Q fill:#2196F3,color:#fff`,
     metadata: {
       confidence: "high",
-      sources: [
-        "AOMA Release Notes 2.113.0",
-        "Mobile Audio Manager Guide",
-        "MBC Documentation",
-      ],
+      sources: ["AOMA Release Notes 2.113.0", "Mobile Audio Manager Guide", "MBC Documentation"],
       lastUpdated: "2025-10-27",
     },
   },

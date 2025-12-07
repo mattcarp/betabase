@@ -23,18 +23,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Get summary stats
-    const { data: summaryData } = await supabaseAdmin.rpc(
-      "get_self_healing_analytics",
-      { p_days: days }
-    );
+    const { data: summaryData } = await supabaseAdmin.rpc("get_self_healing_analytics", {
+      p_days: days,
+    });
 
     // Get daily trends if requested
     let trendsData = null;
     if (includeHistory) {
-      const { data } = await supabaseAdmin.rpc(
-        "get_self_healing_trends",
-        { p_days: days }
-      );
+      const { data } = await supabaseAdmin.rpc("get_self_healing_trends", { p_days: days });
       trendsData = data;
     }
 

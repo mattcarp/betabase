@@ -15,12 +15,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import {
   ThumbsUp,
@@ -61,15 +56,8 @@ export function FeedbackBadge({
 }: FeedbackBadgeProps) {
   if (!feedback) return null;
 
-  const {
-    thumbsUp,
-    rating,
-    hasCorrection,
-    status,
-    severity,
-    categoriesCount,
-    feedbackText,
-  } = feedback;
+  const { thumbsUp, rating, hasCorrection, status, severity, categoriesCount, feedbackText } =
+    feedback;
 
   const renderStars = (rating: number) => {
     const fullStars = Math.floor(rating);
@@ -79,14 +67,9 @@ export function FeedbackBadge({
     return (
       <div className="flex items-center gap-0.5">
         {Array.from({ length: fullStars }).map((_, i) => (
-          <Star
-            key={`full-${i}`}
-            className="h-3 w-3 fill-yellow-400 text-yellow-400"
-          />
+          <Star key={`full-${i}`} className="h-3 w-3 fill-yellow-400 text-yellow-400" />
         ))}
-        {hasHalf && (
-          <StarHalf className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-        )}
+        {hasHalf && <StarHalf className="h-3 w-3 fill-yellow-400 text-yellow-400" />}
         {Array.from({ length: emptyStars }).map((_, i) => (
           <Star key={`empty-${i}`} className="h-3 w-3 text-zinc-600" />
         ))}
@@ -199,11 +182,7 @@ export function FeedbackBadge({
                 className
               )}
             >
-              {thumbsUp ? (
-                <ThumbsUp className="h-4 w-4" />
-              ) : (
-                <ThumbsDown className="h-4 w-4" />
-              )}
+              {thumbsUp ? <ThumbsUp className="h-4 w-4" /> : <ThumbsDown className="h-4 w-4" />}
             </motion.button>
           </TooltipTrigger>
           <TooltipContent>
@@ -238,13 +217,13 @@ export function FeedbackBadge({
                 className
               )}
             >
-              {thumbsUp !== null && thumbsUp !== undefined && (
-                thumbsUp ? (
+              {thumbsUp !== null &&
+                thumbsUp !== undefined &&
+                (thumbsUp ? (
                   <ThumbsUp className="h-3.5 w-3.5 text-green-400" />
                 ) : (
                   <ThumbsDown className="h-3.5 w-3.5 text-red-400" />
-                )
-              )}
+                ))}
 
               {rating !== null && rating !== undefined && (
                 <div className="flex items-center gap-0.5">
@@ -253,25 +232,19 @@ export function FeedbackBadge({
                 </div>
               )}
 
-              {hasCorrection && (
-                <Target className="h-3.5 w-3.5 text-blue-400" />
-              )}
+              {hasCorrection && <Target className="h-3.5 w-3.5 text-blue-400" />}
 
               {severity && renderSeverityIndicator()}
 
               {categoriesCount !== undefined && categoriesCount > 0 && (
-                <span className="text-xs text-zinc-500">
-                  +{categoriesCount}
-                </span>
+                <span className="text-xs text-zinc-500">+{categoriesCount}</span>
               )}
             </motion.button>
           </TooltipTrigger>
           <TooltipContent className="max-w-64">
             <div className="space-y-1">
               {thumbsUp !== null && thumbsUp !== undefined && (
-                <p className="text-sm">
-                  {thumbsUp ? "Positive feedback" : "Negative feedback"}
-                </p>
+                <p className="text-sm">{thumbsUp ? "Positive feedback" : "Negative feedback"}</p>
               )}
               {rating !== null && rating !== undefined && (
                 <div className="flex items-center gap-1">
@@ -280,18 +253,12 @@ export function FeedbackBadge({
                 </div>
               )}
               {hasCorrection && (
-                <p className="text-xs text-blue-400">
-                  Contains suggested correction
-                </p>
+                <p className="text-xs text-blue-400">Contains suggested correction</p>
               )}
               {feedbackText && (
-                <p className="text-xs text-zinc-400 italic">
-                  &ldquo;{feedbackText}&rdquo;
-                </p>
+                <p className="text-xs text-zinc-400 italic">&ldquo;{feedbackText}&rdquo;</p>
               )}
-              {status && (
-                <p className="text-xs text-zinc-400">Status: {status}</p>
-              )}
+              {status && <p className="text-xs text-zinc-400">Status: {status}</p>}
             </div>
           </TooltipContent>
         </Tooltip>
@@ -337,10 +304,7 @@ export function FeedbackBadge({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Badge
-                  variant="outline"
-                  className="text-xs text-blue-400 border-blue-500/30"
-                >
+                <Badge variant="outline" className="text-xs text-blue-400 border-blue-500/30">
                   <Target className="h-3 w-3 mr-1" />
                   Correction
                 </Badge>
@@ -356,10 +320,7 @@ export function FeedbackBadge({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Badge
-                  variant="outline"
-                  className="text-xs text-zinc-400 border-zinc-600"
-                >
+                <Badge variant="outline" className="text-xs text-zinc-400 border-zinc-600">
                   <MessageSquare className="h-3 w-3 mr-1" />
                   Comment
                 </Badge>

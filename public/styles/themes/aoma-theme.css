@@ -5,25 +5,25 @@
 
 :root[data-theme="aoma"] {
   /* AOMA Core Colors - Based on AOMA3 Interface */
-  --aoma-navy-deep: #001F3F;           /* Deep navy background */
-  --aoma-navy-dark: #003366;            /* Darker navy variant */
-  --aoma-slate: #546E7A;                /* Slate blue/gray */
-  --aoma-slate-light: #607D8B;          /* Lighter slate */
-  --aoma-orange-primary: #FF9800;       /* Primary orange CTA */
-  --aoma-orange-hover: #FB8C00;         /* Orange hover state */
-  --aoma-orange-dark: #F57C00;          /* Darker orange */
+  --aoma-navy-deep: #001f3f; /* Deep navy background */
+  --aoma-navy-dark: #003366; /* Darker navy variant */
+  --aoma-slate: #546e7a; /* Slate blue/gray */
+  --aoma-slate-light: #607d8b; /* Lighter slate */
+  --aoma-orange-primary: #ff9800; /* Primary orange CTA */
+  --aoma-orange-hover: #fb8c00; /* Orange hover state */
+  --aoma-orange-dark: #f57c00; /* Darker orange */
 
   /* AOMA Surface Colors */
-  --aoma-surface-background: #001F3F;   /* Main background */
-  --aoma-surface-elevated: #003366;     /* Cards/panels */
+  --aoma-surface-background: #001f3f; /* Main background */
+  --aoma-surface-elevated: #003366; /* Cards/panels */
   --aoma-surface-card: rgba(0, 51, 102, 0.9);
-  --aoma-surface-slate: #546E7A;        /* Slate surfaces */
+  --aoma-surface-slate: #546e7a; /* Slate surfaces */
 
   /* AOMA Text Colors - Professional Hierarchy */
   --aoma-text-primary: #ffffff;
-  --aoma-text-secondary: #B0BEC5;       /* Lighter gray text */
-  --aoma-text-muted: #78909C;           /* Muted gray */
-  --aoma-text-orange: #FF9800;          /* Orange accent text */
+  --aoma-text-secondary: #b0bec5; /* Lighter gray text */
+  --aoma-text-muted: #78909c; /* Muted gray */
+  --aoma-text-orange: #ff9800; /* Orange accent text */
 
   /* AOMA Utility Colors */
   --aoma-border: rgba(176, 190, 197, 0.2);
@@ -32,26 +32,26 @@
 
   /* AOMA State Colors */
   --aoma-state-hover: rgba(255, 152, 0, 0.1);
-  --aoma-state-focus: #FF9800;
+  --aoma-state-focus: #ff9800;
   --aoma-state-active: #003366;
-  --aoma-state-disabled: #37474F;
+  --aoma-state-disabled: #37474f;
 
   /* AOMA Status Colors - Corporate Professional */
   --aoma-status-success-bg: rgba(76, 175, 80, 0.15);
   --aoma-status-success-border: rgba(76, 175, 80, 0.3);
-  --aoma-status-success-text: #81C784;
+  --aoma-status-success-text: #81c784;
 
   --aoma-status-warning-bg: rgba(255, 152, 0, 0.15);
   --aoma-status-warning-border: rgba(255, 152, 0, 0.3);
-  --aoma-status-warning-text: #FFB74D;
+  --aoma-status-warning-text: #ffb74d;
 
   --aoma-status-error-bg: rgba(244, 67, 54, 0.15);
   --aoma-status-error-border: rgba(244, 67, 54, 0.3);
-  --aoma-status-error-text: #E57373;
+  --aoma-status-error-text: #e57373;
 
   /* AOMA Link Colors */
-  --aoma-link-primary: #42A5F5;         /* Blue links */
-  --aoma-link-hover: #64B5F6;
+  --aoma-link-primary: #42a5f5; /* Blue links */
+  --aoma-link-hover: #64b5f6;
 
   /* Override MAC Design System variables when AOMA theme is active */
   --mac-surface-background: var(--aoma-surface-background);
@@ -173,10 +173,18 @@
   font-family: Georgia, serif;
 }
 
-.aoma-logo-quad:nth-child(1) { background: var(--aoma-navy-deep); }
-.aoma-logo-quad:nth-child(2) { background: var(--aoma-slate); }
-.aoma-logo-quad:nth-child(3) { background: var(--aoma-slate); }
-.aoma-logo-quad:nth-child(4) { background: var(--aoma-navy-deep); }
+.aoma-logo-quad:nth-child(1) {
+  background: var(--aoma-navy-deep);
+}
+.aoma-logo-quad:nth-child(2) {
+  background: var(--aoma-slate);
+}
+.aoma-logo-quad:nth-child(3) {
+  background: var(--aoma-slate);
+}
+.aoma-logo-quad:nth-child(4) {
+  background: var(--aoma-navy-deep);
+}
 
 /* AOMA Circular Refresh Icon */
 .aoma-refresh-icon {
@@ -190,7 +198,7 @@
 
 .aoma-refresh-icon::before,
 .aoma-refresh-icon::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 0;
   height: 0;
@@ -328,5 +336,8 @@
 
 /* AOMA Theme Transition Animation */
 :root[data-theme="aoma"] * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }

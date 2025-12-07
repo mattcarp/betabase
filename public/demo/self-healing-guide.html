@@ -1,598 +1,648 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Self-Healing Test Dashboard - Demo Guide</title>
-  <style>
-    :root {
-      --mac-bg: #0a0a0a;
-      --mac-surface: #141414;
-      --mac-border: #262626;
-      --mac-text: #fafafa;
-      --mac-text-muted: #a1a1aa;
-      --mac-accent: #3b82f6;
-      --mac-success: #22c55e;
-      --mac-warning: #eab308;
-      --mac-error: #ef4444;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Self-Healing Test Dashboard - Demo Guide</title>
+    <style>
+      :root {
+        --mac-bg: #0a0a0a;
+        --mac-surface: #141414;
+        --mac-border: #262626;
+        --mac-text: #fafafa;
+        --mac-text-muted: #a1a1aa;
+        --mac-accent: #3b82f6;
+        --mac-success: #22c55e;
+        --mac-warning: #eab308;
+        --mac-error: #ef4444;
+      }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--mac-bg);
-      color: var(--mac-text);
-      line-height: 1.6;
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--mac-bg);
+        color: var(--mac-text);
+        line-height: 1.6;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 300;
-      margin-bottom: 0.5rem;
-      color: var(--mac-text);
-    }
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 300;
+        margin-bottom: 0.5rem;
+        color: var(--mac-text);
+      }
 
-    .subtitle {
-      color: var(--mac-text-muted);
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
-      font-weight: 300;
-    }
+      .subtitle {
+        color: var(--mac-text-muted);
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        font-weight: 300;
+      }
 
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 400;
-      margin: 2rem 0 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--mac-border);
-    }
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin: 2rem 0 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--mac-border);
+      }
 
-    h3 {
-      font-size: 1.2rem;
-      font-weight: 400;
-      margin: 1.5rem 0 0.75rem;
-      color: var(--mac-accent);
-    }
+      h3 {
+        font-size: 1.2rem;
+        font-weight: 400;
+        margin: 1.5rem 0 0.75rem;
+        color: var(--mac-accent);
+      }
 
-    p {
-      margin-bottom: 1rem;
-      color: var(--mac-text-muted);
-    }
+      p {
+        margin-bottom: 1rem;
+        color: var(--mac-text-muted);
+      }
 
-    .card {
-      background: var(--mac-surface);
-      border: 1px solid var(--mac-border);
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin: 1rem 0;
-    }
+      .card {
+        background: var(--mac-surface);
+        border: 1px solid var(--mac-border);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+      }
 
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
 
-    .stat-card {
-      background: var(--mac-surface);
-      border: 1px solid var(--mac-border);
-      border-radius: 8px;
-      padding: 1rem;
-      text-align: center;
-    }
+      .stat-card {
+        background: var(--mac-surface);
+        border: 1px solid var(--mac-border);
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+      }
 
-    .stat-value {
-      font-size: 2rem;
-      font-weight: 300;
-      color: var(--mac-text);
-    }
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 300;
+        color: var(--mac-text);
+      }
 
-    .stat-label {
-      font-size: 0.875rem;
-      color: var(--mac-text-muted);
-      margin-top: 0.25rem;
-    }
+      .stat-label {
+        font-size: 0.875rem;
+        color: var(--mac-text-muted);
+        margin-top: 0.25rem;
+      }
 
-    .tier {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1rem;
-      border-radius: 8px;
-      margin: 0.75rem 0;
-    }
+      .tier {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 0.75rem 0;
+      }
 
-    .tier-1 { background: rgba(34, 197, 94, 0.1); border-left: 3px solid var(--mac-success); }
-    .tier-2 { background: rgba(234, 179, 8, 0.1); border-left: 3px solid var(--mac-warning); }
-    .tier-3 { background: rgba(239, 68, 68, 0.1); border-left: 3px solid var(--mac-error); }
+      .tier-1 {
+        background: rgba(34, 197, 94, 0.1);
+        border-left: 3px solid var(--mac-success);
+      }
+      .tier-2 {
+        background: rgba(234, 179, 8, 0.1);
+        border-left: 3px solid var(--mac-warning);
+      }
+      .tier-3 {
+        background: rgba(239, 68, 68, 0.1);
+        border-left: 3px solid var(--mac-error);
+      }
 
-    .tier-badge {
-      font-weight: 500;
-      padding: 0.25rem 0.75rem;
-      border-radius: 4px;
-      font-size: 0.875rem;
-      white-space: nowrap;
-    }
+      .tier-badge {
+        font-weight: 500;
+        padding: 0.25rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        white-space: nowrap;
+      }
 
-    .tier-1 .tier-badge { background: var(--mac-success); color: #000; }
-    .tier-2 .tier-badge { background: var(--mac-warning); color: #000; }
-    .tier-3 .tier-badge { background: var(--mac-error); color: #fff; }
+      .tier-1 .tier-badge {
+        background: var(--mac-success);
+        color: #000;
+      }
+      .tier-2 .tier-badge {
+        background: var(--mac-warning);
+        color: #000;
+      }
+      .tier-3 .tier-badge {
+        background: var(--mac-error);
+        color: #fff;
+      }
 
-    .tier-content {
-      flex: 1;
-    }
+      .tier-content {
+        flex: 1;
+      }
 
-    .tier-title {
-      font-weight: 500;
-      color: var(--mac-text);
-      margin-bottom: 0.25rem;
-    }
+      .tier-title {
+        font-weight: 500;
+        color: var(--mac-text);
+        margin-bottom: 0.25rem;
+      }
 
-    .tier-desc {
-      font-size: 0.875rem;
-      color: var(--mac-text-muted);
-    }
+      .tier-desc {
+        font-size: 0.875rem;
+        color: var(--mac-text-muted);
+      }
 
-    .code-diff {
-      background: #1a1a2e;
-      border-radius: 8px;
-      padding: 1rem;
-      font-family: 'Monaco', 'Menlo', monospace;
-      font-size: 0.875rem;
-      overflow-x: auto;
-      margin: 1rem 0;
-    }
+      .code-diff {
+        background: #1a1a2e;
+        border-radius: 8px;
+        padding: 1rem;
+        font-family: "Monaco", "Menlo", monospace;
+        font-size: 0.875rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
 
-    .diff-remove {
-      color: #f87171;
-      display: block;
-    }
+      .diff-remove {
+        color: #f87171;
+        display: block;
+      }
 
-    .diff-add {
-      color: #4ade80;
-      display: block;
-    }
+      .diff-add {
+        color: #4ade80;
+        display: block;
+      }
 
-    .script-section {
-      background: var(--mac-surface);
-      border: 1px solid var(--mac-border);
-      border-radius: 8px;
-      margin: 1rem 0;
-      overflow: hidden;
-    }
+      .script-section {
+        background: var(--mac-surface);
+        border: 1px solid var(--mac-border);
+        border-radius: 8px;
+        margin: 1rem 0;
+        overflow: hidden;
+      }
 
-    .script-header {
-      background: var(--mac-border);
-      padding: 0.75rem 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+      .script-header {
+        background: var(--mac-border);
+        padding: 0.75rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-    .script-title {
-      font-weight: 500;
-      color: var(--mac-text);
-    }
+      .script-title {
+        font-weight: 500;
+        color: var(--mac-text);
+      }
 
-    .script-time {
-      font-size: 0.875rem;
-      color: var(--mac-accent);
-    }
+      .script-time {
+        font-size: 0.875rem;
+        color: var(--mac-accent);
+      }
 
-    .script-body {
-      padding: 1rem;
-      color: var(--mac-text-muted);
-      font-style: italic;
-    }
+      .script-body {
+        padding: 1rem;
+        color: var(--mac-text-muted);
+        font-style: italic;
+      }
 
-    .highlight-box {
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid var(--mac-accent);
-      border-radius: 8px;
-      padding: 1rem;
-      margin: 1rem 0;
-    }
+      .highlight-box {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid var(--mac-accent);
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
 
-    .highlight-box strong {
-      color: var(--mac-accent);
-    }
+      .highlight-box strong {
+        color: var(--mac-accent);
+      }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-    }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
 
-    th, td {
-      text-align: left;
-      padding: 0.75rem;
-      border-bottom: 1px solid var(--mac-border);
-    }
+      th,
+      td {
+        text-align: left;
+        padding: 0.75rem;
+        border-bottom: 1px solid var(--mac-border);
+      }
 
-    th {
-      color: var(--mac-text);
-      font-weight: 500;
-    }
+      th {
+        color: var(--mac-text);
+        font-weight: 500;
+      }
 
-    td {
-      color: var(--mac-text-muted);
-    }
+      td {
+        color: var(--mac-text-muted);
+      }
 
-    .value-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-      margin: 1rem 0;
-    }
+      .value-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+      }
 
-    .value-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-    }
+      .value-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
 
-    .value-icon {
-      width: 24px;
-      height: 24px;
-      background: var(--mac-accent);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 0.75rem;
-    }
+      .value-icon {
+        width: 24px;
+        height: 24px;
+        background: var(--mac-accent);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 0.75rem;
+      }
 
-    .nav-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: var(--mac-surface);
-      border-bottom: 1px solid var(--mac-border);
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 100;
-    }
+      .nav-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: var(--mac-surface);
+        border-bottom: 1px solid var(--mac-border);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
+      }
 
-    .nav-brand {
-      font-weight: 500;
-      color: var(--mac-text);
-    }
+      .nav-brand {
+        font-weight: 500;
+        color: var(--mac-text);
+      }
 
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-    }
+      .nav-links {
+        display: flex;
+        gap: 1.5rem;
+      }
 
-    .nav-links a {
-      color: var(--mac-text-muted);
-      text-decoration: none;
-      font-size: 0.875rem;
-    }
+      .nav-links a {
+        color: var(--mac-text-muted);
+        text-decoration: none;
+        font-size: 0.875rem;
+      }
 
-    .nav-links a:hover {
-      color: var(--mac-accent);
-    }
+      .nav-links a:hover {
+        color: var(--mac-accent);
+      }
 
-    .content {
-      margin-top: 4rem;
-    }
+      .content {
+        margin-top: 4rem;
+      }
 
-    .footer {
-      margin-top: 3rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--mac-border);
-      color: var(--mac-text-muted);
-      font-size: 0.875rem;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
-  <nav class="nav-bar">
-    <div class="nav-brand">SIAM Demo Guide</div>
-    <div class="nav-links">
-      <a href="#overview">Overview</a>
-      <a href="#stats">Stats</a>
-      <a href="#tiers">Three Tiers</a>
-      <a href="#script">Demo Script</a>
-      <a href="#value">Business Value</a>
-    </div>
-  </nav>
-
-  <div class="content">
-    <h1>Self-Healing Test Dashboard</h1>
-    <p class="subtitle">Demo Guide - Test Pillar of SIAM's Three-Pillar Architecture</p>
-
-    <section id="overview">
-      <h2>Overview</h2>
-      <p>The Self-Healing Test Dashboard demonstrates AI-powered test maintenance that automatically repairs broken UI tests when selectors change. This is the <strong style="color: var(--mac-text);">Test pillar</strong> of SIAM's three-pillar architecture (Chat, Curate, Test).</p>
-    </section>
-
-    <section id="stats">
-      <h2>Key Metrics (Hero Stats)</h2>
-      <p>When the dashboard loads, you'll see six key metrics:</p>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value">247</div>
-          <div class="stat-label">Total Tests</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">89</div>
-          <div class="stat-label">Auto-Healed</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">12</div>
-          <div class="stat-label">Pending Review</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" style="color: var(--mac-success);">94.2%</div>
-          <div class="stat-label">Success Rate</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">2.3s</div>
-          <div class="stat-label">Avg Heal Time</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">23</div>
-          <div class="stat-label">Last 24h</div>
-        </div>
+      .footer {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--mac-border);
+        color: var(--mac-text-muted);
+        font-size: 0.875rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav-bar">
+      <div class="nav-brand">SIAM Demo Guide</div>
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#stats">Stats</a>
+        <a href="#tiers">Three Tiers</a>
+        <a href="#script">Demo Script</a>
+        <a href="#value">Business Value</a>
       </div>
+    </nav>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Metric</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Total Tests</strong></td>
-            <td>Number of tests in the monitoring system</td>
-          </tr>
-          <tr>
-            <td><strong>Auto-Healed</strong></td>
-            <td>Tests automatically fixed by the AI (Tier 1)</td>
-          </tr>
-          <tr>
-            <td><strong>Pending Review</strong></td>
-            <td>Tests waiting for human review (Tier 2)</td>
-          </tr>
-          <tr>
-            <td><strong>Success Rate</strong></td>
-            <td>Overall healing success rate (target: >90%)</td>
-          </tr>
-          <tr>
-            <td><strong>Avg Heal Time</strong></td>
-            <td>Average time to automatically repair a test</td>
-          </tr>
-          <tr>
-            <td><strong>Last 24h</strong></td>
-            <td>Recent healing activity volume</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <div class="content">
+      <h1>Self-Healing Test Dashboard</h1>
+      <p class="subtitle">Demo Guide - Test Pillar of SIAM's Three-Pillar Architecture</p>
 
-    <section id="tiers">
-      <h2>Three-Tier Healing System</h2>
-      <p>The system classifies each broken test into one of three tiers based on AI confidence:</p>
+      <section id="overview">
+        <h2>Overview</h2>
+        <p>
+          The Self-Healing Test Dashboard demonstrates AI-powered test maintenance that
+          automatically repairs broken UI tests when selectors change. This is the
+          <strong style="color: var(--mac-text)">Test pillar</strong> of SIAM's three-pillar
+          architecture (Chat, Curate, Test).
+        </p>
+      </section>
 
-      <div class="tier tier-1">
-        <span class="tier-badge">TIER 1</span>
-        <div class="tier-content">
-          <div class="tier-title">Automatic Healing</div>
-          <div class="tier-desc">
-            <strong>Confidence: >90%</strong> - Heals automatically, no human intervention needed.<br>
-            Example: Button text changed from "Submit" to "Send" - obvious match.
+      <section id="stats">
+        <h2>Key Metrics (Hero Stats)</h2>
+        <p>When the dashboard loads, you'll see six key metrics:</p>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">247</div>
+            <div class="stat-label">Total Tests</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">89</div>
+            <div class="stat-label">Auto-Healed</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Pending Review</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color: var(--mac-success)">94.2%</div>
+            <div class="stat-label">Success Rate</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">2.3s</div>
+            <div class="stat-label">Avg Heal Time</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">23</div>
+            <div class="stat-label">Last 24h</div>
           </div>
         </div>
-      </div>
 
-      <div class="tier tier-2">
-        <span class="tier-badge">TIER 2</span>
-        <div class="tier-content">
-          <div class="tier-title">Review Required</div>
-          <div class="tier-desc">
-            <strong>Confidence: 60-90%</strong> - Queued for QA review with AI recommendation.<br>
-            Example: Multiple possible matches, needs human judgment.
-          </div>
-        </div>
-      </div>
-
-      <div class="tier tier-3">
-        <span class="tier-badge">TIER 3</span>
-        <div class="tier-content">
-          <div class="tier-title">Architect Review</div>
-          <div class="tier-desc">
-            <strong>Confidence: <60%</strong> - Escalated to test architect.<br>
-            Example: Component completely restructured, may need test rewrite.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Code Diff Visualization</h2>
-      <p>When reviewing a healed test, the dashboard displays the selector change:</p>
-
-      <div class="code-diff">
-        <span class="diff-remove">- button[data-testid="submit-btn"]</span>
-        <span class="diff-add">+ button[data-testid="send-btn"]</span>
-      </div>
-
-      <p>The diff shows the original selector (red) and the AI-suggested replacement (green), along with confidence score and DOM context.</p>
-    </section>
-
-    <section>
-      <h2>Cascade Healing</h2>
-      <div class="highlight-box">
-        <strong>One fix can repair multiple tests.</strong><br><br>
-        When the AI fixes a selector pattern, it automatically identifies and repairs all other tests using the same pattern. This dramatically reduces maintenance burden.
-      </div>
-      <p><strong style="color: var(--mac-text);">Demo talking point:</strong> "When we fix one test, the system automatically identifies 12 other tests with the same selector pattern and heals them all. That's cascade healing."</p>
-    </section>
-
-    <section>
-      <h2>Hidden Demo Trigger</h2>
-      <div class="card">
-        <p style="color: var(--mac-text); margin-bottom: 0.5rem;"><strong>For demo purposes:</strong></p>
-        <p style="margin-bottom: 0;">Click the <strong style="color: var(--mac-accent);">"Configure"</strong> button <strong style="color: var(--mac-accent);">3 times quickly</strong> to trigger a demo healing sequence with simulated failures and automatic repairs.</p>
-      </div>
-    </section>
-
-    <section id="script">
-      <h2>Demo Script (~3 minutes)</h2>
-
-      <div class="script-section">
-        <div class="script-header">
-          <span class="script-title">Opening</span>
-          <span class="script-time">30 seconds</span>
-        </div>
-        <div class="script-body">
-          "The Test pillar shows our AI-powered self-healing test system. When UI changes break our automated tests, the AI automatically repairs them."
-        </div>
-      </div>
-
-      <div class="script-section">
-        <div class="script-header">
-          <span class="script-title">Stats Overview</span>
-          <span class="script-time">30 seconds</span>
-        </div>
-        <div class="script-body">
-          "We're monitoring 247 tests. 89 have been automatically healed, 12 are pending review. Our success rate is 94.2% with an average heal time of 2.3 seconds."
-        </div>
-      </div>
-
-      <div class="script-section">
-        <div class="script-header">
-          <span class="script-title">Three-Tier Explanation</span>
-          <span class="script-time">45 seconds</span>
-        </div>
-        <div class="script-body">
-          "The system uses a three-tier confidence model. Tier 1 tests heal automatically - high confidence, no human needed. Tier 2 queues for QA review - the AI makes a recommendation but wants human verification. Tier 3 escalates to architects - these are complex changes that may need test rewrites."
-        </div>
-      </div>
-
-      <div class="script-section">
-        <div class="script-header">
-          <span class="script-title">Live Workflow</span>
-          <span class="script-time">30 seconds</span>
-        </div>
-        <div class="script-body">
-          "Watch the live workflow here. A test just failed because a button's data-testid changed. The AI analyzed it, scored 96% confidence, and automatically healed it in 1.8 seconds."
-        </div>
-      </div>
-
-      <div class="script-section">
-        <div class="script-header">
-          <span class="script-title">Cascade Demo</span>
-          <span class="script-time">30 seconds</span>
-        </div>
-        <div class="script-body">
-          "Notice it also healed 5 other tests that used the same selector pattern. That's cascade healing - fix one, fix many."
-        </div>
-      </div>
-
-      <div class="script-section">
-        <div class="script-header">
-          <span class="script-title">Closing</span>
-          <span class="script-time">15 seconds</span>
-        </div>
-        <div class="script-body">
-          "This means our QA team spends less time maintaining tests and more time building new coverage. The AI handles the routine maintenance."
-        </div>
-      </div>
-    </section>
-
-    <section id="value">
-      <h2>Business Value Proposition</h2>
-
-      <div class="value-list">
-        <div class="value-item">
-          <div class="value-icon">1</div>
-          <div>
-            <strong style="color: var(--mac-text);">94.2% Success Rate</strong><br>
-            <span style="color: var(--mac-text-muted);">Most tests heal automatically</span>
-          </div>
-        </div>
-        <div class="value-item">
-          <div class="value-icon">2</div>
-          <div>
-            <strong style="color: var(--mac-text);">2.3s Average Heal Time</strong><br>
-            <span style="color: var(--mac-text-muted);">Near-instant repairs</span>
-          </div>
-        </div>
-        <div class="value-item">
-          <div class="value-icon">3</div>
-          <div>
-            <strong style="color: var(--mac-text);">Reduced Maintenance</strong><br>
-            <span style="color: var(--mac-text-muted);">QA focuses on new tests</span>
-          </div>
-        </div>
-        <div class="value-item">
-          <div class="value-icon">4</div>
-          <div>
-            <strong style="color: var(--mac-text);">Cascade Effect</strong><br>
-            <span style="color: var(--mac-text-muted);">One fix repairs many tests</span>
-          </div>
-        </div>
-        <div class="value-item">
-          <div class="value-icon">5</div>
-          <div>
-            <strong style="color: var(--mac-text);">Human-in-the-Loop</strong><br>
-            <span style="color: var(--mac-text-muted);">AI suggests, humans approve</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Technical Details</h2>
-      <div class="card">
         <table>
-          <tr>
-            <td><strong>AI Model</strong></td>
-            <td>Gemini 3 Pro for selector analysis</td>
-          </tr>
-          <tr>
-            <td><strong>Confidence Algorithm</strong></td>
-            <td>Combines semantic similarity, DOM structure, and historical patterns</td>
-          </tr>
-          <tr>
-            <td><strong>API Endpoints</strong></td>
-            <td>
-              <code>GET /api/self-healing</code> - Current status<br>
-              <code>GET /api/self-healing/analytics</code> - Historical data<br>
-              <code>POST /api/self-healing/approve</code> - Human approval
-            </td>
-          </tr>
-          <tr>
-            <td><strong>Integration</strong></td>
-            <td>Playwright test framework with custom healing middleware</td>
-          </tr>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Total Tests</strong></td>
+              <td>Number of tests in the monitoring system</td>
+            </tr>
+            <tr>
+              <td><strong>Auto-Healed</strong></td>
+              <td>Tests automatically fixed by the AI (Tier 1)</td>
+            </tr>
+            <tr>
+              <td><strong>Pending Review</strong></td>
+              <td>Tests waiting for human review (Tier 2)</td>
+            </tr>
+            <tr>
+              <td><strong>Success Rate</strong></td>
+              <td>Overall healing success rate (target: >90%)</td>
+            </tr>
+            <tr>
+              <td><strong>Avg Heal Time</strong></td>
+              <td>Average time to automatically repair a test</td>
+            </tr>
+            <tr>
+              <td><strong>Last 24h</strong></td>
+              <td>Recent healing activity volume</td>
+            </tr>
+          </tbody>
         </table>
-      </div>
-    </section>
+      </section>
 
-    <div class="footer">
-      SIAM Self-Healing Test Dashboard - Demo Guide<br>
-      Last updated: December 2, 2025
+      <section id="tiers">
+        <h2>Three-Tier Healing System</h2>
+        <p>
+          The system classifies each broken test into one of three tiers based on AI confidence:
+        </p>
+
+        <div class="tier tier-1">
+          <span class="tier-badge">TIER 1</span>
+          <div class="tier-content">
+            <div class="tier-title">Automatic Healing</div>
+            <div class="tier-desc">
+              <strong>Confidence: >90%</strong> - Heals automatically, no human intervention
+              needed.<br />
+              Example: Button text changed from "Submit" to "Send" - obvious match.
+            </div>
+          </div>
+        </div>
+
+        <div class="tier tier-2">
+          <span class="tier-badge">TIER 2</span>
+          <div class="tier-content">
+            <div class="tier-title">Review Required</div>
+            <div class="tier-desc">
+              <strong>Confidence: 60-90%</strong> - Queued for QA review with AI recommendation.<br />
+              Example: Multiple possible matches, needs human judgment.
+            </div>
+          </div>
+        </div>
+
+        <div class="tier tier-3">
+          <span class="tier-badge">TIER 3</span>
+          <div class="tier-content">
+            <div class="tier-title">Architect Review</div>
+            <div class="tier-desc">
+              <strong>Confidence: <60%</strong> - Escalated to test architect.<br />
+              Example: Component completely restructured, may need test rewrite.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Code Diff Visualization</h2>
+        <p>When reviewing a healed test, the dashboard displays the selector change:</p>
+
+        <div class="code-diff">
+          <span class="diff-remove">- button[data-testid="submit-btn"]</span>
+          <span class="diff-add">+ button[data-testid="send-btn"]</span>
+        </div>
+
+        <p>
+          The diff shows the original selector (red) and the AI-suggested replacement (green), along
+          with confidence score and DOM context.
+        </p>
+      </section>
+
+      <section>
+        <h2>Cascade Healing</h2>
+        <div class="highlight-box">
+          <strong>One fix can repair multiple tests.</strong><br /><br />
+          When the AI fixes a selector pattern, it automatically identifies and repairs all other
+          tests using the same pattern. This dramatically reduces maintenance burden.
+        </div>
+        <p>
+          <strong style="color: var(--mac-text)">Demo talking point:</strong> "When we fix one test,
+          the system automatically identifies 12 other tests with the same selector pattern and
+          heals them all. That's cascade healing."
+        </p>
+      </section>
+
+      <section>
+        <h2>Hidden Demo Trigger</h2>
+        <div class="card">
+          <p style="color: var(--mac-text); margin-bottom: 0.5rem">
+            <strong>For demo purposes:</strong>
+          </p>
+          <p style="margin-bottom: 0">
+            Click the <strong style="color: var(--mac-accent)">"Configure"</strong> button
+            <strong style="color: var(--mac-accent)">3 times quickly</strong> to trigger a demo
+            healing sequence with simulated failures and automatic repairs.
+          </p>
+        </div>
+      </section>
+
+      <section id="script">
+        <h2>Demo Script (~3 minutes)</h2>
+
+        <div class="script-section">
+          <div class="script-header">
+            <span class="script-title">Opening</span>
+            <span class="script-time">30 seconds</span>
+          </div>
+          <div class="script-body">
+            "The Test pillar shows our AI-powered self-healing test system. When UI changes break
+            our automated tests, the AI automatically repairs them."
+          </div>
+        </div>
+
+        <div class="script-section">
+          <div class="script-header">
+            <span class="script-title">Stats Overview</span>
+            <span class="script-time">30 seconds</span>
+          </div>
+          <div class="script-body">
+            "We're monitoring 247 tests. 89 have been automatically healed, 12 are pending review.
+            Our success rate is 94.2% with an average heal time of 2.3 seconds."
+          </div>
+        </div>
+
+        <div class="script-section">
+          <div class="script-header">
+            <span class="script-title">Three-Tier Explanation</span>
+            <span class="script-time">45 seconds</span>
+          </div>
+          <div class="script-body">
+            "The system uses a three-tier confidence model. Tier 1 tests heal automatically - high
+            confidence, no human needed. Tier 2 queues for QA review - the AI makes a recommendation
+            but wants human verification. Tier 3 escalates to architects - these are complex changes
+            that may need test rewrites."
+          </div>
+        </div>
+
+        <div class="script-section">
+          <div class="script-header">
+            <span class="script-title">Live Workflow</span>
+            <span class="script-time">30 seconds</span>
+          </div>
+          <div class="script-body">
+            "Watch the live workflow here. A test just failed because a button's data-testid
+            changed. The AI analyzed it, scored 96% confidence, and automatically healed it in 1.8
+            seconds."
+          </div>
+        </div>
+
+        <div class="script-section">
+          <div class="script-header">
+            <span class="script-title">Cascade Demo</span>
+            <span class="script-time">30 seconds</span>
+          </div>
+          <div class="script-body">
+            "Notice it also healed 5 other tests that used the same selector pattern. That's cascade
+            healing - fix one, fix many."
+          </div>
+        </div>
+
+        <div class="script-section">
+          <div class="script-header">
+            <span class="script-title">Closing</span>
+            <span class="script-time">15 seconds</span>
+          </div>
+          <div class="script-body">
+            "This means our QA team spends less time maintaining tests and more time building new
+            coverage. The AI handles the routine maintenance."
+          </div>
+        </div>
+      </section>
+
+      <section id="value">
+        <h2>Business Value Proposition</h2>
+
+        <div class="value-list">
+          <div class="value-item">
+            <div class="value-icon">1</div>
+            <div>
+              <strong style="color: var(--mac-text)">94.2% Success Rate</strong><br />
+              <span style="color: var(--mac-text-muted)">Most tests heal automatically</span>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">2</div>
+            <div>
+              <strong style="color: var(--mac-text)">2.3s Average Heal Time</strong><br />
+              <span style="color: var(--mac-text-muted)">Near-instant repairs</span>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">3</div>
+            <div>
+              <strong style="color: var(--mac-text)">Reduced Maintenance</strong><br />
+              <span style="color: var(--mac-text-muted)">QA focuses on new tests</span>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">4</div>
+            <div>
+              <strong style="color: var(--mac-text)">Cascade Effect</strong><br />
+              <span style="color: var(--mac-text-muted)">One fix repairs many tests</span>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">5</div>
+            <div>
+              <strong style="color: var(--mac-text)">Human-in-the-Loop</strong><br />
+              <span style="color: var(--mac-text-muted)">AI suggests, humans approve</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Technical Details</h2>
+        <div class="card">
+          <table>
+            <tr>
+              <td><strong>AI Model</strong></td>
+              <td>Gemini 3 Pro for selector analysis</td>
+            </tr>
+            <tr>
+              <td><strong>Confidence Algorithm</strong></td>
+              <td>Combines semantic similarity, DOM structure, and historical patterns</td>
+            </tr>
+            <tr>
+              <td><strong>API Endpoints</strong></td>
+              <td>
+                <code>GET /api/self-healing</code> - Current status<br />
+                <code>GET /api/self-healing/analytics</code> - Historical data<br />
+                <code>POST /api/self-healing/approve</code> - Human approval
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Integration</strong></td>
+              <td>Playwright test framework with custom healing middleware</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <div class="footer">
+        SIAM Self-Healing Test Dashboard - Demo Guide<br />
+        Last updated: December 2, 2025
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

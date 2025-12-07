@@ -24,27 +24,21 @@ import {
   Activity,
   Zap,
   ExternalLink,
-  RefreshCw
+  RefreshCw,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "../../../lib/utils";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../select";
 
 interface FineTuningJob {
   id: string;
   dataset_id: string;
   dataset_name: string;
-  provider: 'openai' | 'anthropic' | 'huggingface' | 'bedrock' | 'vertex' | 'custom';
+  provider: "openai" | "anthropic" | "huggingface" | "bedrock" | "vertex" | "custom";
   base_model: string;
   provider_job_id: string | null;
-  status: 'pending' | 'validating' | 'queued' | 'training' | 'completed' | 'failed' | 'cancelled';
+  status: "pending" | "validating" | "queued" | "training" | "completed" | "failed" | "cancelled";
   hyperparameters: {
     n_epochs?: number;
     learning_rate?: number;
@@ -94,7 +88,7 @@ export function FineTuningJobsPanel() {
     loadJobs();
     // Poll for updates every 10 seconds for active jobs
     const interval = setInterval(() => {
-      if (jobs.some(j => ['training', 'validating', 'queued'].includes(j.status))) {
+      if (jobs.some((j) => ["training", "validating", "queued"].includes(j.status))) {
         loadJobs();
       }
     }, 10000);
@@ -111,10 +105,12 @@ export function FineTuningJobsPanel() {
 
       const { data, error } = await supabase
         .from("fine_tuning_jobs")
-        .select(`
+        .select(
+          `
           *,
           training_datasets(name)
-        `)
+        `
+        )
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -131,7 +127,7 @@ export function FineTuningJobsPanel() {
             status: "training",
             hyperparameters: { n_epochs: 3, learning_rate: 0.0001, batch_size: 4 },
             training_metrics: { current_epoch: 2, total_epochs: 3, loss: 0.342, progress: 67 },
-            estimated_cost: 47.50,
+            estimated_cost: 47.5,
             actual_cost: 32.15,
             resulting_model_id: null,
             started_at: new Date(Date.now() - 3600000).toISOString(),
@@ -150,7 +146,7 @@ export function FineTuningJobsPanel() {
             status: "completed",
             hyperparameters: { n_epochs: 2, learning_rate: 0.00005 },
             training_metrics: { current_epoch: 2, total_epochs: 2, loss: 0.198, progress: 100 },
-            estimated_cost: 23.00,
+            estimated_cost: 23.0,
             actual_cost: 21.47,
             resulting_model_id: "ft:claude-3-haiku:jira-triage:v1",
             started_at: new Date(Date.now() - 86400000).toISOString(),
@@ -169,7 +165,7 @@ export function FineTuningJobsPanel() {
             status: "pending",
             hyperparameters: { n_epochs: 4 },
             training_metrics: {},
-            estimated_cost: 125.00,
+            estimated_cost: 125.0,
             actual_cost: null,
             resulting_model_id: null,
             started_at: null,
@@ -197,19 +193,18 @@ export function FineTuningJobsPanel() {
     toast.loading("Cancelling job...");
     // Simulate cancel
     setTimeout(() => {
-      setJobs(prev => prev.map(j =>
-        j.id === jobId ? { ...j, status: 'cancelled' as const } : j
-      ));
+      setJobs((prev) =>
+        prev.map((j) => (j.id === jobId ? { ...j, status: "cancelled" as const } : j))
+      );
       toast.dismiss();
       toast.success("Job cancelled");
     }, 1000);
   };
 
-  const filteredJobs = selectedProvider === "all"
-    ? jobs
-    : jobs.filter(j => j.provider === selectedProvider);
+  const filteredJobs =
+    selectedProvider === "all" ? jobs : jobs.filter((j) => j.provider === selectedProvider);
 
-  const activeJobs = jobs.filter(j => ['training', 'validating', 'queued'].includes(j.status));
+  const activeJobs = jobs.filter((j) => ["training", "validating", "queued"].includes(j.status));
   const totalCost = jobs.reduce((sum, j) => sum + (j.actual_cost || j.estimated_cost || 0), 0);
 
   if (loading) {
@@ -280,7 +275,7 @@ export function FineTuningJobsPanel() {
               <CheckCircle2 className="h-8 w-8 text-blue-400" />
               <div>
                 <p className="text-2xl font-bold">
-                  {jobs.filter(j => j.status === 'completed').length}
+                  {jobs.filter((j) => j.status === "completed").length}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Completed</p>
               </div>
@@ -310,23 +305,19 @@ export function FineTuningJobsPanel() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {activeJobs.map(job => (
+            {activeJobs.map((job) => (
               <div key={job.id} className="space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium">{job.dataset_name}</span>
-                  <span className="text-xs text-[var(--mac-text-muted)]">
-                    {job.base_model}
-                  </span>
+                  <span className="text-xs text-[var(--mac-text-muted)]">{job.base_model}</span>
                 </div>
-                <Progress
-                  value={job.training_metrics.progress || 0}
-                  className="h-2"
-                />
+                <Progress value={job.training_metrics.progress || 0} className="h-2" />
                 <div className="flex justify-between text-xs text-[var(--mac-text-muted)]">
                   <span>
-                    Epoch {job.training_metrics.current_epoch || 0}/{job.training_metrics.total_epochs || '-'}
+                    Epoch {job.training_metrics.current_epoch || 0}/
+                    {job.training_metrics.total_epochs || "-"}
                   </span>
-                  <span>Loss: {job.training_metrics.loss?.toFixed(4) || '-'}</span>
+                  <span>Loss: {job.training_metrics.loss?.toFixed(4) || "-"}</span>
                   <span>{job.training_metrics.progress || 0}%</span>
                 </div>
               </div>
@@ -349,23 +340,31 @@ export function FineTuningJobsPanel() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                 >
-                  <Card className={cn(
-                    "mac-card-elevated",
-                    "border-[var(--mac-utility-border)]",
-                    job.status === 'training' && "border-purple-500/50",
-                    "hover:border-purple-500/30 transition-colors"
-                  )}>
+                  <Card
+                    className={cn(
+                      "mac-card-elevated",
+                      "border-[var(--mac-utility-border)]",
+                      job.status === "training" && "border-purple-500/50",
+                      "hover:border-purple-500/30 transition-colors"
+                    )}
+                  >
                     <CardContent className="py-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className={cn(
-                            "h-10 w-10 rounded-lg flex items-center justify-center",
-                            job.status === 'training' ? "bg-purple-500/20" : "bg-zinc-800"
-                          )}>
-                            <Cpu className={cn(
-                              "h-5 w-5",
-                              job.status === 'training' ? "text-purple-400 animate-pulse" : "text-zinc-400"
-                            )} />
+                          <div
+                            className={cn(
+                              "h-10 w-10 rounded-lg flex items-center justify-center",
+                              job.status === "training" ? "bg-purple-500/20" : "bg-zinc-800"
+                            )}
+                          >
+                            <Cpu
+                              className={cn(
+                                "h-5 w-5",
+                                job.status === "training"
+                                  ? "text-purple-400 animate-pulse"
+                                  : "text-zinc-400"
+                              )}
+                            />
                           </div>
                           <div>
                             <h3 className="font-medium text-[var(--mac-text-primary)]">
@@ -381,8 +380,8 @@ export function FineTuningJobsPanel() {
                         <div className="flex items-center gap-6">
                           {/* Hyperparameters */}
                           <div className="text-right text-xs text-[var(--mac-text-muted)]">
-                            <p>Epochs: {job.hyperparameters.n_epochs || '-'}</p>
-                            <p>LR: {job.hyperparameters.learning_rate || '-'}</p>
+                            <p>Epochs: {job.hyperparameters.n_epochs || "-"}</p>
+                            <p>LR: {job.hyperparameters.learning_rate || "-"}</p>
                           </div>
 
                           {/* Cost */}
@@ -391,34 +390,34 @@ export function FineTuningJobsPanel() {
                               ${(job.actual_cost || job.estimated_cost || 0).toFixed(2)}
                             </p>
                             <p className="text-xs text-[var(--mac-text-muted)]">
-                              {job.actual_cost ? 'actual' : 'estimated'}
+                              {job.actual_cost ? "actual" : "estimated"}
                             </p>
                           </div>
 
                           {/* Status */}
-                          <Badge className={cn(
-                            "text-xs text-white min-w-[100px] justify-center",
-                            STATUS_CONFIG[job.status].color
-                          )}>
-                            <StatusIcon className={cn(
-                              "h-3 w-3 mr-1",
-                              job.status === 'training' && "animate-spin"
-                            )} />
+                          <Badge
+                            className={cn(
+                              "text-xs text-white min-w-[100px] justify-center",
+                              STATUS_CONFIG[job.status].color
+                            )}
+                          >
+                            <StatusIcon
+                              className={cn(
+                                "h-3 w-3 mr-1",
+                                job.status === "training" && "animate-spin"
+                              )}
+                            />
                             {STATUS_CONFIG[job.status].label}
                           </Badge>
 
                           {/* Actions */}
                           <div className="flex gap-2">
                             {job.provider_job_id && (
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                title="View on provider"
-                              >
+                              <Button size="sm" variant="ghost" title="View on provider">
                                 <ExternalLink className="h-4 w-4" />
                               </Button>
                             )}
-                            {['training', 'queued', 'validating'].includes(job.status) && (
+                            {["training", "queued", "validating"].includes(job.status) && (
                               <Button
                                 size="sm"
                                 variant="ghost"

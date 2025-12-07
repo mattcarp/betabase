@@ -1,11 +1,11 @@
 /**
  * Supabase Client for SIAM Multi-Tenant Vector Store
- * 
+ *
  * CRITICAL DISTINCTION:
  * - SIAM = Our app (the testing/knowledge management platform)
  * - AOMA = App Under Test (one of potentially many apps we can test)
  * - Alexandria, Confluence, etc. = Other apps we may test in the future
- * 
+ *
  * All vector operations require specifying which app_under_test we're working with.
  */
 
@@ -66,12 +66,20 @@ export const supabaseAdmin = supabaseServiceKey
 // Type definitions for SIAM's multi-tenant vector store (3-level hierarchy)
 export interface SIAMVector {
   id: string;
-  organization: string;    // 'sony-music', etc.
-  division: string;        // 'digital-operations', 'legal', 'finance', etc.
-  app_under_test: string;  // 'aoma', 'alexandria', 'confluence', etc.
+  organization: string; // 'sony-music', etc.
+  division: string; // 'digital-operations', 'legal', 'finance', etc.
+  app_under_test: string; // 'aoma', 'alexandria', 'confluence', etc.
   content: string;
   embedding?: number[];
-  source_type: "knowledge" | "jira" | "git" | "email" | "metrics" | "openai_import" | "cache" | "firecrawl";
+  source_type:
+    | "knowledge"
+    | "jira"
+    | "git"
+    | "email"
+    | "metrics"
+    | "openai_import"
+    | "cache"
+    | "firecrawl";
   source_id: string;
   metadata: Record<string, any>;
   created_at: string;
@@ -88,9 +96,9 @@ export type AOMAVector = SIAMVector;
 
 export interface MigrationStatus {
   id: string;
-  organization: string;    // Which organization's data is being migrated
-  division: string;        // Which division's data is being migrated
-  app_under_test: string;  // Which app's data is being migrated
+  organization: string; // Which organization's data is being migrated
+  division: string; // Which division's data is being migrated
+  app_under_test: string; // Which app's data is being migrated
   source_type: string;
   total_count: number;
   migrated_count: number;
@@ -103,15 +111,15 @@ export interface MigrationStatus {
 
 // Constants for Sony Music structure (for use throughout the app)
 export const SONY_MUSIC = {
-  organization: 'sony-music',
+  organization: "sony-music",
   divisions: {
-    DIGITAL_OPS: 'digital-operations',
-    LEGAL: 'legal',
-    FINANCE: 'finance',
+    DIGITAL_OPS: "digital-operations",
+    LEGAL: "legal",
+    FINANCE: "finance",
   },
   apps: {
-    AOMA: 'aoma',
-    ALEXANDRIA: 'alexandria',
+    AOMA: "aoma",
+    ALEXANDRIA: "alexandria",
   },
 } as const;
 

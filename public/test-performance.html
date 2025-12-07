@@ -1,488 +1,507 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tier 1 Performance Test - Live Browser</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 20px;
-      min-height: 100vh;
-    }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    }
-    
-    h1 {
-      color: #667eea;
-      margin-bottom: 10px;
-      font-size: 32px;
-    }
-    
-    .subtitle {
-      color: #666;
-      margin-bottom: 30px;
-      font-size: 16px;
-    }
-    
-    .test-section {
-      margin-bottom: 30px;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 10px;
-      border-left: 4px solid #667eea;
-    }
-    
-    .test-section h2 {
-      color: #333;
-      margin-bottom: 15px;
-      font-size: 20px;
-    }
-    
-    .test-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    
-    .test-button {
-      padding: 15px 25px;
-      font-size: 16px;
-      font-weight: 600;
-      color: white;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    }
-    
-    .test-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-    }
-    
-    .test-button:active {
-      transform: translateY(0);
-    }
-    
-    .test-button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-    
-    .results {
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 15px;
-      max-height: 400px;
-      overflow-y: auto;
-      font-family: 'Monaco', 'Courier New', monospace;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-    
-    .metric {
-      display: inline-block;
-      padding: 8px 15px;
-      margin: 5px;
-      border-radius: 5px;
-      font-weight: 600;
-      font-size: 14px;
-    }
-    
-    .metric.excellent {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-    
-    .metric.good {
-      background: #fff3cd;
-      color: #856404;
-      border: 1px solid #ffeaa7;
-    }
-    
-    .metric.poor {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-    
-    .log-entry {
-      padding: 8px 0;
-      border-bottom: 1px solid #eee;
-    }
-    
-    .log-entry:last-child {
-      border-bottom: none;
-    }
-    
-    .log-entry .timestamp {
-      color: #999;
-      margin-right: 10px;
-    }
-    
-    .log-entry .icon {
-      margin-right: 5px;
-    }
-    
-    .summary {
-      margin-top: 20px;
-      padding: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border-radius: 10px;
-      font-size: 16px;
-      line-height: 1.8;
-    }
-    
-    .summary h3 {
-      margin-bottom: 15px;
-      font-size: 22px;
-    }
-    
-    .loader {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #667eea;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      animation: spin 1s linear infinite;
-      display: inline-block;
-      margin-right: 10px;
-      vertical-align: middle;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🚀 Tier 1 Performance Testing</h1>
-    <p class="subtitle">Testing cache hits, deduplication, parallel queries, and result merging</p>
-    
-    <!-- Test 1: Cold Cache Query -->
-    <div class="test-section">
-      <h2>Test 1: Cold Cache Performance (First Query)</h2>
-      <div class="test-grid">
-        <button class="test-button" onclick="testColdCache()">Run Cold Cache Test</button>
-      </div>
-      <div id="cold-results" class="results" style="display:none;"></div>
-    </div>
-    
-    <!-- Test 2: Warm Cache Query -->
-    <div class="test-section">
-      <h2>Test 2: Warm Cache Performance (Cache Hit)</h2>
-      <div class="test-grid">
-        <button class="test-button" onclick="testWarmCache()">Run Warm Cache Test</button>
-      </div>
-      <div id="warm-results" class="results" style="display:none;"></div>
-    </div>
-    
-    <!-- Test 3: Parallel Queries -->
-    <div class="test-section">
-      <h2>Test 3: Concurrent Identical Queries (Deduplication)</h2>
-      <div class="test-grid">
-        <button class="test-button" onclick="testDeduplication()">Run Deduplication Test (3x Parallel)</button>
-      </div>
-      <div id="dedupe-results" class="results" style="display:none;"></div>
-    </div>
-    
-    <!-- Test 4: Result Merging -->
-    <div class="test-section">
-      <h2>Test 4: Hybrid Query (Supabase + OpenAI)</h2>
-      <div class="test-grid">
-        <button class="test-button" onclick="testHybridQuery()">Run Hybrid Query Test</button>
-      </div>
-      <div id="hybrid-results" class="results" style="display:none;"></div>
-    </div>
-    
-    <!-- Summary -->
-    <div class="summary" id="summary" style="display:none;">
-      <h3>📊 Performance Summary</h3>
-      <div id="summary-content"></div>
-    </div>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tier 1 Performance Test - Live Browser</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-  <script>
-    const TEST_QUERY = "What is AOMA?";
-    const API_URL = "http://localhost:3000/api/chat";
-    const results = {
-      cold: null,
-      warm: null,
-      dedupe: null,
-      hybrid: null
-    };
-    
-    function formatTime(ms) {
-      if (ms < 10) return `<span class="metric excellent">${ms.toFixed(1)}ms EXCELLENT</span>`;
-      if (ms < 100) return `<span class="metric good">${ms.toFixed(1)}ms GOOD</span>`;
-      return `<span class="metric poor">${ms.toFixed(1)}ms SLOW</span>`;
-    }
-    
-    function addLog(containerId, icon, message) {
-      const container = document.getElementById(containerId);
-      const timestamp = new Date().toLocaleTimeString();
-      const entry = document.createElement('div');
-      entry.className = 'log-entry';
-      entry.innerHTML = `<span class="timestamp">${timestamp}</span><span class="icon">${icon}</span>${message}`;
-      container.appendChild(entry);
-      container.scrollTop = container.scrollHeight;
-    }
-    
-    async function queryAPI(query) {
-      const startTime = Date.now();
-      
-      try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            messages: [
-              { role: 'user', content: query }
-            ],
-            mode: 'fast'
-          })
-        });
-        
-        if (!response.ok) {
-          throw new Error(`API returned ${response.status}: ${response.statusText}`);
-        }
-        
-        // Read the streaming response
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let fullResponse = '';
-        
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          fullResponse += decoder.decode(value, { stream: true });
-        }
-        
-        const duration = Date.now() - startTime;
-        
-        return {
-          success: true,
-          duration,
-          response: fullResponse.substring(0, 200) + '...',
-          fullResponse
-        };
-      } catch (error) {
-        const duration = Date.now() - startTime;
-        return {
-          success: false,
-          duration,
-          error: error.message
-        };
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        min-height: 100vh;
       }
-    }
-    
-    async function testColdCache() {
-      const btn = event.target;
-      btn.disabled = true;
-      btn.innerHTML = '<div class="loader"></div> Running...';
-      
-      const container = document.getElementById('cold-results');
-      container.style.display = 'block';
-      container.innerHTML = '';
-      
-      addLog('cold-results', '🚀', 'Starting cold cache test...');
-      addLog('cold-results', '❄️', 'Cache should be EMPTY - expecting 2-5s query time');
-      
-      const result = await queryAPI(TEST_QUERY + ' (cold)');
-      results.cold = result;
-      
-      if (result.success) {
-        addLog('cold-results', '✅', `Query completed in ${formatTime(result.duration)}`);
-        addLog('cold-results', '💾', 'Result now cached for future queries');
-        addLog('cold-results', '📝', `Response preview: ${result.response}`);
-      } else {
-        addLog('cold-results', '❌', `Query failed: ${result.error}`);
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
       }
-      
-      btn.disabled = false;
-      btn.textContent = 'Run Again';
-      updateSummary();
-    }
-    
-    async function testWarmCache() {
-      const btn = event.target;
-      btn.disabled = true;
-      btn.innerHTML = '<div class="loader"></div> Running...';
-      
-      const container = document.getElementById('warm-results');
-      container.style.display = 'block';
-      container.innerHTML = '';
-      
-      addLog('warm-results', '🚀', 'Starting warm cache test...');
-      addLog('warm-results', '🔥', 'Cache should be HOT - expecting <100ms query time (1000x faster!)');
-      
-      const result = await queryAPI(TEST_QUERY);
-      results.warm = result;
-      
-      if (result.success) {
-        addLog('warm-results', '✅', `Query completed in ${formatTime(result.duration)}`);
-        
-        if (result.duration < 10) {
-          addLog('warm-results', '🎉', 'CACHE HIT! Sub-10ms response time!');
-          addLog('warm-results', '⚡', `Performance improvement: ${((results.cold?.duration || 2000) / result.duration).toFixed(0)}x faster!`);
-        } else if (result.duration < 100) {
-          addLog('warm-results', '📦', 'Cache hit detected! Very fast response!');
+
+      h1 {
+        color: #667eea;
+        margin-bottom: 10px;
+        font-size: 32px;
+      }
+
+      .subtitle {
+        color: #666;
+        margin-bottom: 30px;
+        font-size: 16px;
+      }
+
+      .test-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border-left: 4px solid #667eea;
+      }
+
+      .test-section h2 {
+        color: #333;
+        margin-bottom: 15px;
+        font-size: 20px;
+      }
+
+      .test-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .test-button {
+        padding: 15px 25px;
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .test-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+      }
+
+      .test-button:active {
+        transform: translateY(0);
+      }
+
+      .test-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .results {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 15px;
+        max-height: 400px;
+        overflow-y: auto;
+        font-family: "Monaco", "Courier New", monospace;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .metric {
+        display: inline-block;
+        padding: 8px 15px;
+        margin: 5px;
+        border-radius: 5px;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .metric.excellent {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+
+      .metric.good {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+      }
+
+      .metric.poor {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      .log-entry {
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .log-entry:last-child {
+        border-bottom: none;
+      }
+
+      .log-entry .timestamp {
+        color: #999;
+        margin-right: 10px;
+      }
+
+      .log-entry .icon {
+        margin-right: 5px;
+      }
+
+      .summary {
+        margin-top: 20px;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+        font-size: 16px;
+        line-height: 1.8;
+      }
+
+      .summary h3 {
+        margin-bottom: 15px;
+        font-size: 22px;
+      }
+
+      .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🚀 Tier 1 Performance Testing</h1>
+      <p class="subtitle">
+        Testing cache hits, deduplication, parallel queries, and result merging
+      </p>
+
+      <!-- Test 1: Cold Cache Query -->
+      <div class="test-section">
+        <h2>Test 1: Cold Cache Performance (First Query)</h2>
+        <div class="test-grid">
+          <button class="test-button" onclick="testColdCache()">Run Cold Cache Test</button>
+        </div>
+        <div id="cold-results" class="results" style="display: none"></div>
+      </div>
+
+      <!-- Test 2: Warm Cache Query -->
+      <div class="test-section">
+        <h2>Test 2: Warm Cache Performance (Cache Hit)</h2>
+        <div class="test-grid">
+          <button class="test-button" onclick="testWarmCache()">Run Warm Cache Test</button>
+        </div>
+        <div id="warm-results" class="results" style="display: none"></div>
+      </div>
+
+      <!-- Test 3: Parallel Queries -->
+      <div class="test-section">
+        <h2>Test 3: Concurrent Identical Queries (Deduplication)</h2>
+        <div class="test-grid">
+          <button class="test-button" onclick="testDeduplication()">
+            Run Deduplication Test (3x Parallel)
+          </button>
+        </div>
+        <div id="dedupe-results" class="results" style="display: none"></div>
+      </div>
+
+      <!-- Test 4: Result Merging -->
+      <div class="test-section">
+        <h2>Test 4: Hybrid Query (Supabase + OpenAI)</h2>
+        <div class="test-grid">
+          <button class="test-button" onclick="testHybridQuery()">Run Hybrid Query Test</button>
+        </div>
+        <div id="hybrid-results" class="results" style="display: none"></div>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary" id="summary" style="display: none">
+        <h3>📊 Performance Summary</h3>
+        <div id="summary-content"></div>
+      </div>
+    </div>
+
+    <script>
+      const TEST_QUERY = "What is AOMA?";
+      const API_URL = "http://localhost:3000/api/chat";
+      const results = {
+        cold: null,
+        warm: null,
+        dedupe: null,
+        hybrid: null,
+      };
+
+      function formatTime(ms) {
+        if (ms < 10) return `<span class="metric excellent">${ms.toFixed(1)}ms EXCELLENT</span>`;
+        if (ms < 100) return `<span class="metric good">${ms.toFixed(1)}ms GOOD</span>`;
+        return `<span class="metric poor">${ms.toFixed(1)}ms SLOW</span>`;
+      }
+
+      function addLog(containerId, icon, message) {
+        const container = document.getElementById(containerId);
+        const timestamp = new Date().toLocaleTimeString();
+        const entry = document.createElement("div");
+        entry.className = "log-entry";
+        entry.innerHTML = `<span class="timestamp">${timestamp}</span><span class="icon">${icon}</span>${message}`;
+        container.appendChild(entry);
+        container.scrollTop = container.scrollHeight;
+      }
+
+      async function queryAPI(query) {
+        const startTime = Date.now();
+
+        try {
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              messages: [{ role: "user", content: query }],
+              mode: "fast",
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`API returned ${response.status}: ${response.statusText}`);
+          }
+
+          // Read the streaming response
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let fullResponse = "";
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            fullResponse += decoder.decode(value, { stream: true });
+          }
+
+          const duration = Date.now() - startTime;
+
+          return {
+            success: true,
+            duration,
+            response: fullResponse.substring(0, 200) + "...",
+            fullResponse,
+          };
+        } catch (error) {
+          const duration = Date.now() - startTime;
+          return {
+            success: false,
+            duration,
+            error: error.message,
+          };
+        }
+      }
+
+      async function testColdCache() {
+        const btn = event.target;
+        btn.disabled = true;
+        btn.innerHTML = '<div class="loader"></div> Running...';
+
+        const container = document.getElementById("cold-results");
+        container.style.display = "block";
+        container.innerHTML = "";
+
+        addLog("cold-results", "🚀", "Starting cold cache test...");
+        addLog("cold-results", "❄️", "Cache should be EMPTY - expecting 2-5s query time");
+
+        const result = await queryAPI(TEST_QUERY + " (cold)");
+        results.cold = result;
+
+        if (result.success) {
+          addLog("cold-results", "✅", `Query completed in ${formatTime(result.duration)}`);
+          addLog("cold-results", "💾", "Result now cached for future queries");
+          addLog("cold-results", "📝", `Response preview: ${result.response}`);
         } else {
-          addLog('warm-results', '⚠️', 'No cache hit - query went to database/API');
+          addLog("cold-results", "❌", `Query failed: ${result.error}`);
         }
-        
-        addLog('warm-results', '📝', `Response preview: ${result.response}`);
-      } else {
-        addLog('warm-results', '❌', `Query failed: ${result.error}`);
-      }
-      
-      btn.disabled = false;
-      btn.textContent = 'Run Again';
-      updateSummary();
-    }
-    
-    async function testDeduplication() {
-      const btn = event.target;
-      btn.disabled = true;
-      btn.innerHTML = '<div class="loader"></div> Running...';
-      
-      const container = document.getElementById('dedupe-results');
-      container.style.display = 'block';
-      container.innerHTML = '';
-      
-      addLog('dedupe-results', '🚀', 'Starting deduplication test...');
-      addLog('dedupe-results', '🔄', 'Launching 3 identical queries simultaneously...');
-      
-      const startTime = Date.now();
-      
-      // Fire 3 identical queries at once
-      const promises = [
-        queryAPI(TEST_QUERY + ' (dedupe1)'),
-        queryAPI(TEST_QUERY + ' (dedupe2)'),
-        queryAPI(TEST_QUERY + ' (dedupe3)')
-      ];
-      
-      addLog('dedupe-results', '⏱️', 'All 3 queries launched in parallel...');
-      
-      const [result1, result2, result3] = await Promise.all(promises);
-      const totalTime = Date.now() - startTime;
-      
-      results.dedupe = { result1, result2, result3, totalTime };
-      
-      addLog('dedupe-results', '✅', `All queries completed in ${formatTime(totalTime)}`);
-      
-      // Calculate expected time without deduplication
-      const avgIndividual = (result1.duration + result2.duration + result3.duration) / 3;
-      const expectedWithoutDedupe = avgIndividual * 3;
-      
-      addLog('dedupe-results', '📊', `Query 1: ${formatTime(result1.duration)}`);
-      addLog('dedupe-results', '📊', `Query 2: ${formatTime(result2.duration)}`);
-      addLog('dedupe-results', '📊', `Query 3: ${formatTime(result3.duration)}`);
-      
-      if (totalTime < expectedWithoutDedupe * 0.5) {
-        addLog('dedupe-results', '🎉', 'DEDUPLICATION WORKING! Queries were deduplicated!');
-        addLog('dedupe-results', '⚡', `Saved ${((expectedWithoutDedupe - totalTime) / expectedWithoutDedupe * 100).toFixed(0)}% execution time!`);
-      } else {
-        addLog('dedupe-results', '⚠️', 'Queries ran independently (no deduplication detected)');
-      }
-      
-      btn.disabled = false;
-      btn.textContent = 'Run Again';
-      updateSummary();
-    }
-    
-    async function testHybridQuery() {
-      const btn = event.target;
-      btn.disabled = true;
-      btn.innerHTML = '<div class="loader"></div> Running...';
-      
-      const container = document.getElementById('hybrid-results');
-      container.style.display = 'block';
-      container.innerHTML = '';
-      
-      addLog('hybrid-results', '🚀', 'Starting hybrid query test...');
-      addLog('hybrid-results', '🔀', 'Querying BOTH Supabase + OpenAI simultaneously...');
-      
-      const result = await queryAPI("How does AOMA integrate with Jira tickets?");
-      results.hybrid = result;
-      
-      if (result.success) {
-        addLog('hybrid-results', '✅', `Query completed in ${formatTime(result.duration)}`);
-        addLog('hybrid-results', '📊', 'Response should include results from BOTH sources');
-        addLog('hybrid-results', '🔀', 'Results were merged and deduplicated intelligently');
-        addLog('hybrid-results', '📝', `Response preview: ${result.response}`);
-      } else {
-        addLog('hybrid-results', '❌', `Query failed: ${result.error}`);
-      }
-      
-      btn.disabled = false;
-      btn.textContent = 'Run Again';
-      updateSummary();
-    }
-    
-    function updateSummary() {
-      const summary = document.getElementById('summary');
-      const content = document.getElementById('summary-content');
-      
-      if (!results.cold && !results.warm && !results.dedupe && !results.hybrid) {
-        summary.style.display = 'none';
-        return;
-      }
-      
-      summary.style.display = 'block';
-      
-      let html = '<ul style="list-style: none; padding: 0;">';
-      
-      if (results.cold && results.warm) {
-        const improvement = results.cold.duration / results.warm.duration;
-        html += `<li>⚡ <strong>Cache Performance:</strong> ${improvement.toFixed(0)}x faster (${results.cold.duration.toFixed(0)}ms → ${results.warm.duration.toFixed(0)}ms)</li>`;
-      }
-      
-      if (results.dedupe) {
-        html += `<li>🔄 <strong>Deduplication:</strong> 3 parallel queries completed in ${results.dedupe.totalTime.toFixed(0)}ms</li>`;
-      }
-      
-      if (results.hybrid) {
-        html += `<li>🔀 <strong>Hybrid Query:</strong> Merged results from multiple sources in ${results.hybrid.duration.toFixed(0)}ms</li>`;
-      }
-      
-      html += '</ul>';
-      html += '<p style="margin-top: 15px; opacity: 0.9;">✅ All Tier 1 optimizations are working correctly!</p>';
-      
-      content.innerHTML = html;
-    }
-    
-    // Auto-run on page load after 1 second
-    setTimeout(() => {
-      addLog('cold-results', '💡', 'Tip: Run tests in order for best results!');
-    }, 500);
-  </script>
-</body>
-</html>
 
+        btn.disabled = false;
+        btn.textContent = "Run Again";
+        updateSummary();
+      }
+
+      async function testWarmCache() {
+        const btn = event.target;
+        btn.disabled = true;
+        btn.innerHTML = '<div class="loader"></div> Running...';
+
+        const container = document.getElementById("warm-results");
+        container.style.display = "block";
+        container.innerHTML = "";
+
+        addLog("warm-results", "🚀", "Starting warm cache test...");
+        addLog(
+          "warm-results",
+          "🔥",
+          "Cache should be HOT - expecting <100ms query time (1000x faster!)"
+        );
+
+        const result = await queryAPI(TEST_QUERY);
+        results.warm = result;
+
+        if (result.success) {
+          addLog("warm-results", "✅", `Query completed in ${formatTime(result.duration)}`);
+
+          if (result.duration < 10) {
+            addLog("warm-results", "🎉", "CACHE HIT! Sub-10ms response time!");
+            addLog(
+              "warm-results",
+              "⚡",
+              `Performance improvement: ${((results.cold?.duration || 2000) / result.duration).toFixed(0)}x faster!`
+            );
+          } else if (result.duration < 100) {
+            addLog("warm-results", "📦", "Cache hit detected! Very fast response!");
+          } else {
+            addLog("warm-results", "⚠️", "No cache hit - query went to database/API");
+          }
+
+          addLog("warm-results", "📝", `Response preview: ${result.response}`);
+        } else {
+          addLog("warm-results", "❌", `Query failed: ${result.error}`);
+        }
+
+        btn.disabled = false;
+        btn.textContent = "Run Again";
+        updateSummary();
+      }
+
+      async function testDeduplication() {
+        const btn = event.target;
+        btn.disabled = true;
+        btn.innerHTML = '<div class="loader"></div> Running...';
+
+        const container = document.getElementById("dedupe-results");
+        container.style.display = "block";
+        container.innerHTML = "";
+
+        addLog("dedupe-results", "🚀", "Starting deduplication test...");
+        addLog("dedupe-results", "🔄", "Launching 3 identical queries simultaneously...");
+
+        const startTime = Date.now();
+
+        // Fire 3 identical queries at once
+        const promises = [
+          queryAPI(TEST_QUERY + " (dedupe1)"),
+          queryAPI(TEST_QUERY + " (dedupe2)"),
+          queryAPI(TEST_QUERY + " (dedupe3)"),
+        ];
+
+        addLog("dedupe-results", "⏱️", "All 3 queries launched in parallel...");
+
+        const [result1, result2, result3] = await Promise.all(promises);
+        const totalTime = Date.now() - startTime;
+
+        results.dedupe = { result1, result2, result3, totalTime };
+
+        addLog("dedupe-results", "✅", `All queries completed in ${formatTime(totalTime)}`);
+
+        // Calculate expected time without deduplication
+        const avgIndividual = (result1.duration + result2.duration + result3.duration) / 3;
+        const expectedWithoutDedupe = avgIndividual * 3;
+
+        addLog("dedupe-results", "📊", `Query 1: ${formatTime(result1.duration)}`);
+        addLog("dedupe-results", "📊", `Query 2: ${formatTime(result2.duration)}`);
+        addLog("dedupe-results", "📊", `Query 3: ${formatTime(result3.duration)}`);
+
+        if (totalTime < expectedWithoutDedupe * 0.5) {
+          addLog("dedupe-results", "🎉", "DEDUPLICATION WORKING! Queries were deduplicated!");
+          addLog(
+            "dedupe-results",
+            "⚡",
+            `Saved ${(((expectedWithoutDedupe - totalTime) / expectedWithoutDedupe) * 100).toFixed(0)}% execution time!`
+          );
+        } else {
+          addLog("dedupe-results", "⚠️", "Queries ran independently (no deduplication detected)");
+        }
+
+        btn.disabled = false;
+        btn.textContent = "Run Again";
+        updateSummary();
+      }
+
+      async function testHybridQuery() {
+        const btn = event.target;
+        btn.disabled = true;
+        btn.innerHTML = '<div class="loader"></div> Running...';
+
+        const container = document.getElementById("hybrid-results");
+        container.style.display = "block";
+        container.innerHTML = "";
+
+        addLog("hybrid-results", "🚀", "Starting hybrid query test...");
+        addLog("hybrid-results", "🔀", "Querying BOTH Supabase + OpenAI simultaneously...");
+
+        const result = await queryAPI("How does AOMA integrate with Jira tickets?");
+        results.hybrid = result;
+
+        if (result.success) {
+          addLog("hybrid-results", "✅", `Query completed in ${formatTime(result.duration)}`);
+          addLog("hybrid-results", "📊", "Response should include results from BOTH sources");
+          addLog("hybrid-results", "🔀", "Results were merged and deduplicated intelligently");
+          addLog("hybrid-results", "📝", `Response preview: ${result.response}`);
+        } else {
+          addLog("hybrid-results", "❌", `Query failed: ${result.error}`);
+        }
+
+        btn.disabled = false;
+        btn.textContent = "Run Again";
+        updateSummary();
+      }
+
+      function updateSummary() {
+        const summary = document.getElementById("summary");
+        const content = document.getElementById("summary-content");
+
+        if (!results.cold && !results.warm && !results.dedupe && !results.hybrid) {
+          summary.style.display = "none";
+          return;
+        }
+
+        summary.style.display = "block";
+
+        let html = '<ul style="list-style: none; padding: 0;">';
+
+        if (results.cold && results.warm) {
+          const improvement = results.cold.duration / results.warm.duration;
+          html += `<li>⚡ <strong>Cache Performance:</strong> ${improvement.toFixed(0)}x faster (${results.cold.duration.toFixed(0)}ms → ${results.warm.duration.toFixed(0)}ms)</li>`;
+        }
+
+        if (results.dedupe) {
+          html += `<li>🔄 <strong>Deduplication:</strong> 3 parallel queries completed in ${results.dedupe.totalTime.toFixed(0)}ms</li>`;
+        }
+
+        if (results.hybrid) {
+          html += `<li>🔀 <strong>Hybrid Query:</strong> Merged results from multiple sources in ${results.hybrid.duration.toFixed(0)}ms</li>`;
+        }
+
+        html += "</ul>";
+        html +=
+          '<p style="margin-top: 15px; opacity: 0.9;">✅ All Tier 1 optimizations are working correctly!</p>';
+
+        content.innerHTML = html;
+      }
+
+      // Auto-run on page load after 1 second
+      setTimeout(() => {
+        addLog("cold-results", "💡", "Tip: Run tests in order for best results!");
+      }, 500);
+    </script>
+  </body>
+</html>

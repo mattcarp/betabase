@@ -24,7 +24,7 @@ import {
   Archive,
   Layers,
   Users,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -38,20 +38,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../select";
 
 interface TrainingDataset {
   id: string;
   name: string;
   description: string;
-  dataset_type: 'preference_pairs' | 'instruction_tuning' | 'dpo' | 'sft';
-  status: 'draft' | 'curating' | 'ready' | 'exported' | 'archived';
+  dataset_type: "preference_pairs" | "instruction_tuning" | "dpo" | "sft";
+  status: "draft" | "curating" | "ready" | "exported" | "archived";
   sample_count: number;
   quality_score: number | null;
   export_format: string | null;
@@ -184,7 +178,7 @@ export function TrainingDatasetsPanel() {
 
       if (error) throw error;
 
-      setDatasets(prev => [data, ...prev]);
+      setDatasets((prev) => [data, ...prev]);
       setShowCreateDialog(false);
       setNewDataset({ name: "", description: "", dataset_type: "dpo" });
       toast.success("Dataset created successfully");
@@ -204,7 +198,7 @@ export function TrainingDatasetsPanel() {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
-      setDatasets(prev => [mockDataset, ...prev]);
+      setDatasets((prev) => [mockDataset, ...prev]);
       setShowCreateDialog(false);
       setNewDataset({ name: "", description: "", dataset_type: "dpo" });
       toast.success("Dataset created (demo mode)");
@@ -258,7 +252,7 @@ export function TrainingDatasetsPanel() {
                 <Input
                   placeholder="e.g., AOMA Support Q1 2026"
                   value={newDataset.name}
-                  onChange={(e) => setNewDataset(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e) => setNewDataset((prev) => ({ ...prev, name: e.target.value }))}
                 />
               </div>
               <div className="space-y-2">
@@ -266,14 +260,18 @@ export function TrainingDatasetsPanel() {
                 <Input
                   placeholder="Describe the purpose of this dataset"
                   value={newDataset.description}
-                  onChange={(e) => setNewDataset(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setNewDataset((prev) => ({ ...prev, description: e.target.value }))
+                  }
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Type</label>
                 <Select
                   value={newDataset.dataset_type}
-                  onValueChange={(value: any) => setNewDataset(prev => ({ ...prev, dataset_type: value }))}
+                  onValueChange={(value: any) =>
+                    setNewDataset((prev) => ({ ...prev, dataset_type: value }))
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -291,9 +289,7 @@ export function TrainingDatasetsPanel() {
               <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleCreateDataset}>
-                Create Dataset
-              </Button>
+              <Button onClick={handleCreateDataset}>Create Dataset</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -331,7 +327,7 @@ export function TrainingDatasetsPanel() {
               <CheckCircle2 className="h-8 w-8 text-green-400" />
               <div>
                 <p className="text-2xl font-bold">
-                  {datasets.filter(d => d.status === 'ready' || d.status === 'exported').length}
+                  {datasets.filter((d) => d.status === "ready" || d.status === "exported").length}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Ready</p>
               </div>
@@ -344,9 +340,12 @@ export function TrainingDatasetsPanel() {
               <BarChart3 className="h-8 w-8 text-yellow-400" />
               <div>
                 <p className="text-2xl font-bold">
-                  {datasets.filter(d => d.quality_score !== null)
+                  {(datasets
+                    .filter((d) => d.quality_score !== null)
                     .reduce((sum, d) => sum + (d.quality_score || 0), 0) /
-                    Math.max(datasets.filter(d => d.quality_score !== null).length, 1) * 100 || 0}%
+                    Math.max(datasets.filter((d) => d.quality_score !== null).length, 1)) *
+                    100 || 0}
+                  %
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Avg Quality</p>
               </div>
@@ -368,18 +367,22 @@ export function TrainingDatasetsPanel() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                 >
-                  <Card className={cn(
-                    "mac-card-elevated",
-                    "border-[var(--mac-utility-border)]",
-                    "hover:border-purple-500/50 transition-colors"
-                  )}>
+                  <Card
+                    className={cn(
+                      "mac-card-elevated",
+                      "border-[var(--mac-utility-border)]",
+                      "hover:border-purple-500/50 transition-colors"
+                    )}
+                  >
                     <CardContent className="py-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className={cn(
-                            "h-10 w-10 rounded-lg flex items-center justify-center",
-                            "bg-purple-500/10"
-                          )}>
+                          <div
+                            className={cn(
+                              "h-10 w-10 rounded-lg flex items-center justify-center",
+                              "bg-purple-500/10"
+                            )}
+                          >
                             <Database className="h-5 w-5 text-purple-400" />
                           </div>
                           <div>
@@ -401,10 +404,12 @@ export function TrainingDatasetsPanel() {
                           <Badge variant="outline" className="text-xs">
                             {TYPE_LABELS[dataset.dataset_type]}
                           </Badge>
-                          <Badge className={cn(
-                            "text-xs text-white",
-                            STATUS_CONFIG[dataset.status].color
-                          )}>
+                          <Badge
+                            className={cn(
+                              "text-xs text-white",
+                              STATUS_CONFIG[dataset.status].color
+                            )}
+                          >
                             <StatusIcon className="h-3 w-3 mr-1" />
                             {STATUS_CONFIG[dataset.status].label}
                           </Badge>
@@ -421,15 +426,12 @@ export function TrainingDatasetsPanel() {
                               size="sm"
                               variant="outline"
                               onClick={() => handleExportDataset(dataset)}
-                              disabled={dataset.status === 'draft'}
+                              disabled={dataset.status === "draft"}
                             >
                               <FileJson className="h-4 w-4 mr-1" />
                               Export
                             </Button>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                            >
+                            <Button size="sm" variant="ghost">
                               <Edit2 className="h-4 w-4" />
                             </Button>
                           </div>

@@ -1,15 +1,15 @@
 /**
  * PHASE 2: Re-embed ALL documents using Gemini
- * 
+ *
  * REVISED: Now handles 13 tables, 37,452 embeddings
- * 
+ *
  * This script:
  * - Processes tables in priority order (largest first)
  * - Is resumable (tracks progress in database)
  * - Respects rate limits
  * - Can be stopped and restarted safely
- * 
- * Usage: 
+ *
+ * Usage:
  *   npx tsx migrations/phase2-reembed-gemini.ts
  *   npx tsx migrations/phase2-reembed-gemini.ts --table=jira_ticket_embeddings
  *   npx tsx migrations/phase2-reembed-gemini.ts --batch-size=100
@@ -126,7 +126,8 @@ const TABLE_CONFIGS: TableConfig[] = [
     idColumn: "id",
     embeddingColumn: "embedding",
     geminiColumn: "embedding_gemini",
-    contentExtractor: (row) => [row.message, row.author, row.files_changed].filter(Boolean).join(" | "),
+    contentExtractor: (row) =>
+      [row.message, row.author, row.files_changed].filter(Boolean).join(" | "),
     estimatedRows: 99,
   },
   {
@@ -134,7 +135,8 @@ const TABLE_CONFIGS: TableConfig[] = [
     idColumn: "id",
     embeddingColumn: "embedding",
     geminiColumn: "embedding_gemini",
-    contentExtractor: (row) => [row.test_name, row.description, row.result].filter(Boolean).join(" | "),
+    contentExtractor: (row) =>
+      [row.test_name, row.description, row.result].filter(Boolean).join(" | "),
     estimatedRows: 10,
   },
   {
@@ -169,7 +171,13 @@ async function generateGeminiEmbedding(text: string): Promise<number[]> {
   return result.embedding.values;
 }
 
-async function updateProgress(table: string, migrated: number, failed: number, status: string, lastId?: string) {
+async function updateProgress(
+  table: string,
+  migrated: number,
+  failed: number,
+  status: string,
+  lastId?: string
+) {
   await supabase
     .from("embedding_migration_progress")
     .update({
@@ -179,14 +187,16 @@ async function updateProgress(table: string, migrated: number, failed: number, s
       last_processed_id: lastId,
       updated_at: new Date().toISOString(),
       ...(status === "completed" ? { completed_at: new Date().toISOString() } : {}),
-      ...(status === "in_progress" && migrated === 0 ? { started_at: new Date().toISOString() } : {}),
+      ...(status === "in_progress" && migrated === 0
+        ? { started_at: new Date().toISOString() }
+        : {}),
     })
     .eq("table_name", table);
 }
 
 async function migrateTable(config: TableConfig, batchSize: number = 50) {
   const { table, idColumn, embeddingColumn, geminiColumn, contentExtractor } = config;
-  
+
   console.log(`\n${"=".repeat(60)}`);
   console.log(`Starting migration for: ${table}`);
   console.log(`${"=".repeat(60)}`);
@@ -220,7 +230,7 @@ async function migrateTable(config: TableConfig, batchSize: number = 50) {
 
   // Process in batches
   let processedInRun = 0;
-  
+
   while (true) {
     // Build query for rows that have old embedding but no Gemini embedding
     let query = supabase
@@ -250,7 +260,7 @@ async function migrateTable(config: TableConfig, batchSize: number = 50) {
     for (const row of rows) {
       try {
         const content = contentExtractor(row);
-        
+
         if (!content || content.trim().length === 0) {
           console.log(`  ⚠️  Skipping ${row[idColumn]} - no content`);
           failed++;
@@ -258,14 +268,14 @@ async function migrateTable(config: TableConfig, batchSize: number = 50) {
         }
 
         const embedding = await generateGeminiEmbedding(content);
-        
+
         if (embedding.length !== 768) {
           throw new Error(`Unexpected embedding dimension: ${embedding.length}`);
         }
 
         // Update the row with new embedding
         const updateData: any = { [geminiColumn]: embedding };
-        
+
         // Add embedding_source if column exists
         try {
           updateData.embedding_source = "gemini";
@@ -282,15 +292,16 @@ async function migrateTable(config: TableConfig, batchSize: number = 50) {
 
         migrated++;
         processedInRun++;
-        process.stdout.write(`\r  Progress: ${migrated} migrated, ${failed} failed (${processedInRun} this run)`);
-
+        process.stdout.write(
+          `\r  Progress: ${migrated} migrated, ${failed} failed (${processedInRun} this run)`
+        );
       } catch (err: any) {
         failed++;
         console.error(`\n  ❌ Failed ${row[idColumn]}:`, err.message || err);
       }
 
       // Small delay to respect rate limits (Gemini: 1500 RPM = 25 RPS)
-      await new Promise(r => setTimeout(r, 50));
+      await new Promise((r) => setTimeout(r, 50));
     }
 
     // Update progress after each batch
@@ -303,8 +314,10 @@ async function migrateTable(config: TableConfig, batchSize: number = 50) {
 
 async function main() {
   const args = process.argv.slice(2);
-  const tableArg = args.find(a => a.startsWith("--table="))?.split("=")[1];
-  const batchSize = parseInt(args.find(a => a.startsWith("--batch-size="))?.split("=")[1] || "50");
+  const tableArg = args.find((a) => a.startsWith("--table="))?.split("=")[1];
+  const batchSize = parseInt(
+    args.find((a) => a.startsWith("--batch-size="))?.split("=")[1] || "50"
+  );
 
   console.log("\n" + "=".repeat(60));
   console.log("SIAM Embedding Migration: OpenAI (1536) -> Gemini (768)");
@@ -316,11 +329,11 @@ async function main() {
   console.log("");
 
   if (tableArg) {
-    const config = TABLE_CONFIGS.find(c => c.table === tableArg);
+    const config = TABLE_CONFIGS.find((c) => c.table === tableArg);
     if (!config) {
       console.error(`Unknown table: ${tableArg}`);
       console.log("Available tables:");
-      TABLE_CONFIGS.forEach(c => console.log(`  - ${c.table} (~${c.estimatedRows} rows)`));
+      TABLE_CONFIGS.forEach((c) => console.log(`  - ${c.table} (~${c.estimatedRows} rows)`));
       process.exit(1);
     }
     await migrateTable(config, batchSize);
@@ -342,13 +355,15 @@ async function main() {
     .order("total_rows", { ascending: false });
 
   if (summary) {
-    console.table(summary.map(s => ({
-      table: s.table_name,
-      total: s.total_rows,
-      migrated: s.migrated_rows,
-      failed: s.failed_rows,
-      status: s.status
-    })));
+    console.table(
+      summary.map((s) => ({
+        table: s.table_name,
+        total: s.total_rows,
+        migrated: s.migrated_rows,
+        failed: s.failed_rows,
+        status: s.status,
+      }))
+    );
 
     const totalMigrated = summary.reduce((sum, s) => sum + (s.migrated_rows || 0), 0);
     const totalFailed = summary.reduce((sum, s) => sum + (s.failed_rows || 0), 0);

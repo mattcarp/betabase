@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
             console.log(`[Auth] Verifying code with Cognito for ${email}`);
             try {
               // Generate temp password for Cognito verification
-              const cognitoTempPassword = crypto.randomBytes(16).toString('hex') + 'Aa1!';
+              const cognitoTempPassword = crypto.randomBytes(16).toString("hex") + "Aa1!";
               await cognitoAuth.confirmForgotPassword(email, code, cognitoTempPassword);
               console.log(`[Auth] Code verified successfully with Cognito`);
             } catch (cognitoError: any) {
@@ -156,7 +156,8 @@ export async function POST(request: NextRequest) {
               return NextResponse.json(
                 {
                   error: "Invalid or expired code",
-                  details: process.env.NODE_ENV === "development" ? cognitoError.message : undefined
+                  details:
+                    process.env.NODE_ENV === "development" ? cognitoError.message : undefined,
                 },
                 { status: 400 }
               );
@@ -199,7 +200,10 @@ export async function POST(request: NextRequest) {
 
               const existingUser = users.users.find((u) => u.email === email);
               if (!existingUser) {
-                console.error("[Auth] ERROR: User creation failed but user not found in list:", createError);
+                console.error(
+                  "[Auth] ERROR: User creation failed but user not found in list:",
+                  createError
+                );
                 return NextResponse.json(
                   { error: "User not found after creation failure" },
                   { status: 500 }
@@ -213,10 +217,13 @@ export async function POST(request: NextRequest) {
               console.error("[Auth] ERROR: Unexpected error creating user:", createError);
               console.error("[Auth] Error name:", createError.name);
               console.error("[Auth] Error message:", createError.message);
-              return NextResponse.json({
-                error: "Failed to create user in Supabase",
-                details: process.env.NODE_ENV === "development" ? createError.message : undefined
-              }, { status: 500 });
+              return NextResponse.json(
+                {
+                  error: "Failed to create user in Supabase",
+                  details: process.env.NODE_ENV === "development" ? createError.message : undefined,
+                },
+                { status: 500 }
+              );
             }
           } else {
             userId = newUser.user.id;
@@ -229,10 +236,7 @@ export async function POST(request: NextRequest) {
             cookieStore = await cookies();
           } catch (cookieError) {
             console.error("[Auth] Failed to get cookies:", cookieError);
-            return NextResponse.json(
-              { error: "Failed to initialize session" },
-              { status: 500 }
-            );
+            return NextResponse.json({ error: "Failed to initialize session" }, { status: 500 });
           }
 
           const supabase = createServerClient(
@@ -258,13 +262,12 @@ export async function POST(request: NextRequest) {
 
           // Create a temporary password and sign in to get real session tokens
           // This is the proper way to create an authenticated session programmatically
-          const temporaryPassword = crypto.randomBytes(32).toString('hex');
+          const temporaryPassword = crypto.randomBytes(32).toString("hex");
 
           console.log("[Auth] Setting temporary password for user...");
-          const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
-            userId,
-            { password: temporaryPassword }
-          );
+          const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(userId, {
+            password: temporaryPassword,
+          });
 
           if (updateError) {
             console.error("[Auth] ERROR: Failed to set temporary password:", updateError);
@@ -272,12 +275,18 @@ export async function POST(request: NextRequest) {
               message: updateError.message,
               name: updateError.name,
               status: (updateError as any).status,
-              code: (updateError as any).code
+              code: (updateError as any).code,
             });
-            return NextResponse.json({
-              error: "Failed to prepare session",
-              details: process.env.NODE_ENV === "development" ? `${updateError.message} (${updateError.name})` : undefined
-            }, { status: 500 });
+            return NextResponse.json(
+              {
+                error: "Failed to prepare session",
+                details:
+                  process.env.NODE_ENV === "development"
+                    ? `${updateError.message} (${updateError.name})`
+                    : undefined,
+              },
+              { status: 500 }
+            );
           }
 
           // Now sign in with the temporary password to get real session tokens
@@ -289,10 +298,13 @@ export async function POST(request: NextRequest) {
 
           if (signInError || !signInData.session) {
             console.error("[Auth] ERROR: Failed to sign in:", signInError);
-            return NextResponse.json({
-              error: "Failed to create session",
-              details: process.env.NODE_ENV === "development" ? signInError?.message : undefined
-            }, { status: 500 });
+            return NextResponse.json(
+              {
+                error: "Failed to create session",
+                details: process.env.NODE_ENV === "development" ? signInError?.message : undefined,
+              },
+              { status: 500 }
+            );
           }
 
           console.log("[Auth] Session created successfully");

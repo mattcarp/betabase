@@ -20,7 +20,16 @@ export interface SelfHealingAttempt {
   test_name: string;
   test_file: string;
   test_line_number?: number;
-  status: "detecting" | "analyzing" | "healing" | "testing" | "success" | "failed" | "review" | "approved" | "rejected";
+  status:
+    | "detecting"
+    | "analyzing"
+    | "healing"
+    | "testing"
+    | "success"
+    | "failed"
+    | "review"
+    | "approved"
+    | "rejected";
   tier: 1 | 2 | 3;
   confidence: number;
   original_selector: string;
@@ -109,26 +118,22 @@ export async function GET(request: NextRequest) {
           message: "Table not yet created - returning demo data",
         });
       }
-      return NextResponse.json(
-        { error: "Failed to fetch healing attempts" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to fetch healing attempts" }, { status: 500 });
     }
 
     // Get stats if requested
     let stats = null;
     if (includeStats) {
-      const { data: statsData } = await supabaseAdmin.rpc("get_self_healing_analytics", { p_days: 14 });
+      const { data: statsData } = await supabaseAdmin.rpc("get_self_healing_analytics", {
+        p_days: 14,
+      });
       stats = statsData?.[0] || getDemoStats();
     }
 
     return NextResponse.json({ attempts: data || [], stats });
   } catch (error) {
     console.error("Self-healing fetch error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -218,13 +223,16 @@ export async function POST(request: NextRequest) {
     // Check if supabaseAdmin is available
     if (!supabaseAdmin) {
       // Return demo response when database not configured
-      return NextResponse.json({
-        id: `heal_demo_${Date.now()}`,
-        ...attemptRecord,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        message: "Healing triggered (demo mode - database not configured)",
-      }, { status: 201 });
+      return NextResponse.json(
+        {
+          id: `heal_demo_${Date.now()}`,
+          ...attemptRecord,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          message: "Healing triggered (demo mode - database not configured)",
+        },
+        { status: 201 }
+      );
     }
 
     // Insert into database
@@ -237,22 +245,22 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error("Self-healing insert error:", error);
       // Return demo response for any database error
-      return NextResponse.json({
-        id: `heal_demo_${Date.now()}`,
-        ...attemptRecord,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        message: `Healing triggered (demo mode - ${error.message || error.code || "database unavailable"})`,
-      }, { status: 201 });
+      return NextResponse.json(
+        {
+          id: `heal_demo_${Date.now()}`,
+          ...attemptRecord,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          message: `Healing triggered (demo mode - ${error.message || error.code || "database unavailable"})`,
+        },
+        { status: 201 }
+      );
     }
 
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
     console.error("Self-healing trigger error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -325,7 +333,7 @@ RESPONSE FORMAT (JSON ONLY):
 
   try {
     const promptParts: any[] = [{ text: textPrompt }];
-    
+
     // Add image if available
     if (params.screenshot) {
       // Remove data URL prefix if present
@@ -334,10 +342,10 @@ RESPONSE FORMAT (JSON ONLY):
     }
 
     const { text, usage } = await generateText({
-    model: google("gemini-3-pro-preview"), // Leveraging multimodal capabilities
+      model: google("gemini-3-pro-preview"), // Leveraging multimodal capabilities
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: promptParts,
         },
       ],
@@ -346,7 +354,10 @@ RESPONSE FORMAT (JSON ONLY):
     // Parse the JSON response
     const responseText = text.trim();
     // Remove any markdown code blocks if present
-    const cleanJson = responseText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+    const cleanJson = responseText
+      .replace(/```json\n?/g, "")
+      .replace(/```\n?/g, "")
+      .trim();
 
     const parsed = JSON.parse(cleanJson);
 
@@ -443,7 +454,7 @@ function getDemoAttempts(): Partial<SelfHealingAttempt>[] {
       status: "review",
       tier: 2,
       confidence: 0.72,
-      original_selector: '.filter-dropdown >> nth=0',
+      original_selector: ".filter-dropdown >> nth=0",
       suggested_selector: '[data-testid="genre-filter-dropdown"]',
       healing_strategy: "selector-update",
       healing_rationale: "Positional selector replaced with explicit data-testid",

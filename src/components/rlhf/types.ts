@@ -129,13 +129,7 @@ export interface CuratorAction {
   id: string;
   feedbackId: string;
   curatorId: string;
-  action:
-    | "approve"
-    | "reject"
-    | "request_revision"
-    | "add_correction"
-    | "merge"
-    | "split";
+  action: "approve" | "reject" | "request_revision" | "add_correction" | "merge" | "split";
   notes: string | null;
   timestamp: string;
 }

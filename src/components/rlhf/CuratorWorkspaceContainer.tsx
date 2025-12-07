@@ -181,11 +181,7 @@ export function CuratorWorkspaceContainer({
           <AlertCircle className="h-10 w-10 text-red-400 mb-4" />
           <p className="text-zinc-200 font-medium mb-2">Failed to load queue</p>
           <p className="text-zinc-500 text-sm mb-4">{error}</p>
-          <Button
-            variant="outline"
-            onClick={fetchQueue}
-            className="border-zinc-700 text-zinc-300"
-          >
+          <Button variant="outline" onClick={fetchQueue} className="border-zinc-700 text-zinc-300">
             <RefreshCw className="h-4 w-4 mr-2" />
             Retry
           </Button>
@@ -201,7 +197,10 @@ export function CuratorWorkspaceContainer({
         <div className="flex items-center justify-between mb-4 px-1">
           <div className="flex items-center gap-3">
             {isDemoMode && (
-              <Badge variant="outline" className="bg-yellow-500/10 text-yellow-400 border-yellow-500/30">
+              <Badge
+                variant="outline"
+                className="bg-yellow-500/10 text-yellow-400 border-yellow-500/30"
+              >
                 Demo Mode
               </Badge>
             )}

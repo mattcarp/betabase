@@ -134,13 +134,14 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">Pass Rate</p>
                 <div className="flex items-baseline gap-2">
-                  <span className={cn("text-4xl font-light", getPassRateColor(healthMetrics.passRate))}>
+                  <span
+                    className={cn("text-4xl font-light", getPassRateColor(healthMetrics.passRate))}
+                  >
                     {healthMetrics.passRate}%
                   </span>
                   {healthMetrics.passRateTrend > 0 ? (
                     <span className="flex items-center text-emerald-600 text-sm">
-                      <TrendingUp className="h-4 w-4 mr-1" />
-                      +{healthMetrics.passRateTrend}%
+                      <TrendingUp className="h-4 w-4 mr-1" />+{healthMetrics.passRateTrend}%
                     </span>
                   ) : (
                     <span className="flex items-center text-rose-600 text-sm">
@@ -164,22 +165,28 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">Failing</p>
-                <span className={cn(
-                  "text-4xl font-light",
-                  healthMetrics.failingTests > 0 ? "text-rose-600" : "text-emerald-600"
-                )}>
+                <span
+                  className={cn(
+                    "text-4xl font-light",
+                    healthMetrics.failingTests > 0 ? "text-rose-600" : "text-emerald-600"
+                  )}
+                >
                   {healthMetrics.failingTests}
                 </span>
                 <p className="text-xs text-muted-foreground mt-1">tests need attention</p>
               </div>
-              <div className={cn(
-                "p-2 rounded-full",
-                healthMetrics.failingTests > 0 ? "bg-rose-500/10" : "bg-emerald-500/10"
-              )}>
-                <XCircle className={cn(
-                  "h-6 w-6",
-                  healthMetrics.failingTests > 0 ? "text-rose-600" : "text-emerald-600"
-                )} />
+              <div
+                className={cn(
+                  "p-2 rounded-full",
+                  healthMetrics.failingTests > 0 ? "bg-rose-500/10" : "bg-emerald-500/10"
+                )}
+              >
+                <XCircle
+                  className={cn(
+                    "h-6 w-6",
+                    healthMetrics.failingTests > 0 ? "text-rose-600" : "text-emerald-600"
+                  )}
+                />
               </div>
             </div>
           </CardContent>
@@ -209,22 +216,28 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">Need HITL</p>
-                <span className={cn(
-                  "text-4xl font-light",
-                  healthMetrics.pendingReview > 0 ? "text-amber-600" : "text-muted-foreground"
-                )}>
+                <span
+                  className={cn(
+                    "text-4xl font-light",
+                    healthMetrics.pendingReview > 0 ? "text-amber-600" : "text-muted-foreground"
+                  )}
+                >
                   {healthMetrics.pendingReview}
                 </span>
                 <p className="text-xs text-muted-foreground mt-1">awaiting human review</p>
               </div>
-              <div className={cn(
-                "p-2 rounded-full",
-                healthMetrics.pendingReview > 0 ? "bg-amber-500/10" : "bg-muted"
-              )}>
-                <Users className={cn(
-                  "h-6 w-6",
-                  healthMetrics.pendingReview > 0 ? "text-amber-600" : "text-muted-foreground"
-                )} />
+              <div
+                className={cn(
+                  "p-2 rounded-full",
+                  healthMetrics.pendingReview > 0 ? "bg-amber-500/10" : "bg-muted"
+                )}
+              >
+                <Users
+                  className={cn(
+                    "h-6 w-6",
+                    healthMetrics.pendingReview > 0 ? "text-amber-600" : "text-muted-foreground"
+                  )}
+                />
               </div>
             </div>
           </CardContent>
@@ -234,11 +247,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
       {/* Quick Filters Bar */}
       <Card className="mac-card border-border">
         <CardContent className="p-4">
-          <TestFilters
-            filters={filters}
-            onFiltersChange={handleFiltersChange}
-            compact
-          />
+          <TestFilters filters={filters} onFiltersChange={handleFiltersChange} compact />
         </CardContent>
       </Card>
 
@@ -399,7 +408,10 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 <Clock className="h-4 w-4 text-slate-600" />
                 <span className="text-sm text-muted-foreground">Avg Duration</span>
               </div>
-              <span className="text-lg font-medium">{Math.floor(healthMetrics.avgDuration / 60)}:{(healthMetrics.avgDuration % 60).toString().padStart(2, '0')}</span>
+              <span className="text-lg font-medium">
+                {Math.floor(healthMetrics.avgDuration / 60)}:
+                {(healthMetrics.avgDuration % 60).toString().padStart(2, "0")}
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -457,12 +469,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
           <Wrench className="h-4 w-4" />
           Review Self-Heals
         </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onNavigate?.("flaky")}
-          className="gap-2"
-        >
+        <Button variant="outline" size="sm" onClick={() => onNavigate?.("flaky")} className="gap-2">
           <RefreshCw className="h-4 w-4" />
           Explore Flaky Tests
         </Button>

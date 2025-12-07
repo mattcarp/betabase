@@ -138,7 +138,7 @@ export async function GET(request: NextRequest) {
         if (fb.suggested_correction && fb.suggested_correction.trim()) {
           // If thumbs down with correction: original is rejected, correction is chosen
           // If thumbs up with correction: original is chosen, correction is alternate (skip)
-          if (fb.thumbs_up === false || fb.rating !== null && fb.rating < 3) {
+          if (fb.thumbs_up === false || (fb.rating !== null && fb.rating < 3)) {
             dpoExamples.push({
               prompt: fb.user_query,
               chosen: fb.suggested_correction,
@@ -216,17 +216,11 @@ export async function GET(request: NextRequest) {
         return generateCSVResponse(dpoExamples);
 
       default:
-        return NextResponse.json(
-          { error: `Unsupported format: ${format}` },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: `Unsupported format: ${format}` }, { status: 400 });
     }
   } catch (error) {
     console.error("DPO export error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -258,9 +252,7 @@ function calculateConfidence(fb: FeedbackRow): number {
 
 function generateDPOResponse(examples: DPOExample[]): NextResponse {
   // Generate JSONL format (one JSON object per line)
-  const jsonl = examples
-    .map((example) => JSON.stringify(example))
-    .join("\n");
+  const jsonl = examples.map((example) => JSON.stringify(example)).join("\n");
 
   return new NextResponse(jsonl, {
     headers: {
@@ -307,9 +299,7 @@ function generateCSVResponse(examples: DPOExample[]): NextResponse {
     escapeCSV(ex.metadata?.timestamp),
   ]);
 
-  const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join(
-    "\n"
-  );
+  const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
 
   return new NextResponse(csv, {
     headers: {
@@ -319,10 +309,7 @@ function generateCSVResponse(examples: DPOExample[]): NextResponse {
   });
 }
 
-function generateEmptyResponse(
-  format: string,
-  message: string
-): NextResponse {
+function generateEmptyResponse(format: string, message: string): NextResponse {
   switch (format) {
     case "dpo":
     case "jsonl":
@@ -362,20 +349,11 @@ export async function POST(request: NextRequest) {
   try {
     // Check if supabaseAdmin is available
     if (!supabaseAdmin) {
-      return NextResponse.json(
-        { error: "Database not configured" },
-        { status: 503 }
-      );
+      return NextResponse.json({ error: "Database not configured" }, { status: 503 });
     }
 
     const body = await request.json();
-    const {
-      format = "dpo",
-      feedbackIds,
-      dateRange,
-      categories,
-      minConfidence = 0,
-    } = body;
+    const { format = "dpo", feedbackIds, dateRange, categories, minConfidence = 0 } = body;
 
     // Build custom query
     let query = supabaseAdmin
@@ -408,10 +386,7 @@ export async function POST(request: NextRequest) {
 
     if (feedbackError) {
       console.error("Custom export query error:", feedbackError);
-      return NextResponse.json(
-        { error: "Failed to fetch feedback data" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to fetch feedback data" }, { status: 500 });
     }
 
     // Convert to DPO format
@@ -419,7 +394,10 @@ export async function POST(request: NextRequest) {
 
     if (feedbackData) {
       for (const fb of feedbackData as FeedbackRow[]) {
-        if (fb.suggested_correction && (fb.thumbs_up === false || (fb.rating !== null && fb.rating < 3))) {
+        if (
+          fb.suggested_correction &&
+          (fb.thumbs_up === false || (fb.rating !== null && fb.rating < 3))
+        ) {
           const confidence = calculateConfidence(fb);
           if (confidence >= minConfidence) {
             dpoExamples.push({
@@ -459,9 +437,6 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     console.error("Custom DPO export error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

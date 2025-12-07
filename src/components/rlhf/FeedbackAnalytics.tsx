@@ -133,12 +133,20 @@ export function FeedbackAnalytics({
 
         // Calculate metrics from real data
         const totalFeedback = feedback.length;
-        const positiveCount = feedback.filter((f: { thumbs_up?: boolean }) => f.thumbs_up === true).length;
-        const negativeCount = feedback.filter((f: { thumbs_up?: boolean }) => f.thumbs_up === false).length;
+        const positiveCount = feedback.filter(
+          (f: { thumbs_up?: boolean }) => f.thumbs_up === true
+        ).length;
+        const negativeCount = feedback.filter(
+          (f: { thumbs_up?: boolean }) => f.thumbs_up === false
+        ).length;
         const ratingsWithValue = feedback.filter((f: { rating?: number }) => f.rating);
-        const avgRating = ratingsWithValue.length > 0
-          ? ratingsWithValue.reduce((sum: number, f: { rating?: number }) => sum + (f.rating || 0), 0) / ratingsWithValue.length
-          : 4.2;
+        const avgRating =
+          ratingsWithValue.length > 0
+            ? ratingsWithValue.reduce(
+                (sum: number, f: { rating?: number }) => sum + (f.rating || 0),
+                0
+              ) / ratingsWithValue.length
+            : 4.2;
 
         // Category breakdown from real data
         const categoryBreakdown: Record<string, number> = {
@@ -169,11 +177,14 @@ export function FeedbackAnalytics({
           critical: feedback.filter((f: { severity?: string }) => f.severity === "critical").length,
           major: feedback.filter((f: { severity?: string }) => f.severity === "major").length,
           minor: feedback.filter((f: { severity?: string }) => f.severity === "minor").length,
-          suggestion: feedback.filter((f: { severity?: string }) => f.severity === "suggestion").length,
+          suggestion: feedback.filter((f: { severity?: string }) => f.severity === "suggestion")
+            .length,
         };
 
         // Calculate approved rate
-        const approved = feedback.filter((f: { status?: string }) => f.status === "approved").length;
+        const approved = feedback.filter(
+          (f: { status?: string }) => f.status === "approved"
+        ).length;
         const curatorApprovalRate = totalFeedback > 0 ? approved / totalFeedback : 0.82;
 
         // Generate trend data from dates
@@ -195,15 +206,20 @@ export function FeedbackAnalytics({
 
         setMetrics({
           totalFeedback: totalFeedback || DEMO_METRICS.totalFeedback,
-          positiveRate: totalFeedback > 0 ? positiveCount / (positiveCount + negativeCount || 1) : DEMO_METRICS.positiveRate,
+          positiveRate:
+            totalFeedback > 0
+              ? positiveCount / (positiveCount + negativeCount || 1)
+              : DEMO_METRICS.positiveRate,
           averageRating: avgRating,
           categoryBreakdown: Object.values(categoryBreakdown).some((v: number) => v > 0)
-            ? categoryBreakdown as FeedbackMetrics["categoryBreakdown"]
+            ? (categoryBreakdown as FeedbackMetrics["categoryBreakdown"])
             : DEMO_METRICS.categoryBreakdown,
-          severityBreakdown: Object.values(severityBreakdown).some(v => v > 0)
+          severityBreakdown: Object.values(severityBreakdown).some((v) => v > 0)
             ? severityBreakdown
             : DEMO_METRICS.severityBreakdown,
-          trendsLastDays: trendsLastDays.some(v => v > 0) ? trendsLastDays : DEMO_METRICS.trendsLastDays,
+          trendsLastDays: trendsLastDays.some((v) => v > 0)
+            ? trendsLastDays
+            : DEMO_METRICS.trendsLastDays,
           curatorApprovalRate,
           avgReviewTimeHours: 2.4, // Would need timestamps to calculate
         });
@@ -257,15 +273,11 @@ export function FeedbackAnalytics({
       <CardContent className="pt-6">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className={cn("p-2 rounded-lg", color || "bg-purple-500/20")}>
-              {icon}
-            </div>
+            <div className={cn("p-2 rounded-lg", color || "bg-purple-500/20")}>{icon}</div>
             <div>
               <p className="text-sm text-zinc-400">{title}</p>
               <p className="text-2xl font-bold text-zinc-100">{value}</p>
-              {subtitle && (
-                <p className="text-xs text-zinc-500 mt-1">{subtitle}</p>
-              )}
+              {subtitle && <p className="text-xs text-zinc-500 mt-1">{subtitle}</p>}
             </div>
           </div>
           {trend !== undefined && (
@@ -273,9 +285,7 @@ export function FeedbackAnalytics({
               variant="outline"
               className={cn(
                 "flex items-center gap-1",
-                trend >= 0
-                  ? "text-green-400 border-green-500/30"
-                  : "text-red-400 border-red-500/30"
+                trend >= 0 ? "text-green-400 border-green-500/30" : "text-red-400 border-red-500/30"
               )}
             >
               {trend >= 0 ? (
@@ -319,10 +329,7 @@ export function FeedbackAnalytics({
                 initial={{ width: 0 }}
                 animate={{ width: `${(count / maxValue) * 100}%` }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                className={cn(
-                  "h-full rounded-full",
-                  CATEGORY_COLORS[category as FeedbackCategory]
-                )}
+                className={cn("h-full rounded-full", CATEGORY_COLORS[category as FeedbackCategory])}
               />
             </div>
           </motion.div>
@@ -405,9 +412,7 @@ export function FeedbackAnalytics({
             transition={{ duration: 0.5, delay: index * 0.03 }}
             className={cn(
               "flex-1 rounded-t",
-              index >= metrics.trendsLastDays.length - 7
-                ? "bg-purple-500"
-                : "bg-purple-500/40"
+              index >= metrics.trendsLastDays.length - 7 ? "bg-purple-500" : "bg-purple-500/40"
             )}
             title={`Day ${index + 1}: ${value} feedback items`}
           />
@@ -417,9 +422,7 @@ export function FeedbackAnalytics({
   };
 
   const renderDailyBreakdown = () => {
-    const maxTotal = Math.max(
-      ...DEMO_DAILY_DATA.map((d) => d.positive + d.negative)
-    );
+    const maxTotal = Math.max(...DEMO_DAILY_DATA.map((d) => d.positive + d.negative));
 
     return (
       <div className="space-y-4">
@@ -481,9 +484,7 @@ export function FeedbackAnalytics({
               {(metrics.curatorApprovalRate * 100).toFixed(0)}%
             </p>
             <p className="text-sm text-zinc-400">Approval Rate</p>
-            <p className="text-xs text-zinc-500 mt-1">
-              High quality feedback submissions
-            </p>
+            <p className="text-xs text-zinc-500 mt-1">High quality feedback submissions</p>
           </div>
         </CardContent>
       </Card>
@@ -498,9 +499,7 @@ export function FeedbackAnalytics({
               {metrics.avgReviewTimeHours.toFixed(1)}h
             </p>
             <p className="text-sm text-zinc-400">Avg Review Time</p>
-            <p className="text-xs text-zinc-500 mt-1">
-              From submission to decision
-            </p>
+            <p className="text-xs text-zinc-500 mt-1">From submission to decision</p>
           </div>
         </CardContent>
       </Card>
@@ -515,9 +514,7 @@ export function FeedbackAnalytics({
               {Math.round(metrics.totalFeedback * metrics.curatorApprovalRate)}
             </p>
             <p className="text-sm text-zinc-400">DPO-Ready Examples</p>
-            <p className="text-xs text-zinc-500 mt-1">
-              Ready for model training
-            </p>
+            <p className="text-xs text-zinc-500 mt-1">Ready for model training</p>
           </div>
         </CardContent>
       </Card>
@@ -555,10 +552,7 @@ export function FeedbackAnalytics({
                   width: `${Math.min((metric.value / metric.target) * 100, 100)}%`,
                 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={cn(
-                  "h-full rounded-full",
-                  `bg-${metric.color}-500`
-                )}
+                className={cn("h-full rounded-full", `bg-${metric.color}-500`)}
                 style={{
                   backgroundColor:
                     metric.color === "purple"
@@ -577,16 +571,10 @@ export function FeedbackAnalytics({
         <div className="pt-4 border-t border-zinc-800">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-zinc-200">
-                Training Ready
-              </p>
-              <p className="text-xs text-zinc-500">
-                Minimum 500 high-quality pairs needed
-              </p>
+              <p className="text-sm font-medium text-zinc-200">Training Ready</p>
+              <p className="text-xs text-zinc-500">Minimum 500 high-quality pairs needed</p>
             </div>
-            <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-              Ready
-            </Badge>
+            <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Ready</Badge>
           </div>
         </div>
       </div>
@@ -600,20 +588,13 @@ export function FeedbackAnalytics({
         <div className="flex items-center gap-3">
           <BarChart3 className="h-6 w-6 text-purple-400" />
           <div>
-            <h2 className="text-xl font-semibold text-zinc-100">
-              Feedback Analytics
-            </h2>
-            <p className="text-sm text-zinc-400">
-              RLHF feedback collection and quality metrics
-            </p>
+            <h2 className="text-xl font-semibold text-zinc-100">Feedback Analytics</h2>
+            <p className="text-sm text-zinc-400">RLHF feedback collection and quality metrics</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <Select
-            value={timeRange}
-            onValueChange={(v) => setTimeRange(v as typeof timeRange)}
-          >
+          <Select value={timeRange} onValueChange={(v) => setTimeRange(v as typeof timeRange)}>
             <SelectTrigger className="w-32 bg-zinc-800 border-zinc-700">
               <Calendar className="h-4 w-4 mr-2" />
               <SelectValue />

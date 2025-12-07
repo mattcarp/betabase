@@ -376,9 +376,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                   <Cpu className="h-4 w-4 text-blue-600" />
                   <span className="text-sm font-medium text-foreground">CPU Usage</span>
                 </div>
-                <span className="text-sm font-normal text-foreground">
-                  {systemResources.cpu}%
-                </span>
+                <span className="text-sm font-normal text-foreground">{systemResources.cpu}%</span>
               </div>
               <Progress value={systemResources.cpu} className="h-2" />
             </div>

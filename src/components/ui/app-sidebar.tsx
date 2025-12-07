@@ -253,9 +253,10 @@ export function AppSidebar({ className }: AppSidebarProps) {
                           </div>
                           {conversation.messages.length > 0 && (
                             <p className="text-xs text-mac-text-secondary truncate">
-                              {(conversation.messages[
-                                conversation.messages.length - 1
-                              ]?.content || "").slice(0, 50)}
+                              {(
+                                conversation.messages[conversation.messages.length - 1]?.content ||
+                                ""
+                              ).slice(0, 50)}
                               ...
                             </p>
                           )}
@@ -323,7 +324,9 @@ export function AppSidebar({ className }: AppSidebarProps) {
         {/* AI-Powered Actions Section */}
         {conversations.length > 0 && (
           <SidebarGroup>
-            <SidebarGroupLabel className="text-mac-text-muted pl-0">Quick Actions</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-mac-text-muted pl-0">
+              Quick Actions
+            </SidebarGroupLabel>
             <SidebarGroupContent className="px-0">
               <Actions
                 actions={[

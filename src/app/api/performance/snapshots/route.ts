@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     }
 
     const snapshots = summary
-      ? data ?? []
+      ? (data ?? [])
       : (data ?? []).map((row) => ({
           ...row,
           metrics: ensureSnapshotAlerts(row.metrics),
@@ -47,4 +47,3 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unable to fetch snapshots" }, { status: 500 });
   }
 }
-

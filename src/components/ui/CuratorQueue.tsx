@@ -64,7 +64,7 @@ interface CuratorQueueProps {
 function mapFeedbackToQueueItem(feedback: any): QueueItem {
   // Determine type based on feedback characteristics
   let type: QueueItem["type"] = "response-review";
-  if (feedback.thumbs_up === false || feedback.rating && feedback.rating <= 2) {
+  if (feedback.thumbs_up === false || (feedback.rating && feedback.rating <= 2)) {
     type = "correction";
   } else if (feedback.severity === "critical" || feedback.severity === "major") {
     type = "low-confidence";
@@ -112,10 +112,7 @@ function mapFeedbackToQueueItem(feedback: any): QueueItem {
   };
 }
 
-export const CuratorQueue: React.FC<CuratorQueueProps> = ({
-  className,
-  onItemSelect,
-}) => {
+export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSelect }) => {
   const [filter, setFilter] = useState<"all" | "high" | "pending">("all");
   const [selectedItem, setSelectedItem] = useState<QueueItem | null>(null);
   const [items, setItems] = useState<QueueItem[]>([]);
@@ -250,19 +247,28 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({
     switch (priority) {
       case "high":
         return (
-          <Badge variant="outline" className="bg-rose-500/10 text-rose-600 border-rose-500/20 text-xs">
+          <Badge
+            variant="outline"
+            className="bg-rose-500/10 text-rose-600 border-rose-500/20 text-xs"
+          >
             High
           </Badge>
         );
       case "medium":
         return (
-          <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-xs">
+          <Badge
+            variant="outline"
+            className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-xs"
+          >
             Medium
           </Badge>
         );
       case "low":
         return (
-          <Badge variant="outline" className="bg-slate-500/10 text-slate-600 border-slate-500/20 text-xs">
+          <Badge
+            variant="outline"
+            className="bg-slate-500/10 text-slate-600 border-slate-500/20 text-xs"
+          >
             Low
           </Badge>
         );
@@ -362,9 +368,11 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({
                     <div className="mt-2">
                       <div className="flex items-center justify-between text-xs mb-1">
                         <span className="text-muted-foreground">Confidence</span>
-                        <span className={cn(
-                          item.confidence < 70 ? "text-amber-600" : "text-emerald-600"
-                        )}>
+                        <span
+                          className={cn(
+                            item.confidence < 70 ? "text-amber-600" : "text-emerald-600"
+                          )}
+                        >
                           {item.confidence}%
                         </span>
                       </div>
@@ -442,10 +450,12 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({
                 <div className="p-4 rounded-lg bg-muted/50 border">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium">Confidence Score</span>
-                    <span className={cn(
-                      "text-lg font-medium",
-                      selectedItem.confidence < 70 ? "text-amber-600" : "text-emerald-600"
-                    )}>
+                    <span
+                      className={cn(
+                        "text-lg font-medium",
+                        selectedItem.confidence < 70 ? "text-amber-600" : "text-emerald-600"
+                      )}
+                    >
                       {selectedItem.confidence}%
                     </span>
                   </div>

@@ -4,19 +4,8 @@ import { useState, useCallback } from "react";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../ui/button";
 import { Badge } from "../../ui/badge";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../../ui/popover";
-import {
-  Play,
-  Pause,
-  SkipForward,
-  Presentation,
-  MessageSquare,
-  X,
-} from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
+import { Play, Pause, SkipForward, Presentation, MessageSquare, X } from "lucide-react";
 
 interface DemoQuery {
   id: string;
@@ -68,12 +57,7 @@ interface DemoModeProps {
  * Demo Mode - pre-loaded queries for smooth screen recording
  * Provides quick access to cached demo queries
  */
-export function DemoMode({
-  onQuerySelect,
-  isActive = false,
-  onToggle,
-  className,
-}: DemoModeProps) {
+export function DemoMode({ onQuerySelect, isActive = false, onToggle, className }: DemoModeProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -101,12 +85,7 @@ export function DemoMode({
   };
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-2",
-        className
-      )}
-    >
+    <div className={cn("flex items-center gap-2", className)}>
       {/* Demo Mode Toggle */}
       <Button
         variant={isActive ? "default" : "outline"}
@@ -133,23 +112,14 @@ export function DemoMode({
         <>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-2 border-zinc-700 text-zinc-300"
-              >
+              <Button variant="outline" size="sm" className="gap-2 border-zinc-700 text-zinc-300">
                 <MessageSquare className="h-3.5 w-3.5" />
                 <span className="text-xs">Queries</span>
               </Button>
             </PopoverTrigger>
-            <PopoverContent
-              className="w-80 p-0 bg-zinc-900 border-zinc-700"
-              align="start"
-            >
+            <PopoverContent className="w-80 p-0 bg-zinc-900 border-zinc-700" align="start">
               <div className="p-3 border-b border-zinc-800">
-                <div className="text-sm font-medium text-zinc-200">
-                  Demo Queries
-                </div>
+                <div className="text-sm font-medium text-zinc-200">Demo Queries</div>
                 <p className="text-xs text-zinc-500 mt-1">
                   Pre-cached queries for smooth recording
                 </p>
@@ -178,13 +148,9 @@ export function DemoMode({
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-zinc-300 line-clamp-1">
-                      {query.query}
-                    </p>
+                    <p className="text-sm text-zinc-300 line-clamp-1">{query.query}</p>
                     {query.description && (
-                      <p className="text-xs text-zinc-500 mt-1">
-                        {query.description}
-                      </p>
+                      <p className="text-xs text-zinc-500 mt-1">{query.description}</p>
                     )}
                   </button>
                 ))}

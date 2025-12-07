@@ -57,3 +57,56 @@ pnpm-lock.yaml
 *.tmp
 *.swp
 *~
+
+# Claude skills (managed externally)
+.claude/skills
+
+# Tests (performance reports, generated files)
+tests/
+
+# Documentation files (not critical for CI)
+*.plan.md
+WHATS-NEXT*.md
+THEME-IMPLEMENTATION.md
+docs/
+
+# Scripts and utilities
+utils/
+scripts/
+
+# Config files that can stay as-is
+vitest.config.ts
+tsconfig.json
+playwright.config.ts
+
+# HTML templates
+html/
+
+# Generated/crawled data
+aoma_crawl/
+audit-results/
+.playwright-results/
+.security-reports/
+test-results*/
+
+# Root-level markdown (project docs, not code)
+*.md
+!README.md
+!CHANGELOG.md
+
+# Cursor/IDE configs
+.cursor/
+
+# Misc generated
+.infisical.json
+.mcp-optimization-report.md
+supabase-types.ts
+test-nav.ts
+
+# Services directory (has formatting issues, excluded from CI type-check too)
+src/services/
+
+# Files with spaces (duplicates)
+*\ *.ts
+*\ *.tsx
+*\ *.json

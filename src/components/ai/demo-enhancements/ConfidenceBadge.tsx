@@ -3,12 +3,7 @@
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../ui/badge";
 import { Shield, ShieldAlert, ShieldCheck, ShieldQuestion } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../../ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../ui/tooltip";
 
 interface ConfidenceBadgeProps {
   confidence: number; // 0-1 scale
@@ -33,8 +28,8 @@ export function ConfidenceBadge({
 
   const getConfidenceLevel = () => {
     if (confidence >= 0.85) return "high";
-    if (confidence >= 0.70) return "medium";
-    if (confidence >= 0.50) return "low";
+    if (confidence >= 0.7) return "medium";
+    if (confidence >= 0.5) return "low";
     return "uncertain";
   };
 
@@ -79,8 +74,15 @@ export function ConfidenceBadge({
     },
   };
 
-  const { icon: Icon, label, description, bgClass, borderClass, textClass, iconClass } =
-    config[level];
+  const {
+    icon: Icon,
+    label,
+    description,
+    bgClass,
+    borderClass,
+    textClass,
+    iconClass,
+  } = config[level];
 
   const badge = (
     <Badge
@@ -110,17 +112,18 @@ export function ConfidenceBadge({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>{badge}</TooltipTrigger>
-        <TooltipContent
-          side="top"
-          className="max-w-xs bg-zinc-900 border-zinc-700"
-        >
+        <TooltipContent side="top" className="max-w-xs bg-zinc-900 border-zinc-700">
           <div className="space-y-1">
             <div className={cn("font-medium", textClass)}>{label}</div>
             <p className="text-xs text-zinc-400">{description}</p>
             {strategy && (
               <div className="text-xs text-zinc-500 pt-1 border-t border-zinc-700 mt-2">
-                Strategy: {strategy === "context-aware" ? "Context-Aware" :
-                           strategy === "agentic" ? "Agentic RAG" : "Standard"}
+                Strategy:{" "}
+                {strategy === "context-aware"
+                  ? "Context-Aware"
+                  : strategy === "agentic"
+                    ? "Agentic RAG"
+                    : "Standard"}
               </div>
             )}
           </div>

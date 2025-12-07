@@ -9,7 +9,7 @@ export type ImageProps = Partial<Experimental_GeneratedImage> & {
 
 export const Image = ({ base64, uint8Array, mediaType, src, ...props }: ImageProps) => {
   const imageSrc = src || (base64 && mediaType ? `data:${mediaType};base64,${base64}` : "");
-  
+
   if (!imageSrc) return null;
 
   return (

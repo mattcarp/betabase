@@ -127,7 +127,11 @@
 
 /* MAC theme transitions */
 :root[data-theme="mac"].theme-transitioning {
-  --transition-bg: linear-gradient(135deg, rgba(51, 133, 255, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+  --transition-bg: linear-gradient(
+    135deg,
+    rgba(51, 133, 255, 0.05) 0%,
+    rgba(139, 92, 246, 0.05) 100%
+  );
 }
 
 /* JARVIS theme transitions */
@@ -151,18 +155,13 @@
 }
 
 :root.theme-transitioning::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: -100%;
   width: 200%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.03),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
   animation: theme-shimmer 1.5s ease-in-out;
   pointer-events: none;
   z-index: 9998;

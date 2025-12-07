@@ -4,10 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import {
-  getSystemMetricsVectorService,
-  SystemMetric,
-} from "@/services/systemMetricsVectorService";
+import { getSystemMetricsVectorService, SystemMetric } from "@/services/systemMetricsVectorService";
 
 export async function POST(request: NextRequest) {
   try {

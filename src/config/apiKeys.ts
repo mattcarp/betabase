@@ -35,18 +35,17 @@ const config: ApiConfig = {
   vectorStoreId: getEnvVar("VECTOR_STORE_ID") || defaultConfig.vectorStoreId,
   mcpUrl: getEnvVar("MCP_URL") || defaultConfig.mcpUrl,
   mcpLambdaUrl: getEnvVar("MCP_LAMBDA_URL") || defaultConfig.mcpLambdaUrl,
-  mcpAuthEnabled: getEnvVar("MCP_AUTH_ENABLED") === "false" 
-      ? false 
-      : (defaultConfig.mcpAuthEnabled ?? false),
+  mcpAuthEnabled:
+    getEnvVar("MCP_AUTH_ENABLED") === "false" ? false : (defaultConfig.mcpAuthEnabled ?? false),
 };
 
 function getEnvVar(key: string): string | undefined {
-  if (typeof process !== 'undefined' && process.env) {
-      if (process.env[`NEXT_PUBLIC_${key}`]) return process.env[`NEXT_PUBLIC_${key}`];
-      if (process.env[key]) return process.env[key];
+  if (typeof process !== "undefined" && process.env) {
+    if (process.env[`NEXT_PUBLIC_${key}`]) return process.env[`NEXT_PUBLIC_${key}`];
+    if (process.env[key]) return process.env[key];
   }
   if (typeof window !== "undefined" && (window as any).__env?.[key]) {
-      return (window as any).__env[key];
+    return (window as any).__env[key];
   }
   return undefined;
 }
@@ -57,7 +56,10 @@ export const apiKeysService = {
   getElevenLabsAgentId: () => config.elevenLabsAgentId,
   getVectorStoreId: () => config.vectorStoreId,
   getMcpUrl: () => config.mcpUrl || defaultConfig.mcpUrl || "http://localhost:3333",
-  getMcpLambdaUrl: () => config.mcpLambdaUrl || defaultConfig.mcpLambdaUrl || "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws",
+  getMcpLambdaUrl: () =>
+    config.mcpLambdaUrl ||
+    defaultConfig.mcpLambdaUrl ||
+    "https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws",
   isMcpAuthEnabled: () => config.mcpAuthEnabled ?? false,
   updateConfig: (updates: Partial<ApiConfig>) => {
     Object.assign(config, updates);
@@ -71,7 +73,7 @@ export const apiKeysService = {
       isValid: missingKeys.length === 0,
       missingKeys,
     };
-  }
+  },
 };
 
 // Export individual getters for convenience
