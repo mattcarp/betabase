@@ -1,0 +1,22 @@
+"use client";
+
+/**
+ * RLHF Curator Dashboard Page
+ *
+ * This page provides curators with tools to:
+ * - Review user feedback on AI responses
+ * - Provide corrections for bad responses
+ * - Verify preference pairs for DPO training
+ * - Export training data in JSONL format
+ */
+
+// import { RLHFCuratorDashboard } from "@/components/ui/RLHFCuratorDashboard";
+
+export default function CuratorPage() {
+  return (
+    <div className="h-screen w-screen overflow-hidden bg-zinc-950">
+      {/* <RLHFCuratorDashboard /> */}
+      <div className="text-white p-10">Curator Dashboard Disabled for Build Fix</div>
+    </div>
+  );
+}

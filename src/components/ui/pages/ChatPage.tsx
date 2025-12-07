@@ -12,7 +12,7 @@ import { getChatAPIEndpoint } from "../../../config/featureFlags";
 import { ResponseDebugger } from "../ResponseDebugger";
 import { QuickFixPanel } from "../QuickFixPanel";
 import { TestCaseGenerator } from "../TestCaseGenerator";
-import { HistoricalTestExplorer } from "../../test-dashboard/HistoricalTestExplorer";
+
 import { RLHFTestSuite } from "../../test-dashboard/RLHFTestSuite";
 import { RLHFImpactDashboard } from "../../test-dashboard/RLHFImpactDashboard";
 import { LiveRAGMonitor } from "../../test-dashboard/LiveRAGMonitor";
@@ -455,9 +455,9 @@ Be helpful, concise, and professional in your responses.`;
                       <TestDashboard className="h-full" />
                     </TabsContent>
                     
-                    <TabsContent value="historical" className="h-full">
+                    {/* <TabsContent value="historical" className="h-full">
                       <HistoricalTestExplorer />
-                    </TabsContent>
+                    </TabsContent> */}
                     
                     <TabsContent value="rlhf-tests" className="h-full">
                       <RLHFTestSuite />

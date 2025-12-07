@@ -6,7 +6,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { supabase } from "@/lib/supabase";
 
 export type Permission = 
   | "rlhf_feedback"
@@ -42,8 +42,6 @@ export function usePermissions(userEmail?: string): PermissionCheckResult {
       }
 
       try {
-        const supabase = createClient();
-
         // Get user role
         const { data: roleData, error: roleError } = await supabase
           .from("user_roles")

@@ -222,55 +222,55 @@ interface ReinforcementMetric {
 
 // Stub data for executive dashboard
 const executiveMetrics = {
-  totalValue: 2340000,
-  monthlySavings: 45000,
-  complianceScore: 94,
-  knowledgeUtilization: 78,
-  curationVelocity: 120,
-  duplicateReduction: 23,
+  totalValue: 850000,
+  monthlySavings: 12500,
+  complianceScore: 78,
+  knowledgeUtilization: 62,
+  curationVelocity: 15,
+  duplicateReduction: 8,
 };
 
 const stubCuratorPerformance: CuratorPerformance[] = [
   {
     name: "Sarah Chen",
-    filesProcessed: 342,
-    qualityScore: 94,
-    duplicatesFound: 87,
-    metadataEnriched: 298,
-    valueGenerated: 125000,
+    filesProcessed: 142,
+    qualityScore: 88,
+    duplicatesFound: 24,
+    metadataEnriched: 112,
+    valueGenerated: 45000,
     badge: "master",
     department: "Legal",
     lastActive: new Date(),
   },
   {
     name: "Marcus Johnson",
-    filesProcessed: 298,
-    qualityScore: 87,
-    duplicatesFound: 62,
-    metadataEnriched: 241,
-    valueGenerated: 98000,
+    filesProcessed: 98,
+    qualityScore: 76,
+    duplicatesFound: 18,
+    metadataEnriched: 85,
+    valueGenerated: 28000,
     badge: "champion",
     department: "A&R",
     lastActive: new Date(),
   },
   {
     name: "Emily Rodriguez",
-    filesProcessed: 156,
-    qualityScore: 91,
-    duplicatesFound: 31,
-    metadataEnriched: 142,
-    valueGenerated: 67000,
+    filesProcessed: 64,
+    qualityScore: 92,
+    duplicatesFound: 5,
+    metadataEnriched: 58,
+    valueGenerated: 18000,
     badge: "expert",
     department: "Marketing",
     lastActive: new Date(),
   },
   {
     name: "David Kim",
-    filesProcessed: 89,
-    qualityScore: 85,
-    duplicatesFound: 15,
-    metadataEnriched: 76,
-    valueGenerated: 34000,
+    filesProcessed: 45,
+    qualityScore: 71,
+    duplicatesFound: 8,
+    metadataEnriched: 42,
+    valueGenerated: 12000,
     badge: "rookie",
     department: "Finance",
     lastActive: new Date(),
@@ -280,83 +280,83 @@ const stubCuratorPerformance: CuratorPerformance[] = [
 const stubKnowledgeHealth: KnowledgeHealth[] = [
   {
     category: "Contracts",
-    health: 85,
+    health: 65,
     documents: 1240,
-    coverage: 92,
-    lastUpdated: new Date(),
-    trend: "up",
-  },
-  {
-    category: "Artist Info",
-    health: 92,
-    documents: 3421,
-    coverage: 88,
+    coverage: 72,
     lastUpdated: new Date(),
     trend: "stable",
   },
   {
+    category: "Artist Info",
+    health: 82,
+    documents: 3421,
+    coverage: 88,
+    lastUpdated: new Date(),
+    trend: "up",
+  },
+  {
     category: "Financials",
-    health: 78,
+    health: 58,
     documents: 892,
-    coverage: 71,
+    coverage: 45,
     lastUpdated: new Date(),
     trend: "down",
   },
   {
     category: "Marketing",
-    health: 65,
+    health: 72,
     documents: 567,
-    coverage: 58,
+    coverage: 65,
     lastUpdated: new Date(),
-    trend: "down",
+    trend: "up",
   },
   {
     category: "Compliance",
-    health: 71,
+    health: 48,
     documents: 234,
-    coverage: 64,
+    coverage: 90,
     lastUpdated: new Date(),
-    trend: "up",
+    trend: "stable",
   },
   {
     category: "Catalog",
-    health: 88,
+    health: 91,
     documents: 4567,
     coverage: 95,
     lastUpdated: new Date(),
-    trend: "up",
+    trend: "stable",
   },
 ];
 
 const stubCurationTrends: CurationTrend[] = [
-  { period: "Jan", uploaded: 120, curated: 98, deleted: 15, quality: 82, roi: 2.1, savings: 12000 },
+  { period: "Jan", uploaded: 45, curated: 12, deleted: 3, quality: 65, roi: 1.1, savings: 3200 },
   {
     period: "Feb",
-    uploaded: 145,
-    curated: 132,
-    deleted: 22,
-    quality: 85,
-    roi: 2.4,
-    savings: 15000,
+    uploaded: 52,
+    curated: 28,
+    deleted: 5,
+    quality: 68,
+    roi: 1.3,
+    savings: 5400,
   },
-  { period: "Mar", uploaded: 98, curated: 95, deleted: 8, quality: 88, roi: 2.8, savings: 18000 },
+  { period: "Mar", uploaded: 38, curated: 32, deleted: 8, quality: 71, roi: 1.5, savings: 7200 },
   {
     period: "Apr",
-    uploaded: 167,
-    curated: 155,
-    deleted: 31,
-    quality: 91,
-    roi: 3.2,
-    savings: 24000,
+    uploaded: 65,
+    curated: 45,
+    deleted: 12,
+    quality: 74,
+    roi: 1.7,
+    savings: 9600,
   },
   {
     period: "May",
-    uploaded: 134,
-    curated: 128,
-    deleted: 19,
-    quality: 94,
-    roi: 3.5,
-    savings: 28000,
+    uploaded: 58,
+    curated: 55,
+    deleted: 7,
+    quality: 76,
+    roi: 1.9,
+    savings: 11500,
   },
 ];
 
@@ -884,11 +884,12 @@ export function EnhancedCurateTab({
                 <Card className="border-white/10 bg-black/20">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-light">Curation Velocity</CardTitle>
+                    <Zap className="h-4 w-4 text-amber-400" />
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center justify-between">
                       <span className="text-2xl font-light">
-                        {executiveMetrics.curationVelocity}
+                        --
                       </span>
                       <Activity className="h-8 w-8 text-orange-400" />
                     </div>
@@ -1050,11 +1051,10 @@ export function EnhancedCurateTab({
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    className="mac-input"
+                    className="mac-input pl-9"
                     placeholder="Search files..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9"
                   />
                 </div>
                 <Select value={filterTopic} onValueChange={setFilterTopic}>
@@ -1572,7 +1572,7 @@ export function EnhancedCurateTab({
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600" />
                       <span className="text-sm">
-                        Semantic duplicate detection (save ~$45K/year)
+                        Semantic duplicate detection
                       </span>
                     </div>
                     <div className="flex items-center gap-2">

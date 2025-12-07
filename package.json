@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.24.19",
+  "version": "0.24.20",
   "private": true,
   "scripts": {
     "dev": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && next dev --turbo -p 3000",
@@ -141,7 +141,7 @@
     "framer-motion": "^11.2.10",
     "html-to-image": "^1.11.13",
     "leo-profanity": "^1.8.0",
-    "lucide-react": "^0.545.0",
+    "lucide-react": "^0.556.0",
     "mermaid": "^11.12.1",
     "next": "^16.0.7",
     "openai": "^6.1.0",

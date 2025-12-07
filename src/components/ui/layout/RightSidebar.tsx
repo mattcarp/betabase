@@ -102,7 +102,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
       </div>
 
       {/* Live Insights */}
-      <LiveInsights currentConversation={currentConversation} className="mb-6" />
+      {/* <LiveInsights currentConversation={currentConversation} className="mb-6" /> */}
 
       {/* Wisdom Library */}
       <WisdomLibrary

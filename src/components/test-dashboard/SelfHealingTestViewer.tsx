@@ -416,13 +416,13 @@ export const SelfHealingTestViewer: React.FC = () => {
 
         if (attemptsData.stats) {
           setStats({
-            total: attemptsData.stats.total_attempts || attemptsData.stats.totalAttempts || 1247,
-            healed: attemptsData.stats.auto_healed || attemptsData.stats.autoHealed || 1175,
-            pendingReview: attemptsData.stats.pending_review || attemptsData.stats.pendingReview || 18,
-            failed: attemptsData.stats.tier3_count || 54,
-            avgHealTime: (attemptsData.stats.avg_heal_time_ms || attemptsData.stats.avgHealTimeMs || 4200) / 1000,
-            successRate: attemptsData.stats.success_rate || attemptsData.stats.successRate || 94.2,
-            last24h: attemptsData.stats.tier1_count || 18,
+            total: attemptsData.stats.total_attempts || attemptsData.stats.totalAttempts || 0,
+            healed: attemptsData.stats.auto_healed || attemptsData.stats.autoHealed || 0,
+            pendingReview: attemptsData.stats.pending_review || attemptsData.stats.pendingReview || 0,
+            failed: attemptsData.stats.tier3_count || 0,
+            avgHealTime: (attemptsData.stats.avg_heal_time_ms || attemptsData.stats.avgHealTimeMs || 0) / 1000,
+            successRate: attemptsData.stats.success_rate || attemptsData.stats.successRate || 0,
+            last24h: attemptsData.stats.tier1_count || 0,
           });
         }
       }

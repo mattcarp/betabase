@@ -32,7 +32,8 @@ interface FileUploadItem {
 interface FileUploadProps {
   className?: string;
   onUploadComplete?: (fileId: string, filename: string) => void;
-  onUploadError?: (error: string) => void;
+  onUploadError: (error: string) => void;
+  assistantId?: string;
   maxFileSize?: number; // in bytes
   acceptedFileTypes?: string[];
   compact?: boolean;
