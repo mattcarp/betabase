@@ -46,6 +46,9 @@ export const baseConfig: Partial<PlaywrightTestConfig> = {
   // Test match patterns
   testMatch: ["**/*.spec.ts"],
 
+  // Ignore archive folder
+  testIgnore: ["**/_archive/**"],
+
   // Global timeout
   timeout: 60000,
 
