@@ -12,6 +12,10 @@ const additionalIgnores = [
   "src/hooks/usePermissions 2.tsx",
   "src/hooks/usePermissions.ts",
   "src/hooks/usePermissions.tsx",
+  "src/app-backup/**",
+  "**/*.backup.*",
+  "**/*.old.*",
+  "**/*.disabled",
 ];
 
 const extendedConfig = nextConfig.map((config) => {

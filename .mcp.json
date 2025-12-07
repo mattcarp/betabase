@@ -54,6 +54,11 @@
       "type": "stdio",
       "command": "npx",
       "args": ["shadcn@latest", "mcp"]
+    },
+    "inngest": {
+      "type": "http",
+      "url": "http://127.0.0.1:8288/mcp",
+      "_comment": "Requires: npx inngest-cli@latest dev running in terminal"
     }
   }
 }
