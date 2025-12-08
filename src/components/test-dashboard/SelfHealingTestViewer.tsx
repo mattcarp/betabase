@@ -924,8 +924,14 @@ export const SelfHealingTestViewer: React.FC = () => {
             <Layers className="h-4 w-4" />
             Batch Review
           </TabsTrigger>
-          <TabsTrigger value="workflow">Live Healing Workflow</TabsTrigger>
-          <TabsTrigger value="history">Healing History</TabsTrigger>
+          <TabsTrigger value="workflow" className="flex items-center gap-2">
+            <Play className="h-4 w-4" />
+            Live Healing Workflow
+          </TabsTrigger>
+          <TabsTrigger value="history" className="flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            Healing History
+          </TabsTrigger>
         </TabsList>
 
         {/* NEW: Priority Review Tab - Story-first approach */}

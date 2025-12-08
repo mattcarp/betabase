@@ -266,23 +266,21 @@ Be helpful, concise, and professional in your responses.`;
               </div>
 
               {/* Navigation Tabs - Hidden on mobile, shown on tablet+ */}
-              <div className="hidden md:flex items-center space-x-1 bg-zinc-900/50 p-1.5 rounded-lg border border-zinc-800/50 flex-shrink-0">
+              <div className="hidden md:flex items-center space-x-1 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50 flex-shrink-0">
                 {COMPONENT_MODES.map((mode) => (
                   <button
                     key={mode.mode}
                     onClick={() => setActiveMode(mode.mode)}
                     className={cn(
-                      "relative flex items-center space-x-2 px-4 py-2.5 rounded-md text-sm font-light transition-all duration-200",
+                      "relative flex items-center justify-center space-x-2 px-4 py-2 rounded-md text-sm font-light transition-all duration-200",
                       activeMode === mode.mode
-                        ? "bg-gradient-to-r from-zinc-700 to-zinc-800 text-white shadow-md ring-1 ring-zinc-600/50"
+                        ? "bg-zinc-800 text-white shadow-sm"
                         : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
                     )}
                   >
-                    {activeMode === mode.mode && (
-                      <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[var(--mac-primary-blue-400)] rounded-full" />
-                    )}
                     <span
                       className={cn(
+                        "flex items-center",
                         activeMode === mode.mode && "text-[var(--mac-primary-blue-400)]"
                       )}
                     >
@@ -300,19 +298,17 @@ Be helpful, concise, and professional in your responses.`;
                     key={mode.mode}
                     onClick={() => setActiveMode(mode.mode)}
                     className={cn(
-                      "relative flex items-center justify-center p-2 rounded-md transition-all duration-200",
+                      "flex items-center justify-center p-2 rounded-md transition-all duration-200",
                       activeMode === mode.mode
-                        ? "bg-gradient-to-r from-zinc-700 to-zinc-800 shadow-md ring-1 ring-zinc-600/50"
+                        ? "bg-zinc-800 shadow-sm"
                         : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
                     )}
                     title={mode.label}
                     aria-label={mode.label}
                   >
-                    {activeMode === mode.mode && (
-                      <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-[var(--mac-primary-blue-400)] rounded-full" />
-                    )}
                     <span
                       className={cn(
+                        "flex items-center",
                         activeMode === mode.mode && "text-[var(--mac-primary-blue-400)]"
                       )}
                     >
@@ -393,8 +389,10 @@ Be helpful, concise, and professional in your responses.`;
 
         {/* Main Layout with proper sidebar */}
         <div className="flex flex-1 min-h-0 relative w-full">
-          {/* Enhanced Sidebar with persistence */}
-          <AppSidebar className="border-r border-zinc-800/50" />
+          {/* Enhanced Sidebar with persistence - Only show on Chat tab */}
+          {activeMode === "chat" && (
+            <AppSidebar className="border-r border-zinc-800/50" />
+          )}
 
           {/* Main Content with SidebarInset */}
           <SidebarInset className="flex-1 min-h-0 bg-transparent flex flex-col">
