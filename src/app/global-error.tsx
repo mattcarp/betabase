@@ -1,6 +1,8 @@
+"use client";
+
 /**
- * Global Error Page - Server Component Version
- * This is intentionally NOT a client component to avoid prerender issues.
+ * Global Error Page - Client Component
+ * This MUST be a client component per Next.js requirements.
  * It provides a minimal fallback when the root layout fails.
  */
 export default function GlobalError() {
@@ -20,9 +22,7 @@ export default function GlobalError() {
           padding: "2rem",
         }}
       >
-        <h1 style={{ fontSize: "2rem", margin: 0, fontWeight: 300 }}>
-          Something went wrong
-        </h1>
+        <h1 style={{ fontSize: "2rem", margin: 0, fontWeight: 300 }}>Something went wrong</h1>
         <p
           style={{
             fontSize: "1rem",

@@ -146,3 +146,4 @@ docs/supabase-aoma-analysis.json
 tmp/
 data/aoma-export.csv
 backups/
+.brv/

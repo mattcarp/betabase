@@ -104,7 +104,7 @@
       "Bash(render:*)",
       "Bash(fly:*)",
       "Bash(heroku:*)",
-            "Bash(playwright:*)",
+      "Bash(playwright:*)",
       "Bash(jest:*)",
       "Bash(vitest:*)",
       "Bash(pytest:*)",

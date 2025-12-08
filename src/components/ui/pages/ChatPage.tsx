@@ -77,7 +77,7 @@ const HUDInterface = dynamic(
 );
 
 const CurateTab = dynamic(
-  () => import("../CurateTab").then((mod) => ({ default: mod.CurateTab })),
+  () => import("../EnhancedCurateTab").then((mod) => ({ default: mod.EnhancedCurateTab })),
   {
     loading: () => (
       <div className="flex items-center justify-center h-full">

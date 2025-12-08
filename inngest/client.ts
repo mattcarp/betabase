@@ -10,7 +10,11 @@ export const inngest = {
   id: "mc-thebetabase",
   createFunction: () => ({ handler: () => {} }),
   send: async () => ({ ids: [] }),
-} as unknown as { id: string; createFunction: () => unknown; send: () => Promise<{ ids: string[] }> };
+} as unknown as {
+  id: string;
+  createFunction: () => unknown;
+  send: () => Promise<{ ids: string[] }>;
+};
 
 // Event type definitions for type safety
 export type AomaCrawlEvent = {

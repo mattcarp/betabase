@@ -35,8 +35,15 @@ import {
   Keyboard,
   Copy,
   ExternalLink,
+  ListChecks,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
+
+// Import new story-first components
+import { SelfHealingPriorityQueue, type HealingAttemptSummary } from "./SelfHealingPriorityQueue";
+import { SelfHealingDecisionStory, type HealingAttemptDetail } from "./SelfHealingDecisionStory";
+import { SelfHealingBatchReview } from "./SelfHealingBatchReview";
+import { SelfHealingFeedbackCapture, type FeedbackData } from "./SelfHealingFeedbackCapture";
 
 // Types for self-healing workflow
 interface DOMChange {
@@ -391,7 +398,9 @@ const useKeyboardShortcuts = (
 // Self-Healing Status Viewer Component
 export const SelfHealingTestViewer: React.FC = () => {
   const [selectedAttempt, setSelectedAttempt] = useState<SelfHealingAttempt | null>(null);
-  const [viewMode, setViewMode] = useState<"workflow" | "history">("workflow");
+  const [viewMode, setViewMode] = useState<"priority" | "batch" | "workflow" | "history">(
+    "priority"
+  );
   const [attempts, setAttempts] = useState<SelfHealingAttempt[]>([]);
   const [stats, setStats] = useState<SelfHealingStats>({
     total: 0,
@@ -409,6 +418,11 @@ export const SelfHealingTestViewer: React.FC = () => {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [applyingFix, setApplyingFix] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState(false);
+  // State for story-first Priority Review tab
+  const [storyAttempt, setStoryAttempt] = useState<HealingAttemptDetail | null>(null);
+  // State for feedback capture modal
+  const [feedbackAttempt, setFeedbackAttempt] = useState<HealingAttemptDetail | null>(null);
+  const [isProcessingBatch, setIsProcessingBatch] = useState(false);
 
   // Copy to clipboard helper
   const copyToClipboard = async (text: string) => {
@@ -913,9 +927,157 @@ export const SelfHealingTestViewer: React.FC = () => {
       {/* Main Content */}
       <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as any)}>
         <TabsList>
+          <TabsTrigger value="priority" className="flex items-center gap-2">
+            <ListChecks className="h-4 w-4" />
+            Priority Review
+          </TabsTrigger>
+          <TabsTrigger value="batch" className="flex items-center gap-2">
+            <Layers className="h-4 w-4" />
+            Batch Review
+          </TabsTrigger>
           <TabsTrigger value="workflow">Live Healing Workflow</TabsTrigger>
           <TabsTrigger value="history">Healing History</TabsTrigger>
         </TabsList>
+
+        {/* NEW: Priority Review Tab - Story-first approach */}
+        <TabsContent value="priority" className="space-y-4">
+          {storyAttempt ? (
+            // Show the Decision Story when an attempt is selected
+            <SelfHealingDecisionStory
+              attempt={storyAttempt}
+              onApprove={async (id) => {
+                await handleApprove(id);
+                setStoryAttempt(null);
+              }}
+              onApproveAndTest={async (id) => {
+                await handleApprove(id);
+                setStoryAttempt(null);
+              }}
+              onReject={async (id, reason, notes) => {
+                console.log("Rejection reason:", reason, notes);
+                await handleReject(id);
+                setStoryAttempt(null);
+              }}
+              onEscalate={(id) => {
+                console.log("Escalating:", id);
+                setStoryAttempt(null);
+              }}
+              onApplyFix={async (id) => {
+                await handleApplyFix(id);
+                setStoryAttempt(null);
+              }}
+              isApplying={applyingFix === storyAttempt.id}
+              onBack={() => setStoryAttempt(null)}
+            />
+          ) : (
+            // Show the Priority Queue when no attempt is selected
+            <SelfHealingPriorityQueue
+              attempts={attempts.map((a) => ({
+                id: a.id,
+                testName: a.testName,
+                testFile: a.testFile,
+                status: a.status,
+                tier: a.tier,
+                confidence: a.confidence,
+                similarTestsAffected: a.similarTestsAffected,
+                healingStrategy: a.healingStrategy,
+                timestamp: a.timestamp,
+                originalSelector: a.originalSelector,
+                suggestedSelector: a.suggestedSelector,
+              }))}
+              onSelectAttempt={(summary) => {
+                // Convert summary to full detail for the story view
+                const fullAttempt = attempts.find((a) => a.id === summary.id);
+                if (fullAttempt) {
+                  setStoryAttempt({
+                    id: fullAttempt.id,
+                    testName: fullAttempt.testName,
+                    testFile: fullAttempt.testFile,
+                    status: fullAttempt.status,
+                    tier: fullAttempt.tier,
+                    confidence: fullAttempt.confidence,
+                    similarTestsAffected: fullAttempt.similarTestsAffected,
+                    healingStrategy: fullAttempt.healingStrategy,
+                    timestamp: fullAttempt.timestamp,
+                    originalSelector: fullAttempt.originalSelector,
+                    suggestedSelector: fullAttempt.suggestedSelector,
+                    domChanges: fullAttempt.domChanges?.map((dc) => ({
+                      type: dc.type,
+                      before: dc.before,
+                      after: dc.after,
+                    })),
+                    codeBefore: fullAttempt.beforeCode || fullAttempt.codeBefore,
+                    codeAfter: fullAttempt.afterCode || fullAttempt.codeAfter,
+                    screenshot: fullAttempt.screenshot,
+                    executionTimeMs: fullAttempt.metadata?.executionTime
+                      ? fullAttempt.metadata.executionTime * 1000
+                      : undefined,
+                    aiModel: fullAttempt.metadata?.aiModel,
+                    errorMessage: fullAttempt.error?.message,
+                    errorStack: fullAttempt.error?.stack,
+                  });
+                }
+              }}
+              onQuickApprove={async (id) => {
+                await handleApprove(id);
+              }}
+              selectedId={storyAttempt?.id}
+              isLoading={loading}
+            />
+          )}
+        </TabsContent>
+
+        {/* Batch Review Tab - Bulk operations */}
+        <TabsContent value="batch" className="space-y-4">
+          {feedbackAttempt ? (
+            <SelfHealingFeedbackCapture
+              attemptId={feedbackAttempt.id}
+              testName={feedbackAttempt.testName}
+              originalSelector={feedbackAttempt.originalSelector}
+              suggestedSelector={feedbackAttempt.suggestedSelector}
+              confidence={feedbackAttempt.confidence}
+              onSubmit={async (feedback: FeedbackData) => {
+                console.log("Feedback submitted:", feedback);
+                await handleReject(feedback.attemptId);
+                setFeedbackAttempt(null);
+              }}
+              onCancel={() => setFeedbackAttempt(null)}
+            />
+          ) : (
+            <SelfHealingBatchReview
+              attempts={attempts.map((a) => ({
+                id: a.id,
+                testName: a.testName,
+                testFile: a.testFile,
+                status: a.status,
+                tier: a.tier,
+                confidence: a.confidence,
+                similarTestsAffected: a.similarTestsAffected,
+                healingStrategy: a.healingStrategy,
+                timestamp: a.timestamp,
+                originalSelector: a.originalSelector,
+                suggestedSelector: a.suggestedSelector,
+              }))}
+              onBatchApprove={async (ids) => {
+                setIsProcessingBatch(true);
+                try {
+                  await Promise.all(ids.map((id) => handleApprove(id)));
+                } finally {
+                  setIsProcessingBatch(false);
+                }
+              }}
+              onBatchReject={async (ids, reason) => {
+                setIsProcessingBatch(true);
+                try {
+                  await Promise.all(ids.map((id) => handleReject(id)));
+                } finally {
+                  setIsProcessingBatch(false);
+                }
+              }}
+              isProcessing={isProcessingBatch}
+            />
+          )}
+        </TabsContent>
 
         <TabsContent value="workflow" className="space-y-4">
           <div className="grid gap-4 lg:grid-cols-2">

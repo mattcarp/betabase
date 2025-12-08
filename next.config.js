@@ -16,7 +16,7 @@ try {
 
 const nextConfig = {
   // Use standalone output mode - changes how static pages are generated
-  output: 'standalone',
+  output: "standalone",
 
   // PERFORMANCE OPTIMIZATION: TypeScript type-check is run separately in CI/CD
   // Ignore during builds to speed up deployment

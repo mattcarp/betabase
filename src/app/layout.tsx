@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import React from "react";
+import { ClientProviders } from "@/components/ClientProviders";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -53,7 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="stylesheet" href="/styles/theme-transitions.css" />
       </head>
       <body suppressHydrationWarning>
-        {children}
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   );

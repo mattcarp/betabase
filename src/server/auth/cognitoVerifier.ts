@@ -10,17 +10,13 @@ interface TokenPayload {
   iat: number;
 }
 
-export async function verifyAccessToken(
-  token: string
-): Promise<TokenPayload | null> {
+export async function verifyAccessToken(token: string): Promise<TokenPayload | null> {
   console.warn("verifyAccessToken: Using stub implementation");
   // Stub - always return null (token invalid)
   return null;
 }
 
-export async function verifyIdToken(
-  token: string
-): Promise<TokenPayload | null> {
+export async function verifyIdToken(token: string): Promise<TokenPayload | null> {
   console.warn("verifyIdToken: Using stub implementation");
   // Stub - always return null (token invalid)
   return null;
