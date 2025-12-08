@@ -38,6 +38,7 @@ import {
   ListChecks,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { getTierStyles, getTierTextColor, getTierGradient, getStatusStyles } from "../../lib/mac-tier-styles";
 
 // Import new story-first components
 import { SelfHealingPriorityQueue, type HealingAttemptSummary } from "./SelfHealingPriorityQueue";
@@ -205,40 +206,28 @@ const ConfidenceMeter: React.FC<{ confidence: number; tier: HealingTier }> = ({
     <div className="space-y-2">
       <div className="flex items-center justify-between text-xs">
         <span className="text-muted-foreground">AI Confidence</span>
-        <span
-          className={cn(
-            "font-mono",
-            tier === 1 && "text-green-400",
-            tier === 2 && "text-amber-400",
-            tier === 3 && "text-red-400"
-          )}
-        >
+        <span className={cn("font-mono", getTierTextColor(tier))}>
           {percentage.toFixed(1)}%
         </span>
       </div>
       <div className="relative h-2 bg-black/40 rounded-full overflow-hidden">
         {/* Tier markers */}
         <div className="absolute inset-0 flex">
-          <div className="w-[60%] border-r border-red-500/50" title="Tier 3 threshold (60%)" />
-          <div className="w-[30%] border-r border-amber-400/50" title="Tier 2 threshold (90%)" />
+          <div className="w-[60%] border-r border-[var(--mac-tier3)]/50" title="Tier 3 threshold (60%)" />
+          <div className="w-[30%] border-r border-[var(--mac-tier2)]/50" title="Tier 2 threshold (90%)" />
           <div className="w-[10%]" />
         </div>
         {/* Progress bar */}
         <div
-          className={cn(
-            "h-full transition-all duration-500 rounded-full",
-            tier === 1 && "bg-gradient-to-r from-green-500 to-green-400",
-            tier === 2 && "bg-gradient-to-r from-amber-500 to-amber-400",
-            tier === 3 && "bg-gradient-to-r from-red-500 to-red-400"
-          )}
+          className={cn("h-full transition-all duration-500 rounded-full", getTierGradient(tier))}
           style={{ width: `${percentage}%` }}
         />
       </div>
       <div className="flex justify-between text-[10px] text-muted-foreground">
         <span>0%</span>
-        <span className="text-red-400">Tier 3</span>
-        <span className="text-amber-400">Tier 2</span>
-        <span className="text-green-400">Tier 1</span>
+        <span className="text-[var(--mac-tier3)]">Tier 3</span>
+        <span className="text-[var(--mac-tier2)]">Tier 2</span>
+        <span className="text-[var(--mac-tier1)]">Tier 1</span>
         <span>100%</span>
       </div>
     </div>
@@ -634,17 +623,17 @@ export const SelfHealingTestViewer: React.FC = () => {
     switch (status) {
       case "success":
       case "approved":
-        return "bg-green-500/10 text-green-500 border-green-500/20";
+        return getStatusStyles.success;
       case "failed":
       case "rejected":
-        return "bg-red-500/10 text-red-500 border-red-500/20";
+        return getStatusStyles.error;
       case "review":
-        return "bg-amber-400/10 text-amber-400 border-amber-400/20";
+        return getStatusStyles.warning;
       case "detecting":
       case "analyzing":
       case "healing":
       case "testing":
-        return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+        return getStatusStyles.info;
       default:
         return "bg-gray-500/10 text-gray-400 border-gray-500/20";
     }
@@ -669,19 +658,19 @@ export const SelfHealingTestViewer: React.FC = () => {
       case 1:
         return {
           label: "Tier 1: Auto",
-          color: "bg-green-500/10 text-green-500 border-green-500/20",
+          color: getTierStyles(1),
           description: "Automatic healing - high confidence (>90%)",
         };
       case 2:
         return {
           label: "Tier 2: Review",
-          color: "bg-amber-400/10 text-amber-400 border-amber-400/20",
+          color: getTierStyles(2),
           description: "Requires human review (60-90%)",
         };
       case 3:
         return {
           label: "Tier 3: Architect",
-          color: "bg-red-500/10 text-red-500 border-red-500/20",
+          color: getTierStyles(3),
           description: "Complex change - architect review required (<60%)",
         };
     }

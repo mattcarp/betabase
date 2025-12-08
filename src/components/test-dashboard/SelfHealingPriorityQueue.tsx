@@ -17,6 +17,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { getTierStyles, getRiskStyles } from "../../lib/mac-tier-styles";
 
 // Types aligned with SelfHealingTestViewer
 export type HealingTier = 1 | 2 | 3;
@@ -68,30 +69,23 @@ const getRiskLevel = (
 };
 
 const getRiskColor = (level: "LOW" | "MEDIUM" | "HIGH") => {
-  switch (level) {
-    case "LOW":
-      return "text-green-400 bg-green-500/10 border-green-500/20";
-    case "MEDIUM":
-      return "text-amber-400 bg-amber-500/10 border-amber-500/20";
-    case "HIGH":
-      return "text-red-400 bg-red-500/10 border-red-500/20";
-  }
+  return getRiskStyles(level);
 };
 
-const getTierLabel = (tier: HealingTier) => {
+const getLocalTierLabel = (tier: HealingTier) => {
   switch (tier) {
     case 1:
       return {
         label: "Auto-Approve Candidate",
-        color: "bg-green-500/10 text-green-400 border-green-500/20",
+        color: getTierStyles(1),
       };
     case 2:
       return {
         label: "Review Required",
-        color: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+        color: getTierStyles(2),
       };
     case 3:
-      return { label: "Architect Review", color: "bg-red-500/10 text-red-400 border-red-500/20" };
+      return { label: "Architect Review", color: getTierStyles(3) };
   }
 };
 
@@ -165,18 +159,18 @@ export const SelfHealingPriorityQueue: React.FC<SelfHealingPriorityQueueProps> =
         {/* Summary Badges */}
         <div className="flex items-center gap-2 mt-3">
           {autoApproveCount > 0 && (
-            <Badge variant="outline" className="bg-green-500/10 text-green-400 border-green-500/20">
+            <Badge variant="outline" className={getTierStyles(1)}>
               <Zap className="h-3 w-3 mr-1" />
               {autoApproveCount} ready for auto-approve
             </Badge>
           )}
           {tier2Count > 0 && (
-            <Badge variant="outline" className="bg-amber-500/10 text-amber-400 border-amber-500/20">
+            <Badge variant="outline" className={getTierStyles(2)}>
               {tier2Count} need review
             </Badge>
           )}
           {tier3Count > 0 && (
-            <Badge variant="outline" className="bg-red-500/10 text-red-400 border-red-500/20">
+            <Badge variant="outline" className={getTierStyles(3)}>
               {tier3Count} need architect
             </Badge>
           )}
@@ -222,7 +216,7 @@ export const SelfHealingPriorityQueue: React.FC<SelfHealingPriorityQueueProps> =
           <div className="space-y-3">
             {sortedAttempts.map((attempt, index) => {
               const risk = getRiskLevel(attempt.confidence, attempt.tier);
-              const tierInfo = getTierLabel(attempt.tier);
+              const tierInfo = getLocalTierLabel(attempt.tier);
 
               return (
                 <div
@@ -300,7 +294,7 @@ export const SelfHealingPriorityQueue: React.FC<SelfHealingPriorityQueueProps> =
                         <Button
                           variant="outline"
                           size="sm"
-                          className="h-7 text-xs bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/20"
+                          className={cn("h-7 text-xs hover:opacity-80", getTierStyles(1))}
                           onClick={(e) => {
                             e.stopPropagation();
                             onQuickApprove(attempt.id);

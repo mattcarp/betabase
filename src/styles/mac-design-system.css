@@ -50,6 +50,32 @@
   --mac-error-red: #ef4444; /* Error/Negative state - red */
   --mac-warning-yellow: #eab308; /* Warning state - yellow */
 
+  /* MAC Semantic Tier Colors - For Self-Healing & Tiered Status */
+  /* Tier 1 / Success / Auto-Approve (green) */
+  --mac-tier1: #4ade80;
+  --mac-tier1-bg: rgba(74, 222, 128, 0.1);
+  --mac-tier1-border: rgba(74, 222, 128, 0.2);
+
+  /* Tier 2 / Warning / Needs Review (amber) */
+  --mac-tier2: #fbbf24;
+  --mac-tier2-bg: rgba(251, 191, 36, 0.1);
+  --mac-tier2-border: rgba(251, 191, 36, 0.2);
+
+  /* Tier 3 / Error / Needs Architect (red) */
+  --mac-tier3: #f87171;
+  --mac-tier3-bg: rgba(248, 113, 113, 0.1);
+  --mac-tier3-border: rgba(248, 113, 113, 0.2);
+
+  /* Info / Blue */
+  --mac-info: #60a5fa;
+  --mac-info-bg: rgba(96, 165, 250, 0.1);
+  --mac-info-border: rgba(96, 165, 250, 0.2);
+
+  /* Purple / Special */
+  --mac-purple: #c084fc;
+  --mac-purple-bg: rgba(192, 132, 252, 0.1);
+  --mac-purple-border: rgba(192, 132, 252, 0.2);
+
   /* MAC Highlighter & Annotation Colors */
   --mac-highlight-yellow: rgba(255, 255, 0, 0.5); /* Yellow highlighter */
   --mac-highlight-green: rgba(0, 255, 0, 0.5); /* Green highlighter */

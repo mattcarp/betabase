@@ -19,6 +19,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { getTierStyles, getStatusStyles } from "../../lib/mac-tier-styles";
 import type { HealingAttemptSummary, HealingTier } from "./SelfHealingPriorityQueue";
 
 interface GroupedAttempts {
@@ -88,14 +89,7 @@ const getPatternLabel = (pattern: string): string => {
 };
 
 const getTierColor = (tier: HealingTier) => {
-  switch (tier) {
-    case 1:
-      return "text-green-400 bg-green-500/10 border-green-500/20";
-    case 2:
-      return "text-amber-400 bg-amber-500/10 border-amber-500/20";
-    case 3:
-      return "text-red-400 bg-red-500/10 border-red-500/20";
-  }
+  return getTierStyles(tier);
 };
 
 export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
@@ -271,7 +265,7 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
                     size="sm"
                     onClick={() => onBatchReject(Array.from(selectedIds), "batch-reject")}
                     disabled={isProcessing}
-                    className="bg-red-500/10 border-red-500/20 text-red-400 hover:bg-red-500/20"
+                    className={cn("hover:opacity-80", getStatusStyles.error)}
                   >
                     <XCircle className="h-4 w-4 mr-1" />
                     Reject All
@@ -280,7 +274,7 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
                     size="sm"
                     onClick={() => setShowBatchConfirm(true)}
                     disabled={isProcessing}
-                    className="bg-green-500/20 hover:bg-green-500/30 text-green-400"
+                    className={cn("hover:opacity-80", getStatusStyles.success)}
                   >
                     <CheckCircle2 className="h-4 w-4 mr-1" />
                     Approve All
@@ -326,7 +320,7 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
                   <Button
                     onClick={handleBatchApprove}
                     disabled={isProcessing}
-                    className="bg-green-500/20 hover:bg-green-500/30 text-green-400"
+                    className={cn("hover:opacity-80", getStatusStyles.success)}
                   >
                     {isProcessing ? (
                       <>
