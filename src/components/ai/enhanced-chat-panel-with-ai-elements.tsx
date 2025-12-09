@@ -1,7 +1,7 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../../lib/utils";
 import { ChatInput } from "./chat-input";
 import { ScrollArea } from "../ui/scroll-area";
@@ -11,6 +11,8 @@ import { Badge } from "../ui/badge";
 import { Bot, Sparkles, Trash2, Download, Loader2, AlertCircle, User } from "lucide-react";
 import { Alert, AlertDescription } from "../ui/alert";
 import { motion } from "framer-motion";
+import { InfographicDisplay, type InfographicData } from "./infographic-display";
+import { Q8Button, Q8FeedbackContext } from "../ui/Q8Button";
 
 // AI Elements imports - MAXIMIZE USAGE!
 import { Message, MessageContent, MessageAvatar } from "../ai-elements/message";
@@ -106,6 +108,76 @@ export function EnhancedChatPanelWithAIElements({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
 
+  // Infographic state: track per-message infographics
+  const [infographics, setInfographics] = useState<
+    Record<
+      string,
+      {
+        data: InfographicData | null;
+        isLoading: boolean;
+        error: string | null;
+        dismissed: boolean;
+      }
+    >
+  >({});
+  const pendingQuestionRef = useRef<{ id: string; question: string } | null>(null);
+
+  // Generate infographic for a message (runs in parallel with chat)
+  const generateInfographicForMessage = useCallback(
+    async (messageId: string, question: string, answer: string) => {
+      // Set loading state
+      setInfographics((prev) => ({
+        ...prev,
+        [messageId]: { data: null, isLoading: true, error: null, dismissed: false },
+      }));
+
+      try {
+        const response = await fetch("/api/infographic", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question, answer }),
+        });
+
+        const data = await response.json();
+
+        if (data.generated && data.imageData) {
+          setInfographics((prev) => ({
+            ...prev,
+            [messageId]: {
+              data: {
+                imageData: data.imageData,
+                mimeType: data.mimeType || "image/png",
+                type: data.type || "infographic",
+                generationTimeMs: data.generationTimeMs || 0,
+              },
+              isLoading: false,
+              error: null,
+              dismissed: false,
+            },
+          }));
+        } else {
+          // No infographic generated (question doesn't benefit from one)
+          setInfographics((prev) => ({
+            ...prev,
+            [messageId]: { data: null, isLoading: false, error: null, dismissed: true },
+          }));
+        }
+      } catch (err) {
+        console.error("[Infographic] Generation error:", err);
+        setInfographics((prev) => ({
+          ...prev,
+          [messageId]: {
+            data: null,
+            isLoading: false,
+            error: "Failed to generate",
+            dismissed: false,
+          },
+        }));
+      }
+    },
+    []
+  );
+
   const {
     messages,
     input,
@@ -129,9 +201,16 @@ export function EnhancedChatPanelWithAIElements({
       console.warn("Chat error:", error);
       onError?.(error);
     },
-    onFinish: () => {
+    onFinish: (message: any) => {
       if (maxMessages && messages.length >= maxMessages) {
         console.warn(`Maximum messages (${maxMessages}) reached`);
+      }
+
+      // When AI response completes, trigger infographic generation
+      if (pendingQuestionRef.current && message?.content) {
+        const { id, question } = pendingQuestionRef.current;
+        generateInfographicForMessage(id, question, message.content);
+        pendingQuestionRef.current = null;
       }
     },
   });
@@ -158,7 +237,11 @@ export function EnhancedChatPanelWithAIElements({
   const handleSuggestionClick = (suggestion: string) => {
     setInput(suggestion);
     setShowSuggestions(false);
+    // Generate a unique ID for tracking infographic
+    const messageId = `msg-${Date.now()}`;
+    pendingQuestionRef.current = { id: messageId, question: suggestion };
     append({
+      id: messageId,
       role: "user",
       content: suggestion,
     });
@@ -168,6 +251,8 @@ export function EnhancedChatPanelWithAIElements({
     setMessages([]);
     setInput("");
     setShowSuggestions(true);
+    setInfographics({});
+    pendingQuestionRef.current = null;
   };
 
   const handleExport = () => {
@@ -185,12 +270,24 @@ export function EnhancedChatPanelWithAIElements({
 
   const handleFormSubmit = (value: string) => {
     if (value.trim()) {
+      // Generate a unique ID for tracking infographic
+      const messageId = `msg-${Date.now()}`;
+      pendingQuestionRef.current = { id: messageId, question: value };
       append({
+        id: messageId,
         role: "user",
         content: value,
       });
       setInput("");
     }
+  };
+
+  // Dismiss an infographic
+  const dismissInfographic = (messageId: string) => {
+    setInfographics((prev) => ({
+      ...prev,
+      [messageId]: { ...prev[messageId], dismissed: true },
+    }));
   };
 
   const isMaxMessagesReached = maxMessages ? messages.length >= maxMessages : false;
@@ -293,6 +390,11 @@ export function EnhancedChatPanelWithAIElements({
                     ? { text: content, sources: [] }
                     : parseAOMAResponse(content);
 
+                  // For AI responses, get the previous user message ID for infographic lookup
+                  const prevUserMsg = !isUser && index > 0 ? messages[index - 1] : null;
+                  const infographicKey = prevUserMsg?.id;
+                  const infographicState = infographicKey ? infographics[infographicKey] : null;
+
                   return (
                     <Message key={message.id || index} from={message.role} className="py-2">
                       <MessageAvatar
@@ -306,13 +408,30 @@ export function EnhancedChatPanelWithAIElements({
                         ) : (
                           // AI responses - use Response component with markdown
                           <>
-                            <Response className="text-sm">{text}</Response>
+                            {/* Response text with Q8 button overlay */}
+                            <div className="relative group">
+                              <Response className="text-sm">{text}</Response>
+                              {/* Q8 Curate button for text responses (when no infographic) */}
+                              {!infographicState?.data && prevUserMsg && (
+                                <div className="absolute bottom-1 right-1 opacity-50 group-hover:opacity-100 transition-opacity">
+                                  <Q8Button
+                                    context={{
+                                      type: "text_response",
+                                      question: (prevUserMsg as any)?.content || "",
+                                      answer: text,
+                                      messageId: message.id,
+                                      timestamp: new Date().toISOString(),
+                                    }}
+                                  />
+                                </div>
+                              )}
+                            </div>
 
                             {/* Display sources if available */}
                             {sources.length > 0 && (
                               <div className="mt-4 pt-4 border-t border-border/50">
                                 <p className="text-xs text-muted-foreground mb-2">
-                                  📚 Sources ({sources.length}):
+                                  Sources ({sources.length}):
                                 </p>
                                 <div className="flex flex-wrap gap-2">
                                   {sources.map((source, idx) => (
@@ -342,6 +461,20 @@ export function EnhancedChatPanelWithAIElements({
                                   ))}
                                 </div>
                               </div>
+                            )}
+
+                            {/* Infographic display - appears after AI response */}
+                            {infographicKey && infographicState && !infographicState.dismissed && (
+                              <InfographicDisplay
+                                infographic={infographicState.data}
+                                isLoading={infographicState.isLoading}
+                                error={infographicState.error}
+                                onDismiss={() => dismissInfographic(infographicKey)}
+                                question={(prevUserMsg as any)?.content || ""}
+                                answer={text}
+                                messageId={message.id}
+                                showQ8Button={true}
+                              />
                             )}
                           </>
                         )}
@@ -373,12 +506,10 @@ export function EnhancedChatPanelWithAIElements({
                 <AlertDescription>
                   {error.message || "An error occurred. Please try again."}
                   <Button
-                    className="mac-button mac-button-primary"
+                    className="ml-2 h-auto p-0 mac-button"
                     variant="link"
-                    className="mac-button"
                     size="sm"
                     onClick={() => reload()}
-                    className="ml-2 h-auto p-0"
                   >
                     Retry
                   </Button>

@@ -38,7 +38,12 @@ import {
   ListChecks,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
-import { getTierStyles, getTierTextColor, getTierGradient, getStatusStyles } from "../../lib/mac-tier-styles";
+import {
+  getTierStyles,
+  getTierTextColor,
+  getTierGradient,
+  getStatusStyles,
+} from "../../lib/mac-tier-styles";
 
 // Import new story-first components
 import { SelfHealingPriorityQueue, type HealingAttemptSummary } from "./SelfHealingPriorityQueue";
@@ -206,15 +211,19 @@ const ConfidenceMeter: React.FC<{ confidence: number; tier: HealingTier }> = ({
     <div className="space-y-2">
       <div className="flex items-center justify-between text-xs">
         <span className="text-muted-foreground">AI Confidence</span>
-        <span className={cn("font-mono", getTierTextColor(tier))}>
-          {percentage.toFixed(1)}%
-        </span>
+        <span className={cn("font-mono", getTierTextColor(tier))}>{percentage.toFixed(1)}%</span>
       </div>
       <div className="relative h-2 bg-black/40 rounded-full overflow-hidden">
         {/* Tier markers */}
         <div className="absolute inset-0 flex">
-          <div className="w-[60%] border-r border-[var(--mac-tier3)]/50" title="Tier 3 threshold (60%)" />
-          <div className="w-[30%] border-r border-[var(--mac-tier2)]/50" title="Tier 2 threshold (90%)" />
+          <div
+            className="w-[60%] border-r border-[var(--mac-tier3)]/50"
+            title="Tier 3 threshold (60%)"
+          />
+          <div
+            className="w-[30%] border-r border-[var(--mac-tier2)]/50"
+            title="Tier 2 threshold (90%)"
+          />
           <div className="w-[10%]" />
         </div>
         {/* Progress bar */}

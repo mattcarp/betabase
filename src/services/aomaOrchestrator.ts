@@ -1,12 +1,12 @@
 /**
- * SIAM AOMA Orchestrator Service
- * 
+ * SIAM Vector Orchestrator Service
+ *
  * CRITICAL DISTINCTION:
  * - SIAM = Our app (this testing/knowledge platform)
- * - AOMA = App Under Test (Sony Music's Digital Operations app)
- * 
- * Intelligently routes queries to appropriate AOMA-mesh-mcp LangChain agents
- * Enables full utilization of all orchestrated resources
+ * - AOMA = App Under Test (Sony Music's Asset and Offering Management Application)
+ *
+ * Direct Supabase pgvector queries for RAG context (~100ms response times).
+ * NO external services - all queries go directly to Supabase.
  */
 
 import { aomaCache } from "./aomaCache";

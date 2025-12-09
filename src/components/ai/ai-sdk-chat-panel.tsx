@@ -323,18 +323,16 @@ export function AiSdkChatPanel({
 
   // Determine API endpoint based on selected model
   const getApiEndpoint = () => {
-    // CRITICAL: ALL models (including GPT-5) MUST use AOMA-MESH-MCP orchestration
-    // The /api/chat endpoint integrates with AOMA's LangChain orchestration
-    // which brings together multiple knowledge sources (VITAL requirement per user)
-    console.log("🎯 Using AOMA-MESH-MCP orchestrated endpoint for model:", selectedModel);
+    // ALL models use /api/chat with Supabase vector search for RAG
+    console.log("🎯 Using Supabase vector RAG for model:", selectedModel);
 
-    // Never use vercel endpoint or bypass AOMA
+    // Never use vercel endpoint or bypass RAG
     if (api && api !== "/api/chat-vercel" && api !== "/api/gpt5-responses" && api !== "") {
       // If a custom API is provided that's not Vercel or GPT5-direct, use it
       return api;
     }
 
-    // ALWAYS use /api/chat for ALL models to ensure AOMA orchestration
+    // ALWAYS use /api/chat for ALL models to ensure RAG context
     return "/api/chat";
   };
 

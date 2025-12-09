@@ -9,6 +9,11 @@ import { z } from "zod";
 import { aomaOrchestrator } from "@/services/aomaOrchestrator";
 // import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
 import { modelConfig } from "@/services/modelConfig";
+import {
+  synthesizeContext,
+  formatContextForPrompt,
+  type VectorResult,
+} from "@/services/contextSynthesizer";
 import { searchKnowledge } from "@/services/knowledgeSearchService";
 import { UnifiedRAGOrchestrator } from "@/services/unifiedRAGOrchestrator";
 import { getSessionStateManager } from "@/lib/sessionStateManager";
@@ -410,15 +415,13 @@ export async function POST(req: Request) {
       const queryString =
         typeof messageContent === "string" ? messageContent : JSON.stringify(messageContent);
 
-      console.log("🎯 Using LangChain orchestrator for AOMA:", queryString.substring(0, 100));
-      console.log("⏱️  PERFORMANCE: AOMA query starting (this blocks streaming response)...");
+      console.log("🎯 Querying Supabase vectors:", queryString.substring(0, 100));
+      console.log("⏱️  PERFORMANCE: Vector query starting...");
 
       // Performance tracking
       const perfStart = Date.now();
-      let railwayStartTime: number | null = null;
-      let railwayEndTime: number | null = null;
-      let supabaseStartTime: number | null = null;
-      let supabaseEndTime: number | null = null;
+      let vectorStartTime: number | null = null;
+      let vectorEndTime: number | null = null;
 
       try {
         // ========================================
@@ -494,35 +497,31 @@ export async function POST(req: Request) {
         }
 
         // ========================================
-        // PHASE 2: AOMA Orchestrator (existing system)
+        // PHASE 2: Vector Orchestrator (Supabase-only, ~100ms)
         // ========================================
-        // Use orchestrator which now handles BOTH Supabase and OpenAI sources internally
-        // with intelligent merging and deduplication
-        console.log("🚀 Querying AOMA orchestrator (handles Supabase + OpenAI internally)...");
+        // Direct Supabase pgvector queries - no external services
+        console.log("🚀 Querying vector orchestrator (Supabase pgvector)...");
 
-        // Wrap orchestrator call with timeout to prevent hanging
-        // PERFORMANCE: use short, env-configurable timeout to avoid blocking streaming
+        // Fast timeout - Supabase queries should complete in <500ms
         const preferFast = mode === "fast" || waitForAOMA === false;
-        const defaultTimeout = preferFast ? 5000 : 20000; // default to full-quality wait unless fast mode
+        const defaultTimeout = preferFast ? 2000 : 5000; // Much shorter - Supabase is fast
         const orchestratorTimeoutMs = Number(
-          process.env.AOMA_ORCHESTRATOR_TIMEOUT_MS || String(defaultTimeout)
+          process.env.VECTOR_ORCHESTRATOR_TIMEOUT_MS || String(defaultTimeout)
         );
-        console.log(
-          `🔀 Starting unified orchestrator query (${orchestratorTimeoutMs}ms timeout)...`
-        );
-        railwayStartTime = Date.now();
+        console.log(`🔀 Starting vector query (${orchestratorTimeoutMs}ms timeout)...`);
+        vectorStartTime = Date.now();
         const orchestratorResult = (await Promise.race([
           aomaOrchestrator.executeOrchestration(queryString),
           new Promise((_, reject) =>
             setTimeout(
-              () => reject(new Error(`AOMA orchestrator timeout after ${orchestratorTimeoutMs}ms`)),
+              () => reject(new Error(`Vector query timeout after ${orchestratorTimeoutMs}ms`)),
               orchestratorTimeoutMs
             )
           ),
         ])) as any;
-        railwayEndTime = Date.now();
-        const railwayDuration = railwayEndTime - railwayStartTime;
-        console.log(`⚡ Orchestrator responded in ${railwayDuration}ms`);
+        vectorEndTime = Date.now();
+        const vectorDuration = vectorEndTime - vectorStartTime;
+        console.log(`⚡ Vector query completed in ${vectorDuration}ms`);
 
         // Handle different response formats from the orchestrator
         let contextContent = null;
@@ -548,21 +547,57 @@ export async function POST(req: Request) {
           }
         }
 
-        if (contextContent) {
+        if (
+          contextContent ||
+          (orchestratorResult.sources && orchestratorResult.sources.length > 0)
+        ) {
+          // NEW: Synthesize raw vector results into human-friendly context
+          // This prevents dumping 17 raw Jira tickets on the user
+          let synthesizedCtx = null;
+          if (orchestratorResult.sources && orchestratorResult.sources.length > 0) {
+            console.log(
+              "🧠 Synthesizing context from",
+              orchestratorResult.sources.length,
+              "sources..."
+            );
+            const synthStart = Date.now();
+
+            // Convert to VectorResult format
+            const vectorResults: VectorResult[] = orchestratorResult.sources.map((s: any) => ({
+              content: s.content || "",
+              source_type: s.source_type || "unknown",
+              source_id: s.source_id,
+              similarity: s.similarity,
+              metadata: s.metadata,
+            }));
+
+            synthesizedCtx = await synthesizeContext(queryString, vectorResults);
+            console.log(`✅ Synthesis completed in ${synthesizedCtx.synthesisTimeMs}ms`);
+            console.log(`📊 Key insights: ${synthesizedCtx.keyInsights.length}`);
+          }
+
+          // Use synthesized context if available, otherwise fall back to raw
+          const formattedContext = synthesizedCtx
+            ? formatContextForPrompt(synthesizedCtx)
+            : contextContent;
+
           knowledgeElements.push({
             type: "context",
-            content: contextContent,
+            content: formattedContext,
             metadata: {
               source: "aoma-orchestrator",
+              synthesized: !!synthesizedCtx,
+              synthesisTimeMs: synthesizedCtx?.synthesisTimeMs,
               timestamp: new Date().toISOString(),
             },
           });
 
-          aomaContext = `\n\n[AOMA Context:\n${contextContent}\n]`;
+          aomaContext = `\n\n[AOMA Context:\n${formattedContext}\n]`;
           aomaConnectionStatus = "success";
-          console.log("✅ AOMA orchestration successful");
-          console.log(`📝 Context content length: ${contextContent?.length || 0} chars`);
-          console.log(`📝 aomaContext length: ${aomaContext?.length || 0} chars`);
+          console.log("✅ Vector orchestration successful");
+          console.log(
+            `📝 Context length: ${formattedContext?.length || 0} chars (${synthesizedCtx ? "synthesized" : "raw"})`
+          );
         } else {
           console.error("❌ AOMA orchestrator returned no content", orchestratorResult);
           aomaConnectionStatus = "failed";
@@ -622,10 +657,10 @@ export async function POST(req: Request) {
         // Performance summary
         const totalDuration = Date.now() - perfStart;
         const orchestratorMs =
-          railwayEndTime != null && railwayStartTime != null
-            ? railwayEndTime - railwayStartTime
+          vectorEndTime != null && vectorStartTime != null
+            ? vectorEndTime - vectorStartTime
             : "N/A";
-        console.log("📊 AOMA Query Performance Summary:", {
+        console.log("📊 Vector Query Performance Summary:", {
           totalMs: totalDuration,
           orchestratorMs,
           contextLength: aomaContext.length,
@@ -633,7 +668,7 @@ export async function POST(req: Request) {
           sources: orchestratorResult.sources?.length || 0,
         });
         console.log(
-          `⏱️  PERFORMANCE: Unified orchestrator query completed in ${totalDuration}ms - streaming will now start`
+          `⏱️  PERFORMANCE: Vector query completed in ${totalDuration}ms - streaming will now start`
         );
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
@@ -651,23 +686,18 @@ export async function POST(req: Request) {
                 : "UNKNOWN";
 
         // Log comprehensive error details server-side
-        const railwayDuration =
-          railwayEndTime != null && railwayStartTime != null
-            ? railwayEndTime - railwayStartTime
-            : "N/A";
-        const supabaseDuration =
-          supabaseEndTime != null && supabaseStartTime != null
-            ? supabaseEndTime - supabaseStartTime
+        const vectorDuration =
+          vectorEndTime != null && vectorStartTime != null
+            ? vectorEndTime - vectorStartTime
             : "N/A";
 
-        console.error("❌ AOMA query error:", {
+        console.error("❌ Vector query error:", {
           errorType,
           error: errorMessage,
           stack: error instanceof Error ? error.stack : undefined,
           query: queryString.substring(0, 100),
           durationMs: errorDuration,
-          railwayDuration,
-          supabaseDuration,
+          vectorDuration,
           timestamp: new Date().toISOString(),
         });
 
@@ -706,47 +736,37 @@ export async function POST(req: Request) {
 
     // Enhanced system prompt that includes AOMA orchestration context
     const enhancedSystemPrompt = aomaContext.trim()
-      ? `${systemPrompt || "You are SIAM, an AI assistant for Sony Music with access to AOMA knowledge."}
+      ? `${systemPrompt || "You are SIAM, a helpful AI assistant for Sony Music employees."}
 
-**YOU HAVE ACCESS TO AOMA KNOWLEDGE - USE IT CONFIDENTLY**
+**YOUR KNOWLEDGE:**
 ${aomaContext}
 
-**CRITICAL INSTRUCTIONS:**
-1. Answer ONLY using the AOMA context above
-2. Use natural, conversational language - speak directly to the user
-3. Do NOT reference "interfaces", "screens shown", or "displays" - just explain the functionality
-4. If asked for counts/statistics, say "I can't provide exact counts, but I can describe what I know"
-5. If a detail is missing, say "That's not in my current knowledge base"
-6. NEVER invent or infer facts beyond the provided context, UNLESS the user explicitly asks for a hypothetical example, generic diagram, or general explanation.
+**HOW TO RESPOND:**
+1. Answer like a knowledgeable colleague - direct, helpful, conversational
+2. Lead with the ANSWER, not the source. Don't say "According to the knowledge base..."
+3. If the knowledge mentions Jira tickets, DON'T list them all. Summarize what they tell you.
+4. If asked about counts or specific numbers you don't have, say so briefly
+5. Keep responses concise - 2-3 paragraphs max unless the user asks for more detail
 
-**DIAGRAM POLICY - OPTIONAL, NOT BLOCKING:**
-- Do NOT auto-generate diagrams. Answer with TEXT FIRST.
-- After answering, if a diagram would help, offer it by saying:
-  "Would you like me to generate a diagram? I can create:
-  - **Explainer diagram**: A visual to help understand this concept
-  - **Workflow diagram**: A step-by-step process flow"
-- Only generate a Mermaid diagram if the user explicitly asks for one.
-- When generating diagrams, follow these syntax rules:
-  - Use \`flowchart TD\` or \`flowchart LR\` instead of \`graph\`.
-  - ALWAYS use complete 6-character hex colors (e.g., \`#2ecc71\`, NOT \`#2ec\`).
-  - ALWAYS close all shapes properly: \`((text))\` for circles, \`[text]\` for rectangles, \`{text}\` for diamonds.
-  - ALWAYS end classDef lines with semicolons.
+**NEVER DO THIS:**
+- Don't dump raw ticket data or technical IDs
+- Don't list every source you consulted
+- Don't say "Based on the context provided..."
+- Don't use corporate jargon unless the user does
 
-**EXAMPLES OF GOOD vs BAD RESPONSES:**
-BAD: "From the interface shown, AOMA provides..."
-GOOD: "AOMA provides..."
+**DO THIS INSTEAD:**
+- Answer the question directly in plain English
+- If you found relevant Jira tickets, summarize their themes (e.g., "Several teams are working on metadata improvements")
+- Offer to dive deeper if the user wants specifics
 
-BAD: "The screen displays three options..."
-GOOD: "AOMA offers three options..."
+**DIAGRAMS:**
+- Only create diagrams if the user asks
+- If a diagram would help, offer: "Would you like a visual diagram of this?"
 
-BAD: [Auto-generating a diagram without asking]
-GOOD: "Would you like me to generate a diagram to visualize this?"`
-      : `${systemPrompt || "You are SIAM, an AI assistant for Sony Music."}
+Remember: You're talking to a Sony Music employee who just wants a quick, helpful answer.`
+      : `${systemPrompt || "You are SIAM, a helpful AI assistant for Sony Music."}
 
-**RESPONSE REQUIRED:**
-Respond with ONLY this message:
-
-"That's not in my knowledge base. I won't guess."`;
+I don't have any relevant information about that in my knowledge base. Could you try rephrasing your question, or ask about something related to AOMA (Asset and Offering Management Application)?`;
 
     // Determine model based on AOMA involvement
     const hasAomaContent = aomaContext.trim() !== "";

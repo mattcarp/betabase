@@ -65,11 +65,11 @@ const TestDashboard = dynamic(
 );
 
 const HUDInterface = dynamic(
-  () => import("../HUDInterface").then((mod) => ({ default: mod.HUDInterface })),
+  () => import("../HUDLauncher").then((mod) => ({ default: mod.HUDLauncher })),
   {
     loading: () => (
       <div className="flex items-center justify-center h-full">
-        <div>Loading HUD Interface...</div>
+        <div>Loading HUD...</div>
       </div>
     ),
     ssr: false,
@@ -234,14 +234,15 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
 You have access to a knowledge base and can help with various tasks including analysis, problem-solving, and creative work.
 Be helpful, concise, and professional in your responses.`;
 
-  // DEMO-OPTIMIZED: Use AOMA-specific suggestions with pre-cached instant responses
+  // DEMO-OPTIMIZED: Tested questions with high similarity scores (0.43-0.69)
+  // User types 7th question manually: "Walk me through the video submission workflow"
   const suggestions = [
-    "How do I use the Media Batch Converter to export audio in different formats?",
-    "What's the difference between Unified Submission Tool and Asset Submission Tool (LFV)?",
-    "How do I check if my masters passed GRPS QC and are ready for release?",
-    "Why is my Registration Job Status showing 'failed' and how do I retry delivery to partners?",
-    "How do I unlink Immersive/AMB masters from published products in GRPS?",
-    "What's the process for using Mobile Audio Manager to create ringtones and previews?",
+    "What are the steps to link a product to a master in AOMA?",
+    "What new features are in AOMA 2.116.0?",
+    "What is the quality check process for videos submitted to AOMA?",
+    "What permissions do I need for the Unified Submission Tool?",
+    "What's the difference between Full Master, Side, and Track Linking?",
+    "What are the different asset types in AOMA?",
   ];
 
   return (
@@ -390,9 +391,7 @@ Be helpful, concise, and professional in your responses.`;
         {/* Main Layout with proper sidebar */}
         <div className="flex flex-1 min-h-0 relative w-full">
           {/* Enhanced Sidebar with persistence - Only show on Chat tab */}
-          {activeMode === "chat" && (
-            <AppSidebar className="border-r border-zinc-800/50" />
-          )}
+          {activeMode === "chat" && <AppSidebar className="border-r border-zinc-800/50" />}
 
           {/* Main Content with SidebarInset */}
           <SidebarInset className="flex-1 min-h-0 bg-transparent flex flex-col">

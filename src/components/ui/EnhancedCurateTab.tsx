@@ -75,6 +75,7 @@ import {
   Check,
   Bot,
   Settings,
+  Image as ImageIcon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -89,6 +90,7 @@ import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 import { usePermissions } from "../../hooks/usePermissions";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQ8FeedbackQueue, Q8FeedbackContext } from "./Q8Button";
 import {
   LineChart as RechartsLineChart,
   Line,
@@ -530,10 +532,36 @@ export function EnhancedCurateTab({
   const [agentLogs, setAgentLogs] = useState<AgentDecisionLog[]>(stubAgentLogs);
   const [selectedAgentLog, setSelectedAgentLog] = useState<AgentDecisionLog | null>(null);
 
+  // Q8 Feedback Queue - from Chat tab
+  const {
+    queue: q8Queue,
+    loadQueue: loadQ8Queue,
+    removeFromQueue: removeQ8Item,
+    clearQueue: clearQ8Queue,
+  } = useQ8FeedbackQueue();
+  const [selectedQ8Item, setSelectedQ8Item] = useState<
+    (Q8FeedbackContext & { id: string; submittedAt: string; status: string }) | null
+  >(null);
+  const [q8FeedbackText, setQ8FeedbackText] = useState("");
+
   // Ensure client-side rendering for Recharts
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Load Q8 queue and listen for new feedback from Chat tab
+  useEffect(() => {
+    loadQ8Queue();
+
+    // Listen for new Q8 feedback items
+    const handleNewFeedback = () => {
+      loadQ8Queue();
+      toast.info("New content flagged for review from Chat");
+    };
+
+    window.addEventListener("q8-feedback-added", handleNewFeedback);
+    return () => window.removeEventListener("q8-feedback-added", handleNewFeedback);
+  }, [loadQ8Queue]);
 
   // Stub insights
   const insights: CurationInsight[] = [
@@ -809,10 +837,19 @@ export function EnhancedCurateTab({
 
       <CardContent className="flex-1 overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="dashboard">
               <BarChart3 className="h-4 w-4 mr-2" />
               Overview
+            </TabsTrigger>
+            <TabsTrigger value="q8-feedback" className="relative">
+              <Bot className="h-4 w-4 mr-2" />
+              Q8 Feedback
+              {q8Queue.length > 0 && (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-purple-500">
+                  {q8Queue.length}
+                </Badge>
+              )}
             </TabsTrigger>
             <TabsTrigger value="files">
               <FolderOpen className="h-4 w-4 mr-2" />
@@ -1031,6 +1068,280 @@ export function EnhancedCurateTab({
                       <Shield className="h-4 w-4 mr-2" />
                       Compliance Scan
                     </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Q8 Feedback Tab - HITL Content Review from Chat */}
+          <TabsContent value="q8-feedback" className="flex-1 overflow-auto mt-4">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="mac-title flex items-center gap-2">
+                    <Bot className="h-5 w-5 text-purple-400" />
+                    Q8 Content Feedback Queue
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Review AI-generated content flagged by curators from Chat
+                  </p>
+                </div>
+                {q8Queue.length > 0 && (
+                  <Button variant="outline" size="sm" onClick={clearQ8Queue}>
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Clear All
+                  </Button>
+                )}
+              </div>
+
+              {q8Queue.length === 0 ? (
+                <Card className="border-white/10 bg-black/20">
+                  <CardContent className="flex flex-col items-center justify-center py-12">
+                    <Bot className="h-12 w-12 text-muted-foreground mb-4" />
+                    <p className="text-lg font-light text-muted-foreground">No pending feedback</p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Click the Q8 button on infographics or responses in Chat to flag content for
+                      review
+                    </p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {/* Feedback Queue List */}
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium text-muted-foreground">
+                      Pending Reviews ({q8Queue.length})
+                    </h4>
+                    {q8Queue.map((item) => (
+                      <Card
+                        key={item.id}
+                        className={cn(
+                          "cursor-pointer transition-all hover:shadow-lg border-white/10 bg-black/20",
+                          selectedQ8Item?.id === item.id && "ring-2 ring-purple-500"
+                        )}
+                        onClick={() => {
+                          setSelectedQ8Item(item);
+                          setQ8FeedbackText("");
+                        }}
+                      >
+                        <CardHeader className="pb-2">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-center gap-2">
+                              <Badge
+                                variant={item.type === "infographic" ? "default" : "secondary"}
+                              >
+                                {item.type === "infographic" ? (
+                                  <>
+                                    <ImageIcon className="h-3 w-3 mr-1" /> Infographic
+                                  </>
+                                ) : item.type === "text_response" ? (
+                                  <>
+                                    <FileText className="h-3 w-3 mr-1" /> Response
+                                  </>
+                                ) : (
+                                  <>
+                                    <BookOpen className="h-3 w-3 mr-1" /> Citation
+                                  </>
+                                )}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground">
+                                {new Date(item.submittedAt).toLocaleTimeString()}
+                              </span>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 w-6 p-0"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeQ8Item(item.id);
+                                if (selectedQ8Item?.id === item.id) setSelectedQ8Item(null);
+                              }}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm font-light line-clamp-2">{item.question}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+
+                  {/* Selected Item Detail + Feedback */}
+                  <div className="space-y-4">
+                    {selectedQ8Item ? (
+                      <>
+                        <Card className="border-white/10 bg-black/20">
+                          <CardHeader>
+                            <CardTitle className="text-base font-light">Question</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <p className="text-sm">{selectedQ8Item.question}</p>
+                          </CardContent>
+                        </Card>
+
+                        {selectedQ8Item.infographicData && (
+                          <Card className="border-white/10 bg-black/20">
+                            <CardHeader>
+                              <CardTitle className="text-base font-light flex items-center gap-2">
+                                <ImageIcon className="h-4 w-4" />
+                                Generated Infographic
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <img
+                                src={`data:${selectedQ8Item.infographicData.mimeType};base64,${selectedQ8Item.infographicData.imageData}`}
+                                alt="Infographic for review"
+                                className="w-full rounded-md"
+                              />
+                              <Badge variant="outline" className="mt-2">
+                                {selectedQ8Item.infographicData.type}
+                              </Badge>
+                            </CardContent>
+                          </Card>
+                        )}
+
+                        {selectedQ8Item.answer && (
+                          <Card className="border-white/10 bg-black/20">
+                            <CardHeader>
+                              <CardTitle className="text-base font-light">AI Response</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm line-clamp-6">{selectedQ8Item.answer}</p>
+                            </CardContent>
+                          </Card>
+                        )}
+
+                        {/* Feedback Input */}
+                        <Card className="border-purple-500/50 bg-purple-500/5">
+                          <CardHeader>
+                            <CardTitle className="text-base font-light flex items-center gap-2">
+                              <Edit3 className="h-4 w-4 text-purple-400" />
+                              Your Feedback
+                            </CardTitle>
+                            <CardDescription>
+                              Provide feedback to improve AI responses and self-healing tests
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent className="space-y-3">
+                            <Textarea
+                              placeholder="What's incorrect or could be improved? Be specific..."
+                              value={q8FeedbackText}
+                              onChange={(e) => setQ8FeedbackText(e.target.value)}
+                              className="min-h-[100px] bg-background/50"
+                            />
+                            <div className="flex items-center gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  // TODO: Integrate with self-healing tests
+                                  toast.success("Feedback marked as 'Good' - no changes needed");
+                                  removeQ8Item(selectedQ8Item.id);
+                                  setSelectedQ8Item(null);
+                                }}
+                              >
+                                <ThumbsUp className="h-4 w-4 mr-2" />
+                                Looks Good
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  toast.info("Feedback saved - creating test assertion...");
+                                  removeQ8Item(selectedQ8Item.id);
+                                  setSelectedQ8Item(null);
+                                }}
+                              >
+                                <ThumbsDown className="h-4 w-4 mr-2" />
+                                Needs Work
+                              </Button>
+                              <Button
+                                className="ml-auto bg-purple-600 hover:bg-purple-700"
+                                size="sm"
+                                disabled={!q8FeedbackText.trim()}
+                                onClick={() => {
+                                  // TODO: Submit feedback to self-healing pipeline
+                                  toast.success(
+                                    "Feedback submitted! Creating self-healing test..."
+                                  );
+                                  console.log("Q8 Feedback:", {
+                                    item: selectedQ8Item,
+                                    feedback: q8FeedbackText,
+                                  });
+                                  removeQ8Item(selectedQ8Item.id);
+                                  setSelectedQ8Item(null);
+                                  setQ8FeedbackText("");
+                                }}
+                              >
+                                <Send className="h-4 w-4 mr-2" />
+                                Submit Feedback
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </>
+                    ) : (
+                      <Card className="border-white/10 bg-black/20 h-full flex items-center justify-center">
+                        <CardContent className="text-center py-12">
+                          <Eye className="h-8 w-8 text-muted-foreground mx-auto mb-4" />
+                          <p className="text-sm text-muted-foreground">
+                            Select an item from the queue to review
+                          </p>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* HITL Flow Explanation */}
+              <Card className="border-white/10 bg-black/20 mt-4">
+                <CardHeader>
+                  <CardTitle className="text-lg font-light flex items-center gap-2">
+                    <Network className="h-5 w-5 text-blue-400" />
+                    Human-in-the-Loop Feedback Cycle
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="h-10 w-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                        <Bot className="h-5 w-5 text-blue-400" />
+                      </div>
+                      <span className="text-muted-foreground">Chat</span>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="h-10 w-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+                        <span className="text-purple-400 font-semibold text-xs">Q8</span>
+                      </div>
+                      <span className="text-muted-foreground">Flag</span>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="h-10 w-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                        <Edit3 className="h-5 w-5 text-green-400" />
+                      </div>
+                      <span className="text-muted-foreground">Curate</span>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="h-10 w-10 rounded-full bg-orange-500/20 flex items-center justify-center">
+                        <TestTube className="h-5 w-5 text-orange-400" />
+                      </div>
+                      <span className="text-muted-foreground">Self-Heal</span>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="h-10 w-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                        <Sparkles className="h-5 w-5 text-blue-400" />
+                      </div>
+                      <span className="text-muted-foreground">Better AI</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AOMA Infographic Review</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: #e0e0e0;
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        background: linear-gradient(90deg, #00d4ff, #7c3aed);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .subtitle {
+        text-align: center;
+        color: #888;
+        margin-bottom: 40px;
+        font-size: 1.1rem;
+      }
+      .infographic-section {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+      .type-badge {
+        background: linear-gradient(90deg, #00d4ff, #0099cc);
+        color: #000;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+      }
+      .type-badge.comparison {
+        background: linear-gradient(90deg, #7c3aed, #5b21b6);
+        color: #fff;
+      }
+      .type-badge.hierarchy {
+        background: linear-gradient(90deg, #10b981, #059669);
+        color: #fff;
+      }
+      h2 {
+        font-size: 1.5rem;
+        color: #fff;
+      }
+      .question {
+        color: #aaa;
+        font-style: italic;
+        margin-bottom: 20px;
+        padding-left: 20px;
+        border-left: 3px solid #444;
+      }
+      .image-container {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      }
+      .image-container img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .stats {
+        display: flex;
+        gap: 30px;
+        margin-top: 20px;
+        color: #888;
+        font-size: 0.9rem;
+      }
+      .stat {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .stat-value {
+        color: #00d4ff;
+        font-weight: 600;
+      }
+      .tech-stack {
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 40px;
+      }
+      .tech-stack h3 {
+        color: #00d4ff;
+        margin-bottom: 15px;
+      }
+      .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+      .tech-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 12px 16px;
+        border-radius: 8px;
+      }
+      .tech-item strong {
+        color: #fff;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .tech-item span {
+        color: #888;
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>AOMA Infographic Review</h1>
+      <p class="subtitle">AI-Generated Visual Guides for AOMA Knowledge Base</p>
+
+      <!-- Workflow Infographic -->
+      <div class="infographic-section">
+        <div class="section-header">
+          <span class="type-badge">Workflow</span>
+          <h2>Step-by-Step Process Diagram</h2>
+        </div>
+        <p class="question">"What are the steps to link a product to a master in AOMA?"</p>
+        <div class="image-container">
+          <img src="/infographic-workflow.png" alt="Workflow Infographic" />
+        </div>
+        <div class="stats">
+          <div class="stat">Generation Time: <span class="stat-value">27.5s</span></div>
+          <div class="stat">Size: <span class="stat-value">766 KB</span></div>
+          <div class="stat">Format: <span class="stat-value">JPEG</span></div>
+        </div>
+      </div>
+
+      <!-- Comparison Infographic -->
+      <div class="infographic-section">
+        <div class="section-header">
+          <span class="type-badge comparison">Comparison</span>
+          <h2>Feature Comparison Chart</h2>
+        </div>
+        <p class="question">
+          "What's the difference between Full Master, Side, and Track Linking?"
+        </p>
+        <div class="image-container">
+          <img src="/infographic-comparison.png" alt="Comparison Infographic" />
+        </div>
+        <div class="stats">
+          <div class="stat">Generation Time: <span class="stat-value">29.4s</span></div>
+          <div class="stat">Size: <span class="stat-value">730 KB</span></div>
+          <div class="stat">Format: <span class="stat-value">JPEG</span></div>
+        </div>
+      </div>
+
+      <!-- Hierarchy Infographic -->
+      <div class="infographic-section">
+        <div class="section-header">
+          <span class="type-badge hierarchy">Hierarchy</span>
+          <h2>Asset Type Structure Diagram</h2>
+        </div>
+        <p class="question">"What are the different asset types in AOMA?"</p>
+        <div class="image-container">
+          <img src="/infographic-hierarchy.png" alt="Hierarchy Infographic" />
+        </div>
+        <div class="stats">
+          <div class="stat">Generation Time: <span class="stat-value">23.8s</span></div>
+          <div class="stat">Size: <span class="stat-value">611 KB</span></div>
+          <div class="stat">Format: <span class="stat-value">JPEG</span></div>
+        </div>
+      </div>
+
+      <!-- How It Works -->
+      <div class="tech-stack">
+        <h3>How AOMA Infographics Work</h3>
+        <div class="tech-grid">
+          <div class="tech-item">
+            <strong>Automatic Detection</strong>
+            <span>Questions are analyzed to determine infographic type</span>
+          </div>
+          <div class="tech-item">
+            <strong>Parallel Generation</strong>
+            <span>Infographic creates while text answer streams</span>
+          </div>
+          <div class="tech-item">
+            <strong>Infographic Types</strong>
+            <span>Workflow, Comparison, Hierarchy, Timeline, Checklist</span>
+          </div>
+          <div class="tech-item">
+            <strong>Optional Display</strong>
+            <span>Users can collapse or dismiss if not needed</span>
+          </div>
+          <div class="tech-item">
+            <strong>Context-Aware</strong>
+            <span>Uses RAG answer content to build accurate visuals</span>
+          </div>
+          <div class="tech-item">
+            <strong>Download Ready</strong>
+            <span>Save infographics for presentations and docs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

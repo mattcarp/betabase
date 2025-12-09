@@ -20,7 +20,7 @@ const supabase = createClient(
 );
 
 console.log("🚀 AOMA Crawler - Fresh Start");
-console.log("📊 Database: mc-tk\n");
+console.log("📊 Database: mc-thebetabase\n");
 
 const AOMA_ENDPOINTS = [
   "/aoma-ui/my-aoma-files",
