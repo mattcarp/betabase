@@ -184,7 +184,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
   // Create initial conversation if none exists
   useEffect(() => {
     if (conversations.length === 0) {
-      const newConvo = createConversation("The Betabase");
+      const newConvo = createConversation(); // Let auto-title generate from first message
       setActiveConversation(newConvo.id);
     }
   }, [conversations.length, createConversation, setActiveConversation]);

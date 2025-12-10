@@ -88,9 +88,29 @@ export const useConversationStore = create<ConversationStore>()(
 
       updateConversation: (id, updates) => {
         set((state) => ({
-          conversations: state.conversations.map((c) =>
-            c.id === id ? { ...c, ...updates, updatedAt: new Date() } : c
-          ),
+          conversations: state.conversations.map((c) => {
+            if (c.id !== id) return c;
+
+            const updatedConversation = { ...c, ...updates, updatedAt: new Date() };
+
+            // Auto-generate title from first user message if still default/empty
+            if (
+              (c.title === "New Conversation" || c.title === "The Betabase") &&
+              updates.messages &&
+              updates.messages.length > 0
+            ) {
+              const firstUserMessage = updates.messages.find(
+                (m: Message) => m.role === "user"
+              );
+              if (firstUserMessage && firstUserMessage.content) {
+                updatedConversation.title =
+                  firstUserMessage.content.slice(0, 50) +
+                  (firstUserMessage.content.length > 50 ? "..." : "");
+              }
+            }
+
+            return updatedConversation;
+          }),
         }));
       },
 
@@ -110,7 +130,7 @@ export const useConversationStore = create<ConversationStore>()(
 
               // Auto-generate title from first user message if still default
               if (
-                c.title === "New Conversation" &&
+                (c.title === "New Conversation" || c.title === "The Betabase") &&
                 message.role === "user" &&
                 c.messages.length === 0
               ) {
