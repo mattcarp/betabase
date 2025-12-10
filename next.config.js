@@ -56,10 +56,8 @@ const nextConfig = {
   }),
 
   // PERFORMANCE OPTIMIZATION: Optimize package imports
-  // Enable dynamicIO to force dynamic rendering (fixes React 19 prerender issues)
   experimental: {
     optimizePackageImports: ["@radix-ui/react-icons", "recharts", "framer-motion"],
-    dynamicIO: true,
   },
 
   async headers() {

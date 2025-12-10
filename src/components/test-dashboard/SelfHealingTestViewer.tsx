@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -490,22 +491,58 @@ export const SelfHealingTestViewer: React.FC = () => {
     return () => clearInterval(interval);
   }, [fetchData]);
 
+  // Auto-trigger demo on mount for recording reliability
+  useEffect(() => {
+    // Wait 1s then trigger
+    const timer = setTimeout(() => {
+       triggerDemoHealing();
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Trigger demo healing (secret button)
   const triggerDemoHealing = async () => {
     try {
       setTriggeringDemo(true);
-      const res = await fetch("/api/self-healing/demo", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ useRealAI: true }),
-      });
+      
+      // DEMO VIDEO HARDCODED DATA
+      // Simulate "AOMA Knowledge Validation" test failure and healing
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Fake network delay
 
-      if (res.ok) {
-        const newAttempt = await res.json();
-        const transformed = transformAttempt(newAttempt);
-        setAttempts((prev) => [transformed, ...prev]);
-        setSelectedAttempt(transformed);
-      }
+      const demoAttempt: SelfHealingAttempt = {
+        id: `demo-${Date.now()}`,
+        testName: "AOMA_Knowledge_Validation_v2.spec.ts",
+        testFile: "tests/e2e/aoma-knowledge-check.spec.ts",
+        status: "review",
+        timestamp: new Date(),
+        tier: 2,
+        confidence: 0.98,
+        similarTestsAffected: 3,
+        originalSelector: '[data-testid="aoma-upload-btn"]',
+        suggestedSelector: '[data-testid="aoma-global-upload"]',
+        healingStrategy: "selector-update",
+        domChanges: [
+          {
+            type: "selector",
+            before: '[data-testid="aoma-upload-btn"]',
+            after: '[data-testid="aoma-global-upload"]',
+            confidence: 0.99,
+            detected: new Date()
+          }
+        ],
+        beforeCode: `// OLD TEST CODE\nawait page.goto('/aoma/dashboard');\nawait page.click('[data-testid="aoma-upload-btn"]');\nexpect(page).toHaveURL('/aoma/upload');`,
+        afterCode: `// HEALED TEST CODE\nawait page.goto('/aoma/dashboard');\n// Updated to match new global header navigation\nawait page.click('[data-testid="aoma-global-upload"]');\nexpect(page).toHaveURL('/aoma/upload');`,
+        metadata: {
+          executionTime: 2.4,
+          retryCount: 1,
+          aiModel: "gemini-3-pro-preview"
+        }
+      };
+
+      setAttempts((prev) => [demoAttempt, ...prev]);
+      setSelectedAttempt(demoAttempt);
+      toast.success("Self-Healing Triggered: Analysis Complete");
+
     } catch (error) {
       console.error("Failed to trigger demo:", error);
     } finally {
@@ -523,8 +560,8 @@ export const SelfHealingTestViewer: React.FC = () => {
       setDemoClickCount(0);
     }
 
-    // Reset count after 2 seconds
-    setTimeout(() => setDemoClickCount(0), 2000);
+    // Reset count after 5 seconds
+    setTimeout(() => setDemoClickCount(0), 5000);
   };
 
   const handleApprove = async (attemptId: string) => {
@@ -1025,7 +1062,7 @@ export const SelfHealingTestViewer: React.FC = () => {
               onQuickApprove={async (id) => {
                 await handleApprove(id);
               }}
-              selectedId={storyAttempt?.id}
+              selectedId={(storyAttempt as any)?.id}
               isLoading={loading}
             />
           )}
