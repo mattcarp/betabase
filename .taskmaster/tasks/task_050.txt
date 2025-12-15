@@ -1,0 +1,11 @@
+# Task ID: 50
+# Title: Implement Multi-Tenant Performance Monitoring Database for AOMA and Jira UAT
+# Status: done
+# Dependencies: 49
+# Priority: high
+# Description: Develop a comprehensive performance monitoring database for multi-tenant environments, integrating Web Vitals, Lighthouse scores, and resource metrics.
+# Details:
+Enhance the existing database schema to support multi-tenant performance monitoring. Include fields for Web Vitals such as Largest Contentful Paint (LCP), First Input Delay (FID), Cumulative Layout Shift (CLS), Time to First Byte (TTFB), First Contentful Paint (FCP), and Time to Interactive (TTI). Integrate Lighthouse scores and resource performance metrics. Implement error tracking and an application registry to support multi-tenant environments. Develop a performance alerts system to notify stakeholders of significant performance issues. Create analytics views to provide insights into performance trends and issues. Ensure the database is optimized for large-scale data ingestion and retrieval, leveraging indexing and partitioning strategies where appropriate. Collaborate with the team responsible for the performance crawler to ensure seamless data integration.
+
+# Test Strategy:
+1. Verify the database schema includes all required fields for Web Vitals, Lighthouse scores, and resource metrics. 2. Test data ingestion from the performance crawler to ensure all metrics are accurately captured and stored. 3. Simulate multi-tenant scenarios to verify the application registry and error tracking functionalities. 4. Trigger performance alerts and confirm notifications are sent to the appropriate stakeholders. 5. Validate analytics views by comparing generated insights with expected performance trends. 6. Conduct load testing to ensure the database can handle enterprise-scale data volumes efficiently.

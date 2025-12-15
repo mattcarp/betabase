@@ -1,0 +1,14 @@
+# Task ID: 62
+# Title: Add FIRECRAWL_API_KEY to environment variables for Test Dashboard
+# Status: pending
+# Dependencies: 61
+# Priority: high
+# Description: Include the FIRECRAWL_API_KEY in the environment variables to enable real Application Under Test (AUT) analysis in the Test Dashboard.
+# Details:
+To add the FIRECRAWL_API_KEY to the environment variables, first ensure that the key is securely stored and accessible only to authorized personnel. Update the environment configuration files (e.g., .env or system environment variables) to include the FIRECRAWL_API_KEY. Ensure that the key is correctly referenced in the application code where the Test Dashboard interacts with the AUT analysis features. Additionally, update any deployment scripts or CI/CD pipelines to include this environment variable, ensuring it is available in all environments where the Test Dashboard is deployed. Consider using a secrets management tool to handle the API key securely.
+
+# Test Strategy:
+1. Verify that the FIRECRAWL_API_KEY is correctly added to the environment variables by checking the environment configuration files and system settings.
+2. Deploy the application in a test environment and ensure that the Test Dashboard can access the AUT analysis features using the FIRECRAWL_API_KEY.
+3. Conduct a test run of the Test Dashboard to confirm that real AUT analysis is functioning as expected, with no errors related to the API key.
+4. Review logs and monitoring tools to ensure there are no unauthorized access attempts or security issues related to the API key.

@@ -197,7 +197,27 @@ export function AiSdkChatPanel({
 
   // RLHF Feedback tracking
   const [feedbackGiven, setFeedbackGiven] = useState<Record<string, "up" | "down" | null>>({});
-  const supabase = createClientComponentClient();
+  // Supabase env vars come from Infisical; they may be absent locally.
+  // `createClientComponentClient()` throws if env vars are missing, so lazy-init.
+  const supabaseFeedbackRef = useRef<ReturnType<typeof createClientComponentClient> | null>(null);
+
+  const getSupabaseForFeedback = useCallback(() => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !key) return null;
+
+    if (supabaseFeedbackRef.current) return supabaseFeedbackRef.current;
+    try {
+      supabaseFeedbackRef.current = createClientComponentClient();
+      return supabaseFeedbackRef.current;
+    } catch (err) {
+      console.warn(
+        "[AiSdkChatPanel] Failed to init Supabase client; disabling RLHF feedback persistence.",
+        err
+      );
+      return null;
+    }
+  }, []);
 
   // Demo Enhancement hooks for video recording
   const demoMode = useDemoMode();
@@ -1281,6 +1301,13 @@ export function AiSdkChatPanel({
   const handleFeedback = async (messageId: string, type: "up" | "down") => {
     if (feedbackGiven[messageId]) {
       toast.info("Feedback already recorded for this message");
+      return;
+    }
+
+    const supabase = getSupabaseForFeedback();
+    if (!supabase) {
+      toast.info("Feedback disabled (Supabase not configured)");
+      setFeedbackGiven((prev) => ({ ...prev, [messageId]: type }));
       return;
     }
 

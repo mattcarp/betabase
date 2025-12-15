@@ -7,7 +7,7 @@
 
 import { getSessionStateManager, type ConversationSession } from "../lib/sessionStateManager";
 import { getTwoStageRetrieval } from "./twoStageRetrieval";
-import { getGeminiEmbeddingService } from "./geminiEmbeddingService";
+// import { getGeminiEmbeddingService } from "./geminiEmbeddingService";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { createClient } from '@supabase/supabase-js';
 

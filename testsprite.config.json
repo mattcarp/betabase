@@ -2,7 +2,7 @@
   "projectName": "SIAM - Smart Interaction Agent Manager",
   "testDirectory": "./testsprite_tests",
   "outputDirectory": "./testsprite_results",
-  "baseUrl": "https://siam-app-production.up.railway.app",
+  "baseUrl": "https://siam-app.onrender.com",
   "browser": "chromium",
   "headless": false,
   "timeout": 30000,
@@ -22,13 +22,13 @@
       }
     },
     "staging": {
-      "baseUrl": "https://siam-staging.vercel.app",
+      "baseUrl": "https://siam-app.onrender.com",
       "env": {
         "NODE_ENV": "staging"
       }
     },
     "production": {
-      "baseUrl": "https://siam-app-production.up.railway.app",
+      "baseUrl": "https://siam-app.onrender.com",
       "env": {
         "NODE_ENV": "production"
       }

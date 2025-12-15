@@ -1,0 +1,70 @@
+# Task ID: 56
+# Title: Integrate Vercel AI Elements into Chat Landing Page
+# Status: in-progress
+# Dependencies: 53, 54
+# Priority: high
+# Description: Replace the custom chat UI with Vercel AI Elements for improved user experience and faster iteration on the Chat landing page.
+# Details:
+To integrate Vercel AI Elements into the Chat landing page, begin by installing the Vercel AI SDK and importing the necessary components into `src/components/ui/pages/ChatPage.tsx`. Replace the existing custom chat UI with AI Elements components, ensuring that all current features such as model selector, reasoning display, suggestions, export/clear, streaming, and error states are preserved. Implement a feature flag to allow users to switch back to the current UI if needed. Ensure that all components are accessible and include `data-test-id` attributes for Playwright testing. Pay special attention to maintaining the existing API connections to `app/api/chat/route.ts`.
+<info added on 2025-08-14T02:06:07.427Z>
+Manually integrate the Vercel AI Elements UI components, such as the message thread, prompt input, and conversation wrapper, as pure React UI components without introducing new @ai-sdk/* packages. Avoid using the AI Elements CLI auto-install to prevent pulling in @ai-sdk/react. Ensure these components are wired to the existing chat route and state, maintaining the current streaming and message schema. Map the existing schema to the AI Elements props without relying on AI SDK hooks. Preserve the feature flag to allow fallback to the current EnhancedChatPanel.
+</info added on 2025-08-14T02:06:07.427Z>
+
+# Test Strategy:
+1. Verify that the Vercel AI Elements are correctly displayed on the Chat landing page and that all existing features are functional.
+2. Test the feature flag to ensure users can switch between the new AI Elements UI and the current UI.
+3. Use Playwright to run automated tests, checking for the presence of `data-test-id` attributes and ensuring accessibility standards are met.
+4. Conduct user testing to gather feedback on the new UI and iterate based on findings.
+
+# Subtasks:
+## 1. Install Vercel AI SDK and Scaffold AI Elements [done]
+### Dependencies: None
+### Description: Install the Vercel AI SDK and set up the initial scaffolding for AI Elements in the project.
+### Details:
+Add the Vercel AI SDK to the project's dependencies using npm or yarn. Create a basic setup for AI Elements in the `src/components/ui/pages/ChatPage.tsx` file by importing necessary components.
+<info added on 2025-08-14T07:33:32.137Z>
+Successfully integrated Vercel AI Elements into the SIAM project. Created a new AIElementsChat component that uses the AI Elements components (Conversation, Message, PromptInput, etc.). Added a feature flag (useAIElements) that allows toggling between the classic UI and the new AI Elements UI. The implementation includes proper data-test-id attributes for testing, error handling for undefined inputs, and full integration with the existing /api/chat endpoint. The UI toggle is visible in the header and allows seamless switching between interfaces.
+</info added on 2025-08-14T07:33:32.137Z>
+
+## 2. Implement Feature Flag for UI Toggle [done]
+### Dependencies: 56.1
+### Description: Create a feature flag to allow users to switch between the current chat UI and the new Vercel AI Elements UI.
+### Details:
+Implement a feature flag using a configuration file or environment variable. Modify the `ChatPage.tsx` to conditionally render either the current UI or the AI Elements UI based on the flag's state.
+
+## 3. Replace Custom Chat UI with AI Elements [done]
+### Dependencies: 56.1, 56.2
+### Description: Replace the existing custom chat UI in `ChatPage.tsx` with Vercel AI Elements components.
+### Details:
+Remove the existing chat UI components and integrate AI Elements components, ensuring all current features like model selector, reasoning display, and suggestions are preserved.
+
+## 4. Update API Connections for AI Elements Compatibility [done]
+### Dependencies: 56.3
+### Description: Modify `app/api/chat/route.ts` to ensure compatibility with AI Elements conversation API.
+### Details:
+Update the API to return messages in a format compatible with AI Elements, including reasoning and tool messages.
+
+## 5. Normalize Imports and Ensure Streaming Functionality [done]
+### Dependencies: 56.3, 56.4
+### Description: Normalize imports and ensure streaming functionality works with AI Elements.
+### Details:
+Migrate any `ai/react` imports to `@ai-sdk/react` and verify that streaming features are operational with the new components.
+
+## 6. Ensure Accessibility and Add Data-Test-Id Attributes [done]
+### Dependencies: 56.5
+### Description: Ensure all components are accessible and include `data-test-id` attributes for testing.
+### Details:
+Review the UI components for accessibility compliance and add `data-test-id` attributes to facilitate Playwright testing.
+
+## 7. Update Playwright Tests for New UI [done]
+### Dependencies: 56.6
+### Description: Update existing Playwright tests to cover the new AI Elements UI.
+### Details:
+Modify existing Playwright test scripts to interact with the new UI components and verify their functionality.
+
+## 8. Add Documentation and Feature Flag Instructions [done]
+### Dependencies: 56.7
+### Description: Update the README and add documentation for the feature flag and new UI components.
+### Details:
+Document the integration process, feature flag usage, and any changes to the UI in the project's README file.
+
