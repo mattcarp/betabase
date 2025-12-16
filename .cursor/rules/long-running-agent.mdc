@@ -1,0 +1,235 @@
+---
+description: Long-running agent harness for multi-context window work sessions based on Anthropic research
+globs: **/*
+alwaysApply: true
+---
+
+# Long-Running Agent Harness
+
+This rule implements the [Anthropic research on effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents). It enables AI agents to work effectively across multiple context windows without losing progress or context.
+
+## Core Problem This Solves
+
+AI agents face two key failure modes in long-running tasks:
+1. **One-shotting**: Trying to do too much at once, running out of context mid-feature
+2. **Premature victory**: Declaring "job done" when only partial progress was made
+
+## Two-Agent Architecture
+
+### 1. Initializer Agent (First Session Only)
+Used when starting a NEW project or feature initiative:
+- Creates `claude-progress.txt` for session logging
+- Populates `features.json` with comprehensive feature specifications
+- Sets up `scripts/init.sh` for environment bootstrapping
+- Makes initial git commit as baseline
+
+### 2. Coding Agent (Every Session)
+Used for ALL subsequent work sessions:
+- Reads progress files and git logs first
+- Selects **ONE feature** to work on
+- Tests before declaring done
+- Commits changes and updates progress
+
+---
+
+## SESSION START PROTOCOL (MANDATORY)
+
+**At the start of EVERY coding session, you MUST:**
+
+```
+1. pwd                                    # Understand working directory
+2. Read claude-progress.txt               # Get up to speed on recent work
+3. git log --oneline -10                  # See recent commits
+4. Read features.json                     # Identify next feature to work on
+5. byterover-retrieve-knowledge           # Check for relevant stored patterns
+6. Run basic smoke test                   # Verify app isn't broken BEFORE new work
+```
+
+**Smoke Test for This Project:**
+```bash
+# Verify dev server is running or can start
+curl -s http://localhost:3000/api/health || pnpm dev &
+
+# Quick sanity check
+curl -s http://localhost:3000 | head -20
+```
+
+If the smoke test fails, FIX IT FIRST before starting new work.
+
+---
+
+## SESSION END PROTOCOL (MANDATORY)
+
+**At the end of EVERY coding session, you MUST:**
+
+```
+1. Verify all changes work                # Test what you built
+2. git add . && git commit -m "..."       # Commit with descriptive message
+3. Update claude-progress.txt             # Log what was done
+4. Update features.json (if applicable)   # Mark feature passes:true only if verified
+5. byterover-store-knowledge              # Store any patterns learned
+6. Create HANDOFF-*.md if needed          # For complex incomplete work
+```
+
+---
+
+## INCREMENTAL WORK RULE (CRITICAL)
+
+**You MUST work on ONE feature at a time.**
+
+### ✅ DO:
+- Pick the highest-priority non-passing feature from `features.json`
+- Fully complete and test that ONE feature
+- Commit and update progress
+- THEN move to the next feature
+
+### ❌ DON'T:
+- Try to implement multiple features simultaneously
+- Leave features half-implemented without documentation
+- Mark features as `passes: true` without proper E2E testing
+- Skip the smoke test at session start
+
+---
+
+## Key Files for Long-Running Work
+
+| File | Purpose | When to Update |
+|------|---------|----------------|
+| `claude-progress.txt` | Session-by-session log of work done | END of every session |
+| `features.json` | Structured feature list with pass/fail status | When feature is VERIFIED complete |
+| `scripts/init.sh` | Environment setup script | When setup steps change |
+| `HANDOFF-*.md` | Detailed handoff for complex incomplete work | When stopping mid-feature |
+
+---
+
+## Progress File Format
+
+When updating `claude-progress.txt`, use this format:
+
+```
+---
+Session: YYYY-MM-DD HH:MM
+Agent: Coding
+Duration: ~Xm
+
+## Summary
+- What was accomplished (be specific)
+- Key decisions made
+- Files modified
+
+## Next Steps
+- What the next agent should tackle
+- Any prerequisites
+
+## Warnings/Blockers
+- Issues encountered
+- Things that didn't work (to avoid repeating)
+---
+```
+
+---
+
+## Features File Rules
+
+From `features.json._meta.rules`:
+1. **DO NOT** remove or edit existing features without explicit user approval
+2. **DO NOT** mark a feature as `passes: true` without running verification tests
+3. Each feature must be completed one at a time
+4. Update `claude-progress.txt` after completing each feature
+5. Commit changes to git after each feature completion
+
+---
+
+## Git Hygiene
+
+- Commit after each completed feature with descriptive message
+- Use conventional commit format: `feat(module): Description`
+- Include list of files changed in commit body
+- If you make a mistake, use `git revert` to cleanly undo
+
+---
+
+## Recovery From Bad State
+
+If you start a session and find the codebase is broken:
+
+1. **Don't panic** - Check git log for recent changes
+2. **Check claude-progress.txt** - See what was last attempted
+3. **Consider reverting** - `git revert HEAD` if last commit broke things
+4. **Fix before proceeding** - Never start new work on broken foundation
+5. **Document the fix** - Log what was wrong and how you fixed it
+
+---
+
+## Integration with ByteRover
+
+ByteRover is used for knowledge persistence ACROSS sessions:
+
+### At Session Start:
+```
+byterover-retrieve-knowledge: "patterns for [current feature area]"
+```
+
+### At Session End:
+```
+byterover-store-knowledge: "Learned that [pattern/solution/gotcha]"
+```
+
+This complements `claude-progress.txt` by storing **reusable patterns** vs **session-specific progress**.
+
+---
+
+## Handoff Files
+
+Create `HANDOFF-YYYY-MM-DD-topic.md` when:
+- Stopping in the middle of complex work
+- Debugging something non-obvious
+- Making architectural decisions that need context
+
+Include:
+- Current task status
+- What was tried (and what didn't work)
+- Specific next steps with file paths and line numbers
+- Any blockers or warnings
+
+---
+
+## Example Session Flow
+
+```
+[Session Start]
+├── Read claude-progress.txt → Last session fixed X, next is Y
+├── git log --oneline -5 → Confirmed recent commits
+├── Read features.json → F003 is next priority, passes:false
+├── byterover-retrieve-knowledge "F003 topic" → Got relevant patterns
+├── Run smoke test → App loads ✓
+│
+[Work Phase]
+├── Implement F003 ONE STEP AT A TIME
+├── Test each change incrementally
+├── If stuck, check byterover for similar patterns
+│
+[Session End]
+├── Full E2E test of F003 → Works ✓
+├── git commit -m "feat(F003): Implement feature description"
+├── Update features.json → F003.passes = true
+├── Update claude-progress.txt → Log session details
+├── byterover-store-knowledge → Store any new patterns learned
+└── Done ✓
+```
+
+---
+
+## Anti-Patterns to Avoid
+
+| Anti-Pattern | Why It's Bad | What To Do Instead |
+|--------------|--------------|---------------------|
+| Skipping smoke test | You might build on broken foundation | ALWAYS test first |
+| Working on 3+ features at once | Context exhaustion, messy state | ONE feature at a time |
+| Marking done without testing | False progress, technical debt | E2E test before marking passes |
+| Not updating progress file | Next session loses context | ALWAYS update at session end |
+| Giant commits | Hard to revert, unclear history | Commit per feature |
+
+---
+
+*Based on [Anthropic's research on effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)*

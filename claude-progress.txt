@@ -257,3 +257,48 @@ Continued from CLAUDETTE-HANDOFF.md following long-running agent pattern.
 - NaN% similarity scores in vector search (embedding dimension mismatch - cosmetic)
 - Response times ~12-24s for chat (acceptable but not ideal for demo)
 - 3 issues badge visible in UI (non-blocking)
+
+---
+Session: 2025-12-16 ~15:00
+Agent: Coding
+Duration: ~45m
+
+## Summary
+Implemented Spec-Driven Development workflow based on research into BMAD vs GitHub Spec Kit.
+
+**Research Findings:**
+- BMAD: Too heavyweight for existing project (21 agents, 50+ workflows)
+- GitHub Spec Kit: Good principles, can adopt without full tool replacement
+- Current ByteRover + Long-Running Agent harness is already spec-driven DNA
+
+**Files Created:**
+- `specs/SIAM/prd.md` - Moved from .taskmaster/docs/prd.txt, enhanced
+- `specs/SIAM/constitution.md` - NEW project DNA document (tech stack, conventions, governance)
+- `specs/SIAM/requirements.md` - Enhanced with REQ-XXX IDs, testable acceptance criteria
+
+**Files Modified:**
+- `features.json` - Added spec-driven metadata, requirementRefs, byteroverTags, F006 example
+- `.cursor/rules/session-management.mdc` - Added Clarification Gate (step 8)
+- `.cursor/rules/byterover-rules.mdc` - Added structured tagging format
+
+## Key Decisions
+1. PRD, Requirements, Implementation Plan = 3 distinct documents (all needed)
+2. Constitution = project DNA that AI must follow
+3. Clarification Gate = mandatory check before implementation
+4. Structured ByteRover tags = #category #feature #req-XXX format
+
+## Document Hierarchy
+```
+PRD (why/what) → Requirements (testable criteria) → Implementation Plan (how)
+                        ↓
+              features.json (linked via requirementRefs)
+```
+
+## Next Steps
+- Store patterns in ByteRover (needs auth)
+- Commit these spec-driven enhancements
+- Use clarification gate for next feature work
+
+## Warnings/Blockers
+- ByteRover MCP needs authentication for store-knowledge
+- .taskmaster/ folder is legacy (can be removed later)

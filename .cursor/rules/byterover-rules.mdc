@@ -1,0 +1,237 @@
+---
+description: ByteRover MCP integration for knowledge persistence across sessions
+alwaysApply: true
+---
+
+# ByteRover MCP Integration
+
+ByteRover provides AI memory that persists across context windows and sessions. It complements the file-based progress tracking (`claude-progress.txt`) by storing **reusable patterns and knowledge** rather than session-specific logs.
+
+## Two Tools Available
+
+### 1. `byterover-store-knowledge`
+Stores knowledge for future retrieval.
+
+**MUST use when:**
+- Learning new patterns, APIs, or architectural decisions
+- Finding error solutions or debugging techniques
+- Discovering reusable code patterns
+- Completing significant implementations
+- Finding gotchas or non-obvious behaviors
+
+### 2. `byterover-retrieve-knowledge`
+Retrieves previously stored knowledge.
+
+**MUST use when:**
+- Starting any new task or session
+- Before making architectural decisions
+- When debugging issues
+- Working in unfamiliar codebase areas
+
+---
+
+## Session-Aware Usage
+
+### At Session START
+```
+byterover-retrieve-knowledge: "recent work and patterns for [project area]"
+```
+
+This surfaces:
+- Previous solutions that might be relevant
+- Known gotchas to avoid
+- Established patterns to follow
+
+### At Session END
+```
+byterover-store-knowledge: "[Summary of what was learned]"
+```
+
+Store:
+- New patterns discovered
+- Solutions to problems encountered
+- Gotchas that should be remembered
+- Architectural decisions and rationale
+
+---
+
+## What to Store (Examples)
+
+### ✅ Good Knowledge to Store
+
+```
+# Error solutions
+"React 19 + Radix UI compose-refs infinite loop: Root cause is ref cleanup 
+returning functions. Solution: Create local compose-refs.ts with recursion 
+guard. File: src/lib/compose-refs.ts"
+
+# Patterns
+"Supabase vector search pattern for this project:
+- Use getGeminiEmbeddingService() from src/services/embedding/
+- Vector column is 'embedding' with 768 dimensions
+- Always filter by user_id for multi-tenant"
+
+# Gotchas
+"Next.js 16 + Turbopack: Having both /app and /src/app directories causes 
+404s on all routes. Solution: Rename /app to /_app_backup/"
+
+# Configuration
+"Environment setup: NEXT_PUBLIC_BYPASS_AUTH=true for local dev without 
+auth. Never use on production."
+```
+
+### ❌ Bad Knowledge to Store
+
+```
+# Too session-specific (use claude-progress.txt instead)
+"Today I worked on F003 and got halfway done"
+
+# Too vague
+"Fixed a bug"
+
+# Already in code comments
+"This function validates user input"
+```
+
+---
+
+## Knowledge Categories & Tagging (Spec-Driven)
+
+When storing, use structured tags that link to specs:
+
+### Primary Categories
+| Tag | Use For | Example |
+|-----|---------|---------|
+| `#error-solution` | Bug fixes with root cause | "React 19 compose-refs fix" |
+| `#pattern` | Reusable code patterns | "Supabase vector search pattern" |
+| `#architecture` | Design decisions | "Why services layer exists" |
+| `#gotcha` | Non-obvious behaviors | "Turbopack caching issue" |
+| `#config` | Configuration details | "Auth bypass for dev" |
+| `#integration` | System connections | "aoma-mesh-mcp Railway setup" |
+
+### Requirement Tags (Link to specs/SIAM/requirements.md)
+| Tag | Requirement |
+|-----|-------------|
+| `#req-001` | Query latency |
+| `#req-002` | Multi-source RAG |
+| `#req-006` | RLHF feedback |
+| `#req-011` | Test corpus |
+
+### Feature Tags (Link to features.json)
+| Tag | Feature Area |
+|-----|--------------|
+| `#chat` | Chat pillar |
+| `#curate` | Curate/RLHF pillar |
+| `#testing` | Automated testing pillar |
+| `#infrastructure` | Cross-cutting infra |
+
+### Structured Storage Format
+```
+byterover-store-knowledge: "[Category]: [Description]
+- Context: [Why this matters]
+- Solution: [What to do]
+- Files: [Relevant paths]
+- Refs: REQ-XXX, F00X
+- Tags: #category #feature #requirement"
+```
+
+Example:
+```
+byterover-store-knowledge: "Error Solution: React 19 + Radix compose-refs infinite loop
+- Context: Curate > Files tab crashes with 'Maximum update depth exceeded'
+- Solution: Create local compose-refs.ts with recursion guard (MAX_DEPTH=10)
+- Files: src/lib/compose-refs.ts, src/components/ui/CleanCurateTab.tsx
+- Refs: REQ-007 (Document Ingestion), F011
+- Tags: #error-solution #react19 #radix #curate #req-007"
+```
+
+---
+
+## Retrieval Strategies
+
+### Spec-Driven Retrieval (Recommended)
+When starting work on a requirement:
+```
+byterover-retrieve-knowledge: "patterns for REQ-001 query latency optimization"
+byterover-retrieve-knowledge: "gotchas for curate tab #req-007"
+```
+
+### Broad Context Gathering
+```
+byterover-retrieve-knowledge: "patterns and gotchas for React components"
+```
+
+### Specific Problem Solving
+```
+byterover-retrieve-knowledge: "solutions for Maximum update depth exceeded error"
+```
+
+### Feature-Specific
+```
+byterover-retrieve-knowledge: "how file upload works in curate tab #curate"
+```
+
+### Before Implementation (Clarification Gate)
+```
+byterover-retrieve-knowledge: "[requirement topic] acceptance criteria edge cases"
+```
+
+---
+
+## Integration with Long-Running Agent
+
+ByteRover and file-based tracking serve different purposes:
+
+| Aspect | ByteRover | claude-progress.txt |
+|--------|-----------|---------------------|
+| **Scope** | Cross-project patterns | This project's session log |
+| **Content** | Reusable knowledge | Session-specific progress |
+| **Granularity** | Patterns & solutions | What was done when |
+| **Retrieval** | Semantic search | Sequential reading |
+
+**Use BOTH together:**
+1. `claude-progress.txt` tells you WHAT was done
+2. ByteRover tells you HOW things work and known issues
+
+---
+
+## Conflict Handling
+
+If ByteRover returns a conflict resolution URL:
+- **ALWAYS display the URL to the user**
+- Let them resolve conflicting information
+- Don't guess which version is correct
+
+---
+
+## Best Practices
+
+1. **Be Specific**: Include file paths, function names, line numbers
+2. **Include Context**: Why this matters, when it applies
+3. **Include Code**: Actual snippets when relevant
+4. **Note Gotchas**: What could go wrong
+5. **Update When Wrong**: If stored knowledge is outdated, update it
+
+---
+
+## Example Session Flow
+
+```
+[Session Start]
+├── byterover-retrieve-knowledge: "curate tab implementation patterns"
+│   └── Returns: Previous solutions for similar components
+│
+[During Work]
+├── Encounter error: "Maximum update depth exceeded"
+├── byterover-retrieve-knowledge: "react infinite loop solutions"
+│   └── Returns: Known fix for Radix + React 19
+│
+[Session End]
+├── byterover-store-knowledge: "New pattern learned: 
+│   When using custom Tabs component, ensure cleanup functions 
+│   don't trigger re-renders. See HANDOFF-2025-12-16-curate-files.md"
+```
+
+---
+
+*ByteRover is your long-term memory. Use it liberally.*

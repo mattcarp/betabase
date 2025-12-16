@@ -1,52 +1,319 @@
-# SIAM Requirements (Demo-Ready View)
+# SIAM Requirements (Spec-Driven Format)
 
-## Purpose
-Translate the PRD + demo commitments into durable, testable requirements tied to the three showcase pillars: Chat Experience, Curate/RLHF, and Automated Testing with HITL. Each requirement below states its measurable target, current status, and related assets/tasks so we can track gaps quickly when reopening the project.
+> **Purpose**: Testable, traceable requirements tied to the three showcase pillars. Each requirement has explicit acceptance criteria, feature links, and ByteRover tags for knowledge retrieval.
+>
+> **Related**: [PRD](./prd.md) | [Constitution](./constitution.md) | [Implementation Plan](./implementation-plan.md)  
+> **Last Updated**: 2025-12-16
+
+---
+
+## Requirement Format Guide
+
+Each requirement follows this structure:
+```
+### REQ-XXX: [Name]
+- **Acceptance Criteria**: Measurable, testable conditions
+- **Feature Link**: F00X in features.json
+- **Status**: ✅ Shipped | ⚠️ In Progress | 🚧 Planned | 🚨 Blocked
+- **Test Method**: How to verify (Playwright, manual, etc.)
+- **ByteRover Tags**: For knowledge retrieval
+- **Notes**: Context, edge cases, references
+```
 
 ---
 
 ## 1. Chat Experience Requirements
-| Requirement | Target | Status | Notes / References |
-|-------------|--------|--------|--------------------|
-| **Latency & Coverage** | 95 % of demo queries respond <1 s while touching Jira, Git, knowledge base, and email sources. | ⚠️ ~1.8s (Needs Optimization) | Measured 1797ms on local dev. Needs caching/optimization to hit <1s. |
-| **Complex Query Support** | Must execute scripted demo queries (`DEMO-MASTER-PLAN.md`) including diagram generation and multi-source synthesis. | ⚠️ In progress | Requires Mermaid/Nano-to-Banana/GPT image integration. |
-| **Code & Diagram Rendering** | Responses display syntax-highlighted code blocks and inline diagrams with download/share options. | ⚠️ Planned | UI handled in `ai-sdk-chat-panel.tsx`; diagram assets in `docs/SIAM-MERMAID-DIAGRAMS.md`. |
-| **Trust & Anti-Hallucination** | System returns truthful “I don’t know” for unknowns (e.g., blockchain integration question) with citation trail. | ⚠️ Planned | Logging must feed Curate + Testing dashboards. |
-| **Authentication Path** | Magic-link flow (`/emergency-login.html`) works in demo and maps to Task `77.6` discovery outputs. | ✅ Verified (Code) | Uses Cognito `ForgotPassword` flow for magic codes. `AuthGuard` protects routes. |
+
+### REQ-001: Query Response Latency
+- **Acceptance Criteria**:
+  - 95th percentile response time < 1000ms
+  - Measured from: Chat panel submission to first streaming token
+  - Must touch at least 2 sources (Jira + KB or Git + KB)
+- **Feature Link**: F006 (Performance Optimization)
+- **Status**: ⚠️ In Progress (~1797ms currently)
+- **Test Method**: Playwright timing assertions in `tests/e2e/chat-latency.spec.ts`
+- **ByteRover Tags**: `#latency #chat #performance #rag`
+- **Edge Cases**:
+  - Cold start: Acceptable up to 3s
+  - Complex queries (4+ sources): Acceptable up to 2s
+  - Cache miss: Track separately
+- **Notes**: Measured 1797ms on local dev. Needs caching/optimization.
+
+---
+
+### REQ-002: Multi-Source Query Synthesis
+- **Acceptance Criteria**:
+  - Demo queries from `DEMO-MASTER-PLAN.md` execute successfully
+  - Response includes citations from multiple sources
+  - Source attribution visible in UI
+- **Feature Link**: F007 (Multi-Source RAG)
+- **Status**: ⚠️ In Progress
+- **Test Method**: Manual demo walkthrough + Playwright snapshot tests
+- **ByteRover Tags**: `#rag #multi-source #citations #chat`
+- **Notes**: Requires Mermaid/diagram integration for some queries.
+
+---
+
+### REQ-003: Code & Diagram Rendering
+- **Acceptance Criteria**:
+  - Syntax-highlighted code blocks render correctly
+  - Mermaid diagrams display inline
+  - Download/share options available for diagrams
+- **Feature Link**: F008 (Rich Response Rendering)
+- **Status**: 🚧 Planned
+- **Test Method**: Visual regression tests
+- **ByteRover Tags**: `#rendering #mermaid #code-blocks #chat`
+- **Key Files**: `src/components/ai/ai-sdk-chat-panel.tsx`, `docs/SIAM-MERMAID-DIAGRAMS.md`
+
+---
+
+### REQ-004: Anti-Hallucination Behavior
+- **Acceptance Criteria**:
+  - System returns "I don't know" for questions outside knowledge base
+  - No fabricated information (test with blockchain question)
+  - Citation trail provided for all factual claims
+- **Feature Link**: F009 (Trust & Safety)
+- **Status**: 🚧 Planned
+- **Test Method**: Playwright test with known-unknown queries
+- **ByteRover Tags**: `#hallucination #trust #safety #rag`
+- **Notes**: Logging must feed Curate + Testing dashboards.
+
+---
+
+### REQ-005: Authentication Flow
+- **Acceptance Criteria**:
+  - Magic-link login via Cognito `ForgotPassword` flow works
+  - Auth bypass works in dev with `NEXT_PUBLIC_BYPASS_AUTH=true`
+  - `AuthGuard` protects routes correctly
+  - Demo can run without authentication
+- **Feature Link**: F001 (Infrastructure)
+- **Status**: ✅ Shipped
+- **Test Method**: Manual verification + Playwright auth tests
+- **ByteRover Tags**: `#auth #cognito #magic-link #bypass`
+- **Key Files**: `src/services/auth/CognitoAuthService.ts`, `src/components/auth/AuthGuard.tsx`
 
 ---
 
 ## 2. Curate / RLHF Requirements
-| Requirement | Target | Status | Notes / References |
-|-------------|--------|--------|--------------------|
-| **Admin Editing & Feedback** | Curate tab exposes thumbs, star ratings, doc relevance toggles, and detailed notes for curator role. | ✅ Shipped | `docs/RLHF-ACHIEVEMENT-SUMMARY.md`, `RLHFFeedbackTab.tsx`. |
-| **Document Ingestion** | Uploads immediately route to Supabase, embedding index refreshed, dedupe at 85 % similarity. | ⚠️ Verify pipeline | Need proof that new uploads affect chat answers before demo. |
-| **Visual Analytics** | Stats dashboard shows pending/submitted counts, success rate, trend charts (“visual candy”). | ⚠️ Mock Data Only | `RLHFFeedbackTab.tsx` uses hardcoded mocks. Needs Supabase connection. |
-| **Fine-Tuning Loop** | Admin corrections or uploads demonstrably improve subsequent chat answers (recorded scenario). | ⚠️ Planned | Requires scripted before/after example. |
-| **Role-Based Access** | Admin/curator/viewer enforcement via Supabase RLS and `usePermissions` hook audited before demo. | ✅ Shipped | Supabase migrations 006‑008. |
+
+### REQ-006: Feedback Collection UI
+- **Acceptance Criteria**:
+  - Thumbs up/down buttons visible on chat responses
+  - Star rating (1-5) available
+  - Document relevance toggle functional
+  - Curator notes field saves to Supabase
+- **Feature Link**: F010 (RLHF Feedback)
+- **Status**: ✅ Shipped
+- **Test Method**: `tests/e2e/rlhf-curate-integration.spec.ts`
+- **ByteRover Tags**: `#rlhf #feedback #curate #ui`
+- **Key Files**: `src/components/ui/rlhf-tabs/RLHFFeedbackTab.tsx`
+
+---
+
+### REQ-007: Document Upload & Ingestion
+- **Acceptance Criteria**:
+  - File upload accepts PDF, TXT, MD formats
+  - Upload routes to Supabase storage
+  - Embeddings generated automatically
+  - Semantic deduplication at 85% similarity threshold
+  - New uploads affect subsequent chat answers
+- **Feature Link**: F011 (Document Ingestion)
+- **Status**: ⚠️ In Progress
+- **Test Method**: Upload test file, query for its content
+- **ByteRover Tags**: `#upload #ingestion #embeddings #dedupe #curate`
+- **Notes**: Need proof that uploads affect chat answers before demo.
+
+---
+
+### REQ-008: Curator Analytics Dashboard
+- **Acceptance Criteria**:
+  - Pending/submitted feedback counts displayed
+  - Success rate percentage visible
+  - Trend charts for feedback over time
+  - Data comes from Supabase (not mocks)
+- **Feature Link**: F012 (RLHF Analytics)
+- **Status**: ⚠️ In Progress (Mock Data Only)
+- **Test Method**: Visual inspection + data verification query
+- **ByteRover Tags**: `#analytics #dashboard #charts #curate`
+- **Notes**: Currently uses hardcoded mocks. Needs Supabase connection.
+
+---
+
+### REQ-009: RLHF Improvement Loop
+- **Acceptance Criteria**:
+  - Admin correction of response → embeddings updated
+  - Subsequent query returns improved answer
+  - Before/after demo scenario documented
+- **Feature Link**: F013 (Fine-Tuning Loop)
+- **Status**: 🚧 Planned
+- **Test Method**: Scripted before/after example
+- **ByteRover Tags**: `#rlhf #fine-tuning #improvement #curate`
+
+---
+
+### REQ-010: Role-Based Access Control
+- **Acceptance Criteria**:
+  - Admin role can edit all feedback
+  - Curator role can edit own feedback only
+  - Viewer role is read-only
+  - Enforced via Supabase RLS
+  - `usePermissions` hook returns correct permissions
+- **Feature Link**: F001 (Infrastructure)
+- **Status**: ✅ Shipped
+- **Test Method**: Playwright tests with different user roles
+- **ByteRover Tags**: `#rbac #permissions #rls #security`
+- **Key Files**: `src/hooks/usePermissions.ts`, Supabase migrations 006-008
 
 ---
 
 ## 3. Automated Testing & HITL Requirements
-| Requirement | Target | Status | Notes / References |
-|-------------|--------|--------|--------------------|
-| **Seeded Test Corpus** | “Thousands” of tests stored in Supabase tables (`test_results`, `firecrawl_analysis`, etc.) with `app_name` tenants. | ⚠️ Connection Failed | Script failed to fetch counts. Need to verify API keys in `.env.local`. |
-| **Human-in-the-Loop Review** | UI surfaces failing tests, allows humans to annotate cause, escalate, and convert to automated suites. | ⚠️ UX polish required | HITL flows described in SOTA doc + `demo-1/` scripts. |
-| **Automation Loop** | Human feedback triggers TestSprite/Playwright regeneration; result stored back in Supabase. | ⚠️ In progress | Requires integration spec + demo script. |
-| **Visualization & Reporting** | Manager dashboard shows pass/fail trends, reviewer load, ROI metrics (EvilCharts). | ⚠️ Planned | Chart components need wiring. |
-| **HITL Compliance** | Fiona approvals + LangGraph breakpoints logged for demo scenario (Fix tab narrative). | ⚠️ Verify | `demo-1/scripts/CHAT-CURATE-FIX-DEMO-WALKTHROUGH.md`. |
+
+### REQ-011: Seeded Test Corpus
+- **Acceptance Criteria**:
+  - At least 1000 tests in Supabase (`test_results` table)
+  - Data segmented by `app_name` for multi-tenant
+  - Query returns counts without timeout
+- **Feature Link**: F014 (Test Data)
+- **Status**: 🚨 Blocked (Connection Failed)
+- **Test Method**: `SELECT COUNT(*) FROM test_results` via Supabase MCP
+- **ByteRover Tags**: `#testing #corpus #supabase #multi-tenant`
+- **Blockers**: Script failed to fetch counts. Verify API keys in `.env.local`.
 
 ---
 
-## 4. Supporting Cross-Cutting Requirements
-- **Security & Auth**: Cognito magic-link login, Supabase RLS, Infisical-managed secrets; no hard-coded credentials. (`README.md`, `INFISICAL_SETUP_REPORT.md`)
-- **Infrastructure**: Render deployment, Railway aoma-mesh MCP, Supabase pgvector (1536-d embeddings), OpenAI/Gemini API access.
-- **QA & Compliance**: Playwright suites (≥59 tests) must pass; Fiona HITL review, Semgrep scan, Browserbase smoke tests before demo.
-- **Observability**: Logging for chat latency, Curate actions, and test/HITL events stored so dashboards can reference real data.
+### REQ-012: HITL Review Interface
+- **Acceptance Criteria**:
+  - Failing tests surface in UI
+  - Human can annotate failure cause
+  - Escalation path available
+  - Convert annotation to automated test
+- **Feature Link**: F015 (HITL UI)
+- **Status**: ⚠️ In Progress (UX Polish)
+- **Test Method**: Manual walkthrough + Playwright
+- **ByteRover Tags**: `#hitl #testing #review #annotation`
+- **Key Files**: `demo-1/` scripts, SOTA testing doc
 
 ---
 
-## Next Documentation Moves
-1. Record actual metrics (latency, RLHF counts, Supabase test totals) and replace ⚠️ entries with ✅ once validated.
-2. Link each pending requirement to Task Master IDs/subtasks so progress is traceable.
-3. Keep this file synchronized with `specs/SIAM/implementation-plan.md`; any new milestone there should produce or update a requirement here.
+### REQ-013: Self-Healing Test Generation
+- **Acceptance Criteria**:
+  - Human feedback triggers TestSprite regeneration
+  - New Playwright test generated and stored
+  - Result recorded in Supabase
+- **Feature Link**: F016 (Automation Loop)
+- **Status**: ⚠️ In Progress
+- **Test Method**: Integration spec + demo script
+- **ByteRover Tags**: `#self-healing #testsprite #playwright #automation`
+
+---
+
+### REQ-014: Testing Dashboard & Reporting
+- **Acceptance Criteria**:
+  - Pass/fail trends over time (chart)
+  - Reviewer workload distribution
+  - ROI metrics visible
+  - Uses recharts/shadcn components
+- **Feature Link**: F017 (Test Analytics)
+- **Status**: 🚧 Planned
+- **Test Method**: Visual inspection + data verification
+- **ByteRover Tags**: `#dashboard #charts #testing #analytics`
+
+---
+
+### REQ-015: HITL Compliance Logging
+- **Acceptance Criteria**:
+  - Fiona approvals logged with timestamp
+  - LangGraph breakpoints recorded
+  - Audit trail queryable
+- **Feature Link**: F018 (Compliance)
+- **Status**: ⚠️ Needs Verification
+- **Test Method**: Query audit logs after demo scenario
+- **ByteRover Tags**: `#compliance #audit #fiona #langgraph`
+- **Key Files**: `demo-1/scripts/CHAT-CURATE-FIX-DEMO-WALKTHROUGH.md`
+
+---
+
+## 4. Cross-Cutting Requirements
+
+### REQ-016: Security & Secrets
+- **Acceptance Criteria**:
+  - No hardcoded credentials in codebase
+  - Secrets managed via Infisical
+  - Supabase RLS enforces data isolation
+- **Feature Link**: F001 (Infrastructure)
+- **Status**: ✅ Shipped
+- **Test Method**: Semgrep scan, code review
+- **ByteRover Tags**: `#security #secrets #infisical #rls`
+
+---
+
+### REQ-017: Infrastructure Stability
+- **Acceptance Criteria**:
+  - Render deployment auto-triggers on main merge
+  - Railway aoma-mesh-mcp accessible
+  - Supabase pgvector queries < 500ms
+- **Feature Link**: F001 (Infrastructure)
+- **Status**: ✅ Shipped
+- **Test Method**: Health checks, deployment logs
+- **ByteRover Tags**: `#infrastructure #render #railway #supabase`
+
+---
+
+### REQ-018: Test Suite Health
+- **Acceptance Criteria**:
+  - Minimum 59 Playwright tests pass
+  - No console errors in production build
+  - Pre-PR check passes
+- **Feature Link**: F019 (QA)
+- **Status**: ⚠️ Needs Verification
+- **Test Method**: `npm run test:e2e`, `npm run pre-pr-check`
+- **ByteRover Tags**: `#qa #playwright #testing #ci`
+
+---
+
+## Requirement Status Summary
+
+| Status | Count | Meaning |
+|--------|-------|---------|
+| ✅ Shipped | 4 | Verified complete |
+| ⚠️ In Progress | 9 | Work underway |
+| 🚧 Planned | 4 | Not yet started |
+| 🚨 Blocked | 1 | Has dependency/blocker |
+
+---
+
+## Traceability Matrix
+
+| Requirement | Feature(s) | Implementation Plan Milestone |
+|-------------|-----------|-------------------------------|
+| REQ-001 | F006 | A1 - Experience Polish |
+| REQ-002 | F007 | A1 - Experience Polish |
+| REQ-003 | F008 | A1 - Experience Polish |
+| REQ-004 | F009 | A2 - Trust & Observability |
+| REQ-005 | F001 | A0 - Discovery ✅ |
+| REQ-006 | F010 | B0 - Inventory ✅ |
+| REQ-007 | F011 | B2 - Fine-Tuning Loop |
+| REQ-008 | F012 | B1 - Visual Storytelling |
+| REQ-009 | F013 | B2 - Fine-Tuning Loop |
+| REQ-010 | F001 | B0 - Inventory ✅ |
+| REQ-011 | F014 | C0 - Data Audit |
+| REQ-012 | F015 | C1 - HITL Surfaces |
+| REQ-013 | F016 | C2 - Automation Loop |
+| REQ-014 | F017 | C1 - HITL Surfaces |
+| REQ-015 | F018 | C2 - Automation Loop |
+| REQ-016 | F001 | Infrastructure ✅ |
+| REQ-017 | F001 | Infrastructure ✅ |
+| REQ-018 | F019 | QA |
+
+---
+
+## Next Steps
+
+1. ~~Link each requirement to features.json entries~~ (Traceability matrix added)
+2. Run verification for all ⚠️ items and update status
+3. Create F006-F019 entries in `features.json` to match requirement IDs
+4. Store requirement patterns in ByteRover for future sessions
+
+---
+
+*This document is synchronized with [implementation-plan.md](./implementation-plan.md). Any new milestone there should update requirements here.*

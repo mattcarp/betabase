@@ -2,14 +2,33 @@
   "_meta": {
     "description": "SIAM Feature Specifications - Long-Running Agent Task Tracker",
     "created": "2025-12-04",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "rules": [
       "DO NOT remove or edit existing features without explicit user approval",
       "DO NOT mark a feature as passes:true without running verification tests",
       "Each feature must be completed one at a time",
       "Update claude-progress.txt after completing each feature",
-      "Commit changes to git after each feature completion"
-    ]
+      "Commit changes to git after each feature completion",
+      "NEW: Link features to requirements via requirementRefs array",
+      "NEW: Include byteroverTags for knowledge retrieval"
+    ],
+    "specDriven": {
+      "requirementsFile": "specs/SIAM/requirements.md",
+      "constitutionFile": "specs/SIAM/constitution.md",
+      "featureTemplate": {
+        "id": "F0XX",
+        "category": "chat|curate|testing|infrastructure|documentation|data-extraction",
+        "priority": 1,
+        "name": "Feature Name",
+        "description": "What this feature does",
+        "requirementRefs": ["REQ-001", "REQ-002"],
+        "byteroverTags": "#category #feature",
+        "passes": false,
+        "verification": ["Acceptance criteria from requirements.md"],
+        "completedAt": null,
+        "notes": "Additional context"
+      }
+    }
   },
   "features": [
     {
@@ -93,6 +112,24 @@
       ],
       "completedAt": null,
       "notes": "Alexandria is the Sony docs system - may be Confluence-based"
+    },
+    {
+      "id": "F006",
+      "category": "chat",
+      "priority": 1,
+      "name": "Query Latency Optimization",
+      "description": "Reduce chat response time from ~1.8s to <1s for 95% of queries",
+      "requirementRefs": ["REQ-001"],
+      "byteroverTags": "#latency #chat #performance #rag",
+      "passes": false,
+      "verification": [
+        "95th percentile response time < 1000ms",
+        "Measured from chat submission to first streaming token",
+        "Must touch at least 2 sources (Jira + KB or Git + KB)",
+        "Playwright timing assertions pass"
+      ],
+      "completedAt": null,
+      "notes": "Currently at 1797ms. Needs caching/optimization. See REQ-001 for full acceptance criteria."
     }
   ],
   "backlog": [

@@ -1,0 +1,236 @@
+---
+description: Session start and end protocols for autonomous long-running work
+globs: **/*
+alwaysApply: true
+---
+
+# Session Management Protocol
+
+This rule ensures consistent session hygiene for long-running autonomous work.
+
+## Automatic Session Detection
+
+**You are in a NEW session if:**
+- `claude-progress.txt` hasn't been updated in the current context
+- You don't have memory of recent work
+- User explicitly says "new session" or "picking up where we left off"
+
+**You are in a CONTINUING session if:**
+- You have recent context from current conversation
+- You're in the middle of implementing something
+
+---
+
+## 🚀 SESSION START CHECKLIST
+
+When starting a new session, execute these steps IN ORDER:
+
+### 1. Orient Yourself
+```bash
+pwd
+ls -la
+```
+
+### 2. Read Progress History
+```
+Read: claude-progress.txt (last 3 entries)
+Read: git log --oneline -10
+```
+
+### 3. Check for Handoff Files
+```bash
+ls -la HANDOFF-*.md 2>/dev/null | head -5
+```
+If recent handoff exists, READ IT FIRST - it contains critical context.
+
+### 4. Query ByteRover for Context
+```
+byterover-retrieve-knowledge: "recent work patterns and blockers"
+```
+
+### 5. Identify Current State
+- What was last worked on?
+- Was it completed or in-progress?
+- Are there blockers documented?
+
+### 6. Run Smoke Test
+```bash
+# For this project (Next.js):
+curl -s http://localhost:3000/api/health 2>/dev/null || echo "Server not running"
+```
+
+### 7. Choose ONE Task
+From `features.json`, select the highest-priority feature where `passes: false`.
+
+### 8. Run Clarification Gate (NEW - Spec-Driven)
+Before implementing, verify requirements are clear:
+```
+1. Read: specs/SIAM/requirements.md for the related REQ-XXX
+2. Check: Are acceptance criteria testable?
+3. Identify: Any ambiguities or missing edge cases?
+4. Document: If clarifications needed, update the spec FIRST
+5. Retrieve: byterover-retrieve-knowledge for "[requirement topic]"
+```
+
+**Only proceed to coding when requirements are unambiguous.**
+
+---
+
+## 🏁 SESSION END CHECKLIST
+
+Before ending a session, complete these steps:
+
+### 1. Verify Your Changes Work
+```bash
+# Run relevant tests
+pnpm test 2>/dev/null || echo "No tests configured"
+
+# Manual verification
+curl http://localhost:3000/[relevant-endpoint]
+```
+
+### 2. Commit Your Changes
+```bash
+git add .
+git status  # Review what's being committed
+git commit -m "feat(area): Description of what was done
+
+- Specific change 1
+- Specific change 2
+- Files: list key files modified"
+```
+
+### 3. Update Progress File
+Add entry to `claude-progress.txt`:
+```
+---
+Session: [CURRENT DATE AND TIME]
+Agent: Coding
+Duration: ~[ESTIMATE]m
+
+## Summary
+- [What you accomplished]
+- [Key decisions]
+
+## Next Steps
+- [What should happen next]
+
+## Warnings/Blockers
+- [Any issues or gotchas]
+---
+```
+
+### 4. Update features.json (if applicable)
+Only if you VERIFIED a feature works end-to-end:
+```json
+{
+  "passes": true,
+  "completedAt": "[ISO timestamp]",
+  "notes": "[What was done]"
+}
+```
+
+### 5. Store Knowledge in ByteRover
+```
+byterover-store-knowledge: "[Any patterns, solutions, or gotchas learned]"
+```
+
+### 6. Create Handoff (if stopping mid-feature)
+If you're stopping in the middle of something complex:
+```
+Create: HANDOFF-[DATE]-[topic].md
+```
+
+---
+
+## Handoff File Template
+
+```markdown
+# Session Handoff - [Topic]
+
+## Current Task Status
+**Task**: [What you were working on]
+**Status**: [IN PROGRESS / BLOCKED / NEEDS REVIEW]
+
+## Problem Summary
+[Brief description of the problem/feature]
+
+## What Was Tried
+
+### Attempt 1: [Approach name]
+- What you did
+- Why it didn't work (if applicable)
+- Files modified: `path/to/file.ts:line-number`
+
+### Attempt 2: [Approach name]
+...
+
+## Next Steps to Try
+
+### Option 1: [Most promising approach]
+[Specific steps with file paths]
+
+### Option 2: [Alternative approach]
+[Specific steps]
+
+## Key Files
+| File | Purpose |
+|------|---------|
+| `path/to/file.ts` | [Why it's relevant] |
+
+## Dev Server
+- Port: [3000 or whatever]
+- Status: [Running / Stopped]
+
+---
+*Last updated: [timestamp]*
+```
+
+---
+
+## Session State Indicators
+
+Use these emoji in `claude-progress.txt` for quick scanning:
+
+| Emoji | Meaning |
+|-------|---------|
+| ✅ | Completed and verified |
+| 🔧 | Fixed a bug |
+| 🚧 | Work in progress |
+| 🚨 | Blocking issue |
+| ⏸️ | Paused/deferred |
+| 📋 | Documentation added |
+
+---
+
+## Recovery Procedures
+
+### If You Find a Broken Codebase
+1. Check `git log` for recent changes
+2. Check `claude-progress.txt` for what was attempted
+3. Run `git diff HEAD~1` to see last changes
+4. Consider `git revert HEAD` if last commit broke things
+5. Document the issue before fixing
+
+### If You Don't Know What To Work On
+1. Read `features.json` - find highest priority `passes: false`
+2. Read `claude-progress.txt` - see "Next Steps" from last session
+3. Check for `HANDOFF-*.md` files
+4. Ask user if still unclear
+
+### If Tests Are Failing
+1. Don't start new features
+2. Fix the failing tests first
+3. Document what broke and why
+4. Then proceed with new work
+
+---
+
+## Integration Points
+
+This rule works with:
+- **[long-running-agent.mdc](mdc:.cursor/rules/long-running-agent.mdc)**: Core architecture
+- **[byterover-rules.mdc](mdc:.cursor/rules/byterover-rules.mdc)**: Knowledge persistence
+- **claude-progress.txt**: Session history
+- **features.json**: Feature tracking
+- **HANDOFF-*.md**: Complex work handoffs
