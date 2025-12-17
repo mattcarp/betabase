@@ -476,3 +476,36 @@ Duration: ~45m
 ## Warnings/Blockers
 - 1 failed upload: ffmpeg Documentation.pdf (likely corrupted/empty)
 ---
+
+---
+Session: 2025-12-17 ~21:30
+Agent: Coding
+Duration: ~45m
+
+## Summary
+- ✅ Audited all vector store data sources for embedding quality and chunking
+- ✅ Git code (4,247 docs): Confirmed using Gemini embeddings, avg 1,666 chars - OPTIMAL
+- ✅ Knowledge docs (1,191 docs): Using Gemini, properly chunked - OPTIMAL
+- ⚠️ Jira (15,085 tickets): Only titles stored (~78 chars), unknown embeddings - NEEDS WORK
+- ❌ Firecrawl (96 docs): Captured raw CSS/HTML garbage, DELETED
+- Added B003 (Re-crawl AOMA with proper config) to backlog
+- Added B004 (Re-ingest Jira with full content) to backlog
+- Stored Firecrawl best practices in ByteRover
+
+## Vector Store Status After Session
+| Source     | Count  | Status           |
+|------------|--------|------------------|
+| Git        | 4,247  | ✅ Optimal       |
+| Knowledge  | 1,191  | ✅ Optimal       |
+| Jira       | 15,085 | ⚠️ Titles only  |
+| Firecrawl  | 0      | 🗑️ Deleted      |
+
+## Next Steps
+- When VPN available: Re-crawl AOMA with proper Firecrawl config (B003)
+- When VPN available: Re-extract Jira with full ticket content (B004)
+- Consider re-embedding existing Jira titles with Gemini (quick win)
+
+## Warnings/Blockers
+- No VPN access currently - can't re-crawl AOMA or access Jira API
+- Jira tickets are title-only, limiting RAG quality for ticket-related queries
+---
