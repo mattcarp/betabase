@@ -424,7 +424,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                         <CardContent className="space-y-2">
                           <div>
                             <span className="text-xs text-zinc-500">Reasoning:</span>
-                            <p className="text-xs text-zinc-300 mt-1">{step.reasoning}</p>
+                            <p className="text-xs text-zinc-300 mt-1">{step.reasoningText}</p>
                           </div>
                           <div>
                             <span className="text-xs text-zinc-500">Confidence:</span>

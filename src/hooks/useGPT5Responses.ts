@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 export interface UseGPT5ResponsesOptions {
   systemPrompt?: string;
   temperature?: number;
-  maxTokens?: number;
+  maxOutputTokens?: number;
   reasoningEffort?: "minimal" | "low" | "medium" | "high";
   verbosity?: "low" | "medium" | "high";
   tools?: string[];
@@ -80,7 +80,7 @@ export function useGPT5Responses(options: UseGPT5ResponsesOptions = {}) {
             reasoningEffort: options.reasoningEffort || "medium",
             verbosity: options.verbosity || "medium",
             temperature: options.temperature || 0.7,
-            maxOutputTokens: options.maxTokens || 4096,
+            maxOutputTokens: options.maxOutputTokens || 4096,
             tools: options.tools || ["web_search", "file_search"],
             vectorStoreIds: options.vectorStoreIds || ["vs_3dqHL3Wcmt1WrUof0qS4UQqo"],
           }),

@@ -24,7 +24,7 @@ export type AIModel =
 interface ModelConfig {
   model: AIModel;
   temperature: number;
-  maxTokens: number;
+  maxOutputTokens: number;
   description: string;
   costTier: "economy" | "standard" | "premium" | "ultra";
 }
@@ -36,56 +36,56 @@ class ModelConfigService {
     chat: {
       model: (process.env.NEXT_PUBLIC_DEFAULT_CHAT_MODEL as AIModel) || "gemini-3-pro-preview",
       temperature: 0.9,
-      maxTokens: 8000,
+      maxOutputTokens: 8000,
       description: "Fast conversational RAG with Gemini 3 Pro",
       costTier: "standard",
     },
     "premium-chat": {
       model: "gemini-3-pro-preview",
       temperature: 0.8,
-      maxTokens: 12000,
+      maxOutputTokens: 12000,
       description: "Premium RAG synthesis with Gemini 3 Pro",
       costTier: "standard",
     },
-    reasoning: {
+    reasoningText: {
       model: "gemini-3-pro-preview",
       temperature: 0.7,
-      maxTokens: 10000,
+      maxOutputTokens: 10000,
       description: "Deep reasoning and analysis with Gemini 3 Pro",
       costTier: "standard",
     },
     "code-generation": {
       model: "gemini-3-pro-preview",
       temperature: 0.8,
-      maxTokens: 8000,
+      maxOutputTokens: 8000,
       description: "Code generation optimized with Gemini 3 Pro",
       costTier: "standard",
     },
     "test-generation": {
       model: "gemini-3-pro-preview",
       temperature: 0.5,
-      maxTokens: 4000,
+      maxOutputTokens: 4000,
       description: "Test generation with Gemini 3 Pro",
       costTier: "standard",
     },
     "quick-response": {
       model: "gemini-3-pro-preview",
       temperature: 0.7,
-      maxTokens: 2000,
+      maxOutputTokens: 2000,
       description: "Fast RAG responses with Gemini 3 Pro",
       costTier: "standard",
     },
     vision: {
       model: "gemini-3-pro-preview",
       temperature: 0.7,
-      maxTokens: 4000,
+      maxOutputTokens: 4000,
       description: "Multimodal visual analysis with Gemini 3 Pro",
       costTier: "standard",
     },
     "aoma-query": {
       model: "gemini-3-pro-preview",
       temperature: 0.7, // Lower temp for factual accuracy in RAG
-      maxTokens: 8000,
+      maxOutputTokens: 8000,
       description: "AOMA RAG with Gemini 3 Pro (frontier quality)",
       costTier: "standard",
     },
@@ -118,20 +118,20 @@ class ModelConfigService {
   getModelWithConfig(useCase: ModelUseCase): {
     model: AIModel;
     temperature: number;
-    maxTokens: number;
+    maxOutputTokens: number;
   } {
     const config = this.modelConfigs[useCase];
     if (!config) {
       return {
         model: this.fallbackModel,
         temperature: 0.7,
-        maxTokens: 4000,
+        maxOutputTokens: 4000,
       };
     }
     return {
       model: config.model,
       temperature: config.temperature,
-      maxTokens: config.maxTokens,
+      maxOutputTokens: config.maxOutputTokens,
     };
   }
 

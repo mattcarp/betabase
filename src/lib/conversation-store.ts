@@ -9,7 +9,7 @@ export interface Message {
   content: string;
   timestamp: Date;
   citations?: Citation[];
-  reasoning?: string;
+  reasoningText?: string;
   tools?: ToolInvocation[];
 }
 

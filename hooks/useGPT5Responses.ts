@@ -25,7 +25,7 @@ interface UseGPT5ResponsesOptions {
   reasoningEffort?: "minimal" | "low" | "medium" | "high";
   verbosity?: "low" | "medium" | "high";
   temperature?: number;
-  maxTokens?: number;
+  maxOutputTokens?: number;
   onError?: (error: Error) => void;
   onFinish?: (message: Message) => void;
 }
@@ -91,7 +91,7 @@ export function useGPT5Responses(options: UseGPT5ResponsesOptions = {}) {
             reasoningEffort: options.reasoningEffort || "medium",
             verbosity: options.verbosity || "medium",
             temperature: options.temperature || 0.7,
-            maxOutputTokens: options.maxTokens || 4096,
+            maxOutputTokens: options.maxOutputTokens || 4096,
             tools: ["web_search", "file_search"],
           }),
           signal: abortControllerRef.current.signal,

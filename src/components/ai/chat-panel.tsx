@@ -1,6 +1,6 @@
 "use client";
 
-import { useChat } from "@ai-sdk/react";
+import { useChat, DefaultChatTransport } from "@ai-sdk/react";
 import { useState, useEffect } from "react";
 import { cn } from "../../lib/utils";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
@@ -67,10 +67,21 @@ export function ChatPanel({
 }: ChatPanelProps) {
   const [showSuggestions, setShowSuggestions] = useState(true);
 
-  const { messages, input, isLoading, error, reload, stop, append, setMessages, setInput } =
+  const [input, setInput] = useState('');
+
+  const {
+    messages,
+    isLoading,
+    error,
+    reload,
+    stop,
+    append,
+    setMessages,
+    setInput
+  } =
     useChat({
-      api,
       initialMessages,
+
       onError: (error: Error) => {
         // Network failures are expected during rapid navigation/tests - fail silently
         if (error instanceof TypeError && error.message === "Failed to fetch") {
@@ -80,12 +91,17 @@ export function ChatPanel({
         console.warn("Chat error:", error);
         onError?.(error);
       },
+
       onFinish: () => {
         // Check if we've reached max messages
         if (maxMessages && messages.length >= maxMessages) {
           console.warn(`Maximum messages (${maxMessages}) reached`);
         }
       },
+
+      transport: new DefaultChatTransport({
+        api: api
+      })
     });
 
   // Hide suggestions after first message

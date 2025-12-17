@@ -2,7 +2,7 @@ import { generateText } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { z } from "zod";
+import { z } from 'zod/v3';
 
 // Allow up to 30 seconds for image generation
 export const maxDuration = 30;

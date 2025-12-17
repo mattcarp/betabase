@@ -124,7 +124,7 @@ describe("ContextAwareRetrieval", () => {
     test("should parse valid JSON response", () => {
       const responseText = JSON.stringify({
         enhancedQuery: "detailed explanation of AOMA asset management workflow",
-        reasoning: "Added specificity based on conversation context about workflows",
+        reasoningText: "Added specificity based on conversation context about workflows",
       });
 
       const parsed = JSON.parse(responseText);
@@ -132,7 +132,7 @@ describe("ContextAwareRetrieval", () => {
       expect(parsed.enhancedQuery).toBe(
         "detailed explanation of AOMA asset management workflow"
       );
-      expect(parsed.reasoning).toContain("specificity");
+      expect(parsed.reasoningText).toContain("specificity");
     });
 
     test("should extract JSON from markdown code blocks", () => {
@@ -151,7 +151,7 @@ describe("ContextAwareRetrieval", () => {
       const parsed = JSON.parse(jsonText);
 
       expect(parsed.enhancedQuery).toBe("enhanced query here");
-      expect(parsed.reasoning).toBe("explanation here");
+      expect(parsed.reasoningText).toBe("explanation here");
     });
 
     test("should handle malformed JSON gracefully", () => {

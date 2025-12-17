@@ -478,6 +478,20 @@ Be helpful, concise, and professional in your responses.`;
                         const { updateConversation, getConversation } = useConversationStore.getState();
                         const currentConv = getConversation(activeConversationId);
                         
+                        // Safety check: Don't overwrite stored messages if we would lose data
+                        // This prevents filtered initial messages from overwriting complete conversations
+                        const storedMsgCount = currentConv?.messages?.length || 0;
+                        const hasStoredAssistant = currentConv?.messages?.some((m: any) => m.role === 'assistant');
+                        const newHasAssistant = messages.some((m: any) => m.role === 'assistant');
+                        
+                        if (storedMsgCount > messages.length) {
+                          return; // Would lose messages - skip this update
+                        }
+                        
+                        if (hasStoredAssistant && !newHasAssistant && messages.length <= storedMsgCount) {
+                          return; // Would lose assistant message - skip this update
+                        }
+                        
                         // Helper to extract message content from AI SDK v4 or v5 format
                         const getMessageContent = (m: any): string | undefined => {
                           // AI SDK v5: parts[0].text

@@ -86,7 +86,7 @@ interface ToolCall {
 interface OrchestrationResult {
   tools: ToolCall[];
   strategy: "single" | "parallel" | "sequential";
-  reasoning: string;
+  reasoningText: string;
 }
 
 export class AOMAOrchestrator {
@@ -387,7 +387,7 @@ export class AOMAOrchestrator {
     return {
       tools: selectedTools,
       strategy,
-      reasoning,
+      reasoningText,
     };
   }
 
@@ -672,7 +672,7 @@ export class AOMAOrchestrator {
       metadata: {
         orchestration: orchestration.strategy,
         tools_used: orchestration.tools.map((t) => t.tool),
-        reasoning: orchestration.reasoning,
+        reasoningText: orchestration.reasoningText,
       },
     };
 

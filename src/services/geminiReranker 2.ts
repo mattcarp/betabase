@@ -161,7 +161,7 @@ export class GeminiReranker {
       return documents.map((doc, idx) => ({
         ...doc,
         rerankScore: scores[idx]?.relevance_score / 100 || 0, // Normalize to 0-1
-        rerankReasoning: scores[idx]?.reasoning,
+        rerankReasoning: scores[idx]?.reasoningText,
       }));
     } catch (error) {
       console.error("Error re-ranking batch:", error);
@@ -214,7 +214,7 @@ Respond with ONLY valid JSON in this exact format:
   private parseRerankingResponse(
     responseText: string,
     expectedCount: number
-  ): Array<{ doc_id: number; relevance_score: number; reasoning: string }> {
+  ): Array<{ doc_id: number; relevance_score: number; reasoningText: string }> {
     try {
       // Extract JSON from markdown code blocks if present
       let jsonText = responseText.trim();
@@ -238,7 +238,7 @@ Respond with ONLY valid JSON in this exact format:
         .map((_, idx) => ({
           doc_id: idx + 1,
           relevance_score: 50,
-          reasoning: "Parse error - using default score",
+          reasoningText: "Parse error - using default score",
         }));
     }
   }

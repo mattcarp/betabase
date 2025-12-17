@@ -16,7 +16,7 @@ export default function GPT5Chat() {
     reasoningEffort: "medium" as "minimal" | "low" | "medium" | "high",
     verbosity: "medium" as "low" | "medium" | "high",
     temperature: 0.7,
-    maxTokens: 4096,
+    maxOutputTokens: 4096,
   });
 
   const {
@@ -139,14 +139,14 @@ export default function GPT5Chat() {
                 <input
                   type="number"
                   className="w-full mt-2 p-2 border rounded"
-                  value={settings.maxTokens}
+                  value={settings.maxOutputTokens}
                   min="100"
                   max="128000"
                   step="100"
                   onChange={(e) =>
                     setSettings({
                       ...settings,
-                      maxTokens: parseInt(e.target.value),
+                      maxOutputTokens: parseInt(e.target.value),
                     })
                   }
                 />

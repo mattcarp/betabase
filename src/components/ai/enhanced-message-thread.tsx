@@ -43,6 +43,7 @@ export function EnhancedMessageThread({
           const toolParts = parts.filter((p: any) => p.type === "tool");
           const sourceParts = parts.filter((p: any) => p.type === "source");
 
+          /* FIXME(@ai-sdk-upgrade-v5): The `experimental_attachments` property has been replaced with the parts array. Please manually migrate following https://ai-sdk.dev/docs/migration-guides/migration-guide-5-0#attachments--file-parts */
           return (
             <motion.div
               key={message.id || index}

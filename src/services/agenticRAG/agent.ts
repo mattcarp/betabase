@@ -16,7 +16,7 @@ export interface AgentDecision {
   toolArgs: Record<string, any>;
   result: any;
   confidence: number;
-  reasoning: string;
+  reasoningText: string;
   timestamp: string;
 }
 
@@ -121,7 +121,7 @@ export class AgenticRAGAgent {
       confidence = confidenceDecision.confidence;
 
       console.log(`   Confidence: ${(confidence * 100).toFixed(1)}%`);
-      console.log(`   Reasoning: ${confidenceDecision.reasoning}`);
+      console.log(`   Reasoning: ${confidenceDecision.reasoningText}`);
 
       if (confidence >= targetConfidence) {
         console.log(`   ✅ Target confidence reached!`);
@@ -131,7 +131,7 @@ export class AgenticRAGAgent {
       // If not confident and not last iteration, adjust strategy
       if (iteration < maxIterations) {
         console.log(`   🔄 Adjusting strategy...`);
-        query = await this.improveQuery(query, confidenceDecision.reasoning);
+        query = await this.improveQuery(query, confidenceDecision.reasoningText);
         console.log(`   Enhanced Query: "${query}"`);
       }
     }
@@ -191,7 +191,7 @@ export class AgenticRAGAgent {
       toolArgs,
       result: result.result,
       confidence: 0,
-      reasoning: `Executed vector search (iteration ${iteration})`,
+      reasoningText: `Executed vector search (iteration ${iteration})`,
       timestamp: new Date().toISOString(),
     };
   }
@@ -217,7 +217,7 @@ export class AgenticRAGAgent {
       toolArgs,
       result: result.result,
       confidence: result.result?.confidence || 0,
-      reasoning: result.result?.reasoning || "Confidence check completed",
+      reasoningText: result.result?.reasoningText || "Confidence check completed",
       timestamp: new Date().toISOString(),
     };
   }

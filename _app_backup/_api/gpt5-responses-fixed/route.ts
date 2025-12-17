@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
       conversationId,
       tools: _tools = ["web_search", "file_search"],
       temperature = 0.7,
-      maxTokens = 4096,
+      maxOutputTokens = 4096,
     } = await req.json();
 
     // Get or create conversation history

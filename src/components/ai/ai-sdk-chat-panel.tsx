@@ -1,8 +1,8 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-// import { DefaultChatTransport } from "ai"; // Removed - not available in current ai version
-import { useState, useRef, useEffect, useCallback } from "react";
+// DefaultChatTransport is not available in @ai-sdk/react v3.x
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../../lib/utils";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
@@ -30,6 +30,7 @@ import {
   MicOff,
   Volume2,
   VolumeX,
+  FileIcon,
 } from "lucide-react";
 import { Alert, AlertDescription } from "../ui/alert";
 import { motion, AnimatePresence } from "framer-motion";
@@ -152,6 +153,71 @@ import {
   WebPreviewBody,
 } from "../ai-elements/web-preview";
 import { FileUpload } from "../ai-elements/file-upload";
+// New AI Elements from gap analysis
+import {
+  Plan,
+  PlanHeader,
+  PlanTitle,
+  PlanDescription,
+  PlanContent,
+  PlanFooter,
+  PlanTrigger,
+  PlanAction,
+} from "../ai-elements/plan";
+import {
+  Context,
+  ContextTrigger,
+  ContextContent,
+  ContextContentHeader,
+  ContextContentBody,
+  ContextContentFooter,
+  ContextInputUsage,
+  ContextOutputUsage,
+  ContextReasoningUsage,
+  ContextCacheUsage,
+} from "../ai-elements/context";
+import {
+  ModelSelector,
+  ModelSelectorTrigger,
+  ModelSelectorContent,
+  ModelSelectorInput,
+  ModelSelectorList,
+  ModelSelectorEmpty,
+  ModelSelectorGroup,
+  ModelSelectorItem,
+  ModelSelectorLogo,
+  ModelSelectorName,
+  ModelSelectorSeparator,
+} from "../ai-elements/model-selector";
+import {
+  Confirmation,
+  ConfirmationTitle,
+  ConfirmationRequest,
+  ConfirmationAccepted,
+  ConfirmationRejected,
+  ConfirmationActions,
+  ConfirmationAction,
+} from "../ai-elements/confirmation";
+import {
+  Queue,
+  QueueSection,
+  QueueSectionTrigger,
+  QueueSectionLabel,
+  QueueSectionContent,
+  QueueList,
+  QueueItem,
+  QueueItemIndicator,
+  QueueItemContent,
+  QueueItemDescription,
+  QueueItemActions,
+  QueueItemAction,
+} from "../ai-elements/queue";
+import {
+  Checkpoint,
+  CheckpointIcon,
+  CheckpointTrigger,
+} from "../ai-elements/checkpoint";
+import { BookmarkIcon, ListTodoIcon, GaugeIcon, Trash2Icon, ChevronsUpDownIcon } from "lucide-react";
 
 interface AiSdkChatPanelProps {
   api?: string;
@@ -230,6 +296,42 @@ export function AiSdkChatPanel({
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
   const [loadingSeconds, setLoadingSeconds] = useState(0); // Track seconds elapsed during loading
   const [pendingRagMetadata, setPendingRagMetadata] = useState<any>(null); // RAG metadata from response headers
+
+  // New AI Elements state
+  const [modelSelectorOpen, setModelSelectorOpen] = useState(false);
+  const [tokenUsage, setTokenUsage] = useState({
+    usedTokens: 0,
+    maxOutputTokens: 128000, // Default for most models
+    inputTokens: 0,
+    outputTokens: 0,
+    reasoningTokens: 0,
+    cachedTokens: 0,
+  });
+  const [queueItems, setQueueItems] = useState<Array<{
+    id: string;
+    title: string;
+    description?: string;
+    status: "pending" | "completed";
+  }>>([]);
+  const [checkpoints, setCheckpoints] = useState<Array<{
+    id: string;
+    messageIndex: number;
+    label: string;
+    timestamp: Date;
+  }>>([]);
+  const [pendingConfirmation, setPendingConfirmation] = useState<{
+    id: string;
+    toolName: string;
+    description: string;
+    state: "approval-requested" | "approval-responded" | "output-available";
+    approved?: boolean;
+  } | null>(null);
+  const [activePlan, setActivePlan] = useState<{
+    title: string;
+    description: string;
+    steps: Array<{ label: string; status: "pending" | "active" | "complete" }>;
+    isStreaming: boolean;
+  } | null>(null);
 
   // RLHF Feedback tracking
   const [feedbackGiven, setFeedbackGiven] = useState<Record<string, "up" | "down" | null>>({});
@@ -408,15 +510,22 @@ export function AiSdkChatPanel({
     });
   }, [currentApiEndpoint, selectedModel]); // Only log when endpoint or model changes
 
+  // Filter initial messages - accept AI SDK v4 (content) or v5/v6 (parts) format
+  const filteredInitialMessages = (initialMessages || []).filter((m) => {
+    const v6Content = m.parts?.[0]?.text;
+    const v4Content = m.content;
+    // Accept messages that have parts array (content may be in different format)
+    const hasParts = m.parts && m.parts.length > 0;
+    const hasContent = (v6Content != null && v6Content !== "") || (v4Content != null && v4Content !== "") || hasParts;
+    return hasContent;
+  });
+  
   const chatResult = useChat({
-    // @ts-ignore - AI SDK v6 beta
-    api: currentApiEndpoint,
     id: chatId,
-    // AI SDK v6: Messages use parts[0].text format
-    messages: (initialMessages || []).filter((m) => {
-      const content = m.parts?.[0]?.text;
-      return content != null && content !== "";
-    }),
+
+    // Support both AI SDK v4 (content) and v6 (parts[0].text) formats
+    messages: filteredInitialMessages,
+
     onResponse: (response: Response) => {
       // Capture RAG metadata from response headers before streaming starts
       const ragMetadataHeader = response.headers.get("X-RAG-Metadata");
@@ -429,7 +538,26 @@ export function AiSdkChatPanel({
           console.warn("Failed to parse RAG metadata header:", e);
         }
       }
+      
+      // Capture token usage from response headers
+      const usageHeader = response.headers.get("X-Token-Usage");
+      if (usageHeader) {
+        try {
+          const usage = JSON.parse(usageHeader);
+          setTokenUsage(prev => ({
+            ...prev,
+            usedTokens: prev.usedTokens + (usage.inputTokens || 0) + (usage.outputTokens || 0),
+            inputTokens: prev.inputTokens + (usage.inputTokens || 0),
+            outputTokens: prev.outputTokens + (usage.outputTokens || 0),
+            reasoningTokens: prev.reasoningTokens + (usage.reasoningTokens || 0),
+            cachedTokens: prev.cachedTokens + (usage.cachedTokens || 0),
+          }));
+        } catch (e) {
+          console.warn("Failed to parse token usage header:", e);
+        }
+      }
     },
+
     onError: (err) => {
       // Network failures are expected during rapid navigation/tests - fail silently
       if (err instanceof TypeError && err.message === "Failed to fetch") {
@@ -505,6 +633,7 @@ export function AiSdkChatPanel({
 
       onError?.(err);
     },
+
     onFinish: () => {
       // Clear progress interval if it exists
       if ((window as any).currentProgressInterval) {
@@ -531,6 +660,9 @@ export function AiSdkChatPanel({
         }
       }
     },
+
+    // Use api option directly (transport was removed in @ai-sdk/react v3.x)
+    api: currentApiEndpoint,
   });
 
   const {
@@ -1426,6 +1558,98 @@ export function AiSdkChatPanel({
     }
   };
 
+  // Checkpoint: Save current conversation state
+  const handleSaveCheckpoint = useCallback((label?: string) => {
+    const checkpointLabel = label || `Checkpoint ${checkpoints.length + 1}`;
+    const newCheckpoint = {
+      id: crypto.randomUUID(),
+      messageIndex: messages.length - 1,
+      label: checkpointLabel,
+      timestamp: new Date(),
+    };
+    setCheckpoints(prev => [...prev, newCheckpoint]);
+    toast.success(`Checkpoint saved: ${checkpointLabel}`);
+  }, [messages.length, checkpoints.length]);
+
+  // Checkpoint: Restore to a saved checkpoint
+  const handleRestoreCheckpoint = useCallback((checkpointId: string) => {
+    const checkpoint = checkpoints.find(c => c.id === checkpointId);
+    if (checkpoint && setMessages) {
+      const restoredMessages = messages.slice(0, checkpoint.messageIndex + 1);
+      setMessages(restoredMessages);
+      toast.info(`Restored to: ${checkpoint.label}`);
+    }
+  }, [checkpoints, messages, setMessages]);
+
+  // Queue: Add item to pending queue
+  const handleAddToQueue = useCallback((title: string, description?: string) => {
+    const newItem = {
+      id: crypto.randomUUID(),
+      title,
+      description,
+      status: "pending" as const,
+    };
+    setQueueItems(prev => [...prev, newItem]);
+  }, []);
+
+  // Queue: Mark queue item as completed
+  const handleCompleteQueueItem = useCallback((itemId: string) => {
+    setQueueItems(prev => 
+      prev.map(item => 
+        item.id === itemId ? { ...item, status: "completed" as const } : item
+      )
+    );
+  }, []);
+
+  // Queue: Remove queue item
+  const handleRemoveQueueItem = useCallback((itemId: string) => {
+    setQueueItems(prev => prev.filter(item => item.id !== itemId));
+  }, []);
+
+  // Confirmation: Handle tool approval
+  const handleToolApproval = useCallback((approved: boolean, reason?: string) => {
+    if (pendingConfirmation) {
+      setPendingConfirmation(prev => prev ? {
+        ...prev,
+        state: "approval-responded",
+        approved,
+      } : null);
+      
+      if (approved) {
+        toast.success(`Tool "${pendingConfirmation.toolName}" approved`);
+      } else {
+        toast.info(`Tool "${pendingConfirmation.toolName}" rejected${reason ? `: ${reason}` : ""}`);
+      }
+      
+      // Clear confirmation after a delay
+      setTimeout(() => setPendingConfirmation(null), 2000);
+    }
+  }, [pendingConfirmation]);
+
+  // Get model context size based on selected model
+  const getModelContextSize = useCallback((modelId: string): number => {
+    const contextSizes: Record<string, number> = {
+      "gemini-3-pro-preview": 1000000,
+      "gemini-2.5-pro": 2000000,
+      "gemini-2.5-flash": 1000000,
+      "gemini-2.0-flash": 1000000,
+      "gpt-5": 128000,
+      "gpt-4o": 128000,
+      "gpt-4o-mini": 128000,
+      "claude-3-opus": 200000,
+      "claude-3-sonnet": 200000,
+    };
+    return contextSizes[modelId] || 128000;
+  }, []);
+
+  // Update max tokens when model changes
+  useEffect(() => {
+    setTokenUsage(prev => ({
+      ...prev,
+      maxOutputTokens: getModelContextSize(selectedModel),
+    }));
+  }, [selectedModel, getModelContextSize]);
+
   const renderMessage = (message: any, index: number) => {
     const isUser = message.role === "user";
     const isLastMessage = index === messages.length - 1;
@@ -1466,7 +1690,7 @@ export function AiSdkChatPanel({
             )}
           >
             {/* Reasoning display for AI messages */}
-            {!isUser && showReasoning && message.reasoning && (
+            {!isUser && showReasoning && message.reasoningText && (
               <div className="mb-4">
                 <Reasoning
                   defaultOpen={isLastMessage}
@@ -1474,7 +1698,7 @@ export function AiSdkChatPanel({
                   className="border border-border/30 rounded-lg bg-muted/30 p-4"
                 >
                   <ReasoningTrigger title="AI Reasoning Process" />
-                  <ReasoningContent>{message.reasoning}</ReasoningContent>
+                  <ReasoningContent>{message.reasoningText}</ReasoningContent>
                 </Reasoning>
               </div>
             )}
@@ -1570,6 +1794,46 @@ export function AiSdkChatPanel({
                             </TaskItem>
                           </TaskContent>
                         </Task>
+                      </div>
+                    );
+                  }
+
+                  // Handle image parts (AI SDK format)
+                  if (part.type === "image") {
+                    return (
+                      <div key={index} className="my-3">
+                        <AIImage
+                          src={part.image}
+                          base64={part.base64}
+                          mediaType={part.mediaType}
+                          alt="AI generated image"
+                          className="rounded-lg border border-border/50 shadow-sm hover:shadow-md transition-all duration-200 max-w-full"
+                        />
+                      </div>
+                    );
+                  }
+
+                  // Handle file parts (attachments in responses)
+                  if (part.type === "file") {
+                    return (
+                      <div key={index} className="my-3 p-3 bg-muted/30 rounded-lg border border-border/50 flex items-center gap-3">
+                        <div className="h-10 w-10 rounded bg-primary/10 flex items-center justify-center">
+                          <FileIcon className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">{part.name || "Attachment"}</p>
+                          <p className="text-xs text-muted-foreground">{part.mediaType || "File"}</p>
+                        </div>
+                        {part.url && (
+                          <a
+                            href={part.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:underline text-sm"
+                          >
+                            Download
+                          </a>
+                        )}
                       </div>
                     );
                   }
@@ -1905,11 +2169,11 @@ export function AiSdkChatPanel({
                       <div className="flex items-start gap-4">
                         {preview.image && (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img
+                          (<img
                             src={preview.image}
                             alt={preview.title || "Preview"}
                             className="w-16 h-16 object-cover rounded-md flex-shrink-0"
-                          />
+                          />)
                         )}
                         <div className="flex-1">
                           <h4 className="mac-title text-sm font-medium text-foreground mb-2">
@@ -2091,6 +2355,31 @@ export function AiSdkChatPanel({
 
             {/* Control Panel */}
             <div className="flex items-center gap-3">
+              {/* Context/Token Usage Indicator */}
+              <Context
+                usedTokens={tokenUsage.usedTokens}
+                maxOutputTokens={tokenUsage.maxTokens}
+                usage={{
+                  inputTokens: tokenUsage.inputTokens,
+                  outputTokens: tokenUsage.outputTokens,
+                  reasoningTokens: tokenUsage.reasoningTokens,
+                  cachedInputTokens: tokenUsage.cachedTokens,
+                }}
+                modelId={selectedModel}
+              >
+                <ContextTrigger className="h-8 px-2 text-xs" />
+                <ContextContent side="bottom" align="end">
+                  <ContextContentHeader />
+                  <ContextContentBody className="space-y-1">
+                    <ContextInputUsage />
+                    <ContextOutputUsage />
+                    <ContextReasoningUsage />
+                    <ContextCacheUsage />
+                  </ContextContentBody>
+                  <ContextContentFooter />
+                </ContextContent>
+              </Context>
+
               <Badge variant="secondary" className="text-xs font-medium px-2 py-2">
                 <MessageCircle className="w-3 h-3 mr-2" />
                 {messages.length}
@@ -2099,6 +2388,16 @@ export function AiSdkChatPanel({
               <div className="flex items-center gap-2">
                 {messages.length > 0 && (
                   <>
+                    {/* Checkpoint Button */}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleSaveCheckpoint()}
+                      className="h-8 w-8 hover:bg-emerald-500/10 hover:text-emerald-400 mac-button mac-button-outline"
+                      title={`Save checkpoint (${checkpoints.length} saved)`}
+                    >
+                      <BookmarkIcon className="h-4 w-4" />
+                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"
@@ -2136,7 +2435,6 @@ export function AiSdkChatPanel({
           </div>
         </div>
       )}
-
       {/* Hero Metrics Strip - Show RAG stats at a glance (always visible for demo) */}
       <HeroMetricsStrip
         vectorCount={26568}
@@ -2145,14 +2443,151 @@ export function AiSdkChatPanel({
         compact={true}
         className="flex-shrink-0"
       />
-
+      {/* Active Plan Display - Shows when AI is executing multi-step operations */}
+      <AnimatePresence>
+        {activePlan && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="px-4 py-2 border-b border-zinc-800/50"
+          >
+            <Plan isStreaming={activePlan.isStreaming} defaultOpen={true}>
+              <PlanHeader>
+                <div className="flex-1">
+                  <PlanTitle>{activePlan.title}</PlanTitle>
+                  <PlanDescription>{activePlan.description}</PlanDescription>
+                </div>
+                <PlanAction>
+                  <PlanTrigger />
+                </PlanAction>
+              </PlanHeader>
+              <PlanContent>
+                <div className="space-y-2">
+                  {activePlan.steps.map((step, idx) => (
+                    <div
+                      key={idx}
+                      className={cn(
+                        "flex items-center gap-2 text-sm",
+                        step.status === "complete" && "text-emerald-400",
+                        step.status === "active" && "text-blue-400",
+                        step.status === "pending" && "text-muted-foreground"
+                      )}
+                    >
+                      {step.status === "complete" && <CheckCircle className="h-4 w-4" />}
+                      {step.status === "active" && <Loader className="h-4 w-4 animate-spin" />}
+                      {step.status === "pending" && <div className="h-4 w-4 rounded-full border border-muted-foreground/50" />}
+                      <span>{step.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </PlanContent>
+              <PlanFooter className="text-xs text-muted-foreground">
+                {activePlan.steps.filter(s => s.status === "complete").length} of {activePlan.steps.length} steps complete
+              </PlanFooter>
+            </Plan>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Queue Panel - Shows pending batch operations */}
+      <AnimatePresence>
+        {queueItems.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="px-4 py-2 border-b border-zinc-800/50"
+          >
+            <Queue>
+              <QueueSection defaultOpen={true}>
+                <QueueSectionTrigger>
+                  <QueueSectionLabel
+                    count={queueItems.filter(i => i.status === "pending").length}
+                    label="pending tasks"
+                    icon={<ListTodoIcon className="h-4 w-4" />}
+                  />
+                </QueueSectionTrigger>
+                <QueueSectionContent>
+                  <QueueList>
+                    {queueItems.map((item) => (
+                      <QueueItem key={item.id}>
+                        <div className="flex items-center gap-2">
+                          <QueueItemIndicator completed={item.status === "completed"} />
+                          <QueueItemContent completed={item.status === "completed"}>
+                            {item.title}
+                          </QueueItemContent>
+                          <QueueItemActions>
+                            {item.status === "pending" && (
+                              <QueueItemAction onClick={() => handleCompleteQueueItem(item.id)}>
+                                <CheckCircle className="h-3 w-3" />
+                              </QueueItemAction>
+                            )}
+                            <QueueItemAction onClick={() => handleRemoveQueueItem(item.id)}>
+                              <Trash2Icon className="h-3 w-3" />
+                            </QueueItemAction>
+                          </QueueItemActions>
+                        </div>
+                        {item.description && (
+                          <QueueItemDescription completed={item.status === "completed"}>
+                            {item.description}
+                          </QueueItemDescription>
+                        )}
+                      </QueueItem>
+                    ))}
+                  </QueueList>
+                </QueueSectionContent>
+              </QueueSection>
+            </Queue>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Tool Confirmation Dialog */}
+      <AnimatePresence>
+        {pendingConfirmation && pendingConfirmation.state === "approval-requested" && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="px-4 py-2 border-b border-amber-500/30 bg-amber-500/5"
+          >
+            <Confirmation
+              approval={{ id: pendingConfirmation.id }}
+              state={pendingConfirmation.state as any}
+            >
+              <ConfirmationTitle>
+                <span className="font-medium">Tool Approval Required:</span>{" "}
+                <span className="text-amber-400">{pendingConfirmation.toolName}</span>
+                {pendingConfirmation.description && (
+                  <span className="text-muted-foreground"> — {pendingConfirmation.description}</span>
+                )}
+              </ConfirmationTitle>
+              <ConfirmationRequest>
+                <ConfirmationActions>
+                  <ConfirmationAction
+                    variant="outline"
+                    onClick={() => handleToolApproval(false, "User rejected")}
+                  >
+                    Reject
+                  </ConfirmationAction>
+                  <ConfirmationAction
+                    className="bg-emerald-600 hover:bg-emerald-700"
+                    onClick={() => handleToolApproval(true)}
+                  >
+                    Approve
+                  </ConfirmationAction>
+                </ConfirmationActions>
+              </ConfirmationRequest>
+            </Confirmation>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* Main Chat Area */}
       <div className="flex-1 min-h-0 overflow-y-auto bg-zinc-950">
         <Conversation className="bg-zinc-950">
           <ConversationContent className="px-6 py-4 pb-8 bg-zinc-950">
             {messages.length === 0 && enableWelcomeScreen ? (
               /* Beautiful Welcome Screen */
-              <motion.div
+              (<motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
@@ -2162,7 +2597,6 @@ export function AiSdkChatPanel({
                 <div className="relative mb-8">
                   <SiamLogo size="xl" className="mx-auto" />
                 </div>
-
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -2176,7 +2610,6 @@ export function AiSdkChatPanel({
                     Don't be an ass-hat.
                   </p>
                 </motion.div>
-
                 {/* Enhanced Suggestions */}
                 {showSuggestions &&
                   (dynamicSuggestions.length > 0 ? dynamicSuggestions : suggestions).length > 0 && (
@@ -2213,23 +2646,49 @@ export function AiSdkChatPanel({
                       </div>
                     </motion.div>
                   )}
-              </motion.div>
+              </motion.div>)
             ) : (
               /* Messages Area */
-              <div className="space-y-6">
+              (<div className="space-y-6">
                 <AnimatePresence>
-                  {messages.map((message, index) => (
-                    <motion.div
-                      key={message.id || index}
-                      layout={enableAnimations}
-                      initial={enableAnimations ? { opacity: 0, y: 20 } : undefined}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={enableAnimations ? { opacity: 0, y: -20 } : undefined}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
-                    >
-                      {renderMessage(message, index)}
-                    </motion.div>
-                  ))}
+                  {messages.map((message, index) => {
+                    // Check if there's a checkpoint after this message
+                    const checkpointAtIndex = checkpoints.find(c => c.messageIndex === index);
+                    
+                    return (
+                      <React.Fragment key={message.id || index}>
+                        <motion.div
+                          layout={enableAnimations}
+                          initial={enableAnimations ? { opacity: 0, y: 20 } : undefined}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={enableAnimations ? { opacity: 0, y: -20 } : undefined}
+                          transition={{ duration: 0.3, ease: "easeOut" }}
+                        >
+                          {renderMessage(message, index)}
+                        </motion.div>
+                        
+                        {/* Checkpoint Marker */}
+                        {checkpointAtIndex && (
+                          <motion.div
+                            initial={{ opacity: 0, scaleX: 0 }}
+                            animate={{ opacity: 1, scaleX: 1 }}
+                            className="my-4"
+                          >
+                            <Checkpoint className="text-emerald-400/70">
+                              <CheckpointIcon className="text-emerald-400" />
+                              <CheckpointTrigger
+                                tooltip={`Restore to: ${checkpointAtIndex.label}`}
+                                onClick={() => handleRestoreCheckpoint(checkpointAtIndex.id)}
+                                className="text-xs text-emerald-400/70 hover:text-emerald-400"
+                              >
+                                {checkpointAtIndex.label} • {new Date(checkpointAtIndex.timestamp).toLocaleTimeString()}
+                              </CheckpointTrigger>
+                            </Checkpoint>
+                          </motion.div>
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
 
                   {/* Loading indicator with ChainOfThought RAG visualization */}
                   {/* CRITICAL: Only show when waiting for response, hide once streaming starts */}
@@ -2296,7 +2755,7 @@ export function AiSdkChatPanel({
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </div>)
             )}
 
             {/* Error State */}
@@ -2332,7 +2791,6 @@ export function AiSdkChatPanel({
           <ConversationScrollButton />
         </Conversation>
       </div>
-
       {/* Modern Input Area */}
       <div className="flex-shrink-0 px-4 pt-4 pb-6 border-t border-zinc-800/50 bg-zinc-950 relative">
         {/* Real-Time Transcription Display */}
@@ -2397,7 +2855,48 @@ export function AiSdkChatPanel({
           />
 
           <PromptInputFooter className="border-t border-zinc-800/50 bg-zinc-900/30">
-            <PromptInputTools className="gap-2">
+            <PromptInputTools className="gap-1.5">
+              {/* Context Token Usage Indicator */}
+              <Context
+                usedTokens={tokenUsage.usedTokens}
+                maxOutputTokens={tokenUsage.maxTokens}
+                usage={{
+                  inputTokens: tokenUsage.inputTokens,
+                  outputTokens: tokenUsage.outputTokens,
+                  reasoningTokens: tokenUsage.reasoningTokens,
+                  cachedInputTokens: tokenUsage.cachedTokens,
+                }}
+                modelId={selectedModel}
+              >
+                <ContextTrigger className="!h-6 !px-1.5 !text-[10px] text-muted-foreground hover:text-foreground" />
+                <ContextContent side="top" align="start">
+                  <ContextContentHeader />
+                  <ContextContentBody className="space-y-1">
+                    <ContextInputUsage />
+                    <ContextOutputUsage />
+                    <ContextReasoningUsage />
+                    <ContextCacheUsage />
+                  </ContextContentBody>
+                  <ContextContentFooter />
+                </ContextContent>
+              </Context>
+
+              {/* Checkpoint Save Button */}
+              {messages.length > 0 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleSaveCheckpoint()}
+                  className="!h-6 !w-6 !p-0 text-muted-foreground hover:text-emerald-400 hover:bg-emerald-500/10"
+                  title={`Save checkpoint (${checkpoints.length} saved)`}
+                >
+                  <BookmarkIcon className="h-3 w-3" />
+                </Button>
+              )}
+
+              <div className="w-px h-4 bg-zinc-700/50" />
+
               <FileUpload
                 compact={true}
                 onUploadComplete={handleFileUploadComplete}
@@ -2410,11 +2909,11 @@ export function AiSdkChatPanel({
                 variant={isRecording ? "destructive" : "ghost"}
                 className={cn(
                   "mac-button mac-button-primary",
-                  "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
+                  "!h-6 !w-6 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
                   isRecording
                     ? [
                         "bg-gradient-to-r from-red-500 to-red-600",
-                        "border-red-400/50 shadow-[0_0_20px_rgba(239,68,68,0.6)]",
+                        "border-red-400/50 shadow-[0_0_15px_rgba(239,68,68,0.5)]",
                         "text-white",
                         "animate-pulse",
                       ]
@@ -2470,10 +2969,10 @@ export function AiSdkChatPanel({
                 }
               >
                 {isRecording ? (
-                  <MicOff className="h-4 w-4 text-white" />
+                  <MicOff className="h-3 w-3 text-white" />
                 ) : (
                   <Mic
-                    className={cn("h-4 w-4", permissionState === "denied" && "text-orange-400")}
+                    className={cn("h-3 w-3", permissionState === "denied" && "text-orange-400")}
                   />
                 )}
                 {isRecording && (
@@ -2490,11 +2989,11 @@ export function AiSdkChatPanel({
                 variant={isTTSEnabled ? "default" : "ghost"}
                 className={cn(
                   "mac-button mac-button-primary",
-                  "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
+                  "!h-6 !w-6 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
                   isTTSEnabled
                     ? [
                         "bg-gradient-to-r from-emerald-500/80 to-teal-600/80",
-                        "border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]",
+                        "border-emerald-400/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]",
                       ]
                     : ["hover:bg-zinc-800/50 hover:border-zinc-700"]
                 )}
@@ -2514,9 +3013,9 @@ export function AiSdkChatPanel({
                 title={isTTSEnabled ? "Disable voice responses" : "Enable voice responses"}
               >
                 {isTTSEnabled ? (
-                  <Volume2 className="h-4 w-4 text-white" />
+                  <Volume2 className="h-3 w-3 text-white" />
                 ) : (
-                  <VolumeX className="h-4 w-4" />
+                  <VolumeX className="h-3 w-3" />
                 )}
                 {isPlaying && (
                   <span className="absolute -top-1 -right-1 h-2 w-2 bg-emerald-500 rounded-full animate-pulse border border-white" />
@@ -2533,22 +3032,93 @@ export function AiSdkChatPanel({
                 />
               )}
 
-              <PromptInputSelect
-                value={selectedModel}
-                onValueChange={setSelectedModel}
-                disabled={isMaxMessagesReached || isLoading}
-              >
-                <PromptInputSelectTrigger className="!h-8 !w-[160px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
-                  <PromptInputSelectValue />
-                </PromptInputSelectTrigger>
-                <PromptInputSelectContent>
-                  {availableModels.map((model) => (
-                    <PromptInputSelectItem key={model.id} value={model.id}>
-                      {model.name}
-                    </PromptInputSelectItem>
-                  ))}
-                </PromptInputSelectContent>
-              </PromptInputSelect>
+              {/* Upgraded Model Selector with searchable command palette */}
+              <ModelSelector open={modelSelectorOpen} onOpenChange={setModelSelectorOpen}>
+                <ModelSelectorTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="!h-6 !px-1.5 !text-[10px] bg-transparent border border-zinc-700/50 shrink-0 hover:bg-zinc-800/50 gap-1"
+                    disabled={isMaxMessagesReached || isLoading}
+                  >
+                    <ModelSelectorLogo 
+                      provider={
+                        selectedModel.startsWith("gemini") ? "google" :
+                        selectedModel.startsWith("gpt") ? "openai" :
+                        selectedModel.startsWith("claude") ? "anthropic" : "openai"
+                      }
+                    />
+                    <ModelSelectorName className="max-w-[120px]">
+                      {availableModels.find(m => m.id === selectedModel)?.name || selectedModel}
+                    </ModelSelectorName>
+                    <ChevronsUpDownIcon className="h-3 w-3 opacity-50" />
+                  </Button>
+                </ModelSelectorTrigger>
+                <ModelSelectorContent title="Select AI Model">
+                  <ModelSelectorInput placeholder="Search models..." />
+                  <ModelSelectorList>
+                    <ModelSelectorEmpty>No models found.</ModelSelectorEmpty>
+                    <ModelSelectorGroup heading="Google Gemini">
+                      {availableModels.filter(m => m.id.startsWith("gemini")).map((model) => (
+                        <ModelSelectorItem
+                          key={model.id}
+                          value={model.id}
+                          onSelect={() => {
+                            setSelectedModel(model.id);
+                            setModelSelectorOpen(false);
+                          }}
+                          className={cn(
+                            "flex items-center gap-2",
+                            selectedModel === model.id && "bg-accent"
+                          )}
+                        >
+                          <ModelSelectorLogo provider="google" />
+                          <ModelSelectorName>{model.name}</ModelSelectorName>
+                        </ModelSelectorItem>
+                      ))}
+                    </ModelSelectorGroup>
+                    <ModelSelectorSeparator />
+                    <ModelSelectorGroup heading="OpenAI">
+                      {availableModels.filter(m => m.id.startsWith("gpt")).map((model) => (
+                        <ModelSelectorItem
+                          key={model.id}
+                          value={model.id}
+                          onSelect={() => {
+                            setSelectedModel(model.id);
+                            setModelSelectorOpen(false);
+                          }}
+                          className={cn(
+                            "flex items-center gap-2",
+                            selectedModel === model.id && "bg-accent"
+                          )}
+                        >
+                          <ModelSelectorLogo provider="openai" />
+                          <ModelSelectorName>{model.name}</ModelSelectorName>
+                        </ModelSelectorItem>
+                      ))}
+                    </ModelSelectorGroup>
+                    <ModelSelectorSeparator />
+                    <ModelSelectorGroup heading="Anthropic Claude">
+                      {availableModels.filter(m => m.id.startsWith("claude")).map((model) => (
+                        <ModelSelectorItem
+                          key={model.id}
+                          value={model.id}
+                          onSelect={() => {
+                            setSelectedModel(model.id);
+                            setModelSelectorOpen(false);
+                          }}
+                          className={cn(
+                            "flex items-center gap-2",
+                            selectedModel === model.id && "bg-accent"
+                          )}
+                        >
+                          <ModelSelectorLogo provider="anthropic" />
+                          <ModelSelectorName>{model.name}</ModelSelectorName>
+                        </ModelSelectorItem>
+                      ))}
+                    </ModelSelectorGroup>
+                  </ModelSelectorList>
+                </ModelSelectorContent>
+              </ModelSelector>
 
               {uploadedFiles.length > 0 && (
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -2568,7 +3138,7 @@ export function AiSdkChatPanel({
             <PromptInputSubmit
               disabled={isMaxMessagesReached || !localInput?.trim()}
               status={isLoading ? "streaming" : undefined}
-              className="!h-8 !w-8 !p-0 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 shrink-0"
+              className="!h-6 !w-6 !p-0 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-sm hover:shadow-md transition-all duration-200 shrink-0"
             />
           </PromptInputFooter>
         </PromptInput>

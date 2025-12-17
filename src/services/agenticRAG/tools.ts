@@ -18,7 +18,7 @@ export interface ToolParameter {
 export interface ToolDefinition {
   name: string;
   description: string;
-  parameters: Record<string, ToolParameter>;
+  inputSchema: Record<string, ToolParameter>;
   execute: (args: any) => Promise<any>;
 }
 
@@ -36,7 +36,7 @@ export interface ToolExecutionResult {
 export const vectorSearchTool: ToolDefinition = {
   name: "vector_search",
   description: "Semantic search across all AOMA documents",
-  parameters: {
+  inputSchema: {
     query: {
       name: "query",
       type: "string",
@@ -105,7 +105,7 @@ export const vectorSearchTool: ToolDefinition = {
 export const metadataFilterTool: ToolDefinition = {
   name: "metadata_filter",
   description: "Filter documents by specific metadata criteria",
-  parameters: {
+  inputSchema: {
     filters: {
       name: "filters",
       type: "object",
@@ -148,7 +148,7 @@ export const metadataFilterTool: ToolDefinition = {
 export const confidenceCheckTool: ToolDefinition = {
   name: "confidence_check",
   description: "Evaluate confidence that current context can answer the query",
-  parameters: {
+  inputSchema: {
     context: {
       name: "context",
       type: "array",
@@ -171,7 +171,7 @@ export const confidenceCheckTool: ToolDefinition = {
     if (!context || context.length === 0) {
       return {
         confidence: 0,
-        reasoning: "No context available",
+        reasoningText: "No context available",
       };
     }
     
@@ -266,15 +266,19 @@ export function getGeminiFunctionDeclarations() {
     parameters: {
       type: "object",
       properties: Object.fromEntries(
-        Object.entries(tool.parameters).map(([key, param]) => [
-          key,
-          {
+        Object.entries(tool.inputSchema || {}).map(([key, param]) => {
+          const paramDef: Record<string, any> = {
             type: param.type,
             description: param.description,
-          },
-        ])
+          };
+          // Add items for array types (required by Gemini API)
+          if (param.type === "array") {
+            paramDef.items = { type: "string" };
+          }
+          return [key, paramDef];
+        })
       ),
-      required: Object.entries(tool.parameters)
+      required: Object.entries(tool.inputSchema || {})
         .filter(([, param]) => param.required)
         .map(([key]) => key),
     },

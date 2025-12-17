@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import * as z from 'zod/v3';
 // import { toast } from "sonner";
 const toast = {
   success: (msg: string, _options?: any) => console.log("✅", msg),
@@ -252,12 +252,11 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
           <p className="mac-body text-gray-300">yup. it's back.</p>
         </div>
       </div>
-
       {/* Glass Morphism Card */}
       <div className="mac-glass p-8 shadow-2xl relative">
         {step === "email" ? (
           /* Email Input Step */
-          <form
+          (<form
             onSubmit={emailForm.handleSubmit((data) => sendMagicLink(data, 0))}
             className="space-y-6"
             suppressHydrationWarning
@@ -286,7 +285,6 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                 </p>
               )}
             </Field>
-
             <Button
               type="submit"
               disabled={isLoading}
@@ -304,10 +302,10 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                 </>
               )}
             </Button>
-          </form>
+          </form>)
         ) : (
           /* Code Verification Step */
-          <div className="space-y-6">
+          (<div className="space-y-6">
             {/* Success Message */}
             <div className="text-center p-6 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl border border-green-500/20 backdrop-blur-sm">
               <CheckCircle className="mx-auto h-12 w-12 text-green-400 mb-4" />
@@ -318,7 +316,6 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                 Check your email for the 6-digit verification code
               </p>
             </div>
-
             {/* Dev Code Display */}
             {devCode && (
               <div className="text-center p-4 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 rounded-xl border border-orange-500/20 backdrop-blur-sm">
@@ -328,7 +325,6 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                 </p>
               </div>
             )}
-
             {/* Verification Form */}
             <form
               onSubmit={codeForm.handleSubmit((data) => verifyCode(data, 0))}
@@ -389,7 +385,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                 Use a different email
               </Button>
             </form>
-          </div>
+          </div>)
         )}
 
         {/* Footer */}

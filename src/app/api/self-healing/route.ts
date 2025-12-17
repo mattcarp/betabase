@@ -346,7 +346,11 @@ RESPONSE FORMAT (JSON ONLY):
       messages: [
         {
           role: "user",
-          content: promptParts,
+
+          parts: [{
+            type: 'text',
+            text: promptParts
+          }]
         },
       ],
     });

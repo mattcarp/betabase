@@ -47,6 +47,7 @@ export function MessageThread({
     return <Zap className="h-3 w-3" />;
   };
 
+  /* FIXME(@ai-sdk-upgrade-v5): The `experimental_attachments` property has been replaced with the parts array. Please manually migrate following https://ai-sdk.dev/docs/migration-guides/migration-guide-5-0#attachments--file-parts */
   return (
     <div className={cn("space-y-4 py-4", className)}>
       <AnimatePresence mode="popLayout">

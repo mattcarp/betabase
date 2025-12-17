@@ -53,7 +53,7 @@ export async function GET() {
       await generateText({
         model: google("gemini-2.0-flash"),
         prompt: "Reply with only: ok",
-        maxTokens: 5,
+        maxOutputTokens: 5,
       });
       const latency = Date.now() - start;
       health.services.gemini = { status: "ok", latency };

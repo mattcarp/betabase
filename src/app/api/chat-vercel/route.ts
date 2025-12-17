@@ -1,5 +1,5 @@
 import { openai } from "@ai-sdk/openai";
-import { streamText, convertToCoreMessages } from "ai";
+import { streamText, convertToModelMessages } from "ai";
 import { searchKnowledge } from "@/services/knowledgeSearchService";
 import { aomaOrchestrator } from "@/services/aomaOrchestrator";
 
@@ -108,7 +108,7 @@ export async function POST(req: Request) {
     // Convert messages to model format with proper error handling
     let modelMessages;
     try {
-      modelMessages = convertToCoreMessages(messages);
+      modelMessages = convertToModelMessages(messages);
     } catch (conversionError) {
       console.error("Failed to convert messages:", conversionError);
       // Fallback: create a simple message array

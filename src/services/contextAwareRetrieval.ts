@@ -27,7 +27,7 @@ export interface ContextAwareQueryOptions {
 export interface QueryTransformationResult {
   originalQuery: string;
   enhancedQuery: string;
-  reasoning: string;
+  reasoningText: string;
   contextUsed: {
     historyTurns: number;
     topicWeights: Record<string, number>;
@@ -100,7 +100,7 @@ export class ContextAwareRetrieval {
     const transformation = await this.transformQuery(originalQuery, session);
     
     console.log(`🔄 Enhanced Query: "${transformation.enhancedQuery.substring(0, 100)}${transformation.enhancedQuery.length > 100 ? '...' : ''}"`);
-    console.log(`💡 Reasoning: ${transformation.reasoning}`);
+    console.log(`💡 Reasoning: ${transformation.reasoningText}`);
 
     // Execute two-stage retrieval with enhanced query
     const retrievalResult = await this.twoStageRetrieval.query(
@@ -202,7 +202,7 @@ export class ContextAwareRetrieval {
       return {
         originalQuery,
         enhancedQuery: originalQuery,
-        reasoning: "No conversation history or RLHF signals - using original query",
+        reasoningText: "No conversation history or RLHF signals - using original query",
         contextUsed: {
           historyTurns: 0,
           topicWeights: {},
@@ -231,7 +231,7 @@ export class ContextAwareRetrieval {
       return {
         originalQuery,
         enhancedQuery: parsed.enhancedQuery || originalQuery,
-        reasoning: parsed.reasoning || "Query transformation applied with RLHF signals",
+        reasoningText: parsed.reasoningText || "Query transformation applied with RLHF signals",
         contextUsed: {
           historyTurns: history.length,
           topicWeights: reinforcementContext.topicWeights,
@@ -243,7 +243,7 @@ export class ContextAwareRetrieval {
       return {
         originalQuery,
         enhancedQuery: originalQuery,
-        reasoning: "Transformation failed - using original query",
+        reasoningText: "Transformation failed - using original query",
         contextUsed: {
           historyTurns: history.length,
           topicWeights: reinforcementContext.topicWeights,
@@ -325,7 +325,7 @@ Respond with ONLY valid JSON in this exact format:
    */
   private parseTransformationResponse(responseText: string): {
     enhancedQuery?: string;
-    reasoning?: string;
+    reasoningText?: string;
   } {
     try {
       // Extract JSON from markdown code blocks if present
@@ -337,7 +337,7 @@ Respond with ONLY valid JSON in this exact format:
       const parsed = JSON.parse(jsonText);
       return {
         enhancedQuery: parsed.enhancedQuery,
-        reasoning: parsed.reasoning,
+        reasoningText: parsed.reasoningText,
       };
     } catch (error) {
       console.error("Error parsing transformation response:", error);

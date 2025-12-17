@@ -3,7 +3,7 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 // OpenAI removed - using Gemini-only setup
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { z } from "zod";
+import { z } from 'zod/v3';
 // import type OpenAI from "openai"; // Not needed for Vercel AI SDK
 // import { aomaCache } from "../../../src/services/aomaCache";
 import { aomaOrchestrator } from "@/services/aomaOrchestrator";
@@ -847,7 +847,7 @@ I don't have any relevant information about that in my knowledge base. Could you
 
     console.log(`🤖 Creating stream with model: ${selectedModel}`);
     console.log(
-      `📊 Settings: temp=${modelSettings.temperature}, maxTokens=${modelSettings.maxTokens}`
+      `📊 Settings: temp=${modelSettings.temperature}, maxTokens=${modelSettings.maxOutputTokens}`
     );
     console.log(`💬 Messages: ${openAIMessages.length} messages`);
     console.log(`📚 AOMA Context: ${hasAomaContent ? `${aomaContext.length} chars` : "NONE"}`);
@@ -897,8 +897,8 @@ I don't have any relevant information about that in my knowledge base. Could you
           output: text,
           finishReason: finishReason,
           usage: usage ? {
-            promptTokens: usage.promptTokens,
-            completionTokens: usage.completionTokens,
+            inputTokens: usage.inputTokens,
+            outputTokens: usage.outputTokens,
             totalTokens: usage.totalTokens,
           } : undefined,
           durationMs: Date.now() - generationStartTime,

@@ -25,13 +25,6 @@ import {
 // Radix Tabs removed - using native HTML tabs to avoid React 19 + Radix compose-refs infinite loop
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 import { cn } from "../../lib/utils";
-
-// #region agent log
-// Hypothesis H6: CleanCurateTab module loaded - checking for infinite loop
-if (typeof window !== 'undefined') {
-  fetch('http://127.0.0.1:7243/ingest/d8722888-9008-4d43-a867-1323ebab5570',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'CleanCurateTab.tsx:module-load',message:'CleanCurateTab_MODULE_LOADED',data:{},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H6'})}).catch(()=>{});
-}
-// #endregion
 import { ScrollArea } from "./scroll-area";
 import { Separator } from "./separator";
 import { Input } from "./input";
@@ -295,7 +288,7 @@ interface AgentDecisionLog {
     action: string;
     tool: string;
     confidence: number;
-    reasoning: string;
+    reasoningText: string;
   }>;
   finalConfidence: number;
   totalIterations: number;
@@ -470,10 +463,6 @@ export function CleanCurateTab({
   // Ensure client-side rendering for Recharts
   useEffect(() => {
     setMounted(true);
-    // #region agent log
-    // Hypothesis H6: CleanCurateTab component mounted successfully
-    fetch('http://127.0.0.1:7243/ingest/d8722888-9008-4d43-a867-1323ebab5570',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'CleanCurateTab.tsx:useEffect-mount',message:'CleanCurateTab_MOUNTED',data:{activeTab},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H6'})}).catch(()=>{});
-    // #endregion
   }, []);
 
   // Load Q8 queue and listen for new feedback from Chat tab

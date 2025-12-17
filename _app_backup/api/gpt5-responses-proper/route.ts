@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       previous_response_id: previousResponseId,
 
       // GPT-5 specific parameters - updated format
-      reasoning: {
+      reasoningText: {
         effort: reasoningEffort as "minimal" | "low" | "medium" | "high",
       },
       text: {
@@ -121,10 +121,10 @@ export async function POST(req: NextRequest) {
               }
             }
             // Stream reasoning steps (for high reasoning effort)
-            if ((chunk as any).reasoning) {
+            if ((chunk as any).reasoningText) {
               const data = JSON.stringify({
                 type: "reasoning",
-                content: (chunk as any).reasoning,
+                content: (chunk as any).reasoningText,
               });
               controller.enqueue(encoder.encode(`data: ${data}\n\n`));
             }

@@ -503,7 +503,7 @@ export class ExplicitContentDetector {
   /**
    * Advanced context analysis for subtle explicit content
    */
-  private analyzeContext(text: string): { explicit: boolean; reasoning: string[] } {
+  private analyzeContext(text: string): { explicit: boolean; reasoningText: string[] } {
     const reasoning: string[] = [];
     let explicitScore = 0;
 
@@ -547,7 +547,7 @@ export class ExplicitContentDetector {
 
     return {
       explicit: explicitScore > 0.3,
-      reasoning,
+      reasoningText,
     };
   }
 
