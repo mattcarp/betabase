@@ -585,3 +585,52 @@ Duration: ~45m
 ## Warnings/Blockers
 - None - all systems go for demo recording
 ---
+
+---
+Session: 2025-12-17 ~20:15
+Agent: Coding (Spec-Kit + Long-Running Harness)
+Feature: 001-testing-tab-transformation
+Duration: In Progress
+
+## Mode
+- Using Spec-Kit for task structure (tasks.md)
+- Using Long-Running Harness for continuity (this file + ByteRover)
+
+## Starting Phase 1: Database Foundation
+Tasks: T001-T009
+
+## Progress
+- [ ] T001: Query bb_case table schema
+- [ ] T002: Query bb_application, bb_round, bb_variation relationships
+- [ ] T003: Create migration file
+- [ ] T004: Create historical_tests_view
+- [ ] T005: Create rlhf_generated_tests table
+- [ ] T006: Create self_healing_attempts table
+- [ ] T007: Create test_analytics_daily view
+- [ ] T008: Run migrations
+- [ ] T009: Create indexes
+
+## Notes
+Starting execution...
+---
+
+## Phase 1 Progress Update (20:30)
+- [x] T001: Query bb_case table schema ✅
+  - 8,719 records found
+  - 31 columns including: id, name, expected_result, app_under_test, execution_count, pass_count, etc.
+- [x] T002: Query related tables ✅
+  - bb_application: 5 apps
+  - bb_round: 154 rounds
+  - bb_deployment: 1,793 deployments
+- [x] T003: Create migration file ✅
+  - Created: supabase/migrations/20251217_testing_tab_tables.sql
+- [x] T004: historical_tests_view - in migration ✅
+- [x] T005: rlhf_generated_tests table - in migration ✅
+- [x] T006: self_healing_attempts table - in migration ✅
+- [x] T007: test_analytics_daily view - in migration ✅
+- [ ] T008: Run migrations (needs Supabase SQL editor)
+- [x] T009: Create indexes - in migration ✅
+
+## Files Created
+- src/app/api/tests/schema/route.ts (helper endpoint)
+- supabase/migrations/20251217_testing_tab_tables.sql
