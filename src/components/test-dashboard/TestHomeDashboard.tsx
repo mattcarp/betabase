@@ -332,6 +332,35 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
         </Card>
       )}
 
+      {/* AI Needs Your Guidance Banner */}
+      {healthMetrics.pendingReview > 0 && (
+        <Card className="mac-card border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-transparent" data-test-id="human-needed-banner">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-full bg-purple-500/20">
+                  <Users className="h-6 w-6 text-purple-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-purple-200">AI Needs Your Expertise</p>
+                  <p className="text-xs text-muted-foreground">
+                    {healthMetrics.pendingReview} items awaiting human review • AI has reached the limits of its certainty
+                  </p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                className="bg-purple-600 hover:bg-purple-700 text-white"
+                onClick={() => setShowCuratorQueue(true)}
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                Review Queue
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Quick Filters Bar */}
       <Card className="mac-card border-border">
         <CardContent className="p-4">

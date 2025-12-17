@@ -295,17 +295,40 @@ export function RLHFTestSuite() {
           </Button>
         </div>
 
-        {/* Info banner when no tests */}
+        {/* Info banner when no tests - Emphasizing Human-AI Collaboration */}
         {tests.length === 0 && !loading && (
-          <div className="flex items-start gap-3 p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
-            <AlertTriangle className="h-5 w-5 text-amber-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm text-amber-200 font-medium">No RLHF tests yet</p>
-              <p className="text-xs text-zinc-400 mt-1">
-                Click "Generate New Tests" to create Playwright tests from your curated feedback.
-                Make sure you have approved feedback in the RLHF Curator Dashboard first.
-              </p>
+          <div className="flex flex-col gap-4 p-6 rounded-lg bg-gradient-to-r from-purple-500/10 to-amber-500/5 border border-purple-500/20">
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-full bg-purple-500/20">
+                <Lightbulb className="h-6 w-6 text-purple-400" />
+              </div>
+              <div>
+                <p className="text-lg font-medium text-purple-200">AI Awaiting Human Guidance</p>
+                <p className="text-sm text-zinc-400 mt-1">
+                  Tests in this suite are generated from <strong className="text-amber-300">human curator corrections</strong>.
+                  The AI learns what "good" looks like from your feedback.
+                </p>
+              </div>
             </div>
+            <div className="flex items-center gap-4 text-xs text-zinc-500 pl-14">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-lg">👤</div>
+                <span>Human reviews AI response</span>
+              </div>
+              <span className="text-purple-500">→</span>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-lg">✏️</div>
+                <span>Human provides correction</span>
+              </div>
+              <span className="text-purple-500">→</span>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-lg">🧪</div>
+                <span>AI generates test</span>
+              </div>
+            </div>
+            <p className="text-xs text-zinc-500 pl-14 border-l-2 border-purple-500/30 ml-2">
+              💡 <strong>RLHF</strong> (Reinforcement Learning from Human Feedback) ensures AI improves through human wisdom, not just data.
+            </p>
           </div>
         )}
 

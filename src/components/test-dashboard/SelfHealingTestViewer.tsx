@@ -814,13 +814,13 @@ export const SelfHealingTestViewer: React.FC = () => {
                       variant="outline"
                       className="bg-amber-400/10 text-amber-400 border-amber-400/20 shrink-0"
                     >
-                      Tier 2
+                      👤 Tier 2
                     </Badge>
                     <p className="text-xs text-muted-foreground">
-                      <strong className="text-amber-400">Review Required</strong> -
-                      Medium-confidence fixes (60-90%) are proposed but require human approval
-                      before being committed. This includes structural changes and complex selector
-                      updates.
+                      <strong className="text-amber-400">Human Review Required</strong> -
+                      Medium-confidence fixes (60-90%) are proposed but <em className="text-amber-300">AI asks a human</em> for approval
+                      before committing. AI recognizes the limits of its certainty and defers to human judgment
+                      for structural changes and complex selector updates.
                     </p>
                   </div>
                   <div className="flex items-start gap-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
@@ -828,13 +828,13 @@ export const SelfHealingTestViewer: React.FC = () => {
                       variant="outline"
                       className="bg-red-500/10 text-red-500 border-red-500/20 shrink-0"
                     >
-                      Tier 3
+                      👤👤 Tier 3
                     </Badge>
                     <p className="text-xs text-muted-foreground">
-                      <strong className="text-red-400">Architect Review</strong> - Low-confidence
-                      cases ({"<"}60%) or fundamental test logic issues are escalated for expert
-                      review. These often indicate genuine application changes requiring test
-                      redesign.
+                      <strong className="text-red-400">Expert Human Required</strong> - Low-confidence
+                      cases ({"<"}60%) or fundamental test logic issues are <em className="text-red-300">escalated to human architects</em>.
+                      AI knows when it's out of its depth - these often indicate genuine application changes 
+                      that require human domain expertise to redesign tests properly.
                     </p>
                   </div>
                 </div>

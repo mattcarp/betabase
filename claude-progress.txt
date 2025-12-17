@@ -818,3 +818,33 @@ Duration: ~2 hours
 - Betabase schema (bb_case, bb_application, etc.)
 - Testing Tab API architecture
 ---
+
+---
+Session: 2025-12-17 ~22:20
+Agent: Coding (Spec-Kit + Long-Running Harness)
+Feature: 001-testing-tab-transformation (Continued)
+Duration: In Progress
+
+## Theme: AI Needs Humans
+User emphasized: This demo shows AI needs human guidance - HITL, RLHF, curator approval.
+Not about replacing humans - about symbiosis and collaboration.
+Holiday message: AI as partner, not threat.
+
+## Starting Phase 8-9
+- Phase 8: RLHF Test Suite component wiring
+- Phase 9: E2E verification with real data
+
+## Phase 8: Human-AI Collaboration Theme (~22:30)
+- [x] Enhanced RLHFTestSuite empty state with "AI Awaiting Human Guidance" message
+- [x] Added visual flow: Human reviews → Human corrects → AI generates test
+- [x] Updated SelfHealingTestViewer Tier 2/3 descriptions
+  - Tier 2: "AI asks a human" for approval
+  - Tier 3: "AI knows when it's out of its depth"
+- [x] Added "AI Needs Your Expertise" banner to TestHomeDashboard
+  - Shows when pending review items exist
+  - Direct link to curator queue
+
+## Key Message
+AI and humans work together - AI handles Tier 1 (high confidence)
+but explicitly asks humans for help on Tier 2-3 items.
+RLHF loop shows AI learning from human corrections.
