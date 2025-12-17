@@ -222,6 +222,39 @@ export const ChainOfThoughtImage = memo(
   )
 );
 
+export type ChainOfThoughtSpinnerProps = ComponentProps<"div"> & {
+  message?: ReactNode;
+};
+
+export const ChainOfThoughtSpinner = memo(
+  ({ className, message = "Working on it...", ...props }: ChainOfThoughtSpinnerProps) => (
+    <div
+      className={cn(
+        "flex flex-col items-center justify-center gap-3 py-4",
+        "fade-in-0 animate-in duration-300",
+        className
+      )}
+      {...props}
+    >
+      {/* Elegant pulsing spinner */}
+      <div className="relative">
+        {/* Outer ring with gradient */}
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-transparent border-t-primary/80 border-r-primary/40" />
+        {/* Inner pulse */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="h-2 w-2 animate-pulse rounded-full bg-primary/60" />
+        </div>
+      </div>
+      {/* Optional message with subtle animation */}
+      {message && (
+        <p className="animate-pulse text-muted-foreground text-xs">
+          {message}
+        </p>
+      )}
+    </div>
+  )
+);
+
 ChainOfThought.displayName = "ChainOfThought";
 ChainOfThoughtHeader.displayName = "ChainOfThoughtHeader";
 ChainOfThoughtStep.displayName = "ChainOfThoughtStep";
@@ -229,3 +262,4 @@ ChainOfThoughtSearchResults.displayName = "ChainOfThoughtSearchResults";
 ChainOfThoughtSearchResult.displayName = "ChainOfThoughtSearchResult";
 ChainOfThoughtContent.displayName = "ChainOfThoughtContent";
 ChainOfThoughtImage.displayName = "ChainOfThoughtImage";
+ChainOfThoughtSpinner.displayName = "ChainOfThoughtSpinner";

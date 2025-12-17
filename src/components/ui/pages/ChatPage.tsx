@@ -456,6 +456,12 @@ Be helpful, concise, and professional in your responses.`;
           {/* Main Content with SidebarInset */}
           <SidebarInset className="flex-1 min-h-0 bg-transparent flex flex-col">
             <div className="flex-1 flex flex-col min-h-0">
+              {activeMode === "chat" && (() => {
+                // #region agent log
+                fetch('http://127.0.0.1:7243/ingest/d8722888-9008-4d43-a867-1323ebab5570',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ChatPage.tsx:render-AiSdkChatPanel',message:'Rendering AiSdkChatPanel',data:{key:`${getChatAPIEndpoint()}-${activeConversationId}`,activeConversationId,hasActiveConversation:!!activeConversation,messageCount:activeConversation?.messages?.length,enableWelcomeScreen:!activeConversation || activeConversation.messages.length === 0},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H2'})}).catch(()=>{});
+                // #endregion
+                return null;
+              })()}
               {activeMode === "chat" && (
                 <div className="flex-1 flex flex-col min-h-0">
                   <AiSdkChatPanel
@@ -474,6 +480,9 @@ Be helpful, concise, and professional in your responses.`;
                     conversationId={activeConversationId || undefined}
                     initialMessages={activeConversation?.messages}
                     onMessagesChange={(messages) => {
+                      // #region agent log
+                      fetch('http://127.0.0.1:7243/ingest/d8722888-9008-4d43-a867-1323ebab5570',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ChatPage.tsx:onMessagesChange',message:'Messages changed callback',data:{messageCount:messages?.length,activeConversationId,firstMsgRole:messages?.[0]?.role,lastMsgRole:messages?.[messages?.length-1]?.role,lastMsgHasContent:!!messages?.[messages?.length-1]?.content,lastMsgHasParts:!!messages?.[messages?.length-1]?.parts},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H2,H3'})}).catch(()=>{});
+                      // #endregion
                       if (activeConversationId && messages.length > 0) {
                         const { updateConversation, getConversation } = useConversationStore.getState();
                         const currentConv = getConversation(activeConversationId);

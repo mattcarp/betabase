@@ -84,6 +84,7 @@ import {
   ChainOfThoughtSearchResults,
   ChainOfThoughtSearchResult,
   ChainOfThoughtContent,
+  ChainOfThoughtSpinner,
 } from "../ai-elements/chain-of-thought";
 import { SearchIcon, DatabaseIcon, SparklesIcon, FilterIcon, PlayIcon, DownloadIcon } from "lucide-react";
 import {
@@ -411,7 +412,16 @@ export function AiSdkChatPanel({
     // @ts-ignore - AI SDK v5 still supports api option but types haven't caught up
     api: currentApiEndpoint, // Use the calculated endpoint directly
     id: chatId,
-    messages: (initialMessages || []).filter((m) => m.content != null && m.content !== ""), // CRITICAL: Filter null content
+    // CRITICAL: Handle both AI SDK v4 (content) and v5 (parts[0].text) formats
+    // Messages without valid content in either format are filtered out
+    messages: (initialMessages || []).filter((m) => {
+      // AI SDK v5 format: check parts[0].text
+      const v5Content = m.parts?.[0]?.text;
+      // AI SDK v4 / legacy format: check content
+      const v4Content = m.content;
+      // Accept message if either format has valid content
+      return (v5Content != null && v5Content !== "") || (v4Content != null && v4Content !== "");
+    }),
     onResponse: (response: Response) => {
       // Capture RAG metadata from response headers before streaming starts
       const ragMetadataHeader = response.headers.get("X-RAG-Metadata");
@@ -501,6 +511,9 @@ export function AiSdkChatPanel({
       onError?.(err);
     },
     onFinish: () => {
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/d8722888-9008-4d43-a867-1323ebab5570',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ai-sdk-chat-panel.tsx:onFinish',message:'Stream finished callback',data:{timestamp:Date.now()},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H3'})}).catch(()=>{});
+      // #endregion
       // Clear progress interval if it exists
       if ((window as any).currentProgressInterval) {
         clearInterval((window as any).currentProgressInterval);
@@ -851,7 +864,13 @@ export function AiSdkChatPanel({
   // Update chatId when conversationId changes
   // NOTE: setMessages is intentionally excluded from deps - it's stable and including it causes infinite loops
   useEffect(() => {
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/d8722888-9008-4d43-a867-1323ebab5570',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ai-sdk-chat-panel.tsx:conversationId-effect',message:'Conversation ID effect triggered',data:{conversationId,chatId,willClear:conversationId && chatId !== conversationId,currentMessageCount:messages?.length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H4'})}).catch(()=>{});
+    // #endregion
     if (conversationId && chatId !== conversationId) {
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/d8722888-9008-4d43-a867-1323ebab5570',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ai-sdk-chat-panel.tsx:clearing-messages',message:'CLEARING MESSAGES - conversation mismatch',data:{conversationId,chatId,messagesBeforeClear:messages?.length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H4'})}).catch(()=>{});
+      // #endregion
       // Clear current messages when switching conversations
       setMessages([]);
     }
@@ -886,17 +905,21 @@ export function AiSdkChatPanel({
     }
   };
 
-  // Auto-scroll to bottom
+  // Auto-scroll to bottom when messages change or loading state updates (for spinner visibility)
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector(
         "[data-radix-scroll-area-viewport]"
       );
       if (scrollContainer) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        // Use smooth scroll for a nicer UX during loading updates
+        scrollContainer.scrollTo({
+          top: scrollContainer.scrollHeight,
+          behavior: isLoading ? 'smooth' : 'auto'
+        });
       }
     }
-  }, [messages]);
+  }, [messages, loadingSeconds, isLoading]);
 
   // Hide suggestions after first message
   useEffect(() => {
@@ -1449,11 +1472,11 @@ export function AiSdkChatPanel({
           {/* Message Content */}
           <MessageContent
             className={cn(
-              "relative backdrop-blur-sm border border-border/50 shadow-sm",
-              "transition-all duration-200 hover:shadow-md",
+              "relative",
+              "transition-all duration-200",
               isUser
-                ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white"
-                : "bg-background/80 hover:bg-background/90"
+                ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white backdrop-blur-sm border border-border/50 shadow-sm hover:shadow-md"
+                : "text-zinc-100"
             )}
           >
             {/* Reasoning display for AI messages */}
@@ -2141,6 +2164,12 @@ export function AiSdkChatPanel({
       <div className="flex-1 min-h-0 overflow-y-auto bg-zinc-950">
         <Conversation className="bg-zinc-950">
           <ConversationContent className="px-6 py-4 pb-8 bg-zinc-950">
+            {(() => {
+              // #region agent log
+              fetch('http://127.0.0.1:7243/ingest/d8722888-9008-4d43-a867-1323ebab5570',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ai-sdk-chat-panel.tsx:render-condition',message:'Checking welcome screen condition',data:{messagesLength:messages?.length,enableWelcomeScreen,showWelcome:messages.length === 0 && enableWelcomeScreen,isLoading,status,firstMsgRole:messages?.[0]?.role,lastMsgRole:messages?.[messages?.length-1]?.role},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H2,H5'})}).catch(()=>{});
+              // #endregion
+              return null;
+            })()}
             {messages.length === 0 && enableWelcomeScreen ? (
               /* Beautiful Welcome Screen */
               <motion.div
@@ -2276,6 +2305,12 @@ export function AiSdkChatPanel({
                             status={loadingSeconds > 5 ? "active" : "pending"}
                             description="Generating response with context"
                           />
+                          {/* Show spinner when response generation is active */}
+                          {loadingSeconds > 5 && (
+                            <ChainOfThoughtSpinner 
+                              message="Crafting a thoughtful response..." 
+                            />
+                          )}
                         </ChainOfThoughtContent>
                       </ChainOfThought>
                     </motion.div>
