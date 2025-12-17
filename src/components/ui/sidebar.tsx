@@ -437,6 +437,7 @@ const sidebarMenuButtonVariants = cva(
         default: "h-9",
         sm: "h-8 text-xs",
         lg: "h-10",
+        conversation: "h-auto min-h-11 items-start py-2.5",
       },
     },
     defaultVariants: {

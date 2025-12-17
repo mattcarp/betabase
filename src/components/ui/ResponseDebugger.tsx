@@ -3,6 +3,8 @@
  *
  * Shows full RAG pipeline trace for debugging responses
  * Part of Fix tab in Phase 5
+ * 
+ * Enhanced 2025-12-16: Added recent items dropdown for demo
  */
 
 "use client";
@@ -14,7 +16,7 @@ import { Badge } from "./badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs";
 import { ScrollArea } from "./scroll-area";
 import { Input } from "./input";
-import { Search, RefreshCw, Activity, GitBranch, FileText, Lightbulb } from "lucide-react";
+import { Search, RefreshCw, Activity, GitBranch, FileText, Lightbulb, ChevronDown, Clock, AlertTriangle, ThumbsUp, ThumbsDown } from "lucide-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
@@ -30,6 +32,16 @@ interface DebugData {
   rlhfSignalsUsed: boolean;
 }
 
+interface RecentFeedback {
+  id: string;
+  query: string;
+  thumbs_up: boolean | null;
+  rating: number | null;
+  created_at: string;
+  status: string;
+  severity: string | null;
+}
+
 interface ResponseDebuggerProps {
   conversationId?: string;
   messageId?: string;
@@ -39,7 +51,40 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
   const [debugData, setDebugData] = useState<DebugData | null>(null);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [recentItems, setRecentItems] = useState<RecentFeedback[]>([]);
+  const [loadingRecent, setLoadingRecent] = useState(false);
+  const [showRecent, setShowRecent] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const supabase = createClientComponentClient();
+
+  // Load recent feedback items on mount
+  useEffect(() => {
+    loadRecentItems();
+  }, []);
+
+  const loadRecentItems = async () => {
+    setLoadingRecent(true);
+    try {
+      const { data, error } = await supabase
+        .from("rlhf_feedback")
+        .select("id, query, user_query, thumbs_up, rating, created_at, status, severity")
+        .order("created_at", { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error("Failed to load recent items:", error);
+      } else {
+        setRecentItems(data?.map(item => ({
+          ...item,
+          query: item.query || item.user_query || "Unknown query"
+        })) || []);
+      }
+    } catch (error) {
+      console.error("Error loading recent items:", error);
+    } finally {
+      setLoadingRecent(false);
+    }
+  };
 
   const loadDebugInfo = async (msgId: string) => {
     if (!msgId) {
@@ -48,6 +93,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
     }
 
     setLoading(true);
+    setSelectedId(msgId);
 
     try {
       // Load feedback/metadata for this message
@@ -66,10 +112,10 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
 
       // Extract debug information from metadata
       // Using correct column names: query, retrieved_contexts, feedback_metadata
-      const metadata = feedback.feedback_metadata || {};
+      const metadata = feedback.feedback_metadata || feedback.rag_metadata || {};
 
       setDebugData({
-        query: feedback.query || "N/A",
+        query: feedback.query || feedback.user_query || "N/A",
         strategy: metadata.strategy || "unknown",
         retrievedDocs: feedback.retrieved_contexts || [],
         rerankedDocs: metadata.finalDocs || feedback.retrieved_contexts || [],
@@ -80,12 +126,26 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
       });
 
       toast.success("Debug information loaded");
+      setShowRecent(false);
     } catch (error) {
       console.error("Error loading debug info:", error);
       toast.error("Failed to load debug information");
     } finally {
       setLoading(false);
     }
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return `${diffDays}d ago`;
   };
 
   return (
@@ -102,12 +162,81 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
       <CardContent className="flex-1 flex flex-col">
         {/* Search for message ID */}
         <div className="flex gap-2 mb-4">
-          <Input
-            placeholder="Enter message or feedback ID..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 bg-zinc-900/50 border-zinc-800"
-          />
+          <div className="relative flex-1">
+            <Input
+              placeholder="Enter message or feedback ID..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setShowRecent(true)}
+              className="bg-zinc-900/50 border-zinc-800 pr-10"
+            />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+              onClick={() => {
+                setShowRecent(!showRecent);
+                if (!showRecent) loadRecentItems();
+              }}
+            >
+              <ChevronDown className={cn("h-4 w-4 transition-transform", showRecent && "rotate-180")} />
+            </Button>
+
+            {/* Recent items dropdown */}
+            {showRecent && recentItems.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto">
+                <div className="p-2 border-b border-zinc-700 text-xs text-zinc-400 flex items-center gap-2">
+                  <Clock className="h-3 w-3" />
+                  Recent Feedback Items
+                  {loadingRecent && <RefreshCw className="h-3 w-3 animate-spin ml-auto" />}
+                </div>
+                {recentItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setSearchQuery(item.id);
+                      loadDebugInfo(item.id);
+                    }}
+                    className={cn(
+                      "w-full text-left px-3 py-2 hover:bg-zinc-800 transition-colors border-b border-zinc-800/50 last:border-0",
+                      selectedId === item.id && "bg-zinc-800"
+                    )}
+                  >
+                    <div className="flex items-center gap-2">
+                      {item.thumbs_up === true && <ThumbsUp className="h-3 w-3 text-green-400" />}
+                      {item.thumbs_up === false && <ThumbsDown className="h-3 w-3 text-red-400" />}
+                      {item.severity === "critical" && <AlertTriangle className="h-3 w-3 text-red-400" />}
+                      <span className="text-xs text-zinc-300 truncate flex-1">
+                        {item.query?.substring(0, 60)}...
+                      </span>
+                      <span className="text-xs text-zinc-500">{formatTimeAgo(item.created_at)}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1">
+                      <code className="text-[10px] text-zinc-500 font-mono">{item.id.substring(0, 8)}...</code>
+                      {item.rating && (
+                        <Badge variant="outline" className="text-[10px] h-4">
+                          {item.rating}/5
+                        </Badge>
+                      )}
+                      {item.status && (
+                        <Badge 
+                          variant="outline" 
+                          className={cn(
+                            "text-[10px] h-4",
+                            item.status === "approved" && "border-green-500/50 text-green-400",
+                            item.status === "pending" && "border-yellow-500/50 text-yellow-400",
+                            item.status === "rejected" && "border-red-500/50 text-red-400"
+                          )}
+                        >
+                          {item.status}
+                        </Badge>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           <Button
             onClick={() => loadDebugInfo(searchQuery)}
             disabled={loading || !searchQuery.trim()}

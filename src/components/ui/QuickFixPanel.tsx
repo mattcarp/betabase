@@ -3,20 +3,32 @@
  *
  * Allows curators to edit and save response corrections as training examples
  * Part of Fix tab in Phase 5.2
+ * 
+ * Enhanced 2025-12-16: Added recent items dropdown for demo
  */
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./card";
 import { Button } from "./button";
 import { Textarea } from "./textarea";
 import { Input } from "./input";
 import { Badge } from "./badge";
-import { Edit3, Save, RefreshCw, CheckCircle, AlertCircle } from "lucide-react";
+import { Edit3, Save, RefreshCw, CheckCircle, AlertCircle, ChevronDown, Clock, ThumbsDown, AlertTriangle } from "lucide-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
+
+interface RecentFeedback {
+  id: string;
+  query: string;
+  thumbs_up: boolean | null;
+  rating: number | null;
+  created_at: string;
+  status: string;
+  severity: string | null;
+}
 
 interface QuickFixPanelProps {
   messageId?: string;
@@ -29,21 +41,70 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [queryText, setQueryText] = useState("");
+  const [recentItems, setRecentItems] = useState<RecentFeedback[]>([]);
+  const [loadingRecent, setLoadingRecent] = useState(false);
+  const [showRecent, setShowRecent] = useState(false);
   const supabase = createClientComponentClient();
 
-  const loadMessage = async () => {
-    if (!searchId.trim()) {
+  // Load recent items that need fixing (negative feedback)
+  useEffect(() => {
+    loadRecentItems();
+  }, []);
+
+  const loadRecentItems = async () => {
+    setLoadingRecent(true);
+    try {
+      const { data, error } = await supabase
+        .from("rlhf_feedback")
+        .select("id, query, user_query, thumbs_up, rating, created_at, status, severity")
+        .or("thumbs_up.eq.false,rating.lt.4")
+        .order("created_at", { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error("Failed to load recent items:", error);
+      } else {
+        setRecentItems(data?.map(item => ({
+          ...item,
+          query: item.query || item.user_query || "Unknown query"
+        })) || []);
+      }
+    } catch (error) {
+      console.error("Error loading recent items:", error);
+    } finally {
+      setLoadingRecent(false);
+    }
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return `${diffDays}d ago`;
+  };
+
+  const loadMessage = async (idToLoad?: string) => {
+    const targetId = idToLoad || searchId;
+    if (!targetId.trim()) {
       toast.error("Please enter a message ID");
       return;
     }
 
     setLoading(true);
+    setSearchId(targetId);
 
     try {
       const { data, error } = await supabase
         .from("rlhf_feedback")
-        .select("ai_response, feedback_text")
-        .eq("id", searchId)
+        .select("ai_response, response, feedback_text, query, user_query, suggested_correction")
+        .eq("id", targetId)
         .single();
 
       if (error) {
@@ -52,9 +113,12 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
         return;
       }
 
-      setOriginal(data.ai_response || "");
-      setCorrected(data.feedback_text || data.ai_response || "");
+      const responseText = data.ai_response || data.response || "";
+      setOriginal(responseText);
+      setCorrected(data.suggested_correction || data.feedback_text || responseText);
+      setQueryText(data.query || data.user_query || "");
       setLoaded(true);
+      setShowRecent(false);
       toast.success("Message loaded for editing");
     } catch (error) {
       console.error("Error loading message:", error);
@@ -122,32 +186,113 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
       <CardContent className="flex-1 flex flex-col space-y-4">
         {/* Search for message */}
         {!loaded && (
-          <div className="flex gap-2">
-            <Input
-              placeholder="Enter message or feedback ID..."
-              value={searchId}
-              onChange={(e) => setSearchId(e.target.value)}
-              className="flex-1 bg-zinc-900/50 border-zinc-800"
-            />
-            <Button onClick={loadMessage} disabled={loading || !searchId.trim()} className="gap-2">
-              {loading ? (
-                <>
-                  <RefreshCw className="h-4 w-4 animate-spin" />
-                  Loading...
-                </>
-              ) : (
-                <>
-                  <Edit3 className="h-4 w-4" />
-                  Load
-                </>
-              )}
-            </Button>
+          <div className="space-y-3">
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Input
+                  placeholder="Enter message or feedback ID..."
+                  value={searchId}
+                  onChange={(e) => setSearchId(e.target.value)}
+                  onFocus={() => setShowRecent(true)}
+                  className="bg-zinc-900/50 border-zinc-800 pr-10"
+                />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+                  onClick={() => {
+                    setShowRecent(!showRecent);
+                    if (!showRecent) loadRecentItems();
+                  }}
+                >
+                  <ChevronDown className={cn("h-4 w-4 transition-transform", showRecent && "rotate-180")} />
+                </Button>
+
+                {/* Recent items dropdown - only shows negative feedback */}
+                {showRecent && recentItems.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto">
+                    <div className="p-2 border-b border-zinc-700 text-xs text-zinc-400 flex items-center gap-2">
+                      <AlertTriangle className="h-3 w-3 text-orange-400" />
+                      Responses Needing Correction
+                      {loadingRecent && <RefreshCw className="h-3 w-3 animate-spin ml-auto" />}
+                    </div>
+                    {recentItems.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => loadMessage(item.id)}
+                        className="w-full text-left px-3 py-2 hover:bg-zinc-800 transition-colors border-b border-zinc-800/50 last:border-0"
+                      >
+                        <div className="flex items-center gap-2">
+                          <ThumbsDown className="h-3 w-3 text-red-400" />
+                          {item.severity === "critical" && <AlertTriangle className="h-3 w-3 text-red-400" />}
+                          <span className="text-xs text-zinc-300 truncate flex-1">
+                            {item.query?.substring(0, 60)}...
+                          </span>
+                          <span className="text-xs text-zinc-500">{formatTimeAgo(item.created_at)}</span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
+                          <code className="text-[10px] text-zinc-500 font-mono">{item.id.substring(0, 8)}...</code>
+                          {item.rating && (
+                            <Badge variant="outline" className="text-[10px] h-4 border-red-500/50 text-red-400">
+                              {item.rating}/5
+                            </Badge>
+                          )}
+                          {item.severity && (
+                            <Badge 
+                              variant="outline" 
+                              className={cn(
+                                "text-[10px] h-4",
+                                item.severity === "critical" && "border-red-500/50 text-red-400",
+                                item.severity === "major" && "border-orange-500/50 text-orange-400",
+                                item.severity === "minor" && "border-yellow-500/50 text-yellow-400"
+                              )}
+                            >
+                              {item.severity}
+                            </Badge>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <Button onClick={() => loadMessage()} disabled={loading || !searchId.trim()} className="gap-2">
+                {loading ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  <>
+                    <Edit3 className="h-4 w-4" />
+                    Load
+                  </>
+                )}
+              </Button>
+            </div>
+            
+            {/* Quick access hint */}
+            {recentItems.length > 0 && !showRecent && (
+              <p className="text-xs text-zinc-500">
+                {recentItems.length} responses need correction. Click the dropdown to view them.
+              </p>
+            )}
           </div>
         )}
 
         {/* Edit interface */}
         {loaded && (
           <>
+            {/* Show the original query */}
+            {queryText && (
+              <Card className="bg-zinc-900/30 border-zinc-800">
+                <CardContent className="py-3">
+                  <div className="text-xs text-zinc-500 mb-1">Original Query:</div>
+                  <p className="text-sm text-zinc-200">{queryText}</p>
+                </CardContent>
+              </Card>
+            )}
+
             <div className="flex-1 grid grid-cols-2 gap-4">
               {/* Original response */}
               <div className="flex flex-col">
@@ -215,6 +360,8 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
                   setSearchId("");
                   setOriginal("");
                   setCorrected("");
+                  setQueryText("");
+                  loadRecentItems(); // Refresh the list
                 }}
                 className="gap-2"
               >

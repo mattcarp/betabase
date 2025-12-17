@@ -93,6 +93,7 @@ import {
   ConfidenceBadge,
   DiagramOffer,
   useDiagramOffer,
+  shouldOfferDiagram,
 } from "./demo-enhancements";
 // import { DiagramOffer, useDiagramOffer } from "./demo-enhancements/DiagramOffer";
 
@@ -222,7 +223,6 @@ export function AiSdkChatPanel({
   // Demo Enhancement hooks for video recording
   const demoMode = useDemoMode();
   const diagramOffer = useDiagramOffer();
-  // const diagramOffer = { shouldOffer: false, offerDiagram: () => {}, dismissOffer: () => {}, isGenerating: false, startBackgroundGeneration: () => {} }; // Mock
 
   // Voice feature states - define before using in hooks
   const [isTTSEnabled, setIsTTSEnabled] = useState(false);
@@ -677,6 +677,20 @@ export function AiSdkChatPanel({
 
   // Derive isLoading from useChat isLoading, status, or manual loading state
   const isLoading = chatIsLoading || (status as any) === "loading" || manualLoading;
+
+  // Start background diagram generation when response finishes (non-blocking)
+  const prevIsLoadingRef = useRef(isLoading);
+  useEffect(() => {
+    // Detect transition from loading → not loading (response finished)
+    if (prevIsLoadingRef.current && !isLoading && messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage.role === "assistant" && shouldOfferDiagram(lastMessage.content || "")) {
+        // Start building diagram in background while user reads
+        diagramOffer.startBackgroundGeneration();
+      }
+    }
+    prevIsLoadingRef.current = isLoading;
+  }, [isLoading, messages, diagramOffer]);
 
   // Detect when assistant starts streaming (to prevent jitter)
   useEffect(() => {
@@ -1602,16 +1616,16 @@ export function AiSdkChatPanel({
               </div>
             )}
 
-            {/* Diagram Offer - Non-blocking "Would you like a diagram?" */}
-            {!isUser && isLastMessage && !isLoading && (
+            {/* Diagram Offer - Subtle inline hint, only when content warrants visualization */}
+            {!isUser && isLastMessage && !isLoading && shouldOfferDiagram(message.content || "") && (
               <DiagramOffer
                 shouldOffer={true}
                 onAccept={() => {
-                  diagramOffer.offerDiagram();
-                  // In a real app, this would append a message or trigger detailed view
+                  diagramOffer.showDiagram();
                 }}
                 onDismiss={diagramOffer.dismissOffer}
                 isGenerating={diagramOffer.isGenerating}
+                isReady={diagramOffer.isReady}
               />
             )}
 
@@ -2012,7 +2026,7 @@ export function AiSdkChatPanel({
                     Welcome to The Betabase
                   </h2>
                   <p className="text-lg font-light text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                    Don't be an asshat.
+                    Don't be an ass-hat.
                   </p>
                 </motion.div>
 

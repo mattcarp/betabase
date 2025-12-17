@@ -102,6 +102,37 @@ Create a cyclical diagram showing the RLHF feedback loop:
 Use circular arrows, hand-drawn style, with icons for each step.
 ```
 
+### 🔄 Deduplication Flow (Mermaid)
+
+The Curate pillar includes intelligent deduplication to keep the knowledge base clean:
+
+```mermaid
+flowchart TD
+    A[New Document] --> B{1. Source ID Check}
+    B -->|"Found"| DUP[Duplicate - Skip/Update]
+    B -->|"Not found"| C{2. Content Hash}
+    C -->|"Match"| DUP
+    C -->|"Not found"| D{3. URL Normalization}
+    D -->|"Same URL"| DUP
+    D -->|"Not found"| E{4. Semantic Similarity}
+    E -->|"≥85% Similar"| DUP
+    E -->|"<85%"| F[✅ INSERT NEW DOCUMENT]
+    
+    style A fill:#4CAF50,color:white
+    style DUP fill:#f44336,color:white
+    style F fill:#2196F3,color:white
+    style B fill:#9C27B0,color:white
+    style C fill:#9C27B0,color:white
+    style D fill:#9C27B0,color:white
+    style E fill:#9C27B0,color:white
+```
+
+**Deduplication Layers:**
+- **Layer 1: Source ID** - Fastest check (unique identifier)
+- **Layer 2: Content Hash** - MD5/SHA-256 exact match
+- **Layer 3: URL Normalization** - Pattern matching for URLs
+- **Layer 4: Semantic Similarity** - Embedding cosine similarity (85% threshold)
+
 ---
 
 ## 📹 SHOT 4: PILLAR 3 - TEST (3:30-5:00)

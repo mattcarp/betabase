@@ -5,11 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./car
 import { Button } from "./button";
 import { Badge } from "./badge";
 import { Alert, AlertDescription } from "./alert";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
+// Native tabs to avoid React 19 + Radix ref composition issues
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 import { ScrollArea } from "./scroll-area";
 import { Separator } from "./separator";
 // import { Input } from "./input"; // Unused
-import { Checkbox } from "./checkbox";
+// import { Checkbox } from "./checkbox"; // Unused - using native checkbox
 import {
   Database,
   Upload,
@@ -24,19 +25,20 @@ import {
   FolderOpen,
   Info,
   X,
-  MoreVertical,
+  // MoreVertical, // Unused - was for dropdown menu
   GitMerge,
   // Loader2, // Unused
   Eye,
   Lightbulb,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./dropdown-menu";
+// Native buttons used instead to avoid React 19 + Radix ref issues
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuSeparator,
+//   DropdownMenuTrigger,
+// } from "./dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -389,112 +391,117 @@ export function CurateTab({
       </CardHeader>
 
       <CardContent className="flex-1 overflow-hidden">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList
+        {/* Native tabs implementation to avoid React 19 + Radix ref issues */}
+        <div className="h-full flex flex-col">
+          <div
+            role="tablist"
             className={cn(
-              "flex w-full overflow-x-auto",
+              "flex w-full overflow-x-auto rounded-lg p-1",
               "mac-glass",
-              "border-[var(--mac-utility-border)]",
+              "border border-[var(--mac-utility-border)]",
               "bg-[var(--mac-surface-card)]"
             )}
           >
             {/* Queue Tab - Curator Review Queue */}
-            <TabsTrigger
-              value="queue"
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "queue"}
+              onClick={() => setActiveTab("queue")}
               className={cn(
-                "font-light flex-1",
-                "data-[state=active]:bg-[var(--mac-accent-orange-400)]/10",
-                "data-[state=active]:text-[var(--mac-accent-orange-400)]",
-                "data-[state=active]:border-b-[3px]",
-                "data-[state=active]:border-[var(--mac-accent-orange-400)]",
-                "data-[state=active]:shadow-[0_2px_8px_rgba(251,146,60,0.3)]",
-                "transition-all duration-200"
+                "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
+                activeTab === "queue"
+                  ? "bg-[var(--mac-accent-orange-400)]/10 text-[var(--mac-accent-orange-400)] border-b-[3px] border-[var(--mac-accent-orange-400)] shadow-[0_2px_8px_rgba(251,146,60,0.3)]"
+                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
               )}
             >
               <ListTodo className="h-4 w-4 mr-2" />
               Queue
-            </TabsTrigger>
-            <TabsTrigger
-              value="files"
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "files"}
+              onClick={() => setActiveTab("files")}
               className={cn(
-                "font-light flex-1",
-                "data-[state=active]:bg-[var(--mac-primary-blue-400)]/10",
-                "data-[state=active]:text-[var(--mac-primary-blue-400)]",
-                "data-[state=active]:border-b-[3px]",
-                "data-[state=active]:border-[var(--mac-primary-blue-400)]",
-                "data-[state=active]:shadow-[0_2px_8px_rgba(51,133,255,0.3)]",
-                "transition-all duration-200"
+                "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
+                activeTab === "files"
+                  ? "bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)] border-b-[3px] border-[var(--mac-primary-blue-400)] shadow-[0_2px_8px_rgba(51,133,255,0.3)]"
+                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
               )}
             >
               <FolderOpen className="h-4 w-4 mr-2" />
               Files
-            </TabsTrigger>
-            <TabsTrigger
-              value="upload"
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "upload"}
+              onClick={() => setActiveTab("upload")}
               className={cn(
-                "font-light flex-1",
-                "data-[state=active]:bg-[var(--mac-primary-blue-400)]/10",
-                "data-[state=active]:text-[var(--mac-primary-blue-400)]",
-                "data-[state=active]:border-b-[3px]",
-                "data-[state=active]:border-[var(--mac-primary-blue-400)]",
-                "data-[state=active]:shadow-[0_2px_8px_rgba(51,133,255,0.3)]",
-                "transition-all duration-200"
+                "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
+                activeTab === "upload"
+                  ? "bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)] border-b-[3px] border-[var(--mac-primary-blue-400)] shadow-[0_2px_8px_rgba(51,133,255,0.3)]"
+                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
               )}
             >
               <Upload className="h-4 w-4 mr-2" />
               Upload
-            </TabsTrigger>
-            <TabsTrigger
-              value="info"
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "info"}
+              onClick={() => setActiveTab("info")}
               className={cn(
-                "font-light flex-1",
-                "data-[state=active]:bg-[var(--mac-primary-blue-400)]/10",
-                "data-[state=active]:text-[var(--mac-primary-blue-400)]",
-                "data-[state=active]:border-b-[3px]",
-                "data-[state=active]:border-[var(--mac-primary-blue-400)]",
-                "data-[state=active]:shadow-[0_2px_8px_rgba(51,133,255,0.3)]",
-                "transition-all duration-200"
+                "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
+                activeTab === "info"
+                  ? "bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)] border-b-[3px] border-[var(--mac-primary-blue-400)] shadow-[0_2px_8px_rgba(51,133,255,0.3)]"
+                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
               )}
             >
               <Info className="h-4 w-4 mr-2" />
               Info
-            </TabsTrigger>
+            </button>
 
             {/* RLHF Feedback Tab (permission-gated) */}
             {canAccessRLHF && (
-              <TabsTrigger
-                value="rlhf-feedback"
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeTab === "rlhf-feedback"}
+                onClick={() => setActiveTab("rlhf-feedback")}
                 className={cn(
-                  "font-light flex-1",
-                  "data-[state=active]:bg-[var(--mac-accent-purple-400)]/10",
-                  "data-[state=active]:text-[var(--mac-accent-purple-400)]",
-                  "data-[state=active]:border-b-[3px]",
-                  "data-[state=active]:border-[var(--mac-accent-purple-400)]",
-                  "data-[state=active]:shadow-[0_2px_8px_rgba(168,85,247,0.3)]",
-                  "transition-all duration-200"
+                  "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
+                  activeTab === "rlhf-feedback"
+                    ? "bg-[var(--mac-accent-purple-400)]/10 text-[var(--mac-accent-purple-400)] border-b-[3px] border-[var(--mac-accent-purple-400)] shadow-[0_2px_8px_rgba(168,85,247,0.3)]"
+                    : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
                 )}
               >
                 <Lightbulb className="h-4 w-4 mr-2" />
                 RLHF
-              </TabsTrigger>
+              </button>
             )}
-          </TabsList>
+          </div>
 
           {/* Queue Tab Content - Curator Review Queue */}
-          <TabsContent value="queue" className="flex-1 overflow-hidden mt-4">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
-              {/* Curator Queue takes 2/3 width on large screens */}
-              <div className="lg:col-span-2 overflow-hidden">
-                <CuratorQueue className="h-full" />
-              </div>
-              {/* Feedback Impact Card takes 1/3 width on large screens */}
-              <div className="overflow-auto">
-                <FeedbackImpactCard />
+          {activeTab === "queue" && (
+            <div role="tabpanel" className="flex-1 overflow-hidden mt-4">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
+                {/* Curator Queue takes 2/3 width on large screens */}
+                <div className="lg:col-span-2 overflow-hidden">
+                  <CuratorQueue className="h-full" />
+                </div>
+                {/* Feedback Impact Card takes 1/3 width on large screens */}
+                <div className="overflow-auto">
+                  <FeedbackImpactCard />
+                </div>
               </div>
             </div>
-          </TabsContent>
+          )}
 
-          <TabsContent value="files" className="flex-1 overflow-hidden mt-4">
+          {activeTab === "files" && (
+            <div role="tabpanel" className="flex-1 overflow-hidden mt-4">
             <div className="space-y-4 h-full flex flex-col">
               {/* Search and Actions Bar */}
               <div className="flex items-center gap-2">
@@ -581,13 +588,12 @@ export function CurateTab({
                 )}
               </div>
 
-              {/* Files List */}
-              <ScrollArea
+              {/* Files List - native scroll to avoid React 19 + Radix ref issues */}
+              <div
                 className={cn(
-                  "flex-1 rounded-lg",
+                  "flex-1 rounded-lg overflow-y-auto",
                   "border border-[var(--mac-utility-border)]",
-                  "bg-[var(--mac-surface-elevated)]",
-                  "[&_[data-radix-scroll-area-viewport]]:bg-[var(--mac-surface-elevated)]"
+                  "bg-[var(--mac-surface-elevated)]"
                 )}
               >
                 {loading && filteredFiles.length === 0 ? (
@@ -612,15 +618,16 @@ export function CurateTab({
                   <div className="p-4 space-y-2">
                     {/* Select All */}
                     <div className="flex items-center gap-4 pb-4 border-b border-[var(--mac-utility-border)]">
-                      <Checkbox
+                      <input
+                        type="checkbox"
                         checked={
                           selectedFiles.size === filteredFiles.length && filteredFiles.length > 0
                         }
-                        onCheckedChange={selectAllFiles}
+                        onChange={selectAllFiles}
                         className={cn(
+                          "h-4 w-4 rounded-sm cursor-pointer",
                           "border-[var(--mac-utility-border-elevated)]",
-                          "data-[state=checked]:bg-[var(--mac-primary-blue-400)]",
-                          "data-[state=checked]:border-[var(--mac-primary-blue-400)]"
+                          "accent-[var(--mac-primary-blue-400)]"
                         )}
                       />
                       <label
@@ -652,13 +659,14 @@ export function CurateTab({
                           ]
                         )}
                       >
-                        <Checkbox
+                        <input
+                          type="checkbox"
                           checked={selectedFiles.has(file.id)}
-                          onCheckedChange={() => toggleFileSelection(file.id)}
+                          onChange={() => toggleFileSelection(file.id)}
                           className={cn(
+                            "h-4 w-4 rounded-sm cursor-pointer",
                             "border-[var(--mac-utility-border-elevated)]",
-                            "data-[state=checked]:bg-[var(--mac-primary-blue-400)]",
-                            "data-[state=checked]:border-[var(--mac-primary-blue-400)]"
+                            "accent-[var(--mac-primary-blue-400)]"
                           )}
                         />
 
@@ -731,46 +739,29 @@ export function CurateTab({
                           </div>
                         </div>
 
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0 hover:bg-[var(--mac-state-hover)] mac-button mac-button-outline"
-                            >
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent
-                            align="end"
-                            className={cn(
-                              "mac-glass",
-                              "border-[var(--mac-utility-border)]",
-                              "bg-[var(--mac-surface-elevated)]"
-                            )}
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => previewFileContent(file)}
+                            className="h-8 w-8 p-0 rounded-md hover:bg-[var(--mac-state-hover)] inline-flex items-center justify-center text-[var(--mac-text-secondary)] hover:text-[var(--mac-primary-blue-400)] transition-colors"
+                            title="Preview file"
                           >
-                            <DropdownMenuItem
-                              className="text-[var(--mac-text-primary)] font-light"
-                              onClick={() => previewFileContent(file)}
-                            >
-                              <Eye className="h-4 w-4 mr-2 text-[var(--mac-primary-blue-400)]" />
-                              Preview File
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator className="bg-[var(--mac-utility-border)]" />
-                            <DropdownMenuItem
-                              className="text-[var(--mac-status-error-text)] font-light focus:text-[var(--mac-status-error-text)]"
-                              onClick={() => confirmDeleteFiles([file.id])}
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete File
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                            <Eye className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => confirmDeleteFiles([file.id])}
+                            className="h-8 w-8 p-0 rounded-md hover:bg-[var(--mac-state-hover)] inline-flex items-center justify-center text-[var(--mac-text-secondary)] hover:text-[var(--mac-status-error-text)] transition-colors"
+                            title="Delete file"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
                 )}
-              </ScrollArea>
+              </div>
 
               {/* Status Bar */}
               {stats.lastUpdated && (
@@ -782,9 +773,11 @@ export function CurateTab({
                 </div>
               )}
             </div>
-          </TabsContent>
+            </div>
+          )}
 
-          <TabsContent value="upload" className="flex-1 overflow-hidden mt-4">
+          {activeTab === "upload" && (
+            <div role="tabpanel" className="flex-1 overflow-hidden mt-4">
             <div className="space-y-6">
               {/* Prominent Upload Hero Section */}
               <div
@@ -888,9 +881,11 @@ export function CurateTab({
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+            </div>
+          )}
 
-          <TabsContent value="info" className="flex-1 overflow-hidden mt-4">
+          {activeTab === "info" && (
+            <div role="tabpanel" className="flex-1 overflow-hidden mt-4">
             <div className="space-y-4">
               <Card className="mac-card-elevated">
                 <CardHeader className="mac-card">
@@ -985,15 +980,16 @@ export function CurateTab({
                 </AlertDescription>
               </Alert>
             </div>
-          </TabsContent>
+            </div>
+          )}
 
           {/* RLHF Feedback Tab Content */}
-          {canAccessRLHF && (
-            <TabsContent value="rlhf-feedback" className="flex-1 overflow-hidden mt-4">
+          {canAccessRLHF && activeTab === "rlhf-feedback" && (
+            <div role="tabpanel" className="flex-1 overflow-hidden mt-4">
               <RLHFFeedbackTab />
-            </TabsContent>
+            </div>
           )}
-        </Tabs>
+        </div>
       </CardContent>
 
       {/* Delete Confirmation Dialog */}

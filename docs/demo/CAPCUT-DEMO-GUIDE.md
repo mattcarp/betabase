@@ -91,7 +91,109 @@ Generate with prompt:
   +---------------+ +---------------+ +---------------+
 ```
 
-### Diagram 3: RLHF Feedback Loop
+### Diagram 3: Multi-Tenant Architecture (EMPHASIZE AT START)
+
+```
+Generate with prompt:
+"Create an Excalidraw-style ERD showing 3-level tenant hierarchy: Organization (sony-music) -> Division (pde) -> App (aoma). Show siam_vectors table with dual embeddings (OpenAI 1536d, Gemini 768d). Hand-drawn professional style with purple/cyan theme."
+```
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    MULTI-TENANT VECTOR STORE                    │
+│                    The Betabase Architecture                    │
+└─────────────────────────────────────────────────────────────────┘
+
+    🏢 ORGANIZATION          📂 DIVISION           🎯 APP_UNDER_TEST
+    ┌─────────────┐         ┌─────────────┐       ┌─────────────┐
+    │ sony-music  │────────▶│ pde         │──────▶│ aoma        │
+    │ universal   │         │ legal       │       │ usm         │
+    │ warner      │         │ finance     │       │ dam         │
+    └─────────────┘         └─────────────┘       └─────────────┘
+           │                       │                     │
+           └───────────────────────┼─────────────────────┘
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │       SIAM_VECTORS           │
+                    │  ┌────────────────────────┐  │
+                    │  │ organization: FK       │  │
+                    │  │ division: FK           │  │
+                    │  │ app_under_test: FK     │  │
+                    │  │ content: TEXT          │  │
+                    │  │ embedding: vector(1536)│◀─── OpenAI
+                    │  │ embedding_gemini(768)  │◀─── Gemini
+                    │  │ source_type: jira/git  │  │
+                    │  │ metadata: JSONB        │  │
+                    │  └────────────────────────┘  │
+                    │  🔒 Complete Tenant Isolation │
+                    └──────────────────────────────┘
+```
+
+**Key Point for Demo:** "One vector store, complete isolation. Sony Music can't see Universal's data."
+
+---
+
+### Diagram 4: Chat Orchestration Flow (Vercel AI SDK + Gemini)
+
+```
+Generate with prompt:
+"Create an Excalidraw-style flowchart showing chat request flow: User Query -> RAG Vector Search -> Context Injection -> Gemini 3 Pro -> Streaming Response. Show the Vercel AI SDK wrapper. Professional hand-drawn style."
+```
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│              THE BETABASE CHAT ORCHESTRATION                    │
+│                   (Vercel AI SDK + Gemini)                      │
+└─────────────────────────────────────────────────────────────────┘
+
+    USER QUERY                                    STREAMING RESPONSE
+        │                                               ▲
+        ▼                                               │
+┌───────────────┐                              ┌───────────────┐
+│ POST /api/chat│                              │ useChat Hook  │
+│               │                              │ (React)       │
+└───────┬───────┘                              └───────┬───────┘
+        │                                               │
+        ▼                                               │
+┌───────────────────────────────────────────────────────┴───────┐
+│                    VERCEL AI SDK                              │
+│  ┌─────────────────────────────────────────────────────────┐  │
+│  │ streamText({                                             │  │
+│  │   model: google("gemini-2.0-flash-exp"),                │  │
+│  │   messages: [...],                                       │  │
+│  │   system: enhancedSystemPrompt                           │  │
+│  │ })                                                       │  │
+│  └─────────────────────────────────────────────────────────┘  │
+└───────────────────────────────────────────────────────────────┘
+        │                         ▲
+        │                         │ Context Injection
+        ▼                         │
+┌───────────────┐         ┌───────────────┐
+│ RAG PIPELINE  │────────▶│ ENHANCED      │
+│               │         │ SYSTEM PROMPT │
+│ ┌───────────┐ │         │               │
+│ │ Vector    │ │         │ + Citations   │
+│ │ Search    │ │         │ + Sources     │
+│ │ (pgvector)│ │         │ + Context     │
+│ └───────────┘ │         └───────────────┘
+│       │       │
+│       ▼       │
+│ ┌───────────┐ │
+│ │ siam_     │ │
+│ │ vectors   │ │
+│ │ (45k+)    │ │
+│ └───────────┘ │
+└───────────────┘
+
+KEY FILES:
+• src/app/api/chat/route.ts (main orchestration)
+• src/services/knowledgeSearchService.ts (RAG search)
+• src/hooks/useChat (Vercel AI SDK hook)
+```
+
+---
+
+### Diagram 5: RLHF Feedback Loop
 
 ```
 Generate with prompt:

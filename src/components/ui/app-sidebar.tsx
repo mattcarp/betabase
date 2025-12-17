@@ -105,18 +105,26 @@ export function AppSidebar({ className }: AppSidebarProps) {
   const formatTimestamp = (date: Date | string | undefined | null) => {
     const now = new Date();
 
-    // Handle null/undefined dates
-    if (!date) return "Just now";
+    // Handle null/undefined dates - show "Unknown" for truly missing dates
+    // This helps identify data issues rather than masking them as "Just now"
+    if (!date) return "Unknown";
 
     const dateObj = date instanceof Date ? date : new Date(date);
 
     // Check for invalid dates
-    if (isNaN(dateObj.getTime())) return "Just now";
+    if (isNaN(dateObj.getTime())) return "Unknown";
 
     const diff = now.getTime() - dateObj.getTime();
+    
+    // Handle negative diff (future dates) - shouldn't happen but be defensive
+    if (diff < 0) return "Just now";
+    
+    const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
 
-    if (hours < 1) return "Just now";
+    // More granular "just now" - only for < 5 minutes
+    if (minutes < 5) return "Just now";
+    if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
     const days = Math.floor(hours / 24);
     if (days === 1) return "Yesterday";
@@ -166,7 +174,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
         {/* Search Bar with MAC styling */}
         <div className="px-2 pb-2">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mac-text-secondary" />
+            <Search className="absolute left-3 top-[52%] h-4 w-4 -translate-y-1/2 text-mac-text-secondary" />
             <SidebarInput
               placeholder="Search conversations..."
               value={searchQuery}
@@ -222,12 +230,13 @@ export function AppSidebar({ className }: AppSidebarProps) {
         ) : (
           <SidebarGroup>
             <SidebarGroupContent>
-              <SidebarMenu className="space-y-6">
+              <SidebarMenu>
                 {sortedConversations.map((conversation) => (
                   <SidebarMenuItem key={conversation.id}>
                     <SidebarMenuButton
                       onClick={() => setActiveConversation(conversation.id)}
                       isActive={activeConversationId === conversation.id}
+                      size="conversation"
                       className={cn(
                         "group relative mac-conversation-item",
                         activeConversationId === conversation.id && "active"
@@ -278,7 +287,22 @@ export function AppSidebar({ className }: AppSidebarProps) {
                       </div>
                     </SidebarMenuButton>
 
-                    {/* Conversation Actions */}
+                    {/* Quick Delete Button - Always visible on hover */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (confirm(`Delete "${conversation.title}"?`)) {
+                          deleteConversation(conversation.id);
+                        }
+                      }}
+                      className="absolute right-8 bottom-2.5 opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-red-500/20 text-zinc-500 hover:text-red-400 transition-all duration-150"
+                      title="Delete conversation"
+                      data-test-id="delete-conversation-btn"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </button>
+
+                    {/* Conversation Actions Dropdown */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <SidebarMenuAction
@@ -306,7 +330,11 @@ export function AppSidebar({ className }: AppSidebarProps) {
                         </DropdownMenuItem>
                         <DropdownMenuSeparator className="bg-mac-border" />
                         <DropdownMenuItem
-                          onClick={() => deleteConversation(conversation.id)}
+                          onClick={() => {
+                            if (confirm(`Delete "${conversation.title}"?`)) {
+                              deleteConversation(conversation.id);
+                            }
+                          }}
                           className="mac-dropdown-item text-red-400 hover:text-red-300"
                         >
                           <Trash2 className="h-4 w-4 mr-2" />

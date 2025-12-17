@@ -3,7 +3,6 @@ module.exports = {
   "typescript": {
     "ignoreBuildErrors": true
   },
-  "outputFileTracingRoot": "/Users/matt/Documents/projects/mc-thebetabase",
   "reactStrictMode": true,
   "images": {
     "remotePatterns": [
@@ -21,11 +20,13 @@ module.exports = {
       "image/webp"
     ]
   },
+  "turbopack": {},
   "experimental": {
     "optimizePackageImports": [
       "@radix-ui/react-icons",
       "recharts",
       "framer-motion"
-    ]
+    ],
+    "turbopackFileSystemCacheForDev": false
   }
 }

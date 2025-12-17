@@ -135,6 +135,16 @@
   }
 }
 
+/* Quick delete button styling */
+.mac-conversation-item button[title="Delete conversation"] {
+  z-index: 10;
+}
+
+.mac-conversation-item button[title="Delete conversation"]:hover {
+  background: rgba(239, 68, 68, 0.2);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+}
+
 /* Action buttons with MAC hover effects */
 .mac-action-button {
   position: relative;

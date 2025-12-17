@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Report - Curate Tab Infinite Loop Fix</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e4e4e4;
+            padding: 2rem;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: #888; font-size: 1.1rem; margin-bottom: 2rem; }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-success { background: #22c55e33; color: #22c55e; border: 1px solid #22c55e55; }
+        .badge-fixed { background: #3b82f633; color: #3b82f6; border: 1px solid #3b82f655; }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .test-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        .test-item.pass { border-left: 3px solid #22c55e; }
+        .test-item.fail { border-left: 3px solid #ef4444; }
+        .check { color: #22c55e; margin-right: 0.75rem; font-size: 1.25rem; }
+        .x { color: #ef4444; margin-right: 0.75rem; font-size: 1.25rem; }
+        .log-box {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        .log-line { line-height: 1.6; }
+        .log-success { color: #22c55e; }
+        .log-error { color: #ef4444; }
+        .log-info { color: #3b82f6; }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .summary-stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        .summary-stat .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #22c55e, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .summary-stat .label { color: #888; font-size: 0.9rem; margin-top: 0.25rem; }
+        .fix-details {
+            background: linear-gradient(135deg, rgba(34,197,94,0.1), rgba(59,130,246,0.1));
+            border: 1px solid rgba(34,197,94,0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        .fix-details h3 { color: #22c55e; margin-bottom: 1rem; }
+        .fix-details ul { list-style: none; }
+        .fix-details li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .fix-details li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+        }
+        code {
+            background: rgba(0,0,0,0.3);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.85em;
+        }
+        .timestamp { color: #666; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header style="margin-bottom: 2rem;">
+            <h1>🔧 Debug Report</h1>
+            <p class="subtitle">React 19 + Radix UI Infinite Loop Fix</p>
+            <span class="badge badge-success">✓ VERIFIED</span>
+            <span class="badge badge-fixed">FIX APPLIED</span>
+            <p class="timestamp" style="margin-top: 1rem;">Generated: December 16, 2025 at 10:19 AM</p>
+        </header>
+
+        <div class="summary-grid">
+            <div class="summary-stat">
+                <div class="number">2</div>
+                <div class="label">Bugs Fixed</div>
+            </div>
+            <div class="summary-stat">
+                <div class="number">5</div>
+                <div class="label">Tests Passed</div>
+            </div>
+            <div class="summary-stat">
+                <div class="number">0</div>
+                <div class="label">Errors</div>
+            </div>
+            <div class="summary-stat">
+                <div class="number">28</div>
+                <div class="label">Tabs Fixed</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🐛 Bug #1: Stale Turbopack Cache</h2>
+            <div class="test-item pass">
+                <span class="check">✓</span>
+                <div>
+                    <strong>Landing page loads without "module factory not available" error</strong>
+                    <p style="color: #888; font-size: 0.85rem; margin-top: 0.25rem;">
+                        Cleared <code>.next</code> cache and removed stale <code>next@16.0.10</code> references from pnpm store
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🐛 Bug #2: Curate Tab Infinite Loop</h2>
+            <div class="test-item pass">
+                <span class="check">✓</span>
+                <div>
+                    <strong>CleanCurateTab module loads without errors</strong>
+                    <p style="color: #888; font-size: 0.85rem; margin-top: 0.25rem;">Log: CleanCurateTab_MODULE_LOADED</p>
+                </div>
+            </div>
+            <div class="test-item pass">
+                <span class="check">✓</span>
+                <div>
+                    <strong>CleanCurateTab component mounts successfully</strong>
+                    <p style="color: #888; font-size: 0.85rem; margin-top: 0.25rem;">Log: CleanCurateTab_MOUNTED with activeTab: "dashboard"</p>
+                </div>
+            </div>
+            <div class="test-item pass">
+                <span class="check">✓</span>
+                <div>
+                    <strong>Curate navigation works (URL: #curate)</strong>
+                    <p style="color: #888; font-size: 0.85rem; margin-top: 0.25rem;">Browser navigated from #chat to #curate</p>
+                </div>
+            </div>
+            <div class="test-item pass">
+                <span class="check">✓</span>
+                <div>
+                    <strong>Native Tabs render correctly (5 tabs visible)</strong>
+                    <p style="color: #888; font-size: 0.85rem; margin-top: 0.25rem;">Tabs: Overview, Q8 Feedback, Files, Insights, Upload</p>
+                </div>
+            </div>
+            <div class="test-item pass">
+                <span class="check">✓</span>
+                <div>
+                    <strong>Files tab content renders (no infinite loop)</strong>
+                    <p style="color: #888; font-size: 0.85rem; margin-top: 0.25rem;">Snapshot shows "Search files..." input and 23 "Preview File" buttons</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Debug Logs (Post-Fix)</h2>
+            <div class="log-box">
+<span class="log-line log-success">{"location":"CleanCurateTab.tsx:module-load","message":"CleanCurateTab_MODULE_LOADED"}</span>
+<span class="log-line log-success">{"location":"CleanCurateTab.tsx:useEffect-mount","message":"CleanCurateTab_MOUNTED","data":{"activeTab":"dashboard"}}</span>
+<span class="log-line log-info">// No WINDOW_ONERROR entries - infinite loop is FIXED</span>
+            </div>
+        </div>
+
+        <div class="fix-details">
+            <h3>🛠️ Fix Applied</h3>
+            <p style="margin-bottom: 1rem;"><strong>Root Cause:</strong> React 19's new ref cleanup behavior triggers infinite recursion in Radix UI's <code>composeRefs</code> function when cleanup functions return values.</p>
+            <ul>
+                <li>Created native React tab components (<code>NativeTabs</code>, <code>NativeTabsList</code>, <code>NativeTabsTrigger</code>, <code>NativeTabsContent</code>)</li>
+                <li>Replaced 28 Radix Tabs usages in <code>CleanCurateTab.tsx</code> with native HTML equivalents</li>
+                <li>Native tabs don't use <code>composeRefs</code>, avoiding the infinite loop entirely</li>
+                <li>This follows the same pattern already used for Select and DropdownMenu components</li>
+            </ul>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+            <h2>📁 Files Modified</h2>
+            <div style="font-family: monospace; font-size: 0.9rem; color: #888;">
+                <p style="color: #22c55e;">M  src/components/ui/CleanCurateTab.tsx</p>
+                <p style="color: #888; padding-left: 1rem;">+ Added NativeTabs components (lines 107-200)</p>
+                <p style="color: #888; padding-left: 1rem;">+ Replaced Radix imports with native tabs</p>
+                <p style="color: #888; padding-left: 1rem;">+ Added debug instrumentation</p>
+            </div>
+        </div>
+
+        <footer style="text-align: center; margin-top: 3rem; color: #666;">
+            <p>Debug Mode Report • Generated by Cursor AI Agent</p>
+            <p style="font-size: 0.8rem; margin-top: 0.5rem;">Instrumentation will be removed after user confirms fix is complete</p>
+        </footer>
+    </div>
+</body>
+</html>
+
+
+

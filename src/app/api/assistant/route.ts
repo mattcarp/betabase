@@ -1,3 +1,17 @@
+/**
+ * ⚠️  DEPRECATED - Vector store operations in this file use OpenAI
+ * 
+ * For file uploads, use /api/knowledge/upload instead!
+ * 
+ * The correct architecture uses:
+ * - Storage: Supabase PostgreSQL with pgvector extension
+ * - Table: siam_vectors (multi-tenant)
+ * 
+ * The assistant chat functionality (POST) may still be useful but
+ * file_search/vector_store_ids should NOT be used.
+ * @deprecated Vector store operations - use SupabaseVectorService instead
+ */
+
 import OpenAI from "openai";
 import { NextRequest } from "next/server";
 

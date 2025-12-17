@@ -22,5 +22,5 @@ export { HeroMetricsStrip } from "./HeroMetricsStrip";
 // 5. Demo Mode - pre-loaded queries for smooth recording
 export { DemoMode, useDemoMode } from "./DemoMode";
 
-// 6. Background Diagram Offer - non-blocking "Would you like a diagram?" UX
-export { DiagramOffer, useDiagramOffer } from "./DiagramOffer";
+// 6. Diagram Offer - subtle inline hint, only when content warrants visualization
+export { DiagramOffer, useDiagramOffer, shouldOfferDiagram } from "./DiagramOffer";

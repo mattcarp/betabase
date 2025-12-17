@@ -1,5 +1,5 @@
 "use client";
-// Force rebuild 123
+// Force rebuild 124 - Replaced Radix Tabs with native HTML to fix React 19 compose-refs infinite loop
 import React, { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./card";
 import { Button } from "./button";
@@ -22,12 +22,21 @@ import {
   DialogTitle,
   DialogDescription,
 } from "./dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
+// Radix Tabs removed - using native HTML tabs to avoid React 19 + Radix compose-refs infinite loop
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
+import { cn } from "../../lib/utils";
+
+// #region agent log
+// Hypothesis H6: CleanCurateTab module loaded - checking for infinite loop
+if (typeof window !== 'undefined') {
+  fetch('http://127.0.0.1:7243/ingest/d8722888-9008-4d43-a867-1323ebab5570',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'CleanCurateTab.tsx:module-load',message:'CleanCurateTab_MODULE_LOADED',data:{},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H6'})}).catch(()=>{});
+}
+// #endregion
 import { ScrollArea } from "./scroll-area";
 import { Separator } from "./separator";
 import { Input } from "./input";
 import { Progress } from "./progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
+// Select imports removed - using native HTML select to avoid React 19 + Radix compose-refs infinite loop
 import { Textarea } from "./textarea";
 import {
   Database,
@@ -36,7 +45,6 @@ import {
   RefreshCw,
   FileText,
   Search,
-  Download,
   AlertCircle,
   CheckCircle,
   Clock,
@@ -46,7 +54,6 @@ import {
   X,
   Eye,
   Filter,
-  MoreVertical,
   GitMerge,
   Sparkles,
   TrendingUp,
@@ -82,17 +89,10 @@ import {
   Settings,
   Image as ImageIcon,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-} from "./dropdown-menu";
+// DropdownMenu imports removed - using inline buttons to avoid React 19 + Radix compose-refs infinite loop
 import { FileUpload } from "../ai-elements/file-upload";
 import { toast } from "sonner";
-import { cn } from "../../lib/utils";
+// cn already imported above
 import { usePermissions } from "../../hooks/usePermissions";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQ8FeedbackQueue, Q8FeedbackContext } from "./Q8Button";
@@ -103,6 +103,109 @@ import {
   TooltipTrigger,
 } from "./tooltip";
 // Recharts removed for stability and simplification (Executive Demo)
+
+// ========================================
+// Native Tab Components (React 19 compatible)
+// Uses React Context to avoid prop drilling issues with cloneElement
+// Replaces Radix Tabs to avoid compose-refs infinite loop
+// ========================================
+interface NativeTabsContextValue {
+  activeTab: string;
+  setActiveTab: (value: string) => void;
+}
+const NativeTabsContext = React.createContext<NativeTabsContextValue | null>(null);
+
+const useNativeTabs = () => {
+  const context = React.useContext(NativeTabsContext);
+  if (!context) {
+    throw new Error("Native tab components must be used within NativeTabs");
+  }
+  return context;
+};
+
+interface NativeTabsProps {
+  value: string;
+  onValueChange: (value: string) => void;
+  className?: string;
+  children: React.ReactNode;
+}
+const NativeTabs = ({ value, onValueChange, className, children }: NativeTabsProps) => {
+  const contextValue = React.useMemo(() => ({
+    activeTab: value,
+    setActiveTab: onValueChange,
+  }), [value, onValueChange]);
+
+  return (
+    <NativeTabsContext.Provider value={contextValue}>
+      <div className={className} data-active-tab={value}>
+        {children}
+      </div>
+    </NativeTabsContext.Provider>
+  );
+};
+
+interface NativeTabsListProps {
+  className?: string;
+  children: React.ReactNode;
+}
+const NativeTabsList = ({ className, children }: NativeTabsListProps) => (
+  <div 
+    role="tablist" 
+    className={cn(
+      "inline-flex h-10 items-center justify-center gap-1 rounded-lg bg-zinc-800/50 p-1 text-zinc-400",
+      className
+    )}
+  >
+    {children}
+  </div>
+);
+
+interface NativeTabsTriggerProps {
+  value: string;
+  className?: string;
+  children: React.ReactNode;
+}
+const NativeTabsTrigger = ({ value, className, children }: NativeTabsTriggerProps) => {
+  const { activeTab, setActiveTab } = useNativeTabs();
+  return (
+    <button
+      role="tab"
+      aria-selected={activeTab === value}
+      data-state={activeTab === value ? "active" : "inactive"}
+      onClick={() => setActiveTab(value)}
+      className={cn(
+        "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-zinc-200",
+        activeTab === value && "bg-zinc-700 text-white",
+        className
+      )}
+    >
+      {children}
+    </button>
+  );
+};
+
+interface NativeTabsContentProps {
+  value: string;
+  className?: string;
+  children: React.ReactNode;
+}
+const NativeTabsContent = ({ value, className, children }: NativeTabsContentProps) => {
+  const { activeTab } = useNativeTabs();
+  if (activeTab !== value) return null;
+  return (
+    <div 
+      role="tabpanel"
+      data-state="active"
+      className={cn(
+        "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+};
+// ========================================
 
 interface VectorStoreFile {
   id: string;
@@ -367,6 +470,10 @@ export function CleanCurateTab({
   // Ensure client-side rendering for Recharts
   useEffect(() => {
     setMounted(true);
+    // #region agent log
+    // Hypothesis H6: CleanCurateTab component mounted successfully
+    fetch('http://127.0.0.1:7243/ingest/d8722888-9008-4d43-a867-1323ebab5570',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'CleanCurateTab.tsx:useEffect-mount',message:'CleanCurateTab_MOUNTED',data:{activeTab},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H6'})}).catch(()=>{});
+    // #endregion
   }, []);
 
   // Load Q8 queue and listen for new feedback from Chat tab
@@ -666,13 +773,13 @@ export function CleanCurateTab({
       </CardHeader>
 
       <CardContent className="flex-1 overflow-hidden">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="dashboard">
+        <NativeTabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
+          <NativeTabsList className="grid w-full grid-cols-5">
+            <NativeTabsTrigger value="dashboard">
               <BarChart3 className="h-4 w-4 mr-2" />
               Overview
-            </TabsTrigger>
-            <TabsTrigger value="q8-feedback" className="relative">
+            </NativeTabsTrigger>
+            <NativeTabsTrigger value="q8-feedback" className="relative">
               <Bot className="h-4 w-4 mr-2" />
               Q8 Feedback
               {q8Queue.length > 0 && (
@@ -680,23 +787,23 @@ export function CleanCurateTab({
                   {q8Queue.length}
                 </Badge>
               )}
-            </TabsTrigger>
-            <TabsTrigger value="files">
+            </NativeTabsTrigger>
+            <NativeTabsTrigger value="files">
               <FolderOpen className="h-4 w-4 mr-2" />
               Files
-            </TabsTrigger>
-            <TabsTrigger value="insights">
+            </NativeTabsTrigger>
+            <NativeTabsTrigger value="insights">
               <Lightbulb className="h-4 w-4 mr-2" />
               Insights
-            </TabsTrigger>
-            <TabsTrigger value="upload">
+            </NativeTabsTrigger>
+            <NativeTabsTrigger value="upload">
               <Upload className="h-4 w-4 mr-2" />
               Upload
-            </TabsTrigger>
-          </TabsList>
+            </NativeTabsTrigger>
+          </NativeTabsList>
 
           {/* Executive Dashboard - "Evil Charts" */}
-          <TabsContent value="dashboard" className="flex-1 overflow-auto mt-4">
+          <NativeTabsContent value="dashboard" className="flex-1 overflow-auto mt-4">
             <div className="space-y-4">
               {/* Executive KPIs */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -847,10 +954,10 @@ export function CleanCurateTab({
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+          </NativeTabsContent>
 
           {/* Q8 Feedback Tab - HITL Content Review from Chat */}
-          <TabsContent value="q8-feedback" className="flex-1 overflow-auto mt-4">
+          <NativeTabsContent value="q8-feedback" className="flex-1 overflow-auto mt-4">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -1121,10 +1228,10 @@ export function CleanCurateTab({
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+          </NativeTabsContent>
 
           {/* Files Tab - Preserved with Enhancements */}
-          <TabsContent value="files" className="flex-1 overflow-hidden mt-4">
+          <NativeTabsContent value="files" className="flex-1 overflow-hidden mt-4">
             <div className="space-y-4 h-full flex flex-col">
               {/* Upload Section */}
               <div className="border rounded-lg p-4 bg-muted/10">
@@ -1149,19 +1256,19 @@ export function CleanCurateTab({
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
-                <Select value={filterTopic} onValueChange={setFilterTopic}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="All Topics" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Topics</SelectItem>
-                    {allTopics.map((topic) => (
-                      <SelectItem key={topic} value={topic}>
-                        {topic}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {/* Native select to avoid React 19 + Radix compose-refs infinite loop */}
+                <select
+                  value={filterTopic}
+                  onChange={(e) => setFilterTopic(e.target.value)}
+                  className="h-9 w-32 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                >
+                  <option value="all">All Topics</option>
+                  {allTopics.map((topic) => (
+                    <option key={topic} value={topic}>
+                      {topic}
+                    </option>
+                  ))}
+                </select>
                 <Button variant="outline" size="sm" onClick={loadFiles} disabled={loading}>
                   <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
                 </Button>
@@ -1184,7 +1291,7 @@ export function CleanCurateTab({
               </div>
 
               {/* Files List */}
-              <ScrollArea className="flex-1 border rounded-lg">
+              <div className="flex-1 border rounded-lg overflow-auto">
                 {loading && filteredFiles.length === 0 ? (
                   <div className="flex items-center justify-center h-32">
                     <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -1283,52 +1390,45 @@ export function CleanCurateTab({
                           )}
                         </div>
 
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0 mac-button mac-button-outline"
-                            >
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => {
+{/* Plain HTML buttons to avoid React 19 + Radix compose-refs infinite loop */}
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            className="h-8 w-8 p-0 rounded-md bg-transparent hover:bg-zinc-800/50 inline-flex items-center justify-center transition-colors"
+                            onClick={() => {
                               setPreviewFile(file);
                               setIsPreviewOpen(true);
-                            }}>
-                              <Eye className="h-4 w-4 mr-2" />
-                              Preview File
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Lightbulb className="h-4 w-4 mr-2" />
-                              AI Analysis
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Download className="h-4 w-4 mr-2" />
-                              Download
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              className="text-destructive"
-                              onClick={() => confirmDeleteFiles([file.id])}
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                            }}
+                            title="Preview File"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            className="h-8 w-8 p-0 rounded-md bg-transparent hover:bg-zinc-800/50 inline-flex items-center justify-center transition-colors"
+                            title="AI Analysis"
+                          >
+                            <Lightbulb className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            className="h-8 w-8 p-0 rounded-md bg-transparent hover:bg-zinc-800/50 inline-flex items-center justify-center transition-colors text-red-400 hover:text-red-300"
+                            onClick={() => confirmDeleteFiles([file.id])}
+                            title="Delete"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
                 )}
-              </ScrollArea>
+              </div>
             </div>
-          </TabsContent>
+          </NativeTabsContent>
 
           {/* Insights Tab */}
-          <TabsContent value="insights" className="flex-1 overflow-auto mt-4">
+          <NativeTabsContent value="insights" className="flex-1 overflow-auto mt-4">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="mac-title">AI-Powered Curation Insights</h3>
@@ -1398,10 +1498,10 @@ export function CleanCurateTab({
                 </Card>
               ))}
             </div>
-          </TabsContent>
+          </NativeTabsContent>
 
           {/* Knowledge Curators Tab - No fake data */}
-          <TabsContent value="curators" className="flex-1 overflow-auto mt-4">
+          <NativeTabsContent value="curators" className="flex-1 overflow-auto mt-4">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="mac-title">Knowledge Curator Activity</h3>
@@ -1464,17 +1564,17 @@ export function CleanCurateTab({
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+          </NativeTabsContent>
 
           {/* Analytics Tab - Removed for Executive Review */}
-          <TabsContent value="analytics" className="flex-1 overflow-auto mt-4">
+          <NativeTabsContent value="analytics" className="flex-1 overflow-auto mt-4">
              <div className="flex items-center justify-center h-64 text-muted-foreground">
                 <p>Analytics module disabled for simplification.</p>
              </div>
-          </TabsContent>
+          </NativeTabsContent>
 
           {/* Upload Tab */}
-          <TabsContent value="upload" className="flex-1 overflow-hidden mt-4">
+          <NativeTabsContent value="upload" className="flex-1 overflow-hidden mt-4">
             <div className="space-y-4">
               <FileUpload
                 assistantId={assistantId}
@@ -1539,8 +1639,8 @@ export function CleanCurateTab({
                 </AlertDescription>
               </Alert>
             </div>
-          </TabsContent>
-        </Tabs>
+          </NativeTabsContent>
+        </NativeTabs>
       </CardContent>
 
       {/* File Preview Dialog */}

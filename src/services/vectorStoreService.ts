@@ -1,4 +1,16 @@
 /**
+ * ⚠️  DEPRECATED - This service uses OpenAI vector stores
+ * 
+ * Use SupabaseVectorService instead!
+ * 
+ * Import: import { getSupabaseVectorService } from "@/services/supabaseVectorService";
+ * 
+ * The correct architecture uses Supabase pgvector, NOT OpenAI vector stores.
+ * This file is kept for backward compatibility but should NOT be used for new code.
+ * 
+ * @deprecated Use SupabaseVectorService from supabaseVectorService.ts instead
+ * 
+ * --- Original description (outdated) ---
  * OpenAI Vector Store Service
  * Handles document uploads and management for the AOMA knowledge base
  */

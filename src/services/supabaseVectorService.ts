@@ -26,7 +26,7 @@ export type EmbeddingProvider = "openai" | "gemini";
 export class SupabaseVectorService {
   private embeddingProvider: EmbeddingProvider;
   
-  constructor(embeddingProvider: EmbeddingProvider = "openai") {
+  constructor(embeddingProvider: EmbeddingProvider = "gemini") {
     this.embeddingProvider = embeddingProvider;
   }
 
@@ -153,33 +153,54 @@ export class SupabaseVectorService {
     metadata: Record<string, any> = {}
   ): Promise<string> {
     try {
-      // Generate embedding
+      // Generate embedding using configured provider
       const embedding = await this.generateEmbedding(content);
+      console.log(`📝 Generated ${this.embeddingProvider} embedding (${embedding.length}d)`);
 
-      // Writes/RPC must use admin client
+      // Writes must use admin client
       if (!supabaseAdmin) {
         throw new Error(
           "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server."
         );
       }
 
-      const { data, error } = await supabaseAdmin.rpc("upsert_siam_vector", {
-        p_organization: organization,
-        p_division: division,
-        p_app_under_test: app_under_test,
-        p_content: content,
-        p_embedding: embedding,
-        p_source_type: sourceType,
-        p_source_id: sourceId,
-        p_metadata: metadata,
-      });
+      // Choose correct embedding column based on provider
+      // - embedding: vector(1536) for OpenAI
+      // - embedding_gemini: vector(768) for Gemini
+      const embeddingColumn = this.embeddingProvider === "gemini" ? "embedding_gemini" : "embedding";
+      
+      // Build the record dynamically to use correct column
+      const record: Record<string, any> = {
+        organization,
+        division,
+        app_under_test,
+        content,
+        source_type: sourceType,
+        source_id: sourceId,
+        metadata: {
+          ...metadata,
+          embedding_source: this.embeddingProvider, // Track which provider was used
+        },
+        updated_at: new Date().toISOString(),
+      };
+      record[embeddingColumn] = embedding;
+
+      console.log(`📝 Using column '${embeddingColumn}' for ${this.embeddingProvider} embeddings`);
+
+      const { data, error } = await supabaseAdmin
+        .from("siam_vectors")
+        .upsert(record, {
+          onConflict: "organization,division,app_under_test,source_type,source_id",
+        })
+        .select("id")
+        .single();
 
       if (error) {
         throw error;
       }
 
       console.log(`✅ Upserted vector: ${organization}/${division}/${app_under_test}/${sourceType}/${sourceId}`);
-      return data;
+      return data?.id || sourceId;
     } catch (error) {
       console.error("Vector upsert failed:", error);
       throw new Error(`Upsert failed: ${handleSupabaseError(error)}`);

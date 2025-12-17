@@ -1,3 +1,17 @@
+/**
+ * ⚠️  DEPRECATED - This endpoint uses OpenAI vector stores
+ * 
+ * Use /api/knowledge/upload instead!
+ * 
+ * The correct architecture uses:
+ * - Storage: Supabase PostgreSQL with pgvector extension
+ * - Table: siam_vectors (multi-tenant)
+ * - Embeddings: Gemini (768d) or OpenAI (1536d)
+ * 
+ * This file is kept for backward compatibility but should be migrated.
+ * @deprecated Use /api/knowledge/upload instead
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 

@@ -36,6 +36,71 @@ export interface Conversation {
   model?: string;
 }
 
+/**
+ * Generate a concise, meaningful title from user's first message.
+ * Extracts the essence of the query for sidebar display.
+ */
+function generateTitleFromMessage(content: string): string {
+  if (!content || typeof content !== "string") return "New Conversation";
+  
+  // Clean up the content
+  let title = content
+    .trim()
+    .replace(/\s+/g, " ") // Normalize whitespace
+    .replace(/^(hey|hi|hello|please|can you|could you|i need|i want)\s+/i, "") // Remove common prefixes
+    .replace(/[?!.]+$/, ""); // Remove trailing punctuation
+  
+  // If empty after cleaning, return default
+  if (!title) return "New Conversation";
+  
+  // Capitalize first letter
+  title = title.charAt(0).toUpperCase() + title.slice(1);
+  
+  // Truncate intelligently - try to break at word boundary
+  const maxLength = 45;
+  if (title.length > maxLength) {
+    // Find the last space before maxLength
+    const truncateAt = title.lastIndexOf(" ", maxLength);
+    if (truncateAt > 20) {
+      title = title.substring(0, truncateAt) + "...";
+    } else {
+      title = title.substring(0, maxLength) + "...";
+    }
+  }
+  
+  return title;
+}
+
+/**
+ * Check if a title needs auto-generation (is a default/placeholder title)
+ */
+function isDefaultTitle(title: string): boolean {
+  const defaultTitles = [
+    "new conversation",
+    "the betabase",
+    "untitled",
+    "untitled conversation",
+    ""
+  ];
+  return defaultTitles.includes(title.toLowerCase().trim());
+}
+
+/**
+ * Extract message content from AI SDK v4 or v5 format
+ * AI SDK v5 uses parts[0].text, v4 uses content
+ */
+function getMessageContent(m: any): string | undefined {
+  // AI SDK v5: parts[0].text
+  if (m.parts && m.parts[0]?.text) {
+    return m.parts[0].text;
+  }
+  // AI SDK v4 / fallback: content
+  if (m.content && typeof m.content === "string") {
+    return m.content;
+  }
+  return undefined;
+}
+
 interface ConversationStore {
   conversations: Conversation[];
   activeConversationId: string | null;
@@ -51,6 +116,7 @@ interface ConversationStore {
   getConversation: (id: string) => Conversation | undefined;
   clearAllConversations: () => void;
   removeDuplicateConversations: () => void;
+  regenerateDefaultTitles: () => number; // Returns count of updated conversations
 }
 
 export const useConversationStore = create<ConversationStore>()(
@@ -94,18 +160,16 @@ export const useConversationStore = create<ConversationStore>()(
             const updatedConversation = { ...c, ...updates, updatedAt: new Date() };
 
             // Auto-generate title from first user message if still default/empty
-            if (
-              (c.title === "New Conversation" || c.title === "The Betabase") &&
-              updates.messages &&
-              updates.messages.length > 0
-            ) {
+            // Works with both our Message type and Vercel AI SDK message format
+            if (isDefaultTitle(c.title) && updates.messages && updates.messages.length > 0) {
+              // AI SDK messages have: id, role, content, createdAt, etc.
+              // Try to find the first user message
               const firstUserMessage = updates.messages.find(
-                (m: Message) => m.role === "user"
+                (m: any) => m.role === "user" && m.content
               );
-              if (firstUserMessage && firstUserMessage.content) {
-                updatedConversation.title =
-                  firstUserMessage.content.slice(0, 50) +
-                  (firstUserMessage.content.length > 50 ? "..." : "");
+              
+              if (firstUserMessage?.content) {
+                updatedConversation.title = generateTitleFromMessage(firstUserMessage.content);
               }
             }
 
@@ -129,13 +193,13 @@ export const useConversationStore = create<ConversationStore>()(
               };
 
               // Auto-generate title from first user message if still default
+              // Title is generated as soon as first user message arrives
               if (
-                (c.title === "New Conversation" || c.title === "The Betabase") &&
+                isDefaultTitle(c.title) &&
                 message.role === "user" &&
-                c.messages.length === 0
+                message.content
               ) {
-                updatedConversation.title =
-                  message.content.slice(0, 50) + (message.content.length > 50 ? "..." : "");
+                updatedConversation.title = generateTitleFromMessage(message.content);
               }
 
               return updatedConversation;
@@ -202,6 +266,30 @@ export const useConversationStore = create<ConversationStore>()(
           };
         });
       },
+
+      regenerateDefaultTitles: () => {
+        let updatedCount = 0;
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            // Only process conversations with default titles AND messages
+            if (isDefaultTitle(c.title) && c.messages.length > 0) {
+              const firstUserMessage = c.messages.find(
+                (m: any) => m.role === "user" && m.content
+              );
+              if (firstUserMessage?.content) {
+                updatedCount++;
+                return {
+                  ...c,
+                  title: generateTitleFromMessage(firstUserMessage.content),
+                  updatedAt: new Date(),
+                };
+              }
+            }
+            return c;
+          }),
+        }));
+        return updatedCount;
+      },
     }),
     {
       name: "siam-conversations",
@@ -214,17 +302,27 @@ export const useConversationStore = create<ConversationStore>()(
           const parsed = JSON.parse(str);
 
           // Convert date strings back to Date objects
+          // Guard against undefined/null dates that would create Invalid Date objects
           if (parsed.state?.conversations) {
-            parsed.state.conversations = parsed.state.conversations.map((conv: any) => ({
-              ...conv,
-              createdAt: new Date(conv.createdAt),
-              updatedAt: new Date(conv.updatedAt),
-              messages:
-                conv.messages?.map((msg: any) => ({
-                  ...msg,
-                  timestamp: new Date(msg.timestamp),
-                })) || [],
-            }));
+            parsed.state.conversations = parsed.state.conversations.map((conv: any) => {
+              const now = new Date();
+              const parseDate = (dateValue: any, fallback: Date): Date => {
+                if (!dateValue) return fallback;
+                const parsed = new Date(dateValue);
+                return isNaN(parsed.getTime()) ? fallback : parsed;
+              };
+
+              return {
+                ...conv,
+                createdAt: parseDate(conv.createdAt, now),
+                updatedAt: parseDate(conv.updatedAt, parseDate(conv.createdAt, now)),
+                messages:
+                  conv.messages?.map((msg: any) => ({
+                    ...msg,
+                    timestamp: parseDate(msg.timestamp, now),
+                  })) || [],
+              };
+            });
           }
 
           return parsed;

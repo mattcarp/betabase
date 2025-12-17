@@ -12,6 +12,7 @@ import { getChatAPIEndpoint } from "../../../config/featureFlags";
 import { ResponseDebugger } from "../ResponseDebugger";
 import { QuickFixPanel } from "../QuickFixPanel";
 import { TestCaseGenerator } from "../TestCaseGenerator";
+import { FeedbackTimeline } from "../FeedbackTimeline";
 
 import { RLHFTestSuite } from "../../test-dashboard/RLHFTestSuite";
 import { RLHFImpactDashboard } from "../../test-dashboard/RLHFImpactDashboard";
@@ -47,6 +48,12 @@ import { AOMAKnowledgePanel } from "../AOMAKnowledgePanel";
 import EnhancedKnowledgePanel from "../EnhancedKnowledgePanel";
 import { getKnowledgeSourceCounts } from "../../../services/knowledgeSearchService";
 import { IntrospectionDropdown } from "../IntrospectionDropdown";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../tooltip";
 
 // PERFORMANCE OPTIMIZATION: Dynamic imports for heavy components
 // These components contain charts and heavy dependencies (recharts, etc.)
@@ -77,7 +84,8 @@ const HUDInterface = dynamic(
 );
 
 const CurateTab = dynamic(
-  () => import("../CleanCurateTab").then((mod) => ({ default: mod.CleanCurateTab })),
+  // Using CurateTab instead of CleanCurateTab - it has native tabs that avoid React 19 + Radix infinite loop
+  () => import("../CurateTab").then((mod) => ({ default: mod.CurateTab })),
   {
     loading: () => (
       <div className="flex items-center justify-center h-full">
@@ -136,16 +144,22 @@ interface ChatPageProps {
 const VALID_MODES: ComponentMode["mode"][] = ["chat", "hud", "test", "fix", "curate"];
 
 export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
-  // Initialize from URL hash if present, otherwise default to "chat"
-  const getInitialMode = (): ComponentMode["mode"] => {
-    if (typeof window === "undefined") return "chat";
-    const hash = window.location.hash.slice(1);
-    return VALID_MODES.includes(hash as ComponentMode["mode"])
-      ? (hash as ComponentMode["mode"])
-      : "chat";
-  };
+  // Track if component has hydrated to prevent SSR/client mismatch
+  const [isHydrated, setIsHydrated] = useState(false);
+  
+  // Always initialize with "chat" to prevent hydration mismatch
+  // The URL hash will be read and applied in a useEffect after hydration
+  const [activeMode, setActiveMode] = useState<ComponentMode["mode"]>("chat");
 
-  const [activeMode, setActiveMode] = useState<ComponentMode["mode"]>(getInitialMode);
+  // Mark as hydrated after first render on client
+  useEffect(() => {
+    setIsHydrated(true);
+    // Read URL hash only after component mounts on client
+    const hash = window.location.hash.slice(1);
+    if (VALID_MODES.includes(hash as ComponentMode["mode"])) {
+      setActiveMode(hash as ComponentMode["mode"]);
+    }
+  }, []);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
   const [knowledgeCounts, setKnowledgeCounts] = useState<Record<string, number>>({});
@@ -179,7 +193,17 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
     createConversation,
     setActiveConversation,
     getConversation,
+    regenerateDefaultTitles,
   } = useConversationStore();
+
+  // Regenerate titles for existing conversations that still have default names
+  // This runs once on mount to fix any legacy "New Conversation" entries
+  useEffect(() => {
+    const updated = regenerateDefaultTitles();
+    if (updated > 0) {
+      console.log(`[ChatPage] Regenerated ${updated} conversation titles`);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Create initial conversation if none exists
   useEffect(() => {
@@ -267,57 +291,92 @@ Be helpful, concise, and professional in your responses.`;
               </div>
 
               {/* Navigation Tabs - Hidden on mobile, shown on tablet+ */}
-              <div className="hidden md:flex items-center space-x-1 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50 flex-shrink-0">
-                {COMPONENT_MODES.map((mode) => (
-                  <button
-                    key={mode.mode}
-                    onClick={() => setActiveMode(mode.mode)}
-                    className={cn(
-                      "relative flex items-center justify-center space-x-2 px-4 py-2 rounded-md text-sm font-light transition-all duration-200",
-                      activeMode === mode.mode
-                        ? "bg-zinc-800 text-white shadow-sm"
-                        : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
-                    )}
-                  >
-                    <span
-                      className={cn(
-                        "flex items-center",
-                        activeMode === mode.mode && "text-[var(--mac-primary-blue-400)]"
-                      )}
-                    >
-                      {mode.icon}
-                    </span>
-                    <span className="hidden lg:inline">{mode.label}</span>
-                  </button>
-                ))}
-              </div>
+              {/* Use hydration-safe mode: always "chat" during SSR, actual mode after hydration */}
+              <TooltipProvider delayDuration={200}>
+                <div className="hidden md:flex items-center space-x-1 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50 flex-shrink-0">
+                  {COMPONENT_MODES.map((mode) => {
+                    // Only use actual activeMode after hydration to prevent SSR mismatch
+                    const isActive = isHydrated ? activeMode === mode.mode : mode.mode === "chat";
+                    return (
+                      <Tooltip key={mode.mode}>
+                        <TooltipTrigger asChild>
+                          <button
+                            onClick={() => setActiveMode(mode.mode)}
+                            className={cn(
+                              "relative flex items-center justify-center space-x-2 px-4 py-2 rounded-md text-sm font-light transition-all duration-200",
+                              isActive
+                                ? "bg-zinc-800 text-white shadow-sm"
+                                : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                            )}
+                            suppressHydrationWarning
+                          >
+                            <span
+                              className={cn(
+                                "flex items-center",
+                                isActive && "text-[var(--mac-primary-blue-400)]"
+                              )}
+                              suppressHydrationWarning
+                            >
+                              {mode.icon}
+                            </span>
+                            <span className="hidden lg:inline">{mode.label}</span>
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent 
+                          side="bottom" 
+                          className="bg-zinc-800 text-zinc-100 border-zinc-700"
+                        >
+                          <p className="font-medium">{mode.label}</p>
+                          <p className="text-zinc-400 text-[10px]">{mode.description}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  })}
+                </div>
+              </TooltipProvider>
 
               {/* Mobile Navigation - Compact tabs for small screens */}
-              <div className="flex md:hidden items-center space-x-0.5 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50">
-                {COMPONENT_MODES.map((mode) => (
-                  <button
-                    key={mode.mode}
-                    onClick={() => setActiveMode(mode.mode)}
-                    className={cn(
-                      "flex items-center justify-center p-2 rounded-md transition-all duration-200",
-                      activeMode === mode.mode
-                        ? "bg-zinc-800 shadow-sm"
-                        : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
-                    )}
-                    title={mode.label}
-                    aria-label={mode.label}
-                  >
-                    <span
-                      className={cn(
-                        "flex items-center",
-                        activeMode === mode.mode && "text-[var(--mac-primary-blue-400)]"
-                      )}
-                    >
-                      {mode.icon}
-                    </span>
-                  </button>
-                ))}
-              </div>
+              <TooltipProvider delayDuration={300}>
+                <div className="flex md:hidden items-center space-x-0.5 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50">
+                  {COMPONENT_MODES.map((mode) => {
+                    const isActive = isHydrated ? activeMode === mode.mode : mode.mode === "chat";
+                    return (
+                      <Tooltip key={mode.mode}>
+                        <TooltipTrigger asChild>
+                          <button
+                            onClick={() => setActiveMode(mode.mode)}
+                            className={cn(
+                              "flex items-center justify-center p-2 rounded-md transition-all duration-200",
+                              isActive
+                                ? "bg-zinc-800 shadow-sm"
+                                : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                            )}
+                            aria-label={mode.label}
+                            suppressHydrationWarning
+                          >
+                            <span
+                              className={cn(
+                                "flex items-center",
+                                isActive && "text-[var(--mac-primary-blue-400)]"
+                              )}
+                              suppressHydrationWarning
+                            >
+                              {mode.icon}
+                            </span>
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent 
+                          side="bottom" 
+                          className="bg-zinc-800 text-zinc-100 border-zinc-700"
+                        >
+                          <p className="font-medium">{mode.label}</p>
+                          <p className="text-zinc-400 text-[10px]">{mode.description}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  })}
+                </div>
+              </TooltipProvider>
 
               {/* Controls - Responsive spacing */}
               <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
@@ -402,7 +461,7 @@ Be helpful, concise, and professional in your responses.`;
                     key={`${getChatAPIEndpoint()}-${activeConversationId}`} // Force remount when endpoint or conversation changes
                     api={getChatAPIEndpoint()}
                     title={activeConversation?.title || "The Betabase"}
-                    description="Don't be an asshat."
+                    description="Don't be an ass-hat."
                     systemPrompt={systemPrompt}
                     suggestions={suggestions}
                     className="flex-1 border-0"
@@ -414,17 +473,56 @@ Be helpful, concise, and professional in your responses.`;
                     conversationId={activeConversationId || undefined}
                     initialMessages={activeConversation?.messages}
                     onMessagesChange={(messages) => {
-                      if (activeConversationId) {
-                        // We need to sync the messages back to the store
-                        // The store expects a single message to add, but here we get the full list
-                        // So we should probably update the conversation directly or handle the diff
-                        // For now, let's just update the conversation in the store if we can
-                        // But the store only has addMessage.
-                        // Let's check the store definition again.
-                        // It has updateConversation but that takes Partial<Conversation>.
-                        // So we can update messages directly.
-                        const { updateConversation } = useConversationStore.getState();
-                        updateConversation(activeConversationId, { messages: messages as any[] });
+                      if (activeConversationId && messages.length > 0) {
+                        const { updateConversation, getConversation } = useConversationStore.getState();
+                        const currentConv = getConversation(activeConversationId);
+                        
+                        // Helper to extract message content from AI SDK v4 or v5 format
+                        const getMessageContent = (m: any): string | undefined => {
+                          // AI SDK v5: parts[0].text
+                          if (m.parts && m.parts[0]?.text) {
+                            return m.parts[0].text;
+                          }
+                          // AI SDK v4 / fallback: content
+                          if (m.content && typeof m.content === "string") {
+                            return m.content;
+                          }
+                          return undefined;
+                        };
+                        
+                        // Generate title from first user message if title is still default
+                        const isDefaultTitle = (title: string) => {
+                          const defaults = ["new conversation", "the betabase", "untitled", ""];
+                          return defaults.includes((title || "").toLowerCase().trim());
+                        };
+                        
+                        let newTitle: string | undefined;
+                        if (currentConv && isDefaultTitle(currentConv.title)) {
+                          // Find first user message in the messages array
+                          const firstUserMsg = messages.find((m: any) => m.role === "user" && getMessageContent(m));
+                          const msgContent = firstUserMsg ? getMessageContent(firstUserMsg) : undefined;
+                          
+                          if (msgContent) {
+                            // Generate concise title from user's message
+                            let title = msgContent
+                              .trim()
+                              .replace(/\s+/g, " ")
+                              .replace(/^(hey|hi|hello|please|can you|could you|i need|i want)\s+/i, "")
+                              .replace(/[?!.]+$/, "");
+                            title = title.charAt(0).toUpperCase() + title.slice(1);
+                            if (title.length > 45) {
+                              const truncateAt = title.lastIndexOf(" ", 45);
+                              title = truncateAt > 20 ? title.substring(0, truncateAt) + "..." : title.substring(0, 45) + "...";
+                            }
+                            newTitle = title || undefined;
+                          }
+                        }
+                        
+                        // Update conversation with messages and potentially new title
+                        updateConversation(activeConversationId, { 
+                          messages: messages as any[],
+                          ...(newTitle && { title: newTitle })
+                        });
                       }
                     }}
                   />
@@ -515,16 +613,7 @@ Be helpful, concise, and professional in your responses.`;
                     </TabsContent>
 
                     <TabsContent value="timeline" className="h-full">
-                      <Card className="h-full bg-zinc-900/50 border-zinc-800">
-                        <CardHeader>
-                          <CardTitle className="text-zinc-100">Feedback Timeline</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-zinc-300 text-center py-8">
-                            Timeline view coming soon - shows feedback history for specific queries
-                          </p>
-                        </CardContent>
-                      </Card>
+                      <FeedbackTimeline className="h-full" />
                     </TabsContent>
                   </Tabs>
                 </div>

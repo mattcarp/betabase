@@ -1,0 +1,52 @@
+
+
+UPLOADER
+Archive Details
+View Non-Watermarked
+View Watermarked
+Upload
+Export
+Delete
+Edit Metadata
+ENGINEER
+Archive Details
+View Non-Watermarked
+View Watermarked
+Upload
+Delete
+Edit Metadata
+Export
+EXPORTER
+Archive Details
+View Non-Watermarked
+View Watermarked
+Delete
+Edit Metadata
+Export
+Upload
+Archive Details
+View Non-Watermarked
+View Watermarked
+Upload
+Export
+Delete
+Edit Metadata
+ADMIN
+PREVIEWER
+Archive Details
+View Non-Watermarked
+View Watermarked
+Upload
+Export
+Delete
+Edit Metadata
+VIEWER
+Archive DetailsExport
+Delete
+Edit Metadata
+Upload
+View Watermarked
+View Non-Watermarked
+PERMISSIONS
+ROLE
+AMP SECURITY MODEL
