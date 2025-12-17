@@ -69,18 +69,18 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Build query
+    // Build query - use created_at as it exists in the current schema
     let query = supabase
       .from("self_healing_attempts")
       .select("*", { count: "exact" })
-      .order("detected_at", { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (status) {
       query = query.eq("status", status);
     }
 
     if (tier) {
-      query = query.eq("healing_tier", parseInt(tier));
+      query = query.eq("tier", parseInt(tier));
     }
 
     query = query.range(offset, offset + limit - 1);
@@ -95,21 +95,21 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Calculate stats
+    // Calculate stats - use 'tier' as the column name
     const { data: statsData } = await supabase
       .from("self_healing_attempts")
-      .select("status, healing_tier");
+      .select("status, tier");
 
     const stats = {
       total: statsData?.length || 0,
-      pending: statsData?.filter(s => s.status === "pending").length || 0,
-      autoApproved: statsData?.filter(s => s.status === "auto_approved").length || 0,
-      approved: statsData?.filter(s => s.status === "approved").length || 0,
-      rejected: statsData?.filter(s => s.status === "rejected").length || 0,
+      pending: statsData?.filter(s => s.status === "pending" || s.status === "review").length || 0,
+      autoApproved: statsData?.filter(s => s.status === "auto_approved" || s.status === "auto-healed").length || 0,
+      approved: statsData?.filter(s => s.status === "approved" || s.status === "healed").length || 0,
+      rejected: statsData?.filter(s => s.status === "rejected" || s.status === "failed").length || 0,
       applied: statsData?.filter(s => s.status === "applied").length || 0,
-      tier1: statsData?.filter(s => s.healing_tier === 1).length || 0,
-      tier2: statsData?.filter(s => s.healing_tier === 2).length || 0,
-      tier3: statsData?.filter(s => s.healing_tier === 3).length || 0,
+      tier1: statsData?.filter(s => s.tier === 1).length || 0,
+      tier2: statsData?.filter(s => s.tier === 2).length || 0,
+      tier3: statsData?.filter(s => s.tier === 3).length || 0,
     };
 
     return NextResponse.json({
