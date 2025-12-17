@@ -43,7 +43,6 @@ import { Button } from "./button";
 import { Actions } from "../ai-elements/actions";
 import { InlineCitation } from "../ai-elements/inline-citation";
 import { Source } from "../ai-elements/source";
-import { Suggestion } from "../ai-elements/suggestion";
 import { ThemeSwitcher } from "./theme-switcher";
 import {
   DropdownMenu,
@@ -176,33 +175,36 @@ export function AppSidebar({ className }: AppSidebarProps) {
           <div className="relative">
             <Search className="absolute left-3 top-[52%] h-4 w-4 -translate-y-1/2 text-mac-text-secondary" />
             <SidebarInput
-              placeholder="Search conversations..."
+              placeholder=""
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="mac-input mac-sidebar-search pl-9 h-8 text-sm bg-mac-surface-elevated border border-mac-border/30 text-mac-text-primary placeholder:text-mac-text-muted"
+              className="mac-input mac-sidebar-search pl-9 h-8 text-sm bg-mac-surface-elevated border border-mac-border/30 text-mac-text-primary"
             />
           </div>
         </div>
 
-        {/* AI Suggestions */}
+        {/* Quick Filters - compact icon buttons */}
         {!searchQuery && conversations.length > 3 && (
-          <div className="px-2 pb-2 flex gap-2">
-            <Suggestion suggestion="Recent" onClick={() => setSearchQuery("")} className="text-xs" />
-            <Suggestion
-              suggestion="Pinned"
+          <div className="px-2 pb-2 flex gap-1">
+            <button
               onClick={() => setSearchQuery("pinned")}
-              className="text-xs"
-            />
-            <Suggestion
-              suggestion="Today"
+              title="Show pinned"
+              className="p-1.5 text-xs rounded-md text-zinc-400 hover:text-zinc-200 hover:bg-zinc-700/50 transition-colors"
+            >
+              <Pin className="h-3.5 w-3.5" />
+            </button>
+            <button
               onClick={() => {
                 const today = new Date().toDateString();
                 setFilteredConversations(
                   conversations.filter((c) => new Date(c.updatedAt).toDateString() === today)
                 );
               }}
-              className="text-xs"
-            />
+              title="Today only"
+              className="p-1.5 text-xs rounded-md text-zinc-400 hover:text-zinc-200 hover:bg-zinc-700/50 transition-colors"
+            >
+              <Clock className="h-3.5 w-3.5" />
+            </button>
           </div>
         )}
       </SidebarHeader>

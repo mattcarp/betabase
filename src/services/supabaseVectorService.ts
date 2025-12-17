@@ -209,22 +209,56 @@ export class SupabaseVectorService {
 
   /**
    * Batch upsert vectors (for migration) - Multi-tenant version
+   * 
+   * Can be called with:
+   * - batchUpsertVectors(vectors) - uses DEFAULT_APP_CONTEXT
+   * - batchUpsertVectors(org, division, app, vectors) - explicit context
    */
   async batchUpsertVectors(
-    organization: string,
-    division: string,
-    app_under_test: string,
-    vectors: Array<{
+    orgOrVectors: string | Array<{
+      content: string;
+      sourceType: SIAMVector["source_type"];
+      sourceId: string;
+      metadata?: Record<string, any>;
+    }>,
+    divisionOrNothing?: string,
+    app_under_test?: string,
+    vectorsArg?: Array<{
       content: string;
       sourceType: SIAMVector["source_type"];
       sourceId: string;
       metadata?: Record<string, any>;
     }>
   ): Promise<{ success: number; failed: number }> {
+    // Handle overloaded signature
+    let organization: string;
+    let division: string;
+    let app: string;
+    let vectors: Array<{
+      content: string;
+      sourceType: SIAMVector["source_type"];
+      sourceId: string;
+      metadata?: Record<string, any>;
+    }>;
+    
+    if (Array.isArray(orgOrVectors)) {
+      // Called with just vectors - use defaults
+      const { DEFAULT_APP_CONTEXT } = require("../lib/supabase");
+      organization = DEFAULT_APP_CONTEXT.organization;
+      division = DEFAULT_APP_CONTEXT.division;
+      app = DEFAULT_APP_CONTEXT.app_under_test;
+      vectors = orgOrVectors;
+    } else {
+      // Called with explicit context
+      organization = orgOrVectors;
+      division = divisionOrNothing!;
+      app = app_under_test!;
+      vectors = vectorsArg!;
+    }
     let success = 0;
     let failed = 0;
 
-    console.log(`🔄 Batch upserting ${vectors.length} vectors for ${organization}/${division}/${app_under_test}`);
+    console.log(`🔄 Batch upserting ${vectors.length} vectors for ${organization}/${division}/${app}`);
 
     // Process in batches to avoid overwhelming the API
     const batchSize = Math.max(1, parseInt(process.env.VECTOR_BATCH_SIZE || "5", 10));
@@ -236,7 +270,7 @@ export class SupabaseVectorService {
           await this.upsertVector(
             organization,
             division,
-            app_under_test,
+            app,
             vector.content,
             vector.sourceType,
             vector.sourceId,

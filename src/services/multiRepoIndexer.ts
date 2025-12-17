@@ -64,8 +64,13 @@ export class MultiRepoIndexer {
       migratedCount: 0,
     });
 
+    console.log(`📂 Processing ${changedFiles.length} files in batches of ${batchSize}...`);
+    
     for (let i = 0; i < changedFiles.length; i += batchSize) {
       const batchFiles = changedFiles.slice(i, i + batchSize);
+      const batchNum = Math.floor(i / batchSize) + 1;
+      const totalBatches = Math.ceil(changedFiles.length / batchSize);
+      console.log(`   Batch ${batchNum}/${totalBatches}: Processing ${batchFiles.length} files...`);
 
       const analyses = await Promise.all(
         batchFiles.map((file) =>
@@ -75,8 +80,13 @@ export class MultiRepoIndexer {
         )
       );
       const vectors = analyses.filter(Boolean).flatMap((a) => {
-        totalChunks += (a as any).chunks.length;
-        return (a as any).chunks as Array<{
+        const chunks = (a as any)?.chunks;
+        if (!chunks || !Array.isArray(chunks)) {
+          console.warn(`⚠️  Skipping file with no chunks: ${(a as any)?.relativePath || 'unknown'}`);
+          return [];
+        }
+        totalChunks += chunks.length;
+        return chunks as Array<{
           content: string;
           sourceType: "git";
           sourceId: string;

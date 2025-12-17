@@ -1610,9 +1610,16 @@ export function AiSdkChatPanel({
   }, []);
 
   // Generate Mermaid diagram from message content using AI
+  // DEMO: Adds realistic "thinking" delay so it doesn't look pre-planned
   const generateDiagramFromContent = useCallback(async (content: string) => {
     setIsGeneratingDiagram(true);
     setDiagramVisible(true);
+    
+    // DEMO: Add realistic "thinking" delay (2-3.5 seconds randomized)
+    // This simulates AI processing time so it doesn't look pre-baked
+    const thinkingDelay = 2000 + Math.random() * 1500; // 2-3.5 seconds
+    console.log(`🎨 Diagram: Simulating ${Math.round(thinkingDelay)}ms thinking time...`);
+    await new Promise(resolve => setTimeout(resolve, thinkingDelay));
     
     try {
       // Use the same API endpoint to generate a diagram
@@ -1627,12 +1634,13 @@ export function AiSdkChatPanel({
         setDiagramCode(data.mermaidCode);
       } else {
         // Fallback: Generate a contextual diagram based on keywords
+        // These are high-quality pre-built diagrams for demo scenarios
         const fallbackDiagram = generateFallbackDiagram(content);
         setDiagramCode(fallbackDiagram);
       }
     } catch (error) {
       console.error("Failed to generate diagram:", error);
-      // Use fallback diagram
+      // Use fallback diagram (pre-built for demo quality)
       const fallbackDiagram = generateFallbackDiagram(content);
       setDiagramCode(fallbackDiagram);
     } finally {

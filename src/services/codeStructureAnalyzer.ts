@@ -1,5 +1,5 @@
 import path from "path";
-import { chunkContent, classifyFile, readTextFileSafe } from "../utils/gitIndexingHelpers";
+import { chunkContentWithLines, classifyFile, readTextFileSafe } from "../utils/gitIndexingHelpers";
 
 export interface AnalyzedChunk {
   content: string;
@@ -114,7 +114,8 @@ export class CodeStructureAnalyzer {
     const linesOfCode = content.split(/\r?\n/).length;
     const dependencyCount = imports.length;
 
-    const chunks = chunkContent(content).map((chunk, idx) => {
+    const chunksWithLines = chunkContentWithLines(content);
+    const chunks = chunksWithLines.map((chunk, idx) => {
       const sourceId = `${repositoryTag}:${relativePath}#${idx}`;
       const metadata = {
         repository: repositoryTag,
@@ -127,12 +128,16 @@ export class CodeStructureAnalyzer {
         functions,
         classes,
         chunk_index: idx,
+        // NEW: Line number tracking for precise citations
+        start_line: chunk.startLine,
+        end_line: chunk.endLine,
+        line_range: `${chunk.startLine}-${chunk.endLine}`,
         summary,
         loc: linesOfCode,
         dependency_count: dependencyCount,
         vectorizedAt: new Date().toISOString(),
       };
-      return { content: chunk, sourceType: "git" as const, sourceId, metadata };
+      return { content: chunk.content, sourceType: "git" as const, sourceId, metadata };
     });
 
     return { filePath: absolutePath, relativePath, chunks, summary };

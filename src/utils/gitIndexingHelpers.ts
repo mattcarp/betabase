@@ -119,18 +119,74 @@ export async function readTextFileSafe(filePath: string): Promise<string | null>
   }
 }
 
-export function chunkContent(content: string, maxChars = 3000, overlap = 200): string[] {
-  if (content.length <= maxChars) return [content];
-  const chunks: string[] = [];
+export interface ContentChunk {
+  content: string;
+  startLine: number;
+  endLine: number;
+  startChar: number;
+  endChar: number;
+}
+
+/**
+ * Chunk content with line number tracking
+ * Returns chunks with start/end line numbers for precise citations
+ */
+export function chunkContentWithLines(content: string, maxChars = 3000, overlap = 200): ContentChunk[] {
+  const lines = content.split('\n');
+  
+  // Build a map of character position -> line number
+  const charToLine: number[] = [];
+  let charPos = 0;
+  for (let lineNum = 0; lineNum < lines.length; lineNum++) {
+    const lineLength = lines[lineNum].length + 1; // +1 for newline
+    for (let i = 0; i < lineLength; i++) {
+      charToLine[charPos + i] = lineNum + 1; // 1-indexed line numbers
+    }
+    charPos += lineLength;
+  }
+  
+  if (content.length <= maxChars) {
+    return [{
+      content,
+      startLine: 1,
+      endLine: lines.length,
+      startChar: 0,
+      endChar: content.length
+    }];
+  }
+  
+  const chunks: ContentChunk[] = [];
   let start = 0;
+  
   while (start < content.length) {
     const end = Math.min(start + maxChars, content.length);
-    chunks.push(content.slice(start, end));
+    const chunkContent = content.slice(start, end);
+    
+    const startLine = charToLine[start] || 1;
+    const endLine = charToLine[Math.min(end - 1, content.length - 1)] || lines.length;
+    
+    chunks.push({
+      content: chunkContent,
+      startLine,
+      endLine,
+      startChar: start,
+      endChar: end
+    });
+    
     if (end === content.length) break;
     start = end - overlap;
     if (start < 0) start = 0;
   }
+  
   return chunks;
+}
+
+/**
+ * Legacy function for backward compatibility
+ * @deprecated Use chunkContentWithLines for line number tracking
+ */
+export function chunkContent(content: string, maxChars = 3000, overlap = 200): string[] {
+  return chunkContentWithLines(content, maxChars, overlap).map(c => c.content);
 }
 
 export function classifyFile(relativePath: string): string {

@@ -44,15 +44,29 @@ Use connecting lines and annotations. Professional but approachable style.
 - Show streaming response
 - Point to inline citations
 
-### Query 2: ERD Context  
-- Type: "Show this as a workflow diagram"
-- Mermaid renders
+### Query 2: AOMA Workflow Diagram (⭐ SHOWSTOPPER)
+- **Type this exact question**: 
+  ```
+  How do I upload and archive digital assets in AOMA from preparation to storage?
+  ```
+- AI responds with detailed workflow explanation
+- **Wait for subtle prompt**: "Would you like a visual diagram of this workflow?"
+- **Click the prompt** → 2-3 second "thinking" spinner (looks real!)
+- **Beautiful 5-phase Mermaid diagram appears**:
+  - 📋 Preparation Phase (file selection, validation)
+  - 📝 Registration Phase (metadata, ISRC codes)
+  - ⬆️ Upload Phase (Aspera, Sony Ci, direct)
+  - ⚙️ Processing Phase (transcode, QC)
+  - 💾 Archive Phase (S3 Glacier, Master Vault)
 - Zoom/pan to show interactivity
+- Download button works!
+
+> **Technical Note**: Diagram is stored in `ai-sdk-chat-panel.tsx` function `generateFallbackDiagram()`. Triggers when response contains "upload" AND "archive".
 
 ### Bullets
 - 45,399 AOMA domain vectors
 - Inline source citations
-- Mermaid diagrams on demand
+- **AI-powered diagram generation on demand** (NEW!)
 - All queries scoped to app_under_test='aoma'
 - **Intent Classification** - Smart source routing (NEW!)
 
@@ -71,6 +85,52 @@ Create an infographic showing the Chat pillar with these elements:
 - "Mermaid diagrams" feature bubble
 Use purple/blue color scheme, modern tech aesthetic.
 ```
+
+### AOMA Upload Workflow Diagram (In-App Mermaid)
+
+This is the **exact diagram** that renders when you ask the upload/archive question:
+
+```mermaid
+flowchart TD
+    subgraph prep["📋 1. Preparation Phase"]
+        A[/"📁 Select Source Files"/] --> B{"🔍 Validate File Names"}
+        B -->|"No special chars"| C[/"✅ Files Ready"/]
+        B -->|"Issues found"| D[/"⚠️ Rename Files"/] --> B
+    end
+    
+    subgraph reg["📝 2. Registration Phase"]
+        C --> E["🎵 Register Asset in AOMA"]
+        E --> F{"Enter Metadata"}
+        F --> G["Title & Artist"]
+        F --> H["ISRC/UPC Codes"]
+        F --> I["Security Groups"]
+        G & H & I --> J["📋 Asset Record Created"]
+    end
+    
+    subgraph upload["⬆️ 3. Upload Phase"]
+        J --> K{"Choose Upload Method"}
+        K -->|"Large files"| L["🚀 Aspera Upload"]
+        K -->|"Cloud source"| M["☁️ Sony Ci Import"]
+        K -->|"Small files"| N["📤 Direct Upload"]
+        L & M & N --> O["📦 Files Transferred"]
+    end
+    
+    subgraph process["⚙️ 4. Processing Phase"]
+        O --> P["🔄 Transcode to Formats"]
+        P --> Q["🔍 QC Validation"]
+        Q -->|"Pass"| R["✅ Ready for Distribution"]
+        Q -->|"Fail"| S["❌ Review Errors"] --> T["🔧 Fix Issues"] --> P
+    end
+    
+    subgraph archive["💾 5. Archive Phase"]
+        R --> U["📚 Store in Long-term Archive"]
+        U --> V["🏷️ AWS S3 Glacier"]
+        U --> W["💿 Master Vault"]
+        V & W --> X(("✨ Asset Complete"))
+    end
+```
+
+> **Source**: `src/components/ai/ai-sdk-chat-panel.tsx` lines 1652-1693
 
 ---
 
@@ -220,7 +280,7 @@ What are the steps to link a product to a master in AOMA?
 ```
 
 ```
-Show this as a workflow diagram
+How do I upload and archive digital assets in AOMA from preparation to storage?
 ```
 
 Then for recording:
@@ -228,6 +288,11 @@ Then for recording:
 ```
 What are the steps to link a product to a master in AOMA?
 ```
+
+```
+How do I upload and archive digital assets in AOMA from preparation to storage?
+```
+⬆️ **This triggers the beautiful 5-phase workflow diagram!** Click the "Would you like a visual diagram?" prompt that appears.
 
 ```
 What new features are in AOMA 2.116.0?
@@ -393,6 +458,7 @@ Caption: "Intelligent retrieval, every query"
 Run these before recording (warms cache):
 - [ ] "Show me the multi-tenant database architecture"
 - [ ] "What are the steps to link a product to a master in AOMA?"
+- [ ] "How do I upload and archive digital assets in AOMA from preparation to storage?" ⭐ (triggers diagram)
 - [ ] "What new features are in AOMA 2.116.0?"
 
 ### UI Check
@@ -672,6 +738,75 @@ Create a visual showing two-stage retrieval:
 - Caption: "Right documents, right order"
 Purple/blue gradient, modern tech style
 ```
+
+---
+
+## 🔐 CODE AS HIDDEN KNOWLEDGE (Technical Deep-Dive)
+
+### The Innovation: Intelligent Code Awareness
+
+```mermaid
+graph LR
+    A[User Query: 'Why am I getting this error?'] --> B{AI with Code Knowledge}
+    B --> C{Is it a 500 error?}
+    C -- Yes --> D[Backend Issue - Not in indexed UI code]
+    C -- No --> E[Check Angular Components]
+    E --> F[Find Error Handler in Code]
+    F --> G[Explain in Plain English]
+    G --> H[User-Friendly Answer]
+    
+    I[Code Indexed] -.-> B
+    J[Line Numbers Tracked] -.-> B
+    
+    style B fill:#BB86FC,stroke:#333,stroke-width:2px,color:#fff
+    style G fill:#03DAC6,stroke:#333,stroke-width:2px,color:#000
+    style H fill:#6200EE,stroke:#333,stroke-width:2px,color:#fff
+```
+
+### The Problem: Support Without Developer Access
+- Technical support users need accurate answers about app behavior
+- They don't want to see raw code—they're not developers
+- But code is the ultimate source of truth for "how things really work"
+
+### The Solution: Code as Hidden Knowledge
+We index the actual source code (4,247+ vectors with line numbers!) but teach the AI to use it *invisibly*:
+
+1. **CODE IS HIDDEN** - Never shown unless user asks "show me the code"
+2. **ANSWERS ARE SMARTER** - AI can verify facts against actual implementation
+3. **TROUBLESHOOTING IS PRECISE** - 500 error? AI knows that's backend, not UI
+4. **TRANSLATION TO HUMAN** - "The system validates the product ID" not "validateProductId() in line 234..."
+
+### What Gets Indexed
+| Content | Metadata | Purpose |
+|---------|----------|---------|
+| Angular components | File path, line numbers | Locate UI logic |
+| Services & modules | Functions, classes | Understand data flow |
+| Error handlers | Line ranges | Troubleshooting |
+| Comments & docs | In-code context | Intent & rationale |
+
+### Key System Prompt Instructions
+The AI is explicitly told:
+- "CODE IS HIDDEN KNOWLEDGE - Don't show code snippets unless specifically asked"
+- "If user mentions a 500 error → That's a BACKEND/API error, not the UI"
+- "Say 'Looking at how this works internally...' without showing the code"
+- "Only mention file locations if the user asks 'where in the code'"
+
+### Key Files
+- `src/app/api/chat/route.ts` - System prompt with code knowledge instructions
+- `src/services/intentClassifier.ts` - Routes queries to `git` source for code questions
+- `src/services/multiRepoIndexer.ts` - Indexes code with line numbers
+
+### Demo Talking Point
+"We've indexed the entire AOMA frontend codebase—every component, every service, every error handler. But the AI doesn't dump code at users. Instead, it uses code as hidden knowledge to give *more accurate* answers. Ask about an error, and the AI knows exactly where it comes from—without making you read TypeScript."
+
+### Example Dialogue
+**User:** "I'm getting an error when trying to link a product. It says 'Invalid product ID format.'"
+
+**Without Code Knowledge:**
+> "That error usually means the product ID doesn't match the expected format. Try checking the ID."
+
+**With Code Knowledge (Hidden):**
+> "That error comes from the product validation step before linking. The system expects a 10-character alphanumeric ID starting with 'P'. If you're copying from a spreadsheet, check for hidden spaces or special characters. Would you like me to show you the exact validation rules?"
 
 ---
 

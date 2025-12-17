@@ -26,7 +26,7 @@ import { z } from 'zod/v3';
 export const SOURCE_TYPES = [
   'knowledge',    // AOMA technical docs, architecture, specs
   'jira',         // Tickets, bugs, features, sprint status
-  'git',          // Commits, PRs, code changes
+  'git',          // SOURCE CODE files (Angular components, services, modules) + commits, PRs
   'email',        // Outlook communications, stakeholder messages
   'firecrawl',    // Web-crawled documentation
   'metrics',      // System metrics, performance data
@@ -152,7 +152,7 @@ function buildClassificationPrompt(query: string): string {
 **Available Data Sources:**
 - **knowledge**: Technical documentation, architecture specs, system requirements, API docs, user guides
 - **jira**: Tickets, bugs, feature requests, sprint status, project tracking, issues
-- **git**: Code commits, pull requests, code changes, technical implementations, diffs
+- **git**: ACTUAL SOURCE CODE (Angular components, services, modules, TypeScript files), plus commits and pull requests. Use this when the user asks about implementation details, where something is in the code, or how a feature works technically.
 - **email**: Stakeholder communications, meeting notes, decisions, announcements
 - **firecrawl**: Web-crawled documentation from external sources
 - **metrics**: System performance data, usage statistics, monitoring data
@@ -165,11 +165,12 @@ function buildClassificationPrompt(query: string): string {
 2. Select ONLY sources that would meaningfully contribute (1-3 sources typically)
 3. Order sources by relevance (most relevant first)
 4. If the query is clearly about project status → prioritize jira, email
-5. If the query is about how something works → prioritize knowledge, firecrawl
+5. If the query is about how something works → prioritize knowledge, then git for implementation details
 6. If the query mentions specific tickets or bugs → include jira
-7. If the query is about code or implementation → include git
-8. NEVER include all sources - that defeats the purpose of routing
-9. Be conservative - fewer relevant sources is better than many marginally relevant ones
+7. If the query asks about code, implementation, "where in the code", or technical details → INCLUDE git (contains actual source code)
+8. If answering requires understanding how something is actually built → include git as supporting context
+9. NEVER include all sources - that defeats the purpose of routing
+10. Be conservative - fewer relevant sources is better than many marginally relevant ones
 
 Provide your classification:`;
 }
@@ -196,8 +197,8 @@ function heuristicClassify(
     detected.push('knowledge', 'firecrawl');
   }
   
-  // Code-related keywords
-  if (/\b(code|commit|pr|pull request|merge|git|branch|implementation)\b/.test(q)) {
+  // Code-related keywords (now includes actual source code)
+  if (/\b(code|commit|pr|pull request|merge|git|branch|implementation|component|service|module|typescript|angular|function|class|method|where.*code|in the code)\b/.test(q)) {
     detected.push('git');
   }
   
@@ -240,7 +241,7 @@ export function describeSourceType(source: SourceType): string {
   const descriptions: Record<SourceType, string> = {
     knowledge: 'Technical docs & architecture',
     jira: 'Tickets & project tracking',
-    git: 'Code commits & PRs',
+    git: 'Source code (Angular), commits & PRs',
     email: 'Communications & decisions',
     firecrawl: 'External documentation',
     metrics: 'Performance data',

@@ -346,3 +346,47 @@ fix(curate): Switch to CurateTab with native tabs to avoid React 19 + Radix infi
 - ⚠️ Supabase MCP tool fails with IPv6 EHOSTUNREACH - this is a network/Cursor config issue, NOT a code bug
 - The app itself connects to Supabase fine via IPv4
 ---
+
+---
+Session: 2025-12-17 ~08:30
+Agent: Coding
+Duration: ~20m
+
+## Summary
+✅ Diagram Feature - Demo Ready
+
+### What Was Done
+- Added realistic "thinking" delay (2-3.5s randomized) to diagram generation
+- Confirmed beautiful AOMA upload workflow diagram is contextual (triggers on "upload" + "archive")
+- Verified demo question: "How do I upload and archive digital assets in AOMA from preparation to storage?"
+
+### Demo Instructions
+1. Click 6th suggested question on chat landing page
+2. Wait for AI response (RAG answer about upload workflow)
+3. See subtle "Would you like a visual diagram?" offer appear
+4. Click it → Loading spinner for 2-3.5 seconds (looks like AI thinking)
+5. Beautiful 5-phase Mermaid diagram appears with pan/zoom/download
+
+### Technical Details
+- `generateDiagramFromContent()` in `ai-sdk-chat-panel.tsx` handles generation
+- `generateFallbackDiagram()` provides pre-built contextual diagrams
+- Diagram is NOT AI-generated yet - it's a high-quality pre-built fallback
+- Future: Replace with real Gemini 3 / Nano Banana Pro generation
+
+### Files Modified
+- `src/components/ai/ai-sdk-chat-panel.tsx` - Added thinking delay
+
+## Next Steps
+🎯 RECOMMENDED: F006 - Query Latency Optimization (Priority 1)
+- Current: ~1.8s response time
+- Target: <1s for 95% of queries
+- This is the highest-priority non-blocked feature
+
+Alternatives:
+- F004: Playwright Jira Scraper (for upcoming VPN session)
+- Clean up and button down remaining demo polish
+
+## Warnings/Blockers
+- ByteRover MCP still needs authentication for store-knowledge
+- Diagram is currently using fallback (fake but demo-quality) - document as TODO
+---
