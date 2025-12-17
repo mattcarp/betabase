@@ -93,6 +93,109 @@ export class AOMAOrchestrator {
   private vectorService = getSupabaseVectorService();
 
   /**
+   * Extract key search terms from a verbose user query.
+   * Long queries with filler words dilute the embedding and reduce match quality.
+   * 
+   * Examples:
+   *   "Asset Upload Sorting Failed error - do we have any JIRA tickets about this?"
+   *   → "Asset Upload Sorting Failed"
+   *   
+   *   "I'm getting an 'Invalid product ID' error when trying to link products"  
+   *   → "Invalid product ID"
+   */
+  private extractKeySearchTerms(query: string): string {
+    // 1. Extract quoted text (single or double quotes) - these are usually the key terms
+    const quotedMatch = query.match(/['"]([^'"]{5,80})['"]/);
+    if (quotedMatch) {
+      console.log(`🔑 Extracted quoted key term: "${quotedMatch[1]}"`);
+      return quotedMatch[1];
+    }
+
+    // 2. Look for error patterns: "XYZ error", "XYZ failed", "getting XYZ"
+    const errorPatterns = [
+      /(?:getting|receiving|seeing|have|got)\s+(?:an?\s+)?["']?([A-Z][A-Za-z0-9\s]+(?:Failed|Error|Issue|Problem))["']?/i,
+      /["']?([A-Z][A-Za-z0-9\s]+(?:Failed|Error|Issue|Problem))["']?\s+(?:error|issue|problem)?/i,
+      /error[:\s]+["']?([A-Za-z0-9\s]{5,50})["']?/i,
+    ];
+    
+    for (const pattern of errorPatterns) {
+      const match = query.match(pattern);
+      if (match && match[1]) {
+        const extracted = match[1].trim();
+        console.log(`🔑 Extracted error pattern: "${extracted}"`);
+        return extracted;
+      }
+    }
+
+    // 2.5. Code-specific query optimization
+    // Queries asking for code should include technical terms for better matches
+    const codeQueryPatterns = [
+      // "show me the reducer code for X" -> "ngrx reducer X"
+      /(?:show me|find|get|display)\s+(?:the\s+)?(\w+)\s+code\s+(?:for|in)\s+(.+)/i,
+      // "code in X.ts" -> extract file path terms
+      /code\s+(?:in|from)\s+(\S+\.(?:ts|js|tsx|jsx))/i,
+    ];
+    
+    for (const pattern of codeQueryPatterns) {
+      const match = query.match(pattern);
+      if (match) {
+        // Build a technical search query with Angular/ngrx terms
+        let technicalQuery = query;
+        if (query.toLowerCase().includes('reducer')) {
+          // Add ngrx-specific terms for reducer queries
+          technicalQuery = `ngrx reducer ${match[1] || ''} ${match[2] || ''} .sort createReducer on`;
+        } else if (query.toLowerCase().includes('component')) {
+          technicalQuery = `angular component ${match[1] || ''} ${match[2] || ''}`;
+        } else if (query.toLowerCase().includes('service')) {
+          technicalQuery = `angular service injectable ${match[1] || ''} ${match[2] || ''}`;
+        }
+        if (technicalQuery !== query) {
+          console.log(`🔑 Enhanced code query: "${technicalQuery}"`);
+          return technicalQuery.replace(/\s+/g, ' ').trim();
+        }
+      }
+    }
+
+    // 3. Remove common question phrases that dilute embeddings
+    const fillerPhrases = [
+      /^(do we have any|are there any|can you find|please search for|search for|look for|find|show me)/i,
+      /(jira tickets?|tickets?|issues?|bugs?)\s+(about|for|related to|regarding)/gi,
+      /\?+$/,
+      /^(i'm|i am|we're|we are)\s+(getting|seeing|having|experiencing)/i,
+      /(do we have|are there|can you|please|could you)/gi,
+      /(any|some|the)\s+(jira\s+)?tickets?\s+(about|for|on|regarding)/gi,
+      /(this exact|this specific|this particular|exactly this)/gi,
+    ];
+
+    let cleaned = query;
+    for (const phrase of fillerPhrases) {
+      cleaned = cleaned.replace(phrase, ' ');
+    }
+    
+    // Clean up whitespace
+    cleaned = cleaned.replace(/\s+/g, ' ').trim();
+    
+    // If the cleaned query is significantly shorter and still meaningful, use it
+    if (cleaned.length >= 10 && cleaned.length < query.length * 0.7) {
+      console.log(`🔑 Cleaned query: "${cleaned}" (from ${query.length} to ${cleaned.length} chars)`);
+      return cleaned;
+    }
+
+    // 4. If query is too long, truncate to first meaningful part
+    if (query.length > 100) {
+      // Take first sentence or first 80 chars
+      const firstPart = query.split(/[.!?-]/)[0].trim();
+      if (firstPart.length >= 15 && firstPart.length <= 80) {
+        console.log(`🔑 Using first part: "${firstPart}"`);
+        return firstPart;
+      }
+    }
+
+    // Return original if no optimization possible
+    return query;
+  }
+
+  /**
    * Query unified vector store (FAST PATH - sub-second responses)
    * This is the primary query method that replaces multiple API calls
    */
@@ -126,8 +229,12 @@ export class AOMAOrchestrator {
     }
 
     try {
+      // Extract key search terms for better embedding quality
+      // Long verbose queries dilute embeddings and reduce match accuracy
+      const searchQuery = this.extractKeySearchTerms(query);
+      
       // Perform vector similarity search (multi-tenant: Sony Music / Digital Operations / AOMA)
-      const vectorResults: VectorSearchResult[] = await this.vectorService.searchVectors(query, {
+      const vectorResults: VectorSearchResult[] = await this.vectorService.searchVectors(searchQuery, {
         ...DEFAULT_APP_CONTEXT, // organization, division, app_under_test
         matchThreshold,
         matchCount,

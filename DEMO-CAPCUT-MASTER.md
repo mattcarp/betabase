@@ -858,6 +858,153 @@ Caption: "Intelligent retrieval, every query"
 
 ---
 
+---
+
+## 🎯 REAL DEMO SCENARIOS: Hidden Code Knowledge in Action
+
+These are **REAL examples** from the database where indexed code explains user issues.
+
+### 🔥 SCENARIO 1: "Asset Upload Sorting Failed" (PRIMARY DEMO)
+
+**Real JIRA Tickets Found:**
+- ITSM-55968: Eydís Evensen - Oceanic Mirror
+- ITSM-56940: Les Enfoirés - 2025 Au pays de
+- ITSM-71656: Eefje de Visser - Vlijmscherp
+- ITSM-74175: Tobias Rahim - Vulkanø
+
+**Code Location:** `ust-cc-ttml.reducers.ts` lines 96-183
+**Key Functions:** `handleAssetUploadIdList`, `updateUploadIdList`
+
+#### Demo Script
+
+**USER:** "I'm getting an 'Asset Upload Sorting Failed' error when uploading files. What's going on?"
+
+**AI RESPONSE (With Hidden Code Knowledge):**
+> I found multiple related tickets for this issue—it's a known problem!
+>
+> 📋 **Related Tickets:** ITSM-55968, ITSM-56940, ITSM-71656
+>
+> This error occurs in the **Unified Submission Tool (UST)** when the upload state machine can't properly sequence the files before processing.
+>
+> **Root Cause:** The `handleAssetUploadIdList` function expects files to be sorted by sequence and side before processing begins. When files arrive out of order, it triggers this error.
+>
+> **Quick Fixes:**
+> 1. Refresh the page and try again
+> 2. Upload files in smaller batches (5-10 at a time)
+> 3. Ensure filenames don't contain special characters (like ø, é, etc.)
+>
+> Would you like me to show you the exact code location?
+
+**USER (if they ask):** "Yeah, show me where this happens."
+
+**AI REVEALS CODE:**
+> The sorting logic is in the UST reducers:
+>
+> ```typescript
+> // src/app/module-unified-submission-tool/shared/store/reducers/ust-dolby.reducers.ts
+> // Lines 184-273
+> 
+> dolbyData = dolbyData
+>   .sort((a, b) => a.sequence - b.sequence)
+>   .sort((a, b) => a.side - b.side);
+> ```
+>
+> When files arrive faster than they can be sorted, the state becomes inconsistent.
+
+---
+
+### 📦 SCENARIO 2: "Aspera Disk Write Failed"
+
+**JIRA Ticket:** DPSA-29600
+**Code Location:** `ust-cc-ttml-aspera.reducers.ts` lines 1-79
+
+**USER:** "I got an Aspera error code 36 - disk write failed. What does this mean?"
+
+**AI RESPONSE:**
+> I found a ticket about this: **DPSA-29600**
+>
+> This is an Aspera transfer error, not an AOMA UI issue. Error code 36 means the destination server ran out of disk space.
+>
+> Based on how the code handles Aspera transfers:
+> - The `uploadUstCCTTMLItemAsperaError` state is set
+> - The transfer is marked as failed
+> - **Your files are still safe locally**
+>
+> **What to do:**
+> 1. Wait 10-15 minutes and retry
+> 2. Contact IT if it persists
+> 3. Try a smaller file set to confirm it's a space issue
+
+---
+
+### 🎵 SCENARIO 3: "360RA UploadPublishFailed"
+
+**JIRA Ticket:** DPSA-30187
+**Code Location:** `ust-ra360.reducers.ts` lines 1-109
+**Key Functions:** `handle360State`, `handleAssetUploadIdList`
+
+**USER:** "I'm trying to register a 360 Reality Audio track and getting 'UploadPublishFailed'. Help!"
+
+**AI RESPONSE:**
+> Found it! **DPSA-30187** documents this exact issue.
+>
+> 360RA registrations go through a special workflow. "UploadPublishFailed" means:
+> 1. ✅ The file uploaded successfully
+> 2. ❌ The publish step failed
+>
+> Looking at the code, `UstRa360State` tracks separate statuses:
+> - `ra360Statuses: { assetUploadId: number, status: string }[]`
+>
+> **Next Steps:**
+> 1. Check if the asset appears in "Pending" status
+> 2. If yes, manually complete the registration
+> 3. If no, contact DPSA support with your ISRC code
+
+---
+
+### ⏰ SCENARIO 4: "TUS Upload Inactive Timeout"
+
+**JIRA Ticket:** DPSA-30683
+**Error:** "TUS upload failed: Upload was inactive during last [6] hours"
+
+**USER:** "I got a weird error saying my upload was inactive for 6 hours and now it failed."
+
+**AI RESPONSE:**
+> That's ticket **DPSA-30683** — the TUS (resumable upload) timeout.
+>
+> This happens when:
+> 1. You started an upload
+> 2. Your connection dropped or browser closed
+> 3. 6+ hours passed without resumption
+> 4. The server cleaned up the partial upload
+>
+> **The file is NOT on the server** - you'll need to re-upload.
+>
+> **Pro tip:** The UST uses `resumable.js` for chunked uploads. For large uploads:
+> - Keep the browser tab open and active
+> - Avoid putting your laptop to sleep
+> - Consider uploading during off-peak hours
+
+---
+
+### 📊 Real Scenarios Summary
+
+| # | Error | JIRA | Code File | Best For |
+|---|-------|------|-----------|----------|
+| 1 | Asset Upload Sorting Failed | ITSM-55968+ | ust-cc-ttml.reducers.ts | **Primary demo** |
+| 2 | Aspera Disk Write Failed | DPSA-29600 | ust-cc-ttml-aspera.reducers.ts | Infrastructure |
+| 3 | 360RA UploadPublishFailed | DPSA-30187 | ust-ra360.reducers.ts | Niche workflow |
+| 4 | TUS Inactive Timeout | DPSA-30683 | resumable.js | User behavior |
+
+### 💡 Demo Talking Points
+
+1. "Notice how it found multiple related tickets? That's because we indexed your entire JIRA history."
+2. "The AI knows this is a UI issue because we indexed the Angular code."
+3. "Code is hidden knowledge—it makes the answer smarter without being overwhelming."
+4. "The user didn't have to know *where* to look—the system figured it out."
+
+---
+
 *Created: December 15, 2025*
-*Updated: December 17, 2025 (added Intent Classification, Re-Ranker diagrams)*
+*Updated: December 17, 2025 (added Intent Classification, Re-Ranker diagrams, Real Demo Scenarios)*
 *For: Mattie (called by Claudette)*

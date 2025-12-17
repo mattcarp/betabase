@@ -390,3 +390,57 @@ Alternatives:
 - ByteRover MCP still needs authentication for store-knowledge
 - Diagram is currently using fallback (fake but demo-quality) - document as TODO
 ---
+
+---
+Session: 2025-12-17 17:15
+Agent: Coding
+Duration: ~10m
+
+## Summary ✅
+Fixed regression: Progress indicator in chat panel was disappearing immediately
+
+### Problem
+The beautiful progress indicator showing phases like:
+- "Analyzing query..."
+- "Searching AOMA knowledge base..."
+- "Building context..."
+- "Generating response..."
+- "Formatting response with code blocks, citations, and structure..."
+
+Was disappearing immediately when streaming started, instead of staying visible until content appeared.
+
+### Root Cause
+The condition `!hasStartedStreaming` was too aggressive - it set `hasStartedStreaming=true` as soon as ANY assistant message appeared, even with 0 characters of content.
+
+### Fix Applied
+Changed `ai-sdk-chat-panel.tsx` to only hide progress when there's **meaningful content** (50+ characters):
+
+```typescript
+// Only set hasStartedStreaming when there's MEANINGFUL content visible
+const content = lastMessage.content || lastMessage.parts?.map((p: any) => p.text || '').join('') || '';
+if (content.length > 50) {
+  setHasStartedStreaming(true);
+}
+```
+
+### Enhancements
+1. `currentProgress` phases now drive ChainOfThought header title dynamically
+2. ChainOfThought steps synchronized with `currentProgress.phase` and percentage
+3. Added animated progress bar with percentage display
+4. Phases: connecting → parsing → knowledge-search → context-building → generating → formatting
+
+### Files Modified
+- `src/components/ai/ai-sdk-chat-panel.tsx` (lines ~873-915, ~2846-2940)
+
+### Verified
+- Tested in browser: Progress shows "Searching AOMA knowledge base for relevant information (11s)"
+- Then progresses to "Formatting response with code blocks, citations, and structure (40s)"
+- Disappears correctly once response content is visible
+
+## Next Steps
+- Continue with F006: Query Latency Optimization if desired
+- Or continue demo testing
+
+## Warnings/Blockers
+- None - fix is working correctly
+---

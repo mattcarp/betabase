@@ -115,6 +115,7 @@ import {
   PromptInputActionMenuItem,
   PromptInputActionAddAttachments,
   PromptInputSpeechButton,
+  PromptInputMessage,
 } from "../ai-elements/prompt-input";
 import { Reasoning, ReasoningTrigger, ReasoningContent } from "../ai-elements/reasoning";
 import { Response } from "../ai-elements/response";
@@ -869,33 +870,44 @@ export function AiSdkChatPanel({
     prevIsLoadingRef.current = isLoading;
   }, [isLoading, messages, diagramOffer]);
 
-  // Detect when assistant starts streaming (to prevent jitter)
+  // Detect when assistant has meaningful content (not just streaming started)
+  // FIX: Only hide progress indicator when there's actual visible content
   useEffect(() => {
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
-      // If last message is from assistant and we were processing, streaming has started
+      // Only set hasStartedStreaming when there's MEANINGFUL content visible to user
+      // This keeps the progress indicator visible until there's something to show
       if (lastMessage?.role === "assistant" && (isProcessing || manualLoading)) {
-        setHasStartedStreaming(true);
-        // Don't clear loading states immediately - let the progress indicator continue
-        // The onFinish handler will clear everything when done
+        const content = lastMessage.content || lastMessage.parts?.map((p: any) => p.text || '').join('') || '';
+        // Require at least 50 characters of content before hiding progress
+        // This ensures user sees the progress phases during the "thinking" period
+        if (content.length > 50) {
+          setHasStartedStreaming(true);
+        }
       }
     }
   }, [messages, isProcessing, manualLoading]);
 
   // Track loading time with seconds counter
+  // FIX: Keep counting until there's meaningful content (not just when streaming starts)
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
-    if ((isLoading || manualLoading || isProcessing) && !hasStartedStreaming) {
-      // Reset counter when loading starts
-      setLoadingSeconds(0);
+    // Keep the progress counter running while loading OR while we haven't shown content yet
+    const shouldShowProgress = (isLoading || manualLoading || isProcessing) && !hasStartedStreaming;
+    
+    if (shouldShowProgress) {
+      // Only reset counter when STARTING to load (not when already counting)
+      if (loadingSeconds === 0) {
+        // Counter already at 0, just start interval
+      }
 
       // Start counting every second
       interval = setInterval(() => {
         setLoadingSeconds((prev) => prev + 1);
       }, 1000);
-    } else {
-      // Reset counter when loading stops
+    } else if (!isLoading && !manualLoading && !isProcessing) {
+      // Only reset counter when fully done (not loading at all)
       setLoadingSeconds(0);
     }
 
@@ -1275,9 +1287,10 @@ export function AiSdkChatPanel({
     URL.revokeObjectURL(url);
   };
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const messageToSend = localInput || "";
+  const handleFormSubmit = async (message: PromptInputMessage, event?: React.FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
+    // Use message.text from PromptInput, fallback to localInput for compatibility
+    const messageToSend = message.text || localInput || "";
     if (messageToSend.trim()) {
       // Debug logging for endpoint routing
       console.log("📨 Submitting message with:");
@@ -2842,7 +2855,7 @@ export function AiSdkChatPanel({
                   })}
 
                   {/* Loading indicator with ChainOfThought RAG visualization */}
-                  {/* CRITICAL: Only show when waiting for response, hide once streaming starts */}
+                  {/* FIX: Keep visible until meaningful content arrives (50+ chars) */}
                   {(isLoading || manualLoading || isProcessing) && !hasStartedStreaming && (
                     <motion.div
                       key="loading-indicator"
@@ -2855,51 +2868,94 @@ export function AiSdkChatPanel({
                       <ChainOfThought defaultOpen={true} className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/50">
                         <ChainOfThoughtHeader>
                           <Shimmer duration={1.5} className="text-sm">
-                            {loadingSeconds > 5
-                              ? `Searching AOMA knowledge base... (${loadingSeconds}s)`
-                              : loadingSeconds > 0
-                                ? `Processing query... (${loadingSeconds}s)`
-                                : "Processing query..."}
+                            {/* Use currentProgress title if available for more descriptive phases */}
+                            {currentProgress?.title 
+                              ? `${currentProgress.title}${loadingSeconds > 0 ? ` (${loadingSeconds}s)` : ''}`
+                              : loadingSeconds > 5
+                                ? `Searching AOMA knowledge base... (${loadingSeconds}s)`
+                                : loadingSeconds > 0
+                                  ? `Processing query... (${loadingSeconds}s)`
+                                  : "Processing query..."}
                           </Shimmer>
                         </ChainOfThoughtHeader>
                         <ChainOfThoughtContent>
+                          {/* Use currentProgress.phase for step status when available */}
                           <ChainOfThoughtStep
                             icon={SearchIcon}
                             label="Query Analysis"
-                            status={loadingSeconds > 0 ? "complete" : "active"}
+                            status={
+                              currentProgress?.phase === "parsing" || currentProgress?.phase === "connecting" ? "active" :
+                              (currentProgress?.progress || 0) > 20 || loadingSeconds > 0 ? "complete" : "active"
+                            }
                             description="Analyzing your question to find the best search strategy"
                           />
                           <ChainOfThoughtStep
                             icon={DatabaseIcon}
-                            label="Vector Search"
-                            status={loadingSeconds > 2 ? "complete" : loadingSeconds > 0 ? "active" : "pending"}
-                            description="Searching 45,000+ document embeddings"
+                            label="Knowledge Search"
+                            status={
+                              currentProgress?.phase === "knowledge-search" ? "active" :
+                              (currentProgress?.progress || 0) > 50 || loadingSeconds > 3 ? "complete" :
+                              (currentProgress?.progress || 0) > 20 || loadingSeconds > 1 ? "active" : "pending"
+                            }
+                            description="Searching 45,000+ AOMA document embeddings"
                           >
-                            {loadingSeconds > 2 && (
+                            {((currentProgress?.progress || 0) > 35 || loadingSeconds > 2) && (
                               <ChainOfThoughtSearchResults>
-                                <ChainOfThoughtSearchResult>AOMA docs</ChainOfThoughtSearchResult>
-                                <ChainOfThoughtSearchResult>Workflows</ChainOfThoughtSearchResult>
-                                <ChainOfThoughtSearchResult>Best practices</ChainOfThoughtSearchResult>
+                                <ChainOfThoughtSearchResult>AOMA Documentation</ChainOfThoughtSearchResult>
+                                <ChainOfThoughtSearchResult>Workflows & Processes</ChainOfThoughtSearchResult>
+                                <ChainOfThoughtSearchResult>Best Practices</ChainOfThoughtSearchResult>
                               </ChainOfThoughtSearchResults>
                             )}
                           </ChainOfThoughtStep>
                           <ChainOfThoughtStep
                             icon={FilterIcon}
-                            label="Re-ranking"
-                            status={loadingSeconds > 4 ? "complete" : loadingSeconds > 2 ? "active" : "pending"}
-                            description="Re-ranking results for relevance"
+                            label="Context Building & Re-ranking"
+                            status={
+                              currentProgress?.phase === "context-building" ? "active" :
+                              (currentProgress?.progress || 0) > 65 || loadingSeconds > 5 ? "complete" :
+                              (currentProgress?.progress || 0) > 50 || loadingSeconds > 3 ? "active" : "pending"
+                            }
+                            description="Building context and re-ranking for relevance"
                           />
                           <ChainOfThoughtStep
                             icon={SparklesIcon}
                             label="Response Generation"
-                            status={loadingSeconds > 5 ? "active" : "pending"}
-                            description="Generating response with context"
+                            status={
+                              currentProgress?.phase === "generating" || currentProgress?.phase === "formatting" ? "active" :
+                              (currentProgress?.progress || 0) > 80 || loadingSeconds > 6 ? "active" : "pending"
+                            }
+                            description="Generating comprehensive response with AI model"
                           />
                           {/* Show spinner when response generation is active */}
-                          {loadingSeconds > 5 && (
+                          {((currentProgress?.progress || 0) > 65 || loadingSeconds > 5) && (
                             <ChainOfThoughtSpinner 
-                              message="Crafting a thoughtful response..." 
+                              message={currentProgress?.phase === "formatting" 
+                                ? "Formatting response with code blocks and citations..." 
+                                : "Crafting a thoughtful response..."
+                              } 
                             />
+                          )}
+                          
+                          {/* Progress bar with percentage */}
+                          {currentProgress && (
+                            <div className="mt-4 pt-3 border-t border-zinc-700/30">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-xs text-zinc-400 capitalize">
+                                  {currentProgress.phase?.replace(/-/g, ' ') || 'Processing'}
+                                </span>
+                                <span className="text-xs font-mono text-zinc-500">
+                                  {Math.round(currentProgress.progress || 0)}%
+                                </span>
+                              </div>
+                              <div className="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                                <motion.div
+                                  className="h-full bg-gradient-to-r from-blue-500 to-emerald-500"
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${Math.min(currentProgress.progress || 0, 100)}%` }}
+                                  transition={{ duration: 0.3, ease: "easeOut" }}
+                                />
+                              </div>
+                            </div>
                           )}
                         </ChainOfThoughtContent>
                       </ChainOfThought>

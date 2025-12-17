@@ -387,7 +387,7 @@ Be helpful, concise, and professional in your responses.`;
                 </div>
                 {/* Knowledge status badges */}
                 <div className="hidden lg:flex items-center gap-2">
-                  <Badge variant="outline" title="Knowledge status" className="whitespace-nowrap">
+                  <Badge variant="secondary" title="Knowledge status" className="whitespace-nowrap border-0 bg-zinc-800/50 text-zinc-400">
                     {knowledgeStatus === "ok"
                       ? "Knowledge: OK"
                       : knowledgeStatus === "degraded"
@@ -396,8 +396,8 @@ Be helpful, concise, and professional in your responses.`;
                   </Badge>
                   {lastKnowledgeRefresh && (
                     <Badge
-                      variant="outline"
-                      className="text-xs whitespace-nowrap"
+                      variant="secondary"
+                      className="text-xs whitespace-nowrap border-0 bg-zinc-800/50 text-zinc-400"
                       title="Last refresh"
                     >
                       updated {lastKnowledgeRefresh}
