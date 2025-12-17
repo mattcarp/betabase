@@ -82,6 +82,15 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
   const sanitizeMermaidCode = (rawCode: string): string => {
     let sanitized = rawCode;
 
+    // Fix graph declaration with inline comments (Mermaid doesn't support this)
+    // e.g., "graph TD %% Comment" -> "graph TD\n%% Comment"
+    sanitized = sanitized.replace(/^(graph\s+(?:TD|TB|LR|RL|BT))\s*(%%.*)/gm, "$1\n$2");
+    sanitized = sanitized.replace(/^(flowchart\s+(?:TD|TB|LR|RL|BT))\s*(%%.*)/gm, "$1\n$2");
+    
+    // Ensure graph declaration is on its own line followed by newline
+    sanitized = sanitized.replace(/^(graph\s+(?:TD|TB|LR|RL|BT))\s+(\w)/gm, "$1\n    $2");
+    sanitized = sanitized.replace(/^(flowchart\s+(?:TD|TB|LR|RL|BT))\s+(\w)/gm, "$1\n    $2");
+
     // Remove <br/> and other HTML tags that Gemini sometimes includes
     sanitized = sanitized.replace(/<br\s*\/?>/gi, " ");
     sanitized = sanitized.replace(/<[^>]+>/g, "");
