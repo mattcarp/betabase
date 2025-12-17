@@ -83,6 +83,10 @@ export function HistoricalTestExplorer() {
   });
   const [filters, setFilters] = useState<Filters>({ categories: [], apps: [] });
   const [selectedTest, setSelectedTest] = useState<HistoricalTest | null>(null);
+  const [generatingPlaywright, setGeneratingPlaywright] = useState(false);
+  const [generatedCode, setGeneratedCode] = useState<string | null>(null);
+  const [calculatingConfidence, setCalculatingConfidence] = useState(false);
+  const [aiConfidence, setAiConfidence] = useState<{ score: number; rationale: string } | null>(null);
 
   const loadTests = useCallback(async () => {
     setLoading(true);
@@ -405,13 +409,123 @@ export function HistoricalTestExplorer() {
             )}
 
             <div className="flex gap-2 mt-4">
-              <Button size="sm" className="bg-amber-500 hover:bg-amber-600 text-black">
-                <Sparkles className="h-4 w-4 mr-1" /> Generate Playwright
+              <Button 
+                size="sm" 
+                className="bg-amber-500 hover:bg-amber-600 text-black"
+                onClick={async () => {
+                  setGeneratingPlaywright(true);
+                  setGeneratedCode(null);
+                  try {
+                    const res = await fetch("/api/tests/generate-playwright", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        testId: selectedTest.id,
+                        testName: selectedTest.test_name,
+                        description: selectedTest.description,
+                        preconditions: selectedTest.preconditions,
+                        app_under_test: selectedTest.app_under_test,
+                      }),
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                      setGeneratedCode(data.testCode);
+                      toast.success("Playwright test generated!");
+                    } else {
+                      toast.error(data.error || "Failed to generate");
+                    }
+                  } catch (err) {
+                    toast.error("Generation failed");
+                  } finally {
+                    setGeneratingPlaywright(false);
+                  }
+                }}
+                disabled={generatingPlaywright}
+                data-test-id="generate-playwright-btn"
+              >
+                {generatingPlaywright ? (
+                  <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
+                ) : (
+                  <Sparkles className="h-4 w-4 mr-1" />
+                )}
+                {generatingPlaywright ? "Generating..." : "Generate Playwright"}
               </Button>
-              <Button size="sm" variant="outline" className="border-zinc-600">
-                <FileText className="h-4 w-4 mr-1" /> View Full Details
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="border-zinc-600"
+                onClick={async () => {
+                  setCalculatingConfidence(true);
+                  try {
+                    const res = await fetch("/api/tests/confidence-score", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        testId: selectedTest.id,
+                        testName: selectedTest.test_name,
+                        description: selectedTest.description,
+                        preconditions: selectedTest.preconditions,
+                        app_under_test: selectedTest.app_under_test,
+                        execution_count: selectedTest.execution_count,
+                        pass_count: selectedTest.pass_count,
+                        last_executed_at: selectedTest.last_executed_at,
+                      }),
+                    });
+                    const data = await res.json();
+                    setAiConfidence({ score: data.score, rationale: data.rationale });
+                    toast.success(`AI Confidence: ${Math.round(data.score * 100)}%`);
+                  } catch (err) {
+                    toast.error("Confidence calculation failed");
+                  } finally {
+                    setCalculatingConfidence(false);
+                  }
+                }}
+                disabled={calculatingConfidence}
+                data-test-id="calculate-confidence-btn"
+              >
+                {calculatingConfidence ? (
+                  <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
+                ) : (
+                  <TrendingUp className="h-4 w-4 mr-1" />
+                )}
+                {calculatingConfidence ? "Analyzing..." : "AI Confidence"}
               </Button>
             </div>
+
+            {/* AI Confidence Result */}
+            {aiConfidence && (
+              <div className="mt-3 p-3 bg-zinc-900/50 rounded border border-zinc-700">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-zinc-400 text-sm">AI Analysis:</span>
+                  {getConfidenceBadge(aiConfidence.score)}
+                </div>
+                <p className="text-sm text-zinc-300">{aiConfidence.rationale}</p>
+              </div>
+            )}
+
+            {/* Generated Playwright Code */}
+            {generatedCode && (
+              <div className="mt-3 p-3 bg-zinc-900/50 rounded border border-zinc-700">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-zinc-400 text-sm">Generated Playwright Test:</span>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      navigator.clipboard.writeText(generatedCode);
+                      toast.success("Copied to clipboard!");
+                    }}
+                    className="text-amber-400 hover:text-amber-300"
+                  >
+                    Copy
+                  </Button>
+                </div>
+                <pre className="text-xs text-zinc-300 overflow-x-auto max-h-64 p-2 bg-zinc-950 rounded">
+                  {generatedCode.substring(0, 1500)}
+                  {generatedCode.length > 1500 && "...\n\n// (truncated - copy for full code)"}
+                </pre>
+              </div>
+            )}
           </div>
         )}
       </CardContent>

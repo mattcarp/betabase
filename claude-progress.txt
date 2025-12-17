@@ -672,3 +672,29 @@ Browser verification: Component renders with 8,719 tests, pagination, filters!
 ## Next
 - Phase 3: US2 Confidence Scoring API
 - Phase 4: US3 Playwright Generation
+
+---
+## Starting Phase 3: US2 Confidence Scoring
+Time: ~20:50
+Tasks: T022-T027
+
+The confidence API will use Gemini to analyze test descriptions against
+the knowledge base to determine relevance and automation potential.
+
+## Phase 3-4 Complete (21:05)
+✅ Confidence Score API - /api/tests/confidence-score
+  - Uses Gemini 2.0 Flash for semantic analysis
+  - Factors: pass rate, recency, description quality
+  - Returns: score, level, rationale, automationCandidate
+  
+✅ Playwright Generation API - /api/tests/generate-playwright
+  - Uses Gemini 2.0 Flash
+  - Generates TypeScript Playwright tests
+  - Page Object Model pattern
+  - Extracts selectors from generated code
+  
+✅ HistoricalTestExplorer UI Integration
+  - "Generate Playwright" button now functional
+  - "AI Confidence" button for on-demand scoring
+  - Copy-to-clipboard for generated code
+  - Inline code preview
