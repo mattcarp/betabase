@@ -409,18 +409,13 @@ export function AiSdkChatPanel({
   }, [currentApiEndpoint, selectedModel]); // Only log when endpoint or model changes
 
   const chatResult = useChat({
-    // @ts-ignore - AI SDK v5 still supports api option but types haven't caught up
-    api: currentApiEndpoint, // Use the calculated endpoint directly
+    // @ts-ignore - AI SDK v6 beta
+    api: currentApiEndpoint,
     id: chatId,
-    // CRITICAL: Handle both AI SDK v4 (content) and v5 (parts[0].text) formats
-    // Messages without valid content in either format are filtered out
+    // AI SDK v6: Messages use parts[0].text format
     messages: (initialMessages || []).filter((m) => {
-      // AI SDK v5 format: check parts[0].text
-      const v5Content = m.parts?.[0]?.text;
-      // AI SDK v4 / legacy format: check content
-      const v4Content = m.content;
-      // Accept message if either format has valid content
-      return (v5Content != null && v5Content !== "") || (v4Content != null && v4Content !== "");
+      const content = m.parts?.[0]?.text;
+      return content != null && content !== "";
     }),
     onResponse: (response: Response) => {
       // Capture RAG metadata from response headers before streaming starts
