@@ -12,42 +12,42 @@
 
 ---
 
-## Phase 1: Database Foundation (Blocking Prerequisites)
+## Phase 1: Database Foundation (Blocking Prerequisites) ✅
 
 **Purpose**: Create database infrastructure before any UI work
 
 ⚠️ **CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T001 [SETUP] Query `bb_case` table to understand schema and available fields
-- [ ] T002 [SETUP] Query `bb_application`, `bb_round`, `bb_variation` to map relationships
-- [ ] T003 [SETUP] Create SQL migration file: `supabase/migrations/20251217_testing_tab_tables.sql`
-- [ ] T004 [P] [SETUP] Create `historical_tests_view` joining bb_case with metadata
-- [ ] T005 [P] [SETUP] Create `rlhf_generated_tests` table
-- [ ] T006 [P] [SETUP] Create `self_healing_attempts` table
-- [ ] T007 [P] [SETUP] Create `test_analytics_daily` materialized view
-- [ ] T008 [SETUP] Run migrations and verify tables exist
-- [ ] T009 [SETUP] Create indexes for performance on large tables
+- [x] T001 [SETUP] Query `bb_case` table to understand schema and available fields ✅
+- [x] T002 [SETUP] Query `bb_application`, `bb_round`, `bb_variation` to map relationships ✅
+- [x] T003 [SETUP] Create SQL migration file: `supabase/migrations/20251217_testing_tab_tables.sql` ✅
+- [x] T004 [P] [SETUP] Create `historical_tests_view` joining bb_case with metadata ✅ (in migration)
+- [x] T005 [P] [SETUP] Create `rlhf_generated_tests` table ✅ (in migration)
+- [x] T006 [P] [SETUP] Create `self_healing_attempts` table ✅ (already exists!)
+- [x] T007 [P] [SETUP] Create `test_analytics_daily` materialized view ✅ (in migration)
+- [ ] T008 [SETUP] Run migrations and verify tables exist ⏸️ (needs manual Supabase SQL)
+- [x] T009 [SETUP] Create indexes for performance on large tables ✅ (in migration)
 
 **Checkpoint**: Database ready - can query historical tests and analytics
 
 ---
 
-## Phase 2: User Story 1 - Historical Test Explorer (Priority: P1) 🎯 MVP
+## Phase 2: User Story 1 - Historical Test Explorer (Priority: P1) 🎯 MVP ✅
 
 **Goal**: Browse 8,000+ real tests from legacy Betabase  
 **Independent Test**: Can paginate through tests, filter, see details
 
-### API Implementation
+### API Implementation ✅
 
-- [ ] T010 [US1] Create `/api/tests/historical/route.ts` - GET paginated list
-- [ ] T011 [US1] Create `/api/tests/historical/[id]/route.ts` - GET single test details
-- [ ] T012 [US1] Add filter params: category, status, dateRange, search
-- [ ] T013 [US1] Add sorting: by date, name, confidence
+- [x] T010 [US1] Create `/api/tests/historical/route.ts` - GET paginated list ✅
+- [x] T011 [US1] Create `/api/tests/historical/[id]/route.ts` - GET single test details ✅
+- [x] T012 [US1] Add filter params: category, status, dateRange, search ✅
+- [x] T013 [US1] Add sorting: by date, name, confidence ✅
 
-### Component Updates
+### Component Updates ✅
 
-- [ ] T014 [US1] Re-enable `HistoricalTestExplorer.tsx` (currently disabled)
-- [ ] T015 [US1] Replace mock data with real API call in `loadHistoricalTests()`
+- [x] T014 [US1] Re-enable `HistoricalTestExplorer.tsx` ✅ (already enabled, using real API!)
+- [x] T015 [US1] Replace mock data with real API call in `loadHistoricalTests()` ✅
 - [ ] T016 [US1] Implement virtualized scrolling for 8,000+ items (use react-window)
 - [ ] T017 [US1] Add loading skeletons while fetching
 - [ ] T018 [US1] Add error state with retry button
