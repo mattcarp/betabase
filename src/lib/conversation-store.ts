@@ -153,11 +153,6 @@ export const useConversationStore = create<ConversationStore>()(
       },
 
       updateConversation: (id, updates) => {
-        // #region agent log
-        if (typeof window !== 'undefined') {
-          fetch('http://127.0.0.1:7243/ingest/d8722888-9008-4d43-a867-1323ebab5570',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'conversation-store.ts:updateConversation',message:'Updating conversation',data:{id,updatesHasMessages:!!updates.messages,updatesMessageCount:updates.messages?.length,lastMsgContent:updates.messages?.[updates.messages?.length-1]?.content?.substring?.(0,50),lastMsgParts:updates.messages?.[updates.messages?.length-1]?.parts?.[0]?.text?.substring?.(0,50)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H2,H3,H5'})}).catch(()=>{});
-        }
-        // #endregion
         set((state) => ({
           conversations: state.conversations.map((c) => {
             if (c.id !== id) return c;
