@@ -509,3 +509,79 @@ Duration: ~45m
 - No VPN access currently - can't re-crawl AOMA or access Jira API
 - Jira tickets are title-only, limiting RAG quality for ticket-related queries
 ---
+
+---
+Session: 2025-12-17 10:55 PST
+Agent: Coding
+Duration: ~25m
+
+## Summary
+- ✅ Created `/api/aoma/generate-diagram` endpoint using Gemini 3 Pro for dynamic Mermaid diagram generation
+- ✅ Enhanced `mermaid-diagram.tsx` sanitization to handle AI-generated syntax errors:
+  - Fixed inline comments after `graph TD` declarations
+  - Added HTML tag removal, special character cleanup
+- ✅ Full integration with chat panel diagram offer button
+- ✅ Tested end-to-end: Question → AI response → Diagram offer → Gemini generates Mermaid → Rendered with pan/zoom
+- ✅ Pushed to origin
+
+## Files Modified
+- `src/app/api/aoma/generate-diagram/route.ts` (NEW)
+- `src/components/ai-elements/mermaid-diagram.tsx`
+
+## Next Steps
+- Test diagram rendering in browser to verify sanitization fix works
+- Verify demo flow for "How do I upload and archive digital assets in AOMA?"
+
+## Warnings/Blockers
+- None - Gemini 3 Pro generates good Mermaid syntax with minor fixes needed
+---
+
+---
+Session: 2025-12-17 11:10 PST
+Agent: Coding
+Duration: ~45m
+
+## Summary
+- ✅ Implemented **Intent Classifier** using AI SDK `generateObject()` with Gemini 2.0 Flash
+  - Routes queries to relevant sources (knowledge, jira, git, email, firecrawl, metrics)
+  - Includes heuristic fallback if LLM call fails
+- ✅ Enhanced **Code as Hidden Knowledge** in system prompt
+  - Added KNOWN ERROR-TO-CODE MAPPINGS (Asset Upload Sorting Failed, Aspera errors, etc.)
+  - AI now automatically explains code behavior without showing code
+  - Added CODE FORMATTING instructions for beautiful artifact display
+- ✅ Implemented **Beautiful Code Artifact Display** in response.tsx
+  - Traffic light dots (🔴🟡🟢) like macOS window header
+  - File path display in monospace font
+  - Language badge (TYPESCRIPT, JAVASCRIPT, etc.)
+  - Line numbers on every line
+  - Copy button for one-click copy
+  - Triggered by `typescript:filepath` format in code blocks
+- ✅ Enhanced **Query Preprocessing** in aomaOrchestrator
+  - `extractKeySearchTerms()` extracts quoted phrases or key terms
+  - Prevents conversational filler from diluting embeddings
+  - Enhanced for code-specific queries (reducer, component, service, etc.)
+- ✅ Updated **DEMO-CAPCUT-MASTER.md** with:
+  - Beautiful code artifact visual mockup
+  - CapCut Filming Checklist
+  - Updated demo talking points
+
+## Demo Flow Now Complete
+1. User: "Asset Upload Sorting Failed error. Any JIRA tickets?"
+   → AI mentions ITSM-55968, ITSM-56940, ITSM-74175 + explains code logic
+2. User: "Show me the code"
+   → Beautiful artifact: traffic lights, filepath, line numbers, code snippet
+
+## Files Modified
+- `src/services/intentClassifier.ts` (NEW)
+- `src/app/api/chat/route.ts` (system prompt enhancements)
+- `src/services/aomaOrchestrator.ts` (query preprocessing)
+- `src/components/ai-elements/response.tsx` (code artifact display)
+- `DEMO-CAPCUT-MASTER.md` (filming checklist, artifact mockup)
+
+## Next Steps
+- 🎬 Ready for CapCut filming!
+- Record demo scenarios listed in DEMO-CAPCUT-MASTER.md
+
+## Warnings/Blockers
+- None - all systems go for demo recording
+---

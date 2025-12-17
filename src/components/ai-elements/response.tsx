@@ -287,9 +287,18 @@ const components: Options["components"] = {
   },
   pre: ({ node, className, children }) => {
     let language = "javascript";
+    let filePath = "";
 
     if (typeof node?.properties?.className === "string") {
-      language = node.properties.className.replace("language-", "");
+      const langClass = node.properties.className.replace("language-", "");
+      // Support format like "typescript:path/to/file.ts" or "typescript"
+      if (langClass.includes(":")) {
+        const [lang, path] = langClass.split(":");
+        language = lang;
+        filePath = path;
+      } else {
+        language = langClass;
+      }
     }
 
     // Extract code content from children safely
@@ -305,17 +314,41 @@ const components: Options["components"] = {
       code = children;
     }
 
+    // Always show line numbers for code blocks
+    const showLineNumbers = true;
+
     return (
-      <CodeBlock className={cn("my-4 h-auto", className)} code={code} language={language}>
-        <CodeBlockCopyButton
-          onCopy={() => {
-            // Silent copy success
-          }}
-          onError={() => {
-            // Silent copy error - UI feedback handles this
-          }}
-        />
-      </CodeBlock>
+      <div className="my-4">
+        {/* File path header if provided */}
+        {filePath && (
+          <div className="flex items-center gap-2 bg-zinc-800/80 px-4 py-2 rounded-t-lg border border-b-0 border-zinc-700/50">
+            <div className="flex gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+              <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+            </div>
+            <span className="text-zinc-300 text-xs font-mono truncate">{filePath}</span>
+            <span className="ml-auto px-1.5 py-0.5 bg-blue-600/20 text-blue-300 rounded text-[10px] border border-blue-500/30 uppercase">
+              {language}
+            </span>
+          </div>
+        )}
+        <CodeBlock 
+          className={cn("h-auto", filePath ? "rounded-t-none" : "", className)} 
+          code={code} 
+          language={language}
+          showLineNumbers={showLineNumbers}
+        >
+          <CodeBlockCopyButton
+            onCopy={() => {
+              // Silent copy success
+            }}
+            onError={() => {
+              // Silent copy error - UI feedback handles this
+            }}
+          />
+        </CodeBlock>
+      </div>
     );
   },
 };

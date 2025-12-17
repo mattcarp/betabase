@@ -791,8 +791,20 @@ The AI is explicitly told:
 - "Say 'Looking at how this works internally...' without showing the code"
 - "Only mention file locations if the user asks 'where in the code'"
 
+### 🎨 Beautiful Code Artifact Display
+When the AI reveals code (on user request), it uses a gorgeous artifact format:
+- **Traffic Light Header** - Red/yellow/green dots like a real IDE
+- **File Path Display** - Full path shown in monospace
+- **Language Badge** - TYPESCRIPT, JAVASCRIPT, etc.
+- **Line Numbers** - Every line numbered for reference
+- **Copy Button** - One-click copy to clipboard
+
+**AI Format**: The AI uses `typescript:path/to/file.ts` in code blocks to trigger this display.
+
 ### Key Files
-- `src/app/api/chat/route.ts` - System prompt with code knowledge instructions
+- `src/app/api/chat/route.ts` - System prompt with code knowledge + formatting instructions
+- `src/components/ai-elements/response.tsx` - Code artifact renderer with line numbers
+- `src/components/ai-elements/code-block.tsx` - CodeBlock component
 - `src/services/intentClassifier.ts` - Routes queries to `git` source for code questions
 - `src/services/multiRepoIndexer.ts` - Indexes code with line numbers
 - `src/services/aomaOrchestrator.ts` - Enhanced code query preprocessing
@@ -908,29 +920,39 @@ These are **REAL examples** from the database where indexed code explains user i
 
 **USER (if they ask):** "Yeah, show me where this happens."
 
-**AI REVEALS CODE:**
-> The sorting logic is in the UST reducers:
->
-> 📄 **File:** `src/app/module-unified-submission-tool/shared/store/reducers/ust-dolby.reducers.ts`
-> 📍 **Lines:** 184-273
->
-> ```typescript
-> // This is the ACTUAL indexed code from the AOMA codebase
-> on(UstDolbyActions.setUstDolbyData, (state: UstDolbyState, { dolbyDataItem }) => {
->   let dolbyData = [...state.dolbyData];
->   
->   // ... item validation logic ...
->   
->   dolbyData.push(dolbyDataItem);
->   dolbyData = dolbyData
->     .sort((a, b) => a.sequence - b.sequence)  // ← PRIMARY SORT
->     .sort((a, b) => a.side - b.side);          // ← SECONDARY SORT
->   
->   return { ...state, dolbyData };
-> }),
-> ```
->
-> **Why This Matters:** When files arrive faster than they can be sorted, or when filenames contain special characters that affect sequence parsing, the state becomes inconsistent and throws the "Sorting Failed" error.
+**AI REVEALS CODE (BEAUTIFUL ARTIFACT DISPLAY!):**
+
+The AI outputs code using the special `typescript:filepath` format, which triggers our gorgeous code artifact renderer:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ 🔴 🟡 🟢  src/app/.../reducers/ust-dolby.reducers.ts    TYPESCRIPT  │
+├─────────────────────────────────────────────────────────────────────┤
+│  1 │ // This is the ACTUAL indexed code from the AOMA codebase     │
+│  2 │ on(UstDolbyActions.setUstDolbyData, (state, { dolbyDataItem })│
+│  3 │   let dolbyData = [...state.dolbyData];                       │
+│  4 │                                                                │
+│  5 │   dolbyData.push(dolbyDataItem);                              │
+│  6 │   dolbyData = dolbyData                                       │
+│  7 │     .sort((a, b) => a.sequence - b.sequence)  // PRIMARY      │
+│  8 │     .sort((a, b) => a.side - b.side);          // SECONDARY   │
+│  9 │                                                                │
+│ 10 │   return { ...state, dolbyData };                             │
+│ 11 │ }),                                                           │
+└─────────────────────────────────────────────────────────────────────┘
+                                                        [📋 Copy]
+```
+
+**What the Audience Sees:**
+- 🔴🟡🟢 **Traffic light dots** (macOS-style window header)
+- 📁 **Full file path** in monospace font
+- 🏷️ **Language badge** (TYPESCRIPT)
+- 🔢 **Line numbers** on every line
+- 📋 **Copy button** for instant clipboard copy
+
+**Narration:** "And if you want to see exactly where this is happening in the codebase, I can show you the actual code—with file path and line numbers. Notice how it's beautifully formatted, not just raw text."
+
+**Why This Matters:** When files arrive faster than they can be sorted, or when filenames contain special characters that affect sequence parsing, the state becomes inconsistent and throws the "Sorting Failed" error.
 
 **✅ VERIFIED:** This scenario works! The AI finds:
 - JIRA tickets with 62%+ similarity
@@ -1028,9 +1050,43 @@ These are **REAL examples** from the database where indexed code explains user i
 2. "The AI knows this is a UI issue because we indexed the Angular code."
 3. "Code is hidden knowledge—it makes the answer smarter without being overwhelming."
 4. "The user didn't have to know *where* to look—the system figured it out."
+5. "And look at this beautiful code display—traffic lights, file path, line numbers, copy button!"
+
+---
+
+## 🎬 CAPCUT FILMING CHECKLIST
+
+### Pre-Recording Setup
+- [ ] Dev server running: `infisical run --env=dev -- pnpm dev`
+- [ ] Clear browser cache / use incognito
+- [ ] Test API is responding: `curl http://localhost:3000/api/chat`
+- [ ] Screen recording software ready (ScreenFlow / OBS / QuickTime)
+- [ ] Microphone test
+
+### Demo Queries to Record
+
+| Scene | Query | Expected Features |
+|-------|-------|-------------------|
+| **1. JIRA Discovery** | "I'm getting Asset Upload Sorting Failed error. Any tickets?" | Shows ITSM-55968, ITSM-56940, explains code logic |
+| **2. Code Reveal** | "Show me where this happens in the code" | Beautiful artifact with 🔴🟡🟢, filepath, line numbers |
+| **3. Curate Demo** | Navigate to Curate pillar, upload document | Shows knowledge ingestion flow |
+| **4. Test Demo** | Navigate to Test pillar | Shows test orchestration |
+
+### Key Visual Moments to Capture
+1. 📋 AI mentioning specific JIRA ticket numbers (ITSM-55968)
+2. 💻 Beautiful code artifact appearing with traffic lights
+3. 🔢 Line numbers visible in code display
+4. 📁 File path visible in code header
+5. ⚡ Intent classifier working (visible in dev console if desired)
+
+### Post-Recording Notes
+- Clips will be edited together in CapCut
+- Add Gemini-generated infographics as b-roll
+- Consider adding zooms on key UI elements
+- Music: Keep it subtle and professional
 
 ---
 
 *Created: December 15, 2025*
-*Updated: December 17, 2025 (added Intent Classification, Re-Ranker diagrams, Real Demo Scenarios)*
+*Updated: December 17, 2025 (added Intent Classification, Re-Ranker diagrams, Real Demo Scenarios, Code Artifact Display, Filming Checklist)*
 *For: Mattie (called by Claudette)*
