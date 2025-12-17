@@ -1,0 +1,97 @@
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const testId = parseInt(id);
+
+    if (isNaN(testId)) {
+      return NextResponse.json({ error: "Invalid test ID" }, { status: 400 });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    const { data, error } = await supabase
+      .from("bb_case")
+      .select("*")
+      .eq("id", testId)
+      .single();
+
+    if (error) {
+      if (error.code === "PGRST116") {
+        return NextResponse.json({ error: "Test not found" }, { status: 404 });
+      }
+      return NextResponse.json(
+        { error: "Failed to fetch test", details: error.message },
+        { status: 500 }
+      );
+    }
+
+    // Calculate confidence
+    let confidence = 0.3;
+    if (data.execution_count > 0) {
+      const passRate = data.pass_count / Math.max(data.execution_count, 1);
+      if (passRate > 0.8 && data.last_executed_at) {
+        const lastExec = new Date(data.last_executed_at);
+        const daysSince = (Date.now() - lastExec.getTime()) / (1000 * 60 * 60 * 24);
+        if (daysSince < 90) confidence = 0.9;
+        else if (daysSince < 180) confidence = 0.75;
+        else confidence = 0.6;
+      } else {
+        confidence = 0.5;
+      }
+    }
+
+    // Derive category
+    const desc = (data.expected_result || "").toLowerCase();
+    let category = "General";
+    if (desc.includes("distribution")) category = "Distribution";
+    else if (desc.includes("audio") || desc.includes("media")) category = "Media";
+    else if (desc.includes("user") || desc.includes("admin")) category = "User Admin";
+    else if (desc.includes("search")) category = "Search";
+    else if (desc.includes("upload") || desc.includes("import")) category = "Upload/Import";
+    else if (desc.includes("export") || desc.includes("download")) category = "Export/Download";
+    else if (desc.includes("campaign")) category = "Campaign";
+    else if (desc.includes("permission") || desc.includes("role")) category = "Permissions";
+
+    return NextResponse.json({
+      id: data.id,
+      original_id: data.original_id,
+      test_name: data.name || data.expected_result || "Unnamed Test",
+      description: data.expected_result || "",
+      preconditions: data.preconditions || "",
+      test_script: data.script || "",
+      app_under_test: data.app_under_test || "Unknown",
+      tags: data.tags || "",
+      category,
+      coverage: data.coverage || "0",
+      client_priority: data.client_priority || 0,
+      is_security: data.is_security,
+      execution_count: data.execution_count || 0,
+      pass_count: data.pass_count || 0,
+      fail_count: data.fail_count || 0,
+      first_executed_at: data.first_executed_at,
+      last_executed_at: data.last_executed_at,
+      jira_ticket_count: data.jira_ticket_count || 0,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+      base_confidence: confidence,
+      // Raw data for debugging
+      _raw: data,
+    });
+  } catch (error) {
+    console.error("Error fetching test:", error);
+    return NextResponse.json(
+      { error: "Internal server error", details: String(error) },
+      { status: 500 }
+    );
+  }
+}
+

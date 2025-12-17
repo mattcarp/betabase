@@ -17,6 +17,7 @@ import { FeedbackTimeline } from "../FeedbackTimeline";
 import { RLHFTestSuite } from "../../test-dashboard/RLHFTestSuite";
 import { RLHFImpactDashboard } from "../../test-dashboard/RLHFImpactDashboard";
 import { LiveRAGMonitor } from "../../test-dashboard/LiveRAGMonitor";
+import { HistoricalTestExplorer } from "../../test-dashboard/HistoricalTestExplorer";
 import {
   Upload,
   Settings,
@@ -576,9 +577,9 @@ Be helpful, concise, and professional in your responses.`;
                       <TestDashboard className="h-full" />
                     </TabsContent>
 
-                    {/* <TabsContent value="historical" className="h-full">
+                    <TabsContent value="historical" className="h-full">
                       <HistoricalTestExplorer />
-                    </TabsContent> */}
+                    </TabsContent>
 
                     <TabsContent value="rlhf-tests" className="h-full">
                       <RLHFTestSuite />

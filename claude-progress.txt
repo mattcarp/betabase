@@ -634,3 +634,41 @@ Starting execution...
 ## Files Created
 - src/app/api/tests/schema/route.ts (helper endpoint)
 - supabase/migrations/20251217_testing_tab_tables.sql
+
+---
+## Starting Phase 2: US1 Historical Test Explorer
+Tasks: T010-T021
+Time: ~20:35
+
+- [ ] T010: Create /api/tests/historical - GET paginated list
+- [ ] T011: Create /api/tests/historical/[id] - GET single test
+- [ ] T012: Add filter params
+- [ ] T013: Add sorting
+- [ ] T014: Re-enable HistoricalTestExplorer.tsx
+- [ ] T015: Replace mock data with real API
+- [ ] T016: Virtualized scrolling
+- [ ] T017: Loading skeletons
+- [ ] T018: Error states
+- [ ] T019: Test detail modal
+- [ ] T020: Wire to ChatPage.tsx
+- [ ] T021: Verify counts
+
+Starting T010...
+
+## Phase 2 Update (20:45)
+✅ T010: Historical tests API - /api/tests/historical - WORKING
+✅ T011: Single test API - /api/tests/historical/[id] - WORKING  
+✅ T012-T019: HistoricalTestExplorer component - WORKING
+✅ T020: Integrated into ChatPage.tsx - WORKING
+
+Browser verification: Component renders with 8,719 tests, pagination, filters!
+
+## Files Modified
+- src/app/api/tests/historical/route.ts (new)
+- src/app/api/tests/historical/[id]/route.ts (new)
+- src/components/test-dashboard/HistoricalTestExplorer.tsx (replaced stub)
+- src/components/ui/pages/ChatPage.tsx (enabled Historical tab)
+
+## Next
+- Phase 3: US2 Confidence Scoring API
+- Phase 4: US3 Playwright Generation
