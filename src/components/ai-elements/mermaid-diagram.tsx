@@ -82,6 +82,21 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
   const sanitizeMermaidCode = (rawCode: string): string => {
     let sanitized = rawCode;
 
+    // Remove <br/> and other HTML tags that Gemini sometimes includes
+    sanitized = sanitized.replace(/<br\s*\/?>/gi, " ");
+    sanitized = sanitized.replace(/<[^>]+>/g, "");
+
+    // Remove problematic special characters in node labels
+    // These break Mermaid parsing: \ / : } ? ' < > |
+    sanitized = sanitized.replace(/\\+/g, " ");  // Backslashes
+    sanitized = sanitized.replace(/'/g, "");     // Single quotes (within labels)
+    
+    // Fix node labels that contain special Mermaid syntax characters
+    // Convert {Label with / : ? < > | chars} to {Label with chars}
+    sanitized = sanitized.replace(/(\{[^}]*)[\/:<>|?]+([^}]*\})/g, "$1$2");
+    sanitized = sanitized.replace(/(\[[^\]]*)[\/:<>|?]+([^\]]*\])/g, "$1$2");
+    sanitized = sanitized.replace(/(\([^)]*)[\/:<>|?]+([^)]*\))/g, "$1$2");
+
     // Fix truncated hex colors (e.g., #005* -> #005588)
     // Common pattern: AI cuts off hex values mid-stream
     sanitized = sanitized.replace(/#([0-9a-fA-F]{3})(\*|[\s;,\)])/g, "#$1$1$2");
@@ -117,6 +132,10 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
     // Fix node labels in brackets that have special chars (but aren't already quoted)
     // e.g., [Create DSCM Ticket] -> ["Create DSCM Ticket"]
     sanitized = sanitized.replace(/\[([^"\]]+\s[^"\]]+)\](?!:)/g, '["$1"]');
+
+    // Remove any remaining problematic characters that could break parsing
+    // (Clean up double spaces, etc.)
+    sanitized = sanitized.replace(/\s{2,}/g, " ");
 
     return sanitized;
   };
