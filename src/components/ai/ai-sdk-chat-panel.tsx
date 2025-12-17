@@ -218,6 +218,7 @@ import {
   CheckpointTrigger,
 } from "../ai-elements/checkpoint";
 import { BookmarkIcon, ListTodoIcon, GaugeIcon, Trash2Icon, ChevronsUpDownIcon } from "lucide-react";
+import { MermaidDiagram } from "../ai-elements/mermaid-diagram";
 
 interface AiSdkChatPanelProps {
   api?: string;
@@ -363,6 +364,8 @@ export function AiSdkChatPanel({
   
   // Simple state for diagram viewing - separate from hook
   const [diagramVisible, setDiagramVisible] = useState(false);
+  const [diagramCode, setDiagramCode] = useState<string>("");
+  const [isGeneratingDiagram, setIsGeneratingDiagram] = useState(false);
 
   // Voice feature states - define before using in hooks
   const [isTTSEnabled, setIsTTSEnabled] = useState(false);
@@ -1606,6 +1609,147 @@ export function AiSdkChatPanel({
     setQueueItems(prev => prev.filter(item => item.id !== itemId));
   }, []);
 
+  // Generate Mermaid diagram from message content using AI
+  const generateDiagramFromContent = useCallback(async (content: string) => {
+    setIsGeneratingDiagram(true);
+    setDiagramVisible(true);
+    
+    try {
+      // Use the same API endpoint to generate a diagram
+      const response = await fetch('/api/aoma/generate-diagram', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setDiagramCode(data.mermaidCode);
+      } else {
+        // Fallback: Generate a contextual diagram based on keywords
+        const fallbackDiagram = generateFallbackDiagram(content);
+        setDiagramCode(fallbackDiagram);
+      }
+    } catch (error) {
+      console.error("Failed to generate diagram:", error);
+      // Use fallback diagram
+      const fallbackDiagram = generateFallbackDiagram(content);
+      setDiagramCode(fallbackDiagram);
+    } finally {
+      setIsGeneratingDiagram(false);
+    }
+  }, []);
+
+  // Generate a contextual Mermaid diagram based on content keywords
+  const generateFallbackDiagram = (content: string): string => {
+    const lowerContent = content.toLowerCase();
+    
+    // Detect workflow type and generate appropriate diagram
+    if (lowerContent.includes('upload') && lowerContent.includes('archive')) {
+      return `flowchart TD
+    subgraph prep["📋 1. Preparation Phase"]
+        A[/"📁 Select Source Files"/] --> B{"🔍 Validate File Names"}
+        B -->|"No special chars"| C[/"✅ Files Ready"/]
+        B -->|"Issues found"| D[/"⚠️ Rename Files"/] --> B
+    end
+    
+    subgraph reg["📝 2. Registration Phase"]
+        C --> E["🎵 Register Asset in AOMA"]
+        E --> F{"Enter Metadata"}
+        F --> G["Title & Artist"]
+        F --> H["ISRC/UPC Codes"]
+        F --> I["Security Groups"]
+        G & H & I --> J["📋 Asset Record Created"]
+    end
+    
+    subgraph upload["⬆️ 3. Upload Phase"]
+        J --> K{"Choose Upload Method"}
+        K -->|"Large files"| L["🚀 Aspera Upload"]
+        K -->|"Cloud source"| M["☁️ Sony Ci Import"]
+        K -->|"Small files"| N["📤 Direct Upload"]
+        L & M & N --> O["📦 Files Transferred"]
+    end
+    
+    subgraph process["⚙️ 4. Processing Phase"]
+        O --> P["🔄 Transcode to Formats"]
+        P --> Q["🔍 QC Validation"]
+        Q -->|"Pass"| R["✅ Ready for Distribution"]
+        Q -->|"Fail"| S["❌ Review Errors"] --> T["🔧 Fix Issues"] --> P
+    end
+    
+    subgraph archive["💾 5. Archive Phase"]
+        R --> U["📚 Store in Long-term Archive"]
+        U --> V["🏷️ AWS S3 Glacier"]
+        U --> W["💿 Master Vault"]
+        V & W --> X(("✨ Asset Complete"))
+    end
+    
+    style prep fill:#1e3a5f,stroke:#60a5fa,stroke-width:2px
+    style reg fill:#1e3a5f,stroke:#a78bfa,stroke-width:2px
+    style upload fill:#1e3a5f,stroke:#34d399,stroke-width:2px
+    style process fill:#1e3a5f,stroke:#fbbf24,stroke-width:2px
+    style archive fill:#1e3a5f,stroke:#f472b6,stroke-width:2px
+    style X fill:#10b981,stroke:#34d399,stroke-width:3px`;
+    }
+    
+    if (lowerContent.includes('permission') || lowerContent.includes('role')) {
+      return `flowchart TD
+    subgraph roles["👥 AOMA Permission Levels"]
+        direction TB
+        A["🔒 Viewer"] -->|"Can view"| B["📖 Read-only access"]
+        C["📝 Editor"] -->|"Can edit"| D["✏️ Modify metadata"]
+        E["👑 Admin"] -->|"Full control"| F["⚙️ Manage users & settings"]
+        G["🌐 Global Admin"] -->|"Everything"| H["🏢 Cross-territory access"]
+    end
+    
+    A -.->|"Upgrade"| C
+    C -.->|"Upgrade"| E
+    E -.->|"Upgrade"| G
+    
+    style A fill:#374151,stroke:#6b7280
+    style C fill:#1e40af,stroke:#3b82f6
+    style E fill:#7c3aed,stroke:#a78bfa
+    style G fill:#dc2626,stroke:#f87171`;
+    }
+    
+    // Default AOMA architecture diagram
+    return `flowchart LR
+    subgraph client["🖥️ Client Layer"]
+        A["🌐 Web Browser"]
+        B["📱 Mobile App"]
+    end
+    
+    subgraph api["🔌 API Gateway"]
+        C["⚡ Next.js API Routes"]
+        D["🔐 Auth Middleware"]
+    end
+    
+    subgraph services["⚙️ Services"]
+        E["🤖 AI/RAG Engine"]
+        F["📊 Analytics"]
+        G["🔔 Notifications"]
+    end
+    
+    subgraph data["💾 Data Layer"]
+        H[("🐘 PostgreSQL")]
+        I[("🔍 pgvector")]
+        J["☁️ S3 Storage"]
+    end
+    
+    A & B --> C
+    C --> D
+    D --> E & F & G
+    E --> I
+    F --> H
+    G --> H
+    E & F --> J
+    
+    style client fill:#1e3a5f,stroke:#60a5fa
+    style api fill:#1e3a5f,stroke:#a78bfa
+    style services fill:#1e3a5f,stroke:#34d399
+    style data fill:#1e3a5f,stroke:#fbbf24`;
+  };
+
   // Confirmation: Handle tool approval
   const handleToolApproval = useCallback((approved: boolean, reason?: string) => {
     if (pendingConfirmation) {
@@ -1942,78 +2086,77 @@ export function AiSdkChatPanel({
 
             {/* Diagram Offer - Subtle inline hint for workflow/process content */}
             {/* DEMO MODE: Show for any substantial assistant response */}
-            {!isUser && isLastMessage && !isLoading && !diagramVisible && (message.content?.length || 0) > 100 && (
-              <div className="mt-4 pt-3 border-t border-zinc-800/50 flex items-center gap-3">
-                <button
-                  onClick={() => {
-                    console.log("🎨 Diagram offer clicked - showing diagram");
-                    setDiagramVisible(true);
-                  }}
-                  className="text-sm italic text-zinc-400 hover:text-blue-400 transition-colors cursor-pointer flex items-center gap-2"
-                >
-                  <span className="text-blue-500">✦</span>
-                  would you like a visual diagram of this?
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    // Hide offer permanently for this session
-                    const el = e.currentTarget.parentElement;
-                    if (el) el.style.display = 'none';
-                  }}
-                  className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
-                  aria-label="Dismiss diagram offer"
-                >
-                  dismiss
-                </button>
-              </div>
-            )}
-
-            {/* Active Diagram Display - Using simple state for reliability */}
-            {!isUser && isLastMessage && !isLoading && diagramVisible && (
+            {/* Supports both AI SDK v4 (content) and v6 (parts[0].text) formats */}
+            {(() => {
+              // Get message content from either v4 or v6 format
+              const messageText = message.content || message.parts?.map((p: any) => p.text || '').join('') || '';
+              const hasSubstantialContent = messageText.length > 100;
+              const shouldShowOffer = !isUser && isLastMessage && !isLoading && !diagramVisible && hasSubstantialContent;
+              
+              if (!shouldShowOffer) return null;
+              
+              return (
                 <motion.div 
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    transition={{ duration: 0.3 }}
-                    className="mt-4 border rounded-lg overflow-hidden bg-black/30 border-white/10"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.3 }}
+                  className="mt-4 pt-3 border-t border-zinc-800/30"
                 >
-                    <div className="p-3 bg-white/5 border-b border-white/10 flex justify-between items-center">
-                        <span className="text-sm font-medium text-white flex items-center gap-2">
-                           <div className="h-4 w-4">🕸️</div> AOMA Architecture Diagram
-                        </span>
-                        <div className="flex items-center gap-2">
-                            <span className="text-[10px] text-green-400">Live</span>
-                            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                        </div>
-                    </div>
-                    <div className="p-8 flex justify-center items-center bg-gradient-to-br from-black/50 to-zinc-900/50 aspect-video">
-                        <div className="text-center space-y-6">
-                            {/* Architecture flow diagram */}
-                            <div className="flex items-center justify-center gap-4 text-white/70 text-xs font-mono">
-                                <div className="p-3 border border-zinc-600 rounded-lg bg-zinc-800/50 shadow-lg">
-                                    <div className="text-zinc-400 text-[10px] mb-1">Frontend</div>
-                                    <div className="text-white">Client</div>
-                                </div>
-                                <div className="text-blue-400 text-xl">➜</div>
-                                <div className="p-3 border border-blue-500/50 bg-blue-900/30 rounded-lg shadow-lg shadow-blue-500/10">
-                                    <div className="text-blue-300 text-[10px] mb-1">Backend</div>
-                                    <div className="text-blue-200">AOMA API</div>
-                                </div>
-                                <div className="text-purple-400 text-xl">➜</div>
-                                <div className="p-3 border border-purple-500/50 bg-purple-900/30 rounded-lg shadow-lg shadow-purple-500/10">
-                                    <div className="text-purple-300 text-[10px] mb-1">Storage</div>
-                                    <div className="text-purple-200">Vector DB</div>
-                                </div>
-                            </div>
-                            {/* Labels */}
-                            <div className="flex items-center justify-center gap-8 text-[10px] text-zinc-500">
-                                <span>HTTP/REST</span>
-                                <span>pgvector</span>
-                            </div>
-                            <p className="text-zinc-500 text-xs mt-2 italic">Interactive Mermaid Visualization</p>
-                        </div>
-                    </div>
+                  <button
+                    onClick={() => {
+                      console.log("🎨 Diagram offer clicked - generating diagram from content");
+                      generateDiagramFromContent(messageText);
+                    }}
+                    disabled={isGeneratingDiagram}
+                    className="group flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 hover:border-blue-500/40 hover:from-blue-500/20 hover:to-purple-500/20 transition-all duration-300 disabled:opacity-50"
+                  >
+                    <SparklesIcon className="h-4 w-4 text-blue-400 group-hover:text-blue-300" />
+                    <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">
+                      {isGeneratingDiagram ? "Generating diagram..." : "Would you like a visual diagram of this workflow?"}
+                    </span>
+                    <span className="text-xs text-zinc-500 group-hover:text-zinc-400 ml-1">→</span>
+                  </button>
                 </motion.div>
+              );
+            })()}
+
+            {/* Active Diagram Display - Using REAL MermaidDiagram component */}
+            {!isUser && isLastMessage && !isLoading && diagramVisible && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                transition={{ duration: 0.3 }}
+                className="mt-4"
+              >
+                <div className="relative">
+                  {/* Close button */}
+                  <button
+                    onClick={() => {
+                      setDiagramVisible(false);
+                      setDiagramCode("");
+                    }}
+                    className="absolute top-4 right-4 z-20 p-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 border border-zinc-600/50 text-zinc-400 hover:text-white transition-colors"
+                    title="Close diagram"
+                  >
+                    <Trash2Icon className="h-4 w-4" />
+                  </button>
+                  
+                  {/* Loading state */}
+                  {isGeneratingDiagram && !diagramCode && (
+                    <div className="flex items-center justify-center py-12 rounded-xl border border-purple-500/30 bg-gradient-to-br from-slate-900 to-slate-950">
+                      <Loader className="h-6 w-6 animate-spin mr-3 text-purple-500" />
+                      <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+                        Generating workflow diagram with AI...
+                      </span>
+                    </div>
+                  )}
+                  
+                  {/* Real Mermaid Diagram - pan, zoom, download, copy code */}
+                  {diagramCode && (
+                    <MermaidDiagram code={diagramCode} />
+                  )}
+                </div>
+              </motion.div>
             )}
 
             {/* PERFORMANCE FIX: REMOVED DUPLICATE PROGRESS INDICATOR - Now only rendered once at line 1538 */}

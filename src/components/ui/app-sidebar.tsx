@@ -187,14 +187,14 @@ export function AppSidebar({ className }: AppSidebarProps) {
         {/* AI Suggestions */}
         {!searchQuery && conversations.length > 3 && (
           <div className="px-2 pb-2 flex gap-2">
-            <Suggestion label="Recent" onClick={() => setSearchQuery("")} className="text-xs" />
+            <Suggestion suggestion="Recent" onClick={() => setSearchQuery("")} className="text-xs" />
             <Suggestion
-              label="Pinned"
+              suggestion="Pinned"
               onClick={() => setSearchQuery("pinned")}
               className="text-xs"
             />
             <Suggestion
-              label="Today"
+              suggestion="Today"
               onClick={() => {
                 const today = new Date().toDateString();
                 setFilteredConversations(

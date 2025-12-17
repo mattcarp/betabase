@@ -16,7 +16,7 @@ import { Badge } from "./badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs";
 import { ScrollArea } from "./scroll-area";
 import { Input } from "./input";
-import { Search, RefreshCw, Activity, GitBranch, FileText, Lightbulb, ChevronDown, Clock, AlertTriangle, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Search, RefreshCw, Activity, GitBranch, FileText, Lightbulb, ChevronDown, Clock, ThumbsUp, ThumbsDown } from "lucide-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
@@ -38,8 +38,7 @@ interface RecentFeedback {
   thumbs_up: boolean | null;
   rating: number | null;
   created_at: string;
-  status: string;
-  severity: string | null;
+  status: string | null;
 }
 
 interface ResponseDebuggerProps {
@@ -67,20 +66,25 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
     try {
       const { data, error } = await supabase
         .from("rlhf_feedback")
-        .select("id, query, user_query, thumbs_up, rating, created_at, status, severity")
+        .select("id, query, feedback_type, feedback_value, created_at, status")
         .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) {
-        console.error("Failed to load recent items:", error);
+        // console.error("Failed to load recent items:", error);
+        // Silently fail - table might not exist in dev environments
       } else {
         setRecentItems(data?.map(item => ({
-          ...item,
-          query: item.query || item.user_query || "Unknown query"
+          id: item.id,
+          query: item.query || "Unknown query",
+          thumbs_up: item.feedback_type === 'thumbs_up' ? true : item.feedback_type === 'thumbs_down' ? false : null,
+          rating: item.feedback_value?.score ?? null,
+          created_at: item.created_at,
+          status: item.status,
         })) || []);
       }
     } catch (error) {
-      console.error("Error loading recent items:", error);
+      // console.error("Error loading recent items:", error);
     } finally {
       setLoadingRecent(false);
     }
@@ -205,7 +209,6 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                     <div className="flex items-center gap-2">
                       {item.thumbs_up === true && <ThumbsUp className="h-3 w-3 text-green-400" />}
                       {item.thumbs_up === false && <ThumbsDown className="h-3 w-3 text-red-400" />}
-                      {item.severity === "critical" && <AlertTriangle className="h-3 w-3 text-red-400" />}
                       <span className="text-xs text-zinc-300 truncate flex-1">
                         {item.query?.substring(0, 60)}...
                       </span>

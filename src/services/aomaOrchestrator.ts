@@ -515,16 +515,22 @@ export class AOMAOrchestrator {
    */
   async executeOrchestration(
     query: string,
-    progressCallback?: (update: any) => void
+    options?: {
+      progressCallback?: (update: any) => void;
+      sourceTypes?: string[]; // From intent classifier - skip internal detection if provided
+    }
   ): Promise<any> {
+    const { progressCallback, sourceTypes } = options || {};
+    
     // Start progress tracking
     aomaProgressStream.startQuery(query);
 
     // Normalize query for consistent caching
     const normalizedQuery = this.normalizeQuery(query);
 
-    // Check cache first using normalized query
-    const cacheKey = `orchestrated:${normalizedQuery}`;
+    // Include sourceTypes in cache key for accurate cache hits
+    const sourceTypesKey = sourceTypes?.sort().join(',') || 'auto';
+    const cacheKey = `orchestrated:${normalizedQuery}:${sourceTypesKey}`;
     const cached = aomaCache.get(cacheKey, "rapid");
     if (cached) {
       console.log("⚡ Returning cached orchestrated response");
@@ -542,10 +548,10 @@ export class AOMAOrchestrator {
     // TIER 1 OPTIMIZATION: Deduplicate concurrent identical queries
     // If the same query is already in-flight from another request, reuse that promise
     const deduplicator = getQueryDeduplicator();
-    const dedupeKey = `${normalizedQuery}:${progressCallback ? 'with-callback' : 'no-callback'}`;
+    const dedupeKey = `${normalizedQuery}:${sourceTypesKey}:${progressCallback ? 'with-callback' : 'no-callback'}`;
     
     return deduplicator.dedupe(dedupeKey, async () => {
-      return this.executeOrchestrationInternal(query, normalizedQuery, cacheKey, progressCallback);
+      return this.executeOrchestrationInternal(query, normalizedQuery, cacheKey, progressCallback, sourceTypes);
     });
   }
 
@@ -557,7 +563,8 @@ export class AOMAOrchestrator {
     query: string,
     normalizedQuery: string,
     cacheKey: string,
-    progressCallback?: (update: any) => void
+    progressCallback?: (update: any) => void,
+    classifiedSourceTypes?: string[] // From intent classifier
   ): Promise<any> {
 
     // SUPABASE-ONLY PATH: Direct vector store query (FAST - <100ms)
@@ -567,8 +574,12 @@ export class AOMAOrchestrator {
       // Start service tracking
       aomaProgressStream.startService("vector_store");
 
-      // Determine relevant source types from query
-      const sourceTypes = this.determineSourceTypes(query);
+      // Use classified source types if provided, otherwise detect from query
+      const sourceTypes = classifiedSourceTypes || this.determineSourceTypes(query);
+      
+      if (classifiedSourceTypes) {
+        console.log(`🎯 Using intent-classified sources: [${classifiedSourceTypes.join(', ')}]`);
+      }
 
       // Query Supabase vector store
       const vectorResult = await this.queryVectorStore(query, {

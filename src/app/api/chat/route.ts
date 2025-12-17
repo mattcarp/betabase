@@ -20,6 +20,8 @@ import { getSessionStateManager } from "@/lib/sessionStateManager";
 import { DEFAULT_APP_CONTEXT } from "@/lib/supabase";
 // Langfuse observability
 import { traceChat, flushLangfuse } from "@/lib/langfuse";
+// Intent classifier for intelligent source routing (RAG optimization)
+import { classifyIntent, type IntentClassification } from "@/services/intentClassifier";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
@@ -447,6 +449,43 @@ export async function POST(req: Request) {
       const perfStart = Date.now();
       let vectorStartTime: number | null = null;
       let vectorEndTime: number | null = null;
+      
+      // ========================================
+      // PHASE 0: INTENT CLASSIFICATION (NEW!)
+      // ========================================
+      // Classify query intent to route to relevant sources only
+      // This prevents noise from irrelevant tables and improves response quality
+      let intentResult: IntentClassification | null = null;
+      const intentStartTime = Date.now();
+      
+      try {
+        intentResult = await classifyIntent(queryString, {
+          fallbackSources: ['knowledge', 'jira'], // Safe defaults
+        });
+        
+        const intentDuration = Date.now() - intentStartTime;
+        console.log(`🎯 [Intent] Classification complete in ${intentDuration}ms`);
+        console.log(`   Query type: ${intentResult.queryType}`);
+        console.log(`   Sources: [${intentResult.relevantSources.join(', ')}]`);
+        console.log(`   Confidence: ${(intentResult.confidence * 100).toFixed(0)}%`);
+        console.log(`   Reasoning: ${intentResult.reasoning}`);
+        
+        // Add intent metadata for debugging
+        knowledgeElements.push({
+          type: "context",
+          content: `Query classified as "${intentResult.queryType}" - searching: ${intentResult.relevantSources.join(', ')}`,
+          metadata: {
+            source: "intent-classifier",
+            queryType: intentResult.queryType,
+            confidence: intentResult.confidence,
+            reasoning: intentResult.reasoning,
+            timestamp: new Date().toISOString(),
+          },
+        });
+      } catch (intentError) {
+        console.warn("⚠️ [Intent] Classification failed, using all sources:", intentError);
+        // Continue without intent classification - will use all sources
+      }
 
       try {
         // ========================================
@@ -566,9 +605,19 @@ export async function POST(req: Request) {
           process.env.VECTOR_ORCHESTRATOR_TIMEOUT_MS || String(defaultTimeout)
         );
         console.log(`🔀 Starting vector query (${orchestratorTimeoutMs}ms timeout)...`);
+        
+        // Pass classified sources to orchestrator if available
+        const orchestratorOptions = intentResult?.relevantSources 
+          ? { sourceTypes: intentResult.relevantSources as string[] }
+          : undefined;
+        
+        if (orchestratorOptions?.sourceTypes) {
+          console.log(`🎯 Routing to sources: [${orchestratorOptions.sourceTypes.join(', ')}]`);
+        }
+        
         vectorStartTime = Date.now();
         const orchestratorResult = (await Promise.race([
-          aomaOrchestrator.executeOrchestration(queryString),
+          aomaOrchestrator.executeOrchestration(queryString, orchestratorOptions),
           new Promise((_, reject) =>
             setTimeout(
               () => reject(new Error(`Vector query timeout after ${orchestratorTimeoutMs}ms`)),
