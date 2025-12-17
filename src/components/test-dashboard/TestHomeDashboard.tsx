@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -24,10 +24,33 @@ import {
   Sparkles,
   ChevronDown,
   ChevronUp,
+  Archive,
 } from "lucide-react";
 import { CuratorQueue } from "../ui/CuratorQueue";
 import { TestFilters, TestFilterState, defaultFilters } from "./TestFilters";
 import { cn } from "../../lib/utils";
+
+// Real analytics data type
+interface AnalyticsData {
+  summary: {
+    totalTests: number;
+    totalExecutions: number;
+    passRate: string;
+    testsWithExecutions: number;
+    testsNeverExecuted: number;
+  };
+  selfHealing: {
+    total: number;
+    autoHealed: number;
+    pending: number;
+    applied: number;
+  };
+  feedback: {
+    total: number;
+    approved: number;
+    pending: number;
+  };
+}
 
 interface TestHomeDashboardProps {
   onNavigate?: (tab: string) => void;
@@ -46,6 +69,26 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
 }) => {
   const [showCuratorQueue, setShowCuratorQueue] = useState(false);
   const [filters, setFilters] = useState<TestFilterState>(defaultFilters);
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch real analytics on mount
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const response = await fetch("/api/tests/analytics");
+        if (response.ok) {
+          const data = await response.json();
+          setAnalytics(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch analytics:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAnalytics();
+  }, []);
 
   const handleFiltersChange = (newFilters: TestFilterState) => {
     setFilters(newFilters);
@@ -61,15 +104,20 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
     }
   };
 
-  // Mock data for demonstration - would be fetched from API
+  // Use real data from API when available, fallback to props/mock
   const healthMetrics = {
-    passRate: testStats.total > 0 ? Math.round((testStats.passed / testStats.total) * 100) : 96.2,
+    passRate: analytics?.summary?.passRate 
+      ? parseFloat(analytics.summary.passRate) 
+      : (testStats.total > 0 ? Math.round((testStats.passed / testStats.total) * 100) : 96.2),
     passRateTrend: 2.1,
     failingTests: testStats.failed || 3,
-    healedToday: 12,
-    pendingReview: 5,
+    healedToday: analytics?.selfHealing?.autoHealed || 12,
+    pendingReview: analytics?.feedback?.pending || 5,
     flakyTests: 7,
     avgDuration: testStats.duration || 142,
+    totalTests: analytics?.summary?.totalTests || 0,
+    totalExecutions: analytics?.summary?.totalExecutions || 0,
+    testsNeverExecuted: analytics?.summary?.testsNeverExecuted || 0,
   };
 
   const recentSelfHeals = [
@@ -243,6 +291,46 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
           </CardContent>
         </Card>
       </div>
+
+      {/* Historical Test Suite Stats - Real Data from Betabase */}
+      {analytics && (
+        <Card className="mac-card border-border bg-gradient-to-r from-amber-500/5 to-transparent" data-test-id="historical-stats">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <Archive className="h-5 w-5 text-amber-500" />
+                  <span className="text-sm font-medium text-muted-foreground">Historical Test Suite</span>
+                </div>
+                <div className="flex items-center gap-6 text-sm">
+                  <div>
+                    <span className="text-2xl font-light text-amber-500">{healthMetrics.totalTests.toLocaleString()}</span>
+                    <span className="text-muted-foreground ml-2">tests</span>
+                  </div>
+                  <div className="text-muted-foreground">•</div>
+                  <div>
+                    <span className="text-xl font-light">{healthMetrics.totalExecutions.toLocaleString()}</span>
+                    <span className="text-muted-foreground ml-2">total executions</span>
+                  </div>
+                  <div className="text-muted-foreground">•</div>
+                  <div>
+                    <span className="text-xl font-light text-zinc-400">{healthMetrics.testsNeverExecuted.toLocaleString()}</span>
+                    <span className="text-muted-foreground ml-2">never executed</span>
+                  </div>
+                </div>
+              </div>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => onNavigate?.("historical")}
+                className="text-amber-500 hover:text-amber-400"
+              >
+                Explore <ArrowRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Quick Filters Bar */}
       <Card className="mac-card border-border">

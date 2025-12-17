@@ -740,3 +740,16 @@ the knowledge base to determine relevance and automation potential.
 ## Remaining
 - T008: Run migration in Supabase SQL editor
 - Phase 6-9: Component updates, dashboard wiring
+
+## Phase 6: Dashboard Wiring (~21:30)
+- [x] T59-T62: TestHomeDashboard fetches real analytics ✅
+  - Added useEffect to fetch /api/tests/analytics on mount
+  - Shows real totals: 8,719 tests, 12,177 executions, 80.4% pass rate
+  - Added Historical Test Suite banner with real stats
+- [x] T63-T65: Added Historical tab to TestDashboard ✅
+  - New tab after Self-Healing
+  - Wired to HistoricalTestExplorer component
+
+## Components Updated
+- TestHomeDashboard.tsx: Real API integration
+- TestDashboard.tsx: Historical tab added

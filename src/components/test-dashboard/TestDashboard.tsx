@@ -41,6 +41,7 @@ import { SessionInteraction } from "../../types/session-timeline";
 import { ManualTestingPanel } from "./ManualTestingPanel";
 import { TestHomeDashboard } from "./TestHomeDashboard";
 import { SelfHealingTestViewer } from "./SelfHealingTestViewer";
+import { HistoricalTestExplorer } from "./HistoricalTestExplorer";
 import { Wrench, Home } from "lucide-react";
 
 interface TestDashboardProps {
@@ -548,6 +549,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <Wrench className="h-4 w-4" />
               Self-Healing
             </TabsTrigger>
+            <TabsTrigger value="historical" className="gap-2">
+              <FileSearch className="h-4 w-4" />
+              Historical
+            </TabsTrigger>
             <TabsTrigger value="unified" className="gap-2">
               <Sparkles className="h-4 w-4" />
               Unified
@@ -606,6 +611,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
             <TabsContent value="self-healing" className="m-0 p-0">
               <SelfHealingTestViewer />
+            </TabsContent>
+
+            <TabsContent value="historical" className="m-0 p-4">
+              <HistoricalTestExplorer />
             </TabsContent>
 
             <TabsContent value="unified" className="m-0 p-6">
