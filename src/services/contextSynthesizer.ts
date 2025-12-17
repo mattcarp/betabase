@@ -71,12 +71,14 @@ export async function synthesizeContext(
   const hasTechnicalDocs =
     sourceTypes.includes("knowledge") || sourceTypes.includes("firecrawl");
 
-  // Build context for synthesis - limit to top 5 most relevant
-  const topResults = results.slice(0, 5);
+  // Build context for synthesis - use more results and longer content for chunked docs
+  // With proper chunking, each result is ~1800 chars so we can include more
+  const topResults = results.slice(0, 8);
   const rawContext = topResults
     .map((r, i) => {
       const type = r.source_type.toUpperCase();
-      const content = r.content.substring(0, 500); // Limit each result
+      // INCREASED: 800 chars per result to capture more detail from chunks
+      const content = r.content.substring(0, 800);
       return `[${type} ${i + 1}]: ${content}`;
     })
     .join("\n\n");

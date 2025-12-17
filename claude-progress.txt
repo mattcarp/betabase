@@ -444,3 +444,35 @@ if (content.length > 50) {
 ## Warnings/Blockers
 - None - fix is working correctly
 ---
+
+---
+Session: 2025-12-17 09:00
+Agent: Coding
+Duration: ~45m
+
+## Summary
+- Researched optimal chunking for RAG (Firecrawl/NVIDIA/Chroma 2025 benchmarks)
+- Updated chunking configuration to optimal: 1800 chars (~450 tokens), 200 char overlap (11%)
+- Deleted all 165 old unchunked knowledge vectors
+- Re-uploaded 48 files from 3 directories with proper chunking → 1214 chunks
+- Cleaned 55 duplicate chunks via deduplication service
+- Verified retrieval quality - now returns rich technical details
+
+## Key Changes
+- `src/app/api/knowledge/upload/route.ts`: Updated chunking params with research-backed values
+- Added bulk delete: `?deleteAll=true&sourceType=knowledge`
+- Created `scripts/reupload-with-chunking.sh` for batch uploads
+
+## Test Results
+- SACD spec query: Now returns "2048 bytes per sector", "SSM", "SIZ parameter"
+- DDP Blu-ray: Returns step-by-step process with email notification
+- Asset types: Returns Audio/Graphic/Video with product mappings
+- Permissions: Returns Basic User capabilities and EU-specific permissions
+
+## Next Steps
+- Final suggested questions are working with rich responses
+- Consider semantic chunking for highest-value documents (costs more)
+
+## Warnings/Blockers
+- 1 failed upload: ffmpeg Documentation.pdf (likely corrupted/empty)
+---

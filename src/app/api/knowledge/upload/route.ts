@@ -29,6 +29,80 @@ async function getPdfParse() {
   return pdfParseModule;
 }
 
+// ============================================================================
+// TEXT CHUNKING - Split large documents into overlapping chunks for better RAG
+// ============================================================================
+interface TextChunk {
+  content: string;
+  chunkIndex: number;
+  totalChunks: number;
+  startChar: number;
+  endChar: number;
+}
+
+/**
+ * Split text into overlapping chunks for better vector search retrieval.
+ * Simple, robust implementation.
+ * 
+ * @param text - The full document text
+ * @param chunkSize - Target size of each chunk in characters
+ * @param overlap - Overlap between chunks in characters
+ * @returns Array of text chunks with metadata
+ */
+function chunkText(text: string, chunkSize: number = 1500, overlap: number = 150): TextChunk[] {
+  // Validate inputs
+  if (!text || text.length === 0) {
+    return [];
+  }
+  
+  // If text is small enough, return as single chunk
+  if (text.length <= chunkSize) {
+    return [{
+      content: text.trim(),
+      chunkIndex: 0,
+      totalChunks: 1,
+      startChar: 0,
+      endChar: text.length,
+    }];
+  }
+
+  const chunks: TextChunk[] = [];
+  const step = chunkSize - overlap;
+  
+  // Calculate total chunks upfront
+  const totalChunks = Math.ceil((text.length - overlap) / step);
+
+  for (let i = 0; i < totalChunks; i++) {
+    const startIndex = i * step;
+    const endIndex = Math.min(startIndex + chunkSize, text.length);
+    
+    const chunkContent = text.substring(startIndex, endIndex).trim();
+    
+    if (chunkContent.length > 0) {
+      chunks.push({
+        content: chunkContent,
+        chunkIndex: i,
+        totalChunks,
+        startChar: startIndex,
+        endChar: endIndex,
+      });
+    }
+  }
+  
+  return chunks;
+}
+
+// ============================================================================
+// CHUNKING CONFIGURATION - Based on 2025 RAG research (NVIDIA/Chroma benchmarks)
+// ============================================================================
+// Research shows: 400-512 tokens (~1500-2000 chars) with 10-20% overlap
+// RecursiveCharacterTextSplitter achieved 85-90% recall in Chroma's tests
+// Factoid queries: 256-512 tokens | Analytical queries: 1024+ tokens
+// Source: Firecrawl 2025 chunking benchmarks
+const CHUNK_THRESHOLD = 1800; // Documents larger than this will be chunked
+const CHUNK_SIZE = 1800; // ~450 tokens - optimal for mixed query types
+const CHUNK_OVERLAP = 200; // ~11% overlap - industry standard 10-20%
+
 // Extract text content from various file types
 async function extractTextFromFile(file: File): Promise<string> {
   const fileType = file.type;
@@ -120,45 +194,106 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate source ID from filename
-    const sourceId = `upload-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-
-    // Build metadata
-    const metadata = {
-      filename: file.name,
-      fileType: file.type,
-      fileSize: file.size,
-      uploadedAt: new Date().toISOString(),
-      contentLength: sanitizedContent.length,
-      originalLength: content.length,
-      ...(customMetadata ? JSON.parse(customMetadata) : {}),
-    };
+    // Generate base source ID from filename
+    const baseSourceId = `upload-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
 
     // Store in Supabase using the vector service
     const vectorService = getSupabaseVectorService();
-    const vectorId = await vectorService.upsertVector(
-      organization,
-      division,
-      app_under_test,
-      sanitizedContent,
-      sourceType as any,
-      sourceId,
-      metadata
-    );
+    
+    // Determine if we need to chunk this document
+    const shouldChunk = sanitizedContent.length > CHUNK_THRESHOLD;
+    const vectorIds: string[] = [];
 
-    console.log(`[KNOWLEDGE UPLOAD] ✅ Stored with ID: ${vectorId}`);
+    if (shouldChunk) {
+      // Chunk the document for better retrieval
+      const chunks = chunkText(sanitizedContent, CHUNK_SIZE, CHUNK_OVERLAP);
+      console.log(`[KNOWLEDGE UPLOAD] 📦 Chunking into ${chunks.length} parts (${sanitizedContent.length} chars)`);
 
-    return NextResponse.json({
-      success: true,
-      vectorId,
-      sourceId,
-      filename: file.name,
-      contentLength: sanitizedContent.length,
-      organization,
-      division,
-      app_under_test,
-      message: `Successfully uploaded "${file.name}" to ${organization}/${division}/${app_under_test}`,
-    });
+      for (const chunk of chunks) {
+        const chunkSourceId = `${baseSourceId}-chunk-${chunk.chunkIndex}`;
+        
+        // Build metadata for this chunk
+        const chunkMetadata = {
+          filename: file.name,
+          fileType: file.type,
+          fileSize: file.size,
+          uploadedAt: new Date().toISOString(),
+          // Chunking metadata
+          isChunked: true,
+          chunkIndex: chunk.chunkIndex,
+          totalChunks: chunk.totalChunks,
+          chunkStartChar: chunk.startChar,
+          chunkEndChar: chunk.endChar,
+          originalContentLength: sanitizedContent.length,
+          parentSourceId: baseSourceId,
+          ...(customMetadata ? JSON.parse(customMetadata) : {}),
+        };
+
+        const vectorId = await vectorService.upsertVector(
+          organization,
+          division,
+          app_under_test,
+          chunk.content,
+          sourceType as any,
+          chunkSourceId,
+          chunkMetadata
+        );
+        vectorIds.push(vectorId);
+        
+        console.log(`[KNOWLEDGE UPLOAD] ✅ Chunk ${chunk.chunkIndex + 1}/${chunk.totalChunks} stored: ${vectorId}`);
+      }
+
+      return NextResponse.json({
+        success: true,
+        vectorIds,
+        sourceId: baseSourceId,
+        filename: file.name,
+        contentLength: sanitizedContent.length,
+        chunked: true,
+        chunkCount: chunks.length,
+        organization,
+        division,
+        app_under_test,
+        message: `Successfully uploaded "${file.name}" as ${chunks.length} chunks to ${organization}/${division}/${app_under_test}`,
+      });
+    } else {
+      // Store as single document (small file)
+      const metadata = {
+        filename: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+        uploadedAt: new Date().toISOString(),
+        contentLength: sanitizedContent.length,
+        originalLength: content.length,
+        isChunked: false,
+        ...(customMetadata ? JSON.parse(customMetadata) : {}),
+      };
+
+      const vectorId = await vectorService.upsertVector(
+        organization,
+        division,
+        app_under_test,
+        sanitizedContent,
+        sourceType as any,
+        baseSourceId,
+        metadata
+      );
+
+      console.log(`[KNOWLEDGE UPLOAD] ✅ Stored with ID: ${vectorId}`);
+
+      return NextResponse.json({
+        success: true,
+        vectorId,
+        sourceId: baseSourceId,
+        filename: file.name,
+        contentLength: sanitizedContent.length,
+        chunked: false,
+        organization,
+        division,
+        app_under_test,
+        message: `Successfully uploaded "${file.name}" to ${organization}/${division}/${app_under_test}`,
+      });
+    }
   } catch (error) {
     console.error("[KNOWLEDGE UPLOAD] Error:", error);
     return NextResponse.json(
@@ -200,33 +335,43 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// DELETE endpoint to remove a vector
+// DELETE endpoint to remove vectors
+// If sourceId is provided: delete specific vector
+// If deleteAll=true: delete ALL vectors of that sourceType (DANGER!)
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const sourceId = searchParams.get("sourceId");
+    const deleteAll = searchParams.get("deleteAll") === "true";
     const sourceType = searchParams.get("sourceType") || "knowledge";
     const organization = searchParams.get("organization") || DEFAULT_APP_CONTEXT.organization;
     const division = searchParams.get("division") || DEFAULT_APP_CONTEXT.division;
     const app_under_test = searchParams.get("app_under_test") || DEFAULT_APP_CONTEXT.app_under_test;
 
-    if (!sourceId) {
-      return NextResponse.json({ error: "sourceId is required" }, { status: 400 });
+    if (!sourceId && !deleteAll) {
+      return NextResponse.json({ error: "sourceId is required (or use deleteAll=true to delete all)" }, { status: 400 });
     }
 
     const vectorService = getSupabaseVectorService();
+    
+    // If deleteAll, pass undefined for sourceId to delete all of that type
     const deletedCount = await vectorService.deleteVectorsBySource(
       organization,
       division,
       app_under_test,
       sourceType,
-      sourceId
+      deleteAll ? undefined : sourceId!
     );
+
+    const message = deleteAll 
+      ? `Deleted ALL ${deletedCount} ${sourceType} vector(s)`
+      : `Deleted ${deletedCount} vector(s) with sourceId: ${sourceId}`;
 
     return NextResponse.json({
       success: true,
       deleted: deletedCount,
-      message: `Deleted ${deletedCount} vector(s) with sourceId: ${sourceId}`,
+      deleteAll,
+      message,
     });
   } catch (error) {
     console.error("[KNOWLEDGE UPLOAD] Delete error:", error);

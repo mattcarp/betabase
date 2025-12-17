@@ -13,7 +13,7 @@
 
 import { supabase, DEFAULT_APP_CONTEXT } from "../lib/supabase";
 import { embed } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
 import { OptimizedSupabaseVectorService } from "./optimizedSupabaseVectorService";
 
 export type KnowledgeSourceType =
@@ -78,10 +78,12 @@ export function preprocessQuery(query: string): string {
 
 async function getQueryEmbedding(query: string): Promise<number[] | null> {
   try {
-    // Use the OpenAI embedding model with 1536 dims to match DB
-    const model = openai.embedding("text-embedding-3-small");
-    // AI SDK v5 format: { embedding: number[] } not { embeddings: Array<{embedding: number[]}> }
+    // CRITICAL: Use Gemini embeddings (768d) to match the documents!
+    // Documents are embedded with text-embedding-004 (768 dimensions)
+    // Using OpenAI (1536d) creates dimension mismatch → poor similarity scores
+    const model = google.textEmbeddingModel("text-embedding-004");
     const { embedding } = await embed({ model, value: query });
+    console.log(`📐 Generated Gemini query embedding (${embedding.length}d)`);
     return embedding;
   } catch (err) {
     console.warn("Embedding generation failed, falling back to keyword search:", err);

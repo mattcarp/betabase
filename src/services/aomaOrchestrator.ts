@@ -213,7 +213,10 @@ export class AOMAOrchestrator {
     metadata: any;
     fromCache?: boolean;
   }> {
-    const { matchThreshold = 0.78, matchCount = 10, sourceTypes, useCache = true } = options;
+    // TUNED: Lower threshold for better recall with chunked documents
+    // Chunking creates more specific embeddings that may have lower similarity scores
+    // but contain more relevant specific content
+    const { matchThreshold = 0.55, matchCount = 15, sourceTypes, useCache = true } = options;
 
     // Normalize query for consistent caching
     const normalizedQuery = this.normalizeQuery(query);
