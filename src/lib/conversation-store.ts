@@ -160,16 +160,16 @@ export const useConversationStore = create<ConversationStore>()(
             const updatedConversation = { ...c, ...updates, updatedAt: new Date() };
 
             // Auto-generate title from first user message if still default/empty
-            // Works with both our Message type and Vercel AI SDK message format
+            // Works with both our Message type and Vercel AI SDK v4/v5 message format
             if (isDefaultTitle(c.title) && updates.messages && updates.messages.length > 0) {
-              // AI SDK messages have: id, role, content, createdAt, etc.
-              // Try to find the first user message
+              // AI SDK v5 uses parts[0].text, v4 uses content - use helper to extract
               const firstUserMessage = updates.messages.find(
-                (m: any) => m.role === "user" && m.content
+                (m: any) => m.role === "user" && getMessageContent(m)
               );
               
-              if (firstUserMessage?.content) {
-                updatedConversation.title = generateTitleFromMessage(firstUserMessage.content);
+              const messageContent = firstUserMessage ? getMessageContent(firstUserMessage) : undefined;
+              if (messageContent) {
+                updatedConversation.title = generateTitleFromMessage(messageContent);
               }
             }
 
@@ -193,13 +193,14 @@ export const useConversationStore = create<ConversationStore>()(
               };
 
               // Auto-generate title from first user message if still default
-              // Title is generated as soon as first user message arrives
+              // Title is generated as soon as first user message arrives (works with AI SDK v4/v5)
+              const messageContent = getMessageContent(message);
               if (
                 isDefaultTitle(c.title) &&
                 message.role === "user" &&
-                message.content
+                messageContent
               ) {
-                updatedConversation.title = generateTitleFromMessage(message.content);
+                updatedConversation.title = generateTitleFromMessage(messageContent);
               }
 
               return updatedConversation;
@@ -222,7 +223,10 @@ export const useConversationStore = create<ConversationStore>()(
         return get().conversations.filter(
           (c) =>
             c.title.toLowerCase().includes(lowerQuery) ||
-            c.messages.some((m) => m.content.toLowerCase().includes(lowerQuery)) ||
+            c.messages.some((m) => {
+              const content = getMessageContent(m);
+              return content?.toLowerCase().includes(lowerQuery);
+            }) ||
             c.tags?.some((t) => t.toLowerCase().includes(lowerQuery))
         );
       },
@@ -272,15 +276,17 @@ export const useConversationStore = create<ConversationStore>()(
         set((state) => ({
           conversations: state.conversations.map((c) => {
             // Only process conversations with default titles AND messages
+            // Works with AI SDK v4 (content) and v5 (parts[0].text) formats
             if (isDefaultTitle(c.title) && c.messages.length > 0) {
               const firstUserMessage = c.messages.find(
-                (m: any) => m.role === "user" && m.content
+                (m: any) => m.role === "user" && getMessageContent(m)
               );
-              if (firstUserMessage?.content) {
+              const messageContent = firstUserMessage ? getMessageContent(firstUserMessage) : undefined;
+              if (messageContent) {
                 updatedCount++;
                 return {
                   ...c,
-                  title: generateTitleFromMessage(firstUserMessage.content),
+                  title: generateTitleFromMessage(messageContent),
                   updatedAt: new Date(),
                 };
               }

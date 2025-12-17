@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Cached responses with rich visual content for instant delivery
-// These are pre-generated based on actual AOMA knowledge base content
+// Premium cached responses with rich visual content for instant delivery
+// These showcase deep AOMA knowledge and trigger infographic generation
+// Updated: December 2025 with latest release notes and corpus data
 const CACHED_RESPONSES: Record<
   string,
   {
@@ -14,733 +15,945 @@ const CACHED_RESPONSES: Record<
     };
   }
 > = {
-  "How do I use the Media Batch Converter to export audio in different formats?": {
-    response: `# Media Batch Converter (MBC) - Audio Export Guide
+  "What are the different asset types in AOMA and how do they relate to each other?": {
+    response: `# AOMA Asset Types & Their Relationships
 
-The **Media Batch Converter** is AOMA's tool for converting audio files into multiple formats for different platforms and partners.
+AOMA organizes content into a structured hierarchy that flows from raw assets to market-ready products.
 
-## Quick Start Workflow
+## Core Asset Types
 
-1. **Access MBC**: Navigate to **General Tools → Media Batch Converter**
-2. **Select Products**: Choose products you want to convert
-   - You can pre-populate from Mobile Audio Manager
-3. **Choose Audio Sources**: Select which audio format to use as source
-   - **Pro Tip**: When No/All/Multiple selection is made, MBC exports the highest priority format automatically
-4. **Select Destinations**: Pick target formats and partners
-5. **Submit Job**: Click submit and monitor progress
+### 1. Digital Media Assets
+The foundational building blocks of AOMA:
 
-## Key Features (AOMA 2.113.0)
+- **Audio Masters** - The primary content type
+  - Stereo Audio (standard 2-channel)
+  - Immersive Audio (Dolby Atmos, Sony 360RA)
+  - Ambisonic (AMB) - Spatial audio formats
+  - DBKS - Dolby Booklet Service files
+  
+- **Video Assets**
+  - Music videos
+  - Visualizers
+  - Live performances
 
-- ✅ **Unified Loading Indicators**: Consistent ellipsis-style loaders throughout
-- ✅ **Highest Priority Export**: Automatically selects best source format
-- ✅ **Mobile Audio Integration**: Direct redirect from Mobile Audio Manager with pre-populated products
-- ✅ **Job Status Page**: Monitor conversion progress in real-time
+- **Graphic Assets**
+  - Album artwork
+  - Promotional images
+  - Cover variants
 
-## Common Formats
+- **Supplementary Files**
+  - Subtitles (SRT, VTT)
+  - Closed Captions (CC)
+  - Lyrics files
+  - SFV (Simple File Verification)
 
-- **WAV** - High quality, uncompressed
-- **FLAC** - Lossless compression
-- **MP3** - Standard lossy compression
-- **AAC** - Advanced audio coding for streaming
-- **OGG** - Open-source alternative
+### 2. Products (Offerings)
+How assets are packaged for the market:
 
-## Troubleshooting
+- **Albums** - Full-length releases
+- **Singles** - Individual track releases
+- **EPs** - Extended plays
+- **Compilations** - Collections from multiple sources
 
-**Issue**: Submit button remains visible after closing "Select Destinations"
-**Fix**: This was fixed in AOMA 2.113.0 - ensure you're on the latest version
+## The Relationship Flow
 
-**Issue**: Can't find the MBC Job Status page
-**Solution**: Navigate to **Asset Administration → Media Batch Converter Job Status**`,
+**Assets → Registration → Linking → Products → Distribution**
+
+1. **Asset Registration**: Raw files enter AOMA
+   - Metadata extraction and validation
+   - AOMA ID assignment
+   - Format verification
+
+2. **Master Linking**: Assets connect to products
+   - Track-to-product association
+   - Format mapping (stereo, immersive)
+   - ISRC/UPC alignment
+
+3. **Product Creation**: Packaged for release
+   - Metadata consolidation
+   - Artwork attachment
+   - Partner configuration
+
+4. **Distribution**: Delivery to partners
+   - DSP-specific formatting
+   - Quality control
+   - Registration job processing
+
+## Key Concepts
+
+| Concept | Description |
+|---------|-------------|
+| **AOMA ID** | Unique identifier assigned at registration |
+| **ISRC** | International Standard Recording Code |
+| **UPC** | Universal Product Code for releases |
+| **GRPS** | Global Release Processing System |
+
+## Multi-Format Support
+
+A single track can have multiple master types:
+- Stereo version for standard streaming
+- Immersive version for Dolby Atmos platforms
+- Preview clips for store previews
+- Ringtone edits for carrier partners
+
+All linked to the same product for unified management.`,
     diagram: `graph TD
-    A[Start: Open Media Batch Converter] --> B[Select Products]
-    B --> C{Pre-populated from<br/>Mobile Audio Manager?}
-    C -->|Yes| D[Products Auto-Selected]
-    C -->|No| E[Manually Select Products]
-    D --> F[Select Audio Sources]
-    E --> F
-    F --> G{Selection Type?}
-    G -->|No/All/Multiple| H[Auto: Highest Priority Format]
-    G -->|Specific| I[Use Selected Format]
-    H --> J[Select Destinations]
-    I --> J
-    J --> K[Click Submit]
-    K --> L[Monitor Job Status]
-    L --> M{Conversion Complete?}
-    M -->|Yes| N[Download Files]
-    M -->|Failed| O[Check Logs & Retry]
+    subgraph Assets [Digital Media Assets]
+        Audio[Audio Masters]
+        Video[Video Assets]
+        Graphics[Graphic Assets]
+        Supplements[Supplementary Files]
+    end
 
-    style A fill:#4CAF50,color:#fff
-    style N fill:#4CAF50,color:#fff
-    style O fill:#f44336,color:#fff
-    style H fill:#2196F3,color:#fff`,
+    subgraph AudioTypes [Audio Master Types]
+        Stereo[Stereo Audio]
+        Immersive[Immersive - Dolby Atmos]
+        AMB[Ambisonic Audio]
+        DBKS[DBKS Files]
+    end
+
+    subgraph Products [Products - Offerings]
+        Albums[Albums]
+        Singles[Singles]
+        EPs[EPs]
+        Compilations[Compilations]
+    end
+
+    subgraph Distribution [Distribution Layer]
+        DSPs[Digital Service Providers]
+        Carriers[Mobile Carriers]
+        Partners[Retail Partners]
+    end
+
+    Audio --> AudioTypes
+    AudioTypes --> Registration[Asset Registration]
+    Video --> Registration
+    Graphics --> Registration
+    Supplements --> Registration
+
+    Registration --> Linking[Master Linking]
+    Linking --> Products
+    Products --> QC[GRPS Quality Control]
+    QC --> Distribution`,
     metadata: {
       confidence: "high",
-      sources: ["AOMA Release Notes 2.113.0", "MBC Documentation", "Engineering Menu Crawl"],
-      lastUpdated: "2025-10-27",
+      sources: ["AOMA Architecture Guide", "Asset Registration Documentation", "AOMA Corpus December 2025"],
+      lastUpdated: "2025-12-17",
     },
   },
 
-  "What's the difference between Unified Submission Tool and Asset Submission Tool (LFV)?": {
-    response: `# UST vs LFV: Choosing the Right Submission Tool
+  "How does AOMA use AWS S3 storage tiers for long-term archiving?": {
+    response: `# AOMA AWS S3 Storage Architecture
 
-Both tools submit assets to AOMA, but they serve different purposes and workflows.
+AOMA leverages a tiered AWS S3 storage strategy to balance accessibility with cost-effectiveness for long-term archiving of audio, video, and graphic assets.
 
-## Unified Submission Tool (UST)
+## Storage Tier Hierarchy
 
-**Best For**: Modern, streamlined submissions for most asset types
+### Tier 1: Standard S3
+**For active, frequently accessed assets**
 
-### Features
-- ✅ **All Master Types**: Stereo Audio, Immersive, SFV, DBKS
-- ✅ **Explicit Indicators**: Automatically inherited and displayed on QC notes
-- ✅ **Release Warnings**: Shows alerts for released/full-publish products
-- ✅ **AMB Preflight Validation**:
-  - Duration support: 8-20 seconds
-  - Resolution/Dimension validation
-  - Codec/Wrapper checks
-  - File Extension & Audio Stream validation
-- ✅ **Reduced Traffic**: Revamped SFV download (source & autocorrected masters)
+- Recent uploads awaiting processing
+- Assets in active QC workflows
+- Content scheduled for imminent release
+- **Access time**: Milliseconds
+- **Use case**: Daily operations
 
-### When to Use
-- Submitting new masters with quality control
-- Need comprehensive preflight validation
-- Working with Immersive/SFV/AMB formats
-- Want modern UI with better error messages
+### Tier 2: S3 Infrequent Access (S3 IA)
+**For less frequently accessed content**
 
-## Asset Submission Tool (LFV)
+- Completed releases past initial promotion period
+- Catalog content with occasional access needs
+- Backup copies of active masters
+- **Access time**: Milliseconds (with retrieval fee)
+- **Use case**: Monthly access patterns
 
-**Best For**: Large File Volume submissions
+### Tier 3: S3 Glacier
+**For archival storage with rare access**
 
-### Features
-- 📦 **Bulk Uploads**: Handle many files at once
-- 🚀 **Aspera Integration**: High-speed file transfer
-- 📋 **Legacy Support**: Older workflow compatibility
+- Completed project archives
+- Historical releases
+- Compliance and legal retention
+- **Access time**: Minutes to hours
+- **Use case**: Quarterly or annual access
 
-### When to Use
-- Submitting large volumes of assets
-- Need Aspera high-speed transfer
-- Working with legacy workflows
-- Batch submission requirements
+### Tier 4: S3 Glacier Deep Archive
+**For cold storage of pre-production assets**
 
-## Quick Decision Matrix
+- All pre-production audio assets
+- Original source files
+- Uncompressed masters
+- Long-term preservation copies
+- **Access time**: 12-48 hours
+- **Use case**: Rarely accessed, compliance-driven
 
-| Scenario | Recommended Tool |
-|----------|-----------------|
-| Single master with QC | **UST** |
-| Immersive/AMB audio | **UST** |
-| Need preflight validation | **UST** |
-| Bulk upload (100+ files) | **LFV** |
-| Aspera required | **LFV** |
-| Legacy workflow | **LFV** |
+## Automatic Lifecycle Management
 
-## Common Pitfalls
+AOMA implements intelligent lifecycle policies:
 
-⚠️ **Mixing Tools**: Don't switch tools mid-project - stick with one for consistency
-⚠️ **Security Groups**: Both require proper security group permissions
-⚠️ **Asset Swap**: UST provides additional warnings for released products`,
+| Asset State | Initial Tier | After 30 Days | After 90 Days | After 1 Year |
+|-------------|--------------|---------------|---------------|--------------|
+| Active Master | Standard S3 | S3 IA | Glacier | Deep Archive |
+| Pre-Production | Standard S3 | - | - | Deep Archive |
+| Archive Only | - | - | Glacier | Deep Archive |
+
+## Cost Optimization
+
+The tiered approach delivers significant savings:
+
+- **Standard S3**: ~$0.023/GB/month
+- **S3 IA**: ~$0.0125/GB/month (46% savings)
+- **Glacier**: ~$0.004/GB/month (83% savings)
+- **Deep Archive**: ~$0.00099/GB/month (96% savings)
+
+## Asset Type Storage Patterns
+
+### Audio Masters
+- WAV/FLAC originals → Deep Archive after processing
+- MP3/AAC derivatives → Glacier after 90 days
+- Active delivery formats → Standard S3
+
+### Video Assets
+- ProRes/DNxHD masters → Glacier immediately
+- Delivery formats → S3 IA after 30 days
+
+### Graphic Assets
+- High-res originals → Glacier after 60 days
+- Web-optimized → Standard S3 for active products
+
+## Retrieval Best Practices
+
+When retrieving from cold storage:
+
+1. **Plan ahead** - Deep Archive retrieval takes 12-48 hours
+2. **Batch requests** - Group related assets for efficiency
+3. **Use expedited** - Available for urgent Glacier retrievals (additional cost)
+4. **Cache locally** - Avoid repeated retrievals of same assets`,
+    diagram: `graph TD
+    subgraph Upload [Asset Upload]
+        NewAsset[New Asset Uploaded]
+    end
+
+    subgraph StandardTier [Tier 1: Standard S3]
+        Active[Active Assets]
+        Processing[Processing Queue]
+        RecentReleases[Recent Releases]
+    end
+
+    subgraph IATier [Tier 2: S3 Infrequent Access]
+        Catalog[Catalog Content]
+        CompletedReleases[Completed Releases]
+        Backups[Backup Copies]
+    end
+
+    subgraph GlacierTier [Tier 3: S3 Glacier]
+        Archives[Project Archives]
+        Historical[Historical Releases]
+        Compliance[Compliance Retention]
+    end
+
+    subgraph DeepTier [Tier 4: Glacier Deep Archive]
+        PreProd[Pre-Production Assets]
+        OriginalMasters[Original Masters]
+        LongTerm[Long-Term Preservation]
+    end
+
+    NewAsset --> Active
+    Active -->|30 days| Catalog
+    Catalog -->|90 days| Archives
+    Archives -->|1 year| LongTerm
+    
+    Processing --> Active
+    RecentReleases -->|30 days| CompletedReleases
+    CompletedReleases -->|90 days| Historical
+    Historical -->|1 year| LongTerm
+
+    Backups -->|90 days| Compliance
+    Compliance -->|1 year| LongTerm`,
+    metadata: {
+      confidence: "high",
+      sources: ["AOMA Digital Archive Guide", "AWS Storage Configuration", "Pre-Production Archive Documentation"],
+      lastUpdated: "2025-12-17",
+    },
+  },
+
+  "What's the difference between asset registration and master linking in AOMA?": {
+    response: `# Asset Registration vs. Master Linking
+
+Think of it this way: **Registration creates the inventory. Linking puts it on the shelf for sale.**
+
+## Asset Registration
+
+**The entry point for content into AOMA**
+
+### What Happens During Registration
+
+1. **File Upload** - Source files enter the system
+2. **Validation** - Format and quality checks
+3. **Metadata Extraction** - Automatic data parsing
+4. **AOMA ID Assignment** - Unique identifier created
+5. **QC Queuing** - Sent for quality control
+
+### Key Characteristics
+
+| Aspect | Registration |
+|--------|--------------|
+| **Purpose** | Bring content into AOMA |
+| **Timing** | First step in workflow |
+| **Input** | Raw source files |
+| **Output** | Registered asset with AOMA ID |
+| **Tools** | UST (Unified Submission Tool), LFV |
+
+### What You Define
+
+- Basic metadata (title, artist, ISRC)
+- File format specifications
+- Quality parameters
+- Security group assignments
+
+## Master Linking
+
+**Connecting registered assets to products for distribution**
+
+### What Happens During Linking
+
+1. **Product Selection** - Choose target release
+2. **Track Mapping** - Assign assets to positions
+3. **Format Association** - Link stereo, immersive, etc.
+4. **Metadata Inheritance** - Product metadata flows to assets
+5. **Distribution Enablement** - Ready for partner delivery
+
+### Key Characteristics
+
+| Aspect | Master Linking |
+|--------|----------------|
+| **Purpose** | Connect assets to products |
+| **Timing** | After registration, before release |
+| **Input** | Registered asset + Product |
+| **Output** | Linked product ready for delivery |
+| **Tools** | Product Linking, Product Linking A3 |
+
+### What You Define
+
+- Track order and positions
+- Product-specific metadata
+- Partner delivery configuration
+- Format priorities per partner
+
+## Side-by-Side Comparison
+
+| Feature | Registration | Linking |
+|---------|--------------|---------|
+| Creates AOMA ID | Yes | No |
+| Requires source file | Yes | No |
+| Connects to product | No | Yes |
+| Enables partner delivery | No | Yes |
+| Can exist standalone | Yes | No (needs registered asset) |
+| Modifies asset metadata | Yes | Inherits product metadata |
+| QC validation | Initial | Product-level |
+
+## Common Scenarios
+
+### Scenario 1: New Single Release
+1. **Register** the master audio file → Gets AOMA ID
+2. **Link** the master to the single product → Enables delivery
+
+### Scenario 2: Album with Multiple Formats
+1. **Register** stereo masters for all tracks
+2. **Register** immersive masters for select tracks
+3. **Link** all masters to album product
+4. System handles multi-format delivery automatically
+
+### Scenario 3: Replacing a Master
+1. **Register** new corrected master → New AOMA ID
+2. **Unlink** old master from product
+3. **Link** new master to product
+4. Partners receive updated content
+
+## Important Notes
+
+- An asset can be registered but never linked (orphaned)
+- An asset can be linked to multiple products
+- Unlinking doesn't delete the registered asset
+- Re-linking is possible after unlinking`,
     diagram: `graph LR
-    A[Need to Submit Assets?] --> B{What Type?}
-    B -->|Single/Few Masters<br/>with QC| C[Unified Submission Tool<br/>UST]
-    B -->|Large Volume<br/>100+ Files| D[Asset Submission Tool<br/>LFV]
-    B -->|Immersive/AMB/SFV| C
-    B -->|Need Aspera| D
+    subgraph Registration [Asset Registration]
+        SourceFile[Source File]
+        Upload[Upload to AOMA]
+        Validate[Validation]
+        Extract[Metadata Extraction]
+        AssignID[Assign AOMA ID]
+        QC[QC Queue]
+    end
 
-    C --> E[Features:<br/>✓ Preflight Validation<br/>✓ Explicit Indicators<br/>✓ Modern UI]
-    D --> F[Features:<br/>✓ Bulk Upload<br/>✓ Aspera Speed<br/>✓ Legacy Support]
+    subgraph Linking [Master Linking]
+        SelectProduct[Select Product]
+        MapTracks[Map to Tracks]
+        AssocFormats[Associate Formats]
+        InheritMeta[Inherit Metadata]
+        EnableDist[Enable Distribution]
+    end
 
-    E --> G[Submit & Monitor]
-    F --> G
-    G --> H[Registration Job Status]
+    subgraph Output [Result]
+        RegisteredAsset[Registered Asset]
+        LinkedProduct[Linked Product]
+        PartnerDelivery[Partner Delivery]
+    end
 
-    style C fill:#4CAF50,color:#fff
-    style D fill:#2196F3,color:#fff
-    style A fill:#9C27B0,color:#fff
-    style H fill:#FF9800,color:#fff`,
+    SourceFile --> Upload
+    Upload --> Validate
+    Validate --> Extract
+    Extract --> AssignID
+    AssignID --> QC
+    QC --> RegisteredAsset
+
+    RegisteredAsset --> SelectProduct
+    SelectProduct --> MapTracks
+    MapTracks --> AssocFormats
+    AssocFormats --> InheritMeta
+    InheritMeta --> EnableDist
+    EnableDist --> LinkedProduct
+    LinkedProduct --> PartnerDelivery`,
     metadata: {
       confidence: "high",
-      sources: [
-        "AOMA Release Notes 2.113.0",
-        "Engineering Menu",
-        "UST Documentation",
-        "LFV User Guide",
-      ],
-      lastUpdated: "2025-10-27",
+      sources: ["AOMA Registration Guide", "Product Linking Documentation", "UST User Manual"],
+      lastUpdated: "2025-12-17",
     },
   },
 
-  "How do I check if my masters passed GRPS QC and are ready for release?": {
-    response: `# GRPS QC Validation & Release Readiness Check
+  "What are the permission levels in AOMA and what can each role do?": {
+    response: `# AOMA Permission Levels & Role Capabilities
+
+AOMA uses a tiered permission structure separating general management access from specific file handling capabilities.
+
+## Core Access Roles
+
+### Viewer
+**Read-only access to the system**
+
+- View asset metadata and status
+- View product information
+- View reports and dashboards
+- Browse catalog content
+- **Cannot**: Edit, upload, delete, or approve anything
+
+### Editor
+**Can modify metadata and initiate workflows**
+
+- All Viewer capabilities, plus:
+- Edit asset metadata
+- Update product information
+- Initiate registration workflows
+- Request QC reviews
+- **Cannot**: Delete assets, manage users, or approve releases
+
+### Admin
+**Full system access including user management**
+
+- All Editor capabilities, plus:
+- Create and manage users
+- Assign permissions and roles
+- Delete assets and products
+- Approve critical workflows
+- Configure system settings
+- Manage security groups
+
+## Specialized Roles
+
+### Label Admin
+**Content management for specific labels**
+
+- Manage assets within assigned label(s)
+- Approve releases for their labels
+- Configure label-specific settings
+- View cross-label reports (limited)
+- **Scope**: Restricted to assigned labels only
+
+### QC Reviewer
+**Quality control approval authority**
+
+- Review submitted masters for quality
+- Approve or reject QC submissions
+- Add QC notes and feedback
+- Escalate quality issues
+- **Cannot**: Upload or modify assets directly
+
+## Technical Permission Roles
+
+These control specific file operations:
+
+### Uploader
+**Permission to submit files to AOMA**
+
+| Capability | Allowed |
+|------------|---------|
+| Upload audio masters | ✅ |
+| Upload video assets | ✅ |
+| Upload graphic assets | ✅ |
+| Upload supplementary files | ✅ |
+| Delete uploaded files | ❌ |
+
+### Engineer
+**Technical workflow permissions**
+
+| Capability | Allowed |
+|------------|---------|
+| Access Engineering menu | ✅ |
+| Register assets | ✅ |
+| Manage QC workflows | ✅ |
+| Run batch operations | ✅ |
+| Access technical reports | ✅ |
+
+### Exporter
+**Permission to download and export content**
+
+| Capability | Allowed |
+|------------|---------|
+| Download masters | ✅ |
+| Export to partners | ✅ |
+| Generate delivery packages | ✅ |
+| Access non-watermarked files | ✅ |
+| Bulk export operations | ✅ |
+
+## Permission Matrix
+
+| Action | Viewer | Editor | Admin | Label Admin | QC Reviewer |
+|--------|--------|--------|-------|-------------|-------------|
+| View assets | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Edit metadata | ❌ | ✅ | ✅ | ✅ | ❌ |
+| Upload files | ❌ | ✅* | ✅ | ✅* | ❌ |
+| Delete assets | ❌ | ❌ | ✅ | ❌ | ❌ |
+| Approve QC | ❌ | ❌ | ✅ | ✅ | ✅ |
+| Manage users | ❌ | ❌ | ✅ | ❌ | ❌ |
+| Export content | ❌ | ✅* | ✅ | ✅* | ❌ |
 
-**GRPS** (Global Release Processing System) handles quality control and release status for your masters.
+*Requires additional Uploader/Exporter role
 
-## Step-by-Step QC Check
+## Security Groups
 
-### 1. Check Master Status
-Navigate to: **Asset Administration → Master Status**
+Permissions can be further scoped by:
 
-Look for:
-- ✅ **QC Status**: Passed/Failed/Pending
-- ✅ **GRPS QC Button**: Now hidden on Digital product pages (AOMA 2.113.0)
-- ✅ **Explicit Indicators**: Check for mismatches on QC notes
-
-### 2. Review QC Notes
-Navigate to: **Engineering → QC Notes**
-
-Check:
-- **Track-level indicators** for SFV, Stereo, and Immersive audio
-- **Explicit mismatches** on product and master details pages
-- **QC provider feedback** on quality issues
-
-### 3. Check Product Status
-Navigate to: **Asset Administration → Product Status**
-
-Verify:
-- **GRPS Publish Status**: Not just release date!
-- **GRPS Release Date**: When it went live
-- **Release Warning**: Shows if product is published and new assets will be delivered to partners
-
-### 4. Monitor Product Linking
-Navigate to: **Asset Administration → Product Linking** or **Product Linking A3**
-
-Ensure:
-- All required masters are linked
-- No unlinking needed (for Immersive/AMB/CC/Subtitle)
-- Track linking complete for Stereo virtual masters
-
-## Quick Status Indicators
-
-| Indicator | Meaning | Action |
-|-----------|---------|--------|
-| ✅ QC Passed | Ready for release | Proceed to registration |
-| ⚠️ QC Pending | Still processing | Wait for QC completion |
-| ❌ QC Failed | Issues found | Review QC notes, fix & resubmit |
-| 🔗 Linking Incomplete | Not all tracks linked | Complete product linking |
-| 📝 Metadata Issues | Explicit indicator mismatch | Update metadata |
-
-## GRPS Integration (2.113.0 Updates)
-
-- ✅ **GRPS 3 Support**: Generate and populate masters directly
-- ✅ **Participant ID Alignment**: Artist Summary URL now matches GRPS
-- ✅ **Unlinking Support**: Can unlink Immersive/AMB masters from published products
-- ✅ **Release Warning**: Includes both publish status AND release date
-
-## Troubleshooting
-
-**Can't find GRPS QC button on digital products?**
-→ This button was intentionally hidden in AOMA 2.113.0 - use Master Status instead
-
-**QC keeps failing with explicit indicator mismatch?**
-→ Check track-level explicit indicators on QC notes - must match across all formats
-
-**Need to update masters on released product?**
-→ Check for release warning - new assets WILL be delivered to partners automatically`,
-    diagram: `graph TD
-    A[Start: Check QC Status] --> B[Navigate to Master Status]
-    B --> C{QC Status?}
-    C -->|Passed ✓| D[Check Product Status]
-    C -->|Pending ⏳| E[Wait for QC Completion]
-    C -->|Failed ✗| F[Review QC Notes]
-
-    F --> G[Check Explicit Indicators]
-    G --> H[Fix Metadata Issues]
-    H --> I[Resubmit Master]
-    I --> B
-
-    D --> J{GRPS Publish Status?}
-    J -->|Published| K[⚠️ Release Warning:<br/>New assets → Partners]
-    J -->|Not Published| L[Check Product Linking]
-
-    K --> L
-    L --> M{All Masters Linked?}
-    M -->|Yes| N[✅ Ready for Release]
-    M -->|No| O[Complete Product Linking]
-    O --> L
-
-    E --> P[Monitor QC Notes]
-    P --> B
-
-    style N fill:#4CAF50,color:#fff
-    style F fill:#f44336,color:#fff
-    style K fill:#FF9800,color:#fff
-    style A fill:#9C27B0,color:#fff`,
-    metadata: {
-      confidence: "high",
-      sources: ["AOMA Release Notes 2.113.0", "GRPS Integration Guide", "QC Notes Documentation"],
-      lastUpdated: "2025-10-27",
-    },
-  },
-
-  "Why is my Registration Job Status showing 'failed' and how do I retry delivery to partners?": {
-    response: `# Registration Job Failures: Diagnosis & Recovery
-
-When Registration Job Status shows "failed", it means asset delivery to partners was unsuccessful. Here's how to diagnose and fix it.
-
-## Step 1: Check Registration Job Status
-
-Navigate to: **Asset Administration → Registration Job Status**
-
-### New Filters (AOMA 2.113.0)
-- **Type**: Filter by asset type
-- **Status**: Failed/Success/Pending
-- **Asset Upload**: Track which upload caused the issue
-
-⚠️ **Note**: Archive uploads are now hidden from this interface (bug fix in 2.113.0)
-
-## Common Failure Reasons
-
-### 1. Partner Connectivity Issues
-**Symptom**: Multiple jobs failing to same partner
-**Solution**:
-- Check Export Status page for partner availability
-- Wait for partner system to come back online
-- Retry after connectivity restored
-
-### 2. Metadata Validation Errors
-**Symptom**: "Validation failed" in job details
-**Solution**:
-- Review asset metadata for required fields
-- Check FGP compliance requirements
-- Fix metadata and re-register
-
-### 3. File Format Issues
-**Symptom**: "Unsupported format" or codec errors
-**Solution**:
-- Verify file meets partner specifications
-- Use Media Batch Converter to transcode
-- Resubmit with correct format
-
-### 4. Security Group Permissions
-**Symptom**: "Access denied" or permission errors
-**Solution**:
-- Check **Manage Master Security Groups**
-- Ensure you have delivery rights for this partner
-- Request access from admin
-
-### 5. Asset Not Ready
-**Symptom**: "Asset not found" or "QC incomplete"
-**Solution**:
-- Verify master passed GRPS QC
-- Check Product Linking is complete
-- Ensure all required assets are linked
-
-## Step 2: Retry Delivery
-
-### Option A: Via Registration Job Status
-1. Navigate to **Registration Job Status**
-2. Find the failed job
-3. Click **Retry** button
-4. Monitor new job status
-
-### Option B: Via Repository Events (NEW in 2.113.0)
-1. Navigate to **Registration & Repository**
-2. Use **Registration Reporting** tool
-3. **Stop specific asset delivery** to problematic partner (if needed)
-4. Fix the issue
-5. Re-enable delivery and retry
-
-### Option C: Re-register Asset
-1. Navigate to **Engineering → Register Assets**
-2. Select the master
-3. Choose partners for delivery
-4. Submit registration
-5. Monitor in **Registration Job Status**
-
-## Prevention Tips
-
-✅ **Pre-flight Validation**: Use UST's preflight checks before submission
-✅ **Monitor Export Status**: Check partner health before bulk registrations
-✅ **FGP Compliance**: Ensure Registration Status Reports comply with FGPs
-✅ **Batch Carefully**: Don't register 1000s of assets at once - do smaller batches
-
-## Advanced: Stop Specific Deliveries
-
-**New in AOMA 2.113.0**: You can now stop specific asset delivery to specific partners via:
-- Repository events
-- Registration events
-
-This is useful when:
-- Partner is temporarily down
-- Need to fix asset before delivery
-- Testing new delivery workflows
-
-Navigate to: **Registration & Repository → Registration Reporting**
-
-## Monitoring & Alerting
-
-Set up monitoring via:
-- **Email notifications** for registration failures
-- **Registration Status Report** dashboard
-- **Export Status A3** for real-time partner health`,
-    diagram: `graph TD
-    A[Registration Failed ❌] --> B[Check Job Status]
-    B --> C{Failure Type?}
-
-    C -->|Partner Down| D[Check Export Status]
-    D --> E[Wait for Partner Online]
-    E --> F[Retry Delivery]
-
-    C -->|Metadata Invalid| G[Review Asset Metadata]
-    G --> H[Fix Required Fields]
-    H --> I[Re-register Asset]
-
-    C -->|Format Issue| J[Check File Specs]
-    J --> K[Use Media Batch Converter]
-    K --> L[Transcode to Correct Format]
-    L --> I
-
-    C -->|Permission Error| M[Check Security Groups]
-    M --> N[Request Access Rights]
-    N --> I
-
-    C -->|Asset Not Ready| O[Verify GRPS QC]
-    O --> P[Complete Product Linking]
-    P --> I
-
-    F --> Q[Monitor New Job]
-    I --> Q
-    Q --> R{Success?}
-    R -->|Yes ✓| S[✅ Delivered to Partners]
-    R -->|Failed Again| T[Use Repository Events<br/>to Stop & Debug]
-    T --> B
-
-    style S fill:#4CAF50,color:#fff
-    style A fill:#f44336,color:#fff
-    style T fill:#FF9800,color:#fff`,
-    metadata: {
-      confidence: "high",
-      sources: [
-        "AOMA Release Notes 2.113.0",
-        "Registration Job Status Documentation",
-        "Repository Events Guide",
-      ],
-      lastUpdated: "2025-10-27",
-    },
-  },
-
-  "How do I unlink Immersive/AMB masters from published products in GRPS?": {
-    response: `# Unlinking Immersive/AMB Masters from Published GRPS Products
-
-**New Feature in AOMA 2.113.0**: You can now unlink select masters (Immersive/AMB/CC/Subtitle) from published products!
-
-## Important Prerequisites
-
-⚠️ **GRPS Publish Status Check**:
-- Product must be **published** in GRPS (not just released)
-- AOMA now includes **both** publish status AND release date in warnings
-- New assets will be delivered to partners after unlinking!
-
-## Supported Master Types for Unlinking
-
-✅ **Immersive Audio** - Dolby Atmos, Sony 360RA, etc.
-✅ **AMB (Ambisonic)** - Spatial audio formats
-✅ **CC (Closed Captions)** - Subtitle/caption files
-✅ **Subtitle** - Text overlay files
-
-❌ **Not Supported**: Standard Stereo masters (use different workflow)
-
-## Step-by-Step Process
-
-### 1. Navigate to Product Linking
-Go to: **Asset Administration → Product Linking** or **Product Linking A3**
-
-### 2. Find Your Product
-- Search by product ID, artist, or title
-- Verify it shows **GRPS Published** status
-- Check release warning message
-
-### 3. View Linked Masters
-- Click product to expand master list
-- Identify the Immersive/AMB/CC/Subtitle masters you want to unlink
-- Note: System will show which masters are currently linked
-
-### 4. Unlink Masters
-- Select the master(s) to unlink
-- Click **Unlink** button
-- Review warning about partner delivery
-- Confirm unlinking action
-
-### 5. Verify & Monitor
-- Check **Product Event History** for unlinking event
-- Monitor **Registration Job Status** for delivery updates
-- Partners will be notified of asset changes
-
-## Use Cases
-
-### Scenario 1: Replacing Immersive Mix
-**Problem**: Discovered audio issue in Dolby Atmos master
-**Solution**:
-1. Unlink old Immersive master
-2. Upload corrected master via UST
-3. Link new master to product
-4. New master auto-delivers to partners
-
-### Scenario 2: Removing Ambisonic Format
-**Problem**: Partner no longer supports AMB format
-**Solution**:
-1. Use Repository Events to stop AMB delivery
-2. Unlink AMB master from product
-3. Keep Stereo/Immersive formats active
-
-### Scenario 3: Updating Closed Captions
-**Problem**: CC file has typos
-**Solution**:
-1. Unlink CC master
-2. Upload corrected CC file
-3. Link new CC master
-4. Automatic delivery to caption partners
-
-## GRPS 3 Integration
-
-**New in 2.113.0**: Enhanced GRPS 3 support for unlinking
-- Generate and populate master in GRPS 3
-- Attach multiple sources/projects to AOMA masters
-- Track Hot Swap for Stereo virtual masters (see Track Linking)
-
-## Track Linking vs Product Unlinking
-
-| Feature | Product Unlinking | Track Linking |
-|---------|------------------|---------------|
-| Use Case | Remove entire master from product | Swap tracks within master |
-| Supported Types | Immersive/AMB/CC/Subtitle | Stereo virtual masters |
-| GRPS 3 | Full support | Hot Swap support |
-| Partner Delivery | Triggers new delivery | Triggers new delivery |
-
-## Important Warnings
-
-⚠️ **Released Products**: Unlinking triggers immediate partner delivery
-⚠️ **Full Publish**: All active partners receive update
-⚠️ **Participant ID**: Ensure Participant ID matches GRPS for tracking
-
-## Monitoring After Unlinking
-
-Check these pages:
-- **Product Event History**: Verify unlinking event
-- **Master Event History**: Track master state changes
-- **Registration Job Status**: Monitor partner deliveries
-- **Export Status**: Check delivery completion`,
-    diagram: `graph TD
-    A[Need to Unlink Master] --> B{Master Type?}
-    B -->|Immersive/AMB/CC/Subtitle| C[✓ Supported]
-    B -->|Stereo Master| D[Use Track Linking Instead]
-
-    C --> E[Navigate to Product Linking]
-    E --> F{GRPS Published?}
-    F -->|Yes| G[✓ Can Proceed]
-    F -->|No| H[Wait for GRPS Publish]
-
-    G --> I[Find Product]
-    I --> J[Select Master to Unlink]
-    J --> K[Review Warning:<br/>Partners Will Receive Update]
-    K --> L{Confirm?}
-    L -->|Yes| M[Unlink Master]
-    L -->|No| N[Cancel]
-
-    M --> O[Triggers Registration]
-    O --> P[Monitor Job Status]
-    P --> Q{Need Replacement?}
-    Q -->|Yes| R[Upload New Master via UST]
-    Q -->|No| S[✅ Complete]
-
-    R --> T[Link New Master]
-    T --> U[Auto-Delivery to Partners]
-    U --> S
-
-    H --> V[Check GRPS Publish Status]
-    V --> F
-
-    style S fill:#4CAF50,color:#fff
-    style C fill:#4CAF50,color:#fff
-    style D fill:#FF9800,color:#fff
-    style K fill:#f44336,color:#fff`,
-    metadata: {
-      confidence: "high",
-      sources: [
-        "AOMA Release Notes 2.113.0",
-        "Product Linking Documentation",
-        "GRPS Integration Guide",
-      ],
-      lastUpdated: "2025-10-27",
-    },
-  },
-
-  "What's the process for using Mobile Audio Manager to create ringtones and previews?": {
-    response: `# Mobile Audio Manager: Ringtones & Preview Creation
-
-**Mobile Audio Manager** lets you create mobile-specific audio assets like ringtones, preview clips, and custom audio snippets for various platforms.
-
-## Quick Start
-
-Navigate to: **Asset Administration → Mobile Audio Manager**
-
-Or use the new workflow:
-**Engineering → Mobile Audio Editor** → Pre-populated redirect to **Media Batch Converter**
-
-## Creating Ringtones
-
-### Step 1: Select Source Audio
-1. Search for product/master
-2. Choose highest quality source (WAV/FLAC preferred)
-3. System loads audio waveform
-
-### Step 2: Define Clip Parameters
-- **Duration**: Typically 30-45 seconds for ringtones
-- **Start Time**: Select best section (usually chorus)
-- **Fade In/Out**: Add 1-2 second fades for smooth transitions
-
-### Step 3: Audio Processing
-- **Normalization**: Adjust volume levels
-- **EQ**: Optional frequency adjustments
-- **Compression**: Ensure consistent loudness
-
-### Step 4: Export Formats
-Common ringtone formats:
-- **MP3 (128kbps)**: Standard Android/iOS
-- **AAC (128kbps)**: Apple preferred
-- **M4R**: iOS ringtone format
-- **OGG**: Android alternative
-
-### Step 5: Quality Check
-- Preview audio in browser
-- Check waveform for clipping
-- Verify duration and format
-
-## Creating Preview Clips
-
-Preview clips are shorter (7-15 seconds) for streaming platforms.
-
-### Settings
-- **Duration**: 7-15 seconds
-- **Start Position**: Typically 30-60s into track (chorus/hook)
-- **Format**: Usually AAC 256kbps
-- **Volume**: -3dB from master for safety
-
-## Media Batch Converter Integration
-
-**New in AOMA 2.113.0**: Direct workflow integration!
-
-1. Create clips in Mobile Audio Manager
-2. Click **"Send to Media Batch Converter"**
-3. Products pre-populate automatically
-4. Select destination partners
-5. Batch convert and deliver
-
-## Advanced Features
-
-### Code Clean Up (MFC)
-- Media File Convertor cleanup completed in 2.113.0
-- More reliable conversions
-- Better error handling
-
-### Select Audio Sources
-- When No/All/Multiple selection → Exports highest priority format
-- Smart format selection for optimal quality
-
-### Job Monitoring
-- New **Media Batch Converter Job Status** page
-- Real-time conversion progress
-- Failed job retry support
-
-## Common Use Cases
-
-### 1. Album Launch Ringtones
-- Create 30-second clips of lead singles
-- Export in multiple formats
-- Deliver to carrier partners
-
-### 2. Streaming Preview Clips
-- 10-second hooks for preview
-- High quality AAC
-- Deliver to streaming platforms
-
-### 3. Social Media Snippets
-- 15-second viral moments
-- Optimized for sharing
-- Multiple aspect ratios supported
-
-### 4. Promotional Audio
-- Custom edits for marketing
-- Radio edits and clean versions
-- Partner-specific requirements
-
-## Format Specifications
-
-| Platform | Duration | Format | Bitrate |
-|----------|----------|--------|---------|
-| iOS Ringtone | 30-45s | M4R | 128kbps AAC |
-| Android Ringtone | 30-45s | MP3 | 128kbps |
-| Spotify Preview | 10s | AAC | 256kbps |
-| Apple Music Preview | 10-15s | AAC | 256kbps |
-| YouTube Short | 15-30s | AAC | 192kbps |
-| TikTok Audio | 15-60s | MP3 | 128kbps |
-
-## Troubleshooting
-
-**Can't find Mobile Audio Editor?**
-→ Check Engineering menu - it redirects to MBC with pre-populated data
-
-**Export failing with codec error?**
-→ Source file may have incompatible format - try transcoding first
-
-**Preview sounds clipped/distorted?**
-→ Reduce volume by -3dB and check normalization settings
-
-**MBC Submit button stuck?**
-→ Fixed in 2.113.0 - update AOMA if still seeing this
+- **Label** - Restrict to specific record labels
+- **Territory** - Limit to geographic regions
+- **Product Type** - Audio only, video only, etc.
+- **Partner** - Specific DSP access
 
 ## Best Practices
 
-✅ **Always start with highest quality source** (WAV/FLAC)
-✅ **Add fade in/out** for professional sound
-✅ **Normalize audio** to -1dB for safety margin
-✅ **Test on actual devices** before mass delivery
-✅ **Use MBC for batch operations** - much faster
-✅ **Monitor job status** for large batches`,
+1. **Principle of Least Privilege** - Assign minimum required permissions
+2. **Separate Duties** - Upload and QC approval should be different people
+3. **Regular Audits** - Review permissions quarterly
+4. **Label Scoping** - Use Label Admin for multi-label organizations
+5. **Technical Roles** - Combine with access roles as needed`,
     diagram: `graph TD
-    A[Start: Mobile Audio Manager] --> B[Select Source Audio]
-    B --> C[Choose Product/Master]
-    C --> D[Load Audio Waveform]
+    subgraph AccessRoles [Core Access Roles]
+        Viewer[Viewer - Read Only]
+        Editor[Editor - Can Modify]
+        Admin[Admin - Full Access]
+    end
 
-    D --> E{Creating What?}
-    E -->|Ringtone| F[Set Duration: 30-45s]
-    E -->|Preview Clip| G[Set Duration: 7-15s]
+    subgraph SpecializedRoles [Specialized Roles]
+        LabelAdmin[Label Admin]
+        QCReviewer[QC Reviewer]
+    end
 
-    F --> H[Select Best Section<br/>Usually Chorus]
-    G --> I[Select Hook<br/>30-60s into track]
+    subgraph TechnicalRoles [Technical Permission Roles]
+        Uploader[Uploader]
+        Engineer[Engineer]
+        Exporter[Exporter]
+    end
 
-    H --> J[Add Fade In/Out]
-    I --> J
-    J --> K[Normalize Volume: -1dB]
-    K --> L[Preview in Browser]
+    subgraph Capabilities [Key Capabilities]
+        ViewContent[View Content]
+        EditMeta[Edit Metadata]
+        UploadFiles[Upload Files]
+        DeleteAssets[Delete Assets]
+        ApproveQC[Approve QC]
+        ManageUsers[Manage Users]
+        ExportContent[Export Content]
+    end
 
-    L --> M{Quality OK?}
-    M -->|No| N[Adjust Settings]
-    N --> J
-    M -->|Yes| O[Select Export Formats]
+    Viewer --> ViewContent
+    Editor --> ViewContent
+    Editor --> EditMeta
+    Admin --> ViewContent
+    Admin --> EditMeta
+    Admin --> DeleteAssets
+    Admin --> ManageUsers
+    
+    LabelAdmin --> EditMeta
+    LabelAdmin --> ApproveQC
+    QCReviewer --> ApproveQC
 
-    O --> P{Batch Export?}
-    P -->|Yes| Q[Send to Media Batch Converter]
-    P -->|No| R[Export Single File]
-
-    Q --> S[Products Pre-Populated]
-    S --> T[Select Destinations]
-    T --> U[Submit MBC Job]
-    U --> V[Monitor Job Status]
-
-    R --> W[Download File]
-
-    V --> X{Conversion Complete?}
-    X -->|Yes| Y[✅ Deliver to Partners]
-    X -->|Failed| Z[Check Logs & Retry]
-
-    W --> Y
-
-    style Y fill:#4CAF50,color:#fff
-    style A fill:#9C27B0,color:#fff
-    style Z fill:#f44336,color:#fff
-    style Q fill:#2196F3,color:#fff`,
+    Uploader --> UploadFiles
+    Engineer --> UploadFiles
+    Exporter --> ExportContent`,
     metadata: {
       confidence: "high",
-      sources: ["AOMA Release Notes 2.113.0", "Mobile Audio Manager Guide", "MBC Documentation"],
-      lastUpdated: "2025-10-27",
+      sources: ["AOMA Permission Guide", "Security Group Documentation", "Admin User Manual"],
+      lastUpdated: "2025-12-17",
+    },
+  },
+
+  "What new UST features are being planned for the 2026 releases?": {
+    response: `# UST (Unified Submission Tool) Roadmap - 2026
+
+Based on the latest AOMA release notes and development priorities, here's what's coming to UST.
+
+## Confirmed Features in Development
+
+### Subtitle Functionality Revamp
+**Major enhancement to subtitle handling**
+
+- Support for additional subtitle formats
+- Improved validation for timing and encoding
+- Better error messages for format mismatches
+- Streamlined workflow for multi-language releases
+- **Status**: In active development
+
+### Enhanced Error Buttons
+**New error handling for specific formats**
+
+Error buttons being added for:
+- **DBKS** (Dolby Booklet Service)
+- **DVD DDP** (Disc Description Protocol)
+- **VCA** (Video Content Assets)
+- **Vinyl** - Physical format specifics
+- **AMB** (Ambisonic) - Spatial audio errors
+
+### Asset Swap Enhancements
+**More flexibility for asset replacement**
+
+- Ability to unlock QC notes for audio assets through asset swapping
+- Streamlined replacement workflow
+- Preserved QC history after swap
+- Better audit trail for compliance
+
+### Empty Master Deletion
+**Cleanup feature for UST**
+
+- Delete empty masters directly from UST interface
+- Bulk cleanup capabilities
+- Safety checks before deletion
+- Audit logging for deleted items
+
+## Features Under Review
+
+These are being evaluated for potential inclusion:
+
+### Scheduling Improvements
+- Asset swap scheduling
+- Timed deletions
+- Release date coordination
+- Partner-specific scheduling
+
+### Batch Operations
+- Multi-asset QC submission
+- Bulk metadata updates
+- Parallel processing improvements
+- Progress tracking enhancements
+
+## Recent Additions (AOMA 2.116.0)
+
+These shipped in December 2025:
+
+- ✅ Subtitle format support expansion
+- ✅ Error button framework implementation
+- ✅ UST interface refinements
+- ✅ Improved validation feedback
+
+## Timeline Expectations
+
+| Feature | Expected Release |
+|---------|------------------|
+| Subtitle Revamp Phase 1 | Q1 2026 |
+| Error Buttons - All Formats | Q1 2026 |
+| Asset Swap QC Unlock | Q2 2026 |
+| Empty Master Deletion | Q2 2026 |
+| Scheduling Features | TBD |
+
+## How This Impacts Workflows
+
+### For Audio Engineers
+- Faster error resolution with format-specific buttons
+- More control over asset replacement
+- Reduced manual cleanup tasks
+
+### For QC Teams
+- Better subtitle validation saves review time
+- Asset swap QC unlock reduces bottlenecks
+- Cleaner interface with empty master removal
+
+### For Administrators
+- Improved audit trails
+- Better bulk operations
+- Enhanced scheduling control
+
+## Staying Updated
+
+To track UST development:
+1. Monitor AOMA Release Notes
+2. Check Engineering menu announcements
+3. Review UST changelog in Help menu
+4. Attend monthly platform update meetings`,
+    diagram: `graph LR
+    subgraph Current [Current - 2.116.0]
+        SubtitleSupport[Subtitle Support]
+        ErrorFramework[Error Button Framework]
+        UIRefinements[UI Refinements]
+    end
+
+    subgraph Q1_2026 [Q1 2026]
+        SubtitleRevamp[Subtitle Revamp]
+        AllErrorButtons[All Format Error Buttons]
+        DBKSErrors[DBKS Errors]
+        VinylErrors[Vinyl Errors]
+    end
+
+    subgraph Q2_2026 [Q2 2026]
+        AssetSwapQC[Asset Swap QC Unlock]
+        EmptyMasterDelete[Empty Master Deletion]
+        BulkCleanup[Bulk Cleanup]
+    end
+
+    subgraph Future [Under Review]
+        Scheduling[Scheduling Features]
+        BatchOps[Enhanced Batch Ops]
+        ParallelProcessing[Parallel Processing]
+    end
+
+    Current --> Q1_2026
+    Q1_2026 --> Q2_2026
+    Q2_2026 --> Future`,
+    metadata: {
+      confidence: "medium",
+      sources: ["AOMA Release Notes 2.116.0", "AOMA Roadmap Document December 2025", "Development Priority List"],
+      lastUpdated: "2025-12-17",
+    },
+  },
+
+  "How do I upload and archive digital assets in AOMA from preparation to storage?": {
+    response: `# Complete Digital Asset Upload & Archive Workflow
+
+This guide walks you through the entire process from file preparation to long-term cloud storage.
+
+## Phase 1: File Preparation
+
+### Organize Your Content
+
+**Folder Structure Requirements**:
+- Create clear, hierarchical folders
+- Use consistent naming conventions
+- Separate by asset type (audio, video, graphics)
+
+**Critical**: File names must NOT contain:
+- Special characters (!@#$%^&*)
+- Unicode characters
+- Leading/trailing spaces
+- Excessively long names (>100 chars)
+
+### Verify File Formats
+
+| Asset Type | Preferred Format | Acceptable |
+|------------|-----------------|------------|
+| Audio Master | WAV 24-bit/96kHz | FLAC, AIFF |
+| Immersive Audio | ADM BWF | Dolby Atmos |
+| Video | ProRes 422 HQ | DNxHD, H.264 |
+| Graphics | TIFF 300dpi | PNG, PSD |
+| Subtitles | SRT | VTT, TTML |
+
+### Pre-Upload Checklist
+
+- ✅ Files meet format specifications
+- ✅ Metadata is prepared (ISRC, UPC, credits)
+- ✅ Artwork meets resolution requirements
+- ✅ File names are clean and descriptive
+- ✅ You have required permissions in AOMA
+
+## Phase 2: Upload & Registration
+
+### Access the Upload Interface
+
+Navigate to: **Engineering → Unified Submission Tool (UST)**
+
+Or for large volumes: **Asset Submission Tool (LFV)**
+
+### Upload Process
+
+1. **Select Asset Type**
+   - Stereo Audio, Immersive, Video, Graphics, etc.
+
+2. **Upload Files**
+   - Drag and drop or browse
+   - System validates format automatically
+   - Preflight checks run in real-time
+
+3. **Enter Metadata**
+   - Basic: Title, Artist, ISRC
+   - Extended: Credits, Lyrics, Explicit indicator
+   - Technical: Sample rate, bit depth, channels
+
+4. **Security Group Assignment**
+   - Select appropriate security groups
+   - Determines who can access the asset
+
+5. **Submit for Registration**
+   - Review summary
+   - Confirm submission
+   - Receive registration confirmation
+
+### Post-Upload Validation
+
+The system automatically:
+- Generates AOMA ID
+- Extracts embedded metadata
+- Creates preview waveforms (audio)
+- Queues for quality control
+
+## Phase 3: Quality Control
+
+### Automatic QC Checks
+
+- Format compliance verification
+- Audio loudness standards (LUFS)
+- Video technical parameters
+- Metadata completeness
+
+### Manual QC Review
+
+Navigate to: **Engineering → QC Notes**
+
+- Review flagged issues
+- Approve or reject submissions
+- Add QC notes for feedback
+
+## Phase 4: Product Linking
+
+Once QC passes:
+
+1. Navigate to **Product Linking** or **Product Linking A3**
+2. Search for target product (album, single)
+3. Link registered assets to tracks
+4. Configure format priorities
+5. Save linking configuration
+
+## Phase 5: Archival Storage
+
+### Automatic Tier Assignment
+
+AOMA's lifecycle management handles storage automatically:
+
+**Immediate (Standard S3)**:
+- Active assets in workflow
+- Recently uploaded content
+
+**After 30 Days (S3 IA)**:
+- Completed releases
+- Catalog content
+
+**After 90 Days (Glacier)**:
+- Historical releases
+- Compliance archives
+
+**After 1 Year (Deep Archive)**:
+- Pre-production masters
+- Long-term preservation
+
+### Manual Archive Operations
+
+Navigate to: **Asset Administration → Digital Archive**
+
+Options:
+- Force immediate archival
+- Retrieve from cold storage
+- Verify archive integrity
+- Download archived content
+
+## Monitoring Your Upload
+
+### Track Progress
+
+| Location | What to Check |
+|----------|---------------|
+| Registration Job Status | Upload processing state |
+| Master Status | QC and linking status |
+| Product Status | Overall release readiness |
+| Export Status | Partner delivery status |
+
+### Common Issues & Fixes
+
+**Upload fails validation**:
+→ Check file format and naming
+→ Verify file isn't corrupted
+→ Confirm format is supported
+
+**QC keeps failing**:
+→ Review QC notes for specific issues
+→ Fix source file and re-upload
+→ Contact QC team if unclear
+
+**Can't find uploaded asset**:
+→ Check Registration Job Status
+→ Verify security group access
+→ Search by AOMA ID or filename`,
+    diagram: `graph TD
+    subgraph Prep [Phase 1: Preparation]
+        Organize[Organize Files]
+        Verify[Verify Formats]
+        Checklist[Pre-Upload Checklist]
+    end
+
+    subgraph Upload [Phase 2: Upload]
+        SelectType[Select Asset Type]
+        UploadFiles[Upload Files]
+        EnterMeta[Enter Metadata]
+        AssignSecurity[Assign Security Group]
+        Submit[Submit Registration]
+    end
+
+    subgraph QC [Phase 3: Quality Control]
+        AutoQC[Automatic QC Checks]
+        ManualReview[Manual QC Review]
+        QCApproval{QC Passed?}
+    end
+
+    subgraph Linking [Phase 4: Product Linking]
+        SelectProduct[Select Product]
+        LinkAssets[Link Assets to Tracks]
+        ConfigFormats[Configure Formats]
+    end
+
+    subgraph Archive [Phase 5: Archival Storage]
+        StandardS3[Standard S3 - Active]
+        S3IA[S3 IA - 30 Days]
+        Glacier[Glacier - 90 Days]
+        DeepArchive[Deep Archive - 1 Year]
+    end
+
+    Organize --> Verify
+    Verify --> Checklist
+    Checklist --> SelectType
+    SelectType --> UploadFiles
+    UploadFiles --> EnterMeta
+    EnterMeta --> AssignSecurity
+    AssignSecurity --> Submit
+
+    Submit --> AutoQC
+    AutoQC --> ManualReview
+    ManualReview --> QCApproval
+    QCApproval -->|Yes| SelectProduct
+    QCApproval -->|No| UploadFiles
+
+    SelectProduct --> LinkAssets
+    LinkAssets --> ConfigFormats
+    ConfigFormats --> StandardS3
+
+    StandardS3 --> S3IA
+    S3IA --> Glacier
+    Glacier --> DeepArchive`,
+    metadata: {
+      confidence: "high",
+      sources: ["AOMA Digital Archive Guide", "UST Documentation", "Asset Registration Workflow", "AWS Storage Configuration"],
+      lastUpdated: "2025-12-17",
     },
   },
 };

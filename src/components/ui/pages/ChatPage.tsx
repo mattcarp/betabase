@@ -258,15 +258,16 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
 You have access to a knowledge base and can help with various tasks including analysis, problem-solving, and creative work.
 Be helpful, concise, and professional in your responses.`;
 
-  // DEMO-OPTIMIZED: Tested questions with high similarity scores (0.43-0.69)
-  // User types 7th question manually: "Walk me through the video submission workflow"
+  // PREMIUM SUGGESTED QUESTIONS: Curated showcase with pre-cached responses
+  // All 6 trigger infographic generation and have Mermaid diagrams
+  // Updated: December 2025 with latest AOMA corpus and release notes
   const suggestions = [
-    "What are the steps to link a product to a master in AOMA?",
-    "What new features are in AOMA 2.116.0?",
-    "What is the quality check process for videos submitted to AOMA?",
-    "What permissions do I need for the Unified Submission Tool?",
-    "What's the difference between Full Master, Side, and Track Linking?",
-    "What are the different asset types in AOMA?",
+    "What are the different asset types in AOMA and how do they relate to each other?",
+    "How does AOMA use AWS S3 storage tiers for long-term archiving?",
+    "What's the difference between asset registration and master linking in AOMA?",
+    "What are the permission levels in AOMA and what can each role do?",
+    "What new UST features are being planned for the 2026 releases?",
+    "How do I upload and archive digital assets in AOMA from preparation to storage?",
   ];
 
   return (

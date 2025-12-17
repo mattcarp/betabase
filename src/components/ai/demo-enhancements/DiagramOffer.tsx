@@ -28,7 +28,14 @@ export function DiagramOffer({
 }: DiagramOfferProps) {
   const [dismissed, setDismissed] = useState(false);
 
-  if (!shouldOffer || dismissed) return null;
+  console.log("🎨 DiagramOffer render:", { shouldOffer, dismissed, isGenerating, isReady });
+
+  if (!shouldOffer || dismissed) {
+    console.log("🎨 DiagramOffer: Not rendering (shouldOffer:", shouldOffer, ", dismissed:", dismissed, ")");
+    return null;
+  }
+
+  console.log("🎨 DiagramOffer: Rendering offer UI");
 
   const handleDismiss = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -36,10 +43,20 @@ export function DiagramOffer({
     onDismiss?.();
   };
 
+  const handleAccept = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("🎨 DiagramOffer: Accept button clicked, isGenerating:", isGenerating);
+    if (!isGenerating && onAccept) {
+      console.log("🎨 DiagramOffer: Calling onAccept handler");
+      onAccept();
+    }
+  };
+
   return (
     <div className="mt-3 flex items-center gap-3">
       <button
-        onClick={isGenerating ? undefined : onAccept}
+        onClick={handleAccept}
         disabled={isGenerating}
         className="text-xs italic text-zinc-500 hover:text-zinc-400 transition-colors cursor-pointer disabled:cursor-wait"
       >
@@ -114,7 +131,8 @@ const DIAGRAM_PATTERNS = [
  * Returns true only for content that genuinely benefits from visualization
  */
 export function shouldOfferDiagram(content: string): boolean {
-  if (!content || content.length < 200) return false;
+  // For demo: lower threshold to show the feature (original was 200 chars, 3 keywords)
+  if (!content || content.length < 100) return false;
   
   const lowerContent = content.toLowerCase();
   
@@ -128,8 +146,9 @@ export function shouldOfferDiagram(content: string): boolean {
     pattern.test(content)
   ).length;
   
-  // Require either 3+ keywords or 2+ patterns or combination
-  return keywordMatches >= 3 || patternMatches >= 2 || (keywordMatches >= 2 && patternMatches >= 1);
+  // For demo: lower thresholds (original: 3+ keywords, 2+ patterns, or 2+1 combo)
+  // Now: 1+ keyword or 1+ pattern
+  return keywordMatches >= 1 || patternMatches >= 1;
 }
 
 export interface UseDiagramOfferOptions {
@@ -191,9 +210,11 @@ export function useDiagramOffer(options: UseDiagramOfferOptions = {}) {
   };
 
   const showDiagram = () => {
-    if (status === "ready" || status === "generating") {
-      console.log("🎨 User requested diagram view");
+    // Allow viewing from any state except dismissed
+    if (status !== "dismissed") {
+      console.log("🎨 User requested diagram view, current status:", status);
       setStatus("viewing");
+      console.log("🎨 Status set to viewing");
     }
   };
 

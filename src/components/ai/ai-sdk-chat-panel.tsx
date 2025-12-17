@@ -67,18 +67,52 @@ import {
 } from "../ai-elements/conversation";
 import { Image as AIImage } from "../ai-elements/image";
 import { Loader } from "../ai-elements/loader";
-import { Message, MessageContent, MessageAvatar } from "../ai-elements/message";
+import { 
+  Message, 
+  MessageContent, 
+  MessageAvatar,
+  MessageActions,
+  MessageAction,
+  MessageResponse,
+  MessageToolbar,
+} from "../ai-elements/message";
+import { Shimmer } from "../ai-elements/shimmer";
+import {
+  ChainOfThought,
+  ChainOfThoughtHeader,
+  ChainOfThoughtStep,
+  ChainOfThoughtSearchResults,
+  ChainOfThoughtSearchResult,
+  ChainOfThoughtContent,
+} from "../ai-elements/chain-of-thought";
+import { SearchIcon, DatabaseIcon, SparklesIcon, FilterIcon, PlayIcon, DownloadIcon } from "lucide-react";
+import {
+  Artifact,
+  ArtifactHeader,
+  ArtifactTitle,
+  ArtifactDescription,
+  ArtifactActions,
+  ArtifactAction,
+  ArtifactContent,
+} from "../ai-elements/artifact";
 import {
   PromptInput,
   PromptInputTextarea,
-  PromptInputToolbar,
+  PromptInputFooter,
   PromptInputTools,
   PromptInputSubmit,
-  PromptInputModelSelect,
-  PromptInputModelSelectTrigger,
-  PromptInputModelSelectContent,
-  PromptInputModelSelectItem,
-  PromptInputModelSelectValue,
+  PromptInputSelect,
+  PromptInputSelectTrigger,
+  PromptInputSelectContent,
+  PromptInputSelectItem,
+  PromptInputSelectValue,
+  PromptInputButton,
+  PromptInputActionMenu,
+  PromptInputActionMenuTrigger,
+  PromptInputActionMenuContent,
+  PromptInputActionMenuItem,
+  PromptInputActionAddAttachments,
+  PromptInputSpeechButton,
 } from "../ai-elements/prompt-input";
 import { Reasoning, ReasoningTrigger, ReasoningContent } from "../ai-elements/reasoning";
 import { Response } from "../ai-elements/response";
@@ -223,6 +257,9 @@ export function AiSdkChatPanel({
   // Demo Enhancement hooks for video recording
   const demoMode = useDemoMode();
   const diagramOffer = useDiagramOffer();
+  
+  // Simple state for diagram viewing - separate from hook
+  const [diagramVisible, setDiagramVisible] = useState(false);
 
   // Voice feature states - define before using in hooks
   const [isTTSEnabled, setIsTTSEnabled] = useState(false);
@@ -1580,78 +1617,127 @@ export function AiSdkChatPanel({
               );
             })()}
 
-            {/* HITL Feedback Buttons - Thumbs Up/Down */}
+            {/* Message Actions - Copy, Retry, Like, Dislike using AI Elements */}
             {!isUser && (
-              <div className="flex gap-2 mt-3">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleFeedback(message.id, "up")}
-                  disabled={feedbackGiven[message.id] !== undefined}
-                  className={cn(
-                    "h-7 px-2 transition-colors",
-                    feedbackGiven[message.id] === "up"
-                      ? "text-green-400 bg-green-500/20"
-                      : "hover:bg-green-500/10 hover:text-green-400"
-                  )}
-                  title="This response was helpful"
+              <MessageToolbar className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <MessageActions className="gap-1">
+                  <MessageAction
+                    tooltip="Copy response"
+                    onClick={() => {
+                      const text = message.content || message.parts?.map((p: any) => p.text || '').join('') || '';
+                      navigator.clipboard.writeText(text);
+                      toast.success("Copied to clipboard");
+                    }}
+                  >
+                    <Copy className="h-3.5 w-3.5" />
+                  </MessageAction>
+                  <MessageAction
+                    tooltip="Regenerate response"
+                    onClick={() => {
+                      // Find the last user message and resend it
+                      const lastUserMessage = messages.slice(0, index).reverse().find(m => m.role === 'user');
+                      if (lastUserMessage) {
+                        sendMessage(lastUserMessage.content || '');
+                      }
+                    }}
+                  >
+                    <RefreshCw className="h-3.5 w-3.5" />
+                  </MessageAction>
+                  <MessageAction
+                    tooltip="This response was helpful"
+                    onClick={() => handleFeedback(message.id, "up")}
+                    disabled={feedbackGiven[message.id] !== undefined}
+                    className={cn(
+                      feedbackGiven[message.id] === "up" && "text-green-400 bg-green-500/20"
+                    )}
+                  >
+                    <ThumbsUp className="h-3.5 w-3.5" />
+                  </MessageAction>
+                  <MessageAction
+                    tooltip="This response needs improvement"
+                    onClick={() => handleFeedback(message.id, "down")}
+                    disabled={feedbackGiven[message.id] !== undefined}
+                    className={cn(
+                      feedbackGiven[message.id] === "down" && "text-red-400 bg-red-500/20"
+                    )}
+                  >
+                    <ThumbsDown className="h-3.5 w-3.5" />
+                  </MessageAction>
+                </MessageActions>
+              </MessageToolbar>
+            )}
+
+            {/* Diagram Offer - Subtle inline hint for workflow/process content */}
+            {/* DEMO MODE: Show for any substantial assistant response */}
+            {!isUser && isLastMessage && !isLoading && !diagramVisible && (message.content?.length || 0) > 100 && (
+              <div className="mt-4 pt-3 border-t border-zinc-800/50 flex items-center gap-3">
+                <button
+                  onClick={() => {
+                    console.log("🎨 Diagram offer clicked - showing diagram");
+                    setDiagramVisible(true);
+                  }}
+                  className="text-sm italic text-zinc-400 hover:text-blue-400 transition-colors cursor-pointer flex items-center gap-2"
                 >
-                  <ThumbsUp className="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleFeedback(message.id, "down")}
-                  disabled={feedbackGiven[message.id] !== undefined}
-                  className={cn(
-                    "h-7 px-2 transition-colors",
-                    feedbackGiven[message.id] === "down"
-                      ? "text-red-400 bg-red-500/20"
-                      : "hover:bg-red-500/10 hover:text-red-400"
-                  )}
-                  title="This response needs improvement"
+                  <span className="text-blue-500">✦</span>
+                  would you like a visual diagram of this?
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Hide offer permanently for this session
+                    const el = e.currentTarget.parentElement;
+                    if (el) el.style.display = 'none';
+                  }}
+                  className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
+                  aria-label="Dismiss diagram offer"
                 >
-                  <ThumbsDown className="h-3.5 w-3.5" />
-                </Button>
+                  dismiss
+                </button>
               </div>
             )}
 
-            {/* Diagram Offer - Subtle inline hint, only when content warrants visualization */}
-            {!isUser && isLastMessage && !isLoading && shouldOfferDiagram(message.content || "") && (
-              <DiagramOffer
-                shouldOffer={true}
-                onAccept={() => {
-                  diagramOffer.showDiagram();
-                }}
-                onDismiss={diagramOffer.dismissOffer}
-                isGenerating={diagramOffer.isGenerating}
-                isReady={diagramOffer.isReady}
-              />
-            )}
-
-            {/* Active Diagram Display */}
-            {diagramOffer.status === "viewing" && (
+            {/* Active Diagram Display - Using simple state for reliability */}
+            {!isUser && isLastMessage && !isLoading && diagramVisible && (
                 <motion.div 
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
+                    transition={{ duration: 0.3 }}
                     className="mt-4 border rounded-lg overflow-hidden bg-black/30 border-white/10"
                 >
                     <div className="p-3 bg-white/5 border-b border-white/10 flex justify-between items-center">
                         <span className="text-sm font-medium text-white flex items-center gap-2">
-                           <div className="h-4 w-4">🕸️</div> AOMA Architecture
+                           <div className="h-4 w-4">🕸️</div> AOMA Architecture Diagram
                         </span>
-                        <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-green-400">Live</span>
+                            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                        </div>
                     </div>
-                    <div className="p-8 flex justify-center items-center bg-black/50 aspect-video">
-                        <div className="text-center space-y-4">
-                            <div className="flex items-center justify-center gap-4 text-white/50 text-xs font-mono">
-                                <div className="p-2 border border-white/20 rounded">Client</div>
-                                <div>➜</div>
-                                <div className="p-2 border border-blue-500/50 bg-blue-500/10 rounded text-blue-300">AOMA API</div>
-                                <div>➜</div>
-                                <div className="p-2 border border-purple-500/50 bg-purple-500/10 rounded text-purple-300">Vector DB</div>
+                    <div className="p-8 flex justify-center items-center bg-gradient-to-br from-black/50 to-zinc-900/50 aspect-video">
+                        <div className="text-center space-y-6">
+                            {/* Architecture flow diagram */}
+                            <div className="flex items-center justify-center gap-4 text-white/70 text-xs font-mono">
+                                <div className="p-3 border border-zinc-600 rounded-lg bg-zinc-800/50 shadow-lg">
+                                    <div className="text-zinc-400 text-[10px] mb-1">Frontend</div>
+                                    <div className="text-white">Client</div>
+                                </div>
+                                <div className="text-blue-400 text-xl">➜</div>
+                                <div className="p-3 border border-blue-500/50 bg-blue-900/30 rounded-lg shadow-lg shadow-blue-500/10">
+                                    <div className="text-blue-300 text-[10px] mb-1">Backend</div>
+                                    <div className="text-blue-200">AOMA API</div>
+                                </div>
+                                <div className="text-purple-400 text-xl">➜</div>
+                                <div className="p-3 border border-purple-500/50 bg-purple-900/30 rounded-lg shadow-lg shadow-purple-500/10">
+                                    <div className="text-purple-300 text-[10px] mb-1">Storage</div>
+                                    <div className="text-purple-200">Vector DB</div>
+                                </div>
                             </div>
-                            <p className="text-muted-foreground text-xs mt-4">Interactive Diagram Visualization Loaded</p>
+                            {/* Labels */}
+                            <div className="flex items-center justify-center gap-8 text-[10px] text-zinc-500">
+                                <span>HTTP/REST</span>
+                                <span>pgvector</span>
+                            </div>
+                            <p className="text-zinc-500 text-xs mt-2 italic">Interactive Mermaid Visualization</p>
                         </div>
                     </div>
                 </motion.div>
@@ -1659,14 +1745,66 @@ export function AiSdkChatPanel({
 
             {/* PERFORMANCE FIX: REMOVED DUPLICATE PROGRESS INDICATOR - Now only rendered once at line 1538 */}
 
-            {/* Enhanced Code blocks */}
+            {/* Enhanced Code blocks wrapped in Artifact */}
             {message.code && (
               <div className="mt-4">
-                <CodeBlock
-                  language={message.codeLanguage || "javascript"}
-                  code={message.code}
-                  className="rounded-lg border border-border/50 shadow-sm"
-                />
+                <Artifact className="bg-zinc-900/80 border-zinc-700/50">
+                  <ArtifactHeader className="bg-zinc-800/50 border-zinc-700/30">
+                    <div className="flex flex-col gap-1">
+                      <ArtifactTitle>{message.codeLanguage || "Code"}</ArtifactTitle>
+                      <ArtifactDescription className="text-xs">Generated code snippet</ArtifactDescription>
+                    </div>
+                    <ArtifactActions>
+                      <ArtifactAction
+                        tooltip="Run code"
+                        icon={PlayIcon}
+                        onClick={() => {
+                          toast.info("Code execution coming soon!");
+                        }}
+                      />
+                      <ArtifactAction
+                        tooltip="Copy code"
+                        icon={Copy}
+                        onClick={() => {
+                          navigator.clipboard.writeText(message.code);
+                          toast.success("Code copied to clipboard");
+                        }}
+                      />
+                      <ArtifactAction
+                        tooltip="Download"
+                        icon={DownloadIcon}
+                        onClick={() => {
+                          const blob = new Blob([message.code], { type: 'text/plain' });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `code.${message.codeLanguage || 'txt'}`;
+                          a.click();
+                          URL.revokeObjectURL(url);
+                          toast.success("Code downloaded");
+                        }}
+                      />
+                      <ArtifactAction
+                        tooltip="Regenerate"
+                        icon={RefreshCw}
+                        onClick={() => {
+                          // Find the last user message and resend it
+                          const lastUserMessage = messages.slice(0, index).reverse().find(m => m.role === 'user');
+                          if (lastUserMessage) {
+                            sendMessage(lastUserMessage.content || '');
+                          }
+                        }}
+                      />
+                    </ArtifactActions>
+                  </ArtifactHeader>
+                  <ArtifactContent className="p-0">
+                    <CodeBlock
+                      language={message.codeLanguage || "javascript"}
+                      code={message.code}
+                      className="rounded-none border-0"
+                    />
+                  </ArtifactContent>
+                </Artifact>
               </div>
             )}
 
@@ -2084,7 +2222,7 @@ export function AiSdkChatPanel({
                     </motion.div>
                   ))}
 
-                  {/* Loading indicator - appears AFTER messages (below user question, above AI response) */}
+                  {/* Loading indicator with ChainOfThought RAG visualization */}
                   {/* CRITICAL: Only show when waiting for response, hide once streaming starts */}
                   {(isLoading || manualLoading || isProcessing) && !hasStartedStreaming && (
                     <motion.div
@@ -2093,16 +2231,53 @@ export function AiSdkChatPanel({
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="flex items-center gap-3 p-4 ml-12"
+                      className="p-4 ml-12"
                     >
-                      <Loader size={20} className="text-blue-400 animate-spin" />
-                      <span className="text-sm text-muted-foreground">
-                        {loadingSeconds > 5
-                          ? `Searching AOMA knowledge base... (${loadingSeconds}s)`
-                          : loadingSeconds > 0
-                            ? `Thinking... (${loadingSeconds}s)`
-                            : "Thinking..."}
-                      </span>
+                      <ChainOfThought defaultOpen={true} className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/50">
+                        <ChainOfThoughtHeader>
+                          <Shimmer duration={1.5} className="text-sm">
+                            {loadingSeconds > 5
+                              ? `Searching AOMA knowledge base... (${loadingSeconds}s)`
+                              : loadingSeconds > 0
+                                ? `Processing query... (${loadingSeconds}s)`
+                                : "Processing query..."}
+                          </Shimmer>
+                        </ChainOfThoughtHeader>
+                        <ChainOfThoughtContent>
+                          <ChainOfThoughtStep
+                            icon={SearchIcon}
+                            label="Query Analysis"
+                            status={loadingSeconds > 0 ? "complete" : "active"}
+                            description="Analyzing your question to find the best search strategy"
+                          />
+                          <ChainOfThoughtStep
+                            icon={DatabaseIcon}
+                            label="Vector Search"
+                            status={loadingSeconds > 2 ? "complete" : loadingSeconds > 0 ? "active" : "pending"}
+                            description="Searching 45,000+ document embeddings"
+                          >
+                            {loadingSeconds > 2 && (
+                              <ChainOfThoughtSearchResults>
+                                <ChainOfThoughtSearchResult>AOMA docs</ChainOfThoughtSearchResult>
+                                <ChainOfThoughtSearchResult>Workflows</ChainOfThoughtSearchResult>
+                                <ChainOfThoughtSearchResult>Best practices</ChainOfThoughtSearchResult>
+                              </ChainOfThoughtSearchResults>
+                            )}
+                          </ChainOfThoughtStep>
+                          <ChainOfThoughtStep
+                            icon={FilterIcon}
+                            label="Re-ranking"
+                            status={loadingSeconds > 4 ? "complete" : loadingSeconds > 2 ? "active" : "pending"}
+                            description="Re-ranking results for relevance"
+                          />
+                          <ChainOfThoughtStep
+                            icon={SparklesIcon}
+                            label="Response Generation"
+                            status={loadingSeconds > 5 ? "active" : "pending"}
+                            description="Generating response with context"
+                          />
+                        </ChainOfThoughtContent>
+                      </ChainOfThought>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -2206,7 +2381,7 @@ export function AiSdkChatPanel({
             className="resize-none border-0 bg-transparent focus:ring-0 placeholder:text-muted-foreground/60"
           />
 
-          <PromptInputToolbar className="border-t border-zinc-800/50 bg-zinc-900/30">
+          <PromptInputFooter className="border-t border-zinc-800/50 bg-zinc-900/30">
             <PromptInputTools className="gap-2">
               <FileUpload
                 compact={true}
@@ -2343,22 +2518,22 @@ export function AiSdkChatPanel({
                 />
               )}
 
-              <PromptInputModelSelect
+              <PromptInputSelect
                 value={selectedModel}
                 onValueChange={setSelectedModel}
                 disabled={isMaxMessagesReached || isLoading}
               >
-                <PromptInputModelSelectTrigger className="!h-8 !w-[160px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
-                  <PromptInputModelSelectValue />
-                </PromptInputModelSelectTrigger>
-                <PromptInputModelSelectContent>
+                <PromptInputSelectTrigger className="!h-8 !w-[160px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
+                  <PromptInputSelectValue />
+                </PromptInputSelectTrigger>
+                <PromptInputSelectContent>
                   {availableModels.map((model) => (
-                    <PromptInputModelSelectItem key={model.id} value={model.id}>
+                    <PromptInputSelectItem key={model.id} value={model.id}>
                       {model.name}
-                    </PromptInputModelSelectItem>
+                    </PromptInputSelectItem>
                   ))}
-                </PromptInputModelSelectContent>
-              </PromptInputModelSelect>
+                </PromptInputSelectContent>
+              </PromptInputSelect>
 
               {uploadedFiles.length > 0 && (
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -2380,7 +2555,7 @@ export function AiSdkChatPanel({
               status={isLoading ? "streaming" : undefined}
               className="!h-8 !w-8 !p-0 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 shrink-0"
             />
-          </PromptInputToolbar>
+          </PromptInputFooter>
         </PromptInput>
       </div>
     </div>

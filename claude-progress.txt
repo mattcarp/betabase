@@ -302,3 +302,47 @@ PRD (why/what) → Requirements (testable criteria) → Implementation Plan (how
 ## Warnings/Blockers
 - ByteRover MCP needs authentication for store-knowledge
 - .taskmaster/ folder is legacy (can be removed later)
+
+---
+Session: 2025-12-17 07:05
+Agent: Coding
+Duration: ~25m
+
+## Summary
+✅ Fixed React 19 + Radix UI infinite loop on Curate tab
+
+### Root Cause
+- React 19.2.3 introduced new ref cleanup behavior
+- Radix UI's `composeRefs` utility caused infinite recursion
+- `CleanCurateTab.tsx` was using problematic Radix components
+
+### Fix Applied
+- Switched import from `CleanCurateTab` to `CurateTab` in `ChatPage.tsx`
+- `CurateTab.tsx` already has native HTML tabs (React 19 compatible)
+- No React downgrade needed!
+
+### Verification
+- ✅ Server running on localhost:3000
+- ✅ Curate tab loads without infinite loop
+- ✅ Tab switching works (Queue, Files, Upload, Info, RLHF)
+- ✅ No "Maximum update depth exceeded" errors in console
+- ✅ Chat API working (Supabase connection via app = OK)
+- ✅ Committed and pushed to main
+
+### Commit
+```
+fix(curate): Switch to CurateTab with native tabs to avoid React 19 + Radix infinite loop
+```
+
+## Files Modified
+- `src/components/ui/pages/ChatPage.tsx` - Changed CurateTab import
+
+## Next Steps
+- Demo prep can continue (app is functional)
+- Consider updating other Radix components to native equivalents if issues arise
+- Supabase MCP has IPv6 connection issue (cosmetic, not blocking)
+
+## Warnings/Blockers
+- ⚠️ Supabase MCP tool fails with IPv6 EHOSTUNREACH - this is a network/Cursor config issue, NOT a code bug
+- The app itself connects to Supabase fine via IPv4
+---

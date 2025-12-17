@@ -15,15 +15,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Query parameter is required" }, { status: 400 });
     }
 
-    // Intelligent AOMA suggestions based on actual proprietary Sony Music workflows
-    // These reference real tools and features from AOMA release notes and crawled documentation
+    // Premium suggested questions showcasing deep AOMA knowledge
+    // Each triggers infographic generation and has pre-cached responses with Mermaid diagrams
     const aomaTopics = [
-      "How do I use the Media Batch Converter to export audio in different formats?",
-      "What's the difference between Unified Submission Tool and Asset Submission Tool (LFV)?",
-      "How do I check if my masters passed GRPS QC and are ready for release?",
-      "Why is my Registration Job Status showing 'failed' and how do I retry delivery to partners?",
-      "How do I unlink Immersive/AMB masters from published products in GRPS?",
-      "What's the process for using Mobile Audio Manager to create ringtones and previews?",
+      "What are the different asset types in AOMA and how do they relate to each other?",
+      "How does AOMA use AWS S3 storage tiers for long-term archiving?",
+      "What's the difference between asset registration and master linking in AOMA?",
+      "What are the permission levels in AOMA and what can each role do?",
+      "What new UST features are being planned for the 2026 releases?",
+      "How do I upload and archive digital assets in AOMA from preparation to storage?",
     ];
 
     return NextResponse.json({

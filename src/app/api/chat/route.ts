@@ -18,6 +18,8 @@ import { searchKnowledge } from "@/services/knowledgeSearchService";
 import { UnifiedRAGOrchestrator } from "@/services/unifiedRAGOrchestrator";
 import { getSessionStateManager } from "@/lib/sessionStateManager";
 import { DEFAULT_APP_CONTEXT } from "@/lib/supabase";
+// Langfuse observability
+import { traceChat, flushLangfuse } from "@/lib/langfuse";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
@@ -293,6 +295,29 @@ export async function POST(req: Request) {
     // END INPUT VALIDATION
     // ========================================
 
+    // ========================================
+    // LANGFUSE TRACING INITIALIZATION
+    // ========================================
+    // Extract the latest user message for tracing
+    const traceUserMessage = messages.filter((m: any) => m.role === "user").pop();
+    const traceInput = traceUserMessage?.parts?.find((p: any) => p.type === "text")?.text || 
+                       traceUserMessage?.content || "";
+    
+    // Initialize Langfuse trace for this chat request
+    const langfuseTrace = traceChat({
+      sessionId: `chat_${Date.now()}`,
+      input: typeof traceInput === "string" ? traceInput : JSON.stringify(traceInput),
+      metadata: {
+        model: model || "default",
+        mode: mode || "full",
+        messageCount: messages.length,
+      },
+    });
+    console.log("[Langfuse] Trace initialized");
+    // ========================================
+    // END LANGFUSE TRACING INITIALIZATION
+    // ========================================
+
     if (!messages || messages.length === 0) {
       return new Response(JSON.stringify({ error: "Messages are required" }), {
         status: 400,
@@ -430,6 +455,14 @@ export async function POST(req: Request) {
         console.log("🌟 Executing Advanced RAG (re-ranking, agentic, context-aware)...");
         const ragStartTime = Date.now();
 
+        // Langfuse: Start RAG tracing
+        const ragTrace = langfuseTrace.traceRAG({
+          strategy: "unified",
+          useContextAware: true,
+          useAgenticRAG: queryString.split(" ").length > 15,
+          useRLHFSignals: true,
+        });
+
         // Add query to session history
         await sessionManager.addToHistory(sessionId, {
           query: queryString,
@@ -491,8 +524,24 @@ export async function POST(req: Request) {
               confidence: ragResult.metadata.confidence,
             });
           }
+
+          // Langfuse: End RAG tracing with results
+          ragTrace.end({
+            confidence: ragResult.metadata.confidence,
+            documentsRetrieved: ragResult.documents.length,
+            documentsAfterRerank: ragResult.documents.length,
+            agentIterations: ragResult.metadata.agentIterations || 0,
+            durationMs: ragDuration,
+          });
         } catch (ragError) {
           console.error("❌ Advanced RAG failed:", ragError);
+          // Langfuse: End RAG tracing with failure
+          ragTrace.end({
+            confidence: 0,
+            documentsRetrieved: 0,
+            documentsAfterRerank: 0,
+            durationMs: Date.now() - ragStartTime,
+          });
           // Continue with standard AOMA retrieval
         }
 
@@ -501,6 +550,14 @@ export async function POST(req: Request) {
         // ========================================
         // Direct Supabase pgvector queries - no external services
         console.log("🚀 Querying vector orchestrator (Supabase pgvector)...");
+
+        // Langfuse: Start vector search tracing
+        const vectorTrace = langfuseTrace.traceVectorSearch({
+          query: queryString,
+          provider: "gemini",
+          threshold: 0.50,
+          topK: 10,
+        });
 
         // Fast timeout - Supabase queries should complete in <500ms
         const preferFast = mode === "fast" || waitForAOMA === false;
@@ -670,6 +727,14 @@ export async function POST(req: Request) {
         console.log(
           `⏱️  PERFORMANCE: Vector query completed in ${totalDuration}ms - streaming will now start`
         );
+
+        // Langfuse: End vector search tracing
+        vectorTrace.end({
+          count: orchestratorResult.sources?.length || 0,
+          topSimilarity: orchestratorResult.sources?.[0]?.similarity,
+          durationMs: totalDuration,
+          sources: orchestratorResult.sources?.slice(0, 5).map((s: any) => s.source_type),
+        });
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         const errorDuration = Date.now() - perfStart;
@@ -699,6 +764,12 @@ export async function POST(req: Request) {
           durationMs: errorDuration,
           vectorDuration,
           timestamp: new Date().toISOString(),
+        });
+
+        // Langfuse: End vector search tracing with error
+        vectorTrace.end({
+          count: 0,
+          durationMs: errorDuration,
         });
 
         aomaConnectionStatus = "failed";
@@ -800,6 +871,15 @@ I don't have any relevant information about that in my knowledge base. Could you
 
     console.log(`🤖 Using Google Gemini provider for model: ${selectedModel}`);
 
+    // Langfuse: Start LLM generation tracing
+    const generationStartTime = Date.now();
+    const generationTrace = langfuseTrace.traceGeneration({
+      model: selectedModel,
+      systemPrompt: enhancedSystemPrompt,
+      messages: openAIMessages.map((m: any) => ({ role: m.role, content: String(m.content || "").substring(0, 500) })),
+      temperature: supportsTemperature ? (modelSettings.temperature || temperature) : undefined,
+    });
+
     const result = streamText({
       model: modelProvider,
       messages: openAIMessages, // Already in correct format after filtering/validation
@@ -808,9 +888,33 @@ I don't have any relevant information about that in my knowledge base. Could you
       ...(supportsTemperature && { temperature: modelSettings.temperature || temperature }),
       // Note: AI SDK handles token limits via the model config, not maxTokens parameter
       // Attach RAG metadata to the stream for client-side display
-      onFinish: async ({ text, finishReason }) => {
+      onFinish: async ({ text, finishReason, usage }) => {
         // RAG metadata will be available in response headers
         console.log("✅ Stream finished. RAG metadata:", ragMetadata);
+        
+        // Langfuse: End generation tracing with final output
+        generationTrace.end({
+          output: text,
+          finishReason: finishReason,
+          usage: usage ? {
+            promptTokens: usage.promptTokens,
+            completionTokens: usage.completionTokens,
+            totalTokens: usage.totalTokens,
+          } : undefined,
+          durationMs: Date.now() - generationStartTime,
+        });
+
+        // Langfuse: End the overall trace
+        langfuseTrace.end(text, {
+          model: selectedModel,
+          hasAomaContent,
+          aomaConnectionStatus,
+          finishReason,
+        });
+
+        // Langfuse: Flush events (critical for serverless!)
+        await flushLangfuse();
+        console.log("[Langfuse] Events flushed");
       },
     });
 
@@ -887,6 +991,13 @@ I don't have any relevant information about that in my knowledge base. Could you
     //   isQuotaError || isRateLimitError ? 429 : 500,
     //   errorMessage
     // );
+
+    // Langfuse: Try to flush any pending traces on error
+    try {
+      await flushLangfuse();
+    } catch (flushError) {
+      console.error("[Langfuse] Failed to flush on error:", flushError);
+    }
 
     return new Response(
       JSON.stringify({

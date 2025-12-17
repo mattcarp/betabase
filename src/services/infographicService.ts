@@ -60,6 +60,7 @@ export type AspectRatio =
 export type Resolution = "1K" | "2K" | "4K";
 
 // Detection patterns for different infographic types
+// Updated to match premium suggested questions
 const INFOGRAPHIC_PATTERNS: Record<InfographicType, RegExp[]> = {
   workflow: [
     /how do i/i,
@@ -68,6 +69,8 @@ const INFOGRAPHIC_PATTERNS: Record<InfographicType, RegExp[]> = {
     /process for/i,
     /procedure for/i,
     /guide to/i,
+    /how does.*use/i, // Matches "How does AOMA use AWS S3..."
+    /upload and archive/i, // Matches digital archive workflow
   ],
   comparison: [
     /difference between/i,
@@ -83,6 +86,7 @@ const INFOGRAPHIC_PATTERNS: Record<InfographicType, RegExp[]> = {
     /different kinds/i,
     /asset types/i,
     /structure of/i,
+    /storage tiers/i, // Matches AWS S3 storage tiers
   ],
   explainer: [
     /what is/i,
@@ -101,13 +105,18 @@ const INFOGRAPHIC_PATTERNS: Record<InfographicType, RegExp[]> = {
     /what's new/i,
     /latest updates/i,
     /recent changes/i,
+    /being planned/i, // Matches "What new UST features are being planned..."
+    /roadmap/i,
+    /2026 releases/i,
   ],
   checklist: [
     /requirements for/i,
     /checklist/i,
     /what do i need/i,
     /permissions/i,
+    /permission levels/i, // Matches "What are the permission levels..."
     /prerequisites/i,
+    /what can each role/i, // Matches "what can each role do"
   ],
 };
 

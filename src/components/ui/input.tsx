@@ -1,70 +1,22 @@
-import * as React from "react";
+import * as React from "react"
 
-import { cn } from "../../lib/utils";
+import { cn } from "src/lib/utils"
 
-export interface InputProps extends React.ComponentProps<"input"> {
-  glow?: boolean; // Add MAC glow effect on focus
-  error?: boolean; // Indicate error state
-  helperText?: string; // Helper text for additional context
-  label?: string; // Accessible label for screen readers
-}
-
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, glow = true, error, helperText, label, id, ...props }, ref) => {
-    // Generate IDs for accessibility - useId must be called unconditionally
-    const generatedId = React.useId();
-    const inputId = id || generatedId;
-    const helperId = helperText ? `${inputId}-helper` : undefined;
-    const errorId = error && helperText ? `${inputId}-error` : undefined;
-
+const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
+  ({ className, type, ...props }, ref) => {
     return (
-      <>
-        <input
-          id={inputId}
-          type={type}
-          suppressHydrationWarning
-          className={cn(
-            // Base MAC input styles
-            "mac-input",
-            // Additional shadcn-compatible styles
-            "flex h-10 w-full text-base transition-all duration-200",
-            // File input styles
-            "file:border-0 file:bg-transparent file:text-sm file:font-light file:text-[var(--mac-text-primary)]",
-            // Placeholder styles
-            "placeholder:text-[var(--mac-text-muted)]",
-            // Focus styles with MAC design
-            "focus-visible:outline-none focus-visible:border-[var(--mac-primary-blue-400)]",
-            glow && "focus-visible:shadow-[0_0_20px_rgba(74,158,255,0.3)]",
-            // Error state
-            error &&
-              "border-red-500/50 focus-visible:border-red-400 focus-visible:shadow-[0_0_20px_rgba(239,68,68,0.2)]",
-            // Disabled state
-            "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[var(--mac-state-disabled)]",
-            // Text size responsive
-            "md:text-sm",
-            className
-          )}
-          ref={ref}
-          // Enhanced ARIA attributes
-          aria-invalid={error ? "true" : undefined}
-          aria-describedby={cn(helperId, errorId, props["aria-describedby"])}
-          aria-label={label || props["aria-label"]}
-          aria-required={props.required ? "true" : undefined}
-          {...props}
-        />
-        {helperText && (
-          <span
-            id={errorId || helperId}
-            className={cn("mt-2 text-xs", error ? "text-red-400" : "text-[var(--mac-text-muted)]")}
-            role={error ? "alert" : undefined}
-          >
-            {helperText}
-          </span>
+      <input
+        type={type}
+        className={cn(
+          "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          className
         )}
-      </>
-    );
+        ref={ref}
+        {...props}
+      />
+    )
   }
-);
-Input.displayName = "Input";
+)
+Input.displayName = "Input"
 
-export { Input };
+export { Input }
