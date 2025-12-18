@@ -63,8 +63,11 @@ import { RLHFFeedbackTab } from "./rlhf-tabs/RLHFFeedbackTab";
 import { CuratorQueue } from "./CuratorQueue";
 import { FeedbackImpactCard } from "./FeedbackImpactCard";
 import { DeduplicationTab } from "./DeduplicationTab";
+import { DashboardTab } from "./DashboardTab";
+import { AgentInsightsTab } from "./rlhf-tabs/AgentInsightsTab";
+import { ReinforcementDashboardTab } from "./rlhf-tabs/ReinforcementDashboardTab";
 import { cognitoAuth } from "../../services/cognitoAuth";
-import { ListTodo, GitBranch } from "lucide-react";
+import { ListTodo, GitBranch, BarChart3, Activity } from "lucide-react";
 
 interface VectorStoreFile {
   id: string;
@@ -403,6 +406,23 @@ export function CurateTab({
               "bg-[var(--mac-surface-card)]"
             )}
           >
+            {/* Dashboard Tab - Executive Overview */}
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "dashboard"}
+              onClick={() => setActiveTab("dashboard")}
+              className={cn(
+                "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
+                activeTab === "dashboard"
+                  ? "bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)] border-b-[3px] border-[var(--mac-primary-blue-400)] shadow-[0_2px_8px_rgba(51,133,255,0.3)]"
+                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
+              )}
+            >
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Overview
+            </button>
+
             {/* Queue Tab - Curator Review Queue */}
             <button
               type="button"
@@ -500,7 +520,31 @@ export function CurateTab({
               <GitBranch className="h-4 w-4 mr-2" />
               Dedupe
             </button>
+
+            {/* Agent Insights Tab */}
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "insights"}
+              onClick={() => setActiveTab("insights")}
+              className={cn(
+                "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
+                activeTab === "insights"
+                  ? "bg-[var(--mac-accent-purple-400)]/10 text-[var(--mac-accent-purple-400)] border-b-[3px] border-[var(--mac-accent-purple-400)] shadow-[0_2px_8px_rgba(168,85,247,0.3)]"
+                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
+              )}
+            >
+              <Activity className="h-4 w-4 mr-2" />
+              Insights
+            </button>
           </div>
+
+          {/* Dashboard Tab Content */}
+          {activeTab === "dashboard" && (
+            <div role="tabpanel" className="flex-1 overflow-auto mt-4">
+              <DashboardTab />
+            </div>
+          )}
 
           {/* Queue Tab Content - Curator Review Queue */}
           {activeTab === "queue" && (
@@ -1003,7 +1047,9 @@ export function CurateTab({
 
           {/* RLHF Feedback Tab Content */}
           {canAccessRLHF && activeTab === "rlhf-feedback" && (
-            <div role="tabpanel" className="flex-1 overflow-hidden mt-4">
+            <div role="tabpanel" className="flex-1 overflow-auto mt-4">
+              <ReinforcementDashboardTab />
+              <Separator className="my-8 bg-[var(--mac-utility-border)]" />
               <RLHFFeedbackTab />
             </div>
           )}
@@ -1012,6 +1058,13 @@ export function CurateTab({
           {activeTab === "dedupe" && (
             <div role="tabpanel" className="flex-1 overflow-auto mt-4">
               <DeduplicationTab />
+            </div>
+          )}
+
+          {/* Agent Insights Tab Content */}
+          {activeTab === "insights" && (
+            <div role="tabpanel" className="flex-1 overflow-auto mt-4">
+              <AgentInsightsTab />
             </div>
           )}
         </div>

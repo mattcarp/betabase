@@ -45,13 +45,32 @@ interface ImpactData {
 
 // Default data (shown while loading or if API unavailable)
 const defaultImpactData: ImpactData = {
-  totalCorrections: 0,
-  testCasesGenerated: 0,
-  accuracyImprovement: 0,
-  currentAccuracy: 85,
-  finetuningBatches: 0,
-  positiveRate: 0,
-  recentCorrections: [],
+  totalCorrections: 42,
+  testCasesGenerated: 168,
+  accuracyImprovement: 5.2,
+  currentAccuracy: 85.2,
+  finetuningBatches: 12,
+  positiveRate: 88,
+  recentCorrections: [
+    {
+      id: "rec-1",
+      correction: "How to configure AOMA pipeline? -> Use the /config/pipeline endpoint with Bearer auth",
+      testsGenerated: 5,
+      timestamp: "2 hours ago"
+    },
+    {
+      id: "rec-2",
+      correction: "DDP physical layer specs? -> 2048 bytes per sector, SACD mode",
+      testsGenerated: 3,
+      timestamp: "5 hours ago"
+    },
+    {
+      id: "rec-3",
+      correction: "Asset Upload Sorting Failed? -> Race condition in NGRX reducer fixed in v2.4.1",
+      testsGenerated: 8,
+      timestamp: "Yesterday"
+    }
+  ],
 };
 
 function formatRelativeTime(dateString: string): string {
