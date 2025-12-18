@@ -1293,8 +1293,14 @@ export function AiSdkChatPanel({
 
   const handleFormSubmit = async (message: PromptInputMessage, event?: React.FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
+    
+    console.log("🔵 handleFormSubmit called!", { message, localInput, isLoading, manualLoading, isProcessing });
+    
     // Use message.text from PromptInput, fallback to localInput for compatibility
     const messageToSend = message.text || localInput || "";
+    
+    console.log("🔵 messageToSend:", messageToSend);
+    
     if (messageToSend.trim()) {
       // Debug logging for endpoint routing
       console.log("📨 Submitting message with:");

@@ -408,7 +408,7 @@ Be helpful, concise, and professional in your responses.`;
                 </div>
 
                 {/* Sidebar trigger with MAC styling */}
-                <SidebarTrigger className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 rounded-md transition-colors" />
+                <SidebarTrigger className="h-8 w-8 text-mac-primary-blue-400/60 hover:text-mac-primary-blue-400 hover:bg-mac-primary-blue-400/10 rounded-md transition-all duration-200 border border-transparent hover:border-mac-primary-blue-400/30" title="Toggle sidebar" />
 
                 <Button
                   variant="ghost"

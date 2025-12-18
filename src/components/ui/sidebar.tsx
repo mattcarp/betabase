@@ -4,6 +4,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 import { Slot } from "@radix-ui/react-slot";
+import { Menu } from "lucide-react";
 
 type SidebarContextProps = {
   state: "expanded" | "collapsed";
@@ -190,9 +191,11 @@ const SidebarTrigger = React.forwardRef<HTMLButtonElement, React.ComponentProps<
           onClick?.(e);
           toggleSidebar();
         }}
-        className={cn("", className)}
+        className={cn("flex items-center justify-center", className)}
         {...props}
-      />
+      >
+        <Menu className="h-4 w-4" />
+      </button>
     );
   }
 );
