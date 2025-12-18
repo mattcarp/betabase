@@ -1117,6 +1117,56 @@ The AI outputs code using the special `typescript:filepath` format, which trigge
 
 ---
 
+---
+
+## 🎨 DIAGRAM SYSTEMS REFERENCE (Technical)
+
+### Two Diagram Systems Working Together
+
+#### 1. 🔷 Mermaid Diagrams (In-App, Interactive)
+- **Where**: Rendered in chat interface by browser
+- **Tech**: Mermaid.js library + Gemini 3 Flash for generation
+- **File**: `/api/aoma/generate-diagram/route.ts`
+- **Triggered by**: Workflow questions WITHOUT "infographic" keywords
+- **Display**: Interactive, zoomable, in-browser SVG
+- **Example Query**: "How do I upload and archive digital assets?"
+- **Result**: Beautiful 5-phase workflow diagram appears in chat
+
+#### 2. 🍌 Nano Banana (Static Infographic Images)
+- **Where**: Generated as image files for slides/b-roll
+- **Tech**: Gemini image generation API
+- **File**: `ai-sdk-chat-panel.tsx` lines 1642-1666
+- **Triggered by**: Keywords "infographic", "I'm recording", "for my friends", "I'm in a demo"
+- **Display**: PNG/JPEG image file, hand-drawn style
+- **Example Query**: "Can you create an infographic of the multi-tenant architecture?"
+- **Result**: Beautiful hand-drawn image generated in 3-5 seconds
+
+### When to Use Which
+
+| Scenario | Use | Example Query |
+|----------|-----|---------------|
+| **In-chat visualization** | Mermaid | "Show me the upload workflow" |
+| **Presentation slides** | Nano Banana | "Create an infographic of this for my demo" |
+| **Interactive exploration** | Mermaid | "Diagram the validation flow" |
+| **Beautiful hand-drawn slides** | Nano Banana | "Make a hand-drawn ERD diagram" |
+
+### Common Issues
+
+**❌ HTML Tags in Mermaid**
+```
+NodeID["Text<br/>More text"]  // BREAKS - Mermaid doesn't support HTML
+```
+
+**✅ Correct Mermaid Syntax**
+```
+NodeID["Text - More text"]  // Works - plain text only
+NodeID["Text\nMore text"]   // Works - literal \n for line breaks
+```
+
+**🔧 Auto-Fix**: The system now automatically strips HTML tags from generated Mermaid diagrams (lines 155-166 in `route.ts`)
+
+---
+
 *Created: December 15, 2025*
-*Updated: December 17, 2025 (added Intent Classification, Re-Ranker diagrams, Real Demo Scenarios, Code Artifact Display, Filming Checklist)*
+*Updated: December 18, 2025 (added Intent Classification, Re-Ranker diagrams, Real Demo Scenarios, Code Artifact Display, Filming Checklist, Diagram Systems Reference)*
 *For: Mattie (called by Claudette)*

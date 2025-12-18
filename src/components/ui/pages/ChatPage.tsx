@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { AiSdkChatPanel } from "../../ai/ai-sdk-chat-panel"; // Re-enabled after fixing zod-to-json-schema dependency
 import { ChatPanel } from "../../ai/chat-panel"; // For legacy tabs
@@ -260,6 +260,61 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
 You have access to a knowledge base and can help with various tasks including analysis, problem-solving, and creative work.
 Be helpful, concise, and professional in your responses.`;
 
+  // Stable onMessagesChange callback to prevent infinite re-renders
+  const handleMessagesChange = useCallback((messages: any[]) => {
+    if (!activeConversationId || messages.length === 0) return;
+    
+    const { updateConversation, getConversation } = useConversationStore.getState();
+    const currentConv = getConversation(activeConversationId);
+    
+    // Safety check: Don't overwrite if we would lose data
+    const storedMsgCount = currentConv?.messages?.length || 0;
+    const hasStoredAssistant = currentConv?.messages?.some((m: any) => m.role === 'assistant');
+    const newHasAssistant = messages.some((m: any) => m.role === 'assistant');
+    
+    if (storedMsgCount > messages.length) return;
+    if (hasStoredAssistant && !newHasAssistant && messages.length <= storedMsgCount) return;
+    
+    // Helper to extract message content
+    const getMessageContent = (m: any): string | undefined => {
+      if (m.parts && m.parts[0]?.text) return m.parts[0].text;
+      if (m.content && typeof m.content === "string") return m.content;
+      return undefined;
+    };
+    
+    // Generate title from first user message if needed
+    const isDefaultTitle = (title: string) => {
+      const defaults = ["new conversation", "the betabase", "untitled", ""];
+      return defaults.includes((title || "").toLowerCase().trim());
+    };
+    
+    let newTitle: string | undefined;
+    if (currentConv && isDefaultTitle(currentConv.title)) {
+      const firstUserMsg = messages.find((m: any) => m.role === "user" && getMessageContent(m));
+      const msgContent = firstUserMsg ? getMessageContent(firstUserMsg) : undefined;
+      
+      if (msgContent) {
+        let title = msgContent
+          .trim()
+          .replace(/\s+/g, " ")
+          .replace(/^(hey|hi|hello|please|can you|could you|i need|i want)\s+/i, "")
+          .replace(/[?!.]+$/, "");
+        title = title.charAt(0).toUpperCase() + title.slice(1);
+        if (title.length > 45) {
+          const truncateAt = title.lastIndexOf(" ", 45);
+          title = truncateAt > 20 ? title.substring(0, truncateAt) + "..." : title.substring(0, 45) + "...";
+        }
+        newTitle = title || undefined;
+      }
+    }
+    
+    // Update conversation
+    updateConversation(activeConversationId, { 
+      messages: messages as any[],
+      ...(newTitle && { title: newTitle })
+    });
+  }, [activeConversationId]);
+
   // PREMIUM SUGGESTED QUESTIONS: Curated showcase with pre-cached responses
   // All 6 trigger infographic generation and have Mermaid diagrams
   // Updated: December 2025 with latest AOMA corpus and release notes
@@ -475,73 +530,7 @@ Be helpful, concise, and professional in your responses.`;
                     showHeader={false}
                     conversationId={activeConversationId || undefined}
                     initialMessages={activeConversation?.messages}
-                    onMessagesChange={(messages) => {
-                      if (activeConversationId && messages.length > 0) {
-                        const { updateConversation, getConversation } = useConversationStore.getState();
-                        const currentConv = getConversation(activeConversationId);
-                        
-                        // Safety check: Don't overwrite stored messages if we would lose data
-                        // This prevents filtered initial messages from overwriting complete conversations
-                        const storedMsgCount = currentConv?.messages?.length || 0;
-                        const hasStoredAssistant = currentConv?.messages?.some((m: any) => m.role === 'assistant');
-                        const newHasAssistant = messages.some((m: any) => m.role === 'assistant');
-                        
-                        if (storedMsgCount > messages.length) {
-                          return; // Would lose messages - skip this update
-                        }
-                        
-                        if (hasStoredAssistant && !newHasAssistant && messages.length <= storedMsgCount) {
-                          return; // Would lose assistant message - skip this update
-                        }
-                        
-                        // Helper to extract message content from AI SDK v4 or v5 format
-                        const getMessageContent = (m: any): string | undefined => {
-                          // AI SDK v5: parts[0].text
-                          if (m.parts && m.parts[0]?.text) {
-                            return m.parts[0].text;
-                          }
-                          // AI SDK v4 / fallback: content
-                          if (m.content && typeof m.content === "string") {
-                            return m.content;
-                          }
-                          return undefined;
-                        };
-                        
-                        // Generate title from first user message if title is still default
-                        const isDefaultTitle = (title: string) => {
-                          const defaults = ["new conversation", "the betabase", "untitled", ""];
-                          return defaults.includes((title || "").toLowerCase().trim());
-                        };
-                        
-                        let newTitle: string | undefined;
-                        if (currentConv && isDefaultTitle(currentConv.title)) {
-                          // Find first user message in the messages array
-                          const firstUserMsg = messages.find((m: any) => m.role === "user" && getMessageContent(m));
-                          const msgContent = firstUserMsg ? getMessageContent(firstUserMsg) : undefined;
-                          
-                          if (msgContent) {
-                            // Generate concise title from user's message
-                            let title = msgContent
-                              .trim()
-                              .replace(/\s+/g, " ")
-                              .replace(/^(hey|hi|hello|please|can you|could you|i need|i want)\s+/i, "")
-                              .replace(/[?!.]+$/, "");
-                            title = title.charAt(0).toUpperCase() + title.slice(1);
-                            if (title.length > 45) {
-                              const truncateAt = title.lastIndexOf(" ", 45);
-                              title = truncateAt > 20 ? title.substring(0, truncateAt) + "..." : title.substring(0, 45) + "...";
-                            }
-                            newTitle = title || undefined;
-                          }
-                        }
-                        
-                        // Update conversation with messages and potentially new title
-                        updateConversation(activeConversationId, { 
-                          messages: messages as any[],
-                          ...(newTitle && { title: newTitle })
-                        });
-                      }
-                    }}
+                    onMessagesChange={handleMessagesChange}
                   />
                 </div>
               )}

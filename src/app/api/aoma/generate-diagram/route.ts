@@ -36,10 +36,12 @@ IMPORTANT RULES:
 2. Use flowchart TD (top-down) or LR (left-right) for process flows
 3. CRITICAL: Always use double quotes around labels containing emojis, spaces, or special characters (e.g., NodeID["Label 🚀"] or subgraph "Group Name").
 4. CRITICAL: Subgraphs do NOT use square brackets [ ] for titles. Use quotes: subgraph "Title Name".
-5. Style subgraphs with fill and stroke colors for visual distinction
-6. Use meaningful node IDs (not just A, B, C)
-7. Include decision points with clear yes/no or pass/fail paths
-8. End with style declarations for a polished dark-theme appearance`;
+5. CRITICAL: NEVER use HTML tags like <br/>, <b>, <i>, etc. in labels. Use plain text only. For line breaks, you may use literal \\n but prefer keeping labels single-line.
+6. Style subgraphs with fill and stroke colors for visual distinction
+7. Use meaningful node IDs (not just A, B, C)
+8. Include decision points with clear yes/no or pass/fail paths
+9. End with style declarations for a polished dark-theme appearance
+10. Keep labels concise - if a label is getting too long, split into multiple connected nodes instead`;
 
 export async function POST(req: Request) {
   try {
@@ -152,6 +154,18 @@ Remember: Output ONLY valid Mermaid syntax, no code blocks or explanations.`;
     if (mermaidCode.startsWith("```")) {
       mermaidCode = mermaidCode.replace(/^```\n?/, "").replace(/\n?```$/, "");
     }
+    
+    // 🐛 FIX: Remove HTML tags that Mermaid doesn't support
+    // Replace <br/>, <br>, <b>, <i>, etc. with plain text equivalents
+    mermaidCode = mermaidCode
+      .replace(/<br\s*\/?>/gi, ' ')  // <br/> → space
+      .replace(/<b>(.*?)<\/b>/gi, '$1')  // <b>text</b> → text
+      .replace(/<i>(.*?)<\/i>/gi, '$1')  // <i>text</i> → text
+      .replace(/<strong>(.*?)<\/strong>/gi, '$1')
+      .replace(/<em>(.*?)<\/em>/gi, '$1')
+      .replace(/<[^>]+>/g, '');  // Remove any other HTML tags
+    
+    console.log("[API] Sanitized HTML tags from Mermaid code");
 
     // Validate that we got valid-looking Mermaid syntax
     const validDiagramStarters = [

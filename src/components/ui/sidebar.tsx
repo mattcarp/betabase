@@ -157,6 +157,7 @@ const Sidebar = React.forwardRef<
           "flex flex-col gap-2",
           "duration-200 relative h-full",
           "w-[--sidebar-width]", // Use CSS variable for responsive width
+          state === "collapsed" && collapsible === "icon" && "w-[--sidebar-width-icon]",
           variant === "floating" && "ml-2 rounded-lg border shadow-sm",
           variant === "inset" && "ml-2 rounded-lg",
           className
@@ -165,6 +166,7 @@ const Sidebar = React.forwardRef<
       >
         <div
           data-sidebar="sidebar"
+          data-state={state}
           className={cn(
             "duration-200 relative h-full w-full bg-sidebar text-sidebar-foreground overflow-hidden",
             variant === "floating" && "rounded-lg border border-sidebar-border shadow-lg",
@@ -181,13 +183,14 @@ Sidebar.displayName = "Sidebar";
 
 const SidebarTrigger = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
   ({ className, onClick, ...props }, ref) => {
-    const { toggleSidebar } = useSidebar();
+    const { toggleSidebar, state, open } = useSidebar();
 
     return (
       <button
         ref={ref}
         data-sidebar="trigger"
         onClick={(e) => {
+          console.log('SidebarTrigger clicked! Current state:', state, 'open:', open);
           onClick?.(e);
           toggleSidebar();
         }}

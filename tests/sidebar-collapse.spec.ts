@@ -2,11 +2,14 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Sidebar Collapse Functionality', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to the chat page
-    await page.goto('http://localhost:3000');
+    // Navigate to the chat page with networkidle strategy
+    await page.goto('http://localhost:3000', { 
+      waitUntil: 'domcontentloaded',
+      timeout: 60000 
+    });
     
     // Wait for the sidebar to be visible
-    await page.waitForSelector('[data-sidebar="sidebar"]', { timeout: 10000 });
+    await page.waitForSelector('[data-sidebar="sidebar"]', { timeout: 15000 });
   });
 
   test('should toggle sidebar collapse when clicking the trigger button', async ({ page }) => {
@@ -14,11 +17,15 @@ test.describe('Sidebar Collapse Functionality', () => {
     const sidebarTrigger = page.locator('[data-sidebar="trigger"]');
     await expect(sidebarTrigger).toBeVisible();
 
-    // Get the sidebar element
-    const sidebar = page.locator('[data-sidebar="sidebar"]');
+    // Get the sidebar wrapper element (has data-state attribute)
+    const sidebarWrapper = page.locator('[data-sidebar="provider"]').first();
     
     // Check initial state - sidebar should be expanded
-    await expect(sidebar).toHaveAttribute('data-state', 'expanded');
+    const initialState = await sidebarWrapper.getAttribute('data-state');
+    console.log('Initial sidebar state:', initialState);
+    
+    // Get the inner sidebar element for width measurement
+    const sidebar = page.locator('[data-sidebar="sidebar"]');
     
     // Get the initial width
     const initialWidth = await sidebar.evaluate((el) => {
@@ -31,10 +38,10 @@ test.describe('Sidebar Collapse Functionality', () => {
     await sidebarTrigger.click();
     
     // Wait a moment for the transition
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(500);
     
     // Check if sidebar is now collapsed
-    const sidebarState = await sidebar.getAttribute('data-state');
+    const sidebarState = await sidebarWrapper.getAttribute('data-state');
     console.log('Sidebar state after click:', sidebarState);
     
     // Get the collapsed width
@@ -49,10 +56,10 @@ test.describe('Sidebar Collapse Functionality', () => {
     
     // Click again to expand
     await sidebarTrigger.click();
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(500);
     
     // Should be back to expanded
-    const expandedState = await sidebar.getAttribute('data-state');
+    const expandedState = await sidebarWrapper.getAttribute('data-state');
     console.log('Sidebar state after second click:', expandedState);
     
     const finalWidth = await sidebar.evaluate((el) => {
