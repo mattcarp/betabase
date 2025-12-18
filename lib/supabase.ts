@@ -1,32 +1,61 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-// Lazy initialization to avoid build-time errors
-let supabaseClient: SupabaseClient | null = null;
-let supabaseAdminClient: SupabaseClient | null = null;
+// Global singleton to prevent multiple GoTrueClient instances
+declare global {
+  // eslint-disable-next-line no-var
+  var __supabaseClient: SupabaseClient | undefined;
+  // eslint-disable-next-line no-var  
+  var __supabaseAdminClient: SupabaseClient | undefined;
+}
 
-// Public client for browser
-export const supabase = (() => {
-  if (!supabaseClient) {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (url && key) {
-      supabaseClient = createClient(url, key);
-    }
+// Public client for browser - using global singleton
+function getSupabaseClient(): SupabaseClient | null {
+  if (globalThis.__supabaseClient) {
+    return globalThis.__supabaseClient;
   }
-  return supabaseClient;
-})();
+  
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  if (url && key) {
+    globalThis.__supabaseClient = createClient(url, key, {
+      auth: {
+        persistSession: typeof window !== "undefined", // Only persist in browser
+        storageKey: "sb-betabase-auth", // Unique storage key
+      },
+    });
+    return globalThis.__supabaseClient;
+  }
+  return null;
+}
 
 // Service client for server-side operations (use carefully!)
-export const supabaseAdmin = (() => {
-  if (typeof window === "undefined" && !supabaseAdminClient) {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    if (url && key) {
-      supabaseAdminClient = createClient(url, key);
-    }
+function getSupabaseAdminClient(): SupabaseClient | null {
+  if (typeof window !== "undefined") {
+    return null; // Never expose admin client to browser
   }
-  return supabaseAdminClient;
-})();
+  
+  if (globalThis.__supabaseAdminClient) {
+    return globalThis.__supabaseAdminClient;
+  }
+  
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  if (url && key) {
+    globalThis.__supabaseAdminClient = createClient(url, key, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+    return globalThis.__supabaseAdminClient;
+  }
+  return null;
+}
+
+export const supabase = getSupabaseClient();
+export const supabaseAdmin = getSupabaseAdminClient();
 
 // Types for our ACTUAL tables (as they exist in Supabase)
 export interface CrawlerDocument {

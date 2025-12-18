@@ -196,7 +196,7 @@ function transformAttempt(api: APIAttempt): SelfHealingAttempt {
     metadata: {
       executionTime: (api.execution_time_ms || 0) / 1000,
       retryCount: api.retry_count || 0,
-      aiModel: api.ai_model || "gemini-3-pro-preview",
+      aiModel: api.ai_model || "gemini-3-flash-preview",
     },
   };
 }
@@ -535,7 +535,7 @@ export const SelfHealingTestViewer: React.FC = () => {
         metadata: {
           executionTime: 2.4,
           retryCount: 1,
-          aiModel: "gemini-3-pro-preview"
+          aiModel: "gemini-3-flash-preview"
         }
       };
 

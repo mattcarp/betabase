@@ -114,7 +114,7 @@ ${context}
 6. Never make up information not in the documents`;
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-3-pro-preview' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-3-flash-preview' });
     const result = await model.generateContent([
       { text: systemPrompt },
       { text: `User question: ${query}` },

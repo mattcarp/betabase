@@ -270,7 +270,7 @@ export async function POST(request: NextRequest) {
       code_after: `await page.click('${healingResult.suggestedSelector}');`,
       execution_time_ms: executionTimeMs,
       retry_count: 0,
-      ai_model: "gemini-3-pro-preview",
+      ai_model: "gemini-3-flash-preview",
       ai_tokens_used: healingResult.tokensUsed,
       organization: "sony-music",
       healed_at: tier === 1 ? new Date().toISOString() : null,
@@ -388,7 +388,7 @@ Analyze the DOM change and provide a JSON response with:
 Respond ONLY with valid JSON.`;
 
     const result = await generateText({
-      model: google("gemini-3-pro-preview"),
+      model: google("gemini-3-flash-preview"),
       prompt,
     });
 

@@ -277,7 +277,7 @@ export function AiSdkChatPanel({
   console.log("🎤 Voice buttons should be rendering in PromptInputTools");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
-  const [selectedModel, setSelectedModel] = useState("gemini-3-pro-preview");
+  const [selectedModel, setSelectedModel] = useState("gemini-3-flash-preview");
   const [showReasoning, setShowReasoning] = useState(true);
   const [currentBranch, setCurrentBranch] = useState<string | null>(null);
   const [activeTasks, setActiveTasks] = useState<any[]>([]);
@@ -473,8 +473,9 @@ export function AiSdkChatPanel({
     })();
 
   const availableModels = [
-    // Gemini models (primary for RAG)
-    { id: "gemini-3-pro-preview", name: "Gemini 3 Pro (1M context)" },
+    // Gemini 3.x models (primary for RAG) - Dec 2025
+    { id: "gemini-3-flash-preview", name: "⚡ Gemini 3 Flash (3x faster)" },
+    // Gemini 2.x models (legacy)
     { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro (2M context)" },
     { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash (Fast)" },
     { id: "gemini-2.0-flash", name: "Gemini 2.0 Flash" },
@@ -1794,13 +1795,17 @@ export function AiSdkChatPanel({
   // Get model context size based on selected model
   const getModelContextSize = useCallback((modelId: string): number => {
     const contextSizes: Record<string, number> = {
-      "gemini-3-pro-preview": 1000000,
+      // Gemini 3.x (Dec 2025)
+      "gemini-3-flash-preview": 1000000,
+      // Gemini 2.x
       "gemini-2.5-pro": 2000000,
       "gemini-2.5-flash": 1000000,
       "gemini-2.0-flash": 1000000,
+      // OpenAI
       "gpt-5": 128000,
       "gpt-4o": 128000,
       "gpt-4o-mini": 128000,
+      // Claude
       "claude-3-opus": 200000,
       "claude-3-sonnet": 200000,
     };

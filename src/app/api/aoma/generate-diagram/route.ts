@@ -140,7 +140,7 @@ Remember: Output ONLY valid Mermaid syntax, no code blocks or explanations.`;
 
     // Generate Mermaid code using Gemini 3 Pro (text model, not image)
     const result = await generateText({
-      model: google("gemini-3-pro-preview"),
+      model: google("gemini-3-flash-preview"),
       system: MERMAID_SYSTEM_PROMPT,
       prompt: userPrompt,
       temperature: 0.3, // Lower temperature for more consistent diagram syntax

@@ -655,7 +655,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <SelfHealingTestViewer />
             </TabsContent>
 
-            <TabsContent value="historical" className="m-0 p-4">
+            <TabsContent value="historical" className="m-0 p-4 h-full">
               <HistoricalTestExplorer />
             </TabsContent>
 

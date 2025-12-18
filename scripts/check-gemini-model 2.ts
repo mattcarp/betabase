@@ -26,15 +26,15 @@ async function checkModel() {
   }
   
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: "gemini-3-pro-preview" });
+  const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
   try {
-    console.log("Testing gemini-3-pro-preview...");
+    console.log("Testing gemini-3-flash-preview...");
     const result = await model.generateContent("Hello?");
     const response = await result.response;
     console.log("Success:", response.text());
   } catch (error: any) {
-    console.error("Error with gemini-3-pro-preview:", error.message);
+    console.error("Error with gemini-3-flash-preview:", error.message);
   }
 
   // Also enable this to list models if possible, though the SDK doesn't always expose listModels directly on the main class in older versions. 

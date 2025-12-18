@@ -212,7 +212,7 @@ export async function POST(request: NextRequest) {
       code_after: healingResult.codeAfter,
       execution_time_ms: executionTimeMs,
       retry_count: 0,
-      ai_model: "gemini-3-pro-preview",
+      ai_model: "gemini-3-flash-preview",
       ai_tokens_used: healingResult.tokensUsed,
       error_message: errorMessage,
       error_stack: errorStack,
@@ -342,7 +342,7 @@ RESPONSE FORMAT (JSON ONLY):
     }
 
     const { text, usage } = await generateText({
-      model: google("gemini-3-pro-preview"), // Leveraging multimodal capabilities
+      model: google("gemini-3-flash-preview"), // Leveraging multimodal capabilities
       messages: [
         {
           role: "user",
@@ -469,7 +469,7 @@ function getDemoAttempts(): Partial<SelfHealingAttempt>[] {
       code_before: "await page.click('[data-testid=\"login-btn\"]');",
       code_after: "await page.click('[data-testid=\"login-button-v2\"]');",
       execution_time_ms: 1840,
-      ai_model: "gemini-3-pro-preview",
+      ai_model: "gemini-3-flash-preview",
       ai_tokens_used: 1250,
       created_at: new Date(now.getTime() - 1800000).toISOString(), // 30 min ago
     },
@@ -505,7 +505,7 @@ function getDemoAttempts(): Partial<SelfHealingAttempt>[] {
       code_before: "await page.fill('textarea[placeholder=\"Type your message\"]', query);",
       code_after: "await page.fill('[data-testid=\"chat-message-input\"]', query);",
       execution_time_ms: 2100,
-      ai_model: "gemini-3-pro-preview",
+      ai_model: "gemini-3-flash-preview",
       ai_tokens_used: 1420,
       created_at: new Date(now.getTime() - 3600000).toISOString(), // 1 hour ago
     },
@@ -541,7 +541,7 @@ function getDemoAttempts(): Partial<SelfHealingAttempt>[] {
       code_before: 'await page.click(".filter-panel >> .dropdown >> nth=0");',
       code_after: "await page.click('[data-testid=\"genre-filter-dropdown\"]');",
       execution_time_ms: 3450,
-      ai_model: "gemini-3-pro-preview",
+      ai_model: "gemini-3-flash-preview",
       ai_tokens_used: 2100,
       created_at: new Date(now.getTime() - 5400000).toISOString(), // 1.5 hours ago
     },
@@ -571,7 +571,7 @@ function getDemoAttempts(): Partial<SelfHealingAttempt>[] {
       code_before: "await page.click('nav a:has-text(\"Dashboard\")');",
       code_after: "await page.click('[data-nav=\"dashboard\"]');",
       execution_time_ms: 2890,
-      ai_model: "gemini-3-pro-preview",
+      ai_model: "gemini-3-flash-preview",
       ai_tokens_used: 1680,
       created_at: new Date(now.getTime() - 7200000).toISOString(), // 2 hours ago
     },
@@ -602,7 +602,7 @@ function getDemoAttempts(): Partial<SelfHealingAttempt>[] {
       code_before: "await page.click('table tbody tr:nth-child(1)');",
       code_after: "await page.click('[data-testid=\"track-row\"]:first-of-type');",
       execution_time_ms: 4120,
-      ai_model: "gemini-3-pro-preview",
+      ai_model: "gemini-3-flash-preview",
       ai_tokens_used: 2450,
       created_at: new Date(now.getTime() - 10800000).toISOString(), // 3 hours ago
     },
@@ -638,7 +638,7 @@ function getDemoAttempts(): Partial<SelfHealingAttempt>[] {
       code_before: 'await page.waitForSelector(".modal-overlay >> .upload-container");',
       code_after: 'await page.waitForSelector(\'[role="dialog"][aria-label*="Upload"]\');',
       execution_time_ms: 5670,
-      ai_model: "gemini-3-pro-preview",
+      ai_model: "gemini-3-flash-preview",
       ai_tokens_used: 3200,
       created_at: new Date(now.getTime() - 14400000).toISOString(), // 4 hours ago
     },
@@ -669,7 +669,7 @@ function getDemoAttempts(): Partial<SelfHealingAttempt>[] {
       code_before: 'await page.click(".audio-player >> button.play-pause");',
       code_after: 'await page.click(\'[data-testid="audio-player"] >> [aria-label="Play"]\');',
       execution_time_ms: 6340,
-      ai_model: "gemini-3-pro-preview",
+      ai_model: "gemini-3-flash-preview",
       ai_tokens_used: 3850,
       created_at: new Date(now.getTime() - 18000000).toISOString(), // 5 hours ago
     },
@@ -690,7 +690,7 @@ function getDemoAttempts(): Partial<SelfHealingAttempt>[] {
       healing_rationale: "Clear button now has explicit data-testid. High confidence match.",
       similar_tests_affected: 4,
       execution_time_ms: 1200,
-      ai_model: "gemini-3-pro-preview",
+      ai_model: "gemini-3-flash-preview",
       reviewed_by: "matt.carpenter@sonymusic.com",
       reviewed_at: new Date(now.getTime() - 86400000).toISOString(),
       reviewer_notes: "Approved - clear semantic match",
@@ -713,7 +713,7 @@ function getDemoAttempts(): Partial<SelfHealingAttempt>[] {
         "Pagination buttons restructured. AI suggested selector doesn't account for disabled state.",
       similar_tests_affected: 3,
       execution_time_ms: 2800,
-      ai_model: "gemini-3-pro-preview",
+      ai_model: "gemini-3-flash-preview",
       reviewed_by: "qa.team@sonymusic.com",
       reviewed_at: new Date(now.getTime() - 172800000).toISOString(),
       reviewer_notes: "Rejected - test needs redesign for new disabled state handling",
@@ -734,7 +734,7 @@ function getDemoAttempts(): Partial<SelfHealingAttempt>[] {
       healing_rationale: "Tab component now uses data-testid. Auto-approved due to 98% confidence.",
       similar_tests_affected: 5,
       execution_time_ms: 1500,
-      ai_model: "gemini-3-pro-preview",
+      ai_model: "gemini-3-flash-preview",
       created_at: new Date(now.getTime() - 259200000).toISOString(), // 3 days ago
       healed_at: new Date(now.getTime() - 259200000).toISOString(),
     },

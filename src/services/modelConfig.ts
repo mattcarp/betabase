@@ -9,9 +9,11 @@ export type ModelUseCase =
   | "aoma-query";
 
 export type AIModel =
-  // Gemini models (primary for RAG) - Gemini 3.x only
-  | "gemini-3-pro-preview"
-  | "gemini-3-flash" // Coming mid-December 2025
+  // Gemini 3.x models (primary for RAG) - Released December 2025
+  | "gemini-3-flash-preview"    // Fast frontier model (Released Dec 17, 2025)
+  // Gemini 2.x models (legacy)
+  | "gemini-2.5-pro"
+  | "gemini-2.5-flash"
   // OpenAI models (fallback)
   | "gpt-5"
   | "gpt-5-pro"
@@ -34,64 +36,64 @@ class ModelConfigService {
 
   private modelConfigs: Record<ModelUseCase, ModelConfig> = {
     chat: {
-      model: (process.env.NEXT_PUBLIC_DEFAULT_CHAT_MODEL as AIModel) || "gemini-3-pro-preview",
+      model: (process.env.NEXT_PUBLIC_DEFAULT_CHAT_MODEL as AIModel) || "gemini-3-flash-preview",
       temperature: 0.9,
       maxOutputTokens: 8000,
-      description: "Fast conversational RAG with Gemini 3 Pro",
-      costTier: "standard",
+      description: "Fast conversational RAG with Gemini 3 Flash",
+      costTier: "economy",
     },
     "premium-chat": {
-      model: "gemini-3-pro-preview",
+      model: "gemini-3-flash-preview",
       temperature: 0.8,
       maxOutputTokens: 12000,
-      description: "Premium RAG synthesis with Gemini 3 Pro",
-      costTier: "standard",
+      description: "Premium RAG synthesis with Gemini 3 Flash",
+      costTier: "economy",
     },
     reasoningText: {
-      model: "gemini-3-pro-preview",
+      model: "gemini-3-flash-preview",
       temperature: 0.7,
       maxOutputTokens: 10000,
-      description: "Deep reasoning and analysis with Gemini 3 Pro",
-      costTier: "standard",
+      description: "Deep reasoning and analysis with Gemini 3 Flash",
+      costTier: "economy",
     },
     "code-generation": {
-      model: "gemini-3-pro-preview",
+      model: "gemini-3-flash-preview",
       temperature: 0.8,
       maxOutputTokens: 8000,
-      description: "Code generation optimized with Gemini 3 Pro",
-      costTier: "standard",
+      description: "Code generation optimized with Gemini 3 Flash",
+      costTier: "economy",
     },
     "test-generation": {
-      model: "gemini-3-pro-preview",
+      model: "gemini-3-flash-preview",
       temperature: 0.5,
       maxOutputTokens: 4000,
-      description: "Test generation with Gemini 3 Pro",
-      costTier: "standard",
+      description: "Test generation with Gemini 3 Flash",
+      costTier: "economy",
     },
     "quick-response": {
-      model: "gemini-3-pro-preview",
+      model: "gemini-3-flash-preview",
       temperature: 0.7,
       maxOutputTokens: 2000,
-      description: "Fast RAG responses with Gemini 3 Pro",
-      costTier: "standard",
+      description: "Fast RAG responses with Gemini 3 Flash",
+      costTier: "economy",
     },
     vision: {
-      model: "gemini-3-pro-preview",
+      model: "gemini-3-flash-preview",
       temperature: 0.7,
       maxOutputTokens: 4000,
-      description: "Multimodal visual analysis with Gemini 3 Pro",
-      costTier: "standard",
+      description: "Multimodal visual analysis with Gemini 3 Flash",
+      costTier: "economy",
     },
     "aoma-query": {
-      model: "gemini-3-pro-preview",
-      temperature: 0.7, // Lower temp for factual accuracy in RAG
+      model: "gemini-3-flash-preview",
+      temperature: 0.7,
       maxOutputTokens: 8000,
-      description: "AOMA RAG with Gemini 3 Pro (frontier quality)",
-      costTier: "standard",
+      description: "AOMA RAG with Gemini 3 Flash (frontier speed)",
+      costTier: "economy",
     },
   };
 
-  private fallbackModel: AIModel = "gemini-3-pro-preview";
+  private fallbackModel: AIModel = "gemini-3-flash-preview";
 
   private constructor() {}
 
@@ -147,8 +149,12 @@ class ModelConfigService {
 
   getAvailableModels(): AIModel[] {
     return [
-      "gemini-3-pro-preview",
-      "gemini-3-flash", // Coming mid-December 2025
+      // Gemini 3.x - Current frontier
+      "gemini-3-flash-preview",  // Released Dec 17, 2025
+      // Gemini 2.x - Legacy
+      "gemini-2.5-pro",
+      "gemini-2.5-flash",
+      // OpenAI fallbacks
       "gpt-5",
       "gpt-5-pro",
       "o3",
@@ -161,9 +167,11 @@ class ModelConfigService {
 
   getModelDescription(model: AIModel): string {
     const descriptions: Record<AIModel, string> = {
-      // Gemini models (primary) - 3.x only
-      "gemini-3-pro-preview": "Optimal for RAG: latest Gemini 3 Pro with excellent synthesis",
-      "gemini-3-flash": "Gemini 3 Flash: Fast frontier model (coming mid-December 2025)",
+      // Gemini 3.x models (primary)
+      "gemini-3-flash-preview": "Gemini 3 Flash: 3x faster, frontier intelligence, Dec 2025",
+      // Gemini 2.x models (legacy)
+      "gemini-2.5-pro": "Gemini 2.5 Pro: Advanced thinking, 2M context",
+      "gemini-2.5-flash": "Gemini 2.5 Flash: Price-performance balance",
       // OpenAI models (fallback)
       "gpt-5": "OpenAI GPT-5 (fallback)",
       "gpt-5-pro": "Premium GPT-5 Pro (fallback)",

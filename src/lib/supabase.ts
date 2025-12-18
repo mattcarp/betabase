@@ -9,10 +9,11 @@
  * All vector operations require specifying which app_under_test we're working with.
  */
 
-import { createClient } from "@supabase/supabase-js";
-
-// Re-export functions from root lib/supabase for compatibility
+// Re-export everything from root lib/supabase to avoid duplicate clients
+// This prevents the "Multiple GoTrueClient instances" warning
 export {
+  supabase,
+  supabaseAdmin,
   upsertWikiDocument,
   upsertJiraTicket,
   upsertJiraTicketEmbedding,
@@ -21,47 +22,8 @@ export {
   getFirecrawlAnalysis,
   searchFirecrawlData,
   validateSonyMusicContent,
+  handleSupabaseError,
 } from "../../lib/supabase";
-
-// Get environment variables with validation
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-// Check if using placeholder values
-const isPlaceholder =
-  supabaseUrl?.includes("placeholder") || supabaseAnonKey?.includes("placeholder");
-
-if (!supabaseUrl || !supabaseAnonKey || isPlaceholder) {
-  console.warn("⚠️  Supabase not configured - vector search features disabled:", {
-    url: !!supabaseUrl && !isPlaceholder,
-    key: !!supabaseAnonKey && !isPlaceholder,
-  });
-  // Don't throw error - just log a warning and use placeholder values
-  // API routes will handle missing Supabase gracefully at runtime
-}
-
-// Create a single supabase client for interacting with your database
-// Use placeholder values during build if env vars are missing
-const url = supabaseUrl || "https://placeholder.supabase.co";
-const key = supabaseAnonKey || "placeholder-key";
-
-export const supabase = createClient(url, key, {
-  auth: {
-    persistSession: false, // We're not using auth for vector operations
-  },
-});
-
-// Admin client with service role key (for write operations)
-// Only use this server-side!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-export const supabaseAdmin = supabaseServiceKey
-  ? createClient(url, supabaseServiceKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-    })
-  : null;
 
 // Type definitions for SIAM's multi-tenant vector store (3-level hierarchy)
 export interface SIAMVector {
