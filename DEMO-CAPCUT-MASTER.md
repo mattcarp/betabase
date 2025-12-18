@@ -197,28 +197,37 @@ flowchart TD
 
 ---
 
-## 📹 SHOT 4: PILLAR 3 - TEST (3:30-5:00)
+## 📹 SHOT 4: PILLAR 3 - TEST (3:30-5:00) ⭐ SELF-HEALING
+
+> **📋 Full Script**: See `DEMO-SELF-HEALING-SCRIPT.md` for complete step-by-step walkthrough
 
 ### Action Sequence
 1. Click "Test" button in header
-2. Show stats grid:
-   - 1,247 total tests
-   - 94.2% success rate
-   - 4.2s avg heal time
-3. Click "Self-Healing" tab
-4. Select healing attempt (95% confidence)
-5. Show visual workflow:
-   - Failure → Analysis → Healing → Success
-6. Display code diff (old vs new selector)
-7. Show low-confidence item → needs approval
+2. Show Dashboard stats (80.4% pass rate, 12 healed today)
+3. Click "Review Self-Heals" button
+4. **Tier 1 Example** (97% confidence - auto-approved):
+   - Partner Previewer Upload Flow
+   - Show before/after selector diff
+   - "AI fixed this automatically + 3 similar tests"
+5. **Tier 2 Example** (84% confidence - NEEDS HUMAN): ⭐ EXECUTIVE FAVORITE
+   - Dashboard Project Card restructure
+   - Show "AI Needs Your Expertise" message
+   - Click "Approve & Apply Fix" button
+   - **"This is AI asking for help, not guessing"**
+6. **Tier 3 Example** (62% confidence - escalated):
+   - Search Debounce Timing issue
+   - Show "Expert Review Required" warning
+   - **"AI knows when it's out of its depth"**
+7. Show metrics: 94.2% success rate, 15 hrs/week saved
 
 ### Bullets
-- 1,247 automated tests monitored
+- 9 automated healing attempts monitored
 - 94% auto-healed by AI
 - 4 second average heal time
-- High confidence → auto-fix
-- Low confidence → human review
-- Three-tier approval system
+- **Tier 1**: High confidence → auto-fix immediately
+- **Tier 2**: Medium → AI asks human for approval
+- **Tier 3**: Low → escalate to architect
+- **80% reduction in test maintenance work**
 
 ### CapCut Overlays
 - Stats appearing one by one
