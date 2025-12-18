@@ -716,12 +716,12 @@ the knowledge base to determine relevance and automation potential.
   - Mock data fallback when table doesn't exist
 
 ### Phase 4: RLHF Generated Tests  
-- [x] T42-T51: /api/tests/rlhf ✅
+- [x] T042-T51: /api/tests/rlhf ✅
   - GET/POST/PATCH for RLHF tests
   - Links to rlhf_feedback table
 
 ### Phase 5: Test Analytics
-- [x] T52-T58: /api/tests/analytics ✅
+- [x] T052-T58: /api/tests/analytics ✅
   - Dashboard metrics from bb_case
   - App breakdown, pass rates
   - Self-healing and RLHF stats
@@ -916,3 +916,131 @@ Duration: ~15m
 - Blank screen at /test is a placeholder page - real Test Tab is at /#test
 - Dev server may need restart if it dies (pnpm dev)
 ---
+
+---
+Session: 2025-12-18 ~19:20 PST
+Agent: Coding (Spec-Kit + Long-Running Harness)
+Feature: FEAT-002-curate-tab-enhancement
+Duration: ~2 hours
+
+## Summary
+✅ COMPREHENSIVE CURATE TAB RESEARCH & SPEC COMPLETE
+
+### Research Phase Completed (T001-T005):
+1. **Current State Analysis** ✅
+   - Took screenshot of Curate tab (Queue, Files, Upload, Info, RLHF tabs)
+   - Identified visual sparseness (all metrics show 0)
+   - Documented contradictory messaging ("+60% but 83% to 83%")
+   - Verified React 19 infinite loop fix still working
+
+2. **MAC Design Compliance Review** ✅
+   - Previous audit: 9.8/10 (2025-10-11)
+   - 27 violations fixed in past work
+   - Need verification: glassmorphism, hover states, animations
+   - All components using --mac-* CSS variables
+
+3. **Deduplication Logic Documentation** ✅
+   - 4-layer detection documented:
+     1. Source ID exact match (O(1))
+     2. Content hash SHA-256 (O(1))
+     3. URL normalization (O(1))
+     4. Semantic similarity 95% threshold (O(n))
+   - Tenant-scoped (never crosses org/division boundaries)
+   - Files: deduplicationService.ts (439 lines), /api/knowledge/deduplicate (256 lines)
+
+4. **UI/UX Issues Identified** ✅
+   - Feedback Impact Card: All zeros (0 corrections, 0 tests, 0 training)
+   - Recent Corrections: Empty section
+   - Contradictory percentage claims
+   - Large empty spaces in UI
+
+5. **RLHF Integration Gaps** ✅
+   - ✅ Complete: Backend services, DB schema, RLHFFeedbackTab, CuratorQueue, FeedbackImpactCard
+   - ❌ Missing: Agent Insights Tab (0%)
+   - ❌ Missing: Reinforcement Dashboard Tab (0%)
+   - ⚠️ Partial: Model Registry, Training Datasets, Fine-Tuning Jobs panels
+
+### Specification Phase Completed (T006):
+**Created**: `specs/SIAM/features/FEAT-002-curate-tab-enhancement.md` (650 lines)
+
+**Specification Includes**:
+1. **Vision** - Demo-ready intelligence platform
+2. **Problem Statement** - Current state vs desired state
+3. **User Stories** (5 stories):
+   - US-001: Demo presenter - explain deduplication visually
+   - US-002: Demo presenter - show AI learning from corrections
+   - US-003: Demo presenter - professional non-zero metrics
+   - US-004: Knowledge curator - understand duplicate detection
+   - US-005: Executive - see ROI metrics
+4. **Requirements**:
+   - FR-001: Deduplication Visualization Tab (CRITICAL)
+   - FR-002: Reinforcement Dashboard Tab (HIGH)
+   - FR-003: Feedback Impact Card - Real Data (HIGH)
+   - FR-004: Recent Corrections Section (MEDIUM)
+   - NFR-001: MAC Design Compliance (LOW - already 9.8/10)
+   - NFR-002: Performance - Tab Switching (LOW)
+   - NFR-003: Accessibility WCAG AA (LOW)
+5. **Technical Design**:
+   - New component: DeduplicationTab.tsx
+   - New component: ReinforcementDashboardTab.tsx (RLHF sub-tab)
+   - Enhanced: FeedbackImpactCard.tsx (real API calls)
+   - New API: POST /api/rlhf/analytics
+   - Enhanced API: GET /api/rlhf/feedback?recent=true&limit=5
+6. **Implementation Plan** (25 tasks across 4 phases):
+   - Phase 1: Deduplication Visualization (T001-T008) - 1.5-2 hours
+   - Phase 2: Reinforcement Dashboard (T009-T016) - 1.5-2 hours
+   - Phase 3: Feedback Impact Real Data (T017-T020) - 30-45 min
+   - Phase 4: Verification & Polish (T021-T025) - 30 min
+7. **Testing Strategy**:
+   - E2E Playwright tests (required)
+   - Visual regression tests (optional)
+   - Unit tests (optional - prefer E2E)
+8. **Success Metrics**:
+   - Demo readiness checklist
+   - Technical quality benchmarks
+   - Knowledge transfer verification
+9. **Dependencies & Risks**:
+   - Risk 1: Insufficient real data (HIGH - use mocks)
+   - Risk 2: Chart performance (LOW)
+   - Risk 3: MAC design drift (LOW)
+   - Risk 4: Scope creep (MEDIUM - strict scope defined)
+10. **UI/UX Mockups**:
+    - Deduplication Tab: Duplicate groups, storage savings, tenant badge
+    - Reinforcement Dashboard Tab: Quality timeline, topic improvements, source weights, leaderboard
+
+### Knowledge Storage Completed (T007):
+**Stored in ByteRover**:
+1. Deduplication Algorithm Flow (4-layer detection, tenant-scoped)
+2. RLHF Integration Status (complete backend, missing 2 tabs)
+3. Mock Data Strategy for Demos (realistic ranges, non-zero values)
+
+### Documents Created:
+- `CURATE-TAB-RESEARCH-FINDINGS.md` (475 lines) - Comprehensive research
+- `specs/SIAM/features/FEAT-002-curate-tab-enhancement.md` (650 lines) - Full SpecKit spec
+
+## Files for User Review
+1. **Research**: `CURATE-TAB-RESEARCH-FINDINGS.md`
+2. **Specification**: `specs/SIAM/features/FEAT-002-curate-tab-enhancement.md`
+
+## Recommendation
+**Option 2: Demo-Ready Polish** (3-4 hours in 1-2 sessions)
+- Scope: Dedupe tab + Reinforcement Dashboard + Fix zeros
+- Estimated: T001-T020 (20 tasks)
+- Defers: Agent Insights Tab (complex flowcharts)
+- Defers: EnhancedCurateTab features (analytics, insights)
+
+## Next Steps (Pending User Approval)
+1. User reviews FEAT-002 spec
+2. User confirms scope (Option 1/2/3)
+3. Begin Phase 1 implementation (T001-T008)
+4. Or adjust spec based on feedback
+
+## Warnings/Blockers
+- None - all research complete, spec ready for review
+- ByteRover knowledge storage complete (3 memories queued)
+
+---
+
+*"This spec doesn't just fix the Curate tab - it tells the story of how humans and AI collaborate to build better intelligence."*
+
+— Claudette 💜
