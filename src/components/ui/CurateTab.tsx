@@ -66,8 +66,11 @@ import { DeduplicationTab } from "./DeduplicationTab";
 import { DashboardTab } from "./DashboardTab";
 import { AgentInsightsTab } from "./rlhf-tabs/AgentInsightsTab";
 import { ReinforcementDashboardTab } from "./rlhf-tabs/ReinforcementDashboardTab";
+import { ModelRegistryPanel } from "./rlhf-tabs/ModelRegistryPanel";
+import { TrainingDatasetsPanel } from "./rlhf-tabs/TrainingDatasetsPanel";
+import { FineTuningJobsPanel } from "./rlhf-tabs/FineTuningJobsPanel";
 import { cognitoAuth } from "../../services/cognitoAuth";
-import { ListTodo, GitBranch, BarChart3, Activity } from "lucide-react";
+import { ListTodo, GitBranch, BarChart3, Activity, Brain, Rocket, Database as DatabaseIcon } from "lucide-react";
 
 interface VectorStoreFile {
   id: string;
@@ -98,6 +101,48 @@ const formatDate = (timestamp: number): string => {
     minute: "2-digit",
   });
 };
+
+// Helper component for RLHF sub-tabs
+function RLHFSubTabTrigger({ id, label, icon, activeId, onClick, color }: { 
+  id: string, 
+  label: string, 
+  icon: React.ReactNode, 
+  activeId: string, 
+  onClick: (id: string) => void,
+  color: "purple" | "blue" | "orange" | "green" | "pink"
+}) {
+  const colorMap = {
+    purple: "var(--mac-accent-purple-400)",
+    blue: "var(--mac-primary-blue-400)",
+    orange: "var(--mac-accent-orange-400)",
+    green: "var(--mac-status-connected)",
+    pink: "#ec4899"
+  };
+
+  const isActive = id === activeId;
+  const activeColor = colorMap[color];
+
+  return (
+    <button
+      onClick={() => onClick(id)}
+      className={cn(
+        "flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-light transition-all border",
+        isActive 
+          ? `border-[${activeColor}] bg-[${activeColor}]/10 text-[${activeColor}]`
+          : "border-transparent text-[var(--mac-text-secondary)] hover:bg-[var(--mac-surface-elevated)]"
+      )}
+      style={isActive ? { 
+        borderColor: activeColor, 
+        backgroundColor: `${activeColor}1a`,
+        color: activeColor,
+        boxShadow: `0 0 10px ${activeColor}20`
+      } : {}}
+    >
+      {icon}
+      {label}
+    </button>
+  );
+}
 
 export function CurateTab({
   className,
@@ -133,7 +178,8 @@ export function CurateTab({
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
-  const [activeTab, setActiveTab] = useState("queue");
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [rlhfSubTab, setRlhfSubTab] = useState("feedback");
   const [_statsLoading, _setStatsLoading] = useState(false); // Unused
   const [stats, setStats] = useState({
     totalFiles: 0,
@@ -1047,10 +1093,23 @@ export function CurateTab({
 
           {/* RLHF Feedback Tab Content */}
           {canAccessRLHF && activeTab === "rlhf-feedback" && (
-            <div role="tabpanel" className="flex-1 overflow-auto mt-4">
-              <ReinforcementDashboardTab />
-              <Separator className="my-8 bg-[var(--mac-utility-border)]" />
-              <RLHFFeedbackTab />
+            <div role="tabpanel" className="flex-1 overflow-auto mt-4 space-y-6">
+              {/* RLHF Sub-navigation */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                <RLHFSubTabTrigger id="feedback" label="Feedback" icon={<Lightbulb className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="purple" />
+                <RLHFSubTabTrigger id="reinforcement" label="Learning Curve" icon={<TrendingUp className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="blue" />
+                <RLHFSubTabTrigger id="datasets" label="Datasets" icon={<DatabaseIcon className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="orange" />
+                <RLHFSubTabTrigger id="jobs" label="Fine-Tuning" icon={<Brain className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="pink" />
+                <RLHFSubTabTrigger id="registry" label="Model Registry" icon={<Rocket className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="green" />
+              </div>
+
+              <div className="mt-4">
+                {rlhfSubTab === "feedback" && <RLHFFeedbackTab />}
+                {rlhfSubTab === "reinforcement" && <ReinforcementDashboardTab />}
+                {rlhfSubTab === "datasets" && <TrainingDatasetsPanel />}
+                {rlhfSubTab === "jobs" && <FineTuningJobsPanel />}
+                {rlhfSubTab === "registry" && <ModelRegistryPanel />}
+              </div>
             </div>
           )}
 
