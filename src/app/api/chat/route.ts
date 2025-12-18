@@ -827,11 +827,13 @@ export async function POST(req: Request) {
           timestamp: new Date().toISOString(),
         });
 
-        // Langfuse: End vector search tracing with error
-        vectorTrace.end({
-          count: 0,
-          durationMs: errorDuration,
-        });
+        // Langfuse: End vector search tracing with error (if it was initialized)
+        if (typeof vectorTrace !== 'undefined') {
+          vectorTrace.end({
+            count: 0,
+            durationMs: errorDuration,
+          });
+        }
 
         aomaConnectionStatus = "failed";
 
