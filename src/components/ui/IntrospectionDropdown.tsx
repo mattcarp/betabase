@@ -14,6 +14,7 @@ import { Badge } from "./badge";
 import { ScrollArea } from "./scroll-area";
 import {
   Activity,
+  Bone,
   ChevronRight,
   Loader2,
   AlertCircle,
@@ -141,7 +142,7 @@ export function IntrospectionDropdown() {
             size="sm"
             className="relative flex items-center gap-2 mac-button mac-button-outline"
           >
-            <Activity className="h-4 w-4" />
+            <Bone className="h-4 w-4" />
             <span className="hidden sm:inline">Introspection</span>
             {status?.tracingEnabled && (
               <span className="absolute -top-1 -right-1 flex h-2 w-2">
@@ -154,7 +155,7 @@ export function IntrospectionDropdown() {
         <DropdownMenuContent align="end" className="w-[400px]">
           <DropdownMenuLabel className="flex items-center justify-between">
             <span className="flex items-center gap-2">
-              <Activity className="h-4 w-4" />
+              <Bone className="h-4 w-4" />
               App Health Monitor
             </span>
             {loading && <Loader2 className="h-3 w-3 animate-spin" />}

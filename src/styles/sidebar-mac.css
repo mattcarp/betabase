@@ -12,13 +12,18 @@
   transition: width 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Icon-only collapsed state */
-.mac-sidebar[data-state="collapsed"] {
+/* Icon-only collapsed state - target the wrapper div */
+[data-sidebar="sidebar"][data-state="collapsed"] {
+  width: var(--sidebar-width-icon) !important;
+}
+
+/* Also target the parent wrapper */
+[data-collapsible="icon"][data-state="collapsed"] {
   width: var(--sidebar-width-icon) !important;
 }
 
 /* Hide text when collapsed */
-.mac-sidebar[data-state="collapsed"] .group-data-\[state\=collapsed\]\:hidden {
+[data-state="collapsed"] .group-data-\[state\=collapsed\]\:hidden {
   display: none;
 }
 

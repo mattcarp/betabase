@@ -59,8 +59,8 @@ Use connecting lines and annotations. Professional but approachable style.
   ```
 - AI responds with detailed workflow explanation
 - **Wait for subtle prompt**: "Would you like a visual diagram of this workflow?"
-- **Click the prompt** → 2-3 second "thinking" spinner (looks real!)
-- **Beautiful 5-phase Mermaid diagram appears**:
+- **Click the prompt** → 30-50 second Nano Banana generation (progress indicator)
+- **Beautiful hand-drawn workflow diagram appears**:
   - 📋 Preparation Phase (file selection, validation)
   - 📝 Registration Phase (metadata, ISRC codes)
   - ⬆️ Upload Phase (Aspera, Sony Ci, direct)
@@ -74,9 +74,11 @@ Use connecting lines and annotations. Professional but approachable style.
 ### Bullets
 - 45,399 AOMA domain vectors
 - Inline source citations
-- **AI-powered diagram generation on demand** (NEW!)
+- **Nano Banana diagram generation** - Beautiful hand-drawn visuals (NEW!)
 - All queries scoped to app_under_test='aoma'
 - **Intent Classification** - Smart source routing (NEW!)
+
+> **Note**: Mermaid diagrams in this doc are for reference only - the actual system generates hand-drawn Nano Banana images.
 
 ### CapCut Overlays
 - "45,399 vectors" badge
@@ -90,13 +92,14 @@ Create an infographic showing the Chat pillar with these elements:
 - Large search icon in center
 - "45,399 vectors" callout
 - "Inline citations" feature bubble
-- "Mermaid diagrams" feature bubble
+- "Nano Banana diagrams" feature bubble
 Use purple/blue color scheme, modern tech aesthetic.
 ```
 
-### AOMA Upload Workflow Diagram (In-App Mermaid)
+### AOMA Upload Workflow Diagram (Reference)
 
-This is the **exact diagram** that renders when you ask the upload/archive question:
+This shows the **concept** that Nano Banana will visualize when you ask the upload/archive question.  
+Nano Banana creates a beautiful hand-drawn version of this flow:
 
 ```mermaid
 flowchart TD
@@ -138,7 +141,7 @@ flowchart TD
     end
 ```
 
-> **Source**: `src/components/ai/ai-sdk-chat-panel.tsx` lines 1652-1693
+> **Note**: This Mermaid diagram is for documentation reference. Nano Banana will generate a beautiful hand-drawn version of this workflow automatically.
 
 ---
 
@@ -385,7 +388,7 @@ Infographic for Chat pillar featuring:
 - Large search/chat bubble icon in center
 - "45,399 Domain Vectors" callout with database icon
 - "Inline Citations" feature bubble with link icon
-- "Mermaid Diagrams" feature bubble with graph icon
+- "Nano Banana Diagrams" feature bubble with sparkle/banana icon
 Purple/blue gradient, modern tech style
 ```
 
@@ -516,7 +519,7 @@ Run these before recording (warms cache):
 ### Chat Pillar
 - 45,399 AOMA vectors
 - Inline source citations
-- Mermaid diagrams on demand
+- Nano Banana diagrams on demand (30-50 sec generation)
 - Real proprietary knowledge
 - **Intent Classification** - AI routes queries to relevant sources only
 
@@ -1119,54 +1122,44 @@ The AI outputs code using the special `typescript:filepath` format, which trigge
 
 ---
 
-## 🎨 DIAGRAM SYSTEMS REFERENCE (Technical)
+## 🎨 DIAGRAM SYSTEM (Technical)
 
-### Two Diagram Systems Working Together
+### 🍌 Nano Banana - Single Unified System
 
-#### 1. 🔷 Mermaid Diagrams (In-App, Interactive)
-- **Where**: Rendered in chat interface by browser
-- **Tech**: Mermaid.js library + Gemini 3 Flash for generation
-- **File**: `/api/aoma/generate-diagram/route.ts`
-- **Triggered by**: Workflow questions WITHOUT "infographic" keywords
-- **Display**: Interactive, zoomable, in-browser SVG
-- **Example Query**: "How do I upload and archive digital assets?"
-- **Result**: Beautiful 5-phase workflow diagram appears in chat
+**We simplified!** The system now uses **ONLY Nano Banana** for all diagrams. No more switching between systems or HTML syntax issues.
 
-#### 2. 🍌 Nano Banana (Static Infographic Images)
-- **Where**: Generated as image files for slides/b-roll
-- **Tech**: Gemini image generation API
-- **File**: `ai-sdk-chat-panel.tsx` lines 1642-1666
-- **Triggered by**: Keywords "infographic", "I'm recording", "for my friends", "I'm in a demo"
-- **Display**: PNG/JPEG image file, hand-drawn style
-- **Example Query**: "Can you create an infographic of the multi-tenant architecture?"
-- **Result**: Beautiful hand-drawn image generated in 3-5 seconds
+#### How It Works
+- **Where**: Generated as beautiful images in chat interface
+- **Tech**: Gemini 3 Pro image generation API
+- **File**: `ai-sdk-chat-panel.tsx` (simplified logic)
+- **Triggered by**: ANY diagram request - Nano Banana figures out the visualization
+- **Display**: Hand-drawn style PNG/JPEG images
+- **Generation Time**: 30-50 seconds (with progress indicator)
 
-### When to Use Which
-
-| Scenario | Use | Example Query |
-|----------|-----|---------------|
-| **In-chat visualization** | Mermaid | "Show me the upload workflow" |
-| **Presentation slides** | Nano Banana | "Create an infographic of this for my demo" |
-| **Interactive exploration** | Mermaid | "Diagram the validation flow" |
-| **Beautiful hand-drawn slides** | Nano Banana | "Make a hand-drawn ERD diagram" |
-
-### Common Issues
-
-**❌ HTML Tags in Mermaid**
+#### Example Queries (All Use Nano Banana)
 ```
-NodeID["Text<br/>More text"]  // BREAKS - Mermaid doesn't support HTML
+"Show me the upload workflow"
+→ Nano Banana creates workflow diagram
+
+"Explain the multi-tenant architecture"  
+→ Nano Banana creates ERD diagram
+
+"How does validation work?"
+→ Nano Banana creates process flow
+
+"Create an infographic of this for my demo"
+→ Nano Banana creates presentation slide
 ```
 
-**✅ Correct Mermaid Syntax**
-```
-NodeID["Text - More text"]  // Works - plain text only
-NodeID["Text\nMore text"]   // Works - literal \n for line breaks
-```
-
-**🔧 Auto-Fix**: The system now automatically strips HTML tags from generated Mermaid diagrams (lines 155-166 in `route.ts`)
+#### Why We Switched
+✅ **Simpler logic** - One system, no conditionals  
+✅ **No syntax errors** - Gemini handles all formatting  
+✅ **Better visuals** - Hand-drawn style looks professional  
+✅ **Smarter** - Gemini chooses the best diagram type automatically  
+✅ **Consistent** - Every diagram has the same beautiful aesthetic
 
 ---
 
 *Created: December 15, 2025*
-*Updated: December 18, 2025 (added Intent Classification, Re-Ranker diagrams, Real Demo Scenarios, Code Artifact Display, Filming Checklist, Diagram Systems Reference)*
+*Updated: December 18, 2025 (added Intent Classification, Re-Ranker diagrams, Real Demo Scenarios, Code Artifact Display, Filming Checklist; **Simplified to Nano Banana only - removed Mermaid**)*
 *For: Mattie (called by Claudette)*

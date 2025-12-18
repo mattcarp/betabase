@@ -75,7 +75,7 @@ const SidebarProvider = React.forwardRef<
     const state = open ? "expanded" : "collapsed";
 
     const toggleSidebar = React.useCallback(() => {
-      return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
+      isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
     }, [isMobile, setOpen, setOpenMobile]);
 
     const contextValue = React.useMemo<SidebarContextProps>(
@@ -183,14 +183,13 @@ Sidebar.displayName = "Sidebar";
 
 const SidebarTrigger = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
   ({ className, onClick, ...props }, ref) => {
-    const { toggleSidebar, state, open } = useSidebar();
+    const { toggleSidebar } = useSidebar();
 
     return (
       <button
         ref={ref}
         data-sidebar="trigger"
         onClick={(e) => {
-          console.log('SidebarTrigger clicked! Current state:', state, 'open:', open);
           onClick?.(e);
           toggleSidebar();
         }}
