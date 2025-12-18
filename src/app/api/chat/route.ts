@@ -727,6 +727,9 @@ export async function POST(req: Request) {
           );
 
           // 📎 Extract citation sources for inline display
+          console.log(`📎 DEBUG: orchestratorResult.sources exists, length:`, orchestratorResult.sources.length);
+          console.log(`📎 DEBUG: First source:`, JSON.stringify(orchestratorResult.sources[0], null, 2).substring(0, 300));
+          
           citationSources = orchestratorResult.sources.slice(0, 5).map((s: any, idx: number) => ({
             id: `source-${idx + 1}`,
             title: s.metadata?.title || s.metadata?.file_path || s.metadata?.ticket_key || `Source ${idx + 1}`,
@@ -735,7 +738,7 @@ export async function POST(req: Request) {
             confidence: Math.round((s.similarity || s.score || 0) * 100),
             sourceType: s.source_type
           }));
-          console.log(`📎 Extracted ${citationSources.length} citation sources for inline display`);
+          console.log(`📎 Extracted ${citationSources.length} citation sources:`, citationSources.map(s => s.title));
 
           // Add source information to knowledge elements
           orchestratorResult.sources.slice(0, 6).forEach((source: any) => {
