@@ -136,6 +136,18 @@ export function shouldOfferDiagram(content: string): boolean {
   
   const lowerContent = content.toLowerCase();
   
+  // 🐛 FIX: Don't offer diagrams for "I don't know" responses!
+  const isUnknownResponse = 
+    lowerContent.includes("i don't have any information") ||
+    lowerContent.includes("i don't have data") ||
+    lowerContent.includes("i can't say for sure") ||
+    lowerContent.includes("no information") ||
+    lowerContent.includes("not in my knowledge base") ||
+    lowerContent.includes("i don't know") ||
+    lowerContent.includes("couldn't find");
+  
+  if (isUnknownResponse) return false;
+  
   // Check for diagram keywords
   const keywordMatches = DIAGRAM_KEYWORDS.filter(kw => 
     lowerContent.includes(kw)
