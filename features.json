@@ -130,6 +130,25 @@
       ],
       "completedAt": null,
       "notes": "Currently at 1797ms. Needs caching/optimization. See REQ-001 for full acceptance criteria."
+    },
+    {
+      "id": "F007",
+      "category": "curate",
+      "priority": 1,
+      "name": "Curate Tab Comprehensive Overhaul",
+      "description": "Transform Curate tab into a demo-ready intelligence platform with visual deduplication, RLHF dashboards, and real metrics. (FEAT-002)",
+      "requirementRefs": ["REQ-006", "REQ-020", "REQ-021"],
+      "byteroverTags": "#curate-tab #deduplication #rlhf #mac-design",
+      "passes": false,
+      "verification": [
+        "Deduplication Visualization tab functional",
+        "Reinforcement Dashboard (RLHF) shows quality timeline",
+        "Feedback Impact metrics show non-zero real/mock data",
+        "Agent Insights flowchart visible",
+        "MAC compliance score >= 9.5/10"
+      ],
+      "completedAt": null,
+      "notes": "Option 3 selected by user. Large-scale enhancement."
     }
   ],
   "backlog": [
