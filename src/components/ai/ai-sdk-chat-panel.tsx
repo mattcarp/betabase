@@ -220,6 +220,7 @@ import {
 } from "../ai-elements/checkpoint";
 import { BookmarkIcon, ListTodoIcon, GaugeIcon, Trash2Icon, ChevronsUpDownIcon } from "lucide-react";
 import { MermaidDiagram } from "../ai-elements/mermaid-diagram";
+import { NanoBananaInfographic } from "../ai-elements/NanoBananaInfographic";
 
 interface AiSdkChatPanelProps {
   api?: string;
@@ -367,6 +368,8 @@ export function AiSdkChatPanel({
   const [diagramVisible, setDiagramVisible] = useState(false);
   const [diagramCode, setDiagramCode] = useState<string>("");
   const [isGeneratingDiagram, setIsGeneratingDiagram] = useState(false);
+  const [diagramType, setDiagramType] = useState<'mermaid' | 'nanobanana'>('mermaid');
+  const [nanoBananaPrompt, setNanoBananaPrompt] = useState<string>('');
 
   // Voice feature states - define before using in hooks
   const [isTTSEnabled, setIsTTSEnabled] = useState(false);
@@ -1624,19 +1627,47 @@ export function AiSdkChatPanel({
   }, []);
 
   // Generate Mermaid diagram from message content using AI
-  // DEMO: Adds realistic "thinking" delay so it doesn't look pre-planned
+  // Generate diagram from message content - Nano Banana (image) or Mermaid (SVG)
+  // META DEMO: Detects if user is in demo mode and wants infographic
   const generateDiagramFromContent = useCallback(async (content: string) => {
     setIsGeneratingDiagram(true);
     setDiagramVisible(true);
     
+    // Check if user asked for infographic (triggers Nano Banana)
+    const lowerContent = content.toLowerCase();
+    const wantsInfographic = lowerContent.includes('infographic') || 
+                            lowerContent.includes('i\'m in a demo') ||
+                            lowerContent.includes('i\'m recording') ||
+                            lowerContent.includes('for my friends');
+    
+    if (wantsInfographic) {
+      // 🍌 META DEMO MODE: Use Nano Banana Pro image generation!
+      console.log('🍌 Nano Banana: META DEMO detected - generating infographic!');
+      setDiagramType('nanobanana');
+      
+      // Extract what to visualize from the content
+      const visualizationPrompt = content.includes('multi-tenant') 
+        ? `Create an infographic showing The Betabase's three-tier multi-tenant database architecture:
+           - Organization Level (top): Sony Music, Universal, Warner
+           - Division Level (middle): Digital Operations, Legal, Finance  
+           - Application Under Test Level (bottom): AOMA, Alexandria, USM, Confluence
+           Show data isolation between organizations.`
+        : content;
+      
+      setNanoBananaPrompt(visualizationPrompt);
+      setIsGeneratingDiagram(false); // NanoBananaInfographic handles its own loading
+      return;
+    }
+    
+    // Default: Use Mermaid diagram
+    setDiagramType('mermaid');
+    
     // DEMO: Add realistic "thinking" delay (2-3.5 seconds randomized)
-    // This simulates AI processing time so it doesn't look pre-baked
-    const thinkingDelay = 2000 + Math.random() * 1500; // 2-3.5 seconds
+    const thinkingDelay = 2000 + Math.random() * 1500;
     console.log(`🎨 Diagram: Simulating ${Math.round(thinkingDelay)}ms thinking time...`);
     await new Promise(resolve => setTimeout(resolve, thinkingDelay));
     
     try {
-      // Use the same API endpoint to generate a diagram
       const response = await fetch('/api/aoma/generate-diagram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1647,14 +1678,11 @@ export function AiSdkChatPanel({
         const data = await response.json();
         setDiagramCode(data.mermaidCode);
       } else {
-        // Fallback: Generate a contextual diagram based on keywords
-        // These are high-quality pre-built diagrams for demo scenarios
         const fallbackDiagram = generateFallbackDiagram(content);
         setDiagramCode(fallbackDiagram);
       }
     } catch (error) {
       console.error("Failed to generate diagram:", error);
-      // Use fallback diagram (pre-built for demo quality)
       const fallbackDiagram = generateFallbackDiagram(content);
       setDiagramCode(fallbackDiagram);
     } finally {
@@ -2200,19 +2228,53 @@ export function AiSdkChatPanel({
                     <Trash2Icon className="h-4 w-4" />
                   </button>
                   
-                  {/* Loading state */}
+                  {/* Loading state with 40-second warning */}
                   {isGeneratingDiagram && !diagramCode && (
-                    <div className="flex items-center justify-center py-12 rounded-xl border border-purple-500/30 bg-gradient-to-br from-slate-900 to-slate-950">
-                      <Loader className="h-6 w-6 animate-spin mr-3 text-purple-500" />
-                      <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
-                        Generating workflow diagram with AI...
-                      </span>
+                    <div className="space-y-4 py-8 rounded-xl border border-purple-500/30 bg-gradient-to-br from-slate-900 to-slate-950 px-6">
+                      {/* Spinner */}
+                      <div className="flex items-center justify-center gap-3">
+                        <Loader className="h-6 w-6 animate-spin text-yellow-400" />
+                        <span className="text-base font-medium bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
+                          {diagramType === 'nanobanana' 
+                            ? '🍌 Nano Banana Pro is creating your infographic...'
+                            : 'Generating workflow diagram with AI...'}
+                        </span>
+                      </div>
+                      
+                      {/* Progress info */}
+                      {diagramType === 'nanobanana' && (
+                        <div className="text-center space-y-2">
+                          <p className="text-sm text-zinc-400">
+                            Gemini 3 Pro image generation • Hand-drawn editorial style
+                          </p>
+                          <div className="flex items-center justify-center gap-2 text-xs text-amber-500/70 bg-amber-500/5 border border-amber-500/20 rounded-lg py-2 px-4 mx-auto w-fit">
+                            <span className="animate-pulse">⏱️</span>
+                            <span>This typically takes 30-50 seconds • Your patience creates beauty</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                   
-                  {/* Real Mermaid Diagram - pan, zoom, download, copy code */}
-                  {diagramCode && (
+                  {/* Diagram Display - Nano Banana (image) or Mermaid (SVG) */}
+                  {diagramCode && diagramType === 'mermaid' && (
                     <MermaidDiagram code={diagramCode} />
+                  )}
+                  
+                  {nanoBananaPrompt && diagramType === 'nanobanana' && (
+                    <div className="space-y-3">
+                      <div className="text-xs text-center text-zinc-500 flex items-center justify-center gap-2">
+                        <span>🍌 Generated with Nano Banana Pro</span>
+                        <span className="text-zinc-600">•</span>
+                        <span>Gemini 3 Image Generation</span>
+                      </div>
+                      <NanoBananaInfographic 
+                        prompt={nanoBananaPrompt}
+                        aspectRatio="16:9"
+                        imageSize="2K"
+                        autoGenerate={true}
+                      />
+                    </div>
                   )}
                 </div>
               </motion.div>

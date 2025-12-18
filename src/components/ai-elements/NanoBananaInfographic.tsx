@@ -107,13 +107,34 @@ export function NanoBananaInfographic({
         )}
       </div>
 
-      {/* Loading State */}
+      {/* Loading State - Enhanced with progress info */}
       {isGenerating && (
-        <div className="w-full aspect-video bg-zinc-900/50 rounded-lg border border-zinc-800 flex flex-col items-center justify-center gap-4">
-          <Loader2 className="w-12 h-12 text-yellow-400 animate-spin" />
-          <div className="text-center">
-            <p className="text-sm text-zinc-300 font-medium">Generating infographic...</p>
-            <p className="text-xs text-zinc-500 mt-1">Gemini 3 Pro is drawing your visualization</p>
+        <div className="w-full aspect-video bg-gradient-to-br from-zinc-900/80 to-slate-900/80 rounded-xl border border-yellow-500/20 flex flex-col items-center justify-center gap-5 p-8">
+          {/* Animated spinner */}
+          <div className="relative">
+            {/* Outer ring */}
+            <div className="h-16 w-16 animate-spin rounded-full border-4 border-transparent border-t-yellow-400 border-r-purple-400" />
+            {/* Inner pulse */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="h-4 w-4 animate-pulse rounded-full bg-yellow-400/60" />
+            </div>
+          </div>
+          
+          {/* Status messages */}
+          <div className="text-center space-y-3">
+            <p className="text-base text-zinc-200 font-medium flex items-center gap-2 justify-center">
+              <span className="text-2xl">🍌</span>
+              <span>Nano Banana Pro is creating your infographic...</span>
+            </p>
+            <p className="text-sm text-zinc-400">
+              Gemini 3 Pro • Hand-drawn editorial style • 2K resolution
+            </p>
+            
+            {/* 40-second warning */}
+            <div className="flex items-center justify-center gap-2 text-xs text-amber-400/80 bg-amber-500/10 border border-amber-500/20 rounded-lg py-2 px-4 mx-auto w-fit mt-4">
+              <span className="animate-pulse text-base">⏱️</span>
+              <span>This typically takes 30-50 seconds • Hang tight, beauty is worth the wait!</span>
+            </div>
           </div>
         </div>
       )}

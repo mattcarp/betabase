@@ -11,7 +11,7 @@ export const NANO_BANANA_BASE_STYLE = `
 Visual Style (Mattie's Signature Aesthetic):
 Minimal line art infographic, editorial layout, simple human pictogram figures with circular heads, dotted flow paths connecting stages, pastel accent colors, clean sans serif labels, process diagram, storytelling workflow, magazine editorial style.
 
-Loosely reference MAC Design System principles for polish, but editorial storytelling takes priority.
+Be bold with color choices and visual interest. Flat, modern, interesting explainers that pop. Complete creative freedom.
 
 Technical specs: 16:9 aspect ratio, 2K resolution for clarity.
 `;
