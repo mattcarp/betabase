@@ -14,7 +14,6 @@ import {
   MessageSquare,
   ArrowRight,
   Lightbulb,
-  Brain,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 
@@ -65,7 +64,7 @@ const rejectionReasons: {
     value: "wrong_selector",
     label: "AI Suggested Wrong Fix",
     description: "The AI's suggested selector replacement is incorrect",
-    icon: <Brain className="h-5 w-5" />,
+    icon: <Lightbulb className="h-5 w-5" />,
     color: "text-amber-400 bg-amber-500/10 border-amber-500/20 hover:bg-amber-500/20",
   },
   {

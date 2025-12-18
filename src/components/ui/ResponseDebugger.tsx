@@ -66,7 +66,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
     try {
       const { data, error } = await supabase
         .from("rlhf_feedback")
-        .select("id, query, feedback_type, feedback_value, created_at, status")
+        .select("id, query, user_query, feedback_type, feedback_value, created_at, status")
         .order("created_at", { ascending: false })
         .limit(10);
 
@@ -76,7 +76,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
       } else {
         setRecentItems(data?.map(item => ({
           id: item.id,
-          query: item.query || "Unknown query",
+          query: item.query || item.user_query || "Unknown query",
           thumbs_up: item.feedback_type === 'thumbs_up' ? true : item.feedback_type === 'thumbs_down' ? false : null,
           rating: item.feedback_value?.score ?? null,
           created_at: item.created_at,

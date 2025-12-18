@@ -95,20 +95,19 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
   const [selectedInteractionId, setSelectedInteractionId] = useState<string | undefined>();
   const [isTimelineCollapsed, setIsTimelineCollapsed] = useState(false);
 
-  // Mock real-time test status updates
+  // Real-time test status updates are handled via Server-Sent Events in handleRunTests
+  // Real-time duration timer
   useEffect(() => {
+    let interval: NodeJS.Timeout;
     if (isRunning) {
-      const interval = setInterval(() => {
+      interval = setInterval(() => {
         setTestStats((prev) => ({
           ...prev,
-          running: Math.max(0, prev.running - 1),
-          passed: prev.passed + (prev.running > 0 ? 1 : 0),
           duration: prev.duration + 1,
         }));
       }, 1000);
-
-      return () => clearInterval(interval);
     }
+    return () => clearInterval(interval);
   }, [isRunning]);
 
   const handleRunTests = async () => {
@@ -374,7 +373,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
   };
 
   return (
-    <div className={cn("flex h-full bg-[#0a0a0a]", className)}>
+    <div className={cn("flex h-full bg-[var(--mac-surface-bg)]", className)}>
       {/* Session Timeline Sidebar */}
       <SessionTimeline
         interactions={sessionInteractions}
@@ -390,7 +389,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
       {/* Main Dashboard Content */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Header with Stats */}
-        <div className="border-b border-white/10 bg-[#0a0a0a] p-6">
+        <div className="border-b border-white/10 bg-[var(--mac-surface-bg)] p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <div className="p-2 rounded-md bg-white/5">
@@ -563,7 +562,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                   {useRealTimeStreaming ? "📡 Streaming" : "🔄 Polling"}
                 </Button>
               </div>
-              <div className="bg-[#141414] rounded-lg p-4 max-h-24 overflow-y-auto border border-white/10">
+              <div className="bg-[var(--mac-surface-elevated)] rounded-lg p-4 max-h-24 overflow-y-auto border border-white/10">
                 {recentLogs.length > 0 ? (
                   recentLogs.map((log, index) => (
                     <div key={index} className="text-xs text-neutral-300 font-mono">
@@ -582,7 +581,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
         {/* Main Content Area */}
         <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col">
-          <TabsList className="flex w-full rounded-none border-b border-white/10 bg-[#0a0a0a] overflow-x-auto">
+          <TabsList className="flex w-full rounded-none border-b border-white/10 bg-[var(--mac-surface-bg)] overflow-x-auto">
             <TabsTrigger value="home" className="gap-2">
               <Home className="h-4 w-4" />
               Home

@@ -89,11 +89,11 @@ export const TestAnalytics: React.FC = () => {
 
   // Test categories breakdown
   const categoriesData = [
-    { name: "Unit Tests", value: 45, color: "#3b82f6" },
-    { name: "Integration", value: 25, color: "#10b981" },
-    { name: "E2E", value: 15, color: "#f59e0b" },
-    { name: "API", value: 10, color: "#8b5cf6" },
-    { name: "Performance", value: 5, color: "#ef4444" },
+    { name: "Unit Tests", value: 45, color: "var(--mac-primary-blue-400)" },
+    { name: "Integration", value: 25, color: "var(--mac-success-green)" },
+    { name: "E2E", value: 15, color: "var(--mac-warning-yellow)" },
+    { name: "API", value: 10, color: "var(--mac-accent-purple-400)" },
+    { name: "Performance", value: 5, color: "var(--mac-error-red)" },
   ];
 
   // Key metrics
@@ -258,24 +258,24 @@ export const TestAnalytics: React.FC = () => {
                     type="monotone"
                     dataKey="passed"
                     stackId="1"
-                    stroke="#10b981"
-                    fill="#10b981"
+                    stroke="var(--mac-success-green)"
+                    fill="var(--mac-success-green)"
                     fillOpacity={0.6}
                   />
                   <Area
                     type="monotone"
                     dataKey="failed"
                     stackId="1"
-                    stroke="#ef4444"
-                    fill="#ef4444"
+                    stroke="var(--mac-error-red)"
+                    fill="var(--mac-error-red)"
                     fillOpacity={0.6}
                   />
                   <Area
                     type="monotone"
                     dataKey="skipped"
                     stackId="1"
-                    stroke="#f59e0b"
-                    fill="#f59e0b"
+                    stroke="var(--mac-warning-yellow)"
+                    fill="var(--mac-warning-yellow)"
                     fillOpacity={0.6}
                   />
                 </AreaChart>
@@ -326,7 +326,7 @@ export const TestAnalytics: React.FC = () => {
                   <XAxis dataKey="range" className="text-xs" />
                   <YAxis className="text-xs" />
                   <Tooltip />
-                  <Bar dataKey="count" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="count" fill="var(--mac-primary-blue-400)" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -348,8 +348,8 @@ export const TestAnalytics: React.FC = () => {
                   <Radar
                     name="Performance"
                     dataKey="value"
-                    stroke="#3b82f6"
-                    fill="#3b82f6"
+                    stroke="var(--mac-primary-blue-400)"
+                    fill="var(--mac-primary-blue-400)"
                     fillOpacity={0.6}
                   />
                   <Tooltip />

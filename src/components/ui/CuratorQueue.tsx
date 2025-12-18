@@ -290,7 +290,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
       <Card className="col-span-2 mac-card border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base font-medium flex items-center gap-2">
+            <CardTitle className="text-base font-normal flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-purple-600" />
               Curator Queue
               <Badge variant="secondary" className="ml-2">
@@ -350,7 +350,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
                       {getTypeIcon(item.type)}
-                      <span className="font-medium text-sm">{item.title}</span>
+                      <span className="font-normal text-sm">{item.title}</span>
                     </div>
                     {getPriorityBadge(item.priority)}
                   </div>
@@ -404,7 +404,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
       {/* Item Details */}
       <Card className="col-span-3 mac-card border-border">
         <CardHeader className="pb-3">
-          <CardTitle className="text-base font-medium flex items-center gap-2">
+          <CardTitle className="text-base font-normal flex items-center gap-2">
             <Eye className="h-4 w-4" />
             Review Details
           </CardTitle>
@@ -417,7 +417,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     {getTypeIcon(selectedItem.type)}
-                    <h3 className="font-medium">{selectedItem.title}</h3>
+                    <h3 className="font-normal">{selectedItem.title}</h3>
                   </div>
                   <p className="text-sm text-muted-foreground">{selectedItem.description}</p>
                 </div>
@@ -428,11 +428,11 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
               {selectedItem.metadata?.query && (
                 <div className="space-y-3">
                   <div className="p-4 rounded-lg bg-muted/50 border">
-                    <p className="text-xs font-medium text-muted-foreground mb-2">Original Query</p>
+                    <p className="text-xs font-normal text-muted-foreground mb-2">Original Query</p>
                     <p className="text-sm">{selectedItem.metadata.query}</p>
                   </div>
                   <div className="p-4 rounded-lg bg-blue-500/5 border border-blue-500/20">
-                    <p className="text-xs font-medium text-blue-600 mb-2">AI Response</p>
+                    <p className="text-xs font-normal text-blue-600 mb-2">AI Response</p>
                     <p className="text-sm">{selectedItem.metadata.response}</p>
                   </div>
                 </div>
@@ -440,7 +440,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
 
               {selectedItem.metadata?.documentName && (
                 <div className="p-4 rounded-lg bg-muted/50 border">
-                  <p className="text-xs font-medium text-muted-foreground mb-2">Document</p>
+                  <p className="text-xs font-normal text-muted-foreground mb-2">Document</p>
                   <p className="text-sm font-mono">{selectedItem.metadata.documentName}</p>
                 </div>
               )}
@@ -449,10 +449,10 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
               {selectedItem.confidence && (
                 <div className="p-4 rounded-lg bg-muted/50 border">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Confidence Score</span>
+                    <span className="text-sm font-normal">Confidence Score</span>
                     <span
                       className={cn(
-                        "text-lg font-medium",
+                        "text-lg font-normal",
                         selectedItem.confidence < 70 ? "text-amber-600" : "text-emerald-600"
                       )}
                     >

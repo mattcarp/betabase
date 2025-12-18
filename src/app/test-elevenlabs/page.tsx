@@ -9,7 +9,7 @@ export default function TestElevenLabsPage() {
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-light mb-2">Voice AI Testing Interface</h1>
-          <p className="text-slate-400">
+          <p className="text-zinc-400">
             Test the integrated voice conversation system with knowledge base access
           </p>
           <div className="mt-4 p-4 bg-zinc-900 rounded-lg border border-zinc-800">
@@ -44,7 +44,7 @@ export default function TestElevenLabsPage() {
 
         <div className="mt-8 p-6 bg-zinc-900 rounded-lg border border-zinc-800">
           <h3 className="text-lg font-light mb-4">Testing Instructions</h3>
-          <ol className="space-y-2 text-sm text-slate-400">
+          <ol className="space-y-2 text-sm text-zinc-400">
             <li className="flex items-start gap-2">
               <span className="text-blue-400">1.</span>
               <span>Click "Start Conversation" to begin voice interaction</span>

@@ -68,15 +68,15 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
     try {
       let query = supabase
         .from("rlhf_feedback")
-        .select("id, query, user_query, response, ai_response, thumbs_up, rating, status, severity, suggested_correction, curator_notes, reviewed_at, created_at, updated_at, session_id, model_used")
+        .select("id, query, user_query, response, feedback_type, feedback_value, feedback_metadata, status, created_at, updated_at, session_id, model_used, reviewed_at")
         .order("created_at", { ascending: false })
         .limit(50);
 
       // Apply filters
       if (filter === "negative") {
-        query = query.or("thumbs_up.eq.false,rating.lt.3");
+        query = query.or("feedback_type.eq.thumbs_down,status.eq.rejected");
       } else if (filter === "corrected") {
-        query = query.not("suggested_correction", "is", null);
+        query = query.filter("feedback_metadata->>correction", "neq", "null");
       } else if (filter === "approved") {
         query = query.eq("status", "approved");
       }
@@ -90,7 +90,12 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
         setEvents(data?.map(item => ({
           ...item,
           query: item.query || item.user_query || "Unknown query",
-          response: item.response || item.ai_response || ""
+          response: item.response || "",
+          thumbs_up: item.feedback_type === "thumbs_up",
+          rating: item.feedback_value?.score ?? null,
+          severity: item.feedback_metadata?.severity ?? null,
+          suggested_correction: item.feedback_metadata?.correction ?? null,
+          curator_notes: item.feedback_metadata?.notes ?? null
         })) || []);
       }
     } catch (error) {

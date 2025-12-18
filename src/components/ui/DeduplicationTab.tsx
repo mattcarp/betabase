@@ -204,7 +204,7 @@ export function DeduplicationTab() {
             <div className="mt-6 p-3 rounded-lg bg-[var(--mac-primary-blue-400)]/5 border border-[var(--mac-primary-blue-400)]/20 flex items-center gap-3">
               <ShieldCheck className="h-5 w-5 text-[var(--mac-primary-blue-400)]" />
               <span className="text-sm font-light text-[var(--mac-text-primary)]">
-                <strong className="font-medium">Tenant-Safe Isolation:</strong> sony-music / mso / aoma. 
+                <strong className="font-normal">Tenant-Safe Isolation:</strong> sony-music / mso / aoma. 
                 Intelligence never crosses organization boundaries.
               </span>
             </div>
@@ -213,7 +213,7 @@ export function DeduplicationTab() {
 
         <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium uppercase tracking-wider text-[var(--mac-text-secondary)]">Detection Layers</CardTitle>
+            <CardTitle className="text-sm font-normal uppercase tracking-wider text-[var(--mac-text-secondary)]">Detection Layers</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <DetectionLayer label="Source ID" status="active" />
@@ -262,11 +262,11 @@ export function DeduplicationTab() {
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
                         <CheckCircle2 className="h-4 w-4 text-[var(--mac-status-connected)]" />
-                        <span className="text-xs font-medium uppercase tracking-wider text-[var(--mac-status-connected)]">Version to Keep</span>
+                        <span className="text-xs font-normal uppercase tracking-wider text-[var(--mac-status-connected)]">Version to Keep</span>
                       </div>
                       <div className="p-3 rounded-lg bg-[var(--mac-surface-elevated)] border border-[var(--mac-utility-border)] space-y-2">
                         <div className="flex justify-between items-start">
-                          <h4 className="text-sm font-medium text-[var(--mac-text-primary)] line-clamp-1">{group.keep.filename || group.keep.source_id}</h4>
+                          <h4 className="text-sm font-normal text-[var(--mac-text-primary)] line-clamp-1">{group.keep.filename || group.keep.source_id}</h4>
                           <span className="text-[10px] font-light text-[var(--mac-text-secondary)]">{group.keep.size} MB</span>
                         </div>
                         <p className="text-xs font-light text-[var(--mac-text-secondary)] line-clamp-2 italic">
@@ -283,7 +283,7 @@ export function DeduplicationTab() {
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
                         <AlertCircle className="h-4 w-4 text-[var(--mac-status-warning-text)]" />
-                        <span className="text-xs font-medium uppercase tracking-wider text-[var(--mac-status-warning-text)]">Redundant Copies ({group.duplicates.length})</span>
+                        <span className="text-xs font-normal uppercase tracking-wider text-[var(--mac-status-warning-text)]">Redundant Copies ({group.duplicates.length})</span>
                       </div>
                       <div className="space-y-2">
                         {group.duplicates.map((dup, dIdx) => (
@@ -354,7 +354,7 @@ export function DeduplicationTab() {
 function StatItem({ label, value, icon, highlight = false }: { label: string, value: string, icon?: React.ReactNode, highlight?: boolean }) {
   return (
     <div className="space-y-1">
-      <span className="text-[10px] font-medium uppercase tracking-wider text-[var(--mac-text-secondary)] flex items-center gap-1.5">
+      <span className="text-[10px] font-normal uppercase tracking-wider text-[var(--mac-text-secondary)] flex items-center gap-1.5">
         {icon}
         {label}
       </span>
@@ -373,7 +373,7 @@ function DetectionLayer({ label, status }: { label: string, status: "active" | "
     <div className="flex items-center justify-between">
       <span className="text-xs font-light text-[var(--mac-text-primary)]">{label}</span>
       <Badge className={cn(
-        "text-[9px] font-medium uppercase tracking-tighter px-1.5 py-0.5",
+        "text-[9px] font-normal uppercase tracking-tighter px-1.5 py-0.5",
         status === "active" 
           ? "bg-[var(--mac-status-connected-bg)] text-[var(--mac-status-connected-text)] border-[var(--mac-status-connected-border)]"
           : "bg-[var(--mac-surface-elevated)] text-[var(--mac-text-muted)] border-[var(--mac-utility-border)]"

@@ -315,7 +315,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full space-y-6 bg-[#0a0a0a]">
+    <div className="flex flex-col h-full space-y-6 bg-[var(--mac-surface-bg)]">
       {/* Header with View Toggle */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -343,7 +343,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
 
       {/* Metrics Panel */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Card className="bg-[#0a0a0a] border-white/10">
+        <Card className="bg-[var(--mac-surface-bg)] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -359,7 +359,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#0a0a0a] border-white/10">
+        <Card className="bg-[var(--mac-surface-bg)] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -376,7 +376,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#0a0a0a] border-white/10">
+        <Card className="bg-[var(--mac-surface-bg)] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -392,7 +392,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#0a0a0a] border-white/10">
+        <Card className="bg-[var(--mac-surface-bg)] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -407,7 +407,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#0a0a0a] border-white/10">
+        <Card className="bg-[var(--mac-surface-bg)] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -479,7 +479,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
       <div className="grid grid-cols-12 gap-6 flex-1">
         {/* Timeline / Results List */}
         <div className={cn("col-span-12", showHeatmap ? "lg:col-span-7" : "lg:col-span-5")}>
-          <Card className="h-full bg-[#0a0a0a] border-white/10">
+          <Card className="h-full bg-[var(--mac-surface-bg)] border-white/10">
             <CardHeader>
               <CardTitle className="text-base font-light flex items-center justify-between text-white">
                 <span>Test Timeline ({filteredResults.length} results)</span>
@@ -505,7 +505,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                       <Card
                         key={result.id}
                         className={cn(
-                          "cursor-pointer transition-all hover:shadow-md border-l-4 bg-[#141414] border-white/10",
+                          "cursor-pointer transition-all hover:shadow-md border-l-4 bg-[var(--mac-surface-elevated)] border-white/10",
                           result.type === "manual"
                             ? "border-l-blue-400 hover:border-l-blue-500"
                             : "border-l-emerald-400 hover:border-l-emerald-500",
@@ -576,7 +576,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
         {/* Coverage Heatmap (conditional) */}
         {showHeatmap && (
           <div className="col-span-12 lg:col-span-5">
-            <Card className="h-full bg-[#0a0a0a] border-white/10">
+            <Card className="h-full bg-[var(--mac-surface-bg)] border-white/10">
               <CardHeader>
                 <CardTitle className="text-base font-light flex items-center gap-2 text-white">
                   <Grid3x3 className="h-4 w-4" />
@@ -628,7 +628,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
         {/* Result Details */}
         <div className={cn("col-span-12", showHeatmap ? "hidden" : "lg:col-span-7")}>
           {selectedResult ? (
-            <Card className="h-full bg-[#0a0a0a] border-white/10">
+            <Card className="h-full bg-[var(--mac-surface-bg)] border-white/10">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
@@ -667,7 +667,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
 
                   <TabsContent value="details" className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
-                      <Card className="bg-[#141414] border-white/10">
+                      <Card className="bg-[var(--mac-surface-elevated)] border-white/10">
                         <CardContent className="p-4">
                           <h4 className="text-sm font-light text-neutral-400 mb-2">Type</h4>
                           <div className="flex items-center gap-2">
@@ -679,7 +679,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                         </CardContent>
                       </Card>
 
-                      <Card className="bg-[#141414] border-white/10">
+                      <Card className="bg-[var(--mac-surface-elevated)] border-white/10">
                         <CardContent className="p-4">
                           <h4 className="text-sm font-light text-neutral-400 mb-2">Duration</h4>
                           <div className="flex items-center gap-2">
@@ -702,7 +702,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                           {selectedResult.error.stack && (
                             <>
                               <h4 className="font-light text-rose-400 mt-4 mb-2">Stack Trace</h4>
-                              <pre className="text-xs font-mono bg-[#141414] p-3 rounded overflow-x-auto text-neutral-300">
+                              <pre className="text-xs font-mono bg-[var(--mac-surface-elevated)] p-3 rounded overflow-x-auto text-neutral-300">
                                 {selectedResult.error.stack}
                               </pre>
                             </>
@@ -712,7 +712,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                     )}
 
                     {selectedResult.findings && selectedResult.findings.length > 0 && (
-                      <Card className="bg-[#141414] border-white/10">
+                      <Card className="bg-[var(--mac-surface-elevated)] border-white/10">
                         <CardContent className="p-4">
                           <h4 className="font-light mb-3 text-white">Manual Test Findings</h4>
                           <ul className="space-y-2">
@@ -732,7 +732,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                   </TabsContent>
 
                   <TabsContent value="coverage" className="space-y-4">
-                    <Card className="bg-[#141414] border-white/10">
+                    <Card className="bg-[var(--mac-surface-elevated)] border-white/10">
                       <CardContent className="p-4">
                         <h4 className="font-light mb-3 text-white">Areas Covered</h4>
                         {selectedResult.coverage && selectedResult.coverage.length > 0 ? (
@@ -760,7 +760,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                     {selectedResult.screenshots && selectedResult.screenshots.length > 0 ? (
                       <div className="grid grid-cols-2 gap-4">
                         {selectedResult.screenshots.map((screenshot, index) => (
-                          <Card key={index} className="bg-[#141414] border-white/10">
+                          <Card key={index} className="bg-[var(--mac-surface-elevated)] border-white/10">
                             <CardContent className="p-4">
                               <div className="aspect-video bg-[#0a0a0a] rounded flex items-center justify-center">
                                 <Eye className="h-8 w-8 text-neutral-500" />
@@ -780,7 +780,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
               </CardContent>
             </Card>
           ) : (
-            <Card className="h-full bg-[#0a0a0a] border-white/10">
+            <Card className="h-full bg-[var(--mac-surface-bg)] border-white/10">
               <CardContent className="flex items-center justify-center h-full text-neutral-400">
                 Select a test result to view details
               </CardContent>

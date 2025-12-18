@@ -70,7 +70,7 @@ import { ModelRegistryPanel } from "./rlhf-tabs/ModelRegistryPanel";
 import { TrainingDatasetsPanel } from "./rlhf-tabs/TrainingDatasetsPanel";
 import { FineTuningJobsPanel } from "./rlhf-tabs/FineTuningJobsPanel";
 import { cognitoAuth } from "../../services/cognitoAuth";
-import { ListTodo, GitBranch, BarChart3, Activity, Brain, Rocket, Database as DatabaseIcon } from "lucide-react";
+import { ListTodo, GitBranch, BarChart3, Activity, Lightbulb as LightbulbIcon, Rocket, Database as DatabaseIcon, TrendingUp } from "lucide-react";
 
 interface VectorStoreFile {
   id: string;
@@ -1099,7 +1099,7 @@ export function CurateTab({
                 <RLHFSubTabTrigger id="feedback" label="Feedback" icon={<Lightbulb className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="purple" />
                 <RLHFSubTabTrigger id="reinforcement" label="Learning Curve" icon={<TrendingUp className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="blue" />
                 <RLHFSubTabTrigger id="datasets" label="Datasets" icon={<DatabaseIcon className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="orange" />
-                <RLHFSubTabTrigger id="jobs" label="Fine-Tuning" icon={<Brain className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="pink" />
+                <RLHFSubTabTrigger id="jobs" label="Fine-Tuning" icon={<LightbulbIcon className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="pink" />
                 <RLHFSubTabTrigger id="registry" label="Model Registry" icon={<Rocket className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="green" />
               </div>
 

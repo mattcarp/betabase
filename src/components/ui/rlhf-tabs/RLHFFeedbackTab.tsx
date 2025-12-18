@@ -395,7 +395,6 @@ export function RLHFFeedbackTab() {
           query?: string;
           user_query?: string;
           response?: string;
-          ai_response?: string;
           retrieved_contexts?: Array<{
             content: string;
             source?: string;
@@ -404,11 +403,12 @@ export function RLHFFeedbackTab() {
           created_at: string;
           status?: string;
           feedback_type?: string;
+          feedback_value?: { score?: number };
         }) => ({
           id: f.id,
           sessionId: f.session_id || "unknown",
           query: f.query || f.user_query || "No query recorded",
-          response: f.response || f.ai_response || "No response recorded",
+          response: f.response || "No response recorded",
           retrievedDocs: (f.retrieved_contexts || []).map((ctx, idx) => ({
             id: `doc-${f.id}-${idx}`,
             content: ctx.content || "",

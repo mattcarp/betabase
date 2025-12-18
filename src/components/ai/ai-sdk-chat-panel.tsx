@@ -2775,7 +2775,7 @@ export function AiSdkChatPanel({
                   <h2 className="mac-heading text-4xl font-thin mb-4 text-white tracking-tight">
                     Welcome to The Betabase
                   </h2>
-                  <p className="text-lg font-light text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                  <p className="text-lg font-light text-zinc-400 max-w-2xl mx-auto leading-relaxed">
                     Don't be an ass-hat.
                   </p>
                 </motion.div>
@@ -3016,11 +3016,7 @@ export function AiSdkChatPanel({
                     {[...Array(5)].map((_, i) => (
                       <div
                         key={i}
-                        className="w-1 bg-red-400 rounded-full mac-audio-bar"
-                        style={{
-                          height: `${Math.random() * 20 + 10}px`,
-                          animationDelay: `${i * 0.1}s`,
-                        }}
+                        className="w-1 bg-red-400 rounded-full mac-audio-bar h-4"
                       />
                     ))}
                   </div>

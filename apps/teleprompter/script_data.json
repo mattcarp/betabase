@@ -1,0 +1,105 @@
+[
+    {
+        "id": 1,
+        "title": "HOOK",
+        "duration": 30,
+        "bullets": [
+            "\u2022 Not another chatbot",
+            "\u2022 Enterprise intelligence platform for Sony Music",
+            "\u2022 7 key differentiators",
+            "\u2022 Proprietary knowledge + SLM/fine-tuning strategy"
+        ]
+    },
+    {
+        "id": 2,
+        "title": "DEMO 1: Baseline + Multi-Source",
+        "duration": 45,
+        "bullets": [
+            "[cyan]**Query 1**: \"What is AOMA?\"[/]",
+            "\u2022 Basic RAG from proprietary Sony Music docs",
+            "\u2022 ~50 pages internal AOMA documentation",
+            "\u2022 **Then switch**",
+            "[cyan]**Query 2**: \"Show me JIRA tickets related to AOMA migration and the related code commits\"[/]",
+            "\u2022 Multiple sources simultaneously: JIRA + Git + Docs",
+            "\u2022 Custom AOMA Mesh MCP server",
+            "\u2022 Cross-referenced automatically",
+            "\u2022 **Differentiator #1**: Unified knowledge, not isolated silos"
+        ]
+    },
+    {
+        "id": 3,
+        "title": "DEMO 2: Visual Intelligence",
+        "duration": 45,
+        "bullets": [
+            "[cyan]**Query**: \"Generate a system architecture diagram for AOMA showing all integration points\"[/]",
+            "\u2022 Most chatbots: text walls",
+            "\u2022 SIAM: actual Mermaid diagrams",
+            "\u2022 System flows, architecture visualizations",
+            "\u2022 **Differentiator #2**: Visual diagram generation"
+        ]
+    },
+    {
+        "id": 4,
+        "title": "DEMO 3: Development Context",
+        "duration": 45,
+        "bullets": [
+            "[cyan]**Query**: \"What's the current development status of AOMA3 migration?\"[/]",
+            "\u2022 Not just \"what does doc say?\"",
+            "\u2022 JIRA status + Git commits + Email threads = comprehensive context",
+            "\u2022 Cross-source synthesis",
+            "\u2022 **Differentiator #3**: Development intelligence"
+        ]
+    },
+    {
+        "id": 5,
+        "title": "DEMO 4: Anti-Hallucination",
+        "duration": 30,
+        "bullets": [
+            "[cyan]**Query**: \"Does AOMA have a blockchain integration?\"[/]",
+            "\u2022 Trick question - doesn't exist",
+            "\u2022 Honest \"no information available\"",
+            "\u2022 No fabrication, no confidence when uncertain",
+            "\u2022 **Differentiator #4**: Enterprise trust"
+        ]
+    },
+    {
+        "id": 6,
+        "title": "THE STRATEGY",
+        "duration": 45,
+        "bullets": [
+            "[bold white]SLM + Fine-Tuning Concept[/]",
+            "\u2022 **Problem**: GPT-4/5 knows protein folding, quantum physics",
+            "\u2022 **Reality**: Sony Music users don't need that",
+            "\u2022 **Solution**: Small Language Model + Fine-tuning",
+            "\u2022 Domain-specific: AOMA, DDEX, Sony workflows",
+            "\u2022 Proprietary knowledge only",
+            "\u2022 Faster, cheaper, more accurate for our use case",
+            "\u2022 No hallucination about irrelevant topics",
+            "[bold white]Why This Matters[/]",
+            "\u2022 Lower latency (smaller model)",
+            "\u2022 Lower cost (fewer parameters)",
+            "\u2022 Higher accuracy (focused training)",
+            "\u2022 Better trust (only knows what we teach it)",
+            "[bold white]Future Path[/]",
+            "\u2022 Current: GPT-4o/5 with RAG (works today)",
+            "\u2022 Next: Fine-tuned GPT-4o-mini on Sony Music corpus",
+            "\u2022 Future: Fully custom SLM for enterprise deployment",
+            "\u2022 **Differentiator #5**: Strategic AI approach, not just plug-and-play"
+        ]
+    },
+    {
+        "id": 7,
+        "title": "CLOSE",
+        "duration": 15,
+        "bullets": [
+            "\u2022 Multi-source unified knowledge",
+            "\u2022 Visual intelligence",
+            "\u2022 Development context analysis",
+            "\u2022 Anti-hallucination trust",
+            "\u2022 Strategic SLM/fine-tuning roadmap",
+            "\u2022 59 automated tests backing this",
+            "\u2022 AI testing infrastructure (separate topic)",
+            "\u2022 Questions?"
+        ]
+    }
+]

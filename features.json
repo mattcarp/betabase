@@ -139,7 +139,7 @@
       "description": "Transform Curate tab into a demo-ready intelligence platform with visual deduplication, RLHF dashboards, and real metrics. (FEAT-002)",
       "requirementRefs": ["REQ-006", "REQ-020", "REQ-021"],
       "byteroverTags": "#curate-tab #deduplication #rlhf #mac-design",
-      "passes": false,
+      "passes": true,
       "verification": [
         "Deduplication Visualization tab functional",
         "Reinforcement Dashboard (RLHF) shows quality timeline",
@@ -147,7 +147,7 @@
         "Agent Insights flowchart visible",
         "MAC compliance score >= 9.5/10"
       ],
-      "completedAt": null,
+      "completedAt": "2025-12-18T05:30:00Z",
       "notes": "Option 3 selected by user. Large-scale enhancement."
     }
   ],
@@ -187,6 +187,26 @@
       "addedAt": "2025-12-17",
       "dependencies": ["VPN access", "Jira API or Playwright extraction"],
       "byteroverTags": "#jira #embeddings #rag #data-quality"
+    },
+    {
+      "id": "B005",
+      "category": "chat",
+      "name": "Zeitgeist API Integration",
+      "description": "Implement 'Hot Topics of Today' by analyzing new Jira tickets, Alexandria docs, and recent chat activity. Feed results into Chat suggested questions.",
+      "estimatedComplexity": "high",
+      "addedAt": "2025-12-18",
+      "notes": "What are the big issues? What's on the burner for today? Uses api/zeitgeist.",
+      "byteroverTags": "#zeitgeist #hot-topics #trending #insights"
+    },
+    {
+      "id": "B006",
+      "category": "chat",
+      "name": "Infographic/Diagram API Enhancement",
+      "description": "Fully wire the infographic/diagram generation API to provide real-time visual insights for complex queries.",
+      "estimatedComplexity": "medium",
+      "addedAt": "2025-12-18",
+      "notes": "Use api/infographic and api/generate-diagram. Integrate with Mermaid and Nanobanana.",
+      "byteroverTags": "#infographic #visualization #diagrams #ai-elements"
     }
   ]
 }

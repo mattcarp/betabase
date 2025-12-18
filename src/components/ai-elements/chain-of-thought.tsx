@@ -9,7 +9,7 @@ import {
 } from "src/components/ui/collapsible";
 import { cn } from "src/lib/utils";
 import {
-  BrainIcon,
+  LightbulbIcon,
   ChevronDownIcon,
   DotIcon,
   type LucideIcon,
@@ -92,7 +92,7 @@ export const ChainOfThoughtHeader = memo(
           )}
           {...props}
         >
-          <BrainIcon className="size-4" />
+          <LightbulbIcon className="size-4" />
           <span className="flex-1 text-left">
             {children ?? "Chain of Thought"}
           </span>

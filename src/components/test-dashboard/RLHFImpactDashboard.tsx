@@ -12,6 +12,19 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui
 import { Badge } from "../ui/badge";
 import { TrendingUp, TrendingDown, Activity, Target, Users, Award } from "lucide-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+} from "recharts";
 
 interface ImpactMetrics {
   avgRating: number;
@@ -297,59 +310,156 @@ export function RLHFImpactDashboard() {
           <CardTitle className="text-zinc-100 text-lg">30-Day Trends</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-8">
             {/* Rating Trend */}
             <div>
-              <div className="text-sm text-zinc-400 mb-2">Average Rating Trend</div>
-              <div className="h-24 bg-zinc-900/30 rounded-lg p-4 flex items-end gap-0.5">
-                {timeSeries.map((data, idx) => {
-                  const height = (data.avgRating / 5) * 100; // Scale to 100%
-                  return (
-                    <div
-                      key={idx}
-                      className="flex-1 bg-purple-500/30 rounded-t hover:bg-purple-500/50 transition-colors"
-                      style={{ height: `${height}%` }}
-                      title={`${data.date}: ${data.avgRating.toFixed(2)}`}
+              <div className="flex items-center justify-between mb-4">
+                <div className="text-sm font-medium text-zinc-400">Average Rating Trend</div>
+                <Badge variant="outline" className="bg-purple-500/10 text-purple-400 border-purple-500/20">
+                  Last 30 Days
+                </Badge>
+              </div>
+              <div className="h-48 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={timeSeries}>
+                    <defs>
+                      <linearGradient id="colorRating" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="var(--mac-accent-purple-400)" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="var(--mac-accent-purple-400)" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis
+                      dataKey="date"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: "#666", fontSize: 10 }}
+                      minTickGap={30}
                     />
-                  );
-                })}
+                    <YAxis
+                      domain={[0, 5]}
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: "#666", fontSize: 10 }}
+                    />
+                    <RechartsTooltip
+                      contentStyle={{
+                        backgroundColor: "rgba(9, 9, 11, 0.9)",
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        borderRadius: "8px",
+                        fontSize: "12px",
+                      }}
+                      itemStyle={{ color: "var(--mac-accent-purple-400)" }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="avgRating"
+                      stroke="var(--mac-accent-purple-400)"
+                      strokeWidth={2}
+                      fillOpacity={1}
+                      fill="url(#colorRating)"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
             </div>
 
             {/* Confidence Trend */}
             <div>
-              <div className="text-sm text-zinc-400 mb-2">Confidence Trend</div>
-              <div className="h-24 bg-zinc-900/30 rounded-lg p-4 flex items-end gap-0.5">
-                {timeSeries.map((data, idx) => {
-                  const height = data.confidence; // Already percentage
-                  return (
-                    <div
-                      key={idx}
-                      className="flex-1 bg-amber-500/30 rounded-t hover:bg-amber-500/50 transition-colors"
-                      style={{ height: `${height}%` }}
-                      title={`${data.date}: ${data.confidence.toFixed(1)}%`}
+              <div className="flex items-center justify-between mb-4">
+                <div className="text-sm font-medium text-zinc-400">Retrieval Confidence Trend</div>
+                <Badge variant="outline" className="bg-amber-500/10 text-amber-400 border-amber-500/20">
+                  Semantic Accuracy
+                </Badge>
+              </div>
+              <div className="h-48 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={timeSeries}>
+                    <defs>
+                      <linearGradient id="colorConf" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="var(--mac-accent-orange-400)" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="var(--mac-accent-orange-400)" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis
+                      dataKey="date"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: "#666", fontSize: 10 }}
+                      minTickGap={30}
                     />
-                  );
-                })}
+                    <YAxis
+                      domain={[0, 100]}
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: "#666", fontSize: 10 }}
+                      unit="%"
+                    />
+                    <RechartsTooltip
+                      contentStyle={{
+                        backgroundColor: "rgba(9, 9, 11, 0.9)",
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        borderRadius: "8px",
+                        fontSize: "12px",
+                      }}
+                      itemStyle={{ color: "var(--mac-accent-orange-400)" }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="confidence"
+                      stroke="var(--mac-accent-orange-400)"
+                      strokeWidth={2}
+                      fillOpacity={1}
+                      fill="url(#colorConf)"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
             </div>
 
             {/* Feedback Volume */}
             <div>
-              <div className="text-sm text-zinc-400 mb-2">Daily Feedback Volume</div>
-              <div className="h-24 bg-zinc-900/30 rounded-lg p-4 flex items-end gap-0.5">
-                {timeSeries.map((data, idx) => {
-                  const maxFeedback = Math.max(...timeSeries.map((d) => d.feedbackCount));
-                  const height = maxFeedback > 0 ? (data.feedbackCount / maxFeedback) * 100 : 0;
-                  return (
-                    <div
-                      key={idx}
-                      className="flex-1 bg-blue-500/30 rounded-t hover:bg-blue-500/50 transition-colors"
-                      style={{ height: `${height}%` }}
-                      title={`${data.date}: ${data.feedbackCount} feedback`}
+              <div className="flex items-center justify-between mb-4">
+                <div className="text-sm font-medium text-zinc-400">Daily Feedback Volume</div>
+                <Badge variant="outline" className="bg-blue-500/10 text-blue-400 border-blue-500/20">
+                  Engagement
+                </Badge>
+              </div>
+              <div className="h-48 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={timeSeries}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis
+                      dataKey="date"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: "#666", fontSize: 10 }}
+                      minTickGap={30}
                     />
-                  );
-                })}
+                    <YAxis
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: "#666", fontSize: 10 }}
+                    />
+                    <RechartsTooltip
+                      cursor={{ fill: "rgba(255,255,255,0.05)" }}
+                      contentStyle={{
+                        backgroundColor: "rgba(9, 9, 11, 0.9)",
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        borderRadius: "8px",
+                        fontSize: "12px",
+                      }}
+                      itemStyle={{ color: "var(--mac-primary-blue-400)" }}
+                    />
+                    <Bar
+                      dataKey="feedbackCount"
+                      fill="var(--mac-primary-blue-400)"
+                      radius={[4, 4, 0, 0]}
+                      fillOpacity={0.6}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>

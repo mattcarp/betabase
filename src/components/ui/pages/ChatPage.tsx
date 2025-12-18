@@ -328,7 +328,7 @@ Be helpful, concise, and professional in your responses.`;
                           side="bottom" 
                           className="bg-zinc-800 text-zinc-100 border-zinc-700"
                         >
-                          <p className="font-medium">{mode.label}</p>
+                          <p className="font-normal">{mode.label}</p>
                           <p className="text-zinc-400 text-[10px]">{mode.description}</p>
                         </TooltipContent>
                       </Tooltip>
@@ -371,7 +371,7 @@ Be helpful, concise, and professional in your responses.`;
                           side="bottom" 
                           className="bg-zinc-800 text-zinc-100 border-zinc-700"
                         >
-                          <p className="font-medium">{mode.label}</p>
+                          <p className="font-normal">{mode.label}</p>
                           <p className="text-zinc-400 text-[10px]">{mode.description}</p>
                         </TooltipContent>
                       </Tooltip>

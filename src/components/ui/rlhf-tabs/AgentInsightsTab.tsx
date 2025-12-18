@@ -43,7 +43,7 @@ const MermaidDiagram = ({ chart }: { chart: string }) => {
           <div class="h-8 w-px bg-zinc-700"></div>
           <div class="p-3 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400">Reranking (Gemini 2.0)</div>
           <div class="h-8 w-px bg-zinc-700"></div>
-          <div class="p-3 bg-blue-500/20 border border-blue-500/50 rounded-lg font-medium text-blue-300">Final Response Generation</div>
+          <div class="p-3 bg-blue-500/20 border border-blue-500/50 rounded-lg font-normal text-blue-300">Final Response Generation</div>
         </div>
       </div>
     `;
@@ -143,7 +143,7 @@ export function AgentInsightsTab() {
                   <div className="h-2 w-2 rounded-full bg-green-500"></div> Model
                 </div>
               </div>
-              <Button variant="ghost" size="sm" className="h-7 text-[10px] uppercase font-medium tracking-tighter opacity-60 hover:opacity-100 text-[var(--mac-text-secondary)]">
+              <Button variant="ghost" size="sm" className="h-7 text-[10px] uppercase font-normal tracking-tighter opacity-60 hover:opacity-100 text-[var(--mac-text-secondary)]">
                 Export Decision Log
               </Button>
             </div>
@@ -179,7 +179,7 @@ export function AgentInsightsTab() {
                           {d.step}
                         </div>
                         <div>
-                          <h4 className="text-sm font-medium">{d.action}</h4>
+                          <h4 className="text-sm font-normal">{d.action}</h4>
                           <p className="text-[10px] text-[var(--mac-text-secondary)]">{d.tool}</p>
                         </div>
                       </div>
@@ -187,7 +187,7 @@ export function AgentInsightsTab() {
                         <div className="text-right">
                           <p className="text-[10px] uppercase text-[var(--mac-text-muted)] tracking-tighter">Confidence</p>
                           <p className={cn(
-                            "text-xs font-medium",
+                            "text-xs font-normal",
                             d.confidence > 0.9 ? "text-[var(--mac-status-connected)]" : "text-[var(--mac-status-warning-text)]"
                           )}>{Math.round(d.confidence * 100)}%</p>
                         </div>
@@ -242,7 +242,7 @@ function InsightCard({ title, value, icon }: { title: string, value: string, ico
     <Card className="mac-glass bg-[var(--mac-surface-card)] border border-[var(--mac-utility-border)]">
       <CardContent className="p-4 flex items-center justify-between">
         <div className="space-y-1">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-[var(--mac-text-secondary)]">{title}</p>
+          <p className="text-[10px] font-normal uppercase tracking-wider text-[var(--mac-text-secondary)]">{title}</p>
           <h4 className="text-xl font-light text-[var(--mac-text-primary)]">{value}</h4>
         </div>
         <div className="p-2 rounded-lg bg-[var(--mac-surface-elevated)] border border-[var(--mac-utility-border)]">
@@ -256,7 +256,7 @@ function InsightCard({ title, value, icon }: { title: string, value: string, ico
 function ToolIcon({ label, count }: { label: string, count: number }) {
   return (
     <div className="text-center p-3 rounded-xl bg-[var(--mac-surface-elevated)] border border-[var(--mac-utility-border)] hover:border-[var(--mac-primary-blue-400)]/30 transition-all duration-300">
-      <p className="text-[10px] font-medium text-[var(--mac-text-secondary)] uppercase mb-1">{label}</p>
+      <p className="text-[10px] font-normal text-[var(--mac-text-secondary)] uppercase mb-1">{label}</p>
       <p className="text-lg font-light text-[var(--mac-text-primary)]">{count}</p>
     </div>
   );

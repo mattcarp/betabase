@@ -194,7 +194,7 @@ function KPICard({ title, value, description, icon, trend }: { title: string, va
             {icon}
           </div>
           <span className={cn(
-            "text-[10px] font-medium px-1.5 py-0.5 rounded-full border",
+            "text-[10px] font-normal px-1.5 py-0.5 rounded-full border",
             trend.startsWith("+") ? "bg-[var(--mac-status-connected-bg)] text-[var(--mac-status-connected-text)] border-[var(--mac-status-connected-border)]" : "bg-zinc-800 text-zinc-400 border-zinc-700"
           )}>
             {trend}
@@ -202,7 +202,7 @@ function KPICard({ title, value, description, icon, trend }: { title: string, va
         </div>
         <div className="space-y-0.5">
           <h4 className="text-2xl font-light text-[var(--mac-text-primary)]">{value}</h4>
-          <p className="text-[10px] font-medium uppercase tracking-wider text-[var(--mac-text-secondary)]">{title}</p>
+          <p className="text-[10px] font-normal uppercase tracking-wider text-[var(--mac-text-secondary)]">{title}</p>
           <p className="text-[10px] text-[var(--mac-text-muted)] font-light mt-1">{description}</p>
         </div>
       </CardContent>

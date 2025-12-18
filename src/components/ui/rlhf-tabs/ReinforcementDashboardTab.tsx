@@ -19,7 +19,7 @@ import {
   Cell
 } from "recharts";
 import { 
-  Brain, 
+  Lightbulb, 
   TrendingUp, 
   Zap, 
   Target, 
@@ -83,7 +83,7 @@ export function ReinforcementDashboardTab() {
           title="Training Batches" 
           value="12" 
           delta="+2" 
-          icon={<Brain className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />} 
+          icon={<Lightbulb className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />} 
         />
         <MetricCard 
           title="Feedback Loop" 
@@ -252,11 +252,11 @@ function MetricCard({ title, value, delta, icon }: { title: string, value: strin
     <Card className="mac-glass bg-[var(--mac-surface-card)] border-[var(--mac-utility-border)] hover:border-[var(--mac-utility-border-elevated)] transition-all duration-300">
       <CardContent className="p-4 flex items-center justify-between">
         <div className="space-y-1">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-[var(--mac-text-secondary)]">{title}</p>
+          <p className="text-[10px] font-normal uppercase tracking-wider text-[var(--mac-text-secondary)]">{title}</p>
           <div className="flex items-baseline gap-2">
             <h4 className="text-xl font-light text-[var(--mac-text-primary)]">{value}</h4>
             <span className={cn(
-              "text-[10px] font-medium",
+              "text-[10px] font-normal",
               delta.startsWith("+") ? "text-[var(--mac-status-connected)]" : delta === "Stable" ? "text-[var(--mac-text-muted)]" : "text-[var(--mac-status-error-text)]"
             )}>
               {delta}

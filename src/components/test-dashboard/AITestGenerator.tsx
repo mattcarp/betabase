@@ -24,6 +24,9 @@ import {
   Zap,
   CheckCircle,
   AlertCircle,
+  TrendingUp,
+  Clock,
+  History,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 
@@ -210,8 +213,42 @@ test.describe('${prompt}', () => {
                 placeholder="E.g., Test that users can successfully upload and process PDF documents..."
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="min-h-[100px]"
+                className="min-h-[100px] font-light bg-zinc-900/50 border-zinc-800"
               />
+            </div>
+
+            {/* Zeitgeist Integration: Trending Topics */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label className="flex items-center gap-2 text-zinc-400">
+                  <TrendingUp className="h-3 w-3 text-emerald-400" />
+                  Trending Topics (Zeitgeist)
+                </Label>
+                <Badge variant="outline" className="text-[10px] h-4 px-1 bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+                  Live
+                </Badge>
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  { topic: "AOMA S3 Glacier Tiers", source: "Jira #AOMA-122", type: "new-feature" },
+                  { topic: "Magic Link Session Drift", source: "Alexandria Docs", type: "bug-risk" },
+                  { topic: "UST Release 2026", source: "Recent Chats", type: "hot-topic" },
+                ].map((item, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setPrompt(`Test the ${item.topic} functionality as described in ${item.source}`)}
+                    className="flex items-center justify-between p-2 rounded-lg bg-zinc-950/50 border border-zinc-800 hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-all text-left group"
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-light text-zinc-200 group-hover:text-emerald-300">{item.topic}</span>
+                      <span className="text-[10px] text-zinc-500">{item.source}</span>
+                    </div>
+                    <Badge variant="secondary" className="text-[9px] h-4 bg-zinc-900 text-zinc-500">
+                      {item.type}
+                    </Badge>
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Quick Suggestions */}

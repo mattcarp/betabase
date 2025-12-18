@@ -51,6 +51,11 @@ interface TestResult {
   screenshots?: string[];
   video?: string;
   visualComparison?: VisualRegressionComparisonType; // Visual regression data
+  semanticScore?: {
+    score: number; // 0-1
+    rationale: string;
+    model: string;
+  };
 }
 
 export const TestResultsViewer: React.FC = () => {
@@ -132,6 +137,11 @@ export const TestResultsViewer: React.FC = () => {
         "Submitting form",
         "Authentication successful",
       ],
+      semanticScore: {
+        score: 0.98,
+        rationale: "The assistant provided a perfect step-by-step guide for authentication, correctly identifying all required fields and the final redirect state.",
+        model: "gemini-3-flash-preview"
+      }
     },
     {
       id: "2",
@@ -156,6 +166,11 @@ export const TestResultsViewer: React.FC = () => {
         "ERROR: Unexpected authentication success",
       ],
       screenshots: ["screenshot-1.png", "screenshot-2.png"],
+      semanticScore: {
+        score: 0.45,
+        rationale: "The test failed due to a security bypass. The semantic judge detected that the application accepted invalid credentials, which is a high-severity factual mismatch.",
+        model: "gemini-3-flash-preview"
+      }
     },
     {
       id: "3",
@@ -605,9 +620,22 @@ export const TestResultsViewer: React.FC = () => {
                                         {getStatusIcon(result.status)}
                                         <span className="text-sm truncate">{result.name}</span>
                                       </div>
-                                      <Badge variant="secondary" className="text-xs">
-                                        {result.duration}ms
-                                      </Badge>
+                                      <div className="flex items-center gap-2">
+                                        {result.semanticScore && (
+                                          <Badge 
+                                            variant="outline" 
+                                            className={cn(
+                                              "text-[10px] h-4 px-1 font-light",
+                                              result.semanticScore.score >= 0.8 ? "text-emerald-400 border-emerald-500/30" : "text-amber-400 border-amber-500/30"
+                                            )}
+                                          >
+                                            {Math.round(result.semanticScore.score * 100)}% Match
+                                          </Badge>
+                                        )}
+                                        <Badge variant="secondary" className="text-xs">
+                                          {result.duration}ms
+                                        </Badge>
+                                      </div>
                                     </div>
                                   </CardContent>
                                 </Card>
@@ -667,11 +695,12 @@ export const TestResultsViewer: React.FC = () => {
                 <TabsList
                   className={cn(
                     "grid w-full",
-                    selectedResult.visualComparison ? "grid-cols-5" : "grid-cols-4"
+                    selectedResult.visualComparison ? "grid-cols-6" : "grid-cols-5"
                   )}
                 >
                   <TabsTrigger value="error">Error</TabsTrigger>
                   <TabsTrigger value="logs">Logs</TabsTrigger>
+                  <TabsTrigger value="judge">Semantic Judge</TabsTrigger>
                   <TabsTrigger value="media">Media</TabsTrigger>
                   <TabsTrigger value="code">Code</TabsTrigger>
                   {selectedResult.visualComparison && (
@@ -792,6 +821,81 @@ export const TestResultsViewer: React.FC = () => {
                   ) : (
                     <div className="flex items-center justify-center h-[400px] text-muted-foreground">
                       No logs available
+                    </div>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="judge" className="space-y-4">
+                  {selectedResult.semanticScore ? (
+                    <div className="space-y-4">
+                      <Card className="mac-card border-emerald-500/20 bg-emerald-500/5">
+                        <CardContent className="p-6">
+                          <div className="flex items-center justify-between mb-6">
+                            <div>
+                              <h3 className="text-lg font-light text-white">LLM Semantic Judge</h3>
+                              <p className="text-xs text-zinc-500 mt-1">Evaluated by {selectedResult.semanticScore.model}</p>
+                            </div>
+                            <div className="text-right">
+                              <div className={cn(
+                                "text-4xl font-extralight",
+                                selectedResult.semanticScore.score >= 0.8 ? "text-emerald-400" : "text-amber-400"
+                              )}>
+                                {Math.round(selectedResult.semanticScore.score * 100)}%
+                              </div>
+                              <p className="text-[10px] text-zinc-500 uppercase tracking-widest">Similarity Score</p>
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-4">
+                            <div>
+                              <Label className="text-xs text-zinc-500 uppercase tracking-wider">Rationale</Label>
+                              <div className="mt-2 p-4 rounded-lg bg-zinc-950/50 border border-zinc-800 text-sm font-light leading-relaxed text-zinc-300">
+                                {selectedResult.semanticScore.rationale}
+                              </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-3 gap-4">
+                              <div className="p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
+                                <p className="text-[10px] text-zinc-500 uppercase mb-1">Factual Accuracy</p>
+                                <p className="text-sm font-medium text-zinc-200">High</p>
+                              </div>
+                              <div className="p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
+                                <p className="text-[10px] text-zinc-500 uppercase mb-1">Tone Consistency</p>
+                                <p className="text-sm font-medium text-zinc-200">94%</p>
+                              </div>
+                              <div className="p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
+                                <p className="text-[10px] text-zinc-500 uppercase mb-1">Citation Quality</p>
+                                <p className="text-sm font-medium text-zinc-200">Verified</p>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" size="sm" className="mac-button mac-button-outline gap-2">
+                          <RefreshCw className="h-3 w-3" />
+                          Re-evaluate
+                        </Button>
+                        <Button size="sm" className="mac-button mac-button-primary gap-2 bg-emerald-600 hover:bg-emerald-700">
+                          <CheckCircle className="h-3 w-3" />
+                          Approve Score
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground text-center p-8 space-y-4">
+                      <Sparkles className="h-12 w-12 text-zinc-700 opacity-50" />
+                      <div>
+                        <p className="text-zinc-400">No semantic evaluation available</p>
+                        <p className="text-xs text-zinc-600 mt-1 max-w-xs mx-auto">
+                          SOTA semantic evaluation uses Gemini 3 Flash to judge response quality against ground truth.
+                        </p>
+                      </div>
+                      <Button size="sm" className="mac-button-gradient text-white gap-2">
+                        <Sparkles className="h-3 w-3" />
+                        Run LLM Judge
+                      </Button>
                     </div>
                   )}
                 </TabsContent>

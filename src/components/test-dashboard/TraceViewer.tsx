@@ -33,7 +33,7 @@ import { AnnotationProvider } from "../../contexts/AnnotationContext";
 
 interface TraceStep {
   id: string;
-  type: "navigation" | "click" | "input" | "assertion" | "screenshot" | "network";
+  type: "navigation" | "click" | "input" | "assertion" | "screenshot" | "network" | "agent_node" | "tool_call";
   timestamp: number;
   description: string;
   selector?: string;
@@ -42,6 +42,12 @@ interface TraceStep {
   status?: "success" | "failure" | "warning";
   duration?: number;
   screenshot?: string;
+  agentData?: {
+    node: string;
+    action: string;
+    thought: string;
+    tools?: string[];
+  };
   networkData?: {
     method: string;
     url: string;
@@ -69,6 +75,31 @@ export const TraceViewer: React.FC = () => {
       url: "https://app.example.com/login",
       status: "success",
       duration: 1234,
+    },
+    {
+      id: "agent-1",
+      type: "agent_node",
+      timestamp: 500,
+      description: "Agent Node: supervisor",
+      status: "success",
+      agentData: {
+        node: "supervisor",
+        thought: "User requested authentication. I need to route this to the auth_manager agent.",
+        action: "route_to_auth"
+      }
+    },
+    {
+      id: "agent-2",
+      type: "agent_node",
+      timestamp: 1000,
+      description: "Agent Node: auth_manager",
+      status: "success",
+      agentData: {
+        node: "auth_manager",
+        thought: "I will attempt to login with the provided credentials.",
+        action: "execute_login",
+        tools: ["cognito_auth"]
+      }
     },
     {
       id: "2",
@@ -173,6 +204,10 @@ export const TraceViewer: React.FC = () => {
         return <Monitor className="h-4 w-4" />;
       case "network":
         return <Network className="h-4 w-4" />;
+      case "agent_node":
+        return <Sparkles className="h-4 w-4 text-purple-400" />;
+      case "tool_call":
+        return <Zap className="h-4 w-4 text-amber-400" />;
       default:
         return <Info className="h-4 w-4" />;
     }
@@ -428,8 +463,9 @@ export const TraceViewer: React.FC = () => {
               </CardHeader>
               <CardContent className="mac-card">
                 <Tabs defaultValue="console" className="h-full">
-                  <TabsList className="grid w-full grid-cols-3">
+                  <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="console">Console</TabsTrigger>
+                    <TabsTrigger value="logic">Agent Logic</TabsTrigger>
                     <TabsTrigger value="network">Network</TabsTrigger>
                     <TabsTrigger value="source">Source</TabsTrigger>
                   </TabsList>
@@ -453,6 +489,71 @@ export const TraceViewer: React.FC = () => {
                         ))}
                       </div>
                     </ScrollArea>
+                  </TabsContent>
+
+                  <TabsContent value="logic">
+                    {traceSteps[currentStep]?.agentData ? (
+                      <div className="space-y-4">
+                        <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Sparkles className="h-4 w-4 text-purple-400" />
+                            <span className="text-sm font-medium text-purple-300 capitalize">
+                              Node: {traceSteps[currentStep].agentData.node}
+                            </span>
+                          </div>
+                          <p className="text-xs text-zinc-300 leading-relaxed italic">
+                            "{traceSteps[currentStep].agentData.thought}"
+                          </p>
+                        </div>
+                        
+                        <div>
+                          <Label className="text-[10px] text-zinc-500 uppercase tracking-wider">Action taken</Label>
+                          <div className="mt-1 px-2 py-1 rounded bg-zinc-800 text-xs font-mono text-emerald-400 border border-zinc-700">
+                            {traceSteps[currentStep].agentData.action}()
+                          </div>
+                        </div>
+
+                        {traceSteps[currentStep].agentData.tools && (
+                          <div>
+                            <Label className="text-[10px] text-zinc-500 uppercase tracking-wider">Tools utilized</Label>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {traceSteps[currentStep].agentData.tools.map((tool, idx) => (
+                                <Badge key={idx} variant="secondary" className="text-[10px] bg-zinc-800 border-zinc-700 text-zinc-400">
+                                  {tool}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="pt-4 border-t border-zinc-800">
+                          <p className="text-[10px] text-zinc-500 mb-2 uppercase">LangGraph Execution Path</p>
+                          <div className="flex items-center gap-1 overflow-x-auto pb-2">
+                            {["start", "supervisor", "auth_manager", "browser_agent", "end"].map((n, i) => (
+                              <React.Fragment key={n}>
+                                <div className={cn(
+                                  "px-2 py-1 rounded text-[10px] whitespace-nowrap border",
+                                  traceSteps[currentStep].agentData.node === n 
+                                    ? "bg-purple-500/20 border-purple-500/50 text-purple-300" 
+                                    : "bg-zinc-900 border-zinc-800 text-zinc-600"
+                                )}>
+                                  {n}
+                                </div>
+                                {i < 4 && <ChevronRight className="h-3 w-3 text-zinc-800 shrink-0" />}
+                              </React.Fragment>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground text-center p-8">
+                        <Network className="h-12 w-12 opacity-20 mb-4" />
+                        <p className="text-sm">No agentic data for this step</p>
+                        <p className="text-[10px] text-zinc-600 mt-1">
+                          Agent logic is only available for AI-orchestrated multi-agent flows.
+                        </p>
+                      </div>
+                    )}
                   </TabsContent>
 
                   <TabsContent value="network">

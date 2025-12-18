@@ -57,8 +57,8 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
     try {
       const { data, error } = await supabase
         .from("rlhf_feedback")
-        .select("id, query, user_query, thumbs_up, rating, created_at, status, severity")
-        .or("thumbs_up.eq.false,rating.lt.4")
+        .select("id, query, user_query, feedback_type, feedback_value, created_at, status, feedback_metadata")
+        .or("feedback_type.eq.thumbs_down,status.eq.rejected")
         .order("created_at", { ascending: false })
         .limit(10);
 
@@ -67,7 +67,10 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
       } else {
         setRecentItems(data?.map(item => ({
           ...item,
-          query: item.query || item.user_query || "Unknown query"
+          query: item.query || item.user_query || "Unknown query",
+          thumbs_up: item.feedback_type === "thumbs_up",
+          rating: item.feedback_value?.score ?? null,
+          severity: item.feedback_metadata?.severity ?? null
         })) || []);
       }
     } catch (error) {
@@ -103,7 +106,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
     try {
       const { data, error } = await supabase
         .from("rlhf_feedback")
-        .select("ai_response, response, feedback_text, query, user_query, suggested_correction")
+        .select("response, query, user_query, feedback_metadata")
         .eq("id", targetId)
         .single();
 
@@ -113,9 +116,9 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
         return;
       }
 
-      const responseText = data.ai_response || data.response || "";
+      const responseText = data.response || "";
       setOriginal(responseText);
-      setCorrected(data.suggested_correction || data.feedback_text || responseText);
+      setCorrected(data.feedback_metadata?.correction || data.feedback_metadata?.text || responseText);
       setQueryText(data.query || data.user_query || "");
       setLoaded(true);
       setShowRecent(false);
@@ -141,9 +144,14 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
       const { error } = await supabase
         .from("rlhf_feedback")
         .update({
-          feedback_text: corrected,
-          rating: 5, // Mark as high-quality training example
-          thumbs_up: true,
+          feedback_type: "correction",
+          feedback_value: { score: 5 },
+          feedback_metadata: { 
+            correction: corrected,
+            original_response: original,
+            severity: "resolved"
+          },
+          status: "approved",
           updated_at: new Date().toISOString(),
         })
         .eq("id", searchId);

@@ -4,7 +4,7 @@ import {
   Zap,
   Mic,
   Languages,
-  Brain,
+  Lightbulb,
   Eye,
   EyeOff,
   Monitor,
@@ -43,7 +43,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         {icon}
       </div>
       <div>
-        <h3 className="font-medium text-mac-text-primary mb-1">{title}</h3>
+        <h3 className="font-normal text-mac-text-primary mb-1">{title}</h3>
         <p className="text-sm text-mac-text-secondary">{description}</p>
       </div>
     </div>
@@ -139,7 +139,7 @@ export const HUDLauncher: React.FC<HUDLauncherProps> = ({ className }) => {
         <div className="text-center space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mac-primary-blue-400/10 border border-mac-primary-blue-400/20">
             <Zap className="h-4 w-4 text-mac-primary-blue-400" />
-            <span className="text-sm text-mac-primary-blue-400 font-medium">MC-SIAM</span>
+            <span className="text-sm text-mac-primary-blue-400 font-normal">MC-SIAM</span>
           </div>
 
           <h1 className="text-4xl font-light text-mac-text-primary">Heads-Up Display</h1>
@@ -165,7 +165,7 @@ export const HUDLauncher: React.FC<HUDLauncherProps> = ({ className }) => {
                   )}
                 />
                 <div>
-                  <p className="font-medium text-mac-text-primary">MC-SIAM API Server</p>
+                  <p className="font-normal text-mac-text-primary">MC-SIAM API Server</p>
                   <p className="text-sm text-mac-text-secondary">
                     {apiStatus === "online" && "Running on localhost:3000"}
                     {apiStatus === "offline" && "Not running — start with: bun run dev"}
@@ -206,7 +206,7 @@ export const HUDLauncher: React.FC<HUDLauncherProps> = ({ className }) => {
 
         {/* Features Grid */}
         <div>
-          <h2 className="text-xl font-medium text-mac-text-primary mb-4">Features</h2>
+          <h2 className="text-xl font-normal text-mac-text-primary mb-4">Features</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FeatureCard
               icon={<Mic className="h-5 w-5" />}
@@ -219,7 +219,7 @@ export const HUDLauncher: React.FC<HUDLauncherProps> = ({ className }) => {
               description="Auto-detect and translate 24+ languages in real-time. Perfect for multilingual meetings or café reconnaissance."
             />
             <FeatureCard
-              icon={<Brain className="h-5 w-5" />}
+              icon={<Lightbulb className="h-5 w-5" />}
               title="AOMA Knowledge Base"
               description="Semantic search across your enterprise knowledge. Press / to query anything mid-meeting."
             />
@@ -263,30 +263,30 @@ export const HUDLauncher: React.FC<HUDLauncherProps> = ({ className }) => {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center space-y-2">
-                <div className="w-12 h-12 mx-auto rounded-full bg-mac-primary-blue-400/10 flex items-center justify-center text-mac-primary-blue-400 font-bold">
+                <div className="w-12 h-12 mx-auto rounded-full bg-mac-primary-blue-400/10 flex items-center justify-center text-mac-primary-blue-400 font-normal">
                   1
                 </div>
-                <h3 className="font-medium text-mac-text-primary">Capture</h3>
+                <h3 className="font-normal text-mac-text-primary">Capture</h3>
                 <p className="text-sm text-mac-text-secondary">
                   BlackHole routes system audio (Zoom, Meet, Teams) to the HUD. Your mic is captured
                   separately.
                 </p>
               </div>
               <div className="text-center space-y-2">
-                <div className="w-12 h-12 mx-auto rounded-full bg-mac-primary-blue-400/10 flex items-center justify-center text-mac-primary-blue-400 font-bold">
+                <div className="w-12 h-12 mx-auto rounded-full bg-mac-primary-blue-400/10 flex items-center justify-center text-mac-primary-blue-400 font-normal">
                   2
                 </div>
-                <h3 className="font-medium text-mac-text-primary">Process</h3>
+                <h3 className="font-normal text-mac-text-primary">Process</h3>
                 <p className="text-sm text-mac-text-secondary">
                   Audio streams to Deepgram for transcription. Text is analyzed, translated, and
                   matched against AOMA.
                 </p>
               </div>
               <div className="text-center space-y-2">
-                <div className="w-12 h-12 mx-auto rounded-full bg-mac-primary-blue-400/10 flex items-center justify-center text-mac-primary-blue-400 font-bold">
+                <div className="w-12 h-12 mx-auto rounded-full bg-mac-primary-blue-400/10 flex items-center justify-center text-mac-primary-blue-400 font-normal">
                   3
                 </div>
-                <h3 className="font-medium text-mac-text-primary">Display</h3>
+                <h3 className="font-normal text-mac-text-primary">Display</h3>
                 <p className="text-sm text-mac-text-secondary">
                   Results appear in a transparent overlay. Insights surface automatically. You look
                   like a genius.

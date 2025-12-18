@@ -57,8 +57,8 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
       // (approved, corrected, or highly rated)
       const { data, error } = await supabase
         .from("rlhf_feedback")
-        .select("id, query, user_query, thumbs_up, rating, created_at, status, suggested_correction")
-        .or("status.eq.approved,thumbs_up.eq.true,rating.gte.4")
+        .select("id, query, user_query, feedback_type, feedback_value, created_at, status, feedback_metadata")
+        .or("status.eq.approved,feedback_type.eq.thumbs_up")
         .order("created_at", { ascending: false })
         .limit(10);
 
@@ -67,7 +67,10 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
       } else {
         setRecentItems(data?.map(item => ({
           ...item,
-          query: item.query || item.user_query || "Unknown query"
+          query: item.query || item.user_query || "Unknown query",
+          thumbs_up: item.feedback_type === "thumbs_up",
+          rating: item.feedback_value?.score ?? null,
+          suggested_correction: item.feedback_metadata?.correction ?? null
         })) || []);
       }
     } catch (error) {
@@ -135,7 +138,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
     try {
       // Generate Playwright test code from feedback
       const query = feedbackData.query || feedbackData.user_query || "";
-      const expectedResponse = feedbackData.suggested_correction || feedbackData.feedback_text || feedbackData.ai_response || feedbackData.response || "";
+      const expectedResponse = feedbackData.feedback_metadata?.correction || feedbackData.feedback_metadata?.text || feedbackData.response || "";
       const relevantDocs = feedbackData.retrieved_contexts || feedbackData.documents_marked || [];
 
       const testCodeGenerated = `/**
@@ -165,9 +168,9 @@ test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async
   // Verify response quality (based on curator feedback)
   expect(response).toBeTruthy();
   ${
-    feedbackData.rating >= 4
+    (feedbackData.feedback_value?.score >= 4 || feedbackData.feedback_type === "thumbs_up")
       ? `
-  // This response received positive feedback (${feedbackData.rating}/5 stars)
+  // This response received positive feedback (${feedbackData.feedback_value?.score || 5}/5 stars)
   // Expected to contain key information:`
       : `
   // This response received negative feedback - should be improved
@@ -194,7 +197,7 @@ test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async
   
   console.log('✅ RLHF regression test passed for query: ${query.substring(0, 50)}...');
 });
-`;
+\`;
 
       setTestCode(testCodeGenerated);
       toast.success("Test case generated! Review and save to file.");
@@ -350,13 +353,13 @@ test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async
                 <Badge
                   className={cn(
                     "text-xs",
-                    feedbackData.rating >= 4 || feedbackData.thumbs_up
+                    (feedbackData.feedback_value?.score >= 4 || feedbackData.feedback_type === "thumbs_up")
                       ? "bg-green-500/20 text-green-300"
                       : "bg-red-500/20 text-red-300"
                   )}
                 >
-                  {feedbackData.thumbs_up ? "👍" : feedbackData.thumbs_up === false ? "👎" : "⏳"}{" "}
-                  {feedbackData.rating ? `${feedbackData.rating}/5` : "No rating"}
+                  {feedbackData.feedback_type === "thumbs_up" ? "👍" : feedbackData.feedback_type === "thumbs_down" ? "👎" : "⏳"}{" "}
+                  {feedbackData.feedback_value?.score ? `${feedbackData.feedback_value.score}/5` : "No rating"}
                 </Badge>
                 {(feedbackData.retrieved_contexts || feedbackData.documents_marked) && (
                   <Badge className="text-xs bg-purple-500/20 text-purple-300">
