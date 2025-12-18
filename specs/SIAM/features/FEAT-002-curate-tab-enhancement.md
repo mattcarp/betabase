@@ -863,17 +863,17 @@ test('Curate tab visual regression', async ({ page }) => {
 
 **Spec Author**: Claudette (Long-Running Agent)  
 **Date**: 2025-12-18  
-**Status**: ✅ Ready for User Review
+**Status**: ✅ Approved by User (Option 3)
 
 **User Review Checklist**:
-- [ ] Vision aligns with demo goals
-- [ ] Scope is manageable (3-4 hours)
-- [ ] Deduplication explanation sufficient
-- [ ] RLHF visualization valuable
-- [ ] Mock data strategy acceptable
-- [ ] Technical approach sound
+- [x] Vision aligns with demo goals
+- [x] Scope is comprehensive (Option 3 selected)
+- [x] Deduplication explanation sufficient
+- [x] RLHF visualization valuable
+- [x] Mock data strategy acceptable
+- [x] Technical approach sound
 
-**Once approved, proceed to Implementation Phase 1 (T001-T008).**
+**Proceeding to Implementation Phase 1 (T001-T008) on branch feat/FEAT-002-curate-overhaul.**
 
 ---
 

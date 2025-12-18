@@ -62,8 +62,9 @@ import { usePermissions } from "../../hooks/usePermissions";
 import { RLHFFeedbackTab } from "./rlhf-tabs/RLHFFeedbackTab";
 import { CuratorQueue } from "./CuratorQueue";
 import { FeedbackImpactCard } from "./FeedbackImpactCard";
+import { DeduplicationTab } from "./DeduplicationTab";
 import { cognitoAuth } from "../../services/cognitoAuth";
-import { ListTodo } from "lucide-react";
+import { ListTodo, GitBranch } from "lucide-react";
 
 interface VectorStoreFile {
   id: string;
@@ -482,6 +483,23 @@ export function CurateTab({
                 RLHF
               </button>
             )}
+
+            {/* Deduplication Intelligence Tab */}
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "dedupe"}
+              onClick={() => setActiveTab("dedupe")}
+              className={cn(
+                "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
+                activeTab === "dedupe"
+                  ? "bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)] border-b-[3px] border-[var(--mac-primary-blue-400)] shadow-[0_2px_8px_rgba(51,133,255,0.3)]"
+                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
+              )}
+            >
+              <GitBranch className="h-4 w-4 mr-2" />
+              Dedupe
+            </button>
           </div>
 
           {/* Queue Tab Content - Curator Review Queue */}
@@ -987,6 +1005,13 @@ export function CurateTab({
           {canAccessRLHF && activeTab === "rlhf-feedback" && (
             <div role="tabpanel" className="flex-1 overflow-hidden mt-4">
               <RLHFFeedbackTab />
+            </div>
+          )}
+
+          {/* Deduplication Intelligence Tab Content */}
+          {activeTab === "dedupe" && (
+            <div role="tabpanel" className="flex-1 overflow-auto mt-4">
+              <DeduplicationTab />
             </div>
           )}
         </div>
