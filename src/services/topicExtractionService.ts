@@ -161,6 +161,7 @@ export class TopicExtractionService extends EventEmitter {
     "that",
     "these",
     "those",
+    "way",
     "i",
     "you",
     "he",
@@ -421,15 +422,24 @@ export class TopicExtractionService extends EventEmitter {
     const totalDocs = this.documents.size;
 
     for (const [term, tf] of termFreqs) {
-      // Calculate IDF (Inverse Document Frequency)
-      const docsWithTerm = this.termDocumentFrequency.get(term)?.size || 0;
-      const idf = Math.log(totalDocs / (1 + docsWithTerm));
+      let score: number;
+      let idf: number;
 
-      // Calculate TF-IDF
-      const tfidf = tf * idf;
+      if (totalDocs <= 1) {
+        // Single document case: use normalized TF only (IDF not meaningful)
+        // Normalize TF to a reasonable range using log(1 + tf)
+        idf = 1; // Neutral IDF
+        score = Math.log1p(tf);
+      } else {
+        // Multi-document case: use standard TF-IDF with smoothing
+        const docsWithTerm = this.termDocumentFrequency.get(term)?.size || 0;
+        // Add 1 to totalDocs to ensure log argument is always > 1
+        idf = Math.log((totalDocs + 1) / (1 + docsWithTerm));
+        score = Math.max(0, tf * idf);
+      }
 
       // Boost domain-specific terms
-      const boostedScore = this.DOMAIN_TERMS.has(term) ? tfidf * 1.5 : tfidf;
+      const boostedScore = this.DOMAIN_TERMS.has(term) ? score * 1.5 : score;
 
       results.push({
         term,

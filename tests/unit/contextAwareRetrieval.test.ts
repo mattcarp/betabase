@@ -151,7 +151,7 @@ describe("ContextAwareRetrieval", () => {
       const parsed = JSON.parse(jsonText);
 
       expect(parsed.enhancedQuery).toBe("enhanced query here");
-      expect(parsed.reasoningText).toBe("explanation here");
+      expect(parsed.reasoning).toBe("explanation here");
     });
 
     test("should handle malformed JSON gracefully", () => {
