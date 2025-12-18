@@ -44,7 +44,6 @@ import { Button } from "../button";
 import { Card, CardContent, CardHeader, CardTitle } from "../card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../tabs";
 import { cn } from "../../../lib/utils";
-import { ConnectionStatusIndicator } from "../ConnectionStatusIndicator";
 import { SiamLogo } from "../SiamLogo";
 import { AOMAKnowledgePanel } from "../AOMAKnowledgePanel";
 import EnhancedKnowledgePanel from "../EnhancedKnowledgePanel";
@@ -438,7 +437,6 @@ Be helpful, concise, and professional in your responses.`;
 
               {/* Controls - Responsive spacing */}
               <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
-                <ConnectionStatusIndicator />
                 <div className="introspection-dropdown-container">
                   <IntrospectionDropdown />
                 </div>

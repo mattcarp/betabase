@@ -49,8 +49,9 @@ Use connecting lines and annotations. Professional but approachable style.
 
 ### Query 1: Baseline
 - Type: "What are the steps to link a product to a master in AOMA?"
-- Show streaming response
-- Point to inline citations
+- During progress, menation the 'intent filter' (top), and re-ranking (bottom)
+- Show streaming response (mention streamin is so quack becauase of the new Gemini Flash - cam out on wednesday)
+- Point to inline citations (ensure that there are some)
 
 ### Query 2: AOMA Workflow Diagram (⭐ SHOWSTOPPER)
 - **Type this exact question**: 

@@ -133,6 +133,11 @@ export function IntrospectionDropdown() {
     });
   };
 
+  // Calculate system status for button display
+  const connectedServices = [status?.hasSupabase, status?.hasAIProvider].filter(Boolean).length;
+  const totalServices = 2;
+  const allSystemsOnline = connectedServices === totalServices;
+
   return (
     <>
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
@@ -143,13 +148,12 @@ export function IntrospectionDropdown() {
             className="relative flex items-center gap-2 mac-button mac-button-outline"
           >
             <Bone className="h-4 w-4" />
-            <span className="hidden sm:inline">Introspection</span>
-            {status?.tracingEnabled && (
-              <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            <div className="flex items-center gap-2">
+              <span className={`text-xs font-mono ${allSystemsOnline ? 'text-green-400' : 'text-yellow-400'}`}>
+                {connectedServices}/{totalServices}
               </span>
-            )}
+              <span className="hidden sm:inline">Introspection</span>
+            </div>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[400px]">

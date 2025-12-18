@@ -124,7 +124,7 @@ export function NanoBananaInfographic({
           <div className="text-center space-y-3">
             <p className="text-base text-zinc-200 font-medium flex items-center gap-2 justify-center">
               <span className="text-2xl">🍌</span>
-              <span>Nano Banana Pro is creating your infographic...</span>
+              <span>The Betabase is creating your infographic...</span>
             </p>
             <p className="text-sm text-zinc-400">
               Gemini 3 Pro • Hand-drawn editorial style • 2K resolution
@@ -152,21 +152,13 @@ export function NanoBananaInfographic({
 
       {/* Generated Image */}
       {imageUrl && !isGenerating && (
-        <div className="relative w-full aspect-video bg-zinc-900/30 rounded-lg border border-zinc-800 overflow-hidden group">
+        <div className="relative w-full aspect-video bg-zinc-900/30 rounded-lg border border-zinc-800 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={imageUrl}
             alt="Generated infographic"
             className="w-full h-full object-contain"
           />
-          
-          {/* Hover overlay with prompt */}
-          <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center p-6">
-            <div className="text-center max-w-2xl">
-              <p className="text-xs text-zinc-400 mb-2">Prompt used:</p>
-              <p className="text-sm text-zinc-200">{prompt}</p>
-            </div>
-          </div>
         </div>
       )}
 

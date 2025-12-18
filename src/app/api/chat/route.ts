@@ -855,6 +855,20 @@ export async function POST(req: Request) {
       }
     }
 
+    // Extract sources for inline citations
+    let citationSources: any[] = [];
+    if (orchestratorResult?.sources && Array.isArray(orchestratorResult.sources)) {
+      citationSources = orchestratorResult.sources.slice(0, 5).map((s: any, idx: number) => ({
+        id: `source-${idx + 1}`,
+        title: s.metadata?.title || s.metadata?.file_path || s.metadata?.ticket_key || `Source ${idx + 1}`,
+        url: s.metadata?.url || s.metadata?.jira_url,
+        description: s.metadata?.summary || s.content?.substring(0, 150),
+        confidence: s.similarity || s.score,
+        sourceType: s.source_type
+      }));
+      console.log(`📎 Extracted ${citationSources.length} citation sources for inline display`);
+    }
+
     // Enhanced system prompt that includes AOMA orchestration context
     const enhancedSystemPrompt = aomaContext.trim()
       ? `${systemPrompt || "You are SIAM, a helpful AI assistant for Sony Music employees."}
@@ -976,6 +990,10 @@ I don't have any relevant information about that in my knowledge base. Could you
       system: enhancedSystemPrompt, // Use system parameter instead of adding to messages array
       // Only include temperature for models that support it (not o-series)
       ...(supportsTemperature && { temperature: modelSettings.temperature || temperature }),
+      // Attach sources for inline citations
+      experimental_providerMetadata: citationSources.length > 0 ? {
+        sources: citationSources
+      } : undefined,
       // Note: AI SDK handles token limits via the model config, not maxTokens parameter
       // Attach RAG metadata to the stream for client-side display
       onFinish: async ({ text, finishReason, usage }) => {
@@ -1020,6 +1038,12 @@ I don't have any relevant information about that in my knowledge base. Could you
       if (ragMetadata) {
         response.headers.set("X-RAG-Metadata", JSON.stringify(ragMetadata));
         console.log("📊 RAG Metadata attached to response:", ragMetadata);
+      }
+      
+      // Attach citation sources as custom header for inline citations
+      if (citationSources.length > 0) {
+        response.headers.set("X-Citation-Sources", JSON.stringify(citationSources));
+        console.log("📎 Citation Sources attached to response:", citationSources.length);
       }
 
       // Attach basic Server-Timing if we captured AOMA timings
