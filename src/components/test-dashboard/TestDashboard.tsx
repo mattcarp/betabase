@@ -62,6 +62,33 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
     duration: 0,
   });
   const [recentLogs, setRecentLogs] = useState<string[]>([]);
+  
+  // Historical analytics data from database
+  const [historicalStats, setHistoricalStats] = useState({
+    totalTests: 0,
+    totalExecutions: 0,
+    passRate: "0",
+  });
+
+  // Fetch real analytics on mount
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const response = await fetch("/api/tests/analytics");
+        if (response.ok) {
+          const data = await response.json();
+          setHistoricalStats({
+            totalTests: data.summary?.totalTests || 0,
+            totalExecutions: data.summary?.totalExecutions || 0,
+            passRate: data.summary?.passRate || "0",
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch analytics:", error);
+      }
+    };
+    fetchAnalytics();
+  }, []);
 
   // Session Timeline state
   const [sessionInteractions, setSessionInteractions] = useState<SessionInteraction[]>([]);
@@ -410,13 +437,31 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             </div>
           </div>
 
-          {/* Test Statistics Bar */}
+          {/* Test Statistics Bar - Shows historical data OR current run */}
           <div className="grid grid-cols-6 gap-4">
             <Card className="mac-card border-border">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-muted-foreground">Total</span>
-                  <span className="text-lg font-normal text-foreground">{testStats.total}</span>
+                  <span className="text-sm font-medium text-muted-foreground">
+                    {isRunning ? "Running" : "Total Tests"}
+                  </span>
+                  <span className="text-lg font-normal text-foreground">
+                    {isRunning ? testStats.total : historicalStats.totalTests.toLocaleString()}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="mac-card border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Activity className="h-4 w-4 text-blue-600" />
+                    <span className="text-sm font-medium text-muted-foreground">Executions</span>
+                  </div>
+                  <span className="text-lg font-normal text-blue-700">
+                    {isRunning ? testStats.passed + testStats.failed : historicalStats.totalExecutions.toLocaleString()}
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -426,9 +471,11 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-emerald-600" />
-                    <span className="text-sm font-medium text-muted-foreground">Passed</span>
+                    <span className="text-sm font-medium text-muted-foreground">Pass Rate</span>
                   </div>
-                  <span className="text-lg font-normal text-emerald-700">{testStats.passed}</span>
+                  <span className="text-lg font-normal text-emerald-700">
+                    {isRunning ? `${getSuccessRate()}%` : `${historicalStats.passRate}%`}
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -441,18 +488,6 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                     <span className="text-sm font-medium text-muted-foreground">Failed</span>
                   </div>
                   <span className="text-lg font-normal text-rose-700">{testStats.failed}</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="mac-card border-border">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <AlertCircle className="h-4 w-4 text-amber-600" />
-                    <span className="text-sm font-medium text-muted-foreground">Skipped</span>
-                  </div>
-                  <span className="text-lg font-normal text-amber-700">{testStats.skipped}</span>
                 </div>
               </CardContent>
             </Card>
@@ -475,10 +510,17 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-blue-600" />
-                    <span className="text-sm font-medium text-muted-foreground">Success</span>
+                    <Zap className="h-4 w-4 text-amber-600" />
+                    <span className="text-sm font-medium text-muted-foreground">
+                      {isRunning ? "Running" : "Status"}
+                    </span>
                   </div>
-                  <span className="text-lg font-normal text-blue-700">{getSuccessRate()}%</span>
+                  <span className={cn(
+                    "text-sm font-medium",
+                    isRunning ? "text-amber-600" : "text-emerald-600"
+                  )}>
+                    {isRunning ? "⏳ In Progress" : "✅ Ready"}
+                  </span>
                 </div>
               </CardContent>
             </Card>
