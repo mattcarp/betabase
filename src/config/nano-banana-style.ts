@@ -8,20 +8,12 @@
  */
 
 export const NANO_BANANA_BASE_STYLE = `
-Visual Style Requirements:
-- Hand-drawn aesthetic with slight imperfections for warmth
-- Color palette: Purple (#7c3aed), Blue (#2563eb), Teal (#14b8a6), Yellow (#facc15)
-- Circuit board or tech-pattern decorative borders
-- Icons and small illustrations where relevant (music notes, gears, padlocks, etc.)
-- Handwritten-style typography for main headers
-- Clean modern sans-serif for body text and labels
-- Professional but approachable tone (not corporate stiff, not childish)
-- Tech-forward aesthetic with human warmth
-- Gradients encouraged (purple→blue, blue→teal)
-- Subtle shadows and depth for visual interest
-- Clean composition, not cluttered
-- 16:9 aspect ratio for presentation slides
-- 2K resolution for clarity
+Visual Style (Mattie's Signature Aesthetic):
+Minimal line art infographic, editorial layout, simple human pictogram figures with circular heads, dotted flow paths connecting stages, pastel accent colors, clean sans serif labels, process diagram, storytelling workflow, magazine editorial style.
+
+Loosely reference MAC Design System principles for polish, but editorial storytelling takes priority.
+
+Technical specs: 16:9 aspect ratio, 2K resolution for clarity.
 `;
 
 /**

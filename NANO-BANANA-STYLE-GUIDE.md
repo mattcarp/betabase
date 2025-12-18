@@ -1,46 +1,61 @@
 # 🍌 Nano Banana Pro - Visual Style Guide
 
-**📝 MATTIE: This is YOUR canvas! Replace the placeholder below with your written style guide.**
+**✅ MATTIE'S APPROVED STYLE** (Updated Dec 18, 2025)
 
 ---
 
-## Current Style Template (PLACEHOLDER)
+## The Signature Aesthetic
 
-The style below is automatically appended to EVERY Nano Banana infographic prompt.  
-**Edit once here, applies everywhere!**
+**Minimal line art infographic, editorial layout, simple human pictogram figures with circular heads, dotted flow paths connecting stages, pastel accent colors, clean sans serif labels, process diagram, storytelling workflow, magazine editorial style.**
 
-### Visual Style Requirements:
-- Hand-drawn aesthetic with slight imperfections for warmth
-- Color palette: Purple (#7c3aed), Blue (#2563eb), Teal (#14b8a6), Yellow (#facc15)
-- Circuit board or tech-pattern decorative borders
-- Icons and small illustrations where relevant (music notes, gears, padlocks, etc.)
-- Handwritten-style typography for main headers
-- Clean modern sans-serif for body text and labels
-- Professional but approachable tone (not corporate stiff, not childish)
-- Tech-forward aesthetic with human warmth
-- Gradients encouraged (purple→blue, blue→teal)
-- Subtle shadows and depth for visual interest
-- Clean composition, not cluttered
-- 16:9 aspect ratio for presentation slides
-- 2K resolution for clarity
+Loosely reference MAC Design System principles for polish, but editorial storytelling takes priority.
 
 ---
 
-## 📍 Where This Gets Used:
+## What This Means Technically:
 
-**File:** `src/config/nano-banana-style.ts`  
-**Constant:** `NANO_BANANA_BASE_STYLE`
+### Visual Elements:
+- **Line art**: Clean, minimal strokes - not heavy or bold
+- **Pictogram figures**: Simple humans with circular heads (think: restroom sign style but warmer)
+- **Flow paths**: Dotted lines connecting stages/steps
+- **Colors**: Pastel accent colors (soft purple, soft blue, soft teal, soft yellow)
+- **Typography**: Clean sans serif labels - modern, readable
 
-When you update this guide, copy/paste it into that file to replace the placeholder!
+### Layout:
+- **Editorial magazine style**: Think Wired, FastCompany layouts
+- **Storytelling workflow**: Clear narrative flow, left-to-right or top-to-bottom
+- **Process diagram focus**: Show steps, stages, progression
+- **Clean composition**: Lots of white space, not cluttered
+
+### Tone:
+- **Professional**: Suitable for business presentations
+- **Approachable**: Not corporate stiff
+- **Modern**: Contemporary design trends
+- **Storytelling**: Guides the viewer through a narrative
 
 ---
 
-## ✍️ YOUR WRITTEN STYLE GUIDE GOES BELOW:
+## MAC Design System Reference (Loose):
 
-*(Paste your complete style guide here, then copy it to nano-banana-style.ts)*
+Reference MAC principles for:
+- Spacing/padding consistency
+- Typography hierarchy
+- Accessibility (contrast, readability)
+
+But **editorial storytelling > strict MAC compliance**. If the story demands it, break the rules!
 
 ---
 
-**Last Updated:** December 18, 2025  
-**Status:** ⚠️ PENDING - Waiting for Mattie's style guide
+## 16:9 Aspect Ratio, 2K Resolution
 
+Perfect for CapCut slides and screen recording demos.
+
+---
+
+**This style auto-injects into EVERY Nano Banana prompt!**  
+**Edit here → Updates everywhere automatically** ✨
+
+---
+
+**Last Updated:** December 18, 2025 @ 5:50 AM PST  
+**Status:** ✅ ACTIVE - Mattie's approved style in production
