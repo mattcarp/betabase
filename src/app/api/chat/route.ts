@@ -630,19 +630,6 @@ export async function POST(req: Request) {
         const vectorDuration = vectorEndTime - vectorStartTime;
         console.log(`⚡ Vector query completed in ${vectorDuration}ms`);
 
-        // Extract sources for inline citations RIGHT HERE (while orchestratorResult is in scope!)
-        if (orchestratorResult?.sources && Array.isArray(orchestratorResult.sources)) {
-          citationSources = orchestratorResult.sources.slice(0, 5).map((s: any, idx: number) => ({
-            id: `source-${idx + 1}`,
-            title: s.metadata?.title || s.metadata?.file_path || s.metadata?.ticket_key || `Source ${idx + 1}`,
-            url: s.metadata?.url || s.metadata?.jira_url,
-            description: s.metadata?.summary || s.content?.substring(0, 150),
-            confidence: Math.round((s.similarity || s.score || 0) * 100),
-            sourceType: s.source_type
-          }));
-          console.log(`📎 Extracted ${citationSources.length} citation sources for inline display`);
-        }
-
         // Handle different response formats from the orchestrator
         let contextContent = null;
 
@@ -738,6 +725,17 @@ export async function POST(req: Request) {
           console.log(
             `✅ Orchestrator returned ${orchestratorResult.sources.length} merged results`
           );
+
+          // 📎 Extract citation sources for inline display
+          citationSources = orchestratorResult.sources.slice(0, 5).map((s: any, idx: number) => ({
+            id: `source-${idx + 1}`,
+            title: s.metadata?.title || s.metadata?.file_path || s.metadata?.ticket_key || `Source ${idx + 1}`,
+            url: s.metadata?.url || s.metadata?.jira_url,
+            description: s.metadata?.summary || s.content?.substring(0, 150),
+            confidence: Math.round((s.similarity || s.score || 0) * 100),
+            sourceType: s.source_type
+          }));
+          console.log(`📎 Extracted ${citationSources.length} citation sources for inline display`);
 
           // Add source information to knowledge elements
           orchestratorResult.sources.slice(0, 6).forEach((source: any) => {
