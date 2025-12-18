@@ -16,7 +16,7 @@ import { Input } from "./input";
 import { Badge } from "./badge";
 import { ScrollArea } from "./scroll-area";
 import { FileCode, Download, RefreshCw, CheckCircle, Play, ChevronDown, Clock, ThumbsUp, CheckCheck, TestTube } from "lucide-react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "../../hooks/useSupabaseClient";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -43,7 +43,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
   const [recentItems, setRecentItems] = useState<RecentFeedback[]>([]);
   const [loadingRecent, setLoadingRecent] = useState(false);
   const [showRecent, setShowRecent] = useState(false);
-  const supabase = createClientComponentClient();
+  const supabase = useSupabaseClient();
 
   // Load recent approved/corrected feedback items
   useEffect(() => {
@@ -141,64 +141,59 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
       const expectedResponse = feedbackData.feedback_metadata?.correction || feedbackData.feedback_metadata?.text || feedbackData.response || "";
       const relevantDocs = feedbackData.retrieved_contexts || feedbackData.documents_marked || [];
 
-      const testCodeGenerated = `/**
- * Auto-generated from RLHF feedback
- * Feedback ID: ${feedbackData.id}
- * Generated: ${new Date().toISOString()}
- */
+      const parts = [];
+      parts.push("/**\n");
+      parts.push(" * Auto-generated from RLHF feedback\n");
+      parts.push(" * Feedback ID: " + feedbackData.id + "\n");
+      parts.push(" * Generated: " + new Date().toISOString() + "\n");
+      parts.push(" */\n\n");
+      parts.push("import { test, expect } from '@playwright/test';\n\n");
+      parts.push("test('RLHF Regression: " + query.substring(0, 80).replace(/"/g, '\\"') + "...', async ({ page }) => {\n");
+      parts.push("  // Navigate to chat\n");
+      parts.push("  await page.goto('http://localhost:3000');\n");
+      parts.push("  await page.waitForLoadState('networkidle');\n\n");
+      parts.push("  // Send query\n");
+      parts.push("  const chatInput = page.locator('[data-testid=\"chat-input\"], textarea[placeholder*=\"Message\"]').first();\n");
+      parts.push("  await chatInput.fill(`" + query.replace(/`/g, "\\`") + "`);\n\n");
+      parts.push("  const sendButton = page.locator('button:has-text(\"Send\"), [data-testid=\"send-button\"]').first();\n");
+      parts.push("  await sendButton.click();\n\n");
+      parts.push("  // Wait for AI response\n");
+      parts.push("  await page.waitForSelector('[role=\"assistant\"], .assistant-message, .ai-message', { timeout: 30000 });\n");
+      parts.push("  const response = await page.locator('[role=\"assistant\"], .assistant-message, .ai-message').last().textContent();\n\n");
+      parts.push("  // Verify response quality (based on curator feedback)\n");
+      parts.push("  expect(response).toBeTruthy();\n");
 
-import { test, expect } from '@playwright/test';
+      if (feedbackData.feedback_value?.score >= 4 || feedbackData.feedback_type === "thumbs_up") {
+        parts.push("  // This response received positive feedback (" + (feedbackData.feedback_value?.score || 5) + "/5 stars)\n");
+        parts.push("  // Expected to contain key information:\n");
+      } else {
+        parts.push("  // This response received negative feedback - should be improved\n");
+        parts.push("  // Curator correction:\n");
+      }
 
-test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async ({ page }) => {
-  // Navigate to chat
-  await page.goto('http://localhost:3000');
-  await page.waitForLoadState('networkidle');
-  
-  // Send query
-  const chatInput = page.locator('[data-testid="chat-input"], textarea[placeholder*="Message"]').first();
-  await chatInput.fill(\`${query.replace(/`/g, "\\`")}\`);
-  
-  const sendButton = page.locator('button:has-text("Send"), [data-testid="send-button"]').first();
-  await sendButton.click();
-  
-  // Wait for AI response
-  await page.waitForSelector('[role="assistant"], .assistant-message, .ai-message', { timeout: 30000 });
-  const response = await page.locator('[role="assistant"], .assistant-message, .ai-message').last().textContent();
-  
-  // Verify response quality (based on curator feedback)
-  expect(response).toBeTruthy();
-  ${
-    (feedbackData.feedback_value?.score >= 4 || feedbackData.feedback_type === "thumbs_up")
-      ? `
-  // This response received positive feedback (${feedbackData.feedback_value?.score || 5}/5 stars)
-  // Expected to contain key information:`
-      : `
-  // This response received negative feedback - should be improved
-  // Curator correction:`
-  }
-  ${expectedResponse ? `expect(response?.toLowerCase()).toContain('${expectedResponse.substring(0, 50).toLowerCase().replace(/'/g, "\\'")}');` : "// No specific assertions - manual verification required"}
-  
-  ${
-    relevantDocs.length > 0
-      ? `
-  // Verify correct documents were retrieved (based on curator marks)
-  // ${relevantDocs.length} documents marked as relevant`
-      : ""
-  }
-  ${relevantDocs
-    .slice(0, 3)
-    .map((doc: any) => `// - ${doc.content?.substring(0, 60) || "Document " + doc.id}...`)
-    .join("\n  ")}
-  
-  // Verify RAG metadata present (proof of advanced RAG)
-  const ragBadges = page.locator('[class*="bg-purple-500"], [class*="bg-blue-500"]');
-  const badgeCount = await ragBadges.count();
-  expect(badgeCount).toBeGreaterThan(0); // Should show RAG strategy badges
-  
-  console.log('✅ RLHF regression test passed for query: ${query.substring(0, 50)}...');
-});
-\`;
+      if (expectedResponse) {
+        parts.push("  expect(response?.toLowerCase()).toContain('" + expectedResponse.substring(0, 50).toLowerCase().replace(/'/g, "\\'") + "');\n");
+      } else {
+        parts.push("  // No specific assertions - manual verification required\n");
+      }
 
+      if (relevantDocs.length > 0) {
+        parts.push("\n  // Verify correct documents were retrieved (based on curator marks)\n");
+        parts.push("  // " + relevantDocs.length + " documents marked as relevant\n");
+        relevantDocs.slice(0, 3).forEach((doc: any) => {
+          const docContent = doc.content?.substring(0, 60) || ("Document " + doc.id);
+          parts.push("  // - " + docContent + "...\n");
+        });
+      }
+
+      parts.push("\n  // Verify RAG metadata present (proof of advanced RAG)\n");
+      parts.push("  const ragBadges = page.locator('[class*=\"bg-purple-500\"], [class*=\"bg-blue-500\"]');\n");
+      parts.push("  const badgeCount = await ragBadges.count();\n");
+      parts.push("  expect(badgeCount).toBeGreaterThan(0); // Should show RAG strategy badges\n\n");
+      parts.push("  console.log('✅ RLHF regression test passed for query: ' + '" + query.substring(0, 50).replace(/'/g, "\\'") + "' + '...');\n");
+      parts.push("});\n");
+
+      const testCodeGenerated = parts.join('');
       setTestCode(testCodeGenerated);
       toast.success("Test case generated! Review and save to file.");
     } catch (error) {
@@ -219,13 +214,14 @@ test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `rlhf-${feedbackData?.id || "test"}.spec.ts`;
+    const fileName = "rlhf-" + (feedbackData?.id || "test") + ".spec.ts";
+    a.download = fileName;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    toast.success(`Test saved to rlhf-${feedbackData?.id || "test"}.spec.ts`);
+    toast.success("Test saved to " + fileName);
   };
 
   return (
@@ -359,7 +355,7 @@ test('RLHF Regression: ${query.substring(0, 80).replace(/"/g, '\\"')}...', async
                   )}
                 >
                   {feedbackData.feedback_type === "thumbs_up" ? "👍" : feedbackData.feedback_type === "thumbs_down" ? "👎" : "⏳"}{" "}
-                  {feedbackData.feedback_value?.score ? `${feedbackData.feedback_value.score}/5` : "No rating"}
+                  {feedbackData.feedback_value?.score ? (feedbackData.feedback_value.score + "/5") : "No rating"}
                 </Badge>
                 {(feedbackData.retrieved_contexts || feedbackData.documents_marked) && (
                   <Badge className="text-xs bg-purple-500/20 text-purple-300">

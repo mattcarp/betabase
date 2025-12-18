@@ -11,7 +11,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { TrendingUp, TrendingDown, Activity, Target, Users, Award } from "lucide-react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "../../hooks/useSupabaseClient";
 import {
   LineChart,
   Line,
@@ -57,7 +57,7 @@ export function RLHFImpactDashboard() {
   });
   const [timeSeries, setTimeSeries] = useState<TimeSeriesData[]>([]);
   const [loading, setLoading] = useState(true);
-  const supabase = createClientComponentClient();
+  const supabase = useSupabaseClient();
 
   useEffect(() => {
     loadImpactMetrics();

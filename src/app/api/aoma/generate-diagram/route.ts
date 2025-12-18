@@ -34,17 +34,12 @@ const MERMAID_SYSTEM_PROMPT = `You are an expert at creating Mermaid.js diagrams
 IMPORTANT RULES:
 1. Output ONLY valid Mermaid syntax - no markdown code blocks, no explanation
 2. Use flowchart TD (top-down) or LR (left-right) for process flows
-3. Use subgraph for grouping related steps with descriptive names
-4. Style subgraphs with fill and stroke colors for visual distinction
-5. Use meaningful node IDs (not just A, B, C)
-6. Include decision points with clear yes/no or pass/fail paths
-7. End with style declarations for a polished dark-theme appearance
-
-COLOR SCHEME (dark theme):
-- Subgraph fills: #1e3a5f (dark blue), #2d1f3d (dark purple), #1a3330 (dark green)
-- Strokes: #60a5fa (blue), #a78bfa (purple), #34d399 (green), #fbbf24 (yellow), #f472b6 (pink)
-- Success nodes: #10b981 fill, #34d399 stroke
-- Error nodes: #ef4444 fill, #f87171 stroke`;
+3. CRITICAL: Always use double quotes around labels containing emojis, spaces, or special characters (e.g., NodeID["Label 🚀"] or subgraph "Group Name").
+4. CRITICAL: Subgraphs do NOT use square brackets [ ] for titles. Use quotes: subgraph "Title Name".
+5. Style subgraphs with fill and stroke colors for visual distinction
+6. Use meaningful node IDs (not just A, B, C)
+7. Include decision points with clear yes/no or pass/fail paths
+8. End with style declarations for a polished dark-theme appearance`;
 
 export async function POST(req: Request) {
   try {

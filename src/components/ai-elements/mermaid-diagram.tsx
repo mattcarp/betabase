@@ -91,6 +91,18 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
     sanitized = sanitized.replace(/^(graph\s+(?:TD|TB|LR|RL|BT))\s+(\w)/gm, "$1\n    $2");
     sanitized = sanitized.replace(/^(flowchart\s+(?:TD|TB|LR|RL|BT))\s+(\w)/gm, "$1\n    $2");
 
+    // Fix subgraph title with brackets (invalid Mermaid syntax)
+    // e.g., "subgraph ID [Title & More]" -> "subgraph ID ["Title & More"]"
+    sanitized = sanitized.replace(/^(\s*subgraph\s+\w+)\s+\[([^\]]+)\]/gm, '$1 ["$2"]');
+    
+    // Fix subgraph without ID but with brackets
+    // e.g., "subgraph [Title & More]" -> "subgraph ["Title & More"]"
+    sanitized = sanitized.replace(/^(\s*subgraph)\s+\[([^\]]+)\]/gm, '$1 ["$2"]');
+
+    // Quote subgraph titles that have special chars and aren't quoted
+    // e.g., "subgraph Title & More" -> "subgraph "Title & More""
+    sanitized = sanitized.replace(/^(\s*subgraph\s+)([^"\n\r]+[&()\/]+[^"\n\r]*)$/gm, '$1"$2"');
+
     // Remove <br/> and other HTML tags that Gemini sometimes includes
     sanitized = sanitized.replace(/<br\s*\/?>/gi, " ");
     sanitized = sanitized.replace(/<[^>]+>/g, "");
@@ -107,26 +119,31 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
     sanitized = sanitized.replace(/(\([^)]*)[\/:<>|?]+([^)]*\))/g, "$1$2");
 
     // Fix truncated hex colors (e.g., #005* -> #005588)
-    // Common pattern: AI cuts off hex values mid-stream
     sanitized = sanitized.replace(/#([0-9a-fA-F]{3})(\*|[\s;,\)])/g, "#$1$1$2");
     sanitized = sanitized.replace(/#([0-9a-fA-F]{1,5})\*/g, (match, hex) => {
-      // Pad truncated hex to 6 characters
       const padded = hex.padEnd(6, hex.charAt(hex.length - 1));
       return `#${padded}`;
     });
 
-    // Fix unclosed double-circle parentheses (e.g., ((Success -> ((Success)))
-    // The AI often forgets to close double-parens for circle nodes
+    // Fix unclosed double-circle parentheses
     sanitized = sanitized.replace(/\(\(([^)]+)\s*$/gm, "(($1))");
     sanitized = sanitized.replace(/\(\(([^)]+)\*/g, "(($1))");
-    // Fix single-paren closures on double-paren opens
     sanitized = sanitized.replace(/\(\(([^)]+)\)(?!\))/g, "(($1))");
+
+    // Fix stadium shape brackets if they contain inner brackets (nested issues)
+    // e.g., StartNode([Label]) -> StartNode(["Label"])
+    // But skip if already quoted to avoid double-quoting: (["Already quoted"])
+    sanitized = sanitized.replace(/\(\[([^"\]]+)\]\)/g, '(["$1"])');
+    
+    // Remove escaped quotes inside stadium nodes (AI sometimes adds \")
+    sanitized = sanitized.replace(/\(\[\\"([^\]]+)\\"\]\)/g, '(["$1"])');
+    sanitized = sanitized.replace(/\(\[\\\'([^\]]+)\\\'\]\)/g, '(["$1"])');
 
     // Fix incomplete node shapes
     sanitized = sanitized.replace(/\[([^\]]+)\*/g, "[$1]");
     sanitized = sanitized.replace(/\{([^}]+)\*/g, "{$1}");
 
-    // Remove trailing asterisks that shouldn't be there
+    // Remove trailing asterisks
     sanitized = sanitized.replace(/\*\s*$/gm, "");
     sanitized = sanitized.replace(/\*\s*;/g, ";");
 
@@ -134,16 +151,10 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
     sanitized = sanitized.replace(/(stroke-width:\d+px)\s*\n/g, "$1;\n");
 
     // Quote node labels that contain special characters
-    // Mermaid needs quotes around labels with spaces/special chars in certain contexts
-    // Fix: ID((Label with spaces)) -> ID(("Label with spaces"))
     sanitized = sanitized.replace(/\(\(([^")(]+\s[^")(]+)\)\)/g, '(("$1"))');
-
-    // Fix node labels in brackets that have special chars (but aren't already quoted)
-    // e.g., [Create DSCM Ticket] -> ["Create DSCM Ticket"]
     sanitized = sanitized.replace(/\[([^"\]]+\s[^"\]]+)\](?!:)/g, '["$1"]');
 
-    // Remove any remaining problematic characters that could break parsing
-    // (Clean up double spaces, etc.)
+    // Final cleanup of double spaces
     sanitized = sanitized.replace(/\s{2,}/g, " ");
 
     return sanitized;

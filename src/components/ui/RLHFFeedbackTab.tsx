@@ -27,7 +27,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "../../hooks/useSupabaseClient";
 
 interface RetrievedDoc {
   id: string;
@@ -324,7 +324,7 @@ export function RLHFFeedbackTab() {
   const [feedbackQueue, setFeedbackQueue] = useState<FeedbackItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ pending: 0, submitted: 0, avgRating: 0 });
-  const supabase = createClientComponentClient();
+  const supabase = useSupabaseClient();
 
   useEffect(() => {
     loadFeedbackQueue();

@@ -31,7 +31,7 @@ Does AOMA have a blockchain integration?
 
 ### Segment A: Hook (30s)
 - **NOT** another chatbot
-- Enterprise intelligence for Sony Music
+- Enterprise Intelligence for Human and AI Interaction
 - **7 differentiators**
 - Strategic SLM approach
 

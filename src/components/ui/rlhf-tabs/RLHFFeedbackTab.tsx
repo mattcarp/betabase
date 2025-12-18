@@ -41,82 +41,91 @@ interface RetrievedDoc {
 interface FeedbackItem {
   id: string;
   sessionId: string;
-  query: string;
-  response: string;
+  userQuestion: string;          // What the user asked
+  aiResponse: string;              // What the AI answered (potentially WRONG)
+  correctResponse?: string;        // What the curator says it SHOULD be
   retrievedDocs: RetrievedDoc[];
+  status: "pending" | "approved" | "rejected" | "corrected";
+  priority: number;
+  severity: "minor" | "moderate" | "critical";
   timestamp: string;
-  feedbackSubmitted?: boolean;
+  ragMetadata?: {
+    strategy: string;
+    confidence: number;
+    latency_ms: number;
+  };
 }
 
 interface FeedbackCardProps {
   item: FeedbackItem;
-  onSubmitFeedback: (feedback: any) => void;
+  onApprove: (itemId: string) => void;
+  onReject: (itemId: string, reason: string) => void;
+  onCorrect: (itemId: string, correctResponse: string, docRelevance: Record<string, boolean>) => void;
 }
 
-function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
+function CurationCard({ item, onApprove, onReject, onCorrect }: FeedbackCardProps) {
   const [expanded, setExpanded] = useState(false);
-  const [feedbackType, setFeedbackType] = useState<string | null>(null);
-  const [rating, setRating] = useState(0);
-  const [correction, setCorrection] = useState("");
+  const [correctionText, setCorrectionText] = useState("");
+  const [rejectReason, setRejectReason] = useState("");
+  const [showRejectModal, setShowRejectModal] = useState(false);
   const [docRelevance, setDocRelevance] = useState<Record<string, boolean>>({});
   const [submitting, setSubmitting] = useState(false);
+  
+  // Helper to get severity color
+  const getSeverityColor = () => {
+    switch (item.severity) {
+      case "critical":
+        return "var(--mac-error-red)";
+      case "moderate":
+        return "var(--mac-warning-yellow)";
+      case "minor":
+        return "var(--mac-primary-blue-400)";
+      default:
+        return "var(--mac-text-muted)";
+    }
+  };
 
-  const handleQuickFeedback = async (type: "thumbs_up" | "thumbs_down") => {
-    setFeedbackType(type);
+  const handleApproveClick = async () => {
     setSubmitting(true);
-
     try {
-      await onSubmitFeedback({
-        type,
-        itemId: item.id,
-        docRelevance,
-      });
-      toast.success("Thank you for your feedback!");
+      await onApprove(item.id);
+      toast.success("Response approved!");
     } catch (error) {
-      toast.error("Failed to submit feedback");
+      toast.error("Failed to approve");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleRatingFeedback = async () => {
-    if (rating === 0) return;
-
-    setFeedbackType("rating");
+  const handleRejectClick = async () => {
+    if (!rejectReason.trim()) {
+      toast.error("Please provide a reason for rejection");
+      return;
+    }
     setSubmitting(true);
-
     try {
-      await onSubmitFeedback({
-        type: "rating",
-        itemId: item.id,
-        value: { score: rating },
-        docRelevance,
-      });
-      toast.success("Rating submitted!");
+      await onReject(item.id, rejectReason);
+      toast.success("Response rejected");
+      setShowRejectModal(false);
     } catch (error) {
-      toast.error("Failed to submit rating");
+      toast.error("Failed to reject");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleDetailedFeedback = async () => {
-    if (!correction.trim()) return;
-
-    setFeedbackType("detailed");
+  const handleCorrectClick = async () => {
+    if (!correctionText.trim()) {
+      toast.error("Please provide the correct answer");
+      return;
+    }
     setSubmitting(true);
-
     try {
-      await onSubmitFeedback({
-        type: "correction",
-        itemId: item.id,
-        value: { correction },
-        docRelevance,
-      });
-      toast.success("Detailed feedback submitted!");
-      setCorrection("");
+      await onCorrect(item.id, correctionText, docRelevance);
+      toast.success("Correction submitted!");
+      setCorrectionText("");
     } catch (error) {
-      toast.error("Failed to submit feedback");
+      toast.error("Failed to submit correction");
     } finally {
       setSubmitting(false);
     }
@@ -125,7 +134,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
   const toggleDocRelevance = (docId: string, relevant: boolean) => {
     setDocRelevance((prev) => ({
       ...prev,
-      [docId]: prev[docId] === relevant ? null : relevant,
+      [docId]: prev[docId] === relevant ? undefined : relevant,
     }));
   };
 
@@ -147,7 +156,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <Lightbulb className="h-4 w-4 text-purple-400" />
+                <Lightbulb className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />
                 <span className="text-xs text-[var(--mac-text-muted)] font-light">
                   {new Date(item.timestamp).toLocaleString()}
                 </span>
@@ -164,7 +173,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                   </Badge>
                 )}
               </div>
-              <CardTitle className="text-base font-medium text-[var(--mac-text-primary)]">
+              <CardTitle className="text-base font-light text-[var(--mac-text-primary)]">
                 {item.query}
               </CardTitle>
             </div>
@@ -186,7 +195,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
               variant="ghost"
               size="sm"
               onClick={() => setExpanded(!expanded)}
-              className="mt-2 text-xs text-purple-400 hover:text-purple-300 font-light"
+              className="mt-2 text-xs text-[var(--mac-primary-blue-400)] hover:text-[var(--mac-primary-blue-600)] font-light"
             >
               {expanded ? "Show less" : "Show more"}
             </Button>
@@ -200,12 +209,14 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
               </span>
               <Button
                 size="sm"
-                variant={feedbackType === "thumbs_up" ? "default" : "outline"}
+                variant="ghost"
                 onClick={() => handleQuickFeedback("thumbs_up")}
                 disabled={submitting}
                 className={cn(
-                  "h-8 font-light",
-                  feedbackType === "thumbs_up" && "bg-green-500 hover:bg-green-600"
+                  "h-8 font-light border transition-all",
+                  feedbackType === "thumbs_up"
+                    ? "bg-[var(--mac-success-green)]/20 border-[var(--mac-success-green)]/40 text-[var(--mac-success-green)]"
+                    : "border-[var(--mac-utility-border)] text-[var(--mac-text-secondary)] hover:border-[var(--mac-success-green)]/40 hover:bg-[var(--mac-success-green)]/10"
                 )}
               >
                 <ThumbsUp className="h-3.5 w-3.5 mr-1" />
@@ -213,17 +224,22 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
               </Button>
               <Button
                 size="sm"
-                variant={feedbackType === "thumbs_down" ? "destructive" : "outline"}
+                variant="ghost"
                 onClick={() => handleQuickFeedback("thumbs_down")}
                 disabled={submitting}
-                className="h-8 font-light"
+                className={cn(
+                  "h-8 font-light border transition-all",
+                  feedbackType === "thumbs_down"
+                    ? "bg-[var(--mac-error-red)]/20 border-[var(--mac-error-red)]/40 text-[var(--mac-error-red)]"
+                    : "border-[var(--mac-utility-border)] text-[var(--mac-text-secondary)] hover:border-[var(--mac-error-red)]/40 hover:bg-[var(--mac-error-red)]/10"
+                )}
               >
                 <ThumbsDown className="h-3.5 w-3.5 mr-1" />
                 Not Helpful
               </Button>
 
               {/* Star Rating */}
-              <div className="flex items-center gap-1 ml-2">
+              <div className="flex items-center gap-1 ml-2 border-l border-[var(--mac-utility-border)] pl-3">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
@@ -234,8 +250,8 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                       className={cn(
                         "h-4 w-4 transition-colors",
                         star <= rating
-                          ? "fill-yellow-400 text-yellow-400"
-                          : "text-zinc-600 hover:text-zinc-400"
+                          ? "fill-[var(--mac-warning-yellow)] text-[var(--mac-warning-yellow)]"
+                          : "text-[var(--mac-text-muted)] hover:text-[var(--mac-text-secondary)]"
                       )}
                     />
                   </button>
@@ -245,7 +261,10 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                     size="sm"
                     onClick={handleRatingFeedback}
                     disabled={submitting}
-                    className="ml-2 h-7 text-xs font-light"
+                    className={cn(
+                      "ml-2 h-7 text-xs font-light",
+                      "bg-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-600)]"
+                    )}
                   >
                     Submit
                   </Button>
@@ -257,8 +276,8 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
           {/* Retrieved Documents */}
           {expanded && item.retrievedDocs.length > 0 && (
             <div className="space-y-2 pt-4 border-t border-[var(--mac-utility-border)]">
-              <h4 className="text-sm font-medium text-[var(--mac-text-primary)] flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-purple-400" />
+              <h4 className="text-sm font-light text-[var(--mac-text-primary)] flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />
                 Retrieved Documents ({item.retrievedDocs.length})
               </h4>
               <div className="space-y-2">
@@ -300,20 +319,27 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                       <div className="flex gap-1">
                         <Button
                           size="sm"
-                          variant={docRelevance[doc.id] === true ? "default" : "ghost"}
+                          variant="ghost"
                           onClick={() => toggleDocRelevance(doc.id, true)}
                           className={cn(
-                            "h-8 w-8 p-0",
-                            docRelevance[doc.id] === true && "bg-green-500 hover:bg-green-600"
+                            "h-8 w-8 p-0 border transition-all",
+                            docRelevance[doc.id] === true
+                              ? "bg-[var(--mac-success-green)]/20 border-[var(--mac-success-green)]/40 text-[var(--mac-success-green)]"
+                              : "border-[var(--mac-utility-border)] text-[var(--mac-text-muted)] hover:border-[var(--mac-success-green)]/40 hover:bg-[var(--mac-success-green)]/10"
                           )}
                         >
                           <Check className="h-4 w-4" />
                         </Button>
                         <Button
                           size="sm"
-                          variant={docRelevance[doc.id] === false ? "destructive" : "ghost"}
+                          variant="ghost"
                           onClick={() => toggleDocRelevance(doc.id, false)}
-                          className="h-8 w-8 p-0"
+                          className={cn(
+                            "h-8 w-8 p-0 border transition-all",
+                            docRelevance[doc.id] === false
+                              ? "bg-[var(--mac-error-red)]/20 border-[var(--mac-error-red)]/40 text-[var(--mac-error-red)]"
+                              : "border-[var(--mac-utility-border)] text-[var(--mac-text-muted)] hover:border-[var(--mac-error-red)]/40 hover:bg-[var(--mac-error-red)]/10"
+                          )}
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -327,9 +353,9 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
 
           {/* Detailed Feedback */}
           {expanded && !item.feedbackSubmitted && (
-            <div className="space-y-2 pt-4 border-t border-[var(--mac-utility-border)]">
-              <h4 className="text-sm font-medium text-[var(--mac-text-primary)] flex items-center gap-2">
-                <Edit3 className="h-4 w-4 text-purple-400" />
+            <div className="space-y-3 pt-4 border-t border-[var(--mac-utility-border)]">
+              <h4 className="text-sm font-light text-[var(--mac-text-primary)] flex items-center gap-2">
+                <Edit3 className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />
                 Detailed Feedback
               </h4>
               <Textarea
@@ -338,16 +364,23 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                 onChange={(e) => setCorrection(e.target.value)}
                 className={cn(
                   "min-h-[100px]",
-                  "bg-[var(--mac-surface-background)]/50",
+                  "bg-[var(--mac-surface-elevated)]",
                   "border-[var(--mac-utility-border)]",
                   "text-[var(--mac-text-primary)]",
+                  "placeholder:text-[var(--mac-text-muted)]",
+                  "focus:border-[var(--mac-primary-blue-400)]",
+                  "focus:ring-1 focus:ring-[var(--mac-primary-blue-400)]/20",
                   "font-light"
                 )}
               />
               <Button
                 onClick={handleDetailedFeedback}
                 disabled={submitting || !correction.trim()}
-                className="w-full font-light"
+                className={cn(
+                  "w-full font-light",
+                  "bg-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-600)]",
+                  "disabled:opacity-50 disabled:cursor-not-allowed"
+                )}
               >
                 Submit Detailed Feedback
               </Button>
@@ -367,6 +400,7 @@ export function RLHFFeedbackTab() {
     submitted: 0,
     avgRating: 0,
   });
+  const [showExplanation, setShowExplanation] = useState(true);
 
   useEffect(() => {
     loadFeedbackQueue();
@@ -525,6 +559,105 @@ export function RLHFFeedbackTab() {
 
   return (
     <div className="h-full flex flex-col space-y-4">
+      {/* Explanatory Header */}
+      <AnimatePresence>
+        {showExplanation && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="relative"
+          >
+            <Card
+              className={cn(
+                "mac-card-elevated border-[var(--mac-primary-blue-400)]/20",
+                "bg-gradient-to-r from-[var(--mac-primary-blue-400)]/5 to-[var(--mac-accent-purple-400)]/5"
+              )}
+            >
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-lg bg-[var(--mac-primary-blue-400)]/10 flex items-center justify-center">
+                      <Lightbulb className="h-5 w-5 text-[var(--mac-primary-blue-400)]" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-lg font-light text-[var(--mac-text-primary)]">
+                        Human Feedback Training System
+                      </CardTitle>
+                      <p className="text-xs text-[var(--mac-text-muted)] font-light mt-1">
+                        RLHF: Reinforcement Learning from Human Feedback
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowExplanation(false)}
+                    className="h-8 w-8 p-0 text-[var(--mac-text-muted)] hover:text-[var(--mac-text-primary)]"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-[var(--mac-text-secondary)] font-light leading-relaxed">
+                  This system improves AI response quality through your expert feedback. Review
+                  AI-generated answers from the chat interface, rate their accuracy, and mark
+                  which retrieved documents were actually helpful.
+                </p>
+                <div className="grid grid-cols-3 gap-3 pt-2">
+                  <div className="flex items-start gap-2">
+                    <div className="h-6 w-6 rounded bg-[var(--mac-primary-blue-400)]/10 flex items-center justify-center flex-shrink-0">
+                      <span className="text-xs font-light text-[var(--mac-primary-blue-400)]">
+                        1
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-xs font-light text-[var(--mac-text-primary)]">
+                        Rate Responses
+                      </p>
+                      <p className="text-xs text-[var(--mac-text-muted)] font-light">
+                        Thumbs up/down or 5-star rating
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="h-6 w-6 rounded bg-[var(--mac-accent-purple-400)]/10 flex items-center justify-center flex-shrink-0">
+                      <span className="text-xs font-light text-[var(--mac-accent-purple-400)]">
+                        2
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-xs font-light text-[var(--mac-text-primary)]">
+                        Mark Documents
+                      </p>
+                      <p className="text-xs text-[var(--mac-text-muted)] font-light">
+                        Identify helpful sources
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="h-6 w-6 rounded bg-[var(--mac-success-green)]/10 flex items-center justify-center flex-shrink-0">
+                      <span className="text-xs font-light text-[var(--mac-success-green)]">
+                        3
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-xs font-light text-[var(--mac-text-primary)]">
+                        Provide Corrections
+                      </p>
+                      <p className="text-xs text-[var(--mac-text-muted)] font-light">
+                        Suggest improvements
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Stats Bar */}
       <div className="grid grid-cols-3 gap-4">
         <Card className={cn("mac-card-elevated", "border-[var(--mac-utility-border)]")}>
@@ -532,9 +665,9 @@ export function RLHFFeedbackTab() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[var(--mac-text-muted)] font-light">Pending</p>
-                <p className="text-2xl font-bold text-[var(--mac-text-primary)]">{stats.pending}</p>
+                <p className="text-2xl font-light text-[var(--mac-text-primary)]">{stats.pending}</p>
               </div>
-              <AlertCircle className="h-8 w-8 text-yellow-400" />
+              <AlertCircle className="h-8 w-8 text-[var(--mac-warning-yellow)]" />
             </div>
           </CardContent>
         </Card>
@@ -544,11 +677,11 @@ export function RLHFFeedbackTab() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[var(--mac-text-muted)] font-light">Submitted</p>
-                <p className="text-2xl font-bold text-[var(--mac-text-primary)]">
+                <p className="text-2xl font-light text-[var(--mac-text-primary)]">
                   {stats.submitted}
                 </p>
               </div>
-              <Check className="h-8 w-8 text-green-400" />
+              <Check className="h-8 w-8 text-[var(--mac-success-green)]" />
             </div>
           </CardContent>
         </Card>
@@ -558,11 +691,11 @@ export function RLHFFeedbackTab() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[var(--mac-text-muted)] font-light">Avg Rating</p>
-                <p className="text-2xl font-bold text-[var(--mac-text-primary)]">
+                <p className="text-2xl font-light text-[var(--mac-text-primary)]">
                   {stats.avgRating > 0 ? stats.avgRating.toFixed(1) : "N/A"}
                 </p>
               </div>
-              <TrendingUp className="h-8 w-8 text-purple-400" />
+              <TrendingUp className="h-8 w-8 text-[var(--mac-accent-purple-400)]" />
             </div>
           </CardContent>
         </Card>

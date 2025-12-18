@@ -16,7 +16,7 @@ import { Textarea } from "./textarea";
 import { Input } from "./input";
 import { Badge } from "./badge";
 import { Edit3, Save, RefreshCw, CheckCircle, AlertCircle, ChevronDown, Clock, ThumbsDown, AlertTriangle } from "lucide-react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "../../hooks/useSupabaseClient";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -45,7 +45,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
   const [recentItems, setRecentItems] = useState<RecentFeedback[]>([]);
   const [loadingRecent, setLoadingRecent] = useState(false);
   const [showRecent, setShowRecent] = useState(false);
-  const supabase = createClientComponentClient();
+  const supabase = useSupabaseClient();
 
   // Load recent items that need fixing (negative feedback)
   useEffect(() => {

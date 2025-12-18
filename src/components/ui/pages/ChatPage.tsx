@@ -18,6 +18,7 @@ import { RLHFTestSuite } from "../../test-dashboard/RLHFTestSuite";
 import { RLHFImpactDashboard } from "../../test-dashboard/RLHFImpactDashboard";
 import { LiveRAGMonitor } from "../../test-dashboard/LiveRAGMonitor";
 import { HistoricalTestExplorer } from "../../test-dashboard/HistoricalTestExplorer";
+import { TestDashboardErrorBoundary } from "../../test-dashboard/TestDashboardErrorBoundary";
 import {
   Upload,
   Settings,
@@ -263,9 +264,9 @@ Be helpful, concise, and professional in your responses.`;
   // All 6 trigger infographic generation and have Mermaid diagrams
   // Updated: December 2025 with latest AOMA corpus and release notes
   const suggestions = [
-    "What are the different asset types in AOMA and how do they relate to each other?",
+    "Show me The Betabase multi-tenant database architecture",
     "How does AOMA use AWS S3 storage tiers for long-term archiving?",
-    "What's the difference between asset registration and master linking in AOMA?",
+    "I'm getting an 'Asset Upload Sorting Failed' error when uploading files. What's going on?",
     "What are the permission levels in AOMA and what can each role do?",
     "What new UST features are being planned for the 2026 releases?",
     "How do I upload and archive digital assets in AOMA from preparation to storage?",
@@ -574,7 +575,9 @@ Be helpful, concise, and professional in your responses.`;
                     </TabsList>
 
                     <TabsContent value="dashboard" className="h-full">
-                      <TestDashboard className="h-full" />
+                      <TestDashboardErrorBoundary>
+                        <TestDashboard className="h-full" />
+                      </TestDashboardErrorBoundary>
                     </TabsContent>
 
                     <TabsContent value="historical" className="h-full">

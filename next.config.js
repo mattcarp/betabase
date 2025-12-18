@@ -20,13 +20,11 @@ module.exports = {
       "image/webp"
     ]
   },
-  "turbopack": {},
   "experimental": {
     "optimizePackageImports": [
       "@radix-ui/react-icons",
       "recharts",
       "framer-motion"
-    ],
-    "turbopackFileSystemCacheForDev": false
+    ]
   }
 }

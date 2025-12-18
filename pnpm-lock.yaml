@@ -111,15 +111,12 @@ importers:
       '@radix-ui/react-use-controllable-state':
         specifier: ^1.2.2
         version: 1.2.2(@types/react@19.2.7)(react@19.2.3)
-      '@supabase/auth-helpers-nextjs':
-        specifier: ^0.10.0
-        version: 0.10.0(@supabase/supabase-js@2.87.3)
       '@supabase/ssr':
-        specifier: ^0.7.0
-        version: 0.7.0(@supabase/supabase-js@2.87.3)
+        specifier: ^0.8.0
+        version: 0.8.0(@supabase/supabase-js@2.88.0)
       '@supabase/supabase-js':
-        specifier: ^2.53.0
-        version: 2.87.3
+        specifier: ^2.88.0
+        version: 2.88.0
       '@swc/helpers':
         specifier: ^0.5.17
         version: 0.5.17
@@ -182,7 +179,7 @@ importers:
         version: 1.11.13
       inngest:
         specifier: ^3.47.0
-        version: 3.47.0(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))(next@16.1.0-canary.28(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)(zod@3.25.76)
+        version: 3.47.0(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))(next@16.1.0-canary.32(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)(zod@3.25.76)
       jiti:
         specifier: ^2.6.1
         version: 2.6.1
@@ -205,8 +202,8 @@ importers:
         specifier: ^5.1.6
         version: 5.1.6
       next:
-        specifier: 16.1.0-canary.28
-        version: 16.1.0-canary.28(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: 16.1.0-canary.32
+        version: 16.1.0-canary.32(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       openai:
         specifier: ^6.1.0
         version: 6.13.0(ws@8.18.3)(zod@3.25.76)
@@ -217,13 +214,13 @@ importers:
         specifier: 8.4.39
         version: 8.4.39
       react:
-        specifier: ^19.2.3
+        specifier: 19.2.3
         version: 19.2.3
       react-day-picker:
         specifier: ^9.5.2
         version: 9.12.0(react@19.2.3)
       react-dom:
-        specifier: ^19.2.3
+        specifier: 19.2.3
         version: 19.2.3(react@19.2.3)
       react-draggable:
         specifier: ^4.5.0
@@ -1321,56 +1318,56 @@ packages:
   '@next/bundle-analyzer@16.0.10':
     resolution: {integrity: sha512-AHA6ZomhQuRsJtkoRvsq+hIuwA6F26mQzQT8ICcc2dL3BvHRcWOA+EiFr+BgWFY++EE957xVDqMIJjLApyxnwA==}
 
-  '@next/env@16.1.0-canary.28':
-    resolution: {integrity: sha512-MDaOokAUm/4bts7SnSV4qtL2S5PLsSrkKREp47QN8HLgiaq4fzyY4MLHJ3Am2YDICkJ7hrUdbWMe7q4fN1Mwrw==}
+  '@next/env@16.1.0-canary.32':
+    resolution: {integrity: sha512-G30OXtFQf2NyfdkYif71E68l9RgR8i1eAhfuA35lrx1uMvBKCFe67K8rL8EjpYBkviDFOWPs7jKBwZ51Er0CfQ==}
 
   '@next/eslint-plugin-next@16.0.10':
     resolution: {integrity: sha512-b2NlWN70bbPLmfyoLvvidPKWENBYYIe017ZGUpElvQjDytCWgxPJx7L9juxHt0xHvNVA08ZHJdOyhGzon/KJuw==}
 
-  '@next/swc-darwin-arm64@16.1.0-canary.28':
-    resolution: {integrity: sha512-p2Wggza9uCh8horXCKTjTxVVGgp46M2K6VtZgHOHMsJdjojS98F12o3ZvB21RZ+jnPJGOKxo10Lrhlg2tbM49g==}
+  '@next/swc-darwin-arm64@16.1.0-canary.32':
+    resolution: {integrity: sha512-9uV1Dx54Jj9qC4Tui7CcTHahXqEzH7K/wVnApHJCNLnzFe5J9EC35Ceirbp2L63MNimzFPXIz8bUxLlrdHdX0g==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@next/swc-darwin-x64@16.1.0-canary.28':
-    resolution: {integrity: sha512-Zn8amXQd99G13Ju9ziP/wJhNV/momD2X47UkOM6dgvgzkmwC6YDEEzATJgJh2b23h+iiFmDmONq8jVJ/nCChqQ==}
+  '@next/swc-darwin-x64@16.1.0-canary.32':
+    resolution: {integrity: sha512-GEi2A1WbmiBasRjf0RIBpg12JljpcFpa29z+WWn+IBq96zQqr1+RGU/yjyYBzbe5pvZak/qznbN9yKLGLnq4eQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
 
-  '@next/swc-linux-arm64-gnu@16.1.0-canary.28':
-    resolution: {integrity: sha512-rglvp+0JjhQ6XfH8UQnQrinauM5LFvAulL4dk4AdWAlurzm+exeHzlV4h8v5lzQkpz72bjOJ1qPyr1Ai0eGvKg==}
+  '@next/swc-linux-arm64-gnu@16.1.0-canary.32':
+    resolution: {integrity: sha512-eCJrucdS7VIZ20hqk3fim+lM/0pCFClSkpSZweDKWbrGlZ8YtcYMVBjzkgQrv6UNr7Ik2DaG4v4ggfdHoz5kUg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-arm64-musl@16.1.0-canary.28':
-    resolution: {integrity: sha512-w1UZFex08PjFaauiym4UzanDoHJG3SvB9ckaneNbkJg2g6Y9QReQ8iinVPoBJTr9IwBhEqRnJkmrmQXOFe5Z3A==}
+  '@next/swc-linux-arm64-musl@16.1.0-canary.32':
+    resolution: {integrity: sha512-50UNOZcagPXsQdGhQT1B0q2Tt3Enrah8gY8j53jbGHHaqkdYHb2W6+OV/t9vM5HXUm2xODtUHyrPLAKLcvrAmQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-x64-gnu@16.1.0-canary.28':
-    resolution: {integrity: sha512-OoB7x3n0w01nNopkHVMFM15uPene08OQ2i/RzioG8bymnL6jH1U/oyaVP6clFtHnpsx7dhz+F0/3GDqWihHtCA==}
+  '@next/swc-linux-x64-gnu@16.1.0-canary.32':
+    resolution: {integrity: sha512-nHfycsVm70cftJv5k6EAqcf/rv4spwyWJA7Q3rl6hkXHqew6i+vMIyjP/ln1rLj6ECXy3vKzdyfQMJwdY1TwVg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-linux-x64-musl@16.1.0-canary.28':
-    resolution: {integrity: sha512-OLMmzarvpo4kL1jtuuWvl/WU1/quuUJ7o0wOQTqODCHVioNNJ/7YIx45OA+hosKeTXKgDFECdLQGimp0QDv6jA==}
+  '@next/swc-linux-x64-musl@16.1.0-canary.32':
+    resolution: {integrity: sha512-kxw/FTZ6GREpnpKs5CrfnA5Shm7DUhgToVuNij6/XkuQunO8fkoAfem431mxlSDpskx3aIXu6KTHYbhN439zYQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-win32-arm64-msvc@16.1.0-canary.28':
-    resolution: {integrity: sha512-FLWH3f6qTTgjotFaJe3CEfSFTJH9VbBOe+6Bp7Ofn/ThX29fRcldfxATwiI23859TpdW7CAGw0z4IPJlrsFUWQ==}
+  '@next/swc-win32-arm64-msvc@16.1.0-canary.32':
+    resolution: {integrity: sha512-rTp0X9EWmWbBgprtcRSl9eqKSWQRrnFW+eLSKTQvLWujrFie7O/JisRrpHHMHvfehn7lVRWuB63rxOwcL55ScA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
 
-  '@next/swc-win32-x64-msvc@16.1.0-canary.28':
-    resolution: {integrity: sha512-6sU2t8hhZNDXWmXyKi/QNrUYC/x/kocRek0vayxhZJQ62YGlykF+2Jp0xxx2wb6rlum0ySgfbYjqE/Di/Wr0DQ==}
+  '@next/swc-win32-x64-msvc@16.1.0-canary.32':
+    resolution: {integrity: sha512-dFGQqqY4nryCg56d227Sqz13taoN8yBynRp3hNWnoDAkOoemEmdKN30Iqg0eH6lQ3jEMFMAi4YEdJ4TXJ7BPdQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -2814,45 +2811,33 @@ packages:
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
-  '@supabase/auth-helpers-nextjs@0.10.0':
-    resolution: {integrity: sha512-2dfOGsM4yZt0oS4TPiE7bD4vf7EVz7NRz/IJrV6vLg0GP7sMUx8wndv2euLGq4BjN9lUCpu6DG/uCC8j+ylwPg==}
-    deprecated: This package is now deprecated - please use the @supabase/ssr package instead.
+  '@supabase/auth-js@2.88.0':
+    resolution: {integrity: sha512-r/tlKD1Sv5w5AGmxVdBK17KwVkGOHMjihqw+HeW7Qsyes5ajLeyjL0M7jXZom1+NW4yINacKqOR9gqGmWzW9eA==}
+    engines: {node: '>=20.0.0'}
+
+  '@supabase/functions-js@2.88.0':
+    resolution: {integrity: sha512-p934lg2x9m0bVBXKl2EAwbyIVif21FD1VGtLNGU4iuPOyB6b0bzyRAFnK95pLj48CMJk0DU+q35TDOGcFAyxwQ==}
+    engines: {node: '>=20.0.0'}
+
+  '@supabase/postgrest-js@2.88.0':
+    resolution: {integrity: sha512-8DMGXWQUGM/4e8vtW95dLlNtETTVAyCAr7NyLFACDgVaaPUsDqZvS45LjBNd18fu3n6q/zZwCk4XL2yYWBHTVA==}
+    engines: {node: '>=20.0.0'}
+
+  '@supabase/realtime-js@2.88.0':
+    resolution: {integrity: sha512-4yMVLLq6I2KSzINlBK22vGJJYzJo9FAbfKZl7ZuarvzAClq48skgLWF7dlBCC3B/9wQckKhCfPfvyT0JVz3SXg==}
+    engines: {node: '>=20.0.0'}
+
+  '@supabase/ssr@0.8.0':
+    resolution: {integrity: sha512-/PKk8kNFSs8QvvJ2vOww1mF5/c5W8y42duYtXvkOSe+yZKRgTTZywYG2l41pjhNomqESZCpZtXuWmYjFRMV+dw==}
     peerDependencies:
-      '@supabase/supabase-js': ^2.39.8
+      '@supabase/supabase-js': ^2.76.1
 
-  '@supabase/auth-helpers-shared@0.7.0':
-    resolution: {integrity: sha512-FBFf2ei2R7QC+B/5wWkthMha8Ca2bWHAndN+syfuEUUfufv4mLcAgBCcgNg5nJR8L0gZfyuaxgubtOc9aW3Cpg==}
-    deprecated: This package is now deprecated - please use the @supabase/ssr package instead.
-    peerDependencies:
-      '@supabase/supabase-js': ^2.39.8
-
-  '@supabase/auth-js@2.87.3':
-    resolution: {integrity: sha512-/JjrPXOLhd0fFzf7pd7K16P+nEW2HvVHijis5fLrdGF+jErxuFYCouyzpTOxXO/nfO+EMwYYnu2e55uOet4fog==}
+  '@supabase/storage-js@2.88.0':
+    resolution: {integrity: sha512-iM1CFKzTX0XIesHA/szcCqZG54BkXoSzqlVRB/O8s2u2GsXi0oUTko0ruOgDheNcWwOABKt88b0Fs4IVfDq7tg==}
     engines: {node: '>=20.0.0'}
 
-  '@supabase/functions-js@2.87.3':
-    resolution: {integrity: sha512-nuDxFza9Pv8AXq8TAQscG2EE0+h7RKg0rgBIqFasSKN7Y1n5N1tkQYhUpW9bSMmLLy6hw9jHUE71iLF8gXhGUQ==}
-    engines: {node: '>=20.0.0'}
-
-  '@supabase/postgrest-js@2.87.3':
-    resolution: {integrity: sha512-5Z+yXOAUX5QPgGbKOAFNzG9Qu2BWufZ86edyDqfvZVm8IzqbbLh98kw4KJMqvJlKynfthBte3RCvbQ20MRk+Mg==}
-    engines: {node: '>=20.0.0'}
-
-  '@supabase/realtime-js@2.87.3':
-    resolution: {integrity: sha512-KwlE8hp8rxuKQtqyY2s3H1tgzHCtQ+6s0AedpX4PzHgDF63XPjCdDLWzs1/c/7Ut21FRPG7hHcgfGObzq+Npjw==}
-    engines: {node: '>=20.0.0'}
-
-  '@supabase/ssr@0.7.0':
-    resolution: {integrity: sha512-G65t5EhLSJ5c8hTCcXifSL9Q/ZRXvqgXeNo+d3P56f4U1IxwTqjB64UfmfixvmMcjuxnq2yGqEWVJqUcO+AzAg==}
-    peerDependencies:
-      '@supabase/supabase-js': ^2.43.4
-
-  '@supabase/storage-js@2.87.3':
-    resolution: {integrity: sha512-cMHz9584GNrEl15+uWfNoIusw40QuZ0/F887qihiP2UkrRAW4gVcAZyUa3xUITKsLPQg0zr8fTf4CAw3ugLSNw==}
-    engines: {node: '>=20.0.0'}
-
-  '@supabase/supabase-js@2.87.3':
-    resolution: {integrity: sha512-MH6JmZx7nVxnzNuK4nAAOTIgqSQutd1OqfExmVGU7B8v+/II4gG2h33qskiHMWHPx934nMrckDUicHBrnXA0Cg==}
+  '@supabase/supabase-js@2.88.0':
+    resolution: {integrity: sha512-XcvV+0x3ybSG1WBoRH0U0cizT1pyzkXD4lLiPaMLpj+A0jahvcrcrijBT+IQpLXOa2hbNLuHkS7yqJW67r4+nQ==}
     engines: {node: '>=20.0.0'}
 
   '@swc/helpers@0.5.15':
@@ -5151,9 +5136,6 @@ packages:
     resolution: {integrity: sha512-ekilCSN1jwRvIbgeg/57YFh8qQDNbwDb9xT/qu2DAHbFFZUicIl4ygVaAvzveMhMVr3LnpSKTNnwt8PoOfmKhQ==}
     hasBin: true
 
-  jose@4.15.9:
-    resolution: {integrity: sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==}
-
   jose@6.1.3:
     resolution: {integrity: sha512-0TpaTfihd4QMNwrz/ob2Bp7X04yuxJkjRGi4aKmOqwhov54i6u79oCv7T+C7lo70MKH6BesI3vscD1yb/yzKXQ==}
 
@@ -5665,8 +5647,8 @@ packages:
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
-  next@16.1.0-canary.28:
-    resolution: {integrity: sha512-/hhGjHKNNsypBYpMgJ4xJJnweSrsLt84paP5YIp+0zw2jX8lejOKsNyRNVGrGoABcL7jiuV9HRM14q/LUIVOUA==}
+  next@16.1.0-canary.32:
+    resolution: {integrity: sha512-AkT7PzmgL+7q4HPQYXOBp+yVe20QQPmqUQGx2TFT8AuXlkhZAWQd4gCWNsNuz679/hawro3BiXczFT8V/Hb+hA==}
     engines: {node: '>=20.9.0'}
     hasBin: true
     peerDependencies:
@@ -6384,9 +6366,6 @@ packages:
   serialize-error-cjs@0.1.4:
     resolution: {integrity: sha512-6a6dNqipzbCPlTFgztfNP2oG+IGcflMe/01zSzGrQcxGMKbIjOemBBD85pH92klWaJavAUWxAh9Z0aU28zxW6A==}
     deprecated: Rolling release, please update to 0.2.0
-
-  set-cookie-parser@2.7.2:
-    resolution: {integrity: sha512-oeM1lpU/UvhTxw+g3cIfxXHyJRc/uidd3yK1P242gzHds0udQBYzs3y8j4gCCW+ZJ7ad0yctld8RYO+bdurlvw==}
 
   set-function-length@1.2.2:
     resolution: {integrity: sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==}
@@ -8517,34 +8496,34 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@next/env@16.1.0-canary.28': {}
+  '@next/env@16.1.0-canary.32': {}
 
   '@next/eslint-plugin-next@16.0.10':
     dependencies:
       fast-glob: 3.3.1
 
-  '@next/swc-darwin-arm64@16.1.0-canary.28':
+  '@next/swc-darwin-arm64@16.1.0-canary.32':
     optional: true
 
-  '@next/swc-darwin-x64@16.1.0-canary.28':
+  '@next/swc-darwin-x64@16.1.0-canary.32':
     optional: true
 
-  '@next/swc-linux-arm64-gnu@16.1.0-canary.28':
+  '@next/swc-linux-arm64-gnu@16.1.0-canary.32':
     optional: true
 
-  '@next/swc-linux-arm64-musl@16.1.0-canary.28':
+  '@next/swc-linux-arm64-musl@16.1.0-canary.32':
     optional: true
 
-  '@next/swc-linux-x64-gnu@16.1.0-canary.28':
+  '@next/swc-linux-x64-gnu@16.1.0-canary.32':
     optional: true
 
-  '@next/swc-linux-x64-musl@16.1.0-canary.28':
+  '@next/swc-linux-x64-musl@16.1.0-canary.32':
     optional: true
 
-  '@next/swc-win32-arm64-msvc@16.1.0-canary.28':
+  '@next/swc-win32-arm64-msvc@16.1.0-canary.32':
     optional: true
 
-  '@next/swc-win32-x64-msvc@16.1.0-canary.28':
+  '@next/swc-win32-x64-msvc@16.1.0-canary.32':
     optional: true
 
   '@nodelib/fs.scandir@2.1.5':
@@ -10258,30 +10237,19 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
-  '@supabase/auth-helpers-nextjs@0.10.0(@supabase/supabase-js@2.87.3)':
-    dependencies:
-      '@supabase/auth-helpers-shared': 0.7.0(@supabase/supabase-js@2.87.3)
-      '@supabase/supabase-js': 2.87.3
-      set-cookie-parser: 2.7.2
-
-  '@supabase/auth-helpers-shared@0.7.0(@supabase/supabase-js@2.87.3)':
-    dependencies:
-      '@supabase/supabase-js': 2.87.3
-      jose: 4.15.9
-
-  '@supabase/auth-js@2.87.3':
+  '@supabase/auth-js@2.88.0':
     dependencies:
       tslib: 2.8.1
 
-  '@supabase/functions-js@2.87.3':
+  '@supabase/functions-js@2.88.0':
     dependencies:
       tslib: 2.8.1
 
-  '@supabase/postgrest-js@2.87.3':
+  '@supabase/postgrest-js@2.88.0':
     dependencies:
       tslib: 2.8.1
 
-  '@supabase/realtime-js@2.87.3':
+  '@supabase/realtime-js@2.88.0':
     dependencies:
       '@types/phoenix': 1.6.7
       '@types/ws': 8.18.1
@@ -10291,23 +10259,23 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@supabase/ssr@0.7.0(@supabase/supabase-js@2.87.3)':
+  '@supabase/ssr@0.8.0(@supabase/supabase-js@2.88.0)':
     dependencies:
-      '@supabase/supabase-js': 2.87.3
+      '@supabase/supabase-js': 2.88.0
       cookie: 1.1.1
 
-  '@supabase/storage-js@2.87.3':
+  '@supabase/storage-js@2.88.0':
     dependencies:
       iceberg-js: 0.8.1
       tslib: 2.8.1
 
-  '@supabase/supabase-js@2.87.3':
+  '@supabase/supabase-js@2.88.0':
     dependencies:
-      '@supabase/auth-js': 2.87.3
-      '@supabase/functions-js': 2.87.3
-      '@supabase/postgrest-js': 2.87.3
-      '@supabase/realtime-js': 2.87.3
-      '@supabase/storage-js': 2.87.3
+      '@supabase/auth-js': 2.88.0
+      '@supabase/functions-js': 2.88.0
+      '@supabase/postgrest-js': 2.88.0
+      '@supabase/realtime-js': 2.88.0
+      '@supabase/storage-js': 2.88.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -12560,7 +12528,7 @@ snapshots:
 
   inline-style-parser@0.2.7: {}
 
-  inngest@3.47.0(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))(next@16.1.0-canary.28(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)(zod@3.25.76):
+  inngest@3.47.0(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))(next@16.1.0-canary.32(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)(zod@3.25.76):
     dependencies:
       '@bufbuild/protobuf': 2.10.2
       '@inngest/ai': 0.1.7
@@ -12588,7 +12556,7 @@ snapshots:
       ulid: 2.4.0
       zod: 3.25.76
     optionalDependencies:
-      next: 16.1.0-canary.28(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      next: 16.1.0-canary.32(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       typescript: 5.9.3
     transitivePeerDependencies:
       - '@opentelemetry/core'
@@ -13136,8 +13104,6 @@ snapshots:
   jiti@1.21.7: {}
 
   jiti@2.6.1: {}
-
-  jose@4.15.9: {}
 
   jose@6.1.3: {}
 
@@ -13897,9 +13863,9 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next@16.1.0-canary.28(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+  next@16.1.0-canary.32(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
-      '@next/env': 16.1.0-canary.28
+      '@next/env': 16.1.0-canary.32
       '@swc/helpers': 0.5.15
       baseline-browser-mapping: 2.9.7
       caniuse-lite: 1.0.30001760
@@ -13908,14 +13874,14 @@ snapshots:
       react-dom: 19.2.3(react@19.2.3)
       styled-jsx: 5.1.6(@babel/core@7.28.5)(react@19.2.3)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 16.1.0-canary.28
-      '@next/swc-darwin-x64': 16.1.0-canary.28
-      '@next/swc-linux-arm64-gnu': 16.1.0-canary.28
-      '@next/swc-linux-arm64-musl': 16.1.0-canary.28
-      '@next/swc-linux-x64-gnu': 16.1.0-canary.28
-      '@next/swc-linux-x64-musl': 16.1.0-canary.28
-      '@next/swc-win32-arm64-msvc': 16.1.0-canary.28
-      '@next/swc-win32-x64-msvc': 16.1.0-canary.28
+      '@next/swc-darwin-arm64': 16.1.0-canary.32
+      '@next/swc-darwin-x64': 16.1.0-canary.32
+      '@next/swc-linux-arm64-gnu': 16.1.0-canary.32
+      '@next/swc-linux-arm64-musl': 16.1.0-canary.32
+      '@next/swc-linux-x64-gnu': 16.1.0-canary.32
+      '@next/swc-linux-x64-musl': 16.1.0-canary.32
+      '@next/swc-win32-arm64-msvc': 16.1.0-canary.32
+      '@next/swc-win32-x64-msvc': 16.1.0-canary.32
       '@opentelemetry/api': 1.9.0
       '@playwright/test': 1.57.0
       sharp: 0.34.5
@@ -14694,8 +14660,6 @@ snapshots:
   semver@7.7.3: {}
 
   serialize-error-cjs@0.1.4: {}
-
-  set-cookie-parser@2.7.2: {}
 
   set-function-length@1.2.2:
     dependencies:

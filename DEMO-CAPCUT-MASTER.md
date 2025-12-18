@@ -12,19 +12,27 @@
 
 ---
 
-## 📹 SHOT 1: OPENING - Multi-Tenant ERD (0:00-0:30)
+## 📹 SHOT 1: OPENING - Multi-Tenant ERD (0:00-0:45) 🍌 META DEMO
 
-### Action
-- Type query: "Show me the multi-tenant database architecture"
-- Mermaid diagram renders
-- Zoom on: Organization → Division → App hierarchy
+### Action (THE META MOMENT!)
+1. Type: "Explain The Betabase's multi-tenant database architecture"
+2. AI answers with text explanation
+3. **Then you say:** "I'm recording a demo - can you create an infographic of that? Hand-drawn style, show the three tiers."
+4. **NANO BANANA GENERATES IN REAL-TIME** (~3-5 seconds with spinner)
+5. Beautiful hand-drawn ERD appears!
+6. **You narrate:** "And THAT is the system creating its own demo slides while I'm demoing it. Meta, right?"
 
-### Bullets
-- Three-tier multi-tenant structure
-- Organization (Sony Music)
-- Division (Digital Operations)
-- App Under Test (AOMA, Alexandria, etc.)
-- This is the foundation
+### What You'll Actually Say (Natural):
+> "Okay, and I'm running a demo now. So for my friends, can you make an infographic of how the ERD works for the multi-tenant architecture of this system itself? Thanks!"
+
+**(The system already knows the style from the template - you don't need to specify colors/aesthetic!)**
+
+### Bullets (What to SAY while it generates)
+- **THE BETABASE** = Our QA testing platform
+- **AOMA** = One example AUT (Application Under Test)
+- Three-tier isolation: ANY organization can use our platform
+- Watch this - the system is making its OWN demo slide right now!
+- This is Gemini 3 Pro image generation - hand-drawn infographics on demand
 
 ### Gemini Slide Prompt
 ```
@@ -294,7 +302,7 @@ Title: "Three Pillars Working Together"
 Pre-warm these before recording:
 
 ```
-Show me the multi-tenant database architecture
+Show me The Betabase multi-tenant database architecture
 ```
 
 ```
@@ -478,7 +486,7 @@ Caption: "Intelligent retrieval, every query"
 
 ### Pre-Cache Queries
 Run these before recording (warms cache):
-- [ ] "Show me the multi-tenant database architecture"
+- [ ] "Show me The Betabase multi-tenant database architecture"
 - [ ] "What are the steps to link a product to a master in AOMA?"
 - [ ] "How do I upload and archive digital assets in AOMA from preparation to storage?" ⭐ (triggers diagram)
 - [ ] "What new features are in AOMA 2.116.0?"
@@ -909,7 +917,7 @@ Caption: "Intelligent retrieval, every query"
 
 These are **REAL examples** from the database where indexed code explains user issues.
 
-### 🔥 SCENARIO 1: "Asset Upload Sorting Failed" (PRIMARY DEMO)
+### 🔥 SCENARIO 1: "Asset Upload Sorting Failed" (🏆 GOLDEN DEMO QUERY)
 
 **Real JIRA Tickets Found:**
 - ITSM-55968: Eydís Evensen - Oceanic Mirror
@@ -922,7 +930,7 @@ These are **REAL examples** from the database where indexed code explains user i
 
 #### Demo Script
 
-**USER:** "I'm getting an 'Asset Upload Sorting Failed' error when uploading files. What's going on?"
+**USER (🏆 GOLDEN QUERY):** "I'm getting an 'Asset Upload Sorting Failed' error when uploading files. What's going on?"
 
 **AI RESPONSE (With Hidden Code Knowledge):**
 > I found multiple related tickets for this issue—it's a known problem!

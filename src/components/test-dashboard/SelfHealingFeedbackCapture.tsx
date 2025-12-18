@@ -308,5 +308,3 @@ export const SelfHealingFeedbackCapture: React.FC<SelfHealingFeedbackCaptureProp
     </Card>
   );
 };
-
-export default SelfHealingFeedbackCapture;

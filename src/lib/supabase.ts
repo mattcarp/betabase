@@ -92,16 +92,7 @@ export const DEFAULT_APP_CONTEXT = {
   app_under_test: SONY_MUSIC.apps.AOMA,
 } as const;
 
-// Helper function to handle Supabase errors - EXPORTED for use in services
-export function handleSupabaseError(error: any): string {
-  if (error?.message) {
-    return error.message;
-  }
-  if (error?.details) {
-    return error.details;
-  }
-  return "Unknown Supabase error occurred";
-}
+// handleSupabaseError is already re-exported from ../../lib/supabase above (line 25)
 
 // Export types for use in other services
 export type { SupabaseClient } from "@supabase/supabase-js";

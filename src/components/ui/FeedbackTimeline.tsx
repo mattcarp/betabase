@@ -28,7 +28,7 @@ import {
   TrendingUp,
   Filter
 } from "lucide-react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "../../hooks/useSupabaseClient";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -57,7 +57,7 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<"all" | "negative" | "corrected" | "approved">("all");
-  const supabase = createClientComponentClient();
+  const supabase = useSupabaseClient();
 
   useEffect(() => {
     loadTimeline();

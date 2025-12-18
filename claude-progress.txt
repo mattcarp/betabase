@@ -78,3 +78,22 @@ Duration: ~2.5 hours
 ## Warnings/Blockers
 - None. System is in peak demo condition.
 ---
+
+---
+Session: 2025-12-18 10:15
+Agent: Coding
+Duration: ~15m
+
+## Summary
+- Merged branch `feat/FEAT-002-curate-overhaul` into `main`.
+- All FEAT-002 enhancements (Deduplication, RLHF, Agent Insights) are now on the main branch.
+- Verified working tree is clean.
+
+## Next Steps
+- 🎬 Record demo for Curate pillar.
+- Push local `main` branch to remote.
+- Proceed to F006 (Query Latency Optimization).
+
+## Warnings/Blockers
+- None.
+---

@@ -517,13 +517,127 @@ const Component: React.FC<ComponentProps> = ({
 }
 ```
 
-### Data Visualization
+### Data Storytelling & Information Design
 
-- [ ] **Charts**: Dark theme optimized
-- [ ] **Colors**: MAC palette only
-- [ ] **Animations**: Smooth entry/exit
-- [ ] **Tooltips**: Rich data display
-- [ ] **Legends**: Clear, accessible
+_Inspired by Pitch & Slide, Linear, and Edward Tufte's principles of excellence in statistical graphics_
+
+#### Philosophy: Data with Purpose, Design with Restraint
+
+Data visualization in the MAC Design System prioritizes **clarity over decoration**, **impact over complexity**, and **narrative over noise**. Every chart tells a story. Every metric drives a decision. Every pixel earns its place.
+
+#### Data Visualization Core Principles
+
+- [ ] **Maximize Data-Ink Ratio**: Remove all non-essential visual elements (Tufte's First Principle)
+- [ ] **Bold Without Brightness**: High contrast with muted, sophisticated colors
+- [ ] **Typography as Hierarchy**: Big numbers tell the story, small text provides context
+- [ ] **Geometric Simplicity**: Clean shapes, modular grids, intentional repetition
+- [ ] **Dark by Default**: All data viz optimized for dark mode professional environments
+- [ ] **Accessible Excellence**: WCAG AAA contrast for all critical data points
+
+#### Color Palette for Data Visualization
+
+```css
+/* Muted Professional Accent Colors - Bold But Not Bright */
+--mac-data-coral: #d97752;        /* Primary accent - warm, professional */
+--mac-data-coral-dim: #b86543;     /* For secondary data points */
+--mac-data-teal: #3ba99c;          /* Cool accent - balance to coral */
+--mac-data-teal-dim: #2d8a7f;      /* Subdued teal */
+--mac-data-purple: #8b5cf6;        /* Tech accent - sparingly */
+--mac-data-purple-dim: #7c3aed;    /* Deeper purple */
+
+/* Neutral Data Colors - The Workhorses */
+--mac-data-zinc-100: #fafafa;      /* Highest emphasis text */
+--mac-data-zinc-300: #d4d4d4;      /* High emphasis */
+--mac-data-zinc-400: #a3a3a3;      /* Medium emphasis (most labels) */
+--mac-data-zinc-500: #737373;      /* Low emphasis */
+--mac-data-zinc-600: #525252;      /* Minimal emphasis */
+--mac-data-zinc-800: #27272a;      /* Subtle backgrounds */
+
+/* Semantic Data Colors (use sparingly) */
+--mac-data-success: #22c55e;       /* Positive trends */
+--mac-data-warning: #f59e0b;       /* Caution indicators */
+--mac-data-error: #ef4444;         /* Negative trends */
+```
+
+#### Color Usage Guidelines
+
+- [ ] **Maximum 3 colors per chart**: One primary, one secondary, one neutral
+- [ ] **Never use pure primaries**: All colors must be muted/professional (NO #3b82f6, NO #10b981)
+- [ ] **Semantic consistency**: Red = negative, Green = positive, across all charts
+- [ ] **Accessibility first**: All data colors must pass WCAG AAA (7:1 contrast) on black
+
+#### Typography for Data
+
+```css
+/* Hero Numbers - Dashboard KPIs */
+.mac-data-stat-large {
+  font-size: 60px;           /* 3.75rem */
+  font-weight: 200;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--mac-data-zinc-100);
+  font-variant-numeric: tabular-nums;  /* Critical: aligns digits */
+}
+
+/* Category Labels - Always Uppercase */
+.mac-data-label {
+  font-size: 12px;           /* 0.75rem */
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--mac-data-zinc-400);
+}
+```
+
+#### Chart Component Standards
+
+**Minimal Bar Charts (Pitch & Slide Style):**
+- Bar height: 32px minimum
+- Bar spacing: 8px between bars
+- Corner radius: 4px subtle rounding
+- No borders, no shadows, no glows
+- Use `var(--mac-data-coral)` or `var(--mac-data-teal)` for fills
+
+**Arc Gauges (Energy Intensity Style):**
+- Diameter: 120px-200px
+- Stroke width: 8px-12px
+- Background arc: `var(--mac-data-zinc-800)`
+- Foreground arc: `var(--mac-data-coral)` or `var(--mac-data-teal)`
+- Center label: Large font (36px-60px)
+
+**Recharts Configuration:**
+```typescript
+// Use MAC_RECHARTS_THEME from src/lib/mac-chart-theme.ts
+import { MAC_RECHARTS_THEME, MAC_CHART_COLORS } from '@/lib/mac-chart-theme';
+
+<CartesianGrid {...MAC_RECHARTS_THEME.cartesianGrid} />
+<XAxis {...MAC_RECHARTS_THEME.xAxis} />
+<YAxis {...MAC_RECHARTS_THEME.yAxis} />
+<Tooltip {...MAC_RECHARTS_THEME.tooltip} />
+<Bar fill={MAC_CHART_COLORS.coral} />  // NOT #3b82f6
+```
+
+#### Data Storytelling Checklist
+
+Before creating any visualization:
+- [ ] **What story am I telling?** Can I summarize it in one sentence?
+- [ ] **Who is the audience?** Executive? Analyst? End user?
+- [ ] **What action should they take?** Every chart should drive a decision
+- [ ] **Is this the simplest possible representation?** Remove 50% of what you think you need
+
+#### Common Mistakes to Avoid
+
+- [ ] **DON'T**: Use bright neon colors (#3b82f6, #10b981, #f59e0b bright versions)
+- [ ] **DON'T**: Use 3D charts (ever)
+- [ ] **DON'T**: Add decorative backgrounds or glows to charts
+- [ ] **DON'T**: Show more than 3 data series on one chart
+- [ ] **DO**: Use muted palette (coral, teal, purple from MAC_CHART_COLORS)
+- [ ] **DO**: Maximize negative space
+- [ ] **DO**: Let typography do the heavy lifting
+
+_"Above all else, show the data." — Edward Tufte_
+
+**See full implementation guide:** `docs/MAC-DATA-STORYTELLING-SECTION.md`
 
 ## Success Metrics
 

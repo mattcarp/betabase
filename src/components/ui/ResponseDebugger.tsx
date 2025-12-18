@@ -17,7 +17,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs";
 import { ScrollArea } from "./scroll-area";
 import { Input } from "./input";
 import { Search, RefreshCw, Activity, GitBranch, FileText, Lightbulb, ChevronDown, Clock, ThumbsUp, ThumbsDown } from "lucide-react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "../../hooks/useSupabaseClient";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -54,7 +54,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
   const [loadingRecent, setLoadingRecent] = useState(false);
   const [showRecent, setShowRecent] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const supabase = createClientComponentClient();
+  const supabase = useSupabaseClient();
 
   // Load recent feedback items on mount
   useEffect(() => {

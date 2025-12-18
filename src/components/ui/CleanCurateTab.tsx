@@ -753,7 +753,7 @@ export function CleanCurateTab({
               <Database className="h-3 w-3" />
               {formatFileSize(stats.totalSize)}
             </Badge>
-            <Badge className="flex items-center gap-2 bg-green-600">
+            <Badge className="flex items-center gap-2" style={{ background: 'var(--mac-data-success)' }}>
               <TrendingUp className="h-3 w-3" />
               {stats.avgQuality.toFixed(0)}% Quality
             </Badge>
@@ -822,11 +822,14 @@ export function CleanCurateTab({
                                 <span className="font-light text-zinc-300 capitalize">{stat.source_type}</span>
                                 <span className="text-zinc-400 tabular-nums">{stat.document_count.toLocaleString()}</span>
                               </div>
-                              {/* Tufte: minimal bar, no decoration */}
+                              {/* MAC Data Storytelling: minimal bar with muted coral */}
                               <div className="h-1 bg-zinc-800 rounded-sm overflow-hidden">
                                 <div 
-                                  className="h-full bg-zinc-400 transition-all"
-                                  style={{ width: `${percentage}%` }}
+                                  className="h-full transition-all duration-500"
+                                  style={{ 
+                                    width: `${percentage}%`,
+                                    background: 'var(--mac-data-coral)'
+                                  }}
                                 />
                               </div>
                               <div className="flex justify-between text-xs text-zinc-500">
@@ -883,8 +886,11 @@ export function CleanCurateTab({
                               </div>
                               <div className="h-1 bg-zinc-800 rounded-sm overflow-hidden">
                                 <div 
-                                  className="h-full bg-purple-500/60 transition-all"
-                                  style={{ width: `${percentage}%` }}
+                                  className="h-full transition-all duration-500"
+                                  style={{ 
+                                    width: `${percentage}%`,
+                                    background: 'var(--mac-data-teal)'
+                                  }}
                                 />
                               </div>
                             </div>
@@ -894,7 +900,7 @@ export function CleanCurateTab({
                         <div className="pt-2 border-t border-zinc-800">
                           <div className="flex justify-between text-sm font-medium">
                             <span className="text-zinc-300">Total Test Cases</span>
-                            <span className="text-purple-400 tabular-nums">{realData.totalTestCases.toLocaleString()}</span>
+                            <span className="tabular-nums" style={{ color: 'var(--mac-data-teal)' }}>{realData.totalTestCases.toLocaleString()}</span>
                           </div>
                         </div>
                       </div>

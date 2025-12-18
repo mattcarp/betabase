@@ -4,7 +4,7 @@ import { useChat } from "@ai-sdk/react";
 // DefaultChatTransport is not available in @ai-sdk/react v3.x
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../../lib/utils";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "../../hooks/useSupabaseClient";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
@@ -254,7 +254,7 @@ export function AiSdkChatPanel({
   suggestions = [
     "Help me analyze this code",
     "Explain a complex concept",
-    "Generate creative content",
+    "I'm getting an 'Asset Upload Sorting Failed' error when uploading files. What's going on?",
     "Solve a technical problem",
     "Plan a project workflow",
     "Review and optimize",
@@ -1665,6 +1665,39 @@ export function AiSdkChatPanel({
   // Generate a contextual Mermaid diagram based on content keywords
   const generateFallbackDiagram = (content: string): string => {
     const lowerContent = content.toLowerCase();
+    
+    // THE BETABASE multi-tenant ERD (for demo opening!)
+    if (lowerContent.includes('betabase') || (lowerContent.includes('multi-tenant') && lowerContent.includes('database'))) {
+      return `flowchart TD
+    subgraph org["🏢 Organization Level"]
+        ORG1["Sony Music"]
+        ORG2["Universal"]
+        ORG3["Warner"]
+    end
+    
+    subgraph div["🏛️ Division Level"]
+        DIV1["Digital Operations"]
+        DIV2["Legal"]
+        DIV3["Finance"]
+    end
+    
+    subgraph app["📱 Application Under Test"]
+        APP1["AOMA"]
+        APP2["Alexandria"]
+        APP3["USM"]
+        APP4["Confluence"]
+    end
+    
+    ORG1 --> DIV1 & DIV2 & DIV3
+    DIV1 --> APP1 & APP2 & APP3
+    DIV2 --> APP4
+    
+    style org fill:#7c3aed,stroke:#a78bfa,stroke-width:3px,color:#fff
+    style div fill:#2563eb,stroke:#60a5fa,stroke-width:3px,color:#fff
+    style app fill:#059669,stroke:#34d399,stroke-width:3px,color:#fff
+    style ORG1 fill:#6b21a8,stroke:#a78bfa,color:#fff
+    style APP1 fill:#047857,stroke:#34d399,color:#fff`;
+    }
     
     // Detect workflow type and generate appropriate diagram
     if (lowerContent.includes('upload') && lowerContent.includes('archive')) {

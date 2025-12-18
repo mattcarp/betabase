@@ -6,7 +6,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "../../lib/supabase";
 
 export type Permission = 
   | "rlhf_feedback"
@@ -42,7 +42,9 @@ export function usePermissions(userEmail?: string): PermissionCheckResult {
       }
 
       try {
-        const supabase = createClientComponentClient();
+        if (!supabase) {
+          throw new Error('Supabase client not initialized');
+        }
 
         // Get user role
         const { data: roleData, error: roleError } = await supabase

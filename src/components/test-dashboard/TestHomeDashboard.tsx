@@ -166,10 +166,15 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
   ];
 
   const getPassRateColor = (rate: number) => {
-    if (rate >= 95) return "text-emerald-600";
-    if (rate >= 85) return "text-amber-600";
-    return "text-rose-600";
+    // MAC Data Storytelling: muted semantic colors
+    if (rate >= 95) return "mac-data-success";
+    if (rate >= 85) return "mac-data-warning";
+    return "mac-data-error";
   };
+  
+  const getPassRateStyle = (rate: number) => ({
+    color: `var(--${getPassRateColor(rate)})`
+  });
 
   return (
     <div className="space-y-6">
@@ -183,16 +188,17 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 <p className="text-sm font-medium text-muted-foreground mb-1">Pass Rate</p>
                 <div className="flex items-baseline gap-2">
                   <span
-                    className={cn("text-4xl font-light", getPassRateColor(healthMetrics.passRate))}
+                    className="text-4xl font-light"
+                    style={getPassRateStyle(healthMetrics.passRate)}
                   >
                     {healthMetrics.passRate}%
                   </span>
                   {healthMetrics.passRateTrend > 0 ? (
-                    <span className="flex items-center text-emerald-600 text-sm">
+                    <span className="flex items-center text-sm" style={{ color: 'var(--mac-data-success)' }}>
                       <TrendingUp className="h-4 w-4 mr-1" />+{healthMetrics.passRateTrend}%
                     </span>
                   ) : (
-                    <span className="flex items-center text-rose-600 text-sm">
+                    <span className="flex items-center text-sm" style={{ color: 'var(--mac-data-error)' }}>
                       <TrendingDown className="h-4 w-4 mr-1" />
                       {healthMetrics.passRateTrend}%
                     </span>
@@ -200,8 +206,8 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">this week</p>
               </div>
-              <div className="p-2 rounded-full bg-emerald-500/10">
-                <CheckCircle className="h-6 w-6 text-emerald-600" />
+              <div className="p-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)' }}>
+                <CheckCircle className="h-6 w-6" style={{ color: 'var(--mac-data-success)' }} />
               </div>
             </div>
           </CardContent>
@@ -214,26 +220,32 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">Failing</p>
                 <span
-                  className={cn(
-                    "text-4xl font-light",
-                    healthMetrics.failingTests > 0 ? "text-rose-600" : "text-emerald-600"
-                  )}
+                  className="text-4xl font-light"
+                  style={{ 
+                    color: healthMetrics.failingTests > 0 
+                      ? 'var(--mac-data-error)' 
+                      : 'var(--mac-data-success)' 
+                  }}
                 >
                   {healthMetrics.failingTests}
                 </span>
                 <p className="text-xs text-muted-foreground mt-1">tests need attention</p>
               </div>
               <div
-                className={cn(
-                  "p-2 rounded-full",
-                  healthMetrics.failingTests > 0 ? "bg-rose-500/10" : "bg-emerald-500/10"
-                )}
+                className="p-2 rounded-full"
+                style={{ 
+                  backgroundColor: healthMetrics.failingTests > 0 
+                    ? 'rgba(239, 68, 68, 0.1)' 
+                    : 'rgba(34, 197, 94, 0.1)' 
+                }}
               >
                 <XCircle
-                  className={cn(
-                    "h-6 w-6",
-                    healthMetrics.failingTests > 0 ? "text-rose-600" : "text-emerald-600"
-                  )}
+                  className="h-6 w-6"
+                  style={{ 
+                    color: healthMetrics.failingTests > 0 
+                      ? 'var(--mac-data-error)' 
+                      : 'var(--mac-data-success)' 
+                  }}
                 />
               </div>
             </div>
@@ -246,13 +258,13 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">Self-Healed</p>
-                <span className="text-4xl font-light text-purple-600">
+                <span className="text-4xl font-light" style={{ color: 'var(--mac-data-purple)' }}>
                   {healthMetrics.healedToday}
                 </span>
                 <p className="text-xs text-muted-foreground mt-1">tests auto-fixed today</p>
               </div>
-              <div className="p-2 rounded-full bg-purple-500/10">
-                <Wrench className="h-6 w-6 text-purple-600" />
+              <div className="p-2 rounded-full" style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}>
+                <Wrench className="h-6 w-6" style={{ color: 'var(--mac-data-purple)' }} />
               </div>
             </div>
           </CardContent>
@@ -265,26 +277,32 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">Need HITL</p>
                 <span
-                  className={cn(
-                    "text-4xl font-light",
-                    healthMetrics.pendingReview > 0 ? "text-amber-600" : "text-muted-foreground"
-                  )}
+                  className="text-4xl font-light"
+                  style={{ 
+                    color: healthMetrics.pendingReview > 0 
+                      ? 'var(--mac-data-warning)' 
+                      : 'var(--mac-data-zinc-500)' 
+                  }}
                 >
                   {healthMetrics.pendingReview}
                 </span>
                 <p className="text-xs text-muted-foreground mt-1">awaiting human review</p>
               </div>
               <div
-                className={cn(
-                  "p-2 rounded-full",
-                  healthMetrics.pendingReview > 0 ? "bg-amber-500/10" : "bg-muted"
-                )}
+                className="p-2 rounded-full"
+                style={{ 
+                  backgroundColor: healthMetrics.pendingReview > 0 
+                    ? 'rgba(245, 158, 11, 0.1)' 
+                    : 'rgba(115, 115, 115, 0.1)' 
+                }}
               >
                 <Users
-                  className={cn(
-                    "h-6 w-6",
-                    healthMetrics.pendingReview > 0 ? "text-amber-600" : "text-muted-foreground"
-                  )}
+                  className="h-6 w-6"
+                  style={{ 
+                    color: healthMetrics.pendingReview > 0 
+                      ? 'var(--mac-data-warning)' 
+                      : 'var(--mac-data-zinc-500)' 
+                  }}
                 />
               </div>
             </div>
@@ -294,17 +312,17 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
 
       {/* Historical Test Suite Stats - Real Data from Betabase */}
       {analytics && (
-        <Card className="mac-card border-border bg-gradient-to-r from-amber-500/5 to-transparent" data-test-id="historical-stats">
+        <Card className="mac-card border-border" style={{ background: 'linear-gradient(to right, rgba(217, 151, 82, 0.05), transparent)' }} data-test-id="historical-stats">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
-                  <Archive className="h-5 w-5 text-amber-500" />
+                  <Archive className="h-5 w-5" style={{ color: 'var(--mac-data-coral)' }} />
                   <span className="text-sm font-medium text-muted-foreground">Historical Test Suite</span>
                 </div>
                 <div className="flex items-center gap-6 text-sm">
                   <div>
-                    <span className="text-2xl font-light text-amber-500">{healthMetrics.totalTests.toLocaleString()}</span>
+                    <span className="text-2xl font-light" style={{ color: 'var(--mac-data-coral)' }}>{healthMetrics.totalTests.toLocaleString()}</span>
                     <span className="text-muted-foreground ml-2">tests</span>
                   </div>
                   <div className="text-muted-foreground">•</div>
@@ -323,7 +341,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 variant="ghost" 
                 size="sm" 
                 onClick={() => onNavigate?.("historical")}
-                className="text-amber-500 hover:text-amber-400"
+                style={{ color: 'var(--mac-data-coral)' }}
               >
                 Explore <ArrowRight className="h-4 w-4 ml-1" />
               </Button>
@@ -334,15 +352,15 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
 
       {/* AI Needs Your Guidance Banner */}
       {healthMetrics.pendingReview > 0 && (
-        <Card className="mac-card border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-transparent" data-test-id="human-needed-banner">
+        <Card className="mac-card border-border" style={{ background: 'linear-gradient(to right, rgba(139, 92, 246, 0.1), transparent)', borderColor: 'rgba(139, 92, 246, 0.3)' }} data-test-id="human-needed-banner">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-purple-500/20">
-                  <Users className="h-6 w-6 text-purple-400" />
+                <div className="p-3 rounded-full" style={{ backgroundColor: 'rgba(139, 92, 246, 0.2)' }}>
+                  <Users className="h-6 w-6" style={{ color: 'var(--mac-data-purple)' }} />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-purple-200">AI Needs Your Expertise</p>
+                  <p className="text-sm font-medium" style={{ color: 'var(--mac-data-zinc-100)' }}>AI Needs Your Expertise</p>
                   <p className="text-xs text-muted-foreground">
                     {healthMetrics.pendingReview} items awaiting human review • AI has reached the limits of its certainty
                   </p>
@@ -350,7 +368,8 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
               </div>
               <Button
                 size="sm"
-                className="bg-purple-600 hover:bg-purple-700 text-white"
+                style={{ backgroundColor: 'var(--mac-data-purple)' }}
+                className="text-white hover:opacity-90"
                 onClick={() => setShowCuratorQueue(true)}
               >
                 <Eye className="h-4 w-4 mr-2" />
@@ -375,7 +394,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base font-medium flex items-center gap-2">
-                <Wrench className="h-4 w-4 text-purple-600" />
+                <Wrench className="h-4 w-4" style={{ color: 'var(--mac-data-purple)' }} />
                 Recent Self-Heals
               </CardTitle>
               <Button
@@ -399,9 +418,9 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 >
                   <div className="flex items-center gap-3">
                     {heal.status === "approved" ? (
-                      <CheckCircle className="h-5 w-5 text-emerald-600" />
+                      <CheckCircle className="h-5 w-5" style={{ color: 'var(--mac-data-success)' }} />
                     ) : (
-                      <AlertTriangle className="h-5 w-5 text-amber-600" />
+                      <AlertTriangle className="h-5 w-5" style={{ color: 'var(--mac-data-warning)' }} />
                     )}
                     <div>
                       <p className="text-sm font-medium">{heal.testName}</p>
@@ -411,23 +430,31 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                   <div className="flex items-center gap-3">
                     <Badge
                       variant="outline"
-                      className={cn(
-                        "text-xs",
-                        heal.status === "approved"
-                          ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
-                          : "bg-amber-500/10 text-amber-600 border-amber-500/20"
-                      )}
+                      className="text-xs"
+                      style={heal.status === "approved" ? {
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        color: 'var(--mac-data-success)',
+                        borderColor: 'rgba(34, 197, 94, 0.2)'
+                      } : {
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        color: 'var(--mac-data-warning)',
+                        borderColor: 'rgba(245, 158, 11, 0.2)'
+                      }}
                     >
                       {heal.confidence}% confidence
                     </Badge>
                     <Badge
                       variant="outline"
-                      className={cn(
-                        "text-xs",
-                        heal.status === "approved"
-                          ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
-                          : "bg-amber-500/10 text-amber-600 border-amber-500/20"
-                      )}
+                      className="text-xs"
+                      style={heal.status === "approved" ? {
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        color: 'var(--mac-data-success)',
+                        borderColor: 'rgba(34, 197, 94, 0.2)'
+                      } : {
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        color: 'var(--mac-data-warning)',
+                        borderColor: 'rgba(245, 158, 11, 0.2)'
+                      }}
                     >
                       {heal.status}
                     </Badge>
@@ -442,7 +469,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
         <Card className="mac-card border-border">
           <CardHeader className="pb-3">
             <CardTitle className="text-base font-medium flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-amber-600" />
+              <AlertTriangle className="h-4 w-4" style={{ color: 'var(--mac-data-warning)' }} />
               Attention Needed
             </CardTitle>
           </CardHeader>
@@ -451,12 +478,14 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
               {attentionItems.map((item) => (
                 <div
                   key={item.id}
-                  className={cn(
-                    "p-3 rounded-lg border cursor-pointer hover:shadow-sm transition-shadow",
-                    item.severity === "warning"
-                      ? "bg-amber-500/5 border-amber-500/20"
-                      : "bg-blue-500/5 border-blue-500/20"
-                  )}
+                  className="p-3 rounded-lg border cursor-pointer hover:shadow-sm transition-shadow"
+                  style={item.severity === "warning" ? {
+                    backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                    borderColor: 'rgba(245, 158, 11, 0.2)'
+                  } : {
+                    backgroundColor: 'rgba(59, 169, 156, 0.05)',
+                    borderColor: 'rgba(59, 169, 156, 0.2)'
+                  }}
                   onClick={() => {
                     if (item.type === "low-confidence") onNavigate?.("results");
                     if (item.type === "flaky") onNavigate?.("flaky");
@@ -465,9 +494,9 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 >
                   <div className="flex items-start gap-2">
                     {item.severity === "warning" ? (
-                      <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5" />
+                      <AlertTriangle className="h-4 w-4 mt-0.5" style={{ color: 'var(--mac-data-warning)' }} />
                     ) : (
-                      <Activity className="h-4 w-4 text-blue-600 mt-0.5" />
+                      <Activity className="h-4 w-4 mt-0.5" style={{ color: 'var(--mac-data-teal)' }} />
                     )}
                     <p className="text-sm">{item.message}</p>
                   </div>
@@ -484,7 +513,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Target className="h-4 w-4 text-blue-600" />
+                <Target className="h-4 w-4" style={{ color: 'var(--mac-data-teal)' }} />
                 <span className="text-sm text-muted-foreground">Coverage</span>
               </div>
               <span className="text-lg font-medium">87%</span>
@@ -497,7 +526,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Zap className="h-4 w-4 text-purple-600" />
+                <Zap className="h-4 w-4" style={{ color: 'var(--mac-data-purple)' }} />
                 <span className="text-sm text-muted-foreground">Heal Rate</span>
               </div>
               <span className="text-lg font-medium">94.2%</span>
@@ -510,7 +539,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <RefreshCw className="h-4 w-4 text-amber-600" />
+                <RefreshCw className="h-4 w-4" style={{ color: 'var(--mac-data-coral)' }} />
                 <span className="text-sm text-muted-foreground">Flaky Tests</span>
               </div>
               <span className="text-lg font-medium">{healthMetrics.flakyTests}</span>
@@ -539,7 +568,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base font-medium flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-purple-600" />
+              <Sparkles className="h-4 w-4" style={{ color: 'var(--mac-data-purple)' }} />
               HITL Curator Queue
               <Badge variant="secondary" className="ml-2">
                 {healthMetrics.pendingReview} pending

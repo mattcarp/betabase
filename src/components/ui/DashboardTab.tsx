@@ -41,11 +41,12 @@ const processingTrends = [
   { day: "Sun", processed: 18, quality: 87 },
 ];
 
+// MAC Data Storytelling: muted professional colors (not bright/garish)
 const categoryHealth = [
-  { name: "Legal", value: 92, count: 450, color: "#3b82f6" },
-  { name: "Technical", value: 85, count: 1200, color: "#a855f7" },
-  { name: "Marketing", value: 78, count: 320, color: "#f59e0b" },
-  { name: "Finance", value: 88, count: 280, color: "#10b981" },
+  { name: "Legal", value: 92, count: 450, color: "var(--mac-data-teal)" },
+  { name: "Technical", value: 85, count: 1200, color: "var(--mac-data-purple)" },
+  { name: "Marketing", value: 78, count: 320, color: "var(--mac-data-coral)" },
+  { name: "Finance", value: 88, count: 280, color: "var(--mac-data-success)" },
 ];
 
 export function DashboardTab() {
@@ -72,7 +73,7 @@ export function DashboardTab() {
           title="Optimization" 
           value="25.1%" 
           description="Storage saved by dedupe" 
-          icon={<Zap className="h-4 w-4 text-yellow-500" />} 
+          icon={<Zap className="h-4 w-4" style={{ color: 'var(--mac-data-warning)' }} />} 
           trend="+5.4%"
         />
         <KPICard 
@@ -125,7 +126,7 @@ export function DashboardTab() {
                     color: "var(--mac-text-primary)"
                   }} 
                 />
-                <Bar dataKey="processed" fill="var(--mac-primary-blue-400)" radius={[4, 4, 0, 0]} barSize={30} />
+                <Bar dataKey="processed" fill="var(--mac-data-coral)" radius={[4, 4, 0, 0]} barSize={30} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -150,7 +151,7 @@ export function DashboardTab() {
                   </div>
                   <div className="h-2 w-full bg-[var(--mac-utility-border)] rounded-full overflow-hidden p-0.5 border border-white/5 shadow-inner">
                     <div 
-                      className="h-full rounded-full transition-all duration-1000 shadow-[0_0_8px_rgba(59,130,246,0.3)]" 
+                      className="h-full rounded-full transition-all duration-1000" 
                       style={{ 
                         width: `${cat.value}%`, 
                         backgroundColor: cat.color 

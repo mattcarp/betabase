@@ -27,7 +27,7 @@ import {
   Clock,
   AlertTriangle,
 } from "lucide-react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "../../hooks/useSupabaseClient";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -60,7 +60,7 @@ export function RLHFTestSuite() {
   const [selectedTest, setSelectedTest] = useState<RLHFGeneratedTest | null>(null);
   const [codeViewerOpen, setCodeViewerOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-  const supabase = createClientComponentClient();
+  const supabase = useSupabaseClient();
 
   useEffect(() => {
     loadRLHFTests();
