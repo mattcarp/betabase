@@ -1648,10 +1648,10 @@ export function AiSdkChatPanel({
       // Extract what to visualize from the content
       const visualizationPrompt = content.includes('multi-tenant') 
         ? `Create an infographic showing The Betabase's three-tier multi-tenant database architecture:
-           - Organization Level (top): Sony Music, Universal, Warner
+           - Organization Level (top): Sony Music (use real logo), SMEJ/Sony Music Entertainment Japan (use real logo), Other Music (create a modern playful logo for this fictional company)
            - Division Level (middle): Digital Operations, Legal, Finance  
            - Application Under Test Level (bottom): AOMA, Alexandria, USM, Confluence
-           Show data isolation between organizations.`
+           Show data isolation between organizations with barriers/padlocks.`
         : content;
       
       setNanoBananaPrompt(visualizationPrompt);

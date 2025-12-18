@@ -79,10 +79,13 @@ ${NANO_BANANA_BASE_STYLE}`.trim();
  * Quick templates for common demo diagrams
  */
 export const DEMO_TEMPLATES = {
-  betabaseERD: (organizations: string[] = ['Sony Music', 'Universal', 'Warner']) => 
+  betabaseERD: (organizations: string[] = ['Sony Music', 'SMEJ (Sony Music Entertainment Japan)', 'Other Music']) => 
     buildNanoBananaPrompt(`
       Create an infographic showing The Betabase's three-tier multi-tenant database architecture:
       - Organization Level (top tier): ${organizations.join(', ')}
+        * Sony Music (left) - use real Sony Music logo/branding
+        * SMEJ / Sony Music Entertainment Japan (center) - use real SMEJ logo
+        * Other Music (right) - create a modern, playful music company logo for this fictional company
       - Division Level (middle tier): Digital Operations, Legal, Finance
       - Application Under Test Level (bottom tier): AOMA, Alexandria, USM, Confluence
       Show data isolation between organizations with barriers/padlocks.
