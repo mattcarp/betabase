@@ -591,7 +591,7 @@ export async function POST(req: Request) {
         // Direct Supabase pgvector queries - no external services
         console.log("🚀 Querying vector orchestrator (Supabase pgvector)...");
 
-        // Langfuse: Start vector search tracing
+        // Langfuse: Start vector search tracing (declare outside try for catch block access)
         const vectorTrace = langfuseTrace.traceVectorSearch({
           query: queryString,
           provider: "gemini",
