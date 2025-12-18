@@ -9,9 +9,11 @@
 
 export const NANO_BANANA_BASE_STYLE = `
 Visual Style (Mattie's Signature Aesthetic):
-Minimal line art infographic, editorial layout, simple human pictogram figures with circular heads, dotted flow paths connecting stages, pastel accent colors, clean sans serif labels, process diagram, storytelling workflow, magazine editorial style.
+Minimal line art infographic, editorial layout, modern bold stick figures (not goofy - exciting and professional), dotted flow paths connecting stages, pastel accent colors, clean sans serif labels, process diagram, storytelling workflow, magazine editorial style.
 
-Bold, playful, and fun. Flat modern design with interesting visual elements that pop. Complete creative freedom.
+Bold, playful, fun, and modern. Flat design with interesting visual elements that pop. Stick figure humans should be simple but energetic and contemporary - think modern tech company presentation style, not sketchy or childish.
+
+Complete creative freedom. Make it exciting!
 
 Technical specs: 16:9 aspect ratio, 2K resolution for clarity.
 `;
