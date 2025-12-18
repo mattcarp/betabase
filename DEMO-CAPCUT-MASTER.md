@@ -199,35 +199,48 @@ flowchart TD
 
 ## 📹 SHOT 4: PILLAR 3 - TEST (3:30-5:00) ⭐ SELF-HEALING
 
-> **📋 Full Script**: See `DEMO-SELF-HEALING-SCRIPT.md` for complete step-by-step walkthrough
+**📋 FULL SCRIPT**: See `DEMO-SELF-HEALING-SCRIPT.md` for complete step-by-step walkthrough
 
 ### Action Sequence
 1. Click "Test" button in header
-2. Show Dashboard stats (80.4% pass rate, 12 healed today)
-3. Click "Review Self-Heals" button
-4. **Tier 1 Example** (97% confidence - auto-approved):
-   - Partner Previewer Upload Flow
-   - Show before/after selector diff
-   - "AI fixed this automatically + 3 similar tests"
-5. **Tier 2 Example** (84% confidence - NEEDS HUMAN): ⭐ EXECUTIVE FAVORITE
-   - Dashboard Project Card restructure
-   - Show "AI Needs Your Expertise" message
-   - Click "Approve & Apply Fix" button
-   - **"This is AI asking for help, not guessing"**
-6. **Tier 3 Example** (62% confidence - escalated):
-   - Search Debounce Timing issue
-   - Show "Expert Review Required" warning
-   - **"AI knows when it's out of its depth"**
-7. Show metrics: 94.2% success rate, 15 hrs/week saved
+2. Show **Home Dashboard** stats:
+   - Pass Rate: 80.4%
+   - 12 tests auto-healed today
+   - 5 pending human review
+   - **MESSAGE**: "AI saved us 3 hours today"
+
+3. Click **"Review Self-Heals"** button
+4. Show self-healing queue (9 attempts visible)
+5. **Tier 1 Example** (Upload Flow - 97% confidence):
+   - Auto-approved instantly
+   - Fixed 3 similar tests automatically
+   - **MESSAGE**: "AI handles simple changes"
+
+6. **Tier 2 Example** ⭐ **EXECUTIVE FAVORITE**:
+   - Dashboard Project Card (84% confidence)
+   - Status: "Pending Review"
+   - **AI asks for human approval**
+   - Show approve/reject buttons
+   - Click "Approve & Apply Fix"
+   - **MESSAGE**: "AI knows when it needs human judgment"
+
+7. **Tier 3 Example** (Search Debounce - 62% confidence):
+   - Low confidence - escalated to architect
+   - Complex async/timing issue
+   - **MESSAGE**: "AI knows when it's out of its depth"
+
+8. Show **ROI Metrics**:
+   - 94.2% success rate
+   - 15 hours/week saved
+   - **MESSAGE**: "QA engineers become architects, not maintainers"
 
 ### Bullets
-- 9 automated healing attempts monitored
-- 94% auto-healed by AI
-- 4 second average heal time
-- **Tier 1**: High confidence → auto-fix immediately
-- **Tier 2**: Medium → AI asks human for approval
-- **Tier 3**: Low → escalate to architect
-- **80% reduction in test maintenance work**
+- **9 healing attempts** (live data)
+- **Three-tier system**: Auto / Human Review / Architect
+- **94% auto-healed** by AI
+- **AI asks for help** when uncertain (Tier 2-3)
+- **80% reduction** in test maintenance
+- **15 hrs/week saved** per QA engineer
 
 ### CapCut Overlays
 - Stats appearing one by one
