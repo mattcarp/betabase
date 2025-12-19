@@ -196,17 +196,20 @@ Duration: ~15m
 - None. System is stable and rendering correctly.
 ---
 ---
-Session: 2025-12-19 16:30
+Session: 2025-12-19 17:35
 Agent: Coding
-Duration: ~5m
+Duration: ~10m
 
 ## Summary
-✅ UPDATED: Table header label from "ENV" to "App"
-- Changed "Env" to "App" in `src/components/test-dashboard/HistoricalTestExplorer.tsx` (renders as "APP" due to uppercase styling).
-- Updated `features.json` and historical log entries in `claude-progress.txt` for consistency.
+✅ REMOVED: Generic "Category Health" dashboard component
+- Excised the "Category Health" heatmap and department-based mock data (Legal, Technical, Marketing, Finance).
+- Expanded the "Document Processing Velocity" chart to full width (3 columns) for better data density.
+- Cleaned up unused imports and variables in `src/components/ui/DashboardTab.tsx`.
+- Matches the app's focus on specialized technical intelligence over generic corporate metrics.
 
 ## Next Steps
-- 🎬 Record demo for the Test pillar with the updated header labels.
+- Continue with demo recording.
+- Monitor for any other "generic" artifacts that don't fit the Betabase specialized focus.
 ---
 
 ---
