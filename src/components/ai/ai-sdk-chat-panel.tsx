@@ -556,17 +556,8 @@ export function AiSdkChatPanel({
         }
       }
       
-      // Capture citation sources from response headers
-      const citationHeader = response.headers.get("X-Citation-Sources");
-      if (citationHeader) {
-        try {
-          const sources = JSON.parse(citationHeader);
-          console.log("📎 Captured citation sources from headers:", sources);
-          setPendingCitationSources(sources);
-        } catch (e) {
-          console.warn("Failed to parse citation sources header:", e);
-        }
-      }
+      // 📎 CITATIONS: Disabled for now - fix after demo ships
+      // TODO: Re-enable citation header parsing after demo
       
       // Capture token usage from response headers
       const usageHeader = response.headers.get("X-Token-Usage");
@@ -670,21 +661,9 @@ export function AiSdkChatPanel({
         (window as any).currentProgressInterval = null;
       }
 
-      // 📎 CITATIONS: Attach sources to last message for inline display
-      if (pendingCitationSources.length > 0 && setMessages) {
-        setMessages((prevMessages) => {
-          const lastMsg = prevMessages[prevMessages.length - 1];
-          if (lastMsg && lastMsg.role === 'assistant') {
-            console.log("📎 Attaching", pendingCitationSources.length, "sources to message");
-            return [
-              ...prevMessages.slice(0, -1),
-              { ...lastMsg, sources: pendingCitationSources }
-            ];
-          }
-          return prevMessages;
-        });
-        setPendingCitationSources([]); // Clear for next message
-      }
+      // 📎 CITATIONS: Disabled for now - fix after demo ships
+      // TODO: Re-enable citations after demo
+      // if (pendingCitationSources.length > 0 && setMessages) { ... }
 
       // Immediately clear loading states
       setCurrentProgress(null);
