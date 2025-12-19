@@ -120,6 +120,45 @@ Duration: ~5m
 ---
 
 ---
+Session: 2025-12-19 14:15
+Agent: Coding
+Duration: ~10m
+
+## Summary
+✅ FIXED: "Bubble" artifact in ENV column of HistoricalTestExplorer
+- Increased ENV column width from 85px to 100px to accommodate "Partner Previewer" without wrapping.
+- Refined Badge styling: removed fixed `h-4`, added `whitespace-nowrap` and `h-auto` to prevent layout artifacts.
+- Verified column layout fits within the 420px sidebar constraints.
+- Files modified: `src/components/test-dashboard/HistoricalTestExplorer.tsx`
+
+## Next Steps
+- 🎬 Record demo for the Test pillar.
+- Final E2E verification of the Test pillar.
+
+## Warnings/Blockers
+- None.
+---
+---
+Session: 2025-12-19 13:15
+Agent: Coding
+Duration: ~10m
+
+## Summary
+✅ Refined dashboard stat cards for better professionalism
+- Reduced size of hero stats cards in `TestHomeDashboard` by decreasing padding and font sizes (`text-4xl` -> `text-2xl`).
+- Removed distracting floating hover effect from non-clickable stats cards by introducing `mac-card-static` class.
+- Standardized secondary stats bar with compact layout.
+- Files modified: `src/components/test-dashboard/TestHomeDashboard.tsx`, `src/components/test-dashboard/TestDashboard.tsx`, `src/styles/mac-design-system.css`
+- Commit: cee262fc8 - "ui(stats): reduce card sizes and remove non-functional hover effects"
+
+## Next Steps
+- 🎬 Final demo recording for the Test pillar.
+- Verify entire Test pillar E2E before final submission.
+
+## Warnings/Blockers
+- None. UI is now much cleaner and more stable.
+---
+---
 Session: 2025-12-19 12:45
 Agent: Coding
 Duration: ~10m
@@ -157,17 +196,42 @@ Duration: ~15m
 - None. System is stable and rendering correctly.
 ---
 ---
-Session: 2025-12-19 11:15
+Session: 2025-12-19 15:30
 Agent: Coding
-Duration: ~10m
+Duration: ~15m
 
 ## Summary
-✅ FIXED: Runtime ENOENT error with 'isomorphic-dompurify' (jsdom/SSR conflict)
-- Removed 'isomorphic-dompurify' and replaced it with standard 'dompurify'.
-- Implemented 'src/lib/dom-purify.ts' helper to bypass sanitization on SSR (server-side).
-- Updated 'HistoricalTestExplorer.tsx' and 'SearchResultsResponse.tsx' to use the new safe helper.
-- Verified fix in dev server - app loads and navigates correctly.
+✅ UPGRADED: Historical Test Explorer with advanced Filtering and Sorting
+- Fixed bug where search queries were ignored during initial load.
+- Implemented column-based sorting (ID, Scenario Name, Env, Pass Rate).
+- Added interactive table headers with sort indicators (ArrowUp/ArrowDown).
+- Updated API interaction logic to handle `sortBy` and `sortOrder` parameters.
+- Verified that infinite scroll remains compatible with new search/sort state.
+- Files modified: `src/components/test-dashboard/HistoricalTestExplorer.tsx`
 
 ## Next Steps
-- Finalize Pillar 3 demo features.
+- 🎬 Record demo for the Test pillar showing off the new search/sort capabilities.
+- Verify total record count matches the 8,719 target after filters are applied.
+
+## Warnings/Blockers
+- None. The table now behaves like a professional data table without needing to install new heavy dependencies.
+---
+---
+Session: 2025-12-19 12:45
+Agent: Coding
+Duration: ~20m
+
+## Summary
+- Refactored Knowledge Curation subtabs UI.
+- Replaced inactive tab lettering with the project's primary blue.
+- Set active tabs to white with a white underline.
+- Removed hover "float up" and shadow effects from non-clickable KPI cards and file items.
+- Replaced purple accents with blue across several components for better visual harmony.
+
+## Next Steps
+- Review the new UI with the user.
+- Continue with other UI refinements if requested.
+
+## Warnings/Blockers
+- None encountered.
 ---

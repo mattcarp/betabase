@@ -188,7 +188,7 @@ export function DashboardTab() {
 
 function KPICard({ title, value, description, icon, trend }: { title: string, value: string, description: string, icon: React.ReactNode, trend: string }) {
   return (
-    <Card className="mac-glass bg-[var(--mac-surface-card)] border border-[var(--mac-utility-border)] hover:border-[var(--mac-utility-border-elevated)] transition-all duration-300 group hover:-translate-y-1 shadow-sm hover:shadow-xl">
+    <Card className="mac-glass bg-[var(--mac-surface-card)] border border-[var(--mac-utility-border)] hover:border-[var(--mac-utility-border-elevated)] transition-all duration-300 group shadow-sm">
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="p-2 rounded-lg bg-[var(--mac-surface-elevated)] border border-[var(--mac-utility-border)] group-hover:border-[var(--mac-primary-blue-400)]/30 transition-colors">

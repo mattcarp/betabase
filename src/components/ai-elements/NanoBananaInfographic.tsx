@@ -81,19 +81,7 @@ export function NanoBananaInfographic({
   return (
     <div className={cn("w-full", className)}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <ImageIcon className="w-5 h-5 text-yellow-400" />
-          <h3 className="text-sm font-medium text-zinc-300">
-            🍌 Nano Banana Pro Infographic
-          </h3>
-          {sizeKB > 0 && (
-            <span className="text-xs text-zinc-500">
-              {sizeKB} KB • {imageSize} • {aspectRatio}
-            </span>
-          )}
-        </div>
-        
+      <div className="flex items-center justify-end mb-4">
         {imageUrl && (
           <Button
             onClick={handleDownload}

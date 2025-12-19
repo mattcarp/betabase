@@ -456,8 +456,11 @@ export function RLHFTestSuite() {
                 <label className="text-xs font-medium text-zinc-500 mb-1 block">
                   Expected Response (Curator Correction)
                 </label>
-                <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20 max-h-24 overflow-y-auto">
-                  <p className="text-xs text-zinc-400">{selectedTest.curator_correction}</p>
+                <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20 max-h-24 overflow-y-auto prose prose-invert prose-xs max-w-none">
+                  <div 
+                    className="text-xs text-zinc-400"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.curator_correction) }}
+                  />
                 </div>
               </div>
             )}

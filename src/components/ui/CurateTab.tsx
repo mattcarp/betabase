@@ -461,8 +461,8 @@ export function CurateTab({
               className={cn(
                 "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
                 activeTab === "dashboard"
-                  ? "bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)] border-b-[3px] border-[var(--mac-primary-blue-400)] shadow-[0_2px_8px_rgba(51,133,255,0.3)]"
-                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
+                  ? "bg-white/10 text-white border-b-2 border-white"
+                  : "text-[var(--mac-primary-blue-400)] hover:text-white hover:bg-[var(--mac-state-hover)]"
               )}
             >
               <BarChart3 className="h-4 w-4 mr-2" />
@@ -478,8 +478,8 @@ export function CurateTab({
               className={cn(
                 "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
                 activeTab === "queue"
-                  ? "bg-[var(--mac-accent-orange-400)]/10 text-[var(--mac-accent-orange-400)] border-b-[3px] border-[var(--mac-accent-orange-400)] shadow-[0_2px_8px_rgba(251,146,60,0.3)]"
-                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
+                  ? "bg-white/10 text-white border-b-2 border-white"
+                  : "text-[var(--mac-primary-blue-400)] hover:text-white hover:bg-[var(--mac-state-hover)]"
               )}
             >
               <ListTodo className="h-4 w-4 mr-2" />
@@ -493,8 +493,8 @@ export function CurateTab({
               className={cn(
                 "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
                 activeTab === "files"
-                  ? "bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)] border-b-[3px] border-[var(--mac-primary-blue-400)] shadow-[0_2px_8px_rgba(51,133,255,0.3)]"
-                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
+                  ? "bg-white/10 text-white border-b-2 border-white"
+                  : "text-[var(--mac-primary-blue-400)] hover:text-white hover:bg-[var(--mac-state-hover)]"
               )}
             >
               <FolderOpen className="h-4 w-4 mr-2" />
@@ -508,8 +508,8 @@ export function CurateTab({
               className={cn(
                 "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
                 activeTab === "upload"
-                  ? "bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)] border-b-[3px] border-[var(--mac-primary-blue-400)] shadow-[0_2px_8px_rgba(51,133,255,0.3)]"
-                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
+                  ? "bg-white/10 text-white border-b-2 border-white"
+                  : "text-[var(--mac-primary-blue-400)] hover:text-white hover:bg-[var(--mac-state-hover)]"
               )}
             >
               <Upload className="h-4 w-4 mr-2" />
@@ -523,8 +523,8 @@ export function CurateTab({
               className={cn(
                 "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
                 activeTab === "info"
-                  ? "bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)] border-b-[3px] border-[var(--mac-primary-blue-400)] shadow-[0_2px_8px_rgba(51,133,255,0.3)]"
-                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
+                  ? "bg-white/10 text-white border-b-2 border-white"
+                  : "text-[var(--mac-primary-blue-400)] hover:text-white hover:bg-[var(--mac-state-hover)]"
               )}
             >
               <Info className="h-4 w-4 mr-2" />
@@ -541,8 +541,8 @@ export function CurateTab({
                 className={cn(
                   "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
                   activeTab === "rlhf-feedback"
-                    ? "bg-[var(--mac-accent-purple-400)]/10 text-[var(--mac-accent-purple-400)] border-b-[3px] border-[var(--mac-accent-purple-400)] shadow-[0_2px_8px_rgba(168,85,247,0.3)]"
-                    : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
+                    ? "bg-white/10 text-white border-b-2 border-white"
+                    : "text-[var(--mac-primary-blue-400)] hover:text-white hover:bg-[var(--mac-state-hover)]"
                 )}
               >
                 <Lightbulb className="h-4 w-4 mr-2" />
@@ -559,8 +559,8 @@ export function CurateTab({
               className={cn(
                 "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
                 activeTab === "dedupe"
-                  ? "bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)] border-b-[3px] border-[var(--mac-primary-blue-400)] shadow-[0_2px_8px_rgba(51,133,255,0.3)]"
-                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
+                  ? "bg-white/10 text-white border-b-2 border-white"
+                  : "text-[var(--mac-primary-blue-400)] hover:text-white hover:bg-[var(--mac-state-hover)]"
               )}
             >
               <GitBranch className="h-4 w-4 mr-2" />
@@ -576,8 +576,8 @@ export function CurateTab({
               className={cn(
                 "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
                 activeTab === "insights"
-                  ? "bg-[var(--mac-accent-purple-400)]/10 text-[var(--mac-accent-purple-400)] border-b-[3px] border-[var(--mac-accent-purple-400)] shadow-[0_2px_8px_rgba(168,85,247,0.3)]"
-                  : "text-[var(--mac-text-secondary)] hover:text-[var(--mac-text-primary)] hover:bg-[var(--mac-state-hover)]"
+                  ? "bg-white/10 text-white border-b-2 border-white"
+                  : "text-[var(--mac-primary-blue-400)] hover:text-white hover:bg-[var(--mac-state-hover)]"
               )}
             >
               <Activity className="h-4 w-4 mr-2" />
@@ -653,7 +653,7 @@ export function CurateTab({
                   title="Find and remove duplicate files"
                   className={cn(
                     "mac-button-outline",
-                    "hover:border-[var(--mac-accent-purple-400)]",
+                    "hover:border-[var(--mac-primary-blue-400)]",
                     "hover:bg-[var(--mac-state-hover)]",
                     "group",
                     "transition-all duration-200"
@@ -662,7 +662,7 @@ export function CurateTab({
                   {deduplicating ? (
                     <Spinner className="h-4 w-4" />
                   ) : (
-                    <GitMerge className="h-4 w-4 group-hover:text-[var(--mac-accent-purple-400)]" />
+                    <GitMerge className="h-4 w-4 group-hover:text-[var(--mac-primary-blue-400)]" />
                   )}
                 </Button>
                 {selectedFiles.size > 0 && (
@@ -757,8 +757,6 @@ export function CurateTab({
                           "transition-all duration-200 ease-out",
                           "hover:bg-[var(--mac-state-hover)]",
                           "hover:border-[var(--mac-primary-blue-400)]/40",
-                          "hover:shadow-xl hover:shadow-[var(--mac-primary-blue-400)]/20",
-                          "hover:-translate-y-1",
                           "cursor-pointer",
                           selectedFiles.has(file.id) && [
                             "bg-[var(--mac-surface-card)]",
@@ -819,9 +817,9 @@ export function CurateTab({
                                       variant="outline"
                                       className={cn(
                                         "text-xs h-4 font-light",
-                                        "bg-[var(--mac-accent-purple-400)]/10",
-                                        "border-[var(--mac-accent-purple-400)]/30",
-                                        "text-[var(--mac-accent-purple-400)]"
+                                        "bg-[var(--mac-primary-blue-400)]/10",
+                                        "border-[var(--mac-primary-blue-400)]/30",
+                                        "text-[var(--mac-primary-blue-400)]"
                                       )}
                                     >
                                       New
@@ -1096,10 +1094,10 @@ export function CurateTab({
             <div role="tabpanel" className="flex-1 overflow-auto mt-4 space-y-6">
               {/* RLHF Sub-navigation */}
               <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                <RLHFSubTabTrigger id="feedback" label="Feedback" icon={<Lightbulb className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="purple" />
+                <RLHFSubTabTrigger id="feedback" label="Feedback" icon={<Lightbulb className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="blue" />
                 <RLHFSubTabTrigger id="reinforcement" label="Learning Curve" icon={<TrendingUp className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="blue" />
                 <RLHFSubTabTrigger id="datasets" label="Datasets" icon={<DatabaseIcon className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="orange" />
-                <RLHFSubTabTrigger id="jobs" label="Fine-Tuning" icon={<LightbulbIcon className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="pink" />
+                <RLHFSubTabTrigger id="jobs" label="Fine-Tuning" icon={<LightbulbIcon className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="blue" />
                 <RLHFSubTabTrigger id="registry" label="Model Registry" icon={<Rocket className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="green" />
               </div>
 

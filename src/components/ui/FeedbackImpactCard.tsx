@@ -227,7 +227,7 @@ export function FeedbackImpactCard({ className }: FeedbackImpactCardProps) {
             icon={<Cpu className="h-5 w-5" />}
             value={impactData.finetuningBatches}
             label="Training Batches"
-            color="purple"
+            color="blue"
             loading={loading}
           />
         </div>

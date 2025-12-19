@@ -7,19 +7,16 @@ import { Button } from "./button";
 import { ScrollArea } from "./scroll-area";
 import {
   CheckCircle,
-  XCircle,
   AlertTriangle,
   Clock,
   MessageSquare,
   ThumbsUp,
   ThumbsDown,
   Flag,
-  ArrowRight,
   Eye,
   FileText,
   Lightbulb,
   Sparkles,
-  Filter,
   MoreVertical,
   RefreshCw,
   Loader2,
@@ -59,6 +56,110 @@ interface CuratorQueueProps {
   className?: string;
   onItemSelect?: (item: QueueItem) => void;
 }
+
+// Demo feedback items for showcase (actual feedback, not questions!)
+const DEMO_FEEDBACK_QUEUE: QueueItem[] = [
+  {
+    id: "demo-feedback-1",
+    type: "correction",
+    title: "What are the steps to link a product to a master in AOMA?",
+    description: "Response missing 2024 spec updates - new validation step not mentioned",
+    source: "Session 8f4a2c1b",
+    timestamp: new Date(Date.now() - 1800000), // 30 mins ago
+    priority: "high",
+    confidence: 65,
+    status: "pending",
+    metadata: {
+      query: "What are the steps to link a product to a master in AOMA?",
+      response: "To link a product to a master in AOMA, follow these steps: 1. Navigate to the Product Linking section, 2. Select the product from the catalog...",
+      feedbackType: "thumbs_down",
+      thumbsUp: false,
+      rating: 2,
+      categories: ["accuracy", "completeness"],
+      severity: "major",
+    },
+  },
+  {
+    id: "demo-feedback-2",
+    type: "low-confidence",
+    title: "How do I upload and archive digital assets in AOMA?",
+    description: "Answer was inaccurate - mentioned FTP instead of Aspera for large files",
+    source: "Session 3d9e7f21",
+    timestamp: new Date(Date.now() - 3600000), // 1 hour ago
+    priority: "high",
+    confidence: 58,
+    status: "pending",
+    metadata: {
+      query: "How do I upload and archive digital assets in AOMA from preparation to storage?",
+      response: "For uploading large assets, you can use the FTP upload method which supports files up to 10GB...",
+      feedbackType: "thumbs_down",
+      thumbsUp: false,
+      rating: 1,
+      categories: ["accuracy"],
+      severity: "critical",
+    },
+  },
+  {
+    id: "demo-feedback-3",
+    type: "correction",
+    title: "What are the permission levels in AOMA and what can each role do?",
+    description: "Incomplete - didn't explain territory-specific access controls",
+    source: "Session 6c2b9a14",
+    timestamp: new Date(Date.now() - 7200000), // 2 hours ago
+    priority: "medium",
+    confidence: 72,
+    status: "pending",
+    metadata: {
+      query: "What are the permission levels in AOMA and what can each role do?",
+      response: "AOMA has four permission levels: Viewer, Editor, Admin, and Global Admin. Viewers can read-only access...",
+      feedbackType: "thumbs_down",
+      thumbsUp: false,
+      rating: 3,
+      categories: ["completeness"],
+      severity: "minor",
+    },
+  },
+  {
+    id: "demo-feedback-4",
+    type: "response-review",
+    title: "How does AOMA use AWS S3 storage tiers for long-term archiving?",
+    description: "Response was confusing - mixed up Glacier and Deep Archive pricing",
+    source: "Session 1a5f8c29",
+    timestamp: new Date(Date.now() - 10800000), // 3 hours ago
+    priority: "medium",
+    confidence: 68,
+    status: "pending",
+    metadata: {
+      query: "How does AOMA use AWS S3 storage tiers for long-term archiving?",
+      response: "AOMA uses AWS S3 Glacier for long-term archiving with costs around $0.004 per GB...",
+      feedbackType: "thumbs_down",
+      thumbsUp: false,
+      rating: 2,
+      categories: ["accuracy", "clarity"],
+      severity: "minor",
+    },
+  },
+  {
+    id: "demo-feedback-5",
+    type: "correction",
+    title: "What new UST features are being planned for the 2026 releases?",
+    description: "Outdated information - mentioned features that were already released in Q4 2025",
+    source: "Session 9b3e2d77",
+    timestamp: new Date(Date.now() - 14400000), // 4 hours ago
+    priority: "low",
+    confidence: 75,
+    status: "pending",
+    metadata: {
+      query: "What new UST features are being planned for the 2026 releases?",
+      response: "The 2026 roadmap includes multi-track FLAC support, which will enable...",
+      feedbackType: "thumbs_down",
+      thumbsUp: false,
+      rating: 3,
+      categories: ["accuracy", "freshness"],
+      severity: "suggestion",
+    },
+  },
+];
 
 // Map database feedback to queue items
 function mapFeedbackToQueueItem(feedback: any): QueueItem {
@@ -129,15 +230,17 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
       }
       const data = await response.json();
       const mappedItems = (data.feedback || []).map(mapFeedbackToQueueItem);
-      setItems(mappedItems);
-    } catch (error) {
-      // Network failures are expected during rapid navigation/tests - fail silently
-      if (error instanceof TypeError && error.message === "Failed to fetch") {
-        // Silently ignore aborted requests
+      
+      // If empty, use demo data for showcase
+      if (mappedItems.length === 0) {
+        setItems(DEMO_FEEDBACK_QUEUE);
       } else {
-        console.warn("Error loading curator queue:", error);
-        toast.error("Failed to load queue - using cached data");
+        setItems(mappedItems);
       }
+    } catch (error) {
+      // Network failures - use demo data for showcase
+      console.warn("Error loading curator queue, using demo data:", error);
+      setItems(DEMO_FEEDBACK_QUEUE);
     } finally {
       setLoading(false);
     }
@@ -291,7 +394,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base font-normal flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-purple-600" />
+              <Sparkles className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
               Curator Queue
               <Badge variant="secondary" className="ml-2">
                 {loading ? "..." : filteredItems.length}
@@ -339,7 +442,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
                   className={cn(
                     "p-3 rounded-lg border cursor-pointer transition-all",
                     selectedItem?.id === item.id
-                      ? "bg-purple-500/10 border-purple-500/30"
+                      ? "bg-[var(--mac-primary-blue-400)]/10 border-[var(--mac-primary-blue-400)]/30"
                       : "hover:bg-muted/50 border-transparent"
                   )}
                   onClick={() => {

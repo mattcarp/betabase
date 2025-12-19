@@ -149,6 +149,25 @@
       ],
       "completedAt": "2025-12-18T05:30:00Z",
       "notes": "Option 3 selected by user. Large-scale enhancement."
+    },
+    {
+      "id": "F008",
+      "category": "testing",
+      "priority": 1,
+      "name": "Advanced Historical Test Explorer",
+      "description": "Upgrade the historical test table with functional search, multi-column sorting, and professional data-table behaviors.",
+      "requirementRefs": ["REQ-007"],
+      "byteroverTags": "#testing #data-table #sorting #filtering",
+      "passes": true,
+      "verification": [
+        "Search input filters results in real-time (debounced)",
+        "Headers (ID, Name, Env, Pass) are clickable for sorting",
+        "Sort indicators (arrows) show current sort state",
+        "Infinite scroll maintains sort order",
+        "API correctly handles sortBy and sortOrder params"
+      ],
+      "completedAt": "2025-12-19T15:30:00Z",
+      "notes": "Implemented manual data-table logic over ShadCN Table to avoid new dependencies while delivering requested functionality."
     }
   ],
   "backlog": [

@@ -2304,19 +2304,12 @@ export function AiSdkChatPanel({
                   
                   {/* Diagram Display - Nano Banana only */}
                   {nanoBananaPrompt && (
-                    <div className="space-y-3">
-                      <div className="text-xs text-center text-zinc-500 flex items-center justify-center gap-2">
-                        <span>🍌 Generated with Nano Banana Pro</span>
-                        <span className="text-zinc-600">•</span>
-                        <span>Gemini 3 Image Generation</span>
-                      </div>
-                      <NanoBananaInfographic 
-                        prompt={nanoBananaPrompt}
-                        aspectRatio="16:9"
-                        imageSize="2K"
-                        autoGenerate={true}
-                      />
-                    </div>
+                    <NanoBananaInfographic 
+                      prompt={nanoBananaPrompt}
+                      aspectRatio="16:9"
+                      imageSize="2K"
+                      autoGenerate={true}
+                    />
                   )}
                 </div>
               </motion.div>

@@ -24,9 +24,18 @@ import {
   TableRow,
 } from "../ui/table";
 import { 
+  Artifact, 
+  ArtifactHeader, 
+  ArtifactTitle, 
+  ArtifactContent, 
+  ArtifactAction, 
+  ArtifactActions 
+} from "../ai-elements/artifact";
+import { 
   Archive, 
   Search, 
   RefreshCw,
+  Copy,
   Filter,
   FileText,
   FileSearch,
@@ -38,7 +47,9 @@ import {
   ChevronRight,
   Activity,
   Zap,
-  AlertTriangle
+  AlertTriangle,
+  ArrowUp,
+  ArrowDown
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
@@ -88,6 +99,8 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedApp, setSelectedApp] = useState<string>("");
   const [hasExecutions, setHasExecutions] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("updated_at");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   
   // Infinite scroll state
   const [page, setPage] = useState(1);
@@ -119,8 +132,11 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
         limit: "100", // Cache first 100
       });
 
+      if (searchQuery) params.set("search", searchQuery);
       if (selectedApp) params.set("app", selectedApp);
       if (hasExecutions) params.set("hasExecutions", hasExecutions);
+      if (sortBy) params.set("sortBy", sortBy);
+      if (sortOrder) params.set("sortOrder", sortOrder);
 
       const response = await fetch(`/api/tests/historical?${params}`);
       const data = await response.json();
@@ -145,7 +161,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
     } finally {
       setLoading(false);
     }
-  }, [selectedApp, hasExecutions]);
+  }, [selectedApp, hasExecutions, searchQuery, sortBy, sortOrder]);
 
   // Load more tests for infinite scroll
   const loadMoreTests = useCallback(async () => {
@@ -162,6 +178,8 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
       if (searchQuery) params.set("search", searchQuery);
       if (selectedApp) params.set("app", selectedApp);
       if (hasExecutions) params.set("hasExecutions", hasExecutions);
+      if (sortBy) params.set("sortBy", sortBy);
+      if (sortOrder) params.set("sortOrder", sortOrder);
 
       const response = await fetch(`/api/tests/historical?${params}`);
       const data = await response.json();
@@ -182,7 +200,18 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
     } finally {
       setLoading(false);
     }
-  }, [page, loading, hasMore, searchQuery, selectedApp, hasExecutions]);
+  }, [page, loading, hasMore, searchQuery, selectedApp, hasExecutions, sortBy, sortOrder]);
+
+  const handleSort = (field: string) => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(field);
+      setSortOrder("desc");
+    }
+    setTests([]);
+    setPage(1);
+  };
 
   // Initial load on mount - use prefetched data if available
   useEffect(() => {
@@ -204,16 +233,17 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
 
   // Handle search with debounce
   useEffect(() => {
-    if (!searchQuery) return;
-    
     const timer = setTimeout(() => {
-      setTests([]);
-      setPage(1);
-      loadInitialTests();
-    }, 300);
+      // Don't reload if it's the first render and we already have data
+      if (initialLoadComplete) {
+        setTests([]);
+        setPage(1);
+        loadInitialTests();
+      }
+    }, 400);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, loadInitialTests]);
+  }, [searchQuery, loadInitialTests, initialLoadComplete]);
 
   // Handle scroll for infinite loading
   const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
@@ -240,6 +270,15 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
     if (test.execution_count === 0) return null;
     const rate = (test.pass_count / test.execution_count) * 100;
     return rate.toFixed(0);
+  };
+
+  const SortIcon = ({ field }: { field: string }) => {
+    if (sortBy !== field) return null;
+    return sortOrder === "asc" ? (
+      <ArrowUp className="ml-1 h-3 w-3 text-[var(--mac-primary-blue-400)]" />
+    ) : (
+      <ArrowDown className="ml-1 h-3 w-3 text-[var(--mac-primary-blue-400)]" />
+    );
   };
 
   return (
@@ -329,17 +368,37 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
               <Table className="border-collapse">
                 <TableHeader className="sticky top-0 bg-zinc-900/90 backdrop-blur-md z-30 shadow-sm border-b border-zinc-800">
                   <TableRow className="hover:bg-transparent border-none">
-                    <TableHead className="w-[60px] h-10 px-4 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em]">
-                      ID
+                    <TableHead 
+                      className="w-[60px] h-10 px-4 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] cursor-pointer hover:text-zinc-300 transition-colors"
+                      onClick={() => handleSort("id")}
+                    >
+                      <div className="flex items-center">
+                        ID <SortIcon field="id" />
+                      </div>
                     </TableHead>
-                    <TableHead className="h-10 px-2 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em]">
-                      Scenario Name
+                    <TableHead 
+                      className="h-10 px-2 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] cursor-pointer hover:text-zinc-300 transition-colors"
+                      onClick={() => handleSort("name")}
+                    >
+                      <div className="flex items-center">
+                        Scenario Name <SortIcon field="name" />
+                      </div>
                     </TableHead>
-                    <TableHead className="w-[85px] h-10 px-2 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] text-center">
-                      Env
+                    <TableHead 
+                      className="w-[100px] h-10 px-2 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] text-center cursor-pointer hover:text-zinc-300 transition-colors"
+                      onClick={() => handleSort("app_under_test")}
+                    >
+                      <div className="flex items-center justify-center">
+                        Env <SortIcon field="app_under_test" />
+                      </div>
                     </TableHead>
-                    <TableHead className="w-[70px] h-10 px-4 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] text-right">
-                      Pass
+                    <TableHead 
+                      className="w-[70px] h-10 px-4 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] text-right cursor-pointer hover:text-zinc-300 transition-colors"
+                      onClick={() => handleSort("pass_count")}
+                    >
+                      <div className="flex items-center justify-end">
+                        Pass <SortIcon field="pass_count" />
+                      </div>
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -373,7 +432,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                           {test.test_name || "Unnamed Scenario"}
                         </TableCell>
                         <TableCell className="py-0 px-2 text-center">
-                          <Badge variant="outline" className="text-[9px] h-4 px-1.5 border-zinc-800 text-zinc-500 font-bold uppercase group-hover:border-zinc-700 transition-colors">
+                          <Badge variant="outline" className="text-[9px] h-auto py-0.5 px-2 border-zinc-800 text-zinc-500 font-bold uppercase group-hover:border-zinc-700 transition-colors whitespace-nowrap">
                             {test.app_under_test}
                           </Badge>
                         </TableCell>
@@ -520,16 +579,17 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       <h3 className="text-[11px] font-black text-zinc-500 uppercase tracking-[0.25em]">Logic Script</h3>
                     </div>
                     <div className="relative group">
-                      <pre className="text-xs text-zinc-400 font-mono bg-zinc-950/80 p-6 rounded-2xl border border-zinc-800/50 overflow-x-auto whitespace-pre-wrap leading-relaxed shadow-xl custom-scrollbar">
-                        {selectedTest.test_script}
-                      </pre>
+                      <div 
+                        className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/50 shadow-xl leading-relaxed text-zinc-300 text-[14px] font-light overflow-hidden break-words prose prose-invert prose-sm max-w-none"
+                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.test_script) }}
+                      />
                       <Button 
                         size="sm" 
                         variant="ghost" 
                         className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-500 hover:text-white bg-zinc-900/50 backdrop-blur-sm h-7 text-[10px] uppercase font-bold tracking-widest"
                         onClick={() => {
                           navigator.clipboard.writeText(selectedTest.test_script);
-                          toast.success("Copied to buffer");
+                          toast.success("Copied to clipboard");
                         }}
                       >
                         Copy
@@ -541,10 +601,10 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                 <div className="grid grid-cols-2 gap-8 pt-4">
                   {/* Metadata Section */}
                   <div className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/50 shadow-md">
-                    <h3 className="text-[11px] font-black text-zinc-500 uppercase tracking-[0.25em] mb-6">Environment</h3>
+                    <h3 className="text-[11px] font-black text-zinc-500 uppercase tracking-[0.25em] mb-6">Test Details</h3>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between py-2 border-b border-zinc-800/30">
-                        <span className="text-sm text-zinc-500 font-light">Domain Category</span>
+                        <span className="text-sm text-zinc-500 font-light">Application</span>
                         <Badge variant="outline" className="border-zinc-700 text-zinc-300 bg-zinc-800/30 font-medium">
                           {selectedTest.category}
                         </Badge>
@@ -571,25 +631,25 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
 
                   {/* History Section */}
                   <div className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/50 shadow-md">
-                    <h3 className="text-[11px] font-black text-zinc-500 uppercase tracking-[0.25em] mb-6">Historical Data</h3>
+                    <h3 className="text-[11px] font-black text-zinc-500 uppercase tracking-[0.25em] mb-6">Execution History</h3>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between py-2 border-b border-zinc-800/30">
-                        <span className="text-sm text-zinc-500 font-light">Success Index</span>
+                        <span className="text-sm text-zinc-500 font-light">Success Rate</span>
                         <span className="text-emerald-400 font-bold tabular-nums">{selectedTest.pass_count.toLocaleString()}</span>
                       </div>
                       <div className="flex items-center justify-between py-2 border-b border-zinc-800/30">
-                        <span className="text-sm text-zinc-500 font-light">Failure Index</span>
+                        <span className="text-sm text-zinc-500 font-light">Failure Rate</span>
                         <span className="text-rose-400 font-bold tabular-nums">{selectedTest.fail_count.toLocaleString()}</span>
                       </div>
                       {selectedTest.first_executed_at && (
                         <div className="flex items-center justify-between py-2 border-b border-zinc-800/30">
-                          <span className="text-sm text-zinc-500 font-light">Deployment Date</span>
+                          <span className="text-sm text-zinc-500 font-light">First Run</span>
                           <span className="text-xs text-zinc-300 font-mono tabular-nums">{new Date(selectedTest.first_executed_at).toLocaleDateString()}</span>
                         </div>
                       )}
                       {selectedTest.last_executed_at && (
                         <div className="flex items-center justify-between py-2">
-                          <span className="text-sm text-zinc-500 font-light">Latest Telemetry</span>
+                          <span className="text-sm text-zinc-500 font-light">Last Run</span>
                           <span className="text-xs text-zinc-300 font-mono tabular-nums">{new Date(selectedTest.last_executed_at).toLocaleDateString()}</span>
                         </div>
                       )}
@@ -606,7 +666,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                           <Zap className="h-6 w-6 text-[var(--mac-primary-blue-400)]" />
                         </div>
                         <div>
-                          <h3 className="text-xs font-black text-white uppercase tracking-[0.3em]">Deep Analysis Core</h3>
+                          <h3 className="text-xs font-black text-white uppercase tracking-[0.3em]">AI Analysis</h3>
                           <div className="mt-2">{getConfidenceBadge(aiConfidence.score)}</div>
                         </div>
                       </div>
@@ -629,7 +689,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                     <div className="space-y-6">
                       <div className="relative">
                         <div className="absolute -left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--mac-primary-blue-400)]/40 via-transparent to-transparent" />
-                        <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 pl-2">Heuristic Rationale</h4>
+                        <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 pl-2">AI Reasoning</h4>
                         <p className="text-[15px] text-zinc-200 font-extralight italic leading-relaxed pl-2">
                           {aiConfidence.rationale}
                         </p>
@@ -637,7 +697,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
 
                       {aiConfidence.recommendations && aiConfidence.recommendations.length > 0 && (
                         <div className="pt-4 border-t border-zinc-800/50">
-                          <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3">Optimization Heuristics</h4>
+                          <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3">AI Suggestions</h4>
                           <ul className="space-y-2">
                             {aiConfidence.recommendations.map((rec, i) => (
                               <li key={i} className="flex items-start gap-3 text-xs text-zinc-400 font-light leading-relaxed">
@@ -652,35 +712,63 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                   </div>
                 )}
 
-                {/* Generated Playwright Code */}
+                {/* Automated Test Code */}
                 {generatedCode && (
-                  <div className="p-8 rounded-3xl bg-zinc-950 border border-zinc-800/80 shadow-2xl animate-in zoom-in-95 duration-300">
-                    <div className="flex items-center justify-between mb-6">
+                  <Artifact className="border-zinc-800/80 shadow-2xl animate-in zoom-in-95 duration-300 bg-zinc-950">
+                    <ArtifactHeader className="bg-zinc-900/50 border-b border-zinc-800/50">
                       <div className="flex items-center gap-4">
-                        <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 shadow-inner">
-                          <Sparkles className="h-6 w-6 text-emerald-400" />
+                        <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                          <Sparkles className="h-4 w-4 text-emerald-400" />
                         </div>
-                        <h3 className="text-xs font-black text-white uppercase tracking-[0.3em]">Synthesized Script</h3>
+                        <ArtifactTitle className="text-xs font-black text-white uppercase tracking-[0.3em]">
+                          Automated Test
+                        </ArtifactTitle>
                       </div>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => {
-                          navigator.clipboard.writeText(generatedCode);
-                          toast.success("Copied to buffer");
-                        }}
-                        className="border-zinc-700 text-zinc-400 hover:text-white h-9 text-[10px] font-black uppercase tracking-[0.2em] px-6 rounded-xl bg-zinc-900/50 hover:bg-zinc-800 transition-all shadow-lg"
-                      >
-                        Copy Buffer
-                      </Button>
-                    </div>
-                    <div className="relative group">
-                      <pre className="text-xs text-emerald-400/80 font-mono bg-black/60 p-8 rounded-2xl border border-zinc-800/50 overflow-x-auto max-h-[500px] shadow-2xl custom-scrollbar leading-loose tracking-tight">
-                        {generatedCode}
-                      </pre>
-                      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-zinc-950/80 to-transparent pointer-events-none rounded-b-2xl" />
-                    </div>
-                  </div>
+                      <ArtifactActions>
+                        <ArtifactAction
+                          icon={RefreshCw}
+                          tooltip="Re-generate"
+                          onClick={async () => {
+                            if (!selectedTest) return;
+                            setGeneratingPlaywright(true);
+                            setGeneratedCode(null);
+                            try {
+                              const response = await fetch("/api/generate-playwright", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ test: selectedTest }),
+                              });
+                              const data = await response.json();
+                              if (data.code) {
+                                setGeneratedCode(data.code);
+                                toast.success("Test re-generated successfully");
+                              }
+                            } catch (error) {
+                              toast.error("Failed to re-generate test");
+                            } finally {
+                              setGeneratingPlaywright(false);
+                            }
+                          }}
+                        />
+                        <ArtifactAction
+                          icon={Copy}
+                          tooltip="Copy Test"
+                          onClick={() => {
+                            navigator.clipboard.writeText(generatedCode);
+                            toast.success("Copied to clipboard");
+                          }}
+                        />
+                      </ArtifactActions>
+                    </ArtifactHeader>
+                    <ArtifactContent className="p-0 bg-black/40">
+                      <div className="relative group">
+                        <pre className="text-xs text-emerald-400/80 font-mono p-8 overflow-x-auto max-h-[500px] shadow-2xl custom-scrollbar leading-loose tracking-tight">
+                          {generatedCode}
+                        </pre>
+                        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-zinc-950/80 to-transparent pointer-events-none" />
+                      </div>
+                    </ArtifactContent>
+                  </Artifact>
                 )}
               </div>
             </ScrollArea>
@@ -710,12 +798,12 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       const data = await res.json();
                       if (data.success) {
                         setGeneratedCode(data.testCode);
-                        toast.success("Logic synthesized successfully");
+                        toast.success("Script generated successfully");
                       } else {
-                        toast.error(data.error || "Synthesis failed");
+                        toast.error(data.error || "Generation failed");
                       }
                     } catch (err) {
-                      toast.error("Network synchronization error");
+                      toast.error("Sync error");
                     } finally {
                       setGeneratingPlaywright(false);
                     }
@@ -729,7 +817,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                   ) : (
                     <Sparkles className="h-5 w-5 mr-4 group-hover:rotate-45 transition-transform text-white" />
                   )}
-                  {generatingPlaywright ? "Synthesizing Core..." : "Generate Playwright"}
+                  {generatingPlaywright ? "Generating Test..." : "Generate Test"}
                 </Button>
                 
                 <Button 
@@ -762,9 +850,9 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                         recommendations: data.recommendations,
                         automationFeasibility: data.automationFeasibility
                       });
-                      toast.success(`Reasoning Confidence: ${Math.round(data.score * 100)}%`);
+                      toast.success(`AI Confidence: ${Math.round(data.score * 100)}%`);
                     } catch (err) {
-                      toast.error("Heuristic analysis failed");
+                      toast.error("Analysis failed");
                     } finally {
                       setCalculatingConfidence(false);
                     }
@@ -777,7 +865,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                   ) : (
                     <Zap className="h-5 w-5 mr-4 text-[var(--mac-primary-blue-400)] group-hover:scale-125 transition-transform" />
                   )}
-                  {calculatingConfidence ? "Running Inference..." : "Run AI Analysis"}
+                  {calculatingConfidence ? "Analyzing..." : "Run AI Analysis"}
                 </Button>
               </div>
             </div>
@@ -791,22 +879,22 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                 <FileSearch className="h-10 w-10 text-zinc-500 transition-colors" />
               </div>
             </div>
-            <h3 className="text-2xl font-extralight text-white mb-4 tracking-tight">Intelligence Ready</h3>
+            <h3 className="text-2xl font-extralight text-white mb-4 tracking-tight">Select a Test</h3>
             <p className="text-sm text-zinc-500 font-light max-w-sm leading-relaxed mb-10">
-              Select a historical scenario from the vault to initiate deep analysis, synthetic script generation, and success heuristics.
+              Pick a historical scenario from the vault to generate scripts, run AI analysis, and view performance history.
             </p>
             <div className="grid grid-cols-1 gap-4 w-full max-w-xs text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">
               <div className="flex items-center gap-4 p-4 rounded-2xl border border-zinc-900 bg-zinc-900/20 transition-colors">
                 <Sparkles className="h-4 w-4 text-emerald-500" />
-                <span className="flex-1 text-left">Synthesis Module</span>
+                <span className="flex-1 text-left">Script Generator</span>
               </div>
               <div className="flex items-center gap-4 p-4 rounded-2xl border border-zinc-900 bg-zinc-900/20 transition-colors">
                 <Zap className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
-                <span className="flex-1 text-left">Heuristic Engine</span>
+                <span className="flex-1 text-left">AI Analyzer</span>
               </div>
               <div className="flex items-center gap-4 p-4 rounded-2xl border border-zinc-900 bg-zinc-900/20 transition-colors">
                 <TrendingUp className="h-4 w-4 text-zinc-500" />
-                <span className="flex-1 text-left">Telemetry History</span>
+                <span className="flex-1 text-left">Test History</span>
               </div>
             </div>
           </div>

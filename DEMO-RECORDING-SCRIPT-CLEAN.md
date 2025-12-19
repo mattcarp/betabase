@@ -70,19 +70,22 @@
 ## 🎬 PILLAR 3: TEST (3:45-5:15)
 
 ### Do:
-1. Click "Test" tab
-2. Show dashboard: **12,177 executions, 80.4% pass rate, 12 auto-healed today**
-3. Point to: **241 awaiting human review**
+1. Click "Test" tab.
+2. Show dashboard: **12,177 executions, 80.4% pass rate, 12 auto-healed today**.
+3. Click **"Historical"** sub-tab.
+4. Search for ID **49524** (Wav Duration Mismatch).
+5. Click **"Run AI Analysis"** → Point to **AI Analysis** and **AI Suggestions**.
+6. Search for ID **83168** (Digital Barcode Search).
+7. Click **"Generate Script"** → Show automated test.
 
 ### Say:
-> "The problem: **change one button ID, 50 tests break.** That's blast radius.
+> "The problem: **change one button ID, 50 tests break.** Traditional QA spends 3 hours fixing selectors. We use AI to handle the obvious ones.
 >
-> Traditional? QA engineer spends 3 hours fixing selectors. We asked: what if AI handled the obvious ones?
->
-> **Three tiers:**
-> - Tier 1 (90%+): Auto-heal immediately. **12 today**.
-> - Tier 2 (70-90%): AI proposes, human verifies. **241 in queue**.
-> - Tier 3 (<70%): Escalate to architect. AI knows its limits."
+> But we go deeper. Look at this AOMA test (ID 49524). The system performs **AI Analysis**—it understands technical edge cases like wav duration mismatches. 
+> 
+> It provides **Success Patterns**, teaching us how to make the test more stable. And with one click? We generate the logic into a full Playwright script. 
+> 
+> **AI handles the certainty. Humans handle the nuance.**"
 
 **Insight:** *"The goal isn't replacing QA engineers. It's letting them focus on judgment calls instead of mechanical updates."*
 
@@ -127,6 +130,11 @@
 Show me The Betabase multi-tenant database architecture
 What are the steps to link a product to a master in AOMA?
 How do I upload and archive digital assets in AOMA from preparation to storage?
+
+# Test Pillar IDs:
+49524 (AI Analysis)
+58054 (Success Patterns)
+83168 (Script Generation)
 ```
 
 ---
