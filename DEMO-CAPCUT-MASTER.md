@@ -12,7 +12,9 @@
 >
 > Three pillars: **Chat** for knowledge, **Curate** for continuous improvement, and **Test** for self-healing infrastructure. Each one feeds the others. Let's dive in." 
 
-Looks like a typical knowledge-base chat. The center works with this Zeitgeist service that I wrote, which basically looks at what's going on today. What's happening in our Jira tickets, in our email. I don't have access yet to email. But what's going on in the new documentation, the new releases. Definitely what's going on in testing. What's happening. The Zeitgeist table will be something the manager could use. But these are, hey, let me ask you, let me propose to every morning. It repopulates this with the current zeitgeist questions daily. It only will, you know, it's not stupid, it'll only ask questions or propose questions to which it already knows that it has a really good answer for the user.
+### Foundation Demo - Multi-Tenant Architecture
+
+*[Show clean chat interface]*
 
 ### What to DO:
 
@@ -87,17 +89,15 @@ Looks like a typical knowledge-base chat. The center works with this Zeitgeist s
 
 > **Technical Note**: Diagram is stored in `ai-sdk-chat-panel.tsx` function `generateFallbackDiagram()`. Triggers when response contains "upload" AND "archive".
 
-### Bullets
-- 45,399 AOMA domain vectors
-- Inline source citations (check on this)
-- **Nano Banana diagram generation** - Beautiful hand-drawn visuals (NEW!)
-- All queries scoped to app_under_test='aoma'
-- **Intent Classification** - Smart source routing (NEW!)
+### Key Stats to Mention:
+- **45,399 vectors** of domain knowledge
+- **Intent classification** routes queries intelligently
+- **Re-ranking** optimizes for usefulness, not just similarity
+- **Nano Banana** creates visuals on-demand (30-50 sec)
 
-> **Note**: Mermaid diagrams in this doc are for reference only - the actual system generates hand-drawn Nano Banana images.
-
-### CapCut Overlays
-- "45,399 vectors" badge
+### CapCut Overlays:
+- "45,399 Vectors" badge (appears when you mention it)
+- "Intent → Vector Search → Re-Rank" pipeline diagram (subtle overlay)
 
 
 
