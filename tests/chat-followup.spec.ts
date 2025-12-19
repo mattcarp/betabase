@@ -48,6 +48,16 @@ test.describe('Chat Follow-up Questions', () => {
     const submitButton = await page.locator('button[type="submit"]').first();
     await submitButton.click();
     
+    console.log('⏳ Waiting for progress indicator on first question...');
+    
+    // Verify progress indicator appears (Chain of Thought UI)
+    const progressIndicator1 = await page.waitForSelector('text=/Processing query|Query Analysis|Knowledge Search/', { timeout: 5000 }).catch(() => null);
+    if (progressIndicator1) {
+      console.log('✅ Progress indicator appeared for first question!');
+    } else {
+      console.log('⚠️  Progress indicator did NOT appear for first question (might be too fast)');
+    }
+    
     console.log('⏳ Waiting for first response...');
     
     // Wait for assistant response (look for AI avatar or message container)
@@ -81,6 +91,17 @@ test.describe('Chat Follow-up Questions', () => {
     // Click submit again
     const submitButton2 = await page.locator('button[type="submit"]').first();
     await submitButton2.click();
+    
+    console.log('⏳ Waiting for progress indicator on second (follow-up) question...');
+    
+    // 🎯 THIS IS THE KEY TEST: Verify progress indicator appears for FOLLOW-UP question too!
+    const progressIndicator2 = await page.waitForSelector('text=/Processing query|Query Analysis|Knowledge Search/', { timeout: 5000 }).catch(() => null);
+    if (progressIndicator2) {
+      console.log('✅ Progress indicator appeared for FOLLOW-UP question! (FIX WORKS!)');
+    } else {
+      console.log('❌ Progress indicator did NOT appear for follow-up question (BUG STILL EXISTS)');
+      await page.screenshot({ path: 'tests/screenshots/no-progress-on-followup.png', fullPage: true });
+    }
     
     console.log('⏳ Waiting for second response...');
     

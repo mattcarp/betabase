@@ -684,6 +684,15 @@ export function AiSdkChatPanel({
           console.warn("[SIAM] setInput clear failed", err);
         }
       }
+      
+      // 🔧 SAFETY: If loading states get stuck, force-clear after delay
+      // This prevents the input from being permanently disabled
+      setTimeout(() => {
+        setManualLoading(false);
+        setIsProcessing(false);
+        setHasStartedStreaming(false);
+        console.log("🔓 Safety timeout: Loading states force-cleared");
+      }, 2000);
     },
 
     // Use api option directly (transport was removed in @ai-sdk/react v3.x)
@@ -893,12 +902,20 @@ export function AiSdkChatPanel({
 
   // Detect when assistant has meaningful content (not just streaming started)
   // FIX: Only hide progress indicator when there's actual visible content
+  // CRITICAL: Track message count to detect NEW assistant responses (not old ones from previous questions)
+  const prevMessageCountRef = useRef(messages.length);
+  
   useEffect(() => {
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
-      // Only set hasStartedStreaming when there's MEANINGFUL content visible to user
-      // This keeps the progress indicator visible until there's something to show
-      if (lastMessage?.role === "assistant" && (isProcessing || manualLoading)) {
+      
+      // Only check for streaming content if:
+      // 1. We're currently loading/processing
+      // 2. The last message is an assistant message
+      // 3. The message count has CHANGED (meaning this is a NEW message, not a previous one)
+      const isNewMessage = messages.length > prevMessageCountRef.current;
+      
+      if (lastMessage?.role === "assistant" && (isProcessing || manualLoading) && isNewMessage) {
         const content = lastMessage.content || lastMessage.parts?.map((p: any) => p.text || '').join('') || '';
         // Require at least 50 characters of content before hiding progress
         // This ensures user sees the progress phases during the "thinking" period
@@ -906,6 +923,9 @@ export function AiSdkChatPanel({
           setHasStartedStreaming(true);
         }
       }
+      
+      // Update the previous count for next comparison
+      prevMessageCountRef.current = messages.length;
     }
   }, [messages, isProcessing, manualLoading]);
 
