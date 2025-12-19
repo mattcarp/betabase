@@ -138,43 +138,7 @@
 - Green checkmark on submit
 - Arrow showing chart update
 
-### Gemini Slide Prompt
-```
-Create a cyclical diagram showing the RLHF feedback loop:
-1. "AI Response" → 2. "Human Feedback" → 3. "Embedding Re-weight" → 4. "Better Retrieval" → back to 1
-Use circular arrows, hand-drawn style, with icons for each step.
-```
-
-### 🔄 Deduplication Flow (Mermaid)
-
-The Curate pillar includes intelligent deduplication to keep the knowledge base clean:
-
-```mermaid
-flowchart TD
-    A[New Document] --> B{1. Source ID Check}
-    B -->|"Found"| DUP[Duplicate - Skip/Update]
-    B -->|"Not found"| C{2. Content Hash}
-    C -->|"Match"| DUP
-    C -->|"Not found"| D{3. URL Normalization}
-    D -->|"Same URL"| DUP
-    D -->|"Not found"| E{4. Semantic Similarity}
-    E -->|"≥85% Similar"| DUP
-    E -->|"<85%"| F[✅ INSERT NEW DOCUMENT]
-    
-    style A fill:#4CAF50,color:white
-    style DUP fill:#f44336,color:white
-    style F fill:#2196F3,color:white
-    style B fill:#9C27B0,color:white
-    style C fill:#9C27B0,color:white
-    style D fill:#9C27B0,color:white
-    style E fill:#9C27B0,color:white
-```
-
-**Deduplication Layers:**
-- **Layer 1: Source ID** - Fastest check (unique identifier)
-- **Layer 2: Content Hash** - MD5/SHA-256 exact match
-- **Layer 3: URL Normalization** - Pattern matching for URLs
-- **Layer 4: Semantic Similarity** - Embedding cosine similarity (85% threshold)
+*(Optional mention: "We also have semantic deduplication to keep the knowledge base clean—85% similarity threshold")*
 
 ---
 
@@ -209,15 +173,7 @@ flowchart TD
 - Color-code tiers (green/yellow/red)
 - Before/after arrows on code diff
 
-### Gemini Slide Prompt
-```
-Create a visual showing the self-healing workflow in 4 steps:
-1. "Test Fails" (red X)
-2. "AI Analyzes" (blue brain icon)
-3. "Fix Applied" (purple wrench)
-4. "Test Passes" (green checkmark)
-Connect with arrows, include confidence scores (95%, 78%, 42%) for three tiers.
-```
+*(No Gemini slides needed - this is live demo only)*
 
 ---
 
@@ -246,14 +202,7 @@ Connect with arrows, include confidence scores (95%, 78%, 42%) for three tiers.
 - Final stats overlay
 - CTA: "Try thebetabase.com"
 
-### Gemini Slide Prompt
-```
-Create a summary slide with three pillars side-by-side:
-- Left: "Chat" with chat bubble icon and "45K vectors"
-- Center: "Curate" with feedback icon and "RLHF Loop"
-- Right: "Test" with shield icon and "94% Success"
-Title: "Three Pillars Working Together"
-```
+*(Closing shot - just your face or return to chat tab)*
 
 ---
 
@@ -321,106 +270,11 @@ What new features are in AOMA 2.116.0?
 
 ---
 
-## 📊 GEMINI SLIDES - COMPLETE SET
+## 📊 VISUAL ASSETS (Post-Production Only)
 
-### Slide 1: Title
-```
-Title slide for "The Betabase: Three-Pillar Demo"
-Subtitle: "Chat, Curate, Test"
-Dark gradient background, purple accent color, modern tech aesthetic
-```
+*(These Gemini slide prompts are for AFTER recording if you want B-roll. NOT needed during live demo.)*
 
-### Slide 2: Multi-Tenant Architecture
-```
-Hand-drawn infographic showing three-tier multi-tenant database:
-- Organization level (Sony Music)
-- Division level (Digital Ops, Legal, Finance)  
-- App level (AOMA, Alexandria, Confluence)
-Show data isolation between tiers with connecting lines
-```
-
-### Slide 3: Pillar 1 - Chat
-```
-Infographic for Chat pillar featuring:
-- Large search/chat bubble icon in center
-- "45,399 Domain Vectors" callout with database icon
-- "Inline Citations" feature bubble with link icon
-- "Nano Banana Diagrams" feature bubble with sparkle/banana icon
-Purple/blue gradient, modern tech style
-```
-
-### Slide 4: Pillar 2 - Curate
-```
-Cyclical diagram showing RLHF feedback loop:
-Step 1: "AI Response" (chat bubble)
-Step 2: "Human Feedback" (thumbs up/down)
-Step 3: "Embedding Re-weight" (brain + weights)
-Step 4: "Better Retrieval" (improved search)
-Circle back to Step 1 with arrow
-Hand-drawn connecting arrows
-```
-
-### Slide 5: Pillar 3 - Test
-```
-4-step self-healing workflow diagram:
-1. "Test Fails" - red X icon, example: "Selector not found"
-2. "AI Analyzes" - blue brain icon, "DOM diff detected"  
-3. "Fix Applied" - purple wrench icon, "Selector updated"
-4. "Test Passes" - green checkmark, "95% confidence"
-Include three confidence tiers below: Tier 1 (green), Tier 2 (yellow), Tier 3 (red)
-```
-
-### Slide 6: The Loop
-```
-Show how three pillars connect in a virtuous cycle:
-"Better Chat" → "Fewer Corrections" → "Improved Retrieval" → "Fewer Test Failures" → back to "Better Chat"
-Circular flow with arrows, hand-drawn style
-```
-
-### Slide 7: Summary/CTA
-```
-Three icons side-by-side with stats:
-- Chat icon: "45K vectors"
-- Curate icon: "RLHF Loop"
-- Test icon: "94% Success"
-Title: "Three Pillars Working Together"
-Subtitle: "AI That Gets Better Every Day"
-CTA: "thebetabase.com"
-```
-
-### Slide 8: Intent Classification (RAG Optimization)
-```
-Create a hand-drawn style infographic showing query routing:
-- Left side: "User Query" bubble
-- Center: "Intent Classifier" brain icon with Gemini logo
-- Right side: 6 boxes for source types (JIRA, Docs, Git, Email, Web, Metrics)
-- Show 2 boxes highlighted in green (selected), 4 grayed out (skipped)
-- Arrow from query through classifier to selected sources only
-- Caption: "Smart routing = Less noise, Better answers"
-Use purple/blue tech aesthetic, clean lines
-```
-
-### Slide 9: Re-Ranker (Two-Stage Retrieval)
-```
-Create a visual showing two-stage retrieval:
-- Stage 1: Large funnel labeled "Vector Search" with "200 docs → 50 candidates"
-- Stage 2: Smaller funnel labeled "Gemini Re-Ranker" with "50 → 10 best"
-- Show documents being reordered (arrows showing rank changes)
-- Include small badge: "RLHF Boost" with thumbs-up icon
-- Before/After comparison: scrambled order vs. clean ranked list
-- Caption: "Right documents, right order"
-Purple/blue gradient, modern tech style
-```
-
-### Slide 10: Full RAG Pipeline
-```
-Create a horizontal pipeline diagram showing the full RAG flow:
-1. "Query" (green) → 2. "Intent Classifier" (purple) → 3. "Vector Search" (blue) → 4. "Re-Ranker" (orange) → 5. "Response" (green)
-Show document count decreasing at each stage: 200 → 50 → 10 → 1 response
-Include timing: "50ms + 100ms + 300ms = <500ms total"
-Add small icons for each stage
-Caption: "Intelligent retrieval, every query"
-```
+**Skip this section during recording - Nano Banana generates everything live!**
 
 ---
 
@@ -566,7 +420,9 @@ Run these before recording (warms cache):
 
 ---
 
-## 🧠 INTENT CLASSIFICATION (Technical Deep-Dive)
+## 🧠 TECHNICAL REFERENCE (Not for Demo - Background Info Only)
+
+### Intent Classification
 
 **The Problem It Solves:**
 More data ≠ better answers. With 45K+ vectors across multiple source types (JIRA, docs, git, email), fan-out queries retrieve noise that degrades response quality.
@@ -731,7 +587,7 @@ Purple/blue gradient, modern tech style
 
 ---
 
-## 🔐 CODE AS HIDDEN KNOWLEDGE (Technical Deep-Dive)
+### Code as Hidden Knowledge (Background)
 
 ### The Innovation: Intelligent Code Awareness
 
