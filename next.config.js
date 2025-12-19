@@ -4,6 +4,10 @@ module.exports = {
     "ignoreBuildErrors": true
   },
   "reactStrictMode": true,
+  "devIndicators": {
+    "buildActivity": false,
+    "buildActivityPosition": "bottom-right"
+  },
   "images": {
     "remotePatterns": [
       {
