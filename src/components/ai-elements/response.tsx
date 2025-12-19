@@ -8,6 +8,14 @@ import ReactMarkdown, { type Options } from "react-markdown";
 import remarkGfm from "remark-gfm";
 // import remarkMath from "remark-math"; // TEMPORARILY DISABLED - MISSING DEPENDENCY
 import { cn } from "../../lib/utils";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "../ui/table";
 // import "katex/dist/katex.min.css"; // TEMPORARILY DISABLED - MISSING DEPENDENCY
 // import hardenReactMarkdown from "harden-react-markdown"; // TEMPORARILY DISABLED - MISSING DEPENDENCY
 
@@ -229,36 +237,36 @@ const components: Options["components"] = {
     </h6>
   ),
   table: ({ node, children, className, ...props }) => (
-    <div className="my-4 overflow-x-auto">
-      <table className={cn("w-full border-collapse border border-border", className)} {...props}>
+    <div className="my-4">
+      <Table className={className} {...props}>
         {children}
-      </table>
+      </Table>
     </div>
   ),
   thead: ({ node, children, className, ...props }) => (
-    <thead className={cn("bg-muted/50", className)} {...props}>
+    <TableHeader className={className} {...props}>
       {children}
-    </thead>
+    </TableHeader>
   ),
   tbody: ({ node, children, className, ...props }) => (
-    <tbody className={cn("divide-y divide-border", className)} {...props}>
+    <TableBody className={className} {...props}>
       {children}
-    </tbody>
+    </TableBody>
   ),
   tr: ({ node, children, className, ...props }) => (
-    <tr className={cn("border-b border-border", className)} {...props}>
+    <TableRow className={className} {...props}>
       {children}
-    </tr>
+    </TableRow>
   ),
   th: ({ node, children, className, ...props }) => (
-    <th className={cn("px-4 py-2 text-left font-normal text-sm", className)} {...props}>
+    <TableHead className={className} {...props}>
       {children}
-    </th>
+    </TableHead>
   ),
   td: ({ node, children, className, ...props }) => (
-    <td className={cn("px-4 py-2 text-sm", className)} {...props}>
+    <TableCell className={className} {...props}>
       {children}
-    </td>
+    </TableCell>
   ),
   blockquote: ({ node, children, className, ...props }) => (
     <blockquote
