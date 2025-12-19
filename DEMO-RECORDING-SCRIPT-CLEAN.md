@@ -8,8 +8,7 @@
 ### Say:
 > "Most QA platforms keep humans and AI in separate lanes. We asked a different question: **What if they learned from each other?**
 >
-> This is The Betabase—where human insight trains AI, and AI handles the repetitive work, so humans can focus on what actually requires judgment.
->
+
 > Let's dive in."
 
 ### Do:

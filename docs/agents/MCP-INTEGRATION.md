@@ -12,7 +12,7 @@ MCP servers, tools, and configuration for SIAM.
 - **firecrawl** - Web scraping and analysis
 - **supabase** - Database queries
 - **browser-tools** - Additional browser capabilities
-- **task-master-ai** - Task management
+- **byterover-mcp** - Knowledge management
 - Others: See `.mcp.json` for complete list
 
 ## Render MCP

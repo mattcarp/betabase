@@ -27,28 +27,23 @@ j# SIAM Project Tasks
 3. **Audio Capture Finalization** (Task 37)
 4. **Deployment Infrastructure** (Task 43)
 
-## Taskmaster Integration
+## Task Management Overview
 
-This document works in conjunction with the **taskmaster-ai** system. Use the following commands to manage tasks:
+We use a file-based task management system centered around `features.json` and `claude-progress.txt`.
 
-```bash
-# View all tasks
-task-master list
+### Key Files
+- `features.json`: Comprehensive list of feature specifications and their status.
+- `claude-progress.txt`: Session-by-session log of work completed.
+- `HANDOFF-*.md`: Detailed handoffs for complex, incomplete tasks.
 
-# View specific task details
-task-master show <id>
+### Workflow
+1. **Identify Task**: Check `features.json` for the highest priority `passes: false` feature.
+2. **Implementation**: Work on one feature at a time.
+3. **Verification**: Run E2E tests and manual checks.
+4. **Completion**: Update `features.json` status to `passes: true` and log progress in `claude-progress.txt`.
+5. **Knowledge**: Store any new patterns learned in ByteRover.
 
-# Update task status
-task-master set-status --id=<id> --status=<status>
-
-# Add new tasks
-task-master add "Task description"
-
-# Expand complex tasks into subtasks
-task-master expand --id=<id>
-```
-
-## Current Task Status (from taskmaster)
+## Current Task Status
 
 ### ✅ Completed Tasks
 
@@ -130,23 +125,11 @@ ENABLE_MCP_INTEGRATION=true
 
 ## Development Workflow
 
-Use the taskmaster system for all task management:
-
-```bash
-# Start development session
-task-master list
-
-# Select next task based on dependencies
-task-master next
-
-# Update progress
-task-master set-status --id=<id> --status=in-progress
-
-# Mark completed
-task-master set-status --id=<id> --status=done
-```
-
-**Note**: This TASKS.md file provides context and implementation details, while the taskmaster system handles task tracking, dependencies, and workflow management.
+1. **Start Session**: Read `claude-progress.txt` and `features.json`.
+2. **Select Task**: Choose the highest priority `passes: false` feature.
+3. **Implement**: Work on the feature incrementally.
+4. **Verify**: Run tests and manual checks.
+5. **Finish**: Update `features.json` and `claude-progress.txt`.
 
 - **Phase 1**: 1-2 days (immediate impact)
 - **Phase 2**: 2-3 days (core functionality)

@@ -183,9 +183,9 @@ When you complete this task:
    - Agent associated with server
    - Tools available to agent
 
-2. **Task Master:**
-   - Update task_048.txt status to "done"
-   - Run: `task-master set-status --id=48 --status=done`
+2. **Completion**:
+   - Update `features.json` status to "passes: true"
+   - Log completion in `claude-progress.txt`
 
 3. **Git:**
    - Commit completion notes
@@ -208,8 +208,7 @@ npx tsx src/demo-mcp-integration.ts
 # Check Lambda health directly
 curl https://ochwh4pvfaigb65koqxgf33ruy0rxnhy.lambda-url.us-east-2.on.aws/health
 
-# Mark task as done (after verification)
-task-master set-status --id=48 --status=done
+# Mark task as done (after verification) in features.json and progress log
 ```
 
 ---

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DOMPurify from "isomorphic-dompurify";
+import { sanitizeHtml } from "../../lib/dom-purify";
 import {
   Search,
   File,
@@ -144,7 +144,7 @@ const ResultCard: React.FC<{
               className="mac-title"
               className="mac-title font-normal text-gray-100 hover:text-blue-400 cursor-pointer transition-colors truncate"
               onClick={() => onOpen(result)}
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(result.highlighted.title) }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(result.highlighted.title) }}
             />
             <div className="flex items-center gap-2 text-xs text-gray-400 mt-2">
               <span className="capitalize">{result.type.replace("_", " ")}</span>
@@ -181,7 +181,7 @@ const ResultCard: React.FC<{
       <div className="mb-4">
         <p
           className="text-gray-300 text-sm leading-relaxed"
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(result.highlighted.snippet) }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(result.highlighted.snippet) }}
         />
       </div>
 

@@ -79,22 +79,11 @@ VALUES ('your-user-id', 'curator', 'system')
 ON CONFLICT (user_id) DO UPDATE SET role_name = 'curator';
 ```
 
-**Via Taskmaster (future):**
-```bash
-task-master admin assign-role --email="user@example.com" --role="curator"
-```
+**Note:** Use your organization's user management portal or Supabase dashboard to assign roles.
 
 #### 1.3 Configure AI Models
 
-**Via Taskmaster:**
-```bash
-task-master models --setup
-```
-
-**Interactive prompts:**
-- Select main model (e.g., Gemini 1.5 Pro)
-- Select research model (e.g., Perplexity Sonar)
-- Select fallback model (e.g., Claude 3.5 Sonnet)
+Configure AI model settings in `src/config/aiModels.ts`.
 
 **Via MCP:**
 ```typescript

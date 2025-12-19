@@ -18,14 +18,15 @@
   - Diagram generator choice (Mermaid CLI vs GPT image/Nano-to-Banana)
   - Charting library for Curate/testing dashboards (EvilCharts/shadcn vs existing components)
 
-## Task Master Context
-- `task-master next` currently returns **Task 77.6** (Discovery – Authentication Flows) which feeds Workstream A.
+## Project Status Context
+- Current priority is **Task 77.6** (Discovery – Authentication Flows) which feeds Workstream A.
 - Workstream ↔ Task map lives inside `specs/SIAM/implementation-plan.md` under each section.
 
 ## Handoff Expectations
 - Any new agent should start by reading this file, the implementation plan, and the requirements doc before making edits.
 - Record discoveries/decisions back into:
-  - Task Master via `update_subtask`
+  - `claude-progress.txt` (Session summary)
+  - `features.json` (Feature status)
   - `specs/SIAM/implementation-plan.md` (Workstream notes)
   - `specs/SIAM/requirements.md` (flip ⚠️ → ✅ with evidence)
 - Visual assets (screenshots, diagrams) should be stored under `docs/demo-assets/` (create if missing) and referenced from the plan.

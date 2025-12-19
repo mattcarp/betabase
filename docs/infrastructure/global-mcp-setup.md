@@ -12,13 +12,9 @@ Global MCP packages allow you to use the same MCP servers across all projects wi
 // Location: ~/.config/claude/claude_desktop_config.json
 {
   "mcpServers": {
-    "task-master-ai": {
+    "byterover-mcp": {
       "command": "npx",
-      "args": ["-y", "task-master-ai@latest"],
-      "env": {
-        "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
-        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
-      }
+      "args": ["-y", "byterover-mcp@latest"]
     },
     "testsprite": {
       "command": "npx",
@@ -119,9 +115,9 @@ Then in config:
 ```json
 {
   "mcpServers": {
-    "task-master-ai": {
+    "byterover-mcp": {
       "command": "/Users/matt/.config/claude/mcp-launcher.sh",
-      "args": ["npx", "-y", "task-master-ai@latest"]
+      "args": ["npx", "-y", "byterover-mcp@latest"]
     }
   }
 }
@@ -167,7 +163,7 @@ Then in config:
 
 ```bash
 # 1. Install global packages (optional, npx handles this)
-npm install -g task-master-ai@latest
+npm install -g byterover-mcp@latest
 npm install -g @testsprite/testsprite-mcp@latest
 npm install -g @eqiz/browser-tools-mcp-enhanced@latest
 
@@ -186,13 +182,9 @@ chmod 600 ~/.config/claude/.env
 cat > ~/.config/claude/claude_desktop_config.json << 'EOF'
 {
   "mcpServers": {
-    "task-master-ai": {
+    "byterover-mcp": {
       "command": "npx",
-      "args": ["-y", "task-master-ai@latest"],
-      "env": {
-        "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
-        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
-      }
+      "args": ["-y", "byterover-mcp@latest"]
     },
     "testsprite": {
       "command": "npx",
@@ -237,11 +229,5 @@ echo 'export $(cat ~/.config/claude/.env | xargs)' >> ~/.zshrc
 
 ```bash
 # Test MCP server directly
-npx -y task-master-ai@latest --version
-
-# Check if env vars are loaded
-echo $ANTHROPIC_API_KEY
-
-# Verify in Claude Desktop/Code
-# Should see MCP servers available without project config
+npx -y byterover-mcp@latest --version
 ```

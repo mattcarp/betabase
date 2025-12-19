@@ -618,8 +618,8 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
         </div>
 
         {/* Main Content Area */}
-        <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col">
-          <TabsList className="flex w-full rounded-none border-b border-white/10 bg-[var(--mac-surface-bg)] overflow-x-auto">
+        <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col min-h-0">
+          <TabsList className="flex w-full rounded-none border-b border-white/10 bg-[var(--mac-surface-bg)] overflow-x-auto shrink-0">
             <TabsTrigger value="home" className="gap-2">
               <Home className="h-4 w-4" />
               Home
@@ -674,8 +674,8 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             </TabsTrigger>
           </TabsList>
 
-          <ScrollArea className="flex-1">
-            <TabsContent value="home" className="m-0 p-6">
+          <div className="flex-1 relative min-h-0">
+            <TabsContent value="home" className="m-0 p-6 h-full overflow-auto">
               <TestHomeDashboard
                 onNavigate={setActiveView}
                 testStats={{
@@ -688,7 +688,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               />
             </TabsContent>
 
-            <TabsContent value="self-healing" className="m-0 p-0">
+            <TabsContent value="self-healing" className="m-0 p-0 h-full overflow-auto">
               <SelfHealingTestViewer />
             </TabsContent>
 
@@ -696,11 +696,11 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <HistoricalTestExplorer prefetchedData={prefetchedTests} />
             </TabsContent>
 
-            <TabsContent value="unified" className="m-0 p-6">
+            <TabsContent value="unified" className="m-0 p-6 h-full overflow-auto">
               <UnifiedResultsDashboard />
             </TabsContent>
 
-            <TabsContent value="execution" className="m-0 p-6">
+            <TabsContent value="execution" className="m-0 p-6 h-full overflow-auto">
               <TestExecutionPanel
                 isRunning={isRunning}
                 onRunTests={handleRunTests}
@@ -708,7 +708,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               />
             </TabsContent>
 
-            <TabsContent value="results" className="m-0 p-6">
+            <TabsContent value="results" className="m-0 p-6 h-full overflow-auto">
               <TestResultsViewer />
             </TabsContent>
 
@@ -716,34 +716,34 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <ManualTestingPanel />
             </TabsContent>
 
-            <TabsContent value="ai-generate" className="m-0 p-6">
+            <TabsContent value="ai-generate" className="m-0 p-6 h-full overflow-auto">
               <AITestGenerator />
             </TabsContent>
 
-            <TabsContent value="trace" className="m-0 p-6">
+            <TabsContent value="trace" className="m-0 p-6 h-full overflow-auto">
               <TraceViewer />
             </TabsContent>
 
-            <TabsContent value="coverage" className="m-0 p-6">
+            <TabsContent value="coverage" className="m-0 p-6 h-full overflow-auto">
               <CoverageReport />
             </TabsContent>
 
-            <TabsContent value="flaky" className="m-0 p-6">
+            <TabsContent value="flaky" className="m-0 p-6 h-full overflow-auto">
               <FlakyTestExplorer />
             </TabsContent>
 
-            <TabsContent value="analytics" className="m-0 p-6">
+            <TabsContent value="analytics" className="m-0 p-6 h-full overflow-auto">
               <TestAnalytics />
             </TabsContent>
 
-            <TabsContent value="firecrawl" className="m-0 p-6">
+            <TabsContent value="firecrawl" className="m-0 p-6 h-full overflow-auto">
               <FirecrawlPanel />
             </TabsContent>
 
-            <TabsContent value="session-playback" className="m-0 p-6">
+            <TabsContent value="session-playback" className="m-0 p-6 h-full overflow-auto">
               <SessionPlaybackViewer />
             </TabsContent>
-          </ScrollArea>
+          </div>
         </Tabs>
       </div>
     </div>

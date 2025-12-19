@@ -240,9 +240,9 @@ Required API keys (set in `.env` or `.cursor/mcp.json`):
 - `GOOGLE_API_KEY` - For Gemini API (embeddings, generation, reranking)
 - `PERPLEXITY_API_KEY` - For research-backed operations (optional)
 
-### Taskmaster Config (`.taskmaster/config.json`)
+### AI Model Configuration
 
-AI model settings managed via `task-master models` command:
+AI model settings are managed in `src/config/aiModels.ts`:
 - Main model: Used for primary RAG operations
 - Research model: Used for research-backed query transformation
 - Fallback model: Used if primary fails
@@ -492,7 +492,6 @@ Generate Playwright tests from feedback:
 - [RAG Best Practices](https://www.anthropic.com/research/contextual-retrieval)
 - [RLHF Overview](https://huggingface.co/blog/rlhf)
 - [Agentic RAG Patterns](https://www.llamaindex.ai/blog/agentic-rag)
-- Taskmaster MCP Tools: `docs/.cursor/rules/taskmaster/taskmaster.mdc`
 
 ---
 
