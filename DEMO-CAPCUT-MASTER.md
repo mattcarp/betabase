@@ -1,71 +1,74 @@
-# THREE-PILLAR DEMO - MASTER BULLETS
-
-
-## 📹 SHOT 1: OPENING - Multi-Tenant ERD (0:00-0:45) 🍌 META DEMO
-VOICEOVER: .... bring AI and workers together through the use of such things as RLHF, AND HITL
-were gonna demo some rather unique knowledge base chase, show how that is dependened on curation, which is a human job, and AI-Supported Testing, including self-healing, test generation from human use, generation for machine use. And always, human feedback and curation along the way.
-
-So let's get started.
-
-#### Latest variant of the Betabase, a system I wrote many years ago for testing. This has been clearly very, very written. And I just, honestly, it's a totally different app, but I couldn't find a better name. So I went with that. If you're going to do software testing, come on, you've got to go with the Betabase. It's just hilarious. I'm laughing and chuckling at myself deep inside right now. 
-
-Weve The past for human-driven testing where people are writing the scripts, running the tests, determining when there was a pass and a fail, putting in the dates and putting in the operating systems used and the releases of the apps and all that. I'd like to continue using it in that capacity, but then extend it heavily with AI. And this is, again, a completely new system. The only reason it's named the same thing is I couldn't find a better name. The name makes me chuckle, and I also like the word chuckle.
-
-Looks like a typical knowloadebase-base chat. The The center works with this Zeitgeist service that I wrote, which basically looks at what's going on today. What's happening in our Jira tickets, in our email. I don't have access yet to email. But what's going on in the new documentation, the new releases. Definitely what's going on in testing. What's happening. The Zeitgeist table will be something the manager could use. But these are, hey, let me ask you, let me propose to every morning. It repopulates this with the current zeitgeist questions. It only will, you know, it's not stupid, it'll only ask questions or propose questions to which it already knows that it has a really good answer for the user.
-
-### Action (THE META MOMENT!)
-**A. Tech Gut Check**
-
-- Ask about DDP:
-  - Bytes per sector on a DDP CD master?
-  - Spec number?
-  - Max number of tracks?
-  - Max playtime?
-  - Put it in a nice table.
-- Any more info you can chare on DDP's i'm reall stuck on this. How does AOMA use DDP?
-
-
-1. Type: "Explain The Betabase's multi-tenant database architecture"
-2. AI answers with text explanation
-3. **Then you say:** "I'm recording a demo - can you create an infographic of that? Hand-drawn style, show the three tiers."
-4. **NANO BANANA GENERATES IN REAL-TIME** (~3-5 seconds with spinner)
-5. Beautiful hand-drawn ERD appears!
-6. **You narrate:** "And THAT is the system creating its own demo slides while I'm demoing it. Meta, right?"
-
-### What You'll Actually Say (Natural):
-> "Okay, and I'm running a demo now. So for my friends, can you make an infographic of how the ERD works for the multi-tenant architecture of this system itself? Thanks!"
-
-**(The system already knows the style from the template - you don't need to specify colors/aesthetic!)**
-
-### Bullets (What to SAY while it generates)
-- **THE BETABASE** = Our QA testing platform
-- **AOMA** = One example AUT (Application Under Test)
-- Three-tier isolation: ANY organization can use our platform
-- Watch this - the system is making its OWN demo slide right now!
-- This is Gemini 3 Pro image generation - infographics on demand
-
-### Gemini Slide Prompt
-```
-Create a hand-drawn style infographic showing a three-tier hierarchy:
-- Top tier: "Organization" (Sony Music)
-- Middle tier: "Division" (Digital Ops, Legal, Finance)
-- Bottom tier: "Apps Under Test" (AOMA, Alexandria)
-Use connecting lines and annotations. Professional but approachable style.
-```
+# THE BETABASE DEMO - Production Script
 
 ---
 
-## 📹 SHOT 2: PILLAR 1 - CHAT (0:30-2:00)
-Ask warpmup tech question: On a DDP, how many bytes are in a sector and how many frames are in a second? And also, what are the different DDP standards and what can they be used for? 
+## 📹 OPENING (0:00-0:45)
 
-GO RIGHT TO SHOWSWTOPPPER  QUESTION
-### Query 1: Baseline
-- Type: "What are the steps to link a product to a master in AOMA?"
-- During progress, menation the 'intent filter' (top), and re-ranking (bottom)
-- Show streaming response (mention streamin is so quack becauase of the new Gemini Flash - cam out on wednesday)
-- Point to inline citations (ensure that there are some)
+### Voiceover:
 
-### Query 2: AOMA Workflow Diagram (⭐ SHOWSTOPPER)
+> "Most QA platforms treat humans and AI as separate tools. We asked a different question: **What if they learned from each other?**
+>
+> I'm Mattie, and this is The Betabase—where human insight trains AI, and AI handles the repetitive work, so humans can focus on what actually requires judgment.
+>
+> Three pillars: **Chat** for knowledge, **Curate** for continuous improvement, and **Test** for self-healing infrastructure. Each one feeds the others. Let's dive in." 
+
+Looks like a typical knowledge-base chat. The center works with this Zeitgeist service that I wrote, which basically looks at what's going on today. What's happening in our Jira tickets, in our email. I don't have access yet to email. But what's going on in the new documentation, the new releases. Definitely what's going on in testing. What's happening. The Zeitgeist table will be something the manager could use. But these are, hey, let me ask you, let me propose to every morning. It repopulates this with the current zeitgeist questions daily. It only will, you know, it's not stupid, it'll only ask questions or propose questions to which it already knows that it has a really good answer for the user.
+
+### What to DO:
+
+**Warm-up (optional):**
+- Ask technical question: "On a DDP, how many bytes per sector, and what's the max track count?"
+- Show it knows deep technical specs
+- *Cut this if running long - just visual proof of knowledge depth*
+
+**The Foundation:**
+1. **Type:** "Explain The Betabase's multi-tenant database architecture"
+2. AI explains (Organization → Division → App isolation)
+3. **You say:** "I'm demoing this right now—create an infographic of that multi-tenant architecture for my colleagues. Thanks!"
+4. 🍌 **Nano Banana spinner** appears (30-50 sec, you'll cut to ~5 sec in edit)
+5. **Gorgeous ERD infographic appears** - Sony Music, SMEJ, Other Music
+
+### What to SAY (while Nano Banana generates):
+
+> "Here's the thing: this isn't built for just us. **Multi-tenant from the ground up**—any organization can use it, totally isolated data. Sony Music here, SMEJ over there, completely separate.
+>
+> And watch this... *[gesture at spinner]* ...the system is literally creating its own demo slide right now. That's Gemini image generation in real-time. Meta, right?"
+
+**The Insight:** *"Most platforms bolt on multi-tenancy later. We designed isolation into the foundation. That's the difference between a feature and architecture."*
+
+---
+
+## 📹 PILLAR 1: CHAT - Intelligent Retrieval (0:45-2:30)
+
+### What to DO:
+
+**The Question:**
+- **Type:** "What are the steps to link a product to a master in AOMA?"
+
+**While It Processes (point to screen):**
+- *"Notice the progress—**intent classification** at the top, **re-ranking** at the bottom."*
+
+**When Response Streams:**
+- *"Streaming is instant now—Gemini 3 Flash just dropped Wednesday. Three times faster than the previous model."*
+
+### The Diagram Moment:
+
+**Ask:** "How do I upload and archive digital assets in AOMA from preparation to storage?"
+
+**When diagram offer appears:**
+- Click "Would you like a visual diagram?"
+- 🍌 **Nano Banana generates** (30-50 sec, edit to ~5 sec)
+- **5-phase workflow appears**
+
+### What to SAY:
+
+> "Here's what makes this different: **two-stage retrieval**. 
+>
+> First pass: vector search pulls 200 candidates. Second pass: Gemini re-ranks them by actual relevance, not just embedding similarity. 
+>
+> **The insight:** Semantic similarity doesn't always mean useful. A document can match your keywords perfectly and still be the wrong answer. Re-ranking fixes that."
+
+**Catchphrase:** *"Most RAG systems stop at similarity. We optimize for usefulness."*
 - **Type this exact question**: 
   ```
   How do I upload and archive digital assets in AOMA from preparation to storage?
@@ -99,36 +102,36 @@ GO RIGHT TO SHOWSWTOPPPER  QUESTION
 
 
 
-SQEGUE BETWEEN CHAT AND CURATION
+### Transition to Curation:
 
-- Click the thumbs down button on a response
+**What to DO:**
+- Click **thumbs down** on a response
 - Dialog appears: "Thank you for your feedback"
-- Input field prompts: "What was the issue with this response?"
-- Below the input: "Your feedback will be added to the curation queue and integrated into the system"
-- Three action buttons:
-  - **Close** - dismiss dialog
-  - **Go to Integration** - navigate to integration view
-  - **Go to Curation Queue** - switch to Curate tab with your feedback already visible in the list issue with the question. And then underneath the input it'll say your feedback, your great feedback will be added to the curation queue and integrated into the system in the future. And integrated into the system. And then there's three options: Close, go to integration, go to curation queue. If you hit go to curation queue, you'll automatically be switched to the curate tab and the feedback that you just gave will be in the curation list. 
+- Type issue: *"Should mention the 2024 spec updates"*
+- Click **"Go to Curation Queue"**
+- Auto-switches to Curate tab → your feedback is already there
 
 ---
 
-## 📹 SHOT 3: PILLAR 2 - CURATE (2:00-3:30)
+## 📹 PILLAR 2: CURATE - Human-in-the-Loop Learning (2:30-3:45)
 
-### Action Sequence
-1. Click "Curate" button in header
-2. Show feedback queue (if populated)
-3. Demo thumbs up/down on response
-4. Show star rating (1-5)
-5. Submit feedback → success toast
-6. Show accuracy chart updating
+### What to DO:
+1. Already on Curate tab (from transition)
+2. Show the feedback you just submitted in the queue
+3. Point to other feedback items
+4. Show the **accuracy chart** 
 
-### Bullets
-- Human experts curate AI quality
-- Thumbs up/down + star ratings
-- Feedback queue for review
-- Corrections improve embeddings
-- This is the RLHF loop
-- Domain expertise scales
+### What to SAY:
+
+> "This is where the magic happens. Every thumbs down becomes training data.
+>
+> Our domain experts—people who actually use AOMA every day—curate the AI's knowledge. They don't just report errors; they **teach the system what better looks like.**
+>
+> That feedback updates the embeddings, changes what gets surfaced in searches, makes the next answer more accurate."
+
+**The Insight:** *"AI without human feedback is just expensive autocomplete. The curation loop is what makes it actually learn."*
+
+**Catchphrase:** *"We're not building a static knowledge base. We're building one that gets smarter every single day."*
 
 ### CapCut Overlays
 - "RLHF Feedback Loop" title
@@ -175,50 +178,30 @@ flowchart TD
 
 ---
 
-## 📹 SHOT 4: PILLAR 3 - TEST (3:30-5:00) ⭐ SELF-HEALING
+## 📹 PILLAR 3: TEST - Self-Healing Infrastructure (3:45-5:15)
 
-**📋 FULL SCRIPT**: See `DEMO-SELF-HEALING-SCRIPT.md` for complete step-by-step walkthrough
+### What to DO:
+1. Click "Test" tab
+2. Show dashboard: **12,177 executions**, **80.4% pass rate**, **12 auto-healed today**
+3. Scroll to show: **241 awaiting human review**
 
-### Action Sequence
-1. Click "Test" button in header
-2. Show **Home Dashboard** stats:
-   - Pass Rate: 80.4%
-   - 12 tests auto-healed today
-   - 5 pending human review
-   - **MESSAGE**: "AI saved us 3 hours today"
+### What to SAY:
 
-3. Click **"Review Self-Heals"** button
-4. Show self-healing queue (9 attempts visible)
-5. **Tier 1 Example** (Upload Flow - 97% confidence):
-   - Auto-approved instantly
-   - Fixed 3 similar tests automatically
-   - **MESSAGE**: "AI handles simple changes"
+> "Here's the problem every QA team faces: **you change one button ID, and 50 tests break.** That's your blast radius.
+>
+> Traditional approach? A QA engineer spends three hours updating selectors manually. We asked: what if AI could handle the obvious ones?
+>
+> **Three tiers of confidence:**
+>
+> - **Tier 1** (90%+ confidence): Button renamed but same location, same function? Auto-heal immediately. **12 fixed today**.
+>
+> - **Tier 2** (70-90%): Button moved to a new container? AI proposes the fix but asks a human to verify. **241 in the queue** right now.
+>
+> - **Tier 3** (<70%): Complex structural change? Escalate to an architect. AI knows when it's out of its depth.
 
-6. **Tier 2 Example** ⭐ **EXECUTIVE FAVORITE**:
-   - Dashboard Project Card (84% confidence)
-   - Status: "Pending Review"
-   - **AI asks for human approval**
-   - Show approve/reject buttons
-   - Click "Approve & Apply Fix"
-   - **MESSAGE**: "AI knows when it needs human judgment"
+**The Insight:** *"The goal isn't to replace QA engineers. It's to let them do what humans are actually good at—judgment calls—instead of mechanical selector updates."*
 
-7. **Tier 3 Example** (Search Debounce - 62% confidence):
-   - Low confidence - escalated to architect
-   - Complex async/timing issue
-   - **MESSAGE**: "AI knows when it's out of its depth"
-
-8. Show **ROI Metrics**:
-   - 94.2% success rate
-   - 15 hours/week saved
-   - **MESSAGE**: "QA engineers become architects, not maintainers"
-
-### Bullets
-- **9 healing attempts** (live data)
-- **Three-tier system**: Auto / Human Review / Architect
-- **94% auto-healed** by AI
-- **AI asks for help** when uncertain (Tier 2-3)
-- **80% reduction** in test maintenance
-- **15 hrs/week saved** per QA engineer
+**Catchphrase:** *"Confidence-based automation. AI handles certainty. Humans handle nuance."*
 
 ### CapCut Overlays
 - Stats appearing one by one
@@ -238,18 +221,25 @@ Connect with arrows, include confidence scores (95%, 78%, 42%) for three tiers.
 
 ---
 
-## 📹 SHOT 5: CLOSING (5:00-5:30)
+## 📹 CLOSING: The Loop (5:15-5:45)
 
-### Action
-- Show all three tabs side-by-side (screenshot montage)
-- Or return to Chat tab
+### What to DO:
+- Return to Chat tab
+- Gesture broadly at the interface
 
-### Bullets
-- Chat: answers with real sources
-- Curate: trains the AI
-- Test: heals itself
-- Three pillars working together
-- AI that gets better every day
+### What to SAY:
+
+> "Three pillars, one system:
+>
+> **Chat** surfaces knowledge. **Curate** improves that knowledge with human expertise. **Test** applies those same learning principles to infrastructure.
+>
+> The beauty? They feed each other. Better curation means better retrieval. Better tests mean fewer interruptions. Fewer interruptions mean more time to curate.
+>
+> It's not about replacing humans with AI. It's about **letting each do what they're best at**, and learning from each other along the way."
+
+**Final line:** *"That's The Betabase. Questions?"*
+
+*(Smile, pause, fade to logo)*
 
 ### CapCut Overlays
 - Three checkmarks appearing

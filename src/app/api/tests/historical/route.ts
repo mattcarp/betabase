@@ -33,9 +33,9 @@ export async function GET(request: NextRequest) {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const { searchParams } = new URL(request.url);
 
-    // Pagination
+    // Pagination (support up to 100 for initial cache)
     const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "50");
+    const limit = Math.min(parseInt(searchParams.get("limit") || "50"), 100); // Cap at 100
     const offset = (page - 1) * limit;
 
     // Filters

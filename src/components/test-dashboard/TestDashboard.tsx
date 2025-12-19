@@ -70,6 +70,9 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
     passRate: "0",
   });
 
+  // Prefetched historical tests (ready before tab switch)
+  const [prefetchedTests, setPrefetchedTests] = useState<any>(null);
+
   // Fetch real analytics on mount
   useEffect(() => {
     const fetchAnalytics = async () => {
@@ -90,10 +93,45 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
     fetchAnalytics();
   }, []);
 
+  // Prefetch historical tests during idle time (non-blocking)
+  useEffect(() => {
+    const prefetchHistoricalTests = async () => {
+      try {
+        // Use requestIdleCallback if available, otherwise setTimeout
+        const scheduleIdleFetch = (callback: () => void) => {
+          if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+            window.requestIdleCallback(callback, { timeout: 2000 });
+          } else {
+            setTimeout(callback, 1000);
+          }
+        };
+
+        scheduleIdleFetch(async () => {
+          const params = new URLSearchParams({
+            page: "1",
+            limit: "50", // First 50 tests
+          });
+
+          const response = await fetch(`/api/tests/historical?${params}`);
+          if (response.ok) {
+            const data = await response.json();
+            setPrefetchedTests(data);
+            console.log("✅ Prefetched 50 historical tests");
+          }
+        });
+      } catch (error) {
+        console.error("Failed to prefetch historical tests:", error);
+        // Silent failure - not critical
+      }
+    };
+
+    prefetchHistoricalTests();
+  }, []);
+
   // Session Timeline state
   const [sessionInteractions, setSessionInteractions] = useState<SessionInteraction[]>([]);
   const [selectedInteractionId, setSelectedInteractionId] = useState<string | undefined>();
-  const [isTimelineCollapsed, setIsTimelineCollapsed] = useState(false);
+  const [isTimelineCollapsed, setIsTimelineCollapsed] = useState(true); // Hidden by default
 
   // Real-time test status updates are handled via Server-Sent Events in handleRunTests
   // Real-time duration timer
@@ -655,7 +693,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             </TabsContent>
 
             <TabsContent value="historical" className="m-0 p-4 h-full">
-              <HistoricalTestExplorer />
+              <HistoricalTestExplorer prefetchedData={prefetchedTests} />
             </TabsContent>
 
             <TabsContent value="unified" className="m-0 p-6">
