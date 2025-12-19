@@ -8,9 +8,9 @@
 ### Say:
 > "Most QA platforms keep humans and AI in separate lanes. We asked a different question: **What if they learned from each other?**
 >
-> I'm Mattie, and this is The Betabase—where human insight trains AI, and AI handles the repetitive work, so humans can focus on what actually requires judgment.
+> This is The Betabase—where human insight trains AI, and AI handles the repetitive work, so humans can focus on what actually requires judgment.
 >
-> Three pillars: **Chat** for knowledge, **Curate** for continuous improvement, and **Test** for self-healing infrastructure. Each one feeds the others. Let's dive in."
+> Let's dive in."
 
 ### Do:
 1. Type: "Explain The Betabase's multi-tenant database architecture"
