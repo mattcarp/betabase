@@ -24,6 +24,8 @@ import { traceChat, flushLangfuse } from "@/lib/langfuse";
 import { classifyIntent, type IntentClassification } from "@/services/intentClassifier";
 // Dynamic skill loader for optimized system prompts
 import { buildDynamicPrompt } from "@/services/skillLoader";
+// AI SDK Tools - LLM can call these for deterministic operations
+import { cdtextTool } from "@/tools/cdtext";
 
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
@@ -953,11 +955,22 @@ export async function POST(req: Request) {
       model: modelProvider,
       messages: openAIMessages, // Already in correct format after filtering/validation
       system: enhancedSystemPrompt, // Use system parameter instead of adding to messages array
+      // AI SDK Tools - LLM can call these for deterministic operations
+      tools: {
+        parseCdtext: cdtextTool, // Parse CD-TEXT binary data from DDP masters
+      },
+      maxSteps: 3, // Allow tool call + response + follow-up
       // Only include temperature for models that support it (not o-series)
       ...(supportsTemperature && { temperature: modelSettings.temperature || temperature }),
       // Note: AI SDK handles token limits via the model config, not maxTokens parameter
       // Attach RAG metadata to the stream for client-side display
-      onFinish: async ({ text, finishReason, usage }) => {
+      onFinish: async ({ text, finishReason, usage, steps }) => {
+        // Log tool usage for debugging
+        const toolCalls = steps?.flatMap(s => s.toolCalls || []) || [];
+        if (toolCalls.length > 0) {
+          console.log(`🔧 [Tools] ${toolCalls.length} tool call(s): ${toolCalls.map(t => t.toolName).join(', ')}`);
+        }
+        
         // RAG metadata will be available in response headers
         console.log("✅ Stream finished. RAG metadata:", ragMetadata);
         
