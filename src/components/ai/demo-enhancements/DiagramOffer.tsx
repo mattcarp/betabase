@@ -140,14 +140,15 @@ export function shouldOfferDiagram(content: string): boolean {
   const isUnknownResponse = 
     lowerContent.includes("i don't have any information") ||
     lowerContent.includes("i don't have information") ||
+    lowerContent.includes("i don't have specific details") ||
+    lowerContent.includes("i've looked through") ||
     lowerContent.includes("turns out i don't have") ||
     lowerContent.includes("i don't have data") ||
     lowerContent.includes("i can't say for sure") ||
     lowerContent.includes("no information") ||
     lowerContent.includes("not in my knowledge base") ||
     lowerContent.includes("i don't know") ||
-    lowerContent.includes("couldn't find") ||
-    lowerContent.includes("regarding") && lowerContent.includes("knowledge base");
+    lowerContent.includes("couldn't find");
   
   if (isUnknownResponse) {
     console.log("🚫 Skipping diagram offer - detected 'I don't know' response");
