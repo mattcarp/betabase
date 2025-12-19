@@ -6,7 +6,7 @@
 ## 🎬 OPENING (0:00-0:45)
 
 ### Say:
-> "Most QA platforms treat humans and AI as separate tools. We asked a different question: **What if they learned from each other?**
+> "Most QA platforms keep humans and AI in separate lanes. We asked a different question: **What if they learned from each other?**
 >
 > I'm Mattie, and this is The Betabase—where human insight trains AI, and AI handles the repetitive work, so humans can focus on what actually requires judgment.
 >
