@@ -181,14 +181,14 @@ function mapFeedbackToQueueItem(feedback: any): QueueItem {
 
   // Create a descriptive title
   const query = feedback.user_query || feedback.query || "No query provided";
-  const title = query.length > 50 ? query.substring(0, 47) + "..." : query;
+  const title = query.length > 50 ? query.substring(0, 50) : query;
 
   // Create description
   let description = feedback.feedback_text || "User feedback requires review";
   if (feedback.thumbs_up === false) {
     description = "User marked response as not helpful";
   } else if (feedback.suggested_correction) {
-    description = `Correction: ${feedback.suggested_correction.substring(0, 100)}...`;
+    description = `Correction: ${feedback.suggested_correction.substring(0, 100)}`;
   }
 
   return {

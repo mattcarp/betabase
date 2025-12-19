@@ -62,9 +62,9 @@ function generateTitleFromMessage(content: string): string {
     // Find the last space before maxLength
     const truncateAt = title.lastIndexOf(" ", maxLength);
     if (truncateAt > 20) {
-      title = title.substring(0, truncateAt) + "...";
+      title = title.substring(0, truncateAt);
     } else {
-      title = title.substring(0, maxLength) + "...";
+      title = title.substring(0, maxLength);
     }
   }
   
@@ -160,16 +160,16 @@ export const useConversationStore = create<ConversationStore>()(
             const updatedConversation = { ...c, ...updates, updatedAt: new Date() };
 
             // Auto-generate title from first user message if still default/empty
-            // Works with both our Message type and Vercel AI SDK v4/v5 message format
             if (isDefaultTitle(c.title) && updates.messages && updates.messages.length > 0) {
-              // AI SDK v5 uses parts[0].text, v4 uses content - use helper to extract
               const firstUserMessage = updates.messages.find(
                 (m: any) => m.role === "user" && getMessageContent(m)
               );
               
               const messageContent = firstUserMessage ? getMessageContent(firstUserMessage) : undefined;
               if (messageContent) {
-                updatedConversation.title = generateTitleFromMessage(messageContent);
+                const newTitle = generateTitleFromMessage(messageContent);
+                console.log(`[Store] Auto-generating title for ${id}: "${newTitle}"`);
+                updatedConversation.title = newTitle;
               }
             }
 

@@ -12,9 +12,9 @@
 > Let's dive in."
 
 ### Do:
-1. Type: "What are the different asset types in AOMA?"
+1. Type: "Show me The Betabase multi-tenant database architecture as an ERD"
 2. AI explains (shows it has knowledge)
-3. Say: "I'm demoing this—create an infographic showing The Betabase's multi-tenant architecture for my colleagues"
+3. **Say:** "Okay, I'm running a demo now. For my friends, can you make an infographic of how the ERD works for the multi-tenant architecture of this system itself? Thanks!"
 4. Nano Banana generates (30-50 sec → edit to 5 sec)  
 5. Beautiful ERD appears (Sony Music, SMEJ, Other Music)
 

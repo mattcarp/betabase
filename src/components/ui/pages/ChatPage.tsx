@@ -266,51 +266,19 @@ Be helpful, concise, and professional in your responses.`;
     const { updateConversation, getConversation } = useConversationStore.getState();
     const currentConv = getConversation(activeConversationId);
     
+    if (!currentConv) return;
+
     // Safety check: Don't overwrite if we would lose data
-    const storedMsgCount = currentConv?.messages?.length || 0;
-    const hasStoredAssistant = currentConv?.messages?.some((m: any) => m.role === 'assistant');
+    const storedMsgCount = currentConv.messages?.length || 0;
+    const hasStoredAssistant = currentConv.messages?.some((m: any) => m.role === 'assistant');
     const newHasAssistant = messages.some((m: any) => m.role === 'assistant');
     
     if (storedMsgCount > messages.length) return;
     if (hasStoredAssistant && !newHasAssistant && messages.length <= storedMsgCount) return;
     
-    // Helper to extract message content
-    const getMessageContent = (m: any): string | undefined => {
-      if (m.parts && m.parts[0]?.text) return m.parts[0].text;
-      if (m.content && typeof m.content === "string") return m.content;
-      return undefined;
-    };
-    
-    // Generate title from first user message if needed
-    const isDefaultTitle = (title: string) => {
-      const defaults = ["new conversation", "the betabase", "untitled", ""];
-      return defaults.includes((title || "").toLowerCase().trim());
-    };
-    
-    let newTitle: string | undefined;
-    if (currentConv && isDefaultTitle(currentConv.title)) {
-      const firstUserMsg = messages.find((m: any) => m.role === "user" && getMessageContent(m));
-      const msgContent = firstUserMsg ? getMessageContent(firstUserMsg) : undefined;
-      
-      if (msgContent) {
-        let title = msgContent
-          .trim()
-          .replace(/\s+/g, " ")
-          .replace(/^(hey|hi|hello|please|can you|could you|i need|i want)\s+/i, "")
-          .replace(/[?!.]+$/, "");
-        title = title.charAt(0).toUpperCase() + title.slice(1);
-        if (title.length > 45) {
-          const truncateAt = title.lastIndexOf(" ", 45);
-          title = truncateAt > 20 ? title.substring(0, truncateAt) + "..." : title.substring(0, 45) + "...";
-        }
-        newTitle = title || undefined;
-      }
-    }
-    
-    // Update conversation
+    // Simply update messages. The Store handles auto-title generation.
     updateConversation(activeConversationId, { 
-      messages: messages as any[],
-      ...(newTitle && { title: newTitle })
+      messages: messages as any[]
     });
   }, [activeConversationId]);
 
@@ -517,7 +485,7 @@ Be helpful, concise, and professional in your responses.`;
                     key={`${getChatAPIEndpoint()}-${activeConversationId}`} // Force remount when endpoint or conversation changes
                     api={getChatAPIEndpoint()}
                     title={activeConversation?.title || "The Betabase"}
-                    description="God bless us, every one!"
+                    description="It's back!"
                     systemPrompt={systemPrompt}
                     suggestions={suggestions}
                     className="flex-1 border-0"

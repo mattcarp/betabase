@@ -377,7 +377,8 @@ export function AiSdkChatPanel({
   const [diagramVisible, setDiagramVisible] = useState(false);
   const [diagramCode, setDiagramCode] = useState<string>("");
   const [isGeneratingDiagram, setIsGeneratingDiagram] = useState(false);
-  const [diagramType, setDiagramType] = useState<'mermaid' | 'nanobanana'>('nanobanana');
+  const [activeDiagramType, setActiveDiagramType] = useState<'mermaid' | 'nanobanana'>('mermaid');
+  const [infographicType, setInfographicType] = useState<'erd' | 'process' | 'cycle' | 'comparison' | undefined>();
   const [nanoBananaPrompt, setNanoBananaPrompt] = useState<string>('');
 
   // Voice feature states - define before using in hooks
@@ -1339,7 +1340,11 @@ export function AiSdkChatPanel({
     console.log("🔵 messageToSend:", messageToSend);
     
     if (messageToSend.trim()) {
-      // Debug logging for endpoint routing
+      // 1. Clear input immediately for better UX
+      setLocalInput("");
+      if (typeof setInput === "function") setInput("");
+
+      // 2. Debug logging for endpoint routing
       console.log("📨 Submitting message with:");
       console.log("  - Model:", selectedModel);
       console.log("  - Endpoint:", currentApiEndpoint);
@@ -1723,19 +1728,44 @@ export function AiSdkChatPanel({
     setQueueItems(prev => prev.filter(item => item.id !== itemId));
   }, []);
 
-  // Generate Mermaid diagram from message content using AI
   // Generate diagram from message content - Nano Banana (image) or Mermaid (SVG)
   // META DEMO: Detects if user is in demo mode and wants infographic
   const generateDiagramFromContent = useCallback(async (content: string) => {
     setIsGeneratingDiagram(true);
     setDiagramVisible(true);
     
-    // 🍌 ALWAYS USE NANO BANANA - Let Gemini figure out the visualization
+    // 🍌 ALWAYS USE NANO BANANA for this demo
     console.log('🍌 Nano Banana: Generating diagram with Gemini image generation');
-    setDiagramType('nanobanana');
+    setActiveDiagramType('nanobanana');
     
-    // Let the content speak for itself - Nano Banana will figure out the best visualization
-    setNanoBananaPrompt(content);
+    const lowerContent = content.toLowerCase();
+    
+    // 🎯 GOLDEN PROMPT: Hardcoded for the multi-tenant ERD demo to prevent hallucinations (like ice cream!)
+    // Triggers if message mentions multi-tenant, architecture, ERD, or the system name.
+    const isArchitectureQuery = lowerContent.includes('multi-tenant') || 
+                                lowerContent.includes('database architecture') || 
+                                lowerContent.includes('erd') || 
+                                lowerContent.includes('betabase') ||
+                                lowerContent.includes('system architecture');
+
+    if (isArchitectureQuery) {
+      console.log('🍌 Nano Banana: Using Golden ERD Prompt');
+      setInfographicType('erd');
+      setNanoBananaPrompt(`Create a professional, flat modern technical architecture diagram showing a three-tier multi-tenant software system. 
+NO ICE CREAM, NO FOOD, NO CARTOONS. 
+STYLE: Clean line art, modern tech aesthetic, simple pictogram figures with circular heads, dotted flow paths, pastel accent colors, clean sans-serif labels.
+CONTENT:
+- TIER 1 (Top): "Organization Level" (Entities: Sony Music, SMEJ, Other Music).
+- TIER 2 (Middle): "Division Level" (Digital Operations, Legal, Finance).
+- TIER 3 (Bottom): "Application Level" (AOMA, Alexandria, USM).
+VISUALS: Use dotted lines to show logical data isolation between organizations. Professional, clear, and insightful.
+TITLE: "Multi-Tenant Enterprise Architecture"`);
+    } else {
+      // Let the content speak for itself for other topics
+      setInfographicType(undefined);
+      setNanoBananaPrompt(content);
+    }
+    
     setIsGeneratingDiagram(false); // NanoBananaInfographic handles its own loading
   }, []);
 
@@ -2306,6 +2336,7 @@ export function AiSdkChatPanel({
                   {nanoBananaPrompt && (
                     <NanoBananaInfographic 
                       prompt={nanoBananaPrompt}
+                      diagramType={infographicType}
                       aspectRatio="16:9"
                       imageSize="2K"
                       autoGenerate={true}
@@ -2906,7 +2937,7 @@ export function AiSdkChatPanel({
                     Welcome to The Betabase
                   </h2>
                   <p className="text-lg font-light text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-                    God bless us, every one!
+                    It's back!
                   </p>
                 </motion.div>
                 {/* Enhanced Suggestions */}

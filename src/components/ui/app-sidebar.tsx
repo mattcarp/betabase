@@ -268,7 +268,6 @@ export function AppSidebar({ className }: AppSidebarProps) {
                                 conversation.messages[conversation.messages.length - 1]?.content ||
                                 ""
                               ).slice(0, 50)}
-                              ...
                             </p>
                           )}
                           <div className="flex items-center gap-2 mt-2">

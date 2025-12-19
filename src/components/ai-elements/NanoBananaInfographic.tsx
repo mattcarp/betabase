@@ -7,6 +7,7 @@ import { cn } from '../../lib/utils';
 
 interface NanoBananaInfographicProps {
   prompt: string;
+  diagramType?: 'erd' | 'process' | 'cycle' | 'comparison';
   aspectRatio?: '1:1' | '16:9' | '4:3' | '3:2' | '9:16';
   imageSize?: '1K' | '2K' | '4K';
   className?: string;
@@ -21,6 +22,7 @@ interface NanoBananaInfographicProps {
  */
 export function NanoBananaInfographic({
   prompt,
+  diagramType,
   aspectRatio = '16:9',
   imageSize = '2K',
   className,
@@ -36,12 +38,12 @@ export function NanoBananaInfographic({
     setError(null);
     
     try {
-      console.log('🍌 Nano Banana: Generating infographic...');
+      console.log('🍌 Nano Banana: Generating infographic...', { diagramType });
       
       const response = await fetch('/api/generate-infographic', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, aspectRatio, imageSize })
+        body: JSON.stringify({ prompt, diagramType, aspectRatio, imageSize })
       });
 
       if (!response.ok) {
