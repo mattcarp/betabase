@@ -16,9 +16,9 @@ test.describe('Welcome Screen Verification', () => {
     const welcomeHeading = page.getByRole('heading', { name: 'Welcome to The Betabase' });
     await expect(welcomeHeading).toBeVisible({ timeout: 10000 });
 
-    // 2. Verify "Don't be an ass-hat." text
+    // 2. Verify "God bless us, every one!" text
     // Note: This might be in a paragraph, so we search by text
-    const tagline = page.getByText("Don't be an ass-hat.");
+    const tagline = page.getByText("God bless us, every one!");
     await expect(tagline).toBeVisible();
 
     // 3. Verify the Logo is present

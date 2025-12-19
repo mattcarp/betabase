@@ -85,21 +85,20 @@ GO RIGHT TO SHOWSWTOPPPER  QUESTION
 
 ### CapCut Overlays
 - "45,399 vectors" badge
-- Circle citations when hovering
-- "Diagram generated" text
 
-### Gemini Slide Prompt
-```
-Create an infographic showing the Chat pillar with these elements:
-- Large search icon in center
-- "45,399 vectors" callout
-- "Inline citations" feature bubble
-- "Nano Banana diagrams" feature bubble
-Use purple/blue color scheme, modern tech aesthetic.
-```
-   
 
-Okay, here comes the segue between the chat and the curation. What the user should do, what the demo guy, me, should do is click the down button on a response, the thumbs down button. A dialog comes up, says thank you for your feedback. You can enter it here, what was the issue with the question. And then underneath the input it'll say your feedback, your great feedback will be added to the curation queue and integrated into the system in the future. And integrated into the system. And then there's three options: Close, go to integration, go to curation queue. If you hit go to curation queue, you'll automatically be switched to the curate tab and the feedback that you just gave will be in the curation list. 
+
+
+SQEGUE BETWEEN CHAT AND CURATION
+
+- Click the thumbs down button on a response
+- Dialog appears: "Thank you for your feedback"
+- Input field prompts: "What was the issue with this response?"
+- Below the input: "Your feedback will be added to the curation queue and integrated into the system"
+- Three action buttons:
+  - **Close** - dismiss dialog
+  - **Go to Integration** - navigate to integration view
+  - **Go to Curation Queue** - switch to Curate tab with your feedback already visible in the list issue with the question. And then underneath the input it'll say your feedback, your great feedback will be added to the curation queue and integrated into the system in the future. And integrated into the system. And then there's three options: Close, go to integration, go to curation queue. If you hit go to curation queue, you'll automatically be switched to the curate tab and the feedback that you just gave will be in the curation list. 
 
 ---
 

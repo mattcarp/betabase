@@ -517,7 +517,7 @@ Be helpful, concise, and professional in your responses.`;
                     key={`${getChatAPIEndpoint()}-${activeConversationId}`} // Force remount when endpoint or conversation changes
                     api={getChatAPIEndpoint()}
                     title={activeConversation?.title || "The Betabase"}
-                    description="Don't be an ass-hat."
+                    description="God bless us, every one!"
                     systemPrompt={systemPrompt}
                     suggestions={suggestions}
                     className="flex-1 border-0"
@@ -529,6 +529,7 @@ Be helpful, concise, and professional in your responses.`;
                     conversationId={activeConversationId || undefined}
                     initialMessages={activeConversation?.messages}
                     onMessagesChange={handleMessagesChange}
+                    onSwitchToTab={(tab) => setActiveMode(tab)}
                   />
                 </div>
               )}

@@ -2901,7 +2901,7 @@ export function AiSdkChatPanel({
                     Welcome to The Betabase
                   </h2>
                   <p className="text-lg font-light text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-                    Don't be an ass-hat.
+                    God bless us, every one!
                   </p>
                 </motion.div>
                 {/* Enhanced Suggestions */}
