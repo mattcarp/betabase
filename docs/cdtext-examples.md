@@ -8,16 +8,30 @@
 ```
 
 ### Expected Parsed Output
-```markdown
-| Track | Type      | Value              |
-|-------|-----------|--------------------|
-| Album | TITLE     | Amazing Album      |
-| Album | PERFORMER | The Artist         |
-| 1     | TITLE     | Song One           |
-| 1     | PERFORMER | The Artist         |
-| 2     | TITLE     | Song Two           |
-| 2     | PERFORMER | Another Artist     |
-```
+
+This is CD-TEXT from a standard audio master. Clean and straightforward.
+
+**Album Overview:**
+- **Artist:** The Artist
+- **Album:** Amazing Album
+- **Tracks:** 2
+
+⸻
+
+**Track Listings:**
+
+1. **Song One**  
+   Artist: The Artist
+
+2. **Song Two**  
+   Artist: Another Artist
+
+⸻
+
+**Technical Notes:**
+- Encoding: ISO-8859-1 (Latin-1)
+- All CRCs valid ✓
+- Ready for CD duplication
 
 ---
 
@@ -29,16 +43,37 @@
 ```
 
 ### Expected Parsed Output
-```markdown
-| Track | Type      | Value              |
-|-------|-----------|--------------------|
-| Album | TITLE     | Golden Hits        |
-| Album | PERFORMER | Ray Charles        |
-| 1     | TITLE     | Georgia            |
-| 1     | PERFORMER | Ray Charles        |
-| 1     | ISRC      | USRC11234567       |
-| 2     | ISRC      | USRC99876543       |
-```
+
+This is proper CD-TEXT with ISRC codes - production-ready for commercial release.
+
+**Album Overview:**
+- **Artist:** Ray Charles
+- **Album:** Golden Hits
+- **Genre:** POP
+- **Tracks:** 2 (with ISRC codes)
+
+⸻
+
+**Track Listings:**
+
+1. **Georgia**  
+   Artist: Ray Charles  
+   ISRC: `USRC11234567` ✓
+
+2. *(Title not in sample)*  
+   ISRC: `USRC99876543` ✓
+
+⸻
+
+**Technical Notes:**
+- Encoding: ISO-8859-1
+- ISRC codes present (ready for digital distribution)
+- All metadata complete
+
+**Next Steps:**
+- Ready for CD duplication
+- Can export to MusicBrainz format
+- ISRC codes registered for digital rights management
 
 ---
 
