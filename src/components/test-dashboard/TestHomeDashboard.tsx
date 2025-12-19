@@ -181,46 +181,46 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
       {/* Hero Stats Row */}
       <div className="grid grid-cols-4 gap-4">
         {/* Pass Rate */}
-        <Card className="mac-card border-border relative overflow-hidden">
-          <CardContent className="p-6">
+        <Card className="mac-card-static mac-card-compact border-border relative overflow-hidden">
+          <CardContent className="p-4">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground mb-1">Pass Rate</p>
+                <p className="text-xs font-medium text-muted-foreground mb-1">Pass Rate</p>
                 <div className="flex items-baseline gap-2">
                   <span
-                    className="text-4xl font-light"
+                    className="text-2xl font-light"
                     style={getPassRateStyle(healthMetrics.passRate)}
                   >
                     {healthMetrics.passRate}%
                   </span>
                   {healthMetrics.passRateTrend > 0 ? (
-                    <span className="flex items-center text-sm" style={{ color: 'var(--mac-data-success)' }}>
-                      <TrendingUp className="h-4 w-4 mr-1" />+{healthMetrics.passRateTrend}%
+                    <span className="flex items-center text-[10px]" style={{ color: 'var(--mac-data-success)' }}>
+                      <TrendingUp className="h-3 w-3 mr-0.5" />+{healthMetrics.passRateTrend}%
                     </span>
                   ) : (
-                    <span className="flex items-center text-sm" style={{ color: 'var(--mac-data-error)' }}>
-                      <TrendingDown className="h-4 w-4 mr-1" />
+                    <span className="flex items-center text-[10px]" style={{ color: 'var(--mac-data-error)' }}>
+                      <TrendingDown className="h-3 w-3 mr-0.5" />
                       {healthMetrics.passRateTrend}%
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">this week</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">this week</p>
               </div>
-              <div className="p-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)' }}>
-                <CheckCircle className="h-6 w-6" style={{ color: 'var(--mac-data-success)' }} />
+              <div className="p-1.5 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)' }}>
+                <CheckCircle className="h-4 w-4" style={{ color: 'var(--mac-data-success)' }} />
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Failing Tests */}
-        <Card className="mac-card border-border">
-          <CardContent className="p-6">
+        <Card className="mac-card-static mac-card-compact border-border">
+          <CardContent className="p-4">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground mb-1">Failing</p>
+                <p className="text-xs font-medium text-muted-foreground mb-1">Failing</p>
                 <span
-                  className="text-4xl font-light"
+                  className="text-2xl font-light"
                   style={{ 
                     color: healthMetrics.failingTests > 0 
                       ? 'var(--mac-data-error)' 
@@ -229,10 +229,10 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 >
                   {healthMetrics.failingTests}
                 </span>
-                <p className="text-xs text-muted-foreground mt-1">tests need attention</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">tests need attention</p>
               </div>
               <div
-                className="p-2 rounded-full"
+                className="p-1.5 rounded-full"
                 style={{ 
                   backgroundColor: healthMetrics.failingTests > 0 
                     ? 'rgba(239, 68, 68, 0.1)' 
@@ -240,7 +240,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 }}
               >
                 <XCircle
-                  className="h-6 w-6"
+                  className="h-4 w-4"
                   style={{ 
                     color: healthMetrics.failingTests > 0 
                       ? 'var(--mac-data-error)' 
@@ -253,31 +253,31 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
         </Card>
 
         {/* Self-Healed Today */}
-        <Card className="mac-card border-border">
-          <CardContent className="p-6">
+        <Card className="mac-card-static mac-card-compact border-border">
+          <CardContent className="p-4">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground mb-1">Self-Healed</p>
-                <span className="text-4xl font-light" style={{ color: 'var(--mac-data-purple)' }}>
+                <p className="text-xs font-medium text-muted-foreground mb-1">Self-Healed</p>
+                <span className="text-2xl font-light" style={{ color: 'var(--mac-data-purple)' }}>
                   {healthMetrics.healedToday}
                 </span>
-                <p className="text-xs text-muted-foreground mt-1">tests auto-fixed today</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">tests auto-fixed today</p>
               </div>
-              <div className="p-2 rounded-full" style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}>
-                <Wrench className="h-6 w-6" style={{ color: 'var(--mac-data-purple)' }} />
+              <div className="p-1.5 rounded-full" style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}>
+                <Wrench className="h-4 w-4" style={{ color: 'var(--mac-data-purple)' }} />
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Pending HITL Review */}
-        <Card className="mac-card border-border">
-          <CardContent className="p-6">
+        <Card className="mac-card-static mac-card-compact border-border">
+          <CardContent className="p-4">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground mb-1">Need HITL</p>
+                <p className="text-xs font-medium text-muted-foreground mb-1">Need HITL</p>
                 <span
-                  className="text-4xl font-light"
+                  className="text-2xl font-light"
                   style={{ 
                     color: healthMetrics.pendingReview > 0 
                       ? 'var(--mac-data-warning)' 
@@ -286,10 +286,10 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 >
                   {healthMetrics.pendingReview}
                 </span>
-                <p className="text-xs text-muted-foreground mt-1">awaiting human review</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">awaiting human review</p>
               </div>
               <div
-                className="p-2 rounded-full"
+                className="p-1.5 rounded-full"
                 style={{ 
                   backgroundColor: healthMetrics.pendingReview > 0 
                     ? 'rgba(245, 158, 11, 0.1)' 
@@ -297,7 +297,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 }}
               >
                 <Users
-                  className="h-6 w-6"
+                  className="h-4 w-4"
                   style={{ 
                     color: healthMetrics.pendingReview > 0 
                       ? 'var(--mac-data-warning)' 
@@ -509,52 +509,52 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
 
       {/* Quick Stats Row */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="mac-card border-border">
-          <CardContent className="p-4">
+        <Card className="mac-card-static mac-card-compact border-border">
+          <CardContent className="p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Target className="h-4 w-4" style={{ color: 'var(--mac-data-teal)' }} />
-                <span className="text-sm text-muted-foreground">Coverage</span>
+                <Target className="h-3.5 w-3.5" style={{ color: 'var(--mac-data-teal)' }} />
+                <span className="text-xs text-muted-foreground">Coverage</span>
               </div>
-              <span className="text-lg font-medium">87%</span>
+              <span className="text-base font-medium">87%</span>
             </div>
-            <Progress value={87} className="h-1.5 mt-2" />
+            <Progress value={87} className="h-1 mt-1.5" />
           </CardContent>
         </Card>
 
-        <Card className="mac-card border-border">
-          <CardContent className="p-4">
+        <Card className="mac-card-static mac-card-compact border-border">
+          <CardContent className="p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Zap className="h-4 w-4" style={{ color: 'var(--mac-data-purple)' }} />
-                <span className="text-sm text-muted-foreground">Heal Rate</span>
+                <Zap className="h-3.5 w-3.5" style={{ color: 'var(--mac-data-purple)' }} />
+                <span className="text-xs text-muted-foreground">Heal Rate</span>
               </div>
-              <span className="text-lg font-medium">94.2%</span>
+              <span className="text-base font-medium">94.2%</span>
             </div>
-            <Progress value={94.2} className="h-1.5 mt-2" />
+            <Progress value={94.2} className="h-1 mt-1.5" />
           </CardContent>
         </Card>
 
-        <Card className="mac-card border-border">
-          <CardContent className="p-4">
+        <Card className="mac-card-static mac-card-compact border-border">
+          <CardContent className="p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <RefreshCw className="h-4 w-4" style={{ color: 'var(--mac-data-coral)' }} />
-                <span className="text-sm text-muted-foreground">Flaky Tests</span>
+                <RefreshCw className="h-3.5 w-3.5" style={{ color: 'var(--mac-data-coral)' }} />
+                <span className="text-xs text-muted-foreground">Flaky Tests</span>
               </div>
-              <span className="text-lg font-medium">{healthMetrics.flakyTests}</span>
+              <span className="text-base font-medium">{healthMetrics.flakyTests}</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="mac-card border-border">
-          <CardContent className="p-4">
+        <Card className="mac-card-static mac-card-compact border-border">
+          <CardContent className="p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-slate-600" />
-                <span className="text-sm text-muted-foreground">Avg Duration</span>
+                <Clock className="h-3.5 w-3.5 text-slate-600" />
+                <span className="text-xs text-muted-foreground">Avg Duration</span>
               </div>
-              <span className="text-lg font-medium">
+              <span className="text-base font-medium">
                 {Math.floor(healthMetrics.avgDuration / 60)}:
                 {(healthMetrics.avgDuration % 60).toString().padStart(2, "0")}
               </span>

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 export interface HistoricalTest {
   id: number;
@@ -30,12 +28,27 @@ export interface HistoricalTest {
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // Read env inside the request handler to ensure they are available
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!url || !key) {
+      console.error("Missing Supabase configuration");
+      return NextResponse.json(
+        { error: "Server configuration error", details: "Supabase environment variables are missing" },
+        { status: 500 }
+      );
+    }
+
+    const supabase = createClient(url, key);
     const { searchParams } = new URL(request.url);
 
     // Pagination (support up to 100 for initial cache)
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = Math.min(parseInt(searchParams.get("limit") || "50"), 100); // Cap at 100
+    const pageParam = searchParams.get("page");
+    const limitParam = searchParams.get("limit");
+    
+    const page = parseInt(pageParam || "1") || 1;
+    const limit = Math.min(parseInt(limitParam || "50") || 50, 100); 
     const offset = (page - 1) * limit;
 
     // Filters
@@ -79,9 +92,14 @@ export async function GET(request: NextRequest) {
     const { data, error, count } = await query;
 
     if (error) {
-      console.error("Error fetching historical tests:", error);
+      console.error("Supabase error fetching historical tests:", error);
       return NextResponse.json(
-        { error: "Failed to fetch historical tests", details: error.message },
+        { 
+          error: "Failed to fetch historical tests", 
+          details: error.message,
+          hint: error.hint,
+          code: error.code
+        },
         { status: 500 }
       );
     }

@@ -103,7 +103,12 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
   const [generatingPlaywright, setGeneratingPlaywright] = useState(false);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [calculatingConfidence, setCalculatingConfidence] = useState(false);
-  const [aiConfidence, setAiConfidence] = useState<{ score: number; rationale: string } | null>(null);
+  const [aiConfidence, setAiConfidence] = useState<{ 
+    score: number; 
+    rationale: string;
+    recommendations?: string[];
+    automationFeasibility?: "high" | "medium" | "low";
+  } | null>(null);
 
   // Load initial batch (first 100 tests for cache)
   const loadInitialTests = useCallback(async () => {
@@ -121,7 +126,10 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch tests");
+        const errorMessage = data.details 
+          ? `${data.error}: ${data.details}` 
+          : (data.error || "Failed to fetch tests");
+        throw new Error(errorMessage);
       }
 
       setCachedTests(data.tests);
@@ -131,9 +139,9 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
       setFilters(data.filters);
       setInitialLoadComplete(true);
       setPage(1);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error loading initial tests:", error);
-      toast.error("Failed to load historical tests");
+      toast.error(error.message || "Failed to load historical tests");
     } finally {
       setLoading(false);
     }
@@ -159,14 +167,18 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch tests");
+        const errorMessage = data.details 
+          ? `${data.error}: ${data.details}` 
+          : (data.error || "Failed to fetch tests");
+        throw new Error(errorMessage);
       }
 
       setTests(prev => [...prev, ...data.tests]);
       setHasMore(data.pagination.hasMore);
       setPage(nextPage);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error loading more tests:", error);
+      toast.error(error.message || "Failed to load more tests");
     } finally {
       setLoading(false);
     }
@@ -588,20 +600,54 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                 {/* AI Confidence Result */}
                 {aiConfidence && (
                   <div className="p-8 rounded-3xl bg-[var(--mac-primary-blue-400)]/[0.03] border border-[var(--mac-primary-blue-400)]/20 shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="p-3 rounded-2xl bg-[var(--mac-primary-blue-400)]/10 shadow-inner">
-                        <Zap className="h-6 w-6 text-[var(--mac-primary-blue-400)]" />
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-2xl bg-[var(--mac-primary-blue-400)]/10 shadow-inner">
+                          <Zap className="h-6 w-6 text-[var(--mac-primary-blue-400)]" />
+                        </div>
+                        <div>
+                          <h3 className="text-xs font-black text-white uppercase tracking-[0.3em]">Deep Analysis Core</h3>
+                          <div className="mt-2">{getConfidenceBadge(aiConfidence.score)}</div>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-xs font-black text-white uppercase tracking-[0.3em]">AI Reasoning Core</h3>
-                        <div className="mt-2">{getConfidenceBadge(aiConfidence.score)}</div>
-                      </div>
+                      
+                      {aiConfidence.automationFeasibility && (
+                        <div className="text-right">
+                          <div className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Automation Potential</div>
+                          <Badge variant="outline" className={cn(
+                            "uppercase text-[10px] font-bold tracking-tighter px-2",
+                            aiConfidence.automationFeasibility === "high" ? "border-emerald-500/50 text-emerald-400 bg-emerald-500/10" :
+                            aiConfidence.automationFeasibility === "medium" ? "border-amber-500/50 text-amber-400 bg-amber-500/10" :
+                            "border-rose-500/50 text-rose-400 bg-rose-500/10"
+                          )}>
+                            {aiConfidence.automationFeasibility}
+                          </Badge>
+                        </div>
+                      )}
                     </div>
-                    <div className="relative">
-                      <div className="absolute -left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--mac-primary-blue-400)]/40 via-transparent to-transparent" />
-                      <p className="text-[16px] text-zinc-200 font-extralight italic leading-relaxed pl-2">
-                        {aiConfidence.rationale}
-                      </p>
+
+                    <div className="space-y-6">
+                      <div className="relative">
+                        <div className="absolute -left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--mac-primary-blue-400)]/40 via-transparent to-transparent" />
+                        <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 pl-2">Heuristic Rationale</h4>
+                        <p className="text-[15px] text-zinc-200 font-extralight italic leading-relaxed pl-2">
+                          {aiConfidence.rationale}
+                        </p>
+                      </div>
+
+                      {aiConfidence.recommendations && aiConfidence.recommendations.length > 0 && (
+                        <div className="pt-4 border-t border-zinc-800/50">
+                          <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3">Optimization Heuristics</h4>
+                          <ul className="space-y-2">
+                            {aiConfidence.recommendations.map((rec, i) => (
+                              <li key={i} className="flex items-start gap-3 text-xs text-zinc-400 font-light leading-relaxed">
+                                <div className="h-1.5 w-1.5 rounded-full bg-[var(--mac-primary-blue-400)]/40 mt-1.5 flex-shrink-0" />
+                                {rec}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -710,7 +756,12 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                         }),
                       });
                       const data = await res.json();
-                      setAiConfidence({ score: data.score, rationale: data.rationale });
+                      setAiConfidence({ 
+                        score: data.score, 
+                        rationale: data.rationale,
+                        recommendations: data.recommendations,
+                        automationFeasibility: data.automationFeasibility
+                      });
                       toast.success(`Reasoning Confidence: ${Math.round(data.score * 100)}%`);
                     } catch (err) {
                       toast.error("Heuristic analysis failed");

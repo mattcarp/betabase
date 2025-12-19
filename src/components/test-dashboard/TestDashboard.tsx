@@ -475,86 +475,86 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
           </div>
 
           {/* Test Statistics Bar - Shows historical data OR current run */}
-          <div className="grid grid-cols-6 gap-4">
-            <Card className="mac-card border-border">
-              <CardContent className="p-4">
+          <div className="grid grid-cols-6 gap-3">
+            <Card className="mac-card-static mac-card-compact border-border">
+              <CardContent className="p-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-muted-foreground">
+                  <span className="text-xs font-medium text-muted-foreground">
                     {isRunning ? "Running" : "Total Tests"}
                   </span>
-                  <span className="text-lg font-normal text-foreground">
+                  <span className="text-base font-normal text-foreground">
                     {isRunning ? testStats.total : historicalStats.totalTests.toLocaleString()}
                   </span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="mac-card border-border">
-              <CardContent className="p-4">
+            <Card className="mac-card-static mac-card-compact border-border">
+              <CardContent className="p-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Activity className="h-4 w-4 text-blue-600" />
-                    <span className="text-sm font-medium text-muted-foreground">Executions</span>
+                    <Activity className="h-3.5 w-3.5 text-blue-400" />
+                    <span className="text-xs font-medium text-muted-foreground">Executions</span>
                   </div>
-                  <span className="text-lg font-normal text-blue-700">
+                  <span className="text-base font-normal text-blue-400">
                     {isRunning ? testStats.passed + testStats.failed : historicalStats.totalExecutions.toLocaleString()}
                   </span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="mac-card border-border">
-              <CardContent className="p-4">
+            <Card className="mac-card-static mac-card-compact border-border">
+              <CardContent className="p-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-emerald-600" />
-                    <span className="text-sm font-medium text-muted-foreground">Pass Rate</span>
+                    <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
+                    <span className="text-xs font-medium text-muted-foreground">Pass Rate</span>
                   </div>
-                  <span className="text-lg font-normal text-emerald-700">
+                  <span className="text-base font-normal text-emerald-400">
                     {isRunning ? `${getSuccessRate()}%` : `${historicalStats.passRate}%`}
                   </span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="mac-card border-border">
-              <CardContent className="p-4">
+            <Card className="mac-card-static mac-card-compact border-border">
+              <CardContent className="p-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <XCircle className="h-4 w-4 text-rose-600" />
-                    <span className="text-sm font-medium text-muted-foreground">Failed</span>
+                    <XCircle className="h-3.5 w-3.5 text-rose-400" />
+                    <span className="text-xs font-medium text-muted-foreground">Failed</span>
                   </div>
-                  <span className="text-lg font-normal text-rose-700">{testStats.failed}</span>
+                  <span className="text-base font-normal text-rose-400">{testStats.failed}</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="mac-card border-border">
-              <CardContent className="p-4">
+            <Card className="mac-card-static mac-card-compact border-border">
+              <CardContent className="p-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-slate-600" />
-                    <span className="text-sm font-medium text-muted-foreground">Duration</span>
+                    <Clock className="h-3.5 w-3.5 text-slate-400" />
+                    <span className="text-xs font-medium text-muted-foreground">Duration</span>
                   </div>
-                  <span className="text-lg font-normal text-slate-700">
+                  <span className="text-base font-normal text-slate-400">
                     {formatDuration(testStats.duration)}
                   </span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="mac-card border-border">
-              <CardContent className="p-4">
+            <Card className="mac-card-static mac-card-compact border-border">
+              <CardContent className="p-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-amber-600" />
-                    <span className="text-sm font-medium text-muted-foreground">
+                    <Zap className="h-3.5 w-3.5 text-amber-400" />
+                    <span className="text-xs font-medium text-muted-foreground">
                       {isRunning ? "Running" : "Status"}
                     </span>
                   </div>
                   <span className={cn(
-                    "text-sm font-medium",
-                    isRunning ? "text-amber-600" : "text-emerald-600"
+                    "text-xs font-medium",
+                    isRunning ? "text-amber-400" : "text-emerald-400"
                   )}>
                     {isRunning ? "⏳ In Progress" : "✅ Ready"}
                   </span>
