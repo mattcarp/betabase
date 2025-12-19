@@ -1,9 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./card";
-import { Badge } from "./badge";
-import { Button } from "./button";
 import { 
   BarChart, 
   Bar, 
@@ -11,20 +9,12 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  ResponsiveContainer, 
-  Cell,
-  PieChart,
-  Pie
+  ResponsiveContainer
 } from "recharts";
 import { 
   Activity, 
-  Database, 
-  FileText, 
-  TrendingUp, 
-  AlertCircle, 
   ShieldCheck,
   Zap,
-  Clock,
   Layers,
   BarChart3
 } from "lucide-react";
@@ -42,13 +32,6 @@ const processingTrends = [
 ];
 
 // MAC Data Storytelling: muted professional colors (not bright/garish)
-const categoryHealth = [
-  { name: "Legal", value: 92, count: 450, color: "var(--mac-data-teal)" },
-  { name: "Technical", value: 85, count: 1200, color: "var(--mac-data-purple)" },
-  { name: "Marketing", value: 78, count: 320, color: "var(--mac-data-coral)" },
-  { name: "Finance", value: 88, count: 280, color: "var(--mac-data-success)" },
-];
-
 export function DashboardTab() {
   const [mounted, setMounted] = useState(false);
 
@@ -94,7 +77,7 @@ export function DashboardTab() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Processing Velocity */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] lg:col-span-2">
+        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] lg:col-span-3">
           <CardHeader>
             <CardTitle className="font-light text-xl flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-[var(--mac-primary-blue-400)]" />
@@ -102,7 +85,7 @@ export function DashboardTab() {
             </CardTitle>
             <CardDescription className="font-light text-xs uppercase tracking-widest opacity-60">Daily indexing volume vs average quality</CardDescription>
           </CardHeader>
-          <CardContent className="h-[300px]">
+          <CardContent className="h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={processingTrends}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--mac-utility-border)" />
@@ -126,59 +109,9 @@ export function DashboardTab() {
                     color: "var(--mac-text-primary)"
                   }} 
                 />
-                <Bar dataKey="processed" fill="var(--mac-data-coral)" radius={[4, 4, 0, 0]} barSize={30} />
+                <Bar dataKey="processed" fill="var(--mac-data-coral)" radius={[4, 4, 0, 0]} barSize={40} />
               </BarChart>
             </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Category Health Heatmap */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
-          <CardHeader>
-            <CardTitle className="font-light text-xl flex items-center gap-2">
-              <Database className="h-5 w-5 text-[var(--mac-accent-purple-400)]" />
-              Category Health
-            </CardTitle>
-            <CardDescription className="font-light text-xs opacity-60 uppercase tracking-widest">Document quality by department</CardDescription>
-          </CardHeader>
-          <CardContent className="h-[300px] flex flex-col justify-center">
-            <div className="space-y-5">
-              {categoryHealth.map((cat, i) => (
-                <div key={i} className="space-y-1.5">
-                  <div className="flex justify-between items-center text-xs font-light">
-                    <span className="text-[var(--mac-text-primary)]">{cat.name} ({cat.count} docs)</span>
-                    <span className="text-[var(--mac-text-secondary)]">{cat.value}% Health</span>
-                  </div>
-                  <div className="h-2 w-full bg-[var(--mac-utility-border)] rounded-full overflow-hidden p-0.5 border border-white/5 shadow-inner">
-                    <div 
-                      className="h-full rounded-full transition-all duration-1000" 
-                      style={{ 
-                        width: `${cat.value}%`, 
-                        backgroundColor: cat.color 
-                      }} 
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-8 pt-6 border-t border-[var(--mac-utility-border)]">
-              <div className="flex justify-between items-center px-2">
-                <div className="text-center">
-                  <p className="text-[10px] uppercase text-[var(--mac-text-muted)] tracking-tighter">Total Assets</p>
-                  <p className="text-lg font-light">2,250</p>
-                </div>
-                <div className="h-8 w-px bg-[var(--mac-utility-border)]" />
-                <div className="text-center">
-                  <p className="text-[10px] uppercase text-[var(--mac-text-muted)] tracking-tighter">Unique Chunks</p>
-                  <p className="text-lg font-light">12,482</p>
-                </div>
-                <div className="h-8 w-px bg-[var(--mac-utility-border)]" />
-                <div className="text-center">
-                  <p className="text-[10px] uppercase text-[var(--mac-text-muted)] tracking-tighter">Verified</p>
-                  <p className="text-lg font-light text-[var(--mac-status-connected)]">82%</p>
-                </div>
-              </div>
-            </div>
           </CardContent>
         </Card>
       </div>

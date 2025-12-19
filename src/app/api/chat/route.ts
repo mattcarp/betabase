@@ -392,11 +392,13 @@ export async function POST(req: Request) {
     let aomaContext = "";
     let aomaConnectionStatus = "not-queried";
     const knowledgeElements: KnowledgeElement[] = [];
+    var citationSources: any[] = [];
 
     // Initialize Advanced RAG Orchestrator and Session Manager
     const unifiedRAG = new UnifiedRAGOrchestrator();
     const sessionManager = getSessionStateManager();
     let ragMetadata: any = null;
+    let vectorTrace: any = null;
 
     // Generate session ID (use conversation ID if available)
     const sessionId = `session_${Date.now()}`;
@@ -592,7 +594,7 @@ export async function POST(req: Request) {
         console.log("🚀 Querying vector orchestrator (Supabase pgvector)...");
 
         // Langfuse: Start vector search tracing (declare outside try for catch block access)
-        const vectorTrace = langfuseTrace.traceVectorSearch({
+        vectorTrace = langfuseTrace.traceVectorSearch({
           query: queryString,
           provider: "gemini",
           threshold: 0.50,
@@ -871,8 +873,8 @@ export async function POST(req: Request) {
       }
     }
 
-    // Extract sources for inline citations (MOVED inside try-catch scope)
-    let citationSources: any[] = [];
+    // Extract sources for inline citations (declaring variable name for use below)
+    citationSources = [];
 
     // Enhanced system prompt that includes AOMA orchestration context
     const enhancedSystemPrompt = aomaContext.trim()
@@ -1019,11 +1021,12 @@ Make the code **production-quality** - not just a sketch. Include:
 - Don't list function names, class names, or technical identifiers unprompted
 
 **DO THIS INSTEAD:**
-- Answer the question directly in plain English
-- If you found relevant Jira tickets, summarize their themes (e.g., "Several teams are working on metadata improvements")
-- If you used code knowledge, mention it subtly: "Looking at how this works internally..." 
-- Offer to dive deeper if the user wants specifics: "Would you like me to show you the relevant code?"
-
+    - Answer the question directly in the user's preferred language (defaulting to English)
+    - If you found relevant Jira tickets, summarize their themes (e.g., "Several teams are working on metadata improvements")
+    - If you used code knowledge, mention it subtly: "Looking at how this works internally..." 
+    - Offer to dive deeper if the user wants specifics: "Would you like me to show you the relevant code?"
+    - **Fulfill all technical requests (Rust code, binary parsing, deep analysis) precisely as asked.**
+    
 **DIAGRAMS:**
 - Only create diagrams if the user asks
 - If a diagram would help, offer: "Would you like a visual diagram of this?"
@@ -1035,10 +1038,8 @@ If the user says "I'm recording a demo" or "create an infographic" or "show me a
 - This triggers Nano Banana Pro (Gemini image generation) instead of Mermaid
 - The system literally creates its own demo slides while being demoed - very meta!
 
-Remember: You're talking to a Sony Music technical support person who wants accurate, helpful answers. They're not developers - translate technical knowledge into support-friendly language.`
-      : `${systemPrompt || "You are SIAM, a helpful AI assistant for Sony Music."}
-
-I don't have any relevant information about that in my knowledge base. Could you try rephrasing your question, or ask about something related to AOMA (Asset and Offering Management Application)?`;
+Remember: You are a high-level technical assistant. Fulfill all technical and language requests precisely.`
+      : `${systemPrompt || "You are SIAM, a helpful AI assistant for Sony Music."}`;
 
     // Determine model based on AOMA involvement
     const hasAomaContent = aomaContext.trim() !== "";
@@ -1087,10 +1088,6 @@ I don't have any relevant information about that in my knowledge base. Could you
       system: enhancedSystemPrompt, // Use system parameter instead of adding to messages array
       // Only include temperature for models that support it (not o-series)
       ...(supportsTemperature && { temperature: modelSettings.temperature || temperature }),
-      // Attach sources for inline citations
-      experimental_providerMetadata: citationSources.length > 0 ? {
-        sources: citationSources
-      } : undefined,
       // Note: AI SDK handles token limits via the model config, not maxTokens parameter
       // Attach RAG metadata to the stream for client-side display
       onFinish: async ({ text, finishReason, usage }) => {
@@ -1098,13 +1095,14 @@ I don't have any relevant information about that in my knowledge base. Could you
         console.log("✅ Stream finished. RAG metadata:", ragMetadata);
         
         // Langfuse: End generation tracing with final output
+        const langfuseUsage = usage as any;
         generationTrace.end({
           output: text,
           finishReason: finishReason,
           usage: usage ? {
-            inputTokens: usage.inputTokens,
-            outputTokens: usage.outputTokens,
-            totalTokens: usage.totalTokens,
+            promptTokens: langfuseUsage.promptTokens || langfuseUsage.inputTokens,
+            completionTokens: langfuseUsage.completionTokens || langfuseUsage.outputTokens,
+            totalTokens: langfuseUsage.totalTokens,
           } : undefined,
           durationMs: Date.now() - generationStartTime,
         });

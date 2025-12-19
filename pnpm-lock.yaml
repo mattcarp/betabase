@@ -180,6 +180,9 @@ importers:
       framer-motion:
         specifier: ^11.2.10
         version: 11.18.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      hast-util-to-jsx-runtime:
+        specifier: ^2.3.2
+        version: 2.3.6
       html-to-image:
         specifier: ^1.11.13
         version: 1.11.13
@@ -252,6 +255,9 @@ importers:
       sharp:
         specifier: ^0.34.4
         version: 0.34.5
+      shiki:
+        specifier: ^3.0.0
+        version: 3.20.0
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.3(react@19.2.3))(react@19.2.3)

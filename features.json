@@ -161,13 +161,14 @@
       "passes": true,
       "verification": [
         "Search input filters results in real-time (debounced)",
-        "Headers (ID, Name, Env, Pass) are clickable for sorting",
+        "Headers (ID, Name, App, Pass) are clickable for sorting",
         "Sort indicators (arrows) show current sort state",
         "Infinite scroll maintains sort order",
-        "API correctly handles sortBy and sortOrder params"
+        "API correctly handles sortBy and sortOrder params",
+        "UI: Compact header and bottom-positioned action buttons (Dec 19)"
       ],
-      "completedAt": "2025-12-19T15:30:00Z",
-      "notes": "Implemented manual data-table logic over ShadCN Table to avoid new dependencies while delivering requested functionality."
+      "completedAt": "2025-12-19T16:25:00Z",
+      "notes": "Implemented manual data-table logic. Dec 19: Further polished UI by shrinking header and moving action buttons to the bottom of the scrollable content for better visibility of test scripts."
     }
   ],
   "backlog": [

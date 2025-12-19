@@ -48,7 +48,7 @@
 ---
 
 ## 🎬 PILLAR 2: CURATE (2:30-3:45)
-
+NOTE Once we have the display fixed, definitely choose ID. Once we have the display fixed, definitely choose ID. 
 ### Do:
 1. Click thumbs down on a response
 2. Type feedback: "Should mention 2024 spec updates"

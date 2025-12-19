@@ -46,6 +46,18 @@ export const QUERY_TYPES = [
 
 export type QueryType = typeof QUERY_TYPES[number];
 
+// Available skills for dynamic prompt injection
+export const SKILL_IDS = [
+  'base-personality',  // Always loaded
+  'cdtext-parsing',    // CDTEXT binary parsing for audio pros
+  'code-formatting',   // Code display with Tokyo Night
+  'troubleshooting',   // Error diagnosis and debugging
+  'jira-analysis',     // Ticket summarization
+  'demo-mode',         // Clean presentation formatting
+] as const;
+
+export type SkillId = typeof SKILL_IDS[number];
+
 // Intent classification result
 export const IntentSchema = z.object({
   relevantSources: z.array(z.enum(SOURCE_TYPES))
@@ -58,6 +70,8 @@ export const IntentSchema = z.object({
     .describe('Brief explanation of why these sources were selected'),
   suggestedKeywords: z.array(z.string()).optional()
     .describe('Keywords to boost in vector search'),
+  relevantSkills: z.array(z.enum(SKILL_IDS)).optional()
+    .describe('Skills to load for this query (cdtext-parsing, code-formatting, troubleshooting, jira-analysis, demo-mode)'),
 });
 
 export type IntentClassification = z.infer<typeof IntentSchema>;
@@ -147,7 +161,7 @@ export async function classifyIntent(
  * Build the classification prompt
  */
 function buildClassificationPrompt(query: string): string {
-  return `You are a query router for an enterprise knowledge base. Analyze the user's query and determine which data sources are most relevant for answering it.
+  return `You are a query router for an enterprise knowledge base. Analyze the user's query and determine which data sources AND special skills are relevant.
 
 **Available Data Sources:**
 - **knowledge**: Technical documentation, architecture specs, system requirements, API docs, user guides
@@ -157,20 +171,35 @@ function buildClassificationPrompt(query: string): string {
 - **firecrawl**: Web-crawled documentation from external sources
 - **metrics**: System performance data, usage statistics, monitoring data
 
+**Available Skills (for dynamic prompt injection):**
+- **cdtext-parsing**: CDTEXT binary/hex parsing for audio mastering. Use when: query contains hex data, mentions CD-TEXT, CDTEXT, DDP, or asks about audio metadata parsing
+- **code-formatting**: Beautiful code display with syntax highlighting. Use when: user asks to see code, "show me the code", wants implementation details, or asks for code generation
+- **troubleshooting**: Error diagnosis and debugging patterns. Use when: query mentions errors, bugs, failures, debugging, or "not working"
+- **jira-analysis**: Ticket summarization and sprint analysis. Use when: discussing Jira tickets, sprints, backlogs, or project status
+- **demo-mode**: Clean presentation formatting. Use when: user mentions "recording demo", "presentation", "infographic", or "format nicely"
+
 **User Query:**
 "${query}"
 
 **Instructions:**
 1. Identify the PRIMARY intent of the query
-2. Select ONLY sources that would meaningfully contribute (1-3 sources typically)
-3. Order sources by relevance (most relevant first)
-4. If the query is clearly about project status → prioritize jira, email
-5. If the query is about how something works → prioritize knowledge, then git for implementation details
-6. If the query mentions specific tickets or bugs → include jira
-7. If the query asks about code, implementation, "where in the code", or technical details → INCLUDE git (contains actual source code)
-8. If answering requires understanding how something is actually built → include git as supporting context
-9. NEVER include all sources - that defeats the purpose of routing
-10. Be conservative - fewer relevant sources is better than many marginally relevant ones
+2. Select ONLY data sources that would meaningfully contribute (1-3 sources typically)
+3. Select ONLY skills that are clearly needed (0-2 skills typically, most queries need zero)
+4. Order sources by relevance (most relevant first)
+5. For sources:
+   - If the query is about project status → prioritize jira, email
+   - If the query is about how something works → prioritize knowledge, then git
+   - If the query mentions specific tickets or bugs → include jira
+   - If the query asks about code or implementation → INCLUDE git
+6. For skills:
+   - Only include a skill if the query CLEARLY needs it
+   - Most queries need NO skills - don't include them by default
+   - cdtext-parsing: ONLY if hex data or CDTEXT explicitly mentioned
+   - code-formatting: ONLY if user explicitly asks to see/show code
+   - troubleshooting: ONLY if error/bug/debug mentioned
+   - jira-analysis: ONLY if Jira/tickets/sprint mentioned
+   - demo-mode: ONLY if recording/presentation/demo mentioned
+7. NEVER include all sources or skills - that defeats the purpose
 
 Provide your classification:`;
 }
@@ -184,38 +213,66 @@ function heuristicClassify(
 ): IntentClassification {
   const q = query.toLowerCase();
   
-  // Keyword-based detection
-  const detected: SourceType[] = [];
+  // Keyword-based source detection
+  const detectedSources: SourceType[] = [];
   
   // Status/project management keywords
   if (/\b(status|sprint|ticket|bug|issue|jira|backlog|epic|story)\b/.test(q)) {
-    detected.push('jira');
+    detectedSources.push('jira');
   }
   
   // Technical/documentation keywords
   if (/\b(how|what is|architecture|api|endpoint|function|component|documentation|docs)\b/.test(q)) {
-    detected.push('knowledge', 'firecrawl');
+    detectedSources.push('knowledge', 'firecrawl');
   }
   
   // Code-related keywords (now includes actual source code)
   if (/\b(code|commit|pr|pull request|merge|git|branch|implementation|component|service|module|typescript|angular|function|class|method|where.*code|in the code)\b/.test(q)) {
-    detected.push('git');
+    detectedSources.push('git');
   }
   
   // Communication keywords
   if (/\b(email|meeting|stakeholder|decision|announced|communicated)\b/.test(q)) {
-    detected.push('email');
+    detectedSources.push('email');
   }
   
   // Metrics keywords
   if (/\b(metric|performance|usage|monitoring|dashboard|analytics)\b/.test(q)) {
-    detected.push('metrics');
+    detectedSources.push('metrics');
   }
   
   // Default if nothing detected
-  const relevantSources = detected.length > 0 
-    ? [...new Set(detected)] as SourceType[]
+  const relevantSources = detectedSources.length > 0 
+    ? [...new Set(detectedSources)] as SourceType[]
     : (fallbackSources || ['knowledge', 'jira']);
+  
+  // Keyword-based skill detection
+  const detectedSkills: SkillId[] = [];
+  
+  // CDTEXT parsing skill
+  if (/\b(cdtext|cd.?text|ddp|hex\s*dump)\b/.test(q) || /\b[0-9a-f]{36,}\b/i.test(q)) {
+    detectedSkills.push('cdtext-parsing');
+  }
+  
+  // Code formatting skill
+  if (/\b(show.*code|see.*code|code\s*snippet|generate.*code|write.*code)\b/.test(q)) {
+    detectedSkills.push('code-formatting');
+  }
+  
+  // Troubleshooting skill
+  if (/\b(error|failed|not\s*working|debug|exception|broken|fix)\b/.test(q)) {
+    detectedSkills.push('troubleshooting');
+  }
+  
+  // Jira analysis skill
+  if (/\b(jira|ticket|sprint|backlog|aoma-\d+)\b/.test(q)) {
+    detectedSkills.push('jira-analysis');
+  }
+  
+  // Demo mode skill
+  if (/\b(recording.*demo|demo\s*mode|presentation|infographic|format.*nicely)\b/.test(q)) {
+    detectedSkills.push('demo-mode');
+  }
   
   // Determine query type
   let queryType: QueryType = 'general';
@@ -224,13 +281,14 @@ function heuristicClassify(
   else if (/\b(error|bug|issue|fix|debug)\b/.test(q)) queryType = 'troubleshooting';
   else if (/\b(process|workflow|steps)\b/.test(q)) queryType = 'procedural';
   
-  console.log(`🎯 [Intent] Heuristic fallback: ${relevantSources.join(', ')}`);
+  console.log(`🎯 [Intent] Heuristic fallback: sources=[${relevantSources.join(', ')}], skills=[${detectedSkills.join(', ')}]`);
   
   return {
     relevantSources,
     queryType,
     confidence: 0.5, // Lower confidence for heuristic
     reasoning: 'Fallback heuristic classification based on keywords',
+    relevantSkills: detectedSkills.length > 0 ? detectedSkills : undefined,
   };
 }
 

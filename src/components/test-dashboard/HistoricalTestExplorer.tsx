@@ -10,7 +10,6 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Badge } from "../ui/badge";
@@ -36,18 +35,14 @@ import {
   Search, 
   RefreshCw,
   Copy,
-  Filter,
   FileText,
   FileSearch,
   Sparkles,
   CheckCircle,
-  XCircle,
-  Clock,
   TrendingUp,
   ChevronRight,
   Activity,
   Zap,
-  AlertTriangle,
   ArrowUp,
   ArrowDown
 } from "lucide-react";
@@ -91,7 +86,6 @@ interface HistoricalTestExplorerProps {
 export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplorerProps = {}) {
   // Data state
   const [tests, setTests] = useState<HistoricalTest[]>([]);
-  const [cachedTests, setCachedTests] = useState<HistoricalTest[]>([]); // First 100 cached
   const [loading, setLoading] = useState(false);
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   
@@ -148,7 +142,6 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
         throw new Error(errorMessage);
       }
 
-      setCachedTests(data.tests);
       setTests(data.tests);
       setTotal(data.pagination.total);
       setHasMore(data.pagination.hasMore);
@@ -218,7 +211,6 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
     if (prefetchedData && !initialLoadComplete) {
       // Use prefetched data (instant load!)
       console.log("⚡ Using prefetched historical tests");
-      setCachedTests(prefetchedData.tests || []);
       setTests(prefetchedData.tests || []);
       setTotal(prefetchedData.pagination?.total || 0);
       setHasMore(prefetchedData.pagination?.hasMore || false);
@@ -389,7 +381,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       onClick={() => handleSort("app_under_test")}
                     >
                       <div className="flex items-center justify-center">
-                        Env <SortIcon field="app_under_test" />
+                        App <SortIcon field="app_under_test" />
                       </div>
                     </TableHead>
                     <TableHead 
@@ -479,20 +471,20 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
         {selectedTest ? (
           <div className="flex flex-col h-full" data-test-id="test-detail">
             {/* Detail Header */}
-            <div className="p-8 border-b border-[var(--mac-border)] bg-[var(--mac-surface-elevated)] shadow-sm">
-              <div className="flex items-start justify-between gap-6 mb-6">
+            <div className="p-5 border-b border-[var(--mac-border)] bg-[var(--mac-surface-elevated)] shadow-sm">
+              <div className="flex items-start justify-between gap-4 mb-4">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-4 mb-3">
-                    <h2 className="text-2xl font-light text-white truncate tracking-tight">{selectedTest.test_name}</h2>
+                  <div className="flex items-center gap-4 mb-2">
+                    <h2 className="text-xl font-light text-white truncate tracking-tight">{selectedTest.test_name}</h2>
                     {getConfidenceBadge(selectedTest.base_confidence)}
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-zinc-400 font-light">
+                  <div className="flex items-center gap-4 text-xs text-zinc-400 font-light">
                     <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-zinc-800/50 border border-zinc-700/50">
-                      <FileText className="h-3.5 w-3.5 text-zinc-500" />
+                      <FileText className="h-3 w-3 text-zinc-500" />
                       ID #{selectedTest.id}
                     </span>
                     <span className="text-zinc-700">•</span>
-                    <Badge variant="outline" className="text-xs border-zinc-700 text-zinc-300 font-normal uppercase tracking-wider bg-zinc-800/30">
+                    <Badge variant="outline" className="text-[10px] border-zinc-700 text-zinc-300 font-normal uppercase tracking-wider bg-zinc-800/30">
                       {selectedTest.app_under_test}
                     </Badge>
                   </div>
@@ -501,39 +493,39 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                   variant="ghost"
                   size="sm"
                   onClick={() => setSelectedTest(null)}
-                  className="text-zinc-500 hover:text-white hover:bg-zinc-800 h-10 w-10 p-0 flex-shrink-0 rounded-full transition-all"
+                  className="text-zinc-500 hover:text-white hover:bg-zinc-800 h-8 w-8 p-0 flex-shrink-0 rounded-full transition-all"
                   title="Close detail view"
                 >
-                  <span className="text-2xl">×</span>
+                  <span className="text-xl">×</span>
                 </Button>
               </div>
 
               {/* Quick Stats Cards */}
-              <div className="grid grid-cols-3 gap-4">
-                <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/50 hover:border-[var(--mac-primary-blue-400)]/40 transition-all group shadow-inner text-center">
-                  <div className="text-[10px] text-zinc-500 font-bold mb-2 flex items-center justify-center gap-2 uppercase tracking-widest">
-                    <Activity className="h-3 w-3 text-[var(--mac-primary-blue-400)] group-hover:scale-110 transition-transform" />
+              <div className="grid grid-cols-3 gap-3">
+                <div className="p-3 rounded-xl bg-zinc-900/40 border border-zinc-800/50 hover:border-[var(--mac-primary-blue-400)]/40 transition-all group shadow-inner text-center">
+                  <div className="text-[9px] text-zinc-500 font-bold mb-1 flex items-center justify-center gap-2 uppercase tracking-widest">
+                    <Activity className="h-2.5 w-2.5 text-[var(--mac-primary-blue-400)] group-hover:scale-110 transition-transform" />
                     Executions
                   </div>
-                  <div className="text-3xl font-extralight text-white">
+                  <div className="text-xl font-extralight text-white">
                     {selectedTest.execution_count.toLocaleString()}
                   </div>
                 </div>
-                <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/50 hover:border-emerald-900/30 transition-all group shadow-inner text-center">
-                  <div className="text-[10px] text-zinc-500 font-bold mb-2 flex items-center justify-center gap-2 uppercase tracking-widest">
-                    <CheckCircle className="h-3 w-3 text-emerald-500 group-hover:scale-110 transition-transform" />
+                <div className="p-3 rounded-xl bg-zinc-900/40 border border-zinc-800/50 hover:border-emerald-900/30 transition-all group shadow-inner text-center">
+                  <div className="text-[9px] text-zinc-500 font-bold mb-1 flex items-center justify-center gap-2 uppercase tracking-widest">
+                    <CheckCircle className="h-2.5 w-2.5 text-emerald-500 group-hover:scale-110 transition-transform" />
                     Pass Rate
                   </div>
-                  <div className="text-3xl font-extralight text-emerald-400">
+                  <div className="text-xl font-extralight text-emerald-400">
                     {getPassRate(selectedTest) || "—"}{getPassRate(selectedTest) ? "%" : ""}
                   </div>
                 </div>
-                <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/50 hover:border-zinc-700/50 transition-all group shadow-inner text-center">
-                  <div className="text-[10px] text-zinc-500 font-bold mb-2 flex items-center justify-center gap-2 uppercase tracking-widest">
-                    <FileText className="h-3 w-3 text-zinc-400 group-hover:scale-110 transition-transform" />
+                <div className="p-3 rounded-xl bg-zinc-900/40 border border-zinc-800/50 hover:border-zinc-700/50 transition-all group shadow-inner text-center">
+                  <div className="text-[9px] text-zinc-500 font-bold mb-1 flex items-center justify-center gap-2 uppercase tracking-widest">
+                    <FileText className="h-2.5 w-2.5 text-zinc-400 group-hover:scale-110 transition-transform" />
                     JIRA Links
                   </div>
-                  <div className="text-3xl font-extralight text-white">
+                  <div className="text-xl font-extralight text-white">
                     {selectedTest.jira_ticket_count}
                   </div>
                 </div>
@@ -721,7 +713,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                           <Sparkles className="h-4 w-4 text-emerald-400" />
                         </div>
                         <ArtifactTitle className="text-xs font-black text-white uppercase tracking-[0.3em]">
-                          Automated Test
+                          Generated Automated Test
                         </ArtifactTitle>
                       </div>
                       <ArtifactActions>
@@ -743,7 +735,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                                 setGeneratedCode(data.code);
                                 toast.success("Test re-generated successfully");
                               }
-                            } catch (error) {
+                            } catch {
                               toast.error("Failed to re-generate test");
                             } finally {
                               setGeneratingPlaywright(false);
@@ -770,105 +762,105 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                     </ArtifactContent>
                   </Artifact>
                 )}
+
+                {/* Action Buttons - Moved to bottom of scroll area */}
+                <div className="pt-8 mt-4 border-t border-zinc-800/30">
+                  <div className="flex gap-6">
+                    <Button 
+                      size="lg" 
+                      className="flex-1 mac-button-gradient text-white font-black uppercase tracking-[0.25em] text-[10px] h-14 rounded-2xl shadow-2xl hover:scale-[1.02] active:scale-95 transition-all group overflow-hidden relative"
+                      onClick={async () => {
+                        if (!selectedTest) return;
+                        setGeneratingPlaywright(true);
+                        setGeneratedCode(null);
+                        try {
+                          const res = await fetch("/api/tests/generate-playwright", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              testId: selectedTest.id,
+                              testName: selectedTest.test_name,
+                              description: selectedTest.description,
+                              preconditions: selectedTest.preconditions,
+                              app_under_test: selectedTest.app_under_test,
+                            }),
+                          });
+                          const data = await res.json();
+                          if (data.success) {
+                            setGeneratedCode(data.testCode);
+                            toast.success("Script generated successfully");
+                          } else {
+                            toast.error(data.error || "Generation failed");
+                          }
+                        } catch {
+                          toast.error("Sync error");
+                        } finally {
+                          setGeneratingPlaywright(false);
+                        }
+                      }}
+                      disabled={generatingPlaywright}
+                      data-test-id="generate-playwright-btn"
+                    >
+                      <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      {generatingPlaywright ? (
+                        <RefreshCw className="h-5 w-5 mr-4 animate-spin text-white" />
+                      ) : (
+                        <Sparkles className="h-5 w-5 mr-4 group-hover:rotate-45 transition-transform text-white" />
+                      )}
+                      {generatingPlaywright ? "Generating Automated Test..." : "Generate Automated Test"}
+                    </Button>
+                    
+                    <Button 
+                      size="lg" 
+                      variant="outline" 
+                      className="flex-1 border-zinc-700/50 text-zinc-300 hover:text-white hover:bg-zinc-800/80 font-black uppercase tracking-[0.25em] text-[10px] h-14 rounded-2xl transition-all group shadow-xl active:scale-95 bg-zinc-900/30 backdrop-blur-sm"
+                      onClick={async () => {
+                        if (!selectedTest) return;
+                        setCalculatingConfidence(true);
+                        setAiConfidence(null);
+                        try {
+                          const res = await fetch("/api/tests/confidence-score", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              testId: selectedTest.id,
+                              testName: selectedTest.test_name,
+                              description: selectedTest.description,
+                              preconditions: selectedTest.preconditions,
+                              app_under_test: selectedTest.app_under_test,
+                              execution_count: selectedTest.execution_count,
+                              pass_count: selectedTest.pass_count,
+                              last_executed_at: selectedTest.last_executed_at,
+                            }),
+                          });
+                          const data = await res.json();
+                          setAiConfidence({ 
+                            score: data.score, 
+                            rationale: data.rationale,
+                            recommendations: data.recommendations,
+                          automationFeasibility: data.automationFeasibility
+                        });
+                        toast.success(`AI Confidence: ${Math.round(data.score * 100)}%`);
+                      } catch {
+                        toast.error("Analysis failed");
+                      } finally {
+                        setCalculatingConfidence(false);
+                      }
+                    }}
+                    disabled={calculatingConfidence}
+                      data-test-id="calculate-confidence-btn"
+                    >
+                      {calculatingConfidence ? (
+                        <RefreshCw className="h-5 w-5 mr-4 animate-spin text-zinc-400" />
+                      ) : (
+                        <Zap className="h-5 w-5 mr-4 text-[var(--mac-primary-blue-400)] group-hover:scale-125 transition-transform" />
+                      )}
+                      {calculatingConfidence ? "Analyzing..." : "Run AI Analysis"}
+                    </Button>
+                  </div>
+                </div>
               </div>
             </ScrollArea>
-
-            {/* Action Buttons Footer */}
-            <div className="p-8 border-t border-zinc-800/50 bg-zinc-900/40 backdrop-blur-xl">
-              <div className="flex gap-6 max-w-4xl mx-auto">
-                <Button 
-                  size="lg" 
-                  className="flex-1 mac-button-gradient text-white font-black uppercase tracking-[0.25em] text-[10px] h-14 rounded-2xl shadow-2xl hover:scale-[1.02] active:scale-95 transition-all group overflow-hidden relative"
-                  onClick={async () => {
-                    if (!selectedTest) return;
-                    setGeneratingPlaywright(true);
-                    setGeneratedCode(null);
-                    try {
-                      const res = await fetch("/api/tests/generate-playwright", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                          testId: selectedTest.id,
-                          testName: selectedTest.test_name,
-                          description: selectedTest.description,
-                          preconditions: selectedTest.preconditions,
-                          app_under_test: selectedTest.app_under_test,
-                        }),
-                      });
-                      const data = await res.json();
-                      if (data.success) {
-                        setGeneratedCode(data.testCode);
-                        toast.success("Script generated successfully");
-                      } else {
-                        toast.error(data.error || "Generation failed");
-                      }
-                    } catch (err) {
-                      toast.error("Sync error");
-                    } finally {
-                      setGeneratingPlaywright(false);
-                    }
-                  }}
-                  disabled={generatingPlaywright}
-                  data-test-id="generate-playwright-btn"
-                >
-                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  {generatingPlaywright ? (
-                    <RefreshCw className="h-5 w-5 mr-4 animate-spin text-white" />
-                  ) : (
-                    <Sparkles className="h-5 w-5 mr-4 group-hover:rotate-45 transition-transform text-white" />
-                  )}
-                  {generatingPlaywright ? "Generating Test..." : "Generate Test"}
-                </Button>
-                
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="flex-1 border-zinc-700/50 text-zinc-300 hover:text-white hover:bg-zinc-800/80 font-black uppercase tracking-[0.25em] text-[10px] h-14 rounded-2xl transition-all group shadow-xl active:scale-95 bg-zinc-900/30 backdrop-blur-sm"
-                  onClick={async () => {
-                    if (!selectedTest) return;
-                    setCalculatingConfidence(true);
-                    setAiConfidence(null);
-                    try {
-                      const res = await fetch("/api/tests/confidence-score", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                          testId: selectedTest.id,
-                          testName: selectedTest.test_name,
-                          description: selectedTest.description,
-                          preconditions: selectedTest.preconditions,
-                          app_under_test: selectedTest.app_under_test,
-                          execution_count: selectedTest.execution_count,
-                          pass_count: selectedTest.pass_count,
-                          last_executed_at: selectedTest.last_executed_at,
-                        }),
-                      });
-                      const data = await res.json();
-                      setAiConfidence({ 
-                        score: data.score, 
-                        rationale: data.rationale,
-                        recommendations: data.recommendations,
-                        automationFeasibility: data.automationFeasibility
-                      });
-                      toast.success(`AI Confidence: ${Math.round(data.score * 100)}%`);
-                    } catch (err) {
-                      toast.error("Analysis failed");
-                    } finally {
-                      setCalculatingConfidence(false);
-                    }
-                  }}
-                  disabled={calculatingConfidence}
-                  data-test-id="calculate-confidence-btn"
-                >
-                  {calculatingConfidence ? (
-                    <RefreshCw className="h-5 w-5 mr-4 animate-spin text-zinc-400" />
-                  ) : (
-                    <Zap className="h-5 w-5 mr-4 text-[var(--mac-primary-blue-400)] group-hover:scale-125 transition-transform" />
-                  )}
-                  {calculatingConfidence ? "Analyzing..." : "Run AI Analysis"}
-                </Button>
-              </div>
-            </div>
           </div>
         ) : (
           // Empty state - no test selected
