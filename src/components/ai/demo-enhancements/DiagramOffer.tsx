@@ -139,14 +139,20 @@ export function shouldOfferDiagram(content: string): boolean {
   // 🐛 FIX: Don't offer diagrams for "I don't know" responses!
   const isUnknownResponse = 
     lowerContent.includes("i don't have any information") ||
+    lowerContent.includes("i don't have information") ||
+    lowerContent.includes("turns out i don't have") ||
     lowerContent.includes("i don't have data") ||
     lowerContent.includes("i can't say for sure") ||
     lowerContent.includes("no information") ||
     lowerContent.includes("not in my knowledge base") ||
     lowerContent.includes("i don't know") ||
-    lowerContent.includes("couldn't find");
+    lowerContent.includes("couldn't find") ||
+    lowerContent.includes("regarding") && lowerContent.includes("knowledge base");
   
-  if (isUnknownResponse) return false;
+  if (isUnknownResponse) {
+    console.log("🚫 Skipping diagram offer - detected 'I don't know' response");
+    return false;
+  }
   
   // Check for diagram keywords
   const keywordMatches = DIAGRAM_KEYWORDS.filter(kw => 
