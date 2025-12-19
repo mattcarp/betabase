@@ -168,37 +168,58 @@ export function IntrospectionDropdown() {
           {status && (
             <>
               <DropdownMenuSeparator />
-              <div className="px-2 py-2.5 text-xs">
-                <div className="flex items-center justify-between mb-2">
+              <div className="px-2 py-2.5 text-xs space-y-2">
+                <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">System Status:</span>
-                  <Badge
-                    variant={status.tracingEnabled ? "default" : "secondary"}
-                    className="text-xs"
-                  >
-                    {status.tracingEnabled ? "Healthy" : "Degraded"}
-                  </Badge>
+                  <span className={`flex items-center gap-1.5 font-medium ${status.tracingEnabled ? 'text-green-500' : 'text-yellow-500'}`}>
+                    {status.tracingEnabled ? (
+                      <>
+                        <CheckCircle className="h-3.5 w-3.5" />
+                        Healthy
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle className="h-3.5 w-3.5" />
+                        Degraded
+                      </>
+                    )}
+                  </span>
                 </div>
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">Environment:</span>
-                  <span className="font-mono text-xs">{status.environment}</span>
+                  <span className="font-mono text-xs text-foreground">{status.environment}</span>
                 </div>
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">Database:</span>
-                  <Badge
-                    variant={status.hasSupabase ? "default" : "destructive"}
-                    className="text-xs"
-                  >
-                    {status.hasSupabase ? "Connected" : "Unavailable"}
-                  </Badge>
+                  <span className={`flex items-center gap-1.5 font-medium ${status.hasSupabase ? 'text-green-500' : 'text-red-500'}`}>
+                    {status.hasSupabase ? (
+                      <>
+                        <CheckCircle className="h-3.5 w-3.5" />
+                        Connected
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle className="h-3.5 w-3.5" />
+                        Unavailable
+                      </>
+                    )}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">AI Provider:</span>
-                  <Badge
-                    variant={status.hasAIProvider ? "default" : "destructive"}
-                    className="text-xs"
-                  >
-                    {status.hasAIProvider ? "Connected" : "Unavailable"}
-                  </Badge>
+                  <span className={`flex items-center gap-1.5 font-medium ${status.hasAIProvider ? 'text-green-500' : 'text-red-500'}`}>
+                    {status.hasAIProvider ? (
+                      <>
+                        <CheckCircle className="h-3.5 w-3.5" />
+                        Connected
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle className="h-3.5 w-3.5" />
+                        Unavailable
+                      </>
+                    )}
+                  </span>
                 </div>
               </div>
             </>

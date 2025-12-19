@@ -273,8 +273,8 @@ export function AiSdkChatPanel({
   theme = "auto",
   botAvatar = undefined, // Let it use fallback initials
   userAvatar = undefined, // Let it use fallback initials
-  botName = "AI",
-  userName = "U",
+  botName = "BB",
+  userName = "MC",
   onSwitchToTab,
 }: AiSdkChatPanelProps) {
   console.log("🎯 AiSdkChatPanel: Component mounted with api:", api);
@@ -649,6 +649,7 @@ export function AiSdkChatPanel({
         setCurrentProgress(null);
         setManualLoading(false);
         setIsProcessing(false);
+        setHasStartedStreaming(false); // Reset streaming state for next message
       }, 3000);
 
       onError?.(err);
@@ -1450,21 +1451,32 @@ export function AiSdkChatPanel({
       // Use the AI SDK's append or sendMessage function
       // This properly handles the streaming response format
       try {
-        if (typeof append === "function") {
-          await append({
-            role: "user",
-            content,
-          });
-        } else if (typeof sendMessage === "function") {
-          // Fallback to sendMessage if append not available
-          await sendMessage({
-            role: "user",
-            content,
-          });
-        } else {
-          console.error("Neither append nor sendMessage available from useChat");
-          throw new Error("Chat API not properly initialized");
-        }
+        // Add timeout protection to prevent hanging requests
+        const timeoutMs = 120000; // 2 minutes timeout
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error("Request timed out after 2 minutes")), timeoutMs);
+        });
+
+        const requestPromise = async () => {
+          if (typeof append === "function") {
+            await append({
+              role: "user",
+              content,
+            });
+          } else if (typeof sendMessage === "function") {
+            // Fallback to sendMessage if append not available
+            await sendMessage({
+              role: "user",
+              content,
+            });
+          } else {
+            console.error("Neither append nor sendMessage available from useChat");
+            throw new Error("Chat API not properly initialized");
+          }
+        };
+
+        // Race between the request and timeout
+        await Promise.race([requestPromise(), timeoutPromise]);
 
         // Streaming complete - manually trigger completion logic
         // (onFinish callback should handle this, but we add fallback)
@@ -1495,6 +1507,7 @@ export function AiSdkChatPanel({
         toast.error(`Failed to send message: ${error.message || "Unknown error"}`);
         setManualLoading(false);
         setIsProcessing(false);
+        setHasStartedStreaming(false); // Reset streaming state for next message
 
         // Clear progress on error
         if ((window as any).currentProgressInterval) {

@@ -132,6 +132,7 @@
     "@supabase/supabase-js": "^2.88.0",
     "@swc/helpers": "^0.5.17",
     "@tailwindcss/typography": "^0.5.16",
+    "@types/pdf-parse": "^1.1.5",
     "@types/react": "^19.1.12",
     "ai": "6.0.0-beta.157",
     "autoprefixer": "^10.4.19",

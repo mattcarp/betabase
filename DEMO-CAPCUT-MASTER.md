@@ -1,20 +1,30 @@
 # THREE-PILLAR DEMO - MASTER BULLETS
-**CapCut Recording + Gemini Slides | 5:30 Total**
 
----
-
-## 🎯 STRUCTURE
-
-1. **Multi-Tenant ERD** (Opening emphasis)
-2. **Pillar 1: Chat** (RAG - 45,399 vectors)
-3. **Pillar 2: Curate** (RLHF feedback loop)
-4. **Pillar 3: Test** (Self-healing, 94% success)
-
----
 
 ## 📹 SHOT 1: OPENING - Multi-Tenant ERD (0:00-0:45) 🍌 META DEMO
+VOICEOVER: .... bring AI and workers together through the use of such things as RLHF, AND HITL
+were gonna demo some rather unique knowledge base chase, show how that is dependened on curation, which is a human job, and AI-Supported Testing, including self-healing, test generation from human use, generation for machine use. And always, human feedback and curation along the way.
+
+So let's get started.
+
+#### Latest variant of the Betabase, a system I wrote many years ago for testing. This has been clearly very, very written. And I just, honestly, it's a totally different app, but I couldn't find a better name. So I went with that. If you're going to do software testing, come on, you've got to go with the Betabase. It's just hilarious. I'm laughing and chuckling at myself deep inside right now. 
+
+Weve The past for human-driven testing where people are writing the scripts, running the tests, determining when there was a pass and a fail, putting in the dates and putting in the operating systems used and the releases of the apps and all that. I'd like to continue using it in that capacity, but then extend it heavily with AI. And this is, again, a completely new system. The only reason it's named the same thing is I couldn't find a better name. The name makes me chuckle, and I also like the word chuckle.
+
+Looks like a typical knowloadebase-base chat. The The center works with this Zeitgeist service that I wrote, which basically looks at what's going on today. What's happening in our Jira tickets, in our email. I don't have access yet to email. But what's going on in the new documentation, the new releases. Definitely what's going on in testing. What's happening. The Zeitgeist table will be something the manager could use. But these are, hey, let me ask you, let me propose to every morning. It repopulates this with the current zeitgeist questions. It only will, you know, it's not stupid, it'll only ask questions or propose questions to which it already knows that it has a really good answer for the user.
 
 ### Action (THE META MOMENT!)
+**A. Tech Gut Check**
+
+- Ask about DDP:
+  - Bytes per sector on a DDP CD master?
+  - Spec number?
+  - Max number of tracks?
+  - Max playtime?
+  - Put it in a nice table.
+- Any more info you can chare on DDP's i'm reall stuck on this. How does AOMA use DDP?
+
+
 1. Type: "Explain The Betabase's multi-tenant database architecture"
 2. AI answers with text explanation
 3. **Then you say:** "I'm recording a demo - can you create an infographic of that? Hand-drawn style, show the three tiers."
@@ -32,7 +42,7 @@
 - **AOMA** = One example AUT (Application Under Test)
 - Three-tier isolation: ANY organization can use our platform
 - Watch this - the system is making its OWN demo slide right now!
-- This is Gemini 3 Pro image generation - hand-drawn infographics on demand
+- This is Gemini 3 Pro image generation - infographics on demand
 
 ### Gemini Slide Prompt
 ```
