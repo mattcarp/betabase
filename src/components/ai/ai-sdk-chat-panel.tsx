@@ -11,6 +11,7 @@ import { Badge } from "../ui/badge";
 import { useElevenLabsSTT } from "../../hooks/useElevenLabsSTT";
 import { useElevenLabsVoice } from "../../hooks/useElevenLabsVoice";
 import { VoiceSelector } from "../ui/VoiceSelector";
+import { FeedbackSegueDialog } from "./FeedbackSegueDialog";
 import {
   Sparkles,
   Trash2,
@@ -243,6 +244,7 @@ interface AiSdkChatPanelProps {
   userAvatar?: string;
   botName?: string;
   userName?: string;
+  onSwitchToTab?: (tab: "chat" | "hud" | "test" | "fix" | "curate") => void; // For demo segue to Curate
 }
 
 export function AiSdkChatPanel({
@@ -273,6 +275,7 @@ export function AiSdkChatPanel({
   userAvatar = undefined, // Let it use fallback initials
   botName = "AI",
   userName = "U",
+  onSwitchToTab,
 }: AiSdkChatPanelProps) {
   console.log("🎯 AiSdkChatPanel: Component mounted with api:", api);
   console.log("🎤 Voice buttons should be rendering in PromptInputTools");
@@ -299,6 +302,12 @@ export function AiSdkChatPanel({
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
   const [loadingSeconds, setLoadingSeconds] = useState(0); // Track seconds elapsed during loading
   const [pendingRagMetadata, setPendingRagMetadata] = useState<any>(null); // RAG metadata from response headers
+  
+  // Feedback Dialog State
+  const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
+  const [feedbackMessageId, setFeedbackMessageId] = useState<string | null>(null);
+  const [feedbackUserQuery, setFeedbackUserQuery] = useState("");
+  const [feedbackAiResponse, setFeedbackAiResponse] = useState("");
 
   // New AI Elements state
   const [modelSelectorOpen, setModelSelectorOpen] = useState(false);
@@ -1550,43 +1559,92 @@ export function AiSdkChatPanel({
       return;
     }
 
+    // Find the message to get content and metadata
+    const message = messages.find((m) => m.id === messageId);
+    if (!message) {
+      console.error("Message not found:", messageId);
+      return;
+    }
+
+    // Extract message content
+    const messageContent = message.parts?.[0]?.text || (message as any).content || "";
+
+    // Find the user query (previous message)
+    const messageIndex = messages.findIndex((m) => m.id === messageId);
+    const userQuery =
+      messageIndex > 0
+        ? messages[messageIndex - 1].parts?.[0]?.text ||
+          (messages[messageIndex - 1] as any).content ||
+          ""
+        : "";
+
+    if (type === "up") {
+      // Thumbs up - simple, no dialog
+      const supabase = getSupabaseForFeedback();
+      if (!supabase) {
+        toast.info("Feedback disabled (Supabase not configured)");
+        setFeedbackGiven((prev) => ({ ...prev, [messageId]: type }));
+        return;
+      }
+
+      try {
+        const { error } = await supabase.from("rlhf_feedback").insert({
+          conversation_id: conversationId || `session_${Date.now()}`,
+          user_query: userQuery,
+          ai_response: messageContent,
+          rating: 5,
+          thumbs_up: true,
+          feedback_text: null,
+          documents_marked: message.ragMetadata || null,
+          user_email: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
+
+        if (error) {
+          console.error("Failed to save feedback:", error);
+          toast.error("Failed to save feedback. Please try again.");
+          return;
+        }
+
+        setFeedbackGiven((prev) => ({ ...prev, [messageId]: type }));
+        toast.success("Feedback recorded! Thank you! 💜");
+      } catch (err) {
+        console.error("Error saving feedback:", err);
+        toast.error("Failed to save feedback");
+      }
+    } else {
+      // Thumbs down - open the segue dialog!
+      setFeedbackMessageId(messageId);
+      setFeedbackUserQuery(userQuery);
+      setFeedbackAiResponse(messageContent);
+      setFeedbackDialogOpen(true);
+    }
+  };
+
+  // Handle feedback submission from dialog
+  const handleFeedbackSubmit = async (feedbackText: string) => {
+    if (!feedbackMessageId) return;
+
     const supabase = getSupabaseForFeedback();
     if (!supabase) {
       toast.info("Feedback disabled (Supabase not configured)");
-      setFeedbackGiven((prev) => ({ ...prev, [messageId]: type }));
+      setFeedbackGiven((prev) => ({ ...prev, [feedbackMessageId]: "down" }));
       return;
     }
 
     try {
-      // Find the message to get content and metadata
-      const message = messages.find((m) => m.id === messageId);
-      if (!message) {
-        console.error("Message not found:", messageId);
-        return;
-      }
-
-      // Extract message content
-      const messageContent = message.parts?.[0]?.text || (message as any).content || "";
-
-      // Find the user query (previous message)
-      const messageIndex = messages.findIndex((m) => m.id === messageId);
-      const userQuery =
-        messageIndex > 0
-          ? messages[messageIndex - 1].parts?.[0]?.text ||
-            (messages[messageIndex - 1] as any).content ||
-            ""
-          : "";
-
-      // Store feedback in database
+      const message = messages.find((m) => m.id === feedbackMessageId);
+      
       const { error } = await supabase.from("rlhf_feedback").insert({
         conversation_id: conversationId || `session_${Date.now()}`,
-        user_query: userQuery,
-        ai_response: messageContent,
-        rating: type === "up" ? 5 : 1,
-        thumbs_up: type === "up",
-        feedback_text: null,
-        documents_marked: message.ragMetadata || null,
-        user_email: null, // Will be set by RLS policy from auth user
+        user_query: feedbackUserQuery,
+        ai_response: feedbackAiResponse,
+        rating: 1,
+        thumbs_up: false,
+        feedback_text: feedbackText || null,
+        documents_marked: message?.ragMetadata || null,
+        user_email: null,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       });
@@ -1597,15 +1655,8 @@ export function AiSdkChatPanel({
         return;
       }
 
-      // Update local state
-      setFeedbackGiven((prev) => ({ ...prev, [messageId]: type }));
-
-      // Show success message
-      if (type === "up") {
-        toast.success("Feedback recorded! Thank you! 💜");
-      } else {
-        toast.info("Feedback recorded. A curator will review this response.");
-      }
+      setFeedbackGiven((prev) => ({ ...prev, [feedbackMessageId]: "down" }));
+      toast.success("Feedback saved to curation queue! 🎯");
     } catch (err) {
       console.error("Error saving feedback:", err);
       toast.error("Failed to save feedback");
@@ -3425,6 +3476,26 @@ export function AiSdkChatPanel({
           </PromptInputFooter>
         </PromptInput>
       </div>
+
+      {/* Feedback Segue Dialog */}
+      <FeedbackSegueDialog
+        isOpen={feedbackDialogOpen}
+        onClose={() => {
+          setFeedbackDialogOpen(false);
+          setFeedbackMessageId(null);
+        }}
+        onGoToCurationQueue={() => {
+          setFeedbackDialogOpen(false);
+          setFeedbackMessageId(null);
+          // Switch to curate tab
+          if (onSwitchToTab) {
+            onSwitchToTab("curate");
+          }
+        }}
+        userQuery={feedbackUserQuery}
+        aiResponse={feedbackAiResponse}
+        onSubmitFeedback={handleFeedbackSubmit}
+      />
     </div>
   );
 }

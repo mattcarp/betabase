@@ -21,7 +21,6 @@ import {
   SidebarMenuSkeleton,
   SidebarRail,
   SidebarSeparator,
-  useSidebar,
 } from "./sidebar";
 import {
   MessageCircle,
@@ -70,8 +69,6 @@ export function AppSidebar({ className }: AppSidebarProps) {
     clearAllConversations,
     removeDuplicateConversations,
   } = useConversationStore();
-
-  const { state } = useSidebar();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredConversations, setFilteredConversations] = useState(conversations);
@@ -156,19 +153,18 @@ export function AppSidebar({ className }: AppSidebarProps) {
   };
 
   return (
-    <Sidebar variant="sidebar" collapsible="icon" className={cn("mac-sidebar mac-glass", className)}>
+    <Sidebar variant="sidebar" className={cn("mac-sidebar mac-glass", className)}>
       <SidebarHeader className="mac-surface-elevated border-b border-mac-border">
         <div className="flex items-center justify-between px-2 py-2">
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-mac-accent-purple-400" />
-            <span className="text-sm font-light text-mac-text-primary group-data-[state=collapsed]:hidden">Conversations</span>
+            <span className="text-sm font-light text-mac-text-primary">Conversations</span>
           </div>
           <Button
             onClick={handleNewConversation}
             size="icon"
             variant="ghost"
             className="mac-button-ghost h-7 w-7 hover:bg-mac-state-hover"
-            title="New conversation"
           >
             <Plus className="h-4 w-4" />
           </Button>
@@ -248,45 +244,41 @@ export function AppSidebar({ className }: AppSidebarProps) {
                         activeConversationId === conversation.id && "active"
                       )}
                     >
-                      <div className="flex items-start gap-2.5 w-full">
+                      <div className="flex items-start gap-3 w-full">
                         <MessageCircle
                           className={cn(
                             "h-4 w-4 mt-0.5 shrink-0",
                             activeConversationId === conversation.id
                               ? "text-mac-primary-blue-400"
-                              : "text-mac-primary-blue-400/60"
+                              : "text-mac-text-muted"
                           )}
                         />
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-0.5">
+                          <div className="flex items-center gap-2.5 mb-0.5">
                             {conversation.isPinned && (
                               <Pin className="h-3 w-3 text-mac-accent-purple-400 shrink-0 mac-pin-indicator" />
                             )}
-                            <span className={cn(
-                              "text-sm font-light truncate transition-colors",
-                              activeConversationId === conversation.id
-                                ? "text-transparent bg-clip-text bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-purple-400 font-medium"
-                                : "text-mac-text-primary"
-                            )}>
+                            <span className="text-sm font-light text-mac-text-primary truncate">
                               {conversation.title}
                             </span>
                           </div>
                           {conversation.messages.length > 0 && (
-                            <p className="text-xs text-mac-text-secondary truncate mb-1">
+                            <p className="text-xs text-mac-text-secondary truncate">
                               {(
                                 conversation.messages[conversation.messages.length - 1]?.content ||
                                 ""
                               ).slice(0, 50)}
+                              ...
                             </p>
                           )}
-                          <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-2 mt-2">
                             <Clock className="h-3 w-3 text-mac-text-secondary" />
                             <span className="text-xs text-mac-text-secondary">
                               {formatTimestamp(new Date(conversation.updatedAt))}
                             </span>
                             {conversation.tags && conversation.tags.length > 0 && (
                               <>
-                                <Hash className="h-3 w-3 text-mac-text-secondary ml-1" />
+                                <Hash className="h-3 w-3 text-mac-text-secondary" />
                                 <span className="text-xs text-mac-text-secondary">
                                   {conversation.tags.length}
                                 </span>

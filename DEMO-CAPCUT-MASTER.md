@@ -46,7 +46,9 @@ Use connecting lines and annotations. Professional but approachable style.
 ---
 
 ## 📹 SHOT 2: PILLAR 1 - CHAT (0:30-2:00)
+Ask warpmup tech question: On a DDP, how many bytes are in a sector and how many frames are in a second? And also, what are the different DDP standards and what can they be used for? 
 
+GO RIGHT TO SHOWSWTOPPPER  QUESTION
 ### Query 1: Baseline
 - Type: "What are the steps to link a product to a master in AOMA?"
 - During progress, menation the 'intent filter' (top), and re-ranking (bottom)
@@ -67,14 +69,14 @@ Use connecting lines and annotations. Professional but approachable style.
   - ⬆️ Upload Phase (Aspera, Sony Ci, direct)
   - ⚙️ Processing Phase (transcode, QC)
   - 💾 Archive Phase (S3 Glacier, Master Vault)
-- Zoom/pan to show interactivity
-- Download button works!
+- Zoom/pan to show interactivity (might not work)
+- Download button works! *just tell that to the user*
 
 > **Technical Note**: Diagram is stored in `ai-sdk-chat-panel.tsx` function `generateFallbackDiagram()`. Triggers when response contains "upload" AND "archive".
 
 ### Bullets
 - 45,399 AOMA domain vectors
-- Inline source citations
+- Inline source citations (check on this)
 - **Nano Banana diagram generation** - Beautiful hand-drawn visuals (NEW!)
 - All queries scoped to app_under_test='aoma'
 - **Intent Classification** - Smart source routing (NEW!)
@@ -85,7 +87,6 @@ Use connecting lines and annotations. Professional but approachable style.
 - "45,399 vectors" badge
 - Circle citations when hovering
 - "Diagram generated" text
-- "Intent: [jira, knowledge]" badge (when visible in logs)
 
 ### Gemini Slide Prompt
 ```
@@ -96,53 +97,9 @@ Create an infographic showing the Chat pillar with these elements:
 - "Nano Banana diagrams" feature bubble
 Use purple/blue color scheme, modern tech aesthetic.
 ```
+   
 
-### AOMA Upload Workflow Diagram (Reference)
-
-This shows the **concept** that Nano Banana will visualize when you ask the upload/archive question.  
-Nano Banana creates a beautiful hand-drawn version of this flow:
-
-```mermaid
-flowchart TD
-    subgraph prep["📋 1. Preparation Phase"]
-        A[/"📁 Select Source Files"/] --> B{"🔍 Validate File Names"}
-        B -->|"No special chars"| C[/"✅ Files Ready"/]
-        B -->|"Issues found"| D[/"⚠️ Rename Files"/] --> B
-    end
-    
-    subgraph reg["📝 2. Registration Phase"]
-        C --> E["🎵 Register Asset in AOMA"]
-        E --> F{"Enter Metadata"}
-        F --> G["Title & Artist"]
-        F --> H["ISRC/UPC Codes"]
-        F --> I["Security Groups"]
-        G & H & I --> J["📋 Asset Record Created"]
-    end
-    
-    subgraph upload["⬆️ 3. Upload Phase"]
-        J --> K{"Choose Upload Method"}
-        K -->|"Large files"| L["🚀 Aspera Upload"]
-        K -->|"Cloud source"| M["☁️ Sony Ci Import"]
-        K -->|"Small files"| N["📤 Direct Upload"]
-        L & M & N --> O["📦 Files Transferred"]
-    end
-    
-    subgraph process["⚙️ 4. Processing Phase"]
-        O --> P["🔄 Transcode to Formats"]
-        P --> Q["🔍 QC Validation"]
-        Q -->|"Pass"| R["✅ Ready for Distribution"]
-        Q -->|"Fail"| S["❌ Review Errors"] --> T["🔧 Fix Issues"] --> P
-    end
-    
-    subgraph archive["💾 5. Archive Phase"]
-        R --> U["📚 Store in Long-term Archive"]
-        U --> V["🏷️ AWS S3 Glacier"]
-        U --> W["💿 Master Vault"]
-        V & W --> X(("✨ Asset Complete"))
-    end
-```
-
-> **Note**: This Mermaid diagram is for documentation reference. Nano Banana will generate a beautiful hand-drawn version of this workflow automatically.
+Okay, here comes the segue between the chat and the curation. What the user should do, what the demo guy, me, should do is click the down button on a response, the thumbs down button. A dialog comes up, says thank you for your feedback. You can enter it here, what was the issue with the question. And then underneath the input it'll say your feedback, your great feedback will be added to the curation queue and integrated into the system in the future. And integrated into the system. And then there's three options: Close, go to integration, go to curation queue. If you hit go to curation queue, you'll automatically be switched to the curate tab and the feedback that you just gave will be in the curation list. 
 
 ---
 
