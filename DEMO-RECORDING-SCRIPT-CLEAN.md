@@ -12,11 +12,11 @@
 > Let's dive in."
 
 ### Do:
-1. Type: "Explain The Betabase's multi-tenant database architecture"
-2. AI explains
-3. Say: "I'm demoing this—create an infographic of that multi-tenant architecture for my colleagues"
-4. Nano Banana generates (30-50 sec → edit to 5 sec)
-5. Beautiful ERD appears
+1. Type: "What are the different asset types in AOMA?"
+2. AI explains (shows it has knowledge)
+3. Say: "I'm demoing this—create an infographic showing The Betabase's multi-tenant architecture for my colleagues"
+4. Nano Banana generates (30-50 sec → edit to 5 sec)  
+5. Beautiful ERD appears (Sony Music, SMEJ, Other Music)
 
 ### Say (while generating):
 > "This isn't built for just us. **Multi-tenant from the ground up**—any organization can use it, totally isolated data.
