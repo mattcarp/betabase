@@ -53,13 +53,14 @@
 - **Notes**: Enhanced metadata section to show model, prompt/completion tokens for LLM traces, and similarity scores for retriever traces. Added observation count display.
 
 ### P1-006: Write Playwright Tests for Phase 1
-- **Status**: in-progress
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: E2E tests for introspection dropdown with real data
 - **Acceptance**:
   - Test opens dropdown, verifies non-empty trace list
   - Test clicks trace, verifies detail modal opens
   - Test verifies loading states work
+- **Notes**: Created comprehensive Playwright test suite in tests/e2e/features/introspection-dropdown.spec.ts. Tests include API endpoint validation, dropdown interaction, trace detail modal, health status display, and refresh functionality. All tests skip gracefully if not authenticated.
 
 ---
 

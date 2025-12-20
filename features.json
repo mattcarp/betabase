@@ -218,6 +218,25 @@
       ],
       "completedAt": null,
       "notes": "Promoted from B005. Run: /ralph-loop \"Implement FEAT-010 task 1. See .specify/specs/FEAT-010-zeitgeist/\" --max-iterations 20"
+    },
+    {
+      "id": "F011",
+      "category": "curate",
+      "priority": 1,
+      "name": "Tufte-Inspired Executive Dashboard",
+      "description": "Redesign the Executive Overview using Edward Tufte's principles of high data-ink ratio and professional intelligence quality visualization.",
+      "requirementRefs": ["REQ-008", "REQ-014"],
+      "byteroverTags": "#tufte #dashboard #data-viz #radar-chart #sparklines",
+      "passes": false,
+      "verification": [
+        "Intelligence Quality Radar chart implemented with 5 axes",
+        "Small multiples of sparklines replace large bar charts",
+        "KPI cards transformed into high-density summary tables",
+        "Muted MAC Design palette used throughout",
+        "Subtle TBD placeholders for unwired metrics"
+      ],
+      "completedAt": null,
+      "notes": "Focused on actionable technical intelligence over generic corporate metrics."
     }
   ],
   "backlog": [
