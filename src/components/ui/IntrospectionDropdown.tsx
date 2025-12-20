@@ -26,6 +26,8 @@ import {
   ThumbsUp,
   ThumbsDown,
   ExternalLink,
+  Download,
+  Copy,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
 import { calculateCost, formatCost } from "@/lib/introspection/cost-calculator";
@@ -140,6 +142,29 @@ export function IntrospectionDropdown() {
     setDetailsOpen(true);
     setTraceObservations([]); // Clear previous observations
     await fetchTraceObservations(trace.id);
+  };
+
+  // Export trace as JSON
+  const handleExportTrace = () => {
+    if (!selectedTrace) return;
+
+    const exportData = {
+      trace: selectedTrace,
+      observations: traceObservations,
+      exportedAt: new Date().toISOString(),
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `trace-${selectedTrace.id}-${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const getStatusIcon = (status: string) => {
@@ -632,11 +657,24 @@ export function IntrospectionDropdown() {
       <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              {selectedTrace && getStatusIcon(selectedTrace.status)}
-              {selectedTrace?.name}
-            </DialogTitle>
-            <DialogDescription>Trace ID: {selectedTrace?.id}</DialogDescription>
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <DialogTitle className="flex items-center gap-2">
+                  {selectedTrace && getStatusIcon(selectedTrace.status)}
+                  {selectedTrace?.name}
+                </DialogTitle>
+                <DialogDescription>Trace ID: {selectedTrace?.id}</DialogDescription>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExportTrace}
+                className="flex items-center gap-1"
+              >
+                <Download className="h-3.5 w-3.5" />
+                Export
+              </Button>
+            </div>
           </DialogHeader>
 
           {selectedTrace && (

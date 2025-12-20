@@ -131,40 +131,44 @@
 ## Phase 3: Quality Signals
 
 ### P3-001: Integrate RLHF Feedback Summary
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1.5hr
 - **Description**: Fetch and display recent feedback from RLHF tables
 - **Acceptance**:
   - Shows thumbs up/down counts (last 24h)
   - Aggregate score or percentage
   - Link to curator workspace
+- **Notes**: Created rlhf-query module that calls get_rlhf_stats database function. Displays thumbs up/down counts, average rating, session count, and link to /curate workspace in dropdown. Integrated with API endpoint.
 
 ### P3-002: Add Similarity Score Statistics
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: Extract and display similarity score stats
 - **Acceptance**:
   - Shows avg/min/max similarity from recent searches
   - Flags low-similarity responses
   - Optional: mini histogram
+- **Notes**: Created trace-statistics module with calculateSimilarityStats function. Displays average similarity with color coding (yellow if <0.7, green otherwise). Tooltip shows min/max/low count.
 
 ### P3-003: Track Citation Usage
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: Count and display citation metrics
 - **Acceptance**:
   - Citations per response counted
   - Average citation rate displayed
   - Derived from trace metadata
+- **Notes**: Implemented calculateCitationStats function that counts citations from outputs.citations array or [n] markers in text. Displays average citations per response in quality section.
 
 ### P3-004: Add Conversation Depth Metrics
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: Track session/conversation statistics
 - **Acceptance**:
   - Average messages per session
   - Session count (last 24h)
   - Derived from Langfuse session data
+- **Notes**: Implemented calculateConversationStats function that groups traces by session ID. Displays session count with tooltip showing total messages and avg messages/session.
 
 ---
 
