@@ -28,6 +28,7 @@ import {
   ExternalLink,
   Download,
   Copy,
+  Settings,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
 import { calculateCost, formatCost } from "@/lib/introspection/cost-calculator";
@@ -37,6 +38,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./collapsible";
+import { Switch } from "./switch";
 import { LatencyWaterfall, extractLatencySegments } from "./LatencyWaterfall";
 import { getTokenBudgets, formatTokenCount, type TokenBudget } from "@/lib/introspection/token-aggregator";
 import type { RLHFFeedbackStats } from "@/lib/introspection/rlhf-query";
@@ -81,9 +83,34 @@ export function IntrospectionDropdown() {
   const [showOnlySlowQueries, setShowOnlySlowQueries] = useState(false);
   const [rlhfStats, setRlhfStats] = useState<RLHFFeedbackStats | null>(null);
   const [qualityStats, setQualityStats] = useState<{ similarity: SimilarityStats; citations: CitationStats; conversations: ConversationStats } | null>(null);
+  const [verboseLogging, setVerboseLogging] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("introspection-verbose-logging") === "true";
+    }
+    return false;
+  });
+
+  // Verbose logging helper
+  const log = (message: string, ...args: any[]) => {
+    if (verboseLogging) {
+      console.log(`[Introspection] ${message}`, ...args);
+    }
+  };
+
+  // Toggle verbose logging
+  const toggleVerboseLogging = (enabled: boolean) => {
+    setVerboseLogging(enabled);
+    localStorage.setItem("introspection-verbose-logging", String(enabled));
+    if (enabled) {
+      console.log("[Introspection] Verbose logging enabled");
+    } else {
+      console.log("[Introspection] Verbose logging disabled");
+    }
+  };
 
   // Fetch app health status and recent activity traces
   const fetchIntrospectionData = async () => {
+    log("Fetching introspection data...");
     setLoading(true);
     try {
       // Call the introspection API to get app health data
@@ -96,12 +123,20 @@ export function IntrospectionDropdown() {
 
       if (response.ok) {
         const data = await response.json();
+        log("Received introspection data", {
+          statusEnabled: data.status?.enabled,
+          traceCount: data.traces?.length,
+          hasRLHFStats: !!data.rlhfStats,
+        });
         setStatus(data.status);
         setTraces(data.traces || []);
         setRlhfStats(data.rlhfStats || null);
+      } else {
+        log("Failed to fetch introspection data", response.status, response.statusText);
       }
     } catch (error) {
       console.error("Failed to fetch introspection data:", error);
+      log("Error fetching introspection data", error);
     } finally {
       setLoading(false);
     }
@@ -649,16 +684,34 @@ export function IntrospectionDropdown() {
           {status?.tracingEnabled && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="text-xs text-center justify-center cursor-pointer"
-                onClick={() => {
-                  // Refresh the introspection data
-                  fetchIntrospectionData();
-                }}
-              >
-                <Eye className="h-3 w-3 mr-2" />
-                Refresh Health Status
-              </DropdownMenuItem>
+              <div className="px-2 py-2 space-y-2">
+                <DropdownMenuItem
+                  className="text-xs cursor-pointer"
+                  onClick={() => {
+                    // Refresh the introspection data
+                    fetchIntrospectionData();
+                  }}
+                >
+                  <Eye className="h-3 w-3 mr-2" />
+                  Refresh Health Status
+                </DropdownMenuItem>
+                <div className="flex items-center justify-between px-2 py-1.5">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Settings className="h-3 w-3" />
+                    Verbose Logging
+                    {verboseLogging && (
+                      <Badge variant="outline" className="h-4 px-1 text-[10px] bg-yellow-100 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-400 border-yellow-300 dark:border-yellow-700">
+                        Active
+                      </Badge>
+                    )}
+                  </div>
+                  <Switch
+                    checked={verboseLogging}
+                    onCheckedChange={toggleVerboseLogging}
+                    className="scale-75"
+                  />
+                </div>
+              </div>
             </>
           )}
         </DropdownMenuContent>
