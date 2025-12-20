@@ -28,6 +28,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { calculateCost, formatCost } from "@/lib/introspection/cost-calculator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
 import { LatencyWaterfall, extractLatencySegments } from "./LatencyWaterfall";
+import { getTokenBudgets, formatTokenCount, type TokenBudget } from "@/lib/introspection/token-aggregator";
+
+// Slow query threshold: 2 seconds
+const SLOW_QUERY_THRESHOLD_MS = 2000;
 
 interface ActivityTrace {
   id: string;
@@ -61,6 +65,8 @@ export function IntrospectionDropdown() {
   const [selectedTrace, setSelectedTrace] = useState<ActivityTrace | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [traceObservations, setTraceObservations] = useState<any[]>([]);
+  const [tokenBudgets, setTokenBudgets] = useState<{ daily: TokenBudget; weekly: TokenBudget; allTime: TokenBudget } | null>(null);
+  const [showOnlySlowQueries, setShowOnlySlowQueries] = useState(false);
 
   // Fetch app health status and recent activity traces
   const fetchIntrospectionData = async () => {
@@ -85,6 +91,14 @@ export function IntrospectionDropdown() {
       setLoading(false);
     }
   };
+
+  // Fetch token budgets when traces are loaded
+  useEffect(() => {
+    if (traces.length > 0) {
+      const budgets = getTokenBudgets(traces);
+      setTokenBudgets(budgets);
+    }
+  }, [traces]);
 
   useEffect(() => {
     if (isOpen) {
@@ -161,6 +175,15 @@ export function IntrospectionDropdown() {
     });
   };
 
+  const isSlowQuery = (duration?: number) => {
+    return duration !== undefined && duration >= SLOW_QUERY_THRESHOLD_MS;
+  };
+
+  // Filter traces based on slow query toggle
+  const displayedTraces = showOnlySlowQueries
+    ? traces.filter(trace => isSlowQuery(trace.duration))
+    : traces;
+
   // Calculate system status for button display
   const connectedServices = [status?.hasSupabase, status?.hasAIProvider].filter(Boolean).length;
   const totalServices = 2;
@@ -192,6 +215,48 @@ export function IntrospectionDropdown() {
             </span>
             {loading && <Loader2 className="h-3 w-3 animate-spin" />}
           </DropdownMenuLabel>
+
+          {/* Token Budget Display */}
+          {tokenBudgets && tokenBudgets.daily.traceCount > 0 && (
+            <>
+              <DropdownMenuSeparator />
+              <div className="px-2 py-2 text-xs space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Today:</span>
+                  <span className="font-mono text-xs">
+                    {formatTokenCount(tokenBudgets.daily.totalTokens)} tokens
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Weekly:</span>
+                  <span className="font-mono text-xs">
+                    {formatTokenCount(tokenBudgets.weekly.totalTokens)} tokens
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Est. Cost:</span>
+                  <TooltipProvider>
+                    <Tooltip delayDuration={200}>
+                      <TooltipTrigger asChild>
+                        <span className="font-mono text-xs text-green-600 dark:text-green-400 cursor-help">
+                          ${tokenBudgets.weekly.totalCost.toFixed(2)}
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <div className="text-xs space-y-1">
+                          <div className="font-semibold">7-Day Total</div>
+                          <div>Traces: {tokenBudgets.weekly.traceCount}</div>
+                          <div>
+                            Tokens: {tokenBudgets.weekly.totalTokens.toLocaleString()}
+                          </div>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
+            </>
+          )}
 
           {status && (
             <>
@@ -273,14 +338,31 @@ export function IntrospectionDropdown() {
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuLabel className="text-xs text-muted-foreground">
-            Recent API Activity
-          </DropdownMenuLabel>
+          <div className="px-2 py-2 flex items-center justify-between">
+            <DropdownMenuLabel className="text-xs text-muted-foreground p-0">
+              Recent API Activity
+            </DropdownMenuLabel>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 px-2 text-xs"
+              onClick={() => setShowOnlySlowQueries(!showOnlySlowQueries)}
+            >
+              <Clock className="h-3 w-3 mr-1" />
+              {showOnlySlowQueries ? "Show All" : "Slow Only"}
+            </Button>
+          </div>
 
           <ScrollArea className="h-[300px]">
-            {traces.length === 0 ? (
+            {displayedTraces.length === 0 ? (
               <div className="px-2 py-8 text-center text-sm text-muted-foreground">
-                {status?.tracingEnabled ? (
+                {showOnlySlowQueries ? (
+                  <>
+                    <Clock className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                    <p>No slow queries</p>
+                    <p className="text-xs mt-2">All queries under 2 seconds</p>
+                  </>
+                ) : status?.tracingEnabled ? (
                   <>
                     <Layers className="h-8 w-8 mx-auto mb-2 opacity-50" />
                     <p>No recent activity</p>
@@ -295,10 +377,11 @@ export function IntrospectionDropdown() {
                 )}
               </div>
             ) : (
-              traces.map((trace) => {
+              displayedTraces.map((trace) => {
                 const metadata = trace.metadata as any;
                 const isLLM = trace.runType === "llm";
                 const isRetriever = trace.runType === "retriever";
+                const isSlow = isSlowQuery(trace.duration);
 
                 // Calculate cost for LLM traces
                 const cost =
@@ -309,12 +392,26 @@ export function IntrospectionDropdown() {
                 return (
                   <DropdownMenuItem
                     key={trace.id}
-                    className="flex flex-col items-start gap-2 py-2 cursor-pointer"
+                    className={`flex flex-col items-start gap-2 py-2 cursor-pointer ${
+                      isSlow ? "bg-yellow-50 dark:bg-yellow-950/20 border-l-2 border-yellow-500" : ""
+                    }`}
                     onClick={() => handleTraceClick(trace)}
                   >
                     <div className="flex items-center justify-between w-full">
                       <div className="flex items-center gap-2">
                         {getStatusIcon(trace.status)}
+                        {isSlow && (
+                          <TooltipProvider>
+                            <Tooltip delayDuration={200}>
+                              <TooltipTrigger asChild>
+                                <AlertCircle className="h-3 w-3 text-yellow-600 dark:text-yellow-400" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <div className="text-xs">Slow query (&gt;2s)</div>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
                         <span className="text-sm font-medium truncate max-w-[200px]">
                           {trace.name}
                         </span>

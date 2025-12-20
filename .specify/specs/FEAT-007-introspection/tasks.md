@@ -96,7 +96,7 @@
 - **Notes**: Integrated cost calculator into IntrospectionDropdown. Shows cost with dollar icon for LLM traces, tooltip with token breakdown, and cost display in detail modal. Only appears for traces with model and token metadata. Created comprehensive E2E test suite.
 
 ### P2-003: Create Latency Waterfall Component
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 2hr
 - **Description**: Visual component showing latency breakdown
 - **Acceptance**:
@@ -104,6 +104,7 @@
   - Color-coded: embedding (blue), vector (orange), LLM (green)
   - Displays in trace detail modal
   - Responsive sizing
+- **Notes**: Created LatencyWaterfall component with color-coded segments, tooltips showing duration and percentage, legend, and detailed breakdown table. Added extractLatencySegments helper to parse Langfuse observations. Integrated into trace detail modal with API endpoint to fetch observations. All 11 unit tests passing. Fixed tooltip.tsx import path bug.
 
 ### P2-004: Implement Token Budget Tracking
 - **Status**: pending
