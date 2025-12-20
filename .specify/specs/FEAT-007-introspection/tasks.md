@@ -175,34 +175,37 @@
 ## Phase 4: Developer Tools
 
 ### P4-001: Add Trace Export Button
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 45min
 - **Description**: JSON download for individual traces
 - **Acceptance**:
   - Download button in trace detail modal
   - Includes full trace data with observations
   - Sensible filename format
+- **Notes**: Added Export button in trace detail modal header. Downloads trace with observations as JSON file with timestamp filename (trace-{id}-{timestamp}.json).
 
 ### P4-002: Create Request/Response Inspector
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1.5hr
 - **Description**: Expandable raw data viewer
 - **Acceptance**:
   - Collapsible sections for request/response
   - Syntax-highlighted JSON
   - Copy to clipboard functionality
+- **Notes**: Replaced static Inputs/Outputs sections with collapsible Request/Response inspectors using Collapsible component. Added copy buttons for each section. JSON is formatted with 2-space indentation.
 
 ### P4-003: Add Prompt Viewer
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: Display system prompt used in generation
 - **Acceptance**:
   - Shows full system prompt from trace
   - Collapsible/expandable
   - Highlights dynamic sections if identifiable
+- **Notes**: Added collapsible System Prompt section for LLM traces. Extracts prompt from inputs.messages (system role), inputs.system, or inputs.systemPrompt. Handles both string and object formats. Includes copy functionality.
 
 ### P4-004: Implement Verbose Logging Toggle
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: Developer setting for detailed logging
 - **Acceptance**:
@@ -210,9 +213,10 @@
   - Persisted in localStorage
   - When enabled, adds console.log throughout introspection
   - Visual indicator when active
+- **Notes**: Added Switch component for verbose logging toggle. Persists to localStorage (introspection-verbose-logging). Added log helper function and logging throughout data fetching. Shows "Active" badge when enabled.
 
 ### P4-005: Final Polish and Documentation
-- **Status**: pending
+- **Status**: in-progress
 - **Estimate**: 2hr
 - **Description**: Clean up, optimize, document
 - **Acceptance**:
@@ -220,6 +224,7 @@
   - Performance audit (no regressions)
   - Update CLAUDE.md with introspection docs
   - Team walkthrough/demo
+- **Notes**: All features implemented. Need to run tests and verify no regressions.
 
 ---
 
