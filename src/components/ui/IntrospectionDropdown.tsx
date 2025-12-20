@@ -33,6 +33,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tool
 import { LatencyWaterfall, extractLatencySegments } from "./LatencyWaterfall";
 import { getTokenBudgets, formatTokenCount, type TokenBudget } from "@/lib/introspection/token-aggregator";
 import type { RLHFFeedbackStats } from "@/lib/introspection/rlhf-query";
+import { getQualityStatistics, type SimilarityStats, type CitationStats, type ConversationStats } from "@/lib/introspection/trace-statistics";
 
 // Slow query threshold: 2 seconds
 const SLOW_QUERY_THRESHOLD_MS = 2000;
@@ -72,6 +73,7 @@ export function IntrospectionDropdown() {
   const [tokenBudgets, setTokenBudgets] = useState<{ daily: TokenBudget; weekly: TokenBudget; allTime: TokenBudget } | null>(null);
   const [showOnlySlowQueries, setShowOnlySlowQueries] = useState(false);
   const [rlhfStats, setRlhfStats] = useState<RLHFFeedbackStats | null>(null);
+  const [qualityStats, setQualityStats] = useState<{ similarity: SimilarityStats; citations: CitationStats; conversations: ConversationStats } | null>(null);
 
   // Fetch app health status and recent activity traces
   const fetchIntrospectionData = async () => {
@@ -98,11 +100,14 @@ export function IntrospectionDropdown() {
     }
   };
 
-  // Fetch token budgets when traces are loaded
+  // Calculate statistics when traces are loaded
   useEffect(() => {
     if (traces.length > 0) {
       const budgets = getTokenBudgets(traces);
       setTokenBudgets(budgets);
+
+      const stats = getQualityStatistics(traces);
+      setQualityStats(stats);
     }
   }, [traces]);
 
@@ -381,6 +386,76 @@ export function IntrospectionDropdown() {
                     {rlhfStats.uniqueSessions} sessions
                   </span>
                 </div>
+              </div>
+            </>
+          )}
+
+          {/* Quality Statistics */}
+          {qualityStats && (qualityStats.similarity.count > 0 || qualityStats.citations.totalResponses > 0) && (
+            <>
+              <DropdownMenuSeparator />
+              <div className="px-2 py-2.5 text-xs space-y-2">
+                {/* Similarity Scores */}
+                {qualityStats.similarity.count > 0 && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Avg Similarity:</span>
+                    <TooltipProvider>
+                      <Tooltip delayDuration={200}>
+                        <TooltipTrigger asChild>
+                          <span className={`font-mono text-xs ${
+                            qualityStats.similarity.avg && qualityStats.similarity.avg < 0.7
+                              ? "text-yellow-600 dark:text-yellow-400"
+                              : "text-green-600 dark:text-green-400"
+                          } cursor-help`}>
+                            {qualityStats.similarity.avg?.toFixed(3)}
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <div className="text-xs space-y-1">
+                            <div className="font-semibold">Similarity Range</div>
+                            <div>Min: {qualityStats.similarity.min?.toFixed(3)}</div>
+                            <div>Max: {qualityStats.similarity.max?.toFixed(3)}</div>
+                            <div>Low (&lt;0.7): {qualityStats.similarity.lowSimilarityCount}</div>
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                )}
+
+                {/* Citation Usage */}
+                {qualityStats.citations.totalResponses > 0 && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Avg Citations:</span>
+                    <span className="font-mono text-xs">
+                      {qualityStats.citations.avgCitationsPerResponse.toFixed(1)}
+                    </span>
+                  </div>
+                )}
+
+                {/* Conversation Depth */}
+                {qualityStats.conversations.totalSessions > 0 && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Sessions (24h):</span>
+                    <TooltipProvider>
+                      <Tooltip delayDuration={200}>
+                        <TooltipTrigger asChild>
+                          <span className="font-mono text-xs cursor-help">
+                            {qualityStats.conversations.totalSessions}
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <div className="text-xs space-y-1">
+                            <div>Total messages: {qualityStats.conversations.totalMessages}</div>
+                            <div>
+                              Avg msgs/session: {qualityStats.conversations.avgMessagesPerSession.toFixed(1)}
+                            </div>
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                )}
               </div>
             </>
           )}
