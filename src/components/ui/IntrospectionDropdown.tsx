@@ -719,7 +719,7 @@ export function IntrospectionDropdown() {
 
       {/* Trace Details Dialog */}
       <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
-        <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden">
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden bg-zinc-900 border-white/10">
           <DialogHeader>
             <div className="flex items-center justify-between">
               <div className="flex-1">
@@ -742,8 +742,8 @@ export function IntrospectionDropdown() {
           </DialogHeader>
 
           {selectedTrace && (
-            <ScrollArea className="h-[500px] pr-4">
-              <div className="space-y-4">
+            <ScrollArea className="max-h-[500px] pr-4">
+              <div className="space-y-3">
                 {/* Latency Waterfall */}
                 {traceObservations.length > 0 && (
                   <div>
@@ -758,7 +758,7 @@ export function IntrospectionDropdown() {
                 {/* Metadata */}
                 <div>
                   <h4 className="mac-title">Metadata</h4>
-                  <div className="bg-muted rounded-lg p-4 space-y-1 text-sm">
+                  <div className="bg-black/30 border border-white/5 rounded-lg p-4 space-y-1.5 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Type:</span>
                       <Badge variant="outline" className={getRunTypeColor(selectedTrace.runType)}>
@@ -889,7 +889,7 @@ export function IntrospectionDropdown() {
                       </Button>
                     </div>
                     <CollapsibleContent>
-                      <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto mt-2">
+                      <pre className="bg-black/30 border border-white/5 rounded-lg p-4 text-xs overflow-x-auto mt-2">
                         {JSON.stringify(selectedTrace.inputs, null, 2)}
                       </pre>
                     </CollapsibleContent>
@@ -920,7 +920,7 @@ export function IntrospectionDropdown() {
                       </Button>
                     </div>
                     <CollapsibleContent>
-                      <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto mt-2">
+                      <pre className="bg-black/30 border border-white/5 rounded-lg p-4 text-xs overflow-x-auto mt-2">
                         {JSON.stringify(selectedTrace.outputs, null, 2)}
                       </pre>
                     </CollapsibleContent>
@@ -963,7 +963,7 @@ export function IntrospectionDropdown() {
                       </Button>
                     </div>
                     <CollapsibleContent>
-                      <div className="bg-muted rounded-lg p-4 text-xs overflow-x-auto mt-2">
+                      <div className="bg-black/30 border border-white/5 rounded-lg p-4 text-xs overflow-x-auto mt-2">
                         {(() => {
                           const systemPrompt =
                             selectedTrace.inputs.messages?.find((m: any) => m.role === "system")?.content ||
@@ -999,7 +999,7 @@ export function IntrospectionDropdown() {
                 {selectedTrace.metadata && Object.keys(selectedTrace.metadata).length > 0 && (
                   <div>
                     <h4 className="mac-title">Additional Context</h4>
-                    <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto">
+                    <pre className="bg-black/30 border border-white/5 rounded-lg p-4 text-xs overflow-x-auto mt-2">
                       {JSON.stringify(selectedTrace.metadata, null, 2)}
                     </pre>
                   </div>
