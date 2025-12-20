@@ -156,7 +156,7 @@ Then in config:
 
 4. **Version pinning when needed**:
    ```json
-   "args": ["task-master-ai@0.24.0"]  // Pin specific version
+   "args": ["byterover-mcp@1.0.0"]  // Pin specific version
    ```
 
 ## Example: Complete Global Setup

@@ -296,7 +296,7 @@ ERR_SSL_CLIENT_AUTH_SIGNATURE_FAILED
 - **MAC Design System**: `src/styles/mac-design-system.css`
 - **Testing Documentation**: `docs/TESTING_FUNDAMENTALS.md`
 - **Production Testing**: `docs/PRODUCTION_TESTING.md`
-- **Task Master**: `.taskmaster/tasks/tasks.json`
+- **SpecKit Tasks**: `features.json`
 
 ---
 

@@ -10,11 +10,10 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { TrendingUp, TrendingDown, Activity, Target, Users, Award } from "lucide-react";
+import { TrendingUp, TrendingDown, Activity, Target, Users, Award, Download, FileText, Table } from "lucide-react";
+import { Button } from "../ui/button";
 import { useSupabaseClient } from "../../hooks/useSupabaseClient";
 import {
-  LineChart,
-  Line,
   BarChart,
   Bar,
   XAxis,
@@ -44,6 +43,14 @@ interface TimeSeriesData {
   confidence: number;
 }
 
+interface PeriodMetrics {
+  avgRating: number;
+  totalFeedback: number;
+  curatorApprovals: number;
+  approvalRate: number;
+  avgConfidence: number;
+}
+
 export function RLHFImpactDashboard() {
   const [metrics, setMetrics] = useState<ImpactMetrics>({
     avgRating: 0,
@@ -57,10 +64,160 @@ export function RLHFImpactDashboard() {
   });
   const [timeSeries, setTimeSeries] = useState<TimeSeriesData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [previousPeriodMetrics, setPreviousPeriodMetrics] = useState<PeriodMetrics>({
+    avgRating: 0,
+    totalFeedback: 0,
+    curatorApprovals: 0,
+    approvalRate: 0,
+    avgConfidence: 0,
+  });
+  const [showComparison, setShowComparison] = useState(false);
   const supabase = useSupabaseClient();
+
+  // Export functions for T069
+  const exportToCSV = () => {
+    const headers = ["Date", "Average Rating", "Feedback Count", "Confidence %"];
+    const rows = timeSeries.map((d) => [
+      d.date,
+      d.avgRating.toFixed(2),
+      d.feedbackCount.toString(),
+      d.confidence.toFixed(1),
+    ]);
+
+    const csvContent = [
+      "RLHF Impact Report - 30 Day Summary",
+      "",
+      `Generated: ${new Date().toISOString().split("T")[0]}`,
+      "",
+      "Summary Metrics:",
+      `Average Rating,${metrics.avgRating.toFixed(2)}`,
+      `Total Feedback,${metrics.totalFeedback}`,
+      `Approval Rate,${metrics.approvalRate.toFixed(1)}%`,
+      `Avg Confidence,${metrics.avgConfidence.toFixed(1)}%`,
+      "",
+      "Daily Time Series:",
+      headers.join(","),
+      ...rows.map((r) => r.join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `rlhf-impact-report-${new Date().toISOString().split("T")[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportToPDF = () => {
+    // Generate a printable HTML report
+    const reportHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RLHF Impact Report</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; }
+    h1 { color: #18181b; border-bottom: 2px solid #a855f7; padding-bottom: 10px; }
+    .summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 30px 0; }
+    .metric { background: #f4f4f5; padding: 20px; border-radius: 8px; }
+    .metric-value { font-size: 32px; font-weight: bold; color: #18181b; }
+    .metric-label { color: #71717a; font-size: 14px; margin-top: 5px; }
+    .trend { font-size: 14px; margin-top: 8px; }
+    .trend.positive { color: #22c55e; }
+    .trend.negative { color: #ef4444; }
+    table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e4e4e7; }
+    th { background: #f4f4f5; font-weight: 600; }
+    .comparison { margin-top: 30px; background: #faf5ff; padding: 20px; border-radius: 8px; }
+    .footer { margin-top: 40px; color: #a1a1aa; font-size: 12px; text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>RLHF Impact Report</h1>
+  <p>Generated: ${new Date().toLocaleDateString()} | Period: Last 30 Days</p>
+
+  <div class="summary">
+    <div class="metric">
+      <div class="metric-value">${metrics.avgRating.toFixed(2)}</div>
+      <div class="metric-label">Average Rating</div>
+      <div class="trend ${metrics.ratingTrend >= 0 ? "positive" : "negative"}">
+        ${metrics.ratingTrend >= 0 ? "+" : ""}${metrics.ratingTrend.toFixed(1)}% vs previous period
+      </div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">${metrics.totalFeedback}</div>
+      <div class="metric-label">Total Feedback</div>
+      <div class="trend ${metrics.feedbackTrend >= 0 ? "positive" : "negative"}">
+        ${metrics.feedbackTrend >= 0 ? "+" : ""}${metrics.feedbackTrend.toFixed(1)}% vs previous period
+      </div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">${metrics.approvalRate.toFixed(1)}%</div>
+      <div class="metric-label">Approval Rate</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">${metrics.avgConfidence.toFixed(1)}%</div>
+      <div class="metric-label">Avg Confidence</div>
+      <div class="trend ${metrics.confidenceTrend >= 0 ? "positive" : "negative"}">
+        ${metrics.confidenceTrend >= 0 ? "+" : ""}${metrics.confidenceTrend.toFixed(1)}% vs previous period
+      </div>
+    </div>
+  </div>
+
+  <div class="comparison">
+    <h3>Period Comparison</h3>
+    <table>
+      <tr>
+        <th>Metric</th>
+        <th>Current (30d)</th>
+        <th>Previous (30d)</th>
+        <th>Change</th>
+      </tr>
+      <tr>
+        <td>Average Rating</td>
+        <td>${metrics.avgRating.toFixed(2)}</td>
+        <td>${previousPeriodMetrics.avgRating.toFixed(2)}</td>
+        <td class="${metrics.ratingTrend >= 0 ? "positive" : "negative"}">${metrics.ratingTrend >= 0 ? "+" : ""}${metrics.ratingTrend.toFixed(1)}%</td>
+      </tr>
+      <tr>
+        <td>Total Feedback</td>
+        <td>${metrics.totalFeedback}</td>
+        <td>${previousPeriodMetrics.totalFeedback}</td>
+        <td class="${metrics.feedbackTrend >= 0 ? "positive" : "negative"}">${metrics.feedbackTrend >= 0 ? "+" : ""}${metrics.feedbackTrend.toFixed(1)}%</td>
+      </tr>
+      <tr>
+        <td>Approval Rate</td>
+        <td>${metrics.approvalRate.toFixed(1)}%</td>
+        <td>${previousPeriodMetrics.approvalRate.toFixed(1)}%</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td>Avg Confidence</td>
+        <td>${metrics.avgConfidence.toFixed(1)}%</td>
+        <td>${previousPeriodMetrics.avgConfidence.toFixed(1)}%</td>
+        <td class="${metrics.confidenceTrend >= 0 ? "positive" : "negative"}">${metrics.confidenceTrend >= 0 ? "+" : ""}${metrics.confidenceTrend.toFixed(1)}%</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    The Betabase | RLHF Impact Dashboard | ${new Date().getFullYear()}
+  </div>
+</body>
+</html>`;
+
+    const printWindow = window.open("", "_blank");
+    if (printWindow) {
+      printWindow.document.write(reportHtml);
+      printWindow.document.close();
+      printWindow.print();
+    }
+  };
 
   useEffect(() => {
     loadImpactMetrics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadImpactMetrics = async () => {
@@ -157,6 +314,21 @@ export function RLHFImpactDashboard() {
         approvalRate,
         avgConfidence: avgConfidence * 100, // Convert to percentage
         confidenceTrend,
+      });
+
+      // T070: Store previous period metrics for comparison
+      const prevCuratorApprovals = previousPeriod.filter(
+        (f) => getRating(f) >= 4 || f.feedback_type === "thumbs_up"
+      ).length;
+      const prevApprovalRate =
+        previousPeriod.length > 0 ? (prevCuratorApprovals / previousPeriod.length) * 100 : 0;
+
+      setPreviousPeriodMetrics({
+        avgRating: prevAvgRating,
+        totalFeedback: previousPeriod.length,
+        curatorApprovals: prevCuratorApprovals,
+        approvalRate: prevApprovalRate,
+        avgConfidence: prevConfidence * 100,
       });
 
       // Generate time series data (last 30 days)
@@ -260,16 +432,49 @@ export function RLHFImpactDashboard() {
 
   return (
     <div className="h-full space-y-6">
-      {/* Header */}
+      {/* Header with Export Buttons (T069) */}
       <Card className="bg-zinc-900/50 border-zinc-800">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-zinc-100">
-            <Activity className="h-5 w-5 text-purple-400" />
-            RLHF Impact Dashboard
-          </CardTitle>
-          <CardDescription className="text-zinc-400">
-            Track how human feedback improves AI performance over time
-          </CardDescription>
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2 text-zinc-100">
+                <Activity className="h-5 w-5 text-purple-400" />
+                RLHF Impact Dashboard
+              </CardTitle>
+              <CardDescription className="text-zinc-400 mt-1">
+                Track how human feedback improves AI performance over time
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowComparison(!showComparison)}
+                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+              >
+                <Table className="h-4 w-4 mr-2" />
+                {showComparison ? "Hide" : "Show"} Comparison
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={exportToCSV}
+                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                CSV
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={exportToPDF}
+                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+              >
+                <FileText className="h-4 w-4 mr-2" />
+                PDF
+              </Button>
+            </div>
+          </div>
         </CardHeader>
       </Card>
 
@@ -303,6 +508,160 @@ export function RLHFImpactDashboard() {
           color="bg-amber-500/20 text-amber-400"
         />
       </div>
+
+      {/* Period Comparison (T070) */}
+      {showComparison && (
+        <Card className="bg-zinc-900/50 border-zinc-800">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-zinc-100 text-lg flex items-center gap-2">
+              <Table className="h-5 w-5 text-blue-400" />
+              Period Comparison
+            </CardTitle>
+            <CardDescription className="text-zinc-400">
+              Current 30 days vs previous 30 days
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-zinc-800">
+                    <th className="text-left py-3 px-4 text-zinc-400 font-medium">Metric</th>
+                    <th className="text-right py-3 px-4 text-zinc-400 font-medium">Current (30d)</th>
+                    <th className="text-right py-3 px-4 text-zinc-400 font-medium">Previous (30d)</th>
+                    <th className="text-right py-3 px-4 text-zinc-400 font-medium">Change</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-zinc-800/50">
+                    <td className="py-3 px-4 text-zinc-300">Average Rating</td>
+                    <td className="py-3 px-4 text-right text-zinc-100 font-medium">
+                      {metrics.avgRating.toFixed(2)}
+                    </td>
+                    <td className="py-3 px-4 text-right text-zinc-400">
+                      {previousPeriodMetrics.avgRating.toFixed(2)}
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <Badge
+                        variant="outline"
+                        className={
+                          metrics.ratingTrend >= 0
+                            ? "bg-green-500/10 text-green-400 border-green-500/20"
+                            : "bg-red-500/10 text-red-400 border-red-500/20"
+                        }
+                      >
+                        {metrics.ratingTrend >= 0 ? "+" : ""}
+                        {metrics.ratingTrend.toFixed(1)}%
+                      </Badge>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-zinc-800/50">
+                    <td className="py-3 px-4 text-zinc-300">Total Feedback</td>
+                    <td className="py-3 px-4 text-right text-zinc-100 font-medium">
+                      {metrics.totalFeedback}
+                    </td>
+                    <td className="py-3 px-4 text-right text-zinc-400">
+                      {previousPeriodMetrics.totalFeedback}
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <Badge
+                        variant="outline"
+                        className={
+                          metrics.feedbackTrend >= 0
+                            ? "bg-green-500/10 text-green-400 border-green-500/20"
+                            : "bg-red-500/10 text-red-400 border-red-500/20"
+                        }
+                      >
+                        {metrics.feedbackTrend >= 0 ? "+" : ""}
+                        {metrics.feedbackTrend.toFixed(1)}%
+                      </Badge>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-zinc-800/50">
+                    <td className="py-3 px-4 text-zinc-300">Curator Approvals</td>
+                    <td className="py-3 px-4 text-right text-zinc-100 font-medium">
+                      {metrics.curatorApprovals}
+                    </td>
+                    <td className="py-3 px-4 text-right text-zinc-400">
+                      {previousPeriodMetrics.curatorApprovals}
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      {previousPeriodMetrics.curatorApprovals > 0 ? (
+                        <Badge
+                          variant="outline"
+                          className={
+                            metrics.curatorApprovals >= previousPeriodMetrics.curatorApprovals
+                              ? "bg-green-500/10 text-green-400 border-green-500/20"
+                              : "bg-red-500/10 text-red-400 border-red-500/20"
+                          }
+                        >
+                          {metrics.curatorApprovals >= previousPeriodMetrics.curatorApprovals ? "+" : ""}
+                          {(
+                            ((metrics.curatorApprovals - previousPeriodMetrics.curatorApprovals) /
+                              previousPeriodMetrics.curatorApprovals) *
+                            100
+                          ).toFixed(1)}
+                          %
+                        </Badge>
+                      ) : (
+                        <span className="text-zinc-500">-</span>
+                      )}
+                    </td>
+                  </tr>
+                  <tr className="border-b border-zinc-800/50">
+                    <td className="py-3 px-4 text-zinc-300">Approval Rate</td>
+                    <td className="py-3 px-4 text-right text-zinc-100 font-medium">
+                      {metrics.approvalRate.toFixed(1)}%
+                    </td>
+                    <td className="py-3 px-4 text-right text-zinc-400">
+                      {previousPeriodMetrics.approvalRate.toFixed(1)}%
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      {previousPeriodMetrics.approvalRate > 0 ? (
+                        <Badge
+                          variant="outline"
+                          className={
+                            metrics.approvalRate >= previousPeriodMetrics.approvalRate
+                              ? "bg-green-500/10 text-green-400 border-green-500/20"
+                              : "bg-red-500/10 text-red-400 border-red-500/20"
+                          }
+                        >
+                          {metrics.approvalRate >= previousPeriodMetrics.approvalRate ? "+" : ""}
+                          {(metrics.approvalRate - previousPeriodMetrics.approvalRate).toFixed(1)}pp
+                        </Badge>
+                      ) : (
+                        <span className="text-zinc-500">-</span>
+                      )}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 px-4 text-zinc-300">Avg Confidence</td>
+                    <td className="py-3 px-4 text-right text-zinc-100 font-medium">
+                      {metrics.avgConfidence.toFixed(1)}%
+                    </td>
+                    <td className="py-3 px-4 text-right text-zinc-400">
+                      {previousPeriodMetrics.avgConfidence.toFixed(1)}%
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <Badge
+                        variant="outline"
+                        className={
+                          metrics.confidenceTrend >= 0
+                            ? "bg-green-500/10 text-green-400 border-green-500/20"
+                            : "bg-red-500/10 text-red-400 border-red-500/20"
+                        }
+                      >
+                        {metrics.confidenceTrend >= 0 ? "+" : ""}
+                        {metrics.confidenceTrend.toFixed(1)}%
+                      </Badge>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Time Series Chart (Simplified ASCII representation) */}
       <Card className="bg-zinc-900/50 border-zinc-800">

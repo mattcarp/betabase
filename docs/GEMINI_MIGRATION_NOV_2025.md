@@ -266,7 +266,6 @@ After migration, we'll measure:
 - [Gemini 2.5 Pro Documentation](https://ai.google.dev/gemini-api/docs/models/gemini)
 - [Vercel AI SDK - Google Provider](https://sdk.vercel.ai/providers/ai-sdk-providers/google)
 - [GEMINI_ENV_SETUP.md](../GEMINI_ENV_SETUP.md) - Environment setup guide
-- [Migration Plan](../.taskmaster/docs/gemini-rag-migration-plan.md) - Full technical plan
 
 ---
 

@@ -1,7 +1,6 @@
 # Product Requirements Document: SIAM - Smart Intelligence for Asset Management
 
-> **Moved from**: `.taskmaster/docs/prd.txt`  
-> **Last Updated**: 2025-12-16  
+> **Last Updated**: 2025-12-16
 > **Status**: Active
 
 ## Project Overview

@@ -558,7 +558,7 @@ if (options.incremental) {
 **6. Summary Export**
 ```typescript
 private exportSummary(format: "json" | "csv" = "json") {
-  const outputPath = path.join(process.cwd(), `.taskmaster/logs/crawl-${Date.now()}.${format}`);
+  const outputPath = path.join(process.cwd(), `tmp/logs/crawl-${Date.now()}.${format}`);
   
   if (format === "json") {
     fs.writeFileSync(outputPath, JSON.stringify(this.summary, null, 2));

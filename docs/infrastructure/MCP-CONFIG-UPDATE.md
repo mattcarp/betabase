@@ -8,7 +8,7 @@ Fixed `.mcp.json` configuration to properly support both local development and p
 
 ### Cleaned Up MCP Configuration:
 
-1. **Removed failing servers** - playwright, browser-tools, task-master-ai (had placeholder keys)
+1. **Removed failing servers** - playwright, browser-tools (had placeholder keys)
 2. **Removed hardcoded API keys** - Testsprite API key removed (was exposed in config)
 3. **Kept local aoma-mesh** - For development and testing as we develop this server
 4. **Environment variables** - All sensitive keys should be in .env file, not in .mcp.json

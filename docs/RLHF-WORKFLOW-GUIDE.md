@@ -615,27 +615,6 @@ test('User query: [query text]', async ({ page }) => {
 
 ## Quick Reference Commands
 
-### Taskmaster
-```bash
-# View tasks
-task-master list
-
-# Next task
-task-master next
-
-# Show task details
-task-master show 5.2
-
-# Set task status
-task-master set-status --id=5.2 --status=done
-
-# Generate documentation
-task-master generate
-
-# Configure models
-task-master models --setup
-```
-
 ### Supabase SQL
 ```sql
 -- Get user role
