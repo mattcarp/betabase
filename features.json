@@ -257,6 +257,30 @@
       ],
       "completedAt": "2025-12-20T11:30:00Z",
       "notes": "Retrospectively documented in .specify/specs/F012-test-intelligence/."
+    },
+    {
+      "id": "F013",
+      "category": "testing",
+      "priority": 1,
+      "name": "Record Screencast Checkbox",
+      "description": "Add 'Record screencast' checkbox to AI Generate panel. When enabled, executes generated Playwright code in headed browser with video recording, outputting .webm screencasts.",
+      "specPath": ".specify/specs/FEAT-012-record-screencast/",
+      "currentTask": 8,
+      "totalTasks": 8,
+      "requirementRefs": [],
+      "byteroverTags": "#testing #screencast #video #playwright #ai-generate #demo",
+      "passes": true,
+      "verification": [
+        "Checkbox 'Record screencast' appears in Advanced Options",
+        "Button changes to 'Generate & Record' when checked",
+        "Chrome opens in headed mode during recording",
+        "Video saves to ~/Desktop/playwright-screencasts/",
+        "Toast notification shows file path with 'Show in Finder' action",
+        "Cancel button works mid-recording",
+        "Error handling for server down, Chrome missing"
+      ],
+      "completedAt": "2025-12-20T20:55:00Z",
+      "notes": "All 8 tasks completed. UI checkbox, conditional button, screencast-recorder.ts, executeRecording, toast notifications implemented."
     }
   ],
   "backlog": [
