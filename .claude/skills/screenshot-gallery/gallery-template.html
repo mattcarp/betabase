@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery: [TASK_NAME]</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      color: #e0e0e0;
+    }
+    .container { max-width: 1400px; margin: 0 auto; }
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #00d9ff, #00ff88);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
+    .metadata {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    .metadata-item { }
+    .metadata-label { color: #888; font-size: 0.85rem; margin-bottom: 4px; }
+    .metadata-value { color: #00d9ff; font-family: monospace; }
+    .errors {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .errors h3 { color: #ef4444; margin-bottom: 10px; }
+    .errors pre { color: #fca5a5; font-size: 0.85rem; white-space: pre-wrap; }
+    .no-errors {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin-bottom: 30px;
+      color: #22c55e;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+    }
+    .screenshot {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .screenshot:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      border-color: rgba(0, 217, 255, 0.3);
+    }
+    .screenshot-header {
+      padding: 16px;
+      background: rgba(0,0,0,0.2);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .screenshot-header h3 { font-size: 1rem; color: #fff; margin-bottom: 4px; }
+    .screenshot-header p { font-size: 0.8rem; color: #888; }
+    .screenshot-image { padding: 12px; background: #0a0a0a; }
+    .screenshot-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img {
+      max-width: 95%;
+      max-height: 95%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .lightbox-close:hover { opacity: 1; }
+    .lightbox-caption {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      background: rgba(0,0,0,0.7);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: #666;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>[TASK_NAME]</h1>
+    <p class="subtitle">Visual Testing Gallery</p>
+
+    <div class="metadata">
+      <div class="metadata-item">
+        <div class="metadata-label">Branch</div>
+        <div class="metadata-value">[BRANCH]</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Generated</div>
+        <div class="metadata-value">[TIMESTAMP]</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Screenshots</div>
+        <div class="metadata-value">[COUNT] images</div>
+      </div>
+    </div>
+
+    <!-- If errors exist, show this -->
+    <div class="errors" style="display: none;">
+      <h3>Console Errors</h3>
+      <pre>[ERROR_CONTENT]</pre>
+    </div>
+
+    <!-- If no errors, show this -->
+    <div class="no-errors">No console errors detected</div>
+
+    <div class="gallery">
+      <!-- Repeat for each screenshot -->
+      <div class="screenshot" onclick="openLightbox('[IMG_SRC]', '[IMG_TITLE]')">
+        <div class="screenshot-header">
+          <h3>[IMG_TITLE]</h3>
+          <p>[IMG_DESCRIPTION]</p>
+        </div>
+        <div class="screenshot-image">
+          <img src="[IMG_SRC]" alt="[IMG_TITLE]" loading="lazy">
+        </div>
+      </div>
+      <!-- End repeat -->
+    </div>
+
+    <footer>
+      <p>Generated by screenshot-gallery skill</p>
+    </footer>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightbox-img" src="" alt="">
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
+
+  <script>
+    function openLightbox(src, caption) {
+      const lightbox = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      img.src = src;
+      cap.textContent = caption;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      const lightbox = document.getElementById('lightbox');
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
