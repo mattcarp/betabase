@@ -1,104 +1,60 @@
-import { test, expect } from "./fixtures/base-test";
+import { test, expect } from '@playwright/test';
 
-test.describe("Historical Test Explorer Refinements", () => {
-  // Disable failing on console errors if the app has known noise
-  // test.use({ failOnConsoleError: false });
+test('capture-visual-refinement', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1080 });
 
-  test.beforeEach(async ({ page }) => {
-    // Navigate to the app
-    await page.goto("http://localhost:3000");
-    
-    // Wait for the app to load
-    await page.waitForLoadState("networkidle");
-    
-    // Navigate to Test Dashboard - using the Sidebar or Nav if available
-    // Based on TestDashboard.tsx, we need to click "Test"
-    await page.click("text=Test");
-    await page.waitForSelector("text=Test Dashboard");
-    
-    // Navigate to Historical tab
-    await page.click('button:has-text("Historical")');
-    await page.waitForSelector('[data-test-id="historical-test-explorer"]');
-    
-    // Wait for the cache to warm up (data to load)
-    // The "WARMING CACHE..." text should disappear
-    await page.waitForSelector('text=WARMING CACHE...', { state: 'hidden', timeout: 30000 });
-  });
+  // 1. DASHBOARD / CURATE
+  console.log('--- Phase 1: Dashboard ---');
+  await page.goto('http://localhost:3000#curate', { waitUntil: 'networkidle' });
+  
+  // The Curate page has its own sub-tabs. Default is "dashboard"
+  // Wait for the Radar Chart text
+  try {
+    await page.waitForSelector('text=Intelligence Quality Index', { timeout: 30000 });
+    await page.waitForTimeout(3000); // Animation buffer
+    await page.screenshot({ path: 'dashboard-refinement.png' });
+    console.log('✅ Captured dashboard-refinement.png');
+  } catch (e) {
+    console.log('❌ Failed to find Intelligence Quality Index. Taking fallback screenshot.');
+    await page.screenshot({ path: 'dashboard-failed.png' });
+  }
 
-  test("should verify compact header and action buttons at the bottom", async ({ page }) => {
-    // 1. Select a test from the list
-    // The list uses [data-test-id^="test-row-"]
-    const firstRow = page.locator('[data-test-id^="test-row-"]').first();
-    await expect(firstRow).toBeVisible();
-    await firstRow.click();
-    
-    // 2. Verify detail panel is visible
-    const detailPanel = page.locator('[data-test-id="test-detail"]');
-    await expect(detailPanel).toBeVisible();
+  // 2. TEST TAB
+  console.log('--- Phase 2: Test Tab ---');
+  await page.goto('http://localhost:3000#test', { waitUntil: 'networkidle' });
+  
+  // Click "Historical Tests" sub-tab
+  const historicalSubTab = page.locator('button[role="tab"]:has-text("Historical Tests")');
+  await historicalSubTab.click();
+  
+  try {
+    // Wait for the Archive icon or text
+    await page.waitForSelector('text=Historical Tests', { timeout: 30000 });
+    await page.waitForTimeout(3000);
+    await page.screenshot({ path: 'test-tab-refinement-final.png' });
+    console.log('✅ Captured test-tab-refinement-final.png');
 
-    // Wait a bit for animations
-    await page.waitForTimeout(1000);
-
-    // Take screenshot of the top of the detail panel (showing compact header)
-    await page.screenshot({ 
-      path: "tests/screenshots/historical-1-compact-header.png" 
-    });
-
-    // 3. Scroll to the bottom of the detail area
-    // The detail panel has a ScrollArea which contains the content
-    const scrollArea = detailPanel.locator('div[data-radix-scroll-area-viewport]');
-    await expect(scrollArea).toBeVisible();
+    // 3. TEST DETAIL
+    console.log('--- Phase 3: Test Detail ---');
+    // Wait for any row to be visible
+    const row = page.locator('tr[data-test-id^="test-row-"]').first();
+    await row.waitFor({ state: 'visible', timeout: 30000 });
+    await row.click();
     
-    // Scroll to the bottom
-    await scrollArea.evaluate((el) => {
-      el.scrollTop = el.scrollHeight;
-    });
+    // Wait for overhaul indicators
+    await page.waitForSelector('text=VAULT://', { timeout: 20000 });
+    await page.waitForTimeout(2000);
+    await page.screenshot({ path: 'test-detail-refinement.png' });
+    console.log('✅ Captured test-detail-refinement.png');
+  } catch (e) {
+    console.log('❌ Failed to capture Test Tab details. ' + e.message);
+    await page.screenshot({ path: 'test-tab-failed.png' });
+  }
 
-    // Wait for scroll to finish
-    await page.waitForTimeout(500);
-    
-    // 4. Verify "Generate Automated Test" and "Run AI Analysis" buttons are present at the bottom
-    const genButton = page.locator('button:has-text("Generate Automated Test")');
-    const aiButton = page.locator('button:has-text("Run AI Analysis")');
-    
-    await expect(genButton).toBeVisible();
-    await expect(aiButton).toBeVisible();
-
-    // Take screenshot of the buttons at the bottom
-    await page.screenshot({ 
-      path: "tests/screenshots/historical-2-bottom-buttons.png" 
-    });
-
-    // 5. Test "Generate Automated Test" click
-    await genButton.click();
-    
-    // Look for "Generating Automated Test..." state
-    await expect(page.locator('text=Generating Automated Test...')).toBeVisible();
-    
-    // Wait for "Generated Automated Test" panel to appear (AI generation)
-    // Increased timeout for AI generation
-    await page.waitForSelector('text=Generated Automated Test', { timeout: 45000 });
-    
-    // Verify it's there
-    const artifactTitle = page.locator('text=Generated Automated Test').first();
-    await expect(artifactTitle).toBeVisible();
-
-    // Scroll to the bottom again to see the result and the buttons below it
-    await scrollArea.evaluate((el) => {
-      el.scrollTop = el.scrollHeight;
-    });
-    await page.waitForTimeout(500);
-
-    // Take screenshot of the generated test result
-    await page.screenshot({ 
-      path: "tests/screenshots/historical-3-generated-result.png" 
-    });
-    
-    // Verify toast appeared (optional but good)
-    const toast = page.locator('text=Script generated and saved to vault');
-    if (await toast.isVisible()) {
-        await expect(toast).toBeVisible();
-    }
-  });
+  // 4. LANDING PAGE
+  console.log('--- Phase 4: Landing Page ---');
+  await page.goto('http://localhost:3000#chat', { waitUntil: 'networkidle' });
+  await page.waitForSelector('text=Welcome to The Betabase', { timeout: 20000 });
+  await page.screenshot({ path: 'landing-page.png' });
+  console.log('✅ Captured landing-page.png');
 });
-

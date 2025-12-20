@@ -31,6 +31,17 @@ import {
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 
+// Mock data for global velocity trends
+const processingTrends = [
+  { day: "Mon", processed: 42, quality: 82 },
+  { day: "Tue", processed: 56, quality: 84 },
+  { day: "Wed", processed: 38, quality: 83 },
+  { day: "Thu", processed: 64, quality: 86 },
+  { day: "Fri", processed: 51, quality: 85 },
+  { day: "Sat", processed: 22, quality: 88 },
+  { day: "Sun", processed: 18, quality: 87 },
+];
+
 // Edward Tufte-inspired palette: muted, high data-ink ratio
 const TUFTE_COLORS = {
   primary: "var(--mac-primary-blue-400)",

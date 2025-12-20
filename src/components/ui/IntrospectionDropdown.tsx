@@ -588,7 +588,7 @@ export function IntrospectionDropdown() {
                   <DropdownMenuItem
                     key={trace.id}
                     className={`flex flex-col items-start gap-2 py-2 cursor-pointer ${
-                      isSlow ? "bg-yellow-50 dark:bg-yellow-950/20 border-l-2 border-yellow-500" : ""
+                      isSlow ? "bg-amber-500/5 border-l-2 border-amber-500/60" : ""
                     }`}
                     onClick={() => handleTraceClick(trace)}
                   >
