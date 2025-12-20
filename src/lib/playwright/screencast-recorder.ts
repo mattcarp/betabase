@@ -21,7 +21,7 @@ export function generateFeatureName(description: string): string {
 }
 
 /**
- * Transform Playwright test steps into a recording script
+ * Transform Playwright test steps into a recording script with console error capture
  */
 export function transformToRecordingScript(
   steps: string[],
@@ -58,6 +58,9 @@ const outputDir = join(homedir(), 'Desktop/playwright-screencasts');
 const featureName = '${featureName}';
 const baseUrl = '${baseUrl}';
 
+// Collect console errors
+const consoleErrors = [];
+
 (async () => {
   await mkdir(outputDir, { recursive: true });
 
@@ -77,10 +80,29 @@ const baseUrl = '${baseUrl}';
 
   const page = await context.newPage();
 
+  // Listen for console errors
+  page.on('console', (msg) => {
+    if (msg.type() === 'error') {
+      consoleErrors.push({
+        text: msg.text(),
+        location: msg.location(),
+        type: 'error'
+      });
+    }
+  });
+
+  // Listen for page errors (uncaught exceptions)
+  page.on('pageerror', (error) => {
+    consoleErrors.push({
+      text: error.message,
+      stack: error.stack,
+      type: 'pageerror'
+    });
+  });
+
   try {
     // Initial navigation
-    await page.goto(baseUrl);
-    await page.waitForLoadState('networkidle');
+    await page.goto(baseUrl, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(2000);
 
     // Generated navigation steps
@@ -90,7 +112,7 @@ ${stepsWithPacing}
     await page.waitForTimeout(2000);
 
   } catch (error) {
-    console.error(JSON.stringify({ success: false, error: error.message }));
+    console.error(JSON.stringify({ success: false, error: error.message, consoleErrors }));
   } finally {
     const videoPath = await page.video()?.path();
     await context.close();
@@ -100,23 +122,31 @@ ${stepsWithPacing}
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
       const newPath = join(outputDir, \`\${featureName}-\${timestamp}.webm\`);
       await rename(videoPath, newPath);
-      console.log(JSON.stringify({ success: true, videoPath: newPath }));
+      console.log(JSON.stringify({ success: true, videoPath: newPath, consoleErrors }));
     } else {
-      console.log(JSON.stringify({ success: false, error: 'No video path' }));
+      console.log(JSON.stringify({ success: false, error: 'No video path', consoleErrors }));
     }
   }
 })();
 `;
 }
 
+export interface ConsoleError {
+  text: string;
+  location?: { url: string; lineNumber: number; columnNumber: number };
+  stack?: string;
+  type: "error" | "pageerror";
+}
+
 export interface RecordingResult {
   success: boolean;
   videoPath?: string;
   error?: string;
+  consoleErrors?: ConsoleError[];
 }
 
 /**
- * Check if the dev server is running
+ * Check if a URL is reachable
  */
 export async function checkDevServer(
   url: string = "http://localhost:3000"
@@ -130,7 +160,7 @@ export async function checkDevServer(
 }
 
 /**
- * Execute a recording script and return the video path
+ * Execute a recording script and return the video path and console errors
  */
 export async function executeRecording(
   script: string
@@ -158,6 +188,7 @@ export async function executeRecording(
       return {
         success: false,
         error: `Failed to parse output: ${lastLine}`,
+        consoleErrors: [],
       };
     }
   } catch (error: unknown) {
@@ -166,6 +197,7 @@ export async function executeRecording(
     return {
       success: false,
       error: errorMessage,
+      consoleErrors: [],
     };
   } finally {
     // Cleanup temp file

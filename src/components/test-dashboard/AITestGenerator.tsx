@@ -58,6 +58,11 @@ export const AITestGenerator: React.FC = () => {
   const [recordScreencast, setRecordScreencast] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [lastVideoPath, setLastVideoPath] = useState<string | null>(null);
+  const [targetUrl, setTargetUrl] = useState("https://");
+  const [recordingResult, setRecordingResult] = useState<{
+    videoPath: string;
+    consoleErrors: string[];
+  } | null>(null);
   const [generatedTests, setGeneratedTests] = useState<GeneratedTest[]>([
     {
       id: "1",
@@ -146,49 +151,78 @@ describe('API Integration Tests', () => {
       // Recording mode
       setIsRecording(true);
       setIsGenerating(true);
+      setRecordingResult(null);
 
       try {
-        // Check if dev server is running
-        const serverRunning = await checkDevServer();
-        if (!serverRunning) {
+        // Validate URL
+        const url = targetUrl.trim();
+        if (!url || !url.startsWith("http")) {
           toast({
-            title: "Dev server not running",
-            description: "Start with: npm run dev",
+            title: "Invalid URL",
+            description: "Please enter a valid URL starting with http:// or https://",
             variant: "destructive",
           });
           return;
         }
 
-        // Generate navigation steps from prompt
-        const steps = [
-          `await page.goto('http://localhost:3000');`,
-          // In real implementation, these would be AI-generated from prompt
-        ];
+        // For localhost URLs, check if server is running
+        if (url.includes("localhost")) {
+          const serverRunning = await checkDevServer(url);
+          if (!serverRunning) {
+            toast({
+              title: "Server not reachable",
+              description: `Cannot connect to ${url}`,
+              variant: "destructive",
+            });
+            return;
+          }
+        }
 
-        const featureName = generateFeatureName(prompt);
-        const script = transformToRecordingScript(steps, featureName);
+        // Steps are empty for now - the script will just navigate and capture
+        // In the future, these could be AI-generated from the prompt
+        const steps: string[] = [];
+
+        const featureName = generateFeatureName(prompt || "screencast");
+        const script = transformToRecordingScript(steps, featureName, url);
         const result = await executeRecording(script);
 
         if (result.success && result.videoPath) {
           setLastVideoPath(result.videoPath);
-          const filename = result.videoPath.split("/").pop() || "recording.webm";
-          const directory = result.videoPath.replace(/\/[^/]+$/, "");
-          toast({
-            title: "Screencast recorded",
-            description: filename,
-            action: (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  // Open directory in Finder (macOS)
-                  window.open(`file://${directory}`);
-                }}
-              >
-                Show in Finder
-              </Button>
-            ),
+          const consoleErrors = result.consoleErrors || [];
+
+          // Store full result for UI
+          setRecordingResult({
+            videoPath: result.videoPath,
+            consoleErrors: consoleErrors.map((e) => e.text),
           });
+
+          const filename = result.videoPath.split("/").pop() || "recording.webm";
+
+          if (consoleErrors.length > 0) {
+            // Show warning toast when errors found
+            toast({
+              title: `Recording complete - ${consoleErrors.length} console error${consoleErrors.length > 1 ? "s" : ""} found`,
+              description: filename,
+              variant: "destructive",
+            });
+          } else {
+            const directory = result.videoPath.replace(/\/[^/]+$/, "");
+            toast({
+              title: "Screencast recorded - No errors",
+              description: filename,
+              action: (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    window.open(`file://${directory}`);
+                  }}
+                >
+                  Show in Finder
+                </Button>
+              ),
+            });
+          }
         } else {
           console.error("Recording failed:", result.error);
           toast({
@@ -421,9 +455,22 @@ test.describe('${prompt}', () => {
                     Record screencast
                   </label>
                   {recordScreencast && (
-                    <div className="ml-6 text-xs text-muted-foreground space-y-1">
-                      <div>Resolution: 1920x1080</div>
-                      <div>Output: ~/Desktop/playwright-screencasts/</div>
+                    <div className="ml-6 space-y-3 mt-2">
+                      <div className="space-y-1">
+                        <Label htmlFor="target-url" className="text-xs">Target URL</Label>
+                        <input
+                          id="target-url"
+                          type="url"
+                          className="w-full px-3 py-1.5 text-sm bg-background border border-border rounded-md"
+                          placeholder="https://sonymusic.com"
+                          value={targetUrl}
+                          onChange={(e) => setTargetUrl(e.target.value)}
+                        />
+                      </div>
+                      <div className="text-xs text-muted-foreground space-y-1">
+                        <div>Resolution: 1920x1080</div>
+                        <div>Output: ~/Desktop/playwright-screencasts/</div>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -453,6 +500,93 @@ test.describe('${prompt}', () => {
                 </>
               )}
             </Button>
+
+            {/* Recording Results Panel */}
+            {recordingResult && (
+              <Card className={cn(
+                "mt-4",
+                recordingResult.consoleErrors.length > 0
+                  ? "border-destructive bg-destructive/5"
+                  : "border-green-500/50 bg-green-500/5"
+              )}>
+                <CardContent className="p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium flex items-center gap-2">
+                      {recordingResult.consoleErrors.length > 0 ? (
+                        <>
+                          <AlertCircle className="h-4 w-4 text-destructive" />
+                          {recordingResult.consoleErrors.length} Console Error{recordingResult.consoleErrors.length > 1 ? "s" : ""} Found
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          No Console Errors
+                        </>
+                      )}
+                    </h4>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setRecordingResult(null)}
+                      className="h-6 w-6 p-0"
+                    >
+                      x
+                    </Button>
+                  </div>
+
+                  {/* Video path */}
+                  <div className="text-xs text-muted-foreground flex items-center gap-2">
+                    <Video className="h-3 w-3" />
+                    {recordingResult.videoPath.split("/").pop()}
+                  </div>
+
+                  {/* Console errors list */}
+                  {recordingResult.consoleErrors.length > 0 && (
+                    <div className="space-y-2">
+                      <ScrollArea className="h-[120px]">
+                        <div className="space-y-2">
+                          {recordingResult.consoleErrors.map((error, idx) => (
+                            <div
+                              key={idx}
+                              className="text-xs font-mono p-2 bg-background rounded border border-border"
+                            >
+                              {error.length > 200 ? error.slice(0, 200) + "..." : error}
+                            </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
+
+                      <div className="flex gap-2">
+                        <Button
+                          variant="default"
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => {
+                            // TODO: Implement troubleshoot flow
+                            toast({
+                              title: "Troubleshoot",
+                              description: "Analyzing console errors...",
+                            });
+                          }}
+                        >
+                          Troubleshoot Errors
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const directory = recordingResult.videoPath.replace(/\/[^/]+$/, "");
+                            window.open(`file://${directory}`);
+                          }}
+                        >
+                          Show Video
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
           </CardContent>
         </Card>
 
