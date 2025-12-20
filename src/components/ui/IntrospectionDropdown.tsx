@@ -32,6 +32,11 @@ import {
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
 import { calculateCost, formatCost } from "@/lib/introspection/cost-calculator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./collapsible";
 import { LatencyWaterfall, extractLatencySegments } from "./LatencyWaterfall";
 import { getTokenBudgets, formatTokenCount, type TokenBudget } from "@/lib/introspection/token-aggregator";
 import type { RLHFFeedbackStats } from "@/lib/introspection/rlhf-query";
@@ -165,6 +170,12 @@ export function IntrospectionDropdown() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  };
+
+  // Copy JSON to clipboard
+  const handleCopyJSON = (data: any) => {
+    const json = JSON.stringify(data, null, 2);
+    navigator.clipboard.writeText(json);
   };
 
   const getStatusIcon = (status: string) => {
@@ -801,24 +812,66 @@ export function IntrospectionDropdown() {
                   </div>
                 </div>
 
-                {/* Inputs */}
+                {/* Request Inspector */}
                 {selectedTrace.inputs && (
-                  <div>
-                    <h4 className="mac-title">Inputs</h4>
-                    <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto">
-                      {JSON.stringify(selectedTrace.inputs, null, 2)}
-                    </pre>
-                  </div>
+                  <Collapsible>
+                    <div className="flex items-center justify-between">
+                      <CollapsibleTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="flex items-center gap-2 p-0 h-auto hover:bg-transparent"
+                        >
+                          <h4 className="mac-title">Request</h4>
+                          <ChevronRight className="h-3 w-3 transition-transform ui-state-open:rotate-90" />
+                        </Button>
+                      </CollapsibleTrigger>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleCopyJSON(selectedTrace.inputs)}
+                        className="h-6 px-2"
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    <CollapsibleContent>
+                      <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto mt-2">
+                        {JSON.stringify(selectedTrace.inputs, null, 2)}
+                      </pre>
+                    </CollapsibleContent>
+                  </Collapsible>
                 )}
 
-                {/* Outputs */}
+                {/* Response Inspector */}
                 {selectedTrace.outputs && (
-                  <div>
-                    <h4 className="mac-title">Outputs</h4>
-                    <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto">
-                      {JSON.stringify(selectedTrace.outputs, null, 2)}
-                    </pre>
-                  </div>
+                  <Collapsible>
+                    <div className="flex items-center justify-between">
+                      <CollapsibleTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="flex items-center gap-2 p-0 h-auto hover:bg-transparent"
+                        >
+                          <h4 className="mac-title">Response</h4>
+                          <ChevronRight className="h-3 w-3 transition-transform ui-state-open:rotate-90" />
+                        </Button>
+                      </CollapsibleTrigger>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleCopyJSON(selectedTrace.outputs)}
+                        className="h-6 px-2"
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    <CollapsibleContent>
+                      <pre className="bg-muted rounded-lg p-4 text-xs overflow-x-auto mt-2">
+                        {JSON.stringify(selectedTrace.outputs, null, 2)}
+                      </pre>
+                    </CollapsibleContent>
+                  </Collapsible>
                 )}
 
                 {/* Error */}
