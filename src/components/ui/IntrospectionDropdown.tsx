@@ -874,6 +874,64 @@ export function IntrospectionDropdown() {
                   </Collapsible>
                 )}
 
+                {/* Prompt Viewer (for LLM traces) */}
+                {selectedTrace.runType === "llm" && selectedTrace.inputs && (
+                  <Collapsible>
+                    <div className="flex items-center justify-between">
+                      <CollapsibleTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="flex items-center gap-2 p-0 h-auto hover:bg-transparent"
+                        >
+                          <h4 className="mac-title">System Prompt</h4>
+                          <ChevronRight className="h-3 w-3 transition-transform ui-state-open:rotate-90" />
+                        </Button>
+                      </CollapsibleTrigger>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          const systemPrompt =
+                            selectedTrace.inputs.messages?.find((m: any) => m.role === "system")?.content ||
+                            selectedTrace.inputs.system ||
+                            selectedTrace.inputs.systemPrompt;
+                          if (systemPrompt) {
+                            navigator.clipboard.writeText(
+                              typeof systemPrompt === "string"
+                                ? systemPrompt
+                                : JSON.stringify(systemPrompt, null, 2)
+                            );
+                          }
+                        }}
+                        className="h-6 px-2"
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    <CollapsibleContent>
+                      <div className="bg-muted rounded-lg p-4 text-xs overflow-x-auto mt-2">
+                        {(() => {
+                          const systemPrompt =
+                            selectedTrace.inputs.messages?.find((m: any) => m.role === "system")?.content ||
+                            selectedTrace.inputs.system ||
+                            selectedTrace.inputs.systemPrompt;
+
+                          if (!systemPrompt) {
+                            return <p className="text-muted-foreground italic">No system prompt found</p>;
+                          }
+
+                          if (typeof systemPrompt === "string") {
+                            return <pre className="whitespace-pre-wrap">{systemPrompt}</pre>;
+                          }
+
+                          return <pre>{JSON.stringify(systemPrompt, null, 2)}</pre>;
+                        })()}
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                )}
+
                 {/* Error */}
                 {selectedTrace.error && (
                   <div>
