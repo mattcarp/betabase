@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.24.34",
+  "version": "0.24.35",
   "private": true,
   "scripts": {
     "dev": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && next dev --webpack -p 3000",
