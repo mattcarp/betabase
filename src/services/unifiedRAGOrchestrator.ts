@@ -1,17 +1,20 @@
 /**
- * Unified RAG Orchestrator
- * 
- * Integrates all three RLHF RAG strategies:
- * 1. Re-ranking (two-stage retrieval with Gemini re-ranking)
- * 2. Agentic RAG (multi-step reasoning with self-correction)
- * 3. Context-aware retrieval (session history + RLHF signals)
- * 
- * Part of the Advanced RLHF RAG Implementation - Phase 6
+ * Parallel Unified RAG Orchestrator
+ *
+ * Implements speculative execution to reduce latency:
+ * 1. Parallelizes Vector Search (Stage 1) and Query Transformation
+ * 2. Speculatively re-ranks initial results while second-pass retrieval runs
+ * 3. Merges results from both passes
+ *
+ * Latency Reduction Goal: 1900ms -> 1100ms (~40% reduction)
  */
 
 import { getContextAwareRetrieval } from "./contextAwareRetrieval";
 import { getAgenticRAGAgent } from "./agenticRAG/agent";
 import { getSessionStateManager, type RLHFFeedback } from "../lib/sessionStateManager";
+import { getTwoStageRetrieval, type TwoStageRetrievalResult } from "./twoStageRetrieval"; // Import types
+import { getGeminiReranker } from "./geminiReranker";
+import { VectorSearchResult } from "../lib/supabase";
 
 export interface UnifiedRAGOptions {
   sessionId: string;
@@ -36,7 +39,7 @@ export interface UnifiedRAGResult {
   documents: any[];
   response?: string;
   metadata: {
-    strategy: "context-aware" | "agentic" | "standard";
+    strategy: "context-aware" | "agentic" | "standard" | "parallel-context-aware";
     confidence: number;
     totalTimeMs: number;
     usedContextAware: boolean;
@@ -51,6 +54,8 @@ export class UnifiedRAGOrchestrator {
   private contextAware = getContextAwareRetrieval();
   private agenticRAG = getAgenticRAGAgent();
   private sessionManager = getSessionStateManager();
+  private twoStageRetrieval = getTwoStageRetrieval();
+  private reranker = getGeminiReranker();
 
   /**
    * Execute unified RAG query with all three strategies
@@ -76,18 +81,18 @@ export class UnifiedRAGOrchestrator {
 
     const startTime = performance.now();
 
-    console.log("\n🌟 ========== UNIFIED RAG ORCHESTRATOR ==========");
+    console.log("\n🌟 ========== UNIFIED RAG ORCHESTRATOR (PARALLEL) ==========");
     console.log(`📝 Query: "${query.substring(0, 100)}${query.length > 100 ? '...' : ''}"`);
-    console.log(`🎯 Strategy: ${useAgenticRAG ? 'AGENTIC' : useContextAware ? 'CONTEXT-AWARE' : 'STANDARD'}`);
+    console.log(`🎯 Strategy: ${useAgenticRAG ? 'AGENTIC' : useContextAware ? 'PARALLEL CONTEXT-AWARE' : 'STANDARD'}`);
     console.log(`🔐 RLHF Signals: ${useRLHFSignals ? 'ENABLED' : 'DISABLED'}`);
 
     let result: any;
-    let strategy: "context-aware" | "agentic" | "standard";
+    let strategy: "context-aware" | "agentic" | "standard" | "parallel-context-aware";
     let confidence: number = 0;
 
     try {
       if (useAgenticRAG) {
-        // STRATEGY 1: Agentic RAG (most advanced)
+        // STRATEGY 1: Agentic RAG (most advanced, slower)
         strategy = "agentic";
         console.log("\n🤖 Using Agentic RAG with self-correction");
         
@@ -119,44 +124,141 @@ export class UnifiedRAGOrchestrator {
         confidence = agentResult.confidence;
 
       } else if (useContextAware) {
-        // STRATEGY 2: Context-Aware Retrieval (recommended default)
-        strategy = "context-aware";
-        console.log("\n🧠 Using Context-Aware Retrieval");
+        // STRATEGY 2: Parallel Context-Aware Retrieval (OPTIMIZED)
+        strategy = "parallel-context-aware";
+        console.log("\n🧠 Using Parallel Context-Aware Retrieval");
+
+        // Step 1: Fire BOTH Query Transformation AND Initial Vector Search
+        console.log("⚡ Starting parallel execution: Transformation + Initial Search");
         
-        const contextAwareResult = await this.contextAware.query(query, {
-          sessionId,
+        // Use ANY for internal private method access to avoid complex refactoring
+        const transformPromise = (this.contextAware as any).transformQuery(query, 
+          this.sessionManager.getOrCreateSession(sessionId, {
+            organization, 
+            division, 
+            app_under_test, 
+            userEmail,
+            startedAt: new Date().toISOString(),
+            lastActivityAt: new Date().toISOString()
+          })
+        );
+
+        const initialVectorSearchPromise = (this.twoStageRetrieval as any).vectorService.searchVectors(query, {
           organization,
           division,
           app_under_test,
-          userEmail,
-          initialCandidates,
-          topK,
-          useRLHFSignals,
+          matchThreshold: 0.5,
+          matchCount: initialCandidates,
+          useGemini: true,
         });
 
+        // Step 2: Wait for both to complete? 
+        // We can speculatively start re-ranking initial results if transformation takes too long.
+        // But for simplicity in V1 parallelization, let's await both, then race the second steps.
+        
+        const [transformation, initialVectorResults] = await Promise.all([
+            transformPromise,
+            initialVectorSearchPromise
+        ]);
+
+        console.log(`✅ Parallel Step 1 Complete.`);
+        console.log(`   Transformed Query: "${transformation.enhancedQuery}"`);
+        console.log(`   Initial Candidates: ${initialVectorResults.length}`);
+
+        // Step 3: Fire Enhanced Vector Search (with transformed query) AND Speculative Reranking (of initial results)
+        // If the query wasn't changed much, we can skip the second search!
+        
+        const queryChanged = transformation.enhancedQuery !== query;
+        let finalDocuments: any[] = [];
+        let metadata: any = {};
+
+        if (!queryChanged) {
+            console.log("⚡ Query unchanged, proceeding with standard reranking of initial results");
+            // Just rerank initial results
+            const rerankResult = await this.reranker.rerankDocuments(query, initialVectorResults, {
+                topK,
+                organization,
+                division,
+                app_under_test,
+                useRLHFSignals
+            });
+            finalDocuments = rerankResult.documents;
+        } else {
+            console.log("⚡ Query changed, executing parallel Enhanced Search + Speculative Reranking");
+            
+            // Branch A: Enhanced Search -> Rerank
+            const enhancedSearchPromise = (async () => {
+                const results = await (this.twoStageRetrieval as any).vectorService.searchVectors(transformation.enhancedQuery, {
+                    organization,
+                    division,
+                    app_under_test,
+                    matchThreshold: 0.5,
+                    matchCount: initialCandidates,
+                    useGemini: true,
+                });
+                // Rerank these new results immediately? Or merge first?
+                // Reranking is the bottleneck, so we should try to batch or just rerank the new ones.
+                return this.reranker.rerankDocuments(transformation.enhancedQuery, results, {
+                    topK,
+                    organization,
+                    division,
+                    app_under_test,
+                    useRLHFSignals
+                });
+            })();
+
+            // Branch B: Speculative Reranking of Initial Results (in case Enhanced Search yields nothing or fails)
+            const speculativeRerankPromise = this.reranker.rerankDocuments(query, initialVectorResults, {
+                topK,
+                organization,
+                division,
+                app_under_test,
+                useRLHFSignals
+            });
+
+            // Wait for both
+            const [enhancedReranked, speculativeReranked] = await Promise.all([
+                enhancedSearchPromise,
+                speculativeRerankPromise
+            ]);
+
+            // Merge results based on score
+            // Deduplicate by ID
+            const allDocs = [...enhancedReranked.documents, ...speculativeReranked.documents];
+            const uniqueDocsMap = new Map();
+            allDocs.forEach(doc => {
+                if (!uniqueDocsMap.has(doc.id) || uniqueDocsMap.get(doc.id).rerankScore < doc.rerankScore) {
+                    uniqueDocsMap.set(doc.id, doc);
+                }
+            });
+            
+            finalDocuments = Array.from(uniqueDocsMap.values())
+                .sort((a: any, b: any) => b.rerankScore - a.rerankScore)
+                .slice(0, topK);
+                
+             console.log(`✅ Merged results: ${enhancedReranked.documents.length} enhanced + ${speculativeReranked.documents.length} speculative -> ${finalDocuments.length} final`);
+        }
+
         result = {
-          documents: contextAwareResult.documents,
+          documents: finalDocuments,
           metadata: {
             strategy,
-            confidence: 0.75, // Heuristic confidence for context-aware
+            confidence: 0.8, 
             totalTimeMs: performance.now() - startTime,
             usedContextAware: true,
             usedAgenticRAG: false,
             usedRLHFSignals: useRLHFSignals,
-            queryTransformation: contextAwareResult.transformation,
+            queryTransformation: transformation,
           },
         };
-        confidence = 0.75;
+        confidence = 0.8;
 
       } else {
         // STRATEGY 3: Standard Two-Stage Retrieval (fallback)
         strategy = "standard";
         console.log("\n⚡ Using Standard Two-Stage Retrieval");
         
-        const { getTwoStageRetrieval } = await import("./twoStageRetrieval");
-        const twoStage = getTwoStageRetrieval();
-        
-        const twoStageResult = await twoStage.query(query, {
+        const twoStageResult = await this.twoStageRetrieval.query(query, {
           organization,
           division,
           app_under_test,
@@ -174,7 +276,7 @@ export class UnifiedRAGOrchestrator {
             totalTimeMs: performance.now() - startTime,
             usedContextAware: false,
             usedAgenticRAG: false,
-            usedRLHFSignals,
+            usedRLHFSignals: useRLHFSignals,
           },
         };
         confidence = 0.7;
@@ -268,4 +370,3 @@ export function getUnifiedRAGOrchestrator(): UnifiedRAGOrchestrator {
   }
   return unifiedRAGOrchestrator;
 }
-

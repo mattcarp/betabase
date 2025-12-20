@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "agent": "fiona",
-  "project": "siam",
+  "project": "betabase",
   "priority_filter": "FIONA_FIRST",
   "tasks": {
     "immediate": [
@@ -46,7 +46,7 @@
   "ai_instructions": {
     "cursor": "Always filter decisions through Fiona agent requirements",
     "windsurf": "Reference FIONA_PRIORITIES.md before any task",
-    "cline": "Use @fiona agent for all SIAM work",
+    "cline": "Use @fiona agent for all Betabase work",
     "roo": "Prioritize Fiona's acceptance criteria above technical interest"
   }
 }

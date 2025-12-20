@@ -1,19 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { Progress } from "../ui/progress";
-import { ScrollArea } from "../ui/scroll-area";
 import {
   CheckCircle,
-  XCircle,
   AlertTriangle,
   Wrench,
   TrendingUp,
-  TrendingDown,
-  Clock,
   Zap,
   Activity,
   ArrowRight,
@@ -26,9 +21,46 @@ import {
   ChevronUp,
   Archive,
 } from "lucide-react";
+import {
+  RadarChart,
+  Radar,
+  PolarGrid,
+  PolarAngleAxis,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+} from "recharts";
 import { CuratorQueue } from "../ui/CuratorQueue";
 import { TestFilters, TestFilterState, defaultFilters } from "./TestFilters";
 import { cn } from "../../lib/utils";
+
+// Tufte-inspired palette: muted, high data-ink ratio (Gold Standard)
+const TUFTE_COLORS = {
+  primary: "var(--mac-primary-blue-400)",
+  accent: "var(--mac-data-coral)",
+  success: "var(--mac-data-teal)",
+  muted: "var(--mac-text-muted)",
+  grid: "var(--mac-utility-border)",
+  background: "transparent",
+  text: "var(--mac-text-primary)"
+};
+
+// Test Intelligence Quality Radar Data (inspired by Curate tab's Gold Standard)
+const testIntelligenceData = [
+  { subject: 'Coverage', A: 87, fullMark: 100 },
+  { subject: 'Pass Rate', A: 80, fullMark: 100 },
+  { subject: 'Heal Rate', A: 94, fullMark: 100 },
+  { subject: 'Stability', A: 75, fullMark: 100 },
+  { subject: 'Performance', A: 88, fullMark: 100 },
+];
+
+// Small Multiples: Test Suite Trends (7-day sparklines)
+const suiteTrends = [
+  { name: 'Authentication', data: [12, 11, 13, 12, 14, 13, 15] },
+  { name: 'API Integration', data: [45, 47, 44, 48, 46, 50, 49] },
+  { name: 'UI Components', data: [22, 24, 23, 26, 25, 28, 27] },
+  { name: 'E2E Flows', data: [8, 9, 7, 10, 11, 10, 12] },
+];
 
 // Real analytics data type
 interface AnalyticsData {
@@ -70,7 +102,6 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
   const [showCuratorQueue, setShowCuratorQueue] = useState(false);
   const [filters, setFilters] = useState<TestFilterState>(defaultFilters);
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
-  const [loading, setLoading] = useState(true);
 
   // Fetch real analytics on mount
   useEffect(() => {
@@ -83,8 +114,6 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
         }
       } catch (error) {
         console.error("Failed to fetch analytics:", error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchAnalytics();
@@ -165,175 +194,151 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
     },
   ];
 
-  const getPassRateColor = (rate: number) => {
-    // MAC Data Storytelling: muted semantic colors
-    if (rate >= 95) return "mac-data-success";
-    if (rate >= 85) return "mac-data-warning";
-    return "mac-data-error";
-  };
-  
-  const getPassRateStyle = (rate: number) => ({
-    color: `var(--${getPassRateColor(rate)})`
-  });
+  // Prevent Recharts SSR issues
+  if (typeof window === 'undefined') return null;
 
   return (
-    <div className="space-y-6">
-      {/* Hero Stats Row */}
-      <div className="grid grid-cols-4 gap-4">
-        {/* Pass Rate */}
-        <Card className="mac-card-static mac-card-compact border-border relative overflow-hidden">
-          <CardContent className="p-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-xs font-medium text-muted-foreground mb-1">Pass Rate</p>
-                <div className="flex items-baseline gap-2">
-                  <span
-                    className="text-2xl font-light"
-                    style={getPassRateStyle(healthMetrics.passRate)}
-                  >
-                    {healthMetrics.passRate}%
-                  </span>
-                  {healthMetrics.passRateTrend > 0 ? (
-                    <span className="flex items-center text-[10px]" style={{ color: 'var(--mac-data-success)' }}>
-                      <TrendingUp className="h-3 w-3 mr-0.5" />+{healthMetrics.passRateTrend}%
-                    </span>
-                  ) : (
-                    <span className="flex items-center text-[10px]" style={{ color: 'var(--mac-data-error)' }}>
-                      <TrendingDown className="h-3 w-3 mr-0.5" />
-                      {healthMetrics.passRateTrend}%
-                    </span>
-                  )}
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-10 max-w-[1400px] mx-auto">
+      {/* GOLD STANDARD: Intelligence Quality Radar + Small Multiples */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Test Intelligence Quality Radar */}
+        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-1 shadow-2xl">
+          <CardHeader className="pb-2">
+            <CardTitle className="font-light text-lg flex items-center gap-2">
+              <Activity className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
+              Test Intelligence Index
+            </CardTitle>
+            <CardDescription className="text-[10px] uppercase tracking-[0.2em] opacity-50">Multi-dimensional test health</CardDescription>
+          </CardHeader>
+          <CardContent className="h-[280px] pt-0">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart cx="50%" cy="50%" outerRadius="70%" data={testIntelligenceData}>
+                <PolarGrid stroke={TUFTE_COLORS.grid} strokeDasharray="3 3" />
+                <PolarAngleAxis 
+                  dataKey="subject" 
+                  tick={{ fill: 'var(--mac-text-secondary)', fontSize: 10, fontWeight: 300 }} 
+                />
+                <Radar
+                  name="Quality"
+                  dataKey="A"
+                  stroke={TUFTE_COLORS.primary}
+                  fill={TUFTE_COLORS.primary}
+                  fillOpacity={0.15}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        {/* Small Multiples: Test Suite Sparklines (Tufte "Small Multiples") */}
+        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] lg:col-span-2 shadow-2xl">
+          <CardHeader className="pb-2">
+            <CardTitle className="font-light text-lg flex items-center gap-2">
+              <Target className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
+              Test Suite Velocity
+            </CardTitle>
+            <CardDescription className="text-[10px] uppercase tracking-[0.2em] opacity-50">7-day execution trends</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3 pt-2">
+            {suiteTrends.map((suite, idx) => (
+              <div key={idx} className="flex items-center gap-6 group hover:bg-white/[0.02] p-2 rounded-lg transition-colors">
+                <div className="w-32 text-xs text-zinc-400 font-light">{suite.name}</div>
+                <div className="flex-1 h-8">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={suite.data.map((v) => ({ value: v }))}>
+                      <Line 
+                        type="monotone" 
+                        dataKey="value" 
+                        stroke={TUFTE_COLORS.primary} 
+                        strokeWidth={1.5} 
+                        dot={false} 
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
-                <p className="text-[10px] text-muted-foreground mt-0.5">this week</p>
+                <div className="text-xs text-zinc-300 font-mono w-12 text-right">{suite.data[suite.data.length - 1]} tests</div>
               </div>
-              <div className="p-1.5 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)' }}>
-                <CheckCircle className="h-4 w-4" style={{ color: 'var(--mac-data-success)' }} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Failing Tests */}
-        <Card className="mac-card-static mac-card-compact border-border">
-          <CardContent className="p-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-xs font-medium text-muted-foreground mb-1">Failing</p>
-                <span
-                  className="text-2xl font-light"
-                  style={{ 
-                    color: healthMetrics.failingTests > 0 
-                      ? 'var(--mac-data-error)' 
-                      : 'var(--mac-data-success)' 
-                  }}
-                >
-                  {healthMetrics.failingTests}
-                </span>
-                <p className="text-[10px] text-muted-foreground mt-0.5">tests need attention</p>
-              </div>
-              <div
-                className="p-1.5 rounded-full"
-                style={{ 
-                  backgroundColor: healthMetrics.failingTests > 0 
-                    ? 'rgba(239, 68, 68, 0.1)' 
-                    : 'rgba(34, 197, 94, 0.1)' 
-                }}
-              >
-                <XCircle
-                  className="h-4 w-4"
-                  style={{ 
-                    color: healthMetrics.failingTests > 0 
-                      ? 'var(--mac-data-error)' 
-                      : 'var(--mac-data-success)' 
-                  }}
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Self-Healed Today */}
-        <Card className="mac-card-static mac-card-compact border-border">
-          <CardContent className="p-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-xs font-medium text-muted-foreground mb-1">Self-Healed</p>
-                <span className="text-2xl font-light" style={{ color: 'var(--mac-data-purple)' }}>
-                  {healthMetrics.healedToday}
-                </span>
-                <p className="text-[10px] text-muted-foreground mt-0.5">tests auto-fixed today</p>
-              </div>
-              <div className="p-1.5 rounded-full" style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}>
-                <Wrench className="h-4 w-4" style={{ color: 'var(--mac-data-purple)' }} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Pending HITL Review */}
-        <Card className="mac-card-static mac-card-compact border-border">
-          <CardContent className="p-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-xs font-medium text-muted-foreground mb-1">Need HITL</p>
-                <span
-                  className="text-2xl font-light"
-                  style={{ 
-                    color: healthMetrics.pendingReview > 0 
-                      ? 'var(--mac-data-warning)' 
-                      : 'var(--mac-data-zinc-500)' 
-                  }}
-                >
-                  {healthMetrics.pendingReview}
-                </span>
-                <p className="text-[10px] text-muted-foreground mt-0.5">awaiting human review</p>
-              </div>
-              <div
-                className="p-1.5 rounded-full"
-                style={{ 
-                  backgroundColor: healthMetrics.pendingReview > 0 
-                    ? 'rgba(245, 158, 11, 0.1)' 
-                    : 'rgba(115, 115, 115, 0.1)' 
-                }}
-              >
-                <Users
-                  className="h-4 w-4"
-                  style={{ 
-                    color: healthMetrics.pendingReview > 0 
-                      ? 'var(--mac-data-warning)' 
-                      : 'var(--mac-data-zinc-500)' 
-                  }}
-                />
-              </div>
-            </div>
+            ))}
           </CardContent>
         </Card>
       </div>
 
-      {/* Historical Test Suite Stats - Real Data from Betabase */}
+      {/* Compact Hero Stats Row - Tufte-inspired density */}
+      <div className="grid grid-cols-6 gap-3">
+        <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+          <CardContent className="p-3">
+            <div className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Pass Rate</div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl font-light" style={{ color: 'var(--mac-data-success)' }}>
+                {healthMetrics.passRate}%
+              </span>
+              <span className="flex items-center text-[9px] text-emerald-400">
+                <TrendingUp className="h-2.5 w-2.5 mr-0.5" />+{healthMetrics.passRateTrend}%
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+          <CardContent className="p-3">
+            <div className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Failing</div>
+            <span className="text-xl font-light text-rose-400">{healthMetrics.failingTests}</span>
+          </CardContent>
+        </Card>
+
+        <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+          <CardContent className="p-3">
+            <div className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Auto-Healed</div>
+            <span className="text-xl font-light" style={{ color: 'var(--mac-primary-blue-400)' }}>{healthMetrics.healedToday}</span>
+          </CardContent>
+        </Card>
+
+        <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+          <CardContent className="p-3">
+            <div className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Need HITL</div>
+            <span className="text-xl font-light text-amber-400">{healthMetrics.pendingReview}</span>
+          </CardContent>
+        </Card>
+
+        <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+          <CardContent className="p-3">
+            <div className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Coverage</div>
+            <span className="text-xl font-light text-teal-400">87%</span>
+          </CardContent>
+        </Card>
+
+        <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+          <CardContent className="p-3">
+            <div className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Flaky</div>
+            <span className="text-xl font-light text-zinc-400">{healthMetrics.flakyTests}</span>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Historical Test Suite Stats - Tufte-inspired compact banner */}
       {analytics && (
-        <Card className="mac-card border-border" style={{ background: 'linear-gradient(to right, rgba(217, 151, 82, 0.05), transparent)' }} data-test-id="historical-stats">
-          <CardContent className="p-4">
+        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg" data-test-id="historical-stats">
+          <CardContent className="p-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <Archive className="h-5 w-5" style={{ color: 'var(--mac-data-coral)' }} />
-                  <span className="text-sm font-medium text-muted-foreground">Historical Test Suite</span>
+                  <Archive className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
+                  <span className="text-xs font-medium text-zinc-300 uppercase tracking-wider">Historical Vault</span>
                 </div>
-                <div className="flex items-center gap-6 text-sm">
+                <div className="flex items-center gap-4 text-[11px]">
                   <div>
-                    <span className="text-2xl font-light" style={{ color: 'var(--mac-data-coral)' }}>{healthMetrics.totalTests.toLocaleString()}</span>
-                    <span className="text-muted-foreground ml-2">tests</span>
+                    <span className="text-lg font-light text-[var(--mac-primary-blue-400)]">{healthMetrics.totalTests.toLocaleString()}</span>
+                    <span className="text-zinc-500 ml-1.5">tests</span>
                   </div>
-                  <div className="text-muted-foreground">•</div>
+                  <div className="text-zinc-700">•</div>
                   <div>
-                    <span className="text-xl font-light">{healthMetrics.totalExecutions.toLocaleString()}</span>
-                    <span className="text-muted-foreground ml-2">total executions</span>
+                    <span className="text-base font-light text-zinc-300">{healthMetrics.totalExecutions.toLocaleString()}</span>
+                    <span className="text-zinc-500 ml-1.5">runs</span>
                   </div>
-                  <div className="text-muted-foreground">•</div>
+                  <div className="text-zinc-700">•</div>
                   <div>
-                    <span className="text-xl font-light text-zinc-400">{healthMetrics.testsNeverExecuted.toLocaleString()}</span>
-                    <span className="text-muted-foreground ml-2">never executed</span>
+                    <span className="text-base font-light text-zinc-500">{healthMetrics.testsNeverExecuted.toLocaleString()}</span>
+                    <span className="text-zinc-600 ml-1.5">dormant</span>
                   </div>
                 </div>
               </div>
@@ -341,38 +346,37 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 variant="ghost" 
                 size="sm" 
                 onClick={() => onNavigate?.("historical")}
-                style={{ color: 'var(--mac-data-coral)' }}
+                className="text-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-400)]/10 text-xs h-7"
               >
-                Explore <ArrowRight className="h-4 w-4 ml-1" />
+                Explore <ArrowRight className="h-3.5 w-3.5 ml-1" />
               </Button>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* AI Needs Your Guidance Banner */}
+      {/* AI Needs Your Expertise - Compact Tufte style */}
       {healthMetrics.pendingReview > 0 && (
-        <Card className="mac-card border-border" style={{ background: 'linear-gradient(to right, rgba(139, 92, 246, 0.1), transparent)', borderColor: 'rgba(139, 92, 246, 0.3)' }} data-test-id="human-needed-banner">
-          <CardContent className="p-4">
+        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg" data-test-id="human-needed-banner">
+          <CardContent className="p-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full" style={{ backgroundColor: 'rgba(139, 92, 246, 0.2)' }}>
-                  <Users className="h-6 w-6" style={{ color: 'var(--mac-data-purple)' }} />
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-[var(--mac-primary-blue-400)]/10">
+                  <Users className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium" style={{ color: 'var(--mac-data-zinc-100)' }}>AI Needs Your Expertise</p>
-                  <p className="text-xs text-muted-foreground">
-                    {healthMetrics.pendingReview} items awaiting human review • AI has reached the limits of its certainty
+                  <p className="text-xs font-medium text-white">AI Needs Your Expertise</p>
+                  <p className="text-[10px] text-zinc-500">
+                    {healthMetrics.pendingReview} items awaiting review
                   </p>
                 </div>
               </div>
               <Button
                 size="sm"
-                style={{ backgroundColor: 'var(--mac-data-purple)' }}
-                className="text-white hover:opacity-90"
+                className="bg-[var(--mac-primary-blue-400)] text-white hover:bg-[var(--mac-primary-blue-400)]/90 h-8 text-xs"
                 onClick={() => setShowCuratorQueue(true)}
               >
-                <Eye className="h-4 w-4 mr-2" />
+                <Eye className="h-3.5 w-3.5 mr-2" />
                 Review Queue
               </Button>
             </div>
@@ -387,74 +391,60 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
         </CardContent>
       </Card>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-3 gap-6">
-        {/* Recent Self-Heals */}
-        <Card className="mac-card border-border col-span-2">
-          <CardHeader className="pb-3">
+      {/* Unified Grid: Recent Self-Heals + Attention Items - Gold Standard Layout */}
+      <div className="grid grid-cols-3 gap-4">
+        {/* Recent Self-Heals - Compact */}
+        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-2 shadow-lg">
+          <CardHeader className="pb-2 pt-3 px-4">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-medium flex items-center gap-2">
-                <Wrench className="h-4 w-4" style={{ color: 'var(--mac-data-purple)' }} />
+              <CardTitle className="text-sm font-light flex items-center gap-2 text-white">
+                <Wrench className="h-3.5 w-3.5 text-[var(--mac-primary-blue-400)]" />
                 Recent Self-Heals
               </CardTitle>
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-xs"
+                className="text-[10px] h-6 text-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-400)]/10"
                 onClick={() => onNavigate?.("self-healing")}
               >
-                View All
-                <ArrowRight className="h-3 w-3 ml-1" />
+                View All <ArrowRight className="h-3 w-3 ml-1" />
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
+          <CardContent className="px-4 pb-3">
+            <div className="space-y-2">
               {recentSelfHeals.map((heal) => (
                 <div
                   key={heal.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted/80 transition-colors cursor-pointer"
+                  className="flex items-center justify-between p-2 rounded-lg bg-zinc-900/30 hover:bg-zinc-900/50 transition-colors cursor-pointer border border-zinc-800/50"
                   onClick={() => onNavigate?.("self-healing")}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     {heal.status === "approved" ? (
-                      <CheckCircle className="h-5 w-5" style={{ color: 'var(--mac-data-success)' }} />
+                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
                     ) : (
-                      <AlertTriangle className="h-5 w-5" style={{ color: 'var(--mac-data-warning)' }} />
+                      <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
                     )}
                     <div>
-                      <p className="text-sm font-medium">{heal.testName}</p>
-                      <p className="text-xs text-muted-foreground">{heal.time}</p>
+                      <p className="text-xs font-medium text-zinc-200">{heal.testName}</p>
+                      <p className="text-[10px] text-zinc-500">{heal.time}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <Badge
                       variant="outline"
-                      className="text-xs"
-                      style={heal.status === "approved" ? {
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        color: 'var(--mac-data-success)',
-                        borderColor: 'rgba(34, 197, 94, 0.2)'
-                      } : {
-                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                        color: 'var(--mac-data-warning)',
-                        borderColor: 'rgba(245, 158, 11, 0.2)'
-                      }}
+                      className="text-[9px] h-4 px-1.5 border-[var(--mac-primary-blue-400)]/30 text-[var(--mac-primary-blue-400)] bg-[var(--mac-primary-blue-400)]/10"
                     >
-                      {heal.confidence}% confidence
+                      {heal.confidence}%
                     </Badge>
                     <Badge
                       variant="outline"
-                      className="text-xs"
-                      style={heal.status === "approved" ? {
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        color: 'var(--mac-data-success)',
-                        borderColor: 'rgba(34, 197, 94, 0.2)'
-                      } : {
-                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                        color: 'var(--mac-data-warning)',
-                        borderColor: 'rgba(245, 158, 11, 0.2)'
-                      }}
+                      className={cn(
+                        "text-[9px] h-4 px-1.5",
+                        heal.status === "approved" 
+                          ? "border-emerald-500/30 text-emerald-400 bg-emerald-500/10"
+                          : "border-amber-500/30 text-amber-400 bg-amber-500/10"
+                      )}
                     >
                       {heal.status}
                     </Badge>
@@ -465,27 +455,20 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
           </CardContent>
         </Card>
 
-        {/* Attention Needed */}
-        <Card className="mac-card border-border">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base font-medium flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4" style={{ color: 'var(--mac-data-warning)' }} />
+        {/* Attention Needed - Compact */}
+        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg">
+          <CardHeader className="pb-2 pt-3 px-4">
+            <CardTitle className="text-sm font-light flex items-center gap-2 text-white">
+              <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
               Attention Needed
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-4 pb-3">
             <div className="space-y-2">
               {attentionItems.map((item) => (
                 <div
                   key={item.id}
-                  className="p-3 rounded-lg border cursor-pointer hover:shadow-sm transition-shadow"
-                  style={item.severity === "warning" ? {
-                    backgroundColor: 'rgba(245, 158, 11, 0.05)',
-                    borderColor: 'rgba(245, 158, 11, 0.2)'
-                  } : {
-                    backgroundColor: 'rgba(59, 169, 156, 0.05)',
-                    borderColor: 'rgba(59, 169, 156, 0.2)'
-                  }}
+                  className="p-2 rounded-lg border border-zinc-800/50 cursor-pointer hover:bg-zinc-900/30 transition-colors bg-zinc-900/20"
                   onClick={() => {
                     if (item.type === "low-confidence") onNavigate?.("results");
                     if (item.type === "flaky") onNavigate?.("flaky");
@@ -494,11 +477,11 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 >
                   <div className="flex items-start gap-2">
                     {item.severity === "warning" ? (
-                      <AlertTriangle className="h-4 w-4 mt-0.5" style={{ color: 'var(--mac-data-warning)' }} />
+                      <AlertTriangle className="h-3.5 w-3.5 mt-0.5 text-amber-400" />
                     ) : (
-                      <Activity className="h-4 w-4 mt-0.5" style={{ color: 'var(--mac-data-teal)' }} />
+                      <Activity className="h-3.5 w-3.5 mt-0.5 text-[var(--mac-primary-blue-400)]" />
                     )}
-                    <p className="text-sm">{item.message}</p>
+                    <p className="text-xs text-zinc-300">{item.message}</p>
                   </div>
                 </div>
               ))}
@@ -507,70 +490,15 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
         </Card>
       </div>
 
-      {/* Quick Stats Row */}
-      <div className="grid grid-cols-4 gap-4">
-        <Card className="mac-card-static mac-card-compact border-border">
-          <CardContent className="p-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Target className="h-3.5 w-3.5" style={{ color: 'var(--mac-data-teal)' }} />
-                <span className="text-xs text-muted-foreground">Coverage</span>
-              </div>
-              <span className="text-base font-medium">87%</span>
-            </div>
-            <Progress value={87} className="h-1 mt-1.5" />
-          </CardContent>
-        </Card>
 
-        <Card className="mac-card-static mac-card-compact border-border">
-          <CardContent className="p-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Zap className="h-3.5 w-3.5" style={{ color: 'var(--mac-data-purple)' }} />
-                <span className="text-xs text-muted-foreground">Heal Rate</span>
-              </div>
-              <span className="text-base font-medium">94.2%</span>
-            </div>
-            <Progress value={94.2} className="h-1 mt-1.5" />
-          </CardContent>
-        </Card>
-
-        <Card className="mac-card-static mac-card-compact border-border">
-          <CardContent className="p-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <RefreshCw className="h-3.5 w-3.5" style={{ color: 'var(--mac-data-coral)' }} />
-                <span className="text-xs text-muted-foreground">Flaky Tests</span>
-              </div>
-              <span className="text-base font-medium">{healthMetrics.flakyTests}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="mac-card-static mac-card-compact border-border">
-          <CardContent className="p-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Clock className="h-3.5 w-3.5 text-slate-600" />
-                <span className="text-xs text-muted-foreground">Avg Duration</span>
-              </div>
-              <span className="text-base font-medium">
-                {Math.floor(healthMetrics.avgDuration / 60)}:
-                {(healthMetrics.avgDuration % 60).toString().padStart(2, "0")}
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* HITL Curator Queue Section */}
-      <Card className="mac-card border-border">
-        <CardHeader className="pb-3">
+      {/* HITL Curator Queue - Compact Gold Standard */}
+      <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg">
+        <CardHeader className="pb-2 pt-3 px-4">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base font-medium flex items-center gap-2">
-              <Sparkles className="h-4 w-4" style={{ color: 'var(--mac-data-purple)' }} />
+            <CardTitle className="text-sm font-light flex items-center gap-2 text-white">
+              <Sparkles className="h-3.5 w-3.5 text-[var(--mac-primary-blue-400)]" />
               HITL Curator Queue
-              <Badge variant="secondary" className="ml-2">
+              <Badge variant="outline" className="ml-2 text-[9px] h-4 px-1.5 border-[var(--mac-primary-blue-400)]/30 text-[var(--mac-primary-blue-400)] bg-[var(--mac-primary-blue-400)]/10">
                 {healthMetrics.pendingReview} pending
               </Badge>
             </CardTitle>
@@ -578,72 +506,76 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
               variant="ghost"
               size="sm"
               onClick={() => setShowCuratorQueue(!showCuratorQueue)}
-              className="gap-2"
+              className="gap-1.5 h-7 text-xs text-zinc-400 hover:text-white"
             >
               {showCuratorQueue ? (
-                <>
-                  <ChevronUp className="h-4 w-4" />
-                  Collapse
-                </>
+                <><ChevronUp className="h-3 w-3" /> Collapse</>
               ) : (
-                <>
-                  <ChevronDown className="h-4 w-4" />
-                  Expand
-                </>
+                <><ChevronDown className="h-3 w-3" /> Expand</>
               )}
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            Review and approve AI responses, test corrections, and low-confidence results
+          <p className="text-[10px] text-zinc-500 mt-1 uppercase tracking-wider">
+            Review AI responses, test corrections, and low-confidence results
           </p>
         </CardHeader>
         {showCuratorQueue && (
-          <CardContent className="pt-0">
-            <CuratorQueue className="h-[500px]" />
+          <CardContent className="pt-0 px-4 pb-3">
+            <CuratorQueue className="h-[400px]" />
           </CardContent>
         )}
       </Card>
 
-      {/* Quick Actions */}
-      <div className="flex gap-3">
+      {/* Quick Actions - Tufte minimal */}
+      <div className="flex gap-2">
         <Button
           variant="outline"
           size="sm"
           onClick={() => onNavigate?.("self-healing")}
-          className="gap-2"
+          className="gap-2 h-8 text-xs border-zinc-700/50 text-zinc-300 hover:bg-zinc-800/50 hover:text-white"
         >
-          <Wrench className="h-4 w-4" />
+          <Wrench className="h-3.5 w-3.5" />
           Review Self-Heals
         </Button>
-        <Button variant="outline" size="sm" onClick={() => onNavigate?.("flaky")} className="gap-2">
-          <RefreshCw className="h-4 w-4" />
-          Explore Flaky Tests
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={() => onNavigate?.("flaky")} 
+          className="gap-2 h-8 text-xs border-zinc-700/50 text-zinc-300 hover:bg-zinc-800/50 hover:text-white"
+        >
+          <RefreshCw className="h-3.5 w-3.5" />
+          Flaky Tests
         </Button>
         <Button
           variant="outline"
           size="sm"
           onClick={() => onNavigate?.("analytics")}
-          className="gap-2"
+          className="gap-2 h-8 text-xs border-zinc-700/50 text-zinc-300 hover:bg-zinc-800/50 hover:text-white"
         >
-          <Activity className="h-4 w-4" />
-          View Analytics
+          <Activity className="h-3.5 w-3.5" />
+          Analytics
         </Button>
         <Button
           variant="outline"
           size="sm"
           onClick={() => onNavigate?.("ai-generate")}
-          className="gap-2"
+          className="gap-2 h-8 text-xs border-zinc-700/50 text-zinc-300 hover:bg-zinc-800/50 hover:text-white"
         >
-          <Zap className="h-4 w-4" />
+          <Zap className="h-3.5 w-3.5" />
           Generate Tests
         </Button>
         <Button
           variant={showCuratorQueue ? "default" : "outline"}
           size="sm"
           onClick={() => setShowCuratorQueue(!showCuratorQueue)}
-          className="gap-2"
+          className={cn(
+            "gap-2 h-8 text-xs",
+            showCuratorQueue 
+              ? "bg-[var(--mac-primary-blue-400)] text-white hover:bg-[var(--mac-primary-blue-400)]/90"
+              : "border-zinc-700/50 text-zinc-300 hover:bg-zinc-800/50 hover:text-white"
+          )}
         >
-          <Sparkles className="h-4 w-4" />
+          <Sparkles className="h-3.5 w-3.5" />
           {showCuratorQueue ? "Hide Curator" : "Open Curator"}
         </Button>
       </div>

@@ -426,139 +426,122 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
       {/* Main Dashboard Content */}
       <div className="flex flex-col flex-1 overflow-hidden">
-        {/* Header with Stats */}
-        <div className="border-b border-white/10 bg-[var(--mac-surface-bg)] p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <div className="p-2 rounded-md bg-white/5">
-                <Activity className="h-5 w-5 text-blue-400" />
+        {/* Header with Stats - GOLD STANDARD COMPACT */}
+        <div className="border-b border-white/10 bg-[var(--mac-surface-bg)] p-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-1.5 rounded-lg bg-[var(--mac-primary-blue-400)]/10">
+                <Activity className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
               </div>
               <div>
-                <h1 className="text-2xl font-light tracking-tight text-white">Test Dashboard</h1>
-                <p className="text-sm text-neutral-400">
+                <h1 className="text-lg font-light tracking-tight text-white">Test Dashboard</h1>
+                <p className="text-[10px] text-neutral-500 uppercase tracking-wider">
                   Unified testing and quality assurance platform
                 </p>
               </div>
             </div>
 
-            {/* Control Buttons */}
+            {/* Control Buttons - GOLD STANDARD COMPACT */}
             <div className="flex items-center gap-2">
               <Button
-                className="mac-button mac-button-primary gap-2"
                 variant={isRunning ? "destructive" : "default"}
                 size="sm"
                 onClick={isRunning ? () => setIsRunning(false) : handleRunTests}
+                className={cn(
+                  "gap-2 h-8 text-xs",
+                  !isRunning && "bg-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-400)]/90"
+                )}
               >
                 {isRunning ? (
-                  <>
-                    <Pause className="h-4 w-4" />
-                    Stop
-                  </>
+                  <><Pause className="h-3.5 w-3.5" />Stop</>
                 ) : (
-                  <>
-                    <Play className="h-4 w-4" />
-                    Run Tests
-                  </>
+                  <><Play className="h-3.5 w-3.5" />Run Tests</>
                 )}
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                className="gap-2 mac-button mac-button-outline"
+                className="gap-2 h-8 text-xs border-zinc-700/50 text-zinc-300"
                 onClick={handleRerunFailed}
                 disabled={isRunning || testStats.failed === 0}
               >
-                <RefreshCw className="h-4 w-4" />
+                <RefreshCw className="h-3.5 w-3.5" />
                 Re-run Failed
               </Button>
             </div>
           </div>
 
-          {/* Test Statistics Bar - Shows historical data OR current run */}
-          <div className="grid grid-cols-6 gap-3">
-            <Card className="mac-card-static mac-card-compact border-border">
-              <CardContent className="p-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-muted-foreground">
-                    {isRunning ? "Running" : "Total Tests"}
-                  </span>
-                  <span className="text-base font-normal text-foreground">
-                    {isRunning ? testStats.total : historicalStats.totalTests.toLocaleString()}
-                  </span>
+          {/* Test Statistics Bar - GOLD STANDARD UNIFIED BLUE */}
+          <div className="grid grid-cols-6 gap-2">
+            <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+              <CardContent className="p-2">
+                <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-0.5">
+                  {isRunning ? "Running" : "Total"}
                 </div>
+                <span className="text-base font-light text-white">
+                  {isRunning ? testStats.total : historicalStats.totalTests.toLocaleString()}
+                </span>
               </CardContent>
             </Card>
 
-            <Card className="mac-card-static mac-card-compact border-border">
-              <CardContent className="p-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Activity className="h-3.5 w-3.5 text-blue-400" />
-                    <span className="text-xs font-medium text-muted-foreground">Executions</span>
-                  </div>
-                  <span className="text-base font-normal text-blue-400">
-                    {isRunning ? testStats.passed + testStats.failed : historicalStats.totalExecutions.toLocaleString()}
-                  </span>
+            <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+              <CardContent className="p-2">
+                <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-0.5 flex items-center gap-1">
+                  <Activity className="h-2.5 w-2.5 text-[var(--mac-primary-blue-400)]" />
+                  Executions
                 </div>
+                <span className="text-base font-light text-[var(--mac-primary-blue-400)]">
+                  {isRunning ? testStats.passed + testStats.failed : historicalStats.totalExecutions.toLocaleString()}
+                </span>
               </CardContent>
             </Card>
 
-            <Card className="mac-card-static mac-card-compact border-border">
-              <CardContent className="p-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
-                    <span className="text-xs font-medium text-muted-foreground">Pass Rate</span>
-                  </div>
-                  <span className="text-base font-normal text-emerald-400">
-                    {isRunning ? `${getSuccessRate()}%` : `${historicalStats.passRate}%`}
-                  </span>
+            <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+              <CardContent className="p-2">
+                <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-0.5 flex items-center gap-1">
+                  <CheckCircle className="h-2.5 w-2.5 text-emerald-400" />
+                  Pass Rate
                 </div>
+                <span className="text-base font-light text-emerald-400">
+                  {isRunning ? `${getSuccessRate()}%` : `${historicalStats.passRate}%`}
+                </span>
               </CardContent>
             </Card>
 
-            <Card className="mac-card-static mac-card-compact border-border">
-              <CardContent className="p-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <XCircle className="h-3.5 w-3.5 text-rose-400" />
-                    <span className="text-xs font-medium text-muted-foreground">Failed</span>
-                  </div>
-                  <span className="text-base font-normal text-rose-400">{testStats.failed}</span>
+            <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+              <CardContent className="p-2">
+                <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-0.5 flex items-center gap-1">
+                  <XCircle className="h-2.5 w-2.5 text-rose-400" />
+                  Failed
                 </div>
+                <span className="text-base font-light text-rose-400">{testStats.failed}</span>
               </CardContent>
             </Card>
 
-            <Card className="mac-card-static mac-card-compact border-border">
-              <CardContent className="p-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-3.5 w-3.5 text-slate-400" />
-                    <span className="text-xs font-medium text-muted-foreground">Duration</span>
-                  </div>
-                  <span className="text-base font-normal text-slate-400">
-                    {formatDuration(testStats.duration)}
-                  </span>
+            <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+              <CardContent className="p-2">
+                <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-0.5 flex items-center gap-1">
+                  <Clock className="h-2.5 w-2.5 text-slate-400" />
+                  Duration
                 </div>
+                <span className="text-base font-light text-slate-400">
+                  {formatDuration(testStats.duration)}
+                </span>
               </CardContent>
             </Card>
 
-            <Card className="mac-card-static mac-card-compact border-border">
-              <CardContent className="p-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Zap className="h-3.5 w-3.5 text-amber-400" />
-                    <span className="text-xs font-medium text-muted-foreground">
-                      {isRunning ? "Running" : "Status"}
-                    </span>
-                  </div>
-                  <span className={cn(
-                    "text-xs font-medium",
-                    isRunning ? "text-amber-400" : "text-emerald-400"
-                  )}>
-                    {isRunning ? "⏳ In Progress" : "✅ Ready"}
-                  </span>
+            <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+              <CardContent className="p-2">
+                <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-0.5 flex items-center gap-1">
+                  <Zap className="h-2.5 w-2.5 text-amber-400" />
+                  Status
                 </div>
+                <span className={cn(
+                  "text-xs font-medium",
+                  isRunning ? "text-amber-400" : "text-emerald-400"
+                )}>
+                  {isRunning ? "⏳ In Progress" : "✅ Ready"}
+                </span>
               </CardContent>
             </Card>
           </div>
@@ -586,29 +569,29 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             </div>
           )}
 
-          {/* Real-time Logs Display */}
+          {/* Real-time Logs - GOLD STANDARD COMPACT */}
           {(isRunning || recentLogs.length > 0) && (
-            <div className="mt-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-foreground">Live Test Output</span>
+            <div className="mt-3">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[10px] font-medium text-foreground uppercase tracking-wider">Live Output</span>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setUseRealTimeStreaming(!useRealTimeStreaming)}
-                  className="mac-button mac-button-outline text-xs"
+                  className="h-6 text-[9px] text-zinc-400 hover:text-white"
                 >
                   {useRealTimeStreaming ? "📡 Streaming" : "🔄 Polling"}
                 </Button>
               </div>
-              <div className="bg-[var(--mac-surface-elevated)] rounded-lg p-4 max-h-24 overflow-y-auto border border-white/10">
+              <div className="bg-[var(--mac-surface-elevated)] rounded-lg p-3 max-h-20 overflow-y-auto border border-zinc-800/50">
                 {recentLogs.length > 0 ? (
                   recentLogs.map((log, index) => (
-                    <div key={index} className="text-xs text-neutral-300 font-mono">
+                    <div key={index} className="text-[10px] text-neutral-300 font-mono leading-relaxed">
                       {log}
                     </div>
                   ))
                 ) : (
-                  <div className="text-xs text-neutral-400 italic">
+                  <div className="text-[10px] text-neutral-500 italic">
                     {isRunning ? "Waiting for test output..." : "No recent logs"}
                   </div>
                 )}

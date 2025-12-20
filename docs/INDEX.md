@@ -1,4 +1,4 @@
-# SIAM Documentation Index
+# The Betabase Documentation Index
 
 **Ultimate Performance Documentation Structure** - Optimized for fast navigation and context loading.
 
@@ -28,6 +28,8 @@
 - **[MAC Design System](design/MAC-DESIGN-SYSTEM.md)** - Design tokens, components, compliance validation
 - **[UI Components](design/UI-COMPONENTS.md)** - shadcn/ui, AI Elements, component usage
 - **[Design Review](design/DESIGN-REVIEW.md)** - 8-phase review process, visual scoring, Fiona workflow
+- **[Gold Standards](design/gold-standards/)** - Reference designs for dashboards, charts, and visualizations
+  - **[Curate Mode Dashboard](design/gold-standards/CURATE-MODE-GOLD-STANDARD.md)** - THE gold standard for all dashboard/analytics UI
 
 #### Agents
 
@@ -72,6 +74,7 @@
 | Fix TypeScript errors     | [TypeScript Guidelines](development/TYPESCRIPT-GUIDELINES.md) |
 | Monitor deployment        | [Monitoring](deployment/MONITORING.md)                        |
 | Understand project layout | [Project Structure](reference/PROJECT-STRUCTURE.md)           |
+| Design a dashboard/chart  | [Curate Mode Gold Standard](design/gold-standards/CURATE-MODE-GOLD-STANDARD.md) |
 
 ## Documentation Principles
 

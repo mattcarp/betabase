@@ -8,6 +8,36 @@ allowed-tools: Bash(find:*), Bash(ls:*), Bash(mkdir:*), Bash(open:*), Bash(cp:*)
 
 Generate an interactive HTML gallery from screenshots with click-to-expand lightbox functionality.
 
+## Browser Configuration
+
+**IMPORTANT: All screenshots use these settings:**
+
+| Setting | Value | Rationale |
+|---------|-------|-----------|
+| **Browser** | Chrome (not Chromium) | Playwright 1.57+ uses Chrome for Testing builds |
+| **Mode** | Headless | Consistent rendering, no window chrome interference |
+| **Screenshot Type** | Full Page | Captures entire scrollable content, not just viewport |
+
+When launching the browser or taking screenshots, always use:
+
+```javascript
+// Browser launch (if using Playwright directly)
+browser = await chromium.launch({
+  channel: 'chrome',  // Use Chrome, not Chromium
+  headless: true
+});
+
+// Screenshot options - ALWAYS use fullPage: true
+await page.screenshot({ 
+  path: 'screenshot.png',
+  fullPage: true  // Captures entire scrollable page
+});
+```
+
+For MCP Playwright tools:
+- Use `mcp__playwright-mcp__playwright_navigate` with `headless: true`
+- Use `mcp__playwright-mcp__playwright_screenshot` with `fullPage: true`
+
 ## When to Use This Skill
 
 - User asks to "make a gallery" or "create a gallery"
@@ -86,26 +116,36 @@ git branch --show-current
 date -u +'%Y-%m-%d %H:%M:%S UTC'
 ```
 
-### 3. Start Dev Server & Navigate
+### 3. Start Dev Server & Launch Browser
 
 1. Start dev server if not running (`npx kill-port 3000 && npm run dev`)
 2. Wait for server to be ready (`sleep 5 && curl -s -o /dev/null -w "%{http_code}" http://localhost:3000`)
-3. Navigate to `http://localhost:3000` using `mcp__playwright-mcp__playwright_navigate`
+3. Navigate using `mcp__playwright-mcp__playwright_navigate` with:
+   - `url`: `http://localhost:3000`
+   - `headless`: `true` (Chrome runs in headless mode)
 4. Wait for full page load (`sleep 2`)
 
 ### 4. Navigate to Target & Take Screenshots
 
+**Screenshot settings (ALWAYS use these):**
+```javascript
+{
+  fullPage: true,    // Capture entire scrollable content
+  name: 'screenshot-name'  // Descriptive name
+}
+```
+
 **For a main tab:**
 1. Click the tab button in the right sidebar
 2. Wait for content to load
-3. Take screenshot
+3. Take full-page screenshot
 
 **For a tab with subtabs (e.g., "test tab and its subtabs"):**
 1. Click the main tab
 2. For EACH subtab:
    - Click the subtab trigger
    - Wait for content (`sleep 1`)
-   - Take screenshot with descriptive name (e.g., `03-test-self-healing`)
+   - Take full-page screenshot with descriptive name (e.g., `03-test-self-healing`)
 3. Continue until all subtabs captured
 
 **Screenshot naming convention:**
@@ -146,6 +186,9 @@ open /tmp/gallery-[name]/gallery.html
 
 ## Key Features
 
+- **Chrome browser** - Uses Chrome for Testing (Playwright 1.57+), not Chromium
+- **Headless mode** - Consistent rendering across environments
+- **Full-page screenshots** - Captures entire scrollable content
 - **Dark theme** following MAC Design System colors
 - **Click-to-expand lightbox** - Pure CSS/JS, no dependencies
 - **Metadata header** - Task name, branch, timestamp, screenshot count

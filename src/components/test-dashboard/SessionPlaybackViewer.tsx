@@ -26,6 +26,7 @@ import {
   Video,
   MessageSquare,
   Zap,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { SessionVideoExporter } from "../../utils/sessionVideoExporter";
@@ -430,7 +431,12 @@ export const SessionPlaybackViewer: React.FC = () => {
                       variant={playbackSpeed === speed ? "default" : "outline"}
                       size="sm"
                       onClick={() => setPlaybackSpeed(speed)}
-                      className="min-w-[60px]"
+                      className={cn(
+                        "min-w-[60px]",
+                        playbackSpeed === speed
+                          ? "mac-button mac-button-primary"
+                          : "mac-button mac-button-outline"
+                      )}
                     >
                       {speed}x
                     </Button>
@@ -584,6 +590,11 @@ export const SessionPlaybackViewer: React.FC = () => {
                     variant={selectedDevice === "desktop" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedDevice("desktop")}
+                    className={
+                      selectedDevice === "desktop"
+                        ? "mac-button mac-button-primary"
+                        : "mac-button mac-button-outline"
+                    }
                   >
                     <Monitor className="h-4 w-4" />
                   </Button>
@@ -591,6 +602,11 @@ export const SessionPlaybackViewer: React.FC = () => {
                     variant={selectedDevice === "mobile" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedDevice("mobile")}
+                    className={
+                      selectedDevice === "mobile"
+                        ? "mac-button mac-button-primary"
+                        : "mac-button mac-button-outline"
+                    }
                   >
                     <Smartphone className="h-4 w-4" />
                   </Button>

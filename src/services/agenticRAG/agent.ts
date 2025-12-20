@@ -65,9 +65,12 @@ export class AgenticRAGAgent {
     this.genAI = new GoogleGenerativeAI(apiKey);
     
     // Use Gemini with function calling
+    const declarations = getGeminiFunctionDeclarations();
+    // @ts-ignore
     this.model = this.genAI.getGenerativeModel({
       model: "gemini-2.0-flash-exp",
-      tools: [{ functionDeclarations: getGeminiFunctionDeclarations() }],
+      // @ts-ignore
+      tools: [{ functionDeclarations: declarations }],
       generationConfig: {
         temperature: 0.2,
         topP: 0.95,

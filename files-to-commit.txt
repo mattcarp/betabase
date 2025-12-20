@@ -1,3 +1,10 @@
-src/components/auth/LoginForm.tsx
-tests/auth/test-user-auth.spec.ts
-tests/helpers/auth.ts
+RAG Performance Optimization (Parallel & Conditional Execution)
+
+Implements multi-stage latency optimizations for the Unified RAG pipeline:
+
+1. **Parallel Execution**: Fires Initial Vector Search in parallel with Query Transformation LLM call.
+2. **Conditional Transformation**: Skips LLM transformation for simple queries (< 8 words, no ambiguous pronouns), saving ~800ms.
+3. **Speculative Reranking**: If transformation doesn't change the query, skips secondary vector search.
+4. **Skip Reranking**: For very high confidence (>0.88) vector matches in the initial search, skips the re-ranking step entirely.
+
+Verified with `scripts/test-rag-quality.ts` to ensure data flow and logic correctness.

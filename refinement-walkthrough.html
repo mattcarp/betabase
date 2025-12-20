@@ -18,9 +18,15 @@
         h1 {
             font-weight: 200;
             letter-spacing: 0.1em;
-            margin-bottom: 40px;
+            margin-bottom: 10px;
             text-transform: uppercase;
             color: #2563eb;
+        }
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.5;
+            margin-bottom: 40px;
+            font-style: italic;
         }
         .container {
             max-width: 1200px;
@@ -32,69 +38,105 @@
         .screenshot-section {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
         }
         h2 {
             font-weight: 300;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             margin-top: 0;
             margin-bottom: 20px;
-            opacity: 0.7;
+            color: #ffffff;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
         h2::before {
             content: '';
             display: inline-block;
             width: 4px;
-            height: 20px;
+            height: 24px;
             background: #2563eb;
             border-radius: 2px;
         }
+        .desc {
+            font-size: 15px;
+            line-height: 1.6;
+            opacity: 0.7;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
         img {
             width: 100%;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+        img:hover {
+            transform: scale(1.01);
         }
         .badge {
-            font-size: 10px;
-            font-weight: bold;
+            font-size: 11px;
+            font-weight: 800;
             background: #2563eb;
             color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+        .tag-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tag {
+            font-size: 10px;
+            color: #2563eb;
+            border: 1px solid rgba(37, 99, 235, 0.3);
             padding: 2px 8px;
             border-radius: 4px;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
         }
     </style>
 </head>
 <body>
     <h1>Visual Refinement Report</h1>
+    <p class="subtitle">Retrospective Verification of Dashboard & Test Tab Overhaul</p>
+    
     <div class="container">
+        <!-- Dashboard Overhaul -->
         <div class="screenshot-section">
-            <h2>Executive Dashboard <span class="badge">Tufte Overhaul (F011)</span></h2>
-            <p style="font-size: 14px; opacity: 0.5; margin-bottom: 20px;">Features Intelligence Quality Radar, Small Multiples sparklines, and professional summary tables.</p>
-            <img src="dashboard-refinement.png" alt="Executive Dashboard">
+            <div class="tag-row"><span class="badge">F011</span><span class="tag">Tufte</span><span class="tag">Data-Density</span></div>
+            <h2>Executive Intelligence Dashboard</h2>
+            <p class="desc">
+                Overhauled following Edward Tufte's principles of "least ink, most information." 
+                Featuring a multi-dimensional <strong>Intelligence Quality Radar</strong> and <strong>Small Multiples</strong> sparklines for ingestion trends.
+            </p>
+            <img src="dashboard-refinement.png" alt="Executive Dashboard Overhaul">
         </div>
 
+        <!-- Test Tab Overhaul -->
         <div class="screenshot-section">
-            <h2>Curate Tab <span class="badge">Intelligence Platform</span></h2>
-            <img src="curate-tab-refinement.png" alt="Curate Tab">
+            <div class="tag-row"><span class="badge">F012</span><span class="tag">HITL</span><span class="tag">Confidence</span></div>
+            <h2>Test Pillar: Detailed View Refinement</h2>
+            <p class="desc">
+                Transformed the Test tab into a professional testing vault. Note the <strong>Auto-Ready Confidence</strong> badge, 
+                the <strong>VAULT://</strong> protocol header, and the high-density typography replacing "lame" artifacts.
+            </p>
+            <img src="test-detail-refinement.png" alt="Test Detail Overhaul">
         </div>
 
+        <!-- Test Tab Sidebar -->
         <div class="screenshot-section">
-            <h2>Test Tab <span class="badge">Advanced Intelligence (F012)</span></h2>
-            <p style="font-size: 14px; opacity: 0.5; margin-bottom: 20px;">Overhauled with Automation Confidence scoring, Dual-Mode (Human/Code) rendering, and HITL Critique loops.</p>
-            <img src="test-tab-refinement-final.png" alt="Test Tab Overhaul">
-        </div>
-
-        <div class="screenshot-section">
-            <h2>Test Detail & Critique <span class="badge">Self-Healing HITL</span></h2>
-            <p style="font-size: 14px; opacity: 0.5; margin-bottom: 20px;">Tufte-inspired detail panels with integrated script critique and regeneration logic.</p>
-            <img src="test-detail-refinement.png" alt="Test Detail Refinement">
+            <div class="tag-row"><span class="badge">F012</span><span class="tag">Sidebar</span><span class="tag">Inventory</span></div>
+            <h2>Historical Test Explorer</h2>
+            <p class="desc">
+                Compact, data-rich sidebar managing over 8,700 real test scenarios with real-time filtering and status tracking.
+            </p>
+            <img src="test-tab-refinement-final.png" alt="Historical Test Explorer">
         </div>
     </div>
 </body>

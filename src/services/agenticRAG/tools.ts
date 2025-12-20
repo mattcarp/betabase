@@ -91,7 +91,7 @@ export const vectorSearchTool: ToolDefinition = {
         content: doc.content.substring(0, 300),
         source_type: doc.source_type,
         similarity: doc.similarity,
-        rerankScore: doc.rerankScore,
+        rerankScore: (doc as any).rerankScore,
       })),
       count: result.documents.length,
       metrics: result.stage1Metrics,

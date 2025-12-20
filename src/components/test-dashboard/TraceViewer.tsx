@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { Slider } from "../ui/slider";
 import { ScrollArea } from "../ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Label } from "../ui/label";
 import {
   Play,
   Pause,
@@ -26,6 +27,8 @@ import {
   AlertCircle,
   Info,
   Pencil,
+  Sparkles,
+  Zap,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { AnnotationManager, AnnotationPins } from "./AnnotationManager";
@@ -236,7 +239,6 @@ export const TraceViewer: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Button
-                  className="mac-button mac-button-outline"
                   variant="outline"
                   className="mac-button mac-button-outline"
                   size="icon"
@@ -245,7 +247,6 @@ export const TraceViewer: React.FC = () => {
                   <SkipBack className="h-4 w-4" />
                 </Button>
                 <Button
-                  className="mac-button mac-button-primary"
                   variant="default"
                   className="mac-button mac-button-primary"
                   size="icon"
@@ -254,7 +255,6 @@ export const TraceViewer: React.FC = () => {
                   {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
                 </Button>
                 <Button
-                  className="mac-button mac-button-outline"
                   variant="outline"
                   className="mac-button mac-button-outline"
                   size="icon"
@@ -268,11 +268,15 @@ export const TraceViewer: React.FC = () => {
                   <div className="flex gap-2">
                     {[0.5, 1, 2, 4].map((speed) => (
                       <Button
-                        className="mac-button mac-button-primary"
                         key={speed}
                         variant={playbackSpeed === speed ? "default" : "outline"}
                         size="sm"
                         onClick={() => setPlaybackSpeed(speed)}
+                        className={
+                          playbackSpeed === speed
+                            ? "mac-button mac-button-primary"
+                            : "mac-button mac-button-outline"
+                        }
                       >
                         {speed}x
                       </Button>
@@ -283,17 +287,20 @@ export const TraceViewer: React.FC = () => {
 
               <div className="flex items-center gap-2">
                 <Button
-                  className="mac-button mac-button-primary"
                   variant={annotationsEnabled ? "default" : "outline"}
                   size="sm"
                   onClick={() => setAnnotationsEnabled(!annotationsEnabled)}
-                  className="gap-2"
+                  className={cn(
+                    "gap-2",
+                    annotationsEnabled
+                      ? "mac-button mac-button-primary"
+                      : "mac-button mac-button-outline"
+                  )}
                 >
                   <Pencil className="h-4 w-4" />
                   Annotations
                 </Button>
                 <Button
-                  className="mac-button mac-button-outline"
                   variant="outline"
                   className="mac-button mac-button-outline"
                   size="sm"
@@ -302,7 +309,6 @@ export const TraceViewer: React.FC = () => {
                   Fullscreen
                 </Button>
                 <Button
-                  className="mac-button mac-button-outline"
                   variant="outline"
                   className="mac-button mac-button-outline"
                   size="sm"
@@ -405,18 +411,26 @@ export const TraceViewer: React.FC = () => {
                   <CardTitle className="text-lg">Viewport</CardTitle>
                   <div className="flex gap-2">
                     <Button
-                      className="mac-button mac-button-primary"
                       variant={selectedDevice === "desktop" ? "default" : "outline"}
                       size="sm"
                       onClick={() => setSelectedDevice("desktop")}
+                      className={
+                        selectedDevice === "desktop"
+                          ? "mac-button mac-button-primary"
+                          : "mac-button mac-button-outline"
+                      }
                     >
                       <Monitor className="h-4 w-4" />
                     </Button>
                     <Button
-                      className="mac-button mac-button-primary"
                       variant={selectedDevice === "mobile" ? "default" : "outline"}
                       size="sm"
                       onClick={() => setSelectedDevice("mobile")}
+                      className={
+                        selectedDevice === "mobile"
+                          ? "mac-button mac-button-primary"
+                          : "mac-button mac-button-outline"
+                      }
                     >
                       <Smartphone className="h-4 w-4" />
                     </Button>

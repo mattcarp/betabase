@@ -6,7 +6,9 @@ import { cookies } from "next/headers";
 import { z } from 'zod/v3';
 // import type OpenAI from "openai"; // Not needed for Vercel AI SDK
 // import { aomaCache } from "../../../src/services/aomaCache";
-import { aomaOrchestrator } from "@/services/aomaOrchestrator";
+// DISABLED: aomaOrchestrator removed - UnifiedRAG is now the sole retrieval path
+// This eliminates duplicate vector queries and ~2-5s latency
+// import { aomaOrchestrator } from "@/services/aomaOrchestrator";
 // import { aomaParallelQuery } from "../../../src/services/aomaParallelQuery";
 import { modelConfig } from "@/services/modelConfig";
 import {
@@ -403,7 +405,7 @@ export async function POST(req: Request) {
     const unifiedRAG = new UnifiedRAGOrchestrator();
     const sessionManager = getSessionStateManager();
     let ragMetadata: any = null;
-    let vectorTrace: any = null;
+    // vectorTrace removed - aomaOrchestrator no longer used
 
     // Generate session ID (use conversation ID if available)
     const sessionId = `session_${Date.now()}`;
@@ -455,8 +457,7 @@ export async function POST(req: Request) {
 
       // Performance tracking
       const perfStart = Date.now();
-      let vectorStartTime: number | null = null;
-      let vectorEndTime: number | null = null;
+      // vectorStartTime/vectorEndTime removed - aomaOrchestrator no longer used
 
       // PHASE 0 REMOVED: Intent classifier added ~85ms latency for ~15ms savings
       // All sources are now queried, synthesis step handles relevance
@@ -556,214 +557,89 @@ export async function POST(req: Request) {
             durationMs: Date.now() - ragStartTime,
           });
           // Continue with standard AOMA retrieval
-        }
-
-        // ========================================
-        // PHASE 2: Vector Orchestrator (Supabase-only, ~100ms)
-        // ========================================
-        // Direct Supabase pgvector queries - no external services
-        console.log("🚀 Querying vector orchestrator (Supabase pgvector)...");
-
-        // Langfuse: Start vector search tracing (declare outside try for catch block access)
-        vectorTrace = langfuseTrace.traceVectorSearch({
-          query: queryString,
-          provider: "gemini",
-          threshold: 0.50,
-          topK: 10,
-        });
-
-        // Fast timeout - Supabase queries should complete in <500ms
-        const preferFast = mode === "fast" || waitForAOMA === false;
-        const defaultTimeout = preferFast ? 2000 : 5000; // Much shorter - Supabase is fast
-        const orchestratorTimeoutMs = Number(
-          process.env.VECTOR_ORCHESTRATOR_TIMEOUT_MS || String(defaultTimeout)
-        );
-        console.log(`🔀 Starting vector query (${orchestratorTimeoutMs}ms timeout)...`);
-        
-        vectorStartTime = Date.now();
-        // Query all sources - no intent-based filtering
-        const orchestratorResult = (await Promise.race([
-          aomaOrchestrator.executeOrchestration(queryString),
-          new Promise((_, reject) =>
-            setTimeout(
-              () => reject(new Error(`Vector query timeout after ${orchestratorTimeoutMs}ms`)),
-              orchestratorTimeoutMs
-            )
-          ),
-        ])) as any;
-        vectorEndTime = Date.now();
-        const vectorDuration = vectorEndTime - vectorStartTime;
-        console.log(`⚡ Vector query completed in ${vectorDuration}ms`);
-
-        // Handle different response formats from the orchestrator
-        let contextContent = null;
-
-        if (orchestratorResult) {
-          // Try direct response/content fields first
-          contextContent = orchestratorResult.response || orchestratorResult.content;
-
-          // If not found, check for nested result structure (from /api/aoma endpoint)
-          if (!contextContent && orchestratorResult.result?.content) {
-            const contentArray = orchestratorResult.result.content;
-            if (Array.isArray(contentArray) && contentArray.length > 0) {
-              const textItem = contentArray.find((item: any) => item.type === "text");
-              if (textItem?.text) {
-                try {
-                  const parsed = JSON.parse(textItem.text);
-                  contextContent = parsed.response;
-                } catch (e) {
-                  contextContent = textItem.text;
-                }
-              }
-            }
-          }
-        }
-
-        if (
-          contextContent ||
-          (orchestratorResult.sources && orchestratorResult.sources.length > 0)
-        ) {
-          // NEW: Synthesize raw vector results into human-friendly context
-          // This prevents dumping 17 raw Jira tickets on the user
-          let synthesizedCtx = null;
-          if (orchestratorResult.sources && orchestratorResult.sources.length > 0) {
-            console.log(
-              "🧠 Synthesizing context from",
-              orchestratorResult.sources.length,
-              "sources..."
-            );
-            const synthStart = Date.now();
-
-            // Convert to VectorResult format
-            const vectorResults: VectorResult[] = orchestratorResult.sources.map((s: any) => ({
-              content: s.content || "",
-              source_type: s.source_type || "unknown",
-              source_id: s.source_id,
-              similarity: s.similarity,
-              metadata: s.metadata,
+          // ========================================
+          // BUILD CONTEXT FROM UNIFIED RAG RESULTS
+          // ========================================
+          // PHASE 2 (aomaOrchestrator) REMOVED - UnifiedRAG is now the sole retrieval path
+          // This eliminates duplicate vector queries and ~2-5s latency
+          
+          if (ragResult.documents && ragResult.documents.length > 0) {
+            console.log(`📄 Building context from ${ragResult.documents.length} UnifiedRAG documents...`);
+            
+            // Synthesize context from UnifiedRAG documents
+            const vectorResults: VectorResult[] = ragResult.documents.map((doc: any) => ({
+              content: doc.content || doc.text || "",
+              source_type: doc.source_type || "unknown",
+              source_id: doc.id || doc.source_id,
+              similarity: doc.similarity || doc.rerankScore || 0.75,
+              metadata: doc.metadata || {},
             }));
 
-            synthesizedCtx = await synthesizeContext(queryString, vectorResults);
+            const synthesizedCtx = await synthesizeContext(queryString, vectorResults);
             console.log(`✅ Synthesis completed in ${synthesizedCtx.synthesisTimeMs}ms`);
             console.log(`📊 Key insights: ${synthesizedCtx.keyInsights.length}`);
+
+            const formattedContext = formatContextForPrompt(synthesizedCtx);
+
+            knowledgeElements.push({
+              type: "context",
+              content: formattedContext,
+              metadata: {
+                source: "unified-rag",
+                strategy: ragResult.metadata.strategy,
+                synthesized: true,
+                synthesisTimeMs: synthesizedCtx.synthesisTimeMs,
+                timestamp: new Date().toISOString(),
+              },
+            });
+
+            aomaContext = `\n\n[Knowledge Base Context:\n${formattedContext}\n]`;
+            aomaConnectionStatus = "success";
+            console.log(`📝 Context length: ${formattedContext.length} chars (synthesized from UnifiedRAG)`);
+
+            // 📎 Extract citation sources for inline display
+            citationSources = ragResult.documents.slice(0, 5).map((doc: any, idx: number) => ({
+              id: `source-${idx + 1}`,
+              title: doc.metadata?.title || doc.metadata?.file_path || doc.metadata?.ticket_key || `Source ${idx + 1}`,
+              url: doc.metadata?.url || doc.metadata?.jira_url,
+              description: doc.metadata?.summary || (doc.content || doc.text || "").substring(0, 150),
+              confidence: Math.round((doc.similarity || doc.rerankScore || 0.75) * 100),
+              sourceType: doc.source_type
+            }));
+            console.log(`📎 Extracted ${citationSources.length} citation sources from UnifiedRAG`);
+
+            // Add screenshot references if available
+            ragResult.documents.slice(0, 6).forEach((doc: any) => {
+              if (doc.metadata?.screenshot_path) {
+                knowledgeElements.push({
+                  type: "reference",
+                  content: doc.content || doc.text || "",
+                  metadata: {
+                    source: "unified-rag",
+                    source_type: doc.source_type,
+                    screenshot_path: doc.metadata.screenshot_path,
+                    timestamp: new Date().toISOString(),
+                  },
+                });
+              }
+            });
+          } else {
+            console.log("⚠️ UnifiedRAG returned no documents");
+            aomaConnectionStatus = "no-results";
           }
 
-          // Use synthesized context if available, otherwise fall back to raw
-          const formattedContext = synthesizedCtx
-            ? formatContextForPrompt(synthesizedCtx)
-            : contextContent;
-
-          knowledgeElements.push({
-            type: "context",
-            content: formattedContext,
-            metadata: {
-              source: "aoma-orchestrator",
-              synthesized: !!synthesizedCtx,
-              synthesisTimeMs: synthesizedCtx?.synthesisTimeMs,
-              timestamp: new Date().toISOString(),
-            },
+          // Performance summary
+          const totalDuration = Date.now() - perfStart;
+          console.log("📊 RAG Performance Summary:", {
+            totalMs: totalDuration,
+            ragTimeMs: ragMetadata?.timeMs || "N/A",
+            strategy: ragMetadata?.strategy || "unknown",
+            contextLength: aomaContext.length,
+            status: aomaConnectionStatus,
+            documents: ragResult.documents?.length || 0,
           });
-
-          aomaContext = `\n\n[AOMA Context:\n${formattedContext}\n]`;
-          aomaConnectionStatus = "success";
-          console.log("✅ Vector orchestration successful");
-          console.log(
-            `📝 Context length: ${formattedContext?.length || 0} chars (${synthesizedCtx ? "synthesized" : "raw"})`
-          );
-        } else {
-          console.error("❌ AOMA orchestrator returned no content", orchestratorResult);
-          aomaConnectionStatus = "failed";
-
-          knowledgeElements.push({
-            type: "warning",
-            content:
-              "The AOMA knowledge base is currently unavailable. This may be a temporary connection issue. If this persists, please contact matt@mattcarpenter.com for assistance.",
-            metadata: {
-              timestamp: new Date().toISOString(),
-            },
-          });
+          console.log(`⏱️  PERFORMANCE: RAG completed in ${totalDuration}ms - streaming will now start`);
         }
-
-        // Orchestrator now handles both Supabase and OpenAI internally with intelligent merging
-        // Extract sources from merged results for knowledge elements
-        if (orchestratorResult.sources && Array.isArray(orchestratorResult.sources)) {
-          console.log(
-            `✅ Orchestrator returned ${orchestratorResult.sources.length} merged results`
-          );
-
-          // 📎 Extract citation sources for inline display
-          console.log(`📎 DEBUG: orchestratorResult.sources exists, length:`, orchestratorResult.sources.length);
-          console.log(`📎 DEBUG: First source:`, JSON.stringify(orchestratorResult.sources[0], null, 2).substring(0, 300));
-          
-          citationSources = orchestratorResult.sources.slice(0, 5).map((s: any, idx: number) => ({
-            id: `source-${idx + 1}`,
-            title: s.metadata?.title || s.metadata?.file_path || s.metadata?.ticket_key || `Source ${idx + 1}`,
-            url: s.metadata?.url || s.metadata?.jira_url,
-            description: s.metadata?.summary || s.content?.substring(0, 150),
-            confidence: Math.round((s.similarity || s.score || 0) * 100),
-            sourceType: s.source_type
-          }));
-          console.log(`📎 Extracted ${citationSources.length} citation sources:`, citationSources.map(s => s.title));
-
-          // Add source information to knowledge elements
-          orchestratorResult.sources.slice(0, 6).forEach((source: any) => {
-            if (source.metadata?.screenshot_path) {
-              knowledgeElements.push({
-                type: "reference",
-                content: source.content || "",
-                metadata: {
-                  source: source.source || "merged",
-                  source_type: source.source_type,
-                  screenshot_path: source.metadata.screenshot_path,
-                  timestamp: new Date().toISOString(),
-                },
-              });
-            }
-          });
-
-          // Add summary of sources
-          const supabaseCount = orchestratorResult.sources.filter(
-            (s: any) => s.source === "supabase"
-          ).length;
-          const openaiCount = orchestratorResult.sources.filter(
-            (s: any) => s.source === "openai"
-          ).length;
-          knowledgeElements.push({
-            type: "context",
-            content: `Found ${orchestratorResult.sources.length} results (${supabaseCount} from Supabase, ${openaiCount} from OpenAI)`,
-            metadata: {
-              source: "merged-results",
-              supabaseCount,
-              openaiCount,
-              timestamp: new Date().toISOString(),
-            },
-          });
-        }
-
-        // Performance summary
-        const totalDuration = Date.now() - perfStart;
-        const orchestratorMs =
-          vectorEndTime != null && vectorStartTime != null
-            ? vectorEndTime - vectorStartTime
-            : "N/A";
-        console.log("📊 Vector Query Performance Summary:", {
-          totalMs: totalDuration,
-          orchestratorMs,
-          contextLength: aomaContext.length,
-          status: aomaConnectionStatus,
-          sources: orchestratorResult.sources?.length || 0,
-        });
-        console.log(
-          `⏱️  PERFORMANCE: Vector query completed in ${totalDuration}ms - streaming will now start`
-        );
-
-        // Langfuse: End vector search tracing
-        vectorTrace.end({
-          count: orchestratorResult.sources?.length || 0,
-          topSimilarity: orchestratorResult.sources?.[0]?.similarity,
-          durationMs: totalDuration,
-          sources: orchestratorResult.sources?.slice(0, 5).map((s: any) => s.source_type),
-        });
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         const errorDuration = Date.now() - perfStart;
@@ -779,58 +655,26 @@ export async function POST(req: Request) {
                 ? "SUPABASE_FUNCTION_MISSING"
                 : "UNKNOWN";
 
-        // Log comprehensive error details server-side
-        const vectorDuration =
-          vectorEndTime != null && vectorStartTime != null
-            ? vectorEndTime - vectorStartTime
-            : "N/A";
-
-        console.error("❌ Vector query error:", {
+        console.error("❌ RAG query error:", {
           errorType,
           error: errorMessage,
           stack: error instanceof Error ? error.stack : undefined,
           query: queryString.substring(0, 100),
           durationMs: errorDuration,
-          vectorDuration,
           timestamp: new Date().toISOString(),
         });
 
-        // Langfuse: End vector search tracing with error (if it was initialized)
-        if (typeof vectorTrace !== 'undefined') {
-          vectorTrace.end({
-            count: 0,
-            durationMs: errorDuration,
-          });
-        }
-
         aomaConnectionStatus = "failed";
 
-        // Provide specific user-facing error messages based on error type
-        let userMessage = "AOMA knowledge base temporarily unavailable.";
-
-        if (errorMessage.includes("API key") || errorMessage.includes("401")) {
-          userMessage =
-            "⚠️ AOMA MCP server authentication error. The OpenAI API key needs to be updated. Please contact support.";
-          console.error("🔑 CRITICAL: AOMA MCP server has invalid OpenAI API key!");
-        } else if (errorMessage.includes("unreachable") || errorMessage.includes("ECONNREFUSED")) {
-          userMessage = "⚠️ AOMA MCP server is not responding. Please check that it's running.";
-          console.error("🔌 CRITICAL: Cannot connect to AOMA MCP server!");
-        } else if (errorMessage.includes("timeout")) {
-          userMessage = "⚠️ AOMA query timed out. The server may be overloaded.";
-        }
+        // Provide user-facing error message
+        const userMessage = "Knowledge base temporarily unavailable. Please try again.";
 
         knowledgeElements.push({
           type: "warning",
           content: userMessage,
           metadata: {
             timestamp: new Date().toISOString(),
-            errorType: errorMessage.includes("API key")
-              ? "auth_error"
-              : errorMessage.includes("unreachable")
-                ? "connection_error"
-                : errorMessage.includes("timeout")
-                  ? "timeout_error"
-                  : "unknown_error",
+            errorType,
           },
         });
       }

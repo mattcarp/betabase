@@ -182,10 +182,7 @@ export const ManualTestingPanel: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2
-            className="mac-heading"
-            className="mac-heading text-2xl font-light text-foreground mac-title"
-          >
+          <h2 className="mac-heading text-2xl font-light text-foreground mac-title">
             Manual Testing Mode
           </h2>
           <p className="text-sm text-muted-foreground mt-2">
@@ -257,7 +254,6 @@ export const ManualTestingPanel: React.FC = () => {
                 </Button>
 
                 <Input
-                  className="mac-input"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -280,14 +276,15 @@ export const ManualTestingPanel: React.FC = () => {
                   const Icon = VIEWPORT_SIZES[mode].icon;
                   return (
                     <Button
-                      className="mac-button mac-button-primary"
                       key={mode}
                       variant={viewport === mode ? "default" : "outline"}
                       size="sm"
                       onClick={() => setViewport(mode)}
                       className={cn(
                         "gap-2 transition-all duration-300",
-                        viewport === mode && "shadow-lg shadow-blue-500/20"
+                        viewport === mode
+                          ? "mac-button mac-button-primary shadow-lg shadow-blue-500/20"
+                          : "mac-button mac-button-outline"
                       )}
                     >
                       <Icon className="h-3 w-3" />
@@ -328,10 +325,7 @@ export const ManualTestingPanel: React.FC = () => {
           {/* Recording Controls */}
           <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-6">
-              <h3
-                className="mac-title"
-                className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
-              >
+              <h3 className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2">
                 <Circle className="h-4 w-4 text-red-500" />
                 Recording Controls
               </h3>
@@ -394,10 +388,7 @@ export const ManualTestingPanel: React.FC = () => {
           {/* Session Info */}
           <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-6">
-              <h3
-                className="mac-title"
-                className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
-              >
+              <h3 className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2">
                 <Clock className="h-4 w-4 text-blue-500" />
                 Session Information
               </h3>
@@ -456,10 +447,7 @@ export const ManualTestingPanel: React.FC = () => {
           {/* Quick Actions */}
           <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-6">
-              <h3
-                className="mac-title"
-                className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
-              >
+              <h3 className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2">
                 <Maximize2 className="h-4 w-4 text-purple-500" />
                 Quick Actions
               </h3>
@@ -501,10 +489,7 @@ export const ManualTestingPanel: React.FC = () => {
           {/* Testing Tips */}
           <Card className="mac-card mac-glass border-[var(--mac-utility-border-elevated)] bg-gradient-to-br from-blue-950/20 to-purple-950/20">
             <CardContent className="p-6">
-              <h3
-                className="mac-title"
-                className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2"
-              >
+              <h3 className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2">
                 <MousePointerClick className="h-4 w-4 text-blue-400" />
                 Testing Tips
               </h3>

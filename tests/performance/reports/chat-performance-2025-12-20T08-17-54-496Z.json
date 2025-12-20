@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-12-20T08:17:54.496Z",
+  "summary": {
+    "totalTests": 2,
+    "successCount": 0,
+    "failureCount": 2,
+    "avgTTFB": 0,
+    "avgTTFR": 0,
+    "avgTotal": 0
+  },
+  "results": [
+    {
+      "timestamp": "2025-12-20T08:17:26.738Z",
+      "query": "How do I upload assets to AOMA?",
+      "ttfb": 0,
+      "ttfr": 0,
+      "totalTime": 30002.815000000002,
+      "streamingStartDelay": 0,
+      "aomaOrchestrationTime": null,
+      "embeddingTime": null,
+      "vectorSearchTime": null,
+      "success": false,
+      "errorMessage": "page.waitForResponse: Timeout 30000ms exceeded while waiting for event \"response\""
+    },
+    {
+      "timestamp": "2025-12-20T08:17:54.482Z",
+      "query": "What metadata fields are required?",
+      "ttfb": 0,
+      "ttfr": 0,
+      "totalTime": 25711.509208999996,
+      "streamingStartDelay": 0,
+      "aomaOrchestrationTime": null,
+      "embeddingTime": null,
+      "vectorSearchTime": null,
+      "success": false,
+      "errorMessage": "page.waitForSelector: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-role=\"assistant\"], .assistant-message, [role=\"article\"]') to be visible\u001b[22m\n"
+    }
+  ]
+}

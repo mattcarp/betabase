@@ -20,7 +20,7 @@ function getSupabaseClient(): SupabaseClient | null {
   if (url && key) {
     globalThis.__supabaseClient = createClient(url, key, {
       auth: {
-        persistSession: typeof window !== "undefined", // Only persist in browser
+        persistSession: typeof (globalThis as any).window !== "undefined", // Only persist in browser
         storageKey: "sb-betabase-auth", // Unique storage key
       },
     });
@@ -31,7 +31,7 @@ function getSupabaseClient(): SupabaseClient | null {
 
 // Service client for server-side operations (use carefully!)
 function getSupabaseAdminClient(): SupabaseClient | null {
-  if (typeof window !== "undefined") {
+  if (typeof (globalThis as any).window !== "undefined") {
     return null; // Never expose admin client to browser
   }
   

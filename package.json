@@ -23,6 +23,7 @@
     "lint:quick": "./scripts/quick-lint-check.sh",
     "lint:file": "./scripts/lint-file.sh",
     "lint:fix-all": "npm run lint:fix && npm run format",
+    "lint:design-system": "./scripts/check-design-system.sh",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

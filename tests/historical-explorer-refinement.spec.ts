@@ -6,55 +6,41 @@ test('capture-visual-refinement', async ({ page }) => {
   // 1. DASHBOARD / CURATE
   console.log('--- Phase 1: Dashboard ---');
   await page.goto('http://localhost:3000#curate', { waitUntil: 'networkidle' });
-  
-  // The Curate page has its own sub-tabs. Default is "dashboard"
-  // Wait for the Radar Chart text
-  try {
-    await page.waitForSelector('text=Intelligence Quality Index', { timeout: 30000 });
-    await page.waitForTimeout(3000); // Animation buffer
-    await page.screenshot({ path: 'dashboard-refinement.png' });
-    console.log('✅ Captured dashboard-refinement.png');
-  } catch (e) {
-    console.log('❌ Failed to find Intelligence Quality Index. Taking fallback screenshot.');
-    await page.screenshot({ path: 'dashboard-failed.png' });
-  }
+  await page.waitForSelector('text=Intelligence Quality Index', { timeout: 30000 });
+  await page.waitForTimeout(3000);
+  await page.screenshot({ path: 'dashboard-refinement.png' });
 
   // 2. TEST TAB
   console.log('--- Phase 2: Test Tab ---');
   await page.goto('http://localhost:3000#test', { waitUntil: 'networkidle' });
+  await page.locator('button[role="tab"]:has-text("Historical Tests")').click();
   
-  // Click "Historical Tests" sub-tab
-  const historicalSubTab = page.locator('button[role="tab"]:has-text("Historical Tests")');
-  await historicalSubTab.click();
+  console.log('Waiting for test rows...');
+  const firstRow = page.locator('tr[data-test-id^="test-row-"]').first();
+  await firstRow.waitFor({ state: 'visible', timeout: 45000 });
+  await page.waitForTimeout(2000);
+  await page.screenshot({ path: 'test-tab-refinement-final.png' });
+
+  // 3. TEST DETAIL
+  console.log('--- Phase 3: Test Detail ---');
+  await firstRow.click();
+  await page.waitForSelector('text=Auto-Ready', { timeout: 20000 });
+  await page.waitForTimeout(2000);
+  await page.screenshot({ path: 'test-detail-refinement.png' });
+
+  // 4. GENERATE & CRITIQUE
+  console.log('--- Phase 4: Generate & Critique ---');
+  const genBtn = page.locator('button:has-text("Generate Automated Test")');
+  await genBtn.click();
   
-  try {
-    // Wait for the Archive icon or text
-    await page.waitForSelector('text=Historical Tests', { timeout: 30000 });
-    await page.waitForTimeout(3000);
-    await page.screenshot({ path: 'test-tab-refinement-final.png' });
-    console.log('✅ Captured test-tab-refinement-final.png');
-
-    // 3. TEST DETAIL
-    console.log('--- Phase 3: Test Detail ---');
-    // Wait for any row to be visible
-    const row = page.locator('tr[data-test-id^="test-row-"]').first();
-    await row.waitFor({ state: 'visible', timeout: 30000 });
-    await row.click();
-    
-    // Wait for overhaul indicators
-    await page.waitForSelector('text=VAULT://', { timeout: 20000 });
-    await page.waitForTimeout(2000);
-    await page.screenshot({ path: 'test-detail-refinement.png' });
-    console.log('✅ Captured test-detail-refinement.png');
-  } catch (e) {
-    console.log('❌ Failed to capture Test Tab details. ' + e.message);
-    await page.screenshot({ path: 'test-tab-failed.png' });
-  }
-
-  // 4. LANDING PAGE
-  console.log('--- Phase 4: Landing Page ---');
-  await page.goto('http://localhost:3000#chat', { waitUntil: 'networkidle' });
-  await page.waitForSelector('text=Welcome to The Betabase', { timeout: 20000 });
-  await page.screenshot({ path: 'landing-page.png' });
-  console.log('✅ Captured landing-page.png');
+  // Wait for code artifact to appear (Tokyo Night theme likely has specific colors or text)
+  await page.waitForSelector('text=Manual Execution Logic', { timeout: 30000 }); // It defaults to human mode if code is generating? No, wait.
+  
+  // Click Critique button (Edit3 icon)
+  const critiqueBtn = page.locator('button[title="Critique Script"]');
+  await critiqueBtn.waitFor({ state: 'visible', timeout: 30000 });
+  await critiqueBtn.click();
+  
+  await page.waitForSelector('text=Script Critique', { timeout: 10000 });
+  await page.screenshot({ path: 'critique-ui-refinement.png' });
 });

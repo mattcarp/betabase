@@ -159,12 +159,12 @@ export class ContextAwareRetrieval {
 
       // Extract successful query patterns
       const successfulQueries = (data || [])
-        .map(row => row.query)
+        .map((row: any) => row.query)
         .filter(Boolean);
 
       // Extract documents from retrieved contexts
       const relevantDocuments = (data || [])
-        .flatMap(row => row.retrieved_contexts || [])
+        .flatMap((row: any) => row.retrieved_contexts || [])
         .filter((doc: any) => doc && doc.doc_id);
 
       console.log(`📚 Loaded ${successfulQueries.length} successful queries from RLHF feedback`);

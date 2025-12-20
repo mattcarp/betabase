@@ -258,7 +258,7 @@ Respond with ONLY valid JSON in this exact format:
       
       // Load positive feedback with retrieved contexts
       // Using correct column names: retrieved_contexts, feedback_type, feedback_value
-      const { data: positiveFeedback, error } = await supabase
+      const { data: positiveFeedback, error } = await (supabase!)
         .from('rlhf_feedback')
         .select('retrieved_contexts, feedback_type, feedback_value')
         .or('feedback_type.eq.thumbs_up,feedback_value->>score.gte.4')

@@ -49,8 +49,8 @@
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
+    --border: 0 0% 8%; /* MAC Design System: subtle border (≈ rgba(255,255,255,0.08) on dark bg) */
+    --input: 0 0% 10%; /* Slightly more visible for form inputs */
     --ring: 212.7 26.8% 83.9%;
     
     /* MAC Data Storytelling Colors - Muted Professional Palette */
@@ -89,6 +89,32 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* MAC Design System: Override Tailwind zinc borders to be more subtle in dark mode */
+/* These hardcoded zinc colors are too bright against pure black backgrounds */
+.dark .border-zinc-800,
+.dark .border-b-zinc-800,
+.dark .border-t-zinc-800,
+.dark .border-l-zinc-800,
+.dark .border-r-zinc-800 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .border-zinc-900,
+.dark .border-b-zinc-900,
+.dark .border-t-zinc-900,
+.dark .border-l-zinc-900,
+.dark .border-r-zinc-900 {
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark .border-zinc-700,
+.dark .border-b-zinc-700,
+.dark .border-t-zinc-700,
+.dark .border-l-zinc-700,
+.dark .border-r-zinc-700 {
+  border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
 /* Custom styles */

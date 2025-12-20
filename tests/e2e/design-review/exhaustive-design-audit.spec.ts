@@ -1,7 +1,7 @@
 /**
  * EXHAUSTIVE DESIGN REVIEW TEST
  *
- * This test systematically clicks through EVERY interactive element in the SIAM application
+ * This test systematically clicks through EVERY interactive element in The Betabase application
  * and validates MAC Design System compliance.
  *
  * Coverage:

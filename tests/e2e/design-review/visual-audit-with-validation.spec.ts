@@ -1,7 +1,7 @@
 /**
  * VISUAL DESIGN AUDIT WITH SCREENSHOT VALIDATION
  *
- * This test navigates through the entire SIAM app using clicks (not hash URLs),
+ * This test navigates through the entire Betabase app using clicks (not hash URLs),
  * waits for actual content to load, captures screenshots, and validates they're
  * not blank/black before passing.
  */
@@ -112,7 +112,7 @@ function generateHTMLReport() {
   const html = `<!DOCTYPE html>
 <html>
 <head>
-  <title>SIAM Visual Design Audit Report</title>
+  <title>The Betabase Visual Design Audit Report</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #fff; padding: 20px; }
     h1 { border-bottom: 1px solid #333; padding-bottom: 10px; }
@@ -136,7 +136,7 @@ function generateHTMLReport() {
   </style>
 </head>
 <body>
-  <h1>SIAM Visual Design Audit Report</h1>
+  <h1>The Betabase Visual Design Audit Report</h1>
   <p>Generated: ${new Date().toISOString()}</p>
 
   <div class="summary">

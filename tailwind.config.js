@@ -24,8 +24,8 @@ module.exports = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
+        border: "rgba(255, 255, 255, 0.08)", /* MAC Design System: subtle border */
+        input: "rgba(255, 255, 255, 0.12)", /* Slightly more visible for form inputs */
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

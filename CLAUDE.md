@@ -59,7 +59,7 @@
 - **No promotional content**: Never add "Co-Authored-By: Claude" or similar
 - **Claude/\* branches auto-deleted** after PR merge
 
-## 🎨 MAC Design System
+## 🎨 MAC Design System - MANDATORY CSS RULES
 
 **Centralized location**: `~/Documents/projects/mc-ai-standards/`
 
@@ -72,12 +72,52 @@
 
 **Design review**: `/design-review` or `@fiona "perform design review"`
 
-**Validation rules**:
+### NEVER DO THIS (Hardcoded CSS = REJECTED)
 
-- Use `--mac-*` CSS variables for colors
-- Typography weights: 100-400 only
-- Spacing grid: 8px base unit
-- Prefer `.mac-*` classes
+```tsx
+// BAD - Hardcoded colors
+className="border-zinc-800"           // NO! Use border-border
+className="border-[#27272a]"          // NO! Hardcoded hex
+className="bg-[#1a1a1a]"              // NO! Use bg-background or mac-* class
+style={{ borderColor: '#333' }}       // NO! Inline styles with hardcoded colors
+className="text-gray-400"             // NO! Use text-muted-foreground
+```
+
+### ALWAYS DO THIS (Use Design System Variables)
+
+```tsx
+// GOOD - Design system classes
+className="border-border"             // Uses tailwind.config.js rgba value
+className="bg-background"             // Uses CSS variable
+className="text-foreground"           // Uses CSS variable
+className="text-muted-foreground"     // Uses CSS variable
+className="mac-card-static"           // Uses MAC Design System class
+className="border-[var(--mac-border)]" // Uses MAC CSS variable
+```
+
+### Border Colors - THE RULE
+
+- **ALL borders MUST use `border-border` class** - defined in tailwind.config.js as `rgba(255, 255, 255, 0.08)`
+- **NEVER use** `border-zinc-*`, `border-gray-*`, or any hardcoded border color
+- **For elevated borders**: Use `border-[rgba(255,255,255,0.12)]` or create a design system class
+
+### Color Variables Cheat Sheet
+
+| Need | Use This | NOT This |
+|------|----------|----------|
+| Border | `border-border` | `border-zinc-800` |
+| Background | `bg-background` | `bg-[#0a0a0a]` |
+| Card background | `mac-card-static` | `bg-zinc-900` |
+| Text primary | `text-foreground` | `text-white` |
+| Text secondary | `text-muted-foreground` | `text-gray-400` |
+| Input border | `border-input` | `border-zinc-700` |
+
+### Pre-Commit Check
+
+Before any UI code is considered complete:
+1. Search for hardcoded colors: `grep -r "zinc-\|gray-\|#[0-9a-fA-F]" --include="*.tsx"`
+2. If found, replace with design system equivalents
+3. Run `/design-review` skill to validate
 
 ## 🎯 Vercel AI SDK v5 & AI Elements
 

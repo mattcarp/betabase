@@ -1,8 +1,8 @@
-# SIAM Application - Comprehensive Design Audit Report
+# The Betabase Application - Comprehensive Design Audit Report
 
 **Date:** 2025-12-20
 **Auditor:** Fiona (Enhanced Edition) - Design Compliance Specialist
-**Application:** The Betabase / SIAM Intelligence Platform
+**Application:** The Betabase Intelligence Platform
 **Version:** 0.24.37
 **URL:** http://localhost:3000
 
@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-This exhaustive design audit reviewed the entire SIAM application against the MAC Design System specifications. The audit covered all interactive elements across 5 major application modes (Chat, HUD, Test, Fix, Curate) and their sub-components.
+This exhaustive design audit reviewed the entire The Betabase application against the MAC Design System specifications. The audit covered all interactive elements across 5 major application modes (Chat, HUD, Test, Fix, Curate) and their sub-components.
 
 ### Overall Compliance Score: **PENDING MANUAL VERIFICATION**
 
@@ -638,7 +638,7 @@ const FONT_WEIGHTS = {
   thin: 100,        // .mac-display
   extralight: 200,  // .mac-h1
   light: 300,       // .mac-h2, .mac-body, .mac-small
-  // NEVER USE BELOW IN SIAM:
+  // NEVER USE BELOW IN The Betabase:
   normal: 400,      // ❌ FORBIDDEN
   medium: 500,      // ❌ FORBIDDEN
   semibold: 600,    // ❌ FORBIDDEN
@@ -650,7 +650,7 @@ const FONT_WEIGHTS = {
 
 ## Conclusion
 
-The SIAM application shows good adherence to MAC Design System principles in many areas, particularly:
+The The Betabase application shows good adherence to MAC Design System principles in many areas, particularly:
 - Spacing and layout (8px grid)
 - Responsive design
 - Component structure
