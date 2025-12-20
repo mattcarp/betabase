@@ -181,7 +181,7 @@
       "name": "Introspection & Dogfooding Dashboard",
       "description": "Transform the introspection dropdown into a comprehensive observability dashboard with real Langfuse traces, cost tracking, latency breakdowns, and quality signals.",
       "specPath": ".specify/specs/FEAT-007-introspection/",
-      "currentTask": 3,
+      "currentTask": 8,
       "totalTasks": 20,
       "requirementRefs": [],
       "byteroverTags": "#introspection #langfuse #observability #dogfooding #speckit",
