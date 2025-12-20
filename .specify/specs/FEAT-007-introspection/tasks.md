@@ -76,13 +76,14 @@
 ## Phase 2: Cost & Performance
 
 ### P2-001: Create Cost Calculator Module
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: Create `src/lib/introspection/cost-calculator.ts`
 - **Acceptance**:
   - Pricing table for Claude, GPT-4, GPT-3.5, Gemini
   - `calculateCost(model, promptTokens, completionTokens)` returns USD
   - Updates easily when pricing changes
+- **Notes**: Created cost calculator with comprehensive pricing for OpenAI (GPT-4, GPT-4o, GPT-3.5), Anthropic (Claude 3/3.5), and Google (Gemini) models. Includes formatCost for display, calculateCostBreakdown for detailed info, and helper functions. All 24 unit tests passing.
 
 ### P2-002: Add Cost Display to Traces
 - **Status**: pending

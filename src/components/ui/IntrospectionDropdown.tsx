@@ -22,8 +22,11 @@ import {
   Clock,
   Layers,
   Eye,
+  DollarSign,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
+import { calculateCost, formatCost } from "@/lib/introspection/cost-calculator";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
 
 interface ActivityTrace {
   id: string;
@@ -273,6 +276,12 @@ export function IntrospectionDropdown() {
                 const isLLM = trace.runType === "llm";
                 const isRetriever = trace.runType === "retriever";
 
+                // Calculate cost for LLM traces
+                const cost =
+                  isLLM && metadata?.model && metadata?.promptTokens && metadata?.completionTokens
+                    ? calculateCost(metadata.model, metadata.promptTokens, metadata.completionTokens)
+                    : null;
+
                 return (
                   <DropdownMenuItem
                     key={trace.id}
@@ -313,6 +322,34 @@ export function IntrospectionDropdown() {
                         <span className="text-muted-foreground font-mono text-[10px]">
                           {metadata.totalTokens.toLocaleString()}t
                         </span>
+                      )}
+
+                      {/* Show cost for LLM traces */}
+                      {isLLM && cost !== null && (
+                        <TooltipProvider>
+                          <Tooltip delayDuration={200}>
+                            <TooltipTrigger asChild>
+                              <span className="flex items-center gap-1 text-[10px] font-mono text-green-600 dark:text-green-400">
+                                <DollarSign className="h-3 w-3" />
+                                {formatCost(cost).replace("$", "")}
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <div className="text-xs space-y-1">
+                                <div className="font-semibold">Estimated Cost</div>
+                                <div>
+                                  Input: {metadata.promptTokens.toLocaleString()} tokens
+                                </div>
+                                <div>
+                                  Output: {metadata.completionTokens.toLocaleString()} tokens
+                                </div>
+                                <div className="text-muted-foreground text-[10px] mt-1">
+                                  Based on {metadata.model} pricing
+                                </div>
+                              </div>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       )}
 
                       {/* Show similarity scores for retriever traces */}
@@ -422,6 +459,26 @@ export function IntrospectionDropdown() {
                             <span className="font-mono text-xs font-semibold">{(selectedTrace.metadata as any).totalTokens.toLocaleString()}</span>
                           </div>
                         )}
+                        {/* Cost display */}
+                        {(() => {
+                          const metadata = selectedTrace.metadata as any;
+                          const cost =
+                            metadata?.model && metadata?.promptTokens && metadata?.completionTokens
+                              ? calculateCost(metadata.model, metadata.promptTokens, metadata.completionTokens)
+                              : null;
+
+                          if (cost !== null) {
+                            return (
+                              <div className="flex justify-between pt-2 border-t border-border">
+                                <span className="text-muted-foreground font-semibold">Estimated Cost:</span>
+                                <span className="font-mono text-sm font-bold text-green-600 dark:text-green-400">
+                                  {formatCost(cost)}
+                                </span>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })()}
                       </>
                     )}
                     {/* Retriever-specific metadata */}
