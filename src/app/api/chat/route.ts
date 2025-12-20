@@ -20,12 +20,13 @@ import { getSessionStateManager } from "@/lib/sessionStateManager";
 import { DEFAULT_APP_CONTEXT } from "@/lib/supabase";
 // Langfuse observability
 import { traceChat, flushLangfuse } from "@/lib/langfuse";
-// Intent classifier for intelligent source routing (RAG optimization)
-import { classifyIntent, type IntentClassification } from "@/services/intentClassifier";
+// Intent classifier REMOVED - adds ~85ms latency, only saves ~15ms on vector queries
+// Risk/reward is poor: misclassification excludes relevant data entirely
 // Dynamic skill loader for optimized system prompts
 import { buildDynamicPrompt } from "@/services/skillLoader";
 // AI SDK Tools - LLM can call these for deterministic operations
 import { cdtextTool } from "@/tools/cdtext";
+// Phase 5: Parallel pre-processing REMOVED - depended on intent classifier
 
 // Allow streaming responses up to 60 seconds for AOMA queries
 export const maxDuration = 60;
@@ -457,42 +458,8 @@ export async function POST(req: Request) {
       let vectorStartTime: number | null = null;
       let vectorEndTime: number | null = null;
 
-      // ========================================
-      // PHASE 0: INTENT CLASSIFICATION (NEW!)
-      // ========================================
-      // Classify query intent to route to relevant sources only
-      // This prevents noise from irrelevant tables and improves response quality
-      let intentResult: IntentClassification | null = null;
-      const intentStartTime = Date.now();
-      
-      try {
-        intentResult = await classifyIntent(queryString, {
-          fallbackSources: ['knowledge', 'jira'], // Safe defaults
-        });
-        
-        const intentDuration = Date.now() - intentStartTime;
-        console.log(`🎯 [Intent] Classification complete in ${intentDuration}ms`);
-        console.log(`   Query type: ${intentResult.queryType}`);
-        console.log(`   Sources: [${intentResult.relevantSources.join(', ')}]`);
-        console.log(`   Confidence: ${(intentResult.confidence * 100).toFixed(0)}%`);
-        console.log(`   Reasoning: ${intentResult.reasoning}`);
-        
-        // Add intent metadata for debugging
-        knowledgeElements.push({
-          type: "context",
-          content: `Query classified as "${intentResult.queryType}" - searching: ${intentResult.relevantSources.join(', ')}`,
-          metadata: {
-            source: "intent-classifier",
-            queryType: intentResult.queryType,
-            confidence: intentResult.confidence,
-            reasoning: intentResult.reasoning,
-            timestamp: new Date().toISOString(),
-          },
-        });
-      } catch (intentError) {
-        console.warn("⚠️ [Intent] Classification failed, using all sources:", intentError);
-        // Continue without intent classification - will use all sources
-      }
+      // PHASE 0 REMOVED: Intent classifier added ~85ms latency for ~15ms savings
+      // All sources are now queried, synthesis step handles relevance
 
       try {
         // ========================================
@@ -613,18 +580,10 @@ export async function POST(req: Request) {
         );
         console.log(`🔀 Starting vector query (${orchestratorTimeoutMs}ms timeout)...`);
         
-        // Pass classified sources to orchestrator if available
-        const orchestratorOptions = intentResult?.relevantSources 
-          ? { sourceTypes: intentResult.relevantSources as string[] }
-          : undefined;
-        
-        if (orchestratorOptions?.sourceTypes) {
-          console.log(`🎯 Routing to sources: [${orchestratorOptions.sourceTypes.join(', ')}]`);
-        }
-        
         vectorStartTime = Date.now();
+        // Query all sources - no intent-based filtering
         const orchestratorResult = (await Promise.race([
-          aomaOrchestrator.executeOrchestration(queryString, orchestratorOptions),
+          aomaOrchestrator.executeOrchestration(queryString),
           new Promise((_, reject) =>
             setTimeout(
               () => reject(new Error(`Vector query timeout after ${orchestratorTimeoutMs}ms`)),
@@ -877,29 +836,15 @@ export async function POST(req: Request) {
       }
     }
 
-    // Extract sources for inline citations (declaring variable name for use below)
-
-    // Extract sources for inline citations (declaring variable name for use below)
-    citationSources = [];
-
     // ========================================
     // DYNAMIC SYSTEM PROMPT (Phase 3 Optimization)
     // ========================================
-    // Build system prompt dynamically based on query intent
-    // This reduces token usage from ~4000-5000 to ~500-1500
+    // Build system prompt dynamically based on query content
+    // Intent classification removed - skill loader uses keyword matching instead
     const queryForSkills = typeof messageContent === "string" ? messageContent : JSON.stringify(messageContent || "");
     
-    // Get skills to load based on intent classification
-    const forceSkills: string[] = [];
-    if (intentResult?.relevantSkills) {
-      forceSkills.push(...intentResult.relevantSkills);
-    }
-    
-    // Build the dynamic prompt with only relevant skills
+    // Build the dynamic prompt - skill loader will auto-detect relevant skills
     const dynamicPromptResult = buildDynamicPrompt(queryForSkills, {
-      queryType: intentResult?.queryType,
-      sourceTypes: intentResult?.relevantSources,
-      forceSkills: forceSkills.length > 0 ? forceSkills : undefined,
       aomaContext: aomaContext.trim() || undefined,
     });
     

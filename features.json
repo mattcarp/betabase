@@ -119,8 +119,11 @@
       "priority": 1,
       "name": "Query Latency Optimization",
       "description": "Reduce chat response time from ~1.8s to <1s for 95% of queries",
+      "specPath": ".specify/specs/FEAT-006-latency/",
+      "currentTask": 1,
+      "totalTasks": 7,
       "requirementRefs": ["REQ-001"],
-      "byteroverTags": "#latency #chat #performance #rag",
+      "byteroverTags": "#latency #chat #performance #rag #speckit",
       "passes": false,
       "verification": [
         "95th percentile response time < 1000ms",
@@ -129,7 +132,7 @@
         "Playwright timing assertions pass"
       ],
       "completedAt": null,
-      "notes": "Currently at 1797ms. Needs caching/optimization. See REQ-001 for full acceptance criteria."
+      "notes": "SpecKit integration complete. Run: /ralph-loop \"Implement FEAT-006 task 1. See .specify/specs/FEAT-006-latency/\" --max-iterations 20"
     },
     {
       "id": "F007",
@@ -165,10 +168,11 @@
         "Sort indicators (arrows) show current sort state",
         "Infinite scroll maintains sort order",
         "API correctly handles sortBy and sortOrder params",
-        "UI: Compact header and bottom-positioned action buttons (Dec 19)"
+        "UI: Compact header and bottom-positioned action buttons (Dec 19)",
+        "Persistence: Generated tests saved to Supabase (Dec 19)"
       ],
-      "completedAt": "2025-12-19T16:25:00Z",
-      "notes": "Implemented manual data-table logic. Dec 19: Further polished UI by shrinking header and moving action buttons to the bottom of the scrollable content for better visibility of test scripts."
+      "completedAt": "2025-12-19T16:50:00Z",
+      "notes": "Implemented manual data-table logic. Dec 19: Further polished UI by shrinking header, moving action buttons, renaming to 'Generate Automated Test', and persisting results to Supabase."
     }
   ],
   "backlog": [

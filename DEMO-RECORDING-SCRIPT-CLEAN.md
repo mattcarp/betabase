@@ -12,7 +12,7 @@
 > Let's dive in."
 
 ### Do:
-1. Type: "Show me The Betabase multi-tenant database architecture as an ERD"
+1. Type: "What are the different asset types in AOMA?"
 2. AI explains (shows it has knowledge)
 3. **Say:** "Okay, I'm running a demo now. For my friends, can you make an infographic of how the ERD works for the multi-tenant architecture of this system itself? Thanks!"
 4. Nano Banana generates (30-50 sec → edit to 5 sec)  
@@ -48,7 +48,7 @@
 ---
 
 ## 🎬 PILLAR 2: CURATE (2:30-3:45)
-NOTE Once we have the display fixed, definitely choose ID. Once we have the display fixed, definitely choose ID. 
+
 ### Do:
 1. Click thumbs down on a response
 2. Type feedback: "Should mention 2024 spec updates"

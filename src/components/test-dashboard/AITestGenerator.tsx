@@ -340,12 +340,12 @@ test.describe('${prompt}', () => {
               {isGenerating ? (
                 <>
                   <Sparkles className="h-4 w-4 mr-2 animate-spin" />
-                  Generating...
+                  Generating Automated Test...
                 </>
               ) : (
                 <>
                   <Wand2 className="h-4 w-4 mr-2" />
-                  Generate Test
+                  Generate Automated Test
                 </>
               )}
             </Button>
@@ -355,7 +355,7 @@ test.describe('${prompt}', () => {
         {/* Generated Tests History */}
         <Card className="mac-card">
           <CardHeader className="mac-card">
-            <CardTitle className="text-lg">Generated Tests</CardTitle>
+            <CardTitle className="text-lg">Generated Automated Tests</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <ScrollArea className="h-[200px]">

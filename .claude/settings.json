@@ -417,7 +417,6 @@
       "Bash(rm -rf ~)",
       "Bash(rm -rf ~/)",
       "Bash(sudo rm -rf:*)",
-      "Bash(:(){ :|:& };:)",
       "Bash(dd if=/dev/zero:*)",
       "Bash(mkfs:*)",
       "Bash(format:*)",

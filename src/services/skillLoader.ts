@@ -15,7 +15,10 @@
 
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import type { QueryType, SourceType } from './intentClassifier';
+
+// Type definitions (previously from intentClassifier, now local since intent classifier was removed)
+export type SourceType = 'knowledge' | 'jira' | 'git' | 'email' | 'firecrawl' | 'metrics';
+export type QueryType = 'technical' | 'status' | 'communication' | 'procedural' | 'troubleshooting' | 'general';
 
 // Skill definitions with their triggers and file paths
 export interface SkillDefinition {

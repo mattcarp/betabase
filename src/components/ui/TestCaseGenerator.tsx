@@ -195,7 +195,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
 
       const testCodeGenerated = parts.join('');
       setTestCode(testCodeGenerated);
-      toast.success("Test case generated! Review and save to file.");
+      toast.success("Automated test generated! Review and save to file.");
     } catch (error) {
       console.error("Error generating test:", error);
       toast.error("Failed to generate test case");
@@ -385,12 +385,12 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
                 {generating ? (
                   <>
                     <RefreshCw className="h-4 w-4 animate-spin" />
-                    Generating...
+                    Generating Automated Test...
                   </>
                 ) : (
                   <>
                     <FileCode className="h-4 w-4" />
-                    Generate Playwright Test
+                    Generate Automated Test
                   </>
                 )}
               </Button>

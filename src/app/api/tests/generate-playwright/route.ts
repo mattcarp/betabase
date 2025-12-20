@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText } from "ai";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY,
@@ -53,10 +59,37 @@ Generate ONLY the test code, no explanations:`;
       testCode = testCode.replace(/\n?```$/, "");
     }
 
+    // Persist to Supabase
+    const { data: insertedTest, error: insertError } = await supabase
+      .from("rlhf_generated_tests")
+      .insert({
+        source_query: testName,
+        source_correction: description,
+        test_name: `Automated: ${testName}`,
+        test_description: `Automatically generated from historical test #${testId}`,
+        test_code: testCode,
+        test_language: "typescript",
+        test_framework: "playwright",
+        status: "pending",
+        confidence: 0.85, // Default confidence for AI-generated scripts
+        generation_model: "gemini-2.0-flash",
+        generation_prompt: prompt,
+        generated_at: new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (insertError) {
+      console.error("Failed to persist generated test:", insertError);
+      // We still return the code even if persistence fails, but log it
+    }
+
     return NextResponse.json({
       success: true,
       testCode,
-      testId,
+      testId: testId,
+      persistedId: insertedTest?.id,
+      location: "rlhf_generated_tests",
       model: "gemini-2.0-flash",
     });
   } catch (error) {
