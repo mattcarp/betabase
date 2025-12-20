@@ -5,6 +5,7 @@ import {
   getTraceObservations,
   isLangfuseAvailable,
 } from "@/lib/introspection/langfuse-query";
+import { getRLHFStats, isRLHFAvailable } from "@/lib/introspection/rlhf-query";
 
 // Introspection API endpoint for SIAM internal monitoring
 export async function GET(request: NextRequest) {
@@ -137,6 +138,9 @@ export async function GET(request: NextRequest) {
     const endTime = Date.now();
     trackRequest("/api/introspection", "GET", endTime - startTime, 200);
 
+    // Fetch RLHF stats (last 24 hours)
+    const rlhfStats = isRLHFAvailable() ? await getRLHFStats(1) : null;
+
     // App health status based on service availability
     const hasSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
     const hasGemini = !!process.env.GOOGLE_GENERATIVE_AI_API_KEY;
@@ -155,6 +159,7 @@ export async function GET(request: NextRequest) {
         hasLangfuse,
       },
       traces: recentActivity,
+      rlhfStats,
       metrics: {
         performance: metrics.performance,
         system: {

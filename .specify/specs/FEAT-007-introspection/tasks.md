@@ -107,22 +107,24 @@
 - **Notes**: Created LatencyWaterfall component with color-coded segments, tooltips showing duration and percentage, legend, and detailed breakdown table. Added extractLatencySegments helper to parse Langfuse observations. Integrated into trace detail modal with API endpoint to fetch observations. All 11 unit tests passing. Fixed tooltip.tsx import path bug.
 
 ### P2-004: Implement Token Budget Tracking
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 2hr
 - **Description**: Aggregate and display token usage over time
 - **Acceptance**:
   - Daily/weekly totals calculated from Langfuse
   - Displayed in dropdown header
   - Optional: persist aggregates for faster loading
+- **Notes**: Created token-aggregator module with daily/weekly/all-time token budgets. Displays today's tokens, weekly tokens, and estimated weekly cost in dropdown header with tooltips. Integrated seamlessly with existing traces.
 
 ### P2-005: Add Slow Query Highlighting
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 45min
 - **Description**: Visual indicator for slow traces
 - **Acceptance**:
   - Traces > 2s show warning icon
   - Yellow/amber highlight in list
   - Filter option to show only slow queries
+- **Notes**: Added 2-second threshold constant, slow query detection helper, yellow border and background highlight for traces >2s, warning icon with tooltip, and "Slow Only" filter button in trace list header.
 
 ---
 

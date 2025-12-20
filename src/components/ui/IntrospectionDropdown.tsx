@@ -23,12 +23,16 @@ import {
   Layers,
   Eye,
   DollarSign,
+  ThumbsUp,
+  ThumbsDown,
+  ExternalLink,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
 import { calculateCost, formatCost } from "@/lib/introspection/cost-calculator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
 import { LatencyWaterfall, extractLatencySegments } from "./LatencyWaterfall";
 import { getTokenBudgets, formatTokenCount, type TokenBudget } from "@/lib/introspection/token-aggregator";
+import type { RLHFFeedbackStats } from "@/lib/introspection/rlhf-query";
 
 // Slow query threshold: 2 seconds
 const SLOW_QUERY_THRESHOLD_MS = 2000;
@@ -67,6 +71,7 @@ export function IntrospectionDropdown() {
   const [traceObservations, setTraceObservations] = useState<any[]>([]);
   const [tokenBudgets, setTokenBudgets] = useState<{ daily: TokenBudget; weekly: TokenBudget; allTime: TokenBudget } | null>(null);
   const [showOnlySlowQueries, setShowOnlySlowQueries] = useState(false);
+  const [rlhfStats, setRlhfStats] = useState<RLHFFeedbackStats | null>(null);
 
   // Fetch app health status and recent activity traces
   const fetchIntrospectionData = async () => {
@@ -84,6 +89,7 @@ export function IntrospectionDropdown() {
         const data = await response.json();
         setStatus(data.status);
         setTraces(data.traces || []);
+        setRlhfStats(data.rlhfStats || null);
       }
     } catch (error) {
       console.error("Failed to fetch introspection data:", error);
@@ -332,6 +338,49 @@ export function IntrospectionDropdown() {
                     </span>
                   </div>
                 )}
+              </div>
+            </>
+          )}
+
+          {/* RLHF Feedback Summary */}
+          {rlhfStats && rlhfStats.totalFeedback > 0 && (
+            <>
+              <DropdownMenuSeparator />
+              <div className="px-2 py-2.5 text-xs space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Feedback (24h):</span>
+                  <div className="flex items-center gap-2">
+                    <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
+                      <ThumbsUp className="h-3 w-3" />
+                      {rlhfStats.positiveFeedback}
+                    </span>
+                    <span className="flex items-center gap-1 text-red-600 dark:text-red-400">
+                      <ThumbsDown className="h-3 w-3" />
+                      {rlhfStats.negativeFeedback}
+                    </span>
+                  </div>
+                </div>
+                {rlhfStats.avgRating !== null && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Avg Rating:</span>
+                    <span className="font-mono text-xs">
+                      {rlhfStats.avgRating.toFixed(1)}/5.0
+                    </span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between">
+                  <a
+                    href="/curate"
+                    className="flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <span>Curator Workspace</span>
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                  <span className="text-muted-foreground text-[10px]">
+                    {rlhfStats.uniqueSessions} sessions
+                  </span>
+                </div>
               </div>
             </>
           )}
