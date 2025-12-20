@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { metrics, trackRequest, trackError, updatePerformanceMetrics } from "@/lib/metrics";
+import {
+  getRecentTraces,
+  getTraceObservations,
+  isLangfuseAvailable,
+} from "@/lib/introspection/langfuse-query";
 
 // Introspection API endpoint for SIAM internal monitoring
 export async function GET(_request: NextRequest) {
@@ -11,52 +16,98 @@ export async function GET(_request: NextRequest) {
     metrics.system.memoryUsage = process.memoryUsage();
     metrics.system.uptime = process.uptime();
 
-    // Generate some sample internal activity if we don't have real data yet
-    if (metrics.requests.length === 0) {
-      // Simulate recent chat requests for demo
-      const now = Date.now();
-      const sampleRequests = [
-        { path: "/api/chat", method: "POST", duration: 3200, status: 200, timestamp: now - 30000 },
-        {
-          path: "/api/vector-store/files",
-          method: "GET",
-          duration: 150,
-          status: 200,
-          timestamp: now - 25000,
-        },
-        { path: "/api/chat", method: "POST", duration: 5400, status: 200, timestamp: now - 20000 },
-        { path: "/api/health", method: "GET", duration: 45, status: 200, timestamp: now - 15000 },
-        { path: "/api/chat", method: "POST", duration: 2800, status: 200, timestamp: now - 10000 },
-      ];
+    let recentActivity: any[] = [];
 
-      sampleRequests.forEach((req) => {
-        metrics.requests.push({
-          ...req,
-        });
-      });
-      updatePerformanceMetrics();
+    // Try to get real Langfuse traces first
+    const hasLangfuse = isLangfuseAvailable();
+    if (hasLangfuse) {
+      const traces = await getRecentTraces(20);
+      if (traces && traces.length > 0) {
+        console.log(`[INTROSPECTION] Found ${traces.length} Langfuse traces`);
+
+        // Transform Langfuse traces to match UI format
+        recentActivity = await Promise.all(
+          traces.map(async (trace: any) => {
+            // Get observations for this trace to extract detailed info
+            const observations = await getTraceObservations(trace.id);
+
+            // Find the main LLM generation
+            const llmGeneration = observations?.find((obs: any) => obs.type === "GENERATION");
+
+            // Find vector search spans
+            const vectorSpans = observations?.filter(
+              (obs: any) => obs.type === "SPAN" && obs.name?.toLowerCase().includes("vector")
+            );
+
+            // Determine run type
+            let runType = "chain";
+            if (llmGeneration) runType = "llm";
+            else if (vectorSpans && vectorSpans.length > 0) runType = "retriever";
+            else if (trace.name?.toLowerCase().includes("tool")) runType = "tool";
+
+            // Calculate duration
+            const startTime = trace.timestamp ? new Date(trace.timestamp).getTime() : Date.now();
+            const endTime =
+              llmGeneration?.endTime || trace.endTime
+                ? new Date(llmGeneration?.endTime || trace.endTime).getTime()
+                : startTime;
+            const duration = endTime - startTime;
+
+            // Determine status
+            const hasError = trace.level === "ERROR" || llmGeneration?.level === "ERROR";
+            const status = hasError ? "error" : "success";
+
+            return {
+              id: trace.id,
+              name: trace.name || "Unnamed Trace",
+              runType,
+              startTime: trace.timestamp || new Date().toISOString(),
+              endTime: llmGeneration?.endTime || trace.endTime,
+              duration,
+              status,
+              error: hasError ? trace.statusMessage : undefined,
+              inputs: trace.input || llmGeneration?.input,
+              outputs: trace.output || llmGeneration?.output,
+              metadata: {
+                model: llmGeneration?.model,
+                promptTokens: llmGeneration?.usage?.promptTokens,
+                completionTokens: llmGeneration?.usage?.completionTokens,
+                totalTokens: llmGeneration?.usage?.totalTokens,
+                vectorSearchCount: vectorSpans?.length || 0,
+                similarityScores: vectorSpans?.map((span: any) => span.output?.similarity),
+                observationCount: observations?.length || 0,
+              },
+            };
+          })
+        );
+      } else {
+        console.log("[INTROSPECTION] No Langfuse traces available");
+      }
     }
 
-    // Get recent activity (last 20 requests)
-    const recentActivity = metrics.requests
-      .slice(-20)
-      .reverse()
-      .map((req) => ({
-        id: `req_${req.timestamp}`,
-        name: `${req.method} ${req.path}`,
-        runType: req.path.includes("/chat") ? "llm" : req.path.includes("/api/") ? "tool" : "chain",
-        startTime: new Date(req.timestamp).toISOString(),
-        endTime: new Date(req.timestamp + req.duration).toISOString(),
-        duration: req.duration,
-        status: req.status >= 400 ? "error" : "success",
-        error: req.error,
-        inputs: { method: req.method, path: req.path },
-        outputs: { status: req.status },
-        metadata: {
-          responseTime: `${req.duration}ms`,
-          statusCode: req.status,
-        },
-      }));
+    // Fallback to in-memory metrics if no Langfuse data
+    if (recentActivity.length === 0 && metrics.requests.length > 0) {
+      console.log("[INTROSPECTION] Using fallback in-memory metrics");
+      recentActivity = metrics.requests
+        .slice(-20)
+        .reverse()
+        .map((req) => ({
+          id: `req_${req.timestamp}`,
+          name: `${req.method} ${req.path}`,
+          runType: req.path.includes("/chat") ? "llm" : req.path.includes("/api/") ? "tool" : "chain",
+          startTime: new Date(req.timestamp).toISOString(),
+          endTime: new Date(req.timestamp + req.duration).toISOString(),
+          duration: req.duration,
+          status: req.status >= 400 ? "error" : "success",
+          error: req.error,
+          inputs: { method: req.method, path: req.path },
+          outputs: { status: req.status },
+          metadata: {
+            responseTime: `${req.duration}ms`,
+            statusCode: req.status,
+          },
+        }));
+    }
 
     // Track this request completion
     const endTime = Date.now();
@@ -72,11 +123,12 @@ export async function GET(_request: NextRequest) {
     return NextResponse.json({
       status: {
         enabled: true,
-        project: "SIAM Application Health",
+        project: hasLangfuse ? "Langfuse Traces" : "SIAM Application Health",
         environment: process.env.NODE_ENV || "development",
         tracingEnabled: isHealthy,
         hasSupabase,
         hasAIProvider: hasGemini || hasOpenAI,
+        hasLangfuse,
       },
       traces: recentActivity,
       metrics: {

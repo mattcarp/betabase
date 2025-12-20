@@ -46,6 +46,7 @@ interface AppHealthStatus {
   tracingEnabled: boolean;
   hasSupabase: boolean;
   hasAIProvider: boolean;
+  hasLangfuse?: boolean;
 }
 
 export function IntrospectionDropdown() {
@@ -221,6 +222,24 @@ export function IntrospectionDropdown() {
                     )}
                   </span>
                 </div>
+                {status.hasLangfuse !== undefined && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Langfuse:</span>
+                    <span className={`flex items-center gap-1.5 font-medium ${status.hasLangfuse ? 'text-green-500' : 'text-yellow-500'}`}>
+                      {status.hasLangfuse ? (
+                        <>
+                          <CheckCircle className="h-3.5 w-3.5" />
+                          Connected
+                        </>
+                      ) : (
+                        <>
+                          <AlertCircle className="h-3.5 w-3.5" />
+                          Unavailable
+                        </>
+                      )}
+                    </span>
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -249,39 +268,66 @@ export function IntrospectionDropdown() {
                 )}
               </div>
             ) : (
-              traces.map((trace) => (
-                <DropdownMenuItem
-                  key={trace.id}
-                  className="flex flex-col items-start gap-2 py-2 cursor-pointer"
-                  onClick={() => {
-                    setSelectedTrace(trace);
-                    setDetailsOpen(true);
-                  }}
-                >
-                  <div className="flex items-center justify-between w-full">
-                    <div className="flex items-center gap-2">
-                      {getStatusIcon(trace.status)}
-                      <span className="text-sm font-medium truncate max-w-[200px]">
-                        {trace.name}
-                      </span>
+              traces.map((trace) => {
+                const metadata = trace.metadata as any;
+                const isLLM = trace.runType === "llm";
+                const isRetriever = trace.runType === "retriever";
+
+                return (
+                  <DropdownMenuItem
+                    key={trace.id}
+                    className="flex flex-col items-start gap-2 py-2 cursor-pointer"
+                    onClick={() => {
+                      setSelectedTrace(trace);
+                      setDetailsOpen(true);
+                    }}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-2">
+                        {getStatusIcon(trace.status)}
+                        <span className="text-sm font-medium truncate max-w-[200px]">
+                          {trace.name}
+                        </span>
+                      </div>
+                      <ChevronRight className="h-3 w-3 opacity-50" />
                     </div>
-                    <ChevronRight className="h-3 w-3 opacity-50" />
-                  </div>
-                  <div className="flex items-center gap-2 text-xs">
-                    <Badge
-                      variant="outline"
-                      className={`text-xs px-2 py-0 ${getRunTypeColor(trace.runType)}`}
-                    >
-                      {trace.runType}
-                    </Badge>
-                    <span className="text-muted-foreground">{formatTime(trace.startTime)}</span>
-                    <span className="text-muted-foreground">{formatDuration(trace.duration)}</span>
-                  </div>
-                  {trace.error && (
-                    <span className="text-xs text-red-500 truncate w-full">{trace.error}</span>
-                  )}
-                </DropdownMenuItem>
-              ))
+                    <div className="flex items-center gap-2 text-xs flex-wrap">
+                      <Badge
+                        variant="outline"
+                        className={`text-xs px-2 py-0 ${getRunTypeColor(trace.runType)}`}
+                      >
+                        {trace.runType}
+                      </Badge>
+                      <span className="text-muted-foreground">{formatTime(trace.startTime)}</span>
+                      <span className="text-muted-foreground">{formatDuration(trace.duration)}</span>
+
+                      {/* Show model for LLM traces */}
+                      {isLLM && metadata?.model && (
+                        <span className="text-muted-foreground font-mono text-[10px]">
+                          {metadata.model}
+                        </span>
+                      )}
+
+                      {/* Show tokens for LLM traces */}
+                      {isLLM && metadata?.totalTokens && (
+                        <span className="text-muted-foreground font-mono text-[10px]">
+                          {metadata.totalTokens.toLocaleString()}t
+                        </span>
+                      )}
+
+                      {/* Show similarity scores for retriever traces */}
+                      {isRetriever && metadata?.similarityScores && (
+                        <span className="text-muted-foreground font-mono text-[10px]">
+                          sim: {metadata.similarityScores.filter((s: any) => s != null).join(", ")}
+                        </span>
+                      )}
+                    </div>
+                    {trace.error && (
+                      <span className="text-xs text-red-500 truncate w-full">{trace.error}</span>
+                    )}
+                  </DropdownMenuItem>
+                );
+              })
             )}
           </ScrollArea>
 
@@ -349,6 +395,61 @@ export function IntrospectionDropdown() {
                         {selectedTrace.status}
                       </Badge>
                     </div>
+                    {/* LLM-specific metadata */}
+                    {selectedTrace.runType === "llm" && selectedTrace.metadata && (
+                      <>
+                        {(selectedTrace.metadata as any).model && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Model:</span>
+                            <span className="font-mono text-xs">{(selectedTrace.metadata as any).model}</span>
+                          </div>
+                        )}
+                        {(selectedTrace.metadata as any).promptTokens && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Prompt Tokens:</span>
+                            <span className="font-mono text-xs">{(selectedTrace.metadata as any).promptTokens.toLocaleString()}</span>
+                          </div>
+                        )}
+                        {(selectedTrace.metadata as any).completionTokens && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Completion Tokens:</span>
+                            <span className="font-mono text-xs">{(selectedTrace.metadata as any).completionTokens.toLocaleString()}</span>
+                          </div>
+                        )}
+                        {(selectedTrace.metadata as any).totalTokens && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Total Tokens:</span>
+                            <span className="font-mono text-xs font-semibold">{(selectedTrace.metadata as any).totalTokens.toLocaleString()}</span>
+                          </div>
+                        )}
+                      </>
+                    )}
+                    {/* Retriever-specific metadata */}
+                    {selectedTrace.runType === "retriever" && selectedTrace.metadata && (
+                      <>
+                        {(selectedTrace.metadata as any).vectorSearchCount > 0 && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Vector Searches:</span>
+                            <span className="font-mono text-xs">{(selectedTrace.metadata as any).vectorSearchCount}</span>
+                          </div>
+                        )}
+                        {(selectedTrace.metadata as any).similarityScores && (selectedTrace.metadata as any).similarityScores.length > 0 && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Similarity Scores:</span>
+                            <span className="font-mono text-xs">
+                              {(selectedTrace.metadata as any).similarityScores.filter((s: any) => s != null).join(", ")}
+                            </span>
+                          </div>
+                        )}
+                      </>
+                    )}
+                    {/* Observation count */}
+                    {selectedTrace.metadata && (selectedTrace.metadata as any).observationCount > 0 && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Observations:</span>
+                        <span className="font-mono text-xs">{(selectedTrace.metadata as any).observationCount}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 

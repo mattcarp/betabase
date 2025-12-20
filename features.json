@@ -173,6 +173,51 @@
       ],
       "completedAt": "2025-12-19T16:50:00Z",
       "notes": "Implemented manual data-table logic. Dec 19: Further polished UI by shrinking header, moving action buttons, renaming to 'Generate Automated Test', and persisting results to Supabase."
+    },
+    {
+      "id": "F009",
+      "category": "infrastructure",
+      "priority": 1,
+      "name": "Introspection & Dogfooding Dashboard",
+      "description": "Transform the introspection dropdown into a comprehensive observability dashboard with real Langfuse traces, cost tracking, latency breakdowns, and quality signals.",
+      "specPath": ".specify/specs/FEAT-007-introspection/",
+      "currentTask": 3,
+      "totalTasks": 20,
+      "requirementRefs": [],
+      "byteroverTags": "#introspection #langfuse #observability #dogfooding #speckit",
+      "passes": false,
+      "verification": [
+        "Dropdown displays real Langfuse traces (not fake samples)",
+        "LLM generations show model, tokens, duration, finish reason",
+        "Vector searches show query, results count, top similarity",
+        "Cost per request displayed",
+        "Latency waterfall shows time breakdown"
+      ],
+      "completedAt": null,
+      "notes": "Phase 1 in progress. P1-001 and P1-002 done. Run: /ralph-loop \"Implement FEAT-007-introspection task P1-003. See .specify/specs/FEAT-007-introspection/\" --max-iterations 20"
+    },
+    {
+      "id": "F010",
+      "category": "chat",
+      "priority": 1,
+      "name": "Zeitgeist - Hot Topics Intelligence",
+      "description": "Analyze activity signals (RLHF feedback, Jira tickets, test failures) to identify trending topics. Surface top 6 as dynamic chat suggestions. Provide manager dashboard with full topic list and scores.",
+      "specPath": ".specify/specs/FEAT-010-zeitgeist/",
+      "currentTask": 1,
+      "totalTasks": 9,
+      "requirementRefs": [],
+      "byteroverTags": "#zeitgeist #hot-topics #trending #suggestions #manager-dashboard",
+      "passes": false,
+      "verification": [
+        "/api/zeitgeist returns 6 dynamic suggested queries",
+        "Suggestions based on real user activity (last 48h)",
+        "Each suggestion validated against KB (similarity > 0.70)",
+        "Chat landing page uses dynamic suggestions",
+        "Results cached in app_cache with TTL",
+        "Manager can view full topic list with scores and trends"
+      ],
+      "completedAt": null,
+      "notes": "Promoted from B005. Run: /ralph-loop \"Implement FEAT-010 task 1. See .specify/specs/FEAT-010-zeitgeist/\" --max-iterations 20"
     }
   ],
   "backlog": [
@@ -216,10 +261,11 @@
       "id": "B005",
       "category": "chat",
       "name": "Zeitgeist API Integration",
-      "description": "Implement 'Hot Topics of Today' by analyzing new Jira tickets, Alexandria docs, and recent chat activity. Feed results into Chat suggested questions.",
+      "description": "PROMOTED TO F010. See .specify/specs/FEAT-010-zeitgeist/",
       "estimatedComplexity": "high",
       "addedAt": "2025-12-18",
-      "notes": "What are the big issues? What's on the burner for today? Uses api/zeitgeist.",
+      "promotedTo": "F010",
+      "notes": "Promoted to full feature F010 on 2025-12-20.",
       "byteroverTags": "#zeitgeist #hot-topics #trending #insights"
     },
     {
