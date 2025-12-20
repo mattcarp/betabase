@@ -89,8 +89,6 @@ export async function getRecentTraces(
     const client = getQueryClient();
     const response = await client.api.trace.list({
       limit,
-      // Sort by timestamp descending to get most recent first
-      orderBy: "timestamp",
     });
 
     const traces = response.data || [];
@@ -99,7 +97,12 @@ export async function getRecentTraces(
     console.log(`[Langfuse Query] Fetched ${traces.length} traces`);
     return traces;
   } catch (error) {
-    console.error("[Langfuse Query] Failed to fetch traces:", error);
+    const err = error as Error;
+    console.error("[Langfuse Query] Failed to fetch traces:", {
+      message: err.message,
+      name: err.name,
+      stack: err.stack?.split("\n").slice(0, 3).join("\n"),
+    });
     return null;
   }
 }

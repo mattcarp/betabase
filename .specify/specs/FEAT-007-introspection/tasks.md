@@ -62,6 +62,15 @@
   - Test verifies loading states work
 - **Notes**: Created comprehensive Playwright test suite in tests/e2e/features/introspection-dropdown.spec.ts. Tests include API endpoint validation, dropdown interaction, trace detail modal, health status display, and refresh functionality. All tests skip gracefully if not authenticated.
 
+### P1-007: Bug Fix - Langfuse API Parameter
+- **Status**: done
+- **Estimate**: 15min
+- **Description**: Fixed invalid `orderBy: "timestamp"` parameter causing 400 errors from Langfuse API
+- **Acceptance**:
+  - API call succeeds without orderBy parameter
+  - Real Langfuse traces returned (not fallback in-memory)
+- **Notes**: Discovered during visual testing. Langfuse v4 API doesn't support orderBy on trace.list(). Removed parameter, traces now load correctly.
+
 ---
 
 ## Phase 2: Cost & Performance
