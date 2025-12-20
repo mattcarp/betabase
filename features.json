@@ -227,7 +227,7 @@
       "description": "Redesign the Executive Overview using Edward Tufte's principles of high data-ink ratio and professional intelligence quality visualization.",
       "requirementRefs": ["REQ-008", "REQ-014"],
       "byteroverTags": "#tufte #dashboard #data-viz #radar-chart #sparklines",
-      "passes": false,
+      "passes": true,
       "verification": [
         "Intelligence Quality Radar chart implemented with 5 axes",
         "Small multiples of sparklines replace large bar charts",
@@ -235,8 +235,27 @@
         "Muted MAC Design palette used throughout",
         "Subtle TBD placeholders for unwired metrics"
       ],
-      "completedAt": null,
+      "completedAt": "2025-12-20T10:15:00Z",
       "notes": "Focused on actionable technical intelligence over generic corporate metrics."
+    },
+    {
+      "id": "F012",
+      "category": "testing",
+      "priority": 1,
+      "name": "Advanced Test Intelligence & Critique Interface",
+      "description": "Transform the Test tab into a state-of-the-art testing workspace with automatability confidence scoring, dual-mode script rendering, and HITL critique loops.",
+      "requirementRefs": ["REQ-012", "REQ-013"],
+      "byteroverTags": "#testing #automation #confidence-score #hitl #critique #mac-design",
+      "passes": false,
+      "verification": [
+        "Sidebar displays 'Automation Confidence' badges for every test",
+        "Dual-mode Artifact view (Human-Readable vs Automated Code)",
+        "Critique interface allowing human feedback on generated scripts",
+        "Self-healing trigger based on human critique",
+        "High-density Tufte-style polish applied to detail panels"
+      ],
+      "completedAt": null,
+      "notes": "Applying the same professional data-density from F011 to the Test pillar."
     }
   ],
   "backlog": [

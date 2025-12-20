@@ -511,7 +511,7 @@ Be helpful, concise, and professional in your responses.`;
               {activeMode === "test" && (
                 <div className="h-full p-6 space-y-6">
                   <div>
-                    <h2 className="text-lg font-normal text-zinc-100 flex items-center gap-2">
+                    <h2 className="text-lg font-light text-[var(--mac-text-primary)] flex items-center gap-2">
                       <TestTube className="h-5 w-5 text-zinc-300" />
                       Advanced Testing & Quality Assurance
                     </h2>
@@ -558,7 +558,7 @@ Be helpful, concise, and professional in your responses.`;
               {activeMode === "fix" && (
                 <div className="h-full p-6 space-y-6">
                   <div>
-                    <h2 className="text-lg font-normal text-zinc-100 flex items-center gap-2">
+                    <h2 className="text-lg font-light text-[var(--mac-text-primary)] flex items-center gap-2">
                       <Wrench className="h-5 w-5 text-zinc-300" />
                       Debug & Fix Assistant
                     </h2>
@@ -597,7 +597,7 @@ Be helpful, concise, and professional in your responses.`;
               {activeMode === "curate" && (
                 <div className="h-full">
                   <div className="p-6 border-b border-zinc-800/50">
-                    <h2 className="mac-heading text-lg font-normal text-zinc-100 flex items-center gap-2">
+                    <h2 className="mac-heading text-lg text-[var(--mac-text-primary)] flex items-center gap-2">
                       <Library className="h-5 w-5 text-zinc-300" />
                       Knowledge Curation
                     </h2>

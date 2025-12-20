@@ -44,7 +44,8 @@ import {
   Activity,
   Zap,
   ArrowUp,
-  ArrowDown
+  ArrowDown,
+  Edit3
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
@@ -72,7 +73,42 @@ interface HistoricalTest {
   created_at: string;
   updated_at: string;
   base_confidence: number;
+  automation_confidence?: number; // Calculated heuristic (0-1)
 }
+
+/**
+ * Tufte-Inspired Automation Confidence Heuristic
+ * Evaluates the script's readiness for reliable automation.
+ */
+const calculateAutomationConfidence = (test: HistoricalTest): number => {
+  let score = 50; // Base score
+
+  // 1. Logic Depth: Presence of assertions or explicit steps (+20)
+  if (test.test_script?.toLowerCase().includes("expect") || 
+      test.test_script?.toLowerCase().includes("assert") ||
+      test.test_script?.toLowerCase().includes("verify")) {
+    score += 20;
+  }
+
+  // 2. Context Richness: Detailed prerequisites (+15)
+  if (test.preconditions && test.preconditions.length > 50) {
+    score += 15;
+  }
+
+  // 3. Execution History: Proven stability (+10)
+  const passRate = test.execution_count > 0 ? (test.pass_count / test.execution_count) : 0;
+  if (test.execution_count > 5 && passRate > 0.8) {
+    score += 10;
+  }
+
+  // 4. Complexity Penalty: Purely visual/layout checks (-15)
+  const isVisual = /\b(ui|layout|font|color|alignment|looks|look|feel)\b/i.test(test.test_name);
+  if (isVisual) {
+    score -= 15;
+  }
+
+  return Math.min(Math.max(score, 0), 100) / 100;
+};
 
 interface Filters {
   categories: string[];
@@ -116,6 +152,9 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
     recommendations?: string[];
     automationFeasibility?: "high" | "medium" | "low";
   } | null>(null);
+  const [artifactMode, setArtifactMode] = useState<"code" | "human">("code");
+  const [showCritique, setShowCritique] = useState(false);
+  const [critiqueText, setCritiqueText] = useState("");
 
   // Load initial batch (first 100 tests for cache)
   const loadInitialTests = useCallback(async () => {
@@ -385,6 +424,11 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       </div>
                     </TableHead>
                     <TableHead 
+                      className="w-[60px] h-10 px-2 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] text-center"
+                    >
+                      Conf.
+                    </TableHead>
+                    <TableHead 
                       className="w-[70px] h-10 px-4 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] text-right cursor-pointer hover:text-zinc-300 transition-colors"
                       onClick={() => handleSort("pass_count")}
                     >
@@ -425,6 +469,24 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                           <Badge variant="outline" className="text-[9px] h-auto py-0.5 px-2 border-zinc-800 text-zinc-500 font-bold uppercase group-hover:border-zinc-700 transition-colors whitespace-nowrap">
                             {test.app_under_test}
                           </Badge>
+                        </TableCell>
+                        <TableCell className="py-0 px-2 text-center">
+                          <div className="flex flex-col items-center gap-0.5">
+                            <div className="h-6 w-1 rounded-full bg-zinc-800 overflow-hidden flex flex-col justify-end">
+                              <div 
+                                className={cn(
+                                  "w-full transition-all duration-1000",
+                                  calculateAutomationConfidence(test) >= 0.8 ? "bg-emerald-500" :
+                                  calculateAutomationConfidence(test) >= 0.5 ? "bg-amber-500" :
+                                  "bg-rose-500"
+                                )}
+                                style={{ height: `${calculateAutomationConfidence(test) * 100}%` }}
+                              />
+                            </div>
+                            <span className="text-[8px] font-mono text-zinc-600 tabular-nums">
+                              {Math.round(calculateAutomationConfidence(test) * 100)}
+                            </span>
+                          </div>
                         </TableCell>
                         <TableCell className="py-0 px-4 text-[11px] font-mono text-right tabular-nums">
                           {passRate ? (
@@ -474,17 +536,25 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-1">
                     <h2 className="text-lg font-light text-white truncate tracking-tight">{selectedTest.test_name}</h2>
-                    {getConfidenceBadge(selectedTest.base_confidence)}
+                    <div className="mt-1 flex items-center gap-2">
+                      {getConfidenceBadge(selectedTest.base_confidence)}
+                      <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                        <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest">
+                          Auto-Ready: {Math.round(calculateAutomationConfidence(selectedTest) * 100)}%
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3 text-[10px] text-zinc-400 font-light">
-                    <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-zinc-800/50 border border-zinc-700/50">
-                      <FileText className="h-2.5 w-2.5 text-zinc-500" />
-                      ID #{selectedTest.id}
+                  <div className="flex items-center gap-3 text-[10px] text-zinc-400 font-light font-mono">
+                    <span className="opacity-40">VAULT://</span>
+                    <span className="flex items-center gap-1">
+                      ID-{selectedTest.id}
                     </span>
-                    <span className="text-zinc-700">•</span>
-                    <Badge variant="outline" className="text-[9px] border-zinc-700 text-zinc-300 font-normal uppercase tracking-wider bg-zinc-800/30">
+                    <span className="text-zinc-700">|</span>
+                    <span className="text-zinc-300 font-bold uppercase tracking-wider">
                       {selectedTest.app_under_test}
-                    </Badge>
+                    </span>
                   </div>
                 </div>
                 <Button
@@ -535,13 +605,10 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
               <div className="max-w-4xl mx-auto space-y-6">
                 {/* Description */}
                 {selectedTest.description && (
-                  <div className="group">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="h-4 w-1 bg-[var(--mac-primary-blue-400)] rounded-full group-hover:h-6 transition-all" />
-                      <h3 className="text-[11px] font-black text-zinc-500 uppercase tracking-[0.25em]">Summary</h3>
-                    </div>
+                  <div className="group border-l border-zinc-800/50 pl-6 ml-1 transition-colors hover:border-[var(--mac-primary-blue-400)]/30">
+                    <h3 className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em] mb-3">Context Summary</h3>
                     <div 
-                      className="p-5 rounded-2xl bg-zinc-900/40 border border-zinc-800/50 shadow-sm leading-relaxed text-zinc-200 text-[15px] font-light overflow-hidden break-words prose prose-invert prose-sm max-w-none"
+                      className="leading-relaxed text-zinc-300 text-[14px] font-light overflow-hidden break-words prose prose-invert prose-sm max-w-none"
                       dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.description) }}
                     />
                   </div>
@@ -549,13 +616,10 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
 
                 {/* Preconditions */}
                 {selectedTest.preconditions && (
-                  <div className="group">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="h-4 w-1 bg-amber-500 rounded-full group-hover:h-6 transition-all" />
-                      <h3 className="text-[11px] font-black text-zinc-500 uppercase tracking-[0.25em]">Prerequisites</h3>
-                    </div>
+                  <div className="group border-l border-zinc-800/50 pl-6 ml-1 transition-colors hover:border-amber-500/30">
+                    <h3 className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em] mb-3">System Prerequisites</h3>
                     <div 
-                      className="p-5 rounded-2xl bg-amber-900/5 border border-amber-900/20 text-zinc-300 text-[14px] font-light leading-relaxed shadow-sm overflow-hidden break-words prose prose-invert prose-sm max-w-none"
+                      className="p-4 rounded-xl bg-amber-900/5 border border-amber-900/10 text-zinc-400 text-[13px] font-light leading-relaxed shadow-sm overflow-hidden break-words prose prose-invert prose-sm max-w-none italic"
                       dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.preconditions) }}
                     />
                   </div>
@@ -563,20 +627,17 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
 
                 {/* Test Script */}
                 {selectedTest.test_script && (
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="h-4 w-1 bg-indigo-500 rounded-full" />
-                      <h3 className="text-[11px] font-black text-zinc-500 uppercase tracking-[0.25em]">Logic Script</h3>
-                    </div>
+                  <div className="border-l border-zinc-800/50 pl-6 ml-1 transition-colors hover:border-indigo-500/30">
+                    <h3 className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em] mb-3">Instruction Logic</h3>
                     <div className="relative group">
                       <div 
-                        className="p-5 rounded-2xl bg-zinc-950/80 border border-zinc-800/50 shadow-xl leading-relaxed text-zinc-300 text-[14px] font-light overflow-hidden break-words prose prose-invert prose-sm max-w-none"
+                        className="p-5 rounded-2xl bg-zinc-950/40 border border-zinc-900/20 shadow-inner leading-relaxed text-zinc-300 text-[14px] font-mono overflow-hidden break-words prose prose-invert prose-sm max-w-none"
                         dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.test_script) }}
                       />
                       <Button 
                         size="sm" 
                         variant="ghost" 
-                        className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-500 hover:text-white bg-zinc-900/50 backdrop-blur-sm h-7 text-[10px] uppercase font-bold tracking-widest"
+                        className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-500 hover:text-white bg-zinc-900/50 backdrop-blur-sm h-7 text-[9px] uppercase font-bold tracking-widest"
                         onClick={() => {
                           navigator.clipboard.writeText(selectedTest.test_script);
                           toast.success("Copied to clipboard");
@@ -711,10 +772,30 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                           <Sparkles className="h-4 w-4 text-emerald-400" />
                         </div>
                         <ArtifactTitle className="text-xs font-black text-white uppercase tracking-[0.3em]">
-                          Generated Automated Test
+                          {artifactMode === "code" ? "Automated Test" : "Human-Readable Scenario"}
                         </ArtifactTitle>
                       </div>
                       <ArtifactActions>
+                        <div className="flex bg-zinc-900/80 p-0.5 rounded-lg border border-zinc-800 mr-2">
+                          <button
+                            onClick={() => setArtifactMode("human")}
+                            className={cn(
+                              "px-2 py-1 text-[9px] font-bold uppercase tracking-widest rounded-md transition-all",
+                              artifactMode === "human" ? "bg-zinc-700 text-white shadow-sm" : "text-zinc-500 hover:text-zinc-300"
+                            )}
+                          >
+                            Human
+                          </button>
+                          <button
+                            onClick={() => setArtifactMode("code")}
+                            className={cn(
+                              "px-2 py-1 text-[9px] font-bold uppercase tracking-widest rounded-md transition-all",
+                              artifactMode === "code" ? "bg-zinc-700 text-white shadow-sm" : "text-zinc-500 hover:text-zinc-300"
+                            )}
+                          >
+                            Code
+                          </button>
+                        </div>
                         <ArtifactAction
                           icon={RefreshCw}
                           tooltip="Re-generate"
@@ -726,12 +807,17 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                               const response = await fetch("/api/generate-playwright", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ test: selectedTest }),
+                                body: JSON.stringify({ 
+                                  test: selectedTest,
+                                  additionalInstructions: critiqueText 
+                                }),
                               });
                               const data = await response.json();
                               if (data.code) {
                                 setGeneratedCode(data.code);
-                                toast.success("Test re-generated successfully");
+                                toast.success("Test re-generated with critique");
+                                setCritiqueText("");
+                                setShowCritique(false);
                               }
                             } catch {
                               toast.error("Failed to re-generate test");
@@ -739,6 +825,11 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                               setGeneratingPlaywright(false);
                             }
                           }}
+                        />
+                        <ArtifactAction
+                          icon={Edit3}
+                          tooltip="Critique Script"
+                          onClick={() => setShowCritique(!showCritique)}
                         />
                         <ArtifactAction
                           icon={Copy}
@@ -752,9 +843,97 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                     </ArtifactHeader>
                     <ArtifactContent className="p-0 bg-black/40">
                       <div className="relative group">
-                        <pre className="text-xs text-emerald-400/80 font-mono p-5 overflow-x-auto max-h-[500px] shadow-2xl custom-scrollbar leading-loose tracking-tight">
-                          {generatedCode}
-                        </pre>
+                        {showCritique && (
+                          <div className="absolute inset-0 z-50 bg-zinc-950/90 backdrop-blur-sm p-6 animate-in fade-in zoom-in-95 duration-200 flex flex-col">
+                            <div className="flex items-center justify-between mb-4">
+                              <h4 className="text-xs font-black text-white uppercase tracking-[0.2em] flex items-center gap-2">
+                                <Edit3 className="h-3.5 w-3.5 text-[var(--mac-primary-blue-400)]" />
+                                Script Critique
+                              </h4>
+                              <Button variant="ghost" size="sm" onClick={() => setShowCritique(false)} className="h-6 w-6 p-0 rounded-full">×</Button>
+                            </div>
+                            <p className="text-[11px] text-zinc-500 mb-4 font-light italic">
+                              Suggest improvements, fix selectors, or clarify logic. The AI will rebuild the script based on your feedback.
+                            </p>
+                            <textarea
+                              value={critiqueText}
+                              onChange={(e) => setCritiqueText(e.target.value)}
+                              placeholder="e.g. 'Use data-test-id for the login button', 'Add an assertion for the successful redirect'..."
+                              className="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-xs text-zinc-200 placeholder:text-zinc-700 focus:outline-none focus:border-[var(--mac-primary-blue-400)] transition-all resize-none font-light leading-relaxed mb-4"
+                            />
+                            <div className="flex gap-3">
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="flex-1 text-[10px] font-bold uppercase tracking-widest text-zinc-500 hover:text-white"
+                                onClick={() => {
+                                  setCritiqueText("");
+                                  setShowCritique(false);
+                                }}
+                              >
+                                Cancel
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                className="flex-1 mac-button-gradient text-white text-[10px] font-bold uppercase tracking-widest"
+                                onClick={async () => {
+                                  if (!selectedTest) return;
+                                  setGeneratingPlaywright(true);
+                                  setGeneratedCode(null);
+                                  try {
+                                    const response = await fetch("/api/tests/generate-playwright", {
+                                      method: "POST",
+                                      headers: { "Content-Type": "application/json" },
+                                      body: JSON.stringify({ 
+                                        testId: selectedTest.id,
+                                        additionalInstructions: critiqueText 
+                                      }),
+                                    });
+                                    const data = await response.json();
+                                    if (data.success) {
+                                      setGeneratedCode(data.testCode);
+                                      toast.success("Self-healing complete!");
+                                      setShowCritique(false);
+                                    }
+                                  } catch {
+                                    toast.error("Critique sync failed");
+                                  } finally {
+                                    setGeneratingPlaywright(false);
+                                  }
+                                }}
+                                disabled={!critiqueText.trim() || generatingPlaywright}
+                              >
+                                {generatingPlaywright ? "Healing..." : "Apply & Rebuild"}
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                        {artifactMode === "code" ? (
+                          <pre className="text-xs text-emerald-400/80 font-mono p-5 overflow-x-auto max-h-[500px] shadow-2xl custom-scrollbar leading-loose tracking-tight">
+                            {generatedCode}
+                          </pre>
+                        ) : (
+                          <div className="p-6 prose prose-invert prose-sm max-w-none">
+                            <h4 className="text-emerald-400 font-medium mb-4 flex items-center gap-2">
+                              <CheckCircle className="h-4 w-4" />
+                              Manual Execution Logic
+                            </h4>
+                            <div className="space-y-4 text-zinc-300 font-light">
+                              <div>
+                                <span className="text-emerald-500/60 font-bold uppercase text-[9px] block mb-1">Step 1: Environment Setup</span>
+                                <p dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.preconditions) }} />
+                              </div>
+                              <div className="pt-2 border-t border-white/5">
+                                <span className="text-emerald-500/60 font-bold uppercase text-[9px] block mb-1">Step 2: Core Logic</span>
+                                <p dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.test_script) }} />
+                              </div>
+                              <div className="pt-2 border-t border-white/5">
+                                <span className="text-emerald-500/60 font-bold uppercase text-[9px] block mb-1">Expected Outcome</span>
+                                <p>Verify that the system responds correctly following the logic script above.</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-zinc-950/80 to-transparent pointer-events-none" />
                       </div>
                     </ArtifactContent>
@@ -781,6 +960,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                               description: selectedTest.description,
                               preconditions: selectedTest.preconditions,
                               app_under_test: selectedTest.app_under_test,
+                              additionalInstructions: critiqueText || undefined
                             }),
                           });
                           const data = await res.json();
