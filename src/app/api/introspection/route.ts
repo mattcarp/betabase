@@ -7,7 +7,31 @@ import {
 } from "@/lib/introspection/langfuse-query";
 
 // Introspection API endpoint for SIAM internal monitoring
-export async function GET(_request: NextRequest) {
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const traceId = searchParams.get("traceId");
+
+  // If traceId is provided, fetch detailed trace with observations
+  if (traceId) {
+    try {
+      const observations = await getTraceObservations(traceId);
+      return NextResponse.json({
+        traceId,
+        observations: observations || [],
+      });
+    } catch (error) {
+      console.error(`[INTROSPECTION] Error fetching trace ${traceId}:`, error);
+      return NextResponse.json(
+        {
+          error: "Failed to fetch trace observations",
+          details: error instanceof Error ? error.message : "Unknown error",
+        },
+        { status: 500 }
+      );
+    }
+  }
+
+  // Default behavior: fetch recent traces and health status
   try {
     // Track this introspection request
     const startTime = Date.now();

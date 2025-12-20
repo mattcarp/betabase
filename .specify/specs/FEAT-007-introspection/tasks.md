@@ -86,13 +86,14 @@
 - **Notes**: Created cost calculator with comprehensive pricing for OpenAI (GPT-4, GPT-4o, GPT-3.5), Anthropic (Claude 3/3.5), and Google (Gemini) models. Includes formatCost for display, calculateCostBreakdown for detailed info, and helper functions. All 24 unit tests passing.
 
 ### P2-002: Add Cost Display to Traces
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 45min
 - **Description**: Show estimated cost per trace in dropdown
 - **Acceptance**:
   - Cost displays as "$0.0023" format
   - Calculation based on trace token usage
   - Tooltip explains calculation
+- **Notes**: Integrated cost calculator into IntrospectionDropdown. Shows cost with dollar icon for LLM traces, tooltip with token breakdown, and cost display in detail modal. Only appears for traces with model and token metadata. Created comprehensive E2E test suite.
 
 ### P2-003: Create Latency Waterfall Component
 - **Status**: pending

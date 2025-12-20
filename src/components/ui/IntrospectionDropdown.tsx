@@ -27,6 +27,7 @@ import {
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
 import { calculateCost, formatCost } from "@/lib/introspection/cost-calculator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
+import { LatencyWaterfall, extractLatencySegments } from "./LatencyWaterfall";
 
 interface ActivityTrace {
   id: string;
@@ -59,6 +60,7 @@ export function IntrospectionDropdown() {
   const [loading, setLoading] = useState(false);
   const [selectedTrace, setSelectedTrace] = useState<ActivityTrace | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [traceObservations, setTraceObservations] = useState<any[]>([]);
 
   // Fetch app health status and recent activity traces
   const fetchIntrospectionData = async () => {
@@ -92,6 +94,28 @@ export function IntrospectionDropdown() {
       return () => clearInterval(interval);
     }
   }, [isOpen]);
+
+  // Fetch detailed observations when a trace is selected
+  const fetchTraceObservations = async (traceId: string) => {
+    try {
+      const response = await fetch(`/api/introspection?traceId=${traceId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setTraceObservations(data.observations || []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch trace observations:", error);
+      setTraceObservations([]);
+    }
+  };
+
+  // Handle trace selection
+  const handleTraceClick = async (trace: ActivityTrace) => {
+    setSelectedTrace(trace);
+    setDetailsOpen(true);
+    setTraceObservations([]); // Clear previous observations
+    await fetchTraceObservations(trace.id);
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -286,10 +310,7 @@ export function IntrospectionDropdown() {
                   <DropdownMenuItem
                     key={trace.id}
                     className="flex flex-col items-start gap-2 py-2 cursor-pointer"
-                    onClick={() => {
-                      setSelectedTrace(trace);
-                      setDetailsOpen(true);
-                    }}
+                    onClick={() => handleTraceClick(trace)}
                   >
                     <div className="flex items-center justify-between w-full">
                       <div className="flex items-center gap-2">
@@ -400,6 +421,17 @@ export function IntrospectionDropdown() {
           {selectedTrace && (
             <ScrollArea className="h-[500px] pr-4">
               <div className="space-y-4">
+                {/* Latency Waterfall */}
+                {traceObservations.length > 0 && (
+                  <div>
+                    <h4 className="mac-title">Latency Breakdown</h4>
+                    <LatencyWaterfall
+                      segments={extractLatencySegments(traceObservations)}
+                      totalDuration={selectedTrace.duration}
+                    />
+                  </div>
+                )}
+
                 {/* Metadata */}
                 <div>
                   <h4 className="mac-title">Metadata</h4>
