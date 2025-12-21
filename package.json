@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.24.50",
+  "version": "0.24.51",
   "private": true,
   "scripts": {
     "dev": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && next dev --webpack -p 3000",
@@ -13,7 +13,8 @@
     "test:performance:quick": "playwright test tests/performance/chat-response-time.spec.ts --reporter=list",
     "test:performance:vitals": "playwright test tests/performance/web-vitals-chat.spec.ts --reporter=list",
     "prebuild": "node scripts/generate-build-info.js || echo 'Build info script not found, skipping'",
-    "build": "NODE_OPTIONS='--max-old-space-size=8192' next build --webpack",
+    "build": "next build --turbopack",
+    "build:webpack": "NODE_OPTIONS='--max-old-space-size=8192' next build --webpack",
     "build:analyze": "ANALYZE=true next build --webpack",
     "start": "next start -p $PORT",
     "start:prod": "NODE_ENV=production next start -p $PORT",
