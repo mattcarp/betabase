@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIAM App - UI Gallery</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .card h2 {
+            padding: 15px 20px;
+            font-size: 18px;
+            background: #141414;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .card img {
+            width: 100%;
+            display: block;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .card img:hover {
+            opacity: 0.9;
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+        .lightbox.active { display: flex; }
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            object-fit: contain;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+            background: #22c55e;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>SIAM App - UI Gallery</h1>
+    <p class="subtitle">Current State - December 21, 2025 <span class="status">All Backgrounds Fixed</span></p>
+
+    <div class="gallery">
+        <div class="card">
+            <h2>Chat Tab</h2>
+            <img src="chat-2025-12-21T03-07-39-765Z.png" alt="Chat Tab" onclick="openLightbox(this)">
+        </div>
+
+        <div class="card">
+            <h2>HUD Tab</h2>
+            <img src="hud-2025-12-21T03-07-59-366Z.png" alt="HUD Tab" onclick="openLightbox(this)">
+        </div>
+
+        <div class="card">
+            <h2>Test Tab</h2>
+            <img src="test-2025-12-21T03-08-15-807Z.png" alt="Test Tab" onclick="openLightbox(this)">
+        </div>
+
+        <div class="card">
+            <h2>Test - Self-Healing Subtab</h2>
+            <img src="test-selfhealing-2025-12-21T03-08-33-370Z.png" alt="Self-Healing Subtab" onclick="openLightbox(this)">
+        </div>
+
+        <div class="card">
+            <h2>Test - Historical Subtab</h2>
+            <img src="test-historical-2025-12-21T03-08-39-865Z.png" alt="Historical Subtab" onclick="openLightbox(this)">
+        </div>
+
+        <div class="card">
+            <h2>Fix Tab</h2>
+            <img src="fix-2025-12-21T03-08-45-780Z.png" alt="Fix Tab" onclick="openLightbox(this)">
+        </div>
+
+        <div class="card">
+            <h2>Curate Tab</h2>
+            <img src="curate-2025-12-21T03-08-51-778Z.png" alt="Curate Tab" onclick="openLightbox(this)">
+        </div>
+    </div>
+
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <script>
+        function openLightbox(img) {
+            document.getElementById('lightbox-img').src = img.src;
+            document.getElementById('lightbox').classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+</body>
+</html>

@@ -1,11 +1,24 @@
 // src/lib/playwright/screencast-recorder.ts
 // Screencast recording utilities for AI Test Generator
+//
+// WARNING: This file is imported by client components (AITestGenerator.tsx).
+// DO NOT use top-level imports of Node.js modules (child_process, fs, etc.)
+// All server-only modules must be conditionally required inside `if (typeof window === "undefined")`
 
-import { exec } from "child_process";
-import { writeFile, unlink } from "fs/promises";
-import { promisify } from "util";
+// Server-only imports - dynamically imported to avoid client-side bundling errors
+let execAsync: (command: string, options?: { timeout?: number; cwd?: string }) => Promise<{ stdout: string; stderr: string }>;
+let writeFile: (path: string, data: string, encoding: string) => Promise<void>;
+let unlink: (path: string) => Promise<void>;
 
-const execAsync = promisify(exec);
+// Initialize server-only modules (only runs on server)
+if (typeof window === "undefined") {
+  const { exec } = require("child_process");
+  const { promisify } = require("util");
+  const fs = require("fs/promises");
+  execAsync = promisify(exec);
+  writeFile = fs.writeFile;
+  unlink = fs.unlink;
+}
 
 /**
  * Convert a description to a kebab-case filename
