@@ -116,9 +116,28 @@ Verify a Rust code block appears with syntax highlighting
 - Parses 18-byte packs from hex
 - Decodes: TITLE (0x80), PERFORMER (0x81), ISRC (0x8E), etc.
 - Track 0 = album metadata, Tracks 1-99 = individual tracks
-- Translates non-English text, notes cultural context
+- Translates non-English text (Italian to English with poetic meaning)
 - Generates parser code in any language (Rust, Python, TypeScript, etc.)
 - Can respond in any human language while keeping code in the target programming language
+
+**NEW Enhanced Output (v0.24.54+):**
+After parsing, the skill now adds rich context:
+
+1. **Artist Spotlight Section:**
+   - Full name, nationality, active years
+   - Genre/style, albums sold worldwide
+   - Notable hits, brief biography
+   - Example: "Eros Ramazzotti - 70+ million albums sold, known as Italy's most successful international artist"
+
+2. **Album Context Section:**
+   - Release year and label (BMG/Ariola 2000)
+   - Chart performance (#1 in Italy)
+   - Album theme and significance
+
+3. **Technical Deep Dive:**
+   - What is CD-TEXT (Red Book extension)
+   - DDP format explained (industry standard for CD masters)
+   - ISRC code breakdown (NL = Netherlands, A20 = Sony Music/BMG registrant)
 
 **CD Text Hex to Paste (Eros Ramazzotti album):**
 ```
@@ -191,11 +210,21 @@ Verify filename and line numbers are visible
 - Chat 3 (JIRA + Code): ~75 sec
 - **Total Chat segment: ~4 min**
 
-### Feature Status
-These features all worked at some point. May need restoration:
-- [ ] Nano Banana Pro infographic generation
-- [ ] CD Text parsing skill
-- [ ] Multi-language code generation
+### Feature Status (Updated 2025-12-21)
+**TESTED & WORKING:**
+- [x] Nano Banana Pro infographic generation (v0.24.54)
+  - Thinking mode ENABLED (Google Search grounding)
+  - Updated `betabaseERD` template with correct Sony Music hierarchy
+  - ~41 sec generation time, 2+ MB images
+- [x] CD Text parsing skill (ENHANCED)
+  - Parses Eros Ramazzotti album correctly
+  - Beautiful shadcn table with Track, Title, Translation, ISRC
+  - NEW: Artist Spotlight section (biography, albums sold, notable hits)
+  - NEW: Album Context section (release info, chart performance)
+  - NEW: Technical Deep Dive (DDP format, ISRC breakdown)
+
+**NEEDS TESTING:**
+- [ ] Multi-language code generation (Rust parser)
 - [ ] Mandarin Chinese response capability
 - [ ] JIRA ticket linking
 - [ ] Code display with Shiki/tokyo-night
