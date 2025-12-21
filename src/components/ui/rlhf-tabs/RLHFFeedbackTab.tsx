@@ -24,6 +24,8 @@ import {
   Sparkles,
   AlertCircle,
   TrendingUp,
+  RefreshCw,
+  Loader2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -35,97 +37,89 @@ interface RetrievedDoc {
   source_type: string;
   similarity: number;
   rerankScore?: number;
-  userMarkedRelevant?: boolean | null;
 }
 
 interface FeedbackItem {
   id: string;
   sessionId: string;
-  userQuestion: string;          // What the user asked
-  aiResponse: string;              // What the AI answered (potentially WRONG)
-  correctResponse?: string;        // What the curator says it SHOULD be
+  query: string;
+  response: string;
   retrievedDocs: RetrievedDoc[];
-  status: "pending" | "approved" | "rejected" | "corrected";
-  priority: number;
-  severity: "minor" | "moderate" | "critical";
+  feedbackSubmitted: boolean;
   timestamp: string;
-  ragMetadata?: {
-    strategy: string;
-    confidence: number;
-    latency_ms: number;
-  };
+  rating?: number;
+  feedbackType?: string;
 }
 
-interface FeedbackCardProps {
+interface CurationCardProps {
   item: FeedbackItem;
-  onApprove: (itemId: string) => void;
-  onReject: (itemId: string, reason: string) => void;
-  onCorrect: (itemId: string, correctResponse: string, docRelevance: Record<string, boolean>) => void;
+  onSubmitFeedback: (feedback: {
+    type: string;
+    itemId: string;
+    value?: { score?: number; correction?: string };
+    docRelevance?: Record<string, boolean>;
+  }) => Promise<void>;
 }
 
-function CurationCard({ item, onApprove, onReject, onCorrect }: FeedbackCardProps) {
+function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
   const [expanded, setExpanded] = useState(false);
-  const [correctionText, setCorrectionText] = useState("");
-  const [rejectReason, setRejectReason] = useState("");
-  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [feedbackType, setFeedbackType] = useState<string | null>(null);
+  const [rating, setRating] = useState(0);
+  const [correction, setCorrection] = useState("");
   const [docRelevance, setDocRelevance] = useState<Record<string, boolean>>({});
   const [submitting, setSubmitting] = useState(false);
-  
-  // Helper to get severity color
-  const getSeverityColor = () => {
-    switch (item.severity) {
-      case "critical":
-        return "var(--mac-error-red)";
-      case "moderate":
-        return "var(--mac-warning-yellow)";
-      case "minor":
-        return "var(--mac-primary-blue-400)";
-      default:
-        return "var(--mac-text-muted)";
-    }
-  };
 
-  const handleApproveClick = async () => {
+  const handleQuickFeedback = async (type: "thumbs_up" | "thumbs_down") => {
     setSubmitting(true);
+    setFeedbackType(type);
     try {
-      await onApprove(item.id);
-      toast.success("Response approved!");
-    } catch (error) {
-      toast.error("Failed to approve");
+      await onSubmitFeedback({
+        type,
+        itemId: item.id,
+      });
+      toast.success(type === "thumbs_up" ? "Marked as helpful!" : "Marked as not helpful");
+    } catch {
+      toast.error("Failed to submit feedback");
+      setFeedbackType(null);
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleRejectClick = async () => {
-    if (!rejectReason.trim()) {
-      toast.error("Please provide a reason for rejection");
-      return;
-    }
+  const handleRatingFeedback = async () => {
+    if (rating === 0) return;
     setSubmitting(true);
     try {
-      await onReject(item.id, rejectReason);
-      toast.success("Response rejected");
-      setShowRejectModal(false);
-    } catch (error) {
-      toast.error("Failed to reject");
+      await onSubmitFeedback({
+        type: "rating",
+        itemId: item.id,
+        value: { score: rating },
+      });
+      toast.success("Rating submitted!");
+    } catch {
+      toast.error("Failed to submit rating");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleCorrectClick = async () => {
-    if (!correctionText.trim()) {
-      toast.error("Please provide the correct answer");
+  const handleDetailedFeedback = async () => {
+    if (!correction.trim()) {
+      toast.error("Please provide feedback details");
       return;
     }
     setSubmitting(true);
     try {
-      await onCorrect(item.id, correctionText, docRelevance);
-      toast.success("Correction submitted!");
-      setCorrectionText("");
-    } catch (error) {
-      toast.error("Failed to submit correction");
+      await onSubmitFeedback({
+        type: "correction",
+        itemId: item.id,
+        value: { correction },
+        docRelevance,
+      });
+      toast.success("Feedback submitted!");
+      setCorrection("");
+    } catch {
+      toast.error("Failed to submit feedback");
     } finally {
       setSubmitting(false);
     }
@@ -245,6 +239,7 @@ function CurationCard({ item, onApprove, onReject, onCorrect }: FeedbackCardProp
                     key={star}
                     onClick={() => setRating(star)}
                     className="transition-transform hover:scale-110"
+                    disabled={submitting}
                   >
                     <Star
                       className={cn(
@@ -266,7 +261,7 @@ function CurationCard({ item, onApprove, onReject, onCorrect }: FeedbackCardProp
                       "bg-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-600)]"
                     )}
                   >
-                    Submit
+                    {submitting ? <Loader2 className="h-3 w-3 animate-spin" /> : "Submit"}
                   </Button>
                 )}
               </div>
@@ -382,6 +377,9 @@ function CurationCard({ item, onApprove, onReject, onCorrect }: FeedbackCardProp
                   "disabled:opacity-50 disabled:cursor-not-allowed"
                 )}
               >
+                {submitting ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : null}
                 Submit Detailed Feedback
               </Button>
             </div>
@@ -430,14 +428,18 @@ export function RLHFFeedbackTab() {
           user_query?: string;
           response?: string;
           retrieved_contexts?: Array<{
-            content: string;
+            content?: string;
+            content_preview?: string;
             source?: string;
+            source_type?: string;
             score?: number;
+            similarity?: number;
           }>;
           created_at: string;
           status?: string;
           feedback_type?: string;
           feedback_value?: { score?: number };
+          rating?: number;
         }) => ({
           id: f.id,
           sessionId: f.session_id || "unknown",
@@ -445,13 +447,15 @@ export function RLHFFeedbackTab() {
           response: f.response || "No response recorded",
           retrievedDocs: (f.retrieved_contexts || []).map((ctx, idx) => ({
             id: `doc-${f.id}-${idx}`,
-            content: ctx.content || "",
-            source_type: ctx.source || "knowledge",
-            similarity: ctx.score || 0.8,
+            content: ctx.content || ctx.content_preview || "",
+            source_type: ctx.source_type || ctx.source || "knowledge",
+            similarity: ctx.similarity || ctx.score || 0.8,
             rerankScore: ctx.score ? ctx.score * 1.05 : undefined,
           })),
           timestamp: f.created_at,
           feedbackSubmitted: f.status === "approved" || f.status === "rejected",
+          rating: f.rating || f.feedback_value?.score,
+          feedbackType: f.feedback_type,
         })
       );
 
@@ -552,7 +556,7 @@ export function RLHFFeedbackTab() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-[var(--mac-text-muted)] font-light">Loading feedback queue...</div>
+        <Loader2 className="h-8 w-8 animate-spin text-[var(--mac-primary-blue-400)]" />
       </div>
     );
   }
@@ -701,6 +705,20 @@ export function RLHFFeedbackTab() {
         </Card>
       </div>
 
+      {/* Refresh Button */}
+      <div className="flex justify-end">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={loadFeedbackQueue}
+          disabled={loading}
+          className="text-xs"
+        >
+          <RefreshCw className={cn("h-3 w-3 mr-2", loading && "animate-spin")} />
+          Refresh
+        </Button>
+      </div>
+
       {/* Feedback Queue */}
       <ScrollArea className="flex-1">
         <AnimatePresence>
@@ -708,10 +726,11 @@ export function RLHFFeedbackTab() {
             <div className="flex flex-col items-center justify-center h-64 text-[var(--mac-text-muted)]">
               <AlertCircle className="h-12 w-12 mb-4" />
               <p className="font-light">No feedback items in queue</p>
+              <p className="text-xs mt-1">Chat with the AI to generate feedback items</p>
             </div>
           ) : (
             feedbackQueue.map((item) => (
-              <FeedbackCard key={item.id} item={item} onSubmitFeedback={handleSubmitFeedback} />
+              <CurationCard key={item.id} item={item} onSubmitFeedback={handleSubmitFeedback} />
             ))
           )}
         </AnimatePresence>

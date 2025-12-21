@@ -51,6 +51,7 @@ import { SelfHealingPriorityQueue, type HealingAttemptSummary } from "./SelfHeal
 import { SelfHealingDecisionStory, type HealingAttemptDetail } from "./SelfHealingDecisionStory";
 import { SelfHealingBatchReview } from "./SelfHealingBatchReview";
 import { SelfHealingFeedbackCapture, type FeedbackData } from "./SelfHealingFeedbackCapture";
+import { SelfHealingDemo } from "./SelfHealingDemo";
 
 // Types for self-healing workflow
 interface DOMChange {
@@ -397,8 +398,8 @@ const useKeyboardShortcuts = (
 // Self-Healing Status Viewer Component
 export const SelfHealingTestViewer: React.FC = () => {
   const [selectedAttempt, setSelectedAttempt] = useState<SelfHealingAttempt | null>(null);
-  const [viewMode, setViewMode] = useState<"priority" | "batch" | "workflow" | "history">(
-    "priority"
+  const [viewMode, setViewMode] = useState<"demo" | "priority" | "batch" | "workflow" | "history">(
+    "demo"
   );
   const [attempts, setAttempts] = useState<SelfHealingAttempt[]>([]);
   const [stats, setStats] = useState<SelfHealingStats>({
@@ -962,6 +963,10 @@ export const SelfHealingTestViewer: React.FC = () => {
       {/* Main Content */}
       <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as any)}>
         <TabsList>
+          <TabsTrigger value="demo" className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4" />
+            Interactive Demo
+          </TabsTrigger>
           <TabsTrigger value="priority" className="flex items-center gap-2">
             <ListChecks className="h-4 w-4" />
             Priority Review
@@ -979,6 +984,11 @@ export const SelfHealingTestViewer: React.FC = () => {
             Healing History
           </TabsTrigger>
         </TabsList>
+
+        {/* Interactive Demo Tab - Show executives how self-healing works */}
+        <TabsContent value="demo" className="space-y-4">
+          <SelfHealingDemo />
+        </TabsContent>
 
         {/* NEW: Priority Review Tab - Story-first approach */}
         <TabsContent value="priority" className="space-y-4">

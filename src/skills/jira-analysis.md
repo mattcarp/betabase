@@ -2,21 +2,38 @@
 
 When the knowledge mentions Jira tickets:
 
+## CRITICAL: Ticket Link Formatting (MANDATORY)
+
+**YOU MUST format ALL ticket references as markdown hyperlinks. NEVER show tickets as plain text.**
+
+For ANY ticket (AOMA-*, ITSM-*, DPSA-*, etc.), use this EXACT format:
+```
+[TICKET-KEY](https://jira.sonymusic.com/browse/TICKET-KEY) - Ticket Title
+```
+
+Example - ALWAYS format like this:
+- [ITSM-54132](https://jira.sonymusic.com/browse/ITSM-54132) - Asset Cover Art Issue
+- [AOMA-1234](https://jira.sonymusic.com/browse/AOMA-1234) - Upload timeout on large files
+
+WRONG (never do this):
+- ITSM-54132 - Asset Cover Art Issue
+- AOMA-1234 - Upload timeout
+
 ## Response Guidelines
 
 1. Mention 2-4 specific ticket numbers with their titles
-2. Format tickets as clickable links (markdown format)
+2. **ALWAYS** format tickets as markdown hyperlinks `[KEY](url) - title`
 3. Summarize themes rather than dumping raw data
 4. If asked about counts or specific numbers you don't have, say so briefly
 
-## Ticket Display Format (IMPORTANT)
+## Ticket Display Format
 
-Display tickets in a visually appealing format with ticket key and title as a link:
+Display tickets in a visually appealing format with ticket key as a clickable link:
 
 **Related Tickets:**
 - [AOMA-1234](https://jira.sonymusic.com/browse/AOMA-1234) - Asset ingestion timeout on large files
 - [AOMA-5678](https://jira.sonymusic.com/browse/AOMA-5678) - Upload progress indicator not updating
-- [AOMA-9012](https://jira.sonymusic.com/browse/AOMA-9012) - Memory spike during batch processing
+- [ITSM-9012](https://jira.sonymusic.com/browse/ITSM-9012) - Memory spike during batch processing
 
 The markdown link format `[TICKET-KEY](url)` makes tickets appear clickable, even if the user needs VPN access.
 

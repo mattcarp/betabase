@@ -447,28 +447,28 @@ export function RLHFImpactDashboard() {
             </div>
             <div className="flex items-center gap-2">
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 onClick={() => setShowComparison(!showComparison)}
-                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                className="border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
               >
                 <Table className="h-4 w-4 mr-2" />
                 {showComparison ? "Hide" : "Show"} Comparison
               </Button>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 onClick={exportToCSV}
-                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                className="border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
               >
                 <Download className="h-4 w-4 mr-2" />
                 CSV
               </Button>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 onClick={exportToPDF}
-                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                className="border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
               >
                 <FileText className="h-4 w-4 mr-2" />
                 PDF

@@ -50,6 +50,11 @@
 - **[Project Structure](reference/PROJECT-STRUCTURE.md)** - Directory layout, file organization
 - **[Historical Changes](reference/HISTORICAL-CHANGES.md)** - Migration notes, deprecated features
 
+#### Demo & Screencast
+
+- **[Screencast Script](demo/SCREENCAST-SCRIPT.md)** - Master script for all demo segments
+- **[Pillar 3: Test Demo](PILLAR-3-TEST-DEMO-SCRIPT.md)** - Detailed Test tab narration (60-90 sec)
+
 ## Existing Documentation
 
 ### Already Created
@@ -75,6 +80,7 @@
 | Monitor deployment        | [Monitoring](deployment/MONITORING.md)                        |
 | Understand project layout | [Project Structure](reference/PROJECT-STRUCTURE.md)           |
 | Design a dashboard/chart  | [Curate Mode Gold Standard](design/gold-standards/CURATE-MODE-GOLD-STANDARD.md) |
+| Create demo/screencast    | [Screencast Script](demo/SCREENCAST-SCRIPT.md)                |
 
 ## Documentation Principles
 
@@ -97,4 +103,4 @@ When adding documentation:
 
 ---
 
-_Last updated: 2025-10-26_
+_Last updated: 2025-12-21_

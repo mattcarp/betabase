@@ -194,11 +194,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.mac-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(133, 51, 255, 0.2);
-  border-color: var(--mac-accent-purple-400);
-}
+/* mac-card hover effect removed - use mac-card-static for all cards */
 
 .mac-card-elevated {
   background-color: var(--mac-surface-elevated);

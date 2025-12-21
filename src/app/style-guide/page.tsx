@@ -198,8 +198,8 @@ function ColorsSection() {
               This maintains visual hierarchy and ensures buttons stand out as actionable elements.
             </p>
             <div className="mt-4 flex gap-4">
-              <button className="px-6 py-2 bg-gradient-to-r from-[#4a9eff] to-[#a855f7] rounded-lg text-sm font-normal transition-all duration-150 hover:shadow-lg hover:shadow-purple-500/20">
-                ✓ Gradient Button
+              <button className="px-6 py-2 bg-gradient-to-r from-[#4a9eff] to-[#a855f7] rounded-lg text-sm font-normal transition-all duration-150 hover:brightness-110">
+                Gradient Button
               </button>
               <div className="px-6 py-2 bg-[#1a1a1a] border border-white/[0.08] rounded-lg text-sm font-light text-[#a3a3a3]">
                 ✗ Solid Card
@@ -399,7 +399,7 @@ function ComponentsSection() {
         <h3 className="text-xl font-[200] text-white">Buttons</h3>
         <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-8">
           <div className="flex flex-wrap gap-4 items-center">
-            <button className="px-6 py-3 bg-gradient-to-r from-[#4a9eff] to-[#a855f7] rounded-lg text-sm font-normal transition-all duration-150 hover:shadow-lg hover:shadow-purple-500/25 hover:-translate-y-0.5">
+            <button className="px-6 py-3 bg-gradient-to-r from-[#4a9eff] to-[#a855f7] rounded-lg text-sm font-normal transition-all duration-150 hover:brightness-110">
               Primary Action
             </button>
             <button className="px-6 py-3 bg-[#141414] border border-white/[0.12] rounded-lg text-sm font-normal text-white hover:bg-white/[0.04] hover:border-[#4a9eff] transition-all duration-150">
@@ -460,7 +460,7 @@ function ComponentsSection() {
       <div className="space-y-6">
         <h3 className="text-xl font-[200] text-white">Cards</h3>
         <div className="grid grid-cols-3 gap-6">
-          <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6 transition-all duration-200 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/10 hover:border-[#a855f7]/30">
+          <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6">
             <div className="w-10 h-10 rounded-lg bg-[#4a9eff]/10 flex items-center justify-center mb-4">
               <span className="text-[#4a9eff]">✦</span>
             </div>
@@ -468,7 +468,7 @@ function ComponentsSection() {
             <p className="text-[#a3a3a3] text-sm font-light">Elevated surface with hover lift effect and border highlight.</p>
           </div>
 
-          <div className="mac-glass p-6 transition-all duration-200 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10">
+          <div className="mac-glass p-6">
             <div className="w-10 h-10 rounded-lg bg-[#a855f7]/10 flex items-center justify-center mb-4">
               <span className="text-[#a855f7]">◈</span>
             </div>

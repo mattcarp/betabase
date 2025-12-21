@@ -252,9 +252,86 @@ The code formatter uses Shiki (created by Evan You, who is Chinese not Japanese 
 
 ---
 
-## [Segments 3-6: Curate, Test, etc. - TBD]
+## SEGMENT 3: Test Pillar (~75 sec)
 
-*Waiting for your input on the remaining pillars...*
+*Self-healing tests - AI-powered test maintenance that eliminates brittle test syndrome*
+
+**See also:** [PILLAR-3-TEST-DEMO-SCRIPT.md](../PILLAR-3-TEST-DEMO-SCRIPT.md) for detailed narration
+
+### Dashboard Overview (10 sec)
+
+| Playwright Action | Narration |
+|------------------|-----------|
+| Click Test tab | *silent* |
+| Dashboard loads | "The Test Dashboard gives real-time visibility into your entire test suite." |
+| Point to stats | "8,719 tests, 12,177 executions, 80% pass rate." |
+
+---
+
+### Self-Healing - Star Feature (30 sec)
+
+| Playwright Action | Narration |
+|------------------|-----------|
+| Click "Self-Healing" sub-tab | *silent* |
+| Stats display | "Here's where the magic happens." |
+| Point to 1,247 monitored | "We're monitoring 1,247 tests." |
+| Point to 1,089 auto-healed | "1,089 have been automatically healed." |
+| Point to 94.2% success | "That's a 94% success rate." |
+| Point to 3.1s avg time | "Average heal time: 3.1 seconds." |
+| | "When a button moves or a class name changes, the AI recognizes the intent and updates selectors automatically." |
+| | "No more brittle tests breaking every sprint." |
+
+---
+
+### Historical Tests (15 sec)
+
+| Playwright Action | Narration |
+|------------------|-----------|
+| Click "Historical Tests" sub-tab | *silent* |
+| Table loads with 8,719 tests | "Historical Tests lets you explore your entire test library." |
+| Use filter/search | "Filter by status, search by name." |
+| Click a test row | "Drill into any test for execution history." |
+
+---
+
+### RLHF Tests (10 sec)
+
+| Playwright Action | Narration |
+|------------------|-----------|
+| Click "RLHF Tests" sub-tab | *silent* |
+| Dashboard loads | "RLHF Tests are auto-generated from curator corrections." |
+| Point to "13 generated/week" | "When a human corrects an AI response, we create a regression test." |
+| | "14 tests generated, 7 currently passing." |
+
+---
+
+### Optional: Impact Metrics / Live Monitor (10 sec)
+
+| Playwright Action | Narration |
+|------------------|-----------|
+| Click "Impact Metrics" | "Impact Metrics show testing affects real outcomes." |
+| Point to feedback stats | "3.43 average rating from 240 submissions." |
+
+---
+
+### Test Segment Key Stats
+
+| Metric | Value |
+|--------|-------|
+| Total tests | 8,719 |
+| Executions | 12,177 |
+| Pass rate | 80.4% |
+| Self-healed | 1,089 |
+| Heal success rate | 94.2% |
+| Avg heal time | 3.1s |
+| RLHF tests generated | 14 |
+| Generated per week | 13 |
+
+---
+
+## [Segments 4-6: Curate, etc. - TBD]
+
+*Remaining pillars to be documented...*
 
 ---
 

@@ -2820,12 +2820,12 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
                               initial={{ opacity: 0, y: 20 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: 0.1 * index, duration: 0.4 }}
-                              className="w-full"
+                              className="w-full h-full"
                             >
                               <Suggestion
                                 suggestion={suggestion}
                                 onClick={handleSuggestionClick}
-                                className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm h-auto whitespace-normal py-4 px-4 2xl:py-5 2xl:px-6 2xl:text-base"
+                                className="w-full h-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm whitespace-normal py-4 px-4 2xl:py-5 2xl:px-6 2xl:text-base"
                               />
                             </motion.div>
                           )
