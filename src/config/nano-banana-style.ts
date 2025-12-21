@@ -79,18 +79,38 @@ ${NANO_BANANA_BASE_STYLE}`.trim();
  * Quick templates for common demo diagrams
  */
 export const DEMO_TEMPLATES = {
-  betabaseERD: (organizations: string[] = ['Sony Music', 'SMEJ (Sony Music Entertainment Japan)', 'Other Music']) => 
+  betabaseERD: () =>
     buildNanoBananaPrompt(`
-      Create an infographic showing The Betabase's three-tier multi-tenant database architecture:
-      - Organization Level (top tier): ${organizations.join(', ')}
-        * Sony Music (left) - use real Sony Music logo/branding
-        * SMEJ / Sony Music Entertainment Japan (center) - use real SMEJ logo
-        * Other Music (right) - create a modern, playful music company logo for this fictional company
-      - Division Level (middle tier): Digital Operations, Legal, Finance
-      - Application Under Test Level (bottom tier): AOMA, Alexandria, USM, Confluence
-      Show data isolation between organizations with barriers/padlocks.
-      Use arrows showing the hierarchy.
-      Title: "The Betabase: Three-Tier Multi-Tenant Database Architecture"
+      Create an infographic showing a three-tier multi-tenant enterprise architecture.
+
+      LAYOUT: Focus on Sony Music as the MAIN example. Show the full hierarchy under Sony Music.
+      SMEJ and "Other Music" appear at the top but are FADED/GRAYED OUT to indicate they exist
+      but are not expanded in this view.
+
+      TIER 1 - ORGANIZATION LEVEL (top row, 3 boxes):
+      - Sony Music (LEFT, MAIN FOCUS - fully expanded below, vibrant colors)
+      - SMEJ (CENTER - faded/grayed out, just shows the box exists)
+      - Other Music (RIGHT - faded/grayed out, just shows the box exists)
+
+      TIER 2 - DIVISION LEVEL (ONLY under Sony Music, show 4 divisions in a row):
+      - "US Operations"
+      - "UK Operations"
+      - "Latin America"
+      - "Digital Operations"
+      Draw connecting lines from Sony Music down to all 4 divisions.
+
+      TIER 3 - APPLICATION LEVEL (bottom, under the Sony Music divisions):
+      - AOMA (Asset and Offering Management Application)
+      - Alexandria
+      - USM (Unified System for Music)
+      Draw lines connecting these apps UP to the divisions above.
+      ALL applications are Sony Music systems.
+
+      IMPORTANT: Do NOT put any divisions or applications under SMEJ or Other Music.
+      They should just be faded boxes at the organization level to show the multi-tenant capability.
+
+      Show data isolation barriers (padlocks/barriers) between the organizations.
+      Title: "Multi-Tenant Enterprise Architecture"
     `, 'erd'),
   
   rlhfLoop: () =>

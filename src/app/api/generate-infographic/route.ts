@@ -12,11 +12,12 @@ import { buildNanoBananaPrompt } from '@/config/nano-banana-style';
 
 export async function POST(req: NextRequest) {
   try {
-    const { 
-      prompt, 
-      aspectRatio = '16:9', 
+    const {
+      prompt,
+      aspectRatio = '16:9',
       imageSize = '2K',
-      diagramType // Optional: 'erd', 'process', 'cycle', 'comparison'
+      diagramType, // Optional: 'erd', 'process', 'cycle', 'comparison'
+      thinkingMode = true // Enable research/grounding for better contextual images
     } = await req.json();
 
     if (!prompt) {
@@ -34,9 +35,32 @@ export async function POST(req: NextRequest) {
     console.log('🍌 Nano Banana: Generating infographic...');
     console.log('   User Content:', prompt.substring(0, 80) + '...');
     console.log('   Diagram Type:', diagramType || 'generic');
+    console.log('   Thinking Mode:', thinkingMode ? 'ENABLED (research/grounding)' : 'disabled');
     console.log('   Full Prompt:', fullPrompt.substring(0, 150) + '...');
     console.log('   Aspect Ratio:', aspectRatio);
     console.log('   Image Size:', imageSize);
+
+    // Build request body with optional thinking/grounding mode
+    const requestBody: Record<string, unknown> = {
+      contents: [{
+        parts: [{ text: fullPrompt }] // Uses styled prompt!
+      }],
+      generationConfig: {
+        responseModalities: ['IMAGE'],
+        imageConfig: {
+          aspectRatio,
+          imageSize
+        }
+      }
+    };
+
+    // Enable thinking/grounding mode for research-backed image generation
+    // This allows the model to reference real logos, branding, etc.
+    if (thinkingMode) {
+      requestBody.tools = [{
+        googleSearch: {}
+      }];
+    }
 
     // Call Gemini image generation API
     const response = await fetch(
@@ -47,18 +71,7 @@ export async function POST(req: NextRequest) {
           'x-goog-api-key': apiKey,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{ text: fullPrompt }] // Uses styled prompt!
-          }],
-          generationConfig: {
-            responseModalities: ['IMAGE'],
-            imageConfig: {
-              aspectRatio,
-              imageSize
-            }
-          }
-        })
+        body: JSON.stringify(requestBody)
       }
     );
 
