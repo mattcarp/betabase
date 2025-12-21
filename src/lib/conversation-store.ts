@@ -86,18 +86,47 @@ function isDefaultTitle(title: string): boolean {
 }
 
 /**
- * Extract message content from AI SDK v4 or v5 format
- * AI SDK v5 uses parts[0].text, v4 uses content
+ * Extract message content from AI SDK v4, v5, or v6 formats
+ * - AI SDK v6/v5: parts[0].text or parts.map(p => p.text).join('')
+ * - AI SDK v4: content as string
+ * - Fallback: tries all variations
  */
 function getMessageContent(m: any): string | undefined {
-  // AI SDK v5: parts[0].text
-  if (m.parts && m.parts[0]?.text) {
-    return m.parts[0].text;
+  if (!m) return undefined;
+
+  // AI SDK v5/v6: parts array with text
+  if (m.parts && Array.isArray(m.parts) && m.parts.length > 0) {
+    // Try first text part
+    const textPart = m.parts.find((p: any) => p.type === "text" || p.text);
+    if (textPart?.text) {
+      return textPart.text;
+    }
+    // Fallback: join all text parts
+    const allText = m.parts
+      .map((p: any) => p.text || "")
+      .filter(Boolean)
+      .join("");
+    if (allText) return allText;
   }
-  // AI SDK v4 / fallback: content
-  if (m.content && typeof m.content === "string") {
-    return m.content;
+
+  // AI SDK v4 / direct content: support string or any truthy content
+  if (m.content) {
+    if (typeof m.content === "string") {
+      return m.content;
+    }
+    // Handle content as object with text property
+    if (typeof m.content === "object" && m.content.text) {
+      return m.content.text;
+    }
+    // Handle content as array (rare but possible)
+    if (Array.isArray(m.content)) {
+      const text = m.content
+        .map((c: any) => (typeof c === "string" ? c : c?.text || ""))
+        .join("");
+      if (text) return text;
+    }
   }
+
   return undefined;
 }
 
@@ -160,15 +189,17 @@ export const useConversationStore = create<ConversationStore>()(
             const updatedConversation = { ...c, ...updates, updatedAt: new Date() };
 
             // Auto-generate title from first user message if still default/empty
-            if (isDefaultTitle(c.title) && updates.messages && updates.messages.length > 0) {
+            const shouldGenerateTitle = isDefaultTitle(c.title);
+            const hasMessages = updates.messages && updates.messages.length > 0;
+
+            if (shouldGenerateTitle && hasMessages) {
               const firstUserMessage = updates.messages.find(
                 (m: any) => m.role === "user" && getMessageContent(m)
               );
-              
+
               const messageContent = firstUserMessage ? getMessageContent(firstUserMessage) : undefined;
               if (messageContent) {
                 const newTitle = generateTitleFromMessage(messageContent);
-                console.log(`[Store] Auto-generating title for ${id}: "${newTitle}"`);
                 updatedConversation.title = newTitle;
               }
             }

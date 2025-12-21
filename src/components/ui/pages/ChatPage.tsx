@@ -259,28 +259,78 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
 You have access to a knowledge base and can help with various tasks including analysis, problem-solving, and creative work.
 Be helpful, concise, and professional in your responses.`;
 
+  // Helper to extract message content from AI SDK v4/v5/v6 formats
+  const extractMessageContent = useCallback((m: any): string | undefined => {
+    if (!m) return undefined;
+    // AI SDK v5/v6: parts array
+    if (m.parts && Array.isArray(m.parts) && m.parts.length > 0) {
+      const textPart = m.parts.find((p: any) => p.type === "text" || p.text);
+      if (textPart?.text) return textPart.text;
+      const allText = m.parts.map((p: any) => p.text || "").filter(Boolean).join("");
+      if (allText) return allText;
+    }
+    // AI SDK v4: content as string
+    if (m.content && typeof m.content === "string") return m.content;
+    return undefined;
+  }, []);
+
+  // Helper to generate title from message content
+  const generateTitle = useCallback((content: string): string => {
+    if (!content) return "New Conversation";
+    let title = content
+      .trim()
+      .replace(/\s+/g, " ")
+      .replace(/^(hey|hi|hello|please|can you|could you|i need|i want)\s+/i, "")
+      .replace(/[?!.]+$/, "");
+    if (!title) return "New Conversation";
+    title = title.charAt(0).toUpperCase() + title.slice(1);
+    if (title.length > 45) {
+      const truncateAt = title.lastIndexOf(" ", 45);
+      title = truncateAt > 20 ? title.substring(0, truncateAt) : title.substring(0, 45);
+    }
+    return title;
+  }, []);
+
   // Stable onMessagesChange callback to prevent infinite re-renders
   const handleMessagesChange = useCallback((messages: any[]) => {
     if (!activeConversationId || messages.length === 0) return;
-    
+
     const { updateConversation, getConversation } = useConversationStore.getState();
     const currentConv = getConversation(activeConversationId);
-    
+
     if (!currentConv) return;
 
     // Safety check: Don't overwrite if we would lose data
     const storedMsgCount = currentConv.messages?.length || 0;
-    const hasStoredAssistant = currentConv.messages?.some((m: any) => m.role === 'assistant');
-    const newHasAssistant = messages.some((m: any) => m.role === 'assistant');
-    
+    const hasStoredAssistant = currentConv.messages?.some((m: any) => m.role === "assistant");
+    const newHasAssistant = messages.some((m: any) => m.role === "assistant");
+
     if (storedMsgCount > messages.length) return;
     if (hasStoredAssistant && !newHasAssistant && messages.length <= storedMsgCount) return;
-    
-    // Simply update messages. The Store handles auto-title generation.
-    updateConversation(activeConversationId, { 
-      messages: messages as any[]
-    });
-  }, [activeConversationId]);
+
+    // Explicitly generate title if still default - don't rely solely on store
+    const isDefault = ["new conversation", "the betabase", "untitled", ""].includes(
+      (currentConv.title || "").toLowerCase().trim()
+    );
+
+    let newTitle: string | undefined;
+    if (isDefault) {
+      const firstUserMsg = messages.find((m: any) => m.role === "user");
+      if (firstUserMsg) {
+        const content = extractMessageContent(firstUserMsg);
+        if (content) {
+          newTitle = generateTitle(content);
+        }
+      }
+    }
+
+    // Update conversation with messages and optionally the new title
+    const updates: any = { messages: messages as any[] };
+    if (newTitle && newTitle !== "New Conversation") {
+      updates.title = newTitle;
+    }
+    updateConversation(activeConversationId, updates);
+  }, [activeConversationId, extractMessageContent, generateTitle]);
 
   // PREMIUM SUGGESTED QUESTIONS: Curated showcase with pre-cached responses
   // All 6 trigger infographic generation and have Mermaid diagrams
