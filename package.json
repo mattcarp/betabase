@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.24.47",
+  "version": "0.24.48",
   "private": true,
   "scripts": {
     "dev": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && next dev --webpack -p 3000",
@@ -193,7 +193,8 @@
     "web-vitals": "^5.1.0",
     "xlsx": "^0.18.5",
     "zod": "^3.23.8",
-    "zustand": "^5.0.5"
+    "zustand": "^5.0.5",
+    "pdf-parse": "^1.1.4"
   },
   "devDependencies": {
     "@alloc/quick-lru": "^5.2.0",
@@ -221,7 +222,6 @@
     "micromark-extension-gfm-footnote": "^2.1.0",
     "micromark-util-character": "^2.1.1",
     "ora": "^9.0.0",
-    "pdf-parse": "^1.1.1",
     "pg": "^8.16.3",
     "playwright": "^1.57.0",
     "postcss-nested": "^7.0.2",

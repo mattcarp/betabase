@@ -1,11 +1,16 @@
 import { openai } from "@ai-sdk/openai";
 import { embed } from "ai";
-import type { Browser, Page } from "playwright";
 import { upsertJiraTicket, upsertJiraTicketEmbedding } from "../lib/supabase";
 
+// Type-only imports for playwright (no runtime dependency)
+type Browser = import("playwright").Browser;
+type Page = import("playwright").Page;
+
 // Dynamic import of playwright to avoid bundling in production
+// Uses webpack magic comment to exclude from bundle
 async function getPlaywright() {
-  const { chromium } = await import("playwright");
+  // @ts-ignore - Dynamic import with webpack external
+  const { chromium } = await import(/* webpackIgnore: true */ "playwright");
   return chromium;
 }
 
