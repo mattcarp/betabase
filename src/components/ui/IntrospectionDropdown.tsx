@@ -153,10 +153,17 @@ export function IntrospectionDropdown() {
     }
   }, [traces]);
 
+  // Eager load on mount (non-blocking) so status shows green immediately
+  useEffect(() => {
+    fetchIntrospectionData();
+  }, []);
+
+  // Refresh periodically while dropdown is open
   useEffect(() => {
     if (isOpen) {
+      // Refresh immediately when opened (in case data is stale)
       fetchIntrospectionData();
-      // Refresh every 5 seconds while open
+      // Then refresh every 5 seconds while open
       const interval = setInterval(fetchIntrospectionData, 5000);
       return () => clearInterval(interval);
     }
@@ -719,7 +726,7 @@ export function IntrospectionDropdown() {
 
       {/* Trace Details Dialog */}
       <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
-        <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden bg-zinc-900 border-white/10">
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden bg-background border-border">
           <DialogHeader>
             <div className="flex items-center justify-between">
               <div className="flex-1">
@@ -730,10 +737,10 @@ export function IntrospectionDropdown() {
                 <DialogDescription>Trace ID: {selectedTrace?.id}</DialogDescription>
               </div>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 onClick={handleExportTrace}
-                className="flex items-center gap-1"
+                className="flex items-center gap-1 mac-button mac-button-outline"
               >
                 <Download className="h-3.5 w-3.5" />
                 Export

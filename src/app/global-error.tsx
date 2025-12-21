@@ -3,7 +3,9 @@
 /**
  * Global Error Page - Client Component (required by Next.js)
  * Minimal fallback when the root layout fails.
+ * Note: Uses ESLint disable for unused params as they're required by Next.js signature
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function GlobalError({
   error,
   reset,

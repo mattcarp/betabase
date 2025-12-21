@@ -1,5 +1,8 @@
 "use client";
 
+// Force dynamic rendering to avoid SSG issues with hooks
+export const dynamic = 'force-dynamic';
+
 /**
  * Self-Healing Demo Target App
  *
@@ -20,10 +23,10 @@
  * - showDevTools: true/false - show the selector inspector overlay
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function SelfHealingDemoPage() {
+function SelfHealingDemoContent() {
   const searchParams = useSearchParams();
   const [variant, setVariant] = useState(1);
   const [submitted, setSubmitted] = useState(false);
@@ -362,5 +365,18 @@ export default function SelfHealingDemoPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Wrap with Suspense for useSearchParams
+export default function SelfHealingDemoPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+        <div className="text-slate-400">Loading demo...</div>
+      </div>
+    }>
+      <SelfHealingDemoContent />
+    </Suspense>
   );
 }
