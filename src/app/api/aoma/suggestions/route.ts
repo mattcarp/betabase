@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Premium suggested questions showcasing deep AOMA knowledge
-    // Each triggers infographic generation and has pre-cached responses with Mermaid diagrams
+    // Each triggers infographic generation and has pre-cached responses with Nano Banana diagrams
     const aomaTopics = [
       "What are the different asset types in AOMA and how do they relate to each other?",
       "How does AOMA use AWS S3 storage tiers for long-term archiving?",

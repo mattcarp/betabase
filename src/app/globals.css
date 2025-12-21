@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Required for AI Elements MessageResponse (Streamdown) component */
-@source "../node_modules/streamdown/dist/*.js";
-
 /* Custom styles loaded via link tags in layout.tsx to avoid PostCSS conflicts */
 
 /* Base styles */

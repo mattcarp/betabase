@@ -7,7 +7,7 @@ const CACHED_RESPONSES: Record<
   string,
   {
     response: string;
-    diagram?: string; // Mermaid diagram syntax
+    diagram?: string; // Nano Banana diagram prompt
     metadata: {
       confidence: string;
       sources: string[];

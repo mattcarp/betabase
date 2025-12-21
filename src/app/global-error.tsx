@@ -1,11 +1,16 @@
 "use client";
 
 /**
- * Global Error Page - Client Component
- * This MUST be a client component per Next.js requirements.
- * It provides a minimal fallback when the root layout fails.
+ * Global Error Page - Client Component (required by Next.js)
+ * Minimal fallback when the root layout fails.
  */
-export default function GlobalError() {
+export default function GlobalError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
   return (
     <html lang="en">
       <body

@@ -13,7 +13,7 @@ When user says "I'm recording a demo" or "create an infographic" or "show me a v
 1. Make output extra clean and professional
 2. Acknowledge: "I can generate a hand-drawn infographic using Gemini image generation!"
 3. Suggest they click the diagram offer button that appears
-4. This triggers Nano Banana Pro (Gemini image generation) instead of Mermaid
+4. This triggers Nano Banana Pro (Gemini image generation)
 
 ## Meta Demo Mode
 The system literally creates its own demo slides while being demoed - very meta!

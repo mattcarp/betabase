@@ -365,7 +365,7 @@ Be helpful, concise, and professional in your responses.`;
   }, [activeConversationId, extractMessageContent, generateTitle]);
 
   // PREMIUM SUGGESTED QUESTIONS: Curated showcase with pre-cached responses
-  // All 6 trigger infographic generation and have Mermaid diagrams
+  // All 6 trigger Nano Banana infographic generation
   // Updated: December 2025 with latest AOMA corpus and release notes
   const suggestions = [
     "Show me The Betabase multi-tenant database architecture",

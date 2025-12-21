@@ -22,15 +22,14 @@ import {
 } from "lucide-react";
 import { cn } from "../../../lib/utils";
 
-// Mermaid component for flowcharts
-const MermaidDiagram = ({ chart }: { chart: string }) => {
+// Flow diagram component for agent decision paths
+const FlowDiagram = ({ chart }: { chart: string }) => {
   const [svg, setSvg] = useState<string>("");
 
   useEffect(() => {
-    // In a real implementation, we'd use mermaid.js library
-    // For this long-running task, I'll simulate the rendering
+    // Static visualization of agent decision path
     const mockSvg = `
-      <div class="mermaid-mock p-6 bg-zinc-900/50 rounded-xl border border-zinc-800 text-[var(--mac-text-primary)] font-light text-sm w-full h-full flex flex-col items-center">
+      <div class="flow-diagram p-6 bg-zinc-900/50 rounded-xl border border-border text-[var(--mac-text-primary)] font-light text-sm w-full h-full flex flex-col items-center">
         <div class="flex flex-col items-center space-y-4">
           <div class="p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg text-blue-300">Query: "SACD Sector Specs"</div>
           <div class="h-8 w-px bg-zinc-700"></div>
@@ -130,7 +129,7 @@ export function AgentInsightsTab() {
             <CardDescription className="font-light text-[var(--mac-text-secondary)]">Visual flowchart of AI's logical progression</CardDescription>
           </CardHeader>
           <CardContent>
-            <MermaidDiagram chart="graph TD; A-->B; B-->C; C-->D;" />
+            <FlowDiagram chart="graph TD; A-->B; B-->C; C-->D;" />
             <div className="mt-6 flex justify-between items-center px-2">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1.5 text-xs text-[var(--mac-text-secondary)]">

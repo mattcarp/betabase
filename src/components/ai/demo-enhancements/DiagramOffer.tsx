@@ -208,15 +208,15 @@ export function useDiagramOffer(options: UseDiagramOfferOptions = {}) {
     generationStarted.current = true;
     setStatus("generating");
     
-    // TODO: Replace with actual Mermaid diagram generation
+    // Nano Banana diagram generation
     // This runs in background while user reads the response
     console.log("🎨 Background: Starting diagram generation...");
-    
+
     try {
       // Simulate async generation - replace with actual API call
       await new Promise((resolve) => setTimeout(resolve, 2500));
-      
-      // In real implementation, generate Mermaid diagram here
+
+      // Nano Banana diagram generation
       diagramData.current = "graph TD; A-->B; B-->C;"; // Placeholder
       
       console.log("🎨 Background: Diagram ready");

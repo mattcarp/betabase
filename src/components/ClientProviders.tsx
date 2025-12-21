@@ -8,8 +8,8 @@ interface ClientProvidersProps {
 }
 
 /**
- * Actual client-side providers that use React hooks
- * This component is dynamically imported with ssr: false
+ * Client-side providers - uses ThemeProvider directly
+ * The ThemeProvider handles its own SSR safety
  */
 export function ClientProviders({ children }: ClientProvidersProps) {
   return <ThemeProvider defaultTheme="mac">{children}</ThemeProvider>;

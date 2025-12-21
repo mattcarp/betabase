@@ -184,7 +184,7 @@ Example output:
  * Default questions if generation fails
  * These are optimized for:
  * 1. High vector search similarity (tested 59-75%)
- * 2. Good Mermaid diagram potential
+ * 2. Good infographic potential (Nano Banana)
  * 3. Real user value
  */
 function getDefaultQuestions(): ZeitgeistQuestion[] {

@@ -220,7 +220,6 @@ import {
   CheckpointTrigger,
 } from "../ai-elements/checkpoint";
 import { BookmarkIcon, ListTodoIcon, GaugeIcon, Trash2Icon, ChevronsUpDownIcon } from "lucide-react";
-import { MermaidDiagram } from "../ai-elements/mermaid-diagram";
 import { NanoBananaInfographic } from "../ai-elements/NanoBananaInfographic";
 
 interface AiSdkChatPanelProps {
@@ -377,7 +376,7 @@ export function AiSdkChatPanel({
   const [diagramVisible, setDiagramVisible] = useState(false);
   const [diagramCode, setDiagramCode] = useState<string>("");
   const [isGeneratingDiagram, setIsGeneratingDiagram] = useState(false);
-  const [activeDiagramType, setActiveDiagramType] = useState<'mermaid' | 'nanobanana'>('mermaid');
+  const [activeDiagramType, setActiveDiagramType] = useState<'nanobanana'>('nanobanana');
   const [infographicType, setInfographicType] = useState<'erd' | 'process' | 'cycle' | 'comparison' | undefined>();
   const [nanoBananaPrompt, setNanoBananaPrompt] = useState<string>('');
 
@@ -1728,7 +1727,7 @@ export function AiSdkChatPanel({
     setQueueItems(prev => prev.filter(item => item.id !== itemId));
   }, []);
 
-  // Generate diagram from message content - Nano Banana (image) or Mermaid (SVG)
+  // Generate diagram from message content using Nano Banana
   // META DEMO: Detects if user is in demo mode and wants infographic
   const generateDiagramFromContent = useCallback(async (content: string) => {
     setIsGeneratingDiagram(true);
@@ -1768,150 +1767,6 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
     
     setIsGeneratingDiagram(false); // NanoBananaInfographic handles its own loading
   }, []);
-
-  // 🗑️ DEPRECATED: Mermaid fallback diagrams - Now using Nano Banana exclusively
-  // Kept for reference only - Not called anywhere
-  /* const generateFallbackDiagram = (content: string): string => {
-    const lowerContent = content.toLowerCase();
-    
-    // THE BETABASE multi-tenant ERD (for demo opening!)
-    if (lowerContent.includes('betabase') || (lowerContent.includes('multi-tenant') && lowerContent.includes('database'))) {
-      return `flowchart TD
-    subgraph org["🏢 Organization Level"]
-        ORG1["Sony Music"]
-        ORG2["Universal"]
-        ORG3["Warner"]
-    end
-    
-    subgraph div["🏛️ Division Level"]
-        DIV1["Digital Operations"]
-        DIV2["Legal"]
-        DIV3["Finance"]
-    end
-    
-    subgraph app["📱 Application Under Test"]
-        APP1["AOMA"]
-        APP2["Alexandria"]
-        APP3["USM"]
-        APP4["Confluence"]
-    end
-    
-    ORG1 --> DIV1 & DIV2 & DIV3
-    DIV1 --> APP1 & APP2 & APP3
-    DIV2 --> APP4
-    
-    style org fill:#7c3aed,stroke:#a78bfa,stroke-width:3px,color:#fff
-    style div fill:#2563eb,stroke:#60a5fa,stroke-width:3px,color:#fff
-    style app fill:#059669,stroke:#34d399,stroke-width:3px,color:#fff
-    style ORG1 fill:#6b21a8,stroke:#a78bfa,color:#fff
-    style APP1 fill:#047857,stroke:#34d399,color:#fff`;
-    }
-    
-    // Detect workflow type and generate appropriate diagram
-    if (lowerContent.includes('upload') && lowerContent.includes('archive')) {
-      return `flowchart TD
-    subgraph prep["📋 1. Preparation Phase"]
-        A[/"📁 Select Source Files"/] --> B{"🔍 Validate File Names"}
-        B -->|"No special chars"| C[/"✅ Files Ready"/]
-        B -->|"Issues found"| D[/"⚠️ Rename Files"/] --> B
-    end
-    
-    subgraph reg["📝 2. Registration Phase"]
-        C --> E["🎵 Register Asset in AOMA"]
-        E --> F{"Enter Metadata"}
-        F --> G["Title & Artist"]
-        F --> H["ISRC/UPC Codes"]
-        F --> I["Security Groups"]
-        G & H & I --> J["📋 Asset Record Created"]
-    end
-    
-    subgraph upload["⬆️ 3. Upload Phase"]
-        J --> K{"Choose Upload Method"}
-        K -->|"Large files"| L["🚀 Aspera Upload"]
-        K -->|"Cloud source"| M["☁️ Sony Ci Import"]
-        K -->|"Small files"| N["📤 Direct Upload"]
-        L & M & N --> O["📦 Files Transferred"]
-    end
-    
-    subgraph process["⚙️ 4. Processing Phase"]
-        O --> P["🔄 Transcode to Formats"]
-        P --> Q["🔍 QC Validation"]
-        Q -->|"Pass"| R["✅ Ready for Distribution"]
-        Q -->|"Fail"| S["❌ Review Errors"] --> T["🔧 Fix Issues"] --> P
-    end
-    
-    subgraph archive["💾 5. Archive Phase"]
-        R --> U["📚 Store in Long-term Archive"]
-        U --> V["🏷️ AWS S3 Glacier"]
-        U --> W["💿 Master Vault"]
-        V & W --> X(("✨ Asset Complete"))
-    end
-    
-    style prep fill:#1e3a5f,stroke:#60a5fa,stroke-width:2px
-    style reg fill:#1e3a5f,stroke:#a78bfa,stroke-width:2px
-    style upload fill:#1e3a5f,stroke:#34d399,stroke-width:2px
-    style process fill:#1e3a5f,stroke:#fbbf24,stroke-width:2px
-    style archive fill:#1e3a5f,stroke:#f472b6,stroke-width:2px
-    style X fill:#10b981,stroke:#34d399,stroke-width:3px`;
-    }
-    
-    if (lowerContent.includes('permission') || lowerContent.includes('role')) {
-      return `flowchart TD
-    subgraph roles["👥 AOMA Permission Levels"]
-        direction TB
-        A["🔒 Viewer"] -->|"Can view"| B["📖 Read-only access"]
-        C["📝 Editor"] -->|"Can edit"| D["✏️ Modify metadata"]
-        E["👑 Admin"] -->|"Full control"| F["⚙️ Manage users & settings"]
-        G["🌐 Global Admin"] -->|"Everything"| H["🏢 Cross-territory access"]
-    end
-    
-    A -.->|"Upgrade"| C
-    C -.->|"Upgrade"| E
-    E -.->|"Upgrade"| G
-    
-    style A fill:#374151,stroke:#6b7280
-    style C fill:#1e40af,stroke:#3b82f6
-    style E fill:#7c3aed,stroke:#a78bfa
-    style G fill:#dc2626,stroke:#f87171`;
-    }
-    
-    // Default AOMA architecture diagram
-    return `flowchart LR
-    subgraph client["🖥️ Client Layer"]
-        A["🌐 Web Browser"]
-        B["📱 Mobile App"]
-    end
-    
-    subgraph api["🔌 API Gateway"]
-        C["⚡ Next.js API Routes"]
-        D["🔐 Auth Middleware"]
-    end
-    
-    subgraph services["⚙️ Services"]
-        E["🤖 AI/RAG Engine"]
-        F["📊 Analytics"]
-        G["🔔 Notifications"]
-    end
-    
-    subgraph data["💾 Data Layer"]
-        H[("🐘 PostgreSQL")]
-        I[("🔍 pgvector")]
-        J["☁️ S3 Storage"]
-    end
-    
-    A & B --> C
-    C --> D
-    D --> E & F & G
-    E --> I
-    F --> H
-    G --> H
-    E & F --> J
-    
-    style client fill:#1e3a5f,stroke:#60a5fa
-    style api fill:#1e3a5f,stroke:#a78bfa
-    style services fill:#1e3a5f,stroke:#34d399
-    style data fill:#1e3a5f,stroke:#fbbf24`;
-  }; */
 
   // Confirmation: Handle tool approval
   const handleToolApproval = useCallback((approved: boolean, reason?: string) => {
@@ -2287,7 +2142,7 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
               );
             })()}
 
-            {/* Active Diagram Display - Using REAL MermaidDiagram component */}
+            {/* Active Diagram Display - Nano Banana infographic */}
             {!isUser && isLastMessage && !isLoading && diagramVisible && (
               <motion.div 
                 initial={{ opacity: 0, height: 0 }}

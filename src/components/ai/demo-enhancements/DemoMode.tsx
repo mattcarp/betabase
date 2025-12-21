@@ -42,7 +42,7 @@ const DEMO_QUERIES: DemoQuery[] = [
     label: "Auth Diagram",
     query: "Show me the authentication flow as a diagram",
     category: "diagram",
-    description: "Generates Mermaid workflow visualization",
+    description: "Generates Nano Banana workflow visualization",
   },
 ];
 
