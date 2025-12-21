@@ -1,18 +1,31 @@
 "use client";
 
 import { cn } from "src/lib/utils";
-import { motion } from "motion/react";
+import { motion, type MotionProps, type HTMLMotionProps } from "motion/react";
 import {
   type CSSProperties,
-  type ElementType,
-  type JSX,
   memo,
   useMemo,
 } from "react";
 
+// Pre-create motion components at module level to avoid creating during render
+const motionComponents = {
+  p: motion.p,
+  span: motion.span,
+  div: motion.div,
+  h1: motion.h1,
+  h2: motion.h2,
+  h3: motion.h3,
+  h4: motion.h4,
+  h5: motion.h5,
+  h6: motion.h6,
+} as const;
+
+type MotionElement = keyof typeof motionComponents;
+
 export type TextShimmerProps = {
   children: string;
-  as?: ElementType;
+  as?: MotionElement;
   className?: string;
   duration?: number;
   spread?: number;
@@ -20,14 +33,13 @@ export type TextShimmerProps = {
 
 const ShimmerComponent = ({
   children,
-  as: Component = "p",
+  as = "p",
   className,
   duration = 2,
   spread = 2,
 }: TextShimmerProps) => {
-  const MotionComponent = motion.create(
-    Component as keyof JSX.IntrinsicElements
-  );
+  // Use pre-created motion component from map
+  const MotionComponent = motionComponents[as] || motionComponents.p;
 
   const dynamicSpread = useMemo(
     () => (children?.length ?? 0) * spread,

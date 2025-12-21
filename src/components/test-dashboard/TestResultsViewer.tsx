@@ -28,6 +28,7 @@ import {
   Calendar,
   RefreshCw,
   PlayCircle,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { enhancedSupabaseTestDB } from "../../services/supabase-test-integration-enhanced";
