@@ -77,9 +77,11 @@ export async function synthesizeContext(
   const rawContext = topResults
     .map((r, i) => {
       const type = r.source_type.toUpperCase();
+      // INCLUDE source_id so ticket numbers are visible to synthesis
+      const sourceRef = r.source_id ? ` (${r.source_id})` : "";
       // INCREASED: 800 chars per result to capture more detail from chunks
       const content = r.content.substring(0, 800);
-      return `[${type} ${i + 1}]: ${content}`;
+      return `[${type}${sourceRef}]: ${content}`;
     })
     .join("\n\n");
 
@@ -94,17 +96,18 @@ ${rawContext}
 
 YOUR TASK:
 1. Extract the 2-3 most relevant facts that DIRECTLY answer the user's question
-2. Ignore noise (CSS classes, UI element descriptions, ticket metadata)
-3. Focus on WHAT the user wants to know, not WHERE it came from
-4. If there are Jira tickets, only mention them if they're directly relevant - don't list them
+2. Ignore noise (CSS classes, UI element descriptions, unrelated ticket metadata)
+3. Focus on WHAT the user wants to know
+4. ALWAYS include specific ticket numbers (like DPSA-12345, AOMA-12345) when citing Jira tickets - users need these to look up details
+5. Keep source references so the user can verify the information
 
 RESPOND IN THIS FORMAT:
-SUMMARY: [1-2 sentences that directly answer the question]
-KEY_INSIGHT_1: [Most important fact]
+SUMMARY: [1-2 sentences that directly answer the question, including ticket numbers if applicable]
+KEY_INSIGHT_1: [Most important fact with source reference]
 KEY_INSIGHT_2: [Second most important fact, if relevant]
 KEY_INSIGHT_3: [Third fact, if relevant]
 
-Be concise. Speak like a helpful colleague, not a search engine.`;
+Be concise but always cite specific ticket numbers when referencing Jira.`;
 
     const result = await generateText({
       model: google("gemini-2.0-flash"),
