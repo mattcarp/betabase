@@ -2921,22 +2921,24 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="flex flex-col items-center justify-center min-h-[60vh] text-center"
+                className="flex flex-col items-center justify-center min-h-[50vh] 2xl:min-h-[40vh] text-center py-8 2xl:py-16"
               >
-                {/* Hero Section */}
-                <div className="relative mb-8">
-                  <SiamLogo size="xl" className="mx-auto" />
+                {/* Hero Section - scales up for large displays */}
+                <div className="relative mb-8 2xl:mb-12 3xl:mb-16">
+                  <div className="transform scale-100 2xl:scale-125 3xl:scale-150 4xl:scale-175 transition-transform origin-center">
+                    <SiamLogo size="2xl" className="mx-auto" />
+                  </div>
                 </div>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.6 }}
-                  className="mb-8"
+                  className="mb-8 2xl:mb-12"
                 >
-                  <h2 className="mac-heading text-4xl font-thin mb-4 text-white tracking-tight">
+                  <h2 className="mac-heading text-4xl 2xl:text-5xl 3xl:text-6xl font-thin mb-4 2xl:mb-6 text-white tracking-tight">
                     Welcome to The Betabase
                   </h2>
-                  <p className="text-lg font-light text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+                  <p className="text-lg 2xl:text-xl font-light text-zinc-400 max-w-2xl 2xl:max-w-3xl mx-auto leading-relaxed">
                     It's back!
                   </p>
                 </motion.div>
@@ -2947,15 +2949,15 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4, duration: 0.6 }}
-                      className="w-full max-w-4xl"
+                      className="w-full max-w-4xl 2xl:max-w-6xl 3xl:max-w-7xl"
                     >
-                      <div className="mb-4">
-                        <h3 className="mac-title text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2">
-                          <Sparkles className="w-4 h-4" />
+                      <div className="mb-4 2xl:mb-6">
+                        <h3 className="mac-title text-sm 2xl:text-base font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2">
+                          <Sparkles className="w-4 h-4 2xl:w-5 2xl:h-5" />
                           Try these to get started
                         </h3>
                       </div>
-                      <div className="grid grid-cols-2 gap-4 max-w-3xl mx-auto w-full">
+                      <div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-4 2xl:gap-6 max-w-3xl lg:max-w-5xl 2xl:max-w-6xl mx-auto w-full">
                         {(dynamicSuggestions.length > 0 ? dynamicSuggestions : suggestions).map(
                           (suggestion, index) => (
                             <motion.div
@@ -2968,7 +2970,7 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
                               <Suggestion
                                 suggestion={suggestion}
                                 onClick={handleSuggestionClick}
-                                className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm h-auto whitespace-normal py-4 px-4"
+                                className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm h-auto whitespace-normal py-4 px-4 2xl:py-5 2xl:px-6 2xl:text-base"
                               />
                             </motion.div>
                           )

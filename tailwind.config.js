@@ -23,6 +23,14 @@ module.exports = {
       },
     },
     extend: {
+      screens: {
+        '3xl': '1920px',
+        '4xl': '2560px',
+      },
+      scale: {
+        '175': '1.75',
+        '200': '2',
+      },
       colors: {
         border: "rgba(255, 255, 255, 0.08)", /* MAC Design System: subtle border */
         input: "rgba(255, 255, 255, 0.12)", /* Slightly more visible for form inputs */
