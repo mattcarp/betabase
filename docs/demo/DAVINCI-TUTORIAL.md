@@ -1,6 +1,6 @@
-# CapCut Tutorial: Producing the SIAM Demo
+# DaVinci Resolve Tutorial: Producing the SIAM Demo
 
-This guide will help you produce a professional-grade demo video using CapCut Desktop, featuring a "talking head" vignette and the "Nano Banana 2" diagrams.
+This guide will help you produce a professional-grade demo video using DaVinci Resolve Desktop, featuring a "talking head" vignette and the "Nano Banana 2" diagrams.
 
 ## 1. Preparation & Setup
 
@@ -17,12 +17,12 @@ Ensure you have the following in a dedicated folder (e.g., `siam-demo-assets`):
 ### B. Recording Best Practices
 - **Resolution**: Record your screen in **1080p or 4K**.
 - **Clean Desktop**: Hide desktop icons and turn off notifications.
-- **Separate Tracks**: If using CapCut's recorder, check "Record webcam and screen separately" to get two distinct video tracks. This is crucial for the vignette effect.
+- **Separate Tracks**: If using DaVinci Resolve's recorder, check "Record webcam and screen separately" to get two distinct video tracks. This is crucial for the vignette effect.
 
-## 2. Editing Workflow in CapCut
+## 2. Editing Workflow in DaVinci Resolve
 
 ### Step 1: The Base Layer (Screen Recording)
-1.  Open CapCut and create a **New Project**.
+1.  Open DaVinci Resolve and create a **New Project**.
 2.  **Import** all your assets (screen recording, webcam footage, diagrams).
 3.  Drag your **Screen Recording** onto the main timeline (Track 1).
 4.  **Trim** the start/end to keep it tight.

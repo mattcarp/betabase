@@ -197,7 +197,7 @@ export async function GET(request: NextRequest) {
           modelUsed: record.model_used || null,
           ragMetadata: (record.rag_metadata as FeedbackRecord["ragMetadata"]) || null,
           status: record.status || "pending",
-          curatorId: record.curator_id || null,
+          curatorId: null, // curator_id column doesn't exist in schema
           curatorNotes: record.curator_notes || null,
           reviewedAt: record.reviewed_at || null,
           createdAt: record.created_at,
@@ -281,9 +281,8 @@ export async function PATCH(request: NextRequest) {
       updated_at: new Date().toISOString(),
     };
 
-    if (curatorId) {
-      updateData.curator_id = curatorId;
-    }
+    // Note: curator_id column doesn't exist in schema
+    // curatorId is accepted from client but not persisted
 
     if (curatorNotes) {
       updateData.curator_notes = curatorNotes;

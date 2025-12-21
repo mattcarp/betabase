@@ -369,9 +369,7 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
                       onClick={() => toggleGroup(group.groupKey)}
                     >
                       <Checkbox
-                        checked={allSelected}
-                        // @ts-expect-error - indeterminate is valid HTML attribute
-                        indeterminate={someSelected && !allSelected}
+                        checked={someSelected && !allSelected ? "indeterminate" : allSelected}
                         onCheckedChange={() => toggleGroupSelection(group)}
                         onClick={(e) => e.stopPropagation()}
                         className="border-white/30"

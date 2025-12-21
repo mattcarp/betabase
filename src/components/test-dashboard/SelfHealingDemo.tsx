@@ -117,56 +117,77 @@ test('user can submit order', async ({ page }) => {
     // Step 1: Run original test
     setStep("running-original");
     setVariant(1);
-    addLog("Running original test against variant 1...");
-    await sleep(1500);
+    addLog("Running original test against TechStore checkout...");
+    await sleep(2500);
 
     setStep("original-passed");
-    addLog("Original test PASSED - selector #submit-btn found");
-    await sleep(1500);
+    addLog("Test PASSED - Found button with id='submit-btn'");
+    addLog("Button clicked successfully, order submitted");
+    await sleep(3000);
 
-    // Step 2: UI Changed
+    // Step 2: UI Changed - THIS IS THE KEY MOMENT
     setStep("ui-changed");
     setVariant(3);
-    addLog("UI CHANGED: Developer renamed button ID to 'order-submit-button'");
-    await sleep(2000);
+    addLog("-------------------------------------------");
+    addLog("DEVELOPER REFACTORED THE CHECKOUT BUTTON");
+    addLog("Renamed: id='submit-btn' -> id='order-submit-button'");
+    addLog("(Common during code cleanup sprints)");
+    await sleep(4000);
 
     // Step 3: Run broken test
     setStep("running-broken");
-    addLog("Running test against new UI...");
-    await sleep(1500);
-
-    setStep("test-failed");
-    addLog("TEST FAILED: Selector #submit-btn not found (timeout 30s)");
+    addLog("Running same test against updated UI...");
     await sleep(2000);
 
-    // Step 4: AI Analysis
+    setStep("test-failed");
+    addLog("TEST FAILED!");
+    addLog("Error: Selector '#submit-btn' not found after 30s timeout");
+    addLog("The element exists but with a different ID");
+    await sleep(4000);
+
+    // Step 4: AI Analysis - SHOW THE THINKING
     setStep("analyzing");
-    addLog("Self-Healing AI analyzing DOM changes...");
-    await sleep(1000);
-    addLog("Comparing previous DOM snapshot with current state...");
-    await sleep(1000);
-    addLog("Identifying candidate elements by text, role, and structure...");
+    addLog("-------------------------------------------");
+    addLog("SELF-HEALING AI ACTIVATED");
+    await sleep(1500);
+    addLog("Step 1: Loading DOM snapshot from last passing run...");
+    await sleep(1500);
+    addLog("Step 2: Comparing with current DOM state...");
+    await sleep(1500);
+    addLog("Step 3: Analyzing button by: text content, role, position, siblings...");
+    await sleep(2000);
+    addLog("Step 4: Found candidate: same text 'Complete Purchase', same position");
     await sleep(1500);
 
     // Step 5: Healing
     setStep("healing");
     const result = simulateHealing();
-    addLog(`Found match: ${result.newSelector} (${(result.confidence * 100).toFixed(0)}% confidence)`);
-    await sleep(1000);
-    addLog(`Strategy: ${result.strategy}`);
+    addLog("-------------------------------------------");
+    addLog(`MATCH FOUND: ${result.newSelector}`);
+    addLog(`Confidence: ${(result.confidence * 100).toFixed(0)}% (Tier 1 - Auto-heal threshold)`);
+    await sleep(2000);
+    addLog(`Strategy used: ${result.strategy}`);
     await sleep(1000);
 
     setStep("healed");
-    addLog("Test automatically updated with new selector");
-    await sleep(1500);
+    addLog("-------------------------------------------");
+    addLog("AUTO-HEAL APPLIED");
+    addLog("Test code updated: page.click('#submit-btn') -> page.click('#order-submit-button')");
+    await sleep(3000);
 
     // Step 6: Verify healed test
     setStep("running-healed");
-    addLog("Running healed test to verify...");
-    await sleep(1500);
+    addLog("Re-running test with healed selector...");
+    await sleep(2500);
 
     setStep("healed-passed");
-    addLog("HEALED TEST PASSED! No human intervention required.");
+    addLog("-------------------------------------------");
+    addLog("HEALED TEST PASSED!");
+    addLog("Button found and clicked with new selector");
+    addLog("Order submitted successfully");
+    addLog("");
+    addLog("NO HUMAN INTERVENTION REQUIRED");
+    addLog("Test automatically fixed in 2.3 seconds");
   }, [addLog, simulateHealing]);
 
   const reset = () => {

@@ -65,7 +65,7 @@
 
 5. **Demo Production Gaps**:
    - ❌ No screen recordings
-   - ❌ No CapCut project setup
+   - ❌ No DaVinci Resolve project setup
    - ❌ No voiceover script
    - ❌ No final edited video
 
@@ -247,7 +247,7 @@ npx tsx -e "
 - [ ] Add icons (lucide-react)
 - [ ] Wire up to `healing_stats_24h` view
 - [ ] Test real-time updates
-- [ ] Take screenshot for CapCut
+- [ ] Take screenshot for DaVinci Resolve
 
 **Deliverable**: ✅ Functional stats dashboard with real data
 
@@ -448,10 +448,10 @@ npx tsx -e "
 
 **Deliverable**: ✅ 4 high-quality screen recordings
 
-### Milestone 4.2: CapCut Editing (3 hours)
+### Milestone 4.2: DaVinci Resolve Editing (3 hours)
 
 **Import & Setup** (30 min):
-- [ ] Open CapCut
+- [ ] Open DaVinci Resolve
 - [ ] New Project: "SIAM Self-Healing Demo"
 - [ ] Set timeline: 1080p, 30fps
 - [ ] Import all `.mov` files
@@ -551,7 +551,7 @@ npx tsx -e "
 ### If Components Don't Render
 **Plan C**: Static screenshots + voiceover
 - Take high-res screenshots of Figma mockups
-- Use static images in CapCut
+- Use static images in DaVinci Resolve
 - Strong voiceover carries the narrative
 
 ### If Time Runs Short

@@ -40,7 +40,7 @@ interface FeedbackRow {
   feedback_text: string | null;
   suggested_correction: string | null;
   status: string;
-  curator_id: string | null;
+  curator_email: string | null;
   model_used: string | null;
   created_at: string;
   updated_at: string;

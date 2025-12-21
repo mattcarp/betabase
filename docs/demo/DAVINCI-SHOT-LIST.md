@@ -1,4 +1,4 @@
-# CapCut Shot List & Timing Guide
+# DaVinci Resolve Shot List & Timing Guide
 
 Practical guide for recording and editing the 5-minute demo.
 
@@ -21,7 +21,7 @@ Practical guide for recording and editing the 5-minute demo.
 - App landing on Chat tab
 - Brief pause showing the interface
 
-**CapCut overlay text:**
+**DaVinci Resolve overlay text:**
 ```
 Three things that solve each other
 ```
@@ -40,7 +40,7 @@ Three things that solve each other
 - Wait for response to stream
 - Hover over inline citation (shows source)
 
-**CapCut overlay text:**
+**DaVinci Resolve overlay text:**
 ```
 45,399 domain-specific vectors
 ```
@@ -64,7 +64,7 @@ Sources shown inline
 - Click to show Mermaid diagram
 - Zoom and pan the diagram
 
-**CapCut overlay text:**
+**DaVinci Resolve overlay text:**
 ```
 Diagram generated on demand
 ```
@@ -93,7 +93,7 @@ Diagram generated on demand
 - Show star rating
 - Type a correction: "Actually, it uses Cognito, not generic OAuth"
 
-**CapCut overlay text:**
+**DaVinci Resolve overlay text:**
 ```
 Corrections improve future answers
 ```
@@ -111,7 +111,7 @@ Corrections improve future answers
 - Click one item to expand
 - Show approve/reject buttons
 
-**CapCut overlay text:**
+**DaVinci Resolve overlay text:**
 ```
 Curator queue for review
 ```
@@ -145,7 +145,7 @@ One expert correction helps thousands of queries
 - Click Self-Healing tab
 - Show healing queue
 
-**CapCut overlay text:**
+**DaVinci Resolve overlay text:**
 ```
 94.2% auto-heal success rate
 ```
@@ -165,7 +165,7 @@ One expert correction helps thousands of queries
 - Show tier badge (Tier 1/2/3)
 - Click approve or reject
 
-**CapCut overlay text:**
+**DaVinci Resolve overlay text:**
 ```
 Tier 1: Auto-apply
 Tier 2: Human review
@@ -185,7 +185,7 @@ Tier 3: Architect decision
 - Return to Chat tab (or stay on Test)
 - Brief pause
 
-**CapCut overlay text:**
+**DaVinci Resolve overlay text:**
 ```
 The loop: Better chat → Fewer corrections → Better retrieval → Fewer test failures
 ```
@@ -196,7 +196,7 @@ The loop: Better chat → Fewer corrections → Better retrieval → Fewer test 
 
 ---
 
-## CapCut Edit Checklist
+## DaVinci Resolve Edit Checklist
 
 ```
 [ ] Import screen recording

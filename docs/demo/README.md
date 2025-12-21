@@ -48,7 +48,7 @@
 
 - ~5 minute recorded video
 - Real app, real data (pre-cached for speed)
-- CapCut for text overlays
+- DaVinci Resolve for text overlays
 - No talking head - demonstrating, not presenting
 
 ---

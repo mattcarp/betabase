@@ -1,7 +1,7 @@
 # Northstar Demo Implementation Plan
 
 ## 🌟 Objective
-Create a "State of the Art" (SOTA) demo showcasing the three pillars of The Beta Base: **Chat**, **Curate**, and **Testing**. The final output will be a polished video edited in CapCut.
+Create a "State of the Art" (SOTA) demo showcasing the three pillars of The Beta Base: **Chat**, **Curate**, and **Testing**. The final output will be a polished video edited in DaVinci Resolve.
 
 ## 🏗️ The Three Pillars
 
@@ -30,7 +30,7 @@ Create a "State of the Art" (SOTA) demo showcasing the three pillars of The Beta
     *   Session Playback.
 *   **Status**: ✅ Verified (Screenshot: `testing_tab_clicked`).
 
-## 🎬 Video Production Plan (CapCut)
+## 🎬 Video Production Plan (DaVinci Resolve)
 
 ### Phase 1: Recording (OBS / Screenflick)
 *   **Setup**: Clean browser window (localhost:3000), hidden bookmarks, 1080p resolution.
@@ -39,15 +39,15 @@ Create a "State of the Art" (SOTA) demo showcasing the three pillars of The Beta
     2.  **Curate**: Navigate to Curate tab -> Show feedback queue -> Correct an answer.
     3.  **Testing**: Navigate to Test tab -> Show dashboard -> Run a test -> Show failure & fix.
 
-### Phase 2: Editing (CapCut)
-*   **Import**: Bring recordings into CapCut.
+### Phase 2: Editing (DaVinci Resolve)
+*   **Import**: Bring recordings into DaVinci Resolve.
 *   **Pacing**: Trim dead air, speed up loading times (if any).
 *   **Visuals**:
     *   Add "The Beta Base" intro bumper.
     *   Use zoom-ins for key details (e.g., diagram nodes, citations).
     *   Overlay text for key takeaways ("Multi-source Recall", "HITL Curation").
 *   **Audio**:
-    *   Voiceover (recorded separately or in CapCut).
+    *   Voiceover (recorded separately or in DaVinci Resolve).
     *   Background music (subtle, tech/modern).
 
 ## 📅 Execution Steps
@@ -55,7 +55,7 @@ Create a "State of the Art" (SOTA) demo showcasing the three pillars of The Beta
 1.  **Final Polish**: Ensure all mock data looks realistic (no "Lorem Ipsum").
 2.  **Rehearsal**: Run through the script once without recording.
 3.  **Record**: Capture the three segments.
-4.  **Edit**: Assemble in CapCut.
+4.  **Edit**: Assemble in DaVinci Resolve.
 5.  **Review**: Verify against success criteria.
 
 ## ✅ Success Criteria

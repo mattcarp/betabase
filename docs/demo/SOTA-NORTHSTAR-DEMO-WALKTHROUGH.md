@@ -27,7 +27,7 @@ This demo showcases The Beta Base as a state-of-the-art enterprise AI testing an
 - [ ] Clear chat history for fresh demo
 - [ ] Have demo queries ready in text file
 
-### Recording Setup (for CapCut)
+### Recording Setup (for DaVinci Resolve)
 - [ ] Screen recording tool ready (QuickTime/OBS)
 - [ ] Resolution: 1920x1080, 30fps
 - [ ] System audio + microphone enabled
@@ -55,7 +55,7 @@ This demo showcases The Beta Base as a state-of-the-art enterprise AI testing an
 ### Narration Script
 > "The Beta Base is an enterprise AI testing platform built around three Northstar capabilities. Today we'll demonstrate how it transforms architectural documentation, continuous model improvement, and automated testing for the AOMA enterprise application."
 
-### CapCut Notes
+### DaVinci Resolve Notes
 - Dark gradient background (#0a0a0a to #1a1a1a)
 - Text: Inter Bold, white with purple glow
 - Fade in animation (0.5s)
@@ -102,7 +102,7 @@ This demo showcases The Beta Base as a state-of-the-art enterprise AI testing an
 - "Citations include page titles, sections, and relevance scores"
 - "Voice UI provides hands-free interaction for developers"
 
-#### Visual Cues for CapCut
+#### Visual Cues for DaVinci Resolve
 - Zoom in on citation (1.5x) when hovering
 - Highlight popover with subtle glow effect
 - Show citation count badge
@@ -152,7 +152,7 @@ This demo showcases The Beta Base as a state-of-the-art enterprise AI testing an
 - **Analytics charts**: Accuracy, distribution, trends
 - **Toast notification**: Immediate feedback confirmation
 
-#### Visual Cues for CapCut
+#### Visual Cues for DaVinci Resolve
 - Transition: Slide left from chat to Curate tab
 - Zoom in on feedback queue (1.5x)
 - Highlight cursor on thumbs up button
@@ -262,7 +262,7 @@ This demo showcases The Beta Base as a state-of-the-art enterprise AI testing an
 - **Approval workflow**: Approve/reject buttons for HITL
 - **Metadata panel**: Execution time, retry count, AI model
 
-#### Visual Cues for CapCut
+#### Visual Cues for DaVinci Resolve
 - **3:50**: Transition from Curate to Testing tab (slide left)
 - **3:52**: Zoom in on stats grid (1.5x) - pan across metrics
 - **4:05**: Highlight healing queue (left panel)
@@ -292,7 +292,7 @@ This demo showcases The Beta Base as a state-of-the-art enterprise AI testing an
 - "Try The Beta Base at thebetabase.com"
 - "Built for enterprise AI teams at Sony Music Entertainment"
 
-### CapCut Notes
+### DaVinci Resolve Notes
 - Text overlay with three checkmarks
 - Fade to black over 2 seconds
 - Optional: End card with URL
@@ -330,11 +330,11 @@ This demo showcases The Beta Base as a state-of-the-art enterprise AI testing an
 
 ### During Recording
 1. **Type slowly** - Faster than you think, but readable
-2. **Pause between actions** - Leave 2-3 seconds for CapCut editing
+2. **Pause between actions** - Leave 2-3 seconds for DaVinci Resolve editing
 3. **Narrate as you go** - Or record voiceover separately
 4. **Don't worry about mistakes** - Just pause and restart that section
 
-### Post-Recording (CapCut)
+### Post-Recording (DaVinci Resolve)
 1. **Trim dead space** - Remove pauses, loading screens
 2. **Add zoom effects** - Highlight key UI elements
 3. **Sync voiceover** - Align audio with visual actions
@@ -515,9 +515,9 @@ Perfect for demo without needing live data!
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0 | 2025-11-23 | Initial walkthrough for CapCut demo |
+| 1.0 | 2025-11-23 | Initial walkthrough for DaVinci Resolve demo |
 
 ---
 
-**For CapCut editing instructions, see**: [CAPCUT-TUTORIAL-ENHANCED.md](CAPCUT-TUTORIAL-ENHANCED.md)
+**For DaVinci Resolve editing instructions, see**: [CAPCUT-TUTORIAL-ENHANCED.md](CAPCUT-TUTORIAL-ENHANCED.md)
 **For technical setup, see**: [NORTHSTAR-STATUS.md](NORTHSTAR-STATUS.md)

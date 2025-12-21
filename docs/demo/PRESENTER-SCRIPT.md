@@ -1,7 +1,7 @@
 # North Star Demo - Presenter Script
 
 **Total Runtime:** 5 minutes
-**Format:** Pre-recorded in CapCut
+**Format:** Pre-recorded in DaVinci Resolve
 
 ---
 
@@ -13,7 +13,7 @@ Animated SIAM logo, then Three Pillars diagram fades in
 ### What to say
 > "SIAM - the AI-powered assistant that doesn't just answer questions, it learns from feedback and heals its own tests. Let me show you our three pillars: Chat, Curate, and Test."
 
-### CapCut notes
+### DaVinci Resolve notes
 - Fade in Three Pillars diagram
 - Keep logo animation under 5 seconds
 
@@ -36,7 +36,7 @@ Chat interface at localhost:3000
 ### What to say
 > "First, the Chat pillar. Ask AOMA anything about your music catalog. Notice the inline citations - click to see the exact source. And here's the magic: after each response, we offer a Nano Banana diagram to visualize the answer."
 
-### CapCut notes
+### DaVinci Resolve notes
 - Circle the citations when they appear
 - Zoom on Demo Mode toggle when clicking
 
@@ -61,7 +61,7 @@ Chat interface, then Curator Workspace
 ### What to say
 > "Second, the Curate pillar. This is where humans train the AI. Every thumbs down becomes training data. Watch - I'll submit detailed feedback with a correction. This goes to our curator queue. The curator reviews it, and if approved, it becomes a DPO training pair - the AI learns what 'better' looks like."
 
-### CapCut notes
+### DaVinci Resolve notes
 - Circle the "Suggested correction" field - this is the DPO gold
 - Show the feedback appearing in curator queue
 
@@ -100,7 +100,7 @@ Terminal or Test Dashboard
 >
 > Tier 3: The button relocated to the sidebar. 42% confidence - the AI finds it but says 'this needs architect review.' The context is completely different. Is this intentional? Should the test be rewritten? The human-in-the-loop queue captures this for expert judgment."
 
-### CapCut notes
+### DaVinci Resolve notes
 - Add color overlays: GREEN (Tier 1), YELLOW (Tier 2), RED (Tier 3)
 - Circle confidence percentages
 - Zoom on "similar tests affected" number
@@ -121,7 +121,7 @@ VS Code with `app/api/self-healing/demo/route.ts` open
 ### What to say
 > "Let me show you what makes this work. Here's the three-tier scenario definition - the AI understands that same ID in a different context means different confidence. And here's the real Gemini 3 Pro integration - this isn't mock data. The AI actually analyzes the DOM diff and calculates real confidence."
 
-### CapCut notes
+### DaVinci Resolve notes
 - Use circle/highlight tool on tier definitions
 - Circle the Gemini model name
 
@@ -140,7 +140,7 @@ Three Pillars diagram with stats overlay
 - 94.2% self-healing success rate
 - Real-time feedback to training pipeline
 
-### CapCut notes
+### DaVinci Resolve notes
 - Animated stats appearing one by one
 - End with SIAM logo
 

@@ -74,7 +74,7 @@ I've created beautiful visuals for your HITL demo presentation. All images are s
    - Slide 3: Before/After (impact)
 
 ### Option 2: Embed in Demo Video
-If recording with CapCut/Descript:
+If recording with DaVinci Resolve/Descript:
 1. Import images as B-roll
 2. Overlay during voiceover sections
 3. Use transitions (fade, slide) between images and screen recording

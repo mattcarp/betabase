@@ -255,7 +255,7 @@ Make confidence scores **believable**:
 
 ---
 
-## CapCut Editing: Sophistication Techniques
+## DaVinci Resolve Editing: Sophistication Techniques
 
 ### Scene Transitions for Intelligence
 - **Tier 1 → Tier 2**: Zoom out to show escalation arrow, slide right
@@ -272,7 +272,7 @@ Make confidence scores **believable**:
 ```
 
 ### Visual Effects (Subtle, Professional)
-- **Stats counting up**: Use CapCut's "count up" animation
+- **Stats counting up**: Use DaVinci Resolve's "count up" animation
 - **Confidence bars**: Animated fill (easing: ease-in-out)
 - **Success checkmarks**: Scale up + fade in (0.3s)
 - **Workflow arrows**: Draw-on animation (0.5s)

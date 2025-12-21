@@ -10,7 +10,7 @@
 
 - Localhost dev only
 - No talking head - you're demonstrating, not presenting
-- CapCut for text overlays on key moments
+- DaVinci Resolve for text overlays on key moments
 - Technical audience who've done this work
 
 ---
@@ -185,7 +185,7 @@ Show me the authentication flow as a diagram
 
 ---
 
-## Text Overlays for CapCut
+## Text Overlays for DaVinci Resolve
 
 Moments to highlight with text on screen:
 
@@ -264,7 +264,7 @@ Be honest about these:
 [ ] Test dashboard loaded once
 [ ] Screen recording ready
 [ ] No console errors (check DevTools)
-[ ] CapCut ready for edit
+[ ] DaVinci Resolve ready for edit
 ```
 
 ---

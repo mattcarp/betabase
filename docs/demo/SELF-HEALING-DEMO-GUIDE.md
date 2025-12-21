@@ -36,91 +36,205 @@ The system classifies each broken test into one of three tiers based on AI confi
 - **Action:** Escalated to test architect
 - **Example:** Component completely restructured, may need test rewrite
 
-## Live Healing Workflow
+## Interactive Demo (Updated December 21, 2025)
 
-The dashboard shows real-time healing activity:
+The Self-Healing tab includes an **Interactive Demo** that visually demonstrates the healing flow in real-time. Perfect for executive presentations.
 
-1. **Failing Test Detection** - System identifies selector failures
-2. **AI Analysis** - Gemini 3 Pro analyzes the DOM change
-3. **Confidence Scoring** - Assigns confidence and tier
-4. **Action Taken** - Auto-heal, queue for review, or escalate
+### The Scenario
 
-## Code Diff Visualization
+A developer refactors a checkout button during a code cleanup sprint:
+- **Before:** Button has `id="submit-btn"`
+- **After:** Button renamed to `id="order-submit-button"`
 
-When reviewing a healed test, the dashboard displays:
+This is a VERY common real-world scenario that breaks automated tests.
 
-- **Original Selector** (red) - What the test was looking for
-- **New Selector** (green) - What the AI suggests
-- **Confidence Score** - How certain the AI is about the match
-- **DOM Context** - Surrounding HTML for verification
+### The Problem (Traditional Approach)
 
-Example:
-```diff
-- button[data-testid="submit-btn"]
-+ button[data-testid="send-btn"]
+When the test fails, a QA engineer would need to:
+1. Notice the failure in CI
+2. Investigate the cause
+3. Find the new selector
+4. Update the test code
+5. Commit and push
+
+**Time cost: 15-30 minutes per broken test** - and there could be dozens affected.
+
+### The Solution (Self-Healing)
+
+1. AI detects the test failure
+2. AI loads DOM snapshot from last passing run
+3. AI compares with current DOM to find what changed
+4. AI identifies button by: text content, role, position, siblings
+5. AI finds match: same text "Complete Purchase", same position
+6. AI calculates confidence: 94% (above 90% = Tier 1 = auto-heal)
+7. AI updates test selector automatically
+8. AI re-runs test to verify fix works
+9. **Test passes - NO HUMAN INTERVENTION REQUIRED**
+
+**Time saved: Hours per sprint**
+
+### How to Access
+
+1. Navigate to **Test tab** > **Self-Healing** subtab
+2. Click the **"Interactive Demo"** tab (first tab)
+3. Click **"Run Demo"** button
+
+### Demo Flow (~55 seconds)
+
+| Time | Step | What Happens |
+|------|------|--------------|
+| 0:00-0:06 | Original Test | Test runs against TechStore checkout - PASSES |
+| 0:06-0:14 | UI Changed | Developer renamed button ID (shown in Element Inspector) |
+| 0:14-0:22 | Test Failed | Selector `#submit-btn` not found - timeout error |
+| 0:22-0:38 | AI Analyzing | Loading DOM snapshot, comparing states, finding candidates |
+| 0:38-0:46 | Match Found | 94% confidence, Tier 1 auto-heal threshold |
+| 0:46-0:55 | Verified | Healed test runs and PASSES |
+
+### Key Executive Takeaway
+
+**"Tests fix themselves when developers change the UI."**
+
+## Demo Target App: TechStore Pro
+
+The demo uses a realistic SaaS checkout page (`/demo/self-healing`):
+
+### Features
+- **TechStore Pro** branding with checkout flow
+- Progress bar: Cart → Shipping → Payment
+- Order summary with products, prices, totals
+- **Element Inspector overlay** showing button's selector in real-time
+- Visual indicators: "Test uses this!" and "Changed!" badges
+
+### Button Variants
+
+| Variant | Selector | Description |
+|---------|----------|-------------|
+| 1 | `#submit-btn` | Original (test uses this) |
+| 2 | `#submit-btn` | Same ID, different position |
+| 3 | `#order-submit-button` | Renamed (main demo scenario) |
+| 4 | `.order-submit-btn` | No ID, class only |
+| 5 | `aria-label` | Icon button, aria-label only |
+
+### URL Parameters
+- `?variant=N` - Set button variant (1-5)
+- `?showControls=true` - Show variant switcher
+- `?showDevTools=false` - Hide Element Inspector
+
+### Direct Access
+```
+http://localhost:3000/demo/self-healing?variant=1&showControls=true
 ```
 
-## Cascade Healing
+## Video Recording
 
-A powerful feature: **One fix can repair multiple tests.**
+### Recording Script
 
-When the AI fixes a selector pattern, it automatically identifies and repairs all other tests using the same pattern. This dramatically reduces maintenance burden.
+A Playwright script captures the full demo as video:
 
-**Demo talking point:** "When we fix one test, the system automatically identifies 12 other tests with the same selector pattern and heals them all. That's cascade healing."
+**Location:** `scripts/record-self-healing-demo.ts`
 
-## Hidden Demo Trigger
+**Run with:**
+```bash
+npx tsx scripts/record-self-healing-demo.ts
+```
 
-For demo purposes, there's a hidden feature to simulate live healing activity:
+**Output:** `~/Desktop/playwright-screencasts/self-healing-demo-{timestamp}.webm`
 
-**Click the "Configure" button 3 times quickly** to trigger a demo healing sequence with simulated failures and automatic repairs.
+### What the Recording Shows
+
+1. Navigate to Test tab → Self-Healing → Interactive Demo
+2. Click "Run Demo"
+3. Full ~55 second animation with all steps visible
+4. Final "HEALED TEST PASSED" state
+
+### Video Location
+
+Latest recording: `~/Desktop/playwright-screencasts/self-healing-demo-v3-2025-12-21.webm`
+
+## Components
+
+### SelfHealingDemo.tsx
+`src/components/test-dashboard/SelfHealingDemo.tsx`
+
+- Orchestrates the demo animation
+- Split view: App preview (iframe) + Test code
+- Progress steps indicator with icons
+- Activity log with color-coded messages
+- Healing result card with confidence scores and alternatives
+
+### Demo Target Page
+`src/app/demo/self-healing/page.tsx`
+
+- TechStore Pro checkout UI
+- Element Inspector showing live selector info
+- 5 button variants for different scenarios
+- Success message on click
+
+### SelfHealingTestViewer.tsx
+`src/components/test-dashboard/SelfHealingTestViewer.tsx`
+
+- Parent component containing Interactive Demo tab
+- Also contains: Priority Review, Batch Review, Live Workflow, History
 
 ## Business Value Proposition
 
 Key points for the demo:
 
-1. **94.2% Success Rate** - Most tests heal automatically
+1. **94% Success Rate** - Most tests heal automatically (Tier 1)
 2. **2.3s Average Heal Time** - Near-instant repairs
-3. **Reduced Maintenance** - QA team focuses on new tests, not fixing old ones
-4. **Cascade Effect** - One fix repairs many tests
-5. **Human-in-the-Loop** - AI suggests, humans approve for uncertain cases
+3. **Reduced Maintenance** - QA focuses on new tests, not fixing old ones
+4. **Cascade Effect** - One fix repairs many tests with same pattern
+5. **Human-in-the-Loop** - AI defers to humans for uncertain cases (Tier 2/3)
 
 ## Demo Script
 
 ### Opening (30 seconds)
 "The Test pillar shows our AI-powered self-healing test system. When UI changes break our automated tests, the AI automatically repairs them."
 
-### Stats Overview (30 seconds)
-"We're monitoring 247 tests. 89 have been automatically healed, 12 are pending review. Our success rate is 94.2% with an average heal time of 2.3 seconds."
+### Interactive Demo (60 seconds)
+"Let me show you exactly how it works. I'll run our Interactive Demo."
 
-### Three-Tier Explanation (45 seconds)
-"The system uses a three-tier confidence model. Tier 1 tests heal automatically - high confidence, no human needed. Tier 2 queues for QA review - the AI makes a recommendation but wants human verification. Tier 3 escalates to architects - these are complex changes that may need test rewrites."
+*Click Run Demo*
 
-### Live Workflow (30 seconds)
-"Watch the live workflow here. A test just failed because a button's data-testid changed. The AI analyzed it, scored 96% confidence, and automatically healed it in 1.8 seconds."
+"Here's a checkout page with a Submit button. The test uses `#submit-btn` as its selector."
 
-### Cascade Demo (30 seconds)
-"Notice it also healed 5 other tests that used the same selector pattern. That's cascade healing - fix one, fix many."
+*Wait for UI Change*
+
+"Now a developer refactors the button - renames the ID to `order-submit-button`. Watch what happens to the test."
+
+*Wait for Failure*
+
+"The test fails - can't find the old selector. But now the AI kicks in."
+
+*Wait for Analysis*
+
+"It's comparing DOM snapshots, analyzing the button by text, role, and position..."
+
+*Wait for Healing*
+
+"94% confidence - same text, same position. The AI auto-heals the test."
+
+*Wait for Verification*
+
+"And the healed test passes. No human intervention required. This took 2.3 seconds instead of 30 minutes."
 
 ### Closing (15 seconds)
 "This means our QA team spends less time maintaining tests and more time building new coverage. The AI handles the routine maintenance."
 
-## Technical Details (For Technical Audience)
+## Technical Details
 
-- **AI Model:** Gemini 3 Pro for selector analysis
-- **Confidence Algorithm:** Combines semantic similarity, DOM structure, and historical patterns
-- **API Endpoints:**
-  - `GET /api/self-healing` - Current healing status
-  - `GET /api/self-healing/analytics` - Historical data
-  - `POST /api/self-healing/approve` - Human approval for Tier 2/3
-- **Integration:** Playwright test framework with custom healing middleware
+- **AI Model:** Analysis via DOM comparison and semantic matching
+- **Confidence Algorithm:** Combines text similarity, role matching, DOM structure, position
+- **Healing Strategies:**
+  - Text + Role Matching
+  - data-testid fallback
+  - CSS class matching
+  - aria-label matching
 
-## Screenshots
+## Hidden Demo Trigger (Legacy)
 
-Screenshots are automatically saved during test runs to:
-- `test-results/pillar-3-test-dashboard.png`
-- `test-results/pillar-3-self-healing.png`
-- `test-results/test-dashboard-self-healing-tab.png`
+**Click the "Configure" button 3 times quickly** to trigger a demo healing sequence with simulated failures and automatic repairs.
 
 ---
 
-*Last updated: December 2, 2025*
+*Last updated: December 21, 2025*

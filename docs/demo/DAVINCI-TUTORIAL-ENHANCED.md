@@ -1,7 +1,7 @@
-# CapCut Tutorial - SIAM Demo Video
+# DaVinci Resolve Tutorial - SIAM Demo Video
 
 ## Overview
-Create a 5-6 minute demo video showcasing SIAM's three North Star features using CapCut.
+Create a 5-6 minute demo video showcasing SIAM's three North Star features using DaVinci Resolve.
 
 **Target Duration**: 5:00-6:00  
 **Resolution**: 1920x1080 (1080p)  
@@ -42,7 +42,7 @@ Create a 5-6 minute demo video showcasing SIAM's three North Star features using
 - Subtitle: "Enterprise AI Testing Platform"
 - Background: Dark gradient (#0a0a0a to #1a1a1a)
 
-**CapCut Steps**:
+**DaVinci Resolve Steps**:
 1. Add Text → Title
 2. Font: Inter Bold, 72pt
 3. Color: White with purple glow
@@ -62,7 +62,7 @@ Create a 5-6 minute demo video showcasing SIAM's three North Star features using
 **Voiceover Script**:
 > "We start by asking The Beta Base to visualize the architecture of AOMA. The system generates a Mermaid diagram using the 'Nano Banana 2' theme, showing the multi-tenant system and integration points. The diagram is interactive and supports PNG export."
 
-**CapCut Steps**:
+**DaVinci Resolve Steps**:
 1. Import screen recording
 2. Trim to start at query typing
 3. Add zoom effect on diagram (2x zoom, 2s duration)
@@ -90,7 +90,7 @@ Create a 5-6 minute demo video showcasing SIAM's three North Star features using
 **Voiceover Script**:
 > "The system uses Reinforcement Learning from Human Feedback. Correcting the model's understanding of AOMA updates the knowledge base in real-time, improving future retrieval accuracy."
 
-**CapCut Steps**:
+**DaVinci Resolve Steps**:
 1. Continue screen recording
 2. Add text overlay: "RLHF Feedback Loop"
 3. Highlight key phrases in response
@@ -109,7 +109,7 @@ Create a 5-6 minute demo video showcasing SIAM's three North Star features using
 **Voiceover Script**:
 > "The Curate tab allows the team to review retrieval performance. Submitting feedback writes a validation signal to the database, which triggers a re-weighting of the embeddings for that context."
 
-**CapCut Steps**:
+**DaVinci Resolve Steps**:
 1. Add transition effect (slide left)
 2. Zoom in on feedback queue (1.5x)
 3. Highlight cursor on thumbs up button
@@ -135,7 +135,7 @@ Create a 5-6 minute demo video showcasing SIAM's three North Star features using
 **Voiceover Script**:
 > "TestSprite is the platform's AI agent. When a UI change in AOMA breaks a test, it analyzes the DOM drift and automatically generates a fix, maintaining the release pipeline."
 
-**CapCut Steps**:
+**DaVinci Resolve Steps**:
 1. Continue screen recording
 2. Zoom in on sequence diagram
 3. Add text overlays for each step
@@ -153,17 +153,17 @@ Create a 5-6 minute demo video showcasing SIAM's three North Star features using
 **Voiceover Script**:
 > "The Beta Base provides architecture visualization, RLHF feedback loops, and automated self-healing tests for the AOMA application."
 
-**CapCut Steps**:
+**DaVinci Resolve Steps**:
 1. Add text overlay with three pillars
 2. Fade to black
 3. End card with contact info (optional)
 
 ---
 
-## CapCut Editing Workflow
+## DaVinci Resolve Editing Workflow
 
 ### Step 1: Import Media
-1. Open CapCut
+1. Open DaVinci Resolve
 2. Create New Project → "SIAM Demo Final"
 3. Import all assets:
    - Screen recording(s)
@@ -201,7 +201,7 @@ Create a 5-6 minute demo video showcasing SIAM's three North Star features using
 
 ## Export Settings
 
-### CapCut Export Configuration
+### DaVinci Resolve Export Configuration
 1. Click "Export" (top right)
 2. **Resolution**: 1080p (1920x1080)
 3. **Frame Rate**: 30fps
@@ -226,7 +226,7 @@ Create a 5-6 minute demo video showcasing SIAM's three North Star features using
 ### Editing Tips
 - **Keyboard shortcuts**: Learn 'S' (split), 'C' (cut), 'V' (paste)
 - **Zoom timeline**: Use trackpad pinch or Cmd+/- for precision
-- **Save often**: CapCut auto-saves, but manually save too (Cmd+S)
+- **Save often**: DaVinci Resolve auto-saves, but manually save too (Cmd+S)
 - **Preview**: Watch full video before exporting
 
 ### Voiceover Tips
@@ -240,7 +240,7 @@ Create a 5-6 minute demo video showcasing SIAM's three North Star features using
 ## Troubleshooting
 
 **Video is choppy**:
-- Reduce preview quality in CapCut (Settings → Preview Quality → Low)
+- Reduce preview quality in DaVinci Resolve (Settings → Preview Quality → Low)
 - Close other apps
 - Export and review final video (preview may lag)
 

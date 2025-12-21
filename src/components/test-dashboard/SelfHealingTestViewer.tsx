@@ -431,15 +431,15 @@ export const SelfHealingTestViewer: React.FC = () => {
     setTimeout(() => setCopySuccess(false), 2000);
   };
 
-  // Fetch data from API
-  const fetchData = useCallback(async () => {
+  // Fetch data from API with abort support
+  const fetchData = useCallback(async (signal?: AbortSignal) => {
     try {
       setLoading(true);
 
       // Fetch attempts and analytics in parallel
       const [attemptsRes, analyticsRes] = await Promise.all([
-        fetch("/api/self-healing?limit=50&stats=true"),
-        fetch("/api/self-healing/analytics?days=14&history=true"),
+        fetch("/api/self-healing?limit=50&stats=true", { signal }),
+        fetch("/api/self-healing/analytics?days=14&history=true", { signal }),
       ]);
 
       if (attemptsRes.ok) {
@@ -479,6 +479,10 @@ export const SelfHealingTestViewer: React.FC = () => {
         }
       }
     } catch (error) {
+      // Ignore abort errors (expected on unmount)
+      if (error instanceof Error && error.name === "AbortError") {
+        return;
+      }
       console.error("Failed to fetch self-healing data:", error);
     } finally {
       setLoading(false);
@@ -486,10 +490,16 @@ export const SelfHealingTestViewer: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    fetchData();
+    const controller = new AbortController();
+    fetchData(controller.signal);
+
     // Poll for updates every 30 seconds
-    const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
+    const interval = setInterval(() => fetchData(), 30000);
+
+    return () => {
+      controller.abort();
+      clearInterval(interval);
+    };
   }, [fetchData]);
 
   // Auto-trigger demo on mount for recording reliability
@@ -747,11 +757,11 @@ export const SelfHealingTestViewer: React.FC = () => {
           </p>
         </div>
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={handleSettingsClick}
           className={cn(
-            "transition-all",
+            "border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground transition-all",
             demoClickCount > 0 && "ring-2 ring-purple-500/50",
             triggeringDemo && "opacity-50 cursor-wait"
           )}

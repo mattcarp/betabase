@@ -114,7 +114,7 @@ Expected: All 7 tests pass
 
 ---
 
-## Step 4: Capture Screenshots for CapCut
+## Step 4: Capture Screenshots for DaVinci Resolve
 
 ### Screenshots to Take
 
@@ -162,7 +162,7 @@ git push origin main
 
 ## Demo Script Reference
 
-The full 5-minute CapCut script is in:
+The full 5-minute DaVinci Resolve script is in:
 ```
 docs/demo/CAPCUT-DEMO-GUIDE.md
 ```

@@ -1,7 +1,7 @@
-# North Star Demo - CapCut Recording Guide
+# North Star Demo - DaVinci Resolve Recording Guide
 
 **Target:** 5-minute video demo
-**Format:** CapCut recorded (not live)
+**Format:** DaVinci Resolve recorded (not live)
 **Date:** Wednesday, December 2025
 
 ---
@@ -218,7 +218,7 @@ Generate with prompt:
 
 ---
 
-## Code Highlights to Circle in CapCut
+## Code Highlights to Circle in DaVinci Resolve
 
 ### 1. Three-Tier Confidence System
 **File:** `app/api/self-healing/demo/route.ts:36-140`
@@ -382,14 +382,14 @@ class SelfHealingPage {
 
 ---
 
-## CapCut Script (5 Minutes)
+## DaVinci Resolve Script (5 Minutes)
 
 ### SCENE 1: Opening (0:00 - 0:30)
 **Visual:** Animated logo + Three Pillars diagram
 **Voiceover:**
 > "SIAM - the AI-powered assistant that doesn't just answer questions, it learns from feedback and heals its own tests. Let me show you our three pillars: Chat, Curate, and Test."
 
-**CapCut Action:** Fade in Three Pillars diagram
+**DaVinci Resolve Action:** Fade in Three Pillars diagram
 
 ---
 
@@ -407,7 +407,7 @@ class SelfHealingPage {
 5. Click "Explainer" diagram button
 6. Show generated diagram
 
-**CapCut Action:** Circle the citations, zoom on Demo Mode toggle
+**DaVinci Resolve Action:** Circle the citations, zoom on Demo Mode toggle
 
 ---
 
@@ -428,7 +428,7 @@ class SelfHealingPage {
 8. Show the feedback in queue
 9. Click Approve
 
-**CapCut Action:** Circle the "suggested correction" field - this is the DPO gold
+**DaVinci Resolve Action:** Circle the "suggested correction" field - this is the DPO gold
 
 ---
 
@@ -449,7 +449,7 @@ class SelfHealingPage {
 8. Show: "42% confidence - Needs architect review"
 9. Explain: "The button moved to the sidebar - AI detects this isn't the same context"
 
-**CapCut Actions:**
+**DaVinci Resolve Actions:**
 - Circle the confidence percentages
 - Add color overlays: green (Tier 1), yellow (Tier 2), red (Tier 3)
 - Zoom on "similar tests affected" number
@@ -469,7 +469,7 @@ class SelfHealingPage {
 4. Scroll to performDemoHealing function
 5. Circle Gemini prompt
 
-**CapCut Action:** Use CapCut's circle/highlight tool on key code
+**DaVinci Resolve Action:** Use DaVinci Resolve's circle/highlight tool on key code
 
 ---
 
@@ -484,7 +484,7 @@ class SelfHealingPage {
 - 94.2% self-healing success rate
 - Real-time feedback to training pipeline
 
-**CapCut Action:** Animated stats appearing
+**DaVinci Resolve Action:** Animated stats appearing
 
 ---
 
@@ -539,7 +539,7 @@ When on VPN tonight, capture:
 
 ---
 
-## CapCut Tips
+## DaVinci Resolve Tips
 
 1. **Transitions:** Use "Dissolve" for scene changes, "None" for fast cuts
 2. **Text:** Use large, readable fonts (24pt+) for any code

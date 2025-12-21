@@ -16,6 +16,7 @@
  */
 
 export { cdtextTool } from './cdtext';
+export { musicbrainzLookupTool } from './musicbrainz';
 
 // Future tools:
 // export { searchKnowledgeTool } from './searchKnowledge';
@@ -24,9 +25,11 @@ export { cdtextTool } from './cdtext';
 
 // Convenience export of all tools as an object
 import { cdtextTool } from './cdtext';
+import { musicbrainzLookupTool } from './musicbrainz';
 
 export const siamTools = {
   parseCdtext: cdtextTool,
+  lookupMusicbrainz: musicbrainzLookupTool,
   // searchKnowledge: searchKnowledgeTool,
   // searchJira: searchJiraTool,
   // searchCode: searchCodeTool,
