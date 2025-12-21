@@ -39,7 +39,7 @@ interface TestRun {
 }
 
 // Unused type - keeping for future use
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 // @ts-ignore - Unused type kept for future use
 type _TestSpec = {
   id: string;

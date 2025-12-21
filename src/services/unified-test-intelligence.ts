@@ -10,7 +10,7 @@ import { aomaOrchestrator } from "./aomaOrchestrator";
 import { aomaCache } from "./aomaCache";
 
 // Unused interface - keeping for future use
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 // @ts-ignore - Unused type kept for future use
 type _TestableFeature = {
   name: string;

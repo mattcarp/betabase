@@ -97,7 +97,7 @@ export function EnhancedChatPanel({
       let userFriendlyError = error;
 
       // Parse JSON error messages from AI SDK
-      let errorMessage = error.message || error.toString();
+      const errorMessage = error.message || error.toString();
 
       try {
         // Try to parse if it's a JSON string

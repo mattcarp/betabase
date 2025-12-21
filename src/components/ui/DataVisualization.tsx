@@ -298,7 +298,7 @@ export const DataVisualization: React.FC<DataVisualizationProps> = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let currentData = data.length > 0 ? data : generateEmptyData();
+    const currentData = data.length > 0 ? data : generateEmptyData();
     if (currentData.length > 0) {
       updateMetrics(currentData);
     }

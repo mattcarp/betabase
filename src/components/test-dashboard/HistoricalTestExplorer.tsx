@@ -262,15 +262,26 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
     }
   }, [prefetchedData, initialLoadComplete, loadInitialTests]);
 
-  // Handle search with debounce
+  // Handle search with debounce - only trigger on actual search changes
+  // Using a ref to track the previous search query to avoid false triggers
+  const prevSearchRef = useRef(searchQuery);
+
   useEffect(() => {
+    // Skip if search hasn't actually changed
+    if (prevSearchRef.current === searchQuery) {
+      return;
+    }
+    prevSearchRef.current = searchQuery;
+
+    // Skip the initial mount - let the initial load effect handle that
+    if (!initialLoadComplete) {
+      return;
+    }
+
     const timer = setTimeout(() => {
-      // Don't reload if it's the first render and we already have data
-      if (initialLoadComplete) {
-        setTests([]);
-        setPage(1);
-        loadInitialTests();
-      }
+      setTests([]);
+      setPage(1);
+      loadInitialTests();
     }, 400);
 
     return () => clearTimeout(timer);

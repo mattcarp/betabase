@@ -16,6 +16,7 @@ Generate an interactive HTML gallery from screenshots with click-to-expand light
 |---------|-------|-----------|
 | **Browser** | Chrome (not Chromium) | Playwright 1.57+ uses Chrome for Testing builds |
 | **Mode** | Headless | Consistent rendering, no window chrome interference |
+| **Viewport** | 2880 x 1800 | Full screen resolution, no content cut off |
 | **Screenshot Type** | Full Page | Captures entire scrollable content, not just viewport |
 
 When launching the browser or taking screenshots, always use:
@@ -27,8 +28,13 @@ browser = await chromium.launch({
   headless: true
 });
 
+// CRITICAL: Set full screen viewport before any screenshots
+const context = await browser.newContext({
+  viewport: { width: 2880, height: 1800 }
+});
+
 // Screenshot options - ALWAYS use fullPage: true
-await page.screenshot({ 
+await page.screenshot({
   path: 'screenshot.png',
   fullPage: true  // Captures entire scrollable page
 });
@@ -36,6 +42,7 @@ await page.screenshot({
 
 For MCP Playwright tools:
 - Use `mcp__playwright-mcp__playwright_navigate` with `headless: true`
+- **CRITICAL: Always resize to full screen first** using `mcp__playwright-mcp__playwright_resize` with `width: 2880, height: 1800`
 - Use `mcp__playwright-mcp__playwright_screenshot` with `fullPage: true`
 
 ## When to Use This Skill
@@ -123,7 +130,8 @@ date -u +'%Y-%m-%d %H:%M:%S UTC'
 3. Navigate using `mcp__playwright-mcp__playwright_navigate` with:
    - `url`: `http://localhost:3000`
    - `headless`: `true` (Chrome runs in headless mode)
-4. Wait for full page load (`sleep 2`)
+4. **CRITICAL: Resize to full screen** using `mcp__playwright-mcp__playwright_resize` with `width: 2880, height: 1800`
+5. Wait for full page load (`sleep 2`)
 
 ### 4. Navigate to Target & Take Screenshots
 

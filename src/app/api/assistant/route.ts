@@ -17,7 +17,7 @@ import { NextRequest } from "next/server";
 
 // Extend global type to include our custom property
 declare global {
-  // eslint-disable-next-line no-var
+   
   var assistantInitialized: boolean | undefined;
 }
 
@@ -35,7 +35,7 @@ if (!ASSISTANT_ID) {
 
 // Declare global type for assistant initialization flag
 declare global {
-  // eslint-disable-next-line no-var
+   
   var assistantInitialized: boolean | undefined;
 }
 
@@ -64,7 +64,7 @@ async function ensureAssistantHasFileSearch() {
 
 // Augment global namespace for initialization tracking
 declare global {
-  // eslint-disable-next-line no-var
+   
   var assistantInitialized: boolean | undefined;
 }
 

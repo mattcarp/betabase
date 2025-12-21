@@ -66,10 +66,29 @@ const { chromium } = require('playwright');
 const { rename, mkdir } = require('fs/promises');
 const { homedir } = require('os');
 const { join } = require('path');
+const { execSync } = require('child_process');
 
 const outputDir = join(homedir(), 'Desktop/playwright-screencasts');
 const featureName = '${featureName}';
 const baseUrl = '${baseUrl}';
+
+// Get screen resolution before launching browser
+function getScreenResolution() {
+  try {
+    // macOS: use system_profiler to get display resolution
+    const output = execSync('system_profiler SPDisplaysDataType 2>/dev/null | grep Resolution', { encoding: 'utf8' });
+    const match = output.match(/(\\d+)\\s*x\\s*(\\d+)/);
+    if (match) {
+      return { width: parseInt(match[1]), height: parseInt(match[2]) };
+    }
+  } catch (e) {
+    // Fallback to common resolution
+  }
+  return { width: 1920, height: 1080 };
+}
+
+const screenRes = getScreenResolution();
+console.error('Detected screen resolution:', screenRes.width, 'x', screenRes.height);
 
 // Collect console errors
 const consoleErrors = [];
@@ -81,13 +100,20 @@ const consoleErrors = [];
     channel: 'chrome',
     headless: false,
     slowMo: 50,
+    args: [
+      '--start-maximized',
+      '--start-fullscreen',
+      '--kiosk',
+      \`--window-size=\${screenRes.width},\${screenRes.height}\`
+    ],
   });
 
+  // Use detected screen resolution for viewport and video
   const context = await browser.newContext({
-    viewport: { width: 1920, height: 1080 },
+    viewport: { width: screenRes.width, height: screenRes.height },
     recordVideo: {
       dir: outputDir,
-      size: { width: 1920, height: 1080 }
+      size: { width: screenRes.width, height: screenRes.height }
     }
   });
 

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversation Title Auto-Generation - Screenshot Gallery</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0a0a0a;
+            color: #e4e4e7;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .header {
+            max-width: 1200px;
+            margin: 0 auto 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .subtitle {
+            color: #a1a1aa;
+            font-size: 0.95rem;
+        }
+
+        .metadata {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #71717a;
+        }
+
+        .metadata span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            background: #18181b;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .gallery-item-info {
+            padding: 1rem;
+        }
+
+        .gallery-item-title {
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .gallery-item-desc {
+            font-size: 0.85rem;
+            color: #a1a1aa;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: #3b82f6;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            max-width: 80%;
+            text-align: center;
+        }
+
+        .success-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Conversation Title Auto-Generation</h1>
+        <p class="subtitle">Testing that conversation titles are automatically generated from the first user message instead of showing "New Conversation"</p>
+        <div class="metadata">
+            <span>Date: December 21, 2025</span>
+            <span>Version: 0.24.45</span>
+            <span>Screenshots: 8</span>
+        </div>
+        <div class="success-badge" style="margin-right: 0.75rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            Feature Working - Titles Generate Correctly
+        </div>
+        <div class="success-badge" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path>
+            </svg>
+            Auto-Fix for Legacy Conversations
+        </div>
+    </div>
+
+    <h2 style="max-width: 1200px; margin: 0 auto 1.5rem; font-size: 1.25rem; font-weight: 500; color: #fff;">New Conversation Flow</h2>
+    <div class="gallery">
+        <div class="gallery-item" onclick="openLightbox(this)">
+            <img src="01-initial-state-2025-12-21T04-17-16-807Z.png" alt="Initial State" data-caption="Step 1: Initial state with 'New Conversation' in sidebar">
+            <div class="gallery-item-info">
+                <div class="gallery-item-title"><span class="step-number">1</span>Initial State</div>
+                <div class="gallery-item-desc">Fresh conversation showing "New Conversation" title in sidebar</div>
+            </div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox(this)">
+            <img src="02-message-typed-2025-12-21T04-17-46-578Z.png" alt="Message Typed" data-caption="Step 2: User types a message about self-healing test system">
+            <div class="gallery-item-info">
+                <div class="gallery-item-title"><span class="step-number">2</span>Message Typed</div>
+                <div class="gallery-item-desc">User enters: "Can you explain how the self-healing test system works?"</div>
+            </div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox(this)">
+            <img src="03-message-sent-2025-12-21T04-18-14-892Z.png" alt="Message Sent" data-caption="Step 3: Message sent, title generation triggered">
+            <div class="gallery-item-info">
+                <div class="gallery-item-title"><span class="step-number">3</span>Message Sent</div>
+                <div class="gallery-item-desc">Message submitted, title generation logic activates</div>
+            </div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox(this)">
+            <img src="04-title-generated-2025-12-21T04-18-50-490Z.png" alt="Title Generated" data-caption="Step 4: Title auto-generated as 'Explain how the self-healing test system'">
+            <div class="gallery-item-info">
+                <div class="gallery-item-title"><span class="step-number">4</span>Title Generated</div>
+                <div class="gallery-item-desc">Sidebar now shows: "Explain how the self-healing test system"</div>
+            </div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox(this)">
+            <img src="05-new-conversation-2025-12-21T04-19-28-315Z.png" alt="New Conversation Created" data-caption="Step 5: Creating a second conversation to verify consistency">
+            <div class="gallery-item-info">
+                <div class="gallery-item-title"><span class="step-number">5</span>New Conversation Created</div>
+                <div class="gallery-item-desc">Testing consistency with a second conversation</div>
+            </div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox(this)">
+            <img src="06-second-title-generated-2025-12-21T04-19-54-640Z.png" alt="Second Title Generated" data-caption="Step 6: Second conversation also generates title correctly">
+            <div class="gallery-item-info">
+                <div class="gallery-item-title"><span class="step-number">6</span>Second Title Generated</div>
+                <div class="gallery-item-desc">Second conversation shows: "What are the key features of the test"</div>
+            </div>
+        </div>
+    </div>
+
+    <h2 style="max-width: 1200px; margin: 2.5rem auto 1.5rem; font-size: 1.25rem; font-weight: 500; color: #fff; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08);">Auto-Fix for Legacy Conversations</h2>
+    <p style="max-width: 1200px; margin: 0 auto 1.5rem; color: #a1a1aa; font-size: 0.95rem;">Old conversations that still show "New Conversation" are automatically fixed on app load. The system scans for default titles and regenerates them from the first user message.</p>
+    <div class="gallery">
+        <div class="gallery-item" onclick="openLightbox(this)">
+            <img src="08-titles-auto-fixed-2025-12-21T04-28-36-734Z.png" alt="Auto-Fixed Titles" data-caption="Legacy conversations auto-fixed: 3 titles regenerated from message content">
+            <div class="gallery-item-info">
+                <div class="gallery-item-title"><span class="step-number" style="background: #a855f7;">A</span>Auto-Fixed Titles</div>
+                <div class="gallery-item-desc">3 legacy conversations automatically fixed on page load. Console shows: "[ChatPage] Regenerated 3 conversation titles"</div>
+            </div>
+        </div>
+    </div>
+
+    <div style="max-width: 1200px; margin: 2.5rem auto 0; padding: 1.5rem; background: #18181b; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+        <h3 style="font-size: 1rem; font-weight: 500; margin-bottom: 1rem; color: #fff;">Fixed Titles</h3>
+        <ul style="list-style: none; font-size: 0.9rem; color: #a1a1aa;">
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">"New Conversation" &rarr; <span style="color: #22c55e;">"How do I configure the RAG pipeline"</span></li>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">"New Conversation" &rarr; <span style="color: #22c55e;">"What testing frameworks does SIAM support"</span></li>
+            <li style="padding: 0.5rem 0;">"New Conversation" &rarr; <span style="color: #22c55e;">"Explain the self-healing mechanism in detail"</span></li>
+        </ul>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <img src="" alt="" id="lightbox-img">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+
+    <script>
+        function openLightbox(element) {
+            const img = element.querySelector('img');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+
+            lightboxImg.src = img.src;
+            lightboxCaption.textContent = img.dataset.caption;
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+</html>

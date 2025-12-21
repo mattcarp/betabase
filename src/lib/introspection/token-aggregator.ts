@@ -63,7 +63,7 @@ function extractTokenUsage(trace: any): TokenUsage | null {
 export function aggregateTokenUsage(traces: any[], period: "daily" | "weekly" | "all-time"): TokenBudget {
   const now = new Date();
   let startDate: Date;
-  let endDate: Date = now;
+  const endDate: Date = now;
 
   // Calculate start date based on period
   switch (period) {

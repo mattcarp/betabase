@@ -94,7 +94,7 @@ export const AITestGenerationModal: React.FC<AITestGenerationModalProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const editorRef = useRef<any>(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   const generateTest = useCallback(async () => {
     try {
       // Phase 1: Analyzing

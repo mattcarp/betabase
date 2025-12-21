@@ -141,6 +141,13 @@ interface ChatPageProps {
   onLogout?: () => void;
 }
 
+// Background-prefetched historical tests data
+interface PrefetchedHistoricalData {
+  tests: any[];
+  pagination: { total: number; hasMore: boolean };
+  filters: { categories: string[]; apps: string[] };
+}
+
 // Valid mode values for URL hash routing
 const VALID_MODES: ComponentMode["mode"][] = ["chat", "hud", "test", "fix", "curate"];
 
@@ -166,6 +173,31 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
   const [knowledgeCounts, setKnowledgeCounts] = useState<Record<string, number>>({});
   const [knowledgeStatus, setKnowledgeStatus] = useState<"ok" | "degraded" | "unknown">("unknown");
   const [lastKnowledgeRefresh, setLastKnowledgeRefresh] = useState<string>("");
+
+  // Background preload historical tests (non-blocking)
+  const [prefetchedHistoricalTests, setPrefetchedHistoricalTests] = useState<PrefetchedHistoricalData | null>(null);
+
+  // Preload historical tests in background on app startup (non-blocking)
+  useEffect(() => {
+    // Start fetch immediately - don't wait for anything
+    const preloadHistoricalTests = async () => {
+      try {
+        console.log("[ChatPage] Background preloading historical tests...");
+        const response = await fetch("/api/tests/historical?page=1&limit=100&sortBy=updated_at&sortOrder=desc");
+        if (response.ok) {
+          const data = await response.json();
+          setPrefetchedHistoricalTests(data);
+          console.log(`[ChatPage] Preloaded ${data.tests?.length || 0} historical tests`);
+        }
+      } catch (error) {
+        // Silently fail - the component will load data on its own if prefetch fails
+        console.warn("[ChatPage] Background preload failed:", error);
+      }
+    };
+
+    // Fire and forget - don't block anything
+    preloadHistoricalTests();
+  }, []);
 
   // URL hash-based routing for deep linking
   useEffect(() => {
@@ -587,7 +619,7 @@ Be helpful, concise, and professional in your responses.`;
                     </TabsContent>
 
                     <TabsContent value="historical" className="h-full">
-                      <HistoricalTestExplorer />
+                      <HistoricalTestExplorer prefetchedData={prefetchedHistoricalTests} />
                     </TabsContent>
 
                     <TabsContent value="rlhf-tests" className="h-full">

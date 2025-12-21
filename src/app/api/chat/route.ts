@@ -399,7 +399,7 @@ export async function POST(req: Request) {
     let aomaContext = "";
     let aomaConnectionStatus = "not-queried";
     const knowledgeElements: KnowledgeElement[] = [];
-    var citationSources: any[] = [];
+    let citationSources: any[] = [];
 
     // Initialize Advanced RAG Orchestrator and Session Manager
     const unifiedRAG = new UnifiedRAGOrchestrator();

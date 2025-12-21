@@ -529,50 +529,50 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
       {/* Quick Actions - Tufte minimal */}
       <div className="flex gap-2">
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={() => onNavigate?.("self-healing")}
-          className="gap-2 h-8 text-xs border-zinc-700/50 text-zinc-300 hover:bg-zinc-800/50 hover:text-white"
+          className="gap-2 h-8 text-xs border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
         >
           <Wrench className="h-3.5 w-3.5" />
           Review Self-Heals
         </Button>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={() => onNavigate?.("flaky")} 
-          className="gap-2 h-8 text-xs border-zinc-700/50 text-zinc-300 hover:bg-zinc-800/50 hover:text-white"
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => onNavigate?.("flaky")}
+          className="gap-2 h-8 text-xs border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
         >
           <RefreshCw className="h-3.5 w-3.5" />
           Flaky Tests
         </Button>
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={() => onNavigate?.("analytics")}
-          className="gap-2 h-8 text-xs border-zinc-700/50 text-zinc-300 hover:bg-zinc-800/50 hover:text-white"
+          className="gap-2 h-8 text-xs border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
         >
           <Activity className="h-3.5 w-3.5" />
           Analytics
         </Button>
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={() => onNavigate?.("ai-generate")}
-          className="gap-2 h-8 text-xs border-zinc-700/50 text-zinc-300 hover:bg-zinc-800/50 hover:text-white"
+          className="gap-2 h-8 text-xs border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
         >
           <Zap className="h-3.5 w-3.5" />
           Generate Tests
         </Button>
         <Button
-          variant={showCuratorQueue ? "default" : "outline"}
+          variant={showCuratorQueue ? "default" : "ghost"}
           size="sm"
           onClick={() => setShowCuratorQueue(!showCuratorQueue)}
           className={cn(
             "gap-2 h-8 text-xs",
-            showCuratorQueue 
+            showCuratorQueue
               ? "bg-[var(--mac-primary-blue-400)] text-white hover:bg-[var(--mac-primary-blue-400)]/90"
-              : "border-zinc-700/50 text-zinc-300 hover:bg-zinc-800/50 hover:text-white"
+              : "border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
           )}
         >
           <Sparkles className="h-3.5 w-3.5" />

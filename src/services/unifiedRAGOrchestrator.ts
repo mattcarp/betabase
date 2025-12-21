@@ -170,7 +170,7 @@ export class UnifiedRAGOrchestrator {
         
         const queryChanged = transformation.enhancedQuery !== query;
         let finalDocuments: any[] = [];
-        let metadata: any = {};
+        const metadata: any = {};
 
         if (!queryChanged) {
             console.log("⚡ Query unchanged, proceeding with standard reranking of initial results");

@@ -128,7 +128,10 @@ export function TestFilters({
           variant={filters.flaky ? "default" : "outline"}
           size="sm"
           onClick={() => onFiltersChange({ ...filters, flaky: !filters.flaky })}
-          className="h-9 gap-1"
+          className={cn(
+            "h-9 gap-1",
+            !filters.flaky && "border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
+          )}
         >
           <AlertTriangle className="h-3.5 w-3.5" />
           Flaky
@@ -138,7 +141,10 @@ export function TestFilters({
           variant={filters.selfHealed ? "default" : "outline"}
           size="sm"
           onClick={() => onFiltersChange({ ...filters, selfHealed: !filters.selfHealed })}
-          className="h-9 gap-1"
+          className={cn(
+            "h-9 gap-1",
+            !filters.selfHealed && "border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
+          )}
         >
           <Sparkles className="h-3.5 w-3.5" />
           Self-Healed
@@ -148,7 +154,10 @@ export function TestFilters({
           variant={filters.needsReview ? "default" : "outline"}
           size="sm"
           onClick={() => onFiltersChange({ ...filters, needsReview: !filters.needsReview })}
-          className="h-9 gap-1"
+          className={cn(
+            "h-9 gap-1",
+            !filters.needsReview && "border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
+          )}
         >
           <Clock className="h-3.5 w-3.5" />
           Needs Review

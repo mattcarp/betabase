@@ -153,7 +153,7 @@ export async function compareRAGStrategies(
 }
 
 // Singleton instance
-let comparisonServiceInstance: ReturnType<typeof compareRAGStrategies> | null = null;
+const comparisonServiceInstance: ReturnType<typeof compareRAGStrategies> | null = null;
 
 export function getRAGComparison() {
   return compareRAGStrategies;

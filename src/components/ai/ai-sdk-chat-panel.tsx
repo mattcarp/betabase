@@ -424,7 +424,7 @@ export function AiSdkChatPanel({
       console.error("STT Error:", error);
 
       // Provide helpful instructions based on error type
-      let toastMessage = error.message;
+      const toastMessage = error.message;
       let toastDescription = "";
 
       if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
