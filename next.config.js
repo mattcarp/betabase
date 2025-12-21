@@ -4,10 +4,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    // Allow builds with warnings (errors are already fixed)
-    ignoreDuringBuilds: true,
-  },
   reactStrictMode: true,
   devIndicators: false,
   images: {

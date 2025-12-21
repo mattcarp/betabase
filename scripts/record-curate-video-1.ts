@@ -6,7 +6,7 @@
  * - Marks which ones were actually relevant
  * - Shows expertise the AI doesn't have
  *
- * ARTISTIC VISION: Show the symbiosis - AI retrieves docs, human judges quality
+ * ARTISTIC VISION: Fast-paced, action-oriented demo showing real interactions
  */
 
 import { chromium, Page } from 'playwright';
@@ -31,46 +31,13 @@ async function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function waitForContent(page: Page, selector: string, timeout = 15000): Promise<boolean> {
+async function waitForContent(page: Page, selector: string, timeout = 10000): Promise<boolean> {
   try {
     await page.waitForSelector(selector, { timeout, state: 'visible' });
     return true;
   } catch {
-    console.log(`Content not found: ${selector}`);
     return false;
   }
-}
-
-async function smoothScroll(page: Page, amount: number, duration = 1000) {
-  const steps = 20;
-  const stepAmount = amount / steps;
-  const stepDelay = duration / steps;
-
-  // Find the scrollable tabpanel container (RLHF tab uses overflow-auto)
-  // If no tabpanel, fall back to window scrolling
-  for (let i = 0; i < steps; i++) {
-    await page.evaluate((scroll) => {
-      // Try to find the RLHF tabpanel (overflow-auto container)
-      const tabpanel = document.querySelector('[role="tabpanel"].overflow-auto');
-      if (tabpanel) {
-        tabpanel.scrollBy(0, scroll);
-      } else {
-        // Fallback to window scroll
-        window.scrollBy(0, scroll);
-      }
-    }, stepAmount);
-    await sleep(stepDelay);
-  }
-}
-
-async function scrollElementIntoView(page: Page, selector: string) {
-  await page.evaluate((sel) => {
-    const element = document.querySelector(sel);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, selector);
-  await sleep(500);
 }
 
 async function record() {
@@ -81,7 +48,7 @@ async function record() {
 
   const browser = await chromium.launch({
     headless: false,
-    slowMo: 200 // Slightly slower for better visibility
+    slowMo: 80 // Faster for action-oriented feel
   });
 
   const context = await browser.newContext({
@@ -92,114 +59,141 @@ async function record() {
     }
   });
 
-  context.on('page', page => {
-    page.on('pageerror', err => console.log('Page error:', err.message));
-  });
-
   const page = await context.newPage();
 
   try {
-    // === SCENE 1: Landing - establish context ===
-    console.log('Scene 1: Landing page - The Betabase');
+    // === SCENE 1: Quick landing ===
+    console.log('Scene 1: Landing');
     await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded', timeout: 30000 });
-    await sleep(3000); // Let viewer see the landing page
+    await sleep(1500);
 
     // === SCENE 2: Navigate to Curate ===
-    console.log('Scene 2: Click Curate tab');
+    console.log('Scene 2: Click Curate');
     await waitForContent(page, 'button:has-text("Curate")');
-    await sleep(1000); // Pause before clicking
     await page.click('button:has-text("Curate")');
-    await sleep(2500); // Let Curate tab load
+    await sleep(1500);
 
     // === SCENE 3: Navigate to RLHF ===
-    console.log('Scene 3: Click RLHF tab');
+    console.log('Scene 3: Click RLHF');
     await waitForContent(page, 'button:has-text("RLHF")');
-    await sleep(1000);
     await page.click('button:has-text("RLHF")');
-
-    // === SCENE 4: Wait for RLHF content to fully load ===
-    console.log('Scene 4: Waiting for feedback cards to load');
-    // Wait for loading to finish - look for actual content
     await sleep(2000);
 
-    // Try to wait for feedback card content
-    const cardLoaded = await waitForContent(page, 'text="How do I configure"', 8000) ||
-                       await waitForContent(page, 'text="What\'s the difference"', 3000) ||
-                       await waitForContent(page, '[class*="card"]', 3000);
-
-    if (!cardLoaded) {
-      console.log('Waiting extra time for content...');
-      await sleep(5000);
-    }
-
-    await sleep(2000); // Extra pause to show loaded content
-
-    // === SCENE 5: Smooth scroll to reveal feedback cards ===
-    console.log('Scene 5: Scrolling to show feedback cards');
-    await smoothScroll(page, 400, 1500);
-    await sleep(2000);
-
-    // === SCENE 6: Click on a feedback card to expand it ===
-    console.log('Scene 6: Expanding a feedback card');
+    // === SCENE 4: Click on first feedback card to expand ===
+    console.log('Scene 4: Expand feedback card');
+    // Look for clickable cards in the feedback list
     const cardSelectors = [
-      'text="How do I configure asset metadata"',
-      'text="What\'s the difference between a product"',
-      'text="How do I troubleshoot"',
-      'text="Can I bulk update"',
-      'text="What reports are available"'
+      '[data-testid="feedback-card"]',
+      '.cursor-pointer:has-text("How")',
+      '.cursor-pointer:has-text("What")',
+      'div[class*="card"]:has-text("configure")',
+      'div[class*="card"]:has-text("troubleshoot")'
     ];
 
-    let cardClicked = false;
-    for (const selector of cardSelectors) {
-      const element = page.locator(selector).first();
-      if (await element.isVisible({ timeout: 1500 }).catch(() => false)) {
-        console.log(`Found card: ${selector}`);
-        await sleep(500);
-        await element.click();
-        cardClicked = true;
-        await sleep(2500); // Let card expand
+    let expanded = false;
+    for (const sel of cardSelectors) {
+      const card = page.locator(sel).first();
+      if (await card.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await card.click();
+        expanded = true;
+        console.log('Card expanded!');
+        await sleep(1500);
         break;
       }
     }
 
-    if (!cardClicked) {
-      // Try clicking any visible card-like element
-      const anyCard = page.locator('[class*="cursor-pointer"]').first();
-      if (await anyCard.isVisible({ timeout: 1000 }).catch(() => false)) {
-        await anyCard.click();
-        await sleep(2500);
+    // If no card found, try clicking any text that looks like a question
+    if (!expanded) {
+      const questionText = page.locator('text=/How do I|What is|Can I/').first();
+      if (await questionText.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await questionText.click();
+        await sleep(1500);
       }
     }
 
-    // === SCENE 7: Show retrieved documents ===
-    console.log('Scene 7: Viewing retrieved documents');
-    await smoothScroll(page, 200, 1000);
-    await sleep(3000); // Let viewer see the documents
+    // === SCENE 5: Click thumbs up (Helpful) ===
+    console.log('Scene 5: Click Helpful/ThumbsUp');
+    const thumbsUpSelectors = [
+      'button:has-text("Helpful")',
+      'button[aria-label*="helpful"]',
+      'button[aria-label*="thumbs up"]',
+      '[data-testid="thumbs-up"]',
+      'button:has(svg[class*="ThumbsUp"])'
+    ];
 
-    // === SCENE 8: Mark response as Helpful ===
-    console.log('Scene 8: Marking response as Helpful');
-    const helpfulBtn = page.locator('button:has-text("Helpful")').first();
-    if (await helpfulBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await sleep(500);
-      await helpfulBtn.click();
-      await sleep(2000);
-      console.log('Clicked Helpful!');
+    for (const sel of thumbsUpSelectors) {
+      const btn = page.locator(sel).first();
+      if (await btn.isVisible({ timeout: 800 }).catch(() => false)) {
+        await btn.click();
+        console.log('Clicked thumbs up!');
+        await sleep(1000);
+        break;
+      }
     }
 
-    // === SCENE 9: Mark document relevance ===
-    console.log('Scene 9: Marking document as Relevant');
-    const relevantBtn = page.locator('button:has-text("Relevant")').first();
-    if (await relevantBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await sleep(500);
-      await relevantBtn.click();
-      await sleep(2000);
-      console.log('Marked document as Relevant!');
+    // === SCENE 6: Mark a document as Relevant ===
+    console.log('Scene 6: Mark document Relevant');
+    const relevantSelectors = [
+      'button:has-text("Relevant")',
+      'button:has-text("relevant")',
+      '[data-testid="mark-relevant"]',
+      'button[aria-label*="relevant"]'
+    ];
+
+    for (const sel of relevantSelectors) {
+      const btn = page.locator(sel).first();
+      if (await btn.isVisible({ timeout: 800 }).catch(() => false)) {
+        await btn.click();
+        console.log('Marked relevant!');
+        await sleep(1000);
+        break;
+      }
     }
 
-    // === SCENE 10: Final overview ===
-    console.log('Scene 10: Final state - showing the curation in action');
-    await smoothScroll(page, -300, 1000); // Scroll back up slightly
-    await sleep(4000); // Long pause to end
+    // === SCENE 7: Mark another document as Not Relevant ===
+    console.log('Scene 7: Mark document Not Relevant');
+    const notRelevantSelectors = [
+      'button:has-text("Not Relevant")',
+      'button:has-text("Irrelevant")',
+      '[data-testid="mark-irrelevant"]'
+    ];
+
+    for (const sel of notRelevantSelectors) {
+      const btn = page.locator(sel).nth(1); // Second one if available
+      if (await btn.isVisible({ timeout: 800 }).catch(() => false)) {
+        await btn.click();
+        console.log('Marked not relevant!');
+        await sleep(1000);
+        break;
+      }
+    }
+
+    // === SCENE 8: Submit/Save feedback ===
+    console.log('Scene 8: Submit feedback');
+    const submitSelectors = [
+      'button:has-text("Submit")',
+      'button:has-text("Save")',
+      'button:has-text("Done")',
+      'button[type="submit"]'
+    ];
+
+    for (const sel of submitSelectors) {
+      const btn = page.locator(sel).first();
+      if (await btn.isVisible({ timeout: 800 }).catch(() => false)) {
+        await btn.click();
+        console.log('Submitted!');
+        await sleep(1500);
+        break;
+      }
+    }
+
+    // === SCENE 9: Show toast/confirmation ===
+    console.log('Scene 9: Show confirmation');
+    await sleep(2000); // Let any toast appear
+
+    // === SCENE 10: Brief final view ===
+    console.log('Scene 10: Final view');
+    await sleep(1500);
 
     console.log('Recording complete!');
 
