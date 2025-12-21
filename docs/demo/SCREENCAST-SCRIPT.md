@@ -223,11 +223,20 @@ Verify filename and line numbers are visible
   - NEW: Album Context section (release info, chart performance)
   - NEW: Technical Deep Dive (DDP format, ISRC breakdown)
 
+**TESTED & WORKING (v0.24.55):**
+- [x] JIRA ticket display
+  - Shows ticket IDs with titles (ITSM-54132 - TICKETS PORTADAS, etc.)
+  - Skill loader now detects source types from RAG
+  - Critical fix: RAG context was in catch block, moved to try block
+- [x] Code display with Shiki/tokyo-night
+  - Full TypeScript syntax highlighting
+  - Shows AssetUploaderService with TUS upload handling
+  - Key technical observations formatted nicely
+
 **NEEDS TESTING:**
 - [ ] Multi-language code generation (Rust parser)
 - [ ] Mandarin Chinese response capability
-- [ ] JIRA ticket linking
-- [ ] Code display with Shiki/tokyo-night
+- [ ] JIRA tickets as clickable markdown links (currently plain text)
 
 ### Files Needed
 - `cdtext.bin` - Real CD Text binary (hex format)
