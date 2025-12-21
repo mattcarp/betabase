@@ -547,25 +547,16 @@ export async function POST(req: Request) {
             agentIterations: ragResult.metadata.agentIterations || 0,
             durationMs: ragDuration,
           });
-        } catch (ragError) {
-          console.error("❌ Advanced RAG failed:", ragError);
-          // Langfuse: End RAG tracing with failure
-          ragTrace.end({
-            confidence: 0,
-            documentsRetrieved: 0,
-            documentsAfterRerank: 0,
-            durationMs: Date.now() - ragStartTime,
-          });
-          // Continue with standard AOMA retrieval
+
           // ========================================
           // BUILD CONTEXT FROM UNIFIED RAG RESULTS
           // ========================================
           // PHASE 2 (aomaOrchestrator) REMOVED - UnifiedRAG is now the sole retrieval path
           // This eliminates duplicate vector queries and ~2-5s latency
-          
+
           if (ragResult.documents && ragResult.documents.length > 0) {
             console.log(`📄 Building context from ${ragResult.documents.length} UnifiedRAG documents...`);
-            
+
             // Synthesize context from UnifiedRAG documents
             const vectorResults: VectorResult[] = ragResult.documents.map((doc: any) => ({
               content: doc.content || doc.text || "",
@@ -639,6 +630,17 @@ export async function POST(req: Request) {
             documents: ragResult.documents?.length || 0,
           });
           console.log(`⏱️  PERFORMANCE: RAG completed in ${totalDuration}ms - streaming will now start`);
+
+        } catch (ragError) {
+          console.error("❌ Advanced RAG failed:", ragError);
+          // Langfuse: End RAG tracing with failure
+          ragTrace.end({
+            confidence: 0,
+            documentsRetrieved: 0,
+            documentsAfterRerank: 0,
+            durationMs: Date.now() - ragStartTime,
+          });
+          aomaConnectionStatus = "failed";
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
@@ -686,10 +688,20 @@ export async function POST(req: Request) {
     // Build system prompt dynamically based on query content
     // Intent classification removed - skill loader uses keyword matching instead
     const queryForSkills = typeof messageContent === "string" ? messageContent : JSON.stringify(messageContent || "");
-    
+
+    // Extract unique source types from citation sources for skill loading
+    const ragSourceTypes = citationSources.length > 0
+      ? [...new Set(citationSources.map(s => s.sourceType).filter(Boolean))] as ('knowledge' | 'jira' | 'git' | 'email' | 'firecrawl' | 'metrics')[]
+      : undefined;
+
+    if (ragSourceTypes?.length) {
+      console.log(`📂 [Skills] RAG source types detected: [${ragSourceTypes.join(', ')}]`);
+    }
+
     // Build the dynamic prompt - skill loader will auto-detect relevant skills
     const dynamicPromptResult = buildDynamicPrompt(queryForSkills, {
       aomaContext: aomaContext.trim() || undefined,
+      sourceTypes: ragSourceTypes,
     });
     
     console.log(`🎨 [Skills] Loaded: [${dynamicPromptResult.skills.join(', ')}]`);

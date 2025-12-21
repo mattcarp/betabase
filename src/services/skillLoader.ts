@@ -94,6 +94,12 @@ export const SKILL_DEFINITIONS: SkillDefinition[] = [
       /fix/i,
       /500\s*(error)?/i,
       /exception/i,
+      /problem/i,        // Added: common troubleshooting keyword
+      /timeout/i,        // Added: timeout issues
+      /timing\s*out/i,   // Added: timing out variations
+      /stuck/i,          // Added: stuck processes
+      /slow/i,           // Added: performance issues
+      /hanging/i,        // Added: hanging processes
     ],
     queryTypes: ['troubleshooting'],
     sourceTypes: ['jira'],
