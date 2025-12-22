@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.24.62",
+  "version": "0.24.63",
   "private": true,
   "scripts": {
     "dev": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && next dev --webpack -p 3000",
@@ -57,6 +57,10 @@
     "test:visual:mac": "npx playwright test tests/e2e/visual/mac-design-system-regression.spec.ts --reporter=list",
     "test:visual:dark-theme": "npx playwright test tests/e2e/visual/dark-theme-regression.spec.ts --reporter=list",
     "test:visual:update-snapshots": "npx playwright test tests/e2e/visual/ --update-snapshots",
+    "test:watch:e2e": "npx playwright test --ui",
+    "test:watch:e2e:local": "PLAYWRIGHT_BASE_URL=http://localhost:3000 npx playwright test --ui",
+    "test:legacy": "npx playwright test tests/e2e/legacy/ --reporter=list",
+    "test:legacy:local": "PLAYWRIGHT_BASE_URL=http://localhost:3000 npx playwright test tests/e2e/legacy/ --reporter=list",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

@@ -294,7 +294,6 @@ function generateTopicsFromSignals(
   testSignals: TestFailureSignal[]
 ): ZeitgeistTopic[] {
   const topics: ZeitgeistTopic[] = [];
-  const now = new Date();
 
   // Generate topics from RLHF (highest weight)
   for (const signal of rlhfSignals.slice(0, 20)) {
@@ -486,7 +485,7 @@ async function validateKBCoverage(topics: ZeitgeistTopic[]): Promise<ZeitgeistTo
       }
 
       return { ...topic, hasGoodAnswer: false, answerConfidence: 0 };
-    } catch (err) {
+    } catch (_err) {
       console.warn(`[Zeitgeist] KB validation failed for topic: ${topic.question.substring(0, 50)}...`);
       return { ...topic, hasGoodAnswer: false, answerConfidence: 0 };
     }
@@ -615,7 +614,7 @@ async function saveToCache(cache: ZeitgeistCache): Promise<void> {
     } else {
       console.log("[Zeitgeist] Cache saved to Supabase");
     }
-  } catch (err) {
+  } catch (_err) {
     console.log("[Zeitgeist] Cache saved to memory only");
   }
 }
@@ -645,7 +644,7 @@ async function loadFromCache(): Promise<ZeitgeistCache | null> {
     if (error && error.code !== '42P01') {
       console.log("[Zeitgeist] Supabase cache error:", error.message);
     }
-  } catch (err) {
+  } catch (_err) {
     // Fall through to in-memory cache
   }
 

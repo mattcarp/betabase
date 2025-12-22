@@ -57,6 +57,10 @@
 
 ## Existing Documentation
 
+### Features
+
+- **[FEAT-010: Zeitgeist Hot Topics](FEAT-010-ZEITGEIST-HOT-TOPICS.md)** - AI-powered trending topics intelligence
+
 ### Already Created
 
 - **[AOMA Documentation Index](AOMA-DOCUMENTATION-INDEX.md)** - AOMA integration, authentication, crawling
