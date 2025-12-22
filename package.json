@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.24.61",
+  "version": "0.24.62",
   "private": true,
   "scripts": {
     "dev": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && next dev --webpack -p 3000",
@@ -98,6 +98,7 @@
     ]
   },
   "dependencies": {
+    "@ai-sdk/cohere": "^2.0.21",
     "@ai-sdk/google": "3.0.0-beta.78",
     "@ai-sdk/groq": "3.0.0-beta.55",
     "@ai-sdk/openai": "3.0.0-beta.102",
