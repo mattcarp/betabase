@@ -494,6 +494,7 @@ export async function POST(req: Request) {
             useContextAware: true,
             useAgenticRAG: queryComplexity > 7,
             useRLHFSignals: true,
+            useHybridSearch: true, // NEW: Enable hybrid search with RRF + Gemini reranking
             topK: 5,
             targetConfidence: 0.7,
           });
@@ -512,6 +513,7 @@ export async function POST(req: Request) {
             timeMs: ragResult.metadata.totalTimeMs,
             initialDocs: ragResult.documents.length,
             finalDocs: ragResult.documents.length,
+            usedHybridSearch: ragResult.metadata.usedHybridSearch || false, // NEW
           };
 
           // Add RAG-enhanced documents to knowledge elements
@@ -829,6 +831,12 @@ export async function POST(req: Request) {
       // Add simple milestone for visibility
       timings.push("app;desc=api-chat");
       response.headers.set("Server-Timing", timings.join(", "));
+
+      // Expose custom headers to client (CORS requirement)
+      response.headers.set(
+        "Access-Control-Expose-Headers",
+        "X-RAG-Metadata, X-Citation-Sources, X-Token-Usage, Server-Timing"
+      );
     } catch {}
     return response;
   } catch (error) {

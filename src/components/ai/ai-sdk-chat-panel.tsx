@@ -301,7 +301,8 @@ export function AiSdkChatPanel({
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
   const [loadingSeconds, setLoadingSeconds] = useState(0); // Track seconds elapsed during loading
   const [pendingRagMetadata, setPendingRagMetadata] = useState<any>(null); // RAG metadata from response headers
-  
+  const [pendingCitationSources, setPendingCitationSources] = useState<any[]>([]); // Citation sources from response headers
+
   // Feedback Dialog State
   const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
   const [feedbackMessageId, setFeedbackMessageId] = useState<string | null>(null);
@@ -556,9 +557,18 @@ export function AiSdkChatPanel({
         }
       }
       
-      // 📎 CITATIONS: Disabled for now - fix after demo ships
-      // TODO: Re-enable citation header parsing after demo
-      
+      // 📎 CITATIONS: Parse citation sources from response headers
+      const citationHeader = response.headers.get("X-Citation-Sources");
+      if (citationHeader) {
+        try {
+          const sources = JSON.parse(citationHeader);
+          console.log("📎 Captured citation sources from headers:", sources.length);
+          setPendingCitationSources(sources);
+        } catch (e) {
+          console.warn("Failed to parse citation sources header:", e);
+        }
+      }
+
       // Capture token usage from response headers
       const usageHeader = response.headers.get("X-Token-Usage");
       if (usageHeader) {
@@ -662,9 +672,23 @@ export function AiSdkChatPanel({
         (window as any).currentProgressInterval = null;
       }
 
-      // 📎 CITATIONS: Disabled for now - fix after demo ships
-      // TODO: Re-enable citations after demo
-      // if (pendingCitationSources.length > 0 && setMessages) { ... }
+      // 📎 CITATIONS: Attach citation sources to the last message
+      if (pendingCitationSources.length > 0 && setMessages) {
+        setMessages((prevMessages: any[]) => {
+          if (prevMessages.length === 0) return prevMessages;
+          const lastMsg = prevMessages[prevMessages.length - 1];
+          // Only attach to assistant messages
+          if (lastMsg.role === "assistant") {
+            console.log("📎 Attaching", pendingCitationSources.length, "citation sources to message");
+            return [
+              ...prevMessages.slice(0, -1),
+              { ...lastMsg, sources: pendingCitationSources }
+            ];
+          }
+          return prevMessages;
+        });
+        setPendingCitationSources([]); // Clear after attaching
+      }
 
       // Immediately clear loading states
       setCurrentProgress(null);
