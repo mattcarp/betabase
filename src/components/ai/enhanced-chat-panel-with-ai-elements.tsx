@@ -60,6 +60,22 @@ function parseAOMAResponse(content: string): {
   const sources: Array<{ id: string; title: string; url?: string; description?: string }> = [];
   let text = content;
 
+  // Extract JIRA tickets like DPSA-27269, AOMA-12345, AOMA2-1234, ITSM-55775, UST-2691
+  const jiraPattern = /\b(DPSA|AOMA2?|ITSM|UST)-\d+\b/g;
+  const jiraMatches = [...content.matchAll(jiraPattern)];
+
+  jiraMatches.forEach((match) => {
+    const ticketId = match[0];
+    if (!sources.find((s) => s.title === ticketId)) {
+      sources.push({
+        id: ticketId,
+        title: ticketId,
+        url: `https://sonymusic.atlassian.net/browse/${ticketId}`,
+        description: `View JIRA ticket details`,
+      });
+    }
+  });
+
   // Extract source citations like [1], [2], etc.
   const citationPattern = /\[(\d+)\]/g;
   const matches = [...content.matchAll(citationPattern)];

@@ -329,10 +329,158 @@ The code formatter uses Shiki (created by Evan You, who is Chinese not Japanese 
 
 ---
 
-## [Segments 4-6: Curate, etc. - TBD]
+## SEGMENT 4: Curate Pillar (~75 sec)
 
-*Remaining pillars to be documented...*
+*RLHF in action - Human expertise teaching AI, creating a feedback loop*
+
+**The Story**: AI needs human judgment. Curators review AI responses, mark what's relevant, correct mistakes, and that feedback becomes training data.
+
+**Recording Scripts**: `scripts/record-curate-video-1.ts`, `record-curate-video-2.ts`, `record-curate-video-3.ts`
 
 ---
 
-*Last updated: 2025-12-21*
+### Curate 1: Document Relevance Marking (~25 sec)
+
+*Demonstrates: AI needs human judgment*
+
+| Playwright Action | Narration |
+|------------------|-----------|
+| Click Curate tab | *silent* |
+| Wait for Curate panel to load | "The Curate tab is where human expertise meets AI learning." |
+| Click RLHF sub-tab | *silent* |
+| RLHF interface loads | "RLHF - Reinforcement Learning from Human Feedback." |
+| Click on a feedback card | "Each card represents an AI response that needs review." |
+| Card expands showing context | "Here's a question about asset configuration." |
+| Click thumbs up (Helpful) | "This response was helpful - one click." |
+| Click "Relevant" on a document | "Mark which retrieved documents were actually useful." |
+| Click "Not Relevant" on another | "And which ones missed the mark." |
+| Click Submit/Save | *silent* |
+| Toast confirmation appears | "That's one feedback cycle - 10 seconds of expertise captured forever." |
+
+**Test Generation Input:**
+```
+Click Curate tab
+Wait for Curate panel to load
+Click RLHF sub-tab
+Click on the first feedback card to expand it
+Click thumbs up / Helpful button
+Click Relevant on a document
+Click Not Relevant on another document
+Click Submit
+Verify toast confirmation appears
+```
+
+---
+
+### Curate 2: Correction Flow (~30 sec)
+
+*Demonstrates: AI learns from human expertise*
+
+| Playwright Action | Narration |
+|------------------|-----------|
+| Already on RLHF tab | *continuing from previous* |
+| Click on a different feedback card | "Here's one where the AI got it wrong." |
+| Card expands | *silent* |
+| Click thumbs DOWN (Not Helpful) | "Thumbs down - this response needs work." |
+| Correction textarea appears | "Now I can type the correct answer." |
+| Type: "Per Q3 policy update: Use the new asset classification system. See KB-2847 for details." | *visible typing, ~35 char/sec* |
+| | "I'm adding institutional knowledge the AI doesn't have." |
+| Click Submit | *silent* |
+| Toast: "Correction saved" | "That correction becomes training data." |
+| | "Next time someone asks this, the AI will know." |
+
+**Test Generation Input:**
+```
+Click on a feedback card
+Click thumbs down / Not Helpful button
+Click in the correction textarea
+Type "Per Q3 policy update: Use the new asset classification system. See KB-2847 for details."
+Click Submit
+Verify toast confirmation appears
+```
+
+**What's Happening Behind the Scenes:**
+- Correction stored in `human_corrections` table
+- Linked to original query + AI response
+- Used for fine-tuning and RAG improvement
+- Creates regression test in Test pillar (RLHF Tests)
+
+---
+
+### Curate 3: Quality Review / Metrics (~20 sec)
+
+*Demonstrates: Cumulative impact over time*
+
+| Playwright Action | Narration |
+|------------------|-----------|
+| Click Overview tab (in Curate) | "The Overview shows the cumulative impact." |
+| Stats cards visible | *silent* |
+| Click on Total Feedback stat card | "Total feedback received." |
+| Click on filter dropdown | "Filter by status, time period." |
+| Select an option | *silent* |
+| Click back to RLHF tab | *silent* |
+| Click on a feedback card | "Drill into any feedback item." |
+| Toggle a checkbox/switch if visible | *silent* |
+| Click back to Overview | *silent* |
+| Hover over chart element | "Hover for detailed metrics." |
+| Tooltip shows data | "The AI improves because humans invest their expertise." |
+
+**Test Generation Input:**
+```
+Click Overview tab in Curate
+Click on a stats card
+Click on a filter dropdown
+Select a filter option
+Click RLHF tab
+Click on a feedback card
+Click back to Overview
+Hover over a chart element
+Verify tooltip appears with data
+```
+
+---
+
+### Curate Segment Key Stats
+
+| Metric | What It Shows |
+|--------|---------------|
+| Total Feedback | Number of AI responses reviewed |
+| Helpful Rate | % marked as helpful |
+| Corrections Made | Human expertise captured |
+| Documents Marked | Relevance training for retrieval |
+| Training Impact | How corrections improve AI |
+
+---
+
+### Curate Recording Notes
+
+**Timing:**
+- Curate 1 (RLHF Workflow): ~25 sec
+- Curate 2 (Correction Flow): ~30 sec
+- Curate 3 (Quality Review): ~20 sec
+- **Total Curate segment: ~75 sec**
+
+**Technical Notes:**
+- All recordings use 1920x1080 viewport
+- No `slowMo` - use explicit `sleep()` for pacing
+- Click + wait pattern: `click()` then `sleep(2000-3000ms)`
+- Restart dev server between recording sessions if clicks stop registering
+
+**Key Message:**
+"Every thumbs up, every correction, every relevance mark - it all feeds back. The AI doesn't just respond, it learns. Human expertise becomes institutional memory."
+
+---
+
+## Summary: All Three Pillars
+
+| Pillar | Duration | Key Demo |
+|--------|----------|----------|
+| Chat | ~4 min | ERD infographic, CD Text parsing, JIRA+code |
+| Test | ~75 sec | Self-healing tests (94% success), 8,719 monitored |
+| Curate | ~75 sec | RLHF feedback loop, corrections become training |
+
+**Total Runtime: ~6 minutes**
+
+---
+
+*Last updated: 2025-12-22*

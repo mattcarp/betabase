@@ -1,6 +1,6 @@
 # Self-Healing Test Viewer - Visual Guide
 
-**Quick reference for demo recording and CapCut editing**
+**Quick reference for demo recording and DaVinci Resolve editing**
 
 ---
 
@@ -115,7 +115,7 @@
 
 ---
 
-## Demo Camera Angles (CapCut)
+## Demo Camera Angles (DaVinci Resolve)
 
 ### Shot 1: Stats Grid (3:52-4:05)
 ```
@@ -178,7 +178,7 @@ Duration: 15 seconds
 
 ---
 
-## Text Overlays for CapCut
+## Text Overlays for DaVinci Resolve
 
 ### Overlay 1 (3:55)
 ```
@@ -232,7 +232,7 @@ Color: White with yellow glow
 
 ## Cursor Highlights
 
-Use cursor ring effect (if available in CapCut) for:
+Use cursor ring effect (if available in DaVinci Resolve) for:
 
 1. **Stats Grid** - Hover over "Auto-Healed" card (green)
 2. **Healing Queue** - Click "Login Flow" item

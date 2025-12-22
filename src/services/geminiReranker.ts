@@ -16,6 +16,7 @@ export interface RankedDocument extends VectorSearchResult {
   originalRank: number;
   originalSimilarity: number;
   rlhfBoost?: number;
+  sourceTypeBoost?: number;
 }
 
 export interface RerankingOptions {
@@ -25,6 +26,7 @@ export interface RerankingOptions {
   organization?: string;
   division?: string;
   app_under_test?: string;
+  useSourceTypeBoost?: boolean; // Apply static source type boosts (knowledge > jira)
 }
 
 export interface RerankingResult {
@@ -72,6 +74,7 @@ export class GeminiReranker {
       topK = 10,
       batchSize = 10,
       useRLHFSignals = false,
+      useSourceTypeBoost = true, // Default ON - prioritize knowledge over jira
       organization,
       division,
       app_under_test,
@@ -107,10 +110,16 @@ export class GeminiReranker {
       );
     }
 
+    // Apply source type boosts (knowledge docs get priority)
+    if (useSourceTypeBoost) {
+      finalDocuments = this.applySourceTypeBoosts(finalDocuments);
+    }
+
     // Sort by final score and take top K
+    // Combine: rerankScore * (1 + rlhfBoost + sourceTypeBoost)
     finalDocuments.sort((a, b) => {
-      const scoreA = a.rerankScore * (1.0 + (a.rlhfBoost || 0));
-      const scoreB = b.rerankScore * (1.0 + (b.rlhfBoost || 0));
+      const scoreA = a.rerankScore * (1.0 + (a.rlhfBoost || 0) + (a.sourceTypeBoost || 0));
+      const scoreB = b.rerankScore * (1.0 + (b.rlhfBoost || 0) + (b.sourceTypeBoost || 0));
       return scoreB - scoreA;
     });
 
@@ -241,6 +250,41 @@ Respond with ONLY valid JSON in this exact format:
           reasoningText: "Parse error - using default score",
         }));
     }
+  }
+
+  /**
+   * Apply static source type boosts to prioritize authoritative content
+   *
+   * Boost hierarchy:
+   * - knowledge: +20% (official docs, definitions, core knowledge)
+   * - firecrawl: +10% (crawled web content - often fresher than static docs)
+   * - git: +5% (code context is useful)
+   * - jira: 0% (support tickets - useful but not authoritative)
+   * - pdf: +15% (uploaded documents - usually curated)
+   */
+  private applySourceTypeBoosts(documents: RankedDocument[]): RankedDocument[] {
+    const SOURCE_TYPE_BOOSTS: Record<string, number> = {
+      knowledge: 0.20,  // +20% for knowledge base docs
+      pdf: 0.15,        // +15% for uploaded PDFs
+      firecrawl: 0.10,  // +10% for crawled content
+      git: 0.05,        // +5% for git/code context
+      jira: 0.0,        // No boost for JIRA tickets
+    };
+
+    console.log('📊 Applying source type boosts...');
+
+    return documents.map(doc => {
+      const boost = SOURCE_TYPE_BOOSTS[doc.source_type] ?? 0;
+
+      if (boost > 0) {
+        console.log(`   ${doc.source_type}: +${(boost * 100).toFixed(0)}% boost → ${doc.source_id.substring(0, 40)}...`);
+      }
+
+      return {
+        ...doc,
+        sourceTypeBoost: boost,
+      };
+    });
   }
 
   /**

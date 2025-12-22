@@ -177,6 +177,28 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
   // Background preload historical tests (non-blocking)
   const [prefetchedHistoricalTests, setPrefetchedHistoricalTests] = useState<PrefetchedHistoricalData | null>(null);
 
+  // Zeitgeist suggestions - dynamic hot topics from RLHF, Jira, test signals
+  const [zeitgeistSuggestions, setZeitgeistSuggestions] = useState<string[]>([]);
+
+  // Fetch zeitgeist suggestions on mount
+  useEffect(() => {
+    const fetchZeitgeist = async () => {
+      try {
+        const response = await fetch("/api/zeitgeist");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.questions && data.questions.length > 0) {
+            setZeitgeistSuggestions(data.questions.map((q: { question: string }) => q.question));
+            console.log(`[ChatPage] Loaded ${data.questions.length} zeitgeist suggestions`);
+          }
+        }
+      } catch (error) {
+        console.warn("[ChatPage] Failed to load zeitgeist suggestions:", error);
+      }
+    };
+    fetchZeitgeist();
+  }, []);
+
   // Preload historical tests in background on app startup (non-blocking)
   useEffect(() => {
     // Start fetch immediately - don't wait for anything
@@ -364,10 +386,9 @@ Be helpful, concise, and professional in your responses.`;
     updateConversation(activeConversationId, updates);
   }, [activeConversationId, extractMessageContent, generateTitle]);
 
-  // PREMIUM SUGGESTED QUESTIONS: Curated showcase with pre-cached responses
-  // All 6 trigger Nano Banana infographic generation
-  // Updated: December 2025 with latest AOMA corpus and release notes
-  const suggestions = [
+  // DYNAMIC SUGGESTED QUESTIONS: Fetched from Zeitgeist service (RLHF, Jira, test signals)
+  // Falls back to curated showcase when zeitgeist is unavailable
+  const fallbackSuggestions = [
     "Show me The Betabase multi-tenant database architecture",
     "How does AOMA use AWS S3 storage tiers for long-term archiving?",
     "I'm getting an 'Asset Upload Sorting Failed' error when uploading files. What's going on?",
@@ -375,6 +396,9 @@ Be helpful, concise, and professional in your responses.`;
     "What new UST features are being planned for the 2026 releases?",
     "How do I upload and archive digital assets in AOMA from preparation to storage?",
   ];
+
+  // Use zeitgeist suggestions when available, otherwise fall back
+  const suggestions = zeitgeistSuggestions.length > 0 ? zeitgeistSuggestions : fallbackSuggestions;
 
   return (
     <SidebarProvider defaultOpen={true}>

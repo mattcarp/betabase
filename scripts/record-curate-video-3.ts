@@ -48,15 +48,15 @@ async function record() {
   console.log(`Recording: ${videoPath}`);
 
   const browser = await chromium.launch({
-    headless: false,
-    slowMo: 70 // Fast but readable
+    headless: false
+    // No slowMo - using explicit sleeps instead
   });
 
   const context = await browser.newContext({
-    viewport: { width: 1280, height: 800 },
+    viewport: { width: 1920, height: 1080 },
     recordVideo: {
       dir: OUTPUT_DIR,
-      size: { width: 1280, height: 800 }
+      size: { width: 1920, height: 1080 }
     }
   });
 
@@ -68,11 +68,11 @@ async function record() {
     await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded', timeout: 30000 });
     await sleep(1200);
 
-    // === SCENE 2: Navigate to Curate ===
+    // === SCENE 2: Navigate to Curate (main navigation) ===
     console.log('Scene 2: Click Curate');
-    await waitFor(page, 'button:has-text("Curate")');
     await page.click('button:has-text("Curate")');
-    await sleep(1200);
+    await sleep(3000); // Wait for Curate panel to load
+    console.log('Curate clicked');
 
     // === SCENE 3: Click on a stat card (Total Feedback or similar) ===
     console.log('Scene 3: Click stat card');
@@ -134,10 +134,10 @@ async function record() {
     }
 
     // === SCENE 5: Navigate to RLHF tab ===
-    console.log('Scene 5: Click RLHF');
-    await waitFor(page, 'button:has-text("RLHF")');
+    console.log('Scene 5: Click RLHF tab');
     await page.click('button:has-text("RLHF")');
-    await sleep(1200);
+    await sleep(2000);
+    console.log('RLHF clicked');
 
     // === SCENE 6: Click on a feedback card to expand ===
     console.log('Scene 6: Click feedback card');
@@ -176,7 +176,7 @@ async function record() {
       }
     }
 
-    // === SCENE 8: Click back to Overview ===
+    // === SCENE 8: Click back to Overview tab ===
     console.log('Scene 8: Return to Overview');
     const overviewBtn = page.locator('button:has-text("Overview")').first();
     if (await overviewBtn.isVisible({ timeout: 1000 }).catch(() => false)) {

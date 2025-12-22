@@ -1,7 +1,7 @@
 /**
- * Zeitgeist Questions Cron Job
+ * Zeitgeist Cron Job
  *
- * Runs daily to refresh the suggested questions based on recent knowledge base activity.
+ * Runs daily to refresh hot topics based on aggregated activity signals.
  *
  * Vercel Cron: Add to vercel.json:
  * {
@@ -15,7 +15,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { refreshZeitgeistQuestions } from "@/services/zeitgeistQuestionsService";
+import { refreshZeitgeist } from "@/services/zeitgeistService";
 
 export const runtime = "nodejs";
 export const maxDuration = 60; // Allow up to 60 seconds
@@ -40,17 +40,17 @@ export async function GET(request: Request) {
   console.log("[Cron] Zeitgeist refresh triggered at", new Date().toISOString());
 
   try {
-    const result = await refreshZeitgeistQuestions();
+    const result = await refreshZeitgeist();
 
     return NextResponse.json({
-      success: true,
+      success: result.success,
       timestamp: new Date().toISOString(),
       analysis: {
-        recentJiraTickets: result.recentJiraTickets,
-        recentEmails: result.recentEmails,
-        recentDocuments: result.recentDocuments,
-        questionsGenerated: result.generatedQuestions.length,
-        questions: result.generatedQuestions.map((q) => q.question),
+        topicsAnalyzed: result.topicsAnalyzed,
+        topicsWithAnswers: result.topicsWithAnswers,
+        sourceBreakdown: result.sourceBreakdown,
+        topQuestions: result.topQuestions.slice(0, 6),
+        duration: result.duration,
       },
     });
   } catch (error) {

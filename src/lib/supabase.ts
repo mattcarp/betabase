@@ -82,6 +82,8 @@ export const SONY_MUSIC = {
   apps: {
     AOMA: "aoma",
     ALEXANDRIA: "alexandria",
+    PROMO: "promo",
+    THE_BETABASE: "the-betabase",
   },
 } as const;
 

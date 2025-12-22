@@ -8,7 +8,10 @@
  */
 
 import { getSupabaseVectorService } from "./supabaseVectorService";
-import { getGeminiReranker, type RerankingOptions } from "./geminiReranker";
+// UPGRADED: Using Gemini Structured Reranker with AI SDK v6
+// Uses generateObject() with Zod schema - no JSON parsing failures
+// Option C: Google-only, no Cohere dependency
+import { getGeminiStructuredReranker, type RerankingOptions } from "./geminiStructuredReranker";
 import { VectorSearchResult } from "../lib/supabase";
 
 export interface TwoStageRetrievalOptions {
@@ -20,7 +23,8 @@ export interface TwoStageRetrievalOptions {
   vectorThreshold?: number; // Similarity threshold for stage 1
   sourceTypes?: string[];
   useGemini?: boolean; // Use Gemini embeddings (default: false - data is OpenAI 1536d)
-  
+  ensureSourceDiversity?: boolean; // If true, search each source type separately (default: true)
+
   // Stage 2: Re-ranking
   topK?: number; // K - how many to return after re-ranking (default: 10)
   rerankBatchSize?: number;
@@ -45,7 +49,7 @@ export interface TwoStageRetrievalResult {
 
 export class TwoStageRetrieval {
   private vectorService = getSupabaseVectorService();
-  private reranker = getGeminiReranker();
+  private reranker = getGeminiStructuredReranker();
 
   /**
    * Execute two-stage retrieval: Vector Search → Re-ranking
@@ -64,6 +68,7 @@ export class TwoStageRetrieval {
       vectorThreshold = 0.50,
       sourceTypes,
       useGemini = true, // Use Gemini embeddings (768d)
+      ensureSourceDiversity = true, // Ensure knowledge docs are included
       topK = 10,
       rerankBatchSize = 10,
       useRLHFSignals = true,
@@ -74,19 +79,63 @@ export class TwoStageRetrieval {
     console.log(`🎯 Stage 1: Retrieve ${initialCandidates} candidates`);
     console.log(`🎯 Stage 2: Re-rank to top ${topK} documents`);
     console.log(`🔐 RLHF Signals: ${useRLHFSignals ? 'ENABLED' : 'DISABLED'}`);
+    console.log(`📊 Source Diversity: ${ensureSourceDiversity ? 'ENABLED' : 'DISABLED'}`);
 
     // ========== STAGE 1: High-Recall Vector Search ==========
     const stage1Start = performance.now();
-    
-    const vectorResults = await this.vectorService.searchVectors(query, {
-      organization,
-      division,
-      app_under_test,
-      matchThreshold: vectorThreshold,
-      matchCount: initialCandidates,
-      sourceTypes,
-      useGemini,
-    });
+
+    let vectorResults: VectorSearchResult[];
+
+    if (ensureSourceDiversity && !sourceTypes) {
+      // Multi-source search: ensure knowledge docs are included
+      // Search each priority source type separately to guarantee diversity
+      console.log('🔀 Using multi-source retrieval strategy...');
+
+      const prioritySources = ['knowledge', 'pdf', 'firecrawl', 'git', 'jira'];
+      const perSourceLimit = Math.ceil(initialCandidates / prioritySources.length);
+
+      const allResults: VectorSearchResult[] = [];
+      const seenIds = new Set<string>();
+
+      for (const sourceType of prioritySources) {
+        const sourceResults = await this.vectorService.searchVectors(query, {
+          organization,
+          division,
+          app_under_test,
+          matchThreshold: vectorThreshold,
+          matchCount: perSourceLimit,
+          sourceTypes: [sourceType],
+          useGemini,
+        });
+
+        // Deduplicate
+        for (const result of sourceResults) {
+          if (!seenIds.has(result.id)) {
+            seenIds.add(result.id);
+            allResults.push(result);
+          }
+        }
+
+        if (sourceResults.length > 0) {
+          console.log(`   ${sourceType}: ${sourceResults.length} results (best: ${(sourceResults[0].similarity * 100).toFixed(1)}%)`);
+        }
+      }
+
+      // Sort all by similarity, take top N
+      allResults.sort((a, b) => b.similarity - a.similarity);
+      vectorResults = allResults.slice(0, initialCandidates);
+    } else {
+      // Standard search
+      vectorResults = await this.vectorService.searchVectors(query, {
+        organization,
+        division,
+        app_under_test,
+        matchThreshold: vectorThreshold,
+        matchCount: initialCandidates,
+        sourceTypes,
+        useGemini,
+      });
+    }
 
     const stage1Time = performance.now() - stage1Start;
 

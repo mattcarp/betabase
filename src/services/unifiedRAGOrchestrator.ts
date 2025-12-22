@@ -13,7 +13,8 @@ import { getContextAwareRetrieval } from "./contextAwareRetrieval";
 import { getAgenticRAGAgent } from "./agenticRAG/agent";
 import { getSessionStateManager, type RLHFFeedback } from "../lib/sessionStateManager";
 import { getTwoStageRetrieval, type TwoStageRetrievalResult } from "./twoStageRetrieval"; // Import types
-import { getGeminiReranker } from "./geminiReranker";
+import { getGeminiStructuredReranker } from "./geminiStructuredReranker";
+import { getHybridRetrievalV2 } from "./hybridRetrievalV2"; // NEW: Hybrid retrieval with RRF
 import { VectorSearchResult } from "../lib/supabase";
 
 export interface UnifiedRAGOptions {
@@ -27,6 +28,7 @@ export interface UnifiedRAGOptions {
   useContextAware?: boolean; // Use conversation history (default: true)
   useAgenticRAG?: boolean; // Use agent with self-correction (default: false)
   useRLHFSignals?: boolean; // Apply RLHF boosts (default: true)
+  useHybridSearch?: boolean; // Use hybrid vector+keyword search with RRF (default: true) - NEW!
   
   // Retrieval parameters
   initialCandidates?: number;
@@ -39,12 +41,13 @@ export interface UnifiedRAGResult {
   documents: any[];
   response?: string;
   metadata: {
-    strategy: "context-aware" | "agentic" | "standard" | "parallel-context-aware";
+    strategy: "context-aware" | "agentic" | "standard" | "parallel-context-aware" | "hybrid";
     confidence: number;
     totalTimeMs: number;
     usedContextAware: boolean;
     usedAgenticRAG: boolean;
     usedRLHFSignals: boolean;
+    usedHybridSearch?: boolean; // NEW
     queryTransformation?: any;
     agentIterations?: number;
   };
@@ -55,7 +58,8 @@ export class UnifiedRAGOrchestrator {
   private agenticRAG = getAgenticRAGAgent();
   private sessionManager = getSessionStateManager();
   private twoStageRetrieval = getTwoStageRetrieval();
-  private reranker = getGeminiReranker();
+  private reranker = getGeminiStructuredReranker();
+  private hybridRetrieval = getHybridRetrievalV2(); // NEW: Hybrid search with RRF
 
   /**
    * Execute unified RAG query with all three strategies
@@ -73,6 +77,7 @@ export class UnifiedRAGOrchestrator {
       useContextAware = true,
       useAgenticRAG = false,
       useRLHFSignals = true,
+      useHybridSearch = true, // NEW: Default to hybrid search for better exact match handling
       initialCandidates = 50,
       topK = 10,
       targetConfidence = 0.8,
@@ -83,11 +88,12 @@ export class UnifiedRAGOrchestrator {
 
     console.log("\n🌟 ========== UNIFIED RAG ORCHESTRATOR (PARALLEL) ==========");
     console.log(`📝 Query: "${query.substring(0, 100)}${query.length > 100 ? '...' : ''}"`);
-    console.log(`🎯 Strategy: ${useAgenticRAG ? 'AGENTIC' : useContextAware ? 'PARALLEL CONTEXT-AWARE' : 'STANDARD'}`);
+    console.log(`🎯 Strategy: ${useAgenticRAG ? 'AGENTIC' : useHybridSearch ? 'HYBRID' : useContextAware ? 'PARALLEL CONTEXT-AWARE' : 'STANDARD'}`);
     console.log(`🔐 RLHF Signals: ${useRLHFSignals ? 'ENABLED' : 'DISABLED'}`);
+    console.log(`🔀 Hybrid Search: ${useHybridSearch ? 'ENABLED' : 'DISABLED'}`);
 
     let result: any;
-    let strategy: "context-aware" | "agentic" | "standard" | "parallel-context-aware";
+    let strategy: "context-aware" | "agentic" | "standard" | "parallel-context-aware" | "hybrid";
     let confidence: number = 0;
 
     try {
@@ -118,10 +124,62 @@ export class UnifiedRAGOrchestrator {
             usedContextAware: false,
             usedAgenticRAG: true,
             usedRLHFSignals: useRLHFSignals,
+            usedHybridSearch: false,
             agentIterations: agentResult.iterations,
           },
         };
         confidence = agentResult.confidence;
+
+      } else if (useHybridSearch) {
+        // STRATEGY 2: HYBRID SEARCH (NEW - Option C: RRF + Gemini Structured Reranking)
+        // This is the recommended default for best quality
+        strategy = "hybrid";
+        console.log("\n🔀 Using Hybrid Search (Vector + Keyword + RRF + Gemini Reranking)");
+
+        const hybridResult = await this.hybridRetrieval.search(query, {
+          organization,
+          division,
+          app_under_test,
+          initialCandidates: initialCandidates,
+          vectorThreshold: 0.40, // Slightly stricter threshold
+          useGemini: true,
+          vectorWeight: 1.0,
+          keywordWeight: 1.0,
+          rrfK: 60,
+          rerankCandidates: 15,
+          topK,
+          useRLHFSignals,
+          skipReranking: false, // Always use Gemini reranking for quality
+        });
+
+        // Calculate confidence based on rerank scores
+        const avgScore = hybridResult.documents.length > 0
+          ? hybridResult.documents.reduce((sum, doc) => sum + (doc.rerankScore || 0), 0) / hybridResult.documents.length
+          : 0;
+
+        result = {
+          documents: hybridResult.documents,
+          metadata: {
+            strategy,
+            confidence: Math.min(avgScore + 0.1, 1.0), // Slight boost for hybrid
+            totalTimeMs: hybridResult.metrics.totalMs,
+            usedContextAware: false,
+            usedAgenticRAG: false,
+            usedRLHFSignals: useRLHFSignals,
+            usedHybridSearch: true,
+            hybridMetrics: {
+              vectorResults: hybridResult.metrics.vectorResults,
+              keywordResults: hybridResult.metrics.keywordResults,
+              mergedCandidates: hybridResult.metrics.mergedCandidates,
+              rerankingMs: hybridResult.metrics.rerankingMs,
+            },
+          },
+        };
+        confidence = result.metadata.confidence;
+
+        console.log(`✅ Hybrid search complete: ${hybridResult.documents.length} documents`);
+        console.log(`   Vector: ${hybridResult.metrics.vectorResults}, Keyword: ${hybridResult.metrics.keywordResults}`);
+        console.log(`   Confidence: ${(confidence * 100).toFixed(1)}%`);
 
       } else if (useContextAware) {
         // STRATEGY 2: Parallel Context-Aware Retrieval (OPTIMIZED)
@@ -143,13 +201,16 @@ export class UnifiedRAGOrchestrator {
           })
         );
 
-        const initialVectorSearchPromise = (this.twoStageRetrieval as any).vectorService.searchVectors(query, {
+        // MULTI-SOURCE SEARCH: Query both wiki_documents (OpenAI 1536d) AND siam_vectors (Gemini 768d)
+        const initialVectorSearchPromise = (this.twoStageRetrieval as any).vectorService.searchMultiSource(query, {
           organization,
           division,
           app_under_test,
-          matchThreshold: 0.5,
+          matchThreshold: 0.3,
           matchCount: initialCandidates,
-          useGemini: true,
+          includeWikiDocs: true,
+          includeSiamVectors: true,
+          appNameFilter: 'AOMA',
         });
 
         // Step 2: Wait for both to complete? 
@@ -186,15 +247,17 @@ export class UnifiedRAGOrchestrator {
         } else {
             console.log("⚡ Query changed, executing parallel Enhanced Search + Speculative Reranking");
             
-            // Branch A: Enhanced Search -> Rerank
+            // Branch A: Enhanced Search -> Rerank (MULTI-SOURCE)
             const enhancedSearchPromise = (async () => {
-                const results = await (this.twoStageRetrieval as any).vectorService.searchVectors(transformation.enhancedQuery, {
+                const results = await (this.twoStageRetrieval as any).vectorService.searchMultiSource(transformation.enhancedQuery, {
                     organization,
                     division,
                     app_under_test,
-                    matchThreshold: 0.5,
+                    matchThreshold: 0.3,
                     matchCount: initialCandidates,
-                    useGemini: true,
+                    includeWikiDocs: true,
+                    includeSiamVectors: true,
+                    appNameFilter: 'AOMA',
                 });
                 // Rerank these new results immediately? Or merge first?
                 // Reranking is the bottleneck, so we should try to batch or just rerank the new ones.

@@ -12,14 +12,34 @@
 
 import {
   supabase as publicSupabase,
-  supabaseAdmin,
   SIAMVector,
   VectorSearchResult,
   handleSupabaseError,
 } from "../lib/supabase";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { openai } from "@ai-sdk/openai";
 import { embed } from "ai";
 import { getGeminiEmbeddingService } from "./geminiEmbeddingService";
+
+// Get admin client lazily to avoid null at module load time (for scripts)
+function getAdminClient(): SupabaseClient | null {
+  // Check global first (set by test scripts)
+  if ((globalThis as any).__supabaseAdminClient) {
+    return (globalThis as any).__supabaseAdminClient;
+  }
+  
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  if (url && key) {
+    const client = createClient(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    (globalThis as any).__supabaseAdminClient = client;
+    return client;
+  }
+  return null;
+}
 
 export type EmbeddingProvider = "openai" | "gemini";
 
@@ -94,7 +114,7 @@ export class SupabaseVectorService {
       console.log(`⏱️  Embedding generation (${useGemini ? 'Gemini' : 'OpenAI'}): ${embeddingTime.toFixed(0)}ms`);
 
       // Use admin client for RPC (grants require authenticated/service role)
-      const rpcClient = supabaseAdmin ?? publicSupabase;
+      const rpcClient = getAdminClient() ?? publicSupabase;
       if (!rpcClient) {
         throw new Error("Supabase client is not initialized");
       }
@@ -141,6 +161,194 @@ export class SupabaseVectorService {
   }
 
   /**
+   * Multi-source search - queries BOTH siam_vectors AND wiki_documents
+   * 
+   * This is the FIX for the terrible RAG responses! 🎯
+   * - wiki_documents: Human-written documentation (OpenAI 1536d)
+   * - siam_vectors: Git code for implementation context (Gemini 768d)
+   * 
+   * Runs both queries in parallel, merges results.
+   */
+  async searchMultiSource(
+    query: string,
+    options: {
+      organization: string;
+      division: string;
+      app_under_test: string;
+      matchThreshold?: number;
+      matchCount?: number;
+      sourceTypes?: string[];
+      includeWikiDocs?: boolean;
+      includeSiamVectors?: boolean;
+      appNameFilter?: string; // For wiki_documents (defaults to 'AOMA_WIKI')
+    }
+  ): Promise<VectorSearchResult[]> {
+    const {
+      organization,
+      division,
+      app_under_test,
+      matchThreshold = 0.50,
+      matchCount = 10,
+      sourceTypes = null,
+      includeWikiDocs = true,
+      includeSiamVectors = true,
+      appNameFilter = 'AOMA', // Most AOMA docs are under 'AOMA' (238) not 'AOMA_WIKI' (70)
+    } = options;
+
+    const rpcClient = getAdminClient() ?? publicSupabase;
+    if (!rpcClient) {
+      throw new Error("Supabase client is not initialized");
+    }
+
+    const allResults: VectorSearchResult[] = [];
+    const searchPromises: Promise<void>[] = [];
+
+    // Generate embeddings in parallel
+    const embeddingStart = performance.now();
+    
+    const [geminiEmbedding, openaiEmbedding] = await Promise.all([
+      includeSiamVectors ? this.generateGeminiEmbedding(query) : Promise.resolve(null),
+      includeWikiDocs ? this.generateOpenAIEmbedding(query) : Promise.resolve(null),
+    ]);
+    
+    const embeddingTime = performance.now() - embeddingStart;
+    console.log(`⏱️  Embedding generation (parallel): ${embeddingTime.toFixed(0)}ms`);
+
+    // Query siam_vectors with Gemini embedding (git code)
+    if (includeSiamVectors && geminiEmbedding) {
+      searchPromises.push(
+        rpcClient.rpc("match_siam_vectors_gemini", {
+          p_organization: organization,
+          p_division: division,
+          p_app_under_test: app_under_test,
+          query_embedding: geminiEmbedding,
+          match_threshold: matchThreshold,
+          match_count: matchCount,
+          filter_source_types: sourceTypes,
+        }).then(({ data, error }) => {
+          if (error) {
+            console.error('❌ siam_vectors search error:', error);
+            return;
+          }
+          const results = (data || []).map((r: any) => ({
+            ...r,
+            source_table: 'siam_vectors',
+          }));
+          console.log(`📊 siam_vectors: ${results.length} matches`);
+          allResults.push(...results);
+        })
+      );
+    }
+
+    // Query wiki_documents with OpenAI embedding (documentation)
+    if (includeWikiDocs && openaiEmbedding) {
+      searchPromises.push(
+        rpcClient.rpc("match_wiki_documents", {
+          query_embedding: openaiEmbedding,
+          match_threshold: matchThreshold,
+          match_count: matchCount,
+          app_name_filter: appNameFilter,
+        }).then(({ data, error }) => {
+          if (error) {
+            console.error('❌ wiki_documents search error:', error);
+            return;
+          }
+          // Normalize wiki_documents results to match VectorSearchResult shape
+          const results = (data || []).map((r: any) => ({
+            id: r.id,
+            content: r.markdown_content,
+            source_type: 'wiki' as const,
+            source_id: r.url,
+            metadata: {
+              ...r.metadata,
+              title: r.title,
+              app_name: r.app_name,
+              url: r.url,
+            },
+            similarity: r.similarity,
+            source_table: 'wiki_documents',
+          }));
+          console.log(`📊 wiki_documents: ${results.length} matches`);
+          allResults.push(...results);
+        })
+      );
+    }
+
+    // Wait for all searches to complete
+    const searchStart = performance.now();
+    await Promise.all(searchPromises);
+    const searchTime = performance.now() - searchStart;
+    console.log(`⏱️  Multi-source search (parallel DB queries): ${searchTime.toFixed(0)}ms`);
+
+    // Sort all results by similarity (highest first)
+    allResults.sort((a, b) => (b.similarity || 0) - (a.similarity || 0));
+
+    // Log summary
+    console.log(`📊 Multi-source total: ${allResults.length} matches`);
+    if (allResults.length > 0) {
+      const topResult = allResults[0];
+      console.log(`   Best match: ${((topResult.similarity || 0) * 100).toFixed(1)}% from ${(topResult as any).source_table}`);
+      console.log(`   Content preview: "${topResult.content?.substring(0, 100)}..."`);
+    }
+
+    // Return top matchCount results across all sources
+    return allResults.slice(0, matchCount);
+  }
+
+  /**
+   * Generate Gemini embedding (768d)
+   */
+  private async generateGeminiEmbedding(text: string): Promise<number[]> {
+    const geminiService = getGeminiEmbeddingService();
+    return await geminiService.generateEmbedding(text);
+  }
+
+  /**
+   * Generate OpenAI embedding (1536d)
+   */
+  private async generateOpenAIEmbedding(text: string): Promise<number[]> {
+    try {
+      const { embedding } = await embed({
+        model: openai.embedding("text-embedding-3-small"),
+        value: text,
+      });
+      return embedding;
+    } catch (error: any) {
+      // Check for quota/billing errors
+      const errorMessage = error?.message || error?.toString() || '';
+      const isQuotaError = errorMessage.includes('quota') || 
+                          errorMessage.includes('billing') ||
+                          errorMessage.includes('insufficient_quota') ||
+                          error?.statusCode === 429;
+      
+      if (isQuotaError) {
+        console.error("\n" + "=".repeat(70));
+        console.error("🚨 CRITICAL ERROR: OPENAI API QUOTA EXCEEDED [ERR_OPENAI_QUOTA_001]");
+        console.error("=".repeat(70));
+        console.error("The OpenAI API key has run out of credits.");
+        console.error("Wiki document search will NOT work until this is resolved.");
+        console.error("");
+        console.error("ACTION REQUIRED:");
+        console.error("  1. Visit https://platform.openai.com/account/billing");
+        console.error("  2. Add credits to your OpenAI account");
+        console.error("  3. Restart the application");
+        console.error("");
+        console.error("Contact: Developer with error code ERR_OPENAI_QUOTA_001");
+        console.error("=".repeat(70) + "\n");
+        
+        throw new Error(
+          "[ERR_OPENAI_QUOTA_001] OpenAI API quota exceeded. " +
+          "Wiki document search unavailable. " +
+          "Please add credits at https://platform.openai.com/account/billing"
+        );
+      }
+      
+      console.error("Failed to generate OpenAI embedding:", error);
+      throw new Error("OpenAI embedding generation failed");
+    }
+  }
+
+  /**
    * Upsert a vector (insert or update) - Multi-tenant version
    */
   async upsertVector(
@@ -158,7 +366,7 @@ export class SupabaseVectorService {
       console.log(`📝 Generated ${this.embeddingProvider} embedding (${embedding.length}d)`);
 
       // Writes must use admin client
-      if (!supabaseAdmin) {
+      if (!getAdminClient()) {
         throw new Error(
           "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server."
         );
@@ -187,7 +395,7 @@ export class SupabaseVectorService {
 
       console.log(`📝 Using column '${embeddingColumn}' for ${this.embeddingProvider} embeddings`);
 
-      const { data, error } = await supabaseAdmin
+      const { data, error } = await getAdminClient()!
         .from("siam_vectors")
         .upsert(record, {
           onConflict: "organization,division,app_under_test,source_type,source_id",
@@ -304,7 +512,7 @@ export class SupabaseVectorService {
   ): Promise<any> {
     try {
       // Safe read: prefer public client, fallback to admin
-      const readClient = publicSupabase ?? supabaseAdmin;
+      const readClient = publicSupabase ?? getAdminClient();
       if (!readClient) {
         throw new Error("Supabase client is not initialized");
       }
@@ -341,13 +549,13 @@ export class SupabaseVectorService {
   ): Promise<number> {
     try {
       // Deletions must use admin client
-      if (!supabaseAdmin) {
+      if (!getAdminClient()) {
         throw new Error(
           "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server."
         );
       }
 
-      let query = supabaseAdmin
+      let query = getAdminClient()!
         .from("siam_vectors")
         .delete()
         .eq("organization", organization)
@@ -384,7 +592,7 @@ export class SupabaseVectorService {
   ): Promise<any> {
     try {
       // Safe read: prefer public client, fallback to admin
-      const readClient = publicSupabase ?? supabaseAdmin;
+      const readClient = publicSupabase ?? getAdminClient();
       if (!readClient) {
         throw new Error("Supabase client is not initialized");
       }
@@ -445,13 +653,13 @@ export class SupabaseVectorService {
         updateData.completed_at = new Date().toISOString();
       }
 
-      if (!supabaseAdmin) {
+      if (!getAdminClient()) {
         throw new Error(
           "Supabase admin client not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set on the server."
         );
       }
 
-      const { error } = await supabaseAdmin.from("siam_migration_status").upsert(updateData, {
+      const { error } = await getAdminClient()!.from("siam_migration_status").upsert(updateData, {
         onConflict: "organization,division,app_under_test,source_type",
       });
 

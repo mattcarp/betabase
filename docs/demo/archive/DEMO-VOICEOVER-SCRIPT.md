@@ -4,7 +4,7 @@
 **Tone:** Informal, Technical, "Under the Hood"
 **Goal:** Show the architecture and the 3 key pillars (Chat, Curate, Testing)
 
-| Visual Cue (CapCut Overlay) | Script / Voiceover |
+| Visual Cue (DaVinci Resolve Overlay) | Script / Voiceover |
 | :--- | :--- |
 | **[FACE VIGNETTE ONLY]** | "Hey everyone. I want to show you what we've built with **SIAM** (Smart In A Meeting)." |
 | **[FACE VIGNETTE ONLY]** | "Before we get to the shiny stuff, let's look at the data model because that's the real unlock here." |

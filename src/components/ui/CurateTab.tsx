@@ -69,8 +69,9 @@ import { ReinforcementDashboardTab } from "./rlhf-tabs/ReinforcementDashboardTab
 import { ModelRegistryPanel } from "./rlhf-tabs/ModelRegistryPanel";
 import { TrainingDatasetsPanel } from "./rlhf-tabs/TrainingDatasetsPanel";
 import { FineTuningJobsPanel } from "./rlhf-tabs/FineTuningJobsPanel";
+import { ZeitgeistPanel } from "./ZeitgeistPanel";
 import { cognitoAuth } from "../../services/cognitoAuth";
-import { ListTodo, GitBranch, BarChart3, Activity, Lightbulb as LightbulbIcon, Rocket, Database as DatabaseIcon, TrendingUp } from "lucide-react";
+import { ListTodo, GitBranch, BarChart3, Activity, Lightbulb as LightbulbIcon, Rocket, Database as DatabaseIcon, TrendingUp, Flame } from "lucide-react";
 
 interface VectorStoreFile {
   id: string;
@@ -582,6 +583,23 @@ export function CurateTab({
             >
               <Activity className="h-4 w-4 mr-2" />
               Insights
+            </button>
+
+            {/* Zeitgeist Hot Topics Tab */}
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "zeitgeist"}
+              onClick={() => setActiveTab("zeitgeist")}
+              className={cn(
+                "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
+                activeTab === "zeitgeist"
+                  ? "bg-white/10 text-white border-b-2 border-white"
+                  : "text-[var(--mac-accent-purple-400)] hover:text-white hover:bg-[var(--mac-state-hover)]"
+              )}
+            >
+              <Flame className="h-4 w-4 mr-2" />
+              Hot Topics
             </button>
           </div>
 
@@ -1122,6 +1140,13 @@ export function CurateTab({
           {activeTab === "insights" && (
             <div role="tabpanel" className="flex-1 overflow-auto mt-4">
               <AgentInsightsTab />
+            </div>
+          )}
+
+          {/* Zeitgeist Hot Topics Tab Content */}
+          {activeTab === "zeitgeist" && (
+            <div role="tabpanel" className="flex-1 overflow-auto mt-4">
+              <ZeitgeistPanel />
             </div>
           )}
         </div>

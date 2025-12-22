@@ -2,7 +2,7 @@
 ## SIAM Self-Healing Tests with HITL - Complete Implementation
 
 **Mission**: Build a sophisticated, production-grade demo in 48 hours
-**Resources**: 40,000+ test records, real SIAM codebase, CapCut for final production
+**Resources**: 40,000+ test records, real SIAM codebase, DaVinci Resolve for final production
 **Timeline**: November 23-24, 2025
 **Team**: Mattie + Claude (coding buddies!)
 
@@ -97,13 +97,13 @@ WHERE created_at > NOW() - INTERVAL '24 hours';
 
 ---
 
-### Continued implementation guide with data seeding, components, CapCut production workflow...
+### Continued implementation guide with data seeding, components, DaVinci Resolve production workflow...
 
 *(This is a condensed version - the full guide is ready when you want to continue building!)*
 
 ---
 
-## 🎬 CapCut Production Quick Reference
+## 🎬 DaVinci Resolve Production Quick Reference
 
 ### Recording Setup
 - **Tool**: QuickTime (⌘+Ctrl+N for screen recording)
@@ -111,7 +111,7 @@ WHERE created_at > NOW() - INTERVAL '24 hours';
 - **Clean browser**: Chrome, no bookmarks, dark mode
 - **Record segments separately**: Stats (15s), Tier 1 (60s), Tier 2 (45s), Tier 3 (45s)
 
-### CapCut Editing
+### DaVinci Resolve Editing
 1. **Import** all `.mov` files
 2. **Trim** dead space at start/end
 3. **Add zoom** on key UI elements (1.3-1.5x)
@@ -142,7 +142,7 @@ WHERE created_at > NOW() - INTERVAL '24 hours';
 - [ ] WorkflowViewer component (3 tiers)
 - [ ] HITLReviewPanel component
 - [ ] Record screen segments
-- [ ] CapCut editing (4-6 min video)
+- [ ] DaVinci Resolve editing (4-6 min video)
 - [ ] Export final demo
 
 ---

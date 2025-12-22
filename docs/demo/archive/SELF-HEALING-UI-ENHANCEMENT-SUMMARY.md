@@ -67,7 +67,7 @@ Enhanced the SOTA Northstar Demo to showcase self-healing test capabilities thro
 **Enhancements:**
 - Expanded Scene 4 (Pillar 3) to 90 seconds
 - Detailed walkthrough of self-healing workflow
-- Precise timing breakdown for CapCut editing
+- Precise timing breakdown for DaVinci Resolve editing
 - Visual cues for zoom/pan/highlighting
 - HITL demonstration included
 
@@ -204,7 +204,7 @@ export default function TestingPage() {
 - [ ] Click second healing attempt (review status)
 - [ ] Show approval buttons clearly
 
-### CapCut Editing
+### DaVinci Resolve Editing
 - [ ] Zoom in on stats grid (1.5x) at 3:52
 - [ ] Highlight healing queue at 4:05
 - [ ] Zoom on visual workflow (2x) at 4:15

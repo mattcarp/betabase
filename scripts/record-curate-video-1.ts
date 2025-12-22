@@ -47,15 +47,15 @@ async function record() {
   console.log(`Recording: ${videoPath}`);
 
   const browser = await chromium.launch({
-    headless: false,
-    slowMo: 80 // Faster for action-oriented feel
+    headless: false
+    // No slowMo - using explicit sleeps instead for natural pacing
   });
 
   const context = await browser.newContext({
-    viewport: { width: 1280, height: 800 },
+    viewport: { width: 1920, height: 1080 },
     recordVideo: {
       dir: OUTPUT_DIR,
-      size: { width: 1280, height: 800 }
+      size: { width: 1920, height: 1080 }
     }
   });
 
@@ -67,17 +67,17 @@ async function record() {
     await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded', timeout: 30000 });
     await sleep(1500);
 
-    // === SCENE 2: Navigate to Curate ===
+    // === SCENE 2: Navigate to Curate (main navigation) ===
     console.log('Scene 2: Click Curate');
-    await waitForContent(page, 'button:has-text("Curate")');
     await page.click('button:has-text("Curate")');
-    await sleep(1500);
+    await sleep(3000); // Wait for Curate panel to load
+    console.log('Curate clicked');
 
-    // === SCENE 3: Navigate to RLHF ===
-    console.log('Scene 3: Click RLHF');
-    await waitForContent(page, 'button:has-text("RLHF")');
+    // === SCENE 3: Navigate to RLHF (sub-tab inside Curate) ===
+    console.log('Scene 3: Click RLHF tab');
     await page.click('button:has-text("RLHF")');
     await sleep(2000);
+    console.log('RLHF clicked');
 
     // === SCENE 4: Click on first feedback card to expand ===
     console.log('Scene 4: Expand feedback card');
