@@ -795,15 +795,14 @@ export async function refreshZeitgeist(): Promise<ZeitgeistRefreshResult> {
     topics = applyTrends(topics, previousScores);
     console.log(`[Zeitgeist] Trend calculation applied: ${topics.filter(t => t.trend === 'rising').length} rising, ${topics.filter(t => t.trend === 'falling').length} falling`);
 
-    // Prioritize topics with good answers for suggestions
+    // Chat suggestions: ONLY topics where KB can answer well
+    // RLHF signals (negative feedback) stay in allTopics for manager dashboard
+    // but should NOT appear as chat suggestions - we don't want to suggest
+    // questions we're bad at answering
     const topicsWithGoodAnswers = topics.filter(t => t.hasGoodAnswer);
-    const topicsWithoutGoodAnswers = topics.filter(t => !t.hasGoodAnswer);
 
-    // Top 6 suggestions: prefer topics with good KB answers
-    const suggestionTopics = [
-      ...topicsWithGoodAnswers.slice(0, 6),
-      ...topicsWithoutGoodAnswers.slice(0, Math.max(0, 6 - topicsWithGoodAnswers.length))
-    ].slice(0, 6);
+    // Only suggest topics we can answer well - no backfill with bad topics
+    const suggestionTopics = topicsWithGoodAnswers.slice(0, 6);
 
     const validatedCount = topics.filter(t => t.hasGoodAnswer).length;
 
