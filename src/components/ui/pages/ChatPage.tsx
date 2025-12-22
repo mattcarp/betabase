@@ -347,11 +347,16 @@ Be helpful, concise, and professional in your responses.`;
 
   // Stable onMessagesChange callback to prevent infinite re-renders
   const handleMessagesChange = useCallback((messages: any[]) => {
-    if (!activeConversationId || messages.length === 0) return;
+    // IMPORTANT: Get activeConversationId from store state, NOT from closure
+    // This prevents race conditions when switching conversations
+    const { updateConversation, getConversation, activeConversationId: currentActiveId } = useConversationStore.getState();
 
-    const { updateConversation, getConversation } = useConversationStore.getState();
-    const currentConv = getConversation(activeConversationId);
+    // Use the store's current active ID, not the closure value
+    const targetConversationId = currentActiveId || activeConversationId;
 
+    if (!targetConversationId || messages.length === 0) return;
+
+    const currentConv = getConversation(targetConversationId);
     if (!currentConv) return;
 
     // Safety check: Don't overwrite if we would lose data
@@ -383,7 +388,7 @@ Be helpful, concise, and professional in your responses.`;
     if (newTitle && newTitle !== "New Conversation") {
       updates.title = newTitle;
     }
-    updateConversation(activeConversationId, updates);
+    updateConversation(targetConversationId, updates);
   }, [activeConversationId, extractMessageContent, generateTitle]);
 
   // DYNAMIC SUGGESTED QUESTIONS: Fetched from Zeitgeist service (RLHF, Jira, test signals)
