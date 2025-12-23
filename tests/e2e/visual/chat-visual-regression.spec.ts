@@ -387,7 +387,7 @@ test.describe("Conversation Sidebar", () => {
     }
   });
 
-  test("CRITICAL: No conversation should be titled 'New conversation'", async ({ page }) => {
+  test("CRITICAL: No conversation should be titled 'New conversation' @critical", async ({ page }) => {
     /**
      * This is a critical regression test.
      * Every conversation should be titled with the user's first query.
