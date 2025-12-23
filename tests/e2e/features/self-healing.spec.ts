@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures/base-test';
+import { test, expect } from '../fixtures/base-test';
 import { SelfHealingPage } from './helpers/self-healing';
 
 test.describe('Self-Healing Test Suite', () => {

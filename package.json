@@ -60,6 +60,8 @@
     "test:visual:mac": "npx playwright test tests/e2e/visual/mac-design-system-regression.spec.ts --reporter=list",
     "test:visual:dark-theme": "npx playwright test tests/e2e/visual/dark-theme-regression.spec.ts --reporter=list",
     "test:visual:update-snapshots": "npx playwright test tests/e2e/visual/ --update-snapshots",
+    "test:local:smoke": "PLAYWRIGHT_BASE_URL=http://localhost:3000 npx playwright test --grep @smoke --reporter=list",
+    "test:local:critical": "PLAYWRIGHT_BASE_URL=http://localhost:3000 npx playwright test --grep @critical --reporter=list",
     "test:watch:e2e": "npx playwright test --ui",
     "test:watch:e2e:local": "PLAYWRIGHT_BASE_URL=http://localhost:3000 npx playwright test --ui",
     "test:legacy": "npx playwright test tests/e2e/legacy/ --reporter=list",
