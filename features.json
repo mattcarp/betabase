@@ -338,8 +338,8 @@
       "description": "Fully wire the infographic/diagram generation API to provide real-time visual insights for complex queries.",
       "estimatedComplexity": "medium",
       "addedAt": "2025-12-18",
-      "notes": "Use api/infographic and api/generate-diagram. Integrate with Mermaid and Nanobanana.",
-      "byteroverTags": "#infographic #visualization #diagrams #ai-elements"
+      "notes": "Use api/infographic and api/generate-diagram. Wire Nano Banana Pro into chat flow for automatic visual generation.",
+      "byteroverTags": "#infographic #visualization #diagrams #ai-elements #nanobanana"
     }
   ]
 }

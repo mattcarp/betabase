@@ -60,63 +60,57 @@ export type AspectRatio =
 export type Resolution = "1K" | "2K" | "4K";
 
 // Detection patterns for different infographic types
-// Updated to match premium suggested questions
+// CONSERVATIVE: Only trigger for queries that clearly benefit from visualization
+// Avoid false positives - better to skip an infographic than show an irrelevant one
 const INFOGRAPHIC_PATTERNS: Record<InfographicType, RegExp[]> = {
   workflow: [
-    /how do i/i,
-    /how to/i,
-    /steps to/i,
-    /process for/i,
-    /procedure for/i,
-    /guide to/i,
-    /how does.*use/i, // Matches "How does AOMA use AWS S3..."
-    /upload and archive/i, // Matches digital archive workflow
+    // Only match explicit multi-step process requests
+    /step.by.step.*(process|guide|instructions)/i,
+    /workflow\s+(for|to|diagram)/i,
+    /process\s+flow/i,
+    /how\s+does\s+.+\s+process\s+/i, // "How does AOMA process assets"
+    /walk\s+me\s+through/i,
+    /end.to.end\s+(process|flow)/i,
   ],
   comparison: [
-    /difference between/i,
-    /compare/i,
-    /vs\.?$/i,
-    /versus/i,
-    /which is better/i,
-    /pros and cons/i,
+    // Only match explicit comparisons between named items
+    /difference\s+between\s+\w+\s+and\s+\w+/i, // "difference between X and Y"
+    /compare\s+\w+\s+(to|with|and|vs)/i, // "compare X to Y"
+    /\w+\s+vs\.?\s+\w+/i, // "X vs Y"
+    /pros\s+and\s+cons\s+of/i,
+    /which\s+is\s+better.+or\s+/i, // "which is better X or Y"
   ],
   hierarchy: [
-    /types of/i,
-    /categories of/i,
-    /different kinds/i,
-    /asset types/i,
-    /structure of/i,
-    /storage tiers/i, // Matches AWS S3 storage tiers
+    // Only match explicit structure/organization requests
+    /organizational?\s+structure/i,
+    /hierarchy\s+of/i,
+    /levels\s+of\s+\w+\s+in/i,
+    /storage\s+tiers/i,
+    /asset\s+type\s+hierarchy/i,
   ],
   explainer: [
-    /what is/i,
-    /explain/i,
-    /overview of/i,
-    /introduction to/i,
-    /understand/i,
+    // VERY restrictive - only complex architectural concepts
+    /architecture\s+of/i,
+    /system\s+design/i,
+    /how\s+.+\s+works\s+together/i,
+    /relationship\s+between\s+.+\s+and\s+/i,
+    /explain\s+the\s+.+\s+architecture/i,
   ],
   timeline: [
-    /history of/i,
-    /timeline/i,
-    /evolution of/i,
-    /when did/i,
-    /release notes/i,
-    /new features/i,
-    /what's new/i,
-    /latest updates/i,
-    /recent changes/i,
-    /being planned/i, // Matches "What new UST features are being planned..."
-    /roadmap/i,
-    /2026 releases/i,
+    // Only match explicit timeline/roadmap requests
+    /timeline\s+(of|for)/i,
+    /roadmap\s+(for|to)/i,
+    /release\s+schedule/i,
+    /planned\s+releases/i,
+    /version\s+history/i,
+    /evolution\s+of\s+\w+\s+over/i,
   ],
   checklist: [
-    /requirements for/i,
-    /checklist/i,
-    /what do i need/i,
-    /permissions/i,
-    /permission levels/i, // Matches "What are the permission levels..."
-    /prerequisites/i,
-    /what can each role/i, // Matches "what can each role do"
+    // Only match explicit checklist/requirements requests
+    /checklist\s+(for|to)/i,
+    /prerequisites\s+(for|to)/i,
+    /requirements\s+(for|to)\s+(set|deploy|install|configure)/i,
+    /what\s+do\s+i\s+need\s+to\s+(set\s+up|install|configure|deploy)/i,
   ],
 };
 
