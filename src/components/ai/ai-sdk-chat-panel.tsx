@@ -133,6 +133,8 @@ import {
   useDiagramOffer,
   shouldOfferDiagram,
 } from "./demo-enhancements";
+// Import visual query detection from infographicService for conservative pattern matching
+import { detectInfographicType } from "../../services/infographicService";
 // import { DiagramOffer, useDiagramOffer } from "./demo-enhancements/DiagramOffer";
 
 /*
@@ -2028,6 +2030,35 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
                     );
                   }
 
+                  // Handle tool-call parts (AI SDK v5 format)
+                  if (part.type === "tool-call") {
+                    return (
+                      <div key={index} className="my-2 p-2 bg-blue-500/10 rounded border border-blue-500/20 text-xs">
+                        <span className="text-blue-400">Tool: {part.toolName}</span>
+                      </div>
+                    );
+                  }
+
+                  // Handle tool-result parts (AI SDK v5 format)
+                  if (part.type === "tool-result") {
+                    // Tool results are usually processed by the model and don't need display
+                    return null;
+                  }
+
+                  // Fallback: If part has text content but unknown type, render it
+                  if (part.text && typeof part.text === "string" && part.text.trim()) {
+                    return (
+                      <Response key={index} className={isUser ? "[&>*]:text-white" : ""}>
+                        {part.text}
+                      </Response>
+                    );
+                  }
+
+                  // Log unknown part types for debugging
+                  if (process.env.NODE_ENV === "development") {
+                    console.log("[MessageParts] Unknown part type:", part.type, part);
+                  }
+
                   return null;
                 })
               ) : (
@@ -2130,15 +2161,24 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
               </MessageToolbar>
             )}
 
-            {/* Diagram Offer - Subtle inline hint for workflow/process content */}
-            {/* DEMO MODE: Show for any substantial assistant response */}
+            {/* Diagram Offer - Only show when user explicitly asks for visual content */}
+            {/* Uses detectInfographicType to check the USER'S QUESTION, not the response */}
             {/* Supports both AI SDK v4 (content) and v6 (parts[0].text) formats */}
             {(() => {
               // Get message content from either v4 or v6 format
               const messageText = message.content || message.parts?.map((p: any) => p.text || '').join('') || '';
               const hasSubstantialContent = messageText.length > 100;
-              const shouldShowOffer = !isUser && isLastMessage && !isLoading && !diagramVisible && hasSubstantialContent;
-              
+
+              // Find the user's question (previous message in conversation)
+              const messageIndex = messages.findIndex((m: any) => m.id === message.id);
+              const userQuestion = messageIndex > 0 ?
+                (messages[messageIndex - 1]?.content || messages[messageIndex - 1]?.parts?.map((p: any) => p.text || '').join('') || '') : '';
+
+              // Only offer diagram if the USER explicitly asked for visual content
+              // detectInfographicType returns null if the question doesn't warrant visualization
+              const visualQueryType = detectInfographicType(userQuestion);
+              const shouldShowOffer = !isUser && isLastMessage && !isLoading && !diagramVisible && hasSubstantialContent && visualQueryType !== null;
+
               if (!shouldShowOffer) return null;
               
               return (
@@ -3017,15 +3057,55 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-6 flex items-center justify-center"
+                className="mt-6 mx-auto max-w-xl"
               >
-                <Button
-                  variant="outline"
-                  className="mac-button mac-button-outline flex items-center gap-2 border-destructive/50 text-destructive hover:bg-destructive/10"
-                >
-                  <AlertCircle className="h-4 w-4" />
-                  Retry last message
-                </Button>
+                <Alert className="border-destructive/50 bg-destructive/10">
+                  <AlertCircle className="h-4 w-4 text-destructive" />
+                  <AlertDescription className="text-destructive">
+                    <div className="flex flex-col gap-2">
+                      <span className="font-medium">
+                        {error.message?.includes("503") || error.message?.includes("API_KEY")
+                          ? "Service Unavailable"
+                          : error.message?.includes("quota") || error.message?.includes("429")
+                            ? "Rate Limit Exceeded"
+                            : error.message?.includes("network") || error.message?.includes("fetch")
+                              ? "Connection Error"
+                              : "Request Failed"}
+                      </span>
+                      <span className="text-sm text-muted-foreground">
+                        {error.message?.includes("503")
+                          ? "The AI service is temporarily unavailable. This may be due to missing API credentials."
+                          : error.message?.includes("quota") || error.message?.includes("429")
+                            ? "Too many requests. Please wait a moment before trying again."
+                            : error.message?.includes("network") || error.message?.includes("fetch")
+                              ? "Unable to connect to the server. Check your internet connection."
+                              : error.message || "Something went wrong. Please try again."}
+                      </span>
+                      <div className="flex gap-2 mt-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            clearError?.();
+                            regenerate?.();
+                          }}
+                          className="mac-button mac-button-outline border-destructive/30 hover:bg-destructive/10"
+                        >
+                          <RefreshCw className="h-3 w-3 mr-1" />
+                          Retry
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => clearError?.()}
+                          className="text-muted-foreground hover:text-foreground"
+                        >
+                          Dismiss
+                        </Button>
+                      </div>
+                    </div>
+                  </AlertDescription>
+                </Alert>
               </motion.div>
             )}
 
