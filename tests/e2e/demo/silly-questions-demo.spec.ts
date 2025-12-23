@@ -3,13 +3,13 @@
  * Let's ask silly questions and see how the AI handles them!
  */
 
-import { test, expect } from '../fixtures/base-test';
+import { test, expect } from "@playwright/test";
 
 test.describe("Silly Questions Demo - Anti-Hallucination Testing", () => {
   test.setTimeout(120000);
 
   test("Question 1: Does AOMA have a teleportation feature?", async ({ page }) => {
-    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000");
     await page.waitForSelector('textarea[placeholder*="Ask"]', { timeout: 10000 });
 
     console.log("\n🎯 Question 1: Does AOMA have a teleportation feature?");
@@ -31,7 +31,7 @@ test.describe("Silly Questions Demo - Anti-Hallucination Testing", () => {
   });
 
   test("Question 2: Can AOMA predict lottery numbers?", async ({ page }) => {
-    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000");
     await page.waitForSelector('textarea[placeholder*="Ask"]', { timeout: 10000 });
 
     console.log("\n🎯 Question 2: Can AOMA predict lottery numbers?");
@@ -51,7 +51,7 @@ test.describe("Silly Questions Demo - Anti-Hallucination Testing", () => {
   });
 
   test("Question 3: Does AOMA have a coffee brewing integration?", async ({ page }) => {
-    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000");
     await page.waitForSelector('textarea[placeholder*="Ask"]', { timeout: 10000 });
 
     console.log("\n🎯 Question 3: Does AOMA have a coffee brewing integration?");
@@ -71,7 +71,7 @@ test.describe("Silly Questions Demo - Anti-Hallucination Testing", () => {
   });
 
   test("Question 4: Can AOMA write poetry?", async ({ page }) => {
-    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000");
     await page.waitForSelector('textarea[placeholder*="Ask"]', { timeout: 10000 });
 
     console.log("\n🎯 Question 4: Can AOMA write poetry?");
@@ -91,7 +91,7 @@ test.describe("Silly Questions Demo - Anti-Hallucination Testing", () => {
   });
 
   test("Question 5: Does AOMA support time travel workflows?", async ({ page }) => {
-    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000");
     await page.waitForSelector('textarea[placeholder*="Ask"]', { timeout: 10000 });
 
     console.log("\n🎯 Question 5: Does AOMA support time travel workflows?");
@@ -111,7 +111,7 @@ test.describe("Silly Questions Demo - Anti-Hallucination Testing", () => {
   });
 
   test("Question 6: THE PRESENTATION QUESTION - Teleportation", async ({ page }) => {
-    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000");
     await page.waitForSelector('textarea[placeholder*="Ask"]', { timeout: 10000 });
 
     console.log("\n🎯 THE BIG ONE: Does AOMA have a teleportation feature?");

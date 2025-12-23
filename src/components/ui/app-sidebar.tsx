@@ -153,7 +153,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
   };
 
   return (
-    <Sidebar variant="sidebar" className={cn("mac-sidebar mac-glass", className)}>
+    <Sidebar variant="sidebar" className={cn("mac-sidebar mac-glass", className)} data-testid="conversation-sidebar">
       <SidebarHeader className="mac-surface-elevated border-b border-mac-border">
         <div className="flex items-center justify-between px-2 py-2">
           <div className="flex items-center gap-2">
@@ -165,6 +165,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
             size="icon"
             variant="ghost"
             className="mac-button-ghost h-7 w-7 hover:bg-mac-state-hover"
+            data-testid="new-conversation"
           >
             <Plus className="h-4 w-4" />
           </Button>
@@ -179,6 +180,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="mac-input mac-sidebar-search pl-9 h-8 text-sm bg-mac-surface-elevated border border-mac-border/30 text-mac-text-primary"
+              data-testid="sidebar-search"
             />
           </div>
         </div>
@@ -258,7 +260,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
                             {conversation.isPinned && (
                               <Pin className="h-3 w-3 text-mac-accent-purple-400 shrink-0 mac-pin-indicator" />
                             )}
-                            <span className="text-sm font-light text-mac-text-primary truncate">
+                            <span className="text-sm font-light text-mac-text-primary truncate" data-testid="conversation-title">
                               {conversation.title}
                             </span>
                           </div>

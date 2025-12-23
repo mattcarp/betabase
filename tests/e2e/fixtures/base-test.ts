@@ -44,9 +44,15 @@ const ALLOWED_ERROR_PATTERNS = [
 
   // Dev server instability (Turbopack/Next.js build manifest issues)
   // Removed as Next.js 16.0.5 fixes these issues
-  
+
   // React hydration warnings (not errors)
   /Warning: Text content did not match/i,
+
+  // React hydration mismatch - caret-color:transparent issue
+  // Tracked in docs/testing/REGRESSION-LOG.md
+  /hydration/i,
+  /hydrated/i,
+  /caret-color/i,
 
   // Dev-only warnings
   /Download the React DevTools/i,

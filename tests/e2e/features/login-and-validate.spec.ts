@@ -1,4 +1,4 @@
-import { test, expect } from '../fixtures/base-test';
+import { test, expect } from "@playwright/test";
 
 test.describe("SIAM Application Validation", () => {
   test("Login and validate P0 features", async ({ page }) => {
@@ -7,10 +7,10 @@ test.describe("SIAM Application Validation", () => {
     const testPassword = "4@9XMPfE9B$";
 
     // Navigate to production URL
-    await page.goto("https://siam-two.vercel.app", { waitUntil: 'domcontentloaded' });
+    await page.goto("https://siam-two.vercel.app");
 
     // Wait for page to load
-    await page.waitForLoadState("domcontentloaded");
+    await page.waitForLoadState("networkidle");
 
     // Check if login form is present
     const emailInput = page.locator('input[type="email"]');

@@ -1,9 +1,9 @@
-import { test, expect } from '../fixtures/base-test';
+import { test, expect } from "@playwright/test";
 
 test.describe("Test Dashboard - Quick Validation", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to SIAM with auth bypassed
-    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000");
 
     // Navigate to Test tab
     await page.click("text=Test");

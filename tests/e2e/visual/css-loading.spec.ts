@@ -1,9 +1,9 @@
-import { test, expect } from '../fixtures/base-test';
+import { test, expect } from "@playwright/test";
 
 test.describe("CSS Loading and MAC Design System", () => {
   test("should load all critical CSS and apply MAC design system classes", async ({ page }) => {
     // Navigate to the login page
-    await page.goto("/", { waitUntil: 'domcontentloaded' });
+    await page.goto("/");
 
     // Wait for the page to fully load
     await page.waitForLoadState("networkidle");
@@ -138,7 +138,7 @@ test.describe("CSS Loading and MAC Design System", () => {
   });
 
   test("should maintain CSS on navigation and hot reload", async ({ page }) => {
-    await page.goto("/", { waitUntil: 'domcontentloaded' });
+    await page.goto("/");
     await page.waitForLoadState("networkidle");
 
     // Get initial style count

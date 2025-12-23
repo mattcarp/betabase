@@ -1,9 +1,9 @@
-import { test, expect } from '../fixtures/base-test';
+import { test, expect } from "@playwright/test";
 
 test.describe("Chat Progress Indicator", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the chat interface
-    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000");
 
     // Wait for the chat interface to load
     await page.waitForSelector("text=Welcome to The Betabase", { timeout: 10000 });

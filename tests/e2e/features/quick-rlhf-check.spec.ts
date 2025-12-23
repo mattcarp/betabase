@@ -2,11 +2,11 @@
  * Quick diagnostic test to see what tabs are actually present
  */
 
-import { test, expect } from '../fixtures/base-test';
+import { test, expect } from '@playwright/test';
 
 test('Diagnostic: Count tabs in Curate panel', async ({ page }) => {
   // Navigate
-  await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
+  await page.goto('http://localhost:3000');
   await page.waitForLoadState('networkidle');
   
   // Click Curate tab

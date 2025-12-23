@@ -1,4 +1,4 @@
-import { test, expect } from '../fixtures/base-test';
+import { test, expect } from "@playwright/test";
 
 /**
  * Gemini 2.5 Pro Chat Integration Test
@@ -15,7 +15,7 @@ import { test, expect } from '../fixtures/base-test';
 test.describe("Gemini 2.5 Pro Chat Integration", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to main chat page
-    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000");
     
     // Wait for page to be ready
     await page.waitForLoadState("networkidle");

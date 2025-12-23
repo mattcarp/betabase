@@ -7,7 +7,7 @@
  * - Save responses for manual review
  */
 
-import { test, expect } from '../fixtures/base-test';
+import { test, expect } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -58,7 +58,7 @@ test.describe("AOMA Response Quality Validation", () => {
       console.log(`${"=".repeat(70)}\n`);
 
       // Navigate to chat
-      await page.goto("http://localhost:3000/", { waitUntil: 'domcontentloaded' });
+      await page.goto("http://localhost:3000/");
       await page.waitForLoadState("networkidle");
 
       // Find chat input

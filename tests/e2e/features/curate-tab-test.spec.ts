@@ -1,5 +1,5 @@
-import { test, expect } from '../fixtures/base-test';
-import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
+import { test, expect } from "@playwright/test";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "./helpers/console-monitor";
 
 test.describe("SIAM Curate Tab File Upload Investigation", () => {
   test("examine Curate tab interface for file upload functionality", async ({ page }) => {
@@ -12,7 +12,7 @@ test.describe("SIAM Curate Tab File Upload Investigation", () => {
     console.log("🚀 Testing SIAM Curate tab...");
 
     // Navigate to SIAM
-    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000");
     await page.waitForTimeout(3000); // Give it time to load
 
     // Take screenshot of main interface

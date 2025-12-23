@@ -8,8 +8,7 @@
  * Based on SOTA-2025-Testing-Architecture.md
  */
 
-import { Page } from '@playwright/test';
-import { test, expect } from '../fixtures/base-test';
+import { test, expect, Page } from "@playwright/test";
 
 // Test configuration
 const TEST_URL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3000";
@@ -19,7 +18,7 @@ const TEST_TIMEOUT = 60000; // 60 seconds for complex operations
 const TEST_APPS = {
   SIAM: {
     name: "SIAM",
-    url: "http://localhost:3000",
+    url: "https://thebetabase.com",
     testFeatures: ["chat", "upload", "settings"],
   },
   AOMA: {

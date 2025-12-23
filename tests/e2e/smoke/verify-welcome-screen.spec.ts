@@ -30,9 +30,9 @@ test.describe('Welcome Screen Verification', () => {
     await expect(logo).toBeVisible();
 
     // 4. Verify Suggestions
-    // We expect 4 to 6 suggestions.
-    // They are buttons.
-    const suggestionButtons = page.locator('button').filter({ hasText: /How do I|What's the|Why is my/ });
+    // We expect 4 to 6 suggestions on the welcome screen.
+    // Current patterns: "Show me...", "How does/do...", "I'm getting...", "What are/new...", etc.
+    const suggestionButtons = page.locator('button').filter({ hasText: /Show me|How do|How does|I'm getting|What are|What new/ });
     
     // Wait for at least one to be visible
     await expect(suggestionButtons.first()).toBeVisible();

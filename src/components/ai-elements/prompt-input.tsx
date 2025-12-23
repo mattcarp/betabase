@@ -785,14 +785,17 @@ export const PromptInput = ({
         accept={accept}
         aria-label="Upload files"
         className="hidden"
+        data-testid="file-upload-input"
         multiple={multiple}
         onChange={handleChange}
         ref={inputRef}
         title="Upload files"
         type="file"
+        suppressHydrationWarning
       />
       <form
         className={cn("w-full", className)}
+        data-testid="chat-form"
         onSubmit={handleSubmit}
         ref={formRef}
         {...props}
@@ -909,6 +912,7 @@ export const PromptInputTextarea = ({
   return (
     <InputGroupTextarea
       className={cn("field-sizing-content max-h-48 min-h-16", className)}
+      data-testid="chat-input"
       name="message"
       onCompositionEnd={() => setIsComposing(false)}
       onCompositionStart={() => setIsComposing(true)}
@@ -1052,6 +1056,7 @@ export const PromptInputSubmit = ({
     <InputGroupButton
       aria-label="Submit"
       className={cn(className)}
+      data-testid="send-button"
       size={size}
       type="submit"
       variant={variant}

@@ -235,6 +235,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
         "flex flex-col relative",
         className
       )}
+      data-testid="conversation-sidebar"
     >
       {/* Collapse Toggle */}
       <button
@@ -250,6 +251,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
         <button
           onClick={onNewConversation}
           className="w-full mac-button mac-button-primary flex items-center justify-center gap-2 hover:bg-mac-primary-blue-500/20 transition-all duration-200"
+          data-testid="new-conversation"
         >
           <Plus className="w-4 h-4" />
           <span>New Conversation</span>
@@ -265,6 +267,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-11 pr-10 py-2.5 bg-mac-surface-bg border border-mac-border rounded-lg text-sm text-mac-text-primary placeholder-mac-text-muted focus:outline-none focus:ring-2 focus:ring-mac-accent-purple-400/50 focus:border-mac-accent-purple-400/50 transition-all duration-200"
+            data-testid="sidebar-search"
           />
           {searchQuery && (
             <button
@@ -350,7 +353,10 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 mb-2">
-                                    <h4 className="mac-title text-sm font-normal text-mac-text-primary truncate flex-1">
+                                    <h4
+                                      className="mac-title text-sm font-normal text-mac-text-primary truncate flex-1"
+                                      data-testid="conversation-title"
+                                    >
                                       {conversation.title}
                                     </h4>
                                     {conversation.isPinned && (

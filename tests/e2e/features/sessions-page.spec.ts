@@ -1,9 +1,9 @@
-import { test, expect } from '../fixtures/base-test';
+import { test, expect } from "@playwright/test";
 
 test.describe("Sessions Management Page", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the sessions page
-    await page.goto("http://localhost:3000/sessions", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000/sessions");
   });
 
   test("should display the sessions page header", async ({ page }) => {
@@ -13,7 +13,7 @@ test.describe("Sessions Management Page", () => {
 
   test("should display session cards", async ({ page }) => {
     // Wait for the grid to load
-    await page.waitForLoadState("domcontentloaded");
+    await page.waitForLoadState("networkidle");
 
     // Check that we have session cards
     const sessionCards = page.locator(".mac-card");
@@ -116,7 +116,7 @@ test.describe("Sessions Management Page", () => {
     });
 
     // Wait for page to fully load
-    await page.waitForLoadState("domcontentloaded");
+    await page.waitForLoadState("networkidle");
     await page.waitForTimeout(2000);
 
     // Check for console errors (excluding known warnings)

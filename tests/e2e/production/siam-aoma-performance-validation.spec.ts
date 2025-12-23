@@ -8,12 +8,12 @@
  * Expected: Query responses in <2 seconds (vs 3.5+ seconds before)
  */
 
-import { test, expect } from '../fixtures/base-test';
+import { test, expect } from "@playwright/test";
 
 test.describe("AOMA Query Performance Validation", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to chat interface (root route)
-    await page.goto("http://localhost:3000/", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000/");
     await page.waitForLoadState("networkidle");
   });
 
@@ -136,7 +136,7 @@ test.describe("AOMA Orchestrator Integration", () => {
       consoleLogs.push(msg.text());
     });
 
-    await page.goto("http://localhost:3000/chat", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000/chat");
     const chatInput = page.locator('textarea[placeholder*="Ask"], input[type="text"]').first();
 
     await chatInput.fill("AOMA test query");

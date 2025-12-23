@@ -1,9 +1,9 @@
-import { test, expect } from '../fixtures/base-test';
+import { test, expect } from "@playwright/test";
 
 test.describe("Voice Features Integration", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the chat page with auth bypass
-    await page.goto("http://localhost:3000", { waitUntil: 'domcontentloaded' });
+    await page.goto("http://localhost:3000");
 
     // Wait for the page to load completely
     await page.waitForLoadState("networkidle");

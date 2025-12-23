@@ -1,12 +1,40 @@
 # SIAM Testing Architecture
 
+**Last reorganized**: 2025-12-22
+
 This project uses two test frameworks:
 - **Vitest** for unit and integration tests (.test.ts files)
 - **Playwright** for end-to-end browser tests (.spec.ts files)
 
+## Directory Structure (Current)
+
+```
+tests/
+├── e2e/                    # Playwright E2E tests
+│   ├── critical-paths/     # Core user journeys - MUST always pass
+│   ├── features/           # Feature-specific E2E tests
+│   ├── smoke/              # Fast sanity checks (~30 sec)
+│   ├── visual/             # Screenshot comparisons
+│   ├── production/         # Production-only tests (thebetabase.com)
+│   ├── demo/               # Demo/example tests
+│   └── design-review/      # MAC design system audits
+├── integration/            # Vitest integration tests (real APIs)
+├── unit/                   # Vitest unit tests (pure functions)
+├── pages/                  # Page Object Models
+├── fixtures/               # Shared test fixtures
+├── helpers/                # Shared test utilities
+├── performance/            # Performance benchmarks
+├── config/                 # Test configurations
+├── setup/                  # Test setup (no-mocks enforcement)
+└── _archive/               # Archived/deprecated tests
+```
+
+## Key Docs
+- **Regression Log**: `docs/testing/REGRESSION-LOG.md` - Track all bugs and their tests
+
 ---
 
-# 🧪 Vitest Unit & Integration Tests
+# Vitest Unit & Integration Tests
 
 ## Quick Start
 
@@ -19,23 +47,6 @@ INTEGRATION_TESTS=1 npm run test:integration
 
 # Run all Vitest tests
 npm run test
-```
-
-## Test Organization
-
-```
-tests/
-├── unit/                       # Pure unit tests (.test.ts)
-│   ├── emailParser.test.ts     # 27 tests
-│   └── microsoftEmailParser.test.ts  # 16 tests
-├── integration/                # Integration tests (.test.ts)
-│   ├── emailContext.test.ts
-│   ├── emailContextApi.test.ts
-│   └── multi-tenant-vector-store.test.ts
-├── helpers/                    # Test utilities
-│   └── integration-test.ts
-└── setup/                      # Test configuration
-    └── no-mocks-allowed.ts     # Enforces no-mock policy
 ```
 
 ## No-Mock Policy ❌
