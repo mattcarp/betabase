@@ -16,6 +16,7 @@ export default defineConfig({
   timeout: 60000,
   testDir: "./tests",
   testMatch: /.*\.spec\.ts/,
+  testIgnore: ["**/tests/_archive/**", "**/tests/legacy/**"],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

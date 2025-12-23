@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { setupConsoleMonitoring, assertNoConsoleErrors } from "./helpers/console-monitor";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 test.describe("SIAM Curate Tab File Upload Investigation", () => {
   test("examine Curate tab interface for file upload functionality", async ({ page }) => {

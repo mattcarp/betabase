@@ -1,5 +1,5 @@
 import { test, expect } from '../../fixtures/base-test';
-import { setupConsoleMonitoring, assertNoConsoleErrors } from "../../helpers/console-monitor";
+import { setupConsoleMonitoring, assertNoConsoleErrors } from "../helpers/console-monitor";
 
 /**
  * Smoke tests - Quick health checks that should always pass

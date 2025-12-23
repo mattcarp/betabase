@@ -1,5 +1,5 @@
 import { test, expect } from '../fixtures/base-test';
-import { SelfHealingPage } from './helpers/self-healing';
+import { SelfHealingPage } from '../helpers/self-healing';
 
 test.describe('Self-Healing Test Suite', () => {
   test('should self-heal broken selectors during execution', async ({ page }) => {

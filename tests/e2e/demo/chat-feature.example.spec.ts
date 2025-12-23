@@ -1,5 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
-import TEST_CONFIG from "../test.config";
+import TEST_CONFIG from "../../test.config";
 
 /**
  * Example test file showing best practices and patterns

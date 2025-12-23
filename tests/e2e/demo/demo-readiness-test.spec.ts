@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { setupConsoleMonitoring, getConsoleMonitor } from "./helpers/console-monitor";
+import { setupConsoleMonitoring, getConsoleMonitor } from "../helpers/console-monitor";
 
 /**
  * DEMO READINESS TEST
