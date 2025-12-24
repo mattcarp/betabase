@@ -4,14 +4,13 @@ import { useChat } from "@ai-sdk/react";
 // DefaultChatTransport is not available in @ai-sdk/react v3.x
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../../lib/utils";
-import { useSupabaseClient } from "../../hooks/useSupabaseClient";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { useElevenLabsSTT } from "../../hooks/useElevenLabsSTT";
 import { useElevenLabsVoice } from "../../hooks/useElevenLabsVoice";
 import { VoiceSelector } from "../ui/VoiceSelector";
-import { FeedbackSegueDialog } from "./FeedbackSegueDialog";
 import {
   Sparkles,
   Trash2,
@@ -133,8 +132,6 @@ import {
   useDiagramOffer,
   shouldOfferDiagram,
 } from "./demo-enhancements";
-// Import visual query detection from infographicService for conservative pattern matching
-import { detectInfographicType } from "../../services/infographicService";
 // import { DiagramOffer, useDiagramOffer } from "./demo-enhancements/DiagramOffer";
 
 /*
@@ -222,7 +219,7 @@ import {
   CheckpointTrigger,
 } from "../ai-elements/checkpoint";
 import { BookmarkIcon, ListTodoIcon, GaugeIcon, Trash2Icon, ChevronsUpDownIcon } from "lucide-react";
-import { NanoBananaInfographic } from "../ai-elements/NanoBananaInfographic";
+import { MermaidDiagram } from "../ai-elements/mermaid-diagram";
 
 interface AiSdkChatPanelProps {
   api?: string;
@@ -245,7 +242,6 @@ interface AiSdkChatPanelProps {
   userAvatar?: string;
   botName?: string;
   userName?: string;
-  onSwitchToTab?: (tab: "chat" | "hud" | "test" | "fix" | "curate") => void; // For demo segue to Curate
 }
 
 export function AiSdkChatPanel({
@@ -258,7 +254,7 @@ export function AiSdkChatPanel({
   suggestions = [
     "Help me analyze this code",
     "Explain a complex concept",
-    "I'm getting an 'Asset Upload Sorting Failed' error when uploading files. What's going on?",
+    "Generate creative content",
     "Solve a technical problem",
     "Plan a project workflow",
     "Review and optimize",
@@ -274,9 +270,8 @@ export function AiSdkChatPanel({
   theme = "auto",
   botAvatar = undefined, // Let it use fallback initials
   userAvatar = undefined, // Let it use fallback initials
-  botName = "BB",
-  userName = "MC",
-  onSwitchToTab,
+  botName = "AI",
+  userName = "U",
 }: AiSdkChatPanelProps) {
   console.log("🎯 AiSdkChatPanel: Component mounted with api:", api);
   console.log("🎤 Voice buttons should be rendering in PromptInputTools");
@@ -303,13 +298,6 @@ export function AiSdkChatPanel({
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
   const [loadingSeconds, setLoadingSeconds] = useState(0); // Track seconds elapsed during loading
   const [pendingRagMetadata, setPendingRagMetadata] = useState<any>(null); // RAG metadata from response headers
-  const [pendingCitationSources, setPendingCitationSources] = useState<any[]>([]); // Citation sources from response headers
-
-  // Feedback Dialog State
-  const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
-  const [feedbackMessageId, setFeedbackMessageId] = useState<string | null>(null);
-  const [feedbackUserQuery, setFeedbackUserQuery] = useState("");
-  const [feedbackAiResponse, setFeedbackAiResponse] = useState("");
 
   // New AI Elements state
   const [modelSelectorOpen, setModelSelectorOpen] = useState(false);
@@ -379,9 +367,6 @@ export function AiSdkChatPanel({
   const [diagramVisible, setDiagramVisible] = useState(false);
   const [diagramCode, setDiagramCode] = useState<string>("");
   const [isGeneratingDiagram, setIsGeneratingDiagram] = useState(false);
-  const [activeDiagramType, setActiveDiagramType] = useState<'nanobanana'>('nanobanana');
-  const [infographicType, setInfographicType] = useState<'erd' | 'process' | 'cycle' | 'comparison' | undefined>();
-  const [nanoBananaPrompt, setNanoBananaPrompt] = useState<string>('');
 
   // Voice feature states - define before using in hooks
   const [isTTSEnabled, setIsTTSEnabled] = useState(false);
@@ -426,7 +411,7 @@ export function AiSdkChatPanel({
       console.error("STT Error:", error);
 
       // Provide helpful instructions based on error type
-      const toastMessage = error.message;
+      let toastMessage = error.message;
       let toastDescription = "";
 
       if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
@@ -559,18 +544,6 @@ export function AiSdkChatPanel({
         }
       }
       
-      // 📎 CITATIONS: Parse citation sources from response headers
-      const citationHeader = response.headers.get("X-Citation-Sources");
-      if (citationHeader) {
-        try {
-          const sources = JSON.parse(citationHeader);
-          console.log("📎 Captured citation sources from headers:", sources.length);
-          setPendingCitationSources(sources);
-        } catch (e) {
-          console.warn("Failed to parse citation sources header:", e);
-        }
-      }
-
       // Capture token usage from response headers
       const usageHeader = response.headers.get("X-Token-Usage");
       if (usageHeader) {
@@ -661,7 +634,6 @@ export function AiSdkChatPanel({
         setCurrentProgress(null);
         setManualLoading(false);
         setIsProcessing(false);
-        setHasStartedStreaming(false); // Reset streaming state for next message
       }, 3000);
 
       onError?.(err);
@@ -672,24 +644,6 @@ export function AiSdkChatPanel({
       if ((window as any).currentProgressInterval) {
         clearInterval((window as any).currentProgressInterval);
         (window as any).currentProgressInterval = null;
-      }
-
-      // 📎 CITATIONS: Attach citation sources to the last message
-      if (pendingCitationSources.length > 0 && setMessages) {
-        setMessages((prevMessages: any[]) => {
-          if (prevMessages.length === 0) return prevMessages;
-          const lastMsg = prevMessages[prevMessages.length - 1];
-          // Only attach to assistant messages
-          if (lastMsg.role === "assistant") {
-            console.log("📎 Attaching", pendingCitationSources.length, "citation sources to message");
-            return [
-              ...prevMessages.slice(0, -1),
-              { ...lastMsg, sources: pendingCitationSources }
-            ];
-          }
-          return prevMessages;
-        });
-        setPendingCitationSources([]); // Clear after attaching
       }
 
       // Immediately clear loading states
@@ -710,15 +664,6 @@ export function AiSdkChatPanel({
           console.warn("[SIAM] setInput clear failed", err);
         }
       }
-      
-      // 🔧 SAFETY: If loading states get stuck, force-clear after delay
-      // This prevents the input from being permanently disabled
-      setTimeout(() => {
-        setManualLoading(false);
-        setIsProcessing(false);
-        setHasStartedStreaming(false);
-        console.log("🔓 Safety timeout: Loading states force-cleared");
-      }, 2000);
     },
 
     // Use api option directly (transport was removed in @ai-sdk/react v3.x)
@@ -928,20 +873,12 @@ export function AiSdkChatPanel({
 
   // Detect when assistant has meaningful content (not just streaming started)
   // FIX: Only hide progress indicator when there's actual visible content
-  // CRITICAL: Track message count to detect NEW assistant responses (not old ones from previous questions)
-  const prevMessageCountRef = useRef(messages.length);
-  
   useEffect(() => {
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
-      
-      // Only check for streaming content if:
-      // 1. We're currently loading/processing
-      // 2. The last message is an assistant message
-      // 3. The message count has CHANGED (meaning this is a NEW message, not a previous one)
-      const isNewMessage = messages.length > prevMessageCountRef.current;
-      
-      if (lastMessage?.role === "assistant" && (isProcessing || manualLoading) && isNewMessage) {
+      // Only set hasStartedStreaming when there's MEANINGFUL content visible to user
+      // This keeps the progress indicator visible until there's something to show
+      if (lastMessage?.role === "assistant" && (isProcessing || manualLoading)) {
         const content = lastMessage.content || lastMessage.parts?.map((p: any) => p.text || '').join('') || '';
         // Require at least 50 characters of content before hiding progress
         // This ensures user sees the progress phases during the "thinking" period
@@ -949,9 +886,6 @@ export function AiSdkChatPanel({
           setHasStartedStreaming(true);
         }
       }
-      
-      // Update the previous count for next comparison
-      prevMessageCountRef.current = messages.length;
     }
   }, [messages, isProcessing, manualLoading]);
 
@@ -1356,20 +1290,10 @@ export function AiSdkChatPanel({
 
   const handleFormSubmit = async (message: PromptInputMessage, event?: React.FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
-    
-    console.log("🔵 handleFormSubmit called!", { message, localInput, isLoading, manualLoading, isProcessing });
-    
     // Use message.text from PromptInput, fallback to localInput for compatibility
     const messageToSend = message.text || localInput || "";
-    
-    console.log("🔵 messageToSend:", messageToSend);
-    
     if (messageToSend.trim()) {
-      // 1. Clear input immediately for better UX
-      setLocalInput("");
-      if (typeof setInput === "function") setInput("");
-
-      // 2. Debug logging for endpoint routing
+      // Debug logging for endpoint routing
       console.log("📨 Submitting message with:");
       console.log("  - Model:", selectedModel);
       console.log("  - Endpoint:", currentApiEndpoint);
@@ -1501,32 +1425,21 @@ export function AiSdkChatPanel({
       // Use the AI SDK's append or sendMessage function
       // This properly handles the streaming response format
       try {
-        // Add timeout protection to prevent hanging requests
-        const timeoutMs = 120000; // 2 minutes timeout
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error("Request timed out after 2 minutes")), timeoutMs);
-        });
-
-        const requestPromise = async () => {
-          if (typeof append === "function") {
-            await append({
-              role: "user",
-              content,
-            });
-          } else if (typeof sendMessage === "function") {
-            // Fallback to sendMessage if append not available
-            await sendMessage({
-              role: "user",
-              content,
-            });
-          } else {
-            console.error("Neither append nor sendMessage available from useChat");
-            throw new Error("Chat API not properly initialized");
-          }
-        };
-
-        // Race between the request and timeout
-        await Promise.race([requestPromise(), timeoutPromise]);
+        if (typeof append === "function") {
+          await append({
+            role: "user",
+            content,
+          });
+        } else if (typeof sendMessage === "function") {
+          // Fallback to sendMessage if append not available
+          await sendMessage({
+            role: "user",
+            content,
+          });
+        } else {
+          console.error("Neither append nor sendMessage available from useChat");
+          throw new Error("Chat API not properly initialized");
+        }
 
         // Streaming complete - manually trigger completion logic
         // (onFinish callback should handle this, but we add fallback)
@@ -1557,7 +1470,6 @@ export function AiSdkChatPanel({
         toast.error(`Failed to send message: ${error.message || "Unknown error"}`);
         setManualLoading(false);
         setIsProcessing(false);
-        setHasStartedStreaming(false); // Reset streaming state for next message
 
         // Clear progress on error
         if ((window as any).currentProgressInterval) {
@@ -1601,92 +1513,43 @@ export function AiSdkChatPanel({
       return;
     }
 
-    // Find the message to get content and metadata
-    const message = messages.find((m) => m.id === messageId);
-    if (!message) {
-      console.error("Message not found:", messageId);
-      return;
-    }
-
-    // Extract message content
-    const messageContent = message.parts?.[0]?.text || (message as any).content || "";
-
-    // Find the user query (previous message)
-    const messageIndex = messages.findIndex((m) => m.id === messageId);
-    const userQuery =
-      messageIndex > 0
-        ? messages[messageIndex - 1].parts?.[0]?.text ||
-          (messages[messageIndex - 1] as any).content ||
-          ""
-        : "";
-
-    if (type === "up") {
-      // Thumbs up - simple, no dialog
-      const supabase = getSupabaseForFeedback();
-      if (!supabase) {
-        toast.info("Feedback disabled (Supabase not configured)");
-        setFeedbackGiven((prev) => ({ ...prev, [messageId]: type }));
-        return;
-      }
-
-      try {
-        const { error } = await supabase.from("rlhf_feedback").insert({
-          conversation_id: conversationId || `session_${Date.now()}`,
-          user_query: userQuery,
-          ai_response: messageContent,
-          rating: 5,
-          thumbs_up: true,
-          feedback_text: null,
-          documents_marked: message.ragMetadata || null,
-          user_email: null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        });
-
-        if (error) {
-          console.error("Failed to save feedback:", error);
-          toast.error("Failed to save feedback. Please try again.");
-          return;
-        }
-
-        setFeedbackGiven((prev) => ({ ...prev, [messageId]: type }));
-        toast.success("Feedback recorded! Thank you! 💜");
-      } catch (err) {
-        console.error("Error saving feedback:", err);
-        toast.error("Failed to save feedback");
-      }
-    } else {
-      // Thumbs down - open the segue dialog!
-      setFeedbackMessageId(messageId);
-      setFeedbackUserQuery(userQuery);
-      setFeedbackAiResponse(messageContent);
-      setFeedbackDialogOpen(true);
-    }
-  };
-
-  // Handle feedback submission from dialog
-  const handleFeedbackSubmit = async (feedbackText: string) => {
-    if (!feedbackMessageId) return;
-
     const supabase = getSupabaseForFeedback();
     if (!supabase) {
       toast.info("Feedback disabled (Supabase not configured)");
-      setFeedbackGiven((prev) => ({ ...prev, [feedbackMessageId]: "down" }));
+      setFeedbackGiven((prev) => ({ ...prev, [messageId]: type }));
       return;
     }
 
     try {
-      const message = messages.find((m) => m.id === feedbackMessageId);
-      
+      // Find the message to get content and metadata
+      const message = messages.find((m) => m.id === messageId);
+      if (!message) {
+        console.error("Message not found:", messageId);
+        return;
+      }
+
+      // Extract message content
+      const messageContent = message.parts?.[0]?.text || (message as any).content || "";
+
+      // Find the user query (previous message)
+      const messageIndex = messages.findIndex((m) => m.id === messageId);
+      const userQuery =
+        messageIndex > 0
+          ? messages[messageIndex - 1].parts?.[0]?.text ||
+            (messages[messageIndex - 1] as any).content ||
+            ""
+          : "";
+
+      // Store feedback in database
       const { error } = await supabase.from("rlhf_feedback").insert({
         conversation_id: conversationId || `session_${Date.now()}`,
-        user_query: feedbackUserQuery,
-        ai_response: feedbackAiResponse,
-        rating: 1,
-        thumbs_up: false,
-        feedback_text: feedbackText || null,
-        documents_marked: message?.ragMetadata || null,
-        user_email: null,
+        user_query: userQuery,
+        ai_response: messageContent,
+        rating: type === "up" ? 5 : 1,
+        thumbs_up: type === "up",
+        feedback_text: null,
+        documents_marked: message.ragMetadata || null,
+        user_email: null, // Will be set by RLS policy from auth user
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       });
@@ -1697,8 +1560,15 @@ export function AiSdkChatPanel({
         return;
       }
 
-      setFeedbackGiven((prev) => ({ ...prev, [feedbackMessageId]: "down" }));
-      toast.success("Feedback saved to curation queue! 🎯");
+      // Update local state
+      setFeedbackGiven((prev) => ({ ...prev, [messageId]: type }));
+
+      // Show success message
+      if (type === "up") {
+        toast.success("Feedback recorded! Thank you! 💜");
+      } else {
+        toast.info("Feedback recorded. A curator will review this response.");
+      }
     } catch (err) {
       console.error("Error saving feedback:", err);
       toast.error("Failed to save feedback");
@@ -1753,46 +1623,154 @@ export function AiSdkChatPanel({
     setQueueItems(prev => prev.filter(item => item.id !== itemId));
   }, []);
 
-  // Generate diagram from message content using Nano Banana
-  // META DEMO: Detects if user is in demo mode and wants infographic
+  // Generate Mermaid diagram from message content using AI
+  // DEMO: Adds realistic "thinking" delay so it doesn't look pre-planned
   const generateDiagramFromContent = useCallback(async (content: string) => {
     setIsGeneratingDiagram(true);
     setDiagramVisible(true);
     
-    // 🍌 ALWAYS USE NANO BANANA for this demo
-    console.log('🍌 Nano Banana: Generating diagram with Gemini image generation');
-    setActiveDiagramType('nanobanana');
+    // DEMO: Add realistic "thinking" delay (2-3.5 seconds randomized)
+    // This simulates AI processing time so it doesn't look pre-baked
+    const thinkingDelay = 2000 + Math.random() * 1500; // 2-3.5 seconds
+    console.log(`🎨 Diagram: Simulating ${Math.round(thinkingDelay)}ms thinking time...`);
+    await new Promise(resolve => setTimeout(resolve, thinkingDelay));
     
+    try {
+      // Use the same API endpoint to generate a diagram
+      const response = await fetch('/api/aoma/generate-diagram', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setDiagramCode(data.mermaidCode);
+      } else {
+        // Fallback: Generate a contextual diagram based on keywords
+        // These are high-quality pre-built diagrams for demo scenarios
+        const fallbackDiagram = generateFallbackDiagram(content);
+        setDiagramCode(fallbackDiagram);
+      }
+    } catch (error) {
+      console.error("Failed to generate diagram:", error);
+      // Use fallback diagram (pre-built for demo quality)
+      const fallbackDiagram = generateFallbackDiagram(content);
+      setDiagramCode(fallbackDiagram);
+    } finally {
+      setIsGeneratingDiagram(false);
+    }
+  }, []);
+
+  // Generate a contextual Mermaid diagram based on content keywords
+  const generateFallbackDiagram = (content: string): string => {
     const lowerContent = content.toLowerCase();
     
-    // 🎯 GOLDEN PROMPT: Hardcoded for the multi-tenant ERD demo to prevent hallucinations (like ice cream!)
-    // Triggers if message mentions multi-tenant, architecture, ERD, or the system name.
-    const isArchitectureQuery = lowerContent.includes('multi-tenant') || 
-                                lowerContent.includes('database architecture') || 
-                                lowerContent.includes('erd') || 
-                                lowerContent.includes('betabase') ||
-                                lowerContent.includes('system architecture');
-
-    if (isArchitectureQuery) {
-      console.log('🍌 Nano Banana: Using Golden ERD Prompt');
-      setInfographicType('erd');
-      setNanoBananaPrompt(`Create a professional, flat modern technical architecture diagram showing a three-tier multi-tenant software system. 
-NO ICE CREAM, NO FOOD, NO CARTOONS. 
-STYLE: Clean line art, modern tech aesthetic, simple pictogram figures with circular heads, dotted flow paths, pastel accent colors, clean sans-serif labels.
-CONTENT:
-- TIER 1 (Top): "Organization Level" (Entities: Sony Music, SMEJ, Other Music).
-- TIER 2 (Middle): "Division Level" (Digital Operations, Legal, Finance).
-- TIER 3 (Bottom): "Application Level" (AOMA, Alexandria, USM).
-VISUALS: Use dotted lines to show logical data isolation between organizations. Professional, clear, and insightful.
-TITLE: "Multi-Tenant Enterprise Architecture"`);
-    } else {
-      // Let the content speak for itself for other topics
-      setInfographicType(undefined);
-      setNanoBananaPrompt(content);
+    // Detect workflow type and generate appropriate diagram
+    if (lowerContent.includes('upload') && lowerContent.includes('archive')) {
+      return `flowchart TD
+    subgraph prep["📋 1. Preparation Phase"]
+        A[/"📁 Select Source Files"/] --> B{"🔍 Validate File Names"}
+        B -->|"No special chars"| C[/"✅ Files Ready"/]
+        B -->|"Issues found"| D[/"⚠️ Rename Files"/] --> B
+    end
+    
+    subgraph reg["📝 2. Registration Phase"]
+        C --> E["🎵 Register Asset in AOMA"]
+        E --> F{"Enter Metadata"}
+        F --> G["Title & Artist"]
+        F --> H["ISRC/UPC Codes"]
+        F --> I["Security Groups"]
+        G & H & I --> J["📋 Asset Record Created"]
+    end
+    
+    subgraph upload["⬆️ 3. Upload Phase"]
+        J --> K{"Choose Upload Method"}
+        K -->|"Large files"| L["🚀 Aspera Upload"]
+        K -->|"Cloud source"| M["☁️ Sony Ci Import"]
+        K -->|"Small files"| N["📤 Direct Upload"]
+        L & M & N --> O["📦 Files Transferred"]
+    end
+    
+    subgraph process["⚙️ 4. Processing Phase"]
+        O --> P["🔄 Transcode to Formats"]
+        P --> Q["🔍 QC Validation"]
+        Q -->|"Pass"| R["✅ Ready for Distribution"]
+        Q -->|"Fail"| S["❌ Review Errors"] --> T["🔧 Fix Issues"] --> P
+    end
+    
+    subgraph archive["💾 5. Archive Phase"]
+        R --> U["📚 Store in Long-term Archive"]
+        U --> V["🏷️ AWS S3 Glacier"]
+        U --> W["💿 Master Vault"]
+        V & W --> X(("✨ Asset Complete"))
+    end
+    
+    style prep fill:#1e3a5f,stroke:#60a5fa,stroke-width:2px
+    style reg fill:#1e3a5f,stroke:#a78bfa,stroke-width:2px
+    style upload fill:#1e3a5f,stroke:#34d399,stroke-width:2px
+    style process fill:#1e3a5f,stroke:#fbbf24,stroke-width:2px
+    style archive fill:#1e3a5f,stroke:#f472b6,stroke-width:2px
+    style X fill:#10b981,stroke:#34d399,stroke-width:3px`;
     }
     
-    setIsGeneratingDiagram(false); // NanoBananaInfographic handles its own loading
-  }, []);
+    if (lowerContent.includes('permission') || lowerContent.includes('role')) {
+      return `flowchart TD
+    subgraph roles["👥 AOMA Permission Levels"]
+        direction TB
+        A["🔒 Viewer"] -->|"Can view"| B["📖 Read-only access"]
+        C["📝 Editor"] -->|"Can edit"| D["✏️ Modify metadata"]
+        E["👑 Admin"] -->|"Full control"| F["⚙️ Manage users & settings"]
+        G["🌐 Global Admin"] -->|"Everything"| H["🏢 Cross-territory access"]
+    end
+    
+    A -.->|"Upgrade"| C
+    C -.->|"Upgrade"| E
+    E -.->|"Upgrade"| G
+    
+    style A fill:#374151,stroke:#6b7280
+    style C fill:#1e40af,stroke:#3b82f6
+    style E fill:#7c3aed,stroke:#a78bfa
+    style G fill:#dc2626,stroke:#f87171`;
+    }
+    
+    // Default AOMA architecture diagram
+    return `flowchart LR
+    subgraph client["🖥️ Client Layer"]
+        A["🌐 Web Browser"]
+        B["📱 Mobile App"]
+    end
+    
+    subgraph api["🔌 API Gateway"]
+        C["⚡ Next.js API Routes"]
+        D["🔐 Auth Middleware"]
+    end
+    
+    subgraph services["⚙️ Services"]
+        E["🤖 AI/RAG Engine"]
+        F["📊 Analytics"]
+        G["🔔 Notifications"]
+    end
+    
+    subgraph data["💾 Data Layer"]
+        H[("🐘 PostgreSQL")]
+        I[("🔍 pgvector")]
+        J["☁️ S3 Storage"]
+    end
+    
+    A & B --> C
+    C --> D
+    D --> E & F & G
+    E --> I
+    F --> H
+    G --> H
+    E & F --> J
+    
+    style client fill:#1e3a5f,stroke:#60a5fa
+    style api fill:#1e3a5f,stroke:#a78bfa
+    style services fill:#1e3a5f,stroke:#34d399
+    style data fill:#1e3a5f,stroke:#fbbf24`;
+  };
 
   // Confirmation: Handle tool approval
   const handleToolApproval = useCallback((approved: boolean, reason?: string) => {
@@ -2030,35 +2008,6 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
                     );
                   }
 
-                  // Handle tool-call parts (AI SDK v5 format)
-                  if (part.type === "tool-call") {
-                    return (
-                      <div key={index} className="my-2 p-2 bg-blue-500/10 rounded border border-blue-500/20 text-xs">
-                        <span className="text-blue-400">Tool: {part.toolName}</span>
-                      </div>
-                    );
-                  }
-
-                  // Handle tool-result parts (AI SDK v5 format)
-                  if (part.type === "tool-result") {
-                    // Tool results are usually processed by the model and don't need display
-                    return null;
-                  }
-
-                  // Fallback: If part has text content but unknown type, render it
-                  if (part.text && typeof part.text === "string" && part.text.trim()) {
-                    return (
-                      <Response key={index} className={isUser ? "[&>*]:text-white" : ""}>
-                        {part.text}
-                      </Response>
-                    );
-                  }
-
-                  // Log unknown part types for debugging
-                  if (process.env.NODE_ENV === "development") {
-                    console.log("[MessageParts] Unknown part type:", part.type, part);
-                  }
-
                   return null;
                 })
               ) : (
@@ -2161,24 +2110,15 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
               </MessageToolbar>
             )}
 
-            {/* Diagram Offer - Only show when user explicitly asks for visual content */}
-            {/* Uses detectInfographicType to check the USER'S QUESTION, not the response */}
+            {/* Diagram Offer - Subtle inline hint for workflow/process content */}
+            {/* DEMO MODE: Show for any substantial assistant response */}
             {/* Supports both AI SDK v4 (content) and v6 (parts[0].text) formats */}
             {(() => {
               // Get message content from either v4 or v6 format
               const messageText = message.content || message.parts?.map((p: any) => p.text || '').join('') || '';
               const hasSubstantialContent = messageText.length > 100;
-
-              // Find the user's question (previous message in conversation)
-              const messageIndex = messages.findIndex((m: any) => m.id === message.id);
-              const userQuestion = messageIndex > 0 ?
-                (messages[messageIndex - 1]?.content || messages[messageIndex - 1]?.parts?.map((p: any) => p.text || '').join('') || '') : '';
-
-              // Only offer diagram if the USER explicitly asked for visual content
-              // detectInfographicType returns null if the question doesn't warrant visualization
-              const visualQueryType = detectInfographicType(userQuestion);
-              const shouldShowOffer = !isUser && isLastMessage && !isLoading && !diagramVisible && hasSubstantialContent && visualQueryType !== null;
-
+              const shouldShowOffer = !isUser && isLastMessage && !isLoading && !diagramVisible && hasSubstantialContent;
+              
               if (!shouldShowOffer) return null;
               
               return (
@@ -2206,7 +2146,7 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
               );
             })()}
 
-            {/* Active Diagram Display - Nano Banana infographic */}
+            {/* Active Diagram Display - Using REAL MermaidDiagram component */}
             {!isUser && isLastMessage && !isLoading && diagramVisible && (
               <motion.div 
                 initial={{ opacity: 0, height: 0 }}
@@ -2227,39 +2167,19 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
                     <Trash2Icon className="h-4 w-4" />
                   </button>
                   
-                  {/* Loading state - Nano Banana only */}
-                  {isGeneratingDiagram && (
-                    <div className="space-y-4 py-8 rounded-xl border border-purple-500/30 bg-gradient-to-br from-slate-900 to-slate-950 px-6">
-                      {/* Spinner */}
-                      <div className="flex items-center justify-center gap-3">
-                        <Loader className="h-6 w-6 animate-spin text-yellow-400" />
-                        <span className="text-base font-medium bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
-                          🍌 Nano Banana Pro is creating your infographic...
-                        </span>
-                      </div>
-                      
-                      {/* Progress info */}
-                      <div className="text-center space-y-2">
-                        <p className="text-sm text-zinc-400">
-                          Gemini 3 Pro image generation • Hand-drawn editorial style
-                        </p>
-                        <div className="flex items-center justify-center gap-2 text-xs text-amber-500/70 bg-amber-500/5 border border-amber-500/20 rounded-lg py-2 px-4 mx-auto w-fit">
-                          <span className="animate-pulse">⏱️</span>
-                          <span>This typically takes 30-50 seconds • Your patience creates beauty</span>
-                        </div>
-                      </div>
+                  {/* Loading state */}
+                  {isGeneratingDiagram && !diagramCode && (
+                    <div className="flex items-center justify-center py-12 rounded-xl border border-purple-500/30 bg-gradient-to-br from-slate-900 to-slate-950">
+                      <Loader className="h-6 w-6 animate-spin mr-3 text-purple-500" />
+                      <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+                        Generating workflow diagram with AI...
+                      </span>
                     </div>
                   )}
                   
-                  {/* Diagram Display - Nano Banana only */}
-                  {nanoBananaPrompt && (
-                    <NanoBananaInfographic 
-                      prompt={nanoBananaPrompt}
-                      diagramType={infographicType}
-                      aspectRatio="16:9"
-                      imageSize="2K"
-                      autoGenerate={true}
-                    />
+                  {/* Real Mermaid Diagram - pan, zoom, download, copy code */}
+                  {diagramCode && (
+                    <MermaidDiagram code={diagramCode} />
                   )}
                 </div>
               </motion.div>
@@ -2840,25 +2760,23 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="flex flex-col items-center justify-center min-h-[50vh] 2xl:min-h-[40vh] text-center py-8 2xl:py-16"
+                className="flex flex-col items-center justify-center min-h-[60vh] text-center"
               >
-                {/* Hero Section - scales up for large displays */}
-                <div className="relative mb-8 2xl:mb-12 3xl:mb-16">
-                  <div className="transform scale-100 2xl:scale-125 3xl:scale-150 4xl:scale-175 transition-transform origin-center">
-                    <SiamLogo size="2xl" className="mx-auto" />
-                  </div>
+                {/* Hero Section */}
+                <div className="relative mb-8">
+                  <SiamLogo size="xl" className="mx-auto" />
                 </div>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.6 }}
-                  className="mb-8 2xl:mb-12"
+                  className="mb-8"
                 >
-                  <h2 className="mac-heading text-4xl 2xl:text-5xl 3xl:text-6xl font-thin mb-4 2xl:mb-6 text-white tracking-tight">
+                  <h2 className="mac-heading text-4xl font-thin mb-4 text-white tracking-tight">
                     Welcome to The Betabase
                   </h2>
-                  <p className="text-lg 2xl:text-xl font-light text-zinc-400 max-w-2xl 2xl:max-w-3xl mx-auto leading-relaxed">
-                    It's back!
+                  <p className="text-lg font-light text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+                    yup. it's back.
                   </p>
                 </motion.div>
                 {/* Enhanced Suggestions */}
@@ -2868,15 +2786,15 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4, duration: 0.6 }}
-                      className="w-full max-w-4xl 2xl:max-w-6xl 3xl:max-w-7xl"
+                      className="w-full max-w-4xl"
                     >
-                      <div className="mb-4 2xl:mb-6">
-                        <h3 className="mac-title text-sm 2xl:text-base font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2">
-                          <Sparkles className="w-4 h-4 2xl:w-5 2xl:h-5" />
+                      <div className="mb-4">
+                        <h3 className="mac-title text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2">
+                          <Sparkles className="w-4 h-4" />
                           Try these to get started
                         </h3>
                       </div>
-                      <div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-4 2xl:gap-6 max-w-3xl lg:max-w-5xl 2xl:max-w-6xl mx-auto w-full">
+                      <div className="grid grid-cols-2 gap-4 max-w-3xl mx-auto w-full">
                         {(dynamicSuggestions.length > 0 ? dynamicSuggestions : suggestions).map(
                           (suggestion, index) => (
                             <motion.div
@@ -2884,12 +2802,12 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
                               initial={{ opacity: 0, y: 20 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: 0.1 * index, duration: 0.4 }}
-                              className="w-full h-full"
+                              className="w-full"
                             >
                               <Suggestion
                                 suggestion={suggestion}
                                 onClick={handleSuggestionClick}
-                                className="w-full h-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm whitespace-normal py-4 px-4 2xl:py-5 2xl:px-6 2xl:text-base"
+                                className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm h-auto whitespace-normal py-4 px-4"
                               />
                             </motion.div>
                           )
@@ -3057,55 +2975,15 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-6 mx-auto max-w-xl"
+                className="mt-6 flex items-center justify-center"
               >
-                <Alert className="border-destructive/50 bg-destructive/10">
-                  <AlertCircle className="h-4 w-4 text-destructive" />
-                  <AlertDescription className="text-destructive">
-                    <div className="flex flex-col gap-2">
-                      <span className="font-medium">
-                        {error.message?.includes("503") || error.message?.includes("API_KEY")
-                          ? "Service Unavailable"
-                          : error.message?.includes("quota") || error.message?.includes("429")
-                            ? "Rate Limit Exceeded"
-                            : error.message?.includes("network") || error.message?.includes("fetch")
-                              ? "Connection Error"
-                              : "Request Failed"}
-                      </span>
-                      <span className="text-sm text-muted-foreground">
-                        {error.message?.includes("503")
-                          ? "The AI service is temporarily unavailable. This may be due to missing API credentials."
-                          : error.message?.includes("quota") || error.message?.includes("429")
-                            ? "Too many requests. Please wait a moment before trying again."
-                            : error.message?.includes("network") || error.message?.includes("fetch")
-                              ? "Unable to connect to the server. Check your internet connection."
-                              : error.message || "Something went wrong. Please try again."}
-                      </span>
-                      <div className="flex gap-2 mt-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            clearError?.();
-                            regenerate?.();
-                          }}
-                          className="mac-button mac-button-outline border-destructive/30 hover:bg-destructive/10"
-                        >
-                          <RefreshCw className="h-3 w-3 mr-1" />
-                          Retry
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => clearError?.()}
-                          className="text-muted-foreground hover:text-foreground"
-                        >
-                          Dismiss
-                        </Button>
-                      </div>
-                    </div>
-                  </AlertDescription>
-                </Alert>
+                <Button
+                  variant="outline"
+                  className="mac-button mac-button-outline flex items-center gap-2 border-destructive/50 text-destructive hover:bg-destructive/10"
+                >
+                  <AlertCircle className="h-4 w-4" />
+                  Retry last message
+                </Button>
               </motion.div>
             )}
 
@@ -3473,26 +3351,6 @@ TITLE: "Multi-Tenant Enterprise Architecture"`);
           </PromptInputFooter>
         </PromptInput>
       </div>
-
-      {/* Feedback Segue Dialog */}
-      <FeedbackSegueDialog
-        isOpen={feedbackDialogOpen}
-        onClose={() => {
-          setFeedbackDialogOpen(false);
-          setFeedbackMessageId(null);
-        }}
-        onGoToCurationQueue={() => {
-          setFeedbackDialogOpen(false);
-          setFeedbackMessageId(null);
-          // Switch to curate tab
-          if (onSwitchToTab) {
-            onSwitchToTab("curate");
-          }
-        }}
-        userQuery={feedbackUserQuery}
-        aiResponse={feedbackAiResponse}
-        onSubmitFeedback={handleFeedbackSubmit}
-      />
     </div>
   );
 }

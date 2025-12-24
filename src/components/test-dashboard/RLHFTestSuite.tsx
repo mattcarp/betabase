@@ -7,7 +7,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
@@ -27,7 +27,7 @@ import {
   Clock,
   AlertTriangle,
 } from "lucide-react";
-import { useSupabaseClient } from "../../hooks/useSupabaseClient";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -46,10 +46,21 @@ interface RLHFGeneratedTest {
   status: "pending" | "passing" | "failing" | "flaky";
 }
 
+// Helper to safely get Supabase client - returns null if env vars missing
+function getSupabaseClient() {
+  try {
+    return createClientComponentClient();
+  } catch {
+    console.warn("Supabase not configured - RLHF features disabled");
+    return null;
+  }
+}
+
 export function RLHFTestSuite() {
   const [tests, setTests] = useState<RLHFGeneratedTest[]>([]);
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [supabaseAvailable, setSupabaseAvailable] = useState(true);
   const [stats, setStats] = useState({
     total: 0,
     passing: 0,
@@ -60,13 +71,27 @@ export function RLHFTestSuite() {
   const [selectedTest, setSelectedTest] = useState<RLHFGeneratedTest | null>(null);
   const [codeViewerOpen, setCodeViewerOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-  const supabase = useSupabaseClient();
+  const supabaseRef = useRef<ReturnType<typeof createClientComponentClient> | null>(null);
 
   useEffect(() => {
+    // Lazy-init Supabase client
+    if (!supabaseRef.current) {
+      supabaseRef.current = getSupabaseClient();
+      if (!supabaseRef.current) {
+        setSupabaseAvailable(false);
+        return;
+      }
+    }
     loadRLHFTests();
   }, []);
 
   const loadRLHFTests = async () => {
+    const supabase = supabaseRef.current;
+    if (!supabase) {
+      setSupabaseAvailable(false);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -164,6 +189,12 @@ export function RLHFTestSuite() {
   };
 
   const runTest = async (test: RLHFGeneratedTest) => {
+    const supabase = supabaseRef.current;
+    if (!supabase) {
+      toast.error("Supabase not configured");
+      return;
+    }
+
     toast.info("Running RLHF test...");
     // Update status to show test is running
     try {
@@ -181,8 +212,10 @@ export function RLHFTestSuite() {
       // In a real implementation, this would execute the test
       // For now, simulate test execution
       setTimeout(async () => {
+        const sb = supabaseRef.current;
+        if (!sb) return;
         const passed = Math.random() > 0.3; // 70% pass rate for demo
-        const { error: updateError } = await supabase
+        const { error: updateError } = await sb
           .from("rlhf_generated_tests")
           .update({
             status: passed ? "passing" : "failing",
@@ -214,6 +247,30 @@ export function RLHFTestSuite() {
     setTimeout(() => setCopied(false), 2000);
     toast.success("Test code copied to clipboard");
   };
+
+  // Graceful fallback when Supabase is not configured
+  if (!supabaseAvailable) {
+    return (
+      <Card className="h-full flex flex-col bg-zinc-900/50 border-zinc-800">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-zinc-100">
+            <Lightbulb className="h-5 w-5 text-purple-400" />
+            RLHF-Generated Test Suite
+          </CardTitle>
+          <CardDescription className="text-zinc-400">
+            Auto-generated from curator corrections and high-confidence feedback
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex-1 flex items-center justify-center">
+          <div className="text-center text-zinc-500">
+            <AlertTriangle className="h-8 w-8 mx-auto mb-3 text-yellow-500/60" />
+            <p className="text-sm">Database connection not configured</p>
+            <p className="text-xs mt-1 text-zinc-600">RLHF features require Supabase</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="h-full flex flex-col bg-zinc-900/50 border-zinc-800">
@@ -456,11 +513,8 @@ export function RLHFTestSuite() {
                 <label className="text-xs font-medium text-zinc-500 mb-1 block">
                   Expected Response (Curator Correction)
                 </label>
-                <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20 max-h-24 overflow-y-auto prose prose-invert prose-xs max-w-none">
-                  <div 
-                    className="text-xs text-zinc-400"
-                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.curator_correction) }}
-                  />
+                <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20 max-h-24 overflow-y-auto">
+                  <p className="text-xs text-zinc-400">{selectedTest.curator_correction}</p>
                 </div>
               </div>
             )}

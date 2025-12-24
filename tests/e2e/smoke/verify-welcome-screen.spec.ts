@@ -16,9 +16,9 @@ test.describe('Welcome Screen Verification', () => {
     const welcomeHeading = page.getByRole('heading', { name: 'Welcome to The Betabase' });
     await expect(welcomeHeading).toBeVisible({ timeout: 10000 });
 
-    // 2. Verify "It's back!" text
+    // 2. Verify tagline text
     // Note: This might be in a paragraph, so we search by text
-    const tagline = page.getByText("It's back!");
+    const tagline = page.getByText("yup. it's back.");
     await expect(tagline).toBeVisible();
 
     // 3. Verify the Logo is present
@@ -30,13 +30,16 @@ test.describe('Welcome Screen Verification', () => {
     await expect(logo).toBeVisible();
 
     // 4. Verify Suggestions
-    // We expect 4 to 6 suggestions on the welcome screen.
-    // Current patterns: "Show me...", "How does/do...", "I'm getting...", "What are/new...", etc.
-    const suggestionButtons = page.locator('button').filter({ hasText: /Show me|How do|How does|I'm getting|What are|What new/ });
-    
+    // We expect 4 to 6 suggestions (may be AOMA-specific or generic fallbacks).
+    // AOMA: "How do I...", "What's the...", "What are..."
+    // Fallback: "Help me analyze...", "Explain...", "Generate...", "Solve...", "Plan...", "Review..."
+    const suggestionButtons = page.locator('button').filter({
+      hasText: /How do I|What's the|What are|Help me|Explain|Generate|Solve|Plan|Review/
+    });
+
     // Wait for at least one to be visible
     await expect(suggestionButtons.first()).toBeVisible();
-    
+
     // Check count
     const count = await suggestionButtons.count();
     console.log(`Found ${count} suggestion buttons.`);

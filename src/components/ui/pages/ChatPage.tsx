@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { AiSdkChatPanel } from "../../ai/ai-sdk-chat-panel"; // Re-enabled after fixing zod-to-json-schema dependency
 import { ChatPanel } from "../../ai/chat-panel"; // For legacy tabs
@@ -44,6 +44,7 @@ import { Button } from "../button";
 import { Card, CardContent, CardHeader, CardTitle } from "../card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../tabs";
 import { cn } from "../../../lib/utils";
+import { ConnectionStatusIndicator } from "../ConnectionStatusIndicator";
 import { SiamLogo } from "../SiamLogo";
 import { AOMAKnowledgePanel } from "../AOMAKnowledgePanel";
 import EnhancedKnowledgePanel from "../EnhancedKnowledgePanel";
@@ -141,13 +142,6 @@ interface ChatPageProps {
   onLogout?: () => void;
 }
 
-// Background-prefetched historical tests data
-interface PrefetchedHistoricalData {
-  tests: any[];
-  pagination: { total: number; hasMore: boolean };
-  filters: { categories: string[]; apps: string[] };
-}
-
 // Valid mode values for URL hash routing
 const VALID_MODES: ComponentMode["mode"][] = ["chat", "hud", "test", "fix", "curate"];
 
@@ -173,53 +167,6 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
   const [knowledgeCounts, setKnowledgeCounts] = useState<Record<string, number>>({});
   const [knowledgeStatus, setKnowledgeStatus] = useState<"ok" | "degraded" | "unknown">("unknown");
   const [lastKnowledgeRefresh, setLastKnowledgeRefresh] = useState<string>("");
-
-  // Background preload historical tests (non-blocking)
-  const [prefetchedHistoricalTests, setPrefetchedHistoricalTests] = useState<PrefetchedHistoricalData | null>(null);
-
-  // Zeitgeist suggestions - dynamic hot topics from RLHF, Jira, test signals
-  const [zeitgeistSuggestions, setZeitgeistSuggestions] = useState<string[]>([]);
-
-  // Fetch zeitgeist suggestions on mount
-  useEffect(() => {
-    const fetchZeitgeist = async () => {
-      try {
-        const response = await fetch("/api/zeitgeist");
-        if (response.ok) {
-          const data = await response.json();
-          if (data.questions && data.questions.length > 0) {
-            setZeitgeistSuggestions(data.questions.map((q: { question: string }) => q.question));
-            console.log(`[ChatPage] Loaded ${data.questions.length} zeitgeist suggestions`);
-          }
-        }
-      } catch (error) {
-        console.warn("[ChatPage] Failed to load zeitgeist suggestions:", error);
-      }
-    };
-    fetchZeitgeist();
-  }, []);
-
-  // Preload historical tests in background on app startup (non-blocking)
-  useEffect(() => {
-    // Start fetch immediately - don't wait for anything
-    const preloadHistoricalTests = async () => {
-      try {
-        console.log("[ChatPage] Background preloading historical tests...");
-        const response = await fetch("/api/tests/historical?page=1&limit=100&sortBy=updated_at&sortOrder=desc");
-        if (response.ok) {
-          const data = await response.json();
-          setPrefetchedHistoricalTests(data);
-          console.log(`[ChatPage] Preloaded ${data.tests?.length || 0} historical tests`);
-        }
-      } catch (error) {
-        // Silently fail - the component will load data on its own if prefetch fails
-        console.warn("[ChatPage] Background preload failed:", error);
-      }
-    };
-
-    // Fire and forget - don't block anything
-    preloadHistoricalTests();
-  }, []);
 
   // URL hash-based routing for deep linking
   useEffect(() => {
@@ -313,97 +260,17 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
 You have access to a knowledge base and can help with various tasks including analysis, problem-solving, and creative work.
 Be helpful, concise, and professional in your responses.`;
 
-  // Helper to extract message content from AI SDK v4/v5/v6 formats
-  const extractMessageContent = useCallback((m: any): string | undefined => {
-    if (!m) return undefined;
-    // AI SDK v5/v6: parts array
-    if (m.parts && Array.isArray(m.parts) && m.parts.length > 0) {
-      const textPart = m.parts.find((p: any) => p.type === "text" || p.text);
-      if (textPart?.text) return textPart.text;
-      const allText = m.parts.map((p: any) => p.text || "").filter(Boolean).join("");
-      if (allText) return allText;
-    }
-    // AI SDK v4: content as string
-    if (m.content && typeof m.content === "string") return m.content;
-    return undefined;
-  }, []);
-
-  // Helper to generate title from message content
-  const generateTitle = useCallback((content: string): string => {
-    if (!content) return "New Conversation";
-    let title = content
-      .trim()
-      .replace(/\s+/g, " ")
-      .replace(/^(hey|hi|hello|please|can you|could you|i need|i want)\s+/i, "")
-      .replace(/[?!.]+$/, "");
-    if (!title) return "New Conversation";
-    title = title.charAt(0).toUpperCase() + title.slice(1);
-    if (title.length > 45) {
-      const truncateAt = title.lastIndexOf(" ", 45);
-      title = truncateAt > 20 ? title.substring(0, truncateAt) : title.substring(0, 45);
-    }
-    return title;
-  }, []);
-
-  // Stable onMessagesChange callback to prevent infinite re-renders
-  const handleMessagesChange = useCallback((messages: any[]) => {
-    // IMPORTANT: Get activeConversationId from store state, NOT from closure
-    // This prevents race conditions when switching conversations
-    const { updateConversation, getConversation, activeConversationId: currentActiveId } = useConversationStore.getState();
-
-    // Use the store's current active ID, not the closure value
-    const targetConversationId = currentActiveId || activeConversationId;
-
-    if (!targetConversationId || messages.length === 0) return;
-
-    const currentConv = getConversation(targetConversationId);
-    if (!currentConv) return;
-
-    // Safety check: Don't overwrite if we would lose data
-    const storedMsgCount = currentConv.messages?.length || 0;
-    const hasStoredAssistant = currentConv.messages?.some((m: any) => m.role === "assistant");
-    const newHasAssistant = messages.some((m: any) => m.role === "assistant");
-
-    if (storedMsgCount > messages.length) return;
-    if (hasStoredAssistant && !newHasAssistant && messages.length <= storedMsgCount) return;
-
-    // Explicitly generate title if still default - don't rely solely on store
-    const isDefault = ["new conversation", "the betabase", "untitled", ""].includes(
-      (currentConv.title || "").toLowerCase().trim()
-    );
-
-    let newTitle: string | undefined;
-    if (isDefault) {
-      const firstUserMsg = messages.find((m: any) => m.role === "user");
-      if (firstUserMsg) {
-        const content = extractMessageContent(firstUserMsg);
-        if (content) {
-          newTitle = generateTitle(content);
-        }
-      }
-    }
-
-    // Update conversation with messages and optionally the new title
-    const updates: any = { messages: messages as any[] };
-    if (newTitle && newTitle !== "New Conversation") {
-      updates.title = newTitle;
-    }
-    updateConversation(targetConversationId, updates);
-  }, [activeConversationId, extractMessageContent, generateTitle]);
-
-  // DYNAMIC SUGGESTED QUESTIONS: Fetched from Zeitgeist service (RLHF, Jira, test signals)
-  // Falls back to curated showcase when zeitgeist is unavailable
-  const fallbackSuggestions = [
-    "Show me The Betabase multi-tenant database architecture",
+  // PREMIUM SUGGESTED QUESTIONS: Curated showcase with pre-cached responses
+  // All 6 trigger infographic generation and have Mermaid diagrams
+  // Updated: December 2025 with latest AOMA corpus and release notes
+  const suggestions = [
+    "What are the different asset types in AOMA and how do they relate to each other?",
     "How does AOMA use AWS S3 storage tiers for long-term archiving?",
-    "I'm getting an 'Asset Upload Sorting Failed' error when uploading files. What's going on?",
+    "What's the difference between asset registration and master linking in AOMA?",
     "What are the permission levels in AOMA and what can each role do?",
     "What new UST features are being planned for the 2026 releases?",
     "How do I upload and archive digital assets in AOMA from preparation to storage?",
   ];
-
-  // Use zeitgeist suggestions when available, otherwise fall back
-  const suggestions = zeitgeistSuggestions.length > 0 ? zeitgeistSuggestions : fallbackSuggestions;
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -516,6 +383,7 @@ Be helpful, concise, and professional in your responses.`;
 
               {/* Controls - Responsive spacing */}
               <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+                <ConnectionStatusIndicator />
                 <div className="introspection-dropdown-container">
                   <IntrospectionDropdown />
                 </div>
@@ -540,7 +408,7 @@ Be helpful, concise, and professional in your responses.`;
                 </div>
 
                 {/* Sidebar trigger with MAC styling */}
-                <SidebarTrigger className="h-8 w-8 text-mac-primary-blue-400/60 hover:text-mac-primary-blue-400 hover:bg-mac-primary-blue-400/10 rounded-md transition-all duration-200 border border-transparent hover:border-mac-primary-blue-400/30" title="Toggle sidebar" />
+                <SidebarTrigger className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 rounded-md transition-colors" />
 
                 <Button
                   variant="ghost"
@@ -596,7 +464,7 @@ Be helpful, concise, and professional in your responses.`;
                     key={`${getChatAPIEndpoint()}-${activeConversationId}`} // Force remount when endpoint or conversation changes
                     api={getChatAPIEndpoint()}
                     title={activeConversation?.title || "The Betabase"}
-                    description="It's back!"
+                    description="yup. it's back."
                     systemPrompt={systemPrompt}
                     suggestions={suggestions}
                     className="flex-1 border-0"
@@ -607,8 +475,73 @@ Be helpful, concise, and professional in your responses.`;
                     showHeader={false}
                     conversationId={activeConversationId || undefined}
                     initialMessages={activeConversation?.messages}
-                    onMessagesChange={handleMessagesChange}
-                    onSwitchToTab={(tab) => setActiveMode(tab)}
+                    onMessagesChange={(messages) => {
+                      if (activeConversationId && messages.length > 0) {
+                        const { updateConversation, getConversation } = useConversationStore.getState();
+                        const currentConv = getConversation(activeConversationId);
+                        
+                        // Safety check: Don't overwrite stored messages if we would lose data
+                        // This prevents filtered initial messages from overwriting complete conversations
+                        const storedMsgCount = currentConv?.messages?.length || 0;
+                        const hasStoredAssistant = currentConv?.messages?.some((m: any) => m.role === 'assistant');
+                        const newHasAssistant = messages.some((m: any) => m.role === 'assistant');
+                        
+                        if (storedMsgCount > messages.length) {
+                          return; // Would lose messages - skip this update
+                        }
+                        
+                        if (hasStoredAssistant && !newHasAssistant && messages.length <= storedMsgCount) {
+                          return; // Would lose assistant message - skip this update
+                        }
+                        
+                        // Helper to extract message content from AI SDK v4 or v5 format
+                        const getMessageContent = (m: any): string | undefined => {
+                          // AI SDK v5: parts[0].text
+                          if (m.parts && m.parts[0]?.text) {
+                            return m.parts[0].text;
+                          }
+                          // AI SDK v4 / fallback: content
+                          if (m.content && typeof m.content === "string") {
+                            return m.content;
+                          }
+                          return undefined;
+                        };
+                        
+                        // Generate title from first user message if title is still default
+                        const isDefaultTitle = (title: string) => {
+                          const defaults = ["new conversation", "the betabase", "untitled", ""];
+                          return defaults.includes((title || "").toLowerCase().trim());
+                        };
+                        
+                        let newTitle: string | undefined;
+                        if (currentConv && isDefaultTitle(currentConv.title)) {
+                          // Find first user message in the messages array
+                          const firstUserMsg = messages.find((m: any) => m.role === "user" && getMessageContent(m));
+                          const msgContent = firstUserMsg ? getMessageContent(firstUserMsg) : undefined;
+                          
+                          if (msgContent) {
+                            // Generate concise title from user's message
+                            let title = msgContent
+                              .trim()
+                              .replace(/\s+/g, " ")
+                              .replace(/^(hey|hi|hello|please|can you|could you|i need|i want)\s+/i, "")
+                              .replace(/[?!.]+$/, "");
+                            title = title.charAt(0).toUpperCase() + title.slice(1);
+                            if (title.length > 45) {
+                              const truncateAt = title.lastIndexOf(" ", 45);
+                              title = truncateAt > 20 ? title.substring(0, truncateAt) + "..." : title.substring(0, 45) + "...";
+                            }
+                            newTitle = title || undefined;
+                          }
+                        }
+                        
+                        // Update conversation with messages and potentially new title
+                        updateConversation(activeConversationId, { 
+                          messages: messages as any[],
+                          ...(newTitle && { title: newTitle })
+                        });
+                      }
+                    }}
                   />
                 </div>
               )}
@@ -622,7 +555,7 @@ Be helpful, concise, and professional in your responses.`;
               {activeMode === "test" && (
                 <div className="h-full p-6 space-y-6">
                   <div>
-                    <h2 className="text-lg font-light text-[var(--mac-text-primary)] flex items-center gap-2">
+                    <h2 className="text-lg font-normal text-zinc-100 flex items-center gap-2">
                       <TestTube className="h-5 w-5 text-zinc-300" />
                       Advanced Testing & Quality Assurance
                     </h2>
@@ -648,7 +581,7 @@ Be helpful, concise, and professional in your responses.`;
                     </TabsContent>
 
                     <TabsContent value="historical" className="h-full">
-                      <HistoricalTestExplorer prefetchedData={prefetchedHistoricalTests} />
+                      <HistoricalTestExplorer />
                     </TabsContent>
 
                     <TabsContent value="rlhf-tests" className="h-full">
@@ -669,7 +602,7 @@ Be helpful, concise, and professional in your responses.`;
               {activeMode === "fix" && (
                 <div className="h-full p-6 space-y-6">
                   <div>
-                    <h2 className="text-lg font-light text-[var(--mac-text-primary)] flex items-center gap-2">
+                    <h2 className="text-lg font-normal text-zinc-100 flex items-center gap-2">
                       <Wrench className="h-5 w-5 text-zinc-300" />
                       Debug & Fix Assistant
                     </h2>
@@ -708,7 +641,7 @@ Be helpful, concise, and professional in your responses.`;
               {activeMode === "curate" && (
                 <div className="h-full">
                   <div className="p-6 border-b border-zinc-800/50">
-                    <h2 className="mac-heading text-lg text-[var(--mac-text-primary)] flex items-center gap-2">
+                    <h2 className="mac-heading text-lg font-normal text-zinc-100 flex items-center gap-2">
                       <Library className="h-5 w-5 text-zinc-300" />
                       Knowledge Curation
                     </h2>
