@@ -5,13 +5,13 @@
  * with real queries to AOMA.
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../fixtures/base-test";
 
 test.describe("Smart Diagrams - Visual Tests", () => {
   test.setTimeout(180000); // 3 minutes for AI response
 
   test("renders mermaid diagram for workflow query", async ({ page }) => {
-    // Navigate to the app
+    // Navigate to the app (auth bypassed on localhost)
     await page.goto("http://localhost:3000");
     await page.waitForLoadState("networkidle");
 
@@ -33,9 +33,8 @@ test.describe("Smart Diagrams - Visual Tests", () => {
       fullPage: true,
     });
 
-    // Find and click the submit button (the blue/teal arrow button)
-    const submitButton = page.locator('button[type="submit"], button:has(svg)').last();
-    await submitButton.click();
+    // Submit using Enter key (more reliable than button click)
+    await chatInput.press("Enter");
 
     console.log("Message submitted, waiting for response...");
 
