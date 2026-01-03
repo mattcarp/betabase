@@ -19,7 +19,7 @@ interface CodeBlockProps {
 export function CodeBlock({
   code,
   language = "typescript",
-  theme = "tokyo-night",
+  theme = "catppuccin-mocha",
   showLineNumbers = false,
   className,
   filename,
@@ -67,7 +67,7 @@ export function CodeBlock({
                 return (
                   <span
                     className={cn(
-                      "before:content-[counter(line)] before:mr-6 before:inline-block before:w-4 before:text-right before:text-zinc-500 before:select-none [counter-increment:line]",
+                      "before:content-[counter(line)] before:mr-6 before:inline-block before:w-4 before:text-right before:text-muted-foreground before:select-none [counter-increment:line]",
                       "pl-4",
                       spanClass
                     )}
@@ -91,8 +91,8 @@ export function CodeBlock({
         console.error("Shiki highlighting error:", error);
         // Fallback to plain code
         setRendered(
-          <pre className="overflow-x-auto rounded-lg bg-zinc-900 p-4 text-sm">
-            <code className="font-mono text-zinc-100">{code}</code>
+          <pre className="overflow-x-auto rounded-lg bg-background p-4 text-sm border border-border">
+            <code className="font-mono text-foreground">{code}</code>
           </pre>
         );
       } finally {
@@ -107,13 +107,13 @@ export function CodeBlock({
     return (
       <div
         className={cn(
-          "animate-pulse rounded-lg bg-zinc-900 p-4",
+          "animate-pulse rounded-lg bg-background border border-border p-4",
           className
         )}
       >
-        <div className="h-4 w-3/4 rounded bg-zinc-800" />
-        <div className="mt-2 h-4 w-1/2 rounded bg-zinc-800" />
-        <div className="mt-2 h-4 w-2/3 rounded bg-zinc-800" />
+        <div className="h-4 w-3/4 rounded bg-muted" />
+        <div className="mt-2 h-4 w-1/2 rounded bg-muted" />
+        <div className="mt-2 h-4 w-2/3 rounded bg-muted" />
       </div>
     );
   }
@@ -121,7 +121,7 @@ export function CodeBlock({
   return (
     <div className={cn("group relative", className)}>
       {filename && (
-        <div className="flex items-center gap-2 rounded-t-lg border-b border-zinc-700 bg-zinc-800 px-4 py-2 text-xs text-zinc-400">
+        <div className="flex items-center gap-2 rounded-t-lg border-b border-border bg-muted px-4 py-2 text-xs text-muted-foreground">
           <FileIcon className="h-3.5 w-3.5" />
           <span className="font-mono">{filename}</span>
         </div>
@@ -148,10 +148,10 @@ function CopyButton({ code }: { code: string }) {
     <button
       onClick={handleCopy}
       className={cn(
-        "absolute right-2 top-2 rounded-md p-2 text-zinc-400 opacity-0 transition-all",
-        "hover:bg-zinc-700 hover:text-zinc-100",
+        "absolute right-2 top-2 rounded-md p-2 text-muted-foreground opacity-0 transition-all",
+        "hover:bg-muted hover:text-foreground",
         "group-hover:opacity-100",
-        "focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+        "focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary"
       )}
       aria-label={copied ? "Copied!" : "Copy code"}
     >

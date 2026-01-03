@@ -10,7 +10,7 @@ import type { QueryRequest, QueryResponse, SourceType } from '../types';
 import { DEFAULT_LIMIT, DEFAULT_THRESHOLD, MAX_LIMIT } from '../types';
 import { generateCacheKey, getCachedResponse, setCachedResponse } from '../services/cache';
 import { generateEmbedding } from '../services/embedding';
-import { searchVectors } from '../services/vectorSearch';
+import { searchMultiSource } from '../services/vectorSearch';
 import { synthesizeAnswer } from '../services/synthesis';
 
 const queryRoute = new Hono();
@@ -50,8 +50,8 @@ queryRoute.post('/', async (c) => {
     // Generate embedding (checks Tier 2 cache internally)
     const embeddingResult = await generateEmbedding(query);
 
-    // Vector search
-    const searchResult = await searchVectors(embeddingResult.embedding, {
+    // Multi-source vector search (siam_vectors + wiki_documents)
+    const searchResult = await searchMultiSource(embeddingResult.embedding, query, {
       sources,
       limit,
       threshold,

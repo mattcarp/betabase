@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import React from "react";
+import { Inter } from "next/font/google";
 import { ClientProviders } from "@/components/ClientProviders";
 import "./globals.css";
+
+// Inter font - MAC Design System primary typeface
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "The Betabase",
@@ -10,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="mac" suppressHydrationWarning>
+    <html lang="en" data-theme="mac" suppressHydrationWarning className={`${inter.variable} font-sans`}>
       <head>
         {/* Theme initialization - runs before React hydration */}
         <script
@@ -53,7 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="stylesheet" href="/styles/mac-design-system.css" />
         <link rel="stylesheet" href="/styles/theme-transitions.css" />
       </head>
-      <body suppressHydrationWarning>
+      <body className="dark font-sans antialiased" suppressHydrationWarning>
         <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
