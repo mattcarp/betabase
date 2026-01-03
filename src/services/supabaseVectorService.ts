@@ -17,9 +17,38 @@ import {
   handleSupabaseError,
 } from "../lib/supabase";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
-import { openai } from "@ai-sdk/openai";
-import { embed } from "ai";
 import { getGeminiEmbeddingService } from "./geminiEmbeddingService";
+
+// Server-only AI SDK imports - DO NOT add type annotations that reference the modules
+// Webpack bundles any module that appears in type annotations, even for dynamic imports
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _openaiModule: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _embedModule: any = null;
+
+// Check if we're on the server (where process.env exists properly)
+const isServer = typeof window === "undefined";
+
+async function getOpenAIEmbed(): Promise<{ openai: any; embed: any } | null> {
+  // Only attempt to load on server - browser will always get null
+  if (!isServer) {
+    return null;
+  }
+
+  try {
+    if (!_openaiModule) {
+      // Dynamic require to completely avoid webpack bundling
+      _openaiModule = await import("@ai-sdk/openai");
+    }
+    if (!_embedModule) {
+      _embedModule = await import("ai");
+    }
+    return { openai: _openaiModule.openai, embed: _embedModule.embed };
+  } catch (err) {
+    console.warn("[SupabaseVector] Failed to load AI SDK:", err);
+    return null;
+  }
+}
 
 // Get admin client lazily to avoid null at module load time (for scripts)
 function getAdminClient(): SupabaseClient | null {
@@ -60,10 +89,14 @@ export class SupabaseVectorService {
       const geminiService = getGeminiEmbeddingService();
       return await geminiService.generateEmbedding(text);
     } else {
-      // Fallback to OpenAI
+      // Fallback to OpenAI (server-only)
       try {
-        const { embedding } = await embed({
-          model: openai.embedding("text-embedding-3-small"),
+        const sdk = await getOpenAIEmbed();
+        if (!sdk) {
+          throw new Error("OpenAI SDK not available in browser environment");
+        }
+        const { embedding } = await sdk.embed({
+          model: sdk.openai.embedding("text-embedding-3-small"),
           value: text,
         });
 
@@ -308,8 +341,12 @@ export class SupabaseVectorService {
    */
   private async generateOpenAIEmbedding(text: string): Promise<number[]> {
     try {
-      const { embedding } = await embed({
-        model: openai.embedding("text-embedding-3-small"),
+      const sdk = await getOpenAIEmbed();
+      if (!sdk) {
+        throw new Error("OpenAI SDK not available in browser environment");
+      }
+      const { embedding } = await sdk.embed({
+        model: sdk.openai.embedding("text-embedding-3-small"),
         value: text,
       });
       return embedding;

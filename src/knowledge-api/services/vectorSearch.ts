@@ -3,12 +3,10 @@
  *
  * Multi-source search:
  * - siam_vectors: Gemini embeddings (768d) for git, jira, metrics
- * - wiki_documents: OpenAI embeddings (1536d) for documentation
+ * - wiki_documents: Text search fallback (embeddings stored as TEXT, not vector)
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { openai } from '@ai-sdk/openai';
-import { embed } from 'ai';
 import type { VectorResult, SourceType, AppContext } from '../types';
 
 let supabaseClient: SupabaseClient | null = null;
@@ -32,8 +30,12 @@ function getSupabaseClient(): SupabaseClient {
   return supabaseClient;
 }
 
+export interface EnrichedVectorResult extends VectorResult {
+  expandable?: boolean; // If true, more detail available via /detail endpoint
+}
+
 export interface SearchResult {
-  results: VectorResult[];
+  results: EnrichedVectorResult[];
   duration_ms: number;
 }
 
@@ -65,7 +67,9 @@ export async function searchVectors(
   const client = getSupabaseClient();
 
   // Log search parameters for debugging
-  console.log(`🔍 Vector search: org=${context.organization}, div=${context.division}, app=${context.app_under_test}`);
+  console.log(
+    `Vector search: org=${context.organization}, div=${context.division}, app=${context.app_under_test}`
+  );
   console.log(`   threshold=${threshold}, limit=${limit}, sources=${sources || 'all'}`);
   console.log(`   embedding length=${embedding.length}`);
 
@@ -84,32 +88,22 @@ export async function searchVectors(
     throw new Error(`Vector search failed: ${error.message}`);
   }
 
-  console.log(`📊 Results: ${(data || []).length} matches`);
+  console.log(`Results: ${(data || []).length} matches`);
 
-  const results: VectorResult[] = (data || []).map((row: Record<string, unknown>) => ({
+  const results: EnrichedVectorResult[] = (data || []).map((row: Record<string, unknown>) => ({
     id: row.id as string,
     content: row.content as string,
     source_type: row.source_type as SourceType,
     source_id: row.source_id as string,
     similarity: row.similarity as number,
     metadata: (row.metadata as Record<string, unknown>) || {},
+    expandable: row.source_type === 'jira', // Jira tickets have full detail available
   }));
 
   return {
     results,
     duration_ms: Math.round(performance.now() - start),
   };
-}
-
-/**
- * Generate OpenAI embedding for wiki_documents search
- */
-async function generateOpenAIEmbedding(text: string): Promise<number[]> {
-  const { embedding } = await embed({
-    model: openai.embedding('text-embedding-3-small'),
-    value: text,
-  });
-  return embedding;
 }
 
 /**
@@ -140,78 +134,111 @@ export async function searchMultiSource(
   } = options;
 
   const client = getSupabaseClient();
-  const allResults: VectorResult[] = [];
-
-  // Generate OpenAI embedding for wiki_documents (1536d)
-  const openaiStart = performance.now();
-  let openaiEmbedding: number[] | null = null;
-  try {
-    openaiEmbedding = await generateOpenAIEmbedding(query);
-    console.log(`   OpenAI embedding: ${Math.round(performance.now() - openaiStart)}ms`);
-  } catch (err) {
-    console.error('OpenAI embedding failed (wiki search disabled):', err);
-  }
+  const allResults: EnrichedVectorResult[] = [];
 
   // Run searches in parallel
   const searchPromises: Promise<void>[] = [];
 
   // 1. Search siam_vectors with Gemini embedding
   searchPromises.push(
-    client.rpc('match_siam_vectors_gemini', {
-      p_organization: context.organization,
-      p_division: context.division,
-      p_app_under_test: context.app_under_test,
-      query_embedding: geminiEmbedding,
-      match_threshold: threshold,
-      match_count: limit,
-      filter_source_types: sources || null,
-    }).then(({ data, error }) => {
-      if (error) {
-        console.error('siam_vectors search error:', error);
-        return;
-      }
-      const results = (data || []).map((row: Record<string, unknown>) => ({
-        id: row.id as string,
-        content: row.content as string,
-        source_type: row.source_type as SourceType,
-        source_id: row.source_id as string,
-        similarity: row.similarity as number,
-        metadata: (row.metadata as Record<string, unknown>) || {},
-      }));
-      console.log(`   siam_vectors: ${results.length} matches`);
-      allResults.push(...results);
-    })
-  );
-
-  // 2. Search wiki_documents with OpenAI embedding (if available)
-  if (openaiEmbedding) {
-    searchPromises.push(
-      client.rpc('match_wiki_documents', {
-        query_embedding: openaiEmbedding,
+    client
+      .rpc('match_siam_vectors_gemini', {
+        p_organization: context.organization,
+        p_division: context.division,
+        p_app_under_test: context.app_under_test,
+        query_embedding: geminiEmbedding,
         match_threshold: threshold,
         match_count: limit,
-        app_name_filter: 'AOMA',
-      }).then(({ data, error }) => {
+        filter_source_types: sources || null,
+      })
+      .then(({ data, error }) => {
         if (error) {
-          console.error('wiki_documents search error:', error);
+          console.error('siam_vectors search error:', error);
           return;
         }
-        // Normalize wiki results to VectorResult shape
         const results = (data || []).map((row: Record<string, unknown>) => ({
+          id: row.id as string,
+          content: row.content as string,
+          source_type: row.source_type as SourceType,
+          source_id: row.source_id as string,
+          similarity: row.similarity as number,
+          metadata: (row.metadata as Record<string, unknown>) || {},
+          expandable: row.source_type === 'jira', // Jira has full details via /detail endpoint
+        }));
+        console.log(`   siam_vectors: ${results.length} matches`);
+        allResults.push(...results);
+      })
+  );
+
+  // 2. Search wiki_documents - use text search as fallback since embeddings are stored as TEXT
+  // NOTE: Vector search returns 0 results because wiki_documents.embedding is TEXT not vector(1536)
+  // Until migrated, we use keyword-based text search as a workaround
+  // Only search wiki if no source filter or 'wiki' is in the filter
+  const shouldSearchWiki = !sources || sources.includes('wiki');
+  if (shouldSearchWiki) {
+    searchPromises.push(
+      (async () => {
+      // Extract key terms from query for text search
+      const searchTerms = query
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '')
+        .split(/\s+/)
+        .filter(
+          (term) =>
+            term.length > 2 &&
+            !['what', 'how', 'the', 'is', 'are', 'can', 'does', 'for', 'and', 'with'].includes(term)
+        );
+
+      if (searchTerms.length === 0) {
+        searchTerms.push('aoma'); // Default to AOMA if no terms
+      }
+
+      // Build OR query for text search
+      const orConditions = searchTerms.map((term) => `markdown_content.ilike.%${term}%`).join(',');
+
+      const { data, error } = await client
+        .from('wiki_documents')
+        .select('id, title, markdown_content, url, app_name')
+        .eq('app_name', 'AOMA')
+        .or(orConditions)
+        .limit(limit);
+
+      if (error) {
+        console.error('wiki_documents text search error:', error);
+        return;
+      }
+
+      // Score results by term frequency (rough relevance)
+      const results = (data || []).map((row: Record<string, unknown>) => {
+        const content = ((row.markdown_content as string) || '').toLowerCase();
+        let matchCount = 0;
+        searchTerms.forEach((term) => {
+          const regex = new RegExp(term, 'gi');
+          matchCount += (content.match(regex) || []).length;
+        });
+        // Normalize to 0-1 range (rough approximation)
+        const similarity = Math.min(0.9, 0.3 + matchCount * 0.05);
+
+        return {
           id: row.id as string,
           content: row.markdown_content as string,
           source_type: 'wiki' as SourceType,
           source_id: row.url as string,
-          similarity: row.similarity as number,
+          similarity,
           metadata: {
             title: row.title,
             app_name: row.app_name,
             url: row.url,
           },
-        }));
-        console.log(`   wiki_documents: ${results.length} matches`);
-        allResults.push(...results);
-      })
+          expandable: false, // Wiki returns full content already
+        };
+      });
+
+      console.log(
+        `   wiki_documents (text search): ${results.length} matches for terms [${searchTerms.join(', ')}]`
+      );
+      allResults.push(...results);
+      })()
     );
   }
 
@@ -221,7 +248,7 @@ export async function searchMultiSource(
   allResults.sort((a, b) => b.similarity - a.similarity);
   const finalResults = allResults.slice(0, limit);
 
-  console.log(`📊 Multi-source total: ${allResults.length} matches, returning top ${finalResults.length}`);
+  console.log(`Multi-source total: ${allResults.length} matches, returning top ${finalResults.length}`);
   if (finalResults.length > 0) {
     console.log(`   Best: ${(finalResults[0].similarity * 100).toFixed(1)}% from ${finalResults[0].source_type}`);
   }

@@ -281,6 +281,30 @@
       ],
       "completedAt": "2025-12-20T20:55:00Z",
       "notes": "All 8 tasks completed. UI checkbox, conditional button, screencast-recorder.ts, executeRecording, toast notifications implemented."
+    },
+    {
+      "id": "F014",
+      "category": "chat",
+      "priority": 1,
+      "name": "Smart Diagrams - Two-Stage Visualization",
+      "description": "Mermaid diagrams render inline for workflow/architecture responses, with 'Improve this diagram' button to upgrade to Nano Banana Pro professional slides.",
+      "specPath": ".specify/specs/FEAT-014-smart-diagrams/",
+      "currentTask": 1,
+      "totalTasks": 12,
+      "requirementRefs": [],
+      "byteroverTags": "#diagrams #mermaid #nanobanana #visualization #chat #demo",
+      "passes": false,
+      "verification": [
+        "Mermaid code blocks render as actual diagrams (not raw text)",
+        "Mermaid diagrams use dark theme matching MAC Design System",
+        "AI includes mermaid when response involves workflow/architecture/process",
+        "'Improve this diagram' button appears below mermaid diagrams",
+        "Clicking upgrade button generates Nano Banana Pro image",
+        "Generated image displays with zoom/download controls",
+        "Non-diagram responses do NOT show diagram prompts"
+      ],
+      "completedAt": null,
+      "notes": "Promoted from B006. Two-stage approach: fast mermaid first, pro upgrade on demand."
     }
   ],
   "backlog": [
@@ -335,10 +359,11 @@
       "id": "B006",
       "category": "chat",
       "name": "Infographic/Diagram API Enhancement",
-      "description": "Fully wire the infographic/diagram generation API to provide real-time visual insights for complex queries.",
+      "description": "PROMOTED TO F014. See .specify/specs/FEAT-014-smart-diagrams/",
       "estimatedComplexity": "medium",
       "addedAt": "2025-12-18",
-      "notes": "Use api/infographic and api/generate-diagram. Wire Nano Banana Pro into chat flow for automatic visual generation.",
+      "promotedTo": "F014",
+      "notes": "Promoted to full feature F014 on 2026-01-03. Two-stage approach: mermaid first, Nano Banana Pro upgrade.",
       "byteroverTags": "#infographic #visualization #diagrams #ai-elements #nanobanana"
     }
   ]

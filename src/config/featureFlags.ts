@@ -6,9 +6,17 @@
 // Check if we're in a browser environment
 const isBrowser = typeof window !== "undefined";
 
+// Safe access to process.env (handles edge cases where process is undefined)
+const getEnvVar = (key: string): string | undefined => {
+  if (typeof process !== "undefined" && process.env) {
+    return process.env[key];
+  }
+  return undefined;
+};
+
 // Check for Vercel AI SDK preference (default enabled)
 const useVercelSDKFlag =
-  process.env.NEXT_PUBLIC_USE_VERCEL_SDK !== "false" && // Default true unless explicitly disabled
+  getEnvVar("NEXT_PUBLIC_USE_VERCEL_SDK") !== "false" && // Default true unless explicitly disabled
   !(isBrowser && window.location.search.includes("vercel=false")); // Allow URL override
 
 export const featureFlags = {
@@ -24,13 +32,13 @@ export const featureFlags = {
    * Store Conversations
    * Enables conversation persistence and history
    */
-  storeConversations: process.env.NEXT_PUBLIC_STORE_CONVERSATIONS !== "false", // Default true
+  storeConversations: getEnvVar("NEXT_PUBLIC_STORE_CONVERSATIONS") !== "false", // Default true
 
   /**
    * Debug Mode
    * Enables additional logging and debugging features
    */
-  debugMode: process.env.NEXT_PUBLIC_DEBUG_MODE === "true" || false,
+  debugMode: getEnvVar("NEXT_PUBLIC_DEBUG_MODE") === "true" || false,
 };
 
 /**

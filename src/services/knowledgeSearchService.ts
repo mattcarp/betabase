@@ -12,9 +12,36 @@
  */
 
 import { supabase, DEFAULT_APP_CONTEXT } from "../lib/supabase";
-import { embed } from "ai";
-import { google } from "@ai-sdk/google";
 import { OptimizedSupabaseVectorService } from "./optimizedSupabaseVectorService";
+
+// Server-only AI SDK - DO NOT use type annotations that reference the modules!
+// TypeScript `typeof import()` causes webpack to bundle the module even for dynamic imports
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _embedModule: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _googleModule: any = null;
+
+// Check if we're on the server
+const isServer = typeof window === "undefined";
+
+async function getGoogleEmbed(): Promise<{ google: any; embed: any } | null> {
+  if (!isServer) {
+    return null;
+  }
+
+  try {
+    if (!_embedModule) {
+      _embedModule = await import("ai");
+    }
+    if (!_googleModule) {
+      _googleModule = await import("@ai-sdk/google");
+    }
+    return { google: _googleModule.google, embed: _embedModule.embed };
+  } catch (err) {
+    console.warn("[KnowledgeSearch] Failed to load AI SDK:", err);
+    return null;
+  }
+}
 
 export type KnowledgeSourceType =
   | "git"
@@ -81,9 +108,14 @@ async function getQueryEmbedding(query: string): Promise<number[] | null> {
     // CRITICAL: Use Gemini embeddings (768d) to match the documents!
     // Documents are embedded with text-embedding-004 (768 dimensions)
     // Using OpenAI (1536d) creates dimension mismatch → poor similarity scores
-    const model = google.textEmbeddingModel("text-embedding-004");
-    const { embedding } = await embed({ model, value: query });
-    console.log(`📐 Generated Gemini query embedding (${embedding.length}d)`);
+    const sdk = await getGoogleEmbed();
+    if (!sdk) {
+      console.warn("[Knowledge] AI SDK not available in browser, falling back to keyword search");
+      return null;
+    }
+    const model = sdk.google.textEmbeddingModel("text-embedding-004");
+    const { embedding } = await sdk.embed({ model, value: query });
+    console.log(`[Knowledge] Generated Gemini query embedding (${embedding.length}d)`);
     return embedding;
   } catch (err) {
     console.warn("Embedding generation failed, falling back to keyword search:", err);

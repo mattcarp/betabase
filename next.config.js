@@ -1,3 +1,5 @@
+const webpack = require("webpack");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
@@ -56,6 +58,26 @@ const nextConfig = {
         playwright: "commonjs playwright",
         "playwright-core": "commonjs playwright-core",
       });
+    }
+
+    // Add fallbacks for Node.js modules when bundling for browser
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        os: false,
+        crypto: false,
+        stream: false,
+        buffer: false,
+      };
+
+      // Polyfill process.env for libraries like vscode-textmate that check it at runtime
+      config.plugins.push(
+        new webpack.DefinePlugin({
+          "process.env.VSCODE_TEXTMATE_DEBUG": JSON.stringify(false),
+        })
+      );
     }
 
     return config;

@@ -1,19 +1,26 @@
 "use client";
 
-import { JSX, useEffect, useState } from "react";
-import { codeToHast, type BundledLanguage, type BundledTheme } from "shiki";
-import { toJsxRuntime } from "hast-util-to-jsx-runtime";
-import { Fragment } from "react";
+import { JSX, useEffect, useState, lazy, Suspense, Fragment } from "react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
+
+// Types only - no runtime import to avoid browser issues with process.env
+import type { BundledLanguage, BundledTheme } from "shiki";
+
+// Lazy load MermaidDiagram to avoid bundle bloat
+const MermaidDiagram = lazy(() =>
+  import("../ai-elements/mermaid-diagram").then((m) => ({ default: m.MermaidDiagram }))
+);
 
 interface CodeBlockProps {
   code: string;
-  language?: BundledLanguage;
+  language?: BundledLanguage | "mermaid";
   theme?: BundledTheme;
   showLineNumbers?: boolean;
   className?: string;
   filename?: string;
+  onMermaidUpgrade?: (code: string) => void;
 }
 
 export function CodeBlock({
@@ -23,7 +30,29 @@ export function CodeBlock({
   showLineNumbers = false,
   className,
   filename,
+  onMermaidUpgrade,
 }: CodeBlockProps) {
+  // Special handling for mermaid diagrams - render as actual diagram
+  if (language === "mermaid") {
+    return (
+      <Suspense
+        fallback={
+          <div
+            className={cn(
+              "flex items-center justify-center p-8",
+              "rounded-lg border border-border bg-[#0a0a0a]",
+              className
+            )}
+          >
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            <span className="ml-2 text-sm text-muted-foreground">Loading diagram...</span>
+          </div>
+        }
+      >
+        <MermaidDiagram code={code} className={className} onUpgrade={onMermaidUpgrade} />
+      </Suspense>
+    );
+  }
   const [rendered, setRendered] = useState<JSX.Element | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,8 +60,14 @@ export function CodeBlock({
     async function highlight() {
       setIsLoading(true);
       try {
+        // Dynamic imports to avoid browser issues with process.env in @shikijs/vscode-textmate
+        const [{ codeToHast }, { toJsxRuntime }] = await Promise.all([
+          import("shiki"),
+          import("hast-util-to-jsx-runtime"),
+        ]);
+
         const hast = await codeToHast(code.trim(), {
-          lang: language,
+          lang: language as BundledLanguage, // Safe cast - mermaid is handled above
           theme,
         });
 

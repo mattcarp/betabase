@@ -140,6 +140,32 @@ export const SKILL_DEFINITIONS: SkillDefinition[] = [
     priority: 90, // High priority - affects overall tone
     estimatedTokens: 150,
   },
+  {
+    id: 'diagram-generation',
+    name: 'Diagram Generation',
+    fileName: 'diagram-generation.md',
+    triggerPatterns: [
+      /workflow/i,
+      /architecture/i,
+      /process/i,
+      /how\s+(does|do|is)/i,      // "How does X work?"
+      /explain.*steps/i,
+      /walk.*through/i,
+      /pipeline/i,
+      /flow/i,
+      /sequence/i,
+      /state\s*machine/i,
+      /data\s*flow/i,
+      /integration/i,
+      /multi-?tenant/i,
+      /ingestion/i,
+      /orchestrat/i,
+    ],
+    queryTypes: ['technical', 'procedural'],
+    sourceTypes: ['knowledge'],
+    priority: 75, // Load for architecture/workflow questions
+    estimatedTokens: 400,
+  },
 ];
 
 // Cache for loaded skill content

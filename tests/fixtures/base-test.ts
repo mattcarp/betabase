@@ -44,7 +44,7 @@ const ALLOWED_ERROR_PATTERNS = [
 
   // Dev server instability (Turbopack/Next.js build manifest issues)
   // Removed as Next.js 16.0.5 fixes these issues
-  
+
   // React hydration warnings (not errors)
   /Warning: Text content did not match/i,
 
@@ -58,6 +58,11 @@ const ALLOWED_ERROR_PATTERNS = [
   /third-party/i,
   /gtag/i,
   /analytics/i,
+
+  // Cognito auth errors when env vars not configured (expected in test env)
+  /NEXT_PUBLIC_COGNITO_USER_POOL_ID/i,
+  /NEXT_PUBLIC_COGNITO_CLIENT_ID/i,
+  /Cannot read properties of undefined.*COGNITO/i,
 ];
 
 function shouldIgnoreError(text: string): boolean {

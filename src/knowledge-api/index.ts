@@ -14,6 +14,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import queryRoute from './routes/query';
+import detailRoute from './routes/detail';
 import { getCacheStats } from './services/cache';
 
 const app = new Hono();
@@ -41,8 +42,9 @@ app.get('/health', (c) => {
   });
 });
 
-// Mount query route
+// Mount routes
 app.route('/v1/knowledge/query', queryRoute);
+app.route('/v1/knowledge/detail', detailRoute);
 
 // 404 handler
 app.notFound((c) => {
@@ -78,6 +80,8 @@ console.log(`
   Endpoints:
     GET  /health
     POST /v1/knowledge/query
+    GET  /v1/knowledge/detail/:type/:id
+    POST /v1/knowledge/detail/batch
 ========================================
 `);
 

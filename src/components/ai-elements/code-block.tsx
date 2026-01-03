@@ -2,9 +2,15 @@
 
 import { CheckIcon, CopyIcon } from "lucide-react";
 import type { ComponentProps, HTMLAttributes, ReactNode } from "react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, lazy, Suspense } from "react";
 import { Button } from "../ui/button";
 import { cn } from "../../lib/utils";
+import { Loader2 } from "lucide-react";
+
+// Lazy load MermaidDiagram to avoid bundle bloat
+const MermaidDiagram = lazy(() =>
+  import("./mermaid-diagram").then((m) => ({ default: m.MermaidDiagram }))
+);
 
 type CodeBlockContextType = {
   code: string;
@@ -19,6 +25,7 @@ export type CodeBlockProps = HTMLAttributes<HTMLDivElement> & {
   language: string;
   showLineNumbers?: boolean;
   children?: ReactNode;
+  onMermaidUpgrade?: (code: string) => void;
 };
 
 export const CodeBlock = ({
@@ -27,39 +34,65 @@ export const CodeBlock = ({
   showLineNumbers = false,
   className,
   children,
+  onMermaidUpgrade,
   ...props
-}: CodeBlockProps) => (
-  <CodeBlockContext.Provider value={{ code }}>
-    <div
-      className={cn(
-        "relative w-full overflow-hidden rounded-md border bg-background text-foreground",
-        className
-      )}
-      {...props}
-    >
-      <div className="relative">
-        {/* Simple code display without syntax highlighting */}
-        <pre className="overflow-x-auto p-4 text-sm">
-          <code className="font-mono" data-language={language}>
-            {showLineNumbers
-              ? code.split("\n").map((line, i) => (
-                  <div key={i} className="table-row">
-                    <span className="table-cell pr-4 text-muted-foreground select-none">
-                      {i + 1}
-                    </span>
-                    <span className="table-cell">{line}</span>
-                  </div>
-                ))
-              : code}
-          </code>
-        </pre>
-        {children && (
-          <div className="absolute right-2 top-2 flex items-center gap-2">{children}</div>
+}: CodeBlockProps) => {
+  // Special handling for mermaid diagrams - render as actual diagram
+  if (language === "mermaid") {
+    return (
+      <Suspense
+        fallback={
+          <div
+            className={cn(
+              "flex items-center justify-center p-8",
+              "rounded-lg border border-border bg-[#0a0a0a]",
+              className
+            )}
+          >
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            <span className="ml-2 text-sm text-muted-foreground">Loading diagram...</span>
+          </div>
+        }
+      >
+        <MermaidDiagram code={code} className={className} onUpgrade={onMermaidUpgrade} />
+      </Suspense>
+    );
+  }
+
+  // Default code block rendering
+  return (
+    <CodeBlockContext.Provider value={{ code }}>
+      <div
+        className={cn(
+          "relative w-full overflow-hidden rounded-md border bg-background text-foreground",
+          className
         )}
+        {...props}
+      >
+        <div className="relative">
+          {/* Simple code display without syntax highlighting */}
+          <pre className="overflow-x-auto p-4 text-sm">
+            <code className="font-mono" data-language={language}>
+              {showLineNumbers
+                ? code.split("\n").map((line, i) => (
+                    <div key={i} className="table-row">
+                      <span className="table-cell pr-4 text-muted-foreground select-none">
+                        {i + 1}
+                      </span>
+                      <span className="table-cell">{line}</span>
+                    </div>
+                  ))
+                : code}
+            </code>
+          </pre>
+          {children && (
+            <div className="absolute right-2 top-2 flex items-center gap-2">{children}</div>
+          )}
+        </div>
       </div>
-    </div>
-  </CodeBlockContext.Provider>
-);
+    </CodeBlockContext.Provider>
+  );
+};
 
 export type CodeBlockCopyButtonProps = ComponentProps<typeof Button> & {
   onCopy?: () => void;
